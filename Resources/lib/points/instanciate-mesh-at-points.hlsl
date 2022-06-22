@@ -1,6 +1,6 @@
 #include "lib/shared/point.hlsl"
-#include "point-light.hlsl"
-#include "pbr.hlsl"
+#include "lib/shared/point-light.hlsl"
+#include "lib/shared/pbr.hlsl"
 
 cbuffer Transforms : register(b0)
 {

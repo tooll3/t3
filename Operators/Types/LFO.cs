@@ -20,7 +20,7 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
         {
             _phase = Phase.GetValue(context);
             _bias = Bias.GetValue(context);
-            _shape = (Shapes)Shape.GetValue(context);
+            _shape = (Shapes)(int)Shape.GetValue(context).Clamp(0,5);
             _ratio = Ratio.GetValue(context); 
             var f = (SpeedFactors)AllowSpeedFactor.GetValue(context);
             switch (f)

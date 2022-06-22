@@ -1,6 +1,6 @@
 #include "lib/shared/point.hlsl"
-#include "point-light.hlsl"
-#include "hash-functions.hlsl"
+#include "lib/shared/point-light.hlsl"
+#include "lib/shared/hash-functions.hlsl"
 
 static const float3 Corners[] = 
 {

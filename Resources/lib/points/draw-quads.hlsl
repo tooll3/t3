@@ -1,5 +1,5 @@
 #include "lib/shared/point.hlsl"
-#include "hash-functions.hlsl"
+#include "lib/shared/hash-functions.hlsl"
 
 static const float3 Corners[] = 
 {

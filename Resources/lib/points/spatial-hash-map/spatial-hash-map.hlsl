@@ -2,7 +2,7 @@
 // This code is derived after Guillaume Boissé 
 
 #include "lib/shared/point.hlsl"
-#include "hash-functions.hlsl"
+#include "lib/shared/hash-functions.hlsl"
 #include "lib/points/spatial-hash-map/hash-map-settings.hlsl" 
 
 StructuredBuffer<Point> _points :register(t0); 

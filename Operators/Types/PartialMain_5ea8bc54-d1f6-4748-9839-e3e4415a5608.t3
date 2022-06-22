@@ -1996,16 +1996,6 @@
           }
         },
         {
-          "Id": "423eb712-f7e3-4402-b841-324a9fc91c54"/*VignetteColor*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 0.78482985,
-            "Y": 0.6881498,
-            "Z": 0.50510156,
-            "W": 0.5810409
-          }
-        },
-        {
           "Id": "a0aaadb8-3b39-4a29-b04b-5043ec8bbf42"/*VignetteRadius*/,
           "Type": "System.Single",
           "Value": 2.047334

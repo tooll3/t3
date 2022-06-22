@@ -504,7 +504,10 @@ namespace T3.Gui.Windows.Variations
 
             var rect = GetPixelRectForIndex(atlasIndex);
 
-            _thumbnailCanvasRendering.CopyToCanvasTexture(textureSlot, rect);
+            if (textureSlot.Value != null)
+            {
+                _thumbnailCanvasRendering.CopyToCanvasTexture(textureSlot, rect);
+            }
 
             PoolForBlendOperations.StopHover();
         }

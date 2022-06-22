@@ -21,6 +21,17 @@ namespace Core.Audio
             _updatedClipTimes[clip] = time;
         }
 
+        public static void ReloadClip(AudioClip clip)
+        {
+            if (_clipPlaybacks.TryGetValue(clip.Id, out var stream))
+            {
+                Bass.StreamFree(stream.StreamHandle);
+                _clipPlaybacks.Remove(clip.Id);
+            }
+            
+            UseAudioClip(clip,0);
+        }
+
         public static void CompleteFrame(Playback playback)
         {
             if (!_bassInitialized)

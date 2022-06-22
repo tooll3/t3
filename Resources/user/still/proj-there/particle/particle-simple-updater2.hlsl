@@ -1,6 +1,6 @@
-#include "particle.hlsl"
-#include "noise-functions.hlsl"
-#include "hash-functions.hlsl"
+#include "lib/shared/particle.hlsl"
+#include "lib/shared/noise-functions.hlsl"
+#include "lib/shared/hash-functions.hlsl"
 
 cbuffer TimeConstants : register(b0)
 {

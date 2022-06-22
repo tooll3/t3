@@ -7,7 +7,7 @@ namespace T3.Core
     {
         public static float ToRad => (float)(Math.PI / 180.0);
         public static float ToDegree => (float)(180.0 / Math.PI);
-        
+
         public static float PerlinNoise(float value, float period, int octaves, int seed)
         {
             var noiseSum = 0.0f;
@@ -143,23 +143,22 @@ namespace T3.Core
         {
             return new Vector2(a.X + (b.X - a.X) * t, a.Y + (b.Y - a.Y) * t);
         }
-        
+
         public static Vector3 Lerp(Vector3 a, Vector3 b, float t)
         {
-            return new Vector3(a.X + (b.X - a.X) * t, 
+            return new Vector3(a.X + (b.X - a.X) * t,
                                a.Y + (b.Y - a.Y) * t,
                                a.Z + (b.Z - a.Z) * t);
         }
 
         public static Vector4 Lerp(Vector4 a, Vector4 b, float t)
         {
-            return new Vector4(a.X + (b.X - a.X) * t, 
+            return new Vector4(a.X + (b.X - a.X) * t,
                                a.Y + (b.Y - a.Y) * t,
                                a.Z + (b.Z - a.Z) * t,
                                a.W + (b.W - a.W) * t);
         }
 
-        
         public static double Lerp(double a, double b, double t)
         {
             return (double)(a + (b - a) * t);
@@ -175,54 +174,72 @@ namespace T3.Core
             return Math.Log10(value) / Math.Log10(2.0);
         }
 
-        
         public static float RoundValue(float i, float stepsPerUnit, float stepRatio)
         {
             float u = 1 / stepsPerUnit;
             float v = stepRatio / (2 * stepsPerUnit);
             float m = i % u;
             float r = m - (m < v
-                          ? 0
-                          : (m > (u - v))
-                              ? u
-                              : ((m - v) / (1 - 2 * stepsPerUnit * v)));
+                               ? 0
+                               : (m > (u - v))
+                                   ? u
+                                   : ((m - v) / (1 - 2 * stepsPerUnit * v)));
             float y = i - r;
             return y;
         }
-        
+
+        /// <summary>
+        /// Smooth damps a value with a "critically damped spring" similar to unity's SmoothDamp helper method.
+        /// See https://stackoverflow.com/a/5100956 
+        /// </summary>
+        public static float SpringDamp(float target,
+                                                   float current,
+                                                   ref float velocity,
+                                                   float springConstant = 2,
+                                                   float timeStep = 1/60f)
+        {
+            //const float springConstant = 0.41f;
+            var currentToTarget = target - current;
+            var springForce = currentToTarget * springConstant;
+            var dampingForce = -velocity * 2 * MathF.Sqrt(springConstant);
+            var force = springForce + dampingForce;
+            velocity += force * timeStep;
+            var displacement = velocity * timeStep;
+            return current + displacement;
+        }
+
         public const float Pi2 = (float)Math.PI * 2;
-        
-        
+
         public static Vector3 ToVector3(this Vector4 vec)
         {
-            return new Vector3(vec.X/vec.W, vec.Y/vec.W, vec.Z/vec.W);
+            return new Vector3(vec.X / vec.W, vec.Y / vec.W, vec.Z / vec.W);
         }
-        
+
         public static SharpDX.Vector3 ToVector3(this SharpDX.Vector4 vec)
         {
-            return new SharpDX.Vector3(vec.X/vec.W, vec.Y/vec.W, vec.Z/vec.W);
+            return new SharpDX.Vector3(vec.X / vec.W, vec.Y / vec.W, vec.Z / vec.W);
         }
-        
+
         public static SharpDX.Vector3 ToSharpDx(this Vector3 source)
         {
             return new SharpDX.Vector3(source.X, source.Y, source.Z);
         }
-        
+
         public static Vector3 ToNumerics(this SharpDX.Vector3 source)
         {
             return new Vector3(source.X, source.Y, source.Z);
         }
-        
+
         public static SharpDX.Vector4 ToSharpDx(this Vector4 source)
         {
             return new SharpDX.Vector4(source.X, source.Y, source.Z, source.W);
         }
-        
+
         public static Vector4 ToNumerics(this SharpDX.Vector4 source)
         {
             return new Vector4(source.X, source.Y, source.Z, source.W);
         }
-        
+
         public static SharpDX.Vector4 ToSharpDxVector4(this Vector3 source, float w)
         {
             return new SharpDX.Vector4(source.X, source.Y, source.Z, w);
@@ -232,11 +249,24 @@ namespace T3.Core
         {
             return new SharpDX.Vector3(source.X, source.Y, source.Z);
         }
+
+        /// <summary>
+        /// Return true if a boolean changed from false to true
+        /// </summary>
+        public static bool WasTriggered(bool newState, ref bool current)
+        {
+            if (newState == current)
+                return false;
+
+            current = newState;
+            return newState;
+        }
     }
 
     public class EaseFunctions
     {
-        public static float EaseOutElastic(float x) {
+        public static float EaseOutElastic(float x)
+        {
             const float c4 = (float)(2 * Math.PI) / 3;
 
             return x <= 0f
@@ -244,7 +274,6 @@ namespace T3.Core
                        : x >= 1f
                            ? 1f
                            : (float)(Math.Pow(2, -10 * x) * Math.Sin((x * 10 - 0.75) * c4) + 1);
-
         }
     }
 }

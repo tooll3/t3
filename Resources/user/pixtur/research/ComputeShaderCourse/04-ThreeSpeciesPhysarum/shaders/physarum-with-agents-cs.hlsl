@@ -1,10 +1,12 @@
-#include "hash-functions.hlsl"
+#include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
 
 cbuffer ParamConstants : register(b0)
 {
-    float AgentCount;
+    //float AgentCount;
     float2 BlockCount;
+    float AngleLockSteps;
+    float AngleLockFactor;
 }
 
 cbuffer ResolutionBuffer : register(b1)
@@ -69,21 +71,21 @@ int2 CellAddressFromPosition(float3 pos)
 //     return  float2(gridPos.x, gridPos.y);
 // }
 
-// // Rounds an input value i to steps values
-// // See: https://www.desmos.com/calculator/qpvxjwnsmu
-// float RoundValue(float i, float stepsPerUnit, float stepRatio) 
-// {
-//     float u = 1 / stepsPerUnit;
-//     float v = stepRatio / (2 * stepsPerUnit);
-//     float m = i % u;
-//     float r = m - (m < v
-//                     ? 0
-//                     : m > (u - v)
-//                         ? u
-//                         : (m - v) / (1 - 2 * stepsPerUnit * v));
-//     float y = i - r;
-//     return y;
-// }
+// Rounds an input value i to steps values
+// See: https://www.desmos.com/calculator/qpvxjwnsmu
+float RoundValue(float i, float stepsPerUnit, float stepRatio) 
+{
+    float u = 1 / stepsPerUnit;
+    float v = stepRatio / (2 * stepsPerUnit);
+    float m = i % u;
+    float r = m - (m < v
+                    ? 0
+                    : m > (u - v)
+                        ? u
+                        : (m - v) / (1 - 2 * stepsPerUnit * v));
+    float y = i - r;
+    return y;
+}
 
 static const float ToRad = 3.141592/180;
 
@@ -110,7 +112,10 @@ float ComputeComfortZone(float4 x, float4 cz)
 [numthreads(256,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {   
-    if(i.x >= AgentCount)
+    uint agentCount, stride;
+    Points.GetDimensions(agentCount, stride);
+
+    if(i.x >= agentCount)
         return;
 
     block = int2(i.x % BlockCount.x,  i.x / BlockCount.x % BlockCount.y);
@@ -150,6 +155,7 @@ void main(uint3 i : SV_DispatchThreadID)
                         : 1;
     angle += dir * _rotateToComfort + CB.BaseRotation;
     angle = mod(angle, 2 * 3.141592);
+    angle = RoundValue(angle / (2* 3.1416), AngleLockSteps, AngleLockFactor) * 2 * 3.141578;
     
     float _baseMove = CB.BaseMovement + ((float)block.y - (BlockCount-1)/2.) * 5;
 

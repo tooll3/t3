@@ -790,6 +790,16 @@ namespace T3.Gui.Graph.Interaction
             public SyntaxNode LastOutputNodeFound { get; private set; }
         }
 
+        class ClassDeclarationFinder : CSharpSyntaxWalker
+        {
+            public override void VisitClassDeclaration(ClassDeclarationSyntax node)
+            {
+                ClassDeclarationNode = node;
+            }
+
+            public ClassDeclarationSyntax ClassDeclarationNode;
+        }
+
         class AllInputNodesFinder : CSharpSyntaxRewriter
         {
             public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
@@ -886,10 +896,15 @@ namespace T3.Gui.Graph.Interaction
 
             var outputNodeFinder = new OutputNodeByTypeFinder();
             root = outputNodeFinder.Visit(root);
+            var blockFinder = new ClassDeclarationFinder();
             if (outputNodeFinder.LastOutputNodeFound == null)
             {
-                Log.Error("Could not add an output as no previous one was found, this case is missing and must be added.");
-                return;
+                blockFinder.Visit(root);
+                if (blockFinder.ClassDeclarationNode == null)
+                {
+                    Log.Error("Could not add an output as no previous one was found, this case is missing and must be added.");
+                    return;
+                }
             }
 
             var @namespace = outputType.Namespace;
@@ -903,7 +918,23 @@ namespace T3.Gui.Graph.Interaction
             var inputString = "        public readonly " + slotString + " " + outputName + " = new " + slotString + "();\n";
 
             var outputDeclaration = SyntaxFactory.ParseMemberDeclaration(attributeString + inputString);
-            root = root.InsertNodesAfter(outputNodeFinder.LastOutputNodeFound, new[] { outputDeclaration });
+            if (outputNodeFinder.LastOutputNodeFound != null)
+            {
+                root = root.InsertNodesAfter(outputNodeFinder.LastOutputNodeFound, new[] { outputDeclaration });
+            }
+            else if (blockFinder.ClassDeclarationNode != null)
+            {
+                var node = blockFinder.ClassDeclarationNode;
+                var classDeclaration = node.AddMembers(outputDeclaration);
+                root = root.ReplaceNode(blockFinder.ClassDeclarationNode, classDeclaration);
+            }
+            else
+            {
+                var theClass = root.DescendantNodes().OfType<ClassDeclarationSyntax>().First();
+                var bla = theClass.AddMembers(outputDeclaration);
+                Log.Info($"{bla}");
+                return;
+            }
 
             var newSource = root.GetText().ToString();
             Log.Debug(newSource);

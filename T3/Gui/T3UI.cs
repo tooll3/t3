@@ -31,7 +31,7 @@ namespace T3.Gui
 {
     public class T3Ui
     {
-        public const string Version = "v3.2.1";
+        public const string Version = "v3.2.2";
 
         static T3Ui()
         {
