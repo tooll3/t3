@@ -118,16 +118,21 @@ namespace T3.Gui.Graph
                     resourcePaths.Add(soundtrack.FilePath);
                 
                 resourcePaths.Add(@"projectSettings.json");
-                resourcePaths.Add(@"Resources\hash-functions.hlsl");
-                resourcePaths.Add(@"Resources\noise-functions.hlsl");
-                resourcePaths.Add(@"Resources\particle.hlsl");
-                resourcePaths.Add(@"Resources\pbr.hlsl");
-                resourcePaths.Add(@"Resources\point.hlsl");
-                resourcePaths.Add(@"Resources\point-light.hlsl");
-                resourcePaths.Add(@"Resources\utils.hlsl");
+                
+                resourcePaths.Add(@"Resources\lib\shared\bias.hlsl");
+                resourcePaths.Add(@"Resources\lib\shared\hash-functions.hlsl");
+                resourcePaths.Add(@"Resources\lib\shared\noise-functions.hlsl");
+                resourcePaths.Add(@"Resources\lib\shared\particle.hlsl");
+                resourcePaths.Add(@"Resources\lib\shared\pbr.hlsl");
+                resourcePaths.Add(@"Resources\lib\shared\point.hlsl");
+                resourcePaths.Add(@"Resources\lib\shared\point-light.hlsl");
+                
                 resourcePaths.Add(@"Resources\lib\dx11\fullscreen-texture.hlsl");
                 resourcePaths.Add(@"Resources\lib\img\internal\resolve-multisampled-depth-buffer-cs.hlsl");
-                resourcePaths.Add(@"Resources\lib\particles\particle-dead-list-init.hlsl");
+                
+                resourcePaths.Add(@"Resources\common\images\BRDF-LookUp.dds");
+                resourcePaths.Add(@"Resources\common\HDRI\studio_small_08-prefiltered.dds");
+               
                 resourcePaths.Add(@"Resources\t3\t3.ico");
                 foreach (var resourcePath in resourcePaths)
                 {

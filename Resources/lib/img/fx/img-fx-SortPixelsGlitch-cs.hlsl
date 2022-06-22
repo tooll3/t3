@@ -1,4 +1,4 @@
-#include "hash-functions.hlsl"
+#include "lib/shared/hash-functions.hlsl"
 
 Texture2D<float4> inputTexture : register(t0);
 sampler texSampler : register(s0);

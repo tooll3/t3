@@ -1,4 +1,4 @@
-#include "pbr.hlsl"
+#include "lib/shared/pbr.hlsl"
 
 cbuffer Transforms : register(b0)
 {

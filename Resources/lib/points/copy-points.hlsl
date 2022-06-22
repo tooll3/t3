@@ -1,4 +1,4 @@
-#include "hash-functions.hlsl"
+#include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
 
 StructuredBuffer<Point> SourcePoints : t0;         // input
