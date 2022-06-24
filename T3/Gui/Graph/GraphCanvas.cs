@@ -590,7 +590,7 @@ namespace T3.Gui.Graph
                               && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions.Count > 0
                               && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
                 if (ImGui.MenuItem("Set image as graph background",
-                                   KeyboardBinding.ListKeyboardShortcuts(UserActions.PinToOutputWindow, false),
+                                   KeyboardBinding.ListKeyboardShortcuts(UserActions.DisplayImageAsBackground, false),
                                    selected: false,
                                    enabled: isImage))
                 {
