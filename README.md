@@ -54,7 +54,8 @@ Note: As of 2021-11-05 we no longer use submodules, so you don't have to care ab
 
    1. Open `t3.sln`
    2. In the Solution Explorer right click on **T3** to open the Properties panel. Under the section **Debug** change the **Working  directory** for all build modes to `..`. This is important, because the Resources folder needs to be on the same logical level as the starting directory. If this is not match you will experience errors like "t3.ico" not found.
-   3. Start the project in Debug or Release mode
+   3. In Visual Studio run  Build -> Rebuild solution  to also build the Player.exe
+   4. Start the t3 project in Release mode
 
 ## Get Help
 To get started read the [documentation](https://github.com/still-scene/t3/wiki/user-interface) or watch [tutorial videos](https://www.youtube.com/watch?v=eH2E02U6P5Q&list=PLj-rnPROvbn3LigXGRSDvmLtgTwmNHcQs&index=4)
