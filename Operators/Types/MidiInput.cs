@@ -7,6 +7,7 @@ using NAudio.Midi;
 using Operators.Utils;
 using SharpDX;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using Vector2 = System.Numerics.Vector2;
 
@@ -97,6 +98,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
             lock (this)
             {
+                
                 foreach (var signal in _lastMatchingSignals)
                 {
                     if (_teachingActive)
@@ -138,6 +140,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                         _valuesForControlRange[index] = signal.ControllerValue;
                     }
 
+                    LastMessageTime = Playback.RunTimeInSecs;
                     _isDefaultValue = false;
                 }
 
@@ -292,6 +295,8 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
         #endregion
 
+        public double LastMessageTime;
+        
         private bool _printLogMessages;
         private bool _isDefaultValue = true;
         private bool _oldTeachTrigger;
