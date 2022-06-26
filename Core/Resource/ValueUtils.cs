@@ -201,6 +201,9 @@ namespace Core.Resource
                     {
                         typeof(Vector4), (values, weights) =>
                                          {
+                                             if (values.Length == 1)
+                                                 return values[0];
+                                             
                                              var sum = Vector4.Zero;
                                              for (var index = 0; index < values.Length; index++)
                                              {

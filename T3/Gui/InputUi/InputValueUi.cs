@@ -303,7 +303,10 @@ namespace T3.Gui.InputUi
                     if (ImGui.Button(label, new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
                         if (IsAnimatable)
+                        {
                             animator.CreateInputUpdateAction(inputSlot); // todo: create command
+                            inputSlot.Parent.Parent.Symbol.CreateUpdateActionsAnimatedChildren();
+                        }
                     }
 
                     if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickThreshold)

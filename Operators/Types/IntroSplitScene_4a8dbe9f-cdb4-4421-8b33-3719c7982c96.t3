@@ -1,7 +1,7 @@
 {
   "Name": "IntroSplitScene",
   "Id": "4a8dbe9f-cdb4-4421-8b33-3719c7982c96",
-  "Namespace": "project.numbers.scenes",
+  "Namespace": "user.still.home.scenes",
   "Inputs": [],
   "Children": [
     {

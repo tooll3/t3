@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Operators.Utils;
+using T3.Core;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph;
@@ -97,6 +99,7 @@ namespace T3.Gui.Interaction.Variations
             }
             
             UpdateMidiDevices();
+            SmoothVariationBlending.UpdateBlend();
         }
 
         private static void UpdateMidiDevices()
@@ -141,7 +144,7 @@ namespace T3.Gui.Interaction.Variations
             
             if(SymbolVariationPool.TryGetSnapshot(activationIndex, out var existingVariation))
             {
-                ActivePoolForSnapshots.Apply(ActiveInstanceForSnapshots, existingVariation, UserSettings.Config.PresetsResetToDefaultValues);
+                ActivePoolForSnapshots.Apply(ActiveInstanceForSnapshots, existingVariation);
                 return;
             } 
             
@@ -191,13 +194,13 @@ namespace T3.Gui.Interaction.Variations
             if (SymbolVariationPool.TryGetSnapshot(index, out var variation))
             {
                 _blendTowardsIndex = index;
-                ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, variation, 0, UserSettings.Config.PresetsResetToDefaultValues);
+                ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, variation, 0);
             }
         }
 
         private static int _blendTowardsIndex = -1;
 
-        public static void UpdateBlendingTowardsProgress(int index, float value)
+        public static void UpdateBlendingTowardsProgress(int index, float midiValue)
         {
             if (ActiveInstanceForSnapshots == null || ActivePoolForSnapshots == null)
             {
@@ -206,17 +209,74 @@ namespace T3.Gui.Interaction.Variations
             }
 
             if (_blendTowardsIndex == -1)
+            {
                 return;
+            }
             
             if (SymbolVariationPool.TryGetSnapshot(_blendTowardsIndex, out var variation))
             {
-                ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, variation, value/127.0f, UserSettings.Config.PresetsResetToDefaultValues);
+                //_blendTargetVariation = variation;
+                var normalizedValue = midiValue/127.0f;
+                SmoothVariationBlending.StartBlendTo(variation, normalizedValue);
+            }
+            else
+            {
+                SmoothVariationBlending.Stop();
             }
         }
+
+
+        /// <summary>
+        /// Smooths blending between variations to avoid glitches by low 127 midi resolution steps 
+        /// </summary>
+        private static class SmoothVariationBlending
+        {
+            public static void StartBlendTo(Variation variation, float normalizedBlendWeight)
+            {
+                if (variation != _targetVariation)
+                {
+                    _dampedWeight = normalizedBlendWeight;
+                    _targetVariation = variation;
+                }
+                _targetWeight = normalizedBlendWeight;
+                UpdateBlend();
+            } 
+            
+            public static void UpdateBlend()
+            {
+                if (_targetVariation == null)
+                    return;
+
+                _dampedWeight = MathUtils.SpringDamp(_targetWeight,
+                                                                    _dampedWeight,
+                                                                    ref _dampingVelocity,
+                                                                    200f, (float)Playback.LastFrameDuration);
+
+                if (!(MathF.Abs(_dampingVelocity) > 0.0005f))
+                    return;
+                
+                ActivePoolForSnapshots.BeginBlendTowardsSnapshot(ActiveInstanceForSnapshots, _targetVariation, _dampedWeight);
+            }
+
+            public static void Stop()
+            {
+                _targetVariation = null;
+                
+            }
+            
+            private static float _targetWeight;
+            private static float _dampedWeight;
+            private static float _dampingVelocity;
+            private static Variation _targetVariation;
+            
+        } 
+        
         
         public static void StopBlendingTowards()
         {
             _blendTowardsIndex = -1;
+            ActivePoolForSnapshots.ApplyCurrentBlend();
+            SmoothVariationBlending.Stop();
         }
         
         public static void UpdateBlendValues(int obj, float value)

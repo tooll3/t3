@@ -24,19 +24,27 @@ namespace T3.Operators.Types.Id_32a6a351_6d22_4915_aa0e_e0483b7f4e76
             Texture2D texture = Texture.GetValue(context);
             if (texture != null)
             {
-                if ((texture.Description.BindFlags & BindFlags.RenderTarget) > 0)
+                try
                 {
-                    if (_srv == null || _srv.Resource != texture)
-                    {
-                        _srv?.Dispose();
-                        _srv = new ShaderResourceView(resourceManager.Device, texture); // todo: create via resource manager
-                    }
 
-                    resourceManager.Device.ImmediateContext.GenerateMips(_srv);
+                    if ((texture.Description.BindFlags & BindFlags.RenderTarget) > 0)
+                    {
+                        if (_srv == null || _srv.Resource != texture)
+                        {
+                            _srv?.Dispose();
+                            _srv = new ShaderResourceView(resourceManager.Device, texture); // todo: create via resource manager
+                        }
+
+                        resourceManager.Device.ImmediateContext.GenerateMips(_srv);
+                    }
+                    else
+                    {
+                        Log.Warning("Trying to create mips for a texture2d that doesn't have 'RenderTarget` Bindflags set");
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    Log.Warning("Trying to create mips for a texture2d that doesn't have 'RenderTarget` Bindflags set");
+                    Log.Warning("Generating MipMaps resulted in an Exception: " + e.Message, SymbolChildId);
                 }
             }
 

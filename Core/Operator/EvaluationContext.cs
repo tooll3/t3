@@ -51,7 +51,7 @@ namespace T3.Core.Operator
         public void SetDefaultCamera()
         {
             ObjectToWorld = Matrix.Identity;
-            WorldToCamera = Matrix.LookAtRH(new Vector3(0, 0, 2.41f), Vector3.Zero, Vector3.Up);
+            WorldToCamera = Matrix.LookAtRH(new Vector3(0, 0, 2.4141f), Vector3.Zero, Vector3.Up);
             var fov = MathUtil.DegreesToRadians(45);
             float aspectRatio = (float)RequestedResolution.Width / RequestedResolution.Height;
             CameraToClipSpace = Matrix.PerspectiveFovRH(fov, aspectRatio, 0.01f, 1000);

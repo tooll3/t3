@@ -5,7 +5,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "12a92a1b-9141-4ae9-9da5-0a5954208155"/*TestImageFx*/,
+      "Id": "12a92a1b-9141-4ae9-9da5-0a5954208155"/*CompareImages*/,
       "SymbolId": "0e13e34f-c07b-4ada-8c87-6b89f4ed8b41",
       "InputValues": [
         {
@@ -137,7 +137,7 @@
       "SymbolId": "6820b166-1782-43b9-bc5c-6b4f63b16f86",
       "InputValues": [
         {
-          "Id": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Impact*/,
+          "Id": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Specularity*/,
           "Type": "System.Single",
           "Value": 0.19999999
         },
@@ -349,7 +349,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-monsters\\monsters-2048px\\07-king-kong-XYA.png"
+          "Value": "Resources\\user\\still\\proj-monsters\\monsters-2048px\\07-king-kong-XYA.png"
         }
       ],
       "Outputs": []
@@ -481,7 +481,7 @@
       "Outputs": []
     },
     {
-      "Id": "f195df59-945f-4c53-8e9c-b214b16f529f"/*LinearRamp*/,
+      "Id": "f195df59-945f-4c53-8e9c-b214b16f529f"/*LinearGradient*/,
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {
@@ -745,7 +745,7 @@
       "Outputs": []
     },
     {
-      "Id": "4c6c1d49-24fd-4910-89b5-1711dfb67eb8"/*LinearRamp*/,
+      "Id": "4c6c1d49-24fd-4910-89b5-1711dfb67eb8"/*LinearGradient*/,
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {

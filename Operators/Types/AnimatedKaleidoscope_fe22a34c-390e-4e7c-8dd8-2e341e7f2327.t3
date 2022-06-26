@@ -1,7 +1,7 @@
 {
   "Name": "AnimatedKaleidoscope",
   "Id": "fe22a34c-390e-4e7c-8dd8-2e341e7f2327",
-  "Namespace": "project.numbers.research",
+  "Namespace": "user.still.home.research",
   "Inputs": [],
   "Children": [
     {

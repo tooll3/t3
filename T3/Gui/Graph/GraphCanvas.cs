@@ -330,7 +330,11 @@ namespace T3.Gui.Graph
                                  where rect.Overlaps(boundsInCanvas)
                                  select child).ToList();
 
-            NodeSelection.Clear();
+            if (SelectionFence.SelectMode == SelectionFence.SelectModes.Replace)
+            {
+                NodeSelection.Clear();
+            } 
+
             foreach (var node in nodesToSelect)
             {
                 if (node is SymbolChildUi symbolChildUi)
@@ -341,17 +345,40 @@ namespace T3.Gui.Graph
                         Log.Warning("Can't find instance");
                     }
 
-                    NodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
+                    if (SelectionFence.SelectMode == SelectionFence.SelectModes.Remove)
+                    {
+                        NodeSelection.DeselectNode(symbolChildUi, instance);
+                    }
+                    else
+                    {
+                        NodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
+                    }
                 }
-                if (node is Annotation annotation)
+                else if (node is Annotation annotation)
                 {
-                    var rect = new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size);
-                    if (boundsInCanvas.Contains(rect))
-                        NodeSelection.AddSelection(node);
+                    var annotationRect = new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size);
+                    if (boundsInCanvas.Contains(annotationRect))
+                    {
+                        if (SelectionFence.SelectMode == SelectionFence.SelectModes.Remove)
+                        {
+                            NodeSelection.DeselectNode(annotation);
+                        }
+                        else
+                        {
+                            NodeSelection.AddSelection(annotation);
+                        }
+                    }
                 }
                 else
                 {
-                    NodeSelection.AddSelection(node);
+                    if (SelectionFence.SelectMode == SelectionFence.SelectModes.Remove)
+                    {
+                        NodeSelection.DeselectNode(node);
+                    }
+                    else
+                    {
+                        NodeSelection.AddSelection(node);
+                    }
                 }
             }
         }
@@ -563,7 +590,7 @@ namespace T3.Gui.Graph
                               && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions.Count > 0
                               && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
                 if (ImGui.MenuItem("Set image as graph background",
-                                   KeyboardBinding.ListKeyboardShortcuts(UserActions.PinToOutputWindow, false),
+                                   KeyboardBinding.ListKeyboardShortcuts(UserActions.DisplayImageAsBackground, false),
                                    selected: false,
                                    enabled: isImage))
                 {
@@ -579,7 +606,7 @@ namespace T3.Gui.Graph
                 ImGui.EndMenu();
             }
 
-            if (ImGui.MenuItem("Export", oneOpSelected))
+            if (ImGui.MenuItem("Export as Executable", oneOpSelected))
             {
                 PlayerExporter.ExportInstance(this, selectedChildUis.Single());
             }
@@ -662,7 +689,7 @@ namespace T3.Gui.Graph
 
             if (ImGui.BeginMenu("Add..."))
             {
-                if (ImGui.MenuItem("Add Node..."))
+                if (ImGui.MenuItem("Add Node...", "TAB", false,true))
                 {
                     SymbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null, false, null);
                 }
@@ -716,16 +743,17 @@ namespace T3.Gui.Graph
             }
 
             var symbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-            var a = new Annotation()
+            var annotation = new Annotation()
                         {
                             Id = Guid.NewGuid(),
-                            Title = "null",
+                            Title = "Untitled Annotation",
                             Color = Color.Gray,
                             PosOnCanvas = area.Min,
                             Size = area.GetSize()
                         };
-            var command = new AddAnnotationCommand(symbolUi, a);
+            var command = new AddAnnotationCommand(symbolUi, annotation);
             UndoRedoStack.AddAndExecute(command);
+            AnnotationElement.StartRenaming(annotation);
         }
 
         private void PinSelectedToOutputWindow()

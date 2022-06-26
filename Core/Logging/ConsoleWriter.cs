@@ -1,5 +1,6 @@
 ﻿
 using System;
+//using System.Diagnostics;
 
 namespace T3.Core.Logging
 {
@@ -16,7 +17,14 @@ namespace T3.Core.Logging
 
         public void ProcessEntry(LogEntry newEntry)
         {
-            Console.Write("{0}: {1}\n", newEntry.Level.ToString(), newEntry.Message);
+            try
+            {
+                Console.Write("{0}: {1}\n", newEntry.Level.ToString(), newEntry.Message);
+            }
+            catch(Exception e)
+            {
+                Log.Debug("Failed to print log message to console: " + e.Message);
+            }
         }
     }
 }

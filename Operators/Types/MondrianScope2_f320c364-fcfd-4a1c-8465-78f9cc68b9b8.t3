@@ -1,7 +1,7 @@
 {
   "Name": "MondrianScope2",
   "Id": "f320c364-fcfd-4a1c-8465-78f9cc68b9b8",
-  "Namespace": "project.numbers.research",
+  "Namespace": "user.still.home.research",
   "Inputs": [],
   "Children": [
     {

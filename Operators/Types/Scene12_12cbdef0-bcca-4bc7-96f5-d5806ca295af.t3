@@ -1,7 +1,7 @@
 {
   "Name": "Scene12",
   "Id": "12cbdef0-bcca-4bc7-96f5-d5806ca295af",
-  "Namespace": "project.partial.research",
+  "Namespace": "user.still.there.research",
   "Inputs": [],
   "Children": [
     {
@@ -178,7 +178,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-partial\\textures\\ground.png"
+          "Value": "Resources\\user\\still\\proj-there\\textures\\ground.png"
         }
       ],
       "Outputs": []

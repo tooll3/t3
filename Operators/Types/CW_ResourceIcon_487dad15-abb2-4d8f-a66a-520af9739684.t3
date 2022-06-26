@@ -1,7 +1,7 @@
 {
   "Name": "CW_ResourceIcon",
   "Id": "487dad15-abb2-4d8f-a66a-520af9739684",
-  "Namespace": "project.climate-watch.helpers",
+  "Namespace": "user.pixtur.project.climatewatch.helpers",
   "Inputs": [
     {
       "Id": "56bc4d62-4938-4173-86d5-1f1bd3ea6a43"/*ImagePath*/,
@@ -35,7 +35,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-climatewatch\\images\\icon\\source-coal-ignite.png"
+          "Value": "Resources\\user\\pixtur\\projects\\proj-climatewatch\\images\\icon\\source-coal-ignite.png"
         }
       ],
       "Outputs": []

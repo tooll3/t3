@@ -252,7 +252,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\ReferenceImages\\stains-4x4.png"
+          "Value": "Resources\\user\\pixtur\\testcontent\\ReferenceImages\\stains-4x4.png"
         }
       ],
       "Outputs": []
@@ -309,7 +309,7 @@
       "SymbolId": "6820b166-1782-43b9-bc5c-6b4f63b16f86",
       "InputValues": [
         {
-          "Id": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Impact*/,
+          "Id": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Specularity*/,
           "Type": "System.Single",
           "Value": 0.07
         },
@@ -373,7 +373,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\ReferenceImages\\stains-4x4.png"
+          "Value": "Resources\\user\\pixtur\\testcontent\\ReferenceImages\\stains-4x4.png"
         }
       ],
       "Outputs": []
@@ -385,7 +385,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\ReferenceImages\\scratches-8x1.png"
+          "Value": "Resources\\user\\pixtur\\testcontent\\ReferenceImages\\scratches-8x1.png"
         }
       ],
       "Outputs": []
@@ -624,7 +624,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\MeshTest\\MegaHardSurfacePack\\obj_06_160.obj"
+          "Value": "Resources\\user\\pixtur\\testcontent\\MeshTest\\MegaHardSurfacePack\\obj_06_160.obj"
         }
       ],
       "Outputs": []
@@ -1467,7 +1467,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\ReferenceImages\\stains-4x4.png"
+          "Value": "Resources\\user\\pixtur\\testcontent\\ReferenceImages\\stains-4x4.png"
         }
       ],
       "Outputs": []
@@ -1549,7 +1549,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\ReferenceImages\\stains-4x4.png"
+          "Value": "Resources\\user\\pixtur\\testcontent\\ReferenceImages\\stains-4x4.png"
         }
       ],
       "Outputs": []
@@ -1761,7 +1761,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\ReferenceImages\\spray-stains-4x2.png"
+          "Value": "Resources\\user\\pixtur\\testcontent\\ReferenceImages\\spray-stains-4x2.png"
         }
       ],
       "Outputs": []

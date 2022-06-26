@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
-using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Interaction.Variations;
 using T3.Gui.Interaction.Variations.Model;
@@ -35,7 +34,7 @@ namespace T3.Gui.Windows.Variations
                 _variationsToBeDeletedNextFrame.Clear();
             }
 
-            var compositionHasVariations = VariationHandling.ActivePoolForSnapshots.Variations.Count > 0;
+            var compositionHasVariations = VariationHandling.ActivePoolForSnapshots != null && VariationHandling.ActivePoolForSnapshots.Variations.Count > 0;
             var oneChildSelected = NodeSelection.Selection.Count == 1;
             var selectionChanged = NodeSelection.Selection.Count != _selectedNodeCount;
 
@@ -59,16 +58,23 @@ namespace T3.Gui.Windows.Variations
             drawList.ChannelsSplit(2);
             drawList.ChannelsSetCurrent(1);
             {
-                ImGui.BeginChild("header", new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetFrameHeight()));
+                ImGui.BeginChild("header", 
+                                 new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetFrameHeight()), 
+                                 false, 
+                                 ImGuiWindowFlags.NoScrollbar);
 
                 var viewModeIndex = (int)_viewMode;
+                
                 if (CustomComponents.DrawSegmentedToggle(ref viewModeIndex, _options))
                 {
                     _viewMode = (ViewModes)viewModeIndex;
+                    _presetCanvas.RefreshView();
+                    _snapshotCanvas.RefreshView();
                 }
 
                 ImGui.SameLine();
-                
+                ImGui.Dummy(new Vector2(10,10));
+                ImGui.SameLine();
                 switch (_viewMode)
                 {
                     case ViewModes.Presets:
@@ -137,6 +143,7 @@ namespace T3.Gui.Windows.Variations
             _poolWithVariationToBeDeleted = pool;
             _variationsToBeDeletedNextFrame.AddRange(selectionSelection); // TODO: mixing Snapshots and variations in same list is dangerous
             pool.StopHover();
+            pool.SaveVariationsToFile();
         }
 
         private static readonly List<Variation> _variationsToBeDeletedNextFrame = new(20);

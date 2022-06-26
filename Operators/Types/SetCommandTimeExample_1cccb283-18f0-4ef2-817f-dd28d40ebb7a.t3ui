@@ -191,7 +191,7 @@
       }
     },
     {
-      "ChildId": "2012f932-ba02-4d64-96cd-fccf6aa2c11f"/*LinearRamp*/,
+      "ChildId": "2012f932-ba02-4d64-96cd-fccf6aa2c11f"/*LinearGradient*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

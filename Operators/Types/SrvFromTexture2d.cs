@@ -22,34 +22,41 @@ namespace T3.Operators.Types.Id_c2078514_cf1d_439c_a732_0d7b31b5084a
 
         private void Update(EvaluationContext context)
         {
-            var resourceManager = ResourceManager.Instance();
-            Texture2D texture = Texture.GetValue(context);
-            if (texture != null)
+            try
             {
-                ShaderResourceView.Value?.Dispose();
-                if ((texture.Description.BindFlags & BindFlags.DepthStencil) > 0)
+                var resourceManager = ResourceManager.Instance();
+                Texture2D texture = Texture.GetValue(context);
+                if (texture != null)
                 {
-                    // it's a depth stencil texture, so we need to set the format explicitly
-                    var desc = new ShaderResourceViewDescription()
-                                   {
-                                       Format = Format.R32_Float,
-                                       Dimension = ShaderResourceViewDimension.Texture2D,
-                                       Texture2D = new ShaderResourceViewDescription.Texture2DResource
-                                                       {
-                                                           MipLevels = 1,
-                                                           MostDetailedMip = 0
-                                                       }
-                                   };
-                    ShaderResourceView.Value = new ShaderResourceView(resourceManager.Device, texture, desc);
+                    ShaderResourceView.Value?.Dispose();
+                    if ((texture.Description.BindFlags & BindFlags.DepthStencil) > 0)
+                    {
+                        // it's a depth stencil texture, so we need to set the format explicitly
+                        var desc = new ShaderResourceViewDescription()
+                                       {
+                                           Format = Format.R32_Float,
+                                           Dimension = ShaderResourceViewDimension.Texture2D,
+                                           Texture2D = new ShaderResourceViewDescription.Texture2DResource
+                                                           {
+                                                               MipLevels = 1,
+                                                               MostDetailedMip = 0
+                                                           }
+                                       };
+                        ShaderResourceView.Value = new ShaderResourceView(resourceManager.Device, texture, desc);
+                    }
+                    else
+                    {
+                        ShaderResourceView.Value = new ShaderResourceView(resourceManager.Device, texture); // todo: create via resource manager
+                    }
                 }
                 else
                 {
-                    ShaderResourceView.Value = new ShaderResourceView(resourceManager.Device, texture); // todo: create via resource manager
+                    Utilities.Dispose(ref ShaderResourceView.Value);
                 }
             }
-            else
+            catch (Exception e)
             {
-                Utilities.Dispose(ref ShaderResourceView.Value);
+                Log.Error("Updating Shader Resource View failed: " + e.Message, SymbolChildId);
             }
         }
 

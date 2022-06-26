@@ -1,7 +1,7 @@
 {
   "Name": "RevisionSoundRev",
   "Id": "b23f04e1-a648-4734-9b8e-265c794a0811",
-  "Namespace": "user.pixtur.revision2021",
+  "Namespace": "user.wake.revision2021",
   "Inputs": [],
   "Children": [
     {
@@ -231,7 +231,7 @@
       "Outputs": []
     },
     {
-      "Id": "e4704387-4d6d-457d-99f8-a334ea367afd"/*LinearRamp*/,
+      "Id": "e4704387-4d6d-457d-99f8-a334ea367afd"/*LinearGradient*/,
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {
@@ -685,7 +685,7 @@
       "Outputs": []
     },
     {
-      "Id": "9b7aa593-18f4-4ece-8bba-80a860e91718"/*LinearRamp*/,
+      "Id": "9b7aa593-18f4-4ece-8bba-80a860e91718"/*LinearGradient*/,
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {

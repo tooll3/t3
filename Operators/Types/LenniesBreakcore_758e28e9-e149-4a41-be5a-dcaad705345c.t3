@@ -1209,7 +1209,7 @@
       "Outputs": []
     },
     {
-      "Id": "4c3dd77b-f2d3-4ffd-bb1b-1822807782e4"/*LinearRamp*/,
+      "Id": "4c3dd77b-f2d3-4ffd-bb1b-1822807782e4"/*LinearGradient*/,
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {

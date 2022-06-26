@@ -1,0 +1,48 @@
+{
+  "Name": "Help01_Interface",
+  "Id": "1ec749af-fe7d-4728-9855-d1fa3e879751",
+  "Namespace": "examples.help",
+  "Inputs": [],
+  "Children": [
+    {
+      "Id": "3ca68ae8-02bd-432b-94a4-be80b6eb5d1a"/*LoadTexture2d*/,
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "73ef00c1-942d-4464-9390-b9632fef8468"/*DetectEdges*/,
+      "SymbolId": "2a5475c8-9e16-409f-8c40-a3063e045d38",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "e841cd12-d601-4bde-94f3-85e9dd02a60a"/*Blob*/,
+      "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
+      "InputValues": [
+        {
+          "Id": "8a908810-2482-4088-8b21-a7ee15531e64"/*Size*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 4.2799997,
+            "Y": 0.0
+          }
+        },
+        {
+          "Id": "8232e748-5fc2-488d-8559-ac9ff621f95d"/*Rotate*/,
+          "Type": "System.Single",
+          "Value": 42.0
+        }
+      ],
+      "Outputs": []
+    }
+  ],
+  "Connections": [
+    {
+      "SourceParentOrChildId": "73ef00c1-942d-4464-9390-b9632fef8468",
+      "SourceSlotId": "caf8af48-8819-49b4-890b-89545c8c0ff5",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "c301380c-8fe6-4e3d-af10-9cebd230b0e9"
+    }
+  ]
+}

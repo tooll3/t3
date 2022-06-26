@@ -1,5 +1,5 @@
 #include "lib/shared/point.hlsl"
-#include "hash-functions.hlsl"
+#include "lib/shared/hash-functions.hlsl"
 #include "lib/points/spatial-hash-map/hash-map-settings.hlsl" 
 
 StructuredBuffer<uint> CellPointIndices :register(t0);         // IndexToPointBuffer

@@ -66,9 +66,17 @@ namespace T3.Core.Animation
                 TimeInBars += timeSinceLastFrameInSecs * PlaybackSpeed * Bpm / 240.0;
                 FxTimeInBars = TimeInBars;
             }
-            else if (idleMotionEnabled)
+            else
             {
-                FxTimeInBars += timeSinceLastFrameInSecs * Bpm / 240f;
+                var timeWasManipulated = Math.Abs(TimeInBars - _previousTime) > 0.001f;
+                if (timeWasManipulated)
+                {
+                    FxTimeInBars = TimeInBars;
+                }
+                else if (idleMotionEnabled)
+                {
+                    FxTimeInBars += timeSinceLastFrameInSecs * Bpm / 240f;
+                }
             }
 
             if (IsLooping && TimeInBars > LoopRange.End)
@@ -77,6 +85,8 @@ namespace T3.Core.Animation
                                  ? LoopRange.Start
                                  : TimeInBars - (LoopRange.End - LoopRange.Start);
             }
+
+            _previousTime = TimeInBars;
         }
         
 
@@ -86,6 +96,7 @@ namespace T3.Core.Animation
         }
         
         private static double _lastFrameStart;
+        private double _previousTime;
         private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
     }
 }

@@ -19,19 +19,21 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui;
-using T3.Gui.AutoBackup;
+using t3.Gui.Interaction.Camera;
+using t3.Gui.Interaction.StartupCheck;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using Device = SharpDX.Direct3D11.Device;
 
 namespace T3
 {
+
     public static class Program
     {
         private static T3RenderForm _t3RenderForm;
         public static Device Device { get; private set; }
-        public static bool IsFullScreenRequested { get; set; } = false;
-
+        public static SpaceMouse SpaceMouse { get; private set; }
+        
         [STAThread]
         private static void Main()
         {
@@ -58,11 +60,13 @@ namespace T3
             
             Console.WriteLine("Test");
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
-
+            
+            StartupValidation.CheckInstallation();
+            
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
 
-            _main.CreateRenderForm("T3", false);
+            _main.CreateRenderForm("T3 " + T3Ui.Version, false);
 
             // Create Device and SwapChain
             Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, _main.SwapChainDescription, out var device, out _main.SwapChain);
@@ -85,8 +89,11 @@ namespace T3
                                       Log.Debug($"Cancel closing because save-operation is in progress.");
                                   };
 
+            
+            
             _main.Form.WindowState = FormWindowState.Maximized;
-
+            SpaceMouse = new SpaceMouse(_main.Form.Handle);
+            
             // Initialize optional Viewer Windows
             _viewer.CreateRenderForm("T3 Viewer", true);
             _viewer.InitViewSwapChain(factory, device);
@@ -121,9 +128,7 @@ namespace T3
                 // Disable ImGui ini file settings
                 ImGui.GetIO().NativePtr->IniFilename = null;
             }
-
-            //ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
-
+            
             startupStopWatch.Stop();
             Log.Debug($"startup took {startupStopWatch.ElapsedMilliseconds}ms.");
 
@@ -134,6 +139,12 @@ namespace T3
             // Main loop
             void RenderCallback()
             {
+                if (_main.Form.WindowState == FormWindowState.Minimized == true)
+                {
+                    Thread.Sleep(100);
+                    return;
+                }
+                
                 Int64 ticks = stopwatch.ElapsedTicks;
                 Int64 ticksDiff = ticks - lastElapsedTicks;
                 ImGui.GetIO().DeltaTime = (float)((double)(ticksDiff) / Stopwatch.Frequency);
@@ -232,14 +243,15 @@ namespace T3
             factory.Dispose();
             Log.Debug("Shutdown complete");
         }
+        
 
         private static void HandleFullscreenToggle()
         {
             var isBorderStyleFullScreen = _main.Form.FormBorderStyle == FormBorderStyle.None;
-            if (isBorderStyleFullScreen == IsFullScreenRequested)
+            if (isBorderStyleFullScreen == UserSettings.Config.FullScreen)
                 return;
 
-            if (IsFullScreenRequested)
+            if (UserSettings.Config.FullScreen)
             {
                 _main.Form.FormBorderStyle = FormBorderStyle.Sizable;
                 _main.Form.WindowState = FormWindowState.Normal;
@@ -256,7 +268,6 @@ namespace T3
                 formBounds.Width = formBounds.Width;
                 formBounds.Height = formBounds.Height;
                 _main.Form.Bounds = formBounds;
-
 
                 if (T3Ui.ShowSecondaryRenderWindow)
                 {
@@ -276,8 +287,6 @@ namespace T3
                 _main.Form.FormBorderStyle = FormBorderStyle.Sizable;
                 _viewer.Form.FormBorderStyle = FormBorderStyle.Sizable;
             }
-            //_mainWindow.RenderForm.FormBorderStyle = isFullScreenBorderStyle ? FormBorderStyle.Sizable : FormBorderStyle.None;
-            //_viewerWindow.RenderForm.FormBorderStyle = fullScreenBorderStyle ? FormBorderStyle.Sizable : FormBorderStyle.None;
         }
 
         private static void HandleKeyDown(object sender, KeyEventArgs e)
@@ -307,6 +316,5 @@ namespace T3
 
         private static T3Ui _t3ui = null;
         private static DeviceContext _deviceContext;
-
     }
 }

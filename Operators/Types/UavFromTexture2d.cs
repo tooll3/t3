@@ -27,14 +27,21 @@ namespace T3.Operators.Types.Id_84e02044_3011_4a5e_b76a_c904d9b4557f
             Texture2D texture = Texture.GetValue(context);
             if (texture != null)
             {
-                if (((int)texture.Description.BindFlags & (int)BindFlags.UnorderedAccess) > 0)
+                try
                 {
-                    UnorderedAccessView.Value?.Dispose();
-                    UnorderedAccessView.Value = new UnorderedAccessView(resourceManager.Device, texture); // todo: create via resource manager
+                    if (((int)texture.Description.BindFlags & (int)BindFlags.UnorderedAccess) > 0)
+                    {
+                        UnorderedAccessView.Value?.Dispose();
+                        UnorderedAccessView.Value = new UnorderedAccessView(resourceManager.Device, texture); // todo: create via resource manager
+                    }
+                    else
+                    {
+                        Log.Warning("Trying to create an unordered access view for resource which doesn't have the uav bind flag set");
+                    }
                 }
-                else
-                {
-                    Log.Warning("Trying to create an unordered access view for resource which doesn't have the uav bind flag set");
+                catch (Exception e)
+                {   
+                    Log.Error("Getting Texture2D UAV resulted in an exception: "+ e.Message, SymbolChildId);
                 }
             }
         }

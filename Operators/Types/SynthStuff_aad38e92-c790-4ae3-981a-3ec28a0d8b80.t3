@@ -1,7 +1,7 @@
 {
   "Name": "SynthStuff",
   "Id": "aad38e92-c790-4ae3-981a-3ec28a0d8b80",
-  "Namespace": "project.numbers.scenes",
+  "Namespace": "user.still.home.scenes",
   "Inputs": [],
   "Children": [
     {
@@ -153,7 +153,7 @@
       "Outputs": []
     },
     {
-      "Id": "86d42662-e997-4b86-b5cf-533b88b5db9e"/*LinearRamp*/,
+      "Id": "86d42662-e997-4b86-b5cf-533b88b5db9e"/*LinearGradient*/,
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {
@@ -372,7 +372,7 @@
       "Outputs": []
     },
     {
-      "Id": "471aee90-b117-4946-a749-78c016e2c8cc"/*LinearRamp*/,
+      "Id": "471aee90-b117-4946-a749-78c016e2c8cc"/*LinearGradient*/,
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {
@@ -1136,7 +1136,7 @@
       "Outputs": []
     },
     {
-      "Id": "b0d5471d-7dfc-471b-9494-84aa7059499a"/*LinearRamp*/,
+      "Id": "b0d5471d-7dfc-471b-9494-84aa7059499a"/*LinearGradient*/,
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {

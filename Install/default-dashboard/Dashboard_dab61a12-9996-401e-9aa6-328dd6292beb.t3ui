@@ -1,6 +1,6 @@
 {
   "Id": "dab61a12-9996-401e-9aa6-328dd6292beb"/*Dashboard*/,
-  "Description": "Where it all started",
+  "Description": "Your personal Workspace.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -10,8 +10,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -7569.236,
-        "Y": -1101.12976
+        "X": -1929.0117,
+        "Y": -4485.1763
       }
     },
     {
@@ -21,8 +21,8 @@
         "Y": 49.0
       },
       "Position": {
-        "X": -7113.17725,
-        "Y": -1481.99463
+        "X": -1651.8682,
+        "Y": -4956.744
       }
     },
     {
@@ -32,8 +32,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -7563.17725,
-        "Y": -1418.99463
+        "X": -2101.8684,
+        "Y": -4893.744
       }
     },
     {
@@ -43,8 +43,8 @@
         "Y": 49.0
       },
       "Position": {
-        "X": -7413.17725,
-        "Y": -1481.99463
+        "X": -1951.8682,
+        "Y": -4956.744
       }
     },
     {
@@ -54,8 +54,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": -7263.17725,
-        "Y": -1481.99463
+        "X": -1801.8682,
+        "Y": -4956.744
       }
     },
     {
@@ -65,8 +65,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -7713.17725,
-        "Y": -1481.99463
+        "X": -2251.8684,
+        "Y": -4956.744
       }
     },
     {
@@ -76,19 +76,19 @@
         "Y": 36.0
       },
       "Position": {
-        "X": -7563.17725,
-        "Y": -1481.99463
+        "X": -2101.8684,
+        "Y": -4956.744
       }
     },
     {
-      "ChildId": "6393c5bb-5f07-483f-ad0c-9a92b4b33179"/*Numbers*/,
+      "ChildId": "6393c5bb-5f07-483f-ad0c-9a92b4b33179"/*Demo_Home*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
       },
       "Position": {
-        "X": -7419.236,
-        "Y": -1101.12976
+        "X": -1779.0117,
+        "Y": -4485.1763
       }
     },
     {
@@ -98,8 +98,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -7269.236,
-        "Y": -1101.12976
+        "X": -1629.0117,
+        "Y": -4485.1763
       }
     },
     {
@@ -109,10 +109,105 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -7119.236,
-        "Y": -1101.12976
+        "X": -1479.0117,
+        "Y": -4485.1763
+      }
+    },
+    {
+      "ChildId": "4c9aa4f8-651a-40d3-ad37-ae1f646cee3d"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1951.0618,
+        "Y": -4683.665
+      }
+    },
+    {
+      "ChildId": "ecaa1d12-625b-46c0-9148-454dfc40b576"/*Help01_Interface*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2117.3508,
+        "Y": -5088.3423
+      }
+    },
+    {
+      "ChildId": "d1f722e5-4c48-459e-84e0-b4b78924253b"/*PixturTestLab*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1223.5349,
+        "Y": -4767.9688
       }
     }
   ],
-  "OutputUis": []
+  "OutputUis": [],
+  "Annotations": [
+    {
+      "Id": "b81c6d34-6ca0-4cf8-aeb5-49e6bdeae95a",
+      "Title": "Welcome to Tooll3\n\nThis short tutorial will guide you through the first steps.\n",
+      "Position": {
+        "X": -2272.6042,
+        "Y": -5367.176
+      },
+      "Size": {
+        "X": 497.77017,
+        "Y": 53.331284
+      }
+    },
+    {
+      "Id": "1bb9e84d-84fb-4bc0-a070-ba1d76092369",
+      "Title": "This is the Graph Window.\n\nIn the top right corner, you see,  that it's \ncurrently showing your [Dashboard].",
+      "Position": {
+        "X": -2265.0803,
+        "Y": -5309.5576
+      },
+      "Size": {
+        "X": 227.08203,
+        "Y": 59.949726
+      }
+    },
+    {
+      "Id": "3abc855f-23b7-4e19-b575-d7afc764b9ca",
+      "Title": "You can...\n- zoom with mouse wheel\n- pan with the right mouse button\n- or press [F] to adjust to the view to show all \n  content.",
+      "Position": {
+        "X": -2035.6736,
+        "Y": -5309.594
+      },
+      "Size": {
+        "X": 262.23898,
+        "Y": 60.092556
+      }
+    },
+    {
+      "Id": "589f0a56-7537-4b0e-9305-ec21b76ae7fa",
+      "Title": "This is an Operator.\n\nIf you select it, you will see its output in the Output-Window.\n\nTry to double-click it, for an interactive tutorial that will guide you\nthrough Tooll's user interface.\n\n\n\n\n\n\n       Double click ------>",
+      "Position": {
+        "X": -2266.3516,
+        "Y": -5240.4375
+      },
+      "Size": {
+        "X": 493.6462,
+        "Y": 179.58504
+      }
+    },
+    {
+      "Id": "7a6d050e-f043-49ca-9f1f-23caca7914d3",
+      "Title": "This is a simple Graph. Select the [FluidFeedback] operator to see it's output.",
+      "Position": {
+        "X": -2266.2695,
+        "Y": -5043.737
+      },
+      "Size": {
+        "X": 792.98834,
+        "Y": 185.8118
+      }
+    }
+  ]
 }

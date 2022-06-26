@@ -162,14 +162,14 @@ namespace T3.Gui.Windows.Output
             }
             else
             {
-                Log.Error("Viewer camera not undefined");
+                //Log.Error("Viewer camera undefined");
             }
             _evaluationContext.BackgroundColor = _backgroundColor;
 
             // Ugly hack to hide final target
             if (instanceForOutput != instanceForEvaluation)
             {
-                ImGui.BeginChild("hidden", Vector2.One * 1);
+                ImGui.BeginChild("hidden", Vector2.One );
                 {
                     evaluatedOutputUi.DrawValue(evalOutput, _evaluationContext);
                 }

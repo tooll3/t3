@@ -29,11 +29,11 @@ namespace T3.Gui.Graph.Rendering
 
         private static ShaderResourceView CreateNewSrv(Texture2D texture)
         {
-            if ((texture.Description.BindFlags & BindFlags.DepthStencil) > 0)
-                return null; // skip here for depth/stencil to prevent warning below
-            
             try
             {
+                if ((texture.Description.BindFlags & BindFlags.DepthStencil) > 0)
+                    return null; // skip here for depth/stencil to prevent warning below
+            
                 return new ShaderResourceView(ResourceManager.Instance().Device, texture);
             }
             catch (Exception e)

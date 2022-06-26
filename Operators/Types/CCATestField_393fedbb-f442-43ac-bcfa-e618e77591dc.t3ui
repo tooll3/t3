@@ -14,7 +14,7 @@
       }
     },
     {
-      "ChildId": "236f4a4c-e51c-474c-8d80-e08cd4f77bf8"/*LinearRamp*/,
+      "ChildId": "236f4a4c-e51c-474c-8d80-e08cd4f77bf8"/*LinearGradient*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -113,7 +113,7 @@
       }
     },
     {
-      "ChildId": "26fb9365-302e-4bc6-9084-15466eaffe4d"/*LinearRamp*/,
+      "ChildId": "26fb9365-302e-4bc6-9084-15466eaffe4d"/*LinearGradient*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

@@ -55,6 +55,9 @@ namespace T3.Operators.Types.Id_d14233a2_8240_47d3_bb92_0854f6d3b218
         [Input(Guid = "49337c9b-7016-4093-b695-f7d1dd948fa1")]
         public readonly InputSlot<float> FadeNearest = new InputSlot<float>();
 
+        [Input(Guid = "60b17724-e469-463f-9700-745b4d45d6ff")]
+        public readonly InputSlot<bool> EnableZWrite = new InputSlot<bool>();
+
 
     }
 }

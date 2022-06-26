@@ -42,6 +42,12 @@ namespace T3.Gui.Interaction
                 _rightClickedItemId = ImGui.GetID(string.Empty);
                 _previousColor = color;
             }
+            
+            else if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
+            {
+                edited |= InputEditStateFlags.Started;
+                _previousColor = color;
+            }
 
             if (ImGui.IsMouseReleased(ImGuiMouseButton.Right))
             {
@@ -68,7 +74,7 @@ namespace T3.Gui.Interaction
             {
                 var valuePos = color.W;
                 VerticalColorSlider(color, pCenter, valuePos);
-                if (MathF.Abs(ImGui.GetMouseDragDelta().Y) > UserSettings.Config.ClickThreshold)
+                if (MathF.Abs(ImGui.GetMouseDragDelta().Y) > UserSettings.Config.ClickThreshold / 2f)
                     _modifiedSlider = true;
 
                 color.W = (_previousColor.W - ImGui.GetMouseDragDelta().Y / 100).Clamp(0, 1);
@@ -86,7 +92,7 @@ namespace T3.Gui.Interaction
                 var valuePos = hsb.Z;
                 VerticalColorSlider(color, pCenter, valuePos);
 
-                if (MathF.Abs(ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Y) > UserSettings.Config.ClickThreshold)
+                if (MathF.Abs(ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Y) > UserSettings.Config.ClickThreshold /2f)
                 {
                     _modifiedSlider = true;
                 }

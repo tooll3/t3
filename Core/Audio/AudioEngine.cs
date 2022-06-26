@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Animation;
+using T3.Core.IO;
 using T3.Core.Logging;
 
 namespace Core.Audio
@@ -18,6 +19,17 @@ namespace Core.Audio
         public static void UseAudioClip(AudioClip clip, double time)
         {
             _updatedClipTimes[clip] = time;
+        }
+
+        public static void ReloadClip(AudioClip clip)
+        {
+            if (_clipPlaybacks.TryGetValue(clip.Id, out var stream))
+            {
+                Bass.StreamFree(stream.StreamHandle);
+                _clipPlaybacks.Remove(clip.Id);
+            }
+            
+            UseAudioClip(clip,0);
         }
 
         public static void CompleteFrame(Playback playback)
@@ -47,7 +59,8 @@ namespace Core.Audio
             List<Guid> obsoleteIds = new();
             var playbackSpeedChanged = Math.Abs(_lastPlaybackSpeed - playback.PlaybackSpeed) > 0.001f;
             _lastPlaybackSpeed = playback.PlaybackSpeed;
-            
+
+            var handledMainSoundtrack = false;
             foreach ( var (audioClipId,clipStream) in  _clipPlaybacks)
             {
                 clipStream.IsInUse = _updatedClipTimes.ContainsKey(clipStream.AudioClip);
@@ -59,9 +72,12 @@ namespace Core.Audio
                 {
                     if (playbackSpeedChanged)
                         clipStream.UpdatePlaybackSpeed(playback.PlaybackSpeed);
-                    
-                    // Todo: Update Muting
-                    
+
+                    if (!handledMainSoundtrack && clipStream.AudioClip.IsSoundtrack)
+                    {
+                        UpdateFftBuffer(clipStream.StreamHandle);
+                        handledMainSoundtrack = true;
+                    }
                     clipStream.UpdateTime();
                 }
             }
@@ -76,8 +92,14 @@ namespace Core.Audio
 
         public static void SetMute(bool configAudioMuted)
         {
-            throw new NotImplementedException();
+            if (configAudioMuted)
+            {
+                _originalVolumeBeforeMuting = Bass.Volume;
+            }
+            Bass.Volume = configAudioMuted ? 0 : _originalVolumeBeforeMuting;
         }
+
+        private static double _originalVolumeBeforeMuting;
         
         private static void UpdateFftBuffer(int soundStreamHandle)
         {
@@ -163,8 +185,7 @@ namespace Core.Audio
         
         private const double AudioSyncingOffset = -2 / 60f;
         private const double AudioTriggerDelayOffset = 2 / 60f;
-        private const double ResyncThreshold = 1.5f / 60f;
-            
+
         /// <summary>
         /// We try to find a compromise between letting bass play the audio clip in the correct playback speed which
         /// eventually will drift away from the Playback time. Of the delta between playback and audio-clip time exceeds
@@ -197,7 +218,8 @@ namespace Core.Audio
             var currentPos = Bass.ChannelBytes2Seconds(StreamHandle, currentStreamPos) - AudioSyncingOffset;
             var soundDelta = currentPos - TargetTime;
 
-            if (Math.Abs(soundDelta) <= ResyncThreshold * Math.Abs(Playback.Current.PlaybackSpeed)) 
+            
+            if (Math.Abs(soundDelta) <=  ProjectSettings.Config.AudioResyncThreshold * Math.Abs(Playback.Current.PlaybackSpeed)) 
                 return;
             
             // Resync

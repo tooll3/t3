@@ -1,7 +1,7 @@
 {
   "Name": "FlashingFaces",
   "Id": "f487a6ae-62ed-4f35-9ca8-22f6a25fc2cc",
-  "Namespace": "project.faces",
+  "Namespace": "user.pixtur.project.faces",
   "Inputs": [],
   "Children": [
     {
@@ -9,7 +9,7 @@
       "SymbolId": "6820b166-1782-43b9-bc5c-6b4f63b16f86",
       "InputValues": [
         {
-          "Id": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Impact*/,
+          "Id": "0212bfb2-9f5f-4d60-aab0-3f9525bd7bfc"/*Specularity*/,
           "Type": "System.Single",
           "Value": 0.19999999
         },
@@ -451,7 +451,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-monsters\\monsters-2048px\\07-king-kong-XYA.png"
+          "Value": "Resources\\user\\still\\proj-monsters\\monsters-2048px\\07-king-kong-XYA.png"
         }
       ],
       "Outputs": []

@@ -1,7 +1,7 @@
 {
   "Name": "CM_StateMachine",
   "Id": "b0453fd5-e9c5-481a-aa6b-0040bd5c1318",
-  "Namespace": "project.climate-watch",
+  "Namespace": "user.pixtur.project.climatewatch",
   "Inputs": [
     {
       "Id": "c766e021-8478-4507-859d-25badb679ff2"/*Value*/,

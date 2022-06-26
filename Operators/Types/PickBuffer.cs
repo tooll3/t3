@@ -9,36 +9,42 @@ namespace T3.Operators.Types.Id_e6bbbeef_08d8_4105_b84d_39edadb549c0
     public class PickBuffer : Instance<PickBuffer>
     {
         [Output(Guid = "32D2645B-B627-437A-AFEC-7E728E2B54F5")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> Output = new Slot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly Slot<T3.Core.DataTypes.BufferWithViews> Output = new();
+        
+        [Output(Guid = "106C3BD6-BC99-4B7E-A411-E3044476D8E7")]
+        public readonly Slot<int> Count = new();
         
         
         public PickBuffer()
         {
             Output.UpdateAction = Update;
+            Count.UpdateAction = Update;
         }
 
         private void Update(EvaluationContext context)
         {
             var connections = Input.GetCollectedTypedInputs();
             if (connections == null || connections.Count == 0)
+            {
+                Count.Value = 0;
+                Output.DirtyFlag.Clear();
                 return;
+            }
+
+            Count.Value = connections.Count;
 
             var index = Index.GetValue(context);
             if (index < 0)
                 index = -index;
             
             index %= connections.Count;
-            //Log.Debug($"Fetching buffer with index {index}");
+            
             Output.Value = connections[index].GetValue(context);
+            
+            Output.DirtyFlag.Clear();
+            Count.DirtyFlag.Clear();
         }        
         
-
-        // [Input(Guid = "895a5b7e-d1b5-4779-bff4-d1e7d3d75701")]
-        // public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
-
-        // [Input(Guid = "025cb23d-7612-4ae3-91d5-b783a65e02d0")]
-        // public readonly InputSlot<int> Count = new InputSlot<int>();
-
         [Input(Guid = "04776dc8-7b84-41f5-973c-22cadbf44f02")]
         public readonly InputSlot<int> Index = new InputSlot<int>();
 

@@ -1,13 +1,14 @@
-//#include "hash-functions.hlsl"
-#include "hash-functions.hlsl"
+//#include "lib/shared/hash-functions.hlsl"
+#include "lib/shared/hash-functions.hlsl"
 
 cbuffer ParamConstants : register(b0)
 {
-    float Impact;
+    float Specularity;
     float Shade;
     float Twist;
     float SampleRadius;
     float2 Offset;
+    float Amount;
 }
 
 cbuffer TimeConstants : register(b1)
@@ -77,9 +78,9 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 direction = float2( sin(angle), cos(angle));
 
     float len = length(d);
-    float2 uv2 = 0.5 -direction * len * 10* Impact;
+    float2 uv2 = 0.5 -direction * len * 10* Specularity;
     float4 cc= Image.Sample(texSampler,  uv2);
-    cc.rgb = lerp(uvImage.rgb,  cc.rgb, Shade );
+    cc.rgb = lerp(uvImage.rgb,  cc.rgb, Shade * Amount );
     //return cc;
 
     cc.a *= uvImage.a;

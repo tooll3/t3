@@ -208,13 +208,13 @@
       "Outputs": []
     },
     {
-      "Id": "5f0bdce4-6134-4870-b65b-c570117003cd"/*DidTimeRewind*/,
+      "Id": "5f0bdce4-6134-4870-b65b-c570117003cd"/*DidTimeChange*/,
       "SymbolId": "2443b2fd-c397-4ea6-9588-b595f918cf01",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "0c8caa25-78dd-4af4-a3ad-6a64fb6f7b77"/*OrAll*/,
+      "Id": "0c8caa25-78dd-4af4-a3ad-6a64fb6f7b77"/*Any*/,
       "SymbolId": "1446e61e-7f68-4655-99c8-5be390f64851",
       "InputValues": [],
       "Outputs": []

@@ -1,7 +1,7 @@
 {
   "Name": "ClapKeys",
   "Id": "26a1984b-3116-4559-a93b-e9bbb47fa535",
-  "Namespace": "project.handclap.helpers",
+  "Namespace": "user.wake.handclap.helpers",
   "Inputs": [],
   "Children": [
     {

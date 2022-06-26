@@ -1,7 +1,7 @@
 {
   "Name": "FloorPlanFractal",
   "Id": "41eeb2df-a5fe-4ca3-b66e-1639cea1fb5a",
-  "Namespace": "project.numbers.research",
+  "Namespace": "user.still.home.research",
   "Inputs": [],
   "Children": [
     {

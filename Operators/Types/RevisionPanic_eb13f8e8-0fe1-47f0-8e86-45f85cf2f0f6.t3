@@ -1,7 +1,7 @@
 {
   "Name": "RevisionPanic",
   "Id": "eb13f8e8-0fe1-47f0-8e86-45f85cf2f0f6",
-  "Namespace": "user.pixtur.revision2021",
+  "Namespace": "user.wake.revision2021",
   "Inputs": [],
   "Children": [
     {
@@ -250,7 +250,7 @@
         {
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\proj-partial\\meshes\\statue-river-5k.obj"
+          "Value": "Resources\\user\\still\\proj-there\\meshes\\statue-river-5k.obj"
         }
       ],
       "Outputs": []
