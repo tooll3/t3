@@ -44,9 +44,13 @@ namespace T3.Gui
 
         private void RegisterUiType(Type type, ITypeUiProperties uiProperties,  Func<IInputUi> inputUi, Func<IOutputUi> outputUi)
         {
-            TypeUiRegistry.Entries.Add(type, uiProperties);
-            InputUiFactory.Entries.Add(type, inputUi);
-            OutputUiFactory.Entries.Add(type, outputUi);
+            if (TypeUiRegistry.Entries.ContainsKey(type))
+            {
+                Log.Warning($"Ui Type was already registered, overriding :{type.Name}");
+            }
+            TypeUiRegistry.Entries[type]  = uiProperties;
+            InputUiFactory.Entries[type] = inputUi;
+            OutputUiFactory.Entries[type]  = outputUi;
             
             var typeFullName = type.ToString();
             TypeByNameRegistry.Entries[typeFullName]= type;
@@ -83,8 +87,7 @@ namespace T3.Gui
             RegisterUiType(typeof(Command), new CommandUiProperties(), () => new FallbackInputUi<Command>(), () => new CommandOutputUi());
             RegisterUiType(typeof(Core.Animation.Curve), new FloatUiProperties(), () => new CurveInputUi(),
                            () => new ValueOutputUi<Core.Animation.Curve>());
-            RegisterUiType(typeof(T3.Core.Operator.GizmoVisibility), new FallBackUiProperties(), () => new EnumInputUi<T3.Core.Operator.GizmoVisibility>(),
-                           () => new ValueOutputUi<T3.Core.Operator.GizmoVisibility>());
+
             RegisterUiType(typeof(Core.DataTypes.Gradient), new FloatUiProperties(), () => new GradientInputUi(),
                            () => new ValueOutputUi<Core.DataTypes.Gradient>());
             RegisterUiType(typeof(Core.DataTypes.ParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<Core.DataTypes.ParticleSystem>(),
