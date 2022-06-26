@@ -363,8 +363,7 @@ namespace T3.Core
             RegisterType(typeof(SharpDX.Vector4[]), "Vector4[]",
                          () => new InputValue<SharpDX.Vector4[]>(new SharpDX.Vector4[0]));
 
-            var extensions = Assembly.GetExecutingAssembly().GetExportedTypes().Where(t => typeof(ITypeExtension).IsAssignableFrom(t)
-                && !t.IsAbstract && t.IsClass);
+            var extensions = Assembly.GetExecutingAssembly().GetConcreteClassTypeOf<ITypeExtension>();
 
             foreach (var extension in extensions)
             {
@@ -409,6 +408,7 @@ namespace T3.Core
             var instanceTypes = (from type in OperatorsAssembly.ExportedTypes
                                  where type.IsSubclassOf(typeof(Instance))
                                  where !type.IsGenericType
+                                 where !type.IsAbstract
                                  select type).ToList();
 
             foreach (var symbol in SymbolRegistry.Entries.Values)
@@ -436,6 +436,14 @@ namespace T3.Core
                 };
                 SymbolRegistry.Entries.Add(symbol.Id, symbol);
                 Console.WriteLine($"new added symbol: {newType}");
+            }
+
+            var symbolExtensions = ReflectionUtilities.GetConcreteClassTypeOfFromDomain<ISymbolExtension>().ToList();
+
+            foreach (var symbolExtension in symbolExtensions )
+            {
+                ISymbolExtension ext = (ISymbolExtension)Activator.CreateInstance(symbolExtension);
+                ext.RegisterSymbols((symbol) => SymbolRegistry.Entries.Add(symbol.Id, symbol));
             }
         }
 
