@@ -1,4 +1,4 @@
-﻿using ImGuiNET;
+using ImGuiNET;
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
@@ -382,7 +382,15 @@ namespace T3
             {
                 foreach (var entry in _srvCache)
                 {
-                    entry.Value.Dispose();
+                    try
+                    {
+                        entry.Value.Dispose();
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Warning($"Failed to dispose resource : {entry.Value} :{e.Message}");
+                    }
+                    
                 }
 
                 DisposeObj(ref _fontSampler);
