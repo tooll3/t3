@@ -1,7 +1,8 @@
-﻿using SharpDX.Direct3D11;
+using SharpDX.Direct3D11;
 
 namespace T3.Core.DataTypes
 {
+    [T3Type()]
     public class Texture3dWithViews
     {
         public SharpDX.Direct3D11.Texture3D Texture;

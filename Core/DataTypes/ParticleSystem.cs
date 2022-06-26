@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
@@ -7,6 +7,7 @@ using T3.Core.Logging;
 
 namespace T3.Core.DataTypes
 {
+    [T3Type()]
     public class ParticleSystem
     {
         public Buffer ParticleBuffer;
