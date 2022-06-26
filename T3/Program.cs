@@ -15,6 +15,7 @@ using Core.Logging;
 using T3.App;
 using T3.Compilation;
 using T3.Core;
+using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -27,7 +28,6 @@ using Device = SharpDX.Direct3D11.Device;
 
 namespace T3
 {
-
     public static class Program
     {
         private static T3RenderForm _t3RenderForm;
@@ -37,35 +37,20 @@ namespace T3
         [STAThread]
         private static void Main()
         {
-            Log.AddWriter(new ConsoleWriter());
-            Log.AddWriter(FileWriter.CreateDefault());
-                        
-            // From executing application.
-            Log.Debug($"From executing application: {Assembly.GetExecutingAssembly().GetName().Version}");
-            
-            
-            var absolutePath = Path.GetFullPath(Application.StartupPath + @"\Operators.dll");
-            Log.Debug($"From a '{absolutePath}' {Assembly.LoadFile(absolutePath).GetName().Version}");
-            Log.Debug($"fileVersion' {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion}");
-            Log.Debug($"productVersion' {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion}");
- 
-            // From a physical file, provide full path to that file.
-            //string assemblyVersion = Assembly.LoadFile("Operators.dll").GetName().Version.ToString();
- 
-            // From executing application, gives file version.
-            //string fileVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
- 
-            // From executing application, gives product version.
-            ///string productVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;            
-            
-            Console.WriteLine("Test");
-            CultureInfo.CurrentCulture = new CultureInfo("en-US");
-            
-            StartupValidation.CheckInstallation();
-            
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
-
+            
+            Log.AddWriter(new ConsoleWriter());
+            Log.AddWriter(FileWriter.CreateDefault());
+            
+            CultureInfo.CurrentCulture = new CultureInfo("en-US");
+            
+            new UserSettings(saveOnQuit: true);
+            new ProjectSettings(saveOnQuit: true);
+            
+            if(UserSettings.Config.EnableStartupConsistencyCheck)
+                StartupValidation.CheckInstallation();
+            
             _main.CreateRenderForm("T3 " + T3Ui.Version, false);
 
             // Create Device and SwapChain
