@@ -21,6 +21,7 @@ using T3.Core.Operator;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
 using Vector4 = System.Numerics.Vector4;
+using T3.Core.Extensions;
 
 namespace T3.Core
 {
@@ -55,6 +56,19 @@ namespace T3.Core
     {
         public Assembly OperatorsAssembly { get; }
         protected string OperatorTypesFolder { get; } = @"Operators\Types\";
+
+        public static object JsonToEnumValue<T>(JToken jsonToken) where T : struct // todo: use 7.3 and replace with enum
+        {
+            string value = jsonToken.Value<string>();
+            if (Enum.TryParse(value, out T enumValue))
+            {
+                return enumValue;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
 
         public Model(Assembly operatorAssembly, bool enabledLogging)
@@ -144,80 +158,6 @@ namespace T3.Core
                              list.AddRange(entries.Select(entry => entry.Value<string>()));
                              return list;
                          });
-            RegisterType(typeof(System.Numerics.Quaternion), "Quaternion",
-                         () => new InputValue<System.Numerics.Quaternion>(System.Numerics.Quaternion.Identity),
-                         (writer, obj) =>
-                         {
-                             var quat = (System.Numerics.Quaternion)obj;
-                             writer.WriteStartObject();
-                             writer.WriteValue("X", quat.X);
-                             writer.WriteValue("Y", quat.Y);
-                             writer.WriteValue("Z", quat.Z);
-                             writer.WriteValue("W", quat.W);
-                             writer.WriteEndObject();
-                         },
-                         jsonToken =>
-                         {
-                             float x = jsonToken["X"].Value<float>();
-                             float y = jsonToken["Y"].Value<float>();
-                             float z = jsonToken["Z"].Value<float>();
-                             float w = jsonToken["W"].Value<float>();
-                             return new System.Numerics.Quaternion(x, y, z, w);
-                         });
-            RegisterType(typeof(System.Numerics.Vector2), "Vector2",
-                         InputDefaultValueCreator<System.Numerics.Vector2>,
-                         (writer, obj) =>
-                         {
-                             var vec = (System.Numerics.Vector2)obj;
-                             writer.WriteStartObject();
-                             writer.WriteValue("X", vec.X);
-                             writer.WriteValue("Y", vec.Y);
-                             writer.WriteEndObject();
-                         },
-                         jsonToken =>
-                         {
-                             float x = jsonToken["X"].Value<float>();
-                             float y = jsonToken["Y"].Value<float>();
-                             return new System.Numerics.Vector2(x, y);
-                         });
-            RegisterType(typeof(System.Numerics.Vector3), "Vector3",
-                         InputDefaultValueCreator<System.Numerics.Vector3>,
-                         (writer, obj) =>
-                         {
-                             var vec = (System.Numerics.Vector3)obj;
-                             writer.WriteStartObject();
-                             writer.WriteValue("X", vec.X);
-                             writer.WriteValue("Y", vec.Y);
-                             writer.WriteValue("Z", vec.Z);
-                             writer.WriteEndObject();
-                         },
-                         jsonToken =>
-                         {
-                             float x = jsonToken["X"].Value<float>();
-                             float y = jsonToken["Y"].Value<float>();
-                             float z = jsonToken["Z"].Value<float>();
-                             return new System.Numerics.Vector3(x, y, z);
-                         });
-            RegisterType(typeof(System.Numerics.Vector4), "Vector4",
-                         () => new InputValue<Vector4>(new Vector4(1.0f, 1.0f, 1.0f, 1.0f)),
-                         (writer, obj) =>
-                         {
-                             var vec = (Vector4)obj;
-                             writer.WriteStartObject();
-                             writer.WriteValue("X", vec.X);
-                             writer.WriteValue("Y", vec.Y);
-                             writer.WriteValue("Z", vec.Z);
-                             writer.WriteValue("W", vec.W);
-                             writer.WriteEndObject();
-                         },
-                         jsonToken =>
-                         {
-                             float x = jsonToken["X"].Value<float>();
-                             float y = jsonToken["Y"].Value<float>();
-                             float z = jsonToken["Z"].Value<float>();
-                             float w = jsonToken["W"].Value<float>();
-                             return new Vector4(x, y, z, w);
-                         });
             RegisterType(typeof(System.Text.StringBuilder), "StringBuilder",
                          () => new InputValue<StringBuilder>(new StringBuilder()));
 
@@ -256,10 +196,6 @@ namespace T3.Core
                              }
                              return curve;
                          });
-            RegisterType(typeof(T3.Core.Operator.GizmoVisibility), "GizmoVisibility",
-                         InputDefaultValueCreator<T3.Core.Operator.GizmoVisibility>,
-                         (writer, obj) => writer.WriteValue(obj.ToString()),
-                         JsonToEnumValue<T3.Core.Operator.GizmoVisibility>);
             RegisterType(typeof(DataTypes.Gradient), "Gradient",
                          InputDefaultValueCreator<Gradient>,
                          (writer, obj) =>
@@ -282,21 +218,13 @@ namespace T3.Core
                              }
                              return gradient;
                          });
-            RegisterType(typeof(ParticleSystem), "ParticleSystem",
-                         () => new InputValue<ParticleSystem>(null));
-            
+
             RegisterType(typeof(Point[]), "Point",
                          () => new InputValue<Point[]>());
-            RegisterType(typeof(RenderTargetReference), "RenderTargetRef",
-                         () => new InputValue<RenderTargetReference>());
             RegisterType(typeof(Object), "Object",
                          () => new InputValue<Object>());
             RegisterType(typeof(StructuredList), "StructuredList",
                          () => new InputValue<StructuredList>());
-            RegisterType(typeof(Texture3dWithViews), "Texture3dWithViews", 
-                         () => new InputValue<Texture3dWithViews>(new Texture3dWithViews()));
-            RegisterType(typeof(MeshBuffers), "MeshBuffers",
-                         () => new InputValue<MeshBuffers>(null));
 
             // sharpdx types
             RegisterType(typeof(SharpDX.Direct3D.PrimitiveTopology), "PrimitiveTopology",
@@ -434,6 +362,18 @@ namespace T3.Core
                          });
             RegisterType(typeof(SharpDX.Vector4[]), "Vector4[]",
                          () => new InputValue<SharpDX.Vector4[]>(new SharpDX.Vector4[0]));
+
+            var extensions = Assembly.GetExecutingAssembly().GetExportedTypes().Where(t => typeof(ITypeExtension).IsAssignableFrom(t)
+                && !t.IsAbstract && t.IsClass);
+
+            foreach (var extension in extensions)
+            {
+                ITypeExtension ext = (ITypeExtension)Activator.CreateInstance(extension);
+                
+                ext.RegisterTypes(td => RegisterType(td.Type, td.TypeName, td.DefaultValueCreator));
+
+                ext.RegisterPersistedTypes(td => RegisterType(td.Type, td.TypeName, td.DefaultValueCreator, td.ValueToJsonConverter, td.JsonToValueConverter));
+            }
         }
 
         
@@ -443,14 +383,18 @@ namespace T3.Core
                                         Func<JToken, object> jsonToValueConverter)
         {
             RegisterType(type, typeName, defaultValueCreator);
-            TypeValueToJsonConverters.Entries.Add(type, valueToJsonConverter);
-            JsonToTypeValueConverters.Entries.Add(type, jsonToValueConverter);
+            TypeValueToJsonConverters.Entries[type] = valueToJsonConverter;
+            JsonToTypeValueConverters.Entries[type] = jsonToValueConverter;
         }
 
         public static void RegisterType(Type type, string typeName, Func<InputValue> defaultValueCreator)
-        {
-            TypeNameRegistry.Entries.Add(type, typeName);
-            InputValueCreators.Entries.Add(type, defaultValueCreator);
+        { 
+            if (TypeNameRegistry.Entries.ContainsKey(type))
+            {
+                Log.Warning($"Type was already registered, overriding :{type.Name}");
+            }
+            TypeNameRegistry.Entries[type] = typeName;
+            InputValueCreators.Entries[type] = defaultValueCreator;
         }
 
         public virtual void Load()

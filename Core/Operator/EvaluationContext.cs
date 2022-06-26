@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
@@ -9,6 +9,7 @@ using Vector3 = SharpDX.Vector3;
 
 namespace T3.Core.Operator
 {
+    [T3Type()]
     public enum GizmoVisibility
     {
         Inherit = -1,
