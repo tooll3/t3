@@ -243,7 +243,7 @@
         {
           "Id": "41cfdc83-dc6b-4cc3-b814-c60177ef013f"/*DeviceIndex*/,
           "Type": "System.Int32",
-          "Value": 3
+          "Value": 4
         },
         {
           "Id": "e278c4c8-4c3a-4f95-beec-ce8ead827724"/*Reset*/,

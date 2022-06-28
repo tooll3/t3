@@ -326,96 +326,6 @@
       "Outputs": []
     },
     {
-      "Id": "b5be7e5a-f0b1-4c5d-8970-eb2604cad4ad"/*AdvancedFeedback*/,
-      "SymbolId": "33424f7f-ea2d-4753-bbc3-8df00830c4b5",
-      "InputValues": [
-        {
-          "Id": "1d5207f0-132e-42e9-9b2b-171d092d6cac"/*Displacement*/,
-          "Type": "System.Single",
-          "Value": 0.021
-        },
-        {
-          "Id": "3ae3bc6a-5950-4f8b-b2c1-5247dfb9221c"/*DisplaceOffset*/,
-          "Type": "System.Single",
-          "Value": -0.102
-        },
-        {
-          "Id": "882acab3-7cb9-42e8-8f63-5382c83422c2"/*SampleDistance*/,
-          "Type": "System.Single",
-          "Value": 0.913
-        },
-        {
-          "Id": "95b99630-6d27-41d6-9e02-a3e905d023d7"/*Shade*/,
-          "Type": "System.Single",
-          "Value": 0.39999998
-        },
-        {
-          "Id": "f1a53a46-fa5c-49af-9d53-0d68cfe1b33e"/*BlurRadius*/,
-          "Type": "System.Single",
-          "Value": 9.9
-        },
-        {
-          "Id": "fc1b2bc8-6756-4e78-a90b-8af691d85875"/*Twist*/,
-          "Type": "System.Single",
-          "Value": 2.0
-        },
-        {
-          "Id": "b454ebb9-6b27-46b1-962e-15e658c8f6a2"/*ShiftHue*/,
-          "Type": "System.Single",
-          "Value": 0.248
-        },
-        {
-          "Id": "aedb3315-5061-4b68-8925-761d4d8c78b4"/*ShiftSaturation*/,
-          "Type": "System.Single",
-          "Value": 0.001
-        },
-        {
-          "Id": "cbe45989-b239-491e-a2d8-83a42ab58b85"/*ShiftBrightness*/,
-          "Type": "System.Single",
-          "Value": -0.001999998
-        },
-        {
-          "Id": "640de6a7-14ce-4c72-b78e-aa72f642b765"/*AmplifyEdges*/,
-          "Type": "System.Single",
-          "Value": 3.1
-        },
-        {
-          "Id": "37f312f0-949c-4a43-af92-786761b03d3b"/*SampleRadius*/,
-          "Type": "System.Single",
-          "Value": 1.44
-        },
-        {
-          "Id": "c3827e2e-2d15-475c-9b2f-03a861e97fc5"/*IsEnabled*/,
-          "Type": "System.Boolean",
-          "Value": true
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "8db3337f-99f0-47a3-9f57-b81c57186ea4"/*LoadTexture2d*/,
-      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "75b12d45-57b5-40ad-872f-a1eaf0744703"/*Layer2d*/,
-      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
-      "InputValues": [
-        {
-          "Id": "ed4f8c30-7b71-4649-97e6-710a718039b0"/*Color*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 0.69,
-            "Y": 0.69,
-            "Z": 0.69,
-            "W": 0.04999999
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "3faafe39-df82-4556-a834-0dcd5dce10de"/*MasterFade*/,
       "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
       "Name": "MasterFade",
@@ -515,7 +425,7 @@
         {
           "Id": "4515c98e-05bc-4186-8773-4d2b31a8c323"/*Int*/,
           "Type": "System.Int32",
-          "Value": 4
+          "Value": 5
         }
       ],
       "Outputs": []
@@ -984,33 +894,6 @@
       "Outputs": []
     },
     {
-      "Id": "476b6f7e-2205-4629-9d74-82768b3f4492"/*MidiInput*/,
-      "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
-      "InputValues": [
-        {
-          "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
-          "Type": "System.String",
-          "Value": "Tom-Midi2"
-        },
-        {
-          "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
-          "Type": "System.Int32",
-          "Value": 94
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "27b343d1-ee71-4f37-b4c0-cdb50667b434"/*SetBpm*/,
       "SymbolId": "f5158500-39e4-481e-aa4f-f7dbe8cbe0fa",
       "InputValues": [],
@@ -1112,6 +995,45 @@
       "Id": "ffbf00a4-2418-4236-80ac-6ee3d8f4c732"/*SetCommandTime*/,
       "SymbolId": "32325c5b-53f7-4414-b4dd-a436e45528b0",
       "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "07a26bab-a0d1-440a-b14f-9c914fccfbdb"/*SoundInput*/,
+      "SymbolId": "b72d968b-0045-408d-a2f9-5c739c692a66",
+      "InputValues": [
+        {
+          "Id": "e278c4c8-4c3a-4f95-beec-ce8ead827724"/*Reset*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "514fa78f-326b-4e44-a8bb-232111b76867"/*MidiInput*/,
+      "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
+      "InputValues": [
+        {
+          "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
+          "Type": "System.String",
+          "Value": "Krabappel"
+        },
+        {
+          "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
+          "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
+          "Type": "System.Int32",
+          "Value": 81
+        }
+      ],
       "Outputs": []
     }
   ],
@@ -1315,12 +1237,6 @@
       "TargetSlotId": "f36e4078-2608-4308-ab5f-077c05b1181a"
     },
     {
-      "SourceParentOrChildId": "8db3337f-99f0-47a3-9f57-b81c57186ea4",
-      "SourceSlotId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037",
-      "TargetParentOrChildId": "75b12d45-57b5-40ad-872f-a1eaf0744703",
-      "TargetSlotId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"
-    },
-    {
       "SourceParentOrChildId": "8cead826-542a-4d85-b89d-5826e82ce567",
       "SourceSlotId": "e4a8d926-7abd-4d2a-82a1-b7d140cb457f",
       "TargetParentOrChildId": "8253f5ac-f31c-4607-83a2-121b8221a61d",
@@ -1385,12 +1301,6 @@
       "SourceSlotId": "01706780-d25b-4c30-a741-8b7b81e04d82",
       "TargetParentOrChildId": "a2a93e12-f9f9-4476-a631-3e0ed34650a5",
       "TargetSlotId": "40803d0e-c37c-4b5d-b64b-fd1ef090a4f7"
-    },
-    {
-      "SourceParentOrChildId": "75b12d45-57b5-40ad-872f-a1eaf0744703",
-      "SourceSlotId": "e4a8d926-7abd-4d2a-82a1-b7d140cb457f",
-      "TargetParentOrChildId": "b5be7e5a-f0b1-4c5d-8970-eb2604cad4ad",
-      "TargetSlotId": "0f29ca23-b5fb-484e-8ae6-8ed70d67d623"
     },
     {
       "SourceParentOrChildId": "d9bd8cd7-8625-44e7-b182-d5c257e5de3b",
@@ -1547,17 +1457,6 @@
       "SourceSlotId": "617afbbc-8199-43c0-b630-4563e65959ef",
       "TargetParentOrChildId": "ffbf00a4-2418-4236-80ac-6ee3d8f4c732",
       "TargetSlotId": "d2c934bb-de5c-449c-adf8-7a2f48082e9c"
-    }
-  ],
-  "AudioClips": [
-    {
-      "Id": "00000000-0000-0000-0000-000000000000",
-      "StartTime": 0.0,
-      "EndTime": 0.0,
-      "Bpm": 120.0,
-      "DiscardAfterUse": true,
-      "IsSoundtrack": true,
-      "FilePath": "Resources\\user\\wake\\proj-vj-summer-2022\\soundtrack\\June2022_Setlist-v02_30mins.mp3"
     }
   ]
 }

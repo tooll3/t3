@@ -11,7 +11,7 @@
         {
           "Id": "79c84135-5390-455b-bf60-53d4002d0606"/*Scale*/,
           "Type": "System.Single",
-          "Value": 1.8949685
+          "Value": 1.6447108
         },
         {
           "Id": "912cfd4d-5bef-4fdc-abfc-2f5bf8239875"/*Center*/,
@@ -25,24 +25,24 @@
           "Id": "0b6c67e6-338e-4bb3-bcee-5cc9e2045824"/*Offset*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.26257876,
+            "X": 0.09620506,
             "Y": 0.0
           }
         },
         {
           "Id": "a1b3ae23-cb29-4e3e-93b6-fd4f1efadbf1"/*Angle*/,
           "Type": "System.Single",
-          "Value": -49.24874
+          "Value": -46.620037
         },
         {
           "Id": "c355fa5c-c1f5-4e80-b1b1-d2d233dea3fc"/*Steps*/,
           "Type": "System.Int32",
-          "Value": 4
+          "Value": 3
         },
         {
           "Id": "9618504d-bfbd-4d3d-b4d4-03a7064f0fea"/*ShadeSteps*/,
           "Type": "System.Single",
-          "Value": 0.08999692
+          "Value": 0.0329747
         },
         {
           "Id": "05d0a5b2-a7a6-45c5-969a-f00150558a30"/*Rotate*/,
@@ -52,13 +52,13 @@
         {
           "Id": "d2e12b96-7be3-4b31-bcdd-c882543a6ca6"/*ShadeFolds*/,
           "Type": "System.Single",
-          "Value": 0.4238021
+          "Value": 0.15527497
         },
         {
           "Id": "8866edf5-9f58-4da5-abd1-b4e25607bedc"/*Resolution*/,
           "Type": "SharpDX.Size2",
           "Value": {
-            "Width": -1,
+            "Width": 0,
             "Height": 0
           }
         }
@@ -73,23 +73,23 @@
           "Id": "c4891643-ed6a-4af6-9a2f-02917cf26f24"/*Splits*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 3.0,
-            "Y": 9.1
+            "X": 3.0633612,
+            "Y": 9.733615
           }
         },
         {
           "Id": "bc97a9f4-0652-4f28-b13f-717e2449c001"/*SplitProbability*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.24,
-            "Y": 0.98
+            "X": 0.08793253,
+            "Y": 0.53435785
           }
         },
         {
           "Id": "2de30579-5ed6-4c62-8b49-301381acaad5"/*ScrollSpeed*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.0,
+            "X": 0.08870602,
             "Y": -0.5
           }
         },
@@ -97,29 +97,37 @@
           "Id": "5b146cff-3114-4bbe-b9e3-6f6aea3b2725"/*ScrollProbability*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.0,
+            "X": 0.36116022,
             "Y": 0.52
+          }
+        },
+        {
+          "Id": "3127ae86-b5b3-468c-8e69-004da3db7908"/*Padding*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.14038673,
+            "Y": 0.13527188
           }
         },
         {
           "Id": "1a4ced0e-f38e-4360-adb5-a62ffa0344e1"/*Contrast*/,
           "Type": "System.Single",
-          "Value": 0.99
+          "Value": 0.8379325
         },
         {
           "Id": "19a0d33c-4c0e-40ce-8344-5ae17cf081e5"/*Iterations*/,
           "Type": "System.Single",
-          "Value": 2.5
+          "Value": 4.971096
         },
         {
           "Id": "79feb076-bce0-43eb-9d82-89d4159886ee"/*ForgroundRatio*/,
           "Type": "System.Single",
-          "Value": 0.11
+          "Value": 0.3571096
         },
         {
           "Id": "55db762f-64e0-425f-a5ac-01f3edce113e"/*HighlightProbability*/,
           "Type": "System.Single",
-          "Value": 0.08
+          "Value": 0.035646986
         }
       ],
       "Outputs": []
@@ -172,7 +180,7 @@
         {
           "Id": "edc5e4e1-b4fc-4f1a-a080-ddbe2ca18a55"/*GlowImpact*/,
           "Type": "System.Single",
-          "Value": 0.28
+          "Value": 0.37042338
         },
         {
           "Id": "41165195-b54b-46b2-a928-1347870e8af9"/*BlurAmount*/,
@@ -183,8 +191,8 @@
           "Id": "47ec468d-b984-4653-879d-a08875a90d19"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.76471174,
-            "Y": 0.62829757,
+            "X": 0.6150222,
+            "Y": 0.31912065,
             "Z": 1.0,
             "W": 1.0
           }
@@ -200,6 +208,11 @@
           "Id": "4c38c34c-d992-47f1-bcb5-9bd13fc6474b"/*Shape*/,
           "Type": "System.Int32",
           "Value": 1
+        },
+        {
+          "Id": "a4d48d80-936c-4bbb-a2e8-32f86edd4ab2"/*Rate*/,
+          "Type": "System.Single",
+          "Value": 0.25
         },
         {
           "Id": "3b9e7272-ccf3-4fff-a079-5fcbb8a6c7d5"/*Ratio*/,
