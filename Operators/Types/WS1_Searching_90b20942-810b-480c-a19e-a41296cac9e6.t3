@@ -95,22 +95,22 @@
         {
           "Id": "0f2867ab-a65e-4bf3-b1b5-9c241690ba5f"/*Displacement*/,
           "Type": "System.Single",
-          "Value": 1.9926447E-06
+          "Value": 2.7721399E-09
         },
         {
           "Id": "0eff3a75-eafc-4a5e-8a2c-10577c12e776"/*DisplacementOffset*/,
           "Type": "System.Single",
-          "Value": 0.0015772507
+          "Value": 2.2053719E-06
         },
         {
           "Id": "dc8dfa33-1a49-4800-8c1f-89b29d7427f3"/*Twist*/,
           "Type": "System.Single",
-          "Value": 0.00027310522
+          "Value": 3.8044527E-07
         },
         {
           "Id": "77673c64-918d-46a6-aa29-c362057afee6"/*Shade*/,
           "Type": "System.Single",
-          "Value": -6.2505133E-06
+          "Value": -8.702045E-09
         },
         {
           "Id": "d430113e-33fd-49b7-b1c1-32cc95154a4e"/*SampleCount*/,
@@ -120,7 +120,7 @@
         {
           "Id": "c13b83ce-7dd2-4b4e-bf19-b994493b92a3"/*DisplaceMapSampling*/,
           "Type": "System.Single",
-          "Value": 4.6999993
+          "Value": 4.7
         },
         {
           "Id": "b9dd77ff-7e5a-4036-a1c9-24501f1d4d9d"/*SampleSpread*/,
@@ -142,17 +142,17 @@
         {
           "Id": "7f66aa8d-fbdd-47d6-ba38-07e257e19401"/*SampleRadius*/,
           "Type": "System.Single",
-          "Value": 2.3512454
+          "Value": 2.3000717
         },
         {
           "Id": "d3197979-b418-4182-b1c9-f3126b175f8d"/*Strength*/,
           "Type": "System.Single",
-          "Value": 1.1810639
+          "Value": 1.0901272
         },
         {
           "Id": "c0a17636-f75b-45c0-ab63-cb0f9130a7ac"/*MixOriginal*/,
           "Type": "System.Single",
-          "Value": 9.766427E-08
+          "Value": 1.3596946E-10
         }
       ],
       "Outputs": []
@@ -172,7 +172,7 @@
         {
           "Id": "59bde7a3-0952-46a8-8285-40f0a00488e6"/*Scale*/,
           "Type": "System.Single",
-          "Value": 11.130023
+          "Value": 11.13
         },
         {
           "Id": "0e3d1c9f-d0aa-4765-a0ab-d8292a981368"/*Bias*/,
@@ -318,7 +318,7 @@
         {
           "Id": "f29d5426-5e31-4c7c-be77-5e45bfb9daa9"/*Damping*/,
           "Type": "System.Single",
-          "Value": 0.97999996
+          "Value": 0.98
         }
       ],
       "Outputs": []
@@ -342,12 +342,12 @@
         {
           "Id": "f2baf278-adde-42de-afce-336b6c8d0387"/*RangeOutMin*/,
           "Type": "System.Single",
-          "Value": 0.056951225
+          "Value": 0.040023685
         },
         {
           "Id": "252276fb-8de1-42cc-ba41-07d6862015bd"/*RangeOutMax*/,
           "Type": "System.Single",
-          "Value": 0.2795661
+          "Value": 0.25004137
         }
       ],
       "Outputs": []
@@ -387,7 +387,7 @@
             "X": 0.0,
             "Y": 0.0,
             "Z": 0.0,
-            "W": 0.039422035
+            "W": 5.5134296E-05
           }
         },
         {
