@@ -953,33 +953,6 @@
       "Outputs": []
     },
     {
-      "Id": "bc849748-fd5d-4562-997c-22334056496f"/*MidiInput*/,
-      "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
-      "InputValues": [
-        {
-          "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
-          "Type": "System.String",
-          "Value": "Tom-Midi2"
-        },
-        {
-          "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
-          "Type": "System.Int32",
-          "Value": 36
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "d6264877-05a7-4432-b245-8371fc9a604a"/*HasIntChanged*/,
       "SymbolId": "62f7408a-a34a-459a-bd7d-bb349196df9b",
       "InputValues": [],
@@ -1021,7 +994,7 @@
         {
           "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
           "Type": "System.String",
-          "Value": "Krabappel"
+          "Value": "Tom-Midi2"
         },
         {
           "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
@@ -1031,7 +1004,71 @@
         {
           "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
           "Type": "System.Int32",
-          "Value": 81
+          "Value": 57
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "40757108-d66c-4eb9-a890-806955abce02"/*MidiInput*/,
+      "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
+      "InputValues": [
+        {
+          "Id": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
+          "Type": "System.Single",
+          "Value": 1.0
+        },
+        {
+          "Id": "ca3ce08d-6a19-4ad5-9435-08b050753311"/*Damping*/,
+          "Type": "System.Single",
+          "Value": 0.95
+        },
+        {
+          "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
+          "Type": "System.String",
+          "Value": "APC MINI"
+        },
+        {
+          "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
+          "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
+          "Type": "System.Int32",
+          "Value": 53
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "179243f5-c293-4c2e-87b4-4b3b35677e96"/*MidiInput*/,
+      "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
+      "InputValues": [
+        {
+          "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
+          "Type": "System.String",
+          "Value": "nanoKONTROL2"
+        },
+        {
+          "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
+          "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
+          "Type": "System.Int32",
+          "Value": 1
         }
       ],
       "Outputs": []
@@ -1297,7 +1334,7 @@
       "TargetSlotId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"
     },
     {
-      "SourceParentOrChildId": "ee6bcc89-d6d7-4943-ac8e-1519c2fd68f2",
+      "SourceParentOrChildId": "179243f5-c293-4c2e-87b4-4b3b35677e96",
       "SourceSlotId": "01706780-d25b-4c30-a741-8b7b81e04d82",
       "TargetParentOrChildId": "a2a93e12-f9f9-4476-a631-3e0ed34650a5",
       "TargetSlotId": "40803d0e-c37c-4b5d-b64b-fd1ef090a4f7"
@@ -1457,6 +1494,17 @@
       "SourceSlotId": "617afbbc-8199-43c0-b630-4563e65959ef",
       "TargetParentOrChildId": "ffbf00a4-2418-4236-80ac-6ee3d8f4c732",
       "TargetSlotId": "d2c934bb-de5c-449c-adf8-7a2f48082e9c"
+    }
+  ],
+  "AudioClips": [
+    {
+      "Id": "00000000-0000-0000-0000-000000000000",
+      "StartTime": 0.0,
+      "EndTime": 0.0,
+      "Bpm": 120.0,
+      "DiscardAfterUse": true,
+      "IsSoundtrack": true,
+      "FilePath": "Resources\\user\\still\\proj-drd5\\soundtrack\\nevoke-02.mp3"
     }
   ]
 }

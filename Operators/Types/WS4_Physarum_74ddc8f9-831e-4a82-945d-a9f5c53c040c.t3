@@ -41,7 +41,7 @@
         {
           "Id": "f333dbce-cc54-43ba-99b0-065426820f36"/*RestoreLayout*/,
           "Type": "System.Single",
-          "Value": 0.005
+          "Value": 0.007
         },
         {
           "Id": "8ba49b49-8eee-461b-acd8-ba6bc21ba866"/*RestoreLayoutEnabled*/,
@@ -75,8 +75,8 @@
           "Id": "9c6960f3-ac8d-4ab7-a34e-e24a6217b092"/*DecayRatio*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.991,
-            "Y": 0.991,
+            "X": 0.983,
+            "Y": 0.994,
             "Z": 0.98711956,
             "W": 0.974239
           }
@@ -101,7 +101,7 @@
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": -0.4000002,
-            "Y": 0.90000004,
+            "Y": 0.5,
             "Z": 0.0,
             "W": 0.0
           }
@@ -110,7 +110,7 @@
           "Id": "9a4d8846-6b46-4a4b-a8d3-97f3f9eaf8db"/*Emit*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.04,
+            "X": 0.05,
             "Y": 0.0,
             "Z": 0.0,
             "W": 1.0
@@ -119,37 +119,37 @@
         {
           "Id": "4dd19c0b-10c1-43fa-a3e2-970b4f9c6162"/*SideAngle*/,
           "Type": "System.Single",
-          "Value": 71.0
+          "Value": 156.0
         },
         {
           "Id": "11ba5bbc-4873-489f-85b7-35080f0988cf"/*SideRadius*/,
           "Type": "System.Single",
-          "Value": 6.2
+          "Value": 5.7
         },
         {
           "Id": "e95c5f4d-df12-42f6-a879-8e26540b03ac"/*FrontRadius*/,
           "Type": "System.Single",
-          "Value": 6.0
+          "Value": -0.19999981
         },
         {
           "Id": "6eb81dc2-88b5-4ba7-9f82-fe2389dc2926"/*BaseMovement*/,
           "Type": "System.Single",
-          "Value": 13.8
+          "Value": 4.7
         },
         {
           "Id": "e9fd2c91-7cee-481e-933b-a40a27da15dc"/*BaseRotation*/,
           "Type": "System.Single",
-          "Value": 3.8999999
+          "Value": 0.49
         },
         {
           "Id": "211fd6ee-26a9-4e15-85ba-4a22e865545d"/*MoveToComfort*/,
           "Type": "System.Single",
-          "Value": 3.0
+          "Value": 0.59999996
         },
         {
           "Id": "8367cbad-6214-4167-855b-9f704bb46ac3"/*RotateToComfort*/,
           "Type": "System.Single",
-          "Value": -2.9999971
+          "Value": -0.4000002
         }
       ],
       "Outputs": []
@@ -412,8 +412,8 @@
           "Id": "8c4e188c-18ab-4f69-a60a-14a8e5a12f91"/*ComfortZones*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": -0.76,
-            "Y": 0.7,
+            "X": 3.4,
+            "Y": 11.9,
             "Z": 0.0,
             "W": 0.0
           }
@@ -422,8 +422,8 @@
           "Id": "9a4d8846-6b46-4a4b-a8d3-97f3f9eaf8db"/*Emit*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": -1.3999999,
-            "Y": 0.32,
+            "X": 0.59999996,
+            "Y": 0.39,
             "Z": 0.0,
             "W": 0.0
           }
@@ -431,7 +431,7 @@
         {
           "Id": "4dd19c0b-10c1-43fa-a3e2-970b4f9c6162"/*SideAngle*/,
           "Type": "System.Single",
-          "Value": 18.34524
+          "Value": -19.0
         },
         {
           "Id": "11ba5bbc-4873-489f-85b7-35080f0988cf"/*SideRadius*/,
@@ -441,22 +441,27 @@
         {
           "Id": "e95c5f4d-df12-42f6-a879-8e26540b03ac"/*FrontRadius*/,
           "Type": "System.Single",
-          "Value": 20.394361
+          "Value": 4.1
         },
         {
           "Id": "6eb81dc2-88b5-4ba7-9f82-fe2389dc2926"/*BaseMovement*/,
           "Type": "System.Single",
-          "Value": 2.9541824
+          "Value": 4.0
+        },
+        {
+          "Id": "e9fd2c91-7cee-481e-933b-a40a27da15dc"/*BaseRotation*/,
+          "Type": "System.Single",
+          "Value": 1.1
         },
         {
           "Id": "211fd6ee-26a9-4e15-85ba-4a22e865545d"/*MoveToComfort*/,
           "Type": "System.Single",
-          "Value": -0.064627334
+          "Value": 1.3
         },
         {
           "Id": "8367cbad-6214-4167-855b-9f704bb46ac3"/*RotateToComfort*/,
           "Type": "System.Single",
-          "Value": 40.89239
+          "Value": 8.0
         }
       ],
       "Outputs": []
