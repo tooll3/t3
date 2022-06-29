@@ -256,7 +256,8 @@ namespace T3.Gui.Graph
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
                 if (isOnBackground && ImGui.IsMouseDoubleClicked(0))
                 {
-                    SetCompositionToParentInstance(CompositionOp.Parent);
+                    if(CompositionOp.Parent != null)
+                        SetCompositionToParentInstance(CompositionOp.Parent);
                 }
 
                 if (ConnectionMaker.TempConnections.Count > 0 && ImGui.IsMouseReleased(0))
