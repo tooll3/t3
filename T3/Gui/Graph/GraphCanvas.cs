@@ -607,10 +607,6 @@ namespace T3.Gui.Graph
                 ImGui.EndMenu();
             }
 
-            if (ImGui.MenuItem("Export as Executable", oneOpSelected))
-            {
-                PlayerExporter.ExportInstance(this, selectedChildUis.Single());
-            }
 
             ImGui.Separator();
 
@@ -714,6 +710,13 @@ namespace T3.Gui.Graph
                 }
 
                 ImGui.EndMenu();
+            }
+            
+            ImGui.Separator();
+            
+            if (ImGui.MenuItem("Export as Executable", oneOpSelected))
+            {
+                PlayerExporter.ExportInstance(this, selectedChildUis.Single());
             }
         }
         
