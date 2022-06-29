@@ -57,7 +57,8 @@ namespace T3.Gui.Graph
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\BmFont.cs"));
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\ICameraPropertiesProvider.cs"));
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\AudioAnalysisResult.cs"));
-                //operatorAssemblySources.Add(File.ReadAllText(@"Operators\Types\LFO.cs"));
+                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\MidiInConnectionManager.cs"));
+                
                 var references = OperatorUpdating.CompileSymbolsFromSource(exportDir, operatorAssemblySources.ToArray());
 
                 // copy player and dependent assemblies to export dir
@@ -78,10 +79,27 @@ namespace T3.Gui.Graph
                                               buildFolder + "CommandLine.dll",
                                               buildFolder + "Player.dll",
                                               buildFolder + "Player.exe",
-                                              buildFolder + "SharpDX.Desktop.dll",
                                               buildFolder + "Player.deps.json",
                                               buildFolder + "Player.runtimeconfig.json",
                                               buildFolder + "Player.runtimeconfig.dev.json",
+                                              buildFolder + "Core.dll",
+                                              buildFolder + "NAudio.Midi.dll",
+                                              buildFolder + "NAudio.Core.dll",
+                                              buildFolder + "DdsImport.dll",
+                                              buildFolder + "Svg.dll",
+                                              buildFolder + "ManagedBass.Wasapi.dll",
+                                              buildFolder + "ManagedBass.dll",
+                                              buildFolder + "Newtonsoft.Json.dll",
+                                              buildFolder + "Unsplasharp.dll",
+                                              buildFolder + "Fizzler.dll",
+                                              buildFolder + "SharpDX.Desktop.dll",
+                                              buildFolder + "SharpDX.Mathematics.dll",
+                                              buildFolder + "SharpDX.Direct3D11.dll",
+                                              buildFolder + "SharpDX.Direct2D1.dll",
+                                              buildFolder + "SharpDX.DXGI.dll",
+                                              buildFolder + "SharpDX.D3DCompiler.dll",
+                                              buildFolder + "SharpDX.dll",
+                                              buildFolder + "SharpDX.MediaFoundation.dll",
                                           };
                 playerFileNames.ForEach(s => CopyFile(s, exportDir));
 
