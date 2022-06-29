@@ -8,6 +8,7 @@
 
 ## Installation
 A standalone version is in development. Although it's working already, it needs further clean up and testing.
+The preview build of the 3.2.0 version can be found [here](https://github.com/still-scene/t3/releases/tag/v3.2.0). Please report any issues you might encounter.
 
 This means that you need an IDE, like Visual Studio or Rider, to build and run it. This is free and not as difficult as it might sound.
 
@@ -24,7 +25,7 @@ This means that you need an IDE, like Visual Studio or Rider, to build and run i
 
 ### Cloning the repository
 
-#### If you don't have a git account 
+#### If you don't have a GitHub account 
 Ideally, it would be better to sign-up. It's free and only takes a minute or so. This will allow you share your changes with the community. If not, do the following:
 
 1. Make sure that you have git scm installed (see above)
@@ -34,9 +35,9 @@ Ideally, it would be better to sign-up. It's free and only takes a minute or so.
 Note: As of 2021-11-05 we no longer use submodules, so you don't have to care about setting up those.
 
 
-#### If you have a git account
+#### If you have a GitHub account
 
-   1. If you have a git account, we recommend using ssh. Make sure you have an ssh-key installed correctly. Github has [excellent documentation](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) on that topic.
+   1. If you have a GitHub account, we recommend using ssh. Make sure you have an ssh-key installed correctly. GitHub has [excellent documentation](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) on that topic.
       
    2. With Fork you just clone the repository.
    
