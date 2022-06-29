@@ -481,16 +481,26 @@ namespace T3.Core
 
             foreach (var newType in instanceTypes)
             {
+                string @namespace = _innerNamespace.Replace(newType.Namespace ?? string.Empty, "").ToLower();
+
                 string idFromNamespace = _idFromNamespace.Match(newType.Namespace ?? string.Empty).Value.Replace('_', '-');
                 Debug.Assert(!string.IsNullOrEmpty(idFromNamespace));
-                var symbol = new Symbol(newType, Guid.Parse(idFromNamespace));
+                var symbol = new Symbol(newType, Guid.Parse(idFromNamespace))
+                {
+                    Namespace = @namespace,
+                    Name = newType.Name
+                };
                 SymbolRegistry.Entries.Add(symbol.Id, symbol);
                 Console.WriteLine($"new added symbol: {newType}");
             }
         }
 
+        private readonly Regex _innerNamespace = new Regex(@".Id_(\{){0,1}[0-9a-fA-F]{8}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{12}(\}){0,1}",
+                                                    RegexOptions.IgnoreCase);
+
+
         private readonly Regex _idFromNamespace = new Regex(@"(\{){0,1}[0-9a-fA-F]{8}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{12}(\}){0,1}",
-                                                            RegexOptions.IgnoreCase);
+                                                                    RegexOptions.IgnoreCase);
 
         public Symbol ReadSymbolFromFile(string symbolFile)
         {

@@ -7,9 +7,9 @@
 
 
 ## Installation
-A stand alone version is in development. Although it's working already it needs further clean up and testing.
+A standalone version is in development. Although it's working already, it needs further clean up and testing.
 
-This means that you need an IDE like Visual Studio or Rider to build and run it. This is free and not as difficult as it might sound.
+This means that you need an IDE, like Visual Studio or Rider, to build and run it. This is free and not as difficult as it might sound.
 
 ### Dependencies
 
@@ -18,9 +18,9 @@ This means that you need an IDE like Visual Studio or Rider to build and run it.
    In the installer make sure to select the features...
    1. .net Desktop Application development
    2. .net 4.7.1  (on the right side)
-4. Download install [.net 5.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-5.0.404-windows-x64-installer)
-3. You might also want to download and install a git client like https://git-fork.com/ . Alternatively you can install the bare bone git scm.
-4. On Windows 10 you also need to install [Windows Graphics tools](https://docs.microsoft.com/en-us/windows/uwp/gaming/use-the-directx-runtime-and-visual-studio-graphics-diagnostic-features)
+4. Install [.net 5.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-5.0.404-windows-x64-installer)
+3. You might also want to download and install a git client like https://git-fork.com/ . Alternatively, you can install the bare bone git scm.
+4. On Windows 10, you also need to install [Windows Graphics tools](https://docs.microsoft.com/en-us/windows/uwp/gaming/use-the-directx-runtime-and-visual-studio-graphics-diagnostic-features)
 
 ### Cloning the repository
 
@@ -53,14 +53,13 @@ Note: As of 2021-11-05 we no longer use submodules, so you don't have to care ab
 ## Building and starting
 
    1. Open `t3.sln`
-   2. In the Solution Explorer right click on **T3** to open the Properties panel. Under the section **Debug** change the **Working  directory** for all build modes to `..`. This is important, because the Resources folder needs to be on the same logical level as the starting directory. If this is not match you will experience errors like "t3.ico" not found.
+   2. In the Solution Explorer right click on **T3** to open the Properties panel. Under the section **Debug**, change the **Working  directory** for all build modes to `..`. This is important, because the Resources folder needs to be on the same logical level as the starting directory. If this is not match you will experience errors like "t3.ico" not found.
    3. Start the project in Debug or Release mode
 
 ## Get Help
-If you have questions or feedback, please join us on discord: https://discord.gg/YmSyQdeH3S
+To get started read the [documentation](https://github.com/still-scene/t3/wiki/user-interface) or watch [tutorial videos](https://www.youtube.com/watch?v=eH2E02U6P5Q&list=PLj-rnPROvbn3LigXGRSDvmLtgTwmNHcQs&index=4)
 
-
-
+If you have questions or feedback, please join us on discord: https://discord.gg/YmSyQdeH3S 
 
 
 
