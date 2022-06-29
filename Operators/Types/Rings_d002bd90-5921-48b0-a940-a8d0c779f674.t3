@@ -38,7 +38,7 @@
       "Id": "eeabbad9-a4a5-4ee6-9e53-c0012e339b77"/*Radius*/,
       "DefaultValue": {
         "X": 0.0,
-        "Y": 1.0
+        "Y": 0.5
       }
     },
     {
