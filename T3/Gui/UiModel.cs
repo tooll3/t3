@@ -21,6 +21,7 @@ using T3.Gui.ChildUi;
 using T3.Gui.InputUi;
 using t3.Gui.InputUi.SimpleInputUis;
 using T3.Gui.InputUi.SingleControl;
+using T3.Gui.InputUi.VectorInputs;
 using T3.Gui.OutputUi;
 
 using Buffer = SharpDX.Direct3D11.Buffer;

@@ -1,43 +1,49 @@
 ﻿using System.Linq;
-using ImGuiNET;
 using SharpDX;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Gui.InputUi;
+using T3.Gui.Interaction;
 
-namespace T3.Gui.InputUi.SingleControl
+namespace T3.Gui.InputUi.VectorInputs
 {
-    public class Int3InputUi : SingleControlInputUi<Int3>
+    public class Int3InputUi : IntVectorInputValueUi<Int3>
     {
+        public override bool IsAnimatable => true;
+
+        public Int3InputUi() : base(3)
+        {
+        }
+
         public override IInputUi Clone()
         {
-            return new Int3InputUi()
-                   {
-                       InputDefinition = InputDefinition,
-                       Parent = Parent,
-                       PosOnCanvas = PosOnCanvas,
-                       Relevancy = Relevancy
-                   };
+            return CloneWithType<Int3InputUi>();
         }
 
-        protected override bool DrawSingleEditControl(string name, ref Int3 value)
+        protected override InputEditStateFlags DrawEditControl(string name, ref Int3 int3Value)
         {
-            return ImGui.DragInt3("##int3Edit", ref value.X);
+            IntComponents[0] = int3Value.X;
+            IntComponents[1] = int3Value.Y;
+            IntComponents[2] = int3Value.Z;
+
+            var inputEditState = VectorValueEdit.Draw(IntComponents, Min, Max, Scale, Clamp);
+            int3Value = new Int3(IntComponents[0], IntComponents[1], IntComponents[2]);
+
+            return inputEditState;
         }
 
-        protected override void DrawReadOnlyControl(string name, ref Int3 value)
+
+        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time)
         {
-            DrawEditControl(name, ref value);
-        }
-        
-        public override void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time) 
-        {
-            if (inputValue is InputValue<Int3> float3InputValue)
-            {
-                Int3 value = float3InputValue.Value;
-                var curves = animator.GetCurvesForInput(inputSlot).ToArray();
-                Curve.UpdateCurveValues(curves, time, new [] { (float)value.X, (float)value.Y, (float)value.Z});   
-            }
+            if (inputValue is not InputValue<Int3> typedInputValue)
+                return;
+
+            var curves = animator.GetCurvesForInput(inputSlot).ToArray();
+            IntComponents[0] = typedInputValue.Value.X;
+            IntComponents[1] = typedInputValue.Value.Y;
+            IntComponents[2] = typedInputValue.Value.Z;
+            Curve.UpdateCurveValues(curves, time, IntComponents);
         }
     }
 }
