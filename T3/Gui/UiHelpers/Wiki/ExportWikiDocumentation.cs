@@ -6,7 +6,7 @@ using System.Text;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui;
-
+using T3.Gui.InputUi;
 
 namespace t3.Gui.UiHelpers.Wiki
 {
@@ -31,11 +31,17 @@ namespace t3.Gui.UiHelpers.Wiki
                     if (!symbol.Namespace.StartsWith("lib."))
                         continue;
 
-                    if(symbol.Name.StartsWith("_"))
+                    if (symbol.Name.StartsWith("_"))
+                    {
                         Log.Debug($"Skipping internal '{symbol.Name}'");
-                    
-                    if(symbol.Namespace.Contains("._"))
+                        continue;
+                    }
+
+                    if (symbol.Namespace.Contains("._"))
+                    {
                         Log.Debug($"Skipping internal namespace '{symbol.Namespace}'");
+                        continue;
+                    }
                     
                     
                     if (string.IsNullOrWhiteSpace(symbolUi.Description))
@@ -119,8 +125,18 @@ namespace t3.Gui.UiHelpers.Wiki
             sb.AppendLine("");
             sb.AppendLine($"___");
             sb.AppendLine("");
-            sb.AppendLine($"## Outputs");
             
+            {
+                sb.AppendLine($"## Outputs");
+                sb.AppendLine($"|Name|Type|");
+                sb.AppendLine($"|----|---|");
+                foreach (var outputDef in symbolUi.Symbol.OutputDefinitions)
+                {
+                    var uiOutput = symbolUi.OutputUis[outputDef.Id];
+                    sb.AppendLine($"|__{outputDef.Name}__|{uiOutput.Type}|");
+                }
+            }
+
             if (symbolUi.Symbol.InputDefinitions.Count > 1)
             {
                 sb.AppendLine($"## Parameters");
@@ -130,7 +146,7 @@ namespace t3.Gui.UiHelpers.Wiki
                 foreach (var inputDef in symbolUi.Symbol.InputDefinitions)
                 {
                     var uiInput = symbolUi.InputUis[inputDef.Id];
-                    sb.AppendLine($"|__{inputDef.Name}__|{inputDef.DefaultValue.ValueType}|{uiInput.Relevancy}|");
+                    sb.AppendLine($"|__{inputDef.Name}__|{inputDef.DefaultValue.ValueType}|{ (uiInput.Relevancy != Relevancy.Optional ? uiInput.Relevancy : string.Empty)}|");
                 }
             }
 
