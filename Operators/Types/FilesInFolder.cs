@@ -14,6 +14,9 @@ namespace T3.Operators.Types.Id_f90fcd0a_eab9_4e2a_b393_e8d3a0380823
         [Output(Guid = "99bd5b48-7a28-44a7-91e4-98b33cfda20f")]
         public readonly Slot<List<string>> Files = new Slot<List<string>>();
 
+        [Output(Guid = "a40ea23c-e64a-4cca-ae3c-d447dbf7ef93")]
+        public readonly Slot<int> NumberOfFiles = new Slot<int>();
+
 
         public FilesInFolder()
         {
@@ -40,6 +43,7 @@ namespace T3.Operators.Types.Id_f90fcd0a_eab9_4e2a_b393_e8d3a0380823
             Files.Value = string.IsNullOrEmpty(Filter.Value) 
                               ? filePaths 
                               : filePaths.FindAll(filepath => filepath.Contains(filter)).ToList();
+            NumberOfFiles.Value = Files.Value.Count;
         }
 
         [Input(Guid = "ca9778e7-072c-4304-9043-eeb2dc4ca5d7")]
