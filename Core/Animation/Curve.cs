@@ -233,5 +233,22 @@ namespace T3.Core.Animation
                 curves[index].AddOrUpdateV(time, key);
             }
         }
+        
+        public static void UpdateCurveValues(Curve[] curves, double time, int[] values)
+        {
+            for (var index = 0; index < curves.Length; index++)
+            {
+                var key = curves[index].GetV(time) ?? new VDefinition
+                                                          {
+                                                              U = time,
+                                                              InType = VDefinition.Interpolation.Constant,
+                                                              OutType = VDefinition.Interpolation.Constant,
+                                                              InEditMode = VDefinition.EditMode.Constant,
+                                                              OutEditMode = VDefinition.EditMode.Constant,                                                                   
+                                                          };
+                key.Value = values[index];
+                curves[index].AddOrUpdateV(time, key);
+            }
+        }        
     }
 }
