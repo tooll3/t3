@@ -29,7 +29,7 @@ namespace T3.Operators.Types.Id_f8aed421_5e0e_4d1f_993c_1801153ebba8
         private void Update(EvaluationContext context)
         {
             var band = (FrequencyBands)Band.GetValue(context);
-            var mode = (Modes)Mode.GetValue(context);
+            var mode = (Modes)Math.Clamp(Mode.GetValue(context), 0, 6);
             var decay = Decay.GetValue(context);
             var modulo = UseModulo.GetValue(context);
 

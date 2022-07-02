@@ -29,7 +29,7 @@ namespace T3.Operators.Types.Id_146fae64_18da_4183_9794_a322f47c669e
 
             var hasChanged = false;
 
-            switch ((Modes)Mode.GetValue(context))
+            switch ((Modes)Math.Clamp(Mode.GetValue(context), 0, 2))
             {
                 case Modes.Changed:
                     var increase = Math.Abs(newValue - _lastValue) >= threshold;

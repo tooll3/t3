@@ -25,7 +25,7 @@ namespace T3.Operators.Types.Id_05cf9ea7_045d_421f_8ed3_2c2f6b325a46
             var test = TestValue.GetValue(context);
             
             var result = false;
-            switch ((Modes)Mode.GetValue(context))
+            switch ((Modes)Math.Clamp(Mode.GetValue(context), 0, 2))
             {
                 case Modes.IsSmaller:
                     result =  v < test;
