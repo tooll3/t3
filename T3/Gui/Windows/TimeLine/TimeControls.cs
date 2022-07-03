@@ -417,7 +417,7 @@ namespace T3.Gui.Windows.TimeLine
             T3Ui.OpenedPopUpName = "##TimeSettings";
 
             ImGui.PushFont(Fonts.FontLarge);
-            ImGui.TextUnformatted("Playback settings");
+            ImGui.TextUnformatted("Playback and audio settings");
             ImGui.PopFont();
 
             if (ImGui.BeginTabBar("##timeMode"))

@@ -32,7 +32,7 @@ namespace T3.Operators.Types.Id_b72d968b_0045_408d_a2f9_5c739c692a66
 
         private void Update(EvaluationContext context)
         {
-            if(Utilities.DetectHit(Reset.GetValue(context), ref _wasReset))
+            if(MathUtils.WasTriggered(Reset.GetValue(context), ref _wasReset))
             {
                 _analyzer?.ReInit();
             }
@@ -67,7 +67,7 @@ namespace T3.Operators.Types.Id_b72d968b_0045_408d_a2f9_5c739c692a66
         
         protected override void Dispose(bool disposing)
         {
-            _analyzer.Dispose();
+            //_analyzer.Dispose();
         }
 
         private static Analyzer _analyzer;

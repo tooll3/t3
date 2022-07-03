@@ -71,24 +71,6 @@ namespace T3.Core
                 return hash;
             }
         }
-
-        public static bool DetectHit(bool newValue, ref bool lastValue)
-        {
-            var hasHit = false;
-            if (newValue != lastValue)
-            {
-                if (newValue)
-                {
-                    hasHit = true;
-                }
-
-                lastValue = newValue;
-            }
-
-            return hasHit;
-        }
-        
-
     }
 
     public static class CastTo<TTarget>

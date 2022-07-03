@@ -12,7 +12,7 @@ using T3.Core.Logging;
 namespace Core.Audio
 {
     /// <summary>
-    /// Controls loading, playback and discarding or audio clips.
+    /// Controls loading, playback and discarding of audio clips.
     /// </summary>
     public static class AudioEngine
     {
@@ -188,10 +188,10 @@ namespace Core.Audio
 
         /// <summary>
         /// We try to find a compromise between letting bass play the audio clip in the correct playback speed which
-        /// eventually will drift away from the Playback time. Of the delta between playback and audio-clip time exceeds
+        /// eventually will drift away from Tooll's Playback time. If the delta between playback and audio-clip time exceeds
         /// a threshold, we resync.
         /// Frequent resync causes audio glitches.
-        /// Too large of a threshold can disrupt syncing.  
+        /// Too large of a threshold can disrupt syncing and increase latency.
         /// </summary>
         public void UpdateTime()
         {

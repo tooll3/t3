@@ -25,7 +25,7 @@ namespace T3.Operators.Types.Id_485af23d_543e_44a7_b29f_693ed9533ab5
 
         private void Update(EvaluationContext context)
         {
-            var resetHit = Utilities.DetectHit(ResetTrigger.GetValue(context), ref _wasResetTrigger);
+            var resetHit = MathUtils.WasTriggered(ResetTrigger.GetValue(context), ref _wasResetTrigger);
 
             if (resetHit)
             {
