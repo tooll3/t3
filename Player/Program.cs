@@ -184,18 +184,19 @@ namespace T3
 
             _playback = new Playback();
             
-            // create instance of project op, all children are create automatically
+            // Create instance of project op, all children are create automatically
             _project = demoSymbol.CreateInstance(Guid.NewGuid());
             _evalContext = new EvaluationContext();
-
-            //var soundTrackPath = @"Resources\proj-partial\soundtrack\partial.mp3";
+            
             _soundtrack = demoSymbol.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
             
             var usingSoundtrack = _soundtrack != null && File.Exists(_soundtrack.FilePath);
-          
+            
             if (usingSoundtrack)
             {
                 _playback.Bpm = _soundtrack.Bpm;
+                
+                // Trigger loading clip
                 AudioEngine.UseAudioClip(_soundtrack, 0);
                 AudioEngine.CompleteFrame(_playback);
             }
@@ -207,8 +208,7 @@ namespace T3
             // sample some frames to preload all shaders and resources
             if (usingSoundtrack)
             {
-                var songDurationInSecs = Playback.GetSongDurationInSecs();
-                for (double timeInSecs = 0; timeInSecs < songDurationInSecs; timeInSecs += 1.0)
+                for (double timeInSecs = 0; timeInSecs < _soundtrack.LengthInSeconds; timeInSecs += 1.0)
                 {
                     Log.Info($"Pre-evaluate at: {timeInSecs}s");
                     Playback.Current.TimeInSecs = timeInSecs;
