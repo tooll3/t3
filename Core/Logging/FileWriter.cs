@@ -38,8 +38,8 @@ namespace Core.Logging
 
         public static ILogWriter CreateDefault()
         {
-            Directory.CreateDirectory(@"Log");
-            return new FileWriter($@"Log/{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.log")
+            Directory.CreateDirectory(@".t3\log");
+            return new FileWriter($@".t3\log\{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.log")
                        {
                            Filter = LogEntry.EntryLevel.All
                        };
