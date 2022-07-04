@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using T3.Gui.Windows;
 
 namespace t3.Gui.Interaction.StartupCheck
 {
@@ -31,8 +32,8 @@ namespace t3.Gui.Interaction.StartupCheck
             new Check
                 {
                     RequiredFilePaths = new List<string>()
-                                            {
-                                                @".t3\layout1.json",
+                                            {  
+                                                WindowManager.LayoutPath + "layout1.json",
                                                 @"T3\bin\Debug\net5.0-windows\bass.dll",
                                                 @"T3\bin\Debug\net5.0-windows\DdsImport.dll",
                                                 @"T3\bin\Release\net5.0-windows\bass.dll",
