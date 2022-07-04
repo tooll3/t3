@@ -224,7 +224,7 @@ namespace T3.Gui.Styling
                 new IconSource(Icon.AutoRefresh,  56),
             };
 
-        public const string IconAtlasPath = @"Resources\t3\t3-icons.png";
+        public const string IconAtlasPath = @"Resources\t3-editor\images\t3-icons.png";
     }
 
     public enum Icon

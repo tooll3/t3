@@ -91,7 +91,7 @@ namespace T3
                            {
                                ClientSize = options.Size,
                                AllowUserResizing = false,
-                               Icon = new Icon(@"Resources\t3\t3.ico")
+                               Icon = new Icon(@"Resources\t3-editor\images\t3.ico")
                            };
             
             // SwapChain description

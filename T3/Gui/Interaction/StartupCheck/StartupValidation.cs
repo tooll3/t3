@@ -20,9 +20,9 @@ namespace t3.Gui.Interaction.StartupCheck
                     RequiredFilePaths = new List<string>()
                                             {
                                                 @"Resources\",
-                                                @"Resources\t3\t3-icons.png",
-                                                @"Resources\t3\t3.ico",
-                                                @"T3\Fonts\Roboto-Regular.ttf",
+                                                @"Resources\t3-editor\images\t3-icons.png",
+                                                @"Resources\t3-editor\images\t3.ico",
+                                                @"Resources\t3-editor\fonts\Roboto-Regular.ttf",
                                             },
                     Message = @"Please make sure to set the correct start up directory.\n ",
                     URL = "https://github.com/still-scene/t3/wiki/installation#setting-the-startup-directory-in-visual-studio",
