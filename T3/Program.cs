@@ -8,7 +8,6 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using Core.Logging;
@@ -33,6 +32,8 @@ namespace T3
         private static T3RenderForm _t3RenderForm;
         public static Device Device { get; private set; }
         public static SpaceMouse SpaceMouse { get; private set; }
+
+        public static bool IsStandAlone = File.Exists("StartT3.exe");
         
         [STAThread]
         private static void Main()
@@ -48,7 +49,7 @@ namespace T3
             new UserSettings(saveOnQuit: true);
             new ProjectSettings(saveOnQuit: true);
             
-            if(UserSettings.Config.EnableStartupConsistencyCheck)
+            if(!IsStandAlone && UserSettings.Config.EnableStartupConsistencyCheck)
                 StartupValidation.CheckInstallation();
             
             _main.CreateRenderForm("T3 " + T3Ui.Version, false);

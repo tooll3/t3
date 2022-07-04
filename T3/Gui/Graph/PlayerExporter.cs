@@ -47,7 +47,7 @@ namespace T3.Gui.Graph
 
                 Directory.CreateDirectory(exportDir);
 
-                // generate Operators assembly
+                // Generate Operators assembly
                 var operatorAssemblySources = exportInfo.UniqueSymbols.Select(symbol =>
                                                                               {
                                                                                   var source = File.ReadAllText(symbol.SourcePath);
@@ -59,50 +59,63 @@ namespace T3.Gui.Graph
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\AudioAnalysisResult.cs"));
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\MidiInConnectionManager.cs"));
                 
-                var references = OperatorUpdating.CompileSymbolsFromSource(exportDir, operatorAssemblySources.ToArray());
+                
 
-                // copy player and dependent assemblies to export dir
+                // Copy player and dependent assemblies to export dir
                 var currentDir = Directory.GetCurrentDirectory();
-
-                var buildFolder = currentDir + @"\Player\bin\Release\net5.0-windows\";
+                
+                var playerBuildPath = currentDir + @"\Player\bin\Release\net5.0-windows\";
+                var operatorDependenciesPath = Program.IsStandAlone ? @".\"
+                                         : @"T3\bin\Release\net5.0-windows\";
+                
                 if (!File.Exists(currentDir + @"\Player\bin\Release\net5.0-windows\Player.exe"))
                 {
-                    Log.Error($"Can't find valid build in player release folder: (${buildFolder})");
+                    Log.Error($"Can't find valid build in player release folder: (${playerBuildPath})");
                     Log.Error("Please use your IDE to rebuild solution in release mode.");
                     return;
                 }
 
                 var playerFileNames = new List<string>
                                           {
-                                              buildFolder + "bass.dll",
-                                              buildFolder + "basswasapi.dll",
-                                              buildFolder + "CommandLine.dll",
-                                              buildFolder + "Player.dll",
-                                              buildFolder + "Player.exe",
-                                              buildFolder + "Player.deps.json",
-                                              buildFolder + "Player.runtimeconfig.json",
-                                              buildFolder + "Player.runtimeconfig.dev.json",
-                                              buildFolder + "Core.dll",
-                                              buildFolder + "NAudio.Midi.dll",
-                                              buildFolder + "NAudio.Core.dll",
-                                              buildFolder + "DdsImport.dll",
-                                              buildFolder + "Svg.dll",
-                                              buildFolder + "ManagedBass.Wasapi.dll",
-                                              buildFolder + "ManagedBass.dll",
-                                              buildFolder + "Newtonsoft.Json.dll",
-                                              buildFolder + "Unsplasharp.dll",
-                                              buildFolder + "Fizzler.dll",
-                                              buildFolder + "SharpDX.Desktop.dll",
-                                              buildFolder + "SharpDX.Mathematics.dll",
-                                              buildFolder + "SharpDX.Direct3D11.dll",
-                                              buildFolder + "SharpDX.Direct2D1.dll",
-                                              buildFolder + "SharpDX.DXGI.dll",
-                                              buildFolder + "SharpDX.D3DCompiler.dll",
-                                              buildFolder + "SharpDX.dll",
-                                              buildFolder + "SharpDX.MediaFoundation.dll",
+                                              playerBuildPath + "bass.dll",
+                                              playerBuildPath + "basswasapi.dll",
+                                              playerBuildPath + "CommandLine.dll",
+                                              playerBuildPath + "Player.dll",
+                                              playerBuildPath + "Player.exe",
+                                              playerBuildPath + "Player.deps.json",
+                                              playerBuildPath + "Player.runtimeconfig.json",
+                                              playerBuildPath + "Player.runtimeconfig.dev.json",
                                           };
+
+                // NOTE: This is fallback because the Operators.dll combiled for stand alone runner
+                // does not contain all assembly references. So we add these here manually
+                if (Program.IsStandAlone)
+                {
+                    playerFileNames.AddRange(new List<string>
+                                                 {
+                                                     operatorDependenciesPath + "Core.dll",
+                                                     operatorDependenciesPath + "DdsImport.dll",
+                                                     operatorDependenciesPath + "ManagedBass.Wasapi.dll",
+                                                     operatorDependenciesPath + "ManagedBass.dll",
+                                                     operatorDependenciesPath + "Newtonsoft.Json.dll",
+                                                     operatorDependenciesPath + "Unsplasharp.dll",
+                                                     operatorDependenciesPath + "SharpDX.Desktop.dll",
+                                                     operatorDependenciesPath + "SharpDX.Mathematics.dll",
+                                                     operatorDependenciesPath + "SharpDX.Direct3D11.dll",
+                                                     operatorDependenciesPath + "SharpDX.Direct2D1.dll",
+                                                     operatorDependenciesPath + "SharpDX.DXGI.dll",
+                                                     operatorDependenciesPath + "SharpDX.D3DCompiler.dll",
+                                                     operatorDependenciesPath + "SharpDX.dll",
+                                                     operatorDependenciesPath + "NAudio.Midi.dll",
+                                                     operatorDependenciesPath + "NAudio.Core.dll",
+                                                     operatorDependenciesPath + "Svg.dll",
+                                                     operatorDependenciesPath + "Fizzler.dll",
+                                                     operatorDependenciesPath + "SharpDX.MediaFoundation.dll",
+                                                 });
+                }
                 playerFileNames.ForEach(s => CopyFile(s, exportDir));
 
+                var references = OperatorUpdating.CompileSymbolsFromSource(exportDir, operatorAssemblySources.ToArray());
                 var referencedAssemblies = references.Where(r => r.Display.Contains(currentDir))
                                                      .Select(r => r.Display)
                                                      .Distinct()
@@ -112,11 +125,12 @@ namespace T3.Gui.Graph
                     CopyFile(asmPath, exportDir);
                 }
 
-                // generate exported .t3 files
+                // Generate exported .t3 files
                 var json = new SymbolJson();
                 string symbolExportDir = exportDir + Path.DirectorySeparatorChar + @"Operators\Types\";
                 if (Directory.Exists(symbolExportDir))
                     Directory.Delete(symbolExportDir, true);
+                
                 Directory.CreateDirectory(symbolExportDir);
                 foreach (var symbol in exportInfo.UniqueSymbols)
                 {
@@ -172,7 +186,7 @@ namespace T3.Gui.Graph
                 resourcePaths.Add(@"Resources\common\images\BRDF-LookUp.dds");
                 resourcePaths.Add(@"Resources\common\HDRI\studio_small_08-prefiltered.dds");
 
-                resourcePaths.Add(@"Resources\t3\t3.ico");
+                resourcePaths.Add(@"Resources\t3-editor\images\t3.ico");
                 foreach (var resourcePath in resourcePaths)
                 {
                     try

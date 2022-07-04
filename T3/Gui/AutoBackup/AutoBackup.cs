@@ -20,7 +20,7 @@ namespace T3.Gui.AutoBackup
 
         public AutoBackup()
         {
-            SecondsBetweenSaves = 30;
+            SecondsBetweenSaves = 3*60;
             IsEnabled = false;
         }
 
