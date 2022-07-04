@@ -90,10 +90,6 @@ namespace T3.Core.Animation
         }
         
 
-        public static float GetSongDurationInSecs()
-        {
-            return 120; // fallback to avoid division / 0
-        }
         
         private static double _lastFrameStart;
         private double _previousTime;
