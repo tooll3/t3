@@ -89,7 +89,6 @@ namespace Core.Audio
             }
             
             
-            
             BassWasapi.Start();
             
             System.Threading.Thread.Sleep(100);
@@ -98,16 +97,13 @@ namespace Core.Audio
 
             if (!_assignedTimingHandler)
             {
-                //_timer.Elapsed += TimerUpdateEventHandler;
                 _assignedTimingHandler = true;
             }
-            //_noDataErrorShownOnce = false;
             AudioInput.InputMode = AudioInput.InputModes.WasapiDevice;
         }
 
         public static void StopInputCapture()
         {
-            //_timer.Elapsed -= TimerUpdateEventHandler;
             _assignedTimingHandler = false;
         }
 
@@ -135,23 +131,19 @@ namespace Core.Audio
             }
         }
         
-        // Note: The DataFlags seems to be offset by one (e.g. FFT256 only fills 128 entries)
-        //private const int Bass256FftFlag = (int)DataFlags.FFT512;
-        //private const int Bass1024FftFlag = (int)DataFlags.FFT2048;
-        
         private static int Process(IntPtr buffer, int length, IntPtr user)
         {
             var level = BassWasapi.GetLevel();
 
-            var result = 0;
+            int resultCode;
             if (_fftUpdatesSinceLastFrame == 0)
             {
-                result = BassWasapi.GetData(AudioInput.FftBuffer, AudioInput.BassFlagForFftBufferSize);
+                resultCode = BassWasapi.GetData(AudioInput.FftBuffer, AudioInput.BassFlagForFftBufferSize);
             }
             else
             {
-                result = BassWasapi.GetData(_fftIntermediate, AudioInput.BassFlagForFftBufferSize);
-                if (result >= 0)
+                resultCode = BassWasapi.GetData(_fftIntermediate, AudioInput.BassFlagForFftBufferSize);
+                if (resultCode >= 0)
                 {
                     for (var i = 0; i < AudioInput.FftBufferSize; i++)
                     {
@@ -160,7 +152,7 @@ namespace Core.Audio
                 }
             }
             
-            if (result < 0)
+            if (resultCode < 0)
             {
                 Log.Debug($"No new FFT-Data: {Bass.LastError}");
             }
@@ -171,7 +163,7 @@ namespace Core.Audio
             return length;
         }
 
-        private static int _fftUpdatesSinceLastFrame = 0;
+        private static int _fftUpdatesSinceLastFrame;
         
         public class WasapiInputDevice
         {
@@ -179,22 +171,12 @@ namespace Core.Audio
             public WasapiDeviceInfo DeviceInfo;
         }
 
-        //public static readonly float[] FftBuffer = new float[AudioInput.FftSize];
-
-        private static float[] _fftIntermediate = new float[AudioInput.FftBufferSize];
-        private static int _lastLevel;
+        private static readonly float[] _fftIntermediate = new float[AudioInput.FftBufferSize];
         private static readonly Timer _timer = new()
                                                    {
                                                        Interval = 1000.0 / 120,
                                                    };
         
-
-        //     _timer.Interval = 1000.0/120.0;
-        //     _timer.Elapsed += TimerUpdateEventHandler;
-
-        private static readonly WasapiProcedure _wasapiProcedure = new WasapiProcedure(Process);
-        private static int _hangCounter;
-        //private static int _wasapiDeviceIndex;
-        
+        private static readonly WasapiProcedure _wasapiProcedure = Process;
     }
 }
