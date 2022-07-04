@@ -2,13 +2,6 @@
   "Id": "b72d968b-0045-408d-a2f9-5c739c692a66"/*SoundInput*/,
   "InputUis": [
     {
-      "InputId": "41cfdc83-dc6b-4cc3-b814-c60177ef013f"/*DeviceIndex*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
       "InputId": "e278c4c8-4c3a-4f95-beec-ce8ead827724"/*Reset*/,
       "Position": {
         "X": -200.0,

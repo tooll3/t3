@@ -7,11 +7,15 @@ using SharpDX.Windows;
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using Core.Logging;
 using T3.App;
 using T3.Compilation;
 using T3.Core;
+using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -33,13 +37,20 @@ namespace T3
         [STAThread]
         private static void Main()
         {
-            CultureInfo.CurrentCulture = new CultureInfo("en-US");
-            
-            StartupValidation.CheckInstallation();
-            
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
-
+            
+            Log.AddWriter(new ConsoleWriter());
+            Log.AddWriter(FileWriter.CreateDefault());
+            
+            CultureInfo.CurrentCulture = new CultureInfo("en-US");
+            
+            new UserSettings(saveOnQuit: true);
+            new ProjectSettings(saveOnQuit: true);
+            
+            if(UserSettings.Config.EnableStartupConsistencyCheck)
+                StartupValidation.CheckInstallation();
+            
             _main.CreateRenderForm("T3 " + T3Ui.Version, false);
 
             // Create Device and SwapChain

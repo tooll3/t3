@@ -13,6 +13,10 @@
         {
             public string MainOperatorName = "";
             public float AudioResyncThreshold = 1.65f / 60f;
+            
+            public string AudioInputDeviceName = string.Empty;
+            public float AudioGainFactor = 1;
+            public float AudioDecayFactor = 0.98f;
         }
     }
 }

@@ -14,9 +14,9 @@ namespace Core.Logging
         public FileWriter(string filename)
         {
             _fileWriter = new StreamWriter(filename);
-#if DEBUG
+//#if DEBUG
             _fileWriter.AutoFlush = true;
-#endif
+//#endif
         }
 
         public void Dispose()

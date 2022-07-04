@@ -4,10 +4,6 @@
   "Namespace": "lib.io.audio",
   "Inputs": [
     {
-      "Id": "41cfdc83-dc6b-4cc3-b814-c60177ef013f"/*DeviceIndex*/,
-      "DefaultValue": 0
-    },
-    {
       "Id": "e278c4c8-4c3a-4f95-beec-ce8ead827724"/*Reset*/,
       "DefaultValue": false
     },

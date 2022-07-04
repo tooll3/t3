@@ -2,6 +2,9 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0-windows</TargetFramework>
+        <PackageVersion>0.0.0</PackageVersion>
+        <AssemblyVersion>0.0.0.0</AssemblyVersion>
+        <FileVersion>0.0.0.0</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
