@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Core.Audio;
 using ImGuiNET;
+using Newtonsoft.Json;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using t3.Gui.Audio;
 using T3.Gui.Commands;
@@ -447,17 +449,18 @@ namespace T3.Gui.Windows.TimeLine
                         {
                             var filepathModified =
                                 FileOperations.DrawSoundFilePicker(FileOperations.FilePickerTypes.File, ref soundtrack.FilePath);
-                            
+
                             if (ImGui.Button("Reload"))
                             {
                                 AudioEngine.ReloadClip(soundtrack);
                             }
+
                             ImGui.SameLine();
                             if (ImGui.Button("Remove"))
                             {
                                 composition.Symbol.AudioClips.Remove(soundtrack);
                             }
-                            
+
                             ImGui.SetNextItemWidth(150);
                             if (ImGui.DragFloat("BPM", ref soundtrack.Bpm, 0.02f))
                             {
@@ -470,13 +473,13 @@ namespace T3.Gui.Windows.TimeLine
                             {
                                 soundtrack.StartTime = soundtrackStartTime;
                             }
-                
+
                             ImGui.SetNextItemWidth(150);
                             if (ImGui.DragFloat("Resync Threshold in Seconds", ref ProjectSettings.Config.AudioResyncThreshold, 0.001f, 0.01f, 1f))
                             {
                                 soundtrack.StartTime = soundtrackStartTime;
                             }
-                
+
                             if (filepathModified)
                             {
                                 UpdateBpmFromSoundtrackConfig(soundtrack);
@@ -485,6 +488,45 @@ namespace T3.Gui.Windows.TimeLine
                     }
 
                     ImGui.EndTabItem();
+                }
+
+                if (ImGui.BeginTabItem("Audio input"))
+                {
+                    if (ImGui.Selectable("Use Soundtrack", string.IsNullOrEmpty(ProjectSettings.Config.AudioInputDeviceName)))
+                    {
+                        ProjectSettings.Config.AudioInputDeviceName = string.Empty;
+                        AudioInput.InputMode = AudioInput.InputModes.Soundtrack;
+                    }
+
+                    ImGui.DragFloat("AudioGain", ref ProjectSettings.Config.AudioGainFactor, 0.01f, 0, 100);
+                    ImGui.DragFloat("AudioDecay", ref ProjectSettings.Config.AudioDecayFactor, 0.001f, 0, 1);
+                    
+                    if (!WasapiAudioInput.DevicesInitialized)
+                    {
+                        if (ImGui.Button("Init sound input devices"))
+                        {
+                            WasapiAudioInput.InitializeInputDeviceList();
+                        }
+
+                        CustomComponents.HelpText("Scanning WASAPI input devices can take several seconds...");
+                    }
+                    else
+                    {
+                        foreach (var d in WasapiAudioInput.InputDevices)
+                        {
+                            var isSelected = d.DeviceInfo.Name == ProjectSettings.Config.AudioInputDeviceName;
+                            if (ImGui.Selectable($"{d.DeviceInfo.Name}", isSelected))
+                            {
+                                ProjectSettings.Config.AudioInputDeviceName = d.DeviceInfo.Name;
+                                WasapiAudioInput.StartInputCapture(d);
+                            }
+
+                            var di = d.DeviceInfo;
+                            var j = JsonConvert.SerializeObject(di);
+
+                            CustomComponents.TooltipForLastItem($"{j}");
+                        }
+                    }
                 }
 
                 if (ImGui.BeginTabItem("Tapping"))
@@ -524,6 +566,7 @@ namespace T3.Gui.Windows.TimeLine
 
                     ImGui.EndTabItem();
                 }
+
                 ImGui.EndTabBar();
             }
 
