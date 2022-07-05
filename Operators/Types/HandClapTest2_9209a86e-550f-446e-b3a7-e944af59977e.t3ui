@@ -80,7 +80,7 @@
       }
     },
     {
-      "ChildId": "adc677e7-8811-4031-b083-6a3694b69149"/*TriggerAnimation*/,
+      "ChildId": "adc677e7-8811-4031-b083-6a3694b69149"/*__ObsoletePulse*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

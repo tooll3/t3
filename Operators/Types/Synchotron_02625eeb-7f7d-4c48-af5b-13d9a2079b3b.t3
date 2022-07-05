@@ -243,7 +243,7 @@
       "Outputs": []
     },
     {
-      "Id": "73b9fe1b-96ba-4e69-b5ae-9cb226a1f7d1"/*TriggerAnimation*/,
+      "Id": "73b9fe1b-96ba-4e69-b5ae-9cb226a1f7d1"/*__ObsoletePulse*/,
       "SymbolId": "5952d7b4-29ac-41fb-9324-287392d55048",
       "InputValues": [
         {

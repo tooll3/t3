@@ -2791,7 +2791,7 @@
       }
     },
     {
-      "ChildId": "4296de68-48f3-4bc4-b150-b106b9cf1652"/*TriggerAnimation*/,
+      "ChildId": "4296de68-48f3-4bc4-b150-b106b9cf1652"/*__ObsoletePulse*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

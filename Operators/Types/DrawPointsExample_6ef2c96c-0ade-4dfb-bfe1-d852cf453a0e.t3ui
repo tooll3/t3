@@ -113,7 +113,7 @@
       }
     },
     {
-      "ChildId": "5015e8f7-4712-4c07-baa9-3ee6de87b62d"/*TriggerAnimation*/,
+      "ChildId": "5015e8f7-4712-4c07-baa9-3ee6de87b62d"/*__ObsoletePulse*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

@@ -1851,7 +1851,7 @@
       "Outputs": []
     },
     {
-      "Id": "9187c3fd-b905-4e73-814a-a85aab331819"/*TriggerAnimation*/,
+      "Id": "9187c3fd-b905-4e73-814a-a85aab331819"/*__ObsoletePulse*/,
       "SymbolId": "5952d7b4-29ac-41fb-9324-287392d55048",
       "InputValues": [
         {

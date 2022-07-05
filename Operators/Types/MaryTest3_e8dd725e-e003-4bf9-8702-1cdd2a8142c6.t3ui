@@ -1018,7 +1018,7 @@
       }
     },
     {
-      "ChildId": "9187c3fd-b905-4e73-814a-a85aab331819"/*TriggerAnimation*/,
+      "ChildId": "9187c3fd-b905-4e73-814a-a85aab331819"/*__ObsoletePulse*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

@@ -278,7 +278,7 @@
       }
     },
     {
-      "ChildId": "e78d9b13-55aa-4fe6-af57-1fae4a8af162"/*TriggerAnimation*/,
+      "ChildId": "e78d9b13-55aa-4fe6-af57-1fae4a8af162"/*__ObsoletePulse*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -465,7 +465,7 @@
       }
     },
     {
-      "ChildId": "8be0ef8e-1050-4384-a531-c9dbf5dda9b9"/*TriggerAnimation*/,
+      "ChildId": "8be0ef8e-1050-4384-a531-c9dbf5dda9b9"/*__ObsoletePulse*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
