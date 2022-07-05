@@ -37,9 +37,6 @@ namespace Core.Audio
             if (!_bassInitialized)
             {
                 Bass.Free();
-                Bass.DeviceBufferLength = 1024;
-                Bass.Configure(Configuration.UpdateThreads, false);
-                Bass.Configure(Configuration.DeviceBufferLength, 1024);
                 Bass.Init();
                 _bassInitialized = true;
             }
@@ -110,7 +107,7 @@ namespace Core.Audio
             const int get256FftValues = (int)DataFlags.FFT512;
             if (AudioInput.InputMode == AudioInput.InputModes.Soundtrack)
             {
-                Bass.ChannelGetData(soundStreamHandle, AudioInput.FftBuffer, get256FftValues);
+                Bass.ChannelGetData(soundStreamHandle, AudioInput.FftGainBuffer, get256FftValues);
             }
         }
         
@@ -118,9 +115,6 @@ namespace Core.Audio
         private static bool _bassInitialized;
         private static readonly Dictionary<Guid, AudioClipStream> _clipPlaybacks = new();
         private static readonly Dictionary<AudioClip, double> _updatedClipTimes = new();
-        
-        //private const int FftSize = 256;
-        //public static readonly float[] FftBuffer =  new float[FftSize];
     }
 
 

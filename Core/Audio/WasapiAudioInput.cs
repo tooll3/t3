@@ -79,8 +79,8 @@ namespace Core.Audio
                                  Channels: 0,
                                  //Flags: WasapiInitFlags.Buffer | WasapiInitFlags.Exclusive,
                                  Flags: WasapiInitFlags.Buffer,
-                                 Buffer: (float)device.DeviceInfo.MinimumUpdatePeriod,
-                                 Period: (float)device.DeviceInfo.MinimumUpdatePeriod,
+                                 Buffer: (float)device.DeviceInfo.DefaultUpdatePeriod,
+                                 Period: (float)device.DeviceInfo.DefaultUpdatePeriod,
                                  Procedure: _wasapiProcedure,
                                  User: IntPtr.Zero))
             {
@@ -88,26 +88,15 @@ namespace Core.Audio
                 return;
             }
             
-            
             BassWasapi.Start();
-            
-            System.Threading.Thread.Sleep(100);
-            _timer.Enabled = true;
-            _timer.Start();
-
-            if (!_assignedTimingHandler)
-            {
-                _assignedTimingHandler = true;
-            }
             AudioInput.InputMode = AudioInput.InputModes.WasapiDevice;
         }
 
         public static void StopInputCapture()
         {
-            _assignedTimingHandler = false;
+            //_assignedTimingHandler = false;
         }
 
-        private static bool _assignedTimingHandler;
 
         public static bool DevicesInitialized => _inputDevices != null;
         
@@ -134,23 +123,25 @@ namespace Core.Audio
         private static int Process(IntPtr buffer, int length, IntPtr user)
         {
             var level = BassWasapi.GetLevel();
+            if (length < 3000)
+                 return length;
 
             int resultCode;
-            if (_fftUpdatesSinceLastFrame == 0)
-            {
-                resultCode = BassWasapi.GetData(AudioInput.FftBuffer, AudioInput.BassFlagForFftBufferSize);
-            }
-            else
-            {
-                resultCode = BassWasapi.GetData(_fftIntermediate, AudioInput.BassFlagForFftBufferSize);
-                if (resultCode >= 0)
-                {
-                    for (var i = 0; i < AudioInput.FftBufferSize; i++)
-                    {
-                        AudioInput.FftBuffer[i] = MathF.Max(_fftIntermediate[i], AudioInput.FftBuffer[i]);
-                    }
-                }
-            }
+            // if (_fftUpdatesSinceLastFrame == 0)
+            // {
+                resultCode = BassWasapi.GetData(AudioInput.FftGainBuffer, (int)(AudioInput.BassFlagForFftBufferSize | DataFlags.FFTRemoveDC));
+            // }
+            // else
+            // {
+                // resultCode = BassWasapi.GetData(_fftIntermediate, AudioInput.BassFlagForFftBufferSize);
+                // if (resultCode >= 0)
+                // {
+                //     for (var i = 0; i < AudioInput.FftHaltSize; i++)
+                //     {
+                //         AudioInput.FftGainBuffer[i] = MathF.Max(_fftIntermediate[i], AudioInput.FftGainBuffer[i]);
+                //     }
+                // }
+            // }
             
             if (resultCode < 0)
             {
@@ -171,11 +162,7 @@ namespace Core.Audio
             public WasapiDeviceInfo DeviceInfo;
         }
 
-        private static readonly float[] _fftIntermediate = new float[AudioInput.FftBufferSize];
-        private static readonly Timer _timer = new()
-                                                   {
-                                                       Interval = 1000.0 / 120,
-                                                   };
+        private static readonly float[] _fftIntermediate = new float[AudioInput.FftHalfSize];
         
         private static readonly WasapiProcedure _wasapiProcedure = Process;
     }
