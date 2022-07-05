@@ -86,10 +86,10 @@ namespace T3.Gui.ChildUi
 
 
             var w2 = windowWidth * freqGraphWidth;
-            var x1 = windowCenter * freqGraphWidth - w/2;
-            var x2 = windowCenter * freqGraphWidth + w/2;
+            var x1 =screenRect.Min.X + windowCenter * freqGraphWidth - w2/2;
+            var x2 = screenRect.Min.X +windowCenter * freqGraphWidth + w2/2;
             
-            drawList.AddRectFilled(new Vector2(x1, bottom - thresholdY),
+            drawList.AddRectFilled(new Vector2( x1, bottom - thresholdY),
                                    new Vector2(x2 + w / 20, bottom - thresholdY+ 1),
                                    Color.White.Fade(0.5f));
 
