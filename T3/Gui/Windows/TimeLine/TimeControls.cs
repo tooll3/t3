@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using Core.Audio;
 using ImGuiNET;
 using Newtonsoft.Json;
@@ -492,14 +493,16 @@ namespace T3.Gui.Windows.TimeLine
 
                 if (ImGui.BeginTabItem("Audio input"))
                 {
-                    if (ImGui.Selectable("Use Soundtrack", string.IsNullOrEmpty(ProjectSettings.Config.AudioInputDeviceName)))
+                    ImGui.DragFloat("AudioGain", ref ProjectSettings.Config.AudioGainFactor, 0.01f, 0, 100);
+                    ImGui.DragFloat("AudioDecay", ref ProjectSettings.Config.AudioDecayFactor, 0.001f, 0, 1);
+                    
+                    
+                    ImGui.Text("Audio input for analysis...");
+                    if (ImGui.Selectable("Internal Soundtrack", string.IsNullOrEmpty(ProjectSettings.Config.AudioInputDeviceName)))
                     {
                         ProjectSettings.Config.AudioInputDeviceName = string.Empty;
                         AudioInput.InputMode = AudioInput.InputModes.Soundtrack;
                     }
-
-                    ImGui.DragFloat("AudioGain", ref ProjectSettings.Config.AudioGainFactor, 0.01f, 0, 100);
-                    ImGui.DragFloat("AudioDecay", ref ProjectSettings.Config.AudioDecayFactor, 0.001f, 0, 1);
                     
                     if (!WasapiAudioInput.DevicesInitialized)
                     {
@@ -518,6 +521,7 @@ namespace T3.Gui.Windows.TimeLine
                             if (ImGui.Selectable($"{d.DeviceInfo.Name}", isSelected))
                             {
                                 ProjectSettings.Config.AudioInputDeviceName = d.DeviceInfo.Name;
+                                ProjectSettings.Save();
                                 WasapiAudioInput.StartInputCapture(d);
                             }
 

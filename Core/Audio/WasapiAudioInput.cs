@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Timers;
 using ManagedBass;
 using ManagedBass.Wasapi;
 using T3.Core.IO;
@@ -127,30 +126,30 @@ namespace Core.Audio
                  return length;
 
             int resultCode;
-            // if (_fftUpdatesSinceLastFrame == 0)
-            // {
+            if (_fftUpdatesSinceLastFrame == 0)
+            {
                 resultCode = BassWasapi.GetData(AudioInput.FftGainBuffer, (int)(AudioInput.BassFlagForFftBufferSize | DataFlags.FFTRemoveDC));
-            // }
-            // else
-            // {
-                // resultCode = BassWasapi.GetData(_fftIntermediate, AudioInput.BassFlagForFftBufferSize);
-                // if (resultCode >= 0)
-                // {
-                //     for (var i = 0; i < AudioInput.FftHaltSize; i++)
-                //     {
-                //         AudioInput.FftGainBuffer[i] = MathF.Max(_fftIntermediate[i], AudioInput.FftGainBuffer[i]);
-                //     }
-                // }
-            // }
+            }
+            else
+            {
+                resultCode = BassWasapi.GetData(_fftIntermediate, (int)(AudioInput.BassFlagForFftBufferSize | DataFlags.FFTRemoveDC));
+                if (resultCode >= 0)
+                {
+                    for (var i = 0; i < AudioInput.FftHalfSize; i++)
+                    {
+                        AudioInput.FftGainBuffer[i] = MathF.Max(_fftIntermediate[i], AudioInput.FftGainBuffer[i]);
+                    }
+                }
+            }
             
             if (resultCode < 0)
             {
-                Log.Debug($"No new FFT-Data: {Bass.LastError}");
+                Log.Debug($"Can't get Wasapi FFT-Data: {Bass.LastError}");
             }
 
             var audioLevel = level * 0.00001;
             _fftUpdatesSinceLastFrame++;
-            Log.Debug($"Process with {length} #{_fftUpdatesSinceLastFrame}  L:{audioLevel:0.0}  DevBufLen:{BassWasapi.Info.BufferLength}");
+            //Log.Debug($"Process with {length} #{_fftUpdatesSinceLastFrame}  L:{audioLevel:0.0}  DevBufLen:{BassWasapi.Info.BufferLength}");
             return length;
         }
 
@@ -163,7 +162,6 @@ namespace Core.Audio
         }
 
         private static readonly float[] _fftIntermediate = new float[AudioInput.FftHalfSize];
-        
         private static readonly WasapiProcedure _wasapiProcedure = Process;
     }
 }

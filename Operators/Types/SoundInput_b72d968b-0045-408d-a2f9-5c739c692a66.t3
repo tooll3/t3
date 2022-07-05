@@ -4,12 +4,8 @@
   "Namespace": "lib.io.audio",
   "Inputs": [
     {
-      "Id": "e278c4c8-4c3a-4f95-beec-ce8ead827724"/*Reset*/,
-      "DefaultValue": false
-    },
-    {
-      "Id": "bcd6c387-7fec-494f-b956-560728f05bff"/*Gain*/,
-      "DefaultValue": 1.0
+      "Id": "02a09286-19c9-4cee-9439-260701f6de58"/*Mode*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],

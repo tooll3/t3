@@ -56,7 +56,8 @@ namespace Core.Audio
                 var newPeak = MathF.Max(decayed, currentValue);
                 FrequencyBandPeaks[bandIndex] = newPeak;
 
-                var newAttack = (newPeak - lastPeak).Clamp(0, 1000);
+                const float attackAmplification = 4;
+                var newAttack = (newPeak - lastPeak).Clamp(0, 1000) * attackAmplification;
                 var lastAttackDecayed = FrequencyBandAttacks[bandIndex] * ProjectSettings.Config.AudioDecayFactor; 
                 FrequencyBandAttacks[bandIndex] = MathF.Max(newAttack, lastAttackDecayed);
             }
