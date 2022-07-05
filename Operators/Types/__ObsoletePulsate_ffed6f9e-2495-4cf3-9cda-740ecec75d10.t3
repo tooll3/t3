@@ -1,5 +1,5 @@
 {
-  "Name": "Pulsate",
+  "Name": "__ObsoletePulsate",
   "Id": "ffed6f9e-2495-4cf3-9cda-740ecec75d10",
   "Namespace": "lib.anim",
   "Inputs": [

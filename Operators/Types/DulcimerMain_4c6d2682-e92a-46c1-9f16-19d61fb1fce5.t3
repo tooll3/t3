@@ -4425,7 +4425,7 @@
       "Outputs": []
     },
     {
-      "Id": "4296de68-48f3-4bc4-b150-b106b9cf1652"/*Pulse*/,
+      "Id": "4296de68-48f3-4bc4-b150-b106b9cf1652"/*TriggerAnimation*/,
       "SymbolId": "5952d7b4-29ac-41fb-9324-287392d55048",
       "InputValues": [
         {

@@ -76,7 +76,7 @@
       "Outputs": []
     },
     {
-      "Id": "19fdb10f-5bab-4dc6-8970-4b131ffc211e"/*Pulsate*/,
+      "Id": "19fdb10f-5bab-4dc6-8970-4b131ffc211e"/*__ObsoletePulsate*/,
       "SymbolId": "ffed6f9e-2495-4cf3-9cda-740ecec75d10",
       "InputValues": [],
       "Outputs": []
@@ -835,7 +835,7 @@
       "Outputs": []
     },
     {
-      "Id": "39d707bf-52fa-4ddc-b07e-f21f39a4f0ff"/*Pulse*/,
+      "Id": "39d707bf-52fa-4ddc-b07e-f21f39a4f0ff"/*TriggerAnimation*/,
       "SymbolId": "5952d7b4-29ac-41fb-9324-287392d55048",
       "InputValues": [],
       "Outputs": []
@@ -872,7 +872,7 @@
       "Outputs": []
     },
     {
-      "Id": "f45da076-b20e-401d-a696-40852695e079"/*Pulsate*/,
+      "Id": "f45da076-b20e-401d-a696-40852695e079"/*__ObsoletePulsate*/,
       "SymbolId": "ffed6f9e-2495-4cf3-9cda-740ecec75d10",
       "InputValues": [
         {

@@ -225,7 +225,7 @@
       }
     },
     {
-      "ChildId": "50974332-3d03-43a4-b444-9cdac1979984"/*Pulse*/,
+      "ChildId": "50974332-3d03-43a4-b444-9cdac1979984"/*TriggerAnimation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

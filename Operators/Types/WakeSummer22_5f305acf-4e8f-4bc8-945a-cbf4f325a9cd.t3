@@ -973,13 +973,7 @@
     {
       "Id": "07a26bab-a0d1-440a-b14f-9c914fccfbdb"/*SoundInput*/,
       "SymbolId": "b72d968b-0045-408d-a2f9-5c739c692a66",
-      "InputValues": [
-        {
-          "Id": "e278c4c8-4c3a-4f95-beec-ce8ead827724"/*Reset*/,
-          "Type": "System.Boolean",
-          "Value": false
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {

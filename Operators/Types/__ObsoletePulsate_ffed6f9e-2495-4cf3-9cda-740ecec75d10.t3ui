@@ -1,5 +1,6 @@
 {
-  "Id": "ffed6f9e-2495-4cf3-9cda-740ecec75d10"/*Pulsate*/,
+  "Id": "ffed6f9e-2495-4cf3-9cda-740ecec75d10"/*__ObsoletePulsate*/,
+  "Description": "An obsolete operator that has been replaced with [LFO]",
   "InputUis": [
     {
       "InputId": "3b60db67-3a12-44c3-91ba-5517f74879d6"/*BeatTime*/,

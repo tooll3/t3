@@ -1,5 +1,5 @@
 {
-  "Id": "5952d7b4-29ac-41fb-9324-287392d55048"/*Pulse*/,
+  "Id": "5952d7b4-29ac-41fb-9324-287392d55048"/*TriggerAnimation*/,
   "Description": "Generate a pulse value with a linear decay. \nAlso consider using [LFO].",
   "InputUis": [
     {

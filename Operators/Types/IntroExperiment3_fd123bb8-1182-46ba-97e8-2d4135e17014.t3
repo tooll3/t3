@@ -629,7 +629,7 @@
       "Outputs": []
     },
     {
-      "Id": "50974332-3d03-43a4-b444-9cdac1979984"/*Pulse*/,
+      "Id": "50974332-3d03-43a4-b444-9cdac1979984"/*TriggerAnimation*/,
       "SymbolId": "5952d7b4-29ac-41fb-9324-287392d55048",
       "InputValues": [
         {

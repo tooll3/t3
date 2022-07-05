@@ -243,7 +243,7 @@
       "Outputs": []
     },
     {
-      "Id": "73b9fe1b-96ba-4e69-b5ae-9cb226a1f7d1"/*Pulse*/,
+      "Id": "73b9fe1b-96ba-4e69-b5ae-9cb226a1f7d1"/*TriggerAnimation*/,
       "SymbolId": "5952d7b4-29ac-41fb-9324-287392d55048",
       "InputValues": [
         {
@@ -707,7 +707,7 @@
       "Bpm": 120.0,
       "DiscardAfterUse": true,
       "IsSoundtrack": true,
-      "FilePath": "Resources\\proj-synchotron\\soundtrack\\synthjam.mp3"
+      "FilePath": "Resources\\user\\still\\proj-home\\soundtrack\\synthtoad-02.mp3"
     }
   ],
   "Animator": [

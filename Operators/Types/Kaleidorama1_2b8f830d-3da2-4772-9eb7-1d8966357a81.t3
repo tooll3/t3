@@ -174,7 +174,7 @@
       "Outputs": []
     },
     {
-      "Id": "98e7b6fb-3b6d-4648-a549-78d9b6850f0f"/*Pulsate*/,
+      "Id": "98e7b6fb-3b6d-4648-a549-78d9b6850f0f"/*__ObsoletePulsate*/,
       "SymbolId": "ffed6f9e-2495-4cf3-9cda-740ecec75d10",
       "InputValues": [
         {

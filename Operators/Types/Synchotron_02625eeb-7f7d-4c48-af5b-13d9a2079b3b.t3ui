@@ -69,7 +69,7 @@
       }
     },
     {
-      "ChildId": "73b9fe1b-96ba-4e69-b5ae-9cb226a1f7d1"/*Pulse*/,
+      "ChildId": "73b9fe1b-96ba-4e69-b5ae-9cb226a1f7d1"/*TriggerAnimation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -171,7 +171,7 @@
       "ChildId": "3baeffd5-f09f-400b-8b08-a60063fd6b94"/*Float2ToVector2*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 49.0
       },
       "Position": {
         "X": 663.33545,

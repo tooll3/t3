@@ -4,7 +4,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_ffed6f9e_2495_4cf3_9cda_740ecec75d10
 {
-    public class Pulsate : Instance<Pulsate>
+    public class __ObsoletePulsate : Instance<__ObsoletePulsate>
     {
         [Output (Guid = "CB128B17-6855-440D-8539-BFD437E4193C")]
         public readonly Slot<float> Result = new Slot<float> ();
@@ -16,7 +16,7 @@ namespace T3.Operators.Types.Id_ffed6f9e_2495_4cf3_9cda_740ecec75d10
         public readonly Slot<bool> Bang = new Slot<bool> ();
 
 
-        public Pulsate ()
+        public __ObsoletePulsate()
         {
             Result.UpdateAction = Update;
             Counter.UpdateAction = Update;

@@ -78,7 +78,7 @@
       }
     },
     {
-      "ChildId": "d914540c-d29d-40ce-8c3d-7e093de76a93"/*Pulse*/,
+      "ChildId": "d914540c-d29d-40ce-8c3d-7e093de76a93"/*TriggerAnimation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
