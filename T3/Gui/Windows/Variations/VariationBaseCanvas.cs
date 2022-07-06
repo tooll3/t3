@@ -31,6 +31,8 @@ namespace T3.Gui.Windows.Variations
 
         public void Draw(ImDrawListPtr drawList)
         {
+            UpdateCanvas();
+            
             // Complete deferred actions
             if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
                 DeleteSelectedElements();
