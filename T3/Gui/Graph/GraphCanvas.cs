@@ -38,7 +38,6 @@ namespace T3.Gui.Graph
     {
         public GraphCanvas(GraphWindow window, List<Guid> idPath)
         {
-            //_selectionFence = new SelectionFence(this);
             _window = window;
             SetComposition(idPath, Transition.JumpIn);
         }
@@ -80,7 +79,9 @@ namespace T3.Gui.Graph
             {
                 UserSettings.SaveLastViewedOpForWindow(_window, CompositionOp.SymbolChildId);
                 if (UserSettings.Config.OperatorViewSettings.ContainsKey(CompositionOp.SymbolChildId))
+                {
                     newProps = UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId];
+                }
             }
 
             SetScopeWithTransition(newProps.Scale, newProps.Scroll, previousFocusOnScreen, transition);
@@ -151,6 +152,13 @@ namespace T3.Gui.Graph
         #region drawing UI ====================================================================
         public void Draw(ImDrawListPtr dl, bool showGrid)
         {
+            UpdateCanvas();
+            if (!_initialized)
+            {
+                FocusViewToSelection();
+                _initialized = true;
+            }
+            
             // TODO: Refresh reference on every frame. Since this uses lists instead of dictionary
             // it can be really slow
             CompositionOp = NodeOperations.GetInstanceFromIdPath(_compositionPath);
@@ -160,7 +168,7 @@ namespace T3.Gui.Graph
                 return;
             }
 
-            UpdateCanvas();
+            
             if (this.CompositionOp == null)
             {
                 Log.Error("Can't show graph for undefined CompositionOp");
@@ -176,6 +184,7 @@ namespace T3.Gui.Graph
             DrawList = dl;
             ImGui.BeginGroup();
             {
+                
                 DrawDropHandler();
 
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
@@ -246,11 +255,13 @@ namespace T3.Gui.Graph
                 {
                     ConnectionMaker.ConnectionSplitHelper.PrepareNewFrame(this);
                 }
-
+                
+                
                 SymbolBrowser.Draw();
 
                 Graph.DrawGraph(DrawList);
                 RenameInstanceOverlay.Draw();
+                ImGui.Text($"{Scale}  {Scroll}");
                 HandleFenceSelection();
 
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
@@ -1015,7 +1026,8 @@ namespace T3.Gui.Graph
         private string _symbolDescriptionForDialog = "";
         private string _nameSpaceForDialogEdits = "";
         private readonly GraphWindow _window;
-
+        private bool _initialized; // fit view to to window pos / size
+        
         public enum HoverModes
         {
             Disabled,
