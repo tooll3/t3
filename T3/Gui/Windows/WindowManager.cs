@@ -28,6 +28,7 @@ namespace T3.Gui.Windows
                                new ConsoleLogWindow(),
                                new SymbolLibrary(),
                                new LegacyVariationsWindow(),
+                               new RenderSequenceWindow(),
                            };
         }
 

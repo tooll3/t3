@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ImGuiNET;
 using SharpDX;
+using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -31,7 +33,32 @@ namespace T3.Gui.Windows.Output
             _instanceCounter++;
             OutputWindowInstances.Add(this);
         }
+        
+        public static IEnumerable<OutputWindow> GetVisibleInstances()
+        {
+            foreach (var i in OutputWindowInstances)
+            {
+                if (!(i is OutputWindow graphWindow))
+                    continue;
 
+                if (!i.Config.Visible)
+                    continue;
+
+                yield return graphWindow;
+            }
+        }
+        
+        public static OutputWindow GetPrimaryOutputWindow()
+        {
+            return GetVisibleInstances().FirstOrDefault();
+        }
+
+
+        public Texture2D GetCurrentTexture()
+        {
+            return _imageCanvas?.LastTexture;
+        } 
+        
         protected override void DrawAllInstances()
         {
             // Convert to array to enable removable of members during iteration
