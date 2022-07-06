@@ -27,22 +27,26 @@ namespace T3.Gui.ChildUi
             var h = screenRect.GetHeight();
             var graphRect = screenRect;
 
-            //const float RelativeGraphWidth = 0.75f;
+            if (h < 10)
+            {
+                return SymbolChildUi.CustomUiResult.None;
+            }
+            
 
             graphRect.Expand(-3);
             
-            graphRect.Min.X = graphRect.Max.X - graphRect.GetWidth();
+            //graphRect.Min.X = graphRect.Max.X - graphRect.GetWidth();
             var graphWidth = graphRect.GetWidth();
             drawList.PushClipRect(graphRect.Min, graphRect.Max, true);
 
             var highlightEditable = ImGui.GetIO().KeyCtrl;
 
-            // if (h > 14)
-            // {
-            //     ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), triggerAnimation.Amplitude);
-            //     ValueLabel.Draw(drawList, graphRect, new Vector2(1, 1), triggerAnimation.Offset);
-            // }
-            //
+            if (h > 14)
+            {
+                ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), anim.EndValue);
+                ValueLabel.Draw(drawList, graphRect, new Vector2(1, 1), anim.StartValue);
+            }
+            
             // Graph dragging to edit Bias and Ratio
             var isActive = false;
             
@@ -80,11 +84,12 @@ namespace T3.Gui.ChildUi
                     anim.Bias.Input.IsDefault = false;
                 }
             }
-            
+
+            var delay = anim.Delay.Value;
             
             // Draw Graph
             {
-                const float previousCycleFragment = 0.25f;
+                const float previousCycleFragment = 0.02f;
                 const float relativeX = previousCycleFragment / (1 + previousCycleFragment);
 
                 // Horizontal line
@@ -98,9 +103,8 @@ namespace T3.Gui.ChildUi
                 drawList.AddRectFilled(lv1, lv2, T3Style.Colors.GraphAxisColor);
 
                 // Fragment line 
-                //var width = graphRect.GetWidth() - (lv1.X - graphRect.Min.X); //h * (GraphWidthRatio - leftPaddingH);
-                var cycleWidth = graphWidth * (1 - relativeX); //h * (GraphWidthRatio - leftPaddingH);
-                var dx = new Vector2(anim.LastFraction * cycleWidth - 1, 0);
+                var cycleWidth = graphWidth * (1 - relativeX); 
+                var dx = new Vector2(((float)anim.LastFraction * duration + delay) * cycleWidth - 1, 0);
                 drawList.AddRectFilled(lv1 + dx, lv2 + dx, T3Style.FragmentLineColor);
 
                 // Draw graph
@@ -115,7 +119,7 @@ namespace T3.Gui.ChildUi
                 {
                     var f = (float)i / GraphListSteps;
                     var fragment = f * (1 + previousCycleFragment) - previousCycleFragment;
-                    GraphLinePoints[i] = new Vector2(f * graphWidth * duration,
+                    GraphLinePoints[i] = new Vector2((f * duration +  delay) * graphWidth,
                                                      (0.5f - anim.CalcNormalizedValueForFraction(fragment) / 2) * h
                                                     ) + graphRect.Min;
                 }

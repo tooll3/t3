@@ -1,7 +1,5 @@
 using System;
 using T3.Core;
-using T3.Core.Animation;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -22,13 +20,9 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
         {
             Forward,
             Backwards,
-            Both,
-            None,
+            None
         }
 
-        private Directions _currentDirection = Directions.None;
-        private double _triggerTime; 
-        
         private void Update(EvaluationContext context)
         {
             _startValue = StartValue.GetValue(context);
@@ -73,7 +67,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             }
 
             //var timeSinceTrigger = context.LocalFxTime - _triggerTime;
-            var dt = (float)Playback.LastFrameDuration / _duration;
+            var dt = context.Playback.LastFrameDurationInBars / _duration;
             if (_currentDirection == Directions.Forward)
             {
                 LastFraction += dt;
@@ -94,6 +88,10 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             }
             
             var normalizedValue = CalcNormalizedValueForFraction(LastFraction);
+            if (double.IsNaN(LastFraction) || double.IsInfinity(LastFraction))
+            {
+                LastFraction = 0;
+            }
             
             Result.Value = MathUtils.Lerp(_startValue, _endValue,  normalizedValue);
         }
@@ -125,7 +123,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
                 f => MathUtils.SmootherStep(0,1,f.Clamp(0,1)), //1: Smooth Step
                 f => MathUtils.SmootherStep(0,1,f.Clamp(0,1)/2) *2   , //2: Easy In
                 f => MathUtils.SmootherStep(0,1,f.Clamp(0,1)/2 + 0.5f) *2 -1, //3: Easy Out
-                f => MathF.Sin(f * 40) * MathF.Pow(1-f.Clamp(0.0001f, 1),4) ,  //4: Shake
+                f => MathF.Sin(f.Clamp(0,1) * 40) * MathF.Pow(1-f.Clamp(0.0001f, 1),4) ,  //4: Shake
             };
         
         private bool _trigger;
@@ -134,25 +132,19 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
         private float _startValue;
         private float _endValue;
         private float _duration = 1;
-        private float _delay = 0;
-        private float _ratio;
+        private float _delay;
 
-        public float LastFraction;
-
+        public double LastFraction;
+        
         public enum Shapes
         {
             Linear = 0,
-            Smoothstep = 1,
+            SmoothStep = 1,
             EaseIn = 2,
             EaseOut = 3,
             Shake = 4,
         }
 
-        public enum SpeedFactors {
-            None,
-            FactorA,
-            FactorB,
-        }
 
         public enum AnimModes
         {
@@ -161,9 +153,9 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             OnTrueAndFalse,
         }
         
-        public const string SpeedFactorA = "SpeedFactorA";
-        public const string SpeedFactorB = "SpeedFactorB";
-        
+        private Directions _currentDirection = Directions.None;
+        private double _triggerTime;
+
         [Input(Guid = "62949257-ADB3-4C67-AC0A-D37EE28DA81B")]
         public readonly InputSlot<bool> Trigger = new();
 
