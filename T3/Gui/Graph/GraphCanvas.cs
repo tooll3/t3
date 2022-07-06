@@ -261,7 +261,6 @@ namespace T3.Gui.Graph
 
                 Graph.DrawGraph(DrawList);
                 RenameInstanceOverlay.Draw();
-                ImGui.Text($"{Scale}  {Scroll}");
                 HandleFenceSelection();
 
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
