@@ -380,7 +380,7 @@
       }
     },
     {
-      "ChildId": "7cc101ef-2cac-4feb-b6a3-abce783e8f06"/*SizeToDispatchCount*/,
+      "ChildId": "7cc101ef-2cac-4feb-b6a3-abce783e8f06"/*CalcSize2DispatchCount*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

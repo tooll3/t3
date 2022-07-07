@@ -5,12 +5,12 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_cc11774e_82dd_409f_97fb_5be3f2746f9d
 {
-    public class SizeToDispatchCount : Instance<SizeToDispatchCount>
+    public class CalcSize2DispatchCount : Instance<CalcSize2DispatchCount>
     {
         [Output(Guid = "3b0f7d82-3254-4b4d-baea-bc9aa003768a")]
         public readonly Slot<SharpDX.Int3> DispatchCount = new Slot<SharpDX.Int3>();
 
-        public SizeToDispatchCount()
+        public CalcSize2DispatchCount()
         {
             DispatchCount.UpdateAction = Update;
         }

@@ -1,5 +1,5 @@
 {
-  "Name": "SizeToDispatchCount",
+  "Name": "CalcSize2DispatchCount",
   "Id": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
   "Namespace": "lib.particle",
   "Inputs": [
