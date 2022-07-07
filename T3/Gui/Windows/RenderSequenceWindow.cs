@@ -233,10 +233,10 @@ namespace T3.Gui.Windows
         private string _lastFilename=string.Empty;
         private const int NumTextureEntries = 2;
         
-        private bool _lastEvaluationSucceeded;
-        private Texture2D _depthImageWithCPUAccess;
+        //private bool _lastEvaluationSucceeded;
+        //private Texture2D _depthImageWithCPUAccess;
         
-        private float _lastEvaluatedDepth;
+        //private float _lastEvaluatedDepth;
         private readonly List<Texture2D> _imagesWithCpuAccess = new List<Texture2D>();
         private int _currentIndex;
         private int _currentUsageIndex;        

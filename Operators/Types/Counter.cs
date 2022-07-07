@@ -3,7 +3,6 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c;
 
 //using T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c;
 
@@ -34,21 +33,21 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
             var reset = TriggerReset.GetValue(context);
             var jump = TriggerIncrement.GetValue(context);
             
-            var f = (LFO.SpeedFactors)AllowSpeedFactor.GetValue(context);
+            var f = (SpeedFactors)AllowSpeedFactor.GetValue(context);
             switch (f)
             {
-                case LFO.SpeedFactors.None:
+                case SpeedFactors.None:
                     _speedFactor = 1;
                     break;
-                case LFO.SpeedFactors.FactorA:
+                case SpeedFactors.FactorA:
                 {
-                    if (!context.FloatVariables.TryGetValue(LFO.SpeedFactorA, out _speedFactor))
+                    if (!context.FloatVariables.TryGetValue(SpeedFactorA, out _speedFactor))
                         _speedFactor = 1;
                     
                     break;
                 }
-                case LFO.SpeedFactors.FactorB:
-                    if (!context.FloatVariables.TryGetValue(LFO.SpeedFactorB, out _speedFactor))
+                case SpeedFactors.FactorB:
+                    if (!context.FloatVariables.TryGetValue(SpeedFactorB, out _speedFactor))
                         _speedFactor = 1;
             
                     break;
@@ -128,6 +127,16 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
             WasStep.DirtyFlag.Clear();
         }
  
+        private enum SpeedFactors {
+            None,
+            FactorA,
+            FactorB,
+        }
+        
+        private const string SpeedFactorA = "SpeedFactorA";
+        private const string SpeedFactorB = "SpeedFactorB";
+
+        
         public float Fragment =>
             UseRate
                 ? (float)((_beatTime - _lastJumpTime) * _rate).Clamp(0, 1)
@@ -200,7 +209,7 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
         [Input(Guid = "E0C386B9-A987-4D11-9171-2971FA759827")]
         public readonly InputSlot<bool> SmoothBlending = new InputSlot<bool>();
         
-        [Input(Guid = "C386B9E0-A987-4D11-9171-2971FA759827", MappedType = typeof(LFO.SpeedFactors))]
+        [Input(Guid = "C386B9E0-A987-4D11-9171-2971FA759827", MappedType = typeof(SpeedFactors))]
         public readonly InputSlot<int> AllowSpeedFactor = new InputSlot<int>();
 
     }
