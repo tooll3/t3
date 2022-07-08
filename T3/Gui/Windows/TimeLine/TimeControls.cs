@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Core.Audio;
 using ImGuiNET;
+using ManagedBass;
 using Newtonsoft.Json;
 using T3.Core;
 using T3.Core.Animation;
@@ -491,6 +492,25 @@ namespace T3.Gui.Windows.TimeLine
                     ImGui.EndTabItem();
                 }
 
+                
+                if (ImGui.BeginTabItem("Tapping"))
+                {
+                    CustomComponents.HelpText("Tab the Sync button to set begin of measure and to improve BPM detection.");
+                    var isInitialized = playback is BeatTimingPlayback;
+                    if (isInitialized)
+                    {
+                    }
+                    else
+                    {
+                        if (ImGui.Button("Initialize"))
+                        {
+                            playback = new BeatTimingPlayback();
+                        }
+                    }
+
+                    ImGui.EndTabItem();
+                }
+                
                 if (ImGui.BeginTabItem("Audio input"))
                 {
                     ImGui.DragFloat("AudioGain", ref ProjectSettings.Config.AudioGainFactor, 0.01f, 0, 100);
@@ -502,6 +522,7 @@ namespace T3.Gui.Windows.TimeLine
                     {
                         ProjectSettings.Config.AudioInputDeviceName = string.Empty;
                         AudioInput.InputMode = AudioInput.InputModes.Soundtrack;
+                        Bass.Configure(Configuration.UpdateThreads, true);
                     }
                     
                     if (!WasapiAudioInput.DevicesInitialized)
@@ -520,6 +541,8 @@ namespace T3.Gui.Windows.TimeLine
                             var isSelected = d.DeviceInfo.Name == ProjectSettings.Config.AudioInputDeviceName;
                             if (ImGui.Selectable($"{d.DeviceInfo.Name}", isSelected))
                             {
+                                Bass.Configure(Configuration.UpdateThreads, false);
+
                                 ProjectSettings.Config.AudioInputDeviceName = d.DeviceInfo.Name;
                                 ProjectSettings.Save();
                                 WasapiAudioInput.StartInputCapture(d);
@@ -533,23 +556,6 @@ namespace T3.Gui.Windows.TimeLine
                     }
                 }
 
-                if (ImGui.BeginTabItem("Tapping"))
-                {
-                    CustomComponents.HelpText("Tab the Sync button to set begin of measure and to improve BPM detection.");
-                    var isInitialized = playback is BeatTimingPlayback;
-                    if (isInitialized)
-                    {
-                    }
-                    else
-                    {
-                        if (ImGui.Button("Initialize"))
-                        {
-                            playback = new BeatTimingPlayback();
-                        }
-                    }
-
-                    ImGui.EndTabItem();
-                }
 
                 if (ImGui.BeginTabItem("OSC"))
                 {
