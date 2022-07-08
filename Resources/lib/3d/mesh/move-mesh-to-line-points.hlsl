@@ -29,11 +29,15 @@ float3 TransformVector(float3 v) {
 } 
 
 float3 TransformDirection(float3 v) {
-    float3 v2 = float3(0,v.yz) + lerp(posA, posB, f);
-    v2 = lerp(mul( float4(v2 - posA, 0), orientationA).xyz,
-              mul( float4(v2 - posB, 0), orientationB).xyz,
-              f);
-    return v2;
+    // float3 v2 = float3(0,v.yz) + lerp(posA, posB, f);
+    // v2 = lerp(mul( float4(v2 - posA, 0), orientationA).xyz,
+    //           mul( float4(v2 - posB, 0), orientationB).xyz,
+    //           f);
+
+    return lerp( mul( float4(v, 0), orientationA).xyz, 
+    mul( float4(v, 0), orientationA).xyz,
+    f);
+
 } 
 
 
@@ -45,7 +49,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     uint vertexCount, stride;
     SourceVertices.GetDimensions(vertexCount, stride);
-    if(vertexIndex >= vertexCount) {
+    if(vertexIndex > vertexCount) {
         return;
     }
 
@@ -58,14 +62,14 @@ void main(uint3 i : SV_DispatchThreadID)
     PbrVertex v = SourceVertices[vertexIndex];
     float3 posInWorld = v.Position;
 
-    float floatIndex = posInWorld.x * (Range) * pointCount * Scale   + Offset * pointCount;
+    float floatIndex = posInWorld.x * (Range) * pointCount * Scale   + Offset * pointCount + 0.00001;
 
-    float aIndex = (int)clamp(floatIndex,0, pointCount-2);
-    float bIndex = aIndex + 1;
+    uint aIndex = (int)clamp(floatIndex, 0, pointCount-2);
+    uint bIndex = aIndex + 1;
     f = floatIndex - aIndex; 
 
-    Point pointA = Points[(int)aIndex];
-    Point pointB = Points[(int)bIndex];
+    Point pointA = Points[aIndex];
+    Point pointB = Points[bIndex];
 
     orientationA = transpose(quaternion_to_matrix(pointA.rotation));
     orientationB = transpose(quaternion_to_matrix(pointB.rotation));
@@ -73,9 +77,10 @@ void main(uint3 i : SV_DispatchThreadID)
     posB = pointB.position;
 
     v.Position = TransformVector(v.Position);
-    v.Normal = TransformDirection(v.Normal);
-    v.Tangent = TransformDirection(v.Tangent);
-    v.Bitangent = TransformDirection(v.Bitangent);
+
+    v.Normal = normalize(TransformDirection(v.Normal));
+    v.Tangent = normalize(TransformDirection(v.Tangent));
+    v.Bitangent = normalize(TransformDirection(v.Bitangent));
 
     ResultVertices[vertexIndex] = v;
 }

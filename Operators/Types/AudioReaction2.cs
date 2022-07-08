@@ -44,38 +44,38 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             }
 
 
-            List<float> bands = default;
-            var mode = (InputMode)InputBand.GetValue(context).Clamp(0, Enum.GetNames(typeof(InputMode)).Length - 1);
+            List<float> bins = default;
+            var mode = (InputModes)InputBand.GetValue(context).Clamp(0, Enum.GetNames(typeof(InputModes)).Length - 1);
             switch (mode)
             {
-                case InputMode.RawFft:
-                    bands = AudioInput.FftGainBuffer == null
+                case InputModes.RawFft:
+                    bins = AudioInput.FftGainBuffer == null
                                 ? _emptyList
                                 : AudioInput.FftGainBuffer.ToList();
 
                     break;
 
-                case InputMode.NormalizedFft:
-                    bands = AudioInput.FftNormalizedBuffer == null
+                case InputModes.NormalizedFft:
+                    bins = AudioInput.FftNormalizedBuffer == null
                                 ? _emptyList
                                 : AudioInput.FftNormalizedBuffer.ToList();
                     break;
 
-                case InputMode.FrequencyBands:
-                    bands = AudioInput.FrequencyBands == null
+                case InputModes.FrequencyBands:
+                    bins = AudioInput.FrequencyBands == null
                                 ? _emptyList
                                 : AudioInput.FrequencyBands.ToList();
                     break;
 
-                case InputMode.FrequencyBandsPeaks:
-                    bands = AudioInput.FrequencyBandPeaks == null
+                case InputModes.FrequencyBandsPeaks:
+                    bins = AudioInput.FrequencyBandPeaks == null
                                 ? _emptyList
                                 : AudioInput.FrequencyBandPeaks.ToList();
 
                     break;
 
-                case InputMode.FrequencyBandsAttacks:
-                    bands = AudioInput.FrequencyBandAttacks == null
+                case InputModes.FrequencyBandsAttacks:
+                    bins = AudioInput.FrequencyBandAttacks == null
                                 ? _emptyList
                                 : AudioInput.FrequencyBandAttacks.ToList();
 
@@ -92,13 +92,13 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             var bias = Bias.GetValue(context);
             
             Sum = 0f;
-            if (bands != null && bands.Count > 0)
+            if (bins != null && bins.Count > 0)
             {
-                var bandCount = bands.Count;
+                var bandCount = bins.Count;
 
-                for (var binIndex = 0; binIndex < bands.Count; binIndex++)
+                for (var binIndex = 0; binIndex < bins.Count; binIndex++)
                 {
-                    var binValue = bands[binIndex];
+                    var binValue = bins[binIndex];
                     var f = (float)binIndex / (bandCount - 1);
                     var factor = 1 - (MathF.Abs((f - windowCenter) / windowEdge) - windowWidth / windowEdge).Clamp(0, 1);
                     Sum += binValue * factor;
@@ -162,7 +162,7 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             WasHit.Value = _isHitActive;
             HitCount.Value = _hitCount;
             Level.Value = v;
-            Bands = bands;
+            ActiveBins = bins;
             
             // Only update once
             WasHit.DirtyFlag.Clear();
@@ -178,11 +178,11 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
         public double AccumulatedLevel { get; private set; }
         private float _dampedTimeBetweenHits;
         
-        public List<float> Bands { get; private set; }
+        public List<float> ActiveBins { get; private set; }
         
         private double _lastHitTime;
         
-        private enum InputMode
+        public enum InputModes
         {
             RawFft,
             NormalizedFft,
@@ -191,7 +191,7 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             FrequencyBandsAttacks,
         }
 
-        private enum OutputModes
+        public enum OutputModes
         {
             Pulse,
             TimeSinceHit,
@@ -201,7 +201,7 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
         }
         
         
-        [Input(Guid = "44409811-1a0f-4be6-83ea-b2f040ebf08b", MappedType = typeof(InputMode))]
+        [Input(Guid = "44409811-1a0f-4be6-83ea-b2f040ebf08b", MappedType = typeof(InputModes))]
         public readonly InputSlot<int> InputBand = new();
 
         [Input(Guid = "F3D7C7FD-4280-4FB4-9F9A-C39B28D1A72B")]

@@ -22,14 +22,14 @@
     {
       "Id": "58b9dfb6-0596-4f0d-baf6-7fb3ae426c94"/*Scale*/,
       "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0,
-        "Z": 0.0
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
       }
     },
     {
       "Id": "566f1619-1de0-4b41-b167-7fc261730d62"/*UniformScale*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 1.0
     },
     {
       "Id": "e19808d8-6d73-4638-b5f2-ddddc49ad815"/*Invert*/,

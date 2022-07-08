@@ -5,11 +5,11 @@
   "Inputs": [
     {
       "Id": "5fd5eea5-b7ab-406f-8c10-8435d59297b5"/*Spread*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.4
     },
     {
       "Id": "c1fa1a4e-8884-4a6f-ac80-f22d3b5dfe2f"/*SpreadMode*/,
-      "DefaultValue": 0
+      "DefaultValue": 1
     },
     {
       "Id": "8cef763e-48e4-41f9-b429-0ad32b849adf"/*RandomizeStart*/,

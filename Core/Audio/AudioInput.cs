@@ -60,6 +60,7 @@ namespace Core.Audio
                 var newAttack = (newPeak - lastPeak).Clamp(0, 1000) * attackAmplification;
                 var lastAttackDecayed = FrequencyBandAttacks[bandIndex] * ProjectSettings.Config.AudioDecayFactor; 
                 FrequencyBandAttacks[bandIndex] = MathF.Max(newAttack, lastAttackDecayed);
+                FrequencyBandAttackPeaks[bandIndex] = MathF.Max(FrequencyBandAttackPeaks[bandIndex]*0.995f, FrequencyBandAttacks[bandIndex]);
             }
         }
 
@@ -111,6 +112,7 @@ namespace Core.Audio
         public static readonly float[] FrequencyBandPeaks = new float[FrequencyBandCount];
         
         public static readonly float[] FrequencyBandAttacks = new float[FrequencyBandCount];
+        public static readonly float[] FrequencyBandAttackPeaks = new float[FrequencyBandCount];
         
         /// <summary>
         /// Result of the fft analysis in gain

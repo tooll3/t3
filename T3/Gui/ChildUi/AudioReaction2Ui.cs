@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
+using Core.Audio;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Operator;
@@ -19,7 +21,7 @@ namespace T3.Gui.ChildUi
 
             var h = screenRect.GetHeight();
             var w = screenRect.GetWidth();
-            if (h < 10 || audioReaction2.Bands == null)
+            if (h < 10 || audioReaction2.ActiveBins == null)
             {
                 return SymbolChildUi.CustomUiResult.None;
             }
@@ -34,16 +36,46 @@ namespace T3.Gui.ChildUi
 
             var freqGraphWidth = w * 0.6f;
             var maxBars = 128;
+            var x = screenRect.Min.X;
+            var bottom = screenRect.Max.Y;
 
-            var fftBuffer = audioReaction2.Bands;
+            var fftBuffer = audioReaction2.ActiveBins;
             var binCount = fftBuffer.Count;
             var barsCount = Math.Min(binCount, maxBars);
             var barWidth = freqGraphWidth / barsCount;
             var binsPerBar = (float)binCount / barsCount;
-            var x = screenRect.Min.X;
-            var bottom = screenRect.Max.Y;
-
             const float valueScale = 0.5f;
+            
+            var inputMode = (AudioReaction2.InputModes)audioReaction2.InputBand.Value.Clamp(0, Enum.GetNames(typeof(AudioReaction2.InputModes)).Length);
+            if (inputMode == AudioReaction2.InputModes.FrequencyBandsAttacks
+                || inputMode == AudioReaction2.InputModes.FrequencyBands)
+            {
+                var xPeaks = screenRect.Min.X;
+                float[] peakBands = default;
+                switch (inputMode)
+                {
+                    case AudioReaction2.InputModes.FrequencyBands:
+                        peakBands = AudioInput.FrequencyBandPeaks;
+                        break;
+                    case AudioReaction2.InputModes.FrequencyBandsAttacks:
+                        peakBands = AudioInput.FrequencyBandAttackPeaks;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                for (int barIndex = 0; barIndex < peakBands.Length; barIndex++)
+                {
+                    var peak= peakBands[barIndex];
+
+                    drawList.AddRectFilled(new Vector2(xPeaks, bottom - peak * h * valueScale - 2),
+                                           new Vector2(xPeaks + barWidth, bottom-1),
+                                           Color.Black.Fade(0.06f));
+                    xPeaks += barWidth;
+                }
+            }
+            
+
             
             int binIndex = 0;
             for (int barIndex = 0; barIndex < barsCount; barIndex++)
@@ -57,18 +89,20 @@ namespace T3.Gui.ChildUi
                     binIndex++;
                     count++;
                 }
+                sum /= count;
 
                 var f = (float)barIndex / (barsCount - 1);
                 var factor = (MathF.Abs((f - windowCenter) / windowEdge) - windowWidth / windowEdge).Clamp(0.0f, 1);
-
-                sum /= count;
-
-                x += barWidth;
-
+                
                 drawList.AddRectFilled(new Vector2(x, bottom - sum * h * valueScale - 2),
                                        new Vector2(x + barWidth, bottom-1),
                                        Color.Mix(_highlightColor, _inactiveColor, factor));
+                x += barWidth;
+                
             }
+
+
+
 
             x += barWidth;
 
@@ -151,6 +185,8 @@ namespace T3.Gui.ChildUi
             return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
         }
 
+        
+        
         private static float _dragStartThreshold;
         private static float _dragStartWindow;
         private static Color _highlightColor = Color.Orange;
