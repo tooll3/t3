@@ -17,7 +17,10 @@ namespace T3.Gui.Windows.Output
     {
         public ICamera CameraForRendering { get; private set; }
         public bool BypassCamera { get; private set; }
+        
         public bool PreventCameraInteraction { get; private set; }
+        
+        public bool PreventImageCanvasInteraction { get; private set; }
         
         private enum ControlModes
         {
@@ -53,6 +56,7 @@ namespace T3.Gui.Windows.Output
         {
             _hasAnimationTimeChanged = Math.Abs(_lastUpdateTime - Playback.Current.TimeInBars) > 0.001f;
             _lastUpdateTime = Playback.Current.TimeInBars;
+            PreventImageCanvasInteraction = false;
             
             _drawnInstance = drawnInstance;
             if (drawnInstance == null)
@@ -104,6 +108,7 @@ namespace T3.Gui.Windows.Output
                     
                     if (_firstCamInGraph != null)
                     {
+                        PreventImageCanvasInteraction = true;
                         var isCamOpSelected = NodeSelection.GetFirstSelectedInstance() == _firstCamInGraph;
                         if (isCamOpSelected)
                         {
@@ -138,6 +143,8 @@ namespace T3.Gui.Windows.Output
                         }
                         else
                         {
+                            //PreventCameraInteraction = true;
+                            PreventImageCanvasInteraction = true;
                             cameraForManipulation = _firstCamInGraph;    
                         }
                         CameraForRendering = _outputWindowViewCamera;

@@ -101,7 +101,7 @@ namespace T3.Gui.Windows.Output
                 _imageCanvas.Deactivate();
 
                 _camSelectionHandling.Update(drawnInstance, drawnType);
-                _imageCanvas.PreventMouseInteraction = _camSelectionHandling.PreventCameraInteraction;
+                _imageCanvas.PreventMouseInteraction = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction;
                 _imageCanvas.Update();
                 DrawToolbar();
             }
