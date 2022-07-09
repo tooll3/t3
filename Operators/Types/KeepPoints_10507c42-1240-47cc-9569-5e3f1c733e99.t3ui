@@ -206,28 +206,6 @@
       }
     },
     {
-      "ChildId": "dc1f264f-fea3-4eba-8c87-83dd09d5b373"/*Time*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -142.375,
-        "Y": 1296.0929
-      }
-    },
-    {
-      "ChildId": "51c0be53-8dad-4d79-ac6e-c249564ab4cf"/*HasValueIncreased*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -12.375061,
-        "Y": 1296.0929
-      }
-    },
-    {
       "ChildId": "f3f3405b-71fe-4fd1-908c-357ecdde9523"/*And*/,
       "Size": {
         "X": 110.0,
@@ -236,6 +214,17 @@
       "Position": {
         "X": 444.28735,
         "Y": 699.199
+      }
+    },
+    {
+      "ChildId": "4c032db8-c150-489a-9843-61b96a158465"/*DidTimeChange*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 53.909973,
+        "Y": 1189.8776
       }
     }
   ],
