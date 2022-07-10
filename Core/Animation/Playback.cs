@@ -40,7 +40,8 @@ namespace T3.Core.Animation
         /// <summary>
         /// Convenience function to convert from internal TimeInBars mapped to seconds for current BPM. 
         /// </summary>
-        public double TimeInSecs { get => TimeInBars * 240 / Bpm; set => TimeInBars = value / Bpm * 240f; }
+        public double TimeInSecs { get => TimeInBars * 240 / Bpm; 
+            set => TimeInBars = value * Bpm / 240f; }
 
         public TimeRange LoopRange;
         

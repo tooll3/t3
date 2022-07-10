@@ -38,7 +38,7 @@ namespace T3.Gui.ChildUi
             var maxBars = 128;
             var x = screenRect.Min.X;
             var bottom = screenRect.Max.Y;
-
+  
             var fftBuffer = audioReaction2.ActiveBins;
             var binCount = fftBuffer.Count;
             var barsCount = Math.Min(binCount, maxBars);

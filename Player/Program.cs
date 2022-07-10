@@ -9,10 +9,12 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using CommandLine;
 using CommandLine.Text;
 using Core.Audio;
+using Core.Logging;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.IO;
@@ -72,13 +74,16 @@ namespace T3
                                               e => e);
 
             parserResult.WithParsed(o => { parsedOptions = o; })
-                        .WithNotParsed(o => { Console.WriteLine(helpText); });
+                        .WithNotParsed(o => { Log.Debug(helpText); });
             return parsedOptions;
         }
 
         [STAThread]
         private static void Main(string[] args)
         {
+            Log.AddWriter(new ConsoleWriter());
+            Log.AddWriter(FileWriter.CreateDefault());
+            
             var tmp = new ProjectSettings(saveOnQuit: false);            
             
             Options options = ParseCommandLine(args);
@@ -86,7 +91,7 @@ namespace T3
                 return;
 
             _vsync = !options.NoVsync;
-            Console.WriteLine($"using vsync: {_vsync}, windowed: {options.Windowed}, size: {options.Size}, loop: {options.Loop}, logging: {options.Logging}");
+            Log.Debug($"using vsync: {_vsync}, windowed: {options.Windowed}, size: {options.Size}, loop: {options.Loop}, logging: {options.Logging}");
             var form = new RenderForm("still::partial")
                            {
                                ClientSize = options.Size,
@@ -148,6 +153,16 @@ namespace T3
                                   }
                               }
 
+                              if (keyArgs.KeyCode == Keys.Left)
+                              {
+                                  Playback.Current.TimeInBars -= 4;
+                              }
+                              
+                              if (keyArgs.KeyCode == Keys.Right)
+                              {
+                                  Playback.Current.TimeInBars += 4;
+                              }
+
                               if (keyArgs.KeyCode == Keys.Escape)
                               {
                                   Application.Exit();
@@ -172,7 +187,7 @@ namespace T3
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error loading operator assembly: '{e.Message}'");
+                Log.Debug($"Error loading operator assembly: '{e.Message}'");
                 return;
             }
 
@@ -205,14 +220,23 @@ namespace T3
                 _playback.PlaybackSpeed = 0.5f; // Todo: Clarify, if this is a work around for default BPM mismatch 
             }
 
+
+            var rasterizerDesc = new RasterizerStateDescription()
+                                     {
+                                         FillMode = FillMode.Solid,
+                                         CullMode = CullMode.None,
+                                         IsScissorEnabled = false,
+                                         IsDepthClipEnabled = false
+                                     };
+            var rasterizerState = new RasterizerState(device, rasterizerDesc);
+            
             // sample some frames to preload all shaders and resources
             if (usingSoundtrack)
             {
-                for (double timeInSecs = 0; timeInSecs < _soundtrack.LengthInSeconds; timeInSecs += 1.0)
+                for (double timeInSecs = 0; timeInSecs < _soundtrack.LengthInSeconds; timeInSecs += 2.0)
                 {
-                    Log.Info($"Pre-evaluate at: {timeInSecs}s");
                     Playback.Current.TimeInSecs = timeInSecs;
-                    Playback.Current.TimeInBars = timeInSecs / 120.0 * 240.0;
+                    Log.Info($"Pre-evaluate at: {timeInSecs:0.00}s / {Playback.Current.TimeInBars:0.00} bars");
 
                     DirtyFlag.IncrementGlobalTicks();
                     DirtyFlag.InvalidationRefFrame++;
@@ -227,27 +251,25 @@ namespace T3
                     {
                         textureOutput.Invalidate();
                         textureOutput.GetValue(_evalContext);
+                        
+                        var tex = textureOutput.GetValue(_evalContext);
+                        if (tex == null)
+                        {
+                            Log.Error("Failed to initialize texture");
+                        }
                     }
+                    Thread.Sleep(100);
+                    _swapChain.Present(1, PresentFlags.None);
                 }
             }
 
-            // start playback           
+            // Start playback           
             _playback.Update();
             _playback.TimeInBars = 0;
             _playback.PlaybackSpeed = 1.0;
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            Int64 lastElapsedTicks = stopwatch.ElapsedTicks;
-
-            var rasterizerDesc = new RasterizerStateDescription()
-                                     {
-                                         FillMode = FillMode.Solid,
-                                         CullMode = CullMode.None,
-                                         IsScissorEnabled = false,
-                                         IsDepthClipEnabled = false
-                                     };
-            var rasterizerState = new RasterizerState(device, rasterizerDesc);
 
             // Main loop
             RenderLoop.Run(form, () =>
@@ -347,7 +369,7 @@ namespace T3
             rtv = new RenderTargetView(device, buffer);
         }
 
-        // private static bool _inResize;
+        // Private static bool _inResize;
         private static bool _vsync;
         private static SwapChain _swapChain;
         private static RenderTargetView _renderView;

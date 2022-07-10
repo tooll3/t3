@@ -24,7 +24,7 @@ namespace T3.Gui.Graph
             var instance = graphCanvas.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
             Log.Info($"Exporting {instance.Symbol.Name}...");
             var errorCount = 0;
-            
+
             if (instance.Outputs.Count >= 1 && instance.Outputs.First().ValueType == typeof(Texture2D))
             {
                 // Update project settings
@@ -58,16 +58,15 @@ namespace T3.Gui.Graph
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\ICameraPropertiesProvider.cs"));
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\AudioAnalysisResult.cs"));
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\MidiInConnectionManager.cs"));
-                
-                
 
                 // Copy player and dependent assemblies to export dir
                 var currentDir = Directory.GetCurrentDirectory();
-                
+
                 var playerBuildPath = currentDir + @"\Player\bin\Release\net5.0-windows\";
-                var operatorDependenciesPath = Program.IsStandAlone ? @".\"
-                                         : @"T3\bin\Release\net5.0-windows\";
-                
+                var operatorDependenciesPath = Program.IsStandAlone
+                                                   ? @".\"
+                                                   : @"T3\bin\Release\net5.0-windows\";
+
                 if (!File.Exists(currentDir + @"\Player\bin\Release\net5.0-windows\Player.exe"))
                 {
                     Log.Error($"Can't find valid build in player release folder: (${playerBuildPath})");
@@ -75,54 +74,63 @@ namespace T3.Gui.Graph
                     return;
                 }
 
-                var playerFileNames = new List<string>
-                                          {
-                                              playerBuildPath + "bass.dll",
-                                              playerBuildPath + "basswasapi.dll",
-                                              playerBuildPath + "CommandLine.dll",
-                                              playerBuildPath + "Player.dll",
-                                              playerBuildPath + "Player.exe",
-                                              playerBuildPath + "Player.deps.json",
-                                              playerBuildPath + "Player.runtimeconfig.json",
-                                              playerBuildPath + "Player.runtimeconfig.dev.json",
-                                          };
+                Log.Debug("Copy player resources...");
+                CopyFiles(new[]
+                              {
+                                  playerBuildPath + "bass.dll",
+                                  playerBuildPath + "basswasapi.dll",
+                                  playerBuildPath + "CommandLine.dll",
+                                  playerBuildPath + "Player.dll",
+                                  playerBuildPath + "Player.exe",
+                                  playerBuildPath + "Player.deps.json",
+                                  playerBuildPath + "Player.runtimeconfig.json",
+                                  playerBuildPath + "Player.runtimeconfig.dev.json",
+                                  
+                                  // FIXME: These dlls should be references as Operators dependencies but aren't found there
+                                  playerBuildPath + "SharpDX.Desktop.dll", 
+                                  playerBuildPath + "Rug.OSC.dll",
+                              },
+                          exportDir);
 
-                // NOTE: This is fallback because the Operators.dll combiled for stand alone runner
+                // NOTE: This is fallback because the Operators.dll compiled for stand alone runner
                 // does not contain all assembly references. So we add these here manually
                 if (Program.IsStandAlone)
                 {
-                    playerFileNames.AddRange(new List<string>
-                                                 {
-                                                     operatorDependenciesPath + "Core.dll",
-                                                     operatorDependenciesPath + "DdsImport.dll",
-                                                     operatorDependenciesPath + "ManagedBass.Wasapi.dll",
-                                                     operatorDependenciesPath + "ManagedBass.dll",
-                                                     operatorDependenciesPath + "Newtonsoft.Json.dll",
-                                                     operatorDependenciesPath + "Unsplasharp.dll",
-                                                     operatorDependenciesPath + "SharpDX.Desktop.dll",
-                                                     operatorDependenciesPath + "SharpDX.Mathematics.dll",
-                                                     operatorDependenciesPath + "SharpDX.Direct3D11.dll",
-                                                     operatorDependenciesPath + "SharpDX.Direct2D1.dll",
-                                                     operatorDependenciesPath + "SharpDX.DXGI.dll",
-                                                     operatorDependenciesPath + "SharpDX.D3DCompiler.dll",
-                                                     operatorDependenciesPath + "SharpDX.dll",
-                                                     operatorDependenciesPath + "NAudio.Midi.dll",
-                                                     operatorDependenciesPath + "NAudio.Core.dll",
-                                                     operatorDependenciesPath + "Svg.dll",
-                                                     operatorDependenciesPath + "Fizzler.dll",
-                                                     operatorDependenciesPath + "SharpDX.MediaFoundation.dll",
-                                                 });
+                    Log.Debug("Copy operator dependencies");
+                    CopyFiles(new[]
+                                  {
+                                      operatorDependenciesPath + "Core.dll",
+                                      operatorDependenciesPath + "DdsImport.dll",
+                                      operatorDependenciesPath + "ManagedBass.Wasapi.dll",
+                                      operatorDependenciesPath + "ManagedBass.dll",
+                                      operatorDependenciesPath + "Newtonsoft.Json.dll",
+                                      operatorDependenciesPath + "Unsplasharp.dll",
+                                      operatorDependenciesPath + "SharpDX.Desktop.dll",
+                                      operatorDependenciesPath + "SharpDX.Mathematics.dll",
+                                      operatorDependenciesPath + "SharpDX.Direct3D11.dll",
+                                      operatorDependenciesPath + "SharpDX.Direct2D1.dll",
+                                      operatorDependenciesPath + "SharpDX.DXGI.dll",
+                                      operatorDependenciesPath + "SharpDX.D3DCompiler.dll",
+                                      operatorDependenciesPath + "SharpDX.dll",
+                                      operatorDependenciesPath + "NAudio.Midi.dll",
+                                      operatorDependenciesPath + "NAudio.Core.dll",
+                                      operatorDependenciesPath + "Svg.dll",
+                                      operatorDependenciesPath + "Fizzler.dll",
+                                      operatorDependenciesPath + "SharpDX.MediaFoundation.dll",
+                                      operatorDependenciesPath + "Rug.OSC.dll",
+                                  },
+                              exportDir);
                 }
-                playerFileNames.ForEach(s => CopyFile(s, exportDir));
-
-                var references = OperatorUpdating.CompileSymbolsFromSource(exportDir, operatorAssemblySources.ToArray());
-                var referencedAssemblies = references.Where(r => r.Display.Contains(currentDir))
-                                                     .Select(r => r.Display)
-                                                     .Distinct()
-                                                     .ToArray();
-                foreach (var asmPath in referencedAssemblies)
+                else
                 {
-                    CopyFile(asmPath, exportDir);
+                    Log.Debug("Copy dependencies referenced in Operators.dll...");
+                    var references = OperatorUpdating.CompileSymbolsFromSource(exportDir, operatorAssemblySources.ToArray());
+                    var referencedAssemblies = references.Where(r => r.Display.Contains(currentDir))
+                                                         .Select(r => r.Display)
+                                                         .Distinct()
+                                                         .ToArray();
+                    CopyFiles(referencedAssemblies,
+                              exportDir);
                 }
 
                 // Generate exported .t3 files
@@ -130,7 +138,7 @@ namespace T3.Gui.Graph
                 string symbolExportDir = exportDir + Path.DirectorySeparatorChar + @"Operators\Types\";
                 if (Directory.Exists(symbolExportDir))
                     Directory.Delete(symbolExportDir, true);
-                
+
                 Directory.CreateDirectory(symbolExportDir);
                 foreach (var symbol in exportInfo.UniqueSymbols)
                 {
@@ -157,7 +165,6 @@ namespace T3.Gui.Graph
                             Log.Warning($"You should define soundtracks withing the exported operators. Falling back to {otherSoundtrack.FilePath} set in parent...");
                             resourcePaths.Add(otherSoundtrack.FilePath);
                             errorCount++;
-
                         }
                         else
                         {
@@ -174,6 +181,8 @@ namespace T3.Gui.Graph
 
                 resourcePaths.Add(@"Resources\lib\shared\bias.hlsl");
                 resourcePaths.Add(@"Resources\lib\shared\hash-functions.hlsl");
+                resourcePaths.Add(@"Resources\lib\points\spatial-hash-map\hash-map-settings.hlsl");
+
                 resourcePaths.Add(@"Resources\lib\shared\noise-functions.hlsl");
                 resourcePaths.Add(@"Resources\lib\shared\particle.hlsl");
                 resourcePaths.Add(@"Resources\lib\shared\pbr.hlsl");
@@ -193,7 +202,7 @@ namespace T3.Gui.Graph
                     {
                         if (!resourcePath.Contains("\\") && resourcePath.StartsWith("Resources"))
                         {
-                            Log.Warning($" {resourcePath} can't used for exporting because it's not located in Resources/ folder.");
+                            Log.Warning($" {resourcePath} can't be used for exporting because it's not located in Resources/ folder.");
                             errorCount++;
                             continue;
                         }
@@ -263,8 +272,16 @@ namespace T3.Gui.Graph
                 Log.Info($"Collected {CollectedInstances.Count} instances for export in {UniqueSymbols.Count} different symbols:");
                 foreach (var resourcePath in UniqueResourcePaths)
                 {
-                    Log.Info( $"  {resourcePath}");
+                    Log.Info($"  {resourcePath}");
                 }
+            }
+        }
+
+        public static void CopyFiles(IEnumerable<string> sourcePaths, string targetDir)
+        {
+            foreach (var path in sourcePaths)
+            {
+                CopyFile(path, targetDir);
             }
         }
 
