@@ -220,7 +220,7 @@
       "Outputs": []
     },
     {
-      "Id": "683d5fd7-63cd-40d9-97f9-0fa4cd6ea7d1"/*AudioReaction*/,
+      "Id": "683d5fd7-63cd-40d9-97f9-0fa4cd6ea7d1"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {

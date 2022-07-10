@@ -1,162 +1,248 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Core.Audio;
+using T3.Core;
+using T3.Core.Animation;
+using T3.Core.IO;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Operators.Utils;
 
-namespace T3.Operators.Types.Id_f8aed421_5e0e_4d1f_993c_1801153ebba8
+namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
 {
     public class AudioReaction : Instance<AudioReaction>
     {
-        [Output(Guid = "2aa4d0cb-c49d-41ce-aa74-794cc8682590", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> Level = new Slot<float>();
+        [Output(Guid = "E1749C60-41F0-4E8F-9317-909EF31EEEF1", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<float> Level = new();
 
-        [Output(Guid = "E1D7D3AF-FFD7-460F-B861-F0A11EE287B0", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<int> PeakCount = new Slot<int>();
-
-        [Output(Guid = "0CD3D908-C7C4-41D3-BEF2-C48A29B9842A", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<bool> PeakDetected = new Slot<bool>();
-
+        [Output(Guid = "8CA411D4-10CE-4B90-AEBA-3E405EBECBA3", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<bool> WasHit = new();
+        
+        [Output(Guid = "829fe194-4b8a-4d54-bde1-a0e023a9a198", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<int> HitCount = new();
+        
         public AudioReaction()
         {
             Level.UpdateAction = Update;
-            PeakCount.UpdateAction = Update;
-            PeakDetected.UpdateAction = Update;
+            WasHit.UpdateAction = Update;
+            HitCount.UpdateAction = Update;
         }
 
-        private double _lastEvalTime = 0;
-
+        private double _lastEvalTime;
+        
         private void Update(EvaluationContext context)
         {
-            var band = (FrequencyBands)Band.GetValue(context);
-            var mode = (Modes)Mode.GetValue(context);
-            var decay = Decay.GetValue(context);
-            var modulo = UseModulo.GetValue(context);
-
-            var t = context.LocalFxTime;
-            if (Math.Abs(t - _lastEvalTime) < 0.001f) 
-                return;
-
-            _lastEvalTime = t;
-
-            //var a = _SetAudioAnalysis.AudioAnalysisResult;
-
-            var results = band == FrequencyBands.Bass
-                              ? AudioAnalysisResult.Bass
-                              : AudioAnalysisResult.HiHats;
-
-            var peakDetected = results.PeakCount > _lastPeakCount;
-            
-            var usingModulo = modulo > 0;
-            var isModuloPeak = peakDetected && (!usingModulo || results.PeakCount % modulo == 0);
-
-            if (peakDetected && isModuloPeak)
+            if (Math.Abs(context.LocalFxTime - _lastEvalTime) < 0.001f)
             {
-                _lastModuloPeakTime = context.Playback.FxTimeInBars;
+                return;
             }
-            var timeSinceModuloPeak = (float)(context.Playback.FxTimeInBars - _lastModuloPeakTime);
-            var timeSincePeak = usingModulo
-                                    ? timeSinceModuloPeak
-                                    : results.TimeSincePeak;
+
+            _lastEvalTime = context.LocalFxTime;
             
-            float value = 0;
+            if (!string.IsNullOrEmpty(ProjectSettings.Config.AudioInputDeviceName) && !WasapiAudioInput.DevicesInitialized)
+            {
+                WasapiAudioInput.Initialize();
+            }
+
+            if (MathUtils.WasTriggered(Reset.GetValue(context), ref _reset))
+            {
+                _hitCount = 0;
+                AccumulatedLevel = 0;
+            }
+
+
+            List<float> bins = default;
+            var mode = (InputModes)InputBand.GetValue(context).Clamp(0, Enum.GetNames(typeof(InputModes)).Length - 1);
             switch (mode)
             {
-                case Modes.TimeSincePeak:
-                    
-                    value = timeSincePeak;
+                case InputModes.RawFft:
+                    bins = AudioAnalysis.FftGainBuffer == null
+                                ? _emptyList
+                                : AudioAnalysis.FftGainBuffer.ToList();
+
                     break;
 
-                case Modes.Count:
-                    value = usingModulo
-                        ? results.PeakCount / modulo
-                        : results.PeakCount;
+                case InputModes.NormalizedFft:
+                    bins = AudioAnalysis.FftNormalizedBuffer == null
+                                ? _emptyList
+                                : AudioAnalysis.FftNormalizedBuffer.ToList();
                     break;
 
-                case Modes.Peaks:
-                    value = (float)Math.Max(0, 1 - timeSincePeak * decay);
+                case InputModes.FrequencyBands:
+                    bins = AudioAnalysis.FrequencyBands == null
+                                ? _emptyList
+                                : AudioAnalysis.FrequencyBands.ToList();
                     break;
 
-                case Modes.PeaksDecaying:
-                    value = (float)Math.Pow(decay + 1, -timeSincePeak);
+                case InputModes.FrequencyBandsPeaks:
+                    bins = AudioAnalysis.FrequencyBandPeaks == null
+                                ? _emptyList
+                                : AudioAnalysis.FrequencyBandPeaks.ToList();
+
                     break;
 
-                case Modes.Level:
-                    value = (float)results.AccumulatedEnergy;
+                case InputModes.FrequencyBandsAttacks:
+                    bins = AudioAnalysis.FrequencyBandAttacks == null
+                                ? _emptyList
+                                : AudioAnalysis.FrequencyBandAttacks.ToList();
+
                     break;
+            }
 
-                case Modes.MovingSum:
-                    if (double.IsNaN(_movingSum))
-                        _movingSum = 0;
-                    
-                    var step =Math.Pow(results.AccumulatedEnergy, decay);
-                    if (!double.IsNaN(step))
-                        _movingSum += step;
+            var threshold = Threshold.GetValue(context);
+            var minTimeBetweenHits = MinTimeBetweenHits.GetValue(context);
+            
+            var windowCenter = WindowCenter.GetValue(context).Clamp(0, 1);
+            var windowWidth = WindowWidth.GetValue(context).Clamp(0, 1);
+            var windowEdge = WindowEdge.GetValue(context).Clamp(0.0001f, 1);
+            var amplitude = Amplitude.GetValue(context);
+            var bias = Bias.GetValue(context);
+            
+            Sum = 0f;
+            if (bins != null && bins.Count > 0)
+            {
+                var bandCount = bins.Count;
 
-                    value = (float)(_movingSum % 10000);
-                    break;
+                for (var binIndex = 0; binIndex < bins.Count; binIndex++)
+                {
+                    var binValue = bins[binIndex];
+                    var f = (float)binIndex / (bandCount - 1);
+                    var factor = 1 - (MathF.Abs((f - windowCenter) / windowEdge) - windowWidth / windowEdge).Clamp(0, 1);
+                    Sum += binValue * factor;
+                }
 
-                case Modes.RandomValue:
-                    if (isModuloPeak)
+                Sum /= (bandCount * (windowWidth + windowEdge / 2));
+                
+                var couldBeHit = Sum > threshold;
+
+                if (couldBeHit != _isHitActive)
+                {
+                    if (!_isHitActive && TimeSinceLastHit > minTimeBetweenHits)
                     {
-                        _lastRandomValue = (float)_random.NextDouble();
+                        _isHitActive = couldBeHit;
+                        _lastHitTime = Playback.RunTimeInSecs;
+                        _hitCount++;
                     }
-                    value = _lastRandomValue;
-                    break;
+                    else
+                    {
+                        _isHitActive = couldBeHit;
+                    }
+                }
+                
+                AccumulatedLevel +=  MathF.Pow((Sum * 2) / threshold, 2) * 0.001 * amplitude;
+                _dampedTimeBetweenHits = MathUtils.Lerp((float)TimeSinceLastHit, _dampedTimeBetweenHits, 0.94f);
+            }
 
+            float v;
+            
+            AccumulationActive = false;
+            
+            switch ((OutputModes)Output.GetValue(context).Clamp(0, Enum.GetNames(typeof(OutputModes)).Length - 1))
+            {
+                case OutputModes.Pulse:
+                    v = MathF.Pow((1 - (float)TimeSinceLastHit).Clamp(0, 1), bias) * amplitude;
+                    break;
+                
+                case OutputModes.TimeSinceHit:
+                    v = MathF.Pow((float)TimeSinceLastHit, bias) * amplitude;
+                    break;
+                
+                case OutputModes.Count:
+                    v = _hitCount * amplitude;
+                    break;
+                
+                case OutputModes.Level:
+                    v = MathF.Pow(Sum, bias) * amplitude;
+                    break;
+                
+                case OutputModes.AccumulatedLevel:
+                    AccumulationActive = true;
+                    const double wrapToFloatPrecision = 10000;
+                    v = (float)(AccumulatedLevel % wrapToFloatPrecision);
+                    break;
+                
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
-            Level.Value = value * Amplitude.GetValue(context);
-
-            PeakCount.Value = results.PeakCount;
-
-            PeakDetected.Value = isModuloPeak;
-            _lastPeakCount = results.PeakCount;
-
+            
+            WasHit.Value = _isHitActive;
+            HitCount.Value = _hitCount;
+            Level.Value = v;
+            ActiveBins = bins;
+            
+            // Only update once
+            WasHit.DirtyFlag.Clear();
+            HitCount.DirtyFlag.Clear();
             Level.DirtyFlag.Clear();
-            PeakCount.DirtyFlag.Clear();
-            PeakDetected.DirtyFlag.Clear();
         }
 
-        private double _lastModuloPeakTime;
-        private float _lastRandomValue;
-
-        private enum FrequencyBands
+        public float Sum { get; private set; }   
+        public float SumFactor { get; private set; }
+        private bool _reset;
+        private int _hitCount;
+        private bool _isHitActive;
+        public double AccumulatedLevel { get; private set; }
+        private float _dampedTimeBetweenHits;
+        
+        public List<float> ActiveBins { get; private set; }
+        
+        private double _lastHitTime;
+        
+        public enum InputModes
         {
-            Bass,
-            Highs,
+            RawFft,
+            NormalizedFft,
+            FrequencyBands,
+            FrequencyBandsPeaks,
+            FrequencyBandsAttacks,
         }
 
-        private enum Modes
+        public enum OutputModes
         {
-            TimeSincePeak,
-            Peaks,
-            PeaksDecaying,
-            Level,
+            Pulse,
+            TimeSinceHit,
             Count,
-            RandomValue,
-            MovingSum,
+            Level,
+            AccumulatedLevel,
         }
+        
+        
+        [Input(Guid = "44409811-1a0f-4be6-83ea-b2f040ebf08b", MappedType = typeof(InputModes))]
+        public readonly InputSlot<int> InputBand = new();
 
-        private int _lastPeakCount;
-        private double _movingSum = 0;
-        private Random _random = new Random();
+        [Input(Guid = "F3D7C7FD-4280-4FB4-9F9A-C39B28D1A72B")]
+        public readonly InputSlot<float> WindowCenter = new();
 
-        [Input(Guid = "15F841F5-5153-4383-90B9-F6A4F72D5D6B", MappedType = typeof(FrequencyBands))]
-        public readonly InputSlot<int> Band = new InputSlot<int>();
+        [Input(Guid = "F920A79D-C946-4A78-9E68-F64FC3C4A696")]
+        public readonly InputSlot<float> WindowEdge = new();
+        
+        [Input(Guid = "1D3A1132-E8B9-4C04-99BF-80F6F1530309")]
+        public readonly InputSlot<float> WindowWidth = new();
+        
+        [Input(Guid = "02F71A92-D5C8-4DD7-AF5F-DA12330F60EB")]
+        public readonly InputSlot<float> Threshold = new();
 
-        [Input(Guid = "D9069774-188B-4A5E-976A-053D0C893503", MappedType = typeof(Modes))]
-        public readonly InputSlot<int> Mode = new InputSlot<int>();
+        [Input(Guid = "AECE14B8-88E0-4817-8204-B79159DB8102")]
+        public readonly InputSlot<float> MinTimeBetweenHits = new();
+        
+        
+        [Input(Guid = "80294096-AE64-471A-BCF1-622684E06D56", MappedType = typeof(OutputModes))]
+        public readonly InputSlot<int> Output = new();
+        
+        [Input(Guid = "B1C43D3B-F425-4D62-9D48-07CCB5D08707")]
+        public readonly InputSlot<float> Amplitude = new();
 
-        [Input(Guid = "EC0FE09B-B925-4B14-8186-8C32B65AF9BB")]
-        public readonly InputSlot<float> Amplitude = new InputSlot<float>();
+        [Input(Guid = "1139B245-76B4-4F51-A263-EE1A1371073F")]
+        public readonly InputSlot<float> Bias = new();
 
-        [Input(Guid = "E7FAC507-AD85-48F4-89D3-76600FF519EC")]
-        public readonly InputSlot<float> Decay = new InputSlot<float>();
+        [Input(Guid = "D138C961-B163-428A-9479-2130F1E46314")]
+        public readonly InputSlot<bool> Reset = new();
+        
+        private static readonly List<float> _emptyList = new();
+        public double TimeSinceLastHit => Playback.RunTimeInSecs - _lastHitTime;
 
-        [Input(Guid = "0E04D1F8-3BBD-46B1-BDE6-46BCDFDBE3AA")]
-        public readonly InputSlot<int> UseModulo = new InputSlot<int>();
+        public bool AccumulationActive;
     }
 }

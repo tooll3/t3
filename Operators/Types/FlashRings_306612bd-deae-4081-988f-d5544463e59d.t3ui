@@ -114,7 +114,7 @@
       }
     },
     {
-      "ChildId": "9e3ec14d-3b8e-4db4-a442-d495026f3f6a"/*AudioReaction*/,
+      "ChildId": "9e3ec14d-3b8e-4db4-a442-d495026f3f6a"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -268,7 +268,7 @@
       }
     },
     {
-      "ChildId": "efa441e3-1ee3-4e56-8b36-c574a89fdd01"/*AudioReaction*/,
+      "ChildId": "efa441e3-1ee3-4e56-8b36-c574a89fdd01"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -290,7 +290,7 @@
       }
     },
     {
-      "ChildId": "62e9549e-eb0d-461e-b30d-2396d2f61deb"/*AudioReaction*/,
+      "ChildId": "62e9549e-eb0d-461e-b30d-2396d2f61deb"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -301,7 +301,7 @@
       }
     },
     {
-      "ChildId": "7aec8098-6836-48c8-9d97-6532d2e01aba"/*AudioReaction*/,
+      "ChildId": "7aec8098-6836-48c8-9d97-6532d2e01aba"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

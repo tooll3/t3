@@ -222,7 +222,7 @@
       "Outputs": []
     },
     {
-      "Id": "ee1e1df6-fdad-42b0-93a2-36cc509512f2"/*SoundInput*/,
+      "Id": "ee1e1df6-fdad-42b0-93a2-36cc509512f2"/*AudioFrequencies*/,
       "SymbolId": "b72d968b-0045-408d-a2f9-5c739c692a66",
       "InputValues": [],
       "Outputs": []
@@ -421,7 +421,7 @@
       "Outputs": []
     },
     {
-      "Id": "036e9da9-01fc-4d63-b78d-65d8f9e2a7be"/*AudioReaction*/,
+      "Id": "036e9da9-01fc-4d63-b78d-65d8f9e2a7be"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -533,7 +533,7 @@
       "Outputs": []
     },
     {
-      "Id": "ecee258a-fbe6-4d4b-9aa0-2de197e1c10e"/*AudioReaction*/,
+      "Id": "ecee258a-fbe6-4d4b-9aa0-2de197e1c10e"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {

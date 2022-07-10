@@ -1246,7 +1246,7 @@
       "Outputs": []
     },
     {
-      "Id": "c6958a02-054d-4a7b-936e-91e5fc359c6a"/*AudioReaction*/,
+      "Id": "c6958a02-054d-4a7b-936e-91e5fc359c6a"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -1491,7 +1491,7 @@
       ]
     },
     {
-      "Id": "4f55a79b-e622-4462-98ed-603a4baf1a0c"/*AudioReaction*/,
+      "Id": "4f55a79b-e622-4462-98ed-603a4baf1a0c"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {

@@ -10,12 +10,12 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_b72d968b_0045_408d_a2f9_5c739c692a66
 {
-    public class SoundInput : Instance<SoundInput>
+    public class AudioFrequencies : Instance<AudioFrequencies>
     {
         [Output(Guid = "B3EFDF25-4692-456D-AA48-563CFB0B9DEB", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<List<float>> FftBuffer = new();
 
-        public SoundInput()
+        public AudioFrequencies()
         {
             FftBuffer.UpdateAction = Update;
         }

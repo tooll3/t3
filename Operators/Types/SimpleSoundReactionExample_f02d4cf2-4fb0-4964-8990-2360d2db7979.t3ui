@@ -48,7 +48,7 @@
       }
     },
     {
-      "ChildId": "06922394-76f4-4993-982a-483e28830792"/*AudioReaction*/,
+      "ChildId": "06922394-76f4-4993-982a-483e28830792"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -125,7 +125,7 @@
       }
     },
     {
-      "ChildId": "dc7bc2b2-dd52-42a0-95ac-942e11086e62"/*AudioReaction*/,
+      "ChildId": "dc7bc2b2-dd52-42a0-95ac-942e11086e62"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -136,7 +136,7 @@
       }
     },
     {
-      "ChildId": "4a99eefa-7e69-4378-b697-e5e7b5b6a9a5"/*AudioReaction*/,
+      "ChildId": "4a99eefa-7e69-4378-b697-e5e7b5b6a9a5"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -169,7 +169,7 @@
       }
     },
     {
-      "ChildId": "b194ca63-5f9d-4ab6-9b1a-7f44122ecf63"/*AudioReaction*/,
+      "ChildId": "b194ca63-5f9d-4ab6-9b1a-7f44122ecf63"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -180,7 +180,7 @@
       }
     },
     {
-      "ChildId": "39607d51-9ff8-4e4c-863f-9583e5d3def8"/*AudioReaction*/,
+      "ChildId": "39607d51-9ff8-4e4c-863f-9583e5d3def8"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -191,7 +191,7 @@
       }
     },
     {
-      "ChildId": "338a41e9-7c37-41b3-9507-a221df7ddb33"/*AudioReaction*/,
+      "ChildId": "338a41e9-7c37-41b3-9507-a221df7ddb33"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -268,7 +268,7 @@
       }
     },
     {
-      "ChildId": "2a2daedc-2a07-4d75-bc31-c429b110c493"/*AudioReaction*/,
+      "ChildId": "2a2daedc-2a07-4d75-bc31-c429b110c493"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -279,7 +279,7 @@
       }
     },
     {
-      "ChildId": "cf3d84ba-a757-4d7a-984b-39876803c4df"/*AudioReaction*/,
+      "ChildId": "cf3d84ba-a757-4d7a-984b-39876803c4df"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -301,7 +301,7 @@
       }
     },
     {
-      "ChildId": "83843fc4-6de3-452a-85c7-cbd43f86f049"/*AudioReaction*/,
+      "ChildId": "83843fc4-6de3-452a-85c7-cbd43f86f049"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -356,7 +356,7 @@
       }
     },
     {
-      "ChildId": "b1159277-70ba-4227-b768-2339ebf38679"/*AudioReaction*/,
+      "ChildId": "b1159277-70ba-4227-b768-2339ebf38679"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

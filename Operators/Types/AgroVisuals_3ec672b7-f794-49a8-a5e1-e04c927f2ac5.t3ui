@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "2b3dfaee-795a-4793-af61-35b2a464ecaa"/*AudioReaction2*/,
+      "ChildId": "2b3dfaee-795a-4793-af61-35b2a464ecaa"/*AudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -610,7 +610,7 @@
       }
     },
     {
-      "ChildId": "d481c92c-4271-4f29-8033-1e5c523934aa"/*AudioReaction2*/,
+      "ChildId": "d481c92c-4271-4f29-8033-1e5c523934aa"/*AudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

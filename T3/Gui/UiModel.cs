@@ -202,7 +202,7 @@ namespace T3.Gui
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad.VertexShader), DescriptiveUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985.PixelShader), DescriptiveUi.DrawChildUi);
             
-            CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c.AudioReaction2), AudioReaction2Ui.DrawChildUi);
+            CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c.AudioReaction), AudioReactionUi.DrawChildUi);
 
             foreach (var symbolEntry in SymbolRegistry.Entries)
             {

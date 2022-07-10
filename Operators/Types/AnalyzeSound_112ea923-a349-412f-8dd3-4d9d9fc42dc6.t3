@@ -42,7 +42,7 @@
   ],
   "Children": [
     {
-      "Id": "280d52f7-e2c5-480d-acf1-cffe351edb14"/*SoundInput*/,
+      "Id": "280d52f7-e2c5-480d-acf1-cffe351edb14"/*AudioFrequencies*/,
       "SymbolId": "b72d968b-0045-408d-a2f9-5c739c692a66",
       "InputValues": [],
       "Outputs": []
@@ -503,7 +503,7 @@
       "Outputs": []
     },
     {
-      "Id": "a52c8e43-d247-41ba-9b77-69a674b58737"/*SoundInput*/,
+      "Id": "a52c8e43-d247-41ba-9b77-69a674b58737"/*AudioFrequencies*/,
       "SymbolId": "b72d968b-0045-408d-a2f9-5c739c692a66",
       "InputValues": [],
       "Outputs": []

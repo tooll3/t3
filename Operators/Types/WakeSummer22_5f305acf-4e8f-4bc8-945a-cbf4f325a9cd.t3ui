@@ -722,7 +722,7 @@
       }
     },
     {
-      "ChildId": "07a26bab-a0d1-440a-b14f-9c914fccfbdb"/*SoundInput*/,
+      "ChildId": "07a26bab-a0d1-440a-b14f-9c914fccfbdb"/*AudioFrequencies*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

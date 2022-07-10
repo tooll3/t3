@@ -10,11 +10,11 @@ using UiHelpers;
 
 namespace T3.Gui.ChildUi
 {
-    public static class AudioReaction2Ui
+    public static class AudioReactionUi
     {
         public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
         {
-            if (!(instance is AudioReaction2 audioReaction2)
+            if (!(instance is AudioReaction audioReaction2)
                 || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
                 return SymbolChildUi.CustomUiResult.None;
 
@@ -46,18 +46,18 @@ namespace T3.Gui.ChildUi
             var binsPerBar = (float)binCount / barsCount;
             const float valueScale = 0.5f;
             
-            var inputMode = (AudioReaction2.InputModes)audioReaction2.InputBand.Value.Clamp(0, Enum.GetNames(typeof(AudioReaction2.InputModes)).Length);
-            if (inputMode == AudioReaction2.InputModes.FrequencyBandsAttacks
-                || inputMode == AudioReaction2.InputModes.FrequencyBands)
+            var inputMode = (AudioReaction.InputModes)audioReaction2.InputBand.Value.Clamp(0, Enum.GetNames(typeof(AudioReaction.InputModes)).Length);
+            if (inputMode == AudioReaction.InputModes.FrequencyBandsAttacks
+                || inputMode == AudioReaction.InputModes.FrequencyBands)
             {
                 var xPeaks = screenRect.Min.X;
                 float[] peakBands = default;
                 switch (inputMode)
                 {
-                    case AudioReaction2.InputModes.FrequencyBands:
+                    case AudioReaction.InputModes.FrequencyBands:
                         peakBands = AudioAnalysis.FrequencyBandPeaks;
                         break;
-                    case AudioReaction2.InputModes.FrequencyBandsAttacks:
+                    case AudioReaction.InputModes.FrequencyBandsAttacks:
                         peakBands = AudioAnalysis.FrequencyBandAttackPeaks;
                         break;
                     default:

@@ -1129,7 +1129,7 @@
       "Outputs": []
     },
     {
-      "Id": "9369273b-491d-4416-857f-54c5db32f569"/*AudioReaction*/,
+      "Id": "9369273b-491d-4416-857f-54c5db32f569"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -1340,7 +1340,7 @@
       "Outputs": []
     },
     {
-      "Id": "9474fc67-8b78-49c7-bb3c-d14c4097a399"/*AudioReaction*/,
+      "Id": "9474fc67-8b78-49c7-bb3c-d14c4097a399"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -1589,7 +1589,7 @@
       "Outputs": []
     },
     {
-      "Id": "9234e563-dde0-47a6-87ad-22ab1073760d"/*AudioReaction*/,
+      "Id": "9234e563-dde0-47a6-87ad-22ab1073760d"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -1616,7 +1616,7 @@
       "Outputs": []
     },
     {
-      "Id": "c61aec32-767a-44a3-9224-1dac29c7a335"/*AudioReaction*/,
+      "Id": "c61aec32-767a-44a3-9224-1dac29c7a335"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -3011,7 +3011,7 @@
       "Outputs": []
     },
     {
-      "Id": "182ac728-2659-40be-b152-61f12e2933c6"/*AudioReaction*/,
+      "Id": "182ac728-2659-40be-b152-61f12e2933c6"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -3371,7 +3371,7 @@
       "Outputs": []
     },
     {
-      "Id": "81c44c3b-0191-44bc-bdae-251fea0109f8"/*AudioReaction*/,
+      "Id": "81c44c3b-0191-44bc-bdae-251fea0109f8"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -3399,7 +3399,7 @@
       "Outputs": []
     },
     {
-      "Id": "9997f2b7-a04b-4454-b621-ecd550ecf375"/*AudioReaction*/,
+      "Id": "9997f2b7-a04b-4454-b621-ecd550ecf375"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {

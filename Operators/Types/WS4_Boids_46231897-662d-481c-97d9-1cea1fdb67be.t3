@@ -621,7 +621,7 @@
       "Outputs": []
     },
     {
-      "Id": "a8bbef8d-a58a-49bd-9770-fc278bb6ece1"/*AudioReaction*/,
+      "Id": "a8bbef8d-a58a-49bd-9770-fc278bb6ece1"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {

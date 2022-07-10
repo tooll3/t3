@@ -314,7 +314,7 @@
       "Outputs": []
     },
     {
-      "Id": "fd0474dc-afb2-4f2a-b154-87df8fbe72c6"/*AudioReaction*/,
+      "Id": "fd0474dc-afb2-4f2a-b154-87df8fbe72c6"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {

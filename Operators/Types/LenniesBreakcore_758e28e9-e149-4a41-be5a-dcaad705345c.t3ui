@@ -158,7 +158,7 @@
       }
     },
     {
-      "ChildId": "f6f02e32-9e81-4619-b865-9c91adca4e94"/*AudioReaction*/,
+      "ChildId": "f6f02e32-9e81-4619-b865-9c91adca4e94"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -180,7 +180,7 @@
       }
     },
     {
-      "ChildId": "9bf547f2-ea41-41ab-903b-242804c19348"/*AudioReaction*/,
+      "ChildId": "9bf547f2-ea41-41ab-903b-242804c19348"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -433,7 +433,7 @@
       }
     },
     {
-      "ChildId": "43923f4e-d8a3-401a-b386-da389dcda8a2"/*AudioReaction*/,
+      "ChildId": "43923f4e-d8a3-401a-b386-da389dcda8a2"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -510,7 +510,7 @@
       }
     },
     {
-      "ChildId": "e16c44b9-359c-44c9-8ed4-8a9173e3ac02"/*AudioReaction*/,
+      "ChildId": "e16c44b9-359c-44c9-8ed4-8a9173e3ac02"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -741,7 +741,7 @@
       }
     },
     {
-      "ChildId": "e8d9c7ff-813f-403d-8647-3aea54c68b72"/*AudioReaction*/,
+      "ChildId": "e8d9c7ff-813f-403d-8647-3aea54c68b72"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -763,7 +763,7 @@
       }
     },
     {
-      "ChildId": "f72a06a8-00c2-4027-8c58-f333c7eb4a52"/*AudioReaction*/,
+      "ChildId": "f72a06a8-00c2-4027-8c58-f333c7eb4a52"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -818,7 +818,7 @@
       }
     },
     {
-      "ChildId": "9ced7327-795f-4a18-b760-f160a23864b5"/*AudioReaction*/,
+      "ChildId": "9ced7327-795f-4a18-b760-f160a23864b5"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -1016,7 +1016,7 @@
       }
     },
     {
-      "ChildId": "a8d4f51d-859d-452f-9b1e-f01e8c562845"/*AudioReaction*/,
+      "ChildId": "a8d4f51d-859d-452f-9b1e-f01e8c562845"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

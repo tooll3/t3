@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "a5497546-700b-4b48-bd49-537113ea1deb"/*AudioReaction2*/,
+      "ChildId": "a5497546-700b-4b48-bd49-537113ea1deb"/*AudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -70,7 +70,7 @@
       }
     },
     {
-      "ChildId": "2df46691-0e62-4712-9fd6-e822f8a7f3bc"/*AudioReaction2*/,
+      "ChildId": "2df46691-0e62-4712-9fd6-e822f8a7f3bc"/*AudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -554,7 +554,7 @@
       }
     },
     {
-      "ChildId": "fe84b4de-ce41-4462-b988-4dd2eb671caa"/*AudioReaction2*/,
+      "ChildId": "fe84b4de-ce41-4462-b988-4dd2eb671caa"/*AudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -1029,7 +1029,7 @@
       }
     },
     {
-      "ChildId": "20c90d14-1b82-40da-a78c-cacc6055c176"/*AudioReaction2*/,
+      "ChildId": "20c90d14-1b82-40da-a78c-cacc6055c176"/*AudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -1084,7 +1084,7 @@
       }
     },
     {
-      "ChildId": "4841a178-794d-4f2e-bfd9-e417ebbccfb4"/*AudioReaction2*/,
+      "ChildId": "4841a178-794d-4f2e-bfd9-e417ebbccfb4"/*AudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -1458,7 +1458,7 @@
       }
     },
     {
-      "ChildId": "bac28384-4caf-4a39-8b64-eb988f3a953e"/*AudioReaction2*/,
+      "ChildId": "bac28384-4caf-4a39-8b64-eb988f3a953e"/*AudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

@@ -68,7 +68,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "280d52f7-e2c5-480d-acf1-cffe351edb14"/*SoundInput*/,
+      "ChildId": "280d52f7-e2c5-480d-acf1-cffe351edb14"/*AudioFrequencies*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -465,7 +465,7 @@
       }
     },
     {
-      "ChildId": "a52c8e43-d247-41ba-9b77-69a674b58737"/*SoundInput*/,
+      "ChildId": "a52c8e43-d247-41ba-9b77-69a674b58737"/*AudioFrequencies*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

@@ -184,7 +184,7 @@
       }
     },
     {
-      "ChildId": "ee1e1df6-fdad-42b0-93a2-36cc509512f2"/*SoundInput*/,
+      "ChildId": "ee1e1df6-fdad-42b0-93a2-36cc509512f2"/*AudioFrequencies*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -339,7 +339,7 @@
       }
     },
     {
-      "ChildId": "036e9da9-01fc-4d63-b78d-65d8f9e2a7be"/*AudioReaction*/,
+      "ChildId": "036e9da9-01fc-4d63-b78d-65d8f9e2a7be"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -394,7 +394,7 @@
       }
     },
     {
-      "ChildId": "ecee258a-fbe6-4d4b-9aa0-2de197e1c10e"/*AudioReaction*/,
+      "ChildId": "ecee258a-fbe6-4d4b-9aa0-2de197e1c10e"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

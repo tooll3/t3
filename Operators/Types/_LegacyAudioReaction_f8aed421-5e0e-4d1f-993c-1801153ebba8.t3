@@ -1,5 +1,5 @@
 {
-  "Name": "AudioReaction",
+  "Name": "_LegacyAudioReaction",
   "Id": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
   "Namespace": "lib.audio",
   "Inputs": [
