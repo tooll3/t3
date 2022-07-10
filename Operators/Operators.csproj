@@ -12,6 +12,8 @@
       <PackageReference Include="ManagedBass" Version="3.1.0" />
       <PackageReference Include="ManagedBass.Wasapi" Version="3.1.0" />
       <PackageReference Include="NAudio" Version="2.1.0" />
+        
+      <PackageReference Include="Rug.Osc" Version="1.2.5" />
       <PackageReference Include="SharpDX.MediaFoundation" Version="4.2.0" />
       <PackageReference Include="Svg" Version="3.3.0" />
       <PackageReference Include="unsplasharp.api" Version="0.7.0" />
