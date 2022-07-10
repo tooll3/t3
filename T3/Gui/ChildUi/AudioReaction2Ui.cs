@@ -55,10 +55,10 @@ namespace T3.Gui.ChildUi
                 switch (inputMode)
                 {
                     case AudioReaction2.InputModes.FrequencyBands:
-                        peakBands = AudioInput.FrequencyBandPeaks;
+                        peakBands = AudioAnalysis.FrequencyBandPeaks;
                         break;
                     case AudioReaction2.InputModes.FrequencyBandsAttacks:
-                        peakBands = AudioInput.FrequencyBandAttackPeaks;
+                        peakBands = AudioAnalysis.FrequencyBandAttackPeaks;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

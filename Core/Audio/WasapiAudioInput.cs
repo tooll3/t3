@@ -8,6 +8,9 @@ using T3.Core.Logging;
 
 namespace Core.Audio
 {
+    /// <summary>
+    /// Uses the windows Wasapi audio API to get audio reaction from devices like speakers and microphones
+    /// </summary>
     public static class WasapiAudioInput
     {
         /// <summary>
@@ -50,7 +53,7 @@ namespace Core.Audio
         public static void StartInputCapture(WasapiInputDevice device)
         {
             int inputDeviceIndex = BassWasapi.DefaultInputDevice;
-            AudioInput.InputMode = AudioInput.InputModes.WasapiDevice;
+            AudioAnalysis.InputMode = AudioAnalysis.InputModes.WasapiDevice;
             
             if (device == null)
             {
@@ -88,7 +91,7 @@ namespace Core.Audio
             }
             
             BassWasapi.Start();
-            AudioInput.InputMode = AudioInput.InputModes.WasapiDevice;
+            AudioAnalysis.InputMode = AudioAnalysis.InputModes.WasapiDevice;
         }
 
         public static void StopInputCapture()
@@ -128,16 +131,16 @@ namespace Core.Audio
             int resultCode;
             if (_fftUpdatesSinceLastFrame == 0)
             {
-                resultCode = BassWasapi.GetData(AudioInput.FftGainBuffer, (int)(AudioInput.BassFlagForFftBufferSize | DataFlags.FFTRemoveDC));
+                resultCode = BassWasapi.GetData(AudioAnalysis.FftGainBuffer, (int)(AudioAnalysis.BassFlagForFftBufferSize | DataFlags.FFTRemoveDC));
             }
             else
             {
-                resultCode = BassWasapi.GetData(_fftIntermediate, (int)(AudioInput.BassFlagForFftBufferSize | DataFlags.FFTRemoveDC));
+                resultCode = BassWasapi.GetData(_fftIntermediate, (int)(AudioAnalysis.BassFlagForFftBufferSize | DataFlags.FFTRemoveDC));
                 if (resultCode >= 0)
                 {
-                    for (var i = 0; i < AudioInput.FftHalfSize; i++)
+                    for (var i = 0; i < AudioAnalysis.FftHalfSize; i++)
                     {
-                        AudioInput.FftGainBuffer[i] = MathF.Max(_fftIntermediate[i], AudioInput.FftGainBuffer[i]);
+                        AudioAnalysis.FftGainBuffer[i] = MathF.Max(_fftIntermediate[i], AudioAnalysis.FftGainBuffer[i]);
                     }
                 }
             }
@@ -161,7 +164,7 @@ namespace Core.Audio
             public WasapiDeviceInfo DeviceInfo;
         }
 
-        private static readonly float[] _fftIntermediate = new float[AudioInput.FftHalfSize];
+        private static readonly float[] _fftIntermediate = new float[AudioAnalysis.FftHalfSize];
         private static readonly WasapiProcedure _wasapiProcedure = Process;
     }
 }

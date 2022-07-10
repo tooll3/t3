@@ -516,17 +516,18 @@ namespace T3.Gui.Windows.TimeLine
                     ImGui.DragFloat("AudioGain", ref ProjectSettings.Config.AudioGainFactor, 0.01f, 0, 100);
                     ImGui.DragFloat("AudioDecay", ref ProjectSettings.Config.AudioDecayFactor, 0.001f, 0, 1);
                     
-                    
-                    ImGui.Text("Audio input for analysis...");
+                    ImGui.Spacing();
+                    ImGui.TextColored(Color.Gray, "Select source for audio analysis...");
                     if (ImGui.Selectable("Internal Soundtrack", string.IsNullOrEmpty(ProjectSettings.Config.AudioInputDeviceName)))
                     {
                         ProjectSettings.Config.AudioInputDeviceName = string.Empty;
-                        AudioInput.InputMode = AudioInput.InputModes.Soundtrack;
+                        AudioAnalysis.InputMode = AudioAnalysis.InputModes.Soundtrack;
                         Bass.Configure(Configuration.UpdateThreads, true);
                     }
                     
                     if (!WasapiAudioInput.DevicesInitialized)
                     {
+                        ImGui.Spacing();
                         if (ImGui.Button("Init sound input devices"))
                         {
                             WasapiAudioInput.InitializeInputDeviceList();

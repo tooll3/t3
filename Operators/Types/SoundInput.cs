@@ -34,35 +34,35 @@ namespace T3.Operators.Types.Id_b72d968b_0045_408d_a2f9_5c739c692a66
             switch (mode)
             {
                 case Modes.RawFft:
-                    FftBuffer.Value = AudioInput.FftGainBuffer == null
+                    FftBuffer.Value = AudioAnalysis.FftGainBuffer == null
                                           ? _emptyList
-                                          : AudioInput.FftGainBuffer.ToList();
+                                          : AudioAnalysis.FftGainBuffer.ToList();
                     
                     break;
 
                 case Modes.NormalizedFft:
-                    FftBuffer.Value = AudioInput.FftNormalizedBuffer == null
+                    FftBuffer.Value = AudioAnalysis.FftNormalizedBuffer == null
                                           ? _emptyList
-                                          : AudioInput.FftNormalizedBuffer.ToList();
+                                          : AudioAnalysis.FftNormalizedBuffer.ToList();
                     break;
                 
                 case Modes.FrequencyBands:
-                    FftBuffer.Value = AudioInput.FrequencyBands == null
+                    FftBuffer.Value = AudioAnalysis.FrequencyBands == null
                                           ? _emptyList
-                                          : AudioInput.FrequencyBands.ToList();
+                                          : AudioAnalysis.FrequencyBands.ToList();
                     break;
 
                 case Modes.FrequencyBandsPeaks:
-                    FftBuffer.Value = AudioInput.FrequencyBandPeaks == null
+                    FftBuffer.Value = AudioAnalysis.FrequencyBandPeaks == null
                                           ? _emptyList
-                                          : AudioInput.FrequencyBandPeaks.ToList();
+                                          : AudioAnalysis.FrequencyBandPeaks.ToList();
 
                     break;
                 
                 case Modes.FrequencyBandsAttacks:
-                    FftBuffer.Value = AudioInput.FrequencyBandAttacks == null
+                    FftBuffer.Value = AudioAnalysis.FrequencyBandAttacks == null
                                           ? _emptyList
-                                          : AudioInput.FrequencyBandAttacks.ToList();
+                                          : AudioAnalysis.FrequencyBandAttacks.ToList();
 
                     break;
                 

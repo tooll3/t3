@@ -40,7 +40,7 @@ namespace Core.Audio
                 Bass.Init();
                 _bassInitialized = true;
             }
-            AudioInput.CompleteFrame();
+            AudioAnalysis.CompleteFrame();
             
             // Create new streams
             foreach (var (audioClip, time) in _updatedClipTimes)
@@ -105,9 +105,9 @@ namespace Core.Audio
         private static void UpdateFftBuffer(int soundStreamHandle)
         {
             const int get256FftValues = (int)DataFlags.FFT512;
-            if (AudioInput.InputMode == AudioInput.InputModes.Soundtrack)
+            if (AudioAnalysis.InputMode == AudioAnalysis.InputModes.Soundtrack)
             {
-                Bass.ChannelGetData(soundStreamHandle, AudioInput.FftGainBuffer, get256FftValues);
+                Bass.ChannelGetData(soundStreamHandle, AudioAnalysis.FftGainBuffer, get256FftValues);
             }
         }
         

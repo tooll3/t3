@@ -15,8 +15,7 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
     {
         [Output(Guid = "E1749C60-41F0-4E8F-9317-909EF31EEEF1", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Level = new();
-        
-        
+
         [Output(Guid = "8CA411D4-10CE-4B90-AEBA-3E405EBECBA3", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<bool> WasHit = new();
         
@@ -30,8 +29,17 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             HitCount.UpdateAction = Update;
         }
 
+        private double _lastEvalTime;
+        
         private void Update(EvaluationContext context)
         {
+            if (Math.Abs(context.LocalFxTime - _lastEvalTime) < 0.001f)
+            {
+                return;
+            }
+
+            _lastEvalTime = context.LocalFxTime;
+            
             if (!string.IsNullOrEmpty(ProjectSettings.Config.AudioInputDeviceName) && !WasapiAudioInput.DevicesInitialized)
             {
                 WasapiAudioInput.Initialize();
@@ -49,35 +57,35 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             switch (mode)
             {
                 case InputModes.RawFft:
-                    bins = AudioInput.FftGainBuffer == null
+                    bins = AudioAnalysis.FftGainBuffer == null
                                 ? _emptyList
-                                : AudioInput.FftGainBuffer.ToList();
+                                : AudioAnalysis.FftGainBuffer.ToList();
 
                     break;
 
                 case InputModes.NormalizedFft:
-                    bins = AudioInput.FftNormalizedBuffer == null
+                    bins = AudioAnalysis.FftNormalizedBuffer == null
                                 ? _emptyList
-                                : AudioInput.FftNormalizedBuffer.ToList();
+                                : AudioAnalysis.FftNormalizedBuffer.ToList();
                     break;
 
                 case InputModes.FrequencyBands:
-                    bins = AudioInput.FrequencyBands == null
+                    bins = AudioAnalysis.FrequencyBands == null
                                 ? _emptyList
-                                : AudioInput.FrequencyBands.ToList();
+                                : AudioAnalysis.FrequencyBands.ToList();
                     break;
 
                 case InputModes.FrequencyBandsPeaks:
-                    bins = AudioInput.FrequencyBandPeaks == null
+                    bins = AudioAnalysis.FrequencyBandPeaks == null
                                 ? _emptyList
-                                : AudioInput.FrequencyBandPeaks.ToList();
+                                : AudioAnalysis.FrequencyBandPeaks.ToList();
 
                     break;
 
                 case InputModes.FrequencyBandsAttacks:
-                    bins = AudioInput.FrequencyBandAttacks == null
+                    bins = AudioAnalysis.FrequencyBandAttacks == null
                                 ? _emptyList
-                                : AudioInput.FrequencyBandAttacks.ToList();
+                                : AudioAnalysis.FrequencyBandAttacks.ToList();
 
                     break;
             }
