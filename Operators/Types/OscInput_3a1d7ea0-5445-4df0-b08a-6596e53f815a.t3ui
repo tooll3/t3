@@ -42,10 +42,24 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "5544b675-0de2-4a28-97d0-1a67349152fc"/*Result*/,
+      "OutputId": "5544b675-0de2-4a28-97d0-1a67349152fc"/*FirstResult*/,
       "Position": {
         "X": 133.0,
         "Y": 38.0
+      }
+    },
+    {
+      "OutputId": "1e2ec3d2-b242-4e6f-8d15-290584315aa9"/*Results*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 138.0
+      }
+    },
+    {
+      "OutputId": "8f426b4a-ad49-4ab9-80ee-3df9f5a5aff6"/*LastMessageTime*/,
+      "Position": {
+        "X": 133.0,
+        "Y": 238.0
       }
     }
   ]

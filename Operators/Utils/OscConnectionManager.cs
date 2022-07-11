@@ -87,31 +87,48 @@ namespace Operators.Utils
 
                         // Get the next message. This will block until one arrives or the socket is closed
                         var oscPacket = Receiver.Receive();
+                        
+                        OscMessage oscMessage = default;
 
-                        var oscMessage = OscMessage.Parse(oscPacket.ToString());
+                        var oscPacketString = oscPacket.ToString();
+                        try
+                        {
+                            if (oscPacketString != null && oscPacketString.StartsWith("#bundle"))
+                            {
+                                var bundle = OscBundle.Parse(oscPacketString);
 
-                        //if (oscMessage.Address == "/beatTimer")
-                        //{
-                        // TODO: Do something
-                        Log.Debug($"Got OSC on port {Port} message: {oscMessage.Address} {oscMessage}");
-
+                                if (bundle.Count == 1 && bundle[0] is OscMessage bundledMessage)
+                                {
+                                    oscMessage = bundledMessage;
+                                }
+                                else
+                                {
+                                    Log.Warning($"Can't parse bundled message '{oscPacketString}'");
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                oscMessage = OscMessage.Parse(oscPacket.ToString());
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Warning($"Failed to parse OSC Message: '{oscPacket} {e.Message}'");
+                            continue;
+                        }
+                        
                         foreach (var consumer in Consumers)
                         {
                             consumer.ProcessMessage(oscMessage);
                         }
-
-                        //OscMessageReceived?.Invoke(this, oscMessage);
-                        //}
                     }
                 }
                 catch (Exception ex)
                 {
-                    // if the socket was connected when this happens
-                    // then tell the user
                     if (Receiver.State == OscSocketState.Connected)
                     {
-                        Log.Debug("Exception in listen loop");
-                        Log.Debug(ex.Message);
+                        Log.Warning($"Exception in OSC listen loop: {ex.Message}");
                     }
                 }
             }

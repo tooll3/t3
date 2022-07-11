@@ -19,7 +19,7 @@ namespace T3.Operators.Types.Id_0841cdd4_0106_4f4e_826b_8de23bb5b5f0
         {
             var list = Input.GetValue(context);
             var index = Index.GetValue(context);
-            if (index >= 0 && index < list.Count)
+            if (list != null && index >= 0 && index < list.Count)
             {
                 Selected.Value = list[index];
             }
