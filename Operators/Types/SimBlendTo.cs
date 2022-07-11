@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_4ba8019b_f265_4e41_8722_4ee0c2c64ba9
 {
-    public class ApplyBlend : Instance<ApplyBlend>
+    public class SimBlendTo : Instance<SimBlendTo>
     {
 
         [Output(Guid = "fbee285f-3954-4321-9178-8f870698367f")]

@@ -13,7 +13,7 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
         [Output(Guid = "c53e3a03-3a6d-4547-abbf-7901b5045539", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Result = new Slot<float>();
         
-        [Output(Guid = "BAE829AD-8454-4625-BDE4-A7AB62F579A4")]
+        [Output(Guid = "BAE829AD-8454-4625-BDE4-A7AB62F579A4", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<bool> WasStep = new Slot<bool>();
 
         public Counter()
@@ -32,7 +32,8 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
             _blending = Blending.GetValue(context);
             var reset = TriggerReset.GetValue(context);
             var jump = TriggerIncrement.GetValue(context);
-            
+            var smoothBlending = SmoothBlending.GetValue(context);
+
             var f = (SpeedFactors)AllowSpeedFactor.GetValue(context);
             switch (f)
             {
@@ -90,20 +91,13 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
                     _jumpStartOffset = _count;
                     _jumpTargetOffset = _count + increment;
                 }
-
-                // if (_jumpTargetOffset > modulo)
-                // {
-                //     _count = 0;
-                //     _jumpStartOffset = 0;
-                //     _jumpTargetOffset = increment;
-                // }
                 _lastJumpTime = _beatTime; 
             }
 
             if (_blending >= 0.001)
             {
                 var t = (Fragment / _blending).Clamp(0,1);
-                if (SmoothBlending.GetValue(context))
+                if (smoothBlending)
                     t = MathUtils.SmootherStep(0, 1, t);
 
                 _count = MathUtils.Lerp(_jumpStartOffset, _jumpTargetOffset, t);

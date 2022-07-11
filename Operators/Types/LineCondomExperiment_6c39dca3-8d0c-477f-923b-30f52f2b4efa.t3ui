@@ -15,7 +15,7 @@
       }
     },
     {
-      "ChildId": "7e0497e5-3da1-4a27-b896-ebd036a34365"/*KeepPoints*/,
+      "ChildId": "7e0497e5-3da1-4a27-b896-ebd036a34365"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -26,7 +26,7 @@
       }
     },
     {
-      "ChildId": "0d165858-0a9b-4ba2-b83a-a6d9803f6377"/*ApplyNoise*/,
+      "ChildId": "0d165858-0a9b-4ba2-b83a-a6d9803f6377"/*SimNoise*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -126,7 +126,7 @@
       }
     },
     {
-      "ChildId": "c9a91bfa-bf84-49a1-9ae2-35e76017a691"/*ApplyNoise*/,
+      "ChildId": "c9a91bfa-bf84-49a1-9ae2-35e76017a691"/*SimNoise*/,
       "Size": {
         "X": 110.0,
         "Y": 62.0
@@ -247,7 +247,7 @@
       }
     },
     {
-      "ChildId": "bcb0bc7d-36fa-43b7-8643-f1b22e018e88"/*ApplyCentricForce*/,
+      "ChildId": "bcb0bc7d-36fa-43b7-8643-f1b22e018e88"/*SimForces*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

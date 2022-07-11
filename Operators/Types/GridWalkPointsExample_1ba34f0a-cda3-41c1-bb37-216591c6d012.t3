@@ -81,7 +81,7 @@
       "Outputs": []
     },
     {
-      "Id": "064706da-dc00-415c-8571-a69b5d8a05e7"/*ApplyNoise*/,
+      "Id": "064706da-dc00-415c-8571-a69b5d8a05e7"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [],
       "Outputs": []
@@ -345,7 +345,7 @@
       "Outputs": []
     },
     {
-      "Id": "63a3b7c7-6bbf-4f7e-89e5-806042cc71be"/*ApplyCentricForce*/,
+      "Id": "63a3b7c7-6bbf-4f7e-89e5-806042cc71be"/*SimForces*/,
       "SymbolId": "9c378944-9a57-4ae4-a88e-36c07244bcf7",
       "InputValues": [],
       "Outputs": []

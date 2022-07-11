@@ -521,7 +521,7 @@
       }
     },
     {
-      "ChildId": "4ace51dc-5a0c-4cfc-a395-6570ca96f50d"/*KeepPoints*/,
+      "ChildId": "4ace51dc-5a0c-4cfc-a395-6570ca96f50d"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -532,7 +532,7 @@
       }
     },
     {
-      "ChildId": "97567776-1522-43a7-8c32-021f8886230c"/*ApplyNoise*/,
+      "ChildId": "97567776-1522-43a7-8c32-021f8886230c"/*SimNoise*/,
       "Size": {
         "X": 110.0,
         "Y": 62.0

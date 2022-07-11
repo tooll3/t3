@@ -402,7 +402,7 @@
       }
     },
     {
-      "ChildId": "0bae2f61-75f8-4310-89d0-35afec2333ee"/*KeepPoints*/,
+      "ChildId": "0bae2f61-75f8-4310-89d0-35afec2333ee"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -1329,7 +1329,7 @@
       }
     },
     {
-      "ChildId": "8d1c2fb5-3ff8-4904-8848-0d9ca3be97b7"/*KeepPoints*/,
+      "ChildId": "8d1c2fb5-3ff8-4904-8848-0d9ca3be97b7"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -1428,7 +1428,7 @@
       }
     },
     {
-      "ChildId": "fc1aa3eb-8b37-4e29-9fcf-73c30c1ec827"/*KeepPoints*/,
+      "ChildId": "fc1aa3eb-8b37-4e29-9fcf-73c30c1ec827"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -2496,7 +2496,7 @@
       }
     },
     {
-      "ChildId": "1fc7c2b3-d1a7-4c29-b4dc-b58b7f226bd9"/*KeepPoints*/,
+      "ChildId": "1fc7c2b3-d1a7-4c29-b4dc-b58b7f226bd9"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

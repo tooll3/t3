@@ -125,7 +125,7 @@
       }
     },
     {
-      "ChildId": "1b68a430-6fa4-4d30-9752-98b5bc1ca3b1"/*ApplyCentricForce*/,
+      "ChildId": "1b68a430-6fa4-4d30-9752-98b5bc1ca3b1"/*SimForces*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

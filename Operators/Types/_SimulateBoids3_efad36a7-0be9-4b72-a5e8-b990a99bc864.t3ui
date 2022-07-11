@@ -34,7 +34,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "629936f0-f026-4ba6-a591-7a9220c70588"/*KeepPoints*/,
+      "ChildId": "629936f0-f026-4ba6-a591-7a9220c70588"/*PointSimulation*/,
       "Style": "Expanded",
       "Size": {
         "X": 110.0,

@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_5f846187_e109_45d1_97e0_ae95e3e7d9ba
 {
-    public class ApplyNoise : Instance<ApplyNoise>
+    public class SimNoise : Instance<SimNoise>
     {
 
         [Output(Guid = "cf976e9a-ea57-44f7-aeb9-f57f2e712b41")]

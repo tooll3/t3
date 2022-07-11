@@ -1,5 +1,5 @@
 {
-  "Id": "69c3b4ce-490a-48d4-b1d0-56dd6bf7a9a8"/*SimulatePoints*/,
+  "Id": "69c3b4ce-490a-48d4-b1d0-56dd6bf7a9a8"/*SimForwardMovement*/,
   "Description": "Moves point similar to particles into the direction of their Orientation and with W as their current velocity.",
   "InputUis": [
     {

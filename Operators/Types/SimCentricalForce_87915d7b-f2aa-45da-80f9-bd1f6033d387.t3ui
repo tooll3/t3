@@ -1,6 +1,6 @@
 {
-  "Id": "87915d7b-f2aa-45da-80f9-bd1f6033d387"/*ApplyForceToPoints*/,
-  "Description": "Applies are directed force to points (acceleration stored in W). Use [SimulatePoints] to move them as agents.\n",
+  "Id": "87915d7b-f2aa-45da-80f9-bd1f6033d387"/*SimCentricalForce*/,
+  "Description": "Applies are directed force to points (acceleration stored in W). Use [SimForwardMovement] to move them as agents.\n",
   "InputUis": [
     {
       "InputId": "9180eb49-efae-4305-b269-04314210e1f2"/*GPoints*/,

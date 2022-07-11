@@ -312,7 +312,7 @@
       "Outputs": []
     },
     {
-      "Id": "fa7fdb8f-af2f-41b8-9c88-d56fbc71028b"/*ApplyCentricForce*/,
+      "Id": "fa7fdb8f-af2f-41b8-9c88-d56fbc71028b"/*SimForces*/,
       "SymbolId": "9c378944-9a57-4ae4-a88e-36c07244bcf7",
       "InputValues": [
         {

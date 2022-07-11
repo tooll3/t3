@@ -1,5 +1,5 @@
 {
-  "Name": "ApplyForceToPoints",
+  "Name": "SimCentricalForce",
   "Id": "87915d7b-f2aa-45da-80f9-bd1f6033d387",
   "Namespace": "lib.point.sim",
   "Inputs": [

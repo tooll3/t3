@@ -1,5 +1,5 @@
 {
-  "Name": "ApplyFollowMeshSurface",
+  "Name": "SimFollowMeshSurface",
   "Id": "03aa5f28-3f74-4feb-aa6a-36cdb2d7f0d9",
   "Namespace": "lib.point.sim",
   "Inputs": [

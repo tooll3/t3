@@ -565,7 +565,7 @@
       }
     },
     {
-      "ChildId": "e70d3efc-2a8b-48e3-abbf-5de656b8d275"/*ApplyFollowMeshSurface*/,
+      "ChildId": "e70d3efc-2a8b-48e3-abbf-5de656b8d275"/*SimFollowMeshSurface*/,
       "Size": {
         "X": 110.0,
         "Y": 62.0
@@ -576,7 +576,7 @@
       }
     },
     {
-      "ChildId": "34465ee0-4c2d-43f9-9794-d78c692453ee"/*KeepPoints*/,
+      "ChildId": "34465ee0-4c2d-43f9-9794-d78c692453ee"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

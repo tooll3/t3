@@ -191,7 +191,7 @@
       }
     },
     {
-      "ChildId": "41d453cd-863b-473e-9005-9e6fd5898541"/*KeepPoints*/,
+      "ChildId": "41d453cd-863b-473e-9005-9e6fd5898541"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -202,7 +202,7 @@
       }
     },
     {
-      "ChildId": "d90460cf-4853-415f-a1e6-1aa3619b27c9"/*ApplyNoise*/,
+      "ChildId": "d90460cf-4853-415f-a1e6-1aa3619b27c9"/*SimNoise*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -246,7 +246,7 @@
       }
     },
     {
-      "ChildId": "07dfe685-fbcc-4b91-80b2-3e617745bdf1"/*ApplyDirectionalForce*/,
+      "ChildId": "07dfe685-fbcc-4b91-80b2-3e617745bdf1"/*SimDirectedForce*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -477,7 +477,7 @@
       }
     },
     {
-      "ChildId": "6393b234-1f3a-431e-90d2-9ea71b5f608e"/*KeepPoints*/,
+      "ChildId": "6393b234-1f3a-431e-90d2-9ea71b5f608e"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -543,7 +543,7 @@
       }
     },
     {
-      "ChildId": "9773b81c-64b3-40c4-9a5c-a7d8d2ca6152"/*ApplyNoise*/,
+      "ChildId": "9773b81c-64b3-40c4-9a5c-a7d8d2ca6152"/*SimNoise*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

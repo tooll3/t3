@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_87915d7b_f2aa_45da_80f9_bd1f6033d387
 {
-    public class ApplyForceToPoints : Instance<ApplyForceToPoints>
+    public class SimCentricalForce : Instance<SimCentricalForce>
     {
 
         [Output(Guid = "22ac99e2-182d-4a14-b64d-2a27f39be88b")]

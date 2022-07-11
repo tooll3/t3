@@ -81,7 +81,7 @@
       }
     },
     {
-      "ChildId": "064706da-dc00-415c-8571-a69b5d8a05e7"/*ApplyNoise*/,
+      "ChildId": "064706da-dc00-415c-8571-a69b5d8a05e7"/*SimNoise*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -268,7 +268,7 @@
       }
     },
     {
-      "ChildId": "63a3b7c7-6bbf-4f7e-89e5-806042cc71be"/*ApplyCentricForce*/,
+      "ChildId": "63a3b7c7-6bbf-4f7e-89e5-806042cc71be"/*SimForces*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

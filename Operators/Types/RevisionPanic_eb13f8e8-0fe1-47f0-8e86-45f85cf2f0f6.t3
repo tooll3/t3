@@ -461,13 +461,13 @@
       "Outputs": []
     },
     {
-      "Id": "93b64de5-a16d-4c29-866b-64d57936a345"/*ApplyFollowMeshSurface*/,
+      "Id": "93b64de5-a16d-4c29-866b-64d57936a345"/*SimFollowMeshSurface*/,
       "SymbolId": "03aa5f28-3f74-4feb-aa6a-36cdb2d7f0d9",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "ea52f869-8e60-4d52-87ea-220503021dd4"/*KeepPoints*/,
+      "Id": "ea52f869-8e60-4d52-87ea-220503021dd4"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [
         {

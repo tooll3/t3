@@ -96,7 +96,7 @@
       "Outputs": []
     },
     {
-      "Id": "653eb3ad-9620-4cb7-a8d1-006af7b46252"/*ApplyNoise*/,
+      "Id": "653eb3ad-9620-4cb7-a8d1-006af7b46252"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -216,7 +216,7 @@
       "Outputs": []
     },
     {
-      "Id": "8a5ebaea-18b3-489f-aee1-c441e7624a18"/*ApplyFollowMeshSurface*/,
+      "Id": "8a5ebaea-18b3-489f-aee1-c441e7624a18"/*SimFollowMeshSurface*/,
       "SymbolId": "03aa5f28-3f74-4feb-aa6a-36cdb2d7f0d9",
       "InputValues": [
         {

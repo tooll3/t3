@@ -1,5 +1,5 @@
 {
-  "Name": "ApplyNoise",
+  "Name": "SimNoise",
   "Id": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
   "Namespace": "lib.point.sim",
   "Inputs": [

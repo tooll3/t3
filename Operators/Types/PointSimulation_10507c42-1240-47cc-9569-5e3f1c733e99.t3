@@ -1,5 +1,5 @@
 {
-  "Name": "KeepPoints",
+  "Name": "PointSimulation",
   "Id": "10507c42-1240-47cc-9569-5e3f1c733e99",
   "Namespace": "lib.point.sim",
   "Inputs": [

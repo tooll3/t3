@@ -171,7 +171,7 @@
       }
     },
     {
-      "ChildId": "d2905b4a-b2ae-4f92-a66b-8ede370e49f9"/*ApplyNoise*/,
+      "ChildId": "d2905b4a-b2ae-4f92-a66b-8ede370e49f9"/*SimNoise*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -182,7 +182,7 @@
       }
     },
     {
-      "ChildId": "bc480ac7-97f2-4950-bf96-4470599bb458"/*ApplyFollowMeshSurface*/,
+      "ChildId": "bc480ac7-97f2-4950-bf96-4470599bb458"/*SimFollowMeshSurface*/,
       "Size": {
         "X": 110.0,
         "Y": 62.0
@@ -204,7 +204,7 @@
       }
     },
     {
-      "ChildId": "a7ed4660-0198-4c15-9816-eba09c5a3ebc"/*KeepPoints*/,
+      "ChildId": "a7ed4660-0198-4c15-9816-eba09c5a3ebc"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -435,7 +435,7 @@
       }
     },
     {
-      "ChildId": "dae9dcd4-237a-4242-aadb-31b155f9c758"/*ApplyNoise*/,
+      "ChildId": "dae9dcd4-237a-4242-aadb-31b155f9c758"/*SimNoise*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -754,7 +754,7 @@
       }
     },
     {
-      "ChildId": "63231aec-f065-407b-bff7-1b4a1b53e9c8"/*ApplyDirectionalForce*/,
+      "ChildId": "63231aec-f065-407b-bff7-1b4a1b53e9c8"/*SimDirectedForce*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

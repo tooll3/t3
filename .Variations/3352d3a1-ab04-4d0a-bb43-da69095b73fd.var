@@ -57,6 +57,32 @@
           }
         }
       }
+    },
+    {
+      "Id": "0248c8e3-15ab-4244-93f9-f5f2fdbea8c6",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "Ring XY",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "b654ffe2-d46e-4a62-89b3-a9692d5c6481": 7,
+          "6df5829e-a534-4620-bcd5-9324f94b4f54": {
+            "X": 0.0,
+            "Y": 1.0,
+            "Z": 0.0
+          },
+          "01a62754-7629-487d-a43a-f0cd2fbfafce": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "cd917c3d-489e-4e4d-b5dc-eacc846d82ef": 90.0
+        }
+      }
     }
   ]
 }

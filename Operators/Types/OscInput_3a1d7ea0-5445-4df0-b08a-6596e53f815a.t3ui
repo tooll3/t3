@@ -25,13 +25,6 @@
       }
     },
     {
-      "InputId": "ca3ce08d-6a19-4ad5-9435-08b050753311"/*Damping*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
-      }
-    },
-    {
       "InputId": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
       "Position": {
         "X": -200.0,

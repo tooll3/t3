@@ -180,7 +180,7 @@
       "Outputs": []
     },
     {
-      "Id": "7d7fb901-cac3-468f-9807-4064881ff6ea"/*KeepPoints*/,
+      "Id": "7d7fb901-cac3-468f-9807-4064881ff6ea"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [
         {

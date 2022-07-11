@@ -698,7 +698,7 @@
       "Outputs": []
     },
     {
-      "Id": "4ace51dc-5a0c-4cfc-a395-6570ca96f50d"/*KeepPoints*/,
+      "Id": "4ace51dc-5a0c-4cfc-a395-6570ca96f50d"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [
         {
@@ -710,7 +710,7 @@
       "Outputs": []
     },
     {
-      "Id": "97567776-1522-43a7-8c32-021f8886230c"/*ApplyNoise*/,
+      "Id": "97567776-1522-43a7-8c32-021f8886230c"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [],
       "Outputs": []
