@@ -146,7 +146,7 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
                     {
                         var isLowerCap = capIndex == 0;
                         var capLevel = ((isLowerCap ? 0 : 1) - basePivot) * height;
-                        var capRadius = isLowerCap ? lowerRadius : upperRadius;
+                        //var capRadius = isLowerCap ? lowerRadius : upperRadius;
                         var isReverse = isFlipped ^ isLowerCap;
 
                         var centerVertexIndex = hullVerticesCount + (capsVertexCount / 2) * (capIndex + 1) - 1;
@@ -158,12 +158,12 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
                             var capFraction = 1f - (capSegmentIndex) / (float)capSegments;
                             var nextCapFraction = 1f - (capSegmentIndex + 1) / (float)capSegments;
                             var radius = upperRadius * capFraction;
-                            var nextRadius = upperRadius * nextCapFraction;
+                            //var nextRadius = upperRadius * nextCapFraction;
 
                             
                             for (var columnIndex = 0; columnIndex < vertexHullColumns; ++columnIndex)
                             {
-                                var columnAngle = (float)(columnIndex * radiusAngleFraction + spinInRad + twistInRad * (isLowerCap ? 0 : 1) + Math.PI);
+                                var columnAngle = (float)(columnIndex * radiusAngleFraction + spinInRad + twistInRad * (isLowerCap ? 0 : 1) );
 
                                 var xx = MathF.Sin(columnAngle);
                                 var yy = MathF.Cos(columnAngle);

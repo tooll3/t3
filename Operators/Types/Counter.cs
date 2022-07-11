@@ -3,6 +3,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+
 //using T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c;
 
 namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
@@ -12,7 +13,7 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
         [Output(Guid = "c53e3a03-3a6d-4547-abbf-7901b5045539", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Result = new Slot<float>();
         
-        [Output(Guid = "BAE829AD-8454-4625-BDE4-A7AB62F579A4")]
+        [Output(Guid = "BAE829AD-8454-4625-BDE4-A7AB62F579A4", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<bool> WasStep = new Slot<bool>();
 
         public Counter()
@@ -31,30 +32,32 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
             _blending = Blending.GetValue(context);
             var reset = TriggerReset.GetValue(context);
             var jump = TriggerIncrement.GetValue(context);
-            // var f = (LFO.SpeedFactors)AllowSpeedFactor.GetValue(context);
-            // switch (f)
-            // {
-            //     case LFO.SpeedFactors.None:
-            //         _speedFactor = 1;
-            //         break;
-            //     case LFO.SpeedFactors.FactorA:
-            //     {
-            //         if (!context.FloatVariables.TryGetValue(LFO.SpeedFactorA, out _speedFactor))
-            //             _speedFactor = 1;
-            //         
-            //         break;
-            //     }
-            //     case LFO.SpeedFactors.FactorB:
-            //         if (!context.FloatVariables.TryGetValue(LFO.SpeedFactorB, out _speedFactor))
-            //             _speedFactor = 1;
-            //
-            //         break;
-            //     
-            //     default:
-            //         Log.Debug($"Incorrect speed factor mode {f} in Counter", SymbolChildId);
-            //         _speedFactor = 1;
-            //         break;
-            // }
+            var smoothBlending = SmoothBlending.GetValue(context);
+
+            var f = (SpeedFactors)AllowSpeedFactor.GetValue(context);
+            switch (f)
+            {
+                case SpeedFactors.None:
+                    _speedFactor = 1;
+                    break;
+                case SpeedFactors.FactorA:
+                {
+                    if (!context.FloatVariables.TryGetValue(SpeedFactorA, out _speedFactor))
+                        _speedFactor = 1;
+                    
+                    break;
+                }
+                case SpeedFactors.FactorB:
+                    if (!context.FloatVariables.TryGetValue(SpeedFactorB, out _speedFactor))
+                        _speedFactor = 1;
+            
+                    break;
+                
+                default:
+                    Log.Debug($"Incorrect speed factor mode {f} in Counter", SymbolChildId);
+                    _speedFactor = 1;
+                    break;
+            }
             
             if (!_initialized || reset || float.IsNaN(_count))
             {
@@ -88,20 +91,13 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
                     _jumpStartOffset = _count;
                     _jumpTargetOffset = _count + increment;
                 }
-
-                // if (_jumpTargetOffset > modulo)
-                // {
-                //     _count = 0;
-                //     _jumpStartOffset = 0;
-                //     _jumpTargetOffset = increment;
-                // }
                 _lastJumpTime = _beatTime; 
             }
 
             if (_blending >= 0.001)
             {
                 var t = (Fragment / _blending).Clamp(0,1);
-                if (SmoothBlending.GetValue(context))
+                if (smoothBlending)
                     t = MathUtils.SmootherStep(0, 1, t);
 
                 _count = MathUtils.Lerp(_jumpStartOffset, _jumpTargetOffset, t);
@@ -125,6 +121,16 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
             WasStep.DirtyFlag.Clear();
         }
  
+        private enum SpeedFactors {
+            None,
+            FactorA,
+            FactorB,
+        }
+        
+        private const string SpeedFactorA = "SpeedFactorA";
+        private const string SpeedFactorB = "SpeedFactorB";
+
+        
         public float Fragment =>
             UseRate
                 ? (float)((_beatTime - _lastJumpTime) * _rate).Clamp(0, 1)
@@ -197,7 +203,7 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
         [Input(Guid = "E0C386B9-A987-4D11-9171-2971FA759827")]
         public readonly InputSlot<bool> SmoothBlending = new InputSlot<bool>();
         
-        [Input(Guid = "C386B9E0-A987-4D11-9171-2971FA759827")]
+        [Input(Guid = "C386B9E0-A987-4D11-9171-2971FA759827", MappedType = typeof(SpeedFactors))]
         public readonly InputSlot<int> AllowSpeedFactor = new InputSlot<int>();
 
     }

@@ -313,7 +313,7 @@
       }
     },
     {
-      "ChildId": "8b154b37-83c8-40c9-ac5a-70f352f290a9"/*KeepPoints*/,
+      "ChildId": "8b154b37-83c8-40c9-ac5a-70f352f290a9"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 62.0
@@ -448,7 +448,7 @@
       }
     },
     {
-      "ChildId": "ab00969b-1c24-459e-a6ab-b4e86cae70e5"/*SizeToDispatchCount*/,
+      "ChildId": "ab00969b-1c24-459e-a6ab-b4e86cae70e5"/*CalcSize2DispatchCount*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

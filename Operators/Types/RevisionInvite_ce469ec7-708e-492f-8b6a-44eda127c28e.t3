@@ -568,7 +568,7 @@
       "Outputs": []
     },
     {
-      "Id": "f774520c-e883-42a7-a662-fd34c14a7942"/*ApplyNoise*/,
+      "Id": "f774520c-e883-42a7-a662-fd34c14a7942"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -607,7 +607,7 @@
       "Outputs": []
     },
     {
-      "Id": "1c7a522a-82e6-4c9d-af8c-58f2a1cc2ad0"/*KeepPoints*/,
+      "Id": "1c7a522a-82e6-4c9d-af8c-58f2a1cc2ad0"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [
         {
@@ -878,7 +878,7 @@
       "Outputs": []
     },
     {
-      "Id": "163a2ba6-8409-4305-8e2b-aaa41fac08f1"/*ApplyCentricForce*/,
+      "Id": "163a2ba6-8409-4305-8e2b-aaa41fac08f1"/*SimForces*/,
       "SymbolId": "9c378944-9a57-4ae4-a88e-36c07244bcf7",
       "InputValues": [
         {

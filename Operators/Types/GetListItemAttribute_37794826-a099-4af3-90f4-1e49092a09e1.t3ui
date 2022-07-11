@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "9cf1ae77-1e80-443a-bb07-f545c3d2e71d"/*DataList*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0

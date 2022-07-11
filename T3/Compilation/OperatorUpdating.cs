@@ -125,20 +125,17 @@ namespace T3.Compilation
             foreach (var asmName in referencedAssembliesNames)
             {
                 var asm = Assembly.Load(asmName);
-                if (asm != null)
-                {
-                    referencedAssemblies.Add(MetadataReference.CreateFromFile(asm.Location));
-                }
+                referencedAssemblies.Add(MetadataReference.CreateFromFile(asm.Location));
+                Log.Debug($"Loaded from {asm} {asm.Location}");
 
                 // in order to get dependencies of the used assemblies that are not part of T3 references itself
                 var subAsmNames = asm.GetReferencedAssemblies();
                 foreach (var subAsmName in subAsmNames)
                 {
                     var subAsm = Assembly.Load(subAsmName);
-                    if (subAsm != null)
-                    {
-                        referencedAssemblies.Add(MetadataReference.CreateFromFile(subAsm.Location));
-                    }
+                    Log.Debug($"  Loaded SUB from {subAsm} {subAsm.Location}");
+
+                    referencedAssemblies.Add(MetadataReference.CreateFromFile(subAsm.Location));
                 }
             }
         

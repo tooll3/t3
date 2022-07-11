@@ -121,7 +121,7 @@
       "Outputs": []
     },
     {
-      "Id": "1e7506e4-15f0-4a9b-8cf1-90625eb43b46"/*SizeToDispatchCount*/,
+      "Id": "1e7506e4-15f0-4a9b-8cf1-90625eb43b46"/*CalcSize2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [
         {

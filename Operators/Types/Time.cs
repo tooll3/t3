@@ -23,21 +23,21 @@ namespace T3.Operators.Types.Id_9cb4d49e_135b_400b_a035_2b02c5ea6a72
 
         private void Update(EvaluationContext context)
         {
-            var contextTimeForKeyframes = (float)context.LocalTime;
-            var contextTimeForEffects = (float)context.LocalFxTime;
+            var contextLocalTime = (float)context.LocalTime;
+            var contextLocalFxTime = (float)context.LocalFxTime;
 
             float time = 0;
 
             switch ((Modes)Mode.GetValue(context))
             {
-                case Modes.EffectTimeInBars:
-                    time = contextTimeForEffects;
+                case Modes.LocalFxTimeInBars:
+                    time = contextLocalFxTime;
                     break;
-                case Modes.KeyframeTimeInBars:
-                    time = contextTimeForKeyframes;
+                case Modes.LocalTimeInBars:
+                    time = contextLocalTime;
                     break;
-                case Modes.KeyframeTimeInSecs:
-                    time = contextTimeForKeyframes * 240 / (float)context.Playback.Bpm;
+                case Modes.PlaybackTimeInSecs:
+                    time = contextLocalTime * 240 / (float)context.Playback.Bpm;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -50,9 +50,9 @@ namespace T3.Operators.Types.Id_9cb4d49e_135b_400b_a035_2b02c5ea6a72
 
         private enum Modes
         {
-            EffectTimeInBars,
-            KeyframeTimeInBars,
-            KeyframeTimeInSecs,
+            LocalFxTimeInBars,
+            LocalTimeInBars,
+            PlaybackTimeInSecs,
         }
         
         [Input(Guid = "8DA7D58D-10A5-4378-8F44-B98F87EC2697", MappedType = typeof(Modes))]

@@ -50,7 +50,7 @@
       "Outputs": []
     },
     {
-      "Id": "42b519e3-a054-4594-b1bb-f2e104a8ae7e"/*KeepPoints*/,
+      "Id": "42b519e3-a054-4594-b1bb-f2e104a8ae7e"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [
         {
@@ -257,7 +257,7 @@
       "Outputs": []
     },
     {
-      "Id": "46208b14-9bf3-43a7-96b7-ea021b23b56b"/*ApplyNoise*/,
+      "Id": "46208b14-9bf3-43a7-96b7-ea021b23b56b"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -324,7 +324,7 @@
       "Outputs": []
     },
     {
-      "Id": "f8551a85-a451-4a04-9187-66f6997da665"/*KeepPoints*/,
+      "Id": "f8551a85-a451-4a04-9187-66f6997da665"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [
         {

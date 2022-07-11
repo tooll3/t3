@@ -138,13 +138,13 @@
       "Outputs": []
     },
     {
-      "Id": "7515798a-7339-45f4-8337-32ed03300ced"/*SizeToDispatchCount*/,
+      "Id": "7515798a-7339-45f4-8337-32ed03300ced"/*CalcSize2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "cd3e10db-fe45-4f5b-af14-8e6e87b905a5"/*SizeToDispatchCount*/,
+      "Id": "cd3e10db-fe45-4f5b-af14-8e6e87b905a5"/*CalcSize2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []

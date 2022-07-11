@@ -28,6 +28,7 @@ namespace T3.Gui.Windows
                                new ConsoleLogWindow(),
                                new SymbolLibrary(),
                                new LegacyVariationsWindow(),
+                               new RenderSequenceWindow(),
                            };
         }
 
@@ -235,8 +236,10 @@ namespace T3.Gui.Windows
         {
             var allWindowConfigs = GetAllWindows().Select(window => window.Config).ToList();
 
-            if (!Directory.Exists(".t3"))
-                Directory.CreateDirectory(".t3");
+            
+            
+            if (!Directory.Exists(LayoutPath))
+                Directory.CreateDirectory(LayoutPath);
 
             var serializer = JsonSerializer.Create();
             serializer.Formatting = Formatting.Indented;
@@ -326,7 +329,7 @@ namespace T3.Gui.Windows
 
         private static string GetLayoutFilename(int index)
         {
-            return Path.Combine(ConfigFolderName, string.Format(LayoutFileNameFormat, index));
+            return Path.Combine(LayoutPath, string.Format(LayoutFileNameFormat, index));
         }
 
         private static bool DoesLayoutExists(int index)
@@ -401,7 +404,7 @@ namespace T3.Gui.Windows
         }
         
         private const string LayoutFileNameFormat = "layout{0}.json";
-        private const string ConfigFolderName = ".t3";
+        public  const string LayoutPath = @".t3\layouts\";
         private const float MainMenuBarHeight = 25;
 
         private readonly List<Window> _windows;

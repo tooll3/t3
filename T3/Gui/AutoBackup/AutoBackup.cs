@@ -18,27 +18,24 @@ namespace T3.Gui.AutoBackup
 
         public bool IsEnabled { get; set; }
 
-
         public AutoBackup()
         {
-            SecondsBetweenSaves = 3 * 60;
+            SecondsBetweenSaves = 3*60;
             IsEnabled = false;
         }
 
-        
         /// <summary>
         /// Should be call after all frame operators are completed
         /// </summary>
         public void CheckForSave()
         {
-            if (!IsEnabled ||  _isSaving || Stopwatch.ElapsedMilliseconds < SecondsBetweenSaves * 1000)
+            if (!IsEnabled || _isSaving || Stopwatch.ElapsedMilliseconds < SecondsBetweenSaves * 1000)
                 return;
-            
+
             _isSaving = true;
             Task.Run(CreateBackupCallback);
             Stopwatch.Restart();
-        }  
-        
+        }
 
         private static void CreateBackupCallback()
         {
@@ -47,7 +44,7 @@ namespace T3.Gui.AutoBackup
                 Log.Debug("Skipped backup because saving is in progress.");
                 return;
             }
-            
+
             T3Ui.SaveModified();
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
@@ -58,32 +55,25 @@ namespace T3.Gui.AutoBackup
             ReduceNumberOfBackups();
 
             var zipFilePath = Path.Join(BackupDirectory, $"#{index:D5}-{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.zip");
-            var tempPath = @"Temp\" + Guid.NewGuid() + @"\";
+            var tempPath = TempDirectory + Guid.NewGuid() + @"\";
 
             try
             {
-                var tempConfigPath = tempPath + ConfigDirectory;
-                var tempOperatorsPath = tempPath + OperatorsDirectory + @"\";
+                var directoryWithFiles = new Dictionary<string, string[]>();
+                foreach (var sourcePath in _sourcePaths)
+                {
+                    var tempTargetPath = Path.Combine(tempPath, sourcePath);
+
+                    if (!Directory.Exists(tempTargetPath))
+                        Directory.CreateDirectory(tempTargetPath);
+
+                    CopyDirectory(sourcePath, tempTargetPath, "*");
+                    directoryWithFiles[sourcePath] = Directory.GetFiles(tempTargetPath, "*");
+                }
 
                 var zipPath = Path.GetDirectoryName(zipFilePath);
                 if (!string.IsNullOrEmpty(zipPath) && !Directory.Exists(zipPath))
                     Directory.CreateDirectory(zipPath);
-
-                if (!Directory.Exists(tempConfigPath))
-                    Directory.CreateDirectory(tempConfigPath);
-
-                if (!Directory.Exists(tempOperatorsPath))
-                    Directory.CreateDirectory(tempOperatorsPath);
-
-                CopyDirectory(ConfigDirectory, tempConfigPath, "*");
-
-                CopyDirectory(OperatorsDirectory, tempOperatorsPath, "*");
-
-                var directoryWithFiles = new Dictionary<string, string[]>
-                                             {
-                                                 [ConfigDirectory] = Directory.GetFiles(tempConfigPath, "*"),
-                                                 [OperatorsDirectory] = Directory.GetFiles(tempOperatorsPath, "*")
-                                             };
 
                 using ZipArchive archive = ZipFile.Open(zipFilePath, ZipArchiveMode.Create);
 
@@ -104,8 +94,10 @@ namespace T3.Gui.AutoBackup
             }
             finally
             {
+                Log.Debug($"Deleting {tempPath}");
                 DeletePath(tempPath);
             }
+
             _isSaving = false;
         }
 
@@ -343,12 +335,17 @@ namespace T3.Gui.AutoBackup
 
             return 0;
         }
-        
+
         private static readonly Stopwatch Stopwatch = Stopwatch.StartNew();
         private static bool _isSaving;
 
-        private const string ConfigDirectory = ".t3";
-        private const string OperatorsDirectory = @"Operators\Types";
-        private const string BackupDirectory = ".backup";
+        private const string TempDirectory = @".t3\temp\";
+        private const string BackupDirectory = @".t3\backup";
+
+        private static readonly string[] _sourcePaths =
+            {
+                @"Operators\Types",
+                @".t3\layouts",
+            };
     }
 }

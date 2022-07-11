@@ -301,7 +301,7 @@
       }
     },
     {
-      "ChildId": "ac53a5c7-8db1-4f69-b54b-c81f39af1386"/*AudioReaction*/,
+      "ChildId": "ac53a5c7-8db1-4f69-b54b-c81f39af1386"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

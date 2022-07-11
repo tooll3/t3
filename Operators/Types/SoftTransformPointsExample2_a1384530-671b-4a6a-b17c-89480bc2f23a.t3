@@ -59,7 +59,7 @@
       "Outputs": []
     },
     {
-      "Id": "8a937e74-7400-41dc-b388-4a853e65a165"/*KeepPoints*/,
+      "Id": "8a937e74-7400-41dc-b388-4a853e65a165"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [
         {
@@ -98,7 +98,7 @@
       "Outputs": []
     },
     {
-      "Id": "32b2b070-473e-4a23-b50a-c94c2fdd3957"/*KeepPoints*/,
+      "Id": "32b2b070-473e-4a23-b50a-c94c2fdd3957"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [
         {
@@ -397,7 +397,7 @@
       "Outputs": []
     },
     {
-      "Id": "9197e2d8-ff18-4705-8a6b-eeeff97cd405"/*ApplyNoise*/,
+      "Id": "9197e2d8-ff18-4705-8a6b-eeeff97cd405"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {

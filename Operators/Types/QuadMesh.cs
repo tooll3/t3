@@ -52,8 +52,8 @@ namespace T3.Operators.Types.Id_9d6dbf28_9983_4584_abba_6281ce51d583
                 var center2 = new SharpDX.Vector3(center.X, center.Y, center.Z);
 
                 var segments = Segments.GetValue(context);
-                var rows = segments.Width.Clamp(1, 10000) + 1;
-                var columns = segments.Height.Clamp(1, 10000) + 1;
+                var columns = segments.Width.Clamp(1, 10000) + 1;
+                var rows = segments.Height.Clamp(1, 10000) + 1;
                 
                 var faceCount = (columns -1)  * (rows - 1) * 2;
                 var verticesCount = columns * rows;

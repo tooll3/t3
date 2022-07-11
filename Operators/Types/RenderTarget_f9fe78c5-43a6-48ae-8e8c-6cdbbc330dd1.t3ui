@@ -15,7 +15,10 @@
       "Position": {
         "X": -100.96112,
         "Y": -102.246216
-      }
+      },
+      "Min": -1,
+      "Max": 16384,
+      "Clamp": true
     },
     {
       "InputId": "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f"/*ClearColor*/,

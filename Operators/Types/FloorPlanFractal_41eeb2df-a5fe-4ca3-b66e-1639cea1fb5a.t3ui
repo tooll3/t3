@@ -113,7 +113,7 @@
       }
     },
     {
-      "ChildId": "bc280423-ca27-4f2c-9cb1-0ff7fa3db0dd"/*Pulsate*/,
+      "ChildId": "bc280423-ca27-4f2c-9cb1-0ff7fa3db0dd"/*__ObsoletePulsate*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -168,7 +168,7 @@
       }
     },
     {
-      "ChildId": "e5436232-86bd-4561-912e-bc7ec16266df"/*Pulsate*/,
+      "ChildId": "e5436232-86bd-4561-912e-bc7ec16266df"/*__ObsoletePulsate*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

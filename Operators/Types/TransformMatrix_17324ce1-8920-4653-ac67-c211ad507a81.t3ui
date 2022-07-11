@@ -46,6 +46,13 @@
         "X": 0.0,
         "Y": 0.0
       }
+    },
+    {
+      "OutputId": "eca8121b-2a7f-4ecc-9143-556dcf78ba33"/*ResultInverted*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
     }
   ]
 }

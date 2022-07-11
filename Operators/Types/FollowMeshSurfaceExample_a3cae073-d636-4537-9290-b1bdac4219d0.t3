@@ -668,7 +668,7 @@
       "Outputs": []
     },
     {
-      "Id": "8d9f3c08-6f65-490a-acba-c12d06332724"/*AudioReaction*/,
+      "Id": "8d9f3c08-6f65-490a-acba-c12d06332724"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -779,7 +779,7 @@
       "Outputs": []
     },
     {
-      "Id": "60ae74fb-48c4-4d67-9594-7b5fa54c3b92"/*AudioReaction*/,
+      "Id": "60ae74fb-48c4-4d67-9594-7b5fa54c3b92"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -923,13 +923,13 @@
       "Outputs": []
     },
     {
-      "Id": "e70d3efc-2a8b-48e3-abbf-5de656b8d275"/*ApplyFollowMeshSurface*/,
+      "Id": "e70d3efc-2a8b-48e3-abbf-5de656b8d275"/*SimFollowMeshSurface*/,
       "SymbolId": "03aa5f28-3f74-4feb-aa6a-36cdb2d7f0d9",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "34465ee0-4c2d-43f9-9794-d78c692453ee"/*KeepPoints*/,
+      "Id": "34465ee0-4c2d-43f9-9794-d78c692453ee"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [],
       "Outputs": []

@@ -63,7 +63,7 @@ namespace T3.Gui.UiHelpers
             // Other settings
             public float GizmoSize = 100;
             public bool SwapMainAnd2ndWindowsWhenFullscreen = true;
-            //public bool PresetsResetToDefaultValues = true;
+            public bool EnableStartupConsistencyCheck = true;
 
             // Timeline
             public bool CountBarsFromZero = true;

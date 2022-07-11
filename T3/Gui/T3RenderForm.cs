@@ -1,4 +1,4 @@
-﻿using ImGuiNET;
+using ImGuiNET;
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
@@ -56,10 +56,10 @@ namespace T3
             IntPtr context = ImGui.CreateContext();
             ImGui.SetCurrentContext(context);
 
-            Fonts.FontNormal = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Regular.ttf", 18f);
-            Fonts.FontBold = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Medium.ttf", 18f);
-            Fonts.FontSmall = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Regular.ttf", 13f);
-            Fonts.FontLarge = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Light.ttf", 30f);
+            Fonts.FontNormal =ImGui.GetIO().Fonts.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Regular.ttf", 18f);
+            Fonts.FontBold =  ImGui.GetIO().Fonts.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Medium.ttf", 18f);
+            Fonts.FontSmall = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Regular.ttf", 13f);
+            Fonts.FontLarge = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Light.ttf", 30f);
 
             CreateDeviceObjects();
             SetKeyMappings();
@@ -382,7 +382,15 @@ namespace T3
             {
                 foreach (var entry in _srvCache)
                 {
-                    entry.Value.Dispose();
+                    try
+                    {
+                        entry.Value.Dispose();
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Warning($"Failed to dispose resource : {entry.Value} :{e.Message}");
+                    }
+                    
                 }
 
                 DisposeObj(ref _fontSampler);

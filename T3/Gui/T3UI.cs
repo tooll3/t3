@@ -24,6 +24,7 @@ using T3.Gui.Interaction.Timing;
 using T3.Gui.Interaction.Variations;
 using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
+using t3.Gui.UiHelpers.Wiki;
 using T3.Gui.Windows;
 using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d; // ForwardBeatTaps
 
@@ -38,8 +39,6 @@ namespace T3.Gui
             var operatorsAssembly = Assembly.GetAssembly(typeof(Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe.Value));
             UiModel = new UiModel(operatorsAssembly);
 
-            var tmp = new UserSettings(saveOnQuit: true);
-            var tmp2 = new ProjectSettings(saveOnQuit: true);
             var playback = new Playback();
 
             WindowManager = new WindowManager();
@@ -159,7 +158,16 @@ namespace T3.Gui
                     {
                         ImGui.SetTooltip("Can't exit while saving is in progress");
                     }
-
+                    
+                    ImGui.Separator();
+                    if (ImGui.BeginMenu("Documentation"))
+                    {
+                        if (ImGui.MenuItem("Export Operator Descriptions"))
+                        {
+                            ExportWikiDocumentation.ExportWiki();
+                        }
+                        ImGui.EndMenu();
+                    }
                     ImGui.EndMenu();
                 }
 

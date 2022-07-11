@@ -45,10 +45,12 @@ namespace T3.Gui.Windows
         /// </summary>
         public static ImageOutputCanvas Current = null;
 
-
+        public Texture2D LastTexture;
+        
         public void DrawTexture(Texture2D texture)
         {
             CustomComponents.FillWithStripes(ImGui.GetWindowDrawList(), THelpers.GetContentRegionArea());
+            LastTexture = texture;
             
             if (texture == null || texture.IsDisposed)
                 return;

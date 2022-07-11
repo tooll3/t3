@@ -106,14 +106,14 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
             ZigZag = 4,
         }
 
-        public enum SpeedFactors {
+        private enum SpeedFactors {
             None,
             FactorA,
             FactorB,
         }
         
-        public const string SpeedFactorA = "SpeedFactorA";
-        public const string SpeedFactorB = "SpeedFactorB";
+        private const string SpeedFactorA = "SpeedFactorA";
+        private const string SpeedFactorB = "SpeedFactorB";
         
         
         [Input(Guid = "4C38C34C-D992-47F1-BCB5-9BD13FC6474B", MappedType = typeof(Shapes))]

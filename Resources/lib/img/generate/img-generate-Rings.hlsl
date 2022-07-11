@@ -127,7 +127,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float highlightHash = hash11(seed + HighlightSeed);
 
-    float4 colorOut= highlightHash > _HighlightRatio ? color : Highlight * c;
+    float4 colorOut= highlightHash >= _HighlightRatio ? color : Highlight * c;
 
 
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);

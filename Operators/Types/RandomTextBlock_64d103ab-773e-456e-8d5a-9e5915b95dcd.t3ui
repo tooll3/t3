@@ -279,7 +279,7 @@
       }
     },
     {
-      "ChildId": "a195b8f7-4a2f-4d1f-bd75-1cf115e11820"/*Pulsate*/,
+      "ChildId": "a195b8f7-4a2f-4d1f-bd75-1cf115e11820"/*__ObsoletePulsate*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -290,7 +290,7 @@
       }
     },
     {
-      "ChildId": "bd3dfffa-d16f-44d9-aaf0-636ee7883ff3"/*Pulsate*/,
+      "ChildId": "bd3dfffa-d16f-44d9-aaf0-636ee7883ff3"/*__ObsoletePulsate*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -312,7 +312,7 @@
       }
     },
     {
-      "ChildId": "31899be3-7869-4ef5-8e75-4578bb555cff"/*Pulsate*/,
+      "ChildId": "31899be3-7869-4ef5-8e75-4578bb555cff"/*__ObsoletePulsate*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -433,7 +433,7 @@
       }
     },
     {
-      "ChildId": "062f01cd-e0ee-41f9-a57b-e969071408fa"/*Pulsate*/,
+      "ChildId": "062f01cd-e0ee-41f9-a57b-e969071408fa"/*__ObsoletePulsate*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

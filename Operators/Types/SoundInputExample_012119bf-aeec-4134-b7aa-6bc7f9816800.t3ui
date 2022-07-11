@@ -15,7 +15,7 @@
       }
     },
     {
-      "ChildId": "0b9a6609-c9dd-450c-bc13-0a57dba3d12d"/*SoundInput*/,
+      "ChildId": "0b9a6609-c9dd-450c-bc13-0a57dba3d12d"/*AudioFrequencies*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

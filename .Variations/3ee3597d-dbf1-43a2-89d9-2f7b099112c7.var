@@ -270,8 +270,8 @@
       "ActivationIndex": 7,
       "Title": "untitled",
       "PosOnCanvas": {
-        "X": -7.859024,
-        "Y": -7.1453705
+        "X": 155.14096,
+        "Y": 85.85463
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -351,6 +351,37 @@
           "19a0d33c-4c0e-40ce-8344-5ae17cf081e5": 2.5,
           "79feb076-bce0-43eb-9d82-89d4159886ee": 0.11,
           "55db762f-64e0-425f-a5ac-01f3edce113e": 0.0
+        }
+      }
+    },
+    {
+      "Id": "6854adcc-e65b-462d-8862-6ea560ef5f17",
+      "IsPreset": true,
+      "ActivationIndex": 9,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "c4891643-ed6a-4af6-9a2f-02917cf26f24": {
+            "X": 3.1,
+            "Y": 10.1
+          },
+          "2de30579-5ed6-4c62-8b49-301381acaad5": {
+            "X": 0.14,
+            "Y": -0.5
+          },
+          "5b146cff-3114-4bbe-b9e3-6f6aea3b2725": {
+            "X": 0.57,
+            "Y": 0.52
+          },
+          "3127ae86-b5b3-468c-8e69-004da3db7908": {
+            "X": 0.21,
+            "Y": 0.2
+          },
+          "19a0d33c-4c0e-40ce-8344-5ae17cf081e5": 6.3999996
         }
       }
     }

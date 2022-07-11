@@ -635,7 +635,7 @@
       "Outputs": []
     },
     {
-      "Id": "d68af640-0a96-4cd3-b5f9-d2d48199ba0e"/*ApplyNoise*/,
+      "Id": "d68af640-0a96-4cd3-b5f9-d2d48199ba0e"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -664,7 +664,7 @@
       "Outputs": []
     },
     {
-      "Id": "e78d9b13-55aa-4fe6-af57-1fae4a8af162"/*Pulse*/,
+      "Id": "e78d9b13-55aa-4fe6-af57-1fae4a8af162"/*__ObsoletePulse*/,
       "SymbolId": "5952d7b4-29ac-41fb-9324-287392d55048",
       "InputValues": [],
       "Outputs": []
@@ -914,7 +914,7 @@
       "Outputs": []
     },
     {
-      "Id": "8be0ef8e-1050-4384-a531-c9dbf5dda9b9"/*Pulse*/,
+      "Id": "8be0ef8e-1050-4384-a531-c9dbf5dda9b9"/*__ObsoletePulse*/,
       "SymbolId": "5952d7b4-29ac-41fb-9324-287392d55048",
       "InputValues": [
         {
@@ -1004,7 +1004,7 @@
       "Outputs": []
     },
     {
-      "Id": "5be87581-7be6-48bf-9665-a890f6778203"/*KeepPoints*/,
+      "Id": "5be87581-7be6-48bf-9665-a890f6778203"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [
         {
@@ -1066,7 +1066,7 @@
       "Outputs": []
     },
     {
-      "Id": "9292324d-8687-41d2-8b20-5ab8ea7ff86e"/*ApplyBlend*/,
+      "Id": "9292324d-8687-41d2-8b20-5ab8ea7ff86e"/*SimBlendTo*/,
       "SymbolId": "4ba8019b-f265-4e41-8722-4ee0c2c64ba9",
       "InputValues": [
         {
@@ -1222,7 +1222,7 @@
       "Outputs": []
     },
     {
-      "Id": "b0179bc6-09ee-4937-8167-6887f756a131"/*ApplyNoise*/,
+      "Id": "b0179bc6-09ee-4937-8167-6887f756a131"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -1238,7 +1238,7 @@
       ],
       "Outputs": [
         {
-          "Id": "cf976e9a-ea57-44f7-aeb9-f57f2e712b41"/*ApplyNoise*/,
+          "Id": "cf976e9a-ea57-44f7-aeb9-f57f2e712b41"/*SimNoise*/,
           "DirtyFlagTrigger": "Always"
         }
       ]

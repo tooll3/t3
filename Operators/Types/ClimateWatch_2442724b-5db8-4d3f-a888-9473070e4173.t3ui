@@ -49,7 +49,7 @@
       }
     },
     {
-      "ChildId": "653eb3ad-9620-4cb7-a8d1-006af7b46252"/*ApplyNoise*/,
+      "ChildId": "653eb3ad-9620-4cb7-a8d1-006af7b46252"/*SimNoise*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -104,7 +104,7 @@
       }
     },
     {
-      "ChildId": "8a5ebaea-18b3-489f-aee1-c441e7624a18"/*ApplyFollowMeshSurface*/,
+      "ChildId": "8a5ebaea-18b3-489f-aee1-c441e7624a18"/*SimFollowMeshSurface*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

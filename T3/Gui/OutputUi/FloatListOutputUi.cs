@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -19,13 +20,17 @@ namespace T3.Gui.OutputUi
                        Size = Size
                    };
         }
+
+        private static bool _autoFit;
+        private static float _minFit = -1;
+        private static float _maxFit = 1;
         
         protected override void DrawTypedValue(ISlot slot)
         {
             if (slot is Slot<List<float>> typedSlot)
             {
                 var v = typedSlot.Value;
-                var outputString =  v == null? "NULL" : string.Join(", ", v);
+                var outputString =  v == null? "NULL" : string.Join(", ", $"{v:0.000}");
                 ImGui.TextUnformatted($"{outputString}");
 
                 if (v == null)
@@ -33,9 +38,26 @@ namespace T3.Gui.OutputUi
                 
                 if (v.Count > 3)
                 {
-                    var length = Math.Min(256, v.Count);
+                    var length = Math.Min(1024, v.Count);
                     var floatList = v.GetRange(0, length).ToArray();
-                    ImGui.PlotLines("##values", ref floatList[0], length);
+
+                    ImGui.Checkbox("Auto Fit", ref _autoFit);
+                    if (_autoFit)
+                    {
+                        ImGui.PlotLines("##values", ref floatList[0], length);
+                    }
+                    else
+                    {
+                        ImGui.PlotLines("##values", ref floatList[0], 
+                                        length, 
+                                        0, 
+                                        "", 
+                                        _minFit, 
+                                        _maxFit, 
+                                        new Vector2( ImGui.GetContentRegionAvail().X, 200));
+                        ImGui.DragFloat("Max", ref _maxFit);
+                        ImGui.DragFloat("Min", ref _minFit);
+                    }
                 }
 
                 if (v.Count > 0)
@@ -50,7 +72,7 @@ namespace T3.Gui.OutputUi
                         max = Math.Max(max, number);
                     }
                 
-                    ImGui.TextUnformatted($"{v.Count} [{min:G5} .. {max:G5}] ∅{sum/v.Count:G5}");
+                    ImGui.TextUnformatted($"{v.Count}  between {min:G5} .. {max:G5}  avg {sum/v.Count:G5}");
                 }
             }
             else

@@ -57,11 +57,18 @@
         "X": -1537.0406,
         "Y": 1185.8008
       }
+    },
+    {
+      "InputId": "9e0249c1-8a8c-48b3-8bbb-cb0b0514f299"/*Gain*/,
+      "Position": {
+        "X": -1537.0406,
+        "Y": 1230.8008
+      }
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "280d52f7-e2c5-480d-acf1-cffe351edb14"/*SoundInput*/,
+      "ChildId": "280d52f7-e2c5-480d-acf1-cffe351edb14"/*AudioFrequencies*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -108,7 +115,7 @@
       "ChildId": "f7657f35-0f73-4576-8aa9-f9f5fba4005e"/*Float2ToVector2*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": -396.4594,
@@ -134,7 +141,7 @@
       },
       "Position": {
         "X": -396.4594,
-        "Y": 633.83655
+        "Y": 646.83655
       }
     },
     {
@@ -453,19 +460,19 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -493.77844,
-        "Y": 1239.9376
+        "X": -574.9046,
+        "Y": 1258.2806
       }
     },
     {
-      "ChildId": "a52c8e43-d247-41ba-9b77-69a674b58737"/*SoundInput*/,
+      "ChildId": "a52c8e43-d247-41ba-9b77-69a674b58737"/*AudioFrequencies*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 23.0
       },
       "Position": {
-        "X": -646.9398,
-        "Y": 1286.4332
+        "X": -781.602,
+        "Y": 957.2936
       }
     }
   ],

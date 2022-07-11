@@ -1013,7 +1013,7 @@
       }
     },
     {
-      "ChildId": "d241a0ec-0f14-474d-8555-e38bd06e8aba"/*KeepPoints*/,
+      "ChildId": "d241a0ec-0f14-474d-8555-e38bd06e8aba"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

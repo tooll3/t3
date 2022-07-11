@@ -21,7 +21,9 @@
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "Min": -180.0,
+      "Max": 180.0
     },
     {
       "InputId": "2d7d85ce-7b5e-4e86-bae2-88a7c4f7a2e5"/*W*/,
@@ -45,6 +47,13 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "8698d60d-8cd9-4a3f-9001-19dac29028cc"/*OutPosition*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
       }
     }
   ]

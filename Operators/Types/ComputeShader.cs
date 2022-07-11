@@ -46,7 +46,7 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
                 }
                 _computeShaderResId = resourceManager.CreateComputeShaderFromFile(sourcePath, entryPoint, debugName,
                                                                                   () => ComputerShader.DirtyFlag.Invalidate());
-                Log.Debug($"compute shader {sourcePath}:{entryPoint}", SymbolChildId);
+                //Log.Debug($"compute shader {sourcePath}:{entryPoint}", SymbolChildId);
 
                 try
                 {

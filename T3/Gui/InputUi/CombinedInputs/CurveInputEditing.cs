@@ -39,6 +39,11 @@ namespace t3.Gui.InputUi.CombinedInputs
 
                 InteractionForCurve.Add(imGuiId, curveInteraction);
             }
+            else if (curveInteraction.Curves.Count != 1 || curveInteraction.Curves[0] != curve)
+            {
+                curveInteraction.Curves.Clear();
+                curveInteraction.Curves.Add(curve);
+            }
 
             curveInteraction.EditState = InputEditStateFlags.Nothing;
             curveInteraction.Draw();
