@@ -9,8 +9,8 @@ namespace T3.Operators.Types.Id_146fae64_18da_4183_9794_a322f47c669e
 {
     public class HasValueChanged : Instance<HasValueChanged>
     {
-        [Output(Guid = "35ab8188-77a1-4cd9-b2ad-c503034e49f9")]
-        public readonly Slot<bool> HasIncreased = new Slot<bool>();
+        [Output(Guid = "35ab8188-77a1-4cd9-b2ad-c503034e49f9", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        public readonly Slot<bool> HasChanged = new Slot<bool>();
 
         [Output(Guid = "ab818835-77a1-4cd9-b2ad-c503034e49f9")]
         public readonly Slot<float> Delta = new Slot<float>();
@@ -18,7 +18,7 @@ namespace T3.Operators.Types.Id_146fae64_18da_4183_9794_a322f47c669e
 
         public HasValueChanged()
         {
-            HasIncreased.UpdateAction = Update;
+            HasChanged.UpdateAction = Update;
             Delta.UpdateAction = Update;
         }
 
@@ -32,20 +32,23 @@ namespace T3.Operators.Types.Id_146fae64_18da_4183_9794_a322f47c669e
             switch ((Modes)Mode.GetValue(context))
             {
                 case Modes.Changed:
-                    var increase = Math.Abs(newValue - _lastValue) >= threshold;
+                    var increase = Math.Abs(newValue - _lastValue) > threshold;
                     hasChanged = increase;
-
                     break;
+                
                 case Modes.Increased:
                     hasChanged = newValue > _lastValue + threshold;
                     break;
+                
                 case Modes.Decreased:
                     hasChanged = newValue < _lastValue - threshold;
                     break;
+                
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            HasIncreased.Value = hasChanged;
+            
+            HasChanged.Value = hasChanged;
 
             Delta.Value = newValue - _lastValue;
             _lastValue = newValue;
