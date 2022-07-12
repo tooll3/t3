@@ -18,7 +18,7 @@ namespace T3.Operators.Types.Id_15fb88b2_81a1_43b8_97ba_41221293bb07
         {
             var b = B.GetValue(context);
             Result.Value = b== 0 
-                               ? 0 
+                               ? float.NaN 
                                : A.GetValue(context) / b;
         }
 
@@ -30,3 +30,4 @@ namespace T3.Operators.Types.Id_15fb88b2_81a1_43b8_97ba_41221293bb07
         public readonly InputSlot<float> B = new InputSlot<float>();
     }
 }
+ 

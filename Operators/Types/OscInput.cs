@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 //using System.Threading.Channels;
 //using System.Windows.Forms;
@@ -12,7 +13,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a 
 {
-    public class OscInput : Instance<OscInput>, OscConnectionManager.IOscConsumer
+    public class OscInput : Instance<OscInput>, OscConnectionManager.IOscConsumer, IDisposable
     {
         [Output(Guid = "5544b675-0de2-4a28-97d0-1a67349152fc", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> FirstResult = new();
@@ -126,8 +127,7 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
             {
                 if (_printLogMessages)
                 {
-                    Log.Debug($" would process message for address {_address}");
-
+                    Log.Debug($"Received OSC: {msg.Address}  {msg}");
                 }
 
                 var matchesAddress = msg.Address == _address;
