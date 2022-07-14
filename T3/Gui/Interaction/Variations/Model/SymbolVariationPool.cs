@@ -260,13 +260,7 @@ namespace T3.Gui.Interaction.Variations.Model
                     changes[input.Id] = input.Input.Value.Clone();
                 }
             }
-
-            if (changes.Count == 0)
-            {
-                Log.Warning("All values are default. Nothing to save in preset");
-                return null;
-            }
-
+            
             var newVariation = new Variation
                                    {
                                        Id = Guid.NewGuid(),
