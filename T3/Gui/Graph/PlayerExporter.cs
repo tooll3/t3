@@ -88,7 +88,6 @@ namespace T3.Gui.Graph
                                   
                                   // FIXME: These dlls should be references as Operators dependencies but aren't found there
                                   playerBuildPath + "SharpDX.Desktop.dll", 
-                                  playerBuildPath + "Rug.OSC.dll",
                               },
                           exportDir);
 
@@ -99,6 +98,7 @@ namespace T3.Gui.Graph
                     Log.Debug("Copy operator dependencies");
                     CopyFiles(new[]
                                   {
+                                      playerBuildPath + "Rug.OSC.dll",
                                       operatorDependenciesPath + "Core.dll",
                                       operatorDependenciesPath + "DdsImport.dll",
                                       operatorDependenciesPath + "ManagedBass.Wasapi.dll",
