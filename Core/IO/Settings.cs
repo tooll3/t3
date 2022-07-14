@@ -49,7 +49,7 @@ namespace T3.Core.IO
             return null;
         }
 
-        public void SaveSettings(T configuration)
+        private void SaveSettings(T configuration)
         {
             Log.Debug($"Saving {_filepath}...");
             var serializer = JsonSerializer.Create();

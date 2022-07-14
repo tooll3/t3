@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using T3.Core.Logging;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.AutoBackup
 {
@@ -44,7 +45,7 @@ namespace T3.Gui.AutoBackup
                 Log.Debug("Skipped backup because saving is in progress.");
                 return;
             }
-
+            
             T3Ui.SaveModified();
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
