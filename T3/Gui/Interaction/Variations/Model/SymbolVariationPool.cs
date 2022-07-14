@@ -93,6 +93,8 @@ namespace T3.Gui.Interaction.Variations.Model
             if (Variations.Count == 0)
                 return;
 
+            CreateFolderIfNotExists(VariationsFolder);
+            
             var filePath = GetFilePathForVariationId(SymbolId);
 
             using var sw = new StreamWriter(filePath);
@@ -125,11 +127,24 @@ namespace T3.Gui.Interaction.Variations.Model
             }
         }
 
+        private const string VariationsFolder = ".Variations";
+
         private static string GetFilePathForVariationId(Guid compositionId)
         {
-            var filepath = $".Variations/{compositionId}.var";
+            var filepath = Path.Combine(VariationsFolder, $"{compositionId}.var");
             return filepath;
         }
+
+        private static void CreateFolderIfNotExists(string path)
+        {
+            if(Directory.Exists(path))
+                return;
+
+            Directory.CreateDirectory(path);
+
+        }
+        
+        
         #endregion
 
         public void Apply(Instance instance, Variation variation)

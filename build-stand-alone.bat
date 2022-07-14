@@ -2,6 +2,7 @@
 mkdir "..\T3-Standalone"
 
 Xcopy "Resources" "..\T3-Standalone\Resources" /E /H /C /I
+Xcopy ".Variations" "..\T3-Standalone\.Variations" /E /H /C /I
 Xcopy "Operators" "..\T3-Standalone\Operators" /E /H /C /I
 Xcopy "T3\bin\Release\net5.0-windows" "..\T3-Standalone\" /E /H /C /I
 Xcopy "StartT3\bin\Release\net5.0-windows" "..\T3-Standalone\" /E /H /C /I
