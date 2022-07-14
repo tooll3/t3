@@ -1,22 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net5.0-windows</TargetFramework>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Core\Core.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="ManagedBass" Version="3.1.0" />
-      <PackageReference Include="ManagedBass.Wasapi" Version="3.1.0" />
-      <PackageReference Include="NAudio" Version="2.1.0" />
-        
-      <PackageReference Include="Rug.Osc" Version="1.2.5" />
-      <PackageReference Include="SharpDX.MediaFoundation" Version="4.2.0" />
-      <PackageReference Include="Svg" Version="3.3.0" />
-      <PackageReference Include="unsplasharp.api" Version="0.7.0" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ManagedBass" Version="3.1.0" />
+    <PackageReference Include="ManagedBass.Wasapi" Version="3.1.0" />
+    <PackageReference Include="NAudio" Version="2.1.0"></PackageReference>
+
+    <PackageReference Include="Rug.Osc" Version="1.2.5">
+      <NoWarn>NU1701</NoWarn>
+    </PackageReference>
+    <PackageReference Include="SharpDX.MediaFoundation" Version="4.2.0" />
+    <PackageReference Include="Svg" Version="3.3.0" />
+    <PackageReference Include="unsplasharp.api" Version="0.7.0" />
+  </ItemGroup>
 
 </Project>
