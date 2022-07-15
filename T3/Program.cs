@@ -24,6 +24,7 @@ using t3.Gui.Interaction.StartupCheck;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using Device = SharpDX.Direct3D11.Device;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3
 {
@@ -34,6 +35,8 @@ namespace T3
         public static SpaceMouse SpaceMouse { get; private set; }
 
         public static bool IsStandAlone = File.Exists("StartT3.exe");
+        public const string Version = "v3.2.0";
+
         
         [STAThread]
         private static void Main()
@@ -43,6 +46,7 @@ namespace T3
             
             Log.AddWriter(new ConsoleWriter());
             Log.AddWriter(FileWriter.CreateDefault());
+            Log.Debug($"Starting {Version}");
             
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
             
@@ -52,7 +56,7 @@ namespace T3
             if(!IsStandAlone && UserSettings.Config.EnableStartupConsistencyCheck)
                 StartupValidation.CheckInstallation();
             
-            _main.CreateRenderForm("T3 " + T3Ui.Version, false);
+            _main.CreateRenderForm("T3 " + Version, false);
 
             // Create Device and SwapChain
             Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, _main.SwapChainDescription, out var device, out _main.SwapChain);
@@ -135,7 +139,7 @@ namespace T3
                 Int64 ticksDiff = ticks - lastElapsedTicks;
                 ImGui.GetIO().DeltaTime = (float)((double)(ticksDiff) / Stopwatch.Frequency);
                 lastElapsedTicks = ticks;
-                ImGui.GetIO().DisplaySize = new System.Numerics.Vector2(_main.Form.ClientSize.Width, _main.Form.ClientSize.Height);
+                ImGui.GetIO().DisplaySize = new Vector2(_main.Form.ClientSize.Width, _main.Form.ClientSize.Height);
 
                 HandleFullscreenToggle();
 
@@ -278,22 +282,22 @@ namespace T3
         private static void HandleKeyDown(object sender, KeyEventArgs e)
         {
             var keyIndex = (int)e.KeyCode;
-            if (keyIndex >= Core.IO.KeyHandler.PressedKeys.Length)
+            if (keyIndex >= KeyHandler.PressedKeys.Length)
             {
                 Log.Warning($"Ignoring out of range key code {e.KeyCode} with index {keyIndex}");
             }
             else
             {
-                Core.IO.KeyHandler.PressedKeys[keyIndex] = true;
+                KeyHandler.PressedKeys[keyIndex] = true;
             }
         }
 
         private static void HandleKeyUp(object sender, KeyEventArgs e)
         {
             var keyIndex = (int)e.KeyCode;
-            if (keyIndex < Core.IO.KeyHandler.PressedKeys.Length)
+            if (keyIndex < KeyHandler.PressedKeys.Length)
             {
-                Core.IO.KeyHandler.PressedKeys[keyIndex] = false;
+                KeyHandler.PressedKeys[keyIndex] = false;
             }
         }
 

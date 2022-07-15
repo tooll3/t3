@@ -32,8 +32,6 @@ namespace T3.Gui
 {
     public class T3Ui
     {
-        public const string Version = "v3.2.2";
-
         static T3Ui()
         {
             var operatorsAssembly = Assembly.GetAssembly(typeof(Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe.Value));
