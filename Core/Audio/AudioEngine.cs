@@ -93,14 +93,22 @@ namespace Core.Audio
 
         public static void SetMute(bool configAudioMuted)
         {
-            if (configAudioMuted)
-            {
-                _originalVolumeBeforeMuting = Bass.Volume;
-            }
-            Bass.Volume = configAudioMuted ? 0 : _originalVolumeBeforeMuting;
+            IsMuted = configAudioMuted;
+            UpdateMuting();
         }
 
-        private static double _originalVolumeBeforeMuting;
+        internal static bool IsMuted;
+        
+        //private static double _originalVolumeBeforeMuting;
+
+        private static void UpdateMuting()
+        {
+            foreach (var stream in _clipPlaybacks.Values)
+            {
+                var volume = IsMuted ? 0 : 1;
+                Bass.ChannelSetAttribute(stream.StreamHandle,ChannelAttribute.Volume, volume);
+            }
+        }
         
         private static void UpdateFftBuffer(int soundStreamHandle)
         {
@@ -165,6 +173,7 @@ namespace Core.Audio
             }
             var streamHandle = Bass.CreateStream(clip.FilePath, 0,0, BassFlags.Prescan);
             Bass.ChannelGetAttribute(streamHandle, ChannelAttribute.Frequency, out var defaultPlaybackFrequency);
+            Bass.ChannelSetAttribute(streamHandle, ChannelAttribute.Volume, AudioEngine.IsMuted ? 0 : 1);
             var bytes = Bass.ChannelGetLength(streamHandle);
             if (bytes < 0)
             {
