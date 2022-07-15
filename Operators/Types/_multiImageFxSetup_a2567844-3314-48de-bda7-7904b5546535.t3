@@ -263,38 +263,6 @@
       "Outputs": []
     },
     {
-      "Id": "b37b8a65-099b-4c2f-8d35-4d58f82c1a20"/*RenderTargetBlendDesc*/,
-      "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
-      "InputValues": [
-        {
-          "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "56c398ce-fe71-47eb-a33f-11eec8f82e79"/*SourceBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "SourceAlpha"
-        },
-        {
-          "Id": "8dc53fe4-79bb-43e4-9d4a-4e06f9a3214c"/*DestinationBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "InverseSourceAlpha"
-        },
-        {
-          "Id": "2632af70-5a05-429c-8123-fe280adea655"/*SourceAlphaBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "SourceAlpha"
-        },
-        {
-          "Id": "acc5550b-18ed-4dba-8e69-d5228e2ad850"/*DestinationAlphaBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "InverseSourceAlpha"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "00feaf13-af28-4ea1-bd11-39cc6eae9f72"/*GetTextureSize*/,
       "SymbolId": "daec568f-f7b4-4d81-a401-34d62462daab",
       "InputValues": [],
