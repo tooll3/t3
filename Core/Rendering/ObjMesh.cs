@@ -96,7 +96,7 @@ namespace T3.Core.Rendering
                 }
                 catch (Exception e)
                 {
-                    Log.Error($"Failed to load point cloud:{e.Message} '{line}'");
+                    Log.Error($"Failed to load obj cloud:{e.Message} '{line}'");
                     return null;
                 }
 
