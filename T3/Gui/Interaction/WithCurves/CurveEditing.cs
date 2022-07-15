@@ -126,8 +126,7 @@ namespace T3.Gui.Interaction.WithCurves
                      }
                          
 
-
-                     if (ImGui.MenuItem("Duplicate keyframes"))
+                     if (TimeLineCanvas.Current != null && ImGui.MenuItem("Duplicate keyframes"))
                          DuplicateSelectedKeyframes(TimeLineCanvas.Current.Playback.TimeInBars);
                  }, ref _contextMenuIsOpen
                 );
