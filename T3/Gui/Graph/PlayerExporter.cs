@@ -88,7 +88,6 @@ namespace T3.Gui.Graph
                                   
                                   // FIXME: These dlls should be references as Operators dependencies but aren't found there
                                   playerBuildPath + "SharpDX.Desktop.dll", 
-                                  playerBuildPath + "Rug.OSC.dll",
                               },
                           exportDir);
 
@@ -99,13 +98,13 @@ namespace T3.Gui.Graph
                     Log.Debug("Copy operator dependencies");
                     CopyFiles(new[]
                                   {
+                                      playerBuildPath + "Rug.OSC.dll",
                                       operatorDependenciesPath + "Core.dll",
                                       operatorDependenciesPath + "DdsImport.dll",
                                       operatorDependenciesPath + "ManagedBass.Wasapi.dll",
                                       operatorDependenciesPath + "ManagedBass.dll",
                                       operatorDependenciesPath + "Newtonsoft.Json.dll",
                                       operatorDependenciesPath + "Unsplasharp.dll",
-                                      operatorDependenciesPath + "SharpDX.Desktop.dll",
                                       operatorDependenciesPath + "SharpDX.Mathematics.dll",
                                       operatorDependenciesPath + "SharpDX.Direct3D11.dll",
                                       operatorDependenciesPath + "SharpDX.Direct2D1.dll",
@@ -117,14 +116,16 @@ namespace T3.Gui.Graph
                                       operatorDependenciesPath + "Svg.dll",
                                       operatorDependenciesPath + "Fizzler.dll",
                                       operatorDependenciesPath + "SharpDX.MediaFoundation.dll",
-                                      operatorDependenciesPath + "Rug.OSC.dll",
                                   },
                               exportDir);
                 }
-                else
+                
+                Log.Debug("Compiling Operators.dll...");
+                var references = OperatorUpdating.CompileSymbolsFromSource(exportDir, operatorAssemblySources.ToArray());
+                
+                if(!Program.IsStandAlone)
                 {
                     Log.Debug("Copy dependencies referenced in Operators.dll...");
-                    var references = OperatorUpdating.CompileSymbolsFromSource(exportDir, operatorAssemblySources.ToArray());
                     var referencedAssemblies = references.Where(r => r.Display.Contains(currentDir))
                                                          .Select(r => r.Display)
                                                          .Distinct()

@@ -41,6 +41,7 @@ namespace StartEditor
             operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\GpuQuery.cs"));
             operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\ICameraPropertiesProvider.cs"));
             operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\MidiInConnectionManager.cs"));
+            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\OscConnectionManager.cs"));
 
             Log.Debug("Compiling...");
             var references = CompileSymbolsFromSource(".", operatorAssemblySources.ToArray());

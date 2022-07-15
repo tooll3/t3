@@ -105,7 +105,11 @@ namespace Core.Audio
         public static void InitializeInputDeviceList()
         {
             _inputDevices = new List<WasapiInputDevice>();
-            for (var deviceIndex = 0; deviceIndex < BassWasapi.DeviceCount; deviceIndex++)
+            
+            // Keep in local variable to avoid double evaluation
+            var deviceCount = BassWasapi.DeviceCount;
+            
+            for (var deviceIndex = 0; deviceIndex < deviceCount; deviceIndex++)
             {
                 var deviceInfo = BassWasapi.GetDeviceInfo(deviceIndex);
                 var isValidInputDevice = deviceInfo.IsEnabled && (deviceInfo.IsLoopback || deviceInfo.IsInput);

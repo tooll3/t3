@@ -15,6 +15,7 @@ using CommandLine;
 using CommandLine.Text;
 using Core.Audio;
 using Core.Logging;
+using ManagedBass;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.IO;
@@ -205,9 +206,24 @@ namespace T3
             
             _soundtrack = demoSymbol.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
             
-            var usingSoundtrack = _soundtrack != null && File.Exists(_soundtrack.FilePath);
+            var soundtrackDefined = _soundtrack != null && File.Exists(_soundtrack.FilePath);
             
-            if (usingSoundtrack)
+            // Init wasapi input if required
+            if (!string.IsNullOrEmpty(ProjectSettings.Config.AudioInputDeviceName))
+            {
+                Bass.Free();
+                Bass.Init();
+                WasapiAudioInput.Initialize();
+                if (soundtrackDefined)
+                {
+                    _playback.Bpm = _soundtrack.Bpm;
+                    Log.Warning("Simultaneous audio analysis from project soundtrack and WASAPI is not support. Muting soundtrack");
+                    soundtrackDefined = false;
+                    _soundtrack = null;
+                }
+            }
+            
+            if (soundtrackDefined)
             {
                 _playback.Bpm = _soundtrack.Bpm;
                 
@@ -215,12 +231,11 @@ namespace T3
                 AudioEngine.UseAudioClip(_soundtrack, 0);
                 AudioEngine.CompleteFrame(_playback);
             }
-            else
-            {
-                _playback.PlaybackSpeed = 0.5f; // Todo: Clarify, if this is a work around for default BPM mismatch 
-            }
-
-
+            // else
+            // {
+            //     _playback.PlaybackSpeed = 0.5f; // Todo: Clarify, if this is a work around for default BPM mismatch 
+            // }
+            
             var rasterizerDesc = new RasterizerStateDescription()
                                      {
                                          FillMode = FillMode.Solid,
@@ -230,8 +245,8 @@ namespace T3
                                      };
             var rasterizerState = new RasterizerState(device, rasterizerDesc);
             
-            // sample some frames to preload all shaders and resources
-            if (usingSoundtrack)
+            // Sample some frames to preload all shaders and resources
+            if (soundtrackDefined)
             {
                 for (double timeInSecs = 0; timeInSecs < _soundtrack.LengthInSeconds; timeInSecs += 2.0)
                 {
@@ -258,7 +273,7 @@ namespace T3
                             Log.Error("Failed to initialize texture");
                         }
                     }
-                    Thread.Sleep(100);
+                    Thread.Sleep(20);
                     _swapChain.Present(1, PresentFlags.None);
                 }
             }
@@ -280,7 +295,6 @@ namespace T3
                                      if (_soundtrack != null)
                                      {
                                          AudioEngine.UseAudioClip(_soundtrack, _playback.TimeInSecs);
-                                         AudioEngine.CompleteFrame(_playback);
                                          if (_playback.TimeInSecs >= _soundtrack.LengthInSeconds + _soundtrack.StartTime)
                                          {
                                              if (options.Loop)
@@ -293,7 +307,8 @@ namespace T3
                                              }
                                          }
                                      }
-
+                                     AudioEngine.CompleteFrame(_playback);
+                                     
                                      DirtyFlag.IncrementGlobalTicks();
                                      DirtyFlag.InvalidationRefFrame++;
 

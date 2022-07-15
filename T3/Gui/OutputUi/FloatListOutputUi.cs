@@ -36,7 +36,7 @@ namespace T3.Gui.OutputUi
                 if (v == null)
                     return;
                 
-                if (v.Count > 3)
+                if (v.Count > 1)
                 {
                     var length = Math.Min(1024, v.Count);
                     var floatList = v.GetRange(0, length).ToArray();

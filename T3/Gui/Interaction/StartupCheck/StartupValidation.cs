@@ -35,7 +35,6 @@ namespace t3.Gui.Interaction.StartupCheck
                                             {  
                                                 WindowManager.LayoutPath + "layout1.json",
                                                 @"T3\bin\Debug\net5.0-windows\bass.dll",
-                                                @"T3\bin\Debug\net5.0-windows\DdsImport.dll",
                                                 @"T3\bin\Release\net5.0-windows\bass.dll",
                                             },
                     Message = "Please run Install/install.bat.",

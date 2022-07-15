@@ -555,7 +555,7 @@ namespace T3.Gui.Graph.Interaction
             }
 
             private static Vector2 _lastPosition = Vector2.Zero;
-            private const int QueueLength = 25;
+            private const int QueueLength = 35;
             private const int ChangeDirectionThreshold = 5;
             private static readonly List<int> Directions = new List<int>(QueueLength);
         }

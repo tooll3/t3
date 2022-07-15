@@ -27,7 +27,7 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "35ab8188-77a1-4cd9-b2ad-c503034e49f9"/*HasIncreased*/,
+      "OutputId": "35ab8188-77a1-4cd9-b2ad-c503034e49f9"/*HasChanged*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

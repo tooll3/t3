@@ -78,41 +78,50 @@ namespace Operators.Utils
 
             public void ThreadProc()
             {
-                try
+                while (Receiver.State != OscSocketState.Closed)
                 {
-                    while (Receiver.State != OscSocketState.Closed)
+                    if (Receiver.State != OscSocketState.Connected)
+                        continue;
+
+                    // Get the next message. This will block until one arrives or the socket is closed
+                    var oscPacket = Receiver.Receive();
+
+                    var oscPacketString = oscPacket.ToString();
+                    
+                    try
                     {
-                        if (Receiver.State != OscSocketState.Connected)
+                        if (oscPacketString == null)
                             continue;
 
-                        // Get the next message. This will block until one arrives or the socket is closed
-                        var oscPacket = Receiver.Receive();
-
-                        var oscMessage = OscMessage.Parse(oscPacket.ToString());
-
-                        //if (oscMessage.Address == "/beatTimer")
-                        //{
-                        // TODO: Do something
-                        Log.Debug($"Got OSC on port {Port} message: {oscMessage.Address} {oscMessage}");
-
-                        foreach (var consumer in Consumers)
+                        if (oscPacketString.StartsWith("#bundle"))
                         {
-                            consumer.ProcessMessage(oscMessage);
+                            var bundle = OscBundle.Parse(oscPacketString);
+
+                            foreach (var bundleContent in bundle)
+                            {
+                                if (bundleContent is OscMessage bundleMessage)
+                                {
+                                    ForwardMessage(bundleMessage);
+                                }
+                            }
+
+                            continue;
                         }
 
-                        //OscMessageReceived?.Invoke(this, oscMessage);
-                        //}
+                        ForwardMessage(OscMessage.Parse(oscPacket.ToString()));
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Warning($"Failed to parse OSC Message: '{oscPacket} {e.Message}'");
                     }
                 }
-                catch (Exception ex)
+            }
+
+            private void ForwardMessage(OscMessage message)
+            {
+                foreach (var consumer in Consumers)
                 {
-                    // if the socket was connected when this happens
-                    // then tell the user
-                    if (Receiver.State == OscSocketState.Connected)
-                    {
-                        Log.Debug("Exception in listen loop");
-                        Log.Debug(ex.Message);
-                    }
+                    consumer.ProcessMessage(message);
                 }
             }
         }

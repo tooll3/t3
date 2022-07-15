@@ -546,6 +546,12 @@ namespace T3.Gui.Graph
                 //|| primaryOutput.IsConnected 
                 || firstMatchingInput.IsConnected)
             {
+                Log.Warning("Op doesn't have valid connections");
+                return;
+            }
+
+            if (primaryOutput.ValueType != firstMatchingInput.ValueType)
+            {
                 Log.Warning("Op doesn't match connection type");
                 return;
             }

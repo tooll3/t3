@@ -304,10 +304,13 @@ namespace T3.Gui.Windows.Variations
 
         public bool TryGetBlendWeight(Variation v, out float weight)
         {
+            weight = 0;
+            if (_blendWeights.Count == 0)
+                return false;
+            
             var index = _blendVariations.IndexOf(v);
             if (index == -1)
             {
-                weight = 0;
                 return false;
             }
 

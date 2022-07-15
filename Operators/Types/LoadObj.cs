@@ -26,12 +26,19 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
         private void Update(EvaluationContext context)
         {
             var path = Path.GetValue(context);
+            var vertexSorting = SortVertices.GetValue(context);
+            var useGpuCaching = UseGPUCaching.GetValue(context);
+            if (ClearGPUCache.GetValue(context))
+            {
+                MeshBufferCache.Clear();
+            }
+            
             if (path != _lastFilePath || SortVertices.DirtyFlag.IsDirty)
             {
-                var vertexSorting = SortVertices.GetValue(context);
+                
                 _description = System.IO.Path.GetFileName(path);
 
-                if (UseGPUCaching.GetValue(context))
+                if (useGpuCaching)
                 {
                     if (MeshBufferCache.TryGetValue(path, out var cachedBuffer))
                     {
@@ -112,7 +119,7 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
                     resourceManager.CreateStructuredBufferUav(newData.IndexBuffer, UnorderedAccessViewBufferFlags.None, ref newData.IndexBufferWithViews.Uav);
                 }
 
-                if (UseGPUCaching.GetValue(context))
+                if (useGpuCaching)
                 {
                     MeshBufferCache[path] = newData;
                 }

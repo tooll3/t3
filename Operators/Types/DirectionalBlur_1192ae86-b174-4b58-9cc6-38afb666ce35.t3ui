@@ -1,0 +1,137 @@
+{
+  "Id": "1192ae86-b174-4b58-9cc6-38afb666ce35"/*DirectionalBlur*/,
+  "Description": "Blurs the incoming image along a direction angle. \nYou can override the angle and strength through an FXTexture with...\n\nR - Angle\nG - Strength",
+  "InputUis": [
+    {
+      "InputId": "3cc9487b-bf18-416c-9d69-86592130bfa6"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -630.6626,
+        "Y": 40.772644
+      }
+    },
+    {
+      "InputId": "e94e2b7e-6f0a-42b5-bf5e-abdffe728273"/*Size*/,
+      "Position": {
+        "X": -630.6626,
+        "Y": 85.772644
+      },
+      "Min": 0.0,
+      "Max": 2.0,
+      "Scale": 0.001,
+      "Clamp": true
+    },
+    {
+      "InputId": "11cb8f1e-fac5-4623-b61c-d6482633e505"/*Samples*/,
+      "Position": {
+        "X": -630.6626,
+        "Y": 130.77264
+      },
+      "Min": 0.0
+    },
+    {
+      "InputId": "ab3206bf-9413-4f31-9c3d-0c1fe7477862"/*Angle*/,
+      "Position": {
+        "X": -630.6626,
+        "Y": 175.77264
+      },
+      "Min": -180.0,
+      "Max": 180.0,
+      "Scale": 0.1
+    },
+    {
+      "InputId": "815975d2-5613-4ca8-b208-f09ac07b0518"/*FxAngleFactor*/,
+      "Position": {
+        "X": -630.6626,
+        "Y": 220.77263
+      }
+    },
+    {
+      "InputId": "dfa5e772-0cb4-440f-8483-dcc89b40107d"/*FxSizeFactor*/,
+      "Position": {
+        "X": -630.6626,
+        "Y": 265.7726
+      },
+      "Min": 0.0,
+      "Max": 10.0,
+      "Scale": 0.01,
+      "Clamp": true
+    },
+    {
+      "InputId": "94099125-52d7-475d-aff2-bb1bbd0bd30a"/*Resolution*/,
+      "Position": {
+        "X": -630.07056,
+        "Y": 328.6601
+      }
+    },
+    {
+      "InputId": "6c0cca14-6a0e-4a04-a67b-cbb134d90d03"/*Wrap*/,
+      "Position": {
+        "X": -630.07056,
+        "Y": 373.6601
+      }
+    },
+    {
+      "InputId": "fd99fc97-43a8-4a04-8e17-95c2abc289fc"/*FxTextures*/,
+      "Position": {
+        "X": -630.07056,
+        "Y": 418.6601
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "728da07f-536c-49bb-8db6-692136fc3b46"/*_multiImageFxSetup*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 153.0
+      },
+      "Position": {
+        "X": -129.27481,
+        "Y": 59.84319
+      }
+    },
+    {
+      "ChildId": "4194c8e2-5f6e-410b-b98f-71ed330e395c"/*_ImageFxShaderSetupStatic*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 81.36603,
+        "Y": -1129.8193
+      }
+    },
+    {
+      "ChildId": "d5e26444-fe59-4923-98cb-5c22be2815f8"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -353.41815,
+        "Y": 457.28357
+      }
+    },
+    {
+      "ChildId": "c2ddd0ea-230b-47f1-982c-92dd229bf66c"/*UseFallbackTexture*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -196.50159,
+        "Y": 407.31018
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "c57e38ab-a802-498c-b0f7-cad86e6426a3"/*TextureOutput*/,
+      "Position": {
+        "X": 683.74274,
+        "Y": 98.292076
+      }
+    }
+  ]
+}
