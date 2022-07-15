@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -29,7 +30,7 @@ namespace T3.Operators.Types.Id_146fae64_18da_4183_9794_a322f47c669e
 
             var hasChanged = false;
 
-            switch ((Modes)Mode.GetValue(context))
+            switch ((Modes)Mode.GetValue(context).Clamp(0, Enum.GetNames(typeof(Modes)).Length -1))
             {
                 case Modes.Changed:
                     var increase = Math.Abs(newValue - _lastValue) > threshold;
