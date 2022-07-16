@@ -37,8 +37,8 @@ namespace T3.Gui.UiHelpers
             public bool ShowTimeline = true;
             
             // UI-State
-            public bool FullScreen = true;
-            public bool ShowGraphOverContent = true;
+            public bool FullScreen = false;
+            public bool ShowGraphOverContent = false;
             public int WindowLayoutIndex = 0;
             public bool EnableIdleMotion = true;
             
@@ -47,7 +47,7 @@ namespace T3.Gui.UiHelpers
             public bool ShowExplicitTextureFormatInOutputWindow = false;
             public bool UseArcConnections = true;
             public float SnapStrength = 5;
-            public bool UseJogDialControl = false;
+            public bool UseJogDialControl = true;
             public float ScrollSmoothing = 0.06f;
             public float TooltipDelay = 1.2f;
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
@@ -62,7 +62,7 @@ namespace T3.Gui.UiHelpers
             
             // Other settings
             public float GizmoSize = 100;
-            public bool SwapMainAnd2ndWindowsWhenFullscreen = true;
+            public bool SwapMainAnd2ndWindowsWhenFullscreen = false;
             public bool EnableStartupConsistencyCheck = true;
 
             // Timeline
