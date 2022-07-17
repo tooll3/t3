@@ -120,8 +120,15 @@ namespace T3.Core
                 Utilities.Swap(ref outMin, ref outMax);
             return v.Clamp(outMin, outMax);
         }
+        
+        public static float Remap(float value, float inMin, float inMax, float outMin, float outMax)
+        {
+            var factor = (value - inMin) / (inMax - inMin);
+            var v = factor * (outMax - outMin) + outMin;
+            return v;
+        }
 
-        public static double Remap(double value, double inMin, double inMax, double outMin, double outMax)
+        public static double RemapAndClamp(double value, double inMin, double inMax, double outMin, double outMax)
         {
             var factor = (value - inMin) / (inMax - inMin);
             var v = factor * (outMax - outMin) + outMin;

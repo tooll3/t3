@@ -21,7 +21,7 @@ namespace T3.Gui.Windows.TimeLine.Raster
             var scaleRange = ScaleRanges.FirstOrDefault(range => range.ScaleMax > invertedScale / density);
             fadeFactor = scaleRange == null
                              ? 1
-                             : 1 - (float)MathUtils.Remap(invertedScale, scaleRange.ScaleMin * density, scaleRange.ScaleMax * density, 0, 1);
+                             : 1 - (float)MathUtils.RemapAndClamp(invertedScale, scaleRange.ScaleMin * density, scaleRange.ScaleMax * density, 0, 1);
 
             return scaleRange?.Rasters;
         }
