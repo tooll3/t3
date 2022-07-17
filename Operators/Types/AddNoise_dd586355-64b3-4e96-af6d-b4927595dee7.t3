@@ -33,7 +33,7 @@
     },
     {
       "Id": "97c25ec6-ef71-42f8-9352-52baf2ce41a4"/*RotationLookupDistance*/,
-      "DefaultValue": 1.0
+      "DefaultValue": 0.25
     },
     {
       "Id": "6c2ab161-da81-47c2-8008-222cf994179c"/*UseWAsWeight*/,

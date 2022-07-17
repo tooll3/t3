@@ -15,7 +15,7 @@ cbuffer Transforms : register(b0)
     float4x4 ObjectToCamera;
     float4x4 ObjectToClipSpace;
 };
-
+  
 cbuffer Params : register(b1)
 {
     float Amount;
@@ -65,7 +65,7 @@ void GetTranslationAndRotation(float weight, float3 pointPos, float4 rotation,
         cross(crossXY, rotatedXDirNormalized), 
         crossXY );
 
-    newRotation = normalize(q_from_matrix(transpose(orientationDest)));
+    newRotation = normalize(quaternion_from_matrix_precise(transpose(orientationDest)));
 }
 
 [numthreads(64,1,1)]

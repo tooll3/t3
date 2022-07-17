@@ -249,11 +249,11 @@ float snoise(float3 v)
 
 
 
-float3 snoiseVec3(float3 x)
+float3 snoiseVec3(float3 p)
 {
-  float s  = snoise(float3( x ));
-  float s1 = snoise(float3( x.y - 19.1 , x.z + 33.4 , x.x + 47.2 ));
-  float s2 = snoise(float3( x.z + 74.2 , x.x - 124.5 , x.y + 99.4 ));
+  float s  = snoise(float3( p.x+0.0001, p.y, p.z ));
+  float s1 = snoise(float3( p.y - 19.1 , p.z + 33.4 , p.x + 47.2 ));
+  float s2 = snoise(float3( p.z + 74.2 , p.x - 124.5 , p.y + 99.4 ));
   float3 c = float3( s , s1 , s2 );
   return c;
 }
