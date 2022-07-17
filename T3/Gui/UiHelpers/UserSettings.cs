@@ -37,6 +37,7 @@ namespace T3.Gui.UiHelpers
             public bool ShowTimeline = true;
             
             // UI-State
+            public float UiScaleFactor = 1;
             public bool FullScreen = false;
             public bool ShowGraphOverContent = false;
             public int WindowLayoutIndex = 0;

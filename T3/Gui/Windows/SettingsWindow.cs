@@ -24,6 +24,10 @@ namespace T3.Gui.Windows
             var changed = false;
             if (ImGui.TreeNode("User Interface"))
             {
+                if (ImGui.DragFloat("UI Scale", ref UserSettings.Config.UiScaleFactor, 0.01f, 0.5f, 3f))
+                {
+                    changed = true;
+                }
                 changed |= ImGui.Checkbox("Use arc connections", ref UserSettings.Config.UseArcConnections);
                 changed |= ImGui.Checkbox("Use Jog Dial Control", ref UserSettings.Config.UseJogDialControl);
                 changed |= ImGui.DragFloat("Scroll smoothing", ref UserSettings.Config.ScrollSmoothing);

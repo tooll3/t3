@@ -21,6 +21,7 @@ using T3.Core.Operator.Slots;
 using T3.Gui;
 using t3.Gui.Interaction.Camera;
 using t3.Gui.Interaction.StartupCheck;
+using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using Device = SharpDX.Direct3D11.Device;
@@ -37,6 +38,19 @@ namespace T3
         public static bool IsStandAlone = File.Exists("StartT3.exe");
         public const string Version = "v3.3.0";
 
+        public static void GenerateFonts(float scaleFactor)
+        {
+            var fontAtlasPtr = ImGui.GetIO().Fonts;
+            fontAtlasPtr.Clear();
+            Fonts.FontNormal = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Regular.ttf", 18f * scaleFactor);
+            Fonts.FontBold = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Medium.ttf", 18f * scaleFactor);
+            Fonts.FontSmall = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Regular.ttf", 13f * scaleFactor);
+            Fonts.FontLarge = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Light.ttf", 30f * scaleFactor);
+
+            _t3RenderForm.CreateDeviceObjects();
+        }
+
+        private static float _lastUiScale = 1;
         
         [STAThread]
         private static void Main()
@@ -68,6 +82,8 @@ namespace T3
             factory.MakeWindowAssociation(_main.Form.Handle, WindowAssociationFlags.IgnoreAll);
 
             _t3RenderForm = new T3RenderForm(device, _main.Form.Width, _main.Form.Height);
+
+            GenerateFonts(UserSettings.Config.UiScaleFactor);
 
             // Initialize T3 main window
             _main.InitRenderTargetsAndEventHandlers(device);
@@ -125,10 +141,17 @@ namespace T3
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             Int64 lastElapsedTicks = stopwatch.ElapsedTicks;
-
+            
             // Main loop
             void RenderCallback()
             {
+                // Update font atlas texture if UI-Scale changed
+                if (Math.Abs(UserSettings.Config.UiScaleFactor - _lastUiScale) > 0.005f)
+                {
+                    GenerateFonts(UserSettings.Config.UiScaleFactor);
+                    _lastUiScale = UserSettings.Config.UiScaleFactor;
+                }
+                
                 if (_main.Form.WindowState == FormWindowState.Minimized == true)
                 {
                     Thread.Sleep(100);
