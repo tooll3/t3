@@ -68,13 +68,13 @@ uint wang_hash(in out uint seed)
 }
 
 
-StructuredBuffer<Face> PointCloud : t0;
+StructuredBuffer<Face> FaceBuffer : t0;
 
 Texture2D<float4> inputTexture : register(t1);
 
 RWStructuredBuffer<Point> points : u0;
 // ConsumeStructuredBuffer<ParticleIndex> DeadParticles : u1;
-//RWStructuredBuffer<Face> PointCloud : u2;
+//RWStructuredBuffer<Face> FaceBuffer : u2;
 
 SamplerState linearSampler : register(s0);
 
@@ -82,8 +82,8 @@ SamplerState linearSampler : register(s0);
 [numthreads(160,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
-    uint numStructs, stride;
-    PointCloud.GetDimensions(numStructs, stride);
+    uint faceCount, stride;
+    FaceBuffer.GetDimensions(faceCount, stride);
     // if (i.x >= (uint)bufferCount.x)
     //     return; 
 
@@ -98,7 +98,7 @@ void main(uint3 i : SV_DispatchThreadID)
     // float xi = hash.x;
 
     uint cdfIndex = 0;
-    while (cdfIndex < numStructs && xi > PointCloud[cdfIndex].cdf) // todo: make binary search
+    while (cdfIndex < faceCount && xi > FaceBuffer[cdfIndex].cdf) // todo: make binary search
     {
         cdfIndex += 1;
     }
@@ -109,7 +109,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float xi1 = (float(wang_hash(rng_state)) * (1.0 / 4294967296.0));
     float xi2 = float(wang_hash(rng_state)) * (1.0 / 4294967296.0);
-    Face f = PointCloud[index];
+    Face f = FaceBuffer[index];
     // if (f.positions[0].z < 0.1 || f.positions[1].z < 0.1 || f.positions[2].z < 0.1)
     //     return;
     float xi1Sqrt = sqrt(xi1);
