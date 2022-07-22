@@ -45,6 +45,9 @@ void main(uint3 i : SV_DispatchThreadID)
     posInObject += float4(p.position, 0); 
 
     v.Position = posInObject; 
+    v.Normal = rotate_vector(v.Normal, p.rotation);
+    v.Tangent = rotate_vector(v.Tangent, p.rotation);
+    v.Bitangent = rotate_vector(v.Bitangent, p.rotation);
     ResultVertices[targetVertexIndex] = v; 
 }
 
