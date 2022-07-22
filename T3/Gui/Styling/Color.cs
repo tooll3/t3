@@ -24,16 +24,17 @@ namespace T3.Gui
     public struct Color
     {
         public Vector4 Rgba;
-        public static Color Transparent = new Color(1f, 1f, 1f, 0f);
-        public static Color TransparentBlack = new Color(0f, 0f, 0f, 0f);
-        public static Color White = new Color(1f, 1f, 1f, 1f);
-        public static Color Gray = new Color(0.6f, 0.6f, 0.6f, 1);
-        public static Color DarkGray = new Color(0.3f, 0.3f, 0.3f, 1);
-        public static Color Black = new Color(0, 0, 0, 1f);
-        public static Color Red = new Color(1f, 0.2f, 0.2f, 1f);
-        public static Color Green = new Color(0.2f, 0.9f, 0.2f, 1f);
-        public static Color Blue = new Color(0.4f, 0.5f, 1f, 1);
-        public static Color Orange = new Color(1f, 0.46f, 0f, 1f);
+        
+        public static readonly Color Transparent = new Color(1f, 1f, 1f, 0f);
+        public static readonly Color TransparentBlack = new Color(0f, 0f, 0f, 0f);
+        public static readonly  Color White = new Color(1f, 1f, 1f, 1f);
+        public static readonly Color Gray = new Color(0.6f, 0.6f, 0.6f, 1);
+        public static readonly Color DarkGray = new Color(0.3f, 0.3f, 0.3f, 1);
+        public static readonly Color Black = new Color(0, 0, 0, 1f);
+        public static readonly Color Red = new Color(1f, 0.2f, 0.2f, 1f);
+        public static readonly Color Green = new Color(0.2f, 0.9f, 0.2f, 1f);
+        public static readonly Color Blue = new Color(0.4f, 0.5f, 1f, 1);
+        public static readonly Color Orange = new Color(1f, 0.46f, 0f, 1f);
 
         /// <summary>
         /// Creates white transparent color
@@ -83,8 +84,17 @@ namespace T3.Gui
 
         static public Color FromString(string hex)
         {
-            var systemColor = System.Drawing.ColorTranslator.FromHtml(hex);
+            System.Drawing.Color systemColor = System.Drawing.ColorTranslator.FromHtml(hex);
             return new Color(systemColor.R, systemColor.G, systemColor.B, systemColor.A);
+        }
+        
+        public string ToHTML()
+        {
+            var drawingColor = System.Drawing.Color.FromArgb((int)(A*255).Clamp(0,255), 
+                                                             (int)(R*255).Clamp(0,255), 
+                                                             (int)(G*255).Clamp(0,255), 
+                                                             (int)(B*255).Clamp(0,255));
+            return System.Drawing.ColorTranslator.ToHtml(drawingColor);
         }
 
         public static implicit operator uint(Color color)
