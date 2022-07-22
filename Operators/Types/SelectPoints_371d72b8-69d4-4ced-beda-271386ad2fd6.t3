@@ -37,7 +37,7 @@
     },
     {
       "Id": "56bf96b4-e7c4-4747-b57a-64a39e0d6314"/*FallOff*/,
-      "DefaultValue": 0.001
+      "DefaultValue": 0.5
     },
     {
       "Id": "2c5e5bb5-6023-4ff4-906d-d0a905110e95"/*VolumeShape*/,
