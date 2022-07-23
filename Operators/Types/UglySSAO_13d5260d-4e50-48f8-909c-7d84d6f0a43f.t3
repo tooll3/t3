@@ -43,11 +43,11 @@
     },
     {
       "Id": "c310f731-bc13-44e7-a827-d8e4f996ff99"/*Passes*/,
-      "DefaultValue": 10.0
+      "DefaultValue": 6.0
     },
     {
       "Id": "592b84f4-e53c-499a-ab83-150e0eabfcdf"/*Size*/,
-      "DefaultValue": 8.0
+      "DefaultValue": 2.0
     },
     {
       "Id": "9ac4806b-bbcf-4b29-ac15-4bc7f52ef192"/*MixOriginal*/,

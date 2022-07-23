@@ -13,6 +13,9 @@ namespace T3.Operators.Types.Id_53d3eebd_4ead_4965_b26d_10a8bbd48182
         [Output(Guid = "a54cc25b-9ea2-4012-b462-16c565718cf8")]
         public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOut = new Slot<SharpDX.Direct3D11.Texture2D>();
 
+        [Output(Guid = "07695aef-ea0d-4cdc-864f-dd2de8a947fb")]
+        public readonly Slot<SharpDX.Direct3D11.Texture2D> Depth = new Slot<SharpDX.Direct3D11.Texture2D>();
+
 
         [Input(Guid = "22f5e8db-0b80-47dc-b30b-4bc49d9fad59")]
         public readonly InputSlot<Command> Command = new InputSlot<Command>();

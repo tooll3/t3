@@ -23,6 +23,18 @@ namespace T3.Operators.Types.Id_f3b66187_34b2_4018_8380_279f9f296ded
         [Input(Guid = "71c54c8e-a95f-47e8-b126-0cdaa89ae49b")]
         public readonly InputSlot<float> Exposure = new InputSlot<float>();
 
+        [Input(Guid = "4f573afe-8815-4fd3-a655-89ec40bf3c22")]
+        public readonly InputSlot<bool> RenderBackground = new InputSlot<bool>();
+
+        [Input(Guid = "96094239-9d82-4a32-bbb0-e9da7f6501da")]
+        public readonly InputSlot<float> BackgroundBlur = new InputSlot<float>();
+
+        [Input(Guid = "650aa9a6-4aa6-4928-be76-3f1f825aa773")]
+        public readonly InputSlot<System.Numerics.Vector4> BackgroundColor = new InputSlot<System.Numerics.Vector4>();
+
+        [Input(Guid = "0299761d-7397-4a2f-b591-81fadb404a92")]
+        public readonly InputSlot<float> BackgroundDistance = new InputSlot<float>();
+
     }
 }
 

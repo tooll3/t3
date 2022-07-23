@@ -112,7 +112,7 @@ psInput vsMain(uint id: SV_VertexID)
 
     float sizeFactor = UseWForSize > 0.5 ? pointDef.w : 1;
 
-    quadPosInCamera.xy += quadPos.xy*0.050  * sizeFactor * Size;
+    quadPosInCamera.xy += quadPos.xy*0.050  * sizeFactor * Size * tooCloseFactor;
     output.position = mul(quadPosInCamera, CameraToClipSpace);
     float4 posInWorld = mul(posInObject, ObjectToWorld);
 
