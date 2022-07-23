@@ -58,6 +58,13 @@
         "X": 606.7909,
         "Y": 4479.768
       }
+    },
+    {
+      "InputId": "ef476073-0796-4e6d-bf8b-d0ab92e92296"/*Colors*/,
+      "Position": {
+        "X": 606.7909,
+        "Y": 4119.768
+      }
     }
   ],
   "SymbolChildUis": [
@@ -132,7 +139,7 @@
       "ChildId": "7634ccb2-c032-4e2d-a4ec-a8ef16355d93"/*VertexShaderStage*/,
       "Size": {
         "X": 110.0,
-        "Y": 205.0
+        "Y": 231.0
       },
       "Position": {
         "X": 2139.7566,
@@ -371,6 +378,17 @@
       "Position": {
         "X": 1810.0687,
         "Y": 3826.3286
+      }
+    },
+    {
+      "ChildId": "76883787-0f8f-4ff7-9e92-44982cf1e825"/*GetBufferComponents*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1079.0012,
+        "Y": 4034.0288
       }
     }
   ],

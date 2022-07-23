@@ -39,6 +39,10 @@
     {
       "Id": "b575d027-fd84-4a51-bf8a-6f3437e347f4"/*UseWForSize*/,
       "DefaultValue": true
+    },
+    {
+      "Id": "ef476073-0796-4e6d-bf8b-d0ab92e92296"/*Colors*/,
+      "DefaultValue": null
     }
   ],
   "Children": [
@@ -303,6 +307,12 @@
       "SymbolId": "c2078514-cf1d-439c-a732-0d7b31b5084a",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "76883787-0f8f-4ff7-9e92-44982cf1e825"/*GetBufferComponents*/,
+      "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -529,6 +539,18 @@
       "TargetSlotId": "3a0bea89-bd93-4594-b1b6-3e25689c67e6"
     },
     {
+      "SourceParentOrChildId": "5737fbbc-c50a-41da-a31c-9f972262f69d",
+      "SourceSlotId": "671f198d-4173-4fe9-af5a-fcd5d0a71895",
+      "TargetParentOrChildId": "7634ccb2-c032-4e2d-a4ec-a8ef16355d93",
+      "TargetSlotId": "3a0bea89-bd93-4594-b1b6-3e25689c67e6"
+    },
+    {
+      "SourceParentOrChildId": "76883787-0f8f-4ff7-9e92-44982cf1e825",
+      "SourceSlotId": "1368ab8e-d75e-429f-8ecd-0944f3ede9ab",
+      "TargetParentOrChildId": "7634ccb2-c032-4e2d-a4ec-a8ef16355d93",
+      "TargetSlotId": "3a0bea89-bd93-4594-b1b6-3e25689c67e6"
+    },
+    {
       "SourceParentOrChildId": "a4a533bd-bc12-471c-a7a0-06264eab368a",
       "SourceSlotId": "ed31838b-14b5-4875-a0fc-dc427e874362",
       "TargetParentOrChildId": "7634ccb2-c032-4e2d-a4ec-a8ef16355d93",
@@ -563,6 +585,12 @@
       "SourceSlotId": "3d2ebd10-2670-46b7-8f1a-9475a81a516d",
       "TargetParentOrChildId": "7634ccb2-c032-4e2d-a4ec-a8ef16355d93",
       "TargetSlotId": "bba8f6eb-7cff-435b-ab47-febf58dd8fba"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "ef476073-0796-4e6d-bf8b-d0ab92e92296",
+      "TargetParentOrChildId": "76883787-0f8f-4ff7-9e92-44982cf1e825",
+      "TargetSlotId": "7a13b834-21e5-4cef-ad5b-23c3770ea763"
     },
     {
       "SourceParentOrChildId": "a8bd9433-aa6e-4ba9-b766-3962ab583b65",

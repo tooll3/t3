@@ -34,6 +34,9 @@ namespace T3.Operators.Types.Id_84a93ea9_98fb_4088_a1e9_87454f7292f1
 
         [Input(Guid = "b575d027-fd84-4a51-bf8a-6f3437e347f4")]
         public readonly MultiInputSlot<bool> UseWForSize = new MultiInputSlot<bool>();
+
+        [Input(Guid = "ef476073-0796-4e6d-bf8b-d0ab92e92296")]
+        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Colors = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
     }
 }
 

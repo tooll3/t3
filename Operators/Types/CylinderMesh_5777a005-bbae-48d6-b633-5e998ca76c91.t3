@@ -49,7 +49,7 @@
     },
     {
       "Id": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
-      "DefaultValue": 0
+      "DefaultValue": 1
     }
   ],
   "Children": [],

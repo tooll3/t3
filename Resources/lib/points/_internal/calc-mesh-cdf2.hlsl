@@ -33,7 +33,8 @@ void main(uint3 i : SV_DispatchThreadID)
         float3 heightStart = p0 + dot(p2 - p0, baseDir) * baseDir;
         float b = length(p2 - heightStart);
         float faceArea = a * b * 0.5;
-        FaceData[j].normalizedFaceArea = faceArea;
+        faceArea = isnan(faceArea) ? 0 : faceArea;
+        FaceData[j].normalizedFaceArea =  faceArea;
         sum += faceArea;
     }
 

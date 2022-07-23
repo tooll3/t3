@@ -74,7 +74,7 @@ struct psInput
 sampler texSampler : register(s0);
 
 StructuredBuffer<Point> Points : t0;
-//Texture2D<float4> texture2 : register(t1);
+StructuredBuffer<float4> Colors : t1;
 
 Texture2D<float4> BaseColorMap : register(t1);
 Texture2D<float4> EmissiveColorMap : register(t2);
@@ -92,18 +92,18 @@ psInput vsMain(uint id: SV_VertexID)
     int particleId = id / 6;
     Point pointDef = Points[particleId];
 
-    //float4 aspect = float4(CameraToClipSpace[1][1] / CameraToClipSpace[0][0],1,1,1);
     float3 quadPos = Corners[quadIndex];
     output.texCoord = (quadPos.xy * 0.5 + 0.5);
 
     float4 posInObject = float4(pointDef.position,1);
     float4 quadPosInCamera = mul(posInObject, ObjectToCamera);
-    output.color = Color;
 
-    //quadPosInCamera.xy += quadPos.xy*0.050  * scale;  // * (sin(particle.lifetime) + 1)/20;//*6.0;// * size;
-    //output.position = mul(quadPosInCamera, CameraToClipSpace);
+    uint colorCount, stride;
+    Colors.GetDimensions(colorCount, stride);
+    float4 dynaColor = colorCount > 0 ? Colors[particleId] : 1;
+    output.color = Color * dynaColor;
+
     output.posInWorld = mul(quadPosInCamera, CameraToWorld).xyz;
-
 
     // Shrink too close particles
     float4 posInCamera = mul(posInObject, ObjectToCamera);
@@ -139,7 +139,7 @@ float4 psMain(psInput pin) : SV_TARGET
 
     // Sample input textures to get shading model params.
     //float4 albedo =   BaseColorMap.Sample(texSampler, pin.texCoord);
-    float4 albedo = Color;
+    float4 albedo = pin.color;
     //return float4(normal,1);
     // if(AlphaCutOff > 0 && albedo.a < AlphaCutOff) {
     //     discard;

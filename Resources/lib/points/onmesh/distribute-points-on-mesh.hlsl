@@ -26,8 +26,12 @@ struct FaceProperties {
 StructuredBuffer<PbrVertex> Vertices : t0;
 StructuredBuffer<int3> FaceIndices : t1;
 StructuredBuffer<FaceProperties> CDFs : t2;
+Texture2D<float4> ColorMap : t3;
+
+sampler texSampler : register(s0);
 
 RWStructuredBuffer<Point> ResultPoints : u0;
+RWStructuredBuffer<float4> ResultColors : u1;
 
 [numthreads(160,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
@@ -41,27 +45,35 @@ void main(uint3 i : SV_DispatchThreadID)
         return; 
 
 
-    uint rng_state = (i.x * Seed);
+    uint rng_state = (i.x * (uint)(Seed * 10317));
     float xi = (float(wang_hash(rng_state)) * (1.0 / 4294967296.0));
 
-    uint stepSize = faceCount /2;
-    uint cdfIndex = stepSize;
-    
-    while (stepSize > 1) 
+    uint left = 0;
+    uint width = faceCount -2;
+    uint right = width;
+    uint steps = log2(width) + 1;
+    uint cdfIndex;
+    for (uint j = 0; j < steps; ++j)
     {
-        stepSize /= 2;                        
-        cdfIndex += CDFs[cdfIndex].cdf <= xi 
-                     ? stepSize
-                     : -stepSize;
+        uint middle = (right + left) / 2 ; 
+        float cdfSegStart = CDFs[middle].cdf;
+        float cdfSegEnd = CDFs[middle + 1].cdf;
+        if (right == left || (cdfSegStart <= xi  && cdfSegEnd > xi))
+        {
+            cdfIndex = middle +1;
+        }
+        else {
+            if (xi < cdfSegStart)
+            {
+                right = middle;
+            }
+            else
+            {
+                left = middle +1;
+            }    
+        }
     }
 
-    cdfIndex = max( cdfIndex- 4,0);
-
-
-    while (cdfIndex < faceCount && xi > CDFs[cdfIndex].cdf) // todo: make binary search
-    {
-         cdfIndex += 1;
-    }
 
     uint faceIndex = cdfIndex;
     if (faceIndex >= (uint)faceCount)
@@ -102,5 +114,11 @@ void main(uint3 i : SV_DispatchThreadID)
 
     ResultPoints[i.x] = p;
 
+    float2 uv = Vertices[fIndices[0]].TexCoord * u 
+            + Vertices[fIndices[1]].TexCoord * v
+            + Vertices[fIndices[2]].TexCoord * w;
+
+    float4 color = ColorMap.SampleLevel(texSampler, uv* float2(1, -1), 0);
+    ResultColors[i.x] = color;
 }
 
