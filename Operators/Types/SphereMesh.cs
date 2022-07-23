@@ -78,8 +78,8 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
 
                     if (isTop || isBottom)
                     {
-                        var normalPol0 = SharpDX.Vector3.Up;
-                        var normalPol1 = SharpDX.Vector3.Down;
+                        var normalPol0 = radius > 0 ? SharpDX.Vector3.Up : SharpDX.Vector3.Down;
+                        var normalPol1 = radius > 0 ?SharpDX.Vector3.Down : SharpDX.Vector3.Up;
 
                         for (int uIndex = 0; uIndex < uSegments; ++uIndex)
                         {
