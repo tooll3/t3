@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "d737860b-2864-472d-ad46-4061b63a12d4"/*Seed*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 10.0
     },
     {
       "Id": "b3d526ee-b1f1-4254-b702-1980d659e557"/*Count*/,

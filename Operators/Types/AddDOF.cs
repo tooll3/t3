@@ -29,6 +29,9 @@ namespace T3.Operators.Types.Id_53d3eebd_4ead_4965_b26d_10a8bbd48182
         [Input(Guid = "493c40f0-21e6-466b-afc2-eff570229c86")]
         public readonly InputSlot<int> MaxSamples = new InputSlot<int>();
 
+        [Input(Guid = "40de51d8-91dd-461d-a7be-d4096313eec2")]
+        public readonly InputSlot<System.Numerics.Vector2> NearFarRange = new InputSlot<System.Numerics.Vector2>();
+
     }
 }
 
