@@ -32,7 +32,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\point-trail.hlsl"
+          "Value": "Resources\\lib\\points\\sim\\point-trail.hlsl"
         }
       ],
       "Outputs": []
@@ -150,7 +150,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\point-trail-clear-buffer.hlsl"
+          "Value": "Resources\\lib\\points\\sim\\point-trail-clear-buffer.hlsl"
         }
       ],
       "Outputs": []
