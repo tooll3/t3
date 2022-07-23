@@ -17,7 +17,7 @@
     },
     {
       "Id": "1d3a1132-e8b9-4c04-99bf-80f6f1530309"/*WindowWidth*/,
-      "DefaultValue": 0.1
+      "DefaultValue": 0.2
     },
     {
       "Id": "02f71a92-d5c8-4dd7-af5f-da12330f60eb"/*Threshold*/,

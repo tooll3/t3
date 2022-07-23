@@ -19,6 +19,9 @@ namespace T3.Operators.Types.Id_17188f49_1243_4511_a46c_1804cae10768
 
         [Input(Guid = "3289dbe7-14f0-4bf0-b223-bb57419cf179")]
         public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
+
+        [Input(Guid = "ed758e72-6977-44e0-a997-bf0ad83f6ceb")]
+        public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
     }
 }
 

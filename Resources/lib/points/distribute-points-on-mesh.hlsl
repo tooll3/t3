@@ -44,30 +44,24 @@ void main(uint3 i : SV_DispatchThreadID)
     uint rng_state = (i.x * Seed);
     float xi = (float(wang_hash(rng_state)) * (1.0 / 4294967296.0));
 
-    // uint cdfIndex = 0;
-    // while (cdfIndex < faceCount && xi > CDFs[cdfIndex].cdf && cdfIndex < 1000) // todo: make binary search
-    // {
-    //     cdfIndex += 1;
-    // }
-
     uint stepSize = faceCount /2;
     uint cdfIndex = stepSize;
-    uint lastIndex;
     
-    float cdf;
-    while (stepSize > 1) // todo: make binary search
+    while (stepSize > 1) 
     {
-        stepSize /= 2;        
-        lastIndex = cdfIndex;
-        cdf = CDFs[cdfIndex].cdf;
-        cdfIndex += cdf < xi 
+        stepSize /= 2;                        
+        cdfIndex += CDFs[cdfIndex].cdf <= xi 
                      ? stepSize
                      : -stepSize;
     }
 
-    if(abs(CDFs[lastIndex].cdf - xi) < abs(CDFs[cdfIndex].cdf - xi))
-        cdfIndex = lastIndex;
-    
+    cdfIndex = max( cdfIndex- 4,0);
+
+
+    while (cdfIndex < faceCount && xi > CDFs[cdfIndex].cdf) // todo: make binary search
+    {
+         cdfIndex += 1;
+    }
 
     uint faceIndex = cdfIndex;
     if (faceIndex >= (uint)faceCount)

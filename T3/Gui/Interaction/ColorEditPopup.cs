@@ -274,9 +274,9 @@ namespace T3.Gui.Interaction
                             var prefix = html.StartsWith("#") ? "" : "#";
                             cColor = Color.FromString(prefix + html);
                         }
-                        catch (Exception e)
+                        catch
                         {
-                            //Log.Warning("can't parse color: " + e.Message);
+                            // ignored
                         }
                         finally
                         {
