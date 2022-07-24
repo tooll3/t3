@@ -34,7 +34,12 @@ void main(uint3 i : SV_DispatchThreadID)
         float b = length(p2 - heightStart);
         float faceArea = a * b * 0.5;
         faceArea = isnan(faceArea) ? 0 : faceArea;
-        FaceData[j].normalizedFaceArea =  faceArea;
+
+        float selection = Vertices[f[0]].Selected
+                        + Vertices[f[1]].Selected
+                        + Vertices[f[2]].Selected;
+
+        FaceData[j].normalizedFaceArea =  faceArea * selection;
         sum += faceArea;
     }
 
