@@ -1,0 +1,29 @@
+{
+  "Name": "SequenceAnim",
+  "Id": "94a392e6-3e03-4ccf-a114-e6fafa263b4f",
+  "Namespace": "lib.anim",
+  "Inputs": [
+    {
+      "Id": "7bdfb9a8-87b3-4603-890c-fe755f4c4492"/*Sequence*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "f0ae47ae-5849-4d81-bae0-9b6ec44949ef"/*Rate*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "3ad1c6ab-c91a-4261-aea5-29394d2926df"/*MinValue*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "c5ffcf77-14fe-4a59-b41a-26579ef39326"/*MaxValue*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "1c9afc39-7bab-4042-86eb-c7e30595af8e"/*Bias*/,
+      "DefaultValue": 0.5
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

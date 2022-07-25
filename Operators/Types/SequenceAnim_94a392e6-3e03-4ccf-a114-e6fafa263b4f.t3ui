@@ -1,0 +1,56 @@
+{
+  "Id": "94a392e6-3e03-4ccf-a114-e6fafa263b4f"/*SequenceAnim*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "7bdfb9a8-87b3-4603-890c-fe755f4c4492"/*Sequence*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "f0ae47ae-5849-4d81-bae0-9b6ec44949ef"/*Rate*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "3ad1c6ab-c91a-4261-aea5-29394d2926df"/*MinValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "c5ffcf77-14fe-4a59-b41a-26579ef39326"/*MaxValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "1c9afc39-7bab-4042-86eb-c7e30595af8e"/*Bias*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      },
+      "Min": 0.01,
+      "Max": 0.99,
+      "Scale": 0.01,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "99f24d0d-bda5-44a5-afd1-cb144ba313e6"/*Result*/,
+      "Position": {
+        "X": 149.09799,
+        "Y": -6.8220024
+      }
+    }
+  ]
+}

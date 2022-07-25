@@ -1,0 +1,38 @@
+{
+  "Id": "f05356b6-3456-4a1b-988c-0c8f89fb4816"/*SomniDemo*/,
+  "Description": "A quick production for Evoke 2022",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "77c358d6-ee22-45b8-861f-382da59fcc89"/*SequenceAnim*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 0.0,
+        "Y": 23.606445
+      }
+    },
+    {
+      "ChildId": "74ab95e8-9a40-450b-88c9-089d9c56c971"/*Blob*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 129.14111,
+        "Y": 0.0
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "2297f9a6-4c96-45c7-be81-0f7d048428d3"/*TextureOutput*/,
+      "Position": {
+        "X": 539.1411,
+        "Y": 23.303223
+      }
+    }
+  ]
+}
