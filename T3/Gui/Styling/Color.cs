@@ -246,7 +246,7 @@ namespace T3.Gui
             }
         }
 
-        public Color Fade(float f)
+        public readonly Color Fade(float f)
         {
             return new Color(Rgba.X, Rgba.Y, Rgba.Z, Rgba.W * f);
         }

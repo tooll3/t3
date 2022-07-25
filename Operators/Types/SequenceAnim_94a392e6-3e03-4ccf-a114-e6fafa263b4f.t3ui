@@ -8,7 +8,7 @@
         "X": -200.0,
         "Y": 0.0
       },
-      "Usage": "Default"
+      "Usage": "Multiline"
     },
     {
       "InputId": "f0ae47ae-5849-4d81-bae0-9b6ec44949ef"/*Rate*/,
@@ -41,6 +41,13 @@
       "Max": 0.99,
       "Scale": 0.01,
       "Clamp": true
+    },
+    {
+      "InputId": "f8afee64-627d-48e4-b4ea-a15601a01aa1"/*SequenceIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      }
     }
   ],
   "SymbolChildUis": [],

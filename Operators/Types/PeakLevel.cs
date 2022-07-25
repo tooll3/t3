@@ -29,6 +29,7 @@ namespace T3.Operators.Types.Id_d3fb5baf_43f8_4983_a1d9_42f4005a3af0
             MovingSum.UpdateAction = Update;
         }
 
+
         private void Update(EvaluationContext context)
         {
             var t = context.Playback.FxTimeInBars;
