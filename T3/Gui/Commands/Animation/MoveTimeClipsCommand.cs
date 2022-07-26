@@ -74,7 +74,9 @@ namespace t3.Gui.Commands.Animation
 
         public void Do()
         {
-            foreach (var clip in NodeOperations.GetAllTimeClips(_compositionOp))
+            var allTimeClips = NodeOperations.GetAllTimeClips(_compositionOp).ToList();
+            
+            foreach (var clip in allTimeClips)
             {
                 var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
@@ -83,7 +85,12 @@ namespace t3.Gui.Commands.Animation
                 clip.TimeRange = selectedEntry.TimeRange.Clone();
                 clip.SourceRange = selectedEntry.SourceRange.Clone();
                 clip.LayerIndex = selectedEntry.LayerIndex;
-            }        
+
+                while (clip.IsClipOverlappingOthers(allTimeClips))
+                {
+                    clip.LayerIndex++;
+                }
+            }
         }
     }
 }

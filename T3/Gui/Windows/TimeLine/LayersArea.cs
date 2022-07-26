@@ -142,6 +142,7 @@ namespace T3.Gui.Windows.TimeLine
                     var macroCommands = new MacroCommand("split clip", commands);
                     UndoRedoStack.Add(macroCommands);
                 }
+                ImGui.Separator();
 
                 ImGui.EndPopup();
             }
