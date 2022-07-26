@@ -79,7 +79,7 @@ namespace t3.Gui.Commands.Animation
                 var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
                     continue;
-
+                
                 clip.TimeRange = selectedEntry.TimeRange.Clone();
                 clip.SourceRange = selectedEntry.SourceRange.Clone();
                 clip.LayerIndex = selectedEntry.LayerIndex;
