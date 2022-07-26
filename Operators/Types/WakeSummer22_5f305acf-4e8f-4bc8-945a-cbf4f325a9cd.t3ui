@@ -779,6 +779,12 @@
     {
       "Id": "ca47fb3f-0c20-4c21-b191-b68c661d24e6",
       "Title": "Set Playback Time and BPM by Midi Message",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
       "Position": {
         "X": 1457.0193,
         "Y": 687.99896
@@ -791,6 +797,12 @@
     {
       "Id": "2f296976-1903-4861-87a8-25e12d692314",
       "Title": "Titles for editing",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
       "Position": {
         "X": 48.811554,
         "Y": 1301.1356

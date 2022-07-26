@@ -638,6 +638,12 @@
     {
       "Id": "11fcde24-1b77-4da5-80ac-c73b9ac1547c",
       "Title": "Show meters and detection threshold",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
       "Position": {
         "X": -1252.179,
         "Y": 1002.54645
@@ -650,6 +656,12 @@
     {
       "Id": "cc77db97-a906-4175-b1ef-1d31239648f3",
       "Title": "Set Input midi input controls for LFO speed overrides and Beat Tapping",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
       "Position": {
         "X": -351.65997,
         "Y": -131.52625
@@ -662,6 +674,12 @@
     {
       "Id": "db6d2cf5-f19f-4dac-9818-06fc7cb3f3e2",
       "Title": "Blending is a hack to prevent rendering to undefined rendertarget",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
       "Position": {
         "X": 690.5936,
         "Y": 340.13586

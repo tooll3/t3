@@ -40,7 +40,7 @@ namespace T3.Gui.ChildUi
 
             var h = screenRect.GetHeight();
             var w = screenRect.GetWidth();
-            if (h < 10 || sequenceAnim._currentSequence == null || sequenceAnim._currentSequence.Count == 0)
+            if (h < 10 || sequenceAnim.CurrentSequence == null || sequenceAnim.CurrentSequence.Count == 0)
             {
                 return SymbolChildUi.CustomUiResult.None;
             }
@@ -69,11 +69,11 @@ namespace T3.Gui.ChildUi
             var x = screenRect.Min.X;
             var bottom = screenRect.Max.Y;
 
-            var barCount = sequenceAnim._currentSequence.Count;
+            var barCount = sequenceAnim.CurrentSequence.Count;
             var barWidth = w / barCount;
             var xPeaks = screenRect.Min.X;
 
-            var currentIndex = (int)(sequenceAnim._normalizedBarTime * barCount);
+            var currentIndex = (int)(sequenceAnim.NormalizedBarTime * barCount);
             
             
             ImGui.PushFont(Fonts.FontSmall);
@@ -84,11 +84,11 @@ namespace T3.Gui.ChildUi
 
                 if (isEditActive && mousePos.X > pMin.X && mousePos.X < pMax.X)
                 {
-                    sequenceAnim.SetStepValue(sequenceAnim._sequenceIndex, barIndex, 1-((mousePos.Y +3 - screenRect.Min.Y) / (h-6)).Clamp(0, 1));
+                    sequenceAnim.SetStepValue(barIndex, 1-((mousePos.Y +3 - screenRect.Min.Y) / (h-6)).Clamp(0, 1));
                 }
                 
                 var highlightFactor = barIndex == currentIndex
-                                          ? 1-(sequenceAnim._normalizedBarTime * barCount - barIndex).Clamp(0,1)
+                                          ? 1-(sequenceAnim.NormalizedBarTime * barCount - barIndex).Clamp(0,1)
                                           : 0;
 
                 var barIntensity = barIndex % 4 == 0 ? 0.4f : 0.1f;
@@ -98,7 +98,7 @@ namespace T3.Gui.ChildUi
                                        Color.Black.Fade(barIntensity)
                                       );
 
-                var peak= sequenceAnim._currentSequence[barIndex];
+                var peak= sequenceAnim.CurrentSequence[barIndex];
                 drawList.AddRectFilled(new Vector2(x + 1, bottom - peak * h - 2),
                                        new Vector2(x + barWidth, bottom-1),
                                        Color.Mix(_inactiveColor, _highlightColor,highlightFactor));
@@ -109,10 +109,10 @@ namespace T3.Gui.ChildUi
             }
             ImGui.PopFont();
             
-            var min = screenRect.Min + new Vector2(sequenceAnim._normalizedBarTime * w, 0);
+            var min = screenRect.Min + new Vector2(sequenceAnim.NormalizedBarTime * w, 0);
             drawList.AddRectFilled(min, 
                                    min + new Vector2(1, h), 
-                                   T3Style.FragmentLineColor);
+                                     sequenceAnim.IsRecording ? Color.Red: T3Style.FragmentLineColor);
             
             drawList.PopClipRect();
             ImGui.PopID();

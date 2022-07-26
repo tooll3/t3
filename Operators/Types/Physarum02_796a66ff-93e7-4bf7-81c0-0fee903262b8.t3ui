@@ -514,6 +514,12 @@
     {
       "Id": "604e1334-b958-46d7-9606-76b9dc3174c2",
       "Title": "Experimental Mouse Hover effect",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
       "Position": {
         "X": 403.7389,
         "Y": 298.42035

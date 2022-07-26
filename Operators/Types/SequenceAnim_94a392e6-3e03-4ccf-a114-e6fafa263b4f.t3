@@ -26,6 +26,10 @@
     {
       "Id": "f8afee64-627d-48e4-b4ea-a15601a01aa1"/*SequenceIndex*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "3ce54ca0-cd50-4dc2-bd3d-51e26ebf05ce"/*RecordValue*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [],

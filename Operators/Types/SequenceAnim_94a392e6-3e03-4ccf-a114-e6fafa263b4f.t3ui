@@ -48,6 +48,13 @@
         "X": -200.0,
         "Y": 360.0
       }
+    },
+    {
+      "InputId": "3ce54ca0-cd50-4dc2-bd3d-51e26ebf05ce"/*RecordValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
+      }
     }
   ],
   "SymbolChildUis": [],
@@ -57,6 +64,13 @@
       "Position": {
         "X": 149.09799,
         "Y": -6.8220024
+      }
+    },
+    {
+      "OutputId": "1303bdf7-e547-44bb-84fc-1de0df50f1af"/*WasStep*/,
+      "Position": {
+        "X": 149.09799,
+        "Y": 93.17799
       }
     }
   ]

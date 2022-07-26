@@ -14,17 +14,20 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
         [Output(Guid = "99f24d0d-bda5-44a5-afd1-cb144ba313e6", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Result = new();
 
+        [Output(Guid = "1303BDF7-E547-44BB-84FC-1DE0DF50F1AF", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<bool> WasStep = new();
+
+
         public SequenceAnim()
         {
             Result.UpdateAction = Update;
         }
 
         
-        public void SetStepValue(int sequenceIndex, int stepIndex, float normalizedValue)
+        public void SetStepValue( int stepIndex, float normalizedValue)
         {
-            if (sequenceIndex >= _sequences.Count || stepIndex >= _sequences[sequenceIndex].Count)
+            if (_sequences.Count == 0)
             {
-                Log.Warning($"Invalid sequence index: {sequenceIndex}:{stepIndex}");
                 return;
             }
 
@@ -33,8 +36,7 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
             var stepSearchIndex = 0;
             while (charIndex < _sequencesDefinition.Length)
             {
-                
-                if (sequenceSearchIndex == sequenceIndex && stepSearchIndex == stepIndex)
+                if (sequenceSearchIndex == CurrentSequenceIndex && stepSearchIndex == stepIndex)
                 {
                     var newStringBuilder = new StringBuilder(_sequencesDefinition);
                     newStringBuilder[charIndex] = Convert.ToChar('0' + (int)(normalizedValue*9));
@@ -45,7 +47,7 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
                     Sequence.DirtyFlag.Invalidate();
                     Sequence.Input.IsDefault = false;
                     UpdateSequences();
-                    break;
+                    return;
                 }
 
                 var c = _sequencesDefinition[charIndex];
@@ -62,6 +64,10 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
             }
         }
 
+
+        private double _recordingStartTime = double.NegativeInfinity;
+        private int _lastRecordedIndex = 0;
+        public bool IsRecording { get; private set; }
         
         private void Update(EvaluationContext context)
         {
@@ -70,8 +76,36 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
             _bias = Bias.GetValue(context);
             _rate = Rate.GetValue(context);
 
+            
+            var recValue = RecordValue.GetValue(context);
+            if (_recordingStartTime > context.LocalFxTime)
+                _recordingStartTime = double.NegativeInfinity;
+            
+            var timeSinceRecordStart = (context.LocalFxTime - _recordingStartTime);
+            IsRecording = MathF.Abs(_rate) > 0.001f && timeSinceRecordStart < (1 / _rate) - (1f/CurrentSequence.Count)/_rate;
+            
+            Log.Debug($" Recording active {IsRecording} {timeSinceRecordStart:0.00} bars  {1/_rate}");
+            var wasRecordTriggered = (Math.Abs(recValue - _lastRecordValue) > 0.0001f && recValue > _lastRecordValue);
+            if (wasRecordTriggered)
+            {
+                _lastRecordedIndex = _lastStepIndex;
+                SetStepValue(_lastStepIndex, recValue.Clamp(0, 1));
+                if (!IsRecording)
+                {
+                    _recordingStartTime = context.LocalFxTime;
+                }
+            }
+            else if (IsRecording && _lastStepIndex != _lastRecordedIndex)
+            {
+                SetStepValue(_lastStepIndex, 0);
+                _lastRecordedIndex = _lastStepIndex;
+            }
+
+            _lastRecordValue = recValue;
+            
+
             var hasIndexChanged = SequenceIndex.DirtyFlag.IsDirty;
-            _sequenceIndex = SequenceIndex.GetValue(context);
+            CurrentSequenceIndex = SequenceIndex.GetValue(context);
 
             var newSequences = Sequence.GetValue(context);
 
@@ -81,23 +115,26 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
                 UpdateSequences();
             }
 
-            if (_currentSequence.Count == 0)
+            if (CurrentSequence.Count == 0)
             {
                 Result.Value = 0;
                 return;
             }
 
             var time = context.LocalFxTime * _rate;
-            _normalizedBarTime = (float)(time % 1).Clamp(0, 0.999999f);
+            NormalizedBarTime = (float)(time % 1).Clamp(0, 0.999999f);
 
-            var stepIndex = (int)Math.Floor(_normalizedBarTime * _currentSequence.Count);
-
+            var stepIndex = (int)Math.Floor(NormalizedBarTime * CurrentSequence.Count);
+            
             if (stepIndex < 0)
                 stepIndex = 0;
 
-            var stepStrength = _currentSequence[stepIndex];
+            WasStep.Value = CurrentSequence.Count > 0 && stepIndex != _lastStepIndex && CurrentSequence[stepIndex] > 0;
+            _lastStepIndex = stepIndex;
 
-            var stepTime = (float)(_normalizedBarTime * _currentSequence.Count - stepIndex).Clamp(0, 1);
+            var stepStrength = CurrentSequence[stepIndex];
+
+            var stepTime = (float)(NormalizedBarTime * CurrentSequence.Count - stepIndex).Clamp(0, 1);
             var biasedTime = SchlickBias(stepTime, _bias);
             var stepBeat = (1 - biasedTime) * stepStrength;
 
@@ -125,14 +162,18 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
 
             if (_sequences.Count == 0)
             {
-                _currentSequence = _emptySequence;
+                CurrentSequence = _emptySequence;
             }
             else
             {
-                var index = _sequenceIndex.Clamp(0, _sequences.Count - 1);
-                _currentSequence = _sequences[index];
+                var index = CurrentSequenceIndex.Clamp(0, _sequences.Count - 1);
+                CurrentSequence = _sequences[index];
             }
         }
+        
+        public List<float> CurrentSequence = _emptySequence;
+        public int CurrentSequenceIndex { get; private set; }
+        public float NormalizedBarTime { get; private set; }
 
         private float SchlickBias(float x, float bias)
         {
@@ -140,21 +181,17 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
         }
 
         private List<List<float>> _sequences = new(16);
-        public List<float> _currentSequence = _emptySequence;
-
-        private bool _trigger;
         private static readonly List<float> _emptySequence = new();
-
         private string _sequencesDefinition = string.Empty;
-
         private const float MaxAttachValue = 9;
 
+        private int _lastStepIndex;
+        private float _lastRecordValue;
         private float _minValue;
         private float _maxValue;
         private float _rate;
         private float _bias;
-        public int _sequenceIndex;
-        public float _normalizedBarTime;
+        
 
         [Input(Guid = "7BDFB9A8-87B3-4603-890C-FE755F4C4492")]
         public readonly InputSlot<string> Sequence = new();
@@ -173,5 +210,8 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
 
         [Input(Guid = "1c9afc39-7bab-4042-86eb-c7e30595af8e")]
         public readonly InputSlot<float> Bias = new();
+        
+        [Input(Guid = "3CE54CA0-CD50-4DC2-BD3D-51E26EBF05CE")]
+        public readonly InputSlot<float> RecordValue = new();
     }
 }

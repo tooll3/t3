@@ -318,6 +318,12 @@
     {
       "Id": "54d3bbbf-bd30-4374-a969-c09e93b1f93e",
       "Title": "Compute Cumulative Distribution Function. THIS IS VERY slow.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
       "Position": {
         "X": 271.94485,
         "Y": 1199.4656
@@ -330,6 +336,12 @@
     {
       "Id": "0a625795-2500-41f5-aadc-26eb9065716c",
       "Title": "Emit Points",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
       "Position": {
         "X": 304.83948,
         "Y": 1751.1968
