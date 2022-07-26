@@ -84,7 +84,6 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
             var timeSinceRecordStart = (context.LocalFxTime - _recordingStartTime);
             IsRecording = MathF.Abs(_rate) > 0.001f && timeSinceRecordStart < (1 / _rate) - (1f/CurrentSequence.Count)/_rate;
             
-            Log.Debug($" Recording active {IsRecording} {timeSinceRecordStart:0.00} bars  {1/_rate}");
             var wasRecordTriggered = (Math.Abs(recValue - _lastRecordValue) > 0.0001f && recValue > _lastRecordValue);
             if (wasRecordTriggered)
             {
