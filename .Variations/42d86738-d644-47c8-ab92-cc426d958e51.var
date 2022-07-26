@@ -106,7 +106,7 @@
       "ActivationIndex": 4,
       "Title": "Vintage Cold",
       "PosOnCanvas": {
-        "X": -21.926254,
+        "X": -184.92625,
         "Y": -24.711914
       },
       "ParameterSetsForChildIds": {
@@ -587,8 +587,8 @@
       "ActivationIndex": 18,
       "Title": "untitled",
       "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": -21.926254,
+        "Y": -24.711914
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
