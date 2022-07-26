@@ -21,6 +21,7 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
         public SequenceAnim()
         {
             Result.UpdateAction = Update;
+            WasStep.UpdateAction = Update;
         }
 
         
@@ -138,6 +139,9 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
             var stepBeat = (1 - biasedTime) * stepStrength;
 
             Result.Value = MathUtils.Lerp(_minValue, _maxValue, stepBeat);
+            
+            Result.DirtyFlag.Clear();
+            WasStep.DirtyFlag.Clear();
         }
 
         private void UpdateSequences()
