@@ -3,21 +3,7 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "33921c65-61bc-4229-af9c-c89db9a874bd"/*Segments*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      }
-    },
-    {
       "InputId": "deee0efc-949e-41da-bdb1-d80dbb6ac6e2"/*Stretch*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "9dbf0c3d-4762-41f6-94b9-26acbd1531c0"/*Scale*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
@@ -44,6 +30,20 @@
         "Y": 135.0
       },
       "Scale": 0.1
+    },
+    {
+      "InputId": "33921c65-61bc-4229-af8c-c89db9a874bf"/*Segments*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "9dbf0c3d-4762-41f6-94b8-26acbd1531c1"/*Radius*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
     }
   ],
   "SymbolChildUis": [],

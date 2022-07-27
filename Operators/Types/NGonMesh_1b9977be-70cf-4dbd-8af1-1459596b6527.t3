@@ -4,22 +4,11 @@
   "Namespace": "lib.3d.mesh",
   "Inputs": [
     {
-      "Id": "33921c65-61bc-4229-af9c-c89db9a874bd"/*Segments*/,
-      "DefaultValue": {
-        "Width": 10,
-        "Height": 10
-      }
-    },
-    {
       "Id": "deee0efc-949e-41da-bdb1-d80dbb6ac6e2"/*Stretch*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 1.0
       }
-    },
-    {
-      "Id": "9dbf0c3d-4762-41f6-94b9-26acbd1531c0"/*Scale*/,
-      "DefaultValue": 1.0
     },
     {
       "Id": "83478f70-1ddf-435c-bad5-28f21c30746f"/*Pivot*/,
@@ -43,6 +32,14 @@
         "Y": 0.0,
         "Z": 0.0
       }
+    },
+    {
+      "Id": "33921c65-61bc-4229-af8c-c89db9a874bf"/*Segments*/,
+      "DefaultValue": 5
+    },
+    {
+      "Id": "9dbf0c3d-4762-41f6-94b8-26acbd1531c1"/*Radius*/,
+      "DefaultValue": 1.0
     }
   ],
   "Children": [],

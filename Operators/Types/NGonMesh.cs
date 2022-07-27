@@ -32,7 +32,6 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
 
                 var radius = Radius.GetValue(context);
                 var stretch = Stretch.GetValue(context);
-                var pivot = Pivot.GetValue(context);
                 var rotation = Rotation.GetValue(context);
                 
                 var yaw = MathUtil.DegreesToRadians(rotation.Y);
@@ -42,8 +41,8 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
                 var rotationMatrix = Matrix.RotationYawPitchRoll(yaw, pitch, roll);
                 
                 var center = Center.GetValue(context);
-                var offset = new SharpDX.Vector3(stretch.X * radius * (pivot.X - 0.5f),
-                                                 stretch.Y * radius * (pivot.Y - 0.5f),
+                var offset = new SharpDX.Vector3(stretch.X * radius,
+                                                 stretch.Y * radius,
                                                  0);
 
                 var center2 = new SharpDX.Vector3(center.X, center.Y, center.Z);
@@ -76,9 +75,9 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
                 for (var segmentIndex = 0; segmentIndex < segments; ++segmentIndex)
                 {
                     var phi = 2 * MathF.PI * segmentIndex / segments;
-                    var p = new SharpDX.Vector3(radius * MathF.Sin(phi),
-                                                0, 
-                                                radius * MathF.Cos(phi));
+                    var p = new SharpDX.Vector3(radius * MathF.Sin(phi) * stretch.X, // starts at top
+                                                radius * MathF.Cos(phi) * stretch.Y,
+                                                0);
                     var u0 = MathF.Sin(phi);
                     var v0 = MathF.Cos(phi);
 
@@ -137,10 +136,7 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
         
         [Input(Guid = "9dbf0c3d-4762-41f6-94b8-26acbd1531c1")]
         public readonly InputSlot<float> Radius = new InputSlot<float>();
-        
-        [Input(Guid = "83478f70-1ddf-435c-bad5-28f21c30746f")]
-        public readonly InputSlot<Vector2> Pivot = new InputSlot<Vector2>();
-        
+                
         [Input(Guid = "69a2e8c2-2c88-4969-8beb-66fe8ff4af18")]
         public readonly InputSlot<Vector3> Center = new InputSlot<Vector3>();
         
