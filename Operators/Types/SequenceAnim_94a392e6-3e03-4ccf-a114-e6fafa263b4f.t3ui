@@ -18,10 +18,24 @@
       }
     },
     {
+      "InputId": "e3ad4e64-f7cf-49a1-b3ae-4d285c05103a"/*UpdateMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 450.0
+      }
+    },
+    {
       "InputId": "f0ae47ae-5849-4d81-bae0-9b6ec44949ef"/*Rate*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "5b86b2ec-1043-4a90-9a45-f629cfb7f713"/*OutputMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 495.0
       }
     },
     {

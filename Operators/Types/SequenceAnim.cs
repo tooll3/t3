@@ -23,7 +23,12 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
             Result.UpdateAction = Update;
             WasStep.UpdateAction = Update;
         }
-
+        
+        // Only for custom UI
+        public List<float> CurrentSequence = _emptySequence;
+        public int CurrentSequenceIndex { get; private set; }
+        public float NormalizedBarTime { get; private set; }
+        public bool IsRecording { get; private set; }
         
         public void SetStepValue( int stepIndex, float normalizedValue)
         {
@@ -66,9 +71,6 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
         }
 
 
-        private double _recordingStartTime = double.NegativeInfinity;
-        private int _lastRecordedIndex = 0;
-        public bool IsRecording { get; private set; }
         
         private void Update(EvaluationContext context)
         {
@@ -76,7 +78,8 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
             _maxValue = MaxValue.GetValue(context);
             _bias = Bias.GetValue(context);
             _rate = Rate.GetValue(context);
-
+            
+            var outputMode = (OutputModes)OutputMode.GetValue(context).Clamp(0, Enum.GetValues(typeof(OutputModes)).Length - 1);
             
             var recValue = RecordValue.GetValue(context);
             if (_recordingStartTime > context.LocalFxTime)
@@ -103,7 +106,6 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
 
             _lastRecordValue = recValue;
             
-
             var hasIndexChanged = SequenceIndex.DirtyFlag.IsDirty;
             CurrentSequenceIndex = SequenceIndex.GetValue(context);
 
@@ -124,6 +126,24 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
             var time = context.LocalFxTime * _rate;
             NormalizedBarTime = (float)(time % 1).Clamp(0, 0.999999f);
 
+            var updateMode = (UpdateModes)UpdateMode.GetValue(context).Clamp(0, Enum.GetNames(typeof(UpdateModes)).Length - 1);
+            switch (updateMode)
+            {
+                case UpdateModes.Random:
+                {
+                    var seedValue = (uint)(time *CurrentSequence.Count);
+                    var randomValue = MathUtils.XxHash(seedValue);
+                    var fraction = ((NormalizedBarTime * CurrentSequence.Count) % 1 / CurrentSequence.Count).Clamp(0, 0.999999f); 
+                    NormalizedBarTime = ((float)(randomValue % CurrentSequence.Count)/CurrentSequence.Count + fraction ).Clamp(0, 0.999999f);
+                    Result.Value = NormalizedBarTime;
+                    break;
+                }
+                case UpdateModes.PingPong:
+                    var modTime = MathUtils.Fmod((time + 1) / 2, 1);
+                    NormalizedBarTime = (float)Math.Abs(2 * modTime - 1).Clamp(0, 0.999999f);
+                    break;
+            }
+
             var stepIndex = (int)Math.Floor(NormalizedBarTime * CurrentSequence.Count);
             
             if (stepIndex < 0)
@@ -138,12 +158,30 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
             var biasedTime = SchlickBias(stepTime, _bias);
             var stepBeat = (1 - biasedTime) * stepStrength;
 
-            Result.Value = MathUtils.Lerp(_minValue, _maxValue, stepBeat);
+            float returnValue = 0;
+            
+            switch (outputMode)
+            {
+                case OutputModes.Pulse:
+                    returnValue = MathUtils.Lerp(_minValue, _maxValue, stepBeat);
+                    break;
+                
+                case OutputModes.NormalizedValue:
+                    var normalizedStrength = stepStrength;
+                    returnValue = MathUtils.Lerp(_minValue, _maxValue,  SchlickBias( normalizedStrength, _bias) );
+                    break;
+                
+                case OutputModes.CharacterValue:
+                    returnValue = stepStrength * MaxCharacterValue;
+                    break;
+            }
+            Result.Value = returnValue;
             
             Result.DirtyFlag.Clear();
             WasStep.DirtyFlag.Clear();
         }
 
+        
         private void UpdateSequences()
         {
             var sequences = _sequencesDefinition.Split("\n");
@@ -157,7 +195,7 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
                 foreach (var c in s)
                 {
                     var v = c - minChar;
-                    sequenceValues.Add((v / MaxAttachValue).Clamp(0, 1));
+                    sequenceValues.Add((v / MaxCharacterValue).Clamp(0, 1));
                 }
 
                 _sequences.Add(sequenceValues);
@@ -174,9 +212,6 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
             }
         }
         
-        public List<float> CurrentSequence = _emptySequence;
-        public int CurrentSequenceIndex { get; private set; }
-        public float NormalizedBarTime { get; private set; }
 
         private float SchlickBias(float x, float bias)
         {
@@ -186,7 +221,10 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
         private List<List<float>> _sequences = new(16);
         private static readonly List<float> _emptySequence = new();
         private string _sequencesDefinition = string.Empty;
-        private const float MaxAttachValue = 9;
+        private const float MaxCharacterValue = 8;
+        
+        private double _recordingStartTime = double.NegativeInfinity;
+        private int _lastRecordedIndex = 0;
 
         private int _lastStepIndex;
         private float _lastRecordValue;
@@ -194,6 +232,20 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
         private float _maxValue;
         private float _rate;
         private float _bias;
+
+        private enum OutputModes
+        {
+            Pulse,
+            NormalizedValue,
+            CharacterValue,
+        }
+        
+        private enum UpdateModes
+        {
+            Time,
+            PingPong,
+            Random,
+        }
         
 
         [Input(Guid = "7BDFB9A8-87B3-4603-890C-FE755F4C4492")]
@@ -202,8 +254,14 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
         [Input(Guid = "F8AFEE64-627D-48E4-B4EA-A15601A01AA1")]
         public readonly InputSlot<int> SequenceIndex = new();
 
+        [Input(Guid = "E3AD4E64-F7CF-49A1-B3AE-4D285C05103A", MappedType = typeof(UpdateModes))]
+        public readonly InputSlot<int> UpdateMode = new();
+        
         [Input(Guid = "F0AE47AE-5849-4D81-BAE0-9B6EC44949EF")]
         public readonly InputSlot<float> Rate = new();
+
+        [Input(Guid = "5B86B2EC-1043-4A90-9A45-F629CFB7F713", MappedType = typeof(OutputModes))]
+        public readonly InputSlot<int> OutputMode = new();
 
         [Input(Guid = "3AD1C6AB-C91A-4261-AEA5-29394D2926DF")]
         public readonly InputSlot<float> MinValue = new();

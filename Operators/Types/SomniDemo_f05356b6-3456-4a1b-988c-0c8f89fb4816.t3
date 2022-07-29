@@ -990,6 +990,12 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "bd2b60f7-93bb-46aa-a866-193fe114e033"/*Once*/,
+      "SymbolId": "e8d2b4ac-0ba2-400f-9c82-e5dd15a23d32",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -1292,6 +1298,12 @@
       "SourceSlotId": "1f4e7cac-1f62-4633-b0f3-a3017a026753",
       "TargetParentOrChildId": "cca5079e-3df0-479a-8958-a583f6453876",
       "TargetSlotId": "3289dbe7-14f0-4bf0-b223-bb57419cf179"
+    },
+    {
+      "SourceParentOrChildId": "bd2b60f7-93bb-46aa-a866-193fe114e033",
+      "SourceSlotId": "68389552-6d8a-433b-a75f-18e76435519b",
+      "TargetParentOrChildId": "cca5079e-3df0-479a-8958-a583f6453876",
+      "TargetSlotId": "ed758e72-6977-44e0-a997-bf0ad83f6ceb"
     },
     {
       "SourceParentOrChildId": "f5f0c73e-d007-427b-b95f-333da16e7a9d",

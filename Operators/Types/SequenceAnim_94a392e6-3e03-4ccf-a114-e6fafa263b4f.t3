@@ -12,8 +12,16 @@
       "DefaultValue": 0
     },
     {
+      "Id": "e3ad4e64-f7cf-49a1-b3ae-4d285c05103a"/*UpdateMode*/,
+      "DefaultValue": 0
+    },
+    {
       "Id": "f0ae47ae-5849-4d81-bae0-9b6ec44949ef"/*Rate*/,
       "DefaultValue": 1.0
+    },
+    {
+      "Id": "5b86b2ec-1043-4a90-9a45-f629cfb7f713"/*OutputMode*/,
+      "DefaultValue": 1
     },
     {
       "Id": "3ad1c6ab-c91a-4261-aea5-29394d2926df"/*MinValue*/,
