@@ -109,8 +109,8 @@
     {
       "Id": "c36d2140-8f34-4172-ac77-8e48c40c01df"/*GradientDepthRange*/,
       "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 0.1,
+        "Y": 100.0
       }
     },
     {

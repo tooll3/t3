@@ -275,6 +275,24 @@
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "715928dc-8f9e-4217-b020-7b6c8e0b3f54"/*UseFallbackTexture*/,
+      "SymbolId": "b470fdf9-ac0b-4eb9-9600-453b8c094e3f",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "d2dd80f9-ff44-414c-8dd7-97c66366aafb"/*LoadTexture2d*/,
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+      "InputValues": [
+        {
+          "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
+          "Type": "System.String",
+          "Value": "Resources\\images\\white.png"
+        }
+      ],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -381,8 +399,8 @@
       "TargetSlotId": "c4e91bc6-1691-4eb4-aed5-dd4cae528149"
     },
     {
-      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "SourceSlotId": "a02180a6-7778-4fa2-9a69-228a26936755",
+      "SourceParentOrChildId": "715928dc-8f9e-4217-b020-7b6c8e0b3f54",
+      "SourceSlotId": "778f4eac-24ef-4e93-b864-39f150ab6cb2",
       "TargetParentOrChildId": "531baace-c8ad-4095-ad0c-af6bf2e93627",
       "TargetSlotId": "d5afa102-2f88-431e-9cd4-af91e41f88f6"
     },
@@ -415,6 +433,18 @@
       "SourceSlotId": "8d223463-edff-45fb-9ead-6650a911cebd",
       "TargetParentOrChildId": "6e672779-c8b7-41e5-9ec1-017438d582ce",
       "TargetSlotId": "03f3bc7f-3949-4a97-88cf-04e162cfa2f7"
+    },
+    {
+      "SourceParentOrChildId": "d2dd80f9-ff44-414c-8dd7-97c66366aafb",
+      "SourceSlotId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037",
+      "TargetParentOrChildId": "715928dc-8f9e-4217-b020-7b6c8e0b3f54",
+      "TargetSlotId": "38b478fa-c431-4dc1-80ef-d6c53c90389e"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "a02180a6-7778-4fa2-9a69-228a26936755",
+      "TargetParentOrChildId": "715928dc-8f9e-4217-b020-7b6c8e0b3f54",
+      "TargetSlotId": "91bffbba-b815-44d7-8f93-3238376935bf"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",

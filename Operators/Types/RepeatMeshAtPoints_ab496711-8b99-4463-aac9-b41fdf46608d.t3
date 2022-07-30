@@ -13,7 +13,7 @@
     },
     {
       "Id": "adfa0cb7-257f-4f03-b847-99a6bb317992"/*UseWForSize*/,
-      "DefaultValue": false
+      "DefaultValue": true
     },
     {
       "Id": "abd961af-e76f-415b-a6ac-afb1cf08a1de"/*Scale*/,

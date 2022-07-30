@@ -346,6 +346,28 @@
         "X": 1103.1285,
         "Y": 4688.002
       }
+    },
+    {
+      "ChildId": "715928dc-8f9e-4217-b020-7b6c8e0b3f54"/*UseFallbackTexture*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 990.8287,
+        "Y": 4862.611
+      }
+    },
+    {
+      "ChildId": "d2dd80f9-ff44-414c-8dd7-97c66366aafb"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 779.18396,
+        "Y": 5001.8867
+      }
     }
   ],
   "OutputUis": [
