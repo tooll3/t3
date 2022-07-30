@@ -62,16 +62,14 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
 
                     }
                 }
-
                 _trigger = newTrigger;
             }
 
-            //var timeSinceTrigger = context.LocalFxTime - _triggerTime;
-            var dt = context.Playback.LastFrameDurationInBars / _duration;
+            LastFraction = (context.LocalFxTime - _triggerTime)/_duration; 
+            
             if (_currentDirection == Directions.Forward)
             {
-                LastFraction += dt;
-                if (LastFraction >= 1)
+                if(LastFraction >= 1)
                 {
                     LastFraction = 1;
                     _currentDirection = Directions.None;
@@ -79,7 +77,6 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             }
             else if  (_currentDirection == Directions.Backwards)
             {
-                LastFraction -= dt;
                 if (LastFraction <= 0)
                 {
                     LastFraction = 0;
@@ -96,6 +93,8 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             Result.Value = MathUtils.Lerp(_startValue, _endValue,  normalizedValue);
         }
 
+        private double _lastEvaluationTime;
+        
         public float CalcNormalizedValueForFraction(double t)
         {
             //var fraction = CalcFraction(t);
