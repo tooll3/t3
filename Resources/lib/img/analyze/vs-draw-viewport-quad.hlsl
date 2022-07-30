@@ -59,7 +59,8 @@ vsOutput vsMain(uint vertexId: SV_VertexID)
 
 float4 psMain(vsOutput input) : SV_TARGET
 {
-    float4 c = InputTexture.Sample(texSampler, input.texCoord);
+    //return float4(1,1,0,1);
+    float4 c = InputTexture.SampleLevel(texSampler, input.texCoord,0);
     return clamp(float4(1,1,1,1) * Color * c, 0, float4(1000,1000,1000,1));
 }
 
