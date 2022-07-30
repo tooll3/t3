@@ -79,7 +79,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     ResultPoints[i.x].position = SourcePoints[i.x].position + offset;
 
-    float3 randomRotate = hashRot.xyz * (RandomizeRotation / 180 * PI) * Amount;
+    float3 randomRotate = (hashRot.xyz - 0.5) * (RandomizeRotation / 180 * PI) * Amount;
 
     rot = normalize(qmul(rot, rotate_angle_axis(randomRotate.x * Offset, float3(1,0,0))));
     rot = normalize(qmul(rot, rotate_angle_axis(randomRotate.y * Offset, float3(0,1,0))));
