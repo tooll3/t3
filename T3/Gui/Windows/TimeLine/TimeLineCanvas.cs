@@ -97,7 +97,18 @@ namespace T3.Gui.Windows.TimeLine
 
                 if (FenceState == SelectionFence.States.CompletedAsClick)
                 {
-                    Playback.TimeInBars = InverseTransformPosition(ImGui.GetMousePos()).X;
+                    var newTime = InverseTransformPosition(ImGui.GetMousePos()).X;
+                    if (Playback.IsLooping)
+                    {
+                        var newStartTime = newTime - newTime % 4;
+                        var duration = Playback.LoopRange.Duration;
+                        Playback.LoopRange.Start = newStartTime;
+                        Playback.LoopRange.Duration = duration;
+                    }
+                    else
+                    {
+                        Playback.TimeInBars = newTime;
+                    }
                 }
             }
             Current = null;
