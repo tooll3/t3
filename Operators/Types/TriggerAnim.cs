@@ -92,8 +92,6 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             
             Result.Value = MathUtils.Lerp(_startValue, _endValue,  normalizedValue);
         }
-
-        private double _lastEvaluationTime;
         
         public float CalcNormalizedValueForFraction(double t)
         {
@@ -103,12 +101,6 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             return biased;
         }
 
-        // private float CalcFraction(double t)
-        // {
-        //     return ((float)MathUtils.Fmod(t + _startValue, 1) / _ratio).Clamp(0,1);
-        // } 
-        
-        
         private float SchlickBias(float x, float bias)
         {
             return x / ((1 / bias - 2) * (1 - x) + 1);
@@ -123,6 +115,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
                 f => MathUtils.SmootherStep(0,1,f.Clamp(0,1)/2) *2   , //2: Easy In
                 f => MathUtils.SmootherStep(0,1,f.Clamp(0,1)/2 + 0.5f) *2 -1, //3: Easy Out
                 f => MathF.Sin(f.Clamp(0,1) * 40) * MathF.Pow(1-f.Clamp(0.0001f, 1),4) ,  //4: Shake
+                f => (1-f.Clamp(0,1)), // 0: Linear
             };
         
         private bool _trigger;
@@ -142,6 +135,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             EaseIn = 2,
             EaseOut = 3,
             Shake = 4,
+            Reversed = 5,
         }
 
 
