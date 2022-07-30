@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using T3.Core.Animation;
+using T3.Core.DataTypes;
 using T3.Core.IO;
 using T3.Gui.Graph;
 using T3.Gui.Interaction;
@@ -78,7 +79,9 @@ namespace T3.Gui.UiHelpers
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             
-            public List<GraphBookmarkNavigation.Bookmark> Bookmarks = new List<GraphBookmarkNavigation.Bookmark>();
+            public List<GraphBookmarkNavigation.Bookmark> Bookmarks = new();
+            public List<Gradient> GradientPresets = new();
+            
         }
 
         public static Guid GetLastOpenOpForWindow(string windowTitle)
