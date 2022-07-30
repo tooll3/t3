@@ -88,7 +88,7 @@ namespace T3.Gui.Interaction.Snapping
         /// </summary>
         public static bool CheckForBetterSnapping(double targetTime, double anchorTime, float canvasScale, ref SnapResult bestSnapResult)
         {
-            var snapThresholdOnCanvas = UserSettings.Config.SnapStrength / canvasScale;
+            var snapThresholdOnCanvas = UserSettings.Config.SnapStrength / canvasScale * 0.25f;
             var distance = Math.Abs(anchorTime - targetTime);
             
             var force = Math.Max(0, Math.Abs(snapThresholdOnCanvas) - distance);
