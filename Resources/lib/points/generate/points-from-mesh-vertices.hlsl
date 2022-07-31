@@ -41,14 +41,19 @@ void main(uint3 i : SV_DispatchThreadID)
 {
     uint index = i.x; 
     PbrVertex v = Vertices[index];
+
     ResultPoints[index].position = v.Position 
         + OffsetByTBN.x * v.Tangent * OffsetScale 
         + OffsetByTBN.y * v.Bitangent * OffsetScale
         + OffsetByTBN.z * v.Normal * OffsetScale;
 
     ResultPoints[index].w = v.Selected;
-    float3x3 m = float3x3(v.Tangent, v.Bitangent, v.Normal);
-    float4 rot = quad_from_Mat3(m[0], m[1], m[2]);
+    
+    // Faster be incorrect rotations
+    //float4 rot = quad_from_Mat3(m[0], m[1], m[2]);
+    //float3x3 m = float3x3(v.Tangent, v.Bitangent, v.Normal);
+    
+    float3x3 m = float3x3(v.Tangent, v.Bitangent,v.Normal);
+    float4 rot = normalize(quaternion_from_matrix_precise(transpose(m)));
     ResultPoints[index].rotation = normalize(rot);
 }
-
