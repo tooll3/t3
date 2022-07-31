@@ -1,6 +1,6 @@
 {
   "Id": "f3b66187-34b2-4018-8380-279f9f296ded"/*SetEnvironmet*/,
-  "Description": "Sets the Image based lighting (IBL) texture for PBR rendering.",
+  "Description": "Sets the Image based lighting (IBL) texture for PBR rendering.\n\nNOTICE: For the background environment to have the correctly aligment, the camera mest be set after the environment:\n\n[DrawMesh]->[SetMaterial]->[SetPointLight]->[SetEnvironment]->[SetCamera].",
   "InputUis": [
     {
       "InputId": "e4482cab-f20c-4f9f-9179-c64944164509"/*SubTree*/,
