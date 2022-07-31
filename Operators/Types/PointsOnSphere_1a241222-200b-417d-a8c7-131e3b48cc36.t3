@@ -57,12 +57,7 @@
       "Id": "7dd3873c-b1a5-483c-935c-55b9dfe940b3"/*FloatsToBuffer*/,
       "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "f5531ffb-dbde-45d3-af2a-bd90bcbf3710"/*FloatsToBuffer*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "6ad56331-5bea-4edf-a514-9012c26259a4"/*ExecuteBufferUpdate*/,

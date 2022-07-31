@@ -86,7 +86,7 @@
       "ChildId": "9fa23150-3729-4945-b14d-e37bccd70ad5"/*ComputeShaderStage*/,
       "Size": {
         "X": 110.0,
-        "Y": 140.0
+        "Y": 127.0
       },
       "Position": {
         "X": 388.52078,
@@ -180,17 +180,6 @@
       "Position": {
         "X": 204.19371,
         "Y": 1237.152
-      }
-    },
-    {
-      "ChildId": "d4b6241e-e0c7-4b9a-be4d-a95d09b590e6"/*TransformsConstBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 199.85052,
-        "Y": 642.5657
       }
     },
     {

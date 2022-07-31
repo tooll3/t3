@@ -2,21 +2,21 @@
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
 
-cbuffer Transforms : register(b0)
-{
-    float4x4 CameraToClipSpace;
-    float4x4 ClipSpaceToCamera;
-    float4x4 WorldToCamera;
-    float4x4 CameraToWorld;
-    float4x4 WorldToClipSpace;
-    float4x4 ClipSpaceToWorld;
-    float4x4 ObjectToWorld;
-    float4x4 WorldToObject;
-    float4x4 ObjectToCamera;
-    float4x4 ObjectToClipSpace;
-};
+// cbuffer Transforms : register(b0)
+// {
+//     // float4x4 CameraToClipSpace;
+//     // float4x4 ClipSpaceToCamera;
+//     // float4x4 WorldToCamera;
+//     // float4x4 CameraToWorld;
+//     // float4x4 WorldToClipSpace;
+//     // float4x4 ClipSpaceToWorld;
+//     // float4x4 ObjectToWorld;
+//     // float4x4 WorldToObject;
+//     // float4x4 ObjectToCamera;
+//     // float4x4 ObjectToClipSpace;
+// };
 
-cbuffer Params : register(b1)
+cbuffer Params : register(b0)
 {
     float3 RandomizePosition;
     float Amount;
@@ -67,12 +67,12 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float3 offset = hash4.xyz * RandomizePosition * Amount;
 
-    if (UseLocalSpace > 1.5) 
-    {
-        offset = rotate_vector2(offset, rot);
-        offset = mul( float4(offset,0), WorldToObject);
-    }
-    else if(UseLocalSpace < 0.5)
+    // if (UseLocalSpace > 1.5) 
+    // {
+    //     offset = rotate_vector2(offset, rot);
+    //     offset = mul( float4(offset,0), WorldToObject);
+    // }
+    if(UseLocalSpace < 0.5)
     {
         offset = rotate_vector2(offset, rot);
     }

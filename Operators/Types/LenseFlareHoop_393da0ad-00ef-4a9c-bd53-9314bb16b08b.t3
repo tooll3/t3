@@ -315,12 +315,7 @@
       "Id": "9e3563a9-daee-4ab2-8764-d9788e353428"/*FloatsToBuffer*/,
       "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "f5531ffb-dbde-45d3-af2a-bd90bcbf3710"/*FloatsToBuffer*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "ecf99c8e-88ea-4c5f-bc6a-9d2583da6536"/*Draw*/,
