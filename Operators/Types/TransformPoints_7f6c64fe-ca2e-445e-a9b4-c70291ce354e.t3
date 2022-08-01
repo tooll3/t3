@@ -67,7 +67,12 @@
           "Value": "Resources\\lib\\points\\modify\\transform-points.hlsl"
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "6c118567-8827-4422-86cc-4d4d00762d87"/*ComputeShader*/,
+          "DirtyFlagTrigger": "Always"
+        }
+      ]
     },
     {
       "Id": "852d7521-22e7-4482-9ae5-0556cd78a26a"/*ComputeShaderStage*/,
