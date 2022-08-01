@@ -19,6 +19,11 @@ namespace T3.Core.Operator.Slots
         private int _invalidatedWithRefFrame = -1;
         public bool IsAlreadyInvalidated => InvalidationRefFrame == _invalidatedWithRefFrame;
 
+        public void SetVisited() 
+        {
+            _invalidatedWithRefFrame = InvalidationRefFrame;
+        }
+
         public void Invalidate(bool forceInvalidation = false)
         {
             // Debug.Assert(!IsAlreadyInvalidated); // this should never happen and prevented on the calling side

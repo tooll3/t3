@@ -233,6 +233,7 @@ namespace T3.Core.Operator.Slots
                         input.DirtyFlag.Invalidate();
                     }
 
+                    input.DirtyFlag.SetVisited();
                     outputDirty |= input.DirtyFlag.IsDirty;
                 }
 
@@ -242,6 +243,7 @@ namespace T3.Core.Operator.Slots
                 }
             }
 
+            DirtyFlag.SetVisited();
             return DirtyFlag.Target;
         }
 
