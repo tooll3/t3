@@ -158,7 +158,7 @@ namespace T3.Core.Operator.Slots
 
         public int Invalidate()
         {
-            if (DirtyFlag.IsAlreadyInvalidated)
+            if (DirtyFlag.IsAlreadyInvalidated || DirtyFlag.HasBeenVisited)
                 return DirtyFlag.Target;
             
             if (this is IInputSlot)
