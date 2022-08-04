@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "e4482cab-f20c-4f9f-9179-c64944164509"/*SubTree*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 270.1344,
         "Y": 598.8019
