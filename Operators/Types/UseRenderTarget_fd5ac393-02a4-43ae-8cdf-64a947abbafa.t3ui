@@ -17,6 +17,13 @@
         "X": 0.0,
         "Y": 0.0
       }
+    },
+    {
+      "OutputId": "fb232e1d-a09b-4b02-8e2f-408cd9ac1fff"/*DepthTexture*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
     }
   ]
 }
