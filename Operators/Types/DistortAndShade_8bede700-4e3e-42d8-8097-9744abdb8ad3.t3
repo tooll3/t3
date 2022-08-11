@@ -31,8 +31,8 @@
     {
       "Id": "3a3acfbd-dca7-4f8a-b862-90eae2bc41ca"/*Center*/,
       "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 0.5,
+        "Y": 0.5
       }
     },
     {
