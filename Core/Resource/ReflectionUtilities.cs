@@ -11,7 +11,14 @@ namespace T3.Core
     {
         public static IEnumerable<Type> GetAssemblyTypes(this Assembly assembly, Predicate<Type> typePredicate)
         {
-            return assembly.GetExportedTypes().Where(t => typePredicate(t));
+            if (assembly.IsDynamic)
+            {
+                return Array.Empty<Type>();
+            }
+            else
+            {
+                return assembly.GetExportedTypes().Where(t => typePredicate(t));
+            }         
         }
 
         public static IReadOnlyList<Type> GetDomainTypes(this AppDomain appDomain, Predicate<Type> typePredicate)
