@@ -142,6 +142,7 @@ namespace T3.Gui.Windows.TimeLine
                     var macroCommands = new MacroCommand("split clip", commands);
                     UndoRedoStack.Add(macroCommands);
                 }
+                ImGui.Separator();
 
                 ImGui.EndPopup();
             }
@@ -486,22 +487,27 @@ namespace T3.Gui.Windows.TimeLine
             var layerMinIndex = (screenArea.Min.Y - _minScreenPos.Y) / LayerHeight + _minLayerIndex;
             var layerMaxIndex = (screenArea.Max.Y - _minScreenPos.Y) / LayerHeight + _minLayerIndex;
 
-            var allClips = NodeOperations.GetAllTimeClips(_compositionOp);
-
-            var matchingClips = allClips.FindAll(clip => clip.TimeRange.Start <= endTime
-                                                         && clip.TimeRange.End >= startTime
-                                                         && clip.LayerIndex <= layerMaxIndex
-                                                         && clip.LayerIndex >= layerMinIndex - 1);
-            switch (selectMode)
+            foreach (var clip in NodeOperations.GetAllTimeClips(_compositionOp))
             {
-                case SelectionFence.SelectModes.Add:
-                case SelectionFence.SelectModes.Replace:
-                    ClipSelection.AddSelection(matchingClips);
-                    break;
+                 var matches = clip.TimeRange.Start <= endTime
+                         && clip.TimeRange.End >= startTime
+                         && clip.LayerIndex <= layerMaxIndex
+                         && clip.LayerIndex >= layerMinIndex - 1;
 
-                case SelectionFence.SelectModes.Remove:
-                    ClipSelection.Deselect(matchingClips);
-                    break;
+                 if (!matches)
+                     continue;
+                 
+                 switch (selectMode)
+                 {
+                     case SelectionFence.SelectModes.Add:
+                     case SelectionFence.SelectModes.Replace:
+                         ClipSelection.AddSelection(clip);
+                         break;
+
+                     case SelectionFence.SelectModes.Remove:
+                         ClipSelection.Deselect(clip);
+                         break;
+                 }
             }
         }
 
@@ -719,6 +725,12 @@ namespace T3.Gui.Windows.TimeLine
                 matchingClips.ForEach(Deselect);
             }
 
+            public static void AddSelection(ITimeClip matchingClip)
+            {
+                NodeSelection.SelectCompositionChild(_compositionOp, matchingClip.Id, replaceSelection:false);
+                _selectedClips.Add(matchingClip);
+            }
+            
             public static void AddSelection(List<ITimeClip> matchingClips)
             {
                 foreach (var timeClip in matchingClips)

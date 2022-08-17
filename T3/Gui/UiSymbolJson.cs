@@ -136,6 +136,7 @@ namespace T3.Gui
                 return;
             
             var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
+            var vec4Writer = TypeValueToJsonConverters.Entries[typeof(Vector4)];
             Writer.WritePropertyName("Annotations");
             Writer.WriteStartArray();
 
@@ -144,8 +145,13 @@ namespace T3.Gui
                 Writer.WriteStartObject(); 
                 Writer.WriteObject("Id", annotation.Id);
                 Writer.WriteObject("Title", annotation.Title);
+                
+                Writer.WritePropertyName("Color");
+                vec4Writer(Writer, annotation.Color.Rgba);
+                
                 Writer.WritePropertyName("Position");
                 vec2Writer(Writer, annotation.PosOnCanvas);
+                
                 Writer.WritePropertyName("Size");
                 vec2Writer(Writer, annotation.Size);
                 Writer.WriteEndObject();
@@ -185,6 +191,8 @@ namespace T3.Gui
         public static SymbolUi ReadSymbolUi(JToken mainObject)
         {
             var vector2Converter = JsonToTypeValueConverters.Entries[typeof(Vector2)];
+            var vector4Converter = JsonToTypeValueConverters.Entries[typeof(Vector4)];
+            
             var symbolId = Guid.Parse(mainObject["Id"].Value<string>());
             var symbol = SymbolRegistry.Entries[symbolId];
             
@@ -299,6 +307,11 @@ namespace T3.Gui
                     annotation.Id = Guid.Parse(annotationEntry["Id"].Value<string>());
                     annotation.Title = annotationEntry["Title"].Value<string>();
                     annotation.PosOnCanvas = (Vector2)vector2Converter(annotationEntry["Position"]);
+                    if (annotationEntry["Color"] != null)
+                    {
+                        annotation.Color =  new Color((Vector4)vector4Converter(annotationEntry["Color"]));
+                    } 
+                    
                     annotation.Size = (Vector2)vector2Converter(annotationEntry["Size"]);
                     annotationDict[annotation.Id] = annotation;
                 }

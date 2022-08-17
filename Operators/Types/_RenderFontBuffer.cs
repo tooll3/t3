@@ -101,11 +101,10 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
         private void UpdateMesh(EvaluationContext context)
         {
             var text = Text.GetValue(context);
-            if (string.IsNullOrEmpty(text))
-                return;
-
-            if (_font == null)
-                return;
+            if (string.IsNullOrEmpty(text) || _font == null)
+            {
+                text = " ";
+            }
 
             var horizontalAlign = HorizontalAlign.GetValue(context);
             var verticalAlign = VerticalAlign.GetValue(context);

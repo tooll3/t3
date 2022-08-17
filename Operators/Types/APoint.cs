@@ -14,12 +14,16 @@ namespace T3.Operators.Types.Id_9989f539_f86c_4508_83d7_3fc0e559f502
     public class APoint : Instance<APoint>, ITransformable
     {
         [Output(Guid = "D9C04756-8922-496D-8380-120F280EF65B", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<StructuredList> ResultList = new Slot<StructuredList>();
+        public readonly Slot<StructuredList> ResultList = new();
+        
+        [Output(Guid = "8698D60D-8CD9-4A3F-9001-19DAC29028CC", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<Vector3> OutPosition = new();
         
         public APoint()
         {
             //ResultList.TransformableOp = this;
             ResultList.UpdateAction = Update;
+            OutPosition.UpdateAction = Update;
             _pointListWithSeparator.TypedElements[1] = Point.Separator();
         }
         
@@ -39,11 +43,14 @@ namespace T3.Operators.Types.Id_9989f539_f86c_4508_83d7_3fc0e559f502
 
             var rot = Quaternion.CreateFromAxisAngle(RotationAxis.GetValue(context), RotationAngle.GetValue(context) * MathUtils.ToRad);
             var array = addSeparator ? _pointListWithSeparator : _pointList;
-            
+            OutPosition.Value = from;
             array.TypedElements[0].Position = from;
             array.TypedElements[0].W = w;
             array.TypedElements[0].Orientation = rot;
             ResultList.Value = array;
+            
+            ResultList.DirtyFlag.Clear();
+            OutPosition.DirtyFlag.Clear();
         }
 
         private readonly StructuredList<Point> _pointListWithSeparator = new StructuredList<Point>(2);

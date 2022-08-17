@@ -1,4 +1,5 @@
 using System;
+using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -20,7 +21,7 @@ namespace T3.Operators.Types.Id_026869ee_b62f_481e_aadf_f8a1db77fe65
             var v = Value.GetValue(context);
             var test = TestValue.GetValue(context);
             //var mod = Mod.GetValue(context);
-            switch ((Modes)Mode.GetValue(context))
+            switch ((Modes)Mode.GetValue(context).Clamp(0, Enum.GetValues(typeof(Modes)).Length -1))
             {
                 case Modes.IsSmaller:
                     IsTrue.Value =  v < test;

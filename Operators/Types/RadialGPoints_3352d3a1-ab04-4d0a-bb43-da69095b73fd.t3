@@ -80,7 +80,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\radial-points.hlsl"
+          "Value": "Resources\\lib\\points\\generate\\radial-points.hlsl"
         }
       ],
       "Outputs": []
@@ -163,7 +163,7 @@
       "Outputs": []
     },
     {
-      "Id": "7ae90114-a998-4c78-a57c-de81c4f57b82"/*SizeToDispatchCount*/,
+      "Id": "7ae90114-a998-4c78-a57c-de81c4f57b82"/*CalcSize2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []

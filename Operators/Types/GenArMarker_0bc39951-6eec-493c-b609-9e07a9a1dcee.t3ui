@@ -1,0 +1,255 @@
+{
+  "Id": "0bc39951-6eec-493c-b609-9e07a9a1dcee"/*GenArMarker*/,
+  "Description": "A quick expieriment to create unique 8th wall markers.",
+  "InputUis": [
+    {
+      "InputId": "c4ee2560-49c8-403d-9d91-331017782544"/*A*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "b77b0244-82b1-4adf-8da1-ba7f17fe03c0"/*PickColor*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 127.0
+      },
+      "Position": {
+        "X": 563.1233,
+        "Y": 178.30176
+      }
+    },
+    {
+      "ChildId": "4846f165-f147-423d-a348-387e93081201"/*Rings*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": 1216.9608,
+        "Y": 64.87207
+      }
+    },
+    {
+      "ChildId": "217d107a-e392-454c-a5a9-7256eb559173"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1366.9608,
+        "Y": 64.87207
+      }
+    },
+    {
+      "ChildId": "5fdcd0bc-e770-4c4c-afd0-8ef94df4c6b3"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1516.9608,
+        "Y": 64.87207
+      }
+    },
+    {
+      "ChildId": "ea1d620f-74e6-4913-baab-a3d9a11d0c75"/*Camera*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1666.9608,
+        "Y": 64.87207
+      }
+    },
+    {
+      "ChildId": "6669a391-a916-4c8a-a505-a8e2c2d3ca1a"/*Loop*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1816.9608,
+        "Y": 64.87207
+      }
+    },
+    {
+      "ChildId": "e50555cf-47fd-42dc-aaae-28e6ad1f476f"/*AColor*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 111.1532,
+        "Y": 43.0
+      }
+    },
+    {
+      "ChildId": "cce233f4-f6fb-480f-a858-f9c80b0bebd2"/*ContextFloat*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 0.0,
+        "Y": 443.14746
+      }
+    },
+    {
+      "ChildId": "4f92015e-f757-454e-9201-2fc2efe8445e"/*FloatToInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 150.0,
+        "Y": 443.14746
+      }
+    },
+    {
+      "ChildId": "28b3163e-979b-4571-b9e8-9dbab3da9818"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1966.9608,
+        "Y": 64.87207
+      }
+    },
+    {
+      "ChildId": "7c428f44-e1b6-4f38-b7af-3ea785034ce9"/*AColor*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 111.1532,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "aa1cfe48-12ce-42a3-96a7-693a7a69de08"/*AColor*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 111.1532,
+        "Y": 86.0
+      }
+    },
+    {
+      "ChildId": "e77a0374-6920-415a-bf3f-11fdf7ad07ed"/*AColor*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 111.1532,
+        "Y": 129.0
+      }
+    },
+    {
+      "ChildId": "0e491573-e60e-433a-bb49-1fa494e48c5b"/*AColor*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 111.1532,
+        "Y": 172.0
+      }
+    },
+    {
+      "ChildId": "5ec7979e-815b-43fa-a013-3f2024da0e5d"/*Random*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 791.3876,
+        "Y": 357.82715
+      }
+    },
+    {
+      "ChildId": "efcfe852-6c1d-419d-982b-5bdc7f708950"/*Random*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 975.5901,
+        "Y": 340.9746
+      }
+    },
+    {
+      "ChildId": "942df93f-104b-4e92-8128-5e7ce3268a71"/*Float2ToVector2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 975.5901,
+        "Y": 271.9746
+      }
+    },
+    {
+      "ChildId": "43c23bd9-8721-4a2e-a721-4a177faefbb3"/*AColor*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 119.08325,
+        "Y": 231.62988
+      }
+    },
+    {
+      "ChildId": "5f0e88ac-a022-4007-b198-7522c6e6b5c2"/*Random*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 771.3916,
+        "Y": 282.2871
+      }
+    },
+    {
+      "ChildId": "b1fa57d3-c91b-4c51-96b4-e1f534f4b078"/*AddInts*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 413.1233,
+        "Y": 443.14746
+      }
+    },
+    {
+      "ChildId": "8ff6717b-abde-4585-836a-154d2ed85871"/*MultiplyInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 263.1233,
+        "Y": 572.3906
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "457c5d64-9937-46f1-bfde-df3db22240a5"/*ColorBuffer*/,
+      "Position": {
+        "X": 2376.961,
+        "Y": 304.1953
+      }
+    }
+  ]
+}

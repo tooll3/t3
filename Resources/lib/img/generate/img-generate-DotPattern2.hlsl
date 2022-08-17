@@ -300,9 +300,10 @@ float4 psMain(vsOutput psInput) : SV_TARGET
                     
     float4 color =  lerp(Background, lerp(Foreground, originalColor, MixOriginal), gray);
 
-    float2 hashForCelHighlight = hash22((HighlightSeed * 0.123 % 101.1) * cel.xy * 0.123 + float2(cel.z, cel.w)/2);
+    //float2 hashForCelHighlight = hash22((HighlightSeed * 0.1231 % 101.1) * cel.xy % 0.123 + float2(cel.z % 0.123, 
+    //cel.w*0.11) %12.13);
 
-    if(hashForCelHighlight.x < HighlightProbability) {
+    if(hashForCel1.x < HighlightProbability) {
         color = Highlight;
     }
     return color;

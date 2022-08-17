@@ -38,7 +38,6 @@ namespace T3.Gui.Graph
     {
         public GraphCanvas(GraphWindow window, List<Guid> idPath)
         {
-            //_selectionFence = new SelectionFence(this);
             _window = window;
             SetComposition(idPath, Transition.JumpIn);
         }
@@ -80,7 +79,9 @@ namespace T3.Gui.Graph
             {
                 UserSettings.SaveLastViewedOpForWindow(_window, CompositionOp.SymbolChildId);
                 if (UserSettings.Config.OperatorViewSettings.ContainsKey(CompositionOp.SymbolChildId))
+                {
                     newProps = UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId];
+                }
             }
 
             SetScopeWithTransition(newProps.Scale, newProps.Scroll, previousFocusOnScreen, transition);
@@ -151,6 +152,13 @@ namespace T3.Gui.Graph
         #region drawing UI ====================================================================
         public void Draw(ImDrawListPtr dl, bool showGrid)
         {
+            UpdateCanvas();
+            if (!_initialized)
+            {
+                FocusViewToSelection();
+                _initialized = true;
+            }
+            
             // TODO: Refresh reference on every frame. Since this uses lists instead of dictionary
             // it can be really slow
             CompositionOp = NodeOperations.GetInstanceFromIdPath(_compositionPath);
@@ -160,7 +168,7 @@ namespace T3.Gui.Graph
                 return;
             }
 
-            UpdateCanvas();
+            
             if (this.CompositionOp == null)
             {
                 Log.Error("Can't show graph for undefined CompositionOp");
@@ -176,6 +184,7 @@ namespace T3.Gui.Graph
             DrawList = dl;
             ImGui.BeginGroup();
             {
+                
                 DrawDropHandler();
 
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
@@ -246,7 +255,8 @@ namespace T3.Gui.Graph
                 {
                     ConnectionMaker.ConnectionSplitHelper.PrepareNewFrame(this);
                 }
-
+                
+                
                 SymbolBrowser.Draw();
 
                 Graph.DrawGraph(DrawList);
@@ -256,7 +266,8 @@ namespace T3.Gui.Graph
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
                 if (isOnBackground && ImGui.IsMouseDoubleClicked(0))
                 {
-                    SetCompositionToParentInstance(CompositionOp.Parent);
+                    if(CompositionOp.Parent != null)
+                        SetCompositionToParentInstance(CompositionOp.Parent);
                 }
 
                 if (ConnectionMaker.TempConnections.Count > 0 && ImGui.IsMouseReleased(0))
@@ -590,7 +601,7 @@ namespace T3.Gui.Graph
                               && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions.Count > 0
                               && selectedChildUis[0].SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
                 if (ImGui.MenuItem("Set image as graph background",
-                                   KeyboardBinding.ListKeyboardShortcuts(UserActions.PinToOutputWindow, false),
+                                   KeyboardBinding.ListKeyboardShortcuts(UserActions.DisplayImageAsBackground, false),
                                    selected: false,
                                    enabled: isImage))
                 {
@@ -606,10 +617,6 @@ namespace T3.Gui.Graph
                 ImGui.EndMenu();
             }
 
-            if (ImGui.MenuItem("Export as Executable", oneOpSelected))
-            {
-                PlayerExporter.ExportInstance(this, selectedChildUis.Single());
-            }
 
             ImGui.Separator();
 
@@ -713,6 +720,13 @@ namespace T3.Gui.Graph
                 }
 
                 ImGui.EndMenu();
+            }
+            
+            ImGui.Separator();
+            
+            if (ImGui.MenuItem("Export as Executable", oneOpSelected))
+            {
+                PlayerExporter.ExportInstance(this, selectedChildUis.Single());
             }
         }
         
@@ -1011,7 +1025,8 @@ namespace T3.Gui.Graph
         private string _symbolDescriptionForDialog = "";
         private string _nameSpaceForDialogEdits = "";
         private readonly GraphWindow _window;
-
+        private bool _initialized; // fit view to to window pos / size
+        
         public enum HoverModes
         {
             Disabled,

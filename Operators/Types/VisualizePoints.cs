@@ -22,6 +22,9 @@ namespace T3.Operators.Types.Id_37bdbafc_d14c_4b81_91c3_8f63c3b63812
         [Input(Guid = "40a04de8-54aa-4f66-acea-80ffc4dab7bd")]
         public readonly InputSlot<float> PointSize = new InputSlot<float>();
 
+        [Input(Guid = "b857b40b-2ca7-42a4-bebe-1cb11700ed71")]
+        public readonly InputSlot<float> LineThickness = new InputSlot<float>();
+
     }
 }
 

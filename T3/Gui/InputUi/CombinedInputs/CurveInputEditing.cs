@@ -39,6 +39,11 @@ namespace t3.Gui.InputUi.CombinedInputs
 
                 InteractionForCurve.Add(imGuiId, curveInteraction);
             }
+            else if (curveInteraction.Curves.Count != 1 || curveInteraction.Curves[0] != curve)
+            {
+                curveInteraction.Curves.Clear();
+                curveInteraction.Curves.Add(curve);
+            }
 
             curveInteraction.EditState = InputEditStateFlags.Nothing;
             curveInteraction.Draw();
@@ -157,10 +162,14 @@ namespace t3.Gui.InputUi.CombinedInputs
 
                 var newDragPosition = _singleCurveCanvas.InverseTransformPosition(ImGui.GetIO().MousePos);
                 double u = newDragPosition.X;
-                _singleCurveCanvas.SnapHandlerForU.CheckForSnapping(ref u, _singleCurveCanvas.Scale.X);
+                var enableSnapping = ImGui.GetIO().KeyShift;
+                if(enableSnapping)
+                    _singleCurveCanvas.SnapHandlerForU.CheckForSnapping(ref u, _singleCurveCanvas.Scale.X);
 
                 double v = newDragPosition.Y;
-                _singleCurveCanvas.SnapHandlerForV.CheckForSnapping(ref v, _singleCurveCanvas.Scale.Y);
+                
+                if(enableSnapping)
+                    _singleCurveCanvas.SnapHandlerForV.CheckForSnapping(ref v, _singleCurveCanvas.Scale.Y);
 
                 UpdateDragCommand(u - vDef.U, v - vDef.Value);
 

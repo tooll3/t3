@@ -73,15 +73,6 @@ namespace T3.Core
 
         public Model(Assembly operatorAssembly, bool enabledLogging)
         {
-            if (enabledLogging)
-            {
-                Log.AddWriter(new ConsoleWriter());
-                
-                // Start Logging
-                
-                Log.AddWriter(FileWriter.CreateDefault());
-            }
-
             OperatorsAssembly = operatorAssembly;
 
             // generic enum value from json function, must be local function

@@ -114,7 +114,7 @@
       }
     },
     {
-      "ChildId": "a7ff893b-f2f0-4517-9158-927a4644c8d1"/*ApplyNoise*/,
+      "ChildId": "a7ff893b-f2f0-4517-9158-927a4644c8d1"/*SimNoise*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

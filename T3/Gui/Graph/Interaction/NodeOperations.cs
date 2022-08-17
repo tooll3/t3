@@ -33,29 +33,25 @@ namespace T3.Gui.Graph.Interaction
         /// <summary>
         /// This is slow and should be refactored into something else
         /// </summary>
-        public static List<ITimeClip> GetAllTimeClips(Instance compositionOp)
+        public static IEnumerable<ITimeClip> GetAllTimeClips(Instance compositionOp)
         {
-            var timeClips = new List<ITimeClip>();
             foreach (var child in compositionOp.Children)
             {
                 foreach (var clipProvider in child.Outputs.OfType<ITimeClipProvider>())
                 {
-                    timeClips.Add(clipProvider.TimeClip);
+                    yield return clipProvider.TimeClip;
                 }
             }
-
-            return timeClips;
         }
 
         public static ITimeClip GetCompositionTimeClip(Instance compositionOp)
         {
-            var timeClips = new List<ITimeClip>();
             foreach (var clipProvider in compositionOp.Outputs.OfType<ITimeClipProvider>())
             {
-                timeClips.Add(clipProvider.TimeClip);
+                return clipProvider.TimeClip;
             }
 
-            return timeClips.FirstOrDefault();
+            return null;
         }
 
         public static Instance GetInstanceFromIdPath(IReadOnlyCollection<Guid> childPath)

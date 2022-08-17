@@ -33,7 +33,7 @@
     },
     {
       "Id": "97c25ec6-ef71-42f8-9352-52baf2ce41a4"/*RotationLookupDistance*/,
-      "DefaultValue": 1.0
+      "DefaultValue": 0.25
     },
     {
       "Id": "6c2ab161-da81-47c2-8008-222cf994179c"/*UseWAsWeight*/,
@@ -62,7 +62,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\add-noise-to-points.hlsl"
+          "Value": "Resources\\lib\\points\\modify\\add-noise-to-points.hlsl"
         }
       ],
       "Outputs": []

@@ -36,7 +36,7 @@
       }
     },
     {
-      "ChildId": "4db314de-9fe1-4ac6-93f0-204e423c0331"/*Pulsate*/,
+      "ChildId": "4db314de-9fe1-4ac6-93f0-204e423c0331"/*__ObsoletePulsate*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

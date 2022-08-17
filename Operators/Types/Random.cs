@@ -19,7 +19,7 @@ namespace T3.Operators.Types.Id_10673c38_8c7e_4aa1_8dcd_3f2711c709b5
         {
             var random = new System.Random(Seed.GetValue(context));
             var firstIsGarbage = (float)random.NextDouble();
-            Result.Value = (float)MathUtils.Remap((float)random.NextDouble(), 0f,1f,Min.GetValue(context), Max.GetValue(context));
+            Result.Value = (float)MathUtils.RemapAndClamp((double)(float)random.NextDouble(), 0f,1f,Min.GetValue(context), Max.GetValue(context));
         }
 
         [Input(Guid = "{F2513EAD-7022-4774-8767-7F33D1B92B26}")]

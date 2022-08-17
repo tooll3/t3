@@ -144,7 +144,7 @@
       "Outputs": []
     },
     {
-      "Id": "06922394-76f4-4993-982a-483e28830792"/*AudioReaction*/,
+      "Id": "06922394-76f4-4993-982a-483e28830792"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -273,13 +273,13 @@
       "Outputs": []
     },
     {
-      "Id": "dc7bc2b2-dd52-42a0-95ac-942e11086e62"/*AudioReaction*/,
+      "Id": "dc7bc2b2-dd52-42a0-95ac-942e11086e62"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "4a99eefa-7e69-4378-b697-e5e7b5b6a9a5"/*AudioReaction*/,
+      "Id": "4a99eefa-7e69-4378-b697-e5e7b5b6a9a5"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -325,7 +325,7 @@
       "Outputs": []
     },
     {
-      "Id": "b194ca63-5f9d-4ab6-9b1a-7f44122ecf63"/*AudioReaction*/,
+      "Id": "b194ca63-5f9d-4ab6-9b1a-7f44122ecf63"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -337,7 +337,7 @@
       "Outputs": []
     },
     {
-      "Id": "39607d51-9ff8-4e4c-863f-9583e5d3def8"/*AudioReaction*/,
+      "Id": "39607d51-9ff8-4e4c-863f-9583e5d3def8"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -354,7 +354,7 @@
       "Outputs": []
     },
     {
-      "Id": "338a41e9-7c37-41b3-9507-a221df7ddb33"/*AudioReaction*/,
+      "Id": "338a41e9-7c37-41b3-9507-a221df7ddb33"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -526,7 +526,7 @@
       "Outputs": []
     },
     {
-      "Id": "2a2daedc-2a07-4d75-bc31-c429b110c493"/*AudioReaction*/,
+      "Id": "2a2daedc-2a07-4d75-bc31-c429b110c493"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -538,7 +538,7 @@
       "Outputs": []
     },
     {
-      "Id": "cf3d84ba-a757-4d7a-984b-39876803c4df"/*AudioReaction*/,
+      "Id": "cf3d84ba-a757-4d7a-984b-39876803c4df"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [],
       "Outputs": []
@@ -571,7 +571,7 @@
       "Outputs": []
     },
     {
-      "Id": "83843fc4-6de3-452a-85c7-cbd43f86f049"/*AudioReaction*/,
+      "Id": "83843fc4-6de3-452a-85c7-cbd43f86f049"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -624,7 +624,7 @@
       "Outputs": []
     },
     {
-      "Id": "b1159277-70ba-4227-b768-2339ebf38679"/*AudioReaction*/,
+      "Id": "b1159277-70ba-4227-b768-2339ebf38679"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {

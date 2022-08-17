@@ -331,10 +331,10 @@ namespace T3.Gui.Interaction
                 var center = 0.0;
                 if (min < 0)
                 {
-                    center = MathUtils.Remap((min + max) * 0.5, min, max, 0, itemSize.X);
+                    center = MathUtils.RemapAndClamp((min + max) * 0.5, min, max, 0, itemSize.X);
                 }
 
-                var end = MathUtils.Remap(value, min, max, 0, itemSize.X);
+                var end = MathUtils.RemapAndClamp(value, min, max, 0, itemSize.X);
                 var orgCenter = center;
 
                 if (center > end)

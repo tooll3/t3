@@ -70,6 +70,10 @@ namespace T3.Gui.Windows
                 ImGui.Separator();
                 ImGui.BeginChild("scrolling");
                 {
+                    if (ImGui.IsWindowHovered() && ImGui.GetIO().MouseWheel != 0)
+                    {
+                        _shouldScrollToBottom = false;
+                    }
                     lock (_logEntries)
                     {
                         foreach (var entry in _logEntries)

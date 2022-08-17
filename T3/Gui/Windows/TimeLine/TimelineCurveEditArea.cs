@@ -316,17 +316,18 @@ namespace T3.Gui.Windows.TimeLine
                                   || CurveInputEditing.MoveDirection == CurveInputEditing.MoveDirections.Vertical
                                   || (ImGui.GetIO().KeyCtrl);
             
+            var enableSnapping = ImGui.GetIO().KeyShift;
             double u = allowHorizontal ? newDragPosition.X : vDef.U;
             if (allowHorizontal)
             {
-                if(!ImGui.GetIO().KeyShift)
+                if(enableSnapping)
                     SnapHandlerU.CheckForSnapping(ref u, TimeLineCanvas.Scale.X);
             }
             
             double v = allowVertical ?  newDragPosition.Y : vDef.Value;
             if (allowVertical)
             {
-                if(!ImGui.GetIO().KeyShift)
+                if(enableSnapping)
                     SnapHandlerV.CheckForSnapping(ref v, TimeLineCanvas.Scale.Y);
             } 
             

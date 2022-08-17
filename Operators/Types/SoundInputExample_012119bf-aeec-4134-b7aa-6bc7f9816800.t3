@@ -22,7 +22,7 @@
       "Outputs": []
     },
     {
-      "Id": "0b9a6609-c9dd-450c-bc13-0a57dba3d12d"/*SoundInput*/,
+      "Id": "0b9a6609-c9dd-450c-bc13-0a57dba3d12d"/*AudioFrequencies*/,
       "SymbolId": "b72d968b-0045-408d-a2f9-5c739c692a66",
       "InputValues": [],
       "Outputs": []

@@ -21,32 +21,37 @@ namespace T3.Gui.Windows
 
         protected override void DrawContent()
         {
+            var changed = false;
             if (ImGui.TreeNode("User Interface"))
             {
-                ImGui.Checkbox("Use arc connections", ref UserSettings.Config.UseArcConnections);
-                ImGui.Checkbox("Use Jog Dial Control", ref UserSettings.Config.UseJogDialControl);
-                ImGui.DragFloat("Scroll smoothing", ref UserSettings.Config.ScrollSmoothing);
-                ImGui.Checkbox("Show Graph thumbnails", ref UserSettings.Config.ShowThumbnails);
-                ImGui.Checkbox("Drag snapped nodes", ref UserSettings.Config.SmartGroupDragging);
+                if (ImGui.DragFloat("UI Scale", ref UserSettings.Config.UiScaleFactor, 0.01f, 0.5f, 3f))
+                {
+                    changed = true;
+                }
+                changed |= ImGui.Checkbox("Use arc connections", ref UserSettings.Config.UseArcConnections);
+                changed |= ImGui.Checkbox("Use Jog Dial Control", ref UserSettings.Config.UseJogDialControl);
+                changed |= ImGui.DragFloat("Scroll smoothing", ref UserSettings.Config.ScrollSmoothing);
+                changed |= ImGui.Checkbox("Show Graph thumbnails", ref UserSettings.Config.ShowThumbnails);
+                changed |= ImGui.Checkbox("Drag snapped nodes", ref UserSettings.Config.SmartGroupDragging);
                 ImGui.Separator();
-                ImGui.DragFloat("Snap strength", ref UserSettings.Config.SnapStrength);
-                ImGui.DragFloat("Click threshold", ref UserSettings.Config.ClickThreshold);
-
-                ImGui.DragFloat("Timeline Raster Density", ref UserSettings.Config.TimeRasterDensity, 0.01f);
-                ImGui.Checkbox("Count Bars from Zero", ref UserSettings.Config.CountBarsFromZero);
-                
-                ImGui.Checkbox("Swap Main & 2nd windows when fullscreen", ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen);
-                ImGui.Checkbox("Save Only Modified Symbols", ref UserSettings.Config.SaveOnlyModified);
-                ImGui.Checkbox("Enable Auto Backup", ref UserSettings.Config.AutoSaveAfterSymbolCreation);
+                changed |= ImGui.DragFloat("Snap strength", ref UserSettings.Config.SnapStrength);
+                changed |= ImGui.DragFloat("Click threshold", ref UserSettings.Config.ClickThreshold);
+                 
+                changed |= ImGui.DragFloat("Timeline Raster Density", ref UserSettings.Config.TimeRasterDensity, 0.01f);
+                changed |= ImGui.Checkbox("Count Bars from Zero", ref UserSettings.Config.CountBarsFromZero);
+                 
+                changed |= ImGui.Checkbox("Swap Main & 2nd windows when fullscreen", ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen);
+                changed |= ImGui.Checkbox("Save Only Modified Symbols", ref UserSettings.Config.SaveOnlyModified);
+                changed |= ImGui.Checkbox("Enable Auto Backup", ref UserSettings.Config.AutoSaveAfterSymbolCreation);
                  
                 ImGui.TreePop();
             }
             
             if (ImGui.TreeNode("Space Mouse"))
             {
-                ImGui.DragFloat("Smoothing", ref UserSettings.Config.SpaceMouseDamping, 0.01f, 0.01f, 1f);
-                ImGui.DragFloat("Move Speed", ref UserSettings.Config.SpaceMouseMoveSpeedFactor, 0.01f, 0, 10f);
-                ImGui.DragFloat("Rotation Speed", ref UserSettings.Config.SpaceMouseRotationSpeedFactor, 0.01f, 0, 10f);
+                changed |= ImGui.DragFloat("Smoothing", ref UserSettings.Config.SpaceMouseDamping, 0.01f, 0.01f, 1f);
+                changed |= ImGui.DragFloat("Move Speed", ref UserSettings.Config.SpaceMouseMoveSpeedFactor, 0.01f, 0, 10f);
+                changed |= ImGui.DragFloat("Rotation Speed", ref UserSettings.Config.SpaceMouseRotationSpeedFactor, 0.01f, 0, 10f);
                 ImGui.TreePop();
             }
 
@@ -55,9 +60,9 @@ namespace T3.Gui.Windows
             {
                 //ImGui.Checkbox("Show Timeline", ref UserSettings.Config.ShowTimeline);
                 //ImGui.Checkbox("Show Title", ref UserSettings.Config.ShowTitleAndDescription);
-                ImGui.DragFloat("Gizmo size", ref UserSettings.Config.GizmoSize);
-                ImGui.DragFloat("Tooltip delay", ref UserSettings.Config.TooltipDelay);
-                ImGui.Checkbox("Save after symbol creating", ref UserSettings.Config.AutoSaveAfterSymbolCreation);
+                changed |= ImGui.DragFloat("Gizmo size", ref UserSettings.Config.GizmoSize);
+                changed |= ImGui.DragFloat("Tooltip delay", ref UserSettings.Config.TooltipDelay);
+                changed |= ImGui.Checkbox("Save after symbol creating", ref UserSettings.Config.AutoSaveAfterSymbolCreation);
                 ImGui.TreePop();
             }
 
@@ -129,6 +134,9 @@ namespace T3.Gui.Windows
                 }                
                 ImGui.TreePop();
             }
+            
+            if(changed)
+                UserSettings.Save();
             
             ImGui.Separator();
             T3Metrics.Draw();

@@ -13,9 +13,14 @@ namespace T3.Operators.Types.Id_17324ce1_8920_4653_ac67_c211ad507a81
         [Output(Guid = "751E97DE-C418-48C7-823E-D4660073A559")]
         public readonly Slot<SharpDX.Vector4[]> Result = new Slot<SharpDX.Vector4[]>();
         
+
+        [Output(Guid = "ECA8121B-2A7F-4ECC-9143-556DCF78BA33")]
+        public readonly Slot<SharpDX.Vector4[]> ResultInverted = new Slot<SharpDX.Vector4[]>();
+        
         public TransformMatrix()
         {
             Result.UpdateAction = Update;
+            ResultInverted.UpdateAction = Update;
         }
 
         private void Update(EvaluationContext context)
@@ -28,8 +33,7 @@ namespace T3.Operators.Types.Id_17324ce1_8920_4653_ac67_c211ad507a81
             var t = Translation.GetValue(context);
             var objectToParentObject = Matrix.Transformation(scalingCenter: Vector3.Zero, scalingRotation: Quaternion.Identity, scaling: new Vector3(s.X, s.Y, s.Z), rotationCenter: Vector3.Zero,
                                                              rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll), translation: new Vector3(t.X, t.Y, t.Z));
-
-
+            
             // transpose all as mem layout in hlsl constant buffer is row based
             objectToParentObject.Transpose();
             
@@ -43,9 +47,19 @@ namespace T3.Operators.Types.Id_17324ce1_8920_4653_ac67_c211ad507a81
             _matrix[2] = objectToParentObject.Row3;
             _matrix[3] = objectToParentObject.Row4;
             Result.Value = _matrix;
+
+            var invertedMatrix = Matrix.Invert(objectToParentObject);
+            
+            _invertedMatrix[0] = invertedMatrix.Row1;
+            _invertedMatrix[1] = invertedMatrix.Row2;
+            _invertedMatrix[2] = invertedMatrix.Row3;
+            _invertedMatrix[3] = invertedMatrix.Row4;
+            ResultInverted.Value = _invertedMatrix;
+            
         }
 
         private SharpDX.Vector4[] _matrix = new SharpDX.Vector4[4];
+        private SharpDX.Vector4[] _invertedMatrix = new SharpDX.Vector4[4];
         
         
         

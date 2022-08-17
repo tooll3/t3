@@ -31,10 +31,10 @@ namespace T3.App
                                                                                                    }); 
             
 
-            (uint texId, var tmpId ) = resourceManager.CreateTextureFromFile(@"Resources\t3\t3-background.png", null);
+            (uint texId, var tmpId ) = resourceManager.CreateTextureFromFile(@"Resources\t3-editor\images\t3-background.png", null);
             ViewWindowDefaultSrvId = tmpId;
             
-            (uint texResourceId3, var srvResourceId ) = resourceManager.CreateTextureFromFile(@"Resources\t3\t3-colorpicker.png", null);
+            (uint texResourceId3, var srvResourceId ) = resourceManager.CreateTextureFromFile(@"Resources\t3-editor\images\t3-colorpicker.png", null);
             if (ResourceManager.Instance().Resources[srvResourceId] is ShaderResourceViewResource srvResource)
             {
                 ColorPickerImageSrv = srvResource.ShaderResourceView;

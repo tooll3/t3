@@ -68,7 +68,7 @@ namespace T3.Operators.Types.Id_000e08d0_669f_48df_9083_7aa0a43bbc05
                     int usDuration = (int)(durationInS * 1000f * 1000f);
                     if (logToConsole)
                     {
-                        Log.Debug($"Subtree took: {usDuration}us on GPU.");
+                        Log.Debug($" localTime: {context.LocalTime:0.00}  GPUMeasure {usDuration}us on GPU.");
                     }
                     LastMeasureInMicroSeconds = usDuration;
                     _readyToMeasure = true;

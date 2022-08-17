@@ -81,7 +81,7 @@
       }
     },
     {
-      "ChildId": "19fdb10f-5bab-4dc6-8970-4b131ffc211e"/*Pulsate*/,
+      "ChildId": "19fdb10f-5bab-4dc6-8970-4b131ffc211e"/*__ObsoletePulsate*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -532,7 +532,7 @@
       }
     },
     {
-      "ChildId": "3c1272ba-c8f5-4a82-8ca8-a2a3792cc483"/*KeepPoints*/,
+      "ChildId": "3c1272ba-c8f5-4a82-8ca8-a2a3792cc483"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -543,7 +543,7 @@
       }
     },
     {
-      "ChildId": "1a723892-a66e-44e5-bdb4-e3274dc47645"/*ApplyNoise*/,
+      "ChildId": "1a723892-a66e-44e5-bdb4-e3274dc47645"/*SimNoise*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -675,7 +675,7 @@
       }
     },
     {
-      "ChildId": "00b4e1bf-62c8-431c-8a00-f5c00e83fd05"/*KeepPoints*/,
+      "ChildId": "00b4e1bf-62c8-431c-8a00-f5c00e83fd05"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -686,7 +686,7 @@
       }
     },
     {
-      "ChildId": "99e63ace-8e98-4c8e-9933-40adb77cbd00"/*ApplyNoise*/,
+      "ChildId": "99e63ace-8e98-4c8e-9933-40adb77cbd00"/*SimNoise*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -785,7 +785,7 @@
       }
     },
     {
-      "ChildId": "39d707bf-52fa-4ddc-b07e-f21f39a4f0ff"/*Pulse*/,
+      "ChildId": "39d707bf-52fa-4ddc-b07e-f21f39a4f0ff"/*__ObsoletePulse*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -818,7 +818,7 @@
       }
     },
     {
-      "ChildId": "f45da076-b20e-401d-a696-40852695e079"/*Pulsate*/,
+      "ChildId": "f45da076-b20e-401d-a696-40852695e079"/*__ObsoletePulsate*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -1225,7 +1225,7 @@
       }
     },
     {
-      "ChildId": "c32c88d5-5e5e-4f70-b11a-caf951d6243b"/*KeepPoints*/,
+      "ChildId": "c32c88d5-5e5e-4f70-b11a-caf951d6243b"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -1236,7 +1236,7 @@
       }
     },
     {
-      "ChildId": "05a776a4-ded3-40da-92d7-e758ec38b898"/*ApplyNoise*/,
+      "ChildId": "05a776a4-ded3-40da-92d7-e758ec38b898"/*SimNoise*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

@@ -45,7 +45,7 @@
       "Outputs": []
     },
     {
-      "Id": "7e0497e5-3da1-4a27-b896-ebd036a34365"/*KeepPoints*/,
+      "Id": "7e0497e5-3da1-4a27-b896-ebd036a34365"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [
         {
@@ -62,7 +62,7 @@
       "Outputs": []
     },
     {
-      "Id": "0d165858-0a9b-4ba2-b83a-a6d9803f6377"/*ApplyNoise*/,
+      "Id": "0d165858-0a9b-4ba2-b83a-a6d9803f6377"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -191,7 +191,7 @@
       "Outputs": []
     },
     {
-      "Id": "c9a91bfa-bf84-49a1-9ae2-35e76017a691"/*ApplyNoise*/,
+      "Id": "c9a91bfa-bf84-49a1-9ae2-35e76017a691"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -288,7 +288,7 @@
       "Outputs": []
     },
     {
-      "Id": "6da34677-b066-4bc8-98c2-5b42b490f485"/*AudioReaction*/,
+      "Id": "6da34677-b066-4bc8-98c2-5b42b490f485"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -350,7 +350,7 @@
       "Outputs": []
     },
     {
-      "Id": "bcb0bc7d-36fa-43b7-8643-f1b22e018e88"/*ApplyCentricForce*/,
+      "Id": "bcb0bc7d-36fa-43b7-8643-f1b22e018e88"/*SimForces*/,
       "SymbolId": "9c378944-9a57-4ae4-a88e-36c07244bcf7",
       "InputValues": [
         {
@@ -493,7 +493,7 @@
       "Outputs": []
     },
     {
-      "Id": "a11586ed-7445-4424-a3df-a7f712567ed4"/*AudioReaction*/,
+      "Id": "a11586ed-7445-4424-a3df-a7f712567ed4"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -560,7 +560,7 @@
       "Outputs": []
     },
     {
-      "Id": "cda27e6b-2904-4b77-b69d-0422e62fb9e9"/*AudioReaction*/,
+      "Id": "cda27e6b-2904-4b77-b69d-0422e62fb9e9"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {

@@ -390,7 +390,7 @@
       }
     },
     {
-      "ChildId": "86bb6cc7-56aa-4037-906d-71840bfd44be"/*KeepPoints*/,
+      "ChildId": "86bb6cc7-56aa-4037-906d-71840bfd44be"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -423,7 +423,7 @@
       }
     },
     {
-      "ChildId": "48930fbc-2af4-4a7a-baa0-71bed46dac03"/*AudioReaction*/,
+      "ChildId": "48930fbc-2af4-4a7a-baa0-71bed46dac03"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -985,7 +985,7 @@
       }
     },
     {
-      "ChildId": "65f26d3f-cd59-434e-83c2-c5df70041d77"/*AudioReaction*/,
+      "ChildId": "65f26d3f-cd59-434e-83c2-c5df70041d77"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -1305,7 +1305,7 @@
       }
     },
     {
-      "ChildId": "eab9dca7-6426-42c7-aa8e-33b2e68f59a5"/*KeepPoints*/,
+      "ChildId": "eab9dca7-6426-42c7-aa8e-33b2e68f59a5"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -1404,7 +1404,7 @@
       }
     },
     {
-      "ChildId": "3cb592ad-90e9-4f91-80a3-bb2bb85eebae"/*KeepPoints*/,
+      "ChildId": "3cb592ad-90e9-4f91-80a3-bb2bb85eebae"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -2472,7 +2472,7 @@
       }
     },
     {
-      "ChildId": "58013d84-177f-47d9-a737-963c8708aed4"/*KeepPoints*/,
+      "ChildId": "58013d84-177f-47d9-a737-963c8708aed4"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -2791,7 +2791,7 @@
       }
     },
     {
-      "ChildId": "4296de68-48f3-4bc4-b150-b106b9cf1652"/*Pulse*/,
+      "ChildId": "4296de68-48f3-4bc4-b150-b106b9cf1652"/*__ObsoletePulse*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

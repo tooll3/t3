@@ -207,7 +207,7 @@
       "Outputs": []
     },
     {
-      "Id": "1e3918a0-f26c-4388-a6fb-dbc64d80c6ab"/*SizeToDispatchCount*/,
+      "Id": "1e3918a0-f26c-4388-a6fb-dbc64d80c6ab"/*CalcSize2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []
@@ -245,8 +245,8 @@
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 1.0,
-            "Y": 0.99999,
-            "Z": 0.99999,
+            "Y": 0.9890665,
+            "Z": 0.994361,
             "W": 1.0
           }
         },
@@ -259,6 +259,16 @@
           "Id": "4ca612b7-a899-4567-98e4-8b6e96d5f251"/*Height*/,
           "Type": "System.Single",
           "Value": 0.5
+        },
+        {
+          "Id": "6a91ba46-257d-4c3c-94c5-72cbc06ee816"/*EnableDepthTest*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "2680baf9-3dbd-4ade-b109-19b3b0f1d40f"/*EnableDepthWrite*/,
+          "Type": "System.Boolean",
+          "Value": false
         },
         {
           "Id": "6fd86a21-d06c-4edb-bbe2-39d7411e46d1"/*Position*/,
@@ -1233,14 +1243,14 @@
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
     {
-      "SourceParentOrChildId": "c082ccb7-6f5f-4fae-88ce-be55016b6048",
-      "SourceSlotId": "3c8116a2-2686-41ba-8bfd-d1b3fb929b02",
+      "SourceParentOrChildId": "e3d3fcf4-3cbd-40ac-846f-9efbcb7dbf04",
+      "SourceSlotId": "2d329133-29b9-4f56-b5a6-5ff7d83638fa",
       "TargetParentOrChildId": "2d337162-9b8f-43cb-9fd6-3c0c600e2d71",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
     {
-      "SourceParentOrChildId": "e3d3fcf4-3cbd-40ac-846f-9efbcb7dbf04",
-      "SourceSlotId": "2d329133-29b9-4f56-b5a6-5ff7d83638fa",
+      "SourceParentOrChildId": "c082ccb7-6f5f-4fae-88ce-be55016b6048",
+      "SourceSlotId": "3c8116a2-2686-41ba-8bfd-d1b3fb929b02",
       "TargetParentOrChildId": "2d337162-9b8f-43cb-9fd6-3c0c600e2d71",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },

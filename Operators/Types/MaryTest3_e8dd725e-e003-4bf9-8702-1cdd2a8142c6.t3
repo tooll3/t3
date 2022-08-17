@@ -14,14 +14,14 @@
           "Value": "Resources\\user\\wake\\proj-mary\\geometry\\mary-200k-smooth.obj"
         },
         {
-          "Id": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,
-          "Type": "System.Int32",
-          "Value": 0
-        },
-        {
           "Id": "ddd22736-a600-4c97-a4a4-ad3526b8b35c"/*ClearGPUCache*/,
           "Type": "System.Boolean",
           "Value": false
+        },
+        {
+          "Id": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -370,13 +370,13 @@
       ]
     },
     {
-      "Id": "6a26fe76-a72b-434c-ba70-0d33dd713456"/*KeepPoints*/,
+      "Id": "6a26fe76-a72b-434c-ba70-0d33dd713456"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "3b915749-e0d4-43e1-bcbf-c819b38092a9"/*ApplyNoise*/,
+      "Id": "3b915749-e0d4-43e1-bcbf-c819b38092a9"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -433,7 +433,7 @@
       "Outputs": []
     },
     {
-      "Id": "0851ff88-cf4f-47db-ac88-a238788067cc"/*ApplyFollowMeshSurface*/,
+      "Id": "0851ff88-cf4f-47db-ac88-a238788067cc"/*SimFollowMeshSurface*/,
       "SymbolId": "03aa5f28-3f74-4feb-aa6a-36cdb2d7f0d9",
       "InputValues": [
         {
@@ -1129,7 +1129,7 @@
       "Outputs": []
     },
     {
-      "Id": "9369273b-491d-4416-857f-54c5db32f569"/*AudioReaction*/,
+      "Id": "9369273b-491d-4416-857f-54c5db32f569"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -1286,7 +1286,7 @@
       "Outputs": []
     },
     {
-      "Id": "2c17a0f3-62ed-4902-b10a-5e1f6303fa4c"/*KeepPoints*/,
+      "Id": "2c17a0f3-62ed-4902-b10a-5e1f6303fa4c"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [
         {
@@ -1340,7 +1340,7 @@
       "Outputs": []
     },
     {
-      "Id": "9474fc67-8b78-49c7-bb3c-d14c4097a399"/*AudioReaction*/,
+      "Id": "9474fc67-8b78-49c7-bb3c-d14c4097a399"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -1589,7 +1589,7 @@
       "Outputs": []
     },
     {
-      "Id": "9234e563-dde0-47a6-87ad-22ab1073760d"/*AudioReaction*/,
+      "Id": "9234e563-dde0-47a6-87ad-22ab1073760d"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -1616,7 +1616,7 @@
       "Outputs": []
     },
     {
-      "Id": "c61aec32-767a-44a3-9224-1dac29c7a335"/*AudioReaction*/,
+      "Id": "c61aec32-767a-44a3-9224-1dac29c7a335"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -1851,7 +1851,7 @@
       "Outputs": []
     },
     {
-      "Id": "9187c3fd-b905-4e73-814a-a85aab331819"/*Pulse*/,
+      "Id": "9187c3fd-b905-4e73-814a-a85aab331819"/*__ObsoletePulse*/,
       "SymbolId": "5952d7b4-29ac-41fb-9324-287392d55048",
       "InputValues": [
         {
@@ -3011,7 +3011,7 @@
       "Outputs": []
     },
     {
-      "Id": "182ac728-2659-40be-b152-61f12e2933c6"/*AudioReaction*/,
+      "Id": "182ac728-2659-40be-b152-61f12e2933c6"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -3371,7 +3371,7 @@
       "Outputs": []
     },
     {
-      "Id": "81c44c3b-0191-44bc-bdae-251fea0109f8"/*AudioReaction*/,
+      "Id": "81c44c3b-0191-44bc-bdae-251fea0109f8"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -3399,7 +3399,7 @@
       "Outputs": []
     },
     {
-      "Id": "9997f2b7-a04b-4454-b621-ecd550ecf375"/*AudioReaction*/,
+      "Id": "9997f2b7-a04b-4454-b621-ecd550ecf375"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {

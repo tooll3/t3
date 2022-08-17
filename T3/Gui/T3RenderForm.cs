@@ -56,20 +56,14 @@ namespace T3
             IntPtr context = ImGui.CreateContext();
             ImGui.SetCurrentContext(context);
 
-            Fonts.FontNormal = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Regular.ttf", 18f);
-            Fonts.FontBold = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Medium.ttf", 18f);
-            Fonts.FontSmall = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Regular.ttf", 13f);
-            Fonts.FontLarge = ImGui.GetIO().Fonts.AddFontFromFileTTF(@"T3/Fonts/Roboto-Light.ttf", 30f);
-
-            CreateDeviceObjects();
             SetKeyMappings();
 
             SetPerFrameImGuiData(1f / 60f);
 
             ImGui.GetIO().BackendFlags |= ImGuiBackendFlags.HasMouseCursors;
-
-            ImGui.NewFrame();
         }
+
+
 
         public void WindowResized(int width, int height)
         {

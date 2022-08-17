@@ -621,7 +621,7 @@
       }
     },
     {
-      "ChildId": "5fe273a9-0c2b-4b67-a3dd-d84903d4a5d3"/*AudioReaction*/,
+      "ChildId": "5fe273a9-0c2b-4b67-a3dd-d84903d4a5d3"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -742,7 +742,7 @@
       }
     },
     {
-      "ChildId": "c14a5628-7644-4cc6-886a-4323babc7ce7"/*AudioReaction*/,
+      "ChildId": "c14a5628-7644-4cc6-886a-4323babc7ce7"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

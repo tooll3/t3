@@ -128,7 +128,7 @@
       }
     },
     {
-      "ChildId": "48546943-8316-4b1a-8784-769423edd162"/*ApplyNoise*/,
+      "ChildId": "48546943-8316-4b1a-8784-769423edd162"/*SimNoise*/,
       "Size": {
         "X": 110.0,
         "Y": 88.0
@@ -161,7 +161,7 @@
       }
     },
     {
-      "ChildId": "d904ad75-b0f6-42ca-a323-74a9f93415ca"/*KeepPoints*/,
+      "ChildId": "d904ad75-b0f6-42ca-a323-74a9f93415ca"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 62.0
@@ -205,7 +205,7 @@
       }
     },
     {
-      "ChildId": "68884267-81da-49e0-a135-eee4b3c1c0aa"/*ApplyCentricForce*/,
+      "ChildId": "68884267-81da-49e0-a135-eee4b3c1c0aa"/*SimForces*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -414,7 +414,7 @@
       }
     },
     {
-      "ChildId": "f191a2f8-a555-4537-b0de-1475c0fe93ca"/*ApplyDirectionalForce*/,
+      "ChildId": "f191a2f8-a555-4537-b0de-1475c0fe93ca"/*SimDirectedForce*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

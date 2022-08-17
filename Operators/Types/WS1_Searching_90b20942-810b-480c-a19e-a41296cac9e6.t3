@@ -93,9 +93,24 @@
       "SymbolId": "1b149f1f-529c-4418-ac9d-3871f24a9e38",
       "InputValues": [
         {
+          "Id": "0f2867ab-a65e-4bf3-b1b5-9c241690ba5f"/*Displacement*/,
+          "Type": "System.Single",
+          "Value": 2.7721399E-09
+        },
+        {
           "Id": "0eff3a75-eafc-4a5e-8a2c-10577c12e776"/*DisplacementOffset*/,
           "Type": "System.Single",
-          "Value": 0.0324388
+          "Value": 2.2053719E-06
+        },
+        {
+          "Id": "dc8dfa33-1a49-4800-8c1f-89b29d7427f3"/*Twist*/,
+          "Type": "System.Single",
+          "Value": 3.8044527E-07
+        },
+        {
+          "Id": "77673c64-918d-46a6-aa29-c362057afee6"/*Shade*/,
+          "Type": "System.Single",
+          "Value": -8.702045E-09
         },
         {
           "Id": "d430113e-33fd-49b7-b1c1-32cc95154a4e"/*SampleCount*/,
@@ -127,12 +142,17 @@
         {
           "Id": "7f66aa8d-fbdd-47d6-ba38-07e257e19401"/*SampleRadius*/,
           "Type": "System.Single",
-          "Value": 3.3542612
+          "Value": 2.3000717
         },
         {
           "Id": "d3197979-b418-4182-b1c9-f3126b175f8d"/*Strength*/,
           "Type": "System.Single",
-          "Value": 2.963341
+          "Value": 1.0901272
+        },
+        {
+          "Id": "c0a17636-f75b-45c0-ab63-cb0f9130a7ac"/*MixOriginal*/,
+          "Type": "System.Single",
+          "Value": 1.3596946E-10
         }
       ],
       "Outputs": []
@@ -200,7 +220,7 @@
       "Outputs": []
     },
     {
-      "Id": "683d5fd7-63cd-40d9-97f9-0fa4cd6ea7d1"/*AudioReaction*/,
+      "Id": "683d5fd7-63cd-40d9-97f9-0fa4cd6ea7d1"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -322,12 +342,12 @@
         {
           "Id": "f2baf278-adde-42de-afce-336b6c8d0387"/*RangeOutMin*/,
           "Type": "System.Single",
-          "Value": 0.38871711
+          "Value": 0.040023685
         },
         {
           "Id": "252276fb-8de1-42cc-ba41-07d6862015bd"/*RangeOutMax*/,
           "Type": "System.Single",
-          "Value": 0.85822755
+          "Value": 0.25004137
         }
       ],
       "Outputs": []
@@ -367,7 +387,7 @@
             "X": 0.0,
             "Y": 0.0,
             "Z": 0.0,
-            "W": 0.81097007
+            "W": 5.5134296E-05
           }
         },
         {

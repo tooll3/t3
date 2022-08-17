@@ -37,7 +37,7 @@
       }
     },
     {
-      "ChildId": "e7251de4-c04c-4983-9eca-8b186a4585a9"/*AudioReaction*/,
+      "ChildId": "e7251de4-c04c-4983-9eca-8b186a4585a9"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -125,7 +125,7 @@
       }
     },
     {
-      "ChildId": "1b68a430-6fa4-4d30-9752-98b5bc1ca3b1"/*ApplyCentricForce*/,
+      "ChildId": "1b68a430-6fa4-4d30-9752-98b5bc1ca3b1"/*SimForces*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -213,7 +213,7 @@
       }
     },
     {
-      "ChildId": "0b436f31-f133-4d0b-9780-c7c39ebb3349"/*AudioReaction*/,
+      "ChildId": "0b436f31-f133-4d0b-9780-c7c39ebb3349"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -280,7 +280,7 @@
       }
     },
     {
-      "ChildId": "d04cafd6-4aab-4b42-ad70-99b09fe82f01"/*AudioReaction*/,
+      "ChildId": "d04cafd6-4aab-4b42-ad70-99b09fe82f01"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

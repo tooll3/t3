@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using T3.Core.Animation;
+using T3.Core.DataTypes;
 using T3.Core.IO;
 using T3.Gui.Graph;
 using T3.Gui.Interaction;
@@ -37,8 +38,9 @@ namespace T3.Gui.UiHelpers
             public bool ShowTimeline = true;
             
             // UI-State
-            public bool FullScreen = true;
-            public bool ShowGraphOverContent = true;
+            public float UiScaleFactor = 1;
+            public bool FullScreen = false;
+            public bool ShowGraphOverContent = false;
             public int WindowLayoutIndex = 0;
             public bool EnableIdleMotion = true;
             
@@ -47,7 +49,7 @@ namespace T3.Gui.UiHelpers
             public bool ShowExplicitTextureFormatInOutputWindow = false;
             public bool UseArcConnections = true;
             public float SnapStrength = 5;
-            public bool UseJogDialControl = false;
+            public bool UseJogDialControl = true;
             public float ScrollSmoothing = 0.06f;
             public float TooltipDelay = 1.2f;
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
@@ -62,8 +64,8 @@ namespace T3.Gui.UiHelpers
             
             // Other settings
             public float GizmoSize = 100;
-            public bool SwapMainAnd2ndWindowsWhenFullscreen = true;
-            //public bool PresetsResetToDefaultValues = true;
+            public bool SwapMainAnd2ndWindowsWhenFullscreen = false;
+            public bool EnableStartupConsistencyCheck = true;
 
             // Timeline
             public bool CountBarsFromZero = true;
@@ -77,7 +79,9 @@ namespace T3.Gui.UiHelpers
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             
-            public List<GraphBookmarkNavigation.Bookmark> Bookmarks = new List<GraphBookmarkNavigation.Bookmark>();
+            public List<GraphBookmarkNavigation.Bookmark> Bookmarks = new();
+            public List<Gradient> GradientPresets = new();
+            
         }
 
         public static Guid GetLastOpenOpForWindow(string windowTitle)

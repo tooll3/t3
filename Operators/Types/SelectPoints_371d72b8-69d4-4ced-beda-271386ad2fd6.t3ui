@@ -395,6 +395,12 @@
     {
       "Id": "faa2e40b-86eb-48bd-b33b-d0e17c9050e6",
       "Title": "A work around to pass a 4x4 matrix into a shader.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
       "Position": {
         "X": -548.93146,
         "Y": 1624.8527

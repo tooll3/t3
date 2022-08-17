@@ -12,7 +12,7 @@ using T3.Core.Logging;
 namespace Core.Audio
 {
     /// <summary>
-    /// Controls loading, playback and discarding or audio clips.
+    /// Controls loading, playback and discarding of audio clips.
     /// </summary>
     public static class AudioEngine
     {
@@ -40,6 +40,7 @@ namespace Core.Audio
                 Bass.Init();
                 _bassInitialized = true;
             }
+            AudioAnalysis.CompleteFrame();
             
             // Create new streams
             foreach (var (audioClip, time) in _updatedClipTimes)
@@ -78,7 +79,7 @@ namespace Core.Audio
                         UpdateFftBuffer(clipStream.StreamHandle);
                         handledMainSoundtrack = true;
                     }
-                    clipStream.UpdateTime();
+                    clipStream.UpdateTime(playback);
                 }
             }
 
@@ -92,28 +93,36 @@ namespace Core.Audio
 
         public static void SetMute(bool configAudioMuted)
         {
-            if (configAudioMuted)
-            {
-                _originalVolumeBeforeMuting = Bass.Volume;
-            }
-            Bass.Volume = configAudioMuted ? 0 : _originalVolumeBeforeMuting;
+            IsMuted = configAudioMuted;
+            UpdateMuting();
         }
 
-        private static double _originalVolumeBeforeMuting;
+        internal static bool IsMuted;
+        
+        //private static double _originalVolumeBeforeMuting;
+
+        private static void UpdateMuting()
+        {
+            foreach (var stream in _clipPlaybacks.Values)
+            {
+                var volume = IsMuted ? 0 : 1;
+                Bass.ChannelSetAttribute(stream.StreamHandle,ChannelAttribute.Volume, volume);
+            }
+        }
         
         private static void UpdateFftBuffer(int soundStreamHandle)
         {
             const int get256FftValues = (int)DataFlags.FFT512;
-            Bass.ChannelGetData(soundStreamHandle, FftBuffer, get256FftValues);
+            if (AudioAnalysis.InputMode == AudioAnalysis.InputModes.Soundtrack)
+            {
+                Bass.ChannelGetData(soundStreamHandle, AudioAnalysis.FftGainBuffer, get256FftValues);
+            }
         }
         
         private static double _lastPlaybackSpeed = 1;
         private static bool _bassInitialized;
         private static readonly Dictionary<Guid, AudioClipStream> _clipPlaybacks = new();
         private static readonly Dictionary<AudioClip, double> _updatedClipTimes = new();
-        
-        private const int FftSize = 256;
-        public static readonly float[] FftBuffer =  new float[FftSize];
     }
 
 
@@ -164,6 +173,7 @@ namespace Core.Audio
             }
             var streamHandle = Bass.CreateStream(clip.FilePath, 0,0, BassFlags.Prescan);
             Bass.ChannelGetAttribute(streamHandle, ChannelAttribute.Frequency, out var defaultPlaybackFrequency);
+            Bass.ChannelSetAttribute(streamHandle, ChannelAttribute.Volume, AudioEngine.IsMuted ? 0 : 1);
             var bytes = Bass.ChannelGetLength(streamHandle);
             if (bytes < 0)
             {
@@ -188,17 +198,20 @@ namespace Core.Audio
 
         /// <summary>
         /// We try to find a compromise between letting bass play the audio clip in the correct playback speed which
-        /// eventually will drift away from the Playback time. Of the delta between playback and audio-clip time exceeds
+        /// eventually will drift away from Tooll's Playback time. If the delta between playback and audio-clip time exceeds
         /// a threshold, we resync.
         /// Frequent resync causes audio glitches.
-        /// Too large of a threshold can disrupt syncing.  
+        /// Too large of a threshold can disrupt syncing and increase latency.
         /// </summary>
-        public void UpdateTime()
+        /// <param name="playback"></param>
+        public void UpdateTime(Playback playback)
         {
             if (Playback.Current.PlaybackSpeed == 0)
                 return;
+            
+            var localTargetTimeInSecs = TargetTime - playback.SecondsFromBars(AudioClip.StartTime);
 
-            var isOutOfBounds = TargetTime < AudioClip.StartTime || TargetTime >= AudioClip.LengthInSeconds + AudioClip.StartTime;
+            var isOutOfBounds = localTargetTimeInSecs < 0 || localTargetTimeInSecs >= AudioClip.LengthInSeconds;
             var isPlaying = Bass.ChannelIsActive(StreamHandle) == PlaybackState.Playing;
             
             if (isOutOfBounds)
@@ -216,7 +229,7 @@ namespace Core.Audio
             
             var currentStreamPos = Bass.ChannelGetPosition(StreamHandle);
             var currentPos = Bass.ChannelBytes2Seconds(StreamHandle, currentStreamPos) - AudioSyncingOffset;
-            var soundDelta = currentPos - TargetTime;
+            var soundDelta = currentPos - localTargetTimeInSecs;
 
             
             if (Math.Abs(soundDelta) <=  ProjectSettings.Config.AudioResyncThreshold * Math.Abs(Playback.Current.PlaybackSpeed)) 
@@ -224,7 +237,7 @@ namespace Core.Audio
             
             // Resync
             //Log.Debug($"Sound delta {soundDelta:0.000}s for {AudioClip.FilePath}");
-            var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, TargetTime + AudioTriggerDelayOffset * Playback.Current.PlaybackSpeed + AudioSyncingOffset);
+            var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs + AudioTriggerDelayOffset * Playback.Current.PlaybackSpeed + AudioSyncingOffset);
             Bass.ChannelSetPosition(StreamHandle, newStreamPos);
 
         }

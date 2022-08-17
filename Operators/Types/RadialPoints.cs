@@ -42,7 +42,7 @@ namespace T3.Operators.Types.Id_a38626d8_3145_4aa9_820f_ca16b3411985
             var thickness = W.GetValue(context);
             var thicknessOffset = WOffset.GetValue(context);
 
-            var angelInRads = StartAngel.GetValue(context) * MathUtils.ToRad + (float)Math.PI/2;
+            var angelInRads = StartAngle.GetValue(context) * MathUtils.ToRad + (float)Math.PI/2;
             var deltaAngle = -Cycles.GetValue(context) * MathUtils.Pi2 / (pointCount- circleOffset);
             
             for (var index = 0; index < pointCount; index++)
@@ -92,7 +92,7 @@ namespace T3.Operators.Types.Id_a38626d8_3145_4aa9_820f_ca16b3411985
         public readonly InputSlot<Vector3> Offset = new InputSlot<Vector3>();
 
         [Input(Guid = "E3736CED-D10D-41F3-92ED-DDFC3EDD1BC6")]
-        public readonly InputSlot<float> StartAngel = new InputSlot<float>();
+        public readonly InputSlot<float> StartAngle = new InputSlot<float>();
 
         [Input(Guid = "C9341B17-5F56-4112-BA87-FE734B7BF0BA")]
         public readonly InputSlot<float> Cycles = new InputSlot<float>();

@@ -8,12 +8,22 @@ namespace T3.Core.Animation
 {
     public class TimeClip : IOutputData, ITimeClip
     {
+        public TimeClip()
+        {
+            var t = Playback.Current != null 
+                        ? (float)Playback.Current.TimeInBars
+                        : 0;
+            _timeRange = new TimeRange(t, t + DefaultClipDuration);
+            _sourceRange = new TimeRange(t, t + DefaultClipDuration);
+        }
+
+        private const float DefaultClipDuration = 4f;
         public Guid Id { get; set; }
 
-        private TimeRange _timeRange = new TimeRange(0.0f, 4.0f);
+        private TimeRange _timeRange;
         public ref TimeRange TimeRange => ref _timeRange;
 
-        private TimeRange _sourceRange = new TimeRange(0.0f, 4.0f);
+        private TimeRange _sourceRange;
         public ref TimeRange SourceRange => ref _sourceRange;
 
         public int LayerIndex { get; set; } = 0;

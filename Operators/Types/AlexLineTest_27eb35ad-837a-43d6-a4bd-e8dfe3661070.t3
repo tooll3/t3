@@ -76,7 +76,7 @@
       "Outputs": []
     },
     {
-      "Id": "19fdb10f-5bab-4dc6-8970-4b131ffc211e"/*Pulsate*/,
+      "Id": "19fdb10f-5bab-4dc6-8970-4b131ffc211e"/*__ObsoletePulsate*/,
       "SymbolId": "ffed6f9e-2495-4cf3-9cda-740ecec75d10",
       "InputValues": [],
       "Outputs": []
@@ -341,14 +341,14 @@
           "Value": 1.0
         },
         {
-          "Id": "40a04de8-54aa-4f66-acea-80ffc4dab7bd"/*PointSize*/,
-          "Type": "System.Single",
-          "Value": 1.0
-        },
-        {
           "Id": "c85649df-a235-49d6-a964-c69b299fb4b5"/*Visibility*/,
           "Type": "T3.Core.Operator.GizmoVisibility",
           "Value": "On"
+        },
+        {
+          "Id": "40a04de8-54aa-4f66-acea-80ffc4dab7bd"/*PointSize*/,
+          "Type": "System.Single",
+          "Value": 1.0
         }
       ],
       "Outputs": []
@@ -570,7 +570,7 @@
       "Outputs": []
     },
     {
-      "Id": "3c1272ba-c8f5-4a82-8ca8-a2a3792cc483"/*KeepPoints*/,
+      "Id": "3c1272ba-c8f5-4a82-8ca8-a2a3792cc483"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [
         {
@@ -582,7 +582,7 @@
       "Outputs": []
     },
     {
-      "Id": "1a723892-a66e-44e5-bdb4-e3274dc47645"/*ApplyNoise*/,
+      "Id": "1a723892-a66e-44e5-bdb4-e3274dc47645"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [],
       "Outputs": []
@@ -739,7 +739,7 @@
       "Outputs": []
     },
     {
-      "Id": "00b4e1bf-62c8-431c-8a00-f5c00e83fd05"/*KeepPoints*/,
+      "Id": "00b4e1bf-62c8-431c-8a00-f5c00e83fd05"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [
         {
@@ -751,7 +751,7 @@
       "Outputs": []
     },
     {
-      "Id": "99e63ace-8e98-4c8e-9933-40adb77cbd00"/*ApplyNoise*/,
+      "Id": "99e63ace-8e98-4c8e-9933-40adb77cbd00"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -835,7 +835,7 @@
       "Outputs": []
     },
     {
-      "Id": "39d707bf-52fa-4ddc-b07e-f21f39a4f0ff"/*Pulse*/,
+      "Id": "39d707bf-52fa-4ddc-b07e-f21f39a4f0ff"/*__ObsoletePulse*/,
       "SymbolId": "5952d7b4-29ac-41fb-9324-287392d55048",
       "InputValues": [],
       "Outputs": []
@@ -872,7 +872,7 @@
       "Outputs": []
     },
     {
-      "Id": "f45da076-b20e-401d-a696-40852695e079"/*Pulsate*/,
+      "Id": "f45da076-b20e-401d-a696-40852695e079"/*__ObsoletePulsate*/,
       "SymbolId": "ffed6f9e-2495-4cf3-9cda-740ecec75d10",
       "InputValues": [
         {
@@ -970,14 +970,14 @@
           "Value": 1.0
         },
         {
-          "Id": "40a04de8-54aa-4f66-acea-80ffc4dab7bd"/*PointSize*/,
-          "Type": "System.Single",
-          "Value": 1.0
-        },
-        {
           "Id": "c85649df-a235-49d6-a964-c69b299fb4b5"/*Visibility*/,
           "Type": "T3.Core.Operator.GizmoVisibility",
           "Value": "On"
+        },
+        {
+          "Id": "40a04de8-54aa-4f66-acea-80ffc4dab7bd"/*PointSize*/,
+          "Type": "System.Single",
+          "Value": 1.0
         }
       ],
       "Outputs": []
@@ -1505,13 +1505,13 @@
       "Outputs": []
     },
     {
-      "Id": "c32c88d5-5e5e-4f70-b11a-caf951d6243b"/*KeepPoints*/,
+      "Id": "c32c88d5-5e5e-4f70-b11a-caf951d6243b"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "05a776a4-ded3-40da-92d7-e758ec38b898"/*ApplyNoise*/,
+      "Id": "05a776a4-ded3-40da-92d7-e758ec38b898"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {

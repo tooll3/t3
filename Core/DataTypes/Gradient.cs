@@ -41,7 +41,7 @@ namespace T3.Core.DataTypes
             writer.WriteEndObject();
         }
 
-        public List<Step> Steps { get; set; } = CreateDefaultSteps();
+        public List<Step> Steps { get; set; } = new List<Step>();
         public Interpolations Interpolation { get; set; }
         
         public virtual void Read(JToken inputToken)

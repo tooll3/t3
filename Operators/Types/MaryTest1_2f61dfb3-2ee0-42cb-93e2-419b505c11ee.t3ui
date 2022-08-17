@@ -236,7 +236,7 @@
       }
     },
     {
-      "ChildId": "8a3dab98-2c35-4e01-99fe-adeae0da14a5"/*KeepPoints*/,
+      "ChildId": "8a3dab98-2c35-4e01-99fe-adeae0da14a5"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -247,7 +247,7 @@
       }
     },
     {
-      "ChildId": "cadf968b-623a-4f62-8f22-d5dd7252ea61"/*ApplyNoise*/,
+      "ChildId": "cadf968b-623a-4f62-8f22-d5dd7252ea61"/*SimNoise*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -280,7 +280,7 @@
       }
     },
     {
-      "ChildId": "9ad570de-0aa4-475d-94fd-1be9e7c84806"/*ApplyFollowMeshSurface*/,
+      "ChildId": "9ad570de-0aa4-475d-94fd-1be9e7c84806"/*SimFollowMeshSurface*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -687,7 +687,7 @@
       }
     },
     {
-      "ChildId": "c6958a02-054d-4a7b-936e-91e5fc359c6a"/*AudioReaction*/,
+      "ChildId": "c6958a02-054d-4a7b-936e-91e5fc359c6a"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -819,7 +819,7 @@
       }
     },
     {
-      "ChildId": "66049d23-8b91-41eb-a909-baaf472e1a36"/*KeepPoints*/,
+      "ChildId": "66049d23-8b91-41eb-a909-baaf472e1a36"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -841,7 +841,7 @@
       }
     },
     {
-      "ChildId": "4f55a79b-e622-4462-98ed-603a4baf1a0c"/*AudioReaction*/,
+      "ChildId": "4f55a79b-e622-4462-98ed-603a4baf1a0c"/*_LegacyAudioReaction*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

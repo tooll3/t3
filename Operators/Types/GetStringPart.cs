@@ -90,6 +90,9 @@ namespace T3.Operators.Types.Id_7baaa83d_5c09_42a0_b7bc_35dbcfa5156d
 
             Fragments.Value = GetFragment(fragmentStart, fragmentCount);
             TotalCount.Value = _chunks.Length;
+            
+            Fragments.DirtyFlag.Clear();
+            TotalCount.DirtyFlag.Clear();
         }
 
         private string GetFragment(int startFragment, int fragmentCount)

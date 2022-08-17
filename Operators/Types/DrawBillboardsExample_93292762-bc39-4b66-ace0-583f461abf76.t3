@@ -290,7 +290,7 @@
       "Outputs": []
     },
     {
-      "Id": "a7ff893b-f2f0-4517-9158-927a4644c8d1"/*ApplyNoise*/,
+      "Id": "a7ff893b-f2f0-4517-9158-927a4644c8d1"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [],
       "Outputs": []

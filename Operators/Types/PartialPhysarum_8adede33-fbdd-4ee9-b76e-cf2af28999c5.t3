@@ -663,7 +663,7 @@
       "Outputs": []
     },
     {
-      "Id": "005ac0f1-f94a-416a-8d85-756eff7e8954"/*KeepPoints*/,
+      "Id": "005ac0f1-f94a-416a-8d85-756eff7e8954"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [],
       "Outputs": []

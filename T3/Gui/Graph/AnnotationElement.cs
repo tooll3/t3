@@ -212,6 +212,16 @@ namespace T3.Gui.Graph
                     matches.Add(n);
             }
 
+            foreach (var a in parentUi.Annotations.Values)
+            {
+                if (a == annotation)
+                    continue;
+                
+                var nRect = new ImRect(a.PosOnCanvas, a.PosOnCanvas + a.Size);
+                if (aRect.Contains(nRect))
+                    matches.Add(a);
+            }
+
             return matches;
         }
 

@@ -31,6 +31,8 @@ namespace T3.Gui.Windows.Variations
 
         public void Draw(ImDrawListPtr drawList)
         {
+            UpdateCanvas();
+            
             // Complete deferred actions
             if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
                 DeleteSelectedElements();
@@ -302,10 +304,13 @@ namespace T3.Gui.Windows.Variations
 
         public bool TryGetBlendWeight(Variation v, out float weight)
         {
+            weight = 0;
+            if (_blendWeights.Count == 0)
+                return false;
+            
             var index = _blendVariations.IndexOf(v);
             if (index == -1)
             {
-                weight = 0;
                 return false;
             }
 

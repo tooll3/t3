@@ -230,7 +230,7 @@
       "Outputs": []
     },
     {
-      "Id": "ba94a516-c308-4fae-9d2d-189aeac5871c"/*SizeToDispatchCount*/,
+      "Id": "ba94a516-c308-4fae-9d2d-189aeac5871c"/*CalcSize2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []

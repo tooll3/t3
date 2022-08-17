@@ -1,7 +1,8 @@
-
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/particle.hlsl"
+#include "lib/shared/point.hlsl"
+
 
 cbuffer CountConstants : register(b0)
 {

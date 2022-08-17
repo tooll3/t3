@@ -37,9 +37,9 @@ namespace T3.Core.Operator
                 Index = index;
             }
 
-            public readonly Guid SymbolChildId;
-            public readonly Guid InputId;
-            public readonly int Index;
+            public Guid SymbolChildId;
+            public Guid InputId;
+            public int Index;
         }
 
         public void CopyAllAnimationsTo(Animator targetAnimator, Dictionary<Guid, Guid> oldToNewIdDict)
@@ -419,15 +419,22 @@ namespace T3.Core.Operator
             return _animatedInputCurves.TryGetValue(new CurveId(inputSlot), out curve);
         }
 
-
+        private static CurveId _lookUpKey;
         public bool IsInputSlotAnimated(IInputSlot inputSlot)
         {
-            return _animatedInputCurves.ContainsKey(new CurveId(inputSlot));
+            _lookUpKey.SymbolChildId = inputSlot.Parent.SymbolChildId;
+            _lookUpKey.InputId = inputSlot.Id;
+            _lookUpKey.Index = 0;
+            return _animatedInputCurves.ContainsKey(_lookUpKey);
         }
 
         public bool IsAnimated(Guid symbolChildId, Guid inputId) 
         {
-            return _animatedInputCurves.ContainsKey(new CurveId(symbolChildId, inputId));
+            _lookUpKey.SymbolChildId = symbolChildId;
+            _lookUpKey.InputId = inputId;
+            _lookUpKey.Index = 0;
+
+            return _animatedInputCurves.ContainsKey(_lookUpKey);
         }
  
         public bool IsInstanceAnimated(Instance instance)

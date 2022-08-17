@@ -35,11 +35,11 @@
     },
     {
       "Id": "e14dcc43-7c18-4ed7-ad39-dfeab10e3d33"/*Roughness*/,
-      "DefaultValue": 0.5
+      "DefaultValue": 0.25
     },
     {
       "Id": "108ff533-f205-4989-b894-acf48e3cc1db"/*Metal*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.5
     },
     {
       "Id": "600bbc24-6b3a-4ac4-9ceb-702e71c839e9"/*NormalMap*/,

@@ -339,7 +339,7 @@
       "Outputs": []
     },
     {
-      "Id": "e58f32f0-6358-407d-893a-2b6ce0fa59d7"/*KeepPoints*/,
+      "Id": "e58f32f0-6358-407d-893a-2b6ce0fa59d7"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [
         {
@@ -425,7 +425,7 @@
       "Outputs": []
     },
     {
-      "Id": "a5c5c430-0e81-4dcc-a224-98690542b4e8"/*ApplyNoise*/,
+      "Id": "a5c5c430-0e81-4dcc-a224-98690542b4e8"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -458,7 +458,7 @@
       "Outputs": []
     },
     {
-      "Id": "8f108214-89b7-41b7-a17d-205a16bda9e7"/*ApplyFollowMeshSurface*/,
+      "Id": "8f108214-89b7-41b7-a17d-205a16bda9e7"/*SimFollowMeshSurface*/,
       "SymbolId": "03aa5f28-3f74-4feb-aa6a-36cdb2d7f0d9",
       "InputValues": [],
       "Outputs": []

@@ -408,13 +408,13 @@
       "Outputs": []
     },
     {
-      "Id": "8a3dab98-2c35-4e01-99fe-adeae0da14a5"/*KeepPoints*/,
+      "Id": "8a3dab98-2c35-4e01-99fe-adeae0da14a5"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "cadf968b-623a-4f62-8f22-d5dd7252ea61"/*ApplyNoise*/,
+      "Id": "cadf968b-623a-4f62-8f22-d5dd7252ea61"/*SimNoise*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -493,7 +493,7 @@
       "Outputs": []
     },
     {
-      "Id": "9ad570de-0aa4-475d-94fd-1be9e7c84806"/*ApplyFollowMeshSurface*/,
+      "Id": "9ad570de-0aa4-475d-94fd-1be9e7c84806"/*SimFollowMeshSurface*/,
       "SymbolId": "03aa5f28-3f74-4feb-aa6a-36cdb2d7f0d9",
       "InputValues": [
         {
@@ -1246,7 +1246,7 @@
       "Outputs": []
     },
     {
-      "Id": "c6958a02-054d-4a7b-936e-91e5fc359c6a"/*AudioReaction*/,
+      "Id": "c6958a02-054d-4a7b-936e-91e5fc359c6a"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {
@@ -1437,7 +1437,7 @@
       "Outputs": []
     },
     {
-      "Id": "66049d23-8b91-41eb-a909-baaf472e1a36"/*KeepPoints*/,
+      "Id": "66049d23-8b91-41eb-a909-baaf472e1a36"/*PointSimulation*/,
       "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
       "InputValues": [
         {
@@ -1491,7 +1491,7 @@
       ]
     },
     {
-      "Id": "4f55a79b-e622-4462-98ed-603a4baf1a0c"/*AudioReaction*/,
+      "Id": "4f55a79b-e622-4462-98ed-603a4baf1a0c"/*_LegacyAudioReaction*/,
       "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
       "InputValues": [
         {

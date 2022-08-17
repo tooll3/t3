@@ -206,16 +206,6 @@
           "Id": "93d8bf26-5067-4ccc-b4cb-e03970686462"/*AddressW*/,
           "Type": "SharpDX.Direct3D11.TextureAddressMode",
           "Value": "Clamp"
-        },
-        {
-          "Id": "4b51422e-1da7-4a28-b55f-47881d42f801"/*MipLoadBias*/,
-          "Type": "System.Single",
-          "Value": 0.0
-        },
-        {
-          "Id": "1cce7427-2062-42fd-838e-328def3ecb30"/*MaximumAnisotropy*/,
-          "Type": "System.Int32",
-          "Value": 1
         }
       ],
       "Outputs": []
@@ -252,12 +242,6 @@
     {
       "Id": "dd3ea474-e0f0-45d0-a7cd-ccc2ebe2e9a4"/*Vector2ToFloat2*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "b13824d9-087b-4f28-aad6-4f11fbd705d4"/*LoadTexture2d*/,
-      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
       "Outputs": []
     },

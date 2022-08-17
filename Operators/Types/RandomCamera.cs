@@ -72,10 +72,11 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             var rotateAim = Matrix.RotationYawPitchRoll(
                                                   ComputeAngle(AimYawAngleAndWobble,3) + rotOffset.X * MathUtils.ToRad,
                                                   ComputeAngle(AimPitchAngleAndWobble,4) + rotOffset.Y * MathUtils.ToRad,
-                                                  rotOffset.Z * MathUtils.ToRad);
+                                                  0);
 
             
             var adjustedViewDirection = Vector3.TransformNormal(viewDirection, rotateAim);
+            adjustedViewDirection.Normalize();
             target = eye + adjustedViewDirection;
 
             // Computing matrix
@@ -83,7 +84,7 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             Vector3 up = new Vector3(u.X, u.Y, u.Z);
 
             var roll = ComputeAngle(AimRollAngleAndWobble, 5);
-            var rotateAroundViewDirection = Matrix.RotationAxis(adjustedViewDirection, roll);
+            var rotateAroundViewDirection = Matrix.RotationAxis(adjustedViewDirection, (roll + rotOffset.Z) * MathUtils.ToRad);
             up = Vector3.TransformNormal(up, rotateAroundViewDirection);
             up.Normalize();
 
