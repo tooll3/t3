@@ -9,6 +9,11 @@
       "SymbolId": "46749ae5-ef10-43e7-a712-5cbd7a1d4398",
       "InputValues": [
         {
+          "Id": "b4e3f2c7-0996-4832-abcc-f0e89e5c56c2"/*SampleRadius*/,
+          "Type": "System.Single",
+          "Value": 2.0
+        },
+        {
           "Id": "0529bdf2-47bf-40bf-8ad9-d925545257e9"/*TextureMode*/,
           "Type": "SharpDX.Direct3D11.TextureAddressMode",
           "Value": "Mirror"
@@ -16,17 +21,17 @@
         {
           "Id": "de7eb925-58d9-4300-a0d1-90f7c41722b2"/*Smoothness*/,
           "Type": "System.Single",
-          "Value": 0.080000766
+          "Value": 0.7200005
         },
         {
           "Id": "27a6b0c8-f0e5-4bf2-bb2d-685062d0192d"/*Curvature*/,
           "Type": "System.Single",
-          "Value": 9.26
+          "Value": 5.65
         },
         {
           "Id": "1e5605dd-3dc4-4f50-833a-ffc61d83fca3"/*StepSize*/,
           "Type": "System.Single",
-          "Value": 0.99999774
+          "Value": 3.9999971
         },
         {
           "Id": "3715eeb1-59b5-448f-9bf8-91dc23f71b1d"/*StepCount*/,
@@ -36,7 +41,7 @@
         {
           "Id": "7da293c9-8c0a-4b6c-98f6-afdda2c16062"/*ZoneLevels*/,
           "Type": "System.Int32",
-          "Value": 4
+          "Value": 2
         },
         {
           "Id": "14034d09-5733-4261-8316-f99fd1978247"/*ZoneCenter*/,
