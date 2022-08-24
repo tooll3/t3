@@ -47,8 +47,28 @@ namespace T3.Operators.Types.Id_46749ae5_ef10_43e7_a712_5cbd7a1d4398
         public readonly InputSlot<float> TextureScale = new InputSlot<float>();
 
         [Input(Guid = "de7eb925-58d9-4300-a0d1-90f7c41722b2")]
-        public readonly InputSlot<float> AdjustmentSpeed = new InputSlot<float>();
+        public readonly InputSlot<float> Smoothness = new InputSlot<float>();
 
+        [Input(Guid = "27a6b0c8-f0e5-4bf2-bb2d-685062d0192d")]
+        public readonly InputSlot<float> Curvature = new InputSlot<float>();
+        
+        [Input(Guid = "1e5605dd-3dc4-4f50-833a-ffc61d83fca3")]
+        public readonly InputSlot<float> StepSize = new InputSlot<float>();
+
+        [Input(Guid = "3715eeb1-59b5-448f-9bf8-91dc23f71b1d")]
+        public readonly InputSlot<int> StepCount = new InputSlot<int>();
+
+
+
+        [Input(Guid = "7da293c9-8c0a-4b6c-98f6-afdda2c16062")]
+        public readonly InputSlot<int> ZoneLevels = new InputSlot<int>();
+        
+        [Input(Guid = "fbb64646-51d7-4471-8bcd-b549a8413bf4")]
+        public readonly InputSlot<float> ZoneWidth = new InputSlot<float>();
+
+        [Input(Guid = "14034d09-5733-4261-8316-f99fd1978247")]
+        public readonly InputSlot<float> ZoneCenter = new InputSlot<float>();
+        
 
         private enum Attributes
         {
