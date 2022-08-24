@@ -164,12 +164,12 @@ namespace t3.Gui.InputUi.CombinedInputs
                 double u = newDragPosition.X;
                 var enableSnapping = ImGui.GetIO().KeyShift;
                 if(enableSnapping)
-                    _singleCurveCanvas.SnapHandlerForU.CheckForSnapping(ref u, _singleCurveCanvas.Scale.X);
+                    _singleCurveCanvas.SnapHandlerForU.CheckForSnapping(ref u, _singleCurveCanvas.Scale.X * 1.5f);
 
                 double v = newDragPosition.Y;
                 
                 if(enableSnapping)
-                    _singleCurveCanvas.SnapHandlerForV.CheckForSnapping(ref v, _singleCurveCanvas.Scale.Y);
+                    _singleCurveCanvas.SnapHandlerForV.CheckForSnapping(ref v, _singleCurveCanvas.Scale.Y * 1.5f);
 
                 UpdateDragCommand(u - vDef.U, v - vDef.Value);
 

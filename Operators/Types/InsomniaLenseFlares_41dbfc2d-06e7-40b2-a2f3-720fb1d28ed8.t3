@@ -100,6 +100,16 @@
       "SymbolId": "95558338-81a5-4ecc-9d5c-1c6fb5f6f4fa",
       "InputValues": [
         {
+          "Id": "333c119c-79d0-410c-a20a-5d035a7192ee"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 2.8999999,
+            "Y": 2.8999999,
+            "Z": 2.8999999,
+            "W": 1.0
+          }
+        },
+        {
           "Id": "257c4149-7c27-48ce-abd5-c0dbfc1631b3"/*BlendMod*/,
           "Type": "System.Int32",
           "Value": 1
@@ -185,7 +195,7 @@
         {
           "Id": "3ba2f274-43c5-4c2c-aaa3-474b3f178fbc"/*Complexity*/,
           "Type": "System.Single",
-          "Value": 31.0
+          "Value": 32.1
         },
         {
           "Id": "a2785b57-abcc-442e-90c7-cd120d3255ab"/*Gamma*/,
@@ -205,7 +215,7 @@
         {
           "Id": "d0b327fa-f48a-44cd-aa01-161b1c61bdc1"/*ScatterBrightness*/,
           "Type": "System.Single",
-          "Value": 1.02
+          "Value": 1.29
         },
         {
           "Id": "f1561cc1-3d5a-4caf-899e-fc0c81eed15b"/*Colorize*/,
@@ -311,16 +321,6 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "71681302-3085-4d0b-9af9-98be4463b4d3",
-                  "NormalizedPosition": 0.009708738,
-                  "Color": {
-                    "R": 0.97607654,
-                    "G": 0.9307078,
-                    "B": 0.93231165,
-                    "A": 0.42105263
-                  }
-                },
-                {
                   "Id": "55fddad6-b7dd-42db-8b2a-bceac011d16b",
                   "NormalizedPosition": 0.03640777,
                   "Color": {
@@ -328,6 +328,16 @@
                     "G": 1.0,
                     "B": 0.97130454,
                     "A": 0.0
+                  }
+                },
+                {
+                  "Id": "71681302-3085-4d0b-9af9-98be4463b4d3",
+                  "NormalizedPosition": 0.25541127,
+                  "Color": {
+                    "R": 0.97607654,
+                    "G": 0.9307078,
+                    "B": 0.93231165,
+                    "A": 0.42105263
                   }
                 },
                 {
@@ -465,7 +475,7 @@
         {
           "Id": "59ba312f-c74f-4e76-8830-57c2effa0ff1"/*SpriteCount*/,
           "Type": "System.Int32",
-          "Value": 2
+          "Value": 27
         },
         {
           "Id": "9f85d1f1-37d2-4f7e-9efd-70cb415c4cee"/*Brightness*/,
@@ -496,6 +506,11 @@
           }
         },
         {
+          "Id": "2a1285b1-63ea-46a5-8d96-b7ba33edd88b"/*RandomizeSize*/,
+          "Type": "System.Single",
+          "Value": 1.23
+        },
+        {
           "Id": "bc1d9fdc-ea07-4c0d-be2d-02fa955f9e5a"/*RandomizeSpread*/,
           "Type": "System.Single",
           "Value": 0.18
@@ -504,20 +519,20 @@
           "Id": "7d9da46c-2d1f-48f8-bdc5-bb7e29c363c7"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 1.0,
-            "Y": 0.11790395,
-            "Z": 0.8112548,
-            "W": 0.09000002
+            "X": 0.39790392,
+            "Y": 0.0,
+            "Z": 0.312763,
+            "W": 0.01000002
           }
         },
         {
           "Id": "53351cf3-71a5-4cb3-ad81-60abc7718d4b"/*RandomizeColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0,
-            "W": 0.44000003
+            "X": 0.07,
+            "Y": 0.07,
+            "Z": 0.07,
+            "W": 1.0
           }
         },
         {
@@ -896,6 +911,16 @@
       "SymbolId": "95558338-81a5-4ecc-9d5c-1c6fb5f6f4fa",
       "InputValues": [
         {
+          "Id": "333c119c-79d0-410c-a20a-5d035a7192ee"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 4.9,
+            "Y": 4.9,
+            "Z": 4.9,
+            "W": 1.0
+          }
+        },
+        {
           "Id": "257c4149-7c27-48ce-abd5-c0dbfc1631b3"/*BlendMod*/,
           "Type": "System.Int32",
           "Value": 1
@@ -906,12 +931,7 @@
           "Value": false
         }
       ],
-      "Outputs": [
-        {
-          "Id": "d2d834bd-00f4-46a0-ad20-3f399e107229"/*DrawSprites*/,
-          "IsDisabled": true
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "9700b2cb-eed6-4f81-9c01-69c10dead090"/*Star*/,

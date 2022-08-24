@@ -133,7 +133,7 @@ void main(uint3 i : SV_DispatchThreadID)
                      + SourceVertices[faceVertices.y].Selected
                      + SourceVertices[faceVertices.z].Selected)/3;
 
-    float weight = avgSelection;
+    float weight = UseVertexSelection > 0.5 ? avgSelection : 1;
 
     // DANGER! This will cause multiple access problems with shared vertices!
     ResultVertices[faceVertices.x] = SourceVertices[faceVertices.x];
@@ -203,10 +203,10 @@ void main(uint3 i : SV_DispatchThreadID)
     float3 n = cross(pos1 - pos0, pos2 - pos0);
 
     float i2 = saturate(influence * 10);
-    pos0 = ResultVertices[faceVertices.x].Normal = lerp(ResultVertices[faceVertices.x].Normal, n, i2);
-    pos1 = ResultVertices[faceVertices.y].Normal = lerp(ResultVertices[faceVertices.y].Normal, n, i2);
-    pos2 = ResultVertices[faceVertices.z].Normal = lerp(ResultVertices[faceVertices.z].Normal, n, i2);
+    ResultVertices[faceVertices.x].Normal = lerp(ResultVertices[faceVertices.x].Normal, n, i2);
+    ResultVertices[faceVertices.y].Normal = lerp(ResultVertices[faceVertices.y].Normal, n, i2);
+    ResultVertices[faceVertices.z].Normal = lerp(ResultVertices[faceVertices.z].Normal, n, i2);
 
-
+    
 }
 

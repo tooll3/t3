@@ -67,7 +67,12 @@
           "Value": "Resources\\lib\\points\\modify\\transform-points.hlsl"
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "6c118567-8827-4422-86cc-4d4d00762d87"/*ComputeShader*/,
+          "DirtyFlagTrigger": "Always"
+        }
+      ]
     },
     {
       "Id": "852d7521-22e7-4482-9ae5-0556cd78a26a"/*ComputeShaderStage*/,
@@ -83,18 +88,18 @@
           }
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "c382284f-7e37-4eb0-b284-bc735247f26b"/*ComputeShaderStage*/,
+          "DirtyFlagTrigger": "None"
+        }
+      ]
     },
     {
       "Id": "d45b52bf-0959-402f-820c-8fecb68d4be3"/*FloatsToBuffer*/,
       "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "f5531ffb-dbde-45d3-af2a-bd90bcbf3710"/*FloatsToBuffer*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "b23f0e8b-faa3-4e01-9675-e33c0fbe4af6"/*GetSRVProperties*/,

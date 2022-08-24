@@ -69,12 +69,7 @@
       "Id": "6e1540a7-f8ba-4bbf-85c8-454627e2e02d"/*FloatsToBuffer*/,
       "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "f5531ffb-dbde-45d3-af2a-bd90bcbf3710"/*FloatsToBuffer*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "6ef8e9a2-8687-4d65-9a08-926361fdab7f"/*Vector3ToFloat3*/,

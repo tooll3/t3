@@ -73,12 +73,7 @@
       "Id": "99c9771e-4112-4520-816e-32a0b9644897"/*FloatsToBuffer*/,
       "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "f5531ffb-dbde-45d3-af2a-bd90bcbf3710"/*FloatsToBuffer*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "55f0a2a3-093b-426a-8955-f225413a96c7"/*GetSRVProperties*/,

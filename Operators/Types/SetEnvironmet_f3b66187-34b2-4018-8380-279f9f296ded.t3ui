@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "e4482cab-f20c-4f9f-9179-c64944164509"/*SubTree*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 270.1344,
         "Y": 598.8019
@@ -195,17 +196,6 @@
       "Position": {
         "X": 606.5238,
         "Y": 1033.8887
-      }
-    },
-    {
-      "ChildId": "ec8daa6e-edc6-47e4-bc8b-7406ea4c206f"/*PointLight*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 708.12555,
-        "Y": 539.7909
       }
     }
   ],

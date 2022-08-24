@@ -24,6 +24,10 @@ namespace T3.Operators.Types.Id_e0849edd_ea1b_4657_b22d_5aa646318aa8
             {
                 PrepareCommand.GetValue(context);
             }
+            else
+            {
+                PrepareCommand.DirtyFlag.Clear();
+            }
             
             var vertices = Vertices.GetValue(context);
             var indices = Indices.GetValue(context);

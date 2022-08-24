@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ImGuiNET;
 using SharpDX;
@@ -152,6 +153,24 @@ namespace T3.Gui.Windows.Output
             ImGui.SameLine();
             ColorEditButton.Draw(ref _backgroundColor, new Vector2(ImGui.GetFrameHeight(), ImGui.GetFrameHeight()));
             ImGui.PopStyleColor();
+            
+            var texture = GetCurrentTexture();
+            if (texture != null)
+            {
+                ImGui.SameLine();
+
+                if (ImGui.Button("SaveScr"))
+                {
+                    var folder = @".t3/screenshots/";
+                    if (!Directory.Exists(folder))
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
+                    
+                    var filename = Path.Join(folder, $"{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.jpg");
+                    ScreenshotWriter.SaveBufferToFile(texture, filename);
+                }
+            }
         }
 
         

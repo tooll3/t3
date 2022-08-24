@@ -42,7 +42,12 @@
       "Id": "2f12f5cb-cbdd-4d9a-b4ad-d2b577d2e965"/*TransformsConstBuffer*/,
       "SymbolId": "a60adc26-d7c6-4615-af78-8d2d6da46b79",
       "InputValues": [],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "7a76d147-4b8e-48cf-aa3e-aac3aa90e888"/*TransformsConstBuffer*/,
+          "DirtyFlagTrigger": "Always"
+        }
+      ]
     },
     {
       "Id": "ac78d542-8551-4d5c-9dc4-8c594f27e4e5"/*VertexShader*/,
@@ -162,7 +167,12 @@
       "Id": "e57d129b-4621-4971-ba62-7ab87cafadcb"/*FloatsToBuffer*/,
       "SymbolId": "724da755-2d0c-42ab-8335-8c88ec5fb078",
       "InputValues": [],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "f5531ffb-dbde-45d3-af2a-bd90bcbf3710"/*FloatsToBuffer*/,
+          "DirtyFlagTrigger": "Always"
+        }
+      ]
     },
     {
       "Id": "ad43d468-55d5-4d7f-abac-0e30d42be56c"/*Draw*/,
