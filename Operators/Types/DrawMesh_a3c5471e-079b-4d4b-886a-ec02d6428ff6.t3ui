@@ -50,6 +50,13 @@
         "X": 551.0433,
         "Y": 4605.6885
       }
+    },
+    {
+      "InputId": "2c4b5f3a-e9ec-432e-b1ae-6d999ae44f1b"/*FillMode*/,
+      "Position": {
+        "X": 551.0433,
+        "Y": 4650.6885
+      }
     }
   ],
   "SymbolChildUis": [
@@ -80,7 +87,7 @@
       "ChildId": "92de3521-0c60-4c9f-a8ec-3993e4c9f4eb"/*RasterizerStateOp*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 1878.7769,

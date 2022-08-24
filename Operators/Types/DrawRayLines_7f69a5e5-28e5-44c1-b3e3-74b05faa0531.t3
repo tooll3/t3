@@ -102,11 +102,6 @@
           "Value": 0.0
         },
         {
-          "Id": "f4e8844c-e4f3-42bb-8103-c99149543b23"/*FillMode*/,
-          "Type": "SharpDX.Direct3D11.FillMode",
-          "Value": "Solid"
-        },
-        {
           "Id": "33d5bcfa-996a-4019-9e80-d15b72ea9d4c"/*DepthClipEnabled*/,
           "Type": "System.Boolean",
           "Value": true

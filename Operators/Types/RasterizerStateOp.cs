@@ -24,19 +24,27 @@ namespace T3.Operators.Types.Id_c7283335_ef57_46ad_9538_abbade65845a
         private void Update(EvaluationContext context)
         {
             RasterizerState.Value?.Dispose();
+
+            var fillMode = FillMode.GetValue(context) switch
+                               {
+                                   (int)SharpDX.Direct3D11.FillMode.Solid     => SharpDX.Direct3D11.FillMode.Solid,
+                                   (int)SharpDX.Direct3D11.FillMode.Wireframe => SharpDX.Direct3D11.FillMode.Wireframe,
+                                   _                                          => SharpDX.Direct3D11.FillMode.Solid
+                               };
+
             var rasterizerDesc = new RasterizerStateDescription()
-                                 {
-                                     CullMode = CullMode.GetValue(context),
-                                     DepthBias = DepthBias.GetValue(context),
-                                     DepthBiasClamp = DepthBiasClamp.GetValue(context),
-                                     FillMode = FillMode.GetValue(context),
-                                     IsAntialiasedLineEnabled = AntialiasedLineEnabled.GetValue(context),
-                                     IsDepthClipEnabled = DepthClipEnabled.GetValue(context),
-                                     IsFrontCounterClockwise = FrontCounterClockwise.GetValue(context),
-                                     IsMultisampleEnabled = MultiSampleEnabled.GetValue(context),
-                                     IsScissorEnabled = ScissorEnabled.GetValue(context),
-                                     SlopeScaledDepthBias = SlopeScaledDepthBias.GetValue(context)
-                                 };
+                                     {
+                                         CullMode = CullMode.GetValue(context),
+                                         DepthBias = DepthBias.GetValue(context),
+                                         DepthBiasClamp = DepthBiasClamp.GetValue(context),
+                                         FillMode = fillMode,
+                                         IsAntialiasedLineEnabled = AntialiasedLineEnabled.GetValue(context),
+                                         IsDepthClipEnabled = DepthClipEnabled.GetValue(context),
+                                         IsFrontCounterClockwise = FrontCounterClockwise.GetValue(context),
+                                         IsMultisampleEnabled = MultiSampleEnabled.GetValue(context),
+                                         IsScissorEnabled = ScissorEnabled.GetValue(context),
+                                         SlopeScaledDepthBias = SlopeScaledDepthBias.GetValue(context)
+                                     };
 
 
             try
@@ -49,14 +57,19 @@ namespace T3.Operators.Types.Id_c7283335_ef57_46ad_9538_abbade65845a
             }
         }
 
+        
+
         [Input(Guid = "03F3BC7F-3949-4A97-88CF-04E162CFA2F7")]
         public readonly InputSlot<CullMode> CullMode = new InputSlot<CullMode>();
         [Input(Guid = "A2193AA0-E217-4248-A8DC-360CB89A613B")]
         public readonly InputSlot<int> DepthBias = new InputSlot<int>();
+        
         [Input(Guid = "2B53507E-24C3-4895-8928-3400C6ACCCB6")]
         public readonly InputSlot<float> DepthBiasClamp = new InputSlot<float>();
-        [Input(Guid = "F4E8844C-E4F3-42BB-8103-C99149543B23")]
-        public readonly InputSlot<FillMode> FillMode = new InputSlot<FillMode>();
+        
+        [Input(Guid = "78C9B432-A2B8-4AEA-81E4-0CD5086B3B94", MappedType = typeof(FillMode))]
+        public readonly InputSlot<int> FillMode = new InputSlot<int>();
+        
         [Input(Guid = "EEB75A91-2402-44BE-BB9D-B620E34085ED")]
         public readonly InputSlot<bool> AntialiasedLineEnabled = new InputSlot<bool>();
         [Input(Guid = "33D5BCFA-996A-4019-9E80-D15B72EA9D4C")]

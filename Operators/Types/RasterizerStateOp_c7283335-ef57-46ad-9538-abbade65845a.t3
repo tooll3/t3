@@ -16,8 +16,8 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "f4e8844c-e4f3-42bb-8103-c99149543b23"/*FillMode*/,
-      "DefaultValue": "Solid"
+      "Id": "78c9b432-a2b8-4aea-81e4-0cd5086b3b94"/*FillMode*/,
+      "DefaultValue": 3
     },
     {
       "Id": "eeb75a91-2402-44be-bb9d-b620e34085ed"/*AntialiasedLineEnabled*/,
