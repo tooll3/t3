@@ -100,7 +100,7 @@ namespace T3.Gui.Windows
                 }
                 catch (Exception e)
                 {
-                    Log.Warning($"Failed to create target folder '{_targetFolder}'");
+                    Log.Warning($"Failed to create target folder '{_targetFolder}': {e.Message}");
                     return false;
                 }
             }
