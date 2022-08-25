@@ -48,11 +48,7 @@ float4 psMain(vsOutput input) : SV_TARGET
                     abs(x1.b-m.b) + abs(x2.b-m.b) + abs(y1.b - m.b) +abs(y2.b - m.b)
                 ) * Strength + Contrast;
                 
-    
-    if(x<= sx*8 || x>= 1-sx*8 
-    ||y<= sy*8 || y>= 1-sy*8) {
-    average=0;
-    }
+
     float4 edgeColor = clamp(float4(average,average,average,1),0 , 10000) * Color;
     return lerp(edgeColor, m, MixOriginal);
 }
