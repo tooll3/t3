@@ -60,6 +60,13 @@
         "X": -43.22547,
         "Y": 1360.0071
       }
+    },
+    {
+      "InputId": "e8a33694-9f2f-452f-bf76-3d3aea4dcb94"/*BlendEnabled*/,
+      "Position": {
+        "X": -43.22547,
+        "Y": 1405.0071
+      }
     }
   ],
   "SymbolChildUis": [
@@ -105,17 +112,6 @@
       "Position": {
         "X": 699.02423,
         "Y": 1172.1641
-      }
-    },
-    {
-      "ChildId": "b5e3faf7-3bb2-483f-8d0a-94c5df5b9dc0"/*BlendStateOp*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 477.1714,
-        "Y": 1474.5106
       }
     },
     {
@@ -230,17 +226,6 @@
       }
     },
     {
-      "ChildId": "a4b8e914-6bcb-4619-8078-dc5037d2c2c2"/*RenderTargetBlendDesc*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 260.62253,
-        "Y": 1479.9489
-      }
-    },
-    {
       "ChildId": "5e5582db-1152-478a-b822-b5fdf7ed96a3"/*GetTextureSize*/,
       "Size": {
         "X": 110.0,
@@ -285,25 +270,25 @@
       }
     },
     {
-      "ChildId": "08b5e569-b749-4b3b-9114-7bfbdd151cd7"/*LoadTexture2d*/,
+      "ChildId": "66065af5-2777-4378-87f3-62236ef57103"/*BlendStateOp*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 49.0
       },
       "Position": {
-        "X": 309.02423,
-        "Y": 1657.632
+        "X": 521.07776,
+        "Y": 1799.531
       }
     },
     {
-      "ChildId": "971c7593-4edd-4186-98fe-6e79e6462397"/*PickBlendMode*/,
+      "ChildId": "16d35738-fa2d-4080-b14d-a0c1a055818d"/*RenderTargetBlendDesc*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 36.0
       },
       "Position": {
-        "X": 373.587,
-        "Y": 1610.2062
+        "X": 371.07776,
+        "Y": 1799.531
       }
     }
   ],

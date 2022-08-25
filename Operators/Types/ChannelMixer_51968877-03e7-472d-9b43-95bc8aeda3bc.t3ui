@@ -88,18 +88,6 @@
       }
     },
     {
-      "ChildId": "af62d574-9d8e-4165-b544-3080ce7184b5"/*_ImageFxShaderSetup2*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 125.87869,
-        "Y": 596.3439
-      },
-      "Position": {
-        "X": 425.39984,
-        "Y": 21.665028
-      }
-    },
-    {
       "ChildId": "0d751e5a-ab98-447a-86ae-998e16b4f99c"/*Vector4ToFloat4*/,
       "Size": {
         "X": 110.0,
@@ -120,14 +108,25 @@
         "X": 121.91951,
         "Y": 522.35626
       }
+    },
+    {
+      "ChildId": "99f43d85-65d0-418e-bb90-83f75b71360f"/*_ImageFxShaderSetupStatic*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 322.0
+      },
+      "Position": {
+        "X": 720.5011,
+        "Y": 70.71243
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "9cedcad7-1c8d-4aee-9168-67deae14248d"/*Output*/,
       "Position": {
-        "X": 939.8677,
-        "Y": 642.9786
+        "X": 936.1107,
+        "Y": 139.31403
       }
     }
   ]
