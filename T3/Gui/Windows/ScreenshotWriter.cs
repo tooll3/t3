@@ -6,30 +6,36 @@ using SharpDX.DXGI;
 using SharpDX.IO;
 using SharpDX.WIC;
 using T3.Core;
+using T3.Core.Logging;
 
 namespace T3.Gui.Windows
 {
     public static class ScreenshotWriter
     {
-        public static bool SaveBufferToFile(Texture2D texture2d, string filepath)
+        public enum FileFormats
         {
-            var device = ResourceManager.Instance().Device;            
-            
+            Png,
+            Jpg,
+        }
+        
+        public static bool SaveBufferToFile(Texture2D texture2d, string filepath, FileFormats format)
+        {
+            var device = ResourceManager.Instance().Device;
 
             if (texture2d == null)
                 return false;
 
             var currentDesc = texture2d.Description;
-            if (ImagesWithCpuAccess.Count == 0 
-                || ImagesWithCpuAccess[0].Description.Format != currentDesc.Format 
-                || ImagesWithCpuAccess[0].Description.Width != currentDesc.Width 
-                || ImagesWithCpuAccess[0].Description.Height != currentDesc.Height 
+            if (ImagesWithCpuAccess.Count == 0
+                || ImagesWithCpuAccess[0].Description.Format != currentDesc.Format
+                || ImagesWithCpuAccess[0].Description.Width != currentDesc.Width
+                || ImagesWithCpuAccess[0].Description.Height != currentDesc.Height
                 || ImagesWithCpuAccess[0].Description.MipLevels != currentDesc.MipLevels)
-            {    
+            {
                 var imageDesc = new Texture2DDescription
                                     {
                                         BindFlags = BindFlags.None,
-                                        Format = currentDesc.Format,                                           
+                                        Format = currentDesc.Format,
                                         Width = currentDesc.Width,
                                         Height = currentDesc.Height,
                                         MipLevels = currentDesc.MipLevels,
@@ -41,11 +47,12 @@ namespace T3.Gui.Windows
                                     };
 
                 Dispose();
-                
+
                 for (int i = 0; i < NumTextureEntries; ++i)
                 {
                     ImagesWithCpuAccess.Add(new Texture2D(device, imageDesc));
                 }
+
                 _currentIndex = 0;
                 _currentUsageIndex = 0;
             }
@@ -59,16 +66,15 @@ namespace T3.Gui.Windows
             if (_currentUsageIndex >= NumTextureEntries)
             {
                 immediateContext.UnmapSubresource(readableImage, 0);
-                
+
                 DataBox dataBox = immediateContext.MapSubresource(readableImage,
-                                                                  0, 
-                                                                  0, 
-                                                                  MapMode.Read, 
-                                                                  SharpDX.Direct3D11.MapFlags.None, 
+                                                                  0,
+                                                                  0,
+                                                                  MapMode.Read,
+                                                                  SharpDX.Direct3D11.MapFlags.None,
                                                                   out var imageStream);
                 using (imageStream)
                 {
-
                     int width = currentDesc.Width;
                     int height = currentDesc.Height;
                     //const string filename = "output.jpg";
@@ -81,7 +87,10 @@ namespace T3.Gui.Windows
 
                     // Initialize a Jpeg encoder with this stream
                     //var encoder = new PngBitmapEncoder(factory);
-                    var encoder = new JpegBitmapEncoder(factory);
+                    //var encoder = new JpegBitmapEncoder(factory);
+                    BitmapEncoder encoder = (format == FileFormats.Png) 
+                                      ? new PngBitmapEncoder(factory)
+                                      :new JpegBitmapEncoder(factory);
                     encoder.Initialize(stream);
 
                     // Create a Frame encoder
@@ -96,24 +105,63 @@ namespace T3.Gui.Windows
                     var outBufferSize = height * rowStride;
                     var outDataStream = new DataStream(outBufferSize, true, true);
                     var pixelByteCount = PixelFormat.GetStride(formatId, 1);
-                    
-                    for (int y1 = 0; y1 < height; y1++)
-                    {
-                        for (int x1 = 0; x1 < width; x1++)
-                        {
-                            imageStream.Position = (long)(y1 )* dataBox.RowPitch + (long)(x1) * 8;
-                            
-                            var r = Read2BytesToHalf(imageStream);
-                            var g = Read2BytesToHalf(imageStream);
-                            var b = Read2BytesToHalf(imageStream);
-                            var a = Read2BytesToHalf(imageStream);
 
-                            outDataStream.WriteByte( (byte)(b.Clamp(0,1)*255));
-                            outDataStream.WriteByte( (byte)(g.Clamp(0,1)*255));
-                            outDataStream.WriteByte( (byte)(r.Clamp(0,1)*255));
+                    if (currentDesc.Format == Format.R16G16B16A16_Float)
+                    {
+                        for (int y1 = 0; y1 < height; y1++)
+                        {
+                            for (int x1 = 0; x1 < width; x1++)
+                            {
+                                imageStream.Position = (long)(y1) * dataBox.RowPitch + (long)(x1) * 8;
+
+                                var r = Read2BytesToHalf(imageStream);
+                                var g = Read2BytesToHalf(imageStream);
+                                var b = Read2BytesToHalf(imageStream);
+                                var a = Read2BytesToHalf(imageStream);
+
+                                outDataStream.WriteByte((byte)(b.Clamp(0, 1) * 255));
+                                outDataStream.WriteByte((byte)(g.Clamp(0, 1) * 255));
+                                outDataStream.WriteByte((byte)(r.Clamp(0, 1) * 255));
+                                if (format == FileFormats.Png)
+                                {
+                                    outDataStream.WriteByte((byte)(a.Clamp(0, 1) * 255));
+                                }
+                            }
                         }
                     }
-                    
+                    else if (currentDesc.Format == Format.R8G8B8A8_UNorm)
+                    {
+                        var count = height * width;
+                        try
+                        {
+                            for (int y1 = 0; y1 < height; y1++)
+                            {
+                                imageStream.Position = (long)(y1) * dataBox.RowPitch;
+                                for (int x1 = 0; x1 < width; x1++)
+                                {
+                                    outDataStream.WriteByte((byte)imageStream.ReadByte());
+                                    outDataStream.WriteByte((byte)imageStream.ReadByte());
+                                    outDataStream.WriteByte((byte)imageStream.ReadByte());
+                                    
+                                    var a = imageStream.ReadByte();
+                                    if (format == FileFormats.Png)
+                                    {
+                                        outDataStream.WriteByte((byte)a);
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error("Can't write image:" + e.Message);
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        Log.Warning($"Can't export unknown texture format {currentDesc.Format}");
+                    }
+
                     // Copy the pixels from the buffer to the Wic Bitmap Frame encoder
                     bitmapFrameEncode.WritePixels(height, new DataRectangle(outDataStream.DataPointer, rowStride));
 
@@ -123,10 +171,11 @@ namespace T3.Gui.Windows
                     bitmapFrameEncode.Dispose();
                     encoder.Dispose();
                     stream.Dispose();
-                    
+
                     immediateContext.UnmapSubresource(readableImage, 0);
                 }
             }
+
             return true;
         }
 
@@ -139,12 +188,13 @@ namespace T3.Gui.Windows
             var r = BitConverter.ToSingle(bytes, 0);
             return r;
         }
-        
+
         private static float Read2BytesToHalf(DataStream imageStream)
         {
             var low = (byte)imageStream.ReadByte();
             var high = (byte)imageStream.ReadByte();
-            return ToTwoByteFloat(low, high);;
+            return ToTwoByteFloat(low, high);
+            ;
         }
 
         public static float ToTwoByteFloat(byte ho, byte lo)
@@ -167,9 +217,12 @@ namespace T3.Gui.Windows
                 {
                     mant <<= 1;
                     exp -= 0x400;
-                } while ((mant & 0x400) == 0);
+                }
+                while ((mant & 0x400) == 0);
+
                 mant &= 0x3ff;
             }
+
             return BitConverter.ToSingle(BitConverter.GetBytes((intVal & 0x8000) << 16 | (exp | mant) << 13), 0);
         }
 
@@ -191,29 +244,30 @@ namespace T3.Gui.Windows
                     if (val < 0x7f800000) return I2B(sign | 0x7c00);
                     return I2B(sign | 0x7c00 | (fbits & 0x007fffff) >> 13);
                 }
+
                 return I2B(sign | 0x7bff);
             }
+
             if (val >= 0x38800000) return I2B(sign | val - 0x38000000 >> 13);
             if (val < 0x33000000) return I2B(sign);
             val = (fbits & 0x7fffffff) >> 23;
             return I2B(sign | ((fbits & 0x7fffff | 0x800000) + (0x800000 >> val - 102) >> 126 - val));
         }
-        
-        
+
         private static byte[] bytes = new byte[4];
 
-        public static string LastFilename=string.Empty;
+        public static string LastFilename = string.Empty;
         private const int NumTextureEntries = 2;
-        
+
         private static readonly List<Texture2D> ImagesWithCpuAccess = new();
         private static int _currentIndex;
-        private static int _currentUsageIndex;        
-        
+        private static int _currentUsageIndex;
+
         public static void Dispose()
         {
             foreach (var image in ImagesWithCpuAccess)
                 image.Dispose();
-            
+
             ImagesWithCpuAccess.Clear();
         }
     }

@@ -168,7 +168,7 @@ namespace T3.Gui.Windows.Output
                     }
                     
                     var filename = Path.Join(folder, $"{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.jpg");
-                    ScreenshotWriter.SaveBufferToFile(texture, filename);
+                    ScreenshotWriter.SaveBufferToFile(texture, filename, ScreenshotWriter.FileFormats.Jpg);
                 }
             }
         }

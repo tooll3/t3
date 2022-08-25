@@ -6,6 +6,8 @@ using System.Numerics;
 using T3.Core;
 using T3.Core.IO;
 using T3.Gui.Graph;
+using T3.Gui.InputUi;
+using T3.Gui.Interaction;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using UiHelpers;
@@ -468,6 +470,77 @@ namespace T3.Gui
             }
 
             return changed;
+        }
+
+
+        public static bool FloatValueEdit(string label, ref float value, float min= float.NegativeInfinity, float max= float.PositiveInfinity, float scale= 0)
+        {
+            var labelSize = ImGui.CalcTextSize(label);
+
+            var p = ImGui.GetCursorPos();
+            ImGui.SetCursorPosX( MathF.Max(200 - labelSize.X,0)+10);
+            ImGui.AlignTextToFramePadding();
+            ImGui.TextUnformatted(label);
+            ImGui.SetCursorPos(p);
+            
+            ImGui.SameLine();
+            ImGui.SetCursorPosX(220);
+            var size = new Vector2(150, ImGui.GetFrameHeight());
+            ImGui.PushID(label);
+            var result = SingleValueEdit.Draw(ref value, size, min, max);
+            var modified = (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
+            ImGui.PopID();
+            return modified;
+        }
+        
+        public static bool StringValueEdit(string label, ref string value)
+        {
+            var labelSize = ImGui.CalcTextSize(label);
+
+            var p = ImGui.GetCursorPos();
+            ImGui.SetCursorPosX( MathF.Max(200 - labelSize.X,0)+10);
+            ImGui.AlignTextToFramePadding();
+            ImGui.TextUnformatted(label);
+            ImGui.SetCursorPos(p);
+            
+            ImGui.SameLine();
+            ImGui.SetCursorPosX(220);
+            //var size = new Vector2(150, ImGui.GetFrameHeight());
+            var modified =  ImGui.InputText("##" + label, ref value, 1000);
+            return modified;
+        }
+
+        public static bool DrawEnumSelector<T>(ref int index, string label)
+        {
+            // Label
+            var labelSize = ImGui.CalcTextSize(label);
+
+            var p = ImGui.GetCursorPos();
+            ImGui.SetCursorPosX(MathF.Max(200 - labelSize.X, 0) + 10);
+            ImGui.AlignTextToFramePadding();
+            ImGui.TextUnformatted(label);
+            ImGui.SetCursorPos(p);
+
+            // Dropdown
+            ImGui.SameLine();
+            ImGui.SetCursorPosX(220);
+            var size = new Vector2(150, ImGui.GetFrameHeight());
+            
+            Type enumType = typeof(T);
+            var values = Enum.GetValues(enumType);
+
+            var valueNames = new string[values.Length];
+            for (var i = 0; i < values.Length; i++)
+            {
+                var v = values.GetValue(i);
+                valueNames[i] = v != null
+                                    ? Enum.GetName(typeof(T), v)
+                                    : "?? undefined";
+            }
+
+            ImGui.SetNextItemWidth(size.X);
+            var modified = ImGui.Combo("##dropDown", ref index, valueNames, valueNames.Length);
+            return modified;
         }
     }
 
