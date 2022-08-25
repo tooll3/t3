@@ -1,6 +1,6 @@
 {
   "Id": "9f43f769-d32a-4f49-92ac-e0be3ba250cf"/*Blend*/,
-  "Description": " BlendMode\n0 - Normal\n1 - Screen\n2 - Multiply\n3 - Overlay\n4 - Difference\n5 - Only ImageA.RGB\n\nAlphaBlendModes\n0 - normal\n1 - Use ImageA.a\n2 - Multiplay both\n3 - Alpha 1\n",
+  "Description": "Blends two images.\n",
   "InputUis": [
     {
       "InputId": "abaa52e9-7d3d-4ae5-89d2-5251f61e5392"/*ImageA*/,

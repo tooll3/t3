@@ -57,6 +57,11 @@
           "Id": "a5cb5bda-0fb2-4863-bd8d-9ac09135fc30"/*WrapMode*/,
           "Type": "SharpDX.Direct3D11.TextureAddressMode",
           "Value": "Clamp"
+        },
+        {
+          "Id": "109d0526-615c-401e-bc78-f29fe730c836"/*BlendEnabled*/,
+          "Type": "System.Boolean",
+          "Value": false
         }
       ],
       "Outputs": []

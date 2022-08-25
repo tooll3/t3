@@ -34,15 +34,17 @@ namespace T3.Operators.Types.Id_9f43f769_d32a_4f49_92ac_e0be3ba250cf
             Multiply = 2,
             Overlay = 3,
             Difference = 4,
-            OnlyImageA_RGB = 5,
+            UseImageA_RGB = 5,
+            UseImageB_RGB = 6,
         }
 
         private enum AlphaBlendModes
         {
             Normal = 0,
-            UseImageA_Alpha = 1,
-            Multiply = 2,
-            SetToOne = 3,
+            Multiply = 1,
+            SetToOne = 2,
+            UseImageA_Alpha = 3,
+            UseImageB_Alpha = 4,
         }
     }
 }
