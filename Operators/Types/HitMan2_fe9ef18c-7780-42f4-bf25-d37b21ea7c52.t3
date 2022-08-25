@@ -1396,7 +1396,7 @@
       "Outputs": []
     },
     {
-      "Id": "17e41414-281d-458e-ac9c-c00746be903e"/*LFO*/,
+      "Id": "17e41414-281d-458e-ac9c-c00746be903e"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {

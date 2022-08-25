@@ -26,7 +26,7 @@
       }
     },
     {
-      "ChildId": "b3d36c76-e5bc-4d8b-9721-995454540845"/*LFO*/,
+      "ChildId": "b3d36c76-e5bc-4d8b-9721-995454540845"/*AnimValue*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -70,7 +70,7 @@
       }
     },
     {
-      "ChildId": "08865352-2a1c-40b7-a2c5-da2c0e6b1bb5"/*LFO*/,
+      "ChildId": "08865352-2a1c-40b7-a2c5-da2c0e6b1bb5"/*AnimValue*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

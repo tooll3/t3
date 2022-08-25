@@ -345,7 +345,7 @@
       "Outputs": []
     },
     {
-      "Id": "057bbaad-1f1f-48dc-a8d1-7ab7174581a9"/*LFO*/,
+      "Id": "057bbaad-1f1f-48dc-a8d1-7ab7174581a9"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -1074,7 +1074,7 @@
       "Outputs": []
     },
     {
-      "Id": "8c955ca8-7446-452f-8568-694f7ff7f95e"/*LFO*/,
+      "Id": "8c955ca8-7446-452f-8568-694f7ff7f95e"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -1108,7 +1108,7 @@
       "Outputs": []
     },
     {
-      "Id": "49b0c44a-5ed7-4931-91c1-04d65dee45d3"/*LFO*/,
+      "Id": "49b0c44a-5ed7-4931-91c1-04d65dee45d3"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -1142,7 +1142,7 @@
       "Outputs": []
     },
     {
-      "Id": "73f8b7ce-fd07-44d6-8e8a-bd93cd1b865a"/*LFO*/,
+      "Id": "73f8b7ce-fd07-44d6-8e8a-bd93cd1b865a"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -1176,7 +1176,7 @@
       "Outputs": []
     },
     {
-      "Id": "78753356-9286-48bd-86b1-e6103f824b01"/*LFO*/,
+      "Id": "78753356-9286-48bd-86b1-e6103f824b01"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -1227,7 +1227,7 @@
       "Outputs": []
     },
     {
-      "Id": "ac371638-561c-4611-af8e-ee318fff8f77"/*LFO*/,
+      "Id": "ac371638-561c-4611-af8e-ee318fff8f77"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -2102,7 +2102,7 @@
       "Outputs": []
     },
     {
-      "Id": "993fa4f9-de30-43da-8f73-5d96ee5a399c"/*LFO*/,
+      "Id": "993fa4f9-de30-43da-8f73-5d96ee5a399c"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [],
       "Outputs": []
@@ -4325,7 +4325,7 @@
       "Outputs": []
     },
     {
-      "Id": "61e132a4-f625-43d7-b874-6e5c0fb1a2da"/*LFO*/,
+      "Id": "61e132a4-f625-43d7-b874-6e5c0fb1a2da"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -5590,7 +5590,7 @@
       "Outputs": []
     },
     {
-      "Id": "c828d1be-db72-4304-9c16-b4568cb5e93b"/*LFO*/,
+      "Id": "c828d1be-db72-4304-9c16-b4568cb5e93b"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {

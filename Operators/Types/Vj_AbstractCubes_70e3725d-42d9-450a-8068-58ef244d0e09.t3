@@ -1320,7 +1320,7 @@
       ]
     },
     {
-      "Id": "65348ca0-8a41-45fc-a27e-56920d40f612"/*LFO*/,
+      "Id": "65348ca0-8a41-45fc-a27e-56920d40f612"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -1540,7 +1540,7 @@
       "Outputs": []
     },
     {
-      "Id": "e3d06df7-e361-479c-8424-3778db94ff49"/*LFO*/,
+      "Id": "e3d06df7-e361-479c-8424-3778db94ff49"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -1599,7 +1599,7 @@
       "Outputs": []
     },
     {
-      "Id": "3a697950-2127-4519-bb76-a9ab64976261"/*LFO*/,
+      "Id": "3a697950-2127-4519-bb76-a9ab64976261"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {

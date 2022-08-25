@@ -881,7 +881,7 @@
       "Outputs": []
     },
     {
-      "Id": "320183b4-113e-4056-8bc2-7c0382178ac5"/*LFO*/,
+      "Id": "320183b4-113e-4056-8bc2-7c0382178ac5"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {

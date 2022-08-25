@@ -272,7 +272,7 @@
       "Outputs": []
     },
     {
-      "Id": "d643fb57-8005-4cc7-9ad1-1b9856f87d37"/*LFO*/,
+      "Id": "d643fb57-8005-4cc7-9ad1-1b9856f87d37"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {

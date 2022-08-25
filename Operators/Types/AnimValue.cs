@@ -7,12 +7,12 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
 {
-    public class LFO : Instance<LFO>
+    public class AnimValue : Instance<AnimValue>
     {
         [Output(Guid = "c47e8843-6e8d-4eaf-a554-874b3af9ee63", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Result = new();
 
-        public LFO()
+        public AnimValue()
         {
             Result.UpdateAction = Update;
         }
@@ -21,7 +21,7 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
         {
             _phase = Phase.GetValue(context);
             _bias = Bias.GetValue(context);
-            _shape = (Shapes)(int)Shape.GetValue(context).Clamp(0, 5);
+            _shape = (Shapes)(int)Shape.GetValue(context).Clamp(0, Enum.GetValues(typeof(Shapes)).Length);
             _ratio = Ratio.GetValue(context); 
             var f = (SpeedFactors)AllowSpeedFactor.GetValue(context).Clamp(0,2);
             switch (f)
@@ -59,14 +59,34 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
             Result.Value = normalizedValue * Amplitude.GetValue(context) + Offset.GetValue(context);
         }
 
-        public float CalcNormalizedValueForFraction(double t)
+        public float CalcNormalizedValueForFraction(double time)
         {
-            var fraction = CalcFraction(t);
-            var value = _shape == Shapes.Random
-                            ? (float)((double)MathUtils.XxHash((uint)_time)/uint.MaxValue)
-                            : MapShapes[(int)_shape](fraction);
-            var biased = SchlickBias(value, _bias);
-            return biased;
+            var value = 0f;
+
+            switch (_shape)
+            {
+                case Shapes.Ramp:
+                case Shapes.Saw:
+                case Shapes.Wave:
+                case Shapes.Square:
+                case Shapes.ZigZag:
+                    var fraction = CalcFraction(time);        
+                    value= SchlickBias(MapShapes[(int)_shape](fraction), _bias);
+                    break;
+                
+                case Shapes.Random:
+                    value = (float)((double)MathUtils.XxHash((uint)time) / uint.MaxValue);
+                    break;
+                
+                case Shapes.Endless:
+                    value = (float)time;
+                    break;
+                
+                case Shapes.Noise:
+                    value = MathUtils.PerlinNoise((float)time, 1,5, 42);
+                    break;
+            }
+            return value;
         }
 
         private float CalcFraction(double t)
@@ -88,6 +108,9 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
                 f => (float)Math.Sin((f + 0.25) * 2 * 3.141592f) / 2 + 0.5f, // 2:Wave
                 f => f > 0.5f ? 1 : 0, // 3: Square
                 f => f < 0.5f ? (f * 2) : (1 - (f - 0.5f) * 2), //4: ZigZag,
+                f => f, // 5-Random
+                f => f, // 6-Endless
+                f => f, // 6-Endless
             };
 
         private Shapes _shape;
@@ -107,6 +130,8 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
             Square = 3,
             ZigZag = 4,
             Random = 5,
+            Endless = 6,
+            Noise = 7,
         }
 
         private enum SpeedFactors
