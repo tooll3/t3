@@ -488,7 +488,7 @@
       }
     },
     {
-      "ChildId": "25c51d29-facf-40a5-ad95-a29a3793716c"/*_FloorPointsToGird*/,
+      "ChildId": "25c51d29-facf-40a5-ad95-a29a3793716c"/*SnapPointsToGird*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

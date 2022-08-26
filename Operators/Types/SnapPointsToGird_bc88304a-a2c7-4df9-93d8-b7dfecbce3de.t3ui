@@ -1,26 +1,58 @@
 {
-  "Id": "bc88304a-a2c7-4df9-93d8-b7dfecbce3de"/*_FloorPointsToGird*/,
+  "Id": "bc88304a-a2c7-4df9-93d8-b7dfecbce3de"/*SnapPointsToGird*/,
   "Description": "Floors the position of points onto a grid, e.i. snaps them to the position of a grid.\n\nThis can be useful to debug compute shader effecst that rely on a spatial grid.",
   "InputUis": [
     {
       "InputId": "953a95d0-5226-46bb-80c3-f20b27a32064"/*Points*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -428.19647,
         "Y": 888.3568
       }
     },
     {
-      "InputId": "eacc6bf8-1e12-44fb-8541-91ac4a557745"/*Direction*/,
+      "InputId": "4d7f1f34-ca1b-43ee-803f-cbc14bcc8679"/*Scale*/,
       "Position": {
         "X": -428.19647,
         "Y": 933.3568
       }
     },
     {
-      "InputId": "4d7f1f34-ca1b-43ee-803f-cbc14bcc8679"/*Distance*/,
+      "InputId": "eacc6bf8-1e12-44fb-8541-91ac4a557745"/*GridStretch*/,
       "Position": {
         "X": -428.19647,
         "Y": 978.3568
+      }
+    },
+    {
+      "InputId": "04c5ee70-9f9a-4236-8871-772814b8b2ab"/*Offset*/,
+      "Position": {
+        "X": -428.19647,
+        "Y": 1023.3568
+      }
+    },
+    {
+      "InputId": "a7d80f3e-298d-4eb5-9751-ec432cda4065"/*SnapFraction*/,
+      "Position": {
+        "X": -428.19647,
+        "Y": 1068.3568
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "dc5e2101-e4d5-495a-8291-58aef1876657"/*FractionBlend*/,
+      "Position": {
+        "X": -428.19647,
+        "Y": 1113.3568
+      }
+    },
+    {
+      "InputId": "bf7fef5e-a9d5-41e6-8025-0f74a9e07373"/*UseWAsWeight*/,
+      "Position": {
+        "X": -428.19647,
+        "Y": 1158.3568
       }
     }
   ],
@@ -43,8 +75,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": 138.44325,
-        "Y": 481.52646
+        "X": 123.71759,
+        "Y": 503.57254
       }
     },
     {
@@ -54,8 +86,8 @@
         "Y": 140.0
       },
       "Position": {
-        "X": 471.04163,
-        "Y": 587.7994
+        "X": 465.65698,
+        "Y": 496.97137
       }
     },
     {
@@ -66,8 +98,8 @@
         "Y": 345.16904
       },
       "Position": {
-        "X": 286.774,
-        "Y": 891.8368
+        "X": 99.293335,
+        "Y": 891.93994
       }
     },
     {
@@ -110,8 +142,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": 47.703575,
-        "Y": 922.8412
+        "X": -156.32031,
+        "Y": 972.909
       }
     },
     {
@@ -145,6 +177,28 @@
       "Position": {
         "X": 282.37137,
         "Y": 652.5573
+      }
+    },
+    {
+      "ChildId": "2a34997c-da14-4804-91c8-f71145d2551b"/*Vector3ToFloat3*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -156.32031,
+        "Y": 1028.9089
+      }
+    },
+    {
+      "ChildId": "c70caa98-6538-46be-a17d-637188973c14"/*BoolToFloats*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -228.99658,
+        "Y": 1194.3978
       }
     }
   ],
