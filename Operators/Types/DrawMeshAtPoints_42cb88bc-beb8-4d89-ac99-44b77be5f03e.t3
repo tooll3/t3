@@ -47,6 +47,10 @@
     {
       "Id": "a8590e4f-2edf-42c9-8bc2-e7b521f8cafc"/*AlphaCutOff*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "22b0817f-3149-4713-b87b-89c54300cde8"/*FillMode*/,
+      "DefaultValue": 3
     }
   ],
   "Children": [
@@ -772,6 +776,12 @@
       "SourceSlotId": "c0351f55-ad27-4fbd-b3d5-668ff49f0ea0",
       "TargetParentOrChildId": "fae02035-9e83-465a-a274-7a88464ef66d",
       "TargetSlotId": "03f3bc7f-3949-4a97-88cf-04e162cfa2f7"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "22b0817f-3149-4713-b87b-89c54300cde8",
+      "TargetParentOrChildId": "fae02035-9e83-465a-a274-7a88464ef66d",
+      "TargetSlotId": "78c9b432-a2b8-4aea-81e4-0cd5086b3b94"
     }
   ]
 }

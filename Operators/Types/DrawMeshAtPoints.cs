@@ -1,3 +1,4 @@
+using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -40,6 +41,9 @@ namespace T3.Operators.Types.Id_42cb88bc_beb8_4d89_ac99_44b77be5f03e
 
         [Input(Guid = "a8590e4f-2edf-42c9-8bc2-e7b521f8cafc")]
         public readonly InputSlot<float> AlphaCutOff = new InputSlot<float>();
+
+        [Input(Guid = "22b0817f-3149-4713-b87b-89c54300cde8", MappedType = typeof(FillMode))]
+        public readonly InputSlot<int> FillMode = new InputSlot<int>();
     }
 }
 
