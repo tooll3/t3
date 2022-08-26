@@ -67,21 +67,22 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float3 rgb = (1.0 - a) * tA.rgb + a * tB.rgb;   
     
     switch( (int)ColorMode) {
-        // normal
+        // screen
         case 0:
-            rgb = 1-(1-tA.rgb) * (1-tB.rgb);
+            rgb = (1.0 - a) * tA.rgb + tB.a * tB.rgb;
             break;
             
-        // multiply
+        // screen
         case 1:
-            rgb =  tA.rgb * tB.rgb;
+            rgb = 1-(1-tA.rgb) * (1-tB.rgb * tB.a);            
+            break;
+    
+
+        // multiply
+        case 2:
+            rgb =  lerp(tA.rgb, tA.rgb * tB.rgb, tB.a);
             break;
 
-        // screen
-        case 2:
-            rgb = tA.rgb + tB.rgb;
-            break;
-        
         // overlay
         case 3:
             rgb =  float3( 
