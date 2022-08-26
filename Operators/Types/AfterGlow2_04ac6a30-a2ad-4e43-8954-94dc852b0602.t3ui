@@ -35,6 +35,16 @@
         "X": -463.38632,
         "Y": 199.52512
       }
+    },
+    {
+      "InputId": "b2ee3011-3187-4093-ab7d-30ec81c8ccc9"/*OrgColor*/,
+      "Position": {
+        "X": -463.38632,
+        "Y": 244.52512
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [
@@ -141,7 +151,7 @@
       "ChildId": "5e367fc1-c868-458a-9c67-63a7cf2711ce"/*Blend*/,
       "Size": {
         "X": 110.0,
-        "Y": 49.0
+        "Y": 62.0
       },
       "Position": {
         "X": 903.40436,

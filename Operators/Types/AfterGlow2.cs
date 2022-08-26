@@ -29,6 +29,9 @@ namespace T3.Operators.Types.Id_04ac6a30_a2ad_4e43_8954_94dc852b0602
         [Input(Guid = "47ec468d-b984-4653-879d-a08875a90d19")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
 
+        [Input(Guid = "b2ee3011-3187-4093-ab7d-30ec81c8ccc9")]
+        public readonly InputSlot<System.Numerics.Vector4> OrgColor = new InputSlot<System.Numerics.Vector4>();
+
     }
 }
 
