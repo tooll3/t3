@@ -89,10 +89,6 @@
       ],
       "Outputs": [
         {
-          "Id": "6c118567-8827-4422-86cc-4d4d00762d87"/*ComputeShader*/,
-          "DirtyFlagTrigger": "Always"
-        },
-        {
           "Id": "a6fe06e0-b6a9-463c-9e62-930c58b0a0a1"/*ComputeShader*/,
           "DirtyFlagTrigger": "Always"
         }
