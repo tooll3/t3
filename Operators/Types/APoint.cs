@@ -41,7 +41,7 @@ namespace T3.Operators.Types.Id_9989f539_f86c_4508_83d7_3fc0e559f502
             var w = W.GetValue(context);
             var addSeparator = AddSeparator.GetValue(context);
 
-            var rot = Quaternion.CreateFromAxisAngle(RotationAxis.GetValue(context), RotationAngle.GetValue(context) * MathUtils.ToRad);
+            var rot = Quaternion.CreateFromAxisAngle(Vector3.Normalize( RotationAxis.GetValue(context)), RotationAngle.GetValue(context) * MathUtils.ToRad);
             var array = addSeparator ? _pointListWithSeparator : _pointList;
             OutPosition.Value = from;
             array.TypedElements[0].Position = from;
