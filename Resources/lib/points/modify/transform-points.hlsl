@@ -65,7 +65,7 @@ void main(uint3 i : SV_DispatchThreadID)
         float3x3 orientationDest = float3x3(
             TransformMatrix._m00_m01_m02,
             TransformMatrix._m10_m11_m12,
-            TransformMatrix._m20_m21_m22  );
+            TransformMatrix._m20_m21_m22);
 
 
         newRotation = normalize(quaternion_from_matrix_precise(transpose(orientationDest)));        
@@ -73,6 +73,9 @@ void main(uint3 i : SV_DispatchThreadID)
         // Adjust rotation in point space
         if(CoordinateSpace  < 0.5) {
             newRotation = qmul(orgRot, newRotation);
+        }
+        else {
+            newRotation = qmul(newRotation, orgRot);
         }
     }
 
