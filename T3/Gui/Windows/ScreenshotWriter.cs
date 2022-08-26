@@ -139,9 +139,12 @@ namespace T3.Gui.Windows
                                 imageStream.Position = (long)(y1) * dataBox.RowPitch;
                                 for (int x1 = 0; x1 < width; x1++)
                                 {
-                                    outDataStream.WriteByte((byte)imageStream.ReadByte());
-                                    outDataStream.WriteByte((byte)imageStream.ReadByte());
-                                    outDataStream.WriteByte((byte)imageStream.ReadByte());
+                                    var r = (byte)imageStream.ReadByte();
+                                    var g = (byte)imageStream.ReadByte();
+                                    var b = (byte)imageStream.ReadByte();
+                                    outDataStream.WriteByte(b);
+                                    outDataStream.WriteByte(g);
+                                    outDataStream.WriteByte(r);
                                     
                                     var a = imageStream.ReadByte();
                                     if (format == FileFormats.Png)

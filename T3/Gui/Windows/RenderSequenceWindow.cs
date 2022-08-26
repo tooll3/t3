@@ -23,6 +23,9 @@ namespace T3.Gui.Windows
         private static string _targetFolder = "./Render"; 
         protected override void DrawContent()
         {
+            CustomComponents.HelpText("Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm faster exports.");
+            
+            
             //ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, 10);
             CustomComponents.FloatValueEdit("Start in secs", ref _startTime);
             CustomComponents.FloatValueEdit("End in secs", ref _endTime);
