@@ -48,7 +48,7 @@ namespace T3.Operators.Types.Id_daec568f_f7b4_4d81_a401_34d62462daab
                 }
                 catch (Exception e)
                 {
-                    Log.Warning("Failed to get texture description: " + e, SymbolChildId);
+                    Log.Warning("Failed to get texture description: " + e.Message, SymbolChildId);
                 }
             }
             else

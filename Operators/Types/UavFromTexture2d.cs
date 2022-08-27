@@ -41,7 +41,8 @@ namespace T3.Operators.Types.Id_84e02044_3011_4a5e_b76a_c904d9b4557f
                 }
                 catch (Exception e)
                 {   
-                    Log.Error("Getting Texture2D UAV resulted in an exception: "+ e.Message, SymbolChildId);
+                    Log.Error("UavFromTexture2d exception: " + e.Message, SymbolChildId);
+                    UnorderedAccessView.Value = null;
                 }
             }
         }
