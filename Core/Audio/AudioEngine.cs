@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using ManagedBass;
@@ -79,7 +79,7 @@ namespace Core.Audio
                         UpdateFftBuffer(clipStream.StreamHandle);
                         handledMainSoundtrack = true;
                     }
-                    clipStream.UpdateTime(playback);
+                    clipStream.UpdateTime();
                 }
             }
 
@@ -95,6 +95,11 @@ namespace Core.Audio
         {
             IsMuted = configAudioMuted;
             UpdateMuting();
+        }
+
+        public static bool GetMute()
+        {
+            return IsMuted;
         }
 
         internal static bool IsMuted;
@@ -203,15 +208,12 @@ namespace Core.Audio
         /// Frequent resync causes audio glitches.
         /// Too large of a threshold can disrupt syncing and increase latency.
         /// </summary>
-        /// <param name="playback"></param>
-        public void UpdateTime(Playback playback)
+        public void UpdateTime()
         {
             if (Playback.Current.PlaybackSpeed == 0)
                 return;
-            
-            var localTargetTimeInSecs = TargetTime - playback.SecondsFromBars(AudioClip.StartTime);
 
-            var isOutOfBounds = localTargetTimeInSecs < 0 || localTargetTimeInSecs >= AudioClip.LengthInSeconds;
+            var isOutOfBounds = TargetTime < AudioClip.StartTime || TargetTime >= AudioClip.LengthInSeconds + AudioClip.StartTime;
             var isPlaying = Bass.ChannelIsActive(StreamHandle) == PlaybackState.Playing;
             
             if (isOutOfBounds)
@@ -229,7 +231,7 @@ namespace Core.Audio
             
             var currentStreamPos = Bass.ChannelGetPosition(StreamHandle);
             var currentPos = Bass.ChannelBytes2Seconds(StreamHandle, currentStreamPos) - AudioSyncingOffset;
-            var soundDelta = currentPos - localTargetTimeInSecs;
+            var soundDelta = currentPos - TargetTime;
 
             
             if (Math.Abs(soundDelta) <=  ProjectSettings.Config.AudioResyncThreshold * Math.Abs(Playback.Current.PlaybackSpeed)) 
@@ -237,7 +239,7 @@ namespace Core.Audio
             
             // Resync
             //Log.Debug($"Sound delta {soundDelta:0.000}s for {AudioClip.FilePath}");
-            var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs + AudioTriggerDelayOffset * Playback.Current.PlaybackSpeed + AudioSyncingOffset);
+            var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, TargetTime + AudioTriggerDelayOffset * Playback.Current.PlaybackSpeed + AudioSyncingOffset);
             Bass.ChannelSetPosition(StreamHandle, newStreamPos);
 
         }
