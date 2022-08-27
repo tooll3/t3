@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Threading;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
@@ -11,6 +12,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using Core.Audio;
 using ResourceManager = T3.Core.ResourceManager;
 
 namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
@@ -26,18 +28,16 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         [Output(Guid = "fa56b47f-1b16-45d5-80cd-32c5a872acf4", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Texture2D> Texture = new Slot<Texture2D>();
 
-        [Output(Guid = "440d022e-f706-4265-9d04-cff099117845")]
-        public readonly Slot<ShaderResourceView> ShaderResourceView = new Slot<ShaderResourceView>();
-
         [Input(Guid = "0e255347-08bc-4363-9ffa-ab863a1cea8e")]
         public readonly InputSlot<string> Path = new InputSlot<string>();
 
+        [Input(Guid = "2FECFBB4-F7D9-4C53-95AE-B64CCBB6FBAD")]
+        public readonly InputSlot<float> Volume = new InputSlot<float>();
 
         public PlayVideo()
         {
             Texture.UpdateAction = Update;
-            ShaderResourceView.UpdateAction = Update;
-            
+
             // renderDrawContextHandle = nodeContext.GetGameProvider()
             //     .Bind(g => RenderContext.GetShared(g.Services).GetThreadContext())
             //     .GetHandle() ?? throw new ServiceNotFoundException(typeof(IResourceProvider<Game>));
@@ -46,8 +46,6 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
 
             // Initialize MediaFoundation
             //MediaManagerService.Initialize();
-
-            
         }
 
         private void Update(EvaluationContext context)
@@ -55,39 +53,48 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             if (!_initialized)
             {
                 SetupMediaFoundation();
+                Volume.TypedDefaultValue.Value = 1.0f;
                 _initialized = true;
             }
             
-            if (Texture.DirtyFlag.IsDirty || ShaderResourceView.DirtyFlag.IsDirty)
+            if (Texture.DirtyFlag.IsDirty ||
+                _size.Width <= 0 || _size.Height <= 0)
             {
-                SetupTexture(new Size2(512,512));
+                SetupTexture(_size);
                 //Initialize(filepath: Path.GetValue(context));
             }
 
             if (_engine == null)
                 return;
-            
-            if(Path.DirtyFlag.IsDirty)
+
+            if (Path.DirtyFlag.IsDirty)
+                Play = true;
                 Url = Path.GetValue(context);
+                _engine.Play();
+
+            if (AudioEngine.GetMute())
+                _engine.Volume = 0.0;
+            else
+                _engine.Volume = Volume.GetValue(context).Clamp(0f, 1f);
 
             //TransferFrame();
             UpdateVideo();
         }
         
-        
         private bool _initialized; 
 
         private void SetupMediaFoundation()
         {
-            using var mediaEngineAttributes = new MediaEngineAttributes()
-                                                  {
-                                                      // _SRGB doesn't work :/ Getting invalid argument exception later in TransferVideoFrame
-                                                      AudioCategory = SharpDX.Multimedia.AudioStreamCategory.GameMedia,
-                                                      AudioEndpointRole = SharpDX.Multimedia.AudioEndpointRole.Multimedia,
-                                                      VideoOutputFormat = (int)SharpDX.DXGI.Format.B8G8R8A8_UNorm
-                                                  };
-
             //var graphicsDevice = renderDrawContextHandle.Resource.GraphicsDevice;
+            using var mediaEngineAttributes = new MediaEngineAttributes()
+            {
+                // _SRGB doesn't work :/ Getting invalid argument exception later in TransferVideoFrame
+                AudioCategory = SharpDX.Multimedia.AudioStreamCategory.GameMedia,
+                AudioEndpointRole = SharpDX.Multimedia.AudioEndpointRole.Multimedia,
+                VideoOutputFormat = (int)SharpDX.DXGI.Format.B8G8R8A8_UNorm
+                //VideoOutputFormat = (int)SharpDX.DXGI.Format.NV12
+            };
+
             var device = ResourceManager.Instance().Device;
             //var device = SharpDXInterop.GetNativeDevice(graphicsDevice) as Device;
             if (device != null)
@@ -105,7 +112,6 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             // using var classFactory = new MediaEngineClassFactory();
             // try
             // {
-            //
             //     _engine = new MediaEngine(classFactory, mediaEngineAttributes);
             //     _engine.PlaybackEvent += Engine_PlaybackEvent;
             // }
@@ -122,22 +128,29 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                                  {
                                      DxgiManager = dxgiDeviceManager,
                                      VideoOutputFormat = (int)SharpDX.DXGI.Format.B8G8R8A8_UNorm
+                                     //VideoOutputFormat = (int)SharpDX.DXGI.Format.NV12                                     
                                  };
 
             MediaManager.Startup();
             using (var factory = new MediaEngineClassFactory())
-                _engine = new MediaEngine(factory, attributes, MediaEngineCreateFlags.WaitForStableState, Engine_PlaybackEvent);            
+                _engine = new MediaEngine(factory, attributes, MediaEngineCreateFlags.None, Engine_PlaybackEvent);
         }
-        
+
         private MediaEngine _engine;
         private DXGIDeviceManager dxgiDeviceManager;
-        
-        
+
+        private Size2 _size = new Size2(0, 0);
+
         private void SetupTexture(Size2 size)
         {
             if (size.Width <= 0 || size.Height <= 0)
                 size = new Size2(512, 512);
-            
+
+            Texture.DirtyFlag.Clear();
+
+            if (_texture != null && size == _size)
+                return;
+
             var resourceManager = ResourceManager.Instance();
             var device = resourceManager.Device;
             _texture = new Texture2D(device,
@@ -154,22 +167,18 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                                                   SampleDescription = new SampleDescription(1, 0),
                                                   Usage = ResourceUsage.Default
                                               });
-            _textureSrv = new ShaderResourceView(device, _texture);
             //resourceManager.CreateShaderResourceView(_textureResId, "", ref ShaderResourceView.Value);
 
-            Texture.DirtyFlag.Clear();
-            ShaderResourceView.DirtyFlag.Clear();
+            _size = size;
         }
 
         private Texture2D _texture;
-        private ShaderResourceView _textureSrv;
         // private uint _textureResId;
         // private uint _srvResId;
         
         //private readonly IResourceHandle<RenderDrawContext> renderDrawContextHandle;
         //private readonly ColorSpaceConverter colorSpaceConverter;
         private bool _invalidated;
-        
 
         private void Engine_PlaybackEvent(MediaEngineEvent mediaEvent, long param1, int param2)
         {
@@ -184,6 +193,13 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                     break;
                 case MediaEngineEvent.LoadedMetadata:
                     _invalidated = true;
+                    _engine.Volume = 0.0;
+                    Log.Debug("pausing...");
+                    _engine.Pause();
+                    break;
+                case MediaEngineEvent.FirstFrameReady:
+                case MediaEngineEvent.TimeUpdate:
+                    ErrorCode = MediaEngineErr.Noerror;
                     break;
             }
         }
@@ -198,7 +214,15 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 if (value != url)
                 {
                     url = value;
-                    _engine.Source = value;
+                    try
+                    {
+                        _engine.Pause();
+                        _engine.Source = value;
+                    }
+                    catch (SharpDXException e)
+                    {
+                        Log.Debug("unable to switch video source...");
+                    }
                 }
             }
         }
@@ -228,7 +252,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         /// <summary>
         /// The audio volume.
         /// </summary>
-        public float Volume { get => (float)_engine.Volume; set => _engine.Volume = value.Clamp(0f, 1f); }
+        // public float Volume { get => (float)_engine.Volume; set => _engine.Volume = value.Clamp(0f, 1f); }
 
         /// <summary>
         /// The normalized source rectangle.
@@ -369,12 +393,11 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                     //_texture?.Dispose();
 
                     _engine.GetNativeVideoSize(out var width, out var height);
-
-                    var size = new Size2(width, height);
                     Log.Debug($"should set size to: {width}x{height}");
-                    SetupTexture(size);
+                    SetupTexture(new Size2(width, height));
+
                     // Apply user specified size
-                    //var x = _textureSize;
+                    //var x = _size;
                     // if (x.Width > 0)
                     //     width = x.Width;
                     // if (x.Height > 0)
@@ -389,14 +412,16 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 //if (SharpDXInterop.GetNativeResource(renderTarget) is Texture2D nativeRenderTarget)
                 //{
                 if (_texture != null)
+                {
                     _engine.TransferVideoFrame(
                                               _texture,
                                               ToVideoRect(SourceBounds),
                                               //new RawRectangle(0, 0, renderTarget.ViewWidth, renderTarget.ViewHeight),
                                               new RawRectangle(0, 0, _textureSize.Width, _textureSize.Height),
                                               ToRawColorBGRA(BorderColor));
+                    Texture.Value = _texture;
+                }
 
-                //}
                 // Apply color space conversion if necessary
                 //currentVideoFrame = colorSpaceConverter.ToDeviceColorSpace(renderTarget);
                 //_currentVideoFrame = _texture;
@@ -438,14 +463,15 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         }
 
         // FIXME: we should call this properly
-        // public void Dispose()
-        // {
-        //     _engine.Shutdown();
-        //     _engine.PlaybackEvent -= Engine_PlaybackEvent;
-        //     _engine.Dispose();
-        //     //colorSpaceConverter.Dispose();
-        //     renderTarget?.Dispose();
-        // }
+        public void Dispose()
+        {
+            _engine.Shutdown();
+            _engine.PlaybackEvent -= Engine_PlaybackEvent;
+            _engine.Dispose();
+            _texture.Dispose();
+            //colorSpaceConverter.Dispose();
+            //renderTarget?.Dispose();
+        }
     }
 
     // public enum NetworkState : short

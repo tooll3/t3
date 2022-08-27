@@ -9,17 +9,17 @@
         "Y": 46.995968
       },
       "Usage": "FilePath"
+    },
+    {
+      "InputId": "2fecfbb4-f7d9-4c53-95ae-b64ccbb6fbad"/*Volume*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 91.99597
+      }
     }
   ],
   "SymbolChildUis": [],
   "OutputUis": [
-    {
-      "OutputId": "440d022e-f706-4265-9d04-cff099117845"/*ShaderResourceView*/,
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
     {
       "OutputId": "fa56b47f-1b16-45d5-80cd-32c5a872acf4"/*Texture*/,
       "Position": {

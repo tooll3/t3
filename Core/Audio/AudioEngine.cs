@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using ManagedBass;
@@ -95,6 +95,11 @@ namespace Core.Audio
         {
             IsMuted = configAudioMuted;
             UpdateMuting();
+        }
+
+        public static bool GetMute()
+        {
+            return IsMuted;
         }
 
         internal static bool IsMuted;
