@@ -1200,9 +1200,22 @@ namespace T3.Core
         // returns true if the texture changed
         public bool CreateTexture2d(Texture2DDescription description, string name, ref uint id, ref Texture2D texture)
         {
-            if (texture != null && texture.Description.Equals(description))
+            if (texture != null)
             {
-                return false; // no change
+                bool descriptionMatches;
+                try
+                {
+                    descriptionMatches = texture.Description.Equals(description);
+                }
+                catch
+                {
+                    descriptionMatches = false;
+                }
+
+                if (descriptionMatches)
+                {
+                    return false; // no change
+                }
             }
 
             Resources.TryGetValue(id, out var resource);
