@@ -8,7 +8,7 @@
 
 ## Installation
 A standalone version is in development. Although it's working already, it needs further clean up and testing.
-The preview build of the 3.2.0 version can be found [here](https://github.com/still-scene/t3/releases/tag/v3.2.0). Please report any issues you might encounter.
+The preview build of the 3.3.0 version can be found [here](https://github.com/still-scene/t3/releases/tag/v3.3.0). Please report any issues you might encounter.
 
 This means that you need an IDE, like Visual Studio or Rider, to build and run it. This is free and not as difficult as it might sound.
 
