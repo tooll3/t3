@@ -19,6 +19,13 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
         [Output(Guid = "9c949c29-9dc1-4ded-94ce-1e86317a5233")]
         public readonly Slot<MeshBuffers> Data = new ();
 
+        public enum TextureModes
+        {
+            Planar,
+            Circular, 
+            CircularScaled
+        }
+
         public NGonMesh()
         {
             Data.UpdateAction = Update;
@@ -37,6 +44,9 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
                 var yaw = MathUtil.DegreesToRadians(rotation.Y);
                 var pitch = MathUtil.DegreesToRadians(rotation.X);
                 var roll = MathUtil.DegreesToRadians(rotation.Z);
+
+                var textureMode = (TextureModes)(int)TextureMode.GetValue(context).Clamp(0, Enum.GetValues(typeof(TextureModes)).Length);
+
 
                 var rotationMatrix = Matrix.RotationYawPitchRoll(yaw, pitch, roll);
                 
@@ -75,9 +85,22 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
                     var p = new SharpDX.Vector3(radius * MathF.Sin(phi) * stretch.X, // starts at top
                                                 radius * MathF.Cos(phi) * stretch.Y,
                                                 0);
-                    var u0 = MathF.Sin(phi);
-                    var v0 = MathF.Cos(phi);
+                    float u0=0f, v0=0f;
 
+                    switch (textureMode) {
+                    case TextureModes.Planar:
+                        u0 = MathF.Sin(phi);
+                        v0 = MathF.Cos(phi);
+                        break;
+                    case TextureModes.Circular:
+                        u0 = phi / (2 * MathF.PI);
+                        v0 = 1;
+                        break;
+                    case TextureModes.CircularScaled:
+                        u0 = phi / (2 * MathF.PI);
+                        v0 = radius;
+                        break;
+                    }
                     var uv0 = new SharpDX.Vector2(u0, v0);
                     _vertexBufferData[segmentIndex+1] = new PbrVertex {
                                                                      Position = SharpDX.Vector3.TransformNormal(p, rotationMatrix) + center2,
@@ -125,20 +148,23 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
 
         private readonly MeshBuffers _data = new();
 
-        [Input(Guid = "33921c65-61bc-4229-af8c-c89db9a874bf")]
-        public readonly InputSlot<int> Segments = new();
-        
         [Input(Guid = "deee0efc-949e-41da-bdb1-d80dbb6ac6e2")]
-        public readonly InputSlot<Vector2> Stretch = new();
-        
-        [Input(Guid = "9dbf0c3d-4762-41f6-94b8-26acbd1531c1")]
-        public readonly InputSlot<float> Radius = new();
-                
+        public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
+
         [Input(Guid = "69a2e8c2-2c88-4969-8beb-66fe8ff4af18")]
-        public readonly InputSlot<Vector3> Center = new();
-        
+        public readonly InputSlot<System.Numerics.Vector3> Center = new InputSlot<System.Numerics.Vector3>();
+
         [Input(Guid = "b819ad07-6229-4b8d-b8b6-a2a89b7c81d8")]
-        public readonly InputSlot<Vector3> Rotation = new();
+        public readonly InputSlot<System.Numerics.Vector3> Rotation = new InputSlot<System.Numerics.Vector3>();
+
+        [Input(Guid = "33921c65-61bc-4229-af8c-c89db9a874bf")]
+        public readonly InputSlot<int> Segments = new InputSlot<int>();
+
+        [Input(Guid = "9dbf0c3d-4762-41f6-94b8-26acbd1531c1")]
+        public readonly InputSlot<float> Radius = new InputSlot<float>();
+
+        [Input(Guid = "d85761fb-3c82-4785-a2a2-4b111230e4ee", MappedType = typeof(NGonMesh.TextureModes))]
+        public readonly InputSlot<int> TextureMode = new InputSlot<int>();
         
     }
 }
