@@ -54,33 +54,26 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
 
         private void Update(EvaluationContext context)
         {
+            // initialize media foundation library and default values
             if (!_initialized)
             {
                 SetupMediaFoundation();
-                Volume.TypedDefaultValue.Value = 1.0f;
+                Volume.TypedDefaultValue.Value        = 1.0f;
+                SeekThreshold.TypedDefaultValue.Value = 0.2f;
                 _initialized = true;
             }
             
-            if (Texture.DirtyFlag.IsDirty ||
-                _size.Width <= 0 || _size.Height <= 0)
+            // change texture size if necessary
+            if (Texture.DirtyFlag.IsDirty
+                || _size.Width <= 0 || _size.Height <= 0)
             {
                 SetupTexture(_size);
-                //Initialize(filepath: Path.GetValue(context));
             }
 
             if (_engine == null)
                 return;
 
-            if (Math.Abs(context.LocalTime - _lastUpdateTime) < 0.001)
-            {
-                Play = false;
-            }
-            else
-            {
-                _lastUpdateTime = context.LocalTime;
-                Play = true;
-            }
-            
+            // update video if url has changed
             if (Path.DirtyFlag.IsDirty)
             {
                 Play = true;
@@ -88,25 +81,36 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 _engine.Play();
             }
 
+            // shall we seek?
             var shouldBeTimeInSecs = context.Playback.SecondsFromBars(context.LocalTime);
-            var videoTime = _engine.CurrentTime;
-            var delta =videoTime - shouldBeTimeInSecs;
-            var shouldSeek = !_engine.IsSeeking  
-                             &&  Math.Abs(delta) > SeekThreshold.GetValue(context);
+            var clampedTime = Math.Clamp(shouldBeTimeInSecs, 0.0, _engine.Duration);
+            var videoTime = Math.Clamp(_engine.CurrentTime, 0.0, _engine.Duration);
+            var deltaTime = clampedTime - videoTime;
+            var shouldSeek = !_engine.IsSeeking
+                             && Math.Abs(deltaTime) > SeekThreshold.GetValue(context);
+
+            // play when we are in the center portion of the video
+            // and we are playing the video forward
+            Play = (shouldBeTimeInSecs == clampedTime) &&
+                   (clampedTime - _lastUpdateTime > 0.0);
+            _lastUpdateTime = clampedTime;
+
+            // initiate seeking if necessary
             if (shouldSeek)
             {
-                Log.Debug($"Seeked video to {shouldBeTimeInSecs:0.00} delta was {delta:0.0000)}s");
-                SeekTime = (float)shouldBeTimeInSecs;
+                Log.Debug($"Seeked video to {clampedTime:0.00} delta was {deltaTime:0.0000)}s");
+                SeekTime = (float)clampedTime;
                 Seek = true;
-                
             }
 
+            // mute video if audio engine is muted
+            // FIXME: does not work when the video is not updating...
             if (AudioEngine.GetMute())
                 _engine.Volume = 0.0;
             else
                 _engine.Volume = Volume.GetValue(context).Clamp(0f, 1f);
 
-            //TransferFrame();
+            // update the video state and image
             UpdateVideo();
         }
         
@@ -376,6 +380,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         // }
 
         private double _lastUpdateTime;
+
         void UpdateVideo()
         {
             if (ReadyState <= ReadyState.HaveNothing)
@@ -392,8 +397,6 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                     _engine.CurrentTime = seekTime;
                     Seek = false;
                 }
-
-
                 
                 if (Loop)
                 {
