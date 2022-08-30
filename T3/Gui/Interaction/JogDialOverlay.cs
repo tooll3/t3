@@ -19,6 +19,7 @@ namespace T3.Gui.Interaction
             var modified = false;
             _drawList = ImGui.GetForegroundDrawList();
             _io = ImGui.GetIO();
+            _center = center;
             
             if (restarted)
             {
@@ -28,7 +29,7 @@ namespace T3.Gui.Interaction
                 _min = min;
                 _max = max;
                 _clamp = clamp;
-                _center = center;
+                
                 _state = States.WaitingInNeutral;
             }
 

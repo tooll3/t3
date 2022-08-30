@@ -34,6 +34,10 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         [Input(Guid = "2FECFBB4-F7D9-4C53-95AE-B64CCBB6FBAD")]
         public readonly InputSlot<float> Volume = new InputSlot<float>();
 
+        [Input(Guid = "E9C15B3F-8C4A-411D-B9B3-795D64D6BD20")]
+        public readonly InputSlot<float> SeekThreshold = new InputSlot<float>();
+
+
         public PlayVideo()
         {
             Texture.UpdateAction = Update;
@@ -67,10 +71,35 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             if (_engine == null)
                 return;
 
+            if (Math.Abs(context.LocalTime - _lastUpdateTime) < 0.001)
+            {
+                Play = false;
+            }
+            else
+            {
+                _lastUpdateTime = context.LocalTime;
+                Play = true;
+            }
+            
             if (Path.DirtyFlag.IsDirty)
+            {
                 Play = true;
                 Url = Path.GetValue(context);
                 _engine.Play();
+            }
+
+            var shouldBeTimeInSecs = context.Playback.SecondsFromBars(context.LocalTime);
+            var videoTime = _engine.CurrentTime;
+            var delta =videoTime - shouldBeTimeInSecs;
+            var shouldSeek = !_engine.IsSeeking  
+                             &&  Math.Abs(delta) > SeekThreshold.GetValue(context);
+            if (shouldSeek)
+            {
+                Log.Debug($"Seeked video to {shouldBeTimeInSecs:0.00} delta was {delta:0.0000)}s");
+                SeekTime = (float)shouldBeTimeInSecs;
+                Seek = true;
+                
+            }
 
             if (AudioEngine.GetMute())
                 _engine.Volume = 0.0;
@@ -221,7 +250,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                     }
                     catch (SharpDXException e)
                     {
-                        Log.Debug("unable to switch video source...");
+                        Log.Debug("unable to switch video source..." + e.Message);
                     }
                 }
             }
@@ -346,6 +375,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         //     return _currentVideoFrame;
         // }
 
+        private double _lastUpdateTime;
         void UpdateVideo()
         {
             if (ReadyState <= ReadyState.HaveNothing)
@@ -360,8 +390,11 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 {
                     var seekTime = SeekTime.Clamp(0, Duration);
                     _engine.CurrentTime = seekTime;
+                    Seek = false;
                 }
 
+
+                
                 if (Loop)
                 {
                     var currentTime = CurrentTime;
@@ -463,8 +496,9 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         }
 
         // FIXME: we should call this properly
-        public void Dispose()
+        public new void Dispose()
         {
+            base.Dispose();
             _engine.Shutdown();
             _engine.PlaybackEvent -= Engine_PlaybackEvent;
             _engine.Dispose();

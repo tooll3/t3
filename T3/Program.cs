@@ -91,8 +91,15 @@ namespace T3
             _main.Form.KeyUp += HandleKeyUp;
             _main.Form.Closing += (sender, args) =>
                                   {
-                                      args.Cancel = T3Ui.UiModel.IsSaving;
-                                      Log.Debug($"Cancel closing because save-operation is in progress.");
+                                      if (T3Ui.UiModel.IsSaving)
+                                      {
+                                        args.Cancel = true;
+                                        Log.Debug($"Cancel closing because save-operation is in progress.");
+                                      }
+                                      else
+                                      {
+                                          Log.Debug("Shutting down");
+                                      }
                                   };
 
             
@@ -242,18 +249,26 @@ namespace T3
             }
             catch (Exception e)
             {
-                Log.Warning("Exception during shutdown: " + e);
+                Log.Warning("Exception during shutdown: " + e.Message);
             }
 
             // Release all resources
-            _main.RenderTargetView.Dispose();
-            _main.BackBufferTexture.Dispose();
-            _deviceContext.ClearState();
-            _deviceContext.Flush();
-            device.Dispose();
-            _deviceContext.Dispose();
-            _main.SwapChain.Dispose();
-            factory.Dispose();
+            try
+            {
+                _main.RenderTargetView.Dispose();
+                _main.BackBufferTexture.Dispose();
+                _deviceContext.ClearState();
+                _deviceContext.Flush();
+                device.Dispose();
+                _deviceContext.Dispose();
+                _main.SwapChain.Dispose();
+                factory.Dispose();
+            }
+            catch (Exception e)
+            {
+                Log.Warning("Exception freeing resources: " + e.Message);
+            }
+
             Log.Debug("Shutdown complete");
         }
         
