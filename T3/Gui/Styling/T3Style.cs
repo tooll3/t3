@@ -31,6 +31,7 @@ namespace T3.Gui
             public static Color WarningColor = new Color(203, 19,113, 255);
             
             public static Color WindowBackground = new Color(0.05f, 0.05f,0.05f, 1);
+            public static Color Background = new Color(0.1f, 0.1f, 0.1f, 0.98f);
         }
         
         

@@ -217,6 +217,7 @@ namespace T3.Gui
                     ImGui.MenuItem("Show Main Menu", "", ref UserSettings.Config.ShowMainMenu);
                     ImGui.MenuItem("Show Title", "", ref UserSettings.Config.ShowTitleAndDescription);
                     ImGui.MenuItem("Show Timeline", "", ref UserSettings.Config.ShowTimeline);
+                    ImGui.MenuItem("Show Minimap", "", ref UserSettings.Config.ShowMiniMap);
                     ImGui.MenuItem("Show Toolbar", "", ref UserSettings.Config.ShowToolbar);
                     if(ImGui.MenuItem("Toggle Interface Elements", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), false, !IsCurrentlySaving))
                     {

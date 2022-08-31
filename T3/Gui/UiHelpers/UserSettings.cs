@@ -36,6 +36,7 @@ namespace T3.Gui.UiHelpers
             public bool ShowTitleAndDescription = true;
             public bool ShowToolbar = true;
             public bool ShowTimeline = true;
+            public bool ShowMiniMap = false;
             
             // UI-State
             public float UiScaleFactor = 1;
@@ -43,6 +44,7 @@ namespace T3.Gui.UiHelpers
             public bool ShowGraphOverContent = false;
             public int WindowLayoutIndex = 0;
             public bool EnableIdleMotion = true;
+            
             
             // Interaction
             public bool SmartGroupDragging = false;

@@ -29,7 +29,7 @@ namespace T3.Gui.Interaction
                 WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos()
                                                               + ImGui.GetStyle().WindowBorderSize * Vector2.One;
                 WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin()
-                             - 2* ImGui.GetStyle().WindowBorderSize * Vector2.One;
+                                                               - 2 * ImGui.GetStyle().WindowBorderSize * Vector2.One;
             }
             else
             {
@@ -116,11 +116,10 @@ namespace T3.Gui.Interaction
 
         public Vector2 TransformDirectionFloored(Vector2 vectorInCanvas)
         {
-            var s= vectorInCanvas * Scale;
+            var s = vectorInCanvas * Scale;
             return new Vector2((int)s.X, (int)s.Y);
         }
 
-        
         /// <summary>
         /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
         /// </summary>
@@ -172,6 +171,12 @@ namespace T3.Gui.Interaction
                            Scale = ScaleTarget,
                            Scroll = ScrollTarget
                        };
+        }
+
+        public void SetTargetScope(Scope scope)
+        {
+            ScaleTarget = scope.Scale;
+            ScrollTarget = scope.Scroll;
         }
 
         public void SetVisibleRange(Vector2 scale, Vector2 scroll)
@@ -304,7 +309,7 @@ namespace T3.Gui.Interaction
                                           || float.IsInfinity(scale.Y) || float.IsNaN(scale.Y)
                                           || float.IsInfinity(scroll.X) || float.IsNaN(scroll.X)
                                           || float.IsInfinity(scroll.Y) || float.IsNaN(scroll.Y)
-                )
+               )
             {
                 scale = Vector2.One;
                 scroll = Vector2.Zero;
@@ -392,7 +397,7 @@ namespace T3.Gui.Interaction
                 && (
                        ImGui.IsMouseDragging(ImGuiMouseButton.Right)
                        || ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
-                )
+               )
             {
                 ScrollTarget -= Io.MouseDelta / (ParentScale * ScaleTarget);
                 UserScrolledCanvas = true;
@@ -438,7 +443,7 @@ namespace T3.Gui.Interaction
 
             if (Math.Abs(zoomDelta - 1) < 0.001f)
                 return;
-            
+
             var zoom = zoomDelta * Vector2.One;
             if (IsCurveCanvas)
             {
@@ -456,7 +461,7 @@ namespace T3.Gui.Interaction
 
             if (Math.Abs(zoomDelta) > 0.1f)
                 UserZoomedCanvas = true;
-            
+
             ScrollTarget = (focusCenterOnCanvas - cornerToFocus / zoom);
         }
 

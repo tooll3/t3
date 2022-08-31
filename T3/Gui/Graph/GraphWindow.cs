@@ -238,6 +238,8 @@ namespace T3.Gui.Graph
                 EditDescriptionDialog.Draw(GraphCanvas.CompositionOp.Symbol);
             }
             ImGui.EndChild();
+            
+
 
             if (UserSettings.Config.ShowTimeline)
             {
@@ -264,6 +266,120 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleVar(1);
                 }
             }
+            
+            if(UserSettings.Config.ShowMiniMap)
+                DrawMiniMap(GraphCanvas.CompositionOp);
+        }
+
+        private void DrawMiniMap(Instance compositionOp)
+        {
+            Vector2 widgetSize = new Vector2(200, 200);
+            var localPos = new Vector2(ImGui.GetWindowWidth() - widgetSize.X, 0);
+            ImGui.SetCursorPos(localPos);
+            var widgetPos = ImGui.GetCursorScreenPos();
+
+            
+            if (ImGui.BeginChild("##minimap", widgetSize, false,
+                                 ImGuiWindowFlags.NoScrollbar
+                                 | ImGuiWindowFlags.NoMove
+                                 | ImGuiWindowFlags.NoScrollWithMouse
+                                 | ImGuiWindowFlags.NoDecoration
+                                 | ImGuiWindowFlags.NoTitleBar
+                                 | ImGuiWindowFlags.ChildWindow))
+            {
+                
+                    
+                
+                
+                var dl = ImGui.GetWindowDrawList();
+
+                dl.AddRectFilled(widgetPos,widgetPos+ widgetSize,  T3Style.Colors.Background.Fade(0.8f));
+                
+                if (SymbolUiRegistry.Entries.TryGetValue(compositionOp.Symbol.Id, out var symbolUi))
+                {
+                    var hasFirst= false;
+                    ImRect bounds = new ImRect();
+                    foreach (var child in symbolUi.ChildUis)
+                    {
+                        var rect = ImRect.RectWithSize(child.PosOnCanvas, child.Size);
+                        
+                        if (!hasFirst)
+                        {
+                            bounds = rect;
+                            hasFirst = true;
+                        }
+                        else
+                        {
+                            bounds.Add(rect);
+                        }
+                    }
+
+                    if (hasFirst)
+                    {
+                        var mapMin = widgetPos + Vector2.One* 5;
+                        //var mapMax = windowPos + mapWidgetSize - Vector2.One * 5;
+                        var mapSize = widgetSize - Vector2.One * 10;
+                        
+                        var boundsMin = bounds.Min;
+                        var boundsMax = bounds.Max;
+                        var boundsSize = bounds.GetSize();
+                        var boundsAspect = boundsSize.X / boundsSize.Y;
+
+                        var mapAspect = mapSize.X / mapSize.Y;
+
+                        if (boundsAspect > mapAspect)
+                        {
+                            mapSize.Y = mapSize.X / boundsAspect;
+                        }
+                        else
+                        {
+                            mapSize.X = mapSize.Y * boundsAspect;
+                        }
+
+                        foreach (var annotation in symbolUi.Annotations.Values)
+                        {
+                            var rect = ImRect.RectWithSize(annotation.PosOnCanvas, annotation.Size);
+                            var min = (rect.Min - boundsMin) / boundsSize * mapSize + mapMin;
+                            var max = (rect.Max - boundsMin) / boundsSize * mapSize + mapMin;
+                            dl.AddRectFilled(min,max, annotation.Color.Fade(0.1f));
+                        }
+                        
+                        foreach (var child in symbolUi.ChildUis)
+                        {
+                            var rect = ImRect.RectWithSize(child.PosOnCanvas, child.Size);
+                            var min = (rect.Min - boundsMin) / boundsSize * mapSize + mapMin;
+                            var max = (rect.Max - boundsMin) / boundsSize * mapSize + mapMin;
+                            
+                            dl.AddRectFilled(min,max, Color.White.Fade(0.6f));
+                        }
+                        
+                        // Draw View Area
+                        var viewMin = GraphCanvas.InverseTransformPosition(Vector2.Zero);
+                        var viewMax = GraphCanvas.InverseTransformPosition(GraphCanvas.WindowSize);
+                        
+                        var min2 = (viewMin - boundsMin) / boundsSize * mapSize + mapMin;
+                        var max2 = (viewMax - boundsMin) / boundsSize * mapSize + mapMin;
+                            
+                        dl.AddRect(min2,max2, Color.White);
+                        
+                        
+                        ImGui.InvisibleButton("##map", widgetSize);
+                        if (ImGui.IsItemActive())
+                        {
+                            var posInMap = ImGui.GetMousePos();
+                            var normalizedPos = (posInMap - widgetPos) / widgetSize;
+                            var posInCanvas = bounds.Min + bounds.GetSize() * normalizedPos;
+                            var scope = GraphCanvas.GetTargetScope();
+                            scope.Scroll = posInCanvas;
+                            GraphCanvas.SetTargetScope(scope);
+                        }
+                    }
+                }
+                
+                // dl.AddRectFilled(windowPos+ new Vector2(10, 10), windowPos+ new Vector2(30, 30), Color.Orange);
+            }
+
+            ImGui.EndChild();
         }
 
         private void DrawControlsAtBottom()
