@@ -3,11 +3,13 @@ using ImGuiNET;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using T3.Core;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Operator;
 using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.Interaction;
 using T3.Gui.Interaction.TransformGizmos;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -268,12 +270,12 @@ namespace T3.Gui.Graph
             }
             
             if(UserSettings.Config.ShowMiniMap)
-                DrawMiniMap(GraphCanvas.CompositionOp);
+                DrawMiniMap(GraphCanvas.CompositionOp, GraphCanvas);
         }
 
-        private void DrawMiniMap(Instance compositionOp)
+        private static void DrawMiniMap(Instance compositionOp, ScalableCanvas graphCanvas)
         {
-            Vector2 widgetSize = new Vector2(200, 200);
+            var widgetSize = new Vector2(200, 200);
             var localPos = new Vector2(ImGui.GetWindowWidth() - widgetSize.X, 0);
             ImGui.SetCursorPos(localPos);
             var widgetPos = ImGui.GetCursorScreenPos();
@@ -287,38 +289,43 @@ namespace T3.Gui.Graph
                                  | ImGuiWindowFlags.NoTitleBar
                                  | ImGuiWindowFlags.ChildWindow))
             {
-                
-                    
-                
-                
+
+
+
                 var dl = ImGui.GetWindowDrawList();
 
                 dl.AddRectFilled(widgetPos,widgetPos+ widgetSize,  T3Style.Colors.Background.Fade(0.8f));
+                dl.AddRect(widgetPos,widgetPos+ widgetSize,  Color.Black.Fade(0.9f));
                 
                 if (SymbolUiRegistry.Entries.TryGetValue(compositionOp.Symbol.Id, out var symbolUi))
                 {
-                    var hasFirst= false;
+                    var hasChildren= false;
                     ImRect bounds = new ImRect();
                     foreach (var child in symbolUi.ChildUis)
                     {
                         var rect = ImRect.RectWithSize(child.PosOnCanvas, child.Size);
                         
-                        if (!hasFirst)
+                        if (!hasChildren)
                         {
                             bounds = rect;
-                            hasFirst = true;
+                            hasChildren = true;
                         }
                         else
                         {
                             bounds.Add(rect);
                         }
                     }
+                    
 
-                    if (hasFirst)
+                    var maxBoundsSize = MathF.Max(bounds.GetSize().X, bounds.GetSize().Y);
+                    var opacity = MathUtils.Remap(maxBoundsSize, 200,1000, 0, 1);
+                    
+                    if (hasChildren && opacity > 0)
                     {
-                        var mapMin = widgetPos + Vector2.One* 5;
-                        //var mapMax = windowPos + mapWidgetSize - Vector2.One * 5;
-                        var mapSize = widgetSize - Vector2.One * 10;
+                        const float padding = 5;
+                        
+                        var mapMin = widgetPos + Vector2.One* padding;
+                        var mapSize = widgetSize - Vector2.One * padding * 2;
                         
                         var boundsMin = bounds.Min;
                         var boundsMax = bounds.Max;
@@ -341,7 +348,7 @@ namespace T3.Gui.Graph
                             var rect = ImRect.RectWithSize(annotation.PosOnCanvas, annotation.Size);
                             var min = (rect.Min - boundsMin) / boundsSize * mapSize + mapMin;
                             var max = (rect.Max - boundsMin) / boundsSize * mapSize + mapMin;
-                            dl.AddRectFilled(min,max, annotation.Color.Fade(0.1f));
+                            dl.AddRectFilled(min,max, annotation.Color.Fade(0.1f * opacity));
                         }
                         
                         foreach (var child in symbolUi.ChildUis)
@@ -350,33 +357,37 @@ namespace T3.Gui.Graph
                             var min = (rect.Min - boundsMin) / boundsSize * mapSize + mapMin;
                             var max = (rect.Max - boundsMin) / boundsSize * mapSize + mapMin;
                             
-                            dl.AddRectFilled(min,max, Color.White.Fade(0.6f));
+                            dl.AddRectFilled(min,max, Color.White.Fade(0.5f * opacity));
                         }
                         
                         // Draw View Area
-                        var viewMin = GraphCanvas.InverseTransformPosition(Vector2.Zero);
-                        var viewMax = GraphCanvas.InverseTransformPosition(GraphCanvas.WindowSize);
+                        var viewMinInCanvas = graphCanvas.InverseTransformPosition(Vector2.Zero);
+                        var viewMaxInCanvas = graphCanvas.InverseTransformPosition(graphCanvas.WindowSize);
                         
-                        var min2 = (viewMin - boundsMin) / boundsSize * mapSize + mapMin;
-                        var max2 = (viewMax - boundsMin) / boundsSize * mapSize + mapMin;
-                            
-                        dl.AddRect(min2,max2, Color.White);
+                        var min2 = (viewMinInCanvas - boundsMin) / boundsSize * mapSize + mapMin;
+                        var max2 = (viewMaxInCanvas - boundsMin) / boundsSize * mapSize + mapMin;
                         
+                        dl.AddRect(min2,max2, Color.White.Fade(opacity));
                         
+                        var mousePos = ImGui.GetMousePos();
+                        var normalizedPos = (mousePos - widgetPos - Vector2.One * padding) / mapSize;
+                        var posInCanvas = bounds.Min + bounds.GetSize() * normalizedPos;
+                        
+                        // Debug visualization
+                        //var posInScreen = graphCanvas.TransformPosition(posInCanvas);
+                        //ImGui.GetForegroundDrawList().AddCircle(posInScreen, 10, Color.Green);
+                        
+                        // Dragging
                         ImGui.InvisibleButton("##map", widgetSize);
                         if (ImGui.IsItemActive())
                         {
-                            var posInMap = ImGui.GetMousePos();
-                            var normalizedPos = (posInMap - widgetPos) / widgetSize;
-                            var posInCanvas = bounds.Min + bounds.GetSize() * normalizedPos;
-                            var scope = GraphCanvas.GetTargetScope();
-                            scope.Scroll = posInCanvas;
-                            GraphCanvas.SetTargetScope(scope);
+                            
+                            var scope = graphCanvas.GetTargetScope();
+                            scope.Scroll = posInCanvas - (viewMaxInCanvas - viewMinInCanvas) /2;
+                            graphCanvas.SetTargetScope(scope);
                         }
                     }
                 }
-                
-                // dl.AddRectFilled(windowPos+ new Vector2(10, 10), windowPos+ new Vector2(30, 30), Color.Orange);
             }
 
             ImGui.EndChild();
