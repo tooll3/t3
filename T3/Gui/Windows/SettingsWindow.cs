@@ -36,6 +36,7 @@ namespace T3.Gui.Windows
                 ImGui.Separator();
                 changed |= ImGui.DragFloat("Snap strength", ref UserSettings.Config.SnapStrength);
                 changed |= ImGui.DragFloat("Click threshold", ref UserSettings.Config.ClickThreshold);
+                changed |= ImGui.DragFloat("Keyboard scroll speed", ref UserSettings.Config.KeyboardScrollSpeed);
                  
                 changed |= ImGui.DragFloat("Timeline Raster Density", ref UserSettings.Config.TimeRasterDensity, 0.01f);
                 changed |= ImGui.Checkbox("Count Bars from Zero", ref UserSettings.Config.CountBarsFromZero);

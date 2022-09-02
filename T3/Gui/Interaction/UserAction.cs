@@ -272,7 +272,7 @@ namespace T3.Gui
                             new KeyboardBinding(UserActions.LayoutSelection, new KeyCombination(Key.G)),
                             new KeyboardBinding(UserActions.ToggleFullScreenGraph, new KeyCombination(Key.F11, ctrl: true)),
                             new KeyboardBinding(UserActions.ToggleFocusMode, new KeyCombination(Key.Esc, shift: true)),
-                            new KeyboardBinding(UserActions.AddAnnotation, new KeyCombination(Key.A)){ NeedsWindowFocus = true },
+                            new KeyboardBinding(UserActions.AddAnnotation, new KeyCombination(Key.A, shift:true)){ NeedsWindowFocus = true },
                       
                             new KeyboardBinding(UserActions.ToggleVariationsWindow, new KeyCombination(Key.V, alt:true)){ NeedsWindowFocus = false },
                         };

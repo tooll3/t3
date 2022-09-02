@@ -15,7 +15,6 @@ using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Commands.Annotations;
 using t3.Gui.Commands.Graph;
-using T3.Gui.Graph;
 using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
@@ -245,7 +244,29 @@ namespace T3.Gui.Graph
                     GraphWindow.ClearBackground();
                 }
 
-                
+
+                if (ImGui.IsWindowFocused())
+                {
+                    if (ImGui.IsKeyPressed((ImGuiKey)Keys.W))
+                    {
+                        ScrollTarget.Y -= InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollSpeed).Y;
+                    }
+                    if (ImGui.IsKeyPressed((ImGuiKey)Keys.S))
+                    {
+                        ScrollTarget.Y += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollSpeed).Y;
+                    }
+                    if (ImGui.IsKeyPressed((ImGuiKey)Keys.A))
+                    {
+                        ScrollTarget.X -= InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollSpeed).X;
+                    }                    
+                    if (ImGui.IsKeyPressed((ImGuiKey)Keys.D))
+                    {
+                        ScrollTarget.X += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollSpeed).X;
+                    }                    
+                    
+                }
+
+
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
                 if (showGrid)
