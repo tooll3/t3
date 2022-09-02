@@ -6,6 +6,7 @@ using System.Linq;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.IO;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
@@ -273,7 +274,7 @@ namespace T3.Gui.Graph
                 DrawMiniMap(GraphCanvas.CompositionOp, GraphCanvas);
         }
 
-        private static void DrawMiniMap(Instance compositionOp, ScalableCanvas graphCanvas)
+        private static void DrawMiniMap(Instance compositionOp, ScalableCanvas canvas)
         {
             var widgetSize = new Vector2(200, 200);
             var localPos = new Vector2(ImGui.GetWindowWidth() - widgetSize.X, 0);
@@ -318,7 +319,7 @@ namespace T3.Gui.Graph
                     
 
                     var maxBoundsSize = MathF.Max(bounds.GetSize().X, bounds.GetSize().Y);
-                    var opacity = MathUtils.Remap(maxBoundsSize, 200,1000, 0, 1);
+                    var opacity = MathUtils.RemapAndClamp(maxBoundsSize, 200,1000, 0, 1);
                     
                     if (hasChildren && opacity > 0)
                     {
@@ -356,13 +357,14 @@ namespace T3.Gui.Graph
                             var rect = ImRect.RectWithSize(child.PosOnCanvas, child.Size);
                             var min = (rect.Min - boundsMin) / boundsSize * mapSize + mapMin;
                             var max = (rect.Max - boundsMin) / boundsSize * mapSize + mapMin;
-                            
-                            dl.AddRectFilled(min,max, Color.White.Fade(0.5f * opacity));
+
+                            var fadedColor = Color.White.Fade(0.5f * opacity);
+                            dl.AddRectFilled(min,max, fadedColor);
                         }
                         
                         // Draw View Area
-                        var viewMinInCanvas = graphCanvas.InverseTransformPosition(Vector2.Zero);
-                        var viewMaxInCanvas = graphCanvas.InverseTransformPosition(graphCanvas.WindowSize);
+                        var viewMinInCanvas = canvas.InverseTransformPosition(Vector2.Zero);
+                        var viewMaxInCanvas = canvas.InverseTransformPosition(canvas.WindowSize);
                         
                         var min2 = (viewMinInCanvas - boundsMin) / boundsSize * mapSize + mapMin;
                         var max2 = (viewMaxInCanvas - boundsMin) / boundsSize * mapSize + mapMin;
@@ -370,8 +372,9 @@ namespace T3.Gui.Graph
                         dl.AddRect(min2,max2, Color.White.Fade(opacity));
                         
                         var mousePos = ImGui.GetMousePos();
-                        var normalizedPos = (mousePos - widgetPos - Vector2.One * padding) / mapSize;
-                        var posInCanvas = bounds.Min + bounds.GetSize() * normalizedPos;
+                        var normalizedMousePos = (mousePos - widgetPos - Vector2.One * padding) / mapSize;
+                        var mousePosInCanvas = bounds.Min + bounds.GetSize() * normalizedMousePos;
+                         
                         
                         // Debug visualization
                         //var posInScreen = graphCanvas.TransformPosition(posInCanvas);
@@ -382,9 +385,15 @@ namespace T3.Gui.Graph
                         if (ImGui.IsItemActive())
                         {
                             
-                            var scope = graphCanvas.GetTargetScope();
-                            scope.Scroll = posInCanvas - (viewMaxInCanvas - viewMinInCanvas) /2;
-                            graphCanvas.SetTargetScope(scope);
+                            var scope = canvas.GetTargetScope();
+                            scope.Scroll = mousePosInCanvas - (viewMaxInCanvas - viewMinInCanvas) /2;
+                            canvas.SetTargetScope(scope);
+                        }
+
+                        if (ImGui.IsWindowHovered() && ImGui.GetIO().MouseWheel != 0)
+                        {
+                            var centerInCanvas = (viewMaxInCanvas + viewMinInCanvas) / 2;
+                            canvas.ZoomWithMouseWheel(centerInCanvas);
                         }
                     }
                 }

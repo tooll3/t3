@@ -409,7 +409,7 @@ namespace T3.Gui.Interaction
 
             if ((flags & T3Ui.EditingFlags.PreventZoomWithMouseWheel) == 0)
             {
-                ZoomWithMouseWheel();
+                ZoomWithMouseWheel(InverseTransformPosition(_mouse));
                 //ZoomWithMiddleMouseDrag();
 
                 ScaleTarget = ClampScaleToValidRange(ScaleTarget);
@@ -426,11 +426,10 @@ namespace T3.Gui.Interaction
                        : new Vector2(scale.X.Clamp(0.1f, 11), scale.Y.Clamp(0.1f, 11));
         }
 
-        private void ZoomWithMouseWheel()
+        public void ZoomWithMouseWheel(Vector2 focusCenterOnCanvas)
         {
             UserZoomedCanvas = false;
-
-            var focusCenterOnCanvas = InverseTransformPosition(_mouse);
+            
             //DrawCanvasDebugInfos();
 
             var zoomDelta = ComputeZoomDeltaFromMouseWheel();
