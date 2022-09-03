@@ -476,15 +476,15 @@ namespace T3.Gui
         public static bool FloatValueEdit(string label, ref float value, float min= float.NegativeInfinity, float max= float.PositiveInfinity, float scale= 0)
         {
             var labelSize = ImGui.CalcTextSize(label);
-
+            const float leftPadding = 200;
             var p = ImGui.GetCursorPos();
-            ImGui.SetCursorPosX( MathF.Max(200 - labelSize.X,0)+10);
+            ImGui.SetCursorPosX( MathF.Max(leftPadding - labelSize.X,0)+10);
             ImGui.AlignTextToFramePadding();
             ImGui.TextUnformatted(label);
             ImGui.SetCursorPos(p);
             
             ImGui.SameLine();
-            ImGui.SetCursorPosX(220);
+            ImGui.SetCursorPosX(leftPadding + 20);
             var size = new Vector2(150, ImGui.GetFrameHeight());
             ImGui.PushID(label);
             var result = SingleValueEdit.Draw(ref value, size, min, max);
@@ -495,17 +495,20 @@ namespace T3.Gui
         
         public static bool StringValueEdit(string label, ref string value)
         {
+            const float leftPadding = 200;
             var labelSize = ImGui.CalcTextSize(label);
 
             var p = ImGui.GetCursorPos();
-            ImGui.SetCursorPosX( MathF.Max(200 - labelSize.X,0)+10);
+            ImGui.SetCursorPosX( MathF.Max(leftPadding - labelSize.X,0)+10);
             ImGui.AlignTextToFramePadding();
             ImGui.TextUnformatted(label);
             ImGui.SetCursorPos(p);
             
             ImGui.SameLine();
-            ImGui.SetCursorPosX(220);
+            ImGui.SetCursorPosX(leftPadding + 20);
             //var size = new Vector2(150, ImGui.GetFrameHeight());
+            
+            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X- 50);
             var modified =  ImGui.InputText("##" + label, ref value, 1000);
             return modified;
         }

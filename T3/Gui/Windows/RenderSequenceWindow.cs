@@ -22,14 +22,11 @@ namespace T3.Gui.Windows
 
         protected override void UpdateBeforeDraw()
         {
-            ImGui.SetNextWindowSize(new Vector2(350, 300));
+            ImGui.SetNextWindowSize(new Vector2(550, 270));
         }
 
         protected override void DrawContent()
         {
-            CustomComponents.HelpText("Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm faster exports.");
-            
-            
             //ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, 10);
             CustomComponents.FloatValueEdit("Start in secs", ref _startTime);
             CustomComponents.FloatValueEdit("End in secs", ref _endTime);
@@ -65,6 +62,9 @@ namespace T3.Gui.Windows
                         SaveImage(mainTexture);
                     }
                 }
+                ImGui.SameLine();
+                ImGui.AlignTextToFramePadding();
+                CustomComponents.HelpText("   Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm faster exports.");
             }
             else
             {
