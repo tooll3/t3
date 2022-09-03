@@ -13,6 +13,7 @@ using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.InputUi;
 using T3.Gui.Interaction.TransformGizmos;
+using T3.Gui.Interaction.Variations;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -275,9 +276,20 @@ namespace T3.Gui.Graph
                         var compositionOp = GraphCanvas.Current.CompositionOp;
                         if (compositionOp.Symbol.Animator.IsInstanceAnimated(instance))
                         {
-                            _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, _usableScreenRect.Max.Y - 12),
+                            _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, (_usableScreenRect.Max.Y - 12).Clamp(_usableScreenRect.Min.Y, _usableScreenRect.Max.Y)),
                                                     new Vector2(_usableScreenRect.Max.X - 2, _usableScreenRect.Max.Y - 3),
                                                     Color.Orange);
+                        }
+                    }
+                    
+                    // Snapshot indicator
+                    {
+                        if(VariationHandling.FocusSetsForCompositions.TryGetValue(GraphCanvas.Current.CompositionOp.Symbol.Id, out var focusSet))
+                        {
+                            if(focusSet.Contains(instance.SymbolChildId))
+                                _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, _usableScreenRect.Min.Y + 3),
+                                                        new Vector2(_usableScreenRect.Max.X - 2, (_usableScreenRect.Min.Y + 12).Clamp(0, _usableScreenRect.Max.Y)),
+                                                        Color.Blue);
                         }
                     }
 
