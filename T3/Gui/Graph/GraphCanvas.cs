@@ -247,26 +247,27 @@ namespace T3.Gui.Graph
 
                 if (ImGui.IsWindowFocused())
                 {
-                    if (ImGui.IsKeyPressed((ImGuiKey)Keys.W))
+                    if (ImGui.IsKeyDown((ImGuiKey)Keys.W))
                     {
-                        ScrollTarget.Y -= InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollSpeed).Y;
+                        _dampedScrollVelocity.Y -=  InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).Y; 
                     }
-                    if (ImGui.IsKeyPressed((ImGuiKey)Keys.S))
+                    if (ImGui.IsKeyDown((ImGuiKey)Keys.S))
                     {
-                        ScrollTarget.Y += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollSpeed).Y;
+                        _dampedScrollVelocity.Y += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).Y;
                     }
-                    if (ImGui.IsKeyPressed((ImGuiKey)Keys.A))
+                    if (ImGui.IsKeyDown((ImGuiKey)Keys.A))
                     {
-                        ScrollTarget.X -= InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollSpeed).X;
+                        _dampedScrollVelocity.X -= InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
                     }                    
-                    if (ImGui.IsKeyPressed((ImGuiKey)Keys.D))
+                    if (ImGui.IsKeyDown((ImGuiKey)Keys.D))
                     {
-                        ScrollTarget.X += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollSpeed).X;
-                    }                    
-                    
+                        _dampedScrollVelocity.X += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
+                    }
                 }
 
-
+                ScrollTarget += _dampedScrollVelocity;
+                _dampedScrollVelocity *= 0.90f;
+                
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
                 if (showGrid)
@@ -1047,6 +1048,7 @@ namespace T3.Gui.Graph
         private string _nameSpaceForDialogEdits = "";
         private readonly GraphWindow _window;
         private bool _initialized; // fit view to to window pos / size
+        private static Vector2 _dampedScrollVelocity = Vector2.Zero;
         
         public enum HoverModes
         {

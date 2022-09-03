@@ -56,7 +56,7 @@ namespace T3.Gui.UiHelpers
             public float TooltipDelay = 1.2f;
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
 
-            public float KeyboardScrollSpeed = 200f;
+            public float KeyboardScrollAcceleration = 2.5f;
 
             public bool VariationLiveThumbnails = true;
             public bool VariationHoverPreview = true;
