@@ -20,7 +20,11 @@ namespace T3.Gui.Windows
             Config.Size = new Vector2(350, 300);
         }
 
-        private static string _targetFolder = "./Render"; 
+        protected override void UpdateBeforeDraw()
+        {
+            ImGui.SetNextWindowSize(new Vector2(350, 300));
+        }
+
         protected override void DrawContent()
         {
             CustomComponents.HelpText("Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm faster exports.");
@@ -146,6 +150,7 @@ namespace T3.Gui.Windows
         private static float _fps = 60;
         private static int _frameIndex;
         private static int _frameCount;
+        private static string _targetFolder = "./Render";
 
         private static ScreenshotWriter.FileFormats _fileFormat;
     }
