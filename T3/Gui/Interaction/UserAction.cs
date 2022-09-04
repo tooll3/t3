@@ -196,35 +196,6 @@ namespace T3.Gui
         private static readonly List<KeyboardBinding> Bindings
             = new()
                   {
-                            new KeyboardBinding(UserActions.PlaybackForward, new KeyCombination(Key.L)),
-                            new KeyboardBinding(UserActions.PlaybackForwardHalfSpeed, new KeyCombination(Key.L, shift: true)),
-                            new KeyboardBinding(UserActions.PlaybackBackwards, new KeyCombination(Key.J)),
-                            new KeyboardBinding(UserActions.PlaybackStop, new KeyCombination(Key.K)),
-                            new KeyboardBinding(UserActions.PlaybackToggle, new KeyCombination(Key.Space)), // TODO: Fixme!
-                            new KeyboardBinding(UserActions.PlaybackPreviousFrame, new KeyCombination(Key.CursorLeft, shift: true)),
-                            new KeyboardBinding(UserActions.PlaybackNextFrame, new KeyCombination(Key.CursorRight, shift: true)),
-                            new KeyboardBinding(UserActions.PlaybackJumpToNextKeyframe, new KeyCombination(Key.Period)),
-                            new KeyboardBinding(UserActions.PlaybackJumpToPreviousKeyframe, new KeyCombination(Key.Comma)),
-                            new KeyboardBinding(UserActions.PlaybackNextFrame, new KeyCombination(Key.CursorRight, shift: true)),
-                            new KeyboardBinding(UserActions.PlaybackJumpBack, new KeyCombination(Key.B)),
-
-                            new KeyboardBinding(UserActions.Undo, new KeyCombination(Key.Z, ctrl: true)),
-                            new KeyboardBinding(UserActions.Redo, new KeyCombination(Key.Z, ctrl: true, shift: true)),
-
-                            new KeyboardBinding(UserActions.Save, new KeyCombination(Key.S, ctrl: true)),
-                            new KeyboardBinding(UserActions.FocusSelection, new KeyCombination(Key.F)) { NeedsWindowHover = true },
-                            new KeyboardBinding(UserActions.Duplicate, new KeyCombination(Key.D, ctrl: true)) { NeedsWindowFocus = true },
-                            new KeyboardBinding(UserActions.DeleteSelection, new KeyCombination(Key.Delete)) { NeedsWindowFocus = true },
-                            new KeyboardBinding(UserActions.DeleteSelection, new KeyCombination(Key.Backspace)) { NeedsWindowFocus = true },
-                            new KeyboardBinding(UserActions.CopyToClipboard, new KeyCombination(Key.C, ctrl: true)) { NeedsWindowFocus = true },
-                            new KeyboardBinding(UserActions.PasteFromClipboard, new KeyCombination(Key.V, ctrl: true)) { NeedsWindowFocus = true },
-                            new KeyboardBinding(UserActions.InsertKeyframe, new KeyCombination(Key.C)) { NeedsWindowFocus = true },
-                            new KeyboardBinding(UserActions.InsertKeyframeWithIncrement, new KeyCombination(Key.C, shift: true)) { NeedsWindowFocus = true },
-                            new KeyboardBinding(UserActions.ToggleDisabled, new KeyCombination(Key.D)) { NeedsWindowFocus = true },
-                            new KeyboardBinding(UserActions.PinToOutputWindow, new KeyCombination(Key.P)) { NeedsWindowFocus = true },
-                            new KeyboardBinding(UserActions.DisplayImageAsBackground, new KeyCombination(Key.P, ctrl:true)) { NeedsWindowFocus = false },
-                            new KeyboardBinding(UserActions.ClearBackgroundImage, new KeyCombination(Key.P, ctrl:true, shift: true)) { NeedsWindowFocus = true },
-
                             new KeyboardBinding(UserActions.LoadBookmark1, new KeyCombination(Key.D1, ctrl: true)),
                             new KeyboardBinding(UserActions.LoadBookmark2, new KeyCombination(Key.D2, ctrl: true)),
                             new KeyboardBinding(UserActions.LoadBookmark3, new KeyCombination(Key.D3, ctrl: true)),
@@ -267,13 +238,47 @@ namespace T3.Gui
                             new KeyboardBinding(UserActions.SaveLayout6, new KeyCombination(Key.F7, ctrl: true)),
                             new KeyboardBinding(UserActions.SaveLayout7, new KeyCombination(Key.F8, ctrl: true)),
                             new KeyboardBinding(UserActions.SaveLayout8, new KeyCombination(Key.F9, ctrl: true)),
-                            new KeyboardBinding(UserActions.SaveLayout9, new KeyCombination(Key.F10, ctrl: true)),
+                            new KeyboardBinding(UserActions.SaveLayout9, new KeyCombination(Key.F10, ctrl: true)),                      
+                      
+                            // Playback
+                            new KeyboardBinding(UserActions.PlaybackForward, new KeyCombination(Key.L)),
+                            new KeyboardBinding(UserActions.PlaybackForwardHalfSpeed, new KeyCombination(Key.L, shift: true)),
+                            new KeyboardBinding(UserActions.PlaybackBackwards, new KeyCombination(Key.J)),
+                            new KeyboardBinding(UserActions.PlaybackStop, new KeyCombination(Key.K)),
+                            new KeyboardBinding(UserActions.PlaybackToggle, new KeyCombination(Key.Space)), // TODO: Fixme!
+                            new KeyboardBinding(UserActions.PlaybackPreviousFrame, new KeyCombination(Key.CursorLeft, shift: true)),
+                            new KeyboardBinding(UserActions.PlaybackNextFrame, new KeyCombination(Key.CursorRight, shift: true)),
+                            new KeyboardBinding(UserActions.PlaybackJumpToNextKeyframe, new KeyCombination(Key.Period)),
+                            new KeyboardBinding(UserActions.PlaybackJumpToPreviousKeyframe, new KeyCombination(Key.Comma)),
+                            new KeyboardBinding(UserActions.PlaybackNextFrame, new KeyCombination(Key.CursorRight, shift: true)),
+                            new KeyboardBinding(UserActions.PlaybackJumpBack, new KeyCombination(Key.B)),
 
+                            new KeyboardBinding(UserActions.Undo, new KeyCombination(Key.Z, ctrl: true)),
+                            new KeyboardBinding(UserActions.Redo, new KeyCombination(Key.Z, ctrl: true, shift: true)),
+
+                            // Global
+                            new KeyboardBinding(UserActions.Save, new KeyCombination(Key.S, ctrl: true)),
+                            new KeyboardBinding(UserActions.FocusSelection, new KeyCombination(Key.F)) { NeedsWindowHover = true },
+                            new KeyboardBinding(UserActions.Duplicate, new KeyCombination(Key.D, ctrl: true)) { NeedsWindowFocus = true },
+                            new KeyboardBinding(UserActions.DeleteSelection, new KeyCombination(Key.Delete)) { NeedsWindowFocus = true },
+                            new KeyboardBinding(UserActions.DeleteSelection, new KeyCombination(Key.Backspace)) { NeedsWindowFocus = true },
+                            new KeyboardBinding(UserActions.CopyToClipboard, new KeyCombination(Key.C, ctrl: true)) { NeedsWindowFocus = true },
+                            new KeyboardBinding(UserActions.PasteFromClipboard, new KeyCombination(Key.V, ctrl: true)) { NeedsWindowFocus = true },
+                            
+                            // Timeline
+                            new KeyboardBinding(UserActions.InsertKeyframe, new KeyCombination(Key.C)) { NeedsWindowFocus = true },
+                            new KeyboardBinding(UserActions.InsertKeyframeWithIncrement, new KeyCombination(Key.C, shift: true)) { NeedsWindowFocus = true },
+                            
+                            // Graph window
+                            new KeyboardBinding(UserActions.ToggleDisabled, new KeyCombination(Key.D, shift:true)) { NeedsWindowFocus = true },
+                            new KeyboardBinding(UserActions.PinToOutputWindow, new KeyCombination(Key.P)) { NeedsWindowFocus = true },
+                            new KeyboardBinding(UserActions.DisplayImageAsBackground, new KeyCombination(Key.P, ctrl:true)) { NeedsWindowFocus = false },
+                            new KeyboardBinding(UserActions.ClearBackgroundImage, new KeyCombination(Key.P, ctrl:true, shift: true)) { NeedsWindowFocus = true },
                             new KeyboardBinding(UserActions.LayoutSelection, new KeyCombination(Key.G)),
                             new KeyboardBinding(UserActions.ToggleFullScreenGraph, new KeyCombination(Key.F11, ctrl: true)),
                             new KeyboardBinding(UserActions.ToggleFocusMode, new KeyCombination(Key.Esc, shift: true)),
+                            
                             new KeyboardBinding(UserActions.AddAnnotation, new KeyCombination(Key.A, shift:true)){ NeedsWindowFocus = true },
-                      
                             new KeyboardBinding(UserActions.ToggleVariationsWindow, new KeyCombination(Key.V, alt:true)){ NeedsWindowFocus = false },
                         };
 
