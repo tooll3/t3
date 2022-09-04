@@ -42,6 +42,8 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
 
         private void Update(EvaluationContext context)
         {
+            
+            
             // Initialize media foundation library and default values
             if (!_initialized)
             {
@@ -71,6 +73,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
 
             // shall we seek?
             var shouldBeTimeInSecs = context.Playback.SecondsFromBars(context.LocalTime);
+            //Log.Debug($" PlayVideo.Update({shouldBeTimeInSecs:0.00s})");
             var clampedTime = Math.Clamp(shouldBeTimeInSecs, 0.0, _engine.Duration);
             var videoTime = Math.Clamp(_engine.CurrentTime, 0.0, _engine.Duration);
             var deltaTime = clampedTime - videoTime;
@@ -86,7 +89,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             if (shouldSeek)
             {
                 Log.Debug($"Seeked video to {clampedTime:0.00} delta was {deltaTime:0.0000)}s");
-                SeekTime = (float)clampedTime;
+                SeekTime = (float)clampedTime + 1.1f/60f;
                 Seek = true;
             }
 
@@ -178,7 +181,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
 
         private void EnginePlaybackEventHandler(MediaEngineEvent mediaEvent, long param1, int param2)
         {
-            Log.Debug(mediaEvent.ToString(), SymbolChildId);
+            Log.Debug("PlayVideo update event:" + mediaEvent.ToString(), SymbolChildId);
             switch (mediaEvent)
             {
                 case MediaEngineEvent.LoadStart:
@@ -196,6 +199,8 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 case MediaEngineEvent.FirstFrameReady:
                 case MediaEngineEvent.TimeUpdate:
                     LastErrorCode = MediaEngineErr.Noerror;
+                    
+                    // TODO: Pause video if no longer evaluated
                     break;
             }
         }
@@ -353,14 +358,21 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             return default;
         }
 
-        // FIXME: we should call this properly
-        public new void Dispose()
+        protected override void Dispose(bool isDisposing)
         {
-            base.Dispose();
-            _engine.Shutdown();
-            _engine.PlaybackEvent -= EnginePlaybackEventHandler;
-            _engine.Dispose();
-            _texture.Dispose();
+            if (!isDisposing)
+                return;
+            
+            Log.Debug(" Disposing video");
+
+            //base.Dispose();
+            if (_engine != null)
+            {
+                _engine.Shutdown();
+                //_engine.PlaybackEvent -= EnginePlaybackEventHandler;
+                _engine.Dispose();
+                _texture.Dispose();
+            }
             //colorSpaceConverter.Dispose();
             //renderTarget?.Dispose();
         }

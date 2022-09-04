@@ -4,9 +4,17 @@
   "InputUis": [
     {
       "InputId": "4454891b-ddd0-41f2-80c3-75074df8320b"/*Texture*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -431.6489,
         "Y": 149.08763
+      }
+    },
+    {
+      "InputId": "b0c4ceaa-5101-42c6-bf71-230a01918916"/*Format*/,
+      "Position": {
+        "X": -431.6489,
+        "Y": 194.08763
       }
     }
   ],
@@ -126,33 +134,11 @@
       "ChildId": "6d97517f-50cb-4174-84da-f5076cb72a94"/*Texture2d*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 272.44067,
         "Y": 574.06055
-      }
-    },
-    {
-      "ChildId": "a9dcd8e2-76e7-4235-a261-dd6febefc0a0"/*Texture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -240.66444,
-        "Y": 263.96548
-      }
-    },
-    {
-      "ChildId": "f698d02d-372e-4e2e-9b98-b76c2ea67277"/*LoadTexture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -307.96228,
-        "Y": 441.06592
       }
     }
   ],
