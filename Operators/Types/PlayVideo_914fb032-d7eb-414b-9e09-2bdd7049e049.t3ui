@@ -18,7 +18,7 @@
       }
     },
     {
-      "InputId": "e9c15b3f-8c4a-411d-b9b3-795d64d6bd20"/*SeekThreshold*/,
+      "InputId": "e9c15b3f-8c4a-411d-b9b3-795d64d6bd20"/*ResyncThreshold*/,
       "Position": {
         "X": 51.512096,
         "Y": 136.99597

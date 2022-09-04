@@ -10,16 +10,6 @@
       },
       "Min": -100.0,
       "Max": 100.0
-    },
-    {
-      "InputId": "0d4724ea-c491-4f34-bb1a-901f9e9cb139"/*ModuloValue*/,
-      "Position": {
-        "X": 36.76438,
-        "Y": 184.52876
-      },
-      "Min": -100.0,
-      "Max": 100.0,
-      "Scale": 0.01
     }
   ],
   "SymbolChildUis": [],

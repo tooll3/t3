@@ -96,16 +96,9 @@ namespace Core.Audio
             IsMuted = configAudioMuted;
             UpdateMuting();
         }
-
-        public static bool GetMute()
-        {
-            return IsMuted;
-        }
-
-        internal static bool IsMuted;
         
-        //private static double _originalVolumeBeforeMuting;
-
+        public static bool IsMuted { get; private set; }
+        
         private static void UpdateMuting()
         {
             foreach (var stream in _clipPlaybacks.Values)

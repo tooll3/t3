@@ -12,8 +12,8 @@
       "DefaultValue": 1.0
     },
     {
-      "Id": "e9c15b3f-8c4a-411d-b9b3-795d64d6bd20"/*SeekThreshold*/,
-      "DefaultValue": 0.1
+      "Id": "e9c15b3f-8c4a-411d-b9b3-795d64d6bd20"/*ResyncThreshold*/,
+      "DefaultValue": 0.2
     }
   ],
   "Children": [],
