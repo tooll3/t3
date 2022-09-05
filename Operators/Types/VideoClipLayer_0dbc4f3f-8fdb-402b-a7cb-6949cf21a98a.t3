@@ -9,11 +9,11 @@
     },
     {
       "Id": "28f27625-37fe-409a-b6c1-d4eabf6c1eb8"/*Volume*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 1.0
     },
     {
       "Id": "5eb10090-ae6a-4ae7-9fbd-5bd9ffd13b1b"/*ResyncThreshold*/,
-      "DefaultValue": 0.15
+      "DefaultValue": 0.05
     }
   ],
   "Children": [

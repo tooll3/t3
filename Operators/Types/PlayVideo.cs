@@ -11,6 +11,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using Core.Audio;
+using T3.Core.Animation;
 using ResourceManager = T3.Core.ResourceManager;
 
 namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
@@ -40,9 +41,10 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             Texture.UpdateAction = Update;
         }
 
+        
         private void Update(EvaluationContext context)
         {
-            
+            _lastUpdateRunTimeInSecs = Playback.RunTimeInSecs;
             
             // Initialize media foundation library and default values
             if (!_initialized)
@@ -74,22 +76,23 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             // shall we seek?
             var shouldBeTimeInSecs = context.Playback.SecondsFromBars(context.LocalTime);
             //Log.Debug($" PlayVideo.Update({shouldBeTimeInSecs:0.00s})");
-            var clampedTime = Math.Clamp(shouldBeTimeInSecs, 0.0, _engine.Duration);
-            var videoTime = Math.Clamp(_engine.CurrentTime, 0.0, _engine.Duration);
-            var deltaTime = clampedTime - videoTime;
+            var clampedSeekTime = Math.Clamp(shouldBeTimeInSecs, 0.0, _engine.Duration);
+            var clampedVideoTime = Math.Clamp(_engine.CurrentTime, 0.0, _engine.Duration);
+            var deltaTime = clampedSeekTime - clampedVideoTime;
             var shouldSeek = !_engine.IsSeeking
                              && Math.Abs(deltaTime) > ResyncThreshold.GetValue(context);
 
             // Play when we are in the center portion of the video
             // and we are playing the video forward
-            _play = (shouldBeTimeInSecs == clampedTime) && (clampedTime - _lastUpdateTime > 0.0);
-            _lastUpdateTime = clampedTime;
+            var isPlayingForward = (clampedSeekTime - _lastUpdateTime > 0.0);
+            _play = (shouldBeTimeInSecs == clampedSeekTime) && isPlayingForward;
+            _lastUpdateTime = clampedSeekTime;
 
             // initiate seeking if necessary
             if (shouldSeek)
             {
-                Log.Debug($"Seeked video to {clampedTime:0.00} delta was {deltaTime:0.0000)}s");
-                SeekTime = (float)clampedTime + 1.1f/60f;
+                Log.Debug($"Seeked video to {clampedSeekTime:0.00} delta was {deltaTime:0.0000)}s");
+                SeekTime = (float)clampedSeekTime + 1.1f/60f;
                 Seek = true;
             }
 
@@ -181,7 +184,6 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
 
         private void EnginePlaybackEventHandler(MediaEngineEvent mediaEvent, long param1, int param2)
         {
-            Log.Debug("PlayVideo update event:" + mediaEvent.ToString(), SymbolChildId);
             switch (mediaEvent)
             {
                 case MediaEngineEvent.LoadStart:
@@ -199,6 +201,15 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 case MediaEngineEvent.FirstFrameReady:
                 case MediaEngineEvent.TimeUpdate:
                     LastErrorCode = MediaEngineErr.Noerror;
+
+                    // Pause the video to (mute audio) if Update hasn't been
+                    // called for a while. This will happen when using PlayVideo
+                    // with TimeClips.. 
+                    var timeSinceLastUpdate = Playback.RunTimeInSecs - _lastUpdateRunTimeInSecs;
+                    if (timeSinceLastUpdate > 2 / 60f)
+                    {
+                        _engine.Pause();
+                    }
                     
                     // TODO: Pause video if no longer evaluated
                     break;
@@ -419,5 +430,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
 
         private bool _initialized;
         private double _lastUpdateTime;
+        private double _lastUpdateRunTimeInSecs = 0;
+
     }
 }
