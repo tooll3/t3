@@ -73,8 +73,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     //return float4( repeatP, 0,1);
 
-    float2 samplePos = RepeatMode > 0.5 ? abs(mod(p,2) -1)
-                                        : p - 0.5;
+    float2 samplePos = RepeatMode > 0.5 ? abs(mod(p - 0.5,2) -1)
+                                        : p + 0.5;
 
 
     float4 imgColorForCel = ImageA.Sample(texSampler, samplePos);
