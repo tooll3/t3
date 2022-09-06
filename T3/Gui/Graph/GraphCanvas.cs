@@ -244,24 +244,28 @@ namespace T3.Gui.Graph
                     GraphWindow.ClearBackground();
                 }
 
-
+                
                 if (ImGui.IsWindowFocused())
                 {
-                    if (ImGui.IsKeyDown((ImGuiKey)Keys.W))
+                    var io = ImGui.GetIO();
+                    if (!io.KeyCtrl && !io.KeyShift && !io.KeyAlt)
                     {
-                        _dampedScrollVelocity.Y -=  InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).Y; 
-                    }
-                    if (ImGui.IsKeyDown((ImGuiKey)Keys.S))
-                    {
-                        _dampedScrollVelocity.Y += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).Y;
-                    }
-                    if (ImGui.IsKeyDown((ImGuiKey)Keys.A))
-                    {
-                        _dampedScrollVelocity.X -= InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
-                    }                    
-                    if (ImGui.IsKeyDown((ImGuiKey)Keys.D))
-                    {
-                        _dampedScrollVelocity.X += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
+                        if (ImGui.IsKeyDown((ImGuiKey)Keys.W))
+                        {
+                            _dampedScrollVelocity.Y -=  InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).Y; 
+                        }
+                        if (ImGui.IsKeyDown((ImGuiKey)Keys.S))
+                        {
+                            _dampedScrollVelocity.Y += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).Y;
+                        }
+                        if (ImGui.IsKeyDown((ImGuiKey)Keys.A))
+                        {
+                            _dampedScrollVelocity.X -= InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
+                        }                    
+                        if (ImGui.IsKeyDown((ImGuiKey)Keys.D))
+                        {
+                            _dampedScrollVelocity.X += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
+                        }
                     }
                 }
 
