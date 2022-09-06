@@ -26,6 +26,7 @@ using T3.Gui.OutputUi;
 
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
+// ReSharper disable RedundantNameQualifier
 
 namespace T3.Gui
 {
@@ -37,7 +38,7 @@ namespace T3.Gui
     public class UiModel : Core.Model
     {
         public UiModel(Assembly operatorAssembly) 
-            : base(operatorAssembly, enabledLogging: true)
+            : base(operatorAssembly)
         {
             Init();
         }
@@ -236,17 +237,21 @@ namespace T3.Gui
             // first load core data
             base.Load();
 
-            SymbolUiJson json = new SymbolUiJson();
-            var symbolUiFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolUiExtension}");
+            var uiJson = new SymbolUiJson();
+            
+            var symbolUiFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);
+            
             foreach (var symbolUiFile in symbolUiFiles)
             {
-                SymbolUi symbolUi = json.ReadSymbolUi(symbolUiFile);
+                var symbolUi = uiJson.ReadSymbolUi(symbolUiFile);
                 if (symbolUi != null)
                 {
                     if (SymbolUiRegistry.Entries.ContainsKey(symbolUi.Symbol.Id))
                     {
-                        Debug.Assert(false);
+                        Log.Error($"Can't load UI for [{symbolUi.Symbol.Name}] Registry already contains id {symbolUi.Symbol.Id}.");
+                        continue;
                     }
+                    Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
                     SymbolUiRegistry.Entries.Add(symbolUi.Symbol.Id, symbolUi);
                 }
                 else
@@ -256,55 +261,38 @@ namespace T3.Gui
             }
         }
 
-        private string SymbolUiExtension = ".t3ui";
 
         public override void SaveAll()
         {
             Log.Debug("Saving...");
             IsSaving = true;
             
-            // first save core data
+            // First save core data
             base.SaveAll();
 
-            // remove all old ui files before storing to get rid off invalid ones
-            DirectoryInfo di = new DirectoryInfo(OperatorTypesFolder);
-            FileInfo[] files = di.GetFiles("*" + SymbolUiExtension).ToArray();
-            foreach (FileInfo file in files)
+            // Remove all old ui files before storing to get rid off invalid ones
+            var directoryInfo = new DirectoryInfo(OperatorTypesFolder);
+            var fileInfos = directoryInfo.GetFiles("*" + SymbolUiExtension).ToArray();
+            foreach (var fileInfo in fileInfos)
             {
                 try
                 {
-                    File.Delete(file.FullName);
+                    File.Delete(fileInfo.FullName);
                 }
                 catch (Exception e)
                 {
-                    Log.Warning("Failed to deleted file '" + file + "': " + e);
+                    Log.Warning("Failed to deleted file '" + fileInfo + "': " + e);
                 }
             }
 
-            // store all symbols in corresponding files
-            SymbolUiJson json = new SymbolUiJson();
-            var resourceManager = ResourceManager.Instance();
-            foreach (var (_, symbolUi) in SymbolUiRegistry.Entries)
-            {
-                var symbol = symbolUi.Symbol;
-                using (var sw = new StreamWriter(OperatorTypesFolder + symbol.Name + "_" + symbol.Id + SymbolUiExtension))
-                using (var writer = new JsonTextWriter(sw))
-                {
-                    json.Writer = writer;
-                    json.Writer.Formatting = Formatting.Indented;
-                    json.WriteSymbolUi(symbolUi);
-                }
-                
-                var opResource = resourceManager.GetOperatorFileResource(OperatorTypesFolder + symbol.Name + ".cs");
-                if (opResource == null)
-                {
-                    // if the source wasn't registered before do this now
-                    resourceManager.CreateOperatorEntry(symbol.SourcePath, symbol.Id.ToString(), OperatorUpdating.Update);
-                }
-            }
+            var symbolUis = SymbolUiRegistry.Entries.Values;
+            
+            WriteSymbols(symbolUis);
 
             IsSaving = false;
         }
+
+
 
         public static IEnumerable<SymbolUi> GetModifiedSymbolUis()
         {
@@ -321,36 +309,42 @@ namespace T3.Gui
             Log.Debug($"Saving {modifiedSymbolUis.Count} modified symbols...");
             IsSaving = true;
             
+            WriteSymbols(modifiedSymbolUis);
+            ResourceManager.Instance().EnableOperatorFileWatcher();
+            IsSaving = false;
+        }        
+        
+        
+        private static void WriteSymbols(IEnumerable<SymbolUi> symbolUis)
+        {
+            // Store all symbols in corresponding files
+            var json = new SymbolUiJson();
             var resourceManager = ResourceManager.Instance();
-            SymbolUiJson json = new SymbolUiJson();
-            foreach (var symbolUi in modifiedSymbolUis)
+
+            foreach (var symbolUi in symbolUis)
             {
-                // First save core data and remove obsolete files
-                SaveModifiedSymbol(symbolUi.Symbol);
-                
                 var symbol = symbolUi.Symbol;
-                using (var sw = new StreamWriter(OperatorTypesFolder + symbol.Name + "_" + symbol.Id + SymbolUiExtension))
+                var filepath = BuildFilepathForSymbol(symbol, SymbolUiExtension);
+
+                using (var sw = new StreamWriter(filepath))
                 using (var writer = new JsonTextWriter(sw))
                 {
                     json.Writer = writer;
                     json.Writer.Formatting = Formatting.Indented;
                     json.WriteSymbolUi(symbolUi);
                 }
-                
-                var opResource = resourceManager.GetOperatorFileResource(OperatorTypesFolder + symbol.Name + ".cs");
+
+                var symbolSourceFilepath = BuildFilepathForSymbol(symbol, Model.SourceExtension);
+                var opResource = resourceManager.GetOperatorFileResource(symbolSourceFilepath);
                 if (opResource == null)
                 {
                     // If the source wasn't registered before do this now
-                    resourceManager.CreateOperatorEntry(symbol.SourcePath, symbol.Id.ToString(), OperatorUpdating.Update);
+                    resourceManager.CreateOperatorEntry(symbolSourceFilepath, symbol.Id.ToString(), OperatorUpdating.Update);
                 }
-
+                
                 symbolUi.ClearModifiedFlag();
             }
-            
-            ResourceManager.Instance().EnableOperatorFileWatcher();
-            IsSaving = false;
-        }        
-        
+        }
 
         public bool IsSaving { get; private set; }
 

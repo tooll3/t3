@@ -615,7 +615,6 @@ namespace T3.Gui.Graph.Interaction
                 {
                     operatorResource.OperatorAssembly = newAssembly;
                     operatorResource.Updated = true;
-                    symbol.SourcePath = String.Empty;
                     symbol.PendingSource = newSource;
                     symbol.DeprecatedSourcePath = originalPath;
                     return;

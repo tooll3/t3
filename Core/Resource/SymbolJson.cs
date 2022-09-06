@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Core.Audio;
 using Newtonsoft.Json;
@@ -27,9 +28,14 @@ namespace T3.Core
             }
         }
     }
+    
 
     public class SymbolJson
     {
+        
+        
+        
+        
         public JsonTextWriter Writer { get; set; }
         public JsonTextReader Reader { get; set; }
 
@@ -202,7 +208,7 @@ namespace T3.Core
             var symbolId = Guid.Parse(symbolChildJson["SymbolId"].Value<string>());
             if (!SymbolRegistry.Entries.TryGetValue(symbolId, out var symbol))
             {
-                // if the used symbol hasn't been loaded so far ensure it's loaded now
+                // If the used symbol hasn't been loaded so far ensure it's loaded now
                 symbol = model.ReadSymbolWithId(symbolId);
             }
 

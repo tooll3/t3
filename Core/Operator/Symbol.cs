@@ -24,7 +24,15 @@ namespace T3.Core.Operator
         public string Name { get; set; }
         public string Namespace { get; set; }
         public string PendingSource { get; set; }
-        public string SourcePath { get; set; }
+
+        // public string SourcePath
+        // {
+        //     get
+        //     {
+        //         
+        //     }
+        // }
+
         public string DeprecatedSourcePath { get; set; }
 
         public readonly List<Instance> InstancesOfSymbol = new();

@@ -50,7 +50,7 @@ namespace T3.Gui.Graph
                 // Generate Operators assembly
                 var operatorAssemblySources = exportInfo.UniqueSymbols.Select(symbol =>
                                                                               {
-                                                                                  var source = File.ReadAllText(symbol.SourcePath);
+                                                                                  var source = Model.BuildFilepathForSymbol(symbol, Model.SourceExtension);
                                                                                   return source;
                                                                               }).ToList();
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\GpuQuery.cs"));
