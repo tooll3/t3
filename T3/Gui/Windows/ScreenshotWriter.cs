@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using SharpDX;
 using SharpDX.Direct3D11;
@@ -197,7 +197,6 @@ namespace T3.Gui.Windows
             var low = (byte)imageStream.ReadByte();
             var high = (byte)imageStream.ReadByte();
             return ToTwoByteFloat(low, high);
-            ;
         }
 
         public static float ToTwoByteFloat(byte ho, byte lo)
