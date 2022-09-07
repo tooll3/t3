@@ -19,6 +19,7 @@ namespace T3.Gui.Windows
         {
             Config.Title = "Render Video";
             Config.Size = new Vector2(350, 300);
+            _lastHelpString = "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for faster exports.";
         }
 
         protected override void UpdateBeforeDraw()
@@ -64,18 +65,15 @@ namespace T3.Gui.Windows
                             _videoWriter = new MP4VideoWriter(_targetFile, size);
                             _videoWriter.Bitrate = _bitrate;
                             _videoWriter.Framerate = (int)(_fps + 0.5f);
-                            _lastHelpString = "   Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for faster exports.";
                         }
 
-                        SaveCurrentFrameAndAdvance(mainTexture);
+                        SaveCurrentFrameAndAdvance(ref mainTexture);
                     }
                 }
-                ImGui.SameLine();
-                ImGui.AlignTextToFramePadding();
             }
             else
             {
-                var success = SaveCurrentFrameAndAdvance(mainTexture);
+                var success = SaveCurrentFrameAndAdvance(ref mainTexture);
                 ImGui.ProgressBar(Progress, new Vector2(-1, 4));
 
                 if (_frameIndex > _frameCount)
@@ -111,7 +109,7 @@ namespace T3.Gui.Windows
             {
                 const MessageBoxButtons buttons = MessageBoxButtons.YesNo;
 
-                // FIXME: get a nicer popup windows here...
+                // FIXME: get a nicer popup window here...
                 var result = MessageBox.Show("File exists. Overwrite?", "Render Video", buttons);
                 return (result == DialogResult.Yes);
             }
@@ -132,35 +130,25 @@ namespace T3.Gui.Windows
         }
 
 
-        private static bool SaveCurrentFrameAndAdvance(Texture2D mainTexture)
+        private static bool SaveCurrentFrameAndAdvance(ref Texture2D mainTexture)
         {
-            var success = false;
             try
             {
-                success = AppendImage(mainTexture);
+                _videoWriter.AddVideoFrame(ref mainTexture);
+
+                _frameIndex++;
+                SetPlaybackTimeForNextFrame();
             }
             catch (Exception e)
             {
                 _lastHelpString = e.ToString();
-            }
-
-            if (success)
-            {
-                _frameIndex++;
-                SetPlaybackTimeForNextFrame();
-            }
-            else
-            {
                 _isExporting = false;
                 _videoWriter?.Dispose();
                 _videoWriter = null;
+                return false;
             }
-            return success;
-        }
-        
-        private static bool AppendImage(Texture2D mainTexture)
-        {
-            return _videoWriter.AddVideoFrame(mainTexture);
+
+            return true;
         }
 
         private static void SetPlaybackTimeForNextFrame()

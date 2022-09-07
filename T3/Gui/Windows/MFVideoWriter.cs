@@ -34,11 +34,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Linq;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.MediaFoundation;
 using SharpDX.DXGI;
+using SharpDX.WIC;
 using T3.Core;
 using T3.Core.Logging;
 
@@ -67,6 +67,10 @@ namespace T3.Gui.Windows
         private SharpDX.Size2 _videoPixelSize;
         private int _frameIndex;
         private int _streamIndex;
+        private const int NumTextureEntries = 2;
+        private static readonly List<Texture2D> ImagesWithCpuAccess = new();
+        private static int _currentIndex;
+        private static int _currentUsageIndex;
         #endregion
 
         public int StreamIndex => _streamIndex;
@@ -127,10 +131,21 @@ namespace T3.Gui.Windows
         /// get minimum image buffer size in bytes
         /// </summary>
         /// <param name="frame">texture to get information from</param>
-        public static int sizeInBytes(Texture2D frame)
+        public static int SizeInBytes(ref Texture2D frame)
         {
             var currentDesc = frame.Description;
             var bitsPerPixel = Math.Max(FormatHelper.SizeOfInBits(currentDesc.Format), 1);
+            return (currentDesc.Width * currentDesc.Height * bitsPerPixel + 7) / 8;
+        }
+
+        /// <summary>
+        /// get minimum image buffer size in bytes if imager is RGBA converted
+        /// </summary>
+        /// <param name="frame">texture to get information from</param>
+        public static int RGBASizeInBytes(ref Texture2D frame)
+        {
+            var currentDesc = frame.Description;
+            var bitsPerPixel = 32;
             return (currentDesc.Width * currentDesc.Height * bitsPerPixel + 7) / 8;
         }
 
@@ -172,22 +187,27 @@ namespace T3.Gui.Windows
             return BitConverter.ToSingle(BitConverter.GetBytes((intVal & 0x8000) << 16 | (exp | mant) << 13), 0);
         }
 
-        public MF.Sample CreateSampleFromFrame(Texture2D frame)
+        public MF.Sample CreateSampleFromFrame(ref Texture2D frame)
         {
-            var device = ResourceManager.Instance().Device;
-            MF.MediaBuffer mediaBuffer = MF.MediaFactory.CreateMemoryBuffer(sizeInBytes(frame));
+            if (frame == null)
+                return null;
 
             // Write all contents to the MediaBuffer for media foundation
-            int cbMaxLength = 0;
-            int cbCurrentLength = 0;
-            IntPtr mediaBufferPointer = mediaBuffer.Lock(out cbMaxLength, out cbCurrentLength);
+            MF.MediaBuffer mediaBuffer = MF.MediaFactory.CreateMemoryBuffer(RGBASizeInBytes(ref frame));
+            var device = ResourceManager.Instance().Device;
+            DataStream inputStream = null;
+            DataStream outputStream = null;
             try
             {
-                unsafe
+                // create several textures with a given format with CPU access
+                // to be able to read out the initial texture values
+                var currentDesc = frame.Description;
+                if (ImagesWithCpuAccess.Count == 0
+                    || ImagesWithCpuAccess[0].Description.Format != currentDesc.Format
+                    || ImagesWithCpuAccess[0].Description.Width != currentDesc.Width
+                    || ImagesWithCpuAccess[0].Description.Height != currentDesc.Height
+                    || ImagesWithCpuAccess[0].Description.MipLevels != currentDesc.MipLevels)
                 {
-                    int stride = _videoPixelSize.Width;
-                    int* mediaBufferPointerNative = (int*)mediaBufferPointer.ToPointer();
-                    var currentDesc = frame.Description;
                     var imageDesc = new Texture2DDescription
                     {
                         BindFlags = BindFlags.None,
@@ -195,113 +215,163 @@ namespace T3.Gui.Windows
                         Width = currentDesc.Width,
                         Height = currentDesc.Height,
                         MipLevels = currentDesc.MipLevels,
-                        SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
+                        SampleDescription = new SampleDescription(1, 0),
                         Usage = ResourceUsage.Staging,
                         OptionFlags = ResourceOptionFlags.None,
                         CpuAccessFlags = CpuAccessFlags.Read,
                         ArraySize = 1
                     };
 
-                    var ImageWithCpuAccess = new Texture2D(device, imageDesc);
-                    var immediateContext = device.ImmediateContext;
-                    immediateContext.CopyResource(frame, ImageWithCpuAccess);
-                    immediateContext.UnmapSubresource(ImageWithCpuAccess, 0);
-                    DataBox dataBox = immediateContext.MapSubresource(ImageWithCpuAccess,
-                                                                        0,
-                                                                        0,
-                                                                        MapMode.Read,
-                                                                        SharpDX.Direct3D11.MapFlags.None,
-                                                                        out var imageStream);
+                    DisposeTextures();
 
-                    using (imageStream)
+                    for (int i = 0; i < NumTextureEntries; ++i)
                     {
-                        int* data = null;
-                        if (currentDesc.Format == SharpDX.DXGI.Format.R16G16B16A16_Float)
-                        {
-                            for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
-                            {
-                                for (int loopX = 0; loopX < _videoPixelSize.Width; loopX++)
-                                {
-                                    if (!FlipY)
-                                        imageStream.Position = (long)(loopY) * dataBox.RowPitch +
-                                                               (long)(loopX) * 8;
-                                    else
-                                        imageStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch +
-                                                               (long)(loopX) * 8;
+                        ImagesWithCpuAccess.Add(new Texture2D(device, imageDesc));
+                    }
+                    _currentIndex = 0;
+                    _currentUsageIndex = 0;
+                }
 
-                                    var r = Read2BytesToHalf(imageStream);
-                                    var g = Read2BytesToHalf(imageStream);
-                                    var b = Read2BytesToHalf(imageStream);
-                                    var a = Read2BytesToHalf(imageStream);
+                // copy the original texture to a readable image
+                var immediateContext = device.ImmediateContext;
+                var readableImage = ImagesWithCpuAccess[_currentIndex];
+                immediateContext.CopyResource(frame, readableImage);
+                immediateContext.UnmapSubresource(readableImage, 0);
+                _currentIndex = ++_currentIndex % NumTextureEntries;
+                ++_currentUsageIndex;
 
-                                    UInt32 aPart = (UInt32)(a.Clamp(0, 1) * 255 + 0.5) << 24;
-                                    UInt32 bPart = (UInt32)(r.Clamp(0, 1) * 255 + 0.5) << 16;
-                                    UInt32 gPart = (UInt32)(g.Clamp(0, 1) * 255 + 0.5) << 8;
-                                    UInt32 rPart = (UInt32)(b.Clamp(0, 1) * 255 + 0.5);
+                // don't return first sample since buffering is not ready yet
+                if (_currentUsageIndex < NumTextureEntries)
+                    return null;
 
-                                    int actIndexTarget = (loopY * _videoPixelSize.Width) + loopX;
-                                    mediaBufferPointerNative[actIndexTarget] = (int)(rPart | gPart | bPart | aPart);
-                                }
-                            }
-                        }
-                        else if (currentDesc.Format == SharpDX.DXGI.Format.R8G8B8A8_UNorm)
-                        {
-                            for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
-                            {
-                                for (int loopX = 0; loopX < _videoPixelSize.Width; loopX++)
-                                {
-                                    if (!FlipY)
-                                        imageStream.Position = (long)(loopY) * dataBox.RowPitch +
-                                                               (long)(loopX) * 4;
-                                    else
-                                        imageStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch +
-                                                               (long)(loopX) * 4;
+                // map image resource to get a stream we can read from
+                DataBox dataBox = immediateContext.MapSubresource(readableImage,
+                                                                  0,
+                                                                  0,
+                                                                  MapMode.Read,
+                                                                  SharpDX.Direct3D11.MapFlags.None,
+                                                                  out inputStream);
+                // Create an 8 bit RGBA output buffer to write to
+                int width = currentDesc.Width;
+                int height = currentDesc.Height;
+                var formatId = PixelFormat.Format32bppRGBA;
+                int rowStride = PixelFormat.GetStride(formatId, width);
+                var pixelByteCount = PixelFormat.GetStride(formatId, 1);
+                var outBufferSize = height * rowStride;
+                outputStream = new DataStream(outBufferSize, true, true);
 
-                                    byte r = (byte)imageStream.ReadByte();
-                                    byte g = (byte)imageStream.ReadByte();
-                                    byte b = (byte)imageStream.ReadByte();
-                                    byte a = (byte)imageStream.ReadByte();
+                int cbMaxLength = 0;
+                int cbCurrentLength = 0;
+                IntPtr mediaBufferPointer = mediaBuffer.Lock(out cbMaxLength, out cbCurrentLength);
 
-                                    UInt32 aPart = (UInt32)(a) << 24;
-                                    UInt32 bPart = (UInt32)(r) << 16;
-                                    UInt32 gPart = (UInt32)(g) << 8;
-                                    UInt32 rPart = (UInt32)(b);
-
-                                    int actIndexTarget = (loopY * _videoPixelSize.Width) + loopX;
-                                    mediaBufferPointerNative[actIndexTarget] = (int)(rPart | gPart | bPart | aPart);
-                                }
-                            }
-                        }
+                bool packingUnknown = false;
+                if (currentDesc.Format == SharpDX.DXGI.Format.R16G16B16A16_Float)
+                {
+                    for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
+                    {
+                        if (!FlipY)
+                            inputStream.Position = (long)(loopY) * dataBox.RowPitch;
                         else
+                            inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
+
+                        long outputPosition = (long)(loopY) * rowStride;
+
+                        for (int loopX = 0; loopX < _videoPixelSize.Width; loopX++)
                         {
-                            // unsupported format, return null
-                            return null;
+                            var r = Read2BytesToHalf(inputStream);
+                            var g = Read2BytesToHalf(inputStream);
+                            var b = Read2BytesToHalf(inputStream);
+                            var a = Read2BytesToHalf(inputStream);
+
+                            outputStream.WriteByte((byte)(b.Clamp(0, 1) * 255));
+                            outputStream.WriteByte((byte)(g.Clamp(0, 1) * 255));
+                            outputStream.WriteByte((byte)(r.Clamp(0, 1) * 255));
+                            outputStream.WriteByte((byte)(a.Clamp(0, 1) * 255));
                         }
                     }
                 }
+                else if (currentDesc.Format == SharpDX.DXGI.Format.R8G8B8A8_UNorm)
+                {
+                    for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
+                    {
+                        if (!FlipY)
+                            inputStream.Position = (long)(loopY) * dataBox.RowPitch;
+                        else
+                            inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
+
+                        for (int loopX = 0; loopX < _videoPixelSize.Width; loopX++)
+                        {
+                            byte r = (byte)inputStream.ReadByte();
+                            byte g = (byte)inputStream.ReadByte();
+                            byte b = (byte)inputStream.ReadByte();
+                            byte a = (byte)inputStream.ReadByte();
+
+                            outputStream.WriteByte(b);
+                            outputStream.WriteByte(g);
+                            outputStream.WriteByte(r);
+                            outputStream.WriteByte(a);
+                        }
+                    }
+                }
+                else
+                {
+                    packingUnknown = true;
+                }
+                if (packingUnknown)
+                {
+                    throw new InvalidOperationException("Unknown image packing.");
+                }
+
+                // copy our finished RGBA buffer to the media buffer pointer
+                for (int loopY = 0; loopY < height; loopY++)
+                {
+                    int index = loopY * rowStride;
+                    for (int loopX = width; loopX > 0; --loopX)
+                    {
+                        int value = Marshal.ReadInt32(outputStream.DataPointer, index);
+                        Marshal.WriteInt32(mediaBufferPointer, index, value);
+                        index += 4;
+                    }
+                }
+
+                // release our resources
+                immediateContext.UnmapSubresource(readableImage, 0);
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException("Internal image copy failed : " + e.ToString());
             }
             finally
             {
+                inputStream?.Dispose();
+                outputStream?.Dispose();
                 mediaBuffer.Unlock();
-                mediaBuffer.CurrentLength = sizeInBytes(frame);
+                mediaBuffer.CurrentLength = RGBASizeInBytes(ref frame);
             }
 
             // Create the sample (includes image and timing information)
             MF.Sample sample = MF.MediaFactory.CreateSample();
             sample.AddBuffer(mediaBuffer);
 
+            // we don't need the media buffer here anymore, so dispose it
+            // (otherwise we will get memory leaks)
+            mediaBuffer.Dispose();
             return sample;
         }
 
-        public bool AddVideoFrame(Texture2D frame)
+        public void AddVideoFrame(ref Texture2D frame)
         {
             try
             {
-                Debug.Assert(frame != null);
+                if (frame == null)
+                {
+                    throw new InvalidOperationException("Handed frame was null");
+                }
                 var currentDesc = frame.Description;
-                Debug.Assert(currentDesc.Width != 0 &&
-                             currentDesc.Height != 0);
-
+                if (currentDesc.Width == 0 || currentDesc.Height == 0)
+                {
+                    throw new InvalidOperationException("Empty image handed over");
+                }
                 if (currentDesc.Format != SharpDX.DXGI.Format.R16G16B16A16_Float &&
                     currentDesc.Format != SharpDX.DXGI.Format.R8G8B8A8_UNorm)
                 {
@@ -309,11 +379,10 @@ namespace T3.Gui.Windows
                                                         "input formats are supported so far.");
                 }
 
+                // Create the sink writer if it does not exist so far
                 if (_sinkWriter == null)
                 {
-                    // Create the sink writer if it does not exist so far
                     _sinkWriter = CreateSinkWriter(_filePath);
-                    _disposedValue = false;
                     CreateMediaTarget(_sinkWriter, _videoPixelSize, out _streamIndex);
 
                     // Configure media type of video
@@ -348,29 +417,29 @@ namespace T3.Gui.Windows
             }
 
             // Create the sample (includes image and timing information)
-            var videoSample = CreateSampleFromFrame(frame);
-            try
+            var videoSample = CreateSampleFromFrame(ref frame);
+            if (videoSample != null)
             {
-                // Write to stream
-                var samples = new Dictionary<int, Sample>();
-                samples.Add(StreamIndex, videoSample);
-
-                WriteSamples(samples);
+                try
+                {
+                    // Write to stream
+                    var samples = new Dictionary<int, Sample>();
+                    samples.Add(StreamIndex, videoSample);
+                    WriteSamples(samples);
+                }
+                catch (SharpDXException e)
+                {
+                    Debug.WriteLine(e.Message);
+                    throw new InvalidOperationException(e.Message);
+                }
+                finally
+                {
+                    videoSample.Dispose();
+                }
             }
-            catch (SharpDXException e)
-            {
-                Debug.WriteLine(e.Message);
-                throw new InvalidOperationException(e.Message);
-            }
-            finally
-            {
-                videoSample.Dispose();
-            }
-
-            return true;
         }
 
-        public void AddVideoAndAudioFrame(Texture2D frame, byte[] audioFrame)
+        public void AddVideoAndAudioFrame(ref Texture2D frame, byte[] audioFrame)
         {
             Debug.Assert(frame != null);
             var currentDesc = frame.Description;
@@ -379,16 +448,20 @@ namespace T3.Gui.Windows
                          audioFrame != null &&
                          audioFrame.Length != 0);
 
-            var videoSample = CreateSampleFromFrame(frame);
+            var videoSample = CreateSampleFromFrame(ref frame);
             var audioSample = audioWriter.CreateSampleFromFrame(audioFrame);
             try
             {
-
                 var samples = new Dictionary<int, Sample>();
                 samples.Add(StreamIndex, videoSample);
                 samples.Add(audioWriter.StreamIndex, audioSample);
 
                 WriteSamples(samples);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                throw new InvalidOperationException(e.Message);
             }
             finally
             {
@@ -404,22 +477,15 @@ namespace T3.Gui.Windows
             long frameDuration;
             MediaFactory.FrameRateToAverageTimePerFrame(_framerate, 1, out frameDuration);
 
-            try
+            foreach (var item in samples)
             {
-                foreach (var item in samples)
-                {
-                    var streamIndex = item.Key;
-                    var sample = item.Value;
+                var streamIndex = item.Key;
+                var sample = item.Value;
 
-                    sample.SampleTime = frameDuration * _frameIndex;
-                    sample.SampleDuration = frameDuration;
+                sample.SampleTime = frameDuration * _frameIndex;
+                sample.SampleDuration = frameDuration;
 
-                    _sinkWriter.WriteSample(streamIndex, sample);
-                }
-            }
-            catch (SharpDXException e)
-            {
-                Debug.WriteLine(e.Message);
+                _sinkWriter.WriteSample(streamIndex, sample);
             }
         }
 
@@ -451,36 +517,44 @@ namespace T3.Gui.Windows
             set { _framerate = value; }
         }
 
-        #region IDisposable Support
-        private bool _disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
+        protected void DisposeTextures()
         {
-            if (!_disposedValue)
-            {
-                if (disposing)
-                {
-                    if (_sinkWriter != null)
-                    {
-                        _sinkWriter.NotifyEndOfSegment(_streamIndex);
-                        if (_frameIndex > 0)
-                        {
-                            _sinkWriter.Finalize();
-                        }
-                        _sinkWriter.Dispose();
-                        _sinkWriter = null;
-                    }
-                }
+            foreach (var image in ImagesWithCpuAccess)
+                image.Dispose();
 
-                _disposedValue = true;
-            }
+            ImagesWithCpuAccess.Clear();
         }
 
-        // This code added to correctly implement the disposable pattern.
+        #region IDisposable Support
+
         public void Dispose()
         {
-            Dispose(true);
+            if (_sinkWriter != null)
+            {
+                // since we will try to write on shutdown, things can still go wrong
+                try
+                {
+                    _sinkWriter.NotifyEndOfSegment(_streamIndex);
+                    if (_frameIndex > 0)
+                    {
+                        _sinkWriter.Finalize();
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException(e.Message);
+                }
+                finally
+                {
+                    _sinkWriter.Dispose();
+                    _sinkWriter = null;
+                }
+            }
+
+            // dispose textures too
+            DisposeTextures();
         }
+
         #endregion
     }
 
