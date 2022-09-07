@@ -64,12 +64,12 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     
     //float3 rgb = (1.0 - tB.a)*tA.rgb + tB.a*tB.rgb;   
-    float3 rgb = (1.0 - a) * tA.rgb + a * tB.rgb;   
+    float3 rgb = (1.0 - tB.a) * tA.rgb + tB.a * tB.rgb;   
     
     switch( (int)ColorMode) {
         // screen
         case 0:
-            rgb = (1.0 - a) * tA.rgb + tB.a * tB.rgb;
+            //rgb = (1.0 - a) * tA.rgb + tB.a * tB.rgb;
             break;
             
         // screen
