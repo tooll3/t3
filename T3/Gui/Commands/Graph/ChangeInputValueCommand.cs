@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui;
 using T3.Gui.Commands;
@@ -96,7 +97,12 @@ namespace t3.Gui.Commands.Graph
         {
             //Log.Debug($"assigning value {valueToSet}");
             var inputParentSymbol = SymbolRegistry.Entries[_inputParentSymbolId];
-            var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
+            var symbolChild = inputParentSymbol.Children.SingleOrDefault(child => child.Id == _childId);
+            if (symbolChild == null)
+            {
+                Log.Error($"Can't assign value to missing symbolChild {_childId}");
+                return;
+            }
             var input = symbolChild.InputValues[_inputId];
             
             if (_isAnimated)
