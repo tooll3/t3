@@ -18,7 +18,7 @@ namespace T3.Gui.Windows
             Jpg,
         }
         
-        public static bool SaveBufferToFile(Texture2D texture2d, string filepath, FileFormats format)
+        public static bool SaveBufferToFile(Texture2D texture2d, string filepath, FileFormats format, bool forceFirst= false)
         {
             var device = ResourceManager.Instance().Device;
 
@@ -32,6 +32,8 @@ namespace T3.Gui.Windows
                 || ImagesWithCpuAccess[0].Description.Height != currentDesc.Height
                 || ImagesWithCpuAccess[0].Description.MipLevels != currentDesc.MipLevels)
             {
+                Dispose();
+                
                 var imageDesc = new Texture2DDescription
                                     {
                                         BindFlags = BindFlags.None,
@@ -45,23 +47,21 @@ namespace T3.Gui.Windows
                                         CpuAccessFlags = CpuAccessFlags.Read,
                                         ArraySize = 1
                                     };
-
-                Dispose();
-
+                
                 for (int i = 0; i < NumTextureEntries; ++i)
                 {
                     ImagesWithCpuAccess.Add(new Texture2D(device, imageDesc));
                 }
 
                 _currentIndex = 0;
-                _currentUsageIndex = 0;
+                _currentUsageIndex = 1;
             }
 
             var immediateContext = device.ImmediateContext;
             var readableImage = ImagesWithCpuAccess[_currentIndex];
             immediateContext.CopyResource(texture2d, readableImage);
-            _currentIndex = ++_currentIndex % NumTextureEntries;
-            ++_currentUsageIndex;
+            _currentIndex = (_currentIndex + 1) % NumTextureEntries;
+            _currentUsageIndex++;
 
             if (_currentUsageIndex >= NumTextureEntries)
             {
@@ -269,7 +269,9 @@ namespace T3.Gui.Windows
         public static void Dispose()
         {
             foreach (var image in ImagesWithCpuAccess)
+            {
                 image.Dispose();
+            }
 
             ImagesWithCpuAccess.Clear();
         }
