@@ -288,7 +288,7 @@ namespace T3.Core
             }
         }
 
-        private void ReadChildOutputData(SymbolChild symbolChild, Guid outputId, JToken json)
+        private static void ReadChildOutputData(SymbolChild symbolChild, Guid outputId, JToken json)
         {
             if (json["Type"] != null)
             {
@@ -391,7 +391,7 @@ namespace T3.Core
 
             foreach (var input in symbol.InputDefinitions)
             {
-                // if no entry is present just the value default is used, happens for new inputs
+                // If no entry is present just the value default is used, happens for new inputs
                 if (inputDefaultValues.TryGetValue(input.Id, out var jsonDefaultValue))
                 {
                     input.DefaultValue.SetValueFromJson(jsonDefaultValue);
