@@ -597,26 +597,29 @@ namespace T3.Gui.Graph.Interaction
                 return;
             }
 
-            // create new source on basis of original type
+            // Create new source on basis of original type
             var root = syntaxTree.GetRoot();
             var classRenamer = new ClassRenameRewriter(newName);
             root = classRenamer.Visit(root);
+            
             var memberRewriter = new ConstructorRewriter(newName);
             root = memberRewriter.Visit(root);
+            
             var newSource = root.GetText().ToString();
-            Log.Debug(newSource);
+            //Log.Debug(newSource);
 
             var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newName);
             if (newAssembly != null)
             {
-                string originalPath = @"Operators\Types\" + symbol.Name + ".cs";
-                var operatorResource = ResourceManager.Instance().GetOperatorFileResource(originalPath);
+                //string originalPath = @"Operators\Types\" + symbol.Name + ".cs";
+                var originalSourcePath = Model.BuildFilepathForSymbol(symbol, Model.SourceExtension);
+                var operatorResource = ResourceManager.Instance().GetOperatorFileResource(originalSourcePath);
                 if (operatorResource != null)
                 {
                     operatorResource.OperatorAssembly = newAssembly;
                     operatorResource.Updated = true;
                     symbol.PendingSource = newSource;
-                    symbol.DeprecatedSourcePath = originalPath;
+                    symbol.DeprecatedSourcePath = originalSourcePath;
                     return;
                 }
             }
@@ -731,8 +734,10 @@ namespace T3.Gui.Graph.Interaction
             var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, symbol.Name);
             if (newAssembly != null)
             {
-                string path = @"Operators\Types\" + symbol.Name + ".cs";
-                var operatorResource = ResourceManager.Instance().GetOperatorFileResource(path);
+                //string path = @"Operators\Types\" + symbol.Name + ".cs";
+                var sourcePath = Model.BuildFilepathForSymbol(symbol, Model.SourceExtension);
+                
+                var operatorResource = ResourceManager.Instance().GetOperatorFileResource(sourcePath);
                 if (operatorResource != null)
                 {
                     operatorResource.OperatorAssembly = newAssembly;
@@ -1003,13 +1008,14 @@ namespace T3.Gui.Graph.Interaction
 
         private static SyntaxTree GetSyntaxTree(Symbol symbol)
         {
-            string source = symbol.PendingSource; // there's intermediate source, so use this
-            if (String.IsNullOrEmpty(source))
+            var pendingSource = symbol.PendingSource; // there's intermediate source, so use this
+            if (string.IsNullOrEmpty(pendingSource))
             {
-                string path = @"Operators\Types\" + symbol.Name + ".cs";
+                //var path = @"Operators\Types\" + symbol.Name + ".cs";
+                var path = Model.BuildFilepathForSymbol(symbol, Model.SourceExtension);
                 try
                 {
-                    source = File.ReadAllText(path);
+                    pendingSource = File.ReadAllText(path);
                 }
                 catch (Exception e)
                 {
@@ -1019,13 +1025,13 @@ namespace T3.Gui.Graph.Interaction
                 }
             }
 
-            if (String.IsNullOrEmpty(source))
+            if (string.IsNullOrEmpty(pendingSource))
             {
                 Log.Info("Source was empty, skip compilation.");
                 return null;
             }
 
-            return CSharpSyntaxTree.ParseText(source);
+            return CSharpSyntaxTree.ParseText(pendingSource);
         }
 
         public static IEnumerable<Instance> GetParentInstances(Instance compositionOp, bool includeChildInstance = false)
@@ -1073,7 +1079,7 @@ namespace T3.Gui.Graph.Interaction
             return true;
         }
 
-        public static void RenameSpaceSpaces(NamespaceTreeNode node, string nameSpace)
+        public static void RenameNameSpaces(NamespaceTreeNode node, string nameSpace)
         {
             var orgNameSpace = node.GetAsString();
             foreach (var symbol in SymbolRegistry.Entries.Values)

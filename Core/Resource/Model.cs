@@ -54,7 +54,7 @@ namespace T3.Core
     public class Model
     {
         public Assembly OperatorsAssembly { get; }
-        protected static string OperatorTypesFolder { get; } = @"Operators\Types\";
+        
 
         public Model(Assembly operatorAssembly)
         {
@@ -662,11 +662,12 @@ namespace T3.Core
 
             if (!string.IsNullOrEmpty(symbol.DeprecatedSourcePath))
             {
-                // remove old source file and its entry in project 
+                // Remove old source file and its entry in project
+                
                 //RemoveSourceFileFromProject(symbol.DeprecatedSourcePath);
                 File.Delete(symbol.DeprecatedSourcePath);
 
-                // adjust path of file resource
+                // Adjust path of file resource
                 ResourceManager.Instance().RenameOperatorResource(symbol.DeprecatedSourcePath, sourcePath);
 
                 symbol.DeprecatedSourcePath = string.Empty;
@@ -771,6 +772,7 @@ namespace T3.Core
         public const string SourceExtension = ".cs";
         private const string SymbolExtension = ".t3";
         protected const string SymbolUiExtension = ".t3ui";
+        public const string OperatorTypesFolder  = @"Operators\Types\";
 
         private static readonly List<string> _operatorFileExtensions = new()
                                                                            {

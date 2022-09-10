@@ -27,11 +27,9 @@ namespace StartEditor
             Log.Debug("Building operators.dll...");
             Log.Debug(" Collecting sources...");
             var operatorAssemblySources = new List<string>();
-            foreach (var sourceFile in Directory.GetFiles(@"Operators\Types\"))
+            
+            foreach (var sourceFile in Directory.GetFiles(Model.OperatorTypesFolder, "*.cs", SearchOption.AllDirectories))
             {
-                if (!sourceFile.EndsWith(".cs"))
-                    continue;
-
                 Log.Debug($"+ {sourceFile}");
                 operatorAssemblySources.Add(File.ReadAllText(sourceFile));
             }

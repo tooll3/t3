@@ -130,7 +130,8 @@ namespace T3
             resourceManager.OperatorsAssembly = T3Ui.UiModel.OperatorsAssembly;
             foreach (var (_, symbol) in SymbolRegistry.Entries)
             {
-                ResourceManager.Instance().CreateOperatorEntry(@"Operators\Types\" + symbol.Name + ".cs", symbol.Id.ToString(), OperatorUpdating.Update);
+                var sourceFilePath = Model.BuildFilepathForSymbol(symbol, Model.SourceExtension);
+                ResourceManager.Instance().CreateOperatorEntry(sourceFilePath, symbol.Id.ToString(), OperatorUpdating.Update);
             }
 
             Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");

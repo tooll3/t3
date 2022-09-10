@@ -354,7 +354,7 @@ namespace T3.Core
             _tiffFileWatcher.Created += OnChanged;
             _tiffFileWatcher.EnableRaisingEvents = true;
 
-            _csFileWatcher = new FileSystemWatcher(@"Operators\Types", "*.cs");
+            _csFileWatcher = new FileSystemWatcher(Model.OperatorTypesFolder, "*.cs");
             _csFileWatcher.IncludeSubdirectories = true;
             _csFileWatcher.Changed += OnChanged;
             _csFileWatcher.Renamed += OnRenamed;
@@ -852,11 +852,10 @@ namespace T3.Core
             }
         }
         
-        public uint CreateOperatorEntry(string srcFile, string name, OperatorResource.UpdateDelegate updateHandler)
+        public uint CreateOperatorEntry(string sourceFilePath, string name, OperatorResource.UpdateDelegate updateHandler)
         {
             // todo: code below is redundant with all file resources -> refactor
-            bool foundFileEntryForPath = _fileResources.TryGetValue(srcFile, out var fileResource);
-            if (foundFileEntryForPath)
+            if (_fileResources.TryGetValue(sourceFilePath, out var fileResource))
             {
                 foreach (var id in fileResource.ResourceIds)
                 {
@@ -872,12 +871,12 @@ namespace T3.Core
             _operators.Add(resourceEntry);
             if (fileResource == null)
             {
-                fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
-                _fileResources.Add(srcFile, fileResource);
+                fileResource = new FileResource(sourceFilePath, new[] { resourceEntry.Id });
+                _fileResources.Add(sourceFilePath, fileResource);
             }
             else
             {
-                // file resource already exists, so just add the id of the new type resource
+                // File resource already exists, so just add the id of the new type resource
                 fileResource.ResourceIds.Add(resourceEntry.Id);
             }
 
