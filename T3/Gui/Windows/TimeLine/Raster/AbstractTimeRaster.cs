@@ -46,9 +46,11 @@ namespace T3.Gui.Windows.TimeLine.Raster
             if (rasters == null)
                 return;
 
-            // Debug string 
             ImGui.PushFont(Fonts.FontSmall);
 
+            // Debug string 
+            //ImGui.GetForegroundDrawList().AddText(topLeft, Color.Green, $"{UserSettings.Config.TimeRasterDensity /scale:0.00000}");
+            
             foreach (var raster in rasters)
             {
                 double t = -scroll % raster.Spacing;
@@ -98,9 +100,9 @@ namespace T3.Gui.Windows.TimeLine.Raster
 
         private readonly Dictionary<int, double> _usedPositions = new Dictionary<int, double>();
         protected List<ScaleRange> ScaleRanges;
-        private const double Epsilon = 0.001f;
+        private const double Epsilon = 0.00001f;
 
-        public class ScaleRange
+        protected class ScaleRange
         {
             public double ScaleMin { get; set; }
             public double ScaleMax { get; set; }

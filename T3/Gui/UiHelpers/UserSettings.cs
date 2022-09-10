@@ -72,7 +72,6 @@ namespace T3.Gui.UiHelpers
             public bool EnableStartupConsistencyCheck = true;
 
             // Timeline
-            public bool CountBarsFromZero = true;
             public float TimeRasterDensity = 1f;
 
             // Space mouse

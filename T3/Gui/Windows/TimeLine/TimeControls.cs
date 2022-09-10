@@ -51,7 +51,7 @@ namespace T3.Gui.Windows.TimeLine
             switch (UserSettings.Config.TimeDisplayMode)
             {
                 case TimeFormat.TimeDisplayModes.Bars:
-                    formattedTime = TimeFormat.FormatTimeInBars(playback.TimeInBars, UserSettings.Config.CountBarsFromZero ? 0 : 1);
+                    formattedTime = TimeFormat.FormatTimeInBars(playback.TimeInBars, 0);
                     break;
 
                 case TimeFormat.TimeDisplayModes.Secs:
