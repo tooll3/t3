@@ -78,7 +78,9 @@ namespace T3.Gui.Graph
             TempConnections.Clear();
             _isDisconnectingFromInput = false;
 
-            var selectedSymbolChildUis = NodeSelection.GetSelectedChildUis().ToList();
+            var selectedSymbolChildUis = NodeSelection.GetSelectedChildUis().OrderBy(c => c.PosOnCanvas.Y * 100 + c.PosOnCanvas.X).ToList();
+            selectedSymbolChildUis.Reverse();
+            
             if (selectedSymbolChildUis.Count > 1 && selectedSymbolChildUis.Any(c => c.Id == sourceUi.Id))
             {
                 Log.Debug("Magic would happen here?");
