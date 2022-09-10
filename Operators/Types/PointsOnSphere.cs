@@ -35,6 +35,9 @@ namespace T3.Operators.Types.Id_1a241222_200b_417d_a8c7_131e3b48cc36
 
         [Input(Guid = "813df416-a783-433c-9645-921c885c9840")]
         public readonly InputSlot<float> StartAngle = new InputSlot<float>();
+
+        [Input(Guid = "15716b21-9905-4c1e-8330-06afc72552a5")]
+        public readonly InputSlot<float> Scatter = new InputSlot<float>();
     }
 }
 
