@@ -62,6 +62,7 @@ namespace T3.Gui.UiHelpers
             public bool VariationHoverPreview = true;
             
             // Load Save
+            public string UserName = UndefinedUserName;
             public bool EnableAutoBackup = true;
 
             // Other settings
@@ -83,8 +84,16 @@ namespace T3.Gui.UiHelpers
             
             public List<GraphBookmarkNavigation.Bookmark> Bookmarks = new();
             public List<Gradient> GradientPresets = new();
+
             
         }
+
+        public static bool IsUserNameDefined()
+        {
+            return !string.IsNullOrEmpty(Config.UserName) && Config.UserName != UndefinedUserName;
+        }
+
+        private const string UndefinedUserName = "unknown";
 
         public static Guid GetLastOpenOpForWindow(string windowTitle)
         {

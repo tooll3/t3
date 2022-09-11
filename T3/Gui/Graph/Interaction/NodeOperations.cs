@@ -653,10 +653,18 @@ namespace T3.Gui.Graph.Interaction
         {
             return !string.IsNullOrEmpty(newSymbolName)
                    && _validTypeNamePattern.IsMatch(newSymbolName)
-                   && !SymbolRegistry.Entries.Values.Any(value => String.Equals(value.Name, newSymbolName, StringComparison.OrdinalIgnoreCase));
+                   && !SymbolRegistry.Entries.Values.Any(value => string.Equals(value.Name, newSymbolName, StringComparison.OrdinalIgnoreCase));
         }
 
         private static readonly Regex _validTypeNamePattern = new Regex("^[A-Za-z_]+[A-Za-z0-9_]*$");
+        
+        public static bool IsValidUserName(string userName)
+        {
+            return _validUserNamePattern.IsMatch(userName);
+        }
+
+        private static readonly Regex _validUserNamePattern = new Regex("^[A-Za-z0-9_]+$");
+        
 
         private class NodeByAttributeIdFinder : CSharpSyntaxRewriter
         {

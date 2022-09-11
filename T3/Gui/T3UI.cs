@@ -2,22 +2,19 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Core.Audio;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
-using T3.Core;
 using T3.Core.Animation;
-using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using t3.Gui.Audio;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
+using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.Interaction;
@@ -27,7 +24,8 @@ using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
 using t3.Gui.UiHelpers.Wiki;
 using T3.Gui.Windows;
-using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d; // ForwardBeatTaps
+using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;
+using Unsplasharp.Models; // ForwardBeatTaps
 
 namespace T3.Gui
 {
@@ -71,7 +69,6 @@ namespace T3.Gui
             KeyboardBinding.InitFrame();
             WindowManager.Draw();
             
-            
             BeatTiming.Update(ImGui.GetTime());
 
             SingleValueEdit.StartNextFrame();
@@ -81,12 +78,21 @@ namespace T3.Gui
             
             if ( UserSettings.Config.ShowMainMenu || ImGui.GetMousePos().Y < 20)
             {
-                
                 DrawAppMenu();
             }
             
+            _userNameDialog.Draw();
+            
+            if (!UserSettings.IsUserNameDefined() )
+            {
+                UserSettings.Config.UserName = Environment.UserName;
+                _userNameDialog.ShowNextFrame();
+            }            
+            
             _autoBackup.CheckForSave();
         }
+        
+        private static readonly UserNameDialog _userNameDialog = new();
 
         private void TriggerGlobalActionsFromKeyBindings()
         {
