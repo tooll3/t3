@@ -100,8 +100,7 @@ namespace T3.Gui
             }
             else if (KeyboardBinding.Triggered(UserActions.Save))
             {
-                var saveAll = !UserSettings.Config.SaveOnlyModified;
-                SaveInBackground(saveAll);
+                SaveInBackground(saveAll:true);
             }
             else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode))
             {
@@ -122,12 +121,7 @@ namespace T3.Gui
                     
                     if (ImGui.MenuItem("Save", KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !IsCurrentlySaving))
                     {
-                        SaveInBackground(false);
-                    }
-
-                    if (ImGui.MenuItem("Save All", KeyboardBinding.ListKeyboardShortcuts(UserActions.SaveAll, false), false, !IsCurrentlySaving))
-                    {
-                        SaveInBackground(true);
+                        SaveInBackground(saveAll:true);
                     }
 
                     if (ImGui.MenuItem("Quit", !IsCurrentlySaving))

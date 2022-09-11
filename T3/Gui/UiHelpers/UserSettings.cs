@@ -63,8 +63,7 @@ namespace T3.Gui.UiHelpers
             
             // Load Save
             public bool EnableAutoBackup = true;
-            public bool SaveOnlyModified = false;
-            
+
             // Other settings
             public float GizmoSize = 100;
             public bool SwapMainAnd2ndWindowsWhenFullscreen = false;

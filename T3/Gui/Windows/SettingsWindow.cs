@@ -42,7 +42,7 @@ namespace T3.Gui.Windows
                 changed |= ImGui.Checkbox("Count Bars from Zero", ref UserSettings.Config.CountBarsFromZero);
                  
                 changed |= ImGui.Checkbox("Swap Main & 2nd windows when fullscreen", ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen);
-                changed |= ImGui.Checkbox("Save Only Modified Symbols", ref UserSettings.Config.SaveOnlyModified);
+                
                  
                 ImGui.TreePop();
             }
