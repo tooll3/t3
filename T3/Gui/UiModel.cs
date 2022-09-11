@@ -302,10 +302,12 @@ namespace T3.Gui
             Log.Debug($"Saving {modifiedSymbolUis.Count} modified symbols...");
 
             IsSaving = true;
-            ResourceManager.Instance().DisableOperatorFileWatcher(); // Don't update ops if file is written during save 
-
+            ResourceManager.Instance().DisableOperatorFileWatcher(); // Don't update ops if file is written during save
+            
+            var modifiedSymbols = modifiedSymbolUis.Select(symbolUi => symbolUi.Symbol).ToList();
+            SaveSymbolDefinitionAndSourceFiles(modifiedSymbols);
             WriteSymbolUis(modifiedSymbolUis);
-
+            
             ResourceManager.Instance().EnableOperatorFileWatcher();
             IsSaving = false;
         }
@@ -334,7 +336,7 @@ namespace T3.Gui
                 if (opResource == null)
                 {
                     // If the source wasn't registered before do this now
-                    resourceManager.CreateOperatorEntry(symbolSourceFilepath, symbol.Id.ToString(), OperatorUpdating.Update);
+                    resourceManager.CreateOperatorEntry(symbolSourceFilepath, symbol.Id.ToString(), OperatorUpdating.UpdateHandler);
                 }
 
                 symbolUi.ClearModifiedFlag();

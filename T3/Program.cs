@@ -132,7 +132,7 @@ namespace T3
             foreach (var (_, symbol) in SymbolRegistry.Entries)
             {
                 var sourceFilePath = Model.BuildFilepathForSymbol(symbol, Model.SourceExtension);
-                ResourceManager.Instance().CreateOperatorEntry(sourceFilePath, symbol.Id.ToString(), OperatorUpdating.Update);
+                ResourceManager.Instance().CreateOperatorEntry(sourceFilePath, symbol.Id.ToString(), OperatorUpdating.UpdateHandler);
             }
 
             Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");

@@ -521,20 +521,35 @@ namespace T3.Core
         {
             ResourceManager.Instance().DisableOperatorFileWatcher(); // don't update ops if file is written during save
 
-            // Remove all old t3 files before storing to get rid off invalid ones
-            var symbolFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolExtension}", SearchOption.AllDirectories);
-            foreach (var symbolFilePath in symbolFiles)
+            RemoveAllSymbolFiles();
+            SortAllSymbolSourceFiles();
+            SaveSymbolDefinitionAndSourceFiles(SymbolRegistry.Entries.Values);
+
+            ResourceManager.Instance().EnableOperatorFileWatcher();
+        }
+
+        protected static void SaveSymbolDefinitionAndSourceFiles(IEnumerable<Symbol> valueCollection)
+        {
+            foreach (var symbol in valueCollection)
             {
-                try
+                var filepath = BuildFilepathForSymbol(symbol, SymbolExtension);
+
+                using (var sw = new StreamWriter(filepath))
+                using (var writer = new JsonTextWriter(sw) { Formatting = Formatting.Indented })
                 {
-                    File.Delete(symbolFilePath);
+                    var symbolJson = new SymbolJson { Writer = writer };
+                    symbolJson.WriteSymbol(symbol);
                 }
-                catch (Exception e)
+
+                if (!string.IsNullOrEmpty(symbol.PendingSource))
                 {
-                    Log.Warning("Failed to deleted file '" + symbolFilePath + "': " + e);
+                    WriteSymbolSourceToFile(symbol);
                 }
             }
+        }
 
+        private static void SortAllSymbolSourceFiles()
+        {
             // Move existing source files to correct namespace folder
             var sourceFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SourceExtension}", SearchOption.AllDirectories);
             foreach (var sourceFilePath in sourceFiles)
@@ -550,7 +565,7 @@ namespace T3.Core
                 var targetFilepath = BuildFilepathForSymbol(symbol, SourceExtension);
                 if (sourceFilePath == targetFilepath)
                     continue;
-                
+
                 Log.Debug($" Moving {sourceFilePath} -> {targetFilepath} ...");
                 try
                 {
@@ -561,55 +576,48 @@ namespace T3.Core
                     Log.Warning("Failed to write source file '" + sourceFilePath + "': " + e);
                 }
             }
-
-            // Store all symbols in corresponding files
-            var symbolJson = new SymbolJson();
-
-            foreach (var (_, symbol) in SymbolRegistry.Entries)
-            {
-                var filepath = BuildFilepathForSymbol(symbol, SymbolExtension);
-
-                using (var sw = new StreamWriter(filepath))
-                using (var writer = new JsonTextWriter(sw))
-                {
-                    symbolJson.Writer = writer;
-                    symbolJson.Writer.Formatting = Formatting.Indented;
-                    symbolJson.WriteSymbol(symbol);
-                }
-
-                if (!string.IsNullOrEmpty(symbol.PendingSource))
-                {
-                    WriteSymbolSourceToFile(symbol);
-                }
-            }
-
-            ResourceManager.Instance().EnableOperatorFileWatcher();
         }
 
-
-        public void SaveModifiedSymbol(Symbol symbol)
+        private static void RemoveAllSymbolFiles()
         {
-            RemoveObsoleteSymbolFiles(symbol);
-
-            var symbolJson = new SymbolJson();
-            
-            var filepath = BuildFilepathForSymbol(symbol, SymbolExtension);
-
-            using (var sw = new StreamWriter(filepath))
-            using (var writer = new JsonTextWriter(sw))
+            // Remove all old t3 files before storing to get rid off invalid ones
+            var symbolFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolExtension}", SearchOption.AllDirectories);
+            foreach (var symbolFilePath in symbolFiles)
             {
-                symbolJson.Writer = writer;
-                symbolJson.Writer.Formatting = Formatting.Indented;
-                symbolJson.WriteSymbol(symbol);
-            }
-
-            if (!string.IsNullOrEmpty(symbol.PendingSource))
-            {
-                WriteSymbolSourceToFile(symbol);
+                try
+                {
+                    File.Delete(symbolFilePath);
+                }
+                catch (Exception e)
+                {
+                    Log.Warning("Failed to deleted file '" + symbolFilePath + "': " + e);
+                }
             }
         }
 
-        private static void RemoveObsoleteSymbolFiles(Symbol symbol)
+        // public void SaveModifiedSymbol(Symbol symbol)
+        // {
+        //     RemoveObsoleteSymbolFiles(symbol);
+        //
+        //     var symbolJson = new SymbolJson();
+        //     
+        //     var filepath = BuildFilepathForSymbol(symbol, SymbolExtension);
+        //
+        //     using (var sw = new StreamWriter(filepath))
+        //     using (var writer = new JsonTextWriter(sw))
+        //     {
+        //         symbolJson.Writer = writer;
+        //         symbolJson.Writer.Formatting = Formatting.Indented;
+        //         symbolJson.WriteSymbol(symbol);
+        //     }
+        //
+        //     if (!string.IsNullOrEmpty(symbol.PendingSource))
+        //     {
+        //         WriteSymbolSourceToFile(symbol);
+        //     }
+        // }
+
+        private static void RemoveDeprecatedSymbolFiles(Symbol symbol)
         {
             if (string.IsNullOrEmpty(symbol.DeprecatedSourcePath))
                 return;

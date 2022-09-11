@@ -11,9 +11,15 @@ using T3.Core.Logging;
 
 namespace T3.Compilation
 {
+    /// <summary>
+    /// Handles the c# compilation of symbol classes
+    /// </summary>
     public static class OperatorUpdating
     {
-        public static bool Update(OperatorResource resource, string path)
+        /// <summary>
+        /// An event called that is called if the file hook detects change to the symbol source code.
+        /// </summary>
+        public static void UpdateHandler(OperatorResource resource, string path)
         {
             Log.Info($"Operator source '{path}' changed.");
             Log.Info($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
@@ -27,22 +33,22 @@ namespace T3.Compilation
             {
                 Log.Error($"Error opening file '{path}");
                 Log.Error(e.Message);
-                return false;
+                return;
             }
         
             if (string.IsNullOrEmpty(source))
             {
                 Log.Info("Source was empty, skip compilation.");
-                return false;
+                return;
             }
 
             var newAssembly = CompileSymbolFromSource(source, path);
             if (newAssembly == null)
-                return false;
+                return;
             
             resource.OperatorAssembly = newAssembly;
             resource.Updated = true;
-            return true;
+            return;
         }
 
         public static Assembly CompileSymbolFromSource(string source, string symbolName)
