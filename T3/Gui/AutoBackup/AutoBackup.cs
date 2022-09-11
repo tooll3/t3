@@ -95,7 +95,6 @@ namespace T3.Gui.AutoBackup
             }
             finally
             {
-                Log.Debug($"Deleting {tempPath}");
                 DeletePath(tempPath);
             }
 

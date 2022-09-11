@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Core.Audio;
@@ -9,6 +8,8 @@ using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+
+// ReSharper disable AssignNullToNotNullAttribute
 
 namespace T3.Core
 {
@@ -29,16 +30,11 @@ namespace T3.Core
             }
         }
     }
-    
 
     public class SymbolJson
     {
-        
-        
-        
-        
         public JsonTextWriter Writer { get; set; }
-        public JsonTextReader Reader { get; set; }
+        public JsonTextReader Reader { get; init; }
 
         #region writing
         public void WriteSymbol(Symbol symbol)
@@ -75,24 +71,7 @@ namespace T3.Core
 
             Writer.WriteEndArray();
         }
-
-        private void WriteSymbolOutputs(List<Symbol.OutputDefinition> outputs)
-        {
-            Writer.WritePropertyName("Outputs");
-            Writer.WriteStartArray();
-
-            foreach (var output in outputs)
-            {
-                Writer.WriteStartObject();
-                Writer.WriteObject("Id", output.Id);
-                Writer.WriteComment(output.Name);
-                Writer.WritePropertyName("DefaultValue");
-                // output.DefaultValue.ToJson(Writer);
-                Writer.WriteEndObject();
-            }
-
-            Writer.WriteEndArray();
-        }
+        
 
         private void WriteConnections(List<Symbol.Connection> connections)
         {
@@ -190,7 +169,7 @@ namespace T3.Core
         {
             if (audioClips == null || audioClips.Count == 0)
                 return;
-            
+
             Writer.WritePropertyName("AudioClips");
             Writer.WriteStartArray();
             foreach (var audioClip in audioClips)
@@ -203,7 +182,7 @@ namespace T3.Core
         #endregion
 
         #region reading
-        private SymbolChild ReadSymbolChild(Model model, JToken symbolChildJson)
+        private static SymbolChild ReadSymbolChild(Model model, JToken symbolChildJson)
         {
             var childId = Guid.Parse(symbolChildJson["Id"].Value<string>());
             var symbolId = Guid.Parse(symbolChildJson["SymbolId"].Value<string>());
@@ -257,14 +236,14 @@ namespace T3.Core
             return symbolChild;
         }
 
-        private (Guid, JToken) ReadSymbolInputDefaults(JToken jsonInput)
+        private static (Guid, JToken) ReadSymbolInputDefaults(JToken jsonInput)
         {
             var id = Guid.Parse(jsonInput["Id"].Value<string>());
             var jsonValue = jsonInput["DefaultValue"];
             return (id, jsonValue);
         }
 
-        private Symbol.Connection ReadConnection(JToken jsonConnection)
+        private static Symbol.Connection ReadConnection(JToken jsonConnection)
         {
             var sourceInstanceId = Guid.Parse(jsonConnection["SourceParentOrChildId"].Value<string>());
             var sourceSlotId = Guid.Parse(jsonConnection["SourceSlotId"].Value<string>());
@@ -274,7 +253,7 @@ namespace T3.Core
             return new Symbol.Connection(sourceInstanceId, sourceSlotId, targetInstanceId, targetSlotId);
         }
 
-        private void ReadChildInputValue(SymbolChild symbolChild, JToken inputJson)
+        private static void ReadChildInputValue(SymbolChild symbolChild, JToken inputJson)
         {
             var id = Guid.Parse(inputJson["Id"].Value<string>());
             var jsonValue = inputJson["Value"];
@@ -366,10 +345,9 @@ namespace T3.Core
                                       select idAndValue).ToDictionary(entry => entry.Item1, entry => entry.Item2);
             var animatorData = (JArray)o["Animator"];
 
-            string namespaceId = id.ToString().ToLower().Replace('-', '_');
-            string instanceTypeName = "T3.Operators.Types.Id_" + namespaceId + "." + name +
-                                      ", Operators, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null";
-            Type instanceType = Type.GetType(instanceTypeName);
+            var namespaceId = id.ToString().ToLower().Replace('-', '_');
+            var instanceTypeName = $"T3.Operators.Types.Id_{namespaceId}.{name}, Operators, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null";
+            var instanceType = Type.GetType(instanceTypeName);
             if (instanceType == null)
             {
                 if (allowNonOperatorInstanceType)
@@ -406,13 +384,13 @@ namespace T3.Core
             }
 
             var jAudioClipArray = (JArray)o[nameof(symbol.AudioClips)];
-            if (jAudioClipArray != null)
+            if (jAudioClipArray == null)
+                return symbol;
+
+            foreach (var c in jAudioClipArray)
             {
-                foreach (var c in jAudioClipArray)
-                {
-                    AudioClip clip = AudioClip.FromJson(c);
-                    symbol.AudioClips.Add(clip);
-                }
+                var clip = AudioClip.FromJson(c);
+                symbol.AudioClips.Add(clip);
             }
 
             return symbol;

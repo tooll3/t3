@@ -27,34 +27,33 @@ namespace T3.Core
 {
     public static class JsonToTypeValueConverters
     {
-        public static Dictionary<Type, Func<JToken, object>> Entries { get; } = new Dictionary<Type, Func<JToken, object>>();
+        public static Dictionary<Type, Func<JToken, object>> Entries { get; } = new();
     }
 
     public static class TypeValueToJsonConverters
     {
-        public static Dictionary<Type, Action<JsonTextWriter, object>> Entries { get; } = new Dictionary<Type, Action<JsonTextWriter, object>>();
+        public static Dictionary<Type, Action<JsonTextWriter, object>> Entries { get; } = new();
     }
 
     public static class InputValueCreators
     {
-        public static Dictionary<Type, Func<InputValue>> Entries { get; } = new Dictionary<Type, Func<InputValue>>();
+        public static Dictionary<Type, Func<InputValue>> Entries { get; } = new();
     }
 
     public static class TypeNameRegistry
     {
-        public static Dictionary<Type, string> Entries { get; } = new Dictionary<Type, string>(20);
+        public static Dictionary<Type, string> Entries { get; } = new(20);
     }
 
     public class Command
     {
-        public Action<EvaluationContext> PrepareAction { get; set; }
+        public Action<EvaluationContext> PrepareAction { get; init; }
         public Action<EvaluationContext> RestoreAction { get; set; }
     }
 
     public class Model
     {
         public Assembly OperatorsAssembly { get; }
-        
 
         public Model(Assembly operatorAssembly)
         {
@@ -523,9 +522,8 @@ namespace T3.Core
             ResourceManager.Instance().DisableOperatorFileWatcher(); // don't update ops if file is written during save
 
             // Remove all old t3 files before storing to get rid off invalid ones
-            DirectoryInfo di = new DirectoryInfo(OperatorTypesFolder);
-
-            var symbolFiles = di.GetFiles("*" + SymbolExtension).ToArray();
+            var directoryInfo = new DirectoryInfo(OperatorTypesFolder);
+            var symbolFiles = directoryInfo.GetFiles("*" + SymbolExtension).ToArray();
             foreach (var fileInfo in symbolFiles)
             {
                 try
@@ -538,37 +536,38 @@ namespace T3.Core
                 }
             }
 
-            // Saving source files
-            var sourceFiles = di.GetFiles("*.cs").ToArray();
+            // Move existing source files to correct namespace folder
+            var sourceFiles = directoryInfo.GetFiles("*.cs").ToArray();
             foreach (var fileInfo in sourceFiles)
             {
+                var classname = fileInfo.Name.Replace(".cs", "");
+                var symbol = SymbolRegistry.Entries.Values.SingleOrDefault(s => s.Name == classname);
+                if (symbol == null)
+                {
+                    Log.Warning($"Skipping unregistered source file {fileInfo.Name}");
+                    continue;
+                }
+
+                var targetFilepath = BuildFilepathForSymbol(symbol, SourceExtension);
+                if (fileInfo.FullName == targetFilepath)
+                    continue;
+                
+                Log.Debug($" Moving {fileInfo.FullName} -> {targetFilepath} ...");
                 try
                 {
-                    var classname = fileInfo.Name.Replace(".cs", "");
-                    var symbol = SymbolRegistry.Entries.Values.SingleOrDefault(s => s.Name == classname);
-                    if (symbol == null)
-                        continue;
-
-                    var targetFilepath = BuildFilepathForSymbol(symbol, SourceExtension);
-                    if (fileInfo.FullName != targetFilepath)
-                    {
-                        Log.Debug($" Moving {fileInfo.FullName} -> {targetFilepath} ...");
-                        File.Move(fileInfo.FullName, targetFilepath);
-                    }
+                    File.Move(fileInfo.FullName, targetFilepath);
                 }
                 catch (Exception e)
                 {
-                    Log.Warning("Failed to deleted file '" + fileInfo + "': " + e);
+                    Log.Warning("Failed to write source file '" + fileInfo + "': " + e);
                 }
             }
 
-            SymbolJson symbolJson = new SymbolJson();
-
             // Store all symbols in corresponding files
+            var symbolJson = new SymbolJson();
+
             foreach (var (_, symbol) in SymbolRegistry.Entries)
             {
-                // var path = CreateAndGetOperatorFolder(symbol);
-                // var filepath = Path.Combine(path, symbol.Name + "_" + symbol.Id + SymbolExtension);
                 var filepath = BuildFilepathForSymbol(symbol, SymbolExtension);
 
                 using (var sw = new StreamWriter(filepath))
@@ -588,27 +587,13 @@ namespace T3.Core
             ResourceManager.Instance().EnableOperatorFileWatcher();
         }
 
-        // private string CreateAndGetOperatorFolder(Symbol symbol)
-        // {
-        //     var subFolder = SymbolJson.GetSubDirectoryFromNamespace(symbol);
-        //     var path = Path.Combine(OperatorTypesFolder, subFolder);
-        //     if (!Directory.Exists(path))
-        //     {
-        //         Log.Debug($"Create namespace folder {path}");
-        //         Directory.CreateDirectory(path);
-        //     }
-        //
-        //     return path;
-        // }
 
         public void SaveModifiedSymbol(Symbol symbol)
         {
             RemoveObsoleteSymbolFiles(symbol);
 
-            SymbolJson symbolJson = new SymbolJson();
-
-            //var path = CreateAndGetOperatorFolder(symbol);
-            //var filepath = Path.Combine(path, symbol.Name + "_" + symbol.Id + SymbolExtension);
+            var symbolJson = new SymbolJson();
+            
             var filepath = BuildFilepathForSymbol(symbol, SymbolExtension);
 
             using (var sw = new StreamWriter(filepath))
@@ -625,7 +610,7 @@ namespace T3.Core
             }
         }
 
-        private void RemoveObsoleteSymbolFiles(Symbol symbol)
+        private static void RemoveObsoleteSymbolFiles(Symbol symbol)
         {
             if (string.IsNullOrEmpty(symbol.DeprecatedSourcePath))
                 return;
@@ -646,25 +631,18 @@ namespace T3.Core
             symbol.DeprecatedSourcePath = String.Empty;
         }
 
-        // private string GetFilePathForSymbol(Symbol symbol)
-        // {
-        //     return OperatorTypesFolder + symbol.Name + "_" + symbol.Id + SymbolExtension;
-        // }
 
         private static void WriteSymbolSourceToFile(Symbol symbol)
         {
-            //string sourcePath = Path.Combine(path, symbol.Name + ".cs");
             var sourcePath = BuildFilepathForSymbol(symbol, SourceExtension);
             using (var sw = new StreamWriter(sourcePath))
             {
                 sw.Write(symbol.PendingSource);
             }
 
+            // Remove old source file and its entry in project
             if (!string.IsNullOrEmpty(symbol.DeprecatedSourcePath))
             {
-                // Remove old source file and its entry in project
-                
-                //RemoveSourceFileFromProject(symbol.DeprecatedSourcePath);
                 File.Delete(symbol.DeprecatedSourcePath);
 
                 // Adjust path of file resource
@@ -672,83 +650,16 @@ namespace T3.Core
 
                 symbol.DeprecatedSourcePath = string.Empty;
             }
-
-            // if (string.IsNullOrEmpty(symbol.SourcePath))
-            // {
-            //     //symbol.SourcePath = sourcePath;
-            //     //AddSourceFileToProject(sourcePath);
-            // }
-
             symbol.PendingSource = null;
         }
 
-        /// <summary>
-        /// Inserts an entry like...
-        /// 
-        ///      <Compile Include="Types\GfxPipelineExample.cs" />
-        /// 
-        /// ... to the project file.
-        /// </summary>
-        // public static void AddSourceFileToProject(string newSourceFilePath)
-        // {
-        //     var path = System.IO.Path.GetDirectoryName(newSourceFilePath);
-        //     var newFileName = System.IO.Path.GetFileName(newSourceFilePath);
-        //     var directoryInfo = new DirectoryInfo(path).Parent;
-        //     if (directoryInfo == null)
-        //     {
-        //         Log.Error("Can't find project file folder for " + newSourceFilePath);
-        //         return;
-        //     }
-        //
-        //     var parentPath = directoryInfo.FullName;
-        //     var projectFilePath = System.IO.Path.Combine(parentPath, "Operators.csproj");
-        //
-        //     if (!File.Exists(projectFilePath))
-        //     {
-        //         Log.Error("Can't find project file in " + projectFilePath);
-        //         return;
-        //     }
-        //
-        //     var orgLine = "<ItemGroup>\r\n    <Compile Include";
-        //     var newLine = $"<ItemGroup>\r\n    <Compile Include=\"Types\\{newFileName}\" />\r\n    <Compile Include";
-        //     var newContent = File.ReadAllText(projectFilePath).Replace(orgLine, newLine);
-        //     File.WriteAllText(projectFilePath, newContent);
-        // }
-        //
-        // public static void RemoveSourceFileFromProject(string sourceFilePath)
-        // {
-        //     var path = System.IO.Path.GetDirectoryName(sourceFilePath);
-        //     var fileName = System.IO.Path.GetFileName(sourceFilePath);
-        //     var directoryInfo = new DirectoryInfo(path).Parent;
-        //     if (directoryInfo == null)
-        //     {
-        //         Log.Error("Can't find project file folder for " + sourceFilePath);
-        //         return;
-        //     }
-        //
-        //     var parentPath = directoryInfo.FullName;
-        //     var projectFilePath = System.IO.Path.Combine(parentPath, "Operators.csproj");
-        //
-        //     if (!File.Exists(projectFilePath))
-        //     {
-        //         Log.Error("Can't find project file in " + projectFilePath);
-        //         return;
-        //     }
-        //
-        //     var orgLine = $"    <Compile Include=\"Types\\{fileName}\" />\r\n";
-        //     var newContent = File.ReadAllText(projectFilePath).Replace(orgLine, string.Empty);
-        //     File.WriteAllText(projectFilePath, newContent);
-        // }
         #region File path handling
         private static string GetSubDirectoryFromNamespace(string symbolNamespace)
         {
             var trimmed = symbolNamespace.Trim().Replace(".", "\\");
             return trimmed;
         }
-
-        /// <summary>
-        /// Uses the symbol's namespace to create a relative folder path to it's namespace   
-        /// </summary>
+        
         private static string BuildAndCreateFolderFromNamespace(string symbolNamespace)
         {
             var directory = Path.Combine(OperatorTypesFolder, GetSubDirectoryFromNamespace(symbolNamespace));
@@ -772,7 +683,7 @@ namespace T3.Core
         public const string SourceExtension = ".cs";
         private const string SymbolExtension = ".t3";
         protected const string SymbolUiExtension = ".t3ui";
-        public const string OperatorTypesFolder  = @"Operators\Types\";
+        public const string OperatorTypesFolder = @"Operators\Types\";
 
         private static readonly List<string> _operatorFileExtensions = new()
                                                                            {

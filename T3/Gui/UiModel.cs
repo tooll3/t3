@@ -4,7 +4,6 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,9 +22,9 @@ using t3.Gui.InputUi.SimpleInputUis;
 using T3.Gui.InputUi.SingleControl;
 using T3.Gui.InputUi.VectorInputs;
 using T3.Gui.OutputUi;
-
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
+
 // ReSharper disable RedundantNameQualifier
 
 namespace T3.Gui
@@ -37,20 +36,20 @@ namespace T3.Gui
 
     public class UiModel : Core.Model
     {
-        public UiModel(Assembly operatorAssembly) 
+        public UiModel(Assembly operatorAssembly)
             : base(operatorAssembly)
         {
             Init();
         }
 
-        private void RegisterUiType(Type type, ITypeUiProperties uiProperties,  Func<IInputUi> inputUi, Func<IOutputUi> outputUi)
+        private void RegisterUiType(Type type, ITypeUiProperties uiProperties, Func<IInputUi> inputUi, Func<IOutputUi> outputUi)
         {
             TypeUiRegistry.Entries.Add(type, uiProperties);
             InputUiFactory.Entries.Add(type, inputUi);
             OutputUiFactory.Entries.Add(type, outputUi);
-            
+
             var typeFullName = type.ToString();
-            TypeByNameRegistry.Entries[typeFullName]= type;
+            TypeByNameRegistry.Entries[typeFullName] = type;
         }
 
         private void Init()
@@ -77,7 +76,7 @@ namespace T3.Gui
 
             RegisterUiType(typeof(DateTime), new FloatUiProperties(), () => new FallbackInputUi<DateTime>(),
                            () => new ValueOutputUi<DateTime>());
-            
+
             // t3 core types
             RegisterUiType(typeof(Core.DataTypes.BufferWithViews), new FallBackUiProperties(), () => new FallbackInputUi<Core.DataTypes.BufferWithViews>(),
                            () => new ValueOutputUi<Core.DataTypes.BufferWithViews>());
@@ -101,12 +100,13 @@ namespace T3.Gui
 
             RegisterUiType(typeof(Core.DataTypes.StructuredList), new FloatUiProperties(), () => new StructuredListInputUi(),
                            () => new StructuredListOutputUi());
-            RegisterUiType(typeof(Core.DataTypes.Texture3dWithViews), new FallBackUiProperties(), () => new FallbackInputUi<Core.DataTypes.Texture3dWithViews>(),
+            RegisterUiType(typeof(Core.DataTypes.Texture3dWithViews), new FallBackUiProperties(),
+                           () => new FallbackInputUi<Core.DataTypes.Texture3dWithViews>(),
                            () => new Texture3dOutputUi());
 
             RegisterUiType(typeof(MeshBuffers), new FallBackUiProperties(), () => new FallbackInputUi<MeshBuffers>(),
                            () => new ValueOutputUi<MeshBuffers>());
-            
+
             // sharpdx types
             RegisterUiType(typeof(SharpDX.Int3), new Size2UiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
             RegisterUiType(typeof(SharpDX.Size2), new Size2UiProperties(), () => new Size2InputUi(), () => new ValueOutputUi<Size2>());
@@ -140,14 +140,15 @@ namespace T3.Gui
             RegisterUiType(typeof(SharpDX.Direct3D11.Filter), new ShaderUiProperties(), () => new EnumInputUi<Filter>(), () => new ValueOutputUi<Filter>());
             RegisterUiType(typeof(GeometryShader), new ShaderUiProperties(), () => new FallbackInputUi<GeometryShader>(),
                            () => new ValueOutputUi<GeometryShader>());
-            
+
             RegisterUiType(typeof(SharpDX.Direct3D11.InputLayout), new ShaderUiProperties(), () => new FallbackInputUi<InputLayout>(),
                            () => new ValueOutputUi<InputLayout>());
             RegisterUiType(typeof(SharpDX.Direct3D11.PixelShader), new ShaderUiProperties(), () => new FallbackInputUi<PixelShader>(),
                            () => new ValueOutputUi<PixelShader>());
             RegisterUiType(typeof(SharpDX.Direct3D11.RasterizerState), new ShaderUiProperties(), () => new FallbackInputUi<RasterizerState>(),
                            () => new ValueOutputUi<RasterizerState>());
-            RegisterUiType(typeof(SharpDX.Direct3D11.RenderTargetBlendDescription), new TextureUiProperties(), () => new FallbackInputUi<RenderTargetBlendDescription>(),
+            RegisterUiType(typeof(SharpDX.Direct3D11.RenderTargetBlendDescription), new TextureUiProperties(),
+                           () => new FallbackInputUi<RenderTargetBlendDescription>(),
                            () => new ValueOutputUi<RenderTargetBlendDescription>());
             RegisterUiType(typeof(SharpDX.Direct3D11.RenderTargetView), new TextureUiProperties(), () => new FallbackInputUi<RenderTargetView>(),
                            () => new ValueOutputUi<RenderTargetView>());
@@ -179,7 +180,7 @@ namespace T3.Gui
                            () => new ValueOutputUi<RawRectangle>());
             RegisterUiType(typeof(SharpDX.Vector4[]), new PointListUiProperties(), () => new FallbackInputUi<SharpDX.Vector4[]>(),
                            () => new ValueOutputUi<SharpDX.Vector4[]>());
-            
+
             // register custom UIs for symbol children
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c.Counter), CounterUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_000e08d0_669f_48df_9083_7aa0a43bbc05.GpuMeasure), GpuMeasureUi.DrawChildUi);
@@ -198,18 +199,18 @@ namespace T3.Gui
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5.MidiInput), MidiInputUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_bfe540ef_f8ad_45a2_b557_cd419d9c8e44.DataList), DataListUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_ed0f5188_8888_453e_8db4_20d87d18e9f4.Boolean), BooleanUi.DrawChildUi);
-            
+
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227.LoadObj), DescriptiveUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c.ComputeShader), DescriptiveUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad.VertexShader), DescriptiveUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985.PixelShader), DescriptiveUi.DrawChildUi);
-            
+
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c.AudioReaction), AudioReactionUi.DrawChildUi);
 
             foreach (var symbolEntry in SymbolRegistry.Entries)
             {
                 var valueInstanceType = symbolEntry.Value.InstanceType;
-                if(typeof(IDescriptiveGraphNode).IsAssignableFrom(valueInstanceType))
+                if (typeof(IDescriptiveGraphNode).IsAssignableFrom(valueInstanceType))
                 {
                     CustomChildUiRegistry.Entries.Add(valueInstanceType, DescriptiveUi.DrawChildUi);
                 }
@@ -221,8 +222,6 @@ namespace T3.Gui
             foreach (var symbolEntry in symbols)
             {
                 UpdateUiEntriesForSymbol(symbolEntry.Value);
-
-                
             }
 
             // create instance of project op, all children are create automatically
@@ -238,9 +237,9 @@ namespace T3.Gui
             base.Load();
 
             var uiJson = new SymbolUiJson();
-            
+
             var symbolUiFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);
-            
+
             foreach (var symbolUiFile in symbolUiFiles)
             {
                 var symbolUi = uiJson.ReadSymbolUi(symbolUiFile);
@@ -251,6 +250,7 @@ namespace T3.Gui
                         Log.Error($"Can't load UI for [{symbolUi.Symbol.Name}] Registry already contains id {symbolUi.Symbol.Id}.");
                         continue;
                     }
+
                     Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
                     SymbolUiRegistry.Entries.Add(symbolUi.Symbol.Id, symbolUi);
                 }
@@ -261,12 +261,11 @@ namespace T3.Gui
             }
         }
 
-
         public override void SaveAll()
         {
             Log.Debug("Saving...");
             IsSaving = true;
-            
+
             // First save core data
             base.SaveAll();
 
@@ -286,36 +285,32 @@ namespace T3.Gui
             }
 
             var symbolUis = SymbolUiRegistry.Entries.Values;
-            
-            WriteSymbols(symbolUis);
+
+            WriteSymbolUis(symbolUis);
 
             IsSaving = false;
         }
 
-
-
         public static IEnumerable<SymbolUi> GetModifiedSymbolUis()
         {
             return SymbolUiRegistry.Entries.Values.Where(symbolUi => symbolUi.HasBeenModified);
-        } 
-        
+        }
+
         public void SaveModifiedSymbols()
         {
-            // Don't update ops if file is written during save
-            ResourceManager.Instance().DisableOperatorFileWatcher(); 
-            
             var modifiedSymbolUis = GetModifiedSymbolUis().ToList();
-            
             Log.Debug($"Saving {modifiedSymbolUis.Count} modified symbols...");
+
             IsSaving = true;
-            
-            WriteSymbols(modifiedSymbolUis);
+            ResourceManager.Instance().DisableOperatorFileWatcher(); // Don't update ops if file is written during save 
+
+            WriteSymbolUis(modifiedSymbolUis);
+
             ResourceManager.Instance().EnableOperatorFileWatcher();
             IsSaving = false;
-        }        
-        
-        
-        private static void WriteSymbols(IEnumerable<SymbolUi> symbolUis)
+        }
+
+        private static void WriteSymbolUis(IEnumerable<SymbolUi> symbolUis)
         {
             // Store all symbols in corresponding files
             var json = new SymbolUiJson();
@@ -341,7 +336,7 @@ namespace T3.Gui
                     // If the source wasn't registered before do this now
                     resourceManager.CreateOperatorEntry(symbolSourceFilepath, symbol.Id.ToString(), OperatorUpdating.Update);
                 }
-                
+
                 symbolUi.ClearModifiedFlag();
             }
         }

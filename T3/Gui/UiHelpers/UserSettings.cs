@@ -62,7 +62,6 @@ namespace T3.Gui.UiHelpers
             public bool VariationHoverPreview = true;
             
             // Load Save
-            public bool AutoSaveAfterSymbolCreation = true;
             public bool EnableAutoBackup = true;
             public bool SaveOnlyModified = false;
             
