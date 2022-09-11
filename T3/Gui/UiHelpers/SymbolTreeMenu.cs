@@ -18,8 +18,8 @@ namespace T3.Gui.UiHelpers
     {
         public static void Draw()
         {
-            TreeNode.PopulateCompleteTree();
-            DrawNodesRecursively(TreeNode);
+            _treeNode.PopulateCompleteTree();
+            DrawNodesRecursively(_treeNode);
         }
         
         private static void DrawNodesRecursively(NamespaceTreeNode subtree)
@@ -137,7 +137,7 @@ namespace T3.Gui.UiHelpers
             }
         }
 
-        private static readonly NamespaceTreeNode TreeNode = new NamespaceTreeNode(NamespaceTreeNode.RootNodeId);
+        private static readonly NamespaceTreeNode _treeNode = new(NamespaceTreeNode.RootNodeId);
         
         private static IntPtr _dropData = new IntPtr(0);
         private static string _guidSting;

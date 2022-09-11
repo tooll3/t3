@@ -327,7 +327,10 @@ namespace T3.Gui.Graph.Interaction
 
             UndoRedoStack.Add(new MacroCommand("Combine into symbol", executedCommands));
 
-            T3Ui.SaveInBackground(false);
+            // Sadly saving in background does not save the source files.
+            // This needs to be fixed.
+            //T3Ui.SaveInBackground(false);
+            T3Ui.SaveAll();
         }
 
         private static ImRect GetAreaFromChildren(List<SymbolChildUi> childUis)
@@ -585,6 +588,8 @@ namespace T3.Gui.Graph.Interaction
             {
                 newSymbol.Children[index].Name = sourceSymbol.Children[index].Name;
             }
+            
+            //T3Ui.SaveAll();
 
             return newSymbol;
         }
@@ -621,6 +626,8 @@ namespace T3.Gui.Graph.Interaction
                     operatorResource.Updated = true;
                     symbol.PendingSource = newSource;
                     symbol.DeprecatedSourcePath = originalSourcePath;
+                    
+                    T3Ui.SaveAll();
                     return;
                 }
             }
@@ -643,12 +650,12 @@ namespace T3.Gui.Graph.Interaction
 
         public static bool IsNewSymbolNameValid(string newSymbolName)
         {
-            return !String.IsNullOrEmpty(newSymbolName)
-                   && ValidTypeNamePattern.IsMatch(newSymbolName)
+            return !string.IsNullOrEmpty(newSymbolName)
+                   && _validTypeNamePattern.IsMatch(newSymbolName)
                    && !SymbolRegistry.Entries.Values.Any(value => String.Equals(value.Name, newSymbolName, StringComparison.OrdinalIgnoreCase));
         }
 
-        private static readonly Regex ValidTypeNamePattern = new Regex("^[A-Za-z_]+[A-Za-z0-9_]*$");
+        private static readonly Regex _validTypeNamePattern = new Regex("^[A-Za-z_]+[A-Za-z0-9_]*$");
 
         private class NodeByAttributeIdFinder : CSharpSyntaxRewriter
         {

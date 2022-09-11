@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Core.Audio;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using T3.Core;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
@@ -36,7 +37,7 @@ namespace T3.Gui
         {
             var operatorsAssembly = Assembly.GetAssembly(typeof(Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe.Value));
             UiModel = new UiModel(operatorsAssembly);
-
+            
             var playback = new Playback();
 
             WindowManager = new WindowManager();
@@ -44,24 +45,6 @@ namespace T3.Gui
             VariationHandling.Init();
         }
 
-        private static void CountSymbolUsage()
-        {
-            var counts = new Dictionary<Symbol, int>();
-            foreach (var s in SymbolRegistry.Entries.Values)
-            {
-                foreach (var child in s.Children)
-                {
-                    if (!counts.ContainsKey(child.Symbol))
-                        counts[child.Symbol] = 0;
-                    
-                    counts[child.Symbol]++;
-                }
-            }
-            foreach(var (s,c) in counts.OrderBy(c => counts[c.Key]).Reverse())
-            {
-                Log.Debug($"{s.Name} - {s.Namespace}  {c}");
-            }
-        }
 
         //public static bool MaximalView = true;
         public void Draw()
@@ -263,14 +246,8 @@ namespace T3.Gui
         private static readonly object _saveLocker = new object();
         private static readonly Stopwatch _saveStopwatch = new Stopwatch();
 
-        public static void SaveInBackground(bool saveAll)
+        private static void SaveInBackground(bool saveAll)
         {
-            if (_saveStopwatch.IsRunning)
-            {
-                Log.Debug("Can't save while saving is in progress");
-                return;
-            }
-
             if (saveAll)
             {
                 Task.Run(SaveAll);
@@ -285,6 +262,11 @@ namespace T3.Gui
         {
             lock (_saveLocker)
             {
+                if (_saveStopwatch.IsRunning)
+                {
+                    Log.Debug("Can't save modified while saving is in progress");
+                    return;
+                }                
                 _saveStopwatch.Restart();
                 UiModel.SaveModifiedSymbols();
                 _saveStopwatch.Stop();
@@ -292,10 +274,16 @@ namespace T3.Gui
             }
         }
 
-        private static void SaveAll()
+        public static void SaveAll()
         {
             lock (_saveLocker)
             {
+                if (_saveStopwatch.IsRunning)
+                {
+                    Log.Debug("Can't save while saving is in progress");
+                    return;
+                }
+                
                 _saveStopwatch.Restart();
                 UiModel.SaveAll();
                 _saveStopwatch.Stop();
@@ -328,6 +316,30 @@ namespace T3.Gui
             (HoveredIdsLastFrame, _hoveredIdsForNextFrame) = (_hoveredIdsForNextFrame, HoveredIdsLastFrame);
             _hoveredIdsForNextFrame.Clear();
         }
+        
+        
+        /// <summary>
+        /// Statistics method for debug purpose
+        /// </summary>
+        private static void CountSymbolUsage()
+        {
+            var counts = new Dictionary<Symbol, int>();
+            foreach (var s in SymbolRegistry.Entries.Values)
+            {
+                foreach (var child in s.Children)
+                {
+                    if (!counts.ContainsKey(child.Symbol))
+                        counts[child.Symbol] = 0;
+                    
+                    counts[child.Symbol]++;
+                }
+            }
+            foreach(var (s,c) in counts.OrderBy(c => counts[c.Key]).Reverse())
+            {
+                Log.Debug($"{s.Name} - {s.Namespace}  {c}");
+            }
+        }
+        
 
         private static HashSet<Guid> _hoveredIdsForNextFrame = new HashSet<Guid>();
         public static HashSet<Guid> HoveredIdsLastFrame { get; private set; } = new HashSet<Guid>();

@@ -266,7 +266,7 @@ namespace T3.Gui
             Log.Debug("Saving...");
             IsSaving = true;
 
-            // First save core data
+            // Save all t3 and source files
             base.SaveAll();
 
             // Remove all old ui files before storing to get rid off invalid ones
@@ -284,9 +284,7 @@ namespace T3.Gui
                 }
             }
 
-            var symbolUis = SymbolUiRegistry.Entries.Values;
-
-            WriteSymbolUis(symbolUis);
+            WriteSymbolUis(SymbolUiRegistry.Entries.Values);
 
             IsSaving = false;
         }
@@ -296,6 +294,9 @@ namespace T3.Gui
             return SymbolUiRegistry.Entries.Values.Where(symbolUi => symbolUi.HasBeenModified);
         }
 
+        /// <summary>
+        /// Note: This does NOT clean up 
+        /// </summary>
         public void SaveModifiedSymbols()
         {
             var modifiedSymbolUis = GetModifiedSymbolUis().ToList();
@@ -312,7 +313,7 @@ namespace T3.Gui
 
         private static void WriteSymbolUis(IEnumerable<SymbolUi> symbolUis)
         {
-            // Store all symbols in corresponding files
+            
             var json = new SymbolUiJson();
             var resourceManager = ResourceManager.Instance();
 

@@ -17,8 +17,11 @@ using Truncon.Collections;
 
 namespace T3.Gui
 {
-    public class SymbolUiJson : SymbolJson
+    public class SymbolUiJson 
     {
+        public JsonTextWriter Writer { get; set; }
+        public JsonTextReader Reader { get; init; }
+        
         public void WriteSymbolUi(SymbolUi symbolUi)
         {
             Writer.WriteStartObject();
