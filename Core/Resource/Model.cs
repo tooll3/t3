@@ -536,7 +536,7 @@ namespace T3.Core
             }
 
             // Move existing source files to correct namespace folder
-            var sourceFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolExtension}", SearchOption.AllDirectories);
+            var sourceFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SourceExtension}", SearchOption.AllDirectories);
             foreach (var sourceFilePath in sourceFiles)
             {
                 var classname = Path.GetFileNameWithoutExtension(sourceFilePath);
