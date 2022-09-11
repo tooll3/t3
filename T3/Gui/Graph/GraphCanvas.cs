@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SharpDX.Direct3D11;
 using T3.Core;
+using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
@@ -248,21 +249,22 @@ namespace T3.Gui.Graph
                 if (ImGui.IsWindowFocused())
                 {
                     var io = ImGui.GetIO();
-                    if (!io.KeyCtrl && !io.KeyShift && !io.KeyAlt)
+                    var editingSomething = ImGui.IsAnyItemActive();
+                    if (!io.KeyCtrl && !io.KeyShift && !io.KeyAlt && !editingSomething)
                     {
-                        if (ImGui.IsKeyDown((ImGuiKey)Keys.W))
+                        if (ImGui.IsKeyDown((ImGuiKey)Key.W))
                         {
                             _dampedScrollVelocity.Y -=  InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).Y; 
                         }
-                        if (ImGui.IsKeyDown((ImGuiKey)Keys.S))
+                        if (ImGui.IsKeyDown((ImGuiKey)Key.S))
                         {
                             _dampedScrollVelocity.Y += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).Y;
                         }
-                        if (ImGui.IsKeyDown((ImGuiKey)Keys.A))
+                        if (ImGui.IsKeyDown((ImGuiKey)Key.A))
                         {
                             _dampedScrollVelocity.X -= InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
                         }                    
-                        if (ImGui.IsKeyDown((ImGuiKey)Keys.D))
+                        if (ImGui.IsKeyDown((ImGuiKey)Key.D))
                         {
                             _dampedScrollVelocity.X += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
                         }
