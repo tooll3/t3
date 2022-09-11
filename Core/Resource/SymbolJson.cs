@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using Core.Audio;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -372,9 +373,15 @@ namespace T3.Core
             if (instanceType == null)
             {
                 if (allowNonOperatorInstanceType)
+                {
                     instanceType = typeof(object);
+                }
                 else
-                    throw new Exception($"The type for '{instanceTypeName}' could not be found in Operator assembly.");
+                {
+                    MessageBox.Show($"Definition '{instanceTypeName}' is missing in Operator.dll.\nPlease try to rebuild your solution.");
+                    Application.Exit();
+                    Application.ExitThread();
+                }
             }
 
             var symbol = new Symbol(instanceType, id, orderedInputIds, symbolChildren)
