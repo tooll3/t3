@@ -1,0 +1,22 @@
+{
+  "Name": "ImageEffects",
+  "Id": "649d4542-4165-4129-9484-dd8fb8663e15",
+  "Namespace": "examples.playground",
+  "Inputs": [],
+  "Children": [
+    {
+      "Id": "24986579-f249-48fc-ab7b-a48f44c977df"/*LoadTexture2d*/,
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+      "InputValues": [],
+      "Outputs": []
+    }
+  ],
+  "Connections": [
+    {
+      "SourceParentOrChildId": "24986579-f249-48fc-ab7b-a48f44c977df",
+      "SourceSlotId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "30c39c3d-96cd-40ed-ae05-8b2a3eb6f177"
+    }
+  ]
+}

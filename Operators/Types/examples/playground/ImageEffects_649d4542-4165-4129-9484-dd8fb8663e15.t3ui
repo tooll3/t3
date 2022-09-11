@@ -1,0 +1,27 @@
+{
+  "Id": "649d4542-4165-4129-9484-dd8fb8663e15"/*ImageEffects*/,
+  "Description": "This is playground that gives an overview about Tooll's main image effects operators.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "24986579-f249-48fc-ab7b-a48f44c977df"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "30c39c3d-96cd-40ed-ae05-8b2a3eb6f177"/*Texture*/,
+      "Position": {
+        "X": 410.0,
+        "Y": 11.5
+      }
+    }
+  ]
+}
