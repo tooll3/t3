@@ -28,12 +28,6 @@ namespace T3.Operators.Types.Id_8bede700_4e3e_42d8_8097_9744abdb8ad3
         [Input(Guid = "3a3acfbd-dca7-4f8a-b862-90eae2bc41ca")]
         public readonly InputSlot<System.Numerics.Vector2> Center = new InputSlot<System.Numerics.Vector2>();
 
-        [Input(Guid = "185a8116-bf01-4bca-b9bf-70fcef7c54e3")]
-        public readonly InputSlot<float> SampleRadius = new InputSlot<float>();
-
-        [Input(Guid = "8bd0ef27-31dd-4896-bd15-92a9143902f9")]
-        public readonly InputSlot<float> DisplacementOffset = new InputSlot<float>();
-
     }
 }
 

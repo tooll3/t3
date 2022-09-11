@@ -34,14 +34,6 @@
         "X": 0.5,
         "Y": 0.5
       }
-    },
-    {
-      "Id": "185a8116-bf01-4bca-b9bf-70fcef7c54e3"/*SampleRadius*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "8bd0ef27-31dd-4896-bd15-92a9143902f9"/*DisplacementOffset*/,
-      "DefaultValue": 0.0
     }
   ],
   "Children": [

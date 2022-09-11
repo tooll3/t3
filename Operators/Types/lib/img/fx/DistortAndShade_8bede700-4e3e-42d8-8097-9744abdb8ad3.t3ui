@@ -3,6 +3,7 @@
   "InputUis": [
     {
       "InputId": "824e1ad4-0d33-458f-aefe-f3780ab06529"/*ImageA*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0
@@ -10,6 +11,7 @@
     },
     {
       "InputId": "2596e8fb-00aa-4704-9978-a880c1016c18"/*ImageB*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0
@@ -41,20 +43,6 @@
       "Position": {
         "X": -230.70581,
         "Y": 439.56647
-      }
-    },
-    {
-      "InputId": "185a8116-bf01-4bca-b9bf-70fcef7c54e3"/*SampleRadius*/,
-      "Position": {
-        "X": -139.22812,
-        "Y": 586.67584
-      }
-    },
-    {
-      "InputId": "8bd0ef27-31dd-4896-bd15-92a9143902f9"/*DisplacementOffset*/,
-      "Position": {
-        "X": -136.66925,
-        "Y": 613.93994
       }
     }
   ],
