@@ -1097,9 +1097,13 @@ namespace T3.Core
             return true;
         }
 
-        private readonly Stopwatch _operatorUpdateStopwatch = new Stopwatch();
-        private readonly List<Symbol> _modifiedSymbols = new List<Symbol>();
+        private readonly Stopwatch _operatorUpdateStopwatch = new();
+        private static readonly List<Symbol> _modifiedSymbols = new();
 
+        /// <summary>
+        /// Updates symbol definition, instances if modification to operator source code
+        /// was detected by Resource file hook.
+        /// </summary>
         public List<Symbol> UpdateChangedOperatorTypes()
         {
             _modifiedSymbols.Clear();
@@ -1111,33 +1115,23 @@ namespace T3.Core
                 Type type = opResource.OperatorAssembly.ExportedTypes.FirstOrDefault();
                 if (type == null)
                 {
-                    Log.Error("Error updateable operator had not exported type");
+                    Log.Error("Error updatable operator had not exported type");
                     continue;
                 }
-
-                var symbolEntry = new KeyValuePair<Guid, Symbol>(Guid.Empty, null);
-                foreach (var entry in SymbolRegistry.Entries)
-                {
-                    if (entry.Value.Id.ToString() == opResource.Name)
-                    {
-                        symbolEntry = entry;
-                        break;
-                    }
-                }
-
-                if (symbolEntry.Value != null)
-                {
-                    _operatorUpdateStopwatch.Restart();
-                    symbolEntry.Value.SetInstanceType(type);
-                    opResource.Updated = false;
-                    _operatorUpdateStopwatch.Stop();
-                    Log.Info($"type updating took: {(double)_operatorUpdateStopwatch.ElapsedTicks / Stopwatch.Frequency}s");
-                    _modifiedSymbols.Add(symbolEntry.Value);
-                }
-                else
+                
+                if (!SymbolRegistry.Entries.TryGetValue(opResource.SymbolId, out var symbol))
                 {
                     Log.Info($"Error replacing symbol type '{opResource.Name}");
+                    continue;
                 }
+                
+                _operatorUpdateStopwatch.Restart();
+                symbol.UpdateInstanceType(type);
+                opResource.Updated = false;
+                _operatorUpdateStopwatch.Stop();
+                Log.Info($"type updating took: {(double)_operatorUpdateStopwatch.ElapsedTicks / Stopwatch.Frequency}s");
+                _modifiedSymbols.Add(symbol);
+                
             }
 
             return _modifiedSymbols;

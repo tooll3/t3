@@ -40,12 +40,14 @@ namespace T3.Core
     {
         public Assembly OperatorAssembly { get; set; }
         public bool Updated { get; set; }
+        public Guid SymbolId { get; }
 
-        public OperatorResource(uint id, string name, Assembly operatorAssembly, UpdateDelegate updateHandler)
-            : base(id, name)
+        public OperatorResource(uint id, string nameWithId, Assembly operatorAssembly, UpdateDelegate updateHandler)
+            : base(id, nameWithId)
         {
             _updateHandler = updateHandler;
             OperatorAssembly = operatorAssembly;
+            SymbolId = Guid.Parse(nameWithId);
         }
 
         public delegate void UpdateDelegate(OperatorResource resource, string path);

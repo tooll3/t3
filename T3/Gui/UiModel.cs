@@ -336,7 +336,7 @@ namespace T3.Gui
                 if (opResource == null)
                 {
                     // If the source wasn't registered before do this now
-                    resourceManager.CreateOperatorEntry(symbolSourceFilepath, symbol.Id.ToString(), OperatorUpdating.UpdateHandler);
+                    resourceManager.CreateOperatorEntry(symbolSourceFilepath, symbol.Id.ToString(), OperatorUpdating.ResourceUpdateHandler);
                 }
 
                 symbolUi.ClearModifiedFlag();

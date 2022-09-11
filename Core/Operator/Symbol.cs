@@ -162,7 +162,7 @@ namespace T3.Core.Operator
                               .FindIndex(cc => cc == con); // todo: fix this mess! connection rework!
         }
 
-        public void SetInstanceType(Type instanceType)
+        public void UpdateInstanceType(Type instanceType)
         {
             InstanceType = instanceType;
             Name = instanceType.Name;

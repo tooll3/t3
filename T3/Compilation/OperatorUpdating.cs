@@ -19,7 +19,7 @@ namespace T3.Compilation
         /// <summary>
         /// An event called that is called if the file hook detects change to the symbol source code.
         /// </summary>
-        public static void UpdateHandler(OperatorResource resource, string path)
+        public static void ResourceUpdateHandler(OperatorResource resource, string path)
         {
             Log.Info($"Operator source '{path}' changed.");
             Log.Info($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
@@ -51,6 +51,8 @@ namespace T3.Compilation
             return;
         }
 
+        
+        
         public static Assembly CompileSymbolFromSource(string source, string symbolName)
         {
             // return CompileSymbolsFromSource((source, symbolName));

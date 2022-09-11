@@ -1057,6 +1057,10 @@ namespace T3.Gui.Graph.Interaction
             return parents;
         }
 
+        /// <summary>
+        /// Updates symbol definition, instances and symbolUi if modification to operator source code
+        /// was detected by Resource file hook.
+        /// </summary>
         public static void UpdateChangedOperators()
         {
             var modifiedSymbols = ResourceManager.Instance().UpdateChangedOperatorTypes();
