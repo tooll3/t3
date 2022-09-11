@@ -1,8 +1,5 @@
-﻿using System;
-using System.Numerics;
-using System.Windows.Forms;
+﻿using System.Numerics;
 using ImGuiNET;
-using T3.Gui.Graph.Interaction;
 
 namespace T3.Gui.UiHelpers
 {
@@ -81,6 +78,6 @@ namespace T3.Gui.UiHelpers
         }
 
         private bool _shouldShowNextFrame;
-        protected Vector2 DialogSize = new Vector2(500, 200);
+        protected Vector2 DialogSize = new Vector2(500, 250);
     }
 }

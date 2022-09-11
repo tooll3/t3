@@ -14,6 +14,9 @@ namespace T3.Operators.Types.Id_7845ec24_e249_4c6a_84e3_63422ede1a1d
         [Input(Guid = "4454891b-ddd0-41f2-80c3-75074df8320b")]
         public readonly InputSlot<Texture2D> Texture = new InputSlot<Texture2D>();
 
+        [Input(Guid = "b0c4ceaa-5101-42c6-bf71-230a01918916")]
+        public readonly InputSlot<SharpDX.DXGI.Format> Format = new InputSlot<SharpDX.DXGI.Format>();
+
     }
 }
 

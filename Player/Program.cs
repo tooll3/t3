@@ -192,7 +192,7 @@ namespace T3
                 return;
             }
 
-            _model = new Model(operatorsAssembly, options.Logging);
+            _model = new Model(operatorsAssembly);
             _model.Load();
 
             var symbols = SymbolRegistry.Entries;

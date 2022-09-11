@@ -13,10 +13,15 @@ using T3.Gui.InputUi;
 using T3.Gui.OutputUi;
 using Truncon.Collections;
 
+// ReSharper disable AssignNullToNotNullAttribute
+
 namespace T3.Gui
 {
-    public class SymbolUiJson : SymbolJson
+    public class SymbolUiJson 
     {
+        public JsonTextWriter Writer { get; set; }
+        public JsonTextReader Reader { get; init; }
+        
         public void WriteSymbolUi(SymbolUi symbolUi)
         {
             Writer.WriteStartObject();
@@ -25,7 +30,7 @@ namespace T3.Gui
             Writer.WriteComment(symbolUi.Symbol.Name);
 
             Writer.WriteObject("Description", symbolUi.Description);
-            
+
             WriteInputUis(symbolUi);
             WriteChildUis(symbolUi);
             WriteOutputUis(symbolUi);
@@ -34,7 +39,7 @@ namespace T3.Gui
             Writer.WriteEndObject();
         }
 
-        public void WriteInputUis(SymbolUi symbolUi)
+        private void WriteInputUis(SymbolUi symbolUi)
         {
             Writer.WritePropertyName("InputUis");
             Writer.WriteStartArray();
@@ -59,7 +64,7 @@ namespace T3.Gui
             Writer.WriteEndArray();
         }
 
-        public void WriteChildUis(SymbolUi symbolUi)
+        private void WriteChildUis(SymbolUi symbolUi)
         {
             var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
 
@@ -96,6 +101,7 @@ namespace T3.Gui
                             Writer.WriteObject("Style", value);
                             Writer.WriteEndObject();
                         }
+
                         Writer.WriteEndArray();
                     }
                 }
@@ -105,7 +111,7 @@ namespace T3.Gui
             Writer.WriteEndArray();
         }
 
-        public void WriteOutputUis(SymbolUi symbolUi)
+        private void WriteOutputUis(SymbolUi symbolUi)
         {
             var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
 
@@ -127,14 +133,12 @@ namespace T3.Gui
 
             Writer.WriteEndArray();
         }
-        
-        
-        
-        public void WriteAnnotations(SymbolUi symbolUi)
+
+        private void WriteAnnotations(SymbolUi symbolUi)
         {
             if (symbolUi.Annotations.Count == 0)
                 return;
-            
+
             var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
             var vec4Writer = TypeValueToJsonConverters.Entries[typeof(Vector4)];
             Writer.WritePropertyName("Annotations");
@@ -142,41 +146,40 @@ namespace T3.Gui
 
             foreach (var annotation in symbolUi.Annotations.Values)
             {
-                Writer.WriteStartObject(); 
+                Writer.WriteStartObject();
                 Writer.WriteObject("Id", annotation.Id);
                 Writer.WriteObject("Title", annotation.Title);
-                
+
                 Writer.WritePropertyName("Color");
                 vec4Writer(Writer, annotation.Color.Rgba);
-                
+
                 Writer.WritePropertyName("Position");
                 vec2Writer(Writer, annotation.PosOnCanvas);
-                
+
                 Writer.WritePropertyName("Size");
                 vec2Writer(Writer, annotation.Size);
                 Writer.WriteEndObject();
             }
 
             Writer.WriteEndArray();
-        }        
-        
-        public SymbolUi ReadSymbolUi(string filePath)
-        {
-            using (var streamReader = new StreamReader(filePath))
-            using (var jsonTextReader = new JsonTextReader(streamReader))
-            {
-                return ReadSymbolUi(jsonTextReader);
-            }
         }
 
-        public static SymbolUi ReadSymbolUi(JsonTextReader jsonTextReader)
+        public SymbolUi ReadSymbolUi(string filePath)
+        {
+            using var streamReader = new StreamReader(filePath);
+            using var jsonTextReader = new JsonTextReader(streamReader);
+
+            return ReadSymbolUi(jsonTextReader);
+        }
+
+        private static SymbolUi ReadSymbolUi(JsonTextReader jsonTextReader)
         {
             try
             {
                 var mainObject = JToken.ReadFrom(jsonTextReader);
                 return ReadSymbolUi(mainObject);
             }
-            catch (System.TypeInitializationException e)
+            catch (TypeInitializationException e)
             {
                 Log.Error("Failed to initialize type from json: " + e + "\nLine-Number" + jsonTextReader.LineNumber);
             }
@@ -192,15 +195,34 @@ namespace T3.Gui
         {
             var vector2Converter = JsonToTypeValueConverters.Entries[typeof(Vector2)];
             var vector4Converter = JsonToTypeValueConverters.Entries[typeof(Vector4)];
-            
-            var symbolId = Guid.Parse(mainObject["Id"].Value<string>());
+
+            Guid symbolId;
+            try
+            {
+                symbolId = Guid.Parse(mainObject["Id"].Value<string>() ?? string.Empty);
+            }
+            catch
+            {
+                Log.Error("Failed reading symbolUi id");
+                return null;
+            }
+
             var symbol = SymbolRegistry.Entries[symbolId];
-            
 
             var inputDict = new OrderedDictionary<Guid, IInputUi>();
             foreach (JToken uiInputEntry in (JArray)mainObject["InputUis"])
             {
-                var inputId = Guid.Parse(uiInputEntry["InputId"].Value<string>());
+                Guid inputId;
+                try
+                {
+                    inputId = Guid.Parse(uiInputEntry["InputId"].Value<string>() ?? string.Empty);
+                }
+                catch
+                {
+                    Log.Error("Skipping input with invalid symbolChildUi id");
+                    return null;
+                }
+
                 var inputDefinition = symbol.InputDefinitions.SingleOrDefault(def => def.Id == inputId);
                 if (inputDefinition == null)
                 {
@@ -259,7 +281,7 @@ namespace T3.Gui
                     var dict = childUi.ConnectionStyleOverrides;
                     foreach (var styleEntry in (JArray)conStyleEntry)
                     {
-                        Guid id = Guid.Parse(styleEntry["Id"].Value<string>());
+                        var id = Guid.Parse(styleEntry["Id"].Value<string>());
                         var style = (SymbolChildUi.ConnectionStyles)Enum.Parse(typeof(SymbolChildUi.ConnectionStyles), styleEntry["Style"].Value<string>());
                         dict.Add(id, style);
                     }
@@ -295,31 +317,34 @@ namespace T3.Gui
                     Log.Error($"Error creating output ui for non registered type '{type.Name}'.");
                 }
             }
-            
+
             var annotationDict = new OrderedDictionary<Guid, Annotation>();
             var annotationsArray = (JArray)mainObject["Annotations"];
             if (annotationsArray != null)
             {
                 foreach (var annotationEntry in annotationsArray)
                 {
-                    var annotation = new Annotation();
-                    
-                    annotation.Id = Guid.Parse(annotationEntry["Id"].Value<string>());
-                    annotation.Title = annotationEntry["Title"].Value<string>();
-                    annotation.PosOnCanvas = (Vector2)vector2Converter(annotationEntry["Position"]);
+                    var annotation = new Annotation
+                                         {
+                                             Id = Guid.Parse(annotationEntry["Id"].Value<string>()),
+                                             Title = annotationEntry["Title"].Value<string>(),
+                                             PosOnCanvas = (Vector2)vector2Converter(annotationEntry["Position"])
+                                         };
+
                     if (annotationEntry["Color"] != null)
                     {
-                        annotation.Color =  new Color((Vector4)vector4Converter(annotationEntry["Color"]));
-                    } 
-                    
+                        annotation.Color = new Color((Vector4)vector4Converter(annotationEntry["Color"]));
+                    }
+
                     annotation.Size = (Vector2)vector2Converter(annotationEntry["Size"]);
                     annotationDict[annotation.Id] = annotation;
                 }
             }
-            
 
-            var newSymbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict, annotationDict);
-            newSymbolUi.Description = mainObject["Description"]?.Value<string>();
+            var newSymbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict, annotationDict)
+                                  {
+                                      Description = mainObject["Description"]?.Value<string>()
+                                  };
             return newSymbolUi;
         }
     }

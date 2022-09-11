@@ -16,7 +16,6 @@ namespace T3.Gui
         Undo,
         Redo,
         Save,
-        SaveAll,
         FocusSelection,
         DeleteSelection,
         CopyToClipboard,

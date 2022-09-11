@@ -19,6 +19,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui;
+using T3.Gui.Graph.Interaction;
 using t3.Gui.Interaction.Camera;
 using t3.Gui.Interaction.StartupCheck;
 using T3.Gui.Styling;
@@ -130,7 +131,8 @@ namespace T3
             resourceManager.OperatorsAssembly = T3Ui.UiModel.OperatorsAssembly;
             foreach (var (_, symbol) in SymbolRegistry.Entries)
             {
-                ResourceManager.Instance().CreateOperatorEntry(@"Operators\Types\" + symbol.Name + ".cs", symbol.Id.ToString(), OperatorUpdating.Update);
+                var sourceFilePath = Model.BuildFilepathForSymbol(symbol, Model.SourceExtension);
+                ResourceManager.Instance().CreateOperatorEntry(sourceFilePath, symbol.Id.ToString(), OperatorUpdating.ResourceUpdateHandler);
             }
 
             Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
@@ -172,13 +174,8 @@ namespace T3
                 ImGui.GetIO().DisplaySize = new Vector2(_main.Form.ClientSize.Width, _main.Form.ClientSize.Height);
 
                 HandleFullscreenToggle();
-
-                //NodeOperations.UpdateChangedOperators();
-                var modifiedSymbols = resourceManager.UpdateChangedOperatorTypes();
-                foreach (var symbol in modifiedSymbols)
-                {
-                    UiModel.UpdateUiEntriesForSymbol(symbol);
-                }
+                
+                NodeOperations.UpdateChangedOperators();
 
                 DirtyFlag.IncrementGlobalTicks();
                 T3Metrics.UiRenderingStarted();

@@ -2,21 +2,19 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Core.Audio;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using T3.Core.Animation;
-using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using t3.Gui.Audio;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
+using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.Interaction;
@@ -26,7 +24,8 @@ using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
 using t3.Gui.UiHelpers.Wiki;
 using T3.Gui.Windows;
-using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d; // ForwardBeatTaps
+using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;
+using Unsplasharp.Models; // ForwardBeatTaps
 
 namespace T3.Gui
 {
@@ -36,7 +35,7 @@ namespace T3.Gui
         {
             var operatorsAssembly = Assembly.GetAssembly(typeof(Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe.Value));
             UiModel = new UiModel(operatorsAssembly);
-
+            
             var playback = new Playback();
 
             WindowManager = new WindowManager();
@@ -44,24 +43,6 @@ namespace T3.Gui
             VariationHandling.Init();
         }
 
-        private static void CountSymbolUsage()
-        {
-            var counts = new Dictionary<Symbol, int>();
-            foreach (var s in SymbolRegistry.Entries.Values)
-            {
-                foreach (var child in s.Children)
-                {
-                    if (!counts.ContainsKey(child.Symbol))
-                        counts[child.Symbol] = 0;
-                    
-                    counts[child.Symbol]++;
-                }
-            }
-            foreach(var (s,c) in counts.OrderBy(c => counts[c.Key]).Reverse())
-            {
-                Log.Debug($"{s.Name} - {s.Namespace}  {c}");
-            }
-        }
 
         //public static bool MaximalView = true;
         public void Draw()
@@ -88,7 +69,6 @@ namespace T3.Gui
             KeyboardBinding.InitFrame();
             WindowManager.Draw();
             
-            
             BeatTiming.Update(ImGui.GetTime());
 
             SingleValueEdit.StartNextFrame();
@@ -98,12 +78,21 @@ namespace T3.Gui
             
             if ( UserSettings.Config.ShowMainMenu || ImGui.GetMousePos().Y < 20)
             {
-                
                 DrawAppMenu();
             }
             
+            _userNameDialog.Draw();
+            
+            if (!UserSettings.IsUserNameDefined() )
+            {
+                UserSettings.Config.UserName = Environment.UserName;
+                _userNameDialog.ShowNextFrame();
+            }            
+            
             _autoBackup.CheckForSave();
         }
+        
+        private static readonly UserNameDialog _userNameDialog = new();
 
         private void TriggerGlobalActionsFromKeyBindings()
         {
@@ -117,8 +106,7 @@ namespace T3.Gui
             }
             else if (KeyboardBinding.Triggered(UserActions.Save))
             {
-                var saveAll = !UserSettings.Config.SaveOnlyModified;
-                SaveInBackground(saveAll);
+                SaveInBackground(saveAll:true);
             }
             else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode))
             {
@@ -139,12 +127,7 @@ namespace T3.Gui
                     
                     if (ImGui.MenuItem("Save", KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !IsCurrentlySaving))
                     {
-                        SaveInBackground(false);
-                    }
-
-                    if (ImGui.MenuItem("Save All", KeyboardBinding.ListKeyboardShortcuts(UserActions.SaveAll, false), false, !IsCurrentlySaving))
-                    {
-                        SaveInBackground(true);
+                        SaveInBackground(saveAll:true);
                     }
 
                     if (ImGui.MenuItem("Quit", !IsCurrentlySaving))
@@ -263,14 +246,8 @@ namespace T3.Gui
         private static readonly object _saveLocker = new object();
         private static readonly Stopwatch _saveStopwatch = new Stopwatch();
 
-        public static void SaveInBackground(bool saveAll)
+        private static void SaveInBackground(bool saveAll)
         {
-            if (_saveStopwatch.IsRunning)
-            {
-                Log.Debug("Can't save while saving is in progress");
-                return;
-            }
-
             if (saveAll)
             {
                 Task.Run(SaveAll);
@@ -285,6 +262,11 @@ namespace T3.Gui
         {
             lock (_saveLocker)
             {
+                if (_saveStopwatch.IsRunning)
+                {
+                    Log.Debug("Can't save modified while saving is in progress");
+                    return;
+                }                
                 _saveStopwatch.Restart();
                 UiModel.SaveModifiedSymbols();
                 _saveStopwatch.Stop();
@@ -292,10 +274,16 @@ namespace T3.Gui
             }
         }
 
-        private static void SaveAll()
+        public static void SaveAll()
         {
             lock (_saveLocker)
             {
+                if (_saveStopwatch.IsRunning)
+                {
+                    Log.Debug("Can't save while saving is in progress");
+                    return;
+                }
+                
                 _saveStopwatch.Restart();
                 UiModel.SaveAll();
                 _saveStopwatch.Stop();
@@ -328,6 +316,30 @@ namespace T3.Gui
             (HoveredIdsLastFrame, _hoveredIdsForNextFrame) = (_hoveredIdsForNextFrame, HoveredIdsLastFrame);
             _hoveredIdsForNextFrame.Clear();
         }
+        
+        
+        /// <summary>
+        /// Statistics method for debug purpose
+        /// </summary>
+        private static void CountSymbolUsage()
+        {
+            var counts = new Dictionary<Symbol, int>();
+            foreach (var s in SymbolRegistry.Entries.Values)
+            {
+                foreach (var child in s.Children)
+                {
+                    if (!counts.ContainsKey(child.Symbol))
+                        counts[child.Symbol] = 0;
+                    
+                    counts[child.Symbol]++;
+                }
+            }
+            foreach(var (s,c) in counts.OrderBy(c => counts[c.Key]).Reverse())
+            {
+                Log.Debug($"{s.Name} - {s.Namespace}  {c}");
+            }
+        }
+        
 
         private static HashSet<Guid> _hoveredIdsForNextFrame = new HashSet<Guid>();
         public static HashSet<Guid> HoveredIdsLastFrame { get; private set; } = new HashSet<Guid>();

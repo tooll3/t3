@@ -8,7 +8,6 @@ cbuffer ParamConstants : register(b0)
 }
 
 
-
 cbuffer TimeConstants : register(b2)
 {
     float TargetWidth;
@@ -46,11 +45,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 divisions = float2( sourceAspectRatio / Stretch.x , 1/ Stretch.y) / Scale;
     float2 p = psInput.texCoord;
     p+= Offset;
-
-        
     p-= 0.5;
-
-    //p.x /= aspect2 ;
 
     // Rotate
     float imageRotationRad = (-Rotation - 90) / 180 *3.141578;     
@@ -65,17 +60,11 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         cosa * p.y + sina * p.x 
     );
 
-    //p.x /=sourceAspectRatio;
     p.x *= aspect2 / sourceAspectRatio;
     p *= divisions;
 
-    //float2 repeatP = abs(mod(p,2) -1);
-
-    //return float4( repeatP, 0,1);
-
-    float2 samplePos = RepeatMode > 0.5 ? abs(mod(p,2) -1)
-                                        : p - 0.5;
-
+    float2 samplePos = RepeatMode > 0.5 ? abs(mod(p - 0.5,2) -1)
+                                        : p + 0.5;
 
     float4 imgColorForCel = ImageA.Sample(texSampler, samplePos);
     return imgColorForCel;

@@ -8,7 +8,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using Core.Logging;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
@@ -22,57 +21,55 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
 using Vector4 = System.Numerics.Vector4;
 
+// ReSharper disable RedundantNameQualifier
+
 namespace T3.Core
 {
     public static class JsonToTypeValueConverters
     {
-        public static Dictionary<Type, Func<JToken, object>> Entries { get; } = new Dictionary<Type, Func<JToken, object>>();
+        public static Dictionary<Type, Func<JToken, object>> Entries { get; } = new();
     }
 
     public static class TypeValueToJsonConverters
     {
-        public static Dictionary<Type, Action<JsonTextWriter, object>> Entries { get; } = new Dictionary<Type, Action<JsonTextWriter, object>>();
+        public static Dictionary<Type, Action<JsonTextWriter, object>> Entries { get; } = new();
     }
 
     public static class InputValueCreators
     {
-        public static Dictionary<Type, Func<InputValue>> Entries { get; } = new Dictionary<Type, Func<InputValue>>();
+        public static Dictionary<Type, Func<InputValue>> Entries { get; } = new();
     }
 
     public static class TypeNameRegistry
     {
-        public static Dictionary<Type, string> Entries { get; } = new Dictionary<Type, string>(20);
+        public static Dictionary<Type, string> Entries { get; } = new(20);
     }
 
     public class Command
     {
-        public Action<EvaluationContext> PrepareAction { get; set; }
+        public Action<EvaluationContext> PrepareAction { get; init; }
         public Action<EvaluationContext> RestoreAction { get; set; }
     }
-
 
     public class Model
     {
         public Assembly OperatorsAssembly { get; }
-        protected string OperatorTypesFolder { get; } = @"Operators\Types\";
 
-
-        public Model(Assembly operatorAssembly, bool enabledLogging)
+        public Model(Assembly operatorAssembly)
         {
             OperatorsAssembly = operatorAssembly;
 
             // generic enum value from json function, must be local function
             object JsonToEnumValue<T>(JToken jsonToken) where T : struct // todo: use 7.3 and replace with enum
             {
-                string value = jsonToken.Value<string>();
+                var value = jsonToken.Value<string>();
+
                 if (Enum.TryParse(value, out T enumValue))
                 {
                     return enumValue;
                 }
-                else
-                {
-                    return null;
-                }
+
+                return null;
             }
 
             InputValue InputDefaultValueCreator<T>() => new InputValue<T>();
@@ -94,7 +91,7 @@ namespace T3.Core
                          () => new InputValue<string>(string.Empty),
                          (writer, value) => writer.WriteValue((string)value),
                          jsonToken => jsonToken.Value<string>());
-            
+
             // system types
             RegisterType(typeof(System.Collections.Generic.List<float>), "List<float>",
                          () => new InputValue<List<float>>(new List<float>()),
@@ -139,12 +136,12 @@ namespace T3.Core
                          () => new InputValue<System.Numerics.Quaternion>(System.Numerics.Quaternion.Identity),
                          (writer, obj) =>
                          {
-                             var quat = (System.Numerics.Quaternion)obj;
+                             var quaternion = (System.Numerics.Quaternion)obj;
                              writer.WriteStartObject();
-                             writer.WriteValue("X", quat.X);
-                             writer.WriteValue("Y", quat.Y);
-                             writer.WriteValue("Z", quat.Z);
-                             writer.WriteValue("W", quat.W);
+                             writer.WriteValue("X", quaternion.X);
+                             writer.WriteValue("Y", quaternion.Y);
+                             writer.WriteValue("Z", quaternion.Z);
+                             writer.WriteValue("W", quaternion.W);
                              writer.WriteEndObject();
                          },
                          jsonToken =>
@@ -212,16 +209,13 @@ namespace T3.Core
             RegisterType(typeof(System.Text.StringBuilder), "StringBuilder",
                          () => new InputValue<StringBuilder>(new StringBuilder()));
 
-            
             RegisterType(typeof(DateTime), "DateTime",
                          () => new InputValue<DateTime>(new DateTime()));
 
-            
             // t3 core types
             RegisterType(typeof(BufferWithViews), "BufferWithViews",
                          () => new InputValue<BufferWithViews>(null));
 
-            
             RegisterType(typeof(Command), "Command",
                          () => new InputValue<Command>(null));
             RegisterType(typeof(Animation.Curve), "Curve",
@@ -238,13 +232,14 @@ namespace T3.Core
                              Animation.Curve curve = new Animation.Curve();
                              if (jsonToken == null || !jsonToken.HasValues)
                              {
-                                 curve.AddOrUpdateV(0, new VDefinition(){ Value = 0});
-                                 curve.AddOrUpdateV(1, new VDefinition(){ Value = 1});
+                                 curve.AddOrUpdateV(0, new VDefinition() { Value = 0 });
+                                 curve.AddOrUpdateV(1, new VDefinition() { Value = 1 });
                              }
                              else
                              {
                                  curve.Read(jsonToken);
                              }
+
                              return curve;
                          });
             RegisterType(typeof(T3.Core.Operator.GizmoVisibility), "GizmoVisibility",
@@ -271,11 +266,12 @@ namespace T3.Core
                              {
                                  gradient.Read(jsonToken);
                              }
+
                              return gradient;
                          });
             RegisterType(typeof(ParticleSystem), "ParticleSystem",
                          () => new InputValue<ParticleSystem>(null));
-            
+
             RegisterType(typeof(Point[]), "Point",
                          () => new InputValue<Point[]>());
             RegisterType(typeof(RenderTargetReference), "RenderTargetRef",
@@ -284,7 +280,7 @@ namespace T3.Core
                          () => new InputValue<Object>());
             RegisterType(typeof(StructuredList), "StructuredList",
                          () => new InputValue<StructuredList>());
-            RegisterType(typeof(Texture3dWithViews), "Texture3dWithViews", 
+            RegisterType(typeof(Texture3dWithViews), "Texture3dWithViews",
                          () => new InputValue<Texture3dWithViews>(new Texture3dWithViews()));
             RegisterType(typeof(MeshBuffers), "MeshBuffers",
                          () => new InputValue<MeshBuffers>(null));
@@ -318,7 +314,7 @@ namespace T3.Core
                          InputDefaultValueCreator<Comparison>,
                          (writer, obj) => writer.WriteValue(obj.ToString()),
                          JsonToEnumValue<Comparison>);
-            RegisterType(typeof(SharpDX.Direct3D11.ComputeShader), "ComputeShader", 
+            RegisterType(typeof(SharpDX.Direct3D11.ComputeShader), "ComputeShader",
                          () => new InputValue<ComputeShader>(null));
             RegisterType(typeof(SharpDX.Direct3D11.CpuAccessFlags), "CpuAccessFlags",
                          InputDefaultValueCreator<CpuAccessFlags>,
@@ -403,10 +399,10 @@ namespace T3.Core
                              return new Int3(x, y, z);
                          });
             RegisterType(typeof(SharpDX.Mathematics.Interop.RawRectangle), "RawRectangle",
-                         () => new InputValue<RawRectangle>(new RawRectangle {Left = -100, Right = 100, Bottom = -100, Top = 100}));
+                         () => new InputValue<RawRectangle>(new RawRectangle { Left = -100, Right = 100, Bottom = -100, Top = 100 }));
             RegisterType(typeof(SharpDX.Mathematics.Interop.RawViewportF), "RawViewportF",
                          () => new InputValue<RawViewportF>(new RawViewportF
-                                                            {X = 0.0f, Y = 0.0f, Width = 100.0f, Height = 100.0f, MinDepth = 0.0f, MaxDepth = 10000.0f}));
+                                                                { X = 0.0f, Y = 0.0f, Width = 100.0f, Height = 100.0f, MinDepth = 0.0f, MaxDepth = 10000.0f }));
             RegisterType(typeof(SharpDX.Size2), "Size2",
                          InputDefaultValueCreator<Size2>,
                          (writer, obj) =>
@@ -424,21 +420,20 @@ namespace T3.Core
                              return new Size2(width, height);
                          });
             RegisterType(typeof(SharpDX.Vector4[]), "Vector4[]",
-                         () => new InputValue<SharpDX.Vector4[]>(new SharpDX.Vector4[0]));
+                         () => new InputValue<SharpDX.Vector4[]>(Array.Empty<SharpDX.Vector4>()));
         }
 
-        
-        public static void RegisterType(Type type, string typeName,
-                                        Func<InputValue> defaultValueCreator,
-                                        Action<JsonTextWriter, object> valueToJsonConverter,
-                                        Func<JToken, object> jsonToValueConverter)
+        private static void RegisterType(Type type, string typeName,
+                                         Func<InputValue> defaultValueCreator,
+                                         Action<JsonTextWriter, object> valueToJsonConverter,
+                                         Func<JToken, object> jsonToValueConverter)
         {
             RegisterType(type, typeName, defaultValueCreator);
             TypeValueToJsonConverters.Entries.Add(type, valueToJsonConverter);
             JsonToTypeValueConverters.Entries.Add(type, jsonToValueConverter);
         }
 
-        public static void RegisterType(Type type, string typeName, Func<InputValue> defaultValueCreator)
+        private static void RegisterType(Type type, string typeName, Func<InputValue> defaultValueCreator)
         {
             TypeNameRegistry.Entries.Add(type, typeName);
             InputValueCreators.Entries.Add(type, defaultValueCreator);
@@ -446,10 +441,10 @@ namespace T3.Core
 
         public virtual void Load()
         {
-            var symbolFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolExtension}");
-            foreach (var symbolFile in symbolFiles)
+            var symbolFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolExtension}", SearchOption.AllDirectories);
+            foreach (var symbolFilePath in symbolFiles)
             {
-                ReadSymbolFromFile(symbolFile);
+                ReadSymbolFromFile(symbolFilePath);
             }
 
             // check if there are symbols without a file, if yes add these
@@ -477,43 +472,41 @@ namespace T3.Core
                 string idFromNamespace = _idFromNamespace.Match(newType.Namespace ?? string.Empty).Value.Replace('_', '-');
                 Debug.Assert(!string.IsNullOrEmpty(idFromNamespace));
                 var symbol = new Symbol(newType, Guid.Parse(idFromNamespace))
-                {
-                    Namespace = @namespace,
-                    Name = newType.Name
-                };
+                                 {
+                                     Namespace = @namespace,
+                                     Name = newType.Name
+                                 };
                 SymbolRegistry.Entries.Add(symbol.Id, symbol);
                 Console.WriteLine($"new added symbol: {newType}");
             }
         }
 
         private readonly Regex _innerNamespace = new Regex(@".Id_(\{){0,1}[0-9a-fA-F]{8}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{12}(\}){0,1}",
-                                                    RegexOptions.IgnoreCase);
-
+                                                           RegexOptions.IgnoreCase);
 
         private readonly Regex _idFromNamespace = new Regex(@"(\{){0,1}[0-9a-fA-F]{8}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{12}(\}){0,1}",
-                                                                    RegexOptions.IgnoreCase);
+                                                            RegexOptions.IgnoreCase);
 
-        public Symbol ReadSymbolFromFile(string symbolFile)
+        private Symbol ReadSymbolFromFile(string filepath)
         {
-            Log.Info($"file: {symbolFile}");
-            using (var sr = new StreamReader(symbolFile))
-            using (var jsonReader = new JsonTextReader(sr))
-            {
-                SymbolJson symbolJson = new SymbolJson {Reader = jsonReader};
-                var symbol = symbolJson.ReadSymbol(this);
-                if (symbol != null)
-                {
-                    symbol.SourcePath = OperatorTypesFolder + symbol.Name + SourceExtension;
-                    SymbolRegistry.Entries.Add(symbol.Id, symbol);
-                }
+            Log.Info($" read symbol: `{filepath}`");
+            using var streamReader = new StreamReader(filepath);
+            using var jsonReader = new JsonTextReader(streamReader);
 
-                return symbol;
-            }
+            var symbolJson = new SymbolJson { Reader = jsonReader };
+            var symbol = symbolJson.ReadSymbol(this);
+            if (symbol == null)
+                return null;
+
+            //symbol.SourcePath = OperatorTypesFolder + symbol.Name + SourceExtension;
+            SymbolRegistry.Entries.Add(symbol.Id, symbol);
+
+            return symbol;
         }
 
         public Symbol ReadSymbolWithId(Guid id)
         {
-            var symbolFile = Directory.GetFiles(OperatorTypesFolder, $"*{id}*{SymbolExtension}").FirstOrDefault();
+            var symbolFile = Directory.GetFiles(OperatorTypesFolder, $"*{id}*{SymbolExtension}", SearchOption.AllDirectories).FirstOrDefault();
             if (symbolFile == null)
             {
                 Log.Error($"Could not find symbol file containing the id '{id}'");
@@ -527,31 +520,24 @@ namespace T3.Core
         public virtual void SaveAll()
         {
             ResourceManager.Instance().DisableOperatorFileWatcher(); // don't update ops if file is written during save
-            
-            // remove all old t3 files before storing to get rid off invalid ones
-            DirectoryInfo di = new DirectoryInfo(OperatorTypesFolder);
-            FileInfo[] files = di.GetFiles("*" + SymbolExtension).ToArray();
-            foreach (FileInfo file in files)
-            {
-                try
-                {
-                    File.Delete(file.FullName);
-                }
-                catch (Exception e)
-                {
-                    Log.Warning("Failed to deleted file '" + file + "': " + e);
-                }
-            }
 
-            SymbolJson symbolJson = new SymbolJson();
-            // store all symbols in corresponding files
-            foreach (var (_, symbol) in SymbolRegistry.Entries)
+            RemoveAllSymbolFiles();
+            SortAllSymbolSourceFiles();
+            SaveSymbolDefinitionAndSourceFiles(SymbolRegistry.Entries.Values);
+
+            ResourceManager.Instance().EnableOperatorFileWatcher();
+        }
+
+        protected static void SaveSymbolDefinitionAndSourceFiles(IEnumerable<Symbol> valueCollection)
+        {
+            foreach (var symbol in valueCollection)
             {
-                using (var sw = new StreamWriter(OperatorTypesFolder + symbol.Name + "_" + symbol.Id + SymbolExtension))
-                using (var writer = new JsonTextWriter(sw))
+                var filepath = BuildFilepathForSymbol(symbol, SymbolExtension);
+
+                using (var sw = new StreamWriter(filepath))
+                using (var writer = new JsonTextWriter(sw) { Formatting = Formatting.Indented })
                 {
-                    symbolJson.Writer = writer;
-                    symbolJson.Writer.Formatting = Formatting.Indented;
+                    var symbolJson = new SymbolJson { Writer = writer };
                     symbolJson.WriteSymbol(symbol);
                 }
 
@@ -560,37 +546,83 @@ namespace T3.Core
                     WriteSymbolSourceToFile(symbol);
                 }
             }
-
-            ResourceManager.Instance().EnableOperatorFileWatcher();
         }
-        
-        public void SaveModifiedSymbol(Symbol symbol)
+
+        private static void SortAllSymbolSourceFiles()
         {
-            RemoveObsoleteSymbolFiles(symbol);
-
-            SymbolJson symbolJson = new SymbolJson();
-
-            using (var sw = new StreamWriter(GetFilePathForSymbol(symbol)))
-            using (var writer = new JsonTextWriter(sw))
+            // Move existing source files to correct namespace folder
+            var sourceFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SourceExtension}", SearchOption.AllDirectories);
+            foreach (var sourceFilePath in sourceFiles)
             {
-                symbolJson.Writer = writer;
-                symbolJson.Writer.Formatting = Formatting.Indented;
-                symbolJson.WriteSymbol(symbol);
-            }
+                var classname = Path.GetFileNameWithoutExtension(sourceFilePath);
+                var symbol = SymbolRegistry.Entries.Values.SingleOrDefault(s => s.Name == classname);
+                if (symbol == null)
+                {
+                    Log.Warning($"Skipping unregistered source file {sourceFilePath}");
+                    continue;
+                }
 
-            if (!string.IsNullOrEmpty(symbol.PendingSource))
-            {
-                WriteSymbolSourceToFile(symbol);
+                var targetFilepath = BuildFilepathForSymbol(symbol, SourceExtension);
+                if (sourceFilePath == targetFilepath)
+                    continue;
+
+                Log.Debug($" Moving {sourceFilePath} -> {targetFilepath} ...");
+                try
+                {
+                    File.Move(sourceFilePath, targetFilepath);
+                }
+                catch (Exception e)
+                {
+                    Log.Warning("Failed to write source file '" + sourceFilePath + "': " + e);
+                }
             }
         }
 
-        
-        private void RemoveObsoleteSymbolFiles(Symbol symbol)
+        private static void RemoveAllSymbolFiles()
+        {
+            // Remove all old t3 files before storing to get rid off invalid ones
+            var symbolFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolExtension}", SearchOption.AllDirectories);
+            foreach (var symbolFilePath in symbolFiles)
+            {
+                try
+                {
+                    File.Delete(symbolFilePath);
+                }
+                catch (Exception e)
+                {
+                    Log.Warning("Failed to deleted file '" + symbolFilePath + "': " + e);
+                }
+            }
+        }
+
+        // public void SaveModifiedSymbol(Symbol symbol)
+        // {
+        //     RemoveObsoleteSymbolFiles(symbol);
+        //
+        //     var symbolJson = new SymbolJson();
+        //     
+        //     var filepath = BuildFilepathForSymbol(symbol, SymbolExtension);
+        //
+        //     using (var sw = new StreamWriter(filepath))
+        //     using (var writer = new JsonTextWriter(sw))
+        //     {
+        //         symbolJson.Writer = writer;
+        //         symbolJson.Writer.Formatting = Formatting.Indented;
+        //         symbolJson.WriteSymbol(symbol);
+        //     }
+        //
+        //     if (!string.IsNullOrEmpty(symbol.PendingSource))
+        //     {
+        //         WriteSymbolSourceToFile(symbol);
+        //     }
+        // }
+
+        private static void RemoveDeprecatedSymbolFiles(Symbol symbol)
         {
             if (string.IsNullOrEmpty(symbol.DeprecatedSourcePath))
                 return;
-            
-            foreach (var fileExtension in FileExtensions)
+
+            foreach (var fileExtension in _operatorFileExtensions)
             {
                 var sourceFilepath = Path.Combine(OperatorTypesFolder, symbol.DeprecatedSourcePath + "_" + symbol.Id + fileExtension);
                 try
@@ -602,112 +634,75 @@ namespace T3.Core
                     Log.Warning("Failed to deleted file '" + sourceFilepath + "': " + e);
                 }
             }
+
             symbol.DeprecatedSourcePath = String.Empty;
         }
 
-        private string GetFilePathForSymbol(Symbol symbol)
-        {
-            return OperatorTypesFolder + symbol.Name + "_" + symbol.Id + SymbolExtension;
-        }
 
-        private void WriteSymbolSourceToFile(Symbol symbol)
+        private static void WriteSymbolSourceToFile(Symbol symbol)
         {
-            string sourcePath = OperatorTypesFolder + symbol.Name + ".cs";
+            var sourcePath = BuildFilepathForSymbol(symbol, SourceExtension);
             using (var sw = new StreamWriter(sourcePath))
             {
                 sw.Write(symbol.PendingSource);
             }
 
+            // Remove old source file and its entry in project
             if (!string.IsNullOrEmpty(symbol.DeprecatedSourcePath))
             {
-                // remove old source file and its entry in project 
-                RemoveSourceFileFromProject(symbol.DeprecatedSourcePath);
+                if (symbol.DeprecatedSourcePath == Model.BuildFilepathForSymbol(symbol, SourceExtension))
+                {
+                    Log.Warning($"Attempted to deprecated valid source file: {symbol.DeprecatedSourcePath}");
+                    symbol.DeprecatedSourcePath = string.Empty;
+                    return;
+                }
                 File.Delete(symbol.DeprecatedSourcePath);
-                
-                // adjust path of file resource
+
+                // Adjust path of file resource
                 ResourceManager.Instance().RenameOperatorResource(symbol.DeprecatedSourcePath, sourcePath);
 
                 symbol.DeprecatedSourcePath = string.Empty;
             }
-
-            if (string.IsNullOrEmpty(symbol.SourcePath))
-            {
-                symbol.SourcePath = sourcePath;
-                AddSourceFileToProject(sourcePath);
-            }
-
             symbol.PendingSource = null;
         }
-        
-        /// <summary>
-        /// Inserts an entry like...
-        /// 
-        ///      <Compile Include="Types\GfxPipelineExample.cs" />
-        /// 
-        /// ... to the project file.
-        /// </summary>
-        public static void AddSourceFileToProject(string newSourceFilePath)
+
+        #region File path handling
+        private static string GetSubDirectoryFromNamespace(string symbolNamespace)
         {
-            var path = System.IO.Path.GetDirectoryName(newSourceFilePath);
-            var newFileName = System.IO.Path.GetFileName(newSourceFilePath);
-            var directoryInfo = new DirectoryInfo(path).Parent;
-            if (directoryInfo == null)
-            {
-                Log.Error("Can't find project file folder for " + newSourceFilePath);
-                return;
-            }
-
-            var parentPath = directoryInfo.FullName;
-            var projectFilePath = System.IO.Path.Combine(parentPath, "Operators.csproj");
-
-            if (!File.Exists(projectFilePath))
-            {
-                Log.Error("Can't find project file in " + projectFilePath);
-                return;
-            }
-
-            var orgLine = "<ItemGroup>\r\n    <Compile Include";
-            var newLine = $"<ItemGroup>\r\n    <Compile Include=\"Types\\{newFileName}\" />\r\n    <Compile Include";
-            var newContent = File.ReadAllText(projectFilePath).Replace(orgLine, newLine);
-            File.WriteAllText(projectFilePath, newContent);
-        }
-
-        public static void RemoveSourceFileFromProject(string sourceFilePath)
-        {
-            var path = System.IO.Path.GetDirectoryName(sourceFilePath);
-            var fileName = System.IO.Path.GetFileName(sourceFilePath);
-            var directoryInfo = new DirectoryInfo(path).Parent;
-            if (directoryInfo == null)
-            {
-                Log.Error("Can't find project file folder for " + sourceFilePath);
-                return;
-            }
-
-            var parentPath = directoryInfo.FullName;
-            var projectFilePath = System.IO.Path.Combine(parentPath, "Operators.csproj");
-
-            if (!File.Exists(projectFilePath))
-            {
-                Log.Error("Can't find project file in " + projectFilePath);
-                return;
-            }
-
-            var orgLine = $"    <Compile Include=\"Types\\{fileName}\" />\r\n";
-            var newContent = File.ReadAllText(projectFilePath).Replace(orgLine, string.Empty);
-            File.WriteAllText(projectFilePath, newContent);
+            var trimmed = symbolNamespace.Trim().Replace(".", "\\");
+            return trimmed;
         }
         
-        
-        private static string SymbolExtension { get; } = ".t3";
-        private static string SymbolUiExtension { get; } = ".t3ui";
-        private static string SourceExtension { get; } = ".cs";
-        
-        private static List<string> FileExtensions= new ()
-                                                    {
-                                                        SymbolExtension,
-                                                        SymbolUiExtension,
-                                                        SourceExtension,
-                                                    };
+        private static string BuildAndCreateFolderFromNamespace(string symbolNamespace)
+        {
+            var directory = Path.Combine(OperatorTypesFolder, GetSubDirectoryFromNamespace(symbolNamespace));
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
 
+            return directory;
+        }
+
+        public static string BuildFilepathForSymbol(Symbol symbol, string extension)
+        {
+            var dir = BuildAndCreateFolderFromNamespace(symbol.Namespace);
+            return extension == SourceExtension
+                       ? Path.Combine(dir, symbol.Name + extension)
+                       : Path.Combine(dir, symbol.Name + "_" + symbol.Id + extension);
+        }
+        #endregion
+
+        public const string SourceExtension = ".cs";
+        private const string SymbolExtension = ".t3";
+        protected const string SymbolUiExtension = ".t3ui";
+        public const string OperatorTypesFolder = @"Operators\Types\";
+
+        private static readonly List<string> _operatorFileExtensions = new()
+                                                                           {
+                                                                               SymbolExtension,
+                                                                               SymbolUiExtension,
+                                                                               SourceExtension,
+                                                                           };
     }
 }

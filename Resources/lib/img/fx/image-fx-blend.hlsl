@@ -67,7 +67,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float3 rgb = (1.0 - tB.a) * tA.rgb + tB.a * tB.rgb;   
     
     switch( (int)ColorMode) {
-        // screen
+        // normal
         case 0:
             //rgb = (1.0 - a) * tA.rgb + tB.a * tB.rgb;
             break;

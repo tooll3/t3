@@ -41,8 +41,7 @@ namespace T3.Gui.Windows
                 changed |= ImGui.DragFloat("Timeline Raster Density", ref UserSettings.Config.TimeRasterDensity, 0.01f);
                  
                 changed |= ImGui.Checkbox("Swap Main & 2nd windows when fullscreen", ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen);
-                changed |= ImGui.Checkbox("Save Only Modified Symbols", ref UserSettings.Config.SaveOnlyModified);
-                changed |= ImGui.Checkbox("Enable Auto Backup", ref UserSettings.Config.AutoSaveAfterSymbolCreation);
+                
                  
                 ImGui.TreePop();
             }
@@ -62,7 +61,6 @@ namespace T3.Gui.Windows
                 //ImGui.Checkbox("Show Title", ref UserSettings.Config.ShowTitleAndDescription);
                 changed |= ImGui.DragFloat("Gizmo size", ref UserSettings.Config.GizmoSize);
                 changed |= ImGui.DragFloat("Tooltip delay", ref UserSettings.Config.TooltipDelay);
-                changed |= ImGui.Checkbox("Save after symbol creating", ref UserSettings.Config.AutoSaveAfterSymbolCreation);
                 ImGui.TreePop();
             }
 

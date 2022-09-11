@@ -83,7 +83,7 @@ namespace T3.Gui.Graph
             
             if (selectedSymbolChildUis.Count > 1 && selectedSymbolChildUis.Any(c => c.Id == sourceUi.Id))
             {
-                Log.Debug("Magic would happen here?");
+                selectedSymbolChildUis.Reverse();
                 foreach (var selectedChild in selectedSymbolChildUis)
                 {
                     if (selectedChild.SymbolChild.Symbol.Id != sourceUi.SymbolChild.Symbol.Id)
