@@ -12,7 +12,7 @@ using T3.Core.Logging;
 namespace T3.Compilation
 {
     /// <summary>
-    /// Handles the c# compilation of symbol classes
+    /// And editor functionality that handles the c# compilation of symbol classes.
     /// </summary>
     public static class OperatorUpdating
     {
@@ -23,7 +23,7 @@ namespace T3.Compilation
         {
             Log.Info($"Operator source '{path}' changed.");
             Log.Info($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
-        
+
             string source;
             try
             {
@@ -35,7 +35,7 @@ namespace T3.Compilation
                 Log.Error(e.Message);
                 return;
             }
-        
+
             if (string.IsNullOrEmpty(source))
             {
                 Log.Info("Source was empty, skip compilation.");
@@ -45,17 +45,14 @@ namespace T3.Compilation
             var newAssembly = CompileSymbolFromSource(source, path);
             if (newAssembly == null)
                 return;
-            
+
             resource.OperatorAssembly = newAssembly;
             resource.Updated = true;
             return;
         }
 
-        
-        
         public static Assembly CompileSymbolFromSource(string source, string symbolName)
         {
-            // return CompileSymbolsFromSource((source, symbolName));
             var operatorsAssembly = ResourceManager.Instance().OperatorsAssembly;
             var referencedAssembliesNames = operatorsAssembly.GetReferencedAssemblies(); // todo: ugly
             var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
@@ -75,53 +72,47 @@ namespace T3.Compilation
                 foreach (var subAsmName in subAsmNames)
                 {
                     var subAsm = Assembly.Load(subAsmName);
-                    if (subAsm != null)
-                    {
-                        referencedAssemblies.Add(MetadataReference.CreateFromFile(subAsm.Location));
-                    }
+                    referencedAssemblies.Add(MetadataReference.CreateFromFile(subAsm.Location));
                 }
             }
-        
+
             var syntaxTree = CSharpSyntaxTree.ParseText(source);
             var compilation = CSharpCompilation.Create("Operators",
                                                        new[] { syntaxTree },
                                                        referencedAssemblies.ToArray(),
                                                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
-        
-            using (var dllStream = new MemoryStream())
-            using (var pdbStream = new MemoryStream())
+
+            using var dllStream = new MemoryStream();
+            using var pdbStream = new MemoryStream();
+            
+            var emitResult = compilation.Emit(dllStream, pdbStream);
+            Log.Info($"compilation results of '{symbolName}':");
+            if (!emitResult.Success)
             {
-                var emitResult = compilation.Emit(dllStream, pdbStream);
-                Log.Info($"compilation results of '{symbolName}':");
-                if (!emitResult.Success)
+                foreach (var entry in emitResult.Diagnostics)
                 {
-                    foreach (var entry in emitResult.Diagnostics)
-                    {
-                        if (entry.WarningLevel == 0)
-                            Log.Error(entry.GetMessage());
-                        else
-                            Log.Warning(entry.GetMessage());
-                    }
+                    if (entry.WarningLevel == 0)
+                        Log.Error(entry.GetMessage());
+                    else
+                        Log.Warning(entry.GetMessage());
+                }
+            }
+            else
+            {
+                Log.Info($"Compilation of '{symbolName}' successful.");
+                var newAssembly = Assembly.Load(dllStream.GetBuffer());
+                if (newAssembly.ExportedTypes.Any())
+                {
+                    return newAssembly;
                 }
                 else
                 {
-                    Log.Info($"Compilation of '{symbolName}' successful.");
-                    var newAssembly = Assembly.Load(dllStream.GetBuffer());
-                    if (newAssembly.ExportedTypes.Any())
-                    {
-                        return newAssembly;
-                    }
-                    else
-                    {
-                        Log.Error("New compiled assembly had no exported type.");
-                        return null;
-                    }
+                    Log.Error("New compiled assembly had no exported type.");
+                    return null;
                 }
             }
 
             return null;
         }
-
-
     }
 }

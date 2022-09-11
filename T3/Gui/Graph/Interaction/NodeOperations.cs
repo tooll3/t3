@@ -1063,7 +1063,7 @@ namespace T3.Gui.Graph.Interaction
         /// </summary>
         public static void UpdateChangedOperators()
         {
-            var modifiedSymbols = ResourceManager.Instance().UpdateChangedOperatorTypes();
+            var modifiedSymbols = OperatorResource.UpdateChangedOperatorTypes();
             foreach (var symbol in modifiedSymbols)
             {
                 UiModel.UpdateUiEntriesForSymbol(symbol);

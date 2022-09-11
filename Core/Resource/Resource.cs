@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 
@@ -34,30 +33,6 @@ namespace T3.Core
         public string EntryPoint { get; }
         protected ShaderBytecode _blob;
         public ShaderBytecode Blob { get => _blob; internal set { _blob = value; } }
-    }
-
-    public class OperatorResource : Resource, IUpdateable
-    {
-        public Assembly OperatorAssembly { get; set; }
-        public bool Updated { get; set; }
-        public Guid SymbolId { get; }
-
-        public OperatorResource(uint id, string nameWithId, Assembly operatorAssembly, UpdateDelegate updateHandler)
-            : base(id, nameWithId)
-        {
-            _updateHandler = updateHandler;
-            OperatorAssembly = operatorAssembly;
-            SymbolId = Guid.Parse(nameWithId);
-        }
-
-        public delegate void UpdateDelegate(OperatorResource resource, string path);
-
-        private readonly UpdateDelegate _updateHandler;
-
-        public void Update(string path)
-        {
-            _updateHandler?.Invoke(this, path);
-        }
     }
 
     internal class FileResource
