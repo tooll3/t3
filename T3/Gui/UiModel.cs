@@ -270,17 +270,16 @@ namespace T3.Gui
             base.SaveAll();
 
             // Remove all old ui files before storing to get rid off invalid ones
-            var directoryInfo = new DirectoryInfo(OperatorTypesFolder);
-            var fileInfos = directoryInfo.GetFiles("*" + SymbolUiExtension).ToArray();
-            foreach (var fileInfo in fileInfos)
+            var symbolUiFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);            
+            foreach (var filepath in symbolUiFiles)
             {
                 try
                 {
-                    File.Delete(fileInfo.FullName);
+                    File.Delete(filepath);
                 }
                 catch (Exception e)
                 {
-                    Log.Warning("Failed to deleted file '" + fileInfo + "': " + e);
+                    Log.Warning("Failed to deleted file '" + filepath + "': " + e);
                 }
             }
 

@@ -166,7 +166,7 @@ namespace T3.Core.Operator
         {
             InstanceType = instanceType;
             Name = instanceType.Name;
-            Log.Info($"new instance type name: {Name}");
+            Log.Info($"New instance type name: {Name}");
             var newInstanceSymbolChildren = new List<(SymbolChild, Instance, List<ConnectionEntry>)>();
 
             // check if inputs have changed

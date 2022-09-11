@@ -522,44 +522,43 @@ namespace T3.Core
             ResourceManager.Instance().DisableOperatorFileWatcher(); // don't update ops if file is written during save
 
             // Remove all old t3 files before storing to get rid off invalid ones
-            var directoryInfo = new DirectoryInfo(OperatorTypesFolder);
-            var symbolFiles = directoryInfo.GetFiles("*" + SymbolExtension).ToArray();
-            foreach (var fileInfo in symbolFiles)
+            var symbolFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolExtension}", SearchOption.AllDirectories);
+            foreach (var symbolFilePath in symbolFiles)
             {
                 try
                 {
-                    File.Delete(fileInfo.FullName);
+                    File.Delete(symbolFilePath);
                 }
                 catch (Exception e)
                 {
-                    Log.Warning("Failed to deleted file '" + fileInfo + "': " + e);
+                    Log.Warning("Failed to deleted file '" + symbolFilePath + "': " + e);
                 }
             }
 
             // Move existing source files to correct namespace folder
-            var sourceFiles = directoryInfo.GetFiles("*.cs").ToArray();
-            foreach (var fileInfo in sourceFiles)
+            var sourceFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolExtension}", SearchOption.AllDirectories);
+            foreach (var sourceFilePath in sourceFiles)
             {
-                var classname = fileInfo.Name.Replace(".cs", "");
+                var classname = Path.GetFileNameWithoutExtension(sourceFilePath);
                 var symbol = SymbolRegistry.Entries.Values.SingleOrDefault(s => s.Name == classname);
                 if (symbol == null)
                 {
-                    Log.Warning($"Skipping unregistered source file {fileInfo.Name}");
+                    Log.Warning($"Skipping unregistered source file {sourceFilePath}");
                     continue;
                 }
 
                 var targetFilepath = BuildFilepathForSymbol(symbol, SourceExtension);
-                if (fileInfo.FullName == targetFilepath)
+                if (sourceFilePath == targetFilepath)
                     continue;
                 
-                Log.Debug($" Moving {fileInfo.FullName} -> {targetFilepath} ...");
+                Log.Debug($" Moving {sourceFilePath} -> {targetFilepath} ...");
                 try
                 {
-                    File.Move(fileInfo.FullName, targetFilepath);
+                    File.Move(sourceFilePath, targetFilepath);
                 }
                 catch (Exception e)
                 {
-                    Log.Warning("Failed to write source file '" + fileInfo + "': " + e);
+                    Log.Warning("Failed to write source file '" + sourceFilePath + "': " + e);
                 }
             }
 
@@ -643,6 +642,12 @@ namespace T3.Core
             // Remove old source file and its entry in project
             if (!string.IsNullOrEmpty(symbol.DeprecatedSourcePath))
             {
+                if (symbol.DeprecatedSourcePath == Model.BuildFilepathForSymbol(symbol, SourceExtension))
+                {
+                    Log.Warning($"Attempted to deprecated valid source file: {symbol.DeprecatedSourcePath}");
+                    symbol.DeprecatedSourcePath = string.Empty;
+                    return;
+                }
                 File.Delete(symbol.DeprecatedSourcePath);
 
                 // Adjust path of file resource

@@ -627,6 +627,7 @@ namespace T3.Gui.Graph.Interaction
                     symbol.PendingSource = newSource;
                     symbol.DeprecatedSourcePath = originalSourcePath;
                     
+                    UpdateChangedOperators();
                     T3Ui.SaveAll();
                     return;
                 }

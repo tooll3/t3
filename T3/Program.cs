@@ -19,6 +19,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui;
+using T3.Gui.Graph.Interaction;
 using t3.Gui.Interaction.Camera;
 using t3.Gui.Interaction.StartupCheck;
 using T3.Gui.Styling;
@@ -173,13 +174,8 @@ namespace T3
                 ImGui.GetIO().DisplaySize = new Vector2(_main.Form.ClientSize.Width, _main.Form.ClientSize.Height);
 
                 HandleFullscreenToggle();
-
-                //NodeOperations.UpdateChangedOperators();
-                var modifiedSymbols = resourceManager.UpdateChangedOperatorTypes();
-                foreach (var symbol in modifiedSymbols)
-                {
-                    UiModel.UpdateUiEntriesForSymbol(symbol);
-                }
+                
+                NodeOperations.UpdateChangedOperators();
 
                 DirtyFlag.IncrementGlobalTicks();
                 T3Metrics.UiRenderingStarted();
