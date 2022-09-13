@@ -90,16 +90,15 @@ namespace Operators.Utils
                         // Get the next message. This will block until one arrives or the socket is closed
                         var oscPacket = Receiver.Receive();
 
-                        var oscPacketString = oscPacket.ToString();
-
                         try
                         {
-                            if (oscPacketString == null)
-                                continue;
-
-                            if (oscPacketString.StartsWith("#bundle"))
+                            if (oscPacket is OscMessage)
                             {
-                                var bundle = OscBundle.Parse(oscPacketString);
+                                ForwardMessage((OscMessage)oscPacket);
+                            }
+                            else if (oscPacket is OscBundle)
+                            {
+                                var bundle = (OscBundle)oscPacket;
 
                                 foreach (var bundleContent in bundle)
                                 {
@@ -108,11 +107,11 @@ namespace Operators.Utils
                                         ForwardMessage(bundleMessage);
                                     }
                                 }
-
-                                continue;
                             }
-
-                            ForwardMessage(OscMessage.Parse(oscPacket.ToString()));
+                            else
+                            {
+                                Log.Warning($"Invalid OSC Packet type: '{oscPacket}'");
+                            }
                         }
                         catch (Exception e)
                         {
