@@ -47,6 +47,7 @@ namespace T3.Gui.UiHelpers
             
             
             // Interaction
+            public bool WarnBeforeLibEdit = true;
             public bool SmartGroupDragging = false;
             public bool ShowExplicitTextureFormatInOutputWindow = false;
             public bool UseArcConnections = true;

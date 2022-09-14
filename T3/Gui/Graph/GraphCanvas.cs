@@ -152,13 +152,14 @@ namespace T3.Gui.Graph
         #region drawing UI ====================================================================
         public void Draw(ImDrawListPtr dl, bool showGrid)
         {
+
             UpdateCanvas();
             if (!_initialized)
             {
                 FocusViewToSelection();
                 _initialized = true;
             }
-            
+
             // TODO: Refresh reference on every frame. Since this uses lists instead of dictionary
             // it can be really slow
             CompositionOp = NodeOperations.GetInstanceFromIdPath(_compositionPath);
@@ -168,7 +169,7 @@ namespace T3.Gui.Graph
                 return;
             }
 
-            
+
             if (this.CompositionOp == null)
             {
                 Log.Error("Can't show graph for undefined CompositionOp");
@@ -184,7 +185,7 @@ namespace T3.Gui.Graph
             DrawList = dl;
             ImGui.BeginGroup();
             {
-                
+
                 DrawDropHandler();
 
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))
@@ -237,15 +238,15 @@ namespace T3.Gui.Graph
                     if (selectedImage != null)
                     {
                         GraphWindow.SetBackgroundOutput(selectedImage);
-                    } 
+                    }
                 }
-                
+
                 if (KeyboardBinding.Triggered(UserActions.ClearBackgroundImage))
                 {
                     GraphWindow.ClearBackground();
                 }
 
-                
+
                 if (ImGui.IsWindowFocused())
                 {
                     var io = ImGui.GetIO();
@@ -254,16 +255,19 @@ namespace T3.Gui.Graph
                     {
                         if (ImGui.IsKeyDown((ImGuiKey)Key.W))
                         {
-                            _dampedScrollVelocity.Y -=  InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).Y; 
+                            _dampedScrollVelocity.Y -= InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).Y;
                         }
+
                         if (ImGui.IsKeyDown((ImGuiKey)Key.S))
                         {
                             _dampedScrollVelocity.Y += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).Y;
                         }
+
                         if (ImGui.IsKeyDown((ImGuiKey)Key.A))
                         {
                             _dampedScrollVelocity.X -= InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
-                        }                    
+                        }
+
                         if (ImGui.IsKeyDown((ImGuiKey)Key.D))
                         {
                             _dampedScrollVelocity.X += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
@@ -273,7 +277,7 @@ namespace T3.Gui.Graph
 
                 ScrollTarget += _dampedScrollVelocity;
                 _dampedScrollVelocity *= 0.90f;
-                
+
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
                 if (showGrid)
@@ -283,8 +287,8 @@ namespace T3.Gui.Graph
                 {
                     ConnectionMaker.ConnectionSplitHelper.PrepareNewFrame(this);
                 }
-                
-                
+
+
                 SymbolBrowser.Draw();
 
                 Graph.DrawGraph(DrawList);
@@ -294,7 +298,7 @@ namespace T3.Gui.Graph
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
                 if (isOnBackground && ImGui.IsMouseDoubleClicked(0))
                 {
-                    if(CompositionOp.Parent != null)
+                    if (CompositionOp.Parent != null)
                         SetCompositionToParentInstance(CompositionOp.Parent);
                 }
 
@@ -322,14 +326,15 @@ namespace T3.Gui.Graph
 
                 _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits,
                                             ref _symbolDescriptionForDialog);
-                _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), 
-                                            NodeSelection.GetSelectedNodes<Annotation>().ToList(), 
-                                            ref _nameSpaceForDialogEdits, 
+                _combineToSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(),
+                                            NodeSelection.GetSelectedNodes<Annotation>().ToList(),
+                                            ref _nameSpaceForDialogEdits,
                                             ref _symbolNameForDialogEdits,
                                             ref _symbolDescriptionForDialog);
                 _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
                 _addInputDialog.Draw(CompositionOp.Symbol);
                 _addOutputDialog.Draw(CompositionOp.Symbol);
+                LibWarningDialog.Draw();
                 EditNodeOutputDialog.Draw();
             }
             ImGui.EndGroup();
@@ -1037,14 +1042,15 @@ namespace T3.Gui.Graph
         public Instance CompositionOp { get; private set; }
         #endregion
 
-        private List<Guid> _compositionPath = new List<Guid>();
+        private List<Guid> _compositionPath = new();
 
-        private readonly AddInputDialog _addInputDialog = new AddInputDialog();
-        private readonly AddOutputDialog _addOutputDialog = new AddOutputDialog();
-        private readonly CombineToSymbolDialog _combineToSymbolDialog = new CombineToSymbolDialog();
-        private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new DuplicateSymbolDialog();
-        private readonly RenameSymbolDialog _renameSymbolDialog = new RenameSymbolDialog();
-        public readonly EditNodeOutputDialog EditNodeOutputDialog = new EditNodeOutputDialog();
+        private readonly AddInputDialog _addInputDialog = new();
+        private readonly AddOutputDialog _addOutputDialog = new();
+        private readonly CombineToSymbolDialog _combineToSymbolDialog = new();
+        private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new();
+        private readonly RenameSymbolDialog _renameSymbolDialog = new();
+        public readonly EditNodeOutputDialog EditNodeOutputDialog = new();
+        public static readonly LibWarningDialog LibWarningDialog = new();
 
         //public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
         private List<SymbolChildUi> ChildUis { get; set; }

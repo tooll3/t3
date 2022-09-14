@@ -2,6 +2,7 @@ using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SharpDX;
 using SharpDX.Direct3D11;
@@ -9,6 +10,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.InputUi;
@@ -218,6 +220,10 @@ namespace T3.Gui.Graph
                                   && (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) ||
                                       T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId));
 
+
+                    
+
+                    
                     // A horrible work around to prevent exception because CompositionOp changed during drawing.
                     // A better solution would defer setting the compositionOp to the beginning of next frame.
                     var justOpenedChild = false;
@@ -225,9 +231,24 @@ namespace T3.Gui.Graph
                     {
                         if (ImGui.IsWindowFocused())
                         {
-                            GraphCanvas.Current.SetCompositionToChildInstance(instance);
-                            ImGui.CloseCurrentPopup();
-                            justOpenedChild = true;
+                            var blocked = false;
+                            if (UserSettings.Config.WarnBeforeLibEdit && instance.Symbol.Namespace.StartsWith("lib."))
+                            {
+                                if (UserSettings.Config.WarnBeforeLibEdit)
+                                {
+                                    var count = NodeOperations.GetDependingSymbols(instance.Symbol).Count();
+                                    LibWarningDialog.DependencyCount = count;
+                                    GraphCanvas.LibWarningDialog.ShowNextFrame();
+                                    blocked = true;
+                                }
+                            }
+
+                            if (!blocked)
+                            {
+                                GraphCanvas.Current.SetCompositionToChildInstance(instance);
+                                ImGui.CloseCurrentPopup();
+                                justOpenedChild = true;
+                            }
                         }
                     }
 

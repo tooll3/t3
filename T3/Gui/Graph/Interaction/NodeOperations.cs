@@ -1115,16 +1115,15 @@ namespace T3.Gui.Graph.Interaction
 
         private static void FlagDependentOpsAsModified(Symbol symbol)
         {
-            foreach (var dependent in GetDependentSymbolsWithInstances(symbol))
+            foreach (var dependent in GetDependingSymbols(symbol))
             {
                 var symbolUi = SymbolUiRegistry.Entries[dependent.Id];
                 symbolUi.FlagAsModified();
             }
         }
 
-        private static List<Symbol> GetDependentSymbolsWithInstances(Symbol symbol)
+        public static IEnumerable<Symbol> GetDependingSymbols(Symbol symbol)
         {
-            var result = new List<Symbol>();
             foreach (var s in SymbolRegistry.Entries.Values)
             {
                 foreach (var ss in s.Children)
@@ -1132,12 +1131,10 @@ namespace T3.Gui.Graph.Interaction
                     if (ss.Symbol.Id != symbol.Id)
                         continue;
 
-                    result.Add(s);
+                    yield return s;
                     break;
                 }
             }
-
-            return result;
         }
     }
 }

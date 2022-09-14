@@ -28,6 +28,7 @@ namespace T3.Gui.Windows
                 {
                     changed = true;
                 }
+                changed |= ImGui.Checkbox("Warn before Lib modifications", ref UserSettings.Config.WarnBeforeLibEdit);
                 changed |= ImGui.Checkbox("Use arc connections", ref UserSettings.Config.UseArcConnections);
                 changed |= ImGui.Checkbox("Use Jog Dial Control", ref UserSettings.Config.UseJogDialControl);
                 changed |= ImGui.DragFloat("Scroll smoothing", ref UserSettings.Config.ScrollSmoothing);
