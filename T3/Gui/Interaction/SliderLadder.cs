@@ -2,6 +2,7 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Gui.Styling;
 
 namespace T3.Gui.Interaction
@@ -9,7 +10,7 @@ namespace T3.Gui.Interaction
     /// <summary>
     /// Draws a range of virtual slider overlays
     /// </summary>
-    static class SliderLadder
+    internal static class SliderLadder
     {
         private class RangeDef
         {
@@ -17,89 +18,95 @@ namespace T3.Gui.Interaction
             public readonly float YMax;
             public readonly float ScaleFactor;
             public readonly string Label;
-            public readonly float FadeInDelay;
 
-            public RangeDef(float yMin, float yMax, float scaleFactor, string label, float fadeInDelay)
+            public RangeDef(float yMin, float yMax, float scaleFactor, string label)
             {
                 YMin = yMin;
                 YMax = yMax;
                 ScaleFactor = scaleFactor;
                 Label = label;
-                FadeInDelay = fadeInDelay;
             }
         }
 
         private static readonly RangeDef[] Ranges =
             {
-                new RangeDef(-4f * OuterRangeHeight, -3f * OuterRangeHeight, 1000, "x1000", 2),
-                new RangeDef(-3f * OuterRangeHeight, -2f * OuterRangeHeight, 100, "x100", 1),
-                new RangeDef(-2f * OuterRangeHeight, -1f * OuterRangeHeight, 10, "x10", 0),
-                new RangeDef(-1f * OuterRangeHeight, 1f * OuterRangeHeight, 1, "", 0),
-                new RangeDef(1f * OuterRangeHeight, 2f * OuterRangeHeight, 0.1f, "x0.1", 0),
-                new RangeDef(2f * OuterRangeHeight, 3f * OuterRangeHeight, 0.01f, "x0.01", 1),
+                new(-4f * OuterRangeHeight, -3f * OuterRangeHeight, 1000, "1000"),
+                new(-3f * OuterRangeHeight, -2f * OuterRangeHeight, 100, "100"),
+                new(-2f * OuterRangeHeight, -1f * OuterRangeHeight, 10, "10"),
+
+                new(-1f * OuterRangeHeight, 1f * OuterRangeHeight, 1, ""),
+
+                new(1f * OuterRangeHeight, 2f * OuterRangeHeight, 0.1f, "0.1"),
+                new(2f * OuterRangeHeight, 3f * OuterRangeHeight, 0.01f, "0.01"),
+                new(3f * OuterRangeHeight, 4f * OuterRangeHeight, 0.001f, "0.001"),
             };
 
         private static RangeDef _lockedRange;
+        private const float FadeInLaneOffset = 0.1f;
+        private const float FadeInDuration = 0.1f;
 
-        public static void Draw(ref double _editValue, ImGuiIOPtr io, double min, double max, float scale, float timeSinceVisible, bool clamp, Vector2 _center)
+        private const float LockDistance = 100;
+        //private const float FadeInDelay = 0.1f;
+
+        public static void Draw(ref double editValue, ImGuiIOPtr io, double min, double max, float scale, float timeSinceVisible, bool clamp, Vector2 center)
         {
             var foreground = ImGui.GetForegroundDrawList();
-            ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-            if (timeSinceVisible < 0.2)
+            //ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+            const double initialDelay = 0.2;
+            if (timeSinceVisible < initialDelay)
                 _lockedRange = null;
 
-            var pLast = io.MousePos - io.MouseDelta - _center;
-            var pNow = io.MousePos - _center;
+            var pLast = io.MousePos - io.MouseDelta - center;
+            var pNow = io.MousePos - center;
+
             if (timeSinceVisible < 0.032f)
             {
                 _lastStepPosX = pNow.X;
             }
 
-            float activeScaleFactor = 0;
+            var activeScaleFactor = 0.0;
 
             foreach (var range in Ranges)
             {
-                var isActiveRange = range == _lockedRange
-                                    || (_lockedRange == null && pNow.Y > range.YMin && pNow.Y < range.YMax);
-                var opacity = (timeSinceVisible * 4 - range.FadeInDelay / 4).Clamp(0, 1);
+                var isVerticalMatch = pNow.Y > range.YMin && pNow.Y < range.YMax;
+                var isWithinLockRange = Math.Abs(pNow.X) < LockDistance;
 
-                var isCenterRange = Math.Abs(range.ScaleFactor - 1) < 0.001f;
+                var isActiveRange = isVerticalMatch && isWithinLockRange
+                                    || _lockedRange == null && isVerticalMatch
+                                    || _lockedRange == range;
+
                 if (isActiveRange)
                 {
                     activeScaleFactor = range.ScaleFactor;
-                    if (_lockedRange == null && Math.Abs(ImGui.GetMouseDragDelta().X) > 30)
-                    {
-                        _lockedRange = range;
-                    }
+
+                    _lockedRange = isWithinLockRange ? null : range;
                 }
 
-                if (!isCenterRange)
-                {
-                    var centerColor = (isActiveRange ? RangeActiveColor : RangeCenterColor) * opacity;
+                var isCenterRange = Math.Abs(range.ScaleFactor - 1) < 0.001f;
+                if (isCenterRange)
+                    continue;
 
-                    foreground.AddRectFilledMultiColor(
-                                                       new Vector2(-RangeWidth, range.YMin) + _center,
-                                                       new Vector2(0, range.YMax - RangePadding) + _center,
-                                                       RangeOuterColor,
-                                                       centerColor,
-                                                       centerColor,
-                                                       RangeOuterColor
-                                                      );
+                // Draw
+                var isLookedRange = _lockedRange == range;
 
-                    foreground.AddRectFilledMultiColor(
-                                                       new Vector2(0, range.YMin) + _center,
-                                                       new Vector2(RangeWidth, range.YMax - RangePadding) + _center,
-                                                       centerColor,
-                                                       RangeOuterColor,
-                                                       RangeOuterColor,
-                                                       centerColor
-                                                      );
-                    foreground.AddText(Fonts.FontLarge,
-                                       Fonts.FontLarge.FontSize,
-                                       new Vector2(-20, range.YMin) + _center,
-                                       isActiveRange ? (Color.White * opacity) : Color.Black,
-                                       range.Label);
-                }
+                //var textColor = isActiveRange ? 
+                var centerColor = !isActiveRange
+                                      ? RangeFillColor
+                                      : isLookedRange
+                                          ? LockedRangeFillColor
+                                          : ActiveRangeFillColor;
+
+                var bMin = new Vector2(-RangeWidth, range.YMin) + center;
+                var bMax = new Vector2(RangeWidth, range.YMax) + center;
+                foreground.AddRectFilled(bMin, bMax, centerColor);
+                foreground.AddRect(bMin, bMax, Color.Black);
+
+                var labelSize = ImGui.CalcTextSize(range.Label);
+                var pText = (bMin + bMax) / 2 - labelSize / 2;
+                
+                foreground.AddText(pText,
+                                   isActiveRange ? Color.Black : Color.White,
+                                   range.Label);
             }
 
             var deltaSinceLastStep = pLast.X - _lastStepPosX;
@@ -124,25 +131,24 @@ namespace T3.Gui.Interaction
             if (!(Math.Abs(deltaSinceLastStep) >= StepSize))
                 return;
 
-            _editValue += delta * activeScaleFactor * scale;
+            editValue += delta * activeScaleFactor * scale;
             if (activeScaleFactor > 1)
             {
-                _editValue = Math.Round(_editValue / (activeScaleFactor * scale)) * (activeScaleFactor * scale);
+                editValue = Math.Round(editValue / (activeScaleFactor * scale)) * (activeScaleFactor * scale);
             }
 
             if (clamp)
-                _editValue = _editValue.Clamp(min, max);
+                editValue = editValue.Clamp(min, max);
 
             _lastStepPosX = pNow.X;
         }
 
         private const float StepSize = 3;
         private static float _lastStepPosX;
-        private const float RangeWidth = 300;
+        private const float RangeWidth = 40;
         private const float OuterRangeHeight = 50;
-        private const float RangePadding = 1;
-        private static readonly Color RangeCenterColor = new Color(0.3f, 0.3f, 0.3f, 0.8f);
-        private static readonly Color RangeOuterColor = new Color(0.3f, 0.3f, 0.3f, 0.0f);
-        private static readonly Color RangeActiveColor = new Color(0.0f, 0.0f, 0.0f, 0.7f);
+        private static readonly Color RangeFillColor = new(0.3f, 0.3f, 0.3f);
+        private static readonly Color ActiveRangeFillColor = new(0.8f, 0.8f, 0.8f);
+        private static readonly Color LockedRangeFillColor = new(1f, 0.6f, 0.6f);
     }
 }

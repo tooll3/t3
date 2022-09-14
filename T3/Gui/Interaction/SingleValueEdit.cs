@@ -204,6 +204,7 @@ namespace T3.Gui.Interaction
                         if (isHovered)
                         {
                             T3Ui.MouseWheelFieldHovered = true;
+                            ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
                             var dl = ImGui.GetForegroundDrawList();
                             dl.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.Gray);
 
