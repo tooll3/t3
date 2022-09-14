@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using Rug.Osc;
@@ -54,8 +54,6 @@ namespace Operators.Utils
                                    Port = port,
                                    Receiver = newReceiver,
                                };
-
-            _groupsByPort.Add(port, newGroup);
 
             var thread = new Thread(new ThreadStart(newGroup.ThreadProc));
             newGroup.Thread = thread;
