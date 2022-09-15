@@ -36,7 +36,10 @@
       "Position": {
         "X": 51.512096,
         "Y": 181.99597
-      }
+      },
+      "Min": 0.001,
+      "Max": 1000.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [],

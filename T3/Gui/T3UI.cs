@@ -135,7 +135,7 @@ namespace T3.Gui
                         Application.Exit();
                     }
 
-                    if (ImGui.IsItemHovered())
+                    if (ImGui.IsItemHovered() && IsCurrentlySaving)
                     {
                         ImGui.SetTooltip("Can't exit while saving is in progress");
                     }
