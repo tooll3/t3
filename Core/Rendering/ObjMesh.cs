@@ -4,21 +4,21 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using SharpDX;
-using SharpDX.Direct2D1;
-using SharpDX.DirectWrite;
 using T3.Core.Logging;
+
+// ReSharper disable RedundantNameQualifier
 
 namespace T3.Core.Rendering
 {
     public class ObjMesh
     {
-        public readonly List<SharpDX.Vector3> Positions = new List<SharpDX.Vector3>();
-        public readonly List<SharpDX.Vector4> Colors = new List<Vector4>();
-        
-        public readonly List<SharpDX.Vector3> Normals = new List<SharpDX.Vector3>();
-        public readonly List<SharpDX.Vector2> TexCoords = new List<SharpDX.Vector2>();
-        public readonly List<Face> Faces = new List<Face>();
-        public readonly List<Line> Lines = new List<Line>();
+        public readonly List<SharpDX.Vector3> Positions = new();
+        public readonly List<SharpDX.Vector4> Colors = new();
+
+        public readonly List<SharpDX.Vector3> Normals = new();
+        public readonly List<SharpDX.Vector2> TexCoords = new();
+        public readonly List<Face> Faces = new();
+        public readonly List<Line> Lines = new();
 
         public static ObjMesh LoadFromFile(string objFilePath)
         {
@@ -35,81 +35,93 @@ namespace T3.Core.Rendering
 
             var mesh = new ObjMesh();
 
-            using (var stream = new StreamReader(objFilePath))
+            using var stream = new StreamReader(objFilePath);
+            
+            var line = "";
+            try
             {
-                var line = "";
-                try
+                while ((line = stream.ReadLine()) != null)
                 {
-                    while ((line = stream.ReadLine()) != null)
+                    var lineEntries = line.Split(' ');
+                    switch (lineEntries[0])
                     {
-                        var lineEntries = line.Split(' ');
-                        switch (lineEntries[0])
+                        case "v":
                         {
-                            case "v":
+                            var x = float.Parse(lineEntries[1], CultureInfo.InvariantCulture);
+                            var y = float.Parse(lineEntries[2], CultureInfo.InvariantCulture);
+                            var z = float.Parse(lineEntries[3], CultureInfo.InvariantCulture);
+                            mesh.Positions.Add(new Vector3(x, y, z));
+                            var vertexIncludesColor = lineEntries.Length == 7;
+                            if (vertexIncludesColor)
                             {
-                                float x = float.Parse(lineEntries[1], CultureInfo.InvariantCulture);
-                                float y = float.Parse(lineEntries[2], CultureInfo.InvariantCulture);
-                                float z = float.Parse(lineEntries[3], CultureInfo.InvariantCulture);
-                                mesh.Positions.Add(new Vector3(x, y, z));
-                                var vertexIncludesColor = lineEntries.Length == 7;
-                                if (vertexIncludesColor)
-                                {
-                                    float r = float.Parse(lineEntries[4], CultureInfo.InvariantCulture);
-                                    float g = float.Parse(lineEntries[5], CultureInfo.InvariantCulture);
-                                    float b = float.Parse(lineEntries[6], CultureInfo.InvariantCulture);
-                                    mesh.Colors.Add(new Vector4(r, g, b, 1));
-                                }
-                                break;
+                                var r = float.Parse(lineEntries[4], CultureInfo.InvariantCulture);
+                                var g = float.Parse(lineEntries[5], CultureInfo.InvariantCulture);
+                                var b = float.Parse(lineEntries[6], CultureInfo.InvariantCulture);
+                                mesh.Colors.Add(new Vector4(r, g, b, 1));
                             }
-                            case "vt":
+
+                            break;
+                        }
+                        case "vt":
+                        {
+                            var u = float.Parse(lineEntries[1], CultureInfo.InvariantCulture);
+                            var v = float.Parse(lineEntries[2], CultureInfo.InvariantCulture);
+                            mesh.TexCoords.Add(new Vector2(u, v));
+                            break;
+                        }
+                        case "vn":
+                        {
+                            var x = float.Parse(lineEntries[1], CultureInfo.InvariantCulture);
+                            var y = float.Parse(lineEntries[2], CultureInfo.InvariantCulture);
+                            var z = float.Parse(lineEntries[3], CultureInfo.InvariantCulture);
+                            mesh.Normals.Add(new Vector3(x, y, z));
+                            break;
+                        }
+                        case "f":
+                        {
+                            SplitFaceIndices(lineEntries[1], out var v0V, out var v0T, out var v0N);
+                            SplitFaceIndices(lineEntries[2], out var v1V, out var v1T, out var v1N);
+                            SplitFaceIndices(lineEntries[3], out var v2V, out var v2T, out var v2N);
+                            mesh.Faces.Add(new Face(
+                                                    v0V, v0N, v0T,
+                                                    v1V, v1N, v1T,
+                                                    v2V, v2N, v2T));
+
+                            if (lineEntries.Length > 4)
                             {
-                                float u = float.Parse(lineEntries[1], CultureInfo.InvariantCulture);
-                                float v = float.Parse(lineEntries[2], CultureInfo.InvariantCulture);
-                                mesh.TexCoords.Add(new Vector2(u, v));
-                                break;
-                            }
-                            case "vn":
-                            {
-                                float x = float.Parse(lineEntries[1], CultureInfo.InvariantCulture);
-                                float y = float.Parse(lineEntries[2], CultureInfo.InvariantCulture);
-                                float z = float.Parse(lineEntries[3], CultureInfo.InvariantCulture);
-                                mesh.Normals.Add(new Vector3(x, y, z));
-                                break;
-                            }
-                            case "f":
-                            {
-                                SplitFaceIndices(lineEntries[1], out var v0v, out var v0t, out var v0n);
-                                SplitFaceIndices(lineEntries[2], out var v1v, out var v1t, out var v1n);
-                                SplitFaceIndices(lineEntries[3], out var v2v, out var v2t, out var v2n);
-                                mesh.Faces.Add(new Face( v0v, v0n, v0t, v1v, v1n, v1t, v2v, v2n, v2t));                                
-                                break;
-                            }
-                            case "l":
-                            {
-                                mesh.Lines.Add(new Line(int.Parse(lineEntries[1], CultureInfo.InvariantCulture) - 1,
-                                                        int.Parse(lineEntries[2], CultureInfo.InvariantCulture) - 1
+                                SplitFaceIndices(lineEntries[4], out var v3V, out var v3T, out var v3N);
+                                mesh.Faces.Add(new Face(
+                                                        v0V, v0N, v0T,
+                                                        v2V, v2N, v2T,
+                                                        v3V, v3N, v3T
                                                        ));
-                                break;
                             }
+
+                            break;
+                        }
+                        case "l":
+                        {
+                            mesh.Lines.Add(new Line(int.Parse(lineEntries[1], CultureInfo.InvariantCulture) - 1,
+                                                    int.Parse(lineEntries[2], CultureInfo.InvariantCulture) - 1
+                                                   ));
+                            break;
                         }
                     }
                 }
-                catch (Exception e)
-                {
-                    Log.Error($"Failed to load obj cloud:{e.Message} '{line}'");
-                    return null;
-                }
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to load obj cloud:{e.Message} '{line}'");
+                return null;
+            }
 
-                if (mesh.Colors.Count > 0 && mesh.Colors.Count != mesh.Positions.Count)
-                {
-                    Log.Warning("Optional OBJ color information not defined for all vertices");
-                }
+            if (mesh.Colors.Count > 0 && mesh.Colors.Count != mesh.Positions.Count)
+            {
+                Log.Warning("Optional OBJ color information not defined for all vertices");
             }
 
             return mesh;
         }
-
-        
 
         private static void SplitFaceIndices(string v0, out int positionIndex, out int textureIndex, out int normalIndex)
         {
@@ -126,23 +138,22 @@ namespace T3.Core.Rendering
                 normalIndex = int.Parse(v0Entries[2], CultureInfo.InvariantCulture) - 1;
             }
         }
-        
 
         public struct Face
         {
-            public Face(int v0, int v0n, int v0t, int v1, int v1n, int v1t, int v2, int v2n, int v2t)
+            public Face(int v0, int v0N, int v0T, int v1, int v1N, int v1T, int v2, int v2N, int v2T)
             {
                 V0 = v0;
-                V0n = v0n;
-                V0t = v0t;
+                V0n = v0N;
+                V0t = v0T;
 
                 V1 = v1;
-                V1n = v1n;
-                V1t = v1t;
+                V1n = v1N;
+                V1t = v1T;
 
                 V2 = v2;
-                V2n = v2n;
-                V2t = v2t;
+                V2n = v2N;
+                V2t = v2T;
             }
 
             public int V0;
@@ -177,18 +188,16 @@ namespace T3.Core.Rendering
                 {
                     InitializeVertices();
                 }
+
                 return _distinctVertices;
             }
         }
-        
-        
-        
 
         public int GetVertexIndex(int positionIndex, int normalIndex, int textureCoordsIndex)
         {
             var hash = Vertex.GetHashForIndices(positionIndex, normalIndex, textureCoordsIndex);
 
-            if (VertexIndicesByHash.TryGetValue(hash, out var index))
+            if (_vertexIndicesByHash.TryGetValue(hash, out var index))
             {
                 return index;
             }
@@ -218,14 +227,15 @@ namespace T3.Core.Rendering
             }
         }
 
-        private void InitializeVertices( )
+        private void InitializeVertices()
         {
             if (TexCoords.Count == 0)
             {
                 TexCoords.Add(Vector2.Zero);
             }
+
             _distinctVertices = new List<Vertex>();
-            for (int faceIndex = 0; faceIndex < Faces.Count; faceIndex++)
+            for (var faceIndex = 0; faceIndex < Faces.Count; faceIndex++)
             {
                 var face = Faces[faceIndex];
 
@@ -235,18 +245,15 @@ namespace T3.Core.Rendering
             }
         }
 
-
-
         private int SortInMergedVertex(int posIndex, int normalIndex, int texCoordIndex, ref Face face)
         {
             var vertHash = Vertex.GetHashForIndices(posIndex, normalIndex, texCoordIndex);
 
-            if (VertexIndicesByHash.TryGetValue(vertHash, out var index))
+            if (_vertexIndicesByHash.TryGetValue(vertHash, out var index))
             {
                 return index;
             }
 
-            Vector3 tangent, bitangent;
             MeshUtils.CalcTBNSpace(p0: Positions[face.V0],
                                    uv0: TexCoords[face.V0t],
                                    p1: Positions[face.V1],
@@ -254,18 +261,18 @@ namespace T3.Core.Rendering
                                    p2: Positions[face.V2],
                                    uv2: TexCoords[face.V2t],
                                    normal: Normals[normalIndex],
-                                   tangent: out tangent,
-                                   bitangent: out bitangent);
+                                   tangent: out var tangent,
+                                   bitangent: out var bitangent);
 
             var newIndex = _distinctVertices.Count;
             var vert = new Vertex(posIndex, normalIndex, texCoordIndex);
-            VertexIndicesByHash[vertHash] = newIndex;
+            _vertexIndicesByHash[vertHash] = newIndex;
             VertexBinormals.Add(bitangent);
             VertexTangents.Add(tangent);
             _distinctVertices.Add(vert);
             return newIndex;
         }
-        
+
         /// <summary>
         /// Vertex sorting is implement through an index look-up table
         /// </summary>
@@ -275,28 +282,34 @@ namespace T3.Core.Rendering
             switch (sortDirection)
             {
                 case SortDirections.XForward:
-                    SortedVertexIndices.Sort((v1, v2) =>   Positions[_distinctVertices[v1].PositionIndex].X.
-                                                 CompareTo(Positions[_distinctVertices[v2].PositionIndex].X));
+                    SortedVertexIndices.Sort((v1, v2) => Positions[_distinctVertices[v1].PositionIndex].X
+                                                                                                       .CompareTo(Positions[_distinctVertices[v2].PositionIndex]
+                                                                                                           .X));
                     break;
                 case SortDirections.XBackwards:
-                    SortedVertexIndices.Sort((v1, v2) =>   Positions[_distinctVertices[v2].PositionIndex].X.
-                                                 CompareTo(Positions[_distinctVertices[v1].PositionIndex].X));
+                    SortedVertexIndices.Sort((v1, v2) => Positions[_distinctVertices[v2].PositionIndex].X
+                                                                                                       .CompareTo(Positions[_distinctVertices[v1].PositionIndex]
+                                                                                                           .X));
                     break;
                 case SortDirections.YForward:
-                    SortedVertexIndices.Sort((v1, v2) =>   Positions[_distinctVertices[v1].PositionIndex].Y.
-                                                 CompareTo(Positions[_distinctVertices[v2].PositionIndex].Y));
+                    SortedVertexIndices.Sort((v1, v2) => Positions[_distinctVertices[v1].PositionIndex].Y
+                                                                                                       .CompareTo(Positions[_distinctVertices[v2].PositionIndex]
+                                                                                                           .Y));
                     break;
                 case SortDirections.YBackwards:
-                    SortedVertexIndices.Sort((v1, v2) =>   Positions[_distinctVertices[v2].PositionIndex].Y.
-                                                 CompareTo(Positions[_distinctVertices[v1].PositionIndex].Y));
+                    SortedVertexIndices.Sort((v1, v2) => Positions[_distinctVertices[v2].PositionIndex].Y
+                                                                                                       .CompareTo(Positions[_distinctVertices[v1].PositionIndex]
+                                                                                                           .Y));
                     break;
                 case SortDirections.ZForward:
-                    SortedVertexIndices.Sort((v1, v2) =>   Positions[_distinctVertices[v1].PositionIndex].Z.
-                                                 CompareTo(Positions[_distinctVertices[v2].PositionIndex].Z));
+                    SortedVertexIndices.Sort((v1, v2) => Positions[_distinctVertices[v1].PositionIndex].Z
+                                                                                                       .CompareTo(Positions[_distinctVertices[v2].PositionIndex]
+                                                                                                           .Z));
                     break;
                 case SortDirections.ZBackwards:
-                    SortedVertexIndices.Sort((v1, v2) =>   Positions[_distinctVertices[v2].PositionIndex].Z.
-                                                 CompareTo(Positions[_distinctVertices[v1].PositionIndex].Z));
+                    SortedVertexIndices.Sort((v1, v2) => Positions[_distinctVertices[v2].PositionIndex].Z
+                                                                                                       .CompareTo(Positions[_distinctVertices[v1].PositionIndex]
+                                                                                                           .Z));
                     break;
                 case SortDirections.Ignore:
                     break;
@@ -315,10 +328,10 @@ namespace T3.Core.Rendering
         }
 
         private List<Vertex> _distinctVertices;
-        public readonly List<SharpDX.Vector3> VertexTangents = new List<Vector3>();
-        public readonly List<SharpDX.Vector3> VertexBinormals = new List<Vector3>();
+        public readonly List<SharpDX.Vector3> VertexTangents = new();
+        public readonly List<SharpDX.Vector3> VertexBinormals = new();
         public List<int> SortedVertexIndices;
-        private readonly Dictionary<long, int> VertexIndicesByHash = new Dictionary<long, int>();
+        private readonly Dictionary<long, int> _vertexIndicesByHash = new();
         #endregion
     }
 }
