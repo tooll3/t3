@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.DataTypes;
@@ -10,6 +12,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using Buffer = SharpDX.Direct3D11.Buffer;
+// ReSharper disable RedundantNameQualifier
 
 namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
 {
@@ -23,24 +26,28 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
             Data.UpdateAction = Update;
         }
 
+        private float _scaleFactor;
+        
         private void Update(EvaluationContext context)
         {
             var path = Path.GetValue(context);
             var vertexSorting = SortVertices.GetValue(context);
             var useGpuCaching = UseGPUCaching.GetValue(context);
+            var scaleFactor = ScaleFactor.GetValue(context);
             if (ClearGPUCache.GetValue(context))
             {
-                MeshBufferCache.Clear();
+                _meshBufferCache.Clear();
             }
             
-            if (path != _lastFilePath || SortVertices.DirtyFlag.IsDirty)
+            if (path != _lastFilePath || SortVertices.DirtyFlag.IsDirty || Math.Abs(scaleFactor - _scaleFactor) > 0.001f)
             {
+                _scaleFactor = scaleFactor;
                 
                 _description = System.IO.Path.GetFileName(path);
 
                 if (useGpuCaching)
                 {
-                    if (MeshBufferCache.TryGetValue(path, out var cachedBuffer))
+                    if (_meshBufferCache.TryGetValue(path, out var cachedBuffer))
                     {
                         Data.Value = cachedBuffer.DataBuffers;
                         return;
@@ -77,7 +84,7 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
                         reversedLookup[sortedVertexIndex] = vertexIndex;
                         newData.VertexBufferData[vertexIndex] = new PbrVertex
                                                                     {
-                                                                        Position = mesh.Positions[sortedVertex.PositionIndex],
+                                                                        Position = mesh.Positions[sortedVertex.PositionIndex] * scaleFactor,
                                                                         Normal = mesh.Normals[sortedVertex.NormalIndex],
                                                                         Tangent = mesh.VertexTangents[sortedVertexIndex],
                                                                         Bitangent = mesh.VertexBinormals[sortedVertexIndex],
@@ -121,7 +128,7 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
 
                 if (useGpuCaching)
                 {
-                    MeshBufferCache[path] = newData;
+                    _meshBufferCache[path] = newData;
                 }
 
                 _data = newData;
@@ -143,30 +150,33 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
 
         private class DataSet
         {
-            public readonly MeshBuffers DataBuffers = new MeshBuffers();
+            public readonly MeshBuffers DataBuffers = new();
 
             public Buffer VertexBuffer;
-            public PbrVertex[] VertexBufferData = new PbrVertex[0];
-            public readonly BufferWithViews VertexBufferWithViews = new BufferWithViews();
+            public PbrVertex[] VertexBufferData = Array.Empty<PbrVertex>();
+            public readonly BufferWithViews VertexBufferWithViews = new();
 
             public Buffer IndexBuffer;
-            public SharpDX.Int3[] IndexBufferData = new SharpDX.Int3[0];
-            public readonly BufferWithViews IndexBufferWithViews = new BufferWithViews();
+            public SharpDX.Int3[] IndexBufferData = Array.Empty<Int3>();
+            public readonly BufferWithViews IndexBufferWithViews = new();
         }
 
-        private static readonly Dictionary<string, DataSet> MeshBufferCache = new Dictionary<string, DataSet>();
+        private static readonly Dictionary<string, DataSet> _meshBufferCache = new();
 
         [Input(Guid = "7d576017-89bd-4813-bc9b-70214efe6a27")]
-        public readonly InputSlot<string> Path = new InputSlot<string>();
+        public readonly InputSlot<string> Path = new();
 
         [Input(Guid = "FFD22736-A600-4C97-A4A4-AD3526B8B35C")]
-        public readonly InputSlot<bool> UseGPUCaching = new InputSlot<bool>();
+        public readonly InputSlot<bool> UseGPUCaching = new();
 
         [Input(Guid = "DDD22736-A600-4C97-A4A4-AD3526B8B35C")]
-        public readonly InputSlot<bool> ClearGPUCache = new InputSlot<bool>();
-
+        public readonly InputSlot<bool> ClearGPUCache = new();
         
         [Input(Guid = "AA19E71D-329C-448B-901C-565BF8C0DA4F", MappedType = typeof(ObjMesh.SortDirections))]
-        public readonly InputSlot<int> SortVertices = new InputSlot<int>();
+        public readonly InputSlot<int> SortVertices = new();
+        
+        [Input(Guid = "C39A61B3-FB6B-4611-8F13-273F13C9C491")]
+        public readonly InputSlot<float> ScaleFactor = new();
+
     }
 }

@@ -36,7 +36,7 @@ namespace T3.Core.Rendering
             var mesh = new ObjMesh();
 
             using var stream = new StreamReader(objFilePath);
-            
+
             var line = "";
             try
             {
@@ -205,28 +205,35 @@ namespace T3.Core.Rendering
             return -1;
         }
 
-        public struct Vertex
+        public readonly struct Vertex
         {
             public readonly int PositionIndex;
             public readonly int NormalIndex;
             public readonly int TextureCoordsIndex;
-
-            //public readonly long Hash;
 
             public Vertex(int positionIndex, int normalIndex, int textureCoordsIndex)
             {
                 PositionIndex = positionIndex;
                 NormalIndex = normalIndex;
                 TextureCoordsIndex = textureCoordsIndex;
-                //Hash = GetHashForIndices(positionIndex, normalIndex, textureCoordsIndex);
             }
 
+            /***
+             * The hash is done by bit-shifting. This results in a maximum
+             * vertex count of  64/3 bit =  2^21 = 2,097,152 vertices (!)
+             */
             public static long GetHashForIndices(int pos, int normal, int textureCoords)
             {
                 return (long)pos << 42 | (long)normal << 21 | (long)textureCoords;
             }
         }
 
+        /// <summary>
+        /// Tooll's mesh format uses vertex indices that combine all required information.
+        /// This means that we have to split the OBJ-vertices if they use different normals or UVs.
+        /// We do this by iterating over all face vertices, and generating a hash for face-, normal- and uv-index.
+        /// If the hash already exists, we reuse and thus "merge the vertex" I.e. use it for different faces.
+        /// </summary>
         private void InitializeVertices()
         {
             if (TexCoords.Count == 0)
@@ -234,43 +241,105 @@ namespace T3.Core.Rendering
                 TexCoords.Add(Vector2.Zero);
             }
 
+            // compute fallback UVs as basis for TBN calculation...
+            for (var index = 0; index < Faces.Count; index++)
+            {
+                var face = Faces[index];
+                var uv0 = TexCoords[face.V0t];
+                var uv1 = TexCoords[face.V1t];
+                var uv2 = TexCoords[face.V2t];
+                var needToGenerateUv = uv0 == Vector2.Zero && uv1 == Vector2.Zero && uv2 == Vector2.Zero;
+                if (!needToGenerateUv)
+                    continue;
+                
+                var n0 = Normals[face.V0n];
+                var n1 = Normals[face.V1n];
+                var n2 = Normals[face.V2n];
+                
+                var p0 = Positions[face.V0];
+                var p1 = Positions[face.V1];
+                var p2 = Positions[face.V2];                
+                
+                uv0 = GetUvFromPositionAndNormal(p0, n0);
+                face.V0t = TexCoords.Count;
+                TexCoords.Add(uv0);
+                
+                uv1 = GetUvFromPositionAndNormal(p1, n1);
+                face.V1t = TexCoords.Count;
+                TexCoords.Add(uv1);
+                
+                uv2 = GetUvFromPositionAndNormal(p2, n2);
+                face.V2t = TexCoords.Count;
+                TexCoords.Add(uv2);
+                
+                Faces[index] = face;
+            }
+
             _distinctVertices = new List<Vertex>();
             for (var faceIndex = 0; faceIndex < Faces.Count; faceIndex++)
             {
                 var face = Faces[faceIndex];
 
-                SortInMergedVertex(face.V0, face.V0n, face.V0t, ref face);
-                SortInMergedVertex(face.V1, face.V1n, face.V1t, ref face);
-                SortInMergedVertex(face.V2, face.V2n, face.V2t, ref face);
+                SortInMergedVertex(0, face.V0, face.V0n, face.V0t, faceIndex);
+                SortInMergedVertex(1, face.V1, face.V1n, face.V1t, faceIndex);
+                SortInMergedVertex(2, face.V2, face.V2n, face.V2t, faceIndex);
             }
         }
 
-        private int SortInMergedVertex(int posIndex, int normalIndex, int texCoordIndex, ref Face face)
+        private int SortInMergedVertex(int indexInFace, int posIndex, int normalIndex, int texCoordIndex, int faceIndex)
         {
+            var face = Faces[faceIndex];
             var vertHash = Vertex.GetHashForIndices(posIndex, normalIndex, texCoordIndex);
 
             if (_vertexIndicesByHash.TryGetValue(vertHash, out var index))
             {
                 return index;
             }
+            
+            var p0 = Positions[face.V0];
+            var p1 = Positions[face.V1];
+            var p2 = Positions[face.V2];
 
-            MeshUtils.CalcTBNSpace(p0: Positions[face.V0],
-                                   uv0: TexCoords[face.V0t],
-                                   p1: Positions[face.V1],
-                                   uv1: TexCoords[face.V1t],
-                                   p2: Positions[face.V2],
-                                   uv2: TexCoords[face.V2t],
+            var uv0 = TexCoords[face.V0t];
+            var uv1 = TexCoords[face.V1t];
+            var uv2 = TexCoords[face.V2t];
+
+
+            MeshUtils.CalcTBNSpace(p0: p0, uv0: uv0,
+                                   p1: p1, uv1: uv1,
+                                   p2: p2, uv2: uv2,
                                    normal: Normals[normalIndex],
                                    tangent: out var tangent,
                                    bitangent: out var bitangent);
 
             var newIndex = _distinctVertices.Count;
             var vert = new Vertex(posIndex, normalIndex, texCoordIndex);
+
             _vertexIndicesByHash[vertHash] = newIndex;
             VertexBinormals.Add(bitangent);
             VertexTangents.Add(tangent);
             _distinctVertices.Add(vert);
             return newIndex;
+        }
+
+        private static Vector2 GetUvFromPositionAndNormal(Vector3 pos, Vector3 normal)
+        {
+            var ax = MathF.Abs(normal.X);
+            var ay = MathF.Abs(normal.Y);
+            var az = MathF.Abs(normal.Z);
+
+            if (ax > ay)
+            {
+                return ax > az
+                           ? new Vector2(pos.Y, pos.Z)
+                           : new Vector2(pos.X, pos.Y);
+            }
+            else
+            {
+                return ay > az
+                           ? new Vector2(pos.X, pos.Z)
+                           : new Vector2(pos.X, pos.Y);
+            }
         }
 
         /// <summary>
@@ -282,9 +351,8 @@ namespace T3.Core.Rendering
             switch (sortDirection)
             {
                 case SortDirections.XForward:
-                    SortedVertexIndices.Sort((v1, v2) => Positions[_distinctVertices[v1].PositionIndex].X
-                                                                                                       .CompareTo(Positions[_distinctVertices[v2].PositionIndex]
-                                                                                                           .X));
+                    SortedVertexIndices
+                       .Sort((v1, v2) => Positions[_distinctVertices[v1].PositionIndex].X.CompareTo(Positions[_distinctVertices[v2].PositionIndex].X));
                     break;
                 case SortDirections.XBackwards:
                     SortedVertexIndices.Sort((v1, v2) => Positions[_distinctVertices[v2].PositionIndex].X
