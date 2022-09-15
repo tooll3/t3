@@ -37,7 +37,7 @@ namespace T3.Core.Operator
         public void SetViewFromCamera(ICamera camera)
         {
             var fov = MathUtil.DegreesToRadians(45);
-            float aspectRatio = (float)RequestedResolution.Width / RequestedResolution.Height;
+            var aspectRatio = (float)RequestedResolution.Width / RequestedResolution.Height;
             CameraToClipSpace = Matrix.PerspectiveFovRH(fov, aspectRatio, 0.01f, 1000);
 
             Vector3 eye = new Vector3(camera.CameraPosition.X, camera.CameraPosition.Y, camera.CameraPosition.Z);
