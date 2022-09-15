@@ -359,8 +359,8 @@ namespace T3.Gui.Graph
                         }
                         
                         // Draw View Area
-                        var viewMinInCanvas = canvas.InverseTransformPosition(Vector2.Zero);
-                        var viewMaxInCanvas = canvas.InverseTransformPosition(canvas.WindowSize);
+                        var viewMinInCanvas = canvas.InverseTransformPositionFloat(Vector2.Zero);
+                        var viewMaxInCanvas = canvas.InverseTransformPositionFloat(canvas.WindowSize);
                         
                         var min2 = (viewMinInCanvas - boundsMin) / boundsSize * mapSize + mapMin;
                         var max2 = (viewMaxInCanvas - boundsMin) / boundsSize * mapSize + mapMin;

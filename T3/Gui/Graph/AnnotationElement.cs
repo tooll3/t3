@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
@@ -240,7 +240,7 @@ namespace T3.Gui.Graph
             }
 
             var newDragPos = ImGui.GetMousePos() - _dragStartDelta;
-            var newDragPosInCanvas = GraphCanvas.Current.InverseTransformPosition(newDragPos);
+            var newDragPosInCanvas = GraphCanvas.Current.InverseTransformPositionFloat(newDragPos);
             var moveDeltaOnCanvas = newDragPosInCanvas - draggedNode.PosOnCanvas;
 
             // Drag selection

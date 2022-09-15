@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using ImGuiNET;
 using T3.Core.Animation;
@@ -21,7 +21,7 @@ namespace T3.Gui.Windows.TimeLine.Raster
             }
 
             var scale = TimeLineCanvas.Current.NestedTimeScale * playback.Bpm / 120;
-            var scroll = TimeLineCanvas.Current.NestedTimeOffset;
+            var scroll = TimeLineCanvas.Current.NestedTimeScroll;
 
             DrawTimeTicks(scale, scroll / scale, TimeLineCanvas.Current);
         }

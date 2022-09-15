@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Numerics;
+using T3.Core.Operator;
 using T3.Gui.Selection;
 using UiHelpers;
 
@@ -29,7 +30,7 @@ namespace T3.Gui.UiHelpers
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        Vector2 InverseTransformPosition(Vector2 screenPos);
+        Vector2 InverseTransformPositionFloat(Vector2 screenPos);
 
         float InverseTransformX(float x);
         float TransformX(float x);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -13,6 +13,7 @@ using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Interaction.WithCurves;
 using T3.Gui.Selection;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
@@ -97,7 +98,7 @@ namespace T3.Gui.Windows.TimeLine
 
                 if (FenceState == SelectionFence.States.CompletedAsClick)
                 {
-                    var newTime = InverseTransformPosition(ImGui.GetMousePos()).X;
+                    var newTime = InverseTransformPositionFloat(ImGui.GetMousePos()).X;
                     if (Playback.IsLooping)
                     {
                         var newStartTime = newTime - newTime % 4;
@@ -115,47 +116,79 @@ namespace T3.Gui.Windows.TimeLine
         }
 
 
-        
+
         #region handle nested timelines ----------------------------------
         private void UpdateLocalTimeTranslation(Instance compositionOp)
         {
-            _nestedTimeScale = 1f;
-            _nestedTimeOffset = 0f;
+            // if (UserScrolledCanvas) return;
 
-            var parents = NodeOperations.GetParentInstances(compositionOp).Reverse().ToList();
-            parents.Add(compositionOp);
+            bool firstSource = true;
+            float originalScreenPos = 0f;
+            float newScreenPos = 0f;
+            float centerOfTimeRange = 0f;
+            float centerOfSourceRange = 0f;
+
+            _nestedTimeScale = 1f;
+            _nestedTimeScroll = 0f;
+
+            var compositionTimeClip = NodeOperations.GetCompositionTimeClip(compositionOp);
+            if (compositionTimeClip != null)
+            {
+                centerOfTimeRange = (compositionTimeClip.TimeRange.Start +
+                                     compositionTimeClip.TimeRange.End) * 0.5f;
+                centerOfSourceRange = (compositionTimeClip.SourceRange.Start +
+                                       compositionTimeClip.SourceRange.End) * 0.5f;
+            }
+
+            var parents = NodeOperations.GetParentInstances(compositionOp).ToList();
+            parents.Insert(0, compositionOp);
+            parents.Reverse();
             foreach (var p in parents)
             {
                 if (p.Outputs.Count <= 0 || !(p.Outputs[0] is ITimeClipProvider timeClipProvider))
                     continue;
 
                 var clip = timeClipProvider.TimeClip;
-                var scale = clip.TimeRange.Duration / clip.SourceRange.Duration;
-                _nestedTimeScale *= scale;
-                _nestedTimeOffset += clip.TimeRange.Start - clip.SourceRange.Start * scale;
+                var scale = clip.SourceRange.Duration / clip.TimeRange.Duration;
+                centerOfTimeRange = (clip.TimeRange.Start +
+                                     clip.TimeRange.End) * 0.5f;
+                centerOfSourceRange = (clip.SourceRange.Start +
+                                       clip.SourceRange.End) * 0.5f;
+
+                originalScreenPos = TransformX(centerOfTimeRange);
+                _nestedTimeScale /= scale;
+                newScreenPos = TransformX(centerOfSourceRange);
+                _nestedTimeScroll += InverseTransformDirection(new Vector2(newScreenPos - originalScreenPos, 0)).X
+                                    / _nestedTimeScale;
+
+                firstSource = false;
             }
 
-            // ImGui.TextUnformatted($"localScale: {_nestedTimeScale}   localScroll: {_nestedTimeOffset}");
+            ImGui.TextUnformatted($"localScale: {_nestedTimeScale}   localScroll: {_nestedTimeScroll}   " +
+                                  $"Scroll: {Scroll.X}   Scale: {Scale.X}");
         }
 
         /// <summary>
-        /// Override the default implement to support time clip nesting 
+        /// Override the default implementation to support time clip nesting 
         /// </summary>
-        public override Vector2 TransformPosition(Vector2 posOnCanvas)
+        public override Vector2 TransformPositionFloat(Vector2 posOnCanvas)
         {
             var localScale = new Vector2(_nestedTimeScale, 1);
-            var localScroll = new Vector2(_nestedTimeOffset, 0);
+            var localScroll = new Vector2(_nestedTimeScroll, 0);
 
-            // TODO: Verify that nested scroll is not inverted!
-            return (posOnCanvas * localScale - localScroll) * Scale - Scroll * Scale + WindowPos;
+            // nested tranformation: transform to local coordinates first, then use outer tranformation
+            var localPos = (posOnCanvas - localScroll) * localScale;
+            return base.TransformPositionFloat(localPos);
         }
 
-        public override Vector2 InverseTransformPosition(Vector2 posOnScreen)
+        public override Vector2 InverseTransformPositionFloat(Vector2 posOnScreen)
         {
             var localScale = new Vector2(_nestedTimeScale, 1);
-            var localScroll = new Vector2(_nestedTimeOffset, 0);
+            var localScroll = new Vector2(_nestedTimeScroll, 0);
 
-            return (posOnScreen + localScroll * Scale + Scroll * Scale - WindowPos) / (localScale * Scale);
+            // nested tranformation: transform to local coordinates first, then invert inner tranformation
+            var localPos = base.InverseTransformPositionFloat(posOnScreen);
+            return localPos / localScale + localScroll;
         }
 
         public float TransformGlobalTime(float time)
@@ -163,8 +196,58 @@ namespace T3.Gui.Windows.TimeLine
             return base.TransformPosition(new Vector2(time, 0)).X;
         }
 
-        public float NestedTimeScale => Scale.X * _nestedTimeScale;
-        public float NestedTimeOffset => (Scroll.X * Scale.X + _nestedTimeOffset) + _nestedTimeOffset;
+        public Vector2 TransformDirectionLocal(Vector2 vectorInCanvas)
+        {
+            var localScale = new Vector2(_nestedTimeScale, 1);
+
+            return base.TransformDirection(vectorInCanvas);
+        }
+
+        public Vector2 InverseTransformDirectionLocal(Vector2 vectorInScreen)
+        {
+            var localScale = new Vector2(_nestedTimeScale, 1);
+
+            return base.InverseTransformDirection(vectorInScreen);
+        }
+
+        public override void ZoomWithMouseWheel(Vector2 focusCenterOnScreen)
+        {
+            UserZoomedCanvas = false;
+
+            //DrawCanvasDebugInfos();
+
+            var zoomDelta = ComputeZoomDeltaFromMouseWheel();
+            var clamped = ClampScaleToValidRange(ScaleTarget * zoomDelta);
+            if (clamped == ScaleTarget)
+                return;
+
+            if (Math.Abs(zoomDelta - 1) < 0.001f)
+                return;
+
+            var zoom = zoomDelta * Vector2.One;
+            if (IsCurveCanvas)
+            {
+                if (ImGui.GetIO().KeyAlt)
+                {
+                    zoom.X = 1;
+                }
+                else if (ImGui.GetIO().KeyShift)
+                {
+                    zoom.Y = 1;
+                }
+            }
+
+            ScaleTarget *= zoom;
+
+            if (Math.Abs(zoomDelta) > 0.1f)
+                UserZoomedCanvas = true;
+
+            var focusCenterOnCanvas = base.InverseTransformPositionFloat(focusCenterOnScreen);
+            ScrollTarget += (focusCenterOnCanvas - ScrollTarget) * (zoomDelta - 1.0f) / zoom;
+        }
+
+        public new float NestedTimeScale => Scale.X * _nestedTimeScale;
+        public new float NestedTimeScroll => (Scroll.X + _nestedTimeScroll) * NestedTimeScale;
         #endregion
 
         private void HandleDeferredActions()
@@ -241,7 +324,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 if (!IsCurrentTimeVisible())
                 {
-                    var time = Playback.TimeInBars - InverseTransformDirection(new Vector2(WindowSize.X, 0)).X / 2;
+                    var time = Playback.TimeInBars - InverseTransformDirectionLocal(new Vector2(WindowSize.X, 0)).X / 2;
                     ScrollTarget.X = (float)(time);
                 }
             }
@@ -368,8 +451,8 @@ namespace T3.Gui.Windows.TimeLine
 
         public static TimeLineCanvas Current;
 
-        private float _nestedTimeScale = 1;
-        private float _nestedTimeOffset;
+        private float _nestedTimeScale = 1f;
+        private float _nestedTimeScroll = 0f;
         private double _lastPlaybackSpeed;
         private readonly List<AnimationParameter> _pinnedParams = new(20);
         private List<AnimationParameter> _curvesForSelection = new(64);

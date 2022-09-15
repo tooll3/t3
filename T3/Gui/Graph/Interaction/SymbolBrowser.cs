@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -64,7 +64,7 @@ namespace T3.Gui.Graph.Interaction
                 }
                 else
                 {
-                    OpenAt(GraphCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos + new Vector2(-4, -20)), null, null, false, null);
+                    OpenAt(GraphCanvas.Current.InverseTransformPositionFloat(ImGui.GetIO().MousePos + new Vector2(-4, -20)), null, null, false, null);
                 }
 
                 return;

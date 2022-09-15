@@ -1,4 +1,4 @@
-﻿using ImGuiNET;
+using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -306,7 +306,7 @@ namespace T3.Gui.Windows.TimeLine
                 }
             }
             
-            var newDragPosition = TimeLineCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos);
+            var newDragPosition = TimeLineCanvas.Current.InverseTransformPositionFloat(ImGui.GetIO().MousePos);
 
             var allowHorizontal = CurveInputEditing.MoveDirection == CurveInputEditing.MoveDirections.Both
                                    || CurveInputEditing.MoveDirection == CurveInputEditing.MoveDirections.Horizontal
@@ -463,7 +463,7 @@ namespace T3.Gui.Windows.TimeLine
             var width = ImGui.GetWindowWidth();
 
             double dU = canvas.InverseTransformDirection(new Vector2(step, 0)).X;
-            double u = canvas.InverseTransformPosition(canvas.WindowPos).X;
+            double u = canvas.InverseTransformPositionFloat(canvas.WindowPos).X;
             var x = canvas.WindowPos.X;
 
             var steps = (int)(width / step);
