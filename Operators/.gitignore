@@ -1,7 +1,8 @@
 *.obj
 
 # T3 Operators
-Dashboard_dab61a12-9996-401e-9aa6-328dd6292beb.t3
-Dashboard_dab61a12-9996-401e-9aa6-328dd6292beb.t3ui
+/*/Dashboard.cs
+/*/Dashboard_dab61a12-9996-401e-9aa6-328dd6292beb.t3
+/*/Dashboard_dab61a12-9996-401e-9aa6-328dd6292beb.t3ui
 
 
