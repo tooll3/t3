@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -253,7 +253,7 @@ namespace T3.Gui.Windows.Variations
             }
 
             var newDragPos = ImGui.GetMousePos() - _dragStartDelta;
-            var newDragPosInCanvas = _canvas.InverseTransformPosition(newDragPos);
+            var newDragPosInCanvas = _canvas.InverseTransformPositionFloat(newDragPos);
 
             // Implement snapping to others
             var bestDistanceInCanvas = float.PositiveInfinity;

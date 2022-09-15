@@ -246,7 +246,7 @@ namespace T3.Gui.Graph.Interaction
             }
 
             var newDragPos = ImGui.GetMousePos() - _dragStartDelta;
-            var newDragPosInCanvas = GraphCanvas.Current.InverseTransformPosition(newDragPos);
+            var newDragPosInCanvas = GraphCanvas.Current.InverseTransformPositionFloat(newDragPos);
 
             var bestDistanceInCanvas = float.PositiveInfinity;
             var targetSnapPositionInCanvas = Vector2.Zero;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using T3.Core.Animation;
@@ -22,7 +22,7 @@ namespace T3.Gui.Windows.TimeLine
             }
 
             var scale = TimeLineCanvas.Current.NestedTimeScale;
-            var scroll = TimeLineCanvas.Current.NestedTimeOffset;
+            var scroll = TimeLineCanvas.Current.NestedTimeScroll;
             DrawTimeTicks(scale, scroll / scale, TimeLineCanvas.Current);
         }
 

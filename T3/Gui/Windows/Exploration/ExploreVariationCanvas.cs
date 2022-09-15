@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
@@ -139,7 +139,7 @@ namespace T3.Gui.Windows.Exploration
 
         private GridCell GetScreenRectForGridCell(Vector2 screenPos)
         {
-            var centerInCanvas = InverseTransformPosition(screenPos);
+            var centerInCanvas = InverseTransformPositionFloat(screenPos);
             return new GridCell(
                                 (int)(centerInCanvas.X / _thumbnailSize.X),
                                 (int)(centerInCanvas.Y / _thumbnailSize.Y));
@@ -201,14 +201,14 @@ namespace T3.Gui.Windows.Exploration
         {
             var contentRegion = new ImRect(ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
                                            ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos());
-            var centerInCanvas = InverseTransformPosition(contentRegion.GetCenter());
+            var centerInCanvas = InverseTransformPositionFloat(contentRegion.GetCenter());
             _gridFocusIndex.X = (int)(centerInCanvas.X / _thumbnailSize.X);
             _gridFocusIndex.Y = (int)(centerInCanvas.Y / _thumbnailSize.Y);
         }
 
         private void SetGridFocusToMousePos()
         {
-            var centerInCanvas = InverseTransformPosition(ImGui.GetMousePos());
+            var centerInCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
             _gridFocusIndex.X = (int)(centerInCanvas.X / _thumbnailSize.X);
             _gridFocusIndex.Y = (int)(centerInCanvas.Y / _thumbnailSize.Y);
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using T3.Core.Animation;
@@ -18,7 +18,7 @@ namespace T3.Gui.Windows.TimeLine
             var unitInSecs = UnitsPerSecond * playback.Bpm / 240f * 4;
 
             var scale = TimeLineCanvas.Current.NestedTimeScale / unitInSecs;
-            var scroll = TimeLineCanvas.Current.NestedTimeOffset;
+            var scroll = TimeLineCanvas.Current.NestedTimeScroll;
             DrawTimeTicks(scale, scroll / scale, TimeLineCanvas.Current);
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
@@ -38,10 +38,11 @@ namespace t3.Gui.Interaction.Camera
                 _lastCameraNode = camera;
             }
 
-            if (allowCameraInteraction && ImGui.IsWindowFocused() && ImGui.IsWindowHovered())
+            if (allowCameraInteraction && ImGui.IsWindowHovered())
             {
                 ManipulateCameraByMouse();
-                ManipulateCameraByKeyboard();
+                if (ImGui.IsWindowFocused())
+                    ManipulateCameraByKeyboard();
             }
 
             var frameTime = ImGui.GetTime();

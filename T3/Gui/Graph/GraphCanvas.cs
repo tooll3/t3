@@ -1,4 +1,4 @@
-﻿using ImGuiNET;
+using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -310,7 +310,7 @@ namespace T3.Gui.Graph
                     if (droppedOnBackground)
                     {
                         ConnectionMaker.InitSymbolBrowserAtPosition(SymbolBrowser,
-                                                                    InverseTransformPosition(ImGui.GetIO().MousePos));
+                                                                    InverseTransformPositionFloat(ImGui.GetIO().MousePos));
                     }
                     else
                     {
@@ -471,7 +471,7 @@ namespace T3.Gui.Graph
 
                         var symbol = SymbolRegistry.Entries[guid];
                         var parent = CompositionOp.Symbol;
-                        var posOnCanvas = InverseTransformPosition(ImGui.GetMousePos());
+                        var posOnCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
                         var childUi = NodeOperations.CreateInstance(symbol, parent, posOnCanvas);
 
                         var instance = CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
@@ -731,7 +731,7 @@ namespace T3.Gui.Graph
             {
                 if (ImGui.MenuItem("Add Node...", "TAB", false,true))
                 {
-                    SymbolBrowser.OpenAt(InverseTransformPosition(ImGui.GetMousePos()), null, null, false, null);
+                    SymbolBrowser.OpenAt(InverseTransformPositionFloat(ImGui.GetMousePos()), null, null, false, null);
                 }
 
                 if (ImGui.MenuItem("Add input parameter..."))
@@ -766,7 +766,7 @@ namespace T3.Gui.Graph
         private void AddAnnotation()
         {
             var size = new Vector2(100, 140);
-            var posOnCanvas = InverseTransformPosition(ImGui.GetMousePos());
+            var posOnCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
             var area = new ImRect(posOnCanvas, posOnCanvas + size);
                     
             if (NodeSelection.IsAnythingSelected())
@@ -913,7 +913,7 @@ namespace T3.Gui.Graph
                                                     selectedChildren,
                                                     selectedAnnotations,
                                                     newContainerUi,
-                                                    InverseTransformPosition(ImGui.GetMousePos()));
+                                                    InverseTransformPositionFloat(ImGui.GetMousePos()));
             cmd.Do();
 
             using (var writer = new StringWriter())
@@ -965,7 +965,7 @@ namespace T3.Gui.Graph
                                                             null,
                                                             containerSymbolUi.Annotations.Values.ToList(),
                                                             compositionSymbolUi,
-                                                            InverseTransformPosition(ImGui.GetMousePos()));
+                                                            InverseTransformPositionFloat(ImGui.GetMousePos()));
                     cmd.Do(); // FIXME: Shouldn't this be UndoRedoQueue.AddAndExecute() ? 
                     SymbolUiRegistry.Entries.Remove(containerSymbolUi.Symbol.Id);
                     SymbolRegistry.Entries.Remove(containerSymbol.Id);
