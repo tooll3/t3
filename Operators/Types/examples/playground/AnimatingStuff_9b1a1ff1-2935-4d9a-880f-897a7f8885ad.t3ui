@@ -1,0 +1,346 @@
+{
+  "Id": "9b1a1ff1-2935-4d9a-880f-897a7f8885ad"/*AnimatingStuff*/,
+  "Description": "An interactive playground that illustrates various method to animate things in Tooll.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "cc8267ed-dda9-4614-b813-7276d7168960"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 662.1763,
+        "Y": -126.502335
+      }
+    },
+    {
+      "ChildId": "f78ae4f0-f4de-4c3e-afc6-e590ca446cca"/*Time*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -337.13904,
+        "Y": 117.47208
+      }
+    },
+    {
+      "ChildId": "18453b94-56c2-48af-9dbb-c22f59979eac"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -187.13905,
+        "Y": 117.47208
+      }
+    },
+    {
+      "ChildId": "ae379200-b3ef-42e0-b7a3-135e15b6623e"/*Time*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -344.7715,
+        "Y": 302.99454
+      }
+    },
+    {
+      "ChildId": "d0f693d6-1f2b-4ddb-a312-061df9948e43"/*Modulo*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -191.53813,
+        "Y": 271.41602
+      }
+    },
+    {
+      "ChildId": "cd4606fc-1fd3-49cc-9a8e-f208a2551cfe"/*Sin*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -192.5735,
+        "Y": 331.46695
+      }
+    },
+    {
+      "ChildId": "3458ff59-b0cf-4d68-9fe3-065daa18b4fe"/*PerlinNoise*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -192.5735,
+        "Y": 387.46695
+      }
+    },
+    {
+      "ChildId": "ab4ca174-ac94-4f69-807a-1cb99222bf4e"/*Float3ToVector3*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": -41.53813,
+        "Y": 271.41602
+      }
+    },
+    {
+      "ChildId": "992bd107-7842-4405-8026-924ca2f7bac7"/*Sin*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -214.9024,
+        "Y": 531.5953
+      }
+    },
+    {
+      "ChildId": "b0c738d3-14e5-45af-85ee-8f0c9d4aef95"/*PerlinNoise*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -214.9024,
+        "Y": 587.5953
+      }
+    },
+    {
+      "ChildId": "72b899b2-83ef-408a-aaca-c64ef418303d"/*Add*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -64.90239,
+        "Y": 531.5953
+      }
+    },
+    {
+      "ChildId": "ae957e84-0280-43f4-81e6-6be75dc884e3"/*Time*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -355.9703,
+        "Y": 528.1441
+      }
+    },
+    {
+      "ChildId": "e189b5b6-de84-4a34-881c-9e2704f4512c"/*Time*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -308.55573,
+        "Y": 760.1685
+      }
+    },
+    {
+      "ChildId": "0f990286-95e1-4f3b-bc48-c15fa24e4559"/*Modulo*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -158.55573,
+        "Y": 760.1685
+      }
+    },
+    {
+      "ChildId": "336927ed-4ed7-4df9-965f-ad8dcacda22a"/*Pow*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -8.555847,
+        "Y": 760.1685
+      }
+    },
+    {
+      "ChildId": "c4374d8e-b544-4783-a597-978ad51f0654"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -158.55573,
+        "Y": 816.1685
+      }
+    },
+    {
+      "ChildId": "6802c96a-ee39-4a3f-afe0-732a5eb868bb"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 323.1416,
+        "Y": 77.53679
+      }
+    },
+    {
+      "ChildId": "96d0b66c-af4f-4640-93fe-d51e3b8ec438"/*PerlinNoise*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 323.1416,
+        "Y": 120.53679
+      }
+    },
+    {
+      "ChildId": "c86a1f1a-1b8d-4fe0-89a8-529f625410fd"/*SequenceAnim*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 323.1416,
+        "Y": 176.53679
+      }
+    },
+    {
+      "ChildId": "8aa869d6-0115-4690-a97e-a462e0bf9663"/*Counter*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 323.1416,
+        "Y": 219.53679
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "23bc598c-e87d-4993-9e09-b4676e302e61"/*ColorBuffer*/,
+      "Position": {
+        "X": 812.1763,
+        "Y": -126.502335
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "1e8fabb8-c4ff-42e8-bf8a-a8063a46a54b",
+      "Title": "Tooll is all about animation. So there are endless possibilities to do it.\nThis playground doesn't want to be beautiful but give you some ideas how\nthings can be achieved.\n\n(please activate the Idle Motion mode in the time controls)",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -360.54755,
+        "Y": -155.62436
+      },
+      "Size": {
+        "X": 513.7609,
+        "Y": 86.668526
+      }
+    },
+    {
+      "Id": "61c00d70-55f1-496d-ab8b-d75387a440e6",
+      "Title": "Using time. Notice that Tooll's time is not in secs but in musical Bars \n4 Beats is Bar. 4 bars form a measure. This means that your animation\nwill work for all BPM-rates!\n\n\n",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -362.30133,
+        "Y": 43.232544
+      },
+      "Size": {
+        "X": 476.70273,
+        "Y": 159.47469
+      }
+    },
+    {
+      "Id": "d1a48210-aa37-4a47-bc5b-ecb4974738b2",
+      "Title": "Math is your friend (even if it didn't look it in school).\nUnderstanding these 3 functions will be game changer for your work.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -363.76804,
+        "Y": 211.634
+      },
+      "Size": {
+        "X": 487.20102,
+        "Y": 231.70126
+      }
+    },
+    {
+      "Id": "531dc9b0-ad02-4259-9719-5977dcc4adba",
+      "Title": "Keep in mind that you can always combine stuff.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -368.0495,
+        "Y": 471.19925
+      },
+      "Size": {
+        "X": 501.16092,
+        "Y": 211.1372
+      }
+    },
+    {
+      "Id": "02b96af0-3803-4ddb-af58-2f839afe52c1",
+      "Title": "If values fall in the range between 0 and 1 nerds call them \"Normalized\" or \"Saturated\".\nThe Pow function is very useful to add easing to your normalized values.\n\n",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -368.55573,
+        "Y": 700.1685
+      },
+      "Size": {
+        "X": 533.5782,
+        "Y": 174.90564
+      }
+    },
+    {
+      "Id": "5f9df0dd-39ec-49e9-894b-e820413fdb70",
+      "Title": "Some Operators don't need to be connected to [Time] to be animated.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 254.63885,
+        "Y": 41.12854
+      },
+      "Size": {
+        "X": 394.30252,
+        "Y": 271.63824
+      }
+    }
+  ]
+}
