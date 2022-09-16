@@ -8,7 +8,8 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
 {
-    public class GroupTransform : Instance<GroupTransform> ,ITransformable
+    public class Group : Instance<Group>
+,ITransformable
     {
         [Output(Guid = "977ca2f4-cddb-4b9a-82b2-ff66453bbf9b")]
         public readonly Slot<Command> Output = new Slot<Command>();
@@ -18,7 +19,7 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
         IInputSlot ITransformable.ScaleInput => Scale;
         public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
-        public GroupTransform()
+        public Group()
         {
             Output.UpdateAction = Update;
         }

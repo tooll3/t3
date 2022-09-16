@@ -1,5 +1,5 @@
 {
-  "Id": "a3f64d34-1fab-4230-86b3-1c3deba3f90b"/*GroupTransform*/,
+  "Id": "a3f64d34-1fab-4230-86b3-1c3deba3f90b"/*Group*/,
   "Description": "Transforms a incoming connections. \n\nThis is a combination of [Execute] and [Transform]  for more flexible and compact graphs.",
   "InputUis": [
     {

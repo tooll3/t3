@@ -40,16 +40,6 @@
             "X": 0.48866662,
             "Y": 0.34666666
           }
-        },
-        {
-          "Id": "185a8116-bf01-4bca-b9bf-70fcef7c54e3"/*SampleRadius*/,
-          "Type": "System.Single",
-          "Value": 0.6633335
-        },
-        {
-          "Id": "8bd0ef27-31dd-4896-bd15-92a9143902f9"/*DisplacementOffset*/,
-          "Type": "System.Single",
-          "Value": 0.19
         }
       ],
       "Outputs": []
