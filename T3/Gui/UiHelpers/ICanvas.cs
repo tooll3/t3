@@ -19,6 +19,11 @@ namespace T3.Gui.UiHelpers
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
+        Vector2 TransformPositionFloat(Vector2 posOnCanvas);
+
+        /// <summary>
+        /// Get integer-aligned screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
         Vector2 TransformPosition(Vector2 posOnCanvas);
 
         /// <summary>

@@ -157,11 +157,11 @@ namespace T3.Gui.Interaction
         public Vector2 WindowPos { get; private set; }
         public Vector2 WindowSize { get; private set; }
 
-        public Vector2 Scale { get; private set; } = Vector2.One;
+        public Vector2 Scale { get; protected set; } = Vector2.One;
         protected Vector2 ScaleTarget = Vector2.One;
         protected float NestedTimeScale { get; private set; } = 1f;
 
-        public Vector2 Scroll { get; private set; } = new Vector2(0.0f, 0.0f);
+        public Vector2 Scroll { get; protected set; } = new Vector2(0.0f, 0.0f);
         protected Vector2 ScrollTarget = new Vector2(0.0f, 0.0f);
         protected float NestedTimeScroll { get; private set; } = 0f;
         #endregion

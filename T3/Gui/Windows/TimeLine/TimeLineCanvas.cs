@@ -122,7 +122,6 @@ namespace T3.Gui.Windows.TimeLine
         {
             // if (UserScrolledCanvas) return;
 
-            bool firstSource = true;
             float originalScreenPos = 0f;
             float newScreenPos = 0f;
             float centerOfTimeRange = 0f;
@@ -160,8 +159,6 @@ namespace T3.Gui.Windows.TimeLine
                 newScreenPos = TransformX(centerOfSourceRange);
                 _nestedTimeScroll += InverseTransformDirection(new Vector2(newScreenPos - originalScreenPos, 0)).X
                                     / _nestedTimeScale;
-
-                firstSource = false;
             }
 
             ImGui.TextUnformatted($"localScale: {_nestedTimeScale}   localScroll: {_nestedTimeScroll}   " +
@@ -189,25 +186,6 @@ namespace T3.Gui.Windows.TimeLine
             // nested tranformation: transform to local coordinates first, then invert inner tranformation
             var localPos = base.InverseTransformPositionFloat(posOnScreen);
             return localPos / localScale + localScroll;
-        }
-
-        public float TransformGlobalTime(float time)
-        {
-            return base.TransformPosition(new Vector2(time, 0)).X;
-        }
-
-        public Vector2 TransformDirectionLocal(Vector2 vectorInCanvas)
-        {
-            var localScale = new Vector2(_nestedTimeScale, 1);
-
-            return base.TransformDirection(vectorInCanvas);
-        }
-
-        public Vector2 InverseTransformDirectionLocal(Vector2 vectorInScreen)
-        {
-            var localScale = new Vector2(_nestedTimeScale, 1);
-
-            return base.InverseTransformDirection(vectorInScreen);
         }
 
         public override void ZoomWithMouseWheel(Vector2 focusCenterOnScreen)
@@ -246,8 +224,8 @@ namespace T3.Gui.Windows.TimeLine
             ScrollTarget += (focusCenterOnCanvas - ScrollTarget) * (zoomDelta - 1.0f) / zoom;
         }
 
-        public new float NestedTimeScale => Scale.X * _nestedTimeScale;
-        public new float NestedTimeScroll => (Scroll.X + _nestedTimeScroll) * NestedTimeScale;
+        public new float NestedTimeScale => Scale.X / _nestedTimeScale;
+        public new float NestedTimeScroll => Scroll.X * Scale.X + _nestedTimeScroll * NestedTimeScale;
         #endregion
 
         private void HandleDeferredActions()
@@ -324,8 +302,14 @@ namespace T3.Gui.Windows.TimeLine
             {
                 if (!IsCurrentTimeVisible())
                 {
-                    var time = Playback.TimeInBars - InverseTransformDirectionLocal(new Vector2(WindowSize.X, 0)).X / 2;
-                    ScrollTarget.X = (float)(time);
+                    // assume we are not scrolling, what screen positino would the playhead be at?
+                    var oldScroll = Scroll;
+                    Scroll = new Vector2(0, Scroll.Y);
+                    var posScreen = TransformX((float) Playback.TimeInBars);
+                    // position that playhead in the center of the window
+                    ScrollTarget.X = InverseTransformX(posScreen - WindowSize.X*0.5f);
+                    // restore old state of scrolling
+                    Scroll = oldScroll;
                 }
             }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -289,9 +289,7 @@ namespace T3.Gui.Windows.TimeLine
                             
                             Positions.Add(new Vector2(TimeLineCanvas.Current.TransformX((float)blendU),
                                                        value));
-                            
                         }
-                        
                     } 
 
                     lastValue = MathUtils.RemapAndClamp((float)vDef.Value, maxValue, minValue, layerArea.Min.Y + padding, layerArea.Max.Y - padding);

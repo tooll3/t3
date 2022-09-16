@@ -14,7 +14,7 @@ namespace T3.Gui.Windows.TimeLine
                 return;
             _playback = playback;
 
-            var p = new Vector2(TimeLineCanvas.Current.TransformGlobalTime((float)playback.TimeInBars), 0);
+            var p = new Vector2(TimeLineCanvas.Current.TransformX((float)playback.TimeInBars), 0);
             var drawList = ImGui.GetWindowDrawList();
             drawList.AddRectFilled(p + new Vector2(-1,0), p + new Vector2(2, 2000), _shadowColor);
             drawList.AddRectFilled(p, p + new Vector2(1, 2000), Color.Orange);
