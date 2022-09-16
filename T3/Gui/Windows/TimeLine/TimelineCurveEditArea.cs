@@ -211,7 +211,8 @@ namespace T3.Gui.Windows.TimeLine
             {
                 var sampledValue = (float)curve.GetSampledValue(hoverTime);
                 var posOnCanvas = new Vector2(hoverTime, sampledValue);
-                var posOnScreen = TimeLineCanvas.TransformPosition(posOnCanvas) - new Vector2(KeyframeIconWidth / 2 + 1, KeyframeIconWidth / 2 + 1);
+                var posOnScreen = TimeLineCanvas.TransformPosition(posOnCanvas)
+                                - new Vector2(KeyframeIconWidth / 2 + 1, KeyframeIconWidth / 2 + 1);
                 Icons.Draw(Icon.CurveKeyframe, posOnScreen);
             }
 
@@ -267,7 +268,6 @@ namespace T3.Gui.Windows.TimeLine
             
             if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 0f))
                 return;
-
 
             if (ImGui.GetIO().KeyCtrl && _changeKeyframesCommand == null)
             {

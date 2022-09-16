@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
@@ -29,7 +29,6 @@ namespace T3.Gui.Windows.TimeLine
             _selectionTimeRange = _timeLineCanvas.GetSelectionTimeRange();
             if (!_selectionTimeRange.IsValid || _selectionTimeRange.Duration <= 0)
                 return;
-
 
             var contentRegionMin = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos();
             var contentRegionMax = ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos();

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
@@ -83,7 +83,8 @@ namespace T3.Gui.Interaction.WithCurves
             {
                 var sampledValue = (float)curve.GetSampledValue(hoverTime);
                 var posOnCanvas = new Vector2(hoverTime, sampledValue);
-                var posOnScreen = TransformPosition(posOnCanvas) - new Vector2(KeyframeIconWidth / 2 + 1, KeyframeIconWidth / 2 + 1);
+                var posOnScreen = TransformPosition(posOnCanvas)
+                                - new Vector2(KeyframeIconWidth / 2 + 1, KeyframeIconWidth / 2 + 1);
                 Icons.Draw(Icon.CurveKeyframe, posOnScreen);
                 var drawlist = ImGui.GetWindowDrawList();
                 drawlist.AddText(posOnScreen + Vector2.One*20, Color.Gray, $"Insert at\n{hoverTime:0.00}  {sampledValue:0.00}");
