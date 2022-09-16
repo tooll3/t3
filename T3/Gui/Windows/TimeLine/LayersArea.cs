@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -257,16 +257,16 @@ namespace T3.Gui.Windows.TimeLine
                 var startPosition = position + new Vector2(0, LayerHeight);
                 _drawList.AddBezierCubic(startPosition, 
                                          startPosition + new Vector2(0,verticalOffset),
-                                         startPosition +  new Vector2(horizontalOffset,0),
-                                         startPosition +  new Vector2(horizontalOffset,verticalOffset), 
+                                         startPosition + new Vector2(horizontalOffset,0),
+                                         startPosition + new Vector2(horizontalOffset,verticalOffset), 
                                          _timeRemappingColor,1);
                 
                 horizontalOffset =  TimeLineCanvas.Current.TransformDirection(new Vector2(timeClip.SourceRange.End - timeClip.TimeRange.End,0)).X;
                 var endPosition = position + new Vector2(clipSize.X, LayerHeight);
                 _drawList.AddBezierCubic(endPosition, 
                                          endPosition + new Vector2(0,verticalOffset),
-                                         endPosition +  new Vector2(horizontalOffset,0),
-                                         endPosition +  new Vector2(horizontalOffset,verticalOffset), 
+                                         endPosition + new Vector2(horizontalOffset,0),
+                                         endPosition + new Vector2(horizontalOffset,verticalOffset), 
                                          _timeRemappingColor,1);
                 
             }
@@ -422,10 +422,12 @@ namespace T3.Gui.Windows.TimeLine
             }
 
             var mousePos = ImGui.GetIO().MousePos;
+            var dragContent = ImGui.GetIO().KeyAlt;
+            var referenceRange = (dragContent ? timeClip.SourceRange : timeClip.TimeRange);
             if (_moveClipsCommand == null)
             {
                 var dragStartedAtTime = TimeLineCanvas.Current.InverseTransformX(mousePos.X);
-                _timeWithinDraggedClip = dragStartedAtTime - timeClip.TimeRange.Start;
+                _timeWithinDraggedClip = dragStartedAtTime - referenceRange.Start;
                 _posYInsideDraggedClip = mousePos.Y - position.Y;
                 TimeLineCanvas.Current.StartDragCommand();
             }
@@ -442,14 +444,13 @@ namespace T3.Gui.Windows.TimeLine
 
                     if (_snapHandler.CheckForSnapping(ref newStartTime, TimeLineCanvas.Current.Scale.X))
                     {
-                        TimeLineCanvas.Current.UpdateDragCommand(newStartTime - timeClip.TimeRange.Start, dy);
+                        TimeLineCanvas.Current.UpdateDragCommand(newStartTime - referenceRange.Start, dy);
                         return;
                     }
 
                     var newEndTime = newStartTime + timeClip.TimeRange.Duration;
                     _snapHandler.CheckForSnapping(ref newEndTime, TimeLineCanvas.Current.Scale.X);
-
-                    TimeLineCanvas.Current.UpdateDragCommand(newEndTime - timeClip.TimeRange.End, dy);
+                    TimeLineCanvas.Current.UpdateDragCommand(newEndTime - referenceRange.End, dy);
                     break;
 
                 case HandleDragMode.Start:
@@ -461,7 +462,6 @@ namespace T3.Gui.Windows.TimeLine
                 case HandleDragMode.End:
                     var newDragTime = TimeLineCanvas.Current.InverseTransformX(mousePos.X);
                     _snapHandler.CheckForSnapping(ref newDragTime, TimeLineCanvas.Current.Scale.X);
-
                     TimeLineCanvas.Current.UpdateDragAtEndPointCommand(newDragTime - timeClip.TimeRange.End, 0);
                     break;
 

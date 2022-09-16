@@ -302,7 +302,7 @@ namespace T3.Gui.Windows.TimeLine
             {
                 if (!IsCurrentTimeVisible())
                 {
-                    // assume we are not scrolling, what screen positino would the playhead be at?
+                    // assume we are not scrolling, what screen position would the playhead be at?
                     var oldScroll = Scroll;
                     Scroll = new Vector2(0, Scroll.Y);
                     var posScreen = TransformX((float) Playback.TimeInBars);
