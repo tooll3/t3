@@ -10,8 +10,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": 662.1763,
-        "Y": -126.502335
+        "X": 873.8557,
+        "Y": -368.00662
       }
     },
     {
@@ -186,8 +186,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": 323.1416,
-        "Y": 77.53679
+        "X": 277.3995,
+        "Y": 229.44572
       }
     },
     {
@@ -197,8 +197,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": 323.1416,
-        "Y": 120.53679
+        "X": 274.24683,
+        "Y": 914.9005
       }
     },
     {
@@ -208,8 +208,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": 323.1416,
-        "Y": 176.53679
+        "X": 269.0713,
+        "Y": 520.449
       }
     },
     {
@@ -219,8 +219,119 @@
         "Y": 23.0
       },
       "Position": {
-        "X": 323.1416,
-        "Y": 219.53679
+        "X": 273.5958,
+        "Y": 717.3276
+      }
+    },
+    {
+      "ChildId": "2d866033-d7cd-4151-86c6-4586401d8878"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 276.395,
+        "Y": 313.01584
+      }
+    },
+    {
+      "ChildId": "0a7c8c23-f5b3-4a52-8658-85644f850658"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 276.395,
+        "Y": 356.0159
+      }
+    },
+    {
+      "ChildId": "39f9afdd-a3d7-44f3-95f9-81e2ba1d8817"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 276.395,
+        "Y": 399.01584
+      }
+    },
+    {
+      "ChildId": "aeab1506-0117-4b94-bf80-20d07e91b8e3"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 276.395,
+        "Y": 270.01584
+      }
+    },
+    {
+      "ChildId": "e2b60d54-7aba-4143-bd42-93dec16c259c"/*FloatsToList*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 29.23488,
+        "Y": 220.53563
+      },
+      "Position": {
+        "X": 681.5855,
+        "Y": 190.74869
+      }
+    },
+    {
+      "ChildId": "28eb5a2d-00d7-4908-9bb9-3addca60fcdc"/*SequenceAnim*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 269.0713,
+        "Y": 563.449
+      }
+    },
+    {
+      "ChildId": "95a18394-0bbe-4e45-81b8-a048fe6a5a37"/*Counter*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 273.5958,
+        "Y": 760.3276
+      }
+    },
+    {
+      "ChildId": "683900dd-55c1-453c-8196-113fceb76220"/*PerlinNoise2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 274.24683,
+        "Y": 970.9005
+      }
+    },
+    {
+      "ChildId": "5430f1a7-5ca9-4665-a7e2-344ff3888b51"/*PerlinNoise3*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 274.24683,
+        "Y": 1026.9005
+      }
+    },
+    {
+      "ChildId": "d1b1ec34-7218-4528-8049-b2916651184e"/*AudioReaction*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 882.2925,
+        "Y": 134.21252
       }
     }
   ],
@@ -228,8 +339,8 @@
     {
       "OutputId": "23bc598c-e87d-4993-9e09-b4676e302e61"/*ColorBuffer*/,
       "Position": {
-        "X": 812.1763,
-        "Y": -126.502335
+        "X": 1023.8557,
+        "Y": -368.00662
       }
     }
   ],
@@ -248,8 +359,8 @@
         "Y": -155.62436
       },
       "Size": {
-        "X": 513.7609,
-        "Y": 86.668526
+        "X": 526.4161,
+        "Y": 113.38481
       }
     },
     {
@@ -326,7 +437,7 @@
     },
     {
       "Id": "5f9df0dd-39ec-49e9-894b-e820413fdb70",
-      "Title": "Some Operators don't need to be connected to [Time] to be animated.",
+      "Title": "There are Operators that are animated without a connection to [Time]*\nThese operators are so power tools that we should explain them in detail:\n\n\n\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -338,8 +449,134 @@
         "Y": 41.12854
       },
       "Size": {
-        "X": 394.30252,
-        "Y": 271.63824
+        "X": 495.66006,
+        "Y": 1084.6476
+      }
+    },
+    {
+      "Id": "c6d0cf73-962f-4e66-ade9-60fb8e72f0d4",
+      "Title": "* They are connection themselves automatically.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 266.10956,
+        "Y": 1101.2439
+      },
+      "Size": {
+        "X": 480.41736,
+        "Y": 28.790668
+      }
+    },
+    {
+      "Id": "7333c3c1-a0f0-41c9-9fd8-518804226909",
+      "Title": "Mucians might know [AnimValue] operator as\n\"LFO\" (Low frequency operator).\n\nYou can adjust its main parameters directly by holding \nthe CTRL key.\n- Drag Up/Down on the left adjusts the rate in steps /4 *4\n- Drag the graph to adjust ratio and Bias",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 262.85516,
+        "Y": 99.34523
+      },
+      "Size": {
+        "X": 349.45123,
+        "Y": 344.86874
+      }
+    },
+    {
+      "Id": "d5214db2-60b4-42b3-9a43-3297dd325454",
+      "Title": "[SequenceAnim] is to genate repetitive patterns.\nYou can adjust the steps by dragging with CTRL.\nCheck out the modes. It's very flexible.\n",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 263.64645,
+        "Y": 460.09753
+      },
+      "Size": {
+        "X": 348.86487,
+        "Y": 167.12427
+      }
+    },
+    {
+      "Id": "0f56d01a-e2bd-4948-8357-f52caa52a7ae",
+      "Title": "[Counter] is similar to [AnimValue].\nIt can be useful to drive continues values like\nrotations and phases.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 265.00272,
+        "Y": 642.2368
+      },
+      "Size": {
+        "X": 344.11813,
+        "Y": 206.72559
+      }
+    },
+    {
+      "Id": "363650ae-441e-4058-9319-6c33eea9d63f",
+      "Title": "[PerlinNoise] is the goto algorithm to make things\njiggle in a natural way. Perfect for camera shaking\nand so many other things.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 264.48206,
+        "Y": 855.4984
+      },
+      "Size": {
+        "X": 346.55914,
+        "Y": 236.83342
+      }
+    },
+    {
+      "Id": "558cb89d-7c4c-42fb-a837-fa6eec50fcf6",
+      "Title": "Click me",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 670.0957,
+        "Y": 143.84552
+      },
+      "Size": {
+        "X": 60.941086,
+        "Y": 283.21573
+      }
+    },
+    {
+      "Id": "e068acab-3f1f-4c4a-936a-2d5a631b18d1",
+      "Title": "Reactions to audio input or the current\nproject soundtrack is an advanced topic.\nIt's probably easier to checkout one \nof the tutorial videos for that.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 850.1862,
+        "Y": 42.814667
+      },
+      "Size": {
+        "X": 324.51038,
+        "Y": 223.89844
       }
     }
   ]
