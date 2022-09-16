@@ -8,6 +8,8 @@ using T3.Core.Operator.Slots;
 using System.IO;
 using System.Net;
 using SharpDX.WIC;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
 {
@@ -31,61 +33,72 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
             if (url != _url && !string.IsNullOrEmpty(url))
             {
                 _url = url;
-                if (_webRequest == null)
+                HttpClient httpClient = null;
+                Dispose();
+
+                if (_httpClient == null)
                 {
-                    Dispose();
                     try
                     {
-                        _webRequest = WebRequest.Create(url);
-                        _url = url;
-                        DoGetRequest(_webRequest, HandleResponse);
+                        httpClient = new HttpClient(new HttpClientHandler() { UseDefaultCredentials = true });
+                        _httpClient = httpClient;
                     }
                     catch (Exception e)
                     {
-                        Log.Error($"failed to start request: {e.Message}", this.SymbolChildId);
+                        Log.Error($"failed to create http client: {e.Message}", this.SymbolChildId);
+                        return; // just keep the old image, if we have one
                     }
+                }
+                try { 
+                    DownloadImage(_httpClient, url);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"failed to parse image: {e.Message}", this.SymbolChildId);
                 }
             }
 
             Texture.Value = _image;
         }
 
-        private void DoGetRequest(WebRequest request, Action<WebResponse> responseAction)
+        private async void DownloadImage(HttpClient client, String url)
         {
-            Action wrapperAction = () =>
-                                   {
-                                       request.BeginGetResponse((iAsyncResult) =>
-                                                                {
-                                                                    try
-                                                                    {
-                                                                        WebRequest req = (WebRequest)iAsyncResult.AsyncState;
-                                                                        var response = req.EndGetResponse(iAsyncResult);
-                                                                        responseAction(response);
-                                                                    }
-                                                                    catch (Exception e)
-                                                                    {
-                                                                        Log.Error("Request failed " + e.Message, SymbolChildId);
-                                                                    }
+            if (client == null) throw new ArgumentNullException("httpClient");
 
-                                                                    _webRequest = null;
-                                                                },
-                                                                request);
-                                   };
-            wrapperAction.BeginInvoke((asyncResult) =>
-                                      {
-                                          var action = (Action)asyncResult.AsyncState;
-                                          action.EndInvoke(asyncResult);
-                                      },
-                                      wrapperAction);
+            Stream stream = await DoGetRequest(client, url);
+            if (stream != null)
+            {
+                HandleResponse(stream);
+                stream.Close();
+            }
+        }
+        private async Task<Stream> DoGetRequest(HttpClient client, String url)
+        {
+            try
+            {
+                var response = await client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    var streamResponse = await response.Content.ReadAsStreamAsync();
+                    return streamResponse;
+                }
+                // 404 etc.
+                Log.Info($"No success loading {url}: {response.StatusCode}");
+                return null;
+            } catch (Exception e)
+            {
+                Log.Info($"Failed to load URL : {e.Message}");
+                return null;
+            }
         }
 
-        void HandleResponse(WebResponse response)
+
+        void HandleResponse(Stream streamResponse)
         {
             lock (this)
             {
                 _image = null;
                 using (var memStream = new MemoryStream())
-                using (Stream streamResponse = response.GetResponseStream())
                 {
                     try
                     {
@@ -115,15 +128,13 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
                     }
                     catch (Exception e)
                     {
-                        Log.Info($"Failed to load URL : {e.Message}");
+                        Log.Info($"Failed to decode image data: {e.Message}");
                     }
-
-                    response.Close();
                 }
             }
         }
 
-        private WebRequest _webRequest;
+        private HttpClient _httpClient;
         private Texture2D _image;
         private string _url;
 
