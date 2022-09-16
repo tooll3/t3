@@ -109,7 +109,8 @@ namespace T3.Gui.Interaction
         /// </summary>
         public Vector2 TransformDirection(Vector2 vectorInCanvas)
         {
-            return vectorInCanvas * Scale;
+            return TransformPositionFloat(vectorInCanvas) -
+                   TransformPositionFloat(new Vector2(0, 0));
         }
 
         public Vector2 TransformDirectionFloored(Vector2 vectorInCanvas)
