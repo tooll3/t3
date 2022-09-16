@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Rug.Osc;
@@ -27,8 +27,7 @@ namespace Operators.Utils
                 if (shouldCloseGroup)
                 {
                     Log.Debug($"Closing port {group.Port}");
-                    group.Receiver.Close();
-                    group.Thread.Join();
+                    group.Stop();
                     _groupsByPort.Remove(group.Port);
                 }
 
@@ -49,15 +48,10 @@ namespace Operators.Utils
             var newReceiver = new OscReceiver(port);
             newReceiver.Connect();
 
-            var newGroup = new PortGroup
-                               {
-                                   Port = port,
-                                   Receiver = newReceiver,
-                               };
+            var newGroup = new PortGroup(newReceiver);
 
-            var thread = new Thread(new ThreadStart(newGroup.ThreadProc));
-            newGroup.Thread = thread;
-            thread.Start();
+            _groupsByPort.Add(port, newGroup);
+
             return newGroup;
         }
 
@@ -70,60 +64,84 @@ namespace Operators.Utils
         private static readonly Dictionary<int, PortGroup> _groupsByPort = new();
 
         public class PortGroup
-        {
-            public int Port;
-            public Thread Thread;
-            public OscReceiver Receiver;
+        {          
+            private readonly OscReceiver receiver;
+            private Thread thread;
+            private bool isRunning;
+
+            public int Port => this.receiver.Port;
+
             public HashSet<IOscConsumer> Consumers = new();
 
-            public void ThreadProc()
+            public PortGroup(OscReceiver receiver)
             {
-                while (true)
+                if (receiver == null)
+                    throw new ArgumentNullException("receiver");
+
+                this.receiver = receiver;
+                this.thread = new Thread(new ThreadStart(ThreadProc));
+                this.isRunning = true;
+                this.thread.Start();
+            }
+            
+            private void ThreadProc()
+            {
+                while (this.isRunning)
                 {
-                    while (Receiver.State != OscSocketState.Closed)
-                    {
-                        if (Receiver.State != OscSocketState.Connected)
+                   while (receiver.State != OscSocketState.Closed)           
+                   {
+                        if (receiver.State != OscSocketState.Connected)
                             continue;
 
-                        // Get the next message. This will block until one arrives or the socket is closed
-                        var oscPacket = Receiver.Receive();
-
-                        var oscPacketString = oscPacket.ToString();
 
                         try
                         {
-                            if (oscPacketString == null)
-                                continue;
+                            // Get the next message. This will block until one arrives or the socket is closed
+                            var oscPacket = receiver.Receive();
 
-                            if (oscPacketString.StartsWith("#bundle"))
+                            //note rug.osc ignores non osc packets sent, so this is directly usable
+                            try
                             {
-                                var bundle = OscBundle.Parse(oscPacketString);
-
-                                foreach (var bundleContent in bundle)
+                                if (oscPacket is OscBundle)
                                 {
-                                    if (bundleContent is OscMessage bundleMessage)
+                                    var bundle = (OscBundle)oscPacket;
+
+                                    foreach (var bundleContent in bundle)
                                     {
-                                        ForwardMessage(bundleMessage);
+                                        if (bundleContent is OscMessage bundleMessage)
+                                        {
+                                            ForwardMessage(bundleMessage);
+                                        }
                                     }
-                                }
-
-                                continue;
+                                } 
+                                else if (oscPacket is OscMessage)
+                                {
+                                    ForwardMessage((OscMessage)oscPacket);
+                                }                               
                             }
-
-                            ForwardMessage(OscMessage.Parse(oscPacket.ToString()));
+                            catch (Exception e)
+                            {
+                                Log.Warning($"Failed to parse OSC Message: '{oscPacket} {e.Message}'");
+                            }
                         }
                         catch (Exception e)
                         {
-                            Log.Warning($"Failed to parse OSC Message: '{oscPacket} {e.Message}'");
+                            Log.Debug($"OSC connection on port {Port} changed {e.Message}");
                         }
                     }
 
-                    Log.Debug($"OSC connection on port {Port} closed");
-                    while (Receiver.State == OscSocketState.Closed)
+                    //vux: remark : do not wait 5 seconds if user changed the port
+                    if (this.isRunning)
                     {
-                        Thread.Sleep(5000);
-                        Log.Debug($"Trying to reconnect OSC port {Port}...");
-                        Receiver.Connect();
+                        //vux: remark : normally the only case this would happen is if another app was using the port when starting t3
+                        // the app got closed, otherwise listening on udp will not auto close, is that really necessary?
+                        Log.Debug($"OSC connection on port {Port} closed");
+                        while (receiver.State == OscSocketState.Closed)
+                        {
+                            Thread.Sleep(5000);
+                            Log.Debug($"Trying to reconnect OSC port {Port}...");
+                            receiver.Connect();
+                        }
                     }
                 }
             }
@@ -134,6 +152,14 @@ namespace Operators.Utils
                 {
                     consumer.ProcessMessage(message);
                 }
+            }
+
+            public void Stop()
+            {
+                this.isRunning = false;
+                this.receiver.Dispose();
+                this.thread.Join();
+                
             }
         }
     }
