@@ -57,8 +57,18 @@ namespace T3.Gui.UiHelpers
 
         ImRect InverseTransformRect(ImRect screenRect);
 
-        
-        
+        public enum Transition
+        {
+            JumpIn,
+            JumpOut,
+            Undefined,
+        }
+
+        /// <summary>
+        /// This function is called once when zooming in or out of a time clip canvas
+        /// </summary>
+        void UpdateScaleAndTranslation(Instance compositionOp, Transition transition);
+
         Vector2 Scale { get; }
         Vector2 Scroll { get; }
         Vector2 WindowSize { get; }

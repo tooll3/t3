@@ -46,7 +46,10 @@ namespace T3.Gui.Windows.TimeLine
         {
             Current = this;
             SelectedAnimationParameters = GetAnimationParametersForSelectedNodes(compositionOp);
-            UpdateLocalTimeTranslation(compositionOp);
+
+            // UpdateLocalTimeTranslation(compositionOp);
+            // ImGui.TextUnformatted($"Scroll: {Scroll.X}   Scale: {Scale.X}");
+
             ScrollToTimeAfterStopped();
 
             var modeChanged = UpdateMode();
@@ -118,114 +121,51 @@ namespace T3.Gui.Windows.TimeLine
 
 
         #region handle nested timelines ----------------------------------
-        private void UpdateLocalTimeTranslation(Instance compositionOp)
+        public override void UpdateScaleAndTranslation(Instance compositionOp, ICanvas.Transition transition)
         {
-            // if (UserScrolledCanvas) return;
+            if (transition == ICanvas.Transition.Undefined) return;
 
-            float originalScreenPos = 0f;
-            float newScreenPos = 0f;
-            float centerOfTimeRange = 0f;
-            float centerOfSourceRange = 0f;
+            // remember the old scroll state
+            var oldScale = Scale;
+            var oldScroll = Scroll;
 
-            _nestedTimeScale = 1f;
-            _nestedTimeScroll = 0f;
+            var clip = NodeOperations.GetCompositionTimeClip(compositionOp);
+            if (clip == null) return;
 
-            var compositionTimeClip = NodeOperations.GetCompositionTimeClip(compositionOp);
-            if (compositionTimeClip != null)
+            // determine scaling factor
+            TimeRange sourceRange, targetRange;
+            if (transition == ICanvas.Transition.JumpIn)
             {
-                centerOfTimeRange = (compositionTimeClip.TimeRange.Start +
-                                     compositionTimeClip.TimeRange.End) * 0.5f;
-                centerOfSourceRange = (compositionTimeClip.SourceRange.Start +
-                                       compositionTimeClip.SourceRange.End) * 0.5f;
+                sourceRange = clip.TimeRange;
+                targetRange = clip.SourceRange;
+            }
+            else
+            {
+                sourceRange = clip.SourceRange;
+                targetRange = clip.TimeRange;
             }
 
-            var parents = NodeOperations.GetParentInstances(compositionOp).ToList();
-            parents.Insert(0, compositionOp);
-            parents.Reverse();
-            foreach (var p in parents)
-            {
-                if (p.Outputs.Count <= 0 || !(p.Outputs[0] is ITimeClipProvider timeClipProvider))
-                    continue;
+            float scale = targetRange.Duration / sourceRange.Duration;
 
-                var clip = timeClipProvider.TimeClip;
-                var scale = clip.SourceRange.Duration / clip.TimeRange.Duration;
-                centerOfTimeRange = (clip.TimeRange.Start +
-                                     clip.TimeRange.End) * 0.5f;
-                centerOfSourceRange = (clip.SourceRange.Start +
-                                       clip.SourceRange.End) * 0.5f;
+            // remove scrolling, then determine where the time clip is centered
+            Scroll = new Vector2(0, Scroll.Y);
+            var centerOfSourceRange = (sourceRange.Start + sourceRange.End) * 0.5f;
+            var originalScreenPos = TransformX(centerOfSourceRange);
 
-                originalScreenPos = TransformX(centerOfTimeRange);
-                _nestedTimeScale /= scale;
-                newScreenPos = TransformX(centerOfSourceRange);
-                _nestedTimeScroll += InverseTransformDirection(new Vector2(newScreenPos - originalScreenPos, 0)).X
-                                    / _nestedTimeScale;
-            }
+            // now apply scaling and determine where the source clip is centered
+            Scale /= scale;
+            var centerOfTargetRange = (targetRange.Start + targetRange.End) * 0.5f;
+            var newScreenPos = TransformX(centerOfTargetRange);
 
-            ImGui.TextUnformatted($"localScale: {_nestedTimeScale}   localScroll: {_nestedTimeScroll}   " +
-                                  $"Scroll: {Scroll.X}   Scale: {Scale.X}");
+            // set final scale and "undo" the movement of the position
+            ScaleTarget.X = Scale.X;
+            var positionDelta = new Vector2(newScreenPos - originalScreenPos, 0f);
+            ScrollTarget.X = oldScroll.X * scale + InverseTransformDirection(positionDelta).X;
+
+            // restore the old scale and scroll state
+            Scale = oldScale;
+            Scroll = oldScroll;
         }
-
-        /// <summary>
-        /// Override the default implementation to support time clip nesting 
-        /// </summary>
-        public override Vector2 TransformPositionFloat(Vector2 posOnCanvas)
-        {
-            var localScale = new Vector2(_nestedTimeScale, 1);
-            var localScroll = new Vector2(_nestedTimeScroll, 0);
-
-            // nested tranformation: transform to local coordinates first, then use outer tranformation
-            var localPos = (posOnCanvas - localScroll) * localScale;
-            return base.TransformPositionFloat(localPos);
-        }
-
-        public override Vector2 InverseTransformPositionFloat(Vector2 posOnScreen)
-        {
-            var localScale = new Vector2(_nestedTimeScale, 1);
-            var localScroll = new Vector2(_nestedTimeScroll, 0);
-
-            // nested tranformation: transform to local coordinates first, then invert inner tranformation
-            var localPos = base.InverseTransformPositionFloat(posOnScreen);
-            return localPos / localScale + localScroll;
-        }
-
-        public override void ZoomWithMouseWheel(Vector2 focusCenterOnScreen)
-        {
-            UserZoomedCanvas = false;
-
-            //DrawCanvasDebugInfos();
-
-            var zoomDelta = ComputeZoomDeltaFromMouseWheel();
-            var clamped = ClampScaleToValidRange(ScaleTarget * zoomDelta);
-            if (clamped == ScaleTarget)
-                return;
-
-            if (Math.Abs(zoomDelta - 1) < 0.001f)
-                return;
-
-            var zoom = zoomDelta * Vector2.One;
-            if (IsCurveCanvas)
-            {
-                if (ImGui.GetIO().KeyAlt)
-                {
-                    zoom.X = 1;
-                }
-                else if (ImGui.GetIO().KeyShift)
-                {
-                    zoom.Y = 1;
-                }
-            }
-
-            ScaleTarget *= zoom;
-
-            if (Math.Abs(zoomDelta) > 0.1f)
-                UserZoomedCanvas = true;
-
-            var focusCenterOnCanvas = base.InverseTransformPositionFloat(focusCenterOnScreen);
-            ScrollTarget += (focusCenterOnCanvas - ScrollTarget) * (zoomDelta - 1.0f) / zoom;
-        }
-
-        public new float NestedTimeScale => Scale.X / _nestedTimeScale;
-        public new float NestedTimeScroll => Scroll.X * Scale.X + _nestedTimeScroll * NestedTimeScale;
         #endregion
 
         private void HandleDeferredActions()
@@ -435,8 +375,6 @@ namespace T3.Gui.Windows.TimeLine
 
         public static TimeLineCanvas Current;
 
-        private float _nestedTimeScale = 1f;
-        private float _nestedTimeScroll = 0f;
         private double _lastPlaybackSpeed;
         private readonly List<AnimationParameter> _pinnedParams = new(20);
         private List<AnimationParameter> _curvesForSelection = new(64);

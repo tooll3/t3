@@ -21,9 +21,9 @@ namespace T3.Gui.Windows.TimeLine
                 ScaleRanges = InitializeTimeScaleDefinitions(UserSettings.Config.TimeRasterDensity * 0.02f);
             }
 
-            var scale = TimeLineCanvas.Current.NestedTimeScale;
-            var scroll = TimeLineCanvas.Current.NestedTimeScroll;
-            DrawTimeTicks(scale, scroll / scale, TimeLineCanvas.Current);
+            var scale = TimeLineCanvas.Current.Scale.X;
+            var scroll = TimeLineCanvas.Current.Scroll.X;
+            DrawTimeTicks(scale, scroll, TimeLineCanvas.Current);
         }
 
         protected override string BuildLabel(Raster raster, double timeInBars)

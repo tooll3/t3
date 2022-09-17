@@ -20,10 +20,10 @@ namespace T3.Gui.Windows.TimeLine.Raster
                 _initializedDensity = UserSettings.Config.TimeRasterDensity;
             }
 
-            var scale = TimeLineCanvas.Current.NestedTimeScale * playback.Bpm / 120;
-            var scroll = TimeLineCanvas.Current.NestedTimeScroll;
+            var scale = TimeLineCanvas.Current.Scale.X * playback.Bpm / 120f;
+            var scroll = TimeLineCanvas.Current.Scroll.X / playback.Bpm * 120f;
 
-            DrawTimeTicks(scale, scroll / scale, TimeLineCanvas.Current);
+            DrawTimeTicks(scale, scroll, TimeLineCanvas.Current);
         }
 
         private const double Epsilon = 0.01f;
