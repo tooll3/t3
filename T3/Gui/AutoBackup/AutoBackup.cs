@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -68,8 +68,7 @@ namespace T3.Gui.AutoBackup
                     if (!Directory.Exists(tempTargetPath))
                         Directory.CreateDirectory(tempTargetPath);
 
-                    CopyDirectory(sourcePath, tempTargetPath, "*");
-                    directoryWithFiles[sourcePath] = Directory.GetFiles(tempTargetPath, "*");
+                    CopyDirectory(sourcePath, tempTargetPath, "*").ToList().ForEach(x => directoryWithFiles.Add(x.Key, x.Value));
                 }
 
                 var zipPath = Path.GetDirectoryName(zipFilePath);
@@ -82,7 +81,7 @@ namespace T3.Gui.AutoBackup
                 {
                     foreach (var file in value)
                     {
-                        archive.CreateEntryFromFile(file,
+                        archive.CreateEntryFromFile(Path.Join(directory, Path.GetFileName(file)),
                                                     Path.Join(directory, Path.GetFileName(file)),
                                                     CompressionLevel.Fastest);
                     }
@@ -101,8 +100,12 @@ namespace T3.Gui.AutoBackup
             _isSaving = false;
         }
 
-        private static void CopyDirectory(string sourcePath, string destPath, string searchPattern)
+        private static Dictionary<string, string[]> CopyDirectory(string sourcePath, string destPath, string searchPattern)
         {
+            // returns a dict of all folders (key) and files (value) found in the directory
+            var result = new Dictionary<string, string[]>();
+            var filesFound = new List<string>();
+
             if (!Directory.Exists(destPath))
             {
                 Directory.CreateDirectory(destPath);
@@ -112,13 +115,17 @@ namespace T3.Gui.AutoBackup
             {
                 string dest = Path.Combine(destPath, Path.GetFileName(file));
                 File.Copy(file, dest);
+                filesFound.Add(Path.GetFileName(file));
             }
+            result[sourcePath] = filesFound.ToArray();
 
             foreach (string folder in Directory.GetDirectories(sourcePath, searchPattern))
             {
                 string dest = Path.Combine(destPath, Path.GetFileName(folder));
-                CopyDirectory(folder, dest, searchPattern);
+                // recurse, and join both dicts
+                CopyDirectory(folder, dest, searchPattern).ToList().ForEach(x => result.Add(x.Key, x.Value));
             }
+            return result;
         }
 
         private static void DeletePath(string path)
