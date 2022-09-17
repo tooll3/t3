@@ -421,7 +421,7 @@ namespace T3.Gui.Windows.TimeLine
         #region  implement snapping -------------------------
         SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
         {
-            _snapThresholdOnCanvas = SnapDistance / canvasScale;;
+            _snapThresholdOnCanvas = SnapDistance / canvasScale;
             var maxForce = 0.0;
             var bestSnapTime = Double.NaN;
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
@@ -120,7 +120,7 @@ namespace T3.Gui.Windows
                 return;
             }
 
-            canvas.SetComposition(bookmark.IdPath, ScalableCanvas.Transition.Undefined);
+            canvas.SetComposition(bookmark.IdPath, ICanvas.Transition.Undefined);
             canvas.SetVisibleRange(bookmark.ViewScope.Scale, bookmark.ViewScope.Scroll);
             //SelectionManager.SetSelection(bookmark.SelectedChildIds);
         }

@@ -146,6 +146,11 @@ namespace T3.Gui.Interaction
                               InverseTransformPositionFloat(screenRect.Max));
         }
 
+        public virtual void UpdateScaleAndTranslation(Instance compositionOp, ICanvas.Transition transition)
+        {
+            // by default do nothing, overide in subclasses
+        }
+
         /// <summary>
         /// Transform a canvas position to relative position within ImGui-window (e.g. to set ImGui context) 
         /// </summary>
@@ -160,11 +165,9 @@ namespace T3.Gui.Interaction
 
         public Vector2 Scale { get; protected set; } = Vector2.One;
         protected Vector2 ScaleTarget = Vector2.One;
-        protected float NestedTimeScale { get; private set; } = 1f;
 
         public Vector2 Scroll { get; protected set; } = new Vector2(0.0f, 0.0f);
         protected Vector2 ScrollTarget = new Vector2(0.0f, 0.0f);
-        protected float NestedTimeScroll { get; private set; } = 0f;
         #endregion
 
         public Scope GetTargetScope()
@@ -299,14 +302,7 @@ namespace T3.Gui.Interaction
             }
         }
 
-        public enum Transition
-        {
-            JumpIn,
-            JumpOut,
-            Undefined,
-        }
-
-        protected void SetScopeWithTransition(Vector2 scale, Vector2 scroll, Vector2 previousFocusOnScreen, Transition transition)
+        protected void SetScopeWithTransition(Vector2 scale, Vector2 scroll, Vector2 previousFocusOnScreen, ICanvas.Transition transition)
         {
             if (float.IsInfinity(scale.X) || float.IsNaN(scale.X)
                                           || float.IsInfinity(scale.Y) || float.IsNaN(scale.Y)
@@ -323,13 +319,13 @@ namespace T3.Gui.Interaction
 
             switch (transition)
             {
-                case Transition.JumpIn:
+                case ICanvas.Transition.JumpIn:
                     Scale = ScaleTarget * 0.3f;
                     var sizeOnCanvas = WindowSize / Scale;
                     Scroll = ScrollTarget - sizeOnCanvas / 2;
                     break;
 
-                case Transition.JumpOut:
+                case ICanvas.Transition.JumpOut:
                     Scale = ScaleTarget * 3f;
                     var sizeOnCanvas2 = WindowSize / Scale;
                     Scroll = ScrollTarget + sizeOnCanvas2 / 2;
@@ -540,8 +536,6 @@ namespace T3.Gui.Interaction
         public bool UsingParentCanvas => GraphCanvas.Current != this && GraphCanvas.Current != null;
         public Vector2 ParentScale => UsingParentCanvas ? GraphCanvas.Current.ScaleTarget : Vector2.One;
         public Vector2 ParentScroll => UsingParentCanvas ? GraphCanvas.Current.ScrollTarget : Vector2.Zero;
-        public float ParentTimeScale => UsingParentCanvas ? GraphCanvas.Current.NestedTimeScale : 1f;
-        public float ParentTimeScroll => UsingParentCanvas ? GraphCanvas.Current.NestedTimeScroll : 0f;
 
         public struct Scope
         {

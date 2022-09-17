@@ -15,11 +15,11 @@ namespace T3.Gui.Windows.TimeLine
     {
         public override void Draw(Playback playback)
         {
-            var unitInSecs = UnitsPerSecond * playback.Bpm / 240f * 4;
+            var unitInSecs = UnitsPerSecond / playback.Bpm * 60f * 4f;
 
-            var scale = TimeLineCanvas.Current.NestedTimeScale / unitInSecs;
-            var scroll = TimeLineCanvas.Current.NestedTimeScroll;
-            DrawTimeTicks(scale, scroll / scale, TimeLineCanvas.Current);
+            var scale = TimeLineCanvas.Current.Scale.X / unitInSecs;
+            var scroll = TimeLineCanvas.Current.Scroll.X * unitInSecs;
+            DrawTimeTicks(scale, scroll, TimeLineCanvas.Current);
         }
 
         /// <summary>

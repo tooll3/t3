@@ -39,11 +39,19 @@ namespace T3.Gui.Graph
         public GraphCanvas(GraphWindow window, List<Guid> idPath)
         {
             _window = window;
-            SetComposition(idPath, Transition.JumpIn);
+            SetComposition(idPath, ICanvas.Transition.JumpIn);
         }
 
-        public void SetComposition(List<Guid> childIdPath, Transition transition)
+        public void SetComposition(List<Guid> childIdPath, ICanvas.Transition transition)
         {
+            // zoom timeline out if necessary
+            if (transition == ICanvas.Transition.JumpOut)
+            {
+                var primaryGraphWindow = GraphWindow.GetVisibleInstances().FirstOrDefault();
+                primaryGraphWindow?.CurrentTimeLine?.UpdateScaleAndTranslation(primaryGraphWindow.GraphCanvas.CompositionOp,
+                                                                              transition);
+            }
+
             var previousFocusOnScreen = WindowPos + WindowSize / 2;
 
             var previousInstanceWasSet = _compositionPath != null && _compositionPath.Count > 0;
@@ -85,6 +93,13 @@ namespace T3.Gui.Graph
             }
 
             SetScopeWithTransition(newProps.Scale, newProps.Scroll, previousFocusOnScreen, transition);
+
+            if (transition == ICanvas.Transition.JumpIn)
+            {
+                var primaryGraphWindow = GraphWindow.GetVisibleInstances().FirstOrDefault();
+                primaryGraphWindow?.CurrentTimeLine?.UpdateScaleAndTranslation(primaryGraphWindow.GraphCanvas.CompositionOp,
+                                                                               transition);
+            }
         }
 
         public void SetCompositionToChildInstance(Instance instance)
@@ -102,7 +117,7 @@ namespace T3.Gui.Graph
             newPath.Add(instance.SymbolChildId);
             NodeSelection.Clear();
             TimeLineCanvas.Current?.ClearSelection();
-            SetComposition(newPath, Transition.JumpIn);
+            SetComposition(newPath, ICanvas.Transition.JumpIn);
         }
 
         public void SetCompositionToParentInstance(Instance instance)
@@ -128,7 +143,7 @@ namespace T3.Gui.Graph
             if (shortenedPath.Count() == _compositionPath.Count())
                 throw new ArgumentException("Can't SetCompositionToParentInstance because Instance is not a parent of current composition");
 
-            SetComposition(shortenedPath, Transition.JumpOut);
+            SetComposition(shortenedPath, ICanvas.Transition.JumpOut);
             NodeSelection.Clear();
             TimeLineCanvas.Current?.ClearSelection();
             var previousCompChildUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis

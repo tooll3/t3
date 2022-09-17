@@ -550,6 +550,8 @@ namespace T3.Gui.Graph
 
         private readonly TimeLineCanvas _timeLineCanvas;
 
+        public TimeLineCanvas CurrentTimeLine => _timeLineCanvas;
+
         private static readonly EditSymbolDescriptionDialog EditDescriptionDialog = new EditSymbolDescriptionDialog();
     }
 }

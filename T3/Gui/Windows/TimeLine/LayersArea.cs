@@ -424,6 +424,10 @@ namespace T3.Gui.Windows.TimeLine
             var mousePos = ImGui.GetIO().MousePos;
             var dragContent = ImGui.GetIO().KeyAlt;
             var referenceRange = (dragContent ? timeClip.SourceRange : timeClip.TimeRange);
+            var scale = 1f;
+            if (dragContent && timeClip.SourceRange.Duration != 0 && timeClip.SourceRange.Duration != 0)
+                scale = timeClip.TimeRange.Duration / timeClip.SourceRange.Duration;
+
             if (_moveClipsCommand == null)
             {
                 var dragStartedAtTime = TimeLineCanvas.Current.InverseTransformX(mousePos.X);
@@ -442,26 +446,26 @@ namespace T3.Gui.Windows.TimeLine
                     var newDragPosY = mousePos.Y - position.Y;
                     var dy = _posYInsideDraggedClip - newDragPosY;
 
-                    if (_snapHandler.CheckForSnapping(ref newStartTime, TimeLineCanvas.Current.Scale.X))
+                    if (_snapHandler.CheckForSnapping(ref newStartTime, TimeLineCanvas.Current.Scale.X * scale))
                     {
                         TimeLineCanvas.Current.UpdateDragCommand(newStartTime - referenceRange.Start, dy);
                         return;
                     }
 
-                    var newEndTime = newStartTime + timeClip.TimeRange.Duration;
-                    _snapHandler.CheckForSnapping(ref newEndTime, TimeLineCanvas.Current.Scale.X);
+                    var newEndTime = newStartTime + referenceRange.Duration;
+                    _snapHandler.CheckForSnapping(ref newEndTime, TimeLineCanvas.Current.Scale.X * scale);
                     TimeLineCanvas.Current.UpdateDragCommand(newEndTime - referenceRange.End, dy);
                     break;
 
                 case HandleDragMode.Start:
                     var newDragStartTime = TimeLineCanvas.Current.InverseTransformX(mousePos.X);
-                    _snapHandler.CheckForSnapping(ref newDragStartTime, TimeLineCanvas.Current.Scale.X);
+                    _snapHandler.CheckForSnapping(ref newDragStartTime, TimeLineCanvas.Current.Scale.X * scale);
                     TimeLineCanvas.Current.UpdateDragAtStartPointCommand(newDragStartTime - timeClip.TimeRange.Start, 0);
                     break;
 
                 case HandleDragMode.End:
                     var newDragTime = TimeLineCanvas.Current.InverseTransformX(mousePos.X);
-                    _snapHandler.CheckForSnapping(ref newDragTime, TimeLineCanvas.Current.Scale.X);
+                    _snapHandler.CheckForSnapping(ref newDragTime, TimeLineCanvas.Current.Scale.X * scale);
                     TimeLineCanvas.Current.UpdateDragAtEndPointCommand(newDragTime - timeClip.TimeRange.End, 0);
                     break;
 
@@ -595,6 +599,16 @@ namespace T3.Gui.Windows.TimeLine
             var timeRange = TimeRange.Undefined;
             foreach (var s in ClipSelection.SelectedClips)
             {
+                // fix broken time ranges
+                // FIXME: make sure these don't happen at all
+                if (s.TimeRange.Duration <= 0
+                    || float.IsNaN(s.TimeRange.Start)
+                    || float.IsNaN(s.TimeRange.End))
+                {
+                    s.TimeRange.Start = 0;
+                    s.TimeRange.End = s.TimeRange.Start + 1;
+                }
+
                 timeRange.Unite(s.TimeRange.Start);
                 timeRange.Unite(s.TimeRange.End);
             }
