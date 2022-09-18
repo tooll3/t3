@@ -4,25 +4,14 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "cc8267ed-dda9-4614-b813-7276d7168960"/*RenderTarget*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 873.8557,
-        "Y": -368.00662
-      }
-    },
-    {
       "ChildId": "f78ae4f0-f4de-4c3e-afc6-e590ca446cca"/*Time*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
       },
       "Position": {
-        "X": -337.13904,
-        "Y": 117.47208
+        "X": -338.91553,
+        "Y": 117.81756
       }
     },
     {
@@ -32,8 +21,8 @@
         "Y": 49.0
       },
       "Position": {
-        "X": -187.13905,
-        "Y": 117.47208
+        "X": -188.91554,
+        "Y": 117.81756
       }
     },
     {
@@ -98,8 +87,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": -214.9024,
-        "Y": 531.5953
+        "X": -210.93073,
+        "Y": 517.6301
       }
     },
     {
@@ -109,8 +98,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": -214.9024,
-        "Y": 587.5953
+        "X": -210.93073,
+        "Y": 573.6301
       }
     },
     {
@@ -120,8 +109,8 @@
         "Y": 49.0
       },
       "Position": {
-        "X": -64.90239,
-        "Y": 531.5953
+        "X": -60.93071,
+        "Y": 517.6301
       }
     },
     {
@@ -131,8 +120,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -355.9703,
-        "Y": 528.1441
+        "X": -351.99863,
+        "Y": 514.17896
       }
     },
     {
@@ -142,8 +131,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -308.55573,
-        "Y": 760.1685
+        "X": -303.33383,
+        "Y": 739.68634
       }
     },
     {
@@ -153,8 +142,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": -158.55573,
-        "Y": 760.1685
+        "X": -153.33383,
+        "Y": 739.68634
       }
     },
     {
@@ -164,8 +153,8 @@
         "Y": 49.0
       },
       "Position": {
-        "X": -8.555847,
-        "Y": 760.1685
+        "X": -3.3339539,
+        "Y": 739.68634
       }
     },
     {
@@ -175,8 +164,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -158.55573,
-        "Y": 816.1685
+        "X": -153.33383,
+        "Y": 795.68634
       }
     },
     {
@@ -330,8 +319,509 @@
         "Y": 23.0
       },
       "Position": {
-        "X": 882.2925,
-        "Y": 134.21252
+        "X": 834.43744,
+        "Y": 171.57913
+      }
+    },
+    {
+      "ChildId": "bdae8c89-e17a-44b8-ad72-f727e0242405"/*SampleGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 984.43744,
+        "Y": 171.57913
+      }
+    },
+    {
+      "ChildId": "0313aef1-7de5-4f01-8857-6fe06cefb103"/*Blob*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 1134.4374,
+        "Y": 171.57913
+      }
+    },
+    {
+      "ChildId": "728f86d7-f3ac-4a4f-9d62-30ec4a1eea30"/*AudioReaction*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 834.43744,
+        "Y": 227.57913
+      }
+    },
+    {
+      "ChildId": "f05f819b-dc35-4855-a497-74424b41cea2"/*Remap*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 984.43744,
+        "Y": 227.57913
+      }
+    },
+    {
+      "ChildId": "601b2b0f-01ba-46b9-b54b-5df317984e05"/*Counter*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 984.43744,
+        "Y": 290.57913
+      }
+    },
+    {
+      "ChildId": "2ae322d2-fefc-47e4-bab7-7cb30398df46"/*Text*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1358.6831,
+        "Y": 157.37158
+      }
+    },
+    {
+      "ChildId": "7a930515-14a5-4155-ab9a-e031b8ecf182"/*TriggerAnim*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1351.8728,
+        "Y": 553.42847
+      }
+    },
+    {
+      "ChildId": "05f16d8d-3868-4740-b0fa-61df5f7e0932"/*Click me!*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 852.9956,
+        "Y": 505.42896
+      }
+    },
+    {
+      "ChildId": "83f3b379-fa6c-406b-a820-ad10f5035caa"/*Any*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 88.0
+      },
+      "Position": {
+        "X": 1170.137,
+        "Y": 497.2975
+      }
+    },
+    {
+      "ChildId": "8673bcc9-4db5-4c56-98dc-218cffc563aa"/*Counter*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 852.9956,
+        "Y": 548.42896
+      }
+    },
+    {
+      "ChildId": "6d90c12b-b3da-45ce-988c-93bef31f2e80"/*TriggerAnim*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1351.8728,
+        "Y": 497.42847
+      }
+    },
+    {
+      "ChildId": "3f74624d-2191-4390-a609-fc7bf8c5e781"/*AudioReaction*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 852.9956,
+        "Y": 591.42896
+      }
+    },
+    {
+      "ChildId": "b9b2b384-fb88-4a59-a202-6783b99e76e6"/*SampleCurve*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1504.0156,
+        "Y": 597.84406
+      }
+    },
+    {
+      "ChildId": "70cf0a17-afbc-4bc4-828f-6a075d890cac"/*Time*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 852.9956,
+        "Y": 634.42896
+      }
+    },
+    {
+      "ChildId": "13723a46-c777-4fb3-98df-8489fa480a32"/*Modulo*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1002.9956,
+        "Y": 634.42896
+      }
+    },
+    {
+      "ChildId": "8d780e68-0ff3-43c8-a061-3bb327d23772"/*HasValueDecreased*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1152.9956,
+        "Y": 634.42896
+      }
+    },
+    {
+      "ChildId": "63357015-06ec-4c8c-a592-0be05ab54626"/*Counter*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1504.0156,
+        "Y": 653.84406
+      }
+    },
+    {
+      "ChildId": "8b92443a-feb0-4030-ae0b-b170f42c8b14"/*Remap*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1501.8728,
+        "Y": 497.42847
+      }
+    },
+    {
+      "ChildId": "c68df065-f78f-4bd2-9a0b-cc421158b84b"/*Text*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 2883.4238,
+        "Y": 397.5771
+      }
+    },
+    {
+      "ChildId": "9d9fbf31-c57d-4ba8-be58-eeadf2e697ad"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 3201.0562,
+        "Y": 361.0219
+      }
+    },
+    {
+      "ChildId": "e8cd0c7f-f6ff-45fb-9d76-6b16e37b4e07"/*Remap*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2288.4736,
+        "Y": 452.71002
+      }
+    },
+    {
+      "ChildId": "4afcba9a-0694-4110-9cb3-27ad7122e4ce"/*SampleGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2273.788,
+        "Y": 155.9123
+      },
+      "ConnectionStyleOverrides": [
+        {
+          "Id": "963611e7-f55e-4c94-96e6-34e195558a2b",
+          "Style": "FadedOut"
+        }
+      ]
+    },
+    {
+      "ChildId": "a75e25b9-48a1-454c-985e-8bd9d08e2073"/*Counter*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2123.788,
+        "Y": 155.9123
+      }
+    },
+    {
+      "ChildId": "b018e27d-f80b-4c37-a929-39dbaca6c528"/*SampleGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2264.604,
+        "Y": 207.73523
+      }
+    },
+    {
+      "ChildId": "0e0db0d7-face-4ba8-93d9-ee528e288b12"/*TriggerAnim*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2123.788,
+        "Y": 211.9123
+      }
+    },
+    {
+      "ChildId": "3d990140-3be5-4488-9a48-99214fc046b1"/*BlendColors*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 2414.604,
+        "Y": 151.73523
+      }
+    },
+    {
+      "ChildId": "79c41dfc-33c4-45a8-8279-51e958f31ce8"/*TriggerAnim*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2160.7173,
+        "Y": 450.64343
+      }
+    },
+    {
+      "ChildId": "4ab1615c-525f-4e80-9a6e-84f810376b61"/*Sum*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 2438.4736,
+        "Y": 396.71002
+      }
+    },
+    {
+      "ChildId": "00b7b514-f6a7-4adb-b6bf-04bc98a9c617"/*TriggerAnim*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2288.4736,
+        "Y": 396.71002
+      }
+    },
+    {
+      "ChildId": "5278aace-8eee-4cb0-a3fb-6a95e8121b36"/*MockStrings*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 2162.4297,
+        "Y": 668.67847
+      }
+    },
+    {
+      "ChildId": "3b69dddf-5444-4190-824f-7ce75da7bec0"/*CountInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2102.4297,
+        "Y": 790.2781
+      }
+    },
+    {
+      "ChildId": "6b4246f8-5478-4095-8a6c-106a4bdadc73"/*GetStringPart*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 2329.082,
+        "Y": 661.2781
+      }
+    },
+    {
+      "ChildId": "bbedfcb7-677c-483f-97af-a93cd358310b"/*CombineStrings*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 2479.082,
+        "Y": 618.2781
+      }
+    },
+    {
+      "ChildId": "4802b1d2-fbdc-4262-9b9f-8930e7848bb2"/*String*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 2329.082,
+        "Y": 618.2781
+      }
+    },
+    {
+      "ChildId": "742a5264-6b48-4b1a-b134-21d16d5d9f3c"/*TorusMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 2309.4492,
+        "Y": 892.65405
+      }
+    },
+    {
+      "ChildId": "f99bb023-4fc0-44e6-af91-7cb2f8040aa0"/*CubeMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 2309.4492,
+        "Y": 935.6542
+      }
+    },
+    {
+      "ChildId": "b8254578-edb0-4506-84a3-8fa34397f9fb"/*CylinderMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 2309.4492,
+        "Y": 978.65405
+      }
+    },
+    {
+      "ChildId": "5c8a458a-7f48-43ce-af05-d6ac943f5a3c"/*PickMeshBuffer*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 88.0
+      },
+      "Position": {
+        "X": 2459.4492,
+        "Y": 892.65405
+      }
+    },
+    {
+      "ChildId": "a36cd73f-3324-44f2-bc6a-e7ffc429f49f"/*DrawMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 2609.4492,
+        "Y": 892.65405
+      }
+    },
+    {
+      "ChildId": "bb8fd2be-6949-4adb-beba-352edf93cba1"/*RandomCamera*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2759.4492,
+        "Y": 892.65405
+      }
+    },
+    {
+      "ChildId": "bd5afbb6-d96b-459d-9cc6-c2edde16b61f"/*Group*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 3033.4238,
+        "Y": 397.5771
+      }
+    },
+    {
+      "ChildId": "9c6bf24a-41b5-4678-a23e-355332e3c424"/*ToUpperCase*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2629.082,
+        "Y": 618.2781
+      }
+    },
+    {
+      "ChildId": "d8264630-7310-4c0c-baf8-d4ada4ed4a83"/*Float4ToVector4*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": 1703.3904,
+        "Y": 541.3776
+      }
+    },
+    {
+      "ChildId": "15e47922-80f8-43da-b425-f5a083cf0dd7"/*Counter*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1897.6929,
+        "Y": 395.18082
+      }
+    },
+    {
+      "ChildId": "61bee163-a35c-4e43-9ad5-c58b47aeebb3"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1425.9373,
+        "Y": -816.4706
       }
     }
   ],
@@ -339,15 +829,15 @@
     {
       "OutputId": "23bc598c-e87d-4993-9e09-b4676e302e61"/*ColorBuffer*/,
       "Position": {
-        "X": 1023.8557,
-        "Y": -368.00662
+        "X": 3691.487,
+        "Y": 112.819824
       }
     }
   ],
   "Annotations": [
     {
       "Id": "1e8fabb8-c4ff-42e8-bf8a-a8063a46a54b",
-      "Title": "Tooll is all about animation. So there are endless possibilities to do it.\nThis playground doesn't want to be beautiful but give you some ideas how\nthings can be achieved.\n\n(please activate the Idle Motion mode in the time controls)",
+      "Title": "Tooll is all about animation. So there are endless possibilities for it. This playground shows some examples. \nTry to select the Operators at the end of each graph and play with them.\n\n(please activate the Idle Motion mode in the time controls)",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -355,12 +845,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": -360.54755,
-        "Y": -155.62436
+        "X": -364.748,
+        "Y": -162.99341
       },
       "Size": {
-        "X": 526.4161,
-        "Y": 113.38481
+        "X": 1045.7872,
+        "Y": 182.38724
       }
     },
     {
@@ -373,17 +863,17 @@
         "W": 1.0
       },
       "Position": {
-        "X": -362.30133,
-        "Y": 43.232544
+        "X": -364.07782,
+        "Y": 43.578026
       },
       "Size": {
-        "X": 476.70273,
-        "Y": 159.47469
+        "X": 523.5736,
+        "Y": 161.70665
       }
     },
     {
       "Id": "d1a48210-aa37-4a47-bc5b-ecb4974738b2",
-      "Title": "Math is your friend (even if it didn't look it in school).\nUnderstanding these 3 functions will be game changer for your work.",
+      "Title": "Math is your friend (even if you didn't love it in school).\nUnderstanding these 3 functions will be game changer for your work.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -395,8 +885,8 @@
         "Y": 211.634
       },
       "Size": {
-        "X": 487.20102,
-        "Y": 231.70126
+        "X": 523.4218,
+        "Y": 241.37311
       }
     },
     {
@@ -409,12 +899,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": -368.0495,
-        "Y": 471.19925
+        "X": -364.07782,
+        "Y": 457.23444
       },
       "Size": {
-        "X": 501.16092,
-        "Y": 211.1372
+        "X": 523.2874,
+        "Y": 215.24985
       }
     },
     {
@@ -427,12 +917,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": -368.55573,
-        "Y": 700.1685
+        "X": -363.33383,
+        "Y": 679.68634
       },
       "Size": {
-        "X": 533.5782,
-        "Y": 174.90564
+        "X": 522.81464,
+        "Y": 170.60022
       }
     },
     {
@@ -563,7 +1053,7 @@
     },
     {
       "Id": "e068acab-3f1f-4c4a-936a-2d5a631b18d1",
-      "Title": "Reactions to audio input or the current\nproject soundtrack is an advanced topic.\nIt's probably easier to checkout one \nof the tutorial videos for that.",
+      "Title": "Reactions to audio input or the current project soundtrack is an advanced topic.\nIt's probably easier to checkout one of the tutorial videos for that.\n\nHere is a short example what you could do with that.\nPress play to activate the soundtrack.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -571,12 +1061,156 @@
         "W": 1.0
       },
       "Position": {
-        "X": 850.1862,
-        "Y": 42.814667
+        "X": 812.006,
+        "Y": 38.74341
       },
       "Size": {
-        "X": 324.51038,
-        "Y": 223.89844
+        "X": 480.6572,
+        "Y": 331.98364
+      }
+    },
+    {
+      "Id": "10deadb1-757b-4c5a-a798-7184a5868feb",
+      "Title": "Tooll also provides provide possibilities for keyframe animations.\nYou can animate any scalar and Vector parameter in the parameter window.\n\nAnimated operators have a small orange \"animation\" tag in the corner, \nlike this one:",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 1334.2847,
+        "Y": 39.63623
+      },
+      "Size": {
+        "X": 505.56372,
+        "Y": 332.03497
+      }
+    },
+    {
+      "Id": "ed0d2b3a-8791-4b08-a04b-408338187908",
+      "Title": "If you click on \"Dope\" / \"Curve\" in the Time Control Bar\nyou can toggle between Dopesheet and Curve mode.\nWhen dragging keyframes holding the Shift-keys toggles\nsnapping.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 1343.6693,
+        "Y": 252.98709
+      },
+      "Size": {
+        "X": 483.10703,
+        "Y": 104.82826
+      }
+    },
+    {
+      "Id": "6e01257e-ea2a-426e-95f1-57706f756c0c",
+      "Title": "Another powerful option for procedual animation is [TriggerAnim].\nTake a look at the following example:\n\nThe different version of effects are triggered if any of the events on the left occurs.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 810.1421,
+        "Y": 395.6896
+      },
+      "Size": {
+        "X": 1032.7256,
+        "Y": 319.19763
+      }
+    },
+    {
+      "Id": "d0729712-35f1-4955-81db-6c74338387da",
+      "Title": "Here is a more elaborate example on how to use an animation event...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 1889.0193,
+        "Y": 38.811035
+      },
+      "Size": {
+        "X": 1466.0652,
+        "Y": 1066.7817
+      }
+    },
+    {
+      "Id": "95812bb4-d98b-4bbe-b7e7-577c881298ca",
+      "Title": "We create a new clear color for our render target, by cycling through a gradient. \nNotice how [Counter] uses a modulo to repeat the cycle.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 2097.2876,
+        "Y": 86.37854
+      },
+      "Size": {
+        "X": 694.10455,
+        "Y": 240.68817
+      }
+    },
+    {
+      "Id": "e297379b-e86e-465d-9470-b7744aaf4b80",
+      "Title": "Combine two [TriggerAnimation] with [Remap] to \ncreate a bouncy font size.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 2099.2158,
+        "Y": 336.51074
+      },
+      "Size": {
+        "X": 695.45483,
+        "Y": 212.00005
+      }
+    },
+    {
+      "Id": "c160e623-08f7-4ba0-b9ee-701fa728eec6",
+      "Title": "Use an integer count to pick a string from a list...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 2102.4297,
+        "Y": 558.2781
+      },
+      "Size": {
+        "X": 696.65234,
+        "Y": 212.0
+      }
+    },
+    {
+      "Id": "0059af6e-4f43-4a20-81ee-064d0f932e1a",
+      "Title": "...and pick from a list of meshes to draw.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 2249.4492,
+        "Y": 832.65405
+      },
+      "Size": {
+        "X": 680.0,
+        "Y": 229.0
       }
     }
   ]

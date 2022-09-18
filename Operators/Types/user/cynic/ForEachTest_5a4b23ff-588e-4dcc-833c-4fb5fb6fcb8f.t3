@@ -41,12 +41,12 @@
       "Outputs": []
     },
     {
-      "Id": "05d29f0d-204a-46f8-b370-7cf84af6a59d"/*StringConcat*/,
+      "Id": "05d29f0d-204a-46f8-b370-7cf84af6a59d"/*CombineStrings*/,
       "SymbolId": "48ab9824-76ca-4238-800f-9cf95311e6c0",
       "InputValues": [],
       "Outputs": [
         {
-          "Id": "e47bf25e-351a-44e6-84c6-ad3abc93531a"/*StringConcat*/,
+          "Id": "e47bf25e-351a-44e6-84c6-ad3abc93531a"/*CombineStrings*/,
           "DirtyFlagTrigger": "Always"
         }
       ]

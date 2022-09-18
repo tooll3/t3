@@ -233,7 +233,7 @@
       "Outputs": []
     },
     {
-      "Id": "e572dce2-3734-49ce-9182-ca38125cd557"/*StringConcat*/,
+      "Id": "e572dce2-3734-49ce-9182-ca38125cd557"/*CombineStrings*/,
       "SymbolId": "48ab9824-76ca-4238-800f-9cf95311e6c0",
       "InputValues": [],
       "Outputs": []

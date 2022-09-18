@@ -521,7 +521,7 @@
       "Outputs": []
     },
     {
-      "Id": "4fcc5ed0-a342-44e0-8ec6-0169b37dd800"/*StringConcat*/,
+      "Id": "4fcc5ed0-a342-44e0-8ec6-0169b37dd800"/*CombineStrings*/,
       "SymbolId": "48ab9824-76ca-4238-800f-9cf95311e6c0",
       "InputValues": [],
       "Outputs": []

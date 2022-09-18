@@ -122,7 +122,7 @@
       }
     },
     {
-      "ChildId": "e572dce2-3734-49ce-9182-ca38125cd557"/*StringConcat*/,
+      "ChildId": "e572dce2-3734-49ce-9182-ca38125cd557"/*CombineStrings*/,
       "Size": {
         "X": 110.0,
         "Y": 75.0

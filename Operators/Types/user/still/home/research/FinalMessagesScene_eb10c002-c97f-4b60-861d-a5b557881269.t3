@@ -1014,7 +1014,7 @@
       "Outputs": []
     },
     {
-      "Id": "9ca61644-5c44-4b4f-9a90-a4a3ab924fd1"/*StringConcat*/,
+      "Id": "9ca61644-5c44-4b4f-9a90-a4a3ab924fd1"/*CombineStrings*/,
       "SymbolId": "48ab9824-76ca-4238-800f-9cf95311e6c0",
       "InputValues": [],
       "Outputs": []

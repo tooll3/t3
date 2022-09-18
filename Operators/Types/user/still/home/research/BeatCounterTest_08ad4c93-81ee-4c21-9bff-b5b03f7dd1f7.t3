@@ -130,7 +130,7 @@
       "Outputs": []
     },
     {
-      "Id": "5b263997-0cfc-4f5d-af80-6b1e51e52e9d"/*StringConcat*/,
+      "Id": "5b263997-0cfc-4f5d-af80-6b1e51e52e9d"/*CombineStrings*/,
       "SymbolId": "48ab9824-76ca-4238-800f-9cf95311e6c0",
       "InputValues": [],
       "Outputs": []

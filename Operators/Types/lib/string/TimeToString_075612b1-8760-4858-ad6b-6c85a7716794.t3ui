@@ -67,7 +67,7 @@
       }
     },
     {
-      "ChildId": "febcd3dc-8adf-430b-a94e-eba1c010e1a8"/*StringConcat*/,
+      "ChildId": "febcd3dc-8adf-430b-a94e-eba1c010e1a8"/*CombineStrings*/,
       "Size": {
         "X": 110.0,
         "Y": 75.0
@@ -155,7 +155,7 @@
       }
     },
     {
-      "ChildId": "cdf0eb8d-e5e0-4a5c-8efa-63f1942fa4d9"/*StringConcat*/,
+      "ChildId": "cdf0eb8d-e5e0-4a5c-8efa-63f1942fa4d9"/*CombineStrings*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
