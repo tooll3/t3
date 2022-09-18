@@ -109,7 +109,7 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
 
             if (modulo > 0.001f)
             {
-                Result.Value = (_count % modulo) * increment + startPosition;
+                Result.Value = (_count * increment % modulo) + startPosition;
             }
             else
             {

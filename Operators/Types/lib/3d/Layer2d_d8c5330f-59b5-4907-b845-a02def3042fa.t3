@@ -1,7 +1,7 @@
 {
   "Name": "Layer2d",
   "Id": "d8c5330f-59b5-4907-b845-a02def3042fa",
-  "Namespace": "examples.lib.3d.fx",
+  "Namespace": "lib.3d",
   "Inputs": [
     {
       "Id": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"/*Texture*/,
