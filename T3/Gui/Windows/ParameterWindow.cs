@@ -207,27 +207,36 @@ namespace T3.Gui.Windows
             // namespace and symbol
             {
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
+                
+                ImGui.PushFont(Fonts.FontBold);
+
+                ImGui.TextUnformatted(op.Symbol.Name);
+                ImGui.PopFont();
+                
+                ImGui.SameLine();
+                ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
+                ImGui.TextUnformatted(" in ");
+                ImGui.PopStyleColor();
+                ImGui.SameLine();
+                
                 ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
                 var namespaceForEdit = op.Symbol.Namespace ?? "";
 
+                ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X-10);
                 if (InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit,
                                                   SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
                 {
                     op.Symbol.Namespace = namespaceForEdit;
                     modified = true;
                 }
-
+                
                 ImGui.PopStyleColor();
-                ImGui.SameLine();
-                ImGui.Dummy(new Vector2(10, 0));
-                ImGui.SameLine();
-                ImGui.TextUnformatted(op.Symbol.Name);
-                ImGui.Dummy(Vector2.One * 5);
             }
 
             // SymbolChild Name
             {
-                ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 100);
+                ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
+                ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 105);
 
                 var nameForEdit = symbolChildUi.SymbolChild.Name;
 
