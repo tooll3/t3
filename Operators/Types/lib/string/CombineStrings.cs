@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -6,12 +6,12 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_48ab9824_76ca_4238_800f_9cf95311e6c0
 {
-    public class StringConcat : Instance<StringConcat>
+    public class CombineStrings : Instance<CombineStrings>
     {
         [Output(Guid = "{E47BF25E-351A-44E6-84C6-AD3ABC93531A}")]
         public readonly Slot<string> Result = new Slot<string>();
 
-        public StringConcat()
+        public CombineStrings()
         {
             Result.UpdateAction = Update;
         }
@@ -19,7 +19,7 @@ namespace T3.Operators.Types.Id_48ab9824_76ca_4238_800f_9cf95311e6c0
         private void Update(EvaluationContext context)
         {
             _stringBuilder.Clear();
-            var separator = Separator.GetValue(context);
+            var separator = Separator.GetValue(context).Replace("\\n", "\n");
 
             var isFirst = true;
             foreach (var input in Input.GetCollectedTypedInputs())
