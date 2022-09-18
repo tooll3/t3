@@ -234,7 +234,7 @@
       "Outputs": []
     },
     {
-      "Id": "a37b8594-dff5-4ae9-821a-adc13c87b259"/*ContextFloat*/,
+      "Id": "a37b8594-dff5-4ae9-821a-adc13c87b259"/*GetFloatVar*/,
       "SymbolId": "e6072ecf-30d2-4c52-afa1-3b195d61617b",
       "InputValues": [
         {
@@ -245,7 +245,7 @@
       ],
       "Outputs": [
         {
-          "Id": "e368ba33-827e-4e08-aa19-ba894b40906a"/*ContextFloat*/,
+          "Id": "e368ba33-827e-4e08-aa19-ba894b40906a"/*GetFloatVar*/,
           "DirtyFlagTrigger": "Always"
         }
       ]

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using ImGuiNET;
 using System.Collections.Generic;
 using System.Linq;
@@ -182,8 +182,7 @@ namespace T3.Gui.Windows
                                                             _subtreeNodeToRename = subtree;
                                                             _renameNamespaceDialog.ShowNextFrame();
                                                         }
-                                                    },
-                                                    "#bla");
+                                                    });
                 
                 
                 if (isOpen)

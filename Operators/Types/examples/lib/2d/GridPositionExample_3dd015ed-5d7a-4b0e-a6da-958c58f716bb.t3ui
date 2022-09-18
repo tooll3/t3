@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "b523f12b-4321-4a1b-a5f7-b23afc40a9d6"/*ContextFloat*/,
+      "ChildId": "b523f12b-4321-4a1b-a5f7-b23afc40a9d6"/*GetFloatVar*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

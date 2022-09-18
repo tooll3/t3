@@ -11,7 +11,14 @@
       }
     },
     {
-      "InputId": "f9aebe04-dd82-459f-8175-7139c7b2e468"/*VariableName*/,
+      "InputId": "1f6e2adb-cff8-4dc4-9cb4-a26e3ad8b087"/*Count*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "f9aebe04-dd82-459f-8175-7139c7b2e468"/*IndexVariable*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
@@ -19,11 +26,12 @@
       "Usage": "Default"
     },
     {
-      "InputId": "1f6e2adb-cff8-4dc4-9cb4-a26e3ad8b087"/*Count*/,
+      "InputId": "cde7dd76-0356-48b1-9082-00828c0af386"/*ProgressVariable*/,
       "Position": {
         "X": -200.0,
-        "Y": 90.0
-      }
+        "Y": 135.0
+      },
+      "Usage": "Default"
     }
   ],
   "SymbolChildUis": [],

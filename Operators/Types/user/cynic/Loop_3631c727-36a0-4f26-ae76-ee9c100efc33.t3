@@ -8,12 +8,16 @@
       "DefaultValue": null
     },
     {
-      "Id": "f9aebe04-dd82-459f-8175-7139c7b2e468"/*VariableName*/,
+      "Id": "1f6e2adb-cff8-4dc4-9cb4-a26e3ad8b087"/*Count*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "f9aebe04-dd82-459f-8175-7139c7b2e468"/*IndexVariable*/,
       "DefaultValue": "i"
     },
     {
-      "Id": "1f6e2adb-cff8-4dc4-9cb4-a26e3ad8b087"/*Count*/,
-      "DefaultValue": 1
+      "Id": "cde7dd76-0356-48b1-9082-00828c0af386"/*ProgressVariable*/,
+      "DefaultValue": "f"
     }
   ],
   "Children": [],

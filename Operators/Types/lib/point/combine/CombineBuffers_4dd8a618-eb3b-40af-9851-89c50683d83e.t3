@@ -120,7 +120,7 @@
       "Outputs": []
     },
     {
-      "Id": "0804fa1c-c309-42ac-b530-532237ef443a"/*ContextFloat*/,
+      "Id": "0804fa1c-c309-42ac-b530-532237ef443a"/*GetFloatVar*/,
       "SymbolId": "e6072ecf-30d2-4c52-afa1-3b195d61617b",
       "InputValues": [],
       "Outputs": []

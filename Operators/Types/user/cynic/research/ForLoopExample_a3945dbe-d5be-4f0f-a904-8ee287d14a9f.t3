@@ -5,12 +5,12 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "ab2a4b5c-2b62-41a2-b617-ab245523ad13"/*ContextFloat*/,
+      "Id": "ab2a4b5c-2b62-41a2-b617-ab245523ad13"/*GetFloatVar*/,
       "SymbolId": "e6072ecf-30d2-4c52-afa1-3b195d61617b",
       "InputValues": [],
       "Outputs": [
         {
-          "Id": "e368ba33-827e-4e08-aa19-ba894b40906a"/*ContextFloat*/,
+          "Id": "e368ba33-827e-4e08-aa19-ba894b40906a"/*GetFloatVar*/,
           "DirtyFlagTrigger": "Always"
         }
       ]
@@ -50,7 +50,7 @@
       "Outputs": []
     },
     {
-      "Id": "d9f4172a-5962-4377-b67c-3fddc0207876"/*ContextFloat*/,
+      "Id": "d9f4172a-5962-4377-b67c-3fddc0207876"/*GetFloatVar*/,
       "SymbolId": "e6072ecf-30d2-4c52-afa1-3b195d61617b",
       "InputValues": [
         {
@@ -61,7 +61,7 @@
       ],
       "Outputs": [
         {
-          "Id": "e368ba33-827e-4e08-aa19-ba894b40906a"/*ContextFloat*/,
+          "Id": "e368ba33-827e-4e08-aa19-ba894b40906a"/*GetFloatVar*/,
           "DirtyFlagTrigger": "Always"
         }
       ]

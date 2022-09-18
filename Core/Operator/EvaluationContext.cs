@@ -94,14 +94,15 @@ namespace T3.Core.Operator
         /// <summary>
         /// A structure that is used by SetTexture  
         /// </summary>
-        public Dictionary<string, Texture2D> ContextTextures { get; set; } = new Dictionary<string, Texture2D>(10);
+        public Dictionary<string, Texture2D> ContextTextures { get; set; } = new(10);
         public Texture2D PrbPrefilteredSpecular { get; set; }
-        public PointLightStack PointLights { get; } = new PointLightStack();
-        public System.Numerics.Vector4 BackgroundColor { get; set; } = new System.Numerics.Vector4(0.1f, 0.1f, 0.1f, 1.0f);
+        public PointLightStack PointLights { get; } = new();
+        public System.Numerics.Vector4 BackgroundColor { get; set; } = new(0.1f, 0.1f, 0.1f, 1.0f);
         
         public GizmoVisibility ShowGizmos { get; set; }
 
-        public Dictionary<string, float> FloatVariables { get; } = new Dictionary<string, float>();
+        public Dictionary<string, float> FloatVariables { get; } = new();
+        public Dictionary<string, int> IntVariables { get; } = new();
         public StructuredList IteratedList { get; set; }
         public int IteratedListIndex { get; set; }
         public bool BypassCameras { get; set; }

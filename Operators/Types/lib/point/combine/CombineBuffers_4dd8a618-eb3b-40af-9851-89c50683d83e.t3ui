@@ -152,7 +152,7 @@
       }
     },
     {
-      "ChildId": "0804fa1c-c309-42ac-b530-532237ef443a"/*ContextFloat*/,
+      "ChildId": "0804fa1c-c309-42ac-b530-532237ef443a"/*GetFloatVar*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

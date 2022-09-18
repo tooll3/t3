@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "583fd83a-1d3a-4dbf-9dbd-ab8daf6f0a3b"/*ContextFloat*/,
+      "ChildId": "583fd83a-1d3a-4dbf-9dbd-ab8daf6f0a3b"/*GetFloatVar*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -59,7 +59,7 @@
       }
     },
     {
-      "ChildId": "7cfa7a3c-1035-408f-b235-66390150b80a"/*ContextFloat*/,
+      "ChildId": "7cfa7a3c-1035-408f-b235-66390150b80a"/*GetFloatVar*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

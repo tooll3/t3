@@ -23,15 +23,15 @@
     },
     {
       "Id": "61eb78f5-d36e-479e-938f-a4fa4b31a1b6"/*LineWidth*/,
-      "DefaultValue": 2.0
+      "DefaultValue": 4.0
     },
     {
       "Id": "ce4cc48f-07bb-4aa8-a410-2042732aaa25"/*FollowSurface*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 2.0
     },
     {
       "Id": "603078ef-e7bc-4ba8-87b2-81574a04cfb6"/*OffsetDirection*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 100.0
     },
     {
       "Id": "e069cd71-547b-4231-a6ff-33036337f805"/*RandomFaceDirection*/,
