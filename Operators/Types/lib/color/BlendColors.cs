@@ -18,8 +18,8 @@ namespace T3.Operators.Types.Id_6b7c541a_ca36_4f21_ac95_89e874820c5a
 
         private void Update(EvaluationContext context)
         {
-            var a = ColorA.GetValue(context);
-            var b = ColorB.GetValue(context);
+            var c1 = ColorA.GetValue(context);
+            var c2 = ColorB.GetValue(context);
             var m = Factor.GetValue(context);
             var mode = (Modes)Mode.GetValue(context);
 
@@ -28,16 +28,27 @@ namespace T3.Operators.Types.Id_6b7c541a_ca36_4f21_ac95_89e874820c5a
             {
                 case Modes.Mix:
                     //result = Color.Value;
-                    result = a * (1-m) + b * m;
+                    result = c1 * (1-m) + c2 * m;
                     break;
                 case Modes.Multiply:
-                    result = a *  Vector4.Lerp(new Vector4(1), b, m);
+                    result = c1 *  Vector4.Lerp(new Vector4(1), c2, m);
                     break;
                 
                 case Modes.Add:
-                    result = a +  b * m;
+                    result = c1 +  c2 * m;
                     break;
-                
+
+                case Modes.Blend:
+                {
+                    result =  (1f - c2.W) * c1 + c2.W * c2;
+                    result.W = c1.W + c2.W - c1.W * c2.W;
+                    
+                    //float a = tA.a + tB.a - tA.a*tB.a;                        
+                    //result = c1 +  c2 * m;
+                    break;
+                }
+
+
                 default:
                     throw new ArgumentOutOfRangeException();
                 
@@ -63,6 +74,7 @@ namespace T3.Operators.Types.Id_6b7c541a_ca36_4f21_ac95_89e874820c5a
             Mix,
             Multiply,
             Add,
+            Blend,
         }
     }
 }
