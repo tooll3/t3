@@ -86,7 +86,7 @@
       "Outputs": []
     },
     {
-      "Id": "55f61178-c716-47b9-b900-5979a1bd644d"/*LineGPoints*/,
+      "Id": "55f61178-c716-47b9-b900-5979a1bd644d"/*LinePoints*/,
       "SymbolId": "4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68",
       "InputValues": [
         {
@@ -174,7 +174,7 @@
       "Outputs": []
     },
     {
-      "Id": "74090477-5b08-47fc-a217-3220861b0430"/*LineGPoints*/,
+      "Id": "74090477-5b08-47fc-a217-3220861b0430"/*LinePoints*/,
       "SymbolId": "4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68",
       "InputValues": [
         {

@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "d72c324b-43bf-4a42-8785-8e8fe27bdfc1"/*GridGPoints*/,
+      "ChildId": "d72c324b-43bf-4a42-8785-8e8fe27bdfc1"/*GridPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

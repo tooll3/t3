@@ -770,7 +770,7 @@
       }
     },
     {
-      "ChildId": "80d0ee92-b290-4f34-9bb2-2a2ee2637ba6"/*LinearPoints*/,
+      "ChildId": "80d0ee92-b290-4f34-9bb2-2a2ee2637ba6"/*LinearPointsCpu*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

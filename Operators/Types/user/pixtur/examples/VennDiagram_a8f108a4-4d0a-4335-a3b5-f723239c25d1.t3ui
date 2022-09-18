@@ -36,7 +36,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "f9938de0-78bd-41c1-a4e0-b580056155dc"/*RadialGPoints*/,
+      "ChildId": "f9938de0-78bd-41c1-a4e0-b580056155dc"/*RadialPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

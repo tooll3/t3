@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "241e91e9-da11-4245-9e3f-5c44bcf2fbff"/*GridGPoints*/,
+      "ChildId": "241e91e9-da11-4245-9e3f-5c44bcf2fbff"/*GridPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -15,7 +15,7 @@
       }
     },
     {
-      "ChildId": "7ef0d803-4ee3-4fb7-a77e-9d00630cc50d"/*GridGPoints*/,
+      "ChildId": "7ef0d803-4ee3-4fb7-a77e-9d00630cc50d"/*GridPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -202,7 +202,7 @@
       }
     },
     {
-      "ChildId": "a37db8ac-21e9-4832-aaaf-a7e303c8ce0f"/*RadialGPoints*/,
+      "ChildId": "a37db8ac-21e9-4832-aaaf-a7e303c8ce0f"/*RadialPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -246,7 +246,7 @@
       }
     },
     {
-      "ChildId": "b3ea9892-7e1d-4a93-8c4e-3af3cd42404a"/*LinePoints*/,
+      "ChildId": "b3ea9892-7e1d-4a93-8c4e-3af3cd42404a"/*LinePointsCpu*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

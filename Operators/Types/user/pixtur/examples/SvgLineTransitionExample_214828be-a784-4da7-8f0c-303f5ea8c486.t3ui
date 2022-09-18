@@ -58,7 +58,7 @@
       }
     },
     {
-      "ChildId": "0edf89dc-cf3a-4769-af02-8a2bfea0106b"/*PrepareSlidingLineTransition*/,
+      "ChildId": "0edf89dc-cf3a-4769-af02-8a2bfea0106b"/*PrepareSvgLineTransition*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

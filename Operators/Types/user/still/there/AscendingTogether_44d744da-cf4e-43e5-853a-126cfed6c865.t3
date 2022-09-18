@@ -127,7 +127,7 @@
       "Outputs": []
     },
     {
-      "Id": "571e9182-7203-447e-8d31-1a8ae3d29802"/*LineGPoints*/,
+      "Id": "571e9182-7203-447e-8d31-1a8ae3d29802"/*LinePoints*/,
       "SymbolId": "4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68",
       "InputValues": [
         {
@@ -289,7 +289,7 @@
       "Outputs": []
     },
     {
-      "Id": "078d098b-bb9d-4ed3-9840-42ca9eda11c5"/*LineGPoints*/,
+      "Id": "078d098b-bb9d-4ed3-9840-42ca9eda11c5"/*LinePoints*/,
       "SymbolId": "4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68",
       "InputValues": [
         {

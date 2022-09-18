@@ -223,7 +223,7 @@
       "Outputs": []
     },
     {
-      "Id": "03fdd99c-7f78-4a73-ad3f-a7e0dca0bf45"/*RadialGPoints*/,
+      "Id": "03fdd99c-7f78-4a73-ad3f-a7e0dca0bf45"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {
@@ -278,7 +278,7 @@
       "Outputs": []
     },
     {
-      "Id": "447e6b80-00cc-4e35-9b6a-d3d87482661b"/*RadialGPoints*/,
+      "Id": "447e6b80-00cc-4e35-9b6a-d3d87482661b"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {

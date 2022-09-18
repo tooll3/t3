@@ -247,7 +247,7 @@
       }
     },
     {
-      "ChildId": "99fddf1b-cba1-413c-a295-651ee648584c"/*GridGPoints*/,
+      "ChildId": "99fddf1b-cba1-413c-a295-651ee648584c"/*GridPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -569,7 +569,7 @@
       }
     },
     {
-      "ChildId": "4140d232-ebd6-469b-9a03-c872a3741fce"/*RadialGPoints*/,
+      "ChildId": "4140d232-ebd6-469b-9a03-c872a3741fce"/*RadialPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

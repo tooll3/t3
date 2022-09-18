@@ -5,7 +5,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "0736df8e-8c7b-4f5d-8900-36ef24176b6c"/*RadialGPoints*/,
+      "Id": "0736df8e-8c7b-4f5d-8900-36ef24176b6c"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {

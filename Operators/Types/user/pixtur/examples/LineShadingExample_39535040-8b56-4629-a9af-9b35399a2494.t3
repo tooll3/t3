@@ -5,7 +5,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "241e91e9-da11-4245-9e3f-5c44bcf2fbff"/*GridGPoints*/,
+      "Id": "241e91e9-da11-4245-9e3f-5c44bcf2fbff"/*GridPoints*/,
       "SymbolId": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
       "InputValues": [
         {
@@ -31,7 +31,7 @@
       "Outputs": []
     },
     {
-      "Id": "7ef0d803-4ee3-4fb7-a77e-9d00630cc50d"/*GridGPoints*/,
+      "Id": "7ef0d803-4ee3-4fb7-a77e-9d00630cc50d"/*GridPoints*/,
       "SymbolId": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
       "InputValues": [
         {
@@ -414,7 +414,7 @@
       "Outputs": []
     },
     {
-      "Id": "a37db8ac-21e9-4832-aaaf-a7e303c8ce0f"/*RadialGPoints*/,
+      "Id": "a37db8ac-21e9-4832-aaaf-a7e303c8ce0f"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {
@@ -490,7 +490,7 @@
       "Outputs": []
     },
     {
-      "Id": "b3ea9892-7e1d-4a93-8c4e-3af3cd42404a"/*LinePoints*/,
+      "Id": "b3ea9892-7e1d-4a93-8c4e-3af3cd42404a"/*LinePointsCpu*/,
       "SymbolId": "a98d7796-6e09-45d1-a372-f3ea55abd359",
       "InputValues": [
         {

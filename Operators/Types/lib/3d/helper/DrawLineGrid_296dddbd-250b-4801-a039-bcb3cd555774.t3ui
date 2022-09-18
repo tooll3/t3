@@ -29,7 +29,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "05da9fe7-b92a-4050-bb45-d736d62409ca"/*LineGPoints*/,
+      "ChildId": "05da9fe7-b92a-4050-bb45-d736d62409ca"/*LinePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -40,7 +40,7 @@
       }
     },
     {
-      "ChildId": "6e820e56-1b24-465b-a073-93ca51cca07b"/*LineGPoints*/,
+      "ChildId": "6e820e56-1b24-465b-a073-93ca51cca07b"/*LinePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

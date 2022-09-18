@@ -422,7 +422,7 @@
       }
     },
     {
-      "ChildId": "ba2fd22e-5e88-4139-9988-6f4d9b8d5ea2"/*RadialGPoints*/,
+      "ChildId": "ba2fd22e-5e88-4139-9988-6f4d9b8d5ea2"/*RadialPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

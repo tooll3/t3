@@ -301,7 +301,7 @@
       }
     },
     {
-      "ChildId": "f4bcb032-db33-44c6-9773-0779d9e73285"/*GridGPoints*/,
+      "ChildId": "f4bcb032-db33-44c6-9773-0779d9e73285"/*GridPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

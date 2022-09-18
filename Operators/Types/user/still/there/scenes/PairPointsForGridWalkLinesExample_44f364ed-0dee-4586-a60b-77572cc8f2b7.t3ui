@@ -170,7 +170,7 @@
       }
     },
     {
-      "ChildId": "3cb8e4e7-aff7-4b9d-8c86-35d641692a12"/*GridGPoints*/,
+      "ChildId": "3cb8e4e7-aff7-4b9d-8c86-35d641692a12"/*GridPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -203,7 +203,7 @@
       }
     },
     {
-      "ChildId": "2b060a17-4981-47fd-a965-5baa85995947"/*GridGPoints*/,
+      "ChildId": "2b060a17-4981-47fd-a965-5baa85995947"/*GridPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

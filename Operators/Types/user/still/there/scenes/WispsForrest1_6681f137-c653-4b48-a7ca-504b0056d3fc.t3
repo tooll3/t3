@@ -5,7 +5,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "4d0d0497-492a-4cde-941a-d1d6982eeb55"/*GridGPoints*/,
+      "Id": "4d0d0497-492a-4cde-941a-d1d6982eeb55"/*GridPoints*/,
       "SymbolId": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
       "InputValues": [
         {
@@ -152,7 +152,7 @@
       "Outputs": []
     },
     {
-      "Id": "c37a0fa5-7f88-41f8-862a-8e94fa11d637"/*RadialGPoints*/,
+      "Id": "c37a0fa5-7f88-41f8-862a-8e94fa11d637"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {

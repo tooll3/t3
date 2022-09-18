@@ -23,7 +23,7 @@
       "Outputs": []
     },
     {
-      "Id": "e5315f37-a88a-479a-88c3-f00f1e32affd"/*RadialGPoints*/,
+      "Id": "e5315f37-a88a-479a-88c3-f00f1e32affd"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {

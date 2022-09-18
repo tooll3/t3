@@ -23,7 +23,7 @@
   ],
   "Children": [
     {
-      "Id": "d6156f1a-7196-43ff-bc78-d4f3386ca269"/*RadialGPoints*/,
+      "Id": "d6156f1a-7196-43ff-bc78-d4f3386ca269"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {
@@ -108,7 +108,7 @@
       "Outputs": []
     },
     {
-      "Id": "515c4a57-7b2a-4635-aed4-70b93d632015"/*RadialGPoints*/,
+      "Id": "515c4a57-7b2a-4635-aed4-70b93d632015"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {
@@ -153,7 +153,7 @@
       "Outputs": []
     },
     {
-      "Id": "f5c5240e-595d-476d-84af-6a13985d883b"/*RadialGPoints*/,
+      "Id": "f5c5240e-595d-476d-84af-6a13985d883b"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {

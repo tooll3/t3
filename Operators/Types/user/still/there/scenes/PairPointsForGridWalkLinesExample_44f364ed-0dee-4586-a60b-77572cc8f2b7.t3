@@ -335,7 +335,7 @@
       "Outputs": []
     },
     {
-      "Id": "3cb8e4e7-aff7-4b9d-8c86-35d641692a12"/*GridGPoints*/,
+      "Id": "3cb8e4e7-aff7-4b9d-8c86-35d641692a12"/*GridPoints*/,
       "SymbolId": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
       "InputValues": [
         {
@@ -428,7 +428,7 @@
       "Outputs": []
     },
     {
-      "Id": "2b060a17-4981-47fd-a965-5baa85995947"/*GridGPoints*/,
+      "Id": "2b060a17-4981-47fd-a965-5baa85995947"/*GridPoints*/,
       "SymbolId": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
       "InputValues": [
         {

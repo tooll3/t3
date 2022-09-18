@@ -212,7 +212,7 @@
       }
     },
     {
-      "ChildId": "208cc764-b369-4a47-b6bd-acee70445406"/*RepeatAtPoints*/,
+      "ChildId": "208cc764-b369-4a47-b6bd-acee70445406"/*RepeatAtPointsCpu*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -267,7 +267,7 @@
       }
     },
     {
-      "ChildId": "e4f6cb22-06a7-490f-8042-1243de09d625"/*LinearPoints*/,
+      "ChildId": "e4f6cb22-06a7-490f-8042-1243de09d625"/*LinearPointsCpu*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -366,7 +366,7 @@
       }
     },
     {
-      "ChildId": "f447d7b6-7503-4482-8807-a7e5f6e882fe"/*LinearPoints*/,
+      "ChildId": "f447d7b6-7503-4482-8807-a7e5f6e882fe"/*LinearPointsCpu*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

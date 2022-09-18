@@ -1,0 +1,68 @@
+{
+  "Id": "f19a9234-cd23-4229-a794-aa9d97ad8027"/*DrawAsSplitView*/,
+  "Description": "Renders the connect inputs commands a as split buffer",
+  "InputUis": [
+    {
+      "InputId": "a3929303-170b-496a-b8e0-fc5f604a0ec7"/*Commands*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "62819993-7f9a-436a-8fc6-4b2e6c49ce7a"/*Switch*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 33.61142,
+        "Y": -4.782196
+      }
+    },
+    {
+      "ChildId": "764f39e4-f3ff-4afa-8705-54328aafdee9"/*Loop*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 472.39233,
+        "Y": -88.677734
+      }
+    },
+    {
+      "ChildId": "07e30d35-04c2-4e32-9844-9830c89b80f5"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 265.99454,
+        "Y": -93.87482
+      }
+    },
+    {
+      "ChildId": "de6f8909-c6db-4519-81b4-4591905c8069"/*ContextFloat*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 11.338287,
+        "Y": 197.16092
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "65456554-355b-41a3-893e-960d28113f53"/*Output*/,
+      "Position": {
+        "X": 505.05963,
+        "Y": 64.264496
+      }
+    }
+  ]
+}

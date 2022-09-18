@@ -313,7 +313,7 @@
       }
     },
     {
-      "ChildId": "45755327-53a3-4db1-8489-7a1b35fcb0d7"/*PrepareSlidingLineTransition*/,
+      "ChildId": "45755327-53a3-4db1-8489-7a1b35fcb0d7"/*PrepareSvgLineTransition*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -357,7 +357,7 @@
       }
     },
     {
-      "ChildId": "78241c65-ad57-453b-8bd5-cd4a907f4cc0"/*PrepareSlidingLineTransition*/,
+      "ChildId": "78241c65-ad57-453b-8bd5-cd4a907f4cc0"/*PrepareSvgLineTransition*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -412,7 +412,7 @@
       }
     },
     {
-      "ChildId": "0149d929-9f6a-4e1f-bdb8-4bcfbea90d38"/*PrepareSlidingLineTransition*/,
+      "ChildId": "0149d929-9f6a-4e1f-bdb8-4bcfbea90d38"/*PrepareSvgLineTransition*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -467,7 +467,7 @@
       }
     },
     {
-      "ChildId": "f7c8cfc2-eb46-4ad9-a053-86efbdc58d02"/*PrepareSlidingLineTransition*/,
+      "ChildId": "f7c8cfc2-eb46-4ad9-a053-86efbdc58d02"/*PrepareSvgLineTransition*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -709,7 +709,7 @@
       }
     },
     {
-      "ChildId": "76cbc33c-e157-4cdc-9e73-0c1cb1f87be5"/*PrepareSlidingLineTransition*/,
+      "ChildId": "76cbc33c-e157-4cdc-9e73-0c1cb1f87be5"/*PrepareSvgLineTransition*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -764,7 +764,7 @@
       }
     },
     {
-      "ChildId": "ccab6554-fdfe-4e75-bc97-ec83f4e03bec"/*PrepareSlidingLineTransition*/,
+      "ChildId": "ccab6554-fdfe-4e75-bc97-ec83f4e03bec"/*PrepareSvgLineTransition*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

@@ -54,19 +54,19 @@
       "Outputs": []
     },
     {
-      "Id": "6c270940-27f9-47aa-bc49-f40f2fd8ec9d"/*GridGPoints*/,
+      "Id": "6c270940-27f9-47aa-bc49-f40f2fd8ec9d"/*GridPoints*/,
       "SymbolId": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "906c4169-6718-4b6b-9699-2d160258e7a0"/*LineGPoints*/,
+      "Id": "906c4169-6718-4b6b-9699-2d160258e7a0"/*LinePoints*/,
       "SymbolId": "4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "7a9f1f36-97c5-4013-a95f-6d0b24986bdb"/*RadialGPoints*/,
+      "Id": "7a9f1f36-97c5-4013-a95f-6d0b24986bdb"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [],
       "Outputs": []

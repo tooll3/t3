@@ -705,7 +705,7 @@
       "Outputs": []
     },
     {
-      "Id": "45755327-53a3-4db1-8489-7a1b35fcb0d7"/*PrepareSlidingLineTransition*/,
+      "Id": "45755327-53a3-4db1-8489-7a1b35fcb0d7"/*PrepareSvgLineTransition*/,
       "SymbolId": "b7345438-f3f4-4ad3-9c57-6076ed0e9399",
       "InputValues": [
         {
@@ -776,7 +776,7 @@
       "Outputs": []
     },
     {
-      "Id": "78241c65-ad57-453b-8bd5-cd4a907f4cc0"/*PrepareSlidingLineTransition*/,
+      "Id": "78241c65-ad57-453b-8bd5-cd4a907f4cc0"/*PrepareSvgLineTransition*/,
       "SymbolId": "b7345438-f3f4-4ad3-9c57-6076ed0e9399",
       "InputValues": [
         {
@@ -889,7 +889,7 @@
       "Outputs": []
     },
     {
-      "Id": "0149d929-9f6a-4e1f-bdb8-4bcfbea90d38"/*PrepareSlidingLineTransition*/,
+      "Id": "0149d929-9f6a-4e1f-bdb8-4bcfbea90d38"/*PrepareSvgLineTransition*/,
       "SymbolId": "b7345438-f3f4-4ad3-9c57-6076ed0e9399",
       "InputValues": [
         {
@@ -1002,7 +1002,7 @@
       "Outputs": []
     },
     {
-      "Id": "f7c8cfc2-eb46-4ad9-a053-86efbdc58d02"/*PrepareSlidingLineTransition*/,
+      "Id": "f7c8cfc2-eb46-4ad9-a053-86efbdc58d02"/*PrepareSvgLineTransition*/,
       "SymbolId": "b7345438-f3f4-4ad3-9c57-6076ed0e9399",
       "InputValues": [
         {
@@ -1417,7 +1417,7 @@
       "Outputs": []
     },
     {
-      "Id": "76cbc33c-e157-4cdc-9e73-0c1cb1f87be5"/*PrepareSlidingLineTransition*/,
+      "Id": "76cbc33c-e157-4cdc-9e73-0c1cb1f87be5"/*PrepareSvgLineTransition*/,
       "SymbolId": "b7345438-f3f4-4ad3-9c57-6076ed0e9399",
       "InputValues": [
         {
@@ -1523,7 +1523,7 @@
       "Outputs": []
     },
     {
-      "Id": "ccab6554-fdfe-4e75-bc97-ec83f4e03bec"/*PrepareSlidingLineTransition*/,
+      "Id": "ccab6554-fdfe-4e75-bc97-ec83f4e03bec"/*PrepareSvgLineTransition*/,
       "SymbolId": "b7345438-f3f4-4ad3-9c57-6076ed0e9399",
       "InputValues": [
         {

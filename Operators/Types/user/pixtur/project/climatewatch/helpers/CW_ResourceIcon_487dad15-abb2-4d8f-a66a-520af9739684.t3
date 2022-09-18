@@ -144,7 +144,7 @@
       "Outputs": []
     },
     {
-      "Id": "5b78798d-fa6e-454f-934f-0aa80cfeb05c"/*RadialGPoints*/,
+      "Id": "5b78798d-fa6e-454f-934f-0aa80cfeb05c"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {

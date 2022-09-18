@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "0977579f-6d77-4e37-ac6c-9f70d350ec72"/*RadialGPoints*/,
+      "ChildId": "0977579f-6d77-4e37-ac6c-9f70d350ec72"/*RadialPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -26,7 +26,7 @@
       }
     },
     {
-      "ChildId": "bfa502d6-e68a-4901-80a0-508e27a285f7"/*LinearPoints*/,
+      "ChildId": "bfa502d6-e68a-4901-80a0-508e27a285f7"/*LinearPointsCpu*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

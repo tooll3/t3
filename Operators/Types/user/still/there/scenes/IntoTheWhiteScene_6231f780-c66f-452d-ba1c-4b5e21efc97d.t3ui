@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "bf304ac6-fedc-4706-b0f1-a8fd15527f8f"/*RadialGPoints*/,
+      "ChildId": "bf304ac6-fedc-4706-b0f1-a8fd15527f8f"/*RadialPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

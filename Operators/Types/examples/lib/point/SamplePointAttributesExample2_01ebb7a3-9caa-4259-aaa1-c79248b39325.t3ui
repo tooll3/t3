@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "ca4bedae-a722-45ca-a3a1-9fd99e75acdf"/*LineGPoints*/,
+      "ChildId": "ca4bedae-a722-45ca-a3a1-9fd99e75acdf"/*LinePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -70,7 +70,7 @@
       }
     },
     {
-      "ChildId": "8d33e239-ee49-4f59-a5f1-48f69c27e72b"/*LineGPoints*/,
+      "ChildId": "8d33e239-ee49-4f59-a5f1-48f69c27e72b"/*LinePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

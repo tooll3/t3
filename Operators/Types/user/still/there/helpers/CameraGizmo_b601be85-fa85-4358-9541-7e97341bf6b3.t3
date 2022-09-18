@@ -5,7 +5,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "3681d5ec-1522-416d-85c8-973a80ec6c56"/*RadialGPoints*/,
+      "Id": "3681d5ec-1522-416d-85c8-973a80ec6c56"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {
@@ -45,7 +45,7 @@
       "Outputs": []
     },
     {
-      "Id": "7e5d4017-6aee-4429-b02b-be6bfb29f6cc"/*RadialGPoints*/,
+      "Id": "7e5d4017-6aee-4429-b02b-be6bfb29f6cc"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {
@@ -122,7 +122,7 @@
       "Outputs": []
     },
     {
-      "Id": "ce9c75ec-3798-42fd-8014-507ad938885e"/*RadialGPoints*/,
+      "Id": "ce9c75ec-3798-42fd-8014-507ad938885e"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {

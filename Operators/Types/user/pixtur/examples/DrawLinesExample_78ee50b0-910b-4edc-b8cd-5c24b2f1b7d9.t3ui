@@ -80,7 +80,7 @@
       }
     },
     {
-      "ChildId": "1d940e45-54aa-44c4-86fe-a1aa1b2ee0db"/*GridGPoints*/,
+      "ChildId": "1d940e45-54aa-44c4-86fe-a1aa1b2ee0db"/*GridPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -113,7 +113,7 @@
       }
     },
     {
-      "ChildId": "952f175a-9cfc-42b7-8e10-208b2f77207b"/*LinearPoints*/,
+      "ChildId": "952f175a-9cfc-42b7-8e10-208b2f77207b"/*LinearPointsCpu*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -223,7 +223,7 @@
       }
     },
     {
-      "ChildId": "096fdd41-166a-4707-b61e-842e6f35440d"/*GridGPoints*/,
+      "ChildId": "096fdd41-166a-4707-b61e-842e6f35440d"/*GridPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -597,7 +597,7 @@
       }
     },
     {
-      "ChildId": "10accc9c-f113-4182-82fd-05e97a3fc7c3"/*GridGPoints*/,
+      "ChildId": "10accc9c-f113-4182-82fd-05e97a3fc7c3"/*GridPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -630,7 +630,7 @@
       }
     },
     {
-      "ChildId": "92015adf-4938-42f4-981f-f53a47116c1c"/*GridGPoints*/,
+      "ChildId": "92015adf-4938-42f4-981f-f53a47116c1c"/*GridPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -1642,7 +1642,7 @@
       }
     },
     {
-      "ChildId": "d2d6f1cb-bc8f-4493-843c-396eb0ef37a8"/*GridGPoints*/,
+      "ChildId": "d2d6f1cb-bc8f-4493-843c-396eb0ef37a8"/*GridPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

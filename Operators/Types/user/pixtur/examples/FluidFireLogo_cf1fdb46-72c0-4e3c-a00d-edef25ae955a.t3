@@ -378,7 +378,7 @@
       "Outputs": []
     },
     {
-      "Id": "ccb235a2-9a5d-4046-a503-808d212ab6a2"/*PrepareSlidingLineTransition*/,
+      "Id": "ccb235a2-9a5d-4046-a503-808d212ab6a2"/*PrepareSvgLineTransition*/,
       "SymbolId": "b7345438-f3f4-4ad3-9c57-6076ed0e9399",
       "InputValues": [
         {

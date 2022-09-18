@@ -114,7 +114,7 @@
       }
     },
     {
-      "ChildId": "ccb235a2-9a5d-4046-a503-808d212ab6a2"/*PrepareSlidingLineTransition*/,
+      "ChildId": "ccb235a2-9a5d-4046-a503-808d212ab6a2"/*PrepareSvgLineTransition*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

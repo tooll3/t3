@@ -103,7 +103,7 @@
       }
     },
     {
-      "ChildId": "3a3306b8-eb7a-400c-b21a-2656f36adb14"/*LineGPoints*/,
+      "ChildId": "3a3306b8-eb7a-400c-b21a-2656f36adb14"/*LinePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -158,7 +158,7 @@
       }
     },
     {
-      "ChildId": "e11fc243-20f9-4bd8-8cfc-0b18789d5fc4"/*RadialGPoints*/,
+      "ChildId": "e11fc243-20f9-4bd8-8cfc-0b18789d5fc4"/*RadialPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -169,7 +169,7 @@
       }
     },
     {
-      "ChildId": "c7b5343f-bb73-4ec2-85c1-a08891147dfd"/*LineGPoints*/,
+      "ChildId": "c7b5343f-bb73-4ec2-85c1-a08891147dfd"/*LinePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -455,7 +455,7 @@
       }
     },
     {
-      "ChildId": "a8a058fe-e825-40de-a83b-bfc5ea669692"/*GridGPoints*/,
+      "ChildId": "a8a058fe-e825-40de-a83b-bfc5ea669692"/*GridPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

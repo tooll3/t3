@@ -798,7 +798,7 @@
       }
     },
     {
-      "ChildId": "53c238f8-1527-4d0a-9bb5-3b1b18c3adfe"/*LinePoints*/,
+      "ChildId": "53c238f8-1527-4d0a-9bb5-3b1b18c3adfe"/*LinePointsCpu*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -1129,7 +1129,7 @@
       }
     },
     {
-      "ChildId": "5f092f63-e1ec-4715-9cea-3cdb0cc0b514"/*LinePoints*/,
+      "ChildId": "5f092f63-e1ec-4715-9cea-3cdb0cc0b514"/*LinePointsCpu*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

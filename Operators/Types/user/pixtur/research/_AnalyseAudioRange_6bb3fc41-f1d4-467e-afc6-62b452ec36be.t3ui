@@ -87,7 +87,7 @@
       }
     },
     {
-      "ChildId": "c619fcc9-de86-45ec-9158-584c9ec7e92c"/*LinePoints*/,
+      "ChildId": "c619fcc9-de86-45ec-9158-584c9ec7e92c"/*LinePointsCpu*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -153,7 +153,7 @@
       }
     },
     {
-      "ChildId": "0fc121fb-ee77-49d0-a85e-eb2b6c051bf1"/*LinePoints*/,
+      "ChildId": "0fc121fb-ee77-49d0-a85e-eb2b6c051bf1"/*LinePointsCpu*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -340,7 +340,7 @@
       }
     },
     {
-      "ChildId": "95794462-d463-402c-8a26-a65a94cc323c"/*LinePoints*/,
+      "ChildId": "95794462-d463-402c-8a26-a65a94cc323c"/*LinePointsCpu*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

@@ -81,7 +81,7 @@
       }
     },
     {
-      "ChildId": "67477888-f17a-4cbf-870d-47e32b3bf87c"/*RadialGPoints*/,
+      "ChildId": "67477888-f17a-4cbf-870d-47e32b3bf87c"/*RadialPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -202,7 +202,7 @@
       }
     },
     {
-      "ChildId": "008f2a7b-236c-4453-baa7-0540d016cfff"/*RadialGPoints*/,
+      "ChildId": "008f2a7b-236c-4453-baa7-0540d016cfff"/*RadialPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -235,7 +235,7 @@
       }
     },
     {
-      "ChildId": "1c7f750c-994a-4d9a-9fee-c41cecd731c6"/*RadialGPoints*/,
+      "ChildId": "1c7f750c-994a-4d9a-9fee-c41cecd731c6"/*RadialPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

@@ -23,7 +23,7 @@
   ],
   "Children": [
     {
-      "Id": "05da9fe7-b92a-4050-bb45-d736d62409ca"/*LineGPoints*/,
+      "Id": "05da9fe7-b92a-4050-bb45-d736d62409ca"/*LinePoints*/,
       "SymbolId": "4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68",
       "InputValues": [
         {
@@ -68,7 +68,7 @@
       "Outputs": []
     },
     {
-      "Id": "6e820e56-1b24-465b-a073-93ca51cca07b"/*LineGPoints*/,
+      "Id": "6e820e56-1b24-465b-a073-93ca51cca07b"/*LinePoints*/,
       "SymbolId": "4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68",
       "InputValues": [
         {

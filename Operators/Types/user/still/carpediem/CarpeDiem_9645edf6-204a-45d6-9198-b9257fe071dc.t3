@@ -417,7 +417,7 @@
       ]
     },
     {
-      "Id": "50dabb47-f346-4608-b5a4-7dd6a206f17c"/*RadialGPoints*/,
+      "Id": "50dabb47-f346-4608-b5a4-7dd6a206f17c"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {
@@ -480,7 +480,7 @@
       "Outputs": []
     },
     {
-      "Id": "7fc4985f-4f0e-45da-8c3d-7e4a871ee1dd"/*LineGPoints*/,
+      "Id": "7fc4985f-4f0e-45da-8c3d-7e4a871ee1dd"/*LinePoints*/,
       "SymbolId": "4ae9e2f5-7cb3-40b0-a662-0662e8cb7c68",
       "InputValues": [
         {
@@ -813,7 +813,7 @@
       "Outputs": []
     },
     {
-      "Id": "5db82511-ffb6-4dea-889b-d5eff73440f1"/*RadialGPoints*/,
+      "Id": "5db82511-ffb6-4dea-889b-d5eff73440f1"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {
@@ -1199,7 +1199,7 @@
       "Outputs": []
     },
     {
-      "Id": "f5a54eae-e539-421d-be31-6c8326c44c1f"/*PrepareSlidingLineTransition*/,
+      "Id": "f5a54eae-e539-421d-be31-6c8326c44c1f"/*PrepareSvgLineTransition*/,
       "SymbolId": "b7345438-f3f4-4ad3-9c57-6076ed0e9399",
       "InputValues": [],
       "Outputs": []
@@ -1291,7 +1291,7 @@
       "Outputs": []
     },
     {
-      "Id": "c3964a41-7ae4-409e-a6da-447f4099a998"/*PrepareSlidingLineTransition*/,
+      "Id": "c3964a41-7ae4-409e-a6da-447f4099a998"/*PrepareSvgLineTransition*/,
       "SymbolId": "b7345438-f3f4-4ad3-9c57-6076ed0e9399",
       "InputValues": [],
       "Outputs": []
@@ -1800,7 +1800,7 @@
       "Outputs": []
     },
     {
-      "Id": "9df58d10-f576-4ec0-b2f6-947e21bec404"/*GridGPoints*/,
+      "Id": "9df58d10-f576-4ec0-b2f6-947e21bec404"/*GridPoints*/,
       "SymbolId": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
       "InputValues": [
         {
@@ -1927,7 +1927,7 @@
       "Outputs": []
     },
     {
-      "Id": "20ba2dd7-2aa0-486c-944d-5c2cffab7ad3"/*RadialGPoints*/,
+      "Id": "20ba2dd7-2aa0-486c-944d-5c2cffab7ad3"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {
@@ -2630,7 +2630,7 @@
       "Outputs": []
     },
     {
-      "Id": "3ae58e56-15b1-4cb3-895a-b3ca74eb094b"/*RadialGPoints*/,
+      "Id": "3ae58e56-15b1-4cb3-895a-b3ca74eb094b"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {
@@ -3466,7 +3466,7 @@
       "Outputs": []
     },
     {
-      "Id": "832efb52-79ad-41fa-8a1a-91a3353fa1d4"/*RadialGPoints*/,
+      "Id": "832efb52-79ad-41fa-8a1a-91a3353fa1d4"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {

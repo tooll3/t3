@@ -5,7 +5,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "7199ddac-c377-43f1-aea1-f89087340ae8"/*GridGPoints*/,
+      "Id": "7199ddac-c377-43f1-aea1-f89087340ae8"/*GridPoints*/,
       "SymbolId": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
       "InputValues": [
         {

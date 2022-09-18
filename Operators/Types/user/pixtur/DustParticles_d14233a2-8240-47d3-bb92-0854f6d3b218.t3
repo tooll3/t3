@@ -92,7 +92,7 @@
   ],
   "Children": [
     {
-      "Id": "f1898073-d26a-4bb3-8480-134ae4260f40"/*GridGPoints*/,
+      "Id": "f1898073-d26a-4bb3-8480-134ae4260f40"/*GridPoints*/,
       "SymbolId": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
       "InputValues": [
         {

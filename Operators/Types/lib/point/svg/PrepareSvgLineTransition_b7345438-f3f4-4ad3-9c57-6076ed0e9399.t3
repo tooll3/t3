@@ -1,0 +1,29 @@
+{
+  "Name": "PrepareSvgLineTransition",
+  "Id": "b7345438-f3f4-4ad3-9c57-6076ed0e9399",
+  "Namespace": "lib.point.svg",
+  "Inputs": [
+    {
+      "Id": "5fd5eea5-b7ab-406f-8c10-8435d59297b5"/*Spread*/,
+      "DefaultValue": 0.4
+    },
+    {
+      "Id": "c1fa1a4e-8884-4a6f-ac80-f22d3b5dfe2f"/*SpreadMode*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "8cef763e-48e4-41f9-b429-0ad32b849adf"/*RandomizeStart*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "0bcfbd7a-c01b-409f-a661-135dd27e8580"/*RandomizeDuration*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "82b2e8d3-40c2-4a4c-a9ad-806d5097a8fd"/*SourcePoints*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

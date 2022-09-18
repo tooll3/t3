@@ -174,7 +174,7 @@
       "Outputs": []
     },
     {
-      "Id": "19591b6a-58bc-414a-bc45-bae714c2afb0"/*GridGPoints*/,
+      "Id": "19591b6a-58bc-414a-bc45-bae714c2afb0"/*GridPoints*/,
       "SymbolId": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
       "InputValues": [
         {
@@ -724,7 +724,7 @@
       "Outputs": []
     },
     {
-      "Id": "ddc3fcc2-0a27-4a50-882b-aea6800840ec"/*RadialGPoints*/,
+      "Id": "ddc3fcc2-0a27-4a50-882b-aea6800840ec"/*RadialPoints*/,
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {

@@ -78,7 +78,7 @@
       }
     },
     {
-      "ChildId": "571e9182-7203-447e-8d31-1a8ae3d29802"/*LineGPoints*/,
+      "ChildId": "571e9182-7203-447e-8d31-1a8ae3d29802"/*LinePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -133,7 +133,7 @@
       }
     },
     {
-      "ChildId": "078d098b-bb9d-4ed3-9840-42ca9eda11c5"/*LineGPoints*/,
+      "ChildId": "078d098b-bb9d-4ed3-9840-42ca9eda11c5"/*LinePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
