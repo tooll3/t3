@@ -199,6 +199,7 @@ namespace T3.Gui
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5.MidiInput), MidiInputUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_bfe540ef_f8ad_45a2_b557_cd419d9c8e44.DataList), DataListUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_ed0f5188_8888_453e_8db4_20d87d18e9f4.Boolean), BooleanUi.DrawChildUi);
+            CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_0bec016a_5e1b_467a_8273_368d4d6b9935.Trigger), TriggerUi.DrawChildUi);
 
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227.LoadObj), DescriptiveUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c.ComputeShader), DescriptiveUi.DrawChildUi);
