@@ -602,9 +602,12 @@ namespace T3.Gui
                 THelpers.DisableImGuiKeyboardNavigation();
             }
 
-            var lostFocus = ImGui.IsItemDeactivated();
-
-            if (ImGui.IsItemFocused() || ImGui.IsItemActive() || _isSearchResultWindowOpen)
+            var isItemDeactivated = ImGui.IsItemDeactivated();
+            
+            // We defer exit to get clicks on opened popup list
+            var lostFocus = isItemDeactivated || ImGui.IsKeyDown((ImGuiKey)Key.Esc);
+            
+            if ( ImGui.IsItemActive() || _isSearchResultWindowOpen)
             {
                 _isSearchResultWindowOpen = true;
 
