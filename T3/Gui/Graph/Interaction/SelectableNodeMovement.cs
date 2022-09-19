@@ -519,7 +519,10 @@ namespace T3.Gui.Graph.Interaction
                 if (Directions.Count < 2)
                     return false;
 
-                if (Directions.Count > QueueLength)
+                // queuelength is optimized for 60 fps
+                // adjust length for different frame rates
+                Log.Info("quelen: " + Directions.Count);
+                if (Directions.Count > QueueLength * (1 / 60f) / Core.Animation.Playback.LastFrameDuration)
                     Directions.RemoveAt(0);
 
                 // count direction changes
@@ -541,6 +544,7 @@ namespace T3.Gui.Graph.Interaction
 
                     lastD = d;
                 }
+                Log.Info("direction changed: " + changeDirectionCount);
 
                 var wasShaking = changeDirectionCount >= ChangeDirectionThreshold;
                 if (wasShaking)
@@ -556,7 +560,7 @@ namespace T3.Gui.Graph.Interaction
 
             private static Vector2 _lastPosition = Vector2.Zero;
             private const int QueueLength = 35;
-            private const int ChangeDirectionThreshold = 5;
+            private const int ChangeDirectionThreshold = 3;
             private static readonly List<int> Directions = new List<int>(QueueLength);
         }
     }
