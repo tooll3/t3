@@ -1,0 +1,105 @@
+{
+  "Name": "DemoWithClips",
+  "Id": "827709f4-5e8e-46be-85c7-55ddd9878660",
+  "Namespace": "user.noice.DemoWithClips",
+  "Inputs": [],
+  "Children": [
+    {
+      "Id": "b7687d28-9c62-417f-9af4-60621cd2f4b3"/*RenderTarget*/,
+      "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "0cc201ff-25c8-4d59-8393-aa165ea23e94"/*Scene01*/,
+      "SymbolId": "7db0dfe8-8e9a-4ae5-a4f0-b32a5f936bb7",
+      "InputValues": [],
+      "Outputs": [
+        {
+          "Id": "4b7f5240-8773-46c9-aadc-dc51e028553b"/*Scene01*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 1.0,
+                "End": 2.0
+              },
+              "SourceRange": {
+                "Start": 0.0,
+                "End": 8.0
+              },
+              "LayerIndex": 5
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Id": "07de7326-f4f9-409e-bb4d-6de44c67b02b"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "3aec7b5d-52d9-4e6c-bc2a-534ea1e1a171"/*Scene01*/,
+      "SymbolId": "7db0dfe8-8e9a-4ae5-a4f0-b32a5f936bb7",
+      "InputValues": [],
+      "Outputs": [
+        {
+          "Id": "4b7f5240-8773-46c9-aadc-dc51e028553b"/*Scene01*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 0.0,
+                "End": 1.0
+              },
+              "SourceRange": {
+                "Start": 3.0002213,
+                "End": 0.0
+              },
+              "LayerIndex": 6
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "Connections": [
+    {
+      "SourceParentOrChildId": "b7687d28-9c62-417f-9af4-60621cd2f4b3",
+      "SourceSlotId": "7a4c4feb-be2f-463e-96c6-cd9a6bad77a2",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "150aa4ce-2971-4d14-8ce2-d6af90beb499"
+    },
+    {
+      "SourceParentOrChildId": "0cc201ff-25c8-4d59-8393-aa165ea23e94",
+      "SourceSlotId": "4b7f5240-8773-46c9-aadc-dc51e028553b",
+      "TargetParentOrChildId": "07de7326-f4f9-409e-bb4d-6de44c67b02b",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "3aec7b5d-52d9-4e6c-bc2a-534ea1e1a171",
+      "SourceSlotId": "4b7f5240-8773-46c9-aadc-dc51e028553b",
+      "TargetParentOrChildId": "07de7326-f4f9-409e-bb4d-6de44c67b02b",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "07de7326-f4f9-409e-bb4d-6de44c67b02b",
+      "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
+      "TargetParentOrChildId": "b7687d28-9c62-417f-9af4-60621cd2f4b3",
+      "TargetSlotId": "4da253b7-4953-439a-b03f-1d515a78bddf"
+    }
+  ],
+  "AudioClips": [
+    {
+      "Id": "00000000-0000-0000-0000-000000000000",
+      "StartTime": 0.0,
+      "EndTime": 0.0,
+      "Bpm": 120.0,
+      "DiscardAfterUse": true,
+      "IsSoundtrack": true,
+      "FilePath": "F:\\media\\music\\18 - The Byrds - Mr. Tambourine Man.wav"
+    }
+  ]
+}

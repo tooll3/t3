@@ -1,0 +1,27 @@
+{
+  "Id": "8357b502-96c7-4eaf-9e14-9f217abef7a6"/*subscene0201*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "e6bd4bee-309e-4fd7-a761-ed1032a39351"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -58.740784,
+        "Y": 23.332367
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "f01bcaab-48fc-47aa-9cf2-cc926fadfe70"/*OutputWithTimeClip*/,
+      "Position": {
+        "X": 181.12265,
+        "Y": 29.205948
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "Name": "Scene01",
+  "Id": "7db0dfe8-8e9a-4ae5-a4f0-b32a5f936bb7",
+  "Namespace": "user.noice.DemoWithClips.scenes",
+  "Inputs": [],
+  "Children": [
+    {
+      "Id": "2632501c-0372-42f9-a8fa-086ab1755c6b"/*scene0201*/,
+      "SymbolId": "eb56851b-2421-4aed-bd1b-5be4489e760f",
+      "InputValues": [],
+      "Outputs": [
+        {
+          "Id": "1117df87-59a5-431d-a845-783d9730eb93"/*scene0201*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 4.0,
+                "End": 8.0
+              },
+              "SourceRange": {
+                "Start": 0.0,
+                "End": 2.0
+              },
+              "LayerIndex": 360
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Id": "4dbb23ad-6f5c-4340-a053-eda87ac9c7ac"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "88efb702-8cbb-4da8-b87c-f7a88c067bf5"/*scene0201*/,
+      "SymbolId": "eb56851b-2421-4aed-bd1b-5be4489e760f",
+      "InputValues": [],
+      "Outputs": [
+        {
+          "Id": "1117df87-59a5-431d-a845-783d9730eb93"/*scene0201*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 0.0,
+                "End": 4.0
+              },
+              "SourceRange": {
+                "Start": 0.0,
+                "End": 2.0
+              },
+              "LayerIndex": 360
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "Connections": [
+    {
+      "SourceParentOrChildId": "4dbb23ad-6f5c-4340-a053-eda87ac9c7ac",
+      "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "4b7f5240-8773-46c9-aadc-dc51e028553b"
+    },
+    {
+      "SourceParentOrChildId": "2632501c-0372-42f9-a8fa-086ab1755c6b",
+      "SourceSlotId": "1117df87-59a5-431d-a845-783d9730eb93",
+      "TargetParentOrChildId": "4dbb23ad-6f5c-4340-a053-eda87ac9c7ac",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "88efb702-8cbb-4da8-b87c-f7a88c067bf5",
+      "SourceSlotId": "1117df87-59a5-431d-a845-783d9730eb93",
+      "TargetParentOrChildId": "4dbb23ad-6f5c-4340-a053-eda87ac9c7ac",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    }
+  ]
+}

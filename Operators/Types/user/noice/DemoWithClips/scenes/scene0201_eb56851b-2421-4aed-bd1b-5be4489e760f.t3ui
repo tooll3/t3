@@ -1,0 +1,27 @@
+{
+  "Id": "eb56851b-2421-4aed-bd1b-5be4489e760f"/*scene0201*/,
+  "Description": "New time clip scene",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "f2850dcb-3e91-4bb9-8030-ee0982fffef6"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "1117df87-59a5-431d-a845-783d9730eb93"/*Command*/,
+      "Position": {
+        "X": 182.62102,
+        "Y": 5.995285
+      }
+    }
+  ]
+}

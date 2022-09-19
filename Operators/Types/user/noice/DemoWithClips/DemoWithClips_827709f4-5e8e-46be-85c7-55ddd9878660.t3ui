@@ -1,0 +1,60 @@
+{
+  "Id": "827709f4-5e8e-46be-85c7-55ddd9878660"/*DemoWithClips*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "b7687d28-9c62-417f-9af4-60621cd2f4b3"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 150.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "0cc201ff-25c8-4d59-8393-aa165ea23e94"/*Scene01*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -328.31244,
+        "Y": -20.589127
+      }
+    },
+    {
+      "ChildId": "07de7326-f4f9-409e-bb4d-6de44c67b02b"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": -28.312439,
+        "Y": -21.486404
+      }
+    },
+    {
+      "ChildId": "3aec7b5d-52d9-4e6c-bc2a-534ea1e1a171"/*Scene01*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -328.31244,
+        "Y": 22.410873
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "150aa4ce-2971-4d14-8ce2-d6af90beb499"/*ColorBuffer*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

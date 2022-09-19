@@ -1,0 +1,49 @@
+{
+  "Id": "7db0dfe8-8e9a-4ae5-a4f0-b32a5f936bb7"/*Scene01*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "2632501c-0372-42f9-a8fa-086ab1755c6b"/*scene0201*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2.3266602,
+        "Y": 64.94672
+      }
+    },
+    {
+      "ChildId": "4dbb23ad-6f5c-4340-a053-eda87ac9c7ac"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 180.75067,
+        "Y": 64.87845
+      }
+    },
+    {
+      "ChildId": "88efb702-8cbb-4da8-b87c-f7a88c067bf5"/*scene0201*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -10.498108,
+        "Y": 133.7143
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "4b7f5240-8773-46c9-aadc-dc51e028553b"/*OutputWithTimeClip*/,
+      "Position": {
+        "X": 346.01172,
+        "Y": 16.952759
+      }
+    }
+  ]
+}
