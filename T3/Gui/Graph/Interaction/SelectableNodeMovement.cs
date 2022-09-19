@@ -521,7 +521,6 @@ namespace T3.Gui.Graph.Interaction
 
                 // queuelength is optimized for 60 fps
                 // adjust length for different frame rates
-                Log.Info("quelen: " + Directions.Count);
                 if (Directions.Count > QueueLength * (1 / 60f) / Core.Animation.Playback.LastFrameDuration)
                     Directions.RemoveAt(0);
 
@@ -544,8 +543,7 @@ namespace T3.Gui.Graph.Interaction
 
                     lastD = d;
                 }
-                Log.Info("direction changed: " + changeDirectionCount);
-
+                
                 var wasShaking = changeDirectionCount >= ChangeDirectionThreshold;
                 if (wasShaking)
                     Reset();
