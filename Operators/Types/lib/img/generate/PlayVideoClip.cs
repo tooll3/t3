@@ -80,13 +80,6 @@ namespace T3.Operators.Types.Id_04c1a6dc_3042_48a8_81d2_0a5a162016dc
             // get scaled time range of video
             var timeRange = TimeSlot.TimeClip.TimeRange;
             var sourceRange = TimeSlot.TimeClip.SourceRange;
-            // sanity check
-            if (sourceRange.Start > sourceRange.End)
-            {
-                var temp = sourceRange.Start;
-                sourceRange.Start = sourceRange.End;
-                sourceRange.End = temp;
-            }
 
             // get the time we should be at in the video according to the timeline
             var barsInSeconds = context.LocalTime - timeRange.Start;
@@ -102,9 +95,11 @@ namespace T3.Operators.Types.Id_04c1a6dc_3042_48a8_81d2_0a5a162016dc
 
             // find start and end of video that should be played back
             var sourceStart = context.Playback.SecondsFromBars(sourceRange.Start);
-            var sourceDuration = context.Playback.SecondsFromBars(sourceRange.End);
-            var videoStart = Math.Max(0.0, sourceStart);
-            var videoEnd = Math.Min(_engine.Duration, sourceDuration);
+            var sourceEnd = context.Playback.SecondsFromBars(sourceRange.End);
+            var videoStart = Math.Min(sourceStart, sourceEnd);
+            var videoEnd = Math.Max(sourceStart, sourceEnd);
+            videoStart = Math.Clamp(videoStart, 0.0, _engine.Duration);
+            videoEnd = Math.Clamp(videoEnd, 0.0, _engine.Duration);
 
             // shall we seek?
             var clampedTime = Math.Clamp(shouldBeTimeInSecs, videoStart, videoEnd);
