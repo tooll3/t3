@@ -313,6 +313,29 @@ namespace T3.Gui.Windows
                         }
                     }
                 }
+                else if (currentDesc.Format == SharpDX.DXGI.Format.R16G16B16A16_UNorm)
+                {
+                    for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
+                    {
+                        if (!FlipY)
+                            inputStream.Position = (long)(loopY) * dataBox.RowPitch;
+                        else
+                            inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
+
+                        for (int loopX = 0; loopX < _videoPixelSize.Width; loopX++)
+                        {
+                            byte r = (byte)inputStream.ReadByte(); inputStream.ReadByte();
+                            byte g = (byte)inputStream.ReadByte(); inputStream.ReadByte();
+                            byte b = (byte)inputStream.ReadByte(); inputStream.ReadByte();
+                            byte a = (byte)inputStream.ReadByte(); inputStream.ReadByte();
+
+                            outputStream.WriteByte(b);
+                            outputStream.WriteByte(g);
+                            outputStream.WriteByte(r);
+                            outputStream.WriteByte(a);
+                        }
+                    }
+                }
                 else
                 {
                     packingUnknown = true;
@@ -372,10 +395,12 @@ namespace T3.Gui.Windows
                 {
                     throw new InvalidOperationException("Empty image handed over");
                 }
-                if (currentDesc.Format != SharpDX.DXGI.Format.R16G16B16A16_Float &&
-                    currentDesc.Format != SharpDX.DXGI.Format.R8G8B8A8_UNorm)
+                if (currentDesc.Format != SharpDX.DXGI.Format.R8G8B8A8_UNorm &&
+                    currentDesc.Format != SharpDX.DXGI.Format.R16G16B16A16_UNorm &&
+                    currentDesc.Format != SharpDX.DXGI.Format.R16G16B16A16_Float)
                 {
-                    throw new InvalidOperationException("Only R8G8B8A8_UNorm and R16G16B16A16_Float " +
+                    throw new InvalidOperationException($"Unknown format: {currentDesc.Format.ToString()}. " +
+                                                        "Only R8G8B8A8_UNorm, R16G16B16A16_UNorm and R16G16B16A16_Float " +
                                                         "input formats are supported so far.");
                 }
 

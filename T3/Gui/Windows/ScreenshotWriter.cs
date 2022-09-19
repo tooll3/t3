@@ -160,6 +160,37 @@ namespace T3.Gui.Windows
                             return false;
                         }
                     }
+                    else if (currentDesc.Format == Format.R16G16B16A16_UNorm)
+                    {
+                        var count = height * width;
+                        try
+                        {
+                            for (int y1 = 0; y1 < height; y1++)
+                            {
+                                imageStream.Position = (long)(y1) * dataBox.RowPitch;
+                                for (int x1 = 0; x1 < width; x1++)
+                                {
+                                    var r = (byte)imageStream.ReadByte(); imageStream.ReadByte();
+                                    var g = (byte)imageStream.ReadByte(); imageStream.ReadByte();
+                                    var b = (byte)imageStream.ReadByte(); imageStream.ReadByte();
+                                    outDataStream.WriteByte(b);
+                                    outDataStream.WriteByte(g);
+                                    outDataStream.WriteByte(r);
+
+                                    var a = imageStream.ReadByte(); imageStream.ReadByte();
+                                    if (format == FileFormats.Png)
+                                    {
+                                        outDataStream.WriteByte((byte)a);
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error("Can't write image:" + e.Message);
+                            return false;
+                        }
+                    }
                     else
                     {
                         Log.Warning($"Can't export unknown texture format {currentDesc.Format}");
