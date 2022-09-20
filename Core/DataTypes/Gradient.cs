@@ -20,7 +20,14 @@ namespace T3.Core.DataTypes
             writer.WritePropertyName("Steps");
             writer.WriteStartArray();
 
-            foreach (var step in Steps)
+            StepStruct[] stepsToWrite;
+
+            lock (Steps)
+            {
+                stepsToWrite = Steps.Select(x => new StepStruct(x)).ToArray();
+            }
+
+            foreach (var step in stepsToWrite)
             {
                 writer.WriteStartObject();
                 writer.WriteObject("Id", step.Id);
@@ -162,6 +169,20 @@ namespace T3.Core.DataTypes
             public float NormalizedPosition;
             public Vector4 Color;
             public Guid Id;
+        }
+
+        private struct StepStruct
+        {
+            public float NormalizedPosition;
+            public Vector4 Color;
+            public Guid Id;
+
+            public StepStruct(Step step)
+            {
+                NormalizedPosition = step.NormalizedPosition;
+                Color = step.Color;
+                Id = step.Id;
+            }
         }
 
         public enum Interpolations
