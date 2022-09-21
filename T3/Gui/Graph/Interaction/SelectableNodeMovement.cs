@@ -7,7 +7,6 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using t3.Gui.Commands.Graph;
-using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
@@ -231,6 +230,7 @@ namespace T3.Gui.Graph.Interaction
             }
         }
 
+        
         private static void HandleNodeDragging(ISelectableCanvasObject draggedNode)
         {
             if (!ImGui.IsMouseDragging(ImGuiMouseButton.Left))
@@ -241,12 +241,13 @@ namespace T3.Gui.Graph.Interaction
 
             if (!_isDragging)
             {
-                _dragStartDelta = ImGui.GetMousePos() - GraphCanvas.Current.TransformPosition(draggedNode.PosOnCanvas);
+                _dragStartPosInOpOnCanvas =  GraphCanvas.Current.InverseTransformPositionFloat(ImGui.GetMousePos()) - draggedNode.PosOnCanvas;
                 _isDragging = true;
             }
 
-            var newDragPos = ImGui.GetMousePos() - _dragStartDelta;
-            var newDragPosInCanvas = GraphCanvas.Current.InverseTransformPositionFloat(newDragPos);
+
+            var mousePosOnCanvas = GraphCanvas.Current.InverseTransformPositionFloat(ImGui.GetMousePos());
+            var newDragPosInCanvas = mousePosOnCanvas - _dragStartPosInOpOnCanvas;
 
             var bestDistanceInCanvas = float.PositiveInfinity;
             var targetSnapPositionInCanvas = Vector2.Zero;
@@ -488,18 +489,19 @@ namespace T3.Gui.Graph.Interaction
 
         private static readonly Vector2[] _snapOffsetsInCanvas =
             {
-                new Vector2(SymbolChildUi.DefaultOpSize.X + SnapPadding.X, 0),
-                new Vector2(-SymbolChildUi.DefaultOpSize.X - +SnapPadding.X, 0),
-                new Vector2(0, SnapPadding.Y),
-                new Vector2(0, -SnapPadding.Y)
+                new(SymbolChildUi.DefaultOpSize.X + SnapPadding.X, 0),
+                new(-SymbolChildUi.DefaultOpSize.X - +SnapPadding.X, 0),
+                new(0, SnapPadding.Y),
+                new(0, -SnapPadding.Y)
             };
 
         private static bool _isDragging;
-        private static Vector2 _dragStartDelta;
+        private static Vector2 _dragStartPosInOpOnCanvas;
+
         private static ModifyCanvasElementsCommand _moveCommand;
 
         private static Guid _draggedNodeId = Guid.Empty;
-        private static List<ISelectableCanvasObject> _draggedNodes = new List<ISelectableCanvasObject>();
+        private static List<ISelectableCanvasObject> _draggedNodes = new();
 
         private static class ShakeDetector
         {
@@ -514,20 +516,20 @@ namespace T3.Gui.Graph.Interaction
                     dx = delta.X > 0 ? 1 : -1;
                 }
 
-                Directions.Add(dx);
+                _directions.Add(dx);
 
-                if (Directions.Count < 2)
+                if (_directions.Count < 2)
                     return false;
 
-                if (Directions.Count > QueueLength)
-                    Directions.RemoveAt(0);
+                if (_directions.Count > QueueLength)
+                    _directions.RemoveAt(0);
 
                 // count direction changes
                 var changeDirectionCount = 0;
 
                 var lastD = 0;
                 var lastRealD = 0;
-                foreach (var d in Directions)
+                foreach (var d in _directions)
                 {
                     if (lastD != 0 && d != 0)
                     {
@@ -551,13 +553,13 @@ namespace T3.Gui.Graph.Interaction
 
             public static void Reset()
             {
-                Directions.Clear();
+                _directions.Clear();
             }
 
             private static Vector2 _lastPosition = Vector2.Zero;
             private const int QueueLength = 35;
             private const int ChangeDirectionThreshold = 5;
-            private static readonly List<int> Directions = new List<int>(QueueLength);
+            private static readonly List<int> _directions = new(QueueLength);
         }
     }
 }

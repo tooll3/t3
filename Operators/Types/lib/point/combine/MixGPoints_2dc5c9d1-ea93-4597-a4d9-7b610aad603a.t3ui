@@ -17,6 +17,7 @@
     },
     {
       "InputId": "97904d2e-ae67-4ab4-9201-7902a85d12f3"/*PointsA_*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -452.71265,
         "Y": 906.453
@@ -24,6 +25,7 @@
     },
     {
       "InputId": "91b903a2-5127-431b-ab66-d5a38ce1693c"/*PointsB_*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -452.71265,
         "Y": 962.453
