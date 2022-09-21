@@ -169,6 +169,11 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             
             WasHit.Value = _isHitActive;
             HitCount.Value = _hitCount;
+
+            if (float.IsInfinity(v) || float.IsNaN(v))
+            {
+                v = 0;
+            }
             Level.Value = v;
             ActiveBins = bins;
             
