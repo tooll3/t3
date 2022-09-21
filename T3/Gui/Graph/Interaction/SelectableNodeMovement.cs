@@ -129,6 +129,12 @@ namespace T3.Gui.Graph.Interaction
 
                 _moveCommand = null;
             }
+            else if (ImGui.IsMouseReleased(0) && _moveCommand == null)
+            {
+                // This happens after shake
+                _draggedNodes.Clear();
+            }
+
 
             var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
             if (ImGui.IsMouseReleased(ImGuiMouseButton.Right)
@@ -233,6 +239,7 @@ namespace T3.Gui.Graph.Interaction
         
         private static void HandleNodeDragging(ISelectableCanvasObject draggedNode)
         {
+            
             if (!ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
                 _isDragging = false;
@@ -521,7 +528,9 @@ namespace T3.Gui.Graph.Interaction
                 if (_directions.Count < 2)
                     return false;
 
-                if (_directions.Count > QueueLength)
+                // Queue length is optimized for 60 fps
+                // adjust length for different frame rates
+                if (_directions.Count > QueueLength * (1 / 60f) / Core.Animation.Playback.LastFrameDuration)
                     _directions.RemoveAt(0);
 
                 // count direction changes
@@ -543,7 +552,7 @@ namespace T3.Gui.Graph.Interaction
 
                     lastD = d;
                 }
-
+                
                 var wasShaking = changeDirectionCount >= ChangeDirectionThreshold;
                 if (wasShaking)
                     Reset();
