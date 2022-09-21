@@ -18,8 +18,7 @@ namespace T3.Gui.ChildUi
                 return SymbolChildUi.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
-            if (RateEditLabel.Draw(ref animValue.Rate.TypedInputValue.Value,
-                                   screenRect, drawList,  "Anim " + (AnimValue.Shapes)animValue.Shape.TypedInputValue.Value))
+            if (RateEditLabel.Draw(animValue.Rate, screenRect, drawList,  "Anim " + (AnimValue.Shapes)animValue.Shape.TypedInputValue.Value))
             {
                 animValue.Rate.Input.IsDefault = false;
                 animValue.Rate.DirtyFlag.Invalidate();
