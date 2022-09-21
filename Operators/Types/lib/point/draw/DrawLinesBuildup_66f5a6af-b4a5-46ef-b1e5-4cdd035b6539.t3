@@ -26,11 +26,11 @@
     },
     {
       "Id": "ea06ad34-1b22-4dd7-abac-51402839cf61"/*TransitionProgress*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.5
     },
     {
       "Id": "664a16be-e55e-4cd3-bd12-9122aa1c62d1"/*VisibleRange*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.5
     },
     {
       "Id": "929e0b9d-da3f-46b9-a61f-bd6500613166"/*Texture_*/,
