@@ -1,6 +1,6 @@
 {
   "Id": "af9c5db8-7144-4164-b605-b287aaf71bf6"/*Damp*/,
-  "Description": "Damps an incoming value with the following methods:\n\nLinear interpolation: \nDamping 0 -> instant  ... 1 -> value frozen / Target will never be reached\n\nSpring Damp: \n- Uses a \"critically damped spring\" that will provide a very smooth interpolation that will never overshoot.\n- The ideal damping value depends on your value range (lower spring for very large changes in value).\n\nThe spring damp method is also used by be Unity's SmoothDamp method.\n\nHave look at the example.\n",
+  "Description": "Damps (I.e. smooths or filters) an incoming value with the following methods:\n\nLinear interpolation: \nDamping 0 -> instant  ... 1 -> value frozen / Target will never be reached\n\nSpring Damp: \n- Uses a \"critically damped spring\" that will provide a very smooth interpolation that will never overshoot.\n- The ideal damping value depends on your value range (lower spring for very large changes in value).\n\nThe spring damp method is also used by be Unity's SmoothDamp method.\n\nHave look at the example.\n",
   "InputUis": [
     {
       "InputId": "795aca79-dd10-4f28-a290-a30e7b27b436"/*Value*/,

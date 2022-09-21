@@ -1,6 +1,6 @@
 {
   "Id": "66f5a6af-b4a5-46ef-b1e5-4cdd035b6539"/*DrawLinesBuildup*/,
-  "Description": "Renders incomming points are growing strokes. The \npoints' W attribute has the encode the U progress of \nthe the extend of the strokes. \n\n",
+  "Description": "Renders incomming points are growing strokes. The points' W attribute has the encode the U progress of the the extend of the strokes. \n\nThis operator requires a texture with a [LinearGradient] that is transparent that the ends.\n\nAnother approach would be [SvgToPoints]->[PrepareSvgLineTransition]->[ListToBuffer]->[DrawLinesBuildup].\n",
   "InputUis": [
     {
       "InputId": "f1c00ab5-eb9a-4d31-86a8-d4fc7d0c43c7"/*GPoints*/,
