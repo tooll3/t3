@@ -109,10 +109,10 @@ namespace T3
             SpaceMouse = new SpaceMouse(_main.Form.Handle);
             
             // Initialize optional Viewer Windows
-            _viewer.CreateRenderForm("T3 Viewer", true);
-            _viewer.InitViewSwapChain(factory, device);
-            _viewer.InitRenderTargetsAndEventHandlers(device);
-            _viewer.Form.Show();
+            Viewer.CreateRenderForm("T3 Viewer", true);
+            Viewer.InitViewSwapChain(factory, device);
+            Viewer.InitRenderTargetsAndEventHandlers(device);
+            Viewer.Form.Show();
 
             ResourceManager.Init(device);
             ResourceManager resourceManager = ResourceManager.Instance();
@@ -185,10 +185,10 @@ namespace T3
                 _main.PrepareRenderingFrame(_deviceContext);
 
                 // Render 2nd view
-                _viewer.Form.Visible = T3Ui.ShowSecondaryRenderWindow;
+                Viewer.Form.Visible = T3Ui.ShowSecondaryRenderWindow;
                 if (T3Ui.ShowSecondaryRenderWindow)
                 {
-                    _viewer.PrepareRenderingFrame(_deviceContext);
+                    Viewer.PrepareRenderingFrame(_deviceContext);
 
                     if (resourceManager.Resources[SharedResources.FullScreenVertexShaderId] is VertexShaderResource vsr)
                         _deviceContext.VertexShader.Set(vsr.VertexShader);
@@ -235,7 +235,7 @@ namespace T3
                 _main.SwapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
 
                 if (T3Ui.ShowSecondaryRenderWindow)
-                    _viewer.SwapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
+                    Viewer.SwapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
             }
 
             RenderLoop.Run(_main.Form, RenderCallback);
@@ -296,21 +296,21 @@ namespace T3
 
                 if (T3Ui.ShowSecondaryRenderWindow)
                 {
-                    _viewer.Form.WindowState = FormWindowState.Normal;
-                    _viewer.Form.FormBorderStyle = FormBorderStyle.None;
-                    _viewer.Form.Bounds = Screen.AllScreens[screenIndexForSecondScreen].Bounds;
+                    Viewer.Form.WindowState = FormWindowState.Normal;
+                    Viewer.Form.FormBorderStyle = FormBorderStyle.None;
+                    Viewer.Form.Bounds = Screen.AllScreens[screenIndexForSecondScreen].Bounds;
                 }
                 else
                 {
-                    _viewer.Form.WindowState = FormWindowState.Normal;
-                    _viewer.Form.FormBorderStyle = FormBorderStyle.None;
-                    _viewer.Form.Bounds = Screen.AllScreens[screenIndexForSecondScreen].Bounds;
+                    Viewer.Form.WindowState = FormWindowState.Normal;
+                    Viewer.Form.FormBorderStyle = FormBorderStyle.None;
+                    Viewer.Form.Bounds = Screen.AllScreens[screenIndexForSecondScreen].Bounds;
                 }
             }
             else
             {
                 _main.Form.FormBorderStyle = FormBorderStyle.Sizable;
-                _viewer.Form.FormBorderStyle = FormBorderStyle.Sizable;
+                Viewer.Form.FormBorderStyle = FormBorderStyle.Sizable;
             }
         }
 
@@ -337,7 +337,7 @@ namespace T3
         }
 
         private static readonly AppWindow _main = new();
-        private static readonly AppWindow _viewer = new();
+        public static readonly AppWindow Viewer = new();    // Required it distinguish 2nd render view in mouse handling   
 
         private static T3Ui _t3ui = null;
         private static DeviceContext _deviceContext;
