@@ -173,9 +173,9 @@ namespace T3.Core.DataTypes
 
         private struct StepStruct
         {
-            public readonly float NormalizedPosition;
-            public readonly Vector4 Color;
-            public readonly Guid Id;
+            public float NormalizedPosition;
+            public Vector4 Color;
+            public Guid Id;
 
             public StepStruct(Step step)
             {
