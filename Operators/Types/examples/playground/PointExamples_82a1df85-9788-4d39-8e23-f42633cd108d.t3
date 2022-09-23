@@ -546,7 +546,7 @@
           "Type": "T3.Core.DataTypes.Gradient",
           "Value": {
             "Gradient": {
-              "Interpolation": "Smooth",
+              "Interpolation": "Linear",
               "Steps": [
                 {
                   "Id": "bb15186d-c6b9-4fd1-bf85-baf952c1d1bd",

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Gui.Styling;
 using UiHelpers;
 
@@ -8,8 +10,9 @@ namespace T3.Gui.ChildUi.Animators
 {
     public static class RateEditLabel
     {
-        public static bool Draw(ref float rate, ImRect selectableScreenRect, ImDrawListPtr drawList,  string nodeLabel)
+        public static bool Draw(InputSlot<float> inputSlot, ImRect selectableScreenRect, ImDrawListPtr drawList,  string nodeLabel)
         {
+            var rate = inputSlot.Value;
             var modified = false;
             var h = selectableScreenRect.GetHeight();
             
@@ -62,12 +65,12 @@ namespace T3.Gui.ChildUi.Animators
                 {
                     if (dragDelta.Y > 0 && currentRateIndex > 0)
                     {
-                        rate = SpeedRate.RelevantRates[currentRateIndex - 1].Factor;
+                        inputSlot.TypedInputValue.Value = SpeedRate.RelevantRates[currentRateIndex - 1].Factor;
                         modified = true;
                     }
                     else if (dragDelta.Y < 0 && currentRateIndex < SpeedRate.RelevantRates.Length - 1)
                     {
-                        rate = SpeedRate.RelevantRates[currentRateIndex + 1].Factor;
+                        inputSlot.TypedInputValue.Value = SpeedRate.RelevantRates[currentRateIndex + 1].Factor;
                         modified = true;
                     }
 

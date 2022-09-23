@@ -13,8 +13,7 @@ namespace T3.Gui.ChildUi
             if (!(instance is Jitter jitter))
                 return SymbolChildUi.CustomUiResult.None;
             
-            if (RateEditLabel.Draw(ref jitter.Rate.TypedInputValue.Value, 
-                               screenRect, drawList, nameof(jitter)))
+            if (RateEditLabel.Draw(jitter.Rate, screenRect, drawList, nameof(jitter)))
             {
                 jitter.Rate.Input.IsDefault = false;
                 jitter.Rate.DirtyFlag.Invalidate();

@@ -55,6 +55,12 @@ namespace T3.Operators.Types.Id_cc3cc712_9e87_49c6_b04b_49a12cf2ba75
                 FilteredCubeMap.Value = null;
                 return;
             }
+
+            if ((cubeMapSrc.Description.OptionFlags & ResourceOptionFlags.TextureCube) == 0)
+            {
+                Log.Warning("[SetEnvironment] requires a CubeMap. Please use [TextureToCube] to convert your texture", SymbolChildId);
+                return;
+            }
             
             var device = ResourceManager.Instance().Device;
             var deviceContext = device.ImmediateContext;

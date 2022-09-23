@@ -15,8 +15,7 @@ namespace T3.Gui.ChildUi
                 return SymbolChildUi.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
-            if (RateEditLabel.Draw(ref counter.Rate.TypedInputValue.Value,
-                                   screenRect, drawList, nameof(counter)))
+            if (RateEditLabel.Draw(counter.Rate, screenRect, drawList, nameof(counter)))
             {
                 counter.Rate.Input.IsDefault = false;
                 counter.Rate.DirtyFlag.Invalidate();

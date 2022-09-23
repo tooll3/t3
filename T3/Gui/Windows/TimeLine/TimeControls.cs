@@ -104,7 +104,7 @@ namespace T3.Gui.Windows.TimeLine
                     UserSettings.Config.EnableIdleMotion = !UserSettings.Config.EnableIdleMotion;
                 }
 
-                CustomComponents.TooltipForLastItem("Keep beat time running",
+                CustomComponents.TooltipForLastItem("Idle Motion - Keeps beat time running",
                                                     "This will keep updating the output [Time]\nwhich is useful for procedural animation and syncing.");
 
                 if (UserSettings.Config.EnableIdleMotion)
