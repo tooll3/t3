@@ -1,3 +1,12 @@
+---
+name: Feature request
+about: suggest new features or improvements
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 ### Is your proposal related to a problem?
 
 <!--
