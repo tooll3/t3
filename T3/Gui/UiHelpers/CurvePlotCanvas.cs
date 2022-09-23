@@ -18,7 +18,7 @@ namespace T3.Gui.UiHelpers
 
         public void Draw(float value)
         {
-            var dl = ImGui.GetForegroundDrawList();
+            var dl = ImGui.GetWindowDrawList();
             var min = float.PositiveInfinity;
             var max = float.NegativeInfinity;
 
