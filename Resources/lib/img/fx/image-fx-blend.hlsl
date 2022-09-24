@@ -89,6 +89,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
                 tA.r < 0.5?(2.0 * tA.r * tB.r) : (1.0-2.0*(1.0-tA.r)*(1.0- tB.r)),
                 tA.g < 0.5?(2.0 * tA.g * tB.g) : (1.0-2.0*(1.0-tA.g)*(1.0- tB.g)),
                 tA.b < 0.5?(2.0 * tA.b * tB.b) : (1.0-2.0*(1.0-tA.b)*(1.0- tB.b)));
+                
+            rgb = lerp(tA.rgb, rgb, tB.a);
             break;
             
         // difference
