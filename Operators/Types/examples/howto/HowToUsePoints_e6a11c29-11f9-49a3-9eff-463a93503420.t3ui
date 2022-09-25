@@ -982,7 +982,7 @@
     },
     {
       "Id": "3bb26659-1068-451b-9d15-cfdb43f6ee21",
-      "Title": "Here is a Point. Is has...",
+      "Title": "Here is a Point. It has...",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -1000,7 +1000,7 @@
     },
     {
       "Id": "039a4b9b-2cb2-43b3-8c99-91a22807d920",
-      "Title": "A position XYZ",
+      "Title": "A position XYZ:",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -1018,7 +1018,7 @@
     },
     {
       "Id": "556dbc5f-4348-4a33-b5b0-e03b8dbefd83",
-      "Title": "An orientation:\nIs has 4 components because\nwe use quaternions for better\ninterpolation",
+      "Title": "An orientation:\nIt has 4 components because\nwe use quaternions for better\ninterpolation",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -1036,7 +1036,7 @@
     },
     {
       "Id": "84e31cee-df94-4f80-8fa6-d6f8d8f81b33",
-      "Title": "And a W - Attribute:\nWhich is used for various effects like...\n- selection\n- representing line width\n- scale factores\n- particle age.",
+      "Title": "And a W-Attribute:\nWhich is used for various effects like...\n- selection\n- representing line width\n- scale factores\n- particle age.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -1126,7 +1126,7 @@
     },
     {
       "Id": "422cfb03-b733-4c2f-9bbf-0a3d0453cb1e",
-      "Title": "This helper operator visualizes points,\nand their orientation.  This is one is \npermanently visible. But you can toggle\nthe default for these gizmos with the \noutput window \"Gizmo\" toggle.\n",
+      "Title": "This helper operator visualizes points\nand their orientation.  This one is \npermanently visible. But you can toggle\nthe default for these gizmos with the \noutput window \"Gizmo\" toggle.\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

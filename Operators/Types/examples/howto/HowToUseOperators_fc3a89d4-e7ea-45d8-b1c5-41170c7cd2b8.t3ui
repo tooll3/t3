@@ -709,7 +709,7 @@
   "Annotations": [
     {
       "Id": "f2ae8a9c-8d73-4698-9e04-e8fab0ac2797",
-      "Title": "Everything in T3 is made from Operators.\nThese Operators can be structured into the following categories.",
+      "Title": "Everything in T3 is made out of operators.\nThese operators can be structured into the following categories.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -853,7 +853,7 @@
     },
     {
       "Id": "5bdcc582-0109-4388-bdf5-4d580fa2a967",
-      "Title": "You can quickly distinguish the catories by their respective output type: Float-Number, Buffer, Command, Image, etc.\nThere are many more types but understand these foundations will carry you a long way...",
+      "Title": "You can quickly distinguish the catories by their respective output type: Float-Number, Buffer, Command, Image, etc.\nThere are many more types but understanding these foundations will get you far...",
       "Color": {
         "X": 0.4787234,
         "Y": 0.4787234,
@@ -889,7 +889,7 @@
     },
     {
       "Id": "b03d9382-caa3-47b9-ad9c-5db277583562",
-      "Title": "1. If this RenderTarget\nis selected, it \"requests\"\nIt's input command.",
+      "Title": "1. If this RenderTarget\nis selected, it \"requests\"\nits input command.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -907,7 +907,7 @@
     },
     {
       "Id": "38cdb32d-2357-45fe-9774-6681b00b93fd",
-      "Title": "2. This connected Operator\nsets a camera perspective\nand also requests its connected \ncommand.",
+      "Title": "2. This connected operator\nsets a camera perspective\nand also requests its connected \ncommand.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -925,7 +925,7 @@
     },
     {
       "Id": "c585a017-bbda-4ce7-b26a-159a9f4eb27a",
-      "Title": "3. This operator finally wants\nto \"draw\" something,\nbut it's needs some\ncontent, so,...",
+      "Title": "3. This operator finally wants\nto \"draw\" something,\nbut it needs some\ncontent, so, ...",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -943,7 +943,7 @@
     },
     {
       "Id": "2fca86b0-adbd-45af-a8e1-f8bf5711cb07",
-      "Title": "4. finally this operator\nprovides the actually data\nin form of faces and vertices.",
+      "Title": "4.  ... finally this operator\nprovides the actually data\nin form of faces and vertices.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -979,7 +979,7 @@
     },
     {
       "Id": "d4dc659e-f088-44da-87a4-962d9faa2984",
-      "Title": "While the graph is being evaluated (remember: from right to left) parameters\nfor where and and how to draw things are collected.\n\n",
+      "Title": "While the graph is being evaluated (remember: from right to left), parameters\nfor where and how to draw things are collected.\n\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -1033,7 +1033,7 @@
     },
     {
       "Id": "ac34d967-98a9-43f4-aa93-0c3d1c28c700",
-      "Title": "Switch and pick Operators help you to build complex\nsetups that respond to inputs like time, audio or sensor data.",
+      "Title": "Switch and Pick operators both help you to build complex\nsetups that respond to inputs like time, audio or sensor data.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

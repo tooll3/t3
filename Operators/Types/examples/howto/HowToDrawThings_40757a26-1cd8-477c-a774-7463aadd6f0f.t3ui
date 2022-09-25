@@ -666,7 +666,7 @@
     },
     {
       "Id": "0134d720-fe88-47c0-9159-39afa70da75d",
-      "Title": "Many draw Operators allow to set specific drawstyles...",
+      "Title": "Many draw operators allow to set specific drawstyles...",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -684,7 +684,7 @@
     },
     {
       "Id": "4a84c307-8a7c-4a4e-a986-6f7ec61a0427",
-      "Title": "Apply post processing\nambient occlusion to darken\ncreases.\n",
+      "Title": "Apply post-processing\nambient occlusion to darken\ncreases.\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -720,7 +720,7 @@
     },
     {
       "Id": "3ebb4a84-211b-495b-a3f3-cf844e5606a1",
-      "Title": "Render to an image\nbuffer using anti aliasing.",
+      "Title": "Render to an image\nbuffer using anti-aliasing.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -738,7 +738,7 @@
     },
     {
       "Id": "172298dc-5619-4b11-9fd1-759b82cd840a",
-      "Title": "Generate and apply environment texture and\nrendered show it in the background. The Camera \nhas the follow later, so it the backgorund \nmatches the camera movement..",
+      "Title": "Generate and apply environment texture and\nshow it in the background. The Camera \nhas to follow later so the background \nmatches the camera movement..",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -746,8 +746,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -673.3196,
-        "Y": 180.38708
+        "X": -656.1074,
+        "Y": 200.93582
       },
       "Size": {
         "X": 569.4458,
@@ -810,7 +810,7 @@
     },
     {
       "Id": "12bf94c4-b862-4b4d-9186-8185e49fd79c",
-      "Title": "Setting the material with a generative\ntexture as emissive color.\nNotice how the pattern highlight color\nis brighter that 1 so it glows nicely.",
+      "Title": "Setting the material with a generative\ntexture like emissive color.\nNotice how the pattern highlight color\nis brighter than 1 so it glows nicely.\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -918,7 +918,7 @@
     },
     {
       "Id": "297fac84-de17-4b6c-87b2-08935862abaf",
-      "Title": "An example how to achieve different draw styles.",
+      "Title": "An example of how to achieve different drawing styles.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

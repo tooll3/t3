@@ -24,9 +24,22 @@
           "Id": "8a908810-2482-4088-8b21-a7ee15531e64"/*Size*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 4.2799997,
-            "Y": 0.0
+            "X": 3.2670002,
+            "Y": 0.39999998
           }
+        },
+        {
+          "Id": "325461c8-2892-4e8d-8d3b-0eea1bcc03f9"/*Position*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.39999998,
+            "Y": 0.20000005
+          }
+        },
+        {
+          "Id": "41f4065a-0b65-4dda-9cd3-ef7802ed170b"/*Round*/,
+          "Type": "System.Single",
+          "Value": 2.9802322E-08
         },
         {
           "Id": "8232e748-5fc2-488d-8559-ac9ff621f95d"/*Rotate*/,

@@ -657,7 +657,7 @@
     },
     {
       "Id": "a35b622a-4f5c-4ee1-bf67-0c29c446415a",
-      "Title": "This operator picks one of the\neffects one of the incoming effects.\n\nYour can toggle the grid icon in the \nTime Controls to pause this.",
+      "Title": "This operator picks one of the incoming effects.\n\nYour can toggle the grid icon in the \nTime Controls to pause this.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -675,7 +675,7 @@
     },
     {
       "Id": "cc4c290c-294b-4d1d-bdcd-c58be4ad88d6",
-      "Title": "Here are some basic image effects.\nAlso note, that most Operators\nhave presets you can explore.\n\nTIPP: Hold the ALT-Key while\nhovering presets.",
+      "Title": "Here are some basic image effects.\nAlso note, that most operators\nhave presets you can explore.\n\nTIPP: Hold the ALT-Key while\nhovering over presets.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -711,7 +711,7 @@
     },
     {
       "Id": "341cd5a9-322a-46b4-bfa9-864e6aad8dd4",
-      "Title": "Blend is the go to operator to\ncombine image buffers. ",
+      "Title": "Blend is the go-to operator to\ncombine image buffers. ",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -747,7 +747,7 @@
     },
     {
       "Id": "50b5afd1-0769-411f-b2e0-5bc37a2e664c",
-      "Title": "This is nice example of \nthe kind of effects that\ncan be achived with compute\nshaders. ",
+      "Title": "This is nice example of \nthe kind of effects that\ncan be achieved with compute\nshaders. ",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -783,7 +783,7 @@
     },
     {
       "Id": "eecc7921-23d8-4aa9-8e16-6d35fb2a816e",
-      "Title": "You don't need an effects layer for [DirectionalBlur] .\nBut it really results into some very interesting visuals.",
+      "Title": "You don't need an effects layer for [DirectionalBlur] .\nBut it really results in some very interesting visuals.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -801,7 +801,7 @@
     },
     {
       "Id": "ab3b2edb-7215-4bed-bfb8-cea5b6f5969e",
-      "Title": "Display used the gradient of an effect\nimages as displacement direction.",
+      "Title": "[Displace] uses the gradient of effect\nimages to distort images.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -819,7 +819,7 @@
     },
     {
       "Id": "7cf03de1-1d93-43f8-a91f-0d303e8fc2de",
-      "Title": "Fake like produces something like an emboss effect.\nCheap but sometimes quite effective.",
+      "Title": "Fake Light produces something like an emboss effect.\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -837,7 +837,7 @@
     },
     {
       "Id": "e7d3314e-404f-47ba-96eb-ac6a1624f8cf",
-      "Title": "This is anoter displacement variation.",
+      "Title": "This is another displacement variation.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

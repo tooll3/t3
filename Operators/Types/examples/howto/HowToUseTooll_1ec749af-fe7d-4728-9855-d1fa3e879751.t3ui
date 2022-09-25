@@ -32,8 +32,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": 352.71014,
-        "Y": 164.74783
+        "X": 386.1458,
+        "Y": 152.14096
       }
     }
   ],
@@ -103,7 +103,7 @@
     },
     {
       "Id": "ac1fcac6-637d-474b-8a07-98c92c18ab56",
-      "Title": "Welcome - You made it!\nDouble clicking an operator will enter it. This is how you got here.\n\nTry to double click on the background to get back to the [HomeCanvas].\n",
+      "Title": "Welcome - You made it!\nDouble clicking on an operator will enter it. This is how you got here.\n\nTry to double click on the background to get back to the [HomeCanvas].\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -121,7 +121,7 @@
     },
     {
       "Id": "a3cc2028-be91-472c-985d-cb6c707383c1",
-      "Title": "Notice how the breadcumps in the top left corner also \nguide you the way home...",
+      "Title": "Notice how the breadcrumbs in the top left corner also \nguide you back home...",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -157,7 +157,7 @@
     },
     {
       "Id": "474e3707-8497-44ea-890b-fc3f1f6b4448",
-      "Title": "1. Creating an connecting Operators",
+      "Title": "1. Creating and connecting Operators",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -211,7 +211,7 @@
     },
     {
       "Id": "f5ee65c5-76e7-4242-bdb2-6e6c8ab1cc2a",
-      "Title": "You can...\n\n1. Drag values with the jog dial.\n2. Click a value to type values like \"2.1\" or fomulas like \"1.4/3\"\n3. Hover over a value use mouse wheel. Try holding Shift (for finer) \n   or ALT (for faster) changes.\n\n",
+      "Title": "You can...\n\n1. Drag values horizontally to change them.\n2. Click a value to type, e.g. values like \"2.1\" or fomulas like \"1.4/3\"\n3. Hover over a value to use mouse wheel. Try holding Shift (for finer) \n   or ALT (for faster) changes.\n\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
