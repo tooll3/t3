@@ -343,30 +343,40 @@ namespace T3.Gui.Graph.Interaction
                 ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
                 for (var index = 0; index < examples.Count; index++)
                 {
+                    var label = "Example";
                     var exampleId = examples[index];
-                    var symbolUi = SymbolUiRegistry.Entries[exampleId];
-                    var color = symbolUi.Symbol.OutputDefinitions.Count > 0
-                                    ? TypeUiRegistry.GetPropertiesForType(symbolUi.Symbol.OutputDefinitions[0]?.ValueType).Color
-                                    : Color.Gray;
-
-                    ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(color).Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ColorVariations.OperatorHover.Apply(color).Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.ButtonActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
-
-                    ImGui.SameLine();
-                    ImGui.Button("Example");
-                    SymbolTreeMenu.HandleDragAndDropForSymbolItem(symbolUi.Symbol);
-                    if (!string.IsNullOrEmpty(symbolUi.Description))
-                    {
-                        CustomComponents.TooltipForLastItem(symbolUi.Description);
-                    }
-
-                    ImGui.PopStyleColor(4);
+                    DrawExampleOperator(exampleId, label);
                 }
 
                 ImGui.PopStyleVar();
             }
+        }
+
+        public static void DrawExampleOperator(Guid exampleId, string label)
+        {
+            var symbolUi = SymbolUiRegistry.Entries[exampleId];
+            var color = symbolUi.Symbol.OutputDefinitions.Count > 0
+                            ? TypeUiRegistry.GetPropertiesForType(symbolUi.Symbol.OutputDefinitions[0]?.ValueType).Color
+                            : Color.Gray;
+
+            ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(color).Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ColorVariations.OperatorHover.Apply(color).Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
+
+            ImGui.SameLine();
+            ImGui.Button(label);
+            SymbolTreeMenu.HandleDragAndDropForSymbolItem(symbolUi.Symbol);
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
+            }
+            if (!string.IsNullOrEmpty(symbolUi.Description))
+            {
+                CustomComponents.TooltipForLastItem(symbolUi.Description);
+            }
+
+            ImGui.PopStyleColor(4);
         }
 
         private void ScrollToMakeItemVisible()

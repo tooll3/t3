@@ -1,7 +1,7 @@
 {
   "Name": "PointExamples",
   "Id": "82a1df85-9788-4d39-8e23-f42633cd108d",
-  "Namespace": "examples.playground",
+  "Namespace": "user.pixtur.examples",
   "Inputs": [],
   "Children": [
     {

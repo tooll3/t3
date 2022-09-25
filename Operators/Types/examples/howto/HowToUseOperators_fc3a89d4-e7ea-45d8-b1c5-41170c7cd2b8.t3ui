@@ -1,5 +1,5 @@
 {
-  "Id": "fc3a89d4-e7ea-45d8-b1c5-41170c7cd2b8"/*OperatorTypes*/,
+  "Id": "fc3a89d4-e7ea-45d8-b1c5-41170c7cd2b8"/*HowToUseOperators*/,
   "Description": "This example gives a playful interactive introduction to Tooll's operators and how they work.",
   "InputUis": [],
   "SymbolChildUis": [
@@ -709,7 +709,7 @@
   "Annotations": [
     {
       "Id": "f2ae8a9c-8d73-4698-9e04-e8fab0ac2797",
-      "Title": "Everything in T3 is made from Operators.\nThese Operators can be structured into the following categories.",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -717,8 +717,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1964.626,
-        "Y": -494.6598
+        "X": -2063.4734,
+        "Y": -999.56683
       },
       "Size": {
         "X": 1380.565,
@@ -727,7 +727,7 @@
     },
     {
       "Id": "3aae77b7-2887-4639-9066-9a6d724963f5",
-      "Title": "Values",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -735,8 +735,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1934.5204,
-        "Y": -431.01385
+        "X": -2040.2089,
+        "Y": -1120.6075
       },
       "Size": {
         "X": 154.40231,
@@ -745,7 +745,7 @@
     },
     {
       "Id": "60143946-178c-46d0-87ad-42756155815b",
-      "Title": "Buffers / Data on GPU",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.53900707,
         "Y": 0.42814746,
@@ -753,8 +753,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1753.4545,
-        "Y": -431.84827
+        "X": -1859.143,
+        "Y": -1121.4419
       },
       "Size": {
         "X": 170.57173,
@@ -763,7 +763,7 @@
     },
     {
       "Id": "764be5c8-a525-4175-84e0-a6960d88ac14",
-      "Title": "Draw instructions",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.3647059,
         "Y": 0.64705884,
@@ -771,8 +771,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1548.1908,
-        "Y": -432.68268
+        "X": -1653.8793,
+        "Y": -1122.2762
       },
       "Size": {
         "X": 162.58037,
@@ -781,7 +781,7 @@
     },
     {
       "Id": "63c6b793-896f-4771-aa9b-5ecc42880619",
-      "Title": "Draw attributes",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.36588952,
         "Y": 0.64893615,
@@ -789,8 +789,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1365.4558,
-        "Y": -433.5171
+        "X": -1471.1443,
+        "Y": -1123.1107
       },
       "Size": {
         "X": 169.25575,
@@ -799,7 +799,7 @@
     },
     {
       "Id": "6294dc30-d1fe-48ea-9e9c-fba59643b5d3",
-      "Title": "Flow control",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.3647059,
         "Y": 0.64705884,
@@ -807,8 +807,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1168.5359,
-        "Y": -436.02002
+        "X": -1274.2244,
+        "Y": -1125.6136
       },
       "Size": {
         "X": 153.40196,
@@ -817,7 +817,7 @@
     },
     {
       "Id": "a6e72c0c-14d5-4534-9678-918b37541511",
-      "Title": "Render Targets",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.75886506,
         "Y": 0.35521352,
@@ -825,8 +825,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -995.8147,
-        "Y": -434.35132
+        "X": -1101.5032,
+        "Y": -1123.945
       },
       "Size": {
         "X": 161.57881,
@@ -835,7 +835,7 @@
     },
     {
       "Id": "cb85d1d8-9d77-4f0e-a427-b635818f6f62",
-      "Title": "Image Effects",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.7607843,
         "Y": 0.35686275,
@@ -843,8 +843,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -816.41754,
-        "Y": -435.18567
+        "X": -922.1061,
+        "Y": -1124.7793
       },
       "Size": {
         "X": 208.30545,
@@ -853,7 +853,7 @@
     },
     {
       "Id": "5bdcc582-0109-4388-bdf5-4d580fa2a967",
-      "Title": "You can quickly distinguish the catories by their respective output type: Float-Number, Buffer, Command, Image, etc.\nThere are many more types but understand these foundations will carry you a long way...",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.4787234,
         "Y": 0.4787234,
@@ -861,8 +861,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1934.7438,
-        "Y": -5.545471
+        "X": -2040.4323,
+        "Y": -695.1391
       },
       "Size": {
         "X": 1331.7814,
@@ -871,7 +871,7 @@
     },
     {
       "Id": "d07b68ba-775d-44e2-9299-f9963d881164",
-      "Title": "Although the data is flowing from left to right, the graph is actually \"evaluated\" from right to left!\n\nLet's look at the following example.\nPlease click on the [RenderTarget]...\n\n\n",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -879,8 +879,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1964.6938,
-        "Y": 120.11609
+        "X": -45.9635,
+        "Y": 450.32306
       },
       "Size": {
         "X": 816.1749,
@@ -889,7 +889,7 @@
     },
     {
       "Id": "b03d9382-caa3-47b9-ad9c-5db277583562",
-      "Title": "1. If this RenderTarget\nis selected, it \"requests\"\nIt's input command.",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -897,8 +897,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1416.5824,
-        "Y": 192.19934
+        "X": 502.14795,
+        "Y": 522.4063
       },
       "Size": {
         "X": 160.74431,
@@ -907,7 +907,7 @@
     },
     {
       "Id": "38cdb32d-2357-45fe-9774-6681b00b93fd",
-      "Title": "2. This connected Operator\nsets a camera perspective\nand also requests its connected \ncommand.",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -915,8 +915,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1599.7432,
-        "Y": 192.07443
+        "X": 318.98718,
+        "Y": 522.2814
       },
       "Size": {
         "X": 171.65279,
@@ -925,7 +925,7 @@
     },
     {
       "Id": "c585a017-bbda-4ce7-b26a-159a9f4eb27a",
-      "Title": "3. This operator finally wants\nto \"draw\" something,\nbut it's needs some\ncontent, so,...",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -933,8 +933,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1753.8345,
-        "Y": 193.70654
+        "X": 164.89587,
+        "Y": 523.9135
       },
       "Size": {
         "X": 147.30017,
@@ -943,7 +943,7 @@
     },
     {
       "Id": "2fca86b0-adbd-45af-a8e1-f8bf5711cb07",
-      "Title": "4. finally this operator\nprovides the actually data\nin form of faces and vertices.",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -951,8 +951,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1911.8751,
-        "Y": 193.85352
+        "X": 6.8552246,
+        "Y": 524.0605
       },
       "Size": {
         "X": 153.30922,
@@ -961,7 +961,7 @@
     },
     {
       "Id": "54cb1d11-87a9-4a3e-9be8-bb675fffd24f",
-      "Title": "This example show that graphs can form complex networks (but not loops).",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -969,8 +969,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1964.137,
-        "Y": 442.8679
+        "X": -17.655884,
+        "Y": 827.77466
       },
       "Size": {
         "X": 993.81464,
@@ -979,7 +979,7 @@
     },
     {
       "Id": "d4dc659e-f088-44da-87a4-962d9faa2984",
-      "Title": "While the graph is being evaluated (remember: from right to left) parameters\nfor where and and how to draw things are collected.\n\n",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -987,8 +987,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1963.1359,
-        "Y": 751.264
+        "X": -16.654785,
+        "Y": 1136.1708
       },
       "Size": {
         "X": 826.9337,
@@ -997,7 +997,7 @@
     },
     {
       "Id": "9201860c-0aad-40bc-9693-f280da49c181",
-      "Title": "Transformations like Offset, Scale and Rotation\nare accumulated.",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -1005,8 +1005,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1809.9393,
-        "Y": 970.5456
+        "X": 136.54175,
+        "Y": 1355.4524
       },
       "Size": {
         "X": 476.09747,
@@ -1015,7 +1015,7 @@
     },
     {
       "Id": "7dd94d2a-7335-4106-a707-09402a2a3d00",
-      "Title": "Settings for Material, Time and resolution \nare overwritten. The last one (on the left) wins.\n",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -1023,8 +1023,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1808.4231,
-        "Y": 857.0627
+        "X": 138.05798,
+        "Y": 1241.9695
       },
       "Size": {
         "X": 475.12213,
@@ -1033,7 +1033,7 @@
     },
     {
       "Id": "ac34d967-98a9-43f4-aa93-0c3d1c28c700",
-      "Title": "Switch and pick Operators help you to build complex\nsetups that respond to inputs like time, audio or sensor data.",
+      "Title": "Untitled Annotation",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -1041,8 +1041,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1961.8347,
-        "Y": 1245.3174
+        "X": -15.353638,
+        "Y": 1630.2241
       },
       "Size": {
         "X": 827.9349,

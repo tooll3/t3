@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Text.RegularExpressions;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -107,6 +108,31 @@ namespace T3.Gui.Windows
                     _editDescriptionDialog.ShowNextFrame();                
                 
                 SymbolBrowser.ListExampleOperators(symbolUi);
+                if (!string.IsNullOrEmpty(symbolUi.Description))
+                {
+                    var itemRegex = new Regex(@"\[([A-Za-z\d_]+)\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                    var alreadyListedSymbolNames = new HashSet<string>();
+                    
+                    foreach (Match  match in itemRegex.Matches(symbolUi.Description))
+                    {
+                        var referencedName = match.Groups[1].Value;
+
+                        if (referencedName == symbolUi.Symbol.Name)
+                            continue;
+
+                        if (alreadyListedSymbolNames.Contains(referencedName))
+                            continue;
+                        
+                        // This is slow and could be optimized by dictionary
+                        var referencedSymbolUi = SymbolRegistry.Entries.Values.SingleOrDefault(s => s.Name == referencedName);
+                        if (referencedSymbolUi != null)
+                        {
+                            SymbolBrowser.DrawExampleOperator(referencedSymbolUi.Id,referencedName);
+                        }
+
+                        alreadyListedSymbolNames.Add(referencedName);
+                    }
+                }
                 
                 ImGui.PopStyleVar();
                 ImGui.Unindent();
@@ -246,7 +272,6 @@ namespace T3.Gui.Windows
                     symbolChildUi.SymbolChild.Name = nameForEdit;
                 }
 
-                var keepPos = ImGui.GetCursorScreenPos();
 
                 if (ImGui.IsItemActivated())
                 {

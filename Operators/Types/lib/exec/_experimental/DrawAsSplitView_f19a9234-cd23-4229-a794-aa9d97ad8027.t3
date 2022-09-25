@@ -9,7 +9,7 @@
     },
     {
       "Id": "6074ddd7-fc1f-4ebc-8511-f6003c75f11d"/*WidthFactor*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 1.0
     },
     {
       "Id": "3fd4d565-f4b9-4592-a544-2250ab3d16ab"/*Count*/,
@@ -346,12 +346,6 @@
     {
       "Id": "235dd424-a69e-47dd-b4f1-7cc93f257772"/*ReuseCamera2*/,
       "SymbolId": "1de05a51-4a22-44cd-a584-6f1ae1c0e8d1",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "e56f38c8-7609-472b-a905-a458495a6e27"/*Value*/,
-      "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
       "InputValues": [],
       "Outputs": []
     },

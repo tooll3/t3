@@ -1,7 +1,7 @@
 {
-  "Name": "WorkingWithPoints",
+  "Name": "HowToUsePoints",
   "Id": "e6a11c29-11f9-49a3-9eff-463a93503420",
-  "Namespace": "examples.playground",
+  "Namespace": "examples.howto",
   "Inputs": [],
   "Children": [
     {

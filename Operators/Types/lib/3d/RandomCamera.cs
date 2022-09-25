@@ -1,36 +1,38 @@
 using System;
 using SharpDX;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Operators.Utils;
+using Unsplasharp.Models;
 using Vector2 = System.Numerics.Vector2;
 
 // ReSharper disable SuggestVarOrType_SimpleTypes
 
 namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
 {
-    public class RandomCamera : Instance<RandomCamera>, ICameraPropertiesProvider
+    public class RandomCamera : Instance<RandomCamera>, ICameraPropertiesProvider, ICamera
     {
         [Output(Guid = "14a63b62-5fbb-4f82-8cf3-d0faf279eff8", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Command> Output = new Slot<Command>();
 
-        [Output(Guid = "451245E2-AC0B-435A-841E-7C9EDC804606")]
+        [Output(Guid = "451245E2-AC0B-435A-841E-7C9EDC804606", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Object> Reference = new Slot<Object>();        
-
         
         public RandomCamera()
         {
             Output.UpdateAction = Update;
+            Reference.UpdateAction = Update;
             Reference.Value = this;
         }
 
         private void Update(EvaluationContext context)
         {
-            Reference.DirtyFlag.Clear();
-
-
+            Log.Debug("Update random camera");
+            //Reference.DirtyFlag.Clear();
             
             LastObjectToWorld = context.ObjectToWorld;
             
@@ -99,10 +101,12 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             // Set properties and evaluate sub tree
             var prevCameraToClipSpace = context.CameraToClipSpace;
             var prevWorldToCamera = context.WorldToCamera;
-
             
             context.CameraToClipSpace = CameraToClipSpace;
             context.WorldToCamera = WorldToCamera;
+
+            CameraPosition = eye.ToNumerics();
+            CameraTarget = (eye + adjustedViewDirection).ToNumerics();
             
             Command.GetValue(context);
             
@@ -125,6 +129,9 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
         }
 
         public Matrix CameraToClipSpace { get; set; }
+        public System.Numerics.Vector3 CameraPosition { get; set; }
+        public System.Numerics.Vector3 CameraTarget { get; set; }
+        public float CameraRoll { get; set; }
         public Matrix WorldToCamera { get; set; }
         public Matrix LastObjectToWorld { get; set; }
         

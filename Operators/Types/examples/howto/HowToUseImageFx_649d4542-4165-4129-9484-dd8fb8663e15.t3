@@ -1,7 +1,7 @@
 {
-  "Name": "ImageEffects",
+  "Name": "HowToUseImageFx",
   "Id": "649d4542-4165-4129-9484-dd8fb8663e15",
-  "Namespace": "examples.playground",
+  "Namespace": "examples.howto",
   "Inputs": [],
   "Children": [
     {

@@ -3,11 +3,11 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_fc3a89d4_e7ea_45d8_b1c5_41170c7cd2b8
+namespace T3.Operators.Types.Id_40757a26_1cd8_477c_a774_7463aadd6f0f
 {
-    public class OperatorTypes : Instance<OperatorTypes>
+    public class HowToDrawThings : Instance<HowToDrawThings>
     {
-        [Output(Guid = "2621700c-8798-40ea-9dc8-a3f5ed1d0f41")]
+        [Output(Guid = "85adcfb7-480a-4f41-87cb-bd7819467a68")]
         public readonly Slot<Texture2D> Texture = new Slot<Texture2D>();
 
 

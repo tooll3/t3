@@ -1,7 +1,7 @@
 {
-  "Name": "OperatorTypes",
+  "Name": "HowToUseOperators",
   "Id": "fc3a89d4-e7ea-45d8-b1c5-41170c7cd2b8",
-  "Namespace": "examples.playground",
+  "Namespace": "examples.howto",
   "Inputs": [],
   "Children": [
     {

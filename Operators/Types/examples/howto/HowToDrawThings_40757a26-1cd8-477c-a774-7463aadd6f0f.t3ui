@@ -1,0 +1,872 @@
+{
+  "Id": "40757a26-1cd8-477c-a774-7463aadd6f0f"/*HowToDrawThings*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "114f1697-de7a-4479-afef-4f0e75473c55"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1418.1455,
+        "Y": -1033.8818
+      }
+    },
+    {
+      "ChildId": "5f06349f-20f9-4c08-9080-73cab767ec56"/*TorusMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1974.9448,
+        "Y": -1067.7817
+      }
+    },
+    {
+      "ChildId": "8db2355a-03dd-463f-850c-e7c46f2e2542"/*DrawMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1797.502,
+        "Y": -1067.7817
+      }
+    },
+    {
+      "ChildId": "0823549b-0920-4918-914a-6b5dd46ee73b"/*RandomCamera*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1625.4526,
+        "Y": -1071.0103
+      }
+    },
+    {
+      "ChildId": "83cfdd8a-5ad0-4963-933a-3350c723da68"/*Raster*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1227.5322,
+        "Y": -1039.5315
+      }
+    },
+    {
+      "ChildId": "ba5efb9a-b9b6-4527-9611-6f6f0d0de1f1"/*TorusMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1987.9016,
+        "Y": -719.2358
+      }
+    },
+    {
+      "ChildId": "cedb4954-d18c-4e2a-a300-c91741ac2770"/*DrawMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1778.5256,
+        "Y": -722.83386
+      }
+    },
+    {
+      "ChildId": "be4b0855-88c0-446b-9676-4abd5dd17262"/*DrawAsSplitView*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 101.0
+      },
+      "Position": {
+        "X": -1581.3816,
+        "Y": -727.09424
+      }
+    },
+    {
+      "ChildId": "67f26d45-435d-4c0b-9816-44459ce7d112"/*DrawMesh with Color*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1778.5256,
+        "Y": -666.83386
+      }
+    },
+    {
+      "ChildId": "bd3404a6-fca8-44fa-ab6b-63330064ac3b"/*DrawMesh Wireframe*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1778.5256,
+        "Y": -610.83386
+      }
+    },
+    {
+      "ChildId": "64503253-d781-4b80-ade5-a4f52c6304b7"/*Transparent*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1778.5256,
+        "Y": -554.83386
+      }
+    },
+    {
+      "ChildId": "dcb2eec4-39d1-450c-b2ef-e3863112ee20"/*RandomCamera*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1778.5256,
+        "Y": -498.83386
+      }
+    },
+    {
+      "ChildId": "68bc893f-26e3-46d2-91f4-c63d310c045e"/*TorusMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1332.4905,
+        "Y": -721.4
+      }
+    },
+    {
+      "ChildId": "bb139225-87df-4389-ba68-2c2a5c9a76ca"/*DrawMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1123.1145,
+        "Y": -724.9981
+      }
+    },
+    {
+      "ChildId": "81c61825-9ddb-46ee-9dfd-74c04a8c5fa6"/*DrawAsSplitView*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 88.0
+      },
+      "Position": {
+        "X": -925.97046,
+        "Y": -729.2585
+      }
+    },
+    {
+      "ChildId": "d2dbbc4c-d99e-414e-8d40-22fcef28bb87"/*DrawMeshUnlit*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1123.1145,
+        "Y": -668.9981
+      }
+    },
+    {
+      "ChildId": "6d4f550a-3fec-4b75-94ef-663e60dd3328"/*RandomCamera*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1123.1145,
+        "Y": -543.9981
+      }
+    },
+    {
+      "ChildId": "424ca24d-7eb5-4646-a5cd-84143fbe1016"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1326.3185,
+        "Y": -549.49316
+      }
+    },
+    {
+      "ChildId": "f2f28b35-bb34-4660-a2c5-8ff0fe06ad80"/*DrawMeshHatched*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1123.1145,
+        "Y": -599.9981
+      }
+    },
+    {
+      "ChildId": "c60d8bbe-4d2d-41a3-a8cd-6d2909cc6d6d"/*LoadObj*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1953.8181,
+        "Y": -174.28876
+      }
+    },
+    {
+      "ChildId": "fadf444e-7fa3-4a8f-b8f9-826dcc887a54"/*DisplaceMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1803.8181,
+        "Y": -174.28876
+      }
+    },
+    {
+      "ChildId": "d16957f5-2a78-4df6-b26d-50cdc991610a"/*DrawMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1386.3267,
+        "Y": -173.06967
+      }
+    },
+    {
+      "ChildId": "cf44730d-4b94-41d8-8daa-77a3cdc8dfa8"/*SetFog*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -998.025,
+        "Y": -55.198975
+      }
+    },
+    {
+      "ChildId": "dffb34f5-78e3-4b62-a96b-778a9e724a0e"/*SetPointLight*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -488.28027,
+        "Y": -68.3363
+      }
+    },
+    {
+      "ChildId": "b30e8746-c3cb-4bb7-88ec-871796fd66d6"/*SetEnvironmet*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -275.92566,
+        "Y": 331.0371
+      }
+    },
+    {
+      "ChildId": "0abc263f-1c0c-4405-a803-5b3c4fa09649"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 82.60803,
+        "Y": -85.73932
+      }
+    },
+    {
+      "ChildId": "df8b434b-a61b-4927-b6f8-f6cb293e716f"/*RandomCamera*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -67.39197,
+        "Y": -85.73932
+      }
+    },
+    {
+      "ChildId": "a887a0b1-a520-480f-951c-21fe157d48d7"/*Blob*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -616.4906,
+        "Y": 388.89417
+      }
+    },
+    {
+      "ChildId": "5018e654-335b-4200-92c3-d13f3286d606"/*TextureToCubeMap2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -466.4906,
+        "Y": 388.89417
+      }
+    },
+    {
+      "ChildId": "30d0ea55-fdfe-4fbd-8aef-f5978f02897a"/*SetMaterial*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1200.2356,
+        "Y": 10.363464
+      }
+    },
+    {
+      "ChildId": "4eb05d75-64e7-436b-a35b-59646e69627d"/*Time*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1953.8181,
+        "Y": -131.28876
+      }
+    },
+    {
+      "ChildId": "e069a7da-016d-475c-952b-0f69a551ef9d"/*UglySSAO*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 319.2381,
+        "Y": -100.61896
+      }
+    },
+    {
+      "ChildId": "da8c1027-7fe4-476b-9554-9a5def4a2acb"/*SplitMeshVertices*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1616.9886,
+        "Y": -176.56747
+      }
+    },
+    {
+      "ChildId": "f4cab9da-00e0-48d5-b6c0-2bdfdb2e30ac"/*Glow*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 564.25006,
+        "Y": -97.14838
+      }
+    },
+    {
+      "ChildId": "6a465a04-8cf1-4196-b673-324c14dc484e"/*OscillateVec3*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -635.5497,
+        "Y": 33.946655
+      }
+    },
+    {
+      "ChildId": "db413f53-2fa5-4eec-87cb-3d5f4bf285c0"/*Group*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": -745.8069,
+        "Y": -96.84436
+      }
+    },
+    {
+      "ChildId": "e13af1a0-015d-4c9e-93c8-27c39bdcb076"/*LenseFlareSetup*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1000.4785,
+        "Y": -203.27682
+      }
+    },
+    {
+      "ChildId": "9fab0cbe-51e6-4cd5-95db-7688cb1aa95c"/*DustParticles*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -997.1255,
+        "Y": 110.760864
+      }
+    },
+    {
+      "ChildId": "ae38c453-6d05-4548-b6a8-f346081eac14"/*RyojiPattern2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1351.013,
+        "Y": 118.69971
+      }
+    },
+    {
+      "ChildId": "35b60bb9-6e7e-4077-9862-926a35be6116"/*ColorGrade*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 808.37787,
+        "Y": -99.91461
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "85adcfb7-480a-4f41-87cb-bd7819467a68"/*Texture*/,
+      "Position": {
+        "X": -813.9706,
+        "Y": -1048.371
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "9fc74122-1bcb-42fd-aab5-70a85494da34",
+      "Title": "Tooll is all about drawing (or \"rendering\") realtime content. \nThis playground will give you an introduction.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2046.7365,
+        "Y": -1314.7784
+      },
+      "Size": {
+        "X": 1057.0809,
+        "Y": 456.6184
+      }
+    },
+    {
+      "Id": "d8d8b8bf-155c-442f-8803-33d1adb4f4fa",
+      "Title": "Here is a typical setup of the basics steps.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2024.2039,
+        "Y": -1199.6492
+      },
+      "Size": {
+        "X": 997.26807,
+        "Y": 243.17088
+      }
+    },
+    {
+      "Id": "25e3bfe3-664a-457f-8d95-cb15cd6ab613",
+      "Title": "Some \"content\" like\nbuffers or textures...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2000.4419,
+        "Y": -1151.2529
+      },
+      "Size": {
+        "X": 180.4414,
+        "Y": 156.23706
+      }
+    },
+    {
+      "Id": "ba8bde03-aac0-4804-8b78-240174beca1a",
+      "Title": "..is drawn...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1809.6251,
+        "Y": -1151.74
+      },
+      "Size": {
+        "X": 156.09897,
+        "Y": 156.8071
+      }
+    },
+    {
+      "Id": "57f79672-ad79-4fd6-a33e-971e16121a31",
+      "Title": "...within the setup...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1645.7754,
+        "Y": -1150.1257
+      },
+      "Size": {
+        "X": 173.01573,
+        "Y": 155.83853
+      }
+    },
+    {
+      "Id": "889fb60b-71bb-461b-bd56-8b1517ec350b",
+      "Title": "...Into an image buffer.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1463.362,
+        "Y": -1149.3188
+      },
+      "Size": {
+        "X": 194.48569,
+        "Y": 155.99994
+      }
+    },
+    {
+      "Id": "e5f6c868-14bf-4140-8175-50847921dbb0",
+      "Title": "Then we can apply\npost effects.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1256.0879,
+        "Y": -1149.8032
+      },
+      "Size": {
+        "X": 182.21709,
+        "Y": 156.16136
+      }
+    },
+    {
+      "Id": "6a9c7694-ecc4-4ae4-8233-62ba9d1bd00a",
+      "Title": "For each of these steps there are many operators to achive different effects.\nPlease check out the [HowToUseOperators] for more details.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2023.1958,
+        "Y": -940.97906
+      },
+      "Size": {
+        "X": 726.66455,
+        "Y": 65.42012
+      }
+    },
+    {
+      "Id": "0134d720-fe88-47c0-9159-39afa70da75d",
+      "Title": "Many draw Operators allow to set specific drawstyles...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2047.9016,
+        "Y": -787.09424
+      },
+      "Size": {
+        "X": 636.52,
+        "Y": 384.26038
+      }
+    },
+    {
+      "Id": "f360f53a-741f-48ab-9380-e269a0ec0d8a",
+      "Title": "Here are some examples for different draw operators.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1392.4905,
+        "Y": -789.2585
+      },
+      "Size": {
+        "X": 640.77277,
+        "Y": 388.06506
+      }
+    },
+    {
+      "Id": "4a84c307-8a7c-4a4e-a986-6f7ec61a0427",
+      "Title": "Apply post processing\nambient occlusion to darken\ncreases.\n",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 265.76642,
+        "Y": -227.76715
+      },
+      "Size": {
+        "X": 221.14015,
+        "Y": 218.73944
+      }
+    },
+    {
+      "Id": "ea6de842-51c2-4af5-a0a5-88f0da8b3ee5",
+      "Title": "Apply glow to HDR colors\nin the emissive texture and \nenvironment.\n",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 505.13733,
+        "Y": -226.98999
+      },
+      "Size": {
+        "X": 219.11948,
+        "Y": 217.24168
+      }
+    },
+    {
+      "Id": "3ebb4a84-211b-495b-a3f3-cf844e5606a1",
+      "Title": "Render to an image\nbuffer using anti aliasing.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 44.27063,
+        "Y": -228.54434
+      },
+      "Size": {
+        "X": 206.68472,
+        "Y": 219.72847
+      }
+    },
+    {
+      "Id": "172298dc-5619-4b11-9fd1-759b82cd840a",
+      "Title": "Generate and apply environment texture and\nrendered show it in the background. The Camera \nhas the follow later, so it the backgorund \nmatches the camera movement..",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -673.3196,
+        "Y": 180.38708
+      },
+      "Size": {
+        "X": 569.4458,
+        "Y": 248.55031
+      }
+    },
+    {
+      "Id": "f4de65e7-5f95-4bd2-8637-32775b3aac08",
+      "Title": "A lense flare setup that follows \nthe point light position.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1057.9758,
+        "Y": -270.29028
+      },
+      "Size": {
+        "X": 271.9152,
+        "Y": 150.49971
+      }
+    },
+    {
+      "Id": "ea226448-a8e3-41fa-8d3d-91e6772c7fc4",
+      "Title": "Some dust particles that\nwiggle around.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1057.1255,
+        "Y": 50.760864
+      },
+      "Size": {
+        "X": 270.41327,
+        "Y": 140.66847
+      }
+    },
+    {
+      "Id": "3117d176-08b9-4034-9ff5-d132677ec5c4",
+      "Title": "A bit of colored fog for depth.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1058.025,
+        "Y": -115.199005
+      },
+      "Size": {
+        "X": 270.98553,
+        "Y": 160.13054
+      }
+    },
+    {
+      "Id": "12bf94c4-b862-4b4d-9186-8185e49fd79c",
+      "Title": "Setting the material with a generative\ntexture as emissive color.\nNotice how the pattern highlight color\nis brighter that 1 so it glows nicely.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1444.4316,
+        "Y": -79.16931
+      },
+      "Size": {
+        "X": 375.18164,
+        "Y": 248.53848
+      }
+    },
+    {
+      "Id": "4013c5b7-284c-4780-b796-5876887189fb",
+      "Title": "Drawing the mesh. Notice how Culling\nis set to None for bothsided rendering...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1444.4614,
+        "Y": -269.44162
+      },
+      "Size": {
+        "X": 375.2548,
+        "Y": 183.40845
+      }
+    },
+    {
+      "Id": "66a55a5e-5f1e-491b-b976-f956432aee4c",
+      "Title": "Split vertices for flat shading.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1648.3842,
+        "Y": -267.87048
+      },
+      "Size": {
+        "X": 178.40385,
+        "Y": 182.33775
+      }
+    },
+    {
+      "Id": "c38dd9ef-dbb6-48a2-a4db-ca156c24b188",
+      "Title": "Apply some color grading\nand vignette.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 739.8451,
+        "Y": -226.2128
+      },
+      "Size": {
+        "X": 230.0,
+        "Y": 215.6874
+      }
+    },
+    {
+      "Id": "9e3c3518-bdf1-451c-bc45-89a7d9a64277",
+      "Title": "Load and distort a mesh.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1988.1711,
+        "Y": -266.93024
+      },
+      "Size": {
+        "X": 328.57657,
+        "Y": 182.24362
+      }
+    },
+    {
+      "Id": "52f96e30-a573-452c-8454-b71544dd9cd1",
+      "Title": "This is an advanced setup that illustrates many components required for a PBR light setup.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2045.8506,
+        "Y": -376.70312
+      },
+      "Size": {
+        "X": 3087.2983,
+        "Y": 891.1676
+      }
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "Id": "a3c5471e-079b-4d4b-886a-ec02d6428ff6"/*DrawMesh*/,
+  "Description": "Uses PBR rendering to draw a mesh using the current settings for material, fog, point lights, transform and camera. For convenience Tooll adds a default reflection and two point lights attached to the camera to a RenderTarget. You can override these by adding [SetEnvironment] and [SetMaterial] operators further up (further right) in your graph.\n\nYou can adjust various parameters to achieve wireframe or both sided rendering.\n\nAlso take a look at [DrawMeshAtPoints], [DrawMeshUnlit], [DrawMeshHashed] and the [HowToDrawThings] playground.",
   "InputUis": [
     {
       "InputId": "8c9dee45-d165-48c8-b8dd-b7f47e77fd00"/*Color*/,
