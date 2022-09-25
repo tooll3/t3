@@ -52,7 +52,7 @@ namespace T3.Gui
             {
                 List<Symbol.OutputDefinition> outputDefinitions = SymbolChild.Symbol.OutputDefinitions;
 
-                //Set disabled status on outputs of our SymbolChild's Symbol
+                //Set disabled status on this child's outputs
                 for(int i = 0; i < outputDefinitions.Count; i++)
                 {
                     if (outputDefinitions[i] == null)
@@ -74,15 +74,24 @@ namespace T3.Gui
                     childOutput.IsDisabled = value;
                 }
 
-                //Set disabled status on outputs of each instanced copy of our symbol
+                //Set disabled status on outputs of each instanced copy of this child within all parents that contain it
                 foreach (var parentInstance in SymbolChild.Parent.InstancesOfSymbol)
                 {
-                    var childInstance = parentInstance.Children.Single(child => child.SymbolChildId == Id);
-                    List<ISlot> outputs = childInstance.Outputs;
+                    Instance[] matchingChildInstances = parentInstance.Children.Where(child => child.SymbolChildId == Id).ToArray();
 
-                    for (int i = 0; i < outputs.Count; i++)
+                    //this parent doesn't have an instance of our SymbolChild. Ignoring and continuing.
+                    if(matchingChildInstances.Length == 0)
+                        continue;
+
+                    //set disabled status on all outputs of each instance
+                    foreach (Instance instance in matchingChildInstances)
                     {
-                        outputs[i].IsDisabled = value;
+                        List<ISlot> outputs = instance.Outputs;
+
+                        for (int i = 0; i < outputs.Count; i++)
+                        {
+                            outputs[i].IsDisabled = value;
+                        }
                     }
                 }
             }
