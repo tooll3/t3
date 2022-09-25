@@ -2,7 +2,7 @@
 
 namespace T3.Operators.Types.Id_dab61a12_9996_401e_9aa6_328dd6292beb
 {
-    public class Dashboard : Instance<Dashboard>
+    public class HomeCanvas : Instance<HomeCanvas>
     {
     }
 }

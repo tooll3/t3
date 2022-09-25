@@ -32,15 +32,15 @@ namespace T3.Gui.Graph.Dialogs
                 {
                     UserSettings.Save();
                     
-                    // Change dashboard namespace
-                    if(!SymbolRegistry.Entries.TryGetValue(UiModel.DashboardSymbolId, out var dashboardSymbol))
+                    // Change home (I.e. dashboard) namespace
+                    if(!SymbolRegistry.Entries.TryGetValue(UiModel.HomeSymbolId, out var homeSymbol))
                     {
-                        Log.Warning("Skipped setting dashboard namespace because symbol wasn't found");
+                        Log.Warning("Skipped setting home canvas namespace because symbol wasn't found");
                     }
                     else
                     {
-                        Log.Debug($"Moving dashboard to user.{UserSettings.Config.UserName}");
-                        dashboardSymbol.Namespace = $"user.{UserSettings.Config.UserName}";
+                        Log.Debug($"Moving home canvas to user.{UserSettings.Config.UserName}");
+                        homeSymbol.Namespace = $"user.{UserSettings.Config.UserName}";
                         T3Ui.SaveAll();
                     }
                     

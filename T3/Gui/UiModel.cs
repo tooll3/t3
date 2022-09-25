@@ -227,13 +227,13 @@ namespace T3.Gui
 
             // create instance of project op, all children are create automatically
             
-            var dashboardSymbol = symbols[DashboardSymbolId];
+            var homeSymbol = symbols[HomeSymbolId];
             
-            Guid dashboardInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
-            RootInstance = dashboardSymbol.CreateInstance(dashboardInstanceId);
+            Guid homeInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
+            RootInstance = homeSymbol.CreateInstance(homeInstanceId);
         }
         
-        public static Guid DashboardSymbolId = Guid.Parse("dab61a12-9996-401e-9aa6-328dd6292beb");
+        public static Guid HomeSymbolId = Guid.Parse("dab61a12-9996-401e-9aa6-328dd6292beb");
 
         public override void Load()
         {

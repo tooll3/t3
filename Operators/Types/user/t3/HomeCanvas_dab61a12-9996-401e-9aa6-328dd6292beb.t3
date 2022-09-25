@@ -1,5 +1,5 @@
 {
-  "Name": "Dashboard",
+  "Name": "HomeCanvas",
   "Id": "dab61a12-9996-401e-9aa6-328dd6292beb",
   "Namespace": "user.t3",
   "Inputs": [],
@@ -64,7 +64,7 @@
       "Outputs": []
     },
     {
-      "Id": "bc999d1e-4b76-43f1-9e3d-8f51b9d22871"/*LFO*/,
+      "Id": "bc999d1e-4b76-43f1-9e3d-8f51b9d22871"/*AnimValue*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [],
       "Outputs": []
@@ -118,38 +118,44 @@
       "Outputs": []
     },
     {
-      "Id": "6393c5bb-5f07-483f-ad0c-9a92b4b33179"/*Demo_Home*/,
-      "SymbolId": "c9a7e71c-7311-4d1e-8508-cd580d7a0b8d",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "13005c71-2ea0-4088-986b-ba8fbc91783b"/*Synchotron*/,
       "SymbolId": "02625eeb-7f7d-4c48-af5b-13d9a2079b3b",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "16347f06-736b-41a1-8547-a7655923dfd3"/*Revision2021*/,
-      "SymbolId": "93184ac2-d545-4611-a941-d5e8769c999b",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "4c9aa4f8-651a-40d3-ad37-ae1f646cee3d"/*Layer2d*/,
-      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "ecaa1d12-625b-46c0-9148-454dfc40b576"/*Help01_Interface*/,
+      "Id": "ecaa1d12-625b-46c0-9148-454dfc40b576"/*HowToUseTooll*/,
       "SymbolId": "1ec749af-fe7d-4728-9855-d1fa3e879751",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "d1f722e5-4c48-459e-84e0-b4b78924253b"/*PixturTestLab*/,
-      "SymbolId": "a4f8b7e9-a52f-41b6-a63b-d30e5ba77825",
+      "Id": "665d7961-58a9-4181-94f1-eb40af17cdc7"/*HowToAnimate*/,
+      "SymbolId": "9b1a1ff1-2935-4d9a-880f-897a7f8885ad",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "73956a9d-0756-4d9c-a11b-ca59b3ee16fb"/*HowToDrawThings*/,
+      "SymbolId": "40757a26-1cd8-477c-a774-7463aadd6f0f",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "acbc034c-3c0d-4f7e-ac09-39cfd702f601"/*HowToUseImageEffects*/,
+      "SymbolId": "649d4542-4165-4129-9484-dd8fb8663e15",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "91dc79a2-ed7a-41dc-8245-2d3011f4aebe"/*HowToUseOperators*/,
+      "SymbolId": "fc3a89d4-e7ea-45d8-b1c5-41170c7cd2b8",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "91042db3-81d6-4a17-8cef-423811aabb17"/*HowToUsePoints*/,
+      "SymbolId": "e6a11c29-11f9-49a3-9eff-463a93503420",
       "InputValues": [],
       "Outputs": []
     }

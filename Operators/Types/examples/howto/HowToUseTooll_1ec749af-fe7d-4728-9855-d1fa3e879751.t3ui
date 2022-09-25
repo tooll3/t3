@@ -103,7 +103,7 @@
     },
     {
       "Id": "ac1fcac6-637d-474b-8a07-98c92c18ab56",
-      "Title": "Welcome - You made it!\nDouble clicking an operator will enter it. This is how you got here.\n\nTry to double click on the background to get back to the [Dashboard].\n",
+      "Title": "Welcome - You made it!\nDouble clicking an operator will enter it. This is how you got here.\n\nTry to double click on the background to get back to the [HomeCanvas].\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
