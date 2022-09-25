@@ -13,6 +13,9 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
         [Output(Guid = "aacea92a-c166-46dc-b775-d28baf9820f5", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Result = new Slot<float>();
 
+        protected const float FrameRate = 60f;
+        protected readonly float minTimeElapsedBeforeEvaluation = 1 / 1000f;
+
         public Damp()
         {
             Result.UpdateAction = Update;
@@ -20,50 +23,24 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
 
         private void Update(EvaluationContext context)
         {
-            var v = Value.GetValue(context);
+            var inputValue = Value.GetValue(context);
             var damping = Damping.GetValue(context);
 
-            var t = context.LocalFxTime;
-            if (Math.Abs(t - _lastEvalTime) < 0.001f)
+            var currentTime = context.LocalFxTime;
+            if (Math.Abs(currentTime - _lastEvalTime) < minTimeElapsedBeforeEvaluation)
                 return;
-            
-            _lastEvalTime = t;
-            const float FrameRate = 60f;
 
-            var method = (Methods)Method.GetValue(context).Clamp(0, 1);
-            switch (method)
-            {
-                case Methods.LinearInterpolation:
-                    var framesPassed = (int)((Playback.LastFrameDuration * FrameRate) - 0.5f).Clamp(0,5) + 1 ;
-                    
-                    for (int stepIndex = 0; stepIndex < framesPassed; stepIndex++)
-                    {
-                        _dampedValue = MathUtils.Lerp(v,_dampedValue, damping);
-                    }
+            _lastEvalTime = currentTime;
 
-                    break;
-                
-                case Methods.DampedSpring:
-                    _dampedValue = MathUtils.SpringDamp(v,_dampedValue , ref _velocity, 0.5f/(damping + 0.001f),  (float)Playback.LastFrameDuration);
-                    break;
-            }
-            
-            // Prevent NaN
-            if (float.IsNaN(_dampedValue) || float.IsNaN(_velocity))
-            {
-                _dampedValue = 0;
-                _velocity = 0;
-            }
-            
+            var method = (DampFunctions.Methods)Method.GetValue(context).Clamp(0, 1);
+            _dampedValue = DampFunctions.DampenFloat(inputValue, _dampedValue, damping, _velocity, FrameRate, method);
+
+            MathUtils.CheckNaN(ref _dampedValue, 0);
+            MathUtils.CheckNaN(ref _velocity, 0);
+
             Result.Value = _dampedValue;
         }
 
-        private enum Methods
-        {
-            LinearInterpolation,
-            DampedSpring
-        }
-        
         private float _dampedValue;
         private float _velocity;
         private double _lastEvalTime;
@@ -74,7 +51,7 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
         [Input(Guid = "F29D5426-5E31-4C7C-BE77-5E45BFB9DAA9")]
         public readonly InputSlot<float> Damping = new();
         
-        [Input(Guid = "76D52DF1-597E-4429-9916-13E6E0D93248", MappedType = typeof(Methods))]
+        [Input(Guid = "76D52DF1-597E-4429-9916-13E6E0D93248", MappedType = typeof(DampFunctions.Methods))]
         public readonly InputSlot<int> Method = new();
         
     }

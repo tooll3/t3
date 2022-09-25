@@ -35,10 +35,8 @@ namespace T3.Operators.Types.Id_ef3a1411_e88c_43a8_83b4_931fdbf16c75
                                ? MathUtils.Lerp(_dampedValue, value, Decay.GetValue(context))
                                : value;
 
-            if (float.IsInfinity(_dampedValue) || float.IsNaN(_dampedValue))
-            {
-                _dampedValue = 0;
-            }
+
+            MathUtils.CheckNaNOrInfinity(ref _dampedValue, 0);
             Result.Value = _dampedValue;
         }
 
