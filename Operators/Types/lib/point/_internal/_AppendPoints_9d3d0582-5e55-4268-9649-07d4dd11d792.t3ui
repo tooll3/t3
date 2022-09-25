@@ -1,5 +1,6 @@
 {
-  "Id": "9d3d0582-5e55-4268-9649-07d4dd11d792"/*AppendPoints*/,
+  "Id": "9d3d0582-5e55-4268-9649-07d4dd11d792"/*_AppendPoints*/,
+  "Description": "Combines to point buffers.\n\nThis operator has been deprecated. Consider using [CombineBuffer].",
   "InputUis": [
     {
       "InputId": "d331b1f7-3ec3-4dc3-a019-ef72d86b3a98"/*GPoints*/,

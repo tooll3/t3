@@ -37,7 +37,7 @@
       }
     },
     {
-      "ChildId": "5d37b825-6ef1-4a36-ab81-e01ddd8e20e2"/*AppendPoints*/,
+      "ChildId": "5d37b825-6ef1-4a36-ab81-e01ddd8e20e2"/*_AppendPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -81,7 +81,7 @@
       }
     },
     {
-      "ChildId": "ffa45004-e04a-4c58-9cdd-a76307f7e8f6"/*AppendPoints*/,
+      "ChildId": "ffa45004-e04a-4c58-9cdd-a76307f7e8f6"/*_AppendPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

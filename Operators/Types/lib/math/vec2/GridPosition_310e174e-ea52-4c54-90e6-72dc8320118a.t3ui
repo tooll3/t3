@@ -18,6 +18,7 @@
     },
     {
       "InputId": "938103ee-65bd-4f5e-ae5e-5635dc53e3e6"/*Index*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 90.0

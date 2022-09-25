@@ -136,83 +136,6 @@
       }
     },
     {
-      "ChildId": "68bc893f-26e3-46d2-91f4-c63d310c045e"/*TorusMesh*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -1332.4905,
-        "Y": -721.4
-      }
-    },
-    {
-      "ChildId": "bb139225-87df-4389-ba68-2c2a5c9a76ca"/*DrawMesh*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -1123.1145,
-        "Y": -724.9981
-      }
-    },
-    {
-      "ChildId": "81c61825-9ddb-46ee-9dfd-74c04a8c5fa6"/*DrawAsSplitView*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 88.0
-      },
-      "Position": {
-        "X": -925.97046,
-        "Y": -729.2585
-      }
-    },
-    {
-      "ChildId": "d2dbbc4c-d99e-414e-8d40-22fcef28bb87"/*DrawMeshUnlit*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": -1123.1145,
-        "Y": -668.9981
-      }
-    },
-    {
-      "ChildId": "6d4f550a-3fec-4b75-94ef-663e60dd3328"/*RandomCamera*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -1123.1145,
-        "Y": -543.9981
-      }
-    },
-    {
-      "ChildId": "424ca24d-7eb5-4646-a5cd-84143fbe1016"/*LoadTexture2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -1326.3185,
-        "Y": -549.49316
-      }
-    },
-    {
-      "ChildId": "f2f28b35-bb34-4660-a2c5-8ff0fe06ad80"/*DrawMeshHatched*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -1123.1145,
-        "Y": -599.9981
-      }
-    },
-    {
       "ChildId": "c60d8bbe-4d2d-41a3-a8cd-6d2909cc6d6d"/*LoadObj*/,
       "Size": {
         "X": 110.0,
@@ -442,6 +365,149 @@
         "X": 808.37787,
         "Y": -99.91461
       }
+    },
+    {
+      "ChildId": "77eabcd8-9cec-43a6-be9f-bb1a19c7fb21"/*LoadObj*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2000.8025,
+        "Y": 732.4695
+      }
+    },
+    {
+      "ChildId": "195fc78a-57a1-4e9e-b9ce-515d69f6d67d"/*DrawAsSplitView*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 114.0
+      },
+      "Position": {
+        "X": -1256.7488,
+        "Y": 887.07056
+      }
+    },
+    {
+      "ChildId": "4e98f2cd-6a52-433e-90bd-52a8e9d44a4c"/*DrawMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1519.5566,
+        "Y": 943.0061
+      }
+    },
+    {
+      "ChildId": "444fac4f-e84b-4ac7-9edf-7d6fbe27d543"/*DrawMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1519.5566,
+        "Y": 887.0061
+      }
+    },
+    {
+      "ChildId": "dfd46496-c4d4-47d5-9580-cbc377fe662d"/*DrawMeshHatched*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1519.5566,
+        "Y": 999.0061
+      }
+    },
+    {
+      "ChildId": "941f204b-32c9-4eda-a964-4a148302f0a6"/*CubeMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1992.1963,
+        "Y": 838.9773
+      }
+    },
+    {
+      "ChildId": "765e11b2-9c1a-4e91-9bbf-53cae74656c8"/*Camera*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1490.7076,
+        "Y": 732.678
+      }
+    },
+    {
+      "ChildId": "3b54970e-fea9-4ee7-95f4-afff9d9915fa"/*DrawMeshHatched*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1821.2825,
+        "Y": 1052.8044
+      }
+    },
+    {
+      "ChildId": "badf9e48-e789-42de-8fea-6af901d453e1"/*DrawMeshUnlit*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1523.1082,
+        "Y": 1072.0415
+      }
+    },
+    {
+      "ChildId": "859c196d-7fb8-4b49-aa21-37f5a44e4f3d"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1670.3455,
+        "Y": 1206.7012
+      }
+    },
+    {
+      "ChildId": "474d6e31-5c5f-4faf-8c3f-b589fc034297"/*DrawMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1842.1963,
+        "Y": 838.9773
+      }
+    },
+    {
+      "ChildId": "87709f46-6143-4860-a9b5-fdeec94083c1"/*PerlinNoise3*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -2000.8025,
+        "Y": 676.4695
+      }
+    },
+    {
+      "ChildId": "006e9f30-aba2-4f10-a7d7-997fd8aa9e5f"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": -884.68164,
+        "Y": 700.58813
+      }
     }
   ],
   "OutputUis": [
@@ -614,24 +680,6 @@
       "Size": {
         "X": 636.52,
         "Y": 384.26038
-      }
-    },
-    {
-      "Id": "f360f53a-741f-48ab-9380-e269a0ec0d8a",
-      "Title": "Here are some examples for different draw operators.",
-      "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
-        "W": 1.0
-      },
-      "Position": {
-        "X": -1392.4905,
-        "Y": -789.2585
-      },
-      "Size": {
-        "X": 640.77277,
-        "Y": 388.06506
       }
     },
     {
@@ -866,6 +914,24 @@
       "Size": {
         "X": 3087.2983,
         "Y": 891.1676
+      }
+    },
+    {
+      "Id": "297fac84-de17-4b6c-87b2-08935862abaf",
+      "Title": "An example how to achieve different draw styles.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2047.269,
+        "Y": 546.5475
+      },
+      "Size": {
+        "X": 1443.1089,
+        "Y": 840.14264
       }
     }
   ]

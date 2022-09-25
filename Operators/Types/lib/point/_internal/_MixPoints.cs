@@ -11,12 +11,12 @@ using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Operators.Types.Id_bdd982c4_dfc4_48d6_888a_f067081dbe8e
 {
-    public class MixPoints : Instance<MixPoints>
+    public class _MixPoints : Instance<_MixPoints>
     {
         [Output(Guid = "5bf5f55e-9099-4413-b17a-f49d042cb4ca")]
         public readonly Slot<T3.Core.DataTypes.Point[]> Result = new Slot<T3.Core.DataTypes.Point[]>();
 
-        public MixPoints()
+        public _MixPoints()
         {
             Result.UpdateAction = Update;
         }

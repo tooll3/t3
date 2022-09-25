@@ -1,7 +1,7 @@
 {
-  "Name": "AppendPoints",
+  "Name": "_AppendPoints",
   "Id": "9d3d0582-5e55-4268-9649-07d4dd11d792",
-  "Namespace": "lib.point.combine",
+  "Namespace": "lib.point._internal",
   "Inputs": [
     {
       "Id": "d331b1f7-3ec3-4dc3-a019-ef72d86b3a98"/*GPoints*/,

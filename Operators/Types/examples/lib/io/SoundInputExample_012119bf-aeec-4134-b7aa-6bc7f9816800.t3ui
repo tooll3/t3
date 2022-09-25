@@ -422,7 +422,7 @@
       }
     },
     {
-      "ChildId": "abbfeab1-0512-4ba1-8423-259d574161cf"/*AppendPoints*/,
+      "ChildId": "abbfeab1-0512-4ba1-8423-259d574161cf"/*_AppendPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

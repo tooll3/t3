@@ -268,7 +268,7 @@
       "Outputs": []
     },
     {
-      "Id": "b34ff274-1a33-47c5-abc4-5fa2fd52c1d2"/*AppendPoints*/,
+      "Id": "b34ff274-1a33-47c5-abc4-5fa2fd52c1d2"/*_AppendPoints*/,
       "SymbolId": "9d3d0582-5e55-4268-9649-07d4dd11d792",
       "InputValues": [],
       "Outputs": []

@@ -22,6 +22,9 @@ namespace T3.Operators.Types.Id_f19a9234_cd23_4229_a794_aa9d97ad8027
 
         [Input(Guid = "92677DCA-DB04-43B9-84FD-6AD485DEB209")]
         public readonly InputSlot<object> CameraRef = new InputSlot<object>();
+
+        [Input(Guid = "987bda72-6a6b-4216-9ecf-d87b7299553d")]
+        public readonly InputSlot<string> Labels = new InputSlot<string>();
     }
 }
 
