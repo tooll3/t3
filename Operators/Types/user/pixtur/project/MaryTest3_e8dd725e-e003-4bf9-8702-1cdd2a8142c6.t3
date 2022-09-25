@@ -326,7 +326,7 @@
       "Outputs": []
     },
     {
-      "Id": "8d3c2c6a-1702-48d5-88f0-16b8a90380e1"/*MixGPoints*/,
+      "Id": "8d3c2c6a-1702-48d5-88f0-16b8a90380e1"/*MixPoints*/,
       "SymbolId": "2dc5c9d1-ea93-4597-a4d9-7b610aad603a",
       "InputValues": [
         {

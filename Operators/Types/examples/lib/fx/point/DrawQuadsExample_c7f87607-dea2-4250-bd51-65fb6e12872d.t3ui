@@ -301,7 +301,7 @@
       }
     },
     {
-      "ChildId": "b2d18996-1246-43fc-9986-d97dac09a3a8"/*OffsetPoints*/,
+      "ChildId": "b2d18996-1246-43fc-9986-d97dac09a3a8"/*_OffsetPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

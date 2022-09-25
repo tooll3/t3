@@ -345,7 +345,7 @@
       }
     },
     {
-      "ChildId": "7b0c8379-b5b6-42ac-b33c-57012107b698"/*GrowStrainsExample*/,
+      "ChildId": "7b0c8379-b5b6-42ac-b33c-57012107b698"/*CollectSpawnPointsExample*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

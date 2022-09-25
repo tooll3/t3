@@ -2711,7 +2711,7 @@
       }
     },
     {
-      "ChildId": "2cc66cef-15b4-4957-ae21-0708c046f2f8"/*OffsetPoints*/,
+      "ChildId": "2cc66cef-15b4-4957-ae21-0708c046f2f8"/*_OffsetPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

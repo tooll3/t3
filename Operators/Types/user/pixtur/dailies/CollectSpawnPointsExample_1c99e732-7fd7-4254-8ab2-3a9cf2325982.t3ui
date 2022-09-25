@@ -1,5 +1,5 @@
 {
-  "Id": "1c99e732-7fd7-4254-8ab2-3a9cf2325982"/*GrowStrainsExample*/,
+  "Id": "1c99e732-7fd7-4254-8ab2-3a9cf2325982"/*CollectSpawnPointsExample*/,
   "Description": "Combines [PickSpawnPoints] with [GrowStrains]",
   "InputUis": [],
   "SymbolChildUis": [

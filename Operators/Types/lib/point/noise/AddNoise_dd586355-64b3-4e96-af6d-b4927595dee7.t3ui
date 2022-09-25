@@ -3,6 +3,7 @@
   "InputUis": [
     {
       "InputId": "3f5abde2-66e1-4b04-9bff-5a19a58aab86"/*Points*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -348.14264,
         "Y": 755.7676

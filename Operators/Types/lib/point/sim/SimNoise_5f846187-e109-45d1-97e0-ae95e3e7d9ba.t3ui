@@ -17,6 +17,7 @@
     },
     {
       "InputId": "679d6321-a5d7-41cc-a191-5e6cf353dfc4"/*GPoints*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -292.88382,
         "Y": 230.41301

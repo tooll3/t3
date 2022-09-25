@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_2dc5c9d1_ea93_4597_a4d9_7b610aad603a
 {
-    public class MixGPoints : Instance<MixGPoints>
+    public class MixPoints : Instance<MixPoints>
     {
 
         [Output(Guid = "660013c7-8f6b-458a-bb86-61e5a85692a4")]

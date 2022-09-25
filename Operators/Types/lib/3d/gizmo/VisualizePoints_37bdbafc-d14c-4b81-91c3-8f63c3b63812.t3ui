@@ -58,7 +58,7 @@
       }
     },
     {
-      "ChildId": "f90d835d-b532-4acb-9621-c50cfcddd060"/*OffsetPoints*/,
+      "ChildId": "f90d835d-b532-4acb-9621-c50cfcddd060"/*_OffsetPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -91,7 +91,7 @@
       }
     },
     {
-      "ChildId": "c9a525e8-831f-4f1f-9984-bebae5c1033c"/*OffsetPoints*/,
+      "ChildId": "c9a525e8-831f-4f1f-9984-bebae5c1033c"/*_OffsetPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -124,7 +124,7 @@
       }
     },
     {
-      "ChildId": "1f4b7d14-832e-4ced-9a23-9a32c2277387"/*OffsetPoints*/,
+      "ChildId": "1f4b7d14-832e-4ced-9a23-9a32c2277387"/*_OffsetPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

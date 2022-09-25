@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_3737cd30_c79a_4282_897a_7d2a44076c65
 {
-    public class OffsetPoints : Instance<OffsetPoints>
+    public class _OffsetPoints : Instance<_OffsetPoints>
     {
 
         [Output(Guid = "5a0777ae-9dff-4c8f-b206-eac6d65a910f")]

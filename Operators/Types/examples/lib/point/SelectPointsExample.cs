@@ -3,11 +3,11 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_1c99e732_7fd7_4254_8ab2_3a9cf2325982
+namespace T3.Operators.Types.Id_2fcb6afc_2d82_47a5_a6dd_39c85348b8c4
 {
-    public class GrowStrainsExample : Instance<GrowStrainsExample>
+    public class SelectPointsExample : Instance<SelectPointsExample>
     {
-        [Output(Guid = "eb14540d-5d13-4b83-a2ed-32535a399815")]
+        [Output(Guid = "015dd888-70a7-412c-a2da-daada267c1ae")]
         public readonly Slot<Texture2D> ColorBuffer = new Slot<Texture2D>();
 
 

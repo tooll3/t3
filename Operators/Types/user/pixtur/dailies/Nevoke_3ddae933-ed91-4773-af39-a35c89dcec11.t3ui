@@ -1711,7 +1711,7 @@
       }
     },
     {
-      "ChildId": "83f22a92-3396-4029-a645-3eddbb3c88e3"/*OffsetPoints*/,
+      "ChildId": "83f22a92-3396-4029-a645-3eddbb3c88e3"/*_OffsetPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -2251,7 +2251,7 @@
       }
     },
     {
-      "ChildId": "aa91fece-91f1-47ea-828c-a9786c00fe90"/*OffsetPoints*/,
+      "ChildId": "aa91fece-91f1-47ea-828c-a9786c00fe90"/*_OffsetPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -2306,7 +2306,7 @@
       }
     },
     {
-      "ChildId": "f20a678e-4d5f-4bee-ad3d-3a1a3b165672"/*OffsetPoints*/,
+      "ChildId": "f20a678e-4d5f-4bee-ad3d-3a1a3b165672"/*_OffsetPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -2383,7 +2383,7 @@
       }
     },
     {
-      "ChildId": "b775854e-1b00-410a-ad23-0a353e92c7cc"/*OffsetPoints*/,
+      "ChildId": "b775854e-1b00-410a-ad23-0a353e92c7cc"/*_OffsetPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
