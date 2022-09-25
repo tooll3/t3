@@ -11,11 +11,27 @@ namespace T3.Operators.Types.Id_e64f95e4_c045_400f_98ca_7c020ad46174
     public class Switch : Instance<Switch>
     {
         [Output(Guid = "9300b07e-977d-47b0-908e-c4b1e5e53a64", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<Command> Output = new Slot<Command>();
+        public readonly Slot<Command> Output = new();
 
+        [Output(Guid = "044538A4-4499-4F8F-8843-D880677EE1E7")]
+        public readonly Slot<int> Count = new();
+        
         public Switch()
         {
             Output.UpdateAction = Update;
+            Count.UpdateAction = UpdateCount;
+        }
+
+        private void UpdateCount(EvaluationContext context)
+        {
+            var commands = Commands.GetCollectedTypedInputs();
+            if (commands == null)
+            {
+                Count.Value = 0;
+                return;
+            }
+
+            Count.Value = commands.Count;
         }
 
         private void Update(EvaluationContext context)
@@ -25,6 +41,7 @@ namespace T3.Operators.Types.Id_e64f95e4_c045_400f_98ca_7c020ad46174
 
             if (commands.Count == 0 || index == -1)
             {
+                Count.Value = 0;
                 return;
             }
             
@@ -60,6 +77,7 @@ namespace T3.Operators.Types.Id_e64f95e4_c045_400f_98ca_7c020ad46174
             Commands.LimitMultiInputInvalidationToIndices = OptimizeInvalidation.GetValue(context) 
                                                                 ? _activeIndices 
                                                                 : null;
+            Count.Value = commands.Count;
         }
 
         private readonly List<int> _activeIndices = new();
