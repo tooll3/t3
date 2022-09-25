@@ -421,6 +421,8 @@ namespace T3.Core
                          });
             RegisterType(typeof(SharpDX.Vector4[]), "Vector4[]",
                          () => new InputValue<SharpDX.Vector4[]>(Array.Empty<SharpDX.Vector4>()));
+            RegisterType(typeof(Dict<float>), "Dict<float>",
+                         () => new InputValue<Dict<float>>());
         }
 
         private static void RegisterType(Type type, string typeName,

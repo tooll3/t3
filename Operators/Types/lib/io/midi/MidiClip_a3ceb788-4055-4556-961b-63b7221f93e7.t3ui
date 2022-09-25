@@ -1,0 +1,58 @@
+{
+  "Id": "a3ceb788-4055-4556-961b-63b7221f93e7"/*MidiClip*/,
+  "InputUis": [
+    {
+      "InputId": "71655b86-b0ed-422e-89e3-e678c87a7e0e"/*Command*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "31fe831f-c3be-4ae3-884b-d2fc4f1754a4"/*Filename*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "8b88c669-7351-4332-9294-9a06a46f45a1"/*PrintLogMessages*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "4771e114-58cb-4944-910d-20d9de5f2367"/*Values*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "ce9bf60f-f43a-431c-8715-cf3a14593db3"/*Tracks*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 300.0
+      }
+    },
+    {
+      "OutputId": "aadd9189-0086-42d6-ac45-d694270c0252"/*DeltaTicksPerQuarterNote*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 400.0
+      }
+    },
+    {
+      "OutputId": "a5250fba-092f-48c9-a979-a88fa3a793b1"/*TimeSlot*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 500.0
+      }
+    }
+  ]
+}

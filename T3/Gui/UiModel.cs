@@ -180,6 +180,8 @@ namespace T3.Gui
                            () => new ValueOutputUi<RawRectangle>());
             RegisterUiType(typeof(SharpDX.Vector4[]), new PointListUiProperties(), () => new FallbackInputUi<SharpDX.Vector4[]>(),
                            () => new ValueOutputUi<SharpDX.Vector4[]>());
+            RegisterUiType(typeof(Dict<float>), new FloatUiProperties(),
+                           () => new FloatDictInputUi(), () => new FloatDictOutputUi());
 
             // register custom UIs for symbol children
             CustomChildUiRegistry.Entries.Add(typeof(Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c.Counter), CounterUi.DrawChildUi);
