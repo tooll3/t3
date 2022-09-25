@@ -28,7 +28,7 @@ namespace T3.Operators.Types.Id_97eb35ec_2825_4f63_8fdf_3fe38fa9e652
         public readonly InputSlot<float> Scale = new InputSlot<float>();
 
         [Input(Guid = "4de046cc-26d7-466f-90b4-3a3bdd59acb3")]
-        public readonly InputSlot<float> Evolution = new InputSlot<float>();
+        public readonly InputSlot<float> Phase = new InputSlot<float>();
 
         [Input(Guid = "0e3d1c9f-d0aa-4765-a0ab-d8292a981368")]
         public readonly InputSlot<float> Bias = new InputSlot<float>();

@@ -14,6 +14,14 @@
     {
       "Id": "031ef11b-f6cc-497e-9528-ed9490e878b5"/*Mode*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "b994249d-c101-41d9-8142-a4f675fcd70c"/*MinTimeBetweenHits*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "8ebf4715-0b4b-4cdd-a079-9f91c2df0476"/*PreventContinuedChanges*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

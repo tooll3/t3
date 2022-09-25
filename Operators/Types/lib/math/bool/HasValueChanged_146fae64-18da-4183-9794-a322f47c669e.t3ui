@@ -22,6 +22,20 @@
         "X": -200.0,
         "Y": 90.0
       }
+    },
+    {
+      "InputId": "b994249d-c101-41d9-8142-a4f675fcd70c"/*MinTimeBetweenHits*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "8ebf4715-0b4b-4cdd-a079-9f91c2df0476"/*PreventContinuedChanges*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
     }
   ],
   "SymbolChildUis": [],
@@ -38,6 +52,13 @@
       "Position": {
         "X": 0.0,
         "Y": 100.0
+      }
+    },
+    {
+      "OutputId": "5e37da80-5d1f-4e17-a0a1-1e386b3a2561"/*DeltaOnHit*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
       }
     }
   ]
