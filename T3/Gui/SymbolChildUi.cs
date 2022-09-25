@@ -1,14 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using Microsoft.VisualBasic.Logging;
 using T3.Core.Operator;
 using T3.Gui.ChildUi;
 using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
 using UiHelpers;
+using T3.Core.Logging;
+using Log = T3.Core.Logging.Log;
+using T3.Core.Operator.Slots;
 
 namespace T3.Gui
 {
@@ -46,19 +50,40 @@ namespace T3.Gui
             get => SymbolChild.Outputs.FirstOrDefault().Value?.IsDisabled ?? false;
             set 
             {
-                var firstOutputDef = SymbolChild.Symbol.OutputDefinitions.FirstOrDefault();
-                if (firstOutputDef != null)
+                List<Symbol.OutputDefinition> outputDefinitions = SymbolChild.Symbol.OutputDefinitions;
+
+                //Set disabled status on outputs of our SymbolChild's Symbol
+                for(int i = 0; i < outputDefinitions.Count; i++)
                 {
-                    var childOutput = SymbolChild.Outputs[firstOutputDef.Id];
+                    if (outputDefinitions[i] == null)
+                    {
+                        Log.Warning($"{SymbolChild.Symbol.GetType()} {SymbolChild.Symbol.Name} contains a null {typeof(Symbol.OutputDefinition)}", Id);
+                        continue;
+                    }
+
+                    SymbolChild.Output childOutput;
+                    bool hasOutput = SymbolChild.Outputs.TryGetValue(outputDefinitions[i].Id, out childOutput);
+
+                    if(!hasOutput)
+                    {
+                        Log.Warning($"{typeof(SymbolChild)} {SymbolChild.ReadableName} does not have the following child output as defined: " +
+                            $"{childOutput.OutputDefinition.Name}({nameof(Guid)}{childOutput.OutputDefinition.Id})");
+                        continue;
+                    }
+
                     childOutput.IsDisabled = value;
                 }
 
+                //Set disabled status on outputs of each instanced copy of our symbol
                 foreach (var parentInstance in SymbolChild.Parent.InstancesOfSymbol)
                 {
                     var childInstance = parentInstance.Children.Single(child => child.SymbolChildId == Id);
-                    var output = childInstance.Outputs.FirstOrDefault();
-                    if (output != null)
-                        output.IsDisabled = value;
+                    List<ISlot> outputs = childInstance.Outputs;
+
+                    for (int i = 0; i < outputs.Count; i++)
+                    {
+                        outputs[i].IsDisabled = value;
+                    }
                 }
             }
         }
