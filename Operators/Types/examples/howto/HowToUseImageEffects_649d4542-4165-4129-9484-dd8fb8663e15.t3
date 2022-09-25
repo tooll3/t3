@@ -1,5 +1,5 @@
 {
-  "Name": "HowToUseImageFx",
+  "Name": "HowToUseImageEffects",
   "Id": "649d4542-4165-4129-9484-dd8fb8663e15",
   "Namespace": "examples.howto",
   "Inputs": [],
@@ -1478,12 +1478,6 @@
       "SourceSlotId": "c47e8843-6e8d-4eaf-a554-874b3af9ee63",
       "TargetParentOrChildId": "f506c6d3-4095-4acf-82dd-d847515f6f1c",
       "TargetSlotId": "8169be8f-cb35-4900-b462-f2139b412d59"
-    },
-    {
-      "SourceParentOrChildId": "582bdcd1-f69d-428c-8f59-579553ff633d",
-      "SourceSlotId": "9df7498c-543f-46f3-b331-ae8f143a2a65",
-      "TargetParentOrChildId": "f9664b47-b295-4c2e-87d7-b3212d073799",
-      "TargetSlotId": "1df828ad-2d74-47fc-9f0e-10f4ce10b170"
     },
     {
       "SourceParentOrChildId": "24986579-f249-48fc-ab7b-a48f44c977df",

@@ -1,5 +1,5 @@
 {
-  "Id": "649d4542-4165-4129-9484-dd8fb8663e15"/*HowToUseImageFx*/,
+  "Id": "649d4542-4165-4129-9484-dd8fb8663e15"/*HowToUseImageEffects*/,
   "Description": "This is playground that gives an overview about Tooll's main image effects operators.",
   "InputUis": [],
   "SymbolChildUis": [
@@ -131,8 +131,8 @@
         "Y": 49.0
       },
       "Position": {
-        "X": -441.04816,
-        "Y": 1812.1992
+        "X": -435.11987,
+        "Y": 1764.3967
       }
     },
     {
@@ -142,8 +142,8 @@
         "Y": 49.0
       },
       "Position": {
-        "X": 110.61981,
-        "Y": 1803.2435
+        "X": 116.548096,
+        "Y": 1755.441
       }
     },
     {
@@ -183,7 +183,7 @@
       "ChildId": "f9664b47-b295-4c2e-87d7-b3212d073799"/*ChromaticDistortion*/,
       "Size": {
         "X": 110.0,
-        "Y": 49.0
+        "Y": 36.0
       },
       "Position": {
         "X": -492.4898,
@@ -197,8 +197,8 @@
         "Y": 49.0
       },
       "Position": {
-        "X": 121.96179,
-        "Y": 1455.1797
+        "X": 120.13037,
+        "Y": 1411.5441
       }
     },
     {
@@ -241,8 +241,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -752.9755,
-        "Y": 1484.5781
+        "X": -747.04724,
+        "Y": 1436.7756
       }
     },
     {
@@ -252,8 +252,8 @@
         "Y": 62.0
       },
       "Position": {
-        "X": -584.33856,
-        "Y": 1482.6313
+        "X": -578.4103,
+        "Y": 1434.8289
       }
     },
     {
@@ -263,8 +263,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -752.9755,
-        "Y": 1527.5779
+        "X": -747.04724,
+        "Y": 1479.7754
       }
     },
     {
@@ -274,8 +274,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -618.2967,
-        "Y": 1823.6013
+        "X": -612.3684,
+        "Y": 1775.7988
       }
     },
     {
@@ -285,8 +285,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": -622.4427,
-        "Y": 1942.4573
+        "X": -616.5144,
+        "Y": 1894.6548
       }
     },
     {
@@ -296,8 +296,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -772.4427,
-        "Y": 1942.4573
+        "X": -766.5144,
+        "Y": 1894.6548
       }
     },
     {
@@ -307,8 +307,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -39.380188,
-        "Y": 1803.2435
+        "X": -33.451904,
+        "Y": 1755.441
       }
     },
     {
@@ -318,8 +318,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": -32.670593,
-        "Y": 1912.5024
+        "X": -26.74231,
+        "Y": 1864.7
       }
     },
     {
@@ -340,8 +340,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -182.67072,
-        "Y": 1912.5024
+        "X": -176.74243,
+        "Y": 1864.7
       }
     },
     {
@@ -351,8 +351,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -28.038208,
-        "Y": 1455.1797
+        "X": -29.869629,
+        "Y": 1411.5441
       }
     },
     {
@@ -362,8 +362,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": -35.797913,
-        "Y": 1612.3456
+        "X": -29.869629,
+        "Y": 1564.5431
       }
     },
     {
@@ -373,8 +373,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -178.03821,
-        "Y": 1608.1787
+        "X": -179.86963,
+        "Y": 1564.5431
       }
     },
     {
@@ -621,7 +621,7 @@
   "Annotations": [
     {
       "Id": "d05d3d5d-240b-4de8-a970-e881f43d4c02",
-      "Title": "Untitled Annotation",
+      "Title": "There are effects that use the incoming \nimage to generate patterns or shapes.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -629,8 +629,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": 288.21948,
-        "Y": -100.33676
+        "X": -509.0327,
+        "Y": -307.52258
       },
       "Size": {
         "X": 318.33148,
@@ -639,7 +639,7 @@
     },
     {
       "Id": "c57262d3-9928-48c2-ab08-eba3a204fcde",
-      "Title": "Untitled Annotation",
+      "Title": "Here are examples of effects that\ntransform or distort an image buffer.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -647,8 +647,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": 288.21948,
-        "Y": 513.12524
+        "X": -509.0327,
+        "Y": 305.9394
       },
       "Size": {
         "X": 317.46347,
@@ -657,7 +657,7 @@
     },
     {
       "Id": "a35b622a-4f5c-4ee1-bf67-0c29c446415a",
-      "Title": "Untitled Annotation",
+      "Title": "This operator picks one of the\neffects one of the incoming effects.\n\nYour can toggle the grid icon in the \nTime Controls to pause this.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -665,8 +665,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": 664.35657,
-        "Y": -97.35181
+        "X": -132.89563,
+        "Y": -304.53763
       },
       "Size": {
         "X": 532.47034,
@@ -675,7 +675,7 @@
     },
     {
       "Id": "cc4c290c-294b-4d1d-bdcd-c58be4ad88d6",
-      "Title": "Untitled Annotation",
+      "Title": "Here are some basic image effects.\nAlso note, that most Operators\nhave presets you can explore.\n\nTIPP: Hold the ALT-Key while\nhovering presets.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -683,8 +683,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -53.46411,
-        "Y": -147.99094
+        "X": -850.7163,
+        "Y": -355.17676
       },
       "Size": {
         "X": 1469.0864,
@@ -693,7 +693,7 @@
     },
     {
       "Id": "374f4922-c82a-416b-86ec-7c52b7321fc4",
-      "Title": "Untitled Annotation",
+      "Title": "Many effects use a second input\nas mask or effect input. Here are\nsome examples.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -701,8 +701,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -56.559204,
-        "Y": 1411.9257
+        "X": -853.8114,
+        "Y": 1204.7399
       },
       "Size": {
         "X": 1159.8102,
@@ -711,7 +711,7 @@
     },
     {
       "Id": "341cd5a9-322a-46b4-bfa9-864e6aad8dd4",
-      "Title": "Untitled Annotation",
+      "Title": "Blend is the go to operator to\ncombine image buffers. ",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -719,8 +719,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": 1222.3247,
-        "Y": 1476.8701
+        "X": 425.07257,
+        "Y": 1269.6843
       },
       "Size": {
         "X": 833.9123,
@@ -729,7 +729,7 @@
     },
     {
       "Id": "5e8bd960-7a80-4d3b-9d1b-3ee52183a8fd",
-      "Title": "Untitled Annotation",
+      "Title": "However you should consider using [Layer2d]\nfor better rendering performance.\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -737,8 +737,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": 1590.9023,
-        "Y": 1702.323
+        "X": 793.65015,
+        "Y": 1495.1372
       },
       "Size": {
         "X": 448.5168,
@@ -747,7 +747,7 @@
     },
     {
       "Id": "50b5afd1-0769-411f-b2e0-5bc37a2e664c",
-      "Title": "Untitled Annotation",
+      "Title": "This is nice example of \nthe kind of effects that\ncan be achived with compute\nshaders. ",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -755,8 +755,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": 2177.2637,
-        "Y": 1414.5411
+        "X": 1380.0115,
+        "Y": 1207.3553
       },
       "Size": {
         "X": 449.49582,
@@ -765,7 +765,7 @@
     },
     {
       "Id": "6d0076de-13c0-4688-982d-c3cb67fe35de",
-      "Title": "Untitled Annotation",
+      "Title": "[BlendWithMask] uses a mask image to control the blending.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -773,8 +773,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": 1220.7463,
-        "Y": 1942.9543
+        "X": 423.49408,
+        "Y": 1735.7686
       },
       "Size": {
         "X": 832.5994,
@@ -783,7 +783,7 @@
     },
     {
       "Id": "eecc7921-23d8-4aa9-8e16-6d35fb2a816e",
-      "Title": "Untitled Annotation",
+      "Title": "You don't need an effects layer for [DirectionalBlur] .\nBut it really results into some very interesting visuals.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -791,17 +791,17 @@
         "W": 1.0
       },
       "Position": {
-        "X": -18.388367,
-        "Y": 1548.0077
+        "X": -809.7123,
+        "Y": 1293.0194
       },
       "Size": {
-        "X": 558.88855,
-        "Y": 338.40582
+        "X": 548.9582,
+        "Y": 305.63626
       }
     },
     {
       "Id": "ab3b2edb-7215-4bed-bfb8-cea5b6f5969e",
-      "Title": "Untitled Annotation",
+      "Title": "Display used the gradient of an effect\nimages as displacement direction.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -809,8 +809,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -22.079529,
-        "Y": 1894.7037
+        "X": -813.40344,
+        "Y": 1639.7155
       },
       "Size": {
         "X": 562.1143,
@@ -819,7 +819,7 @@
     },
     {
       "Id": "7cf03de1-1d93-43f8-a91f-0d303e8fc2de",
-      "Title": "Untitled Annotation",
+      "Title": "Fake like produces something like an emboss effect.\nCheap but sometimes quite effective.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -827,17 +827,17 @@
         "W": 1.0
       },
       "Position": {
-        "X": 547.82983,
-        "Y": 1540.6992
+        "X": -251.25378,
+        "Y": 1289.8778
       },
       "Size": {
-        "X": 530.99304,
-        "Y": 345.74164
+        "X": 530.0,
+        "Y": 309.0
       }
     },
     {
       "Id": "e7d3314e-404f-47ba-96eb-ac6a1624f8cf",
-      "Title": "Untitled Annotation",
+      "Title": "This is anoter displacement variation.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -845,8 +845,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": 549.8226,
-        "Y": 1895.6864
+        "X": -241.50134,
+        "Y": 1640.6981
       },
       "Size": {
         "X": 530.0001,
@@ -855,7 +855,7 @@
     },
     {
       "Id": "e6afb637-c33e-4b9d-9ebd-b4275a0b9b3d",
-      "Title": "Untitled Annotation",
+      "Title": "Blending",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -863,8 +863,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": 1160.7463,
-        "Y": 1416.8701
+        "X": 363.49408,
+        "Y": 1209.6843
       },
       "Size": {
         "X": 939.9079,
