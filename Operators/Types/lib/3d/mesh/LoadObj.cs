@@ -42,7 +42,6 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
             if (path != _lastFilePath || SortVertices.DirtyFlag.IsDirty || Math.Abs(scaleFactor - _scaleFactor) > 0.001f)
             {
                 _scaleFactor = scaleFactor;
-
                 _description = System.IO.Path.GetFileName(path);
 
                 if (useGpuCaching)
@@ -86,12 +85,12 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
                         reversedLookup[sortedVertexIndex] = vertexIndex;
                         newData.VertexBufferData[vertexIndex] = new PbrVertex
                         {
-                            Position = mesh.Positions[sortedVertex.PositionIndex] * scaleFactor,
-                            Normal = mesh.Normals[sortedVertex.NormalIndex],
-                            Tangent = mesh.VertexTangents[sortedVertexIndex],
-                            Bitangent = mesh.VertexBinormals[sortedVertexIndex],
-                            Texcoord = mesh.TexCoords[sortedVertex.TextureCoordsIndex],
-                            Selection = 1,
+                                                                Position = mesh.Positions[sortedVertex.PositionIndex] * scaleFactor,
+                                                                Normal = mesh.Normals[sortedVertex.NormalIndex],
+                                                                Tangent = mesh.VertexTangents[sortedVertexIndex],
+                                                                Bitangent = mesh.VertexBinormals[sortedVertexIndex],
+                                                                Texcoord = mesh.TexCoords[sortedVertex.TextureCoordsIndex],
+                                                                Selection = 1,
                         };
                     }
 
