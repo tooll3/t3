@@ -141,6 +141,9 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
             Data.Value = _data.DataBuffers;
         }
 
+        /// <summary>
+        /// A method for logging warnings on the loading of <see cref="ObjMesh"/>
+        /// </summary>
         private static void QueryPresenceOfMeshUVs(ObjMesh mesh)
         {
             const string baseMessage = "This prevents computation of Tangents and binormals and will cause black rendering and other issues with displacement as a result.";
@@ -150,9 +153,13 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
                 return;
             }
 
-            if (mesh.TexCoords.Count != mesh.Positions.Count)
+            //if texture coordinates are not evenly divisible by number of vertices (assuming support or future support of multiple UV sets)
+            //and if the reason that is true is that there are fewer texCoords than would be required, rather than more texCoords
+            int modResult = mesh.TexCoords.Count % mesh.Positions.Count;
+            if (modResult != 0 && mesh.Positions.Count * modResult < mesh.TexCoords.Count)
             {
-                Log.Warning($"UVs of {nameof(ObjMesh)} are missing vertices. {baseMessage}");
+                Log.Warning($"UVs of {nameof(ObjMesh)} are missing vertices. {baseMessage}\n" +
+                    $"Vertex count: {mesh.Positions.Count}, UV count {mesh.TexCoords.Count}");
             }
         }
 
