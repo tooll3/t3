@@ -42,7 +42,7 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
             if (path != _lastFilePath || SortVertices.DirtyFlag.IsDirty || Math.Abs(scaleFactor - _scaleFactor) > 0.001f)
             {
                 _scaleFactor = scaleFactor;
-                
+
                 _description = System.IO.Path.GetFileName(path);
 
                 if (useGpuCaching)
@@ -60,6 +60,8 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
                     Log.Warning($"Can't read file {path}");
                     return;
                 }
+
+                QueryPresenceOfMeshUVs(mesh);
 
                 mesh.UpdateVertexSorting((ObjMesh.SortDirections)vertexSorting);
 
@@ -83,14 +85,14 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
                         var sortedVertex = mesh.DistinctDistinctVertices[sortedVertexIndex];
                         reversedLookup[sortedVertexIndex] = vertexIndex;
                         newData.VertexBufferData[vertexIndex] = new PbrVertex
-                                                                    {
-                                                                        Position = mesh.Positions[sortedVertex.PositionIndex] * scaleFactor,
-                                                                        Normal = mesh.Normals[sortedVertex.NormalIndex],
-                                                                        Tangent = mesh.VertexTangents[sortedVertexIndex],
-                                                                        Bitangent = mesh.VertexBinormals[sortedVertexIndex],
-                                                                        Texcoord = mesh.TexCoords[sortedVertex.TextureCoordsIndex],
-                                                                        Selection = 1,
-                                                                    };
+                        {
+                            Position = mesh.Positions[sortedVertex.PositionIndex] * scaleFactor,
+                            Normal = mesh.Normals[sortedVertex.NormalIndex],
+                            Tangent = mesh.VertexTangents[sortedVertexIndex],
+                            Bitangent = mesh.VertexBinormals[sortedVertexIndex],
+                            Texcoord = mesh.TexCoords[sortedVertex.TextureCoordsIndex],
+                            Selection = 1,
+                        };
                     }
 
                     newData.VertexBufferWithViews.Buffer = newData.VertexBuffer;
@@ -137,6 +139,21 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
             _data.DataBuffers.VertexBuffer = _data.VertexBufferWithViews;
             _data.DataBuffers.IndicesBuffer = _data.IndexBufferWithViews;
             Data.Value = _data.DataBuffers;
+        }
+
+        private static void QueryPresenceOfMeshUVs(ObjMesh mesh)
+        {
+            const string baseMessage = "This prevents computation of Tangents and binormals and will cause black rendering and other issues with displacement as a result.";
+            if (mesh.TexCoords.Count == 0)
+            {
+                Log.Warning($"No UVs are present in this {nameof(ObjMesh)}. {baseMessage}");
+                return;
+            }
+
+            if (mesh.TexCoords.Count != mesh.Positions.Count)
+            {
+                Log.Warning($"UVs of {nameof(ObjMesh)} are missing vertices. {baseMessage}");
+            }
         }
 
         public string GetDescriptiveString()
