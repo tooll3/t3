@@ -14,7 +14,7 @@
         "X": -200.0,
         "Y": 45.0
       },
-      "Usage": "Default"
+      "Usage": "FilePath"
     },
     {
       "InputId": "8b88c669-7351-4332-9294-9a06a46f45a1"/*PrintLogMessages*/,
