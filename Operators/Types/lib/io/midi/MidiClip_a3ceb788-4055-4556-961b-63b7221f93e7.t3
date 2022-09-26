@@ -4,10 +4,6 @@
   "Namespace": "lib.io.midi",
   "Inputs": [
     {
-      "Id": "71655b86-b0ed-422e-89e3-e678c87a7e0e"/*Command*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "31fe831f-c3be-4ae3-884b-d2fc4f1754a4"/*Filename*/,
       "DefaultValue": ""
     },

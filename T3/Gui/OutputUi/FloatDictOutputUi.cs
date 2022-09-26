@@ -77,8 +77,7 @@ namespace T3.Gui.OutputUi
                 var keyEnum = floatDict.Keys.GetEnumerator();
                 valueEnum = floatDict.Values.GetEnumerator();
                 
-                //foreach(var (key, value) in floatDict) {
-                // print general user interface
+                // Print general user interface
                 if (_previousChannelValues.Count > 0)
                 {
                     ImGui.Checkbox("Auto Fit", ref _autoFit);
@@ -95,7 +94,6 @@ namespace T3.Gui.OutputUi
                 {
                     keyEnum.MoveNext();
                     valueEnum.MoveNext();
-
 
                     // Set plot color, repeating every 10 colors
                     var hue = ((float)channelIndex * 360.0f/10.0f) / 360.0f;

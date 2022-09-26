@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -14,26 +13,21 @@ namespace T3.Operators.Types.Id_a3ceb788_4055_4556_961b_63b7221f93e7
 {
     public class MidiClip : Instance<MidiClip>, IDisposable
     {
-        [Output(Guid = "4771E114-58CB-4944-910D-20D9DE5F2367", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<Dict<float>> Values = new();
+        [Output(Guid = "04BFDF5C-7D05-469A-89BE-525F27186F69", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly TimeClipSlot<Dict<float>> Values = new();
 
-        [Output(Guid = "CE9BF60F-F43A-431C-8715-CF3A14593DB3", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<int> Tracks = new();
+        [Output(Guid = "C08C4B81-65B0-4FC3-AF46-F06E72838F9D")]
+        public readonly Slot<List<string>> ChannelNames = new();
 
-        [Output(Guid = "AADD9189-0086-42D6-AC45-D694270C0252", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        [Output(Guid = "AADD9189-0086-42D6-AC45-D694270C0252")]
         public readonly Slot<float> DeltaTicksPerQuarterNote = new();
-
-        [Output(Guid = "A5250FBA-092F-48C9-A979-A88FA3A793B1", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly TimeClipSlot<Command> TimeSlot = new();
 
         public MidiClip()
         {
             _initialized = false;
-
-            TimeSlot.UpdateAction = Update;
-            Tracks.UpdateAction = Update;
-            DeltaTicksPerQuarterNote.UpdateAction = Update;
             Values.UpdateAction = Update;
+            ChannelNames.UpdateAction = Update;
+            DeltaTicksPerQuarterNote.UpdateAction = Update;
         }
 
         protected override void Dispose(bool isDisposing)
@@ -49,6 +43,8 @@ namespace T3.Operators.Types.Id_a3ceb788_4055_4556_961b_63b7221f93e7
                 if (!_initialized || Filename.DirtyFlag.IsDirty)
                 {
                     SetupMidiFile(context);
+                    _channelNames = _channels.Keys.ToList();
+                    ChannelNames.Value = _channelNames;
                 }
 
                 if (_midiEventCollection == null) 
@@ -57,8 +53,8 @@ namespace T3.Operators.Types.Id_a3ceb788_4055_4556_961b_63b7221f93e7
                 _printLogMessages = PrintLogMessages.GetValue(context);
 
                 // Get scaled time range of clip
-                var timeRange = TimeSlot.TimeClip.TimeRange;
-                var sourceRange = TimeSlot.TimeClip.SourceRange;
+                var timeRange = Values.TimeClip.TimeRange;
+                var sourceRange = Values.TimeClip.SourceRange;
 
                 // Get the time we should be at in the MIDI file according to the timeClip
                 var bars = context.LocalTime - timeRange.Start;
@@ -79,23 +75,28 @@ namespace T3.Operators.Types.Id_a3ceb788_4055_4556_961b_63b7221f93e7
 
                 // Include past events in our response
                 var minRange = Math.Min(sourceRange.Start, sourceRange.End);
+                var someTrackChanged = false;
                 if (bars >= minRange &&
                     bars < minRange + Math.Abs(sourceRange.Duration))
                 {
                     for (var trackIndex = 0; trackIndex < _midiFile.Tracks; trackIndex++)
                     {
-                        UpdateTrack(trackIndex, bars);
+                        someTrackChanged |= UpdateTrack(trackIndex, bars);
                     }
                 }
 
-                if (_valuesUpdated)
-                    Values.Value = _values;
+                if (someTrackChanged)
+                    Values.Value = _channels;
             }
+            
             catch (Exception e)
             {
                 Log.Debug("Updating MidiClip failed:" + e.Message, SymbolChildId);
             }
         }
+
+        
+        private List<string> _channelNames = new();
 
         private void SetupMidiFile(EvaluationContext context)
         {
@@ -108,11 +109,11 @@ namespace T3.Operators.Types.Id_a3ceb788_4055_4556_961b_63b7221f93e7
             _midiFile = new MidiFile(filename, noStrictMode);
             _deltaTicksPerQuarterNote = _midiFile.DeltaTicksPerQuarterNote;
             _midiEventCollection = _midiFile.Events;
-            _lastTrackEventIndices = Enumerable.Repeat(-1, _midiFile.Tracks).ToList();
+            ClearTracks();
+            
             _timeSignature = _midiFile.Events[0].OfType<TimeSignatureEvent>().FirstOrDefault();
 
             // Update slots
-            Tracks.Value = _midiFile.Tracks;
             DeltaTicksPerQuarterNote.Value = (int)_deltaTicksPerQuarterNote;    // conversion to int is probably bad
 
             _initialized = true;
@@ -120,31 +121,27 @@ namespace T3.Operators.Types.Id_a3ceb788_4055_4556_961b_63b7221f93e7
 
         private void ClearTracks()
         {
-            for (var index = 0; index < _lastTrackEventIndices.Count; index++)
-            {
-                _lastTrackEventIndices[index] = -1;
-            }
+            _lastTrackEventIndices = Enumerable.Repeat(-1, _midiFile.Tracks).ToList();
 
-            foreach (var k in _values.Keys)
+            foreach (var k in _channels.Keys)
             {
-                _values[k] = 0;
+                _channels[k] = 0;
             }
         }
-
-        private void UpdateTrack(int trackIndex, double time)
+        
+        private bool UpdateTrack(int trackIndex, double time)
         {
-            _valuesUpdated = false;
-
             if (trackIndex >= _lastTrackEventIndices.Count ||
                 trackIndex >= _midiFile.Events[trackIndex].Count) 
-                return;
+                return false;
 
             var events = _midiFile.Events[trackIndex];
             
             var lastEventIndex = _lastTrackEventIndices[trackIndex];
             if (lastEventIndex + 1 >= events.Count) 
-                return;
+                return false;
 
+            var valuesChanged = false;
             var timeInTicks = (long)(time * 4 * _deltaTicksPerQuarterNote);
             var nextEventIndex = lastEventIndex + 1;
             while (nextEventIndex < events.Count
@@ -152,8 +149,7 @@ namespace T3.Operators.Types.Id_a3ceb788_4055_4556_961b_63b7221f93e7
             {
                 if (_printLogMessages)
                 {
-                    Log.Debug(ToBarsBeatsTicks(events[nextEventIndex].AbsoluteTime,
-                                    _deltaTicksPerQuarterNote, _timeSignature));
+                    Log.Debug(TimeToBarsBeatsTicks(events[nextEventIndex].AbsoluteTime, _deltaTicksPerQuarterNote, _timeSignature));
                 }
 
                 switch (events[nextEventIndex])
@@ -164,8 +160,8 @@ namespace T3.Operators.Types.Id_a3ceb788_4055_4556_961b_63b7221f93e7
                         var name = noteOnEvent.NoteName;
                         var value = noteOnEvent.Velocity / 127f;
                         var key = $"/channel{channel}/{name}";
-                        _values[key] = value;
-                        _valuesUpdated = true;
+                        _channels[key] = value;
+                        valuesChanged = true;
 
                         if (_printLogMessages)
                             Log.Debug(key + "=" + value);
@@ -177,8 +173,8 @@ namespace T3.Operators.Types.Id_a3ceb788_4055_4556_961b_63b7221f93e7
                         var name = noteEvent.NoteName;
                         const float value = 0.0f;
                         var key = $"/channel{channel}/{name}";
-                        _values[key] = value;
-                        _valuesUpdated = true;
+                        _channels[key] = value;
+                        valuesChanged = true;
 
                         if (_printLogMessages)
                             Log.Debug(key + "=" + value);
@@ -190,8 +186,8 @@ namespace T3.Operators.Types.Id_a3ceb788_4055_4556_961b_63b7221f93e7
                         var controller = (int)controlChangeEvent.Controller;
                         var value = controlChangeEvent.ControllerValue / 127f;
                         var key = $"/channel{channel}/controller{controller}";
-                        _values[key] = value;
-                        _valuesUpdated = true;
+                        _channels[key] = value;
+                        valuesChanged = true;
 
                         if (_printLogMessages)
                             Log.Debug($"{key}={value}");
@@ -205,12 +201,13 @@ namespace T3.Operators.Types.Id_a3ceb788_4055_4556_961b_63b7221f93e7
             }
 
             _lastTrackEventIndices[trackIndex] = lastEventIndex;
+            return valuesChanged;
         }
 
         /**
          * From https://github.com/naudio/NAudio/blob/master/Docs/MidiFile.md
          */
-        private static string ToBarsBeatsTicks(long eventTime, double ticksPerQuarterNote, TimeSignatureEvent timeSignature)
+        private static string TimeToBarsBeatsTicks(long eventTime, double ticksPerQuarterNote, TimeSignatureEvent timeSignature)
         {
             var beatsPerBar = timeSignature?.Numerator ?? 4;
             var ticksPerBar = timeSignature == null
@@ -230,17 +227,13 @@ namespace T3.Operators.Types.Id_a3ceb788_4055_4556_961b_63b7221f93e7
         private double _deltaTicksPerQuarterNote = 500000.0 / 60;
 
         // Output data
-        private readonly Dict<float> _values = new(0f);
+        private readonly Dict<float> _channels = new(0f);
 
         // Parsing the file
         private TimeSignatureEvent _timeSignature = null;
         private double _lastTimeInBars = 0f;
         private List<int> _lastTrackEventIndices = null;
         private bool _printLogMessages = false;
-        private bool _valuesUpdated = false;
-
-        // [Input(Guid = "71655B86-B0ED-422E-89E3-E678C87A7E0E")]
-        // Public readonly InputSlot<T3.Core.Command> Command = new();
 
         [Input(Guid = "31FE831F-C3BE-4AE3-884B-D2FC4F1754A4")]
         public readonly InputSlot<string> Filename = new();
