@@ -285,66 +285,25 @@ namespace T3.Core
         }
 
         /// <summary>
-        /// Checks for NaN, and sets the float to the provided default value if NaN.
+        /// Checks for NaN or Infinity, and sets the float to the provided default value if either.
         /// </summary>
-        /// <returns>True if NaN</returns>
-        public static bool CheckNaN(ref float val, float defaultValue)
+        /// <returns>True if NaN or Infinity</returns>
+        public static bool ApplyDefaultIfInvalid(ref float val, float defaultValue)
         {
-            bool isNaN = float.IsNaN(val);
-            val = isNaN ? defaultValue : val;
-            return isNaN;
+            bool isInvalid = float.IsNaN(val) || float.IsInfinity(val);
+            val = isInvalid ? defaultValue : val;
+            return isInvalid;
         }
 
         /// <summary>
-        /// Checks for NaN, and sets the double to the provided default value if NaN.
+        /// Checks for NaN or Infinity, and sets the double to the provided default value if either.
         /// </summary>
-        /// <returns>True if NaN</returns>
-        public static bool CheckNaN(ref double val, double defaultValue)
+        /// <returns>True if NaN or Infinity</returns>
+        public static bool ApplyDefaultIfInvalid(ref double val, double defaultValue)
         {
-            bool isNaN = double.IsNaN(val);
-            val = isNaN ? defaultValue : val;
-            return isNaN;
-        }
-
-        /// <summary>
-        /// Checks for infinity, and sets the double to the provided default value if infinity.
-        /// </summary>
-        /// <returns>True if infinity</returns>
-        public static bool CheckInfinity(ref float val, float defaultValue)
-        {
-            bool isInfinity = float.IsInfinity(val);
-            val = isInfinity ? defaultValue : val;
-            return isInfinity;
-        }
-
-        /// <summary>
-        /// Checks for infinity, and sets the double to the provided default value if infinity.
-        /// </summary>
-        /// <returns>True if infinity</returns>
-        public static bool CheckInfinity(ref double val, double defaultValue)
-        {
-            bool isInfinity = double.IsInfinity(val);
-            val = isInfinity ? defaultValue : val;
-            return isInfinity;
-
-        }
-
-        /// <summary>
-        /// Checks for NaN or infinity, and sets the float to the provided default value if either.
-        /// </summary>
-        /// <returns>True if infinity or NaN</returns>
-        public static bool CheckNaNOrInfinity(ref float val, float defaultValue)
-        {
-            return CheckInfinity(ref val, defaultValue) || CheckNaN(ref val, defaultValue);
-        }
-
-        /// <summary>
-        /// Checks for NaN or infinity, and sets the double to the provided default value if either.
-        /// </summary>
-        /// <returns>True if infinity or NaN</returns>
-        public static bool CheckNaNOrInfinity(ref double val, float defaultValue)
-        {
-            return CheckInfinity(ref val, defaultValue) || CheckNaN(ref val, defaultValue);
+            bool isInvalid = double.IsNaN(val) || double.IsInfinity(val);
+            val = isInvalid ? defaultValue : val;
+            return isInvalid;
         }
     }
 

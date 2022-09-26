@@ -35,8 +35,8 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
             var method = (DampFunctions.Methods)Method.GetValue(context).Clamp(0, 1);
             _dampedValue = DampFunctions.DampenFloat(inputValue, _dampedValue, damping, _velocity, FrameRate, method);
 
-            MathUtils.CheckNaN(ref _dampedValue, 0);
-            MathUtils.CheckNaN(ref _velocity, 0);
+            MathUtils.ApplyDefaultIfInvalid(ref _dampedValue, 0);
+            MathUtils.ApplyDefaultIfInvalid(ref _velocity, 0);
 
             Result.Value = _dampedValue;
         }

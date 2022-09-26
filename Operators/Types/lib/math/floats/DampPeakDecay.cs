@@ -36,7 +36,7 @@ namespace T3.Operators.Types.Id_ef3a1411_e88c_43a8_83b4_931fdbf16c75
                                : value;
 
 
-            MathUtils.CheckNaNOrInfinity(ref _dampedValue, 0);
+            MathUtils.ApplyDefaultIfInvalid(ref _dampedValue, 0);
             Result.Value = _dampedValue;
         }
 
