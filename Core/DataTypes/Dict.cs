@@ -40,18 +40,19 @@ namespace T3.Core.DataTypes
             // TODO: unverified...
             var dict = json["Dict"];
             var keys = dict["Key"];
-            var vals = dict["Val"];
+            var values = dict["Val"];
             Clear();
-            if (keys != null && vals != null)
+            
+            if (keys == null || values == null)
+                return;
+            
+            while (keys.HasValues && values.HasValues)
             {
-                while (keys.HasValues && vals.HasValues)
-                {
-                    var key = keys.First.ToObject<string>();
-                    var val = vals.First.ToObject<T>();
-                    this[key] = val;
-                    keys.First.Remove();
-                    vals.First.Remove();
-                }
+                var key = keys.First.ToObject<string>();
+                var val = values.First.ToObject<T>();
+                this[key] = val;
+                keys.First.Remove();
+                values.First.Remove();
             }
         }
 
@@ -60,9 +61,9 @@ namespace T3.Core.DataTypes
             if (outputData is Dict<T> otherDict)
             {
                 Clear();
-                foreach (var kvp in otherDict)
+                foreach (var (key, value) in otherDict)
                 {
-                    this[kvp.Key] = kvp.Value;
+                    this[key] = value;
                 }
                 return true;
             }
@@ -76,7 +77,7 @@ namespace T3.Core.DataTypes
             return TypedClone();
         }
 
-        public Dict<T> TypedClone()
+        private Dict<T> TypedClone()
         {
             var result = new Dict<T>(_defaultValue);
             foreach (var kvp in this)

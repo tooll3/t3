@@ -6,8 +6,6 @@ using System.Linq;
 using ImGuiNET;
 using T3.Core.Operator.Slots;
 using T3.Core.DataTypes;
-using T3.Gui;
-using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Gui.OutputUi
 {
@@ -28,93 +26,99 @@ namespace T3.Gui.OutputUi
         private static float _minFit = -1;
         private static float _maxFit = 1;
 
-        private static List<List<float>> _previousValues;
+        private static List<List<float>> _previousChannelValues;
         
         protected override void DrawTypedValue(ISlot slot)
         {
             if (slot is Slot<Dict<float>> typedSlot)
             {
+                var floatDict = typedSlot.Value;
+                if (floatDict == null)
+                    return;
+                
+                var outputString = string.Join(", ", $"{floatDict:0.000}");
                 ImGui.BeginChild("##scrolling");
-
-                var v = typedSlot.Value;
-                var outputString = v == null ? "" : string.Join(", ", $"{v:0.000}");
                 ImGui.TextUnformatted($"{outputString}");
 
-                if (v == null)
-                    return;
 
-                var count = Math.Min(1024, v.Count);
-                var horizontalLength = 512;
+                var count = Math.Min(1024, floatDict.Count);
+                const int horizontalLength = 512;
 
                 if (_clear)
-                    _previousValues = null;
+                    _previousChannelValues = null;
 
-                // expand list of previous values if necessary
-                if (_previousValues == null)
-                    _previousValues = new List<List<float>>();
-                if (count > _previousValues.Count)
+                
+                if(_clear || _previousChannelValues == null)
+                    _previousChannelValues = new List<List<float>>();
+                
+                // Expand list of previous values if necessary
+                if (count > _previousChannelValues.Count)
                 {
-                    while (_previousValues.Count < count)
+                    while (_previousChannelValues.Count < count)
                     {
-                        // and new list and initialize to zeroes
+                        // And new list and initialize to zeroes
                         var newList = Enumerable.Repeat(0f, horizontalLength).ToList();
-                        _previousValues.Add(newList);
+                        _previousChannelValues.Add(newList);
                     }
                 }
 
-                var valueEnum = v.Values.GetEnumerator();
+                var valueEnum = floatDict.Values.GetEnumerator();
                 for (var i = 0; i < count; i++)
                 {
                     valueEnum.MoveNext();
-                    _previousValues[i].Add(valueEnum.Current);
+                    _previousChannelValues[i].Add(valueEnum.Current);
 
-                    // keep only a certain number of samples
-                    while (_previousValues[i].Count > horizontalLength)
-                        _previousValues[i].RemoveAt(0);
+                    // Keep only a certain number of samples
+                    while (_previousChannelValues[i].Count > horizontalLength)
+                        _previousChannelValues[i].RemoveAt(0);
                 }
 
 
-                var keyEnum = v.Keys.GetEnumerator();
-                valueEnum = v.Values.GetEnumerator();
-                for (var i = 0; i < _previousValues.Count; i++)
+                var keyEnum = floatDict.Keys.GetEnumerator();
+                valueEnum = floatDict.Values.GetEnumerator();
+                
+                //foreach(var (key, value) in floatDict) {
+                // print general user interface
+                if (_previousChannelValues.Count > 0)
+                {
+                    ImGui.Checkbox("Auto Fit", ref _autoFit);
+                    ImGui.SameLine();
+                    _clear  = ImGui.Button("Clear");
+                    if (!_autoFit)
+                    {
+                        ImGui.DragFloat("Max", ref _maxFit);
+                        ImGui.DragFloat("Min", ref _minFit);
+                    }
+                }
+                
+                for (var channelIndex = 0; channelIndex < _previousChannelValues.Count; channelIndex++)
                 {
                     keyEnum.MoveNext();
                     valueEnum.MoveNext();
 
-                    // print general user interface?
-                    if (i == 0)
-                    {
-                        ImGui.Checkbox("Auto Fit", ref _autoFit);
-                        ImGui.SameLine();
-                        _clear  = ImGui.Button("Clear");
-                        if (!_autoFit)
-                        {
-                            ImGui.DragFloat("Max", ref _maxFit);
-                            ImGui.DragFloat("Min", ref _minFit);
-                        }
-                    }
 
-                    // set plot color, repeating every 10 colors
-                    var hue = ((float)i * 360.0f/10.0f) / 360.0f;
+                    // Set plot color, repeating every 10 colors
+                    var hue = ((float)channelIndex * 360.0f/10.0f) / 360.0f;
                     hue -= (float) Math.Floor(hue);
-                    var saturation = 0.5f;
-                    var value = 0.75f;
-                    Vector4 plotColor = new Vector4(1f);
+                    const float saturation = 0.5f;
+                    const float value = 0.75f;
+                    var plotColor = new Vector4(1f);
+                    
                     ImGui.ColorConvertHSVtoRGB(hue, saturation, value,
                                                out plotColor.X, out plotColor.Y, out plotColor.Z);
                     ImGui.PushStyleColor(ImGuiCol.PlotLines, plotColor);
 
-                    var floatArray = _previousValues[i].ToArray();
+                    var floatArray = _previousChannelValues[channelIndex].ToArray();
                     if (_autoFit)
                     {
-                        ImGui.PlotLines("##values", ref floatArray[0], _previousValues[i].Count,
+                        ImGui.PlotLines("##values", ref floatArray[0], _previousChannelValues[channelIndex].Count,
                                         0,
                                         keyEnum.Current);
                     }
                     else
                     {
                         ImGui.PlotLines("##values", ref floatArray[0],
-                                        _previousValues[i].Count,
+                                        _previousChannelValues[channelIndex].Count,
                                         0,
                                         keyEnum.Current,
                                         _minFit,
@@ -130,7 +134,7 @@ namespace T3.Gui.OutputUi
                                                 T3Style.Colors.TextMuted.A);
                     ImGui.PushStyleColor(ImGuiCol.Text, textColor);
 
-                    if (_autoFit && _previousValues[i].Count > 0)
+                    if (_autoFit && _previousChannelValues[channelIndex].Count > 0)
                     {
                         var min = float.PositiveInfinity;
                         var max = float.NegativeInfinity;
@@ -144,7 +148,7 @@ namespace T3.Gui.OutputUi
 
                         ImGui.SameLine();
                         ImGui.TextUnformatted($"  [{min:G3} .. {max:G3}]" +
-                                              $"  avg {(sum / _previousValues[i].Count):0.000}");
+                                              $"  avg {(sum / _previousChannelValues[channelIndex].Count):0.000}");
                     }
 
                     ImGui.PopStyleColor();
