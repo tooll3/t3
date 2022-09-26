@@ -16,9 +16,6 @@ namespace T3.Operators.Types.Id_cb89ed1d_03ea_4880_bfa0_1dd723e4bdab
         [Input(Guid = "18aeda2b-ff90-4cf4-9665-c8c65a23cb5f")]
         public readonly InputSlot<float> BlendSpeed = new InputSlot<float>();
 
-        [Input(Guid = "0e3011f8-ae19-41b2-a5df-62e092be57ca")]
-        public readonly InputSlot<System.Collections.Generic.List<string>> Input = new InputSlot<System.Collections.Generic.List<string>>();
-
         [Input(Guid = "c3765d6d-4f45-4425-a86c-1cdd13eff296")]
         public readonly InputSlot<float> Scale = new InputSlot<float>();
 
@@ -27,6 +24,12 @@ namespace T3.Operators.Types.Id_cb89ed1d_03ea_4880_bfa0_1dd723e4bdab
 
         [Input(Guid = "651d479c-a3d4-4d18-bdcd-2400e2cdb56b")]
         public readonly InputSlot<float> RandomOffset = new InputSlot<float>();
+
+        [Input(Guid = "ca8724d8-a362-4af4-bdf8-a80a1b0ef72e")]
+        public readonly InputSlot<string> FolderWithImages = new InputSlot<string>();
+
+        [Input(Guid = "3cb08250-213c-4fa6-b9a0-1c92bf01ad6e")]
+        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
 
     }
 }

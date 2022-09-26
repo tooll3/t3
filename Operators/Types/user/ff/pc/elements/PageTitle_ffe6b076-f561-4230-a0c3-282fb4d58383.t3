@@ -1,0 +1,57 @@
+{
+  "Name": "PageTitle",
+  "Id": "ffe6b076-f561-4230-a0c3-282fb4d58383",
+  "Namespace": "user.ff.pc.elements",
+  "Inputs": [
+    {
+      "Id": "409adab7-82e6-4d70-af14-04180a4940b0"/*Title*/,
+      "DefaultValue": "Title"
+    }
+  ],
+  "Children": [
+    {
+      "Id": "db99be43-6bdb-4ab6-ab59-0fd8206c92ce"/*Text*/,
+      "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
+      "InputValues": [
+        {
+          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*Input*/,
+          "Type": "System.String",
+          "Value": "Segmentation by Vehicle Requirements"
+        },
+        {
+          "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": -1.7207584,
+            "Y": 0.8099588
+          }
+        },
+        {
+          "Id": "ae7f7e83-fa18-44fd-b639-3bd0dbd3ac06"/*VerticalAlign*/,
+          "Type": "System.Int32",
+          "Value": 0
+        },
+        {
+          "Id": "82cc31ff-3307-4b6d-be70-16e471c2ffc9"/*HorizontalAlign*/,
+          "Type": "System.Int32",
+          "Value": 0
+        }
+      ],
+      "Outputs": []
+    }
+  ],
+  "Connections": [
+    {
+      "SourceParentOrChildId": "db99be43-6bdb-4ab6-ab59-0fd8206c92ce",
+      "SourceSlotId": "3f8b20a7-c8b8-45ab-86a1-0efcd927358e",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "3ef7072f-bf0c-4e87-9525-69e19c4ddfdd"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "409adab7-82e6-4d70-af14-04180a4940b0",
+      "TargetParentOrChildId": "db99be43-6bdb-4ab6-ab59-0fd8206c92ce",
+      "TargetSlotId": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"
+    }
+  ]
+}
