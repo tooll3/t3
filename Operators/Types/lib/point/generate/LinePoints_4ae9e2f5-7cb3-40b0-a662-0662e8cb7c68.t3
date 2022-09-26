@@ -57,7 +57,7 @@
     },
     {
       "Id": "83986e05-af3e-469f-a656-9956d37d12ba"/*Orientation*/,
-      "DefaultValue": 0
+      "DefaultValue": 1
     },
     {
       "Id": "ddc2ea6a-d356-46c9-b333-4cce69c02570"/*AddSeparator*/,

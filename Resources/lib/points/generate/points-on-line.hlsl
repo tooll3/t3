@@ -16,7 +16,7 @@ cbuffer Params : register(b0)
     float Twist;
 
     float3 ManualOrientationAxis;
-    float OriationMode;
+    float OrientationMode;
     
     float AddSeparator;
 }
@@ -60,13 +60,13 @@ void main(uint3 i : SV_DispatchThreadID)
     // FIXME: this rotation is hard to control and feels awkward. 
     // I didn't come up with another method, though
     float4 rot2 = 0;
-    if(OriationMode < 0.5) 
+    if(OrientationMode < 0.5) 
     {
         float4 rotate = rotate_angle_axis(3.141578/2 * 1, float3(0,0,1));
 
         rotate = qmul( rotate, rotate_angle_axis( (OrientationAngle + Twist * f) / 180 * 3.141578, float3(0,1,0)));
 
-        //float3 axis = OriationMode > 0.5 ? ManualOrientationAxis : Direction;
+        //float3 axis = OrientationMode > 0.5 ? ManualOrientationAxis : Direction;
 
         float3 upVector = float3(0,0,1);
         float t = abs(dot( normalize(Direction), normalize(upVector)));
@@ -74,13 +74,12 @@ void main(uint3 i : SV_DispatchThreadID)
             upVector = float3(0,1,0);
         }
         float4 lookAt = q_look_at(normalize(Direction), upVector);
-
         
         rot2 = normalize(qmul(rotate, lookAt));
     }
     else {
-        //float3 axis = OriationMode > 0.5 ? ManualOrientationAxis : Direction;
-        rot2 = normalize(rotate_angle_axis(OrientationAngle / 180 * 3.141578, ManualOrientationAxis));
+        //float3 axis = OrientationMode > 0.5 ? ManualOrientationAxis : Direction;
+        rot2 = normalize(rotate_angle_axis((OrientationAngle + Twist * f) / 180 * 3.141578, ManualOrientationAxis));
         //rot2 = qmul(q_look_at(Direction, float3(1,1,0)), rotate);
     }
 
