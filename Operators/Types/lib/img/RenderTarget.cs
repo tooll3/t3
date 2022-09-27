@@ -60,7 +60,15 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
 
             _sampleCount = Multisampling.GetValue(context).Clamp(1, 32);
 
-            UpdateTextures(device, size, TextureFormat.GetValue(context), withDepthBuffer ? Format.R32_Typeless : Format.Unknown, generateMips);
+            var textureFormat = TextureFormat.GetValue(context);
+            if (textureFormat == Format.Unknown)
+            {
+                Log.Warning("Texture format unknown is not supported. Falling back to default");
+                textureFormat = TextureFormat.TypedDefaultValue.Value;
+                TextureFormat.SetTypedInputValue(textureFormat);
+            }
+            
+            UpdateTextures(device, size, textureFormat, withDepthBuffer ? Format.R32_Typeless : Format.Unknown, generateMips);
 
             var deviceContext = device.ImmediateContext;
 
