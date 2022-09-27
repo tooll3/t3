@@ -37,7 +37,7 @@ namespace T3
         public static SpaceMouse SpaceMouse { get; private set; }
 
         public static bool IsStandAlone = File.Exists("StartT3.exe");
-        public const string Version = "v3.3.0";
+        public const string Version = "v3.4.0";
 
         public static void GenerateFonts(float scaleFactor)
         {
