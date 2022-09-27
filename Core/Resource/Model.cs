@@ -478,6 +478,12 @@ namespace T3.Core
                                      Namespace = @namespace,
                                      Name = newType.Name
                                  };
+
+                if (SymbolRegistry.Entries.ContainsKey(symbol.Id))
+                {
+                    Log.Error($"Ignoring redefinition symbol {symbol.Name}. Please fix multiple definitions in Operators/Types/ folder");
+                    continue;
+                }
                 SymbolRegistry.Entries.Add(symbol.Id, symbol);
                 Console.WriteLine($"new added symbol: {newType}");
             }
