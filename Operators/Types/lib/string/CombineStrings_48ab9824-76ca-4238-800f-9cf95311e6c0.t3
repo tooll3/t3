@@ -1,0 +1,17 @@
+{
+  "Name": "CombineStrings",
+  "Id": "48ab9824-76ca-4238-800f-9cf95311e6c0",
+  "Namespace": "lib.string",
+  "Inputs": [
+    {
+      "Id": "b5e72715-9339-484f-b197-5a28cd823798"/*Input*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "c832ba89-f4ae-4c47-b62b-52da52a09556"/*Separator*/,
+      "DefaultValue": ""
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

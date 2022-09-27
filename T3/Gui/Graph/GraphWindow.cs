@@ -1,13 +1,12 @@
 using System;
 using ImGuiNET;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using T3.Core.Animation;
-using T3.Core.IO;
+using T3.Core;
 using T3.Core.Operator;
 using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
+using T3.Gui.Interaction;
 using T3.Gui.Interaction.TransformGizmos;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -238,6 +237,8 @@ namespace T3.Gui.Graph
                 EditDescriptionDialog.Draw(GraphCanvas.CompositionOp.Symbol);
             }
             ImGui.EndChild();
+            
+
 
             if (UserSettings.Config.ShowTimeline)
             {
@@ -264,6 +265,137 @@ namespace T3.Gui.Graph
                     ImGui.PopStyleVar(1);
                 }
             }
+            
+            if(UserSettings.Config.ShowMiniMap)
+                DrawMiniMap(GraphCanvas.CompositionOp, GraphCanvas);
+        }
+
+        private static void DrawMiniMap(Instance compositionOp, ScalableCanvas canvas)
+        {
+            var widgetSize = new Vector2(200, 200);
+            var localPos = new Vector2(ImGui.GetWindowWidth() - widgetSize.X, 0);
+            ImGui.SetCursorPos(localPos);
+            var widgetPos = ImGui.GetCursorScreenPos();
+
+            
+            if (ImGui.BeginChild("##minimap", widgetSize, false,
+                                 ImGuiWindowFlags.NoScrollbar
+                                 | ImGuiWindowFlags.NoMove
+                                 | ImGuiWindowFlags.NoScrollWithMouse
+                                 | ImGuiWindowFlags.NoDecoration
+                                 | ImGuiWindowFlags.NoTitleBar
+                                 | ImGuiWindowFlags.ChildWindow))
+            {
+
+
+
+                var dl = ImGui.GetWindowDrawList();
+
+                dl.AddRectFilled(widgetPos,widgetPos+ widgetSize,  T3Style.Colors.Background.Fade(0.8f));
+                dl.AddRect(widgetPos,widgetPos+ widgetSize,  Color.Black.Fade(0.9f));
+                
+                if (SymbolUiRegistry.Entries.TryGetValue(compositionOp.Symbol.Id, out var symbolUi))
+                {
+                    var hasChildren= false;
+                    ImRect bounds = new ImRect();
+                    foreach (var child in symbolUi.ChildUis)
+                    {
+                        var rect = ImRect.RectWithSize(child.PosOnCanvas, child.Size);
+                        
+                        if (!hasChildren)
+                        {
+                            bounds = rect;
+                            hasChildren = true;
+                        }
+                        else
+                        {
+                            bounds.Add(rect);
+                        }
+                    }
+                    
+
+                    var maxBoundsSize = MathF.Max(bounds.GetSize().X, bounds.GetSize().Y);
+                    var opacity = MathUtils.RemapAndClamp(maxBoundsSize, 200,1000, 0, 1);
+                    
+                    if (hasChildren && opacity > 0)
+                    {
+                        const float padding = 5;
+                        
+                        var mapMin = widgetPos + Vector2.One* padding;
+                        var mapSize = widgetSize - Vector2.One * padding * 2;
+                        
+                        var boundsMin = bounds.Min;
+                        var boundsMax = bounds.Max;
+                        var boundsSize = bounds.GetSize();
+                        var boundsAspect = boundsSize.X / boundsSize.Y;
+
+                        var mapAspect = mapSize.X / mapSize.Y;
+
+                        if (boundsAspect > mapAspect)
+                        {
+                            mapSize.Y = mapSize.X / boundsAspect;
+                        }
+                        else
+                        {
+                            mapSize.X = mapSize.Y * boundsAspect;
+                        }
+
+                        foreach (var annotation in symbolUi.Annotations.Values)
+                        {
+                            var rect = ImRect.RectWithSize(annotation.PosOnCanvas, annotation.Size);
+                            var min = (rect.Min - boundsMin) / boundsSize * mapSize + mapMin;
+                            var max = (rect.Max - boundsMin) / boundsSize * mapSize + mapMin;
+                            dl.AddRectFilled(min,max, annotation.Color.Fade(0.1f * opacity));
+                        }
+                        
+                        foreach (var child in symbolUi.ChildUis)
+                        {
+                            var rect = ImRect.RectWithSize(child.PosOnCanvas, child.Size);
+                            var min = (rect.Min - boundsMin) / boundsSize * mapSize + mapMin;
+                            var max = (rect.Max - boundsMin) / boundsSize * mapSize + mapMin;
+
+                            var fadedColor = Color.White.Fade(0.5f * opacity);
+                            dl.AddRectFilled(min,max, fadedColor);
+                        }
+                        
+                        // Draw View Area
+                        var viewMinInCanvas = canvas.InverseTransformPositionFloat(Vector2.Zero);
+                        var viewMaxInCanvas = canvas.InverseTransformPositionFloat(canvas.WindowSize);
+                        
+                        var min2 = (viewMinInCanvas - boundsMin) / boundsSize * mapSize + mapMin;
+                        var max2 = (viewMaxInCanvas - boundsMin) / boundsSize * mapSize + mapMin;
+                        
+                        dl.AddRect(min2,max2, Color.White.Fade(opacity));
+                        
+                        var mousePos = ImGui.GetMousePos();
+                        var normalizedMousePos = (mousePos - widgetPos - Vector2.One * padding) / mapSize;
+                        var mousePosInCanvas = bounds.Min + bounds.GetSize() * normalizedMousePos;
+                         
+                        
+                        // Debug visualization
+                        //var posInScreen = graphCanvas.TransformPosition(posInCanvas);
+                        //ImGui.GetForegroundDrawList().AddCircle(posInScreen, 10, Color.Green);
+                        
+                        // Dragging
+                        ImGui.InvisibleButton("##map", widgetSize);
+                        if (ImGui.IsItemActive())
+                        {
+                            
+                            var scope = canvas.GetTargetScope();
+                            scope.Scroll = mousePosInCanvas - (viewMaxInCanvas - viewMinInCanvas) /2;
+                            canvas.SetTargetScope(scope);
+                        }
+
+                        if (ImGui.IsWindowHovered() && ImGui.GetIO().MouseWheel != 0)
+                        {
+                            var centerInCanvas = (viewMaxInCanvas + viewMinInCanvas) / 2;
+                            canvas.ZoomWithMouseWheel(centerInCanvas);
+                        }
+                    }
+                }
+            }
+
+            ImGui.EndChild();
         }
 
         private void DrawControlsAtBottom()
@@ -417,6 +549,8 @@ namespace T3.Gui.Graph
                                                 + 2;
 
         private readonly TimeLineCanvas _timeLineCanvas;
+
+        public TimeLineCanvas CurrentTimeLine => _timeLineCanvas;
 
         private static readonly EditSymbolDescriptionDialog EditDescriptionDialog = new EditSymbolDescriptionDialog();
     }

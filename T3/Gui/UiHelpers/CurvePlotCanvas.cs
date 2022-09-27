@@ -18,7 +18,7 @@ namespace T3.Gui.UiHelpers
 
         public void Draw(float value)
         {
-            var dl = ImGui.GetForegroundDrawList();
+            var dl = ImGui.GetWindowDrawList();
             var min = float.PositiveInfinity;
             var max = float.NegativeInfinity;
 
@@ -59,7 +59,7 @@ namespace T3.Gui.UiHelpers
             
             _raster.Draw(_canvas);
 
-            if (!_paused)
+            if (!_paused && float.IsFinite(value) && !float.IsInfinity(value) && !float.IsNaN(value))
             {
                 _graphValues[_sampleOffset] = value;
                 _sampleOffset = (_sampleOffset + 1) % _sampleCount;

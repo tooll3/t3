@@ -24,6 +24,11 @@ namespace T3.Gui.Windows
             var changed = false;
             if (ImGui.TreeNode("User Interface"))
             {
+                if (ImGui.DragFloat("UI Scale", ref UserSettings.Config.UiScaleFactor, 0.01f, 0.5f, 3f))
+                {
+                    changed = true;
+                }
+                changed |= ImGui.Checkbox("Warn before Lib modifications", ref UserSettings.Config.WarnBeforeLibEdit);
                 changed |= ImGui.Checkbox("Use arc connections", ref UserSettings.Config.UseArcConnections);
                 changed |= ImGui.Checkbox("Use Jog Dial Control", ref UserSettings.Config.UseJogDialControl);
                 changed |= ImGui.DragFloat("Scroll smoothing", ref UserSettings.Config.ScrollSmoothing);
@@ -32,13 +37,12 @@ namespace T3.Gui.Windows
                 ImGui.Separator();
                 changed |= ImGui.DragFloat("Snap strength", ref UserSettings.Config.SnapStrength);
                 changed |= ImGui.DragFloat("Click threshold", ref UserSettings.Config.ClickThreshold);
+                changed |= ImGui.DragFloat("Keyboard scroll speed", ref UserSettings.Config.KeyboardScrollAcceleration);
                  
                 changed |= ImGui.DragFloat("Timeline Raster Density", ref UserSettings.Config.TimeRasterDensity, 0.01f);
-                changed |= ImGui.Checkbox("Count Bars from Zero", ref UserSettings.Config.CountBarsFromZero);
                  
                 changed |= ImGui.Checkbox("Swap Main & 2nd windows when fullscreen", ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen);
-                changed |= ImGui.Checkbox("Save Only Modified Symbols", ref UserSettings.Config.SaveOnlyModified);
-                changed |= ImGui.Checkbox("Enable Auto Backup", ref UserSettings.Config.AutoSaveAfterSymbolCreation);
+                
                  
                 ImGui.TreePop();
             }
@@ -58,7 +62,6 @@ namespace T3.Gui.Windows
                 //ImGui.Checkbox("Show Title", ref UserSettings.Config.ShowTitleAndDescription);
                 changed |= ImGui.DragFloat("Gizmo size", ref UserSettings.Config.GizmoSize);
                 changed |= ImGui.DragFloat("Tooltip delay", ref UserSettings.Config.TooltipDelay);
-                changed |= ImGui.Checkbox("Save after symbol creating", ref UserSettings.Config.AutoSaveAfterSymbolCreation);
                 ImGui.TreePop();
             }
 

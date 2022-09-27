@@ -101,7 +101,7 @@ namespace T3.Gui
 
         public void UpdateConsistencyWithSymbol()
         {
-            // check if child entries are missing
+            // Check if child entries are missing
             foreach (var child in Symbol.Children)
             {
                 if (!ChildUis.Exists(c => c.Id == child.Id))

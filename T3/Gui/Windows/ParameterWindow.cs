@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Text.RegularExpressions;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -107,6 +108,31 @@ namespace T3.Gui.Windows
                     _editDescriptionDialog.ShowNextFrame();                
                 
                 SymbolBrowser.ListExampleOperators(symbolUi);
+                if (!string.IsNullOrEmpty(symbolUi.Description))
+                {
+                    var itemRegex = new Regex(@"\[([A-Za-z\d_]+)\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                    var alreadyListedSymbolNames = new HashSet<string>();
+                    
+                    foreach (Match  match in itemRegex.Matches(symbolUi.Description))
+                    {
+                        var referencedName = match.Groups[1].Value;
+
+                        if (referencedName == symbolUi.Symbol.Name)
+                            continue;
+
+                        if (alreadyListedSymbolNames.Contains(referencedName))
+                            continue;
+                        
+                        // This is slow and could be optimized by dictionary
+                        var referencedSymbolUi = SymbolRegistry.Entries.Values.SingleOrDefault(s => s.Name == referencedName);
+                        if (referencedSymbolUi != null)
+                        {
+                            SymbolBrowser.DrawExampleOperator(referencedSymbolUi.Id,referencedName);
+                        }
+
+                        alreadyListedSymbolNames.Add(referencedName);
+                    }
+                }
                 
                 ImGui.PopStyleVar();
                 ImGui.Unindent();
@@ -207,27 +233,36 @@ namespace T3.Gui.Windows
             // namespace and symbol
             {
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
+                
+                ImGui.PushFont(Fonts.FontBold);
+
+                ImGui.TextUnformatted(op.Symbol.Name);
+                ImGui.PopFont();
+                
+                ImGui.SameLine();
+                ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
+                ImGui.TextUnformatted(" in ");
+                ImGui.PopStyleColor();
+                ImGui.SameLine();
+                
                 ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
                 var namespaceForEdit = op.Symbol.Namespace ?? "";
 
+                ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X-10);
                 if (InputWithTypeAheadSearch.Draw("##namespace", ref namespaceForEdit,
                                                   SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i)))
                 {
                     op.Symbol.Namespace = namespaceForEdit;
                     modified = true;
                 }
-
+                
                 ImGui.PopStyleColor();
-                ImGui.SameLine();
-                ImGui.Dummy(new Vector2(10, 0));
-                ImGui.SameLine();
-                ImGui.TextUnformatted(op.Symbol.Name);
-                ImGui.Dummy(Vector2.One * 5);
             }
 
             // SymbolChild Name
             {
-                ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 100);
+                ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
+                ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 105);
 
                 var nameForEdit = symbolChildUi.SymbolChild.Name;
 
@@ -237,7 +272,6 @@ namespace T3.Gui.Windows
                     symbolChildUi.SymbolChild.Name = nameForEdit;
                 }
 
-                var keepPos = ImGui.GetCursorScreenPos();
 
                 if (ImGui.IsItemActivated())
                 {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -9,7 +9,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using T3.Core.Logging;
-using T3.Gui.UiHelpers;
 
 namespace T3.Gui.AutoBackup
 {
@@ -21,7 +20,7 @@ namespace T3.Gui.AutoBackup
 
         public AutoBackup()
         {
-            SecondsBetweenSaves = 3*60;
+            SecondsBetweenSaves = 3 * 60;
             IsEnabled = false;
         }
 
@@ -38,6 +37,8 @@ namespace T3.Gui.AutoBackup
             Stopwatch.Restart();
         }
 
+        private static List<string> _filePaths = new(10000);
+
         private static void CreateBackupCallback()
         {
             if (T3Ui.IsCurrentlySaving)
@@ -45,7 +46,7 @@ namespace T3.Gui.AutoBackup
                 Log.Debug("Skipped backup because saving is in progress.");
                 return;
             }
-            
+
             T3Ui.SaveModified();
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
@@ -56,35 +57,20 @@ namespace T3.Gui.AutoBackup
             ReduceNumberOfBackups();
 
             var zipFilePath = Path.Join(BackupDirectory, $"#{index:D5}-{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.zip");
-            var tempPath = TempDirectory + Guid.NewGuid() + @"\";
-
+            
             try
             {
-                var directoryWithFiles = new Dictionary<string, string[]>();
-                foreach (var sourcePath in _sourcePaths)
-                {
-                    var tempTargetPath = Path.Combine(tempPath, sourcePath);
-
-                    if (!Directory.Exists(tempTargetPath))
-                        Directory.CreateDirectory(tempTargetPath);
-
-                    CopyDirectory(sourcePath, tempTargetPath, "*");
-                    directoryWithFiles[sourcePath] = Directory.GetFiles(tempTargetPath, "*");
-                }
-
                 var zipPath = Path.GetDirectoryName(zipFilePath);
                 if (!string.IsNullOrEmpty(zipPath) && !Directory.Exists(zipPath))
                     Directory.CreateDirectory(zipPath);
 
-                using ZipArchive archive = ZipFile.Open(zipFilePath, ZipArchiveMode.Create);
-
-                foreach (var (directory, value) in directoryWithFiles)
+                using var archive = ZipFile.Open(zipFilePath, ZipArchiveMode.Create);
+                
+                foreach (var sourcePath in _sourcePaths)
                 {
-                    foreach (var file in value)
+                    foreach (var filepath in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
                     {
-                        archive.CreateEntryFromFile(file,
-                                                    Path.Join(directory, Path.GetFileName(file)),
-                                                    CompressionLevel.Fastest);
+                        archive.CreateEntryFromFile(filepath, filepath, CompressionLevel.Fastest);
                     }
                 }
             }
@@ -93,47 +79,10 @@ namespace T3.Gui.AutoBackup
                 DeleteFile(zipFilePath);
                 Log.Error("auto backup failed: {0}", ex.Message);
             }
-            finally
-            {
-                Log.Debug($"Deleting {tempPath}");
-                DeletePath(tempPath);
-            }
 
             _isSaving = false;
         }
-
-        private static void CopyDirectory(string sourcePath, string destPath, string searchPattern)
-        {
-            if (!Directory.Exists(destPath))
-            {
-                Directory.CreateDirectory(destPath);
-            }
-
-            foreach (string file in Directory.GetFiles(sourcePath, searchPattern))
-            {
-                string dest = Path.Combine(destPath, Path.GetFileName(file));
-                File.Copy(file, dest);
-            }
-
-            foreach (string folder in Directory.GetDirectories(sourcePath, searchPattern))
-            {
-                string dest = Path.Combine(destPath, Path.GetFileName(folder));
-                CopyDirectory(folder, dest, searchPattern);
-            }
-        }
-
-        private static void DeletePath(string path)
-        {
-            try
-            {
-                Directory.Delete(path, true);
-            }
-            catch (Exception e)
-            {
-                Log.Info("Failed to delete path:" + e.Message);
-            }
-        }
-
+        
         private static void DeleteFile(string file)
         {
             try

@@ -30,7 +30,14 @@ namespace Core.Logging
         {
             lock (_fileWriter)
             {
-                _fileWriter.Write("{0:HH:mm:ss.fff} ({1}): {2}", entry.TimeStamp, entry.Level.ToString(), entry.Message + "\n");
+                try
+                {
+                    _fileWriter.Write("{0:HH:mm:ss.fff} ({1}): {2}", entry.TimeStamp, entry.Level.ToString(), entry.Message + "\n");
+                }
+                catch (Exception)
+                {
+                    // skip encoder exception
+                }
             }
         }
 

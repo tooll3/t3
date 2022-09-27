@@ -51,7 +51,7 @@ namespace T3.Gui.Windows.TimeLine
             switch (UserSettings.Config.TimeDisplayMode)
             {
                 case TimeFormat.TimeDisplayModes.Bars:
-                    formattedTime = TimeFormat.FormatTimeInBars(playback.TimeInBars, UserSettings.Config.CountBarsFromZero ? 0 : 1);
+                    formattedTime = TimeFormat.FormatTimeInBars(playback.TimeInBars, 0);
                     break;
 
                 case TimeFormat.TimeDisplayModes.Secs:
@@ -104,7 +104,7 @@ namespace T3.Gui.Windows.TimeLine
                     UserSettings.Config.EnableIdleMotion = !UserSettings.Config.EnableIdleMotion;
                 }
 
-                CustomComponents.TooltipForLastItem("Keep beat time running",
+                CustomComponents.TooltipForLastItem("Idle Motion - Keeps beat time running",
                                                     "This will keep updating the output [Time]\nwhich is useful for procedural animation and syncing.");
 
                 if (UserSettings.Config.EnableIdleMotion)
@@ -479,7 +479,7 @@ namespace T3.Gui.Windows.TimeLine
                             ImGui.SetNextItemWidth(150);
                             if (ImGui.DragFloat("Resync Threshold in Seconds", ref ProjectSettings.Config.AudioResyncThreshold, 0.001f, 0.01f, 1f))
                             {
-                                soundtrack.StartTime = soundtrackStartTime;
+                                //soundtrack.StartTime = soundtrackStartTime;
                             }
 
                             if (filepathModified)

@@ -1,5 +1,7 @@
-﻿using System;
+using System;
 using System.Numerics;
+using T3.Core.Animation;
+using T3.Core.Operator;
 
 namespace T3.Core
 {
@@ -120,8 +122,15 @@ namespace T3.Core
                 Utilities.Swap(ref outMin, ref outMax);
             return v.Clamp(outMin, outMax);
         }
+        
+        public static float Remap(float value, float inMin, float inMax, float outMin, float outMax)
+        {
+            var factor = (value - inMin) / (inMax - inMin);
+            var v = factor * (outMax - outMin) + outMin;
+            return v;
+        }
 
-        public static double Remap(double value, double inMin, double inMax, double outMin, double outMax)
+        public static double RemapAndClamp(double value, double inMin, double inMax, double outMin, double outMax)
         {
             var factor = (value - inMin) / (inMax - inMin);
             var v = factor * (outMax - outMin) + outMin;
@@ -274,6 +283,28 @@ namespace T3.Core
             current = newState;
             return newState;
         }
+
+        /// <summary>
+        /// Checks for NaN or Infinity, and sets the float to the provided default value if either.
+        /// </summary>
+        /// <returns>True if NaN or Infinity</returns>
+        public static bool ApplyDefaultIfInvalid(ref float val, float defaultValue)
+        {
+            bool isInvalid = float.IsNaN(val) || float.IsInfinity(val);
+            val = isInvalid ? defaultValue : val;
+            return isInvalid;
+        }
+
+        /// <summary>
+        /// Checks for NaN or Infinity, and sets the double to the provided default value if either.
+        /// </summary>
+        /// <returns>True if NaN or Infinity</returns>
+        public static bool ApplyDefaultIfInvalid(ref double val, double defaultValue)
+        {
+            bool isInvalid = double.IsNaN(val) || double.IsInfinity(val);
+            val = isInvalid ? defaultValue : val;
+            return isInvalid;
+        }
     }
 
     public class EaseFunctions
@@ -287,6 +318,51 @@ namespace T3.Core
                        : x >= 1f
                            ? 1f
                            : (float)(Math.Pow(2, -10 * x) * Math.Sin((x * 10 - 0.75) * c4) + 1);
+        }
+    }
+
+    public class DampFunctions
+    {
+        public enum Methods
+        {
+            LinearInterpolation,
+            DampedSpring
+        }
+
+        public static float DampenFloat(float inputValue, float previousValue, float damping, float velocity, float frameRate, Methods method)
+        {
+            float dampenedValue = inputValue;
+
+            switch (method)
+            {
+                case Methods.LinearInterpolation:
+                    dampenedValue = LinearDamp(inputValue, previousValue, damping, frameRate);
+                    break;
+
+                case Methods.DampedSpring:
+                    dampenedValue = SpringDamp(inputValue, previousValue, damping, ref velocity);
+                    break;
+            }
+
+            return dampenedValue;
+        }
+
+        private static float SpringDamp(float inputValue, float previousValue, float damping, ref float velocity)
+        {
+            return MathUtils.SpringDamp(inputValue, previousValue, ref velocity, 0.5f / (damping + 0.001f), (float)Playback.LastFrameDuration);
+        }
+
+        private static float LinearDamp(float inputValue, float previousValue, float damping, float frameRate)
+        {
+            float dampenedValue = inputValue;
+            var framesPassed = (int)((Playback.LastFrameDuration * frameRate) - 0.5f).Clamp(0, 5) + 1;
+
+            for (int stepIndex = 0; stepIndex < framesPassed; stepIndex++)
+            {
+                dampenedValue = MathUtils.Lerp(dampenedValue, previousValue, damping);
+            }
+
+            return dampenedValue;
         }
     }
 }

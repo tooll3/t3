@@ -24,7 +24,15 @@ namespace T3.Core.Operator
         public string Name { get; set; }
         public string Namespace { get; set; }
         public string PendingSource { get; set; }
-        public string SourcePath { get; set; }
+
+        // public string SourcePath
+        // {
+        //     get
+        //     {
+        //         
+        //     }
+        // }
+
         public string DeprecatedSourcePath { get; set; }
 
         public readonly List<Instance> InstancesOfSymbol = new();
@@ -154,11 +162,11 @@ namespace T3.Core.Operator
                               .FindIndex(cc => cc == con); // todo: fix this mess! connection rework!
         }
 
-        public void SetInstanceType(Type instanceType)
+        public void UpdateInstanceType(Type instanceType)
         {
             InstanceType = instanceType;
             Name = instanceType.Name;
-            Log.Info($"new instance type name: {Name}");
+            Log.Info($"New instance type name: {Name}");
             var newInstanceSymbolChildren = new List<(SymbolChild, Instance, List<ConnectionEntry>)>();
 
             // check if inputs have changed

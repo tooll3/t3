@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace T3.Core.Animation
 {
@@ -16,5 +17,30 @@ namespace T3.Core.Animation
         ref TimeRange TimeRange { get; }
         ref TimeRange SourceRange { get; }
         int LayerIndex { get; set; }
+        
+        public bool IsClipOverlappingOthers( IEnumerable<ITimeClip> allTimeClips)
+        {
+            foreach (var otherClip in allTimeClips)
+            {
+                if (otherClip == this)
+                    continue;
+
+                if (LayerIndex != otherClip.LayerIndex)
+                    continue;
+
+
+                var start = TimeRange.Start;
+                var end = TimeRange.End;
+                var otherStart = otherClip.TimeRange.Start;
+                var otherEnd = otherClip.TimeRange.End;
+                
+                if (otherEnd <= start || otherStart >= end)
+                    continue;
+                 
+                return true;
+            }
+
+            return false;
+        }
     }
 }

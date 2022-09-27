@@ -13,9 +13,9 @@ ComputeShader_a256d70f-adb3-481d-a926-caf35bd3e64c.t3ui
 Counter.cs
 Counter_11882635-4757-4cac-a024-70bb4e8b504c.t3
 Counter_11882635-4757-4cac-a024-70bb4e8b504c.t3ui
-Dashboard.cs
-Dashboard_dab61a12-9996-401e-9aa6-328dd6292beb.t3
-Dashboard_dab61a12-9996-401e-9aa6-328dd6292beb.t3ui
+HomeCanvas.cs
+HomeCanvas_dab61a12-9996-401e-9aa6-328dd6292beb.t3
+HomeCanvas_dab61a12-9996-401e-9aa6-328dd6292beb.t3ui
 DataList.cs
 DataList_bfe540ef-f8ad-45a2-b557-cd419d9c8e44.t3
 DataList_bfe540ef-f8ad-45a2-b557-cd419d9c8e44.t3ui

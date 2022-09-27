@@ -236,5 +236,5 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         ? pow( f, Bias+1)
         : 1-pow( clamp(1-f,0,10), -Bias+1);    
 
-    return lerp(ColorA, ColorB, fBiased);
+    return lerp(ColorA, ColorB, saturate(fBiased));
 }

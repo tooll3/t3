@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Numerics;
 using Core.Audio;
@@ -31,8 +31,8 @@ namespace T3.Gui.Windows.TimeLine
             //                        contentRegionMax + windowPos, new Color(0,0,0,0.3f));
             
             var songDurationInBars = (float)(soundTrack.LengthInSeconds * soundTrack.Bpm / 240);
-            var xMin= TimeLineCanvas.Current.TransformGlobalTime((float)soundTrack.StartTime);
-            var xMax = TimeLineCanvas.Current.TransformGlobalTime(songDurationInBars + (float)soundTrack.StartTime);
+            var xMin = TimeLineCanvas.Current.TransformX((float) soundTrack.StartTime);
+            var xMax = TimeLineCanvas.Current.TransformX(songDurationInBars + (float)soundTrack.StartTime);
             
             var resourceManager = ResourceManager.Instance();
             if (resourceManager.Resources.TryGetValue(_srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)

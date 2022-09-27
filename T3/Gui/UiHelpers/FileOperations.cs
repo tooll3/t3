@@ -44,7 +44,7 @@ namespace T3.Gui.UiHelpers
                 folderBrowser.FileName = "Folder Selection.";
                 if (folderBrowser.ShowDialog() != DialogResult.OK)
                     return null;
-                
+
                 var absoluteFolderPath = System.IO.Path.GetDirectoryName(folderBrowser.FileName);
                 return ConvertToRelativeFilepath(absoluteFolderPath);
             }
@@ -55,32 +55,32 @@ namespace T3.Gui.UiHelpers
             File,
             Folder,
         }
-        
+
         public static bool DrawSoundFilePicker(FilePickerTypes type, ref string value)
         {
             ImGui.SetNextItemWidth(-70);
             var tmp = value;
             if (tmp == null)
                 tmp = string.Empty;
-            
+
             var modified = ImGui.InputText("##filepath", ref tmp, 255);
             modified |= DrawFileSelector(type, ref tmp);
             if (modified && tmp != null)
             {
                 value = tmp;
             }
+
             return modified;
         }
-        
-        
+
         public static bool DrawFileSelector(FilePickerTypes type, ref string value)
         {
             var modified = false;
             ImGui.SameLine();
             if (ImGui.Button("...", new Vector2(30, 0)))
             {
-                string newPath = type == FilePickerTypes.File 
-                                     ? FileOperations.PickResourceFilePath(value) 
+                string newPath = type == FilePickerTypes.File
+                                     ? FileOperations.PickResourceFilePath(value)
                                      : FileOperations.PickResourceDirectory();
                 if (!string.IsNullOrEmpty(newPath))
                 {
@@ -89,28 +89,32 @@ namespace T3.Gui.UiHelpers
                 }
             }
 
-            ImGui.SameLine();
-            if (ImGui.Button("Edit", new Vector2(40, 0)))
+            if (type == FilePickerTypes.File)
             {
-                if (!File.Exists(value))
+                ImGui.SameLine();
+                if (ImGui.Button("Edit", new Vector2(40, 0)))
                 {
-                    Log.Error("Can't open non-existing file " + value);
-                }
-                else
-                {
-                    try
+                    if (!File.Exists(value))
                     {
-                        Process.Start(new ProcessStartInfo(value) { UseShellExecute = true });
+                        Log.Error("Can't open non-existing file " + value);
                     }
-                    catch (Win32Exception e)
+                    else
                     {
-                        Log.Warning("Can't open editor: " + e.Message);
+                        try
+                        {
+                            Process.Start(new ProcessStartInfo(value) { UseShellExecute = true });
+                        }
+                        catch (Win32Exception e)
+                        {
+                            Log.Warning("Can't open editor: " + e.Message);
+                        }
                     }
                 }
             }
+
             return modified;
         }
-        
+
         private static string ConvertToRelativeFilepath(string absoluteFilePath)
         {
             var currentApplicationPath = Path.GetFullPath(".");
@@ -120,14 +124,11 @@ namespace T3.Gui.UiHelpers
             return relativeFilePath;
         }
 
-
-        
         private static string GetAbsoluteResourcePath()
         {
             return Path.Combine(Path.GetFullPath("."), ResourcesFolder);
         }
-        
-        
+
         private static string GetAbsoluteDirectory(string relativeFilepath)
         {
             var absolutePath = GetAbsoluteResourcePath();

@@ -24,6 +24,7 @@ cbuffer ParamConstants : register(b0)
     
     float Distort;
     float Contrast;
+    float Seed;
 }
 
 cbuffer TimeConstants : register(b1)
@@ -87,8 +88,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float ringV = mod(rings,1);
     float ringIndex = floor(rings);
     
-
-    float2 ringHash = hash21((ringIndex +1) * 124.34+ 1232); 
+    float2 ringHash = hash22(float2((ringIndex +1) * 124.34+ 1.12,  (Seed + 0.5) % 312.113)); 
 
     float segments= _Segments.x + (ringHash.x -0.5) * _Segments.y ;
 
@@ -106,8 +106,9 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float segmentIndex = floor(ringAngle2 - segmentV+0.01);
     float segmentAngle = mod(ringAngle2,1);
 
-    float seed = (segmentIndex * 1.123 + ringIndex % 12.31);
-    float4 segmentHash = hash41(seed * 9234.131 );
+    float seed = (segmentIndex * 1.123 + ringIndex % 12.31 + Seed % 712.1);
+    float4 segmentHash = hash42(float2(seed * 9234.131, (Seed + 0.5) *13.791 ));
+    
 
     float segmentThickness= saturate(_Thickness.x/2 + (segmentHash.y -0.5) * _Thickness.y);
 
@@ -124,7 +125,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     c *= segmentHash.x > _FillRatio ? 0 :1;
 
     float4 color = lerp(Background, Fill,c * brightness);
-
+    
     float highlightHash = hash11(seed + HighlightSeed);
 
     float4 colorOut= highlightHash >= _HighlightRatio ? color : Highlight * c;

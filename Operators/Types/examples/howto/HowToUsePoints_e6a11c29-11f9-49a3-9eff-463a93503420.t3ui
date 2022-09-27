@@ -1,0 +1,1254 @@
+{
+  "Id": "e6a11c29-11f9-49a3-9eff-463a93503420"/*HowToUsePoints*/,
+  "Description": "This playground gives you an introduction on how point buffers can be used to generate content and drive effects.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "270602f1-232c-46ac-bfe6-c274fe0d0762"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1532.5952,
+        "Y": 1414.1638
+      }
+    },
+    {
+      "ChildId": "4104f01d-5a29-4180-8ade-086c1771c8e4"/*DrawLines*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1955.1259,
+        "Y": 1402.8794
+      }
+    },
+    {
+      "ChildId": "4f16d478-fae0-4a57-b34b-1e0880ef9b3c"/*DrawPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1954.6155,
+        "Y": 1289.178
+      }
+    },
+    {
+      "ChildId": "61670bc6-3069-4d32-824b-32a8b69bf3a8"/*DrawRibbons*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1955.1259,
+        "Y": 1471.8792
+      }
+    },
+    {
+      "ChildId": "4c969991-3d31-4198-93fc-6fb508753477"/*DrawVaryingQuads*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1955.1259,
+        "Y": 1527.8794
+      }
+    },
+    {
+      "ChildId": "9b8cc1dc-3928-4b4d-9a69-4439eb1d6ff1"/*SelectPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1486.8296,
+        "Y": 552.5927
+      }
+    },
+    {
+      "ChildId": "6ff4defe-bf98-420a-87b9-203feb826f03"/*SnapToPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1486.8296,
+        "Y": 608.5927
+      }
+    },
+    {
+      "ChildId": "9acb8fd0-2b08-4326-87f7-610ecb875508"/*SetPointsW*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1486.8296,
+        "Y": 677.5927
+      }
+    },
+    {
+      "ChildId": "23da3257-ae52-470d-892a-e7c3106e338d"/*AddNoise*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1486.8296,
+        "Y": 496.5927
+      }
+    },
+    {
+      "ChildId": "6d4fd00b-4c06-46a0-af37-7db4cfb25e3d"/*ListToBuffer*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -2195.8901,
+        "Y": -317.47348
+      }
+    },
+    {
+      "ChildId": "663fe5da-bbab-48b7-bd16-bdf5a880b998"/*RepetitionPointsExample*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2106.526,
+        "Y": 2132.6255
+      }
+    },
+    {
+      "ChildId": "08115442-f531-42a2-a2d6-9bf3207cd039"/*APoint*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": -2393.8835,
+        "Y": -311.41382
+      }
+    },
+    {
+      "ChildId": "c906661a-46c3-4fc1-b645-fffe4817ac42"/*GridPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2463.485,
+        "Y": 490.1026
+      }
+    },
+    {
+      "ChildId": "34436d53-780d-429d-813f-dbde0fd927b9"/*RadialPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2465.2744,
+        "Y": 533.04083
+      }
+    },
+    {
+      "ChildId": "79ff1a48-aaff-43b8-ab31-2d3e57bdb710"/*LinePoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2463.485,
+        "Y": 447.1026
+      }
+    },
+    {
+      "ChildId": "4720c7c2-7b7c-4838-8a13-057c6a49bd38"/*VisualizePoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -2230.9485,
+        "Y": 442.98553
+      }
+    },
+    {
+      "ChildId": "d7c1384c-c1bc-4796-aeb5-afe285af6190"/*PickPointList*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 39.181328,
+        "Y": 232.07657
+      },
+      "Position": {
+        "X": -2313.485,
+        "Y": 447.1026
+      }
+    },
+    {
+      "ChildId": "3d327cfe-6aa3-419a-8698-ca060026d782"/*Counter*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2618.8264,
+        "Y": 690.5975
+      }
+    },
+    {
+      "ChildId": "3c57ecea-eda6-43f3-90e7-70aa0ede8397"/*FloatToInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -2476.5679,
+        "Y": 684.3851
+      }
+    },
+    {
+      "ChildId": "b51b0f00-7ee5-4c68-b879-c7f93cfc0e37"/*PointsOnSphere*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2465.2744,
+        "Y": 576.0406
+      }
+    },
+    {
+      "ChildId": "6eaefeb6-27c5-4611-9efe-c08283bb4e49"/*LoadObj*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2615.2742,
+        "Y": 619.0406
+      }
+    },
+    {
+      "ChildId": "5daffb62-a330-46a0-8707-d3d3ff800082"/*PointsOnMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -2465.2744,
+        "Y": 619.0406
+      }
+    },
+    {
+      "ChildId": "51f3ae0c-f82f-44af-8bd6-11d7bd79f9ad"/*RadialPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2632.42,
+        "Y": 1285.7588
+      }
+    },
+    {
+      "ChildId": "11de5802-3cd1-4b92-8ddc-bd99a6476198"/*AddNoise*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -2332.42,
+        "Y": 1285.7588
+      }
+    },
+    {
+      "ChildId": "a41f2ec4-419c-47d1-8c78-16e1b27fc57f"/*Time*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2482.4197,
+        "Y": 1341.7588
+      }
+    },
+    {
+      "ChildId": "32c67af9-e610-4a8c-99e9-efffedfc1e8c"/*DrawAsSplitView*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 99.27977,
+        "Y": 318.23596
+      },
+      "Position": {
+        "X": -1677.4412,
+        "Y": 1291.7332
+      }
+    },
+    {
+      "ChildId": "bf335863-f399-48e9-ae04-01d5e7d5c0a5"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2121.1362,
+        "Y": 1447.3721
+      }
+    },
+    {
+      "ChildId": "9f16cf76-5dda-4398-a829-561dd154cad3"/*DrawMeshAtPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1958.8896,
+        "Y": 1612.6733
+      }
+    },
+    {
+      "ChildId": "ccb65dc9-10ca-4a9f-9a22-809e3a4e9ba4"/*TransformPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -2482.4197,
+        "Y": 1285.7588
+      }
+    },
+    {
+      "ChildId": "c6e8c1d1-f7f6-40c8-be38-efe660f89e41"/*DrawPointsAsSpheres*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1954.6155,
+        "Y": 1345.1782
+      }
+    },
+    {
+      "ChildId": "10ed79d0-a2e4-4b70-a90d-2f50893052f1"/*Camera*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1956.4451,
+        "Y": 1775.9441
+      }
+    },
+    {
+      "ChildId": "7fce2ccb-998d-45ba-91ac-2188ed5c60c8"/*LoadObj*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2121.1362,
+        "Y": 1490.3718
+      }
+    },
+    {
+      "ChildId": "669a702a-c21d-496f-b52b-07c97c409836"/*RepeatAtGPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -2093.189,
+        "Y": 1668.8828
+      }
+    },
+    {
+      "ChildId": "8e19205f-2010-4957-bd97-4891ddeaedbd"/*CrossLinePoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2243.189,
+        "Y": 1668.8828
+      }
+    },
+    {
+      "ChildId": "0db9c579-68c3-47ae-bc5d-e616b499a966"/*DrawLines*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1958.8896,
+        "Y": 1681.6733
+      }
+    },
+    {
+      "ChildId": "5acfc765-2de4-443a-a859-a1d0998cff3c"/*CombineBuffers*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1690.477,
+        "Y": 488.81412
+      }
+    },
+    {
+      "ChildId": "05ee96b3-7862-4038-85b8-b9bd2a7e28f3"/*MixPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1690.477,
+        "Y": 544.81415
+      }
+    },
+    {
+      "ChildId": "85505229-0ab7-4d3a-a328-46b9e2c92d66"/*PairPointsForLines*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1690.477,
+        "Y": 613.81415
+      }
+    },
+    {
+      "ChildId": "893c3b6b-7a6e-4f71-9bb3-9f62afe4589f"/*GridPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1909.0826,
+        "Y": 533.48737
+      }
+    },
+    {
+      "ChildId": "acdcfedf-12c6-4073-8828-1743f69ba6d9"/*LinePoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1909.0826,
+        "Y": 490.48737
+      }
+    },
+    {
+      "ChildId": "e6e7fa6e-402e-47cf-a60c-258e1099bf66"/*MeshVerticesToPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1910.7407,
+        "Y": 729.93774
+      }
+    },
+    {
+      "ChildId": "34bd43c5-0661-4685-a28d-cd4284352f01"/*PickPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1690.477,
+        "Y": 738.81415
+      }
+    },
+    {
+      "ChildId": "ee8beb58-fa5c-400d-a3f9-9109dd5f5948"/*PointsOnMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1910.7407,
+        "Y": 673.93774
+      }
+    },
+    {
+      "ChildId": "2047e779-d502-4411-8cb8-7c3f8387d80a"/*PointTrail*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1690.477,
+        "Y": 682.81415
+      }
+    },
+    {
+      "ChildId": "0a6ae130-7bd0-4bf2-8a26-fd6c6c0a802e"/*RadialPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1909.0826,
+        "Y": 576.48737
+      }
+    },
+    {
+      "ChildId": "06142067-94fa-4ea9-a226-9ef218e28702"/*RepeatAtGPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1690.477,
+        "Y": 794.81415
+      }
+    },
+    {
+      "ChildId": "d22e8d40-723a-4db9-8b99-11e9a2334d54"/*SubdivideLinePoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1915.1292,
+        "Y": 922.8876
+      }
+    },
+    {
+      "ChildId": "2cd8ae17-7c30-489b-a29d-99bdec29f170"/*SamplePoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1915.1292,
+        "Y": 866.8877
+      }
+    },
+    {
+      "ChildId": "ccd97973-3380-4357-b811-c5845f774243"/*DisplacePoints2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1486.8296,
+        "Y": 877.7954
+      }
+    },
+    {
+      "ChildId": "d33b2f20-23d5-40d3-be00-8f370050da3a"/*SamplePointAttributes*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1486.8296,
+        "Y": 733.5927
+      }
+    },
+    {
+      "ChildId": "e7fce6a5-182f-4068-9527-0b9cead68c91"/*VisualizePoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1813.628,
+        "Y": -279.98456
+      }
+    },
+    {
+      "ChildId": "e33a459b-8f08-4919-9c13-6e1b430dc0b1"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2584.8318,
+        "Y": -82.50781
+      }
+    },
+    {
+      "ChildId": "b0e5e966-5a93-4316-8712-522de1df5b48"/*OscillateVec3*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2587.2202,
+        "Y": -335.56934
+      }
+    },
+    {
+      "ChildId": "061194a0-51d0-4e77-9054-63293a8923cf"/*RepeatAtGPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -2004.0645,
+        "Y": -140.97162
+      }
+    },
+    {
+      "ChildId": "b8e5e7ca-a1cb-4e65-b39b-32801aa99d8a"/*RadialPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2154.0645,
+        "Y": -140.97162
+      }
+    },
+    {
+      "ChildId": "a71b9967-c984-4ef7-904b-eae794731712"/*PerlinNoise3*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -2585.2148,
+        "Y": -226.22643
+      }
+    },
+    {
+      "ChildId": "a88cabd8-8f70-4c98-bf0d-bdbb1307116d"/*DrawPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1854.0645,
+        "Y": -140.97162
+      }
+    },
+    {
+      "ChildId": "b97e6257-8436-4194-986e-3d149c5a26ab"/*RepeatAtGPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1830.1141,
+        "Y": 1.2333984
+      }
+    },
+    {
+      "ChildId": "7c5ae41c-94d2-44d3-9b6c-d703e386a75f"/*RadialPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2010.5999,
+        "Y": 8.339172
+      }
+    },
+    {
+      "ChildId": "fd5f73fa-1cff-4bb8-a13f-495b05056b58"/*DrawLines*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1680.1141,
+        "Y": 1.2333984
+      }
+    },
+    {
+      "ChildId": "166cf7e1-3cb5-4013-a328-96d8317e40f6"/*PointAttributeFromNoise*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1846.256,
+        "Y": 184.34985
+      }
+    },
+    {
+      "ChildId": "3e6a5b7c-1487-4e46-b159-3e9d9e19ce34"/*DrawMeshAtPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1696.2559,
+        "Y": 184.34985
+      }
+    },
+    {
+      "ChildId": "a079079e-7c16-45ee-bd92-4b610ebce692"/*CubeMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1846.256,
+        "Y": 227.34985
+      }
+    },
+    {
+      "ChildId": "2a9af866-b3b9-4728-8e4d-e25cd6a89e0a"/*Select me*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 88.0
+      },
+      "Position": {
+        "X": -1331.8721,
+        "Y": -157.31097
+      }
+    },
+    {
+      "ChildId": "89d6eda5-72db-47b3-a3e6-1c9041b50d5b"/*DisplacePoints2dExample*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1656.5258,
+        "Y": 2132.6255
+      }
+    },
+    {
+      "ChildId": "03638616-65e6-4eab-bd84-7918122cb4fb"/*DrawBillboardsExample*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2406.526,
+        "Y": 2132.6255
+      }
+    },
+    {
+      "ChildId": "c4274c55-d725-4624-9017-98ee761d8e7a"/*SelectPointsExample*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2556.526,
+        "Y": 2132.6255
+      }
+    },
+    {
+      "ChildId": "05178e56-7460-46e0-8f1e-8282c1eacd20"/*SamplePointAttributesExample2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1806.5258,
+        "Y": 2132.6255
+      }
+    },
+    {
+      "ChildId": "9841cf8b-b316-484e-9bc1-06150fd99ddc"/*SimulateBoidsExample*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1506.5258,
+        "Y": 2132.6255
+      }
+    },
+    {
+      "ChildId": "39d62d2e-b4fd-42dc-8862-2f2e87914dfa"/*TransformPointsExample*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2256.526,
+        "Y": 2132.6255
+      }
+    },
+    {
+      "ChildId": "0efa48b2-9177-497c-a7df-5ec4b5805953"/*TraceContourLinesExample*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1956.5258,
+        "Y": 2132.6255
+      }
+    },
+    {
+      "ChildId": "68d90f3f-e501-439f-bb24-7afbfbab5cd1"/*RandomizePoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1486.8296,
+        "Y": 946.7954
+      }
+    },
+    {
+      "ChildId": "e89a7b38-458c-4121-8986-0993d30ea994"/*PointAttributeFromNoise*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1486.8296,
+        "Y": 802.5927
+      }
+    },
+    {
+      "ChildId": "5bdc3357-ff13-4c98-9573-d78efd836003"/*CollectSpawnPointsExample*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1356.5258,
+        "Y": 2132.6255
+      }
+    },
+    {
+      "ChildId": "f4a31981-0614-45e4-bf60-741113b6930a"/*PointSimulation*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1240.4968,
+        "Y": 442.74902
+      }
+    },
+    {
+      "ChildId": "1f1cdde6-5dc3-4361-bfe3-617ee6c5e516"/*SimBlendTo*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1090.4968,
+        "Y": 442.74902
+      }
+    },
+    {
+      "ChildId": "44aae274-34c6-41cb-a39d-25d7c9291182"/*SimFollowMeshSurface*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1090.4968,
+        "Y": 511.74908
+      }
+    },
+    {
+      "ChildId": "76adcfbd-7eda-4696-8b6a-299c4d9ea910"/*SimForwardMovement*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1090.4968,
+        "Y": 580.749
+      }
+    },
+    {
+      "ChildId": "2f9a6aa2-4849-4472-903c-caca89226786"/*SimNoise*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1090.4968,
+        "Y": 636.749
+      }
+    },
+    {
+      "ChildId": "2a490687-d347-48b4-bda4-971f4d3be8af"/*CollectSpawnPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1240.4968,
+        "Y": 511.74908
+      }
+    },
+    {
+      "ChildId": "284050bf-5e51-4005-9ec1-069809d87d8a"/*ApplyRandomWalk*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1090.4968,
+        "Y": 692.749
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "e4d2b739-0a14-4e52-a275-256b78b12b0f"/*Output2*/,
+      "Position": {
+        "X": -1325.8488,
+        "Y": 1407.1191
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "24d6d4c9-86ae-4b27-89e4-4cd940448048",
+      "Title": "There are many ways to generate point buffers.\nHere is a short selection.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2675.8794,
+        "Y": 357.14606
+      },
+      "Size": {
+        "X": 694.0072,
+        "Y": 739.6359
+      }
+    },
+    {
+      "Id": "3c2452bb-9e0b-4eaa-b8f6-0b76783689c6",
+      "Title": "Points can be drawn in many different styles:",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2666.054,
+        "Y": 1225.7714
+      },
+      "Size": {
+        "X": 1569.1357,
+        "Y": 619.2972
+      }
+    },
+    {
+      "Id": "aa763b0b-105c-4484-a194-645027866b03",
+      "Title": "Combining and blending",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1723.3369,
+        "Y": 442.56158
+      },
+      "Size": {
+        "X": 200.12738,
+        "Y": 614.0068
+      }
+    },
+    {
+      "Id": "dc990361-035c-42c0-a86b-8f8b335772c7",
+      "Title": "A point is a small structure that combines flexibility \nwith a small data size for great rendering performance.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2669.8071,
+        "Y": -474.34076
+      },
+      "Size": {
+        "X": 1728.8485,
+        "Y": 779.6546
+      }
+    },
+    {
+      "Id": "3bb26659-1068-451b-9d15-cfdb43f6ee21",
+      "Title": "Here is a Point. It has...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2657.7798,
+        "Y": -384.99622
+      },
+      "Size": {
+        "X": 422.8791,
+        "Y": 353.217
+      }
+    },
+    {
+      "Id": "039a4b9b-2cb2-43b3-8c99-91a22807d920",
+      "Title": "A position XYZ:",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2645.5051,
+        "Y": -353.36603
+      },
+      "Size": {
+        "X": 214.15538,
+        "Y": 50.974754
+      }
+    },
+    {
+      "Id": "556dbc5f-4348-4a33-b5b0-e03b8dbefd83",
+      "Title": "An orientation:\nIt has 4 components because\nwe use quaternions for better\ninterpolation",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2646.3806,
+        "Y": -299.06064
+      },
+      "Size": {
+        "X": 214.39908,
+        "Y": 119.50568
+      }
+    },
+    {
+      "Id": "84e31cee-df94-4f80-8fa6-d6f8d8f81b33",
+      "Title": "And a W-Attribute:\nWhich is used for various effects like...\n- selection\n- representing line width\n- scale factores\n- particle age.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2646.4822,
+        "Y": -175.73566
+      },
+      "Size": {
+        "X": 214.75826,
+        "Y": 138.68735
+      }
+    },
+    {
+      "Id": "efa93f6a-e19d-426f-8e51-80d7aa2ef28f",
+      "Title": "We use this operator to \nupload the buffer to the GPU.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2213.2192,
+        "Y": -384.17752
+      },
+      "Size": {
+        "X": 265.8644,
+        "Y": 174.81816
+      }
+    },
+    {
+      "Id": "dfa7dd0a-a43a-4fa2-b03f-e26be1dcf4a6",
+      "Title": "We can use this point's position to draw more points...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2214.0645,
+        "Y": -200.97162
+      },
+      "Size": {
+        "X": 693.813,
+        "Y": 134.46597
+      }
+    },
+    {
+      "Id": "f90ff88b-5619-4340-812f-21bc753440db",
+      "Title": "...and these positions to draw even more line points at these positions.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2070.5999,
+        "Y": -58.7666
+      },
+      "Size": {
+        "X": 550.5377,
+        "Y": 132.76059
+      }
+    },
+    {
+      "Id": "c682fefc-fbdc-482e-a662-374d73bbab0b",
+      "Title": "...or create another modified copy\nand draw mesh instances there...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2068.8945,
+        "Y": 81.07495
+      },
+      "Size": {
+        "X": 549.6853,
+        "Y": 186.0
+      }
+    },
+    {
+      "Id": "422cfb03-b733-4c2f-9bbf-0a3d0453cb1e",
+      "Title": "This helper operator visualizes points\nand their orientation.  This one is \npermanently visible. But you can toggle\nthe default for these gizmos with the \noutput window \"Gizmo\" toggle.\n",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1878.7441,
+        "Y": -402.40167
+      },
+      "Size": {
+        "X": 358.92697,
+        "Y": 193.85951
+      }
+    },
+    {
+      "Id": "2c36f688-8733-41c5-b0f4-938ba39cb359",
+      "Title": "Modifying",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1514.4272,
+        "Y": 442.56158
+      },
+      "Size": {
+        "X": 189.4774,
+        "Y": 615.7693
+      }
+    },
+    {
+      "Id": "75f4dc3b-3942-4ebc-937a-cb57ff662c6a",
+      "Title": "Generating Points",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1934.975,
+        "Y": 442.4251
+      },
+      "Size": {
+        "X": 192.30157,
+        "Y": 365.06592
+      }
+    },
+    {
+      "Id": "812b2f92-a03e-4fbc-9550-bea6a9634fdc",
+      "Title": "Refine points",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1934.2,
+        "Y": 816.26733
+      },
+      "Size": {
+        "X": 195.26692,
+        "Y": 166.54079
+      }
+    },
+    {
+      "Id": "e80e0d59-a953-4658-85f3-9cf519280745",
+      "Title": "Most operators will create NEW buffers with manipulated, combined or filtered points.\nThis allows you to create reproducible  and controllable effects.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1954.7706,
+        "Y": 357.84497
+      },
+      "Size": {
+        "X": 643.0631,
+        "Y": 734.2421
+      }
+    },
+    {
+      "Id": "2b385ae1-10e6-4178-b8ac-cba37ac4f4f2",
+      "Title": "The following operators DIRECTLY MODIFY buffers,\nlike you would expect from a particle simulation.\n",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1299.0233,
+        "Y": 356.22687
+      },
+      "Size": {
+        "X": 473.11365,
+        "Y": 390.54013
+      }
+    },
+    {
+      "Id": "0731a2ec-bb3c-4986-bf68-a4de4859a35f",
+      "Title": "Here are some more examples for how to use points.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2644.5498,
+        "Y": 1988.2922
+      },
+      "Size": {
+        "X": 1543.457,
+        "Y": 216.67253
+      }
+    }
+  ]
+}

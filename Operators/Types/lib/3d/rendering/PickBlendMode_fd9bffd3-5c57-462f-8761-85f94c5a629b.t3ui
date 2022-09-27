@@ -1,0 +1,200 @@
+{
+  "Id": "fd9bffd3-5c57-462f-8761-85f94c5a629b"/*PickBlendMode*/,
+  "Description": "Provides a opinionat set of hareware blendstates.\n\nGraphics card (output merger) blend modes are kind of hard to get right. Feel free to suggest additional modes.",
+  "InputUis": [
+    {
+      "InputId": "30b58444-0485-4116-8b15-7e62fee69eaa"/*BlendMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "ecff38e1-c7ec-40cb-8511-b16b4fa4d647"/*BlendStateOp*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 438.50763,
+        "Y": -379.69525
+      }
+    },
+    {
+      "ChildId": "5a39b008-9b76-4d36-97b2-e574de70d7f6"/*Normal*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 288.50763,
+        "Y": -379.69525
+      }
+    },
+    {
+      "ChildId": "4c6a33d8-7050-41e5-8a5d-75e9f3a3b526"/*BlendStateOp*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 438.50763,
+        "Y": -290.69507
+      }
+    },
+    {
+      "ChildId": "1ecbb18d-0ba2-4ff0-9252-66f53bf80a15"/*Add*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 288.50763,
+        "Y": -290.69507
+      }
+    },
+    {
+      "ChildId": "465c3595-dd0d-4ff4-b40d-b28c3c57ed68"/*Multiply*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 266.4923,
+        "Y": -214.00044
+      }
+    },
+    {
+      "ChildId": "e8c1d16a-fd0e-41ce-99e7-e8bc3b69868b"/*BlendStateOp*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 438.50763,
+        "Y": -201.69514
+      }
+    },
+    {
+      "ChildId": "1d52da61-f32b-46d9-afc1-c2922799feab"/*Invert*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 288.50763,
+        "Y": -112.69519
+      }
+    },
+    {
+      "ChildId": "fcc42cee-1340-4250-989c-23b8dd343d6a"/*BlendStateOp*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 438.50763,
+        "Y": -112.69519
+      }
+    },
+    {
+      "ChildId": "41bc4763-eaa4-4e1c-9212-ebe0ee7679eb"/*SwitchBlendState*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 114.0
+      },
+      "Position": {
+        "X": 746.29297,
+        "Y": -139.58556
+      }
+    },
+    {
+      "ChildId": "a643b0f4-a848-4def-8ca6-e24a5693be39"/*RenderTargetBlendDesc*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 129.77487,
+        "Y": -176.32721
+      }
+    },
+    {
+      "ChildId": "8c761bd0-4702-4c35-a4c7-6e2fb0cc5853"/*RenderTargetBlendDesc*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 132.58417,
+        "Y": -284.51508
+      }
+    },
+    {
+      "ChildId": "bff74c44-a870-4e61-807b-556bb8ad3752"/*RenderTargetBlendDesc*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 278.0166,
+        "Y": 172.46326
+      }
+    },
+    {
+      "ChildId": "674b7d97-7baf-4388-9805-264eee280cbb"/*BlendStateOp*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 428.0166,
+        "Y": 172.46326
+      }
+    },
+    {
+      "ChildId": "e0469c72-d6ba-48a9-8380-f7896ed260f4"/*RenderTargetBlendDesc*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 59.289444,
+        "Y": -133.7929
+      }
+    },
+    {
+      "ChildId": "53e0ef4c-c046-41a0-baa4-d891d476a0e6"/*No Blend*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 287.2684,
+        "Y": -21.33612
+      }
+    },
+    {
+      "ChildId": "2a58b3a9-d63a-4087-8f99-4e8283b1a07e"/*BlendStateOp*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 437.2684,
+        "Y": -21.33612
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "a42dd1c5-886c-4fa9-bf69-8b6321a48930"/*Result2*/,
+      "Position": {
+        "X": 1252.6006,
+        "Y": 76.97545
+      }
+    }
+  ]
+}

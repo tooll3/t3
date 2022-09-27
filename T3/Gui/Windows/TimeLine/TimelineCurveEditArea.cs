@@ -1,4 +1,4 @@
-﻿using ImGuiNET;
+using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -211,7 +211,8 @@ namespace T3.Gui.Windows.TimeLine
             {
                 var sampledValue = (float)curve.GetSampledValue(hoverTime);
                 var posOnCanvas = new Vector2(hoverTime, sampledValue);
-                var posOnScreen = TimeLineCanvas.TransformPosition(posOnCanvas) - new Vector2(KeyframeIconWidth / 2 + 1, KeyframeIconWidth / 2 + 1);
+                var posOnScreen = TimeLineCanvas.TransformPosition(posOnCanvas)
+                                - new Vector2(KeyframeIconWidth / 2 + 1, KeyframeIconWidth / 2 + 1);
                 Icons.Draw(Icon.CurveKeyframe, posOnScreen);
             }
 
@@ -268,7 +269,6 @@ namespace T3.Gui.Windows.TimeLine
             if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 0f))
                 return;
 
-
             if (ImGui.GetIO().KeyCtrl && _changeKeyframesCommand == null)
             {
                 if (isSelected)
@@ -306,7 +306,7 @@ namespace T3.Gui.Windows.TimeLine
                 }
             }
             
-            var newDragPosition = TimeLineCanvas.Current.InverseTransformPosition(ImGui.GetIO().MousePos);
+            var newDragPosition = TimeLineCanvas.Current.InverseTransformPositionFloat(ImGui.GetIO().MousePos);
 
             var allowHorizontal = CurveInputEditing.MoveDirection == CurveInputEditing.MoveDirections.Both
                                    || CurveInputEditing.MoveDirection == CurveInputEditing.MoveDirections.Horizontal
@@ -316,17 +316,18 @@ namespace T3.Gui.Windows.TimeLine
                                   || CurveInputEditing.MoveDirection == CurveInputEditing.MoveDirections.Vertical
                                   || (ImGui.GetIO().KeyCtrl);
             
+            var enableSnapping = ImGui.GetIO().KeyShift;
             double u = allowHorizontal ? newDragPosition.X : vDef.U;
             if (allowHorizontal)
             {
-                if(!ImGui.GetIO().KeyShift)
+                if(enableSnapping)
                     SnapHandlerU.CheckForSnapping(ref u, TimeLineCanvas.Scale.X);
             }
             
             double v = allowVertical ?  newDragPosition.Y : vDef.Value;
             if (allowVertical)
             {
-                if(!ImGui.GetIO().KeyShift)
+                if(enableSnapping)
                     SnapHandlerV.CheckForSnapping(ref v, TimeLineCanvas.Scale.Y);
             } 
             
@@ -420,7 +421,7 @@ namespace T3.Gui.Windows.TimeLine
         #region  implement snapping -------------------------
         SnapResult IValueSnapAttractor.CheckForSnap(double targetTime, float canvasScale)
         {
-            _snapThresholdOnCanvas = SnapDistance / canvasScale;;
+            _snapThresholdOnCanvas = SnapDistance / canvasScale;
             var maxForce = 0.0;
             var bestSnapTime = Double.NaN;
 
@@ -462,7 +463,7 @@ namespace T3.Gui.Windows.TimeLine
             var width = ImGui.GetWindowWidth();
 
             double dU = canvas.InverseTransformDirection(new Vector2(step, 0)).X;
-            double u = canvas.InverseTransformPosition(canvas.WindowPos).X;
+            double u = canvas.InverseTransformPositionFloat(canvas.WindowPos).X;
             var x = canvas.WindowPos.X;
 
             var steps = (int)(width / step);

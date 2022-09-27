@@ -49,16 +49,16 @@ namespace T3.App
         private const int VK_ALT = 0x12;
         #endregion
 
-        
-        
         protected override void WndProc(ref System.Windows.Forms.Message m)
         {
             var filterAltKeyToPreventFocusLoss = (m.Msg == WM_SYSKEYDOWN || m.Msg == WM_SYSKEYUP) && (int)m.WParam == VK_ALT;
             if (!filterAltKeyToPreventFocusLoss)
                 base.WndProc(ref m);
-            
+
             Program.SpaceMouse?.ProcessMessage(m);
-            
+
+            var isViewer = this == Program.Viewer.Form;
+
             ImGuiIOPtr io = ImGui.GetIO();
             switch (m.Msg)
             {
@@ -69,6 +69,9 @@ namespace T3.App
                 case WM_MBUTTONDOWN:
                 case WM_MBUTTONDBLCLK:
                 {
+                    if (isViewer)
+                         return;
+
                     int button = 0;
                     if (m.Msg == WM_LBUTTONDOWN || m.Msg == WM_LBUTTONDBLCLK) button = 0;
                     if (m.Msg == WM_RBUTTONDOWN || m.Msg == WM_RBUTTONDBLCLK) button = 1;
@@ -162,7 +165,7 @@ namespace T3.App
             }
         }
 
-        private  bool UpdateMouseCursor()
+        private bool UpdateMouseCursor()
         {
             ImGuiIOPtr io = ImGui.GetIO();
             if (((uint)io.ConfigFlags & (uint)ImGuiConfigFlags.NoMouseCursorChange) > 0)
@@ -176,9 +179,8 @@ namespace T3.App
                 return true;
             }
 
-
             Cursor newCursor = null;
-            
+
             // Show OS mouse cursor
             switch (imgui_cursor)
             {
@@ -207,11 +209,11 @@ namespace T3.App
                     newCursor = Cursors.Hand;
                     break;
             }
-            
+
             if (Cursor.Current != newCursor)
             {
                 Cursor = newCursor;
-            } 
+            }
 
             return true;
         }

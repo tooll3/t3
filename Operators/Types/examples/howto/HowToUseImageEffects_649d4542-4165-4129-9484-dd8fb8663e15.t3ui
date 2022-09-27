@@ -1,0 +1,875 @@
+{
+  "Id": "649d4542-4165-4129-9484-dd8fb8663e15"/*HowToUseImageEffects*/,
+  "Description": "This is playground that gives an overview about Tooll's main image effects operators.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "24986579-f249-48fc-ab7b-a48f44c977df"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -793.96643,
+        "Y": 78.25729
+      }
+    },
+    {
+      "ChildId": "56160207-977c-4165-8b29-7fed4497d70f"/*Raster*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": -484.1703,
+        "Y": -191.20844
+      }
+    },
+    {
+      "ChildId": "cba28168-419c-4024-964e-02000cec480f"/*DetectEdges*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -485.01575,
+        "Y": -53.355743
+      }
+    },
+    {
+      "ChildId": "3c581874-d61d-46aa-bd7a-c85503d66283"/*AsciiRender*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -487.41382,
+        "Y": 54.964844
+      }
+    },
+    {
+      "ChildId": "7d6cad4b-ad65-4d2b-ac2f-44f5165936f5"/*EdgeRepeat*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -489.61926,
+        "Y": 425.66394
+      }
+    },
+    {
+      "ChildId": "678dd2b5-25bb-42d7-8a29-b9da21e943a5"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -793.96643,
+        "Y": 121.25729
+      }
+    },
+    {
+      "ChildId": "edf1c3d0-01ae-4fe1-ba26-14dfc963b68d"/*KochKaleidoskope*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -489.78333,
+        "Y": 550.7095
+      }
+    },
+    {
+      "ChildId": "a32547d9-1bbd-4b77-8f2c-2b0315640c01"/*MirrorRepeat*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -492.6624,
+        "Y": 677.3969
+      }
+    },
+    {
+      "ChildId": "ef6aca02-7dd1-4eaa-be1e-419236d1cf34"/*PickTexture*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 166.0
+      },
+      "Position": {
+        "X": 256.91443,
+        "Y": -206.18582
+      }
+    },
+    {
+      "ChildId": "7740580a-6af3-486b-8885-f7cf5f8db401"/*Counter*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -76.00525,
+        "Y": -127.86978
+      }
+    },
+    {
+      "ChildId": "50402b67-ea93-4784-bca9-8f11127f1632"/*FloatToInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 73.99475,
+        "Y": -127.86978
+      }
+    },
+    {
+      "ChildId": "7d471c04-6981-4754-bf77-516ee976e233"/*Displace*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -435.11987,
+        "Y": 1764.3967
+      }
+    },
+    {
+      "ChildId": "d0c165cc-6bbc-4d1b-a68d-555ffa7f91c9"/*DistortAndShade*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 116.548096,
+        "Y": 1755.441
+      }
+    },
+    {
+      "ChildId": "293cb7d1-08f5-4437-aa94-502ddde4eb60"/*Blend*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 782.6072,
+        "Y": 1412.4475
+      }
+    },
+    {
+      "ChildId": "c17b5d0d-69cb-4d2e-8a25-7223b63ab61e"/*BlendWithMask*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 970.9174,
+        "Y": 1887.9846
+      }
+    },
+    {
+      "ChildId": "b25770bf-184b-4434-be62-3326146ce95c"/*BubbleZoom*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -491.9426,
+        "Y": 804.0843
+      }
+    },
+    {
+      "ChildId": "f9664b47-b295-4c2e-87d7-b3212d073799"/*ChromaticDistortion*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -492.4898,
+        "Y": 927.4031
+      }
+    },
+    {
+      "ChildId": "9ff355e1-f077-4ba0-ad2e-d365912197bf"/*FakeLight*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 120.13037,
+        "Y": 1411.5441
+      }
+    },
+    {
+      "ChildId": "668d6a32-5f84-4fb9-a5f5-82b65f2682f3"/*GlitchDisplace*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1603.6519,
+        "Y": 1603.7269
+      }
+    },
+    {
+      "ChildId": "dc62ad42-2aa6-4b7d-af87-f41068544c52"/*SortPixelGlitch*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1600.4597,
+        "Y": 1409.1532
+      }
+    },
+    {
+      "ChildId": "45f48cde-daf3-4657-894e-90c58c12031a"/*Steps*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -488.85345,
+        "Y": 178.05316
+      }
+    },
+    {
+      "ChildId": "5cdc3815-8326-47b5-868f-72f2ddec00ef"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -747.04724,
+        "Y": 1436.7756
+      }
+    },
+    {
+      "ChildId": "e43c6694-7a42-48c3-b533-1443f9a2a263"/*DirectionalBlur*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": -578.4103,
+        "Y": 1434.8289
+      }
+    },
+    {
+      "ChildId": "f1adb0e6-6d6c-4f1d-b479-8b9087b18939"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -747.04724,
+        "Y": 1479.7754
+      }
+    },
+    {
+      "ChildId": "efd9e808-8f31-467e-8977-a0b08c59a23e"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -612.3684,
+        "Y": 1775.7988
+      }
+    },
+    {
+      "ChildId": "d5c0027d-2a90-4539-a0e5-bbbfcb9f468a"/*FractalNoise*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -616.5144,
+        "Y": 1894.6548
+      }
+    },
+    {
+      "ChildId": "da1518d7-a525-46fb-bb96-418a50fec6c7"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -766.5144,
+        "Y": 1894.6548
+      }
+    },
+    {
+      "ChildId": "5a8a018b-21fd-432a-a945-ca51368ff454"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -33.451904,
+        "Y": 1755.441
+      }
+    },
+    {
+      "ChildId": "c0bcb1c6-91e4-4b60-bb09-d26ee0be360f"/*LinearGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -26.74231,
+        "Y": 1864.7
+      }
+    },
+    {
+      "ChildId": "887e3416-71f3-469e-87de-5ee14eeb0691"/*OscillateVec2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -796.2522,
+        "Y": -33.696136
+      }
+    },
+    {
+      "ChildId": "14296236-7e27-4042-b7a1-79d753d96db9"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -176.74243,
+        "Y": 1864.7
+      }
+    },
+    {
+      "ChildId": "b3b270aa-d2a8-493c-ab8d-9509ebbf9238"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -29.869629,
+        "Y": 1411.5441
+      }
+    },
+    {
+      "ChildId": "9f37d3d3-ae06-42c4-98b8-9a89244ead5a"/*Blob*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -29.869629,
+        "Y": 1564.5431
+      }
+    },
+    {
+      "ChildId": "780c9435-f59f-4247-9201-37b152fcee3b"/*OscillateVec2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -179.86963,
+        "Y": 1564.5431
+      }
+    },
+    {
+      "ChildId": "6ce44056-bf52-46a6-833d-59e69e7d50b3"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 604.32324,
+        "Y": 1421.7762
+      }
+    },
+    {
+      "ChildId": "2afd07a3-4a23-4900-92ff-96185ac2e52e"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 604.32324,
+        "Y": 1574.7762
+      }
+    },
+    {
+      "ChildId": "d9ecd28e-d8d7-4adb-8ee1-d2c8c8ea1313"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 454.32327,
+        "Y": 1617.7762
+      }
+    },
+    {
+      "ChildId": "990c72bf-1eac-47ca-aa79-e4d233491c80"/*SampleGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 604.32324,
+        "Y": 1617.7762
+      }
+    },
+    {
+      "ChildId": "8e5148ef-7d15-4b98-acd2-9860cedc6d15"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 807.30164,
+        "Y": 1583.4005
+      }
+    },
+    {
+      "ChildId": "c15501c2-1756-44f3-a47a-3929fbe5d591"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 957.30164,
+        "Y": 1583.4005
+      }
+    },
+    {
+      "ChildId": "34135c50-1c3a-4999-9653-1cb04bb1b567"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 807.30164,
+        "Y": 1639.4005
+      }
+    },
+    {
+      "ChildId": "cffbb39b-8be7-4ccd-a37b-4cd5814fb6c9"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1107.3014,
+        "Y": 1583.4005
+      }
+    },
+    {
+      "ChildId": "582bdcd1-f69d-428c-8f59-579553ff633d"/*OscillateVec2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -727.6654,
+        "Y": 679.23584
+      }
+    },
+    {
+      "ChildId": "f90f131d-143a-464c-8690-daa8539cb74f"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -793.96643,
+        "Y": 164.2573
+      }
+    },
+    {
+      "ChildId": "f48e49cc-bda9-43b8-baa6-fc1a713ded65"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1450.4597,
+        "Y": 1409.1532
+      }
+    },
+    {
+      "ChildId": "7d77d004-92e5-4f7f-81e3-f276b3662600"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1450.4597,
+        "Y": 1452.1532
+      }
+    },
+    {
+      "ChildId": "fded24d6-fd46-4d1b-90bd-16e035752a8f"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1453.6517,
+        "Y": 1603.7269
+      }
+    },
+    {
+      "ChildId": "9c3c7271-27fc-4add-b1c4-753791f75e7e"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 820.9174,
+        "Y": 1887.9846
+      }
+    },
+    {
+      "ChildId": "bd644acc-63c2-4e3e-9b4c-a8f651f94a93"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 820.9174,
+        "Y": 2040.9851
+      }
+    },
+    {
+      "ChildId": "f506c6d3-4095-4acf-82dd-d847515f6f1c"/*LinearGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 822.2536,
+        "Y": 2151.2808
+      }
+    },
+    {
+      "ChildId": "2777e6c3-c78c-42c4-9b7e-d2a9bd562ac7"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 672.2536,
+        "Y": 2151.2808
+      }
+    },
+    {
+      "ChildId": "c8c2360c-73df-483e-bee1-4fe2a04da53c"/*BlurWithMask*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -423.9602,
+        "Y": 2046.3953
+      }
+    },
+    {
+      "ChildId": "2438bf57-200c-447a-9982-f8e56ce2d068"/*LoadTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -573.9602,
+        "Y": 2046.3953
+      }
+    },
+    {
+      "ChildId": "16a393bc-102b-4285-863d-b4f0ca740f87"/*LinearGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -573.9602,
+        "Y": 2199.3953
+      }
+    },
+    {
+      "ChildId": "5bcd74ed-838d-4724-88c5-db78fb002e12"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -723.9602,
+        "Y": 2199.3953
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "30c39c3d-96cd-40ed-ae05-8b2a3eb6f177"/*Texture*/,
+      "Position": {
+        "X": 888.86224,
+        "Y": -209.2998
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "d05d3d5d-240b-4de8-a970-e881f43d4c02",
+      "Title": "There are effects that use the incoming \nimage to generate patterns or shapes.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -509.0327,
+        "Y": -307.52258
+      },
+      "Size": {
+        "X": 318.33148,
+        "Y": 599.18994
+      }
+    },
+    {
+      "Id": "c57262d3-9928-48c2-ab08-eba3a204fcde",
+      "Title": "Here are examples of effects that\ntransform or distort an image buffer.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -509.0327,
+        "Y": 305.9394
+      },
+      "Size": {
+        "X": 317.46347,
+        "Y": 684.47864
+      }
+    },
+    {
+      "Id": "a35b622a-4f5c-4ee1-bf67-0c29c446415a",
+      "Title": "This operator picks one of the incoming effects.\n\nYour can toggle the grid icon in the \nTime Controls to pause this.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -132.89563,
+        "Y": -304.53763
+      },
+      "Size": {
+        "X": 532.47034,
+        "Y": 288.19614
+      }
+    },
+    {
+      "Id": "cc4c290c-294b-4d1d-bdcd-c58be4ad88d6",
+      "Title": "Here are some basic image effects.\nAlso note, that most operators\nhave presets you can explore.\n\nTIPP: Hold the ALT-Key while\nhovering over presets.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -850.7163,
+        "Y": -355.17676
+      },
+      "Size": {
+        "X": 1469.0864,
+        "Y": 1476.9762
+      }
+    },
+    {
+      "Id": "374f4922-c82a-416b-86ec-7c52b7321fc4",
+      "Title": "Many effects use a second input\nas mask or effect input. Here are\nsome examples.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -853.8114,
+        "Y": 1204.7399
+      },
+      "Size": {
+        "X": 1159.8102,
+        "Y": 1061.5957
+      }
+    },
+    {
+      "Id": "341cd5a9-322a-46b4-bfa9-864e6aad8dd4",
+      "Title": "Blend is the go-to operator to\ncombine image buffers. ",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 425.07257,
+        "Y": 1269.6843
+      },
+      "Size": {
+        "X": 833.9123,
+        "Y": 447.7344
+      }
+    },
+    {
+      "Id": "5e8bd960-7a80-4d3b-9d1b-3ee52183a8fd",
+      "Title": "However you should consider using [Layer2d]\nfor better rendering performance.\n",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 793.65015,
+        "Y": 1495.1372
+      },
+      "Size": {
+        "X": 448.5168,
+        "Y": 205.56488
+      }
+    },
+    {
+      "Id": "50b5afd1-0769-411f-b2e0-5bc37a2e664c",
+      "Title": "This is nice example of \nthe kind of effects that\ncan be achieved with compute\nshaders. ",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 1380.0115,
+        "Y": 1207.3553
+      },
+      "Size": {
+        "X": 449.49582,
+        "Y": 686.73987
+      }
+    },
+    {
+      "Id": "6d0076de-13c0-4688-982d-c3cb67fe35de",
+      "Title": "[BlendWithMask] uses a mask image to control the blending.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 423.49408,
+        "Y": 1735.7686
+      },
+      "Size": {
+        "X": 832.5994,
+        "Y": 511.5363
+      }
+    },
+    {
+      "Id": "eecc7921-23d8-4aa9-8e16-6d35fb2a816e",
+      "Title": "You don't need an effects layer for [DirectionalBlur] .\nBut it really results in some very interesting visuals.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -809.7123,
+        "Y": 1293.0194
+      },
+      "Size": {
+        "X": 548.9582,
+        "Y": 305.63626
+      }
+    },
+    {
+      "Id": "ab3b2edb-7215-4bed-bfb8-cea5b6f5969e",
+      "Title": "[Displace] uses the gradient of effect\nimages to distort images.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -813.40344,
+        "Y": 1639.7155
+      },
+      "Size": {
+        "X": 562.1143,
+        "Y": 310.01205
+      }
+    },
+    {
+      "Id": "7cf03de1-1d93-43f8-a91f-0d303e8fc2de",
+      "Title": "Fake Light produces something like an emboss effect.\n",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -251.25378,
+        "Y": 1289.8778
+      },
+      "Size": {
+        "X": 530.0,
+        "Y": 309.0
+      }
+    },
+    {
+      "Id": "e7d3314e-404f-47ba-96eb-ac6a1624f8cf",
+      "Title": "This is another displacement variation.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -241.50134,
+        "Y": 1640.6981
+      },
+      "Size": {
+        "X": 530.0001,
+        "Y": 309.0
+      }
+    },
+    {
+      "Id": "e6afb637-c33e-4b9d-9ebd-b4275a0b9b3d",
+      "Title": "Blending",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 363.49408,
+        "Y": 1209.6843
+      },
+      "Size": {
+        "X": 939.9079,
+        "Y": 1075.8276
+      }
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.Commands;
 using T3.Gui.Graph.Interaction;
@@ -19,19 +20,12 @@ namespace t3.Gui.Commands.Animation
 
         public void Do()
         {
-            // var compositionSymbol = SymbolRegistry.Entries[_compositionSymbolId];
-            var allClips = NodeOperations.GetAllTimeClips(_compositionOp);
-            foreach (var clipToRemove in _clipsToRemove)
-            {
-                allClips.Remove(clipToRemove);
-            }
+            Log.Warning("Deleting timeclips is not implemented");
         }
 
         public void Undo()
         {
-            // var compositionSymbol = SymbolRegistry.Entries[_compositionSymbolId];
-            var allClips = NodeOperations.GetAllTimeClips(_compositionOp);
-            allClips.AddRange(_clipsToRemove);
+            Log.Warning("Undoing deletion of timeclips is not implemented");
         }
 
         private readonly Instance _compositionOp;

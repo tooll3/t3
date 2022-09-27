@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
@@ -78,10 +78,12 @@ namespace T3.Gui.Graph
             TempConnections.Clear();
             _isDisconnectingFromInput = false;
 
-            var selectedSymbolChildUis = NodeSelection.GetSelectedChildUis().ToList();
+            var selectedSymbolChildUis = NodeSelection.GetSelectedChildUis().OrderBy(c => c.PosOnCanvas.Y * 100 + c.PosOnCanvas.X).ToList();
+            selectedSymbolChildUis.Reverse();
+            
             if (selectedSymbolChildUis.Count > 1 && selectedSymbolChildUis.Any(c => c.Id == sourceUi.Id))
             {
-                Log.Debug("Magic would happen here?");
+                selectedSymbolChildUis.Reverse();
                 foreach (var selectedChild in selectedSymbolChildUis)
                 {
                     if (selectedChild.SymbolChild.Symbol.Id != sourceUi.SymbolChild.Symbol.Id)
@@ -854,7 +856,7 @@ namespace T3.Gui.Graph
                         && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() < UserSettings.Config.ClickThreshold
                         )
                     {
-                        var posOnScreen = graphCanvas.InverseTransformPosition(_bestMatchYetForCurrentFrame.PositionOnScreen) - SymbolChildUi.DefaultOpSize / 2;
+                        var posOnScreen = graphCanvas.InverseTransformPositionFloat(_bestMatchYetForCurrentFrame.PositionOnScreen) - SymbolChildUi.DefaultOpSize / 2;
 
                         SplitConnectionWithSymbolBrowser(graphCanvas.CompositionOp.Symbol,
                                                          graphCanvas.SymbolBrowser,

@@ -11,13 +11,19 @@ using T3.Core.Logging;
 
 namespace T3.Compilation
 {
+    /// <summary>
+    /// And editor functionality that handles the c# compilation of symbol classes.
+    /// </summary>
     public static class OperatorUpdating
     {
-        public static bool Update(OperatorResource resource, string path)
+        /// <summary>
+        /// An event called that is called if the file hook detects change to the symbol source code.
+        /// </summary>
+        public static void ResourceUpdateHandler(OperatorResource resource, string path)
         {
             Log.Info($"Operator source '{path}' changed.");
             Log.Info($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
-        
+
             string source;
             try
             {
@@ -27,27 +33,26 @@ namespace T3.Compilation
             {
                 Log.Error($"Error opening file '{path}");
                 Log.Error(e.Message);
-                return false;
+                return;
             }
-        
+
             if (string.IsNullOrEmpty(source))
             {
                 Log.Info("Source was empty, skip compilation.");
-                return false;
+                return;
             }
 
             var newAssembly = CompileSymbolFromSource(source, path);
             if (newAssembly == null)
-                return false;
-            
+                return;
+
             resource.OperatorAssembly = newAssembly;
             resource.Updated = true;
-            return true;
+            return;
         }
 
         public static Assembly CompileSymbolFromSource(string source, string symbolName)
         {
-            // return CompileSymbolsFromSource((source, symbolName));
             var operatorsAssembly = ResourceManager.Instance().OperatorsAssembly;
             var referencedAssembliesNames = operatorsAssembly.GetReferencedAssemblies(); // todo: ugly
             var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
@@ -67,109 +72,47 @@ namespace T3.Compilation
                 foreach (var subAsmName in subAsmNames)
                 {
                     var subAsm = Assembly.Load(subAsmName);
-                    if (subAsm != null)
-                    {
-                        referencedAssemblies.Add(MetadataReference.CreateFromFile(subAsm.Location));
-                    }
+                    referencedAssemblies.Add(MetadataReference.CreateFromFile(subAsm.Location));
                 }
             }
-        
+
             var syntaxTree = CSharpSyntaxTree.ParseText(source);
             var compilation = CSharpCompilation.Create("Operators",
                                                        new[] { syntaxTree },
                                                        referencedAssemblies.ToArray(),
                                                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
-        
-            using (var dllStream = new MemoryStream())
-            using (var pdbStream = new MemoryStream())
+
+            using var dllStream = new MemoryStream();
+            using var pdbStream = new MemoryStream();
+            
+            var emitResult = compilation.Emit(dllStream, pdbStream);
+            Log.Info($"compilation results of '{symbolName}':");
+            if (!emitResult.Success)
             {
-                var emitResult = compilation.Emit(dllStream, pdbStream);
-                Log.Info($"compilation results of '{symbolName}':");
-                if (!emitResult.Success)
+                foreach (var entry in emitResult.Diagnostics)
                 {
-                    foreach (var entry in emitResult.Diagnostics)
-                    {
-                        if (entry.WarningLevel == 0)
-                            Log.Error(entry.GetMessage());
-                        else
-                            Log.Warning(entry.GetMessage());
-                    }
+                    if (entry.WarningLevel == 0)
+                        Log.Error(entry.GetMessage());
+                    else
+                        Log.Warning(entry.GetMessage());
+                }
+            }
+            else
+            {
+                Log.Info($"Compilation of '{symbolName}' successful.");
+                var newAssembly = Assembly.Load(dllStream.GetBuffer());
+                if (newAssembly.ExportedTypes.Any())
+                {
+                    return newAssembly;
                 }
                 else
                 {
-                    Log.Info($"Compilation of '{symbolName}' successful.");
-                    var newAssembly = Assembly.Load(dllStream.GetBuffer());
-                    if (newAssembly.ExportedTypes.Any())
-                    {
-                        return newAssembly;
-                    }
-                    else
-                    {
-                        Log.Error("New compiled assembly had no exported type.");
-                        return null;
-                    }
+                    Log.Error("New compiled assembly had no exported type.");
+                    return null;
                 }
             }
 
             return null;
-        }
-
-        public static List<MetadataReference> CompileSymbolsFromSource(string exportPath, params string[] sources) 
-        {
-            var operatorsAssembly = ResourceManager.Instance().OperatorsAssembly;
-            var referencedAssembliesNames = operatorsAssembly.GetReferencedAssemblies(); // todo: ugly
-            var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
-            var coreAssembly = typeof(ResourceManager).Assembly;
-            referencedAssemblies.Add(MetadataReference.CreateFromFile(coreAssembly.Location));
-            // referencedAssemblies.Add(MetadataReference.CreateFromFile(operatorsAssembly.Location));
-            foreach (var asmName in referencedAssembliesNames)
-            {
-                var asm = Assembly.Load(asmName);
-                referencedAssemblies.Add(MetadataReference.CreateFromFile(asm.Location));
-                Log.Debug($"Loaded from {asm} {asm.Location}");
-
-                // in order to get dependencies of the used assemblies that are not part of T3 references itself
-                var subAsmNames = asm.GetReferencedAssemblies();
-                foreach (var subAsmName in subAsmNames)
-                {
-                    var subAsm = Assembly.Load(subAsmName);
-                    Log.Debug($"  Loaded SUB from {subAsm} {subAsm.Location}");
-
-                    referencedAssemblies.Add(MetadataReference.CreateFromFile(subAsm.Location));
-                }
-            }
-        
-            var syntaxTrees = sources.Select(s => CSharpSyntaxTree.ParseText(s));
-            var compilation = CSharpCompilation.Create("Operators",
-                                                       syntaxTrees,
-                                                       referencedAssemblies.ToArray(),
-                                                       new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
-                                                          .WithOptimizationLevel(OptimizationLevel.Release));
-        
-            using (var dllStream = new FileStream(exportPath + Path.DirectorySeparatorChar + "Operators.dll", FileMode.Create))
-            // using (var pdbStream = new FileStream(exportPath + Path.DirectorySeparatorChar + "Operators.pdb", FileMode.Create))
-            using (var pdbStream = new MemoryStream())
-            {
-                var emitResult = compilation.Emit(dllStream, pdbStream);
-                Log.Info($"compilation results of 'export':");
-                
-                if (!emitResult.Success)
-                {
-                    foreach (var entry in emitResult.Diagnostics)
-                    {
-                        if (entry.WarningLevel == 0)
-                            Log.Error(entry.GetMessage());
-                        else
-                            Log.Warning(entry.GetMessage());
-                    }
-                }
-                else
-                {
-                    Log.Info($"Compilation of 'export' successful.");
-                }
-            }
-
-            return referencedAssemblies;
         }
     }
 }

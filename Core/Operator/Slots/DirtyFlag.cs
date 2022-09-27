@@ -17,7 +17,15 @@ namespace T3.Core.Operator.Slots
 
         public static int InvalidationRefFrame { get; set; } = 0;
         private int _invalidatedWithRefFrame = -1;
+        private int _visitedAtFrame = -1;
         public bool IsAlreadyInvalidated => InvalidationRefFrame == _invalidatedWithRefFrame;
+
+        public void SetVisited() 
+        {
+            _visitedAtFrame = InvalidationRefFrame;
+        }
+
+        public bool HasBeenVisited => _visitedAtFrame == InvalidationRefFrame;
 
         public void Invalidate(bool forceInvalidation = false)
         {

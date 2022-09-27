@@ -5,6 +5,7 @@ using T3.App;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Gui.InputUi;
+using T3.Gui.Styling;
 using UiHelpers;
 
 namespace T3.Gui.Interaction
@@ -16,10 +17,11 @@ namespace T3.Gui.Interaction
             var edited = InputEditStateFlags.Nothing;
             var cColor = new Color(color);
             const float saturationWarp = 1.5f; 
-            ImGui.SetNextWindowSize(new Vector2(270, 290));
+            ImGui.SetNextWindowSize(new Vector2(270, 350));
             if (ImGui.BeginPopup("##colorEdit"))
             {
                 var drawList = ImGui.GetForegroundDrawList();
+                ImGui.Dummy(new Vector2(10,10));
 
                 ImGui.ColorConvertRGBtoHSV(color.X, color.Y, color.Z, out var hNormalized, out var linearSaturation, out var v);
 
@@ -48,6 +50,7 @@ namespace T3.Gui.Interaction
                 
                 drawList.AddCircle(windowPos + pickedColorPos, 5, Color.Black);
                 drawList.AddCircle(windowPos + pickedColorPos, 4, Color.White);
+                ImGui.SetCursorPosX(10);
                 ImGui.InvisibleButton("colorwheel", size);
                 if (ImGui.IsItemActive())
                 {
@@ -176,10 +179,36 @@ namespace T3.Gui.Interaction
                     }
                 }                
 
+                
+                
+                
                 // Draw HSV input values
+                const float inputWidth = 60;
+                const float paddedInputWidth = inputWidth + 1;
+                var inputSize = new Vector2(inputWidth, ImGui.GetFrameHeight());
+                
+                
+                ImGui.PushFont(Fonts.FontSmall);
+                ImGui.PushStyleColor(ImGuiCol.Text, _labelColor.Rgba);
+                ImGui.TextUnformatted("Hue");
+                ImGui.SameLine();
+                
+                ImGui.SetCursorPosX(1 * paddedInputWidth); 
+                ImGui.TextUnformatted("Sat");
+                ImGui.SameLine();
+                
+                ImGui.SetCursorPosX(2 * paddedInputWidth);
+                ImGui.TextUnformatted("Lum");
+                ImGui.SameLine();
+                
+                
+                ImGui.SetCursorPosX(3 * paddedInputWidth + 20);
+                ImGui.TextUnformatted("Alpha");
+
+                ImGui.PopStyleColor();
+                ImGui.PopFont();
+                
                 {
-                    var inputSize = new Vector2(60,
-                                                ImGui.GetFrameHeight());
                     var hueDegrees = hNormalized * 360f;
 
                     ImGui.PushID("h");
@@ -203,7 +232,7 @@ namespace T3.Gui.Interaction
                     ImGui.SameLine();
                     ImGui.PushID("s");
                     if (SingleValueEdit.Draw(ref linearSaturation, inputSize, 0, 1, true,
-                                             scale: 0.002f,
+                                             scale: 0.005f,
                                              format: "{0:0.00}") is InputEditStateFlags.Modified)
                     {
                         cColor.Saturation = linearSaturation.Clamp(0, 1);
@@ -213,7 +242,7 @@ namespace T3.Gui.Interaction
 
                     ImGui.SameLine();
                     ImGui.PushID("v");
-                    if (SingleValueEdit.Draw(ref v, inputSize, 0, 20, true, 0.020f, "{0:0.00}") is InputEditStateFlags.Modified)
+                    if (SingleValueEdit.Draw(ref v, inputSize, 0, 20, true, 0.005f, "{0:0.00}") is InputEditStateFlags.Modified)
                     {
                         cColor.V = v.Clamp(0, 10);
                         edited |= InputEditStateFlags.Modified;
@@ -226,12 +255,34 @@ namespace T3.Gui.Interaction
                     ImGui.SameLine();
                     ImGui.PushID("a");
                     var a = cColor.A;
-                    if (SingleValueEdit.Draw(ref a, inputSize, 0, 20, true, 0.020f, "{0:0.00}") is InputEditStateFlags.Modified)
+                    if (SingleValueEdit.Draw(ref a, inputSize, 0, 1, true, 0.005f, "{0:0.00}") is InputEditStateFlags.Modified)
                     {
                         cColor.A = a.Clamp(0, 1);
                         edited |= InputEditStateFlags.Modified;
                     }
                     ImGui.PopID();
+                }
+
+                // Hex Representation
+                {
+                    var html = cColor.ToHTML();
+                    
+                    if (ImGui.InputText("##hex", ref html, 10))
+                    {
+                        try
+                        {
+                            var prefix = html.StartsWith("#") ? "" : "#";
+                            cColor = Color.FromString(prefix + html);
+                        }
+                        catch
+                        {
+                            // ignored
+                        }
+                        finally
+                        {
+                            edited |= InputEditStateFlags.Modified;
+                        }
+                    }
                 }
 
                 ImGui.EndPopup();
@@ -240,5 +291,7 @@ namespace T3.Gui.Interaction
             color = cColor.Rgba;
             return edited;
         }
+        
+        private static Color _labelColor = Color.Gray;
     }
 }

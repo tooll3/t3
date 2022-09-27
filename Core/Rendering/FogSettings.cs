@@ -15,7 +15,7 @@ namespace T3.Core.Rendering
                     ResourceManager.Instance().SetupConstBuffer(new FogParameters()
                                                                     {
                                                                         Bias = 2,
-                                                                        Distance = 100,
+                                                                        Distance = 10000,
                                                                         Color = new Vector4(0, 0, 0, 1),
                                                                     }, ref _defaultSettingsBuffer);
                 }

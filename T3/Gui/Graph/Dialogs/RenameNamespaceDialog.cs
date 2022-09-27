@@ -40,7 +40,7 @@ namespace T3.Gui.Graph.Dialogs
                                                       && Regex.IsMatch(_nameSpace, @"^[\d\w_\.]+$")
                                                       ))
                 {
-                    NodeOperations.RenameSpaceSpaces(_node, _nameSpace);
+                    NodeOperations.RenameNameSpaces(_node, _nameSpace);
                     Close();
                 }
 

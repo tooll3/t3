@@ -15,8 +15,7 @@ namespace T3.Gui.ChildUi
             
                 return SymbolChildUi.CustomUiResult.None;
             
-            if (RateEditLabel.Draw(ref jitter2d.Rate.TypedInputValue.Value, 
-                               screenRect, drawList, nameof(jitter2d)))
+            if (RateEditLabel.Draw(jitter2d.Rate, screenRect, drawList, nameof(jitter2d)))
             {
                 jitter2d.Rate.Input.IsDefault = false;
                 jitter2d.Rate.DirtyFlag.Invalidate();

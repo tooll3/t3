@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Gui.Graph.Interaction;
-using T3.Gui.Selection;
 
 namespace T3.Gui.Graph.Interaction
 {
@@ -97,7 +95,9 @@ namespace T3.Gui.Graph.Interaction
                 }
                 
                 if (!(_currentRegex.IsMatch(symbolUi.Symbol.Name) 
-                    || symbolUi.Symbol.Namespace.Contains(SearchString)))
+                      || symbolUi.Symbol.Namespace.Contains(SearchString, StringComparison.InvariantCultureIgnoreCase) 
+                      || (!string.IsNullOrEmpty(symbolUi.Description) 
+                          && symbolUi.Description.Contains(SearchString, StringComparison.InvariantCultureIgnoreCase))))
                     continue;
 
                 MatchingSymbolUis.Add(symbolUi);
@@ -132,8 +132,20 @@ namespace T3.Gui.Graph.Interaction
                 // bump if direct match
                 if (symbolName.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                    relevancy *= 3;
+                    relevancy *= 3f;
                 }
+            }
+
+
+            if (!string.IsNullOrEmpty(symbolUi.Description) 
+                && symbolUi.Description.Contains(query, StringComparison.InvariantCultureIgnoreCase))
+            {
+                relevancy *= 1.5f;
+            }
+            
+            if (symbolName.Equals(query, StringComparison.InvariantCultureIgnoreCase))
+            {
+                relevancy *= 5;
             }
             
             // Add usage count (the following statement is slow and should be cached)

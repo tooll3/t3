@@ -1,0 +1,17 @@
+{
+  "Name": "SelectFloatFromDict",
+  "Id": "fd5467c7-c75d-4755-8885-fd1ff1f07c95",
+  "Namespace": "lib.io.midi",
+  "Inputs": [
+    {
+      "Id": "126d52eb-cdf9-48e6-ac77-bb6e90700c56"/*DictionaryInput*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "b0acb8ad-9f90-4908-b780-1297e0a1d572"/*Select*/,
+      "DefaultValue": "/channel1/C0"
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

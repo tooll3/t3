@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
@@ -8,20 +8,19 @@ namespace T3.Gui.Windows.TimeLine
 {
     public class CurrentTimeMarker: IValueSnapAttractor
     {
-        public  void Draw(Playback playback)
+        public void Draw(Playback playback)
         {
             if (playback == null)
                 return;
             _playback = playback;
 
-            var p = new Vector2(TimeLineCanvas.Current.TransformGlobalTime((float)playback.TimeInBars), 0);
+            var p = new Vector2(TimeLineCanvas.Current.TransformX((float)playback.TimeInBars), 0);
             var drawList = ImGui.GetWindowDrawList();
             drawList.AddRectFilled(p + new Vector2(-1,0), p + new Vector2(2, 2000), _shadowColor);
             drawList.AddRectFilled(p, p + new Vector2(1, 2000), Color.Orange);
         }
 
         private static readonly Color _shadowColor = new Color(0, 0, 0, 0.4f);
-        
         
         public SnapResult CheckForSnap(double time, float canvasScale)
         {

@@ -1,0 +1,89 @@
+{
+  "Id": "0ed2bee3-641f-4b08-8685-df1506e9af3c"/*SetMaterial*/,
+  "Description": "Sets the phyical base rendering (PBR) material for the current RenderTarget which is then used by [DrawMesh] and other PBR rendering operators. Each of the material properties can be controlled by a color or by connecting a texture input.\n\nPlease note that color parameter is multiplied to the texture: so to for an emissive texture to be visible, you have to first set the Emissive Color to one.\n\nThe base (albedo) color can also be adjusted by the Draw operators.\n\nFor the roughness rendering the draw operators need an IBL texture set by [SetEnviroment] . We uses a default IBL map as a default.\n\n\nAlso see: [HowToDrawThings]",
+  "InputUis": [
+    {
+      "InputId": "2a585a23-b60c-4c8b-8cfa-9ab2a8b04c7a"/*SubTree*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "9ff5ade2-cfa7-4616-ad89-356f3248e04f"/*BaseColor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "0eb51df1-570a-4ac6-bae6-5e03d6e66ceb"/*BaseColorMap*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "2c91c306-1815-4b22-a70f-746232f024d7"/*EmissiveColor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "9d5ca726-28b0-4f3d-a5aa-f0ae3e2043a9"/*Specular*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "e14dcc43-7c18-4ed7-ad39-dfeab10e3d33"/*Roughness*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "108ff533-f205-4989-b894-acf48e3cc1db"/*Metal*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
+    },
+    {
+      "InputId": "600bbc24-6b3a-4ac4-9ceb-702e71c839e9"/*NormalMap*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      }
+    },
+    {
+      "InputId": "c8003fbd-c6ce-440c-9f1f-6b15b5ee5274"/*RoughnessSpecularMetallicOcclusionMap*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      }
+    },
+    {
+      "InputId": "6d859756-0243-42c5-973d-6de2dcdc5609"/*EmissiveColorMap*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "d80e1028-a48d-4171-8c8c-e6856bd2143d"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

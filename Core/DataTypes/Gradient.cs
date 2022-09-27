@@ -20,7 +20,13 @@ namespace T3.Core.DataTypes
             writer.WritePropertyName("Steps");
             writer.WriteStartArray();
 
-            foreach (var step in Steps)
+            Step[] stepsToWrite;
+            lock (Steps)
+            {
+                stepsToWrite = Steps.Select(step => new Step(step)).ToArray();
+            }
+
+            foreach (var step in stepsToWrite)
             {
                 writer.WriteStartObject();
                 writer.WriteObject("Id", step.Id);
@@ -41,7 +47,7 @@ namespace T3.Core.DataTypes
             writer.WriteEndObject();
         }
 
-        public List<Step> Steps { get; set; } = CreateDefaultSteps();
+        public List<Step> Steps { get; set; } = new List<Step>();
         public Interpolations Interpolation { get; set; }
         
         public virtual void Read(JToken inputToken)
@@ -162,6 +168,19 @@ namespace T3.Core.DataTypes
             public float NormalizedPosition;
             public Vector4 Color;
             public Guid Id;
+
+            public Step() { }
+
+            /// <summary>
+            /// Constructor to clone the provided <see cref="Step"/>
+            /// </summary>
+            /// <param name="original"></param>
+            public Step(Step original)
+            {
+                NormalizedPosition = original.NormalizedPosition;
+                Color = original.Color;
+                Id = original.Id;
+            }
         }
 
         public enum Interpolations

@@ -1,0 +1,22 @@
+{
+  "Name": "PickColor",
+  "Id": "3539c3a0-73f1-412c-aad2-517810126ac6",
+  "Namespace": "lib.math.vec4",
+  "Inputs": [
+    {
+      "Id": "03a48f06-5375-449f-941b-35f93b2a5825"/*Input*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
+    },
+    {
+      "Id": "f3f93feb-8b26-4f6d-bd90-4c331cf9fac0"/*Index*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

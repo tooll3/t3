@@ -52,7 +52,7 @@ namespace T3.Core.Animation
         
         public static double RunTimeInSecs => _runTimeWatch.ElapsedMilliseconds / 1000.0;
         public static double LastFrameDuration { get; private set; }
-        public double LastFrameDurationInBars => BarsFromSecs(LastFrameDuration);
+        public double LastFrameDurationInBars => BarsFromSeconds(LastFrameDuration);
         
         public virtual void Update(bool idleMotionEnabled = false)
         {
@@ -91,11 +91,15 @@ namespace T3.Core.Animation
             _previousTime = TimeInBars;
         }
 
-        public double BarsFromSecs(double secs)
+        public double BarsFromSeconds(double secs)
         {
             return secs * Bpm / 240f;
         }
-
+        
+        public double SecondsFromBars(double bars)
+        {
+            return bars * 240 / Bpm;
+        }
         
         private static double _lastFrameStart;
         private double _previousTime;

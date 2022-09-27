@@ -142,7 +142,7 @@ namespace T3.Gui.Windows
                         if (ImGui.Selectable(symbolChild.ReadableName))
                         {
                             graphWindow?.GraphCanvas.SetComposition(NodeOperations.BuildIdPathForInstance(instanceParent),
-                                                                    ScalableCanvas.Transition.Undefined);
+                                                                    ICanvas.Transition.Undefined);
 
                             var childUi = SymbolUiRegistry.Entries[compositionSymbol.Id].ChildUis.Single(cUi => cUi.Id == instance.SymbolChildId);
                             NodeSelection.SetSelectionToChildUi(childUi, instance);
@@ -182,8 +182,7 @@ namespace T3.Gui.Windows
                                                             _subtreeNodeToRename = subtree;
                                                             _renameNamespaceDialog.ShowNextFrame();
                                                         }
-                                                    },
-                                                    "#bla");
+                                                    });
                 
                 
                 if (isOpen)

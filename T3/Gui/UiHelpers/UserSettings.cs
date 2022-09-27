@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using T3.Core.Animation;
+using T3.Core.DataTypes;
 using T3.Core.IO;
 using T3.Gui.Graph;
 using T3.Gui.Interaction;
@@ -35,38 +36,42 @@ namespace T3.Gui.UiHelpers
             public bool ShowTitleAndDescription = true;
             public bool ShowToolbar = true;
             public bool ShowTimeline = true;
+            public bool ShowMiniMap = false;
             
             // UI-State
-            public bool FullScreen = true;
-            public bool ShowGraphOverContent = true;
+            public float UiScaleFactor = 1;
+            public bool FullScreen = false;
+            public bool ShowGraphOverContent = false;
             public int WindowLayoutIndex = 0;
             public bool EnableIdleMotion = true;
             
+            
             // Interaction
+            public bool WarnBeforeLibEdit = true;
             public bool SmartGroupDragging = false;
             public bool ShowExplicitTextureFormatInOutputWindow = false;
             public bool UseArcConnections = true;
             public float SnapStrength = 5;
-            public bool UseJogDialControl = false;
+            public bool UseJogDialControl = true;
             public float ScrollSmoothing = 0.06f;
             public float TooltipDelay = 1.2f;
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
+
+            public float KeyboardScrollAcceleration = 2.5f;
 
             public bool VariationLiveThumbnails = true;
             public bool VariationHoverPreview = true;
             
             // Load Save
-            public bool AutoSaveAfterSymbolCreation = true;
+            public string UserName = UndefinedUserName;
             public bool EnableAutoBackup = true;
-            public bool SaveOnlyModified = false;
-            
+
             // Other settings
             public float GizmoSize = 100;
-            public bool SwapMainAnd2ndWindowsWhenFullscreen = true;
+            public bool SwapMainAnd2ndWindowsWhenFullscreen = false;
             public bool EnableStartupConsistencyCheck = true;
 
             // Timeline
-            public bool CountBarsFromZero = true;
             public float TimeRasterDensity = 1f;
 
             // Space mouse
@@ -77,8 +82,18 @@ namespace T3.Gui.UiHelpers
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             
-            public List<GraphBookmarkNavigation.Bookmark> Bookmarks = new List<GraphBookmarkNavigation.Bookmark>();
+            public List<GraphBookmarkNavigation.Bookmark> Bookmarks = new();
+            public List<Gradient> GradientPresets = new();
+
+            
         }
+
+        public static bool IsUserNameDefined()
+        {
+            return !string.IsNullOrEmpty(Config.UserName) && Config.UserName != UndefinedUserName;
+        }
+
+        private const string UndefinedUserName = "unknown";
 
         public static Guid GetLastOpenOpForWindow(string windowTitle)
         {

@@ -2,6 +2,7 @@ using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SharpDX;
 using SharpDX.Direct3D11;
@@ -9,10 +10,12 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Graph.Rendering;
 using T3.Gui.InputUi;
 using T3.Gui.Interaction.TransformGizmos;
+using T3.Gui.Interaction.Variations;
 using T3.Gui.OutputUi;
 using T3.Gui.Selection;
 using T3.Gui.Styling;
@@ -217,16 +220,37 @@ namespace T3.Gui.Graph
                                   && (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) ||
                                       T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId));
 
+
+                    
+
+                    
                     // A horrible work around to prevent exception because CompositionOp changed during drawing.
                     // A better solution would defer setting the compositionOp to the beginning of next frame.
                     var justOpenedChild = false;
-                    if (hovered && ImGui.IsMouseDoubleClicked(0) && !RenameInstanceOverlay.IsOpen)
+                    if (hovered && ImGui.IsMouseDoubleClicked(0) 
+                                && !RenameInstanceOverlay.IsOpen
+                                && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenSubGraph) == 0)
                     {
                         if (ImGui.IsWindowFocused())
                         {
-                            GraphCanvas.Current.SetCompositionToChildInstance(instance);
-                            ImGui.CloseCurrentPopup();
-                            justOpenedChild = true;
+                            var blocked = false;
+                            if (UserSettings.Config.WarnBeforeLibEdit && instance.Symbol.Namespace.StartsWith("lib."))
+                            {
+                                if (UserSettings.Config.WarnBeforeLibEdit)
+                                {
+                                    var count = NodeOperations.GetDependingSymbols(instance.Symbol).Count();
+                                    LibWarningDialog.DependencyCount = count;
+                                    GraphCanvas.LibWarningDialog.ShowNextFrame();
+                                    blocked = true;
+                                }
+                            }
+
+                            if (!blocked)
+                            {
+                                GraphCanvas.Current.SetCompositionToChildInstance(instance);
+                                ImGui.CloseCurrentPopup();
+                                justOpenedChild = true;
+                            }
                         }
                     }
 
@@ -275,9 +299,21 @@ namespace T3.Gui.Graph
                         var compositionOp = GraphCanvas.Current.CompositionOp;
                         if (compositionOp.Symbol.Animator.IsInstanceAnimated(instance))
                         {
-                            _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, _usableScreenRect.Max.Y - 12),
+                            _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, (_usableScreenRect.Max.Y - 12).Clamp(_usableScreenRect.Min.Y, _usableScreenRect.Max.Y)),
                                                     new Vector2(_usableScreenRect.Max.X - 2, _usableScreenRect.Max.Y - 3),
                                                     Color.Orange);
+                        }
+                    }
+
+                    // Snapshot indicator
+                    {
+                        if (VariationHandling.FocusSetsForCompositions.TryGetValue(GraphCanvas.Current.CompositionOp.Symbol.Id, out var focusSet))
+                        {
+                            if (focusSet.Contains(instance.SymbolChildId))
+                                _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, _usableScreenRect.Min.Y + 3),
+                                                        new Vector2(_usableScreenRect.Max.X - 2,
+                                                                    (_usableScreenRect.Min.Y + 12).Clamp(0, _usableScreenRect.Max.Y)),
+                                                        Color.Blue);
                         }
                     }
 
@@ -750,7 +786,8 @@ namespace T3.Gui.Graph
                 }
 
                 var isMouseReleasedWithoutDrag =
-                    ImGui.IsMouseReleased(ImGuiMouseButton.Left) && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() < UserSettings.Config.ClickThreshold;
+                    ImGui.IsMouseReleased(ImGuiMouseButton.Left) &&
+                    ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() < UserSettings.Config.ClickThreshold;
                 if (isMouseReleasedWithoutDrag)
                 {
                     //Graph.Connections.GetLinesFromNodeOutput(childUi, outputDef.Id);
@@ -795,19 +832,21 @@ namespace T3.Gui.Graph
                         }
 
                         // Clicked
-                        else if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+                        else
                         {
-                            _draggedOutputOpId = Guid.Empty;
-                            _draggedOutputDefId = Guid.Empty;
-                            if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickThreshold)
+                            if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
                             {
-                                ConnectionMaker.OpenSymbolBrowserAtOutput(GraphCanvas.Current.SymbolBrowser, childUi, instance, output.Id);
+                                _draggedOutputOpId = Guid.Empty;
+                                _draggedOutputDefId = Guid.Empty;
+                                if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickThreshold)
+                                {
+                                    ConnectionMaker.OpenSymbolBrowserAtOutput(GraphCanvas.Current.SymbolBrowser, childUi, instance, output.Id);
+                                }
                             }
-                        }
-
-                        if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
-                        {
-                            GraphCanvas.Current.EditNodeOutputDialog.OpenForOutput(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
+                            else if (ImGui.IsMouseReleased(ImGuiMouseButton.Right))
+                            {
+                                GraphCanvas.Current.EditNodeOutputDialog.OpenForOutput(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
+                            }
                         }
                     }
                 }
@@ -839,7 +878,7 @@ namespace T3.Gui.Graph
 
         private static ImRect GetUsableOutputSlotArea(SymbolChildUi targetUi, int outputIndex)
         {
-            var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.5f, 1.2f, (int)(UsableSlotThickness *0.5f), UsableSlotThickness);
+            var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.5f, 1.2f, (int)(UsableSlotThickness * 0.5f), UsableSlotThickness);
 
             var opRect = _usableScreenRect;
             var outputCount = targetUi.SymbolChild.Symbol.OutputDefinitions.Count;
@@ -901,7 +940,7 @@ namespace T3.Gui.Graph
                         DrawInputSources(targetUi, inputDef);
 
                         connection = GraphCanvas.Current.CompositionOp.Symbol.Connections.SingleOrDefault(c => c.TargetParentOrChildId == targetUi.Id
-                                                                                                               && c.TargetSlotId == inputDef.Id);
+                                                                                                              && c.TargetSlotId == inputDef.Id);
                         if (connection != null)
                         {
                             sourceOp = GraphCanvas.Current.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
@@ -971,7 +1010,7 @@ namespace T3.Gui.Graph
             var sources = CollectSourcesForInput(compositionUi, GraphCanvas.Current.CompositionOp, targetUi, inputDef, inputIndex);
             if (sources.Count <= 0)
                 return;
-            
+
             ImGui.PushFont(Fonts.FontSmall);
             foreach (var source in sources)
             {
@@ -1004,10 +1043,10 @@ namespace T3.Gui.Graph
                 else
                 {
                     connection = compositionUi.Symbol.Connections.FirstOrDefault(c => c.TargetParentOrChildId == targetUi.Id
-                                                                                          && c.TargetSlotId == inputDef.Id
-                                                                                    );
+                                                                                      && c.TargetSlotId == inputDef.Id
+                                                                                );
                 }
-                
+
                 if (connection == null)
                     break;
 
@@ -1021,20 +1060,19 @@ namespace T3.Gui.Graph
 
                 var connectionSourceId = connection.SourceParentOrChildId;
                 var connectionSourceUi = compositionUi.ChildUis.SingleOrDefault(c => c.Id == connectionSourceId);
-                
+
                 var instance = compositionOp.Children.SingleOrDefault(child => child.SymbolChildId == connectionSourceId);
                 if (connectionSourceUi != null && instance != null)
                 {
                     var outputDef = connectionSourceUi.SymbolChild.Symbol.OutputDefinitions.SingleOrDefault(outp => outp.Id == connection.SourceSlotId);
                     var output = instance.Outputs.SingleOrDefault(outp => outp.Id == connection.SourceSlotId);
 
-                    var outputName = (instance.Outputs.Count > 1 && outputDef?.Name != "Output" && outputDef?.Name != "Result") 
-                                         ? "." + outputDef?.Name 
+                    var outputName = (instance.Outputs.Count > 1 && outputDef?.Name != "Output" && outputDef?.Name != "Result")
+                                         ? "." + outputDef?.Name
                                          : "";
                     sources.Insert(0, $"{connectionSourceUi?.SymbolChild.ReadableName} {outputName}  " + GetValueString(output));
                 }
-            
-                
+
                 if (connectionSourceUi?.SymbolChild.Symbol.InputDefinitions.Count > 0)
                 {
                     targetUi = connectionSourceUi;
@@ -1045,6 +1083,7 @@ namespace T3.Gui.Graph
                     break;
                 }
             }
+
             return sources;
         }
 
@@ -1054,7 +1093,7 @@ namespace T3.Gui.Graph
                        {
                            InputValue<float> f    => $"{f.Value:G3}",
                            InputValue<int> i      => $"{i.Value:G3}",
-                           InputValue<Int3> i      => $"{i.Value:G3}",
+                           InputValue<Int3> i     => $"{i.Value:G3}",
                            InputValue<bool> b     => $"{b.Value}",
                            InputValue<Vector3> v3 => $"{v3.Value:G3}",
                            InputValue<Vector2> v2 => $"{v2.Value:G3}",
@@ -1062,7 +1101,7 @@ namespace T3.Gui.Graph
                            _                      => ""
                        };
         }
-        
+
         private static string GetValueString(ISlot outputSlot)
         {
             return outputSlot switch
@@ -1078,17 +1117,19 @@ namespace T3.Gui.Graph
                        };
         }
 
-        private static string Truncate(string input, int maxLength = 10 )
+        private static string Truncate(string input, int maxLength = 10)
         {
-            if(input == null)
+            if (input == null)
                 return "null";
 
             if (input.Length < maxLength)
             {
                 return input;
-            } 
+            }
+
             return input[..Math.Min(input.Length, maxLength)] + "...";
-        } 
+        }
+
         private static void DrawMultiInputSocket(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea,
                                                  bool isInputHovered, int multiInputIndex, bool isGap, Color colorForType,
                                                  Color reactiveSlotColor)
@@ -1123,9 +1164,8 @@ namespace T3.Gui.Graph
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                     ImGui.BeginTooltip();
                     {
-                        
-                        DrawInputSources(targetUi, inputDef,multiInputIndex);
-                        
+                        DrawInputSources(targetUi, inputDef, multiInputIndex);
+
                         // var connectionSource = "";
                         // var connections = GraphCanvas.Current.CompositionOp.Symbol.Connections.Where(c => c.TargetParentOrChildId == targetUi.Id
                         //                                                                                  && c.TargetSlotId == inputDef.Id).ToList();

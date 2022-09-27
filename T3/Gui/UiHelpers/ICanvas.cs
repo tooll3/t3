@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Numerics;
+using T3.Core.Operator;
 using T3.Gui.Selection;
 using UiHelpers;
 
@@ -18,6 +19,11 @@ namespace T3.Gui.UiHelpers
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
+        Vector2 TransformPositionFloat(Vector2 posOnCanvas);
+
+        /// <summary>
+        /// Get integer-aligned screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
+        /// </summary>
         Vector2 TransformPosition(Vector2 posOnCanvas);
 
         /// <summary>
@@ -29,7 +35,7 @@ namespace T3.Gui.UiHelpers
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
-        Vector2 InverseTransformPosition(Vector2 screenPos);
+        Vector2 InverseTransformPositionFloat(Vector2 screenPos);
 
         float InverseTransformX(float x);
         float TransformX(float x);
@@ -51,8 +57,18 @@ namespace T3.Gui.UiHelpers
 
         ImRect InverseTransformRect(ImRect screenRect);
 
-        
-        
+        public enum Transition
+        {
+            JumpIn,
+            JumpOut,
+            Undefined,
+        }
+
+        /// <summary>
+        /// This function is called once when zooming in or out of a time clip canvas
+        /// </summary>
+        void UpdateScaleAndTranslation(Instance compositionOp, Transition transition);
+
         Vector2 Scale { get; }
         Vector2 Scroll { get; }
         Vector2 WindowSize { get; }

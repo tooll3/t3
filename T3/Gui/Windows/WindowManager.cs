@@ -29,6 +29,7 @@ namespace T3.Gui.Windows
                                new SymbolLibrary(),
                                new LegacyVariationsWindow(),
                                new RenderSequenceWindow(),
+                               new RenderVideoWindow(),
                            };
         }
 

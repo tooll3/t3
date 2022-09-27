@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -160,12 +160,16 @@ namespace t3.Gui.InputUi.CombinedInputs
                     StartDragCommand();
                 }
 
-                var newDragPosition = _singleCurveCanvas.InverseTransformPosition(ImGui.GetIO().MousePos);
+                var newDragPosition = _singleCurveCanvas.InverseTransformPositionFloat(ImGui.GetIO().MousePos);
                 double u = newDragPosition.X;
-                _singleCurveCanvas.SnapHandlerForU.CheckForSnapping(ref u, _singleCurveCanvas.Scale.X);
+                var enableSnapping = ImGui.GetIO().KeyShift;
+                if(enableSnapping)
+                    _singleCurveCanvas.SnapHandlerForU.CheckForSnapping(ref u, _singleCurveCanvas.Scale.X * 1.5f);
 
                 double v = newDragPosition.Y;
-                _singleCurveCanvas.SnapHandlerForV.CheckForSnapping(ref v, _singleCurveCanvas.Scale.Y);
+                
+                if(enableSnapping)
+                    _singleCurveCanvas.SnapHandlerForV.CheckForSnapping(ref v, _singleCurveCanvas.Scale.Y * 1.5f);
 
                 UpdateDragCommand(u - vDef.U, v - vDef.Value);
 

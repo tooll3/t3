@@ -19,8 +19,10 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Gui;
+using T3.Gui.Graph.Interaction;
 using t3.Gui.Interaction.Camera;
 using t3.Gui.Interaction.StartupCheck;
+using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using T3.Gui.Windows;
 using Device = SharpDX.Direct3D11.Device;
@@ -35,8 +37,21 @@ namespace T3
         public static SpaceMouse SpaceMouse { get; private set; }
 
         public static bool IsStandAlone = File.Exists("StartT3.exe");
-        public const string Version = "v3.3.0";
+        public const string Version = "v3.4.0";
 
+        public static void GenerateFonts(float scaleFactor)
+        {
+            var fontAtlasPtr = ImGui.GetIO().Fonts;
+            fontAtlasPtr.Clear();
+            Fonts.FontNormal = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Regular.ttf", 18f * scaleFactor);
+            Fonts.FontBold = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Medium.ttf", 18f * scaleFactor);
+            Fonts.FontSmall = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Regular.ttf", 13f * scaleFactor);
+            Fonts.FontLarge = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Light.ttf", 30f * scaleFactor);
+
+            _t3RenderForm.CreateDeviceObjects();
+        }
+
+        private static float _lastUiScale = 1;
         
         [STAThread]
         private static void Main()
@@ -69,14 +84,23 @@ namespace T3
 
             _t3RenderForm = new T3RenderForm(device, _main.Form.Width, _main.Form.Height);
 
+            GenerateFonts(UserSettings.Config.UiScaleFactor);
+
             // Initialize T3 main window
             _main.InitRenderTargetsAndEventHandlers(device);
             _main.Form.KeyDown += HandleKeyDown;
             _main.Form.KeyUp += HandleKeyUp;
             _main.Form.Closing += (sender, args) =>
                                   {
-                                      args.Cancel = T3Ui.UiModel.IsSaving;
-                                      Log.Debug($"Cancel closing because save-operation is in progress.");
+                                      if (T3Ui.UiModel.IsSaving)
+                                      {
+                                        args.Cancel = true;
+                                        Log.Debug($"Cancel closing because save-operation is in progress.");
+                                      }
+                                      else
+                                      {
+                                          Log.Debug("Shutting down");
+                                      }
                                   };
 
             
@@ -85,10 +109,10 @@ namespace T3
             SpaceMouse = new SpaceMouse(_main.Form.Handle);
             
             // Initialize optional Viewer Windows
-            _viewer.CreateRenderForm("T3 Viewer", true);
-            _viewer.InitViewSwapChain(factory, device);
-            _viewer.InitRenderTargetsAndEventHandlers(device);
-            _viewer.Form.Show();
+            Viewer.CreateRenderForm("T3 Viewer", true);
+            Viewer.InitViewSwapChain(factory, device);
+            Viewer.InitRenderTargetsAndEventHandlers(device);
+            Viewer.Form.Show();
 
             ResourceManager.Init(device);
             ResourceManager resourceManager = ResourceManager.Instance();
@@ -107,7 +131,8 @@ namespace T3
             resourceManager.OperatorsAssembly = T3Ui.UiModel.OperatorsAssembly;
             foreach (var (_, symbol) in SymbolRegistry.Entries)
             {
-                ResourceManager.Instance().CreateOperatorEntry(@"Operators\Types\" + symbol.Name + ".cs", symbol.Id.ToString(), OperatorUpdating.Update);
+                var sourceFilePath = Model.BuildFilepathForSymbol(symbol, Model.SourceExtension);
+                ResourceManager.Instance().CreateOperatorEntry(sourceFilePath, symbol.Id.ToString(), OperatorUpdating.ResourceUpdateHandler);
             }
 
             Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
@@ -125,10 +150,17 @@ namespace T3
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             Int64 lastElapsedTicks = stopwatch.ElapsedTicks;
-
+            
             // Main loop
             void RenderCallback()
             {
+                // Update font atlas texture if UI-Scale changed
+                if (Math.Abs(UserSettings.Config.UiScaleFactor - _lastUiScale) > 0.005f)
+                {
+                    GenerateFonts(UserSettings.Config.UiScaleFactor);
+                    _lastUiScale = UserSettings.Config.UiScaleFactor;
+                }
+                
                 if (_main.Form.WindowState == FormWindowState.Minimized == true)
                 {
                     Thread.Sleep(100);
@@ -142,13 +174,8 @@ namespace T3
                 ImGui.GetIO().DisplaySize = new Vector2(_main.Form.ClientSize.Width, _main.Form.ClientSize.Height);
 
                 HandleFullscreenToggle();
-
-                //NodeOperations.UpdateChangedOperators();
-                var modifiedSymbols = resourceManager.UpdateChangedOperatorTypes();
-                foreach (var symbol in modifiedSymbols)
-                {
-                    UiModel.UpdateUiEntriesForSymbol(symbol);
-                }
+                
+                NodeOperations.UpdateChangedOperators();
 
                 DirtyFlag.IncrementGlobalTicks();
                 T3Metrics.UiRenderingStarted();
@@ -158,10 +185,10 @@ namespace T3
                 _main.PrepareRenderingFrame(_deviceContext);
 
                 // Render 2nd view
-                _viewer.Form.Visible = T3Ui.ShowSecondaryRenderWindow;
+                Viewer.Form.Visible = T3Ui.ShowSecondaryRenderWindow;
                 if (T3Ui.ShowSecondaryRenderWindow)
                 {
-                    _viewer.PrepareRenderingFrame(_deviceContext);
+                    Viewer.PrepareRenderingFrame(_deviceContext);
 
                     if (resourceManager.Resources[SharedResources.FullScreenVertexShaderId] is VertexShaderResource vsr)
                         _deviceContext.VertexShader.Set(vsr.VertexShader);
@@ -208,7 +235,7 @@ namespace T3
                 _main.SwapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
 
                 if (T3Ui.ShowSecondaryRenderWindow)
-                    _viewer.SwapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
+                    Viewer.SwapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
             }
 
             RenderLoop.Run(_main.Form, RenderCallback);
@@ -219,18 +246,26 @@ namespace T3
             }
             catch (Exception e)
             {
-                Log.Warning("Exception during shutdown: " + e);
+                Log.Warning("Exception during shutdown: " + e.Message);
             }
 
             // Release all resources
-            _main.RenderTargetView.Dispose();
-            _main.BackBufferTexture.Dispose();
-            _deviceContext.ClearState();
-            _deviceContext.Flush();
-            device.Dispose();
-            _deviceContext.Dispose();
-            _main.SwapChain.Dispose();
-            factory.Dispose();
+            try
+            {
+                _main.RenderTargetView.Dispose();
+                _main.BackBufferTexture.Dispose();
+                _deviceContext.ClearState();
+                _deviceContext.Flush();
+                device.Dispose();
+                _deviceContext.Dispose();
+                _main.SwapChain.Dispose();
+                factory.Dispose();
+            }
+            catch (Exception e)
+            {
+                Log.Warning("Exception freeing resources: " + e.Message);
+            }
+
             Log.Debug("Shutdown complete");
         }
         
@@ -261,21 +296,21 @@ namespace T3
 
                 if (T3Ui.ShowSecondaryRenderWindow)
                 {
-                    _viewer.Form.WindowState = FormWindowState.Normal;
-                    _viewer.Form.FormBorderStyle = FormBorderStyle.None;
-                    _viewer.Form.Bounds = Screen.AllScreens[screenIndexForSecondScreen].Bounds;
+                    Viewer.Form.WindowState = FormWindowState.Normal;
+                    Viewer.Form.FormBorderStyle = FormBorderStyle.None;
+                    Viewer.Form.Bounds = Screen.AllScreens[screenIndexForSecondScreen].Bounds;
                 }
                 else
                 {
-                    _viewer.Form.WindowState = FormWindowState.Normal;
-                    _viewer.Form.FormBorderStyle = FormBorderStyle.None;
-                    _viewer.Form.Bounds = Screen.AllScreens[screenIndexForSecondScreen].Bounds;
+                    Viewer.Form.WindowState = FormWindowState.Normal;
+                    Viewer.Form.FormBorderStyle = FormBorderStyle.None;
+                    Viewer.Form.Bounds = Screen.AllScreens[screenIndexForSecondScreen].Bounds;
                 }
             }
             else
             {
                 _main.Form.FormBorderStyle = FormBorderStyle.Sizable;
-                _viewer.Form.FormBorderStyle = FormBorderStyle.Sizable;
+                Viewer.Form.FormBorderStyle = FormBorderStyle.Sizable;
             }
         }
 
@@ -302,7 +337,7 @@ namespace T3
         }
 
         private static readonly AppWindow _main = new();
-        private static readonly AppWindow _viewer = new();
+        public static readonly AppWindow Viewer = new();    // Required it distinguish 2nd render view in mouse handling   
 
         private static T3Ui _t3ui = null;
         private static DeviceContext _deviceContext;

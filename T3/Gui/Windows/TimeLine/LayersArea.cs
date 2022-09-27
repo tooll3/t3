@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -142,6 +142,7 @@ namespace T3.Gui.Windows.TimeLine
                     var macroCommands = new MacroCommand("split clip", commands);
                     UndoRedoStack.Add(macroCommands);
                 }
+                ImGui.Separator();
 
                 ImGui.EndPopup();
             }
@@ -256,16 +257,16 @@ namespace T3.Gui.Windows.TimeLine
                 var startPosition = position + new Vector2(0, LayerHeight);
                 _drawList.AddBezierCubic(startPosition, 
                                          startPosition + new Vector2(0,verticalOffset),
-                                         startPosition +  new Vector2(horizontalOffset,0),
-                                         startPosition +  new Vector2(horizontalOffset,verticalOffset), 
+                                         startPosition + new Vector2(horizontalOffset,0),
+                                         startPosition + new Vector2(horizontalOffset,verticalOffset), 
                                          _timeRemappingColor,1);
                 
                 horizontalOffset =  TimeLineCanvas.Current.TransformDirection(new Vector2(timeClip.SourceRange.End - timeClip.TimeRange.End,0)).X;
                 var endPosition = position + new Vector2(clipSize.X, LayerHeight);
                 _drawList.AddBezierCubic(endPosition, 
                                          endPosition + new Vector2(0,verticalOffset),
-                                         endPosition +  new Vector2(horizontalOffset,0),
-                                         endPosition +  new Vector2(horizontalOffset,verticalOffset), 
+                                         endPosition + new Vector2(horizontalOffset,0),
+                                         endPosition + new Vector2(horizontalOffset,verticalOffset), 
                                          _timeRemappingColor,1);
                 
             }
@@ -421,10 +422,16 @@ namespace T3.Gui.Windows.TimeLine
             }
 
             var mousePos = ImGui.GetIO().MousePos;
+            var dragContent = ImGui.GetIO().KeyAlt;
+            var referenceRange = (dragContent ? timeClip.SourceRange : timeClip.TimeRange);
+            var scale = 1f;
+            if (dragContent && timeClip.SourceRange.Duration != 0 && timeClip.SourceRange.Duration != 0)
+                scale = timeClip.TimeRange.Duration / timeClip.SourceRange.Duration;
+
             if (_moveClipsCommand == null)
             {
                 var dragStartedAtTime = TimeLineCanvas.Current.InverseTransformX(mousePos.X);
-                _timeWithinDraggedClip = dragStartedAtTime - timeClip.TimeRange.Start;
+                _timeWithinDraggedClip = dragStartedAtTime - referenceRange.Start;
                 _posYInsideDraggedClip = mousePos.Y - position.Y;
                 TimeLineCanvas.Current.StartDragCommand();
             }
@@ -439,28 +446,26 @@ namespace T3.Gui.Windows.TimeLine
                     var newDragPosY = mousePos.Y - position.Y;
                     var dy = _posYInsideDraggedClip - newDragPosY;
 
-                    if (_snapHandler.CheckForSnapping(ref newStartTime, TimeLineCanvas.Current.Scale.X))
+                    if (_snapHandler.CheckForSnapping(ref newStartTime, TimeLineCanvas.Current.Scale.X * scale))
                     {
-                        TimeLineCanvas.Current.UpdateDragCommand(newStartTime - timeClip.TimeRange.Start, dy);
+                        TimeLineCanvas.Current.UpdateDragCommand(newStartTime - referenceRange.Start, dy);
                         return;
                     }
 
-                    var newEndTime = newStartTime + timeClip.TimeRange.Duration;
-                    _snapHandler.CheckForSnapping(ref newEndTime, TimeLineCanvas.Current.Scale.X);
-
-                    TimeLineCanvas.Current.UpdateDragCommand(newEndTime - timeClip.TimeRange.End, dy);
+                    var newEndTime = newStartTime + referenceRange.Duration;
+                    _snapHandler.CheckForSnapping(ref newEndTime, TimeLineCanvas.Current.Scale.X * scale);
+                    TimeLineCanvas.Current.UpdateDragCommand(newEndTime - referenceRange.End, dy);
                     break;
 
                 case HandleDragMode.Start:
                     var newDragStartTime = TimeLineCanvas.Current.InverseTransformX(mousePos.X);
-                    _snapHandler.CheckForSnapping(ref newDragStartTime, TimeLineCanvas.Current.Scale.X);
+                    _snapHandler.CheckForSnapping(ref newDragStartTime, TimeLineCanvas.Current.Scale.X * scale);
                     TimeLineCanvas.Current.UpdateDragAtStartPointCommand(newDragStartTime - timeClip.TimeRange.Start, 0);
                     break;
 
                 case HandleDragMode.End:
                     var newDragTime = TimeLineCanvas.Current.InverseTransformX(mousePos.X);
-                    _snapHandler.CheckForSnapping(ref newDragTime, TimeLineCanvas.Current.Scale.X);
-
+                    _snapHandler.CheckForSnapping(ref newDragTime, TimeLineCanvas.Current.Scale.X * scale);
                     TimeLineCanvas.Current.UpdateDragAtEndPointCommand(newDragTime - timeClip.TimeRange.End, 0);
                     break;
 
@@ -486,22 +491,27 @@ namespace T3.Gui.Windows.TimeLine
             var layerMinIndex = (screenArea.Min.Y - _minScreenPos.Y) / LayerHeight + _minLayerIndex;
             var layerMaxIndex = (screenArea.Max.Y - _minScreenPos.Y) / LayerHeight + _minLayerIndex;
 
-            var allClips = NodeOperations.GetAllTimeClips(_compositionOp);
-
-            var matchingClips = allClips.FindAll(clip => clip.TimeRange.Start <= endTime
-                                                         && clip.TimeRange.End >= startTime
-                                                         && clip.LayerIndex <= layerMaxIndex
-                                                         && clip.LayerIndex >= layerMinIndex - 1);
-            switch (selectMode)
+            foreach (var clip in NodeOperations.GetAllTimeClips(_compositionOp))
             {
-                case SelectionFence.SelectModes.Add:
-                case SelectionFence.SelectModes.Replace:
-                    ClipSelection.AddSelection(matchingClips);
-                    break;
+                 var matches = clip.TimeRange.Start <= endTime
+                         && clip.TimeRange.End >= startTime
+                         && clip.LayerIndex <= layerMaxIndex
+                         && clip.LayerIndex >= layerMinIndex - 1;
 
-                case SelectionFence.SelectModes.Remove:
-                    ClipSelection.Deselect(matchingClips);
-                    break;
+                 if (!matches)
+                     continue;
+                 
+                 switch (selectMode)
+                 {
+                     case SelectionFence.SelectModes.Add:
+                     case SelectionFence.SelectModes.Replace:
+                         ClipSelection.AddSelection(clip);
+                         break;
+
+                     case SelectionFence.SelectModes.Remove:
+                         ClipSelection.Deselect(clip);
+                         break;
+                 }
             }
         }
 
@@ -589,6 +599,16 @@ namespace T3.Gui.Windows.TimeLine
             var timeRange = TimeRange.Undefined;
             foreach (var s in ClipSelection.SelectedClips)
             {
+                // fix broken time ranges
+                // FIXME: make sure these don't happen at all
+                if (s.TimeRange.Duration <= 0
+                    || float.IsNaN(s.TimeRange.Start)
+                    || float.IsNaN(s.TimeRange.End))
+                {
+                    s.TimeRange.Start = 0;
+                    s.TimeRange.End = s.TimeRange.Start + 1;
+                }
+
                 timeRange.Unite(s.TimeRange.Start);
                 timeRange.Unite(s.TimeRange.End);
             }
@@ -719,6 +739,12 @@ namespace T3.Gui.Windows.TimeLine
                 matchingClips.ForEach(Deselect);
             }
 
+            public static void AddSelection(ITimeClip matchingClip)
+            {
+                NodeSelection.SelectCompositionChild(_compositionOp, matchingClip.Id, replaceSelection:false);
+                _selectedClips.Add(matchingClip);
+            }
+            
             public static void AddSelection(List<ITimeClip> matchingClips)
             {
                 foreach (var timeClip in matchingClips)

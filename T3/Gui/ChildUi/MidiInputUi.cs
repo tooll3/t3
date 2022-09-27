@@ -40,7 +40,7 @@ namespace T3.Gui.ChildUi
             }
 
             var normalizedFadeOut = ((Playback.RunTimeInSecs - midiInput.LastMessageTime) / 5).Clamp(0, 1);
-            var fadeOut = (float)MathUtils.Remap(normalizedFadeOut, 0, 1, 1, 0.5f);
+            var fadeOut = (float)MathUtils.RemapAndClamp(normalizedFadeOut, 0, 1, 1, 0.5f);
             var fadeColor = Color.White.Fade(fadeOut);
             ImGui.TextColored(fadeColor, $"{midiInput.Result.Value:0.00}");
 
@@ -58,7 +58,7 @@ namespace T3.Gui.ChildUi
                 var maxRange = midiInput.OutputRange.Value.Y;
                 var currentValue = midiInput.Result.Value;
 
-                var xPos = MathUtils.Remap(currentValue, minRange, maxRange, graphRect.Min.X, graphRect.Max.X);
+                var xPos = MathUtils.RemapAndClamp((double)currentValue, minRange, maxRange, graphRect.Min.X, graphRect.Max.X);
                 var topLeftPos = new Vector2((float)xPos, graphRect.Min.Y);
                 drawList.AddRectFilled(topLeftPos, topLeftPos + new Vector2(1, graphRect.GetHeight()), Color.Orange);
             }

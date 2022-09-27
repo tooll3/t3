@@ -1,0 +1,100 @@
+{
+  "Name": "VideoClipLayer",
+  "Id": "0dbc4f3f-8fdb-402b-a7cb-6949cf21a98a",
+  "Namespace": "user.pixtur.research",
+  "Inputs": [
+    {
+      "Id": "31721e18-556b-452b-a8aa-18dbd44af74d"/*Path*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "28f27625-37fe-409a-b6c1-d4eabf6c1eb8"/*Volume*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "5eb10090-ae6a-4ae7-9fbd-5bd9ffd13b1b"/*ResyncThreshold*/,
+      "DefaultValue": 0.05
+    }
+  ],
+  "Children": [
+    {
+      "Id": "524dda12-de31-4378-87bd-9e587c087871"/*PlayVideo*/,
+      "SymbolId": "914fb032-d7eb-414b-9e09-2bdd7049e049",
+      "InputValues": [
+        {
+          "Id": "0e255347-08bc-4363-9ffa-ab863a1cea8e"/*Path*/,
+          "Type": "System.String",
+          "Value": "C:\\Users\\pixtur\\Videos\\Foundation\\Foundation.S01E08.The.Missing.Piece.1080p.ATVP.WEB-DL.DDP5.1.H.264-CasStudio.mkv"
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "a054b8bc-67ad-4610-92a9-d51d1d57aab4"/*Layer2d*/,
+      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
+      "InputValues": [
+        {
+          "Id": "a83bdfb1-c92d-4844-9e43-8ce09959fae9"/*EnableDepthTest*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
+          "Id": "022f1959-a62b-49de-817a-3930bc8ec32b"/*EnableDepthWrite*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "49676bbc-9566-479e-87ff-68741dedf878"/*_VideoFormatConversion*/,
+      "SymbolId": "7845ec24-e249-4c6a-84e3-63422ede1a1d",
+      "InputValues": [
+        {
+          "Id": "b0c4ceaa-5101-42c6-bf71-230a01918916"/*Format*/,
+          "Type": "SharpDX.DXGI.Format",
+          "Value": "R16G16B16A16_Float"
+        }
+      ],
+      "Outputs": []
+    }
+  ],
+  "Connections": [
+    {
+      "SourceParentOrChildId": "a054b8bc-67ad-4610-92a9-d51d1d57aab4",
+      "SourceSlotId": "e4a8d926-7abd-4d2a-82a1-b7d140cb457f",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "44a513ca-ab20-46df-bb6b-f28b42dc86e0"
+    },
+    {
+      "SourceParentOrChildId": "524dda12-de31-4378-87bd-9e587c087871",
+      "SourceSlotId": "fa56b47f-1b16-45d5-80cd-32c5a872acf4",
+      "TargetParentOrChildId": "49676bbc-9566-479e-87ff-68741dedf878",
+      "TargetSlotId": "4454891b-ddd0-41f2-80c3-75074df8320b"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "31721e18-556b-452b-a8aa-18dbd44af74d",
+      "TargetParentOrChildId": "524dda12-de31-4378-87bd-9e587c087871",
+      "TargetSlotId": "0e255347-08bc-4363-9ffa-ab863a1cea8e"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "28f27625-37fe-409a-b6c1-d4eabf6c1eb8",
+      "TargetParentOrChildId": "524dda12-de31-4378-87bd-9e587c087871",
+      "TargetSlotId": "2fecfbb4-f7d9-4c53-95ae-b64ccbb6fbad"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "5eb10090-ae6a-4ae7-9fbd-5bd9ffd13b1b",
+      "TargetParentOrChildId": "524dda12-de31-4378-87bd-9e587c087871",
+      "TargetSlotId": "e9c15b3f-8c4a-411d-b9b3-795d64d6bd20"
+    },
+    {
+      "SourceParentOrChildId": "49676bbc-9566-479e-87ff-68741dedf878",
+      "SourceSlotId": "a722cd4f-82da-4532-a7bc-7a6bdc30b06e",
+      "TargetParentOrChildId": "a054b8bc-67ad-4610-92a9-d51d1d57aab4",
+      "TargetSlotId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"
+    }
+  ]
+}

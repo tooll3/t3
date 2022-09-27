@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
+using T3.Core.Operator;
 using T3.Gui.Graph;
 using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
@@ -29,7 +30,7 @@ namespace T3.Gui.Interaction
                 WindowPos = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos()
                                                               + ImGui.GetStyle().WindowBorderSize * Vector2.One;
                 WindowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin()
-                             - 2* ImGui.GetStyle().WindowBorderSize * Vector2.One;
+                                                               - 2 * ImGui.GetStyle().WindowBorderSize * Vector2.One;
             }
             else
             {
@@ -47,21 +48,20 @@ namespace T3.Gui.Interaction
         /// <summary>
         /// Convert canvas position (e.g. of an Operator) into screen position  
         /// </summary>
-        public virtual Vector2 TransformPosition(Vector2 posOnCanvas)
-        {
-            var v = posOnCanvas * Scale - Scroll * Scale + WindowPos;
-            return new Vector2((int)v.X, (int)v.Y);
-        }
-
         public virtual Vector2 TransformPositionFloat(Vector2 posOnCanvas)
         {
-            var v = posOnCanvas * Scale - Scroll * Scale + WindowPos;
-            return new Vector2(v.X, v.Y);
+            return (posOnCanvas - Scroll) * Scale + WindowPos;
+        }
+
+        public Vector2 TransformPosition(Vector2 posOnCanvas)
+        {
+            var v = TransformPositionFloat(posOnCanvas);
+            return new Vector2((int)v.X, (int)v.Y);
         }
 
         public Vector2 TransformPositionFloored(Vector2 posOnCanvas)
         {
-            return MathUtils.Floor(posOnCanvas * Scale - Scroll * Scale + WindowPos);
+            return MathUtils.Floor(TransformPositionFloat(posOnCanvas));
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace T3.Gui.Interaction
         /// </summary>
         public float TransformX(float xOnCanvas)
         {
-            return TransformPosition(new Vector2(xOnCanvas, 0)).X;
+            return TransformPositionFloat(new Vector2(xOnCanvas, 0)).X;
         }
 
         /// <summary>
@@ -77,13 +77,13 @@ namespace T3.Gui.Interaction
         /// </summary>
         public float TransformY(float yOnCanvas)
         {
-            return TransformPosition(new Vector2(0, yOnCanvas)).Y;
+            return TransformPositionFloat(new Vector2(0, yOnCanvas)).Y;
         }
 
         /// <summary>
         /// Convert a screen space position (e.g. from mouse) to canvas coordinates  
         /// </summary>
-        public virtual Vector2 InverseTransformPosition(Vector2 screenPos)
+        public virtual Vector2 InverseTransformPositionFloat(Vector2 screenPos)
         {
             return (screenPos - WindowPos) / Scale + Scroll;
         }
@@ -93,7 +93,7 @@ namespace T3.Gui.Interaction
         /// </summary>
         public virtual float InverseTransformX(float xOnScreen)
         {
-            return InverseTransformPosition(new Vector2(xOnScreen, 0)).X;
+            return InverseTransformPositionFloat(new Vector2(xOnScreen, 0)).X;
         }
 
         /// <summary>
@@ -101,9 +101,7 @@ namespace T3.Gui.Interaction
         /// </summary>
         public float InverseTransformY(float yOnScreen)
         {
-            //return (yOnScreen - WindowPos.Y) / Scale.Y + Scroll.Y;
-            //return (yOnScreen - WindowPos.Y - WindowPos.Y) / Scale.Y;
-            return InverseTransformPosition(new Vector2(yOnScreen, 0)).Y;
+            return InverseTransformPositionFloat(new Vector2(0, yOnScreen)).Y;
         }
 
         /// <summary>
@@ -111,16 +109,16 @@ namespace T3.Gui.Interaction
         /// </summary>
         public Vector2 TransformDirection(Vector2 vectorInCanvas)
         {
-            return vectorInCanvas * Scale;
+            return TransformPositionFloat(vectorInCanvas) -
+                   TransformPositionFloat(new Vector2(0, 0));
         }
 
         public Vector2 TransformDirectionFloored(Vector2 vectorInCanvas)
         {
-            var s= vectorInCanvas * Scale;
+            var s = TransformDirection(vectorInCanvas);
             return new Vector2((int)s.X, (int)s.Y);
         }
 
-        
         /// <summary>
         /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
         /// </summary>
@@ -144,7 +142,13 @@ namespace T3.Gui.Interaction
 
         public ImRect InverseTransformRect(ImRect screenRect)
         {
-            return new ImRect(InverseTransformPosition(screenRect.Min), InverseTransformPosition(screenRect.Max));
+            return new ImRect(InverseTransformPositionFloat(screenRect.Min),
+                              InverseTransformPositionFloat(screenRect.Max));
+        }
+
+        public virtual void UpdateScaleAndTranslation(Instance compositionOp, ICanvas.Transition transition)
+        {
+            // by default do nothing, overide in subclasses
         }
 
         /// <summary>
@@ -152,16 +156,17 @@ namespace T3.Gui.Interaction
         /// </summary>
         public Vector2 ChildPosFromCanvas(Vector2 posOnCanvas)
         {
-            return posOnCanvas * Scale - Scroll * Scale;
+            return TransformPositionFloat(posOnCanvas) - WindowPos;
+            // (posOnCanvas - Scroll) * Scale;
         }
 
         public Vector2 WindowPos { get; private set; }
         public Vector2 WindowSize { get; private set; }
 
-        public Vector2 Scale { get; private set; } = Vector2.One;
+        public Vector2 Scale { get; protected set; } = Vector2.One;
         protected Vector2 ScaleTarget = Vector2.One;
 
-        public Vector2 Scroll { get; private set; } = new Vector2(0.0f, 0.0f);
+        public Vector2 Scroll { get; protected set; } = new Vector2(0.0f, 0.0f);
         protected Vector2 ScrollTarget = new Vector2(0.0f, 0.0f);
         #endregion
 
@@ -172,6 +177,12 @@ namespace T3.Gui.Interaction
                            Scale = ScaleTarget,
                            Scroll = ScrollTarget
                        };
+        }
+
+        public void SetTargetScope(Scope scope)
+        {
+            ScaleTarget = scope.Scale;
+            ScrollTarget = scope.Scroll;
         }
 
         public void SetVisibleRange(Vector2 scale, Vector2 scroll)
@@ -291,20 +302,13 @@ namespace T3.Gui.Interaction
             }
         }
 
-        public enum Transition
-        {
-            JumpIn,
-            JumpOut,
-            Undefined,
-        }
-
-        protected void SetScopeWithTransition(Vector2 scale, Vector2 scroll, Vector2 previousFocusOnScreen, Transition transition)
+        protected void SetScopeWithTransition(Vector2 scale, Vector2 scroll, Vector2 previousFocusOnScreen, ICanvas.Transition transition)
         {
             if (float.IsInfinity(scale.X) || float.IsNaN(scale.X)
                                           || float.IsInfinity(scale.Y) || float.IsNaN(scale.Y)
                                           || float.IsInfinity(scroll.X) || float.IsNaN(scroll.X)
                                           || float.IsInfinity(scroll.Y) || float.IsNaN(scroll.Y)
-                )
+               )
             {
                 scale = Vector2.One;
                 scroll = Vector2.Zero;
@@ -315,13 +319,13 @@ namespace T3.Gui.Interaction
 
             switch (transition)
             {
-                case Transition.JumpIn:
+                case ICanvas.Transition.JumpIn:
                     Scale = ScaleTarget * 0.3f;
                     var sizeOnCanvas = WindowSize / Scale;
                     Scroll = ScrollTarget - sizeOnCanvas / 2;
                     break;
 
-                case Transition.JumpOut:
+                case ICanvas.Transition.JumpOut:
                     Scale = ScaleTarget * 3f;
                     var sizeOnCanvas2 = WindowSize / Scale;
                     Scroll = ScrollTarget + sizeOnCanvas2 / 2;
@@ -392,7 +396,7 @@ namespace T3.Gui.Interaction
                 && (
                        ImGui.IsMouseDragging(ImGuiMouseButton.Right)
                        || ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
-                )
+               )
             {
                 ScrollTarget -= Io.MouseDelta / (ParentScale * ScaleTarget);
                 UserScrolledCanvas = true;
@@ -404,14 +408,14 @@ namespace T3.Gui.Interaction
 
             if ((flags & T3Ui.EditingFlags.PreventZoomWithMouseWheel) == 0)
             {
-                ZoomWithMouseWheel();
+                ZoomWithMouseWheel(_mouse);
                 //ZoomWithMiddleMouseDrag();
 
                 ScaleTarget = ClampScaleToValidRange(ScaleTarget);
             }
         }
 
-        private Vector2 ClampScaleToValidRange(Vector2 scale)
+        protected Vector2 ClampScaleToValidRange(Vector2 scale)
         {
             if (IsCurveCanvas)
                 return scale;
@@ -421,11 +425,10 @@ namespace T3.Gui.Interaction
                        : new Vector2(scale.X.Clamp(0.1f, 11), scale.Y.Clamp(0.1f, 11));
         }
 
-        private void ZoomWithMouseWheel()
+        public virtual void ZoomWithMouseWheel(Vector2 focusCenterOnScreen)
         {
             UserZoomedCanvas = false;
-
-            var focusCenterOnCanvas = InverseTransformPosition(_mouse);
+            
             //DrawCanvasDebugInfos();
 
             var zoomDelta = ComputeZoomDeltaFromMouseWheel();
@@ -433,12 +436,9 @@ namespace T3.Gui.Interaction
             if (clamped == ScaleTarget)
                 return;
 
-            var cornerOnCanvas = ScrollTarget;
-            var cornerToFocus = focusCenterOnCanvas - cornerOnCanvas;
-
             if (Math.Abs(zoomDelta - 1) < 0.001f)
                 return;
-            
+
             var zoom = zoomDelta * Vector2.One;
             if (IsCurveCanvas)
             {
@@ -456,13 +456,14 @@ namespace T3.Gui.Interaction
 
             if (Math.Abs(zoomDelta) > 0.1f)
                 UserZoomedCanvas = true;
-            
-            ScrollTarget = (focusCenterOnCanvas - cornerToFocus / zoom);
+
+            var focusCenterOnCanvas = InverseTransformPositionFloat(focusCenterOnScreen);
+            ScrollTarget += (focusCenterOnCanvas - ScrollTarget) * (zoomDelta - 1.0f) / zoom;
         }
 
         private void DrawCanvasDebugInfos()
         {
-            var focusCenterOnCanvas = InverseTransformPosition(_mouse);
+            var focusCenterOnCanvas = InverseTransformPositionFloat(_mouse);
             var dl = ImGui.GetForegroundDrawList();
 
             var focusOnScreen = TransformPosition(focusCenterOnCanvas);
@@ -476,9 +477,9 @@ namespace T3.Gui.Interaction
             dl.AddText(wp + new Vector2(0, 32), Color.Orange, $"CNVS: {focusCenterOnCanvas.X:0.0} {focusCenterOnCanvas.Y:0.0} ");
         }
 
-        private bool IsCurveCanvas => Scale.Y < 0;
+        protected bool IsCurveCanvas => Scale.Y < 0;
 
-        private float ComputeZoomDeltaFromMouseWheel()
+        protected float ComputeZoomDeltaFromMouseWheel()
         {
             const float zoomSpeed = 1.2f;
             var zoomSum = 1f;
@@ -532,8 +533,9 @@ namespace T3.Gui.Interaction
         //     }
         // }
 
-        private bool UsingParentCanvas => GraphCanvas.Current != this && GraphCanvas.Current != null;
-        private Vector2 ParentScale => UsingParentCanvas ? GraphCanvas.Current.ScaleTarget : Vector2.One;
+        public bool UsingParentCanvas => GraphCanvas.Current != this && GraphCanvas.Current != null;
+        public Vector2 ParentScale => UsingParentCanvas ? GraphCanvas.Current.ScaleTarget : Vector2.One;
+        public Vector2 ParentScroll => UsingParentCanvas ? GraphCanvas.Current.ScrollTarget : Vector2.Zero;
 
         public struct Scope
         {

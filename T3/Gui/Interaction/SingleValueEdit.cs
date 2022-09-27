@@ -5,7 +5,6 @@ using T3.Core;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Gui.InputUi;
-using T3.Gui.Styling;
 using T3.Gui.UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 
@@ -58,19 +57,18 @@ namespace T3.Gui.Interaction
                                                float scale = 1,
                                                string format = "{0:0.000}")
         {
-            CurrentTabIndex++;
+            _currentTabIndex++;
             var componentId = ImGui.GetID("valueEdit");
 
-            var shouldFocus = CurrentTabIndex == TabFocusIndex;
+            var shouldFocus = _currentTabIndex == _tabFocusIndex;
             if (shouldFocus)
             {
-                
                 //Log.Debug("  ShouldFocus for index " + TabFocusIndex  +  "  state " + _state );
                 SetState(InputStates.TextInput);
                 _activeJogDialId = componentId;
                 _jogDialText = FormatValueForButton(ref value);
             }
-            
+
             var io = ImGui.GetIO();
 
             _numberFormat = format;
@@ -117,11 +115,11 @@ namespace T3.Gui.Interaction
 
                         if (UserSettings.Config.UseJogDialControl)
                         {
-                            JogDialOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.03f,  _center, min, max, scale, clamp);
+                            JogDialOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
                         }
                         else
                         {
-                            SliderLadder.Draw(io, min, max, scale, (float)(ImGui.GetTime() - _timeOpened), clamp);
+                            SliderLadder.Draw(ref _editValue, io, min, max, scale, (float)(ImGui.GetTime() - _timeOpened), clamp, _center);
                         }
 
                         break;
@@ -144,15 +142,15 @@ namespace T3.Gui.Interaction
                             ImGui.SetKeyboardFocusHere(-1);
                             if (ImGui.IsKeyReleased((ImGuiKey)Key.Tab))
                             {
-                                TabFocusIndex = -1;
+                                _tabFocusIndex = -1;
                             }
                         }
 
                         ImGui.PopStyleColor();
                         var completedAfterTabbing = false;
-                        if (ImGui.IsKeyPressed((ImGuiKey)Key.Tab) && TabFocusIndex == -1)
+                        if (ImGui.IsKeyPressed((ImGuiKey)Key.Tab) && _tabFocusIndex == -1)
                         {
-                            TabFocusIndex = CurrentTabIndex + (ImGui.GetIO().KeyShift ? -1 : 1);
+                            _tabFocusIndex = _currentTabIndex + (ImGui.GetIO().KeyShift ? -1 : 1);
                             completedAfterTabbing = true;
                         }
 
@@ -163,7 +161,6 @@ namespace T3.Gui.Interaction
                             // and reopen the state. Sadly there doesn't appear to be a simple fix for this.
                         }
 
-                        
                         if (completedAfterTabbing || ImGui.IsKeyPressed((ImGuiKey)Key.Esc) || ImGui.IsItemDeactivated() || !ImGui.IsWindowFocused())
                         {
                             SetState(InputStates.Inactive);
@@ -171,11 +168,9 @@ namespace T3.Gui.Interaction
                                 _editValue = _startValue;
                         }
 
-
                         _editValue = Evaluate(_jogDialText);
                         break;
                 }
-                
 
                 value = _editValue;
                 if (_state == InputStates.Inactive)
@@ -187,7 +182,6 @@ namespace T3.Gui.Interaction
             }
 
             DrawButtonWithDynamicLabel(FormatValueForButton(ref value), ref size);
-            
             DrawValueRangeIndicator(value, min, max);
 
             if (ImGui.IsItemActivated())
@@ -201,8 +195,8 @@ namespace T3.Gui.Interaction
             else
             {
                 var isHovered = ImGui.IsItemHovered();
-                    
-                if ( _state == InputStates.Inactive)
+
+                if (_state == InputStates.Inactive)
                 {
                     var isHoveredComponent = _activeHoverComponentId == componentId;
                     if (isHoveredComponent)
@@ -210,13 +204,14 @@ namespace T3.Gui.Interaction
                         if (isHovered)
                         {
                             T3Ui.MouseWheelFieldHovered = true;
+                            ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
                             var dl = ImGui.GetForegroundDrawList();
                             dl.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.Gray);
-                        
+
                             var wheel = ImGui.GetIO().MouseWheel;
                             if (wheel == 0)
                                 return InputEditStateFlags.Nothing;
-                            
+
                             var factor = 1f;
                             if (ImGui.GetIO().KeyShift)
                             {
@@ -226,7 +221,7 @@ namespace T3.Gui.Interaction
                             {
                                 factor = 10f;
                             }
-                            
+
                             value += wheel * scale * 10 * factor;
                             _hovereddComponentModifiedByWheel = true;
                             return InputEditStateFlags.Modified;
@@ -234,9 +229,9 @@ namespace T3.Gui.Interaction
 
                         var didModify = _hovereddComponentModifiedByWheel;
                         _hovereddComponentModifiedByWheel = false;
-                            
-                        return didModify 
-                                   ? InputEditStateFlags.ModifiedAndFinished 
+
+                        return didModify
+                                   ? InputEditStateFlags.ModifiedAndFinished
                                    : InputEditStateFlags.Nothing;
                     }
 
@@ -254,8 +249,6 @@ namespace T3.Gui.Interaction
         }
 
         private static bool _hovereddComponentModifiedByWheel;
-        
-        
 
         private static void SetState(InputStates newState)
         {
@@ -282,9 +275,9 @@ namespace T3.Gui.Interaction
             _state = newState;
         }
 
-        public static int CurrentTabIndex = 0;
-        public static int LastMaxTabIndex;
-        public static int TabFocusIndex = -1; // if not -1 tries to set keyboard focus to input field.  
+        private static int _currentTabIndex;
+        private static int _lastMaxTabIndex;
+        private static int _tabFocusIndex = -1; // if not -1 tries to set keyboard focus to input field.  
 
         private static double Evaluate(string expression)
         {
@@ -331,10 +324,10 @@ namespace T3.Gui.Interaction
                 var center = 0.0;
                 if (min < 0)
                 {
-                    center = MathUtils.Remap((min + max) * 0.5, min, max, 0, itemSize.X);
+                    center = MathUtils.RemapAndClamp((min + max) * 0.5, min, max, 0, itemSize.X);
                 }
 
-                var end = MathUtils.Remap(value, min, max, 0, itemSize.X);
+                var end = MathUtils.RemapAndClamp(value, min, max, 0, itemSize.X);
                 var orgCenter = center;
 
                 if (center > end)
@@ -399,157 +392,17 @@ namespace T3.Gui.Interaction
         private static double _timeOpened;
 
         /// <summary>
-        /// Draws a range of virtual slider overlays
-        /// </summary>
-        private static class SliderLadder
-        {
-            private class RangeDef
-            {
-                public readonly float YMin;
-                public readonly float YMax;
-                public readonly float ScaleFactor;
-                public readonly string Label;
-                public readonly float FadeInDelay;
-
-                public RangeDef(float yMin, float yMax, float scaleFactor, string label, float fadeInDelay)
-                {
-                    YMin = yMin;
-                    YMax = yMax;
-                    ScaleFactor = scaleFactor;
-                    Label = label;
-                    FadeInDelay = fadeInDelay;
-                }
-            }
-
-            private static readonly RangeDef[] Ranges =
-                {
-                    new RangeDef(-4f * OuterRangeHeight, -3f * OuterRangeHeight, 1000, "x1000", 2),
-                    new RangeDef(-3f * OuterRangeHeight, -2f * OuterRangeHeight, 100, "x100", 1),
-                    new RangeDef(-2f * OuterRangeHeight, -1f * OuterRangeHeight, 10, "x10", 0),
-                    new RangeDef(-1f * OuterRangeHeight, 1f * OuterRangeHeight, 1, "", 0),
-                    new RangeDef(1f * OuterRangeHeight, 2f * OuterRangeHeight, 0.1f, "x0.1", 0),
-                    new RangeDef(2f * OuterRangeHeight, 3f * OuterRangeHeight, 0.01f, "x0.01", 1),
-                };
-
-            private static RangeDef _lockedRange;
-
-            public static void Draw(ImGuiIOPtr io, double min, double max, float scale, float timeSinceVisible, bool clamp)
-            {
-                var foreground = ImGui.GetForegroundDrawList();
-                ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-                if (timeSinceVisible < 0.2)
-                    _lockedRange = null;
-
-                var pLast = io.MousePos - io.MouseDelta - _center;
-                var pNow = io.MousePos - _center;
-                if (timeSinceVisible < 0.032f)
-                {
-                    _lastStepPosX = pNow.X;
-                }
-
-                float activeScaleFactor = 0;
-
-                foreach (var range in Ranges)
-                {
-                    var isActiveRange = range == _lockedRange
-                                        || (_lockedRange == null && pNow.Y > range.YMin && pNow.Y < range.YMax);
-                    var opacity = (timeSinceVisible * 4 - range.FadeInDelay / 4).Clamp(0, 1);
-
-                    var isCenterRange = Math.Abs(range.ScaleFactor - 1) < 0.001f;
-                    if (isActiveRange)
-                    {
-                        activeScaleFactor = range.ScaleFactor;
-                        if (_lockedRange == null && Math.Abs(ImGui.GetMouseDragDelta().X) > 30)
-                        {
-                            _lockedRange = range;
-                        }
-                    }
-
-                    if (!isCenterRange)
-                    {
-                        var centerColor = (isActiveRange ? RangeActiveColor : RangeCenterColor) * opacity;
-
-                        foreground.AddRectFilledMultiColor(
-                                                           new Vector2(-RangeWidth, range.YMin) + _center,
-                                                           new Vector2(0, range.YMax - RangePadding) + _center,
-                                                           RangeOuterColor,
-                                                           centerColor,
-                                                           centerColor,
-                                                           RangeOuterColor
-                                                          );
-
-                        foreground.AddRectFilledMultiColor(
-                                                           new Vector2(0, range.YMin) + _center,
-                                                           new Vector2(RangeWidth, range.YMax - RangePadding) + _center,
-                                                           centerColor,
-                                                           RangeOuterColor,
-                                                           RangeOuterColor,
-                                                           centerColor
-                                                          );
-                        foreground.AddText(Fonts.FontLarge,
-                                           Fonts.FontLarge.FontSize,
-                                           new Vector2(-20, range.YMin) + _center,
-                                           isActiveRange ? (Color.White * opacity) : Color.Black,
-                                           range.Label);
-                    }
-                }
-
-                var deltaSinceLastStep = pLast.X - _lastStepPosX;
-                var delta = deltaSinceLastStep / StepSize;
-                if (io.KeyAlt)
-                {
-                    ImGui.PushFont(Fonts.FontSmall);
-                    foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), Color.Gray, "x0.01");
-                    ImGui.PopFont();
-
-                    delta *= 0.01f;
-                }
-                else if (io.KeyShift)
-                {
-                    ImGui.PushFont(Fonts.FontSmall);
-                    foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), Color.Gray, "x10");
-                    ImGui.PopFont();
-
-                    delta *= 10f;
-                }
-
-                if (!(Math.Abs(deltaSinceLastStep) >= StepSize))
-                    return;
-
-                _editValue += delta * activeScaleFactor * scale;
-                if (activeScaleFactor > 1)
-                {
-                    _editValue = Math.Round(_editValue / (activeScaleFactor * scale)) * (activeScaleFactor * scale);
-                }
-
-                if (clamp)
-                    _editValue = _editValue.Clamp(min, max);
-
-                _lastStepPosX = pNow.X;
-            }
-
-            private const float StepSize = 3;
-            private static float _lastStepPosX;
-            private const float RangeWidth = 300;
-            private const float OuterRangeHeight = 50;
-            private const float RangePadding = 1;
-            private static readonly Color RangeCenterColor = new Color(0.3f, 0.3f, 0.3f, 0.8f);
-            private static readonly Color RangeOuterColor = new Color(0.3f, 0.3f, 0.3f, 0.0f);
-            private static readonly Color RangeActiveColor = new Color(0.0f, 0.0f, 0.0f, 0.7f);
-        }
-
-        /// <summary>
         /// This is a horrible attempt to work around imguis current limitation that button elements can't have a tab focus
         /// </summary>
         public static void StartNextFrame()
         {
-            LastMaxTabIndex = CurrentTabIndex;
-            CurrentTabIndex = 0;
-            
-            if (TabFocusIndex > LastMaxTabIndex)
+            _lastMaxTabIndex = _currentTabIndex;
+            _currentTabIndex = 0;
+
+            if (_tabFocusIndex > _lastMaxTabIndex)
             {
                 Log.Debug("fixing tab overflow");
-                TabFocusIndex = -1;
+                _tabFocusIndex = -1;
             }
         }
     }

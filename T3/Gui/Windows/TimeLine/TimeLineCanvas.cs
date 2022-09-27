@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -13,6 +13,7 @@ using T3.Gui.Interaction;
 using T3.Gui.Interaction.Snapping;
 using T3.Gui.Interaction.WithCurves;
 using T3.Gui.Selection;
+using T3.Gui.UiHelpers;
 using UiHelpers;
 
 namespace T3.Gui.Windows.TimeLine
@@ -45,7 +46,10 @@ namespace T3.Gui.Windows.TimeLine
         {
             Current = this;
             SelectedAnimationParameters = GetAnimationParametersForSelectedNodes(compositionOp);
-            UpdateLocalTimeTranslation(compositionOp);
+
+            // UpdateLocalTimeTranslation(compositionOp);
+            // ImGui.TextUnformatted($"Scroll: {Scroll.X}   Scale: {Scale.X}");
+
             ScrollToTimeAfterStopped();
 
             var modeChanged = UpdateMode();
@@ -97,63 +101,71 @@ namespace T3.Gui.Windows.TimeLine
 
                 if (FenceState == SelectionFence.States.CompletedAsClick)
                 {
-                    Playback.TimeInBars = InverseTransformPosition(ImGui.GetMousePos()).X;
+                    var newTime = InverseTransformPositionFloat(ImGui.GetMousePos()).X;
+                    if (Playback.IsLooping)
+                    {
+                        var newStartTime = newTime - newTime % 4;
+                        var duration = Playback.LoopRange.Duration;
+                        Playback.LoopRange.Start = newStartTime;
+                        Playback.LoopRange.Duration = duration;
+                    }
+                    else
+                    {
+                        Playback.TimeInBars = newTime;
+                    }
                 }
             }
             Current = null;
         }
 
 
-        
+
         #region handle nested timelines ----------------------------------
-        private void UpdateLocalTimeTranslation(Instance compositionOp)
+        public override void UpdateScaleAndTranslation(Instance compositionOp, ICanvas.Transition transition)
         {
-            _nestedTimeScale = 1f;
-            _nestedTimeOffset = 0f;
+            if (transition == ICanvas.Transition.Undefined) return;
 
-            var parents = NodeOperations.GetParentInstances(compositionOp).Reverse().ToList();
-            parents.Add(compositionOp);
-            foreach (var p in parents)
+            // remember the old scroll state
+            var oldScale = Scale;
+            var oldScroll = Scroll;
+
+            var clip = NodeOperations.GetCompositionTimeClip(compositionOp);
+            if (clip == null) return;
+
+            // determine scaling factor
+            TimeRange sourceRange, targetRange;
+            if (transition == ICanvas.Transition.JumpIn)
             {
-                if (p.Outputs.Count <= 0 || !(p.Outputs[0] is ITimeClipProvider timeClipProvider))
-                    continue;
-
-                var clip = timeClipProvider.TimeClip;
-                var scale = clip.TimeRange.Duration / clip.SourceRange.Duration;
-                _nestedTimeScale *= scale;
-                _nestedTimeOffset += clip.TimeRange.Start - clip.SourceRange.Start * scale;
+                sourceRange = clip.TimeRange;
+                targetRange = clip.SourceRange;
+            }
+            else
+            {
+                sourceRange = clip.SourceRange;
+                targetRange = clip.TimeRange;
             }
 
-            // ImGui.TextUnformatted($"localScale: {_nestedTimeScale}   localScroll: {_nestedTimeOffset}");
+            float scale = targetRange.Duration / sourceRange.Duration;
+
+            // remove scrolling, then determine where the time clip is centered
+            Scroll = new Vector2(0, Scroll.Y);
+            var centerOfSourceRange = (sourceRange.Start + sourceRange.End) * 0.5f;
+            var originalScreenPos = TransformX(centerOfSourceRange);
+
+            // now apply scaling and determine where the source clip is centered
+            Scale /= scale;
+            var centerOfTargetRange = (targetRange.Start + targetRange.End) * 0.5f;
+            var newScreenPos = TransformX(centerOfTargetRange);
+
+            // set final scale and "undo" the movement of the position
+            ScaleTarget.X = Scale.X;
+            var positionDelta = new Vector2(newScreenPos - originalScreenPos, 0f);
+            ScrollTarget.X = oldScroll.X * scale + InverseTransformDirection(positionDelta).X;
+
+            // restore the old scale and scroll state
+            Scale = oldScale;
+            Scroll = oldScroll;
         }
-
-        /// <summary>
-        /// Override the default implement to support time clip nesting 
-        /// </summary>
-        public override Vector2 TransformPosition(Vector2 posOnCanvas)
-        {
-            var localScale = new Vector2(_nestedTimeScale, 1);
-            var localScroll = new Vector2(_nestedTimeOffset, 0);
-
-            // TODO: Verify that nested scroll is not inverted!
-            return (posOnCanvas * localScale - localScroll) * Scale - Scroll * Scale + WindowPos;
-        }
-
-        public override Vector2 InverseTransformPosition(Vector2 posOnScreen)
-        {
-            var localScale = new Vector2(_nestedTimeScale, 1);
-            var localScroll = new Vector2(_nestedTimeOffset, 0);
-
-            return (posOnScreen + localScroll * Scale + Scroll * Scale - WindowPos) / (localScale * Scale);
-        }
-
-        public float TransformGlobalTime(float time)
-        {
-            return base.TransformPosition(new Vector2(time, 0)).X;
-        }
-
-        public float NestedTimeScale => Scale.X * _nestedTimeScale;
-        public float NestedTimeOffset => (Scroll.X * Scale.X + _nestedTimeOffset) + _nestedTimeOffset;
         #endregion
 
         private void HandleDeferredActions()
@@ -230,8 +242,14 @@ namespace T3.Gui.Windows.TimeLine
             {
                 if (!IsCurrentTimeVisible())
                 {
-                    var time = Playback.TimeInBars - InverseTransformDirection(new Vector2(WindowSize.X, 0)).X / 2;
-                    ScrollTarget.X = (float)(time);
+                    // assume we are not scrolling, what screen position would the playhead be at?
+                    var oldScroll = Scroll;
+                    Scroll = new Vector2(0, Scroll.Y);
+                    var posScreen = TransformX((float) Playback.TimeInBars);
+                    // position that playhead in the center of the window
+                    ScrollTarget.X = InverseTransformX(posScreen - WindowSize.X*0.5f);
+                    // restore old state of scrolling
+                    Scroll = oldScroll;
                 }
             }
 
@@ -357,8 +375,6 @@ namespace T3.Gui.Windows.TimeLine
 
         public static TimeLineCanvas Current;
 
-        private float _nestedTimeScale = 1;
-        private float _nestedTimeOffset;
         private double _lastPlaybackSpeed;
         private readonly List<AnimationParameter> _pinnedParams = new(20);
         private List<AnimationParameter> _curvesForSelection = new(64);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
@@ -212,6 +212,16 @@ namespace T3.Gui.Graph
                     matches.Add(n);
             }
 
+            foreach (var a in parentUi.Annotations.Values)
+            {
+                if (a == annotation)
+                    continue;
+                
+                var nRect = new ImRect(a.PosOnCanvas, a.PosOnCanvas + a.Size);
+                if (aRect.Contains(nRect))
+                    matches.Add(a);
+            }
+
             return matches;
         }
 
@@ -230,7 +240,7 @@ namespace T3.Gui.Graph
             }
 
             var newDragPos = ImGui.GetMousePos() - _dragStartDelta;
-            var newDragPosInCanvas = GraphCanvas.Current.InverseTransformPosition(newDragPos);
+            var newDragPosInCanvas = GraphCanvas.Current.InverseTransformPositionFloat(newDragPos);
             var moveDeltaOnCanvas = newDragPosInCanvas - draggedNode.PosOnCanvas;
 
             // Drag selection
