@@ -52,7 +52,7 @@ namespace T3.Gui
             {
                 List<Symbol.OutputDefinition> outputDefinitions = SymbolChild.Symbol.OutputDefinitions;
 
-                //Set disabled status on this child's outputs
+                // Set disabled status on this child's outputs
                 for(int i = 0; i < outputDefinitions.Count; i++)
                 {
                     if (outputDefinitions[i] == null)
