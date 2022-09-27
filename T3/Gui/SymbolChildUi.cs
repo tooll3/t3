@@ -85,10 +85,11 @@ namespace T3.Gui
                     {
                         List<ISlot> outputs = instance.Outputs;
 
-                        for (int i = 0; i < outputs.Count; i++)
+                        foreach (var t in outputs)
                         {
-                            outputs[i].IsDisabled = value;
+                            t.IsDisabled = value;
                         }
+
                     }
                 }
             }
