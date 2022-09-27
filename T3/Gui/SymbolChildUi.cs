@@ -77,7 +77,7 @@ namespace T3.Gui
                 // Set disabled status on outputs of each instanced copy of this child within all parents that contain it
                 foreach (var parentInstance in SymbolChild.Parent.InstancesOfSymbol)
                 {
-                    Instance[] matchingChildInstances = parentInstance.Children.Where(child => child.SymbolChildId == Id).ToArray();
+                    var matchingChildInstances = parentInstance.Children.Where(child => child.SymbolChildId == Id).ToArray();
 
                     //this parent doesn't have an instance of our SymbolChild. Ignoring and continuing.
                     if(matchingChildInstances.Length == 0)
