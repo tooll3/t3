@@ -81,7 +81,7 @@ namespace T3.Gui
                         continue;
 
                     //set disabled status on all outputs of each instance
-                    foreach (Instance instance in matchingChildInstances)
+                    foreach (var instance in matchingChildInstances)
                     {
                         List<ISlot> outputs = instance.Outputs;
 
