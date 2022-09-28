@@ -31,9 +31,6 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
 
         private void Update(EvaluationContext context)
         {
-            Log.Debug("Update random camera");
-            //Reference.DirtyFlag.Clear();
-            
             LastObjectToWorld = context.ObjectToWorld;
             
             float fov = MathUtil.DegreesToRadians(Fov.GetValue(context));
