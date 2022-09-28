@@ -562,7 +562,9 @@ namespace T3.Gui
             }
 
             ImGui.SetNextItemWidth(size.X);
-            var modified = ImGui.Combo("##dropDown", ref index, valueNames, valueNames.Length);
+            // FIXME: using only "##dropdown" did not allow for multiple combos (see for example renderSequenceWindow.cs)
+            // so we add the type and label here - but this is only a temporary hack...
+            var modified = ImGui.Combo($"##dropDown{enumType}{label}", ref index, valueNames, valueNames.Length, valueNames.Length);
             return modified;
         }
     }

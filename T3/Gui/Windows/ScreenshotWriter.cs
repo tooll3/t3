@@ -17,14 +17,13 @@ namespace T3.Gui.Windows
             Png,
             Jpg,
         }
-        
-        public static bool SaveBufferToFile(Texture2D texture2d, string filepath, FileFormats format, bool forceFirst= false)
-        {
-            var device = ResourceManager.Instance().Device;
 
+        public static bool SaveBufferToFile(Texture2D texture2d, string filepath, FileFormats format)
+        {
             if (texture2d == null)
                 return false;
 
+            var device = ResourceManager.Instance().Device;
             var currentDesc = texture2d.Description;
             if (ImagesWithCpuAccess.Count == 0
                 || ImagesWithCpuAccess[0].Description.Format != currentDesc.Format
@@ -52,88 +51,88 @@ namespace T3.Gui.Windows
                 {
                     ImagesWithCpuAccess.Add(new Texture2D(device, imageDesc));
                 }
-
                 _currentIndex = 0;
-                _currentUsageIndex = 1;
+                // skip the first two frames since they will only appear
+                // after buffers have been swapped
+                _currentUsageIndex = -SkipImages;
             }
 
+            // copy the original texture to a readable image
             var immediateContext = device.ImmediateContext;
             var readableImage = ImagesWithCpuAccess[_currentIndex];
             immediateContext.CopyResource(texture2d, readableImage);
+            immediateContext.UnmapSubresource(readableImage, 0);
             _currentIndex = (_currentIndex + 1) % NumTextureEntries;
-            _currentUsageIndex++;
 
-            if (_currentUsageIndex >= NumTextureEntries)
+            // don't return first two samples since buffering is not ready yet
+            if (_currentUsageIndex++ < 0)
+                return true;
+
+            DataBox dataBox = immediateContext.MapSubresource(readableImage,
+                                                                0,
+                                                                0,
+                                                                MapMode.Read,
+                                                                SharpDX.Direct3D11.MapFlags.None,
+                                                                out var imageStream);
+            using (imageStream)
             {
-                immediateContext.UnmapSubresource(readableImage, 0);
+                int width = currentDesc.Width;
+                int height = currentDesc.Height;
+                var factory = new ImagingFactory();
 
-                DataBox dataBox = immediateContext.MapSubresource(readableImage,
-                                                                  0,
-                                                                  0,
-                                                                  MapMode.Read,
-                                                                  SharpDX.Direct3D11.MapFlags.None,
-                                                                  out var imageStream);
-                using (imageStream)
+                WICStream stream = null;
+
+                stream = new WICStream(factory, filepath, NativeFileAccess.Write);
+
+                // Initialize a Jpeg encoder with this stream
+                //var encoder = new PngBitmapEncoder(factory);
+                //var encoder = new JpegBitmapEncoder(factory);
+                BitmapEncoder encoder = (format == FileFormats.Png)
+                                    ? new PngBitmapEncoder(factory)
+                                    : new JpegBitmapEncoder(factory);
+                encoder.Initialize(stream);
+
+                // Create a Frame encoder
+                var bitmapFrameEncode = new BitmapFrameEncode(encoder);
+                bitmapFrameEncode.Initialize();
+                bitmapFrameEncode.SetSize(width, height);
+                var formatId = PixelFormat.Format32bppRGBA;
+                bitmapFrameEncode.SetPixelFormat(ref formatId);
+
+                // Write a pseudo-plasma to a buffer
+                int rowStride = PixelFormat.GetStride(formatId, width);
+                var outBufferSize = height * rowStride;
+                var outDataStream = new DataStream(outBufferSize, true, true);
+                var pixelByteCount = PixelFormat.GetStride(formatId, 1);
+
+                try
                 {
-                    int width = currentDesc.Width;
-                    int height = currentDesc.Height;
-                    //const string filename = "output.jpg";
-
-                    var factory = new ImagingFactory();
-
-                    WICStream stream = null;
-
-                    stream = new WICStream(factory, filepath, NativeFileAccess.Write);
-
-                    // Initialize a Jpeg encoder with this stream
-                    //var encoder = new PngBitmapEncoder(factory);
-                    //var encoder = new JpegBitmapEncoder(factory);
-                    BitmapEncoder encoder = (format == FileFormats.Png) 
-                                      ? new PngBitmapEncoder(factory)
-                                      :new JpegBitmapEncoder(factory);
-                    encoder.Initialize(stream);
-
-                    // Create a Frame encoder
-                    var bitmapFrameEncode = new BitmapFrameEncode(encoder);
-                    bitmapFrameEncode.Initialize();
-                    bitmapFrameEncode.SetSize(width, height);
-                    var formatId = PixelFormat.Format32bppRGBA;
-                    bitmapFrameEncode.SetPixelFormat(ref formatId);
-
-                    // Write a pseudo-plasma to a buffer
-                    int rowStride = PixelFormat.GetStride(formatId, width);
-                    var outBufferSize = height * rowStride;
-                    var outDataStream = new DataStream(outBufferSize, true, true);
-                    var pixelByteCount = PixelFormat.GetStride(formatId, 1);
-
-                    if (currentDesc.Format == Format.R16G16B16A16_Float)
+                    switch (currentDesc.Format)
                     {
-                        for (int y1 = 0; y1 < height; y1++)
-                        {
-                            for (int x1 = 0; x1 < width; x1++)
+                        case Format.R16G16B16A16_Float:
+                            for (int y1 = 0; y1 < height; y1++)
                             {
-                                imageStream.Position = (long)(y1) * dataBox.RowPitch + (long)(x1) * 8;
-
-                                var r = Read2BytesToHalf(imageStream);
-                                var g = Read2BytesToHalf(imageStream);
-                                var b = Read2BytesToHalf(imageStream);
-                                var a = Read2BytesToHalf(imageStream);
-
-                                outDataStream.WriteByte((byte)(b.Clamp(0, 1) * 255));
-                                outDataStream.WriteByte((byte)(g.Clamp(0, 1) * 255));
-                                outDataStream.WriteByte((byte)(r.Clamp(0, 1) * 255));
-                                if (format == FileFormats.Png)
+                                for (int x1 = 0; x1 < width; x1++)
                                 {
-                                    outDataStream.WriteByte((byte)(a.Clamp(0, 1) * 255));
+                                    imageStream.Position = (long)(y1) * dataBox.RowPitch + (long)(x1) * 8;
+
+                                    var r = Read2BytesToHalf(imageStream);
+                                    var g = Read2BytesToHalf(imageStream);
+                                    var b = Read2BytesToHalf(imageStream);
+                                    var a = Read2BytesToHalf(imageStream);
+
+                                    outDataStream.WriteByte((byte)(b.Clamp(0, 1) * 255));
+                                    outDataStream.WriteByte((byte)(g.Clamp(0, 1) * 255));
+                                    outDataStream.WriteByte((byte)(r.Clamp(0, 1) * 255));
+                                    if (format == FileFormats.Png)
+                                    {
+                                        outDataStream.WriteByte((byte)(a.Clamp(0, 1) * 255));
+                                    }
                                 }
                             }
-                        }
-                    }
-                    else if (currentDesc.Format == Format.R8G8B8A8_UNorm)
-                    {
-                        var count = height * width;
-                        try
-                        {
+                            break;
+
+                        case Format.R8G8B8A8_UNorm:
                             for (int y1 = 0; y1 < height; y1++)
                             {
                                 imageStream.Position = (long)(y1) * dataBox.RowPitch;
@@ -145,7 +144,7 @@ namespace T3.Gui.Windows
                                     outDataStream.WriteByte(b);
                                     outDataStream.WriteByte(g);
                                     outDataStream.WriteByte(r);
-                                    
+
                                     var a = imageStream.ReadByte();
                                     if (format == FileFormats.Png)
                                     {
@@ -153,47 +152,32 @@ namespace T3.Gui.Windows
                                     }
                                 }
                             }
-                        }
-                        catch (Exception e)
-                        {
-                            Log.Error("Can't write image:" + e.Message);
-                            return false;
-                        }
-                    }
-                    else if (currentDesc.Format == Format.R16G16B16A16_UNorm)
-                    {
-                        var count = height * width;
-                        try
-                        {
+                            break;
+
+                        case Format.R16G16B16A16_UNorm:
                             for (int y1 = 0; y1 < height; y1++)
                             {
                                 imageStream.Position = (long)(y1) * dataBox.RowPitch;
                                 for (int x1 = 0; x1 < width; x1++)
                                 {
-                                    var r = (byte)imageStream.ReadByte(); imageStream.ReadByte();
-                                    var g = (byte)imageStream.ReadByte(); imageStream.ReadByte();
-                                    var b = (byte)imageStream.ReadByte(); imageStream.ReadByte();
+                                    imageStream.ReadByte(); var r = (byte)imageStream.ReadByte();
+                                    imageStream.ReadByte(); var g = (byte)imageStream.ReadByte();
+                                    imageStream.ReadByte(); var b = (byte)imageStream.ReadByte();
                                     outDataStream.WriteByte(b);
                                     outDataStream.WriteByte(g);
                                     outDataStream.WriteByte(r);
 
-                                    var a = imageStream.ReadByte(); imageStream.ReadByte();
+                                    imageStream.ReadByte(); var a = imageStream.ReadByte();
                                     if (format == FileFormats.Png)
                                     {
                                         outDataStream.WriteByte((byte)a);
                                     }
                                 }
                             }
-                        }
-                        catch (Exception e)
-                        {
-                            Log.Error("Can't write image:" + e.Message);
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        Log.Warning($"Can't export unknown texture format {currentDesc.Format}");
+                            break;
+
+                        default:
+                            throw new InvalidOperationException($"Can't export unknown texture format {currentDesc.Format}");
                     }
 
                     // Copy the pixels from the buffer to the Wic Bitmap Frame encoder
@@ -202,13 +186,21 @@ namespace T3.Gui.Windows
                     // Commit changes
                     bitmapFrameEncode.Commit();
                     encoder.Commit();
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException("Internal image copy failed : " + e.ToString());
+                }
+                finally
+                {
+                    immediateContext.UnmapSubresource(readableImage, 0);
+                    imageStream.Dispose();
+                    outDataStream.Dispose();
                     bitmapFrameEncode.Dispose();
                     encoder.Dispose();
                     stream.Dispose();
-
-                    immediateContext.UnmapSubresource(readableImage, 0);
                 }
-            }
+            } // using (imageStream)
 
             return true;
         }
@@ -290,6 +282,10 @@ namespace T3.Gui.Windows
         private static byte[] bytes = new byte[4];
 
         public static string LastFilename = string.Empty;
+        // skip a certain number of images at the beginning since the
+        // final content will only appear after several buffer flips
+        public const int SkipImages = 2;
+        // hold several textures internally to speed up calculations
         private const int NumTextureEntries = 2;
 
         private static readonly List<Texture2D> ImagesWithCpuAccess = new();
@@ -299,9 +295,7 @@ namespace T3.Gui.Windows
         public static void Dispose()
         {
             foreach (var image in ImagesWithCpuAccess)
-            {
                 image.Dispose();
-            }
 
             ImagesWithCpuAccess.Clear();
         }

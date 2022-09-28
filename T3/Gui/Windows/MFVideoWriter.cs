@@ -67,6 +67,10 @@ namespace T3.Gui.Windows
         private SharpDX.Size2 _videoPixelSize;
         private int _frameIndex;
         private int _streamIndex;
+        // skip a certain number of images at the beginning since the
+        // final content will only appear after several buffer flips
+        public const int SkipImages = 2;
+        // hold several textures internally to speed up calculations
         private const int NumTextureEntries = 2;
         private static readonly List<Texture2D> ImagesWithCpuAccess = new();
         private static int _currentIndex;
@@ -229,7 +233,9 @@ namespace T3.Gui.Windows
                         ImagesWithCpuAccess.Add(new Texture2D(device, imageDesc));
                     }
                     _currentIndex = 0;
-                    _currentUsageIndex = 0;
+                    // skip the first two frames since they will only appear
+                    // after buffers have been swapped
+                    _currentUsageIndex = -SkipImages;
                 }
 
                 // copy the original texture to a readable image
@@ -237,11 +243,10 @@ namespace T3.Gui.Windows
                 var readableImage = ImagesWithCpuAccess[_currentIndex];
                 immediateContext.CopyResource(frame, readableImage);
                 immediateContext.UnmapSubresource(readableImage, 0);
-                _currentIndex = ++_currentIndex % NumTextureEntries;
-                ++_currentUsageIndex;
+                _currentIndex = (_currentIndex + 1) % NumTextureEntries;
 
-                // don't return first sample since buffering is not ready yet
-                if (_currentUsageIndex < NumTextureEntries)
+                // don't return first two samples since buffering is not ready yet
+                if (_currentUsageIndex++ < 0)
                     return null;
 
                 // map image resource to get a stream we can read from
@@ -264,85 +269,81 @@ namespace T3.Gui.Windows
                 int cbCurrentLength = 0;
                 IntPtr mediaBufferPointer = mediaBuffer.Lock(out cbMaxLength, out cbCurrentLength);
 
-                bool packingUnknown = false;
-                if (currentDesc.Format == SharpDX.DXGI.Format.R16G16B16A16_Float)
+                switch (currentDesc.Format)
                 {
-                    for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
-                    {
-                        if (!FlipY)
-                            inputStream.Position = (long)(loopY) * dataBox.RowPitch;
-                        else
-                            inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
-
-                        long outputPosition = (long)(loopY) * rowStride;
-
-                        for (int loopX = 0; loopX < _videoPixelSize.Width; loopX++)
+                    case SharpDX.DXGI.Format.R16G16B16A16_Float:
+                        for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
                         {
-                            var r = Read2BytesToHalf(inputStream);
-                            var g = Read2BytesToHalf(inputStream);
-                            var b = Read2BytesToHalf(inputStream);
-                            var a = Read2BytesToHalf(inputStream);
+                            if (!FlipY)
+                                inputStream.Position = (long)(loopY) * dataBox.RowPitch;
+                            else
+                                inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
 
-                            outputStream.WriteByte((byte)(b.Clamp(0, 1) * 255));
-                            outputStream.WriteByte((byte)(g.Clamp(0, 1) * 255));
-                            outputStream.WriteByte((byte)(r.Clamp(0, 1) * 255));
-                            outputStream.WriteByte((byte)(a.Clamp(0, 1) * 255));
+                            long outputPosition = (long)(loopY) * rowStride;
+
+                            for (int loopX = 0; loopX < _videoPixelSize.Width; loopX++)
+                            {
+                                var r = Read2BytesToHalf(inputStream);
+                                var g = Read2BytesToHalf(inputStream);
+                                var b = Read2BytesToHalf(inputStream);
+                                var a = Read2BytesToHalf(inputStream);
+
+                                outputStream.WriteByte((byte)(b.Clamp(0, 1) * 255));
+                                outputStream.WriteByte((byte)(g.Clamp(0, 1) * 255));
+                                outputStream.WriteByte((byte)(r.Clamp(0, 1) * 255));
+                                outputStream.WriteByte((byte)(a.Clamp(0, 1) * 255));
+                            }
                         }
-                    }
-                }
-                else if (currentDesc.Format == SharpDX.DXGI.Format.R8G8B8A8_UNorm)
-                {
-                    for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
-                    {
-                        if (!FlipY)
-                            inputStream.Position = (long)(loopY) * dataBox.RowPitch;
-                        else
-                            inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
+                        break;
 
-                        for (int loopX = 0; loopX < _videoPixelSize.Width; loopX++)
+                    case SharpDX.DXGI.Format.R8G8B8A8_UNorm:
+                        for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
                         {
-                            byte r = (byte)inputStream.ReadByte();
-                            byte g = (byte)inputStream.ReadByte();
-                            byte b = (byte)inputStream.ReadByte();
-                            byte a = (byte)inputStream.ReadByte();
+                            if (!FlipY)
+                                inputStream.Position = (long)(loopY) * dataBox.RowPitch;
+                            else
+                                inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
 
-                            outputStream.WriteByte(b);
-                            outputStream.WriteByte(g);
-                            outputStream.WriteByte(r);
-                            outputStream.WriteByte(a);
+                            for (int loopX = 0; loopX < _videoPixelSize.Width; loopX++)
+                            {
+                                byte r = (byte)inputStream.ReadByte();
+                                byte g = (byte)inputStream.ReadByte();
+                                byte b = (byte)inputStream.ReadByte();
+                                byte a = (byte)inputStream.ReadByte();
+
+                                outputStream.WriteByte(b);
+                                outputStream.WriteByte(g);
+                                outputStream.WriteByte(r);
+                                outputStream.WriteByte(a);
+                            }
                         }
-                    }
-                }
-                else if (currentDesc.Format == SharpDX.DXGI.Format.R16G16B16A16_UNorm)
-                {
-                    for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
-                    {
-                        if (!FlipY)
-                            inputStream.Position = (long)(loopY) * dataBox.RowPitch;
-                        else
-                            inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
+                        break;
 
-                        for (int loopX = 0; loopX < _videoPixelSize.Width; loopX++)
+                    case SharpDX.DXGI.Format.R16G16B16A16_UNorm:
+                        for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
                         {
-                            byte r = (byte)inputStream.ReadByte(); inputStream.ReadByte();
-                            byte g = (byte)inputStream.ReadByte(); inputStream.ReadByte();
-                            byte b = (byte)inputStream.ReadByte(); inputStream.ReadByte();
-                            byte a = (byte)inputStream.ReadByte(); inputStream.ReadByte();
+                            if (!FlipY)
+                                inputStream.Position = (long)(loopY) * dataBox.RowPitch;
+                            else
+                                inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
 
-                            outputStream.WriteByte(b);
-                            outputStream.WriteByte(g);
-                            outputStream.WriteByte(r);
-                            outputStream.WriteByte(a);
+                            for (int loopX = 0; loopX < _videoPixelSize.Width; loopX++)
+                            {
+                                inputStream.ReadByte(); byte r = (byte)inputStream.ReadByte();
+                                inputStream.ReadByte(); byte g = (byte)inputStream.ReadByte();
+                                inputStream.ReadByte(); byte b = (byte)inputStream.ReadByte();
+                                inputStream.ReadByte(); byte a = (byte)inputStream.ReadByte();
+
+                                outputStream.WriteByte(b);
+                                outputStream.WriteByte(g);
+                                outputStream.WriteByte(r);
+                                outputStream.WriteByte(a);
+                            }
                         }
-                    }
-                }
-                else
-                {
-                    packingUnknown = true;
-                }
-                if (packingUnknown)
-                {
-                    throw new InvalidOperationException("Unknown image packing.");
+                        break;
+
+                    default:
+                        throw new InvalidOperationException($"Can't export unknown texture format {currentDesc.Format}");
                 }
 
                 // copy our finished RGBA buffer to the media buffer pointer
