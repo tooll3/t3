@@ -1,4 +1,4 @@
-﻿using ImGuiNET;
+using ImGuiNET;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -149,7 +149,7 @@ namespace T3.Gui.Windows
             {
                 ImGui.PushID(input.Id.GetHashCode());
                 ImGui.PushFont(Fonts.FontLarge);
-                ImGui.TextUnformatted("Parameter settings for" + input.InputDefinition.Name);
+                ImGui.TextUnformatted("Parameter settings for " + input.InputDefinition.Name);
                 ImGui.PopFont();
                 input.DrawSettings();
                 ImGui.Spacing();
