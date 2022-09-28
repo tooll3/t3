@@ -1,7 +1,7 @@
 {
   "Name": "OrthographicCamera",
   "Id": "954af16f-b37b-4e64-a965-4bec02b9179e",
-  "Namespace": "lib.3d.",
+  "Namespace": "lib.3d.rendering",
   "Inputs": [
     {
       "Id": "4f5832eb-23a0-4cdf-8144-3537578e3e26"/*Command*/,

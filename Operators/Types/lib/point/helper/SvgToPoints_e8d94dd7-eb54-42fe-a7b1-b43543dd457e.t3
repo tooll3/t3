@@ -1,7 +1,7 @@
 {
   "Name": "SvgToPoints",
   "Id": "e8d94dd7-eb54-42fe-a7b1-b43543dd457e",
-  "Namespace": "user.pixtur.research",
+  "Namespace": "lib.point.helper",
   "Inputs": [
     {
       "Id": "ef2a461d-c66d-44d8-8b0e-e48a57ec991f"/*FilePath*/,
