@@ -1,7 +1,7 @@
 {
   "Name": "PerlinNoise2",
   "Id": "ccc06dd6-4eec-4d17-af0b-4f1700e7887a",
-  "Namespace": "lib.math.vec3",
+  "Namespace": "lib.math.vec2",
   "Inputs": [
     {
       "Id": "c1ffdc20-7c90-49f9-8deb-f0a415e130c8"/*Seed*/,
