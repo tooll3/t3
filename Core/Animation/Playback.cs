@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 
 namespace T3.Core.Animation
@@ -93,12 +93,12 @@ namespace T3.Core.Animation
 
         public double BarsFromSeconds(double secs)
         {
-            return secs * Bpm / 240f;
+            return secs * Bpm / 240.0;
         }
         
         public double SecondsFromBars(double bars)
         {
-            return bars * 240 / Bpm;
+            return bars * 240.0 / Bpm;
         }
         
         private static double _lastFrameStart;
