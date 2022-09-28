@@ -1,0 +1,156 @@
+{
+  "Name": "LifetimeUpdate",
+  "Id": "804cd9ce-7e1b-4156-a372-268a99650a57",
+  "Namespace": "obsolete.particle",
+  "Inputs": [
+    {
+      "Id": "f2030b01-03cb-44a3-b303-29380290b996"/*ParticleSystem*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [
+    {
+      "Id": "93641220-8ab8-41ee-8b9c-dcdcab5819e8"/*ParticleSystemComponents*/,
+      "SymbolId": "c78a26f9-0c0e-4f1e-a2aa-6ca6136c52d0",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "4f4de09e-5185-44ce-857e-5aeaca1d60d3"/*TimeConstBuffer*/,
+      "SymbolId": "de8bc97a-8ef0-4d4a-9ffa-88046a2daf40",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "a7001670-f0b6-4800-8ce9-de7b542f4a82"/*ComputeShader*/,
+      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
+      "InputValues": [
+        {
+          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
+          "Type": "System.String",
+          "Value": "Resources\\lib\\particles\\particle-lifetime-updater.hlsl"
+        },
+        {
+          "Id": "c0701d0b-d37f-4570-9e9a-ec2e88b919d1"/*DebugName*/,
+          "Type": "System.String",
+          "Value": ""
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "56cbe3e4-5e72-4231-b513-5d566cc2bd7e"/*ComputeShaderStage*/,
+      "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
+      "InputValues": [
+        {
+          "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
+          "Type": "SharpDX.Int3",
+          "Value": {
+            "X": 392,
+            "Y": 1,
+            "Z": 1
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "bbd4ca3c-38c8-46c7-ae6a-9dd16862f500"/*CalcParticleDispatchCount*/,
+      "SymbolId": "afc6379d-c940-4617-9e79-0ae129a2f349",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "2546c67b-88f2-49d2-9a44-357e51d450f8"/*TransformsConstBuffer*/,
+      "SymbolId": "a60adc26-d7c6-4615-af78-8d2d6da46b79",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "9011e8f7-a3e3-491f-be94-dd6bfbabea8d"/*GetParticleSystem*/,
+      "SymbolId": "5c983354-efc5-42a4-a0e1-ad548c12c177",
+      "InputValues": [],
+      "Outputs": []
+    }
+  ],
+  "Connections": [
+    {
+      "SourceParentOrChildId": "56cbe3e4-5e72-4231-b513-5d566cc2bd7e",
+      "SourceSlotId": "c382284f-7e37-4eb0-b284-bc735247f26b",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "f6f929b9-b3c4-4891-a910-b58d78c05708"
+    },
+    {
+      "SourceParentOrChildId": "bbd4ca3c-38c8-46c7-ae6a-9dd16862f500",
+      "SourceSlotId": "39ac07e0-18a3-4e94-adbf-85cb35acd4f6",
+      "TargetParentOrChildId": "56cbe3e4-5e72-4231-b513-5d566cc2bd7e",
+      "TargetSlotId": "180cae35-10e3-47f3-8191-f6ecea7d321c"
+    },
+    {
+      "SourceParentOrChildId": "4f4de09e-5185-44ce-857e-5aeaca1d60d3",
+      "SourceSlotId": "6c118567-8827-4422-86cc-4d4d00762d87",
+      "TargetParentOrChildId": "56cbe3e4-5e72-4231-b513-5d566cc2bd7e",
+      "TargetSlotId": "34cf06fe-8f63-4f14-9c59-35a2c021b817"
+    },
+    {
+      "SourceParentOrChildId": "2546c67b-88f2-49d2-9a44-357e51d450f8",
+      "SourceSlotId": "7a76d147-4b8e-48cf-aa3e-aac3aa90e888",
+      "TargetParentOrChildId": "56cbe3e4-5e72-4231-b513-5d566cc2bd7e",
+      "TargetSlotId": "34cf06fe-8f63-4f14-9c59-35a2c021b817"
+    },
+    {
+      "SourceParentOrChildId": "93641220-8ab8-41ee-8b9c-dcdcab5819e8",
+      "SourceSlotId": "dbf61091-a9a7-4ad2-9dc1-68afdc3ea9fd",
+      "TargetParentOrChildId": "56cbe3e4-5e72-4231-b513-5d566cc2bd7e",
+      "TargetSlotId": "599384c2-bf6c-4953-be74-d363292ab1c7"
+    },
+    {
+      "SourceParentOrChildId": "93641220-8ab8-41ee-8b9c-dcdcab5819e8",
+      "SourceSlotId": "44319fb3-97da-4b1e-afcc-13a202d0e082",
+      "TargetParentOrChildId": "56cbe3e4-5e72-4231-b513-5d566cc2bd7e",
+      "TargetSlotId": "599384c2-bf6c-4953-be74-d363292ab1c7"
+    },
+    {
+      "SourceParentOrChildId": "93641220-8ab8-41ee-8b9c-dcdcab5819e8",
+      "SourceSlotId": "93803ce0-1e4f-4830-bca9-3ca153999f36",
+      "TargetParentOrChildId": "56cbe3e4-5e72-4231-b513-5d566cc2bd7e",
+      "TargetSlotId": "599384c2-bf6c-4953-be74-d363292ab1c7"
+    },
+    {
+      "SourceParentOrChildId": "93641220-8ab8-41ee-8b9c-dcdcab5819e8",
+      "SourceSlotId": "c48f3e70-6668-4965-91fd-044684765382",
+      "TargetParentOrChildId": "56cbe3e4-5e72-4231-b513-5d566cc2bd7e",
+      "TargetSlotId": "599384c2-bf6c-4953-be74-d363292ab1c7"
+    },
+    {
+      "SourceParentOrChildId": "a7001670-f0b6-4800-8ce9-de7b542f4a82",
+      "SourceSlotId": "6c118567-8827-4422-86cc-4d4d00762d87",
+      "TargetParentOrChildId": "56cbe3e4-5e72-4231-b513-5d566cc2bd7e",
+      "TargetSlotId": "5c0e9c96-9aba-4757-ae1f-cc50fb6173f1"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "f2030b01-03cb-44a3-b303-29380290b996",
+      "TargetParentOrChildId": "9011e8f7-a3e3-491f-be94-dd6bfbabea8d",
+      "TargetSlotId": "8109f618-2c24-4340-bf01-80fcf7a924db"
+    },
+    {
+      "SourceParentOrChildId": "9011e8f7-a3e3-491f-be94-dd6bfbabea8d",
+      "SourceSlotId": "5403d6a2-c93c-4045-a7d0-14653a1c1ad7",
+      "TargetParentOrChildId": "93641220-8ab8-41ee-8b9c-dcdcab5819e8",
+      "TargetSlotId": "e5cebe45-c1d2-48fa-83aa-e321aee14912"
+    },
+    {
+      "SourceParentOrChildId": "9011e8f7-a3e3-491f-be94-dd6bfbabea8d",
+      "SourceSlotId": "5403d6a2-c93c-4045-a7d0-14653a1c1ad7",
+      "TargetParentOrChildId": "bbd4ca3c-38c8-46c7-ae6a-9dd16862f500",
+      "TargetSlotId": "2767954c-6836-402a-af76-d5b1c84c20d3"
+    },
+    {
+      "SourceParentOrChildId": "a7001670-f0b6-4800-8ce9-de7b542f4a82",
+      "SourceSlotId": "a6fe06e0-b6a9-463c-9e62-930c58b0a0a1",
+      "TargetParentOrChildId": "bbd4ca3c-38c8-46c7-ae6a-9dd16862f500",
+      "TargetSlotId": "7e97ad11-385b-44b3-8db1-d48906bb98cb"
+    }
+  ]
+}

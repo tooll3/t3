@@ -1,0 +1,13 @@
+{
+  "Name": "ParticleBuffer",
+  "Id": "3546ec16-cf88-4915-b8bb-9566769687ca",
+  "Namespace": "obsolete.particle",
+  "Inputs": [
+    {
+      "Id": "61d1be34-26cf-43db-9219-7a97ab3113b8"/*Count*/,
+      "DefaultValue": 1000
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
