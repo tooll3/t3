@@ -1,7 +1,7 @@
 {
   "Name": "AdvancedFeedback",
   "Id": "33424f7f-ea2d-4753-bbc3-8df00830c4b5",
-  "Namespace": "user.pixtur.examples",
+  "Namespace": "lib.img.fx",
   "Inputs": [
     {
       "Id": "0f29ca23-b5fb-484e-8ae6-8ed70d67d623"/*Command*/,

@@ -1,7 +1,7 @@
 {
   "Name": "FluidFeedback",
   "Id": "f9d453d1-04d9-43ef-9189-50008f93bcc2",
-  "Namespace": "user.pixtur.examples",
+  "Namespace": "lib.img.fx",
   "Inputs": [
     {
       "Id": "ebd35d33-dc73-46ae-a82c-2060d750018a"/*Command*/,

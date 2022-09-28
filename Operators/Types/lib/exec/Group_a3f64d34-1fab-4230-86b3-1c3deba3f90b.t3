@@ -1,7 +1,7 @@
 {
   "Name": "Group",
   "Id": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
-  "Namespace": "lib.3d",
+  "Namespace": "lib.exec",
   "Inputs": [
     {
       "Id": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"/*Commands*/,
