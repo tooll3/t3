@@ -1326,7 +1326,7 @@
       }
     },
     {
-      "ChildId": "a84d3bfe-9a0d-49df-ba2d-ca41e78d6dbe"/*SvgToPoints*/,
+      "ChildId": "a84d3bfe-9a0d-49df-ba2d-ca41e78d6dbe"/*LoadSvg*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -2889,7 +2889,7 @@
       }
     },
     {
-      "ChildId": "d5e887c7-b5b8-4bfc-a718-31565682c71d"/*SvgToPoints*/,
+      "ChildId": "d5e887c7-b5b8-4bfc-a718-31565682c71d"/*LoadSvg*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -2944,7 +2944,7 @@
       }
     },
     {
-      "ChildId": "d7ee4139-468c-4910-9111-ffea129c0cd1"/*SvgToPoints*/,
+      "ChildId": "d7ee4139-468c-4910-9111-ffea129c0cd1"/*LoadSvg*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -2955,7 +2955,7 @@
       }
     },
     {
-      "ChildId": "77b672ec-8a0c-4330-abbb-f5a0c1452798"/*SvgToPoints*/,
+      "ChildId": "77b672ec-8a0c-4330-abbb-f5a0c1452798"/*LoadSvg*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -2966,7 +2966,7 @@
       }
     },
     {
-      "ChildId": "868b0585-8df7-4085-ab77-c98dbfd76b12"/*SvgToPoints*/,
+      "ChildId": "868b0585-8df7-4085-ab77-c98dbfd76b12"/*LoadSvg*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -2977,7 +2977,7 @@
       }
     },
     {
-      "ChildId": "9bcba621-28b1-4df4-a187-df2ef07fb035"/*SvgToPoints*/,
+      "ChildId": "9bcba621-28b1-4df4-a187-df2ef07fb035"/*LoadSvg*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -3329,7 +3329,7 @@
       }
     },
     {
-      "ChildId": "91645e88-909d-4a85-b465-3fa4d6e2200a"/*SvgToPoints*/,
+      "ChildId": "91645e88-909d-4a85-b465-3fa4d6e2200a"/*LoadSvg*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -3549,7 +3549,7 @@
       }
     },
     {
-      "ChildId": "d60a2284-ec48-4083-9a6c-181eaf864344"/*SvgToPoints*/,
+      "ChildId": "d60a2284-ec48-4083-9a6c-181eaf864344"/*LoadSvg*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -3582,7 +3582,7 @@
       }
     },
     {
-      "ChildId": "45dd2a21-d05a-4f35-8475-bb3161db3352"/*SvgToPoints*/,
+      "ChildId": "45dd2a21-d05a-4f35-8475-bb3161db3352"/*LoadSvg*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

@@ -468,7 +468,7 @@
       }
     },
     {
-      "ChildId": "83db89a2-79d2-4937-9ea3-c55e6717d7bf"/*SvgToPoints*/,
+      "ChildId": "83db89a2-79d2-4937-9ea3-c55e6717d7bf"/*LoadSvg*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

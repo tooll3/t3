@@ -4685,7 +4685,7 @@
       "Outputs": []
     },
     {
-      "Id": "14414ae3-9d61-499d-83c4-d32cef16787f"/*SvgToPoints*/,
+      "Id": "14414ae3-9d61-499d-83c4-d32cef16787f"/*LoadSvg*/,
       "SymbolId": "e8d94dd7-eb54-42fe-a7b1-b43543dd457e",
       "InputValues": [
         {

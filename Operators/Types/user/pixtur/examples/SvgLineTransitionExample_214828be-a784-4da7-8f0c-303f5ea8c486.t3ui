@@ -3,7 +3,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "20e24719-9118-42cb-99b4-670ec652aac1"/*SvgToPoints*/,
+      "ChildId": "20e24719-9118-42cb-99b4-670ec652aac1"/*LoadSvg*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

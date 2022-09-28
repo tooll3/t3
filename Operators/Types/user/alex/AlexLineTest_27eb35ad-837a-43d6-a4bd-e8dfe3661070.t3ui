@@ -455,7 +455,7 @@
       }
     },
     {
-      "ChildId": "49394e8e-d1e5-466f-a068-d463a99ea02a"/*SvgToPoints*/,
+      "ChildId": "49394e8e-d1e5-466f-a068-d463a99ea02a"/*LoadSvg*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

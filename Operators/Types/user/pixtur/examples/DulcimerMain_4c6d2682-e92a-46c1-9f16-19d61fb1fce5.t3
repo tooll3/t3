@@ -712,7 +712,7 @@
       ]
     },
     {
-      "Id": "88a84b80-20c0-4bc1-990b-2d82e31e91e7"/*SvgToPoints*/,
+      "Id": "88a84b80-20c0-4bc1-990b-2d82e31e91e7"/*LoadSvg*/,
       "SymbolId": "e8d94dd7-eb54-42fe-a7b1-b43543dd457e",
       "InputValues": [
         {

@@ -5,7 +5,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "20e24719-9118-42cb-99b4-670ec652aac1"/*SvgToPoints*/,
+      "Id": "20e24719-9118-42cb-99b4-670ec652aac1"/*LoadSvg*/,
       "SymbolId": "e8d94dd7-eb54-42fe-a7b1-b43543dd457e",
       "InputValues": [
         {
