@@ -11,6 +11,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using Svg;
 using Svg.Pathing;
+using Svg.Transforms;
 using T3.Core;
 using T3.Core.Logging;
 using Point = T3.Core.DataTypes.Point;
@@ -33,7 +34,7 @@ namespace T3.Operators.Types.Id_e8d94dd7_eb54_42fe_a7b1_b43543dd457e
             public GraphicsPath GraphicsPath;
             public bool NeedsClosing;
         }
-        
+
         private void Update(EvaluationContext context)
         {
             var filepath = FilePath.GetValue(context);
@@ -62,7 +63,7 @@ namespace T3.Operators.Types.Id_e8d94dd7_eb54_42fe_a7b1_b43543dd457e
             var scale = Scale.GetValue(context) * fitBoundsFactor;
             _importAsLines = ImportAs.GetValue(context) == 0;
             _reduceFactor = ReduceFactor.GetValue(context).Clamp(0.001f, 1f);
-            
+
             var svgElements = svgDoc.Descendants();
             var pathElements = ConvertAllNodesIntoGraphicPaths(svgElements);
 
@@ -100,7 +101,6 @@ namespace T3.Operators.Types.Id_e8d94dd7_eb54_42fe_a7b1_b43543dd457e
                 // Calculate normals
                 if (pathPointCount > 1)
                 {
-                    
                     for (var pathPointIndex = 0; pathPointIndex < pathPointCount; pathPointIndex++)
                     {
                         if (pathPointIndex == 0)
@@ -123,11 +123,11 @@ namespace T3.Operators.Types.Id_e8d94dd7_eb54_42fe_a7b1_b43543dd457e
                         }
                     }
                 }
-                
+
                 // Close loop?
                 if (pathElement.NeedsClosing)
                 {
-                    _pointListWithSeparator.TypedElements[startIndex + pathPointCount] = _pointListWithSeparator.TypedElements[startIndex];    
+                    _pointListWithSeparator.TypedElements[startIndex + pathPointCount] = _pointListWithSeparator.TypedElements[startIndex];
                     pointIndex++;
                 }
 
@@ -150,7 +150,7 @@ namespace T3.Operators.Types.Id_e8d94dd7_eb54_42fe_a7b1_b43543dd457e
         private List<GraphicsPathEntry> ConvertAllNodesIntoGraphicPaths(IEnumerable<SvgElement> nodes)
         {
             var paths = new List<GraphicsPathEntry>();
-            
+
             _svgRenderer ??= SvgRenderer.FromImage(new Bitmap(1, 1));
 
             foreach (var node in nodes)
@@ -167,7 +167,7 @@ namespace T3.Operators.Types.Id_e8d94dd7_eb54_42fe_a7b1_b43543dd457e
                             {
                                 if (newPath == null)
                                     continue;
-                                
+
                                 paths.Add(new GraphicsPathEntry
                                               {
                                                   GraphicsPath = newPath,
@@ -190,13 +190,30 @@ namespace T3.Operators.Types.Id_e8d94dd7_eb54_42fe_a7b1_b43543dd457e
                                               NeedsClosing = false
                                           });
                         }
+
                         break;
                     }
                     case SvgGroup:
                         break;
-                    
+
                     case SvgPathBasedElement element:
                     {
+                        if (element is SvgRectangle rect)
+                        {
+                            //if(element.Transforms.Contains())
+                            if (rect.Transforms != null)
+                            {
+                                foreach (var t in rect.Transforms)
+                                {
+                                    if (t is not SvgTranslate tr)
+                                        continue;
+
+                                    rect.X += tr.X;
+                                    rect.Y += tr.Y;
+                                }
+                            }
+                        }
+
                         var needsClosing = element is SvgRectangle or SvgCircle or SvgEllipse;
 
                         var graphicsPath = element.Path(_svgRenderer);
@@ -230,19 +247,18 @@ namespace T3.Operators.Types.Id_e8d94dd7_eb54_42fe_a7b1_b43543dd457e
         [Input(Guid = "221BF10C-B13E-40CF-80AF-769C10A21C5B")]
         public readonly InputSlot<bool> ScaleToBounds = new();
 
-        [Input(Guid = "8D63C134-1257-4331-AE84-F5EB6DD66C13", MappedType= typeof(ImportModes))]
+        [Input(Guid = "8D63C134-1257-4331-AE84-F5EB6DD66C13", MappedType = typeof(ImportModes))]
         public readonly InputSlot<int> ImportAs = new();
-        
+
         [Input(Guid = "2BB64740-ED2F-4295-923D-D585D70197E7")]
         public readonly InputSlot<float> ReduceFactor = new();
-        
-        
+
         private enum ImportModes
         {
             Lines,
             Points,
-        } 
-        
+        }
+
         private static ISvgRenderer _svgRenderer;
     }
 }

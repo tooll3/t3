@@ -18,7 +18,7 @@ namespace T3.Operators.Types.Id_66f5a6af_b4a5_46ef_b1e5_4cdd035b6539
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
 
         [Input(Guid = "dbb4ee8f-eefa-4df7-a8dd-1efb6f5bdae0")]
-        public readonly InputSlot<float> Size = new InputSlot<float>();
+        public readonly InputSlot<float> LineWidth = new InputSlot<float>();
 
         [Input(Guid = "8a96a596-0b77-4bba-8033-5e372cec01eb")]
         public readonly InputSlot<float> ShrinkWithDistance = new InputSlot<float>();

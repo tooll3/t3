@@ -18,7 +18,7 @@
       }
     },
     {
-      "InputId": "dbb4ee8f-eefa-4df7-a8dd-1efb6f5bdae0"/*Size*/,
+      "InputId": "dbb4ee8f-eefa-4df7-a8dd-1efb6f5bdae0"/*LineWidth*/,
       "Position": {
         "X": -300.97974,
         "Y": 360.46448
@@ -35,8 +35,8 @@
     {
       "InputId": "ea06ad34-1b22-4dd7-abac-51402839cf61"/*TransitionProgress*/,
       "Position": {
-        "X": -300.97974,
-        "Y": 450.46448
+        "X": -362.53522,
+        "Y": 526.87805
       },
       "Scale": 0.001
     },
@@ -354,6 +354,17 @@
       "Position": {
         "X": -308.91452,
         "Y": 1013.92163
+      }
+    },
+    {
+      "ChildId": "b625b0aa-dfca-4015-a0b6-b3df4ff55cf8"/*Add*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -136.4585,
+        "Y": 537.437
       }
     }
   ],
