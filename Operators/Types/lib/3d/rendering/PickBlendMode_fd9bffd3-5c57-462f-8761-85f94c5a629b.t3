@@ -27,9 +27,9 @@
       "Outputs": []
     },
     {
-      "Id": "5a39b008-9b76-4d36-97b2-e574de70d7f6"/*Normal*/,
+      "Id": "5a39b008-9b76-4d36-97b2-e574de70d7f6"/*PremultipliedAlpha*/,
       "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
-      "Name": "Normal",
+      "Name": "PremultipliedAlpha",
       "InputValues": [
         {
           "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
@@ -39,17 +39,12 @@
         {
           "Id": "2632af70-5a05-429c-8123-fe280adea655"/*SourceAlphaBlend*/,
           "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "One"
+          "Value": "InverseSourceAlpha"
         },
         {
           "Id": "acc5550b-18ed-4dba-8e69-d5228e2ad850"/*DestinationAlphaBlend*/,
           "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "InverseSourceAlpha"
-        },
-        {
-          "Id": "01305a3e-54cc-4f6d-8774-f6ff04b4fec1"/*AlphaBlendOperation*/,
-          "Type": "SharpDX.Direct3D11.BlendOperation",
-          "Value": "Add"
+          "Value": "One"
         }
       ],
       "Outputs": []
@@ -198,80 +193,6 @@
       "Outputs": []
     },
     {
-      "Id": "a643b0f4-a848-4def-8ca6-e24a5693be39"/*RenderTargetBlendDesc*/,
-      "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
-      "InputValues": [
-        {
-          "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "56c398ce-fe71-47eb-a33f-11eec8f82e79"/*SourceBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "DestinationColor"
-        },
-        {
-          "Id": "8dc53fe4-79bb-43e4-9d4a-4e06f9a3214c"/*DestinationBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "Zero"
-        },
-        {
-          "Id": "2632af70-5a05-429c-8123-fe280adea655"/*SourceAlphaBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "One"
-        },
-        {
-          "Id": "acc5550b-18ed-4dba-8e69-d5228e2ad850"/*DestinationAlphaBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "InverseSourceAlpha"
-        },
-        {
-          "Id": "01305a3e-54cc-4f6d-8774-f6ff04b4fec1"/*AlphaBlendOperation*/,
-          "Type": "SharpDX.Direct3D11.BlendOperation",
-          "Value": "Add"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "8c761bd0-4702-4c35-a4c7-6e2fb0cc5853"/*RenderTargetBlendDesc*/,
-      "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
-      "InputValues": [
-        {
-          "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "56c398ce-fe71-47eb-a33f-11eec8f82e79"/*SourceBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "One"
-        },
-        {
-          "Id": "8dc53fe4-79bb-43e4-9d4a-4e06f9a3214c"/*DestinationBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "SourceAlpha"
-        },
-        {
-          "Id": "2632af70-5a05-429c-8123-fe280adea655"/*SourceAlphaBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "One"
-        },
-        {
-          "Id": "acc5550b-18ed-4dba-8e69-d5228e2ad850"/*DestinationAlphaBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "InverseSourceAlpha"
-        },
-        {
-          "Id": "01305a3e-54cc-4f6d-8774-f6ff04b4fec1"/*AlphaBlendOperation*/,
-          "Type": "SharpDX.Direct3D11.BlendOperation",
-          "Value": "Add"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "bff74c44-a870-4e61-807b-556bb8ad3752"/*RenderTargetBlendDesc*/,
       "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
       "InputValues": [
@@ -315,43 +236,6 @@
       "Outputs": []
     },
     {
-      "Id": "e0469c72-d6ba-48a9-8380-f7896ed260f4"/*RenderTargetBlendDesc*/,
-      "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
-      "InputValues": [
-        {
-          "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "56c398ce-fe71-47eb-a33f-11eec8f82e79"/*SourceBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "DestinationAlpha"
-        },
-        {
-          "Id": "8dc53fe4-79bb-43e4-9d4a-4e06f9a3214c"/*DestinationBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "Zero"
-        },
-        {
-          "Id": "2632af70-5a05-429c-8123-fe280adea655"/*SourceAlphaBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "One"
-        },
-        {
-          "Id": "acc5550b-18ed-4dba-8e69-d5228e2ad850"/*DestinationAlphaBlend*/,
-          "Type": "SharpDX.Direct3D11.BlendOption",
-          "Value": "InverseSourceAlpha"
-        },
-        {
-          "Id": "01305a3e-54cc-4f6d-8774-f6ff04b4fec1"/*AlphaBlendOperation*/,
-          "Type": "SharpDX.Direct3D11.BlendOperation",
-          "Value": "Add"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "53e0ef4c-c046-41a0-baa4-d891d476a0e6"/*No Blend*/,
       "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
       "Name": "No Blend",
@@ -369,6 +253,24 @@
       "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "9cd85a03-a0c3-4566-a8e8-f23032587b01"/*RenderTargetBlendDesc*/,
+      "SymbolId": "38ee7546-8d7d-463c-aeea-e482d7ca3f30",
+      "InputValues": [
+        {
+          "Id": "7f535169-8f65-4186-866d-59c2b89d7da2"/*BlendEnabled*/,
+          "Type": "System.Boolean",
+          "Value": true
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "1713bba2-4e8d-4d87-85e3-986742e3689a"/*BlendStateOp*/,
+      "SymbolId": "064ca51f-47ab-4cb7-95f2-e537b68e137e",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -377,6 +279,12 @@
       "SourceSlotId": "0608b46b-4778-4f95-b688-3a749f9664ae",
       "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "TargetSlotId": "a42dd1c5-886c-4fa9-bf69-8b6321a48930"
+    },
+    {
+      "SourceParentOrChildId": "5a39b008-9b76-4d36-97b2-e574de70d7f6",
+      "SourceSlotId": "228e1dc2-944e-4235-bf2d-2eb3f895858c",
+      "TargetParentOrChildId": "1713bba2-4e8d-4d87-85e3-986742e3689a",
+      "TargetSlotId": "63d0e4e8-fa00-4059-a11b-6a31e66757dc"
     },
     {
       "SourceParentOrChildId": "53e0ef4c-c046-41a0-baa4-d891d476a0e6",
@@ -421,6 +329,12 @@
       "TargetSlotId": "a737bb60-d98b-4405-914c-7df91a58d8bc"
     },
     {
+      "SourceParentOrChildId": "1713bba2-4e8d-4d87-85e3-986742e3689a",
+      "SourceSlotId": "6ef6c44b-ee22-4c64-9910-4f7595c41897",
+      "TargetParentOrChildId": "41bc4763-eaa4-4e1c-9212-ebe0ee7679eb",
+      "TargetSlotId": "a737bb60-d98b-4405-914c-7df91a58d8bc"
+    },
+    {
       "SourceParentOrChildId": "1ecbb18d-0ba2-4ff0-9252-66f53bf80a15",
       "SourceSlotId": "228e1dc2-944e-4235-bf2d-2eb3f895858c",
       "TargetParentOrChildId": "4c6a33d8-7050-41e5-8a5d-75e9f3a3b526",
@@ -439,7 +353,7 @@
       "TargetSlotId": "63d0e4e8-fa00-4059-a11b-6a31e66757dc"
     },
     {
-      "SourceParentOrChildId": "5a39b008-9b76-4d36-97b2-e574de70d7f6",
+      "SourceParentOrChildId": "9cd85a03-a0c3-4566-a8e8-f23032587b01",
       "SourceSlotId": "228e1dc2-944e-4235-bf2d-2eb3f895858c",
       "TargetParentOrChildId": "ecff38e1-c7ec-40cb-8511-b16b4fa4d647",
       "TargetSlotId": "63d0e4e8-fa00-4059-a11b-6a31e66757dc"
