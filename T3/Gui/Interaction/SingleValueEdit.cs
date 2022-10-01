@@ -171,7 +171,7 @@ namespace T3.Gui.Interaction
                         bool invalid;
                         _editValue = Evaluate(_jogDialText, out invalid);
 
-                        //if the value is invalid, just revert it to what it was previously
+                        // If the value is invalid, just revert it to what it was previously
                         if (invalid)
                         {
                             _editValue = _startValue;
