@@ -2,17 +2,17 @@
   "Id": "2dc5c9d1-ea93-4597-a4d9-7b610aad603a"/*MixPoints*/,
   "InputUis": [
     {
-      "InputId": "c5480ce5-a8ba-4a26-8cee-c28e442020b7"/*BlendMode*/,
-      "Position": {
-        "X": -448.6706,
-        "Y": 720.16473
-      }
-    },
-    {
       "InputId": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendValue*/,
       "Position": {
         "X": -448.6706,
-        "Y": 765.16473
+        "Y": 662.0187
+      }
+    },
+    {
+      "InputId": "c5480ce5-a8ba-4a26-8cee-c28e442020b7"/*BlendMode*/,
+      "Position": {
+        "X": -448.6706,
+        "Y": 707.0187
       }
     },
     {
@@ -75,7 +75,7 @@
       },
       "Position": {
         "X": -318.6706,
-        "Y": 720.16473
+        "Y": 707.0187
       }
     },
     {

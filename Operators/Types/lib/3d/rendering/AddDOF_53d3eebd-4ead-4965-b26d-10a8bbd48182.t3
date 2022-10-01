@@ -31,7 +31,7 @@
     {
       "Id": "40de51d8-91dd-461d-a7be-d4096313eec2"/*NearFarRange*/,
       "DefaultValue": {
-        "X": 0.1,
+        "X": 0.01,
         "Y": 1000.0
       }
     }
