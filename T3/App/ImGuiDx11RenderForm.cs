@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 using ImGuiNET;
 using SharpDX.Windows;
@@ -33,6 +33,7 @@ namespace T3.App
 
         private const int WM_MOUSEWHEEL = 0x020A;
         private const int WM_MOUSEHWHEEL = 0x020E;
+        private const int WM_MOUSEMOVE = 0x0200;
         private const int WM_KEYDOWN = 0x0100;
         private const int WM_SYSKEYDOWN = 0x0104;
         private const int WM_KEYUP = 0x0101;
@@ -80,6 +81,12 @@ namespace T3.App
                     //if (!ImGui.IsAnyMouseDown() && ::GetCapture() == NULL)
                     //    ::SetCapture(hwnd);
                     io.MouseDown[button] = true;
+
+                    if (!Capture)
+                    {
+                        Capture = true;
+                    }
+
                     return;
                 }
                 case WM_LBUTTONUP:
@@ -91,11 +98,38 @@ namespace T3.App
                     if (m.Msg == WM_RBUTTONUP) button = 1;
                     if (m.Msg == WM_MBUTTONUP) button = 2;
                     io.MouseDown[button] = false;
+
                     // TODO
                     //if (!ImGui::IsAnyMouseDown() && ::GetCapture() == hwnd)
                     //    ::ReleaseCapture();
+                    if (Capture)
+                    {
+                        Capture = false;
+                    }
+
                     return;
                 }
+                case WM_MOUSEMOVE:
+                    if (Capture)
+                    {
+                        IntPtr xy = m.LParam;
+                        int xPos = unchecked((short)xy);
+                        int yPos = unchecked((short)((uint)xy >> 16));
+
+                        var clientRect = ClientRectangle;
+                        int rightEdge = ClientRectangle.Right - 12;
+                        int leftEdge = ClientRectangle.Left + 12;
+
+                        if (xPos > rightEdge)
+                        {
+                            Cursor.Position = new System.Drawing.Point(leftEdge, yPos);
+                        }
+                        if (xPos < leftEdge)
+                        {
+                            Cursor.Position = new System.Drawing.Point(rightEdge, yPos);
+                        }
+                    }
+                    break;
                 case WM_MOUSEWHEEL:
                     io.MouseWheel += (short)(((uint)(long)m.WParam >> 16) & 0xffff) / 120.0f; // TODO (float)WHEEL_DELTA;
                     return;
