@@ -17,7 +17,7 @@ namespace T3.App
         public ImGuiDx11RenderForm(string title)
             : base(title)
         {
-            MouseMove += (o, e) => ImGui.GetIO().MousePos = new System.Numerics.Vector2(e.X, e.Y);
+            //MouseMove += (o, e) => ImGui.GetIO().MousePos = new System.Numerics.Vector2(e.X, e.Y);
         }
 
         #region WM Message Ids
@@ -110,26 +110,40 @@ namespace T3.App
                     return;
                 }
                 case WM_MOUSEMOVE:
-                    if (Capture)
                     {
                         IntPtr xy = m.LParam;
                         int xPos = unchecked((short)xy);
                         int yPos = unchecked((short)((uint)xy >> 16));
+                        io.MousePos = new System.Numerics.Vector2(xPos, yPos);
 
-                        var clientRect = ClientRectangle;
-                        int rightEdge = ClientRectangle.Right - 12;
-                        int leftEdge = ClientRectangle.Left + 12;
+                        if (Capture)
+                        {
+                            var clientRect = ClientRectangle;
+                            int rightEdge = ClientRectangle.Right - 12;
+                            int leftEdge = ClientRectangle.Left + 12;
 
-                        if (xPos > rightEdge)
-                        {
-                            Cursor.Position = new System.Drawing.Point(leftEdge, yPos);
-                        }
-                        if (xPos < leftEdge)
-                        {
-                            Cursor.Position = new System.Drawing.Point(rightEdge, yPos);
+                            bool wrapped = false;
+                            if (xPos > rightEdge)
+                            {
+                                xPos = leftEdge;
+                                wrapped = true;
+                            }
+                            if (xPos < leftEdge)
+                            {
+                                xPos = rightEdge;
+                                wrapped = true;
+                            }
+                            if (wrapped)
+                            {
+                                Cursor.Position = new System.Drawing.Point(xPos, yPos);
+                                //io.MousePosPrev = new System.Numerics.Vector2(xPos, yPos);
+                                io.MousePos = new System.Numerics.Vector2(-float.MaxValue, -float.MaxValue); // make it not valid for ImGui
+                                //io.MouseDelta = new System.Numerics.Vector2(0, 0);
+                                //io.MousePosPrev = new System.Numerics.Vector2(-float.MaxValue, -float.MaxValue);
+                            }
                         }
                     }
-                    break;
+                    return;
                 case WM_MOUSEWHEEL:
                     io.MouseWheel += (short)(((uint)(long)m.WParam >> 16) & 0xffff) / 120.0f; // TODO (float)WHEEL_DELTA;
                     return;

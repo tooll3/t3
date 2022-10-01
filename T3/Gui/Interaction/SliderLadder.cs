@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
@@ -56,12 +56,16 @@ namespace T3.Gui.Interaction
             if (timeSinceVisible < initialDelay)
                 _lockedRange = null;
 
-            var pLast = io.MousePos - io.MouseDelta - center;
+            var pLast = io.MousePosPrev - center;// io.MousePos - io.MouseDelta - center;
             var pNow = io.MousePos - center;
 
-            if (timeSinceVisible < 0.032f)
+            if (timeSinceVisible < 0.032f || float.IsNaN(_lastStepPosX) )
             {
                 _lastStepPosX = pNow.X;
+            }
+            if (!ImGui.IsMousePosValid())
+            {
+                _lastStepPosX = float.NaN;
             }
 
             var activeScaleFactor = 0.0;
@@ -110,6 +114,9 @@ namespace T3.Gui.Interaction
             }
 
             var deltaSinceLastStep = pLast.X - _lastStepPosX;
+            if (float.IsNaN(deltaSinceLastStep))
+                deltaSinceLastStep = 0;
+
             var delta = deltaSinceLastStep / StepSize;
             if (io.KeyAlt)
             {
