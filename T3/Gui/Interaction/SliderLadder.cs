@@ -56,16 +56,16 @@ namespace T3.Gui.Interaction
             if (timeSinceVisible < initialDelay)
                 _lockedRange = null;
 
-            var pLast = io.MousePosPrev - center;// io.MousePos - io.MouseDelta - center;
-            var pNow = io.MousePos - center;
+            Vector2 pLast = io.MousePos - io.MouseDelta - center;
+            Vector2 pNow = io.MousePos - center;
+            if (!ImGui.IsMousePosValid())
+            {
+                _lastStepPosX = pNow.X = float.NaN;
+            }
 
             if (timeSinceVisible < 0.032f || float.IsNaN(_lastStepPosX) )
             {
                 _lastStepPosX = pNow.X;
-            }
-            if (!ImGui.IsMousePosValid())
-            {
-                _lastStepPosX = float.NaN;
             }
 
             var activeScaleFactor = 0.0;
@@ -113,9 +113,11 @@ namespace T3.Gui.Interaction
                                    range.Label);
             }
 
-            var deltaSinceLastStep = pLast.X - _lastStepPosX;
-            if (float.IsNaN(deltaSinceLastStep))
-                deltaSinceLastStep = 0;
+            float deltaSinceLastStep = 0;
+            if (!float.IsNaN(_lastStepPosX))
+            {
+                deltaSinceLastStep = pLast.X - _lastStepPosX;
+            }
 
             var delta = deltaSinceLastStep / StepSize;
             if (io.KeyAlt)

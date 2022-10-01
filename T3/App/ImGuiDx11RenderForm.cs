@@ -77,11 +77,10 @@ namespace T3.App
                     if (m.Msg == WM_LBUTTONDOWN || m.Msg == WM_LBUTTONDBLCLK) button = 0;
                     if (m.Msg == WM_RBUTTONDOWN || m.Msg == WM_RBUTTONDBLCLK) button = 1;
                     if (m.Msg == WM_MBUTTONDOWN || m.Msg == WM_MBUTTONDBLCLK) button = 2;
-                    // TODO
-                    //if (!ImGui.IsAnyMouseDown() && ::GetCapture() == NULL)
-                    //    ::SetCapture(hwnd);
                     io.MouseDown[button] = true;
 
+                    //if (!ImGui.IsAnyMouseDown() && ::GetCapture() == NULL)
+                    //    ::SetCapture(hwnd);
                     if (!Capture)
                     {
                         Capture = true;
@@ -99,10 +98,9 @@ namespace T3.App
                     if (m.Msg == WM_MBUTTONUP) button = 2;
                     io.MouseDown[button] = false;
 
-                    // TODO
                     //if (!ImGui::IsAnyMouseDown() && ::GetCapture() == hwnd)
                     //    ::ReleaseCapture();
-                    if (Capture)
+                    if (!ImGui.IsAnyMouseDown() && Capture )
                     {
                         Capture = false;
                     }
@@ -136,10 +134,7 @@ namespace T3.App
                             if (wrapped)
                             {
                                 Cursor.Position = new System.Drawing.Point(xPos, yPos);
-                                //io.MousePosPrev = new System.Numerics.Vector2(xPos, yPos);
-                                io.MousePos = new System.Numerics.Vector2(-float.MaxValue, -float.MaxValue); // make it not valid for ImGui
-                                //io.MouseDelta = new System.Numerics.Vector2(0, 0);
-                                //io.MousePosPrev = new System.Numerics.Vector2(-float.MaxValue, -float.MaxValue);
+                                io.MousePos = new System.Numerics.Vector2(-float.MaxValue, -float.MaxValue); // make it not valid for ImGui for a Frame
                             }
                         }
                     }
