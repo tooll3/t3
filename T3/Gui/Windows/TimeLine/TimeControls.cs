@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -255,14 +255,32 @@ namespace T3.Gui.Windows.TimeLine
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackForwardHalfSpeed, false) +
                                                     "\n Next frame:" + KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackNextFrame, false));
 
-                const float editFrameRate = 30;
-                const float frameDuration = 1 / editFrameRate;
+                double frameDuration = 0.25;
+                switch (UserSettings.Config.TimeDisplayMode)
+                {
+                    case TimeFormat.TimeDisplayModes.Secs:
+                        frameDuration = (playback.Bpm / 240.0) / 10.0;
+                        break;
+                    case TimeFormat.TimeDisplayModes.F30:
+                        frameDuration = (playback.Bpm / 240.0) / 30.0;
+                        break;
+                    case TimeFormat.TimeDisplayModes.F60:
+                        frameDuration = (playback.Bpm / 240.0) / 60.0;
+                        break;
+                }
+                double editFrameRate = 1 / frameDuration;
 
                 // Step to previous frame
                 if (KeyboardBinding.Triggered(UserActions.PlaybackPreviousFrame))
                 {
                     var rounded = Math.Round(playback.TimeInBars * editFrameRate) / editFrameRate;
                     playback.TimeInBars = rounded - frameDuration;
+                }
+                // Step to next frame
+                if (KeyboardBinding.Triggered(UserActions.PlaybackNextFrame))
+                {
+                    var rounded = Math.Round(playback.TimeInBars * editFrameRate) / editFrameRate;
+                    playback.TimeInBars = rounded + frameDuration;
                 }
 
                 // Step to previous frame
@@ -272,12 +290,6 @@ namespace T3.Gui.Windows.TimeLine
                     playback.TimeInBars -= 1;
                 }
 
-                // Step to next frame
-                if (KeyboardBinding.Triggered(UserActions.PlaybackNextFrame))
-                {
-                    var rounded = Math.Round(playback.TimeInBars * editFrameRate) / editFrameRate;
-                    playback.TimeInBars = rounded + frameDuration;
-                }
 
                 // Play backwards with increasing speed
                 if (KeyboardBinding.Triggered(UserActions.PlaybackBackwards))

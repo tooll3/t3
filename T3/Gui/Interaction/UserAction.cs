@@ -1,4 +1,4 @@
-﻿using ImGuiNET;
+using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -126,6 +126,9 @@ namespace T3.Gui
         public bool NeedsWindowHover;
         public bool KeyPressOnly;
         public readonly KeyCombination Combination;
+        public float AutoRepeatTime = -1f;
+        private float PressTime = 0;
+
 
         public static bool Triggered(UserActions action)
         {
@@ -148,19 +151,55 @@ namespace T3.Gui
                     continue;
 
                 var c = binding.Combination;
+                float curTime = (float)ImGui.GetTime();
 
-                var isKeyPressed = (!binding.KeyPressOnly || ImGui.IsKeyPressed((ImGuiKey)c.Key, false));
-                if (ImGui.IsKeyPressed((ImGuiKey)c.Key, false)
-                    && isKeyPressed
-                    && ((!c.Alt && !io.KeyAlt) || (c.Alt && io.KeyAlt)) // There is probably a smarty way to express this.
-                    && ((!c.Ctrl && !io.KeyCtrl) || (c.Ctrl && io.KeyCtrl))
-                    && ((!c.Shift && !io.KeyShift) || (c.Shift && io.KeyShift))
-                    )
-                    return true;
+                if (binding.AutoRepeatTime <= 0)
+                {
+                    var isKeyPressed = (!binding.KeyPressOnly || ImGui.IsKeyPressed((ImGuiKey)c.Key, false));
+                    if (ImGui.IsKeyPressed((ImGuiKey)c.Key, false)
+                        && isKeyPressed
+                        && ((!c.Alt && !io.KeyAlt) || (c.Alt && io.KeyAlt)) // There is probably a smarty way to express this.
+                        && ((!c.Ctrl && !io.KeyCtrl) || (c.Ctrl && io.KeyCtrl))
+                        && ((!c.Shift && !io.KeyShift) || (c.Shift && io.KeyShift))
+                        )
+                        return true;
+                }
+                else
+                {
+                    var isKeyDown = ImGui.IsKeyDown((ImGuiKey)c.Key);
+                    if (isKeyDown
+                        && ((!c.Alt && !io.KeyAlt) || (c.Alt && io.KeyAlt)) // There is probably a smarty way to express this.
+                        && ((!c.Ctrl && !io.KeyCtrl) || (c.Ctrl && io.KeyCtrl))
+                        && ((!c.Shift && !io.KeyShift) || (c.Shift && io.KeyShift))
+                        )
+                    {
+                        if (binding.PressTime == 0) // first time key down
+                        {
+                            binding.PressTime = curTime;
+                            return true;
+                        }
+
+                        float deltaTime = curTime - binding.PressTime;
+                        if (deltaTime >= binding.AutoRepeatTime)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false; // wait autorepeat timeout
+                        }
+                    }
+                    else // key up
+                    {
+                        binding.PressTime = 0;
+                    }
+                }
             }
-
             return false;
         }
+        
+
+
 
         public static string ListKeyboardShortcuts(UserActions action, bool showLabel = true)
         {
@@ -227,8 +266,8 @@ namespace T3.Gui
                             new KeyboardBinding(UserActions.PlaybackBackwards, new KeyCombination(Key.J)),
                             new KeyboardBinding(UserActions.PlaybackStop, new KeyCombination(Key.K)),
                             new KeyboardBinding(UserActions.PlaybackToggle, new KeyCombination(Key.Space)), // TODO: Fixme!
-                            new KeyboardBinding(UserActions.PlaybackPreviousFrame, new KeyCombination(Key.CursorLeft, shift: true)),
-                            new KeyboardBinding(UserActions.PlaybackNextFrame, new KeyCombination(Key.CursorRight, shift: true)),
+                            new KeyboardBinding(UserActions.PlaybackPreviousFrame, new KeyCombination(Key.CursorLeft, shift: true)) { AutoRepeatTime = 1.0f },
+                            new KeyboardBinding(UserActions.PlaybackNextFrame, new KeyCombination(Key.CursorRight, shift: true)) { AutoRepeatTime = 1.0f },
                             new KeyboardBinding(UserActions.PlaybackJumpToNextKeyframe, new KeyCombination(Key.Period)),
                             new KeyboardBinding(UserActions.PlaybackJumpToPreviousKeyframe, new KeyCombination(Key.Comma)),
                             new KeyboardBinding(UserActions.PlaybackNextFrame, new KeyCombination(Key.CursorRight, shift: true)),
