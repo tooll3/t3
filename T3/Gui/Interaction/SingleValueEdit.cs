@@ -168,7 +168,15 @@ namespace T3.Gui.Interaction
                                 _editValue = _startValue;
                         }
 
-                        _editValue = Evaluate(_jogDialText);
+                        bool invalid;
+                        _editValue = Evaluate(_jogDialText, out invalid);
+
+                        //if the value is invalid, just revert it to what it was previously
+                        if (invalid)
+                        {
+                            _editValue = _startValue;
+                            _jogDialText = value.ToString();
+                        }
                         break;
                 }
 
@@ -279,7 +287,7 @@ namespace T3.Gui.Interaction
         private static int _lastMaxTabIndex;
         private static int _tabFocusIndex = -1; // if not -1 tries to set keyboard focus to input field.  
 
-        private static double Evaluate(string expression)
+        private static double Evaluate(string expression, out bool isInvalid)
         {
             try
             {
@@ -287,11 +295,14 @@ namespace T3.Gui.Interaction
                 table.Columns.Add("expression", typeof(string), expression);
                 var row = table.NewRow();
                 table.Rows.Add(row);
-                return double.Parse((string)row["expression"]);
+                double result = double.Parse((string)row["expression"]);
+                isInvalid = MathUtils.ApplyDefaultIfInvalid(ref result, DefaultValue);
+                return result;
             }
             catch
             {
-                return float.NaN;
+                isInvalid = true;
+                return DefaultValue;
             }
         }
 
@@ -390,6 +401,7 @@ namespace T3.Gui.Interaction
 
         private static string _numberFormat = "{0:0.000}";
         private static double _timeOpened;
+        private const double DefaultValue = 0.0;
 
         /// <summary>
         /// This is a horrible attempt to work around imguis current limitation that button elements can't have a tab focus
