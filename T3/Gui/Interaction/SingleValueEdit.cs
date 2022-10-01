@@ -295,7 +295,7 @@ namespace T3.Gui.Interaction
                 table.Columns.Add("expression", typeof(string), expression);
                 var row = table.NewRow();
                 table.Rows.Add(row);
-                double result = double.Parse((string)row["expression"]);
+                var result = double.Parse((string)row["expression"]);
                 isInvalid = MathUtils.ApplyDefaultIfInvalid(ref result, DefaultValue);
                 return result;
             }
