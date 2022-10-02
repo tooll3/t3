@@ -71,7 +71,6 @@ namespace T3.Gui.Windows
                     ImGui.Unindent();
                     ImGui.TreePop();
                 }
-#endif
 
                 if (ImGui.TreeNode("Modified Symbols"))
                 {
@@ -88,7 +87,8 @@ namespace T3.Gui.Windows
                 
                 ImGui.TreePop();
             }
-
+            
+#endif
 #if DEBUG
             if (ImGui.TreeNode("Look (not saved)"))
             {
@@ -116,7 +116,7 @@ namespace T3.Gui.Windows
             }
 #endif
 
-            if(changed)
+            if (changed)
                 UserSettings.Save();
 
 #if DEBUG
