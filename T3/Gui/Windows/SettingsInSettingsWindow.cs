@@ -1,5 +1,6 @@
 using System;
 using ImGuiNET;
+using T3.Gui.Graph;
 using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows
@@ -130,6 +131,78 @@ namespace T3.Gui.Windows
             //    label = "Show Timeline",
             //    imguiFunc = () => ImGui.Checkbox("##ShowTimeline", ref UserSettings.Config.ShowTimeline)
             //}
+        };
+        
+        static readonly UIControlledSetting[] debugSettings = new UIControlledSetting[]
+        {
+            new UIControlledSetting()
+            {
+                label = "VSync",
+                imguiFunc = () => ImGui.Checkbox("##UseVSync", ref UseVSync)
+            },
+
+            new UIControlledSetting()
+            {
+                label = "Show Window Regions",
+                imguiFunc = () => ImGui.Checkbox("##WindowRegionsVisible", ref WindowRegionsVisible)
+            },
+
+            new UIControlledSetting()
+            {
+                label = "Show Item Regions",
+                imguiFunc = () => ImGui.Checkbox("##ItemRegionsVisible", ref ItemRegionsVisible)
+            },
+        };
+
+        static readonly UIControlledSetting[] t3UiStyleSettings = new UIControlledSetting[]
+        {
+            new UIControlledSetting()
+            {
+                label = "Height Connection Zone",
+                imguiFunc = () => ImGui.DragFloat("##UsableSlotThickness", ref GraphNode.UsableSlotThickness)
+            },
+
+            new UIControlledSetting()
+            {
+                label = "Label position",
+                imguiFunc = () => ImGui.DragFloat2("##LabelPos", ref GraphNode.LabelPos)
+            },
+
+            new UIControlledSetting()
+            {
+                label = "Slot Gaps",
+                imguiFunc = () => ImGui.DragFloat("##SlotGaps", ref GraphNode.SlotGaps, 0.1f, 0, 10f)
+            },
+
+            new UIControlledSetting()
+            {
+                label = "Input Slot Margin Y",
+                imguiFunc = () => ImGui.DragFloat("##InputSlotMargin", ref GraphNode.InputSlotMargin, 0.1f, 0, 10f)
+            },
+
+            new UIControlledSetting()
+            {
+                label = "Input Slot Thickness",
+                imguiFunc = () => ImGui.DragFloat("##InputSlotThickness", ref GraphNode.InputSlotThickness, 0.1f, 0, 10f)
+            },
+
+            new UIControlledSetting()
+            {
+                label = "Output Slot Margin",
+                imguiFunc = () => ImGui.DragFloat("##OutputSlotMargin", ref GraphNode.OutputSlotMargin, 0.1f, 0, 10f)
+            },
+
+            new UIControlledSetting()
+            {
+                label = "Value Label Color",
+                imguiFunc = () => ImGui.ColorEdit4("##ValueLabelColor", ref T3Style.Colors.ValueLabelColor.Rgba)
+            },
+
+            new UIControlledSetting()
+            {
+                label = "Value Label Color Hover",
+                imguiFunc = () => ImGui.ColorEdit4("##ValueLabelColorHover", ref T3Style.Colors.ValueLabelColorHover.Rgba)
+            },
         };
     }
 }

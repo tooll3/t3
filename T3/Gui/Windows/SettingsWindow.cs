@@ -38,21 +38,19 @@ namespace T3.Gui.Windows
                 ImGui.TreePop();
             }
 
-            
             if (ImGui.TreeNode("Additional settings"))
             {
                 changed |= DrawSettingsTable("##AdditionalSettings", additionalSettings);
                 ImGui.TreePop();
             }
 
+#if DEBUG
             if (ImGui.TreeNode("Debug Options"))
             {
-                ImGui.Checkbox("VSync", ref UseVSync);
-                ImGui.Checkbox("Show Window Regions", ref WindowRegionsVisible);
-                ImGui.Checkbox("Show Item Regions", ref ItemRegionsVisible);
-
+                DrawSettingsTable("##DebugOptionsTable", debugSettings);
                 if (ImGui.TreeNode("Undo Queue"))
                 {
+                    ImGui.Indent();
                     ImGui.TextUnformatted("Undo");
                     ImGui.Indent();
                     foreach (var c in UndoRedoStack.UndoStack)
@@ -70,9 +68,11 @@ namespace T3.Gui.Windows
                     }
 
                     ImGui.Unindent();
+                    ImGui.Unindent();
                     ImGui.TreePop();
                 }
-                
+#endif
+
                 if (ImGui.TreeNode("Modified Symbols"))
                 {
                     foreach (var symbolUi in UiModel.GetModifiedSymbolUis())
@@ -89,6 +89,7 @@ namespace T3.Gui.Windows
                 ImGui.TreePop();
             }
 
+#if DEBUG
             if (ImGui.TreeNode("Look (not saved)"))
             {
                 ColorVariations.DrawSettingsUi();
@@ -113,12 +114,15 @@ namespace T3.Gui.Windows
                 }                
                 ImGui.TreePop();
             }
-            
+#endif
+
             if(changed)
                 UserSettings.Save();
-            
+
+#if DEBUG
             ImGui.Separator();
             T3Metrics.Draw();
+#endif
         }
 
         public override List<Window> GetInstances()
