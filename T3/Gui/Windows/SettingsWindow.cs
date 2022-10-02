@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Threading.Channels;
+using System.Windows.Forms;
 using ImGuiNET;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.TypeColors;
 using T3.Gui.UiHelpers;
+using System.Numerics;
 
 namespace T3.Gui.Windows
 {
-    public class SettingsWindow : Window
+    public partial class SettingsWindow : Window
     {
         public SettingsWindow()
         {
@@ -22,46 +25,23 @@ namespace T3.Gui.Windows
         protected override void DrawContent()
         {
             var changed = false;
+            ImGui.NewLine();
             if (ImGui.TreeNode("User Interface"))
             {
-                if (ImGui.DragFloat("UI Scale", ref UserSettings.Config.UiScaleFactor, 0.01f, 0.5f, 3f))
-                {
-                    changed = true;
-                }
-                changed |= ImGui.Checkbox("Warn before Lib modifications", ref UserSettings.Config.WarnBeforeLibEdit);
-                changed |= ImGui.Checkbox("Use arc connections", ref UserSettings.Config.UseArcConnections);
-                changed |= ImGui.Checkbox("Use Jog Dial Control", ref UserSettings.Config.UseJogDialControl);
-                changed |= ImGui.DragFloat("Scroll smoothing", ref UserSettings.Config.ScrollSmoothing);
-                changed |= ImGui.Checkbox("Show Graph thumbnails", ref UserSettings.Config.ShowThumbnails);
-                changed |= ImGui.Checkbox("Drag snapped nodes", ref UserSettings.Config.SmartGroupDragging);
-                ImGui.Separator();
-                changed |= ImGui.DragFloat("Snap strength", ref UserSettings.Config.SnapStrength);
-                changed |= ImGui.DragFloat("Click threshold", ref UserSettings.Config.ClickThreshold);
-                changed |= ImGui.DragFloat("Keyboard scroll speed", ref UserSettings.Config.KeyboardScrollAcceleration);
-                 
-                changed |= ImGui.DragFloat("Timeline Raster Density", ref UserSettings.Config.TimeRasterDensity, 0.01f);
-                 
-                changed |= ImGui.Checkbox("Swap Main & 2nd windows when fullscreen", ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen);
-                
-                 
+                changed |= DrawSettingsTable("##UserInterfaceTable", userInterfaceSettings);
                 ImGui.TreePop();
             }
             
             if (ImGui.TreeNode("Space Mouse"))
             {
-                changed |= ImGui.DragFloat("Smoothing", ref UserSettings.Config.SpaceMouseDamping, 0.01f, 0.01f, 1f);
-                changed |= ImGui.DragFloat("Move Speed", ref UserSettings.Config.SpaceMouseMoveSpeedFactor, 0.01f, 0, 10f);
-                changed |= ImGui.DragFloat("Rotation Speed", ref UserSettings.Config.SpaceMouseRotationSpeedFactor, 0.01f, 0, 10f);
+                changed |= DrawSettingsTable("##SpaceMouseTable", spaceMouseSettings);
                 ImGui.TreePop();
             }
 
             
             if (ImGui.TreeNode("Additional settings"))
             {
-                //ImGui.Checkbox("Show Timeline", ref UserSettings.Config.ShowTimeline);
-                //ImGui.Checkbox("Show Title", ref UserSettings.Config.ShowTitleAndDescription);
-                changed |= ImGui.DragFloat("Gizmo size", ref UserSettings.Config.GizmoSize);
-                changed |= ImGui.DragFloat("Tooltip delay", ref UserSettings.Config.TooltipDelay);
+                changed |= DrawSettingsTable("##AdditionalSettings", additionalSettings);
                 ImGui.TreePop();
             }
 
@@ -144,6 +124,46 @@ namespace T3.Gui.Windows
         public override List<Window> GetInstances()
         {
             return new List<Window>();
+        }
+
+        bool DrawSettingsTable(string tableID, UIControlledSetting[] settings)
+        {
+            ImGui.NewLine();
+            bool changed = false;
+            if (ImGui.BeginTable(tableID, 2, ImGuiTableFlags.BordersInnerH | ImGuiTableFlags.SizingFixedSame | ImGuiTableFlags.PadOuterX))
+            {
+                foreach (UIControlledSetting setting in settings)
+                {
+                    ImGui.TableNextRow();
+                    ImGui.TableNextColumn();
+                    ImGui.Indent();
+                    ImGui.Text(setting.label);
+                    ImGui.Unindent();
+
+                    if (!string.IsNullOrEmpty(setting.tooltip))
+                    {
+                        if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+                        {
+                            ImGui.SetTooltip(setting.tooltip);
+                        }
+                    }
+
+                    ImGui.TableNextColumn();
+
+                    bool valueChanged = setting.imguiFunc.Invoke();
+                    if(valueChanged && setting.OnValueChanged != null)
+                    {
+                        setting.OnValueChanged.Invoke();
+                    }
+
+                    changed |= valueChanged;
+                }
+            }
+
+            ImGui.EndTable();
+            ImGui.NewLine();
+
+            return changed;
         }
     }
 }
