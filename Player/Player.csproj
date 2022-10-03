@@ -5,6 +5,7 @@
         <TargetFramework>net5.0-windows</TargetFramework>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <StartupObject>T3.Program</StartupObject>
+	<ApplicationIcon>..\Resources\t3-editor\images\t3.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
