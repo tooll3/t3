@@ -849,13 +849,13 @@ namespace T3.Gui.Graph
                 commands.Add(cmd);
             }
 
-            selectedInputUis = selectedInputUis == null ? NodeSelection.GetSelectedNodes<IInputUi>().ToList() : selectedInputUis;
+            selectedInputUis ??= NodeSelection.GetSelectedNodes<IInputUi>().ToList();
             if (selectedInputUis.Count > 0)
             {
                 NodeOperations.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), CompositionOp.Symbol);
             }
 
-            selectedOutputUis = selectedOutputUis == null ? NodeSelection.GetSelectedNodes<IOutputUi>().ToList() : selectedOutputUis;
+            selectedOutputUis ??= NodeSelection.GetSelectedNodes<IOutputUi>().ToList();
             if (selectedOutputUis.Count > 0)
             {
                 NodeOperations.RemoveOutputsFromSymbol(selectedOutputUis.Select(entry => entry.Id).ToArray(), CompositionOp.Symbol);
