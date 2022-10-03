@@ -15,29 +15,43 @@ namespace T3.Gui.Graph
     {
         public static void OpenForSymbolChildUi(SymbolChildUi symbolChildUi)
         {
-            _focusedInstanceId = symbolChildUi.SymbolChild.Id;
+            _nextFocusedInstanceId = symbolChildUi.SymbolChild.Id;
         }
+
+        private static Guid _nextFocusedInstanceId = Guid.Empty;
 
         public static void Draw()
         {
             var justOpened = false;
+
+            var renameTriggered = _nextFocusedInstanceId != Guid.Empty;
+            
             if (_focusedInstanceId == Guid.Empty)
             {
-                if (ImGui.IsWindowFocused()
+                if ((renameTriggered || ImGui.IsWindowFocused()) 
                     && !ImGui.IsAnyItemActive() 
                     && !ImGui.IsAnyItemFocused() 
-                    && ImGui.IsKeyPressed((ImGuiKey)Key.Return)
+                    && (renameTriggered || ImGui.IsKeyPressed((ImGuiKey)Key.Return))
                     && string.IsNullOrEmpty(T3Ui.OpenedPopUpName))
                 {
                     var selectedInstances = NodeSelection.GetSelectedNodes<SymbolChildUi>().ToList();
-                    if (selectedInstances.Count == 1)
+                    if (_nextFocusedInstanceId != Guid.Empty)
                     {
+                        _focusedInstanceId = _nextFocusedInstanceId;
+                        _nextFocusedInstanceId = Guid.Empty;
                         justOpened = true;
                         ImGui.SetKeyboardFocusHere();
+
+                    }
+                    else if (selectedInstances.Count == 1)
+                    {
                         _focusedInstanceId = selectedInstances[0].SymbolChild.Id;
+                        justOpened = true;
+                        ImGui.SetKeyboardFocusHere();
                     }
                 }
             }
+
 
             if (_focusedInstanceId == Guid.Empty)
                 return;
@@ -61,7 +75,6 @@ namespace T3.Gui.Graph
             ImGui.InputText("##input", ref text, 256, ImGuiInputTextFlags.AutoSelectAll);
             symbolChild.Name = text;
             
-            //ImGui.SetKeyboardFocusHere();
             if (!justOpened && (ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
             {
                 _focusedInstanceId = Guid.Empty;
