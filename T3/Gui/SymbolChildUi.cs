@@ -1,14 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Gui.ChildUi;
-using T3.Gui.Graph;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.Selection;
 using UiHelpers;
+using T3.Core.Operator.Slots;
 
 namespace T3.Gui
 {
@@ -46,19 +47,52 @@ namespace T3.Gui
             get => SymbolChild.Outputs.FirstOrDefault().Value?.IsDisabled ?? false;
             set 
             {
-                var firstOutputDef = SymbolChild.Symbol.OutputDefinitions.FirstOrDefault();
-                if (firstOutputDef != null)
+                List<Symbol.OutputDefinition> outputDefinitions = SymbolChild.Symbol.OutputDefinitions;
+
+                // Set disabled status on this child's outputs
+                foreach (var outputDef in outputDefinitions)
                 {
-                    var childOutput = SymbolChild.Outputs[firstOutputDef.Id];
+
+                {
+                    if (outputDefinitions[i] == null)
+                    {
+                        Log.Warning($"{SymbolChild.Symbol.GetType()} {SymbolChild.Symbol.Name} contains a null {typeof(Symbol.OutputDefinition)}", Id);
+                        continue;
+                    }
+
+                    SymbolChild.Output childOutput;
+                    bool hasOutput = SymbolChild.Outputs.TryGetValue(outputDefinitions[i].Id, out childOutput);
+
+                    if(!hasOutput)
+                    {
+                        Log.Warning($"{typeof(SymbolChild)} {SymbolChild.ReadableName} does not have the following child output as defined: " +
+                            $"{childOutput.OutputDefinition.Name}({nameof(Guid)}{childOutput.OutputDefinition.Id})");
+                        continue;
+                    }
+
                     childOutput.IsDisabled = value;
                 }
 
+                // Set disabled status on outputs of each instanced copy of this child within all parents that contain it
                 foreach (var parentInstance in SymbolChild.Parent.InstancesOfSymbol)
                 {
-                    var childInstance = parentInstance.Children.Single(child => child.SymbolChildId == Id);
-                    var output = childInstance.Outputs.FirstOrDefault();
-                    if (output != null)
-                        output.IsDisabled = value;
+                    var matchingChildInstances = parentInstance.Children.Where(child => child.SymbolChildId == Id).ToArray();
+
+                    //this parent doesn't have an instance of our SymbolChild. Ignoring and continuing.
+                    if(matchingChildInstances.Length == 0)
+                        continue;
+
+                    //set disabled status on all outputs of each instance
+                    foreach (var instance in matchingChildInstances)
+                    {
+                        List<ISlot> outputs = instance.Outputs;
+
+                        foreach (var t in outputs)
+                        {
+                            t.IsDisabled = value;
+                        }
+
+                    }
                 }
             }
         }
