@@ -413,7 +413,19 @@ namespace T3.Gui.Graph
 
                         var valueColor = labelColor;
                         valueColor.Rgba.W *= 0.6f;
+                        
+                        // Avoid clipping because it increases ImGui draw calls and is expensive
+                        var estimatedValueWidth = valueAsString.Length * 8;
+                        var needClipping = estimatedValueWidth > _usableScreenRect.Max.X - screenCursor.X;
+                        if (needClipping)
+                        {
+                            _drawList.PushClipRect(_usableScreenRect.Min, _usableScreenRect.Max, true);
+                        }
+                        
                         _drawList.AddText(screenCursor, valueColor, valueAsString);
+                        if(needClipping) 
+                            _drawList.PopClipRect();
+
                         ImGui.PopStyleColor();
 
                         ImGui.PopFont();
