@@ -52,16 +52,14 @@ namespace T3.Gui
                 // Set disabled status on this child's outputs
                 foreach (var outputDef in outputDefinitions)
                 {
-
-                {
-                    if (outputDefinitions[i] == null)
+                    if (outputDef == null)
                     {
                         Log.Warning($"{SymbolChild.Symbol.GetType()} {SymbolChild.Symbol.Name} contains a null {typeof(Symbol.OutputDefinition)}", Id);
                         continue;
                     }
 
                     SymbolChild.Output childOutput;
-                    bool hasOutput = SymbolChild.Outputs.TryGetValue(outputDefinitions[i].Id, out childOutput);
+                    bool hasOutput = SymbolChild.Outputs.TryGetValue(outputDef.Id, out childOutput);
 
                     if(!hasOutput)
                     {
@@ -91,7 +89,6 @@ namespace T3.Gui
                         {
                             t.IsDisabled = value;
                         }
-
                     }
                 }
             }

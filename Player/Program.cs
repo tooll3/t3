@@ -362,7 +362,7 @@ namespace T3
             factory.Dispose();
         }
 
-        private static void MouseMoveHandler(object? sender, MouseEventArgs e)
+        private static void MouseMoveHandler(object sender, MouseEventArgs e)
         {
             if (sender is not Form form)
                 return;
