@@ -38,7 +38,7 @@ namespace T3.Gui.Graph.Interaction
             {
                 if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                 {
-                    var compositionSymbolId = GraphCanvas.Current.CompositionOp.Symbol.Id;
+                    var compositionSymbolId = currentCompositionOp.Symbol.Id;
                     _draggedNodeId = node.Id;
                     if (node.IsSelected)
                     {
@@ -46,7 +46,7 @@ namespace T3.Gui.Graph.Interaction
                     }
                     else
                     {
-                        var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+                        var parentUi = SymbolUiRegistry.Entries[currentCompositionOp.Symbol.Id];
                         if(UserSettings.Config.SmartGroupDragging)
                             _draggedNodes = FindSnappedNeighbours(parentUi, node).ToList();
                         
@@ -85,7 +85,7 @@ namespace T3.Gui.Graph.Interaction
 
                     if (singleDraggedNode != null && ConnectionMaker.ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolChildUi childUi)
                     {
-                        var instanceForSymbolChildUi = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
+                        var instanceForSymbolChildUi = currentCompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
                         ConnectionMaker.SplitConnectionWithDraggedNode(childUi, 
                                                                        ConnectionMaker.ConnectionSplitHelper.BestMatchLastFrame.Connection, 
                                                                        instanceForSymbolChildUi);
@@ -95,7 +95,7 @@ namespace T3.Gui.Graph.Interaction
                     var selectedInputs = NodeSelection.GetSelectedNodes<IInputUi>().ToList();
                     if (selectedInputs.Count > 0)
                     {
-                        var composition = GraphCanvas.Current.CompositionOp;
+                        var composition = currentCompositionOp;
                         var compositionUi = SymbolUiRegistry.Entries[composition.Symbol.Id];
                         composition.Symbol.InputDefinitions.Sort((a, b) =>
                                                                  {

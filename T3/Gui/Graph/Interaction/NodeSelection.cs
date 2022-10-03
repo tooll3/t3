@@ -211,7 +211,10 @@ namespace T3.Gui.Graph.Interaction
         public static void DeselectCompositionChild(Instance compositionOp, Guid symbolChildId)
         {
             if (!NodeOperations.TryGetUiAndInstanceInComposition(symbolChildId, compositionOp, out var childUi, out var instance))
+            {
+                Log.Debug($"{nameof(NodeSelection)}: Could not find Ui and Instance in {compositionOp.GetType()}: {symbolChildId}");
                 return;
+            }
 
             Selection.Remove(childUi);
             if (instance is ITransformable transformable)
