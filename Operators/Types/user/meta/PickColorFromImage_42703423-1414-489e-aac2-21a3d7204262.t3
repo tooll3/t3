@@ -1,0 +1,21 @@
+{
+  "Name": "PickColorFromImage",
+  "Id": "42703423-1414-489e-aac2-21a3d7204262",
+  "Namespace": "user.meta",
+  "Inputs": [
+    {
+      "Id": "3b8c51c9-c544-47eb-9d70-4bd6b161be2d"/*InputImage*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "3b1a9402-439f-46ff-9993-4fe806757b65"/*Row*/,
+      "DefaultValue": 1
+    },
+    {
+      "Id": "8cd44c6d-8096-4ca3-b4df-4f723438ae7b"/*Column*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
