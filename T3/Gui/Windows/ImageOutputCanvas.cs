@@ -72,7 +72,7 @@ namespace T3.Gui.Windows
             if (ImGui.IsMouseHoveringRect(topLeftOnScreen, topLeftOnScreen + sizeOnScreen))
             {
                 var relativePosition = (ImGui.GetMousePos() - topLeftOnScreen) / sizeOnScreen;
-                MouseInput.Set(relativePosition, ImGui.IsMouseDown(ImGuiMouseButton.Left));
+                Core.IO.MouseInput.Set(relativePosition, ImGui.IsMouseDown(ImGuiMouseButton.Left));
             }
 
             if (UserSettings.Config.ShowGraphOverContent)
