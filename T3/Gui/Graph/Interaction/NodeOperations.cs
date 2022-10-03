@@ -1136,5 +1136,59 @@ namespace T3.Gui.Graph.Interaction
                 }
             }
         }
+        
+        public static void CollectDependencies(ISlot slot, HashSet<ISlot> all)
+        {
+            if (slot == null)
+            {
+                Log.Warning("skipping null slot");
+                return;
+            }
+
+            if (all.Contains(slot))
+                return;
+            
+            all.Add(slot);
+            
+            if (slot is IInputSlot)
+            {
+                if (!slot.IsConnected)
+                    return;
+                
+                CollectDependencies(slot.GetConnection(0), all);
+            }
+            else if (slot.IsConnected)
+            {
+                CollectDependencies(slot.GetConnection(0), all);
+            }
+            else
+            {
+                var parentInstance = slot.Parent;
+                foreach (var input in parentInstance.Inputs)
+                {
+                    if (input.IsConnected)
+                    {
+                        if (input.IsMultiInput)
+                        {
+                            var multiInput = (IMultiInputSlot)input;
+                            
+                            foreach (var entry in multiInput.GetCollectedInputs())
+                            {
+                                CollectDependencies(entry, all);
+                            }
+                        }
+                        else
+                        {
+                            var target = input.GetConnection(0);
+                            CollectDependencies(target, all);
+                        }
+                    }
+                    else if ((input.DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
+                    {
+                        input.DirtyFlag.Invalidate();
+                    }
+                }
+            }
+        }
     }
 }

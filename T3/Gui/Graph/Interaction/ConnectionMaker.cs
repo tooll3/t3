@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
@@ -261,6 +261,26 @@ namespace T3.Gui.Graph
         public static void CompleteAtInputSlot(Symbol parentSymbol, SymbolChildUi targetUi, Symbol.InputDefinition input, int multiInputIndex = 0,
                                                bool insertMultiInput = false)
         {
+            // Check for cycles
+            var sourceInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == TempConnections[0].SourceParentOrChildId);
+            if (sourceInstance != null)
+            {
+                var outputSlot = sourceInstance.Outputs[0];
+                var deps = new HashSet<ISlot>();  
+                NodeOperations.CollectDependencies(outputSlot, deps);
+                
+                foreach (var d in deps)
+                {
+                    if (d.Parent.SymbolChildId != targetUi.SymbolChild.Id)
+                        continue;
+                    
+                    Log.Debug("Sorry, you can't do this. This connection would result in a cycle.");
+                    TempConnections.Clear();
+                    ConnectionSnapEndHelper.ResetSnapping();
+                    return;
+                }
+            }
+            
             // TODO: Support simultaneous connection to multiInput
             var newConnection = new Symbol.Connection(sourceParentOrChildId: TempConnections[0].SourceParentOrChildId,
                                                       sourceSlotId: TempConnections[0].SourceSlotId,
@@ -292,6 +312,30 @@ namespace T3.Gui.Graph
 
         public static void CompleteAtOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, Symbol.OutputDefinition output)
         {
+            // Check for cycles
+            var sourceInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == sourceUi.SymbolChild.Id);
+            if (sourceInstance != null)
+            {
+                var deps = new HashSet<ISlot>();
+                foreach (var inputSlot in sourceInstance.Inputs)
+                {
+                    NodeOperations.CollectDependencies(inputSlot, deps);
+                }
+                
+                foreach (var d in deps)
+                {
+                    if (d.Parent.SymbolChildId != TempConnections[0].TargetParentOrChildId)
+                        continue;
+                    
+                    Log.Debug("Sorry, you can't do this. This connection would result in a cycle.");
+                    TempConnections.Clear();
+                    ConnectionSnapEndHelper.ResetSnapping();
+                    return;
+                }
+            }
+
+            
+            
             // Todo: Support simultaneous connection from multiple inputs
             var newConnection = new Symbol.Connection(sourceParentOrChildId: sourceUi.SymbolChild.Id,
                                                       sourceSlotId: output.Id,
