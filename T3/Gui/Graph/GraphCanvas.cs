@@ -44,7 +44,8 @@ namespace T3.Gui.Graph
 
         public void SetComposition(List<Guid> childIdPath, ICanvas.Transition transition)
         {
-            // zoom timeline out if necessary
+            SelectableNodeMovement.Reset();
+            // Zoom timeline out if necessary
             if (transition == ICanvas.Transition.JumpOut)
             {
                 var primaryGraphWindow = GraphWindow.GetVisibleInstances().FirstOrDefault();

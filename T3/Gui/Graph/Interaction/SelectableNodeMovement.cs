@@ -21,6 +21,15 @@ namespace T3.Gui.Graph.Interaction
     public static class SelectableNodeMovement
     {
         /// <summary>
+        /// Reset to avoid accidental dragging of previous elements 
+        /// </summary>
+        public static void Reset()
+        {
+            _moveCommand = null;
+            _draggedNodes.Clear();
+        }
+        
+        /// <summary>
         /// NOTE: This has to be called directly after ImGui.Item
         /// </summary>
         public static void Handle(ISelectableCanvasObject node, Instance instance = null)
