@@ -1,0 +1,13 @@
+{
+  "Name": "LoadPointCloud",
+  "Id": "2d09d163-4aa3-4a58-a93c-86dfb7963070",
+  "Namespace": "obsolete.particle",
+  "Inputs": [
+    {
+      "Id": "e0479d39-38bb-4802-9a97-3e8991797fc9"/*Path*/,
+      "DefaultValue": "Resources\\images\\frog2.jpg"
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

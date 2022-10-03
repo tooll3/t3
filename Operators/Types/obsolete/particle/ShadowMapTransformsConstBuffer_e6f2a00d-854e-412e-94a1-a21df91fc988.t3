@@ -1,0 +1,39 @@
+{
+  "Name": "ShadowMapTransformsConstBuffer",
+  "Id": "e6f2a00d-854e-412e-94a1-a21df91fc988",
+  "Namespace": "obsolete.particle",
+  "Inputs": [
+    {
+      "Id": "94d229a4-8bbf-4be4-a2f1-9b52cc785490"/*Position*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 10.0
+      }
+    },
+    {
+      "Id": "14038263-253a-4025-a7e5-fd6ca7dfb949"/*Target*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "5783c091-816e-43a7-94ba-2e0df6380b0d"/*NearFarClip*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 100.0
+      }
+    },
+    {
+      "Id": "82c12036-6f0e-4da6-913c-0a2c37919466"/*Size*/,
+      "DefaultValue": {
+        "X": 25.0,
+        "Y": 25.0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

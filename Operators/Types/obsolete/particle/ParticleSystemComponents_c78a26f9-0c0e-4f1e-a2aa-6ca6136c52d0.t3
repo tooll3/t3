@@ -1,0 +1,13 @@
+{
+  "Name": "ParticleSystemComponents",
+  "Id": "c78a26f9-0c0e-4f1e-a2aa-6ca6136c52d0",
+  "Namespace": "obsolete.particle",
+  "Inputs": [
+    {
+      "Id": "e5cebe45-c1d2-48fa-83aa-e321aee14912"/*ParticleSystem*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
