@@ -4,6 +4,10 @@
   "Namespace": "lib.math.vec3",
   "Inputs": [
     {
+      "Id": "deddfbee-386d-4f8f-9339-ec6c01908a11"/*OverrideTime*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "1cd2174e-aeb2-4258-8395-a9cc16f276b5"/*Seed*/,
       "DefaultValue": 0
     },
@@ -42,10 +46,6 @@
     {
       "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Scale*/,
       "DefaultValue": 1.0
-    },
-    {
-      "Id": "deddfbee-386d-4f8f-9339-ec6c01908a11"/*OverrideTime*/,
-      "DefaultValue": 0.0
     }
   ],
   "Children": [],

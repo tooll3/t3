@@ -5,9 +5,7 @@
 cbuffer Params : register(b0)
 {
     float BlendFactor;
-    float CountA;
-    float CountB;
-    float CombineMode;
+    float BlendMode;
 }
 
 
@@ -20,7 +18,17 @@ void main(uint3 i : SV_DispatchThreadID)
 {
     Point A = Points1[i.x];
     Point B = Points2[i.x];
-    ResultPoints[i.x].position =  lerp(A.position, B.position, BlendFactor); 
-    ResultPoints[i.x].w = lerp(A.w, B.w, BlendFactor);
+
+    float f =BlendFactor;
+
+    if(BlendMode < 1.5) {
+        f = A.w;        
+    }
+    else if(BlendMode < 2.5) {
+        f = (1-B.w);
+    }
+
+    ResultPoints[i.x].position =  lerp(A.position, B.position, f); 
+    ResultPoints[i.x].w = lerp(A.w, B.w, f);
 }
 

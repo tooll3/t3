@@ -60,18 +60,12 @@ void main(uint3 i : SV_DispatchThreadID)
     float4 hash4 = hash42(rand);
     hash4 =  GetGain(hash4, clamp(Bias, 0.001, 0.999)) * 2 -1;
     
-    //float4 hashRot = (hash42( i.x * 1.431 + 237 + floor(Seed+ 0.5) * 117.1) * 2 -1);
     float4 hashRot = hash42( float2(rand, 23.1));
 
     float4 rot = SourcePoints[i.x].rotation;
 
     float3 offset = hash4.xyz * RandomizePosition * Amount;
 
-    // if (UseLocalSpace > 1.5) 
-    // {
-    //     offset = rotate_vector2(offset, rot);
-    //     offset = mul( float4(offset,0), WorldToObject);
-    // }
     if(UseLocalSpace < 0.5)
     {
         offset = rotate_vector2(offset, rot);

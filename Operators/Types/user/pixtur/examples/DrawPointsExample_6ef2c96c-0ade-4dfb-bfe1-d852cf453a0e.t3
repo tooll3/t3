@@ -366,14 +366,14 @@
       "SymbolId": "2dc5c9d1-ea93-4597-a4d9-7b610aad603a",
       "InputValues": [
         {
-          "Id": "c5480ce5-a8ba-4a26-8cee-c28e442020b7"/*BlendMode*/,
-          "Type": "System.Int32",
-          "Value": 0
-        },
-        {
           "Id": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendValue*/,
           "Type": "System.Single",
           "Value": 1.21
+        },
+        {
+          "Id": "c5480ce5-a8ba-4a26-8cee-c28e442020b7"/*BlendMode*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []

@@ -1,14 +1,18 @@
-using System;
 using System.Numerics;
-using T3.Core.Logging;
+using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+
 
 namespace T3.Operators.Types.Id_2ed26fb7_fe66_4ed6_8b8d_230d87ae5c77
 {
     public class CamPosition : Instance<CamPosition>
     {
+        
+        [Output(Guid = "51BEC9E0-2E6E-49B6-885C-2AA0F3AC37E3", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<Command> Command = new();
+        
         [Output(Guid = "20E33049-C2FA-4C9F-8607-318B279B72EC", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Vector3> Position = new Slot<Vector3>();
         
@@ -21,13 +25,12 @@ namespace T3.Operators.Types.Id_2ed26fb7_fe66_4ed6_8b8d_230d87ae5c77
         
         public CamPosition()
         {
-            Position.UpdateAction = Update;
-            Direction.UpdateAction = Update;
-            AspectRatio.UpdateAction = Update;
+            Command.UpdateAction = Update;
         }
 
         private void Update(EvaluationContext context)
         {
+            
             SharpDX.Matrix camToWorld = context.WorldToCamera;
             camToWorld.Invert();
             
@@ -44,9 +47,6 @@ namespace T3.Operators.Types.Id_2ed26fb7_fe66_4ed6_8b8d_230d87ae5c77
             Direction.DirtyFlag.Clear();
             AspectRatio.DirtyFlag.Clear();
         }
-
-        [Input(Guid = "eb265bf8-7ec5-4089-88ce-d8054d338ea7")]
-        public readonly InputSlot<string> Variable = new InputSlot<string>();
     }
 }
 

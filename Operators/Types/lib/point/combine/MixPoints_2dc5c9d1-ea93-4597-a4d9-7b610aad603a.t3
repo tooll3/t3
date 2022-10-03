@@ -4,12 +4,12 @@
   "Namespace": "lib.point.combine",
   "Inputs": [
     {
-      "Id": "c5480ce5-a8ba-4a26-8cee-c28e442020b7"/*BlendMode*/,
-      "DefaultValue": 0
-    },
-    {
       "Id": "ba7ffda2-f9f6-440d-a174-7339844835fa"/*BlendValue*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "c5480ce5-a8ba-4a26-8cee-c28e442020b7"/*BlendMode*/,
+      "DefaultValue": 0
     },
     {
       "Id": "97904d2e-ae67-4ab4-9201-7902a85d12f3"/*PointsA_*/,
@@ -166,8 +166,8 @@
       "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
     },
     {
-      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "SourceSlotId": "ba7ffda2-f9f6-440d-a174-7339844835fa",
+      "SourceParentOrChildId": "2eb9e20b-521f-4630-8085-2c32bda1bbdb",
+      "SourceSlotId": "db1073a1-b9d8-4d52-bc5c-7ae8c0ee1ac3",
       "TargetParentOrChildId": "76ab5ba5-897f-4f96-b57e-aed844481f88",
       "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
     },

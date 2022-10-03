@@ -35,7 +35,7 @@ namespace T3.Gui.ChildUi
                                   : Fonts.FontSmall);
 
             ImGui.PushFont(font);
-            ImGui.TextUnformatted($"{valueInstance.Float.Value:0.00}");
+            ImGui.TextUnformatted($"{valueInstance.Float.Value:0.000}");
             ImGui.PopFont();
             
             ImGui.EndGroup();
