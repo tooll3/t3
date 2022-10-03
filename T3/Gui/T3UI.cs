@@ -187,7 +187,8 @@ namespace T3.Gui
                     SymbolTreeMenu.Draw();
                     ImGui.EndMenu();
                 }
-                if (ImGui.BeginMenu("Windows"))
+
+                if (ImGui.BeginMenu("View"))
                 {
                     UserSettings.Config.ShowMainMenu = true;
                     ImGui.MenuItem("FullScreen", "", ref UserSettings.Config.FullScreen);
@@ -206,8 +207,11 @@ namespace T3.Gui
                     {
                         ToggleFocusMode();
                     }
-                    
-                    ImGui.Separator();
+                    ImGui.EndMenu();
+                }
+                
+                if (ImGui.BeginMenu("Windows"))
+                {
                     WindowManager.DrawWindowMenuContent();
                     ImGui.EndMenu();
                 }
