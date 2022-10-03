@@ -25,6 +25,15 @@ namespace T3.Gui.Graph.Interaction
         /// </summary>
         public static void Handle(ISelectableCanvasObject node, Instance instance = null)
         {
+            var currentCompositionOp = GraphCanvas.Current.CompositionOp;
+            var compositionChanged = currentCompositionOp != _currentCompositionOp;
+
+            if (compositionChanged)
+            {
+                ClearDraggedNodes();
+                _currentCompositionOp = currentCompositionOp;
+            }
+
             if (ImGui.IsItemActive())
             {
                 if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
@@ -66,8 +75,7 @@ namespace T3.Gui.Graph.Interaction
                     return;
 
                 var singleDraggedNode = (_draggedNodes.Count == 1) ? _draggedNodes[0] : null;
-                _draggedNodeId = Guid.Empty;
-                _draggedNodes.Clear();
+                ClearDraggedNodes();
 
                 var wasDragging = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() > UserSettings.Config.ClickThreshold;
                 if (wasDragging)
@@ -151,6 +159,12 @@ namespace T3.Gui.Graph.Interaction
                     NodeSelection.SetSelection(node);
                 }
             }
+        }
+
+        private static void ClearDraggedNodes()
+        {
+            _draggedNodeId = Guid.Empty;
+            _draggedNodes.Clear();
         }
 
         private static void DisconnectDraggedNodes()
@@ -509,6 +523,7 @@ namespace T3.Gui.Graph.Interaction
 
         private static Guid _draggedNodeId = Guid.Empty;
         private static List<ISelectableCanvasObject> _draggedNodes = new();
+        private static Instance _currentCompositionOp;
 
         private static class ShakeDetector
         {
