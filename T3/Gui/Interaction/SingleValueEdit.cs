@@ -168,11 +168,10 @@ namespace T3.Gui.Interaction
                                 _editValue = _startValue;
                         }
 
-                        bool invalid;
-                        _editValue = Evaluate(_jogDialText, out invalid);
+                        var valid = Evaluate(_jogDialText, ref _editValue);
 
                         // If the value is invalid, just revert it to what it was previously
-                        if (invalid)
+                        if (!valid)
                         {
                             _editValue = _startValue;
                             _jogDialText = value.ToString();
@@ -287,7 +286,7 @@ namespace T3.Gui.Interaction
         private static int _lastMaxTabIndex;
         private static int _tabFocusIndex = -1; // if not -1 tries to set keyboard focus to input field.  
 
-        private static double Evaluate(string expression, out bool isInvalid)
+        private static bool Evaluate(string expression, ref double editValue)
         {
             try
             {
@@ -295,14 +294,17 @@ namespace T3.Gui.Interaction
                 table.Columns.Add("expression", typeof(string), expression);
                 var row = table.NewRow();
                 table.Rows.Add(row);
-                var result = double.Parse((string)row["expression"]);
-                isInvalid = MathUtils.ApplyDefaultIfInvalid(ref result, DefaultValue);
-                return result;
+                var newValue = double.Parse((string)row["expression"]);
+                
+                if (double.IsNaN(newValue) || double.IsInfinity(newValue))
+                    return false;
+                
+                editValue = newValue;
+                return true;
             }
             catch
             {
-                isInvalid = true;
-                return DefaultValue;
+                return false;
             }
         }
 
