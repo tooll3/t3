@@ -17,7 +17,7 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
 
         [Output(Guid = "761245E2-AC0B-435A-841E-7C9EDC804606")]
         public readonly Slot<Object> Reference = new();
-        
+
         public Camera()
         {
             Output.UpdateAction = Update;
@@ -28,7 +28,7 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
         {
             Reference.DirtyFlag.Clear();
             LastObjectToWorld = context.ObjectToWorld;
-            
+
             var fov = MathUtil.DegreesToRadians(Fov.GetValue(context));
             var aspectRatio = AspectRatio.GetValue(context);
             if (aspectRatio < 0.0001f)
@@ -45,7 +45,7 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
             var upValue = Up.GetValue(context);
             var up = new Vector3(upValue.X, upValue.Y, upValue.Z);
             var worldToCameraRoot = Matrix.LookAtRH(eye, target, up);
-            
+
             var rollRotation = Matrix.RotationAxis(new Vector3(0, 0, 1), -(float)Roll.GetValue(context));
 
             var pOffset = PositionOffset.GetValue(context);
@@ -56,8 +56,7 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
                                                                  MathUtil.DegreesToRadians(rOffset.X),
                                                                  MathUtil.DegreesToRadians(rOffset.Z));
             
-            WorldToCamera= worldToCameraRoot * rollRotation * additionalTranslation * additionalRotation;
-
+            WorldToCamera = worldToCameraRoot * rollRotation * additionalRotation * additionalTranslation;
 
             if (context.BypassCameras)
             {
@@ -65,16 +64,16 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
                 Log.Debug($"Bypassing {SymbolChildId}", SymbolChildId);
                 return;
             }
-            
+
             // Set properties and evaluate sub tree
             var prevWorldToCamera = context.WorldToCamera;
             var prevCameraToClipSpace = context.CameraToClipSpace;
-            
+
             context.WorldToCamera = WorldToCamera;
             context.CameraToClipSpace = CameraToClipSpace;
-            
+
             Command.GetValue(context);
-            
+
             context.CameraToClipSpace = prevCameraToClipSpace;
             context.WorldToCamera = prevWorldToCamera;
         }
@@ -120,12 +119,12 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
         public readonly InputSlot<float> Fov = new InputSlot<float>();
         [Input(Guid = "764CA304-FC86-48A9-9C82-A04FAC7EADB2")]
         public readonly InputSlot<float> Roll = new InputSlot<float>();
-        
+
         [Input(Guid = "FEE19916-846F-491A-A2EE-1E7B1AC8E533")]
         public readonly InputSlot<System.Numerics.Vector3> PositionOffset = new InputSlot<System.Numerics.Vector3>();
-        
+
         [Input(Guid = "D4D0F046-297B-440A-AEF8-C2F0426EF4F5")]
         public readonly InputSlot<System.Numerics.Vector3> RotationOffset = new InputSlot<System.Numerics.Vector3>();
-
+        
     }
 }
