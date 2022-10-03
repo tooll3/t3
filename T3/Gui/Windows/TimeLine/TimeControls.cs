@@ -479,7 +479,7 @@ namespace T3.Gui.Windows.TimeLine
                             ImGui.SetNextItemWidth(150);
                             if (ImGui.DragFloat("Resync Threshold in Seconds", ref ProjectSettings.Config.AudioResyncThreshold, 0.001f, 0.01f, 1f))
                             {
-                                //soundtrack.StartTime = soundtrackStartTime;
+                                UserSettings.Save();
                             }
 
                             if (filepathModified)
