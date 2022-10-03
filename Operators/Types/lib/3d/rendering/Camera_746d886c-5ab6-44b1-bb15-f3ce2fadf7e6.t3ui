@@ -73,6 +73,13 @@
         "X": 0.0,
         "Y": 90.0
       }
+    },
+    {
+      "InputId": "ae275370-a684-42fb-ab7a-50e16d24082d"/*ViewportShift*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 135.0
+      }
     }
   ],
   "SymbolChildUis": [],

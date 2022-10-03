@@ -65,6 +65,13 @@
         "Y": 0.0,
         "Z": 0.0
       }
+    },
+    {
+      "Id": "ae275370-a684-42fb-ab7a-50e16d24082d"/*ViewportShift*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
     }
   ],
   "Children": [],
