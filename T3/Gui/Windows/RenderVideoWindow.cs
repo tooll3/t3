@@ -43,7 +43,7 @@ namespace T3.Gui.Windows
             if (mainTexture == null)
             {
                 CustomComponents.HelpText("You have selected an operator that does not render. " +
-                                          "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm fast exports.");
+                                          "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for fast exports.");
                 return;
             }
 
@@ -67,6 +67,7 @@ namespace T3.Gui.Windows
 
                             _videoWriter = new MP4VideoWriter(_targetFile, size);
                             _videoWriter.Bitrate = _bitrate;
+                            // FIXME: Allow floating point FPS in a future version
                             _videoWriter.Framerate = (int)_fps;
                         }
 
