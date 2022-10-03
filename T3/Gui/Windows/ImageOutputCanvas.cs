@@ -59,7 +59,13 @@ namespace T3.Gui.Windows
             var area = new ImRect(0, 0, size.X, size.Y);
 
             if (_viewMode == Modes.Fitted)
+            {
                 ImageOutputCanvas.Current.FitAreaOnCanvas(area);
+                if (DisableDamping)
+                {
+                    Scale = ScaleTarget;
+                }                
+            }
 
             var topLeft = Vector2.Zero;
             var topLeftOnScreen = ImageOutputCanvas.Current.TransformPosition(topLeft);
@@ -164,5 +170,6 @@ namespace T3.Gui.Windows
 
         public Modes ViewMode => _viewMode;
         private Modes _viewMode = Modes.Fitted;
+        public bool DisableDamping = false;
     }
 }

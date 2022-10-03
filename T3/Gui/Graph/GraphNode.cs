@@ -1274,11 +1274,11 @@ namespace T3.Gui.Graph
 
         private static readonly string _unfoldLabel = (char)Icon.ChevronLeft + "##size";
         private static readonly string _foldLabel = (char)Icon.ChevronDown + "##size";
-        private static readonly List<IInputUi> _visibleInputs = new List<IInputUi>(15); // A static variable to avoid GC allocations
+        private static readonly List<IInputUi> _visibleInputs = new(15); // A static variable to avoid GC allocations
 
-        private static readonly EvaluationContext _evaluationContext = new EvaluationContext();
+        private static readonly EvaluationContext _evaluationContext = new();
 
-        private static readonly ImageOutputCanvas _imageCanvasForTooltips = new ImageOutputCanvas();
+        private static readonly ImageOutputCanvas _imageCanvasForTooltips = new() { DisableDamping = true};
         private static Guid _hoveredNodeIdForConnectionTarget;
 
         private static ImRect _usableScreenRect;
