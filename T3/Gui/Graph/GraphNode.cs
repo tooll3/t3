@@ -35,6 +35,12 @@ namespace T3.Gui.Graph
     {
         public static void Draw(SymbolChildUi childUi, Instance instance)
         {
+            if (_instanceToSwitchGraphWindowTo != null)
+            {
+                GraphCanvas.Current.SetCompositionToChildInstance(_instanceToSwitchGraphWindowTo);
+                _instanceToSwitchGraphWindowTo = null;
+            }
+
             if (instance == null)
                 return;
 
@@ -223,10 +229,6 @@ namespace T3.Gui.Graph
 
                     
 
-                    
-                    // A horrible work around to prevent exception because CompositionOp changed during drawing.
-                    // A better solution would defer setting the compositionOp to the beginning of next frame.
-                    var justOpenedChild = false;
                     if (hovered && ImGui.IsMouseDoubleClicked(0) 
                                 && !RenameInstanceOverlay.IsOpen
                                 && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenSubGraph) == 0)
@@ -247,9 +249,8 @@ namespace T3.Gui.Graph
 
                             if (!blocked)
                             {
-                                GraphCanvas.Current.SetCompositionToChildInstance(instance);
+                                _instanceToSwitchGraphWindowTo = instance;
                                 ImGui.CloseCurrentPopup();
-                                justOpenedChild = true;
                             }
                         }
                     }
@@ -266,7 +267,6 @@ namespace T3.Gui.Graph
                                                    && ImGui.GetMouseDragDelta(ImGuiMouseButton.Middle, 0).Length() < UserSettings.Config.ClickThreshold;
 
                     if ((activatedWithLeftMouse || activatedWithMiddleMouse)
-                        && !justOpenedChild
                         && string.IsNullOrEmpty(T3Ui.OpenedPopUpName)
                         && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp) == 0)
                     {
@@ -275,7 +275,7 @@ namespace T3.Gui.Graph
                     }
 
                     ImGui.SetNextWindowSizeConstraints(new Vector2(280, 40), new Vector2(280, 320));
-                    if (!justOpenedChild && ImGui.BeginPopup("parameterContextPopup"))
+                    if (ImGui.BeginPopup("parameterContextPopup"))
                     {
                         ImGui.PushFont(Fonts.FontSmall);
                         var compositionSymbolUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
@@ -1273,5 +1273,6 @@ namespace T3.Gui.Graph
         private static ImRect _selectableScreenRect;
         private static ImDrawListPtr _drawList;
         private static bool _isVisible;
+        private static Instance _instanceToSwitchGraphWindowTo;
     }
 }
