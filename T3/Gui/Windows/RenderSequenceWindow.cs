@@ -29,7 +29,7 @@ namespace T3.Gui.Windows
 
         protected override void DrawContent()
         {
-            // ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, 10);
+            //ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, 10);
             DrawTimeSetup();
 
             // custom parameters for this renderer
@@ -47,7 +47,7 @@ namespace T3.Gui.Windows
             if (mainTexture == null)
             {
                 CustomComponents.HelpText("You have selected an operator that does not render. " +
-                                          "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm fast exports.");
+                                          "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for fast exports.");
                 return;
             }
 
