@@ -6,6 +6,7 @@ using T3.Core.DataTypes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Rendering;
 using Vector3 = SharpDX.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core.Operator
 {
@@ -97,7 +98,16 @@ namespace T3.Core.Operator
         public Dictionary<string, Texture2D> ContextTextures { get; set; } = new(10);
         public Texture2D PrbPrefilteredSpecular { get; set; }
         public PointLightStack PointLights { get; } = new();
+        
+        /// <summary>
+        /// This should be set by RenderTargets and other ops can could be directly used by SetFog.
+        /// </summary>
         public System.Numerics.Vector4 BackgroundColor { get; set; } = new(0.1f, 0.1f, 0.1f, 1.0f);
+        
+        /// <summary>
+        /// Can be set by [SetMaterial] [Group] and other ops to fade out groups  
+        /// </summary>
+        public System.Numerics.Vector4 ForegroundColor { get; set; } = Vector4.One;
         
         public GizmoVisibility ShowGizmos { get; set; }
 

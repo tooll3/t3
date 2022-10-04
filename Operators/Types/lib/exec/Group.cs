@@ -28,11 +28,12 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
         {
             TransformCallback?.Invoke(this, context); // this this is stupid stupid
 
+            // Build and set transform matrix
             var s = Scale.GetValue(context) * UniformScale.GetValue(context);
             var r = Rotation.GetValue(context);
-            float yaw = MathUtil.DegreesToRadians(r.Y);
-            float pitch = MathUtil.DegreesToRadians(r.X);
-            float roll = MathUtil.DegreesToRadians(r.Z);
+            var yaw = MathUtil.DegreesToRadians(r.Y);
+            var pitch = MathUtil.DegreesToRadians(r.X);
+            var roll = MathUtil.DegreesToRadians(r.Z);
             var t = Translation.GetValue(context);
             var objectToParentObject = Matrix.Transformation(scalingCenter: Vector3.Zero, scalingRotation: Quaternion.Identity, scaling: new Vector3(s.X, s.Y, s.Z), rotationCenter: Vector3.Zero,
                                                              rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll), translation: new Vector3(t.X, t.Y, t.Z));
@@ -43,29 +44,30 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
             var commands = Commands.CollectedInputs;
             if (IsEnabled.GetValue(context))
             {
-                // do preparation if needed
-                for (int i = 0; i < commands.Count; i++)
+                foreach (var t1 in commands)
                 {
-                    commands[i].Value?.PrepareAction?.Invoke(context);
+                    // Do preparation if needed
+                    t1.Value?.PrepareAction?.Invoke(context);
+                    
+                    // Execute commands
+                    t1.GetValue(context);
+                    
+                    // Cleanup after usage
+                    t1.Value?.RestoreAction?.Invoke(context);
                 }
 
-                // execute commands
-                for (int i = 0; i < commands.Count; i++)
-                {
-                    commands[i].GetValue(context);
-                }
-
-                // cleanup after usage
-                for (int i = 0; i < commands.Count; i++)
-                {
-                    commands[i].Value?.RestoreAction?.Invoke(context);
-                }
+                // foreach (var t1 in commands)
+                // {
+                // }
+                //
+                // foreach (var t1 in commands)
+                // {
+                // }
             }
 
             Commands.DirtyFlag.Clear();
             
             
-            //Commands.GetValue(context);
             context.ObjectToWorld = previousWorldTobject;
         }
 
@@ -86,6 +88,9 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
         
         [Input(Guid = "83D80B87-DF2E-4A7E-8BB3-6D5F041A60E4")]
         public readonly InputSlot<bool> IsEnabled = new();
-        
+
+        [Input(Guid = "996BD2D7-3741-4ADE-B1B6-18EB3D884081")]
+        public readonly InputSlot<System.Numerics.Vector4> Color = new();
+
     }
 }
