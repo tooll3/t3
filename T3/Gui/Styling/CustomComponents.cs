@@ -473,21 +473,23 @@ namespace T3.Gui
         }
 
 
-        public static bool FloatValueEdit(string label, ref float value, float min= float.NegativeInfinity, float max= float.PositiveInfinity, float scale= 0)
+        public static bool FloatValueEdit(string label, ref float value, float min = float.NegativeInfinity, float max = float.PositiveInfinity, float scale = 0.01f, bool clamp = false)
         {
             var labelSize = ImGui.CalcTextSize(label);
             const float leftPadding = 200;
             var p = ImGui.GetCursorPos();
-            ImGui.SetCursorPosX( MathF.Max(leftPadding - labelSize.X,0)+10);
+            ImGui.SetCursorPosX(MathF.Max(leftPadding - labelSize.X, 0) + 10);
             ImGui.AlignTextToFramePadding();
-            ImGui.TextUnformatted(label);
+
+            string cleanedLabel = label.Split(_idSpecifier)[0];
+            ImGui.TextUnformatted(cleanedLabel);
             ImGui.SetCursorPos(p);
-            
+
             ImGui.SameLine();
             ImGui.SetCursorPosX(leftPadding + 20);
             var size = new Vector2(150, ImGui.GetFrameHeight());
             ImGui.PushID(label);
-            var result = SingleValueEdit.Draw(ref value, size, min, max);
+            var result = SingleValueEdit.Draw(ref value, size, min, max, clamp, scale);
             var modified = (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
             ImGui.PopID();
             return modified;
@@ -500,7 +502,10 @@ namespace T3.Gui
             var p = ImGui.GetCursorPos();
             ImGui.SetCursorPosX(MathF.Max(leftPadding - labelSize.X, 0) + 10);
             ImGui.AlignTextToFramePadding();
-            ImGui.TextUnformatted(label);
+
+            string cleanedLabel = label.Split(_idSpecifier)[0];
+            ImGui.TextUnformatted(cleanedLabel);
+
             ImGui.SetCursorPos(p);
 
             ImGui.SameLine();
@@ -521,7 +526,10 @@ namespace T3.Gui
             var p = ImGui.GetCursorPos();
             ImGui.SetCursorPosX( MathF.Max(leftPadding - labelSize.X,0)+10);
             ImGui.AlignTextToFramePadding();
-            ImGui.TextUnformatted(label);
+
+            string cleanedLabel = label.Split(_idSpecifier)[0];
+            ImGui.TextUnformatted(cleanedLabel);
+
             ImGui.SetCursorPos(p);
             
             ImGui.SameLine();
@@ -541,7 +549,10 @@ namespace T3.Gui
             var p = ImGui.GetCursorPos();
             ImGui.SetCursorPosX(MathF.Max(200 - labelSize.X, 0) + 10);
             ImGui.AlignTextToFramePadding();
-            ImGui.TextUnformatted(label);
+
+            string cleanedLabel = label.Split(_idSpecifier)[0];
+            ImGui.TextUnformatted(cleanedLabel);
+
             ImGui.SetCursorPos(p);
 
             // Dropdown
@@ -567,6 +578,9 @@ namespace T3.Gui
             var modified = ImGui.Combo($"##dropDown{enumType}{label}", ref index, valueNames, valueNames.Length, valueNames.Length);
             return modified;
         }
+
+
+        private const string _idSpecifier = "##";
     }
 
     public static class InputWithTypeAheadSearch
@@ -665,6 +679,6 @@ namespace T3.Gui
 
         private static List<string> _lastResults = new List<string>();
         private static int _selectedResultIndex = 0;
-        private static bool _isSearchResultWindowOpen;        
+        private static bool _isSearchResultWindowOpen;
     }
 }
