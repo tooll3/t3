@@ -7,6 +7,7 @@ using T3.Gui.Graph;
 using T3.Gui.TypeColors;
 using T3.Gui.UiHelpers;
 using System.Numerics;
+using t3.Gui;
 
 namespace T3.Gui.Windows
 {
@@ -28,26 +29,26 @@ namespace T3.Gui.Windows
             ImGui.NewLine();
             if (ImGui.TreeNode("User Interface"))
             {
-                changed |= DrawSettingsTable("##UserInterfaceTable", userInterfaceSettings);
+                changed |= SettingsUi.DrawSettings(userInterfaceSettings);
                 ImGui.TreePop();
             }
             
             if (ImGui.TreeNode("Space Mouse"))
             {
-                changed |= DrawSettingsTable("##SpaceMouseTable", spaceMouseSettings);
+                changed |= SettingsUi.DrawSettings(spaceMouseSettings);
                 ImGui.TreePop();
             }
 
             if (ImGui.TreeNode("Additional settings"))
             {
-                changed |= DrawSettingsTable("##AdditionalSettings", additionalSettings);
+                changed |= SettingsUi.DrawSettings(additionalSettings);
                 ImGui.TreePop();
             }
 
 #if DEBUG
             if (ImGui.TreeNode("Debug Options"))
             {
-                DrawSettingsTable("##DebugOptionsTable", debugSettings);
+                SettingsUi.DrawSettings(debugSettings);
                 if (ImGui.TreeNode("Undo Queue"))
                 {
                     ImGui.Indent();
@@ -96,15 +97,7 @@ namespace T3.Gui.Windows
 
                 if (ImGui.TreeNode("T3 Ui Style"))
                 {
-                    ImGui.DragFloat("Height Connection Zone", ref GraphNode.UsableSlotThickness);
-                    ImGui.DragFloat2("Label position", ref GraphNode.LabelPos);
-                    ImGui.DragFloat("Slot Gaps", ref GraphNode.SlotGaps, 0.1f, 0, 10f);
-                    ImGui.DragFloat("Input Slot Margin Y", ref GraphNode.InputSlotMargin, 0.1f, 0, 10f);
-                    ImGui.DragFloat("Input Slot Thickness", ref GraphNode.InputSlotThickness, 0.1f, 0, 10f);
-                    ImGui.DragFloat("Output Slot Margin", ref GraphNode.OutputSlotMargin, 0.1f, 0, 10f);
-
-                    ImGui.ColorEdit4("ValueLabelColor", ref T3Style.Colors.ValueLabelColor.Rgba);
-                    ImGui.ColorEdit4("ValueLabelColorHover", ref T3Style.Colors.ValueLabelColorHover.Rgba);
+                    SettingsUi.DrawSettings(t3UiStyleSettings);
                 }
                 
                 if (ImGui.TreeNode("T3 Graph colors"))
@@ -128,46 +121,6 @@ namespace T3.Gui.Windows
         public override List<Window> GetInstances()
         {
             return new List<Window>();
-        }
-
-        bool DrawSettingsTable(string tableID, UIControlledSetting[] settings)
-        {
-            ImGui.NewLine();
-            bool changed = false;
-            if (ImGui.BeginTable(tableID, 2, ImGuiTableFlags.BordersInnerH | ImGuiTableFlags.SizingFixedSame | ImGuiTableFlags.PadOuterX))
-            {
-                foreach (UIControlledSetting setting in settings)
-                {
-                    ImGui.TableNextRow();
-                    ImGui.TableNextColumn();
-                    ImGui.Indent();
-                    ImGui.Text(setting.label);
-                    ImGui.Unindent();
-
-                    if (!string.IsNullOrEmpty(setting.tooltip))
-                    {
-                        if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-                        {
-                            ImGui.SetTooltip(setting.tooltip);
-                        }
-                    }
-
-                    ImGui.TableNextColumn();
-
-                    bool valueChanged = setting.imguiFunc.Invoke();
-                    if(valueChanged && setting.OnValueChanged != null)
-                    {
-                        setting.OnValueChanged.Invoke();
-                    }
-
-                    changed |= valueChanged;
-                }
-            }
-
-            ImGui.EndTable();
-            ImGui.NewLine();
-
-            return changed;
         }
     }
 }

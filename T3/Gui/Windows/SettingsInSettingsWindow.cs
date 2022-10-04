@@ -1,4 +1,6 @@
-using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using ImGuiNET;
 using T3.Gui.Graph;
 using T3.Gui.UiHelpers;
@@ -7,202 +9,201 @@ namespace T3.Gui.Windows
 {
     public partial class SettingsWindow
     {
-        class UIControlledSetting
-        {
-            public string label;
-            public string tooltip;
-            public Func<bool> imguiFunc;
-            public Action OnValueChanged;
-        }
-
         static readonly UIControlledSetting[] userInterfaceSettings = new UIControlledSetting[]
         {
-            new UIControlledSetting()
-            {
-                label = "UI Scale",
-                imguiFunc = () => ImGui.DragFloat("##UiScaleFactor", ref UserSettings.Config.UiScaleFactor, 0.01f, 0.5f, 3f)
-            },
+            new UIControlledSetting
+            (
+                label: "UI Scale",
+                tooltip: "The global scale of all rendered UI in the application",
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.UiScaleFactor, 0.01f, 3f)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Warn before Lib modifications",
-                imguiFunc = () => ImGui.Checkbox("##WarnBeforeLibEdit", ref UserSettings.Config.WarnBeforeLibEdit)
-            },
+            new UIControlledSetting
+            (
+                label: "Warn before Lib modifications",
+                tooltip: "This warning pops up when you attempt to enter an Operator that ships with the application.\n" +
+                         "If unsure, this is best left checked.",
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.WarnBeforeLibEdit)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Use arc connections",
-                imguiFunc = () => ImGui.Checkbox("##UseArcConnections", ref UserSettings.Config.UseArcConnections)
-            },
+            new UIControlledSetting
+            (
+                label: "Use arc connections",
+                tooltip: "Affects the shape of the connections between your Operators",
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.UseArcConnections)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Use Jog Dial Control",
-                imguiFunc = () => ImGui.Checkbox("##UseJogDialControl", ref UserSettings.Config.UseJogDialControl)
-            },
+            new UIControlledSetting
+            (
+                label: "Use Jog Dial Control",
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.UseJogDialControl)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Scroll smoothing",
-                imguiFunc = () => ImGui.DragFloat("##ScrollSmoothing", ref UserSettings.Config.ScrollSmoothing)
-            },
+            new UIControlledSetting
+            (
+                label: "Scroll smoothing",
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.ScrollSmoothing)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Show Graph thumbnails",
-                imguiFunc = () => ImGui.Checkbox("##ShowThumbnails", ref UserSettings.Config.ShowThumbnails)
-            },
+            new UIControlledSetting
+            (
+                label: "Show Graph thumbnails",
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.ShowThumbnails)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Drag snapped nodes",
-                imguiFunc = () => ImGui.Checkbox("##SmartGroupDragging", ref UserSettings.Config.SmartGroupDragging)
-            },
+            new UIControlledSetting
+            (
+                label: "Drag snapped nodes",
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.SmartGroupDragging)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Snap strength",
-                imguiFunc = () => ImGui.DragFloat("##SnapStrength", ref UserSettings.Config.SnapStrength)
-            },
+            new UIControlledSetting
+            (
+                label: "Snap strength",
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.SnapStrength)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Click threshold",
-                imguiFunc = () => ImGui.DragFloat("##ClickThreshold", ref UserSettings.Config.ClickThreshold)
-            },
+            new UIControlledSetting
+            (
+                label: "Click threshold",
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.ClickThreshold)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Timeline Raster Density",
-                imguiFunc = () => ImGui.DragFloat("##TimeRasterDensity", ref UserSettings.Config.TimeRasterDensity, 0.01f)
-            },
+            new UIControlledSetting
+            (
+                label: "Timeline Raster Density",
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.TimeRasterDensity)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Fullscreen Window Swap",
-                tooltip = "Swap main and second windows when fullscreen",
-                imguiFunc = () => ImGui.Checkbox("##SwapMainAnd2ndWindowsWhenFullscreen", ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen)
-            },
+            new UIControlledSetting
+            (
+                label: "Fullscreen Window Swap",
+                tooltip: "Swap main and second windows when fullscreen",
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen)
+            ),
         };
 
         static readonly UIControlledSetting[] spaceMouseSettings = new UIControlledSetting[]
         {
-            new UIControlledSetting()
-            {
-                label = "Smoothing",
-                imguiFunc = () => ImGui.DragFloat("##SpaceMouseDamping", ref UserSettings.Config.SpaceMouseDamping, 0.01f, 0.01f, 1f)
-            },
+            new UIControlledSetting
+            (
+                label: "Smoothing",
+                guiFunc: (string guiLabel) => ImGui.DragFloat(guiLabel, ref UserSettings.Config.SpaceMouseDamping, 0.01f, 0.01f, 1f)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Move Speed",
-                imguiFunc = () => ImGui.DragFloat("##SpaceMouseMoveSpeedFactor", ref UserSettings.Config.SpaceMouseMoveSpeedFactor, 0.01f, 0, 10f)
-            },
+            new UIControlledSetting
+            (
+                label: "Move Speed",
+                guiFunc: (string guiLabel) => ImGui.DragFloat(guiLabel, ref UserSettings.Config.SpaceMouseMoveSpeedFactor, 0.01f, 0, 10f)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Rotation Speed",
-                imguiFunc = () => ImGui.DragFloat("##SpaceMouseRotationSpeedFactor", ref UserSettings.Config.SpaceMouseRotationSpeedFactor, 0.01f, 0, 10f)
-            }
+            new UIControlledSetting
+            (
+                label: "Rotation Speed",
+                guiFunc: (string guiLabel) => ImGui.DragFloat(guiLabel, ref UserSettings.Config.SpaceMouseRotationSpeedFactor, 0.01f, 0, 10f)
+            )
         };
 
         static readonly UIControlledSetting[] additionalSettings = new UIControlledSetting[]
         {
-            new UIControlledSetting()
-            {
-                label = "Gizmo size",
-                imguiFunc = () => ImGui.DragFloat("##GizmoSize", ref UserSettings.Config.GizmoSize)
-            },
+            new UIControlledSetting
+            (
+                label: "Gizmo size",
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.GizmoSize)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Tooltip delay",
-                imguiFunc = () => ImGui.DragFloat("##TooltipDelay", ref UserSettings.Config.TooltipDelay)
-            },
+            new UIControlledSetting
+            (
+                label: "Tooltip delay",
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.TooltipDelay)
+            ),
 
-            //new SettingInfo()
-            //{
-            //    label = "Show Title",
-            //    imguiFunc = () => ImGui.Checkbox("##ShowTitleAndDescription", ref UserSettings.Config.ShowTitleAndDescription)
-            //},
 
-            //new SettingInfo()
-            //{
-            //    label = "Show Timeline",
-            //    imguiFunc = () => ImGui.Checkbox("##ShowTimeline", ref UserSettings.Config.ShowTimeline)
-            //}
+            // These settings were laid out in the old UI, kept here for someone else to ultimately choose to yeet or unyeet them
+
+            //new UIControlledSetting
+            //(
+            //    label: "Show Title",
+            //    guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.ShowTitleAndDescription)
+            //),
+
+            //new UIControlledSetting
+            //(
+            //    label: "Show Timeline",
+            //    guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.ShowTimeline)
+            //)
         };
         
         static readonly UIControlledSetting[] debugSettings = new UIControlledSetting[]
         {
-            new UIControlledSetting()
-            {
-                label = "VSync",
-                imguiFunc = () => ImGui.Checkbox("##UseVSync", ref UseVSync)
-            },
+            new UIControlledSetting
+            (
+                label: "VSync",
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UseVSync)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Show Window Regions",
-                imguiFunc = () => ImGui.Checkbox("##WindowRegionsVisible", ref WindowRegionsVisible)
-            },
+            new UIControlledSetting
+            (
+                label: "Show Window Regions",
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref WindowRegionsVisible)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Show Item Regions",
-                imguiFunc = () => ImGui.Checkbox("##ItemRegionsVisible", ref ItemRegionsVisible)
-            },
+            new UIControlledSetting
+            (
+                label: "Show Item Regions",
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref ItemRegionsVisible)
+            ),
         };
 
         static readonly UIControlledSetting[] t3UiStyleSettings = new UIControlledSetting[]
         {
-            new UIControlledSetting()
-            {
-                label = "Height Connection Zone",
-                imguiFunc = () => ImGui.DragFloat("##UsableSlotThickness", ref GraphNode.UsableSlotThickness)
-            },
+            new UIControlledSetting
+            (
+                label: "Height Connection Zone",
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref GraphNode.UsableSlotThickness)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Label position",
-                imguiFunc = () => ImGui.DragFloat2("##LabelPos", ref GraphNode.LabelPos)
-            },
+            new UIControlledSetting
+            (
+                label: "Label position",
+                guiFunc: (string guiLabel) => ImGui.DragFloat2(guiLabel, ref GraphNode.LabelPos)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Slot Gaps",
-                imguiFunc = () => ImGui.DragFloat("##SlotGaps", ref GraphNode.SlotGaps, 0.1f, 0, 10f)
-            },
+            new UIControlledSetting
+            (
+                label: "Slot Gaps",
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref GraphNode.SlotGaps, 0, 10f)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Input Slot Margin Y",
-                imguiFunc = () => ImGui.DragFloat("##InputSlotMargin", ref GraphNode.InputSlotMargin, 0.1f, 0, 10f)
-            },
+            new UIControlledSetting
+            (
+                label: "Input Slot Margin Y",
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref GraphNode.InputSlotMargin, 0, 10f)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Input Slot Thickness",
-                imguiFunc = () => ImGui.DragFloat("##InputSlotThickness", ref GraphNode.InputSlotThickness, 0.1f, 0, 10f)
-            },
+            new UIControlledSetting
+            (
+                label: "Input Slot Thickness",
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref GraphNode.InputSlotThickness, 0, 10f)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Output Slot Margin",
-                imguiFunc = () => ImGui.DragFloat("##OutputSlotMargin", ref GraphNode.OutputSlotMargin, 0.1f, 0, 10f)
-            },
+            new UIControlledSetting
+            (
+                label: "Output Slot Margin",
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref GraphNode.OutputSlotMargin, 0, 10f)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Value Label Color",
-                imguiFunc = () => ImGui.ColorEdit4("##ValueLabelColor", ref T3Style.Colors.ValueLabelColor.Rgba)
-            },
+            new UIControlledSetting
+            (
+                label: "Value Label Color",
+                guiFunc: (string guiLabel) => ImGui.ColorEdit4(guiLabel, ref T3Style.Colors.ValueLabelColor.Rgba)
+            ),
 
-            new UIControlledSetting()
-            {
-                label = "Value Label Color Hover",
-                imguiFunc = () => ImGui.ColorEdit4("##ValueLabelColorHover", ref T3Style.Colors.ValueLabelColorHover.Rgba)
-            },
+            new UIControlledSetting
+            (
+                label: "Value Label Color Hover",
+                guiFunc: (string guiLabel) => ImGui.ColorEdit4(guiLabel, ref T3Style.Colors.ValueLabelColorHover.Rgba)
+            ),
         };
     }
 }
