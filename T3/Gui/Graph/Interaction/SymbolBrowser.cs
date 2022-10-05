@@ -90,8 +90,7 @@ namespace T3.Gui.Graph.Interaction
 
                 if (highlightedSymbolUi != null)
                 {
-                    ImGui.SetCursorPos(posInWindow + new Vector2(250, _size.Y + 1));
-                    DrawDescriptionPanel(highlightedSymbolUi, new Vector2(250, _resultListSize.Y));
+                    DrawDescriptionPanelLeftOrRight(posInWindow, highlightedSymbolUi);
                 }
 
                 ImGui.PopStyleVar(2);
@@ -304,6 +303,23 @@ namespace T3.Gui.Graph.Interaction
             highlightedSymbolUi = itemForHelp;
         }
 
+
+        private void DrawDescriptionPanelLeftOrRight(Vector2 posInWindow, SymbolUi highlightedSymbolUi)
+        {
+            float width = _resultListSize.X;
+            bool shouldShiftToRight = posInWindow.X + width > GraphCanvas.Current.WindowSize.X;
+            float xPositionOffset = shouldShiftToRight ? -width : width;
+            float xPosition = posInWindow.X + xPositionOffset;
+
+            Vector2 position = new Vector2(xPosition, posInWindow.Y + _size.Y + 1);
+
+            if (xPosition > 0)
+            {
+                ImGui.SetCursorPos(position);
+                DrawDescriptionPanel(highlightedSymbolUi, _resultListSize);
+            }
+        }
+
         private void DrawDescriptionPanel(SymbolUi itemForHelp, Vector2 size)
         {
             if (itemForHelp == null)
@@ -317,8 +333,8 @@ namespace T3.Gui.Graph.Interaction
                 return;
             
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.One); // Padding between panels
-            
-            if (ImGui.BeginChildFrame(998, size))
+
+            if (ImGui.BeginChildFrame(998, size, ImGuiWindowFlags.ChildWindow))
             {
                 if (!string.IsNullOrEmpty(itemForHelp.Description))
                 {
