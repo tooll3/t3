@@ -16,6 +16,12 @@ namespace T3.Operators.Types.Id_a85870e1_6b18_40db_96e2_076536d5a521
         [Input(Guid = "6d1dd4e7-560e-4374-adf1-8e8245070cda")]
         public readonly InputSlot<float> Transition = new InputSlot<float>();
 
+        [Input(Guid = "a38f3325-346f-43bb-a430-fc2af3b4d0bd")]
+        public readonly InputSlot<float> Scale = new InputSlot<float>();
+
+        [Input(Guid = "7bbfb8c2-082b-4aba-beb5-a4aeb99c7c32")]
+        public readonly InputSlot<System.Numerics.Vector3> Offset = new InputSlot<System.Numerics.Vector3>();
+
 
     }
 }

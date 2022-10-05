@@ -45,6 +45,16 @@
         "X": 0.0,
         "Y": 90.0
       }
+    },
+    {
+      "InputId": "996bd2d7-3741-4ade-b1b6-18eb3d884081"/*Color*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 135.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [],

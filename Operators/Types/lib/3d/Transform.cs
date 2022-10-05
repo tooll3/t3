@@ -28,14 +28,20 @@ namespace T3.Operators.Types.Id_284d2183_197d_47fd_b130_873cced78b1c
            
             TransformCallback?.Invoke(this, context); // this this is stupid stupid
 
+            var pivot = Pivot.GetValue(context);
             var s = Scale.GetValue(context) * UniformScale.GetValue(context);
             var r = Rotation.GetValue(context);
             float yaw = MathUtil.DegreesToRadians(r.Y);
             float pitch = MathUtil.DegreesToRadians(r.X);
             float roll = MathUtil.DegreesToRadians(r.Z);
             var t = Translation.GetValue(context);
-            var objectToParentObject = Matrix.Transformation(scalingCenter: Vector3.Zero, scalingRotation: Quaternion.Identity, scaling: new Vector3(s.X, s.Y, s.Z), rotationCenter: Vector3.Zero,
-                                                             rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll), translation: new Vector3(t.X, t.Y, t.Z));
+            var objectToParentObject = Matrix.Transformation(
+                                                             scalingCenter: pivot.ToSharpDx(), 
+                                                             scalingRotation: Quaternion.Identity, 
+                                                             scaling: s.ToSharpDx(), 
+                                                             rotationCenter: pivot.ToSharpDx(),
+                                                             rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll), 
+                                                             translation: t.ToSharpDx());
             
             var previousWorldTobject = context.ObjectToWorld;
             context.ObjectToWorld = Matrix.Multiply(objectToParentObject, context.ObjectToWorld);
@@ -58,6 +64,7 @@ namespace T3.Operators.Types.Id_284d2183_197d_47fd_b130_873cced78b1c
         [Input(Guid = "A7B1E667-BCE3-4E76-A5B1-0955C118D0FC")]
         public readonly InputSlot<float> UniformScale = new();
 
-
+        [Input(Guid = "95C8BEF2-504C-42A1-93BA-DC7E38C0DD49")]
+        public readonly InputSlot<System.Numerics.Vector3> Pivot = new();
     }
 }

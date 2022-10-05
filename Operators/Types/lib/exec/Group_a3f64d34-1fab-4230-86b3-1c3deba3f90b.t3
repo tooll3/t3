@@ -38,6 +38,15 @@
     {
       "Id": "83d80b87-df2e-4a7e-8bb3-6d5f041a60e4"/*IsEnabled*/,
       "DefaultValue": true
+    },
+    {
+      "Id": "996bd2d7-3741-4ade-b1b6-18eb3d884081"/*Color*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
+        "W": 1.0
+      }
     }
   ],
   "Children": [],

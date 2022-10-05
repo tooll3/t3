@@ -38,6 +38,13 @@
         "X": 0.0,
         "Y": 45.0
       }
+    },
+    {
+      "InputId": "95c8bef2-504c-42a1-93ba-dc7e38c0dd49"/*Pivot*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      }
     }
   ],
   "SymbolChildUis": [],

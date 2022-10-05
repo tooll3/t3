@@ -34,6 +34,14 @@
     {
       "Id": "a7b1e667-bce3-4e76-a5b1-0955c118d0fc"/*UniformScale*/,
       "DefaultValue": 1.0
+    },
+    {
+      "Id": "95c8bef2-504c-42a1-93ba-dc7e38c0dd49"/*Pivot*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
     }
   ],
   "Children": [],
