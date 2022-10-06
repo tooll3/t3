@@ -56,6 +56,7 @@ namespace T3.Gui.UiHelpers
             public float ScrollSmoothing = 0.06f;
             public float TooltipDelay = 1.2f;
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
+            public bool SymbolBrowserDescriptionTimeout = false;
 
             public float KeyboardScrollAcceleration = 2.5f;
 

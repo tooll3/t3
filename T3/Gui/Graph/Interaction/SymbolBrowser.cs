@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.IO;
@@ -85,28 +86,27 @@ namespace T3.Gui.Graph.Interaction
 
                 ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5, 5));
                 ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
-                SymbolUi highlightedSymbolUi;
-                DrawMatchesList(out highlightedSymbolUi);
 
-                if (highlightedSymbolUi != null)
+                DrawResultsList(_resultListSize);
+
+                if (_lastHoveredSymbolUi != null)
                 {
-                    DrawDescriptionPanelLeftOrRight(posInWindow, highlightedSymbolUi);
+                    DrawDescriptionPanelLeftOrRight(posInWindow, _resultListSize, _lastHoveredSymbolUi);
                 }
 
                 ImGui.PopStyleVar(2);
-                DrawSearchInput(new Vector2(posInWindow.X + 1, posInWindow.Y));
+                DrawSearchInput(posInWindow, _size.X);
             }
+
+            _drawList.AddRect(_posInScreen, OutputPositionOnScreen, Color.Gray);
             ImGui.PopID();
         }
         #endregion
 
-        private bool _selectedItemWasChanged;
-
         #region internal implementation -----------------------------------------------------------
-        private void DrawSearchInput(Vector2 posInWindow)
+        private void DrawSearchInput(Vector2 posInWindow, float width)
         {
-            ImGui.SetCursorPos(posInWindow);
-            ImGui.SetNextItemWidth(90);
+            //ImGui.SetNextItemWidth(90);
 
             if (_focusInputNextTime)
             {
@@ -114,12 +114,11 @@ namespace T3.Gui.Graph.Interaction
                 _focusInputNextTime = false;
             }
 
-            ImGui.SetCursorPos(posInWindow + new Vector2(1, 1));
+            ImGui.SetCursorPos(posInWindow);
 
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(7, 6));
-            ImGui.SetNextItemWidth(_size.X);
+            ImGui.SetNextItemWidth(width);
             ImGui.InputText("##symbolbrowserfilter", ref _filter.SearchString, 10);
-            _drawList.AddRect(_posInScreen, OutputPositionOnScreen, Color.Gray);
 
             if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorDown))
             {
@@ -146,9 +145,11 @@ namespace T3.Gui.Graph.Interaction
             }
 
             var clickedOutside = ImGui.IsMouseClicked(ImGuiMouseButton.Left) && ImGui.IsWindowHovered();
-            if (clickedOutside
+            bool shouldCancelConnectionMaker = clickedOutside
                 || ImGui.IsMouseClicked(ImGuiMouseButton.Right)
-                || ImGui.IsKeyDown((ImGuiKey)Key.Esc))
+                || ImGui.IsKeyDown((ImGuiKey)Key.Esc);
+
+            if (shouldCancelConnectionMaker)
             {
                 ConnectionMaker.Cancel();
                 Cancel();
@@ -156,25 +157,18 @@ namespace T3.Gui.Graph.Interaction
 
             ImGui.PopStyleVar();
 
-            if (ImGui.IsItemActive())
+            if (!ImGui.IsItemActive())
+                return;
+
+            if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {
-                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-                {
-                    PosOnCanvas += GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
-                }
+                PosOnCanvas += GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
             }
         }
 
-        private void SelectNextSymbolUi(SymbolUi selectedSymbolUi)
-        {
-            JumpThroughMatchingSymbolList(selectedSymbolUi, 1);
-        }
-
-        private void SelectPreviousSymbol(SymbolUi selectedSymbolUi)
-        {
-            JumpThroughMatchingSymbolList(selectedSymbolUi, -1);
-        }
-
+        private void SelectNextSymbolUi(SymbolUi selectedSymbolUi) => JumpThroughMatchingSymbolList(selectedSymbolUi, 1);
+        private void SelectPreviousSymbol(SymbolUi selectedSymbolUi) => JumpThroughMatchingSymbolList(selectedSymbolUi, -1);
+        
         private void JumpThroughMatchingSymbolList(SymbolUi currentSelectedSymbolUi, int jump)
         {
             if (_filter.MatchingSymbolUis.Count == 0)
@@ -207,41 +201,26 @@ namespace T3.Gui.Graph.Interaction
             win?.Focus();
         }
 
-        private void DrawMatchesList(out SymbolUi highlightedSymbolUi)
+        private void DrawResultsList(Vector2 size)
         {
             SymbolUi itemForHelp = null;
+            bool itemForHelpIsHovered = false;
 
-            if (ImGui.BeginChildFrame(999, _resultListSize))
+            if (ImGui.BeginChildFrame(999, size))
             {
-                if (_filter.MatchingSymbolUis.Count > 0 && !_filter.MatchingSymbolUis.Contains(_selectedSymbolUi))
+                var gotAMatch = _filter.MatchingSymbolUis.Count > 0 && !_filter.MatchingSymbolUis.Contains(_selectedSymbolUi);
+                if (gotAMatch)
                     _selectedSymbolUi = _filter.MatchingSymbolUis[0];
 
                 if ((_selectedSymbolUi == null && SymbolUiRegistry.Entries.Values.Any()))
                     _selectedSymbolUi = SymbolUiRegistry.Entries.Values.FirstOrDefault();
 
-                //  Print type filter
-                if (_filter.FilterInputType != null || _filter.FilterOutputType != null)
-                {
-                    ImGui.PushFont(Fonts.FontSmall);
-
-                    var inputTypeName = _filter.FilterInputType != null
-                                            ? TypeNameRegistry.Entries[_filter.FilterInputType]
-                                            : string.Empty;
-
-                    var outputTypeName = _filter.FilterOutputType != null
-                                             ? TypeNameRegistry.Entries[_filter.FilterOutputType]
-                                             : string.Empty;
-
-                    var isMultiInput = _filter.OnlyMultiInputs ? "[..]" : "";
-
-                    var headerLabel = $"{inputTypeName}{isMultiInput}  -> {outputTypeName}";
-                    ImGui.TextDisabled(headerLabel);
-                    ImGui.PopFont();
-                }
+                PrintTypeFilter();
 
                 foreach (var symbolUi in _filter.MatchingSymbolUis)
                 {
-                    ImGui.PushID(symbolUi.Symbol.Id.GetHashCode());
+                    int symbolHash = symbolUi.Symbol.Id.GetHashCode();
+                    ImGui.PushID(symbolHash);
                     {
                         var color = symbolUi.Symbol.OutputDefinitions.Count > 0
                                         ? TypeUiRegistry.GetPropertiesForType(symbolUi.Symbol.OutputDefinitions[0]?.ValueType).Color
@@ -255,24 +234,27 @@ namespace T3.Gui.Graph.Interaction
                         ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
 
                         var isSelected = symbolUi == _selectedSymbolUi;
+
                         if (isSelected && _selectedItemWasChanged)
                         {
                             ScrollToMakeItemVisible();
                             _selectedItemWasChanged = false;
-                        }
-
-                        if (itemForHelp == null && isSelected)
-                        {
                             itemForHelp = symbolUi;
                         }
 
-                        ImGui.Selectable("", isSelected);
+                        ImGui.Selectable($"##Selectable{symbolHash}", isSelected);
+                        var isHovered = ImGui.IsItemHovered();
 
-                        if (ImGui.IsItemHovered())
+                        if (!itemForHelpIsHovered)
                         {
-                            itemForHelp = symbolUi;
+                            SymbolUi potentialItemForHelp =  DetermineItemForHelp(symbolUi, isSelected, isHovered);
+                            if(potentialItemForHelp != null)
+                            {
+                                itemForHelpIsHovered = isHovered;
+                                itemForHelp = potentialItemForHelp;
+                            }
                         }
-                        
+
                         if (ImGui.IsItemActivated())
                         {
                             CreateInstance(symbolUi.Symbol);
@@ -300,23 +282,99 @@ namespace T3.Gui.Graph.Interaction
             }
 
             ImGui.EndChildFrame();
-            highlightedSymbolUi = itemForHelp;
         }
 
-
-        private void DrawDescriptionPanelLeftOrRight(Vector2 posInWindow, SymbolUi highlightedSymbolUi)
+        private SymbolUi DetermineItemForHelp(SymbolUi symbolUi, bool isSelected, bool isHovered)
         {
-            float width = _resultListSize.X;
-            bool shouldShiftToRight = posInWindow.X + width > GraphCanvas.Current.WindowSize.X;
-            float xPositionOffset = shouldShiftToRight ? -width : width;
-            float xPosition = posInWindow.X + xPositionOffset;
+            if (isHovered)
+            {
+                _lastHoveredSymbolUi = symbolUi;
+                return symbolUi;
+            }
+            
+            if (symbolUi == _lastHoveredSymbolUi)
+            {
+                if (UserSettings.Config.SymbolBrowserDescriptionTimeout)
+                {
+                    ExpireLastHoveredSymbolUi(symbolUi);
+                }
 
-            Vector2 position = new Vector2(xPosition, posInWindow.Y + _size.Y + 1);
+                return symbolUi;
+            }
+
+            if (isSelected)
+            {
+                return symbolUi;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// A method to give some time before expiring a hovered symbol.
+        /// This is intended to allow the cursor to cross over the scroll bar
+        /// of the symbol browser so examples can be interacted with
+        /// </summary>
+        /// <param name="hoveredSymbolUi"></param>
+        async void ExpireLastHoveredSymbolUi(SymbolUi hoveredSymbolUi)
+        {
+            //if we've already started calculating this one, we can just return
+            if (hoveredSymbolUi != _lastHoveredSymbolUi)
+                return;
+
+            DateTime startTime = DateTime.Now;
+            const int expireTimeMs = 300;
+
+            //returns true if expireTimeMs have elapsed or if the hovered symbol has changed
+            Func<bool> Finished = () =>
+                DateTime.Now.Subtract(startTime).Milliseconds > expireTimeMs ||
+                _lastHoveredSymbolUi != hoveredSymbolUi;
+
+            while (!Finished())
+            {
+                await Task.Yield();
+            }
+
+            //if time's up and the hovered symbol hasnt changed, let's reset the hovered symbol
+            if (hoveredSymbolUi == _lastHoveredSymbolUi)
+                _canExpireDescription = true;
+        }
+
+        private void PrintTypeFilter()
+        {
+            if (_filter.FilterInputType != null || _filter.FilterOutputType != null)
+            {
+                ImGui.PushFont(Fonts.FontSmall);
+
+                var inputTypeName = _filter.FilterInputType != null
+                                        ? TypeNameRegistry.Entries[_filter.FilterInputType]
+                                        : string.Empty;
+
+                var outputTypeName = _filter.FilterOutputType != null
+                                         ? TypeNameRegistry.Entries[_filter.FilterOutputType]
+                                         : string.Empty;
+
+                var isMultiInput = _filter.OnlyMultiInputs ? "[..]" : "";
+
+                var headerLabel = $"{inputTypeName}{isMultiInput}  -> {outputTypeName}";
+                ImGui.TextDisabled(headerLabel);
+                ImGui.PopFont();
+            }
+        }
+
+        private void DrawDescriptionPanelLeftOrRight(Vector2 posInWindow, Vector2 size, SymbolUi highlightedSymbolUi)
+        {
+            var width = _resultListSize.X;
+            bool shouldShiftToRight = posInWindow.X + width > GraphCanvas.Current.WindowSize.X;
+            var xPositionOffset = shouldShiftToRight ? -width : width;
+            var xPosition = posInWindow.X + xPositionOffset;
+
+            var position = new Vector2(xPosition, posInWindow.Y + _size.Y + 1);
 
             if (xPosition > 0)
             {
                 ImGui.SetCursorPos(position);
-                DrawDescriptionPanel(highlightedSymbolUi, _resultListSize);
+                DrawDescriptionPanel(highlightedSymbolUi, size);
             }
         }
 
@@ -351,7 +409,13 @@ namespace T3.Gui.Graph.Interaction
                 }
 
                 ImGui.EndChildFrame();
+
+                if(_canExpireDescription && ImGui.IsItemHovered())
+                {
+                    _lastHoveredSymbolUi = null;
+                }
             }
+            
 
             ImGui.PopStyleVar();
         }
@@ -404,6 +468,7 @@ namespace T3.Gui.Graph.Interaction
             var scrollTarget = ImGui.GetCursorPos();
             var windowSize = ImGui.GetWindowSize();
             var scrollPos = ImGui.GetScrollY();
+
             if (scrollTarget.Y < scrollPos)
             {
                 ImGui.SetScrollY(scrollTarget.Y);
@@ -499,12 +564,15 @@ namespace T3.Gui.Graph.Interaction
         private bool _focusInputNextTime;
         private Vector2 _posInScreen;
         private ImDrawListPtr _drawList;
+        private bool _selectedItemWasChanged;
 
         private static readonly Vector2 _resultListSize = new Vector2(250, 300);
         private readonly Vector4 _namespaceColor = new Color(1, 1, 1, 0.4f);
 
 
         private SymbolUi _selectedSymbolUi;
+        private SymbolUi _lastHoveredSymbolUi;
+        private bool _canExpireDescription;
         private static readonly int UiId = "DraftNode".GetHashCode();
     }
 }
