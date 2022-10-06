@@ -28,8 +28,6 @@ namespace T3.Core
             Blob = blob;
         }
 
-        public abstract void Update(string path);
-
         public string EntryPoint { get; }
         protected ShaderBytecode _blob;
         public ShaderBytecode Blob { get => _blob; internal set { _blob = value; } }
@@ -60,12 +58,12 @@ namespace T3.Core
             VertexShader = vertexShader;
         }
 
-        public override void Update(string path)
+        public void UpdateFromFile(string path)
         {
             if (UpToDate)
                 return;
 
-            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "vs_5_0", ref VertexShader, ref _blob);
+            ResourceManager.Instance().CompileShaderFromFile(path, EntryPoint, Name, "vs_5_0", ref VertexShader, ref _blob);
             UpToDate = true;
         }
 
@@ -82,12 +80,12 @@ namespace T3.Core
 
         public PixelShader PixelShader;
 
-        public override void Update(string path)
+        public virtual void UpdateFromFile(string path)
         {
             if (UpToDate)
                 return;
 
-            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "ps_5_0", ref PixelShader, ref _blob);
+            ResourceManager.Instance().CompileShaderFromFile(path, EntryPoint, Name, "ps_5_0", ref PixelShader, ref _blob);
             UpToDate = true;
         }
     }
@@ -102,12 +100,21 @@ namespace T3.Core
 
         public ComputeShader ComputeShader;
 
-        public override void Update(string path)
+        public void UpdateFromFile(string path)
         {
             if (UpToDate)
                 return;
 
-            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref _blob);
+            ResourceManager.Instance().CompileShaderFromFile(path, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref _blob);
+            UpToDate = true;
+        }
+
+        public void UpdateFromSourceString(string source)
+        {
+            if (UpToDate)
+                return;
+
+            ResourceManager.Instance().CompileShaderFromSource(source, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref _blob);
             UpToDate = true;
         }
     }
@@ -122,12 +129,12 @@ namespace T3.Core
 
         public GeometryShader GeometryShader;
 
-        public override void Update(string path)
+        public virtual void UpdateFromFile(string path)
         {
             if (UpToDate)
                 return;
 
-            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "gs_5_0", ref GeometryShader, ref _blob);
+            ResourceManager.Instance().CompileShaderFromFile(path, EntryPoint, Name, "gs_5_0", ref GeometryShader, ref _blob);
             UpToDate = true;
         }
     }

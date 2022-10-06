@@ -399,7 +399,7 @@ namespace T3.Core
             }
         }
 
-        internal void CompileShader<TShader>(string srcFile, string entryPoint, string name, string profile, ref TShader shader, ref ShaderBytecode blob)
+        internal void CompileShaderFromFile<TShader>(string srcFile, string entryPoint, string name, string profile, ref TShader shader, ref ShaderBytecode blob)
             where TShader : class, IDisposable
         {
             CompilationResult compilationResult = null;
@@ -430,6 +430,39 @@ namespace T3.Core
             Log.Info($"Successfully compiled shader '{name}' with profile '{profile}' from '{srcFile}'");
         }
 
+        internal void CompileShaderFromSource<TShader>(string shaderSource, string entryPoint, string name, string profile, ref TShader shader, ref ShaderBytecode blob)
+            where TShader : class, IDisposable
+        {
+            CompilationResult compilationResult = null;
+            try
+            {
+                ShaderFlags flags = ShaderFlags.None;
+                #if DEBUG || FORCE_SHADER_DEBUG
+                flags |= ShaderFlags.Debug;
+                #endif
+
+                compilationResult = ShaderBytecode.Compile(shaderSource, entryPoint, profile, flags, EffectFlags.None, null, new IncludeHandler());
+            }
+            catch (Exception ce)
+            {
+                Log.Error($"Failed to compile shader '{name}': {ce.Message}\nUsing previous resource state.");
+                return;
+            }
+
+            blob?.Dispose();
+            blob = compilationResult.Bytecode;
+
+            shader?.Dispose();
+            
+            // As shader type is generic we've to use Activator and PropertyInfo to create/set the shader object
+            Type shaderType = typeof(TShader);
+            shader = (TShader)Activator.CreateInstance(shaderType, Device, blob.Data, null);
+            PropertyInfo debugNameInfo = shaderType.GetProperty("DebugName");
+            debugNameInfo?.SetValue(shader, name);
+
+            Log.Info($"Successfully compiled shader '{name}' with profile '{profile}' from source '{shaderSource}'");
+        }        
+        
         public uint CreateVertexShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
         {
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
@@ -451,7 +484,7 @@ namespace T3.Core
 
             VertexShader vertexShader = null;
             ShaderBytecode blob = null;
-            CompileShader(srcFile, entryPoint, name, "vs_5_0", ref vertexShader, ref blob);
+            CompileShaderFromFile(srcFile, entryPoint, name, "vs_5_0", ref vertexShader, ref blob);
             if (vertexShader == null)
             {
                 Log.Info($"Failed to create vertex shader '{name}'.");
@@ -499,7 +532,7 @@ namespace T3.Core
 
             PixelShader shader = null;
             ShaderBytecode blob = null;
-            CompileShader(srcFile, entryPoint, name, "ps_5_0", ref shader, ref blob);
+            CompileShaderFromFile(srcFile, entryPoint, name, "ps_5_0", ref shader, ref blob);
             if (shader == null)
             {
                 Log.Info($"Failed to create pixel shader '{name}'.");
@@ -526,6 +559,89 @@ namespace T3.Core
             return resourceEntry.Id;
         }
 
+        
+        public bool CreateComputeShaderFromString(string shaderSource, string name, string entryPoint, ref uint resourceId)
+        {
+            if (string.IsNullOrEmpty(shaderSource) || string.IsNullOrEmpty(entryPoint))
+                return false;        
+            
+            // Todo: Add some caching here?
+            
+            // if (texture != null)
+            // {
+            //     bool descriptionMatches;
+            //     try
+            //     {
+            //         descriptionMatches = texture.Description.Equals(description);
+            //     }
+            //     catch
+            //     {
+            //         descriptionMatches = false;
+            //     }
+            //
+            //     if (descriptionMatches)
+            //     {
+            //         return false; // no change
+            //     }
+            // }
+        
+            Resources.TryGetValue(resourceId, out var resource);
+
+            // if (resource is ComputeShaderResource computeShaderResource)
+            // {
+            //     computeShaderResource.ComputeShader?.Dispose();
+            //     computeShaderResource.Texture = new Texture2D(Device, description);
+            //     texture = computeShaderResource.Texture;
+            // }
+            // else
+            // {
+            //     // // no entry so far, if texture is also null then create a new one
+            //     // if (texture == null)
+            //     // {
+            //     //     texture = new Texture2D(Device, description);
+            //     // }
+            //
+            //     // new texture, create resource entry
+            //     computeShaderResource = new Texture2dResource(GetNextResourceId(), name, texture);
+            //     Resources.Add(computeShaderResource.Id, computeShaderResource);
+            //     _2dTextures.Add(computeShaderResource);
+            // }
+            //
+            // resourceId = computeShaderResource.Id;
+
+            
+            ComputeShader shader = null;
+            ShaderBytecode blob = null;
+            CompileShaderFromSource(shaderSource, entryPoint, name, "cs_5_0", ref shader, ref blob);
+            if (shader == null)
+            {
+                //Log.Info($"Failed to create compute shader '{name}'.");
+                return false;
+            }
+
+            resourceId = GetNextResourceId();
+            var resourceEntry = new ComputeShaderResource(resourceId, name, entryPoint, blob, shader);
+            Resources.Add(resourceId, resourceEntry);
+            _computeShaders.Add(resourceEntry);
+            // if (fileResource == null)
+            // {
+            //     fileResource = new FileResource(srcFile, new[] { resourceEntry.Id });
+            //     _fileResources.Add(srcFile, fileResource);
+            // }
+            // else
+            // {
+            //     // file resource already exists, so just add the id of the new type resource
+            //     fileResource.ResourceIds.Add(resourceEntry.Id);
+            // }
+
+            // fileResource.FileChangeAction -= fileChangedAction;
+            // fileResource.FileChangeAction += fileChangedAction;
+
+            // return resourceEntry.Id;
+            
+            return true;
+        }
+        
         public uint CreateComputeShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
         {
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
@@ -550,7 +666,7 @@ namespace T3.Core
 
             ComputeShader shader = null;
             ShaderBytecode blob = null;
-            CompileShader(srcFile, entryPoint, name, "cs_5_0", ref shader, ref blob);
+            CompileShaderFromFile(srcFile, entryPoint, name, "cs_5_0", ref shader, ref blob);
             if (shader == null)
             {
                 Log.Info($"Failed to create compute shader '{name}'.");
@@ -602,7 +718,7 @@ namespace T3.Core
 
             GeometryShader shader = null;
             ShaderBytecode blob = null;
-            CompileShader(srcFile, entryPoint, name, "gs_5_0", ref shader, ref blob);
+            CompileShaderFromFile(srcFile, entryPoint, name, "gs_5_0", ref shader, ref blob);
             if (shader == null)
             {
                 Log.Info($"Failed to create geometry shader '{name}'.");
@@ -634,7 +750,7 @@ namespace T3.Core
             Resources.TryGetValue(id, out var resource);
             if (resource is VertexShaderResource vsResource)
             {
-                vsResource.Update(path);
+                vsResource.UpdateFromFile(path);
                 vertexShader = vsResource.VertexShader;
             }
         }
@@ -644,7 +760,7 @@ namespace T3.Core
             Resources.TryGetValue(id, out var resource);
             if (resource is PixelShaderResource vsResource)
             {
-                vsResource.Update(path);
+                vsResource.UpdateFromFile(path);
                 vertexShader = vsResource.PixelShader;
             }
         }
@@ -654,7 +770,7 @@ namespace T3.Core
             Resources.TryGetValue(id, out var resource);
             if (resource is ComputeShaderResource csResource)
             {
-                csResource.Update(path);
+                csResource.UpdateFromFile(path);
                 computeShader = csResource.ComputeShader;
             }
         }
@@ -664,7 +780,7 @@ namespace T3.Core
             Resources.TryGetValue(id, out var resource);
             if (resource is GeometryShaderResource gsResource)
             {
-                gsResource.Update(path);
+                gsResource.UpdateFromFile(path);
                 geometryShader = gsResource.GeometryShader;
             }
         }
