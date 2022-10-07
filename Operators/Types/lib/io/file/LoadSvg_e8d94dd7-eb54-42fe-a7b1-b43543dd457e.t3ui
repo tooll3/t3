@@ -16,7 +16,10 @@
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Min": 0.0,
+      "Max": 1000.0,
+      "Scale": 0.001
     },
     {
       "InputId": "4dfce92e-9282-486f-a274-e59402696bbb"/*CenterToBounds*/,

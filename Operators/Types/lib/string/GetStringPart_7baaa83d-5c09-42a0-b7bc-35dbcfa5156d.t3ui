@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "05d7962b-a02e-4ab5-9927-865375348ccd"/*InputText*/,
+      "Relevancy": "Relevant",
       "Position": {
         "X": 0.0,
         "Y": 0.0
