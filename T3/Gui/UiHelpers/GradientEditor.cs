@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core;
@@ -211,6 +212,12 @@ namespace T3.Gui.UiHelpers
             drawList.AddRect(areaOnScreen.Min, areaOnScreen.Max, Color.Black);
             drawList.AddRectFilled(areaOnScreen.Min, areaOnScreen.Max, new Color(0.15f, 0.15f, 0.15f, 1));
 
+            if (gradient.Steps == null || gradient.Steps.Count == 0)
+            {
+                Log.Warning("Can't draw invalid gradient");
+                return;
+            }
+
             // Draw Gradient background
             {
                 CustomComponents.FillWithStripes(drawList, areaOnScreen);
@@ -219,7 +226,7 @@ namespace T3.Gui.UiHelpers
             // Draw Gradient
             var minPos = areaOnScreen.Min;
             var maxPos = areaOnScreen.Max;
-
+            
             uint leftColor = ImGui.ColorConvertFloat4ToU32(gradient.Steps[0].Color);
 
             // Draw complex gradient
