@@ -203,8 +203,7 @@ namespace T3.Gui.Graph.Interaction
 
         private void DrawResultsList(Vector2 size)
         {
-            SymbolUi itemForHelp = null;
-            bool itemForHelpIsHovered = false;
+            var itemForHelpIsHovered = false;
 
             if (ImGui.BeginChildFrame(999, size))
             {
@@ -219,7 +218,7 @@ namespace T3.Gui.Graph.Interaction
 
                 foreach (var symbolUi in _filter.MatchingSymbolUis)
                 {
-                    int symbolHash = symbolUi.Symbol.Id.GetHashCode();
+                    var symbolHash = symbolUi.Symbol.Id.GetHashCode();
                     ImGui.PushID(symbolHash);
                     {
                         var color = symbolUi.Symbol.OutputDefinitions.Count > 0
@@ -239,19 +238,17 @@ namespace T3.Gui.Graph.Interaction
                         {
                             ScrollToMakeItemVisible();
                             _selectedItemWasChanged = false;
-                            itemForHelp = symbolUi;
                         }
 
-                        ImGui.Selectable($"##Selectable{symbolHash}", isSelected);
+                        ImGui.Selectable($"##Selectable{symbolHash.ToString()}", isSelected);
                         var isHovered = ImGui.IsItemHovered();
 
                         if (!itemForHelpIsHovered)
                         {
-                            SymbolUi potentialItemForHelp =  DetermineItemForHelp(symbolUi, isSelected, isHovered);
+                            var potentialItemForHelp =  DetermineItemForHelp(symbolUi, isSelected, isHovered);
                             if(potentialItemForHelp != null)
                             {
                                 itemForHelpIsHovered = isHovered;
-                                itemForHelp = potentialItemForHelp;
                             }
                         }
 
@@ -291,23 +288,17 @@ namespace T3.Gui.Graph.Interaction
                 _lastHoveredSymbolUi = symbolUi;
                 return symbolUi;
             }
+
+            if (symbolUi != _lastHoveredSymbolUi)
+                return isSelected ? symbolUi : null;
             
-            if (symbolUi == _lastHoveredSymbolUi)
+            if (UserSettings.Config.SymbolBrowserDescriptionTimeout)
             {
-                if (UserSettings.Config.SymbolBrowserDescriptionTimeout)
-                {
-                    ExpireLastHoveredSymbolUi(symbolUi);
-                }
-
-                return symbolUi;
+                ExpireLastHoveredSymbolUi(symbolUi);
             }
 
-            if (isSelected)
-            {
-                return symbolUi;
-            }
+            return symbolUi;
 
-            return null;
         }
 
         /// <summary>
@@ -342,40 +333,40 @@ namespace T3.Gui.Graph.Interaction
 
         private void PrintTypeFilter()
         {
-            if (_filter.FilterInputType != null || _filter.FilterOutputType != null)
-            {
-                ImGui.PushFont(Fonts.FontSmall);
+            if (_filter.FilterInputType == null && _filter.FilterOutputType == null)
+                return;
+            
+            ImGui.PushFont(Fonts.FontSmall);
 
-                var inputTypeName = _filter.FilterInputType != null
-                                        ? TypeNameRegistry.Entries[_filter.FilterInputType]
-                                        : string.Empty;
+            var inputTypeName = _filter.FilterInputType != null
+                                    ? TypeNameRegistry.Entries[_filter.FilterInputType]
+                                    : string.Empty;
 
-                var outputTypeName = _filter.FilterOutputType != null
-                                         ? TypeNameRegistry.Entries[_filter.FilterOutputType]
-                                         : string.Empty;
+            var outputTypeName = _filter.FilterOutputType != null
+                                     ? TypeNameRegistry.Entries[_filter.FilterOutputType]
+                                     : string.Empty;
 
-                var isMultiInput = _filter.OnlyMultiInputs ? "[..]" : "";
+            var isMultiInput = _filter.OnlyMultiInputs ? "[..]" : "";
 
-                var headerLabel = $"{inputTypeName}{isMultiInput}  -> {outputTypeName}";
-                ImGui.TextDisabled(headerLabel);
-                ImGui.PopFont();
-            }
+            var headerLabel = $"{inputTypeName}{isMultiInput}  -> {outputTypeName}";
+            ImGui.TextDisabled(headerLabel);
+            ImGui.PopFont();
         }
 
         private void DrawDescriptionPanelLeftOrRight(Vector2 posInWindow, Vector2 size, SymbolUi highlightedSymbolUi)
         {
             var width = _resultListSize.X;
-            bool shouldShiftToRight = posInWindow.X + width > GraphCanvas.Current.WindowSize.X;
+            var shouldShiftToRight = posInWindow.X + width > GraphCanvas.Current.WindowSize.X;
             var xPositionOffset = shouldShiftToRight ? -width : width;
             var xPosition = posInWindow.X + xPositionOffset;
 
             var position = new Vector2(xPosition, posInWindow.Y + _size.Y + 1);
 
-            if (xPosition > 0)
-            {
-                ImGui.SetCursorPos(position);
-                DrawDescriptionPanel(highlightedSymbolUi, size);
-            }
+            if (xPosition <= 0)
+                return;
+            
+            ImGui.SetCursorPos(position);
+            DrawDescriptionPanel(highlightedSymbolUi, size);
         }
 
         private void DrawDescriptionPanel(SymbolUi itemForHelp, Vector2 size)
@@ -422,18 +413,18 @@ namespace T3.Gui.Graph.Interaction
 
         public static void ListExampleOperators(SymbolUi itemForHelp)
         {
-            if (ExampleSymbolLinking.ExampleSymbols.TryGetValue(itemForHelp.Symbol.Id, out var examples))
+            if (!ExampleSymbolLinking.ExampleSymbols.TryGetValue(itemForHelp.Symbol.Id, out var examples))
+                return;
+            
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
+            foreach (var guid in examples)
             {
-                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
-                for (var index = 0; index < examples.Count; index++)
-                {
-                    var label = "Example";
-                    var exampleId = examples[index];
-                    DrawExampleOperator(exampleId, label);
-                }
-
-                ImGui.PopStyleVar();
+                var label = "Example";
+                var exampleId = guid;
+                DrawExampleOperator(exampleId, label);
             }
+
+            ImGui.PopStyleVar();
         }
 
         public static void DrawExampleOperator(Guid exampleId, string label)
