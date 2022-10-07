@@ -55,17 +55,16 @@ namespace T3.Gui.Graph.Interaction
                 if (!ImGui.IsWindowFocused() || !ImGui.IsKeyReleased((ImGuiKey)Key.Tab))
                     return;
 
-                if (NodeSelection.GetSelectedChildUis().Count() == 1)
-                {
-                    var childUi = NodeSelection.GetSelectedChildUis().ToList()[0];
-                    {
-                        var instance = NodeSelection.GetInstanceForSymbolChildUi(childUi);
-                        ConnectionMaker.OpenBrowserWithSingleSelection(this, childUi, instance);
-                    }
-                }
-                else
+                if (NodeSelection.GetSelectedChildUis().Count() != 1)
                 {
                     OpenAt(GraphCanvas.Current.InverseTransformPositionFloat(ImGui.GetIO().MousePos + new Vector2(-4, -20)), null, null, false, null);
+                    return;
+                }
+                
+                var childUi = NodeSelection.GetSelectedChildUis().ToList()[0];
+                {
+                    var instance = NodeSelection.GetInstanceForSymbolChildUi(childUi);
+                    ConnectionMaker.OpenBrowserWithSingleSelection(this, childUi, instance);
                 }
 
                 return;
@@ -77,7 +76,7 @@ namespace T3.Gui.Graph.Interaction
 
             ImGui.PushID(UiId);
             {
-                Vector2 posInWindow = GraphCanvas.Current.ChildPosFromCanvas(PosOnCanvas);
+                var posInWindow = GraphCanvas.Current.ChildPosFromCanvas(PosOnCanvas);
                 _posInScreen = GraphCanvas.Current.TransformPosition(PosOnCanvas);
                 _drawList = ImGui.GetWindowDrawList();
 
@@ -145,7 +144,7 @@ namespace T3.Gui.Graph.Interaction
             }
 
             var clickedOutside = ImGui.IsMouseClicked(ImGuiMouseButton.Left) && ImGui.IsWindowHovered();
-            bool shouldCancelConnectionMaker = clickedOutside
+            var shouldCancelConnectionMaker = clickedOutside
                 || ImGui.IsMouseClicked(ImGuiMouseButton.Right)
                 || ImGui.IsKeyDown((ImGuiKey)Key.Esc);
 
