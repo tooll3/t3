@@ -134,7 +134,7 @@ namespace T3.Core
                                       MaximumLod = Single.MaxValue,
                                   };
             DefaultSamplerState = new SamplerState(device, samplerDesc);
-            ResourceFileWatcher.Setup(ResourcesFolder);
+            ResourceFileWatcher.Setup();
         }
 
         public SamplerState DefaultSamplerState { get; }

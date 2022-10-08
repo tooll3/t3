@@ -7,70 +7,40 @@ using T3.Core.Logging;
 
 namespace T3.Core
 {
-    /// <summary>
-    /// Used by some <see cref="Resource"/>s to link to a file.
-    /// Note that multiple resources likes <see cref="VertexShader"/> and <see cref="PixelShader"/> can
-    /// depend on the some source file. 
-    /// </summary>
-    public class ResourceFileHook
-    {
-        public ResourceFileHook(string path, IEnumerable<uint> ids)
-        {
-            Path = path;
-            ResourceIds.AddRange(ids);
-            LastWriteReferenceTime = File.GetLastWriteTime(path);
-        }
-
-        public string Path;
-        public readonly List<uint> ResourceIds = new();
-        public DateTime LastWriteReferenceTime;
-        public Action FileChangeAction;
-    }
-
     public static class ResourceFileWatcher
     {
-        public static void Setup(string resourcesFolder)
+        public static void Setup()
         {
-            _hlslFileWatcher = new FileSystemWatcher(resourcesFolder, "*.hlsl");
-            _hlslFileWatcher.IncludeSubdirectories = true;
-            _hlslFileWatcher.Changed += FileChangedHandler;
-            _hlslFileWatcher.Created += FileChangedHandler;
-            _hlslFileWatcher.Deleted += FileChangedHandler;
-            _hlslFileWatcher.Renamed += FileChangedHandler;
-            _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime; // creation time needed for visual studio (2017)
-            _hlslFileWatcher.EnableRaisingEvents = true;
+            var hlslWatcher = AddWatcher(ResourceManager.ResourcesFolder, "*.hlsl");
+            hlslWatcher.Deleted += FileChangedHandler;
+            hlslWatcher.Renamed += FileChangedHandler;
+            hlslWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime; // Creation time needed for visual studio (2017)
 
-            _pngFileWatcher = new FileSystemWatcher(resourcesFolder, "*.png");
-            _pngFileWatcher.IncludeSubdirectories = true;
-            _pngFileWatcher.Changed += FileChangedHandler;
-            _pngFileWatcher.Created += FileChangedHandler;
-            _pngFileWatcher.EnableRaisingEvents = true;
+            AddWatcher(ResourceManager.ResourcesFolder, "*.png");
+            AddWatcher(ResourceManager.ResourcesFolder, "*.jpg");
+            AddWatcher(ResourceManager.ResourcesFolder, "*.dds");
+            AddWatcher(ResourceManager.ResourcesFolder, "*.tiff");
 
-            _jpgFileWatcher = new FileSystemWatcher(resourcesFolder, "*.jpg");
-            _jpgFileWatcher.IncludeSubdirectories = true;
-            _jpgFileWatcher.Changed += FileChangedHandler;
-            _jpgFileWatcher.Created += FileChangedHandler;
-            _jpgFileWatcher.EnableRaisingEvents = true;
-
-            _ddsFileWatcher = new FileSystemWatcher(resourcesFolder, "*.dds");
-            _ddsFileWatcher.IncludeSubdirectories = true;
-            _ddsFileWatcher.Changed += FileChangedHandler;
-            _ddsFileWatcher.Created += FileChangedHandler;
-            _ddsFileWatcher.EnableRaisingEvents = true;
-
-            _tiffFileWatcher = new FileSystemWatcher(resourcesFolder, "*.tiff");
-            _tiffFileWatcher.IncludeSubdirectories = true;
-            _tiffFileWatcher.Changed += FileChangedHandler;
-            _tiffFileWatcher.Created += FileChangedHandler;
-            _tiffFileWatcher.EnableRaisingEvents = true;
-
-            _csFileWatcher = new FileSystemWatcher(Model.OperatorTypesFolder, "*.cs");
-            _csFileWatcher.IncludeSubdirectories = true;
-            _csFileWatcher.Changed += FileChangedHandler;
+            _csFileWatcher = AddWatcher(Model.OperatorTypesFolder,"*.cs");
             _csFileWatcher.Renamed += CsFileRenamedHandler;
             _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
-            _csFileWatcher.EnableRaisingEvents = true;
+
         }
+
+        private static FileSystemWatcher AddWatcher(string folder, string filePattern)
+        {
+            var newWatcher = new FileSystemWatcher(folder, filePattern)
+                                 {
+                                     IncludeSubdirectories = true,
+                                     EnableRaisingEvents = true
+                                 };
+            newWatcher.Changed += FileChangedHandler;
+            newWatcher.Created += FileChangedHandler;
+            _fileWatchers.Add(filePattern, newWatcher);
+            return newWatcher;
+        }
+
+        private static Dictionary<string, FileSystemWatcher> _fileWatchers = new();
 
         public static void DisableOperatorFileWatcher()
         {
@@ -128,14 +98,28 @@ namespace T3.Core
         {
             ResourceManager.RenameOperatorResource(renamedEventArgs.OldFullPath, renamedEventArgs.FullPath);
         }
-
-        private static FileSystemWatcher _hlslFileWatcher;
-        private static FileSystemWatcher _pngFileWatcher;
-        private static FileSystemWatcher _jpgFileWatcher;
-        private static FileSystemWatcher _ddsFileWatcher;
-        private static FileSystemWatcher _tiffFileWatcher;
+        
         private static FileSystemWatcher _csFileWatcher;
-
         public static readonly Dictionary<string, ResourceFileHook> _resourceFileHooks = new();
+    }
+    
+    /// <summary>
+    /// Used by some <see cref="Resource"/>s to link to a file.
+    /// Note that multiple resources likes <see cref="VertexShader"/> and <see cref="PixelShader"/> can
+    /// depend on the some source file. 
+    /// </summary>
+    public class ResourceFileHook
+    {
+        public ResourceFileHook(string path, IEnumerable<uint> ids)
+        {
+            Path = path;
+            ResourceIds.AddRange(ids);
+            LastWriteReferenceTime = File.GetLastWriteTime(path);
+        }
+
+        public string Path;
+        public readonly List<uint> ResourceIds = new();
+        public DateTime LastWriteReferenceTime;
+        public Action FileChangeAction;
     }
 }
