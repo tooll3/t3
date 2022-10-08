@@ -29,13 +29,14 @@ namespace t3.Gui.Interaction.StartupCheck
                     URL = "https://github.com/still-scene/t3/wiki/installation#setting-the-startup-directory-in-visual-studio",
                 }.Do();
             
+
+            
             new Check
                 {
                     RequiredFilePaths = new List<string>()
                                             {  
                                                 WindowManager.LayoutPath + "layout1.json",
-                                                @"T3\bin\Debug\net5.0-windows\bass.dll",
-                                                @"T3\bin\Release\net5.0-windows\bass.dll",
+                                                @"T3\bin\Release\net6.0-windows\bass.dll",
                                             },
                     Message = "Please run Install/install.bat.",
                     URL = "https://github.com/still-scene/t3/wiki/installation#setup-and-installation",
@@ -45,7 +46,7 @@ namespace t3.Gui.Interaction.StartupCheck
                 {
                     RequiredFilePaths = new List<string>()
                                             {
-                                                @"Player\bin\Release\net5.0-windows\Player.exe",
+                                                @"Player\bin\Release\net6.0-windows\Player.exe",
                                             },
                     Message = "This will prevent you from exporting as executable.\nPlease rebuild your solution.",
                     URL = "https://github.com/still-scene/t3/wiki/installation#setup-and-installation",

@@ -67,12 +67,12 @@ namespace T3.Gui.Graph
                 // Copy player and dependent assemblies to export dir
                 var currentDir = Directory.GetCurrentDirectory();
 
-                var playerBuildPath = currentDir + @"\Player\bin\Release\net5.0-windows\";
+                var playerBuildPath = currentDir + @"\Player\bin\Release\net6.0-windows\";
                 var operatorDependenciesPath = Program.IsStandAlone
                                                    ? @".\"
-                                                   : @"T3\bin\Release\net5.0-windows\";
+                                                   : @"T3\bin\Release\net6.0-windows\";
 
-                if (!File.Exists(currentDir + @"\Player\bin\Release\net5.0-windows\Player.exe"))
+                if (!File.Exists(currentDir + @"\Player\bin\Release\net6.0-windows\Player.exe"))
                 {
                     Log.Error($"Can't find valid build in player release folder: (${playerBuildPath})");
                     Log.Error("Please use your IDE to rebuild solution in release mode.");
