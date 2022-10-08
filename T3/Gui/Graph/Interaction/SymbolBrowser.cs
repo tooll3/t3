@@ -81,29 +81,29 @@ namespace T3.Gui.Graph.Interaction
                 _drawList = ImGui.GetWindowDrawList();
 
                 ImGui.SetNextWindowFocus();
-                ImGui.SetCursorPos(posInWindow + new Vector2(1, _size.Y + 1));
 
-                ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5, 5));
-                ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
+                Vector2 browserPositionInWindow;
+                ShiftPositionToFitOnCanvas(out browserPositionInWindow, posInWindow + _browserPositionOffset, _resultListSize);
+
+                ImGui.SetCursorPos(browserPositionInWindow);
 
                 DrawResultsList(_resultListSize);
 
                 if (_lastHoveredSymbolUi != null)
                 {
-                    DrawDescriptionPanelLeftOrRight(posInWindow, _resultListSize, _lastHoveredSymbolUi);
+                    DrawDescriptionPanelFitOnCanvas(browserPositionInWindow, _resultListSize, _lastHoveredSymbolUi);
                 }
 
-                ImGui.PopStyleVar(2);
-                DrawSearchInput(posInWindow, _size.X);
+                DrawSearchInput(browserPositionInWindow, _size);
             }
 
-            _drawList.AddRect(_posInScreen, OutputPositionOnScreen, Color.Gray);
             ImGui.PopID();
         }
         #endregion
 
         #region internal implementation -----------------------------------------------------------
-        private void DrawSearchInput(Vector2 posInWindow, float width)
+
+        private void DrawSearchInput(Vector2 posInWindow, Vector2 size)
         {
             //ImGui.SetNextItemWidth(90);
 
@@ -113,11 +113,23 @@ namespace T3.Gui.Graph.Interaction
                 _focusInputNextTime = false;
             }
 
-            ImGui.SetCursorPos(posInWindow);
+            var offset = new Vector2(2, -size.Y - 12);
+            posInWindow += offset;
 
-            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(7, 6));
-            ImGui.SetNextItemWidth(width);
+            ImGui.SetCursorPos(posInWindow );
+
+            var padding = new Vector2(7, 6);
+            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, padding);
+            ImGui.SetNextItemWidth(_size.X);
+            
             ImGui.InputText("##symbolbrowserfilter", ref _filter.SearchString, 10);
+
+            // Search input outline
+            var outlinePadding = new Vector2(0, padding.X);
+            var outlineOffset = new Vector2(0, size.Y * 2);
+            var min = posInWindow + outlineOffset - outlinePadding / 2f;
+            var max = min + new Vector2(size.X, size.Y) + outlinePadding; 
+            _drawList.AddRect(min, max, Color.Gray);
 
             if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorDown))
             {
@@ -202,6 +214,8 @@ namespace T3.Gui.Graph.Interaction
 
         private void DrawResultsList(Vector2 size)
         {
+            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5, 5));
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
             var itemForHelpIsHovered = false;
 
             if (ImGui.BeginChildFrame(999, size))
@@ -278,6 +292,8 @@ namespace T3.Gui.Graph.Interaction
             }
 
             ImGui.EndChildFrame();
+
+            ImGui.PopStyleVar(2);
         }
 
         private SymbolUi DetermineItemForHelp(SymbolUi symbolUi, bool isSelected, bool isHovered)
@@ -352,21 +368,52 @@ namespace T3.Gui.Graph.Interaction
             ImGui.PopFont();
         }
 
-        private void DrawDescriptionPanelLeftOrRight(Vector2 posInWindow, Vector2 size, SymbolUi highlightedSymbolUi)
+        private void DrawDescriptionPanelFitOnCanvas(Vector2 resultsListPosition, Vector2 size, SymbolUi highlightedSymbolUi)
         {
-            var width = _resultListSize.X;
-            var shouldShiftToRight = posInWindow.X + width > GraphCanvas.Current.WindowSize.X;
-            var xPositionOffset = shouldShiftToRight ? -width : width;
-            var xPosition = posInWindow.X + xPositionOffset;
+            Vector2 descriptionPanelPosition;
+            ShiftDescriptionPositionToFitOnCanvas(out descriptionPanelPosition, resultsListPosition, _resultListSize);
 
-            var position = new Vector2(xPosition, posInWindow.Y + _size.Y + 1);
-
-            if (xPosition <= 0)
+            //if it simply doesn't fit on screen, return
+            if (descriptionPanelPosition.X <= 0)
                 return;
-            
-            ImGui.SetCursorPos(position);
+
+            ImGui.SetCursorPos(descriptionPanelPosition);
             DrawDescriptionPanel(highlightedSymbolUi, size);
         }
+
+        private void ShiftDescriptionPositionToFitOnCanvas(out Vector2 newPosition, Vector2 resultsWindowPosition, Vector2 size)
+        {
+            var maxXPos = resultsWindowPosition.X + size.X * 2;
+            var shouldShiftLeft = maxXPos >= GraphCanvas.Current.WindowSize.X;
+            var xPositionOffset = shouldShiftLeft ? -size.X : size.X;
+
+            newPosition = new Vector2
+            {
+                X = resultsWindowPosition.X + xPositionOffset,
+                Y = resultsWindowPosition.Y
+            };
+        }
+
+        private void ShiftPositionToFitOnCanvas(out Vector2 newPosition, Vector2 originalPosition, Vector2 size)
+        {
+            var maxXPos = originalPosition.X + size.X;
+            var maxYPos = originalPosition.Y + size.Y;
+
+            var windowSize = GraphCanvas.Current.WindowSize;
+
+            var shouldShiftLeft = maxXPos > windowSize.X;
+            var xPositionOffset = shouldShiftLeft ? windowSize.X - maxXPos : 0;
+
+            var shouldShiftUp = maxYPos > windowSize.Y;
+            var yPositionOffset = shouldShiftUp ? windowSize.Y - maxYPos : 0;
+
+            newPosition = new Vector2
+            {
+                X = originalPosition.X + xPositionOffset,
+                Y = originalPosition.Y + yPositionOffset
+            };
+        }
+
 
         private void DrawDescriptionPanel(SymbolUi itemForHelp, Vector2 size)
         {
@@ -382,7 +429,7 @@ namespace T3.Gui.Graph.Interaction
             
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.One); // Padding between panels
 
-            if (ImGui.BeginChildFrame(998, size, ImGuiWindowFlags.ChildWindow))
+            if (ImGui.BeginChildFrame(998, size))
             {
                 if (!string.IsNullOrEmpty(itemForHelp.Description))
                 {
@@ -394,18 +441,16 @@ namespace T3.Gui.Graph.Interaction
                 if (hasExamples)
                 {
                     ImGui.Dummy(new Vector2(10, 10));
-
                     ListExampleOperators(itemForHelp);
                 }
 
                 ImGui.EndChildFrame();
-
-                if(_canExpireDescription && ImGui.IsItemHovered())
-                {
-                    _lastHoveredSymbolUi = null;
-                }
             }
-            
+
+            if (_canExpireDescription && ImGui.IsItemHovered())
+            {
+                _lastHoveredSymbolUi = null;
+            }
 
             ImGui.PopStyleVar();
         }
@@ -550,6 +595,7 @@ namespace T3.Gui.Graph.Interaction
         public bool IsOpen;
 
         private readonly Vector2 _size = SymbolChildUi.DefaultOpSize;
+        private static Vector2 _browserPositionOffset => new Vector2(-20, 0);
         
         private bool _focusInputNextTime;
         private Vector2 _posInScreen;
