@@ -52,7 +52,7 @@ namespace T3.Gui.Graph.Interaction
         {
             if (!IsOpen)
             {
-                if (!ImGui.IsWindowFocused() || !ImGui.IsKeyReleased((ImGuiKey)Key.Tab))
+                if (!ImGui.IsWindowFocused() || !ImGui.IsKeyReleased((ImGuiKey)Key.Tab) || !ImGui.IsWindowHovered())
                     return;
 
                 if (NodeSelection.GetSelectedChildUis().Count() != 1)
