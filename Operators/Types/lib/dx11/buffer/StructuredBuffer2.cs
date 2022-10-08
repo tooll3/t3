@@ -35,13 +35,13 @@ namespace T3.Operators.Types.Id_b6c5be1d_b133_45e9_a269_8047ea0d6ad7
             if (BufferWithViews.Value == null)
                 BufferWithViews.Value = new BufferWithViews();
 
-            ResourceManager.Instance().SetupStructuredBuffer(sizeInBytes, stride, ref BufferWithViews.Value.Buffer);
+            ResourceManager.SetupStructuredBuffer(sizeInBytes, stride, ref BufferWithViews.Value.Buffer);
 
             if (createSrv)
-                ResourceManager.Instance().CreateStructuredBufferSrv(BufferWithViews.Value.Buffer, ref BufferWithViews.Value.Srv);
+                ResourceManager.CreateStructuredBufferSrv(BufferWithViews.Value.Buffer, ref BufferWithViews.Value.Srv);
 
             if (createUav)
-                ResourceManager.Instance().CreateStructuredBufferUav(BufferWithViews.Value.Buffer, bufferFlags, ref BufferWithViews.Value.Uav);
+                ResourceManager.CreateStructuredBufferUav(BufferWithViews.Value.Buffer, bufferFlags, ref BufferWithViews.Value.Uav);
         }
 
         [Input(Guid = "0016dd87-8756-4a97-a0da-096e1a879c05")]

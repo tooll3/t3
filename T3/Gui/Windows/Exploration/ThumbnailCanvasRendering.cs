@@ -61,7 +61,7 @@ namespace T3.Gui.Windows.Exploration
 
             // Setup graphics pipeline for rendering into the canvas texture
             var resourceManager = ResourceManager.Instance();
-            var deviceContext = resourceManager.Device.ImmediateContext;
+            var deviceContext = ResourceManager.Device.ImmediateContext;
             deviceContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
 
             deviceContext.Rasterizer.SetViewport(new ViewportF(rect.Min.X,

@@ -18,7 +18,7 @@ namespace T3.Operators.Types.Id_5efaf208_ba62_42ce_b3df_059b37fc1382 {
 
         private void Update(EvaluationContext context) {
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var outputMerger = deviceContext.OutputMerger;
 
@@ -49,7 +49,7 @@ namespace T3.Operators.Types.Id_5efaf208_ba62_42ce_b3df_059b37fc1382 {
         }
 
         private void Restore(EvaluationContext context) {
-            var deviceContext = ResourceManager.Instance().Device.ImmediateContext;
+            var deviceContext = ResourceManager.Device.ImmediateContext;
             var outputMerger = deviceContext.OutputMerger;
 
             outputMerger.BlendState = _prevBlendState;

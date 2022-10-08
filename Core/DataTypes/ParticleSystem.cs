@@ -53,9 +53,9 @@ namespace T3.Core.DataTypes
             var resourceManager = ResourceManager.Instance();
             int stride = ParticleSizeInBytes;
             var bufferData = Enumerable.Repeat(-10.0f, MaxCount * (stride / 4)).ToArray(); // init with negative lifetime other values doesn't matter
-            resourceManager.SetupStructuredBuffer(bufferData, stride * MaxCount, stride, ref ParticleBuffer);
-            resourceManager.CreateStructuredBufferUav(ParticleBuffer, UnorderedAccessViewBufferFlags.None, ref ParticleBufferUav);
-            resourceManager.CreateStructuredBufferSrv(ParticleBuffer, ref ParticleBufferSrv);
+            ResourceManager.SetupStructuredBuffer(bufferData, stride * MaxCount, stride, ref ParticleBuffer);
+            ResourceManager.CreateStructuredBufferUav(ParticleBuffer, UnorderedAccessViewBufferFlags.None, ref ParticleBufferUav);
+            ResourceManager.CreateStructuredBufferSrv(ParticleBuffer, ref ParticleBufferSrv);
         }
 
         private const int ParticleIndexSizeInBytes = 8;
@@ -64,12 +64,12 @@ namespace T3.Core.DataTypes
         {
             // init the buffer 
             var resourceManager = ResourceManager.Instance();
-            resourceManager.SetupStructuredBuffer(ParticleIndexSizeInBytes*MaxCount, ParticleIndexSizeInBytes, ref DeadParticleIndices);
-            resourceManager.CreateStructuredBufferUav(DeadParticleIndices, UnorderedAccessViewBufferFlags.Append, ref DeadParticleIndicesUav);
+            ResourceManager.SetupStructuredBuffer(ParticleIndexSizeInBytes*MaxCount, ParticleIndexSizeInBytes, ref DeadParticleIndices);
+            ResourceManager.CreateStructuredBufferUav(DeadParticleIndices, UnorderedAccessViewBufferFlags.Append, ref DeadParticleIndicesUav);
             
             // init counter of the dead list buffer (must be done due to uav binding)
             ComputeShader deadListInitShader = resourceManager.GetComputeShader(_initDeadListShaderResId);
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var csStage = deviceContext.ComputeShader;
             var prevShader = csStage.Get();
@@ -93,22 +93,22 @@ namespace T3.Core.DataTypes
         private void InitAliveParticleIndices()
         {
             var resourceManager = ResourceManager.Instance();
-            resourceManager.SetupStructuredBuffer(ParticleIndexSizeInBytes*MaxCount, ParticleIndexSizeInBytes, ref AliveParticleIndices);
-            resourceManager.CreateStructuredBufferUav(AliveParticleIndices, UnorderedAccessViewBufferFlags.Counter, ref AliveParticleIndicesUav);
-            resourceManager.CreateStructuredBufferSrv(AliveParticleIndices, ref AliveParticleIndicesSrv);
+            ResourceManager.SetupStructuredBuffer(ParticleIndexSizeInBytes*MaxCount, ParticleIndexSizeInBytes, ref AliveParticleIndices);
+            ResourceManager.CreateStructuredBufferUav(AliveParticleIndices, UnorderedAccessViewBufferFlags.Counter, ref AliveParticleIndicesUav);
+            ResourceManager.CreateStructuredBufferSrv(AliveParticleIndices, ref AliveParticleIndicesSrv);
         }
 
         private void InitIndirectArgBuffer()
         {
             var resourceManager = ResourceManager.Instance();
             int sizeInBytes = 16;
-            resourceManager.SetupIndirectBuffer(sizeInBytes, ref IndirectArgsBuffer);
-            resourceManager.CreateBufferUav<uint>(IndirectArgsBuffer, Format.R32_UInt, ref IndirectArgsBufferUav);
+            ResourceManager.SetupIndirectBuffer(sizeInBytes, ref IndirectArgsBuffer);
+            ResourceManager.CreateBufferUav<uint>(IndirectArgsBuffer, Format.R32_UInt, ref IndirectArgsBufferUav);
         }
         
         private void InitParticleCountConstBuffer()
         {
-            ResourceManager.Instance().SetupConstBuffer(Vector4.Zero, ref ParticleCountConstBuffer);
+            ResourceManager.SetupConstBuffer(Vector4.Zero, ref ParticleCountConstBuffer);
             ParticleCountConstBuffer.DebugName = "ParticleCountConstBuffer";
         }
     }

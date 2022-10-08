@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using SharpDX.D3DCompiler;
+﻿using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 
 namespace T3.Core
@@ -18,7 +15,7 @@ namespace T3.Core
         public readonly string Name;
         public bool UpToDate { get; set; }
     }
-    
+
     public abstract class ShaderResource : Resource
     {
         protected ShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob)
@@ -28,31 +25,12 @@ namespace T3.Core
             Blob = blob;
         }
 
-        public abstract void Update(string path);
-
         public string EntryPoint { get; }
         protected ShaderBytecode _blob;
-        public ShaderBytecode Blob { get => _blob; internal set { _blob = value; } }
+        public ShaderBytecode Blob { get => _blob; private init => _blob = value; }
     }
 
-    internal class FileResource
-    {
-        public FileResource(string path, IEnumerable<uint> ids)
-        {
-            Path = path;
-            ResourceIds.AddRange(ids);
-            LastWriteReferenceTime = File.GetLastWriteTime(path);
-        }
-
-        public string Path;
-        public readonly List<uint> ResourceIds = new List<uint>();
-        public DateTime LastWriteReferenceTime;
-        public Action FileChangeAction;
-    }
-
-
-    
-        public class VertexShaderResource : ShaderResource
+    public class VertexShaderResource : ShaderResource
     {
         public VertexShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob, VertexShader vertexShader)
             : base(id, name, entryPoint, blob)
@@ -60,12 +38,12 @@ namespace T3.Core
             VertexShader = vertexShader;
         }
 
-        public override void Update(string path)
+        public void UpdateFromFile(string path)
         {
             if (UpToDate)
                 return;
 
-            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "vs_5_0", ref VertexShader, ref _blob);
+            ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "vs_5_0", ref VertexShader, ref _blob);
             UpToDate = true;
         }
 
@@ -82,12 +60,12 @@ namespace T3.Core
 
         public PixelShader PixelShader;
 
-        public override void Update(string path)
+        public virtual void UpdateFromFile(string path)
         {
             if (UpToDate)
                 return;
 
-            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "ps_5_0", ref PixelShader, ref _blob);
+            ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "ps_5_0", ref PixelShader, ref _blob);
             UpToDate = true;
         }
     }
@@ -102,14 +80,20 @@ namespace T3.Core
 
         public ComputeShader ComputeShader;
 
-        public override void Update(string path)
+        public void UpdateFromFile(string path)
         {
             if (UpToDate)
                 return;
 
-            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref _blob);
+            ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref _blob);
             UpToDate = true;
         }
+
+        // public void UpdateFromSourceString(string source)
+        // {
+        //     ResourceManager.Instance().CompileShaderFromSource(source, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref _blob);
+        //     UpToDate = true;
+        // }
     }
 
     public class GeometryShaderResource : ShaderResource
@@ -122,17 +106,16 @@ namespace T3.Core
 
         public GeometryShader GeometryShader;
 
-        public override void Update(string path)
+        public virtual void UpdateFromFile(string path)
         {
             if (UpToDate)
                 return;
 
-            ResourceManager.Instance().CompileShader(path, EntryPoint, Name, "gs_5_0", ref GeometryShader, ref _blob);
+            ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "gs_5_0", ref GeometryShader, ref _blob);
             UpToDate = true;
         }
     }
-    
-    
+
     public class Texture2dResource : Resource
     {
         public Texture2dResource(uint id, string name, Texture2D texture)
@@ -143,7 +126,7 @@ namespace T3.Core
 
         public Texture2D Texture;
     }
-    
+
     public class Texture3dResource : Resource
     {
         public Texture3dResource(uint id, string name, Texture3D texture)

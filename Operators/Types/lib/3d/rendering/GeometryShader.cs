@@ -52,7 +52,7 @@ namespace T3.Operators.Types.Id_a908cc64_e8cb_490c_ae45_c2c5fbfcedfb
             }
             else
             {
-                resourceManager.UpdateGeometryShaderFromFile(Source.Value, _geometryShaderResId, ref Shader.Value);
+                ResourceManager.UpdateGeometryShaderFromFile(Source.Value, _geometryShaderResId, ref Shader.Value);
             }
             
             if (_geometryShaderResId != ResourceManager.NullResource)

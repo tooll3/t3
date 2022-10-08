@@ -34,7 +34,7 @@ namespace T3.Gui.Graph.Rendering
                 if ((texture.Description.BindFlags & BindFlags.DepthStencil) > 0)
                     return null; // skip here for depth/stencil to prevent warning below
             
-                return new ShaderResourceView(ResourceManager.Instance().Device, texture);
+                return new ShaderResourceView(ResourceManager.Device, texture);
             }
             catch (Exception e)
             {

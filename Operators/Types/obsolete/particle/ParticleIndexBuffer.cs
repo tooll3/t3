@@ -27,7 +27,7 @@ namespace T3.Operators.Types.Id_0618660b_32fb_4c78_953c_b178f53699c2
                 return;
 
             var resourceManager = ResourceManager.Instance();
-            resourceManager.SetupStructuredBuffer(4 * count, 4, ref Buffer.Value);
+            ResourceManager.SetupStructuredBuffer(4 * count, 4, ref Buffer.Value);
 
             var symbolChild = Parent.Symbol.Children.Single(c => c.Id == SymbolChildId);
             Buffer.Value.DebugName = symbolChild.ReadableName;

@@ -71,8 +71,8 @@ namespace T3.Operators.Types.Id_bd175754_d3fd_4c75_9d40_5023eb1d8db6
             }
 
             var stride = 32;
-            resourceManager.SetupStructuredBuffer(bufferData, stride * numEntries, stride, ref _buffer);
-            resourceManager.CreateStructuredBufferSrv(_buffer, ref PointCloudSrv.Value);
+            ResourceManager.SetupStructuredBuffer(bufferData, stride * numEntries, stride, ref _buffer);
+            ResourceManager.CreateStructuredBufferSrv(_buffer, ref PointCloudSrv.Value);
         }
 
         [Input(Guid = "2de69331-00ed-4612-b6c1-f2131390c735")]

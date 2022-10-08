@@ -49,7 +49,7 @@ namespace T3.Operators.Types.Id_e6f2a00d_854e_412e_94a1_a21df91fc988
             Matrix worldToCamera = Matrix.LookAtRH(eye, target, up);
 
             var bufferContent = new BufferLayout(cameraToClipSpace, worldToCamera, context.ObjectToWorld);
-            ResourceManager.Instance().SetupConstBuffer(bufferContent, ref Buffer.Value);
+            ResourceManager.SetupConstBuffer(bufferContent, ref Buffer.Value);
             Buffer.Value.DebugName = nameof(ShadowMapTransformsConstBuffer);
         }
 

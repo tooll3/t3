@@ -198,7 +198,7 @@ namespace T3.Gui.Windows
 
             // Write all contents to the MediaBuffer for media foundation
             MF.MediaBuffer mediaBuffer = MF.MediaFactory.CreateMemoryBuffer(RGBASizeInBytes(ref frame));
-            var device = ResourceManager.Instance().Device;
+            var device = ResourceManager.Device;
             DataStream inputStream = null;
             DataStream outputStream = null;
             try

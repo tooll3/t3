@@ -26,7 +26,7 @@ namespace T3.Operators.Types.Id_a8a0e6c4_1f49_4ed8_8d0b_e7aa6cdf8a87
             if (sizeInBytes <= 0)
                 return;
 
-            ResourceManager.Instance().SetupStructuredBuffer(sizeInBytes, stride, ref Buffer.Value);
+            ResourceManager.SetupStructuredBuffer(sizeInBytes, stride, ref Buffer.Value);
         }
 
         [Input(Guid = "28E44436-F4E2-44EC-A28D-447E7A9F6BA8")]

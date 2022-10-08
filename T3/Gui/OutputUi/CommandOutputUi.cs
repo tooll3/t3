@@ -36,7 +36,7 @@ namespace T3.Gui.OutputUi
 
             // setup render target - TODO: this should not be done for all 'Command' outputs as most of them don't produce image content
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
 
             Size2 size = context.RequestedResolution;
             var wasRebuild = UpdateTextures(device, size, Format.R16G16B16A16_UNorm);

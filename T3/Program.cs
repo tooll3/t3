@@ -190,10 +190,10 @@ namespace T3
                 {
                     Viewer.PrepareRenderingFrame(_deviceContext);
 
-                    if (resourceManager.Resources[SharedResources.FullScreenVertexShaderId] is VertexShaderResource vsr)
+                    if (ResourceManager.ResourcesById[SharedResources.FullScreenVertexShaderId] is VertexShaderResource vsr)
                         _deviceContext.VertexShader.Set(vsr.VertexShader);
 
-                    if (resourceManager.Resources[SharedResources.FullScreenPixelShaderId] is PixelShaderResource psr)
+                    if (ResourceManager.ResourcesById[SharedResources.FullScreenPixelShaderId] is PixelShaderResource psr)
                         _deviceContext.PixelShader.Set(psr.PixelShader);
 
                     if (resourceManager.SecondRenderWindowTexture != null && !resourceManager.SecondRenderWindowTexture.IsDisposed)
@@ -208,7 +208,7 @@ namespace T3
                         _deviceContext.Rasterizer.State = SharedResources.ViewWindowRasterizerState;
                         _deviceContext.PixelShader.SetShaderResource(0, viewWindowBackgroundSrv);
                     }
-                    else if (resourceManager.Resources[ SharedResources.ViewWindowDefaultSrvId] is ShaderResourceViewResource srvr)
+                    else if (ResourceManager.ResourcesById[ SharedResources.ViewWindowDefaultSrvId] is ShaderResourceViewResource srvr)
                     {
                         _deviceContext.PixelShader.SetShaderResource(0, srvr.ShaderResourceView);
                         //Log.Debug($"using Default TextureId:{srvr.TextureId}, debug name:{srvr.ShaderResourceView.DebugName}");

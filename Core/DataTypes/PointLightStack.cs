@@ -107,11 +107,11 @@ namespace T3.Core.DataTypes
                                              SizeInBytes = size,
                                              BindFlags = BindFlags.ConstantBuffer
                                          };
-                    constBuffer = new Buffer(ResourceManager.Instance().Device, data, bufferDesc) { DebugName = "PointLightsConstBuffer" };
+                    constBuffer = new Buffer(ResourceManager.Device, data, bufferDesc) { DebugName = "PointLightsConstBuffer" };
                 }
                 else
                 {
-                    ResourceManager.Instance().Device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), constBuffer, 0);
+                    ResourceManager.Device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), constBuffer, 0);
                 }
             }
         }

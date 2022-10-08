@@ -101,7 +101,7 @@ namespace T3.Operators.Types.Id_55cc0f79_96c9_482e_9794_934dc0f87708
                 dataStream.Position = 0;
                 var dataRectangles = new DataRectangle[] { new DataRectangle(dataStream.DataPointer, listSizeInBytes) };
                 Utilities.Dispose(ref CurveTexture.Value);
-                CurveTexture.Value = new Texture2D(ResourceManager.Instance().Device, texDesc, dataRectangles);
+                CurveTexture.Value = new Texture2D(ResourceManager.Device, texDesc, dataRectangles);
             }
         }
 

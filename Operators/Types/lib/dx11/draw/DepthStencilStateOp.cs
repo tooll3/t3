@@ -33,7 +33,7 @@ namespace T3.Operators.Types.Id_04858a08_f0fe_4536_9152_686659f0ab58
                     DepthComparison = Comparison.GetValue(context),
                 };
                 
-                DepthState.Value = new DepthStencilState(ResourceManager.Instance().Device, depthStencilStateDescription);
+                DepthState.Value = new DepthStencilState(ResourceManager.Device, depthStencilStateDescription);
                 
             }
             catch (SharpDXException e)

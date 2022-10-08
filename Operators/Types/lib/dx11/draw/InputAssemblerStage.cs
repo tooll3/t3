@@ -23,7 +23,7 @@ namespace T3.Operators.Types.Id_9d1266c5_23db_439f_a475_8000fdd1c318
         private void Update(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var iaStage = deviceContext.InputAssembler;
 
@@ -38,7 +38,7 @@ namespace T3.Operators.Types.Id_9d1266c5_23db_439f_a475_8000fdd1c318
         public void Restore(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var iaStage = deviceContext.InputAssembler;
 

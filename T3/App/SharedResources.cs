@@ -16,7 +16,7 @@ namespace T3.App
             FullScreenPixelShaderId =
                 resourceManager.CreatePixelShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
             
-            ViewWindowRasterizerState = new RasterizerState(ResourceManager.Instance().Device, new RasterizerStateDescription
+            ViewWindowRasterizerState = new RasterizerState(ResourceManager.Device, new RasterizerStateDescription
                                                                                                    {
                                                                                                        FillMode = FillMode.Solid, // Wireframe
                                                                                                        CullMode = CullMode.None,
@@ -35,7 +35,7 @@ namespace T3.App
             ViewWindowDefaultSrvId = tmpId;
             
             (uint texResourceId3, var srvResourceId ) = resourceManager.CreateTextureFromFile(@"Resources\t3-editor\images\t3-colorpicker.png", null);
-            if (ResourceManager.Instance().Resources[srvResourceId] is ShaderResourceViewResource srvResource)
+            if (ResourceManager.ResourcesById[srvResourceId] is ShaderResourceViewResource srvResource)
             {
                 ColorPickerImageSrv = srvResource.ShaderResourceView;
             }

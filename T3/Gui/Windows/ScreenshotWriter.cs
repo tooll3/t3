@@ -23,7 +23,7 @@ namespace T3.Gui.Windows
             if (texture2d == null)
                 return false;
 
-            var device = ResourceManager.Instance().Device;
+            var device = ResourceManager.Device;
             var currentDesc = texture2d.Description;
             if (ImagesWithCpuAccess.Count == 0
                 || ImagesWithCpuAccess[0].Description.Format != currentDesc.Format

@@ -40,7 +40,7 @@ namespace T3.Operators.Types.Id_9515d59d_0bd5_406b_96da_6a5f60215700
 
             try
             {
-                var samplerState = new SamplerState(ResourceManager.Instance().Device, samplerDesc); // todo: put into resource manager
+                var samplerState = new SamplerState(ResourceManager.Device, samplerDesc); // todo: put into resource manager
                 SamplerState.Value?.Dispose();
                 SamplerState.Value = samplerState;
             }

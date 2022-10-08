@@ -53,7 +53,7 @@ namespace T3.Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad
             }
             else
             {
-                resourceManager.UpdateVertexShaderFromFile(Source.Value, _vertexShaderResId, ref Shader.Value);
+                ResourceManager.UpdateVertexShaderFromFile(Source.Value, _vertexShaderResId, ref Shader.Value);
             }
 
             if (_vertexShaderResId != ResourceManager.NullResource)

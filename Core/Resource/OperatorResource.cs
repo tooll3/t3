@@ -71,7 +71,7 @@ namespace T3.Core
         
         public void RemoveOperatorEntry(uint resourceId)
         {
-            var resources = ResourceManager.Instance().Resources;
+            var resources = ResourceManager.ResourcesById;
             if (!resources.TryGetValue(resourceId, out var entry))
                 return;
             

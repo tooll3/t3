@@ -41,7 +41,7 @@ namespace T3.Operators.Types.Id_064ca51f_47ab_4cb7_95f2_e537b68e137e
 
             try
             {
-                BlendState.Value = new BlendState(ResourceManager.Instance().Device, blendDesc); // todo: put into resource manager
+                BlendState.Value = new BlendState(ResourceManager.Device, blendDesc); // todo: put into resource manager
             }
             catch (SharpDXException e)
             {

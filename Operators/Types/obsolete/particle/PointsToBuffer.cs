@@ -55,9 +55,9 @@ namespace T3.Operators.Types.Id_59b810f1_7849_40a7_ae10_7e8008685311
             var stride = 32;
 
             _bufferWithViews.Buffer = _buffer;
-            resourceManager.SetupStructuredBuffer(_bufferData, stride * pointArray.Length, stride, ref _buffer);
-            resourceManager.CreateStructuredBufferSrv(_buffer, ref _bufferWithViews.Srv);
-            resourceManager.CreateStructuredBufferUav(_buffer, UnorderedAccessViewBufferFlags.None, ref _bufferWithViews.Uav);
+            ResourceManager.SetupStructuredBuffer(_bufferData, stride * pointArray.Length, stride, ref _buffer);
+            ResourceManager.CreateStructuredBufferSrv(_buffer, ref _bufferWithViews.Srv);
+            ResourceManager.CreateStructuredBufferUav(_buffer, UnorderedAccessViewBufferFlags.None, ref _bufferWithViews.Uav);
             OutBuffer.Value = _bufferWithViews;
         }
 

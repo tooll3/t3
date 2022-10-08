@@ -78,9 +78,9 @@ namespace T3.Operators.Types.Id_73f152ac_12d9_4ae9_856a_9a74637fd6f6
             }
 
             int stride = 108;
-            resourceManager.SetupStructuredBuffer(faceBufferData, stride * numVertexEntries, stride, ref Buffer);
+            ResourceManager.SetupStructuredBuffer(faceBufferData, stride * numVertexEntries, stride, ref Buffer);
             Buffer.DebugName = nameof(PointCloudFromObj);
-            resourceManager.CreateStructuredBufferSrv(Buffer, ref PointCloudSrv.Value);            
+            ResourceManager.CreateStructuredBufferSrv(Buffer, ref PointCloudSrv.Value);            
         }
         
         

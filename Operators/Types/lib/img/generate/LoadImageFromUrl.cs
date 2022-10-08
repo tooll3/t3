@@ -117,7 +117,7 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
                                                        BitmapPaletteType.Custom);
 
                             _image?.Dispose();
-                            _image = ResourceManager.CreateTexture2DFromBitmap(ResourceManager.Instance().Device, formatConverter);
+                            _image = ResourceManager.CreateTexture2DFromBitmap(ResourceManager.Device, formatConverter);
                             _image.DebugName = _url;
                             bitmapFrameDecode.Dispose();
                             bitmapDecoder.Dispose();

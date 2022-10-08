@@ -151,7 +151,7 @@ namespace T3.Operators.Types.Id_04c1a6dc_3042_48a8_81d2_0a5a162016dc
                                                       VideoOutputFormat = (int)SharpDX.DXGI.Format.B8G8R8A8_UNorm
                                                   };
 
-            var device = ResourceManager.Instance().Device;
+            var device = ResourceManager.Device;
             if (device != null)
             {
                 // Add multi thread protection on device (MF is multi-threaded)
@@ -190,7 +190,7 @@ namespace T3.Operators.Types.Id_04c1a6dc_3042_48a8_81d2_0a5a162016dc
                 return;
 
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             _texture = new Texture2D(device,
                                      new Texture2DDescription
                                          {

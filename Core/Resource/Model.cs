@@ -527,13 +527,13 @@ namespace T3.Core
 
         public virtual void SaveAll()
         {
-            ResourceManager.Instance().DisableOperatorFileWatcher(); // don't update ops if file is written during save
+            ResourceFileWatcher.DisableOperatorFileWatcher(); // don't update ops if file is written during save
 
             RemoveAllSymbolFiles();
             SortAllSymbolSourceFiles();
             SaveSymbolDefinitionAndSourceFiles(SymbolRegistry.Entries.Values);
 
-            ResourceManager.Instance().EnableOperatorFileWatcher();
+            ResourceFileWatcher.EnableOperatorFileWatcher();
         }
 
         protected static void SaveSymbolDefinitionAndSourceFiles(IEnumerable<Symbol> valueCollection)
@@ -667,7 +667,7 @@ namespace T3.Core
                 File.Delete(symbol.DeprecatedSourcePath);
 
                 // Adjust path of file resource
-                ResourceManager.Instance().RenameOperatorResource(symbol.DeprecatedSourcePath, sourcePath);
+                ResourceManager.RenameOperatorResource(symbol.DeprecatedSourcePath, sourcePath);
 
                 symbol.DeprecatedSourcePath = string.Empty;
             }

@@ -39,7 +39,7 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
             }
 
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var csStage = deviceContext.ComputeShader;
 
@@ -60,7 +60,7 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
                     // for (int level = 2; level <= bitonicBlockSize; level <<= 1)
                 {
                     Int4 sortParams = new Int4(_level, _level, bitonicBlockSize, numBufferElements / bitonicBlockSize);
-                    resourceManager.SetupConstBuffer(sortParams, ref _parameterConstBuffer);
+                    ResourceManager.SetupConstBuffer(sortParams, ref _parameterConstBuffer);
                     deviceContext.Dispatch(numBufferElements / bitonicBlockSize, 1, 1);
                 }
                 else
@@ -77,7 +77,7 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
                     csStage.SetShaderResource(0, srv1);
                     csStage.SetUnorderedAccessView(0, uav2);
                     Int4 param = new Int4(_level / bitonicBlockSize, (_level & ~numBufferElements) / bitonicBlockSize, matWidth, matHeight);
-                    resourceManager.SetupConstBuffer(param, ref _parameterConstBuffer);
+                    ResourceManager.SetupConstBuffer(param, ref _parameterConstBuffer);
                     deviceContext.Dispatch(matWidth / 32, matHeight / 32, 1);
 
                     csStage.Set(sortShader);
@@ -89,7 +89,7 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
                     csStage.SetShaderResource(0, srv2);
                     csStage.SetUnorderedAccessView(0, uav1);
                     param = new Int4(bitonicBlockSize, _level, matHeight, matWidth);
-                    resourceManager.SetupConstBuffer(param, ref _parameterConstBuffer);
+                    ResourceManager.SetupConstBuffer(param, ref _parameterConstBuffer);
                     deviceContext.Dispatch(matHeight / 32, matWidth / 32, 1);
 
                     csStage.Set(sortShader);
@@ -108,7 +108,7 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
                 for (int level = 2; level <= bitonicBlockSize; level <<= 1)
                 {
                     Int4 sortParams = new Int4(level, level, bitonicBlockSize, numBufferElements / bitonicBlockSize);
-                    resourceManager.SetupConstBuffer(sortParams, ref _parameterConstBuffer);
+                    ResourceManager.SetupConstBuffer(sortParams, ref _parameterConstBuffer);
                     deviceContext.Dispatch(numBufferElements / bitonicBlockSize, 1, 1);
                 }
 
@@ -124,7 +124,7 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
                     csStage.SetShaderResource(0, srv1);
                     csStage.SetUnorderedAccessView(0, uav2);
                     Int4 param = new Int4(level / bitonicBlockSize, (level & ~numBufferElements) / bitonicBlockSize, matWidth, matHeight);
-                    resourceManager.SetupConstBuffer(param, ref _parameterConstBuffer);
+                    ResourceManager.SetupConstBuffer(param, ref _parameterConstBuffer);
                     deviceContext.Dispatch(matWidth / 32, matHeight / 32, 1);
 
                     csStage.Set(sortShader);
@@ -136,7 +136,7 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
                     csStage.SetShaderResource(0, srv2);
                     csStage.SetUnorderedAccessView(0, uav1);
                     param = new Int4(bitonicBlockSize, level, matHeight, matWidth);
-                    resourceManager.SetupConstBuffer(param, ref _parameterConstBuffer);
+                    ResourceManager.SetupConstBuffer(param, ref _parameterConstBuffer);
                     deviceContext.Dispatch(matHeight / 32, matWidth / 32, 1);
 
                     csStage.Set(sortShader);
@@ -177,7 +177,7 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
 
         private void InitConstBuffer()
         {
-            ResourceManager.Instance().SetupConstBuffer(Int4.Zero, ref _parameterConstBuffer);
+            ResourceManager.SetupConstBuffer(Int4.Zero, ref _parameterConstBuffer);
             _parameterConstBuffer.DebugName = "GpuSort-ParameterConstBuffer";
         }
 

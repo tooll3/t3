@@ -18,7 +18,7 @@ namespace T3.Operators.Types.Id_000e08d0_669f_48df_9083_7aa0a43bbc05
         {
             Output.UpdateAction = Update;
 
-            _d3dDevice = ResourceManager.Instance().Device;
+            _d3dDevice = ResourceManager.Device;
             _queryTimeStampDisjoint = new GpuQuery(_d3dDevice, new QueryDescription() { Type = QueryType.TimestampDisjoint });
             _queryTimeStampFrameBegin = new GpuQuery(_d3dDevice, new QueryDescription() { Type = QueryType.Timestamp });
             _queryTimeStampFrameEnd = new GpuQuery(_d3dDevice, new QueryDescription() { Type = QueryType.Timestamp });

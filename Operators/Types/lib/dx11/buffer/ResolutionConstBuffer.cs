@@ -20,7 +20,7 @@ namespace T3.Operators.Types.Id_38e88910_6063_41d1_840b_8aeeb0eeccc0
         private void Update(EvaluationContext context)
         {
             var bufferContent = new ResolutionBufferLayout(Resolution.GetValue(context));
-            ResourceManager.Instance().SetupConstBuffer(bufferContent, ref Buffer.Value);
+            ResourceManager.SetupConstBuffer(bufferContent, ref Buffer.Value);
             Buffer.Value.DebugName = nameof(ResolutionBufferLayout);
         }
 

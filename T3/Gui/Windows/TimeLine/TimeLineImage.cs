@@ -35,7 +35,7 @@ namespace T3.Gui.Windows.TimeLine
             var xMax = TimeLineCanvas.Current.TransformX(songDurationInBars + (float)soundTrack.StartTime);
             
             var resourceManager = ResourceManager.Instance();
-            if (resourceManager.Resources.TryGetValue(_srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
+            if (ResourceManager.ResourcesById.TryGetValue(_srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
             {
                 drawList.AddImage((IntPtr)srvResource.ShaderResourceView, 
                                   new Vector2(xMin, yMin), 

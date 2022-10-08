@@ -63,7 +63,8 @@ namespace T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985
             }
             else
             {
-                resourceManager.UpdatePixelShaderFromFile(Source.Value, _pixelShaderResId, ref Shader.Value);
+                // Shader was flagged as dirty by file update action 
+                ResourceManager.UpdatePixelShaderFromFile(Source.Value, _pixelShaderResId, ref Shader.Value);
             }
 
             if (_pixelShaderResId != ResourceManager.NullResource)
