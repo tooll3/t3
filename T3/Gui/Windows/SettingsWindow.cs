@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Threading.Channels;
+using System.Windows.Forms;
 using ImGuiNET;
 using T3.Gui.Commands;
 using T3.Gui.Graph;
 using T3.Gui.TypeColors;
 using T3.Gui.UiHelpers;
+using System.Numerics;
+using t3.Gui;
 
 namespace T3.Gui.Windows
 {
-    public class SettingsWindow : Window
+    public partial class SettingsWindow : Window
     {
         public SettingsWindow()
         {
@@ -22,57 +26,32 @@ namespace T3.Gui.Windows
         protected override void DrawContent()
         {
             var changed = false;
+            ImGui.NewLine();
             if (ImGui.TreeNode("User Interface"))
             {
-                if (ImGui.DragFloat("UI Scale", ref UserSettings.Config.UiScaleFactor, 0.01f, 0.5f, 3f))
-                {
-                    changed = true;
-                }
-                changed |= ImGui.Checkbox("Warn before Lib modifications", ref UserSettings.Config.WarnBeforeLibEdit);
-                changed |= ImGui.Checkbox("Use arc connections", ref UserSettings.Config.UseArcConnections);
-                changed |= ImGui.Checkbox("Use Jog Dial Control", ref UserSettings.Config.UseJogDialControl);
-                changed |= ImGui.DragFloat("Scroll smoothing", ref UserSettings.Config.ScrollSmoothing);
-                changed |= ImGui.Checkbox("Show Graph thumbnails", ref UserSettings.Config.ShowThumbnails);
-                changed |= ImGui.Checkbox("Drag snapped nodes", ref UserSettings.Config.SmartGroupDragging);
-                ImGui.Separator();
-                changed |= ImGui.DragFloat("Snap strength", ref UserSettings.Config.SnapStrength);
-                changed |= ImGui.DragFloat("Click threshold", ref UserSettings.Config.ClickThreshold);
-                changed |= ImGui.DragFloat("Keyboard scroll speed", ref UserSettings.Config.KeyboardScrollAcceleration);
-                 
-                changed |= ImGui.DragFloat("Timeline Raster Density", ref UserSettings.Config.TimeRasterDensity, 0.01f);
-                 
-                changed |= ImGui.Checkbox("Swap Main & 2nd windows when fullscreen", ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen);
-                
-                 
+                changed |= SettingsUi.DrawSettingsTable("##uisettingstable", userInterfaceSettings);
                 ImGui.TreePop();
             }
             
             if (ImGui.TreeNode("Space Mouse"))
             {
-                changed |= ImGui.DragFloat("Smoothing", ref UserSettings.Config.SpaceMouseDamping, 0.01f, 0.01f, 1f);
-                changed |= ImGui.DragFloat("Move Speed", ref UserSettings.Config.SpaceMouseMoveSpeedFactor, 0.01f, 0, 10f);
-                changed |= ImGui.DragFloat("Rotation Speed", ref UserSettings.Config.SpaceMouseRotationSpeedFactor, 0.01f, 0, 10f);
+                changed |= SettingsUi.DrawSettingsTable("##settingspacemousetable", spaceMouseSettings);
                 ImGui.TreePop();
             }
 
-            
             if (ImGui.TreeNode("Additional settings"))
             {
-                //ImGui.Checkbox("Show Timeline", ref UserSettings.Config.ShowTimeline);
-                //ImGui.Checkbox("Show Title", ref UserSettings.Config.ShowTitleAndDescription);
-                changed |= ImGui.DragFloat("Gizmo size", ref UserSettings.Config.GizmoSize);
-                changed |= ImGui.DragFloat("Tooltip delay", ref UserSettings.Config.TooltipDelay);
+                changed |= SettingsUi.DrawSettingsTable("##additionalsettingstable", additionalSettings);
                 ImGui.TreePop();
             }
 
+#if DEBUG
             if (ImGui.TreeNode("Debug Options"))
             {
-                ImGui.Checkbox("VSync", ref UseVSync);
-                ImGui.Checkbox("Show Window Regions", ref WindowRegionsVisible);
-                ImGui.Checkbox("Show Item Regions", ref ItemRegionsVisible);
-
+                SettingsUi.DrawSettings(debugSettings);
                 if (ImGui.TreeNode("Undo Queue"))
                 {
+                    ImGui.Indent();
                     ImGui.TextUnformatted("Undo");
                     ImGui.Indent();
                     foreach (var c in UndoRedoStack.UndoStack)
@@ -90,9 +69,10 @@ namespace T3.Gui.Windows
                     }
 
                     ImGui.Unindent();
+                    ImGui.Unindent();
                     ImGui.TreePop();
                 }
-                
+
                 if (ImGui.TreeNode("Modified Symbols"))
                 {
                     foreach (var symbolUi in UiModel.GetModifiedSymbolUis())
@@ -108,22 +88,16 @@ namespace T3.Gui.Windows
                 
                 ImGui.TreePop();
             }
-
+            
+#endif
+#if DEBUG
             if (ImGui.TreeNode("Look (not saved)"))
             {
                 ColorVariations.DrawSettingsUi();
 
                 if (ImGui.TreeNode("T3 Ui Style"))
                 {
-                    ImGui.DragFloat("Height Connection Zone", ref GraphNode.UsableSlotThickness);
-                    ImGui.DragFloat2("Label position", ref GraphNode.LabelPos);
-                    ImGui.DragFloat("Slot Gaps", ref GraphNode.SlotGaps, 0.1f, 0, 10f);
-                    ImGui.DragFloat("Input Slot Margin Y", ref GraphNode.InputSlotMargin, 0.1f, 0, 10f);
-                    ImGui.DragFloat("Input Slot Thickness", ref GraphNode.InputSlotThickness, 0.1f, 0, 10f);
-                    ImGui.DragFloat("Output Slot Margin", ref GraphNode.OutputSlotMargin, 0.1f, 0, 10f);
-
-                    ImGui.ColorEdit4("ValueLabelColor", ref T3Style.Colors.ValueLabelColor.Rgba);
-                    ImGui.ColorEdit4("ValueLabelColorHover", ref T3Style.Colors.ValueLabelColorHover.Rgba);
+                    SettingsUi.DrawSettingsTable("##t3uistylesettings", t3UiStyleSettings);
                 }
                 
                 if (ImGui.TreeNode("T3 Graph colors"))
@@ -133,12 +107,15 @@ namespace T3.Gui.Windows
                 }                
                 ImGui.TreePop();
             }
-            
-            if(changed)
+#endif
+
+            if (changed)
                 UserSettings.Save();
-            
+
+#if DEBUG
             ImGui.Separator();
             T3Metrics.Draw();
+#endif
         }
 
         public override List<Window> GetInstances()
