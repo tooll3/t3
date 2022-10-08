@@ -2,6 +2,7 @@ using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using T3.Gui.Windows;
@@ -27,11 +28,26 @@ namespace t3.Gui
                     ImGui.TableNextRow();
                     ImGui.TableNextColumn();
                     ImGui.Indent();
-                    ImGui.Text(setting.uniqueLabel);
-                    ImGui.Unindent();
-                    ImGui.TableNextColumn();
-                    bool valueChanged = DrawSetting(setting);
-                    changed |= valueChanged;
+
+                    if (setting.DrawOnLeft)
+                    {
+                        var valueChanged = setting.DrawGUIControl(true);
+                        changed |= valueChanged;
+                        ImGui.SameLine();
+                        ImGui.Dummy(_leftCheckboxSpacing);
+                        ImGui.SameLine();
+                        ImGui.Text(setting.CleanLabel);
+                        ImGui.Unindent();
+                    }
+                    else
+                    {
+                        ImGui.Text(setting.CleanLabel);
+                        ImGui.Unindent();
+                        ImGui.TableNextColumn();
+                        var valueChanged = setting.DrawGUIControl(true);
+                        changed |= valueChanged;
+                    }
+
                 }
             }
 
@@ -54,16 +70,15 @@ namespace t3.Gui
 
             foreach (var setting in settings)
             {
-                changed |= DrawSetting(setting);
+                ImGui.Text(setting.CleanLabel);
+                ImGui.SameLine();
+                changed |= setting.DrawGUIControl(true);
             }
 
             ImGui.NewLine();
             return changed;
         }
 
-        public static bool DrawSetting(UIControlledSetting setting)
-        {
-            return setting.DrawGUIControl();
-        }
+        private static readonly Vector2 _leftCheckboxSpacing = new Vector2(0f, 20f);
     }
 }

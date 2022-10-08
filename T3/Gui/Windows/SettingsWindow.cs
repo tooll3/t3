@@ -29,19 +29,19 @@ namespace T3.Gui.Windows
             ImGui.NewLine();
             if (ImGui.TreeNode("User Interface"))
             {
-                changed |= SettingsUi.DrawSettings(userInterfaceSettings);
+                changed |= SettingsUi.DrawSettingsTable("##uisettingstable", userInterfaceSettings);
                 ImGui.TreePop();
             }
             
             if (ImGui.TreeNode("Space Mouse"))
             {
-                changed |= SettingsUi.DrawSettings(spaceMouseSettings);
+                changed |= SettingsUi.DrawSettingsTable("##settingspacemousetable", spaceMouseSettings);
                 ImGui.TreePop();
             }
 
             if (ImGui.TreeNode("Additional settings"))
             {
-                changed |= SettingsUi.DrawSettings(additionalSettings);
+                changed |= SettingsUi.DrawSettingsTable("##additionalsettingstable", additionalSettings);
                 ImGui.TreePop();
             }
 
@@ -97,7 +97,7 @@ namespace T3.Gui.Windows
 
                 if (ImGui.TreeNode("T3 Ui Style"))
                 {
-                    SettingsUi.DrawSettings(t3UiStyleSettings);
+                    SettingsUi.DrawSettingsTable("##t3uistylesettings", t3UiStyleSettings);
                 }
                 
                 if (ImGui.TreeNode("T3 Graph colors"))

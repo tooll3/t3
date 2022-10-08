@@ -487,10 +487,19 @@ namespace T3.Gui
 
             ImGui.SameLine();
             ImGui.SetCursorPosX(leftPadding + 20);
-            var size = new Vector2(150, ImGui.GetFrameHeight());
+            var modified = DrawSingleValueEdit(cleanedLabel, ref value, min, max, clamp, scale);
+
+            return modified;
+        }
+
+        public static bool FloatValueEditInPlace(string label, ref float value, float min = float.NegativeInfinity, float max = float.PositiveInfinity, float scale = 0.01f, bool clamp = false)
+        {
+            string cleanedLabel = label.Split(_idSpecifier)[0];
+            ImGui.TextUnformatted(cleanedLabel);
+            ImGui.SameLine();
             ImGui.PushID(label);
-            var result = SingleValueEdit.Draw(ref value, size, min, max, clamp, scale);
-            var modified = (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
+            var modified = DrawSingleValueEdit(cleanedLabel, ref value, min, max, clamp, scale);
+
             ImGui.PopID();
             return modified;
         }
@@ -510,12 +519,27 @@ namespace T3.Gui
 
             ImGui.SameLine();
             ImGui.SetCursorPosX(leftPadding + 20);
-            var size = new Vector2(150, ImGui.GetFrameHeight());
-            ImGui.PushID(label);
-            var result = SingleValueEdit.Draw(ref value, size, min, max, true, scale);
-            var modified = (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
-            ImGui.PopID();
+
+            var modified = DrawSingleValueEdit(cleanedLabel, ref value, min, max, true, scale);
             return modified;
+        }
+
+        public static bool DrawSingleValueEdit(string label, ref int value, int min = int.MinValue, int max = int.MaxValue, bool clamp = false, float scale = 1f)
+        {
+            ImGui.PushID(label);
+            var size = new Vector2(150, ImGui.GetFrameHeight());
+            var result = SingleValueEdit.Draw(ref value, size, min, max, clamp, scale);
+            ImGui.PopID();
+            return (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
+        }
+
+        public static bool DrawSingleValueEdit(string label, ref float value, float min = float.MinValue, float max = float.MaxValue, bool clamp = false, float scale = 1f)
+        {
+            ImGui.PushID(label);
+            var size = new Vector2(150, ImGui.GetFrameHeight());
+            var result = SingleValueEdit.Draw(ref value, size, min, max, clamp, scale);
+            ImGui.PopID();
+            return (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
         }
 
         public static bool StringValueEdit(string label, ref string value)
@@ -578,7 +602,6 @@ namespace T3.Gui
             var modified = ImGui.Combo($"##dropDown{enumType}{label}", ref index, valueNames, valueNames.Length, valueNames.Length);
             return modified;
         }
-
 
         private const string _idSpecifier = "##";
     }

@@ -1,7 +1,6 @@
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using ImGuiNET;
+using System;
+using System.Numerics;
 using T3.Gui.Graph;
 using T3.Gui.UiHelpers;
 
@@ -16,70 +15,77 @@ namespace T3.Gui.Windows
                 label: "Warn before Lib modifications",
                 tooltip: "This warning pops up when you attempt to enter an Operator that ships with the application.\n" +
                          "If unsure, this is best left checked.",
-                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.WarnBeforeLibEdit)
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.WarnBeforeLibEdit),
+                drawOnLeft: true
             ),
 
             new UIControlledSetting
             (
                 label: "Use arc connections",
                 tooltip: "Affects the shape of the connections between your Operators",
-                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.UseArcConnections)
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.UseArcConnections),
+                drawOnLeft: true
             ),
 
             new UIControlledSetting
             (
                 label: "Use Jog Dial Control",
-                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.UseJogDialControl)
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.UseJogDialControl),
+                drawOnLeft: true
             ),
 
             new UIControlledSetting
             (
                 label: "Show Graph thumbnails",
-                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.ShowThumbnails)
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.ShowThumbnails),
+                drawOnLeft: true
             ),
 
             new UIControlledSetting
             (
                 label: "Drag snapped nodes",
-                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.SmartGroupDragging)
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.SmartGroupDragging),
+                drawOnLeft: true
             ),
 
             new UIControlledSetting
             (
                 label: "Fullscreen Window Swap",
                 tooltip: "Swap main and second windows when fullscreen",
-                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen)
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen),
+                drawOnLeft: true
             ),
 
             new UIControlledSetting
             (
                 label: "UI Scale",
                 tooltip: "The global scale of all rendered UI in the application",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.UiScaleFactor, 0.01f, 3f)
+                guiFunc: (string guiLabel) => CustomComponents.DrawSingleValueEdit(guiLabel, ref UserSettings.Config.UiScaleFactor, 0.1f, 5f, true, 0.01f)
             ),
 
             new UIControlledSetting
             (
                 label: "Scroll smoothing",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.ScrollSmoothing)
+                guiFunc: (string guiLabel) => CustomComponents.DrawSingleValueEdit(guiLabel, ref UserSettings.Config.ScrollSmoothing, 0f, 0.2f, true, 0.01f)
             ),
 
             new UIControlledSetting
             (
                 label: "Snap strength",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.SnapStrength)
+                guiFunc: (string guiLabel) => CustomComponents.DrawSingleValueEdit(guiLabel, ref UserSettings.Config.SnapStrength)
             ),
 
             new UIControlledSetting
             (
                 label: "Click threshold",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.ClickThreshold)
+                guiFunc: (string guiLabel) => CustomComponents.DrawSingleValueEdit(guiLabel, ref UserSettings.Config.ClickThreshold)
+
             ),
 
             new UIControlledSetting
             (
                 label: "Timeline Raster Density",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.TimeRasterDensity)
+                guiFunc: (string guiLabel) => CustomComponents.DrawSingleValueEdit(guiLabel, ref UserSettings.Config.TimeRasterDensity)
             ),
         };
 
@@ -88,19 +94,19 @@ namespace T3.Gui.Windows
             new UIControlledSetting
             (
                 label: "Smoothing",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.SpaceMouseDamping, 0.01f, 1f)
+                guiFunc: (string guiLabel) => CustomComponents.DrawSingleValueEdit(guiLabel, ref UserSettings.Config.SpaceMouseDamping, 0.01f, 1f)
             ),
 
             new UIControlledSetting
             (
                 label: "Move Speed",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.SpaceMouseMoveSpeedFactor, 0, 10f)
+                guiFunc: (string guiLabel) => CustomComponents.DrawSingleValueEdit(guiLabel, ref UserSettings.Config.SpaceMouseMoveSpeedFactor, 0, 10f)
             ),
 
             new UIControlledSetting
             (
                 label: "Rotation Speed",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.SpaceMouseRotationSpeedFactor, 0, 10f)
+                guiFunc: (string guiLabel) => CustomComponents.DrawSingleValueEdit(guiLabel, ref UserSettings.Config.SpaceMouseRotationSpeedFactor, 0, 10f)
             )
         };
 
@@ -109,13 +115,13 @@ namespace T3.Gui.Windows
             new UIControlledSetting
             (
                 label: "Gizmo size",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.GizmoSize)
+                guiFunc: (string guiLabel) => CustomComponents.DrawSingleValueEdit(guiLabel, ref UserSettings.Config.GizmoSize)
             ),
 
             new UIControlledSetting
             (
                 label: "Tooltip delay",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.TooltipDelay)
+                guiFunc: (string guiLabel) => CustomComponents.DrawSingleValueEdit(guiLabel, ref UserSettings.Config.TooltipDelay)
             ),
 
 
@@ -139,19 +145,22 @@ namespace T3.Gui.Windows
             new UIControlledSetting
             (
                 label: "VSync",
-                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UseVSync)
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UseVSync),
+                drawOnLeft: true
             ),
 
             new UIControlledSetting
             (
                 label: "Show Window Regions",
-                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref WindowRegionsVisible)
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref WindowRegionsVisible),
+                drawOnLeft: true
             ),
 
             new UIControlledSetting
             (
                 label: "Show Item Regions",
-                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref ItemRegionsVisible)
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref ItemRegionsVisible),
+                drawOnLeft: true
             ),
         };
 
@@ -166,31 +175,31 @@ namespace T3.Gui.Windows
             new UIControlledSetting
             (
                 label: "Height Connection Zone",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref GraphNode.UsableSlotThickness)
+                guiFunc: (string guiLabel) => CustomComponents.DrawSingleValueEdit(guiLabel, ref GraphNode.UsableSlotThickness)
             ),
 
             new UIControlledSetting
             (
                 label: "Slot Gaps",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref GraphNode.SlotGaps, 0, 10f)
+                guiFunc: (string guiLabel) => CustomComponents.DrawSingleValueEdit(guiLabel, ref GraphNode.SlotGaps, 0, 10f)
             ),
 
             new UIControlledSetting
             (
                 label: "Input Slot Margin Y",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref GraphNode.InputSlotMargin, 0, 10f)
+                guiFunc: (string guiLabel) => CustomComponents.DrawSingleValueEdit(guiLabel, ref GraphNode.InputSlotMargin, 0, 10f)
             ),
 
             new UIControlledSetting
             (
                 label: "Input Slot Thickness",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref GraphNode.InputSlotThickness, 0, 10f)
+                guiFunc: (string guiLabel) => CustomComponents.DrawSingleValueEdit(guiLabel, ref GraphNode.InputSlotThickness, 0, 10f)
             ),
 
             new UIControlledSetting
             (
                 label: "Output Slot Margin",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref GraphNode.OutputSlotMargin, 0, 10f)
+                guiFunc: (string guiLabel) => CustomComponents.DrawSingleValueEdit(guiLabel, ref GraphNode.OutputSlotMargin, 0, 10f)
             ),
 
             new UIControlledSetting
@@ -205,5 +214,6 @@ namespace T3.Gui.Windows
                 guiFunc: (string guiLabel) => ImGui.ColorEdit4(guiLabel, ref T3Style.Colors.ValueLabelColorHover.Rgba)
             ),
         };
+
     }
 }

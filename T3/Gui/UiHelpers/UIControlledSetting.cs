@@ -9,23 +9,24 @@ namespace T3.Gui.Windows
         /// <summary>
         /// The generated unique label
         /// </summary>
-        public string uniqueLabel { get; private set; }
+        private string _uniqueLabel;
+        private string _hiddenUniqueLabel;
 
         /// <summary>
         /// The label provided in the constructor
-        /// Unused by this class and here for convenience, but often best left ignored
         /// </summary>
-        public string cleanLabel { get; private set; }
+        public string CleanLabel { get; private set; }
+        public bool DrawOnLeft { get; private set; }
 
-        private string tooltip;
-        private string additionalNotes;
-        private Func<bool> guiFunc;
-        private Action OnValueChanged;
+        private string _tooltip;
+        private string _additionalNotes;
+        private Func<string, bool> _guiFunc;
+        private Action _OnValueChanged;
 
         // Cheaper than GUIDs
         // In case we want to have the same variable be changeable with different UI controls
         // or if multiple settings have the same label
-        static ushort countForUniqueID = ushort.MaxValue;
+        static ushort _countForUniqueID = ushort.MaxValue;
 
         /// <summary>
         /// For the sake of simple use of the optional parameters and populating/maintaining many settings, the recommended way to call this constructor is:
@@ -43,17 +44,19 @@ namespace T3.Gui.Windows
         /// <param name="guiFunc">The <see cref="ImGuiNET"/> - based function that draws the setting control and
         /// returns true if the control was changed. The input to this function see is a unique ID based on the label provided</param>
         /// <param name="tooltip">Tooltip displayed when hovering over the control</param>
-        /// <param name="additionalNotes">Additional notes displayed alongside the tooltip</param>
+        /// <param name="additionalNotes">Additional notes displayed alongside the tooltip [Not currently in use, but will be once T3 tooltips are integrated]</param>
         /// <param name="OnValueChanged">An action performed when the value is changed</param>
-        public UIControlledSetting(string label, Func<string, bool> guiFunc, string tooltip = null, string additionalNotes = null, Action OnValueChanged = null)
+        public UIControlledSetting(string label, Func<string, bool> guiFunc, string tooltip = null, string additionalNotes = null, bool drawOnLeft = false, Action OnValueChanged = null)
         {
-            cleanLabel = label;
-            uniqueLabel = $"{label}##{countForUniqueID--}";
+            CleanLabel = label;
+            _hiddenUniqueLabel = $"##{label}{_countForUniqueID--}";
+            _uniqueLabel = $"{label}##{_countForUniqueID--}";
 
-            this.guiFunc = () => guiFunc(uniqueLabel);
-            this.tooltip = tooltip;
-            this.additionalNotes = additionalNotes;
-            this.OnValueChanged = OnValueChanged;
+            _guiFunc = guiFunc;
+            _tooltip = tooltip;
+            _additionalNotes = additionalNotes;
+            _OnValueChanged = OnValueChanged;
+            DrawOnLeft = drawOnLeft;
         }
 
         /// <summary>
@@ -61,24 +64,29 @@ namespace T3.Gui.Windows
         /// </summary>
         /// <returns>True if changed, false if unchanged.
         /// If an Action was provided in constructor, it will be executed when value is changed. </returns>
-        public bool DrawGUIControl()
+        public bool DrawGUIControl(bool hideLabel)
         {
-            if (!string.IsNullOrEmpty(tooltip))
+            if (!string.IsNullOrEmpty(_tooltip))
             {
                 if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
                 {
-                    ImGui.SetTooltip(tooltip);
+                    ImGui.SetTooltip(_tooltip);
                 }
             }
 
-            var changed = guiFunc.Invoke();
+            var changed = DrawCommand(hideLabel);
 
             if(changed)
             {
-                OnValueChanged?.Invoke();
+                _OnValueChanged?.Invoke();
             }
 
             return changed;
+        }
+
+        bool DrawCommand(bool hideLabel)
+        {
+            return _guiFunc.Invoke(hideLabel ? _hiddenUniqueLabel : _uniqueLabel);
         }
     }
 }
