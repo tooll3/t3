@@ -21,7 +21,7 @@ namespace T3.Operators.Types.Id_75306997_4329_44e9_a17a_050dae532182
         private void Update(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var psStage = deviceContext.PixelShader;
 
@@ -47,7 +47,7 @@ namespace T3.Operators.Types.Id_75306997_4329_44e9_a17a_050dae532182
 
         private void Restore(EvaluationContext context)
         {
-            var deviceContext = ResourceManager.Instance().Device.ImmediateContext;
+            var deviceContext = ResourceManager.Device.ImmediateContext;
             var psStage = deviceContext.PixelShader;
 
             psStage.Set(_prevPixelShader);

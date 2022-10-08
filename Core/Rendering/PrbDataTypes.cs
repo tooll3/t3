@@ -76,7 +76,7 @@ namespace T3.Core.Rendering
             ResourceManager.Instance().SetupConstBuffer(content, ref _defaultParameterBuffer);
 
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
 
             WhitePixelTexture = CreateFallBackTexture(new Vector4(1, 1, 1, 1));
             _baseColorMapSrv = new ShaderResourceView(device, WhitePixelTexture);
@@ -97,7 +97,7 @@ namespace T3.Core.Rendering
         private static Texture2D CreateFallBackTexture(Vector4 c)
         {
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
 
             var colorDesc = new Texture2DDescription()
                                 {
@@ -126,7 +126,7 @@ namespace T3.Core.Rendering
             {
                 var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, () => { });
                 
-                if (resourceManager.Resources.TryGetValue(srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
+                if (resourceManager.ResourcesById.TryGetValue(srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
                     return srvResource.ShaderResourceView;                
 
                 Log.Warning($"Failed loading texture {imagePath}");
@@ -144,7 +144,7 @@ namespace T3.Core.Rendering
             try
             {
                 var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, () => { });
-                if (resourceManager.Resources.TryGetValue(textureResId, out var resource1) && resource1 is Texture2dResource textureResource)
+                if (resourceManager.ResourcesById.TryGetValue(textureResId, out var resource1) && resource1 is Texture2dResource textureResource)
                      return textureResource.Texture;
                 
                 Log.Warning($"Failed loading texture {imagePath}");

@@ -148,9 +148,9 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
                                     Log.Warning("No faces found");
                                     return;
                                 }
-                                resourceManager.SetupStructuredBuffer(newData.IndexBufferData, stride * faceCount, stride, ref newData.IndexBuffer);
-                                resourceManager.CreateStructuredBufferSrv(newData.IndexBuffer, ref newData.IndexBufferWithViews.Srv);
-                                resourceManager.CreateStructuredBufferUav(newData.IndexBuffer, UnorderedAccessViewBufferFlags.None,
+                                ResourceManager.SetupStructuredBuffer(newData.IndexBufferData, stride * faceCount, stride, ref newData.IndexBuffer);
+                                ResourceManager.CreateStructuredBufferSrv(newData.IndexBuffer, ref newData.IndexBufferWithViews.Srv);
+                                ResourceManager.CreateStructuredBufferUav(newData.IndexBuffer, UnorderedAccessViewBufferFlags.None,
                                                                           ref newData.IndexBufferWithViews.Uav);
                             }
 
@@ -163,10 +163,10 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
                             }
                             Log.Debug($"  loaded {path} Child {childIndex}:  {verticesCount} vertices  {faceCount} faces");
                             newData.VertexBufferWithViews.Buffer = newData.VertexBuffer;
-                            resourceManager.SetupStructuredBuffer(newData.VertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride,
+                            ResourceManager.SetupStructuredBuffer(newData.VertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride,
                                                                   ref newData.VertexBuffer);
-                            resourceManager.CreateStructuredBufferSrv(newData.VertexBuffer, ref newData.VertexBufferWithViews.Srv);
-                            resourceManager.CreateStructuredBufferUav(newData.VertexBuffer, UnorderedAccessViewBufferFlags.None,
+                            ResourceManager.CreateStructuredBufferSrv(newData.VertexBuffer, ref newData.VertexBufferWithViews.Srv);
+                            ResourceManager.CreateStructuredBufferUav(newData.VertexBuffer, UnorderedAccessViewBufferFlags.None,
                                                                       ref newData.VertexBufferWithViews.Uav);
 
                             _description = System.IO.Path.GetFileName(path);

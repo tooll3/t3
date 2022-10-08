@@ -39,7 +39,7 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
             }
 
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var csStage = deviceContext.ComputeShader;
 

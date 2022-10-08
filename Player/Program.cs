@@ -334,9 +334,9 @@ namespace T3
                                          if (tex != null)
                                          {
                                              context.Rasterizer.State = rasterizerState;
-                                             if (resourceManager.Resources[FullScreenVertexShaderId] is VertexShaderResource vsr)
+                                             if (resourceManager.ResourcesById[FullScreenVertexShaderId] is VertexShaderResource vsr)
                                                  context.VertexShader.Set(vsr.VertexShader);
-                                             if (resourceManager.Resources[FullScreenPixelShaderId] is PixelShaderResource psr)
+                                             if (resourceManager.ResourcesById[FullScreenPixelShaderId] is PixelShaderResource psr)
                                                  context.PixelShader.Set(psr.PixelShader);
                                              var srv = new ShaderResourceView(device, tex);
                                              context.PixelShader.SetShaderResource(0, srv);

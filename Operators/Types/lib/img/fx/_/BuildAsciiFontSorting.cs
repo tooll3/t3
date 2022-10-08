@@ -71,7 +71,7 @@ namespace T3.Operators.Types.Id_b536f791_ae9a_45a7_a153_e2f36a65cfb3
                 var dataRectangles = new DataRectangle[] { new DataRectangle(dataStream.DataPointer, listSizeInBytes) };
                 Utilities.Dispose(ref MappingTexture.Value);
 
-                MappingTexture.Value = new Texture2D(ResourceManager.Instance().Device, texDesc, dataRectangles);
+                MappingTexture.Value = new Texture2D(ResourceManager.Device, texDesc, dataRectangles);
             }
         }
 

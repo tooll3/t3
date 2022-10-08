@@ -39,7 +39,7 @@ namespace T3.Operators.Types.Id_724da755_2d0c_42ab_8335_8c88ec5fb078
             Params.DirtyFlag.Clear();
             
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
 
             var size = sizeof(float)*array.Length;
             using (var data = new DataStream(size, true, true))

@@ -38,7 +38,7 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
 
             // Textures
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
 
             Utilities.Dispose(ref _baseColorMapSrv);
             var tex = BaseColorMap.GetValue(context) ?? PbrContextSettings.WhitePixelTexture;

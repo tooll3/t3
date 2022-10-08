@@ -11,13 +11,12 @@ using T3.Core.Operator.Slots;
 namespace T3.Operators.Types.Id_4e5bc624_9cda_46a8_9681_7fd412ea3893
 {
     public class ComputeShaderFromSource : Instance<ComputeShaderFromSource>
-                                         , IDescriptiveGraphNode
     {
         [Output(Guid = "190e262f-6554-4b34-b5b6-6617a98ab123")]
-        public readonly Slot<SharpDX.Direct3D11.ComputeShader> ComputerShader = new Slot<SharpDX.Direct3D11.ComputeShader>();
+        public readonly Slot<SharpDX.Direct3D11.ComputeShader> ComputerShader = new();
 
         [Output(Guid = "a3e0a72f-68d0-4278-8b9b-f4cf33603305")]
-        public readonly Slot<SharpDX.Int3> ThreadCount = new Slot<SharpDX.Int3>();
+        public readonly Slot<SharpDX.Int3> ThreadCount = new();
 
         private uint _computeShaderResId;
 
@@ -47,40 +46,23 @@ namespace T3.Operators.Types.Id_4e5bc624_9cda_46a8_9681_7fd412ea3893
                     debugName = new FileInfo(shaderSource).Name;
                 }
 
-                var success = resourceManager.CreateComputeShaderFromString(shaderSource: shaderSource,
+                var success = resourceManager.CreateComputeShaderFromSource(shaderSource: shaderSource,
                                                                             name: debugName,
                                                                             entryPoint: entryPoint,
                                                                             ref _computeShaderResId);
                 if (!success)
                 {
-                    //Log.Warning($"Failed to create compute shader resource for {shaderSource}");
+                    // We don't have to log a failure here, because the ResourceManager already did that.
                 }
-
-
-                // try
-                // {
-                //     _description =  "ComputeShader\n" + Path.GetFileName(sourcePath);
-                // }
-                // catch
-                // {
-                //     Log.Warning($"Unable to get filename from {sourcePath}", SymbolChildId);
-                // }
             }
-            // else
-            // {
-            //     resourceManager.UpdateComputeShaderFromFile(ShaderSource.Value, _computeShaderResId, ref ComputerShader.Value);
-            // }
 
             if (_computeShaderResId == ResourceManager.NullResource)
             {
-                //Log.Warning("shader resources is null");    
                 return;
             }
             
-            //Log.Debug($" resourceId: {_computeShaderResId}");
-
-            //Log.Debug("Applying compute shader");
             ComputerShader.Value = resourceManager.GetComputeShader(_computeShaderResId);
+            
             var shaderReflection = new ShaderReflection(resourceManager.GetComputeShaderBytecode(_computeShaderResId));
             shaderReflection.GetThreadGroupSize(out int x, out int y, out int z);
             ThreadCount.Value = new Int3(x, y, z);

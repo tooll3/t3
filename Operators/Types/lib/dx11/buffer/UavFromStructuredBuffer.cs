@@ -28,7 +28,7 @@ namespace T3.Operators.Types.Id_0b5b14bf_c850_493a_afb1_72643926e214
                 return;
             
             var bufferFlags = BufferFlags.GetValue(context);
-            resourceManager.CreateStructuredBufferUav(buffer, bufferFlags, ref UnorderedAccessView.Value);
+            ResourceManager.CreateStructuredBufferUav(buffer, bufferFlags, ref UnorderedAccessView.Value);
             if (UnorderedAccessView.Value == null)
                 return;
 

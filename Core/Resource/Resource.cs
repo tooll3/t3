@@ -18,7 +18,7 @@ namespace T3.Core
         public readonly string Name;
         public bool UpToDate { get; set; }
     }
-    
+
     public abstract class ShaderResource : Resource
     {
         protected ShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob)
@@ -30,27 +30,10 @@ namespace T3.Core
 
         public string EntryPoint { get; }
         protected ShaderBytecode _blob;
-        public ShaderBytecode Blob { get => _blob; internal set { _blob = value; } }
+        public ShaderBytecode Blob { get => _blob; private init => _blob = value; }
     }
 
-    internal class FileResource
-    {
-        public FileResource(string path, IEnumerable<uint> ids)
-        {
-            Path = path;
-            ResourceIds.AddRange(ids);
-            LastWriteReferenceTime = File.GetLastWriteTime(path);
-        }
-
-        public string Path;
-        public readonly List<uint> ResourceIds = new List<uint>();
-        public DateTime LastWriteReferenceTime;
-        public Action FileChangeAction;
-    }
-
-
-    
-        public class VertexShaderResource : ShaderResource
+    public class VertexShaderResource : ShaderResource
     {
         public VertexShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob, VertexShader vertexShader)
             : base(id, name, entryPoint, blob)
@@ -63,7 +46,7 @@ namespace T3.Core
             if (UpToDate)
                 return;
 
-            ResourceManager.Instance().CompileShaderFromFile(path, EntryPoint, Name, "vs_5_0", ref VertexShader, ref _blob);
+            ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "vs_5_0", ref VertexShader, ref _blob);
             UpToDate = true;
         }
 
@@ -85,7 +68,7 @@ namespace T3.Core
             if (UpToDate)
                 return;
 
-            ResourceManager.Instance().CompileShaderFromFile(path, EntryPoint, Name, "ps_5_0", ref PixelShader, ref _blob);
+            ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "ps_5_0", ref PixelShader, ref _blob);
             UpToDate = true;
         }
     }
@@ -105,18 +88,15 @@ namespace T3.Core
             if (UpToDate)
                 return;
 
-            ResourceManager.Instance().CompileShaderFromFile(path, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref _blob);
+            ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref _blob);
             UpToDate = true;
         }
 
-        public void UpdateFromSourceString(string source)
-        {
-            if (UpToDate)
-                return;
-
-            ResourceManager.Instance().CompileShaderFromSource(source, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref _blob);
-            UpToDate = true;
-        }
+        // public void UpdateFromSourceString(string source)
+        // {
+        //     ResourceManager.Instance().CompileShaderFromSource(source, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref _blob);
+        //     UpToDate = true;
+        // }
     }
 
     public class GeometryShaderResource : ShaderResource
@@ -134,12 +114,11 @@ namespace T3.Core
             if (UpToDate)
                 return;
 
-            ResourceManager.Instance().CompileShaderFromFile(path, EntryPoint, Name, "gs_5_0", ref GeometryShader, ref _blob);
+            ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "gs_5_0", ref GeometryShader, ref _blob);
             UpToDate = true;
         }
     }
-    
-    
+
     public class Texture2dResource : Resource
     {
         public Texture2dResource(uint id, string name, Texture2D texture)
@@ -150,7 +129,7 @@ namespace T3.Core
 
         public Texture2D Texture;
     }
-    
+
     public class Texture3dResource : Resource
     {
         public Texture3dResource(uint id, string name, Texture3D texture)
@@ -173,5 +152,25 @@ namespace T3.Core
 
         public readonly ShaderResourceView ShaderResourceView;
         public readonly uint TextureId;
+    }
+
+    /// <summary>
+    /// Used by some <see cref="Resource"/>s to link to a file.
+    /// Note that multiple resources likes <see cref="VertexShader"/> and <see cref="PixelShader"/> can
+    /// depend on the some source file. 
+    /// </summary>
+    internal class ResourceFileHook
+    {
+        public ResourceFileHook(string path, IEnumerable<uint> ids)
+        {
+            Path = path;
+            ResourceIds.AddRange(ids);
+            LastWriteReferenceTime = File.GetLastWriteTime(path);
+        }
+
+        public string Path;
+        public readonly List<uint> ResourceIds = new();
+        public DateTime LastWriteReferenceTime;
+        public Action FileChangeAction;
     }
 }

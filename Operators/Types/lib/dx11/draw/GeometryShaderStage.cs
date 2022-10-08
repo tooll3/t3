@@ -21,7 +21,7 @@ namespace T3.Operators.Types.Id_4abd5f2e_3296_4d71_8462_faa203091b1d
         private void Update(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var gsStage = deviceContext.GeometryShader;
 
@@ -44,7 +44,7 @@ namespace T3.Operators.Types.Id_4abd5f2e_3296_4d71_8462_faa203091b1d
 
         private void Restore(EvaluationContext context)
         {
-            var deviceContext = ResourceManager.Instance().Device.ImmediateContext;
+            var deviceContext = ResourceManager.Device.ImmediateContext;
             var vsStage = deviceContext.GeometryShader;
             vsStage.Set(_prevGeometryShader);
             vsStage.SetConstantBuffers(0, _prevConstantBuffers.Length, _prevConstantBuffers);

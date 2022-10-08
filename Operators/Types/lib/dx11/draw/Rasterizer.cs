@@ -21,7 +21,7 @@ namespace T3.Operators.Types.Id_fbd7f0f0_36a3_4fbb_91e1_cb33d4666d09
         private void Update(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var rasterizer = deviceContext.Rasterizer;
 
@@ -40,7 +40,7 @@ namespace T3.Operators.Types.Id_fbd7f0f0_36a3_4fbb_91e1_cb33d4666d09
 
         private void Restore(EvaluationContext context)
         {
-            var deviceContext = ResourceManager.Instance().Device.ImmediateContext;
+            var deviceContext = ResourceManager.Device.ImmediateContext;
             var rasterizer = deviceContext.Rasterizer;
             rasterizer.SetViewports(_prevViewports, _prevViewports.Length);
             rasterizer.State = _prevState;

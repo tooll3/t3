@@ -21,7 +21,7 @@ namespace T3.Operators.Types.Id_e3596381_c118_4e2e_a482_83049a9f74af
         private void Update(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             // deviceContext.Draw2(VertexCount.GetValue(context), VertexStartLocation.GetValue(context));
             var rtv = RenderTarget.GetValue(context);

@@ -120,9 +120,9 @@ namespace T3.Operators.Types.Id_8f696d89_a23f_42ae_b382_8670febb546b
                 const int stride = 4;
                 var resourceManager = ResourceManager.Instance();
                 _bufferWithViews.Buffer = _buffer;
-                resourceManager.SetupStructuredBuffer(_cellBuffer, stride * _cellBuffer.Length, stride, ref _buffer);
-                resourceManager.CreateStructuredBufferSrv(_buffer, ref _bufferWithViews.Srv);
-                resourceManager.CreateStructuredBufferUav(_buffer, UnorderedAccessViewBufferFlags.None, ref _bufferWithViews.Uav);
+                ResourceManager.SetupStructuredBuffer(_cellBuffer, stride * _cellBuffer.Length, stride, ref _buffer);
+                ResourceManager.CreateStructuredBufferSrv(_buffer, ref _bufferWithViews.Srv);
+                ResourceManager.CreateStructuredBufferUav(_buffer, UnorderedAccessViewBufferFlags.None, ref _bufferWithViews.Uav);
             }
             
             OutBuffer.Value = _bufferWithViews;

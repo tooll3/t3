@@ -20,7 +20,7 @@ namespace T3.Operators.Types.Id_9b28e6b9_1d1f_42d8_8a9e_33497b1df820
         private void Update(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
 
             var setVs = deviceContext.VertexShader.Get();

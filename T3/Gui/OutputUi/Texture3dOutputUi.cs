@@ -33,8 +33,8 @@ namespace T3.Gui.OutputUi
                                   SampleDescription = new SampleDescription(1, 0),
                                   Usage = ResourceUsage.Default,
                               };
-            _viewTexture = new Texture2D(resourceManager.Device, texDesc);
-            _viewTextureUav = new UnorderedAccessView(resourceManager.Device, _viewTexture);
+            _viewTexture = new Texture2D(ResourceManager.Device, texDesc);
+            _viewTextureUav = new UnorderedAccessView(ResourceManager.Device, _viewTexture);
         }
 
         public override IOutputUi Clone()
@@ -69,7 +69,7 @@ namespace T3.Gui.OutputUi
                 return null;
 
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var csStage = deviceContext.ComputeShader;
             var prevShader = csStage.Get();

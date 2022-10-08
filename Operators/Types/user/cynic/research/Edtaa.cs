@@ -34,7 +34,7 @@ namespace T3.Operators.Types.Id_afcd4aad_8c8d_4e59_8e8e_a8c12d312200
                 return;
             }
 
-            var d3DDevice = ResourceManager.Instance().Device;
+            var d3DDevice = ResourceManager.Device;
             var immediateContext = d3DDevice.ImmediateContext;
 
             if (_imageWithCPUAccess == null ||
@@ -505,7 +505,7 @@ namespace T3.Operators.Types.Id_afcd4aad_8c8d_4e59_8e8e_a8c12d312200
             // try
             // {
             //     if (ShaderResourceView.Value != null)
-            //         resourceManager.Device.ImmediateContext.GenerateMips(ShaderResourceView.Value);
+            //         ResourceManager.Device.ImmediateContext.GenerateMips(ShaderResourceView.Value);
             // }
             // catch (Exception e)
             // {

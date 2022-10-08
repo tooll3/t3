@@ -49,7 +49,7 @@ namespace T3.Operators.Types.Id_c7283335_ef57_46ad_9538_abbade65845a
 
             try
             {
-                RasterizerState.Value = new RasterizerState(ResourceManager.Instance().Device, rasterizerDesc); // todo: put into resource manager 
+                RasterizerState.Value = new RasterizerState(ResourceManager.Device, rasterizerDesc); // todo: put into resource manager 
             }
             catch(Exception e)
             {

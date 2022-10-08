@@ -20,7 +20,7 @@ namespace T3.Operators.Types.Id_81ff4731_e244_4995_b03d_5544d9211d83
         private void Update(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
 
             var targetBuffer = TargetBuffer.GetValue(context);

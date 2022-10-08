@@ -62,7 +62,7 @@ namespace T3.Operators.Types.Id_cc3cc712_9e87_49c6_b04b_49a12cf2ba75
                 return;
             }
             
-            var device = ResourceManager.Instance().Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             
             // Vertex shader stage
@@ -253,7 +253,7 @@ namespace T3.Operators.Types.Id_cc3cc712_9e87_49c6_b04b_49a12cf2ba75
         
         private void Restore(EvaluationContext context)
         {
-            var deviceContext = ResourceManager.Instance().Device.ImmediateContext;
+            var deviceContext = ResourceManager.Device.ImmediateContext;
 
             deviceContext.Rasterizer.SetViewports(_prevViewports, _prevViewports.Length);
             deviceContext.OutputMerger.BlendState = _prevBlendState;

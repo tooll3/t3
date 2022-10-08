@@ -78,7 +78,7 @@ namespace T3.Operators.Types.Id_2c53eee7_eb38_449b_ad2a_d7a674952e5b
                 dataStream.Position = 0;
                 var dataRectangles = new DataRectangle[] { new DataRectangle(dataStream.DataPointer, gradientSizeInBytes) };
                 Utilities.Dispose(ref GradientsTexture.Value);
-                GradientsTexture.Value = new Texture2D(ResourceManager.Instance().Device, texDesc, dataRectangles);
+                GradientsTexture.Value = new Texture2D(ResourceManager.Device, texDesc, dataRectangles);
             }
         }
 

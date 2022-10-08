@@ -42,11 +42,11 @@ namespace T3.Operators.Types.Id_c2078514_cf1d_439c_a732_0d7b31b5084a
                                                                MostDetailedMip = 0
                                                            }
                                        };
-                        ShaderResourceView.Value = new ShaderResourceView(resourceManager.Device, texture, desc);
+                        ShaderResourceView.Value = new ShaderResourceView(ResourceManager.Device, texture, desc);
                     }
                     else
                     {
-                        ShaderResourceView.Value = new ShaderResourceView(resourceManager.Device, texture); // todo: create via resource manager
+                        ShaderResourceView.Value = new ShaderResourceView(ResourceManager.Device, texture); // todo: create via resource manager
                     }
                 }
                 else

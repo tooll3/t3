@@ -68,7 +68,7 @@ namespace T3.Operators.Types.Id_7e28c796_85e7_47ee_99bb_9599284dbeeb
                     var elementSizeInBytes = firstInputList?.ElementSizeInBytes ?? 0; // todo: add check that all inputs have same type
                     try
                     {
-                        resourceManager.SetupStructuredBuffer(data, totalSizeInBytes, elementSizeInBytes, ref _buffer);
+                        ResourceManager.SetupStructuredBuffer(data, totalSizeInBytes, elementSizeInBytes, ref _buffer);
                     }
                     catch (Exception e)
                     {
@@ -79,8 +79,8 @@ namespace T3.Operators.Types.Id_7e28c796_85e7_47ee_99bb_9599284dbeeb
                     var elementCount = totalSizeInBytes / elementSizeInBytes;
                     Length.Value = elementCount;
                 }
-                resourceManager.CreateStructuredBufferSrv(_buffer, ref _bufferWithViews.Srv);
-                resourceManager.CreateStructuredBufferUav(_buffer, UnorderedAccessViewBufferFlags.None, ref _bufferWithViews.Uav);
+                ResourceManager.CreateStructuredBufferSrv(_buffer, ref _bufferWithViews.Srv);
+                ResourceManager.CreateStructuredBufferUav(_buffer, UnorderedAccessViewBufferFlags.None, ref _bufferWithViews.Uav);
             }
 
             _bufferWithViews.Buffer = _buffer;
