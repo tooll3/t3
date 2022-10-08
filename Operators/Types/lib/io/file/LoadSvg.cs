@@ -43,6 +43,8 @@ namespace T3.Operators.Types.Id_e8d94dd7_eb54_42fe_a7b1_b43543dd457e
                 Log.Debug($"File {filepath} doesn't exist");
                 return;
             }
+            
+            ResourceFileWatcher.AddFileHook(filepath, () => {FilePath.DirtyFlag.Invalidate();});
 
             var centerToBounds = CenterToBounds.GetValue(context);
             var scaleToBounds = ScaleToBounds.GetValue(context);
