@@ -215,7 +215,7 @@ namespace T3.Gui.Windows
             return r;
         }
 
-        private static float Read2BytesToHalf(DataStream imageStream)
+        public static float Read2BytesToHalf(DataStream imageStream)
         {
             var low = (byte)imageStream.ReadByte();
             var high = (byte)imageStream.ReadByte();

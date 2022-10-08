@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "3b8c51c9-c544-47eb-9d70-4bd6b161be2d"/*InputImage*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0
