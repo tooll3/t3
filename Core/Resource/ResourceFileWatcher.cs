@@ -26,7 +26,43 @@ namespace T3.Core
             _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
 
         }
+        
+        public static void AddFileHook(string filepath, Action action)
+        {
+            if (string.IsNullOrEmpty(filepath))
+                return;
 
+            string pattern;
+            try
+            {
+                pattern = "*" + Path.GetExtension(filepath);
+            }
+            catch
+            {
+                Log.Warning($"Can't get filepath from source file: {filepath}");
+                return;
+            }
+            
+            if (!_fileWatchers.ContainsKey(pattern))
+            {
+                AddWatcher(ResourceManager.ResourcesFolder, pattern);
+            }
+
+            if (_resourceFileHooks.TryGetValue(filepath, out var hook))
+            {
+                hook.FileChangeAction -= action;
+                hook.FileChangeAction += action;
+            }
+            else
+            {
+                var newHook = new ResourceFileHook(filepath, Array.Empty<uint>())
+                                  {
+                                      FileChangeAction = action
+                                  };
+                _resourceFileHooks.Add(filepath,newHook);
+            }
+        }
+        
         private static FileSystemWatcher AddWatcher(string folder, string filePattern)
         {
             var newWatcher = new FileSystemWatcher(folder, filePattern)
@@ -39,6 +75,7 @@ namespace T3.Core
             _fileWatchers.Add(filePattern, newWatcher);
             return newWatcher;
         }
+
 
         private static Dictionary<string, FileSystemWatcher> _fileWatchers = new();
 
@@ -55,7 +92,7 @@ namespace T3.Core
         private static void FileChangedHandler(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
             // Log.Info($"change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
-            if (!ResourceFileWatcher._resourceFileHooks.TryGetValue(fileSystemEventArgs.FullPath, out var fileResource))
+            if (!_resourceFileHooks.TryGetValue(fileSystemEventArgs.FullPath, out var fileHook))
             {
                 //Log.Warning("Invalid FileResource?");
                 return;
@@ -63,7 +100,7 @@ namespace T3.Core
 
             // Log.Info($"valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
             DateTime lastWriteTime = File.GetLastWriteTime(fileSystemEventArgs.FullPath);
-            if (lastWriteTime == fileResource.LastWriteReferenceTime)
+            if (lastWriteTime == fileHook.LastWriteReferenceTime)
                 return;
 
             // Log.Info($"very valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
@@ -72,24 +109,24 @@ namespace T3.Core
             //       it cannot read the file. 
             Thread.Sleep(15);
             Log.Info($"File '{fileSystemEventArgs.FullPath}' changed due to {fileSystemEventArgs.ChangeType}");
-            foreach (var id in fileResource.ResourceIds)
+            foreach (var id in fileHook.ResourceIds)
             {
                 // Update all resources that depend from this file
                 if (ResourceManager.ResourcesById.TryGetValue(id, out var resource))
                 {
                     var updateable = resource as IUpdateable;
-                    updateable?.Update(fileResource.Path);
+                    updateable?.Update(fileHook.Path);
                     resource.UpToDate = false;
                 }
                 else
                 {
-                    Log.Info($"Trying to update a non existing file resource '{fileResource.Path}'.");
+                    Log.Info($"Trying to update a non existing file resource '{fileHook.Path}'.");
                 }
             }
 
-            fileResource.FileChangeAction?.Invoke();
+            fileHook.FileChangeAction?.Invoke();
 
-            fileResource.LastWriteReferenceTime = lastWriteTime;
+            fileHook.LastWriteReferenceTime = lastWriteTime;
 
             // else discard the (duplicated) OnChanged event
         }

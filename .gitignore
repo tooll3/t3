@@ -285,7 +285,7 @@ Resources/user/pixtur/VJ/Agro
 Resources/user/pixtur/VJ/Terror
 Render
 
-*.obj
+
 
 # T3 Operators
 Operators/Types/**/Dashboard.cs
