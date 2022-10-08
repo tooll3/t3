@@ -13,13 +13,6 @@ namespace T3.Gui.Windows
         {
             new UIControlledSetting
             (
-                label: "UI Scale",
-                tooltip: "The global scale of all rendered UI in the application",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.UiScaleFactor, 0.01f, 3f)
-            ),
-
-            new UIControlledSetting
-            (
                 label: "Warn before Lib modifications",
                 tooltip: "This warning pops up when you attempt to enter an Operator that ships with the application.\n" +
                          "If unsure, this is best left checked.",
@@ -41,12 +34,6 @@ namespace T3.Gui.Windows
 
             new UIControlledSetting
             (
-                label: "Scroll smoothing",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.ScrollSmoothing)
-            ),
-
-            new UIControlledSetting
-            (
                 label: "Show Graph thumbnails",
                 guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.ShowThumbnails)
             ),
@@ -55,6 +42,26 @@ namespace T3.Gui.Windows
             (
                 label: "Drag snapped nodes",
                 guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.SmartGroupDragging)
+            ),
+
+            new UIControlledSetting
+            (
+                label: "Fullscreen Window Swap",
+                tooltip: "Swap main and second windows when fullscreen",
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen)
+            ),
+
+            new UIControlledSetting
+            (
+                label: "UI Scale",
+                tooltip: "The global scale of all rendered UI in the application",
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.UiScaleFactor, 0.01f, 3f)
+            ),
+
+            new UIControlledSetting
+            (
+                label: "Scroll smoothing",
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.ScrollSmoothing)
             ),
 
             new UIControlledSetting
@@ -73,13 +80,6 @@ namespace T3.Gui.Windows
             (
                 label: "Timeline Raster Density",
                 guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.TimeRasterDensity)
-            ),
-
-            new UIControlledSetting
-            (
-                label: "Fullscreen Window Swap",
-                tooltip: "Swap main and second windows when fullscreen",
-                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen)
             ),
         };
 
@@ -159,14 +159,14 @@ namespace T3.Gui.Windows
         {
             new UIControlledSetting
             (
-                label: "Height Connection Zone",
-                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref GraphNode.UsableSlotThickness)
+                label: "Label position",
+                guiFunc: (string guiLabel) => ImGui.DragFloat2(guiLabel, ref GraphNode.LabelPos)
             ),
 
             new UIControlledSetting
             (
-                label: "Label position",
-                guiFunc: (string guiLabel) => ImGui.DragFloat2(guiLabel, ref GraphNode.LabelPos)
+                label: "Height Connection Zone",
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref GraphNode.UsableSlotThickness)
             ),
 
             new UIControlledSetting
