@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading;
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
@@ -27,7 +26,6 @@ namespace T3.Core
     {
         void Update(string path);
     }
-    
     
     public class ResourceManager
     {
@@ -72,7 +70,7 @@ namespace T3.Core
         
         public OperatorResource GetOperatorFileResource(string path)
         {
-            bool foundFileEntryForPath = _resourceFileHooks.TryGetValue(path, out var fileResource);
+            bool foundFileEntryForPath = ResourceFileWatcher._resourceFileHooks.TryGetValue(path, out var fileResource);
             if (foundFileEntryForPath)
             {
                 foreach (var id in fileResource.ResourceIds)
@@ -85,7 +83,7 @@ namespace T3.Core
             return null;
         }
 
-        public void RenameOperatorResource(string oldPath, string newPath)
+        public static void RenameOperatorResource(string oldPath, string newPath)
         {
             var extension = Path.GetExtension(newPath);
             if (extension != ".cs")
@@ -94,12 +92,12 @@ namespace T3.Core
                 return;
             }
 
-            if (_resourceFileHooks.TryGetValue(oldPath, out var fileResource))
+            if (ResourceFileWatcher._resourceFileHooks.TryGetValue(oldPath, out var fileResource))
             {
                 Log.Info($"renamed file resource from '{oldPath}' to '{newPath}'");
                 fileResource.Path = newPath;
-                _resourceFileHooks.Remove(oldPath);
-                _resourceFileHooks.Add(newPath, fileResource);
+                ResourceFileWatcher._resourceFileHooks.Remove(oldPath);
+                ResourceFileWatcher._resourceFileHooks.Add(newPath, fileResource);
             }
         }
 
@@ -136,61 +134,14 @@ namespace T3.Core
                                       MaximumLod = Single.MaxValue,
                                   };
             DefaultSamplerState = new SamplerState(device, samplerDesc);
-                
-            _hlslFileWatcher = new FileSystemWatcher(ResourcesFolder, "*.hlsl");
-            _hlslFileWatcher.IncludeSubdirectories = true;
-            _hlslFileWatcher.Changed += FileChangedHandler;
-            _hlslFileWatcher.Created += FileChangedHandler;
-            _hlslFileWatcher.Deleted += FileChangedHandler;
-            _hlslFileWatcher.Renamed += FileChangedHandler;
-            _hlslFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime; // creation time needed for visual studio (2017)
-            _hlslFileWatcher.EnableRaisingEvents = true;
-
-            _pngFileWatcher = new FileSystemWatcher(ResourcesFolder, "*.png");
-            _pngFileWatcher.IncludeSubdirectories = true;
-            _pngFileWatcher.Changed += FileChangedHandler;
-            _pngFileWatcher.Created += FileChangedHandler;
-            _pngFileWatcher.EnableRaisingEvents = true;
-
-            _jpgFileWatcher = new FileSystemWatcher(ResourcesFolder, "*.jpg");
-            _jpgFileWatcher.IncludeSubdirectories = true;
-            _jpgFileWatcher.Changed += FileChangedHandler;
-            _jpgFileWatcher.Created += FileChangedHandler;
-            _jpgFileWatcher.EnableRaisingEvents = true;
-
-            _ddsFileWatcher = new FileSystemWatcher(ResourcesFolder, "*.dds");
-            _ddsFileWatcher.IncludeSubdirectories = true;
-            _ddsFileWatcher.Changed += FileChangedHandler;
-            _ddsFileWatcher.Created += FileChangedHandler;
-            _ddsFileWatcher.EnableRaisingEvents = true;
-
-            _tiffFileWatcher = new FileSystemWatcher(ResourcesFolder, "*.tiff");
-            _tiffFileWatcher.IncludeSubdirectories = true;
-            _tiffFileWatcher.Changed += FileChangedHandler;
-            _tiffFileWatcher.Created += FileChangedHandler;
-            _tiffFileWatcher.EnableRaisingEvents = true;
-
-            _csFileWatcher = new FileSystemWatcher(Model.OperatorTypesFolder, "*.cs");
-            _csFileWatcher.IncludeSubdirectories = true;
-            _csFileWatcher.Changed += FileChangedHandler;
-            _csFileWatcher.Renamed += CsFileRenamedHandler;
-            _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
-            _csFileWatcher.EnableRaisingEvents = true;
+            ResourceFileWatcher.Setup(ResourcesFolder);
         }
 
         public SamplerState DefaultSamplerState { get; }
 
-        public void DisableOperatorFileWatcher()
-        {
-            _csFileWatcher.EnableRaisingEvents = false;
-        }
-        
-        public void EnableOperatorFileWatcher()
-        {
-            _csFileWatcher.EnableRaisingEvents = true;
-        }
 
-        public void SetupConstBuffer<T>(T bufferData, ref Buffer buffer) where T : struct
+
+        public static void SetupConstBuffer<T>(T bufferData, ref Buffer buffer) where T : struct
         {
             using var data = new DataStream(Marshal.SizeOf(typeof(T)), true, true);
             
@@ -463,7 +414,7 @@ namespace T3.Core
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
                 return NullResource;
 
-            if (_resourceFileHooks.TryGetValue(srcFile, out var fileResource))
+            if (ResourceFileWatcher._resourceFileHooks.TryGetValue(srcFile, out var fileResource))
             {
                 foreach (var id in fileResource.ResourceIds)
                 {
@@ -490,7 +441,7 @@ namespace T3.Core
             if (fileResource == null)
             {
                 fileResource = new ResourceFileHook(srcFile, new[] { newShaderResource.Id });
-                _resourceFileHooks.Add(srcFile, fileResource);
+                ResourceFileWatcher._resourceFileHooks.Add(srcFile, fileResource);
             }
             else
             {
@@ -509,7 +460,7 @@ namespace T3.Core
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
                 return NullResource;
 
-            bool foundFileEntryForPath = _resourceFileHooks.TryGetValue(srcFile, out var fileResource);
+            bool foundFileEntryForPath = ResourceFileWatcher._resourceFileHooks.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
             {
                 foreach (var id in fileResource.ResourceIds)
@@ -537,7 +488,7 @@ namespace T3.Core
             if (fileResource == null)
             {
                 fileResource = new ResourceFileHook(srcFile, new[] { resourceEntry.Id });
-                _resourceFileHooks.Add(srcFile, fileResource);
+                ResourceFileWatcher._resourceFileHooks.Add(srcFile, fileResource);
             }
             else
             {
@@ -587,7 +538,7 @@ namespace T3.Core
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
                 return NullResource;
 
-            if (_resourceFileHooks.TryGetValue(srcFile, out var fileResource))
+            if (ResourceFileWatcher._resourceFileHooks.TryGetValue(srcFile, out var fileResource))
             {
                 foreach (var resourceId in fileResource.ResourceIds)
                 {
@@ -617,7 +568,7 @@ namespace T3.Core
             if (fileResource == null)
             {
                 fileResource = new ResourceFileHook(srcFile, new[] { newResource.Id });
-                _resourceFileHooks.Add(srcFile, fileResource);
+                ResourceFileWatcher._resourceFileHooks.Add(srcFile, fileResource);
             }
             else
             {
@@ -637,7 +588,7 @@ namespace T3.Core
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
                 return NullResource;
 
-            bool foundFileEntryForPath = _resourceFileHooks.TryGetValue(srcFile, out var fileResource);
+            bool foundFileEntryForPath = ResourceFileWatcher._resourceFileHooks.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
             {
                 foreach (var id in fileResource.ResourceIds)
@@ -668,7 +619,7 @@ namespace T3.Core
             if (fileResource == null)
             {
                 fileResource = new ResourceFileHook(srcFile, new[] { resourceEntry.Id });
-                _resourceFileHooks.Add(srcFile, fileResource);
+                ResourceFileWatcher._resourceFileHooks.Add(srcFile, fileResource);
             }
             else
             {
@@ -682,7 +633,7 @@ namespace T3.Core
             return resourceEntry.Id;
         }
 
-        public void UpdateVertexShaderFromFile(string path, uint id, ref VertexShader vertexShader)
+        public static void UpdateVertexShaderFromFile(string path, uint id, ref VertexShader vertexShader)
         {
             ResourcesById.TryGetValue(id, out var resource);
             if (resource is VertexShaderResource vsResource)
@@ -692,7 +643,7 @@ namespace T3.Core
             }
         }
 
-        public void UpdatePixelShaderFromFile(string path, uint id, ref PixelShader vertexShader)
+        public static void UpdatePixelShaderFromFile(string path, uint id, ref PixelShader vertexShader)
         {
             ResourcesById.TryGetValue(id, out var resource);
             if (resource is PixelShaderResource vsResource)
@@ -702,7 +653,7 @@ namespace T3.Core
             }
         }
 
-        public void UpdateComputeShaderFromFile(string path, uint id, ref ComputeShader computeShader)
+        public static void UpdateComputeShaderFromFile(string path, uint id, ref ComputeShader computeShader)
         {
             ResourcesById.TryGetValue(id, out var resource);
             if (resource is ComputeShaderResource csResource)
@@ -712,7 +663,7 @@ namespace T3.Core
             }
         }
 
-        public void UpdateGeometryShaderFromFile(string path, uint id, ref GeometryShader geometryShader)
+        public static void UpdateGeometryShaderFromFile(string path, uint id, ref GeometryShader geometryShader)
         {
             ResourcesById.TryGetValue(id, out var resource);
             if (resource is GeometryShaderResource gsResource)
@@ -725,7 +676,7 @@ namespace T3.Core
         public uint CreateOperatorEntry(string sourceFilePath, string name, OperatorResource.UpdateDelegate updateHandler)
         {
             // todo: code below is redundant with all file resources -> refactor
-            if (_resourceFileHooks.TryGetValue(sourceFilePath, out var fileResource))
+            if (ResourceFileWatcher._resourceFileHooks.TryGetValue(sourceFilePath, out var fileResource))
             {
                 foreach (var id in fileResource.ResourceIds)
                 {
@@ -742,7 +693,7 @@ namespace T3.Core
             if (fileResource == null)
             {
                 fileResource = new ResourceFileHook(sourceFilePath, new[] { resourceEntry.Id });
-                _resourceFileHooks.Add(sourceFilePath, fileResource);
+                ResourceFileWatcher._resourceFileHooks.Add(sourceFilePath, fileResource);
             }
             else
             {
@@ -755,52 +706,7 @@ namespace T3.Core
 
 
 
-        private void FileChangedHandler(object sender, FileSystemEventArgs fileSystemEventArgs)
-        {
-            // Log.Info($"change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
-            if (!_resourceFileHooks.TryGetValue(fileSystemEventArgs.FullPath, out var fileResource))
-            {
-                //Log.Warning("Invalid FileResource?");
-                return;
-            }
 
-            // Log.Info($"valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
-            DateTime lastWriteTime = File.GetLastWriteTime(fileSystemEventArgs.FullPath);
-            if (lastWriteTime == fileResource.LastWriteReferenceTime)
-                return;
-            
-            // Log.Info($"very valid change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
-            // hack: in order to prevent editors like vs-code still having the file locked after writing to it, this gives these editors 
-            //       some time to release the lock. With a locked file Shader.ReadFromFile(...) function will throw an exception, because
-            //       it cannot read the file. 
-            Thread.Sleep(15);
-            Log.Info($"File '{fileSystemEventArgs.FullPath}' changed due to {fileSystemEventArgs.ChangeType}");
-            foreach (var id in fileResource.ResourceIds)
-            {
-                // Update all resources that depend from this file
-                if (ResourcesById.TryGetValue(id, out var resource))
-                {
-                    var updateable = resource as IUpdateable;
-                    updateable?.Update(fileResource.Path);
-                    resource.UpToDate = false;
-                }
-                else
-                {
-                    Log.Info($"Trying to update a non existing file resource '{fileResource.Path}'.");
-                }
-            }
-
-            fileResource.FileChangeAction?.Invoke();
-
-            fileResource.LastWriteReferenceTime = lastWriteTime;
-
-            // else discard the (duplicated) OnChanged event
-        }
-
-        private void CsFileRenamedHandler(object sender, RenamedEventArgs renamedEventArgs)
-        {
-            RenameOperatorResource(renamedEventArgs.OldFullPath, renamedEventArgs.FullPath);
-        }
 
         public static Texture2D CreateTexture2DFromBitmap(Device device, BitmapSource bitmapSource)
         {
@@ -998,7 +904,7 @@ namespace T3.Core
                 return (NullResource, NullResource);
             }
 
-            if (_resourceFileHooks.TryGetValue(filename, out var existingFileResource))
+            if (ResourceFileWatcher._resourceFileHooks.TryGetValue(filename, out var existingFileResource))
             {
                 uint textureId = existingFileResource.ResourceIds.First();
                 existingFileResource.FileChangeAction += fileChangeAction;
@@ -1042,7 +948,7 @@ namespace T3.Core
 
             var fileResource = new ResourceFileHook(filename, new[] { textureResourceEntry.Id, srvResourceId });
             fileResource.FileChangeAction += fileChangeAction;
-            _resourceFileHooks.Add(filename, fileResource);
+            ResourceFileWatcher._resourceFileHooks.Add(filename, fileResource);
 
             return (textureResourceEntry.Id, srvResourceId);
         }
@@ -1134,20 +1040,13 @@ namespace T3.Core
         }
 
 
-        public readonly Dictionary<uint, Resource> ResourcesById = new();
+        public static readonly Dictionary<uint, Resource> ResourcesById = new();
         
-        private readonly Dictionary<string, ResourceFileHook> _resourceFileHooks = new();
-
         private readonly List<ShaderResourceViewResource> _shaderResourceViews = new();
         
-        private readonly FileSystemWatcher _hlslFileWatcher;
-        private readonly FileSystemWatcher _pngFileWatcher;
-        private readonly FileSystemWatcher _jpgFileWatcher;
-        private readonly FileSystemWatcher _ddsFileWatcher;
-        private readonly FileSystemWatcher _tiffFileWatcher;
-        private readonly FileSystemWatcher _csFileWatcher;
+        public const string ResourcesFolder = @"Resources";
 
         public static Device Device { get; private set; }
-        public const string ResourcesFolder = @"Resources";
+        
     }
 }

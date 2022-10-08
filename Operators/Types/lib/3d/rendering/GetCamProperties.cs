@@ -47,13 +47,13 @@ namespace T3.Operators.Types.Id_843c9378_6836_4f39_b676_06fd2828af3e
 
             if (_previousBufferInitialized)
             {
-                ResourceManager.Instance().SetupConstBuffer(_bufferContent, ref PreviousBuffer.Value);
+                ResourceManager.SetupConstBuffer(_bufferContent, ref PreviousBuffer.Value);
                 PreviousBuffer.Value.DebugName=nameof(TransformsConstBuffer);
                 PreviousBuffer.DirtyFlag.Clear();
             }
             
             _bufferContent = new TransformsConstBuffer.TransformBufferLayout(camera.CameraToClipSpace, camera.WorldToCamera, camera.LastObjectToWorld);
-            ResourceManager.Instance().SetupConstBuffer(_bufferContent, ref Buffer.Value);
+            ResourceManager.SetupConstBuffer(_bufferContent, ref Buffer.Value);
             Buffer.Value.DebugName=nameof(TransformsConstBuffer);
             _previousBufferInitialized = true;
         }

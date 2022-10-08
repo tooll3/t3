@@ -108,7 +108,7 @@ namespace T3.Core.DataTypes
         
         private void InitParticleCountConstBuffer()
         {
-            ResourceManager.Instance().SetupConstBuffer(Vector4.Zero, ref ParticleCountConstBuffer);
+            ResourceManager.SetupConstBuffer(Vector4.Zero, ref ParticleCountConstBuffer);
             ParticleCountConstBuffer.DebugName = "ParticleCountConstBuffer";
         }
     }

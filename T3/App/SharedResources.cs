@@ -35,7 +35,7 @@ namespace T3.App
             ViewWindowDefaultSrvId = tmpId;
             
             (uint texResourceId3, var srvResourceId ) = resourceManager.CreateTextureFromFile(@"Resources\t3-editor\images\t3-colorpicker.png", null);
-            if (ResourceManager.Instance().ResourcesById[srvResourceId] is ShaderResourceViewResource srvResource)
+            if (ResourceManager.ResourcesById[srvResourceId] is ShaderResourceViewResource srvResource)
             {
                 ColorPickerImageSrv = srvResource.ShaderResourceView;
             }

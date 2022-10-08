@@ -34,7 +34,7 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
                                                  Metal = Metal.GetValue(context)
                                              };
 
-            ResourceManager.Instance().SetupConstBuffer(parameterBufferContent, ref _parameterBuffer);
+            ResourceManager.SetupConstBuffer(parameterBufferContent, ref _parameterBuffer);
 
             // Textures
             var resourceManager = ResourceManager.Instance();

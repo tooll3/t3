@@ -308,13 +308,13 @@ namespace T3.Gui
             Log.Debug($"Saving {modifiedSymbolUis.Count} modified symbols...");
 
             IsSaving = true;
-            ResourceManager.Instance().DisableOperatorFileWatcher(); // Don't update ops if file is written during save
+            ResourceFileWatcher.DisableOperatorFileWatcher(); // Don't update ops if file is written during save
             
             var modifiedSymbols = modifiedSymbolUis.Select(symbolUi => symbolUi.Symbol).ToList();
             SaveSymbolDefinitionAndSourceFiles(modifiedSymbols);
             WriteSymbolUis(modifiedSymbolUis);
             
-            ResourceManager.Instance().EnableOperatorFileWatcher();
+            ResourceFileWatcher.EnableOperatorFileWatcher();
             IsSaving = false;
         }
 

@@ -22,12 +22,12 @@ namespace T3.Operators.Types.Id_74cbfce0_f8b8_46a1_b5d6_38477d4eec99
         private void Update(EvaluationContext context)
         {
             Utilities.Dispose(ref _parameterBuffer);
-            ResourceManager.Instance().SetupConstBuffer(new FogSettings.FogParameters
-                                                            {
-                                                                Bias = Bias.GetValue(context),
-                                                                Distance = Distance.GetValue(context),
-                                                                Color = Color.GetValue(context)
-                                                            }, ref _parameterBuffer);
+            ResourceManager.SetupConstBuffer(new FogSettings.FogParameters
+                                                 {
+                                                     Bias = Bias.GetValue(context),
+                                                     Distance = Distance.GetValue(context),
+                                                     Color = Color.GetValue(context)
+                                                 }, ref _parameterBuffer);
             
             var previousParameters = context.FogParameters;
             context.FogParameters = _parameterBuffer;

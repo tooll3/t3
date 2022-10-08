@@ -73,7 +73,7 @@ namespace T3.Core.Rendering
                                   Specular = 10,
                                   Metal = 0
                               };
-            ResourceManager.Instance().SetupConstBuffer(content, ref _defaultParameterBuffer);
+            ResourceManager.SetupConstBuffer(content, ref _defaultParameterBuffer);
 
             var resourceManager = ResourceManager.Instance();
             var device = ResourceManager.Device;
@@ -126,7 +126,7 @@ namespace T3.Core.Rendering
             {
                 var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, () => { });
                 
-                if (resourceManager.ResourcesById.TryGetValue(srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
+                if (ResourceManager.ResourcesById.TryGetValue(srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
                     return srvResource.ShaderResourceView;                
 
                 Log.Warning($"Failed loading texture {imagePath}");
@@ -144,7 +144,7 @@ namespace T3.Core.Rendering
             try
             {
                 var (textureResId, srvResId) = resourceManager.CreateTextureFromFile(imagePath, () => { });
-                if (resourceManager.ResourcesById.TryGetValue(textureResId, out var resource1) && resource1 is Texture2dResource textureResource)
+                if (ResourceManager.ResourcesById.TryGetValue(textureResId, out var resource1) && resource1 is Texture2dResource textureResource)
                      return textureResource.Texture;
                 
                 Log.Warning($"Failed loading texture {imagePath}");

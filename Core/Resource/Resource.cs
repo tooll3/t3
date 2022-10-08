@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using SharpDX.D3DCompiler;
+﻿using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 
 namespace T3.Core
@@ -152,25 +149,5 @@ namespace T3.Core
 
         public readonly ShaderResourceView ShaderResourceView;
         public readonly uint TextureId;
-    }
-
-    /// <summary>
-    /// Used by some <see cref="Resource"/>s to link to a file.
-    /// Note that multiple resources likes <see cref="VertexShader"/> and <see cref="PixelShader"/> can
-    /// depend on the some source file. 
-    /// </summary>
-    internal class ResourceFileHook
-    {
-        public ResourceFileHook(string path, IEnumerable<uint> ids)
-        {
-            Path = path;
-            ResourceIds.AddRange(ids);
-            LastWriteReferenceTime = File.GetLastWriteTime(path);
-        }
-
-        public string Path;
-        public readonly List<uint> ResourceIds = new();
-        public DateTime LastWriteReferenceTime;
-        public Action FileChangeAction;
     }
 }

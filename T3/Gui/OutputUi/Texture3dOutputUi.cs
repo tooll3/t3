@@ -81,7 +81,7 @@ namespace T3.Gui.OutputUi
             csStage.Set(resolveShader);
 
             Int4 parameter = new Int4(_zPosIndex, 0, 0, 0);
-            resourceManager.SetupConstBuffer(parameter, ref _paramBuffer);
+            ResourceManager.SetupConstBuffer(parameter, ref _paramBuffer);
             
             const int threadNumX = 16, threadNumY = 16;
             csStage.SetShaderResource(0, texture3d.Srv);

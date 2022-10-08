@@ -21,7 +21,7 @@ namespace T3.Operators.Types.Id_1ba08d52_c8ec_479a_8dc0_95d92da36577
         private void Update(EvaluationContext context)
         {
             var bufferContent = new ParamBufferLayout(Param1.GetValue(context), Param2.GetValue(context), Param3.GetValue(context), Param4.GetValue(context));
-            ResourceManager.Instance().SetupConstBuffer(bufferContent, ref Buffer.Value);
+            ResourceManager.SetupConstBuffer(bufferContent, ref Buffer.Value);
             Buffer.Value.DebugName = nameof(ColorGradeConstBuffer);
         }
 

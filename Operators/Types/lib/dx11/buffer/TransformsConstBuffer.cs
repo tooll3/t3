@@ -21,7 +21,7 @@ namespace T3.Operators.Types.Id_a60adc26_d7c6_4615_af78_8d2d6da46b79
         private void Update(EvaluationContext context)
         {
             var bufferContent = new TransformBufferLayout(context.CameraToClipSpace, context.WorldToCamera, context.ObjectToWorld);
-            ResourceManager.Instance().SetupConstBuffer(bufferContent, ref Buffer.Value);
+            ResourceManager.SetupConstBuffer(bufferContent, ref Buffer.Value);
             Buffer.Value.DebugName = nameof(TransformsConstBuffer);
         }
 

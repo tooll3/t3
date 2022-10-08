@@ -20,7 +20,7 @@ namespace T3.Operators.Types.Id_c30542d5_609c_452a_9168_78964a3a0927
         private void Update(EvaluationContext context)
         {
             var bufferContent = new ParamBufferLayout(Param1.GetValue(context), Param2.GetValue(context), Param3.GetValue(context), Param4.GetValue(context));
-            ResourceManager.Instance().SetupConstBuffer(bufferContent, ref Buffer.Value);
+            ResourceManager.SetupConstBuffer(bufferContent, ref Buffer.Value);
             Buffer.Value.DebugName = nameof(ParamConstBuffer);
         }
 
