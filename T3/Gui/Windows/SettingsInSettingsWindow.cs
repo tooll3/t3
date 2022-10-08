@@ -88,19 +88,19 @@ namespace T3.Gui.Windows
             new UIControlledSetting
             (
                 label: "Smoothing",
-                guiFunc: (string guiLabel) => ImGui.DragFloat(guiLabel, ref UserSettings.Config.SpaceMouseDamping, 0.01f, 0.01f, 1f)
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.SpaceMouseDamping, 0.01f, 1f)
             ),
 
             new UIControlledSetting
             (
                 label: "Move Speed",
-                guiFunc: (string guiLabel) => ImGui.DragFloat(guiLabel, ref UserSettings.Config.SpaceMouseMoveSpeedFactor, 0.01f, 0, 10f)
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.SpaceMouseMoveSpeedFactor, 0, 10f)
             ),
 
             new UIControlledSetting
             (
                 label: "Rotation Speed",
-                guiFunc: (string guiLabel) => ImGui.DragFloat(guiLabel, ref UserSettings.Config.SpaceMouseRotationSpeedFactor, 0.01f, 0, 10f)
+                guiFunc: (string guiLabel) => CustomComponents.FloatValueEdit(guiLabel, ref UserSettings.Config.SpaceMouseRotationSpeedFactor, 0, 10f)
             )
         };
 

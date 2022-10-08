@@ -41,6 +41,11 @@ namespace t3.Gui
             return changed;
         }
 
+        /// <summary>
+        /// Draws a series of settings in order
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <returns></returns>
         public static bool DrawSettings(UIControlledSetting[] settings)
         {
             ImGui.NewLine();

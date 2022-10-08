@@ -63,20 +63,15 @@ namespace T3.Gui.Windows
         /// If an Action was provided in constructor, it will be executed when value is changed. </returns>
         public bool DrawGUIControl()
         {
-            //if (!string.IsNullOrEmpty(tooltip))
-            //{
-            //    if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-            //    {
-            //        ImGui.SetTooltip(tooltip);
-            //    }
-            //}
-
-            var changed = guiFunc.Invoke();
-
             if (!string.IsNullOrEmpty(tooltip))
             {
-                CustomComponents.TooltipForLastItem(tooltip, additionalNotes);
+                if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+                {
+                    ImGui.SetTooltip(tooltip);
+                }
             }
+
+            var changed = guiFunc.Invoke();
 
             if(changed)
             {
