@@ -18,7 +18,7 @@ namespace T3.Gui.Windows
         public string CleanLabel { get; private set; }
         public bool DrawOnLeft { get; private set; }
 
-        private string _tooltip;
+        public string Tooltip { get; private set; }
         private string _additionalNotes;
         private Func<string, bool> _guiFunc;
         private Action _OnValueChanged;
@@ -53,7 +53,7 @@ namespace T3.Gui.Windows
             _uniqueLabel = $"{label}##{_countForUniqueID--}";
 
             _guiFunc = guiFunc;
-            _tooltip = tooltip;
+            Tooltip = tooltip;
             _additionalNotes = additionalNotes;
             _OnValueChanged = OnValueChanged;
             DrawOnLeft = drawOnLeft;
@@ -66,17 +66,9 @@ namespace T3.Gui.Windows
         /// If an Action was provided in constructor, it will be executed when value is changed. </returns>
         public bool DrawGUIControl(bool hideLabel)
         {
-            if (!string.IsNullOrEmpty(_tooltip))
-            {
-                if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-                {
-                    ImGui.SetTooltip(_tooltip);
-                }
-            }
-
             var changed = DrawCommand(hideLabel);
 
-            if(changed)
+            if (changed)
             {
                 _OnValueChanged?.Invoke();
             }

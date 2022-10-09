@@ -56,7 +56,6 @@ namespace T3.Gui.UiHelpers
             public float ScrollSmoothing = 0.06f;
             public float TooltipDelay = 1.2f;
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
-            public bool SymbolBrowserDescriptionTimeout = false;
 
             public float KeyboardScrollAcceleration = 2.5f;
 
@@ -79,6 +78,9 @@ namespace T3.Gui.UiHelpers
             public float SpaceMouseRotationSpeedFactor = 1f;
             public float SpaceMouseMoveSpeedFactor = 1f;
             public float SpaceMouseDamping = 0.5f;
+
+            // Symbol Browser
+            public bool AlwaysShowDescriptionPanel = false;
 
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;

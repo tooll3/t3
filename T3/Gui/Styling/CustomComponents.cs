@@ -492,18 +492,6 @@ namespace T3.Gui
             return modified;
         }
 
-        public static bool FloatValueEditInPlace(string label, ref float value, float min = float.NegativeInfinity, float max = float.PositiveInfinity, float scale = 0.01f, bool clamp = false)
-        {
-            string cleanedLabel = label.Split(_idSpecifier)[0];
-            ImGui.TextUnformatted(cleanedLabel);
-            ImGui.SameLine();
-            ImGui.PushID(label);
-            var modified = DrawSingleValueEdit(cleanedLabel, ref value, min, max, clamp, scale);
-
-            ImGui.PopID();
-            return modified;
-        }
-
         public static bool IntValueEdit(string label, ref int value, int min = int.MinValue, int max = int.MaxValue, float scale = 1)
         {
             var labelSize = ImGui.CalcTextSize(label);

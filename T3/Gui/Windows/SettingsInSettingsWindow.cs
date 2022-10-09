@@ -215,5 +215,17 @@ namespace T3.Gui.Windows
             ),
         };
 
+        static readonly UIControlledSetting[] symbolBrowserSettings = new UIControlledSetting[]
+        {
+            new UIControlledSetting
+            (
+                label: "Always Show Description",
+                tooltip: "Shifts the Description panel to the left of the Symbol Browser when\n" +
+                        "it is too close to the right edge of the screen to display it.",
+                guiFunc: (string guiLabel) => ImGui.Checkbox(guiLabel, ref UserSettings.Config.AlwaysShowDescriptionPanel),
+                drawOnLeft: true
+            ),
+        };
+
     }
 }

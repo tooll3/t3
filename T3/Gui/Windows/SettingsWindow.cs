@@ -39,9 +39,15 @@ namespace T3.Gui.Windows
                 ImGui.TreePop();
             }
 
-            if (ImGui.TreeNode("Additional settings"))
+            if (ImGui.TreeNode("Additional Settings"))
             {
                 changed |= SettingsUi.DrawSettingsTable("##additionalsettingstable", additionalSettings);
+
+                if(ImGui.TreeNode("Symbol Browser Settings"))
+                {
+                    changed |= SettingsUi.DrawSettingsTable("##symbolbrowsersettingstable", symbolBrowserSettings);
+                }
+
                 ImGui.TreePop();
             }
 

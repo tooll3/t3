@@ -33,15 +33,20 @@ namespace t3.Gui
                     {
                         var valueChanged = setting.DrawGUIControl(true);
                         changed |= valueChanged;
+
                         ImGui.SameLine();
                         ImGui.Dummy(_leftCheckboxSpacing);
                         ImGui.SameLine();
+
                         ImGui.Text(setting.CleanLabel);
+                        DrawTooltip(setting);
+
                         ImGui.Unindent();
                     }
                     else
                     {
                         ImGui.Text(setting.CleanLabel);
+                        DrawTooltip(setting);
                         ImGui.Unindent();
                         ImGui.TableNextColumn();
                         var valueChanged = setting.DrawGUIControl(true);
@@ -71,12 +76,24 @@ namespace t3.Gui
             foreach (var setting in settings)
             {
                 ImGui.Text(setting.CleanLabel);
+                DrawTooltip(setting);
                 ImGui.SameLine();
                 changed |= setting.DrawGUIControl(true);
             }
 
             ImGui.NewLine();
             return changed;
+        }
+
+        private static void DrawTooltip(UIControlledSetting setting)
+        {
+            if (!string.IsNullOrEmpty(setting.Tooltip))
+            {
+                if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+                {
+                    ImGui.SetTooltip(setting.Tooltip);
+                }
+            }
         }
 
         private static readonly Vector2 _leftCheckboxSpacing = new Vector2(0f, 20f);
