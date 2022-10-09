@@ -343,17 +343,8 @@ namespace T3.Gui.Graph.Interaction
             var yOverflow = maxYPos > windowSize.Y;
             var yShrinkage = yOverflow ? windowSize.Y - maxYPos : 0;
 
-            position = new Vector2
-            {
-                X = position.X + xPositionOffset,
-                Y = position.Y
-            };
-
-            size = new Vector2
-            {
-                X = size.X,
-                Y = size.Y + yShrinkage
-            };
+            position.X += xPositionOffset;
+            size.Y += yShrinkage;
         }
 
         private void DrawDescriptionPanel(Vector2 position, Vector2 size, SymbolUi itemForHelp)
