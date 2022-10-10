@@ -666,7 +666,7 @@
           }
         },
         {
-          "Id": "dbb4ee8f-eefa-4df7-a8dd-1efb6f5bdae0"/*Size*/,
+          "Id": "dbb4ee8f-eefa-4df7-a8dd-1efb6f5bdae0"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 1.04
         },
@@ -833,7 +833,7 @@
           }
         },
         {
-          "Id": "dbb4ee8f-eefa-4df7-a8dd-1efb6f5bdae0"/*Size*/,
+          "Id": "dbb4ee8f-eefa-4df7-a8dd-1efb6f5bdae0"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 1.04
         },
@@ -946,7 +946,7 @@
           }
         },
         {
-          "Id": "dbb4ee8f-eefa-4df7-a8dd-1efb6f5bdae0"/*Size*/,
+          "Id": "dbb4ee8f-eefa-4df7-a8dd-1efb6f5bdae0"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 1.04
         },
@@ -1059,7 +1059,7 @@
           }
         },
         {
-          "Id": "dbb4ee8f-eefa-4df7-a8dd-1efb6f5bdae0"/*Size*/,
+          "Id": "dbb4ee8f-eefa-4df7-a8dd-1efb6f5bdae0"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 1.04
         },
@@ -1384,7 +1384,7 @@
           }
         },
         {
-          "Id": "dbb4ee8f-eefa-4df7-a8dd-1efb6f5bdae0"/*Size*/,
+          "Id": "dbb4ee8f-eefa-4df7-a8dd-1efb6f5bdae0"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 1.0
         },
@@ -1559,7 +1559,7 @@
           }
         },
         {
-          "Id": "dbb4ee8f-eefa-4df7-a8dd-1efb6f5bdae0"/*Size*/,
+          "Id": "dbb4ee8f-eefa-4df7-a8dd-1efb6f5bdae0"/*LineWidth*/,
           "Type": "System.Single",
           "Value": 0.66
         },
