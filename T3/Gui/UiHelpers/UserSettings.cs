@@ -79,6 +79,9 @@ namespace T3.Gui.UiHelpers
             public float SpaceMouseMoveSpeedFactor = 1f;
             public float SpaceMouseDamping = 0.5f;
 
+            // Symbol Browser
+            public bool AlwaysShowDescriptionPanel = false;
+
             [JsonConverter(typeof(StringEnumConverter))]
             public TimeFormat.TimeDisplayModes TimeDisplayMode = TimeFormat.TimeDisplayModes.Bars;
             

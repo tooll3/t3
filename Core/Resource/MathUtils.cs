@@ -1,7 +1,6 @@
 using System;
 using System.Numerics;
 using T3.Core.Animation;
-using T3.Core.Operator;
 
 namespace T3.Core
 {
