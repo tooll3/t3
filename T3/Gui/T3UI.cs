@@ -24,6 +24,7 @@ using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
 using t3.Gui.UiHelpers.Wiki;
 using T3.Gui.Windows;
+using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;
 using Unsplasharp.Models; // ForwardBeatTaps
 
@@ -33,7 +34,7 @@ namespace T3.Gui
     {
         static T3Ui()
         {
-            var operatorsAssembly = Assembly.GetAssembly(typeof(Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe.Value));
+            var operatorsAssembly = Assembly.GetAssembly(typeof(Value));
             UiModel = new UiModel(operatorsAssembly);
             
             var playback = new Playback();
@@ -374,5 +375,9 @@ namespace T3.Gui
             PreventZoomWithMouseWheel = 1 << 3,
             PreventPanningWithMouse = 1 << 4,
         }
+
+        public static bool UseVSync = true;
+        public static bool WindowRegionsVisible;
+        public static bool ItemRegionsVisible;
     }
 }

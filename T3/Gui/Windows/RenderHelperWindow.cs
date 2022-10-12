@@ -18,7 +18,7 @@ namespace T3.Gui.Windows
             Frames
         }
 
-        protected void DrawTimeSetup()
+        protected static void DrawTimeSetup()
         {
             // use our loop range instead of entered values?
             ImGui.Checkbox("Use Loop Range", ref _useLoopRange);
@@ -26,7 +26,7 @@ namespace T3.Gui.Windows
 
             // convert times if reference time selection changed
             int newTimeReferenceIndex = (int)_timeReference;
-            if (CustomComponents.DrawEnumSelector<TimeReference>(ref newTimeReferenceIndex, "Time reference"))
+            if (CustomComponents.DrawEnumParameter<TimeReference>(ref newTimeReferenceIndex, "Time reference"))
             {
                 TimeReference newTimeReference = (TimeReference)newTimeReferenceIndex;
                 _startTime = (float)ConvertReferenceTime(_startTime, _timeReference, newTimeReference);
@@ -34,11 +34,11 @@ namespace T3.Gui.Windows
                 _timeReference = newTimeReference;
             }
 
-            CustomComponents.FloatValueEdit($"Start in {_timeReference}", ref _startTime);
-            CustomComponents.FloatValueEdit($"End in {_timeReference}", ref _endTime);
+            CustomComponents.DrawFloatParameter($"Start in {_timeReference}", ref _startTime);
+            CustomComponents.DrawFloatParameter($"End in {_timeReference}", ref _endTime);
 
             // change FPS if required
-            CustomComponents.FloatValueEdit("FPS", ref _fps, 0);
+            CustomComponents.DrawFloatParameter("FPS", ref _fps, 0);
             if (_fps < 0) _fps = -_fps;
             if (_fps != 0)
             {
@@ -79,7 +79,7 @@ namespace T3.Gui.Windows
             return true;
         }
 
-        public static void UseLoopRange()
+        private static void UseLoopRange()
         {
             var playback = Playback.Current; // TODO, this should be non-static eventually
             var startInSeconds = playback.SecondsFromBars(playback.LoopRange.Start);
@@ -88,9 +88,9 @@ namespace T3.Gui.Windows
             _endTime = (float)SecondsToReferenceTime(endInSeconds, _timeReference);
         }
 
-        public static double ConvertReferenceTime(double time,
-            TimeReference oldTimeReference,
-            TimeReference newTimeReference)
+        private static double ConvertReferenceTime(double time,
+                                                   TimeReference oldTimeReference,
+                                                   TimeReference newTimeReference)
         {
             // only convert time value if time reference changed
             if (oldTimeReference == newTimeReference) return time;
@@ -99,7 +99,7 @@ namespace T3.Gui.Windows
             return SecondsToReferenceTime(seconds, newTimeReference);
         }
 
-        protected static double ConvertFPS(double time, double oldFps, double newFps)
+        private static double ConvertFPS(double time, double oldFps, double newFps)
         {
             // only convert FPS if values are valid
             if (oldFps == 0 || newFps == 0) return time;
@@ -107,7 +107,7 @@ namespace T3.Gui.Windows
             return time / oldFps * newFps;
         }
 
-        protected static double ReferenceTimeToSeconds(double time, TimeReference timeReference)
+        private static double ReferenceTimeToSeconds(double time, TimeReference timeReference)
         {
             var playback = Playback.Current; // TODO, this should be non-static eventually
             switch (timeReference)
@@ -127,7 +127,7 @@ namespace T3.Gui.Windows
             return time;
         }
 
-        protected static double SecondsToReferenceTime(double timeInSeconds, TimeReference timeReference)
+        private static double SecondsToReferenceTime(double timeInSeconds, TimeReference timeReference)
         {
             var playback = Playback.Current; // TODO, this should be non-static eventually
             switch (timeReference)
@@ -161,12 +161,12 @@ namespace T3.Gui.Windows
 
         protected static float Progress => (float)((double)_frameIndex / (double)_frameCount).Clamp(0, 1);
 
-        protected static bool _useLoopRange;
-        protected static TimeReference _timeReference;
-        protected static float _startTime;
-        protected static float _endTime = 1.0f; // one Bar
+        private static bool _useLoopRange;
+        private static TimeReference _timeReference;
+        private static float _startTime;
+        private static float _endTime = 1.0f; // one Bar
         protected static float _fps = 60.0f;
-        protected static float _lastValidFps = _fps;
+        private static float _lastValidFps = _fps;
 
         protected static int _frameIndex;
         protected static int _frameCount;

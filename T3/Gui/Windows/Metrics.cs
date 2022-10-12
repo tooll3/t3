@@ -50,11 +50,11 @@ namespace T3.Gui.Windows
             ImGui.SameLine(0, offsetFromAppMenu.X);
             if (ImGui.InvisibleButton("performanceGraph", new Vector2(barWidth, ImGui.GetFrameHeight())))
             {
-                SettingsWindow.UseVSync = !SettingsWindow.UseVSync;
+                T3Ui.UseVSync = !T3Ui.UseVSync;
             }
             if (ImGui.IsItemHovered())
             {
-                ImGui.SetTooltip($"UI: {_peakUiRenderDurationMs:0.0}ms\nRender: {_peakDeltaTimeMs:0.0}ms\n VSync: {(SettingsWindow.UseVSync?"On":"Off")} (Click to toggle)");
+                ImGui.SetTooltip($"UI: {_peakUiRenderDurationMs:0.0}ms\nRender: {_peakDeltaTimeMs:0.0}ms\n VSync: {(T3Ui.UseVSync?"On":"Off")} (Click to toggle)");
             }
             const float normalFramerateLevelAt = 0.5f;
             const float frameTimingScaleFactor = barWidth / normalFramerateLevelAt / ExpectedFramerate;

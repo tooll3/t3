@@ -337,41 +337,7 @@ namespace T3.Gui
                                                   ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos(),
                                                   Color.White);
         }
-
         
-
-        // public static void ToggleButton(string str_id, ref bool v)
-        // {
-        //     var p = ImGui.GetCursorScreenPos();
-        //     var drawList = ImGui.GetWindowDrawList();
-        //
-        //     var height = ImGui.GetFrameHeight();
-        //     var width = height * 1.55f;
-        //     var radius = height * 0.50f;
-        //
-        //     ImGui.InvisibleButton(str_id, new Vector2(width, height));
-        //     if (ImGui.IsItemClicked())
-        //         v = !v;
-        //
-        //     var t = v ? 1.0f : 0.0f;
-        //
-        //     //ImGuiContext & g = *GImGui;
-        //     //var g = ImGui.GetCurrentContext();
-        //     //float ANIM_SPEED = 0.08f;
-        //     //if (g.LastActiveId == g.CurrentWindow->GetID(str_id))// && g.LastActiveIdTimer < ANIM_SPEED)
-        //     //{
-        //     //    float t_anim = ImSaturate(g.LastActiveIdTimer / ANIM_SPEED);
-        //     //    t = v ? (t_anim) : (1.0f - t_anim);
-        //     //}
-        //
-        //     var colBg = ImGui.IsItemHovered()
-        //                     ? Color.White
-        //                     : Color.Red;
-        //
-        //     drawList.AddRectFilled(p, new Vector2(p.X + width, p.Y + height), colBg, height * 0.5f);
-        //     drawList.AddCircleFilled(new Vector2(p.X + radius + t * (width - radius * 2.0f), p.Y + radius), radius - 1.5f, Color.White);
-        // }
-
         public static bool EmptyWindowMessage(string message, string buttonLabel = null)
         {
             var center = (ImGui.GetWindowContentRegionMax() + ImGui.GetWindowContentRegionMin()) / 2 + ImGui.GetWindowPos();
@@ -385,11 +351,13 @@ namespace T3.Gui
             var y = center.Y - lineCount * textLineHeight / 2;
             var drawList = ImGui.GetWindowDrawList();
 
+            var emptyMessageColor = new Color(0.3f);
+
             foreach (var line in lines)
             {
                 var textSize = ImGui.CalcTextSize(line);
                 var position = new Vector2(center.X - textSize.X / 2, y);
-                drawList.AddText(position, EmptyMessageColor, line);
+                drawList.AddText(position, emptyMessageColor, line);
                 y += textLineHeight;
             }
 
@@ -406,7 +374,6 @@ namespace T3.Gui
             return false;
         }
 
-        private static Color EmptyMessageColor = new Color(0.3f);
 
         public static void TooltipForLastItem(string message, string additionalNotes = null, bool useHoverDelay = true)
         {
@@ -473,64 +440,67 @@ namespace T3.Gui
         }
 
 
-        public static bool FloatValueEdit(string label, ref float value, float min = float.NegativeInfinity, float max = float.PositiveInfinity, float scale = 0.01f, bool clamp = false)
+        public static bool DrawCheckboxParameter(string label, ref bool value, string tooltip= null)
+        {
+            var modified = ImGui.Checkbox(label, ref value);
+            if (!string.IsNullOrEmpty(tooltip))
+            {
+                TooltipForLastItem(tooltip);
+            }
+            return modified;
+        }
+        
+        public static bool DrawFloatParameter(string label, ref float value, float min = float.NegativeInfinity, float max = float.PositiveInfinity, float scale = 0.01f, bool clamp = false, string tooltip= null)
         {
             var labelSize = ImGui.CalcTextSize(label);
             const float leftPadding = 200;
             var p = ImGui.GetCursorPos();
             ImGui.SetCursorPosX(MathF.Max(leftPadding - labelSize.X, 0) + 10);
             ImGui.AlignTextToFramePadding();
-
-            string cleanedLabel = label.Split(_idSpecifier)[0];
-            ImGui.TextUnformatted(cleanedLabel);
+            
+            ImGui.TextUnformatted(label);
             ImGui.SetCursorPos(p);
 
             ImGui.SameLine();
             ImGui.SetCursorPosX(leftPadding + 20);
-            var modified = DrawSingleValueEdit(cleanedLabel, ref value, min, max, clamp, scale);
+            ImGui.PushID(label);
+            var size = new Vector2(150, ImGui.GetFrameHeight());
+            var result = SingleValueEdit.Draw(ref value, size, min, max, clamp, scale);
+            ImGui.PopID();
+            var modified = (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
 
+            if (!string.IsNullOrEmpty(tooltip))
+            {
+                TooltipForLastItem(tooltip);
+            }
+            
             return modified;
         }
-
-        public static bool IntValueEdit(string label, ref int value, int min = int.MinValue, int max = int.MaxValue, float scale = 1)
+        
+        public static bool DrawIntParameter(string label, ref int value, int min = int.MinValue, int max = int.MaxValue, float scale = 1)
         {
             var labelSize = ImGui.CalcTextSize(label);
             const float leftPadding = 200;
             var p = ImGui.GetCursorPos();
             ImGui.SetCursorPosX(MathF.Max(leftPadding - labelSize.X, 0) + 10);
             ImGui.AlignTextToFramePadding();
-
-            string cleanedLabel = label.Split(_idSpecifier)[0];
-            ImGui.TextUnformatted(cleanedLabel);
+            
+            ImGui.TextUnformatted(label);
 
             ImGui.SetCursorPos(p);
 
             ImGui.SameLine();
             ImGui.SetCursorPosX(leftPadding + 20);
 
-            var modified = DrawSingleValueEdit(cleanedLabel, ref value, min, max, true, scale);
+            ImGui.PushID(label);
+            var size = new Vector2(150, ImGui.GetFrameHeight());
+            var result = SingleValueEdit.Draw(ref value, size, min, max, true, scale);
+            ImGui.PopID();
+            var modified = (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
             return modified;
         }
 
-        public static bool DrawSingleValueEdit(string label, ref int value, int min = int.MinValue, int max = int.MaxValue, bool clamp = false, float scale = 1f)
-        {
-            ImGui.PushID(label);
-            var size = new Vector2(150, ImGui.GetFrameHeight());
-            var result = SingleValueEdit.Draw(ref value, size, min, max, clamp, scale);
-            ImGui.PopID();
-            return (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
-        }
-
-        public static bool DrawSingleValueEdit(string label, ref float value, float min = float.MinValue, float max = float.MaxValue, bool clamp = false, float scale = 1f)
-        {
-            ImGui.PushID(label);
-            var size = new Vector2(150, ImGui.GetFrameHeight());
-            var result = SingleValueEdit.Draw(ref value, size, min, max, clamp, scale);
-            ImGui.PopID();
-            return (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
-        }
-
-        public static bool StringValueEdit(string label, ref string value)
+        public static bool DrawStringParameter(string label, ref string value)
         {
             const float leftPadding = 200;
             var labelSize = ImGui.CalcTextSize(label);
@@ -539,7 +509,7 @@ namespace T3.Gui
             ImGui.SetCursorPosX( MathF.Max(leftPadding - labelSize.X,0)+10);
             ImGui.AlignTextToFramePadding();
 
-            string cleanedLabel = label.Split(_idSpecifier)[0];
+            string cleanedLabel = label.Split(ImGuiIdSpecifier)[0];
             ImGui.TextUnformatted(cleanedLabel);
 
             ImGui.SetCursorPos(p);
@@ -553,7 +523,7 @@ namespace T3.Gui
             return modified;
         }
 
-        public static bool DrawEnumSelector<T>(ref int index, string label)
+        public static bool DrawEnumParameter<T>(ref int index, string label)
         {
             // Label
             var labelSize = ImGui.CalcTextSize(label);
@@ -562,7 +532,7 @@ namespace T3.Gui
             ImGui.SetCursorPosX(MathF.Max(200 - labelSize.X, 0) + 10);
             ImGui.AlignTextToFramePadding();
 
-            string cleanedLabel = label.Split(_idSpecifier)[0];
+            string cleanedLabel = label.Split(ImGuiIdSpecifier)[0];
             ImGui.TextUnformatted(cleanedLabel);
 
             ImGui.SetCursorPos(p);
@@ -591,7 +561,7 @@ namespace T3.Gui
             return modified;
         }
 
-        private const string _idSpecifier = "##";
+        private const string ImGuiIdSpecifier = "##";
     }
 
     public static class InputWithTypeAheadSearch
@@ -603,19 +573,19 @@ namespace T3.Gui
             {
                 if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorDown, true))
                 {
-                    if (_lastResults.Count > 0)
+                    if (_lastTypeAheadResults.Count > 0)
                     {
                         _selectedResultIndex++;
-                        _selectedResultIndex %= _lastResults.Count;
+                        _selectedResultIndex %= _lastTypeAheadResults.Count;
                     }
                 }
                 else if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorUp, true))
                 {
-                    if (_lastResults.Count > 0)
+                    if (_lastTypeAheadResults.Count > 0)
                     {
                         _selectedResultIndex--;
                         if (_selectedResultIndex < 0)
-                            _selectedResultIndex = _lastResults.Count - 1;
+                            _selectedResultIndex = _lastTypeAheadResults.Count - 1;
                     }
                 }
             }
@@ -624,7 +594,7 @@ namespace T3.Gui
 
             if (ImGui.IsItemActivated())
             {
-                _lastResults.Clear();
+                _lastTypeAheadResults.Clear();
                 _selectedResultIndex = -1;
                 THelpers.DisableImGuiKeyboardNavigation();
             }
@@ -650,7 +620,7 @@ namespace T3.Gui
                                 | ImGuiWindowFlags.ChildWindow
                                 ))
                 {
-                    _lastResults.Clear();
+                    _lastTypeAheadResults.Clear();
                     int index = 0;
                     ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Gray.Rgba);
                     foreach (var word in items)
@@ -667,7 +637,7 @@ namespace T3.Gui
                                 _isSearchResultWindowOpen = false;
                             }
 
-                            _lastResults.Add(word);
+                            _lastTypeAheadResults.Add(word);
                             if (++index > 30)
                                 break;
                         }
@@ -688,7 +658,7 @@ namespace T3.Gui
             return wasChanged;
         }
 
-        private static List<string> _lastResults = new List<string>();
+        private static readonly List<string> _lastTypeAheadResults = new();
         private static int _selectedResultIndex = 0;
         private static bool _isSearchResultWindowOpen;
     }

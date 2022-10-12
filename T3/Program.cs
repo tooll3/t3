@@ -232,10 +232,10 @@ namespace T3
 
                 T3Metrics.UiRenderingCompleted();
 
-                _main.SwapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
+                _main.SwapChain.Present(T3Ui.UseVSync ? 1 : 0, PresentFlags.None);
 
                 if (T3Ui.ShowSecondaryRenderWindow)
-                    Viewer.SwapChain.Present(SettingsWindow.UseVSync ? 1 : 0, PresentFlags.None);
+                    Viewer.SwapChain.Present(T3Ui.UseVSync ? 1 : 0, PresentFlags.None);
             }
 
             RenderLoop.Run(_main.Form, RenderCallback);

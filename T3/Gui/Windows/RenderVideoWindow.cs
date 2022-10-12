@@ -33,8 +33,8 @@ namespace T3.Gui.Windows
             DrawTimeSetup();
 
             // custom parameters for this renderer
-            CustomComponents.IntValueEdit("Bitrate", ref _bitrate, 0, 25000000, 1000);
-            CustomComponents.StringValueEdit("File", ref _targetFile);
+            CustomComponents.DrawIntParameter("Bitrate", ref _bitrate, 0, 25000000, 1000);
+            CustomComponents.DrawStringParameter("File", ref _targetFile);
             ImGui.SameLine();
             FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref _targetFile);
             ImGui.Separator();

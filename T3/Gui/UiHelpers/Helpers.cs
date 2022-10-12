@@ -48,19 +48,19 @@ namespace UiHelpers
         /// </summary>
         public static void DebugItemRect(string label = "", uint color = 0xff20ff80)
         {
-            if (SettingsWindow.ItemRegionsVisible)
+            if (T3Ui.ItemRegionsVisible)
                 DebugRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color, label);
         }
 
         public static void DebugWindowRect(string label = "", uint color = 0xffff2080)
         {
-            if (SettingsWindow.WindowRegionsVisible)
+            if (T3Ui.WindowRegionsVisible)
                 DebugRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), color, label);
         }
 
         public static void DebugContentRect(string label = "", uint color = 0xff804080)
         {
-            if (!SettingsWindow.WindowRegionsVisible)
+            if (!T3Ui.WindowRegionsVisible)
                 return;
 
             var min = ImGui.GetWindowContentRegionMin();

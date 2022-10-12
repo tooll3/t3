@@ -1,27 +1,16 @@
-using System.Collections.Generic;
-using System.Threading.Channels;
-using System.Windows.Forms;
-using ImGuiNET;
-using T3.Gui.Commands;
-using T3.Gui.Graph;
-using T3.Gui.TypeColors;
-using T3.Gui.UiHelpers;
+﻿using System.Collections.Generic;
 using System.Numerics;
-using t3.Gui;
+using ImGuiNET;
+using T3.Gui.UiHelpers;
 
 namespace T3.Gui.Windows
 {
-    public partial class SettingsWindow : Window
+    public class SettingsWindow : Window
     {
         public SettingsWindow()
         {
             Config.Title = "Settings";
         }
-
-        public static bool UseVSync = true;
-
-        public static bool WindowRegionsVisible;
-        public static bool ItemRegionsVisible;
 
         protected override void DrawContent()
         {
@@ -29,99 +18,98 @@ namespace T3.Gui.Windows
             ImGui.NewLine();
             if (ImGui.TreeNode("User Interface"))
             {
-                changed |= SettingsUi.DrawSettingsTable("##uisettingstable", userInterfaceSettings);
+                changed |= CustomComponents.DrawCheckboxParameter("Warn before Lib modifications",
+                                                       ref UserSettings.Config.WarnBeforeLibEdit,
+                                                       "This warning pops up when you attempt to enter an Operator that ships with the application.\n" +
+                                                       "If unsure, this is best left checked.");
+                
+                changed |= CustomComponents.DrawCheckboxParameter("Use arc connections",
+                                                                  ref UserSettings.Config.UseArcConnections,
+                                                                  "Affects the shape of the connections between your Operators");
+                
+
+                changed |= CustomComponents.DrawCheckboxParameter("Use Jog Dial Control",
+                                                                  ref UserSettings.Config.UseJogDialControl,
+                                                                  "Affects the shape of the connections between your Operators");
+
+                changed |= CustomComponents.DrawCheckboxParameter("Show Graph thumbnails",
+                                                                  ref UserSettings.Config.ShowThumbnails);
+
+                changed |= CustomComponents.DrawCheckboxParameter("Drag snapped nodes",
+                                                                  ref UserSettings.Config.SmartGroupDragging);
+                
+                changed |= CustomComponents.DrawCheckboxParameter("Fullscreen Window Swap",
+                                                                  ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen,
+                                                                  "Swap main and second windows when fullscreen");
+
+                ImGui.Dummy(new Vector2(20,20));
+                
+
+                changed |= CustomComponents.DrawFloatParameter("UI Scale",
+                                                               ref UserSettings.Config.UiScaleFactor,
+                                                               0.1f, 5f, 0.01f, true, 
+                                                               "The global scale of all rendered UI in the application");
+                
+
+                changed |= CustomComponents.DrawFloatParameter("Scroll smoothing",
+                                                               ref UserSettings.Config.ScrollSmoothing,
+                                                               0.0f, 0.2f, 0.01f, true);
+
+                changed |= CustomComponents.DrawFloatParameter("Snap strength",
+                                                    ref UserSettings.Config.SnapStrength,
+                                                    0.0f, 0.2f, 0.01f, true);
+                
+                changed |= CustomComponents.DrawFloatParameter("Click threshold",
+                                                               ref UserSettings.Config.ClickThreshold,
+                                                               0.0f, 10f, 0.1f, true, 
+                                                               "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input.");
+                
+                changed |= CustomComponents.DrawFloatParameter("Timeline Raster Density",
+                                                               ref UserSettings.Config.TimeRasterDensity,
+                                                               0.0f, 10f, 0.01f, true, 
+                                                               "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input.");
+                ImGui.Dummy(new Vector2(20,20));
                 ImGui.TreePop();
             }
-            
+
             if (ImGui.TreeNode("Space Mouse"))
             {
-                changed |= SettingsUi.DrawSettingsTable("##settingspacemousetable", spaceMouseSettings);
+                CustomComponents.HelpText("These settings only apply with a connected space mouse controller");
+                
+                changed |= CustomComponents.DrawFloatParameter("Smoothing",
+                                                               ref UserSettings.Config.SpaceMouseDamping,
+                                                               0.0f, 10f, 0.01f, true);                
+
+                changed |= CustomComponents.DrawFloatParameter("Move Speed",
+                                                               ref UserSettings.Config.SpaceMouseMoveSpeedFactor,
+                                                               0.0f, 10f, 0.01f, true);                
+
+                changed |= CustomComponents.DrawFloatParameter("Rotation Speed",
+                                                               ref UserSettings.Config.SpaceMouseRotationSpeedFactor,
+                                                               0.0f, 10f, 0.01f, true);                
+                
+                ImGui.Dummy(new Vector2(20,20));
                 ImGui.TreePop();
             }
 
             if (ImGui.TreeNode("Additional Settings"))
             {
-                changed |= SettingsUi.DrawSettingsTable("##additionalsettingstable", additionalSettings);
+                changed |= CustomComponents.DrawFloatParameter("Gizmo size",
+                                                               ref UserSettings.Config.GizmoSize,
+                                                               0.0f, 10f, 0.01f, true);                        
 
-                if(ImGui.TreeNode("Symbol Browser Settings"))
-                {
-                    changed |= SettingsUi.DrawSettingsTable("##symbolbrowsersettingstable", symbolBrowserSettings);
-                }
-
-                ImGui.TreePop();
-            }
-
-#if DEBUG
-            if (ImGui.TreeNode("Debug Options"))
-            {
-                SettingsUi.DrawSettings(debugSettings);
-                if (ImGui.TreeNode("Undo Queue"))
-                {
-                    ImGui.Indent();
-                    ImGui.TextUnformatted("Undo");
-                    ImGui.Indent();
-                    foreach (var c in UndoRedoStack.UndoStack)
-                    {
-                        ImGui.Selectable(c.Name);
-                    }
-
-                    ImGui.Unindent();
-                    ImGui.Spacing();
-                    ImGui.TextUnformatted("Redo");
-                    ImGui.Indent();
-                    foreach (var c in UndoRedoStack.RedoStack)
-                    {
-                        ImGui.Selectable(c.Name);
-                    }
-
-                    ImGui.Unindent();
-                    ImGui.Unindent();
-                    ImGui.TreePop();
-                }
-
-                if (ImGui.TreeNode("Modified Symbols"))
-                {
-                    foreach (var symbolUi in UiModel.GetModifiedSymbolUis())
-                    {
-                        if (symbolUi.HasBeenModified)
-                        {
-                            ImGui.TextUnformatted(symbolUi.Symbol.Namespace + ". " +  symbolUi.Symbol.Name);
-                        }
-                    }
-                    
-                    ImGui.TreePop();
-                }                
+                changed |= CustomComponents.DrawFloatParameter("Tooltip delay in Seconds",
+                                                               ref UserSettings.Config.TooltipDelay,
+                                                               0.0f, 30f, 0.01f, true);        
                 
+                changed |= CustomComponents.DrawCheckboxParameter("Always show description in Symbol Browser",
+                                                               ref UserSettings.Config.AlwaysShowDescriptionPanel,
+                                                               "Shifts the Description panel to the left of the Symbol Browser when\n" +
+                                                               "it is too close to the right edge of the screen to display it.");
                 ImGui.TreePop();
             }
-            
-#endif
-#if DEBUG
-            if (ImGui.TreeNode("Look (not saved)"))
-            {
-                ColorVariations.DrawSettingsUi();
-
-                if (ImGui.TreeNode("T3 Ui Style"))
-                {
-                    SettingsUi.DrawSettingsTable("##t3uistylesettings", t3UiStyleSettings);
-                }
-                
-                if (ImGui.TreeNode("T3 Graph colors"))
-                {
-                    T3Style.DrawUi();
-                    ImGui.TreePop();
-                }                
-                ImGui.TreePop();
-            }
-#endif
-
             if (changed)
                 UserSettings.Save();
-
-#if DEBUG
-            ImGui.Separator();
-            T3Metrics.Draw();
-#endif
         }
 
         public override List<Window> GetInstances()
