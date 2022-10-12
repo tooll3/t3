@@ -30,11 +30,12 @@ namespace T3.Gui.Interaction
 
         private static readonly RangeDef[] Ranges =
             {
-                new(-4f * OuterRangeHeight, -3f * OuterRangeHeight, 1000, "1000"),
-                new(-3f * OuterRangeHeight, -2f * OuterRangeHeight, 100, "100"),
-                new(-2f * OuterRangeHeight, -1f * OuterRangeHeight, 10, "10"),
+                new(-5f * OuterRangeHeight, -4f * OuterRangeHeight, 1000, "1000"),
+                new(-4f * OuterRangeHeight, -3f * OuterRangeHeight, 100, "100"),
+                new(-3f * OuterRangeHeight, -2f * OuterRangeHeight, 10, "10"),
+                new(-2f * OuterRangeHeight, -1f * OuterRangeHeight, 1, "1"),
 
-                new(-1f * OuterRangeHeight, 1f * OuterRangeHeight, 1, ""),
+                new(-1f * OuterRangeHeight, 1f * OuterRangeHeight, 0, ""),
 
                 new(1f * OuterRangeHeight, 2f * OuterRangeHeight, 0.1f, "0.1"),
                 new(2f * OuterRangeHeight, 3f * OuterRangeHeight, 0.01f, "0.01"),
@@ -42,29 +43,28 @@ namespace T3.Gui.Interaction
             };
 
         private static RangeDef _lockedRange;
-        private const float FadeInLaneOffset = 0.1f;
-        private const float FadeInDuration = 0.1f;
 
         private const float LockDistance = 100;
-        //private const float FadeInDelay = 0.1f;
-
         public static void Draw(ref double editValue, ImGuiIOPtr io, double min, double max, float scale, float timeSinceVisible, bool clamp, Vector2 center)
         {
             var foreground = ImGui.GetForegroundDrawList();
-            //ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
             const double initialDelay = 0.2;
-            if (timeSinceVisible < initialDelay)
-                _lockedRange = null;
-
-            var pLast = io.MousePos - io.MouseDelta - center;
+            
             var pNow = io.MousePos - center;
-
-            if (timeSinceVisible < 0.032f)
+            if (timeSinceVisible < initialDelay)
             {
-                _lastStepPosX = pNow.X;
+                _lockedRange = null;
+                _hasExceededDragThreshold = false;
+                _lastX = 0f;
             }
 
+            var x = MathF.Floor(pNow.X / PixelsPerSize); 
+            
+            _hasExceededDragThreshold |= MathF.Abs(pNow.X) > PixelsPerSize * 4;
+            
+            var dx = x - _lastX;
             var activeScaleFactor = 0.0;
+            var usingCenterRange = false; 
 
             foreach (var range in Ranges)
             {
@@ -82,14 +82,15 @@ namespace T3.Gui.Interaction
                     _lockedRange = isWithinLockRange ? null : range;
                 }
 
-                var isCenterRange = Math.Abs(range.ScaleFactor - 1) < 0.001f;
+                var isCenterRange = Math.Abs(range.ScaleFactor - 0) < 0.001f;
                 if (isCenterRange)
+                {
+                    usingCenterRange = isActiveRange;
                     continue;
+                }
 
                 // Draw
                 var isLookedRange = _lockedRange == range;
-
-                //var textColor = isActiveRange ? 
                 var centerColor = !isActiveRange
                                       ? RangeFillColor
                                       : isLookedRange
@@ -109,46 +110,54 @@ namespace T3.Gui.Interaction
                                    range.Label);
             }
 
-            var deltaSinceLastStep = pLast.X - _lastStepPosX;
-            var delta = deltaSinceLastStep / StepSize;
-            if (io.KeyAlt)
-            {
-                ImGui.PushFont(Fonts.FontSmall);
-                foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), Color.Gray, "x0.01");
-                ImGui.PopFont();
-
-                delta *= 0.01f;
-            }
-            else if (io.KeyShift)
-            {
-                ImGui.PushFont(Fonts.FontSmall);
-                foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), Color.Gray, "x10");
-                ImGui.PopFont();
-
-                delta *= 10f;
-            }
-
-            if (!(Math.Abs(deltaSinceLastStep) >= StepSize))
+            if (Math.Abs(dx) < 0.0001f)
                 return;
-
-            editValue += delta * activeScaleFactor * scale;
-            if (activeScaleFactor > 1)
+            
+            if (_hasExceededDragThreshold)
             {
-                editValue = Math.Round(editValue / (activeScaleFactor * scale)) * (activeScaleFactor * scale);
+                var delta = dx;
+                if (io.KeyAlt)
+                {
+                    ImGui.PushFont(Fonts.FontSmall);
+                    foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), Color.Gray, "x0.01");
+                    ImGui.PopFont();
+
+                    delta *= 0.01f;
+                }
+                else if (io.KeyShift)
+                {
+                    ImGui.PushFont(Fonts.FontSmall);
+                    foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), Color.Gray, "x10");
+                    ImGui.PopFont();
+
+                    delta *= 10f;
+                }                
+                
+                var scaling = (usingCenterRange) 
+                                  ? scale
+                                  : activeScaleFactor;
+                
+                editValue += delta * scaling;
+                
+                if (activeScaleFactor != 0)
+                {
+                    editValue = Math.Round(editValue / (activeScaleFactor * scale)) * (activeScaleFactor * scale);
+                }
+
+                if (clamp)
+                    editValue = editValue.Clamp(min, max);
             }
 
-            if (clamp)
-                editValue = editValue.Clamp(min, max);
-
-            _lastStepPosX = pNow.X;
+            _lastX = x;
         }
 
-        private const float StepSize = 3;
-        private static float _lastStepPosX;
+        private const float PixelsPerSize = 7;
         private const float RangeWidth = 40;
         private const float OuterRangeHeight = 50;
         private static readonly Color RangeFillColor = new(0.3f, 0.3f, 0.3f);
         private static readonly Color ActiveRangeFillColor = new(0.8f, 0.8f, 0.8f);
         private static readonly Color LockedRangeFillColor = new(1f, 0.6f, 0.6f);
+        private static bool _hasExceededDragThreshold;
+        private static float _lastX;
     }
 }
