@@ -58,9 +58,9 @@ namespace T3.Gui.Interaction
                 _lastX = 0f;
             }
 
-            var x = MathF.Floor(pNow.X / PixelsPerSize); 
+            var x = MathF.Floor(pNow.X / PixelsPerStep); 
             
-            _hasExceededDragThreshold |= MathF.Abs(pNow.X) > PixelsPerSize * 4;
+            _hasExceededDragThreshold |= MathF.Abs(pNow.X) > PixelsPerStep * 4;
             
             var dx = x - _lastX;
             var activeScaleFactor = 0.0;
@@ -151,7 +151,7 @@ namespace T3.Gui.Interaction
             _lastX = x;
         }
 
-        private const float PixelsPerSize = 7;
+        private const float PixelsPerStep = 7;
         private const float RangeWidth = 40;
         private const float OuterRangeHeight = 50;
         private static readonly Color RangeFillColor = new(0.3f, 0.3f, 0.3f);

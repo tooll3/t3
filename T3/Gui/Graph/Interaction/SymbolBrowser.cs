@@ -111,6 +111,7 @@ namespace T3.Gui.Graph.Interaction
             {
                 ImGui.SetKeyboardFocusHere();
                 _focusInputNextTime = false;
+                _selectedItemWasChanged = true;
             }
 
             ImGui.SetCursorPos(posInWindow);
@@ -330,7 +331,7 @@ namespace T3.Gui.Graph.Interaction
         }
 
 
-        private void ShiftPositionToFitOnCanvas(ref Vector2 position, ref Vector2 size)
+        private static void ShiftPositionToFitOnCanvas(ref Vector2 position, ref Vector2 size)
         {
             var maxXPos = position.X + size.X;
             var maxYPos = position.Y + size.Y;
@@ -389,7 +390,7 @@ namespace T3.Gui.Graph.Interaction
                 _timeDescriptionSymbolUiLastHovered = DateTime.Now;
         }
 
-        private void DrawDescriptionPanelImGui(SymbolUi itemForHelp, Vector2 size, bool hasExamples)
+        private static void DrawDescriptionPanelImGui(SymbolUi itemForHelp, Vector2 size, bool hasExamples)
         {
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.One); // Padding between panels
 
@@ -422,9 +423,8 @@ namespace T3.Gui.Graph.Interaction
             ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
             foreach (var guid in examples)
             {
-                var label = "Example";
-                var exampleId = guid;
-                DrawExampleOperator(exampleId, label);
+                const string label = "Example";
+                DrawExampleOperator(guid, label);
             }
 
             ImGui.PopStyleVar();
@@ -457,10 +457,11 @@ namespace T3.Gui.Graph.Interaction
             ImGui.PopStyleColor(4);
         }
 
-        private void ScrollToMakeItemVisible()
+        private static void ScrollToMakeItemVisible()
         {
-            var scrollTarget = ImGui.GetCursorPos();
             var windowSize = ImGui.GetWindowSize();
+            var scrollTarget = ImGui.GetCursorPos();
+            scrollTarget -= new Vector2(0, ImGui.GetFrameHeight() + 4); // adjust to start pos of previous item
             var scrollPos = ImGui.GetScrollY();
 
             if (scrollTarget.Y < scrollPos)
