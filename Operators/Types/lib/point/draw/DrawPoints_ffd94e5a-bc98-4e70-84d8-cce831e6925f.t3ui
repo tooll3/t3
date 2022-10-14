@@ -368,6 +368,28 @@
         "X": 1252.2148,
         "Y": 4791.9507
       }
+    },
+    {
+      "ChildId": "fd0b19bc-ffcc-436f-800b-f934f82a0423"/*BlendColors*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1126.8871,
+        "Y": 4039.9224
+      }
+    },
+    {
+      "ChildId": "43937000-6623-4ae7-b4c3-e4ddeabe2a71"/*GetForegroundColor*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1002.66223,
+        "Y": 4105.8643
+      }
     }
   ],
   "OutputUis": [

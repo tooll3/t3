@@ -75,7 +75,7 @@ namespace T3.Gui.Windows
                                    ? MathUtils.Lerp(_peakDeltaTimeMs, deltaTimeMs, 0.05f)
                                    : deltaTimeMs;
             
-            var drawList = ImGui.GetForegroundDrawList();
+            var drawList = ImGui.GetWindowDrawList();
 
             // Draw Ui Render Duration
             var uiTimeWidth = (float)Math.Ceiling(_uiRenderDurationMs * frameTimingScaleFactor);
