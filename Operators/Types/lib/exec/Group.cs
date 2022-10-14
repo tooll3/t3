@@ -37,6 +37,12 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
             var t = Translation.GetValue(context);
             var objectToParentObject = Matrix.Transformation(scalingCenter: Vector3.Zero, scalingRotation: Quaternion.Identity, scaling: new Vector3(s.X, s.Y, s.Z), rotationCenter: Vector3.Zero,
                                                              rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll), translation: new Vector3(t.X, t.Y, t.Z));
+
+
+            var previousColor = context.ForegroundColor;
+            var color = Color.GetValue(context);
+            //color.W *= previousColor.W;     // TODO: this should be probably be controlled by an input parameter
+            context.ForegroundColor *= color;
             
             var previousWorldTobject = context.ObjectToWorld;
             context.ObjectToWorld = Matrix.Multiply(objectToParentObject, context.ObjectToWorld);
@@ -55,19 +61,11 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
                     // Cleanup after usage
                     t1.Value?.RestoreAction?.Invoke(context);
                 }
-
-                // foreach (var t1 in commands)
-                // {
-                // }
-                //
-                // foreach (var t1 in commands)
-                // {
-                // }
             }
-
+            
             Commands.DirtyFlag.Clear();
             
-            
+            context.ForegroundColor = previousColor;
             context.ObjectToWorld = previousWorldTobject;
         }
 
