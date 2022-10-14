@@ -519,7 +519,16 @@ namespace T3.Gui
             //var size = new Vector2(150, ImGui.GetFrameHeight());
             
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X- 50);
+
+
+            var wasNull = value == null;
+            if (wasNull)
+                value = string.Empty;
+            
             var modified = ImGui.InputText("##" + label, ref value, 1000);
+            if (!modified && wasNull)
+                value = null;
+            
             return modified;
         }
 

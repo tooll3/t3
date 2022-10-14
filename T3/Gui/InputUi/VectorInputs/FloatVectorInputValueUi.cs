@@ -82,10 +82,15 @@ namespace T3.Gui.InputUi
         {
             base.DrawSettings();
 
-            ImGui.DragFloat("Min", ref Min);
-            ImGui.DragFloat("Max", ref Max);
-            ImGui.DragFloat("Scale", ref _scale);
-            ImGui.Checkbox("Clamp Range", ref Clamp);
+            CustomComponents.DrawFloatParameter("Scale", ref _scale);
+            CustomComponents.DrawFloatParameter("Min", ref Min);
+            CustomComponents.DrawFloatParameter("Max", ref Max);
+            CustomComponents.DrawCheckboxParameter("Clamp Range", ref Clamp);
+            //ImGui.DragFloat("Min", ref Min);
+            //ImGui.DragFloat("Max", ref Max);
+            //ImGui.DragFloat("Scale", ref _scale);
+            //ImGui.Checkbox("Clamp Range", ref Clamp);
+            CustomComponents.DrawStringParameter("Custom Format", ref Format);
         }
 
         public override void Write(JsonTextWriter writer)
@@ -137,6 +142,7 @@ namespace T3.Gui.InputUi
         private float _scale = DefaultScale;
         public float Scale  => FloatInputUi.GetScaleFromRange(_scale, Min, Max);
         public bool Clamp;
+        public string Format = null;
         
         protected readonly float[] FloatComponents;
 

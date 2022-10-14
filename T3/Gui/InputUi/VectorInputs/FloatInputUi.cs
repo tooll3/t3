@@ -19,7 +19,7 @@ namespace T3.Gui.InputUi
         protected override InputEditStateFlags DrawEditControl(string name, ref float value)
         {
             FloatComponents[0] = value;
-            var inputEditState = VectorValueEdit.Draw(FloatComponents, Min, Max, Scale, Clamp);
+            var inputEditState = VectorValueEdit.Draw(FloatComponents, Min, Max, Scale, Clamp, 0, Format);
             value = FloatComponents[0];
             return inputEditState;
         }

@@ -191,7 +191,7 @@ namespace T3.Gui.InputUi
 
                         ImGui.SameLine();
 
-                        // Draw control
+                        //// Draw name
                         ImGui.PushItemWidth(200.0f);
                         ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? Color.Gray.Rgba : Color.White.Rgba);
                         ImGui.SetNextItemWidth(-1);
