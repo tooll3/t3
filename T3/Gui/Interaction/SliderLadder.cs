@@ -14,15 +14,13 @@ namespace T3.Gui.Interaction
     {
         private class RangeDef
         {
-            public readonly float YMin;
-            public readonly float YMax;
+            // public readonly float YMin;
+            // public readonly float YMax;
             public readonly float ScaleFactor;
             public readonly string Label;
 
-            public RangeDef(float yMin, float yMax, float scaleFactor, string label)
+            public RangeDef(float scaleFactor, string label)
             {
-                YMin = yMin;
-                YMax = yMax;
                 ScaleFactor = scaleFactor;
                 Label = label;
             }
@@ -30,26 +28,24 @@ namespace T3.Gui.Interaction
 
         private static readonly RangeDef[] Ranges =
             {
-                new(-5f * OuterRangeHeight, -4f * OuterRangeHeight, 1000, "1000"),
-                new(-4f * OuterRangeHeight, -3f * OuterRangeHeight, 100, "100"),
-                new(-3f * OuterRangeHeight, -2f * OuterRangeHeight, 10, "10"),
-                new(-2f * OuterRangeHeight, -1f * OuterRangeHeight, 1, "1"),
-
-                new(-1f * OuterRangeHeight, 1f * OuterRangeHeight, 0, ""),
-
-                new(1f * OuterRangeHeight, 2f * OuterRangeHeight, 0.1f, "0.1"),
-                new(2f * OuterRangeHeight, 3f * OuterRangeHeight, 0.01f, "0.01"),
-                new(3f * OuterRangeHeight, 4f * OuterRangeHeight, 0.001f, "0.001"),
+                new(1000, "1000"),
+                new(100, "100"),
+                new(10, "10"),
+                new(1, "1"),
+                new(0.1f, "0.1"),
+                new(0.01f, "0.01"),
+                new(0.001f, "0.001"),
             };
 
         private static RangeDef _lockedRange;
 
         private const float LockDistance = 100;
+
         public static void Draw(ref double editValue, ImGuiIOPtr io, double min, double max, float scale, float timeSinceVisible, bool clamp, Vector2 center)
         {
             var foreground = ImGui.GetForegroundDrawList();
             const double initialDelay = 0.2;
-            
+
             var pNow = io.MousePos - center;
             if (timeSinceVisible < initialDelay)
             {
@@ -58,17 +54,32 @@ namespace T3.Gui.Interaction
                 _lastX = 0f;
             }
 
-            var x = MathF.Floor(pNow.X / PixelsPerStep); 
-            
+            var x = MathF.Floor(pNow.X / PixelsPerStep);
+
             _hasExceededDragThreshold |= MathF.Abs(pNow.X) > PixelsPerStep * 4;
-            
+
             var dx = x - _lastX;
             var activeScaleFactor = 0.0;
-            var usingCenterRange = false; 
+            var usingCenterRange = false;
 
-            foreach (var range in Ranges)
+            // Find center range index
+            int centerRangeIndex;
+            for (centerRangeIndex = 0; centerRangeIndex < Ranges.Length; centerRangeIndex++)
             {
-                var isVerticalMatch = pNow.Y > range.YMin && pNow.Y < range.YMax;
+                var range = Ranges[centerRangeIndex];
+                if (range.ScaleFactor < scale * 1.5f)
+                    break;
+            }
+            
+            
+
+            for (var rangeIndex = 0; rangeIndex < Ranges.Length; rangeIndex++)
+            {
+                var yMin = OuterRangeHeight * (rangeIndex - centerRangeIndex-1 + 0.5f);
+                var yMax = OuterRangeHeight * (rangeIndex  - centerRangeIndex + 0.5f);
+                
+                var range = Ranges[rangeIndex];
+                var isVerticalMatch = pNow.Y > yMin && pNow.Y < yMax;
                 var isWithinLockRange = Math.Abs(pNow.X) < LockDistance;
 
                 var isActiveRange = isVerticalMatch && isWithinLockRange
@@ -78,11 +89,10 @@ namespace T3.Gui.Interaction
                 if (isActiveRange)
                 {
                     activeScaleFactor = range.ScaleFactor;
-
                     _lockedRange = isWithinLockRange ? null : range;
                 }
 
-                var isCenterRange = Math.Abs(range.ScaleFactor - 0) < 0.001f;
+                var isCenterRange = rangeIndex == centerRangeIndex;
                 if (isCenterRange)
                 {
                     usingCenterRange = isActiveRange;
@@ -97,14 +107,14 @@ namespace T3.Gui.Interaction
                                           ? LockedRangeFillColor
                                           : ActiveRangeFillColor;
 
-                var bMin = new Vector2(-RangeWidth, range.YMin) + center;
-                var bMax = new Vector2(RangeWidth, range.YMax) + center;
+                var bMin = new Vector2(-RangeWidth, yMin) + center;
+                var bMax = new Vector2(RangeWidth, yMax) + center;
                 foreground.AddRectFilled(bMin, bMax, centerColor);
                 foreground.AddRect(bMin, bMax, Color.Black);
 
                 var labelSize = ImGui.CalcTextSize(range.Label);
                 var pText = (bMin + bMax) / 2 - labelSize / 2;
-                
+
                 foreground.AddText(pText,
                                    isActiveRange ? Color.Black : Color.White,
                                    range.Label);
@@ -112,17 +122,18 @@ namespace T3.Gui.Interaction
 
             if (Math.Abs(dx) < 0.0001f)
                 return;
-            
+
             if (_hasExceededDragThreshold)
             {
                 var delta = dx;
+                
                 if (io.KeyAlt)
                 {
                     ImGui.PushFont(Fonts.FontSmall);
                     foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), Color.Gray, "x0.01");
                     ImGui.PopFont();
 
-                    delta *= 0.01f;
+                    scale *= 0.01f;
                 }
                 else if (io.KeyShift)
                 {
@@ -130,18 +141,18 @@ namespace T3.Gui.Interaction
                     foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), Color.Gray, "x10");
                     ImGui.PopFont();
 
-                    delta *= 10f;
-                }                
-                
-                var scaling = (usingCenterRange) 
+                    scale *= 10f;
+                }
+
+                var scaling = (usingCenterRange)
                                   ? scale
                                   : activeScaleFactor;
-                
+
                 editValue += delta * scaling;
-                
-                if (activeScaleFactor != 0)
+
+                if (activeScaleFactor != 0 && (!usingCenterRange && ImGui.GetIO().KeyCtrl))
                 {
-                    editValue = Math.Round(editValue / (activeScaleFactor * scale)) * (activeScaleFactor * scale);
+                    editValue = Math.Round(editValue / (activeScaleFactor)) * (activeScaleFactor);
                 }
 
                 if (clamp)
