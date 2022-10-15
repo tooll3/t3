@@ -109,6 +109,10 @@ namespace T3.Gui.InputUi
             
             if(Clamp)
                 writer.WriteValue("Clamp", Clamp);
+            
+            if(!string.IsNullOrEmpty(Format))
+                writer.WriteObject("Format", Format);
+
             // ReSharper enable CompareOfFloatsByEqualityOperator
         }
 
@@ -120,6 +124,7 @@ namespace T3.Gui.InputUi
             Max = inputToken["Max"]?.Value<float>() ?? DefaultMax;
             _scale = inputToken["Scale"]?.Value<float>() ?? DefaultScale;
             Clamp = inputToken["Clamp"]?.Value<bool>() ?? false;
+            Format = inputToken["Format"]?.Value<string>() ?? null;
         }
 
         private static float GetScaleFromRange(float scale, float min, float max)

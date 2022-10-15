@@ -49,7 +49,8 @@
       "Position": {
         "X": -212.96689,
         "Y": 257.20883
-      }
+      },
+      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "ef3d0313-50a1-42d3-b3cb-e8ea1b93cd34"/*Round*/,
@@ -94,7 +95,8 @@
       },
       "Min": -180.0,
       "Max": 180.0,
-      "Scale": 2.0
+      "Scale": 2.0,
+      "Format": "{0:0.000}°"
     },
     {
       "InputId": "07e57992-ea38-4e3b-8d69-cb4e99ae587c"/*Resolution*/,
