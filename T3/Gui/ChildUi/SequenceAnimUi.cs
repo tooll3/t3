@@ -112,7 +112,7 @@ namespace T3.Gui.ChildUi
             var min = screenRect.Min + new Vector2(sequenceAnim.NormalizedBarTime * w, 0);
             drawList.AddRectFilled(min, 
                                    min + new Vector2(1, h), 
-                                     sequenceAnim.IsRecording ? Color.Red: T3Style.FragmentLineColor);
+                                     sequenceAnim.IsRecording ? Color.Red: T3Style.Colors.FragmentLineColor);
             
             drawList.PopClipRect();
             ImGui.PopID();

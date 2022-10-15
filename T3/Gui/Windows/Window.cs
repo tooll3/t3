@@ -54,8 +54,6 @@ namespace T3.Gui.Windows
             }
         }
 
-        private bool _isFocused = false; 
-        
         public void DrawOneInstance()
         {
             UpdateBeforeDraw();
