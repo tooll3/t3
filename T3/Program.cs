@@ -181,6 +181,12 @@ namespace T3
                 T3Metrics.UiRenderingStarted();
                 T3Style.Apply();
 
+                if (!string.IsNullOrEmpty(RequestImGuiLayoutUpdate))
+                {
+                    ImGui.LoadIniSettingsFromMemory(RequestImGuiLayoutUpdate);
+                    RequestImGuiLayoutUpdate = null;
+                }
+                
                 ImGui.NewFrame();
                 _main.PrepareRenderingFrame(_deviceContext);
 
@@ -341,5 +347,6 @@ namespace T3
 
         private static T3Ui _t3ui = null;
         private static DeviceContext _deviceContext;
+        public static string RequestImGuiLayoutUpdate;
     }
 }

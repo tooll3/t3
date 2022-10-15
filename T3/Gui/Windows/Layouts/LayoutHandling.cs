@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using ImGuiNET;
 using Newtonsoft.Json;
 using T3.Core.Logging;
@@ -63,52 +64,25 @@ namespace T3.Gui.Windows.Layouts
             }
         }
 
-        private static void SaveLayout(int index)
+        public static void UpdateAfterResize(Vector2 newSize)
         {
-            var allWindowConfigs = WindowManager.GetAllWindows().Select(window => window.Config).ToList();
-
-            if (!Directory.Exists(LayoutPath))
-                Directory.CreateDirectory(LayoutPath);
-
-            var serializer = JsonSerializer.Create();
-            serializer.Formatting = Formatting.Indented;
-            using (var file = File.CreateText(GetLayoutFilename(index)))
-            {
-                serializer.Serialize(file, allWindowConfigs);
-            }
-
-            UserSettings.Config.WindowLayoutIndex = index;
-        }
-
-        public static void LoadAndApplyLayout(int index)
-        {
-            var filename = GetLayoutFilename(index);
-            if (!File.Exists(filename))
-            {
-                Log.Warning($"Layout {filename} doesn't exist yet");
+            if (newSize == Vector2.Zero)
                 return;
-            }
 
-            var jsonBlob = File.ReadAllText(filename);
-            var serializer = JsonSerializer.Create();
-            var fileTextReader = new StringReader(jsonBlob);
-            if (!(serializer.Deserialize(fileTextReader, typeof(List<Window.WindowConfig>))
-                      is List<Window.WindowConfig> configurations))
-            {
-                Log.Error("Can't load layout");
-                return;
-            }
+            ApplyLayout(new Layout
+                            {
+                                WindowConfigs = WindowManager.GetAllWindows().Select(window => window.Config).ToList()
+                            });
+        }        
+        
 
-            UserSettings.Config.ShowGraphOverContent = false;
-            WindowManager.SetGraphWindowToNormal();
 
-            ApplyConfigurations(configurations);
-            UserSettings.Config.WindowLayoutIndex = index;
-        }
-
-        public static void ApplyConfigurations(List<Window.WindowConfig> configurations)
+        private static void ApplyLayout(Layout layout)
         {
-            foreach (var config in configurations)
+            layout.WindowConfigs ??= new List<Window.WindowConfig>();
+            
+            // First update windows settings
+            foreach (var config in layout.WindowConfigs)
             {
                 var matchingWindow = WindowManager.GetAllWindows().FirstOrDefault(window => window.Config.Title == config.Title);
                 if (matchingWindow == null)
@@ -131,32 +105,83 @@ namespace T3.Gui.Windows.Layouts
                         matchingWindow = new ParameterWindow();
                         matchingWindow.Config = config;
                     }
-
-                    // else
-                    // {
-                    //     Log.Error($"Can't find type of window '{config.Title}'");
-                    // }
                 }
                 else
                 {
                     matchingWindow.Config = config;
                 }
             }
-
+            
             // Close Windows without configurations
             foreach (var w in WindowManager.GetAllWindows())
             {
-                var hasConfig = configurations.Any(config => config.Title == w.Config.Title);
+                var hasConfig = layout.WindowConfigs.Any(config => config.Title == w.Config.Title);
                 if (!hasConfig)
                 {
                     w.Config.Visible = false;
                 }
             }
+            
+            // apply ImGui settings
+            if (!string.IsNullOrEmpty(layout.ImGuiSettings))
+            {
+                Program.RequestImGuiLayoutUpdate = layout.ImGuiSettings;
+            }
+                //ImGui.LoadIniSettingsFromMemory(layout.ImGuiSettings);
 
-            ApplyLayout();
+            // Than apply size and positions
+            // foreach (var window1 in WindowManager.GetAllWindows())
+            // {
+            //     window1.ApplySizeAndPosition();
+            // }
+        }        
+        
+        private static void SaveLayout(int index)
+        {
+            if (!Directory.Exists(LayoutPath))
+                Directory.CreateDirectory(LayoutPath);
+
+            var serializer = JsonSerializer.Create();
+            serializer.Formatting = Formatting.Indented;
+
+            using var file = File.CreateText(GetLayoutFilename(index));
+            var layout = new Layout
+                             {
+                                 WindowConfigs = WindowManager.GetAllWindows().Select(window => window.Config).ToList(),
+                                 ImGuiSettings = ImGui.SaveIniSettingsToMemory(),
+                             };
+            
+            serializer.Serialize(file, layout);
+            UserSettings.Config.WindowLayoutIndex = index;
+        }        
+        
+        public static void LoadAndApplyLayout(int index)
+        {
+            var filename = GetLayoutFilename(index);
+            if (!File.Exists(filename))
+            {
+                Log.Warning($"Layout {filename} doesn't exist yet");
+                return;
+            }
+
+            var jsonBlob = File.ReadAllText(filename);
+            var serializer = JsonSerializer.Create();
+            var fileTextReader = new StringReader(jsonBlob);
+            if (!(serializer.Deserialize(fileTextReader, typeof(Layout))
+                      is Layout layout))
+            {
+                Log.Error("Can't load layout");
+                return;
+            }
+
+            UserSettings.Config.ShowGraphOverContent = false;
+            WindowManager.SetGraphWindowToNormal();
+
+            ApplyLayout(layout);
+            UserSettings.Config.WindowLayoutIndex = index;
         }
-
-        public static string GetLayoutFilename(int index)
+        
+        private static string GetLayoutFilename(int index)
         {
             return Path.Combine(LayoutPath, string.Format(LayoutFileNameFormat, index));
         }
@@ -164,14 +189,6 @@ namespace T3.Gui.Windows.Layouts
         private static bool DoesLayoutExists(int index)
         {
             return File.Exists(GetLayoutFilename(index));
-        }
-
-        private static void ApplyLayout()
-        {
-            foreach (var window in WindowManager.GetAllWindows())
-            {
-                window.ApplySizeAndPosition();
-            }
         }
 
         private static readonly UserActions[] _loadLayoutActions =
@@ -205,7 +222,7 @@ namespace T3.Gui.Windows.Layouts
         /// <summary>
         /// Defines a layout that can be then serialized to file  
         /// </summary>
-        class LayoutDefinition
+        public class Layout
         {
             public string Title;
             public List<Window.WindowConfig> WindowConfigs;

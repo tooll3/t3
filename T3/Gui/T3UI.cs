@@ -78,7 +78,6 @@ namespace T3.Gui
             }
             
             // Draw everything!
-            //ImGui.DockSpace(666, ImGui.GetContentRegionAvail(), ImGuiDockNodeFlags.None);
             ImGui.DockSpaceOverViewport();
             WindowManager.Draw();
             

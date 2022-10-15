@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
@@ -15,7 +14,7 @@ namespace T3.Gui.Windows.Layouts
     {
         public static void Draw()
         {
-            Initialize();
+            //Initialize();
             if (!_hasBeenInitialized)
                 return;
 
@@ -67,11 +66,8 @@ namespace T3.Gui.Windows.Layouts
             if (ImGui.GetTime() > 1 && _hasBeenInitialized)
                 return;
 
-            if (File.Exists(LayoutHandling.GetLayoutFilename(UserSettings.Config.WindowLayoutIndex)))
-            {
-                LayoutHandling.LoadAndApplyLayout(UserSettings.Config.WindowLayoutIndex);
-            }
-
+            //LayoutHandling.LoadAndApplyLayout(UserSettings.Config.WindowLayoutIndex);
+            
             if (UserSettings.Config.ShowGraphOverContent)
             {
                 HideAllWindowBesidesMainGraph();
@@ -204,12 +200,9 @@ namespace T3.Gui.Windows.Layouts
             if (newSize == _appWindowSize)
                 return;
 
-            var allWindowConfigs = GetAllWindows().Select(window => window.Config).ToList();
             _appWindowSize = newSize;
-            if (newSize == Vector2.Zero)
-                return;
 
-            LayoutHandling.ApplyConfigurations(allWindowConfigs);
+            LayoutHandling.UpdateAfterResize(newSize);
         }
 
         private static void ToggleWindowTypeVisibility<T>() where T : Window
