@@ -24,9 +24,9 @@ using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
 using t3.Gui.UiHelpers.Wiki;
 using T3.Gui.Windows;
+using T3.Gui.Windows.Layouts;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;
-using Unsplasharp.Models; // ForwardBeatTaps
 
 namespace T3.Gui
 {
@@ -39,7 +39,8 @@ namespace T3.Gui
             
             var playback = new Playback();
 
-            WindowManager = new WindowManager();
+            //WindowManager = new WindowManager();
+            WindowManager.Initialize();
             ExampleSymbolLinking.UpdateExampleLinks();
             VariationHandling.Init();
         }
@@ -69,6 +70,12 @@ namespace T3.Gui
             FitViewToSelectionHandling.ProcessNewFrame();
             SrvManager.FreeUnusedTextures();
             KeyboardBinding.InitFrame();
+
+            if (ImGui.IsKeyPressed(ImGuiKey.Tab))
+            {
+                var result = ImGui.SaveIniSettingsToMemory();
+                Log.Debug(result);
+            }
             
             // Draw everything!
             //ImGui.DockSpace(666, ImGui.GetContentRegionAvail(), ImGuiDockNodeFlags.None);
@@ -356,8 +363,7 @@ namespace T3.Gui
 
         private readonly StatusErrorLine _statusErrorLine = new StatusErrorLine();
         public static readonly UiModel UiModel;
-        public static readonly WindowManager WindowManager;
-
+        
         public static string OpenedPopUpName; // This is reset on Frame start and can be useful for allow context menu to stay open even if a
         // later context menu would also be opened. There is probably some ImGui magic to do this probably. 
 

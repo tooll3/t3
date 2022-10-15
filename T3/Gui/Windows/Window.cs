@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using System.Collections.Generic;
 using System.Numerics;
+using T3.Gui.Windows.Layouts;
 
 namespace T3.Gui.Windows
 {
@@ -61,7 +62,7 @@ namespace T3.Gui.Windows
             if (!Config.Visible)
                 return;
 
-            if (!_wasVisibled)
+            if (!_wasVisible)
             {
                 ApplySizeAndPosition();
                 var size = WindowManager.GetPixelPositionFromRelative(Config.Size);
@@ -69,7 +70,7 @@ namespace T3.Gui.Windows
                 
                 var pos = WindowManager.GetPixelPositionFromRelative(Config.Position);
                 ImGui.SetNextWindowPos(pos);
-                _wasVisibled = true;
+                _wasVisible = true;
             }
             
             var hideFrameBorder = (WindowFlags & ImGuiWindowFlags.NoMove) != ImGuiWindowFlags.None;
@@ -151,6 +152,6 @@ namespace T3.Gui.Windows
             ImGui.SetWindowSize(Config.Title, WindowManager.GetPixelPositionFromRelative(Config.Size));
         }
 
-        private bool _wasVisibled;
+        private bool _wasVisible;
     }
 }

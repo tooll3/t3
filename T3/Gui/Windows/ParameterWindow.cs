@@ -13,6 +13,7 @@ using T3.Gui.Graph.Dialogs;
 using T3.Gui.Graph.Interaction;
 using T3.Gui.InputUi;
 using T3.Gui.Styling;
+using T3.Gui.Windows.Layouts;
 
 namespace T3.Gui.Windows
 {
@@ -326,11 +327,11 @@ namespace T3.Gui.Windows
 
         public static bool IsAnyInstanceVisible()
         {
-            return T3Ui.WindowManager.IsAnyInstanceVisible<ParameterWindow>();
+            return WindowManager.IsAnyInstanceVisible<ParameterWindow>();
         }
         
-        private static readonly EditSymbolDescriptionDialog _editDescriptionDialog = new EditSymbolDescriptionDialog();
-        private static readonly List<Window> _parameterWindowInstances = new List<Window>();
+        private static readonly EditSymbolDescriptionDialog _editDescriptionDialog = new();
+        private static readonly List<Window> _parameterWindowInstances = new();
         private ChangeSymbolChildNameCommand _symbolChildNameCommand;
         private static ChangeInputValueCommand _inputValueCommandInFlight;
         private static IInputSlot _inputSlotForActiveCommand;
