@@ -104,13 +104,13 @@ namespace T3.Gui.Windows.Output
                 _camSelectionHandling.Update(drawnInstance, drawnType);
                 _imageCanvas.PreventMouseInteraction = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction;
                 _imageCanvas.Update();
-                DrawToolbar();
+                DrawToolbar(drawnType);
             }
             ImGui.EndChild();
         }
 
 
-        private void DrawToolbar()
+        private void DrawToolbar(Type drawnType)
         {
             ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.6f).Rgba);
             ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin());
@@ -130,7 +130,15 @@ namespace T3.Gui.Windows.Output
             ImGui.PushStyleColor(ImGuiCol.Text, _imageCanvas.ViewMode == ImageOutputCanvas.Modes.Fitted ? Color.Black.Rgba : Color.White);
             if (ImGui.Button("Fit") || KeyboardBinding.Triggered(UserActions.FocusSelection))
             {
-                _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Fitted);
+                var showingImage = GetCurrentTexture() != null;
+                if (drawnType == typeof(Texture2D))
+                {
+                    _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Fitted);
+                }
+                else if (drawnType == typeof(Command))
+                {
+                    _camSelectionHandling.ResetView();
+                }
             }
 
             ImGui.PopStyleColor();

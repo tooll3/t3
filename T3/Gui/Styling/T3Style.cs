@@ -19,7 +19,7 @@ namespace T3.Gui
             public static readonly Color GraphLineColor = new Color(1, 1, 1, 0.3f);
             public static readonly Color GraphLineColorHover = new Color(1, 1, 1, 0.7f);
             public static readonly Color GraphAxisColor = new Color(0, 0, 0, 0.3f);
-            public static readonly Color ButtonColor = new Color(0.15f, 0.15f, 0.15f, 1f);
+            public static readonly Color ButtonColor = Color.FromString("#CC282828");
             public static readonly Color ButtonHoverColor = new Color(43, 65, 80, 255);
             public static readonly Color TextMuted = new Color(0.5f);
             public static readonly Color TextDisabled = new Color(0.328f, 0.328f, 0.328f, 1.000f);
@@ -72,7 +72,6 @@ namespace T3.Gui
             style.DisplayWindowPadding = Vector2.Zero;
             style.DisplaySafeAreaPadding = Vector2.Zero;
             style.ChildBorderSize = 1;
-            style.WindowBorderSize = 0;
             style.TabRounding = 2;
         }
     }

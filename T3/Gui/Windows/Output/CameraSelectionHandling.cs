@@ -307,8 +307,13 @@ namespace T3.Gui.Windows.Output
 
             ImGui.SameLine();
         }
-        
-        
+
+        public void ResetView()
+        {
+            _cameraInteraction.ResetView();
+        }
+
+
         private ControlModes _controlMode = ControlModes.AutoUseFirstCam;
         private readonly ViewCamera _outputWindowViewCamera = new();
         private readonly CameraInteraction _cameraInteraction = new();

@@ -56,6 +56,12 @@ namespace t3.Gui.Interaction.Camera
             camera.CameraTarget = _smoothedSetup.Target;
         }
 
+        public void ResetView()
+        {
+            _moveVelocity = Vector3.Zero;
+            _intendedSetup.Reset();
+        }
+        
         private bool ComputeSmoothMovement()
         {
             var stillDamping = !_smoothedSetup.MatchesSetup(_intendedSetup);

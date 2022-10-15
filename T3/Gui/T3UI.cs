@@ -130,6 +130,7 @@ namespace T3.Gui
         {
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6, 6));
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
             
             if (ImGui.BeginMainMenuBar())
             {
@@ -233,7 +234,7 @@ namespace T3.Gui
                 ImGui.EndMainMenuBar();
             }
 
-            ImGui.PopStyleVar(2);
+            ImGui.PopStyleVar(3);
         }
 
 
