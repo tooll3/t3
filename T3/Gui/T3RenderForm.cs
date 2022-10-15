@@ -376,18 +376,21 @@ namespace T3
 
             try
             {
-                foreach (var entry in _srvCache)
-                {
-                    try
-                    {
-                        entry.Value.Dispose();
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Warning($"Failed to dispose resource : {entry.Value} :{e.Message}");
-                    }
-
-                }
+                // Sadly a resource leak causes this to trigger memory exceptions.
+                // So disabled for now
+                
+                // foreach (var entry in _srvCache)
+                // {
+                //     try
+                //     {
+                //         entry.Value.Dispose();
+                //     }
+                //     catch (Exception e)
+                //     {
+                //         Log.Warning($"Failed to dispose resource : {entry.Value} :{e.Message}");
+                //     }
+                //
+                // }
 
                 DisposeObj(ref _fontSampler);
                 DisposeObj(ref _fontTextureView);
