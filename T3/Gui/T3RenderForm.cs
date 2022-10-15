@@ -61,6 +61,8 @@ namespace T3
             SetPerFrameImGuiData(1f / 60f);
 
             ImGui.GetIO().BackendFlags |= ImGuiBackendFlags.HasMouseCursors;
+            ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DockingEnable;
+            //ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.ViewportsEnable;
         }
 
 

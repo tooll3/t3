@@ -86,7 +86,8 @@ namespace T3.Gui
                 _colors[(int)ImGuiCol.WindowBg] = new Vector4(0.1f,0.1f,0.1f, 0.98f);
                 _colors[(int)ImGuiCol.ModalWindowDimBg] = new Vector4(0.1f,0.1f,0.1f, 0.1f);
                 _colors[(int)ImGuiCol.MenuBarBg] = new Vector4(0.0f,0.0f,0.0f, 1.0f);
-                
+                _colors[(int)ImGuiCol.Separator] = new Vector4(0.0f,0.0f,0.0f, 1.0f);
+                _colors[(int)ImGuiCol.SeparatorHovered] = Color.FromString("#FF00B2FF");
             }
 
             public void Apply(ImGuiStylePtr style)

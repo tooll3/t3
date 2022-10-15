@@ -48,6 +48,7 @@ namespace T3.Gui
         //public static bool MaximalView = true;
         public void Draw()
         {
+            // Prepare the current frame 
             Playback.Current.Update(UserSettings.Config.EnableIdleMotion);
             SoundtrackUtils.UpdateMainSoundtrack();
             AudioEngine.CompleteFrame(Playback.Current);
@@ -68,10 +69,14 @@ namespace T3.Gui
             FitViewToSelectionHandling.ProcessNewFrame();
             SrvManager.FreeUnusedTextures();
             KeyboardBinding.InitFrame();
+            
+            // Draw everything!
+            //ImGui.DockSpace(666, ImGui.GetContentRegionAvail(), ImGuiDockNodeFlags.None);
+            ImGui.DockSpaceOverViewport();
             WindowManager.Draw();
             
+            // Complete frame
             BeatTiming.Update(ImGui.GetTime());
-
             SingleValueEdit.StartNextFrame();
 
             SwapHoveringBuffers();
