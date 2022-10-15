@@ -96,7 +96,7 @@ namespace T3.Gui.ChildUi
                 //var width = graphRect.GetWidth() - (lv1.X - graphRect.Min.X); //h * (GraphWidthRatio - leftPaddingH);
                 var cycleWidth = graphWidth * (1- relativeX); //h * (GraphWidthRatio - leftPaddingH);
                 var dx = new Vector2(animValue.LastFraction * cycleWidth - 1, 0);
-                drawList.AddRectFilled(lv1 + dx, lv2 + dx, T3Style.FragmentLineColor);
+                drawList.AddRectFilled(lv1 + dx, lv2 + dx, T3Style.Colors.FragmentLineColor);
 
                 // Draw graph
                 //        lv

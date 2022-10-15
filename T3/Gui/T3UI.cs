@@ -24,9 +24,9 @@ using T3.Gui.Selection;
 using T3.Gui.UiHelpers;
 using t3.Gui.UiHelpers.Wiki;
 using T3.Gui.Windows;
+using T3.Gui.Windows.Layouts;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;
-using Unsplasharp.Models; // ForwardBeatTaps
 
 namespace T3.Gui
 {
@@ -39,7 +39,8 @@ namespace T3.Gui
             
             var playback = new Playback();
 
-            WindowManager = new WindowManager();
+            //WindowManager = new WindowManager();
+            WindowManager.TryToInitialize();
             ExampleSymbolLinking.UpdateExampleLinks();
             VariationHandling.Init();
         }
@@ -48,6 +49,7 @@ namespace T3.Gui
         //public static bool MaximalView = true;
         public void Draw()
         {
+            // Prepare the current frame 
             Playback.Current.Update(UserSettings.Config.EnableIdleMotion);
             SoundtrackUtils.UpdateMainSoundtrack();
             AudioEngine.CompleteFrame(Playback.Current);
@@ -68,10 +70,19 @@ namespace T3.Gui
             FitViewToSelectionHandling.ProcessNewFrame();
             SrvManager.FreeUnusedTextures();
             KeyboardBinding.InitFrame();
+
+            if (ImGui.IsKeyPressed(ImGuiKey.Tab))
+            {
+                var result = ImGui.SaveIniSettingsToMemory();
+                Log.Debug(result);
+            }
+            
+            // Draw everything!
+            ImGui.DockSpaceOverViewport();
             WindowManager.Draw();
             
+            // Complete frame
             BeatTiming.Update(ImGui.GetTime());
-
             SingleValueEdit.StartNextFrame();
 
             SwapHoveringBuffers();
@@ -122,6 +133,8 @@ namespace T3.Gui
             
             if (ImGui.BeginMainMenuBar())
             {
+                ImGui.SetCursorPos(new Vector2(0,-1)); // Shift to make menu items selected when hitting top of screen
+                
                 if (ImGui.BeginMenu("File"))
                 {
                     UserSettings.Config.ShowMainMenu = true;
@@ -192,12 +205,8 @@ namespace T3.Gui
                 if (ImGui.BeginMenu("View"))
                 {
                     UserSettings.Config.ShowMainMenu = true;
-                    ImGui.MenuItem("FullScreen", "", ref UserSettings.Config.FullScreen);
-                    if (ImGui.MenuItem("Graph over Content Mode", "", ref UserSettings.Config.ShowGraphOverContent))
-                    {
-                        WindowManager.ApplyGraphOverContentModeChange();
-                    }
                     
+
                     ImGui.Separator();
                     ImGui.MenuItem("Show Main Menu", "", ref UserSettings.Config.ShowMainMenu);
                     ImGui.MenuItem("Show Title", "", ref UserSettings.Config.ShowTitleAndDescription);
@@ -351,8 +360,7 @@ namespace T3.Gui
 
         private readonly StatusErrorLine _statusErrorLine = new StatusErrorLine();
         public static readonly UiModel UiModel;
-        public static readonly WindowManager WindowManager;
-
+        
         public static string OpenedPopUpName; // This is reset on Frame start and can be useful for allow context menu to stay open even if a
         // later context menu would also be opened. There is probably some ImGui magic to do this probably. 
 

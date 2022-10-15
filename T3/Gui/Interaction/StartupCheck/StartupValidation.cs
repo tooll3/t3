@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using T3.Gui.Windows;
+using T3.Gui.Windows.Layouts;
 
 namespace t3.Gui.Interaction.StartupCheck
 {
@@ -35,7 +35,7 @@ namespace t3.Gui.Interaction.StartupCheck
                 {
                     RequiredFilePaths = new List<string>()
                                             {  
-                                                WindowManager.LayoutPath + "layout1.json",
+                                                LayoutHandling.LayoutPath + "layout1.json",
                                                 @"T3\bin\Release\net6.0-windows\bass.dll",
                                             },
                     Message = "Please run Install/install.bat.",

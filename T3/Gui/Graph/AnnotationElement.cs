@@ -108,7 +108,7 @@ namespace T3.Gui.Graph
                 // Label
                 {
                     var isScaledDown = GraphCanvas.Current.Scale.X < 1;
-                    ImGui.PushFont(isScaledDown ? Fonts.FontSmall : Fonts.FontBold);
+                    ImGui.PushFont(isScaledDown ? Fonts.FontSmall : Fonts.FontNormal);
 
                     drawList.PushClipRect(_screenArea.Min, _screenArea.Max, true);
                     var labelPos = _screenArea.Min + new Vector2(4, 4);

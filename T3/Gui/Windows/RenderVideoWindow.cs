@@ -18,7 +18,6 @@ namespace T3.Gui.Windows
         public RenderVideoWindow()
         {
             Config.Title = "Render Video";
-            Config.Size = new Vector2(350, 300);
             _lastHelpString = "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for faster exports.";
         }
 

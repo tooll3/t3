@@ -42,7 +42,7 @@ namespace T3
 
         private int _windowWidth;
         private int _windowHeight;
-        
+
         private Vector2 _scaleFactor = Vector2.One;
 
 
@@ -61,6 +61,8 @@ namespace T3
             SetPerFrameImGuiData(1f / 60f);
 
             ImGui.GetIO().BackendFlags |= ImGuiBackendFlags.HasMouseCursors;
+            ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DockingEnable;
+            //ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.ViewportsEnable;
         }
 
 
@@ -84,12 +86,12 @@ namespace T3
                 _vertexBufferSize = draw_data.TotalVtxCount + 5000;
                 _vb = new Buffer(_device,
                                  new BufferDescription()
-                                 {
-                                     SizeInBytes = _vertexBufferSize * Unsafe.SizeOf<ImDrawVert>(),
-                                     Usage = ResourceUsage.Dynamic,
-                                     BindFlags = BindFlags.VertexBuffer,
-                                     CpuAccessFlags = CpuAccessFlags.Write
-                                 });
+                                     {
+                                         SizeInBytes = _vertexBufferSize * Unsafe.SizeOf<ImDrawVert>(),
+                                         Usage = ResourceUsage.Dynamic,
+                                         BindFlags = BindFlags.VertexBuffer,
+                                         CpuAccessFlags = CpuAccessFlags.Write
+                                     });
             }
 
             if (_ib == null || _indexBufferSize < draw_data.TotalIdxCount)
@@ -98,12 +100,12 @@ namespace T3
                 _indexBufferSize = draw_data.TotalIdxCount + 10000;
                 _ib = new Buffer(_device,
                                  new BufferDescription()
-                                 {
-                                     SizeInBytes = _indexBufferSize * Unsafe.SizeOf<ushort>(),
-                                     Usage = ResourceUsage.Dynamic,
-                                     BindFlags = BindFlags.IndexBuffer,
-                                     CpuAccessFlags = CpuAccessFlags.Write
-                                 });
+                                     {
+                                         SizeInBytes = _indexBufferSize * Unsafe.SizeOf<ushort>(),
+                                         Usage = ResourceUsage.Dynamic,
+                                         BindFlags = BindFlags.IndexBuffer,
+                                         CpuAccessFlags = CpuAccessFlags.Write
+                                     });
             }
 
             // Copy and convert all vertices into a single contiguous buffer
@@ -282,21 +284,21 @@ namespace T3
             // Create the input layout
             _inputLayout = new InputLayout(_device, ShaderSignature.GetInputSignature(_vertexShaderBlob),
                                            new[]
-                                           {
-                                               new InputElement("POSITION", 0, Format.R32G32_Float, 0, 0),
-                                               new InputElement("TEXCOORD", 0, Format.R32G32_Float, 8, 0),
-                                               new InputElement("COLOR", 0, Format.R8G8B8A8_UNorm, 16, 0)
-                                           });
+                                               {
+                                                   new InputElement("POSITION", 0, Format.R32G32_Float, 0, 0),
+                                                   new InputElement("TEXCOORD", 0, Format.R32G32_Float, 8, 0),
+                                                   new InputElement("COLOR", 0, Format.R8G8B8A8_UNorm, 16, 0)
+                                               });
 
             // Create the constant buffer
             _vertexContantBuffer = new Buffer(_device,
                                               new BufferDescription()
-                                              {
-                                                  SizeInBytes = 4 * 4 * 4 /*TODO sizeof(Matrix4x4)*/,
-                                                  Usage = ResourceUsage.Dynamic,
-                                                  BindFlags = BindFlags.ConstantBuffer,
-                                                  CpuAccessFlags = CpuAccessFlags.Write
-                                              });
+                                                  {
+                                                      SizeInBytes = 4 * 4 * 4 /*TODO sizeof(Matrix4x4)*/,
+                                                      Usage = ResourceUsage.Dynamic,
+                                                      BindFlags = BindFlags.ConstantBuffer,
+                                                      CpuAccessFlags = CpuAccessFlags.Write
+                                                  });
 
             // Create the pixel shader
             string pixelShader =
@@ -335,22 +337,22 @@ namespace T3
 
             // Create the rasterizer state
             var rasterizerDesc = new RasterizerStateDescription()
-                                 {
-                                     FillMode = FillMode.Solid,
-                                     CullMode = CullMode.None,
-                                     IsScissorEnabled = true,
-                                     IsDepthClipEnabled = true
-                                 };
+                                     {
+                                         FillMode = FillMode.Solid,
+                                         CullMode = CullMode.None,
+                                         IsScissorEnabled = true,
+                                         IsDepthClipEnabled = true
+                                     };
             _rasterizerState = new RasterizerState(_device, rasterizerDesc);
 
             // Create depth-stencil State
             var depthStencilDesc = new DepthStencilStateDescription()
-                                   {
-                                       IsDepthEnabled = false,
-                                       DepthWriteMask = DepthWriteMask.All,
-                                       DepthComparison = Comparison.Always,
-                                       IsStencilEnabled = false
-                                   };
+                                       {
+                                           IsDepthEnabled = false,
+                                           DepthWriteMask = DepthWriteMask.All,
+                                           DepthComparison = Comparison.Always,
+                                           IsStencilEnabled = false
+                                       };
             depthStencilDesc.FrontFace.FailOperation =
                 depthStencilDesc.FrontFace.DepthFailOperation = depthStencilDesc.FrontFace.PassOperation = StencilOperation.Keep;
             depthStencilDesc.BackFace = depthStencilDesc.FrontFace;
@@ -384,7 +386,7 @@ namespace T3
                     {
                         Log.Warning($"Failed to dispose resource : {entry.Value} :{e.Message}");
                     }
-                    
+
                 }
 
                 DisposeObj(ref _fontSampler);
@@ -401,7 +403,7 @@ namespace T3
                 DisposeObj(ref _vertexShader);
                 DisposeObj(ref _vertexShaderBlob);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Log.Warning($"Failed to dispose resources :{e.Message}");
             }
@@ -475,17 +477,17 @@ namespace T3
 
                 uint[] iconContent = new uint[sx * sy];
                 formatConverter.CopyPixels<uint>(new RawBox(px, py, sx, sy), iconContent);
-                
+
                 var rect = io.Fonts.GetCustomRectByIndex(glyphId);
-                    for (int y = 0, s = 0; y < rect.Height; y++)
+                for (int y = 0, s = 0; y < rect.Height; y++)
+                {
+                    uint* p = (uint*)atlasPixels + (rect.Y + y) * atlasWidth + rect.X;
+                    for (int x = rect.Width; x > 0; x--)
                     {
-                        uint* p = (uint*)atlasPixels + (rect.Y + y) * atlasWidth + rect.X;
-                        for (int x = rect.Width; x > 0; x--)
-                        {
-                            *p++ = iconContent[s];
-                            s++;
-                        }
+                        *p++ = iconContent[s];
+                        s++;
                     }
+                }
             }
 
             IntPtr _fontAtlasID = (IntPtr)1;
@@ -494,17 +496,17 @@ namespace T3
 
             // Upload texture to graphics system
             var textureDesc = new Texture2DDescription()
-                              {
-                                  Width = atlasWidth,
-                                  Height = atlasHeight,
-                                  MipLevels = 1,
-                                  ArraySize = 1,
-                                  Format = Format.R8G8B8A8_UNorm,
-                                  SampleDescription = new SampleDescription() { Count = 1, Quality = 0 },
-                                  Usage = ResourceUsage.Default,
-                                  BindFlags = BindFlags.ShaderResource,
-                                  CpuAccessFlags = CpuAccessFlags.None
-                              };
+                                  {
+                                      Width = atlasWidth,
+                                      Height = atlasHeight,
+                                      MipLevels = 1,
+                                      ArraySize = 1,
+                                      Format = Format.R8G8B8A8_UNorm,
+                                      SampleDescription = new SampleDescription() { Count = 1, Quality = 0 },
+                                      Usage = ResourceUsage.Default,
+                                      BindFlags = BindFlags.ShaderResource,
+                                      CpuAccessFlags = CpuAccessFlags.None
+                                  };
             Texture2D texture = new Texture2D(_device, textureDesc, new[] { box });
             texture.DebugName = "FImgui Font Atlas";
 
@@ -515,16 +517,16 @@ namespace T3
             io.Fonts.TexID = (IntPtr)_fontTextureView;
 
             var samplerDesc = new SamplerStateDescription()
-                              {
-                                  Filter = Filter.MinMagMipLinear,
-                                  AddressU = TextureAddressMode.Wrap,
-                                  AddressV = TextureAddressMode.Wrap,
-                                  AddressW = TextureAddressMode.Wrap,
-                                  MipLodBias = 0.0f,
-                                  ComparisonFunction = Comparison.Always,
-                                  MinimumLod = 0.0f,
-                                  MaximumLod = 0.0f
-                              };
+                                  {
+                                      Filter = Filter.MinMagMipLinear,
+                                      AddressU = TextureAddressMode.Wrap,
+                                      AddressV = TextureAddressMode.Wrap,
+                                      AddressW = TextureAddressMode.Wrap,
+                                      MipLodBias = 0.0f,
+                                      ComparisonFunction = Comparison.Always,
+                                      MinimumLod = 0.0f,
+                                      MaximumLod = 0.0f
+                                  };
             _fontSampler = new SamplerState(_device, samplerDesc);
         }
 
@@ -533,4 +535,6 @@ namespace T3
             InvalidateDeviceObjects();
         }
     }
+
+
 }

@@ -105,7 +105,7 @@ namespace T3.Gui.ChildUi
                 // Fragment line 
                 var cycleWidth = graphWidth * (1 - relativeX); 
                 var dx = new Vector2(((float)anim.LastFraction * duration + delay) * cycleWidth - 1, 0);
-                drawList.AddRectFilled(lv1 + dx, lv2 + dx, T3Style.FragmentLineColor);
+                drawList.AddRectFilled(lv1 + dx, lv2 + dx, T3Style.Colors.FragmentLineColor);
 
                 // Draw graph
                 //        lv
