@@ -14,7 +14,7 @@ namespace T3.Gui.Windows.Layouts
     {
         public static void Draw()
         {
-            //Initialize();
+            TryToInitialize(); // We have to keep initializing until window sizes are initialized
             if (!_hasBeenInitialized)
                 return;
 
@@ -45,8 +45,12 @@ namespace T3.Gui.Windows.Layouts
                 ImGui.ShowMetricsWindow(ref _metricsWindowVisible);
         }
 
-        public static void Initialize()
+        public static void TryToInitialize()
         {
+            // Wait first frame for ImGUI to initialize
+            if (ImGui.GetTime() > 1 && _hasBeenInitialized)
+                return;
+            
             _windows = new List<Window>()
                            {
                                new GraphWindow(),
@@ -60,13 +64,9 @@ namespace T3.Gui.Windows.Layouts
                                new LegacyVariationsWindow(),
                                new RenderSequenceWindow(),
                                new RenderVideoWindow(),
-                           };
+                           };            
 
-            // Wait first frame for ImGUI to initialize
-            if (ImGui.GetTime() > 1 && _hasBeenInitialized)
-                return;
-
-            //LayoutHandling.LoadAndApplyLayout(UserSettings.Config.WindowLayoutIndex);
+            LayoutHandling.LoadAndApplyLayout(UserSettings.Config.WindowLayoutIndex);
             
             if (UserSettings.Config.ShowGraphOverContent)
             {
@@ -121,7 +121,6 @@ namespace T3.Gui.Windows.Layouts
                 return;
             graphWindow1.WindowFlags &= ~(ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoMove |
                                           ImGuiWindowFlags.NoResize);
-            graphWindow1.ApplySizeAndPosition();
         }
 
         public static Vector2 GetRelativePositionFromPixel(Vector2 pixel)
@@ -165,13 +164,9 @@ namespace T3.Gui.Windows.Layouts
 
             var yPadding = UserSettings.Config.ShowGraphOverContent ? 0 : MainMenuBarHeight;
             var pos = GetRelativePositionFromPixel(new Vector2(0, yPadding));
-
-            graphWindow1.Config.Position = pos;
-            graphWindow1.Config.Size = new Vector2(1, 1 - pos.Y);
-
+            
             graphWindow1.WindowFlags |= ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoMove |
                                         ImGuiWindowFlags.NoResize;
-            graphWindow1.ApplySizeAndPosition();
         }
 
         private static void HideAllWindowBesidesMainGraph()

@@ -1,7 +1,6 @@
 ﻿using ImGuiNET;
 using System.Collections.Generic;
 using System.Numerics;
-using T3.Gui.Windows.Layouts;
 
 namespace T3.Gui.Windows
 {
@@ -55,32 +54,27 @@ namespace T3.Gui.Windows
             }
         }
 
+        private bool _isFocused = false; 
+        
         public void DrawOneInstance()
         {
             UpdateBeforeDraw();
 
             if (!Config.Visible)
                 return;
-
+            
             if (!_wasVisible)
             {
-                ApplySizeAndPosition();
-                var size = WindowManager.GetPixelPositionFromRelative(Config.Size);
-                ImGui.SetNextWindowSize(size);
-                
-                var pos = WindowManager.GetPixelPositionFromRelative(Config.Position);
-                ImGui.SetNextWindowPos(pos);
+                ImGui.SetNextWindowSize(new Vector2(400,350));
                 _wasVisible = true;
             }
             
             var hideFrameBorder = (WindowFlags & ImGuiWindowFlags.NoMove) != ImGuiWindowFlags.None;
             if(hideFrameBorder)
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
-            
+
             if (ImGui.Begin(Config.Title, ref Config.Visible, WindowFlags))
             {
-                StoreWindowLayout();
-
                 // Prevent window header from becoming invisible 
                 var windowPos = ImGui.GetWindowPos();
                 if (windowPos.X <= 0) windowPos.X = 0;
@@ -95,7 +89,7 @@ namespace T3.Gui.Windows
 
                 if (PreventWindowDragging)
                     ImGui.EndChild();
-                
+
                 ImGui.End();
             }
 
@@ -120,37 +114,15 @@ namespace T3.Gui.Windows
         {
         }
 
-        private void StoreWindowLayout()
-        {
-            if (WindowManager.IsWindowMinimized)
-                return;
-            
-            Config.Position = WindowManager.GetRelativePositionFromPixel(ImGui.GetWindowPos());
-            Config.Size = WindowManager.GetRelativePositionFromPixel(ImGui.GetWindowSize());
-        }
 
         public class WindowConfig
         {
             public string Title;
             public bool Visible;
-            public Vector2 Position = _defaultPosition;
-            public Vector2 Size = DefaultSize;
-
-            public static readonly Vector2 DefaultSize = new Vector2(0.3f,0.2f);
-            private static readonly Vector2 _defaultPosition = new Vector2(0.2f,0.2f);
         }
 
         public WindowConfig Config = new WindowConfig();
 
-        public void ApplySizeAndPosition()
-        {
-            ImGui.SetWindowPos(Config.Title, WindowManager.GetPixelPositionFromRelative(Config.Position));
-
-            if (Config.Size == Vector2.Zero)
-                Config.Size = WindowConfig.DefaultSize;
-            
-            ImGui.SetWindowSize(Config.Title, WindowManager.GetPixelPositionFromRelative(Config.Size));
-        }
 
         private bool _wasVisible;
     }

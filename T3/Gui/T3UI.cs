@@ -40,7 +40,7 @@ namespace T3.Gui
             var playback = new Playback();
 
             //WindowManager = new WindowManager();
-            WindowManager.Initialize();
+            WindowManager.TryToInitialize();
             ExampleSymbolLinking.UpdateExampleLinks();
             VariationHandling.Init();
         }
@@ -133,6 +133,8 @@ namespace T3.Gui
             
             if (ImGui.BeginMainMenuBar())
             {
+                ImGui.SetCursorPos(new Vector2(0,-1)); // Shift to make menu items selected when hitting top of screen
+                
                 if (ImGui.BeginMenu("File"))
                 {
                     UserSettings.Config.ShowMainMenu = true;

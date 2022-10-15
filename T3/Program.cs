@@ -151,6 +151,8 @@ namespace T3
             stopwatch.Start();
             Int64 lastElapsedTicks = stopwatch.ElapsedTicks;
             
+            T3Style.Apply();
+            
             // Main loop
             void RenderCallback()
             {
@@ -179,7 +181,6 @@ namespace T3
 
                 DirtyFlag.IncrementGlobalTicks();
                 T3Metrics.UiRenderingStarted();
-                T3Style.Apply();
 
                 if (!string.IsNullOrEmpty(RequestImGuiLayoutUpdate))
                 {

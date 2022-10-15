@@ -1,6 +1,4 @@
 ﻿using ImGuiNET;
-using System;
-using System.Collections.Generic;
 using System.Numerics;
 
 namespace T3.Gui
@@ -46,20 +44,11 @@ namespace T3.Gui
                 return;
 
             var style = ImGui.GetStyle();
-            _colorOverrides.Apply(style);
+            ImGuiColorOverrides.Apply(style);
             _styleOverrides.Apply(style);
         }
 
 
-        public static void DrawUi()
-        {
-            ImGui.Checkbox("Apply Override", ref _overridesEnabled);
-            _styleOverrides.DrawUi();
-            _colorOverrides.DrawUi();
-        }
-
-
-        private static ImGuiColorOverrides _colorOverrides = new ImGuiColorOverrides();
         private class ImGuiColorOverrides
         {
             public ImGuiColorOverrides()
@@ -88,9 +77,16 @@ namespace T3.Gui
                 _colors[(int)ImGuiCol.MenuBarBg] = new Vector4(0.0f,0.0f,0.0f, 1.0f);
                 _colors[(int)ImGuiCol.Separator] = new Vector4(0.0f,0.0f,0.0f, 1.0f);
                 _colors[(int)ImGuiCol.SeparatorHovered] = Color.FromString("#FF00B2FF");
+                _colors[(int)ImGuiCol.TabUnfocused] = Color.FromString("#FF1C1C1C");
+                _colors[(int)ImGuiCol.TabActive] = Color.FromString("#FF505050");
+                _colors[(int)ImGuiCol.Tab] = Color.FromString("#FF202020");
+                _colors[(int)ImGuiCol.TabUnfocused] = Color.FromString("#FF151515");
+                _colors[(int)ImGuiCol.TabUnfocusedActive] = Color.FromString("#FF202020");
+                _colors[(int)ImGuiCol.TitleBgActive] = Color.FromString("#FF000000");
+                _colors[(int)ImGuiCol.TitleBg] = Color.FromString("#FF000000");
             }
 
-            public void Apply(ImGuiStylePtr style)
+            public static void Apply(ImGuiStylePtr style)
             {
                 for (var i = 0; i < style.Colors.Count; i++)
                 {
@@ -98,32 +94,24 @@ namespace T3.Gui
                 }
             }
 
-            public void DrawUi()
-            {
-                for (var index = 0; index < _colors.Length; index++)
-                {
-                    var x = (ImGuiCol)index;
-                    ImGui.ColorEdit4("" + x, ref _colors[index]);
-                }
-            }
             private static Vector4[] _colors;
         }
 
-        private static ImGuiStyleOverrides _styleOverrides = new ImGuiStyleOverrides();
+        private static readonly ImGuiStyleOverrides _styleOverrides = new();
         private class ImGuiStyleOverrides
         {
-            public Vector2 ItemSpacing = new Vector2(1, 1);
-            public Vector2 FramePadding = new Vector2(7, 4);
-            public Vector2 ItemInnerSpacing = new Vector2(3, 2);
-            public Vector2 WindowPadding = Vector2.Zero;
-            public float GrabMinSize = 2;
-            public float FrameBorderSize = 0;
-            public float WindowRounding = 0;
-            public float ChildRounding = 0;
-            public float ScrollbarRounding = 2;
-            public float FrameRounding = 0f;
-             
-
+            private Vector2 ItemSpacing = new Vector2(1, 1);
+            private Vector2 FramePadding = new Vector2(7, 4);
+            private Vector2 ItemInnerSpacing = new Vector2(3, 2);
+            private Vector2 WindowPadding = Vector2.Zero;
+            private float GrabMinSize = 2;
+            private float FrameBorderSize = 0;
+            private float WindowRounding = 0;
+            private float ChildRounding = 0;
+            private float ScrollbarRounding = 2;
+            private float FrameRounding = 0f;
+            
+            
             public void Apply(ImGuiStylePtr style)
             {
                 style.WindowPadding = WindowPadding;
@@ -138,22 +126,9 @@ namespace T3.Gui
                 style.FrameRounding = FrameRounding;
                 style.DisplayWindowPadding = Vector2.Zero;
                 style.DisplaySafeAreaPadding = Vector2.Zero;
-                style.ChildBorderSize = 0;
-            }
-
-            public void DrawUi()
-            {
-                ImGui.DragFloat2("FramePadding", ref FramePadding);
-                ImGui.DragFloat2("ItemSpacing", ref ItemSpacing);
-                ImGui.DragFloat2("ItemInnerSpacing", ref ItemInnerSpacing);
-
-                ImGui.DragFloat("GrabMinSize", ref GrabMinSize);
-                ImGui.DragFloat("FrameBorderSize", ref FrameBorderSize);
-                ImGui.DragFloat("WindowRounding", ref WindowRounding);
-                ImGui.DragFloat("ChildRounding", ref ChildRounding);
-                ImGui.DragFloat("ScrollbarRounding", ref ScrollbarRounding);
-                ImGui.DragFloat("FrameRounding", ref FrameRounding);
-                ImGui.Spacing();
+                style.ChildBorderSize = 1;
+                style.WindowBorderSize = 0;
+                style.TabRounding = 2;
             }
         }
 

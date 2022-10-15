@@ -222,12 +222,10 @@ namespace T3.Gui.Windows.Layouts
         /// <summary>
         /// Defines a layout that can be then serialized to file  
         /// </summary>
-        public class Layout
+        private class Layout
         {
-            public string Title;
             public List<Window.WindowConfig> WindowConfigs;
             public string ImGuiSettings;
-            public bool IsGraphOverContent;
         }
 
         private const string LayoutFileNameFormat = "layout{0}.json";
