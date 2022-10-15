@@ -174,7 +174,6 @@ namespace T3.Gui.Windows.Layouts
                 return;
             }
 
-            UserSettings.Config.ShowGraphOverContent = false;
             WindowManager.SetGraphWindowToNormal();
 
             ApplyLayout(layout);

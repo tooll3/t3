@@ -205,12 +205,8 @@ namespace T3.Gui
                 if (ImGui.BeginMenu("View"))
                 {
                     UserSettings.Config.ShowMainMenu = true;
-                    ImGui.MenuItem("FullScreen", "", ref UserSettings.Config.FullScreen);
-                    if (ImGui.MenuItem("Graph over Content Mode", "", ref UserSettings.Config.ShowGraphOverContent))
-                    {
-                        WindowManager.ApplyGraphOverContentModeChange();
-                    }
                     
+
                     ImGui.Separator();
                     ImGui.MenuItem("Show Main Menu", "", ref UserSettings.Config.ShowMainMenu);
                     ImGui.MenuItem("Show Title", "", ref UserSettings.Config.ShowTitleAndDescription);

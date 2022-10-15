@@ -20,12 +20,6 @@ namespace T3.Gui.Windows.Layouts
 
             LayoutHandling.ProcessKeyboardShortcuts();
 
-            if (KeyboardBinding.Triggered(UserActions.ToggleFullScreenGraph))
-            {
-                UserSettings.Config.ShowGraphOverContent = !UserSettings.Config.ShowGraphOverContent;
-                ApplyGraphOverContentModeChange();
-            }
-
             if (KeyboardBinding.Triggered(UserActions.ToggleVariationsWindow))
             {
                 ToggleWindowTypeVisibility<VariationsWindow>();
@@ -67,12 +61,6 @@ namespace T3.Gui.Windows.Layouts
                            };            
 
             LayoutHandling.LoadAndApplyLayout(UserSettings.Config.WindowLayoutIndex);
-            
-            if (UserSettings.Config.ShowGraphOverContent)
-            {
-                HideAllWindowBesidesMainGraph();
-                SetGraphWindowAsBackground();
-            }
 
             _appWindowSize = ImGui.GetIO().DisplaySize;
             _hasBeenInitialized = true;
@@ -85,6 +73,7 @@ namespace T3.Gui.Windows.Layouts
                 window.DrawMenuItemToggle();
             }
 
+            ImGui.MenuItem("FullScreen", "", ref UserSettings.Config.FullScreen);
             if (ImGui.MenuItem("2nd Render Window", "", ShowSecondaryRenderWindow))
                 ShowSecondaryRenderWindow = !ShowSecondaryRenderWindow;
 
@@ -98,21 +87,7 @@ namespace T3.Gui.Windows.Layouts
 
             LayoutHandling.DrawMainMenuItems();
         }
-
-        public static void ApplyGraphOverContentModeChange()
-        {
-            if (UserSettings.Config.ShowGraphOverContent)
-            {
-                HideAllWindowBesidesMainGraph();
-                SetGraphWindowAsBackground();
-                UserSettings.Config.FullScreen = true;
-            }
-            else
-            {
-                SetGraphWindowToNormal();
-                LayoutHandling.LoadAndApplyLayout(UserSettings.Config.WindowLayoutIndex);
-            }
-        }
+        
 
         public static void SetGraphWindowToNormal()
         {
@@ -121,16 +96,6 @@ namespace T3.Gui.Windows.Layouts
                 return;
             graphWindow1.WindowFlags &= ~(ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoMove |
                                           ImGuiWindowFlags.NoResize);
-        }
-
-        public static Vector2 GetRelativePositionFromPixel(Vector2 pixel)
-        {
-            return pixel / _appWindowSize;
-        }
-
-        public static Vector2 GetPixelPositionFromRelative(Vector2 fraction)
-        {
-            return fraction * _appWindowSize;
         }
 
         public static IEnumerable<Window> GetAllWindows()
@@ -155,19 +120,7 @@ namespace T3.Gui.Windows.Layouts
         {
             return GetAllWindows().OfType<T>().Any(w => w.Config.Visible);
         }
-
-        private static void SetGraphWindowAsBackground()
-        {
-            var graphWindow1 = GraphWindow.GetPrimaryGraphWindow();
-            if (graphWindow1 == null)
-                return;
-
-            var yPadding = UserSettings.Config.ShowGraphOverContent ? 0 : MainMenuBarHeight;
-            var pos = GetRelativePositionFromPixel(new Vector2(0, yPadding));
-            
-            graphWindow1.WindowFlags |= ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoBringToFrontOnFocus | ImGuiWindowFlags.NoMove |
-                                        ImGuiWindowFlags.NoResize;
-        }
+        
 
         private static void HideAllWindowBesidesMainGraph()
         {

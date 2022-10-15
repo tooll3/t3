@@ -80,9 +80,6 @@ namespace T3.Gui.Windows
                 var relativePosition = (ImGui.GetMousePos() - topLeftOnScreen) / sizeOnScreen;
                 Core.IO.MouseInput.Set(relativePosition, ImGui.IsMouseDown(ImGuiMouseButton.Left));
             }
-
-            if (UserSettings.Config.ShowGraphOverContent)
-                return;
             
             string format = "";
             if (srv == null)

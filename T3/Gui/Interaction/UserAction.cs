@@ -56,7 +56,6 @@ namespace T3.Gui
         ScrollDown,
         
         // Layout and window management
-        ToggleFullScreenGraph,
         ToggleFocusMode,
         ToggleVariationsWindow,
         
@@ -252,7 +251,6 @@ namespace T3.Gui
                             new KeyboardBinding(UserActions.ToggleVariationsWindow, new KeyCombination(Key.V, alt:true)){ NeedsWindowFocus = false },
 
                             // Layout and window management
-                            new KeyboardBinding(UserActions.ToggleFullScreenGraph, new KeyCombination(Key.F11, ctrl: true)),
                             new KeyboardBinding(UserActions.ToggleFocusMode, new KeyCombination(Key.Esc, shift: true)),
                             new KeyboardBinding(UserActions.ToggleFocusMode, new KeyCombination(Key.Esc, shift: true)),
                             
