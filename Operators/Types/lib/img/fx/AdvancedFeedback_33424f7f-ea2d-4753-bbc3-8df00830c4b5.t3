@@ -220,6 +220,11 @@
           "Id": "3c8b43be-430f-4afe-8244-5282be49bfbc"/*Samples*/,
           "Type": "System.Single",
           "Value": 40.0
+        },
+        {
+          "Id": "9c944546-1363-4e3b-b706-31a4b750db2c"/*Wrap*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "MirrorOnce"
         }
       ],
       "Outputs": []
