@@ -37,6 +37,9 @@ namespace T3.Operators.Types.Id_05cf9ea7_045d_421f_8ed3_2c2f6b325a46
                 case Modes.IsLarger:
                     result =  v > test;
                     break;
+                case Modes.IsNotEqual:
+                    result =  v != test;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -57,6 +60,7 @@ namespace T3.Operators.Types.Id_05cf9ea7_045d_421f_8ed3_2c2f6b325a46
             IsSmaller,
             IsEqual,
             IsLarger,
+            IsNotEqual,
         }
         
         [Input(Guid = "3B6CA34B-4A64-458A-874F-A0AA094FC278")]

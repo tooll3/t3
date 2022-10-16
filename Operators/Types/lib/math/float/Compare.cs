@@ -27,10 +27,13 @@ namespace T3.Operators.Types.Id_026869ee_b62f_481e_aadf_f8a1db77fe65
                     IsTrue.Value =  v < test;
                     break;
                 case Modes.IsEqual:
-                    IsTrue.Value =  Math.Abs(v-test)< Precision.GetValue(context);
+                    IsTrue.Value = Math.Abs(v-test) < Precision.GetValue(context);
                     break;
                 case Modes.IsLarger:
                     IsTrue.Value =  v > test;
+                    break;
+                case Modes.IsNotEqual:
+                    IsTrue.Value = Math.Abs(v-test) >= Precision.GetValue(context);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -42,6 +45,7 @@ namespace T3.Operators.Types.Id_026869ee_b62f_481e_aadf_f8a1db77fe65
             IsSmaller,
             IsEqual,
             IsLarger,
+            IsNotEqual,
         }
         
         [Input(Guid = "8d98d88c-7a0e-4282-823e-4889ef286e5a")]
