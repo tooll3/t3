@@ -349,14 +349,14 @@
       "SymbolId": "026869ee-b62f-481e-aadf-f8a1db77fe65",
       "InputValues": [
         {
-          "Id": "f1537faa-1bd2-44c9-b0ae-d06c5af5cdef"/*Mode*/,
-          "Type": "System.Int32",
-          "Value": 2
-        },
-        {
           "Id": "5a39f9ad-f447-493e-94f1-9d2ca7627420"/*TestValue*/,
           "Type": "System.Single",
           "Value": 1.0
+        },
+        {
+          "Id": "f1537faa-1bd2-44c9-b0ae-d06c5af5cdef"/*Mode*/,
+          "Type": "System.Int32",
+          "Value": 2
         }
       ],
       "Outputs": []
@@ -390,14 +390,14 @@
       "SymbolId": "026869ee-b62f-481e-aadf-f8a1db77fe65",
       "InputValues": [
         {
-          "Id": "f1537faa-1bd2-44c9-b0ae-d06c5af5cdef"/*Mode*/,
-          "Type": "System.Int32",
-          "Value": 2
-        },
-        {
           "Id": "5a39f9ad-f447-493e-94f1-9d2ca7627420"/*TestValue*/,
           "Type": "System.Single",
           "Value": 2.0
+        },
+        {
+          "Id": "f1537faa-1bd2-44c9-b0ae-d06c5af5cdef"/*Mode*/,
+          "Type": "System.Int32",
+          "Value": 2
         }
       ],
       "Outputs": []

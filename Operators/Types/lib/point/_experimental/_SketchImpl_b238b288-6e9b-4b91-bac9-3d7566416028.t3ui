@@ -1,0 +1,90 @@
+{
+  "Id": "b238b288-6e9b-4b91-bac9-3d7566416028"/*_SketchImpl*/,
+  "Description": "Internal implementation for Sketching.",
+  "InputUis": [
+    {
+      "InputId": "c427f009-7e04-4168-82e6-5ebe2640204d"/*MousePos*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "520a2023-7450-4314-9cac-850d6d692461"/*IsMouseButtonDown*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "b0d76cab-8e7e-4845-b7e4-202424dfa12d"/*TriggerReset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "ea245c8a-d7f1-4f40-9d8d-f1d68070fef2"/*PageIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "7bc91594-ad3b-4c65-a4c1-cf2fa5759599"/*Mode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "1057313c-006a-4f12-8828-07447337898b"/*BrushSize*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "4718e758-703e-4ff9-ac66-ce03cdce2904"/*BrushColor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "51641425-a2c6-4480-ac8f-2e6d2cbc300a"/*FilePath*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      },
+      "Usage": "Default"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "974f46e5-b1dc-40ae-ac28-bbb1fb032efe"/*CursorPosInWorld*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    },
+    {
+      "OutputId": "532b35d1-4fee-41e6-aa6a-d42152dce4a0"/*CurrentBrushSize*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "eb2272b3-8b4a-46b1-a193-8b10bdc2b038"/*OutPages*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 300.0
+      }
+    }
+  ]
+}

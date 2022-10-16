@@ -238,7 +238,7 @@ namespace T3.Gui
 
                             // Timeline
                             new KeyboardBinding(UserActions.InsertKeyframe, new KeyCombination(Key.C)) { NeedsWindowFocus = true },
-                            new KeyboardBinding(UserActions.InsertKeyframeWithIncrement, new KeyCombination(Key.C, shift: true)) { NeedsWindowFocus = true },
+                            new KeyboardBinding(UserActions.InsertKeyframeWithIncrement, new KeyCombination(Key.C, shift: true)),
                             
                             // Graph window
                             new KeyboardBinding(UserActions.ToggleDisabled, new KeyCombination(Key.D, shift:true)) { NeedsWindowFocus = true },
