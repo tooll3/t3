@@ -1,6 +1,6 @@
 {
   "Id": "42703423-1414-489e-aac2-21a3d7204262"/*PickColorFromImage*/,
-  "Description": "",
+  "Description": "Gets the color of a certain position in the texture",
   "InputUis": [
     {
       "InputId": "3b8c51c9-c544-47eb-9d70-4bd6b161be2d"/*InputImage*/,

@@ -25,8 +25,6 @@ namespace T3.Operators.Types.Id_42703423_1414_489e_aac2_21a3d7204262
         {
             var alwaysUpdate = AlwaysUpdate.GetValue(context);
             var inputImage = InputImage.GetValue(context);
-            // var row = Row.GetValue(context);
-            // var column = Column.GetValue(context);
 
             var position = Position.GetValue(context);
 
@@ -88,17 +86,16 @@ namespace T3.Operators.Types.Id_42703423_1414_489e_aac2_21a3d7204262
                 {
                     case Format.R8G8B8A8_UNorm:
                     {
-                        // Position to the wanted pixel. FIXME: 4 should be replaced by correct # of bytes per pixel
+                        // Position to the wanted pixel. 4 of bytes per pixel
                         sourceStream.Seek(row * sourceDataBox.RowPitch + 4 * column, System.IO.SeekOrigin.Begin);
 
-                        var dxColor = new SharpDX.Color4(sourceStream.Read<Int32>()); // FIXME Int32 implies 4 byte per pixel
+                        var dxColor = new SharpDX.Color4(sourceStream.Read<Int32>()); 
                         color = new Vector4(dxColor.Red, dxColor.Green, dxColor.Blue, dxColor.Alpha);
                     }
                         break;
 
                     case Format.R16G16B16A16_Float:
                     {
-                        // Position to the wanted pixel. FIXME: 4 should be replaced by correct # of bytes per pixel
                         sourceStream.Seek(row * sourceDataBox.RowPitch + 8 * column, System.IO.SeekOrigin.Begin);
 
                         var r = Read2BytesToHalf(sourceStream);
