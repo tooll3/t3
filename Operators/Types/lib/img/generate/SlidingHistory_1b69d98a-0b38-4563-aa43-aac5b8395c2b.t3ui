@@ -1,0 +1,222 @@
+{
+  "Id": "1b69d98a-0b38-4563-aa43-aac5b8395c2b"/*SlidingHistory*/,
+  "Description": "Generates a wave form image by feeding in a horizontal texture line at the bottom of the texture.",
+  "InputUis": [
+    {
+      "InputId": "48699e66-a59b-4cbb-b131-171ce9fcade3"/*Texture2d*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 349.5853,
+        "Y": 432.55927
+      }
+    },
+    {
+      "InputId": "72db9342-9c07-4557-8b67-e3dc6ee55271"/*ResetTrigger*/,
+      "Position": {
+        "X": 532.45074,
+        "Y": 900.31165
+      }
+    },
+    {
+      "InputId": "41748add-f957-4a48-b7a5-43ff868bc814"/*HistoryLength*/,
+      "Position": {
+        "X": 547.3341,
+        "Y": 699.73676
+      }
+    },
+    {
+      "InputId": "5d42ff17-a552-4437-877a-a27a369866d7"/*IsEnabled*/,
+      "Position": {
+        "X": 547.3341,
+        "Y": 744.73676
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "29c4a760-ecc6-459e-8a49-4992ba4c7839"/*SrvFromTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1578.2402,
+        "Y": 505.823
+      }
+    },
+    {
+      "ChildId": "37983b13-b8ea-4c71-838f-d41e505687cc"/*FloatsToBuffer*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1285.4177,
+        "Y": 350.23743
+      }
+    },
+    {
+      "ChildId": "72a2020d-e075-4cb4-9de9-5a2d56e8b787"/*GetTextureSize*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 683.1161,
+        "Y": 477.45618
+      }
+    },
+    {
+      "ChildId": "5bc5d5e6-f84c-4766-a8ef-ce58bf9e2d59"/*Size2Components*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 833.1161,
+        "Y": 477.45618
+      }
+    },
+    {
+      "ChildId": "cba6a810-6b82-46ac-9f0c-0936549e7a26"/*ComputeShader*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1285.4177,
+        "Y": 294.23743
+      }
+    },
+    {
+      "ChildId": "1b3cb295-1bfa-4e55-a60b-1a1981eca7da"/*ComputeShaderStage*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 127.0
+      },
+      "Position": {
+        "X": 1768.708,
+        "Y": 396.72363
+      }
+    },
+    {
+      "ChildId": "da84d2fe-8541-447c-ac78-abea00a0d45c"/*ExecuteTextureUpdate*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 2139.9731,
+        "Y": 410.61475
+      }
+    },
+    {
+      "ChildId": "2cdce12d-cc9c-4ccb-b9dd-6f7a68b9ee70"/*Texture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1451.2949,
+        "Y": 963.95654
+      }
+    },
+    {
+      "ChildId": "7b36f2cc-e9cc-449d-ab14-de0312d9e562"/*UavFromTexture2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1600.4329,
+        "Y": 818.7541
+      }
+    },
+    {
+      "ChildId": "d1a78fe6-dac7-4ef1-adfe-1d35c93807a5"/*CalcSize2DispatchCount*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1580.7966,
+        "Y": 415.37003
+      }
+    },
+    {
+      "ChildId": "90d83d65-a4a2-4de3-9d0b-24899154e908"/*GenerateMips*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1601.2949,
+        "Y": 963.95654
+      }
+    },
+    {
+      "ChildId": "8acb18e3-2d94-4061-84a3-31bdbbde4a9d"/*BoolToFloats*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 682.45074,
+        "Y": 900.31165
+      }
+    },
+    {
+      "ChildId": "bea7f00f-1de7-4558-ae28-1717fcc24e0b"/*Int2ToSize2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1010.7107,
+        "Y": 570.39795
+      }
+    },
+    {
+      "ChildId": "ef83e4a5-e4b7-48df-b467-322e12dce771"/*ClampInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 738.40094,
+        "Y": 662.17847
+      }
+    },
+    {
+      "ChildId": "4de5154b-0489-45ed-8c36-8ef585118428"/*Int2ToSize2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1044.8889,
+        "Y": 685.5081
+      }
+    },
+    {
+      "ChildId": "7480a3d0-41bd-4e07-abcb-514406ba3df4"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 1918.708,
+        "Y": 396.72363
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "724ecde4-fd33-4a59-a8df-51cb21e70bd3"/*Output*/,
+      "Position": {
+        "X": 2362.4048,
+        "Y": 406.64587
+      }
+    }
+  ]
+}

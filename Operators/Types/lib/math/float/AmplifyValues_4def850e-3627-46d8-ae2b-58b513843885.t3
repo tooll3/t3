@@ -5,11 +5,11 @@
   "Inputs": [
     {
       "Id": "2c6c16e9-2037-4b5e-a4ac-6c5aab0fc582"/*Smoothing*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.95
     },
     {
       "Id": "dcf2d659-7b51-4a87-8378-ca01419e4b7c"/*MixAverage*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 1.0
     },
     {
       "Id": "38d415d3-2ac1-4256-929d-cfdb3fa5c7a9"/*MixCurrent*/,

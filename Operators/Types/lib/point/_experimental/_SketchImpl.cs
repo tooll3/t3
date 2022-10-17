@@ -42,7 +42,8 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             if (filepath != _filepath)
             {
                 _filepath = filepath;
-                _pages= Core.Utilities.TryLoadingJson<Dictionary<int, Page>>(filepath);
+                _pages= Core.Utilities.TryLoadingJson<Dictionary<int, Page>>(filepath) 
+                        ?? new Dictionary<int, Page>();
             }
 
             _pageIndex = PageIndex.GetValue(context);

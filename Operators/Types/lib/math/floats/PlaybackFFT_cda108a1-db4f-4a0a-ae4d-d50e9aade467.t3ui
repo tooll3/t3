@@ -3,7 +3,7 @@
   "Description": "Returns the bass audio FFT buffer during soundtrack playback.\n",
   "InputUis": [
     {
-      "InputId": "6888315d-ef77-4814-87e9-91528d600c72"/*IsEnabled*/,
+      "InputId": "66cb16d6-1506-4783-925d-3cdf62602812"/*InputBand*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0

@@ -4,8 +4,8 @@
   "Namespace": "lib.math.floats",
   "Inputs": [
     {
-      "Id": "6888315d-ef77-4814-87e9-91528d600c72"/*IsEnabled*/,
-      "DefaultValue": true
+      "Id": "66cb16d6-1506-4783-925d-3cdf62602812"/*InputBand*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],
