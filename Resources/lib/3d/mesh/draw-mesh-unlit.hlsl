@@ -82,9 +82,16 @@ float4 psMain(psInput pin) : SV_TARGET
         float level = BlurLevel * levels;
         int baseLevel = (int)level;
 
-        float4 c1 = BaseColorMap2.SampleLevel(texSampler, pin.texCoord, baseLevel);
-        float4 c2 = BaseColorMap2.SampleLevel(texSampler, pin.texCoord, baseLevel + 1);
-        float4 albedo = lerp(c1, c2, level - baseLevel);
+        float4 albedo = 0;
+        if(BlurLevel > 0) 
+        {
+            float4 c1 = BaseColorMap2.SampleLevel(texSampler, pin.texCoord, baseLevel);
+            float4 c2 = BaseColorMap2.SampleLevel(texSampler, pin.texCoord, baseLevel + 1);
+            albedo = lerp(c1, c2, level - baseLevel);
+        }
+        else {
+            albedo = BaseColorMap2.Sample(texSampler, pin.texCoord);
+        }
 
         //float4 albedo = BaseColorMap2.Sample(texSampler, pin.texCoord);
         //return float4(albedo.rgb,1);

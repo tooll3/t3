@@ -34,6 +34,9 @@ namespace T3.Operators.Types.Id_5a2752e8_95ae_4d76_b903_1f52ef43bcdc
 
         [Input(Guid = "6fd86a21-d06c-4edb-bbe2-39d7411e46d1")]
         public readonly InputSlot<System.Numerics.Vector2> Position = new InputSlot<System.Numerics.Vector2>();
+
+        [Input(Guid = "81f7acd7-6704-404b-b8be-9e77d2117fcc")]
+        public readonly InputSlot<SharpDX.Direct3D11.Filter> Filter = new InputSlot<SharpDX.Direct3D11.Filter>();
     }
 }
 
