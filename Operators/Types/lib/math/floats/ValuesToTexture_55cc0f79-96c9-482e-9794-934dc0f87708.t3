@@ -10,6 +10,10 @@
       }
     },
     {
+      "Id": "165f7e0e-6ef0-4be1-8ed3-61ed0db752ed"/*UseFullList*/,
+      "DefaultValue": true
+    },
+    {
       "Id": "ca67bfaf-ede7-43ba-b279-fc1ddfbe2ffa"/*RangeStart*/,
       "DefaultValue": 0
     },
