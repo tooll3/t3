@@ -10,6 +10,9 @@ namespace T3.Operators.Types.Id_cb89ed1d_03ea_4880_bfa0_1dd723e4bdab
         [Output(Guid = "fd703cd6-ed0a-473b-9620-d5b5f5547774")]
         public readonly Slot<Command> Output = new Slot<Command>();
 
+        [Output(Guid = "51ba413f-1a7a-4860-8654-bdbd78a1bba4")]
+        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new Slot<SharpDX.Direct3D11.Texture2D>();
+
         [Input(Guid = "61469462-04ef-4f75-bd58-2bd42b8da15a")]
         public readonly InputSlot<float> IndexAndFraction = new InputSlot<float>();
 
