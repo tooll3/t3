@@ -46,6 +46,13 @@ namespace T3.Operators.Types.Id_1b149f1f_529c_4418_ac9d_3871f24a9e38
         [Input(Guid = "6e772174-813d-4baa-b6b5-27e197b547ac")]
         public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> WrapMode = new InputSlot<SharpDX.Direct3D11.TextureAddressMode>();
 
+        [Input(Guid = "6a5c120f-7c04-439b-ad2d-6f78ceb3b378", MappedType = typeof(DisplaceModes))]
+        public readonly InputSlot<int> DisplaceMode = new InputSlot<int>();
+        
+        private enum DisplaceModes {
+            UseIntensityGradient,
+            UseIntensity
+        }
     }
 }
 

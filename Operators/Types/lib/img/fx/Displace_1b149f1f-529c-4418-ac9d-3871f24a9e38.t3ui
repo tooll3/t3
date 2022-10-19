@@ -88,6 +88,13 @@
         "X": -221.74158,
         "Y": 798.0933
       }
+    },
+    {
+      "InputId": "6a5c120f-7c04-439b-ad2d-6f78ceb3b378"/*DisplaceMode*/,
+      "Position": {
+        "X": -221.74158,
+        "Y": 843.0933
+      }
     }
   ],
   "SymbolChildUis": [
@@ -123,6 +130,17 @@
       "Position": {
         "X": 6.496521,
         "Y": 764.40607
+      }
+    },
+    {
+      "ChildId": "3df8359a-b804-4daa-bd0a-af87bd5bd9b6"/*IntToFloat*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 24.44983,
+        "Y": 856.8907
       }
     }
   ],
