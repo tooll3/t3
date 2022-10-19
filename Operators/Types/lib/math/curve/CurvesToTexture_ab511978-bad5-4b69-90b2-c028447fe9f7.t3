@@ -33,6 +33,18 @@
           ]
         }
       }
+    },
+    {
+      "Id": "74a9437b-a3cd-46c8-aa14-7c45fa629933"/*ExportGrayScale*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "63c7f648-7e02-4e0b-aaee-3a4c6869d75f"/*SampleSize*/,
+      "DefaultValue": 256
+    },
+    {
+      "Id": "63e90d86-5ad5-4333-8b99-7f8d285c4913"/*Direction*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],

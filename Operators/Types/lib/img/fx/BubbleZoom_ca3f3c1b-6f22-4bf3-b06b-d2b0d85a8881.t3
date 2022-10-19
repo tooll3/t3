@@ -16,7 +16,7 @@
     },
     {
       "Id": "5bb5934d-28a8-4bd3-a146-f0ecb804170a"/*ScaleFactor*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 1.0
     },
     {
       "Id": "1e93d2b1-d21c-44bd-a96c-9844b9a89c8f"/*Width*/,
@@ -24,7 +24,7 @@
     },
     {
       "Id": "064b98dc-60f8-4019-a40c-21cb3bed9f4a"/*Radius*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.5
     },
     {
       "Id": "e5a5d0cf-447b-471f-871a-f3237a760df2"/*Bias*/,
