@@ -14,7 +14,7 @@
           "Value": 25
         },
         {
-          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
           "Type": "System.Boolean",
           "Value": true
         }

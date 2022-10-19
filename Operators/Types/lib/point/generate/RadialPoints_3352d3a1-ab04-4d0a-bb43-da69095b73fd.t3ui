@@ -56,7 +56,7 @@
       "Format": "{0:0.000} ×"
     },
     {
-      "InputId": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+      "InputId": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
       "Position": {
         "X": -150.41754,
         "Y": 1170.569
