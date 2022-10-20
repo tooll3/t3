@@ -162,7 +162,7 @@ namespace T3.Gui.Interaction
             _lastX = x;
         }
 
-        private const float PixelsPerStep = 7;
+        private const float PixelsPerStep = 10;
         private const float RangeWidth = 40;
         private const float OuterRangeHeight = 50;
         private static readonly Color RangeFillColor = new(0.3f, 0.3f, 0.3f);
