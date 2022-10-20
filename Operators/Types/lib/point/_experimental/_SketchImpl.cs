@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using SharpDX;
 using T3.Core;
 using T3.Core.DataTypes;
@@ -42,8 +43,29 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             if (filepath != _filepath)
             {
                 _filepath = filepath;
-                _pages= Core.Utilities.TryLoadingJson<Dictionary<int, Page>>(filepath) 
-                        ?? new Dictionary<int, Page>();
+                _pages = Core.Utilities.TryLoadingJson<Dictionary<int, Page>>(filepath); 
+                
+                if (_pages != null)
+                {
+                    foreach (var page in _pages.Values)
+                    {
+                        if (page.PointsList == null)
+                        {
+                            page.PointsList = new StructuredList<Point>(BufferIncreaseStep);
+                            continue;
+                        }
+                        
+                        if (page.PointsList.NumElements == page.WriteIndex)
+                            continue;
+                        
+                        Log.Warning($"Adjusting writing index {page.WriteIndex} -> {page.PointsList.NumElements}");
+                        page.WriteIndex = page.PointsList.NumElements;
+                    }
+                }
+                else
+                {
+                    _pages = new Dictionary<int, Page>();
+                }
             }
 
             _pageIndex = PageIndex.GetValue(context);
@@ -211,9 +233,15 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
         public class Page
         {
             public int WriteIndex;
+            
+            [JsonConverter(typeof(StructuredListConverter))]
             public StructuredList<Point> PointsList;
         }
+        
 
+
+
+        
         private Page CurrentPage
         {
             get
@@ -283,7 +311,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
         [Input(Guid = "51641425-A2C6-4480-AC8F-2E6D2CBC300A")]
         public readonly InputSlot<string> FilePath = new();
-
-
     }
+    
+
 }
