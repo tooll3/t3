@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Core.Audio;
 using T3.Core.Animation;
+using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using t3.Gui.Audio;
@@ -25,6 +26,7 @@ using T3.Gui.UiHelpers;
 using t3.Gui.UiHelpers.Wiki;
 using T3.Gui.Windows;
 using T3.Gui.Windows.Layouts;
+using T3.Operators.Types.Id_2b00bb7a_92cc_41e5_a5f6_bc3e8b16c5eb;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;
 
@@ -70,6 +72,10 @@ namespace T3.Gui
             FitViewToSelectionHandling.ProcessNewFrame();
             SrvManager.FreeUnusedTextures();
             KeyboardBinding.InitFrame();
+            
+            // Set selected id so operator can check if they are selected or not  
+            var selectedInstance = NodeSelection.GetSelectedInstance();
+            MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty; 
 
             if (ImGui.IsKeyPressed(ImGuiKey.Tab))
             {

@@ -86,7 +86,10 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             var mousePos = MousePos.GetValue(context);
             _currentPosInWorld = PointFromMousePos(context, mousePos);
             
-            if (_mode != Modes.View)
+            
+            var isSelected = MouseInput.SelectedChildId == Parent.SymbolChildId; 
+            
+            if (_mode != Modes.View && isSelected)
             {
                 if (TriggerReset.GetValue(context))
                 {

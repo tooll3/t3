@@ -38,6 +38,12 @@ namespace T3.Operators.Types.Id_8e6ed99c_a3e0_42c0_9f81_a89b1e340757
         [Input(Guid = "2ded8235-157d-486b-a997-87d09d18f998")]
         public readonly InputSlot<string> Filename = new InputSlot<string>();
 
+        [Input(Guid = "0d965690-5c83-47df-a48f-512e060b5e16")]
+        public readonly InputSlot<T3.Core.Command> Scene = new InputSlot<T3.Core.Command>();
+
+        [Input(Guid = "f823fdfd-fc3d-41c4-bd9d-6badf764d702")]
+        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> InputImage = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+
         private enum ShowModes
         {
             OnlyAtFrame,
