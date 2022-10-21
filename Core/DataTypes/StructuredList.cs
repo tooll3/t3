@@ -208,7 +208,13 @@ namespace T3.Core.DataTypes
             var inputToken = JToken.ReadFrom(reader);
 
             var jArray = (JArray)inputToken["StructuredList"];
+            if (jArray == null)
+            {
+                TypedElements = Array.Empty<T>();
+                return this;
+            }
             var elementCount = jArray.Count;
+            
             TypedElements = new T[elementCount];
 
             var fieldInfos = Type.GetFields();

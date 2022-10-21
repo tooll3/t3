@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using SharpDX;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.IO;
 using T3.Core.Logging;
@@ -109,7 +110,8 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             _currentPosInWorld = PointFromMousePos(context, mousePos);
             
             
-            var isSelected = MouseInput.SelectedChildId == Parent.SymbolChildId; 
+            var isSelected = MouseInput.SelectedChildId == Parent.SymbolChildId;
+            var wasModified = false;
             
             if (_mode != Modes.View && isSelected)
             {
@@ -155,7 +157,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                                                 });
                                 AppendPoint(Point.Separator(), advanceIndex: false);
                                 _currentStrokeLength++;
-                                _needsSave = true;
+                                wasModified = true;
                                 break;
                             
                             case Modes.Erase:
@@ -167,7 +169,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                                         continue;
                                 
                                     CurrentPointList.TypedElements[index].W = float.NaN;
-                                    _needsSave = true;
+                                    wasModified = true;
                                 }
 
                                 break;
@@ -185,7 +187,13 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             CursorPosInWorld.Value = _currentPosInWorld;
             CurrentBrushSize.Value = _brushSize * brushSizeModeFactor;
 
-            if (_needsSave && Math.Abs(context.LocalTime - _lastSaveTime) > 0.01)
+            if (wasModified)
+            {
+                _lastModificationTime = Playback.RunTimeInSecs;
+                _needsSave = true;
+            }
+
+            if (_needsSave && Playback.RunTimeInSecs - _lastModificationTime > 2)
             {
                 string filepath1 = FilePath.GetValue(context);
                 Core.Utilities.SaveJson(_pages, filepath1);
@@ -194,9 +202,11 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             }
         }
 
+        private double _lastModificationTime;
+
         private static Vector3 PointFromMousePos(EvaluationContext context, Vector2 mousePos)
         {
-            const float offsetFromCamPlane = 0.98f;
+            const float offsetFromCamPlane = 0.99f;
             var posInClipSpace = new SharpDX.Vector4((mousePos.X - 0.5f) * 2, (-mousePos.Y + 0.5f) * 2, offsetFromCamPlane, 1);
             Matrix clipSpaceToCamera = context.CameraToClipSpace;
             clipSpaceToCamera.Invert();
