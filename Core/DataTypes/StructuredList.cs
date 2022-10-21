@@ -17,12 +17,12 @@ namespace T3.Core.DataTypes
             Type = type;
         }
 
-        public StructuredList(JsonTextReader reader, Type type)
-        {
-            Type = type;
-            var testList = Read(reader);
-        }
         
+        // public StructuredList(JsonTextReader reader, Type type)
+        // {
+        //     Type = type;
+        //     var testList = Read(reader);
+        // }
 
         public Type Type { get; }
         public abstract object Elements { get; }
@@ -51,6 +51,12 @@ namespace T3.Core.DataTypes
             TypedElements = new T[count];
         }
 
+        public StructuredList() : base(typeof(T))
+        {
+            //TypedElements = new T[count];
+        }
+
+
         public T[] TypedElements { get; private set; }
 
         public override object Elements => TypedElements;
@@ -76,7 +82,7 @@ namespace T3.Core.DataTypes
 
         public override void WriteToStream(DataStream stream)
         {
-            if(NumElements > 0)
+            if (NumElements > 0)
                 stream.WriteRange(TypedElements);
         }
 
@@ -173,7 +179,7 @@ namespace T3.Core.DataTypes
         {
             writer.Formatting = Formatting.Indented;
             writer.WriteStartObject();
-            writer.WritePropertyName("StructureList");
+            writer.WritePropertyName("StructuredList");
             writer.WriteStartArray();
 
             var fieldInfos = Type.GetFields();
@@ -200,61 +206,64 @@ namespace T3.Core.DataTypes
         public override StructuredList Read(JsonTextReader reader)
         {
             var inputToken = JToken.ReadFrom(reader);
-            
+
             var jArray = (JArray)inputToken["StructuredList"];
             var elementCount = jArray.Count;
-            var newList = new StructuredList<T>(elementCount);
+            TypedElements = new T[elementCount];
 
             var fieldInfos = Type.GetFields();
             for (var index = 0; index < jArray.Count; index++)
             {
+                TypedElements[index]= new T();
+                object boxedEntry = TypedElements[index];
+                
                 var childJson = jArray[index];
-                Log.Debug($"  list-item: {childJson}");
                 foreach (var fieldInfo in fieldInfos)
                 {
-                    var name = fieldInfo.Name;
-                    Log.Debug($"  field: {name}");
+                    var valueConverter = JsonToTypeValueConverters.Entries[fieldInfo.FieldType];
+                    var valueJson = childJson[fieldInfo.Name];
+                    var objValue =valueConverter(valueJson);
+                    fieldInfo.SetValue(boxedEntry, objValue);
                 }
-                
-                newList.TypedElements[index] = new T();
-            }
 
-            return newList;
+                TypedElements[index] = (T)boxedEntry;
+            }
+            
+            return this;
         }
     }
-    
+
     public class StructuredListConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             if (writer is not JsonTextWriter textWriter)
                 return;
-            
+
             if (value is not StructuredList list)
                 return;
-            
+
             list.Write(textWriter);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            // User user = new User();
-            // user.UserName = (string)reader.Value;
-            Log.Debug("Trying to read json");
-
             if (reader is not JsonTextReader textReader)
                 return null;
 
+            var obj = Activator.CreateInstance(objectType) as StructuredList;
+            if (obj == null)
+            {
+                Log.Warning($"Can't create instance of {objectType}");
+                return null;
+            }
             
-            //var newList = new StructuredList<typeof<objectType>>(objectType, reader);
-            //var newList = StructuredList.Read(textReader);
-            //return newList;
-            return null;
+            obj.Read(textReader);
+            return obj;
         }
 
         public override bool CanConvert(Type objectType)
         {
-            //return objectType == typeof(User);
             return true;
         }
     }
