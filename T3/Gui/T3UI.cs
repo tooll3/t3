@@ -76,12 +76,6 @@ namespace T3.Gui
             // Set selected id so operator can check if they are selected or not  
             var selectedInstance = NodeSelection.GetSelectedInstance();
             MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty; 
-
-            if (ImGui.IsKeyPressed(ImGuiKey.Tab))
-            {
-                var result = ImGui.SaveIniSettingsToMemory();
-                Log.Debug(result);
-            }
             
             // Draw everything!
             ImGui.DockSpaceOverViewport();
