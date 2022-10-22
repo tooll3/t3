@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using ImGuiNET;
 using SharpDX.Windows;
+using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Gui;
 
@@ -108,9 +109,12 @@ namespace T3.App
                     {
                         case VK_SHIFT:
                             io.KeyShift = true;
+                            io.KeysDown[(int)m.WParam] = true;
+                            io.KeysDown[(int)Key.ShiftKey] = true;
                             break;
                         case VK_CONTROL:
                             io.KeyCtrl = true;
+                            io.KeysDown[(int)Key.CtrlKey] = true;
                             break;
                         case VK_ALT:
                             io.KeyAlt = true;
@@ -130,9 +134,11 @@ namespace T3.App
                     {
                         case VK_SHIFT:
                             io.KeyShift = false;
+                            io.KeysDown[(int)Key.ShiftKey] = false;
                             break;
                         case VK_CONTROL:
                             io.KeyCtrl = false;
+                            io.KeysDown[(int)Key.CtrlKey] = false;
                             break;
                         case VK_ALT:
                             io.KeyAlt = false;

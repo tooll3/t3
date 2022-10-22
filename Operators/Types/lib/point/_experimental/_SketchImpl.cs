@@ -94,7 +94,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                 }
                 else if (KeyHandler.PressedKeys[(int)Key.X])
                 {
-                    if (IsAtPage)
+                    if (IsTimeAtPage)
                     {
                         _cuttedPage = ActivePage;
                         _orderedPages.Remove(ActivePage);
@@ -105,7 +105,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                 {
                     if (_cuttedPage != null)
                     {
-                        if (IsAtPage)
+                        if (IsTimeAtPage)
                             _orderedPages.Remove(ActivePage);
 
                         _cuttedPage.Time = context.LocalTime;
@@ -119,7 +119,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
             OutPages.Value = _orderedPages;
             ActivePageIndex.Value = _activePageIndex;
-            var pageTitle = IsAtPage ? $"PAGE{_activePageIndex}" : "EMPTY PAGE";
+            var pageTitle = IsTimeAtPage ? $"PAGE{_activePageIndex}" : "EMPTY PAGE";
             var tool = !IsOpSelected
                            ? "Not selected"
                            : _drawMode == DrawModes.Draw
@@ -149,7 +149,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             if (_drawMode == DrawModes.Erase)
                 visibleBrushSize *= 4;
 
-            posInWorld = PointFromMousePos(context, MousePos.GetValue(context));
+            posInWorld = CalcPosInWorld(context, MousePos.GetValue(context));
 
             if (_drawMode == DrawModes.View || !IsOpSelected)
             {
@@ -158,11 +158,14 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                 return false;
             }
 
-            var justReleased = MathUtils.WasReleased(IsMouseButtonDown.GetValue(context), ref _isMouseDown);
-
+            var isMouseDown = IsMouseButtonDown.GetValue(context);
+            var justReleased = !isMouseDown && _isMouseDown;
+            var justPressed = isMouseDown && !_isMouseDown;
+            _isMouseDown = isMouseDown;
+            
             if (justReleased)
             {
-                if (_drawMode != DrawModes.Draw || !IsAtPage)
+                if (_drawMode != DrawModes.Draw || !IsTimeAtPage)
                     return false;
 
                 // Add to points for single click to make it visible as a dot
@@ -204,8 +207,16 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             switch (_drawMode)
             {
                 case DrawModes.Draw:
-                    if (!IsAtPage)
+                    if (!IsTimeAtPage)
                         InsertNewPage(context.LocalTime);
+
+                    if(justPressed && KeyHandler.PressedKeys[(int)Key.ShiftKey] && ActivePage.WriteIndex > 1)
+                    {
+                        // Discard last separator point
+                        ActivePage.WriteIndex--;
+                        _currentStrokeLength = 1;
+                    }
+                    
 
                     AppendPoint(new Point()
                                     {
@@ -224,7 +235,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
                 case DrawModes.Erase:
                 {
-                    if (!IsAtPage)
+                    if (!IsTimeAtPage)
                         return false;
 
                     var wasModified = false;
@@ -283,7 +294,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             }
         }
 
-        private static Vector3 PointFromMousePos(EvaluationContext context, Vector2 mousePos)
+        private static Vector3 CalcPosInWorld(EvaluationContext context, Vector2 mousePos)
         {
             const float offsetFromCamPlane = 0.99f;
             var posInClipSpace = new SharpDX.Vector4((mousePos.X - 0.5f) * 2, (-mousePos.Y + 0.5f) * 2, offsetFromCamPlane, 1);
@@ -303,7 +314,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
         private void AppendPoint(Point p, bool advanceIndex = true)
         {
-            if (!IsAtPage)
+            if (!IsTimeAtPage)
             {
                 Log.Warning("Tried writing to undefined sketch page");
                 return;
@@ -347,7 +358,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
         private bool GetPreviousStrokePoint(out Point point)
         {
-            if (!IsAtPage || _currentStrokeLength == 0 || ActivePage.WriteIndex == 0)
+            if (!IsTimeAtPage || _currentStrokeLength == 0 || ActivePage.WriteIndex == 0)
             {
                 Log.Warning("Can't get previous stroke point");
                 point = new Point();
@@ -376,8 +387,8 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
         private bool IsOpSelected => MouseInput.SelectedChildId == Parent.SymbolChildId;
 
-        private bool IsAtPage => _activePageIndex != NoPageIndex;
-        private Page ActivePage => IsAtPage ? _orderedPages[_activePageIndex] : null;
+        private bool IsTimeAtPage => _activePageIndex != NoPageIndex;
+        private Page ActivePage => IsTimeAtPage ? _orderedPages[_activePageIndex] : null;
         private int _activePageIndex = NoPageIndex;
 
         private const int BufferIncreaseStep = 100; // low to reduce page file overhead

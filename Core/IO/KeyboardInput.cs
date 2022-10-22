@@ -2,12 +2,19 @@
 {
     /// <summary>
     /// Note: The actually handling is implemented differently in Editor and Player.
+    ///
+    /// Its values are set directly in the windows forms WndProc message handling
+    /// using the <see cref="Key"/>-code provided by the Windows event.
     /// </summary>
     public static class KeyHandler
     {
         public static bool[] PressedKeys = new bool[512];
     }
     
+    /// <summary>
+    /// This enumeration is directly derived from System.Windows.Forms.Keys.
+    /// Make sure to not confuse these with ImGuiKey enumeration.
+    /// </summary>
     public enum Key
     {
         D0 = 48,
@@ -52,6 +59,8 @@
         // LeftShift,    
         // RightShift,
         // LeftCtrl,
+        ShiftKey = 16,
+        CtrlKey = 16,
         F1 = 112,
         F2 = 113,
         F3 = 114,
