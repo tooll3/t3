@@ -347,16 +347,16 @@ namespace t3.Gui.Interaction.Camera
         #region DllImports
 
         [DllImport("User32.dll")]
-        extern static uint GetRawInputDeviceList(IntPtr pRawInputDeviceList, ref uint uiNumDevices, uint cbSize);
+        private static extern uint GetRawInputDeviceList(IntPtr pRawInputDeviceList, ref uint uiNumDevices, uint cbSize);
 
         [DllImport("User32.dll")]
-        extern static uint GetRawInputDeviceInfo(IntPtr hDevice, uint uiCommand, IntPtr pData, ref uint pcbSize);
+        private static extern uint GetRawInputDeviceInfo(IntPtr hDevice, uint uiCommand, IntPtr pData, ref uint pcbSize);
 
         [DllImport("User32.dll")]
-        extern static bool RegisterRawInputDevices(RAWINPUTDEVICE[] pRawInputDevice, uint uiNumDevices, uint cbSize);
+        private static extern bool RegisterRawInputDevices(RAWINPUTDEVICE[] pRawInputDevice, uint uiNumDevices, uint cbSize);
 
         [DllImport("User32.dll")]
-        extern static uint GetRawInputData(IntPtr hRawInput, uint uiCommand, IntPtr pData, ref uint pcbSize, uint cbSizeHeader);
+        private static extern uint GetRawInputData(IntPtr hRawInput, uint uiCommand, IntPtr pData, ref uint pcbSize, uint cbSizeHeader);
 
         #endregion DllImports
 
@@ -367,7 +367,7 @@ namespace t3.Gui.Interaction.Camera
         /// Key: the device handle
         /// Value: the device info class
         /// </summary>
-        public Hashtable deviceList = new Hashtable();
+        private readonly Hashtable _deviceList = new Hashtable();
 
         //Event and delegate
         public delegate void MotionEventHandler(object sender, MotionEventArgs e);
@@ -546,11 +546,11 @@ namespace t3.Gui.Interaction.Camera
                             //If it is a 3Dx device and it isn't already in the list,
                             //add it to the deviceList hashtable and increase the
                             //NumberOfDevices count
-                            if ( Is3DxDevice(hidInfo) && !deviceList.Contains(rid.hDevice) )
+                            if ( Is3DxDevice(hidInfo) && !_deviceList.Contains(rid.hDevice) )
                             {
                                 Console.WriteLine("Using 3Dx device: " + deviceName);
                                 NumberOfDevices++;
-                                deviceList.Add(rid.hDevice, dInfo);
+                                _deviceList.Add(rid.hDevice, dInfo);
                             }
                             Marshal.FreeHGlobal(pHIDData);
                         }
@@ -583,7 +583,7 @@ namespace t3.Gui.Interaction.Camera
         /// keyboard events that occur.
         /// </summary>
         /// <param name="message">The WM_INPUT message to process.</param>
-        public void ProcessInputCommand(Message message)
+        private void ProcessInputCommand(Message message)
         {
             uint dwSize = 0;
 
@@ -614,15 +614,15 @@ namespace t3.Gui.Interaction.Camera
                     {
                         DeviceInfo dInfo = null;
 
-                        if (deviceList.Contains(header.hDevice))
+                        if (_deviceList.Contains(header.hDevice))
                         {
-                            dInfo = (DeviceInfo)deviceList[header.hDevice];
+                            dInfo = (DeviceInfo)_deviceList[header.hDevice];
                         }
                         else
                         {
                             // Device not in list.  Reenumerate all of them again.  Could warn the code with some sort of Connect/Disconnect event.
                             EnumerateDevices();
-                            dInfo = (DeviceInfo)deviceList[header.hDevice];
+                            dInfo = (DeviceInfo)_deviceList[header.hDevice];
                         }
 
                         // The header tells us the size of the actual event
