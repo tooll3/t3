@@ -15,25 +15,16 @@
       "DefaultValue": false
     },
     {
-      "Id": "7bc91594-ad3b-4c65-a4c1-cf2fa5759599"/*Mode*/,
-      "DefaultValue": 0
-    },
-    {
       "Id": "1057313c-006a-4f12-8828-07447337898b"/*BrushSize*/,
       "DefaultValue": 0.0
     },
     {
-      "Id": "4718e758-703e-4ff9-ac66-ce03cdce2904"/*BrushColor*/,
-      "DefaultValue": {
-        "X": 1.0,
-        "Y": 1.0,
-        "Z": 1.0,
-        "W": 1.0
-      }
-    },
-    {
       "Id": "51641425-a2c6-4480-ac8f-2e6d2cbc300a"/*FilePath*/,
       "DefaultValue": ""
+    },
+    {
+      "Id": "0fa40e27-c7ca-4bb9-88c6-ced917dfec12"/*OverridePageIndex*/,
+      "DefaultValue": -1
     }
   ],
   "Children": [],

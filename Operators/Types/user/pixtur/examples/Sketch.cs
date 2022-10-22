@@ -35,6 +35,9 @@ namespace T3.Operators.Types.Id_8e6ed99c_a3e0_42c0_9f81_a89b1e340757
         [Input(Guid = "d9931f47-2fc9-4df3-ab97-1a71e45501d2")]
         public readonly InputSlot<bool> ShowOnionSkin = new InputSlot<bool>();
 
+        [Input(Guid = "37093302-053a-47b2-ace6-b9d310d3f4b7")]
+        public readonly InputSlot<int> OverridePageIndex = new InputSlot<int>();
+
         private enum ShowModes
         {
             OnlyAtFrame,

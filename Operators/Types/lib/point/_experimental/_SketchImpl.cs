@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using SharpDX;
-using T3.Core;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.IO;
@@ -12,7 +11,6 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using Point = T3.Core.DataTypes.Point;
-using Quaternion = System.Numerics.Quaternion;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 
@@ -49,17 +47,18 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             var isFilePathDirty = FilePath.DirtyFlag.IsDirty;
             var filepath = FilePath.GetValue(context);
 
-            _paging._overridePageIndex = OverridePageIndex.GetValue(context);
-            
+            var overrideIndexWasDirty = OverridePageIndex.DirtyFlag.IsDirty;
+            var overridePageIndex = OverridePageIndex.GetValue(context);
+
             if (isFilePathDirty)
             {
-                _paging.UpdatePagesFromDisk(filepath);
+                _paging.LoadPages(filepath);
             }
 
             var pageIndexNeedsUpdate = Math.Abs(_lastUpdateContextTime - context.LocalTime) > 0.001;
-            if (pageIndexNeedsUpdate || isFilePathDirty)
+            if (pageIndexNeedsUpdate || isFilePathDirty || overrideIndexWasDirty)
             {
-                _paging.UpdatePagesForTime(context.LocalTime);
+                _paging.UpdatePageIndex(context.LocalTime, overridePageIndex);
                 _lastUpdateContextTime = context.LocalTime;
             }
 
@@ -107,8 +106,8 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             var wasModified = DoSketch(context, out CursorPosInWorld.Value, out CurrentBrushSize.Value);
 
             OutPages.Value = _paging.Pages;
-            ActivePageIndexOutput.Value = _paging._activePageIndex;
-            var pageTitle = _paging.IsTimeAtPage ? $"PAGE{_paging._activePageIndex}" : "EMPTY PAGE";
+            ActivePageIndexOutput.Value = _paging.ActivePageIndex;
+            var pageTitle = _paging.HasActivePage ? $"PAGE{_paging.ActivePageIndex}" : "EMPTY PAGE";
             var tool = !IsOpSelected
                            ? "Not selected"
                            : _drawMode == DrawModes.Draw
@@ -151,10 +150,10 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             var justReleased = !isMouseDown && _isMouseDown;
             var justPressed = isMouseDown && !_isMouseDown;
             _isMouseDown = isMouseDown;
-            
+
             if (justReleased)
             {
-                if (_drawMode != DrawModes.Draw || !_paging.IsTimeAtPage)
+                if (_drawMode != DrawModes.Draw || !_paging.HasActivePage)
                     return false;
 
                 // Add to points for single click to make it visible as a dot
@@ -196,16 +195,15 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             switch (_drawMode)
             {
                 case DrawModes.Draw:
-                    if (!_paging.IsTimeAtPage)
-                        _paging.InsertNewPage(context.LocalTime);
+                    if (!_paging.HasActivePage)
+                        _paging.InsertNewPage();
 
-                    if(justPressed && KeyHandler.PressedKeys[(int)Key.ShiftKey] && _paging.ActivePage.WriteIndex > 1)
+                    if (justPressed && KeyHandler.PressedKeys[(int)Key.ShiftKey] && _paging.ActivePage.WriteIndex > 1)
                     {
                         // Discard last separator point
                         _paging.ActivePage.WriteIndex--;
                         _currentStrokeLength = 1;
                     }
-                    
 
                     AppendPoint(new Point()
                                     {
@@ -224,7 +222,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
                 case DrawModes.Erase:
                 {
-                    if (!_paging.IsTimeAtPage)
+                    if (!_paging.HasActivePage)
                         return false;
 
                     var wasModified = false;
@@ -244,7 +242,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
             return false;
         }
-        
+
         private static Vector3 CalcPosInWorld(EvaluationContext context, Vector2 mousePos)
         {
             const float offsetFromCamPlane = 0.99f;
@@ -265,7 +263,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
         private void AppendPoint(Point p, bool advanceIndex = true)
         {
-            if (!_paging.IsTimeAtPage)
+            if (!_paging.HasActivePage)
             {
                 Log.Warning("Tried writing to undefined sketch page");
                 return;
@@ -283,10 +281,9 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                 _paging.ActivePage.WriteIndex++;
         }
 
-
         private bool GetPreviousStrokePoint(out Point point)
         {
-            if (!_paging.IsTimeAtPage || _currentStrokeLength == 0 || _paging.ActivePage.WriteIndex == 0)
+            if (!_paging.HasActivePage || _currentStrokeLength == 0 || _paging.ActivePage.WriteIndex == 0)
             {
                 Log.Warning("Can't get previous stroke point");
                 point = new Point();
@@ -296,7 +293,6 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             point = CurrentPointList.TypedElements[_paging.ActivePage.WriteIndex - 1];
             return true;
         }
-
 
         private double _lastModificationTime;
         private StructuredList<Point> CurrentPointList => _paging.ActivePage.PointsList;
@@ -308,11 +304,9 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
         private int _currentStrokeLength;
 
-
         private double _lastUpdateContextTime = -1;
 
         private bool IsOpSelected => MouseInput.SelectedChildId == Parent.SymbolChildId;
-
 
         public class Page
         {
@@ -328,33 +322,53 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
         /// </summary>
         private class Paging
         {
-            public void UpdatePagesForTime(double contextLocalTime)
+            /// <summary>
+            /// Derives active page index from local time or parameter override 
+            /// </summary>
+            public void UpdatePageIndex(double contextLocalTime, int overridePageIndex)
             {
+                _lastContextTime = contextLocalTime;
+
+                if (overridePageIndex >= 0)
+                {
+                    if (overridePageIndex >= Pages.Count)
+                    {
+                        ActivePage = null;
+                        return;
+                    }
+                        
+                    ActivePageIndex = overridePageIndex;
+                    ActivePage = Pages[overridePageIndex];
+                    return;
+                }
+
                 for (var pageIndex = 0; pageIndex < Pages.Count; pageIndex++)
                 {
                     var page = Pages[pageIndex];
                     if (!(Math.Abs(page.Time - contextLocalTime) < 0.05))
                         continue;
 
-                    _activePageIndex = pageIndex;
+                    ActivePageIndex = pageIndex;
+                    ActivePage = Pages[pageIndex];
                     return;
                 }
 
-                _activePageIndex = NoPageIndex;
+                ActivePageIndex = NoPageIndex;
+                ActivePage = null;
             }
 
-            public void InsertNewPage(double time)
+            public void InsertNewPage()
             {
-                Pages.Add(new Page()
-                                              {
-                                                  Time = time,
-                                                  PointsList = new StructuredList<Point>(BufferIncreaseStep),
-                                              });
+                Pages.Add(new Page
+                              {
+                                  Time = _lastContextTime,
+                                  PointsList = new StructuredList<Point>(BufferIncreaseStep),
+                              });
                 Pages = Pages.OrderBy(p => p.Time).ToList();
-                UpdatePagesForTime(time);
+                UpdatePageIndex(_lastContextTime, NoPageIndex); // This is probably bad
             }
 
-            public void UpdatePagesFromDisk(string filepath)
+            public void LoadPages(string filepath)
             {
                 Pages = Core.Utilities.TryLoadingJson<List<Page>>(filepath);
 
@@ -372,7 +386,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                             continue;
 
                         //Log.Warning($"Adjusting writing index {page.WriteIndex} -> {page.PointsList.NumElements}");
-                        page.WriteIndex = page.PointsList.NumElements+1;
+                        page.WriteIndex = page.PointsList.NumElements + 1;
                     }
                 }
                 else
@@ -380,55 +394,48 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                     Pages = new List<Page>();
                 }
             }
-            
-            public bool IsOverridingTime => _overridePageIndex < -0.001;
-            public bool IsTimeAtPage => _activePageIndex != NoPageIndex;
-            public Page ActivePage =>
-                IsOverridingTime 
-                    ? Pages[(int)(_overridePageIndex).Clamp(0, Pages.Count-1)]
-                    : IsTimeAtPage 
-                        ? Pages[_activePageIndex] 
-                        : null;
 
-            public bool HasCutPage => _cuttedPage != null;
+            public bool HasActivePage => ActivePage != null;
+
+            public Page ActivePage;
+
+            public bool HasCutPage => _cutPage != null;
 
             public void Cut(double time)
             {
-                if (!IsTimeAtPage)
+                if (!HasActivePage)
                     return;
-                
-                _cuttedPage = ActivePage;
+
+                _cutPage = ActivePage;
                 Pages.Remove(ActivePage);
-                UpdatePagesForTime(time);
+                UpdatePageIndex(_lastContextTime, NoPageIndex);
             }
-            
+
             public void Paste(double time)
             {
-                if (_cuttedPage == null)
+                if (_cutPage == null)
                     return;
-                
-                if (IsTimeAtPage)
+
+                if (HasActivePage)
                     Pages.Remove(ActivePage);
 
-                _cuttedPage.Time = time;
-                Pages.Add(_cuttedPage);
-                UpdatePagesForTime(time);
+                _cutPage.Time = time;
+                Pages.Add(_cutPage);
+                UpdatePageIndex(_lastContextTime, NoPageIndex);
             }
-            
-            public int _activePageIndex = NoPageIndex;
-            public float _overridePageIndex = NoPageIndex;
-            
-            private const int NoPageIndex = -1;
+
+            public int ActivePageIndex { get; private set; } = NoPageIndex;
 
             public List<Page> Pages = new();
-            private Page _cuttedPage;
+            private Page _cutPage;
+            private double _lastContextTime;
 
+            private const int NoPageIndex = -1;
         }
 
         private readonly Paging _paging = new();
 
         private const int BufferIncreaseStep = 100; // low to reduce page file overhead
-
 
         private readonly int[] _numberKeys =
             { (int)Key.D1, (int)Key.D2, (int)Key.D3, (int)Key.D4, (int)Key.D5, (int)Key.D6, (int)Key.D7, (int)Key.D8, (int)Key.D9 };
@@ -451,9 +458,8 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
         [Input(Guid = "51641425-A2C6-4480-AC8F-2E6D2CBC300A")]
         public readonly InputSlot<string> FilePath = new();
-        
-        [Input(Guid = "BA7E85F8-D377-4B3E-9FB6-763C5B04E88C")]
-        public readonly InputSlot<float> OverridePageIndex = new();
 
+        [Input(Guid = "0FA40E27-C7CA-4BB9-88C6-CED917DFEC12")]
+        public readonly InputSlot<int> OverridePageIndex = new();
     }
 }

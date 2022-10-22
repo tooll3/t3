@@ -17,28 +17,11 @@
       }
     },
     {
-      "InputId": "7bc91594-ad3b-4c65-a4c1-cf2fa5759599"/*Mode*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
-      }
-    },
-    {
       "InputId": "1057313c-006a-4f12-8828-07447337898b"/*BrushSize*/,
       "Position": {
         "X": -200.0,
         "Y": 180.0
       }
-    },
-    {
-      "InputId": "4718e758-703e-4ff9-ac66-ce03cdce2904"/*BrushColor*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 315.0
-      },
-      "Min": 0.0,
-      "Max": 1.0,
-      "Clamp": true
     },
     {
       "InputId": "51641425-a2c6-4480-ac8f-2e6d2cbc300a"/*FilePath*/,
@@ -47,6 +30,13 @@
         "Y": 225.0
       },
       "Usage": "Default"
+    },
+    {
+      "InputId": "0fa40e27-c7ca-4bb9-88c6-ced917dfec12"/*OverridePageIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
     }
   ],
   "SymbolChildUis": [],
@@ -73,7 +63,7 @@
       }
     },
     {
-      "OutputId": "e1b35efa-3a49-4ab3-83ae-a2ded1cef908"/*ActivePageIndex*/,
+      "OutputId": "e1b35efa-3a49-4ab3-83ae-a2ded1cef908"/*ActivePageIndexOutput*/,
       "Position": {
         "X": 0.0,
         "Y": 400.0
