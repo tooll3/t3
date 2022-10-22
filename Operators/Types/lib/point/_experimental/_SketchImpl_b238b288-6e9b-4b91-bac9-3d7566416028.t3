@@ -15,14 +15,6 @@
       "DefaultValue": false
     },
     {
-      "Id": "b0d76cab-8e7e-4845-b7e4-202424dfa12d"/*TriggerReset*/,
-      "DefaultValue": false
-    },
-    {
-      "Id": "ea245c8a-d7f1-4f40-9d8d-f1d68070fef2"/*PageIndex*/,
-      "DefaultValue": 0
-    },
-    {
       "Id": "7bc91594-ad3b-4c65-a4c1-cf2fa5759599"/*Mode*/,
       "DefaultValue": 0
     },

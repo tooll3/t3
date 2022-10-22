@@ -10,6 +10,10 @@
     {
       "Id": "1b8d9a00-f337-431e-bab3-24d45ed9d191"/*PageIndex*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "ddbac6ab-e547-4955-9346-680b2c5bf8a4"/*GetOnionSkin*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

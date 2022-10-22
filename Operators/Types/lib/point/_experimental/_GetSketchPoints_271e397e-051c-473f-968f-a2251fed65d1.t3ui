@@ -15,6 +15,13 @@
         "X": -200.0,
         "Y": 90.0
       }
+    },
+    {
+      "InputId": "ddbac6ab-e547-4955-9346-680b2c5bf8a4"/*GetOnionSkin*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
     }
   ],
   "SymbolChildUis": [],
@@ -24,6 +31,13 @@
       "Position": {
         "X": 0.0,
         "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "fb4f4ac1-696c-4606-b479-ed8dadd166d3"/*DistanceToCurrentTime*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 300.0
       }
     }
   ]

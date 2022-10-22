@@ -282,6 +282,18 @@ namespace T3.Core
             current = newState;
             return newState;
         }
+        
+        /// <summary>
+        /// Return true if a boolean changed from false to true
+        /// </summary>
+        public static bool WasReleased(bool newState, ref bool current)
+        {
+            if (newState == current)
+                return false;
+
+            current = newState;
+            return !newState;
+        }
 
         /// <summary>
         /// Checks for NaN or Infinity, and sets the float to the provided default value if either.

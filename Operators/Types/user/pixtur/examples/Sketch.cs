@@ -14,12 +14,6 @@ namespace T3.Operators.Types.Id_8e6ed99c_a3e0_42c0_9f81_a89b1e340757
         [Output(Guid = "6d0b50be-70d4-4539-8d9d-ebb7434075c2")]
         public readonly Slot<T3.Core.DataTypes.BufferWithViews> Points = new Slot<T3.Core.DataTypes.BufferWithViews>();
 
-        [Input(Guid = "1280a038-ea38-472d-aeb9-37a27b76ce8f", MappedType = typeof(_SketchImpl.Modes))]
-        public readonly InputSlot<int> Mode = new InputSlot<int>();
-
-        [Input(Guid = "4e80860e-f553-43cb-8b69-fc3b3b3eda73")]
-        public readonly InputSlot<float> PageFloatIndex = new InputSlot<float>();
-
         [Input(Guid = "1c5d0d86-c000-449e-903a-3212d19d8e1d")]
         public readonly InputSlot<float> StrokeSize = new InputSlot<float>();
 
@@ -29,12 +23,6 @@ namespace T3.Operators.Types.Id_8e6ed99c_a3e0_42c0_9f81_a89b1e340757
         [Input(Guid = "44b88a09-6374-4180-9bc9-713ccfbb36f0")]
         public readonly InputSlot<System.Numerics.Vector4> Background = new InputSlot<System.Numerics.Vector4>();
 
-        [Input(Guid = "45be101b-0086-4f40-a230-0b860209460b", MappedType = typeof(ShowModes))]
-        public readonly InputSlot<int> ShowAs = new InputSlot<int>();
-
-        [Input(Guid = "0f089041-06b0-43f2-a5b6-8214abf9f959")]
-        public readonly InputSlot<float> WidthFactor = new InputSlot<float>();
-
         [Input(Guid = "2ded8235-157d-486b-a997-87d09d18f998")]
         public readonly InputSlot<string> Filename = new InputSlot<string>();
 
@@ -43,6 +31,9 @@ namespace T3.Operators.Types.Id_8e6ed99c_a3e0_42c0_9f81_a89b1e340757
 
         [Input(Guid = "f823fdfd-fc3d-41c4-bd9d-6badf764d702")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> InputImage = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+
+        [Input(Guid = "d9931f47-2fc9-4df3-ab97-1a71e45501d2")]
+        public readonly InputSlot<bool> ShowOnionSkin = new InputSlot<bool>();
 
         private enum ShowModes
         {

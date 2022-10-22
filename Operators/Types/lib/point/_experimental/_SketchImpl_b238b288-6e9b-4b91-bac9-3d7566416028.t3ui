@@ -17,20 +17,6 @@
       }
     },
     {
-      "InputId": "b0d76cab-8e7e-4845-b7e4-202424dfa12d"/*TriggerReset*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
-      "InputId": "ea245c8a-d7f1-4f40-9d8d-f1d68070fef2"/*PageIndex*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      }
-    },
-    {
       "InputId": "7bc91594-ad3b-4c65-a4c1-cf2fa5759599"/*Mode*/,
       "Position": {
         "X": -200.0,
@@ -84,6 +70,20 @@
       "Position": {
         "X": 0.0,
         "Y": 300.0
+      }
+    },
+    {
+      "OutputId": "e1b35efa-3a49-4ab3-83ae-a2ded1cef908"/*ActivePageIndex*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 400.0
+      }
+    },
+    {
+      "OutputId": "bd29c7d2-1296-48cb-ad85-f96c27a35b92"/*StatusMessage*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 500.0
       }
     }
   ]
