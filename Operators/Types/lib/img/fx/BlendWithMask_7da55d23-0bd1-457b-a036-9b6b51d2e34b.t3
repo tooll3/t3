@@ -229,6 +229,11 @@
             "Z": 1E-06,
             "W": 0.0
           }
+        },
+        {
+          "Id": "f0cf3325-4967-4419-9beb-036cd6dbfd6a"/*GenerateMips*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
       "Outputs": []

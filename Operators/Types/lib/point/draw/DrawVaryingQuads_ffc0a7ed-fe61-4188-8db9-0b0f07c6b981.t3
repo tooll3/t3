@@ -73,21 +73,21 @@
           "Interpolation": "Linear",
           "Steps": [
             {
-              "Id": "c205ab45-bae2-44f7-8c5d-868739dc6068",
+              "Id": "d6fa33bd-a9d7-4ced-bd84-bf3c6e6dea17",
               "NormalizedPosition": 0.0,
               "Color": {
                 "R": 1.0,
-                "G": 0.0,
+                "G": 1.0,
                 "B": 1.0,
                 "A": 1.0
               }
             },
             {
-              "Id": "32acf39b-1341-4c4b-a844-a7452080fa93",
+              "Id": "991b2ce5-af35-4eb7-8177-f91d1a3a854f",
               "NormalizedPosition": 1.0,
               "Color": {
-                "R": 0.0,
-                "G": 0.0,
+                "R": 1.0,
+                "G": 1.0,
                 "B": 1.0,
                 "A": 1.0
               }
