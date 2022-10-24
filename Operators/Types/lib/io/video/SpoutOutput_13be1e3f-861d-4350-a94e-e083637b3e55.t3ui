@@ -1,0 +1,29 @@
+{
+  "Id": "13be1e3f-861d-4350-a94e-e083637b3e55"/*SpoutOutput*/,
+  "InputUis": [
+    {
+      "InputId": "d4b5c642-9cb9-4f41-8739-edbb9c6c4857"/*Texture*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "fe61ff9e-7f1b-4f69-9f4b-313f30b57124"/*Command*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "297ea260-4486-48f8-b58f-8180acf0c2c5"/*TextureOutput*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}
