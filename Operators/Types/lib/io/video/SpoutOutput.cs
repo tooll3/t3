@@ -4,15 +4,13 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using System;
-using Spout.Interop;
-using OpenGL;
-using System.Runtime.InteropServices;
-using SharpDX;
 using System.Collections.Generic;
+using OpenGL;
+using Spout;
+using SharpDX;
 using SharpDX.DXGI;
 using DeviceContext = OpenGL.DeviceContext;
 using PixelFormat = SharpDX.WIC.PixelFormat;
-using System.Linq;
 
 namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
 {
@@ -29,32 +27,40 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
         private void Update(EvaluationContext context)
         {
             Command.GetValue(context);
-            TextureOutput.Value = Texture.GetValue(context);
-            sendImage(TextureOutput.Value);
+            var texture = Texture.GetValue(context);
+
+            TextureOutput.Value = texture;
+            sendTexture(ref texture);
         }
 
         private bool InitializeSpout(uint width, uint height)
         {
             if (_initialized && width == _width && height == _height) return true;
 
-            if (_initialized)
-            {
-                Dispose();
-            }
-            else
+            DisposeTextures();
+
+            if (!_initialized)
             {
                 ++_instance;
                 _senderName = $"Tooll3 Output {_instance}";
             }
 
-            _deviceContext = OpenGL.DeviceContext.Create();
+            _deviceContext = DeviceContext.Create();
             _glContext = _deviceContext.CreateContext(IntPtr.Zero);
             // Make this become the primary context
             _deviceContext.MakeCurrent(_glContext);
-            // var deviceContext = ResourceManager.Device.ImmediateContext;
+
+            var deviceContext = ResourceManager.Device.ImmediateContext;
             // Create the sender
-            _sender = new SpoutSender();
-            _initialized = _sender.CreateSender(_senderName, width, height, 0);
+            if (_sender == null)
+            {
+                _sender = new SpoutSender();
+                _initialized = _sender.CreateSender(_senderName, width, height, 0);
+            }
+            else
+            {
+                _initialized = _sender.UpdateSender(_senderName, width, height);
+            }
             _width = width;
             _height = height;
             return _initialized;
@@ -98,7 +104,7 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             return BitConverter.ToSingle(BitConverter.GetBytes((intVal & 0x8000) << 16 | (exp | mant) << 13), 0);
         }
 
-        private bool sendImage(Texture2D frame)
+        private bool sendTexture(ref Texture2D frame)
         {
             // Make this become the primary context
             if (frame == null)
@@ -118,15 +124,13 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
                 if (!InitializeSpout((uint)width, (uint)height))
                     return false;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }
 
-            if (!_deviceContext.MakeCurrent(_glContext))
+            if (_deviceContext == null || !_deviceContext.MakeCurrent(_glContext))
                 return false;
-
-            int[] data = new int[currentDesc.Width * currentDesc.Height];
 
             try
             {
@@ -172,10 +176,11 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
                 _currentIndex = (_currentIndex + 1) % NumTextureEntries;
 
                 // don't return first two samples since buffering is not ready yet
-                if (_currentUsageIndex++ < 0)
+                if (_currentUsageIndex++ < 0 || _width != width || _height != height)
                     return false;
 
                 // map image resource to get a stream we can read from
+
                 DataBox dataBox = immediateContext.MapSubresource(readableImage,
                                                                   0,
                                                                   0,
@@ -269,26 +274,21 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
                         throw new InvalidOperationException($"Can't export unknown texture format {currentDesc.Format}");
                 }
 
-                // copy our finished RGBA buffer to the media buffer pointer
-                Marshal.Copy(outputStream.DataPointer, data, 0, width * height);
-
                 // release our resources
                 immediateContext.UnmapSubresource(readableImage, 0);
 
                 unsafe
                 {
-                    fixed (int* pData = data)
-                    {
-                        byte* bytePData = (byte*)pData;
-                        _sender.SendImage(
-                            bytePData, // Pixels
-                            (uint)width, // Width
-                            (uint)height, // Height
-                            Gl.RGBA, // GL_RGBA
-                            true, // B Invert
-                            0 // Host FBO
-                            );
-                    }
+                    byte* bytePData = (byte*)outputStream.DataPointer.ToPointer();
+
+                    _sender.SendImage(
+                        bytePData, // Pixels
+                        (uint)width, // Width
+                        (uint)height, // Height
+                        Gl.RGBA, // GL_RGBA
+                        true, // B Invert
+                        0 // Host FBO
+                        );
                 }
             }
             catch (Exception e)
@@ -318,6 +318,7 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
         {
             if (_sender != null)
             {
+                _sender.ReleaseSender();
                 _sender.Dispose();
                 _sender = null;
             }
