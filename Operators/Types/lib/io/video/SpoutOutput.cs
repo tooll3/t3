@@ -1,16 +1,20 @@
-using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using OpenGL;
-using Spout;
 using SharpDX;
+using SharpDX.Direct3D11;
 using SharpDX.DXGI;
+using SpoutDX;
 using DeviceContext = OpenGL.DeviceContext;
-using PixelFormat = SharpDX.WIC.PixelFormat;
+using Resource = SharpDX.DXGI.Resource;
+// using PixelFormat = SharpDX.WIC.PixelFormat;
+using T3.Core.Logging;
+using SpoutDX.__Symbols;
 
 namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
 {
@@ -21,6 +25,9 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
 
         public SpoutOutput()
         {
+            ++_instance;
+            _senderName = $"Tooll3 Output {_instance}";
+
             TextureOutput.UpdateAction = Update;
         }
 
@@ -33,29 +40,54 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             sendTexture(ref texture);
         }
 
-        private bool InitializeSpout(uint width, uint height)
+        private unsafe bool InitializeSpout(uint width, uint height)
         {
             if (_initialized && width == _width && height == _height) return true;
 
             DisposeTextures();
 
-            if (!_initialized)
-            {
-                ++_instance;
-                _senderName = $"Tooll3 Output {_instance}";
-            }
-
             _deviceContext = DeviceContext.Create();
             _glContext = _deviceContext.CreateContext(IntPtr.Zero);
             // Make this become the primary context
             _deviceContext.MakeCurrent(_glContext);
-
+        
             var deviceContext = ResourceManager.Device.ImmediateContext;
             // Create the sender
-            if (_sender == null)
+            if (!_initialized || _sender == null)
             {
+                // var DXGI_FORMAT_R8G8B8A8_UINT = 30;
+                var device = ID3D11Device.__CreateInstance(((IntPtr)ResourceManager.Device));
+                _spoutDX = new SpoutDX.SpoutDX();
+                _spoutDX.OpenDirectX11(device);
+                // _spoutDX.SetAdapter(0);
+
+                IntPtr adapterName = Marshal.AllocHGlobal(1024);
+                string adapter;
+                unsafe
+                {
+                    sbyte* name = (sbyte*)adapterName;
+                    _spoutDX.GetAdapterName(_spoutDX.Adapter, name, 1024);
+                    adapter = new string(name);
+                }
+                Marshal.FreeHGlobal(adapterName);
+                Console.WriteLine(@$"Spout is using adapter {adapter}");
+
                 _sender = new SpoutSender();
+                D3D11TEXTURE2D_DESC desc = new CD3D11TEXTURE2D_DESC()
+                    {
+                        Width = width,
+                        Height = height,
+                        MipLevels = 1,
+                        BindFlags = 0,
+                        Usage = D3D11USAGE.D3D11USAGE_DYNAMIC,
+                        CPUAccessFlags = 0,
+                        //sampleCount = 1,
+                        //sampleQuality = 0,
+                        ArraySize = 1,
+                        MiscFlags = 0
+                    };
                 _initialized = _sender.CreateSender(_senderName, width, height, 0);
+                _spoutDX.SetActiveSender(_senderName);
             }
             else
             {
@@ -104,21 +136,35 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             return BitConverter.ToSingle(BitConverter.GetBytes((intVal & 0x8000) << 16 | (exp | mant) << 13), 0);
         }
 
+        private Texture2D CreateD3D11Texture2D(Texture2D d3d11Texture2D)
+        {
+            using (var resource = d3d11Texture2D.QueryInterface<Resource>())
+            {
+                return ResourceManager.Device.OpenSharedResource<Texture2D>(resource.SharedHandle);
+            }
+        }
+
         private bool sendTexture(ref Texture2D frame)
         {
-            // Make this become the primary context
             if (frame == null)
                 return false;
 
             var device = ResourceManager.Device;
             DataStream inputStream = null;
             DataStream outputStream = null;
+            Texture2D sharedTexture = null;
 
             int width, height;
             Texture2DDescription currentDesc;
             try
             {
                 currentDesc = frame.Description;
+                if (currentDesc.Format != Format.R8G8B8A8_UNorm)
+                {
+                    Log.Debug("Spout currently only supports texture format B8G8R8A8_UNorm.");
+                    Log.Debug("Please use a render target operator to change the format accordingly.");
+                    return false;
+                }
                 width = currentDesc.Width;
                 height = currentDesc.Height;
                 if (!InitializeSpout((uint)width, (uint)height))
@@ -126,9 +172,14 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             }
             catch (Exception e)
             {
+                Log.Debug("Initialization of Spout failed. Are Spout.dll and SpoutDX.dll present in the executable folder?");
+                Log.Debug(e.ToString());
+                _spoutDX?.Dispose();
+                _spoutDX = null;
                 return false;
             }
 
+            // Make this become the primary context
             if (_deviceContext == null || !_deviceContext.MakeCurrent(_glContext))
                 return false;
 
@@ -150,9 +201,9 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
                         Height = currentDesc.Height,
                         MipLevels = currentDesc.MipLevels,
                         SampleDescription = new SampleDescription(1, 0),
-                        Usage = ResourceUsage.Staging,
-                        OptionFlags = ResourceOptionFlags.None,
-                        CpuAccessFlags = CpuAccessFlags.Read,
+                        Usage = ResourceUsage.Default, // ResourceUsage.Staging,
+                        OptionFlags = ResourceOptionFlags.Shared,
+                        CpuAccessFlags = CpuAccessFlags.None,
                         ArraySize = 1
                     };
 
@@ -179,126 +230,20 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
                 if (_currentUsageIndex++ < 0 || _width != width || _height != height)
                     return false;
 
-                // map image resource to get a stream we can read from
-
-                DataBox dataBox = immediateContext.MapSubresource(readableImage,
-                                                                  0,
-                                                                  0,
-                                                                  MapMode.Read,
-                                                                  SharpDX.Direct3D11.MapFlags.None,
-                                                                  out inputStream);
-                // Create an 8 bit RGBA output buffer to write to
-                var formatId = PixelFormat.Format32bppRGBA;
-                int rowStride = PixelFormat.GetStride(formatId, width);
-                var pixelByteCount = PixelFormat.GetStride(formatId, 1);
-                var outBufferSize = height * rowStride;
-                outputStream = new DataStream(outBufferSize, true, true);
-
-                int cbMaxLength = 0;
-                int cbCurrentLength = 0;
-
-                switch (currentDesc.Format)
-                {
-                    case SharpDX.DXGI.Format.R16G16B16A16_Float:
-                        for (int loopY = 0; loopY < height; loopY++)
-                        {
-                            if (!FlipY)
-                                inputStream.Position = (long)(loopY) * dataBox.RowPitch;
-                            else
-                                inputStream.Position = (long)(height - 1 - loopY) * dataBox.RowPitch;
-
-                            long outputPosition = (long)(loopY) * rowStride;
-
-                            for (int loopX = 0; loopX < width; loopX++)
-                            {
-                                var b = Read2BytesToHalf(inputStream);
-                                var g = Read2BytesToHalf(inputStream);
-                                var r = Read2BytesToHalf(inputStream);
-                                var a = Read2BytesToHalf(inputStream);
-
-                                outputStream.WriteByte((byte)(b.Clamp(0, 1) * 255));
-                                outputStream.WriteByte((byte)(g.Clamp(0, 1) * 255));
-                                outputStream.WriteByte((byte)(r.Clamp(0, 1) * 255));
-                                outputStream.WriteByte((byte)(a.Clamp(0, 1) * 255));
-                            }
-                        }
-                        break;
-
-                    case SharpDX.DXGI.Format.R8G8B8A8_UNorm:
-                        for (int loopY = 0; loopY < height; loopY++)
-                        {
-                            if (!FlipY)
-                                inputStream.Position = (long)(loopY) * dataBox.RowPitch;
-                            else
-                                inputStream.Position = (long)(height - 1 - loopY) * dataBox.RowPitch;
-
-                            for (int loopX = 0; loopX < width; loopX++)
-                            {
-                                byte b = (byte)inputStream.ReadByte();
-                                byte g = (byte)inputStream.ReadByte();
-                                byte r = (byte)inputStream.ReadByte();
-                                byte a = (byte)inputStream.ReadByte();
-
-                                outputStream.WriteByte(b);
-                                outputStream.WriteByte(g);
-                                outputStream.WriteByte(r);
-                                outputStream.WriteByte(a);
-                            }
-                        }
-                        break;
-
-                    case SharpDX.DXGI.Format.R16G16B16A16_UNorm:
-                        for (int loopY = 0; loopY < height; loopY++)
-                        {
-                            if (!FlipY)
-                                inputStream.Position = (long)(loopY) * dataBox.RowPitch;
-                            else
-                                inputStream.Position = (long)(height - 1 - loopY) * dataBox.RowPitch;
-
-                            for (int loopX = 0; loopX < width; loopX++)
-                            {
-                                inputStream.ReadByte(); byte b = (byte)inputStream.ReadByte();
-                                inputStream.ReadByte(); byte g = (byte)inputStream.ReadByte();
-                                inputStream.ReadByte(); byte r = (byte)inputStream.ReadByte();
-                                inputStream.ReadByte(); byte a = (byte)inputStream.ReadByte();
-
-                                outputStream.WriteByte(b);
-                                outputStream.WriteByte(g);
-                                outputStream.WriteByte(r);
-                                outputStream.WriteByte(a);
-                            }
-                        }
-                        break;
-
-                    default:
-                        throw new InvalidOperationException($"Can't export unknown texture format {currentDesc.Format}");
-                }
-
-                // release our resources
-                immediateContext.UnmapSubresource(readableImage, 0);
-
-                unsafe
-                {
-                    byte* bytePData = (byte*)outputStream.DataPointer.ToPointer();
-
-                    _sender.SendImage(
-                        bytePData, // Pixels
-                        (uint)width, // Width
-                        (uint)height, // Height
-                        Gl.RGBA, // GL_RGBA
-                        true, // B Invert
-                        0 // Host FBO
-                        );
-                }
+                sharedTexture = CreateD3D11Texture2D(readableImage);
+                _texture = ID3D11Texture2D.__CreateInstance(((IntPtr)sharedTexture));
+                _spoutDX.SendTexture(_texture);
             }
             catch (Exception e)
             {
-                throw new InvalidOperationException("Internal image copy failed : " + e.ToString());
+                Log.Debug("Texture sending failed : " + e.ToString());
             }
             finally
             {
                 inputStream?.Dispose();
                 outputStream?.Dispose();
+                _texture?.Dispose();
+                sharedTexture?.Dispose();
             }
 
             return true;
@@ -334,7 +279,9 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
         private DeviceContext _deviceContext;
         private IntPtr _glContext;
         private string _senderName;
+        private SpoutDX.SpoutDX _spoutDX;
         private SpoutSender _sender;
+        private ID3D11Texture2D _texture;
 
         /// <summary>
         /// Internal use: FlipY during rendering?

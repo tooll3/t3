@@ -11,7 +11,59 @@ using System.Security;
 using __CallingConvention = global::System.Runtime.InteropServices.CallingConvention;
 using __IntPtr = global::System.IntPtr;
 
-[assembly:InternalsVisibleTo("Spout")]
+[assembly:InternalsVisibleTo("SpoutDX")]
+
+// DEBUG: struct tagRECT
+// DEBUG: {
+// DEBUG:     LONG    left;
+// DEBUG:     LONG    top;
+// DEBUG:     LONG    right;
+// DEBUG:     LONG    bottom;
+// DEBUG: }
+public unsafe partial class TagRECT
+{
+    [StructLayout(LayoutKind.Sequential, Size = 16)]
+    public partial struct __Internal
+    {
+        internal int left;
+        internal int top;
+        internal int right;
+        internal int bottom;
+    }
+}
+
+// DEBUG: struct tagSIZE
+// DEBUG: {
+// DEBUG:     LONG        cx;
+// DEBUG:     LONG        cy;
+// DEBUG: }
+public unsafe partial class TagSIZE
+{
+    [StructLayout(LayoutKind.Sequential, Size = 8)]
+    public partial struct __Internal
+    {
+        internal int cx;
+        internal int cy;
+    }
+}
+
+// DEBUG: struct _GUID {
+// DEBUG:     unsigned long  Data1;
+// DEBUG:     unsigned short Data2;
+// DEBUG:     unsigned short Data3;
+// DEBUG:     unsigned char  Data4[ 8 ];
+// DEBUG: }
+public unsafe partial class GUID
+{
+    [StructLayout(LayoutKind.Sequential, Size = 16)]
+    public partial struct __Internal
+    {
+        internal uint Data1;
+        internal ushort Data2;
+        internal ushort Data3;
+        internal fixed byte Data4[8];
+    }
+}
 
 // DEBUG: struct _SHELLEXECUTEINFOA
 // DEBUG: {
@@ -3099,36 +3151,6 @@ namespace Std
     }
 }
 
-// DEBUG: enum D3D_FEATURE_LEVEL
-// DEBUG:     {
-// DEBUG:         D3D_FEATURE_LEVEL_1_0_CORE	= 0x1000,
-// DEBUG:         D3D_FEATURE_LEVEL_9_1	= 0x9100,
-// DEBUG:         D3D_FEATURE_LEVEL_9_2	= 0x9200,
-// DEBUG:         D3D_FEATURE_LEVEL_9_3	= 0x9300,
-// DEBUG:         D3D_FEATURE_LEVEL_10_0	= 0xa000,
-// DEBUG:         D3D_FEATURE_LEVEL_10_1	= 0xa100,
-// DEBUG:         D3D_FEATURE_LEVEL_11_0	= 0xb000,
-// DEBUG:         D3D_FEATURE_LEVEL_11_1	= 0xb100,
-// DEBUG:         D3D_FEATURE_LEVEL_12_0	= 0xc000,
-// DEBUG:         D3D_FEATURE_LEVEL_12_1	= 0xc100
-// DEBUG:     }
-public enum D3D_FEATURE_LEVEL
-{
-}
-
-// DEBUG: enum D3D_DRIVER_TYPE
-// DEBUG:     {
-// DEBUG:         D3D_DRIVER_TYPE_UNKNOWN	= 0,
-// DEBUG:         D3D_DRIVER_TYPE_HARDWARE	= ( D3D_DRIVER_TYPE_UNKNOWN + 1 ) ,
-// DEBUG:         D3D_DRIVER_TYPE_REFERENCE	= ( D3D_DRIVER_TYPE_HARDWARE + 1 ) ,
-// DEBUG:         D3D_DRIVER_TYPE_NULL	= ( D3D_DRIVER_TYPE_REFERENCE + 1 ) ,
-// DEBUG:         D3D_DRIVER_TYPE_SOFTWARE	= ( D3D_DRIVER_TYPE_NULL + 1 ) ,
-// DEBUG:         D3D_DRIVER_TYPE_WARP	= ( D3D_DRIVER_TYPE_SOFTWARE + 1 ) 
-// DEBUG:     }
-public enum D3D_DRIVER_TYPE
-{
-}
-
 namespace Std
 {
 }
@@ -3273,4 +3295,34 @@ namespace Std
 // DEBUG: }
 public enum DXGI_FORMAT
 {
+}
+
+// DEBUG: struct DXGI_RATIONAL
+// DEBUG: {
+// DEBUG:     UINT Numerator;
+// DEBUG:     UINT Denominator;
+// DEBUG: }
+public unsafe partial class DXGI_RATIONAL
+{
+    [StructLayout(LayoutKind.Sequential, Size = 8)]
+    public partial struct __Internal
+    {
+        internal uint Numerator;
+        internal uint Denominator;
+    }
+}
+
+// DEBUG: struct DXGI_SAMPLE_DESC
+// DEBUG: {
+// DEBUG:     UINT Count;
+// DEBUG:     UINT Quality;
+// DEBUG: }
+public unsafe partial class DXGI_SAMPLE_DESC
+{
+    [StructLayout(LayoutKind.Sequential, Size = 8)]
+    public partial struct __Internal
+    {
+        internal uint Count;
+        internal uint Quality;
+    }
 }
