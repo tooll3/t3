@@ -1,20 +1,16 @@
-using T3.Core;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using OpenGL;
-using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SpoutDX;
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using T3.Core;
+using T3.Core.Logging;
+using T3.Core.Operator;
+using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Slots;
 using DeviceContext = OpenGL.DeviceContext;
 using Resource = SharpDX.DXGI.Resource;
-// using PixelFormat = SharpDX.WIC.PixelFormat;
-using T3.Core.Logging;
-using SpoutDX.__Symbols;
 
 namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
 {
@@ -25,115 +21,34 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
 
         public SpoutOutput()
         {
-            ++_instance;
-            _senderName = $"Tooll3 Output {_instance}";
-
             TextureOutput.UpdateAction = Update;
+            _instance++;
         }
 
         private void Update(EvaluationContext context)
         {
             Command.GetValue(context);
             var texture = Texture.GetValue(context);
+            var senderName = SenderName.GetValue(context);
 
             TextureOutput.Value = texture;
-            sendTexture(ref texture);
+            sendTexture(senderName, ref texture);
+
+            SenderName.Update(context);
         }
 
-        private unsafe bool InitializeSpout(uint width, uint height)
+        private string GetAdapterName()
         {
-            if (_initialized && width == _width && height == _height) return true;
-
-            DisposeTextures();
-
-            _deviceContext = DeviceContext.Create();
-            _glContext = _deviceContext.CreateContext(IntPtr.Zero);
-            // Make this become the primary context
-            _deviceContext.MakeCurrent(_glContext);
-        
-            var deviceContext = ResourceManager.Device.ImmediateContext;
-            // Create the sender
-            if (!_initialized || _sender == null)
+            IntPtr adapterName = Marshal.AllocHGlobal(1024);
+            string adapter;
+            unsafe
             {
-                // var DXGI_FORMAT_R8G8B8A8_UINT = 30;
-                var device = ID3D11Device.__CreateInstance(((IntPtr)ResourceManager.Device));
-                _spoutDX = new SpoutDX.SpoutDX();
-                _spoutDX.OpenDirectX11(device);
-                // _spoutDX.SetAdapter(0);
-
-                IntPtr adapterName = Marshal.AllocHGlobal(1024);
-                string adapter;
-                unsafe
-                {
-                    sbyte* name = (sbyte*)adapterName;
-                    _spoutDX.GetAdapterName(_spoutDX.Adapter, name, 1024);
-                    adapter = new string(name);
-                }
-                Marshal.FreeHGlobal(adapterName);
-                Console.WriteLine(@$"Spout is using adapter {adapter}");
-
-                _sender = new SpoutSender();
-                D3D11TEXTURE2D_DESC desc = new CD3D11TEXTURE2D_DESC()
-                    {
-                        Width = width,
-                        Height = height,
-                        MipLevels = 1,
-                        BindFlags = 0,
-                        Usage = D3D11USAGE.D3D11USAGE_DYNAMIC,
-                        CPUAccessFlags = 0,
-                        //sampleCount = 1,
-                        //sampleQuality = 0,
-                        ArraySize = 1,
-                        MiscFlags = 0
-                    };
-                _initialized = _sender.CreateSender(_senderName, width, height, 0);
-                _spoutDX.SetActiveSender(_senderName);
+                sbyte* name = (sbyte*)adapterName;
+                _spoutDX.GetAdapterName(_spoutDX.Adapter, name, 1024);
+                adapter = new string(name);
             }
-            else
-            {
-                _initialized = _sender.UpdateSender(_senderName, width, height);
-            }
-            _width = width;
-            _height = height;
-            return _initialized;
-        }
-
-        // FIXME: Would possibly need some refactoring not to duplicate code from ScreenshotWriter
-        private static float Read2BytesToHalf(DataStream imageStream)
-        {
-            var low = (byte)imageStream.ReadByte();
-            var high = (byte)imageStream.ReadByte();
-            return ToTwoByteFloat(low, high);
-        }
-
-        // FIXME: Would possibly need some refactoring not to duplicate code from ScreenshotWriter
-        public static float ToTwoByteFloat(byte ho, byte lo)
-        {
-            var intVal = BitConverter.ToInt32(new byte[] { ho, lo, 0, 0 }, 0);
-
-            int mant = intVal & 0x03ff;
-            int exp = intVal & 0x7c00;
-            if (exp == 0x7c00) exp = 0x3fc00;
-            else if (exp != 0)
-            {
-                exp += 0x1c000;
-                if (mant == 0 && exp > 0x1c400)
-                    return BitConverter.ToSingle(BitConverter.GetBytes((intVal & 0x8000) << 16 | exp << 13 | 0x3ff), 0);
-            }
-            else if (mant != 0)
-            {
-                exp = 0x1c400;
-                do
-                {
-                    mant <<= 1;
-                    exp -= 0x400;
-                }
-                while ((mant & 0x400) == 0);
-
-                mant &= 0x3ff;
-            }
-
-            return BitConverter.ToSingle(BitConverter.GetBytes((intVal & 0x8000) << 16 | (exp | mant) << 13), 0);
+            Marshal.FreeHGlobal(adapterName);
+            return adapter;
         }
 
         private Texture2D CreateD3D11Texture2D(Texture2D d3d11Texture2D)
@@ -144,15 +59,60 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             }
         }
 
-        private bool sendTexture(ref Texture2D frame)
+        private bool InitializeSpout(string senderName, uint width, uint height)
+        {
+            if (!_initialized)
+            {
+                // create OpenGL context and make this become the primary context
+                _deviceContext = DeviceContext.Create();
+                _glContext = _deviceContext.CreateContext(IntPtr.Zero);
+                _deviceContext.MakeCurrent(_glContext);
+                _device = ID3D11Device.__CreateInstance(((IntPtr)ResourceManager.Device));
+                _initialized = true;
+            }
+            else
+            {
+                _deviceContext.MakeCurrent(_glContext);
+            }
+
+            // get rid of old textures?
+            if (width != _width || height != _height || senderName != _senderName)
+            {
+                DisposeTextures();
+
+                if (_spoutDX != null)
+                {
+                    _spoutDX.CloseDirectX11();
+                    _spoutDX.Dispose();
+                    _spoutDX = null;
+                }
+                _width = 0;
+                _height = 0;
+            }
+
+            // create new spoutDX object
+            if (_spoutDX == null)
+            {
+                _spoutDX = new SpoutDX.SpoutDX();
+                _spoutDX.OpenDirectX11(_device);
+                Console.WriteLine(@$"Spout is using adapter {GetAdapterName()}");
+
+                // create new sender and read back the actual name chosen by spout
+                // (which may be different if you have multiple senders of the same name)
+                _spoutDX.SenderName = senderName;
+                _senderName = _spoutDX.SenderName;
+                SenderName.SetTypedInputValue(_senderName);
+                _width = width;
+                _height = height;
+            }
+
+            return true;
+        }
+
+        private bool sendTexture(string senderName, ref Texture2D frame)
         {
             if (frame == null)
                 return false;
-
-            var device = ResourceManager.Device;
-            DataStream inputStream = null;
-            DataStream outputStream = null;
-            Texture2D sharedTexture = null;
 
             int width, height;
             Texture2DDescription currentDesc;
@@ -167,13 +127,15 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
                 }
                 width = currentDesc.Width;
                 height = currentDesc.Height;
-                if (!InitializeSpout((uint)width, (uint)height))
+                if (!InitializeSpout(senderName, (uint)width, (uint)height))
                     return false;
             }
             catch (Exception e)
             {
                 Log.Debug("Initialization of Spout failed. Are Spout.dll and SpoutDX.dll present in the executable folder?");
                 Log.Debug(e.ToString());
+                _spoutDX?.ReleaseSender();
+                _spoutDX?.CloseDirectX11();
                 _spoutDX?.Dispose();
                 _spoutDX = null;
                 return false;
@@ -183,6 +145,8 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             if (_deviceContext == null || !_deviceContext.MakeCurrent(_glContext))
                 return false;
 
+            var device = ResourceManager.Device;
+            Texture2D sharedTexture = null;
             try
             {
                 // create several textures with a given format with CPU access
@@ -201,7 +165,7 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
                         Height = currentDesc.Height,
                         MipLevels = currentDesc.MipLevels,
                         SampleDescription = new SampleDescription(1, 0),
-                        Usage = ResourceUsage.Default, // ResourceUsage.Staging,
+                        Usage = ResourceUsage.Default,
                         OptionFlags = ResourceOptionFlags.Shared,
                         CpuAccessFlags = CpuAccessFlags.None,
                         ArraySize = 1
@@ -226,12 +190,19 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
                 immediateContext.UnmapSubresource(readableImage, 0);
                 _currentIndex = (_currentIndex + 1) % NumTextureEntries;
 
-                // don't return first two samples since buffering is not ready yet
-                if (_currentUsageIndex++ < 0 || _width != width || _height != height)
+                // sanity check
+                if (_width != width || _height != height)
                     return false;
 
-                sharedTexture = CreateD3D11Texture2D(readableImage);
-                _texture = ID3D11Texture2D.__CreateInstance(((IntPtr)sharedTexture));
+                // don't return first two samples since buffering is not ready yet
+                if (_currentUsageIndex < 0)
+                {
+                    _currentUsageIndex++;
+                    return false;
+                }
+
+                // sharedTexture = CreateD3D11Texture2D(readableImage);
+                _texture = ID3D11Texture2D.__CreateInstance(((IntPtr)readableImage));
                 _spoutDX.SendTexture(_texture);
             }
             catch (Exception e)
@@ -240,8 +211,6 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             }
             finally
             {
-                inputStream?.Dispose();
-                outputStream?.Dispose();
                 _texture?.Dispose();
                 sharedTexture?.Dispose();
             }
@@ -261,50 +230,57 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
 
         public new void Dispose()
         {
-            if (_sender != null)
-            {
-                _sender.ReleaseSender();
-                _sender.Dispose();
-                _sender = null;
-            }
-
-            // dispose textures too
+            // dispose textures
             DisposeTextures();
+
+            _spoutDX?.ReleaseSender();
+            _spoutDX?.CloseDirectX11();
+            _spoutDX?.Dispose();
+
+            if (_instance > 0)
+                --_instance;
+
+            if (_instance <= 0)
+            {
+                _device?.Dispose();
+                _deviceContext?.MakeCurrent(IntPtr.Zero);
+                _deviceContext?.Dispose();
+                _initialized = false;
+            }
         }
 
         #endregion
 
-        private static int _instance;
-        private bool _initialized;
-        private DeviceContext _deviceContext;
-        private IntPtr _glContext;
-        private string _senderName;
-        private SpoutDX.SpoutDX _spoutDX;
-        private SpoutSender _sender;
-        private ID3D11Texture2D _texture;
+        private static int _instance;                   // number of instances of this object
+        private static bool _initialized;               // were static members initialized?
+        private static DeviceContext _deviceContext;    // OpenGL device context
+        private static IntPtr _glContext;               // OpenGL context
+        private static ID3D11Device _device;            // Direct3D11 device
 
-        /// <summary>
-        /// Internal use: FlipY during rendering?
-        /// </summary>
-        protected virtual bool FlipY
-        {
-            get { return true; }
-        }
-        private uint _width;
-        private uint _height;
+        private SpoutDX.SpoutDX _spoutDX;               // spout object supporting DirectX
+        private string _senderName;                     // name of our spout sender
+        private uint _width;                            // current width of our sender
+        private uint _height;                           // current height of our sender
+        private ID3D11Texture2D _texture;               // texture to send
 
         // skip a certain number of images at the beginning since the
         // final content will only appear after several buffer flips
-        public const int SkipImages = 2;
+        public const int SkipImages = 0;
         // hold several textures internally to speed up calculations
         private const int NumTextureEntries = 2;
-        private static readonly List<Texture2D> ImagesWithCpuAccess = new();
-        private static int _currentIndex;
-        private static int _currentUsageIndex;
+        private readonly List<Texture2D> ImagesWithCpuAccess = new();
+        // current image index (used for circular access of ImagesWithCpuAccess)
+        private int _currentIndex;
+        // current Usage index (used for implementation of image skipping)
+        private int _currentUsageIndex;
 
         [Input(Guid = "{FE61FF9E-7F1B-4F69-9F4B-313F30B57124}")]
         public readonly InputSlot<Command> Command = new InputSlot<Command>();
+
         [Input(Guid = "d4b5c642-9cb9-4f41-8739-edbb9c6c4857")]
         public readonly InputSlot<Texture2D> Texture = new InputSlot<Texture2D>();
+
+        [Input(Guid = "7C27EBD7-3746-4B70-A252-DD0AC0445B74")]
+        public InputSlot<string> SenderName = new InputSlot<string>();
     }
 }
