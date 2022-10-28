@@ -6,12 +6,15 @@ cbuffer ParamConstants : register(b0)
     float HeightF;
     float HistoryStepsF;
     float NumStates;
-    float NeighbourCountF;
+
+    float NeighbourCountF; //4
     float MousePosX;
     float MousePosY;
     float MouseDown;
-    float Reset;
+
+    float Reset;  // 8
     float RandomSeed;
+    float FxThreshold;
 }
 
 // cbuffer TimeConstants : register(b1)
@@ -27,6 +30,7 @@ cbuffer ParamConstants : register(b0)
 // };
 
 Texture2D<float4> GradientTexture : register(t0);
+Texture2D<float4> FxTexture : register(t1);
 sampler texSampler : register(s0);
 
 RWStructuredBuffer<int> ReadField : register(u0); 
@@ -42,9 +46,12 @@ static const int2 NeighbourOffsets[] =
   int2(  0,  0),
   int2( +1,  0),
   int2( 0,  +1),
-};
 
-//static const int NeighbourCount = 5;
+  int2( -1,  -1),
+  int2( +1,  -1),
+  int2( -1,  +1),
+  int2( +1,  +1),
+};
 
 [numthreads(16,16,1)]
 void main(uint3 i : SV_DispatchThreadID)
@@ -55,79 +62,70 @@ void main(uint3 i : SV_DispatchThreadID)
 
     int s = ReadField[pInFieldBuffer.x];
     // Mouse
-    // if(MousePosX >= 0 && MousePosX < 1
-    // && MousePosY >=0 && MousePosY < 1) {
-    //     int mousePosInField = MousePosX* WidthF + (int)(MousePosY * HeightF) * WidthF;
-    //     if(abs(mousePosInField - pInFieldBuffer) < 4) {
-    //         WriteOutput[i.xy] = float4(1,0,0,1);
-    //         if(MouseDown > 0.5) 
-    //         {
-    //             s=0;
-    //             ReadField[pInFieldBuffer].State = 1;
-    //         }
-    //     }
-    // }
+    if(MousePosX >= 0 && MousePosX < 1
+    && MousePosY >=0 && MousePosY < 1) {
+        int mousePosInField = MousePosX* WidthF + (int)(MousePosY * HeightF) * WidthF;
+        if(abs(mousePosInField - pInFieldBuffer) < 4) {
+            WriteOutput[i.xy] = float4(1,0,0,1);
+            if(MouseDown > 0.5) 
+            {
+                s=0;
+                ReadField[pInFieldBuffer] = 10;
+            }
+        }
+    }
 
     if(Reset > 0.5) 
     {
-        //int s= 0;
-        // if(i.y == 0) 
-        // {
-            //bool isInCenter = abs(i.y * 39 +  i.x - WidthF/3) < 5;
-            //s = isInCenter ? (int)(hash11(i.x + RandomSeed) * NumStates)
-            //                :0;
-
-        // }
-        //WriteField[pInFieldBuffer] =  (int)(hash11(i.x + RandomSeed) * NumStates);
-        s =  (int)(hash11(i.x + i.y * 39+ RandomSeed) * NumStates);
+        s =  (int)(hash11(i.x * 12.3 + i.y * 1239.7+ RandomSeed) * NumStates);
         WriteField[pInFieldBuffer] = s;
         return;
     }
 
+    {
 
-    // Simulate first line
-    // if(i.y == 0) 
-    // {
-        // Permanent seed
-        {
-            bool isInCenter = abs(i.x - WidthF/3) < 10;
-            s = isInCenter ? (int)(hash11(i.x + RandomSeed) * NumStates)
-                            : s;
-        }
-
-        int requiredBitCount = (int)(ceil(log2((float)NumStates)));
-        int mask = (1 << requiredBitCount) -1;    // Just to make sure. Actually this should be required.
-
-        int lookupResult = 0;
-        int NeighbourCount = clamp((int)NeighbourCountF,1,5);
+        float4 fxRgb = FxTexture.SampleLevel(texSampler, pos / float2(WidthF, HeightF), 0);
+        float fx = fxRgb.r * fxRgb.a;
         
-        int offset = NeighbourCount < 5 ? 1:0;
+        if(fx > FxThreshold) 
+            ReadField[pInFieldBuffer] = (fx - FxThreshold) / (1 - FxThreshold) * NumStates;
 
-        for(int nIndex = 0; nIndex < NeighbourCount; nIndex++) 
-        {
+    }
 
-            lookupResult = lookupResult << requiredBitCount;
-            int2 offsetXY= NeighbourOffsets[nIndex + offset];
-
-            int nPos = pInFieldBuffer + offsetXY.x + rez.x * offsetXY.y;
-
-            // if(xy < 0) {
-            //     xy += rez.xy;
-            // }
-            // else if(xy >= rez.xy) {
-            //     xy -= rez.xy;
-            // }
-
-            lookupResult+= ReadField[nPos];// & mask; 
-        }
-        s = TransitionFunctions[lookupResult];
-        WriteField[pInFieldBuffer] =  s;
+    // Permanent seed
+    // {
+    //     bool isInCenter = abs(i.x - WidthF/3) < 10;
+    //     s = isInCenter ? (int)(hash11(i.x + RandomSeed) * NumStates)
+    //                     : s;
     // }
-    // // Copy to history 
-    // else {
-    //     s = ReadField[pInFieldBuffer - rez.x];
-    //     WriteField[pInFieldBuffer] =  ReadField[pInFieldBuffer - rez.x];
-    // }
+
+    int requiredBitCount = (int)(ceil(log2((float)NumStates)));
+    int mask = (1 << requiredBitCount) -1;    // Just to make sure. Actually this should be required.
+
+    int lookupResult = 0;
+    int NeighbourCount = clamp((int)NeighbourCountF,1,9);
+    
+    int offset = NeighbourCount < 5 ? 1:0;
+
+    for(int nIndex = 0; nIndex < NeighbourCount; nIndex++) 
+    {
+
+        lookupResult = lookupResult << requiredBitCount;
+        int2 offsetXY= NeighbourOffsets[nIndex + offset];
+
+        int nPos = pInFieldBuffer + offsetXY.x + rez.x * offsetXY.y;
+
+        // if(xy < 0) {
+        //     xy += rez.xy;
+        // }
+        // else if(xy >= rez.xy) {
+        //     xy -= rez.xy;
+        // }
+
+        lookupResult+= ReadField[nPos];
+    }
+    s = TransitionFunctions[lookupResult];
+    WriteField[pInFieldBuffer] =  s;
 
     AllMemoryBarrier();
 

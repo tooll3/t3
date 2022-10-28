@@ -115,7 +115,6 @@ namespace T3.Operators.Types.Id_8f696d89_a23f_42ae_b382_8670febb546b
                 // }
 
                 
-                Log.Debug($" Lambda:  {MeasureLambda()}");                
                 
                 const int stride = 4;
                 var resourceManager = ResourceManager.Instance();
@@ -128,6 +127,10 @@ namespace T3.Operators.Types.Id_8f696d89_a23f_42ae_b382_8670febb546b
             OutBuffer.Value = _bufferWithViews;
             TableLength.Value = _ruleTableLength;
             WasUpdated.Value = wasUpdate;
+            
+            OutBuffer.DirtyFlag.Clear();
+            TableLength.DirtyFlag.Clear();
+            WasUpdated.DirtyFlag.Clear();
         }
 
         private int FlipLookupIndex(int index)

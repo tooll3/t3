@@ -35,15 +35,27 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
 
         [Input(Guid = "E9C15B3F-8C4A-411D-B9B3-795D64D6BD20")]
         public readonly InputSlot<float> ResyncThreshold = new();
+        
+        [Input(Guid = "48E62A3C-A903-4A9B-A44A-148C6C07AC1E")]
+        public readonly InputSlot<float> OverrideTime = new();
+        
 
         public PlayVideo()
         {
             Texture.UpdateAction = Update;
         }
 
+        private double _lastContextTime;
         
         private void Update(EvaluationContext context)
         {
+            if (Math.Abs(context.LocalFxTime - _lastContextTime) < 0.001)
+                return;
+
+            _lastContextTime = context.LocalFxTime;
+            
+            
+            
             _lastUpdateRunTimeInSecs = Playback.RunTimeInSecs;
             
             // Initialize media foundation library and default values
@@ -74,7 +86,12 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             }
 
             // shall we seek?
-            var shouldBeTimeInSecs = context.Playback.SecondsFromBars(context.LocalTime);
+            var shouldBeTimeInSecs = OverrideTime.IsConnected
+                                         ? OverrideTime.GetValue(context)
+                                         : context.Playback.SecondsFromBars(context.LocalTime);
+            
+            
+            
             //Log.Debug($" PlayVideo.Update({shouldBeTimeInSecs:0.00s})");
             var clampedSeekTime = Math.Clamp(shouldBeTimeInSecs, 0.0, _engine.Duration);
             var clampedVideoTime = Math.Clamp(_engine.CurrentTime, 0.0, _engine.Duration);
