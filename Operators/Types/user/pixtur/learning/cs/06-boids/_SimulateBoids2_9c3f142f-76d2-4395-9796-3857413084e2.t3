@@ -4,6 +4,10 @@
   "Namespace": "user.pixtur.learning.cs.06-boids",
   "Inputs": [
     {
+      "Id": "1a0f4276-cd30-4974-b9de-5b7f4f4de6d2"/*PointBuffer*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "75ee8f92-f110-40d0-9bdc-ccf9413dc266"/*EffectLayer*/,
       "DefaultValue": 0.0
     },
@@ -16,6 +20,10 @@
       "DefaultValue": 0.0
     },
     {
+      "Id": "5e8c41a5-5389-4ab7-9060-3b0a6ca98267"/*EffectTexture*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "a2ea7dcb-f30d-4f13-8e7d-2faa38518525"/*EffectTwist*/,
       "DefaultValue": 0.0
     },
@@ -25,14 +33,6 @@
     },
     {
       "Id": "8a70798c-6448-44ef-a0cb-c9bf22bcc3e1"/*BoidDefinitions*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "5e8c41a5-5389-4ab7-9060-3b0a6ca98267"/*EffectTexture*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "1a0f4276-cd30-4974-b9de-5b7f4f4de6d2"/*PointBuffer*/,
       "DefaultValue": null
     }
   ],
@@ -278,12 +278,6 @@
       "SymbolId": "c513c58d-e45c-408d-a0b8-250c9af31545",
       "InputValues": [],
       "Outputs": []
-    },
-    {
-      "Id": "5357c694-c6b1-4716-a046-07430afa20eb"/*Time*/,
-      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
-      "InputValues": [],
-      "Outputs": []
     }
   ],
   "Connections": [
@@ -360,7 +354,7 @@
       "TargetSlotId": "7773837e-104a-4b3d-a41f-cadbd9249af2"
     },
     {
-      "SourceParentOrChildId": "5357c694-c6b1-4716-a046-07430afa20eb",
+      "SourceParentOrChildId": "1bf67f65-0786-4c94-b8c9-fc92b8c3f83d",
       "SourceSlotId": "b20573fe-7a7e-48e1-9370-744288ca6e32",
       "TargetParentOrChildId": "5d3d4e19-2f8e-4545-b9ca-4431bab503e3",
       "TargetSlotId": "ed88c6c7-1ea2-4593-9589-ec670afb4654"
