@@ -47,6 +47,10 @@
         "Z": 1.0,
         "W": 1.0
       }
+    },
+    {
+      "Id": "35a18838-b095-431f-a3af-2dba81dcc16f"/*ForceColorUpdate*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

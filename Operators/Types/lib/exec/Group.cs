@@ -1,10 +1,12 @@
 using System;
 using SharpDX;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
 {
@@ -38,9 +40,10 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
             var objectToParentObject = Matrix.Transformation(scalingCenter: Vector3.Zero, scalingRotation: Quaternion.Identity, scaling: new Vector3(s.X, s.Y, s.Z), rotationCenter: Vector3.Zero,
                                                              rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll), translation: new Vector3(t.X, t.Y, t.Z));
 
-
+            var forceColorUpdate = ForceColorUpdate.GetValue(context);
             var previousColor = context.ForegroundColor;
             var color = Color.GetValue(context);
+            
             //color.W *= previousColor.W;     // TODO: this should be probably be controlled by an input parameter
             context.ForegroundColor *= color;
             
@@ -54,10 +57,16 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
                 {
                     // Do preparation if needed
                     t1.Value?.PrepareAction?.Invoke(context);
+
+                    if (forceColorUpdate)
+                    {
+                        DirtyFlag.InvalidationRefFrame++;
+                        t1.Invalidate();
+                    }
                     
                     // Execute commands
                     t1.GetValue(context);
-                    
+
                     // Cleanup after usage
                     t1.Value?.RestoreAction?.Invoke(context);
                 }
@@ -89,6 +98,9 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
 
         [Input(Guid = "996BD2D7-3741-4ADE-B1B6-18EB3D884081")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new();
+
+        [Input(Guid = "35A18838-B095-431F-A3AF-2DBA81DCC16F")]
+        public readonly InputSlot<bool> ForceColorUpdate = new();
 
     }
 }

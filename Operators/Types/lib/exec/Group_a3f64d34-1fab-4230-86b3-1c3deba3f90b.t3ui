@@ -55,6 +55,13 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "35a18838-b095-431f-a3af-2dba81dcc16f"/*ForceColorUpdate*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 180.0
+      }
     }
   ],
   "SymbolChildUis": [],
