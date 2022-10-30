@@ -1796,10 +1796,10 @@ namespace SpoutDX
             // DEBUG: std::string GetSpoutLog()
             public static string GetSpoutLog()
             {
-                var __ret = new global::Std.BasicString.__Internalc__N_std_S_basic_string__C___N_std_S_char_traits__C___N_std_S_allocator__C();
+                var __ret = new global::Spout.Std.BasicString.__Internalc__N_std_S_basic_string__C___N_std_S_char_traits__C___N_std_S_allocator__C();
                 __Internal.GetSpoutLog(new IntPtr(&__ret));
-                var __basicStringRet0 = global::Std.BasicString<sbyte, global::Std.CharTraits<sbyte>, global::Std.Allocator<sbyte>>.__CreateInstance(new __IntPtr(&__ret));
-                var __retString0 = global::Std.BasicStringExtensions.Data(__basicStringRet0);
+                var __basicStringRet0 = global::Spout.Std.BasicString<sbyte, global::Spout.Std.CharTraits<sbyte>, global::Spout.Std.Allocator<sbyte>>.__CreateInstance(new __IntPtr(&__ret));
+                var __retString0 = global::Spout.Std.BasicStringExtensions.Data(__basicStringRet0);
                 __basicStringRet0.Dispose();
                 return __retString0;
             }
@@ -1875,10 +1875,10 @@ namespace SpoutDX
             // DEBUG: std::string GetSDKversion()
             public static string GetSDKversion()
             {
-                var __ret = new global::Std.BasicString.__Internalc__N_std_S_basic_string__C___N_std_S_char_traits__C___N_std_S_allocator__C();
+                var __ret = new global::Spout.Std.BasicString.__Internalc__N_std_S_basic_string__C___N_std_S_char_traits__C___N_std_S_allocator__C();
                 __Internal.GetSDKversion(new IntPtr(&__ret));
-                var __basicStringRet0 = global::Std.BasicString<sbyte, global::Std.CharTraits<sbyte>, global::Std.Allocator<sbyte>>.__CreateInstance(new __IntPtr(&__ret));
-                var __retString0 = global::Std.BasicStringExtensions.Data(__basicStringRet0);
+                var __basicStringRet0 = global::Spout.Std.BasicString<sbyte, global::Spout.Std.CharTraits<sbyte>, global::Spout.Std.Allocator<sbyte>>.__CreateInstance(new __IntPtr(&__ret));
+                var __retString0 = global::Spout.Std.BasicStringExtensions.Data(__basicStringRet0);
                 __basicStringRet0.Dispose();
                 return __retString0;
             }
@@ -1886,10 +1886,10 @@ namespace SpoutDX
             // DEBUG: std::string _getLogPath()
             public static string GetLogPath()
             {
-                var __ret = new global::Std.BasicString.__Internalc__N_std_S_basic_string__C___N_std_S_char_traits__C___N_std_S_allocator__C();
+                var __ret = new global::Spout.Std.BasicString.__Internalc__N_std_S_basic_string__C___N_std_S_char_traits__C___N_std_S_allocator__C();
                 __Internal.GetLogPath(new IntPtr(&__ret));
-                var __basicStringRet0 = global::Std.BasicString<sbyte, global::Std.CharTraits<sbyte>, global::Std.Allocator<sbyte>>.__CreateInstance(new __IntPtr(&__ret));
-                var __retString0 = global::Std.BasicStringExtensions.Data(__basicStringRet0);
+                var __basicStringRet0 = global::Spout.Std.BasicString<sbyte, global::Spout.Std.CharTraits<sbyte>, global::Spout.Std.Allocator<sbyte>>.__CreateInstance(new __IntPtr(&__ret));
+                var __retString0 = global::Spout.Std.BasicStringExtensions.Data(__basicStringRet0);
                 __basicStringRet0.Dispose();
                 return __retString0;
             }
@@ -1897,10 +1897,10 @@ namespace SpoutDX
             // DEBUG: std::string _levelName(SpoutLogLevel level)
             public static string LevelName(global::SpoutDX.Spoututils.SpoutLogLevel level)
             {
-                var __ret = new global::Std.BasicString.__Internalc__N_std_S_basic_string__C___N_std_S_char_traits__C___N_std_S_allocator__C();
+                var __ret = new global::Spout.Std.BasicString.__Internalc__N_std_S_basic_string__C___N_std_S_char_traits__C___N_std_S_allocator__C();
                 __Internal.LevelName(new IntPtr(&__ret), level);
-                var __basicStringRet0 = global::Std.BasicString<sbyte, global::Std.CharTraits<sbyte>, global::Std.Allocator<sbyte>>.__CreateInstance(new __IntPtr(&__ret));
-                var __retString0 = global::Std.BasicStringExtensions.Data(__basicStringRet0);
+                var __basicStringRet0 = global::Spout.Std.BasicString<sbyte, global::Spout.Std.CharTraits<sbyte>, global::Spout.Std.Allocator<sbyte>>.__CreateInstance(new __IntPtr(&__ret));
+                var __retString0 = global::Spout.Std.BasicStringExtensions.Data(__basicStringRet0);
                 __basicStringRet0.Dispose();
                 return __retString0;
             }
@@ -72386,7 +72386,7 @@ namespace SpoutDX
             }
         }
 
-        public int Frame
+        public new int Frame
         {
             get
             {
