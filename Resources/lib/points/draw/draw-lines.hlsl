@@ -1,9 +1,4 @@
 #include "lib/shared/point.hlsl"
-// struct Point
-// {
-//     float3 position;
-//     float size;
-// };
 
 static const float3 Corners[] = 
 {

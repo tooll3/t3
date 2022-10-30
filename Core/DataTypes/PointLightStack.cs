@@ -122,16 +122,16 @@ namespace T3.Core.DataTypes
             {
                 _defaultPointLights[0] = new PointLight
                                              {
-                                                 Position = new Vector3(4,10,4),
-                                                 Intensity = 10, 
+                                                 Position = new Vector3(8,20,3),
+                                                 Intensity = 4, 
                                                  Color = new System.Numerics.Vector4(1,0.93f,0.95f,1),
                                                  Range = 100,
                                                  Decay = 2
                                              };
                 _defaultPointLights[1] = new PointLight
                                              {
-                                                 Position = new Vector3(-4,-10,-4),
-                                                 Intensity = 6, 
+                                                 Position = new Vector3(-8,-20,-8),
+                                                 Intensity = 3f, 
                                                  Color = new System.Numerics.Vector4(0.97f,0.96f,1,1),
                                                  Range = 100,
                                                  Decay = 2,
