@@ -28,9 +28,22 @@ namespace T3.Gui.Graph.Interaction
             _moveCommand = null;
             _draggedNodes.Clear();
         }
+
+        /// <summary>
+        /// For certain edge cases the release handling of nodes cannot be detected.
+        /// This is a work around to clear the state on mouse release
+        /// </summary>
+        public static void CompleteFrame()
+        {
+            if (ImGui.IsMouseReleased(0) && _moveCommand != null)
+            {
+                Reset();    
+            }
+        }
+
         
         /// <summary>
-        /// NOTE: This has to be called directly after ImGui.Item
+        /// NOTE: This has to be called for ALL movable elements and directly after ImGui.Item
         /// </summary>
         public static void Handle(ISelectableCanvasObject node, Instance instance = null)
         {
@@ -579,5 +592,6 @@ namespace T3.Gui.Graph.Interaction
             private const int ChangeDirectionThreshold = 5;
             private static readonly List<int> _directions = new(QueueLength);
         }
+
     }
 }

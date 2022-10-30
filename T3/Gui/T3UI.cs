@@ -84,6 +84,7 @@ namespace T3.Gui
             // Complete frame
             BeatTiming.Update(ImGui.GetTime());
             SingleValueEdit.StartNextFrame();
+            SelectableNodeMovement.CompleteFrame();
 
             SwapHoveringBuffers();
             TriggerGlobalActionsFromKeyBindings();
