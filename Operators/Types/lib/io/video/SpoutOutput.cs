@@ -1,5 +1,6 @@
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
+using SharpGLTF.Schema2;
 using SpoutDX;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,8 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
 {
     public class SpoutOutput : Instance<SpoutOutput>
     {
-        [Output(Guid = "297ea260-4486-48f8-b58f-8180acf0c2c5")]
-        public readonly Slot<Texture2D> TextureOutput = new Slot<Texture2D>();
+        [Output(Guid = "297ea260-4486-48f8-b58f-8180acf0c2c5", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<Texture2D> TextureOutput = new();
 
         public SpoutOutput()
         {
@@ -32,8 +33,7 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             var senderName = SenderName.GetValue(context);
 
             TextureOutput.Value = texture;
-            sendTexture(senderName, ref texture);
-
+            SendTexture(senderName, ref texture);
             SenderName.Update(context);
         }
 
@@ -65,14 +65,20 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             {
                 // create OpenGL context and make this become the primary context
                 _deviceContext = DeviceContext.Create();
-                _glContext = _deviceContext.CreateContext(IntPtr.Zero);
-                _deviceContext.MakeCurrent(_glContext);
+                _glContext = DeviceContext.GetCurrentContext();
+                if (_glContext == IntPtr.Zero)
+                {
+                    _glContext = _deviceContext.CreateContext(IntPtr.Zero);
+                    _deviceContext.MakeCurrent(_glContext);
+                }
                 _device = ID3D11Device.__CreateInstance(((IntPtr)ResourceManager.Device));
                 _initialized = true;
             }
-            else
+            else if (_glContext != DeviceContext.GetCurrentContext())
             {
-                _deviceContext.MakeCurrent(_glContext);
+                // Make this become the primary context
+                if (_deviceContext == null || !_deviceContext.MakeCurrent(_glContext))
+                    return false;
             }
 
             // get rid of old textures?
@@ -95,7 +101,7 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             {
                 _spoutDX = new SpoutDX.SpoutDX();
                 _spoutDX.OpenDirectX11(_device);
-                Console.WriteLine(@$"Spout is using adapter {GetAdapterName()}");
+                Console.WriteLine(@$"Spout output is using adapter {GetAdapterName()}");
 
                 // create new sender and read back the actual name chosen by spout
                 // (which may be different if you have multiple senders of the same name)
@@ -109,7 +115,7 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             return true;
         }
 
-        private bool sendTexture(string senderName, ref Texture2D frame)
+        private bool SendTexture(string senderName, ref Texture2D frame)
         {
             if (frame == null)
                 return false;
@@ -119,9 +125,12 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             try
             {
                 currentDesc = frame.Description;
-                if (currentDesc.Format != Format.R8G8B8A8_UNorm)
+                if (currentDesc.Format != Format.B8G8R8A8_UNorm &&
+                    currentDesc.Format != Format.R8G8B8A8_UNorm &&
+                    currentDesc.Format != Format.R16G16B16A16_UNorm &&
+                    currentDesc.Format != Format.R16G16B16A16_Float)
                 {
-                    Log.Debug("Spout currently only supports texture format B8G8R8A8_UNorm.");
+                    Log.Debug("Spout output supports texture formats B8G8R8A8_UNorm, R8G8B8A8_UNorm, R16G16B16A16_UNorm and R16G16B16A16_Float.");
                     Log.Debug("Please use a render target operator to change the format accordingly.");
                     return false;
                 }
@@ -141,29 +150,24 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
                 return false;
             }
 
-            // Make this become the primary context
-            if (_deviceContext == null || !_deviceContext.MakeCurrent(_glContext))
-                return false;
-
             var device = ResourceManager.Device;
-            Texture2D sharedTexture = null;
             try
             {
                 // create several textures with a given format with CPU access
                 // to be able to read out the initial texture values
-                if (ImagesWithCpuAccess.Count == 0
-                    || ImagesWithCpuAccess[0].Description.Format != currentDesc.Format
-                    || ImagesWithCpuAccess[0].Description.Width != currentDesc.Width
-                    || ImagesWithCpuAccess[0].Description.Height != currentDesc.Height
-                    || ImagesWithCpuAccess[0].Description.MipLevels != currentDesc.MipLevels)
+                if (ImagesWithGpuAccess.Count == 0
+                    || ImagesWithGpuAccess[0].Description.Format != currentDesc.Format
+                    || ImagesWithGpuAccess[0].Description.Width != currentDesc.Width
+                    || ImagesWithGpuAccess[0].Description.Height != currentDesc.Height
+                    || ImagesWithGpuAccess[0].Description.MipLevels != 1)
                 {
                     var imageDesc = new Texture2DDescription
                     {
-                        BindFlags = BindFlags.None,
+                        BindFlags = BindFlags.ShaderResource,
                         Format = currentDesc.Format,
                         Width = currentDesc.Width,
                         Height = currentDesc.Height,
-                        MipLevels = currentDesc.MipLevels,
+                        MipLevels = 1,
                         SampleDescription = new SampleDescription(1, 0),
                         Usage = ResourceUsage.Default,
                         OptionFlags = ResourceOptionFlags.Shared,
@@ -175,33 +179,21 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
 
                     for (int i = 0; i < NumTextureEntries; ++i)
                     {
-                        ImagesWithCpuAccess.Add(new Texture2D(device, imageDesc));
+                        ImagesWithGpuAccess.Add(new Texture2D(device, imageDesc));
                     }
                     _currentIndex = 0;
-                    // skip the first two frames since they will only appear
-                    // after buffers have been swapped
-                    _currentUsageIndex = -SkipImages;
                 }
+
+                // sanity check
+                if (_spoutDX == null || width == 0 || height == 0 || _width != width || _height != height)
+                    return false;
 
                 // copy the original texture to a readable image
                 var immediateContext = device.ImmediateContext;
-                var readableImage = ImagesWithCpuAccess[_currentIndex];
+                var readableImage = ImagesWithGpuAccess[_currentIndex];
                 immediateContext.CopyResource(frame, readableImage);
-                immediateContext.UnmapSubresource(readableImage, 0);
                 _currentIndex = (_currentIndex + 1) % NumTextureEntries;
 
-                // sanity check
-                if (_width != width || _height != height)
-                    return false;
-
-                // don't return first two samples since buffering is not ready yet
-                if (_currentUsageIndex < 0)
-                {
-                    _currentUsageIndex++;
-                    return false;
-                }
-
-                // sharedTexture = CreateD3D11Texture2D(readableImage);
                 _texture = ID3D11Texture2D.__CreateInstance(((IntPtr)readableImage));
                 _spoutDX.SendTexture(_texture);
             }
@@ -212,7 +204,6 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             finally
             {
                 _texture?.Dispose();
-                sharedTexture?.Dispose();
             }
 
             return true;
@@ -220,10 +211,10 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
 
         protected void DisposeTextures()
         {
-            foreach (var image in ImagesWithCpuAccess)
+            foreach (var image in ImagesWithGpuAccess)
                 image.Dispose();
 
-            ImagesWithCpuAccess.Clear();
+            ImagesWithGpuAccess.Clear();
         }
 
         #region IDisposable Support
@@ -263,24 +254,19 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
         private uint _height;                           // current height of our sender
         private ID3D11Texture2D _texture;               // texture to send
 
-        // skip a certain number of images at the beginning since the
-        // final content will only appear after several buffer flips
-        public const int SkipImages = 0;
         // hold several textures internally to speed up calculations
         private const int NumTextureEntries = 2;
-        private readonly List<Texture2D> ImagesWithCpuAccess = new();
-        // current image index (used for circular access of ImagesWithCpuAccess)
+        private readonly List<Texture2D> ImagesWithGpuAccess = new();
+        // current image index (used for circular access of ImagesWithGpuAccess)
         private int _currentIndex;
-        // current Usage index (used for implementation of image skipping)
-        private int _currentUsageIndex;
 
-        [Input(Guid = "{FE61FF9E-7F1B-4F69-9F4B-313F30B57124}")]
-        public readonly InputSlot<Command> Command = new InputSlot<Command>();
+        [Input(Guid = "FE61FF9E-7F1B-4F69-9F4B-313F30B57124")]
+        public readonly InputSlot<Command> Command = new();
 
         [Input(Guid = "d4b5c642-9cb9-4f41-8739-edbb9c6c4857")]
-        public readonly InputSlot<Texture2D> Texture = new InputSlot<Texture2D>();
+        public readonly InputSlot<Texture2D> Texture = new();
 
         [Input(Guid = "7C27EBD7-3746-4B70-A252-DD0AC0445B74")]
-        public InputSlot<string> SenderName = new InputSlot<string>();
+        public InputSlot<string> SenderName = new();
     }
 }
