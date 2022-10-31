@@ -253,7 +253,6 @@ namespace T3.Operators.Types.Id_25307357_6f6c_45b1_a38d_de635510a845
                     var immediateContext = device.ImmediateContext;
                     var readableImage = ImagesWithGpuAccess[_currentIndex];
 
-                    //_spoutDX.SenderHandle
                     Texture2D readTexture = new Texture2D(_spoutDX.SenderTexture.__Instance);
                     immediateContext.CopyResource(readTexture, readableImage);
                     _currentIndex = (_currentIndex + 1) % NumTextureEntries;
