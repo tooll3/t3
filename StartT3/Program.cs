@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -105,7 +105,8 @@ namespace StartEditor
                                                        syntaxTrees,
                                                        referencedAssemblies.ToArray(),
                                                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
-                                                          .WithOptimizationLevel(OptimizationLevel.Release));
+                                                          .WithOptimizationLevel(OptimizationLevel.Release)
+                                                          .WithAllowUnsafe(true));
 
             using (var dllStream = new FileStream(FinalOperatorAssemblyFilepath, FileMode.Create)) 
             // using (var pdbStream = new FileStream(exportPath + Path.DirectorySeparatorChar + "Operators.pdb", FileMode.Create))
