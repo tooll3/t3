@@ -10,14 +10,14 @@ namespace T3.Operators.Types.Id_fd31d208_12fe_46bf_bfa3_101211f8f497
 {
     public class Text : Instance<Text>, ITransformable
     {
-        private enum HorizontalAligns
+        public enum HorizontalAligns
         {
             Left,
             Center,
             Right,
         }
         
-        private enum VerticalAligns
+        public enum VerticalAligns
         {
             Top,
             Middle,
@@ -40,7 +40,7 @@ namespace T3.Operators.Types.Id_fd31d208_12fe_46bf_bfa3_101211f8f497
 
         
         [Input(Guid = "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1")]
-        public readonly InputSlot<string> Input = new InputSlot<string>();
+        public readonly InputSlot<string> InputText = new InputSlot<string>();
 
         [Input(Guid = "0e5f05b4-5e8a-4f6d-8cac-03b04649eb67")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();

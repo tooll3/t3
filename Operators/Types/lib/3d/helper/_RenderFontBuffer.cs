@@ -109,8 +109,11 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             if (_font == null)
                 return;
 
-            var horizontalAlign = HorizontalAlign.GetValue(context);
-            var verticalAlign = VerticalAlign.GetValue(context);
+            var lineNumber = 0;
+            var horizontalAlign = (HorizontalAligns)HorizontalAlign.GetValue(context).Clamp(0, Enum.GetValues(typeof(HorizontalAligns)).Length -1);
+            var verticalAlign = (VerticalAligns)VerticalAlign.GetValue(context).Clamp(0, Enum.GetValues(typeof(VerticalAligns)).Length -1);
+            
+            //var verticalAlign = VerticalAlign.GetValue(context);
             var characterSpacing = Spacing.GetValue(context);
             var lineHeight = LineHeight.GetValue(context);
             var commonScaleH = (512.0 / _font.Font.Common.ScaleH);
@@ -125,35 +128,22 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             float textureHeight = _font.Font.Common.ScaleH;
             float cursorX = 0;
             float cursorY = 0;
-            const float SdfWidth = 5f; // assumption after some experiments
+            const float sdfWidth = 5f; // assumption after some experiments
 
             switch (verticalAlign)
             {
-                // Top
-                case 0:
-                    //cursorY = _font.Font.Common.LineHeight * lineHeight * 1;
-                    //cursorY = 40;// _font.Font.Common.LineHeight - _font.Font.Common.Base;// -_font.Font.Common.LineHeight;
-                    cursorY = _font.Font.Common.Base * (1+ SdfWidth / _font.Font.Info.Size);
+                case VerticalAligns.Top:
+                    cursorY = _font.Font.Common.Base * (1 + sdfWidth / _font.Font.Info.Size);
                     break;
-                // Middle
-                case 1:
-                    //var evenLineNumber = numLinesInText + numLinesInText % 2;  
-                    cursorY = _font.Font.Common.LineHeight * lineHeight * (numLinesInText - 1) / 2
-                              + _font.Font.Common.LineHeight / 2f
-                              + _font.Font.Common.Base * ( SdfWidth / _font.Font.Info.Size);
+                case VerticalAligns.Middle:
+                    cursorY = _font.Font.Common.LineHeight * lineHeight * (numLinesInText - 1) / 2 + _font.Font.Common.LineHeight / 2f +
+                              _font.Font.Common.Base * (sdfWidth / _font.Font.Info.Size);
                     break;
-                // Bottom
-                case 2:
+                case VerticalAligns.Bottom:
                     cursorY = _font.Font.Common.LineHeight * lineHeight * numLinesInText;
                     break;
             }
 
-
-            
-
-            //cursorY += (_font.Font.Common.LineHeight - _font.Font.Common.Base) * lineHeight;
-            //cursorY += ( _font.Font.Common.Base) * lineHeight / 6;
-            //cursorY += _font.Font.Common.LineHeight * lineHeight/6;
             if (_bufferContent == null || _bufferContent.Length != text.Length)
             {
                 _bufferContent = new BufferLayout[text.Length];
@@ -175,6 +165,7 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
                     cursorX = 0;
                     currentLineCharacterCount = 0;
                     lastChar = 0;
+                    lineNumber++;
                     continue;
                 }
 
@@ -207,7 +198,7 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
                               {
                                   Position = new Vector3(x, y, 0),
                                   Size = sizeHeight,
-                                  Orientation = new Vector3(0, 1, 0),
+                                  Orientation = Quaternion.Identity,
                                   AspectRatio = sizeWidth / sizeHeight,
                                   Color = color,
                                   UvMinMax = new Vector4(
@@ -216,9 +207,10 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
                                                          (charInfo.X + charInfo.Width) / textureWidth, // uRight 
                                                          (charInfo.Y + charInfo.Height) / textureHeight // vBottom                              
                                                         ),
-                                  BirthTime = (float)context.LocalTime,
-                                  Speed = 0,
+                                  //BirthTime = (float)context.LocalTime,
+                                  //Speed = 0,
                                   Id = (uint)outputIndex,
+                                  LineNumber = (uint)lineNumber
                               };
 
                     outputIndex++;
@@ -239,10 +231,10 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             {
                 switch (horizontalAlign)
                 {
-                    case 1:
+                    case HorizontalAligns.Center:
                         OffsetLineCharacters((cursorX / 2 - characterSpacing / 2) * size, currentLineCharacterCount, outputIndex);
                         break;
-                    case 2:
+                    case HorizontalAligns.Right:
                         OffsetLineCharacters(cursorX * size, currentLineCharacterCount, outputIndex);
                         break;
                 }
@@ -290,8 +282,24 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
 
         private BufferLayout[] _bufferContent;
 
-        // Must be multiple of 16
-        [StructLayout(LayoutKind.Explicit, Size = 32)]
+        
+        public enum HorizontalAligns
+        {
+            Left,
+            Center,
+            Right,
+        }
+        
+        public enum VerticalAligns
+        {
+            Top,
+            Middle,
+            Bottom,
+        }
+
+        
+        // Size must be multiple of 16
+        [StructLayout(LayoutKind.Explicit, Size = StructSize)]
         public struct BufferLayout
         {
             [FieldOffset(0)]
@@ -301,25 +309,27 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             public float Size;
 
             [FieldOffset(4 * 4)]
-            public Vector3 Orientation;
-
-            [FieldOffset(7 * 4)]
             public float AspectRatio;
-
-            [FieldOffset(8 * 4)]
+            
+            [FieldOffset(5 * 4)]
+            public Quaternion Orientation;
+            
+            [FieldOffset(9 * 4)]
             public Vector4 Color;
 
-            [FieldOffset(12 * 4)]
+            [FieldOffset(13 * 4)]
             public Vector4 UvMinMax;
-
-            [FieldOffset(16 * 4)]
-            public float BirthTime;
-
+            
             [FieldOffset(17 * 4)]
-            public float Speed;
-
-            [FieldOffset(18 * 4)]
             public uint Id;
+            
+            [FieldOffset(18 * 4)]
+            public uint LineNumber;
+            
+            [FieldOffset(19 * 4)]
+            public uint __padding;
+
+            private const int StructSize = 20 * 4;
         }
     }
 }
