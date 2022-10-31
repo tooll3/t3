@@ -215,7 +215,7 @@ namespace T3.Operators.Types.Id_25307357_6f6c_45b1_a38d_de635510a845
                 {
                     var imageDesc = new Texture2DDescription
                     {
-                        BindFlags = BindFlags.ShaderResource | BindFlags.UnorderedAccess,
+                        BindFlags = BindFlags.ShaderResource,
                         Format = textureFormat,
                         Width = (int)width,
                         Height = (int)height,
