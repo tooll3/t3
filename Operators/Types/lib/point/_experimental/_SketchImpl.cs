@@ -79,7 +79,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             }
 
             // Switch modes
-            {
+            if(IsOpSelected) {
                 // if (Mode.DirtyFlag.IsDirty)
                 // {
                 //     _drawMode = (DrawModes)Mode.GetValue(context).Clamp(0, Enum.GetNames(typeof(DrawModes)).Length - 1);
@@ -95,11 +95,13 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                 }
                 else if (KeyHandler.PressedKeys[(int)Key.X])
                 {
-                    _paging.Cut(context.LocalTime);
+                    if(!KeyHandler.PressedKeys[(int)Key.CtrlKey])
+                        _paging.Cut();
                 }
                 else if (KeyHandler.PressedKeys[(int)Key.V])
                 {
-                    _paging.Paste(context.LocalTime);
+                    if(!KeyHandler.PressedKeys[(int)Key.CtrlKey])
+                        _paging.Paste(context.LocalTime);
                 }
             }
 
@@ -401,7 +403,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
             public bool HasCutPage => _cutPage != null;
 
-            public void Cut(double time)
+            public void Cut()
             {
                 if (!HasActivePage)
                     return;

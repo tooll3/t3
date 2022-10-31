@@ -330,6 +330,24 @@
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "24375801-6561-45be-afcf-1853cdf2e8f8"/*GetForegroundColor*/,
+      "SymbolId": "6c1271a0-058f-4ff0-940b-f196e5debdf7",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "e851fd11-5010-4239-ae12-ba314e12fb78"/*BlendColors*/,
+      "SymbolId": "6b7c541a-ca36-4f21-ac95-89e874820c5a",
+      "InputValues": [
+        {
+          "Id": "8d444e8c-d9b5-4206-9202-5abf23b13baf"/*Mode*/,
+          "Type": "System.Int32",
+          "Value": 1
+        }
+      ],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -532,8 +550,8 @@
       "TargetSlotId": "c4e91bc6-1691-4eb4-aed5-dd4cae528149"
     },
     {
-      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "SourceSlotId": "75419a73-8a3e-4538-9a1d-e3b0ce7f8561",
+      "SourceParentOrChildId": "e851fd11-5010-4239-ae12-ba314e12fb78",
+      "SourceSlotId": "66ce8660-253c-4a0b-8aec-f7a56751a1e4",
       "TargetParentOrChildId": "cb907894-2073-4565-8b82-93cfba8637fc",
       "TargetSlotId": "980ef785-6ae2-44d1-803e-febfc75791c5"
     },
@@ -584,6 +602,18 @@
       "SourceSlotId": "9b3e42f6-8980-4f30-8d8f-ed1dea5f19b9",
       "TargetParentOrChildId": "e68a517c-c993-4f5e-9767-f671adb4f75c",
       "TargetSlotId": "75a09454-6cde-458b-9314-05a99b2e5919"
+    },
+    {
+      "SourceParentOrChildId": "24375801-6561-45be-afcf-1853cdf2e8f8",
+      "SourceSlotId": "f962854b-00d6-4eb3-aa4c-e5d4bd500672",
+      "TargetParentOrChildId": "e851fd11-5010-4239-ae12-ba314e12fb78",
+      "TargetSlotId": "b9e5c6f3-7052-456f-9d1b-c182b4412433"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "75419a73-8a3e-4538-9a1d-e3b0ce7f8561",
+      "TargetParentOrChildId": "e851fd11-5010-4239-ae12-ba314e12fb78",
+      "TargetSlotId": "eb601c57-2025-4135-8292-223eaedaf187"
     },
     {
       "SourceParentOrChildId": "e68a517c-c993-4f5e-9767-f671adb4f75c",

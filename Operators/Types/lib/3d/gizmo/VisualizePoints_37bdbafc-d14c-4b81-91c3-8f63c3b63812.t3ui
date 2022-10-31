@@ -1,5 +1,6 @@
 {
   "Id": "37bdbafc-d14c-4b81-91c3-8f63c3b63812"/*VisualizePoints*/,
+  "Description": "This helper operator visualizes points and their orientation. This one is permanently visible, but you can toggle the default for these gizmos with the output window \"Gizmo\" toggle.",
   "InputUis": [
     {
       "InputId": "54fc4cd7-dfc3-4690-9fd1-2b555f7656d4"/*Points*/,

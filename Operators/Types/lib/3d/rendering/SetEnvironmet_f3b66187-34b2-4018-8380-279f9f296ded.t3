@@ -153,11 +153,6 @@
           "Id": "2c88e7c4-04f8-4e45-94d8-214775c5609c"/*EnableZWrite*/,
           "Type": "System.Boolean",
           "Value": true
-        },
-        {
-          "Id": "a0b6601e-4fbb-4489-9e15-59e80db0d26c"/*UseCubeMap*/,
-          "Type": "System.Boolean",
-          "Value": true
         }
       ],
       "Outputs": []
@@ -289,12 +284,6 @@
       "SourceSlotId": "0299761d-7397-4a2f-b591-81fadb404a92",
       "TargetParentOrChildId": "d21fdf03-5b23-4752-bf5e-a01c4b525f55",
       "TargetSlotId": "372288fa-3794-47ba-9f91-59240513217a"
-    },
-    {
-      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "SourceSlotId": "96094239-9d82-4a32-bbb0-e9da7f6501da",
-      "TargetParentOrChildId": "db7944aa-ade6-450e-af4d-d4af0fd039fc",
-      "TargetSlotId": "44b31261-df87-4289-bc64-db349476e418"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",

@@ -252,7 +252,7 @@ namespace t3.Gui.Interaction.Camera
                 _manipulatedByKeyboard = true;
             }
 
-            if (ImGui.IsKeyDown((ImGuiKey)Key.X))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.Q))
             {
                 _moveVelocity -= _viewAxis.Up * acc;
                 _manipulatedByKeyboard = true;

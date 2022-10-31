@@ -20,17 +20,24 @@
       }
     },
     {
-      "OutputId": "0fdf4500-9582-49a5-b383-6ecae14d8dd5"/*Count*/,
+      "OutputId": "0fdf4500-9582-49a5-b383-6ecae14d8dd5"/*CameraCount*/,
       "Position": {
         "X": 300.0,
         "Y": 300.0
       }
     },
     {
-      "OutputId": "f9a31409-323c-43c8-b850-624050ea229e"/*MatrixRows*/,
+      "OutputId": "f9a31409-323c-43c8-b850-624050ea229e"/*CamToWorldRows*/,
       "Position": {
         "X": 300.0,
         "Y": 600.0
+      }
+    },
+    {
+      "OutputId": "40bd0840-10ad-46cd-b8e7-0bad72222c32"/*WorldToClipSpaceRows*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 700.0
       }
     }
   ]

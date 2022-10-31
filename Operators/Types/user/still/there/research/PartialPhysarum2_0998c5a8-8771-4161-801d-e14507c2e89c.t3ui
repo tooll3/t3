@@ -468,7 +468,7 @@
       }
     },
     {
-      "ChildId": "ca7db786-7f7f-47d0-bd03-b4a8380d4560"/*CameraGizmo*/,
+      "ChildId": "ca7db786-7f7f-47d0-bd03-b4a8380d4560"/*_CameraGizmo*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
