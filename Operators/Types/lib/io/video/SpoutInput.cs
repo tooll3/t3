@@ -25,6 +25,11 @@ namespace T3.Operators.Types.Id_25307357_6f6c_45b1_a38d_de635510a845
             Texture.UpdateAction = Update;
             _instance++;
         }
+        ~SpoutInput()
+        {
+            // FIXME: Dispose OpenGL context correctly
+            // Dispose();
+        }
 
         private void Update(EvaluationContext context)
         {
@@ -113,21 +118,23 @@ namespace T3.Operators.Types.Id_25307357_6f6c_45b1_a38d_de635510a845
             if (_spoutDX == null)
             {
                 _spoutDX = new SpoutDX.SpoutDX();
-                _spoutDX.OpenDirectX11(_device);
                 _spoutDX.AdapterAuto = true;
+                _spoutDX.OpenDirectX11(_device);
 
                 // set new receiver and read back the actual name chosen by spout
                 // (which may be different if you have multiple receivers of the same name)
                 _spoutDX.SetReceiverName(receiverName);
+                _spoutDX.CheckSenderFormat(receiverName);
                 _receiverName = receiverName;
-                // ReceiverName.SetTypedInputValue(_receiverName);
+                ReceiverName.SetTypedInputValue(_receiverName);
             }
             else if (receiverName != _receiverName)
             {
                 // set new receiver and read back the actual name chosen by spout
                 // (which may be different if you have multiple receivers of the same name)
                 _spoutDX.SetReceiverName(receiverName);
-                _receiverName = _spoutDX.SenderName;
+                _spoutDX.CheckSenderFormat(receiverName);
+                _receiverName = receiverName;
                 ReceiverName.SetTypedInputValue(_receiverName);
             }
 
@@ -199,10 +206,11 @@ namespace T3.Operators.Types.Id_25307357_6f6c_45b1_a38d_de635510a845
                 uint senderHeight = 0;
                 IntPtr senderHandle = IntPtr.Zero;
                 uint directXFormat = 0;
-                Format textureFormat = Format.B8G8R8A8_UNorm;
+                Format textureFormat = Format.R8G8B8A8_UNorm;
                 if (GetSenderInfo(ref senderWidth, ref senderHeight, ref senderHandle, ref directXFormat))
                 {
-                    textureFormat = (Format) directXFormat;
+                    if (directXFormat != 0)
+                        textureFormat = (Format)directXFormat;
                 }
 
                 // create several textures with a given format with CPU access
@@ -215,14 +223,14 @@ namespace T3.Operators.Types.Id_25307357_6f6c_45b1_a38d_de635510a845
                 {
                     var imageDesc = new Texture2DDescription
                     {
-                        BindFlags = BindFlags.ShaderResource,
+                        BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
                         Format = textureFormat,
                         Width = (int)width,
                         Height = (int)height,
                         MipLevels = 1,
                         SampleDescription = new SampleDescription(1, 0),
                         Usage = ResourceUsage.Default,
-                        OptionFlags = ResourceOptionFlags.Shared,
+                        OptionFlags = ResourceOptionFlags.None,
                         CpuAccessFlags = CpuAccessFlags.None,
                         ArraySize = 1
                     };

@@ -25,6 +25,11 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             TextureOutput.UpdateAction = Update;
             _instance++;
         }
+        ~SpoutOutput()
+        {
+            // FIXME: Dispose OpenGL context correctly
+            // Dispose();
+        }
 
         private void Update(EvaluationContext context)
         {
