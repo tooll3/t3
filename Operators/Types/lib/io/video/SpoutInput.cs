@@ -1,7 +1,6 @@
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SpoutDX;
-using SpoutDX.__Symbols;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -121,17 +120,15 @@ namespace T3.Operators.Types.Id_25307357_6f6c_45b1_a38d_de635510a845
                 _spoutDX.AdapterAuto = true;
                 _spoutDX.OpenDirectX11(_device);
 
-                // set new receiver and read back the actual name chosen by spout
-                // (which may be different if you have multiple receivers of the same name)
+                // set new receiver
                 _spoutDX.SetReceiverName(receiverName);
                 _spoutDX.CheckSenderFormat(receiverName);
                 _receiverName = receiverName;
                 ReceiverName.SetTypedInputValue(_receiverName);
             }
-            else if (receiverName != _receiverName)
+            else if (receiverName != _receiverName || !_spoutDX.IsConnected)
             {
-                // set new receiver and read back the actual name chosen by spout
-                // (which may be different if you have multiple receivers of the same name)
+                // set new receiver
                 _spoutDX.SetReceiverName(receiverName);
                 _spoutDX.CheckSenderFormat(receiverName);
                 _receiverName = receiverName;
@@ -199,18 +196,28 @@ namespace T3.Operators.Types.Id_25307357_6f6c_45b1_a38d_de635510a845
             var device = ResourceManager.Device;
             try
             {
-                // _spoutDX.CheckSenderFormat(_receiverName);
+                if (!_spoutDX.IsFrameNew)
+                    return true;
+
+                Texture2D readTexture = new Texture2D(_spoutDX.SenderTexture.__Instance);
 
                 // check the input format
                 uint senderWidth = 0;
                 uint senderHeight = 0;
                 IntPtr senderHandle = IntPtr.Zero;
                 uint directXFormat = 0;
+
+                // default to RGBA input
                 Format textureFormat = Format.R8G8B8A8_UNorm;
+                // check the currently received format
                 if (GetSenderInfo(ref senderWidth, ref senderHeight, ref senderHandle, ref directXFormat))
                 {
+                    // if a format is provided, use that,
+                    // otherwise use the format provided in the image that was received
                     if (directXFormat != 0)
                         textureFormat = (Format)directXFormat;
+                    else
+                        textureFormat = readTexture.Description.Format;
                 }
 
                 // create several textures with a given format with CPU access
@@ -256,17 +263,12 @@ namespace T3.Operators.Types.Id_25307357_6f6c_45b1_a38d_de635510a845
                     return false;
 
                 // copy the spout texture to an internal image
-                if (_spoutDX.IsFrameNew)
-                {
-                    var immediateContext = device.ImmediateContext;
-                    var readableImage = ImagesWithGpuAccess[_currentIndex];
+                var immediateContext = device.ImmediateContext;
+                var readableImage = ImagesWithGpuAccess[_currentIndex];
+                immediateContext.CopyResource(readTexture, readableImage);
+                _currentIndex = (_currentIndex + 1) % NumTextureEntries;
 
-                    Texture2D readTexture = new Texture2D(_spoutDX.SenderTexture.__Instance);
-                    immediateContext.CopyResource(readTexture, readableImage);
-                    _currentIndex = (_currentIndex + 1) % NumTextureEntries;
-
-                    Texture.Value = readableImage;
-                }
+                Texture.Value = readableImage;
             }
             catch (Exception e)
             {
