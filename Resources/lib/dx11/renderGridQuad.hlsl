@@ -27,10 +27,10 @@ cbuffer Transforms : register(b0)
 cbuffer Params : register(b1)
 {
     float4 Color;
+    float Size;
     float Scale;
 };
 
-Texture2D<float4> InputTexture : register(t0);
 sampler texSampler : register(s0);
 
 
@@ -48,10 +48,13 @@ vsOutput vsMain(uint vertexId: SV_VertexID)
 {
     vsOutput output;
     float2 quadVertex = Quad[vertexId].xy;
-    float2 quadVertexInObject = quadVertex * Scale * 0.5;
+    float2 quadVertexInObject = quadVertex * Size * 0.5;
+
     output.position = mul(float4(quadVertexInObject, 0, 1), ObjectToClipSpace);
+    //output.position.xyz /= output.position.w;
+
     output.texCoord = quadVertex*float2(0.5, -0.5) + 0.5;
-    output.scale = mul(float4(1, 1,1,1), WorldToObject).xy / Scale;
+    output.scale = mul(float4(1, 1,1,1), WorldToObject).xy / Size;
     return output;
 }
 
@@ -59,6 +62,7 @@ vsOutput vsMain(uint vertexId: SV_VertexID)
 static float divisions = 1;
 static float lineWidth = 0.3;
 static float feather = 0.1;
+//static float divs = 0.1;
 
 
 float lines(float d, float angle, float spacing) {
@@ -84,8 +88,8 @@ float4 psMain(vsOutput input) : SV_TARGET
     float grid10 = smoothstep( -0.6, 1.1, fadeOutInDistance);
     float axis = smoothstep( -3, 0.3, fadeOutInDistance);
 
-    float linesX = lines(p.x, angleX, 1) * smallGrid + lines(p.x, angleX, 10) *grid10 + lines(p.x, angleX, 100);// * axis * (p.x > 0 ? 1:0);
-    float linesY =  lines(p.y, angleY, 1) * smallGrid + lines(p.y, angleY, 10) * grid10 +  lines(p.y, angleY, 100);// * axis *  (p.y > 0 ? 1:0);;
+    float linesX = lines(p.x, angleX, 1* Scale) * smallGrid + lines(p.x, angleX, 10* Scale) *grid10 + lines(p.x, angleX, 100* Scale);// * axis * (p.x > 0 ? 1:0* Scale);
+    float linesY =  lines(p.y, angleY, 1* Scale) * smallGrid + lines(p.y, angleY, 10* Scale) * grid10 +  lines(p.y, angleY, 100* Scale);// * axis *  (p.y > 0 ? 1:0);;
 
     float lines = max(linesX, linesY);
 
