@@ -97,49 +97,49 @@
       "InputId": "05d35c66-39c0-4768-b761-85cfd1083e31"/*TransitionProgress*/,
       "Position": {
         "X": -437.7634,
-        "Y": 897.48706
+        "Y": 934.803
       }
     },
     {
       "InputId": "c8b9bdeb-356e-4a6d-91e2-e8b9f5e6edd4"/*TransitionSpread*/,
       "Position": {
         "X": -437.7634,
-        "Y": 942.48706
+        "Y": 979.803
       }
     },
     {
       "InputId": "58176355-6683-4334-8da7-c1c37e8e6d2b"/*ColorTransition*/,
       "Position": {
         "X": -437.7634,
-        "Y": 987.48706
+        "Y": 1024.803
       }
     },
     {
-      "InputId": "239fca06-0079-4f3c-bd3e-6f972c8f82e2"/*SizeAnim*/,
+      "InputId": "12f9b103-1f94-437c-891f-fa28bcf93d8d"/*Movement*/,
       "Position": {
         "X": -437.7634,
-        "Y": 1032.487
+        "Y": 1069.803
       }
     },
     {
-      "InputId": "942fb14b-31a6-4677-bf54-313608dc0cbc"/*XAnim*/,
+      "InputId": "b22fb2c1-3053-48b1-a31e-58458bfc31d5"/*RandomizeTiming*/,
       "Position": {
         "X": -437.7634,
-        "Y": 1077.487
+        "Y": 1114.803
       }
     },
     {
-      "InputId": "ab41cf06-31fd-4a72-8966-749996245b97"/*ZAnim*/,
+      "InputId": "b99561fa-c8ad-4457-9eb0-bca357a78698"/*RandomizeMovement*/,
       "Position": {
         "X": -437.7634,
-        "Y": 1122.487
+        "Y": 1159.803
       }
     },
     {
-      "InputId": "d7ca528f-4bae-4d53-b137-283b0988ebe1"/*YAnim*/,
+      "InputId": "d1f0018f-b07d-4397-8fe9-c8dee9bfa32a"/*Seed*/,
       "Position": {
         "X": -437.7634,
-        "Y": 1167.487
+        "Y": 1204.803
       }
     }
   ],
@@ -304,11 +304,11 @@
       "ChildId": "78aa5aee-f447-4fa1-89a4-60495264566d"/*FloatsToBuffer*/,
       "Size": {
         "X": 110.0,
-        "Y": 166.0
+        "Y": 244.0
       },
       "Position": {
-        "X": 136.52838,
-        "Y": 272.79782
+        "X": 466.80093,
+        "Y": -265.80414
       }
     },
     {
@@ -426,7 +426,7 @@
       "ChildId": "44283486-b0a5-43b7-9204-638a4ffe8494"/*CurvesToTexture*/,
       "Size": {
         "X": 110.0,
-        "Y": 88.0
+        "Y": 23.0
       },
       "Position": {
         "X": -77.53772,
@@ -508,6 +508,17 @@
       "Position": {
         "X": 562.69165,
         "Y": 1230.2537
+      }
+    },
+    {
+      "ChildId": "a23dc3f9-a908-47b5-86ae-641c4b14dc6e"/*Vector3ToFloat3*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 113.98346,
+        "Y": 899.39923
       }
     }
   ],

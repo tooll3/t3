@@ -54,7 +54,7 @@ struct GridEntry
     float4 UvMinMax;        // 13
     uint CharIndex;         // 17
     uint LineNumber;        // 18
-    uint __padding2;
+    float2 __padding2;
 };
 
 struct Output

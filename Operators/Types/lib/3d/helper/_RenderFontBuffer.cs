@@ -197,7 +197,7 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
                         = new BufferLayout
                               {
                                   Position = new Vector3(x, y, 0),
-                                  Size = sizeHeight,
+                                  CharHeight = sizeHeight,
                                   Orientation = Quaternion.Identity,
                                   AspectRatio = sizeWidth / sizeHeight,
                                   Color = color,
@@ -210,7 +210,8 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
                                   //BirthTime = (float)context.LocalTime,
                                   //Speed = 0,
                                   Id = (uint)outputIndex,
-                                  LineNumber = (uint)lineNumber
+                                  LineNumber = (uint)lineNumber,
+                                  Offset = new Vector2(charInfo.XOffset, charInfo.YOffset),
                               };
 
                     outputIndex++;
@@ -297,8 +298,6 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             Bottom,
         }
 
-        
-        // Size must be multiple of 16
         [StructLayout(LayoutKind.Explicit, Size = StructSize)]
         public struct BufferLayout
         {
@@ -306,7 +305,7 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             public Vector3 Position;
 
             [FieldOffset(3 * 4)]
-            public float Size;
+            public float CharHeight;
 
             [FieldOffset(4 * 4)]
             public float AspectRatio;
@@ -327,9 +326,9 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             public uint LineNumber;
             
             [FieldOffset(19 * 4)]
-            public uint __padding;
+            public Vector2 Offset;
 
-            private const int StructSize = 20 * 4;
+            private const int StructSize = 21 * 4;
         }
     }
 }

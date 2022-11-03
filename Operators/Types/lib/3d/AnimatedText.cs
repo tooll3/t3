@@ -85,17 +85,17 @@ namespace T3.Operators.Types.Id_1dbbb50f_98e1_45fe_bd14_f41b5940a019
         [Input(Guid = "58176355-6683-4334-8da7-c1c37e8e6d2b")]
         public readonly InputSlot<T3.Core.DataTypes.Gradient> ColorTransition = new InputSlot<T3.Core.DataTypes.Gradient>();
 
-        [Input(Guid = "239fca06-0079-4f3c-bd3e-6f972c8f82e2")]
-        public readonly InputSlot<T3.Core.Animation.Curve> SizeAnim = new InputSlot<T3.Core.Animation.Curve>();
+        [Input(Guid = "12f9b103-1f94-437c-891f-fa28bcf93d8d")]
+        public readonly InputSlot<System.Numerics.Vector3> Movement = new InputSlot<System.Numerics.Vector3>();
 
-        [Input(Guid = "942fb14b-31a6-4677-bf54-313608dc0cbc")]
-        public readonly InputSlot<T3.Core.Animation.Curve> XAnim = new InputSlot<T3.Core.Animation.Curve>();
+        [Input(Guid = "b22fb2c1-3053-48b1-a31e-58458bfc31d5")]
+        public readonly InputSlot<float> RandomizeTiming = new InputSlot<float>();
 
-        [Input(Guid = "ab41cf06-31fd-4a72-8966-749996245b97")]
-        public readonly InputSlot<T3.Core.Animation.Curve> ZAnim = new InputSlot<T3.Core.Animation.Curve>();
+        [Input(Guid = "b99561fa-c8ad-4457-9eb0-bca357a78698")]
+        public readonly InputSlot<float> RandomizeMovement = new InputSlot<float>();
 
-        [Input(Guid = "d7ca528f-4bae-4d53-b137-283b0988ebe1")]
-        public readonly InputSlot<T3.Core.Animation.Curve> YAnim = new InputSlot<T3.Core.Animation.Curve>();
+        [Input(Guid = "d1f0018f-b07d-4397-8fe9-c8dee9bfa32a")]
+        public readonly InputSlot<float> Seed = new InputSlot<float>();
     }
 }
 
