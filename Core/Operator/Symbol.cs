@@ -269,7 +269,13 @@ namespace T3.Core.Operator
             {
                 var parent = instance.Parent;
                 //
-                if (!parent.Children.Contains(instance))
+                if (parent == null)
+                {
+                    Log.Error($"Warning: Skipping instance without parent {instance.Symbol}");
+                    continue;
+                }
+                
+                if (parent == null || !parent.Children.Contains(instance))
                 {
                     Log.Error($"Warning: Skipping no longer valid instance of {instance.Symbol} in {parent.Symbol}");
                     continue;
@@ -357,7 +363,7 @@ namespace T3.Core.Operator
             // now remove the old instances itself...
             foreach (var instance in InstancesOfSymbol)
             {
-                instance.Parent.Children.Remove(instance);
+                instance.Parent?.Children.Remove(instance);
                 instance.Dispose();
             }
             InstancesOfSymbol.Clear();
