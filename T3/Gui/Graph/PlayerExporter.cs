@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -63,6 +63,8 @@ namespace T3.Gui.Graph
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\ICameraPropertiesProvider.cs"));
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\AudioAnalysisResult.cs"));
                 operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\MidiInConnectionManager.cs"));
+                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\Interop\SpoutDX.cs"));
+                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\Interop\Std.cs"));
 
                 // Copy player and dependent assemblies to export dir
                 var currentDir = Directory.GetCurrentDirectory();
@@ -84,6 +86,8 @@ namespace T3.Gui.Graph
                               {
                                   playerBuildPath + "bass.dll",
                                   playerBuildPath + "basswasapi.dll",
+                                  playerBuildPath + "Spout.dll",
+                                  playerBuildPath + "SpoutDX.dll",
                                   playerBuildPath + "CommandLine.dll",
                                   playerBuildPath + "Player.dll",
                                   playerBuildPath + "Player.exe",
@@ -121,6 +125,16 @@ namespace T3.Gui.Graph
                                       operatorDependenciesPath + "Svg.dll",
                                       operatorDependenciesPath + "Fizzler.dll",
                                       operatorDependenciesPath + "SharpDX.MediaFoundation.dll",
+                                      operatorDependenciesPath + "OpenGL.Net.dll",
+                                      // unsure if all of the below needed but they allow compilation of Spout capable demos
+                                      operatorDependenciesPath + @"runtimes\win-x64\native\Std-symbols.dll",
+                                      operatorDependenciesPath + @"runtimes\win-x64\native\CppSharp.CppParser.dll",
+                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.AST.dll",
+                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.dll",
+                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Generator.dll",
+                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Parser.CSharp.dll",
+                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Parser.dll",
+                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Runtime.dll"
                                   },
                               exportDir);
                 }
@@ -415,7 +429,8 @@ namespace T3.Gui.Graph
                                                        syntaxTrees,
                                                        referencedAssemblies.ToArray(),
                                                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
-                                                          .WithOptimizationLevel(OptimizationLevel.Release));
+                                                          .WithOptimizationLevel(OptimizationLevel.Release)
+                                                          .WithAllowUnsafe(true));
 
             using var dllStream = new FileStream( Path.Combine(exportPath, "Operators.dll"), FileMode.Create);
             using var pdbStream = new MemoryStream();
