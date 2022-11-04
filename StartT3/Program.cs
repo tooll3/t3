@@ -40,6 +40,8 @@ namespace StartEditor
             operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\ICameraPropertiesProvider.cs"));
             operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\MidiInConnectionManager.cs"));
             operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\OscConnectionManager.cs"));
+            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\Interop\SpoutDX.cs"));
+            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\Interop\Std.cs"));
 
             Log.Debug("Compiling...");
             var references = CompileSymbolsFromSource(".", operatorAssemblySources.ToArray());
