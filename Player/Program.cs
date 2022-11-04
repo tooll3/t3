@@ -358,8 +358,8 @@ namespace T3
             context.Flush();
             device.Dispose();
             context.Dispose();
-            _swapChain.Dispose();
-            factory.Dispose();
+            //_swapChain.Dispose();
+            //factory.Dispose();
         }
 
         private static void MouseMoveHandler(object sender, MouseEventArgs e)
