@@ -23,7 +23,7 @@
       "Outputs": []
     },
     {
-      "Id": "0823549b-0920-4918-914a-6b5dd46ee73b"/*RandomCamera*/,
+      "Id": "0823549b-0920-4918-914a-6b5dd46ee73b"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
@@ -181,7 +181,7 @@
       "Outputs": []
     },
     {
-      "Id": "dcb2eec4-39d1-450c-b2ef-e3863112ee20"/*RandomCamera*/,
+      "Id": "dcb2eec4-39d1-450c-b2ef-e3863112ee20"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [],
       "Outputs": []
@@ -294,7 +294,7 @@
       "Outputs": []
     },
     {
-      "Id": "df8b434b-a61b-4927-b6f8-f6cb293e716f"/*RandomCamera*/,
+      "Id": "df8b434b-a61b-4927-b6f8-f6cb293e716f"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {

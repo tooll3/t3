@@ -1,5 +1,5 @@
 {
-  "Name": "RandomCamera",
+  "Name": "OrbitCamera",
   "Id": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
   "Namespace": "lib.3d.rendering",
   "Inputs": [
@@ -104,6 +104,10 @@
     {
       "Id": "21f595ad-0808-48f1-bdd8-118d1527944c"/*Fov*/,
       "DefaultValue": 45.0
+    },
+    {
+      "Id": "7a87791d-c2cf-4853-befe-47abb2d8742f"/*HelloString*/,
+      "DefaultValue": ""
     }
   ],
   "Children": [],

@@ -14,7 +14,8 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
 {
-    public class RandomCamera : Instance<RandomCamera>, ICameraPropertiesProvider, ICamera
+    public class OrbitCamera : Instance<OrbitCamera>
+,ICameraPropertiesProvider,ICamera
     {
         [Output(Guid = "14a63b62-5fbb-4f82-8cf3-d0faf279eff8", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Command> Output = new Slot<Command>();
@@ -22,7 +23,7 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
         [Output(Guid = "451245E2-AC0B-435A-841E-7C9EDC804606", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Object> Reference = new Slot<Object>();        
         
-        public RandomCamera()
+        public OrbitCamera()
         {
             Output.UpdateAction = Update;
             Reference.UpdateAction = Update;
@@ -32,6 +33,7 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
         private void Update(EvaluationContext context)
         {
             LastObjectToWorld = context.ObjectToWorld;
+            
             
             float fov = MathUtil.DegreesToRadians(Fov.GetValue(context));
             float aspectRatio = AspectRatio.GetValue(context);
@@ -195,5 +197,10 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
         public readonly InputSlot<float> Fov = new InputSlot<float>();
         // [Input(Guid = "0bd7cb53-fb5b-47da-a1b6-61d20f0c77d2")]
         // public readonly InputSlot<float> Roll = new InputSlot<float>();
+        
+        [Input(Guid = "7A87791D-C2CF-4853-BEFE-47ABB2D8742F")]
+        public readonly InputSlot<string> HelloString = new();
+        
+        
     }
 }

@@ -270,13 +270,13 @@
       "Outputs": []
     },
     {
-      "Id": "94c58a3f-97fc-4ed8-9c22-f37b5adc8a36"/*RandomCamera*/,
+      "Id": "94c58a3f-97fc-4ed8-9c22-f37b5adc8a36"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "208b31a2-c742-4669-8b9d-cbc0c2ce4479"/*RandomCamera*/,
+      "Id": "208b31a2-c742-4669-8b9d-cbc0c2ce4479"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [],
       "Outputs": []
@@ -537,7 +537,7 @@
       "Outputs": []
     },
     {
-      "Id": "246ebb95-a615-44b8-bb27-5a759acac9f7"/*RandomCamera*/,
+      "Id": "246ebb95-a615-44b8-bb27-5a759acac9f7"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [],
       "Outputs": []

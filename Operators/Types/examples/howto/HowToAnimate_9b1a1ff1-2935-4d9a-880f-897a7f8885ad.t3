@@ -981,7 +981,7 @@
       "Outputs": []
     },
     {
-      "Id": "bb8fd2be-6949-4adb-beba-352edf93cba1"/*RandomCamera*/,
+      "Id": "bb8fd2be-6949-4adb-beba-352edf93cba1"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [],
       "Outputs": []

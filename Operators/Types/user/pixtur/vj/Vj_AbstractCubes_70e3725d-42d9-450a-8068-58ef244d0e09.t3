@@ -70,7 +70,7 @@
       "Outputs": []
     },
     {
-      "Id": "4e123292-7366-46a8-8906-c0cca2a1d2bf"/*RandomCamera*/,
+      "Id": "4e123292-7366-46a8-8906-c0cca2a1d2bf"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
@@ -1923,7 +1923,7 @@
       "Outputs": []
     },
     {
-      "Id": "a4308a48-e0e8-4ba0-95b7-ff5771c68b03"/*RandomCamera*/,
+      "Id": "a4308a48-e0e8-4ba0-95b7-ff5771c68b03"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {

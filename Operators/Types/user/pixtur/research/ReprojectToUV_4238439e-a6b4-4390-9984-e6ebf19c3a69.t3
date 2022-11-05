@@ -4,10 +4,6 @@
   "Namespace": "user.pixtur.research",
   "Inputs": [
     {
-      "Id": "5ba52f22-0fe6-4316-a512-7577fcdff091"/*Mesh*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "eb4da1b0-f9c6-480d-a1a3-ac875cbf1037"/*Color*/,
       "DefaultValue": {
         "X": 1.0,
@@ -18,6 +14,10 @@
     },
     {
       "Id": "04e2fd86-3dbc-4718-9f3b-361dff3e49c8"/*Texture*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "5ba52f22-0fe6-4316-a512-7577fcdff091"/*Mesh*/,
       "DefaultValue": null
     },
     {
