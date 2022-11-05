@@ -39,7 +39,7 @@ namespace T3.Core
         public static uint XxHash(uint p)
         {
             const uint PRIME32_2 = 2246822519U, PRIME32_3 = 3266489917U;
-            const uint PRIME32_4 = 668265263U,  PRIME32_5 = 374761393U;
+            const uint PRIME32_4 = 668265263U, PRIME32_5 = 374761393U;
 
             uint h32 = p + PRIME32_5;
             h32 = PRIME32_4 * ((h32 << 17) | (h32 >> (32 - 17)));
@@ -48,7 +48,7 @@ namespace T3.Core
 
             return h32 ^ (h32 >> 16);
         }
-        
+
         private static float Fade(float t)
         {
             return t * t * t * (t * (t * 6 - 15) + 10);
@@ -121,7 +121,7 @@ namespace T3.Core
                 Utilities.Swap(ref outMin, ref outMax);
             return v.Clamp(outMin, outMax);
         }
-        
+
         public static float Remap(float value, float inMin, float inMax, float outMin, float outMax)
         {
             var factor = (value - inMin) / (inMax - inMin);
@@ -214,10 +214,10 @@ namespace T3.Core
         /// See https://stackoverflow.com/a/5100956 
         /// </summary>
         public static float SpringDamp(float target,
-                                                   float current,
-                                                   ref float velocity,
-                                                   float springConstant = 2,
-                                                   float timeStep = 1/60f)
+                                       float current,
+                                       ref float velocity,
+                                       float springConstant = 2,
+                                       float timeStep = 1 / 60f)
         {
             //const float springConstant = 0.41f;
             var currentToTarget = target - current;
@@ -282,7 +282,7 @@ namespace T3.Core
             current = newState;
             return newState;
         }
-        
+
         /// <summary>
         /// Return true if a boolean changed from false to true
         /// </summary>
@@ -301,7 +301,16 @@ namespace T3.Core
         /// <returns>True if NaN or Infinity</returns>
         public static bool ApplyDefaultIfInvalid(ref float val, float defaultValue)
         {
-            bool isInvalid = float.IsNaN(val) || float.IsInfinity(val);
+            var isInvalid = float.IsNaN(val) || float.IsInfinity(val);
+            val = isInvalid ? defaultValue : val;
+            return isInvalid;
+        }
+
+        public static bool ApplyDefaultIfInvalid(ref Vector3 val, Vector3 defaultValue)
+        {
+            var isInvalid = float.IsNaN(val.X) || float.IsInfinity(val.X) ||
+                            float.IsNaN(val.Y) || float.IsInfinity(val.Y) ||
+                            float.IsNaN(val.Z) || float.IsInfinity(val.Z);
             val = isInvalid ? defaultValue : val;
             return isInvalid;
         }
@@ -332,7 +341,7 @@ namespace T3.Core
         }
     }
 
-    public class DampFunctions
+    public static class DampFunctions
     {
         public enum Methods
         {
@@ -340,40 +349,34 @@ namespace T3.Core
             DampedSpring
         }
 
-        public static float DampenFloat(float inputValue, float previousValue, float damping, float velocity, float frameRate, Methods method)
+        public static float DampenFloat(float inputValue, float previousValue, float damping, ref float velocity, Methods method)
         {
-            float dampenedValue = inputValue;
-
-            switch (method)
-            {
-                case Methods.LinearInterpolation:
-                    dampenedValue = LinearDamp(inputValue, previousValue, damping, frameRate);
-                    break;
-
-                case Methods.DampedSpring:
-                    dampenedValue = SpringDamp(inputValue, previousValue, damping, ref velocity);
-                    break;
-            }
-
-            return dampenedValue;
+            return method switch
+                       {
+                           Methods.LinearInterpolation => LinearDamp(inputValue, previousValue, damping),
+                           Methods.DampedSpring        => SpringDampFloat(inputValue, previousValue, damping, ref velocity),
+                           _                           => inputValue
+                       };
         }
 
-        private static float SpringDamp(float inputValue, float previousValue, float damping, ref float velocity)
+        public static float SpringDampFloat(float inputValue, float previousValue, float damping, ref float velocity)
         {
             return MathUtils.SpringDamp(inputValue, previousValue, ref velocity, 0.5f / (damping + 0.001f), (float)Playback.LastFrameDuration);
         }
 
-        private static float LinearDamp(float inputValue, float previousValue, float damping, float frameRate)
+        private static float LinearDamp(float targetValue, float currentValue, float damping)
         {
-            float dampenedValue = inputValue;
-            var framesPassed = (int)((Playback.LastFrameDuration * frameRate) - 0.5f).Clamp(0, 5) + 1;
+            // TODO: Fix damping factor from framerate 
+            return MathUtils.Lerp(targetValue, currentValue, damping);
+        }
 
-            for (int stepIndex = 0; stepIndex < framesPassed; stepIndex++)
-            {
-                dampenedValue = MathUtils.Lerp(dampenedValue, previousValue, damping);
-            }
-
-            return dampenedValue;
+        public static Vector3 SpringDampVec3(Vector3 targetVec, Vector3 currentValue, float damping, ref Vector3 velocity)
+        {
+            var dt = (float)Playback.LastFrameDuration;
+            return new Vector3(
+                               MathUtils.SpringDamp(targetVec.X, currentValue.X, ref velocity.X, 0.5f / (damping + 0.001f), dt),
+                               MathUtils.SpringDamp(targetVec.Y, currentValue.Y, ref velocity.Y, 0.5f / (damping + 0.001f), dt),
+                               MathUtils.SpringDamp(targetVec.Z, currentValue.Z, ref velocity.Z, 0.5f / (damping + 0.001f), dt));
         }
     }
 }
