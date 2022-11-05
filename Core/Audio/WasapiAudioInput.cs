@@ -25,7 +25,7 @@ namespace Core.Audio
             InitializeInputDeviceList();
 
             var deviceName = ProjectSettings.Config.AudioInputDeviceName;
-            var device = _inputDevices.SingleOrDefault(d => d.DeviceInfo.Name == deviceName);
+            var device = _inputDevices.FirstOrDefault(d => d.DeviceInfo.Name == deviceName);
             StartInputCapture(device);
         }
         
