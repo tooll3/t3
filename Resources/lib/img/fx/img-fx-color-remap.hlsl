@@ -1,13 +1,15 @@
 cbuffer ParamConstants : register(b0)
 {
-    float4 Fill;
-    float4 Background;
-    float2 Center;
-    float Width;
-    float Rotation;
-    float PingPong;
-    float Repeat;
     float Bias;
+    float DontColorAlpha;
+//     float4 Fill;
+//     float4 Background;
+//     float2 Center;
+//     float Width;
+//     float Rotation;
+//     float PingPong;
+//     float Repeat;
+//     float Bias;
 }
 
 cbuffer TimeConstants : register(b1)
@@ -44,7 +46,9 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 uv = psInput.texCoord;
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
     float4 gradient = Gradient.Sample(texSampler, float2(orgColor.r, 0));
-    float a = orgColor.a + gradient.a - orgColor.a*gradient.a;
+    float a =  DontColorAlpha > 0.5 
+                    ? orgColor.a + gradient.a - orgColor.a*gradient.a
+                    :gradient.a;
     float3 rgb = (1.0 - gradient.a)*orgColor.rgb + gradient.a*gradient.rgb;   
     return float4(rgb,a);
 }

@@ -21,6 +21,9 @@ namespace T3.Operators.Types.Id_da93f7d1_ef91_4b4a_9708_2d9b1baa4c14
 
         [Input(Guid = "c45d487b-3221-44c7-bf9e-b982a65280f6")]
         public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();
+
+        [Input(Guid = "7777f86d-dbf7-44d4-9da4-99a819038095")]
+        public readonly InputSlot<bool> DontColorAlpha = new InputSlot<bool>();
     }
 }
 
