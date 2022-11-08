@@ -620,7 +620,7 @@
       }
     },
     {
-      "ChildId": "d792580c-28fd-434a-ad25-fb21c89415d6"/*RandomCamera*/,
+      "ChildId": "d792580c-28fd-434a-ad25-fb21c89415d6"/*OrbitCamera*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

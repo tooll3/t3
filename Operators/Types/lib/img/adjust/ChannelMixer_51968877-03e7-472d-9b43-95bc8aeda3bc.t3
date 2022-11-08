@@ -96,6 +96,21 @@
           "Id": "1e4e274b-60b2-4fe8-b275-ebef80d520a7"/*Source*/,
           "Type": "System.String",
           "Value": "Resources\\lib\\img\\img-fx-MixChannels.hlsl"
+        },
+        {
+          "Id": "6cf68692-43a5-4a93-873c-99aa0d2dde93"/*BufferColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 0.0
+          }
+        },
+        {
+          "Id": "e8a33694-9f2f-452f-bf76-3d3aea4dcb94"/*BlendEnabled*/,
+          "Type": "System.Boolean",
+          "Value": false
         }
       ],
       "Outputs": []

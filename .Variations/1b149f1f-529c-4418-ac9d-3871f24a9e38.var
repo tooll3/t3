@@ -117,6 +117,22 @@
           "77673c64-918d-46a6-aa29-c362057afee6": -0.23351105
         }
       }
+    },
+    {
+      "Id": "12d238d9-d418-4987-a249-48ca91fc6337",
+      "IsPreset": true,
+      "ActivationIndex": 7,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "0f2867ab-a65e-4bf3-b1b5-9c241690ba5f": 11.4,
+          "0eff3a75-eafc-4a5e-8a2c-10577c12e776": 1.3
+        }
+      }
     }
   ]
 }

@@ -42,9 +42,14 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
             m.M31 = viewPortShift.X;
             m.M32 = viewPortShift.Y;
             CameraToClipSpace = m;
+            var pOffset = PositionOffset.GetValue(context);
+            var offsetAffectsTarget = OffsetAffectsTarget.GetValue(context);
 
             var positionValue = Position.GetValue(context);
             var eye = new Vector3(positionValue.X, positionValue.Y, positionValue.Z);
+            if (!offsetAffectsTarget)
+                eye += pOffset.ToSharpDx();
+            
             var targetValue = Target.GetValue(context);
             var target = new Vector3(targetValue.X, targetValue.Y, targetValue.Z);
             var upValue = Up.GetValue(context);
@@ -52,9 +57,8 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
             var worldToCameraRoot = Matrix.LookAtRH(eye, target, up);
 
             var rollRotation = Matrix.RotationAxis(new Vector3(0, 0, 1), -(float)Roll.GetValue(context));
-
-            var pOffset = PositionOffset.GetValue(context);
-            var additionalTranslation = Matrix.Translation(pOffset.X, pOffset.Y, pOffset.Z);
+            
+            var additionalTranslation = offsetAffectsTarget ?  Matrix.Translation(pOffset.X, pOffset.Y, pOffset.Z) : Matrix.Identity;
 
             var rOffset = RotationOffset.GetValue(context);
             var additionalRotation = Matrix.RotationYawPitchRoll(MathUtil.DegreesToRadians(rOffset.Y),
@@ -140,5 +144,9 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
         
         [Input(Guid = "AE275370-A684-42FB-AB7A-50E16D24082D")]
         public readonly InputSlot<System.Numerics.Vector2> ViewportShift = new();
+        
+        [Input(Guid = "123396F0-62C4-43CD-8BE0-A661553D4783")]
+        public readonly InputSlot<bool> OffsetAffectsTarget = new();
+
     }
 }

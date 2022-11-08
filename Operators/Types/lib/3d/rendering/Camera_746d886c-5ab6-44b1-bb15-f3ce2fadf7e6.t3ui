@@ -80,6 +80,13 @@
         "X": 0.0,
         "Y": 135.0
       }
+    },
+    {
+      "InputId": "123396f0-62c4-43cd-8be0-a661553d4783"/*OffsetAffectsTarget*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 180.0
+      }
     }
   ],
   "SymbolChildUis": [],

@@ -1,6 +1,6 @@
 {
   "Id": "42cb88bc-beb8-4d89-ac99-44b77be5f03e"/*DrawMeshAtPoints*/,
-  "Description": "Draws PBR shaded instances of a mesh defined by the connected point buffer. It uses the current settings for material, point lights, fog and environment. It can use the point’s W attribute to control the size of the instances.\n\nCheckout the [HowToDrawThings] on how to set these up.\n\nAlso checkout [DrawMesh].",
+  "Description": "Draws PBR shaded instances of a mesh defined by the connected point buffer. It uses the current settings for material, point lights, fog and environment. It can use the point's W attribute to control the size of the instances.\n\nCheckout the [HowToDrawThings] on how to set these up.\n\nAlso checkout [DrawMesh].",
   "InputUis": [
     {
       "InputId": "408ae7c7-9aa8-4537-8c55-b5689f8f9b56"/*GPoints*/,

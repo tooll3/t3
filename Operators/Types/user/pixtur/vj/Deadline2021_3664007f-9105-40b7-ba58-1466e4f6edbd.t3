@@ -1185,7 +1185,7 @@
       ]
     },
     {
-      "Id": "8b5775ba-8bda-48f3-a483-6b942ca383a8"/*RandomCamera*/,
+      "Id": "8b5775ba-8bda-48f3-a483-6b942ca383a8"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [],
       "Outputs": []
@@ -4344,7 +4344,7 @@
       "Outputs": []
     },
     {
-      "Id": "b505d7ad-02fc-4f03-9d27-06d2c675357f"/*RandomCamera*/,
+      "Id": "b505d7ad-02fc-4f03-9d27-06d2c675357f"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [],
       "Outputs": []

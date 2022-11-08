@@ -249,7 +249,7 @@
           "Id": "6fd86a21-d06c-4edb-bbe2-39d7411e46d1"/*Position*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.69,
+            "X": 0.66,
             "Y": 0.53
           }
         }
@@ -817,7 +817,7 @@
       "Outputs": []
     },
     {
-      "Id": "5c50b599-e1b2-417a-bea6-22002ceb142f"/*RandomCamera*/,
+      "Id": "5c50b599-e1b2-417a-bea6-22002ceb142f"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {

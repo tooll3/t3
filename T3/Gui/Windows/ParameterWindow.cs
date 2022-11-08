@@ -111,10 +111,10 @@ namespace T3.Gui.Windows
                 SymbolBrowser.ListExampleOperators(symbolUi);
                 if (!string.IsNullOrEmpty(symbolUi.Description))
                 {
-                    var itemRegex = new Regex(@"\[([A-Za-z\d_]+)\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                    
                     var alreadyListedSymbolNames = new HashSet<string>();
                     
-                    foreach (Match  match in itemRegex.Matches(symbolUi.Description))
+                    foreach (Match  match in _itemRegex.Matches(symbolUi.Description))
                     {
                         var referencedName = match.Groups[1].Value;
 
@@ -336,5 +336,6 @@ namespace T3.Gui.Windows
         private static ChangeInputValueCommand _inputValueCommandInFlight;
         private static IInputSlot _inputSlotForActiveCommand;
         private static int _instanceCounter;
+        private static readonly Regex _itemRegex = new Regex(@"\[([A-Za-z\d_]+)\]", RegexOptions.Compiled);
     }
 }

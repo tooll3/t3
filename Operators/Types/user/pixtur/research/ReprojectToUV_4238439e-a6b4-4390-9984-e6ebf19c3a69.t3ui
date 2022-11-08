@@ -3,14 +3,6 @@
   "Description": "Uses a camera projection and the UV layout of the incoming mesh to reproject an image onto a geometry.\n\nThis can useful for uses like projection mapping or imersive media installations.\n\nNote:\n\nFor the setup to work correctly make sure that...\n- the FOV of the viewer camera is wide enough.\n- the aspect ratio of the viewer camera matches the texture resolution\n\n",
   "InputUis": [
     {
-      "InputId": "5ba52f22-0fe6-4316-a512-7577fcdff091"/*Mesh*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": 545.7166,
-        "Y": 4260.0938
-      }
-    },
-    {
       "InputId": "eb4da1b0-f9c6-480d-a1a3-ac875cbf1037"/*Color*/,
       "Position": {
         "X": 548.2994,
@@ -23,6 +15,14 @@
       "Position": {
         "X": 545.7166,
         "Y": 4204.0938
+      }
+    },
+    {
+      "InputId": "5ba52f22-0fe6-4316-a512-7577fcdff091"/*Mesh*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 545.7166,
+        "Y": 4260.0938
       }
     },
     {

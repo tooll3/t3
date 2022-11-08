@@ -13,8 +13,7 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
         [Output(Guid = "aacea92a-c166-46dc-b775-d28baf9820f5", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Result = new Slot<float>();
 
-        protected const float FrameRate = 60f;
-        protected readonly float minTimeElapsedBeforeEvaluation = 1 / 1000f;
+        private const float MinTimeElapsedBeforeEvaluation = 1 / 1000f;
 
         public Damp()
         {
@@ -27,13 +26,13 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
             var damping = Damping.GetValue(context);
 
             var currentTime = context.LocalFxTime;
-            if (Math.Abs(currentTime - _lastEvalTime) < minTimeElapsedBeforeEvaluation)
+            if (Math.Abs(currentTime - _lastEvalTime) < MinTimeElapsedBeforeEvaluation)
                 return;
 
             _lastEvalTime = currentTime;
 
             var method = (DampFunctions.Methods)Method.GetValue(context).Clamp(0, 1);
-            _dampedValue = DampFunctions.DampenFloat(inputValue, _dampedValue, damping, _velocity, FrameRate, method);
+            _dampedValue = DampFunctions.DampenFloat(inputValue, _dampedValue, damping, ref _velocity, method);
 
             MathUtils.ApplyDefaultIfInvalid(ref _dampedValue, 0);
             MathUtils.ApplyDefaultIfInvalid(ref _velocity, 0);

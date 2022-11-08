@@ -227,7 +227,7 @@
       "ChildId": "90fbe32e-868e-4b73-bdf7-8110b7b4aab3"/*Float2ToVector2*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 867.3059,
@@ -257,7 +257,7 @@
       }
     },
     {
-      "ChildId": "c527059f-ab8f-45a2-be74-768dda019a6f"/*RandomCamera*/,
+      "ChildId": "c527059f-ab8f-45a2-be74-768dda019a6f"/*OrbitCamera*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

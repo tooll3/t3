@@ -136,7 +136,7 @@
       }
     },
     {
-      "ChildId": "6febac3a-e871-45fc-841d-405064327ed4"/*RandomCamera*/,
+      "ChildId": "6febac3a-e871-45fc-841d-405064327ed4"/*OrbitCamera*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -356,7 +356,7 @@
       }
     },
     {
-      "ChildId": "fa8fb1c3-42c8-428c-a942-5664733757ce"/*RandomCamera*/,
+      "ChildId": "fa8fb1c3-42c8-428c-a942-5664733757ce"/*OrbitCamera*/,
       "Size": {
         "X": 110.0,
         "Y": 62.0

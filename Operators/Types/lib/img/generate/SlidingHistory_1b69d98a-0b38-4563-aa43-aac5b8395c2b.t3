@@ -13,11 +13,11 @@
     },
     {
       "Id": "41748add-f957-4a48-b7a5-43ff868bc814"/*HistoryLength*/,
-      "DefaultValue": 0
+      "DefaultValue": 512
     },
     {
       "Id": "5d42ff17-a552-4437-877a-a27a369866d7"/*IsEnabled*/,
-      "DefaultValue": false
+      "DefaultValue": true
     }
   ],
   "Children": [
