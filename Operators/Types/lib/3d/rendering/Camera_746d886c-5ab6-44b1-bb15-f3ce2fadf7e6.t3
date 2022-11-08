@@ -72,6 +72,10 @@
         "X": 0.0,
         "Y": 0.0
       }
+    },
+    {
+      "Id": "123396f0-62c4-43cd-8be0-a661553d4783"/*OffsetAffectsTarget*/,
+      "DefaultValue": true
     }
   ],
   "Children": [],
