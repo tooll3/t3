@@ -958,7 +958,12 @@ namespace T3.Gui.Graph
                             sourceOp = GraphCanvas.Current.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
                             if (sourceOp != null)
                             {
-                                output = sourceOp.Outputs[connection.SourceSlotId];
+                                if (!sourceOp.Outputs.TryGetValue(connection.SourceSlotId, out output))
+                                {
+                                    GraphCanvas.Current.CompositionOp.Symbol.Connections.Remove(connection);
+                                    
+                                }
+                                //output = sourceOp.Outputs[connection.SourceSlotId];
                             }
                         }
 
