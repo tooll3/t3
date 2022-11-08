@@ -67,6 +67,13 @@
         "X": -43.22547,
         "Y": 1405.0071
       }
+    },
+    {
+      "InputId": "2624d563-bad7-4fcb-a201-0ee0b9b93afa"/*Filter*/,
+      "Position": {
+        "X": -43.22547,
+        "Y": 1450.0071
+      }
     }
   ],
   "SymbolChildUis": [
@@ -107,7 +114,7 @@
       "ChildId": "db440258-c623-493f-92d7-24193d977910"/*SamplerStateOp*/,
       "Size": {
         "X": 110.0,
-        "Y": 49.0
+        "Y": 62.0
       },
       "Position": {
         "X": 699.02423,

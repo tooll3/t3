@@ -37,6 +37,9 @@ namespace T3.Operators.Types.Id_bd0b9c5b_c611_42d0_8200_31af9661f189
         [Input(Guid = "e8a33694-9f2f-452f-bf76-3d3aea4dcb94")]
         public readonly InputSlot<bool> BlendEnabled = new InputSlot<bool>();
 
+        [Input(Guid = "2624d563-bad7-4fcb-a201-0ee0b9b93afa")]
+        public readonly InputSlot<SharpDX.Direct3D11.Filter> Filter = new InputSlot<SharpDX.Direct3D11.Filter>();
+
     }
 }
 

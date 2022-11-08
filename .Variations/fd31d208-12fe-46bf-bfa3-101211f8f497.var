@@ -1,0 +1,82 @@
+{
+  "Id": "fd31d208-12fe-46bf-bfa3-101211f8f497",
+  "Variations": [
+    {
+      "Id": "51afbf54-3757-461f-b8cd-c23bd0460a42",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Center",
+      "PosOnCanvas": {
+        "X": 100.33089,
+        "Y": 91.79208
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "de0fed7d-d2af-4424-baf3-81606e26559f": {
+            "X": 0.0031847656,
+            "Y": 0.0027872026
+          }
+        }
+      }
+    },
+    {
+      "Id": "75ae1561-dc62-4c2b-b40e-aeea9b558c5b",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Top Left",
+      "PosOnCanvas": {
+        "X": 263.33093,
+        "Y": 91.79208
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "de0fed7d-d2af-4424-baf3-81606e26559f": {
+            "X": 0.0031847656,
+            "Y": 0.0027872026
+          },
+          "ae7f7e83-fa18-44fd-b639-3bd0dbd3ac06": 0,
+          "82cc31ff-3307-4b6d-be70-16e471c2ffc9": 0
+        }
+      }
+    },
+    {
+      "Id": "1158f911-fe9b-4eba-98b3-203b06f83bb6",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "Large",
+      "PosOnCanvas": {
+        "X": 273.80087,
+        "Y": 183.82574
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "de0fed7d-d2af-4424-baf3-81606e26559f": {
+            "X": 0.0031847656,
+            "Y": 0.0027872026
+          },
+          "d89c518c-a862-4f46-865b-0380350b7417": 1140.0
+        }
+      }
+    },
+    {
+      "Id": "b819b968-4f73-4ec8-9db4-edd9d7a63c76",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "Narrow",
+      "PosOnCanvas": {
+        "X": 100.33089,
+        "Y": 184.79208
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "de0fed7d-d2af-4424-baf3-81606e26559f": {
+            "X": 0.0031847656,
+            "Y": 0.0027872026
+          },
+          "d89c518c-a862-4f46-865b-0380350b7417": 1140.0,
+          "835d7f17-9de4-4612-a2f0-01c1346cdf1a": -7.6
+        }
+      }
+    }
+  ]
+}
