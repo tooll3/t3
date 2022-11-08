@@ -96,6 +96,9 @@ namespace T3.Operators.Types.Id_1dbbb50f_98e1_45fe_bd14_f41b5940a019
 
         [Input(Guid = "d1f0018f-b07d-4397-8fe9-c8dee9bfa32a")]
         public readonly InputSlot<float> Seed = new InputSlot<float>();
+
+        [Output(Guid = "5a784cb1-9011-4e8f-a5d5-c1bd4cc7d2df")]
+        public readonly Slot<T3.Core.DataTypes.MeshBuffers> MeshBuffer = new Slot<T3.Core.DataTypes.MeshBuffers>();
     }
 }
 

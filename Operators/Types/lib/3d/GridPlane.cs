@@ -18,6 +18,9 @@ namespace T3.Operators.Types.Id_935e6597_3d9f_4a79_b4a6_600e8f28861e
 
         [Input(Guid = "7096708e-4b56-4b57-b86c-576540434626")]
         public readonly InputSlot<float> Scale = new InputSlot<float>();
+
+        [Input(Guid = "a8e8da31-b4e0-4710-8292-2f27175c5f6b")]
+        public readonly InputSlot<System.Numerics.Vector3> Rotation = new InputSlot<System.Numerics.Vector3>();
     }
 }
 
