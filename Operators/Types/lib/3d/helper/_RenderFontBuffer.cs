@@ -15,36 +15,7 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
 {
     public class _RenderFontBuffer : Instance<_RenderFontBuffer>
     {
-        // Inputs ----------------------------------------------------
-        [Input(Guid = "F2DD87B1-7F37-4B02-871B-B2E35972F246")]
-        public readonly InputSlot<string> Text = new InputSlot<string>();
 
-        [Input(Guid = "E827FDD1-20CA-473C-99EE-B839563690E9")]
-        public readonly InputSlot<string> Filepath = new InputSlot<string>();
-
-        [Input(Guid = "1CDE902D-5EAA-4144-B579-85F54717356B")]
-        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
-
-        [Input(Guid = "5008E9B4-083A-4494-8F7C-50FE5D80FC35")]
-        public readonly InputSlot<float> Size = new InputSlot<float>();
-
-        [Input(Guid = "E05E143E-8D4C-4DE7-8C9C-7FA7755009D3")]
-        public readonly InputSlot<float> Spacing = new InputSlot<float>();
-
-        [Input(Guid = "9EB4E13F-0FE3-4ED9-9DF1-814F075A05DA")]
-        public readonly InputSlot<float> LineHeight = new InputSlot<float>();
-
-        [Input(Guid = "C4F03392-FF7E-4B4A-8740-F93A581B2B6B")]
-        public readonly InputSlot<Vector2> Position = new InputSlot<Vector2>();
-
-        [Input(Guid = "FFD2233A-8F3E-426B-815B-8071E4C779AB")]
-        public readonly InputSlot<float> Slant = new InputSlot<float>();
-
-        [Input(Guid = "14829EAC-BA59-4D31-90DC-53C7FC56CC30")]
-        public readonly InputSlot<int> VerticalAlign = new InputSlot<int>();
-
-        [Input(Guid = "E43BC887-D425-4F9C-8A86-A32C761DE0CC")]
-        public readonly InputSlot<int> HorizontalAlign = new InputSlot<int>();
 
         // Outputs ---------------------------------------------------------
 
@@ -71,9 +42,9 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
                 return;
 
             var filepath = Filepath.GetValue(context);
-            if (FontDescriptions.ContainsKey(filepath))
+            if (_fontDescriptions.ContainsKey(filepath))
             {
-                _font = FontDescriptions[filepath];
+                _font = _fontDescriptions[filepath];
                 return;
             }
 
@@ -95,7 +66,7 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
 
             _font = new FontDescription(bmFont);
 
-            FontDescriptions[filepath] = _font;
+            _fontDescriptions[filepath] = _font;
         }
 
         private void UpdateMesh(EvaluationContext context)
@@ -255,7 +226,7 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
         }
 
         private FontDescription _font;
-        private static readonly Dictionary<string, FontDescription> FontDescriptions = new Dictionary<string, FontDescription>();
+        private static readonly Dictionary<string, FontDescription> _fontDescriptions = new();
 
         private class FontDescription
         {
@@ -277,8 +248,8 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             }
 
             public readonly Font Font;
-            public readonly Dictionary<int, float> KerningForPairs = new Dictionary<int, float>();
-            public readonly Dictionary<int, FontChar> InfoForCharacter = new Dictionary<int, FontChar>();
+            public readonly Dictionary<int, float> KerningForPairs = new();
+            public readonly Dictionary<int, FontChar> InfoForCharacter = new();
         }
 
         private BufferLayout[] _bufferContent;
@@ -330,5 +301,36 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
 
             private const int StructSize = 21 * 4;
         }
+        
+        // Inputs ----------------------------------------------------
+        [Input(Guid = "F2DD87B1-7F37-4B02-871B-B2E35972F246")]
+        public readonly InputSlot<string> Text = new InputSlot<string>();
+
+        [Input(Guid = "E827FDD1-20CA-473C-99EE-B839563690E9")]
+        public readonly InputSlot<string> Filepath = new InputSlot<string>();
+
+        [Input(Guid = "1CDE902D-5EAA-4144-B579-85F54717356B")]
+        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
+
+        [Input(Guid = "5008E9B4-083A-4494-8F7C-50FE5D80FC35")]
+        public readonly InputSlot<float> Size = new InputSlot<float>();
+
+        [Input(Guid = "E05E143E-8D4C-4DE7-8C9C-7FA7755009D3")]
+        public readonly InputSlot<float> Spacing = new InputSlot<float>();
+
+        [Input(Guid = "9EB4E13F-0FE3-4ED9-9DF1-814F075A05DA")]
+        public readonly InputSlot<float> LineHeight = new InputSlot<float>();
+
+        [Input(Guid = "C4F03392-FF7E-4B4A-8740-F93A581B2B6B")]
+        public readonly InputSlot<Vector2> Position = new InputSlot<Vector2>();
+
+        [Input(Guid = "FFD2233A-8F3E-426B-815B-8071E4C779AB")]
+        public readonly InputSlot<float> Slant = new InputSlot<float>();
+
+        [Input(Guid = "14829EAC-BA59-4D31-90DC-53C7FC56CC30")]
+        public readonly InputSlot<int> VerticalAlign = new InputSlot<int>();
+
+        [Input(Guid = "E43BC887-D425-4F9C-8A86-A32C761DE0CC")]
+        public readonly InputSlot<int> HorizontalAlign = new InputSlot<int>();        
     }
 }

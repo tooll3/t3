@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ManagedBass.DirectX8;
 using Newtonsoft.Json;
+using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 
 namespace T3.Core.Operator
@@ -35,14 +36,20 @@ namespace T3.Core.Operator
 
             foreach (var inputDefinition in symbol.InputDefinitions)
             {
-                InputValues.Add(inputDefinition.Id, new Input(inputDefinition));
+                if(!InputValues.TryAdd(inputDefinition.Id, new Input(inputDefinition)))
+                {  
+                    throw new ApplicationException($"The ID for symbol input {symbol.Name}.{inputDefinition.Name} must be unique.");
+                }
             }
 
             foreach (var outputDefinition in symbol.OutputDefinitions)
             {
                 var outputData = (outputDefinition.OutputDataType != null) ? (Activator.CreateInstance(outputDefinition.OutputDataType) as IOutputData) : null;
                 var output = new Output(outputDefinition, outputData) { DirtyFlagTrigger = outputDefinition.DirtyFlagTrigger };
-                Outputs.Add(outputDefinition.Id, output);
+                if (!Outputs.TryAdd(outputDefinition.Id, output))
+                {
+                    throw new ApplicationException($"The ID for symbol output {symbol.Name}.{outputDefinition.Name} must be unique.");
+                }
             }
         }
 

@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Numerics;
-using SharpDX.Win32;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -14,7 +13,8 @@ using Svg.Pathing;
 using Svg.Transforms;
 using T3.Core;
 using T3.Core.Logging;
-using Point = T3.Core.DataTypes.Point;
+
+using Point = T3.Core.DataStructures.Point;
 
 namespace T3.Operators.Types.Id_e8d94dd7_eb54_42fe_a7b1_b43543dd457e
 {

@@ -1,8 +1,5 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Numerics;
-using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -10,7 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
-using Buffer = SharpDX.Direct3D11.Buffer;
+using T3.Core.DataStructures;
 
 namespace T3.Operators.Types.Id_dd3d7e16_f33e_4fb0_89c6_4d8cbc9d702f
 {
@@ -51,9 +48,7 @@ namespace T3.Operators.Types.Id_dd3d7e16_f33e_4fb0_89c6_4d8cbc9d702f
                 {
                     if (from < to)
                     {
-                        var tmp = from;
-                        from = to;
-                        to = tmp;
+                        (@from, to) = (to, @from);
                     }
 
                     var combined = (to << 16) + from;
@@ -61,7 +56,7 @@ namespace T3.Operators.Types.Id_dd3d7e16_f33e_4fb0_89c6_4d8cbc9d702f
                 }
 
                 var count = hashSet.Count;
-                //_pointList = new T3.Core.DataTypes.Point[count * 3];
+                //_pointList = new T3.Core.DataStructures.Point[count * 3];
                 _pointList.SetLength(count * 3);
 
                 var index = 0;

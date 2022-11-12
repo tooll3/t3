@@ -7,7 +7,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using Point = T3.Core.DataTypes.Point;
+using Point = T3.Core.DataStructures.Point;
 using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Operators.Types.Id_b7345438_f3f4_4ad3_9c57_6076ed0e9399

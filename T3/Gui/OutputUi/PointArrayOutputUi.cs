@@ -8,7 +8,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Gui.OutputUi
 {
-    public class PointArrayOutputUi : OutputUi<T3.Core.DataTypes.Point[]>
+    public class PointArrayOutputUi : OutputUi<T3.Core.DataStructures.Point[]>
     {
         public override IOutputUi Clone()
         {
@@ -22,7 +22,7 @@ namespace T3.Gui.OutputUi
         
         protected override void DrawTypedValue(ISlot slot)
         {
-            if (slot is Slot<T3.Core.DataTypes.Point[]> typedSlot)
+            if (slot is Slot<T3.Core.DataStructures.Point[]> typedSlot)
             {
                 var v = typedSlot.Value;
 
