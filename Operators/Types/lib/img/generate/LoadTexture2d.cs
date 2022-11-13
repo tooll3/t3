@@ -12,9 +12,10 @@ namespace T3.Operators.Types.Id_0b3436db_e283_436e_ba85_2f3a1de76a9d
     public class LoadTexture2d : Instance<LoadTexture2d>
     {
         [Output(Guid = "{E0C4FEDD-5C2F-46C8-B67D-5667435FB037}")]
-        public readonly Slot<Texture2D> Texture = new Slot<Texture2D>();
+        public readonly Slot<Texture2D> Texture = new();
+        
         [Output(Guid = "{A4A46C04-FF03-48CE-83C9-0C0BAA0F72E7}")]
-        public readonly Slot<ShaderResourceView> ShaderResourceView = new Slot<ShaderResourceView>();
+        public readonly Slot<ShaderResourceView> ShaderResourceView = new();
 
         private uint _textureResId;
         private uint _srvResId;
@@ -54,7 +55,7 @@ namespace T3.Operators.Types.Id_0b3436db_e283_436e_ba85_2f3a1de76a9d
                 }
                 catch (Exception e)
                 {
-                    Log.Error($"Filed to create texture from file '{imagePath}':" + e.Message);
+                    Log.Error($"Failed to create texture from file '{imagePath}':" + e.Message);
                 }
             }
             else

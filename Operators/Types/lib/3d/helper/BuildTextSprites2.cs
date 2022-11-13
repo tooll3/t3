@@ -1,8 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Operators.Utils;
+using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.DataStructures;
+using T3.Core.DataTypes;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -11,11 +16,14 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
 {
     public class BuildTextSprites2 : Instance<BuildTextSprites2>
     {
-        [Output(Guid = "3D2F53A3-F1F0-489B-B20B-BADB09CDAEBE")]
-        public readonly Slot<SharpDX.Direct3D11.Buffer> SpriteBuffer = new();
+        [Output(Guid = "89685AC6-6A97-403C-8334-E685A4CCCDA0")]
+        public readonly Slot<T3.Core.DataTypes.BufferWithViews> PointBuffer = new();
 
-        [Output(Guid = "A4295D83-282E-4B5D-8927-312DD26F07A6")]
-        public readonly Slot<SharpDX.Direct3D11.Buffer> PointBuffer = new();
+        [Output(Guid = "0BEA15C8-329A-4705-BC11-12EEF4F1A70A")]
+        public readonly Slot<T3.Core.DataTypes.BufferWithViews> SpriteBuffer = new();
+
+        [Output(Guid = "{E0C4FEDD-5C2F-46C8-B67D-5667435FB037}")]
+        public readonly Slot<Texture2D> Texture = new();
 
         public BuildTextSprites2()
         {
@@ -26,9 +34,49 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
         private void Update(EvaluationContext context)
         {
             if (Filepath.DirtyFlag.IsDirty || _bmFont == null)
-                _bmFont = BmFontDescription.InitializeFromFile(Filepath.GetValue(context));
+            {
+                var filepath = Filepath.GetValue(context);
+                _bmFont = BmFontDescription.InitializeFromFile(filepath);
+                if (_bmFont != null)
+                {
+                    var imageFilePath = filepath.Replace(".fnt", ".png");
+                    UpdateTexture(imageFilePath);
+                }
+            }
 
             UpdateMesh(context);
+        }
+
+        private void UpdateTexture(string imageFilePath)
+        {
+            ShaderResourceView srv = null;
+
+            try
+            {
+                (_textureResId, _srvResId) = ResourceManager.Instance().CreateTextureFromFile(imageFilePath, () => { Texture.DirtyFlag.Invalidate(); });
+
+                if (ResourceManager.ResourcesById.TryGetValue(_textureResId, out var resource1) && resource1 is Texture2dResource textureResource)
+                    Texture.Value = textureResource.Texture;
+
+                if (ResourceManager.ResourcesById.TryGetValue(_srvResId, out var resource2) && resource2 is ShaderResourceViewResource srvResource)
+                    srv = srvResource.ShaderResourceView;
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Filed to create texture from file '{imageFilePath}':" + e.Message);
+            }
+
+            try
+            {
+                if (srv != null)
+                    ResourceManager.Device.ImmediateContext.GenerateMips(srv);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to generate mipmaps for texture {imageFilePath}:" + e);
+            }
+
+            Texture.DirtyFlag.Clear();
         }
 
         private void UpdateMesh(EvaluationContext context)
@@ -43,6 +91,8 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
                 return;
 
             var lineNumber = 0;
+
+            var offsetBaseLine = OffsetBaseLine.GetValue(context);
             var horizontalAlign = (BmFontDescription.HorizontalAligns)HorizontalAlign.GetValue(context)
                                                                                      .Clamp(0,
                                                                                             Enum.GetValues(typeof(BmFontDescription.HorizontalAligns)).Length -
@@ -50,50 +100,51 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
             var verticalAlign =
                 (BmFontDescription.VerticalAligns)VerticalAlign.GetValue(context).Clamp(0, Enum.GetValues(typeof(BmFontDescription.VerticalAligns)).Length - 1);
 
-            //var verticalAlign = VerticalAlign.GetValue(context);
             var characterSpacing = Spacing.GetValue(context);
             var lineHeight = LineHeight.GetValue(context);
-            //var commonScaleH = (512.0 / _bmFont.Font.Common.ScaleH);
-            var scaleFactor = 1.0 / _bmFont.Font.Info.Size * 0.00185;
-            var size = (float)(Size.GetValue(context) * scaleFactor); // Scaling to match 1080p 72DPI pt font sizes 
-            var position = Position.GetValue(context);
+            const float viewHeightInT3Units = 2;
+            var textSize = Size.GetValue(context);
+
+            var scaleFactor =  (textSize / _bmFont.BmFont.Info.Size) * (viewHeightInT3Units / 1080f); // from cursor space to t3 units  
+            var textPosition = Position.GetValue(context);
 
             var numLinesInText = text.Split('\n').Length;
 
             var color = Color.GetValue(context);
-            float textureWidth = _bmFont.Font.Common.ScaleW;
-            float textureHeight = _bmFont.Font.Common.ScaleH;
+            float textureWidth = _bmFont.BmFont.Common.ScaleW;
+            float textureHeight = _bmFont.BmFont.Common.ScaleH;
             float cursorX = 0;
             float cursorY = 0;
-            const float sdfWidth = 5f; // assumption after some experiments
+            float sdfWidth = _bmFont.Padding.Left;
 
             switch (verticalAlign)
             {
                 case BmFontDescription.VerticalAligns.Top:
-                    cursorY = _bmFont.Font.Common.Base * (1 + sdfWidth / _bmFont.Font.Info.Size);
+                    cursorY = _bmFont.BmFont.Common.Base * (1 + sdfWidth / _bmFont.BmFont.Info.Size);
                     break;
                 case BmFontDescription.VerticalAligns.Middle:
-                    cursorY = _bmFont.Font.Common.LineHeight * lineHeight * (numLinesInText - 1) / 2 + _bmFont.Font.Common.LineHeight / 2f +
-                              _bmFont.Font.Common.Base * (sdfWidth / _bmFont.Font.Info.Size);
+                    cursorY = _bmFont.BmFont.Common.LineHeight * lineHeight * (numLinesInText - 1) / 2;
                     break;
                 case BmFontDescription.VerticalAligns.Bottom:
-                    cursorY = _bmFont.Font.Common.LineHeight * lineHeight * numLinesInText;
+                    cursorY = _bmFont.BmFont.Common.LineHeight * lineHeight * numLinesInText;
                     break;
             }
 
-            if (_spriteBuffer == null || _spriteBuffer.Length != text.Length)
-            {
-                _spriteBuffer = new Sprite[text.Length];
-            }
-
-            if (_pointBuffer == null || _pointBuffer.Length != text.Length)
-            {
-                _pointBuffer = new Point[text.Length];
-            }
+            // if (_sprites == null || _sprites.Count != text.Length)
+            // {
+            //     _sprites = new Sprite[text.Length];
+            // }
+            //
+            // if (_points == null || _points.Length != text.Length)
+            // {
+            //     _points = new Point[text.Length];
+            // }
+            _sprites.Clear();
+            _points.Clear();
 
             var outputIndex = 0;
             var currentLineCharacterCount = 0;
-            var lastChar = 0;
+            var lastCharId = 0;
 
             foreach (var c in text)
             {
@@ -101,105 +152,131 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
                 {
                     AdjustLineAlignment();
 
-                    cursorY -= _bmFont.Font.Common.LineHeight * lineHeight;
+                    cursorY -= _bmFont.BmFont.Common.LineHeight * lineHeight;
                     cursorX = 0;
                     currentLineCharacterCount = 0;
-                    lastChar = 0;
+                    lastCharId = 0;
                     lineNumber++;
                     continue;
                 }
 
                 if (!_bmFont.InfoForCharacter.TryGetValue(c, out var charInfo))
                 {
-                    lastChar = 0;
+                    lastCharId = 0;
                     continue;
                 }
 
-                if (lastChar != 0)
+                cursorX += _bmFont.GetKerning(lastCharId, charInfo.Id) *0;
+
+
+                var verticalCenterOffset = _bmFont.Padding.Up + _bmFont.BmFont.Common.Base + _bmFont.Padding.Down - _bmFont.BmFont.Info.Size /2f;
+                var charTopLeft = new Vector2(cursorX + charInfo.XOffset,
+                                              cursorY + charInfo.YOffset);
+
+                var center = textPosition + new Vector3(
+                                                        charTopLeft.X + charInfo.Width/2f,
+                                                        cursorY,
+                                                        0
+                                                       ) * scaleFactor;
+
+                var pivot = new Vector2(0,
+                                        charInfo.YOffset + charInfo.Height / 2f - verticalCenterOffset -  offsetBaseLine
+                                       );
+                pivot *= scaleFactor;
+
+                var isVisible = charInfo.Width != 0 || charInfo.Height != 0;
+                //if (isVisible)
                 {
-                    var key = lastChar | c;
-                    if (_bmFont.KerningForPairs.TryGetValue(key, out var kerning2))
-                    {
-                        cursorX += kerning2;
-                    }
-                }
+                    _sprites.Add(
+                                 new Sprite
+                                     {
+                                         Width = charInfo.Width * scaleFactor,
+                                         Height = charInfo.Height * scaleFactor,
+                                         Color = color,
+                                         UvMin = new Vector2(charInfo.X / textureWidth, charInfo.Y / textureHeight),
+                                         UvMax = new Vector2((charInfo.X + charInfo.Width) / textureWidth, (charInfo.Y + charInfo.Height) / textureHeight),
+                                         Pivot = pivot,
+                                         CharIndex = (uint)outputIndex,
+                                         CharIndexInLine = (uint)currentLineCharacterCount,
+                                         LineIndex = (uint)lineNumber,
+                                         Extra = 0
+                                     });
 
-                var sizeWidth = charInfo.Width * size;
-                var sizeHeight = charInfo.Height * size;
-                var x = position.X + (cursorX + charInfo.XOffset) * size;
-                var y = position.Y + ((cursorY - charInfo.YOffset)) * size;
-
-                if (charInfo.Width != 1 || charInfo.Height != 1)
-                {
-                    _spriteBuffer[outputIndex]
-                        = new Sprite
-                              {
-                                  Width = sizeWidth,
-                                  Height = sizeHeight,
-                                  Color = color,
-                                  UvMin = new Vector2(charInfo.X / textureWidth, charInfo.Y / textureHeight),
-                                  UvMax = new Vector2((charInfo.X + charInfo.Width) / textureWidth, (charInfo.Y + charInfo.Height) / textureHeight),
-                                  Pivot = default,
-                                  CharIndex = (uint)outputIndex,
-                                  CharIndexInLine = (uint)currentLineCharacterCount,
-                                  LineIndex = (uint)lineNumber,
-                                  Extra = 0
-                              };
-
-                    _pointBuffer[outputIndex]
-                        = new Point
-                              {
-                                  Position = new Vector3(x, y, 0),
-                                  W = 1,
-                                  Orientation = Quaternion.Identity
-                              };
+                    _points.Add(new Point
+                                    {
+                                        Position = center,
+                                        W = 1,
+                                        Orientation = Quaternion.Identity
+                                    });
                     outputIndex++;
+                    currentLineCharacterCount++;
                 }
 
-                currentLineCharacterCount++;
                 cursorX += charInfo.XAdvance;
                 cursorX += characterSpacing;
-                lastChar = c;
+                lastCharId = charInfo.Id;
             }
 
             AdjustLineAlignment();
 
-            ResourceManager.Instance().SetupStructuredBuffer(_spriteBuffer, ref SpriteBuffer.Value);
-            SpriteBuffer.Value.DebugName = "SpriteBufferLayout";
-            
-            ResourceManager.Instance().SetupStructuredBuffer(_pointBuffer, ref PointBuffer.Value);
-            PointBuffer.Value.DebugName = "PointBufferLayout";
+            SpriteBuffer.Value ??= new BufferWithViews();
+            ResourceManager.SetupStructuredBuffer( _sprites.Count > 0 ? _sprites.ToArray() : _nonSprite, ref SpriteBuffer.Value.Buffer);
+            ResourceManager.CreateStructuredBufferSrv(SpriteBuffer.Value.Buffer, ref SpriteBuffer.Value.Srv);
+
+            PointBuffer.Value ??= new BufferWithViews();
+            ResourceManager.SetupStructuredBuffer( _points.Count > 0 ? _points.ToArray() : _nonPoints, ref PointBuffer.Value.Buffer);
+            ResourceManager.CreateStructuredBufferSrv(PointBuffer.Value.Buffer, ref PointBuffer.Value.Srv);
+
+            SpriteBuffer.DirtyFlag.Clear();
+            PointBuffer.DirtyFlag.Clear();
 
             void AdjustLineAlignment()
             {
                 switch (horizontalAlign)
                 {
                     case BmFontDescription.HorizontalAligns.Center:
-                        OffsetLineCharacters((cursorX / 2 - characterSpacing / 2) * size, currentLineCharacterCount, outputIndex);
+                        OffsetLineCharacters((cursorX / 2 - characterSpacing / 2) * scaleFactor, currentLineCharacterCount, outputIndex);
                         break;
                     case BmFontDescription.HorizontalAligns.Right:
-                        OffsetLineCharacters(cursorX * size, currentLineCharacterCount, outputIndex);
+                        OffsetLineCharacters(cursorX * scaleFactor, currentLineCharacterCount, outputIndex);
                         break;
                 }
             }
         }
+
+        private static Sprite[] _nonSprite = new[] { new Sprite()
+                                                         {
+                                                             Height = 0,
+                                                             Width =  0,
+                                                             
+                                                         } };
+        
+        private static Point[] _nonPoints = new[] { new Point()
+                                                         {
+                                                             Position = Vector3.Zero,
+                                                             W= float.NaN,
+                                                             Orientation =  Quaternion.Identity,
+                                                             
+                                                         } };
 
         private void OffsetLineCharacters(float offset, int currentLineCharacterCount, int outputIndex)
         {
             for (var backIndex = 0; backIndex <= currentLineCharacterCount; backIndex++)
             {
                 var index0 = outputIndex - backIndex;
-                if (index0 < 0 || index0 >= _pointBuffer.Length)
+                if (index0 < 0 || index0 >= _points.Count)
                     continue;
 
-                _pointBuffer[index0].Position.X -= offset;
+                var p = _points[index0];
+                p.Position.X -= offset;
+                _points[index0] = p;
             }
         }
 
         private BmFontDescription _bmFont;
 
-        private Sprite[] _spriteBuffer;
-        private Point[] _pointBuffer;
+        private List<Sprite> _sprites = new(100);
+        private List<Point> _points = new(100);
 
         // Inputs ----------------------------------------------------
         [Input(Guid = "F2DD87B1-7F37-4B02-871B-B2E35972F246")]
@@ -220,13 +297,19 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
         [Input(Guid = "9EB4E13F-0FE3-4ED9-9DF1-814F075A05DA")]
         public readonly InputSlot<float> LineHeight = new();
 
-        [Input(Guid = "C4F03392-FF7E-4B4A-8740-F93A581B2B6B")]
-        public readonly InputSlot<Vector2> Position = new();
+        [Input(Guid = "77A79A37-6151-4A35-BE4D-415A91B0E651")]
+        public readonly InputSlot<Vector3> Position = new();
 
         [Input(Guid = "14829EAC-BA59-4D31-90DC-53C7FC56CC30", MappedType = typeof(BmFontDescription.VerticalAligns))]
         public readonly InputSlot<int> VerticalAlign = new();
 
         [Input(Guid = "E43BC887-D425-4F9C-8A86-A32C761DE0CC", MappedType = typeof(BmFontDescription.HorizontalAligns))]
         public readonly InputSlot<int> HorizontalAlign = new();
+
+        [Input(Guid = "7094D22F-DCF9-4FD0-9570-7243E3284CF4")]
+        public readonly InputSlot<float> OffsetBaseLine = new();
+
+        private uint _textureResId;
+        private uint _srvResId;
     }
 }

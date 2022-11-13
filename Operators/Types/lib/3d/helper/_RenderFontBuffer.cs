@@ -195,7 +195,7 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             }
             AdjustLineAlignment();
 
-            ResourceManager.Instance().SetupStructuredBuffer(_bufferContent, ref Buffer.Value);
+            ResourceManager.SetupStructuredBuffer(_bufferContent, ref Buffer.Value);
             Buffer.Value.DebugName = nameof(_RenderFontBuffer);
             VertexCount.Value = outputIndex * 6;
 

@@ -31,6 +31,9 @@ namespace T3.Operators.Types.Id_9d494c7e_f94c_477f_aeb3_7fa70788f225
 
         [Input(Guid = "fecc8310-208e-45de-a43b-bf547663e743")]
         public readonly InputSlot<int> BlendMod = new InputSlot<int>();
+
+        [Input(Guid = "926bdbc2-ee14-4125-8886-18f445766ef3")]
+        public readonly InputSlot<float> AlphaCutOff = new InputSlot<float>();
     }
 }
 
