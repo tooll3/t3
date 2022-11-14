@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/SpriteDef.hlsl"
 
 static const float3 Quad[] =
 {
@@ -44,20 +45,7 @@ cbuffer Params : register(b1)
     float AlphaCutOff;
 };
 
-struct SpriteDef
-{
-    float2 Size;
-    float4 Color;
-    float2 UvMin;
-    float2 UvMax;
-    float2 Pivot;
-    uint CharIndex;
-    uint CharIndexInLine;
-    uint LineIndex;
-    uint Extra;
-};
-
-struct Output
+struct psInput
 {
     float4 position : SV_POSITION;
     float2 texCoord : TEXCOORD;
@@ -67,13 +55,12 @@ struct Output
 StructuredBuffer<Point> Points : t0;
 StructuredBuffer<SpriteDef> Sprites : t1;
 Texture2D<float4> fontTexture : register(t2);
-Texture2D<float4> GradientTexture : register(t3);
 sampler texSampler : register(s0);
 
 
-Output vsMain(uint id: SV_VertexID)
+psInput vsMain(uint id: SV_VertexID)
 {
-    Output output;
+    psInput output;
 
     int vertexIndex = id % 6;
     int entryIndex = id / 6;
@@ -100,35 +87,21 @@ Output vsMain(uint id: SV_VertexID)
     float4 uv = float4(sprite.UvMin, sprite.UvMax) * UV[vertexIndex];
     output.texCoord =  uv.xy + uv.zw;
 
-    float4 c = GradientTexture.SampleLevel(texSampler, float2(p.w, 0), 0);
-    output.color = sprite.Color * Color * c;
+    output.color = sprite.Color * Color;
     return output;
 }
 
-
-struct PsInput
-{
-    float4 position : SV_POSITION;
-    float2 texCoord : TEXCOORD;
-    float4 color : COLOR;
-};
 
 float median(float r, float g, float b) {
     return max(min(r, g), min(max(r, g), b));
 }
 
-float4 psMain(PsInput input) : SV_TARGET
+float4 psMain(psInput input) : SV_TARGET
 {
-    
+
     float3 smpl1 =  fontTexture.Sample(texSampler, input.texCoord).rgb;
-
-
-    //return float4(smpl1,1);
-
     int height, width;
     fontTexture.GetDimensions(width,height);
-
-    // from https://github.com/Chlumsky/msdfgen/issues/22#issuecomment-234958005
 
     float2 dx2 = abs(ddx( input.texCoord.xy ) * width);
     float2 dy2 = abs(ddy( input.texCoord.xy ) * height);
@@ -142,16 +115,6 @@ float4 psMain(PsInput input) : SV_TARGET
     if(AlphaCutOff > 0 && letterShape < AlphaCutOff) {
         discard;
     }
-
     
     return float4(input.color.rgb, letterShape * input.color.a);
-    
-
-    // float glow = pow( smoothstep(0, 1, sigDist + 0.3), 0.4);
-    // //return float4(letterShape,0,0,1);
-
-    // return float4(
-    //     lerp(Shadow.rgb, Color.rgb, saturate(pow(letterShape,0.3)) ),
-    //     max( saturate(letterShape*2),glow * Shadow.a) * Color.a
-    // );
 }

@@ -758,7 +758,7 @@
       "Outputs": []
     },
     {
-      "Id": "e29019cf-1b03-4d5f-8d72-e5983840aa1d"/*GridPlaneGizmo*/,
+      "Id": "e29019cf-1b03-4d5f-8d72-e5983840aa1d"/*_OutputWindowGrid*/,
       "SymbolId": "e5588101-5686-4b02-ab7d-e58199ba552e",
       "InputValues": [],
       "Outputs": []
