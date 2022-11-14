@@ -38,6 +38,9 @@ namespace T3.Operators.Types.Id_15f056a3_ee8b_41a2_92c9_eb85153f8200
         [Input(Guid = "36e69f1c-412b-4a5c-8b17-d0f5d909f1cb")]
         public readonly InputSlot<float> Offset = new InputSlot<float>();
 
+        [Input(Guid = "de5d13dd-6cdc-4639-95f8-34b6f91cfe78")]
+        public readonly MultiInputSlot<bool> UseWAsSelection = new MultiInputSlot<bool>();
+
 
         private enum Spaces
         {
