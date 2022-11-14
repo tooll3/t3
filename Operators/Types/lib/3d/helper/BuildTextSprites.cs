@@ -14,7 +14,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
 {
-    public class BuildTextSprites2 : Instance<BuildTextSprites2>
+    public class BuildTextSprites : Instance<BuildTextSprites>
     {
         [Output(Guid = "89685AC6-6A97-403C-8334-E685A4CCCDA0")]
         public readonly Slot<T3.Core.DataTypes.BufferWithViews> PointBuffer = new();
@@ -25,7 +25,7 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
         [Output(Guid = "{E0C4FEDD-5C2F-46C8-B67D-5667435FB037}")]
         public readonly Slot<Texture2D> Texture = new();
 
-        public BuildTextSprites2()
+        public BuildTextSprites()
         {
             SpriteBuffer.UpdateAction = Update;
             PointBuffer.UpdateAction = Update;

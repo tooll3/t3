@@ -95,12 +95,12 @@ namespace Operators.Utils
             public static Paddings FromString(string str)
             {
                 if (string.IsNullOrEmpty(str))
-                    return ZeroPadding;
+                    return _zeroPadding;
 
                 var newPadding = new Paddings();
                 var values = str.Split(",");
                 if (values.Length != 4)
-                    return ZeroPadding;
+                    return _zeroPadding;
                 
                 newPadding.Up = float.TryParse(values[0], out var upPadding) ? upPadding : 0; 
                 newPadding.Right = float.TryParse(values[1], out var rightPadding) ? rightPadding : 0;
@@ -115,7 +115,7 @@ namespace Operators.Utils
             public float Down;
             public float Left;
 
-            private static Paddings ZeroPadding;
+            private static readonly Paddings _zeroPadding = default;
         }
     }
 }
