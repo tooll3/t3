@@ -66,7 +66,7 @@ namespace T3.Operators.Types.Id_2c53eee7_eb38_449b_ad2a_d7a674952e5b
 
                     for (var sampleIndex = 0; sampleIndex < sampleCount; sampleIndex++)
                     {
-                        var sampledColor = gradient.Sample((float)sampleIndex / sampleCount);
+                        var sampledColor = gradient.Sample((float)sampleIndex / (sampleCount-1f));
                         dataStream.Write(sampledColor.X);
                         dataStream.Write(sampledColor.Y);
                         dataStream.Write(sampledColor.Z);

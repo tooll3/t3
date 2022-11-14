@@ -70,7 +70,7 @@
       }
     },
     {
-      "ChildId": "a4037412-c9d6-43aa-b208-c04a033f7c76"/*GridPlaneGizmo*/,
+      "ChildId": "a4037412-c9d6-43aa-b208-c04a033f7c76"/*_OutputWindowGrid*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

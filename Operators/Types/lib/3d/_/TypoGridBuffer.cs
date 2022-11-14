@@ -81,7 +81,7 @@ namespace T3.Operators.Types.Id_fa45d013_5a1c_45a0_9b05_a4a4edfb06f9
                 }
             }
             
-            ResourceManager.Instance().SetupStructuredBuffer(_bufferContent, ref Buffer.Value);
+            ResourceManager.SetupStructuredBuffer(_bufferContent, ref Buffer.Value);
             Buffer.Value.DebugName = nameof(TypoGridBuffer);
 
             VertexCount.Value = size * 6;

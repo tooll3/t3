@@ -15,36 +15,7 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
 {
     public class _RenderFontBuffer : Instance<_RenderFontBuffer>
     {
-        // Inputs ----------------------------------------------------
-        [Input(Guid = "F2DD87B1-7F37-4B02-871B-B2E35972F246")]
-        public readonly InputSlot<string> Text = new InputSlot<string>();
 
-        [Input(Guid = "E827FDD1-20CA-473C-99EE-B839563690E9")]
-        public readonly InputSlot<string> Filepath = new InputSlot<string>();
-
-        [Input(Guid = "1CDE902D-5EAA-4144-B579-85F54717356B")]
-        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
-
-        [Input(Guid = "5008E9B4-083A-4494-8F7C-50FE5D80FC35")]
-        public readonly InputSlot<float> Size = new InputSlot<float>();
-
-        [Input(Guid = "E05E143E-8D4C-4DE7-8C9C-7FA7755009D3")]
-        public readonly InputSlot<float> Spacing = new InputSlot<float>();
-
-        [Input(Guid = "9EB4E13F-0FE3-4ED9-9DF1-814F075A05DA")]
-        public readonly InputSlot<float> LineHeight = new InputSlot<float>();
-
-        [Input(Guid = "C4F03392-FF7E-4B4A-8740-F93A581B2B6B")]
-        public readonly InputSlot<Vector2> Position = new InputSlot<Vector2>();
-
-        [Input(Guid = "FFD2233A-8F3E-426B-815B-8071E4C779AB")]
-        public readonly InputSlot<float> Slant = new InputSlot<float>();
-
-        [Input(Guid = "14829EAC-BA59-4D31-90DC-53C7FC56CC30")]
-        public readonly InputSlot<int> VerticalAlign = new InputSlot<int>();
-
-        [Input(Guid = "E43BC887-D425-4F9C-8A86-A32C761DE0CC")]
-        public readonly InputSlot<int> HorizontalAlign = new InputSlot<int>();
 
         // Outputs ---------------------------------------------------------
 
@@ -71,9 +42,9 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
                 return;
 
             var filepath = Filepath.GetValue(context);
-            if (FontDescriptions.ContainsKey(filepath))
+            if (_fontDescriptions.ContainsKey(filepath))
             {
-                _font = FontDescriptions[filepath];
+                _font = _fontDescriptions[filepath];
                 return;
             }
 
@@ -95,7 +66,7 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
 
             _font = new FontDescription(bmFont);
 
-            FontDescriptions[filepath] = _font;
+            _fontDescriptions[filepath] = _font;
         }
 
         private void UpdateMesh(EvaluationContext context)
@@ -109,8 +80,11 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             if (_font == null)
                 return;
 
-            var horizontalAlign = HorizontalAlign.GetValue(context);
-            var verticalAlign = VerticalAlign.GetValue(context);
+            var lineNumber = 0;
+            var horizontalAlign = (HorizontalAligns)HorizontalAlign.GetValue(context).Clamp(0, Enum.GetValues(typeof(HorizontalAligns)).Length -1);
+            var verticalAlign = (VerticalAligns)VerticalAlign.GetValue(context).Clamp(0, Enum.GetValues(typeof(VerticalAligns)).Length -1);
+            
+            //var verticalAlign = VerticalAlign.GetValue(context);
             var characterSpacing = Spacing.GetValue(context);
             var lineHeight = LineHeight.GetValue(context);
             var commonScaleH = (512.0 / _font.Font.Common.ScaleH);
@@ -125,35 +99,22 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             float textureHeight = _font.Font.Common.ScaleH;
             float cursorX = 0;
             float cursorY = 0;
-            const float SdfWidth = 5f; // assumption after some experiments
+            const float sdfWidth = 5f; // assumption after some experiments
 
             switch (verticalAlign)
             {
-                // Top
-                case 0:
-                    //cursorY = _font.Font.Common.LineHeight * lineHeight * 1;
-                    //cursorY = 40;// _font.Font.Common.LineHeight - _font.Font.Common.Base;// -_font.Font.Common.LineHeight;
-                    cursorY = _font.Font.Common.Base * (1+ SdfWidth / _font.Font.Info.Size);
+                case VerticalAligns.Top:
+                    cursorY = _font.Font.Common.Base * (1 + sdfWidth / _font.Font.Info.Size);
                     break;
-                // Middle
-                case 1:
-                    //var evenLineNumber = numLinesInText + numLinesInText % 2;  
-                    cursorY = _font.Font.Common.LineHeight * lineHeight * (numLinesInText - 1) / 2
-                              + _font.Font.Common.LineHeight / 2f
-                              + _font.Font.Common.Base * ( SdfWidth / _font.Font.Info.Size);
+                case VerticalAligns.Middle:
+                    cursorY = _font.Font.Common.LineHeight * lineHeight * (numLinesInText - 1) / 2 + _font.Font.Common.LineHeight / 2f +
+                              _font.Font.Common.Base * (sdfWidth / _font.Font.Info.Size);
                     break;
-                // Bottom
-                case 2:
+                case VerticalAligns.Bottom:
                     cursorY = _font.Font.Common.LineHeight * lineHeight * numLinesInText;
                     break;
             }
 
-
-            
-
-            //cursorY += (_font.Font.Common.LineHeight - _font.Font.Common.Base) * lineHeight;
-            //cursorY += ( _font.Font.Common.Base) * lineHeight / 6;
-            //cursorY += _font.Font.Common.LineHeight * lineHeight/6;
             if (_bufferContent == null || _bufferContent.Length != text.Length)
             {
                 _bufferContent = new BufferLayout[text.Length];
@@ -175,6 +136,7 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
                     cursorX = 0;
                     currentLineCharacterCount = 0;
                     lastChar = 0;
+                    lineNumber++;
                     continue;
                 }
 
@@ -206,8 +168,8 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
                         = new BufferLayout
                               {
                                   Position = new Vector3(x, y, 0),
-                                  Size = sizeHeight,
-                                  Orientation = new Vector3(0, 1, 0),
+                                  CharHeight = sizeHeight,
+                                  Orientation = Quaternion.Identity,
                                   AspectRatio = sizeWidth / sizeHeight,
                                   Color = color,
                                   UvMinMax = new Vector4(
@@ -216,9 +178,11 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
                                                          (charInfo.X + charInfo.Width) / textureWidth, // uRight 
                                                          (charInfo.Y + charInfo.Height) / textureHeight // vBottom                              
                                                         ),
-                                  BirthTime = (float)context.LocalTime,
-                                  Speed = 0,
+                                  //BirthTime = (float)context.LocalTime,
+                                  //Speed = 0,
                                   Id = (uint)outputIndex,
+                                  LineNumber = (uint)lineNumber,
+                                  Offset = new Vector2(charInfo.XOffset, charInfo.YOffset),
                               };
 
                     outputIndex++;
@@ -231,7 +195,7 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             }
             AdjustLineAlignment();
 
-            ResourceManager.Instance().SetupStructuredBuffer(_bufferContent, ref Buffer.Value);
+            ResourceManager.SetupStructuredBuffer(_bufferContent, ref Buffer.Value);
             Buffer.Value.DebugName = nameof(_RenderFontBuffer);
             VertexCount.Value = outputIndex * 6;
 
@@ -239,10 +203,10 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             {
                 switch (horizontalAlign)
                 {
-                    case 1:
+                    case HorizontalAligns.Center:
                         OffsetLineCharacters((cursorX / 2 - characterSpacing / 2) * size, currentLineCharacterCount, outputIndex);
                         break;
-                    case 2:
+                    case HorizontalAligns.Right:
                         OffsetLineCharacters(cursorX * size, currentLineCharacterCount, outputIndex);
                         break;
                 }
@@ -262,7 +226,7 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
         }
 
         private FontDescription _font;
-        private static readonly Dictionary<string, FontDescription> FontDescriptions = new Dictionary<string, FontDescription>();
+        private static readonly Dictionary<string, FontDescription> _fontDescriptions = new();
 
         private class FontDescription
         {
@@ -284,42 +248,89 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             }
 
             public readonly Font Font;
-            public readonly Dictionary<int, float> KerningForPairs = new Dictionary<int, float>();
-            public readonly Dictionary<int, FontChar> InfoForCharacter = new Dictionary<int, FontChar>();
+            public readonly Dictionary<int, float> KerningForPairs = new();
+            public readonly Dictionary<int, FontChar> InfoForCharacter = new();
         }
 
         private BufferLayout[] _bufferContent;
 
-        // Must be multiple of 16
-        [StructLayout(LayoutKind.Explicit, Size = 32)]
+        
+        public enum HorizontalAligns
+        {
+            Left,
+            Center,
+            Right,
+        }
+        
+        public enum VerticalAligns
+        {
+            Top,
+            Middle,
+            Bottom,
+        }
+
+        [StructLayout(LayoutKind.Explicit, Size = StructSize)]
         public struct BufferLayout
         {
             [FieldOffset(0)]
             public Vector3 Position;
 
             [FieldOffset(3 * 4)]
-            public float Size;
+            public float CharHeight;
 
             [FieldOffset(4 * 4)]
-            public Vector3 Orientation;
-
-            [FieldOffset(7 * 4)]
             public float AspectRatio;
-
-            [FieldOffset(8 * 4)]
+            
+            [FieldOffset(5 * 4)]
+            public Quaternion Orientation;
+            
+            [FieldOffset(9 * 4)]
             public Vector4 Color;
 
-            [FieldOffset(12 * 4)]
+            [FieldOffset(13 * 4)]
             public Vector4 UvMinMax;
-
-            [FieldOffset(16 * 4)]
-            public float BirthTime;
-
+            
             [FieldOffset(17 * 4)]
-            public float Speed;
-
-            [FieldOffset(18 * 4)]
             public uint Id;
+            
+            [FieldOffset(18 * 4)]
+            public uint LineNumber;
+            
+            [FieldOffset(19 * 4)]
+            public Vector2 Offset;
+
+            private const int StructSize = 21 * 4;
         }
+        
+        // Inputs ----------------------------------------------------
+        [Input(Guid = "F2DD87B1-7F37-4B02-871B-B2E35972F246")]
+        public readonly InputSlot<string> Text = new InputSlot<string>();
+
+        [Input(Guid = "E827FDD1-20CA-473C-99EE-B839563690E9")]
+        public readonly InputSlot<string> Filepath = new InputSlot<string>();
+
+        [Input(Guid = "1CDE902D-5EAA-4144-B579-85F54717356B")]
+        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
+
+        [Input(Guid = "5008E9B4-083A-4494-8F7C-50FE5D80FC35")]
+        public readonly InputSlot<float> Size = new InputSlot<float>();
+
+        [Input(Guid = "E05E143E-8D4C-4DE7-8C9C-7FA7755009D3")]
+        public readonly InputSlot<float> Spacing = new InputSlot<float>();
+
+        [Input(Guid = "9EB4E13F-0FE3-4ED9-9DF1-814F075A05DA")]
+        public readonly InputSlot<float> LineHeight = new InputSlot<float>();
+
+        [Input(Guid = "C4F03392-FF7E-4B4A-8740-F93A581B2B6B")]
+        public readonly InputSlot<Vector2> Position = new InputSlot<Vector2>();
+
+        [Input(Guid = "FFD2233A-8F3E-426B-815B-8071E4C779AB")]
+        public readonly InputSlot<float> Slant = new InputSlot<float>();
+
+        [Input(Guid = "14829EAC-BA59-4D31-90DC-53C7FC56CC30")]
+        public readonly InputSlot<int> VerticalAlign = new InputSlot<int>();
+
+        [Input(Guid = "E43BC887-D425-4F9C-8A86-A32C761DE0CC")]
+        public readonly InputSlot<int> HorizontalAlign = new InputSlot<int>();        
     }
 }

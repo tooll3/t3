@@ -9,7 +9,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using Point = T3.Core.DataTypes.Point;
+using Point = T3.Core.DataStructures.Point;
 
 namespace T3.Operators.Types.Id_353f63fc_e613_43ca_b037_02d7b9f4e935
 {

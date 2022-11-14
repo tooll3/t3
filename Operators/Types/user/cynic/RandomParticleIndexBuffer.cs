@@ -49,7 +49,7 @@ namespace T3.Operators.Types.Id_6fae395d_c3a0_4693_a3dc_8959cda5a92b
                 }
             }
 
-            ResourceManager.Instance().SetupStructuredBuffer(_data, ref Buffer.Value);
+            ResourceManager.SetupStructuredBuffer(_data, ref Buffer.Value);
         }
 
         private ParticleIndex[] _data;

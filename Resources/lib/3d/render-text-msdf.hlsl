@@ -40,7 +40,7 @@ cbuffer Params : register(b1)
 {
     float4 Color;
     float4 Shadow;
-    float3 Params;
+    float3 TestParams;
 };
 
 struct GridEntry
@@ -52,15 +52,25 @@ struct GridEntry
     //float2 size;
     //float2 __filldummy;
 
-    float3 Position;
-    float Size;
-    float3 Orientation;
-    float AspectRatio;
-    float4 Color;
-    float4 UvMinMax;
-    float BirthTime;
-    float Speed;
-    uint Id;        
+    // float3 Position;
+    // float Size;
+    // float3 Orientation;
+    // float AspectRatio;
+    // float4 Color;
+    // float4 UvMinMax;
+    // float BirthTime;
+    // float Speed;
+    // uint Id;        
+
+    float3 Position;     
+    float Size;             // 3
+    float AspectRatio;      // 4
+    float4 Orientation;     // 5
+    float4 Color;           // 9
+    float4 UvMinMax;        // 13
+    uint CharIndex;         // 17
+    uint LineNumber;        // 18
+    float2 Offset;
 };
 
 struct Output
@@ -86,8 +96,18 @@ Output vsMain(uint id: SV_VertexID)
 
     GridEntry entry = GridEntries[entryIndex];
 
+
     float3 posInObject = entry.Position;
-    posInObject.xy += quadPos.xy * float2(entry.Size * entry.AspectRatio, entry.Size) ; //CellSize *  (1- CellPadding) * (1+overrideScale* OverrideScale) /2;
+    posInObject.xy += quadPos.xy * float2(entry.Size * entry.AspectRatio, entry.Size);
+
+    // Experimenting with aligned font scaling (not working)
+    // float2 posInQuad = quadPos.xy * float2(entry.Size * entry.AspectRatio, entry.Size);
+    // posInQuad -= entry.Offset / 1024 * TestParams.x + float2(0.5 * entry.AspectRatio, -0.22) * TestParams.z;
+    // posInQuad *= TestParams.y;
+    // posInQuad += entry.Offset / 1024 * TestParams.x - float2(0.25 * entry.AspectRatio, -1.22) * TestParams.z * TestParams.y;
+    // posInQuad -= 0.08;
+    // float3 posInObject = float3(posInQuad,0) + entry.Position;
+
 
     float4 quadPosInWorld = mul(float4(posInObject.xyz,1), ObjectToWorld);
     
@@ -119,8 +139,10 @@ float4 psMain(PsInput input) : SV_TARGET
 {    
     //float2 msdfUnit = float2(1,1) * 1;// pxRange/float2(textureSize(msdf, 0));
     float3 smpl1 =  fontTexture.Sample(texSampler, input.texCoord).rgb;
-    //float sigDist1 = median(smpl1.r, smpl1.g, smpl1.b) - 0.0001;
-    //float opacity1 = smoothstep(0.0,0.9,sigDist1*sigDist1);
+    //return float4(smpl1,1);
+    // float sigDist1 = median(smpl1.r, smpl1.g, smpl1.b) - 0.0001;
+    // float opacity1 = smoothstep(0.0,0.9,sigDist1*sigDist1);
+    //return float4(opacity1.xxx,1);
 
     int height, width;
     fontTexture.GetDimensions(width,height);
@@ -133,9 +155,10 @@ float4 psMain(PsInput input) : SV_TARGET
     float dy= max(dy2.x, dy2.y);
     float edge = rsqrt( dx * dx + dy * dy );
 
-    float toPixels = Params.x * edge ;
+    float toPixels = 16 * edge ;
     float sigDist = median( smpl1.r, smpl1.g, smpl1.b ) - 0.5;
     float letterShape = clamp( sigDist * toPixels + 0.5, 0.0, 1.0 );
+
 
     if(Shadow.a < 0.01) {
         return float4(Color.rgb, letterShape * Color.a);

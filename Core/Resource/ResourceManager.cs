@@ -207,7 +207,7 @@ namespace T3.Core
             uav = new UnorderedAccessView(Device, buffer, desc);
         }
 
-        public void SetupStructuredBuffer<T>(T[] bufferData, ref Buffer buffer) where T : struct
+        public static void SetupStructuredBuffer<T>(T[] bufferData, ref Buffer buffer) where T : struct
         {
             int stride = Marshal.SizeOf(typeof(T));
             int sizeInBytes = stride * bufferData.Length;
@@ -1042,7 +1042,7 @@ namespace T3.Core
 
         public static readonly Dictionary<uint, Resource> ResourcesById = new();
         
-        private readonly List<ShaderResourceViewResource> _shaderResourceViews = new();
+        private static readonly List<ShaderResourceViewResource> _shaderResourceViews = new();
         
         public const string ResourcesFolder = @"Resources";
 
