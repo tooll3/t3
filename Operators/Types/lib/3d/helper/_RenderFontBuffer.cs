@@ -4,6 +4,7 @@ using System.IO;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
+using Operators.Utils;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -15,16 +16,13 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
 {
     public class _RenderFontBuffer : Instance<_RenderFontBuffer>
     {
-
-
-        // Outputs ---------------------------------------------------------
-
         [Output(Guid = "3D2F53A3-F1F0-489B-B20B-BADB09CDAEBE")]
-        public readonly Slot<SharpDX.Direct3D11.Buffer> Buffer = new Slot<SharpDX.Direct3D11.Buffer>();
+        public readonly Slot<SharpDX.Direct3D11.Buffer> Buffer = new();
 
         [Output(Guid = "A0ECA9CE-35AA-497D-B5C9-CDE52A7C8D58")]
-        public readonly Slot<int> VertexCount = new Slot<int>();
+        public readonly Slot<int> VertexCount = new();
 
+        
         public _RenderFontBuffer()
         {
             Buffer.UpdateAction = Update;
@@ -32,41 +30,13 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
 
         private void Update(EvaluationContext context)
         {
-            InitializeFontDescription(context);
+            if (Filepath.DirtyFlag.IsDirty || _font == null)
+            {
+                var filepath = Filepath.GetValue(context);
+                _font = BmFontDescription.InitializeFromFile(filepath);
+            }
+            
             UpdateMesh(context);
-        }
-
-        private void InitializeFontDescription(EvaluationContext context)
-        {
-            if (!Filepath.DirtyFlag.IsDirty && _font != null)
-                return;
-
-            var filepath = Filepath.GetValue(context);
-            if (_fontDescriptions.ContainsKey(filepath))
-            {
-                _font = _fontDescriptions[filepath];
-                return;
-            }
-
-            Font bmFont;
-
-            var serializer = new XmlSerializer(typeof(Font));
-            try
-            {
-                var stream = new FileStream(filepath, FileMode.Open);
-                bmFont = (Font)serializer.Deserialize(stream);
-                Log.Debug("loaded font with character count:" + bmFont.Chars.Length);
-                stream.Close();
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Failed to load font {filepath} " + e + "\n" + e.Message);
-                return;
-            }
-
-            _font = new FontDescription(bmFont);
-
-            _fontDescriptions[filepath] = _font;
         }
 
         private void UpdateMesh(EvaluationContext context)
@@ -81,37 +51,35 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
                 return;
 
             var lineNumber = 0;
-            var horizontalAlign = (HorizontalAligns)HorizontalAlign.GetValue(context).Clamp(0, Enum.GetValues(typeof(HorizontalAligns)).Length -1);
-            var verticalAlign = (VerticalAligns)VerticalAlign.GetValue(context).Clamp(0, Enum.GetValues(typeof(VerticalAligns)).Length -1);
+            var horizontalAlign = (BmFontDescription.HorizontalAligns)HorizontalAlign.GetValue(context).Clamp(0, Enum.GetValues(typeof(BmFontDescription.HorizontalAligns)).Length -1);
+            var verticalAlign = (BmFontDescription.VerticalAligns)VerticalAlign.GetValue(context).Clamp(0, Enum.GetValues(typeof(BmFontDescription.VerticalAligns)).Length -1);
             
-            //var verticalAlign = VerticalAlign.GetValue(context);
             var characterSpacing = Spacing.GetValue(context);
             var lineHeight = LineHeight.GetValue(context);
-            var commonScaleH = (512.0 / _font.Font.Common.ScaleH);
-            var scaleFactor = 1.0 / _font.Font.Info.Size * 0.00185; 
+            var scaleFactor = 1.0 / _font.BmFont.Info.Size * 0.00185; 
             var size = (float)(Size.GetValue(context)  * scaleFactor); // Scaling to match 1080p 72DPI pt font sizes 
             var position = Position.GetValue(context);
 
             var numLinesInText = text.Split('\n').Length;
 
             var color = Color.GetValue(context);
-            float textureWidth = _font.Font.Common.ScaleW;
-            float textureHeight = _font.Font.Common.ScaleH;
+            float textureWidth = _font.BmFont.Common.ScaleW;
+            float textureHeight = _font.BmFont.Common.ScaleH;
             float cursorX = 0;
             float cursorY = 0;
             const float sdfWidth = 5f; // assumption after some experiments
 
             switch (verticalAlign)
             {
-                case VerticalAligns.Top:
-                    cursorY = _font.Font.Common.Base * (1 + sdfWidth / _font.Font.Info.Size);
+                case BmFontDescription.VerticalAligns.Top:
+                    cursorY = _font.BmFont.Common.Base * (1 + sdfWidth / _font.BmFont.Info.Size);
                     break;
-                case VerticalAligns.Middle:
-                    cursorY = _font.Font.Common.LineHeight * lineHeight * (numLinesInText - 1) / 2 + _font.Font.Common.LineHeight / 2f +
-                              _font.Font.Common.Base * (sdfWidth / _font.Font.Info.Size);
+                case BmFontDescription.VerticalAligns.Middle:
+                    cursorY = _font.BmFont.Common.LineHeight * lineHeight * (numLinesInText - 1) / 2 + _font.BmFont.Common.LineHeight / 2f +
+                              _font.BmFont.Common.Base * (sdfWidth / _font.BmFont.Info.Size);
                     break;
-                case VerticalAligns.Bottom:
-                    cursorY = _font.Font.Common.LineHeight * lineHeight * numLinesInText;
+                case BmFontDescription.VerticalAligns.Bottom:
+                    cursorY = _font.BmFont.Common.LineHeight * lineHeight * numLinesInText;
                     break;
             }
 
@@ -132,7 +100,7 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
                 {
                     AdjustLineAlignment();
 
-                    cursorY -= _font.Font.Common.LineHeight * lineHeight;
+                    cursorY -= _font.BmFont.Common.LineHeight * lineHeight;
                     cursorX = 0;
                     currentLineCharacterCount = 0;
                     lastChar = 0;
@@ -178,8 +146,6 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
                                                          (charInfo.X + charInfo.Width) / textureWidth, // uRight 
                                                          (charInfo.Y + charInfo.Height) / textureHeight // vBottom                              
                                                         ),
-                                  //BirthTime = (float)context.LocalTime,
-                                  //Speed = 0,
                                   Id = (uint)outputIndex,
                                   LineNumber = (uint)lineNumber,
                                   Offset = new Vector2(charInfo.XOffset, charInfo.YOffset),
@@ -203,10 +169,10 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             {
                 switch (horizontalAlign)
                 {
-                    case HorizontalAligns.Center:
+                    case BmFontDescription.HorizontalAligns.Center:
                         OffsetLineCharacters((cursorX / 2 - characterSpacing / 2) * size, currentLineCharacterCount, outputIndex);
                         break;
-                    case HorizontalAligns.Right:
+                    case BmFontDescription.HorizontalAligns.Right:
                         OffsetLineCharacters(cursorX * size, currentLineCharacterCount, outputIndex);
                         break;
                 }
@@ -225,49 +191,8 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             }
         }
 
-        private FontDescription _font;
-        private static readonly Dictionary<string, FontDescription> _fontDescriptions = new();
-
-        private class FontDescription
-        {
-            public FontDescription(Font bmFont)
-            {
-                Font = bmFont;
-
-                foreach (var c in bmFont.Chars)
-                {
-                    InfoForCharacter[c.Id] = c;
-                }
-
-                foreach (var kerning in bmFont.Kernings)
-                {
-                    var key = kerning.First << 16 | kerning.Second;
-                    var value = kerning.Amount;
-                    KerningForPairs[key] = value;
-                }
-            }
-
-            public readonly Font Font;
-            public readonly Dictionary<int, float> KerningForPairs = new();
-            public readonly Dictionary<int, FontChar> InfoForCharacter = new();
-        }
-
+        private BmFontDescription _font;
         private BufferLayout[] _bufferContent;
-
-        
-        public enum HorizontalAligns
-        {
-            Left,
-            Center,
-            Right,
-        }
-        
-        public enum VerticalAligns
-        {
-            Top,
-            Middle,
-            Bottom,
-        }
 
         [StructLayout(LayoutKind.Explicit, Size = StructSize)]
         public struct BufferLayout
@@ -304,33 +229,33 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
         
         // Inputs ----------------------------------------------------
         [Input(Guid = "F2DD87B1-7F37-4B02-871B-B2E35972F246")]
-        public readonly InputSlot<string> Text = new InputSlot<string>();
+        public readonly InputSlot<string> Text = new();
 
         [Input(Guid = "E827FDD1-20CA-473C-99EE-B839563690E9")]
-        public readonly InputSlot<string> Filepath = new InputSlot<string>();
+        public readonly InputSlot<string> Filepath = new();
 
         [Input(Guid = "1CDE902D-5EAA-4144-B579-85F54717356B")]
-        public readonly InputSlot<Vector4> Color = new InputSlot<Vector4>();
+        public readonly InputSlot<Vector4> Color = new();
 
         [Input(Guid = "5008E9B4-083A-4494-8F7C-50FE5D80FC35")]
-        public readonly InputSlot<float> Size = new InputSlot<float>();
+        public readonly InputSlot<float> Size = new();
 
         [Input(Guid = "E05E143E-8D4C-4DE7-8C9C-7FA7755009D3")]
-        public readonly InputSlot<float> Spacing = new InputSlot<float>();
+        public readonly InputSlot<float> Spacing = new();
 
         [Input(Guid = "9EB4E13F-0FE3-4ED9-9DF1-814F075A05DA")]
-        public readonly InputSlot<float> LineHeight = new InputSlot<float>();
+        public readonly InputSlot<float> LineHeight = new();
 
         [Input(Guid = "C4F03392-FF7E-4B4A-8740-F93A581B2B6B")]
-        public readonly InputSlot<Vector2> Position = new InputSlot<Vector2>();
+        public readonly InputSlot<Vector2> Position = new();
 
         [Input(Guid = "FFD2233A-8F3E-426B-815B-8071E4C779AB")]
-        public readonly InputSlot<float> Slant = new InputSlot<float>();
+        public readonly InputSlot<float> Slant = new();
 
         [Input(Guid = "14829EAC-BA59-4D31-90DC-53C7FC56CC30")]
-        public readonly InputSlot<int> VerticalAlign = new InputSlot<int>();
+        public readonly InputSlot<int> VerticalAlign = new();
 
         [Input(Guid = "E43BC887-D425-4F9C-8A86-A32C761DE0CC")]
-        public readonly InputSlot<int> HorizontalAlign = new InputSlot<int>();        
+        public readonly InputSlot<int> HorizontalAlign = new();        
     }
 }

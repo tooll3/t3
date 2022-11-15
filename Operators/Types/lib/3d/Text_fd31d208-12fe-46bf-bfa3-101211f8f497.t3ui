@@ -427,6 +427,61 @@
         "X": 9.762146,
         "Y": 109.20798
       }
+    },
+    {
+      "ChildId": "ed7824cd-9a79-4843-bab2-0428c58e6bf4"/*TextSprites*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 127.0
+      },
+      "Position": {
+        "X": 376.04935,
+        "Y": 1163.9191
+      }
+    },
+    {
+      "ChildId": "133566f3-715a-4020-a7fc-0a5fc52ff0fc"/*DrawPointSprites*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": 573.95026,
+        "Y": 1165.5605
+      }
+    },
+    {
+      "ChildId": "f007ebd1-a7c6-4241-b8e5-b2654eb9e020"/*Vector2ToFloat2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -25.148438,
+        "Y": 1188.6572
+      }
+    },
+    {
+      "ChildId": "9d325f56-2018-4359-aa82-7371ed99f74a"/*Float3ToVector3*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 136.64252,
+        "Y": 1198.5054
+      }
+    },
+    {
+      "ChildId": "f3f8736c-5233-48d0-83dd-c9c02f1bf3e1"/*DrawPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 802.24304,
+        "Y": 1464.568
+      }
     }
   ],
   "OutputUis": [
