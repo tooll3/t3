@@ -115,18 +115,21 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
             float textureHeight = _bmFont.BmFont.Common.ScaleH;
             float cursorX = 0;
             float cursorY = 0;
-            float sdfWidth = _bmFont.Padding.Left;
+            var verticalCenterOffset = _bmFont.Padding.Up + _bmFont.BmFont.Common.Base + _bmFont.Padding.Down - _bmFont.BmFont.Info.Size /2f;
 
             switch (verticalAlign)
             {
                 case BmFontDescription.VerticalAligns.Top:
-                    cursorY = _bmFont.BmFont.Common.Base * (1 + sdfWidth / _bmFont.BmFont.Info.Size);
+                    // an ugly approximation to the original text implementation
+                    cursorY = _bmFont.BmFont.Common.Base * (1 + _bmFont.Padding.Up / _bmFont.BmFont.Info.Size) - verticalCenterOffset;
                     break;
+                
                 case BmFontDescription.VerticalAligns.Middle:
                     cursorY = _bmFont.BmFont.Common.LineHeight * lineHeight * (numLinesInText - 1) / 2;
                     break;
+                
                 case BmFontDescription.VerticalAligns.Bottom:
-                    cursorY = _bmFont.BmFont.Common.LineHeight * lineHeight * numLinesInText;
+                    cursorY = _bmFont.BmFont.Common.LineHeight * lineHeight * (numLinesInText) - (verticalCenterOffset - offsetBaseLine);
                     break;
             }
 
@@ -169,7 +172,7 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
                 cursorX += _bmFont.GetKerning(lastCharId, charInfo.Id) *0;
 
 
-                var verticalCenterOffset = _bmFont.Padding.Up + _bmFont.BmFont.Common.Base + _bmFont.Padding.Down - _bmFont.BmFont.Info.Size /2f;
+
                 var charTopLeft = new Vector2(cursorX + charInfo.XOffset,
                                               cursorY + charInfo.YOffset);
 
@@ -180,7 +183,7 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
                                                        ) * scaleFactor;
 
                 var pivot = new Vector2(0,
-                                        charInfo.YOffset + charInfo.Height / 2f - verticalCenterOffset -  offsetBaseLine
+                                        charInfo.YOffset + charInfo.Height / 2f - verticalCenterOffset - offsetBaseLine
                                        );
                 pivot *= scaleFactor;
 
