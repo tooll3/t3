@@ -85,8 +85,8 @@ void main(uint3 i : SV_DispatchThreadID)
                                           : zeroAdjustedSize.x;
         pos.x+= offsetAndAngles.x * gridWidth.x * 0.3333;
 
-        const float HexScale = 0.578f;
-        pos.x *= HexScale * 3;
+        const float HexScale = sqrt(3.0);  //0.578f * 3;
+        pos.x *= HexScale;
         float rotDelta = (180 +offsetAndAngles.y ) * ToRad ;
 
         pos+= Center;
@@ -94,22 +94,29 @@ void main(uint3 i : SV_DispatchThreadID)
         ResultPoints[index].w = W *(2/3.0);
         ResultPoints[index].rotation = rotate_angle_axis(OrientationAngle*PI/180 + rotDelta, normalize(OrientationAxis));
         return;        
-        // bool isOdd = cell.x % 2 > 0;
-        // float3 verticalOffset= isOdd
-        //                     ? (0.331f * Size.y) 
-        //                     : 0;
-                            
-        // const float TriangleScale = 0.581f;
-        // float3 pos =float3((float) ((cell.x - c.x/2 + 0.5f) * Size.x * TriangleScale),
-        //                 (float) ((cell.y - c.y/2 + 0.5f) * Size.y + verticalOffset),
-        //                 (float) (0));
 
-        // float rotZ=  isOdd ? 60 * ToRad : 0;
-        // pos+= Center;
-        // ResultPoints[index].position = pos;
-        // ResultPoints[index].w = W;
+    }
 
-        // ResultPoints[index].rotation = rotate_angle_axis((OrientationAngle) *PI/180 + rotZ, normalize(OrientationAxis));
+    // Honeycomb
+    if(Tiling < 2.5) 
+    {
+        float3 gridSize = SizeMode > 0.5 ? zeroAdjustedSize/(c-1)
+                                          : zeroAdjustedSize;                                    
+        
+        bool isOddRow = cell.x % 2 > 0;
+        pos.y += isOddRow ? (gridSize.y / 2): 0;
+
+        bool isOddLayer = cell.z % 2 > 0;
+        pos.x += isOddLayer ? (gridSize.x * 0.45): 0;
+        pos.y += isOddLayer ? (gridSize.y / 2): 0;
+
+        pos.x *= sqrt(3.0)/2;
+        pos.z *= sqrt(3.0)/2;
+        pos+= Center;
+        ResultPoints[index].position = pos;
+        ResultPoints[index].w = W;
+
+        ResultPoints[index].rotation = rotate_angle_axis((OrientationAngle) *PI/180, normalize(OrientationAxis));
     }
 }
 

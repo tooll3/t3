@@ -71,8 +71,7 @@ namespace T3.Operators.Types.Id_3ee8f66d_68df_43c1_b0eb_407259bf7e86
         {
             Cartesian,
             Triangular,
-            HoneyCombs,
-            ChamferedHexagons,
+            HoneyCombs
         }
     }
 }
