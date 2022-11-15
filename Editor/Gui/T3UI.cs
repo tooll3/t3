@@ -15,6 +15,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Rendering;
@@ -94,6 +95,7 @@ namespace T3.Editor.Gui
             }
             
             _userNameDialog.Draw();
+            _createFromTemplateDialog.Draw();
             
             if (!UserSettings.IsUserNameDefined() )
             {
@@ -104,7 +106,7 @@ namespace T3.Editor.Gui
             _autoBackup.CheckForSave();
         }
         
-        private static readonly UserNameDialog _userNameDialog = new();
+
 
         private void TriggerGlobalActionsFromKeyBindings()
         {
@@ -139,6 +141,11 @@ namespace T3.Editor.Gui
                 if (ImGui.BeginMenu("File"))
                 {
                     UserSettings.Config.ShowMainMenu = true;
+
+                    if (ImGui.MenuItem("New...", KeyboardBinding.ListKeyboardShortcuts(UserActions.New, false), false, !IsCurrentlySaving))
+                    {
+                        _createFromTemplateDialog.ShowNextFrame();
+                    }
                     
                     if (ImGui.MenuItem("Save", KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !IsCurrentlySaving))
                     {
@@ -374,6 +381,9 @@ namespace T3.Editor.Gui
         public static bool IsCurrentlySaving => _saveStopwatch != null && _saveStopwatch.IsRunning;
 
         private static readonly AutoBackup.AutoBackup _autoBackup = new();
+        
+        private static readonly CreateFromTemplateDialog _createFromTemplateDialog = new();
+        private static readonly UserNameDialog _userNameDialog = new();
 
         [Flags]
         public enum EditingFlags
@@ -386,7 +396,6 @@ namespace T3.Editor.Gui
         }
 
         public static bool UseVSync = true;
-        public static bool WindowRegionsVisible;
         public static bool ItemRegionsVisible;
     }
 }

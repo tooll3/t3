@@ -11,7 +11,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
 {
     public class DuplicateSymbolDialog : ModalDialog
     {
-        public void Draw(Instance compositionOp, List<SymbolChildUi> selectedChildUis, ref string nameSpace, ref string combineName, ref string description)
+        public void Draw(Instance compositionOp, List<SymbolChildUi> selectedChildUis, ref string nameSpace, ref string newTypeName, ref string description)
         {
             DialogSize = new Vector2(500, 280);
 
@@ -39,7 +39,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     if (ImGui.IsWindowAppearing())
                         ImGui.SetKeyboardFocusHere();
 
-                    ImGui.InputText("##name", ref combineName, 255);
+                    ImGui.InputText("##name", ref newTypeName, 255);
 
                     CustomComponents.HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
                     ImGui.Spacing();
@@ -54,14 +54,12 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.InputTextMultiline("##description", ref description, 1024, new Vector2(450, 60));
                 }
 
-                if (CustomComponents.DisablableButton("Duplicate", NodeOperations.IsNewSymbolNameValid(combineName), enableTriggerWithReturn:false))
+                if (CustomComponents.DisablableButton("Duplicate", NodeOperations.IsNewSymbolNameValid(newTypeName), enableTriggerWithReturn:false))
                 {
                     var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
-                    NodeOperations.DuplicateAsNewType(compositionSymbolUi,
-                                                      selectedChildUis.First().SymbolChild,
-                                                      newTypeName: combineName,
-                                                      nameSpace: nameSpace,
-                                                      description);
+                    var position = selectedChildUis.First().PosOnCanvas + new Vector2(0, 100);
+                    
+                    NodeOperations.DuplicateAsNewType(compositionSymbolUi, selectedChildUis.First().SymbolChild.Symbol.Id, newTypeName, nameSpace, description, position);
                     ImGui.CloseCurrentPopup();
                 }
 

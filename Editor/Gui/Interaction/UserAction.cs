@@ -19,6 +19,7 @@ namespace T3.Editor.Gui.Interaction
         DeleteSelection,
         CopyToClipboard,
         PasteFromClipboard,
+        New,
         
         // Playback
         PlaybackForward,

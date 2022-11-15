@@ -36,7 +36,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                     RequiredFilePaths = new List<string>()
                                             {  
                                                 LayoutHandling.LayoutPath + "layout1.json",
-                                                @"T3\bin\Release\net6.0-windows\bass.dll",
+                                                @"Editor\bin\Release\net6.0-windows\bass.dll",
                                             },
                     Message = "Please run Install/install.bat.",
                     URL = "https://github.com/still-scene/t3/wiki/installation#setup-and-installation",

@@ -51,7 +51,7 @@ namespace T3.Editor.Gui.UiHelpers
 
 
             ImGui.SetNextWindowSize(DialogSize, ImGuiCond.FirstUseEver);
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(20, 20));
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(Padding, Padding));
 
             if (!ImGui.BeginPopupModal(title))
                 return false;
@@ -78,6 +78,7 @@ namespace T3.Editor.Gui.UiHelpers
         }
 
         private bool _shouldShowNextFrame;
-        protected Vector2 DialogSize = new Vector2(500, 250);
+        protected Vector2 DialogSize = new(500, 250);
+        protected float Padding = 20;
     }
 }

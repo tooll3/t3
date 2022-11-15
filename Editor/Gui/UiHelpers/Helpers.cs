@@ -49,22 +49,7 @@ namespace T3.Editor.Gui.UiHelpers
             if (T3Ui.ItemRegionsVisible)
                 DebugRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color, label);
         }
-
-        public static void DebugWindowRect(string label = "", uint color = 0xffff2080)
-        {
-            if (T3Ui.WindowRegionsVisible)
-                DebugRect(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), color, label);
-        }
-
-        public static void DebugContentRect(string label = "", uint color = 0xff804080)
-        {
-            if (!T3Ui.WindowRegionsVisible)
-                return;
-
-            var min = ImGui.GetWindowContentRegionMin();
-            var max = ImGui.GetWindowContentRegionMax();
-            DebugRect(ImGui.GetWindowPos() + min, ImGui.GetWindowPos() + max, color, label);
-        }
+        
 
         public static ImRect GetContentRegionArea()
         {

@@ -53,7 +53,8 @@ namespace T3.Editor.Gui.OutputUi
                                           context.BackgroundColor.Z,
                                           context.BackgroundColor.W);
             deviceContext.ClearRenderTargetView(_colorBufferRtv, colorRgba);
-            deviceContext.ClearDepthStencilView(_depthBufferDsv, DepthStencilClearFlags.Depth, 1.0f, 0);
+            if(_depthBufferDsv != null)
+                deviceContext.ClearDepthStencilView(_depthBufferDsv, DepthStencilClearFlags.Depth, 1.0f, 0);
             
             // evaluate the op
             slot.Update(context);

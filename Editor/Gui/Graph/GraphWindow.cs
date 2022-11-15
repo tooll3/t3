@@ -180,8 +180,7 @@ namespace T3.Editor.Gui.Graph
             _imageBackground.Draw();
 
             ImGui.SetCursorPos(Vector2.Zero);
-            THelpers.DebugContentRect("window");
-            
+
             if (_imageBackground.IsActive && TransformGizmoHandling.IsDragging)
                 return;
             

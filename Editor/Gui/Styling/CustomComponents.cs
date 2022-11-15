@@ -498,7 +498,7 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
 
-        public static bool DrawStringParameter(string label, ref string value)
+        public static bool DrawStringParameter(string label, ref string value, string placeHolder = null)
         {
             const float leftPadding = 200;
             var labelSize = ImGui.CalcTextSize(label);
@@ -526,6 +526,16 @@ namespace T3.Editor.Gui.Styling
             var modified = ImGui.InputText("##" + label, ref value, 1000);
             if (!modified && wasNull)
                 value = null;
+
+            if (string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(placeHolder))
+            {
+                var drawList = ImGui.GetWindowDrawList();
+                var minPos = ImGui.GetItemRectMin();
+                var maxPos = ImGui.GetItemRectMax();
+                drawList.PushClipRect(minPos,maxPos);
+                drawList.AddText(minPos + new Vector2(3,3), Color.White.Fade(0.25f), placeHolder);
+                drawList.PopClipRect();
+            }
             
             return modified;
         }

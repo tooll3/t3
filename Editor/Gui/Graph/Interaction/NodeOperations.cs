@@ -458,10 +458,17 @@ namespace T3.Editor.Gui.Graph.Interaction
             public int MultiInputIndex { get; set; }
         }
 
-        public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate, string newTypeName, string nameSpace,
-                                                string description)
+        // public static Symbol DuplicateAsNewType(SymbolUi compositionUi, SymbolChild symbolChildToDuplicate, string newTypeName, string nameSpace,
+        //                                         string description)
+        public static Symbol DuplicateAsNewType(SymbolUi compositionUi, Guid symbolId, string newTypeName, string nameSpace,
+                                                string description, Vector2 posOnCanvas)
         {
-            var sourceSymbol = symbolChildToDuplicate.Symbol;
+            if(!SymbolRegistry.Entries.TryGetValue(symbolId, out var sourceSymbol))
+            {
+                Log.Warning("Can't find symbol to duplicate");
+                return null;
+            }
+            //var sourceSymbol = symbolChildToDuplicate.Symbol;
 
             var syntaxTree = GetSyntaxTree(sourceSymbol);
             if (syntaxTree == null)
@@ -560,19 +567,19 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
 
             // Create instance
-            var mousePos = GraphCanvas.Current.InverseTransformPositionFloat(ImGui.GetMousePos());
-            var addCommand = new AddSymbolChildCommand(compositionUi.Symbol, newSymbol.Id) { PosOnCanvas = mousePos };
+            //var mousePos = GraphCanvas.Current.InverseTransformPositionFloat(ImGui.GetMousePos());
+            var addCommand = new AddSymbolChildCommand(compositionUi.Symbol, newSymbol.Id) { PosOnCanvas = posOnCanvas };
             UndoRedoStack.AddAndExecute(addCommand);
 
             var newSymbolChild = compositionUi.Symbol.Children.Find(child => child.Id == addCommand.AddedChildId);
             var newSymbolInputValues = newSymbolChild.InputValues;
 
-            foreach (var (id, input) in symbolChildToDuplicate.InputValues)
-            {
-                var newInput = newSymbolInputValues[oldToNewIdMap[id]];
-                newInput.Value.Assign(input.Value.Clone());
-                newInput.IsDefault = input.IsDefault;
-            }
+            // foreach (var (id, input) in symbolChildToDuplicate.InputValues)
+            // {
+            //     var newInput = newSymbolInputValues[oldToNewIdMap[id]];
+            //     newInput.Value.Assign(input.Value.Clone());
+            //     newInput.IsDefault = input.IsDefault;
+            // }
 
             // Update the positions
             var sourceSelectables = sourceSymbolUi.GetSelectables().ToArray();
@@ -657,7 +664,15 @@ namespace T3.Editor.Gui.Graph.Interaction
         }
 
         private static readonly Regex _validTypeNamePattern = new Regex("^[A-Za-z_]+[A-Za-z0-9_]*$");
-        
+
+        public static bool IsNameSpaceValid(string nameSpaceString)
+        {
+            return !string.IsNullOrEmpty(nameSpaceString)
+                   && _validTypeNameSpacePattern.IsMatch(nameSpaceString);
+        }
+
+        private static readonly Regex _validTypeNameSpacePattern = new Regex(@"^(@?[a-z_A-Z]\w+(?:\.@?[a-z_A-Z]\w+)*);$");
+
         public static bool IsValidUserName(string userName)
         {
             return _validUserNamePattern.IsMatch(userName);
