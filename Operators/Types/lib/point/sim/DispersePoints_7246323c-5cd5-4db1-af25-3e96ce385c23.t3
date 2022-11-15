@@ -17,7 +17,7 @@
     },
     {
       "Id": "dbb567d1-0b9d-4848-afe5-99b0ec436934"/*CellSize*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.92
     },
     {
       "Id": "7cc4cb31-81aa-40c4-a439-5c2ee5ca2868"/*ClampAccelleration*/,
