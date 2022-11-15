@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using T3.Core;
 using T3.Core.Logging;
 
-namespace StartEditor
+namespace T3.StartEditor
 {
     /// <summary>
     /// Rebuilds Operators.dll 

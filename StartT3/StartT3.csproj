@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
-    <RootNamespace>StartEditor</RootNamespace>
+    <RootNamespace>T3.StartEditor</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

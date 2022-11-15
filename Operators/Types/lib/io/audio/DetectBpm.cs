@@ -8,7 +8,7 @@ namespace T3.Operators.Types.Id_e712e801_863d_45c5_9ef8_fbe90dcb8375
 {
     /// <summary>
     /// This is an older implementation. A slighted updated
-    /// algorithm can be found in <see cref="T3.Gui.Interaction.Timing.BpmDetection"/>
+    /// algorithm can be found in <see cref="Editor.Gui.Interaction.Timing.BpmDetection"/>
     /// </summary>
     public class DetectBpm : Instance<DetectBpm>
     {

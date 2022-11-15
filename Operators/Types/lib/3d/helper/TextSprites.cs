@@ -82,10 +82,10 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
         private void UpdateMesh(EvaluationContext context)
         {
             var text = Text.GetValue(context);
-            if (string.IsNullOrEmpty(text))
-            {
-                text = " ";
-            }
+            // if (string.IsNullOrEmpty(text))
+            // {
+            //     text = " ";
+            // }
 
             if (_bmFont == null)
                 return;

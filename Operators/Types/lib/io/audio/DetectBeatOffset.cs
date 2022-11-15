@@ -11,7 +11,7 @@ namespace T3.Operators.Types.Id_1fa651c8_ab73_4ca0_9506_84602bbf2fcb
 {
     /// <summary>
     /// This is an older implementation. A slighted updated
-    /// algorithm can be found in <see cref="T3.Gui.Interaction.Timing.BpmDetection"/>
+    /// algorithm can be found in <see cref="Editor.Gui.Interaction.Timing.BpmDetection"/>
     /// </summary>
     public class DetectBeatOffset : Instance<DetectBeatOffset>
     {
