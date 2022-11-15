@@ -41,7 +41,7 @@
     },
     {
       "Id": "4ac28e13-fac9-4f1a-9aa7-e564a0d57e93"/*Round*/,
-      "DefaultValue": 0.5
+      "DefaultValue": 0.0
     },
     {
       "Id": "4d9bfddb-901e-4524-a99c-ba594d317e8a"/*Feather*/,
@@ -60,7 +60,7 @@
     },
     {
       "Id": "7613bc20-d400-440d-b6a5-5f60ce61a33c"/*Rotate*/,
-      "DefaultValue": 0.0
+      "DefaultValue": -90.0
     },
     {
       "Id": "e7a99144-1f59-42ae-bdac-906ca1e54e0d"/*Sides*/,

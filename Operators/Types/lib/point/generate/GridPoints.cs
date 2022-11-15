@@ -58,10 +58,21 @@ namespace T3.Operators.Types.Id_3ee8f66d_68df_43c1_b0eb_407259bf7e86
         [Input(Guid = "9748853e-5f13-45c9-bca6-d07b07185aab", MappedType = typeof(SizeModes))]
         public readonly InputSlot<int> SizeMode = new InputSlot<int>();
 
+        [Input(Guid = "4686AA6E-C8E0-45EE-B9C3-1CC7294F305E", MappedType = typeof(Tilings))]
+        public readonly InputSlot<int> Tiling = new InputSlot<int>();
+
         private enum SizeModes
         {
             Cell,
             Bounds,
+        }
+        
+        private enum Tilings
+        {
+            Cartesian,
+            Triangular,
+            HoneyCombs,
+            ChamferedHexagons,
         }
     }
 }

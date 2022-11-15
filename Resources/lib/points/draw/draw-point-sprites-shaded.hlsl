@@ -74,6 +74,7 @@ struct psInput
     float4 position : SV_POSITION;
     float3 worldPosition : POSITION;
     float3x3 tbnToWorld : TBASIS;    
+    float4 color : COLOR;
     float fog:VPOS;
 };
 
@@ -107,7 +108,7 @@ psInput vsMain(uint id: SV_VertexID)
     Point p = Points[entryIndex];
 
     float3 quadCorners = Corners[vertexIndex];
-    float3 posInObject =  (-float3(sprite.Pivot, 0) + quadCorners * float3(sprite.Size,0)) * Size;
+    float3 posInObject =  (-float3(sprite.Pivot, 0) + quadCorners * float3(sprite.Size,0)) * Size * p.w;
 
     float4x4 orientationMatrix = transpose(quaternion_to_matrix(p.rotation));
     posInObject = mul( float4(posInObject.xyz, 1), orientationMatrix);
@@ -136,6 +137,8 @@ psInput vsMain(uint id: SV_VertexID)
 
     float4 uv = float4(sprite.UvMin, sprite.UvMax) * UV[vertexIndex];
     output.texCoord =  uv.xy + uv.zw;
+
+    output.color = sprite.Color * Color;
 
     // Fog
     float4 posInCamera = mul(float4(posInObject,1), ObjectToCamera);
@@ -183,7 +186,6 @@ float4 psMain(psInput psInput) : SV_TARGET
 
     // Get current fragment's normal and transform to world space.
     float3 N = lerp(float3(0,0,1),  normalize(2.0 * NormalMap.Sample(texSampler, psInput.texCoord).rgb - 1.0), normalStrength);
-
 
     //return float4(psInput.tbnToWorld[0],1);
     N = normalize(mul(N,psInput.tbnToWorld));
@@ -298,5 +300,5 @@ float4 psMain(psInput psInput) : SV_TARGET
     litColor.rgb = lerp(litColor.rgb, FogColor.rgb, psInput.fog);
     litColor += float4(EmissiveColorMap.Sample(texSampler, psInput.texCoord).rgb * EmissiveColor.rgb, 0);
     litColor.a *= albedo.a;
-    return litColor;
+    return litColor * psInput.color;
 }

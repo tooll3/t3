@@ -90,11 +90,11 @@ void main(uint3 i : SV_DispatchThreadID)
     // Hexa-pattern
     else if(Pattern == 2)
     {
-        bool isOddColumn = index.x % 2 == 0;
-        bool isOddRow = cell.y % 2 > 0;
-        bool isOddLayer = cell.z % 2 > 0;
+        // bool isOddColumn = index.x % 2 == 0;
+        // bool isOddRow = cell.y % 2 > 0;
+        // bool isOddLayer = cell.z % 2 > 0;
         
-        bool isOdd2Column = index.x % 4 == 0;
+        // bool isOdd2Column = index.x % 4 == 0;
 
         float3 pos = SizeMode > 0.5 ? zeroAdjustedSize * (cell / clampedCount) - zeroAdjustedSize * (Pivot  + 0.5)
                                     : zeroAdjustedSize * cell - zeroAdjustedSize * clampedCount * (Pivot  + 0.5);
