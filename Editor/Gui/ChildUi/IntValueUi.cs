@@ -1,12 +1,14 @@
 ﻿using System.Linq;
 using System.Numerics;
+using Editor.Gui;
 using Editor.Gui.Styling;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_cc07b314_4582_4c2c_84b8_bb32f59fc09b;
 using UiHelpers;
 
-namespace Editor.Gui.ChildUi
+namespace T3.Editor.Gui.ChildUi
 {
     public static class IntValueUi
     {

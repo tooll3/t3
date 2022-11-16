@@ -4,9 +4,9 @@ using System.Linq;
 using System.Numerics;
 using Editor.Gui;
 using Editor.Gui.Commands;
-using Editor.Gui.Selection;
+using T3.Editor.Gui.Selection;
 
-namespace Editor.Gui.Commands.Graph
+namespace T3.Editor.Gui.Commands.Graph
 {
     public class ModifyCanvasElementsCommand : ICommand
     {

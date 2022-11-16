@@ -7,6 +7,7 @@ using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
+using T3.Editor.Gui.UiHelpers;
 using UiHelpers;
 
 namespace Editor.Gui.Interaction.WithCurves

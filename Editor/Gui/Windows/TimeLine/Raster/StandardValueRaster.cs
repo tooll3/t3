@@ -5,6 +5,7 @@ using Editor.Gui.Interaction.Snapping;
 using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows.TimeLine.Raster;
 using T3.Core.Animation;
+using T3.Editor.Gui.Interaction.Snapping;
 
 namespace Editor.Gui.Windows.TimeLine
 {

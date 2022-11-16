@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Numerics;
+using Editor.Gui;
+using Editor.Gui.Commands;
 using T3.Core.Operator;
-using Editor.Gui.Graph;
 
-namespace Editor.Gui.Commands
+namespace T3.Editor.Gui.Commands.Graph
 {
     public class AddSymbolChildCommand : ICommand
     {

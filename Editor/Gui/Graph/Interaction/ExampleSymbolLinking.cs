@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Editor.Gui;
 using T3.Core.Logging;
 
-namespace Editor.Gui.Graph.Interaction
+namespace T3.Editor.Gui.Graph.Interaction
 {
     public static class ExampleSymbolLinking
     {

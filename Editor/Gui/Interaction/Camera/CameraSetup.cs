@@ -1,5 +1,6 @@
 using System.Numerics;
 using T3.Core.Operator.Interfaces;
+using T3.Editor.Gui.Interaction.Camera;
 
 namespace Editor.Gui.Interaction.Camera
 {

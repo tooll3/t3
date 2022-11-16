@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using T3.Core.Logging;
-using T3.Core.Operator;
 using Editor.Gui;
 using Editor.Gui.Commands;
 using Editor.Gui.Graph;
+using T3.Core.Logging;
+using T3.Core.Operator;
+using T3.Editor.Gui.Graph;
 
-namespace Editor.Gui.Commands.Graph
+namespace T3.Editor.Gui.Commands.Graph
 {
     public class CopySymbolChildrenCommand : ICommand
     {

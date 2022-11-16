@@ -4,6 +4,7 @@ using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.Logging;
+using T3.Core.Resource;
 
 namespace T3.Core.DataTypes
 {

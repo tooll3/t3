@@ -2,13 +2,14 @@ using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_935e6597_3d9f_4a79_b4a6_600e8f28861e
 {
     public class GridPlane : Instance<GridPlane>
     {
         [Output(Guid = "1eb82dc0-2e66-4c3c-a3e8-1b246886e59f")]
-        public readonly Slot<T3.Core.Command> Output = new Slot<T3.Core.Command>();
+        public readonly Slot<Command> Output = new Slot<Command>();
 
         [Input(Guid = "c0f652b8-80fb-4bd2-b6cd-cfc459f9fcc5")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();

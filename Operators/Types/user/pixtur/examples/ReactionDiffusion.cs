@@ -3,6 +3,7 @@ using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_4315fe6a_dacd_4eef_814d_256edffb29ff
 {
@@ -27,7 +28,7 @@ namespace T3.Operators.Types.Id_4315fe6a_dacd_4eef_814d_256edffb29ff
         public readonly InputSlot<float> ReactionSpeed = new InputSlot<float>();
 
         [Input(Guid = "fd68e8b8-e773-45c9-a325-67d239cb9859")]
-        public readonly MultiInputSlot<T3.Core.Command> Command = new MultiInputSlot<T3.Core.Command>();
+        public readonly MultiInputSlot<Command> Command = new MultiInputSlot<Command>();
 
         [Input(Guid = "28469baf-2c2f-46a6-8c88-c5e3a37ba5fc")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> FxTexture = new InputSlot<SharpDX.Direct3D11.Texture2D>();

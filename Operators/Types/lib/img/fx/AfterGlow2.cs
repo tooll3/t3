@@ -2,6 +2,7 @@ using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_04ac6a30_a2ad_4e43_8954_94dc852b0602
 {
@@ -11,7 +12,7 @@ namespace T3.Operators.Types.Id_04ac6a30_a2ad_4e43_8954_94dc852b0602
         public readonly Slot<Texture2D> Output = new Slot<Texture2D>();
 
         [Output(Guid = "bba87b99-0d84-4710-b080-887f38860318")]
-        public readonly Slot<T3.Core.Command> CombinedLayers = new Slot<T3.Core.Command>();
+        public readonly Slot<Command> CombinedLayers = new Slot<Command>();
 
 
         [Input(Guid = "f06e5ede-f7ff-48ed-b2cf-9a87ef5932ec")]

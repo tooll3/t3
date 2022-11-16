@@ -10,9 +10,11 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using Core.Audio;
 using T3.Core.Animation;
-using ResourceManager = T3.Core.ResourceManager;
+using T3.Core.Audio;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using ResourceManager = T3.Core.Resource.ResourceManager;
 
 namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
 {

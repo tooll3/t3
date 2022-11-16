@@ -1,4 +1,4 @@
-namespace Editor.Gui.Interaction.Camera
+namespace T3.Editor.Gui.Interaction.Camera
 {
     public static class CameraInteractionParameters
     {

@@ -4,7 +4,6 @@ using Editor.Gui.Graph.Interaction;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Logging;
-using Editor.Gui.Selection;
 
 namespace Editor.Gui.Graph
 {

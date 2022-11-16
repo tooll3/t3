@@ -2,12 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using Editor.Gui;
+using Editor.Gui.Windows;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
+using T3.Core.Resource;
+using T3.Core.Utils;
 
-namespace Editor.Gui.Windows
+namespace T3.Editor.Gui.Windows
 {
     public abstract class RenderHelperWindow : Window
     {

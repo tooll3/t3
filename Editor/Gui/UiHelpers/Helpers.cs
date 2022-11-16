@@ -1,11 +1,12 @@
-using ImGuiNET;
 using System.Numerics;
-using T3.Core;
-using T3.Core.Logging;
 using Editor.Gui;
-using Editor.Gui.Windows;
+using ImGuiNET;
+using T3.Core;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.Styling;
 
-namespace UiHelpers
+namespace T3.Editor.Gui.UiHelpers
 {
     /// <summary>
     /// A collection of helper and debug function for IMGUI development

@@ -1,14 +1,15 @@
-﻿using SharpDX.Direct3D11;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Editor.Gui.Windows;
 using ImGuiNET;
 using SharpDX;
+using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
-namespace Editor.Gui.OutputUi
+namespace T3.Editor.Gui.OutputUi
 {
     public class Texture3dOutputUi : OutputUi<Texture3dWithViews>
     {

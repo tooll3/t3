@@ -41,7 +41,9 @@ using SharpDX.DXGI;
 using SharpDX.WIC;
 using T3.Core;
 using T3.Core.Logging;
-
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.Windows;
 using MF = SharpDX.MediaFoundation;
 
 

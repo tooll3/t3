@@ -2,6 +2,9 @@
 using Editor.Gui.Interaction.LegacyVariations.Model;
 using NAudio.Midi;
 using T3.Core.Logging;
+using T3.Editor.Gui.Interaction.LegacyVariations;
+using T3.Editor.Gui.Interaction.LegacyVariations.Midi;
+using T3.Editor.Gui.Interaction.LegacyVariations.Midi.CommandProcessing;
 
 //using T3.Gui.Interaction.VariationHandling.InputCommands;
 

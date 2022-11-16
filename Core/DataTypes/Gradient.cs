@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Resource;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SharpDX.WIC;
 using T3.Core.Logging;
+using T3.Core.Resource;
+using T3.Core.Utils;
 using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core.DataTypes

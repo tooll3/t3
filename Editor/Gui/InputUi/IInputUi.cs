@@ -1,11 +1,12 @@
 ﻿using System;
-using Editor.Gui.Selection;
+using Editor.Gui;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Editor.Gui.Selection;
 
-namespace Editor.Gui.InputUi
+namespace T3.Editor.Gui.InputUi
 {
     [Flags]
     public enum InputEditStateFlags

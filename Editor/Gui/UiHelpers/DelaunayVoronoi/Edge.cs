@@ -1,4 +1,6 @@
-﻿namespace DelaunayVoronoi
+﻿using DelaunayVoronoi;
+
+namespace T3.Editor.Gui.UiHelpers.DelaunayVoronoi
 {
     public class Edge
     {

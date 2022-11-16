@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Numerics;
-using T3.Core;
 
-namespace Core.Resource
+namespace T3.Core.Utils
 {
     /**
      * Helper methods to deal with OkLab color space. This can be useful for nicer blending of gradients

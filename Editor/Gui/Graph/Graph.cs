@@ -5,12 +5,17 @@ using System.Linq;
 using System.Numerics;
 using Editor.Gui.InputUi;
 using Editor.Gui.OutputUi;
-using Editor.Gui.TypeColors;
 using Editor.Gui.UiHelpers;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using Editor.Gui.Graph.Interaction;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.OutputUi;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using Truncon.Collections;
 using UiHelpers;
 

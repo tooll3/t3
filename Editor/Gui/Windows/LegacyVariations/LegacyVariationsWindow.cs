@@ -13,6 +13,12 @@ using T3.Core.Operator;
 using Editor.Gui;
 using Editor.Gui.Styling;
 using Editor.Gui.Windows;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.Interaction.LegacyVariations;
+using T3.Editor.Gui.Interaction.LegacyVariations.Model;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.Windows;
 
 namespace Editor.Gui.Windows.Variations
 {

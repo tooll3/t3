@@ -13,7 +13,13 @@ using Editor.Gui.Windows.Layouts;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Dialogs;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.Windows;
 
 namespace Editor.Gui.Windows
 {

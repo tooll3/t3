@@ -8,6 +8,7 @@ using Newtonsoft.Json.Converters;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.IO;
+using T3.Editor.Gui.Interaction;
 
 namespace Editor.Gui.UiHelpers
 {

@@ -9,6 +9,7 @@ using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using Editor.Gui.Interaction.Camera;
+using T3.Core.Resource;
 using T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6;
 
 namespace Editor.Gui.Windows.Output

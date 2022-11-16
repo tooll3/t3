@@ -6,6 +6,8 @@ using Editor.Gui.Interaction.Snapping;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Logging;
+using T3.Editor.Gui.Interaction.Snapping;
+using T3.Editor.Gui.Styling;
 using UiHelpers;
 
 namespace Editor.Gui.Windows.TimeLine

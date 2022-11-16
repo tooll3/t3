@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Core.Audio;
+using T3.Core.Audio;
 using T3.Core.Logging;
 
 namespace Editor.Gui.Audio

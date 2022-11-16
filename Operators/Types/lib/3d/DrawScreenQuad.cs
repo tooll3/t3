@@ -2,6 +2,7 @@ using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 using T3.Operators.Types.Id_fd9bffd3_5c57_462f_8761_85f94c5a629b;
 
 namespace T3.Operators.Types.Id_5a2752e8_95ae_4d76_b903_1f52ef43bcdc
@@ -9,7 +10,7 @@ namespace T3.Operators.Types.Id_5a2752e8_95ae_4d76_b903_1f52ef43bcdc
     public class DrawScreenQuad : Instance<DrawScreenQuad>
     {
         [Output(Guid = "3c8116a2-2686-41ba-8bfd-d1b3fb929b02")]
-        public readonly Slot<T3.Core.Command> Output = new Slot<T3.Core.Command>();
+        public readonly Slot<Command> Output = new Slot<Command>();
 
         [Input(Guid = "92c66734-dce9-402a-95f6-cde0e58bf32f")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new InputSlot<SharpDX.Direct3D11.Texture2D>();

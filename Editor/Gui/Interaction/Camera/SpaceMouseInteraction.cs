@@ -3,7 +3,10 @@ using SharpDX;
 using Editor;
 using T3.Core;
 using Editor.Gui.UiHelpers;
+using T3.Core.Resource;
+using T3.Core.Utils;
 using T3.Editor;
+using T3.Editor.Gui.Interaction.Camera;
 
 namespace Editor.Gui.Interaction.Camera
 {

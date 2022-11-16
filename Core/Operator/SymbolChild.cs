@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ManagedBass.DirectX8;
-using Newtonsoft.Json;
-using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 
 namespace T3.Core.Operator

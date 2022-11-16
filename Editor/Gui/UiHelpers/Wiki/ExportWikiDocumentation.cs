@@ -7,6 +7,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using Editor.Gui;
 using Editor.Gui.InputUi;
+using T3.Editor.Gui.InputUi;
 
 namespace Editor.Gui.UiHelpers.Wiki
 {

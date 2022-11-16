@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using T3.Core;
+using T3.Core.Resource;
+using T3.Core.Utils;
 
-namespace Editor.Gui.Interaction.Timing
+namespace T3.Editor.Gui.Interaction.Timing
 {
     public class BpmDetection
     {

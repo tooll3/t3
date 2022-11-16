@@ -6,7 +6,12 @@ using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using Editor.Gui.Commands.Graph;
+using T3.Core.Operator.Slots;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Interaction.LegacyVariations.Model;
 
 namespace Editor.Gui.Interaction.LegacyVariations.Model
 {

@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using Editor.Gui;
+using Editor.Gui.Commands;
 using Editor.Gui.Graph;
+using T3.Editor.Gui.Graph;
 
-namespace Editor.Gui.Commands
+namespace T3.Editor.Gui.Commands.Annotations
 {
     public class AddAnnotationCommand : ICommand
     {

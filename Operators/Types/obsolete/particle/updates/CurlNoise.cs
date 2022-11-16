@@ -2,13 +2,14 @@ using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_0e553db8_9621_45e2_b871_736b7630bf1f
 {
     public class CurlNoise : Instance<CurlNoise>
     {
         [Output(Guid = "a507e4cd-1b47-4cf5-924c-29ec6374f34e")]
-        public readonly Slot<T3.Core.Command> Command = new Slot<T3.Core.Command>();
+        public readonly Slot<Command> Command = new Slot<Command>();
 
 
         [Input(Guid = "d8f26ecf-f7eb-44c9-9911-bc177c771c0e")]

@@ -3,6 +3,8 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
+using T3.Core.Utils;
 
 //using T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c;
 

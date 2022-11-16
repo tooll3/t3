@@ -2,7 +2,8 @@
 using System.Linq;
 using Editor.Gui.Commands;
 using T3.Core.Animation;
-using Editor.Gui.Commands.Animation;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Animation;
 
 namespace Editor.Gui.Windows.TimeLine
 {

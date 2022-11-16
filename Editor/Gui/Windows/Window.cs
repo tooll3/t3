@@ -1,8 +1,9 @@
-﻿using ImGuiNET;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Numerics;
+using Editor.Gui;
+using ImGuiNET;
 
-namespace Editor.Gui.Windows
+namespace T3.Editor.Gui.Windows
 {
     /// <summary>
     /// A base class that unifies how windows are rendered and persisted

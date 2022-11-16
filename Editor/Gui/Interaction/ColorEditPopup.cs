@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Numerics;
 using Editor.App;
-using Editor.Gui.InputUi;
+using Editor.Gui;
+using Editor.Gui.Interaction;
 using Editor.Gui.Styling;
 using ImGuiNET;
 using T3.Core;
-using T3.Core.Logging;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using UiHelpers;
 
-namespace Editor.Gui.Interaction
+namespace T3.Editor.Gui.Interaction
 {
     public static class ColorEditPopup
     {

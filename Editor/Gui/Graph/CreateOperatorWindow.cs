@@ -1,6 +1,6 @@
 ﻿using ImGuiNET;
 
-namespace Editor.Gui.Graph
+namespace T3.Editor.Gui.Graph
 {
     /// <summary>
     /// Provides a list of operators

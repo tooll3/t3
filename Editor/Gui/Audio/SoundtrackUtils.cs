@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using Core.Audio;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using Editor.Gui.Graph;
+using T3.Core.Audio;
 
 namespace Editor.Gui.Audio
 {

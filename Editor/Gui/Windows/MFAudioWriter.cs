@@ -32,20 +32,13 @@ SOFTWARE.
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Linq;
+using System.Runtime.InteropServices;
 using SharpDX;
-using SharpDX.Direct3D11;
-using SharpDX.MediaFoundation;
-using SharpDX.DXGI;
-using T3.Core;
-using T3.Core.Logging;
-
 using MF = SharpDX.MediaFoundation;
 
 
-namespace Editor.Gui.Windows
+namespace T3.Editor.Gui.Windows
 {
     struct WAVEFORMATEX
     {

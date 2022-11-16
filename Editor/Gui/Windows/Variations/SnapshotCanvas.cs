@@ -5,10 +5,11 @@ using System.Numerics;
 using Editor.Gui.Graph.Interaction;
 using Editor.Gui.Interaction.Variations;
 using Editor.Gui.Interaction.Variations.Model;
-using Editor.Gui.Selection;
 using Editor.Gui.Styling;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.Windows.Variations;
 
 namespace Editor.Gui.Windows.Variations
 {

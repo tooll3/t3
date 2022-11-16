@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using T3.Core.Logging;
 
-namespace Editor.Gui.Interaction.Timing
+namespace T3.Editor.Gui.Interaction.Timing
 {
     /// <summary>
     /// A helper to provide continuous a BeatTime for live situations.

@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using T3.Core;
 using T3.Core.Logging;
+using T3.Core.Resource;
 
 namespace Editor.Compilation
 {

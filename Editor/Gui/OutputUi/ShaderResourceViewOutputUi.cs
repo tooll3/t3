@@ -1,14 +1,10 @@
-﻿using System;
-using System.Diagnostics;
-using System.Numerics;
-using ImGuiNET;
+﻿using System.Diagnostics;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using T3.Core.Logging;
-using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
-namespace Editor.Gui.OutputUi
+namespace T3.Editor.Gui.OutputUi
 {
     public class ShaderResourceViewOutputUi : OutputUi<ShaderResourceView>
     {

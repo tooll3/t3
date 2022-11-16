@@ -1,10 +1,12 @@
 ﻿using System.Numerics;
+using Editor.Gui;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
-using Editor.Gui;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using UiHelpers;
 
-namespace Editor.Gui.Selection
+namespace T3.Editor.Gui.Selection
 {
     /// <summary>
     /// Provides fence selection interaction

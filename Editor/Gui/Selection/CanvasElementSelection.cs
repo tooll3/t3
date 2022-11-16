@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using Editor.Gui;
 using T3.Core.Logging;
 
-namespace Editor.Gui.Selection
+namespace T3.Editor.Gui.Selection
 {
     public class CanvasElementSelection
     {

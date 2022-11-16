@@ -7,6 +7,9 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.UiHelpers;
 
 namespace Editor.Gui.InputUi.SingleControl
 {

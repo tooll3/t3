@@ -13,8 +13,10 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
+using T3.Core.Utils;
 using Color = SharpDX.Color;
-using Utilities = T3.Core.Utilities;
+using Utilities = T3.Core.Utils.Utilities;
 
 namespace T3.Operators.Types.Id_b536f791_ae9a_45a7_a153_e2f36a65cfb3
 {

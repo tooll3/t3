@@ -2,6 +2,7 @@ using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 using T3.Operators.Utils;
 
 namespace T3.Operators.Types.Id_ecbafbeb_c14b_4507_953f_80bc6676d077

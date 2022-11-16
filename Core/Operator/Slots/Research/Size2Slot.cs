@@ -1,6 +1,6 @@
 using SharpDX;
 
-namespace T3.Core.Operator.Slots
+namespace T3.Core.Operator.Slots.Research
 {
     public class Size2Slot : InputSlot<Size2>
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NAudio.Midi;
 using T3.Core.Logging;
 
-namespace Editor.Gui.Interaction.LegacyVariations.Midi
+namespace T3.Editor.Gui.Interaction.LegacyVariations.Midi
 {
     /// <summary>
     /// Keeps track of connected midi out devices sorted by product names 

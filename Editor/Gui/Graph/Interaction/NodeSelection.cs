@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Editor.Gui.Interaction.TransformGizmos;
-using Editor.Gui.Selection;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using Editor.Gui;
 using Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Selection;
 
 namespace Editor.Gui.Graph.Interaction
 {

@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Core.Audio;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using T3.Core.Audio;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
 // ReSharper disable AssignNullToNotNullAttribute
 
-namespace T3.Core
+namespace T3.Core.Resource
 {
     public static class JsonExtensions
     {

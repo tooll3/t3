@@ -1,11 +1,11 @@
 ﻿using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 
-namespace T3.Core
+namespace T3.Core.Resource
 {
-    public abstract class Resource
+    public abstract class AbstractResource
     {
-        protected Resource(uint id, string name)
+        protected AbstractResource(uint id, string name)
         {
             Id = id;
             Name = name;
@@ -16,7 +16,7 @@ namespace T3.Core
         public bool UpToDate { get; set; }
     }
 
-    public abstract class ShaderResource : Resource
+    public abstract class ShaderResource : AbstractResource
     {
         protected ShaderResource(uint id, string name, string entryPoint, ShaderBytecode blob)
             : base(id, name)
@@ -116,7 +116,7 @@ namespace T3.Core
         }
     }
 
-    public class Texture2dResource : Resource
+    public class Texture2dResource : AbstractResource
     {
         public Texture2dResource(uint id, string name, Texture2D texture)
             : base(id, name)
@@ -127,7 +127,7 @@ namespace T3.Core
         public Texture2D Texture;
     }
 
-    public class Texture3dResource : Resource
+    public class Texture3dResource : AbstractResource
     {
         public Texture3dResource(uint id, string name, Texture3D texture)
             : base(id, name)
@@ -138,7 +138,7 @@ namespace T3.Core
         public Texture3D Texture;
     }
 
-    public class ShaderResourceViewResource : Resource
+    public class ShaderResourceViewResource : AbstractResource
     {
         public ShaderResourceViewResource(uint id, string name, ShaderResourceView srv, uint textureId)
             : base(id, name)

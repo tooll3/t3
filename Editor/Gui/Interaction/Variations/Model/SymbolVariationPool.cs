@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Core.Resource;
 using Editor.Gui.Commands;
 using Editor.Gui.Commands.Variations;
 using Newtonsoft.Json;
@@ -10,7 +9,11 @@ using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using Editor.Gui.Commands.Graph;
+using T3.Core.Operator.Slots;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Graph;
 
 namespace Editor.Gui.Interaction.Variations.Model
 {

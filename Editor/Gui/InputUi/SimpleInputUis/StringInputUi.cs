@@ -6,6 +6,9 @@ using Newtonsoft.Json.Linq;
 using T3.Core;
 using Editor.Gui.InputUi;
 using Editor.Gui.UiHelpers;
+using T3.Core.Resource;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.UiHelpers;
 
 namespace Editor.Gui.InputUi.SimpleInputUis
 {

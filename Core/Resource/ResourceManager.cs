@@ -20,7 +20,7 @@ using Device = SharpDX.Direct3D11.Device;
 // ReSharper disable SuggestVarOrType_SimpleTypes <- Cynic doesn't like it
 // ReSharper disable PrivateFieldCanBeConvertedToLocalVariable    <- keeping the file handlers as members is clearer
 
-namespace T3.Core
+namespace T3.Core.Resource
 {
     public interface IUpdateable
     {
@@ -38,7 +38,7 @@ namespace T3.Core
             return _instance;
         }
 
-        public T GetResource<T>(uint resourceId) where T : Resource
+        public T GetResource<T>(uint resourceId) where T : AbstractResource
         {
             return (T)ResourcesById[resourceId];
         }
@@ -1040,7 +1040,7 @@ namespace T3.Core
         }
 
 
-        public static readonly Dictionary<uint, Resource> ResourcesById = new();
+        public static readonly Dictionary<uint, AbstractResource> ResourcesById = new();
         
         private static readonly List<ShaderResourceViewResource> _shaderResourceViews = new();
         

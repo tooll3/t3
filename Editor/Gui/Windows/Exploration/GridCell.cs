@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using SharpDX;
 
-namespace Editor.Gui.Windows.Exploration
+namespace T3.Editor.Gui.Windows.Exploration
 {
     public struct GridCell
     {

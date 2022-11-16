@@ -4,8 +4,10 @@ using Editor.Gui.Graph.Interaction;
 using Editor.Gui.InputUi;
 using Editor.Gui.OutputUi;
 using Editor.Gui.Styling;
-using Editor.Gui.TypeColors;
 using T3.Core.Operator;
+using T3.Editor.Gui.OutputUi;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using UiHelpers;
 
 namespace Editor.Gui.Graph

@@ -1,7 +1,7 @@
 ﻿using Editor.Gui.UiHelpers;
 using ImGuiNET;
 
-namespace Editor.Gui.Graph.Dialogs
+namespace T3.Editor.Gui.Graph.Dialogs
 {
     public class LibWarningDialog : ModalDialog
     {

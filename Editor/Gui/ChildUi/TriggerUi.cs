@@ -1,11 +1,13 @@
 ﻿using System.Linq;
 using System.Numerics;
+using Editor.Gui;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_0bec016a_5e1b_467a_8273_368d4d6b9935;
 using UiHelpers;
 
-namespace Editor.Gui.ChildUi
+namespace T3.Editor.Gui.ChildUi
 {
     public static class TriggerUi
     {

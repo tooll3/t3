@@ -7,15 +7,20 @@ using System.Text;
 using Editor.Gui.Commands;
 using Editor.Gui.Interaction.Snapping;
 using Editor.Gui.Interaction.WithCurves;
-using Editor.Gui.Selection;
 using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using T3.Core.Animation;
 using T3.Core.Operator;
-using Editor.Gui.Commands.Animation;
 using Editor.Gui.InputUi;
 using Editor.Gui.InputUi.CombinedInputs;
 using Editor.Gui.Interaction;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Animation;
+using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Interaction.Snapping;
+using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using UiHelpers;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator

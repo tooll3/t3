@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
-using Utilities = T3.Core.Utilities;
+using Utilities = T3.Core.Utils.Utilities;
 using Vector4 = System.Numerics.Vector4;
 
 

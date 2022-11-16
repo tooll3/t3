@@ -6,6 +6,8 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using Editor.Gui.InputUi;
 using Editor.Gui.InputUi.SimpleInputUis;
+using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace Editor.Gui.Graph.Interaction
 {

@@ -4,10 +4,9 @@ using Editor.Gui.Interaction.TransformGizmos;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using Editor.Gui.Selection;
 using Vector2 = System.Numerics.Vector2;
 
-namespace Editor.Gui.OutputUi
+namespace T3.Editor.Gui.OutputUi
 {
     public abstract class OutputUi<T> : IOutputUi
     {

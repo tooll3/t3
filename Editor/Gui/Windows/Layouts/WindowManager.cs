@@ -7,6 +7,9 @@ using Editor.Gui.Windows.Exploration;
 using Editor.Gui.Windows.Output;
 using Editor.Gui.Windows.Variations;
 using ImGuiNET;
+using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Windows;
+using T3.Editor.Gui.Windows.Exploration;
 
 namespace Editor.Gui.Windows.Layouts
 {

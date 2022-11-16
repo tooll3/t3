@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using System.Numerics;
+using T3.Editor.Gui.Styling;
 
 namespace Editor.Gui
 {

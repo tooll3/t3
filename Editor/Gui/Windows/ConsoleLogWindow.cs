@@ -1,13 +1,16 @@
-﻿using ImGuiNET;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 using System.Windows.Forms;
+using Editor.Gui;
+using Editor.Gui.Windows;
+using ImGuiNET;
 using T3.Core.Logging;
-using UiHelpers;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 
-namespace Editor.Gui.Windows
+namespace T3.Editor.Gui.Windows
 {
     /// <summary>
     /// Renders the <see cref="ConsoleLogWindow"/>

@@ -1,4 +1,4 @@
-﻿namespace Editor.Gui.Selection
+﻿namespace T3.Editor.Gui.Selection
 {
     public static class FitViewToSelectionHandling
     {

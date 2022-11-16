@@ -9,6 +9,7 @@ using T3.Core.Logging;
 using Editor.Gui.InputUi.CombinedInputs;
 using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows.TimeLine;
+using T3.Editor.Gui.InputUi;
 
 namespace Editor.Gui.InputUi
 {

@@ -1,9 +1,9 @@
 ﻿using System;
-using T3.Core.Operator;
 using Editor.Gui;
 using Editor.Gui.Commands;
+using T3.Core.Operator;
 
-namespace Editor.Gui.Commands.Graph
+namespace T3.Editor.Gui.Commands.Graph
 {
     public class ChangeSymbolChildNameCommand : ICommand
     {

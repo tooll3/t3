@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Editor.Gui.OutputUi
+namespace T3.Editor.Gui.OutputUi
 {
     public static class OutputUiFactory
     {

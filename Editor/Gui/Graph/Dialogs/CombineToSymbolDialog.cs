@@ -7,6 +7,7 @@ using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core.Operator;
 using Editor.Gui.Graph;
+using T3.Editor.Gui.Graph;
 
 namespace Editor.Gui.Graph.Dialogs
 {

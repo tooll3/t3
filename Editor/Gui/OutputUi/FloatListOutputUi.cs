@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Numerics;
+using Editor.Gui.OutputUi;
 using ImGuiNET;
-using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
-namespace Editor.Gui.OutputUi
+namespace T3.Editor.Gui.OutputUi
 {
     public class FloatListOutputUi : OutputUi<List<float>>
     {

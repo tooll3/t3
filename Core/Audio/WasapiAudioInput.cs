@@ -6,7 +6,7 @@ using ManagedBass.Wasapi;
 using T3.Core.IO;
 using T3.Core.Logging;
 
-namespace Core.Audio
+namespace T3.Core.Audio
 {
     /// <summary>
     /// Uses the windows Wasapi audio API to get audio reaction from devices like speakers and microphones

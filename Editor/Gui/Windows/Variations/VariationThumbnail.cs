@@ -2,19 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui.Commands;
+using Editor.Gui;
 using Editor.Gui.Interaction.Variations;
 using Editor.Gui.Interaction.Variations.Model;
-using Editor.Gui.Selection;
 using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core;
-using Editor.Gui.Commands.Graph;
-using UiHelpers;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 
-namespace Editor.Gui.Windows.Variations
+namespace T3.Editor.Gui.Windows.Variations
 {
     public static class VariationThumbnail
     {

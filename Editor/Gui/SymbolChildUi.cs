@@ -4,12 +4,14 @@ using System.Linq;
 using System.Numerics;
 using Editor.Gui.ChildUi;
 using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Selection;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using UiHelpers;
 using T3.Core.Operator.Slots;
+using T3.Editor.Gui.ChildUi;
+using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.UiHelpers;
 
 namespace Editor.Gui
 {

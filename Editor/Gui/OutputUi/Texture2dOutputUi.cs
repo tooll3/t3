@@ -1,10 +1,11 @@
-﻿using SharpDX.Direct3D11;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Editor.Gui.Windows;
+using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
-namespace Editor.Gui.OutputUi
+namespace T3.Editor.Gui.OutputUi
 {
     public class Texture2dOutputUi : OutputUi<Texture2D>
     {

@@ -6,6 +6,8 @@ using System.Numerics;
 using Editor.Gui.Interaction.Snapping;
 using Editor.Gui.UiHelpers;
 using Editor.Gui.Graph;
+using T3.Editor.Gui.Interaction.Snapping;
+using T3.Editor.Gui.Styling;
 
 namespace Editor.Gui.Timeline
 {

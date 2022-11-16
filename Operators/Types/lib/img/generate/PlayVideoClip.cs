@@ -6,12 +6,14 @@ using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.MediaFoundation;
 using T3.Core;
+using T3.Core.Audio;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using Core.Audio;
-using ResourceManager = T3.Core.ResourceManager;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using ResourceManager = T3.Core.Resource.ResourceManager;
 
 namespace T3.Operators.Types.Id_04c1a6dc_3042_48a8_81d2_0a5a162016dc
 {
@@ -30,7 +32,7 @@ namespace T3.Operators.Types.Id_04c1a6dc_3042_48a8_81d2_0a5a162016dc
 
         // Input parameters
         [Input(Guid = "10c311ee-6426-463a-a1fe-cfac6de04224")]
-        public readonly InputSlot<T3.Core.Command> Command = new();
+        public readonly InputSlot<Command> Command = new();
 
         [Input(Guid = "31721e18-556b-452b-a8aa-18dbd44af74d")]
         public readonly InputSlot<string> Path = new();

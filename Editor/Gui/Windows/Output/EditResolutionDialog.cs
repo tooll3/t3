@@ -1,5 +1,6 @@
 ﻿using Editor.Gui.UiHelpers;
 using ImGuiNET;
+using T3.Editor.Gui.Windows.Output;
 
 namespace Editor.Gui.Windows.Output
 {

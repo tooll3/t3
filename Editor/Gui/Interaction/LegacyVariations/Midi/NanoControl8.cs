@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using Editor.Gui.Interaction.LegacyVariations.Midi;
+using T3.Editor.Gui.Interaction.LegacyVariations.Midi.CommandProcessing;
 
-namespace Editor.Gui.Interaction.LegacyVariations.Midi
+namespace T3.Editor.Gui.Interaction.LegacyVariations.Midi
 {
     public class NanoControl8 : AbstractMidiDevice
     {

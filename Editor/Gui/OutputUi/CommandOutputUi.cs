@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Diagnostics;
+using Editor.Gui.OutputUi;
+using Editor.Gui.Windows;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
-using System.Diagnostics;
-using Editor.Gui.Windows;
 using T3.Core;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using Editor.Gui.Windows.Output;
+using T3.Core.Resource;
 using Device = SharpDX.Direct3D11.Device;
+using Utilities = T3.Core.Utils.Utilities;
 
-namespace Editor.Gui.OutputUi
+namespace T3.Editor.Gui.OutputUi
 {
     public class CommandOutputUi : OutputUi<Command>
     {
@@ -134,8 +135,8 @@ namespace Editor.Gui.OutputUi
             
             // Initialize depth buffer 
             {
-                T3.Core.Utilities.Dispose(ref _depthBufferDsv);
-                T3.Core.Utilities.Dispose(ref _depthBuffer);
+                Utilities.Dispose(ref _depthBufferDsv);
+                Utilities.Dispose(ref _depthBuffer);
 
                 var depthDesc = new Texture2DDescription()
                                     {

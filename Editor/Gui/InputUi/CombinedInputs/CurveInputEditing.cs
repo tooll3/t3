@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui.Commands.Animation;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Logging;
@@ -12,8 +11,14 @@ using Editor.Gui.Graph;
 using Editor.Gui.InputUi;
 using Editor.Gui.Interaction;
 using Editor.Gui.Interaction.WithCurves;
-using Editor.Gui.Selection;
 using Editor.Gui.Windows.TimeLine;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Animation;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Interaction.WithCurves;
+using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.Styling;
 
 namespace Editor.Gui.InputUi.CombinedInputs
 {

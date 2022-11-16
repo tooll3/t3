@@ -14,7 +14,12 @@ using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using Editor.Gui.Graph.Interaction;
 using Editor.Gui.Interaction.TransformGizmos;
-using Editor.Gui.Selection;
+using T3.Core.Resource;
+using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.OutputUi;
+using T3.Editor.Gui.Windows;
+using T3.Editor.Gui.Windows.Output;
+using Color = T3.Editor.Gui.Styling.Color;
 using Vector2 = System.Numerics.Vector2;
 
 namespace Editor.Gui.Windows.Output

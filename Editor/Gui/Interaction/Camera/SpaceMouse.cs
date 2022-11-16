@@ -6,7 +6,7 @@ using System.Windows.Forms;
 // Drawn heavily from Emma Burrows codeproject sample
 // which closely follows the C++ MS WM_INPUT sample.
 
-namespace Editor.Gui.Interaction.Camera
+namespace T3.Editor.Gui.Interaction.Camera
 {
     public sealed class SpaceMouse
     {

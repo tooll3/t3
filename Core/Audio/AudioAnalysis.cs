@@ -1,10 +1,10 @@
 ﻿using System;
 using ManagedBass;
-using T3.Core;
 using T3.Core.IO;
-using T3.Core.Logging;
+using T3.Core.Resource;
+using T3.Core.Utils;
 
-namespace Core.Audio
+namespace T3.Core.Audio
 {
     /// <summary>
     /// Analyze audio input from internal soundtrack or from selected Wasapi device.

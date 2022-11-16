@@ -1,8 +1,6 @@
-using ImGuiNET;
 using System;
-using Editor.Gui.UiHelpers;
 
-namespace Editor.Gui.Windows
+namespace T3.Editor.Gui.UiHelpers
 {
     public class UIControlledSetting
     {

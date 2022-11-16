@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using Editor.Gui.InputUi;
+using Editor.Gui;
 using Editor.Gui.Interaction;
 using Editor.Gui.Styling;
+using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Styling;
 using UiHelpers;
 
-namespace Editor.Gui.UiHelpers
+namespace T3.Editor.Gui.UiHelpers
 {
     public static class GradientEditor
     {

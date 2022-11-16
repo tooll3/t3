@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Core.Audio;
 using ImGuiNET;
 using T3.Core;
+using T3.Core.Audio;
 using T3.Core.Operator;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c;
 using UiHelpers;
 

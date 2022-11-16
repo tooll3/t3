@@ -2,6 +2,9 @@
 using Editor.Gui.Interaction.LegacyVariations.Model;
 using ImGuiNET;
 using NAudio.Midi;
+using T3.Editor.Gui.Interaction.LegacyVariations;
+using T3.Editor.Gui.Interaction.LegacyVariations.Midi;
+using T3.Editor.Gui.Interaction.LegacyVariations.Midi.CommandProcessing;
 
 namespace Editor.Gui.Interaction.LegacyVariations.Midi
 {

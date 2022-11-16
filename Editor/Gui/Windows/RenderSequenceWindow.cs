@@ -9,6 +9,8 @@ using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using Editor.Gui.Windows;
+using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using Vector2 = System.Numerics.Vector2;
 
 namespace Editor.Gui.Windows

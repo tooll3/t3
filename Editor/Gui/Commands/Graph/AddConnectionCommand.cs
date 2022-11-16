@@ -1,7 +1,9 @@
 using System;
+using Editor.Gui;
+using Editor.Gui.Commands;
 using T3.Core.Operator;
 
-namespace Editor.Gui.Commands
+namespace T3.Editor.Gui.Commands.Graph
 {
     public class AddConnectionCommand : ICommand
     {

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
+using Editor.Gui;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
-namespace Editor.Gui.Graph.Dialogs
+namespace T3.Editor.Gui.Graph.Dialogs
 {
     public class EditNodeOutputDialog : ModalDialog
     {

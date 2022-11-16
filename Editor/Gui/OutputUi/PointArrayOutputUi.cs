@@ -2,7 +2,7 @@
 using ImGuiNET;
 using T3.Core.Operator.Slots;
 
-namespace Editor.Gui.OutputUi
+namespace T3.Editor.Gui.OutputUi
 {
     public class PointArrayOutputUi : OutputUi<T3.Core.DataStructures.Point[]>
     {

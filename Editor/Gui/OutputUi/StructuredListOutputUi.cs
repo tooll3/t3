@@ -4,6 +4,7 @@ using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Editor.Gui.OutputUi;
 
 namespace Editor.Gui.OutputUi
 {

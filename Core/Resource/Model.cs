@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,6 +6,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
@@ -17,13 +17,14 @@ using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataStructures.Point;
 using Vector4 = System.Numerics.Vector4;
 
 // ReSharper disable RedundantNameQualifier
 
-namespace T3.Core
+namespace T3.Core.Resource
 {
     public static class JsonToTypeValueConverters
     {

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SharpDX;
-using T3.Core;
-using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using Quaternion = System.Numerics.Quaternion;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
@@ -10,7 +9,7 @@ using Vector4 = System.Numerics.Vector4;
 
 // ReSharper disable RedundantNameQualifier
 
-namespace Core.Resource
+namespace T3.Core.Utils
 {
     public static class ValueUtils
     {

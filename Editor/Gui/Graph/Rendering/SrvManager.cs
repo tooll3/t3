@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Logging;
+using T3.Core.Resource;
 
-namespace Editor.Gui.Graph.Rendering
+namespace T3.Editor.Gui.Graph.Rendering
 {
     /// <summary>
     /// A helper class that manages the creating of srv's for textures

@@ -1,11 +1,12 @@
 ﻿using System;
-using Core.Resource;
 using ImGuiNET;
 using T3.Core;
+using T3.Core.Resource;
+using T3.Core.Utils;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
-namespace Editor.Gui
+namespace T3.Editor.Gui.Styling
 {
     //static class TColors
     //{

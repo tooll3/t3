@@ -1,21 +1,24 @@
 ﻿using System;
-using ImGuiNET;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using Editor.Gui;
 using Editor.Gui.Graph;
 using Editor.Gui.Graph.Dialogs;
 using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Selection;
 using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
-using T3.Core;
+using Editor.Gui.Windows;
+using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using Editor.Gui.Interaction;
+using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 
-namespace Editor.Gui.Windows
+namespace T3.Editor.Gui.Windows
 {
     /// <summary>
     /// Shows a tree of all defined symbols sorted by namespace 

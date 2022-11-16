@@ -10,7 +10,6 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using Core.Logging;
 using Editor;
 using Editor.App;
 using Editor.Compilation;
@@ -25,7 +24,9 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using Editor.Gui.Interaction.Camera;
-using Editor.Gui.Interaction.StartupCheck;
+using T3.Core.Resource;
+using T3.Editor.Gui.Interaction.Camera;
+using T3.Editor.Gui.Interaction.StartupCheck;
 using Device = SharpDX.Direct3D11.Device;
 using Vector2 = System.Numerics.Vector2;
 

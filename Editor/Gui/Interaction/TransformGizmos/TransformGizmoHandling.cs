@@ -11,8 +11,12 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
-using Editor.Gui.Commands.Graph;
+using T3.Core.Resource;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.UiHelpers;
 using UiHelpers;
+using Color = T3.Editor.Gui.Styling.Color;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 // ReSharper disable RedundantNameQualifier

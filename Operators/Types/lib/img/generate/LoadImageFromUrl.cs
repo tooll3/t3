@@ -10,6 +10,7 @@ using System.Net;
 using SharpDX.WIC;
 using System.Net.Http;
 using System.Threading.Tasks;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
 {

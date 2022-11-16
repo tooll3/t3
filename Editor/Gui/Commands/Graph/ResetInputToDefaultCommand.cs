@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Linq;
-using T3.Core.Operator;
 using Editor.Gui.Commands;
+using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 
-namespace Editor.Gui.Commands.Graph
+namespace T3.Editor.Gui.Commands.Graph
 {
     public class ResetInputToDefault : ICommand
     {

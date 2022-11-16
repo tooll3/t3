@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Editor.Gui;
+using Editor.Gui.Windows.Output;
 using ImGuiNET;
 using SharpDX;
 
-namespace Editor.Gui.Windows.Output
+namespace T3.Editor.Gui.Windows.Output
 {
     public class ResolutionHandling
     {

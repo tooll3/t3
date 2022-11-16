@@ -1,4 +1,7 @@
-﻿namespace Editor.Gui.InputUi
+﻿using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Styling;
+
+namespace Editor.Gui.InputUi
 {
     public class FloatUiProperties : ITypeUiProperties
     {

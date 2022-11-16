@@ -1,6 +1,7 @@
 ﻿using System;
 using SharpDX;
 using SharpDX.Direct3D11;
+using T3.Core.Resource;
 
 namespace T3.Core.Rendering
 {

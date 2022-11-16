@@ -10,6 +10,12 @@ using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using T3.Core;
 using T3.Core.IO;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using UiHelpers;
 
 namespace Editor.Gui

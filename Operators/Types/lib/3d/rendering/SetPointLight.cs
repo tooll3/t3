@@ -3,6 +3,7 @@ using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_4912ba82_460a_4229_884d_6b647d64b08c
 {
@@ -32,7 +33,7 @@ namespace T3.Operators.Types.Id_4912ba82_460a_4229_884d_6b647d64b08c
         }
 
         [Input(Guid = "d46d2cb6-9ab9-4640-a3d4-e70e643bd3b4")]
-        public readonly InputSlot<T3.Core.Command> Command = new InputSlot<T3.Core.Command>();
+        public readonly InputSlot<Command> Command = new InputSlot<Command>();
 
         [Input(Guid = "f46ed192-1f6c-415e-8fe3-6d4909859f6b")]
         public readonly InputSlot<System.Numerics.Vector3> Position = new InputSlot<System.Numerics.Vector3>();

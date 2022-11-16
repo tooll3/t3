@@ -2,13 +2,14 @@ using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_119f710b_e6be_4eef_af63_13cfc6ba86fd
 {
     public class ParticleEmitter : Instance<ParticleEmitter>
     {
         [Output(Guid = "aa24848d-4ec6-4f1a-9a5a-c64587ee6f75")]
-        public readonly Slot<T3.Core.Command> Command = new Slot<T3.Core.Command>();
+        public readonly Slot<Command> Command = new Slot<Command>();
 
 
         [Input(Guid = "b33b6b8b-37cd-475a-b67d-ac672478f439")]

@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Editor.Gui;
 using Editor.Gui.Graph.Interaction;
 using Editor.Gui.InputUi;
 using Editor.Gui.InputUi.SingleControl;
-using Editor.Gui.OutputUi;
 using Editor.Gui.Styling;
+using Editor.Gui.Windows;
+using Editor.Gui.Windows.Exploration;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Logging;
-using Editor.Gui;
-using Editor.Gui.Selection;
-using Editor.Gui.Windows;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.OutputUi;
+using T3.Editor.Gui.Styling;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
-namespace Editor.Gui.Windows.Exploration
+namespace T3.Editor.Gui.Windows.Exploration
 {
     /// <summary>
     /// Renders the <see cref="ExplorationWindow"/>

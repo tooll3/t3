@@ -9,7 +9,7 @@ using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Operator;
-using Editor.Gui.Selection;
+using T3.Core.Resource;
 
 namespace Editor.Gui.Graph.Dialogs
 {

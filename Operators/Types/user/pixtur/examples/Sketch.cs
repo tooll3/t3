@@ -2,6 +2,7 @@ using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 using T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028;
 
 namespace T3.Operators.Types.Id_8e6ed99c_a3e0_42c0_9f81_a89b1e340757
@@ -27,7 +28,7 @@ namespace T3.Operators.Types.Id_8e6ed99c_a3e0_42c0_9f81_a89b1e340757
         public readonly InputSlot<string> Filename = new InputSlot<string>();
 
         [Input(Guid = "0d965690-5c83-47df-a48f-512e060b5e16")]
-        public readonly InputSlot<T3.Core.Command> Scene = new InputSlot<T3.Core.Command>();
+        public readonly InputSlot<Command> Scene = new InputSlot<Command>();
 
         [Input(Guid = "f823fdfd-fc3d-41c4-bd9d-6badf764d702")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> InputImage = new InputSlot<SharpDX.Direct3D11.Texture2D>();

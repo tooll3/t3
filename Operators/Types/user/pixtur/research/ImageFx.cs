@@ -2,13 +2,14 @@ using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_dc066031_ccf6_4a23_8412_a266e5f2cb16
 {
     public class ImageFx : Instance<ImageFx>
     {
         [Output(Guid = "7d5358d4-f713-44ff-b1a6-8c169a7b6dec")]
-        public readonly Slot<T3.Core.Command> Output = new Slot<T3.Core.Command>();
+        public readonly Slot<Command> Output = new Slot<Command>();
 
 
         [Input(Guid = "72de7eea-2c6c-41a8-a499-188ad20d80ba")]

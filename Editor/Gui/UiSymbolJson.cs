@@ -3,19 +3,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui.Graph;
+using Editor.Gui;
 using Editor.Gui.InputUi;
-using Editor.Gui.OutputUi;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Resource;
+using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.OutputUi;
+using T3.Editor.Gui.Styling;
 using Truncon.Collections;
 
 // ReSharper disable AssignNullToNotNullAttribute
 
-namespace Editor.Gui
+namespace T3.Editor.Gui
 {
     public class SymbolUiJson 
     {

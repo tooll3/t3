@@ -1,13 +1,8 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
+﻿using Editor.Gui.Commands;
 using Editor.Gui.Graph;
-using T3.Core.Animation;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph;
 
-namespace Editor.Gui.Commands
+namespace T3.Editor.Gui.Commands.Annotations
 {
     public class ChangeAnnotationTextCommand : ICommand
     {

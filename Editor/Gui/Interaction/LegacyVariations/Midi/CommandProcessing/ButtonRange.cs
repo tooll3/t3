@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using Editor.Gui.Interaction.LegacyVariations.Midi;
 
-namespace Editor.Gui.Interaction.LegacyVariations.Midi
+namespace T3.Editor.Gui.Interaction.LegacyVariations.Midi.CommandProcessing
 {
     /// <summary>
     /// Describes either a single or range of buttons on a midi device  

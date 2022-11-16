@@ -2,13 +2,14 @@ using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_bb617a86_d771_480a_be94_c9cc460252a5
 {
     public class __ImageQuadEmitterOBSOLETE : Instance<__ImageQuadEmitterOBSOLETE>
     {
         [Output(Guid = "23c5d230-4f31-44f8-9b65-5c8cf111bd45")]
-        public readonly Slot<T3.Core.Command> Command = new Slot<T3.Core.Command>();
+        public readonly Slot<Command> Command = new Slot<Command>();
 
         [Input(Guid = "49a41a2a-39a4-46fd-ab70-5c8442a6fd61")]
         public readonly InputSlot<T3.Core.DataTypes.ParticleSystem> ParticleSystem = new InputSlot<T3.Core.DataTypes.ParticleSystem>();

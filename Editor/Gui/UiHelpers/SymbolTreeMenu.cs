@@ -1,14 +1,16 @@
 ﻿using System;
-using ImGuiNET;
 using System.Runtime.InteropServices;
+using Editor.Gui;
 using Editor.Gui.Graph.Interaction;
 using Editor.Gui.InputUi;
 using Editor.Gui.Styling;
-using Editor.Gui.TypeColors;
 using Editor.Gui.Windows;
+using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Styling;
 
-namespace Editor.Gui.UiHelpers
+namespace T3.Editor.Gui.UiHelpers
 {
     /// <summary>
     /// Shows a tree of all defined symbols sorted by namespace.

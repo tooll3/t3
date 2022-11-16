@@ -9,6 +9,8 @@ using SharpDX;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
+using T3.Core.Resource;
+using T3.Core.Utils;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5

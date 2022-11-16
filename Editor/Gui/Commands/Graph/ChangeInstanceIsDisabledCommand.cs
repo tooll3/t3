@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using T3.Core.Logging;
 using Editor.Gui;
 using Editor.Gui.Commands;
+using T3.Core.Logging;
 
-namespace Editor.Gui.Commands.Graph
+namespace T3.Editor.Gui.Commands.Graph
 {
     public class ChangeInstanceIsDisabledCommand : ICommand
     {

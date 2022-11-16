@@ -11,7 +11,10 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
+using T3.Core.Utils;
 using Device = SharpDX.Direct3D11.Device;
+using Utilities = T3.Core.Utils.Utilities;
 
 namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
 {
@@ -231,9 +234,9 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             if (colorFormatChanged)
             {
                 // Color / Multi sampling
-                Core.Utilities.Dispose(ref _multiSampledColorBufferSrv);
-                Core.Utilities.Dispose(ref _multiSampledColorBufferRtv);
-                Core.Utilities.Dispose(ref _multiSampledColorBuffer);
+                Utilities.Dispose(ref _multiSampledColorBufferSrv);
+                Utilities.Dispose(ref _multiSampledColorBufferRtv);
+                Utilities.Dispose(ref _multiSampledColorBuffer);
 
                 try
                 {
@@ -270,17 +273,17 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                 catch (Exception e)
                 {
                     Log.Error("Error creating color render target." + e.Message, SymbolChildId);
-                    Core.Utilities.Dispose(ref _multiSampledColorBufferSrv);
-                    Core.Utilities.Dispose(ref _multiSampledColorBufferRtv);
-                    Core.Utilities.Dispose(ref _multiSampledColorBuffer);
+                    Utilities.Dispose(ref _multiSampledColorBufferSrv);
+                    Utilities.Dispose(ref _multiSampledColorBufferRtv);
+                    Utilities.Dispose(ref _multiSampledColorBuffer);
                 }
 
                 // Color / Down sampled
                 if (_resolvedColorBuffer != null)
                 {
-                    Core.Utilities.Dispose(ref _resolvedColorBufferSrv);
-                    Core.Utilities.Dispose(ref _resolvedColorBufferRtv);
-                    Core.Utilities.Dispose(ref _resolvedColorBuffer);
+                    Utilities.Dispose(ref _resolvedColorBufferSrv);
+                    Utilities.Dispose(ref _resolvedColorBufferRtv);
+                    Utilities.Dispose(ref _resolvedColorBuffer);
                 }
 
                 if (DownSamplingRequired)
@@ -309,9 +312,9 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                     catch
                     {
                         Log.Error("Error creating color render target.", SymbolChildId);
-                        Core.Utilities.Dispose(ref _resolvedColorBufferSrv);
-                        Core.Utilities.Dispose(ref _resolvedColorBufferRtv);
-                        Core.Utilities.Dispose(ref _resolvedColorBuffer);
+                        Utilities.Dispose(ref _resolvedColorBufferSrv);
+                        Utilities.Dispose(ref _resolvedColorBufferRtv);
+                        Utilities.Dispose(ref _resolvedColorBuffer);
                     }
                 }
 
@@ -329,11 +332,11 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
 
             if (depthFormatChanged || (!depthRequired && depthInitialized))
             {
-                Core.Utilities.Dispose(ref _multiSampledDepthBufferDsv);
-                Core.Utilities.Dispose(ref _multiSampledDepthBufferSrv);
-                Core.Utilities.Dispose(ref _multiSampledDepthBuffer);
-                Core.Utilities.Dispose(ref _resolvedDepthBufferUav);
-                Core.Utilities.Dispose(ref _resolvedDepthBuffer);
+                Utilities.Dispose(ref _multiSampledDepthBufferDsv);
+                Utilities.Dispose(ref _multiSampledDepthBufferSrv);
+                Utilities.Dispose(ref _multiSampledDepthBuffer);
+                Utilities.Dispose(ref _resolvedDepthBufferUav);
+                Utilities.Dispose(ref _resolvedDepthBuffer);
             }
 
             if (depthRequired && (depthFormatChanged || !depthInitialized))
@@ -377,9 +380,9 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                 }
                 catch
                 {
-                    Core.Utilities.Dispose(ref _multiSampledDepthBufferDsv);
-                    Core.Utilities.Dispose(ref _multiSampledDepthBufferSrv);
-                    Core.Utilities.Dispose(ref _multiSampledDepthBuffer);
+                    Utilities.Dispose(ref _multiSampledDepthBufferDsv);
+                    Utilities.Dispose(ref _multiSampledDepthBufferSrv);
+                    Utilities.Dispose(ref _multiSampledDepthBuffer);
                     Log.Error("Error  creating multisampled depth/stencil buffer.", SymbolChildId);
                 }
 
@@ -406,8 +409,8 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                     }
                     catch
                     {
-                        Core.Utilities.Dispose(ref _resolvedDepthBufferUav);
-                        Core.Utilities.Dispose(ref _resolvedDepthBuffer);
+                        Utilities.Dispose(ref _resolvedDepthBufferUav);
+                        Utilities.Dispose(ref _resolvedDepthBuffer);
                         Log.Error("Error creating depth/stencil downsampling buffer.", SymbolChildId);
                     }
                 }
@@ -445,7 +448,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
         private int _sampleCount;
 
         [Input(Guid = "4da253b7-4953-439a-b03f-1d515a78bddf")]
-        public readonly InputSlot<T3.Core.Command> Command = new InputSlot<T3.Core.Command>();
+        public readonly InputSlot<Command> Command = new InputSlot<Command>();
 
         [Input(Guid = "03749b41-cc3c-4f38-aea6-d7cea19fc073")]
         public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();

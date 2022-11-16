@@ -9,6 +9,8 @@ using ImGuiNET;
 using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Editor;
+using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Windows;
 
 namespace Editor.Gui.Windows.Layouts
 {

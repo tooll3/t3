@@ -3,6 +3,9 @@ using Editor.Gui.Interaction;
 using Editor.Gui.Styling;
 using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;
+using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using UiHelpers;
 
 namespace Editor.Gui.UiHelpers

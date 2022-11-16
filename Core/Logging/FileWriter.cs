@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
-using T3.Core.Logging;
 
-namespace Core.Logging
+namespace T3.Core.Logging
 {
     /// <summary>
     /// Write Debug-Log messages to log files

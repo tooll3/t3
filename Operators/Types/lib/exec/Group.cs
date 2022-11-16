@@ -6,6 +6,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b

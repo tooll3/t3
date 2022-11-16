@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using T3.Core.Animation;
 using Editor.Gui.Commands;
+using T3.Core.Animation;
 
-namespace Editor.Gui.Commands.Animation
+namespace T3.Editor.Gui.Commands.Animation
 {
     public class ChangeKeyframesCommand : ICommand
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace Editor.Gui.Selection
+namespace T3.Editor.Gui.Selection
 {
     public interface ISelectableCanvasObject
     {

@@ -7,6 +7,8 @@ using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows.TimeLine.Raster;
 using ImGuiNET;
+using T3.Editor.Gui.Interaction.Snapping;
+using T3.Editor.Gui.Styling;
 
 namespace Editor.Gui.Windows.TimeLine
 {

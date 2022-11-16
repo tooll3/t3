@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Numerics;
+using Editor.Gui;
+using Editor.Gui.ChildUi;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Operator;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95;
 using UiHelpers;
 
-namespace Editor.Gui.ChildUi
+namespace T3.Editor.Gui.ChildUi
 {
     public static class TriggerAnimUi
     {

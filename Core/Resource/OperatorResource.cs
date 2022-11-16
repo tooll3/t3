@@ -6,9 +6,9 @@ using System.Reflection;
 using T3.Core.Logging;
 using T3.Core.Operator;
 
-namespace T3.Core
+namespace T3.Core.Resource
 {
-    public class OperatorResource : Resource, IUpdateable
+    public class OperatorResource : AbstractResource, IUpdateable
     {
         public Assembly OperatorAssembly { get; set; }
         public bool Updated { get; set; }

@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
+using Editor.Gui;
 using Editor.Gui.UiHelpers;
+using Editor.Gui.Windows;
 using ImGuiNET;
 
-namespace Editor.Gui.Windows
+namespace T3.Editor.Gui.Windows
 {
     public class SettingsWindow : Window
     {

@@ -5,6 +5,10 @@ using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Logging;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using UiHelpers;
 
 namespace Editor.Gui.ChildUi.Animators

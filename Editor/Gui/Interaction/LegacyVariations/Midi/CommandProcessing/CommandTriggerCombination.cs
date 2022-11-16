@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using T3.Editor.Gui.Interaction.LegacyVariations.Midi;
+using T3.Editor.Gui.Interaction.LegacyVariations.Midi.CommandProcessing;
 
 //using System.Linq;
 //using T3.Gui.Graph;

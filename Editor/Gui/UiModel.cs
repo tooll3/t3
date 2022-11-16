@@ -22,6 +22,11 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using Editor.Gui.InputUi.SimpleInputUis;
+using T3.Core.Resource;
+using T3.Editor.Gui;
+using T3.Editor.Gui.ChildUi;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.OutputUi;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataStructures.Point;
 
@@ -34,7 +39,7 @@ namespace Editor.Gui
         public static Dictionary<string, Type> Entries { get; } = new Dictionary<string, Type>();
     }
 
-    public class UiModel : T3.Core.Model
+    public class UiModel : Model
     {
         public UiModel(Assembly operatorAssembly)
             : base(operatorAssembly)

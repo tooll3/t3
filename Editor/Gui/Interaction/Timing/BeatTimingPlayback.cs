@@ -1,8 +1,6 @@
-﻿using System;
-using T3.Core.Animation;
-using T3.Core.Operator;
+﻿using T3.Core.Animation;
 
-namespace Editor.Gui.Interaction.Timing
+namespace T3.Editor.Gui.Interaction.Timing
 {
     /// <summary>
     /// Override the default Playback to support continuous playback synchronized to BPM

@@ -1,4 +1,4 @@
-﻿namespace Editor.Gui.Interaction.LegacyVariations.Midi
+﻿namespace T3.Editor.Gui.Interaction.LegacyVariations.Midi.CommandProcessing
 {
     public class ModeButton
     {

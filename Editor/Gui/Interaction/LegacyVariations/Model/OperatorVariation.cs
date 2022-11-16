@@ -7,6 +7,8 @@ using Newtonsoft.Json.Linq;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Resource;
+using T3.Editor.Gui.Interaction.LegacyVariations.Model;
 
 namespace Editor.Gui.Interaction.LegacyVariations.Model
 {

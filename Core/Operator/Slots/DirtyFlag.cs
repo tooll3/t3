@@ -1,5 +1,4 @@
 using System;
-using T3.Core.Logging;
 
 namespace T3.Core.Operator.Slots
 {

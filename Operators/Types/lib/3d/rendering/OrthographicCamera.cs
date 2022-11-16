@@ -4,6 +4,7 @@ using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_954af16f_b37b_4e64_a965_4bec02b9179e
 {
@@ -43,7 +44,7 @@ namespace T3.Operators.Types.Id_954af16f_b37b_4e64_a965_4bec02b9179e
         }
 
         [Input(Guid = "4f5832eb-23a0-4cdf-8144-3537578e3e26")]
-        public readonly InputSlot<T3.Core.Command> Command = new InputSlot<T3.Core.Command>();
+        public readonly InputSlot<Command> Command = new InputSlot<Command>();
 
         [Input(Guid = "a0a28003-d6b5-4af5-9444-acf7af18ab4e")]
         public readonly InputSlot<System.Numerics.Vector3> Position = new InputSlot<System.Numerics.Vector3>();

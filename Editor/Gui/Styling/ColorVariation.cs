@@ -1,13 +1,10 @@
-﻿using ImGuiNET;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using Editor.Gui.InputUi;
+using ImGuiNET;
 
-namespace Editor.Gui.TypeColors
+namespace T3.Editor.Gui.Styling
 {
     /// <summary>
     /// Provides <see cref="Variation"/>s of <see cref="Color"/>s that are used to 

@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Numerics;
-using Core.Audio;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
@@ -9,6 +8,8 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using Editor.Gui.Audio;
 using Editor.Gui.UiHelpers;
+using T3.Core.Audio;
+using T3.Core.Resource;
 
 namespace Editor.Gui.Windows.TimeLine
 {

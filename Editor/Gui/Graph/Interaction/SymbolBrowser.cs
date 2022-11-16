@@ -4,11 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using Core.Resource;
 using Editor.Gui.Commands;
 using Editor.Gui.InputUi;
 using Editor.Gui.Styling;
-using Editor.Gui.TypeColors;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core;
@@ -16,7 +14,13 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Selection;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using UiHelpers;
 
 namespace Editor.Gui.Graph.Interaction

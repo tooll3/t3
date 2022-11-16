@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Numerics;
+using Editor.Gui;
 using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Selection;
+using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.Styling;
 
-namespace Editor.Gui.Graph
+namespace T3.Editor.Gui.Graph
 {
     public class Annotation : ISelectableCanvasObject
     {

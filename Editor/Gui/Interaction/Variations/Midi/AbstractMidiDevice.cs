@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Editor.Gui.Interaction.Variations.Midi;
 using Editor.Gui.Interaction.Variations.Model;
 using NAudio.Midi;
 using Operators.Utils;
-using T3.Core.Logging;
+using T3.Editor.Gui.Interaction.Variations.Midi.CommandProcessing;
 
-namespace Editor.Gui.Interaction.Variations.Midi
+namespace T3.Editor.Gui.Interaction.Variations.Midi
 {
     public interface IControllerInputDevice
     {

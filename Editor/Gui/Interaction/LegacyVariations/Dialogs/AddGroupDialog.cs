@@ -1,13 +1,7 @@
-﻿using System.Linq;
-using System.Numerics;
+﻿using System.Numerics;
 using Editor.Gui.UiHelpers;
-using ImGuiNET;
-using T3.Core.Operator;
-using T3.Core.Operator.Slots;
-using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Styling;
 
-namespace Editor.Gui.Interaction.LegacyVariations.Dialogs
+namespace T3.Editor.Gui.Interaction.LegacyVariations.Dialogs
 {
     public class AddGroupDialog : ModalDialog
     {

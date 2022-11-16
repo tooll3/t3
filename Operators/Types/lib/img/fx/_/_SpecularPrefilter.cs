@@ -9,8 +9,9 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
+using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
-using Utilities = T3.Core.Utilities;
+using Utilities = T3.Core.Utils.Utilities;
 
 namespace T3.Operators.Types.Id_cc3cc712_9e87_49c6_b04b_49a12cf2ba75
 {

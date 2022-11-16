@@ -1,8 +1,9 @@
-﻿using Editor.Gui.Graph;
-using Editor.Gui;
+﻿using Editor.Gui;
 using Editor.Gui.Commands;
+using Editor.Gui.Graph;
+using T3.Editor.Gui.Graph;
 
-namespace Editor.Gui.Commands.Annotations
+namespace T3.Editor.Gui.Commands.Annotations
 {
     public class DeleteAnnotationCommand : ICommand
     {

@@ -8,9 +8,7 @@ using System.Numerics;
 using Editor.Gui.Commands;
 using Editor.Gui.Graph;
 using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Selection;
 using Editor.Gui.Styling;
-using Editor.Gui.TypeColors;
 using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows.TimeLine;
 using T3.Core;
@@ -18,7 +16,14 @@ using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using Editor.Gui.Commands.Graph;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.Styling;
 
 namespace Editor.Gui.InputUi
 {

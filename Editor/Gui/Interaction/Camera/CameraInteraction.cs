@@ -4,6 +4,7 @@ using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Operator.Interfaces;
 using Editor.Gui.Interaction.TransformGizmos;
+using T3.Editor.Gui.Interaction.Camera;
 
 namespace Editor.Gui.Interaction.Camera
 {

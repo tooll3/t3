@@ -132,7 +132,6 @@ namespace T3.Core.Animation
             state.Table[newU] = key;
             key.U = newU;
             SplineInterpolator.UpdateTangents(state.Table.ToList());
-            return;
         }
 
         public List<KeyValuePair<double, VDefinition>> GetPointTable()

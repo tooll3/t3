@@ -1,6 +1,7 @@
 ﻿using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.Logging;
+using T3.Core.Resource;
 
 namespace Editor.App
 {

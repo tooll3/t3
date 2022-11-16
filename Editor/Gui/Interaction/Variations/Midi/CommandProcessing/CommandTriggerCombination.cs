@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Editor.Gui.Interaction.Variations.Midi;
 
 //using System.Linq;
 //using T3.Gui.Graph;
 //using T3.Gui.Interaction.VariationHandling.InputCommands;
 
-namespace Editor.Gui.Interaction.Variations.Midi
+namespace T3.Editor.Gui.Interaction.Variations.Midi.CommandProcessing
 {
     /// <summary>
     /// Creates matching commands if input signals are matching. 

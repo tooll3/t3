@@ -2,6 +2,8 @@
 using ImGuiNET;
 using Editor.Gui.InputUi;
 using Editor.Gui.UiHelpers;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.UiHelpers;
 
 namespace Editor.Gui.InputUi.SimpleInputUis
 {

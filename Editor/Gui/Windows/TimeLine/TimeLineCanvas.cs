@@ -5,7 +5,6 @@ using System.Numerics;
 using Editor.Gui.Graph.Interaction;
 using Editor.Gui.Interaction.Snapping;
 using Editor.Gui.Interaction.WithCurves;
-using Editor.Gui.Selection;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core.Animation;
@@ -14,6 +13,12 @@ using T3.Core.Operator.Slots;
 using Editor.Gui.Audio;
 using Editor.Gui.Graph;
 using Editor.Gui.Interaction;
+using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Interaction.Snapping;
+using T3.Editor.Gui.Interaction.WithCurves;
+using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using UiHelpers;
 
 namespace Editor.Gui.Windows.TimeLine

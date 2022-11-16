@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Data;
-using Editor.Gui.InputUi;
+using Editor.Gui;
+using Editor.Gui.Interaction;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Styling;
 using Vector2 = System.Numerics.Vector2;
 
-namespace Editor.Gui.Interaction
+namespace T3.Editor.Gui.Interaction
 {
     /// <summary>
     /// An alternative ImGui component for editing float values 

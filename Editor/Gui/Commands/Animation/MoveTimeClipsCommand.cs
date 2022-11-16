@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using T3.Core.Animation;
-using T3.Core.Operator;
 using Editor.Gui.Commands;
 using Editor.Gui.Graph.Interaction;
+using T3.Core.Animation;
+using T3.Core.Operator;
 
-namespace Editor.Gui.Commands.Animation
+namespace T3.Editor.Gui.Commands.Animation
 {
     public class MoveTimeClipsCommand : ICommand
     {

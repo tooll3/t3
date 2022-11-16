@@ -11,6 +11,10 @@ using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using Editor.Gui.UiHelpers;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.Interaction.Variations.Midi;
+using T3.Editor.Gui.Windows.Variations;
 
 //using T3.Gui.Windows.Variations;
 

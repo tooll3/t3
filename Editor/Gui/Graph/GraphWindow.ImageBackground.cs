@@ -8,6 +8,8 @@ using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using Editor.Gui.Interaction.Camera;
+using T3.Editor.Gui.OutputUi;
+using T3.Editor.Gui.Windows.Output;
 using Vector2 = System.Numerics.Vector2;
 
 namespace Editor.Gui.Graph

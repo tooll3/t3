@@ -1,12 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using Editor.Gui.Interaction.Variations;
+using Editor.Gui.Interaction.Variations.Midi;
 using Editor.Gui.Interaction.Variations.Model;
 using NAudio.Midi;
 using T3.Core.Logging;
+using T3.Editor.Gui.Interaction.Variations.Midi.CommandProcessing;
 
 //using T3.Gui.Interaction.VariationHandling.InputCommands;
 
-namespace Editor.Gui.Interaction.Variations.Midi
+namespace T3.Editor.Gui.Interaction.Variations.Midi
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("ReSharper", "UnusedMember.Local")]
     public class Apc40Mk2 : AbstractMidiDevice
     {
         public Apc40Mk2()

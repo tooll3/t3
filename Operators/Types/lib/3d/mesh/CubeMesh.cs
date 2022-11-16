@@ -9,6 +9,8 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
+using T3.Core.Resource;
+using T3.Core.Utils;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;

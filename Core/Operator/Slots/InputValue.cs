@@ -1,11 +1,12 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
-using Core.Resource;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using T3.Core.DataTypes;
+using T3.Core.Resource;
+using T3.Core.Utils;
 
-namespace T3.Core.Operator
+namespace T3.Core.Operator.Slots
 {
     public abstract class InputValue
     {

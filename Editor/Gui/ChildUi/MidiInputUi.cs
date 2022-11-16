@@ -1,14 +1,19 @@
 ﻿using System.Linq;
 using System.Numerics;
+using Editor.Gui;
 using Editor.Gui.Styling;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
 using UiHelpers;
 
-namespace Editor.Gui.ChildUi
+namespace T3.Editor.Gui.ChildUi
 {
     public static class MidiInputUi
     {

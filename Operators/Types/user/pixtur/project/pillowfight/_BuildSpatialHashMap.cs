@@ -2,13 +2,14 @@ using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_f61ceb9b_74f8_4883_88ea_7e6c35b63bbd
 {
     public class _BuildSpatialHashMap : Instance<_BuildSpatialHashMap>
     {
         [Output(Guid = "59d09aa6-051c-4906-9f32-f65e66979c56")]
-        public readonly Slot<T3.Core.Command> Update = new Slot<T3.Core.Command>();
+        public readonly Slot<Command> Update = new Slot<Command>();
         
         [Output(Guid = "b4505f1e-ab0e-45be-8e46-8e3b37ec59ec")]
         public readonly Slot<SharpDX.Direct3D11.ShaderResourceView> CellPointIndices = new Slot<SharpDX.Direct3D11.ShaderResourceView>();

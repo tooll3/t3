@@ -1,10 +1,9 @@
-﻿using ImGuiNET;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using ImGuiNET;
 using T3.Core.IO;
 
-namespace Editor.Gui
+namespace T3.Editor.Gui.Interaction
 {
     /// <summary>
     /// UserAction represent single atomic commands that can be mapped to a keyboard shortcuts

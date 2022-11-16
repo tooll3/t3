@@ -6,9 +6,10 @@ using SharpDX.DXGI;
 using SharpDX.IO;
 using SharpDX.WIC;
 using T3.Core;
-using T3.Core.Logging;
+using T3.Core.Resource;
+using T3.Core.Utils;
 
-namespace Editor.Gui.Windows
+namespace T3.Editor.Gui.Windows
 {
     public static class ScreenshotWriter
     {

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Numerics;
 using Editor.Gui.Graph;
 using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Selection;
 using Editor.Gui.Styling;
 using Editor.Gui.Windows.Output;
 using T3.Core.Operator;
+using T3.Editor.Gui.Selection;
 using Icon = Editor.Gui.Styling.Icon;
 
 namespace Editor.Gui.Windows

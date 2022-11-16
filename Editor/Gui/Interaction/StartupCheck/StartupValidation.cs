@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using Editor.Gui.Windows.Layouts;
 
-namespace Editor.Gui.Interaction.StartupCheck
+namespace T3.Editor.Gui.Interaction.StartupCheck
 {
     /// <summary>
     /// Looks for required files and folders

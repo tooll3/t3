@@ -8,6 +8,7 @@ using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Editor.Gui.InputUi;
 
 namespace Editor.Gui.InputUi
 {

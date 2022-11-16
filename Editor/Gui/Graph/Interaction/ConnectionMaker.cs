@@ -6,7 +6,6 @@ using Editor.Gui.Graph.Interaction;
 using Editor.Gui.InputUi;
 using Editor.Gui.Interaction.TransformGizmos;
 using Editor.Gui.OutputUi;
-using Editor.Gui.Selection;
 using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows;
@@ -16,8 +15,16 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using Editor.Gui.Commands.Graph;
+using T3.Core.Resource;
+using T3.Core.Utils;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.OutputUi;
+using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.UiHelpers;
 using UiHelpers;
+using Color = T3.Editor.Gui.Styling.Color;
 using Vector2 = System.Numerics.Vector2;
 
 namespace Editor.Gui.Graph

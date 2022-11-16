@@ -3,6 +3,7 @@ using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_33424f7f_ea2d_4753_bbc3_8df00830c4b5
 {
@@ -12,7 +13,7 @@ namespace T3.Operators.Types.Id_33424f7f_ea2d_4753_bbc3_8df00830c4b5
         public readonly Slot<Texture2D> ColorBuffer = new Slot<Texture2D>();
 
         [Input(Guid = "0f29ca23-b5fb-484e-8ae6-8ed70d67d623")]
-        public readonly MultiInputSlot<T3.Core.Command> Command = new MultiInputSlot<T3.Core.Command>();
+        public readonly MultiInputSlot<Command> Command = new MultiInputSlot<Command>();
 
         [Input(Guid = "1d5207f0-132e-42e9-9b2b-171d092d6cac")]
         public readonly InputSlot<float> Displacement = new InputSlot<float>();

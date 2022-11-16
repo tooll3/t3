@@ -5,11 +5,9 @@ using System.IO;
 using System.Numerics;
 using System.Windows.Forms;
 using ImGuiNET;
-using T3.Core.IO;
 using T3.Core.Logging;
-using Editor.Gui.InputUi;
 
-namespace Editor.Gui.UiHelpers
+namespace T3.Editor.Gui.UiHelpers
 {
     public static class FileOperations
     {

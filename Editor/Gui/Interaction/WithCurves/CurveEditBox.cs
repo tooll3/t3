@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui.Commands;
+using Editor.Gui;
 using Editor.Gui.Interaction.Snapping;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;
-using Editor.Gui.Commands.Animation;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Animation;
+using T3.Editor.Gui.Interaction.Snapping;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using UiHelpers;
 
-namespace Editor.Gui.Interaction.WithCurves
+namespace T3.Editor.Gui.Interaction.WithCurves
 {
     /// <summary>
     /// Note: This component is currently not used because most interactions can be completed by dragging keyframes with

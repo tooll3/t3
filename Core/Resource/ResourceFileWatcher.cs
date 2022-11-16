@@ -5,7 +5,7 @@ using System.Threading;
 using SharpDX.Direct3D11;
 using T3.Core.Logging;
 
-namespace T3.Core
+namespace T3.Core.Resource
 {
     public static class ResourceFileWatcher
     {
@@ -141,7 +141,7 @@ namespace T3.Core
     }
     
     /// <summary>
-    /// Used by some <see cref="Resource"/>s to link to a file.
+    /// Used by some <see cref="AbstractResource"/>s to link to a file.
     /// Note that multiple resources likes <see cref="VertexShader"/> and <see cref="PixelShader"/> can
     /// depend on the some source file. 
     /// </summary>

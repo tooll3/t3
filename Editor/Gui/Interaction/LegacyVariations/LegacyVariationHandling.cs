@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Editor.Gui;
 using Editor.Gui.Graph;
 using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Interaction.LegacyVariations.Dialogs;
+using Editor.Gui.Interaction.LegacyVariations;
 using Editor.Gui.Interaction.LegacyVariations.Midi;
 using Editor.Gui.Interaction.LegacyVariations.Model;
-using Editor.Gui.Selection;
 using ImGuiNET;
 using Operators.Utils;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
-//using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
-using T3.Operators.Types.Id_a53f3873_a5aa_4bcc_aa06_0745d98209d6;
+using T3.Editor.Gui.Interaction.LegacyVariations.Dialogs;
+using T3.Editor.Gui.Interaction.LegacyVariations.Midi;
+using T3.Editor.Gui.Interaction.LegacyVariations.Model;
+using T3.Editor.Gui.Selection;
+using T3.Operators.Types.Id_a53f3873_a5aa_4bcc_aa06_0745d98209d6; //using T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5;
 
-namespace Editor.Gui.Interaction.LegacyVariations
+namespace T3.Editor.Gui.Interaction.LegacyVariations
 {
     public class LegacyVariationHandling
     {

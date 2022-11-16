@@ -2,6 +2,7 @@ using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_d1432885_5d16_49ec_afb9_845d0f3efcb8
 {
@@ -9,7 +10,7 @@ namespace T3.Operators.Types.Id_d1432885_5d16_49ec_afb9_845d0f3efcb8
     {
 
         [Output(Guid = "5eb793e9-e004-4759-bd18-61ec7dce40a4")]
-        public readonly TimeClipSlot<T3.Core.Command> Output2 = new TimeClipSlot<T3.Core.Command>();
+        public readonly TimeClipSlot<Command> Output2 = new TimeClipSlot<Command>();
 
 
     }

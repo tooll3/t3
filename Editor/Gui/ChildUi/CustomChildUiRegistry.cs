@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Editor.Gui;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.UiHelpers;
 using UiHelpers;
 
-namespace Editor.Gui.ChildUi
+namespace T3.Editor.Gui.ChildUi
 {
     public static class CustomChildUiRegistry
     {

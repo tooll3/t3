@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
-namespace Editor.Gui.Commands
+namespace T3.Editor.Gui.Commands
 {
     public interface ICommand
     {

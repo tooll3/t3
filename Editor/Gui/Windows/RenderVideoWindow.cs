@@ -8,6 +8,8 @@ using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
 using T3.Core.Logging;
+using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using Vector2 = System.Numerics.Vector2;
 using Icon = Editor.Gui.Styling.Icon;
 
