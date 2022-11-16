@@ -498,9 +498,10 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
 
-        public static bool DrawStringParameter(string label, ref string value, string placeHolder = null)
+        public static bool DrawStringParameter(string label, ref string value, string placeHolder = null, string warning=null)
         {
             const float leftPadding = 200;
+            const float spacing = 20;
             var labelSize = ImGui.CalcTextSize(label);
 
             var p = ImGui.GetCursorPos();
@@ -513,7 +514,7 @@ namespace T3.Editor.Gui.Styling
             ImGui.SetCursorPos(p);
             
             ImGui.SameLine();
-            ImGui.SetCursorPosX(leftPadding + 20);
+            ImGui.SetCursorPosX(leftPadding + spacing);
             //var size = new Vector2(150, ImGui.GetFrameHeight());
             
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X- 50);
@@ -533,8 +534,19 @@ namespace T3.Editor.Gui.Styling
                 var minPos = ImGui.GetItemRectMin();
                 var maxPos = ImGui.GetItemRectMax();
                 drawList.PushClipRect(minPos,maxPos);
-                drawList.AddText(minPos + new Vector2(3,3), Color.White.Fade(0.25f), placeHolder);
+                drawList.AddText(minPos + new Vector2(8,3), Color.White.Fade(0.25f), placeHolder);
                 drawList.PopClipRect();
+            }
+
+            if (!string.IsNullOrEmpty(warning))
+            {
+                ImGui.Indent(leftPadding + spacing);
+                ImGui.PushFont(Fonts.FontSmall);
+                ImGui.PushStyleColor(ImGuiCol.Text, Color.Red.Rgba);
+                ImGui.TextUnformatted(warning);
+                ImGui.PopStyleColor();
+                ImGui.PopFont();
+                ImGui.Unindent(leftPadding + spacing);
             }
             
             return modified;

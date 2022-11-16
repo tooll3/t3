@@ -318,7 +318,7 @@ namespace T3.Editor.Gui
             _hoveredIdsForNextFrame.Add(id);
         }
 
-        public static void CenterHoveredId(Guid symbolChildId)
+        public static void SelectAndCenterChildIdInView(Guid symbolChildId)
         {
             var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
             if (primaryGraphWindow == null)
