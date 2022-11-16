@@ -34,14 +34,10 @@ namespace T3.StartEditor
                 operatorAssemblySources.Add(File.ReadAllText(sourceFile));
             }
 
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\AudioAnalysisResult.cs"));
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\BmFont.cs"));
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\GpuQuery.cs"));
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\ICameraPropertiesProvider.cs"));
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\MidiInConnectionManager.cs"));
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\OscConnectionManager.cs"));
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\Interop\SpoutDX.cs"));
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\Interop\Std.cs"));
+            foreach (var filepath in Directory.GetFiles(@"Operators\Utils\", "*.cs", SearchOption.AllDirectories))
+            {
+                operatorAssemblySources.Add(File.ReadAllText(filepath));
+            }
 
             Log.Debug("Compiling...");
             var references = CompileSymbolsFromSource(".", operatorAssemblySources.ToArray());
