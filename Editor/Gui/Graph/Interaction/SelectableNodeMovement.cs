@@ -8,13 +8,13 @@ using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Editor.Gui;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 
 namespace Editor.Gui.Graph.Interaction

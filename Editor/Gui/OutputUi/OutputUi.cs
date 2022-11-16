@@ -1,9 +1,9 @@
 ﻿using System;
 using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Interaction.TransformGizmos;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Editor.Gui.Interaction.TransformGizmos;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.OutputUi

@@ -5,8 +5,6 @@ using System.Linq;
 using Editor.Gui.Graph.Dialogs;
 using Editor.Gui.Graph.Interaction;
 using Editor.Gui.Interaction;
-using Editor.Gui.Interaction.TransformGizmos;
-using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows;
 using Editor.Gui.Windows.TimeLine;
@@ -16,12 +14,12 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.TimeLine;
-using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 
 namespace Editor.Gui.Graph

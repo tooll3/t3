@@ -1,12 +1,11 @@
 ﻿using System.Linq;
 using System.Numerics;
 using Editor.Gui;
-using Editor.Gui.Styling;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
-using UiHelpers;
 
 namespace T3.Editor.Gui.ChildUi
 {

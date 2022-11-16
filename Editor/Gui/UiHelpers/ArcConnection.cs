@@ -1,18 +1,11 @@
 using System;
 using System.Numerics;
-using System.Windows.Forms;
-using ImGuiNET;
-using T3.Core;
-using T3.Core.Logging;
-using Editor.Gui;
 using Editor.Gui.Graph;
-using Editor.Gui.Windows;
-using T3.Core.Resource;
+using ImGuiNET;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
-using T3.Editor.Gui.UiHelpers;
 
-namespace UiHelpers
+namespace T3.Editor.Gui.UiHelpers
 {
     static class ArcConnection
     {

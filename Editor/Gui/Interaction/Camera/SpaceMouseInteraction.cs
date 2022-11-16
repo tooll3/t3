@@ -1,14 +1,10 @@
 ﻿using System;
-using SharpDX;
-using Editor;
-using T3.Core;
+using Editor.Gui.Interaction.Camera;
 using Editor.Gui.UiHelpers;
-using T3.Core.Resource;
+using SharpDX;
 using T3.Core.Utils;
-using T3.Editor;
-using T3.Editor.Gui.Interaction.Camera;
 
-namespace Editor.Gui.Interaction.Camera
+namespace T3.Editor.Gui.Interaction.Camera
 {
     /// <summary>
     /// Gathers update event information from SpaceMouse and apply it to a <see cref="CameraSetup"/>. 

@@ -8,6 +8,7 @@ using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.Gui.OutputUi
 {

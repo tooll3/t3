@@ -5,7 +5,6 @@ using ImGuiNET;
 using System.Numerics;
 using Editor.Gui.Commands;
 using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using T3.Core.IO;
 using T3.Core.Operator;
@@ -17,7 +16,6 @@ using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using UiHelpers;
 
 namespace Editor.Gui.Graph
 {

@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
 using Editor.Gui;
-using Editor.Gui.Styling;
 using ImGuiNET;
 using T3.Core;
 using T3.Core.Operator;
@@ -9,7 +8,6 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f;
-using UiHelpers;
 
 namespace T3.Editor.Gui.ChildUi
 {

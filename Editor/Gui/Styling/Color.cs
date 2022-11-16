@@ -1,7 +1,5 @@
 ﻿using System;
 using ImGuiNET;
-using T3.Core;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;

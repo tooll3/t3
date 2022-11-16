@@ -4,7 +4,7 @@ using T3.Core.DataTypes;
 using Editor.Gui.UiHelpers;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
-using UiHelpers;
+using T3.Editor.Gui.TableView;
 
 namespace Editor.Gui.InputUi
 {
@@ -44,7 +44,7 @@ namespace Editor.Gui.InputUi
             //                       ImGui.GetCursorScreenPos() + size);
             //
             // //var modified= GradientEditor.Draw(slist, ImGui.GetWindowDrawList(), area);
-            var modified = TableView.TableList.Draw(slist);
+            var modified = TableList.Draw(slist);
             return modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
         }
         
@@ -59,7 +59,7 @@ namespace Editor.Gui.InputUi
             //ImGui.TextUnformatted($"{value.Type.Name}[{value.GetCount()}]");
             ImGui.NewLine();
             
-                        var modified = TableView.TableList.Draw(slist);
+                        var modified = TableList.Draw(slist);
                         //return modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;            var modified = TableView.TableList.Draw(slist);
                         //return modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
         }

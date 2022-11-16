@@ -3,7 +3,6 @@ using System.Linq;
 using DelaunayVoronoi;
 using Editor.Gui;
 using Editor.Gui.Interaction.Variations.Model;
-using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows;
 using Editor.Gui.Windows.Output;

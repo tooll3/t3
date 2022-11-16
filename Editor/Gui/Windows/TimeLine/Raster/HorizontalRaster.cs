@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
-using Editor.Gui.Interaction.Snapping;
-using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
-using Editor.Gui.Windows.TimeLine.Raster;
 using ImGuiNET;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
-using T3.Editor.Gui.Windows.TimeLine.Raster;
+using T3.Editor.Gui.UiHelpers;
 
-namespace Editor.Gui.Windows.TimeLine
+namespace T3.Editor.Gui.Windows.TimeLine.Raster
 {
     public  class HorizontalRaster: IValueSnapAttractor
     {

@@ -12,13 +12,13 @@ using T3.Core.Operator;
 using Editor.Gui.Graph.Interaction;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Editor.Gui;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using Truncon.Collections;
-using UiHelpers;
 
 namespace Editor.Gui.Graph
 {

@@ -4,13 +4,13 @@ using System.Linq;
 using Editor.Gui;
 using Editor.Gui.Graph.Interaction;
 using Editor.Gui.Interaction.Camera;
-using Editor.Gui.Interaction.TransformGizmos;
 using Editor.Gui.Windows;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
+using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6;
 
 namespace T3.Editor.Gui.Windows.Output

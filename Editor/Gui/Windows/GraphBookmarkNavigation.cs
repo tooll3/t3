@@ -10,7 +10,9 @@ using Microsoft.SqlServer.Server;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using T3.Core.Logging;
+using T3.Editor.Gui;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.UiHelpers;
 
 namespace Editor.Gui.Windows
 {

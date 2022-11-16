@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Editor.Gui.UiHelpers;
-using Editor.Gui.Windows.TimeLine.Raster;
+using Editor.Gui.Windows.TimeLine;
 using T3.Core.Animation;
-using T3.Editor.Gui.Windows.TimeLine.Raster;
 
-namespace Editor.Gui.Windows.TimeLine
+namespace T3.Editor.Gui.Windows.TimeLine.Raster
 {
     /// <summary>
     /// A <see cref="AbstractTimeRaster"/> that displays Bars, Beats and ticks 

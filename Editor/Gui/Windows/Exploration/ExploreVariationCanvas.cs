@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Editor.Gui;
 using Editor.Gui.Windows;
-using Editor.Gui.Windows.Exploration;
 using Editor.Gui.Windows.Output;
 using ImGuiNET;
 using SharpDX.Direct3D11;

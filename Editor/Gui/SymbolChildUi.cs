@@ -2,18 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui.ChildUi;
 using Editor.Gui.Graph.Interaction;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using UiHelpers;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.UiHelpers;
 
-namespace Editor.Gui
+namespace T3.Editor.Gui
 {
     /// <summary>
     /// Properties needed for visual representation of an instance. Should later be moved to gui component.

@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Reflection;
-using Editor.Gui.Styling;
 using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Editor.Gui.Styling;
 
-namespace Editor.Gui.TableView
+namespace T3.Editor.Gui.TableView
 {
     public static class TableList
     {

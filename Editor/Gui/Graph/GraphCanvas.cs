@@ -12,7 +12,6 @@ using Editor.Gui.Graph.Interaction;
 using Editor.Gui.InputUi;
 using Editor.Gui.Interaction;
 using Editor.Gui.OutputUi;
-using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows;
 using Editor.Gui.Windows.Output;
@@ -37,7 +36,7 @@ using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using UiHelpers;
+using T3.Editor.Gui.Windows.TimeLine;
 
 namespace Editor.Gui.Graph
 {

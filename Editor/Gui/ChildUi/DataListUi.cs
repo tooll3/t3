@@ -4,7 +4,6 @@ using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_bfe540ef_f8ad_45a2_b557_cd419d9c8e44;
-using UiHelpers;
 
 namespace T3.Editor.Gui.ChildUi
 {
@@ -31,7 +30,7 @@ namespace T3.Editor.Gui.ChildUi
             
             ImGui.SetCursorScreenPos(innerRect.Min);
             
-            var modified =global::Editor.Gui.TableView.TableList.Draw(list, innerRect.GetSize());
+            var modified =global::T3.Editor.Gui.TableView.TableList.Draw(list, innerRect.GetSize());
             if (modified)
             {
                 dataList.InputList.DirtyFlag.Invalidate();

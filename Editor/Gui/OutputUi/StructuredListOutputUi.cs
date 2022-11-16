@@ -5,6 +5,7 @@ using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.OutputUi;
+using T3.Editor.Gui.TableView;
 
 namespace Editor.Gui.OutputUi
 {
@@ -31,7 +32,7 @@ namespace Editor.Gui.OutputUi
                 }
                 else
                 {
-                    var modified = TableView.TableList.Draw(typedSlot.Value);
+                    var modified = TableList.Draw(typedSlot.Value);
                     if (modified)
                     {
                         typedSlot.DirtyFlag.Invalidate();

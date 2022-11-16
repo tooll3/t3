@@ -8,7 +8,7 @@ using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Editor.Gui.UiHelpers;
-using UiHelpers;
+using T3.Editor.Gui.Windows.TimeLine;
 
 namespace Editor.Gui.Interaction.WithCurves
 {

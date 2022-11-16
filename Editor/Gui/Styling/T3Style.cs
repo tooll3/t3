@@ -1,8 +1,7 @@
-﻿using ImGuiNET;
-using System.Numerics;
-using T3.Editor.Gui.Styling;
+﻿using System.Numerics;
+using ImGuiNET;
 
-namespace Editor.Gui
+namespace T3.Editor.Gui.Styling
 {
     /// <summary>
     /// Defines global style constants and ImGUI overrides

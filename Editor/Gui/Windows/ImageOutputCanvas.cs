@@ -1,25 +1,17 @@
+using System;
+using System.Numerics;
+using Editor.Gui;
+using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using SharpDX.Direct3D11;
-using System;
-using System.Collections.Generic;
-using System.Numerics;
-using Editor.Gui.Interaction;
-using Editor.Gui.OutputUi;
-using Editor.Gui.Styling;
-using Editor.Gui.UiHelpers;
 using SharpDX.DXGI;
-using T3.Core;
-using T3.Core.Logging;
-using Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Operators.Types.Id_eff2ffff_dc39_4b90_9b1c_3c0a9a0108c6;
-using UiHelpers;
 
-namespace Editor.Gui.Windows
+namespace T3.Editor.Gui.Windows
 {
     public class ImageOutputCanvas : ScalableCanvas
     {

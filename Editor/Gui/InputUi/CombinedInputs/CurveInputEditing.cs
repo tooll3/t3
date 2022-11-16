@@ -19,6 +19,8 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.WithCurves;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.Windows.TimeLine;
+using T3.Editor.Gui.Windows.TimeLine.Raster;
 
 namespace Editor.Gui.InputUi.CombinedInputs
 {

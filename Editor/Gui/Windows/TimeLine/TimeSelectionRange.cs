@@ -1,16 +1,11 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Numerics;
-using Editor.Gui.Interaction.Snapping;
 using ImGuiNET;
 using T3.Core.Animation;
-using T3.Core.Logging;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
-using UiHelpers;
 
-namespace Editor.Gui.Windows.TimeLine
+namespace T3.Editor.Gui.Windows.TimeLine
 {
     /// <summary>
     /// A graphic representation that allows to move and scale multiple selected timeline elements

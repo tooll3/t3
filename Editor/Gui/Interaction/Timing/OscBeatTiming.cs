@@ -2,9 +2,8 @@
 using System.Threading;
 using Rug.Osc;
 using T3.Core.Logging;
-using T3.Editor.Gui.Interaction.Timing;
 
-namespace Editor.Gui.Interaction.Timing
+namespace T3.Editor.Gui.Interaction.Timing
 {
     /// <summary>
     /// Receives midi sync signals via OSC. 

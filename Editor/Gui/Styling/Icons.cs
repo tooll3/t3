@@ -1,13 +1,9 @@
-﻿using ImGuiNET;
-using System.Numerics;
-using T3.Core;
-using T3.Core.Resource;
+﻿using System.Numerics;
+using ImGuiNET;
 using T3.Core.Utils;
-using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using UiHelpers;
 
-namespace Editor.Gui.Styling
+namespace T3.Editor.Gui.Styling
 {
     /// <summary>
     /// Handles the mapping of custom icons

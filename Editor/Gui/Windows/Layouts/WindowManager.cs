@@ -3,13 +3,13 @@ using System.Linq;
 using System.Numerics;
 using Editor.Gui.Graph;
 using Editor.Gui.UiHelpers;
-using Editor.Gui.Windows.Exploration;
 using Editor.Gui.Windows.Output;
 using Editor.Gui.Windows.Variations;
 using ImGuiNET;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Exploration;
+using T3.Editor.Gui.Windows.Variations;
 
 namespace Editor.Gui.Windows.Layouts
 {

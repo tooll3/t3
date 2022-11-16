@@ -1,6 +1,4 @@
-﻿using Editor.Gui.Interaction.Snapping;
-using Editor.Gui.UiHelpers;
-using Editor.Gui.Windows.TimeLine.Raster;
+﻿using Editor.Gui.UiHelpers;
 using T3.Core.Animation;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Windows.TimeLine.Raster;

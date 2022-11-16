@@ -1,10 +1,11 @@
 ﻿using Editor.Gui;
 using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Graph.Dialogs
 {

@@ -7,7 +7,6 @@ using Editor.Gui;
 using Editor.Gui.Graph;
 using Editor.Gui.Graph.Dialogs;
 using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows;
 using ImGuiNET;

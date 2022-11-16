@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using ImGuiNET;
 
-namespace Editor.Gui.UiHelpers
+namespace T3.Editor.Gui.UiHelpers
 {
     /// <summary>
     /// Framework for rendering modal dialogs.

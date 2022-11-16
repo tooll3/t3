@@ -5,8 +5,7 @@ using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_ed0f5188_8888_453e_8db4_20d87d18e9f4;
-using UiHelpers;
-using Icon = Editor.Gui.Styling.Icon;
+using Icon = T3.Editor.Gui.Styling.Icon;
 
 namespace T3.Editor.Gui.ChildUi
 {

@@ -1,10 +1,8 @@
 ﻿using System.Numerics;
-using Editor.Gui;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using UiHelpers;
 
 namespace T3.Editor.Gui.Selection
 {

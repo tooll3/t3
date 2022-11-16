@@ -4,7 +4,6 @@ using Editor.Gui;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.UiHelpers;
-using UiHelpers;
 
 namespace T3.Editor.Gui.ChildUi
 {

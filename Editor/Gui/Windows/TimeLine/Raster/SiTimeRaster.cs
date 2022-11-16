@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Editor.Gui.Interaction.Snapping;
 using Editor.Gui.UiHelpers;
+using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Editor.Gui.Interaction.Snapping;
-using T3.Editor.Gui.Windows.TimeLine.Raster;
 
-namespace Editor.Gui.Windows.TimeLine.Raster
+namespace T3.Editor.Gui.Windows.TimeLine.Raster
 {
     /// <summary>
     /// A <see cref="AbstractTimeRaster"/> that displays Seconds, Minutes, Hours, etc. 

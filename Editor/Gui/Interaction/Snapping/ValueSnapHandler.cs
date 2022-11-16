@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Numerics;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
-using T3.Core;
-using T3.Core.Logging;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
-using UiHelpers;
+using T3.Editor.Gui.UiHelpers;
 
-namespace Editor.Gui.Interaction.Snapping
+namespace T3.Editor.Gui.Interaction.Snapping
 {
     public class ValueSnapHandler
     {

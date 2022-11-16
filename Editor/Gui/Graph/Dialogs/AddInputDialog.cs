@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using Editor.Gui.Graph.Interaction;
 using Editor.Gui.InputUi;
-using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core;
@@ -12,6 +11,8 @@ using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.VectorInputs;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 
 namespace Editor.Gui.Graph.Dialogs
 {

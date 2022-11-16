@@ -10,6 +10,7 @@ using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Editor.Gui.Windows;
 using Device = SharpDX.Direct3D11.Device;
 using Utilities = T3.Core.Utils.Utilities;
 

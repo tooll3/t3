@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Editor.Gui.Commands;
 using Editor.Gui.UiHelpers;
-using Editor.Gui.Windows;
 using ImGuiNET;
 using SharpDX;
 using SharpDX.Mathematics.Interop;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
@@ -15,13 +12,13 @@ using T3.Core.Resource;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.UiHelpers;
-using UiHelpers;
+using T3.Editor.Gui.Windows;
 using Color = T3.Editor.Gui.Styling.Color;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 // ReSharper disable RedundantNameQualifier
 
-namespace Editor.Gui.Interaction.TransformGizmos
+namespace T3.Editor.Gui.Interaction.TransformGizmos
 {
     /**
      * Handles the interaction with 3d-gizmos for operators selected in the graph.  

@@ -2,9 +2,6 @@
 using System.Runtime.InteropServices;
 using Editor.Gui;
 using Editor.Gui.Graph.Interaction;
-using Editor.Gui.InputUi;
-using Editor.Gui.Styling;
-using Editor.Gui.Windows;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Interaction;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Editor.Gui.Graph;
 using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Interaction.Variations.Midi;
 using Editor.Gui.Interaction.Variations.Model;
 using Editor.Gui.Windows.Variations;
 using Operators.Utils;

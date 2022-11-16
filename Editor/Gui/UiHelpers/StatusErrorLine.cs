@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Editor.Gui.Styling;
-using Editor.Gui.Windows;
 using ImGuiNET;
-using T3.Core;
 using T3.Core.Logging;
-using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows;
 
-namespace Editor.Gui.UiHelpers
+namespace T3.Editor.Gui.UiHelpers
 {
     /// <summary>
     /// Renders the <see cref="ConsoleLogWindow"/>

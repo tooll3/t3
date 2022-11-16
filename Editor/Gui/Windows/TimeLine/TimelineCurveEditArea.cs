@@ -1,19 +1,15 @@
-using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
-using Editor.Gui.Commands;
-using Editor.Gui.Interaction.Snapping;
+using Editor.Gui.InputUi.CombinedInputs;
 using Editor.Gui.Interaction.WithCurves;
-using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
+using Editor.Gui.Windows.TimeLine;
+using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;
-using Editor.Gui.InputUi;
-using Editor.Gui.InputUi.CombinedInputs;
-using Editor.Gui.Interaction;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Animation;
 using T3.Editor.Gui.Interaction;
@@ -21,12 +17,10 @@ using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows.TimeLine;
-using UiHelpers;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
-namespace Editor.Gui.Windows.TimeLine
+namespace T3.Editor.Gui.Windows.TimeLine
 {
     public class TimelineCurveEditArea : AnimationParameterEditing, ITimeObjectManipulation, IValueSnapAttractor
     {

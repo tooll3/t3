@@ -2,10 +2,8 @@ using System.Collections.Generic;
 using System.Numerics;
 using T3.Core.Operator;
 using T3.Editor.Gui.Selection;
-using T3.Editor.Gui.UiHelpers;
-using UiHelpers;
 
-namespace Editor.Gui.UiHelpers
+namespace T3.Editor.Gui.UiHelpers
 {
     public interface INodeCanvas:ICanvas
     {

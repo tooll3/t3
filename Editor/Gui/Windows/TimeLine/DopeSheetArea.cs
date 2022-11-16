@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Editor.Gui;
-using Editor.Gui.Interaction.Snapping;
-using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;

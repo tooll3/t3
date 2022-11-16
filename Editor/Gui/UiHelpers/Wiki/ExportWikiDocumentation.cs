@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Editor.Gui;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using Editor.Gui;
-using Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi;
 
-namespace Editor.Gui.UiHelpers.Wiki
+namespace T3.Editor.Gui.UiHelpers.Wiki
 {
     /// <summary>
     /// Exports a folder structure with a complete wiki documentation for all operators in lib 

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using T3.Core;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Editor.Gui.Interaction.Timing

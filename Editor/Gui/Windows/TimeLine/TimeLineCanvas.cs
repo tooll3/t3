@@ -2,27 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Editor.Gui;
+using Editor.Gui.Audio;
 using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Interaction.Snapping;
-using Editor.Gui.Interaction.WithCurves;
-using Editor.Gui.UiHelpers;
+using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using Editor.Gui.Audio;
-using Editor.Gui.Graph;
-using Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Interaction.WithCurves;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows.TimeLine;
-using UiHelpers;
+using T3.Editor.Gui.Windows.TimeLine.Raster;
 
-namespace Editor.Gui.Windows.TimeLine
+namespace T3.Editor.Gui.Windows.TimeLine
 {
     /// <summary>
     /// Combines multiple <see cref="ITimeObjectManipulation"/>s into a single consistent

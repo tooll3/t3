@@ -3,12 +3,12 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Text;
 using Editor.Gui;
-using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Windows
 {

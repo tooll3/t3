@@ -1,35 +1,28 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
+using Editor.Gui;
+using Editor.Gui.Audio;
 using Editor.Gui.Graph;
-using Editor.Gui.Interaction.Timing;
-using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
+using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;
 using ManagedBass;
 using Newtonsoft.Json;
-using T3.Core;
 using T3.Core.Animation;
+using T3.Core.Audio;
 using T3.Core.IO;
 using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Slots;
-using Editor.Gui.Audio;
-using Editor.Gui.Commands;
-using T3.Core.Audio;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using Icon = Editor.Gui.Styling.Icon;
+using Icon = T3.Editor.Gui.Styling.Icon;
 using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
-namespace Editor.Gui.Windows.TimeLine
+namespace T3.Editor.Gui.Windows.TimeLine
 {
     internal static class TimeControls
     {
@@ -379,7 +372,7 @@ namespace Editor.Gui.Windows.TimeLine
             ImGui.SameLine();
 
             // ToggleHover
-            Styling.Icon icon;
+            Icon icon;
             string tooltip;
             string additionalTooltip = null;
             switch (UserSettings.Config.HoverMode)

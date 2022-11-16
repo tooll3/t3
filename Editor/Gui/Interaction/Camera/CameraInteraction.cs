@@ -3,8 +3,8 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Operator.Interfaces;
-using Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.Interaction.Camera;
+using T3.Editor.Gui.Interaction.TransformGizmos;
 
 namespace Editor.Gui.Interaction.Camera
 {

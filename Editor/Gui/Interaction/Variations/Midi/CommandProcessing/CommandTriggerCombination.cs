@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Editor.Gui.Interaction.Variations.Midi;
 
 //using System.Linq;
 //using T3.Gui.Graph;

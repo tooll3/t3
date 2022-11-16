@@ -5,6 +5,7 @@ using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Graph.Dialogs
 {

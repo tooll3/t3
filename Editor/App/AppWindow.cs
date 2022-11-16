@@ -1,13 +1,15 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
-using Editor.Gui;
+using Editor.App;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
+using T3.Editor.Gui.Styling;
 using Device = SharpDX.Direct3D11.Device;
+using Icon = System.Drawing.Icon;
 
-namespace Editor.App
+namespace T3.Editor.App
 {
     /// <summary>
     /// Functions and properties related to rendering DX11 content into  RenderForm windows

@@ -6,7 +6,6 @@ using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_b724ea74_d5d7_4928_9cd1_7a7850e4e179;
-using UiHelpers;
 
 namespace T3.Editor.Gui.ChildUi
 {

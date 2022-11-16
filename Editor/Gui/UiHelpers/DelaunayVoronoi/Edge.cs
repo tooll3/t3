@@ -1,6 +1,4 @@
-﻿using DelaunayVoronoi;
-
-namespace T3.Editor.Gui.UiHelpers.DelaunayVoronoi
+﻿namespace T3.Editor.Gui.UiHelpers.DelaunayVoronoi
 {
     public class Edge
     {

@@ -1,6 +1,6 @@
 ﻿using ImGuiNET;
 
-namespace Editor.Gui.Styling
+namespace T3.Editor.Gui.Styling
 {
     public static class Fonts
     {

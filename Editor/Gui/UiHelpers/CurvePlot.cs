@@ -1,10 +1,7 @@
 ﻿using ImGuiNET;
-using T3.Core;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using UiHelpers;
 
-namespace Editor.Gui.UiHelpers
+namespace T3.Editor.Gui.UiHelpers
 {
     public class CurvePlot
     {

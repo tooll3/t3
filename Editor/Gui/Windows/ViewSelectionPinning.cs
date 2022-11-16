@@ -1,17 +1,19 @@
-﻿using ImGuiNET;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Editor.Gui;
 using Editor.Gui.Graph;
 using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Styling;
+using Editor.Gui.Windows;
 using Editor.Gui.Windows.Output;
+using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Selection;
-using Icon = Editor.Gui.Styling.Icon;
+using T3.Editor.Gui.Styling;
+using Icon = T3.Editor.Gui.Styling.Icon;
 
-namespace Editor.Gui.Windows
+namespace T3.Editor.Gui.Windows
 {
     /// <summary>
     /// A helper that decides which graph element to show.

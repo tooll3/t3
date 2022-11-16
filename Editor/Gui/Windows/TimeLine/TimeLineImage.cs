@@ -10,6 +10,7 @@ using Editor.Gui.Audio;
 using Editor.Gui.UiHelpers;
 using T3.Core.Audio;
 using T3.Core.Resource;
+using T3.Editor.Gui.Windows.TimeLine;
 
 namespace Editor.Gui.Windows.TimeLine
 {

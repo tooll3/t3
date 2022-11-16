@@ -18,13 +18,13 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Editor.Compilation;
+using T3.Editor.Gui;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Annotations;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
-using UiHelpers;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using Vector2 = System.Numerics.Vector2;
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator

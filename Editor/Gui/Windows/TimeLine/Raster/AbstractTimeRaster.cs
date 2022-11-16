@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui.Interaction.Snapping;
-using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Utils;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Windows.TimeLine.Raster
 {

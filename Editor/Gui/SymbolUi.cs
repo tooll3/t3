@@ -11,6 +11,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Editor.Gui;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;

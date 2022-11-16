@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.Numerics;
 using Editor.Gui;
 using Editor.Gui.Graph;
-using Editor.Gui.Interaction.Snapping;
-using Editor.Gui.Styling;
 using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine;
-using UiHelpers;
 
 namespace T3.Editor.Gui.Interaction.WithCurves
 {
