@@ -1,17 +1,16 @@
 ﻿using System;
-using ImGuiNET;
 using System.Diagnostics;
 using System.Numerics;
 using System.Text;
+using Editor.Gui;
 using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
-using T3.Core;
+using ImGuiNET;
 using T3.Core.IO;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 
-namespace Editor.Gui.Windows
+namespace T3.Editor.Gui.Windows
 {
     public static class T3Metrics
     {

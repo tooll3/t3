@@ -32,6 +32,7 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Operators.Types.Id_2b00bb7a_92cc_41e5_a5f6_bc3e8b16c5eb;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;

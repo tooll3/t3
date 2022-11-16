@@ -2,6 +2,7 @@
 using Editor.Gui.ChildUi.Animators;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.ChildUi.Animators;
 using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c;
 using UiHelpers;

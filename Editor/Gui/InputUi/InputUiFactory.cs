@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using T3.Editor.Gui.InputUi;
 
-namespace Editor.Gui.InputUi
+namespace T3.Editor.Gui.InputUi
 {
     public static class InputUiFactory
     {

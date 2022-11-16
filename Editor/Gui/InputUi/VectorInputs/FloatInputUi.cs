@@ -1,13 +1,13 @@
 ﻿using System.Linq;
 using System.Numerics;
+using Editor.Gui.InputUi;
 using Editor.Gui.Interaction;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 
-namespace Editor.Gui.InputUi
+namespace T3.Editor.Gui.InputUi.VectorInputs
 {
     public class FloatInputUi : FloatVectorInputValueUi<float>
     {

@@ -6,11 +6,10 @@ using System.Reflection;
 using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Resource;
 
-namespace Editor.Compilation
+namespace T3.Editor.Compilation
 {
     /// <summary>
     /// And editor functionality that handles the c# compilation of symbol classes.
@@ -49,7 +48,6 @@ namespace Editor.Compilation
 
             resource.OperatorAssembly = newAssembly;
             resource.Updated = true;
-            return;
         }
 
         public static Assembly CompileSymbolFromSource(string source, string symbolName)
@@ -63,10 +61,7 @@ namespace Editor.Compilation
             foreach (var asmName in referencedAssembliesNames)
             {
                 var asm = Assembly.Load(asmName);
-                if (asm != null)
-                {
-                    referencedAssemblies.Add(MetadataReference.CreateFromFile(asm.Location));
-                }
+                referencedAssemblies.Add(MetadataReference.CreateFromFile(asm.Location));
 
                 // in order to get dependencies of the used assemblies that are not part of T3 references itself
                 var subAsmNames = asm.GetReferencedAssemblies();

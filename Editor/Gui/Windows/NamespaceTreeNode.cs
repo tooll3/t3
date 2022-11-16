@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using T3.Core.Operator;
 
-namespace Editor.Gui.Windows
+namespace T3.Editor.Gui.Windows
 {
     /// <summary>
     /// A nested container that can contain further instances of <see cref="NamespaceTreeNode"/>

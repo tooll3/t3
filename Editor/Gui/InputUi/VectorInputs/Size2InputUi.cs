@@ -4,10 +4,8 @@ using SharpDX;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using Editor.Gui.InputUi;
-using T3.Editor.Gui.InputUi;
 
-namespace Editor.Gui.InputUi.VectorInputs
+namespace T3.Editor.Gui.InputUi.VectorInputs
 {
     public class Size2InputUi : IntVectorInputValueUi<Size2>
     {

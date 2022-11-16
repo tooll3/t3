@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using T3.Core;
+using Editor.Gui;
+using Editor.Gui.InputUi.SimpleInputUis;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using Editor.Gui.InputUi;
-using Editor.Gui.InputUi.SimpleInputUis;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Editor.Gui.InputUi.SimpleInputUis;
 
-namespace Editor.Gui.Graph.Interaction
+namespace T3.Editor.Gui.Graph.Interaction
 {
     public class FileReferenceOperations
     {

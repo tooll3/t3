@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using Editor.Gui.InputUi.SingleControl;
 using ImGuiNET;
-using T3.Editor.Gui.InputUi;
 
-namespace Editor.Gui.InputUi.SingleControl
+namespace T3.Editor.Gui.InputUi.SingleControl
 {
     public class StringListInputUi : SingleControlInputUi<List<string>>
     {

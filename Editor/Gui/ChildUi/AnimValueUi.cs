@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Numerics;
+using Editor.Gui;
 using Editor.Gui.ChildUi.Animators;
 using ImGuiNET;
-using T3.Core;
 using T3.Core.Operator;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c;
-using UiHelpers;
 
-namespace Editor.Gui.ChildUi
+namespace T3.Editor.Gui.ChildUi
 {
     public static class AnimValueUi
     {
@@ -31,10 +28,10 @@ namespace Editor.Gui.ChildUi
             var h = screenRect.GetHeight();
             var graphRect = screenRect;
             
-            const float RelativeGraphWidth = 0.75f;
+            const float relativeGraphWidth = 0.75f;
             
             graphRect.Expand(-3);
-            graphRect.Min.X = graphRect.Max.X - graphRect.GetWidth() * RelativeGraphWidth;
+            graphRect.Min.X = graphRect.Max.X - graphRect.GetWidth() * relativeGraphWidth;
             var graphWidth = graphRect.GetWidth();
             
             var highlightEditable = ImGui.GetIO().KeyCtrl;
@@ -114,13 +111,13 @@ namespace Editor.Gui.ChildUi
                 {
                     var f = (float)i / GraphListSteps;
                     var fragment = f * (1 + previousCycleFragment) - previousCycleFragment;
-                    GraphLinePoints[i] = new Vector2(f * graphWidth,
+                    _graphLinePoints[i] = new Vector2(f * graphWidth,
                                                      (0.5f - animValue.CalcNormalizedValueForFraction(fragment) / 2) * h
                                                     ) + graphRect.Min;
                 }
 
                 var curveLineColor = highlightEditable ? T3Style.Colors.GraphLineColorHover : T3Style.Colors.GraphLineColor;
-                drawList.AddPolyline(ref GraphLinePoints[0], GraphListSteps, curveLineColor, ImDrawFlags.None, 1.5f);
+                drawList.AddPolyline(ref _graphLinePoints[0], GraphListSteps, curveLineColor, ImDrawFlags.None, 1.5f);
             }
 
             ImGui.PopID();
@@ -130,9 +127,7 @@ namespace Editor.Gui.ChildUi
         private static float _dragStartBias;
         private static float _dragStartRatio;
         
-        
-
-        private static readonly Vector2[] GraphLinePoints = new Vector2[GraphListSteps];
+        private static readonly Vector2[] _graphLinePoints = new Vector2[GraphListSteps];
         private const int GraphListSteps = 80;
     }
 }

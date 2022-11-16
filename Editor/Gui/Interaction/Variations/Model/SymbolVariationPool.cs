@@ -14,6 +14,7 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Commands.Variations;
 
 namespace Editor.Gui.Interaction.Variations.Model
 {

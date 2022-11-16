@@ -1,12 +1,10 @@
 ﻿using System.Numerics;
-using Editor.Gui.UiHelpers;
+using Editor.Gui.InputUi;
 using ImGuiNET;
 using T3.Core.DataTypes;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.UiHelpers;
-using UiHelpers;
 
-namespace Editor.Gui.InputUi
+namespace T3.Editor.Gui.InputUi.CombinedInputs
 {
     public class GradientInputUi : InputValueUi<Gradient>
     {

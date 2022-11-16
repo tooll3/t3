@@ -20,6 +20,7 @@ using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
+using T3.Editor.Gui.Windows.TimeLine;
 using UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 

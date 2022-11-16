@@ -21,6 +21,7 @@ using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows.TimeLine;
 using UiHelpers;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator

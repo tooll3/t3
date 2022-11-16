@@ -58,7 +58,6 @@ namespace Editor.Gui.Windows.Layouts
                                new OutputWindow(),
                                new ConsoleLogWindow(),
                                new SymbolLibrary(),
-                               new LegacyVariationsWindow(),
                                new RenderSequenceWindow(),
                                new RenderVideoWindow(),
                            };            

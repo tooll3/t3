@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Editor.Gui;
 using Editor.Gui.Interaction.Variations;
 using Editor.Gui.Interaction.Variations.Model;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using Editor.Gui;
-using Editor.Gui.Commands;
-using T3.Editor.Gui.Commands;
 
-namespace Editor.Gui.Commands.Variations
+namespace T3.Editor.Gui.Commands.Variations
 {
     public class AddPresetOrVariationCommand : ICommand
     {

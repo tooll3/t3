@@ -6,6 +6,7 @@ using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.UiHelpers;
 using UiHelpers;
 using String = T3.Operators.Types.Id_5880cbc3_a541_4484_a06a_0e6f77cdbe8e.String;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Editor.Gui.Commands;
 using T3.Core.Animation;
 
 namespace T3.Editor.Gui.Commands.Animation
@@ -10,14 +9,11 @@ namespace T3.Editor.Gui.Commands.Animation
         public string Name => "Move keyframes";
         public bool IsUndoable => true;
 
-        private readonly Guid _compositionSymbolId;
-
         private readonly Dictionary<VDefinition, VDefinition> _originalDefForReferences = new Dictionary<VDefinition, VDefinition>();
         private readonly Dictionary<VDefinition, VDefinition> _newDefForReferences = new Dictionary<VDefinition, VDefinition>();
 
         public ChangeKeyframesCommand(Guid compositionSymbolId, IEnumerable<VDefinition> vDefinitions)
         {
-            _compositionSymbolId = compositionSymbolId;
             foreach (var def in vDefinitions)
             {
                 _originalDefForReferences[def] = def.Clone();

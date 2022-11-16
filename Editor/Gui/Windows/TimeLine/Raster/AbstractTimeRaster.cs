@@ -5,14 +5,12 @@ using Editor.Gui.Interaction.Snapping;
 using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
-using T3.Core;
 using T3.Core.Animation;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
 
-namespace Editor.Gui.Windows.TimeLine.Raster
+namespace T3.Editor.Gui.Windows.TimeLine.Raster
 {
     public abstract class AbstractTimeRaster : IValueSnapAttractor
     {

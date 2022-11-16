@@ -3,6 +3,7 @@ using ImGuiNET;
 using T3.Core.DataTypes;
 using Editor.Gui.UiHelpers;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.InputUi.CombinedInputs;
 using UiHelpers;
 
 namespace Editor.Gui.InputUi

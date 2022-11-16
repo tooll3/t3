@@ -1,12 +1,12 @@
-using System;
 using System.Numerics;
 using Editor.Gui.Interaction.Snapping;
+using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
 
-namespace Editor.Gui.Windows.TimeLine
+namespace T3.Editor.Gui.Windows.TimeLine
 {
     public class CurrentTimeMarker: IValueSnapAttractor
     {

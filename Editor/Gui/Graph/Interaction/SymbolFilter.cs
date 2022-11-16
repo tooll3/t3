@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Editor.Gui;
+using Editor.Gui.Graph.Interaction;
 using T3.Core.Logging;
 using T3.Core.Operator;
 
-namespace Editor.Gui.Graph.Interaction
+namespace T3.Editor.Gui.Graph.Interaction
 {
     /// <summary>
     /// Provides a regular expression to filter and sort matching <see cref="Symbol"/>s

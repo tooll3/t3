@@ -1,6 +1,4 @@
-﻿using Editor.Gui.Commands;
-using Editor.Gui.Graph;
-using T3.Editor.Gui.Graph;
+﻿using T3.Editor.Gui.Graph;
 
 namespace T3.Editor.Gui.Commands.Annotations
 {

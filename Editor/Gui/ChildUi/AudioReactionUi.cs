@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Numerics;
+using Editor.Gui;
 using ImGuiNET;
-using T3.Core;
 using T3.Core.Audio;
 using T3.Core.Operator;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c;
-using UiHelpers;
 
-namespace Editor.Gui.ChildUi
+namespace T3.Editor.Gui.ChildUi
 {
     public static class AudioReactionUi
     {
@@ -193,10 +190,7 @@ namespace Editor.Gui.ChildUi
         
         private static float _dragStartThreshold;
         private static float _dragStartWindow;
-        private static Color _highlightColor = Color.Orange;
-        private static Color _inactiveColor = Color.Black.Fade(0.2f);
-
-        private static readonly Vector2[] GraphLinePoints = new Vector2[GraphListSteps];
-        private const int GraphListSteps = 80;
+        private static readonly Color _highlightColor = Color.Orange;
+        private static readonly Color _inactiveColor = Color.Black.Fade(0.2f);
     }
 }

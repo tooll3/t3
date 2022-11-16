@@ -21,6 +21,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.InputUi;

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using T3.Editor.Gui.InputUi;
+using Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 
-namespace Editor.Gui.InputUi
+namespace T3.Editor.Gui.InputUi
 {
     public static class TypeUiRegistry
     {

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Numerics;
-using Editor.Gui;
 using Editor.Gui.Styling;
 using ImGuiNET;
-using T3.Core;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 
@@ -88,8 +85,8 @@ namespace T3.Editor.Gui.Interaction
         private static Vector2 _center;
         private static float DistanceToCenter => Vector2.Distance(_io.MousePos, _center);
 
-        private static readonly Color SegmentColor = new Color(0.2f, 0.2f, 0.2f, 0.35f);
-        private static readonly Color ActiveSegmentColor = new Color(1f, 1f, 1f, 0.5f);
+        private static readonly Color _segmentColor = new Color(0.2f, 0.2f, 0.2f, 0.35f);
+        private static readonly Color _activeSegmentColor = new Color(1f, 1f, 1f, 0.5f);
 
         private enum States
         {
@@ -107,7 +104,7 @@ namespace T3.Editor.Gui.Interaction
                 _ringIndex = ringIndex;
                 _drawList.AddCircle(_center,
                                     radius: Radius + RingWidth / 2,
-                                    SegmentColor,
+                                    _segmentColor,
                                     num_segments: 64,
                                     thickness: RingWidth - Padding);
 
@@ -150,10 +147,8 @@ namespace T3.Editor.Gui.Interaction
                 if (!IsActive)
                     return false;
 
-                var pLast = _io.MousePos - _io.MouseDelta;
                 var pNow = _io.MousePos;
-
-                var lastDialRatio = GetDialRatio(pLast);
+                
                 var dialRatio = GetDialRatio(pNow);
 
                 if (_state == States.WaitingInNeutral)
@@ -212,7 +207,7 @@ namespace T3.Editor.Gui.Interaction
                                     a_min: -(float)rads1,
                                     a_max: -(float)rads2,
                                     num_segments: 64);
-                _drawList.PathStroke(ActiveSegmentColor, ImDrawFlags.None, 1);
+                _drawList.PathStroke(_activeSegmentColor, ImDrawFlags.None, 1);
             }
 
             

@@ -2,19 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui.Commands;
+using Editor.Gui;
 using Editor.Gui.Graph;
 using Editor.Gui.Graph.Interaction;
 using Editor.Gui.Interaction.Snapping;
 using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
+using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;
-using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using Editor.Gui.Interaction;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Animation;
 using T3.Editor.Gui.Commands.Graph;
@@ -22,9 +21,8 @@ using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using UiHelpers;
 
-namespace Editor.Gui.Windows.TimeLine
+namespace T3.Editor.Gui.Windows.TimeLine
 {
     /// <summary>
     /// Shows a list of Layers with <see cref="TimeClip"/>s

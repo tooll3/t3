@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
+using Editor.Gui;
+using Editor.Gui.Graph;
 using Editor.Gui.Graph.Interaction;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Logging;
 
-namespace Editor.Gui.Graph
+namespace T3.Editor.Gui.Graph
 {
     /// <summary>
     /// If active renders a small input field above a symbolChildUi. Handles its state 

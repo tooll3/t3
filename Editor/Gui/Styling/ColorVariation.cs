@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Editor.Gui.InputUi;
 using ImGuiNET;
+using T3.Editor.Gui.InputUi;
 
 namespace T3.Editor.Gui.Styling
 {

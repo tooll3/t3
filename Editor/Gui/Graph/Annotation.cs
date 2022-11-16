@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Numerics;
-using Editor.Gui;
 using Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;

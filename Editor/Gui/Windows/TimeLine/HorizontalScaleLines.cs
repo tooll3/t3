@@ -1,15 +1,13 @@
-﻿using ImGuiNET;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
-using Editor.Gui.Interaction.Snapping;
 using Editor.Gui.UiHelpers;
-using Editor.Gui.Graph;
+using ImGuiNET;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
 
-namespace Editor.Gui.Timeline
+namespace T3.Editor.Gui.Windows.TimeLine
 {
     /// <summary>
     /// Interaction logic for HorizontalScaleLines.xaml

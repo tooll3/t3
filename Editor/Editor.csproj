@@ -26,4 +26,8 @@
     <ProjectReference Include="..\Operators\Operators.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Gui\Windows\LegacyVariations" />
+  </ItemGroup>
+
 </Project>

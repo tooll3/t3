@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Editor.Gui.ChildUi.Animators
+namespace T3.Editor.Gui.ChildUi.Animators
 {
     public struct SpeedRate
     {

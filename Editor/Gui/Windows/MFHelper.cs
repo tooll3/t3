@@ -31,7 +31,7 @@ https://github.com/RolandKoenig/SeeingSharp/blob/master/SeeingSharp.Multimedia_S
 using System;
 using System.Text;
 
-namespace Editor.Gui.Windows
+namespace T3.Editor.Gui.Windows
 {
     /// <summary>
     /// A helper class containing utility methods used when working with Media Foundation.

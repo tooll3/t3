@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Editor.Gui.Interaction.WithCurves;
+using Editor.Gui.Windows.TimeLine;
 using T3.Core.Animation;
-using Editor.Gui.Graph;
-using Editor.Gui.Interaction;
-using Editor.Gui.UiHelpers;
 
-namespace Editor.Gui.Windows.TimeLine
+namespace T3.Editor.Gui.Windows.TimeLine
 {
     /// <summary>
     /// Links to AnimationParameters to editors like DopeSheets or <see cref="TimelineCurveEditArea"/>>

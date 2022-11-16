@@ -1,17 +1,16 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using Editor.Gui;
+using Editor.Gui.InputUi;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 
-namespace Editor.Gui.InputUi
+namespace T3.Editor.Gui.InputUi.VectorInputs
 {
     public abstract class IntVectorInputValueUi<T> : InputValueUi<T>
     {

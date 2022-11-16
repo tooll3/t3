@@ -10,6 +10,7 @@ using ImGuiNET;
 using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Resource;
+using T3.Editor.Gui.InputUi;
 
 namespace Editor.Gui.Graph.Dialogs
 {

@@ -1,15 +1,15 @@
-﻿using ImGuiNET;
-using System.Numerics;
+﻿using System.Numerics;
+using Editor.Gui.Graph;
 using Editor.Gui.Graph.Interaction;
 using Editor.Gui.InputUi;
 using Editor.Gui.Styling;
+using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using UiHelpers;
 
-namespace Editor.Gui.Graph
+namespace T3.Editor.Gui.Graph
 {
     /// <summary>
     /// Draws published input parameters of a <see cref="Symbol"/> and uses <see cref="ConnectionMaker"/> 

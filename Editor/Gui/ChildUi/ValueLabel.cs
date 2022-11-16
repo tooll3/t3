@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Numerics;
 using Editor.Gui;
-using Editor.Gui.Interaction;
 using Editor.Gui.Styling;
 using ImGuiNET;
-using T3.Core;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using UiHelpers;
 
 namespace T3.Editor.Gui.ChildUi
 {
@@ -46,7 +42,7 @@ namespace T3.Editor.Gui.ChildUi
                     
                     if (ImGui.IsItemActive() || !ImGui.IsAnyItemActive())
                     {
-                        drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), HoverRegionColor);
+                        drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), _hoverRegionColor);
                     }
                     else
                     {
@@ -87,7 +83,7 @@ namespace T3.Editor.Gui.ChildUi
             return modified;
         }
 
-        private static readonly Color HoverRegionColor = new Color(0, 0, 0, 0.2f);
+        private static readonly Color _hoverRegionColor = new Color(0, 0, 0, 0.2f);
         private static Vector2 _jogDailCenter;
         private static InputSlot<float> _jogDialValue;        
     }

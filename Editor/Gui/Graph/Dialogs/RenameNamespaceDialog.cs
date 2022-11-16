@@ -4,6 +4,7 @@ using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows;
 using ImGuiNET;
+using T3.Editor.Gui.Windows;
 
 namespace Editor.Gui.Graph.Dialogs
 {

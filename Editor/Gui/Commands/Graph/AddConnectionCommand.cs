@@ -1,6 +1,5 @@
 using System;
 using Editor.Gui;
-using Editor.Gui.Commands;
 using T3.Core.Operator;
 
 namespace T3.Editor.Gui.Commands.Graph

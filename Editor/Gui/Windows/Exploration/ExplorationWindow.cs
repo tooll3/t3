@@ -13,6 +13,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using Vector2 = System.Numerics.Vector2;

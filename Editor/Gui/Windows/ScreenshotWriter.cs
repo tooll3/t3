@@ -5,7 +5,6 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.IO;
 using SharpDX.WIC;
-using T3.Core;
 using T3.Core.Resource;
 using T3.Core.Utils;
 

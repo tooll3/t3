@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using Editor.Gui;
 using Editor.Gui.Graph.Interaction;
 using Editor.Gui.Styling;
 using Editor.Gui.UiHelpers;
 using ImGuiNET;
 
-namespace Editor.Gui.Graph.Dialogs
+namespace T3.Editor.Gui.Graph.Dialogs
 {
     public class RenameSymbolDialog : ModalDialog
     {

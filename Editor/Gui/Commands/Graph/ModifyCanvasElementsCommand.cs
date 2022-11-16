@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Editor.Gui;
-using Editor.Gui.Commands;
 using T3.Editor.Gui.Selection;
 
 namespace T3.Editor.Gui.Commands.Graph
