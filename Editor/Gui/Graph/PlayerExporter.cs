@@ -54,15 +54,12 @@ namespace T3.Editor.Gui.Graph
                                                                                   var source = File.ReadAllText(Model.BuildFilepathForSymbol(symbol, Model.SourceExtension));
                                                                                   return source;
                                                                               }).ToList();
-                
-                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\GpuQuery.cs"));
-                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\BmFont.cs"));
-                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\ICameraPropertiesProvider.cs"));
-                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\AudioAnalysisResult.cs"));
-                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\MidiInConnectionManager.cs"));
-                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\Interop\SpoutDX.cs"));
-                operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\Interop\Std.cs"));
 
+                foreach (var file in Directory.GetFiles(@"Operators\Utils\", "*.cs", SearchOption.AllDirectories))
+                {
+                    operatorAssemblySources.Add(File.ReadAllText(file));    
+                }
+                
                 // Copy player and dependent assemblies to export dir
                 var currentDir = Directory.GetCurrentDirectory();
 
