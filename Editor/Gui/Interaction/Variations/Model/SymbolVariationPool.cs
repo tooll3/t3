@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Editor.Gui.Commands;
-using Editor.Gui.Commands.Variations;
+using Editor.Gui.Interaction.Variations;
+using Editor.Gui.Interaction.Variations.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -16,7 +15,7 @@ using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Commands.Variations;
 
-namespace Editor.Gui.Interaction.Variations.Model
+namespace T3.Editor.Gui.Interaction.Variations.Model
 {
     /// <summary>
     /// Collects all presets and variations for a symbol 

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Numerics;
 using ImGuiNET;
-using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.Gui.ChildUi.Animators;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
-namespace Editor.Gui.ChildUi.Animators
+namespace T3.Editor.Gui.ChildUi.Animators
 {
     public static class RateEditLabel
     {

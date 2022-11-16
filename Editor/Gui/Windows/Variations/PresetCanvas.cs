@@ -3,10 +3,10 @@ using Editor.Gui.Interaction.Variations;
 using Editor.Gui.Interaction.Variations.Model;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Styling;
-using T3.Editor.Gui.Windows.Variations;
 
-namespace Editor.Gui.Windows.Variations
+namespace T3.Editor.Gui.Windows.Variations
 {
     public class PresetCanvas : VariationBaseCanvas
     {

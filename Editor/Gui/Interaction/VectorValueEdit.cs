@@ -1,10 +1,8 @@
 ﻿using System.Numerics;
-using Editor.Gui.InputUi;
 using ImGuiNET;
 using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.Interaction;
 
-namespace Editor.Gui.Interaction
+namespace T3.Editor.Gui.Interaction
 {
     public static class VectorValueEdit
     {

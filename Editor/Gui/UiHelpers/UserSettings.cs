@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Editor.Gui.Graph;
-using Editor.Gui.Interaction;
 using Editor.Gui.Windows;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -10,7 +9,7 @@ using T3.Core.DataTypes;
 using T3.Core.IO;
 using T3.Editor.Gui.Interaction;
 
-namespace Editor.Gui.UiHelpers
+namespace T3.Editor.Gui.UiHelpers
 {
     /// <summary>
     /// Saves view layout, currently open node and other user settings 

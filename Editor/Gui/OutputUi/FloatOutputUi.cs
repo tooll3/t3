@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics;
-using Editor.Gui.OutputUi;
-using Editor.Gui.UiHelpers;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.UiHelpers;
 

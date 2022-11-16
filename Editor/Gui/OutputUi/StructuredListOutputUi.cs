@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.DataTypes;
-using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.TableView;
 
-namespace Editor.Gui.OutputUi
+namespace T3.Editor.Gui.OutputUi
 {
     public class StructuredListOutputUi : OutputUi<StructuredList>
     {

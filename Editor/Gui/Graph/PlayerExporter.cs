@@ -14,10 +14,10 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using Editor.Gui.Audio;
 using Editor.Gui.InputUi;
-using Editor.Gui.InputUi.SimpleInputUis;
 using T3.Core.Resource;
 using T3.Editor;
 using T3.Editor.Gui;
+using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
 using T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23;
 

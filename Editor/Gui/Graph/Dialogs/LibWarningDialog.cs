@@ -1,5 +1,4 @@
-﻿using Editor.Gui.UiHelpers;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Graph.Dialogs

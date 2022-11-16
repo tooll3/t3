@@ -7,6 +7,7 @@ using T3.Core.Operator.Slots;
 using Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.VectorInputs;
+using T3.Editor.Gui.Interaction;
 
 namespace Editor.Gui.InputUi.VectorInputs
 {

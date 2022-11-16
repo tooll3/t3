@@ -1,24 +1,18 @@
-using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Editor.Gui.Graph;
-using Editor.Gui.InputUi;
-using Editor.Gui.Interaction;
-using Editor.Gui.UiHelpers;
-using T3.Core;
+using ImGuiNET;
 using T3.Core.IO;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
-using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
-namespace Editor.Gui
+namespace T3.Editor.Gui.Styling
 {
-    static class CustomComponents
+    internal static class CustomComponents
     {
         public static bool JogDial(string label, ref double delta, Vector2 size)
         {

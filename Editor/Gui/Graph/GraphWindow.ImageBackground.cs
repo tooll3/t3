@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Editor.Gui.Graph.Interaction;
-using Editor.Gui.OutputUi;
 using Editor.Gui.Windows;
-using Editor.Gui.Windows.Output;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using Editor.Gui.Interaction.Camera;
+using T3.Editor.Gui;
+using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Interaction.Camera;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Output;

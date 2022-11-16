@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Editor.Gui.Commands;
 using T3.Core.Animation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Animation;
 using T3.Editor.Gui.Windows.TimeLine;
 
-namespace Editor.Gui.Windows.TimeLine
+namespace T3.Editor.Gui.Interaction.Animation
 {
     public class AnimationOperations
     {

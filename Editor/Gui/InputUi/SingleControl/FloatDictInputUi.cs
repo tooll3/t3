@@ -1,8 +1,7 @@
-using T3.Core.DataTypes;
 using ImGuiNET;
-using T3.Editor.Gui.InputUi;
+using T3.Core.DataTypes;
 
-namespace Editor.Gui.InputUi.SingleControl
+namespace T3.Editor.Gui.InputUi.SingleControl
 {
     public class FloatDictInputUi : SingleControlInputUi<Dict<float>>
     {

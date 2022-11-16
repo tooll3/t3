@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui.Graph.Interaction;
-using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core.Operator;
 using Editor.Gui.Graph;
 using T3.Editor.Gui;
 using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 

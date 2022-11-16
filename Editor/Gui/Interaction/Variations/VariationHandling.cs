@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using Editor.Gui.Graph;
-using Editor.Gui.Graph.Interaction;
 using Editor.Gui.Interaction.Variations.Model;
-using Editor.Gui.Windows.Variations;
 using Operators.Utils;
 using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using Editor.Gui.UiHelpers;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Variations.Midi;
+using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Windows.Variations;
 
 //using T3.Gui.Windows.Variations;

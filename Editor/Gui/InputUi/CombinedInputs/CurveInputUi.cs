@@ -1,17 +1,9 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
+using Editor.Gui;
 using ImGuiNET;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using T3.Core;
 using T3.Core.Animation;
-using T3.Core.Logging;
-using Editor.Gui.InputUi.CombinedInputs;
-using Editor.Gui.UiHelpers;
-using Editor.Gui.Windows.TimeLine;
-using T3.Editor.Gui.InputUi;
 
-namespace Editor.Gui.InputUi
+namespace T3.Editor.Gui.InputUi.CombinedInputs
 {
     public class CurveInputUi : InputValueUi<T3.Core.Animation.Curve>
     {

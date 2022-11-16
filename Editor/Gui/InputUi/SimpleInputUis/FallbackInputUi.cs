@@ -1,9 +1,7 @@
-﻿
+﻿using Editor.Gui.InputUi;
 using ImGuiNET;
-using Editor.Gui.InputUi;
-using T3.Editor.Gui.InputUi;
 
-namespace Editor.Gui.InputUi.SimpleInputUis
+namespace T3.Editor.Gui.InputUi.SimpleInputUis
 {
     public class FallbackInputUi<T> : InputValueUi<T>
     {

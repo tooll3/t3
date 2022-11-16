@@ -1,23 +1,23 @@
-using ImGuiNET;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
-using Editor.Gui.Graph.Interaction;
+using Editor.Gui;
 using Editor.Gui.Windows.Layouts;
+using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.Gui;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
-using T3.Editor.Gui.Windows;
+using T3.Editor.Gui.Windows.Layouts;
 
-namespace Editor.Gui.Windows
+namespace T3.Editor.Gui.Windows
 {
     class ParameterWindow : Window
     {

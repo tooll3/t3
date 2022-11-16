@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Text;
 using Editor.Gui;
-using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Utils;

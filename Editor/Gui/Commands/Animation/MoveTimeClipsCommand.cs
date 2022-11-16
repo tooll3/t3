@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Editor.Gui.Commands;
-using Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Commands;
 using T3.Core.Animation;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph.Interaction;
 
 namespace T3.Editor.Gui.Commands.Animation
 {

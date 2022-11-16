@@ -1,27 +1,19 @@
-using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
-using Editor.Gui.Graph.Dialogs;
-using Editor.Gui.Graph.Interaction;
-using Editor.Gui.InputUi;
+using Editor.Gui;
+using Editor.Gui.Graph;
 using Editor.Gui.Interaction.Variations;
-using Editor.Gui.OutputUi;
-using Editor.Gui.UiHelpers;
-using Editor.Gui.Windows;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ImGuiNET;
 using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
-using T3.Editor.Gui;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction.TransformGizmos;
@@ -34,12 +26,12 @@ using Color = T3.Editor.Gui.Styling.Color;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Editor.Gui.Graph
+namespace T3.Editor.Gui.Graph
 {
     /// <summary>
     /// Renders a graphic representation of a <see cref="SymbolChild"/> within the current <see cref="GraphWindow"/>
     /// </summary>
-    static class GraphNode
+    internal static class GraphNode
     {
         public static void Draw(SymbolChildUi childUi, Instance instance)
         {
@@ -57,7 +49,7 @@ namespace Editor.Gui.Graph
             }
 
             SymbolChildUi.CustomUiResult customUiResult;
-            _drawList = Graph.DrawList;
+            _drawList = global::Editor.Gui.Graph.Graph.DrawList;
 
             var newNodeSize = ComputeNodeSize(childUi, visibleInputUis);
             AdjustGroupLayoutAfterResize(childUi, newNodeSize);
@@ -387,7 +379,7 @@ namespace Editor.Gui.Graph
                 var isPotentialConnectionTarget = ConnectionMaker.IsMatchingInputType(inputDefinition.DefaultValue.ValueType);
                 var colorForType = ColorForInputType(inputDefinition);
 
-                var connectedLines = Graph.Connections.GetLinesToNodeInputSlot(childUi, inputDefinition.Id);
+                var connectedLines = global::Editor.Gui.Graph.Graph.Connections.GetLinesToNodeInputSlot(childUi, inputDefinition.Id);
 
                 // Render input Label
                 if ((customUiResult & SymbolChildUi.CustomUiResult.PreventInputLabels) == 0)
@@ -564,7 +556,7 @@ namespace Editor.Gui.Graph
                 // Update connection lines
                 var dirtyFlagNumUpdatesWithinFrame = output.DirtyFlag.NumUpdatesWithinFrame;
 
-                foreach (var line in Graph.Connections.GetLinesFromNodeOutput(childUi, outputDef.Id))
+                foreach (var line in global::Editor.Gui.Graph.Graph.Connections.GetLinesFromNodeOutput(childUi, outputDef.Id))
                 {
                     line.SourcePosition = new Vector2(usableArea.Max.X, usableArea.GetCenter().Y);
                     line.SourceNodeArea = _selectableScreenRect;
@@ -649,7 +641,7 @@ namespace Editor.Gui.Graph
         // TODO: this is a major performance hot spot and needs optimization
         private static List<IInputUi> FindVisibleInputUis(SymbolUi symbolUi, SymbolChildUi childUi, ref bool nodeHasHiddenMatchingInputs)
         {
-            var connectionsToNode = Graph.Connections.GetLinesIntoNode(childUi);
+            var connectionsToNode = global::Editor.Gui.Graph.Graph.Connections.GetLinesIntoNode(childUi);
 
             if (childUi.Style == SymbolChildUi.Styles.Expanded)
             {
@@ -768,7 +760,7 @@ namespace Editor.Gui.Graph
             if (_previewTextureView == null)
                 return;
 
-            Graph.DrawList.AddImage((IntPtr)_previewTextureView, _previewArea.Min, _previewArea.Max);
+            global::Editor.Gui.Graph.Graph.DrawList.AddImage((IntPtr)_previewTextureView, _previewArea.Min, _previewArea.Max);
         }
 
         private static Vector2 ComputeNodeSize(SymbolChildUi childUi, List<IInputUi> visibleInputUis)
@@ -785,7 +777,7 @@ namespace Editor.Gui.Graph
                     continue;
 
                 //TODO: this should be refactored, because it's very slow and is later repeated
-                var connectedLines = Graph.Connections.GetLinesToNodeInputSlot(childUi, input.Id);
+                var connectedLines = global::Editor.Gui.Graph.Graph.Connections.GetLinesToNodeInputSlot(childUi, input.Id);
                 additionalMultiInputSlots += connectedLines.Count;
             }
 

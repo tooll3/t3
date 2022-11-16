@@ -1,10 +1,10 @@
 ﻿using System.Linq;
-using T3.Core.Animation;
-using T3.Core.Operator;
 using Editor.Gui.Graph;
+using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.Operator;
 
-namespace Editor.Gui.Audio
+namespace T3.Editor.Gui.Audio
 {
     public static class SoundtrackUtils
     {

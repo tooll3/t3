@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
-using Editor.Gui.OutputUi;
 using ImGuiNET;
 using T3.Core.Operator.Slots;
 

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Data;
 using Editor.Gui;
-using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Interaction

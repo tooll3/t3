@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Editor.Gui.Interaction.Snapping;
+using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Windows.TimeLine.Raster
 {

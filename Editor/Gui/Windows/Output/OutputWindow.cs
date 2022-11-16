@@ -2,26 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Editor.Gui.Interaction;
-using Editor.Gui.OutputUi;
+using Editor.Gui;
 using ImGuiNET;
-using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core;
-using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Core.Operator.Interfaces;
-using Editor.Gui.Graph.Interaction;
 using T3.Core.Resource;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
-using T3.Editor.Gui.Windows;
-using T3.Editor.Gui.Windows.Output;
 using Color = T3.Editor.Gui.Styling.Color;
 using Vector2 = System.Numerics.Vector2;
 
-namespace Editor.Gui.Windows.Output
+namespace T3.Editor.Gui.Windows.Output
 {
     public class OutputWindow : Window
     {

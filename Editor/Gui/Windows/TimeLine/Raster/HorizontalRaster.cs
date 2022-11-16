@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
-using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;

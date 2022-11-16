@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using Editor.Gui;
-using Editor.Gui.InputUi.SimpleInputUis;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;

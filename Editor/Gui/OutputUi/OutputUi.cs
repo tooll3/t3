@@ -1,8 +1,8 @@
 ﻿using System;
-using Editor.Gui.Graph.Interaction;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using Vector2 = System.Numerics.Vector2;
 

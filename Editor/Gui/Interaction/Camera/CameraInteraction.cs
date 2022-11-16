@@ -1,12 +1,12 @@
 using System;
 using System.Numerics;
+using Editor.Gui.Interaction.Camera;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Operator.Interfaces;
-using T3.Editor.Gui.Interaction.Camera;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 
-namespace Editor.Gui.Interaction.Camera
+namespace T3.Editor.Gui.Interaction.Camera
 {
     /// <summary>
     /// Controls the manipulation of camera view within an 3d output window.

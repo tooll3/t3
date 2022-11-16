@@ -1,23 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ImGuiNET;
 using System.Numerics;
-using Editor.Gui.Commands;
-using Editor.Gui.Graph.Interaction;
-using Editor.Gui.UiHelpers;
+using Editor.Gui.Graph;
+using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Operator;
-using Editor.Gui.Graph;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Annotations;
 using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
-namespace Editor.Gui.Graph
+namespace T3.Editor.Gui.Graph
 {
     /// <summary>
     /// Draws an AnnotationElement and handles its interaction

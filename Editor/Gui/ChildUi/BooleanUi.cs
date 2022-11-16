@@ -3,6 +3,7 @@ using System.Numerics;
 using Editor.Gui;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_ed0f5188_8888_453e_8db4_20d87d18e9f4;
 using Icon = T3.Editor.Gui.Styling.Icon;

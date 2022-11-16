@@ -5,6 +5,7 @@ using Editor.Gui.Interaction.Variations.Model;
 using NAudio.Midi;
 using T3.Core.Logging;
 using T3.Editor.Gui.Interaction.Variations.Midi.CommandProcessing;
+using T3.Editor.Gui.Interaction.Variations.Model;
 
 //using T3.Gui.Interaction.VariationHandling.InputCommands;
 

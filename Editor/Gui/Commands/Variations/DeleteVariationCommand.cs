@@ -1,7 +1,7 @@
 ﻿using Editor.Gui.Interaction.Variations.Model;
-using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Interaction.Variations.Model;
 
-namespace Editor.Gui.Commands.Variations
+namespace T3.Editor.Gui.Commands.Variations
 {
     public class DeleteVariationCommand : ICommand
     {

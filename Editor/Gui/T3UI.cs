@@ -1,5 +1,4 @@
-﻿using ImGuiNET;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,21 +6,17 @@ using System.Numerics;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Editor.Gui.Commands;
+using Editor.Gui;
 using Editor.Gui.Graph;
-using Editor.Gui.Graph.Dialogs;
-using Editor.Gui.Graph.Interaction;
-using Editor.Gui.Interaction;
 using Editor.Gui.Interaction.Variations;
-using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows;
-using Editor.Gui.Windows.Layouts;
+using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.Audio;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using Editor.Gui.Audio;
-using T3.Core.Audio;
+using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
@@ -32,11 +27,11 @@ using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.UiHelpers.Wiki;
 using T3.Editor.Gui.Windows;
-using T3.Operators.Types.Id_2b00bb7a_92cc_41e5_a5f6_bc3e8b16c5eb;
+using T3.Editor.Gui.Windows.Layouts;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;
 
-namespace Editor.Gui
+namespace T3.Editor.Gui
 {
     public class T3Ui
     {

@@ -1,5 +1,4 @@
 ﻿using Editor.Gui;
-using Editor.Gui.ChildUi.Animators;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.ChildUi.Animators;

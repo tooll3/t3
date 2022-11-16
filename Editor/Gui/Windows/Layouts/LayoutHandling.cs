@@ -3,14 +3,15 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using Editor.Gui.Graph;
-using Editor.Gui.UiHelpers;
-using Editor.Gui.Windows.Output;
 using ImGuiNET;
 using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Editor;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
+using T3.Editor.Gui.Windows.Layouts;
+using T3.Editor.Gui.Windows.Output;
 
 namespace Editor.Gui.Windows.Layouts
 {

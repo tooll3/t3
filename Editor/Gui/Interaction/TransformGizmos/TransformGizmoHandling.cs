@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using SharpDX;
 using SharpDX.Mathematics.Interop;

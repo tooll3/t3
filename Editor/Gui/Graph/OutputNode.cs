@@ -1,9 +1,9 @@
 ﻿using System.Numerics;
 using Editor.Gui.Graph;
-using Editor.Gui.Graph.Interaction;
 using Editor.Gui.InputUi;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;

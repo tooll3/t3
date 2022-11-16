@@ -1,13 +1,10 @@
 ﻿using System.Numerics;
-using Editor.Gui.Interaction;
-using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
-using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine.Raster;
 
-namespace Editor.Gui.UiHelpers
+namespace T3.Editor.Gui.UiHelpers
 {
     public class CurvePlotCanvas
     {

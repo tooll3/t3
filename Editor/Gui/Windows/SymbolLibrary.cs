@@ -6,8 +6,6 @@ using System.Runtime.InteropServices;
 using Editor.Gui;
 using Editor.Gui.Graph;
 using Editor.Gui.Graph.Dialogs;
-using Editor.Gui.Graph.Interaction;
-using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows;
 using ImGuiNET;
 using T3.Core.Logging;

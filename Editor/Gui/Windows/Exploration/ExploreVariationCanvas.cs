@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Editor.Gui;
 using Editor.Gui.Windows;
-using Editor.Gui.Windows.Output;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core;
@@ -13,6 +12,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows.Output;
 using Vector2 = System.Numerics.Vector2;
 
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using Editor.Gui.Interaction.Camera;
-using Editor.Gui.UiHelpers;
 using SharpDX;
 using T3.Core.Utils;
+using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Interaction.Camera
 {

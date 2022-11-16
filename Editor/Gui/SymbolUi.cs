@@ -2,23 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui.Graph;
-using Editor.Gui.Graph.Interaction;
-using Editor.Gui.InputUi;
-using Editor.Gui.OutputUi;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using T3.Editor.Gui;
 using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
 using Truncon.Collections;
 
-namespace Editor.Gui
+namespace T3.Editor.Gui
 {
     public class SymbolUi : ISelectionContainer
     {

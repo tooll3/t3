@@ -1,31 +1,29 @@
-﻿using ImGuiNET;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui.Commands;
+using Editor.Gui;
 using Editor.Gui.Graph;
-using Editor.Gui.Graph.Interaction;
-using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows.TimeLine;
-using T3.Core;
+using ImGuiNET;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
-using T3.Editor.Gui;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Interaction.Animation;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 
-namespace Editor.Gui.InputUi
+namespace T3.Editor.Gui.InputUi
 {
     public abstract class InputValueUi<T> : IInputUi
     {

@@ -5,7 +5,6 @@ using System.Numerics;
 using Editor.Gui;
 using Editor.Gui.Interaction.Variations;
 using Editor.Gui.Interaction.Variations.Model;
-using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Utils;

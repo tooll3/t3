@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using Editor.Gui.OutputUi;
 using Editor.Gui.Windows;
 using SharpDX;
 using SharpDX.Direct3D11;

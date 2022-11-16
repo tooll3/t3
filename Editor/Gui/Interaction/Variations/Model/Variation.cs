@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui.Windows.Variations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;

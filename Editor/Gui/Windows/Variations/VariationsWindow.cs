@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using Editor.Gui;
-using Editor.Gui.Graph.Interaction;
 using Editor.Gui.Interaction.Variations;
 using Editor.Gui.Interaction.Variations.Model;
-using Editor.Gui.Windows.Variations;
 using ImGuiNET;
+using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Interaction.Variations.Model;
+using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Windows.Variations
 {

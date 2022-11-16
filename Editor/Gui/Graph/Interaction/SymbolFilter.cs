@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Editor.Gui;
-using Editor.Gui.Graph.Interaction;
 using T3.Core.Logging;
 using T3.Core.Operator;
 

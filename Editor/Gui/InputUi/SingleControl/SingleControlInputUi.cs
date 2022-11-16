@@ -1,7 +1,7 @@
-﻿using ImGuiNET;
-using T3.Editor.Gui.InputUi;
+﻿using Editor.Gui.InputUi;
+using ImGuiNET;
 
-namespace Editor.Gui.InputUi.SingleControl
+namespace T3.Editor.Gui.InputUi.SingleControl
  {
      public abstract class SingleControlInputUi<T> : InputValueUi<T>
      {

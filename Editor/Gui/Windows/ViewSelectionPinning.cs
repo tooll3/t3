@@ -4,13 +4,13 @@ using System.Linq;
 using System.Numerics;
 using Editor.Gui;
 using Editor.Gui.Graph;
-using Editor.Gui.Graph.Interaction;
 using Editor.Gui.Windows;
-using Editor.Gui.Windows.Output;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.Windows.Output;
 using Icon = T3.Editor.Gui.Styling.Icon;
 
 namespace T3.Editor.Gui.Windows

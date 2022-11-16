@@ -2,10 +2,10 @@
 using System.Linq;
 using Editor.Gui;
 using Editor.Gui.Graph;
-using Editor.Gui.Graph.Interaction;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Editor.Gui.Graph.Interaction;
 
 namespace T3.Editor.Gui.Graph
 {

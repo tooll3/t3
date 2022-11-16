@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Editor.Gui;
-using Editor.Gui.Windows.Output;
 using ImGuiNET;
 using SharpDX;
+using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Windows.Output
 {

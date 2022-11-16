@@ -1,10 +1,11 @@
 using System;
 using Editor.Gui;
-using Editor.Gui.Windows.Output;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
+using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows.Output;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows

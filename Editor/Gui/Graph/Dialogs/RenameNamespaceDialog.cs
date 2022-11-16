@@ -1,8 +1,7 @@
 ﻿using System.Text.RegularExpressions;
-using Editor.Gui.Graph.Interaction;
-using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows;
 using ImGuiNET;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;

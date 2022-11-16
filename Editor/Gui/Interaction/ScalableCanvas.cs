@@ -2,7 +2,6 @@ using System;
 using System.Numerics;
 using Editor.Gui;
 using Editor.Gui.Graph;
-using Editor.Gui.UiHelpers;
 using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;
 using T3.Core;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Editor.Gui;
-using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;

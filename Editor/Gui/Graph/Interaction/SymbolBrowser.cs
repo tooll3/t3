@@ -1,29 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using System.Threading.Tasks;
-using Editor.Gui.Commands;
-using Editor.Gui.InputUi;
-using Editor.Gui.UiHelpers;
+using Editor.Gui;
+using Editor.Gui.Graph;
 using ImGuiNET;
-using T3.Core;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using Editor.Gui.Graph.Interaction;
 using T3.Core.Resource;
 using T3.Core.Utils;
-using T3.Editor.Gui;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
-namespace Editor.Gui.Graph.Interaction
+namespace T3.Editor.Gui.Graph.Interaction
 {
     /// <summary>
     /// Represents the placeholder for a new <see cref="GraphNode"/> on the <see cref="GraphCanvas"/>. 

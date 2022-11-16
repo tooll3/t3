@@ -2,19 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Editor.Gui;
+using Editor.Gui.Graph;
+using Editor.Gui.Interaction.WithCurves;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Logging;
-using Editor.Gui;
-using Editor.Gui.Commands;
-using Editor.Gui.Graph;
-using Editor.Gui.InputUi;
-using Editor.Gui.Interaction;
-using Editor.Gui.Interaction.WithCurves;
-using Editor.Gui.Windows.TimeLine;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Animation;
-using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.WithCurves;
 using T3.Editor.Gui.Selection;
@@ -22,7 +17,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.TimeLine;
 using T3.Editor.Gui.Windows.TimeLine.Raster;
 
-namespace Editor.Gui.InputUi.CombinedInputs
+namespace T3.Editor.Gui.InputUi.CombinedInputs
 {
     /// <summary>
     /// Handles editing of Curve-Inputs in parameter windows and Graph CustomUi.

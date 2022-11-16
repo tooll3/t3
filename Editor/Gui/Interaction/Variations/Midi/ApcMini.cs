@@ -4,6 +4,7 @@ using Editor.Gui.Interaction.Variations;
 using Editor.Gui.Interaction.Variations.Model;
 using NAudio.Midi;
 using T3.Editor.Gui.Interaction.Variations.Midi.CommandProcessing;
+using T3.Editor.Gui.Interaction.Variations.Model;
 
 namespace T3.Editor.Gui.Interaction.Variations.Midi
 {

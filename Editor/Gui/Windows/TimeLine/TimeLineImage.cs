@@ -7,7 +7,6 @@ using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
 using Editor.Gui.Audio;
-using Editor.Gui.UiHelpers;
 using T3.Core.Audio;
 using T3.Core.Resource;
 using T3.Editor.Gui.Windows.TimeLine;

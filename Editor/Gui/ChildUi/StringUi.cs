@@ -2,7 +2,6 @@
 using Editor.Gui;
 using Editor.Gui.Graph;
 using Editor.Gui.InputUi;
-using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.InputUi;

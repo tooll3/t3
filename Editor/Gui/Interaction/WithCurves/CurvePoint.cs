@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Numerics;
-using Editor.Gui.UiHelpers;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Editor.Gui.Styling;
