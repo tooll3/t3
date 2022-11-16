@@ -1,5 +1,4 @@
 ﻿using System;
-using Editor.Gui;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Operator;

@@ -1,9 +1,8 @@
 ﻿using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Resource;
 
-namespace Editor.App
+namespace T3.Editor.App
 {
     /// <summary>
     /// A collection of rendering resource used across the T3 UI

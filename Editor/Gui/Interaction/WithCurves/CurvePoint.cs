@@ -5,7 +5,7 @@ using T3.Core.Animation;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
-namespace Editor.Gui.Interaction.WithCurves
+namespace T3.Editor.Gui.Interaction.WithCurves
 {
     /// <summary>
     /// Interaction logic for CurvePointControl.xaml

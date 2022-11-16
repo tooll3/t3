@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Editor.Gui.Interaction.WithCurves;
-using Editor.Gui.Windows.TimeLine;
 using T3.Core.Animation;
+using T3.Editor.Gui.Interaction.WithCurves;
 
 namespace T3.Editor.Gui.Windows.TimeLine
 {

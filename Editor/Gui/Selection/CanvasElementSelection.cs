@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Editor.Gui;
 using T3.Core.Logging;
 
 namespace T3.Editor.Gui.Selection

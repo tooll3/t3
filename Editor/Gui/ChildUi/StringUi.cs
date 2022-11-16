@@ -1,9 +1,7 @@
 ﻿using System;
-using Editor.Gui;
-using Editor.Gui.Graph;
-using Editor.Gui.InputUi;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;

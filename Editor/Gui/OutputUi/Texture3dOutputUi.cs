@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Editor.Gui.Windows;
 using ImGuiNET;
 using SharpDX;
 using SharpDX.Direct3D11;

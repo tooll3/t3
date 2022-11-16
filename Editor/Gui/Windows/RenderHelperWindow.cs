@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using Editor.Gui;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Logging;

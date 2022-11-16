@@ -1,19 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Editor.Gui.Graph;
-using Editor.Gui.Interaction;
 using ImGuiNET;
-using Microsoft.SqlServer.Server;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using T3.Core.Logging;
-using T3.Editor.Gui;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 
-namespace Editor.Gui.Windows
+namespace T3.Editor.Gui.Windows
 {
     /// <summary>
     /// Allows users to create and use bookmarks to quickly navigate between areas of graphs

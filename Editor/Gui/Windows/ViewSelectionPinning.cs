@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui;
-using Editor.Gui.Graph;
-using Editor.Gui.Windows;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;

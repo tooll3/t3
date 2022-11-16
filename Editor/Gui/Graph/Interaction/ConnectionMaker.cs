@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using T3.Editor.Gui.Commands;
-using Editor.Gui.InputUi;
-using Editor.Gui.Windows;
 using ImGuiNET;
 using SharpDX;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using T3.Editor.Gui;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.OutputUi;
@@ -26,7 +19,7 @@ using T3.Editor.Gui.Windows;
 using Color = T3.Editor.Gui.Styling.Color;
 using Vector2 = System.Numerics.Vector2;
 
-namespace Editor.Gui.Graph
+namespace T3.Editor.Gui.Graph.Interaction
 {
     /// <summary>
     /// Handles the creation of new  <see cref="Symbol.Connection"/>s. 

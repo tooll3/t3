@@ -1,5 +1,4 @@
 ﻿using System;
-using Editor.Gui.InputUi;
 using ImGuiNET;
 using T3.Editor.Gui.UiHelpers;
 

@@ -7,21 +7,15 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Newtonsoft.Json;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using Editor.Gui.Audio;
-using Editor.Gui.InputUi;
 using T3.Core.Resource;
-using T3.Editor;
-using T3.Editor.Gui;
 using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
-using T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23;
 
-namespace Editor.Gui.Graph
+namespace T3.Editor.Gui.Graph
 {
     public class PlayerExporter
     {

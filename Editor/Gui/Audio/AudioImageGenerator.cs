@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using SharpDX;
 using T3.Core.Logging;
 
-namespace Editor.Gui.Audio
+namespace T3.Editor.Gui.Audio
 {
     public class AudioImageGenerator
     {

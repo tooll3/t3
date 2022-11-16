@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui;
-using Editor.Gui.InputUi;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core;

@@ -1,6 +1,5 @@
 using System;
 using System.Numerics;
-using Editor.Gui;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;

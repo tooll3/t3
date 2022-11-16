@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
-using Editor.App;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;

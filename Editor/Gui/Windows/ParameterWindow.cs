@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
-using Editor.Gui;
-using Editor.Gui.Windows.Layouts;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;

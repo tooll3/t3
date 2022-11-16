@@ -3,11 +3,10 @@ using System.Windows.Forms;
 using ImGuiNET;
 using SharpDX.Windows;
 using T3.Core.IO;
-using T3.Editor;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable IdentifierTypo
-namespace Editor.App
+namespace T3.Editor.App
 {
     /// <summary>
     /// A RenderForm class that maps windows RenderForm events and to ImGui 

@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;
-using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine;
 
-namespace Editor.Gui.Interaction.WithCurves
+namespace T3.Editor.Gui.Interaction.WithCurves
 {
     /// <summary>
     /// Editing of a set of curves and keyframes independent of the actual visualization.

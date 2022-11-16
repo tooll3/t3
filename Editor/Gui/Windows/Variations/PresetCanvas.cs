@@ -1,8 +1,7 @@
 ﻿using System.Numerics;
-using Editor.Gui.Interaction.Variations;
-using Editor.Gui.Interaction.Variations.Model;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Styling;
 

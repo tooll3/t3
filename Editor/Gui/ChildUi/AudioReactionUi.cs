@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Numerics;
-using Editor.Gui;
 using ImGuiNET;
 using T3.Core.Audio;
 using T3.Core.Operator;

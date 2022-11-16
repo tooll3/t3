@@ -1,5 +1,4 @@
-﻿using Editor.Gui;
-using ImGuiNET;
+﻿using ImGuiNET;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 

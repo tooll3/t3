@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Editor.Gui.InputUi.SingleControl;
 using ImGuiNET;
 
 namespace T3.Editor.Gui.InputUi.SingleControl

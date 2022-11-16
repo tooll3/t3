@@ -2,16 +2,11 @@ using System;
 using System.IO;
 using System.Numerics;
 using ImGuiNET;
-using T3.Core;
-using T3.Core.Animation;
-using T3.Core.IO;
-using T3.Core.Logging;
-using Editor.Gui.Audio;
 using T3.Core.Audio;
 using T3.Core.Resource;
-using T3.Editor.Gui.Windows.TimeLine;
+using T3.Editor.Gui.Audio;
 
-namespace Editor.Gui.Windows.TimeLine
+namespace T3.Editor.Gui.Windows.TimeLine
 {
     public class TimeLineImage
     {

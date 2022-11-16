@@ -1,16 +1,9 @@
 using System;
-using ImGuiNET;
 using System.Collections.Generic;
 using System.Linq;
-using Editor.Gui.Graph.Dialogs;
-using Editor.Gui.Interaction;
-using Editor.Gui.Windows;
-using Editor.Gui.Windows.TimeLine;
-using T3.Core;
+using ImGuiNET;
 using T3.Core.Operator;
-using T3.Core.Resource;
 using T3.Core.Utils;
-using T3.Editor.Gui;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction;
@@ -22,7 +15,7 @@ using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.TimeLine;
 using Vector2 = System.Numerics.Vector2;
 
-namespace Editor.Gui.Graph
+namespace T3.Editor.Gui.Graph
 {
     /// <summary>
     /// A window that renders a node graph 
@@ -542,7 +535,7 @@ namespace Editor.Gui.Graph
             }
         }
 
-        private readonly ImageBackground _imageBackground = new ImageBackground();
+        private readonly GraphWindow.ImageBackground _imageBackground = new();
 
         public readonly GraphCanvas GraphCanvas;
         private const int UseComputedHeight = -1;

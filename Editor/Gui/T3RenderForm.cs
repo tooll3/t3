@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 using ImGuiNET;
 using SharpDX;
 using SharpDX.D3DCompiler;
@@ -5,19 +11,13 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Windows.Forms;
 using T3.Core.Logging;
 using T3.Editor.Gui.Styling;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
 using Vector2 = System.Numerics.Vector2;
 
-namespace Editor
+namespace T3.Editor.Gui
 {
     public class T3RenderForm : IDisposable
     {

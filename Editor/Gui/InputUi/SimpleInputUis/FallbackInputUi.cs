@@ -1,5 +1,4 @@
-﻿using Editor.Gui.InputUi;
-using ImGuiNET;
+﻿using ImGuiNET;
 
 namespace T3.Editor.Gui.InputUi.SimpleInputUis
 {

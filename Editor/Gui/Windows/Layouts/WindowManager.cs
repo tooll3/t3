@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui.Graph;
-using Editor.Gui.Windows.Layouts;
+using T3.Editor.Gui.Graph;
 using ImGuiNET;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;

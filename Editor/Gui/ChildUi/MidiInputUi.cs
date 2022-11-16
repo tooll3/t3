@@ -1,11 +1,8 @@
 ﻿using System.Linq;
 using System.Numerics;
-using Editor.Gui;
 using ImGuiNET;
-using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Operator;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;

@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Editor.Gui;
-using Editor.Gui.Windows;
 using ImGuiNET;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;

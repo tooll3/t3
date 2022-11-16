@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Editor.Gui.Interaction;
 using SharpDX;
 using T3.Core.Animation;
 using T3.Core.Operator;

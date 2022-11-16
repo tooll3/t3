@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Numerics;
-using Editor.Gui;
-using T3.Editor.Gui.Commands;
 using T3.Core.Operator;
 
 namespace T3.Editor.Gui.Commands.Graph

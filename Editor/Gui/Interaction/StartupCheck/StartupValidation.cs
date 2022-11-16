@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using Editor.Gui.Windows.Layouts;
+using T3.Editor.Gui.Windows.Layouts;
 
 namespace T3.Editor.Gui.Interaction.StartupCheck
 {

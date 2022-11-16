@@ -1,9 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DelaunayVoronoi;
-using Editor.Gui;
-using Editor.Gui.Interaction.Variations.Model;
-using Editor.Gui.Windows;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;

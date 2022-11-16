@@ -2,9 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui;
-using Editor.Gui.Graph;
-using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

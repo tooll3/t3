@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using Editor.Gui;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Logging;

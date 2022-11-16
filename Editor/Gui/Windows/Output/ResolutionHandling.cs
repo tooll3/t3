@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Editor.Gui;
 using ImGuiNET;
 using SharpDX;
 using T3.Editor.Gui.Styling;

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Editor.Gui;
-using T3.Editor.Gui.Commands;
 using T3.Core.Logging;
 
 namespace T3.Editor.Gui.Commands.Graph

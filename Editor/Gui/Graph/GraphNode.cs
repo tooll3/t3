@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Editor.Gui;
-using Editor.Gui.Graph;
-using Editor.Gui.Interaction.Variations;
 using ImGuiNET;
 using SharpDX;
 using SharpDX.Direct3D11;
@@ -17,6 +14,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction.TransformGizmos;
+using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
@@ -49,7 +47,7 @@ namespace T3.Editor.Gui.Graph
             }
 
             SymbolChildUi.CustomUiResult customUiResult;
-            _drawList = global::Editor.Gui.Graph.Graph.DrawList;
+            _drawList = global::T3.Editor.Gui.Graph.Graph.DrawList;
 
             var newNodeSize = ComputeNodeSize(childUi, visibleInputUis);
             AdjustGroupLayoutAfterResize(childUi, newNodeSize);
@@ -379,7 +377,7 @@ namespace T3.Editor.Gui.Graph
                 var isPotentialConnectionTarget = ConnectionMaker.IsMatchingInputType(inputDefinition.DefaultValue.ValueType);
                 var colorForType = ColorForInputType(inputDefinition);
 
-                var connectedLines = global::Editor.Gui.Graph.Graph.Connections.GetLinesToNodeInputSlot(childUi, inputDefinition.Id);
+                var connectedLines = global::T3.Editor.Gui.Graph.Graph.Connections.GetLinesToNodeInputSlot(childUi, inputDefinition.Id);
 
                 // Render input Label
                 if ((customUiResult & SymbolChildUi.CustomUiResult.PreventInputLabels) == 0)
@@ -556,7 +554,7 @@ namespace T3.Editor.Gui.Graph
                 // Update connection lines
                 var dirtyFlagNumUpdatesWithinFrame = output.DirtyFlag.NumUpdatesWithinFrame;
 
-                foreach (var line in global::Editor.Gui.Graph.Graph.Connections.GetLinesFromNodeOutput(childUi, outputDef.Id))
+                foreach (var line in global::T3.Editor.Gui.Graph.Graph.Connections.GetLinesFromNodeOutput(childUi, outputDef.Id))
                 {
                     line.SourcePosition = new Vector2(usableArea.Max.X, usableArea.GetCenter().Y);
                     line.SourceNodeArea = _selectableScreenRect;
@@ -641,7 +639,7 @@ namespace T3.Editor.Gui.Graph
         // TODO: this is a major performance hot spot and needs optimization
         private static List<IInputUi> FindVisibleInputUis(SymbolUi symbolUi, SymbolChildUi childUi, ref bool nodeHasHiddenMatchingInputs)
         {
-            var connectionsToNode = global::Editor.Gui.Graph.Graph.Connections.GetLinesIntoNode(childUi);
+            var connectionsToNode = global::T3.Editor.Gui.Graph.Graph.Connections.GetLinesIntoNode(childUi);
 
             if (childUi.Style == SymbolChildUi.Styles.Expanded)
             {
@@ -760,7 +758,7 @@ namespace T3.Editor.Gui.Graph
             if (_previewTextureView == null)
                 return;
 
-            global::Editor.Gui.Graph.Graph.DrawList.AddImage((IntPtr)_previewTextureView, _previewArea.Min, _previewArea.Max);
+            global::T3.Editor.Gui.Graph.Graph.DrawList.AddImage((IntPtr)_previewTextureView, _previewArea.Min, _previewArea.Max);
         }
 
         private static Vector2 ComputeNodeSize(SymbolChildUi childUi, List<IInputUi> visibleInputUis)
@@ -777,7 +775,7 @@ namespace T3.Editor.Gui.Graph
                     continue;
 
                 //TODO: this should be refactored, because it's very slow and is later repeated
-                var connectedLines = global::Editor.Gui.Graph.Graph.Connections.GetLinesToNodeInputSlot(childUi, input.Id);
+                var connectedLines = global::T3.Editor.Gui.Graph.Graph.Connections.GetLinesToNodeInputSlot(childUi, input.Id);
                 additionalMultiInputSlots += connectedLines.Count;
             }
 

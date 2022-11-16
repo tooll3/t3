@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Editor.Gui.Graph;
-using Editor.Gui.Interaction.Variations.Model;
 using Operators.Utils;
-using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Variations.Midi;
 using T3.Editor.Gui.Interaction.Variations.Model;
@@ -16,7 +13,7 @@ using T3.Editor.Gui.Windows.Variations;
 
 //using T3.Gui.Windows.Variations;
 
-namespace Editor.Gui.Interaction.Variations
+namespace T3.Editor.Gui.Interaction.Variations
 {
     /// <summary>
     /// Handles the live integration of variation model to the user interface.

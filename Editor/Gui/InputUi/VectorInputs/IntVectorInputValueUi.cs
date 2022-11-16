@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using Editor.Gui;
-using Editor.Gui.InputUi;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

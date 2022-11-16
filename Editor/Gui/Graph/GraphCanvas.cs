@@ -1,4 +1,3 @@
-using ImGuiNET;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,25 +5,17 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using T3.Editor.Gui.Commands;
-using Editor.Gui.Graph.Dialogs;
-using Editor.Gui.InputUi;
-using Editor.Gui.Interaction;
-using Editor.Gui.Windows;
-using Editor.Gui.Windows.TimeLine;
+using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Resource;
-using T3.Editor.Gui;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Annotations;
 using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
@@ -33,10 +24,11 @@ using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.Gui.Windows.TimeLine;
 
-namespace Editor.Gui.Graph
+namespace T3.Editor.Gui.Graph
 {
     /// <summary>
     /// A <see cref="ICanvas"/> that displays the graph of an Operator.
@@ -314,7 +306,7 @@ namespace Editor.Gui.Graph
 
                 SymbolBrowser.Draw();
 
-                Graph.DrawGraph(DrawList);
+                T3.Editor.Gui.Graph.Graph.DrawGraph(DrawList);
                 RenameInstanceOverlay.Draw();
                 HandleFenceSelection();
 

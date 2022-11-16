@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using Editor.Gui;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;

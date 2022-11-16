@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using T3.Core.Audio;
 using T3.Core.Logging;
 
-namespace Editor.Gui.Audio
+namespace T3.Editor.Gui.Audio
 {
     public static class AudioImageFactory
     {

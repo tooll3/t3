@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Editor.Gui;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Editor.Gui;
-using Editor.Gui.Interaction.Camera;
-using Editor.Gui.Windows;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;

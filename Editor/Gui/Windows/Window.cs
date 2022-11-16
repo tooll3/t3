@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
-using Editor.Gui;
 using ImGuiNET;
 
 namespace T3.Editor.Gui.Windows

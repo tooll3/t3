@@ -1,5 +1,4 @@
 using System.Numerics;
-using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Editor.Gui.Interaction.Snapping;

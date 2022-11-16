@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Editor.Gui;
-using Editor.Gui.Audio;
-using Editor.Gui.Graph;
-using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;
 using ManagedBass;
 using Newtonsoft.Json;
@@ -12,6 +8,7 @@ using T3.Core.Audio;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Editor.Gui.Audio;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Styling;

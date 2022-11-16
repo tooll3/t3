@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using Editor.Gui.InputUi;
 using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Editor.Gui.UiHelpers;

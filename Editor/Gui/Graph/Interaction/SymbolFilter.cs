@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Editor.Gui;
 using T3.Core.Logging;
 using T3.Core.Operator;
 

@@ -1,13 +1,10 @@
 using System;
 using System.Numerics;
-using Editor.Gui;
-using Editor.Gui.Graph;
-using Editor.Gui.Windows.TimeLine;
 using ImGuiNET;
-using T3.Core;
 using T3.Core.Operator;
-using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine;

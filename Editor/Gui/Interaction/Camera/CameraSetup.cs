@@ -1,8 +1,7 @@
 using System.Numerics;
 using T3.Core.Operator.Interfaces;
-using T3.Editor.Gui.Interaction.Camera;
 
-namespace Editor.Gui.Interaction.Camera
+namespace T3.Editor.Gui.Interaction.Camera
 {
     /// <summary>
     /// Describes a complete setup of a camera position and rotation. This

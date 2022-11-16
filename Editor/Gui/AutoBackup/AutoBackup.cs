@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Editor.Gui;
 using T3.Core.Logging;
 
 namespace T3.Editor.Gui.AutoBackup

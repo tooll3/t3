@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.InputUi

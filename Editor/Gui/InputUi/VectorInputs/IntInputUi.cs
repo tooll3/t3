@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
-using Editor.Gui.InputUi;
-using Editor.Gui.Interaction;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Operator;

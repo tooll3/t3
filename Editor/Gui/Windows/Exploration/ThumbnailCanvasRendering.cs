@@ -1,5 +1,4 @@
-﻿using Editor.App;
-using SharpDX;
+﻿using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
@@ -7,6 +6,7 @@ using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Editor.App;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.UiHelpers;
 using Vector2 = System.Numerics.Vector2;
