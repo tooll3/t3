@@ -16,8 +16,8 @@ namespace T3.Editor.Gui.Commands.Graph
 
         public Dictionary<Guid, Guid> OldToNewIdDict { get; } = new Dictionary<Guid, Guid>();
 
-        public CopySymbolChildrenCommand(SymbolUi sourceCompositionUi, 
-                                         IEnumerable<SymbolChildUi> symbolChildrenToCopy, 
+        public CopySymbolChildrenCommand(SymbolUi sourceCompositionUi,
+                                         IEnumerable<SymbolChildUi> symbolChildrenToCopy,
                                          List<Annotation> selectedAnnotations,
                                          SymbolUi targetCompositionUi,
                                          Vector2 targetPosition)
@@ -38,7 +38,7 @@ namespace T3.Editor.Gui.Commands.Graph
                 upperLeftCorner = Vector2.Min(upperLeftCorner, childToCopy.PosOnCanvas);
             }
 
-            PositionOffset =  targetPosition - upperLeftCorner;
+            PositionOffset = targetPosition - upperLeftCorner;
 
             foreach (var childToCopy in symbolChildrenToCopy)
             {
@@ -59,8 +59,13 @@ namespace T3.Editor.Gui.Commands.Graph
             }
 
             _connectionsToCopy.Reverse(); // to keep multi input order
-            if(selectedAnnotations != null && selectedAnnotations.Count > 1)
-                _annotationsToCopy.AddRange(selectedAnnotations);
+            if (selectedAnnotations != null && selectedAnnotations.Count > 0)
+            {
+                _annotationsToCopy = selectedAnnotations
+                                    .Select(a => a.Clone())
+                                    .ToList();
+                //_annotationsToCopy.AddRange(selectedAnnotations);
+            }
         }
 
         public void Undo()
@@ -75,6 +80,7 @@ namespace T3.Editor.Gui.Commands.Graph
             {
                 parentSymbolUi.Annotations.Remove(annotation.Id);
             }
+
             NewSymbolChildIds.Clear();
         }
 
@@ -83,12 +89,12 @@ namespace T3.Editor.Gui.Commands.Graph
             var targetCompositionSymbolUi = SymbolUiRegistry.Entries[_targetSymbolId];
             var targetSymbol = targetCompositionSymbolUi.Symbol;
             var sourceCompositionSymbolUi = SymbolUiRegistry.Entries[_sourceSymbolId];
-            
+
             // copy animations first, so when creating the new child instances can automatically create animations actions for the existing curves
             var childIdsToCopyAnimations = _childrenToCopy.Select(entry => entry.ChildId).ToList();
             var oldToNewIdDict = _childrenToCopy.ToDictionary(entry => entry.ChildId, entry => entry.AddedId);
             sourceCompositionSymbolUi.Symbol.Animator.CopyAnimationsTo(targetSymbol.Animator, childIdsToCopyAnimations, oldToNewIdDict);
-            
+
             foreach (var childToCopy in _childrenToCopy)
             {
                 SymbolChild symbolChildToCopy = sourceCompositionSymbolUi.Symbol.Children.Find(child => child.Id == childToCopy.ChildId);
@@ -97,11 +103,11 @@ namespace T3.Editor.Gui.Commands.Graph
                     Log.Warning("Skipping attempt to copy undefined operator. This can be related to undo/redo operations. Please try to reproduce and tell pixtur");
                     continue;
                 }
-                
+
                 var symbolToAdd = SymbolRegistry.Entries[symbolChildToCopy.Symbol.Id];
                 targetCompositionSymbolUi.AddChildAsCopyFromSource(symbolToAdd, childToCopy.AddedId, sourceCompositionSymbolUi, childToCopy.ChildId,
                                                                    _targetPosition + childToCopy.RelativePosition);
-                
+
                 SymbolChild newSymbolChild = targetSymbol.Children.Find(child => child.Id == childToCopy.AddedId);
                 NewSymbolChildIds.Add(newSymbolChild.Id);
                 var newSymbolInputs = newSymbolChild.InputValues;
@@ -140,10 +146,10 @@ namespace T3.Editor.Gui.Commands.Graph
                 NewSymbolAnnotationIds.Add(annotation.Id);
             }
         }
-        
+
         public readonly List<Guid> NewSymbolChildIds = new(); //This primarily used for selecting the new children
         public List<Guid> NewSymbolAnnotationIds = new(); //This primarily used for selecting the new children
-        
+
         struct Entry
         {
             public Entry(Guid childId, Guid addedId, Vector2 relativePosition, Vector2 size)

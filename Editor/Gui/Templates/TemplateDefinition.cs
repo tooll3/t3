@@ -28,9 +28,9 @@ namespace T3.Editor.Gui.Templates
                           {
                               Title = "Empty Project",
                               DefaultSymbolName = "NewProject",
-                              Summary = "Creates a new project and sets up a folder structure for resources.",
+                              Summary = "Creates a new project and sets up a folder structure for your resources.",
                               Documentation =
-                                  "Setups It will also setup a folder structure for project related files like soundtrack or images.",
+                                  "It will create a new Symbol and setup a folder structure for project related files like your soundtrack or images.",
                               TemplateSymbolId = Guid.Parse("fe8aeb9b-61ac-4a0e-97ee-4833233ac9d1"),
                               AfterSetupAction = (newChildUi, name, nameSpace, description, resourceFolder) =>
                                                  {
@@ -55,7 +55,7 @@ namespace T3.Editor.Gui.Templates
                               DefaultSymbolName = "NewPointShader",
                               Summary = "Creates a compute shader setup",
                               Documentation =
-                                  "This will create a new Symbol with an fully working example compute shader. It will setup and open the hlsl sourcecode file.",
+                                  "This will create a new Symbol with an fully working compute shader example. It will setup and open the hlsl shader source code.",
                               TemplateSymbolId = Guid.Parse("0db659a4-d0ba-4d23-acac-aea5ba5b57dc"),
                               AfterSetupAction = (newInstance, name, nameSpace, description, resourceFolder) =>
                                                  {
@@ -68,7 +68,7 @@ namespace T3.Editor.Gui.Templates
                                                          var shaderInstance = newInstance.Children.SingleOrDefault(c => c.Symbol.Id ==
                                                              Guid.Parse("a256d70f-adb3-481d-a926-caf35bd3e64c"));
 
-                                                         File.Copy(@"\Resources\examples\templates\PointShaderTemplate.hlsl",
+                                                         File.Copy(@"Resources\examples\templates\PointShaderTemplate.hlsl",
                                                                    newShaderFilename);
 
                                                          if (shaderInstance is ComputeShader computeShader)

@@ -12,7 +12,7 @@ namespace T3.Editor.Gui.Templates
     /// </summary>
     public static class TemplateUse
     {
-        public static void TryToApplyTemplate(TemplateDefinition template, string newTypeName, string nameSpace, string description, string resourceFolder)
+        public static void TryToApplyTemplate(TemplateDefinition template, string symbolName, string nameSpace, string description, string resourceFolder)
         {
             var defaultCanvasWindow = GraphWindow.GetPrimaryGraphWindow();
             if (defaultCanvasWindow == null)
@@ -32,7 +32,7 @@ namespace T3.Editor.Gui.Templates
             var centerOnScreen = graphCanvas.WindowPos + graphCanvas.WindowSize / 2;
             var positionOnCanvas2 = graphCanvas.InverseTransformPositionFloat(centerOnScreen);
             var freePosition = FindFreePositionOnCanvas(graphCanvas, positionOnCanvas2);
-            var newSymbol = NodeOperations.DuplicateAsNewType(compositionSymbolUi, template.TemplateSymbolId, newTypeName, nameSpace, description, freePosition);
+            var newSymbol = NodeOperations.DuplicateAsNewType(compositionSymbolUi, template.TemplateSymbolId, symbolName, nameSpace, description, freePosition);
             
             // Select instance of new symbol
             var newChildUi = compositionSymbolUi.ChildUis.SingleOrDefault(c => c.SymbolChild.Symbol.Id == newSymbol.Id);
@@ -43,7 +43,11 @@ namespace T3.Editor.Gui.Templates
             }
             T3Ui.SelectAndCenterChildIdInView(newChildUi.SymbolChild.Id);
             var newInstance = NodeSelection.GetSelectedInstance(); 
-            template.AfterSetupAction?.Invoke(newInstance,  nameSpace, description, resourceFolder, resourceFolder);
+            template.AfterSetupAction?.Invoke(newInstance,
+                                              symbolName,
+                                              nameSpace, 
+                                              description, 
+                                              resourceFolder);
         }
 
         private static Vector2 FindFreePositionOnCanvas(GraphCanvas canvas, Vector2 pos)

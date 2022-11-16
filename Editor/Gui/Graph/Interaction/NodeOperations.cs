@@ -521,7 +521,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             // Apply content to new symbol
             var cmd = new CopySymbolChildrenCommand(sourceSymbolUi,
                                                     null,
-                                                    sourceSymbolUi.Annotations.Values.ToList(),
+                                                    new List<Annotation>(),
                                                     newSymbolUi,
                                                     Vector2.One);
             cmd.Do();
@@ -567,13 +567,11 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
 
             // Create instance
-            //var mousePos = GraphCanvas.Current.InverseTransformPositionFloat(ImGui.GetMousePos());
             var addCommand = new AddSymbolChildCommand(compositionUi.Symbol, newSymbol.Id) { PosOnCanvas = posOnCanvas };
             UndoRedoStack.AddAndExecute(addCommand);
 
-            var newSymbolChild = compositionUi.Symbol.Children.Find(child => child.Id == addCommand.AddedChildId);
-            var newSymbolInputValues = newSymbolChild.InputValues;
-
+            //var newSymbolChild = compositionUi.Symbol.Children.Find(child => child.Id == addCommand.AddedChildId);
+            //var newSymbolInputValues = newSymbolChild.InputValues;
             // foreach (var (id, input) in symbolChildToDuplicate.InputValues)
             // {
             //     var newInput = newSymbolInputValues[oldToNewIdMap[id]];

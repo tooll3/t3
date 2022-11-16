@@ -10,7 +10,7 @@ namespace T3.Editor.Gui.Graph
     {
         public string Title = "Untitled Annotation";
         public Color Color = Color.Gray;
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
         public Vector2 PosOnCanvas { get; set; }
         public Vector2 Size { get; set; }
         public bool IsSelected => NodeSelection.IsNodeSelected(this);
@@ -20,10 +20,10 @@ namespace T3.Editor.Gui.Graph
             return new Annotation
                        {
                            Id = Guid.NewGuid(),
-                           Title = this.Title = "Untitled Annotation",
-                           Color = this.Color,
-                           PosOnCanvas = this.PosOnCanvas,
-                           Size = this.Size
+                           Title = Title,
+                           Color = Color,
+                           PosOnCanvas = PosOnCanvas,
+                           Size = Size
                        };
         }
     }

@@ -3,10 +3,9 @@ using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
-using T3.Editor.Gui.Templates;
 using T3.Editor.Gui.UiHelpers;
 
-namespace T3.Editor.Gui.Dialog
+namespace T3.Editor.Gui.Templates
 {
     public class CreateFromTemplateDialog : ModalDialog
     {
@@ -15,7 +14,7 @@ namespace T3.Editor.Gui.Dialog
             DialogSize = new Vector2(800, 400);
             Padding = 0;
         }
-
+        
         public void Draw()
         {
             if (_selectedTemplateIndex == -1)
@@ -26,56 +25,84 @@ namespace T3.Editor.Gui.Dialog
             
             if (BeginDialog("Create"))
             {
-                TemplateDefinition selectedTemplate = null;
+                
+                _selectedTemplate = null;
                 ImGui.BeginChild("templates", new Vector2(200, -1));
                 {
-                    ImGui.PushStyleVar(ImGuiStyleVar.ItemInnerSpacing, new Vector2(4, 4));
+                    var windowMin = ImGui.GetWindowPos();
+                    ImGui.GetWindowDrawList().AddRectFilled(windowMin, windowMin + ImGui.GetContentRegionAvail(), T3Style.Colors.DarkGray);                    
+                    
+                    //ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(10,10));
+                    //ImGui.PushStyleVar(ImGuiStyleVar.ItemInnerSpacing, new Vector2(4, 4));
+                    ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.One * 2);
+                    
                     for (var index = 0; index < TemplateDefinition.TemplateDefinitions.Count; index++)
                     {
                         ImGui.PushID(index);
                         var template = TemplateDefinition.TemplateDefinitions[index];
                         var isSelected = index == _selectedTemplateIndex;
                         if (isSelected)
-                            selectedTemplate = template;
+                            _selectedTemplate = template;
 
-                        if (ImGui.Selectable(template.Title, isSelected, ImGuiSelectableFlags.None, new Vector2(ImGui.GetContentRegionAvail().X, 45)))
+                        if (ImGui.Selectable("##template.Title", isSelected, ImGuiSelectableFlags.None, new Vector2(ImGui.GetContentRegionAvail().X, 45)))
                         {
                             _selectedTemplateIndex = index;
                             ApplyTemplateSwitch();
                         }
+                        
+                        var itemRectMin = ImGui.GetItemRectMin();
+                        var itemRectMax = ImGui.GetItemRectMax();
+                        var keepCursor = ImGui.GetCursorScreenPos();
 
-                        var keepCursor = ImGui.GetCursorPos();
-                        ImGui.SetCursorScreenPos(ImGui.GetItemRectMin() + new Vector2(10, -30));
+                        // Background
+                        ImGui.GetWindowDrawList().AddRectFilled(itemRectMin, itemRectMax, isSelected ? T3Style.Colors.ButtonActive : T3Style.Colors.Button);
+                        
+                        // Title
+                        ImGui.SetCursorScreenPos(itemRectMin + new Vector2(10, 5));
+                        ImGui.TextUnformatted(template.Title);
+                        
+                        // summary
+                        ImGui.SetCursorScreenPos(itemRectMin + new Vector2(10, 25));
                         ImGui.PushFont(Fonts.FontSmall);
+                        ImGui.PushStyleColor(ImGuiCol.Text, Color.White.Fade(0.4f).Rgba);
                         ImGui.TextWrapped(template.Summary);
+                        ImGui.PopStyleColor();
                         ImGui.PopFont();
-                        ImGui.SetCursorPos(keepCursor);
+                        
+                        ImGui.SetCursorScreenPos(keepCursor + new Vector2(0,2));
                         ImGui.PopID();
                     }
 
-                    //DrawSidePanelContent();
-                    ImGui.Selectable("An option");
-                    ImGui.EndChild();
+                    // ImGui.PopStyleColor(6);
                     ImGui.PopStyleVar();
+                    //ImGui.PopStyleVar();
                 }
+                ImGui.EndChild();
 
                 ImGui.SameLine();
-                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10,10));
-                ImGui.BeginChild("options", new Vector2(-1, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
+                //ImGui.PushStyleVar(ImGuiStyleVar., new Vector2(20,20));
+                
+                ImGui.BeginChild("options", new Vector2(-20, -1), false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
                 {
-                    if (selectedTemplate != null)
-                    {
-                        ImGui.PushFont(Fonts.FontLarge);
-                        ImGui.TextUnformatted($"Create {selectedTemplate.Title}");
-                        ImGui.PopFont();
-                        ImGui.TextWrapped(selectedTemplate.Documentation);
-                    }
+                    ImGui.Dummy(new Vector2(20,10));
+                    
+                    ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 10);
+                    ImGui.BeginGroup();
+                    
+                    ImGui.PushFont(Fonts.FontLarge);
+                    ImGui.TextUnformatted($"Create {_selectedTemplate?.Title}");
+                    ImGui.PopFont();
+                    
+                    ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+                    ImGui.TextWrapped(_selectedTemplate?.Documentation);
+                    ImGui.PopStyleColor();
+                    ImGui.Dummy(new Vector2(10,10));
 
                     var isNewSymbolNameValid = NodeOperations.IsNewSymbolNameValid(_newSymbolName);
                     CustomComponents.DrawStringParameter("Name",
                                                          ref _newSymbolName,
                                                          null,
-                                                         isNewSymbolNameValid ? null : "Symbols must not contain spaces or special characters.");
+                                                         isNewSymbolNameValid ? null : "Symbols must by unique and not contain spaces or special characters.");
 
                     var isNamespaceValid = NodeOperations.IsNameSpaceValid(NameSpace);
                     CustomComponents.DrawStringParameter("NameSpace",
@@ -93,12 +120,15 @@ namespace T3.Editor.Gui.Dialog
                                                         );
                     
                     CustomComponents.DrawStringParameter("Description", ref _newDescription);
+                    
+                    ImGui.Dummy(new Vector2(10,10));
 
+                   
                     if (CustomComponents.DisablableButton("Create", 
                                                           isNewSymbolNameValid && isNamespaceValid, 
                                                           enableTriggerWithReturn: false))
                     {
-                        TemplateUse.TryToApplyTemplate(selectedTemplate, _newSymbolName, NameSpace, _newDescription, ResourceDirectory);
+                        TemplateUse.TryToApplyTemplate(_selectedTemplate, _newSymbolName, NameSpace, _newDescription, ResourceDirectory);
                         ImGui.CloseCurrentPopup();
                     }
 
@@ -108,8 +138,9 @@ namespace T3.Editor.Gui.Dialog
                         ImGui.CloseCurrentPopup();
                     }
                 }
+                ImGui.EndGroup();
                 ImGui.EndChild();
-                ImGui.PopStyleVar();
+                //ImGui.PopStyleVar();
                 EndDialogContent();
             }
 
@@ -118,10 +149,11 @@ namespace T3.Editor.Gui.Dialog
 
         private void ApplyTemplateSwitch()
         {
-            var newTemplate = TemplateDefinition.TemplateDefinitions[_selectedTemplateIndex];
-            _newSymbolName = newTemplate.DefaultSymbolName ?? "MyOp";
+            _selectedTemplate = TemplateDefinition.TemplateDefinitions[_selectedTemplateIndex];
+            _newSymbolName = _selectedTemplate.DefaultSymbolName ?? "MyOp";
         }
         
+        private TemplateDefinition _selectedTemplate = TemplateDefinition.TemplateDefinitions[0];
         private static readonly Regex _validResourceFolderPattern = new Regex(@"^Resources\\([A-Za-z][A-Za-z\d]*)(\\([A-Za-z][A-Za-z\d]*))*\\?$");
         
         private string NameSpace => string.IsNullOrEmpty(_newNameSpace) ? $"user.{UserSettings.Config.UserName}.{_newSymbolName}" : _newNameSpace;
@@ -134,8 +166,4 @@ namespace T3.Editor.Gui.Dialog
 
         private int _selectedTemplateIndex = -1;
     }
-}
-
-namespace T3.Editor.Templates
-{
 }
