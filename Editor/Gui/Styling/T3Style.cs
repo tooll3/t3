@@ -13,20 +13,27 @@ namespace T3.Editor.Gui.Styling
     {
         public static class Colors
         {
-            public static readonly Color ConnectedParameterColor = new Color(0.6f, 0.6f, 1f, 1f);
-            public static readonly Color ValueLabelColor = new Color(1, 1, 1, 0.5f);
-            public static readonly Color ValueLabelColorHover = new Color(1, 1, 1, 1.2f);
-            public static readonly Color GraphLineColor = new Color(1, 1, 1, 0.3f);
-            public static readonly Color GraphLineColorHover = new Color(1, 1, 1, 0.7f);
-            public static readonly Color GraphAxisColor = new Color(0, 0, 0, 0.3f);
-            public static readonly Color ButtonColor = Color.FromString("#CC282828");
-            public static readonly Color ButtonHoverColor = new Color(43, 65, 80, 255);
+            public static readonly Color ConnectedParameter = new Color(0.6f, 0.6f, 1f, 1f);
+            public static readonly Color ValueLabel = new Color(1, 1, 1, 0.5f);
+            public static readonly Color ValueLabelHover = new Color(1, 1, 1, 1.2f);
+            public static readonly Color GraphLine = new Color(1, 1, 1, 0.3f);
+            public static readonly Color GraphLineHover = new Color(1, 1, 1, 0.7f);
+            public static readonly Color GraphAxis = new Color(0, 0, 0, 0.3f);
+
+            public static readonly Color Button = Color.FromString("#CC282828");
+            public static readonly Color ButtonHover = new Color(43, 65, 80, 255);
+            
+            public static readonly Color ButtonActive = Color.FromString("#4592FF");
+            public static readonly Color DarkGray = Color.FromString("#131313");
+                        
             public static readonly Color TextMuted = new Color(0.5f);
             public static readonly Color TextDisabled = new Color(0.328f, 0.328f, 0.328f, 1.000f);
-            public static readonly Color WarningColor = new Color(203, 19,113, 255);
+            public static readonly Color Warning = new Color(203, 19,113, 255);
+            
             public static readonly Color WindowBackground = new Color(0.05f, 0.05f,0.05f, 1);
             public static readonly Color Background = new Color(0.1f, 0.1f, 0.1f, 0.98f);
-            public static readonly Color FragmentLineColor = Color.Orange;
+            
+            public static readonly Color GraphActiveLine = Color.Orange;
         }
 
         public const float ToolBarHeight = 25;
@@ -36,8 +43,8 @@ namespace T3.Editor.Gui.Styling
             var style = ImGui.GetStyle();
             style.Colors[(int)ImGuiCol.Text] = new Vector4(1, 1, 1, 0.85f);
             style.Colors[(int)ImGuiCol.TextDisabled] = Colors.TextDisabled;
-            style.Colors[(int)ImGuiCol.Button] = Colors.ButtonColor;
-            style.Colors[(int)ImGuiCol.ButtonHovered] = Colors.ButtonHoverColor;
+            style.Colors[(int)ImGuiCol.Button] = Colors.Button;
+            style.Colors[(int)ImGuiCol.ButtonHovered] = Colors.ButtonHover;
             style.Colors[(int)ImGuiCol.Border] = new Vector4(0, 0.00f, 0.00f, 0.97f);
             style.Colors[(int)ImGuiCol.BorderShadow] = new Vector4(0.00f, 0.00f, 0.00f, 1.00f);
             style.Colors[(int)ImGuiCol.FrameBg] = new Vector4(0.13f, 0.13f, 0.13f, 0.80f);

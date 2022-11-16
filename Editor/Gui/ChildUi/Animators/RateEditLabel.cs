@@ -83,7 +83,7 @@ namespace T3.Editor.Gui.ChildUi.Animators
             if (h > 30)
             {
                 ImGui.PushFont(Fonts.FontSmall);
-                drawList.AddText(selectableScreenRect.Min + new Vector2(4, 2), highlight ? T3Style.Colors.ValueLabelColorHover : T3Style.Colors.ValueLabelColor, nodeLabel);
+                drawList.AddText(selectableScreenRect.Min + new Vector2(4, 2), highlight ? T3Style.Colors.ValueLabelHover : T3Style.Colors.ValueLabel, nodeLabel);
                 ImGui.PopFont();
             }
             

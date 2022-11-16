@@ -299,7 +299,7 @@ namespace T3.Editor.Gui.Windows
                 ImGui.PushFont(Fonts.FontBold);
                 if (symbolChildUi.IsDisabled)
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Button, T3Style.Colors.WarningColor.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Button, T3Style.Colors.Warning.Rgba);
                     ImGui.PushStyleColor(ImGuiCol.Text, Color.White.Rgba);
                     if (ImGui.Button("DISABLED", new Vector2(100, 0)))
                     {

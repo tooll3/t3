@@ -142,11 +142,11 @@ namespace T3.Editor.Gui.Graph
                     // Disabled indicator
                     if (instance.Outputs.Count > 0 && instance.Outputs[0].IsDisabled)
                     {
-                        drawList.AddLine(_usableScreenRect.Min + new Vector2(3, 2), _usableScreenRect.Max - new Vector2(3, 2), T3Style.Colors.WarningColor, 3);
+                        drawList.AddLine(_usableScreenRect.Min + new Vector2(3, 2), _usableScreenRect.Max - new Vector2(3, 2), T3Style.Colors.Warning, 3);
                         drawList.AddLine(
                                          new Vector2(_usableScreenRect.Min.X + 3, _usableScreenRect.Max.Y - 2),
                                          new Vector2(_usableScreenRect.Max.X - 3, _usableScreenRect.Min.Y + 2),
-                                         T3Style.Colors.WarningColor, 3);
+                                         T3Style.Colors.Warning, 3);
                     }
 
                     // Interaction

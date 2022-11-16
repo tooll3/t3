@@ -86,18 +86,18 @@ namespace T3.Editor.Gui.ChildUi
                 // Horizontal line
                 var lh1 = graphRect.Min + Vector2.UnitY * h / 2;
                 var lh2 = new Vector2(graphRect.Max.X, lh1.Y + 1);
-                drawList.AddRectFilled(lh1, lh2, T3Style.Colors.GraphAxisColor);
+                drawList.AddRectFilled(lh1, lh2, T3Style.Colors.GraphAxis);
 
                 // Vertical start line 
                 var lv1 = graphRect.Min + Vector2.UnitX * (int)(graphWidth * relativeX);
                 var lv2 = new Vector2(lv1.X + 1, graphRect.Max.Y);
-                drawList.AddRectFilled(lv1, lv2, T3Style.Colors.GraphAxisColor);
+                drawList.AddRectFilled(lv1, lv2, T3Style.Colors.GraphAxis);
 
                 // Fragment line 
                 //var width = graphRect.GetWidth() - (lv1.X - graphRect.Min.X); //h * (GraphWidthRatio - leftPaddingH);
                 var cycleWidth = graphWidth * (1- relativeX); //h * (GraphWidthRatio - leftPaddingH);
                 var dx = new Vector2(animValue.LastFraction * cycleWidth - 1, 0);
-                drawList.AddRectFilled(lv1 + dx, lv2 + dx, T3Style.Colors.FragmentLineColor);
+                drawList.AddRectFilled(lv1 + dx, lv2 + dx, T3Style.Colors.GraphActiveLine);
 
                 // Draw graph
                 //        lv
@@ -116,7 +116,7 @@ namespace T3.Editor.Gui.ChildUi
                                                     ) + graphRect.Min;
                 }
 
-                var curveLineColor = highlightEditable ? T3Style.Colors.GraphLineColorHover : T3Style.Colors.GraphLineColor;
+                var curveLineColor = highlightEditable ? T3Style.Colors.GraphLineHover : T3Style.Colors.GraphLine;
                 drawList.AddPolyline(ref _graphLinePoints[0], GraphListSteps, curveLineColor, ImDrawFlags.None, 1.5f);
             }
 
