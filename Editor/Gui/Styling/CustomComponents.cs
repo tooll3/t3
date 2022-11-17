@@ -545,7 +545,7 @@ namespace T3.Editor.Gui.Styling
             
             if (isFilePickerVisible)
             {
-                FileOperations.DrawFileSelector(showFilePicker, ref value);                
+                modified |= FileOperations.DrawFileSelector(showFilePicker, ref value);                
             } 
 
             if (!string.IsNullOrEmpty(warning))

@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
 using ImGuiNET;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -35,8 +38,7 @@ namespace T3.Editor.Gui.Dialog
 
                     var fullPath = (_otherToollDir != null && Directory.Exists(_otherToollDir)) ? Path.GetFullPath(_otherToollDir) : "";
                     var startUpPath = Path.GetFullPath(".");
-                    //Log.Debug( $"{fullPath} vs {startUpPath}");
-
+                    
                     string warning = null;
                     if (!Directory.Exists(_otherToollDir))
                     {
@@ -47,7 +49,8 @@ namespace T3.Editor.Gui.Dialog
                         warning = "Can't import from itself";
                     }
 
-                    hasChanged |= CustomComponents.DrawStringParameter("Tooll directory", ref _otherToollDir, null, warning, FileOperations.FilePickerTypes.Folder);
+                    hasChanged |= CustomComponents.DrawStringParameter("Tooll directory", ref _otherToollDir, null, warning,
+                                                                       FileOperations.FilePickerTypes.Folder);
 
                     if (hasChanged)
                     {
@@ -83,7 +86,8 @@ namespace T3.Editor.Gui.Dialog
                         ImGui.PushID(index);
                         var item = _scanResults[index];
                         ImGui.Checkbox(item.RemotePathInUserNameSpace + (item.Status == ScanItem.Stati.AlreadyExists ? " (exists)" : ""), ref item.IsSelected);
-                        
+                        CustomComponents.TooltipForLastItem($"Target: {item.LocalFilePath}\nSource: {item.RemoteFilePath}");
+
                         ImGui.PopID();
                     }
                 }
@@ -104,86 +108,213 @@ namespace T3.Editor.Gui.Dialog
             }
 
             var nameSpaceFolder = _userNamespace.Replace(".", @"\");
-            var otherOperatorNamespaceDirectory = Path.Combine(_otherToollDir, @"Operators\Types\", nameSpaceFolder);
-            
-            if (!Directory.Exists(otherOperatorNamespaceDirectory))
+            _otherOperatorNamespaceDirectory = $@"{_otherToollDir}\Operators\Types\{nameSpaceFolder}";
+            _localOperatorNamespaceDirectory = $@"Operators\Types\{nameSpaceFolder}";
+
+            if (!Directory.Exists(_otherOperatorNamespaceDirectory))
             {
-                _scanResultSummary = $"Tooll version doesn't have operator directory? {otherOperatorNamespaceDirectory}";
+                _scanResultSummary = $"Tooll version doesn't have operator directory? {_otherOperatorNamespaceDirectory}";
                 return;
             }
 
-            var opFiles = Directory.GetFiles(otherOperatorNamespaceDirectory, "*.cs", SearchOption.AllDirectories);
+            // Scan local files for namespace to allow for moving of files
+            var allLocalFilesWithFilePath = new Dictionary<string, string>();
+            foreach (var filePath in Directory.GetFiles(_localOperatorNamespaceDirectory, "", SearchOption.AllDirectories))
+            {
+                var fileName = Path.GetFileName(filePath);
+                if (!allLocalFilesWithFilePath.TryAdd(fileName, filePath))
+                {
+                    Log.Warning($"Skipping double definition of {fileName} in {filePath}");
+                }
+            }
+
+            // Scan for ops
             var countNew = 0;
             var countExisting = 0;
-
-            foreach (var filePath in opFiles)
+            var opFiles = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.cs", SearchOption.AllDirectories);
+            foreach (var remoteFilePath in opFiles)
             {
-                var localPath = filePath.Replace(otherOperatorNamespaceDirectory, "");
+                var filePathWithinNamespace = remoteFilePath.Replace(_otherOperatorNamespaceDirectory, "");
+                var fileName = Path.GetFileName(remoteFilePath);
                 var newItem = new ScanItem()
                                   {
-                                      FilePath = filePath,
-                                      Title = Path.GetFileNameWithoutExtension(filePath),
+                                      RemoteFilePath = remoteFilePath,
+                                      Title = Path.GetFileNameWithoutExtension(remoteFilePath),
                                       Status = ScanItem.Stati.Undefined,
                                       IsSelected = false,
-                                      RemotePathInUserNameSpace = localPath,
+                                      LocalFilePath = null,
+                                      RemotePathInUserNameSpace = filePathWithinNamespace,
                                   };
-                
-                if (File.Exists($@"Operators\Types\{_userNamespace.Replace(".", "\\")}\{localPath}"))
+
+                if (allLocalFilesWithFilePath.ContainsKey(fileName))
                 {
                     newItem.Status = ScanItem.Stati.AlreadyExists;
-                    Log.Debug($"localPath {localPath} exists");
+                    newItem.LocalFilePath = allLocalFilesWithFilePath[fileName];
+                    Log.Debug($"localPath {filePathWithinNamespace} exists");
                     countExisting++;
                 }
                 else
                 {
                     newItem.Status = ScanItem.Stati.New;
+                    newItem.LocalFilePath = _localOperatorNamespaceDirectory + filePathWithinNamespace;
                     newItem.IsSelected = true;
-                    Log.Debug($" localPath {localPath} is new");
+                    Log.Debug($"localPath {filePathWithinNamespace} is new");
                     countNew++;
                 }
+
                 _scanResults.Add(newItem);
             }
 
-            _scanResultSummary = $"Found {opFiles.Length} Operators ({countNew} new   {countExisting} existing";
+            // Scan for resource files
+            var otherResourceDirectory = _otherToollDir + @"\Resources\" + nameSpaceFolder;
+            _otherResourceFiles.Clear();
+            if (Directory.Exists(otherResourceDirectory))
+            {
+                _otherResourceFiles.AddRange(Directory.GetFiles(otherResourceDirectory, "", SearchOption.AllDirectories));
+            }
+
+            _scanResultSummary = $"Found {opFiles.Length} Operators ({countNew} new / {countExisting} existing)  {_otherResourceFiles.Count} resource files";
         }
 
         private void MigrateSelection()
         {
-            var t3NameSpaces = new string[] { "T3.Core.", "T3.Operators." };
+            var allRemoteT3Files = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3", SearchOption.AllDirectories);
+            var allRemoteT3UiFiles = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3ui", SearchOption.AllDirectories);
+
             foreach (var item in _scanResults)
             {
-                var fileContent = File.ReadAllText(item.FilePath);
-                var newContent= Regex.Replace(fileContent, @"^using\s+([^;\s]+);\s*?\n" ,
-                                              m =>
-                                              {
-                                                  var namespaceMatch = m.Groups[1].Value;
-                                                  foreach (var wouldNeedFix in t3NameSpaces)
-                                                  {
-                                                      if (namespaceMatch.StartsWith(wouldNeedFix))
-                                                      {
-                                                          return "using T3." + namespaceMatch + ";\r\n"; 
-                                                      }
-                                                  }
-                                                  return m.Value;
-                                              }, RegexOptions.Multiline );
+                if (!item.IsSelected)
+                    continue;
 
-                foreach (var requiredNamespace in new[] { "using T3.Core.Operator.Resource;" })
+                // Adjust and copy source code file
+                var sourceCode = File.ReadAllText(item.RemoteFilePath);
+                sourceCode = AddRequiredNameSpaces(sourceCode);
+                sourceCode = FixLocalNamespaceUsages(sourceCode);
+
+                var targetDir = Path.GetDirectoryName(item.LocalFilePath);
+                try
                 {
-                    if(!newContent.Contains(requiredNamespace))
+                    if (!Directory.Exists(targetDir))
+                        Directory.CreateDirectory(targetDir);
+                }
+                catch (Exception e)
+                {
+                    Log.Warning($"can't create target directory {targetDir}: " + e.Message);
+                    continue;
+                }
+
+                File.WriteAllText(item.LocalFilePath, sourceCode);
+
+                // Copy tooll-files
+
+                foreach (var fileList in new[] { allRemoteT3Files, allRemoteT3UiFiles })
+                {
+                    var otherFile =
+                        fileList.SingleOrDefault(f =>
+                                                     Regex.IsMatch(f,
+                                                                   item.Title +
+                                                                   @"_[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\."));
+                    if (otherFile == null)
                     {
-                        newContent = requiredNamespace + "\r\n" + newContent;
+                        Log.Warning($"Can't find .t3 or .t3ui file for {item.Title}");
+                        continue;
+                    }
+
+                    var targetFilePath = otherFile.Replace(_otherOperatorNamespaceDirectory, _localOperatorNamespaceDirectory);
+                    try
+                    {
+                        File.Copy(otherFile, targetFilePath);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Warning($"Can't copy file {otherFile} -> {targetFilePath} " + e.Message);
                     }
                 }
-                Log.Debug(newContent);
+            }
+
+            // Copy Resource files
+            foreach (var otherResourceFilePath in _otherResourceFiles)
+            {
+                var targetFileName = otherResourceFilePath.Replace(_otherToollDir, ".");
+                try
+                {
+                    var targetDirectory = Path.GetDirectoryName(targetFileName);
+                    if (File.Exists(targetFileName))
+                    {
+                        Log.Debug($"Overwriting {targetFileName}");
+                    }
+                    else if (!Directory.Exists(targetDirectory))
+                    {
+                        Directory.CreateDirectory(targetDirectory);
+                    }
+
+                    File.Copy(otherResourceFilePath, targetFileName, overwrite: true);
+                }
+                catch (Exception e)
+                {
+                    Log.Warning($"Can't copy resource files {targetFileName}: " + e.Message);
+                }
             }
         }
-        
+
+        private static string AddRequiredNameSpaces(string sourceCode)
+        {
+            var requiredNamespaces = new[] { "using T3.Core.DataTypes;" };
+            foreach (var requiredNamespace in requiredNamespaces)
+            {
+                if (!sourceCode.Contains(requiredNamespace))
+                {
+                    sourceCode = requiredNamespace + "\r\n" + sourceCode;
+                }
+            }
+
+            return sourceCode;
+        }
+
+        private static string FixLocalNamespaceUsages(string sourceCode)
+        {
+            foreach (var (key, value) in _stringReplacements)
+            {
+                sourceCode = sourceCode.Replace(key, value);
+            }
+
+            return sourceCode;
+        }
+
+        private static Dictionary<string, string> _stringReplacements
+            = new()
+                  {
+                      { "<T3.Core.Command>", "<Command>" }
+                  };
+
+        private static string PrefixNameSpaceUsing(string sourceCode)
+        {
+            var t3NameSpaces = new[] { "Core.", "Operators." };
+
+            var newContent = Regex.Replace(sourceCode, @"^using\s+([^;\s]+);\s*?\n",
+                                           m =>
+                                           {
+                                               var namespaceMatch = m.Groups[1].Value;
+                                               foreach (var wouldNeedFix in t3NameSpaces)
+                                               {
+                                                   if (namespaceMatch.StartsWith(wouldNeedFix))
+                                                   {
+                                                       return "using T3." + namespaceMatch + ";\r\n";
+                                                   }
+                                               }
+
+                                               return m.Value;
+                                           }, RegexOptions.Multiline);
+            return newContent;
+        }
+
         private class ScanItem
         {
             public string Title;
-            public string FilePath;
+            public string RemoteFilePath;
+            public string LocalFilePath;
             public string RemotePathInUserNameSpace;
-            public bool IsSelected ;
+            public bool IsSelected;
             public Stati Status;
 
             public enum Stati
@@ -194,9 +325,12 @@ namespace T3.Editor.Gui.Dialog
             }
         }
 
-        private string _scanResultSummary = null;
-        private List<ScanItem> _scanResults = new List<ScanItem>();
+        private string _scanResultSummary;
+        private readonly List<ScanItem> _scanResults = new();
+        private readonly List<string> _otherResourceFiles = new();
         private string _otherToollDir;
         private string _userNamespace;
+        private string _otherOperatorNamespaceDirectory;
+        private string _localOperatorNamespaceDirectory;
     }
 }
