@@ -38,7 +38,7 @@ namespace T3.Editor.Gui.Dialog
 
                     var fullPath = (_otherToollDir != null && Directory.Exists(_otherToollDir)) ? Path.GetFullPath(_otherToollDir) : "";
                     var startUpPath = Path.GetFullPath(".");
-                    
+
                     string warning = null;
                     if (!Directory.Exists(_otherToollDir))
                     {
@@ -122,12 +122,15 @@ namespace T3.Editor.Gui.Dialog
 
             // Scan local files for namespace to allow for moving of files
             var allLocalFilesWithFilePath = new Dictionary<string, string>();
-            foreach (var filePath in Directory.GetFiles(_localOperatorNamespaceDirectory, "", SearchOption.AllDirectories))
+            if (Directory.Exists(_localOperatorNamespaceDirectory))
             {
-                var fileName = Path.GetFileName(filePath);
-                if (!allLocalFilesWithFilePath.TryAdd(fileName, filePath))
+                foreach (var filePath in Directory.GetFiles(_localOperatorNamespaceDirectory, "", SearchOption.AllDirectories))
                 {
-                    Log.Warning($"Skipping double definition of {fileName} in {filePath}");
+                    var fileName = Path.GetFileName(filePath);
+                    if (!allLocalFilesWithFilePath.TryAdd(fileName, filePath))
+                    {
+                        Log.Warning($"Skipping double definition of {fileName} in {filePath}");
+                    }
                 }
             }
 
