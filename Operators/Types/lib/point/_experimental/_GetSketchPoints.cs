@@ -4,8 +4,6 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.DataStructures;
-
 using T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028;
 
 // ReSharper disable RedundantNameQualifier

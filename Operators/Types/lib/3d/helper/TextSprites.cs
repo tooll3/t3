@@ -5,7 +5,6 @@ using System.Numerics;
 using Operators.Utils;
 using SharpDX.Direct3D11;
 using T3.Core;
-using T3.Core.DataStructures;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;

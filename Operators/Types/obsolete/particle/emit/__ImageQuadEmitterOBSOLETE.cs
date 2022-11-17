@@ -1,9 +1,7 @@
-using System;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_bb617a86_d771_480a_be94_c9cc460252a5
 {

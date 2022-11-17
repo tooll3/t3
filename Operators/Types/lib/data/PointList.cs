@@ -2,7 +2,7 @@ using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using Point = T3.Core.DataStructures.Point;
+using Point = T3.Core.DataTypes.Point;
 
 namespace T3.Operators.Types.Id_d5607e3b_15e8_402c_8d54_b29e40415ab0
 {

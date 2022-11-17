@@ -8,6 +8,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
 
@@ -16,7 +17,7 @@ namespace T3.Operators.Types.Id_bdd982c4_dfc4_48d6_888a_f067081dbe8e
     public class _MixPoints : Instance<_MixPoints>
     {
         [Output(Guid = "5bf5f55e-9099-4413-b17a-f49d042cb4ca")]
-        public readonly Slot<T3.Core.DataStructures.Point[]> Result = new Slot<T3.Core.DataStructures.Point[]>();
+        public readonly Slot<Point[]> Result = new Slot<Point[]>();
 
         public _MixPoints()
         {
@@ -37,7 +38,7 @@ namespace T3.Operators.Types.Id_bdd982c4_dfc4_48d6_888a_f067081dbe8e
 
             //var count = countX * countY;
             if (_points.Length != listA.Length)
-                _points = new T3.Core.DataStructures.Point[listA.Length];
+                _points = new Point[listA.Length];
 
             var factor = Factor.GetValue(context);
             var mode = (Modes)Mode.GetValue(context);
@@ -68,7 +69,7 @@ namespace T3.Operators.Types.Id_bdd982c4_dfc4_48d6_888a_f067081dbe8e
                         {
                             var pB1 = listB[bIndex < listB.Length - 1 ? bIndex  : listB.Length-1];
                             var pB2 = listB[bIndex < listB.Length - 2 ? bIndex + 1 : listB.Length - 1];
-                            var pB = new T3.Core.DataStructures.Point()
+                            var pB = new Point()
                                          {
                                              Position = Vector3.Lerp(pB1.Position, pB2.Position, fraction),
                                              W = MathUtils.Lerp(pB1.W, pB2.W, fraction),
@@ -88,7 +89,7 @@ namespace T3.Operators.Types.Id_bdd982c4_dfc4_48d6_888a_f067081dbe8e
             
             Result.Value = _points;
 
-            void ComputeStep(int index, T3.Core.DataStructures.Point pA, T3.Core.DataStructures.Point pB)
+            void ComputeStep(int index, Point pA, Point pB)
             {
                 switch (mode)
                 {
@@ -109,7 +110,7 @@ namespace T3.Operators.Types.Id_bdd982c4_dfc4_48d6_888a_f067081dbe8e
 
 
         private const float Pi2 = (float)Math.PI * 2;
-        private T3.Core.DataStructures.Point[] _points = new T3.Core.DataStructures.Point[0];
+        private Point[] _points = new Point[0];
 
         enum Modes
         {
@@ -125,10 +126,10 @@ namespace T3.Operators.Types.Id_bdd982c4_dfc4_48d6_888a_f067081dbe8e
         }
         
         [Input(Guid = "57F1D1D3-B437-4761-A5F5-0520CF820F58")]
-        public readonly InputSlot<T3.Core.DataStructures.Point[]> A = new InputSlot<T3.Core.DataStructures.Point[]>();
+        public readonly InputSlot<Point[]> A = new InputSlot<Point[]>();
         
         [Input(Guid = "3119875E-A6EA-4D19-B536-513459A0DB98")]
-        public readonly InputSlot<T3.Core.DataStructures.Point[]> B = new InputSlot<T3.Core.DataStructures.Point[]>();
+        public readonly InputSlot<Point[]> B = new InputSlot<Point[]>();
         
         [Input(Guid = "e8e8d26f-ccd1-4c15-b215-9c5bcfc133fb", MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new InputSlot<int>();

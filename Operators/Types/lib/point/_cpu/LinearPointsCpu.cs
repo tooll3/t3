@@ -7,7 +7,6 @@ using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.DataStructures;
 using T3.Core.Resource;
 using T3.Core.Utils;
 
@@ -38,7 +37,7 @@ namespace T3.Operators.Types.Id_796a5efb_2ccf_4cae_b01c_d3f20a070181
             var count = countX;
             if (_points.Length != count)
             {
-                _points = new T3.Core.DataStructures.Point[count];
+                _points = new Point[count];
                 _pointList.SetLength(count);
             }
 
@@ -64,7 +63,7 @@ namespace T3.Operators.Types.Id_796a5efb_2ccf_4cae_b01c_d3f20a070181
             PointList.Value = _pointList;
         }
 
-        private Point[] _points = new T3.Core.DataStructures.Point[0];
+        private Point[] _points = new Point[0];
         private readonly StructuredList<Point> _pointList = new StructuredList<Point>(10);
 
         [Input(Guid = "A32B0085-4F83-4240-845C-D663240A738C")]

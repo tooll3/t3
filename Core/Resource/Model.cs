@@ -19,7 +19,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using Buffer = SharpDX.Direct3D11.Buffer;
-using Point = T3.Core.DataStructures.Point;
+using Point = T3.Core.DataTypes.Point;
 using Vector4 = System.Numerics.Vector4;
 
 // ReSharper disable RedundantNameQualifier

@@ -1,8 +1,4 @@
-using System;
-using System.Runtime.InteropServices;
-using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -10,6 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using Point = T3.Core.DataTypes.Point;
 
 namespace T3.Operators.Types.Id_59b810f1_7849_40a7_ae10_7e8008685311
 {
@@ -44,7 +41,7 @@ namespace T3.Operators.Types.Id_59b810f1_7849_40a7_ae10_7e8008685311
             var resourceManager = ResourceManager.Instance();
             if (_bufferData.Length != pointArray.Length)
             {
-                _bufferData = new T3.Core.DataStructures.Point[pointArray.Length];
+                _bufferData = new Point[pointArray.Length];
             }
             
 
@@ -63,10 +60,10 @@ namespace T3.Operators.Types.Id_59b810f1_7849_40a7_ae10_7e8008685311
         }
 
         private Buffer _buffer;
-        private T3.Core.DataStructures.Point[] _bufferData = new T3.Core.DataStructures.Point[0];
+        private Point[] _bufferData = new Point[0];
         private BufferWithViews _bufferWithViews = new BufferWithViews();
 
         [Input(Guid = "6fddc26b-31e2-41f1-b86c-0b71d898801a")]
-        public readonly InputSlot<T3.Core.DataStructures.Point[]> PointArray = new InputSlot<T3.Core.DataStructures.Point[]>();
+        public readonly InputSlot<Point[]> PointArray = new InputSlot<Point[]>();
     }
 }

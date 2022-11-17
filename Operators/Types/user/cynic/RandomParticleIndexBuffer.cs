@@ -1,14 +1,9 @@
 using System;
 using System.Runtime.InteropServices;
-using SharpDX;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using Utilities = T3.Core.Utils.Utilities;
 
 namespace T3.Operators.Types.Id_6fae395d_c3a0_4693_a3dc_8959cda5a92b
 {

@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
+using T3.Core.DataTypes;
 using T3.Core.Operator.Slots;
 
 namespace T3.Editor.Gui.OutputUi
 {
-    public class PointArrayOutputUi : OutputUi<T3.Core.DataStructures.Point[]>
+    public class PointArrayOutputUi : OutputUi<Point[]>
     {
         public override IOutputUi Clone()
         {
@@ -18,7 +19,7 @@ namespace T3.Editor.Gui.OutputUi
         
         protected override void DrawTypedValue(ISlot slot)
         {
-            if (slot is Slot<T3.Core.DataStructures.Point[]> typedSlot)
+            if (slot is Slot<Point[]> typedSlot)
             {
                 var v = typedSlot.Value;
 

@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using System.Runtime.InteropServices;
 
-namespace T3.Core.DataStructures
+namespace T3.Core.DataTypes
 {
     [StructLayout(LayoutKind.Explicit, Size = StructSize)]
     public struct Sprite

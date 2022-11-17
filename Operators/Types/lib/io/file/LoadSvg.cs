@@ -15,7 +15,7 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.Utils;
-using Point = T3.Core.DataStructures.Point;
+using Point = T3.Core.DataTypes.Point;
 
 namespace T3.Operators.Types.Id_e8d94dd7_eb54_42fe_a7b1_b43543dd457e
 {

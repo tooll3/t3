@@ -1,5 +1,6 @@
 using System.Numerics;
 using T3.Core;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -11,7 +12,7 @@ namespace T3.Operators.Types.Id_a3bc1b8c_6bd9_4117_880e_afb9765e3104
     public class NoisePoints : Instance<NoisePoints>
     {
         [Output(Guid = "25c89e66-e8ee-4600-9d2f-009b7d9e75ca")]
-        public readonly Slot<T3.Core.DataStructures.Point[]> Result = new Slot<T3.Core.DataStructures.Point[]>();
+        public readonly Slot<Point[]> Result = new Slot<Point[]>();
 
         public NoisePoints()
         {
@@ -22,7 +23,7 @@ namespace T3.Operators.Types.Id_a3bc1b8c_6bd9_4117_880e_afb9765e3104
         {
             var count = Count.GetValue(context).Clamp(1, 10000);
             if (_points.Length != count)
-                _points = new T3.Core.DataStructures.Point[count];
+                _points = new Point[count];
 
             var scale = Scale.GetValue(context);
             var frequency = Frequency.GetValue(context);
@@ -48,7 +49,7 @@ namespace T3.Operators.Types.Id_a3bc1b8c_6bd9_4117_880e_afb9765e3104
             Result.Value = _points;
         }
 
-        private T3.Core.DataStructures.Point[] _points = new T3.Core.DataStructures.Point[0];
+        private Point[] _points = new Point[0];
 
         [Input(Guid = "52953760-435e-4f11-8e65-c9d46bc40076")]
         public readonly InputSlot<Vector3> Scale = new InputSlot<Vector3>();

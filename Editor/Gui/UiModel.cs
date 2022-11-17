@@ -24,7 +24,7 @@ using T3.Editor.Gui.InputUi.SingleControl;
 using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.OutputUi;
 using Buffer = SharpDX.Direct3D11.Buffer;
-using Point = T3.Core.DataStructures.Point;
+using Point = T3.Core.DataTypes.Point;
 
 // ReSharper disable RedundantNameQualifier
 
@@ -90,7 +90,7 @@ namespace T3.Editor.Gui
                            () => new ValueOutputUi<T3.Core.DataTypes.Gradient>());
             RegisterUiType(typeof(T3.Core.DataTypes.ParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<T3.Core.DataTypes.ParticleSystem>(),
                            () => new ValueOutputUi<T3.Core.DataTypes.ParticleSystem>());
-            RegisterUiType(typeof(T3.Core.DataStructures.Point[]), new PointListUiProperties(), () => new FallbackInputUi<Point[]>(),
+            RegisterUiType(typeof(Point[]), new PointListUiProperties(), () => new FallbackInputUi<Point[]>(),
                            () => new PointArrayOutputUi());
             RegisterUiType(typeof(T3.Core.DataTypes.RenderTargetReference), new TextureUiProperties(),
                            () => new FallbackInputUi<T3.Core.DataTypes.RenderTargetReference>(),

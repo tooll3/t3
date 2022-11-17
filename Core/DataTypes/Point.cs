@@ -1,8 +1,8 @@
-﻿using System.Runtime.InteropServices;
-using System;
+﻿using System;
 using System.Numerics;
+using System.Runtime.InteropServices;
 
-namespace T3.Core.DataStructures
+namespace T3.Core.DataTypes
 {
     [StructLayout(LayoutKind.Explicit, Size = 2 * 16)]
     public struct Point
