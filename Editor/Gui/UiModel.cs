@@ -82,8 +82,8 @@ namespace T3.Editor.Gui
             RegisterUiType(typeof(T3.Core.DataTypes.BufferWithViews), new FallBackUiProperties(), () => new FallbackInputUi<T3.Core.DataTypes.BufferWithViews>(),
                            () => new ValueOutputUi<T3.Core.DataTypes.BufferWithViews>());
             RegisterUiType(typeof(Command), new CommandUiProperties(), () => new FallbackInputUi<Command>(), () => new CommandOutputUi());
-            RegisterUiType(typeof(T3.Core.Animation.Curve), new FloatUiProperties(), () => new CurveInputUi(),
-                           () => new ValueOutputUi<T3.Core.Animation.Curve>());
+            RegisterUiType(typeof(Curve), new FloatUiProperties(), () => new CurveInputUi(),
+                           () => new ValueOutputUi<Curve>());
             RegisterUiType(typeof(T3.Core.Operator.GizmoVisibility), new FallBackUiProperties(), () => new EnumInputUi<T3.Core.Operator.GizmoVisibility>(),
                            () => new ValueOutputUi<T3.Core.Operator.GizmoVisibility>());
             RegisterUiType(typeof(T3.Core.DataTypes.Gradient), new FloatUiProperties(), () => new GradientInputUi(),

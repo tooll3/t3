@@ -1,4 +1,5 @@
 using T3.Core;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -53,7 +54,7 @@ namespace T3.Operators.Types.Id_ffc0a7ed_fe61_4188_8db9_0b0f07c6b981
         public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();
 
         [Input(Guid = "9645b08f-ed92-4b82-8090-0a31162e83fb")]
-        public readonly InputSlot<T3.Core.Animation.Curve> Scale = new InputSlot<T3.Core.Animation.Curve>();
+        public readonly InputSlot<Curve> Scale = new InputSlot<Curve>();
 
     }
 }

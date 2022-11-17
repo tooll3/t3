@@ -46,12 +46,6 @@ namespace T3.Core.Resource
         public static Dictionary<Type, string> Entries { get; } = new(20);
     }
 
-    public class Command
-    {
-        public Action<EvaluationContext> PrepareAction { get; init; }
-        public Action<EvaluationContext> RestoreAction { get; set; }
-    }
-
     public class Model
     {
         public Assembly OperatorsAssembly { get; }
@@ -219,18 +213,18 @@ namespace T3.Core.Resource
 
             RegisterType(typeof(Command), "Command",
                          () => new InputValue<Command>(null));
-            RegisterType(typeof(Animation.Curve), "Curve",
-                         InputDefaultValueCreator<Animation.Curve>,
+            RegisterType(typeof(Curve), "Curve",
+                         InputDefaultValueCreator<Curve>,
                          (writer, obj) =>
                          {
-                             Animation.Curve curve = (Animation.Curve)obj;
+                             Curve curve = (Curve)obj;
                              writer.WriteStartObject();
                              curve?.Write(writer);
                              writer.WriteEndObject();
                          },
                          jsonToken =>
                          {
-                             Animation.Curve curve = new Animation.Curve();
+                             Curve curve = new Curve();
                              if (jsonToken == null || !jsonToken.HasValues)
                              {
                                  curve.AddOrUpdateV(0, new VDefinition() { Value = 0 });

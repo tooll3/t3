@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SharpDX;
 using T3.Core.Animation;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;

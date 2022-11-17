@@ -1,10 +1,11 @@
 ﻿using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.DataTypes;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs
 {
-    public class CurveInputUi : InputValueUi<T3.Core.Animation.Curve>
+    public class CurveInputUi : InputValueUi<Curve>
     {
         public override IInputUi Clone()
         {

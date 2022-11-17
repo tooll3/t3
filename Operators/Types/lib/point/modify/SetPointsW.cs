@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -27,7 +28,7 @@ namespace T3.Operators.Types.Id_191e5057_4da4_447e_b7cf_e9e0ed8c5dd8
         public readonly InputSlot<float> Phase = new InputSlot<float>();
 
         [Input(Guid = "27bf737b-966e-4203-b8fd-2d9c7b19dcad")]
-        public readonly InputSlot<T3.Core.Animation.Curve> WCurve = new InputSlot<T3.Core.Animation.Curve>();
+        public readonly InputSlot<Curve> WCurve = new InputSlot<Curve>();
 
         [Input(Guid = "d504c3f9-290f-4a73-bf9d-f9266ea955f6")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();

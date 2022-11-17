@@ -1,4 +1,5 @@
 ﻿using T3.Core.Animation;
+using T3.Core.DataTypes;
 
 namespace T3.Editor.Gui.Commands.Animation
 {

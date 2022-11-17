@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using T3.Core.DataTypes;
 
 namespace T3.Core.Animation
 {

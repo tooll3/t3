@@ -148,7 +148,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         private float _scale = DefaultScale;
         public float Scale  => FloatInputUi.GetScaleFromRange(_scale, Min, Max);
         public bool Clamp;
-        public string Format = null;
+        public string Format;
         
         protected readonly float[] FloatComponents;
 

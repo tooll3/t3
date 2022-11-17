@@ -7,6 +7,7 @@ using SharpDX.Mathematics.Interop;
 using SharpDX.MediaFoundation;
 using T3.Core;
 using T3.Core.Audio;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;

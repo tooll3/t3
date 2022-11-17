@@ -5,6 +5,7 @@ using System.Numerics;
 using System.Text;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Animation;
