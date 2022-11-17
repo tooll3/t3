@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using ImGuiNET;
-using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -60,12 +60,15 @@ namespace T3.Editor.Gui.Dialog
                     var isValid = !string.IsNullOrEmpty(_otherToollDir) && !string.IsNullOrEmpty(_userNamespace);
                     CustomComponents.HelpText(_scanResultSummary);
 
-                    if (CustomComponents.DisablableButton("Import", isValid))
+                    if (CustomComponents.DisablableButton("Import and Restart", isValid))
                     {
-                        //Todo: do something!
                         MigrateSelection();
+                        MessageBox.Show("Tooll now has to restart to complete the import.");
+                        Application.Exit();
+                        //Application.Restart();
+                        //Environment.Exit(0);
 
-                        ImGui.CloseCurrentPopup();
+                        //ImGui.CloseCurrentPopup();
                     }
 
                     ImGui.SameLine();
