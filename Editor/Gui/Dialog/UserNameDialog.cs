@@ -5,7 +5,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
-namespace T3.Editor.Gui.Graph.Dialogs
+namespace T3.Editor.Gui.Dialog
 {
     public class UserNameDialog : ModalDialog
     {

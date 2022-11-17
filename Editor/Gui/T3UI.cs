@@ -15,6 +15,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Rendering;
@@ -95,6 +96,7 @@ namespace T3.Editor.Gui
             }
             
             _userNameDialog.Draw();
+            _importDialog.Draw();
             _createFromTemplateDialog.Draw();
             
             if (!UserSettings.IsUserNameDefined() )
@@ -147,6 +149,11 @@ namespace T3.Editor.Gui
                         _createFromTemplateDialog.ShowNextFrame();
                     }
                     
+                    if (ImGui.MenuItem("Import Operators", null, false, !IsCurrentlySaving))
+                    {
+                        _importDialog.ShowNextFrame();
+                    }
+
                     if (ImGui.MenuItem("Save", KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !IsCurrentlySaving))
                     {
                         SaveInBackground(saveAll:true);
@@ -384,6 +391,7 @@ namespace T3.Editor.Gui
         
         private static readonly CreateFromTemplateDialog _createFromTemplateDialog = new();
         private static readonly UserNameDialog _userNameDialog = new();
+        private static readonly MigrateOperatorsDialog _importDialog = new();
 
         [Flags]
         public enum EditingFlags
