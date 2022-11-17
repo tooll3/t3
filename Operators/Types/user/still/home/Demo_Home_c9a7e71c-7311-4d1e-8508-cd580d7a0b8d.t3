@@ -523,7 +523,7 @@
       "InputValues": [
         {
           "Id": "d34e16a9-4346-4dcf-a1fb-11325925dcd7"/*CurveA*/,
-          "Type": "T3.Core.Animation.Curve",
+          "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
               "PreCurve": "Constant",
@@ -555,7 +555,7 @@
         },
         {
           "Id": "d2824633-c023-4e26-a61b-6f15718a119e"/*CurveB*/,
-          "Type": "T3.Core.Animation.Curve",
+          "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
               "PreCurve": "Constant",
