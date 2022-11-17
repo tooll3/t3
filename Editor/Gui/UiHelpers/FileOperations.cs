@@ -50,6 +50,7 @@ namespace T3.Editor.Gui.UiHelpers
 
         public enum FilePickerTypes
         {
+            None,
             File,
             Folder,
         }

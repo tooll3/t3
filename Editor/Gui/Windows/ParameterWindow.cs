@@ -40,7 +40,7 @@ namespace T3.Editor.Gui.Windows
 
         protected override void DrawAllInstances()
         {
-            // Convert to array to allow closing of windowns
+            // Convert to array to allow closing of windows
             foreach (var w in _parameterWindowInstances.ToArray())
             {
                 w.DrawOneInstance();
@@ -96,8 +96,7 @@ namespace T3.Editor.Gui.Windows
                 ImGui.Dummy(new Vector2(10,10));
                 ImGui.Indent();
                 ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10,10));
-
-
+                
                 if (!string.IsNullOrEmpty(symbolUi.Description))
                 {
                     ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
@@ -111,7 +110,6 @@ namespace T3.Editor.Gui.Windows
                 SymbolBrowser.ListExampleOperators(symbolUi);
                 if (!string.IsNullOrEmpty(symbolUi.Description))
                 {
-                    
                     var alreadyListedSymbolNames = new HashSet<string>();
                     
                     foreach (Match  match in _itemRegex.Matches(symbolUi.Description))

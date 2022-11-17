@@ -26,6 +26,7 @@ namespace T3.Editor.Gui.Templates
             if (BeginDialog("Create"))
             {
                 
+                
                 _selectedTemplate = null;
                 ImGui.BeginChild("templates", new Vector2(200, -1));
                 {

@@ -498,28 +498,32 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
 
-        public static bool DrawStringParameter(string label, ref string value, string placeHolder = null, string warning=null)
+        public static bool DrawStringParameter(string label, 
+                                               ref string value, 
+                                               string placeHolder = null, 
+                                               string warning=null,  
+                                               FileOperations.FilePickerTypes showFilePicker = FileOperations.FilePickerTypes.None)
         {
             const float leftPadding = 200;
             const float spacing = 20;
+            var isFilePickerVisible = showFilePicker != FileOperations.FilePickerTypes.None;
+            float spaceForFilePicker = isFilePickerVisible ? 30 : 0;
             var labelSize = ImGui.CalcTextSize(label);
 
             var p = ImGui.GetCursorPos();
             ImGui.SetCursorPosX( MathF.Max(leftPadding - labelSize.X,0)+10);
             ImGui.AlignTextToFramePadding();
 
-            string cleanedLabel = label.Split(ImGuiIdSpecifier)[0];
+            var cleanedLabel = label.Split(ImGuiIdSpecifier)[0];
             ImGui.TextUnformatted(cleanedLabel);
 
             ImGui.SetCursorPos(p);
             
             ImGui.SameLine();
             ImGui.SetCursorPosX(leftPadding + spacing);
-            //var size = new Vector2(150, ImGui.GetFrameHeight());
             
-            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X- 50);
-
-
+            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X- 50 - spaceForFilePicker);
+            
             var wasNull = value == null;
             if (wasNull)
                 value = string.Empty;
@@ -537,6 +541,12 @@ namespace T3.Editor.Gui.Styling
                 drawList.AddText(minPos + new Vector2(8,3), Color.White.Fade(0.25f), placeHolder);
                 drawList.PopClipRect();
             }
+
+            
+            if (isFilePickerVisible)
+            {
+                FileOperations.DrawFileSelector(showFilePicker, ref value);                
+            } 
 
             if (!string.IsNullOrEmpty(warning))
             {
