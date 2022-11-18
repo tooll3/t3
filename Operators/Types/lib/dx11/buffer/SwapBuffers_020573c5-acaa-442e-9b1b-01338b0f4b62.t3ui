@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "243160dd-c19d-48f2-b966-c9b4ee79c2d6"/*BufferAInput*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0
@@ -11,6 +12,7 @@
     },
     {
       "InputId": "de95e30b-896e-4880-b940-82863554ce02"/*BufferBInput*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0
