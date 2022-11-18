@@ -17,7 +17,7 @@
     },
     {
       "Id": "bfa7d45a-0f98-4016-ae34-d5f653e821d6"/*ResultForTrue*/,
-      "DefaultValue": 0
+      "DefaultValue": 1
     },
     {
       "Id": "158e2790-1244-4509-8911-b850ffcee29f"/*ResultForFalse*/,
