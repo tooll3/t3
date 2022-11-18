@@ -66,7 +66,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float4 rot = SourcePoints[i.x].rotation;
 
-    float amount = Amount * (UseWAsSelection > 0.5 ? SourcePoints[i.x].w : 0);
+    float amount = Amount * (UseWAsSelection > 0.5 ? SourcePoints[i.x].w : 1);
 
     float3 offset = hash4.xyz * RandomizePosition * amount;
 
