@@ -3,6 +3,7 @@
   "InputUis": [
     {
       "InputId": "6c935163-1729-4df0-a981-610b4aa7c6a3"/*Input*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0

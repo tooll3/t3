@@ -25,8 +25,8 @@ Texture2D<float4> FxTexture : register(t0);
 
 RWTexture2D<float4> BufferA  : register(u0); 
 RWTexture2D<float4> BufferB  : register(u1); 
-RWTexture2D<float4> ColorOutput  : register(u2); 
-//RWTexture2D<float4> BufferBRead  : register(u2); 
+RWTexture2D<float4> BufferBRead  : register(u2); 
+RWTexture2D<float4> ColorOutput  : register(u3); 
 
 
 [numthreads(32,32,1)]
@@ -42,14 +42,7 @@ void main1(uint3 DTid : SV_DispatchThreadID)
     
     float4 a = BufferB[DTid.xy];
 
-    float border = BorderStrength;
-    float2 velocity = a.xy * Damping                      //fluid velocity
-             +Gravity             //gravity
-             +float(uv.x<.05)*float2(1,0)*border   //wall
-             +float(uv.y<.05)*float2(0,1)*border  //wall
-             -float(uv.x>.95)*float2(1,0)*border  //wall
-             -float(uv.y>.95)*float2(0,1)*border; //wall
-
+    float2 velocity = a.xy * Damping;                      //fluid velocity
 
     float s = 0;
     float maxSteps = 4;//maxStepsernel convolution size
@@ -70,7 +63,7 @@ void main1(uint3 DTid : SV_DispatchThreadID)
 }
  
 
-[numthreads(32,4,1)]
+[numthreads(32,32,1)]
 void main2(uint3 DTid : SV_DispatchThreadID)
 {   
     uint width, height;
@@ -90,8 +83,8 @@ void main2(uint3 DTid : SV_DispatchThreadID)
             int2 p = DTid.xy + d;
             p=max(0, min(p, int2(width,height)-1));
             float4  a = BufferA[p];       //old velocity in a.xy, mass in a.z
-            float4  b = BufferB[p];   //new velocity in b.xy, normalization of convolution in .z
-            float2  c = -b.xy - d;  //translate the gaussian 2Dimage
+            float4  b = BufferBRead[p];   //new velocity in b.xy, normalization of convolution in .z
+            float2  c = -b.xy - d;        //translate the gaussian 2Dimage
             float s = a.z*exp(-dot(c,c))*b.z;       //calculate the normalized gaussian 2Dimage multiplied by mass
             float2  e = c*(a.z- MassAttraction);                 //fluid expands or attracts itself depending on mass
             o.xy += s*(b.xy+e);                     //sum all translated velocities
@@ -104,24 +97,42 @@ void main2(uint3 DTid : SV_DispatchThreadID)
     o.xy *= tz;                        //calculate the average velocity
 
     o.b = lerp(o.b, StabilizeMassTarget, StabilizeMass);
-    
+        
+    uint edgeWidth = 1;
+
+    if(DTid.x <= edgeWidth 
+    || DTid.x >= width - edgeWidth 
+    || DTid.y <= edgeWidth 
+    || DTid.y >= height - edgeWidth ) 
     {
-        int edgeWidth = 1;
-
-        if(DTid.x <= edgeWidth 
-        || DTid.x >= width - edgeWidth 
-        || DTid.y <= edgeWidth 
-        || DTid.y >= height - edgeWidth ) 
-        {
-            o.rgb= 0;
-        }
+        o.rgb= 0;
     }
+    
 
+    // Apply FX Texture
+    float4 fx = FxTexture.SampleLevel(texSampler, uv,0);
+
+    //o.b *= 1.00;
+    //o.b = lerp(o.b, fx.b, ApplyFxTexture.b * ApplyFxTexture.a * fx.a);
+    //o.b = lerp(o.b, fx.b, ApplyFxTexture.b * ApplyFxTexture.a * fx.a);
+    o.b += fx.b * ApplyFxTexture.b * ApplyFxTexture.a * fx.a;
+
+    //o.xy *= 0.9;
+    o.xy += fx.xy * ApplyFxTexture.xy * ApplyFxTexture.a * fx.a;
+    //o.z *=1.02;
+
+    //float2 resolution = float2(width, height);
+    //float2 uv= DTid.xy / resolution;
+    float border = BorderStrength;
+    float borderWidth = 0.05;
+    o.xy +=Gravity             //gravity
+             +float(uv.x < borderWidth)*float2(1,0)*border   //wall
+             +float(uv.y < borderWidth)*float2(0,1)*border  //wall
+             -float(uv.x > 1 - borderWidth)*float2(1,0)*border  //wall
+             -float(uv.y > 1 - borderWidth)*float2(0,1)*border; //wall
 
     if(MousePressed > 0.5)
     {
-        float2 resolution = float2(width, height);
-        float2 uv= DTid.xy / resolution;
         float2 m = 3.*(uv-.5);
         //o = float4(0,0,1,1)*exp(-dot(m,m));        
 
@@ -135,11 +146,6 @@ void main2(uint3 DTid : SV_DispatchThreadID)
     }
     o.a = 1;
 
-    // Apply FX Texture
-    float4 fx = FxTexture.SampleLevel(texSampler, uv,0);
-
-    
-    o.rgb = lerp(o.rgb, fx.rgb, ApplyFxTexture.rgb * ApplyFxTexture.a * fx.a);
 
     BufferB[DTid.xy] = o;
 

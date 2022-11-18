@@ -6,41 +6,41 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace T3.Operators.Types.Id_e4e608e7_1248_4d73_910c_e8bfbb34251b
+namespace T3.Operators.Types.Id_d1a1f207_0537_416a_985b_e350c3f7e655
 {
-    public class SimpleLiquid : Instance<SimpleLiquid>
+    public class SimpleLiquid2 : Instance<SimpleLiquid2>
     {
-        [Output(Guid = "9397f264-fde0-4806-b287-5cac9fd638b1")]
+        [Output(Guid = "08692782-19d4-49fe-94e7-1209500ed1d8")]
         public readonly Slot<Texture2D> ColorBuffer = new Slot<Texture2D>();
 
-        [Input(Guid = "5c42604f-bbc1-4e65-8f21-8d8e79179e5a")]
+        [Input(Guid = "fddaca10-39db-4cc0-8b0a-06e9319b0180")]
         public readonly InputSlot<float> ShouldReset = new InputSlot<float>();
 
-        [Input(Guid = "a9d8c898-545e-4c0e-af61-6d2251209460")]
+        [Input(Guid = "0f3dd599-095e-4766-9483-c8cb21f9571a")]
         public readonly InputSlot<System.Numerics.Vector2> Gravity = new InputSlot<System.Numerics.Vector2>();
 
-        [Input(Guid = "3520474e-1341-4b49-a4ce-247b52ae3fe7")]
+        [Input(Guid = "faf738e5-5ff4-4bcd-85dc-b1c1484edfa6")]
         public readonly InputSlot<float> BorderStrength = new InputSlot<float>();
 
-        [Input(Guid = "b4db432f-3284-4b36-9c81-b644d958f582")]
+        [Input(Guid = "0dab731e-e419-4244-a694-2dfb2e372750")]
         public readonly InputSlot<float> Damping = new InputSlot<float>();
 
-        [Input(Guid = "04dce025-be57-4478-a66c-4e92f4f1f8c4")]
+        [Input(Guid = "225df965-a92b-45d8-abae-81238aada793")]
         public readonly InputSlot<float> MassAttraction = new InputSlot<float>();
 
-        [Input(Guid = "fdd814ec-b8c6-41bd-91d1-ae6e6cfb7e8c")]
+        [Input(Guid = "013b2675-0a53-4b5d-be3c-3b52cbb37134")]
         public readonly InputSlot<float> Brightness = new InputSlot<float>();
 
-        [Input(Guid = "bee3be17-6ac1-4c11-902a-0321cf5b1a19")]
+        [Input(Guid = "6097721e-d139-444d-bc3f-c539fe6ceadd")]
         public readonly InputSlot<float> StabilizeMass = new InputSlot<float>();
 
-        [Input(Guid = "ac239fb9-b90f-43e9-b591-b4e4e07bb5f7")]
+        [Input(Guid = "aaaa20e2-7bad-4bb0-a656-115876e021bc")]
         public readonly InputSlot<float> StabilizeMassTarget = new InputSlot<float>();
 
-        [Input(Guid = "6bd77c9b-de54-4058-994d-351bdf6bc4da")]
+        [Input(Guid = "b5e1cded-fded-4769-8d1e-38598cf944db")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> FxTexture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
-        [Input(Guid = "75c2f9b1-b252-424b-ab8b-7fa543e20138")]
+        [Input(Guid = "76efee74-fe2d-4926-98d8-82be384f298e")]
         public readonly InputSlot<System.Numerics.Vector4> ApplyFxTexture = new InputSlot<System.Numerics.Vector4>();
 
     }
