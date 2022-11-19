@@ -367,11 +367,6 @@
           "Id": "82464caa-a407-4f6d-a062-cef322d131f0"/*Twist*/,
           "Type": "System.Single",
           "Value": 22.0
-        },
-        {
-          "Id": "ae06f89e-d5a4-43a3-957d-718b66d76918"/*WriteAngleAndStrength*/,
-          "Type": "System.Boolean",
-          "Value": false
         }
       ],
       "Outputs": []
@@ -1157,11 +1152,6 @@
           "Id": "82464caa-a407-4f6d-a062-cef322d131f0"/*Twist*/,
           "Type": "System.Single",
           "Value": 0.0
-        },
-        {
-          "Id": "ae06f89e-d5a4-43a3-957d-718b66d76918"/*WriteAngleAndStrength*/,
-          "Type": "System.Boolean",
-          "Value": true
         }
       ],
       "Outputs": []

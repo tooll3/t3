@@ -25,8 +25,17 @@ namespace T3.Operators.Types.Id_01458940_287f_4d31_9906_998efa9a2641
         [Input(Guid = "82464caa-a407-4f6d-a062-cef322d131f0")]
         public readonly InputSlot<float> Twist = new InputSlot<float>();
 
-        [Input(Guid = "ae06f89e-d5a4-43a3-957d-718b66d76918")]
-        public readonly InputSlot<bool> WriteAngleAndStrength = new InputSlot<bool>();
+        [Input(Guid = "cf7e6f41-cc6e-46dd-8779-1273326a5a53", MappedType = typeof(Modes))]
+        public readonly InputSlot<int> Mode = new InputSlot<int>();
+        
+        
+        private enum Modes
+        {
+            Gray_ToNormalizedRGB,
+            Gray_ToNormalizedRGBNeg,
+            Gray_ToAngleAndMagnitude,
+            Red_ToRG_KeepBA,
+        }
     }
 }
 
