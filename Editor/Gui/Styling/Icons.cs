@@ -152,7 +152,7 @@ namespace T3.Editor.Gui.Styling
                 Char = (char)icon;
             }
 
-            private const int SlotSize = 16;
+            private const int SlotSize = 15;
             public readonly ImRect SourceArea;
             public readonly char Char;
         }
@@ -161,22 +161,22 @@ namespace T3.Editor.Gui.Styling
 
         public static readonly IconSource[] CustomIcons =
             {
-                new (Icon.DopeSheetKeyframeLinearSelected, 0, new Vector2(16, 25)),
-                new (Icon.DopeSheetKeyframeLinear, 1, new Vector2(16, 25)),
-                new (Icon.LastKeyframe, 2, new Vector2(16, 25)),
-                new (Icon.FirstKeyframe, 3, new Vector2(16, 25)),
+                new (Icon.DopeSheetKeyframeLinearSelected, 0, new Vector2(15, 25)),
+                new (Icon.DopeSheetKeyframeLinear, 1, new Vector2(15, 25)),
+                new (Icon.LastKeyframe, 2, new Vector2(15, 25)),
+                new (Icon.FirstKeyframe, 3, new Vector2(15, 25)),
                 new (Icon.JumpToRangeStart, 4),
                 new (Icon.JumpToPreviousKeyframe, 5),
                 new (Icon.PlayBackwards, 6),
                 new (Icon.PlayForwards, 7),
                 new (Icon.JumpToNextKeyframe, 8),
                 new (Icon.JumpToRangeEnd, 9),
-                new (Icon.Loop, 10, new Vector2(32, 16)),
+                new (Icon.Loop, 10, new Vector2(32, 15)),
                 new (Icon.BeatGrid, 12),
                 new (Icon.ConnectedParameter, 13),
                 new (Icon.Stripe4PxPattern, 14),
                 new (Icon.CurveKeyframe, 15),
-                new (Icon.CurveKeyframeSelected, 16),
+                new (Icon.CurveKeyframeSelected, 15),
                 new (Icon.CurrentTimeMarkerHandle, 17),
                 new (Icon.FollowTime, 18),
                 new (Icon.ToggleAudioOn, 19),
@@ -185,8 +185,8 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.HoverPreviewSmall, 22),
                 new (Icon.HoverPreviewPlay, 23),
                 new (Icon.HoverPreviewDisabled, 24),
-                new (Icon.ConstantKeyframeSelected, 25, new Vector2(16, 25)),
-                new (Icon.ConstantKeyframe, 26, new Vector2(16, 25)),
+                new (Icon.ConstantKeyframeSelected, 25, new Vector2(15, 25)),
+                new (Icon.ConstantKeyframe, 26, new Vector2(15, 25)),
                 new (Icon.ChevronLeft, 27),
                 new (Icon.ChevronRight, 28),
                 new (Icon.ChevronUp, 29),
@@ -198,23 +198,23 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.Grid, 35),
                 new (Icon.Revert, 36),
                 
-                new (Icon.DopeSheetKeyframeSmoothSelected, 37, new Vector2(16, 25)),
-                new (Icon.DopeSheetKeyframeSmooth, 38, new Vector2(16, 25)),
+                new (Icon.DopeSheetKeyframeSmoothSelected, 37, new Vector2(15, 25)),
+                new (Icon.DopeSheetKeyframeSmooth, 38, new Vector2(15, 25)),
                 
-                new (Icon.DopeSheetKeyframeCubicSelected, 39, new Vector2(16, 25)),
-                new (Icon.DopeSheetKeyframeCubic, 40, new Vector2(16, 25)),
-                new (Icon.DopeSheetKeyframeHorizontalSelected, 41, new Vector2(16, 25)),
-                new (Icon.DopeSheetKeyframeHorizontal, 42, new Vector2(16, 25)),
+                new (Icon.DopeSheetKeyframeCubicSelected, 39, new Vector2(15, 25)),
+                new (Icon.DopeSheetKeyframeCubic, 40, new Vector2(15, 25)),
+                new (Icon.DopeSheetKeyframeHorizontalSelected, 41, new Vector2(15, 25)),
+                new (Icon.DopeSheetKeyframeHorizontal, 42, new Vector2(15, 25)),
                 
-                new (Icon.KeyframeToggleOnBoth, new Vector2(43 * 16, 0), new Vector2(23, 15)),
-                new (Icon.KeyframeToggleOnLeft, new Vector2(45 * 16, 0), new Vector2(23, 15)),
-                new (Icon.KeyframeToggleOnRight, new Vector2(47 * 16, 0), new Vector2(23, 15)),
-                new (Icon.KeyframeToggleOnNone, new Vector2(49 * 16, 0), new Vector2(23, 15)),
+                new (Icon.KeyframeToggleOnBoth, new Vector2(43 * 15, 0), new Vector2(23, 15)),
+                new (Icon.KeyframeToggleOnLeft, new Vector2(45 * 15, 0), new Vector2(23, 15)),
+                new (Icon.KeyframeToggleOnRight, new Vector2(47 * 15, 0), new Vector2(23, 15)),
+                new (Icon.KeyframeToggleOnNone, new Vector2(49 * 15, 0), new Vector2(23, 15)),
                 
-                new (Icon.KeyframeToggleOffBoth, new Vector2(43 * 16, 16), new Vector2(23, 15)),
-                new (Icon.KeyframeToggleOffLeft, new Vector2(45 * 16, 16), new Vector2(23, 15)),
-                new (Icon.KeyframeToggleOffRight, new Vector2(47 * 16, 16), new Vector2(23, 15)),
-                new (Icon.KeyframeToggleOffNone, new Vector2(49 * 16, 16), new Vector2(23, 15)),
+                new (Icon.KeyframeToggleOffBoth, new Vector2(43 * 15, 15), new Vector2(23, 15)),
+                new (Icon.KeyframeToggleOffLeft, new Vector2(45 * 15, 15), new Vector2(23, 15)),
+                new (Icon.KeyframeToggleOffRight, new Vector2(47 * 15, 15), new Vector2(23, 15)),
+                new (Icon.KeyframeToggleOffNone, new Vector2(49 * 15, 15), new Vector2(23, 15)),
                 new (Icon.Checkmark,  51),
                 new (Icon.Settings,  52),
                 
