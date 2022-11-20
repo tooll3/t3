@@ -78,7 +78,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
                         {
                             var output = BuildLabel(raster, time);
 
-                            var p = topLeft + new Vector2(xIndex - 7, viewHeight - 17);
+                            var p = topLeft + new Vector2(xIndex + 1, viewHeight - 17);
                             drawList.AddText(p, textColor, output);
                         }
                     }
