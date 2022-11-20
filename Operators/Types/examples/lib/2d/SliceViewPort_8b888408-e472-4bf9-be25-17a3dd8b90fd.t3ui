@@ -12,6 +12,7 @@
     },
     {
       "InputId": "0ec5edfc-426c-40bb-a68e-80e4caa4c7bf"/*CellIndex*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0

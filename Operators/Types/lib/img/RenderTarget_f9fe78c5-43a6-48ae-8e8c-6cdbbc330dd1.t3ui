@@ -68,6 +68,13 @@
         "X": -100.96112,
         "Y": 212.75378
       }
+    },
+    {
+      "InputId": "abebb02b-bcaa-42c7-8eb8-da3c1b2fc840"/*EnableUpdate*/,
+      "Position": {
+        "X": -100.96112,
+        "Y": 257.75378
+      }
     }
   ],
   "SymbolChildUis": [],

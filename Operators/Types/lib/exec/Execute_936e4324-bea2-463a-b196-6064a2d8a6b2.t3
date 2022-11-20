@@ -4,12 +4,12 @@
   "Namespace": "lib.exec",
   "Inputs": [
     {
-      "Id": "d68b5569-b43d-4a0d-9524-35289ce08098"/*IsEnabled*/,
-      "DefaultValue": true
-    },
-    {
       "Id": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"/*Command*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "d68b5569-b43d-4a0d-9524-35289ce08098"/*IsEnabled*/,
+      "DefaultValue": true
     }
   ],
   "Children": [],

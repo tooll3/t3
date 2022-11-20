@@ -44,11 +44,11 @@ namespace T3.Operators.Types.Id_936e4324_bea2_463a_b196_6064a2d8a6b2
             Command.DirtyFlag.Clear();
         }
         
-        [Input(Guid = "D68B5569-B43D-4A0D-9524-35289CE08098")]
-        public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
-
         [Input(Guid = "5D73EBE6-9AA0-471A-AE6B-3F5BFD5A0F9C")]
         public readonly MultiInputSlot<Command> Command = new MultiInputSlot<Command>();
+
+        [Input(Guid = "D68B5569-B43D-4A0D-9524-35289CE08098")]
+        public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
 
     }
 }
