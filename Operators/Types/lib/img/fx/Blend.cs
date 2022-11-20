@@ -27,6 +27,9 @@ namespace T3.Operators.Types.Id_9f43f769_d32a_4f49_92ac_e0be3ba250cf
         [Input(Guid = "cad32967-e91b-4bd1-af09-5fdfdeee630e", MappedType = typeof(AlphaBlendModes))]
         public readonly InputSlot<int> AlphaMode = new InputSlot<int>();
 
+        [Input(Guid = "cdc2cf4b-f788-4cb4-a3f5-8dfaa8bd54b3")]
+        public readonly InputSlot<bool> NormalForUpperHalf = new InputSlot<bool>();
+
         private enum RgbBlendModes
         {
             Normal = 0,
@@ -36,6 +39,7 @@ namespace T3.Operators.Types.Id_9f43f769_d32a_4f49_92ac_e0be3ba250cf
             Difference = 4,
             UseImageA_RGB = 5,
             UseImageB_RGB = 6,
+            Overlay50p = 7,
         }
 
         private enum AlphaBlendModes
