@@ -318,7 +318,7 @@ namespace T3.Editor.Gui.Graph
                     // Hidden inputs indicator
                     if (nodeHasHiddenMatchingInputs)
                     {
-                        var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.5f);
+                        var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.8f);
                         var colorForType = TypeUiRegistry.Entries[ConnectionMaker.TempConnections[0].ConnectionType].Color;
                         colorForType.Rgba.W *= blink;
                         _drawList.AddRectFilled(
@@ -702,7 +702,7 @@ namespace T3.Editor.Gui.Graph
                         ? ConnectionMaker.IsMatchingInputType(type)
                         : ConnectionMaker.IsMatchingOutputType(type))
                 {
-                    var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.5f);
+                    var blink = (float)(Math.Sin(ImGui.GetTime() * 10) / 2f + 0.8f);
                     colorForType.Rgba.W *= blink;
                     style = ColorVariations.Highlight;
                 }
