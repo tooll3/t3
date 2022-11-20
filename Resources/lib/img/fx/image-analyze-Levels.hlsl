@@ -3,6 +3,7 @@ cbuffer ParamConstants : register(b0)
     float2 Center;
     float Width;
     float Rotation;
+    float ShowOriginal;
 }
 
 cbuffer TimeConstants : register(b1)
@@ -41,7 +42,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     inputTexture.GetDimensions(width, height);
 
     float2 uv = psInput.texCoord;
-    float4 orgColor =  inputTexture.Sample(texSampler, uv);//clamp(inputTexture.Sample(texSampler, uv), 0, float4(100,100,100,4));
+    float4 orgColor =  inputTexture.Sample(texSampler, uv);
 
     float aspectRation = TargetWidth/TargetHeight;
     float2 p = uv;
@@ -51,12 +52,11 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float radians = Rotation / 180 *3.141578;
     float2 angle =  float2(sin(radians),cos(radians));
     float distanceFromCenter=  dot(p-Center, angle);
-    float normalizedDistance  = -distanceFromCenter / Width;
-    if(normalizedDistance < 0) {
-        return orgColor;
-    }
+    float normalizedDistance= -distanceFromCenter / Width;
+    float4 visibleOrgColor = lerp(float4(0,0,0,0), orgColor, ShowOriginal);
 
-    if( IsBetween(normalizedDistance, 1, 1.03)) {
+    // Bottom Line
+    if( IsBetween(normalizedDistance, 1, 1 + 0.01)) {
         return float4(0., 0., 0., 1);
     }
 
@@ -66,33 +66,32 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     pOnLine += 0.5;
     float4 colorOnLine = inputTexture.Sample(texSampler, pOnLine);
 
-    float4 bgColor = inputTexture.Sample(texSampler, uv);
+    // Curves...
+    float4 curveColor = float4(0,0,0,0);
+    float lineThickness = 0.015 * width/max(width,height);
+    float3 curveShapeRGB = smoothstep(normalizedDistance +lineThickness, normalizedDistance +lineThickness * 1.5 ,colorOnLine.rgb);
+    float curveShapeA = smoothstep(normalizedDistance +lineThickness, normalizedDistance +lineThickness * 1.5 ,colorOnLine.a) * 0.2;
 
-    // Show curves
-    float lineThickness = 0.02 * width/max(width,height);
-    float4 curveColor = float4(0,0,0,1);
-    //curveColor.rgb = (colorOnLine.rgb < normalizedDistance ) ? 0:0.3;
-    float3 curveShape = smoothstep(normalizedDistance +lineThickness, normalizedDistance +lineThickness * 1.5 ,colorOnLine.rgb) * 0.3;
-    float3 curveLine =smoothstep(normalizedDistance + lineThickness, normalizedDistance,colorOnLine.rgb)
-                    *smoothstep(normalizedDistance - lineThickness, normalizedDistance,colorOnLine.rgb) *1.5;
-    curveColor.rgb = curveLine + curveShape;
-
-    // Highlight clamping
+    float4 curveLines =smoothstep(normalizedDistance + lineThickness, normalizedDistance,colorOnLine.rgba)
+                    *smoothstep(normalizedDistance - lineThickness, normalizedDistance,colorOnLine.rgba) * float4(1,1,1,0.0);
+    curveLines.a += length(curveLines.rgb) * 0.3;
+    curveLines.rgb+= curveLines.a * 0.2;
+    curveColor.rgba = curveLines + float4(curveShapeRGB, curveShapeA);
+    if(normalizedDistance < 0)
+        curveColor.rgba =0;
+    
+    // Zebra pattern for highlight clamping
     float3 clamping = colorOnLine.rgb > 1 ? float3(1,1,1) :float3(0,0,0);
     float2 pixelposition = uv * float2(width,height);
-    float pattern = (pixelposition.x  + pixelposition.y + 0.5 + beatTime * 100)  % 8 < 2 ? 1:0;
+    float pattern = (pixelposition.x  + pixelposition.y + 0.5 + beatTime * 100)  % 8 < 2 ? 1: -1;
 
-    float3 clampArea = clamping * curveShape.rgb * (normalizedDistance > 1 ? 3:0);
-    bgColor.rgb -= pattern * (clampArea > 0 ? 10 :0);
-
-    curveColor.a =  normalizedDistance > 1 
-                        ? ((colorOnLine.a > normalizedDistance  ) ? 0.3: bgColor.a)
-                        : ((colorOnLine.a > normalizedDistance ? 0.8:0.4));
-
+    float3 clampedAreaRGB = clamping * curveShapeRGB * (normalizedDistance > 1 ? 1:0);
+    float4 clampedArea = float4(clampedAreaRGB, length(clampedAreaRGB) * pattern * 0.2);
     float heighlightExcessiveAlpha = (normalizedDistance > 1  && colorOnLine.a > normalizedDistance) ? 1: 0;
-    bgColor.rgb += pattern * heighlightExcessiveAlpha * 10;
 
-    curveColor.rgb += bgColor * ((normalizedDistance <1) ? 0.6 : 1);
-    //curveColor.a = 1;
-    return curveColor;
+    bool isBetweenCurveRange = normalizedDistance >= 0 && normalizedDistance <= 1;
+
+    return  curveColor
+            + clampedArea
+            + visibleOrgColor * (isBetweenCurveRange ? 0.4 : 1);
 }
