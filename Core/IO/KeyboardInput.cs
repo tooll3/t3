@@ -12,7 +12,7 @@
     }
     
     /// <summary>
-    /// This enumeration is directly derived from System.Windows.Forms.Keys.
+    /// This enumeration is directly derived from <see cref="System.Windows.Forms.Keys"/>.
     /// Make sure to not confuse these with ImGuiKey enumeration.
     /// </summary>
     public enum Key
@@ -61,6 +61,8 @@
         // LeftCtrl,
         ShiftKey = 16,
         CtrlKey = 16,
+        End = 0x23,
+        Home = 0x24,        
         F1 = 112,
         F2 = 113,
         F3 = 114,

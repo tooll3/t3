@@ -179,7 +179,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 if (CustomComponents.ToggleIconButton(Icon.JumpToRangeStart,
                                                       label: "##jumpToBeginning",
                                                       isSelected: ref isSelected,
-                                                      ControlSize))
+                                                      ControlSize)
+                    || KeyboardBinding.Triggered(UserActions.PlaybackJumpToStartTime)
+                    )
                 {
                     playback.TimeInBars = playback.LoopRange.Start;
                 }
