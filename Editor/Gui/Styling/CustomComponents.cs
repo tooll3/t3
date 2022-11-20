@@ -121,16 +121,32 @@ namespace T3.Editor.Gui.Styling
             var wasSelected = isSelected;
             var clicked = false;
 
-            //ImGui.PushStyleColor(ImGuiCol.Text, isSelected ? new Color(1f).Rgba : new Color(0.3f));
-            ImGui.PushStyleColor(ImGuiCol.Text, isSelected ? new Color(1f, 1, 1f, 1f).Rgba : new Color(0, 0, 0, 1f));
-            // ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Red.Rgba);
-            // ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Red.Rgba);
+            var stateColor = isSelected ? new Color(1f, 1, 1f, 1f) : new Color(0, 0, 0, 1f);
+            ImGui.PushStyleColor(ImGuiCol.Text, stateColor.Rgba);
 
-            if (CustomComponents.IconButton(icon, label, size) || trigger)
+
+            var padding = string.IsNullOrEmpty(label) ?  new Vector2(0.1f, 0.5f) :  new Vector2(0.5f, 0.5f);
+            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, padding);
+            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
+            
+            ImGui.PushFont(Icons.IconFont);
+
+            if (ImGui.Button($"{(char)icon}##label", size))
             {
                 isSelected = !isSelected;
                 clicked = true;
             }
+
+            ImGui.PopFont();
+            
+            var labelPos = ImGui.GetItemRectMin() + new Vector2(16 , ImGui.GetItemRectSize().Y/2);
+            //ImGui.GetWindowDrawList().AddText(labelPos, stateColor, label);
+
+            ImGui.PopStyleVar(2);
+            
+            // if (IconButton(icon, label, size) || trigger)
+            // {
+            // }
 
             ImGui.PopStyleColor(1);
 
@@ -143,7 +159,7 @@ namespace T3.Editor.Gui.Styling
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.5f));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
             
-            var clicked = ImGui.Button((char)(int)icon + label, size);
+            var clicked = ImGui.Button(""+(char)icon, size);
 
             ImGui.PopStyleVar(2);
             ImGui.PopFont();
