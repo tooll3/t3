@@ -69,7 +69,7 @@ namespace T3.Editor.Gui.Interaction
         /// </summary>
         public float TransformX(float xOnCanvas)
         {
-            return TransformPositionFloat(new Vector2(xOnCanvas, 0)).X;
+            return TransformPosition(new Vector2(xOnCanvas, 0)).X;
         }
 
         /// <summary>
@@ -458,7 +458,7 @@ namespace T3.Editor.Gui.Interaction
                 UserZoomedCanvas = true;
 
             var focusCenterOnCanvas = InverseTransformPositionFloat(focusCenterOnScreen);
-            ScrollTarget += (focusCenterOnCanvas - ScrollTarget) * (zoomDelta - 1.0f) / zoom;
+            ScrollTarget += (focusCenterOnCanvas - ScrollTarget) * (zoom - Vector2.One) / zoom;
         }
 
         private void DrawCanvasDebugInfos()
