@@ -14,7 +14,7 @@ namespace T3.Editor.Gui.ChildUi
         public static bool Draw(ImDrawListPtr drawList, ImRect screenRect, Vector2 alignment, InputSlot<float> inputSlot)
         {
             var modified = false;
-            var value = (double)inputSlot.TypedDefaultValue.Value;
+            var value = (double)inputSlot.TypedInputValue.Value;
             var valueText = $"{value:G5}";
             var hashCode = inputSlot.GetHashCode();
             ImGui.PushID(hashCode);
