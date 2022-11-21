@@ -141,30 +141,6 @@
       "Name": "1...5",
       "InputValues": [],
       "Outputs": []
-    },
-    {
-      "Id": "a26755fb-2ebc-4f2f-ad9c-bab8dad6e9dd"/*IntroExperiment2*/,
-      "SymbolId": "b4dec97e-e881-4bdd-9db8-1a3627d155dc",
-      "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "605b1a47-72d2-4d0a-ad99-e20dfef5e898"/*IntroExperiment2*/,
-          "OutputData": {
-            "Type": "T3.Core.Animation.TimeClip",
-            "TimeClip": {
-              "TimeRange": {
-                "Start": 34.0011,
-                "End": 38.0011
-              },
-              "SourceRange": {
-                "Start": 0.0,
-                "End": 4.0
-              },
-              "LayerIndex": 0
-            }
-          }
-        }
-      ]
     }
   ],
   "Connections": [

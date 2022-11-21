@@ -4,28 +4,6 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "6aeb9d6c-3917-49a4-ba52-292935cf3e84"/*SetParticleSystem*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 589.719,
-        "Y": 69.0
-      }
-    },
-    {
-      "ChildId": "76a1c920-4d87-4395-b05c-fafd6f2e81dd"/*ParticleSystemSetup*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 439.719,
-        "Y": 364.0
-      }
-    },
-    {
       "ChildId": "68e3fcbc-1e8f-4cb7-bef8-573fe8045eb8"/*Execute*/,
       "Style": "Resizable",
       "Size": {
@@ -38,17 +16,6 @@
       }
     },
     {
-      "ChildId": "998ef443-5ca8-4461-b359-03277206b8d1"/*LifetimeUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 300.0,
-        "Y": 195.0
-      }
-    },
-    {
       "ChildId": "4bd9af5d-3b81-4244-8df2-b00298bf678c"/*DrawParticles*/,
       "Size": {
         "X": 110.0,
@@ -57,17 +24,6 @@
       "Position": {
         "X": 150.0,
         "Y": 238.0
-      }
-    },
-    {
-      "ChildId": "8c342e38-bf48-43d7-87b6-522b2af84dea"/*EmitPointClound*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 150.0,
-        "Y": 69.0
       }
     },
     {
@@ -89,17 +45,6 @@
       },
       "Position": {
         "X": 739.719,
-        "Y": 69.0
-      }
-    },
-    {
-      "ChildId": "0adf4b3e-bff6-4014-b01b-aef3b2e7ff4f"/*LoadPointCloud*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 0.0,
         "Y": 69.0
       }
     },
@@ -134,17 +79,6 @@
       "Position": {
         "X": 300.0,
         "Y": 69.0
-      }
-    },
-    {
-      "ChildId": "320664d0-1330-4c69-be55-759cc42a597b"/*CurlNoiseWithGizmo*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 300.0,
-        "Y": 152.0
       }
     },
     {

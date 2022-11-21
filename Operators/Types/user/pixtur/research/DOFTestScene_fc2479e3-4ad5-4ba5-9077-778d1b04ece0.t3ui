@@ -158,17 +158,6 @@
       }
     },
     {
-      "ChildId": "0599d009-4a50-4f51-9eed-0d2a217df1fc"/*LifetimeUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 150.0,
-        "Y": 105.99988
-      }
-    },
-    {
       "ChildId": "719839da-d8be-4792-8546-03a451a0219d"/*DrawParticles*/,
       "Size": {
         "X": 110.0,
@@ -177,28 +166,6 @@
       "Position": {
         "X": 150.0,
         "Y": 148.99988
-      }
-    },
-    {
-      "ChildId": "bad7cb9d-19ce-42df-bada-03447f7ab6c2"/*SetParticleSystem*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 449.99927,
-        "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "a9310e5c-e150-4e51-a344-4b1381998f94"/*ParticleSystemSetup*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 299.99927,
-        "Y": 211.99988
       }
     },
     {
@@ -221,17 +188,6 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
-      }
-    },
-    {
-      "ChildId": "e1fcd4ef-a18c-49b7-9b0e-984aa1eeec4d"/*CurlNoiseWithGizmo*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 150.0,
-        "Y": 62.999878
       }
     },
     {

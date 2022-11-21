@@ -400,17 +400,6 @@
       }
     },
     {
-      "ChildId": "4c67dc17-7889-4a34-ba20-21602d25240d"/*PointCloudFromObj*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 1039.9973,
-        "Y": 1168.6449
-      }
-    },
-    {
       "ChildId": "a778a3cd-b77c-40b3-8301-9f332faaefe2"/*GetSRVProperties*/,
       "Size": {
         "X": 110.0,
@@ -463,17 +452,6 @@
       "Position": {
         "X": 851.8131,
         "Y": 365.46692
-      }
-    },
-    {
-      "ChildId": "5fd83b60-1e1c-4796-b874-57a53f8f1547"/*PointCloudFromObj*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 555.43646,
-        "Y": 47.458405
       }
     },
     {

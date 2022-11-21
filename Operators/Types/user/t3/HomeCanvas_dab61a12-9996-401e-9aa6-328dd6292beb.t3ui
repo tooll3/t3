@@ -1,0 +1,433 @@
+{
+  "Id": "dab61a12-9996-401e-9aa6-328dd6292beb"/*HomeCanvas*/,
+  "Description": "Your personal Workspace.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "eb3041f4-dcf1-4ef7-948e-c18ee0a29bc8"/*ThereDemo*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2236.0034,
+        "Y": -4395.7686
+      }
+    },
+    {
+      "ChildId": "d31691f2-3f93-474e-9327-b28281c057f3"/*FluidFeedback*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1652.9976,
+        "Y": -4889.9697
+      }
+    },
+    {
+      "ChildId": "64fe5405-7f98-4303-b2a5-f53db065740c"/*TorusMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2102.9978,
+        "Y": -4826.9697
+      }
+    },
+    {
+      "ChildId": "dda89242-8a90-4442-b3df-ed2d855e32a4"/*DrawMesh*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -1952.9976,
+        "Y": -4889.9697
+      }
+    },
+    {
+      "ChildId": "2fe00e23-ee4a-4234-a0dc-213b9a6ca9fe"/*OrbitCamera*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1802.9976,
+        "Y": -4889.9697
+      }
+    },
+    {
+      "ChildId": "bc999d1e-4b76-43f1-9e3d-8f51b9d22871"/*_AnimValueOld*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2252.9978,
+        "Y": -4889.9697
+      }
+    },
+    {
+      "ChildId": "018e0408-fac8-42f0-a17c-b9c0bb5ab5b7"/*SampleGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -2102.9978,
+        "Y": -4889.9697
+      }
+    },
+    {
+      "ChildId": "13005c71-2ea0-4088-986b-ba8fbc91783b"/*Synchotron*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2086.003,
+        "Y": -4395.7686
+      }
+    },
+    {
+      "ChildId": "ecaa1d12-625b-46c0-9148-454dfc40b576"/*HowToUseTooll*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2101.4788,
+        "Y": -5021.86
+      }
+    },
+    {
+      "ChildId": "665d7961-58a9-4181-94f1-eb40af17cdc7"/*HowToAnimate*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2232.4702,
+        "Y": -4606.786
+      }
+    },
+    {
+      "ChildId": "73956a9d-0756-4d9c-a11b-ca59b3ee16fb"/*HowToDrawThings*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2081.4658,
+        "Y": -4604.3564
+      }
+    },
+    {
+      "ChildId": "acbc034c-3c0d-4f7e-ac09-39cfd702f601"/*HowToUseImageEffects*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1933.4803,
+        "Y": -4603.2993
+      }
+    },
+    {
+      "ChildId": "91dc79a2-ed7a-41dc-8245-2d3011f4aebe"/*HowToUseOperators*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1783.4803,
+        "Y": -4603.2993
+      }
+    },
+    {
+      "ChildId": "91042db3-81d6-4a17-8cef-423811aabb17"/*HowToUsePoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -1633.4803,
+        "Y": -4603.2993
+      }
+    },
+    {
+      "ChildId": "35076e05-37c2-41e6-9afb-cc63b354962a"/*DulcimerMain*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2803.4175,
+        "Y": -5270.5317
+      }
+    },
+    {
+      "ChildId": "a32b78d0-5bc7-41fa-9d44-2c79c53128f7"/*ParticleTests*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -2815.8887,
+        "Y": -4593.7646
+      }
+    },
+    {
+      "ChildId": "007fc925-b4cc-4ff3-9dfa-33f513a4ee0a"/*SetCommandTimeExample*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -3086.9277,
+        "Y": -4721.8013
+      }
+    },
+    {
+      "ChildId": "19da94d2-5e5a-4474-9709-3bc461045e14"/*SetMaterialExample*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -3131.8237,
+        "Y": -5308.775
+      }
+    },
+    {
+      "ChildId": "afc50dab-a107-4b31-8144-c4e447ac046c"/*CCA2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -3214.9644,
+        "Y": -5144.9863
+      }
+    },
+    {
+      "ChildId": "9be7f19d-e225-4933-ac1a-06b2b60241b4"/*HammerDulcimer*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -3188.3313,
+        "Y": -4919.6772
+      }
+    },
+    {
+      "ChildId": "028e5d64-206e-4ee6-b92b-83e5775f0150"/*SynthTiling*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -3438.5852,
+        "Y": -4960.4165
+      }
+    },
+    {
+      "ChildId": "f11fa70c-17ac-49fd-83c3-6720b67e3b1b"/*RevRibbons*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -3384.5437,
+        "Y": -4826.56
+      }
+    },
+    {
+      "ChildId": "036c42da-8df4-4622-bf81-6e7c180862fb"/*T3Pitch*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -3439.4165,
+        "Y": -5233.9507
+      }
+    },
+    {
+      "ChildId": "b7109565-606e-4ef1-835f-cd0033e17904"/*T3Pitch*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -3384.5435,
+        "Y": -5112.565
+      }
+    },
+    {
+      "ChildId": "378cd55e-8402-4d93-b224-a532d7d5dd14"/*WS1_Searching*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -3395.352,
+        "Y": -5456.768
+      }
+    },
+    {
+      "ChildId": "99d01a65-4bbb-4dd4-ada6-0be7e8940b54"/*_JumpingLight*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -3567.4536,
+        "Y": -5509.1465
+      }
+    },
+    {
+      "ChildId": "d1d4f337-161a-4c47-9e59-0c09d547cb5f"/*PixturTestLab*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -3484.3127,
+        "Y": -5652.1494
+      }
+    }
+  ],
+  "OutputUis": [],
+  "Annotations": [
+    {
+      "Id": "b81c6d34-6ca0-4cf8-aeb5-49e6bdeae95a",
+      "Title": "Welcome to Tooll3\n\nThis short tutorial will guide you through the first steps.\n",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2277.1924,
+        "Y": -5383.488
+      },
+      "Size": {
+        "X": 813.0497,
+        "Y": 614.5786
+      }
+    },
+    {
+      "Id": "1bb9e84d-84fb-4bc0-a070-ba1d76092369",
+      "Title": "This is the Graph Window.\n\nIn the top right corner, you'll see your\ncurrent status [HomeCanvas].",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2264.1956,
+        "Y": -5322.6045
+      },
+      "Size": {
+        "X": 406.215,
+        "Y": 99.29809
+      }
+    },
+    {
+      "Id": "3abc855f-23b7-4e19-b575-d7afc764b9ca",
+      "Title": "You can...\n- zoom in and out with mouse wheel\n- pan by clicking and holding the right mouse button\n- press [F] to adjust the view to show all \n  content.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -1854.5667,
+        "Y": -5322.4688
+      },
+      "Size": {
+        "X": 379.77603,
+        "Y": 100.455734
+      }
+    },
+    {
+      "Id": "589f0a56-7537-4b0e-9305-ec21b76ae7fa",
+      "Title": "This is an Operator.\n\nIf you select it, you will see its output in the Output Window.\n\nDouble click this operator for an interactive tutorial that will guide you\nthrough Tooll's user interface.\n\n\n\n\n\n\n       Double click ------>",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2266.507,
+        "Y": -5218.758
+      },
+      "Size": {
+        "X": 791.0501,
+        "Y": 233.90132
+      }
+    },
+    {
+      "Id": "7a6d050e-f043-49ca-9f1f-23caca7914d3",
+      "Title": "This is a simple Graph. Select the [FluidFeedback] operator to see it's output.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2267.399,
+        "Y": -4976.9624
+      },
+      "Size": {
+        "X": 792.98834,
+        "Y": 185.8118
+      }
+    },
+    {
+      "Id": "0c4f5f08-a8f1-4791-8764-f3a49aa77871",
+      "Title": "Some more complex projects.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2275.9617,
+        "Y": -4532.795
+      },
+      "Size": {
+        "X": 815.3256,
+        "Y": 174.20337
+      }
+    },
+    {
+      "Id": "b4fc7f16-73ac-48ea-93d2-6253527680e3",
+      "Title": "These interactive playgrounds give you an introduction on how to use different operators.\nThere is also the \"Tip of the Day\" playlist on YouTube.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -2275.9617,
+        "Y": -4757.4165
+      },
+      "Size": {
+        "X": 813.3638,
+        "Y": 210.12221
+      }
+    }
+  ]
+}

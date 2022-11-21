@@ -103,12 +103,6 @@
       "Outputs": []
     },
     {
-      "Id": "2f81a769-cb16-4fec-b92e-1b5d96e45557"/*PointsToBuffer*/,
-      "SymbolId": "59b810f1-7849-40a7-ae10-7e8008685311",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "db822aaf-0697-4fbe-bf9e-eafa3a068212"/*_SpeciesDefinition*/,
       "SymbolId": "924b8cc0-5b4b-41d0-a71b-b26465683910",
       "InputValues": [

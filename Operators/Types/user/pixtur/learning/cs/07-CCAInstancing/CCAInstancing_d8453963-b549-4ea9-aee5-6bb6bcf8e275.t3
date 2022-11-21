@@ -729,12 +729,6 @@
       "Outputs": []
     },
     {
-      "Id": "4c67dc17-7889-4a34-ba20-21602d25240d"/*PointCloudFromObj*/,
-      "SymbolId": "73f152ac-12d9-4ae9-856a-9a74637fd6f6",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "a778a3cd-b77c-40b3-8301-9f332faaefe2"/*GetSRVProperties*/,
       "SymbolId": "bc489196-9a30-4580-af6f-dc059f226da1",
       "InputValues": [],
@@ -792,18 +786,6 @@
           "Id": "0af05ab4-0d77-4f01-a79b-691f58f702ef"/*Size*/,
           "Type": "System.Single",
           "Value": 0.93
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "5fd83b60-1e1c-4796-b874-57a53f8f1547"/*PointCloudFromObj*/,
-      "SymbolId": "73f152ac-12d9-4ae9-856a-9a74637fd6f6",
-      "InputValues": [
-        {
-          "Id": "af396e7d-bda8-4c64-a109-b3f4c65f940d"/*Path*/,
-          "Type": "System.String",
-          "Value": "Resources\\common\\meshes\\cube.obj"
         }
       ],
       "Outputs": []
@@ -1037,12 +1019,6 @@
       "SourceSlotId": "e4a8d926-7abd-4d2a-82a1-b7d140cb457f",
       "TargetParentOrChildId": "a72a4ff0-f5a6-46b8-ba40-e16cdd468e64",
       "TargetSlotId": "047b8fae-468c-48a7-8f3a-5fac8dd5b3c6"
-    },
-    {
-      "SourceParentOrChildId": "4c67dc17-7889-4a34-ba20-21602d25240d",
-      "SourceSlotId": "90c70f78-7b3a-40a0-98a5-650be09871a4",
-      "TargetParentOrChildId": "a778a3cd-b77c-40b3-8301-9f332faaefe2",
-      "TargetSlotId": "e79473f4-3fd2-467e-acda-b27ef7dae6a9"
     },
     {
       "SourceParentOrChildId": "94227b52-b1ed-47c8-8e2e-1f04c76f45a4",

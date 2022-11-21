@@ -92,17 +92,6 @@
       }
     },
     {
-      "ChildId": "ee8faec1-6b5c-4e9c-a1fb-af228461de75"/*PointCloudFromObj*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
       "ChildId": "ad550184-4f5f-4d3e-b377-b355f03789ea"/*TransformPoints*/,
       "Size": {
         "X": 110.0,

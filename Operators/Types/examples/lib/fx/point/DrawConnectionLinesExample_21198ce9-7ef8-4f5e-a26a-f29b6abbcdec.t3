@@ -226,18 +226,6 @@
       "Outputs": []
     },
     {
-      "Id": "ee8faec1-6b5c-4e9c-a1fb-af228461de75"/*PointCloudFromObj*/,
-      "SymbolId": "73f152ac-12d9-4ae9-856a-9a74637fd6f6",
-      "InputValues": [
-        {
-          "Id": "af396e7d-bda8-4c64-a109-b3f4c65f940d"/*Path*/,
-          "Type": "System.String",
-          "Value": "Resources\\common\\meshes\\marblePlayer.obj"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "ad550184-4f5f-4d3e-b377-b355f03789ea"/*TransformPoints*/,
       "SymbolId": "7f6c64fe-ca2e-445e-a9b4-c70291ce354e",
       "InputValues": [
@@ -591,12 +579,6 @@
       "SourceSlotId": "cf976e9a-ea57-44f7-aeb9-f57f2e712b41",
       "TargetParentOrChildId": "c26ebdfe-4f15-42ce-a7a7-51263e0a715a",
       "TargetSlotId": "5df18658-ef86-4c0f-8bb4-4ac3fbbf9a33"
-    },
-    {
-      "SourceParentOrChildId": "ee8faec1-6b5c-4e9c-a1fb-af228461de75",
-      "SourceSlotId": "90c70f78-7b3a-40a0-98a5-650be09871a4",
-      "TargetParentOrChildId": "c5b187d3-72e2-4a9a-ac99-a1555daebd1b",
-      "TargetSlotId": "1f4184f4-c186-43f4-9c01-e7af9c2e4920"
     },
     {
       "SourceParentOrChildId": "3bc66e22-5b67-4ce4-8517-91ef12c1cb81",

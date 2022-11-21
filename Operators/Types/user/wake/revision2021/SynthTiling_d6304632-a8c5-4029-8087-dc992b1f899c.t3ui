@@ -1,6 +1,6 @@
 {
   "Id": "d6304632-a8c5-4029-8087-dc992b1f899c"/*SynthTiling*/,
-  "Description": "",
+  "Description": "An nice animation example that uses [SampleGridAttributes] and inverted blendmap to generate abstract patterns.",
   "InputUis": [],
   "SymbolChildUis": [
     {

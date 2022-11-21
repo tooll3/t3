@@ -110,17 +110,6 @@
         "X": -25.344522,
         "Y": -143.55087
       }
-    },
-    {
-      "ChildId": "b398b93a-6dc0-47de-90f8-8fa922d06f80"/*CalcSize2DispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 172.64561,
-        "Y": -84.88713
-      }
     }
   ],
   "OutputUis": [

@@ -1,6 +1,6 @@
 {
   "Id": "ffe6b076-f561-4230-a0c3-282fb4d58383"/*PageTitle*/,
-  "Description": "Renders and positions a page title.\nMight have transitions later.",
+  "Description": "An internal helper that renders and positions a page title.\nMight have transitions later.",
   "InputUis": [
     {
       "InputId": "409adab7-82e6-4d70-af14-04180a4940b0"/*Title*/,

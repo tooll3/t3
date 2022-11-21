@@ -79,12 +79,6 @@
       "Outputs": []
     },
     {
-      "Id": "1b11a2be-0b5e-49c8-a60a-e4f48b134cc5"/*ComputeWobble*/,
-      "SymbolId": "7b95571c-8391-4313-a008-7020a14887f4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "6ca75d69-fe79-4f69-917a-fa18a0e43781"/*LInearDepth*/,
       "SymbolId": "f52db9a4-fde9-49ca-9ef7-131825c34e65",
       "Name": "LInearDepth",
@@ -119,12 +113,6 @@
     {
       "Id": "d61892b2-2a5f-4099-a80e-8fae6ae9a243"/*EmitParticlesAtMeshSliceExample*/,
       "SymbolId": "ccafae36-6001-4ee8-b0b5-76c1adebcdde",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "24f7376d-a279-4317-9977-ba87b3ec7161"/*ParticleShadowmapExample*/,
-      "SymbolId": "7a5e8169-601e-4fd8-8ce4-bff669f50d37",
       "InputValues": [],
       "Outputs": []
     },
@@ -783,12 +771,6 @@
       "Outputs": []
     },
     {
-      "Id": "391c5c3c-807e-4228-a769-482fce130d38"/*ParticleShadowmapExample*/,
-      "SymbolId": "7a5e8169-601e-4fd8-8ce4-bff669f50d37",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "dc078b76-f24c-44e1-8fdd-8c1f8b0e68f2"/*LoopExample*/,
       "SymbolId": "a3945dbe-d5be-4f0f-a904-8ee287d14a9f",
       "InputValues": [],
@@ -1161,7 +1143,7 @@
       "Outputs": []
     },
     {
-      "Id": "fa1d329a-cd43-4835-b64d-66c0769d7fc0"/*PbrExample*/,
+      "Id": "fa1d329a-cd43-4835-b64d-66c0769d7fc0"/*SetMaterialExample*/,
       "SymbolId": "5b86e841-548d-4dbd-a39b-6361e28e23f5",
       "InputValues": [],
       "Outputs": []

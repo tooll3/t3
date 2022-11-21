@@ -380,17 +380,6 @@
       }
     },
     {
-      "ChildId": "7cc101ef-2cac-4feb-b6a3-abce783e8f06"/*CalcSize2DispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": -2539.3892,
-        "Y": 268.8746
-      }
-    },
-    {
       "ChildId": "8211cdfd-ff13-4cea-8aa6-e03370e7fef1"/*ComputeShader*/,
       "Size": {
         "X": 110.0,

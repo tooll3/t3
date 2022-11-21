@@ -180,28 +180,6 @@
         "X": 25.95169,
         "Y": 474.00012
       }
-    },
-    {
-      "ChildId": "7515798a-7339-45f4-8337-32ed03300ced"/*CalcSize2DispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 106.93964,
-        "Y": -111.27411
-      }
-    },
-    {
-      "ChildId": "cd3e10db-fe45-4f5b-af14-8e6e87b905a5"/*CalcSize2DispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 179.22614,
-        "Y": -260.53235
-      }
     }
   ],
   "OutputUis": [

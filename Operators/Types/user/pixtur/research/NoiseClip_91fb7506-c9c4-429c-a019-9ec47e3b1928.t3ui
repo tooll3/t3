@@ -111,17 +111,6 @@
         "X": -631.00714,
         "Y": 241.44801
       }
-    },
-    {
-      "ChildId": "a26755fb-2ebc-4f2f-ad9c-bab8dad6e9dd"/*IntroExperiment2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -151.1238,
-        "Y": 297.77362
-      }
     }
   ],
   "OutputUis": [

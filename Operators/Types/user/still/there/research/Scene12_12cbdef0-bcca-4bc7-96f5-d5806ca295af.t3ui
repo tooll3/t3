@@ -3,23 +3,6 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "10958a7d-807d-4cd2-94b7-7751579b1faa"/*ParticleSystemSetup*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 1824.3685,
-        "Y": 613.8728
-      },
-      "ConnectionStyleOverrides": [
-        {
-          "Id": "544d34f9-07bc-4cc1-a657-b9f832da52e0",
-          "Style": "FadedOut"
-        }
-      ]
-    },
-    {
       "ChildId": "a9fb61eb-6d5f-4256-a352-1a11652f3b22"/*Execute*/,
       "Style": "Resizable",
       "Size": {
@@ -62,17 +45,6 @@
       "Position": {
         "X": 3005.7742,
         "Y": 1048.0742
-      }
-    },
-    {
-      "ChildId": "9731c731-87da-49e9-a32e-277eba658241"/*CurleNoiseUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 140.15887,
-        "Y": 800.33276
       }
     },
     {
@@ -401,17 +373,6 @@
       }
     },
     {
-      "ChildId": "6764e686-a985-455b-b6bb-b269441347c1"/*LifetimeUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 1069.033,
-        "Y": 860.1877
-      }
-    },
-    {
       "ChildId": "3cb2a127-5320-4723-9d87-f583530ab6a5"/*Locator*/,
       "Size": {
         "X": 110.0,
@@ -599,17 +560,6 @@
       }
     },
     {
-      "ChildId": "206a4c30-78b2-4c24-bfb2-6fdb428f113c"/*CurlNoiseWithGizmo*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 1049.6962,
-        "Y": 424.9624
-      }
-    },
-    {
       "ChildId": "05b1f83e-fb2b-4bca-8216-490f2b916f6f"/*Transform*/,
       "Size": {
         "X": 110.0,
@@ -698,17 +648,6 @@
       }
     },
     {
-      "ChildId": "54310d59-6f6b-43bd-917c-f7cd79160322"/*SetParticleSystem*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": -50.860596,
-        "Y": 854.88477
-      }
-    },
-    {
       "ChildId": "caaf1b91-f94a-4ea3-81d5-b31e4f21f11a"/*Layer2d*/,
       "Size": {
         "X": 110.0,
@@ -739,17 +678,6 @@
       "Position": {
         "X": 2893.4678,
         "Y": 1485.7793
-      }
-    },
-    {
-      "ChildId": "bb0e5978-e8b4-4b7e-af68-e59841f605ae"/*SetParticleSystem*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 1962.4105,
-        "Y": 553.25793
       }
     }
   ],

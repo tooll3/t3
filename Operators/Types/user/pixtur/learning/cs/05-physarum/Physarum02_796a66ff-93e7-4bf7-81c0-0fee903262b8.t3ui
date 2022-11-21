@@ -27,17 +27,6 @@
       }
     },
     {
-      "ChildId": "2f81a769-cb16-4fec-b92e-1b5d96e45557"/*PointsToBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -1380.1023,
-        "Y": 423.84
-      }
-    },
-    {
       "ChildId": "db822aaf-0697-4fbe-bf9e-eafa3a068212"/*_SpeciesDefinition*/,
       "Size": {
         "X": 110.0,

@@ -3,17 +3,6 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "b111e38b-03b4-44fa-809f-c648d1582a20"/*GrainExample*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 150.0,
-        "Y": 0.0
-      }
-    },
-    {
       "ChildId": "c494d24a-0fed-4a18-aa1e-2a4508f9b9c3"/*SortPixelGlitch*/,
       "Size": {
         "X": 110.0,

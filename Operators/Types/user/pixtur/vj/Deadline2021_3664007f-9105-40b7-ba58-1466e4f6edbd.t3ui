@@ -818,17 +818,6 @@
       }
     },
     {
-      "ChildId": "27691bcd-d9e6-45e8-9a93-df0c89801e08"/*RandomTextBlock*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 1749.0813,
-        "Y": -3188.5317
-      }
-    },
-    {
       "ChildId": "c93b29a3-b0c1-47e5-b786-8ffc4bd7ffd9"/*PointsOnSphere*/,
       "Size": {
         "X": 110.0,

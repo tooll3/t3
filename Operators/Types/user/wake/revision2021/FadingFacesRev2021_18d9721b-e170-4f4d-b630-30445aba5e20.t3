@@ -461,7 +461,7 @@
                   "OutType": "Linear",
                   "InEditMode": "Linear",
                   "OutEditMode": "Linear",
-                  "InTangentAngle": -1.011790236194024,
+                  "InTangentAngle": -1.0117902361940243,
                   "OutTangentAngle": -4.153382889783817
                 }
               ]
@@ -685,6 +685,12 @@
       "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
       "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "TargetSlotId": "29a0bc9a-4c33-4777-aa73-b2c7074a89fa"
+    },
+    {
+      "SourceParentOrChildId": "b8bf4c30-19ea-47b5-9d5f-42293ec26284",
+      "SourceSlotId": "7a4c4feb-be2f-463e-96c6-cd9a6bad77a2",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "fc1d05ff-7395-4408-a025-4f3d4247a2ea"
     },
     {
       "SourceParentOrChildId": "a214afd7-87f4-4dad-89de-e5d0f7e97462",

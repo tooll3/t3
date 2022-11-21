@@ -1,12 +1,12 @@
 {
   "Id": "18d9721b-e170-4f4d-b630-30445aba5e20"/*FadingFacesRev2021*/,
-  "Description": "",
+  "Description": "An experiment displacing images fetched via the unsplash API. Used for WAKE Revision 2021 VJ set ",
   "InputUis": [
     {
       "InputId": "71eb23a5-dde7-42bd-916a-5278343b64ad"/*OverrideTime*/,
       "Position": {
-        "X": -509.18994,
-        "Y": -8.77836
+        "X": -569.5769,
+        "Y": -7.0773106
       }
     }
   ],
@@ -169,7 +169,7 @@
       "ChildId": "73b4ec65-14e3-46e4-a868-fb6f68c3a2be"/*Float2ToVector2*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 935.6587,
@@ -216,8 +216,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": 1617.916,
-        "Y": 50.406494
+        "X": 1645.8403,
+        "Y": -65.69989
       }
     },
     {
@@ -400,7 +400,7 @@
       "ChildId": "bf7516b1-1f4c-48aa-a1f1-1bbb87968413"/*FluidFeedback*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 36.0
       },
       "Position": {
         "X": 1123.5593,
@@ -423,8 +423,15 @@
     {
       "OutputId": "29a0bc9a-4c33-4777-aa73-b2c7074a89fa"/*Output2*/,
       "Position": {
+        "X": 1823.9698,
+        "Y": 104.119644
+      }
+    },
+    {
+      "OutputId": "fc1d05ff-7395-4408-a025-4f3d4247a2ea"/*Output3*/,
+      "Position": {
         "X": 1820.2955,
-        "Y": 35.533646
+        "Y": -72.673935
       }
     }
   ]

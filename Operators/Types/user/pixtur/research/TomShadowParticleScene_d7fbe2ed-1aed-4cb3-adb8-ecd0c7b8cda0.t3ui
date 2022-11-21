@@ -3,17 +3,6 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "f2dcd447-d2da-467e-a36d-afe429a19820"/*ParticleSystemSetup*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 740.47437,
-        "Y": 2462.9763
-      }
-    },
-    {
       "ChildId": "02a06064-7cec-4003-beba-e639a499ad39"/*Execute*/,
       "Style": "Resizable",
       "Size": {
@@ -26,29 +15,6 @@
       }
     },
     {
-      "ChildId": "067625ce-d259-44f7-961e-e8e3fd71824a"/*LifetimeUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 589.89777,
-        "Y": 2187.1738
-      }
-    },
-    {
-      "ChildId": "556a909b-9869-4fd7-84f7-f7d9ff8bce45"/*CurlNoiseWithGizmo*/,
-      "Style": "Expanded",
-      "Size": {
-        "X": 110.0,
-        "Y": 127.0
-      },
-      "Position": {
-        "X": 589.89777,
-        "Y": 2230.1738
-      }
-    },
-    {
       "ChildId": "2ce677f7-c976-45b7-879c-43f8c03e3b01"/*DrawParticles*/,
       "Size": {
         "X": 110.0,
@@ -57,39 +23,6 @@
       "Position": {
         "X": -1079.615,
         "Y": 2628.1284
-      }
-    },
-    {
-      "ChildId": "887233df-cbc1-444d-9f7f-63689ddedead"/*PointCloudFromObj*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 290.70728,
-        "Y": 2089.5996
-      }
-    },
-    {
-      "ChildId": "77184804-be14-406c-9eef-1fecfd72e07d"/*SetParticleSystem*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 890.47437,
-        "Y": 2089.5996
-      }
-    },
-    {
-      "ChildId": "e7536243-4986-4e44-bf4c-665531af98d2"/*EmitFromMesh*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
-      "Position": {
-        "X": 440.70728,
-        "Y": 2089.5996
       }
     },
     {
@@ -145,17 +78,6 @@
       "Position": {
         "X": 1340.4744,
         "Y": 2089.5996
-      }
-    },
-    {
-      "ChildId": "a3be08b1-2dab-40a5-904f-c65be1241fc7"/*ParticleSystemSetup*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -3547.0254,
-        "Y": 2976.8284
       }
     },
     {
@@ -228,7 +150,7 @@
       "ChildId": "dcbd97a0-a9b2-47fb-8704-af21eee31a56"/*VertexShaderStage*/,
       "Size": {
         "X": 110.0,
-        "Y": 101.0
+        "Y": 36.0
       },
       "Position": {
         "X": -2194.3428,
@@ -305,7 +227,7 @@
       "ChildId": "333fd336-55f4-4020-afe0-581feda10bb6"/*DrawInstancedIndirect*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 23.0
       },
       "Position": {
         "X": -2195.9043,
@@ -322,17 +244,6 @@
       "Position": {
         "X": -1875.2023,
         "Y": 3034.5708
-      }
-    },
-    {
-      "ChildId": "0a0f6712-2e4c-42da-8236-3e04dc285f51"/*ParticleSystemComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -2702.5425,
-        "Y": 3093.4922
       }
     },
     {
@@ -387,14 +298,14 @@
       },
       "Position": {
         "X": -2218.053,
-        "Y": 4299.7725
+        "Y": 4260.7725
       }
     },
     {
       "ChildId": "80d0c908-4e0f-4d58-95d0-9c19e7e1f553"/*PixelShaderStage*/,
       "Size": {
         "X": 110.0,
-        "Y": 140.0
+        "Y": 127.0
       },
       "Position": {
         "X": -2217.5535,
@@ -405,7 +316,7 @@
       "ChildId": "9b15c2b7-53db-45f1-ae1f-5946edd92f80"/*VertexShaderStage*/,
       "Size": {
         "X": 110.0,
-        "Y": 153.0
+        "Y": 114.0
       },
       "Position": {
         "X": -2218.053,
@@ -471,7 +382,7 @@
       "ChildId": "027b790f-63f0-4e99-a506-fd497d3156da"/*DrawInstancedIndirect*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 23.0
       },
       "Position": {
         "X": -2213.8352,
@@ -498,17 +409,6 @@
       "Position": {
         "X": -1797.0193,
         "Y": 4223.5244
-      }
-    },
-    {
-      "ChildId": "aa386c1b-434d-4409-857f-2cb236ba0f0d"/*ParticleSystemComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -2729.9827,
-        "Y": 4205.663
       }
     },
     {
@@ -542,17 +442,6 @@
       "Position": {
         "X": -3136.8118,
         "Y": 3510.3413
-      }
-    },
-    {
-      "ChildId": "4cc374e2-8688-4f91-a064-476b1d81af4e"/*ShadowMapTransformsConstBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -2962.691,
-        "Y": 4005.7952
       }
     },
     {
@@ -614,7 +503,7 @@
       "ChildId": "f5a58531-1f31-48f4-b317-2ab8678d44c4"/*PixelShaderStage*/,
       "Size": {
         "X": 110.0,
-        "Y": 140.0
+        "Y": 127.0
       },
       "Position": {
         "X": -2484.324,
@@ -1042,17 +931,6 @@
       }
     },
     {
-      "ChildId": "cec6b846-40bb-4ec0-ab95-8e94c5700f66"/*GetParticleSystem*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -3369.2544,
-        "Y": 3093.62
-      }
-    },
-    {
       "ChildId": "d0d755c7-df4d-4a3f-8e02-c6d590b46fb9"/*BoundingBox*/,
       "Size": {
         "X": 110.0,
@@ -1067,7 +945,7 @@
       "ChildId": "75088d0c-52a1-4822-885a-90dce37fc6ff"/*ResetSubtreeTrigger*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 23.0
       },
       "Position": {
         "X": 1040.4744,
@@ -1116,17 +994,6 @@
       "Position": {
         "X": 439.89777,
         "Y": 2230.1738
-      }
-    },
-    {
-      "ChildId": "22d72536-f307-4ace-974e-96d93c237df8"/*EmitPointClound*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 420.26526,
-        "Y": 1981.787
       }
     }
   ],
