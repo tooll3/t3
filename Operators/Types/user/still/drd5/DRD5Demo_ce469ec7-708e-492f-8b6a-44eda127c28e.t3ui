@@ -1305,7 +1305,7 @@
       }
     },
     {
-      "ChildId": "9fe2dc8f-410d-473f-ac12-dc9f5933dddb"/*Jitter*/,
+      "ChildId": "9fe2dc8f-410d-473f-ac12-dc9f5933dddb"/*_Jitter*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

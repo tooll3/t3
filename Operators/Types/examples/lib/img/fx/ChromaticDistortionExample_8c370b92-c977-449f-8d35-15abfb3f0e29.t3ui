@@ -102,7 +102,7 @@
       }
     },
     {
-      "ChildId": "0058f642-ae48-43ad-a33f-bf8d4049c52a"/*Jitter2d*/,
+      "ChildId": "0058f642-ae48-43ad-a33f-bf8d4049c52a"/*_Jitter2d*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

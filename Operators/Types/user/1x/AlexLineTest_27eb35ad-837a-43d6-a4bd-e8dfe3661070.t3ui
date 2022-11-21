@@ -81,7 +81,7 @@
       }
     },
     {
-      "ChildId": "3805cf82-4f8f-46a3-9022-4bcf16ac339e"/*Jitter2d*/,
+      "ChildId": "3805cf82-4f8f-46a3-9022-4bcf16ac339e"/*_Jitter2d*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -92,7 +92,7 @@
       }
     },
     {
-      "ChildId": "20e36297-1927-4b85-9e4c-e160c66f71a1"/*Jitter*/,
+      "ChildId": "20e36297-1927-4b85-9e4c-e160c66f71a1"/*_Jitter*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -466,7 +466,7 @@
       }
     },
     {
-      "ChildId": "89348c55-d708-4f70-aeff-ffd33ce37cc4"/*MeshBufferComponents*/,
+      "ChildId": "89348c55-d708-4f70-aeff-ffd33ce37cc4"/*_MeshBufferComponents*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -477,7 +477,7 @@
       }
     },
     {
-      "ChildId": "c6710bb6-d1ec-4127-94b6-ce2c112da2b1"/*AssembleMeshBuffers*/,
+      "ChildId": "c6710bb6-d1ec-4127-94b6-ce2c112da2b1"/*_AssembleMeshBuffers*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
