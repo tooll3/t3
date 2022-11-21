@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "7a2939e4-8c15-4c86-bf83-cc0555c4e3d3"/*AnalyzeSound*/,
+      "ChildId": "7a2939e4-8c15-4c86-bf83-cc0555c4e3d3"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

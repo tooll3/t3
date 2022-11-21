@@ -14,7 +14,7 @@
   ],
   "Children": [
     {
-      "Id": "a7a36d51-2b6d-459d-a211-3015c475d363"/*AnalyzeSound*/,
+      "Id": "a7a36d51-2b6d-459d-a211-3015c475d363"/*_AnalyzeSound*/,
       "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
       "InputValues": [],
       "Outputs": []

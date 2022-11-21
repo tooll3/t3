@@ -539,6 +539,136 @@
       "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "7868a1c6-e97a-4f75-9d5f-b13462a2ca6c"/*VJSpermZoomer*/,
+      "SymbolId": "a9bd30b1-8b58-4b88-8c8e-5f14b425edec",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "629ef604-784f-454d-ae28-0acd56709a95"/*VJUralt*/,
+      "SymbolId": "a9e36415-58b3-4e2c-b42a-757000d5e337",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "25bf27f5-8feb-43d2-9fa4-0ea6ac14f079"/*VJDeadlineAnimals*/,
+      "SymbolId": "8f1bc36a-0206-4c35-900d-ced5dd30481b",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "4a5d8138-2c30-4b88-83a2-dfcf98185f91"/*Vj_AbstractCubes*/,
+      "SymbolId": "70e3725d-42d9-450a-8068-58ef244d0e09",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "e9913ab1-a240-473c-8720-1dfdc023ce41"/*FluidSim*/,
+      "SymbolId": "de8c8149-5b73-40f3-b55d-0fc5031f44ea",
+      "InputValues": [
+        {
+          "Id": "2dd6ce17-3f3d-4f94-bd63-60546eddd4ff"/*RestoreLayout*/,
+          "Type": "System.Single",
+          "Value": 0.26
+        },
+        {
+          "Id": "5234f5b4-64c3-4865-a099-e630e4e69341"/*RestoreLayoutEnabled*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "5f0b271d-ca80-42cf-a5c7-7a0014c6e467"/*ShowAgents*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "9c4b2499-25e2-40ce-8677-50560bbba844"/*_AnalyseAudioRange*/,
+      "SymbolId": "6bb3fc41-f1d4-467e-afc6-62b452ec36be",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "6b939b56-457e-4d2a-9cc6-fcba34c58b48"/*_SubdivsionRaster*/,
+      "SymbolId": "f15cc064-1d70-4945-ae60-35d884788c0f",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "02b6fc8a-e81a-4a42-93e9-103c3bfa8639"/*_AnalyzeSound*/,
+      "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "09a74e3a-f072-4600-839a-765c7fe04cd2"/*MaryLookDev*/,
+      "SymbolId": "23191f62-56d4-4522-81da-7b96b9c5bbe6",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "63925f00-8f40-4580-add9-a12f1f2ac955"/*NoiseClip*/,
+      "SymbolId": "91fb7506-c9c4-429c-a019-9ec47e3b1928",
+      "InputValues": [],
+      "Outputs": [
+        {
+          "Id": "8fcba4e1-3ecc-461b-b4b8-6d1d341382af"/*NoiseClip*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 229.26924,
+                "End": 233.26924
+              },
+              "SourceRange": {
+                "Start": 229.26924,
+                "End": 233.26924
+              },
+              "LayerIndex": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Id": "994f1cb4-3761-437f-9fa5-18d0bb4d95ee"/*ReprojectToUV*/,
+      "SymbolId": "4238439e-a6b4-4390-9984-e6ebf19c3a69",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "fc3518d7-a891-4cb2-9447-47da795465b3"/*ReprojectToUvExample*/,
+      "SymbolId": "2bd99e05-9a54-4466-a220-0289939406bd",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "bb242f0c-9c76-46a8-aac2-c0800822ca58"/*SortPixelGlitchExample*/,
+      "SymbolId": "26aa6110-def1-4140-9d1e-de3621aeae10",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "6549e0dc-2736-46b6-be3f-dad4fceab929"/*SortPixelGlitch*/,
+      "SymbolId": "cbbb011c-f2bc-460e-86d0-48e49ed377fd",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "d486abf4-049b-434b-a2e6-6d47a10336c4"/*Sketch*/,
+      "SymbolId": "8e6ed99c-a3e0-42c0-9f81-a89b1e340757",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "56df06f3-989b-46ad-8b9b-11483c2bfaa4"/*SortPixelsWithGlowExample*/,
+      "SymbolId": "857946f2-dfb5-4d93-82e5-1c8f21d7e60c",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [

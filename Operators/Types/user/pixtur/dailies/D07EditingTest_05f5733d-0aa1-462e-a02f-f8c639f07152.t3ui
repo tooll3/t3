@@ -2062,7 +2062,7 @@
       }
     },
     {
-      "ChildId": "69da4c87-4a40-431d-90a4-db7db18ffce4"/*AnalyzeSound*/,
+      "ChildId": "69da4c87-4a40-431d-90a4-db7db18ffce4"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

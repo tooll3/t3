@@ -1,6 +1,6 @@
 {
   "Id": "70e3725d-42d9-450a-8068-58ef244d0e09"/*Vj_AbstractCubes*/,
-  "Description": "",
+  "Description": "An abstract experiment with [SetMeshUvs]. Requires correctly set audio input.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -469,7 +469,7 @@
       "ChildId": "51f0a577-bf0c-42bc-9193-6d722b4bb08f"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 36.0
       },
       "Position": {
         "X": 468.75452,
@@ -1373,7 +1373,7 @@
       "ChildId": "b9db5948-f616-4395-a0f7-5df77b068555"/*PointSimulation*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 36.0
       },
       "Position": {
         "X": 907.59204,

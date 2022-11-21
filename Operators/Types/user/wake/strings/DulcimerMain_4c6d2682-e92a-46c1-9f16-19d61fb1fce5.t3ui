@@ -434,7 +434,7 @@
       }
     },
     {
-      "ChildId": "662c0c2a-f76d-4285-84a9-283291ea6a95"/*AnalyzeSound*/,
+      "ChildId": "662c0c2a-f76d-4285-84a9-283291ea6a95"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

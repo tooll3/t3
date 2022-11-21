@@ -1,7 +1,7 @@
 {
   "Name": "UglySSAO",
   "Id": "13d5260d-4e50-48f8-909c-7d84d6f0a43f",
-  "Namespace": "user.pixtur.research",
+  "Namespace": "lib.3d.fx",
   "Inputs": [
     {
       "Id": "450023da-53fb-4e36-9936-551a2ebcce84"/*Texture2d*/,

@@ -389,7 +389,7 @@
       }
     },
     {
-      "ChildId": "cbd81894-e1db-4327-9cde-1dade40f279a"/*AnalyzeSound*/,
+      "ChildId": "cbd81894-e1db-4327-9cde-1dade40f279a"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

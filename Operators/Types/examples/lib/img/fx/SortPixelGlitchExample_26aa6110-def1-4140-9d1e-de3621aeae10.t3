@@ -1,7 +1,7 @@
 {
-  "Name": "SortPixelExample",
+  "Name": "SortPixelGlitchExample",
   "Id": "26aa6110-def1-4140-9d1e-de3621aeae10",
-  "Namespace": "user.pixtur.research",
+  "Namespace": "examples.lib.img.fx",
   "Inputs": [],
   "Children": [
     {
@@ -14,17 +14,9 @@
           "Value": 90.0
         },
         {
-          "Id": "beada8f0-cece-4526-aa29-3546bebd276a"/*Center*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": -0.00999999,
-            "Y": -0.110000014
-          }
-        },
-        {
           "Id": "99171ae6-fb07-4121-bf23-e97f30b33be5"/*IntensityRange*/,
           "Type": "System.Single",
-          "Value": 0.09
+          "Value": 0.03
         }
       ],
       "Outputs": []
@@ -600,18 +592,6 @@
       "Outputs": []
     },
     {
-      "Id": "04f73ff9-0db0-4245-9afa-a7bbf8f9a292"/*LoadTexture2d*/,
-      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
-      "InputValues": [
-        {
-          "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
-          "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\ash-thorp-02b.jpg"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "a555d375-95b6-4c2e-b478-22a0a0f2edf8"/*LoadImageFromUrl*/,
       "SymbolId": "61ec6355-bd7d-4abb-aa44-b01b7d658e23",
       "InputValues": [
@@ -1007,58 +987,9 @@
       "Outputs": []
     },
     {
-      "Id": "eacfdc23-8040-4ba4-8eef-0deaa7c9036c"/*LoadTexture2d*/,
-      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
-      "InputValues": [
-        {
-          "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
-          "Type": "System.String",
-          "Value": "Resources\\user\\pixtur\\ash-thorp-02a.jpg"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "988f37ce-6dee-4c93-bcc2-5bb65ced0315"/*Grain*/,
       "SymbolId": "b5102fba-f05b-43fc-aa1d-613fe1d68ad2",
       "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "fb14872b-0b70-449b-aaaa-267c791a159a"/*Blob*/,
-      "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
-      "InputValues": [
-        {
-          "Id": "bbda1c8c-fa81-43ef-b773-f7ecfb8968e1"/*Fill*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0,
-            "W": 0.0
-          }
-        },
-        {
-          "Id": "de54f18b-6a1e-4610-8d6d-58897df6959b"/*Background*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0,
-            "W": 1.0
-          }
-        },
-        {
-          "Id": "41f4065a-0b65-4dda-9cd3-ef7802ed170b"/*Round*/,
-          "Type": "System.Single",
-          "Value": 0.3
-        },
-        {
-          "Id": "8846aa50-e4d0-433c-9e5b-013a93f17f79"/*Feather*/,
-          "Type": "System.Single",
-          "Value": 0.49
-        }
-      ],
       "Outputs": []
     },
     {
@@ -1141,8 +1072,8 @@
       "TargetSlotId": "4de046cc-26d7-466f-90b4-3a3bdd59acb3"
     },
     {
-      "SourceParentOrChildId": "04f73ff9-0db0-4245-9afa-a7bbf8f9a292",
-      "SourceSlotId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037",
+      "SourceParentOrChildId": "37438897-74c2-4bb9-9b10-5c0fb070f54e",
+      "SourceSlotId": "df388f27-f5b6-417b-87a7-a6a59b625128",
       "TargetParentOrChildId": "12a92a1b-9141-4ae9-9da5-0a5954208155",
       "TargetSlotId": "5537a990-0d27-4e91-912e-8f913a734722"
     },
@@ -1421,12 +1352,6 @@
       "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
       "TargetParentOrChildId": "f7beda37-f0ab-4fec-b935-99046945e29b",
       "TargetSlotId": "4da253b7-4953-439a-b03f-1d515a78bddf"
-    },
-    {
-      "SourceParentOrChildId": "37438897-74c2-4bb9-9b10-5c0fb070f54e",
-      "SourceSlotId": "df388f27-f5b6-417b-87a7-a6a59b625128",
-      "TargetParentOrChildId": "fb14872b-0b70-449b-aaaa-267c791a159a",
-      "TargetSlotId": "630d4d0b-d4ca-4987-93ca-7eb782ebccc6"
     }
   ]
 }

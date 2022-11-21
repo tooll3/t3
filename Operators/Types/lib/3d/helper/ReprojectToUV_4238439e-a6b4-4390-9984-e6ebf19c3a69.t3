@@ -1,7 +1,7 @@
 {
   "Name": "ReprojectToUV",
   "Id": "4238439e-a6b4-4390-9984-e6ebf19c3a69",
-  "Namespace": "user.pixtur.research",
+  "Namespace": "lib.3d.helper",
   "Inputs": [
     {
       "Id": "eb4da1b0-f9c6-480d-a1a3-ac875cbf1037"/*Color*/,

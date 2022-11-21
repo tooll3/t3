@@ -1,5 +1,6 @@
 {
-  "Id": "112ea923-a349-412f-8dd3-4d9d9fc42dc6"/*AnalyzeSound*/,
+  "Id": "112ea923-a349-412f-8dd3-4d9d9fc42dc6"/*_AnalyzeSound*/,
+  "Description": "This operator has been deprecated.\nPlease consider using [AudioReaction].",
   "InputUis": [
     {
       "InputId": "7357ea4b-201d-484b-8398-4a8e13fa3880"/*SubGraph*/,

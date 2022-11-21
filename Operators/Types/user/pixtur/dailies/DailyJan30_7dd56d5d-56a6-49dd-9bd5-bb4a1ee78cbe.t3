@@ -5,7 +5,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "bc8265bc-a4aa-4ee8-b7be-5040bbf61bc6"/*AnalyzeSound*/,
+      "Id": "bc8265bc-a4aa-4ee8-b7be-5040bbf61bc6"/*_AnalyzeSound*/,
       "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
       "InputValues": [
         {

@@ -1543,7 +1543,7 @@
       "Outputs": []
     },
     {
-      "Id": "46f94a63-e9dd-4751-8103-b205ff08ad8c"/*AnalyzeSound*/,
+      "Id": "46f94a63-e9dd-4751-8103-b205ff08ad8c"/*_AnalyzeSound*/,
       "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
       "InputValues": [],
       "Outputs": []
@@ -1630,7 +1630,7 @@
       "Outputs": []
     },
     {
-      "Id": "9e303105-1a05-4bea-94d0-7a13f7defe91"/*AnalyzeSound*/,
+      "Id": "9e303105-1a05-4bea-94d0-7a13f7defe91"/*_AnalyzeSound*/,
       "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
       "InputValues": [
         {

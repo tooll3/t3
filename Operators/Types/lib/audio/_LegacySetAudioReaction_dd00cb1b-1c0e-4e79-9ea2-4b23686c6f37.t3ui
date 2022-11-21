@@ -19,7 +19,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "a7a36d51-2b6d-459d-a211-3015c475d363"/*AnalyzeSound*/,
+      "ChildId": "a7a36d51-2b6d-459d-a211-3015c475d363"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

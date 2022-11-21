@@ -366,7 +366,7 @@
       }
     },
     {
-      "ChildId": "29b3a7f3-1127-4920-b7ab-64b99c9687e2"/*AnalyzeSound*/,
+      "ChildId": "29b3a7f3-1127-4920-b7ab-64b99c9687e2"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -960,7 +960,7 @@
       }
     },
     {
-      "ChildId": "cc6430f3-9ab5-4f97-beb8-5999b84f2aeb"/*AnalyzeSound*/,
+      "ChildId": "cc6430f3-9ab5-4f97-beb8-5999b84f2aeb"/*_AnalyzeSound*/,
       "Style": "Expanded",
       "Size": {
         "X": 110.0,
@@ -1192,7 +1192,7 @@
       }
     },
     {
-      "ChildId": "ab6291d8-3eb4-4632-9647-9413d37d775f"/*AnalyzeSound*/,
+      "ChildId": "ab6291d8-3eb4-4632-9647-9413d37d775f"/*_AnalyzeSound*/,
       "Style": "Expanded",
       "Size": {
         "X": 110.0,
@@ -1677,7 +1677,7 @@
       }
     },
     {
-      "ChildId": "12d6fe5e-160b-4947-afe6-98b01ee2d6bd"/*AnalyzeSound*/,
+      "ChildId": "12d6fe5e-160b-4947-afe6-98b01ee2d6bd"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

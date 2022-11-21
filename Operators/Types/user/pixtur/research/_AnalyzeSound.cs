@@ -8,7 +8,7 @@ using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_112ea923_a349_412f_8dd3_4d9d9fc42dc6
 {
-    public class AnalyzeSound : Instance<AnalyzeSound>
+    public class _AnalyzeSound : Instance<_AnalyzeSound>
     {
 
         [Input(Guid = "7357ea4b-201d-484b-8398-4a8e13fa3880")]

@@ -393,7 +393,7 @@
       "ChildId": "2ab1fc67-2226-4cb9-9d12-bd65b1a51b53"/*PickString*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 36.0
       },
       "Position": {
         "X": -2425.3794,
@@ -625,7 +625,7 @@
       "Style": "Expanded",
       "Size": {
         "X": 110.0,
-        "Y": 75.0
+        "Y": 127.0
       },
       "Position": {
         "X": 6325.7314,
@@ -2496,7 +2496,7 @@
       "ChildId": "08dcb962-f087-4422-ae85-9900b0317413"/*RandomizePoints*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 36.0
       },
       "Position": {
         "X": -3129.69,
@@ -3156,7 +3156,7 @@
       "ChildId": "e4d6c700-8a76-4853-96bb-defd387fef46"/*SimNoise*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 36.0
       },
       "Position": {
         "X": -4290.64,
