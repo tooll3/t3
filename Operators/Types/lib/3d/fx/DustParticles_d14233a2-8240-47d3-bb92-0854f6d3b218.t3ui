@@ -1,6 +1,6 @@
 {
   "Id": "d14233a2-8240-47d3-bb92-0854f6d3b218"/*DustParticles*/,
-  "Description": "Draws points that repeated wrapped and animated around the current camera position.",
+  "Description": "Draws points that repeated wrapped and animated around the current camera position.\n\nTip: This effect can be combined with [SetFog].",
   "InputUis": [
     {
       "InputId": "df0a84c2-a1e9-492f-903a-5ef7511c6ec8"/*Count*/,
@@ -42,7 +42,9 @@
       "Position": {
         "X": -1359.4902,
         "Y": 445.22437
-      }
+      },
+      "Min": 0.0,
+      "Max": 3.0
     },
     {
       "InputId": "3783617d-17d5-4052-b732-60c61948ca1f"/*NoiseVariation*/,
@@ -91,7 +93,10 @@
       "Position": {
         "X": -1381.7103,
         "Y": 1196.5905
-      }
+      },
+      "Min": -0.1,
+      "Max": 0.1,
+      "Scale": 0.001
     },
     {
       "InputId": "e3a995dc-ec77-439c-8aed-e47df5e2b923"/*OffsetVolume*/,

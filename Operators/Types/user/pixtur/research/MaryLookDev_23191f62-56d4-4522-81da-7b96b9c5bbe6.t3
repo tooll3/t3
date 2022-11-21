@@ -5,20 +5,8 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "effa1f4a-5625-4d43-952d-6534ab9991f4"/*MaryTest1*/,
-      "SymbolId": "2f61dfb3-2ee0-42cb-93e2-419b505c11ee",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "310dce33-fab8-403e-9d11-bd5e7075df6c"/*MaryTest2*/,
       "SymbolId": "ba2a8670-e0c3-4e7b-9382-d1c0938ba2b3",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "d0a42cee-6f82-49c0-8aed-af20f84675c6"/*MaryTest3*/,
-      "SymbolId": "e8dd725e-e003-4bf9-8702-1cdd2a8142c6",
       "InputValues": [],
       "Outputs": []
     },

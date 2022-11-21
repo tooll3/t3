@@ -1,7 +1,7 @@
 {
   "Name": "SceneCityLogo",
   "Id": "b849e7a2-2fee-4463-b964-67f5c2519fc5",
-  "Namespace": "user.pixtur",
+  "Namespace": "user.pixtur.project.sceneCityLogo",
   "Inputs": [],
   "Children": [
     {

@@ -1,6 +1,6 @@
 {
   "Id": "cb89ed1d-03ea-4880-bfa0-1dd723e4bdab"/*FadingSlideShow*/,
-  "Description": "Blends between image files within a list on using a float value using the integer component as index and the remainder as blend factor.",
+  "Description": "Blends smoothly between image files read from a directory.\nBlendspeed  controls the speed of the transition.",
   "InputUis": [
     {
       "InputId": "61469462-04ef-4f75-bd58-2bd42b8da15a"/*IndexAndFraction*/,

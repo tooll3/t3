@@ -104,17 +104,6 @@
       }
     },
     {
-      "ChildId": "4a791824-9110-4125-b80d-b4391547d3d4"/*ParticleTests*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 751.8484,
-        "Y": 151.90901
-      }
-    },
-    {
       "ChildId": "6ca75d69-fe79-4f69-917a-fa18a0e43781"/*LInearDepth*/,
       "Size": {
         "X": 110.0,

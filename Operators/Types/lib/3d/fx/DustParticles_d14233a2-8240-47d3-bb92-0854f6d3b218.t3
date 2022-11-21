@@ -1,7 +1,7 @@
 {
   "Name": "DustParticles",
   "Id": "d14233a2-8240-47d3-bb92-0854f6d3b218",
-  "Namespace": "user.pixtur",
+  "Namespace": "lib.3d.fx",
   "Inputs": [
     {
       "Id": "df0a84c2-a1e9-492f-903a-5ef7511c6ec8"/*Count*/,
@@ -246,6 +246,11 @@
           "Id": "63621a98-874b-4d1a-9724-f4fa70b8ccf1"/*Reset*/,
           "Type": "System.Boolean",
           "Value": false
+        },
+        {
+          "Id": "56eac471-ad48-41ec-b617-cbcb67646c97"/*AddSeperatorThreshold*/,
+          "Type": "System.Single",
+          "Value": 0.89
         }
       ],
       "Outputs": []

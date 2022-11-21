@@ -307,6 +307,14 @@ namespace T3.Core.Utils
             return isInvalid;
         }
 
+        public static bool ApplyDefaultIfInvalid(ref Vector2 val, Vector2 defaultValue)
+        {
+            var isInvalid = float.IsNaN(val.X) || float.IsInfinity(val.X) ||
+                            float.IsNaN(val.Y) || float.IsInfinity(val.Y);
+            val = isInvalid ? defaultValue : val;
+            return isInvalid;
+        }
+        
         public static bool ApplyDefaultIfInvalid(ref Vector3 val, Vector3 defaultValue)
         {
             var isInvalid = float.IsNaN(val.X) || float.IsInfinity(val.X) ||
@@ -369,6 +377,14 @@ namespace T3.Core.Utils
         {
             // TODO: Fix damping factor from framerate 
             return MathUtils.Lerp(targetValue, currentValue, damping);
+        }
+        
+        public static Vector2 SpringDampVec2(Vector2 targetVec, Vector2 currentValue, float damping, ref Vector2 velocity)
+        {
+            var dt = (float)Playback.LastFrameDuration;
+            return new Vector2(
+                               MathUtils.SpringDamp(targetVec.X, currentValue.X, ref velocity.X, 0.5f / (damping + 0.001f), dt),
+                               MathUtils.SpringDamp(targetVec.Y, currentValue.Y, ref velocity.Y, 0.5f / (damping + 0.001f), dt));
         }
 
         public static Vector3 SpringDampVec3(Vector3 targetVec, Vector3 currentValue, float damping, ref Vector3 velocity)

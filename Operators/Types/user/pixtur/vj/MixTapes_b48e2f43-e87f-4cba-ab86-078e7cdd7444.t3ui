@@ -1,7 +1,15 @@
 {
   "Id": "b48e2f43-e87f-4cba-ab86-078e7cdd7444"/*MixTapes*/,
   "Description": "Playing with edge repeat and kaleidoscope",
-  "InputUis": [],
+  "InputUis": [
+    {
+      "InputId": "813f0932-56ab-447d-bd80-370240d2454c"/*EffectMode*/,
+      "Position": {
+        "X": 36.080124,
+        "Y": 589.83356
+      }
+    }
+  ],
   "SymbolChildUis": [
     {
       "ChildId": "e1db7259-0718-4a3d-9c9b-64416a48eb19"/*FilesInFolder*/,
@@ -33,17 +41,6 @@
       },
       "Position": {
         "X": 300.0,
-        "Y": 43.0
-      }
-    },
-    {
-      "ChildId": "e556b8d0-bebb-4760-a397-49d7aea244e9"/*_AnimValueOld*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 0.0,
         "Y": 43.0
       }
     },
@@ -95,7 +92,7 @@
       "ChildId": "dd2d4937-508c-457e-8275-e7d9d36bb889"/*Execute*/,
       "Size": {
         "X": 110.0,
-        "Y": 62.0
+        "Y": 49.0
       },
       "Position": {
         "X": 1397.9954,
@@ -120,8 +117,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": 900.0,
-        "Y": 0.0
+        "X": 947.99536,
+        "Y": 388.79102
       }
     },
     {
@@ -172,7 +169,7 @@
       "ChildId": "52292445-43ac-4153-86c5-35f334957450"/*KochKaleidoskope*/,
       "Size": {
         "X": 110.0,
-        "Y": 62.0
+        "Y": 75.0
       },
       "Position": {
         "X": 1755.7585,
@@ -249,22 +246,11 @@
       "ChildId": "3c403e73-a77a-43d7-bb3d-495d9d74102a"/*PickTexture*/,
       "Size": {
         "X": 110.0,
-        "Y": 75.0
+        "Y": 88.0
       },
       "Position": {
         "X": 1961.1362,
         "Y": -1.9359226
-      }
-    },
-    {
-      "ChildId": "dbef0bce-7efb-4a8e-ba5d-9b399084c945"/*_AnimValueOld*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 1971.275,
-        "Y": 147.8826
       }
     },
     {
@@ -279,14 +265,47 @@
       }
     },
     {
-      "ChildId": "25eb385b-02ae-44b9-9024-31886f6935b1"/*Text*/,
+      "ChildId": "e662870c-bbf0-4ebc-a02b-7cf47d3e9d34"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 0.0,
+        "Y": 43.0
+      }
+    },
+    {
+      "ChildId": "ae840aae-39d7-4026-9b97-2f116059b326"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 2054.2827,
+        "Y": 259.255
+      }
+    },
+    {
+      "ChildId": "4fa7d728-0dc7-4c6b-bee3-0a153c4db10b"/*AnimVec2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1455.7585,
+        "Y": 145.50708
+      }
+    },
+    {
+      "ChildId": "d4c558cb-9e6e-4130-a3ba-575a763bbb14"/*DampVec2*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
       },
       "Position": {
-        "X": 100.0,
-        "Y": 100.0
+        "X": 1605.7585,
+        "Y": 145.50708
       }
     }
   ],

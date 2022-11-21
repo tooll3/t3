@@ -4,36 +4,14 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "effa1f4a-5625-4d43-952d-6534ab9991f4"/*MaryTest1*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 3901.9211,
-        "Y": 612.7167
-      }
-    },
-    {
       "ChildId": "310dce33-fab8-403e-9d11-bd5e7075df6c"/*MaryTest2*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
       },
       "Position": {
-        "X": 4263.2227,
-        "Y": 616.12463
-      }
-    },
-    {
-      "ChildId": "d0a42cee-6f82-49c0-8aed-af20f84675c6"/*MaryTest3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 4439.2173,
-        "Y": 746.584
+        "X": 4258.4272,
+        "Y": 391.52808
       }
     },
     {

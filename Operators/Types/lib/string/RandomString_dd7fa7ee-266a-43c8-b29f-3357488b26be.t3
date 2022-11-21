@@ -1,7 +1,7 @@
 {
   "Name": "RandomString",
   "Id": "dd7fa7ee-266a-43c8-b29f-3357488b26be",
-  "Namespace": "user.pixtur",
+  "Namespace": "lib.string",
   "Inputs": [
     {
       "Id": "4e36b984-43ff-447b-8e1d-a099fefd4d74"/*Rate*/,

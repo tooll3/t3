@@ -224,17 +224,6 @@
       }
     },
     {
-      "ChildId": "49a3a95f-8a72-43b8-a2a4-89831a4bb790"/*FlashRings*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -8125.6313,
-        "Y": -1108.531
-      }
-    },
-    {
       "ChildId": "7b0c8379-b5b6-42ac-b33c-57012107b698"/*CollectSpawnPointsExample*/,
       "Size": {
         "X": 110.0,

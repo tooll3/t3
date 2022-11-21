@@ -1,7 +1,7 @@
 {
   "Name": "FadingSlideShow",
   "Id": "cb89ed1d-03ea-4880-bfa0-1dd723e4bdab",
-  "Namespace": "user.pixtur.vj",
+  "Namespace": "lib.3d.helper",
   "Inputs": [
     {
       "Id": "61469462-04ef-4f75-bd58-2bd42b8da15a"/*IndexAndFraction*/,
@@ -28,7 +28,7 @@
     },
     {
       "Id": "ca8724d8-a362-4af4-bdf8-a80a1b0ef72e"/*FolderWithImages*/,
-      "DefaultValue": ""
+      "DefaultValue": "Resources\\images"
     },
     {
       "Id": "3cb08250-213c-4fa6-b9a0-1c92bf01ad6e"/*Color*/,
