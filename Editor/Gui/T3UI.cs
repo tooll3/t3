@@ -16,7 +16,6 @@ using T3.Core.Operator;
 using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
-using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.Interaction;
@@ -63,7 +62,7 @@ namespace T3.Editor.Gui
             if (ForwardBeatTaps.ResyncTriggered)
                 BeatTiming.TriggerResyncMeasure();
 
-            _autoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
+            AutoBackup.AutoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
             OpenedPopUpName = string.Empty;
 
             VariationHandling.Update();
@@ -105,7 +104,7 @@ namespace T3.Editor.Gui
                 _userNameDialog.ShowNextFrame();
             }            
             
-            _autoBackup.CheckForSave();
+            AutoBackup.AutoBackup.CheckForSave();
         }
         
 
@@ -387,7 +386,7 @@ namespace T3.Editor.Gui
         public const string FloatNumberFormat = "{0:F2}";
         public static bool IsCurrentlySaving => _saveStopwatch != null && _saveStopwatch.IsRunning;
 
-        private static readonly AutoBackup.AutoBackup _autoBackup = new();
+        //private static readonly AutoBackup.AutoBackup _autoBackup = new();
         
         private static readonly CreateFromTemplateDialog _createFromTemplateDialog = new();
         private static readonly UserNameDialog _userNameDialog = new();

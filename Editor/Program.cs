@@ -61,6 +61,8 @@ namespace T3.Editor
             Log.AddWriter(new ConsoleWriter());
             Log.AddWriter(FileWriter.CreateDefault());
             Log.Debug($"Starting {Version}");
+
+            StartUp.FlagBeginStartupSequence();
             
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
             
@@ -133,8 +135,7 @@ namespace T3.Editor
                 var sourceFilePath = Model.BuildFilepathForSymbol(symbol, Model.SourceExtension);
                 ResourceManager.Instance().CreateOperatorEntry(sourceFilePath, symbol.Id.ToString(), OperatorUpdating.ResourceUpdateHandler);
             }
-
-            Console.WriteLine($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
+            
             ShaderResourceView viewWindowBackgroundSrv = null;
 
             unsafe
@@ -142,6 +143,8 @@ namespace T3.Editor
                 // Disable ImGui ini file settings
                 ImGui.GetIO().NativePtr->IniFilename = null;
             }
+            
+            StartUp.FlagStartupSequenceComplete();
             
             startupStopWatch.Stop();
             Log.Debug($"startup took {startupStopWatch.ElapsedMilliseconds}ms.");

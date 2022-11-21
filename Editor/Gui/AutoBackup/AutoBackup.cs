@@ -12,22 +12,22 @@ using T3.Core.Logging;
 
 namespace T3.Editor.Gui.AutoBackup
 {
-    public class AutoBackup
+    public static class AutoBackup
     {
-        public int SecondsBetweenSaves { get; set; }
+        public static int SecondsBetweenSaves { get; set; } = 3 * 60;
 
-        public bool IsEnabled { get; set; }
+        public static bool IsEnabled { get; set; }
 
-        public AutoBackup()
-        {
-            SecondsBetweenSaves = 3 * 60;
-            IsEnabled = false;
-        }
+        // public AutoBackup()
+        // {
+        //     SecondsBetweenSaves = 3 * 60;
+        //     IsEnabled = false;
+        // }
 
         /// <summary>
         /// Should be call after all frame operators are completed
         /// </summary>
-        public void CheckForSave()
+        public static void CheckForSave()
         {
             if (!IsEnabled || _isSaving || Stopwatch.ElapsedMilliseconds < SecondsBetweenSaves * 1000)
                 return;
@@ -57,7 +57,7 @@ namespace T3.Editor.Gui.AutoBackup
             ReduceNumberOfBackups();
 
             var zipFilePath = Path.Join(BackupDirectory, $"#{index:D5}-{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.zip");
-            
+
             try
             {
                 var zipPath = Path.GetDirectoryName(zipFilePath);
@@ -65,7 +65,7 @@ namespace T3.Editor.Gui.AutoBackup
                     Directory.CreateDirectory(zipPath);
 
                 using var archive = ZipFile.Open(zipFilePath, ZipArchiveMode.Create);
-                
+
                 foreach (var sourcePath in _sourcePaths)
                 {
                     foreach (var filepath in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
@@ -82,7 +82,7 @@ namespace T3.Editor.Gui.AutoBackup
 
             _isSaving = false;
         }
-        
+
         private static void DeleteFile(string file)
         {
             try
@@ -95,49 +95,58 @@ namespace T3.Editor.Gui.AutoBackup
             }
         }
 
-        public static void RestoreLast()
+        public static bool RestoreLast()
         {
-            var lastFile = GetLatestArchiveFile();
-            if (lastFile == null)
-                return;
+            var latestArchivePath = GetLatestArchiveFilePath();
+            if (latestArchivePath == null)
+                return false;
 
-            var latestArchiveName = lastFile.FullName;
-
-            using ZipArchive archive = ZipFile.Open(latestArchiveName, ZipArchiveMode.Read);
-
-            const string destinationDirectoryName = ".";
-
-            foreach (var file in archive.Entries)
+            try
             {
-                var completeFileName = Path.Combine(destinationDirectoryName, file.FullName);
+                using var archive = ZipFile.Open(latestArchivePath, ZipArchiveMode.Read);
 
-                if (file.Name == "")
+                foreach (var file in archive.Entries)
                 {
-                    // Assuming Empty for Directory
-                    var directoryName = Path.GetDirectoryName(completeFileName);
-                    if (string.IsNullOrEmpty(directoryName))
-                        continue;
+                    var targetFilePath = file.FullName;
 
-                    Directory.CreateDirectory(directoryName);
-                    continue;
+                    if (File.Exists(targetFilePath))
+                    {
+                        File.Delete(targetFilePath);
+                    }
+
+                    var directory = Path.GetDirectoryName(targetFilePath);
+                    if (directory != null && !Directory.Exists(directory))
+                    {
+                        try
+                        {
+                            Directory.CreateDirectory(directory);
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Warning($"Failed to create target directory for restoring{targetFilePath}:" + e.Message);
+                            continue;
+                        }
+                    }
+
+                    file.ExtractToFile(targetFilePath, true);
                 }
-
-                if (File.Exists(completeFileName))
-                {
-                    File.Delete(completeFileName);
-                }
-
-                file.ExtractToFile(completeFileName, true);
             }
+            catch (Exception e)
+            {
+                Log.Error($"Restoring archive {latestArchivePath} failed. Is Zip archive corrupted?" + e.Message);
+                return false;
+            }
+
+            return true;
         }
 
         public static DateTime? GetTimeOfLastBackup()
         {
-            var lastFile = GetLatestArchiveFile();
-            if (lastFile == null)
+            var lastFilePath = GetLatestArchiveFilePath();
+            if (lastFilePath == null)
                 return null;
 
-            var result = Regex.Match(lastFile.Name, @"(#\d\d\d\d\d)?-(\d\d\d\d)_(\d\d)_(\d\d)-(\d\d)_(\d\d)_(\d\d)_(\d\d\d)");
+            var result = Regex.Match(lastFilePath, @"(#\d\d\d\d\d)?-(\d\d\d\d)_(\d\d)_(\d\d)-(\d\d)_(\d\d)_(\d\d)_(\d\d\d)");
 
             if (!result.Success)
                 return null;
@@ -157,11 +166,11 @@ namespace T3.Editor.Gui.AutoBackup
 
         private static int GetIndexOfLastBackup()
         {
-            var lastFile = GetLatestArchiveFile();
-            if (lastFile == null)
+            var lastFilePath = GetLatestArchiveFilePath();
+            if (lastFilePath == null)
                 return -1;
 
-            var result = Regex.Match(lastFile.Name, @"#(\d\d\d\d\d)-(\d\d\d\d)_(\d\d)_(\d\d)-(\d\d)_(\d\d)_(\d\d)_(\d\d\d)");
+            var result = Regex.Match(lastFilePath, @"#(\d\d\d\d\d)-(\d\d\d\d)_(\d\d)_(\d\d)-(\d\d)_(\d\d)_(\d\d)_(\d\d\d)");
 
             if (!result.Success)
                 return -1;
@@ -170,13 +179,15 @@ namespace T3.Editor.Gui.AutoBackup
             return index;
         }
 
-        private static FileInfo GetLatestArchiveFile()
+        public static string GetLatestArchiveFilePath()
         {
-            if (!Directory.Exists(BackupDirectory))
-                return null;
+            return Directory.Exists(BackupDirectory)
+                       ? Directory.GetFiles(BackupDirectory, "*.zip", SearchOption.TopDirectoryOnly).Reverse().FirstOrDefault()
+                       : null;
 
-            var backupDirectory = new DirectoryInfo(BackupDirectory);
-            return backupDirectory.GetFiles().OrderByDescending(f => f.LastWriteTime).FirstOrDefault();
+            //var backupDirectory = new DirectoryInfo(BackupDirectory);
+
+            // return backupDirectory.GetFiles().OrderByDescending(f => f.LastWriteTime).FirstOrDefault();
         }
 
         /*

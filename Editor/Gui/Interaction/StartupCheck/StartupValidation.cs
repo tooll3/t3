@@ -53,6 +53,35 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                 }.Do();            
         }
 
+        public static void OpenUrl(string url)
+        {
+            try
+            {
+                Process.Start(url);
+            }
+            catch
+            {
+                // hack because of this: https://github.com/dotnet/corefx/issues/10361
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    url = url.Replace("&", "^&");
+                    Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    Process.Start("xdg-open", url);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    Process.Start("open", url);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+        
         private struct Check
         {
             public List<string> RequiredFilePaths;
@@ -101,35 +130,6 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                 }
                 Application.Exit();
                 Application.ExitThread();
-            }
-
-            private static void OpenUrl(string url)
-            {
-                try
-                {
-                    Process.Start(url);
-                }
-                catch
-                {
-                    // hack because of this: https://github.com/dotnet/corefx/issues/10361
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                    {
-                        url = url.Replace("&", "^&");
-                        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-                    }
-                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                    {
-                        Process.Start("xdg-open", url);
-                    }
-                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                    {
-                        Process.Start("open", url);
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
             }
         }
     }
