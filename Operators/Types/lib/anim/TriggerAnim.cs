@@ -117,7 +117,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
                 f => MathUtils.SmootherStep(0,1,f.Clamp(0,1)/2) *2   , //2: Easy In
                 f => MathUtils.SmootherStep(0,1,f.Clamp(0,1)/2 + 0.5f) *2 -1, //3: Easy Out
                 f => MathF.Sin(f.Clamp(0,1) * 40) * MathF.Pow(1-f.Clamp(0.0001f, 1),4) ,  //4: Shake
-                f => f<=0 ? 0 : (1-f.Clamp(0,1)), // 0: Kick
+                f => f<=0 ? 0 : (1-f.Clamp(0,1)), // 5: Kick
             };
         
         private bool _trigger;

@@ -11,7 +11,8 @@ namespace T3.Editor.Gui.ChildUi.Animators
     {
         public static bool Draw(InputSlot<float> inputSlot, ImRect selectableScreenRect, ImDrawListPtr drawList,  string nodeLabel)
         {
-            var rate = inputSlot.Value;
+            var rate = inputSlot.Input.Value is InputValue<float> floatValue ? floatValue.Value : inputSlot.Value;
+            
             var modified = false;
             var h = selectableScreenRect.GetHeight();
             

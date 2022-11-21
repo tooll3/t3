@@ -26,9 +26,9 @@ namespace T3.Editor.Gui.ChildUi
             ImGui.PushFont(Fonts.FontSmall);
 
             var deviceAndChannel = "Midi Device?";
-            if (!string.IsNullOrEmpty(midiInput.Device.Value))
+            if (!string.IsNullOrEmpty(midiInput.Device.TypedInputValue.Value))
             {
-                deviceAndChannel = $"{midiInput.Device.Value} CH{midiInput.Channel.Value}:{midiInput.Control.Value}";
+                deviceAndChannel = $"{midiInput.Device.TypedInputValue.Value} CH{midiInput.Channel.TypedInputValue.Value}:{midiInput.Control.TypedInputValue.Value}";
             }
 
             ImGui.TextUnformatted(deviceAndChannel);
@@ -54,8 +54,8 @@ namespace T3.Editor.Gui.ChildUi
             graphRect.Expand(padding);
             if (graphRect.GetHeight() > 0 && graphRect.GetWidth() > 0)
             {
-                var minRange = midiInput.OutputRange.Value.X;
-                var maxRange = midiInput.OutputRange.Value.Y;
+                var minRange = midiInput.OutputRange.TypedInputValue.Value.X;
+                var maxRange = midiInput.OutputRange.TypedInputValue.Value.Y;
                 var currentValue = midiInput.Result.Value;
 
                 var xPos = MathUtils.RemapAndClamp((double)currentValue, minRange, maxRange, graphRect.Min.X, graphRect.Max.X);

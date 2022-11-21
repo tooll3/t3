@@ -11,11 +11,12 @@ namespace T3.Editor.Gui.ChildUi
 {
     public static class ValueLabel
     {
-        public static bool Draw(ImDrawListPtr drawList, ImRect screenRect, Vector2 alignment, InputSlot<float> remapValue)
+        public static bool Draw(ImDrawListPtr drawList, ImRect screenRect, Vector2 alignment, InputSlot<float> inputSlot)
         {
             var modified = false;
-            var valueText = $"{remapValue.Value:G5}";
-            var hashCode = remapValue.GetHashCode();
+            var value = (double)inputSlot.TypedDefaultValue.Value;
+            var valueText = $"{value:G5}";
+            var hashCode = inputSlot.GetHashCode();
             ImGui.PushID(hashCode);
             
             var editingUnlocked = ImGui.GetIO().KeyCtrl || _jogDialValue != null;
@@ -30,11 +31,11 @@ namespace T3.Editor.Gui.ChildUi
                 {
                     ImGui.InvisibleButton("button", labelSize);
                     
-                    double value = remapValue.TypedInputValue.Value;
+                    double value2 = inputSlot.TypedInputValue.Value;
                     if (ImGui.IsItemActivated() && ImGui.GetIO().KeyCtrl)
                     {
                         _jogDailCenter = ImGui.GetIO().MousePos;
-                        _jogDialValue = remapValue;
+                        _jogDialValue = inputSlot;
                         drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.White);
                     }
                     
@@ -47,7 +48,7 @@ namespace T3.Editor.Gui.ChildUi
                         highlight = false;
                     }
 
-                    if (_jogDialValue == remapValue)
+                    if (_jogDialValue == inputSlot)
                     {
                         if (ImGui.IsItemActive())
                         {
@@ -55,9 +56,9 @@ namespace T3.Editor.Gui.ChildUi
                                                            0.01f);
                             if (modified)
                             {
-                                remapValue.TypedInputValue.Value = (float)value;
-                                remapValue.Input.IsDefault = false;
-                                remapValue.DirtyFlag.Invalidate();
+                                inputSlot.TypedInputValue.Value = (float)value;
+                                inputSlot.Input.IsDefault = false;
+                                inputSlot.DirtyFlag.Invalidate();
                             }
                         }
                         else

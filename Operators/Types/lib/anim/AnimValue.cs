@@ -67,11 +67,12 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
 
             switch (_shape)
             {
-                case Shapes.Ramp:
-                case Shapes.Saw:
+                case Shapes.Ramps:
+                case Shapes.Saws:
                 case Shapes.Wave:
                 case Shapes.Square:
                 case Shapes.ZigZag:
+                case Shapes.KickSaws:
                     var fraction = CalcFraction(time);        
                     value= SchlickBias(MapShapes[(int)_shape](fraction), _bias);
                     break;
@@ -103,17 +104,32 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
 
         private delegate float MappingFunction(float fraction);
 
+        
         private readonly MappingFunction[] MapShapes =
             {
-                f => f, // 0:Ramp
-                f => 1 - f, // 1:Saw,
-                f => (float)Math.Sin((f + 0.25) * 2 * 3.141592f) / 2 + 0.5f, // 2:Wave
-                f => f > 0.5f ? 1 : 0, // 3: Square
-                f => f < 0.5f ? (f * 2) : (1 - (f - 0.5f) * 2), //4: ZigZag,
-                f => f, // 5-Random
-                f => f, // 6-Endless
-                f => f, // 6-Endless
+                f => f,                                                         // 0: Ramp
+                f => 1 - f,                                                     // 1: Saw,
+                f => (float)Math.Sin((f + 0.25) * 2 * 3.141592f) / 2 + 0.5f,    // 2: Wave
+                f => f > 0.5f ? 1 : 0,                                          // 3: Square
+                f => f < 0.5f ? (f * 2) : (1 - (f - 0.5f) * 2),                 // 4: ZigZag,
+                f => f,                                                         // 5: Random
+                f => f,                                                         // 6: Endless
+                f => f,                                                         // 7: Noise
+                f => f<=0 ? 0 : (1-f.Clamp(0,1)),                               // 8: Kick (SraResting at last value)
             };
+        
+        public enum Shapes
+        {
+            Ramps = 0,
+            Saws = 1,
+            Wave = 2,
+            Square = 3,
+            ZigZag = 4,
+            Random = 5,
+            Endless = 6,
+            Noise = 7,
+            KickSaws =8,
+        }
 
         private Shapes _shape;
         private float _bias;
@@ -124,17 +140,6 @@ namespace T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c
 
         public float LastFraction;
 
-        public enum Shapes
-        {
-            Ramp = 0,
-            Saw = 1,
-            Wave = 2,
-            Square = 3,
-            ZigZag = 4,
-            Random = 5,
-            Endless = 6,
-            Noise = 7,
-        }
 
         private enum SpeedFactors
         {

@@ -33,7 +33,7 @@ namespace T3.Editor.Gui.ChildUi
                 ImGui.TextUnformatted(symbolChild.Name);
             }
 
-            ImGui.TextUnformatted($"{intValueInstance.Int.Value:0}");
+            ImGui.TextUnformatted($"{intValueInstance.Int.TypedInputValue.Value:0}");
             ImGui.EndGroup();
             ImGui.PopFont();
             
