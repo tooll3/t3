@@ -196,7 +196,9 @@ namespace T3.Editor.Gui
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_cc07b314_4582_4c2c_84b8_bb32f59fc09b.IntValue), IntValueUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_d6384148_c654_48ce_9cf4_9adccf91283a.ValueSlider), ValueSliderUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_f0acd1a4_7a98_43ab_a807_6d1bd3e92169.Remap), RemapUi.DrawChildUi);
-            CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c.AnimValue), AnimValueUi.DrawChildUi);
+            CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_ea7b8491_2f8e_4add_b0b1_fd068ccfed0d.AnimValue), AnimValueUi.DrawChildUi);
+            CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_af79ee8c_d08d_4dca_b478_b4542ed69ad8.AnimVec2), AnimVec2Ui.DrawChildUi);
+            CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_7814fd81_b8d0_4edf_b828_5165f5657344.AnimVec3), AnimVec3Ui.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f.SequenceAnim), SequenceAnimUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95.TriggerAnim), TriggerAnimUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5.MidiInput), MidiInputUi.DrawChildUi);

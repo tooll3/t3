@@ -40,7 +40,7 @@
       "Outputs": []
     },
     {
-      "Id": "e556b8d0-bebb-4760-a397-49d7aea244e9"/*AnimValue*/,
+      "Id": "e556b8d0-bebb-4760-a397-49d7aea244e9"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -149,7 +149,7 @@
       "Outputs": []
     },
     {
-      "Id": "334d2bb3-b39a-4eb6-84ec-96fdc584714d"/*AnimValue*/,
+      "Id": "334d2bb3-b39a-4eb6-84ec-96fdc584714d"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -291,7 +291,7 @@
       "Outputs": []
     },
     {
-      "Id": "90f417b4-f8e6-4680-b791-14c0b6aa55d5"/*AnimValue*/,
+      "Id": "90f417b4-f8e6-4680-b791-14c0b6aa55d5"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -382,7 +382,7 @@
       "Outputs": []
     },
     {
-      "Id": "dbef0bce-7efb-4a8e-ba5d-9b399084c945"/*AnimValue*/,
+      "Id": "dbef0bce-7efb-4a8e-ba5d-9b399084c945"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -414,7 +414,7 @@
       "Outputs": []
     },
     {
-      "Id": "4b05e8f0-8e04-42d0-bd9c-473eb5f4f539"/*AnimValue*/,
+      "Id": "4b05e8f0-8e04-42d0-bd9c-473eb5f4f539"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {

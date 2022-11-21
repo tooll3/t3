@@ -31,7 +31,8 @@
       "Position": {
         "X": -1369.7134,
         "Y": 2177.8186
-      }
+      },
+      "Format": "{0:P2}"
     },
     {
       "InputId": "76efee74-fe2d-4926-98d8-82be384f298e"/*ApplyFxTexture*/,
@@ -40,8 +41,7 @@
         "Y": 2222.8186
       },
       "Min": -1.0,
-      "Max": 1.0,
-      "Clamp": true
+      "Max": 1.0
     },
     {
       "InputId": "c07bdf4d-8395-4327-b57e-6ba38f36e8a0"/*SpeedFactor*/,
@@ -51,7 +51,8 @@
       },
       "Min": 0.8,
       "Max": 1.2,
-      "Scale": 0.001
+      "Scale": 0.001,
+      "Format": "{0:P2}"
     },
     {
       "InputId": "18d0f554-e8f7-4b0f-98c7-24c9742b66af"/*StabilizeFactor*/,
@@ -61,7 +62,8 @@
       },
       "Min": 0.8,
       "Max": 1.2,
-      "Scale": 0.001
+      "Scale": 0.001,
+      "Format": "{0:P2}"
     },
     {
       "InputId": "b5e1cded-fded-4769-8d1e-38598cf944db"/*FxTexture*/,

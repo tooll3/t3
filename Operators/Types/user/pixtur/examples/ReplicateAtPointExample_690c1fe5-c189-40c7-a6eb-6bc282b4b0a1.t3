@@ -143,11 +143,6 @@
           "Id": "3e9bce35-7de1-42de-80e5-8eec29e92422"/*SampleRadius*/,
           "Type": "System.Single",
           "Value": 0.98
-        },
-        {
-          "Id": "ae06f89e-d5a4-43a3-957d-718b66d76918"/*WriteAngleAndStrength*/,
-          "Type": "System.Boolean",
-          "Value": false
         }
       ],
       "Outputs": []

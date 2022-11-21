@@ -6,7 +6,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi.Animators;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Operators.Types.Id_c5e39c67_256f_4cb9_a635_b62a0d9c796c;
+using T3.Operators.Types.Id_ea7b8491_2f8e_4add_b0b1_fd068ccfed0d;
 
 namespace T3.Editor.Gui.ChildUi
 {
@@ -19,7 +19,7 @@ namespace T3.Editor.Gui.ChildUi
                 return SymbolChildUi.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
-            if (RateEditLabel.Draw(animValue.Rate, screenRect, drawList,  "Anim " + (AnimValue.Shapes)animValue.Shape.TypedInputValue.Value))
+            if (RateEditLabel.Draw(animValue.Rate, screenRect, drawList,  "Anim " + (AnimMath.Shapes)animValue.Shape.TypedInputValue.Value))
             {
                 animValue.Rate.Input.IsDefault = false;
                 animValue.Rate.DirtyFlag.Invalidate();
@@ -32,7 +32,7 @@ namespace T3.Editor.Gui.ChildUi
             
             graphRect.Expand(-3);
             graphRect.Min.X = graphRect.Max.X - graphRect.GetWidth() * relativeGraphWidth;
-            var graphWidth = graphRect.GetWidth();
+            
             
             var highlightEditable = ImGui.GetIO().KeyCtrl;
 
@@ -50,6 +50,11 @@ namespace T3.Editor.Gui.ChildUi
             {
                 ImGui.InvisibleButton("dragMicroGraph", graphRect.GetSize());
                 isActive = ImGui.IsItemActive();
+
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
+                }
             }
 
             if (isActive)
@@ -77,7 +82,18 @@ namespace T3.Editor.Gui.ChildUi
                     animValue.Bias.Input.IsDefault = false;
                 }
             }
+            
+            DrawCurve(drawList, graphRect, animValue, highlightEditable);
+            
+            ImGui.PopID();
+            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
+        }
 
+        private static void DrawCurve(ImDrawListPtr drawList, ImRect graphRect, AnimValue animValue, bool highlightEditable)
+        {
+            var graphWidth = graphRect.GetWidth();
+            var h = graphRect.GetHeight();
+            
             // Draw Graph
             {
                 const float previousCycleFragment = 0.25f; 
@@ -94,9 +110,9 @@ namespace T3.Editor.Gui.ChildUi
                 drawList.AddRectFilled(lv1, lv2, T3Style.Colors.GraphAxis);
 
                 // Fragment line 
-                //var width = graphRect.GetWidth() - (lv1.X - graphRect.Min.X); //h * (GraphWidthRatio - leftPaddingH);
-                var cycleWidth = graphWidth * (1- relativeX); //h * (GraphWidthRatio - leftPaddingH);
-                var dx = new Vector2(animValue.LastFraction * cycleWidth - 1, 0);
+                var cycleWidth = graphWidth * (1- relativeX); 
+                var dx = new Vector2((float)MathUtils.Fmod(animValue._normalizedTime,1f) * cycleWidth - 1, 0);
+                
                 drawList.AddRectFilled(lv1 + dx, lv2 + dx, T3Style.Colors.GraphActiveLine);
 
                 // Draw graph
@@ -106,23 +122,29 @@ namespace T3.Editor.Gui.ChildUi
                 //  0-----1 - - - - - -   lh
                 //        |
                 //        |
-
+                
                 for (var i = 0; i < GraphListSteps; i++)
                 {
                     var f = (float)i / GraphListSteps;
-                    var fragment = f * (1 + previousCycleFragment) - previousCycleFragment;
+                    var fragment = f * (1 + previousCycleFragment) - previousCycleFragment + Math.Floor(animValue._normalizedTime);
+
+                    var v = AnimMath.CalcValueForNormalizedTime(animValue._shape,
+                                                                fragment,
+                                                                0,
+                                                                animValue.Bias.TypedInputValue.Value,
+                                                                animValue.Ratio.TypedInputValue.Value).Clamp(-1,1); 
+                    var vv = (0.5f - v / 2) * h;
+
                     _graphLinePoints[i] = new Vector2(f * graphWidth,
-                                                     (0.5f - animValue.CalcNormalizedValueForFraction(fragment) / 2) * h
-                                                    ) + graphRect.Min;
+                                                      vv
+                                                     ) + graphRect.Min;
                 }
 
                 var curveLineColor = highlightEditable ? T3Style.Colors.GraphLineHover : T3Style.Colors.GraphLine;
                 drawList.AddPolyline(ref _graphLinePoints[0], GraphListSteps, curveLineColor, ImDrawFlags.None, 1.5f);
-            }
-
-            ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            }            
         }
+        
 
         private static float _dragStartBias;
         private static float _dragStartRatio;

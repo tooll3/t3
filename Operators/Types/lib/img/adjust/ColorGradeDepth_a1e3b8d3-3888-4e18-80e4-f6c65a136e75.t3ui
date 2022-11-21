@@ -22,21 +22,27 @@
       "Position": {
         "X": -8.08049,
         "Y": 337.35626
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "6a4eb09f-070a-4fd2-82f5-677b7cafb1dc"/*Gamma*/,
       "Position": {
         "X": -8.08049,
         "Y": 382.35626
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "bfb058cb-3611-441a-840f-0a1c4efd4de1"/*Lift*/,
       "Position": {
         "X": -8.08049,
         "Y": 432.35626
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "2e91b9e5-67eb-424f-be6f-3ed6ab77f3b8"/*VignetteColor*/,

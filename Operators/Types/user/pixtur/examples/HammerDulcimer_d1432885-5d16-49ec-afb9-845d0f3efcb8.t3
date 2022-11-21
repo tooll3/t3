@@ -282,7 +282,7 @@
       "Outputs": []
     },
     {
-      "Id": "ab0e0d83-6b7a-471b-aee9-e42fe8ee073d"/*AnimValue*/,
+      "Id": "ab0e0d83-6b7a-471b-aee9-e42fe8ee073d"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -314,7 +314,7 @@
       "Outputs": []
     },
     {
-      "Id": "973a37a8-0fac-4175-af73-9c50d5d926f7"/*AnimValue*/,
+      "Id": "973a37a8-0fac-4175-af73-9c50d5d926f7"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -429,7 +429,7 @@
       "Outputs": []
     },
     {
-      "Id": "a3b67a77-b313-45f1-85b5-badfbbe72f51"/*AnimValue*/,
+      "Id": "a3b67a77-b313-45f1-85b5-badfbbe72f51"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -504,7 +504,7 @@
       "Outputs": []
     },
     {
-      "Id": "d445860c-38ab-44c6-b70a-88fb727cc20a"/*AnimValue*/,
+      "Id": "d445860c-38ab-44c6-b70a-88fb727cc20a"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -2899,7 +2899,7 @@
       "Outputs": []
     },
     {
-      "Id": "ab1617af-0c52-4b64-ad0c-54ea19f46322"/*AnimValue*/,
+      "Id": "ab1617af-0c52-4b64-ad0c-54ea19f46322"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -2931,7 +2931,7 @@
       "Outputs": []
     },
     {
-      "Id": "67c8391c-19ec-49d6-9c56-8ecdaf4b377b"/*AnimValue*/,
+      "Id": "67c8391c-19ec-49d6-9c56-8ecdaf4b377b"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -2996,7 +2996,7 @@
       "Outputs": []
     },
     {
-      "Id": "a887f3a3-f139-4fb9-9ef3-f3b149c15af8"/*AnimValue*/,
+      "Id": "a887f3a3-f139-4fb9-9ef3-f3b149c15af8"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -3033,7 +3033,7 @@
       "Outputs": []
     },
     {
-      "Id": "f857e88e-966c-4cb6-98e1-0530ca668548"/*AnimValue*/,
+      "Id": "f857e88e-966c-4cb6-98e1-0530ca668548"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -3555,7 +3555,7 @@
       "Outputs": []
     },
     {
-      "Id": "9fa7447d-84eb-4405-9e5e-b5ca46dd6100"/*AnimValue*/,
+      "Id": "9fa7447d-84eb-4405-9e5e-b5ca46dd6100"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -4195,7 +4195,7 @@
       "Outputs": []
     },
     {
-      "Id": "41b69133-15ce-44da-89ee-e667f0b3dd7a"/*AnimValue*/,
+      "Id": "41b69133-15ce-44da-89ee-e667f0b3dd7a"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -4243,13 +4243,13 @@
       "Outputs": []
     },
     {
-      "Id": "5175301f-bfbd-42f6-b5c8-de967c536e3a"/*AnimValue*/,
+      "Id": "5175301f-bfbd-42f6-b5c8-de967c536e3a"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "c5ba7e02-fcf1-46f4-86d7-82262b35f836"/*AnimValue*/,
+      "Id": "c5ba7e02-fcf1-46f4-86d7-82262b35f836"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
