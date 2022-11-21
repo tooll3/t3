@@ -155,7 +155,7 @@
       "Outputs": []
     },
     {
-      "Id": "c08660cd-6546-47ed-a176-330f4064cb0b"/*LoadTexture2d*/,
+      "Id": "c08660cd-6546-47ed-a176-330f4064cb0b"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
       "Outputs": []

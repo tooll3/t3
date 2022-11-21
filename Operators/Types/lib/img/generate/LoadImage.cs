@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Mime;
 using SharpDX.Direct3D11;
 using T3.Core;
@@ -10,7 +10,7 @@ using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_0b3436db_e283_436e_ba85_2f3a1de76a9d
 {
-    public class LoadTexture2d : Instance<LoadTexture2d>
+    public class LoadImage : Instance<LoadImage>
     {
         [Output(Guid = "{E0C4FEDD-5C2F-46C8-B67D-5667435FB037}")]
         public readonly Slot<Texture2D> Texture = new();
@@ -21,7 +21,7 @@ namespace T3.Operators.Types.Id_0b3436db_e283_436e_ba85_2f3a1de76a9d
         private uint _textureResId;
         private uint _srvResId;
 
-        public LoadTexture2d()
+        public LoadImage()
         {
             Texture.UpdateAction = UpdateTexture;
             ShaderResourceView.UpdateAction = UpdateShaderResourceView;

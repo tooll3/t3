@@ -1,5 +1,5 @@
 {
-  "Name": "LoadTexture2d",
+  "Name": "LoadImage",
   "Id": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
   "Namespace": "lib.img.generate",
   "Inputs": [

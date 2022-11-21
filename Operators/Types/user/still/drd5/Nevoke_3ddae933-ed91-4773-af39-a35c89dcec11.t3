@@ -5840,7 +5840,7 @@
       "Outputs": []
     },
     {
-      "Id": "067e51c7-1307-4d14-afe7-2a41e669a401"/*LoadTexture2d*/,
+      "Id": "067e51c7-1307-4d14-afe7-2a41e669a401"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
       "Outputs": []

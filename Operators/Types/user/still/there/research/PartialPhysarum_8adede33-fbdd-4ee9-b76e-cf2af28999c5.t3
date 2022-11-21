@@ -420,7 +420,7 @@
       "Outputs": []
     },
     {
-      "Id": "ab973979-ef83-41df-b81f-13148625a5b1"/*LoadTexture2d*/,
+      "Id": "ab973979-ef83-41df-b81f-13148625a5b1"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {

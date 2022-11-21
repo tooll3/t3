@@ -1992,7 +1992,7 @@
       "Outputs": []
     },
     {
-      "Id": "e516873b-612e-4d43-bb01-76794ed98d79"/*LoadTexture2d*/,
+      "Id": "e516873b-612e-4d43-bb01-76794ed98d79"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
       "Outputs": []

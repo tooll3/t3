@@ -6,11 +6,11 @@ using T3.Operators.Types.Id_3b0eb327_6ad8_424f_bca7_ccbfa2c9a986;
 
 namespace T3.Editor.Gui.ChildUi
 {
-    public static class JitterUi
+    public static class _JitterUi
     {
         public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
         {
-            if (!(instance is Jitter jitter))
+            if (!(instance is _Jitter jitter))
                 return SymbolChildUi.CustomUiResult.None;
             
             if (RateEditLabel.Draw(jitter.Rate, screenRect, drawList, nameof(jitter)))

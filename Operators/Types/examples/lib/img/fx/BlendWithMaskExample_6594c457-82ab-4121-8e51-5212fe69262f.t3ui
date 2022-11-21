@@ -26,7 +26,7 @@
       }
     },
     {
-      "ChildId": "3448034f-e4c9-453c-b21e-288c112cf2bb"/*LoadTexture2d*/,
+      "ChildId": "3448034f-e4c9-453c-b21e-288c112cf2bb"/*LoadImage*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -37,7 +37,7 @@
       }
     },
     {
-      "ChildId": "65bd2f7a-29eb-404b-8d24-aba1cce3f151"/*LoadTexture2d*/,
+      "ChildId": "65bd2f7a-29eb-404b-8d24-aba1cce3f151"/*LoadImage*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

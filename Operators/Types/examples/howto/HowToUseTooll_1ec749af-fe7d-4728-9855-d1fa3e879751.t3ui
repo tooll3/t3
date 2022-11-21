@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "3ca68ae8-02bd-432b-94a4-be80b6eb5d1a"/*LoadTexture2d*/,
+      "ChildId": "3ca68ae8-02bd-432b-94a4-be80b6eb5d1a"/*LoadImage*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

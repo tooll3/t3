@@ -90,7 +90,7 @@
       "Outputs": []
     },
     {
-      "Id": "138784ac-d072-43f7-b316-6e892904696e"/*LoadTexture2d*/,
+      "Id": "138784ac-d072-43f7-b316-6e892904696e"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
       "Outputs": []
@@ -308,7 +308,7 @@
       "Outputs": []
     },
     {
-      "Id": "be443153-dbb7-4bfa-b49f-6796b770cdbc"/*LoadTexture2d*/,
+      "Id": "be443153-dbb7-4bfa-b49f-6796b770cdbc"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
       "Outputs": []
@@ -767,7 +767,7 @@
       "Outputs": []
     },
     {
-      "Id": "b2ab77e8-1713-4c5b-bdaf-a68470b0f027"/*LoadTexture2d*/,
+      "Id": "b2ab77e8-1713-4c5b-bdaf-a68470b0f027"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
       "Outputs": []
@@ -791,7 +791,7 @@
       "Outputs": []
     },
     {
-      "Id": "f6030d61-76e2-4307-b94e-432275e64345"/*LoadTexture2d*/,
+      "Id": "f6030d61-76e2-4307-b94e-432275e64345"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
       "Outputs": []

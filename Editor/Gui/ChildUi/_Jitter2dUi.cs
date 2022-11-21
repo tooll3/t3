@@ -10,7 +10,7 @@ namespace T3.Editor.Gui.ChildUi
     {
         public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
         {
-            if (!(instance is Jitter2d jitter2d)
+            if (!(instance is _Jitter2d jitter2d)
                 ||!ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
             
                 return SymbolChildUi.CustomUiResult.None;

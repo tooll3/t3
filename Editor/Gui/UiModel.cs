@@ -189,8 +189,8 @@ namespace T3.Editor.Gui
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_000e08d0_669f_48df_9083_7aa0a43bbc05.GpuMeasure), GpuMeasureUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_8211249d_7a26_4ad0_8d84_56da72a5c536.SampleGradient), GradientSliderUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_b724ea74_d5d7_4928_9cd1_7a7850e4e179.SampleCurve), SampleCurveUi.DrawChildUi);
-            CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_3b0eb327_6ad8_424f_bca7_ccbfa2c9a986.Jitter), JitterUi.DrawChildUi);
-            CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_23794a1f_372d_484b_ac31_9470d0e77819.Jitter2d), Jitter2dUi.DrawChildUi);
+            CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_3b0eb327_6ad8_424f_bca7_ccbfa2c9a986._Jitter), _JitterUi.DrawChildUi);
+            CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_23794a1f_372d_484b_ac31_9470d0e77819._Jitter2d), Jitter2dUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_5880cbc3_a541_4484_a06a_0e6f77cdbe8e.AString), AStringUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe.Value), ValueUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_cc07b314_4582_4c2c_84b8_bb32f59fc09b.IntValue), IntValueUi.DrawChildUi);

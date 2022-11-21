@@ -2646,7 +2646,7 @@
       "Outputs": []
     },
     {
-      "Id": "57f01ea3-9177-41ed-a439-1468a12d47ad"/*LoadTexture2d*/,
+      "Id": "57f01ea3-9177-41ed-a439-1468a12d47ad"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {

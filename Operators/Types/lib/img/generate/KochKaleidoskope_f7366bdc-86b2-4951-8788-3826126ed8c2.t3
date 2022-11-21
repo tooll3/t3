@@ -55,7 +55,7 @@
   ],
   "Children": [
     {
-      "Id": "6e2f6af0-ffa0-439b-8603-6fe38856cf42"/*LoadTexture2d*/,
+      "Id": "6e2f6af0-ffa0-439b-8603-6fe38856cf42"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {

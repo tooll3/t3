@@ -42,7 +42,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "792985da-7ebf-4314-af79-61dd4a60dd77"/*LoadTexture2d*/,
+      "ChildId": "792985da-7ebf-4314-af79-61dd4a60dd77"/*LoadImage*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

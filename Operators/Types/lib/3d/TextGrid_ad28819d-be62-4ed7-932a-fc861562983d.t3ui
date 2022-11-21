@@ -193,7 +193,7 @@
       }
     },
     {
-      "ChildId": "48312cc6-05fd-412d-92f7-62169f0bb632"/*LoadTexture2d*/,
+      "ChildId": "48312cc6-05fd-412d-92f7-62169f0bb632"/*LoadImage*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
