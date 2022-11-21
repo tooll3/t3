@@ -50,17 +50,6 @@
       }
     },
     {
-      "ChildId": "5f18b37c-4aa3-43e0-b61f-be1f6ef4bf8f"/*ActivatePresets*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -1705.5046,
-        "Y": -1458.9388
-      }
-    },
-    {
       "ChildId": "1a9bfa49-2af6-47ed-9b60-bb6b69c77f57"/*ExecuteTextureUpdate*/,
       "Size": {
         "X": 110.0,
@@ -203,17 +192,6 @@
       "Position": {
         "X": -2437.9915,
         "Y": -285.1405
-      }
-    },
-    {
-      "ChildId": "6216f47e-ea41-407c-a396-595f20145a32"/*Boids01*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -2440.981,
-        "Y": -55.222412
       }
     },
     {

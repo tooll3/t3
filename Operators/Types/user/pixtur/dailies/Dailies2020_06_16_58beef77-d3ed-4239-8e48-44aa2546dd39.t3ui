@@ -3,7 +3,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "39b24059-7143-48a0-abdd-66f9e8042c6c"/*String*/,
+      "ChildId": "39b24059-7143-48a0-abdd-66f9e8042c6c"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -421,7 +421,7 @@
       }
     },
     {
-      "ChildId": "b48e2992-82e1-4768-b7f6-e39ce5e0aa0d"/*String*/,
+      "ChildId": "b48e2992-82e1-4768-b7f6-e39ce5e0aa0d"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -443,7 +443,7 @@
       }
     },
     {
-      "ChildId": "93b13142-b5b5-49aa-adb5-3668feab4998"/*PickFromStrings*/,
+      "ChildId": "93b13142-b5b5-49aa-adb5-3668feab4998"/*PickFromStringList*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

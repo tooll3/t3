@@ -71,7 +71,7 @@
       }
     },
     {
-      "ChildId": "81ace394-e393-419a-a4e3-abb3b6170a2a"/*PickFromStrings*/,
+      "ChildId": "81ace394-e393-419a-a4e3-abb3b6170a2a"/*PickFromStringList*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

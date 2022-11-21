@@ -5,7 +5,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "007930c8-3c0d-429f-b00e-31d3040b6868"/*String*/,
+      "Id": "007930c8-3c0d-429f-b00e-31d3040b6868"/*AString*/,
       "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
       "InputValues": [
         {
@@ -158,7 +158,7 @@
       "Outputs": []
     },
     {
-      "Id": "14fdbdfe-67f0-4d38-ae64-0b122bcf2982"/*PickFromStrings*/,
+      "Id": "14fdbdfe-67f0-4d38-ae64-0b122bcf2982"/*PickFromStringList*/,
       "SymbolId": "ef357e66-24e9-4f54-8d86-869db74602f4",
       "InputValues": [],
       "Outputs": []

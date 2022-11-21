@@ -258,12 +258,6 @@
       "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
       "InputValues": [],
       "Outputs": []
-    },
-    {
-      "Id": "fa87c669-86a3-4545-aeb1-6fbef5ff4e1a"/*ActivatePresets*/,
-      "SymbolId": "a53f3873-a5aa-4bcc-aa06-0745d98209d6",
-      "InputValues": [],
-      "Outputs": []
     }
   ],
   "Connections": [

@@ -896,7 +896,7 @@
       }
     },
     {
-      "ChildId": "01b8ece0-fa6a-47a8-91a8-841829dbcc01"/*PickFromStrings*/,
+      "ChildId": "01b8ece0-fa6a-47a8-91a8-841829dbcc01"/*PickFromStringList*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -1602,7 +1602,7 @@
       }
     },
     {
-      "ChildId": "94f538ee-142f-4828-94ce-daa04de9189c"/*String*/,
+      "ChildId": "94f538ee-142f-4828-94ce-daa04de9189c"/*AString*/,
       "Style": "Resizable",
       "Size": {
         "X": 49.6417,
@@ -1614,7 +1614,7 @@
       }
     },
     {
-      "ChildId": "99b61a01-9303-4510-aa3b-7bf856fc00e2"/*GetStringPart*/,
+      "ChildId": "99b61a01-9303-4510-aa3b-7bf856fc00e2"/*PickStringPart*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

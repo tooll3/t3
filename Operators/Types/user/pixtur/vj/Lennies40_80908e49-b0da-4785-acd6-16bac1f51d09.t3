@@ -357,7 +357,7 @@
       "Outputs": []
     },
     {
-      "Id": "76fc9e20-79c0-4346-af62-c24f45648a2c"/*GetStringPart*/,
+      "Id": "76fc9e20-79c0-4346-af62-c24f45648a2c"/*PickStringPart*/,
       "SymbolId": "7baaa83d-5c09-42a0-b7bc-35dbcfa5156d",
       "InputValues": [],
       "Outputs": []

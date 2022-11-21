@@ -37,7 +37,7 @@
       }
     },
     {
-      "ChildId": "3d6bcdce-b4db-4784-af82-4d8d01782e1a"/*PickFromStrings*/,
+      "ChildId": "3d6bcdce-b4db-4784-af82-4d8d01782e1a"/*PickFromStringList*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -191,7 +191,7 @@
       }
     },
     {
-      "ChildId": "02f84161-d799-417d-960d-f0a5301a9355"/*PickFromStrings*/,
+      "ChildId": "02f84161-d799-417d-960d-f0a5301a9355"/*PickFromStringList*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -544,7 +544,7 @@
       }
     },
     {
-      "ChildId": "ad902e02-3e48-4de1-95b9-d27d23ec2725"/*PickFromStrings*/,
+      "ChildId": "ad902e02-3e48-4de1-95b9-d27d23ec2725"/*PickFromStringList*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -577,7 +577,7 @@
       }
     },
     {
-      "ChildId": "8c60e470-e8bb-4025-9940-c29901c70623"/*PickFromStrings*/,
+      "ChildId": "8c60e470-e8bb-4025-9940-c29901c70623"/*PickFromStringList*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

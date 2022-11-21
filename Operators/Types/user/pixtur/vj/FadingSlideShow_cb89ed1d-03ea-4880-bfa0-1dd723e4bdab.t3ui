@@ -62,7 +62,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "b8296b8a-4ac8-4974-9d82-642dc33ada5f"/*PickFromStrings*/,
+      "ChildId": "b8296b8a-4ac8-4974-9d82-642dc33ada5f"/*PickFromStringList*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -106,7 +106,7 @@
       }
     },
     {
-      "ChildId": "f9d98cbe-6228-4ff1-baab-e5106fe95c04"/*PickFromStrings*/,
+      "ChildId": "f9d98cbe-6228-4ff1-baab-e5106fe95c04"/*PickFromStringList*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

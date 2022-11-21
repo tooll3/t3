@@ -1,6 +1,6 @@
 {
   "Id": "7b21f10b-3548-4a23-95df-360addaeb03d"/*ScrambleString*/,
-  "Description": "Produces a wide selection of text writer effects that \ncan be linked to AudioReactions. Interesting Setups are\n\nMockStrings->GetFragment->ScambleString",
+  "Description": "Produces a wide selection of text writer effects that \ncan be linked to AudioReactions. Interesting Setups are\n\n[MockStrings]->[GetStringPart]->[ScambleString]",
   "InputUis": [
     {
       "InputId": "ce436e27-05a5-431d-9aa2-920dbff639a7"/*WriteMode*/,

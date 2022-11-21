@@ -245,17 +245,6 @@
         "X": 160.50963,
         "Y": 743.6799
       }
-    },
-    {
-      "ChildId": "fa87c669-86a3-4545-aeb1-6fbef5ff4e1a"/*ActivatePresets*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 454.63547,
-        "Y": 719.1336
-      }
     }
   ],
   "OutputUis": [

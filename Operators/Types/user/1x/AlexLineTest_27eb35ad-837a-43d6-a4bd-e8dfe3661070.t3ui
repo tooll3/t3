@@ -4,17 +4,6 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "edfd1185-4f1f-424b-ac7f-ca667d7190d1"/*There_Workspace*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 0.0,
-        "Y": 1388.9164
-      }
-    },
-    {
       "ChildId": "0cb3c964-66ea-4d0c-be81-fe71dafcbcdd"/*TorusMesh*/,
       "Size": {
         "X": 110.0,

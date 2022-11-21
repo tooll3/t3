@@ -119,7 +119,7 @@
       "Outputs": []
     },
     {
-      "Id": "81ace394-e393-419a-a4e3-abb3b6170a2a"/*PickFromStrings*/,
+      "Id": "81ace394-e393-419a-a4e3-abb3b6170a2a"/*PickFromStringList*/,
       "SymbolId": "ef357e66-24e9-4f54-8d86-869db74602f4",
       "InputValues": [
         {

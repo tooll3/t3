@@ -5,7 +5,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "39b24059-7143-48a0-abdd-66f9e8042c6c"/*String*/,
+      "Id": "39b24059-7143-48a0-abdd-66f9e8042c6c"/*AString*/,
       "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
       "InputValues": [
         {
@@ -917,7 +917,7 @@
       "Outputs": []
     },
     {
-      "Id": "b48e2992-82e1-4768-b7f6-e39ce5e0aa0d"/*String*/,
+      "Id": "b48e2992-82e1-4768-b7f6-e39ce5e0aa0d"/*AString*/,
       "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
       "InputValues": [
         {
@@ -935,7 +935,7 @@
       "Outputs": []
     },
     {
-      "Id": "93b13142-b5b5-49aa-adb5-3668feab4998"/*PickFromStrings*/,
+      "Id": "93b13142-b5b5-49aa-adb5-3668feab4998"/*PickFromStringList*/,
       "SymbolId": "ef357e66-24e9-4f54-8d86-869db74602f4",
       "InputValues": [],
       "Outputs": []

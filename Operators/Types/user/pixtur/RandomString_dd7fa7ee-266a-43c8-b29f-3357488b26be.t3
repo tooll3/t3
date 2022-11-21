@@ -20,7 +20,7 @@
       "Outputs": []
     },
     {
-      "Id": "9a2ba5ae-1660-48d2-bc58-a9a97f575741"/*GetStringPart*/,
+      "Id": "9a2ba5ae-1660-48d2-bc58-a9a97f575741"/*PickStringPart*/,
       "SymbolId": "7baaa83d-5c09-42a0-b7bc-35dbcfa5156d",
       "InputValues": [],
       "Outputs": []

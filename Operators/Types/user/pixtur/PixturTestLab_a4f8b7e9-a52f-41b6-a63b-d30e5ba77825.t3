@@ -17,12 +17,6 @@
       "Outputs": []
     },
     {
-      "Id": "ea76826d-fc25-4f0f-9c33-5c9f9620e680"/*HandClap*/,
-      "SymbolId": "6aa4fc3d-c93e-4422-944c-c10d78b36b8f",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "374e2345-cefe-4430-a654-1768574b477b"/*FlashingFaces*/,
       "SymbolId": "f487a6ae-62ed-4f35-9ca8-22f6a25fc2cc",
       "InputValues": [],
@@ -95,12 +89,6 @@
           "Value": 0.57
         }
       ],
-      "Outputs": []
-    },
-    {
-      "Id": "bd5897c1-72d5-44a3-8f2e-88e86cc72274"/*Boids01*/,
-      "SymbolId": "78b13039-2abe-41c0-b6b1-16c3e717efb6",
-      "InputValues": [],
       "Outputs": []
     },
     {
@@ -314,12 +302,6 @@
       "Outputs": []
     },
     {
-      "Id": "23561fab-903a-4bf1-9bd5-80031c5824b1"/*ActivatePresets*/,
-      "SymbolId": "a53f3873-a5aa-4bcc-aa06-0745d98209d6",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "236114d7-e70a-4683-815d-803cec62226c"/*RevisionSoundRev*/,
       "SymbolId": "b23f04e1-a648-4734-9b8e-265c794a0811",
       "InputValues": [],
@@ -404,24 +386,6 @@
       "Outputs": []
     },
     {
-      "Id": "9ac36466-ad78-4dea-bdbf-24816587874f"/*RevisionPhotoWall*/,
-      "SymbolId": "fe766595-854e-4f84-80f0-06f2bc9e8ef4",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "c1719b50-7e01-4060-9b05-94359e6f0f28"/*HandClapTest2*/,
-      "SymbolId": "9209a86e-550f-446e-b3a7-e944af59977e",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "9cf5c950-5681-40eb-97c3-08d8afdc8662"/*HandClap*/,
-      "SymbolId": "6aa4fc3d-c93e-4422-944c-c10d78b36b8f",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "a6f2501b-e94f-49c6-810a-5311b7c91d92"/*CupidDemo*/,
       "SymbolId": "442d40e3-7c00-4161-a606-79c2fe6c36c1",
       "InputValues": [],
@@ -442,12 +406,6 @@
     {
       "Id": "0c5597a2-7ff5-4b1e-a460-c91739a515a2"/*SomniDemo*/,
       "SymbolId": "f05356b6-3456-4a1b-988c-0c8f89fb4816",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "061ad224-7ce8-4f08-a6b8-ac7a50c3af61"/*There_Workspace*/,
-      "SymbolId": "a9080ad4-6cb2-4d5b-ad07-1cce239ee787",
       "InputValues": [],
       "Outputs": []
     },

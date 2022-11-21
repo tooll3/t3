@@ -1,0 +1,25 @@
+{
+  "Name": "PickStringPart",
+  "Id": "7baaa83d-5c09-42a0-b7bc-35dbcfa5156d",
+  "Namespace": "lib.string",
+  "Inputs": [
+    {
+      "Id": "05d7962b-a02e-4ab5-9927-865375348ccd"/*InputText*/,
+      "DefaultValue": "The sky above the port\nwas the colour of television,\ntuned to a dead channel"
+    },
+    {
+      "Id": "5d7184f6-cf46-4cb0-b29f-b3c52b34b634"/*SplitInto*/,
+      "DefaultValue": 2
+    },
+    {
+      "Id": "9cb908ad-0800-4b88-b256-c6cc2b84ab6c"/*FragmentStart*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "7520db6d-7855-40e1-bb81-ead290815435"/*FragmentCount*/,
+      "DefaultValue": 1
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

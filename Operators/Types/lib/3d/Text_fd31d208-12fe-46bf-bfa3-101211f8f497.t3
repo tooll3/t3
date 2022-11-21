@@ -325,7 +325,7 @@
       "Outputs": []
     },
     {
-      "Id": "395e0473-ce2f-46e4-be5f-e38682ee3b8c"/*StringReplace*/,
+      "Id": "395e0473-ce2f-46e4-be5f-e38682ee3b8c"/*SearchAndReplace*/,
       "SymbolId": "b7910fc6-c3b2-4daf-93cd-010dcfe22a57",
       "InputValues": [
         {

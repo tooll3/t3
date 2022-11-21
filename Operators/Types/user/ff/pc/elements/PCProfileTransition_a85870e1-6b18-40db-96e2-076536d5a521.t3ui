@@ -356,7 +356,7 @@
       }
     },
     {
-      "ChildId": "20b52402-c328-4e59-85b2-e2029c53abdc"/*StringReplace*/,
+      "ChildId": "20b52402-c328-4e59-85b2-e2029c53abdc"/*SearchAndReplace*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -367,7 +367,7 @@
       }
     },
     {
-      "ChildId": "c0b75fdd-15f3-4501-b8f7-410804e24a44"/*StringReplace*/,
+      "ChildId": "c0b75fdd-15f3-4501-b8f7-410804e24a44"/*SearchAndReplace*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -378,7 +378,7 @@
       }
     },
     {
-      "ChildId": "a72a871e-f30e-4a39-ac8e-ae868fc3ca37"/*StringReplace*/,
+      "ChildId": "a72a871e-f30e-4a39-ac8e-ae868fc3ca37"/*SearchAndReplace*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -389,7 +389,7 @@
       }
     },
     {
-      "ChildId": "ff74e6a5-73a3-4918-b404-f3935123860a"/*StringReplace*/,
+      "ChildId": "ff74e6a5-73a3-4918-b404-f3935123860a"/*SearchAndReplace*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

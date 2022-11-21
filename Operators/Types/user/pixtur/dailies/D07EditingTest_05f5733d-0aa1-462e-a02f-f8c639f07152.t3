@@ -963,7 +963,7 @@
       "Outputs": []
     },
     {
-      "Id": "ea32d1ed-5b84-4165-8b32-f24afac1f13e"/*PickFromStrings*/,
+      "Id": "ea32d1ed-5b84-4165-8b32-f24afac1f13e"/*PickFromStringList*/,
       "SymbolId": "ef357e66-24e9-4f54-8d86-869db74602f4",
       "InputValues": [],
       "Outputs": []

@@ -15,7 +15,7 @@
       }
     },
     {
-      "ChildId": "645d2687-2f96-45cd-993d-47b4469f5fe7"/*String*/,
+      "ChildId": "645d2687-2f96-45cd-993d-47b4469f5fe7"/*AString*/,
       "Style": "Resizable",
       "Size": {
         "X": 339.1137,
@@ -830,7 +830,7 @@
       }
     },
     {
-      "ChildId": "8b338a30-f8d7-412e-ab96-8259018f1b3b"/*PickFromStrings*/,
+      "ChildId": "8b338a30-f8d7-412e-ab96-8259018f1b3b"/*PickFromStringList*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -962,7 +962,7 @@
       }
     },
     {
-      "ChildId": "a8f91ddc-67e4-4347-af0f-b9f872a51829"/*PickFromStrings*/,
+      "ChildId": "a8f91ddc-67e4-4347-af0f-b9f872a51829"/*PickFromStringList*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -1996,7 +1996,7 @@
       }
     },
     {
-      "ChildId": "a48e08a0-9c7f-4713-89e5-6da54c0adc1b"/*String*/,
+      "ChildId": "a48e08a0-9c7f-4713-89e5-6da54c0adc1b"/*AString*/,
       "Style": "Resizable",
       "Size": {
         "X": 97.17527,
@@ -2019,7 +2019,7 @@
       }
     },
     {
-      "ChildId": "4412027c-9a1d-4d93-90f3-7fc62c4ca160"/*GetStringPart*/,
+      "ChildId": "4412027c-9a1d-4d93-90f3-7fc62c4ca160"/*PickStringPart*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

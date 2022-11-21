@@ -506,7 +506,7 @@
       "Outputs": []
     },
     {
-      "Id": "af7bcb67-f594-427e-855f-8304ab364bfa"/*GetStringPart*/,
+      "Id": "af7bcb67-f594-427e-855f-8304ab364bfa"/*PickStringPart*/,
       "SymbolId": "7baaa83d-5c09-42a0-b7bc-35dbcfa5156d",
       "InputValues": [
         {
@@ -622,7 +622,7 @@
       "Outputs": []
     },
     {
-      "Id": "aebe47ce-742d-4b5a-a1a7-aa7af063879a"/*String*/,
+      "Id": "aebe47ce-742d-4b5a-a1a7-aa7af063879a"/*AString*/,
       "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
       "InputValues": [
         {
@@ -747,7 +747,7 @@
       "Outputs": []
     },
     {
-      "Id": "43a831c3-5eee-40da-b600-e161514a254f"/*String*/,
+      "Id": "43a831c3-5eee-40da-b600-e161514a254f"/*AString*/,
       "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
       "InputValues": [
         {
@@ -759,7 +759,7 @@
       "Outputs": []
     },
     {
-      "Id": "63867c5e-fa90-4b0f-9086-3b52f61d62c4"/*GetStringPart*/,
+      "Id": "63867c5e-fa90-4b0f-9086-3b52f61d62c4"/*PickStringPart*/,
       "SymbolId": "7baaa83d-5c09-42a0-b7bc-35dbcfa5156d",
       "InputValues": [
         {
@@ -1355,7 +1355,7 @@
       "Outputs": []
     },
     {
-      "Id": "59f0359d-10b2-45e6-a11d-2c2143dd2049"/*GetStringPart*/,
+      "Id": "59f0359d-10b2-45e6-a11d-2c2143dd2049"/*PickStringPart*/,
       "SymbolId": "7baaa83d-5c09-42a0-b7bc-35dbcfa5156d",
       "InputValues": [
         {
@@ -1548,7 +1548,7 @@
       "Outputs": []
     },
     {
-      "Id": "f30d3874-28f7-4ebe-ba77-3e3b22adaacc"/*String*/,
+      "Id": "f30d3874-28f7-4ebe-ba77-3e3b22adaacc"/*AString*/,
       "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
       "InputValues": [
         {
@@ -1577,7 +1577,7 @@
       "Outputs": []
     },
     {
-      "Id": "5b6aa928-78e0-44a9-9bd4-8ac668186196"/*String*/,
+      "Id": "5b6aa928-78e0-44a9-9bd4-8ac668186196"/*AString*/,
       "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
       "InputValues": [
         {
@@ -1644,7 +1644,7 @@
       "Outputs": []
     },
     {
-      "Id": "08f519db-b5a7-4da4-b4c9-75ac8cdd0191"/*String*/,
+      "Id": "08f519db-b5a7-4da4-b4c9-75ac8cdd0191"/*AString*/,
       "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
       "InputValues": [
         {

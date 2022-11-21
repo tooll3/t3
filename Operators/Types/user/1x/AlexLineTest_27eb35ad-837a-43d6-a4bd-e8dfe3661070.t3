@@ -5,12 +5,6 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "edfd1185-4f1f-424b-ac7f-ca667d7190d1"/*There_Workspace*/,
-      "SymbolId": "a9080ad4-6cb2-4d5b-ad07-1cce239ee787",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "0cb3c964-66ea-4d0c-be81-fe71dafcbcdd"/*TorusMesh*/,
       "SymbolId": "a835ab86-29c1-438e-a7f7-2e297108bfd5",
       "InputValues": [],

@@ -125,23 +125,6 @@
       "Outputs": []
     },
     {
-      "Id": "5f18b37c-4aa3-43e0-b61f-be1f6ef4bf8f"/*ActivatePresets*/,
-      "SymbolId": "a53f3873-a5aa-4bcc-aa06-0745d98209d6",
-      "InputValues": [
-        {
-          "Id": "0b0eb01b-f165-42b7-898d-1a1750c23bcd"/*GroupIndex*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "97c73f45-4c94-4cc7-b602-3e70a473dce8"/*PresetA*/,
-          "Type": "System.Int32",
-          "Value": 43
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "1a9bfa49-2af6-47ed-9b60-bb6b69c77f57"/*ExecuteTextureUpdate*/,
       "SymbolId": "6c2f8241-9f4b-451e-8a1d-871631d21163",
       "InputValues": [],
@@ -459,12 +442,6 @@
     {
       "Id": "ff724a91-f100-49e6-a03f-b4cb30641921"/*Physarum02*/,
       "SymbolId": "796a66ff-93e7-4bf7-81c0-0fee903262b8",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "6216f47e-ea41-407c-a396-595f20145a32"/*Boids01*/,
-      "SymbolId": "78b13039-2abe-41c0-b6b1-16c3e717efb6",
       "InputValues": [],
       "Outputs": []
     },
@@ -1419,12 +1396,6 @@
       "SourceSlotId": "f83f1835-477e-4bb6-93f0-14bf273b8e94",
       "TargetParentOrChildId": "18a48cf7-12bc-4083-b5c0-04cf41413854",
       "TargetSlotId": "eb02b152-63ad-4227-ba5d-6baa9ce9884a"
-    },
-    {
-      "SourceParentOrChildId": "5f18b37c-4aa3-43e0-b61f-be1f6ef4bf8f",
-      "SourceSlotId": "0f56e725-00f5-4ee9-a795-90e1ddf77a70",
-      "TargetParentOrChildId": "1a9bfa49-2af6-47ed-9b60-bb6b69c77f57",
-      "TargetSlotId": "088ddcee-1407-4cd8-85bc-6704b8ea73b1"
     },
     {
       "SourceParentOrChildId": "a2cacaf8-d556-4607-ac39-4ec49ea15ef3",

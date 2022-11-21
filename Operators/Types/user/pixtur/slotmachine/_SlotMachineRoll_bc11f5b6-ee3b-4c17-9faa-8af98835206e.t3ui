@@ -33,7 +33,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "65f23933-b969-4832-94cb-4193a6294e68"/*String*/,
+      "ChildId": "65f23933-b969-4832-94cb-4193a6294e68"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
