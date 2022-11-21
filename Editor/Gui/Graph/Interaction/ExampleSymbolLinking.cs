@@ -13,17 +13,17 @@ namespace T3.Editor.Gui.Graph.Interaction
             foreach (var symbolUi in SymbolUiRegistry.Entries.Values)
             {
                 var examples = SymbolUiRegistry.Entries.Values
-                                               .Where(c => c.Symbol.Name == symbolUi.Symbol.Name + "Example" 
-                                                           || c.Symbol.Name == symbolUi.Symbol.Name + "Examples"  )
-                                               .Select(c=> c.Symbol.Id)
+                                               .Where(c => c.Symbol.Name == symbolUi.Symbol.Name + "Example"
+                                                           || c.Symbol.Name == symbolUi.Symbol.Name + "Examples")
+                                               .Select(c => c.Symbol.Id)
                                                .ToList();
                 if (examples.Count != 0)
                     ExampleSymbols[symbolUi.Symbol.Id] = examples;
             }
+
             Log.Debug($"Found examples for {ExampleSymbols.Count} operators");
         }
-        
-        
-        public static Dictionary<Guid, List<Guid>> ExampleSymbols { get; }= new Dictionary<Guid, List<Guid>>(30);
+
+        public static Dictionary<Guid, List<Guid>> ExampleSymbols { get; } = new Dictionary<Guid, List<Guid>>(30);
     }
 }

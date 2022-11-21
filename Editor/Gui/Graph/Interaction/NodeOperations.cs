@@ -1149,8 +1149,28 @@ namespace T3.Editor.Gui.Graph.Interaction
                 }
             }
         }
-        
-        public static void CollectDependencies(ISlot slot, HashSet<ISlot> all)
+
+        public static  HashSet<Guid> CollectRequiredSymbolIds(Symbol symbol, HashSet<Guid> all = null)
+        {
+            all ??= new HashSet<Guid>();
+            
+            foreach (var symbolChild in symbol.Children)
+            {
+                if (all.Contains(symbolChild.Symbol.Id))
+                    continue;
+                
+                all.Add(symbolChild.Symbol.Id);
+                CollectRequiredSymbolIds(symbolChild.Symbol, all);
+            }
+
+            return all;
+        }
+
+        /// <summary>
+        /// Scan all slots required for updating a Slot.
+        /// This can be used for invalidation and cycle checking. 
+        /// </summary>
+        public static void CollectSlotDependencies(ISlot slot, HashSet<ISlot> all)
         {
             if (slot == null)
             {
@@ -1168,11 +1188,11 @@ namespace T3.Editor.Gui.Graph.Interaction
                 if (!slot.IsConnected)
                     return;
                 
-                CollectDependencies(slot.GetConnection(0), all);
+                CollectSlotDependencies(slot.GetConnection(0), all);
             }
             else if (slot.IsConnected)
             {
-                CollectDependencies(slot.GetConnection(0), all);
+                CollectSlotDependencies(slot.GetConnection(0), all);
             }
             else
             {
@@ -1187,13 +1207,13 @@ namespace T3.Editor.Gui.Graph.Interaction
                             
                             foreach (var entry in multiInput.GetCollectedInputs())
                             {
-                                CollectDependencies(entry, all);
+                                CollectSlotDependencies(entry, all);
                             }
                         }
                         else
                         {
                             var target = input.GetConnection(0);
-                            CollectDependencies(target, all);
+                            CollectSlotDependencies(target, all);
                         }
                     }
                     else if ((input.DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)

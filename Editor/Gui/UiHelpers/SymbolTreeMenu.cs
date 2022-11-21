@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using ImGuiNET;
 using T3.Core.Operator;
@@ -20,7 +22,7 @@ namespace T3.Editor.Gui.UiHelpers
             _treeNode.PopulateCompleteTree();
             DrawNodesRecursively(_treeNode);
         }
-        
+
         private static void DrawNodesRecursively(NamespaceTreeNode subtree)
         {
             if (subtree.Name == NamespaceTreeNode.RootNodeId)
@@ -71,9 +73,19 @@ namespace T3.Editor.Gui.UiHelpers
                 {
                     //_selectedSymbol = symbol;
                 }
-
-                HandleDragAndDropForSymbolItem(symbol);
                 
+                ImGui.PopStyleColor(4);
+                HandleDragAndDropForSymbolItem(symbol);
+
+                if (SymbolAnalysis.InformationForSymbolIds.TryGetValue(symbol.Id, out var info))
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+                    ListSymbolSetWithTooltip("  (needs {0}/", "  (",  info.RequiredSymbolIds);
+                    ListSymbolSetWithTooltip("used by {0})  ", "NOT USED)  ",  info.DependingSymbolIds);
+                    ImGui.PopStyleColor();
+                }
+
+
                 if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var symbolUi))
                 {
                     if (!string.IsNullOrEmpty(symbolUi.Description))
@@ -102,13 +114,49 @@ namespace T3.Editor.Gui.UiHelpers
                         ImGui.Button($"EXAMPLE");
                         HandleDragAndDropForSymbolItem(SymbolRegistry.Entries[exampleId]);
                     }
+
                     ImGui.PopStyleVar();
                     ImGui.PopFont();
                 }
 
-                ImGui.PopStyleColor(4);
             }
             ImGui.PopID();
+        }
+
+        private static void ListSymbolSetWithTooltip(string setTitleFormat, string emptySetTitle, HashSet<Guid> symbolIdSet)
+        {
+            ImGui.PushID(setTitleFormat);
+            ImGui.SameLine();
+            
+            if (symbolIdSet.Count == 0)
+            {
+                ImGui.TextUnformatted(emptySetTitle);
+            }
+            else
+            {
+                ImGui.TextUnformatted(string.Format(setTitleFormat, symbolIdSet.Count));
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.BeginTooltip();
+                    ListSymbols(symbolIdSet);
+                    ImGui.EndTooltip();
+                }
+            }
+            
+            ImGui.PopID();
+        }
+
+        private static void ListSymbols(HashSet<Guid> valueRequiredSymbolIds)
+        {
+            foreach (var required in valueRequiredSymbolIds
+                                    .Select(rId =>
+                                            {
+                                                var rSymbol = SymbolRegistry.Entries[rId];
+                                                return rSymbol.Namespace + ". " + rSymbol.Name;
+                                            }).OrderBy(c => c))
+            {
+                ImGui.TextUnformatted(required);
+            }
         }
 
         public static void HandleDragAndDropForSymbolItem(Symbol symbol)
@@ -137,7 +185,7 @@ namespace T3.Editor.Gui.UiHelpers
         }
 
         private static readonly NamespaceTreeNode _treeNode = new(NamespaceTreeNode.RootNodeId);
-        
+
         private static IntPtr _dropData = new IntPtr(0);
         private static string _guidSting;
     }

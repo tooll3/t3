@@ -266,7 +266,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             {
                 var outputSlot = sourceInstance.Outputs[0];
                 var deps = new HashSet<ISlot>();  
-                NodeOperations.CollectDependencies(outputSlot, deps);
+                NodeOperations.CollectSlotDependencies(outputSlot, deps);
                 
                 foreach (var d in deps)
                 {
@@ -318,7 +318,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 var deps = new HashSet<ISlot>();
                 foreach (var inputSlot in sourceInstance.Inputs)
                 {
-                    NodeOperations.CollectDependencies(inputSlot, deps);
+                    NodeOperations.CollectSlotDependencies(inputSlot, deps);
                 }
                 
                 foreach (var d in deps)
