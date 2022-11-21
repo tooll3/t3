@@ -65,7 +65,7 @@ namespace T3.Operators.Types.Id_ea7b8491_2f8e_4add_b0b1_fd068ccfed0d
         [Input(Guid = "7b4992ba-30f7-42e5-b04b-ae4ec0be810e")]
         public readonly InputSlot<float> OverrideTime = new();
 
-        [Input(Guid = "738f6cfb-8b71-423c-b897-824c20397e5a", MappedType = typeof(AnimMath.Shapes))]
+        [Input(Guid = "738f6cfb-8b71-423c-b897-824c20397e5a", MappedType = typeof(AnimMath.SpeedFactors))]
         public readonly InputSlot<int> AllowSpeedFactor = new();
     }
 }

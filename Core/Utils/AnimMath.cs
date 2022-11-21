@@ -8,10 +8,10 @@ namespace T3.Core.Utils
     {
         public static float GetSpeedOverrideFromContext(EvaluationContext context, InputSlot<int> allowSpeedFactor)
         {
-            var f = (SpeedFactors)allowSpeedFactor.GetValue(context).Clamp(0, Enum.GetNames(typeof(SpeedFactors)).Length);
+            var speedFactors = (SpeedFactors)allowSpeedFactor.GetValue(context).Clamp(0, Enum.GetNames(typeof(SpeedFactors)).Length -1);
             float rateFactorFromContext = 1;
             
-            switch (f)
+            switch (speedFactors)
             {
                 case SpeedFactors.None:
                     break;
