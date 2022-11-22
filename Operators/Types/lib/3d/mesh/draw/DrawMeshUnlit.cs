@@ -19,7 +19,7 @@ namespace T3.Operators.Types.Id_4499dcb1_c936_49ed_861b_2ad8ae58cb28
         [Input(Guid = "5100a9db-ee56-4023-9fb0-36cbfb439734")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
 
-        [Input(Guid = "922cf855-2676-4a96-9d90-622791a6a423")]
+        [Input(Guid = "922cf855-2676-4a96-9d90-622791a6a423", MappedType = typeof(PickBlendMode.BlendModes))]
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();
 
         [Input(Guid = "8d223463-edff-45fb-9ead-6650a911cebd")]
