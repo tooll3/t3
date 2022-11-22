@@ -11,52 +11,57 @@
         {
           "Id": "1d5207f0-132e-42e9-9b2b-171d092d6cac"/*Displacement*/,
           "Type": "System.Single",
-          "Value": 0.22
+          "Value": 0.021
         },
         {
           "Id": "3ae3bc6a-5950-4f8b-b2c1-5247dfb9221c"/*DisplaceOffset*/,
           "Type": "System.Single",
-          "Value": -0.008999998
+          "Value": -0.102
         },
         {
           "Id": "882acab3-7cb9-42e8-8f63-5382c83422c2"/*SampleDistance*/,
           "Type": "System.Single",
-          "Value": 2.95
+          "Value": 0.913
         },
         {
           "Id": "95b99630-6d27-41d6-9e02-a3e905d023d7"/*Shade*/,
           "Type": "System.Single",
-          "Value": 0.88
+          "Value": 0.39999998
         },
         {
           "Id": "f1a53a46-fa5c-49af-9d53-0d68cfe1b33e"/*BlurRadius*/,
           "Type": "System.Single",
-          "Value": 9.5
+          "Value": 9.9
         },
         {
           "Id": "fc1b2bc8-6756-4e78-a90b-8af691d85875"/*Twist*/,
           "Type": "System.Single",
-          "Value": 100.0
+          "Value": 2.0
         },
         {
           "Id": "b454ebb9-6b27-46b1-962e-15e658c8f6a2"/*ShiftHue*/,
           "Type": "System.Single",
-          "Value": -0.07999998
+          "Value": 0.248
+        },
+        {
+          "Id": "aedb3315-5061-4b68-8925-761d4d8c78b4"/*ShiftSaturation*/,
+          "Type": "System.Single",
+          "Value": 0.001
+        },
+        {
+          "Id": "cbe45989-b239-491e-a2d8-83a42ab58b85"/*ShiftBrightness*/,
+          "Type": "System.Single",
+          "Value": -0.001999998
         },
         {
           "Id": "640de6a7-14ce-4c72-b78e-aa72f642b765"/*AmplifyEdges*/,
           "Type": "System.Single",
-          "Value": 19.3
-        },
-        {
-          "Id": "9d210666-6b60-4193-9bfd-8a50c8973238"/*LimitBrights*/,
-          "Type": "System.Single",
-          "Value": 0.9
+          "Value": 3.1
         },
         {
           "Id": "37f312f0-949c-4a43-af92-786761b03d3b"/*SampleRadius*/,
           "Type": "System.Single",
-          "Value": 0.36
+          "Value": 1.44
         },
         {
           "Id": "c3827e2e-2d15-475c-9b2f-03a861e97fc5"/*IsEnabled*/,

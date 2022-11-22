@@ -356,14 +356,29 @@
       "SymbolId": "6b7c541a-ca36-4f21-ac95-89e874820c5a",
       "InputValues": [
         {
-          "Id": "b9e5c6f3-7052-456f-9d1b-c182b4412433"/*ColorB*/,
+          "Id": "eb601c57-2025-4135-8292-223eaedaf187"/*ColorA*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.0,
             "Y": 0.0,
             "Z": 0.0,
-            "W": 0.0
+            "W": 1.0
           }
+        },
+        {
+          "Id": "b9e5c6f3-7052-456f-9d1b-c182b4412433"/*ColorB*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 1.0
+          }
+        },
+        {
+          "Id": "8d444e8c-d9b5-4206-9202-5abf23b13baf"/*Mode*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -425,7 +440,7 @@
         {
           "Id": "4515c98e-05bc-4186-8773-4d2b31a8c323"/*Int*/,
           "Type": "System.Int32",
-          "Value": 1
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -1044,6 +1059,11 @@
       "Id": "179243f5-c293-4c2e-87b4-4b3b35677e96"/*MidiInput*/,
       "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
       "InputValues": [
+        {
+          "Id": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
+          "Type": "System.Single",
+          "Value": 0.0
+        },
         {
           "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
           "Type": "System.Boolean",
