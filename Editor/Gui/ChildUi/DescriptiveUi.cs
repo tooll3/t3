@@ -1,52 +1,46 @@
-﻿using System.Linq;
-using System.Numerics;
+﻿using System;
+using System.IO;
+using System.Linq;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
-using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.ChildUi
 {
     public static class DescriptiveUi
     {
-        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
+        public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect area)
         {
-            if (!(instance is IDescriptiveGraphNode descriptiveGraphNode) )
+            if (instance is not IDescriptiveGraphNode descriptiveGraphNode )
                 return SymbolChildUi.CustomUiResult.None;
-
-            var descriptiveString = descriptiveGraphNode.GetDescriptiveString();
-            if (string.IsNullOrEmpty(descriptiveString))
-            {
-                return SymbolChildUi.CustomUiResult.None;
-            }
             
+            drawList.PushClipRect(area.Min, area.Max, true);
+            
+            // Label if instance has title
             var symbolChild = instance.Parent.Symbol.Children.Single(c => c.Id == instance.SymbolChildId);
-            ImGui.PushClipRect(selectableScreenRect.Min, selectableScreenRect.Max, true);
             
-            var h = selectableScreenRect.GetHeight();
-            var font = h > 50
-                           ? Fonts.FontLarge
-                           : (h > 25
-                                  ? Fonts.FontNormal
-                                  : Fonts.FontSmall);
+            WidgetElements.DrawTitle(drawList, area, !string.IsNullOrEmpty(symbolChild.Name) ? symbolChild.Name : symbolChild.Symbol.Name);
 
-            ImGui.PushFont(font);
-            ImGui.SetCursorScreenPos(selectableScreenRect.Min + new Vector2(10,0));
-            ImGui.BeginGroup();
-            if (!string.IsNullOrEmpty(symbolChild.Name))
+            var slot = descriptiveGraphNode.GetSourcePathSlot();
+            var filePath = slot?.TypedInputValue?.Value;
+            if (!string.IsNullOrEmpty(filePath))
             {
-                var isRenamed = !string.IsNullOrEmpty(symbolChild.Name);
-                ImGui.TextUnformatted(isRenamed
-                                          ? $"\"{symbolChild.ReadableName}\""
-                                          : symbolChild.ReadableName);
+                try
+                {
+                    filePath = Path.GetFileName(filePath);
+                }
+                catch (Exception e)
+                {
+                    Log.Debug("Can't get filepath for output " + e.Message);
+                }
             }
-            ImGui.TextUnformatted(descriptiveString);
-
-            ImGui.EndGroup();
-            ImGui.PopFont();
             
-            ImGui.PopClipRect();
+            WidgetElements.DrawPrimaryValue(drawList, area, filePath);
+            
+            drawList.PopClipRect();
             return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
         }
     }

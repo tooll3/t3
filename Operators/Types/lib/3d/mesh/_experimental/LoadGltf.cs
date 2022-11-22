@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -171,7 +170,6 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
                             ResourceManager.CreateStructuredBufferUav(newData.VertexBuffer, UnorderedAccessViewBufferFlags.None,
                                                                       ref newData.VertexBufferWithViews.Uav);
 
-                            _description = System.IO.Path.GetFileName(path);
                         }
                         _data = newData;
                     }
@@ -187,12 +185,12 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
             }
         }
 
-        public string GetDescriptiveString()
+        public InputSlot<string> GetSourcePathSlot()
         {
-            return _description;
+            return Path;
         }
+        
 
-        private string _description;
         private string _lastFilePath;
         private DataSet _data = new DataSet();
 

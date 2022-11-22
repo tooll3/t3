@@ -22,12 +22,6 @@ namespace T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985
             Shader.UpdateAction = Update;
         }
 
-        public string GetDescriptiveString()
-        {
-            return _description;
-        }
-
-        private string _description = "PixelShader";
         
         private void Update(EvaluationContext context)
         {
@@ -49,15 +43,6 @@ namespace T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985
                         Log.Error($"Invalid sourcePath for shader: {sourcePath}: " + e.Message);
                         return;
                     }
-                    
-                    try
-                    {
-                        _description =  "PixelShader\n" + Path.GetFileName(sourcePath);
-                    }
-                    catch
-                    {
-                        Log.Warning($"Unable to get filename from {sourcePath}", SymbolChildId);
-                    }                    
                 }
                 _pixelShaderResId = resourceManager.CreatePixelShaderFromFile(sourcePath, entryPoint, debugName,
                                                                               () => Shader.DirtyFlag.Invalidate());
@@ -74,6 +59,13 @@ namespace T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985
             }
         }
 
+        public InputSlot<string> GetSourcePathSlot()
+        {
+            return Source;
+        }
+
+
+        
         [Input(Guid = "24646F06-1509-43CE-94C6-EEB608AD97CD")]
         public readonly InputSlot<string> Source = new InputSlot<string>();
 

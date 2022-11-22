@@ -148,9 +148,9 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
             _sourceFileChanged = true;
         }
 
-        public string GetDescriptiveString()
+        public InputSlot<string> GetSourcePathSlot()
         {
-            return _description;
+            return Path;
         }
 
         private bool _sourceFileChanged;

@@ -1,6 +1,4 @@
 ﻿using System.IO;
-using T3.Core;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
@@ -20,12 +18,23 @@ namespace T3.Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad
             Shader.UpdateAction = Update;
         }
         
-        public string GetDescriptiveString()
-        {
-            return _description;
-        }
-        
-        private string _description = "VertexShader";
+        // public string GetDescriptiveValue()
+        // {
+        //     var filepath = Source?.TypedInputValue?.Value;
+        //     if (string.IsNullOrEmpty(filepath))
+        //     {
+        //         return "?";
+        //     }
+        //     try
+        //     {
+        //         _description = Path.GetFileName(sourcePath);
+        //     }
+        //     catch
+        //     {
+        //         Log.Warning($"Unable to get filename from {sourcePath}", SymbolChildId);
+        //     }    
+        //     return Source?.TypedInputValue?.Value;;
+        // }
         
         private void Update(EvaluationContext context)
         {
@@ -42,15 +51,6 @@ namespace T3.Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad
                 }
                 _vertexShaderResId = resourceManager.CreateVertexShaderFromFile(sourcePath, entryPoint, debugName,
                                                                                 () => Shader.DirtyFlag.Invalidate());
-                
-                try
-                {
-                    _description =  "VertexShader\n" + Path.GetFileName(sourcePath);
-                }
-                catch
-                {
-                    Log.Warning($"Unable to get filename from {sourcePath}", SymbolChildId);
-                }                
             }
             else
             {
@@ -61,10 +61,13 @@ namespace T3.Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad
             {
                 Shader.Value = resourceManager.GetVertexShader(_vertexShaderResId);
             }
-            
-            
         }
-
+        
+        public InputSlot<string> GetSourcePathSlot()
+        {
+            return Source;
+        }
+        
         [Input(Guid = "78FB7501-74D9-4A27-8DB2-596F25482C87")]
         public readonly InputSlot<string> Source = new InputSlot<string>();
 

@@ -31,7 +31,7 @@ namespace T3.Operators.Types.Id_4e5bc624_9cda_46a8_9681_7fd412ea3893
             return _description;
         }
 
-        private string _description = "ComputeShader";
+        private string _description = "not loaded";
 
         private void Update(EvaluationContext context)
         {

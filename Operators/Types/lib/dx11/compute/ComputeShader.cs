@@ -25,12 +25,12 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
             ComputerShader.UpdateAction = Update;
         }
         
-        public string GetDescriptiveString()
+        public InputSlot<string> GetSourcePathSlot()
         {
-            return _description;
+            return Source;
         }
 
-        private string _description = "ComputeShader";
+        private string _description = "not loaded";
 
         private void Update(EvaluationContext context)
         {
@@ -51,7 +51,7 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
 
                 try
                 {
-                    _description =  "ComputeShader\n" + Path.GetFileName(sourcePath);
+                    _description =  Path.GetFileName(sourcePath);
                 }
                 catch
                 {
