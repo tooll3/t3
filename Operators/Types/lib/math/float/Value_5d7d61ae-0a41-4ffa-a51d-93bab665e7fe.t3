@@ -6,6 +6,14 @@
     {
       "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "90045a45-f549-4cb5-b57c-c39a0664e84f"/*SliderMin*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "1785eabd-54fa-4b8c-ae5a-54112c2e50b8"/*SliderMax*/,
+      "DefaultValue": 1.0
     }
   ],
   "Children": [],

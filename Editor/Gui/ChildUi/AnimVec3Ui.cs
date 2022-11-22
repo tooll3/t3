@@ -3,7 +3,7 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Utils;
-using T3.Editor.Gui.ChildUi.Animators;
+using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_7814fd81_b8d0_4edf_b828_5165f5657344;
@@ -19,7 +19,7 @@ namespace T3.Editor.Gui.ChildUi
                 return SymbolChildUi.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
-            if (RateEditLabel.Draw(animVec2.RateFactor, screenRect, drawList,  "Anim3 " + (AnimMath.Shapes)animVec2.Shape.TypedInputValue.Value))
+            if (WidgetElements.DrawRateLabelWithTitle(animVec2.RateFactor, screenRect, drawList,  "Anim3 " + (AnimMath.Shapes)animVec2.Shape.TypedInputValue.Value))
             {
                 animVec2.RateFactor.Input.IsDefault = false;
                 animVec2.RateFactor.DirtyFlag.Invalidate();
@@ -36,11 +36,7 @@ namespace T3.Editor.Gui.ChildUi
             
             var highlightEditable = ImGui.GetIO().KeyCtrl;
 
-            if (h > 14)
-            {
-                ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), animVec2.AmplitudeFactor);
-                //ValueLabel.Draw(drawList, graphRect, new Vector2(1, 1), animValue.Offset);
-            }
+            ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), animVec2.AmplitudeFactor);
 
             // Graph dragging to edit Bias and Ratio
             var isActive = false;

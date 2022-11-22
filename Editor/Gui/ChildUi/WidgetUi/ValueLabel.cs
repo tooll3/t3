@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
@@ -7,12 +6,15 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
-namespace T3.Editor.Gui.ChildUi
+namespace T3.Editor.Gui.ChildUi.WidgetUi
 {
     public static class ValueLabel
     {
         public static bool Draw(ImDrawListPtr drawList, ImRect screenRect, Vector2 alignment, InputSlot<float> inputSlot)
         {
+            if (screenRect.GetHeight() < 15)
+                return false;
+            
             var modified = false;
             var value = (double)inputSlot.TypedInputValue.Value;
             var valueText = $"{value:G5}";
@@ -21,6 +23,7 @@ namespace T3.Editor.Gui.ChildUi
             
             var editingUnlocked = ImGui.GetIO().KeyCtrl || _jogDialValue != null;
             var highlight = editingUnlocked;
+            
             // InputGizmo
             {
                 var labelSize = screenRect.GetSize() / 4 + Vector2.One * 4;
@@ -52,7 +55,7 @@ namespace T3.Editor.Gui.ChildUi
                     {
                         if (ImGui.IsItemActive())
                         {
-                            modified = JogDialOverlay.Draw(ref value, ImGui.IsItemActivated(), _jogDailCenter, Double.NegativeInfinity, Double.PositiveInfinity,
+                            modified = JogDialOverlay.Draw(ref value, ImGui.IsItemActivated(), _jogDailCenter, double.NegativeInfinity, double.PositiveInfinity,
                                                            0.01f);
                             if (modified)
                             {

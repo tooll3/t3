@@ -1,6 +1,6 @@
 ﻿using ImGuiNET;
 using T3.Core.Operator;
-using T3.Editor.Gui.ChildUi.Animators;
+using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_23794a1f_372d_484b_ac31_9470d0e77819;
 
@@ -15,7 +15,7 @@ namespace T3.Editor.Gui.ChildUi
             
                 return SymbolChildUi.CustomUiResult.None;
             
-            if (RateEditLabel.Draw(jitter2d.Rate, screenRect, drawList, nameof(jitter2d)))
+            if (WidgetElements.DrawRateLabelWithTitle(jitter2d.Rate, screenRect, drawList, nameof(jitter2d)))
             {
                 jitter2d.Rate.Input.IsDefault = false;
                 jitter2d.Rate.DirtyFlag.Invalidate();

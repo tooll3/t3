@@ -3,7 +3,7 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Utils;
-using T3.Editor.Gui.ChildUi.Animators;
+using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_af79ee8c_d08d_4dca_b478_b4542ed69ad8;
@@ -19,7 +19,7 @@ namespace T3.Editor.Gui.ChildUi
                 return SymbolChildUi.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
-            if (RateEditLabel.Draw(animVec2.RateFactor, screenRect, drawList,  "Anim2 " + (AnimMath.Shapes)animVec2.Shape.TypedInputValue.Value))
+            if (WidgetElements.DrawRateLabelWithTitle(animVec2.RateFactor, screenRect, drawList,  "Anim2 " + (AnimMath.Shapes)animVec2.Shape.TypedInputValue.Value))
             {
                 animVec2.RateFactor.Input.IsDefault = false;
                 animVec2.RateFactor.DirtyFlag.Invalidate();

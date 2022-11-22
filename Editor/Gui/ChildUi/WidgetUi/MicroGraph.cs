@@ -6,7 +6,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
-namespace T3.Editor.Gui.ChildUi.Animators
+namespace T3.Editor.Gui.ChildUi.WidgetUi
 {
     public static class MicroGraph
     {
@@ -148,8 +148,6 @@ namespace T3.Editor.Gui.ChildUi.Animators
             DraggingHorizontally,
         }
         
-        //private static readonly Color CurveLineColor = new Color(1, 1, 1, 0.5f);
-
         private static readonly Vector2[] GraphLinePoints = new Vector2[4];
     }
 }

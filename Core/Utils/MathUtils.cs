@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using T3.Core.Animation;
 using T3.Core.Resource;
 
@@ -82,16 +83,19 @@ namespace T3.Core.Utils
                                        : v.X, (v.Y < mn.Y) ? mn.Y : (v.Y > mx.Y) ? mx.Y : v.Y);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Min<T>(T lhs, T rhs) where T : System.IComparable<T>
         {
             return lhs.CompareTo(rhs) < 0 ? lhs : rhs;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Max<T>(T lhs, T rhs) where T : System.IComparable<T>
         {
             return lhs.CompareTo(rhs) >= 0 ? lhs : rhs;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Clamp<T>(this T val, T min, T max) where T : System.IComparable<T>
         {
             if (val.CompareTo(min) < 0) return min;
@@ -99,21 +103,38 @@ namespace T3.Core.Utils
             else return val;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Lerp(float a, float b, float t)
         {
             return (float)(a + (b - a) * t);
         }
-
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Fmod(float v, float mod)
         {
             return v - mod * (float)Math.Floor(v / mod);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Fmod(double v, double mod)
         {
             return v - mod * Math.Floor(v / mod);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float NormalizeAndClamp(float value, float min, float max)
+        {
+            return MathF.Max(0, MathF.Min(1,(value - min) / (max - min)));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static double NormalizeAndClamp(double value, double min, double max)
+        {
+            return Math.Max(0, Math.Min(1,(value - min) / (max - min)));
+        }
+
+
+        
         public static float RemapAndClamp(float value, float inMin, float inMax, float outMin, float outMax)
         {
             var factor = (value - inMin) / (inMax - inMin);
@@ -123,6 +144,7 @@ namespace T3.Core.Utils
             return v.Clamp(outMin, outMax);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Remap(float value, float inMin, float inMax, float outMin, float outMax)
         {
             var factor = (value - inMin) / (inMax - inMin);
@@ -130,6 +152,7 @@ namespace T3.Core.Utils
             return v;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double RemapAndClamp(double value, double inMin, double inMax, double outMin, double outMax)
         {
             var factor = (value - inMin) / (inMax - inMin);
@@ -186,11 +209,13 @@ namespace T3.Core.Utils
             return (double)(a + (b - a) * t);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Lerp(int a, int b, float t)
         {
             return (int)(a + (b - a) * t);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Log2(double value)
         {
             return Math.Log10(value) / Math.Log10(2.0);
@@ -237,36 +262,43 @@ namespace T3.Core.Utils
             return new Vector3(vec.X / vec.W, vec.Y / vec.W, vec.Z / vec.W);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SharpDX.Vector3 ToVector3(this SharpDX.Vector4 vec)
         {
             return new SharpDX.Vector3(vec.X / vec.W, vec.Y / vec.W, vec.Z / vec.W);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SharpDX.Vector3 ToSharpDx(this Vector3 source)
         {
             return new SharpDX.Vector3(source.X, source.Y, source.Z);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 ToNumerics(this SharpDX.Vector3 source)
         {
             return new Vector3(source.X, source.Y, source.Z);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SharpDX.Vector4 ToSharpDx(this Vector4 source)
         {
             return new SharpDX.Vector4(source.X, source.Y, source.Z, source.W);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector4 ToNumerics(this SharpDX.Vector4 source)
         {
             return new Vector4(source.X, source.Y, source.Z, source.W);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SharpDX.Vector4 ToSharpDxVector4(this Vector3 source, float w)
         {
             return new SharpDX.Vector4(source.X, source.Y, source.Z, w);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SharpDX.Vector3 ToSharpDxVector3(this Vector3 source)
         {
             return new SharpDX.Vector3(source.X, source.Y, source.Z);

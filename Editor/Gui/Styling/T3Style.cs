@@ -25,7 +25,9 @@ namespace T3.Editor.Gui.Styling
             
             public static readonly Color ButtonActive = Color.FromString("#4592FF");
             public static readonly Color DarkGray = Color.FromString("#131313");
-                        
+            
+            public static readonly Color WidgetSlider = new Color(0.15f);
+            public static readonly Color TextWidgetTitle = new Color(0.65f);
             public static readonly Color TextMuted = new Color(0.5f);
             public static readonly Color TextDisabled = new Color(0.328f, 0.328f, 0.328f, 1.000f);
             public static readonly Color Warning = new Color(203, 19,113, 255);
