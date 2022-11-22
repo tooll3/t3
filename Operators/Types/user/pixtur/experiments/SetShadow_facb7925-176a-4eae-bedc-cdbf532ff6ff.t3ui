@@ -1,0 +1,35 @@
+{
+  "Id": "facb7925-176a-4eae-bedc-cdbf532ff6ff"/*SetShadow*/,
+  "Description": "Renders a shadow pass for a directional light source",
+  "InputUis": [
+    {
+      "InputId": "be6dc055-d4c8-4c75-a084-12c22a268034"/*Command*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "bf4f9bee-3151-486f-8b37-f0a1375eae00"/*SetDirectionalLight*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "a0a1b038-8637-45af-89b5-dcef99f872f7"/*Output*/,
+      "Position": {
+        "X": 410.0,
+        "Y": 18.0
+      }
+    }
+  ]
+}

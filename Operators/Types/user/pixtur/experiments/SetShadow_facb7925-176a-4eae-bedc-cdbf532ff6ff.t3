@@ -1,0 +1,33 @@
+{
+  "Name": "SetShadow",
+  "Id": "facb7925-176a-4eae-bedc-cdbf532ff6ff",
+  "Namespace": "user.pixtur.experiments",
+  "Inputs": [
+    {
+      "Id": "be6dc055-d4c8-4c75-a084-12c22a268034"/*Command*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [
+    {
+      "Id": "bf4f9bee-3151-486f-8b37-f0a1375eae00"/*SetDirectionalLight*/,
+      "SymbolId": "5390ae74-a51e-4d10-adf7-78a8ddf3cd61",
+      "InputValues": [],
+      "Outputs": []
+    }
+  ],
+  "Connections": [
+    {
+      "SourceParentOrChildId": "bf4f9bee-3151-486f-8b37-f0a1375eae00",
+      "SourceSlotId": "7e87d7de-74c0-4dad-9ea9-d8790f3fff0f",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "a0a1b038-8637-45af-89b5-dcef99f872f7"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "be6dc055-d4c8-4c75-a084-12c22a268034",
+      "TargetParentOrChildId": "bf4f9bee-3151-486f-8b37-f0a1375eae00",
+      "TargetSlotId": "d4634e0a-1b7d-417e-82c8-9ac1880dac74"
+    }
+  ]
+}
