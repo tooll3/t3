@@ -122,7 +122,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
             {
                 if (ImGui.Button($"{BeatTiming.Bpm:0.0} BPM?"))
                 {
-                    //T3Ui.BeatTiming.SetBpmFromSystemAudio();
+                    var newBpm = T3Ui._bpmDetection.ComputeBpmRate();
+                    if (newBpm > 0)
+                    {
+                        Log.Debug("Setting bpm to" + newBpm);
+                        BeatTiming.SetBpmRate(newBpm);
+                    }
+                    // T3Ui.BeatTiming.SetBpmFromSystemAudio();
                     // if (newBpm > 0)
                     //     playback.Bpm = newBpm;
                 }

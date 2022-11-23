@@ -1,0 +1,14 @@
+{
+  "Id": "712c50e8-7cba-4b29-bde4-1d860ab6b701"/*GetBeatTimingDetails*/,
+  "InputUis": [],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "f697732e-46f3-4037-afc5-56f396bd70ad"/*Values*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

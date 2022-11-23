@@ -15,7 +15,6 @@ namespace T3.Core.Audio
     {
         /// <summary>
         /// Initializes the default device list and input.
-        /// NOTE This can take several seconds(!)
         /// </summary>
         public static void Initialize()
         {
@@ -40,8 +39,9 @@ namespace T3.Core.Audio
             }
         }
         
-        private static List<WasapiInputDevice> _inputDevices;
-
+        /// <summary>
+        /// Needs to be called once a frame
+        /// </summary>
         public static void CompleteFrame()
         {
             _fftUpdatesSinceLastFrame = 0;
@@ -168,6 +168,7 @@ namespace T3.Core.Audio
             public WasapiDeviceInfo DeviceInfo;
         }
 
+        private static List<WasapiInputDevice> _inputDevices;
         private static readonly float[] _fftIntermediate = new float[AudioAnalysis.FftHalfSize];
         private static readonly WasapiProcedure _wasapiProcedure = Process;
     }
