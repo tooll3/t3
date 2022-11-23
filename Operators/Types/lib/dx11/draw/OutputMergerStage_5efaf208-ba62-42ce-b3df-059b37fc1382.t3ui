@@ -30,7 +30,7 @@
       }
     },
     {
-      "InputId": "6c7907d7-70f7-4db7-83ea-22ee48610994"/*DepthStencilReference*/,
+      "InputId": "6c7907d7-70f7-4db7-83ea-22ee48610994"/*DepthStencilReference_IGNORED*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -44,14 +44,14 @@
       }
     },
     {
-      "InputId": "ccee2ec3-586f-4396-8b20-cc99484e1b64"/*BlendFactor*/,
+      "InputId": "ccee2ec3-586f-4396-8b20-cc99484e1b64"/*BlendFactor_NOTSUPPORTED*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
       }
     },
     {
-      "InputId": "03166157-1e18-4513-8af5-398c6f4fcb1e"/*BlendSampleMask*/,
+      "InputId": "03166157-1e18-4513-8af5-398c6f4fcb1e"/*BlendSampleMask_NOTSUPPORTED*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
