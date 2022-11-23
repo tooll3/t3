@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "16863415-1d90-46a7-80a4-372602a49c6f"/*SubTree*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0
@@ -19,6 +20,7 @@
     },
     {
       "InputId": "3ab2e94d-b10b-4cd9-9ee0-073292a947fc"/*PrefilteredSpecularMap*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 90.0

@@ -88,7 +88,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                 context.BypassCameras = false;
 
                 deviceContext.Rasterizer.SetViewport(new SharpDX.Viewport(0, 0, size.Width, size.Height, 0.0f, 1.0f));
-                deviceContext.OutputMerger.SetTargets(_multiSampledDepthBufferDsv, _multiSampledColorBufferRtv);
+                deviceContext.OutputMerger.SetTargets(_depthBufferDsv, _multiSampledColorBufferRtv);
 
                 // Clear
 
@@ -97,9 +97,9 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                     try
                     {
                         deviceContext.ClearRenderTargetView(_multiSampledColorBufferRtv, new Color(clearColor.X, clearColor.Y, clearColor.Z, clearColor.W));
-                        if (_multiSampledDepthBufferDsv != null)
+                        if (_depthBufferDsv != null)
                         {
-                            deviceContext.ClearDepthStencilView(_multiSampledDepthBufferDsv, DepthStencilClearFlags.Depth, 1.0f, 0);
+                            deviceContext.ClearDepthStencilView(_depthBufferDsv, DepthStencilClearFlags.Depth, 1.0f, 0);
                         }
 
                         _wasClearedOnce = true;
@@ -205,10 +205,10 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             csStage.Set(resolveShader);
 
             const int threadNumX = 16, threadNumY = 16;
-            csStage.SetShaderResource(0, _multiSampledDepthBufferSrv);
+            csStage.SetShaderResource(0, _depthBufferSrv);
             csStage.SetUnorderedAccessView(0, _resolvedDepthBufferUav, 0);
-            int dispatchCountX = _multiSampledDepthBuffer.Description.Width / threadNumX ;
-            int dispatchCountY = _multiSampledDepthBuffer.Description.Height / threadNumY;
+            int dispatchCountX = _depthBuffer.Description.Width / threadNumX ;
+            int dispatchCountY = _depthBuffer.Description.Height / threadNumY;
             deviceContext.Dispatch(dispatchCountX, dispatchCountY, 1);
             
             // Restore prev setup
@@ -326,19 +326,19 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             }
 
             var depthRequired = depthFormat != Format.Unknown;
-            var depthInitialized = _multiSampledDepthBuffer != null;
+            var depthInitialized = _depthBuffer != null;
 
-            bool depthFormatChanged = _multiSampledDepthBuffer == null
-                                      || _multiSampledDepthBuffer.Description.Width != size.Width
-                                      || _multiSampledDepthBuffer.Description.Height != size.Height
-                                      || _multiSampledDepthBuffer.Description.SampleDescription.Count != _sampleCount
-                                      || _multiSampledDepthBuffer.Description.Format != depthFormat;
+            bool depthFormatChanged = _depthBuffer == null
+                                      || _depthBuffer.Description.Width != size.Width
+                                      || _depthBuffer.Description.Height != size.Height
+                                      || _depthBuffer.Description.SampleDescription.Count != _sampleCount
+                                      || _depthBuffer.Description.Format != depthFormat;
 
             if (depthFormatChanged || (!depthRequired && depthInitialized))
             {
-                Utilities.Dispose(ref _multiSampledDepthBufferDsv);
-                Utilities.Dispose(ref _multiSampledDepthBufferSrv);
-                Utilities.Dispose(ref _multiSampledDepthBuffer);
+                Utilities.Dispose(ref _depthBufferDsv);
+                Utilities.Dispose(ref _depthBufferSrv);
+                Utilities.Dispose(ref _depthBuffer);
                 Utilities.Dispose(ref _resolvedDepthBufferUav);
                 Utilities.Dispose(ref _resolvedDepthBuffer);
             }
@@ -349,7 +349,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                 // Depth / Multi sampled
                 try
                 {
-                    _multiSampledDepthBuffer = new Texture2D(device,
+                    _depthBuffer = new Texture2D(device,
                                                              new Texture2DDescription
                                                                  {
                                                                      ArraySize = 1,
@@ -364,8 +364,8 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                                                                      Usage = ResourceUsage.Default
                                                                  });
 
-                    _multiSampledDepthBufferDsv = new DepthStencilView(device,
-                                                                       _multiSampledDepthBuffer,
+                    _depthBufferDsv = new DepthStencilView(device,
+                                                                       _depthBuffer,
                                                                        new DepthStencilViewDescription
                                                                            {
                                                                                Format = Format.D32_Float,
@@ -380,14 +380,14 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                                                Format = Format.R32_Float,
                                                Dimension = ShaderResourceViewDimension.Texture2DMultisampled
                                            };
-                        _multiSampledDepthBufferSrv = new ShaderResourceView(device, _multiSampledDepthBuffer, viewDesc);
+                        _depthBufferSrv = new ShaderResourceView(device, _depthBuffer, viewDesc);
                     }
                 }
                 catch
                 {
-                    Utilities.Dispose(ref _multiSampledDepthBufferDsv);
-                    Utilities.Dispose(ref _multiSampledDepthBufferSrv);
-                    Utilities.Dispose(ref _multiSampledDepthBuffer);
+                    Utilities.Dispose(ref _depthBufferDsv);
+                    Utilities.Dispose(ref _depthBufferSrv);
+                    Utilities.Dispose(ref _depthBuffer);
                     Log.Error("Error  creating multisampled depth/stencil buffer.", SymbolChildId);
                 }
 
@@ -440,9 +440,9 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
         private ShaderResourceView _resolvedColorBufferSrv;
         private RenderTargetView _resolvedColorBufferRtv;
 
-        private Texture2D _multiSampledDepthBuffer;
-        private DepthStencilView _multiSampledDepthBufferDsv;
-        private ShaderResourceView _multiSampledDepthBufferSrv;
+        private Texture2D _depthBuffer;
+        private DepthStencilView _depthBufferDsv;
+        private ShaderResourceView _depthBufferSrv;
 
         private Texture2D _resolvedDepthBuffer;
         private UnorderedAccessView _resolvedDepthBufferUav;
@@ -450,7 +450,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
         private bool _wasClearedOnce;
 
         private Texture2D ColorTexture => _sampleCount > 1 ? _resolvedColorBuffer : _multiSampledColorBuffer ;
-        private Texture2D DepthTexture => _sampleCount > 1 ? _resolvedDepthBuffer : _multiSampledDepthBuffer;
+        private Texture2D DepthTexture => _sampleCount > 1 ? _resolvedDepthBuffer : _depthBuffer;
         private bool DownSamplingRequired => _sampleCount > 1;
         private int _sampleCount;
 

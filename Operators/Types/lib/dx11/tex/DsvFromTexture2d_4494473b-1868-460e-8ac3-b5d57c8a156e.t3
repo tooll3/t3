@@ -1,0 +1,13 @@
+{
+  "Name": "DsvFromTexture2d",
+  "Id": "4494473b-1868-460e-8ac3-b5d57c8a156e",
+  "Namespace": "lib.dx11.tex",
+  "Inputs": [
+    {
+      "Id": "7a3a1f0c-9d60-4e8f-a199-7c3477886c68"/*Texture*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

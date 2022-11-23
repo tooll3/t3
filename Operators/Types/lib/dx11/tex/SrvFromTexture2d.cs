@@ -26,7 +26,6 @@ namespace T3.Operators.Types.Id_c2078514_cf1d_439c_a732_0d7b31b5084a
         {
             try
             {
-                var resourceManager = ResourceManager.Instance();
                 Texture2D texture = Texture.GetValue(context);
                 if (texture != null)
                 {
