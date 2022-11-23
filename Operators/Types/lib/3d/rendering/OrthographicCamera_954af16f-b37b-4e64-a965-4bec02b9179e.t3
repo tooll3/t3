@@ -38,7 +38,7 @@
     {
       "Id": "9326957b-bc25-4f89-a833-9b8bb415d8ef"/*NearFarClip*/,
       "DefaultValue": {
-        "X": 0.1,
+        "X": 0.01,
         "Y": 1000.0
       }
     },

@@ -14,6 +14,13 @@
         "X": 0.0,
         "Y": 0.0
       }
+    },
+    {
+      "InputId": "65077b57-f9eb-48aa-8195-588f906b0e72"/*DepthStencilView*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
     }
   ],
   "SymbolChildUis": [],

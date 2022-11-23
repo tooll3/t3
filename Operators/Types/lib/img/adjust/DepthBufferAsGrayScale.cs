@@ -20,5 +20,8 @@ namespace T3.Operators.Types.Id_2d62dd4b_9597_4569_a09e_495abf880e34
         [Input(Guid = "41f15d72-577a-4e13-bfec-e60443930fd1")]
         public readonly InputSlot<System.Numerics.Vector2> OutputRange = new InputSlot<System.Numerics.Vector2>();
 
+        [Input(Guid = "379bee6d-ba65-4a53-9d9e-8dded21f351a")]
+        public readonly InputSlot<bool> ClampOutput = new InputSlot<bool>();
+
     }
 }

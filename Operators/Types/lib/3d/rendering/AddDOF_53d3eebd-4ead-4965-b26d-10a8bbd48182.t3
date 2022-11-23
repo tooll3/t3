@@ -82,7 +82,13 @@
     {
       "Id": "10fa6855-40c2-4e76-a59d-0d351b510dd8"/*_ComputeDepthToLinear*/,
       "SymbolId": "ade1d03d-db80-41ad-bcfa-8a2b900e9d41",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "63ce243b-48f4-482e-9ddf-a43cf1e4fc5f"/*Mode*/,
+          "Type": "System.Int32",
+          "Value": 1
+        }
+      ],
       "Outputs": []
     },
     {

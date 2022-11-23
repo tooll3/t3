@@ -19,7 +19,7 @@
       "Usage": "Default"
     },
     {
-      "InputId": "3ab2e94d-b10b-4cd9-9ee0-073292a947fc"/*PrefilteredSpecularMap*/,
+      "InputId": "3ab2e94d-b10b-4cd9-9ee0-073292a947fc"/*Texture*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,

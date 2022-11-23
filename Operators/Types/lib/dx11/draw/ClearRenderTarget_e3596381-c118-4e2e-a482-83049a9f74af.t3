@@ -15,6 +15,10 @@
     {
       "Id": "25c0c15c-5b95-4fe3-8d59-4e127fce1cf2"/*RenderTarget*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "65077b57-f9eb-48aa-8195-588f906b0e72"/*DepthStencilView*/,
+      "DefaultValue": null
     }
   ],
   "Children": [],

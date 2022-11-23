@@ -12,7 +12,7 @@
       "DefaultValue": ""
     },
     {
-      "Id": "3ab2e94d-b10b-4cd9-9ee0-073292a947fc"/*PrefilteredSpecularMap*/,
+      "Id": "3ab2e94d-b10b-4cd9-9ee0-073292a947fc"/*Texture*/,
       "DefaultValue": null
     }
   ],

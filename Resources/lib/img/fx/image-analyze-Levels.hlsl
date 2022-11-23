@@ -68,13 +68,13 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     // Curves...
     float4 curveColor = float4(0,0,0,0);
-    float lineThickness = 0.015 * width/max(width,height);
+    float lineThickness = 3.0 / Width / max(width,height);
     float3 curveShapeRGB = smoothstep(normalizedDistance +lineThickness, normalizedDistance +lineThickness * 1.5 ,colorOnLine.rgb);
     float curveShapeA = smoothstep(normalizedDistance +lineThickness, normalizedDistance +lineThickness * 1.5 ,colorOnLine.a) * 0.2;
 
     float4 curveLines =smoothstep(normalizedDistance + lineThickness, normalizedDistance,colorOnLine.rgba)
                     *smoothstep(normalizedDistance - lineThickness, normalizedDistance,colorOnLine.rgba) * float4(1,1,1,0.0);
-    curveLines.a += length(curveLines.rgb) * 0.3;
+    curveLines.a += length(curveLines.rgb) * 0.5;
     curveLines.rgb+= curveLines.a * 0.2;
     curveColor.rgba = curveLines + float4(curveShapeRGB, curveShapeA);
     if(normalizedDistance < 0)
