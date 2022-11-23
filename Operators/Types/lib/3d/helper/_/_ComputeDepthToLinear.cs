@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_ade1d03d_db80_41ad_bcfa_8a2b900e9d41
 {
-    public class DepthToLinear : Instance<DepthToLinear>
+    public class _ComputeDepthToLinear : Instance<_ComputeDepthToLinear>
     {
         [Output(Guid = "eff29dae-87c5-43a4-856b-51ac3abf567a")]
         public readonly Slot<Command> Output = new Slot<Command>();

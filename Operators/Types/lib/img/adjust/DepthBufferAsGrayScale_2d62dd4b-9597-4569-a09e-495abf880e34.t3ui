@@ -1,0 +1,73 @@
+{
+  "Id": "2d62dd4b-9597-4569-a09e-495abf880e34"/*DepthBufferAsGrayScale*/,
+  "Description": "Converts the provided depth buffer into a gray scale texture.\n\nImportant: Needs the correct settings for near/far-clipping.",
+  "InputUis": [
+    {
+      "InputId": "20f33d70-7599-4e71-993c-43464410182a"/*Texture2d*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -14.234039,
+        "Y": 87.99289
+      }
+    },
+    {
+      "InputId": "482e7931-cc65-49bd-ac56-8724b83a4e6a"/*NearFarRange*/,
+      "Position": {
+        "X": -14.234039,
+        "Y": 177.99289
+      }
+    },
+    {
+      "InputId": "41f15d72-577a-4e13-bfec-e60443930fd1"/*OutputRange*/,
+      "Position": {
+        "X": -12.139221,
+        "Y": 244.01709
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "23acca8e-26cf-41a0-8055-e52f2f69ce6e"/*_ImageFxShaderSetup2*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 134.97804,
+        "Y": 481.95227
+      },
+      "Position": {
+        "X": 453.32947,
+        "Y": 40.24771
+      }
+    },
+    {
+      "ChildId": "e22b1137-23c0-4fde-b119-b794242b3471"/*Vector2ToFloat2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 135.76596,
+        "Y": 177.99289
+      }
+    },
+    {
+      "ChildId": "5f81a76e-2b10-4322-a898-c485dda489a2"/*Vector2ToFloat2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 135.76596,
+        "Y": 233.99289
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "bbb34e6c-ac3d-40e3-959d-124ea0bcac3d"/*Output*/,
+      "Position": {
+        "X": 939.8677,
+        "Y": 642.9786
+      }
+    }
+  ]
+}

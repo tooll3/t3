@@ -80,7 +80,7 @@
       "Outputs": []
     },
     {
-      "Id": "10fa6855-40c2-4e76-a59d-0d351b510dd8"/*DepthToLinear*/,
+      "Id": "10fa6855-40c2-4e76-a59d-0d351b510dd8"/*_ComputeDepthToLinear*/,
       "SymbolId": "ade1d03d-db80-41ad-bcfa-8a2b900e9d41",
       "InputValues": [],
       "Outputs": []

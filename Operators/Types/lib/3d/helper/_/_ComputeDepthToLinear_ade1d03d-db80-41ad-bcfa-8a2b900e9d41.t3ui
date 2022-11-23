@@ -1,6 +1,6 @@
 {
-  "Id": "ade1d03d-db80-41ad-bcfa-8a2b900e9d41"/*DepthToLinear*/,
-  "Description": "An internal helper that converts a depth buffer into a linear texture map. ",
+  "Id": "ade1d03d-db80-41ad-bcfa-8a2b900e9d41"/*_ComputeDepthToLinear*/,
+  "Description": "An internal helper that converts a depth buffer into a linear texture map. \n\nNote that the TextureMap is not returned but a reference has to be provided as input parameter.",
   "InputUis": [
     {
       "InputId": "de65c36d-10a7-446f-a4dd-e55ce42f4203"/*DepthBuffer*/,

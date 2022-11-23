@@ -1,5 +1,5 @@
 {
-  "Name": "DepthToLinear",
+  "Name": "_ComputeDepthToLinear",
   "Id": "ade1d03d-db80-41ad-bcfa-8a2b900e9d41",
   "Namespace": "lib.3d.helper._",
   "Inputs": [

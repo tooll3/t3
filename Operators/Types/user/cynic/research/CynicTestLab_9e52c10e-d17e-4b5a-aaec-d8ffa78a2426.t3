@@ -99,7 +99,7 @@
       "Outputs": []
     },
     {
-      "Id": "f2b1a4d3-56ec-4643-b3c3-74734f17eff8"/*DepthToLinear*/,
+      "Id": "f2b1a4d3-56ec-4643-b3c3-74734f17eff8"/*_ComputeDepthToLinear*/,
       "SymbolId": "ade1d03d-db80-41ad-bcfa-8a2b900e9d41",
       "InputValues": [],
       "Outputs": []
