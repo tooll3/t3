@@ -44,7 +44,7 @@ namespace T3.Operators.Types.Id_e4a38f3c_bd4c_406a_9979_bb683d79b39b
             }
             catch (System.FormatException)
             {
-                //Log.Warning("Failed to format CountDown time: " + e.Message, SymbolChildId);
+                //Log.Warning("Failed to format CountDown time: " + e.Message, this);
                 Output.Value = "Invalid Format";
                 return;
             }

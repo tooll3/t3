@@ -57,6 +57,8 @@ namespace T3.Editor.Gui.Graph
             var previousInstanceWasSet = _compositionPath != null && _compositionPath.Count > 0;
             if (previousInstanceWasSet)
             {
+                //NodeOperations.GetInstanceFromIdPath(_compositionPath)
+                //var previousInstance = OperatorUtils.GetInstanceFromIdPath(T3Ui.UiModel.RootInstance, _compositionPath);
                 var previousInstance = NodeOperations.GetInstanceFromIdPath(_compositionPath);
                 UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId] = GetTargetScope();
 
@@ -100,6 +102,34 @@ namespace T3.Editor.Gui.Graph
                 primaryGraphWindow?.CurrentTimeLine?.UpdateScaleAndTranslation(primaryGraphWindow.GraphCanvas.CompositionOp,
                                                                                transition);
             }
+        }
+
+        /// <summary>
+        /// Uses an ID-path to open an instance's parent composition and centers the instance.
+        /// This can be useful to jump to elements (e.g. through bookmarks)
+        /// </summary>
+        public void OpenAndFocusInstance(List<Guid> childIdPath)
+        {
+            var instance = NodeOperations.GetInstanceFromIdPath(childIdPath);
+            if (instance == null)
+            {
+                return;
+            }
+
+            if (childIdPath.Count < 2)
+            {
+                return;
+            }
+
+            var pathToParent = childIdPath.GetRange(0, childIdPath.Count - 1);
+            SetComposition(pathToParent, ICanvas.Transition.Undefined);
+            
+            var parentComposition = instance.Parent;
+            var parentUi = SymbolUiRegistry.Entries[parentComposition.Symbol.Id];
+            var childInstanceUi = parentUi.ChildUis.SingleOrDefault(c => c.Id == instance.SymbolChildId);
+            NodeSelection.Clear();
+            NodeSelection.AddSymbolChildToSelection(childInstanceUi, instance);
+            FitViewToSelectionHandling.FitViewToSelection();
         }
 
         public void SetCompositionToChildInstance(Instance instance)

@@ -24,7 +24,7 @@ namespace T3.Operators.Types.Id_712c50e8_7cba_4b29_bde4_1d860ab6b701
         
         private void Update(EvaluationContext context)
         {
-            //Log.Debug("Updated beatTappingDetails" + context.LocalFxTime, SymbolChildId);
+            //Log.Debug("Updated beatTappingDetails" + context.LocalFxTime, this);
             var fields = typeof(BeatTimingDetails).GetFields(BindingFlags.Public | BindingFlags.Static);
             
             foreach (var fieldInfo in fields)

@@ -18,7 +18,7 @@ namespace T3.Operators.Types.Id_0bec016a_5e1b_467a_8273_368d4d6b9935
 
         private void Update(EvaluationContext context)
         {
-            Log.Debug("Update Trigger",SymbolChildId);
+            Log.Debug("Update Trigger",this);
             Result.Value = BoolValue.GetValue(context);
             if (Result.Value)
             {

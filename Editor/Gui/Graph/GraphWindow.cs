@@ -28,13 +28,11 @@ namespace T3.Editor.Gui.Graph
             Config.Title = "Graph##" + _instanceCounter;
             Config.Visible = true;
             AllowMultipleInstances = true;
-
-
-
+            
             // Legacy work-around
             var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
             var shownOpInstance = FindIdInNestedChildren(T3Ui.UiModel.RootInstance, opId) ?? T3Ui.UiModel.RootInstance;
-            var path = NodeOperations.BuildIdPathForInstance(shownOpInstance);
+            var path = OperatorUtils.BuildIdPathForInstance(shownOpInstance);
             GraphCanvas = new GraphCanvas(this, path);
 
             _timeLineCanvas = new TimeLineCanvas();
@@ -157,7 +155,7 @@ namespace T3.Editor.Gui.Graph
                 return;
 
             _currentWindow._imageBackground.BackgroundNodePath = instance != null
-                                                                     ? NodeOperations.BuildIdPathForInstance(instance)
+                                                                     ? OperatorUtils.BuildIdPathForInstance(instance)
                                                                      : null;
         }
         

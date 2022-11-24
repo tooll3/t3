@@ -73,7 +73,7 @@ namespace T3.Operators.Types.Id_7e28c796_85e7_47ee_99bb_9599284dbeeb
                     }
                     catch (Exception e)
                     {
-                        Log.Error("Failed to setup structured buffer " + e.Message, SymbolChildId);
+                        Log.Error("Failed to setup structured buffer " + e.Message, this);
                         return;
                     }
 

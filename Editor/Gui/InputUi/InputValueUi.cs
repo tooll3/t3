@@ -448,7 +448,7 @@ namespace T3.Editor.Gui.InputUi
             NodeOperations.AddInputToSymbol(input.Name, input.InputDefinition.IsMultiInput, input.DefaultValue.ValueType, composition.Symbol);
             NodeOperations.UpdateChangedOperators();
 
-            var updatedComposition = NodeOperations.GetInstanceFromIdPath(NodeOperations.BuildIdPathForInstance(composition));
+            var updatedComposition = NodeOperations.GetInstanceFromIdPath(OperatorUtils.BuildIdPathForInstance(composition));
 
             var newInput = updatedComposition.Symbol.InputDefinitions.SingleOrDefault(i => i.Name == input.Name);
             if (newInput != null)

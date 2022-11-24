@@ -35,7 +35,7 @@ namespace T3.Operators.Types.Id_dd201330_6eab_43b9_b601_2e491ab18feb
                 DirtyFlag.InvalidationRefFrame++;
                 foreach (var c in SubTree.CollectedInputs)
                 {
-                    //Log.Debug($"  {index} {c}", SymbolChildId);
+                    //Log.Debug($"  {index} {c}", this);
                     c.Invalidate();
                     c.GetValue(context);
                     

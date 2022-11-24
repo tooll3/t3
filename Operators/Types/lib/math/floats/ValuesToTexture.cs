@@ -101,7 +101,7 @@ namespace T3.Operators.Types.Id_55cc0f79_96c9_482e_9794_934dc0f87708
                 }
                 catch (Exception e)
                 {
-                    Log.Warning("Can't create texture from values :" + e.Message, SymbolChildId);
+                    Log.Warning("Can't create texture from values :" + e.Message, this);
                 }
             }
         }

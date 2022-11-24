@@ -28,7 +28,7 @@ namespace T3.Operators.Types.Id_271e397e_051c_473f_968f_a2251fed65d1
         {
             if (Pages.GetValue(context) is not List<_SketchImpl.Page> orderedPages)
             {
-                Log.Warning("Can't get pages from sketch implementation", SymbolChildId);
+                Log.Warning("Can't get pages from sketch implementation", this);
                 PointList.Value = _emptyList;
                 DistanceToCurrentTime.Value = 10000;
                 return;

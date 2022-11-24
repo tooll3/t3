@@ -30,6 +30,7 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
         {
             SpriteBuffer.UpdateAction = Update;
             PointBuffer.UpdateAction = Update;
+            Texture.UpdateAction = Update;
         }
 
         private void Update(EvaluationContext context)
@@ -46,6 +47,10 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
             }
 
             UpdateMesh(context);
+            
+            Texture.DirtyFlag.Clear();
+            SpriteBuffer.DirtyFlag.Clear();
+            PointBuffer.DirtyFlag.Clear();
         }
 
         private void UpdateTexture(string imageFilePath)
@@ -83,13 +88,12 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
         private void UpdateMesh(EvaluationContext context)
         {
             var text = Text.GetValue(context);
-            // if (string.IsNullOrEmpty(text))
-            // {
-            //     text = " ";
-            // }
 
             if (_bmFont == null)
+            {
+                Log.Warning("Can't generate text sprites without valid BMFont definition", this);
                 return;
+            }
 
             var lineNumber = 0;
 
@@ -133,16 +137,7 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
                     cursorY = _bmFont.BmFont.Common.LineHeight * lineHeight * (numLinesInText) - (verticalCenterOffset - offsetBaseLine);
                     break;
             }
-
-            // if (_sprites == null || _sprites.Count != text.Length)
-            // {
-            //     _sprites = new Sprite[text.Length];
-            // }
-            //
-            // if (_points == null || _points.Length != text.Length)
-            // {
-            //     _points = new Point[text.Length];
-            // }
+            
             _sprites.Clear();
             _points.Clear();
 
@@ -226,13 +221,12 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
             SpriteBuffer.Value ??= new BufferWithViews();
             ResourceManager.SetupStructuredBuffer( _sprites.Count > 0 ? _sprites.ToArray() : _nonSprite, ref SpriteBuffer.Value.Buffer);
             ResourceManager.CreateStructuredBufferSrv(SpriteBuffer.Value.Buffer, ref SpriteBuffer.Value.Srv);
+            ResourceManager.CreateStructuredBufferUav(SpriteBuffer.Value.Buffer, UnorderedAccessViewBufferFlags.None,ref SpriteBuffer.Value.Uav);
 
             PointBuffer.Value ??= new BufferWithViews();
             ResourceManager.SetupStructuredBuffer( _points.Count > 0 ? _points.ToArray() : _nonPoints, ref PointBuffer.Value.Buffer);
             ResourceManager.CreateStructuredBufferSrv(PointBuffer.Value.Buffer, ref PointBuffer.Value.Srv);
-
-            SpriteBuffer.DirtyFlag.Clear();
-            PointBuffer.DirtyFlag.Clear();
+            ResourceManager.CreateStructuredBufferUav(PointBuffer.Value.Buffer, UnorderedAccessViewBufferFlags.None,ref PointBuffer.Value.Uav);
 
             void AdjustLineAlignment()
             {
@@ -248,20 +242,20 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
             }
         }
 
-        private static Sprite[] _nonSprite = new[] { new Sprite()
-                                                         {
-                                                             Height = 0,
-                                                             Width =  0,
+        private readonly Sprite[] _nonSprite = { new()
+                                                            {
+                                                                Height = 0,
+                                                                Width =  0,
                                                              
-                                                         } };
+                                                            } };
         
-        private static Point[] _nonPoints = new[] { new Point()
-                                                         {
-                                                             Position = Vector3.Zero,
-                                                             W= float.NaN,
-                                                             Orientation =  Quaternion.Identity,
+        private readonly Point[] _nonPoints = { new()
+                                                           {
+                                                               Position = Vector3.Zero,
+                                                               W= float.NaN,
+                                                               Orientation =  Quaternion.Identity,
                                                              
-                                                         } };
+                                                           } };
 
         private void OffsetLineCharacters(float offset, int currentLineCharacterCount, int outputIndex)
         {
@@ -279,8 +273,8 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
 
         private BmFontDescription _bmFont;
 
-        private List<Sprite> _sprites = new(100);
-        private List<Point> _points = new(100);
+        private readonly List<Sprite> _sprites = new(100);
+        private readonly List<Point> _points = new(100);
 
         // Inputs ----------------------------------------------------
         [Input(Guid = "F2DD87B1-7F37-4B02-871B-B2E35972F246")]

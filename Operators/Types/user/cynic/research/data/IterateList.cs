@@ -22,7 +22,7 @@ namespace T3.Operators.Types.Id_8b285708_3f20_4957_9eb2_bb40e0d320ee
         {
             if (context.IteratedList != null)
             {
-                Log.Warning("Nesting multiple [IterateList] Operators is not possible yet", SymbolChildId);
+                Log.Warning("Nesting multiple [IterateList] Operators is not possible yet", this);
                 return;
             }
             

@@ -41,7 +41,7 @@ namespace T3.Operators.Types.Id_62c89469_7194_486a_87cd_c3e6bc0cf5d2
                 var cl = connectedLists[index];
                 if (cl != input)
                 {
-                    Log.Warning($"Inconsistent buffers connected to MultiUpdatePoints on index {index}", SymbolChildId);
+                    Log.Warning($"Inconsistent buffers connected to MultiUpdatePoints on index {index}", this);
                 }
             }
 

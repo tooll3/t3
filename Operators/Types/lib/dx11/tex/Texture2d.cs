@@ -57,7 +57,7 @@ namespace T3.Operators.Types.Id_f52db9a4_fde9_49ca_9ef7_131825c34e65
             }
             catch(Exception e)
             {
-                Log.Error($"Failed to create Texture2d: {e.Message}", SymbolChildId);
+                Log.Error($"Failed to create Texture2d: {e.Message}", this);
             }
             //ResourceManager.Instance().id .TestId = _textureResId;
         }

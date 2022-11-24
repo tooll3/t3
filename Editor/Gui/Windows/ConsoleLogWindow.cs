@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core.Logging;
+using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -26,7 +29,6 @@ namespace T3.Editor.Gui.Windows
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
             {
-
                 lock (_logEntries)
                 {
                     while (_logEntries.Count > MaxLineCount)
@@ -34,7 +36,7 @@ namespace T3.Editor.Gui.Windows
                         _logEntries.RemoveAt(0);
                     }
                 }
-                
+
                 //ImGui.TextUnformatted(_isAtBottom ? "Bottom!": "Not at bottom");
                 CustomComponents.ToggleButton("Scroll", ref _shouldScrollToBottom, Vector2.Zero);
                 ImGui.SameLine();
@@ -47,6 +49,7 @@ namespace T3.Editor.Gui.Windows
                         _logEntries.Clear();
                     }
                 }
+
                 ImGui.SameLine();
 
                 if (ImGui.Button("Copy"))
@@ -63,9 +66,11 @@ namespace T3.Editor.Gui.Windows
                             sb.Append(entry.Message);
                             sb.Append("\n");
                         }
+
                         Clipboard.SetText(sb.ToString());
                     }
                 }
+
                 ImGui.SameLine();
                 ImGui.InputText("##Filter", ref _filterString, 100);
                 ImGui.Separator();
@@ -75,6 +80,7 @@ namespace T3.Editor.Gui.Windows
                     {
                         _shouldScrollToBottom = false;
                     }
+
                     lock (_logEntries)
                     {
                         foreach (var entry in _logEntries)
@@ -82,31 +88,59 @@ namespace T3.Editor.Gui.Windows
                             if (FilterIsActive && !entry.Message.Contains(_filterString))
                                 continue;
 
-
                             var entryLevel = entry.Level;
                             var color = GetColorForLogLevel(entryLevel)
-                               .Fade( T3Ui.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f);
-                            
+                               .Fade(T3Ui.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f);
+
                             //var timeInSeconds= (entry.TimeStamp - _startTime).Ticks / 10000000f;
                             // Hack to hide ":" render prefix problem
                             ImGui.SetCursorPosX(-2);
-                            
+
                             // FIXME: It should be possible to pass NULL to avoid prefixing. 
                             // This seems to be broken in imgui.net
-                            ImGui.Value("", (float)entry.SecondsSinceStart);    // Print with ImGui to avoid allocation
+                            ImGui.Value("", (float)entry.SecondsSinceStart); // Print with ImGui to avoid allocation
                             ImGui.SameLine(80);
                             ImGui.TextColored(color, entry.Message);
 
-                            if (IsLineHovered())
+                            if (!IsLineHovered() || !(entry.SourceIdPath?.Length > 1))
+                                continue;
+                            
+                            T3Ui.AddHoveredId(entry.SourceId);
+                            var childIdPath = entry.SourceIdPath.ToList();
+                            var hoveredSourceInstance = NodeOperations.GetInstanceFromIdPath(childIdPath);
+                            ImGui.BeginTooltip();
                             {
-                                T3Ui.AddHoveredId(entry.SourceId);
+                                if (hoveredSourceInstance == null)
+                                {
+                                    ImGui.Text("Source Instance of message not longer valid");
+                                }
+                                else
+                                {
+                                    ImGui.TextColored(T3Style.Colors.TextMuted, "from ");
+                                    
+                                    foreach (var p in NodeOperations.GetReadableInstancePath(childIdPath))
+                                    {
+                                        ImGui.SameLine();
+                                        ImGui.TextColored(T3Style.Colors.TextMuted, " / ");
+                                        
+                                        ImGui.SameLine();
+                                        ImGui.Text(p);
+                                    }
+                                }
+                            }
+                            ImGui.EndTooltip();
+                            
+                            if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                            {
+                                GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(childIdPath);
                             }
                         }
                     }
-                    ImGui.TextColored(Color.Gray, "---");    // Indicator for end
+
+                    ImGui.TextColored(Color.Gray, "---"); // Indicator for end
                     if (_shouldScrollToBottom)
                     {
-                        ImGui.SetScrollY(ImGui.GetScrollMaxY()+ ImGui.GetFrameHeight()  );
+                        ImGui.SetScrollY(ImGui.GetScrollMaxY() + ImGui.GetFrameHeight());
                         //_shouldScrollToBottom = false;
                         _isAtBottom = true;
                     }
@@ -117,13 +151,14 @@ namespace T3.Editor.Gui.Windows
                 }
                 ImGui.EndChild();
             }
+            
             ImGui.PopStyleVar();
         }
 
         public static Color GetColorForLogLevel(LogEntry.EntryLevel entryLevel)
         {
-            return _colorForLogLevel.TryGetValue(entryLevel, out var color) 
-                       ? color 
+            return _colorForLogLevel.TryGetValue(entryLevel, out var color)
+                       ? color
                        : T3Style.Colors.TextMuted;
         }
 
@@ -139,15 +174,17 @@ namespace T3.Editor.Gui.Windows
             var lineRect = new ImRect(min, min + size);
             return lineRect.Contains(ImGui.GetMousePos());
         }
-        
-        private static readonly Dictionary<LogEntry.EntryLevel, Color> _colorForLogLevel = new Dictionary<LogEntry.EntryLevel, Color>()
-                                                                                          {
-                                                                                              {LogEntry.EntryLevel.Debug, new Color(1,1,1,0.6f) },
-                                                                                              {LogEntry.EntryLevel.Info, new Color(1,1,1,0.6f) },
-                                                                                              {LogEntry.EntryLevel.Warning, new Color(1,0.5f,0.5f,0.9f) },
-                                                                                              {LogEntry.EntryLevel.Error, new Color(1,0.2f,0.2f,1f) },
-                                                                                          };
 
+        private static readonly Dictionary<LogEntry.EntryLevel, Color> _colorForLogLevel = new Dictionary<LogEntry.EntryLevel, Color>()
+                                                                                               {
+                                                                                                   { LogEntry.EntryLevel.Debug, new Color(1, 1, 1, 0.6f) },
+                                                                                                   { LogEntry.EntryLevel.Info, new Color(1, 1, 1, 0.6f) },
+                                                                                                   {
+                                                                                                       LogEntry.EntryLevel.Warning,
+                                                                                                       new Color(1, 0.5f, 0.5f, 0.9f)
+                                                                                                   },
+                                                                                                   { LogEntry.EntryLevel.Error, new Color(1, 0.2f, 0.2f, 1f) },
+                                                                                               };
 
         public void ProcessEntry(LogEntry entry)
         {
@@ -168,10 +205,9 @@ namespace T3.Editor.Gui.Windows
         }
 
         private const int MaxLineCount = 250;
-        
+
         public LogEntry.EntryLevel Filter { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        
         private bool FilterIsActive => !string.IsNullOrEmpty(_filterString);
         private const float LinePadding = 3;
         private List<LogEntry> _logEntries = new List<LogEntry>();
@@ -181,4 +217,3 @@ namespace T3.Editor.Gui.Windows
         private readonly DateTime _startTime = DateTime.Now;
     }
 }
-

@@ -106,7 +106,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                     } 
                     catch
                     {
-                        Log.Error($"{Parent.Symbol.Name}: Error clearing actual render target.", SymbolChildId);
+                        Log.Error($"{Parent.Symbol.Name}: Error clearing actual render target.", this);
                     }
                 }
                 
@@ -276,7 +276,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                 }
                 catch (Exception e)
                 {
-                    Log.Error("Error creating color render target." + e.Message, SymbolChildId);
+                    Log.Error("Error creating color render target." + e.Message, this);
                     Utilities.Dispose(ref _multiSampledColorBufferSrv);
                     Utilities.Dispose(ref _multiSampledColorBufferRtv);
                     Utilities.Dispose(ref _multiSampledColorBuffer);
@@ -315,7 +315,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                     }
                     catch
                     {
-                        Log.Error("Error creating color render target.", SymbolChildId);
+                        Log.Error("Error creating color render target.", this);
                         Utilities.Dispose(ref _resolvedColorBufferSrv);
                         Utilities.Dispose(ref _resolvedColorBufferRtv);
                         Utilities.Dispose(ref _resolvedColorBuffer);
@@ -388,7 +388,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                     Utilities.Dispose(ref _multiSampledDepthBufferDsv);
                     Utilities.Dispose(ref _multiSampledDepthBufferSrv);
                     Utilities.Dispose(ref _multiSampledDepthBuffer);
-                    Log.Error("Error  creating multisampled depth/stencil buffer.", SymbolChildId);
+                    Log.Error("Error  creating multisampled depth/stencil buffer.", this);
                 }
 
                 if (DownSamplingRequired)
@@ -416,7 +416,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                     {
                         Utilities.Dispose(ref _resolvedDepthBufferUav);
                         Utilities.Dispose(ref _resolvedDepthBuffer);
-                        Log.Error("Error creating depth/stencil downsampling buffer.", SymbolChildId);
+                        Log.Error("Error creating depth/stencil downsampling buffer.", this);
                     }
                 }
             }

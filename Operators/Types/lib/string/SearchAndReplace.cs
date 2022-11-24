@@ -38,7 +38,7 @@ namespace T3.Operators.Types.Id_b7910fc6_c3b2_4daf_93cd_010dcfe22a57
             }
             catch (Exception)
             {
-                Log.Error($"'{pattern}' is an incorrect search pattern", SymbolChildId);
+                Log.Error($"'{pattern}' is an incorrect search pattern", this);
             }
         }
         

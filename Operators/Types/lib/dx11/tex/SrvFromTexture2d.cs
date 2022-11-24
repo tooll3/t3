@@ -58,7 +58,7 @@ namespace T3.Operators.Types.Id_c2078514_cf1d_439c_a732_0d7b31b5084a
             }
             catch (Exception e)
             {
-                Log.Error("Updating Shader Resource View failed: " + e.Message, SymbolChildId);
+                Log.Error("Updating Shader Resource View failed: " + e.Message, this);
             }
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Utils;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.Selection;
 
@@ -94,7 +95,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             Selection.Add(childUi);
             if (instance != null)
             {
-                _childUiInstanceIdPaths[childUi] = NodeOperations.BuildIdPathForInstance(instance);
+                _childUiInstanceIdPaths[childUi] = OperatorUtils.BuildIdPathForInstance(instance);
                 if (instance is ITransformable transformable)
                 {
                     TransformGizmoHandling.RegisterSelectedTransformable(childUi, transformable);
@@ -230,7 +231,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         public static Instance GetInstanceForSymbolChildUi(SymbolChildUi symbolChildUi)
         {
             var idPath = _childUiInstanceIdPaths[symbolChildUi];
-            return (NodeOperations.GetInstanceFromIdPath(idPath));
+            return NodeOperations.GetInstanceFromIdPath(idPath);
         }
 
         public static readonly List<ISelectableCanvasObject> Selection = new();

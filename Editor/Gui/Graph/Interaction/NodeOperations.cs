@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using ImGuiNET;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -14,6 +13,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Core.Utils;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Annotations;
@@ -22,8 +22,8 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using Vector2 = System.Numerics.Vector2;
-// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 
+// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 
 namespace T3.Editor.Gui.Graph.Interaction
@@ -54,37 +54,52 @@ namespace T3.Editor.Gui.Graph.Interaction
             return null;
         }
 
-        public static Instance GetInstanceFromIdPath(IReadOnlyCollection<Guid> childPath)
+        public static Instance GetInstanceFromIdPath(List<Guid> compositionPath)
         {
-            if (childPath == null || childPath.Count == 0)
-                return null;
-
-            var instance = T3Ui.UiModel.RootInstance;
-            foreach (var childId in childPath)
-            {
-                // Ignore root
-                if (childId == T3Ui.UiModel.RootInstance.SymbolChildId)
-                    continue;
-
-                instance = instance.Children.SingleOrDefault(child => child.SymbolChildId == childId);
-                if (instance == null)
-                    return null;
-            }
-
-            return instance;
+            return OperatorUtils.GetInstanceFromIdPath(T3Ui.UiModel.RootInstance, compositionPath);
         }
 
-        public static List<Guid> BuildIdPathForInstance(Instance instance)
+        public static List<string> GetReadableInstancePath(List<Guid> path)
         {
-            var result = new List<Guid>(6);
-            do
-            {
-                result.Insert(0, instance.SymbolChildId);
-                instance = instance.Parent;
-            }
-            while (instance != null);
+            if (path == null || path.Count == 0)
+                return new List<string> { "Path empty" };
 
-            return result;
+            var instance = GetInstanceFromIdPath(path);
+            if (instance == null)
+                return new List<string> { "Path invalid" };
+
+            var newList = new List<string>();
+
+            while (true)
+            {
+                var parent = instance.Parent;
+                if (parent == null)
+                {
+                    break;
+                }
+                
+                var parentSymbolUi = SymbolUiRegistry.Entries[parent.Symbol.Id];
+                var childUisWithThatType = parentSymbolUi.ChildUis.FindAll(c => c.SymbolChild.Symbol == instance.Symbol);
+                var indexLabel = "";
+
+                var symbolUiChild = childUisWithThatType.SingleOrDefault(c => c.Id == instance.SymbolChildId);
+
+                if (childUisWithThatType.Count > 1)
+                {
+                    var index = childUisWithThatType.IndexOf(symbolUiChild);
+                    indexLabel = $"#{index}";
+                }
+
+                var readableNameSuffice = !string.IsNullOrEmpty(symbolUiChild?.SymbolChild.Name)
+                                              ? $" ({symbolUiChild.SymbolChild.Name})"
+                                              : "";
+
+                newList.Insert(0, instance.Symbol.Name + indexLabel + readableNameSuffice);
+                
+                instance = parent;
+            }
+
+            return newList;
         }
 
         public static void CombineAsNewType(SymbolUi parentCompositionSymbolUi,
@@ -463,7 +478,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         public static Symbol DuplicateAsNewType(SymbolUi compositionUi, Guid symbolId, string newTypeName, string nameSpace,
                                                 string description, Vector2 posOnCanvas)
         {
-            if(!SymbolRegistry.Entries.TryGetValue(symbolId, out var sourceSymbol))
+            if (!SymbolRegistry.Entries.TryGetValue(symbolId, out var sourceSymbol))
             {
                 Log.Warning("Can't find symbol to duplicate");
                 return null;
@@ -593,7 +608,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             {
                 newSymbol.Children[index].Name = sourceSymbol.Children[index].Name;
             }
-            
+
             //T3Ui.SaveAll();
 
             return newSymbol;
@@ -631,7 +646,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                     operatorResource.Updated = true;
                     symbol.PendingSource = newSource;
                     symbol.DeprecatedSourcePath = originalSourcePath;
-                    
+
                     UpdateChangedOperators();
                     T3Ui.SaveAll();
                     return;
@@ -677,7 +692,6 @@ namespace T3.Editor.Gui.Graph.Interaction
         }
 
         private static readonly Regex _validUserNamePattern = new Regex("^[A-Za-z0-9_]+$");
-        
 
         private class NodeByAttributeIdFinder : CSharpSyntaxRewriter
         {
@@ -761,7 +775,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, symbol.Name);
             if (newAssembly == null)
                 return false;
-            
+
             //string path = @"Operators\Types\" + symbol.Name + ".cs";
             var sourcePath = Model.BuildFilepathForSymbol(symbol, Model.SourceExtension);
 
@@ -984,7 +998,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             var inputNodeFinder = new AllInputNodesFinder();
             root = inputNodeFinder.Visit(root);
-            
+
             // Check if the order in code is the same as in symbol
             Debug.Assert(inputNodeFinder.InputNodesFound.Count == symbol.InputDefinitions.Count);
             var orderIsOk = true;
@@ -1150,15 +1164,15 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
         }
 
-        public static  HashSet<Guid> CollectRequiredSymbolIds(Symbol symbol, HashSet<Guid> all = null)
+        public static HashSet<Guid> CollectRequiredSymbolIds(Symbol symbol, HashSet<Guid> all = null)
         {
             all ??= new HashSet<Guid>();
-            
+
             foreach (var symbolChild in symbol.Children)
             {
                 if (all.Contains(symbolChild.Symbol.Id))
                     continue;
-                
+
                 all.Add(symbolChild.Symbol.Id);
                 CollectRequiredSymbolIds(symbolChild.Symbol, all);
             }
@@ -1180,14 +1194,14 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             if (all.Contains(slot))
                 return;
-            
+
             all.Add(slot);
-            
+
             if (slot is IInputSlot)
             {
                 if (!slot.IsConnected)
                     return;
-                
+
                 CollectSlotDependencies(slot.GetConnection(0), all);
             }
             else if (slot.IsConnected)
@@ -1204,7 +1218,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                         if (input.IsMultiInput)
                         {
                             var multiInput = (IMultiInputSlot)input;
-                            
+
                             foreach (var entry in multiInput.GetCollectedInputs())
                             {
                                 CollectSlotDependencies(entry, all);
