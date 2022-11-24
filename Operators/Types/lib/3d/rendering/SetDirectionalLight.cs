@@ -22,7 +22,7 @@ namespace T3.Operators.Types.Id_5390ae74_a51e_4d10_adf7_78a8ddf3cd61
         private void Update(EvaluationContext context)
         {
             var pointLights = context.PointLights;
-            var light = new PointLight(Position.GetValue(context),
+            var light = new LightDefinition(Position.GetValue(context),
                                        Intensity.GetValue(context),
                                        Color.GetValue(context),
                                        Range.GetValue(context),

@@ -7,34 +7,6 @@ using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Core.Rendering
 {
-    [StructLayout(LayoutKind.Explicit, Size = 3 * 16)]
-    public struct PointLight
-    {
-        public PointLight(System.Numerics.Vector3 position, float intensity, System.Numerics.Vector4 color, float range, float decay =2)
-        {
-            Position = position;
-            Intensity = intensity;
-            Color = color;
-            Range = range;
-            Decay = decay;
-        }
-
-        [FieldOffset(0)]
-        public System.Numerics.Vector3 Position;
-
-        [FieldOffset(3*4)]
-        public float Intensity;
-
-        [FieldOffset(4*4)]
-        public System.Numerics.Vector4 Color;
-
-        [FieldOffset(8*4)]
-        public float Range;
-        
-        [FieldOffset(9*4)]
-        public float Decay;
-    }
-
     public class PointLightStack
     {
         public const int MaxPointLights = 8;
@@ -65,7 +37,7 @@ namespace T3.Core.Rendering
             _isConstBufferDirty = true;
         }
 
-        public bool Push(PointLight pointLight)
+        public bool Push(LightDefinition pointLight)
         {
             if (_currentSize == MaxPointLights)
             {
@@ -88,9 +60,9 @@ namespace T3.Core.Rendering
             }
         }
 
-        private static void UpdateConstBuffer(ref PointLight[] pointLights, ref Buffer constBuffer, int activeLightCount)
+        private static void UpdateConstBuffer(ref LightDefinition[] pointLights, ref Buffer constBuffer, int activeLightCount)
         {
-            var size = Marshal.SizeOf<PointLight>() * MaxPointLights + 16;
+            var size = Marshal.SizeOf<LightDefinition>() * MaxPointLights + 16;
             using (var data = new DataStream(size, true, true))
             {
                 foreach (var light in pointLights)
@@ -121,7 +93,7 @@ namespace T3.Core.Rendering
         {
             if (_defaultConstBuffer == null)
             {
-                _defaultPointLights[0] = new PointLight
+                _defaultPointLights[0] = new LightDefinition
                                              {
                                                  Position = new Vector3(8,20,3),
                                                  Intensity = 4, 
@@ -129,7 +101,7 @@ namespace T3.Core.Rendering
                                                  Range = 100,
                                                  Decay = 2
                                              };
-                _defaultPointLights[1] = new PointLight
+                _defaultPointLights[1] = new LightDefinition
                                              {
                                                  Position = new Vector3(-8,-20,-8),
                                                  Intensity = 3f, 
@@ -147,7 +119,7 @@ namespace T3.Core.Rendering
         public int Count => _currentSize > 0 ? _currentSize : 2; 
         
 
-        public PointLight GetPointLight(int index)
+        public LightDefinition GetPointLight(int index)
         {
             var useDefaultLights = _currentSize == 0;
             
@@ -162,12 +134,12 @@ namespace T3.Core.Rendering
                        : _pointLights[index];
         }
         
-        private PointLight[] _pointLights = new PointLight[MaxPointLights];
+        private LightDefinition[] _pointLights = new LightDefinition[MaxPointLights];
         private int _currentSize = 0;
         private bool _isConstBufferDirty = true;
         private Buffer _constBuffer = null;
         
-        private static PointLight[] _defaultPointLights = new PointLight[MaxPointLights];
+        private static LightDefinition[] _defaultPointLights = new LightDefinition[MaxPointLights];
         private static Buffer _defaultConstBuffer;
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using T3.Core;
+using T3.Core.DataStructures;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -53,7 +54,8 @@ namespace T3.Operators.Types.Id_843c9378_6836_4f39_b676_06fd2828af3e
                 PreviousBuffer.DirtyFlag.Clear();
             }
             
-            _bufferContent = new TransformsConstBuffer.TransformBufferLayout(camera.CameraToClipSpace, camera.WorldToCamera, camera.LastObjectToWorld);
+            //camera.CameraToClipSpace, camera.WorldToCamera, camera.LastObjectToWorld
+            _bufferContent = new TransformBufferLayout(context);
             ResourceManager.SetupConstBuffer(_bufferContent, ref Buffer.Value);
             Buffer.Value.DebugName=nameof(TransformsConstBuffer);
             _previousBufferInitialized = true;
@@ -63,7 +65,7 @@ namespace T3.Operators.Types.Id_843c9378_6836_4f39_b676_06fd2828af3e
         public readonly InputSlot<Object> CameraReference = new InputSlot<Object>();
 
         
-        private TransformsConstBuffer.TransformBufferLayout _bufferContent;
+        private TransformBufferLayout _bufferContent;
         private bool _previousBufferInitialized;
     }
 }

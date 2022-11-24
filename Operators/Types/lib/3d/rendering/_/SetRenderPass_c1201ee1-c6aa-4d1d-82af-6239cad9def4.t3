@@ -1,0 +1,21 @@
+{
+  "Name": "SetRenderPass",
+  "Id": "c1201ee1-c6aa-4d1d-82af-6239cad9def4",
+  "Namespace": "lib.3d.rendering._",
+  "Inputs": [
+    {
+      "Id": "5c82a1e8-d91f-4777-9c9c-0b4509dd8150"/*SubTree*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "56bfc2ec-1455-41aa-a3b8-ffe3ead75941"/*Id*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "2623ed48-b145-4942-9730-a5936a104def"/*Texture*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

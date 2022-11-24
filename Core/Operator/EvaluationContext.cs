@@ -87,6 +87,8 @@ namespace T3.Core.Operator
         public Matrix WorldToCamera { get; set; } = Matrix.Identity;
         public Matrix ObjectToWorld { get; set; } = Matrix.Identity;
         
+        public Matrix LightToClipSpace { get; set; } = Matrix.Identity;
+        
         // Render settings
         public Buffer FogParameters { get; set; } = FogSettings.DefaultSettingsBuffer;
         public Buffer PbrMaterialParams { get; set; }
