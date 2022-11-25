@@ -26,7 +26,7 @@
       }
     },
     {
-      "ChildId": "cf8500d6-994f-479b-8a98-362c35b233c9"/*UglySSAO*/,
+      "ChildId": "cf8500d6-994f-479b-8a98-362c35b233c9"/*SSAO*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

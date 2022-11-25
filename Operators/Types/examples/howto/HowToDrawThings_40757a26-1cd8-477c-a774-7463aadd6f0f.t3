@@ -426,7 +426,7 @@
       "Outputs": []
     },
     {
-      "Id": "e069a7da-016d-475c-952b-0f69a551ef9d"/*UglySSAO*/,
+      "Id": "e069a7da-016d-475c-952b-0f69a551ef9d"/*SSAO*/,
       "SymbolId": "13d5260d-4e50-48f8-909c-7d84d6f0a43f",
       "InputValues": [
         {

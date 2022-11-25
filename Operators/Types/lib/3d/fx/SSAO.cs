@@ -6,10 +6,13 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_13d5260d_4e50_48f8_909c_7d84d6f0a43f
 {
-    public class UglySSAO : Instance<UglySSAO>
+    public class SSAO : Instance<SSAO>
     {
         [Output(Guid = "9be415b6-b7f0-4b8f-8d93-c147ef8d0d44")]
         public readonly Slot<Texture2D> Output = new Slot<Texture2D>();
+
+        [Output(Guid = "ac91f2bf-9162-4c4d-a8fd-865f961cfac9")]
+        public readonly Slot<SharpDX.Direct3D11.Texture2D> DepthBuffer2 = new Slot<SharpDX.Direct3D11.Texture2D>();
 
         [Input(Guid = "450023da-53fb-4e36-9936-551a2ebcce84")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture2d = new InputSlot<SharpDX.Direct3D11.Texture2D>();

@@ -222,7 +222,7 @@
       "Outputs": []
     },
     {
-      "Id": "11843f5d-0f01-438a-ac63-4764b23e8b93"/*UglySSAO*/,
+      "Id": "11843f5d-0f01-438a-ac63-4764b23e8b93"/*SSAO*/,
       "SymbolId": "13d5260d-4e50-48f8-909c-7d84d6f0a43f",
       "InputValues": [
         {

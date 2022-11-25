@@ -213,10 +213,10 @@
       }
     },
     {
-      "ChildId": "7c648f17-312a-41a0-81fb-50635b72c217"/*AddDOF*/,
+      "ChildId": "7c648f17-312a-41a0-81fb-50635b72c217"/*DepthOfField*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 1934.7197,

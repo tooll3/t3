@@ -313,7 +313,7 @@
       }
     },
     {
-      "ChildId": "f47ff24c-623b-42e1-85cb-7473c9af3c4f"/*DepthToLinear*/,
+      "ChildId": "f47ff24c-623b-42e1-85cb-7473c9af3c4f"/*_ComputeDepthToLinear*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

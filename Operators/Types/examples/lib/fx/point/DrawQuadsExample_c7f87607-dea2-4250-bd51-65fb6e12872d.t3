@@ -937,7 +937,7 @@
       "Outputs": []
     },
     {
-      "Id": "7a02163a-e4fc-4cab-bf5e-705fd55267bb"/*UglySSAO*/,
+      "Id": "7a02163a-e4fc-4cab-bf5e-705fd55267bb"/*SSAO*/,
       "SymbolId": "13d5260d-4e50-48f8-909c-7d84d6f0a43f",
       "InputValues": [
         {
@@ -2187,7 +2187,7 @@
       "Outputs": []
     },
     {
-      "Id": "37868e34-2b4d-4092-a09e-af5943bc543e"/*UglySSAO*/,
+      "Id": "37868e34-2b4d-4092-a09e-af5943bc543e"/*SSAO*/,
       "SymbolId": "13d5260d-4e50-48f8-909c-7d84d6f0a43f",
       "InputValues": [
         {
