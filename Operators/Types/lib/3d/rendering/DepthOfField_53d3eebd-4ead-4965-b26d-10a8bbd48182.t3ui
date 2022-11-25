@@ -46,6 +46,7 @@
     },
     {
       "InputId": "bc1685a8-0a92-460f-85ca-7f096db965f0"/*TextureBuffer*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -477.11346,
         "Y": 452.1857
