@@ -552,6 +552,127 @@
         "X": 3143.371,
         "Y": 1726.4106
       }
+    },
+    {
+      "ChildId": "b96681f7-e6bf-4c67-a3b1-17b44a51e692"/*SimpleLiquid2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2103.4023,
+        "Y": 57.470886
+      }
+    },
+    {
+      "ChildId": "aae4536c-b918-44a7-b177-46148e503523"/*SimpleLiquid2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1770.3643,
+        "Y": 607.07635
+      }
+    },
+    {
+      "ChildId": "0c1d4310-88af-456d-8350-cec774dfb355"/*SimpleLiquid2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 2737.707,
+        "Y": -284.67944
+      }
+    },
+    {
+      "ChildId": "f5ce59d7-097c-4e84-8b9f-6f0324f3cbbe"/*Text*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2287.707,
+        "Y": -284.67944
+      }
+    },
+    {
+      "ChildId": "00b1c09e-92ef-4f4d-a8cd-4200446fa74a"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2437.707,
+        "Y": -284.67944
+      }
+    },
+    {
+      "ChildId": "4319b394-2d17-40b8-89c8-f092d64d03da"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1987.707,
+        "Y": -284.67944
+      }
+    },
+    {
+      "ChildId": "d2307294-774e-466e-a6e9-31b3139635e2"/*RoundedRect*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 2587.707,
+        "Y": -284.67944
+      }
+    },
+    {
+      "ChildId": "4e1dd600-6c84-45bb-b42f-893df471834a"/*SampleGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2137.707,
+        "Y": -284.67944
+      }
+    },
+    {
+      "ChildId": "6efe2fd3-ceba-4e4e-b6d3-04e2992ef66b"/*AnimVec2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 2454.2761,
+        "Y": -108.39569
+      }
+    },
+    {
+      "ChildId": "560b8e66-e2c8-4d65-a443-4639efbf3dcf"/*AnimVec2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 2485.4158,
+        "Y": -173.42413
+      }
+    },
+    {
+      "ChildId": "a97911bd-6b8b-4cdd-ba99-4900aa70f54d"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 2512.8926,
+        "Y": -435.82745
+      }
     }
   ],
   "OutputUis": [
