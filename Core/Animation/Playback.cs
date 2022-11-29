@@ -50,7 +50,7 @@ namespace T3.Core.Animation
         public double PlaybackSpeed { get; set; }
         public bool IsLooping = false;
         
-        public static double RunTimeInSecs => _runTimeWatch.ElapsedMilliseconds / 1000.0;
+        public static double RunTimeInSecs =>   _runTimeWatch.Elapsed.TotalSeconds;
         public static double LastFrameDuration { get; private set; }
         public double LastFrameDurationInBars => BarsFromSeconds(LastFrameDuration);
         

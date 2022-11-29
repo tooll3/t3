@@ -9,6 +9,20 @@
         "Y": 0.0
       },
       "Usage": "Default"
+    },
+    {
+      "InputId": "c78e0d72-1296-430c-98fb-078cbe2e9596"/*FallbackValue*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "70ef2d92-cd3e-4c14-ba9c-e7e29b2478c8"/*LogUpdates*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
     }
   ],
   "SymbolChildUis": [],

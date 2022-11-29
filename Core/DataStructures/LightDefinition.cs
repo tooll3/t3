@@ -19,7 +19,8 @@ namespace T3.Core.Rendering
             Decay = decay;
             SpotLightDirection = Vector3.UnitZ;
             SpotLightFOV = 1;
-            
+            SpotLightEdge = 0;
+            ShadowMode = 0;
         }
 
         [FieldOffset(0)]
@@ -51,4 +52,5 @@ namespace T3.Core.Rendering
 
         private const int StructSize = 16 * 4;
     }
+    
 }

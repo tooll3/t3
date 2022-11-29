@@ -23,5 +23,8 @@ namespace T3.Operators.Types.Id_2d62dd4b_9597_4569_a09e_495abf880e34
         [Input(Guid = "379bee6d-ba65-4a53-9d9e-8dded21f351a")]
         public readonly InputSlot<bool> ClampOutput = new InputSlot<bool>();
 
+        [Input(Guid = "05359bf0-eef3-4322-b5cd-8df009e6a236")]
+        public readonly InputSlot<int> Mode = new InputSlot<int>();
+
     }
 }
