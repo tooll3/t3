@@ -174,7 +174,7 @@
       "Outputs": []
     },
     {
-      "Id": "cec5d414-bd1a-42fe-b858-5a814b22764c"/*AddDOF*/,
+      "Id": "cec5d414-bd1a-42fe-b858-5a814b22764c"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {

@@ -6,9 +6,9 @@ namespace T3.Editor.Gui.Interaction.Timing
 {
     public class BpmDetection
     {
-        public float SampleDurationInSec { get; set; } = 15;
+        public float SampleDurationInSec { get; set; } = 25;
         public int BpmRangeMin { get; set; } = 80;
-        public int BpmRangeMax { get; set; } = 160;
+        public int BpmRangeMax { get; set; } = 180;
         public float NormalizedFrequencyRangeMin { get; set; } = 0;
         public float NormalizedFrequencyRangeMax { get; set; } = 0.2f;
         public float LockInFactor { get; set; } = 0.001f;
@@ -57,7 +57,7 @@ namespace T3.Editor.Gui.Interaction.Timing
             foreach (var offset in _searchOffsets)
             {
                 var bpm = _currentBpm + offset;
-                if (bpm < 70 || bpm > 160)
+                if (bpm < 70 || bpm > 170)
                     continue;
 
                 var m = MeasureEnergyDifference(bpm) / ComputeFocusFactor(bpm, _currentBpm, 2, 0.01f);
@@ -174,7 +174,7 @@ namespace T3.Editor.Gui.Interaction.Timing
         private const int FramesPerSecond = 60;
         private const int FftResolution = 512;
         private float _currentBpm = 66;
-        private readonly float[] _searchOffsets = { -0.5f, -0.1f, 0, 0.1f, 0.5f, };
+        private readonly float[] _searchOffsets = { -0.3f, -0.1f, 0, 0.1f, 0.3f, };
 
         private int SampleBufferSize => (int)SampleDurationInSec.Clamp(1, 60) * FramesPerSecond;
         

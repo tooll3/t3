@@ -3648,7 +3648,7 @@
       ]
     },
     {
-      "Id": "40ca73c2-2c56-493d-a854-eaa113887a19"/*UglySSAO*/,
+      "Id": "40ca73c2-2c56-493d-a854-eaa113887a19"/*SSAO*/,
       "SymbolId": "13d5260d-4e50-48f8-909c-7d84d6f0a43f",
       "InputValues": [
         {

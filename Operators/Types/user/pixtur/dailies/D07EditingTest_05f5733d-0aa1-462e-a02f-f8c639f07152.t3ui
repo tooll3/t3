@@ -70,7 +70,7 @@
       }
     },
     {
-      "ChildId": "b311776a-6532-4e72-96be-b05eef56d317"/*AddDOF*/,
+      "ChildId": "b311776a-6532-4e72-96be-b05eef56d317"/*DepthOfField*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -819,7 +819,7 @@
       }
     },
     {
-      "ChildId": "f6a03a5b-8bb0-4677-89de-66849eebb0f5"/*AddDOF*/,
+      "ChildId": "f6a03a5b-8bb0-4677-89de-66849eebb0f5"/*DepthOfField*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -841,7 +841,7 @@
       }
     },
     {
-      "ChildId": "e7450a30-ad92-4317-b843-739ce6a86c3b"/*AddDOF*/,
+      "ChildId": "e7450a30-ad92-4317-b843-739ce6a86c3b"/*DepthOfField*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -2007,7 +2007,7 @@
       }
     },
     {
-      "ChildId": "0a53de4c-0535-4a6b-9a27-9366c47b3069"/*UglySSAO*/,
+      "ChildId": "0a53de4c-0535-4a6b-9a27-9366c47b3069"/*SSAO*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

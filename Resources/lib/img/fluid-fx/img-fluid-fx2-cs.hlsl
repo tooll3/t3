@@ -10,14 +10,20 @@ cbuffer ParamConstants : register(b0)
     float MousePressed;
     float TriggerReset;
 
-    float2 Gravity;
+    float2 Gravity;  //4
     float BorderStrength;    
     float MassAttraction;
-    float4 ApplyFxTexture;
 
-    float SpeedFactor;
-    float StabilizeFactor;
+    float ApplyFxTexture;    // 8
+    float FxRG_Acceleration; // 9
+    float FxB_Mass;          // 10
 
+    float SpeedFactor;       // 11
+    float StabilizeFactor;   // 12
+    float ResetFillFactor;
+
+    float MouseClick_Force;
+    float MouseClick_Fill;
 }
 
 
@@ -119,8 +125,8 @@ void main2(uint3 DTid : SV_DispatchThreadID)
     // Apply FX Texture
     float4 fx = FxTexture.SampleLevel(texSampler, uv,0);
 
-    o.b += fx.b * ApplyFxTexture.b * ApplyFxTexture.a * fx.a;
-    o.xy += (fx.xy  -0.5) * ApplyFxTexture.xy * ApplyFxTexture.a * fx.a;
+    o.b += fx.b * FxB_Mass * ApplyFxTexture * fx.a;
+    o.xy += (fx.xy  -0.5) * FxRG_Acceleration * ApplyFxTexture * fx.a;
     o.xy *= SpeedFactor;
     
     // Stabilize at one
@@ -132,12 +138,20 @@ void main2(uint3 DTid : SV_DispatchThreadID)
     {
         float2 m = 3.*(uv-.5);
         float2 m2 = 8.*(uv- MousePos);
-        o += float4(m2,0,0)*.4*exp(-dot(m2,m2));
+        m2.x *= (float)width/height;
+        
+        o += float4(m2,0,0)*.4*exp(-dot(m2,m2)) * MouseClick_Force;
+        o.z += smoothstep(1,0, length(m2) ) * MouseClick_Fill;
+
+        //o += float4(0, 0, length(m2),0) * MouseClick_Fill;
+
+
     }
 
     if(TriggerReset > 0.5) {
+        ColorOutput[DTid.xy]= float4(1,1,0,1);    
         float2 m = 3.*(uv-.5);
-        o = float4(0,1,1,1)*exp(-dot(m,m)) * 0.1; 
+        o = float4(0,1,1,1)*exp(-dot(m,m)) * ResetFillFactor; 
         o.xy = m*1;
         BufferB[DTid.xy] = o;        
     }
@@ -152,4 +166,15 @@ void main2(uint3 DTid : SV_DispatchThreadID)
                      +sin(a.y*4.+float4(1,3,2,4))*.2+.6);
     c.a=1;
     ColorOutput[DTid.xy]= c;    
+
+
+    ///-------  
+    {   
+        float2 p = 0.5;     
+        float2 m2 = 8.*(uv- p);
+        float2 pp = uv- MousePos;
+        
+        float k = smoothstep(1,0, 8 * length(pp) );
+    }
+    
 }

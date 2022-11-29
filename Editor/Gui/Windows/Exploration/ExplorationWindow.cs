@@ -185,7 +185,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                                                             {
                                                                 SymbolChildUi = symbolChildUi,
                                                                 Input = input,
-                                                                InstanceIdPath = NodeOperations.BuildIdPathForInstance(instance),
+                                                                InstanceIdPath = OperatorUtils.BuildIdPathForInstance(instance),
                                                                 Type = p.ValueType,
                                                                 InputSlot = inputSlot,
                                                                 ParameterScale = scale,

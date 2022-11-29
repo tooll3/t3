@@ -2162,7 +2162,7 @@
       }
     },
     {
-      "ChildId": "40ca73c2-2c56-493d-a854-eaa113887a19"/*UglySSAO*/,
+      "ChildId": "40ca73c2-2c56-493d-a854-eaa113887a19"/*SSAO*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

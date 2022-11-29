@@ -25,8 +25,14 @@ namespace T3.Operators.Types.Id_d1a1f207_0537_416a_985b_e350c3f7e655
         [Input(Guid = "225df965-a92b-45d8-abae-81238aada793")]
         public readonly InputSlot<float> MassAttraction = new InputSlot<float>();
 
-        [Input(Guid = "76efee74-fe2d-4926-98d8-82be384f298e")]
-        public readonly InputSlot<System.Numerics.Vector4> ApplyFxTexture = new InputSlot<System.Numerics.Vector4>();
+        [Input(Guid = "91d7a9e8-dc0e-4c77-8496-90ac7c4dfe0c")]
+        public readonly InputSlot<float> ApplyFxTexture = new InputSlot<float>();
+
+        [Input(Guid = "83b4782b-9ac3-4426-b7d9-1669e97c89b1")]
+        public readonly InputSlot<float> FX_RG_Velocity = new InputSlot<float>();
+
+        [Input(Guid = "fcf28205-bcc4-46f3-af4c-1a3896a991a5")]
+        public readonly InputSlot<float> FX_B_AddRemoveMass = new InputSlot<float>();
 
         [Input(Guid = "c07bdf4d-8395-4327-b57e-6ba38f36e8a0")]
         public readonly InputSlot<float> SpeedFactor = new InputSlot<float>();
@@ -34,11 +40,17 @@ namespace T3.Operators.Types.Id_d1a1f207_0537_416a_985b_e350c3f7e655
         [Input(Guid = "18d0f554-e8f7-4b0f-98c7-24c9742b66af")]
         public readonly InputSlot<float> StabilizeFactor = new InputSlot<float>();
 
+        [Input(Guid = "128d4d4e-7dc9-466b-9e9d-e572d2cd0b5e")]
+        public readonly InputSlot<float> ResetFillFactor = new InputSlot<float>();
+
+        [Input(Guid = "f9351dc1-ccbd-44f2-9872-c1a0245bb1b0")]
+        public readonly InputSlot<float> MouseClick_Force = new InputSlot<float>();
+
+        [Input(Guid = "17a4765b-7032-4737-86c2-647b7bd4bedf")]
+        public readonly InputSlot<float> OnClick_AddRemoveMass = new InputSlot<float>();
+
         [Input(Guid = "b5e1cded-fded-4769-8d1e-38598cf944db")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> FxTexture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
-
-        [Input(Guid = "4e00796d-704a-4c1f-9822-d11e1ada619c")]
-        public readonly InputSlot<SharpDX.DXGI.Format> Format = new InputSlot<SharpDX.DXGI.Format>();
 
         [Input(Guid = "b4d844b5-5d29-4c2d-a327-e1b9eb7411d8")]
         public readonly InputSlot<int> Iterations = new InputSlot<int>();

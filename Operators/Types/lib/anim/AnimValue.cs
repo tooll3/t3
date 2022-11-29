@@ -13,9 +13,13 @@ namespace T3.Operators.Types.Id_ea7b8491_2f8e_4add_b0b1_fd068ccfed0d
         [Output(Guid = "ae4addf0-08cf-4b25-9515-4fef9359d183")]
         public readonly Slot<float> Result = new();
 
+        [Output(Guid = "5538411F-E6E5-4DFF-9CF4-A6410BE49A8C")]
+        public readonly Slot<bool> WasHit = new();
+        
         public AnimValue()
         {
             Result.UpdateAction = Update;
+            WasHit.UpdateAction = Update;
         }
 
         public double _normalizedTime; // only public for Ui
@@ -36,9 +40,15 @@ namespace T3.Operators.Types.Id_ea7b8491_2f8e_4add_b0b1_fd068ccfed0d
                            ? OverrideTime.GetValue(context)
                            : context.LocalFxTime;
 
+            var originalTime = _normalizedTime;
             
             _normalizedTime = (time + phase) * rateFactorFromContext * rate;
             Result.Value = AnimMath.CalcValueForNormalizedTime(_shape, _normalizedTime, 0, bias,ratio) * amplitude + offset;
+            
+            WasHit.Value = (int)originalTime != (int)_normalizedTime;
+            
+            WasHit.DirtyFlag.Clear();
+            Result.DirtyFlag.Clear();
         }
         
         [Input(Guid = "4cf5d20b-7335-4584-b246-c260ac5cdf4f", MappedType = typeof(AnimMath.Shapes))]

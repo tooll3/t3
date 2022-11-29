@@ -28,6 +28,10 @@
     {
       "Id": "51545316-69fc-441f-b59f-44979e32972c"/*Pow*/,
       "DefaultValue": 1.0
+    },
+    {
+      "Id": "63e90d86-5ad5-4333-8b99-7f8d285c4913"/*Direction*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],

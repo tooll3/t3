@@ -25,7 +25,7 @@ namespace T3.Operators.Types.Id_2b00bb7a_92cc_41e5_a5f6_bc3e8b16c5eb
 
             if (keyIndex >= KeyHandler.PressedKeys.Length)
             {
-                Log.Warning($"keyIndex {keyIndex} out of range", SymbolChildId);
+                Log.Warning($"keyIndex {keyIndex} out of range", this);
                 return;
             } 
             

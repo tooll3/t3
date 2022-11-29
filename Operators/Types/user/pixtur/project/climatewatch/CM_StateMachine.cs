@@ -148,7 +148,7 @@ namespace T3.Operators.Types.Id_b0453fd5_e9c5_481a_aa6b_0040bd5c1318
             // if (newState == _state)
             //     return;
 
-            Log.Debug($"Switch {_state} -> {newState}", SymbolChildId);
+            Log.Debug($"Switch {_state} -> {newState}", this);
 
             switch (newState)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
 using T3.Core.Logging;
+using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction;
@@ -134,7 +135,7 @@ namespace T3.Editor.Gui.Windows
 
             bookmarks[index] = new Bookmark()
                                    {
-                                       IdPath = NodeOperations.BuildIdPathForInstance(canvas.CompositionOp),
+                                       IdPath = OperatorUtils.BuildIdPathForInstance(canvas.CompositionOp),
                                        ViewScope = canvas.GetTargetScope(),
                                        SelectedChildIds = NodeSelection.GetSelectedNodes<SymbolChildUi>().Select(s => s.Id).ToList()
                                    };

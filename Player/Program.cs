@@ -238,7 +238,7 @@ namespace T3
                 
                 // Trigger loading clip
                 AudioEngine.UseAudioClip(_soundtrack, 0);
-                AudioEngine.CompleteFrame(_playback);
+                AudioEngine.CompleteFrame(_playback);// Initialize   
             }
             // else
             // {
@@ -316,7 +316,9 @@ namespace T3
                                              }
                                          }
                                      }
-                                     AudioEngine.CompleteFrame(_playback);
+                                     
+                                     // Update
+                                     AudioEngine.CompleteFrame(_playback); 
                                      
                                      DirtyFlag.IncrementGlobalTicks();
                                      DirtyFlag.InvalidationRefFrame++;

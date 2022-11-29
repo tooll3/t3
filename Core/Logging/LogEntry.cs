@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace T3.Core.Logging
 {
-    public struct LogEntry
+    public readonly struct LogEntry
     {
         [Flags]
         public enum EntryLevel
@@ -15,60 +14,38 @@ namespace T3.Core.Logging
             All = Debug | Info | Warning | Error
         }
 
-        public DateTime TimeStamp { get; private set; }
-        public EntryLevel Level { get; private set; }
-        public String Message { get; private set; }
-        public Guid SourceId { get; private set; }
+        public DateTime TimeStamp { get; }
+        public EntryLevel Level { get; }
+        public string Message { get; }
+        public Guid[] SourceIdPath  { get; }
 
-        public LogEntry(EntryLevel level, Guid sourceId, String message)
-        {
-            TimeStamp = DateTime.Now;
-            Level = level;
-            SourceId = sourceId;
-            Message = message;
-        }
-
-        public LogEntry(EntryLevel level, String message)
+        public LogEntry(EntryLevel level, string message, Guid[] sourceIdPath)
         {
             TimeStamp = DateTime.Now;
             Level = level;
             Message = message;
-            SourceId = Guid.Empty;
+            SourceIdPath = sourceIdPath;
         }
-
-        public LogEntry(EntryLevel level, String message, DateTime timeStamp)
+        
+        public LogEntry(EntryLevel level, string message, Guid sourceId)
         {
-            TimeStamp = timeStamp;
+            TimeStamp = DateTime.Now;
             Level = level;
             Message = message;
-            SourceId = Guid.Empty;
+            SourceIdPath = new []{sourceId};
         }
 
-        /**
-         * Special method to clone an existing entry with a new lineMessage.
-         * This is required for implementing splitting multiline-messages
-         */
-        public LogEntry(LogEntry original, String lineMessage)
+        public LogEntry(EntryLevel level, string message)
         {
-            TimeStamp = original.TimeStamp;
-            Level = original.Level;
-            Message = lineMessage;
-            SourceId = original.SourceId;
-        }
-
-        public List<LogEntry> SplitIntoSingleLineEntries()
-        {
-            var result = new List<LogEntry>();
-            foreach (var line in Message.Replace("\r", "").Split('\n'))
-            {
-                result.Add(new LogEntry(this, line));
-            }
-            return result;
+            TimeStamp = DateTime.Now;
+            Level = level;
+            Message = message;
+            SourceIdPath = null;
         }
         
         public double SecondsSinceStart => (TimeStamp - _startTime).TotalSeconds;
         public double SecondsAgo => (DateTime.Now - TimeStamp).TotalSeconds;
-
+        public Guid SourceId => SourceIdPath is { Length: > 0 } ? SourceIdPath[^1] : Guid.Empty;
         private static readonly DateTime _startTime = DateTime.Now;
     }
 }

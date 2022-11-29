@@ -31,7 +31,7 @@ namespace T3.Operators.Types.Id_a908cc64_e8cb_490c_ae45_c2c5fbfcedfb
                 string sourcePath = Source.GetValue(context);
                 if (!File.Exists(sourcePath))
                 {
-                    Log.Warning($"GeometryShader has incorrect or missing path {sourcePath}", SymbolChildId);
+                    Log.Warning($"GeometryShader has incorrect or missing path {sourcePath}", this);
                     return;
                 }
                 

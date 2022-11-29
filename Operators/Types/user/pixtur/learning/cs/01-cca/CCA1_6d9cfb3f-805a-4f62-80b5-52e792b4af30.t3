@@ -360,7 +360,7 @@
       "Outputs": []
     },
     {
-      "Id": "1acd4f4d-da74-4065-94df-a5d279f92cc4"/*AddDOF*/,
+      "Id": "1acd4f4d-da74-4065-94df-a5d279f92cc4"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [],
       "Outputs": []

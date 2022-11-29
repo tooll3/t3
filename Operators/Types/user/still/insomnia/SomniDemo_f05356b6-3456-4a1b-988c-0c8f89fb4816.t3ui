@@ -2405,7 +2405,7 @@
       }
     },
     {
-      "ChildId": "cd527df6-0cb4-4a54-889c-b055aa086523"/*UglySSAO*/,
+      "ChildId": "cd527df6-0cb4-4a54-889c-b055aa086523"/*SSAO*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -2702,7 +2702,7 @@
       }
     },
     {
-      "ChildId": "3fc22001-87f3-4de3-bd82-e1297dbefd50"/*AddDOF*/,
+      "ChildId": "3fc22001-87f3-4de3-bd82-e1297dbefd50"/*DepthOfField*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Selection;
@@ -152,13 +153,13 @@ namespace T3.Editor.Gui.Windows
 
         public void PinInstance(Instance instance)
         {
-            _pinnedInstancePath = NodeOperations.BuildIdPathForInstance(instance);
+            _pinnedInstancePath = OperatorUtils.BuildIdPathForInstance(instance);
             _isPinned = true;
         }
 
         private void PinSelectionAsEvaluationStart(Instance instance)
         {
-            _pinnedEvaluationInstancePath = NodeOperations.BuildIdPathForInstance(instance);
+            _pinnedEvaluationInstancePath = OperatorUtils.BuildIdPathForInstance(instance);
         }
 
         public Instance GetPinnedOrSelectedInstance()

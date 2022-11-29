@@ -892,14 +892,15 @@ namespace T3.Editor.Gui.Graph.Interaction
                     var drawList = ImGui.GetForegroundDrawList();
 
                     drawList.AddCircleFilled(_bestMatchYetForCurrentFrame.PositionOnScreen, radius, _bestMatchYetForCurrentFrame.Color, 30);
-                    ImGui.SetCursorScreenPos(_bestMatchYetForCurrentFrame.PositionOnScreen - Vector2.One * radius / 2);
+                    
+                    var buttonMin = _mousePosition - Vector2.One * radius / 2;
+                    ImGui.SetCursorScreenPos(buttonMin);
 
-                    ImGui.InvisibleButton("splitMe", Vector2.One * radius);
-                    if (ImGui.IsItemDeactivated()
-                        && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() < UserSettings.Config.ClickThreshold
-                        )
+                    if(ImGui.InvisibleButton("splitMe", Vector2.One * radius))
                     {
-                        var posOnScreen = graphCanvas.InverseTransformPositionFloat(_bestMatchYetForCurrentFrame.PositionOnScreen) - SymbolChildUi.DefaultOpSize / 2;
+                        var posOnScreen = graphCanvas.InverseTransformPositionFloat(_bestMatchYetForCurrentFrame.PositionOnScreen) 
+                                          - new Vector2(SymbolChildUi.DefaultOpSize.X / 0.25f, 
+                                                        SymbolChildUi.DefaultOpSize.Y / 2);
 
                         SplitConnectionWithSymbolBrowser(graphCanvas.CompositionOp.Symbol,
                                                          graphCanvas.SymbolBrowser,

@@ -45,7 +45,7 @@ namespace T3.Operators.Types.Id_32a6a351_6d22_4915_aa0e_e0483b7f4e76
                 }
                 catch (Exception e)
                 {
-                    Log.Warning("Generating MipMaps resulted in an Exception: " + e.Message, SymbolChildId);
+                    Log.Warning("Generating MipMaps resulted in an Exception: " + e.Message, this);
                 }
             }
 

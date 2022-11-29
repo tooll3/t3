@@ -2045,6 +2045,12 @@
       "SymbolId": "284d2183-197d-47fd-b130-873cced78b1c",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "9da7040c-2d5d-4311-bfd5-4334c61f8215"/*AudioReaction*/,
+      "SymbolId": "03477b9a-860e-4887-81c3-5fe51621122c",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [

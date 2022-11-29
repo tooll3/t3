@@ -222,7 +222,7 @@
       "Outputs": []
     },
     {
-      "Id": "11843f5d-0f01-438a-ac63-4764b23e8b93"/*UglySSAO*/,
+      "Id": "11843f5d-0f01-438a-ac63-4764b23e8b93"/*SSAO*/,
       "SymbolId": "13d5260d-4e50-48f8-909c-7d84d6f0a43f",
       "InputValues": [
         {
@@ -1466,14 +1466,14 @@
       "SymbolId": "18251874-5d5a-4384-8dcd-fcf297e54886",
       "InputValues": [
         {
-          "Id": "519d77c0-5605-433a-b8ce-6d84f99edd7b"/*Count*/,
-          "Type": "System.Int32",
-          "Value": 81
-        },
-        {
           "Id": "f32458a5-f19f-487b-8ae2-a575de0b4ff2"/*StartIndex*/,
           "Type": "System.Int32",
           "Value": 15109
+        },
+        {
+          "Id": "519d77c0-5605-433a-b8ce-6d84f99edd7b"/*Count*/,
+          "Type": "System.Int32",
+          "Value": 81
         },
         {
           "Id": "60cea2c3-02ae-4132-ad11-3f16c2f71b6e"/*ScatterSelect*/,

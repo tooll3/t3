@@ -107,7 +107,7 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
                         {
                             streamResponse.CopyTo(memStream);
 
-                            Log.Debug($"Finished loading URL {_url}", SymbolChildId);
+                            Log.Debug($"Finished loading URL {_url}", this);
 
                             ImagingFactory factory = new ImagingFactory();
                             memStream.Position = 0;

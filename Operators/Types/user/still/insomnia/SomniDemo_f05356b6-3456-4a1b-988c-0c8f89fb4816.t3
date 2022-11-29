@@ -4768,7 +4768,7 @@
       "Outputs": []
     },
     {
-      "Id": "cd527df6-0cb4-4a54-889c-b055aa086523"/*UglySSAO*/,
+      "Id": "cd527df6-0cb4-4a54-889c-b055aa086523"/*SSAO*/,
       "SymbolId": "13d5260d-4e50-48f8-909c-7d84d6f0a43f",
       "InputValues": [
         {
@@ -5404,7 +5404,7 @@
       "Outputs": []
     },
     {
-      "Id": "3fc22001-87f3-4de3-bd82-e1297dbefd50"/*AddDOF*/,
+      "Id": "3fc22001-87f3-4de3-bd82-e1297dbefd50"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {

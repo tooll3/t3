@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Selection;
@@ -140,7 +141,7 @@ namespace T3.Editor.Gui.Windows
 
                         if (ImGui.Selectable(symbolChild.ReadableName))
                         {
-                            graphWindow?.GraphCanvas.SetComposition(NodeOperations.BuildIdPathForInstance(instanceParent),
+                            graphWindow?.GraphCanvas.SetComposition(OperatorUtils.BuildIdPathForInstance(instanceParent),
                                                                     ICanvas.Transition.Undefined);
 
                             var childUi = SymbolUiRegistry.Entries[compositionSymbol.Id].ChildUis.Single(cUi => cUi.Id == instance.SymbolChildId);

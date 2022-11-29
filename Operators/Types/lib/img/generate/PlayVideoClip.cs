@@ -213,7 +213,7 @@ namespace T3.Operators.Types.Id_04c1a6dc_3042_48a8_81d2_0a5a162016dc
 
         private void EnginePlaybackEventHandler(MediaEngineEvent mediaEvent, long param1, int param2)
         {
-            // Log.Debug(mediaEvent.ToString(), SymbolChildId);
+            // Log.Debug(mediaEvent.ToString(), this);
             switch (mediaEvent)
             {
                 case MediaEngineEvent.LoadStart:

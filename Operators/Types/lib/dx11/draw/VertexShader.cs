@@ -31,7 +31,7 @@ namespace T3.Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad
         //     }
         //     catch
         //     {
-        //         Log.Warning($"Unable to get filename from {sourcePath}", SymbolChildId);
+        //         Log.Warning($"Unable to get filename from {sourcePath}", this);
         //     }    
         //     return Source?.TypedInputValue?.Value;;
         // }

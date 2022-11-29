@@ -32,7 +32,7 @@ namespace T3.Operators.Types.Id_484bec1b_e441_440a_85b4_b3865c57b4ed
 
             if (obj is not ICamera camera)
             {
-                Log.Warning("Can't GetCamProperties from invalid reference type", SymbolChildId);
+                Log.Warning("Can't GetCamProperties from invalid reference type", this);
                 return;
             }                   
             

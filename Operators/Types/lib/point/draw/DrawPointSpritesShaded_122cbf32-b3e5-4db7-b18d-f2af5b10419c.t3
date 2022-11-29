@@ -30,7 +30,7 @@
     },
     {
       "Id": "08fb9c79-2672-4ece-89bc-6f05e07592d7"/*AlphaCutOff*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.0009999999
     },
     {
       "Id": "e7cd2998-cd5a-494e-8669-b68f59fba257"/*EnableDepthWrite*/,

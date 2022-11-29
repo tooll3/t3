@@ -1259,7 +1259,7 @@
       }
     },
     {
-      "ChildId": "a58afbae-8e6e-4b2d-aa12-5df6b66f280f"/*AddDOF*/,
+      "ChildId": "a58afbae-8e6e-4b2d-aa12-5df6b66f280f"/*DepthOfField*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

@@ -1,5 +1,5 @@
 {
-  "Id": "13d5260d-4e50-48f8-909c-7d84d6f0a43f"/*UglySSAO*/,
+  "Id": "13d5260d-4e50-48f8-909c-7d84d6f0a43f"/*SSAO*/,
   "InputUis": [
     {
       "InputId": "450023da-53fb-4e36-9936-551a2ebcce84"/*Texture2d*/,
@@ -399,6 +399,13 @@
       "Position": {
         "X": 1800.886,
         "Y": 1416.9978
+      }
+    },
+    {
+      "OutputId": "ac91f2bf-9162-4c4d-a8fd-865f961cfac9"/*DepthBuffer2*/,
+      "Position": {
+        "X": 1800.886,
+        "Y": 1516.9978
       }
     }
   ]

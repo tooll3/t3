@@ -29,6 +29,7 @@ using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;
+using T3.Operators.Types.Id_cda108a1_db4f_4a0a_ae4d_d50e9aade467;
 
 namespace T3.Editor.Gui
 {
@@ -46,15 +47,16 @@ namespace T3.Editor.Gui
             ExampleSymbolLinking.UpdateExampleLinks();
             VariationHandling.Init();
         }
-
-
-        //public static bool MaximalView = true;
+        
         public void Draw()
         {
             // Prepare the current frame 
             Playback.Current.Update(UserSettings.Config.EnableIdleMotion);
             SoundtrackUtils.UpdateMainSoundtrack();
-            AudioEngine.CompleteFrame(Playback.Current);
+            BeatTiming.Update(ImGui.GetTime());
+            _bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
+            
+            AudioEngine.CompleteFrame(Playback.Current);    // Update
             
             if (ForwardBeatTaps.BeatTapTriggered)
                 BeatTiming.TriggerSyncTap();
@@ -82,7 +84,6 @@ namespace T3.Editor.Gui
             WindowManager.Draw();
             
             // Complete frame
-            BeatTiming.Update(ImGui.GetTime());
             SingleValueEdit.StartNextFrame();
             SelectableNodeMovement.CompleteFrame();
 
@@ -375,6 +376,8 @@ namespace T3.Editor.Gui
         private readonly StatusErrorLine _statusErrorLine = new StatusErrorLine();
         public static readonly UiModel UiModel;
         
+        
+        
         public static string OpenedPopUpName; // This is reset on Frame start and can be useful for allow context menu to stay open even if a
         // later context menu would also be opened. There is probably some ImGui magic to do this probably. 
 
@@ -391,6 +394,8 @@ namespace T3.Editor.Gui
         private static readonly CreateFromTemplateDialog _createFromTemplateDialog = new();
         private static readonly UserNameDialog _userNameDialog = new();
         private static readonly MigrateOperatorsDialog _importDialog = new();
+
+        public static readonly BpmDetection _bpmDetection = new ();
 
         [Flags]
         public enum EditingFlags

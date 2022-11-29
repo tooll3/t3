@@ -34,6 +34,7 @@ namespace T3.Operators.Types.Id_55cc0f79_96c9_482e_9794_934dc0f87708
             if (!Values.IsConnected)
                 return;
 
+            var useHorizontal = Direction.GetValue(context) == 0;
             var values = Values.GetValue(context);
             if (values == null || values.Count == 0)
                 return;
@@ -46,7 +47,7 @@ namespace T3.Operators.Types.Id_55cc0f79_96c9_482e_9794_934dc0f87708
                 rangeStart = 0;
                 rangeEnd = values.Count - 1;
             }
-            
+
             var gain = Gain.GetValue(context);
             var pow = Pow.GetValue(context);
 
@@ -54,7 +55,7 @@ namespace T3.Operators.Types.Id_55cc0f79_96c9_482e_9794_934dc0f87708
             {
                 return;
             }
-            
+
             if (rangeEnd < rangeStart)
             {
                 (rangeEnd, rangeStart) = (rangeStart, rangeEnd);
@@ -69,8 +70,8 @@ namespace T3.Operators.Types.Id_55cc0f79_96c9_482e_9794_934dc0f87708
             {
                 var texDesc = new Texture2DDescription()
                                   {
-                                      Width = sampleCount,
-                                      Height = 1,
+                                      Width = useHorizontal ? sampleCount : 1,
+                                      Height = useHorizontal ? 1 : sampleCount,
                                       ArraySize = 1,
                                       BindFlags = BindFlags.ShaderResource,
                                       Usage = ResourceUsage.Default,
@@ -86,19 +87,31 @@ namespace T3.Operators.Types.Id_55cc0f79_96c9_482e_9794_934dc0f87708
                     dataStream.Write(v);
                 }
 
-                dataStream.Position = 0;
-                var dataRectangles = new DataRectangle[] { new DataRectangle(dataStream.DataPointer, listSizeInBytes) };
-                Utilities.Dispose(ref CurveTexture.Value);
-                CurveTexture.Value = new Texture2D(ResourceManager.Device, texDesc, dataRectangles);
+                try
+                {
+                    dataStream.Position = 0;
+                    var dataRectangles = new DataRectangle[]
+                                             {
+                                                 new(
+                                                     dataPointer: dataStream.DataPointer, 
+                                                     pitch: useHorizontal ? listSizeInBytes : 1 * entrySizeInBytes)
+                                             };
+                    Utilities.Dispose(ref CurveTexture.Value);
+                    CurveTexture.Value = new Texture2D(ResourceManager.Device, texDesc, dataRectangles);
+                }
+                catch (Exception e)
+                {
+                    Log.Warning("Can't create texture from values :" + e.Message, this);
+                }
             }
         }
-        
+
         [Input(Guid = "092C8D1F-A70E-4298-B5DF-52C9D62F8E04")]
         public readonly InputSlot<List<float>> Values = new();
 
         [Input(Guid = "165F7E0E-6EF0-4BE1-8ED3-61ED0DB752ED")]
         public readonly InputSlot<bool> UseFullList = new();
-        
+
         [Input(Guid = "CA67BFAF-EDE7-43BA-B279-FC1DDFBE2FFA")]
         public readonly InputSlot<int> RangeStart = new();
 
@@ -110,7 +123,14 @@ namespace T3.Operators.Types.Id_55cc0f79_96c9_482e_9794_934dc0f87708
 
         [Input(Guid = "51545316-69FC-441F-B59F-44979E32972C")]
         public readonly InputSlot<float> Pow = new();
-        
-        
+
+        [Input(Guid = "63E90D86-5AD5-4333-8B99-7F8D285C4913", MappedType = typeof(Directions))]
+        public readonly InputSlot<int> Direction = new();
+
+        private enum Directions
+        {
+            Horizontal,
+            Vertical,
+        }
     }
 }

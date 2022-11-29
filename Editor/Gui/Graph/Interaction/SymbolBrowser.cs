@@ -56,7 +56,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                     OpenAt(GraphCanvas.Current.InverseTransformPositionFloat(ImGui.GetIO().MousePos + new Vector2(-4, -20)), null, null, false, null);
                     return;
                 }
-                
+
                 var childUi = NodeSelection.GetSelectedChildUis().ToList()[0];
                 {
                     var instance = NodeSelection.GetInstanceForSymbolChildUi(childUi);
@@ -99,7 +99,6 @@ namespace T3.Editor.Gui.Graph.Interaction
         #endregion
 
         #region internal implementation -----------------------------------------------------------
-
         private void DrawSearchInput(Vector2 posInWindow, Vector2 posInScreen, Vector2 size)
         {
             if (_focusInputNextTime)
@@ -114,7 +113,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             var padding = new Vector2(7, 6);
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, padding);
             ImGui.SetNextItemWidth(size.X);
-            
+
             ImGui.InputText("##symbolbrowserfilter", ref _filter.SearchString, 10);
 
             // Search input outline
@@ -146,8 +145,8 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             var clickedOutside = ImGui.IsMouseClicked(ImGuiMouseButton.Left) && ImGui.IsWindowHovered();
             var shouldCancelConnectionMaker = clickedOutside
-                || ImGui.IsMouseClicked(ImGuiMouseButton.Right)
-                || ImGui.IsKeyDown((ImGuiKey)Key.Esc);
+                                              || ImGui.IsMouseClicked(ImGuiMouseButton.Right)
+                                              || ImGui.IsKeyDown((ImGuiKey)Key.Esc);
 
             if (shouldCancelConnectionMaker)
             {
@@ -168,7 +167,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         private void SelectNextSymbolUi(SymbolUi selectedSymbolUi) => JumpThroughMatchingSymbolList(selectedSymbolUi, 1);
         private void SelectPreviousSymbol(SymbolUi selectedSymbolUi) => JumpThroughMatchingSymbolList(selectedSymbolUi, -1);
-        
+
         private void JumpThroughMatchingSymbolList(SymbolUi currentSelectedSymbolUi, int jump)
         {
             if (_filter.MatchingSymbolUis.Count == 0)
@@ -218,14 +217,35 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                 PrintTypeFilter();
 
+                var configUserName = "user." + UserSettings.Config.UserName + ".";
+                var compositionNameSpace = "";
+                var currentMainComposition = GraphWindow.GetMainComposition();
+                if (currentMainComposition != null)
+                {
+                    compositionNameSpace = currentMainComposition.Symbol.Namespace;
+                }
+                
+                
                 foreach (var symbolUi in _filter.MatchingSymbolUis)
                 {
                     var symbolHash = symbolUi.Symbol.Id.GetHashCode();
                     ImGui.PushID(symbolHash);
                     {
+                        var symbolNamespace = symbolUi.Symbol.Namespace;
+                        var isRelevantNamespace = symbolNamespace.StartsWith("lib.")
+                                                  || symbolNamespace.StartsWith("examples.lib.")
+                                                  || symbolNamespace.StartsWith(configUserName)
+                                                  || symbolNamespace.StartsWith(compositionNameSpace);
+                        
+
                         var color = symbolUi.Symbol.OutputDefinitions.Count > 0
                                         ? TypeUiRegistry.GetPropertiesForType(symbolUi.Symbol.OutputDefinitions[0]?.ValueType).Color
                                         : Color.Gray;
+
+                        if (!isRelevantNamespace)
+                        {
+                            color = color.Fade(0.4f);
+                        }
                         ImGui.PushStyleColor(ImGuiCol.Header, ColorVariations.Operator.Apply(color).Rgba);
 
                         var hoverColor = ColorVariations.OperatorHover.Apply(color).Rgba;
@@ -261,10 +281,10 @@ namespace T3.Editor.Gui.Graph.Interaction
                         ImGui.TextUnformatted(symbolUi.Symbol.Name);
                         ImGui.SameLine();
 
-                        if (!string.IsNullOrEmpty(symbolUi.Symbol.Namespace))
+                        if (!string.IsNullOrEmpty(symbolNamespace))
                         {
                             ImGui.PushStyleColor(ImGuiCol.Text, _namespaceColor);
-                            ImGui.Text(symbolUi.Symbol.Namespace);
+                            ImGui.Text(symbolNamespace);
                             ImGui.PopStyleColor();
                             ImGui.SameLine();
                         }
@@ -273,7 +293,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                         ImGui.PopStyleColor(4);
                     }
-                    ImGui.PopID();
+                    ImGui.PopID(); 
                 }
             }
 
@@ -290,7 +310,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 _timeDescriptionSymbolUiLastHovered = DateTime.Now;
                 return true;
             }
-            
+
             if (isSelected && !_descriptionPanelHovered)
             {
                 if ((DateTime.Now - _timeDescriptionSymbolUiLastHovered).Milliseconds > 50)
@@ -307,7 +327,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         {
             if (_filter.FilterInputType == null && _filter.FilterOutputType == null)
                 return;
-            
+
             ImGui.PushFont(Fonts.FontSmall);
 
             var inputTypeName = _filter.FilterInputType != null
@@ -324,7 +344,6 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.TextDisabled(headerLabel);
             ImGui.PopFont();
         }
-
 
         private static void ShiftPositionToFitOnCanvas(ref Vector2 position, ref Vector2 size)
         {
@@ -379,7 +398,6 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.SetCursorPos(position);
             DrawDescriptionPanelImGui(itemForHelp, size, hasExamples);
 
-
             _descriptionPanelHovered = ImGui.IsItemHovered();
             if (_descriptionPanelHovered)
                 _timeDescriptionSymbolUiLastHovered = DateTime.Now;
@@ -414,7 +432,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         {
             if (!ExampleSymbolLinking.ExampleSymbols.TryGetValue(itemForHelp.Symbol.Id, out var examples))
                 return;
-            
+
             ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
             foreach (var guid in examples)
             {
@@ -444,6 +462,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
             }
+
             if (!string.IsNullOrEmpty(symbolUi.Description))
             {
                 CustomComponents.TooltipForLastItem(symbolUi.Description);
@@ -551,7 +570,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         private readonly Vector2 _size = SymbolChildUi.DefaultOpSize;
         private static Vector2 _browserPositionOffset => new Vector2(0, 40);
-        
+
         private bool _focusInputNextTime;
         private Vector2 _posInScreen;
         private ImDrawListPtr _drawList;
@@ -559,7 +578,6 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         private static readonly Vector2 _resultListSize = new Vector2(250, 300);
         private readonly Vector4 _namespaceColor = new Color(1, 1, 1, 0.4f);
-
 
         private SymbolUi _selectedSymbolUi;
         private SymbolUi _symbolUiForDescription;

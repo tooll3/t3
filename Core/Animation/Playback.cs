@@ -13,7 +13,7 @@ namespace T3.Core.Animation
     /// Examples for this are [Pulsate] or [Counter]. 
     /// 
     /// "Time" vs "FxTime"
-    ///  - FxTime keeps running if "continued playback" is activated. The effect time should be used for most Operators.
+    ///  - FxTime keeps running if "Idle Motion" (aka. "continued playback") is activated. The effect time should be used for most Operators.
     ///  - Time is used for all UI interactions and everything that is driven by keyframes.
     /// 
     /// RunTime is the time since application.

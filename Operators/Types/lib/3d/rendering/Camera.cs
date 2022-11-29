@@ -73,7 +73,7 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
             if (context.BypassCameras)
             {
                 Command.GetValue(context);
-                //Log.Debug($"Bypassing {SymbolChildId}", SymbolChildId);
+                //Log.Debug($"Bypassing {SymbolChildId}", this);
                 return;
             }
 

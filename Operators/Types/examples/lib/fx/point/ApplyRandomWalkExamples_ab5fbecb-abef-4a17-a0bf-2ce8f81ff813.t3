@@ -279,7 +279,7 @@
       ]
     },
     {
-      "Id": "3d037fcb-7924-4133-9acf-3f52a2ea87af"/*AddDOF*/,
+      "Id": "3d037fcb-7924-4133-9acf-3f52a2ea87af"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {
