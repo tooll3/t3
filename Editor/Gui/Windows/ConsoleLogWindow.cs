@@ -169,6 +169,9 @@ namespace T3.Editor.Gui.Windows
 
         private static bool IsLineHovered()
         {
+            if (!ImGui.IsWindowHovered())
+                return false;
+            
             var min = new Vector2(ImGui.GetWindowPos().X, ImGui.GetItemRectMin().Y);
             var size = new Vector2(ImGui.GetWindowWidth(), ImGui.GetItemRectSize().Y + LinePadding);
             var lineRect = new ImRect(min, min + size);
