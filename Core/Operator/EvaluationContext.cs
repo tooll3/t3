@@ -66,7 +66,7 @@ namespace T3.Core.Operator
 
         /// <summary>
         /// The primary time used for user interactions and keyframe manipulation.
-        /// This is where there time marker in the timeline is displayed.
+        /// This is where there time marker in the timeline is displayed unless overridden by operators.
         ///
         /// While evaluating the graph it can be overridden for sub graphs by <see cref="SetCommandTime"/>.
         /// </summary>
@@ -118,6 +118,8 @@ namespace T3.Core.Operator
         public bool BypassCameras { get; set; }
 
         public ParticleSystem ParticleSystem;
+        
+        
     }
 
 }

@@ -1,0 +1,38 @@
+{
+  "Id": "53127485-e2c7-4be8-aff2-da5790799593"/*LogMessage*/,
+  "Description": "Prints a message to console log. \nThis can be useful for debugging updates, caching and timing in complex graph networks.",
+  "InputUis": [
+    {
+      "InputId": "183cd865-7939-4110-8192-f112fff3cc60"/*SubGraph*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "acd53819-c248-4c95-a1a5-92a583e9b49b"/*Message*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "42a673ee-c323-401c-b5d9-8d8f9dbebc2b"/*LogLevel*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "8d6a6d3d-c814-41bc-b770-5a54dfdeb6a2"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

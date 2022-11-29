@@ -103,6 +103,12 @@ namespace T3.Core.Utils
             else return val;
         }
 
+        public static int ClampForEnum<T>(this int i) where T:Enum 
+        {
+            return i.Clamp(0, Enum.GetValues(typeof(T)).Length - 1);
+        }
+
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Lerp(float a, float b, float t)
         {
