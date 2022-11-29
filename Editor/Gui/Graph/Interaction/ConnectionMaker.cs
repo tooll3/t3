@@ -899,8 +899,8 @@ namespace T3.Editor.Gui.Graph.Interaction
                     if(ImGui.InvisibleButton("splitMe", Vector2.One * radius))
                     {
                         var posOnScreen = graphCanvas.InverseTransformPositionFloat(_bestMatchYetForCurrentFrame.PositionOnScreen) 
-                                          - new Vector2(SymbolChildUi.DefaultOpSize.X / 0.25f, 
-                                                        SymbolChildUi.DefaultOpSize.Y / 2);
+                                          - new Vector2(SymbolChildUi.DefaultOpSize.X * 0.25f, 
+                                                        SymbolChildUi.DefaultOpSize.Y * 0.5f);
 
                         SplitConnectionWithSymbolBrowser(graphCanvas.CompositionOp.Symbol,
                                                          graphCanvas.SymbolBrowser,
