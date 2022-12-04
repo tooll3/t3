@@ -202,7 +202,7 @@
     },
     {
       "Title": "Parameters##1",
-      "Visible": true
+      "Visible": false
     },
     {
       "Title": "Parameters##2",
@@ -589,6 +589,10 @@
       "Visible": false
     },
     {
+      "Title": "Parameters##98",
+      "Visible": true
+    },
+    {
       "Title": "Explore Variations",
       "Visible": false
     },
@@ -598,7 +602,7 @@
     },
     {
       "Title": "Output##0",
-      "Visible": true
+      "Visible": false
     },
     {
       "Title": "Output##1",
@@ -993,6 +997,10 @@
       "Visible": false
     },
     {
+      "Title": "Legacy Variations",
+      "Visible": false
+    },
+    {
       "Title": "Render Sequence",
       "Visible": false
     },
@@ -1001,5 +1009,5 @@
       "Visible": false
     }
   ],
-  "ImGuiSettings": "[Window][DockSpaceViewport_11111111]\nPos=0,26\nSize=1920,1031\nCollapsed=0\n\n[Window][Graph##1]\nPos=0,26\nSize=1019,1031\nCollapsed=0\nDockId=0x00000001,0\n\n[Window][Parameters##1]\nPos=1021,525\nSize=443,532\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Variations]\nPos=1466,525\nSize=454,532\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Output##0]\nPos=1021,26\nSize=899,497\nCollapsed=0\nDockId=0x00000003,0\n\n[Window][Debug##Default]\nPos=60,60\nSize=400,400\nCollapsed=0\n\n[Window][Explore Variations]\nPos=810,306\nSize=768,283\nCollapsed=0\n\n[Window][Console]\nPos=548,678\nSize=768,283\nCollapsed=0\n\n[Window][Output##1]\nPos=0,26\nSize=2304,712\nCollapsed=0\n\n[Docking][Data]\nDockSpace       ID=0x8B93E3BD Window=0xA787BDB4 Pos=0,26 Size=1920,1031 Split=X Selected=0x1F46795C\n  DockNode      ID=0x00000001 Parent=0x8B93E3BD SizeRef=1019,1391 CentralNode=1 Selected=0x1F46795C\n  DockNode      ID=0x00000002 Parent=0x8B93E3BD SizeRef=899,1391 Split=Y Selected=0x9CE63BF6\n    DockNode    ID=0x00000003 Parent=0x00000002 SizeRef=768,497 Selected=0x75327DBA\n    DockNode    ID=0x00000004 Parent=0x00000002 SizeRef=768,532 Split=X Selected=0x9CE63BF6\n      DockNode  ID=0x00000005 Parent=0x00000004 SizeRef=443,596 Selected=0x9CE63BF6\n      DockNode  ID=0x00000006 Parent=0x00000004 SizeRef=454,596 Selected=0x3BC11B9B\n\n"
+  "ImGuiSettings": "[Window][DockSpaceViewport_11111111]\nPos=0,0\nSize=2560,1440\nCollapsed=0\n\n[Window][Graph##1]\nPos=325,0\nSize=2235,1440\nCollapsed=0\nDockId=0x00000001,0\n\n[Window][Parameters##1]\nPos=1445,26\nSize=428,1391\nCollapsed=0\nDockId=0x00000004,0\n\n[Window][Variations]\nPos=0,0\nSize=323,574\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Output##0]\nPos=1445,26\nSize=1115,793\nCollapsed=0\nDockId=0x00000003,0\n\n[Window][Debug##Default]\nPos=60,60\nSize=400,400\nCollapsed=0\n\n[Window][Explore Variations]\nPos=810,306\nSize=768,283\nCollapsed=0\n\n[Window][Console]\nPos=548,678\nSize=768,283\nCollapsed=0\n\n[Window][Output##1]\nPos=0,26\nSize=2304,712\nCollapsed=0\n\n[Window][Parameters##98]\nPos=0,576\nSize=323,864\nCollapsed=0\nDockId=0x00000006,0\n\n[Docking][Data]\nDockSpace       ID=0x8B93E3BD Window=0xA787BDB4 Pos=0,0 Size=2560,1440 Split=X Selected=0x1F46795C\n  DockNode      ID=0x00000007 Parent=0x8B93E3BD SizeRef=323,1414 Split=Y Selected=0x22D9F0A0\n    DockNode    ID=0x00000005 Parent=0x00000007 SizeRef=323,574 Selected=0x3BC11B9B\n    DockNode    ID=0x00000006 Parent=0x00000007 SizeRef=323,864 HiddenTabBar=1 Selected=0x22D9F0A0\n  DockNode      ID=0x00000008 Parent=0x8B93E3BD SizeRef=2235,1414 Split=X\n    DockNode    ID=0x00000001 Parent=0x00000008 SizeRef=1443,1391 CentralNode=1 HiddenTabBar=1 Selected=0x1F46795C\n    DockNode    ID=0x00000002 Parent=0x00000008 SizeRef=1115,1391 Split=Y Selected=0x9CE63BF6\n      DockNode  ID=0x00000003 Parent=0x00000002 SizeRef=768,793 Selected=0x75327DBA\n      DockNode  ID=0x00000004 Parent=0x00000002 SizeRef=768,596 Selected=0x9CE63BF6\n\n"
 }
