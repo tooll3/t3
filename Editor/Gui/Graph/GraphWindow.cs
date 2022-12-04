@@ -102,10 +102,6 @@ namespace T3.Editor.Gui.Graph
             return GraphWindowInstances;
         }
 
-        protected override void UpdateBeforeDraw()
-        {
-            //_playback.Update(ImGui.GetIO().DeltaTime, UserSettings.Config.KeepBeatTimeRunningInPause);
-        }
 
         private static GraphWindow _currentWindow;
         private bool _focusOnNextFrame;

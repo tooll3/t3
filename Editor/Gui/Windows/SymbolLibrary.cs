@@ -35,19 +35,12 @@ namespace T3.Editor.Gui.Windows
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
             {
                 ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
-                if (ImGui.Button("Clear"))
-                {
-                    _filter.SearchString = "";
-                }
 
-                ImGui.SameLine();
-                if (ImGui.InputText("##Filter", ref _filter.SearchString, 100))
-                {
-                    _selectedSymbol = null;
-                }
+                //ImGui.SetNextItemWidth(-120);
+                CustomComponents.DrawSearchField("Search symbols...", ref _filter.SearchString, -60);
                 
                 ImGui.SameLine();
-                if (ImGui.Button("Update"))
+                if (ImGui.Button("Rescan"))
                 {
                     _treeNode.PopulateCompleteTree();
                     ExampleSymbolLinking.UpdateExampleLinks();
@@ -85,80 +78,11 @@ namespace T3.Editor.Gui.Windows
             {
                 SymbolTreeMenu.DrawSymbolItem(symbolUi.Symbol);
             }
-
-            var showUsages = _filter.MatchingSymbolUis.Count == 1 || _selectedSymbol != null;
-            if (showUsages)
-            {
-                var symbol = _selectedSymbol ?? _filter.MatchingSymbolUis[0].Symbol;
-                ImGui.Separator();
-                ImGui.PushFont(Fonts.FontLarge);
-                ImGui.TextUnformatted("Is used these Symbols...");
-                ImGui.PopFont();
-                CustomComponents.HelpText("Note: This only includes currently loaded (instanced) Operators.");
-
-                var graphWindow = GraphWindow.GetVisibleInstances().FirstOrDefault();
-
-                var usagesInSymbolInstances = new Dictionary<Symbol, List<Instance>>();
-                foreach (var symbolInstance in symbol.InstancesOfSymbol)
-                {
-                    var parents = NodeOperations.GetParentInstances(symbolInstance, includeChildInstance: true).ToList();
-                    if (parents.Count < 2)
-                        continue;
-
-                    var compositionSymbol = parents[parents.Count - 2].Symbol;
-                    var instance = parents[parents.Count - 1];
-
-                    if (!usagesInSymbolInstances.TryGetValue(compositionSymbol, out var list))
-                    {
-                        list = new List<Instance>();
-                        usagesInSymbolInstances[compositionSymbol] = list;
-                    }
-
-                    if (list.All(c => c.SymbolChildId != instance.SymbolChildId))
-                    {
-                        list.Add(instance);
-                    }
-                }
-
-                foreach (var (compositionSymbol, instances) in usagesInSymbolInstances)
-                {
-                    ImGui.PushFont(Fonts.FontBold);
-                    ImGui.TextColored(Color.Gray, compositionSymbol.Name);
-                    ImGui.PopFont();
-                    ImGui.SameLine();
-                    ImGui.TextColored(Color.Gray, " - " + compositionSymbol.Namespace);
-
-                    foreach (var instance in instances)
-                    {
-                        ImGui.PushID(instance.SymbolChildId.GetHashCode());
-                        var instanceParent = instance.Parent;
-                        var symbolChild = instanceParent.Symbol.Children.SingleOrDefault(child => child.Id == instance.SymbolChildId);
-                        if (symbolChild == null)
-                        {
-                            Log.Error($"Can't find SymbolChild of Instance {instance.Symbol.Name} ({instance.SymbolChildId}) in parent {instanceParent.Symbol.Name}");
-                            continue;
-                        }
-
-                        if (ImGui.Selectable(symbolChild.ReadableName))
-                        {
-                            graphWindow?.GraphCanvas.SetComposition(OperatorUtils.BuildIdPathForInstance(instanceParent),
-                                                                    ICanvas.Transition.Undefined);
-
-                            var childUi = SymbolUiRegistry.Entries[compositionSymbol.Id].ChildUis.Single(cUi => cUi.Id == instance.SymbolChildId);
-                            NodeSelection.SetSelectionToChildUi(childUi, instance);
-                            FitViewToSelectionHandling.FitViewToSelection();
-                        }
-
-                        ImGui.PopID();
-                    }
-                }
-            }
         }
 
-        private void StopDrag()
+        private static void StopDrag()
         {
             T3Ui.DraggingIsInProgress = false;
-            //_dropData = T3Ui.NotDroppingPointer;
         }
 
         private NamespaceTreeNode _subtreeNodeToRename;
@@ -268,9 +192,8 @@ namespace T3.Editor.Gui.Windows
             return new List<Window>();
         }
 
-        private NamespaceTreeNode _treeNode = new NamespaceTreeNode(NamespaceTreeNode.RootNodeId);
-        private readonly SymbolFilter _filter = new SymbolFilter();
-        private static Symbol _selectedSymbol;
-        private static RenameNamespaceDialog _renameNamespaceDialog = new RenameNamespaceDialog();
+        private readonly NamespaceTreeNode _treeNode = new(NamespaceTreeNode.RootNodeId);
+        private readonly SymbolFilter _filter = new();
+        private static readonly RenameNamespaceDialog _renameNamespaceDialog = new();
     }
 }

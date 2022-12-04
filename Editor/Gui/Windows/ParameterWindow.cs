@@ -34,9 +34,6 @@ namespace T3.Editor.Gui.Windows
             return _parameterWindowInstances;
         }
 
-        protected override void UpdateBeforeDraw()
-        {
-        }
 
         protected override void DrawAllInstances()
         {

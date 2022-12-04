@@ -73,6 +73,11 @@ namespace T3.Editor.Gui.UiHelpers
                 {
                     //_selectedSymbol = symbol;
                 }
+
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
+                }
                 
                 ImGui.PopStyleColor(4);
                 HandleDragAndDropForSymbolItem(symbol);

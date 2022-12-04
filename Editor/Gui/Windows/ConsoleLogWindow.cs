@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core.Logging;
+using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
@@ -25,19 +26,12 @@ namespace T3.Editor.Gui.Windows
             Config.Visible = true;
         }
 
+        private readonly List<LogEntry> _filteredEntries = new(1000);
+
         protected override void DrawContent()
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
             {
-                lock (_logEntries)
-                {
-                    while (_logEntries.Count > MaxLineCount)
-                    {
-                        _logEntries.RemoveAt(0);
-                    }
-                }
-
-                //ImGui.TextUnformatted(_isAtBottom ? "Bottom!": "Not at bottom");
                 CustomComponents.ToggleButton("Scroll", ref _shouldScrollToBottom, Vector2.Zero);
                 ImGui.SameLine();
 
@@ -60,11 +54,11 @@ namespace T3.Editor.Gui.Windows
                         foreach (var entry in _logEntries)
                         {
                             sb.Append($"{(entry.TimeStamp - _startTime).Ticks / 10000000f:  0.000}");
-                            sb.Append("\t");
+                            sb.Append('\t');
                             sb.Append(entry.Level);
-                            sb.Append("\t");
+                            sb.Append('\t');
                             sb.Append(entry.Message);
-                            sb.Append("\n");
+                            sb.Append('\n');
                         }
 
                         Clipboard.SetText(sb.ToString());
@@ -72,68 +66,54 @@ namespace T3.Editor.Gui.Windows
                 }
 
                 ImGui.SameLine();
-                ImGui.InputText("##Filter", ref _filterString, 100);
+                CustomComponents.DrawSearchField("Filter", ref _filterString);
+
                 ImGui.Separator();
                 ImGui.BeginChild("scrolling");
                 {
-                    if (ImGui.IsWindowHovered() && ImGui.GetIO().MouseWheel != 0)
-                    {
-                        _shouldScrollToBottom = false;
-                    }
+                    if (_logEntries == null)
+                        return;
 
                     lock (_logEntries)
                     {
-                        foreach (var entry in _logEntries)
+                        var items = _logEntries;
+                        if (FilterIsActive)
                         {
-                            if (FilterIsActive && !entry.Message.Contains(_filterString))
-                                continue;
-
-                            var entryLevel = entry.Level;
-                            var color = GetColorForLogLevel(entryLevel)
-                               .Fade(T3Ui.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f);
-
-                            //var timeInSeconds= (entry.TimeStamp - _startTime).Ticks / 10000000f;
-                            // Hack to hide ":" render prefix problem
-                            ImGui.SetCursorPosX(-2);
-
-                            // FIXME: It should be possible to pass NULL to avoid prefixing. 
-                            // This seems to be broken in imgui.net
-                            ImGui.Value("", (float)entry.SecondsSinceStart); // Print with ImGui to avoid allocation
-                            ImGui.SameLine(80);
-                            ImGui.TextColored(color, entry.Message);
-
-                            if (!IsLineHovered() || !(entry.SourceIdPath?.Length > 1))
-                                continue;
-                            
-                            T3Ui.AddHoveredId(entry.SourceId);
-                            var childIdPath = entry.SourceIdPath.ToList();
-                            var hoveredSourceInstance = NodeOperations.GetInstanceFromIdPath(childIdPath);
-                            ImGui.BeginTooltip();
+                            _filteredEntries.Clear();
+                            foreach (var e in _logEntries)
                             {
-                                if (hoveredSourceInstance == null)
+                                if (!e.Message.Contains(_filterString))
+                                    continue;
+
+                                _filteredEntries.Add(e);
+                            }
+
+                            items = _filteredEntries;
+                        }
+
+                        if (ImGui.IsWindowHovered() && ImGui.GetIO().MouseWheel != 0)
+                        {
+                            _shouldScrollToBottom = false;
+                        }
+
+                        unsafe
+                        {
+                            var clipperData = new ImGuiListClipper();
+                            var listClipperPtr = new ImGuiListClipperPtr(&clipperData);
+
+                            listClipperPtr.Begin(items.Count, ImGui.GetTextLineHeightWithSpacing());
+                            while (listClipperPtr.Step())
+                            {
+                                for (var i = listClipperPtr.DisplayStart; i < listClipperPtr.DisplayEnd; ++i)
                                 {
-                                    ImGui.Text("Source Instance of message not longer valid");
-                                }
-                                else
-                                {
-                                    ImGui.TextColored(T3Style.Colors.TextMuted, "from ");
-                                    
-                                    foreach (var p in NodeOperations.GetReadableInstancePath(childIdPath))
-                                    {
-                                        ImGui.SameLine();
-                                        ImGui.TextColored(T3Style.Colors.TextMuted, " / ");
-                                        
-                                        ImGui.SameLine();
-                                        ImGui.Text(p);
-                                    }
+                                    if (i < 0 || i >= items.Count)
+                                        continue;
+
+                                    DrawEntry(items[i]);
                                 }
                             }
-                            ImGui.EndTooltip();
-                            
-                            if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-                            {
-                                GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(childIdPath);
-                            }
+
+                            listClipperPtr.End();
                         }
                     }
 
@@ -141,7 +121,6 @@ namespace T3.Editor.Gui.Windows
                     if (_shouldScrollToBottom)
                     {
                         ImGui.SetScrollY(ImGui.GetScrollMaxY() + ImGui.GetFrameHeight());
-                        //_shouldScrollToBottom = false;
                         _isAtBottom = true;
                     }
                     else
@@ -149,10 +128,73 @@ namespace T3.Editor.Gui.Windows
                         _isAtBottom = ImGui.GetScrollY() >= ImGui.GetScrollMaxY() - ImGui.GetWindowHeight();
                     }
                 }
+
                 ImGui.EndChild();
             }
-            
+
             ImGui.PopStyleVar();
+        }
+
+        private static double _lastLimeTime;
+
+        public static void DrawEntry(LogEntry entry)
+        {
+            var entryLevel = entry.Level;
+
+            var time = entry.SecondsSinceStart;
+            var dt = time - _lastLimeTime;
+
+            var fade = 1f;
+            var frameFraction = (float)dt / (1.5f / 60f);
+            if (frameFraction < 1)
+            {
+                fade = MathUtils.RemapAndClamp(frameFraction, 0, 1, 0.2f, 0.8f);
+            }
+
+            var timeColor = T3Style.Colors.Text.Fade(fade);
+            var timeLabel = $" {time:0.000}";
+            var timeLabelSize = ImGui.CalcTextSize(timeLabel);
+            ImGui.SetCursorPosX(80 - timeLabelSize.X);
+            ImGui.TextColored(timeColor, timeLabel);
+            _lastLimeTime = time;
+            ImGui.SameLine(90);
+
+            var color = GetColorForLogLevel(entryLevel)
+               .Fade(T3Ui.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f);
+            ImGui.TextColored(color, entry.Message);
+
+            if (!IsLineHovered() || !(entry.SourceIdPath?.Length > 1))
+                return;
+
+            T3Ui.AddHoveredId(entry.SourceId);
+            var childIdPath = entry.SourceIdPath.ToList();
+            var hoveredSourceInstance = NodeOperations.GetInstanceFromIdPath(childIdPath);
+            ImGui.BeginTooltip();
+            {
+                if (hoveredSourceInstance == null)
+                {
+                    ImGui.Text("Source Instance of message not longer valid");
+                }
+                else
+                {
+                    ImGui.TextColored(T3Style.Colors.TextMuted, "from ");
+
+                    foreach (var p in NodeOperations.GetReadableInstancePath(childIdPath))
+                    {
+                        ImGui.SameLine();
+                        ImGui.TextColored(T3Style.Colors.TextMuted, " / ");
+
+                        ImGui.SameLine();
+                        ImGui.Text(p);
+                    }
+                }
+            }
+            ImGui.EndTooltip();
+
+            if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+            {
+                GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(childIdPath);
+            }
         }
 
         public static Color GetColorForLogLevel(LogEntry.EntryLevel entryLevel)
@@ -171,9 +213,9 @@ namespace T3.Editor.Gui.Windows
         {
             if (!ImGui.IsWindowHovered())
                 return false;
-            
+
             var min = new Vector2(ImGui.GetWindowPos().X, ImGui.GetItemRectMin().Y);
-            var size = new Vector2(ImGui.GetWindowWidth(), ImGui.GetItemRectSize().Y + LinePadding);
+            var size = new Vector2(ImGui.GetWindowWidth() - 10, ImGui.GetItemRectSize().Y + LinePadding - 2);
             var lineRect = new ImRect(min, min + size);
             return lineRect.Contains(ImGui.GetMousePos());
         }
@@ -207,13 +249,12 @@ namespace T3.Editor.Gui.Windows
             _logEntries = null;
         }
 
-        private const int MaxLineCount = 250;
 
         public LogEntry.EntryLevel Filter { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         private bool FilterIsActive => !string.IsNullOrEmpty(_filterString);
         private const float LinePadding = 3;
-        private List<LogEntry> _logEntries = new List<LogEntry>();
+        private List<LogEntry> _logEntries = new();
         private bool _shouldScrollToBottom = true;
         private string _filterString = "";
         private bool _isAtBottom = true;

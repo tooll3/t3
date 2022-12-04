@@ -140,7 +140,7 @@ namespace T3.Core.Utils
         }
 
 
-        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float RemapAndClamp(float value, float inMin, float inMax, float outMin, float outMax)
         {
             var factor = (value - inMin) / (inMax - inMin);

@@ -118,7 +118,6 @@ namespace T3.Editor.Gui.Styling
 
         public static bool ToggleIconButton(Icon icon, string label, ref bool isSelected, Vector2 size, bool trigger = false)
         {
-            var wasSelected = isSelected;
             var clicked = false;
 
             var stateColor = isSelected ? new Color(1f, 1, 1f, 1f) : new Color(0, 0, 0, 1f);
@@ -139,15 +138,7 @@ namespace T3.Editor.Gui.Styling
 
             ImGui.PopFont();
             
-            var labelPos = ImGui.GetItemRectMin() + new Vector2(16 , ImGui.GetItemRectSize().Y/2);
-            //ImGui.GetWindowDrawList().AddText(labelPos, stateColor, label);
-
             ImGui.PopStyleVar(2);
-            
-            // if (IconButton(icon, label, size) || trigger)
-            // {
-            // }
-
             ImGui.PopStyleColor(1);
 
             return clicked;
@@ -186,20 +177,7 @@ namespace T3.Editor.Gui.Styling
 
             ImGui.PopStyleVar(2);
         }
-
-        public static void PopUp(Action drawContent, string id = "context_menu")
-        {
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
-            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
-
-            if (ImGui.BeginPopupContextItem(id))
-            {
-                drawContent?.Invoke();
-                ImGui.EndPopup();
-            }
-
-            ImGui.PopStyleVar(2);
-        }
+        
 
         public static void DrawContextMenuForScrollCanvas(Action drawMenuContent, ref bool contextMenuIsOpen)
         {
@@ -303,55 +281,6 @@ namespace T3.Editor.Gui.Styling
             drawList.PopClipRect();
         }
 
-        public static void DrawSplitter(bool splitVertically, float thickness, ref float size0, ref float size1, float minSize0, float minSize1)
-        {
-            var backupPos = ImGui.GetCursorPos();
-            if (splitVertically)
-                ImGui.SetCursorPosY(backupPos.Y + size0);
-            else
-                ImGui.SetCursorPosX(backupPos.X + size0);
-
-            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 1));
-
-            // We don't draw while active/pressed because as we move the panes the splitter button will be 1 frame late
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0, 0, 0, 1));
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.6f, 0.6f, 0.6f, 0.10f));
-            ImGui.Button("##Splitter", new Vector2(!splitVertically ? thickness : -1.0f, splitVertically ? thickness : -1.0f));
-            ImGui.PopStyleColor(3);
-
-            ImGui.SetItemAllowOverlap(); // This is to allow having other buttons OVER our splitter. 
-
-            if (ImGui.IsAnyItemHovered())
-            {
-                ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNS);
-            }
-
-            if (ImGui.IsItemActive())
-            {
-                var mouseDelta = splitVertically ? ImGui.GetIO().MouseDelta.Y : ImGui.GetIO().MouseDelta.X;
-
-                //// Minimum pane size
-                //if (mouse_delta < min_size0 - size0)
-                //    mouse_delta = min_size0 - size0;
-                //if (mouse_delta > size1 - min_size1)
-                //    mouse_delta = size1 - min_size1;
-
-                // Apply resize
-                size0 += mouseDelta;
-                size1 -= mouseDelta;
-            }
-
-            ImGui.SetCursorPos(backupPos);
-        }
-
-        public static void DrawContentRegion()
-        {
-            ImGui.GetForegroundDrawList().AddRect(
-                                                  ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos(),
-                                                  ImGui.GetWindowContentRegionMax() + ImGui.GetWindowPos(),
-                                                  Color.White);
-        }
-        
         public static bool EmptyWindowMessage(string message, string buttonLabel = null)
         {
             var center = (ImGui.GetWindowContentRegionMax() + ImGui.GetWindowContentRegionMin()) / 2 + ImGui.GetWindowPos();
@@ -374,7 +303,6 @@ namespace T3.Editor.Gui.Styling
                 drawList.AddText(position, emptyMessageColor, line);
                 y += textLineHeight;
             }
-
             
             if (!string.IsNullOrEmpty(buttonLabel))
             {
@@ -578,6 +506,40 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
 
+        public static bool DrawSearchField(string placeHolderLabel, ref string value, float width=0)
+        {
+            var wasNull = value == null;
+            if (wasNull)
+                value = string.Empty;
+            
+            ImGui.SetNextItemWidth(width-20);
+            var modified = ImGui.InputText("##" + placeHolderLabel, ref value, 1000);
+            if (!modified && wasNull)
+                value = null;
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                ImGui.SameLine();
+                if (ImGui.Button("×"))
+                {
+                    value = null;
+                    modified = true;
+                }
+            }
+            else
+            {
+                var drawList = ImGui.GetWindowDrawList();
+                var minPos = ImGui.GetItemRectMin();
+                var maxPos = ImGui.GetItemRectMax();
+                drawList.PushClipRect(minPos, maxPos);
+                drawList.AddText(minPos + new Vector2(8, 5), Color.White.Fade(0.25f), placeHolderLabel);
+                drawList.PopClipRect();
+            }
+
+            return modified;
+        }        
+        
+        
         public static bool DrawEnumParameter<T>(ref int index, string label)
         {
             // Label
@@ -617,104 +579,5 @@ namespace T3.Editor.Gui.Styling
         }
 
         private const string ImGuiIdSpecifier = "##";
-    }
-
-    public static class InputWithTypeAheadSearch
-    {
-        public static bool Draw(string id, ref string text, IOrderedEnumerable<string> items)
-        {
-            
-            if (_isSearchResultWindowOpen)
-            {
-                if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorDown, true))
-                {
-                    if (_lastTypeAheadResults.Count > 0)
-                    {
-                        _selectedResultIndex++;
-                        _selectedResultIndex %= _lastTypeAheadResults.Count;
-                    }
-                }
-                else if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorUp, true))
-                {
-                    if (_lastTypeAheadResults.Count > 0)
-                    {
-                        _selectedResultIndex--;
-                        if (_selectedResultIndex < 0)
-                            _selectedResultIndex = _lastTypeAheadResults.Count - 1;
-                    }
-                }
-            }
-            
-            var wasChanged = ImGui.InputText(id, ref text, 256);
-
-            if (ImGui.IsItemActivated())
-            {
-                _lastTypeAheadResults.Clear();
-                _selectedResultIndex = -1;
-                THelpers.DisableImGuiKeyboardNavigation();
-            }
-
-            var isItemDeactivated = ImGui.IsItemDeactivated();
-            
-            // We defer exit to get clicks on opened popup list
-            var lostFocus = isItemDeactivated || ImGui.IsKeyDown((ImGuiKey)Key.Esc);
-            
-            if ( ImGui.IsItemActive() || _isSearchResultWindowOpen)
-            {
-                _isSearchResultWindowOpen = true;
-
-                ImGui.SetNextWindowPos(new Vector2(ImGui.GetItemRectMin().X, ImGui.GetItemRectMax().Y));
-                ImGui.SetNextWindowSize(new Vector2(ImGui.GetItemRectSize().X, 0));
-                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(7, 7));
-                if (ImGui.Begin("##typeAheadSearchPopup", ref _isSearchResultWindowOpen,
-                                ImGuiWindowFlags.NoTitleBar 
-                                | ImGuiWindowFlags.NoMove 
-                                | ImGuiWindowFlags.NoResize 
-                                | ImGuiWindowFlags.Tooltip 
-                                | ImGuiWindowFlags.NoFocusOnAppearing 
-                                | ImGuiWindowFlags.ChildWindow
-                                ))
-                {
-                    _lastTypeAheadResults.Clear();
-                    int index = 0;
-                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Gray.Rgba);
-                    foreach (var word in items)
-                    {
-                        if (word != null && word != text && word.Contains(text))
-                        {
-                            var isSelected = index == _selectedResultIndex;
-                            ImGui.Selectable(word, isSelected);
-                            
-                            if (ImGui.IsItemClicked() || (isSelected && ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
-                            {
-                                text = word;
-                                wasChanged = true;
-                                _isSearchResultWindowOpen = false;
-                            }
-
-                            _lastTypeAheadResults.Add(word);
-                            if (++index > 30)
-                                break;
-                        }
-                    }
-                    ImGui.PopStyleColor();
-                }
-
-                ImGui.End();
-                ImGui.PopStyleVar();
-            }
-
-            if (lostFocus)
-            {
-                THelpers.RestoreImGuiKeyboardNavigation();
-                _isSearchResultWindowOpen = false;
-            }
-
-            return wasChanged;
-        }
-
-        private static readonly List<string> _lastTypeAheadResults = new();
-        private static int _selectedResultIndex = 0;
-        private static bool _isSearchResultWindowOpen;
     }
 }

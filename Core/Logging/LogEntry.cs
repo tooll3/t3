@@ -2,7 +2,7 @@
 
 namespace T3.Core.Logging
 {
-    public readonly struct LogEntry
+    public class LogEntry
     {
         [Flags]
         public enum EntryLevel

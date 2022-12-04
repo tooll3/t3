@@ -56,21 +56,11 @@ namespace T3.Editor.Gui.UiHelpers
             {
                 ImGui.BeginTooltip();
                 {
-                    var lastEntryTime = double.PositiveInfinity;
                     lock (_logEntries)
                     {
                         foreach (var entry in _logEntries)
                         {
-                            var timeSinceLastEntry = entry.SecondsSinceStart - lastEntryTime;
-                            if (timeSinceLastEntry > 1)
-                                ImGui.Spacing();
-
-                            lastEntryTime = entry.SecondsSinceStart;
-                            var entryLevel = entry.Level;
-                            ImGui.SetCursorPosX(-2);
-                            ImGui.Value("", (float)entry.SecondsSinceStart); // Print with ImGui to avoid allocation
-                            ImGui.SameLine(80);
-                            ImGui.TextColored(ConsoleLogWindow.GetColorForLogLevel(entryLevel), entry.Message);
+                            ConsoleLogWindow.DrawEntry(entry);
                         }
                     }
                 }
