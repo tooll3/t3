@@ -397,6 +397,198 @@
       "Visible": false
     },
     {
+      "Title": "Parameters##50",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##51",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##52",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##53",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##54",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##55",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##56",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##57",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##58",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##59",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##60",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##61",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##62",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##63",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##64",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##65",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##66",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##67",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##68",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##69",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##70",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##71",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##72",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##73",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##74",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##75",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##76",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##77",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##78",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##79",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##80",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##81",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##82",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##83",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##84",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##85",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##86",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##87",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##88",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##89",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##90",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##91",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##92",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##93",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##94",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##95",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##96",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##97",
+      "Visible": false
+    },
+    {
       "Title": "Explore Variations",
       "Visible": false
     },
@@ -601,15 +793,203 @@
       "Visible": false
     },
     {
+      "Title": "Output##49",
+      "Visible": false
+    },
+    {
+      "Title": "Output##50",
+      "Visible": false
+    },
+    {
+      "Title": "Output##51",
+      "Visible": false
+    },
+    {
+      "Title": "Output##52",
+      "Visible": false
+    },
+    {
+      "Title": "Output##53",
+      "Visible": false
+    },
+    {
+      "Title": "Output##54",
+      "Visible": false
+    },
+    {
+      "Title": "Output##55",
+      "Visible": false
+    },
+    {
+      "Title": "Output##56",
+      "Visible": false
+    },
+    {
+      "Title": "Output##57",
+      "Visible": false
+    },
+    {
+      "Title": "Output##58",
+      "Visible": false
+    },
+    {
+      "Title": "Output##59",
+      "Visible": false
+    },
+    {
+      "Title": "Output##60",
+      "Visible": false
+    },
+    {
+      "Title": "Output##61",
+      "Visible": false
+    },
+    {
+      "Title": "Output##62",
+      "Visible": false
+    },
+    {
+      "Title": "Output##63",
+      "Visible": false
+    },
+    {
+      "Title": "Output##64",
+      "Visible": false
+    },
+    {
+      "Title": "Output##65",
+      "Visible": false
+    },
+    {
+      "Title": "Output##66",
+      "Visible": false
+    },
+    {
+      "Title": "Output##67",
+      "Visible": false
+    },
+    {
+      "Title": "Output##68",
+      "Visible": false
+    },
+    {
+      "Title": "Output##69",
+      "Visible": false
+    },
+    {
+      "Title": "Output##70",
+      "Visible": false
+    },
+    {
+      "Title": "Output##71",
+      "Visible": false
+    },
+    {
+      "Title": "Output##72",
+      "Visible": false
+    },
+    {
+      "Title": "Output##73",
+      "Visible": false
+    },
+    {
+      "Title": "Output##74",
+      "Visible": false
+    },
+    {
+      "Title": "Output##75",
+      "Visible": false
+    },
+    {
+      "Title": "Output##76",
+      "Visible": false
+    },
+    {
+      "Title": "Output##77",
+      "Visible": false
+    },
+    {
+      "Title": "Output##78",
+      "Visible": false
+    },
+    {
+      "Title": "Output##79",
+      "Visible": false
+    },
+    {
+      "Title": "Output##80",
+      "Visible": false
+    },
+    {
+      "Title": "Output##81",
+      "Visible": false
+    },
+    {
+      "Title": "Output##82",
+      "Visible": false
+    },
+    {
+      "Title": "Output##83",
+      "Visible": false
+    },
+    {
+      "Title": "Output##84",
+      "Visible": false
+    },
+    {
+      "Title": "Output##85",
+      "Visible": false
+    },
+    {
+      "Title": "Output##86",
+      "Visible": false
+    },
+    {
+      "Title": "Output##87",
+      "Visible": false
+    },
+    {
+      "Title": "Output##88",
+      "Visible": false
+    },
+    {
+      "Title": "Output##89",
+      "Visible": false
+    },
+    {
+      "Title": "Output##90",
+      "Visible": false
+    },
+    {
+      "Title": "Output##91",
+      "Visible": false
+    },
+    {
+      "Title": "Output##92",
+      "Visible": false
+    },
+    {
+      "Title": "Output##93",
+      "Visible": false
+    },
+    {
+      "Title": "Output##94",
+      "Visible": false
+    },
+    {
+      "Title": "Output##95",
+      "Visible": false
+    },
+    {
+      "Title": "Output##96",
+      "Visible": false
+    },
+    {
       "Title": "Console",
       "Visible": false
     },
     {
       "Title": "Symbol Library",
-      "Visible": false
-    },
-    {
-      "Title": "Legacy Variations",
       "Visible": false
     },
     {
@@ -621,5 +1001,5 @@
       "Visible": false
     }
   ],
-  "ImGuiSettings": "[Window][DockSpaceViewport_11111111]\nPos=0,26\nSize=2560,1414\nCollapsed=0\n\n[Window][Graph##1]\nPos=0,740\nSize=1443,700\nCollapsed=0\nDockId=0x00000001,0\n\n[Window][Parameters##1]\nPos=1445,740\nSize=428,700\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Variations]\nPos=1875,740\nSize=685,700\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Output##0]\nPos=0,26\nSize=1279,712\nCollapsed=0\nDockId=0x00000004,0\n\n[Window][Debug##Default]\nPos=60,60\nSize=400,400\nCollapsed=0\n\n[Window][Explore Variations]\nPos=810,306\nSize=768,283\nCollapsed=0\n\n[Window][Console]\nPos=548,678\nSize=768,283\nCollapsed=0\n\n[Window][Output##1]\nPos=1281,26\nSize=1279,712\nCollapsed=0\nDockId=0x00000007,0\n\n[Docking][Data]\nDockSpace       ID=0x8B93E3BD Window=0xA787BDB4 Pos=0,26 Size=2560,1414 Split=Y Selected=0x1F46795C\n  DockNode      ID=0x00000003 Parent=0x8B93E3BD SizeRef=2560,712 Split=X\n    DockNode    ID=0x00000004 Parent=0x00000003 SizeRef=1279,283 Selected=0x75327DBA\n    DockNode    ID=0x00000007 Parent=0x00000003 SizeRef=1279,283 Selected=0x4852540A\n  DockNode      ID=0x00000008 Parent=0x8B93E3BD SizeRef=2560,677 Split=X\n    DockNode    ID=0x00000001 Parent=0x00000008 SizeRef=1443,1391 CentralNode=1 Selected=0x1F46795C\n    DockNode    ID=0x00000002 Parent=0x00000008 SizeRef=1115,1391 Split=X Selected=0x9CE63BF6\n      DockNode  ID=0x00000005 Parent=0x00000002 SizeRef=428,596 Selected=0x9CE63BF6\n      DockNode  ID=0x00000006 Parent=0x00000002 SizeRef=685,596 Selected=0x3BC11B9B\n\n"
+  "ImGuiSettings": "[Window][DockSpaceViewport_11111111]\nPos=0,26\nSize=1920,1031\nCollapsed=0\n\n[Window][Graph##1]\nPos=0,514\nSize=803,543\nCollapsed=0\nDockId=0x00000001,0\n\n[Window][Parameters##1]\nPos=805,514\nSize=428,543\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Variations]\nPos=1235,514\nSize=685,543\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Output##0]\nPos=0,26\nSize=959,486\nCollapsed=0\nDockId=0x00000004,0\n\n[Window][Debug##Default]\nPos=60,60\nSize=400,400\nCollapsed=0\n\n[Window][Explore Variations]\nPos=810,306\nSize=768,283\nCollapsed=0\n\n[Window][Console]\nPos=548,678\nSize=768,283\nCollapsed=0\n\n[Window][Output##1]\nPos=961,26\nSize=959,486\nCollapsed=0\nDockId=0x00000007,0\n\n[Docking][Data]\nDockSpace       ID=0x8B93E3BD Window=0xA787BDB4 Pos=0,26 Size=1920,1031 Split=Y Selected=0x1F46795C\n  DockNode      ID=0x00000003 Parent=0x8B93E3BD SizeRef=2560,486 Split=X\n    DockNode    ID=0x00000004 Parent=0x00000003 SizeRef=1279,283 Selected=0x75327DBA\n    DockNode    ID=0x00000007 Parent=0x00000003 SizeRef=1279,283 Selected=0x4852540A\n  DockNode      ID=0x00000008 Parent=0x8B93E3BD SizeRef=2560,543 Split=X\n    DockNode    ID=0x00000001 Parent=0x00000008 SizeRef=1443,1391 CentralNode=1 Selected=0x1F46795C\n    DockNode    ID=0x00000002 Parent=0x00000008 SizeRef=1115,1391 Split=X Selected=0x9CE63BF6\n      DockNode  ID=0x00000005 Parent=0x00000002 SizeRef=428,596 Selected=0x9CE63BF6\n      DockNode  ID=0x00000006 Parent=0x00000002 SizeRef=685,596 Selected=0x3BC11B9B\n\n"
 }
