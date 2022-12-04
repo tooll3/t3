@@ -1,8 +1,5 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Numerics;
-using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -10,7 +7,6 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
-using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Operators.Types.Id_dd3d7e16_f33e_4fb0_89c6_4d8cbc9d702f
 {
@@ -29,12 +25,10 @@ namespace T3.Operators.Types.Id_dd3d7e16_f33e_4fb0_89c6_4d8cbc9d702f
             var path = Path.GetValue(context);
             if (path != _lastFilePath)
             {
-                _description = System.IO.Path.GetFileName(path);
-
                 var mesh = ObjMesh.LoadFromFile(path);
                 if (mesh == null)
                 {
-                    Log.Error($"Failed to extract edge line points from obj {path}", SymbolChildId);
+                    Log.Error($"Failed to extract edge line points from obj {path}", this);
                     return;
                 }
                 
@@ -51,9 +45,7 @@ namespace T3.Operators.Types.Id_dd3d7e16_f33e_4fb0_89c6_4d8cbc9d702f
                 {
                     if (from < to)
                     {
-                        var tmp = from;
-                        from = to;
-                        to = tmp;
+                        (@from, to) = (to, @from);
                     }
 
                     var combined = (to << 16) + from;
@@ -61,7 +53,7 @@ namespace T3.Operators.Types.Id_dd3d7e16_f33e_4fb0_89c6_4d8cbc9d702f
                 }
 
                 var count = hashSet.Count;
-                //_pointList = new T3.Core.DataTypes.Point[count * 3];
+                //_pointList = new T3.Core.DataStructures.Point[count * 3];
                 _pointList.SetLength(count * 3);
 
                 var index = 0;
@@ -98,14 +90,13 @@ namespace T3.Operators.Types.Id_dd3d7e16_f33e_4fb0_89c6_4d8cbc9d702f
             Data.Value = _pointList;
         }
 
-        public string GetDescriptiveString()
+        public InputSlot<string> GetSourcePathSlot()
         {
-            return _description;
+            return Path;
         }
 
         private readonly StructuredList<Point> _pointList = new StructuredList<Point>(10);
 
-        private string _description;
         private string _lastFilePath;
 
         [Input(Guid = "b6932cbd-e6b6-447b-b416-701326227864")]

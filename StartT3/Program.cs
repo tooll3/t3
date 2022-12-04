@@ -1,17 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Core.Logging;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using T3.Core;
 using T3.Core.Logging;
+using T3.Core.Resource;
 
-namespace StartEditor
+namespace T3.StartEditor
 {
     /// <summary>
     /// Rebuilds Operators.dll 
@@ -34,12 +34,10 @@ namespace StartEditor
                 operatorAssemblySources.Add(File.ReadAllText(sourceFile));
             }
 
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\AudioAnalysisResult.cs"));
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\BmFont.cs"));
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\GpuQuery.cs"));
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\ICameraPropertiesProvider.cs"));
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\MidiInConnectionManager.cs"));
-            operatorAssemblySources.Add(File.ReadAllText(@"Operators\Utils\OscConnectionManager.cs"));
+            foreach (var filepath in Directory.GetFiles(@"Operators\Utils\", "*.cs", SearchOption.AllDirectories))
+            {
+                operatorAssemblySources.Add(File.ReadAllText(filepath));
+            }
 
             Log.Debug("Compiling...");
             var references = CompileSymbolsFromSource(".", operatorAssemblySources.ToArray());
@@ -47,7 +45,7 @@ namespace StartEditor
             Log.Debug("Starting Tooll 3");
             try
             {
-                var filepath = "T3.exe";
+                var filepath = "Editor.exe";
                 Process.Start(new ProcessStartInfo(filepath)
                                   {
                                       UseShellExecute = true,
@@ -105,7 +103,8 @@ namespace StartEditor
                                                        syntaxTrees,
                                                        referencedAssemblies.ToArray(),
                                                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
-                                                          .WithOptimizationLevel(OptimizationLevel.Release));
+                                                          .WithOptimizationLevel(OptimizationLevel.Release)
+                                                          .WithAllowUnsafe(true));
 
             using (var dllStream = new FileStream(FinalOperatorAssemblyFilepath, FileMode.Create)) 
             // using (var pdbStream = new FileStream(exportPath + Path.DirectorySeparatorChar + "Operators.pdb", FileMode.Create))

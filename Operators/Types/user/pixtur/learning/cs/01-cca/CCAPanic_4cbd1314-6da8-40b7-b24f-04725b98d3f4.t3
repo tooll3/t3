@@ -53,12 +53,12 @@
         {
           "Id": "8f7d797d-b35b-4cd5-8929-bef91eaf2967"/*Threshold*/,
           "Type": "System.Single",
-          "Value": 1.77
+          "Value": 1.7399999
         },
         {
           "Id": "f97f4836-7ec7-404c-9d67-ecfb9754117d"/*MaxSteps*/,
           "Type": "System.Single",
-          "Value": 30.0
+          "Value": 25.79
         },
         {
           "Id": "fbd5b40b-eb15-443a-b397-2decd62263aa"/*Range*/,
@@ -68,7 +68,7 @@
         {
           "Id": "ce73442c-4058-48b0-9c0c-21254003b281"/*RandomAmount*/,
           "Type": "System.Single",
-          "Value": -0.04000002
+          "Value": -1.41
         },
         {
           "Id": "a900c432-8336-4eee-8250-d0198e58dbea"/*AddNoise2*/,
@@ -83,7 +83,7 @@
         {
           "Id": "7e80cad4-2a66-480e-8f4f-5d037d8e98bc"/*R_xThreshold*/,
           "Type": "System.Single",
-          "Value": -0.96
+          "Value": -0.35
         },
         {
           "Id": "4b34b3cf-967c-44d2-9b97-251de312f9cf"/*Scale*/,
@@ -171,7 +171,7 @@
       "Outputs": []
     },
     {
-      "Id": "70762278-5cb9-4d0d-8e69-9029a32346c8"/*Jitter2d*/,
+      "Id": "70762278-5cb9-4d0d-8e69-9029a32346c8"/*_Jitter2d*/,
       "SymbolId": "23794a1f-372d-484b-ac31-9470d0e77819",
       "InputValues": [
         {
@@ -428,7 +428,7 @@
       "Outputs": []
     },
     {
-      "Id": "2380b055-2484-414f-a225-56ec05fc0a93"/*Jitter2d*/,
+      "Id": "2380b055-2484-414f-a225-56ec05fc0a93"/*_Jitter2d*/,
       "SymbolId": "23794a1f-372d-484b-ac31-9470d0e77819",
       "InputValues": [
         {
@@ -489,7 +489,7 @@
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [
         {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*Input*/,
+          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
           "Type": "System.String",
           "Value": "PANIC"
         },
@@ -534,7 +534,7 @@
         {
           "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
           "Type": "System.String",
-          "Value": "Resources\\fonts\\Monument_Bold.fnt"
+          "Value": "Resources\\fonts\\Roboto-Black.fnt"
         }
       ],
       "Outputs": []
@@ -1095,7 +1095,7 @@
             "OutType": "Linear",
             "InEditMode": "Linear",
             "OutEditMode": "Linear",
-            "InTangentAngle": -0.9840229994802914,
+            "InTangentAngle": -1.5509007698768693,
             "OutTangentAngle": 1.5779879796118743
           },
           {

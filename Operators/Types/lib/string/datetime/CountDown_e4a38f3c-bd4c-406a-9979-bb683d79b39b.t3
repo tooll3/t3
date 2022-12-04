@@ -1,0 +1,17 @@
+{
+  "Name": "CountDown",
+  "Id": "e4a38f3c-bd4c-406a-9979-bb683d79b39b",
+  "Namespace": "lib.string.datetime",
+  "Inputs": [
+    {
+      "Id": "61e5281b-b772-4bbd-b52f-e6b6310d259a"/*LaunchTime*/,
+      "DefaultValue": "2021-04-17 17:00"
+    },
+    {
+      "Id": "d404e744-fa84-4bc8-8aa3-e6e972d9a5a7"/*Format*/,
+      "DefaultValue": "hh\\:mm\\:ss\\:ff"
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

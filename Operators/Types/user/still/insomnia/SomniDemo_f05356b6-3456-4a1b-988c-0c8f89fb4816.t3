@@ -1025,7 +1025,7 @@
       "Outputs": []
     },
     {
-      "Id": "150bd3b1-ff12-4ce5-ad06-72641ac3f2a5"/*RandomCamera*/,
+      "Id": "150bd3b1-ff12-4ce5-ad06-72641ac3f2a5"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
@@ -1509,7 +1509,7 @@
       "InputValues": [
         {
           "Id": "108cb829-5f9e-4a45-bc6b-7cf40a0a0f89"/*Curve*/,
-          "Type": "T3.Core.Animation.Curve",
+          "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
               "PreCurve": "Constant",
@@ -1703,7 +1703,7 @@
       "Outputs": []
     },
     {
-      "Id": "f694290f-5404-4288-a9cd-d6e713773263"/*LoadTexture2d*/,
+      "Id": "f694290f-5404-4288-a9cd-d6e713773263"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {
@@ -1942,7 +1942,7 @@
           "Value": 0.02
         },
         {
-          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
           "Type": "System.Boolean",
           "Value": true
         }
@@ -3830,7 +3830,7 @@
       "Outputs": []
     },
     {
-      "Id": "0d733da3-1b52-4a38-bdec-94797f0ccfaa"/*LoadTexture2d*/,
+      "Id": "0d733da3-1b52-4a38-bdec-94797f0ccfaa"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {
@@ -4685,7 +4685,7 @@
       "Outputs": []
     },
     {
-      "Id": "14414ae3-9d61-499d-83c4-d32cef16787f"/*SvgToPoints*/,
+      "Id": "14414ae3-9d61-499d-83c4-d32cef16787f"/*LoadSvg*/,
       "SymbolId": "e8d94dd7-eb54-42fe-a7b1-b43543dd457e",
       "InputValues": [
         {
@@ -4877,7 +4877,7 @@
       "Outputs": []
     },
     {
-      "Id": "cd527df6-0cb4-4a54-889c-b055aa086523"/*UglySSAO*/,
+      "Id": "cd527df6-0cb4-4a54-889c-b055aa086523"/*SSAO*/,
       "SymbolId": "13d5260d-4e50-48f8-909c-7d84d6f0a43f",
       "InputValues": [
         {
@@ -5344,7 +5344,7 @@
         },
         {
           "Id": "81e652c3-d12c-4b45-afd2-f6de9de20df1"/*ScaleForW*/,
-          "Type": "T3.Core.Animation.Curve",
+          "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
               "PreCurve": "Constant",
@@ -5513,7 +5513,7 @@
       "Outputs": []
     },
     {
-      "Id": "3fc22001-87f3-4de3-bd82-e1297dbefd50"/*AddDOF*/,
+      "Id": "3fc22001-87f3-4de3-bd82-e1297dbefd50"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {
@@ -5660,7 +5660,7 @@
         },
         {
           "Id": "9645b08f-ed92-4b82-8090-0a31162e83fb"/*Scale*/,
-          "Type": "T3.Core.Animation.Curve",
+          "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
               "PreCurve": "Constant",

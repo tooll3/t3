@@ -11,17 +11,17 @@
       "Max": 100.0
     },
     {
-      "InputId": "f1537faa-1bd2-44c9-b0ae-d06c5af5cdef"/*Mode*/,
-      "Position": {
-        "X": 197.0,
-        "Y": 328.0
-      }
-    },
-    {
       "InputId": "5a39f9ad-f447-493e-94f1-9d2ca7627420"/*TestValue*/,
       "Position": {
         "X": 197.0,
         "Y": 373.0
+      }
+    },
+    {
+      "InputId": "f1537faa-1bd2-44c9-b0ae-d06c5af5cdef"/*Mode*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 328.0
       }
     },
     {

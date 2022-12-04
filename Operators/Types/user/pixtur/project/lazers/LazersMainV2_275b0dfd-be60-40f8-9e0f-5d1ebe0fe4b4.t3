@@ -1456,7 +1456,7 @@
         },
         {
           "Id": "81e652c3-d12c-4b45-afd2-f6de9de20df1"/*ScaleForW*/,
-          "Type": "T3.Core.Animation.Curve",
+          "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
               "PreCurve": "Constant",
@@ -1543,7 +1543,7 @@
       "Outputs": []
     },
     {
-      "Id": "46f94a63-e9dd-4751-8103-b205ff08ad8c"/*AnalyzeSound*/,
+      "Id": "46f94a63-e9dd-4751-8103-b205ff08ad8c"/*_AnalyzeSound*/,
       "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
       "InputValues": [],
       "Outputs": []
@@ -1567,7 +1567,7 @@
       "Outputs": []
     },
     {
-      "Id": "61ccf849-5007-4d73-b758-4d97cf693fbf"/*RandomCamera*/,
+      "Id": "61ccf849-5007-4d73-b758-4d97cf693fbf"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
@@ -1630,7 +1630,7 @@
       "Outputs": []
     },
     {
-      "Id": "9e303105-1a05-4bea-94d0-7a13f7defe91"/*AnalyzeSound*/,
+      "Id": "9e303105-1a05-4bea-94d0-7a13f7defe91"/*_AnalyzeSound*/,
       "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
       "InputValues": [
         {
@@ -1960,7 +1960,7 @@
       "Outputs": []
     },
     {
-      "Id": "c8931932-c62d-49dd-bb41-208edd6464c6"/*AnimValue*/,
+      "Id": "c8931932-c62d-49dd-bb41-208edd6464c6"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -2361,7 +2361,7 @@
       "Outputs": []
     },
     {
-      "Id": "279b9671-3846-4d18-bc07-93837187ba73"/*LoadTexture2d*/,
+      "Id": "279b9671-3846-4d18-bc07-93837187ba73"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
       "Outputs": []
@@ -2451,7 +2451,7 @@
       "Outputs": []
     },
     {
-      "Id": "a58afbae-8e6e-4b2d-aa12-5df6b66f280f"/*AddDOF*/,
+      "Id": "a58afbae-8e6e-4b2d-aa12-5df6b66f280f"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {

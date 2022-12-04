@@ -31,7 +31,7 @@
           "Value": 0.49
         },
         {
-          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
           "Type": "System.Boolean",
           "Value": true
         }
@@ -65,7 +65,7 @@
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [
         {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*Input*/,
+          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
           "Type": "System.String",
           "Value": "REALTIME"
         },
@@ -198,7 +198,7 @@
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [
         {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*Input*/,
+          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
           "Type": "System.String",
           "Value": "KEYFRAME"
         },
@@ -233,7 +233,7 @@
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [
         {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*Input*/,
+          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
           "Type": "System.String",
           "Value": "PROCEDURAL"
         },
@@ -349,14 +349,14 @@
       "SymbolId": "026869ee-b62f-481e-aadf-f8a1db77fe65",
       "InputValues": [
         {
-          "Id": "f1537faa-1bd2-44c9-b0ae-d06c5af5cdef"/*Mode*/,
-          "Type": "System.Int32",
-          "Value": 2
-        },
-        {
           "Id": "5a39f9ad-f447-493e-94f1-9d2ca7627420"/*TestValue*/,
           "Type": "System.Single",
           "Value": 1.0
+        },
+        {
+          "Id": "f1537faa-1bd2-44c9-b0ae-d06c5af5cdef"/*Mode*/,
+          "Type": "System.Int32",
+          "Value": 2
         }
       ],
       "Outputs": []
@@ -390,14 +390,14 @@
       "SymbolId": "026869ee-b62f-481e-aadf-f8a1db77fe65",
       "InputValues": [
         {
-          "Id": "f1537faa-1bd2-44c9-b0ae-d06c5af5cdef"/*Mode*/,
-          "Type": "System.Int32",
-          "Value": 2
-        },
-        {
           "Id": "5a39f9ad-f447-493e-94f1-9d2ca7627420"/*TestValue*/,
           "Type": "System.Single",
           "Value": 2.0
+        },
+        {
+          "Id": "f1537faa-1bd2-44c9-b0ae-d06c5af5cdef"/*Mode*/,
+          "Type": "System.Int32",
+          "Value": 2
         }
       ],
       "Outputs": []

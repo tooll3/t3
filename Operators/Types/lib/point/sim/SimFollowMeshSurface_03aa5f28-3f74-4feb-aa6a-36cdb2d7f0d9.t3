@@ -122,7 +122,7 @@
       ]
     },
     {
-      "Id": "7cccb4aa-1bff-4943-8738-1226a79c33b3"/*MeshBufferComponents*/,
+      "Id": "7cccb4aa-1bff-4943-8738-1226a79c33b3"/*_MeshBufferComponents*/,
       "SymbolId": "5b9f1d97-4e10-4f31-ba83-4cbf7be9719b",
       "InputValues": [],
       "Outputs": []

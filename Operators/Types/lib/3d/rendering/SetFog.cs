@@ -2,10 +2,13 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
+using T3.Core.Resource;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_74cbfce0_f8b8_46a1_b5d6_38477d4eec99
 {
@@ -22,12 +25,12 @@ namespace T3.Operators.Types.Id_74cbfce0_f8b8_46a1_b5d6_38477d4eec99
         private void Update(EvaluationContext context)
         {
             Utilities.Dispose(ref _parameterBuffer);
-            ResourceManager.Instance().SetupConstBuffer(new FogSettings.FogParameters
-                                                            {
-                                                                Bias = Bias.GetValue(context),
-                                                                Distance = Distance.GetValue(context),
-                                                                Color = Color.GetValue(context)
-                                                            }, ref _parameterBuffer);
+            ResourceManager.SetupConstBuffer(new FogSettings.FogParameters
+                                                 {
+                                                     Bias = Bias.GetValue(context),
+                                                     Distance = Distance.GetValue(context),
+                                                     Color = Color.GetValue(context)
+                                                 }, ref _parameterBuffer);
             
             var previousParameters = context.FogParameters;
             context.FogParameters = _parameterBuffer;

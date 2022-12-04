@@ -118,6 +118,17 @@
         "X": -64.98917,
         "Y": 453.7878
       }
+    },
+    {
+      "ChildId": "31adbf53-34ea-4f3a-981b-cf1757e60933"/*_ImageFxShaderSetupStatic*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 153.0
+      },
+      "Position": {
+        "X": 354.8067,
+        "Y": 610.0231
+      }
     }
   ],
   "OutputUis": [

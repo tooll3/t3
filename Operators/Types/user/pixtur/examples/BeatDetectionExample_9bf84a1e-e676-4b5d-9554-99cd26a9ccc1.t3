@@ -5,13 +5,13 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "7a2939e4-8c15-4c86-bf83-cc0555c4e3d3"/*AnalyzeSound*/,
+      "Id": "7a2939e4-8c15-4c86-bf83-cc0555c4e3d3"/*_AnalyzeSound*/,
       "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "1828de5c-71f4-4b13-91b2-6debcee60e19"/*RandomCamera*/,
+      "Id": "1828de5c-71f4-4b13-91b2-6debcee60e19"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [],
       "Outputs": []
@@ -165,7 +165,7 @@
       "Outputs": []
     },
     {
-      "Id": "bd16aff8-14d6-4143-9903-487693c92607"/*AddDOF*/,
+      "Id": "bd16aff8-14d6-4143-9903-487693c92607"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {

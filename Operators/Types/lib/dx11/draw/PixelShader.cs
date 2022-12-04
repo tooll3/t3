@@ -6,6 +6,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985
 {
@@ -21,12 +22,6 @@ namespace T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985
             Shader.UpdateAction = Update;
         }
 
-        public string GetDescriptiveString()
-        {
-            return _description;
-        }
-
-        private string _description = "PixelShader";
         
         private void Update(EvaluationContext context)
         {
@@ -48,22 +43,14 @@ namespace T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985
                         Log.Error($"Invalid sourcePath for shader: {sourcePath}: " + e.Message);
                         return;
                     }
-                    
-                    try
-                    {
-                        _description =  "PixelShader\n" + Path.GetFileName(sourcePath);
-                    }
-                    catch
-                    {
-                        Log.Warning($"Unable to get filename from {sourcePath}", SymbolChildId);
-                    }                    
                 }
                 _pixelShaderResId = resourceManager.CreatePixelShaderFromFile(sourcePath, entryPoint, debugName,
                                                                               () => Shader.DirtyFlag.Invalidate());
             }
             else
             {
-                resourceManager.UpdatePixelShaderFromFile(Source.Value, _pixelShaderResId, ref Shader.Value);
+                // Shader was flagged as dirty by file update action 
+                ResourceManager.UpdatePixelShaderFromFile(Source.Value, _pixelShaderResId, ref Shader.Value);
             }
 
             if (_pixelShaderResId != ResourceManager.NullResource)
@@ -72,6 +59,13 @@ namespace T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985
             }
         }
 
+        public InputSlot<string> GetSourcePathSlot()
+        {
+            return Source;
+        }
+
+
+        
         [Input(Guid = "24646F06-1509-43CE-94C6-EEB608AD97CD")]
         public readonly InputSlot<string> Source = new InputSlot<string>();
 

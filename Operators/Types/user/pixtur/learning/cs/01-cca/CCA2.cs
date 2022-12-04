@@ -1,8 +1,10 @@
 using System.Numerics;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_2d0cd5e6_361a_43c3_8daa_3be2c301dbc4
 {
@@ -48,7 +50,7 @@ namespace T3.Operators.Types.Id_2d0cd5e6_361a_43c3_8daa_3be2c301dbc4
         public readonly InputSlot<float> Rotate = new InputSlot<float>();
 
         [Input(Guid = "2b067147-6b90-4e00-99a7-32e66d3075bb")]
-        public readonly MultiInputSlot<T3.Core.Command> AdditionalGemeotry = new MultiInputSlot<T3.Core.Command>();
+        public readonly MultiInputSlot<Command> AdditionalGemeotry = new MultiInputSlot<Command>();
 
     }
 }

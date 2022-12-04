@@ -79,7 +79,7 @@
         },
         {
           "Id": "9645b08f-ed92-4b82-8090-0a31162e83fb"/*Scale*/,
-          "Type": "T3.Core.Animation.Curve",
+          "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
               "PreCurve": "Constant",
@@ -174,7 +174,7 @@
       "Outputs": []
     },
     {
-      "Id": "cec5d414-bd1a-42fe-b858-5a814b22764c"/*AddDOF*/,
+      "Id": "cec5d414-bd1a-42fe-b858-5a814b22764c"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {
@@ -232,7 +232,7 @@
           "Value": 123
         },
         {
-          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
           "Type": "System.Boolean",
           "Value": true
         }
@@ -292,7 +292,7 @@
           "Value": 1.0
         },
         {
-          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
           "Type": "System.Boolean",
           "Value": false
         },
@@ -756,7 +756,7 @@
       "Outputs": []
     },
     {
-      "Id": "a8a049de-c168-48cc-9e82-bc64999556ad"/*GetStringPart*/,
+      "Id": "a8a049de-c168-48cc-9e82-bc64999556ad"/*PickStringPart*/,
       "SymbolId": "7baaa83d-5c09-42a0-b7bc-35dbcfa5156d",
       "InputValues": [
         {
@@ -943,7 +943,7 @@
       "Outputs": []
     },
     {
-      "Id": "f22526b3-39a6-49b3-bc3e-04ec29ba6e1b"/*AnimValue*/,
+      "Id": "f22526b3-39a6-49b3-bc3e-04ec29ba6e1b"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -1038,7 +1038,7 @@
       "Outputs": []
     },
     {
-      "Id": "314f8bbb-7c9a-49bf-a59e-2b5372ee9752"/*AnalyzeSound*/,
+      "Id": "314f8bbb-7c9a-49bf-a59e-2b5372ee9752"/*_AnalyzeSound*/,
       "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
       "InputValues": [],
       "Outputs": []
@@ -1063,7 +1063,7 @@
       "Outputs": []
     },
     {
-      "Id": "0bc10d49-4c34-4e01-bdce-2e5ec8e1c6c5"/*GetStringPart*/,
+      "Id": "0bc10d49-4c34-4e01-bdce-2e5ec8e1c6c5"/*PickStringPart*/,
       "SymbolId": "7baaa83d-5c09-42a0-b7bc-35dbcfa5156d",
       "InputValues": [],
       "Outputs": []
@@ -1141,7 +1141,7 @@
       "Outputs": []
     },
     {
-      "Id": "91855310-4233-45e1-b80b-039899c25d4d"/*PickFromStrings*/,
+      "Id": "91855310-4233-45e1-b80b-039899c25d4d"/*PickFromStringList*/,
       "SymbolId": "ef357e66-24e9-4f54-8d86-869db74602f4",
       "InputValues": [],
       "Outputs": []

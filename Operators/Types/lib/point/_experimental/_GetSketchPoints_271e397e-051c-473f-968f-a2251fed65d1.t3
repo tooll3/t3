@@ -1,0 +1,21 @@
+{
+  "Name": "_GetSketchPoints",
+  "Id": "271e397e-051c-473f-968f-a2251fed65d1",
+  "Namespace": "lib.point._experimental",
+  "Inputs": [
+    {
+      "Id": "c7c71de4-a9a8-4194-b490-ab48004565d1"/*Pages*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "1b8d9a00-f337-431e-bab3-24d45ed9d191"/*PageIndex*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "ddbac6ab-e547-4955-9346-680b2c5bf8a4"/*GetOnionSkin*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

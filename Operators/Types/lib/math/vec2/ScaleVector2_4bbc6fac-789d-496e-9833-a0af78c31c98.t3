@@ -13,9 +13,13 @@
     {
       "Id": "c34ae94c-228d-45e4-9e9a-ec2799953444"/*B*/,
       "DefaultValue": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 1.0,
+        "Y": 1.0
       }
+    },
+    {
+      "Id": "927443fe-4338-462a-bf78-90a08f77467b"/*UniformScale*/,
+      "DefaultValue": 1.0
     }
   ],
   "Children": [],

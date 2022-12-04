@@ -7,6 +7,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_fc1ef086_c160_4174_8e60_a4eda931163d
 {

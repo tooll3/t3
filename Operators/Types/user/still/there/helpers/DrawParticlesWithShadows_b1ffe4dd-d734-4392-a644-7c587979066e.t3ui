@@ -211,17 +211,6 @@
       }
     },
     {
-      "ChildId": "5d7556f5-1cb1-43bc-ab98-942e4c7a9cee"/*ParticleSystemComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -1108.1044,
-        "Y": 450.34937
-      }
-    },
-    {
       "ChildId": "adab8911-5d07-46d7-a208-e24ed7ed09cb"/*RenderTargetBlendDesc*/,
       "Size": {
         "X": 110.0,
@@ -274,17 +263,6 @@
       "Position": {
         "X": -1269.5863,
         "Y": 237.79875
-      }
-    },
-    {
-      "ChildId": "565fb46e-8330-4b8d-bcba-7ee041cc4d7d"/*GetParticleSystem*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -1238.1046,
-        "Y": 450.34937
       }
     },
     {
@@ -509,17 +487,6 @@
       }
     },
     {
-      "ChildId": "5a3b9140-79cb-4e40-a84d-139ae0626404"/*ParticleSystemComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -231.39975,
-        "Y": 1783.2548
-      }
-    },
-    {
       "ChildId": "d9eb028f-6615-4f66-ac00-540188769c79"/*TransformsConstBuffer*/,
       "Size": {
         "X": 110.0,
@@ -664,17 +631,6 @@
       }
     },
     {
-      "ChildId": "b916b86e-f0b0-4194-9488-2c3274f85b16"/*ParticleSystemComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 25.772705,
-        "Y": 2730.6506
-      }
-    },
-    {
       "ChildId": "ea696878-b599-42eb-be5a-9681dff4bb1d"/*Texture2d*/,
       "Size": {
         "X": 110.0,
@@ -705,17 +661,6 @@
       "Position": {
         "X": -654.7948,
         "Y": 2163.0515
-      }
-    },
-    {
-      "ChildId": "9294e2eb-e5cc-4f10-afcd-3bad974b77a3"/*ShadowMapTransformsConstBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": -590.8492,
-        "Y": 1466.0225
       }
     },
     {
@@ -918,7 +863,7 @@
       }
     },
     {
-      "ChildId": "558b35ed-a6c0-4ee7-9a02-358317bffa9d"/*LoadTexture2d*/,
+      "ChildId": "558b35ed-a6c0-4ee7-9a02-358317bffa9d"/*LoadImage*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

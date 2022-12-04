@@ -24,6 +24,7 @@ namespace T3.Operators.Types.Id_fd9bffd3_5c57_462f_8761_85f94c5a629b
             Invert,
             
             None,
+            PreMultipliedExperimental
         }
     }
 }

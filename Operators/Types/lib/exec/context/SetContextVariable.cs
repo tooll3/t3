@@ -1,9 +1,11 @@
 using System;
 using T3.Core;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789
 {
@@ -19,17 +21,6 @@ namespace T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789
 
         private void Update(EvaluationContext context)
         {
-            // string variableName = Variable.GetValue(context);
-            // float end = End.GetValue(context);
-            // for (float i = 0f; i < end; i += 1.0f)
-            // {
-            //     context.FloatVariables[variableName] = i;
-            //
-            //     DirtyFlag.InvalidationRefFrame++;
-            //     Command.Invalidate();
-            //     Command.GetValue(context);
-            // }
-
             var name = VariableName.GetValue(context);
             var newValue = Value.GetValue(context);
             if (string.IsNullOrEmpty(name))
@@ -43,13 +34,14 @@ namespace T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789
             }
             else
             {
-                var previous = 0f;
-                var hadPreviousValue = context.FloatVariables.TryGetValue(name, out previous);
+                var hadPreviousValue = context.FloatVariables.TryGetValue(name, out var previous);
                 context.FloatVariables[name] = newValue;
+                
                 SubGraph.GetValue(context);
+                
                 if (hadPreviousValue)
                 {
-                    context.FloatVariables[name] = newValue;
+                    context.FloatVariables[name] = previous;
                 }
                 else
                 {

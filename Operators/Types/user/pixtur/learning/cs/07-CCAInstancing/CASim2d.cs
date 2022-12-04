@@ -39,5 +39,11 @@ namespace T3.Operators.Types.Id_63090462_3237_465e_a12c_25c8bbfaaa8c
         [Input(Guid = "7ce33028-ecd0-4e6b-b857-52eb8bbec9f4")]
         public readonly InputSlot<bool> ResetOnChange = new InputSlot<bool>();
 
+        [Input(Guid = "9d58ecd1-7ed1-43d2-83f4-1710e4258822")]
+        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> FxTexture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+
+        [Input(Guid = "eb02b152-63ad-4227-ba5d-6baa9ce9884a")]
+        public readonly InputSlot<float> FxThreshold = new InputSlot<float>();
+
     }
 }

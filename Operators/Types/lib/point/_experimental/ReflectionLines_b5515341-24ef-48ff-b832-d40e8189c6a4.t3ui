@@ -200,7 +200,7 @@
       }
     },
     {
-      "ChildId": "9a2419fc-0325-4baf-916a-c99dc239bf8f"/*MeshBufferComponents*/,
+      "ChildId": "9a2419fc-0325-4baf-916a-c99dc239bf8f"/*_MeshBufferComponents*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

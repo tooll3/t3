@@ -14,28 +14,36 @@
       "Position": {
         "X": -8.08049,
         "Y": 291.35632
-      }
+      },
+      "Min": 0.0,
+      "Max": 2.0
     },
     {
       "InputId": "4dc44a7b-fe7c-4807-aaaa-53fb553de017"/*Gain*/,
       "Position": {
         "X": -8.08049,
         "Y": 337.35626
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "be4dc864-a5f9-4356-91f9-58de8056a3a8"/*Gamma*/,
       "Position": {
         "X": -8.08049,
         "Y": 382.35626
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "e8cc8a26-313e-4399-b800-901019bbaa78"/*Lift*/,
       "Position": {
         "X": -8.08049,
         "Y": 432.35626
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "423eb712-f7e3-4402-b841-324a9fc91c54"/*VignetteColor*/,
@@ -66,7 +74,9 @@
       "Position": {
         "X": -8.08049,
         "Y": 662.35626
-      }
+      },
+      "Min": -2.0,
+      "Max": 2.0
     }
   ],
   "SymbolChildUis": [

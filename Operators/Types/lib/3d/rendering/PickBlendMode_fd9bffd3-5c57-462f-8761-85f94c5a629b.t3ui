@@ -5,8 +5,8 @@
     {
       "InputId": "30b58444-0485-4116-8b15-7e62fee69eaa"/*BlendMode*/,
       "Position": {
-        "X": -200.0,
-        "Y": 45.0
+        "X": -176.51567,
+        "Y": 117.192566
       }
     }
   ],
@@ -23,14 +23,14 @@
       }
     },
     {
-      "ChildId": "5a39b008-9b76-4d36-97b2-e574de70d7f6"/*Normal*/,
+      "ChildId": "5a39b008-9b76-4d36-97b2-e574de70d7f6"/*PremultipliedAlpha*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
       },
       "Position": {
-        "X": 288.50763,
-        "Y": -379.69525
+        "X": 287.2684,
+        "Y": 47.66388
       }
     },
     {
@@ -62,8 +62,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": 266.4923,
-        "Y": -214.00044
+        "X": 288.50763,
+        "Y": -201.69514
       }
     },
     {
@@ -103,33 +103,11 @@
       "ChildId": "41bc4763-eaa4-4e1c-9212-ebe0ee7679eb"/*SwitchBlendState*/,
       "Size": {
         "X": 110.0,
-        "Y": 114.0
+        "Y": 127.0
       },
       "Position": {
         "X": 746.29297,
         "Y": -139.58556
-      }
-    },
-    {
-      "ChildId": "a643b0f4-a848-4def-8ca6-e24a5693be39"/*RenderTargetBlendDesc*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 129.77487,
-        "Y": -176.32721
-      }
-    },
-    {
-      "ChildId": "8c761bd0-4702-4c35-a4c7-6e2fb0cc5853"/*RenderTargetBlendDesc*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 132.58417,
-        "Y": -284.51508
       }
     },
     {
@@ -155,17 +133,6 @@
       }
     },
     {
-      "ChildId": "e0469c72-d6ba-48a9-8380-f7896ed260f4"/*RenderTargetBlendDesc*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 59.289444,
-        "Y": -133.7929
-      }
-    },
-    {
       "ChildId": "53e0ef4c-c046-41a0-baa4-d891d476a0e6"/*No Blend*/,
       "Size": {
         "X": 110.0,
@@ -185,6 +152,28 @@
       "Position": {
         "X": 437.2684,
         "Y": -21.33612
+      }
+    },
+    {
+      "ChildId": "9cd85a03-a0c3-4566-a8e8-f23032587b01"/*RenderTargetBlendDesc*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 288.50763,
+        "Y": -379.69525
+      }
+    },
+    {
+      "ChildId": "1713bba2-4e8d-4d87-85e3-986742e3689a"/*BlendStateOp*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 437.2684,
+        "Y": 47.66388
       }
     }
   ],

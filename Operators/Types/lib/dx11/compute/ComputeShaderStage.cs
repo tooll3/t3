@@ -2,10 +2,13 @@ using System.Collections.Generic;
 using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
+using T3.Core.Utils;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Operators.Types.Id_8bef116d_7d1c_4c1b_b902_25c1d5e925a9
@@ -23,7 +26,7 @@ namespace T3.Operators.Types.Id_8bef116d_7d1c_4c1b_b902_25c1d5e925a9
         private void Update(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var csStage = deviceContext.ComputeShader;
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using SharpDX;
 using SharpDX.Direct3D11;
+using T3.Core.Resource;
 
 namespace T3.Core.Rendering
 {
@@ -15,7 +16,7 @@ namespace T3.Core.Rendering
         {
             get
             {
-                if (_defaultDepthStencilState == null && ResourceManager.Instance().Device != null)
+                if (_defaultDepthStencilState == null && ResourceManager.Device != null)
                 {
                     var depthStencilDescription = new DepthStencilStateDescription
                                                       {
@@ -25,7 +26,7 @@ namespace T3.Core.Rendering
                                                           StencilReadMask = 255,
                                                           StencilWriteMask = 255
                                                       };
-                    _defaultDepthStencilState = new DepthStencilState(ResourceManager.Instance().Device, depthStencilDescription);
+                    _defaultDepthStencilState = new DepthStencilState(ResourceManager.Device, depthStencilDescription);
                 }
 
                 return _defaultDepthStencilState;
@@ -38,13 +39,13 @@ namespace T3.Core.Rendering
         {
             get
             {
-                if (_disabledDepthStencilState == null && ResourceManager.Instance().Device != null)
+                if (_disabledDepthStencilState == null && ResourceManager.Device != null)
                 {
                     var depthStencilDescription = new DepthStencilStateDescription
                                                       {
                                                           IsDepthEnabled = false
                                                       };
-                    _disabledDepthStencilState = new DepthStencilState(ResourceManager.Instance().Device, depthStencilDescription);
+                    _disabledDepthStencilState = new DepthStencilState(ResourceManager.Device, depthStencilDescription);
                 }
 
                 return _disabledDepthStencilState;
@@ -57,7 +58,7 @@ namespace T3.Core.Rendering
         {
             get
             {
-                if (_defaultBlendState == null && ResourceManager.Instance().Device != null)
+                if (_defaultBlendState == null && ResourceManager.Device != null)
                 {
                     var blendStateDescription = new BlendStateDescription();
                     blendStateDescription.RenderTarget[0].IsBlendEnabled = true;
@@ -69,7 +70,7 @@ namespace T3.Core.Rendering
                     blendStateDescription.RenderTarget[0].AlphaBlendOperation = BlendOperation.Add;
                     blendStateDescription.RenderTarget[0].RenderTargetWriteMask = ColorWriteMaskFlags.All;
                     blendStateDescription.AlphaToCoverageEnable = false;
-                    _defaultBlendState = new BlendState(ResourceManager.Instance().Device, blendStateDescription);
+                    _defaultBlendState = new BlendState(ResourceManager.Device, blendStateDescription);
                 }
 
                 return _defaultBlendState;
@@ -82,12 +83,12 @@ namespace T3.Core.Rendering
         {
             get
             {
-                if (_disabledBlendState == null && ResourceManager.Instance().Device != null)
+                if (_disabledBlendState == null && ResourceManager.Device != null)
                 {
                     var blendStateDescription = new BlendStateDescription();
                     blendStateDescription.RenderTarget[0].IsBlendEnabled = false;
                     blendStateDescription.RenderTarget[0].RenderTargetWriteMask = ColorWriteMaskFlags.All;
-                    _disabledBlendState = new BlendState(ResourceManager.Instance().Device, blendStateDescription);
+                    _disabledBlendState = new BlendState(ResourceManager.Device, blendStateDescription);
                 }
 
                 return _disabledBlendState;
@@ -102,7 +103,7 @@ namespace T3.Core.Rendering
         {
             get
             {
-                if (_defaultRasterizerState == null && ResourceManager.Instance().Device != null)
+                if (_defaultRasterizerState == null && ResourceManager.Device != null)
                 {
                     var desc = new RasterizerStateDescription
                                    {
@@ -110,7 +111,7 @@ namespace T3.Core.Rendering
                                        CullMode = CullMode.Back,
                                        IsDepthClipEnabled = true
                                    };
-                    _defaultRasterizerState = new RasterizerState(ResourceManager.Instance().Device, desc);
+                    _defaultRasterizerState = new RasterizerState(ResourceManager.Device, desc);
                 }
 
                 return _defaultRasterizerState;
@@ -123,7 +124,7 @@ namespace T3.Core.Rendering
         {
             get
             {
-                if (_defaultSamplerState == null && ResourceManager.Instance().Device != null)
+                if (_defaultSamplerState == null && ResourceManager.Device != null)
                 {
                     var desc = new SamplerStateDescription
                                    {
@@ -136,7 +137,7 @@ namespace T3.Core.Rendering
                                        MaximumLod = Single.MaxValue
                                    };
 
-                    _defaultSamplerState = new SamplerState(ResourceManager.Instance().Device, desc);
+                    _defaultSamplerState = new SamplerState(ResourceManager.Device, desc);
                 }
 
                 return _defaultSamplerState;

@@ -175,7 +175,7 @@
       "Outputs": []
     },
     {
-      "Id": "33fc65f9-8d72-49c4-b59e-e0f08b26c525"/*AnimValue*/,
+      "Id": "33fc65f9-8d72-49c4-b59e-e0f08b26c525"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -213,7 +213,7 @@
       "Outputs": []
     },
     {
-      "Id": "e5e063dc-04d3-49ed-95b2-87666db98861"/*AnimValue*/,
+      "Id": "e5e063dc-04d3-49ed-95b2-87666db98861"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -277,7 +277,7 @@
       "Outputs": []
     },
     {
-      "Id": "1856de70-1877-44b6-9e24-408ca25518c9"/*AnimValue*/,
+      "Id": "1856de70-1877-44b6-9e24-408ca25518c9"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -341,13 +341,13 @@
       "Outputs": []
     },
     {
-      "Id": "5aaa4d0b-f8d0-4cfe-bed3-ff780d0d6cb3"/*PickFromStrings*/,
+      "Id": "5aaa4d0b-f8d0-4cfe-bed3-ff780d0d6cb3"/*PickFromStringList*/,
       "SymbolId": "ef357e66-24e9-4f54-8d86-869db74602f4",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "17baf0f9-d359-413a-a88e-766ba27e64ef"/*LoadTexture2d*/,
+      "Id": "17baf0f9-d359-413a-a88e-766ba27e64ef"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
       "Outputs": []

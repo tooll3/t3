@@ -47,7 +47,7 @@
       }
     },
     {
-      "ChildId": "d11109dd-c3f5-4022-8dce-acf7abc4023c"/*Jitter2d*/,
+      "ChildId": "d11109dd-c3f5-4022-8dce-acf7abc4023c"/*_Jitter2d*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -91,7 +91,7 @@
       }
     },
     {
-      "ChildId": "ae8e7308-9ab5-41ee-9bce-c26f811ca86e"/*Jitter2d*/,
+      "ChildId": "ae8e7308-9ab5-41ee-9bce-c26f811ca86e"/*_Jitter2d*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -121,17 +121,6 @@
       "Position": {
         "X": 877.5781,
         "Y": 437.93915
-      }
-    },
-    {
-      "ChildId": "a435879b-5826-49ea-8b60-503b8a1c7486"/*RandomTextBlock*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 648.00806,
-        "Y": 56.0
       }
     },
     {
@@ -179,7 +168,7 @@
       }
     },
     {
-      "ChildId": "d635de60-830f-445c-acb7-bc56e7adc6f7"/*Jitter2d*/,
+      "ChildId": "d635de60-830f-445c-acb7-bc56e7adc6f7"/*_Jitter2d*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using T3.Core.Operator;
+using T3.Core.Utils;
 
 namespace T3.Core.Logging
 {
@@ -23,61 +26,27 @@ namespace T3.Core.Logging
         }
 
         #region API for logging
-        public static void Debug(string message)
+
+        public static void Debug(string message, params object[] args)
         {
-            DoLog(new LogEntry(LogEntry.EntryLevel.Debug, message));
-        }
-
-        public static void Debug(string message, Guid sourceId)
+            ProcessAndLog(LogEntry.EntryLevel.Debug, message, args);
+        }        
+        
+        public static void Info(string message, params object[] args)
         {
-            DoLog(new LogEntry(LogEntry.EntryLevel.Debug, sourceId, message));
-        }
-
-        public static void DebugFormat(string message, params object[] args)
+            ProcessAndLog(LogEntry.EntryLevel.Info, message, args);
+        }  
+        
+        public static void Warning(string message, params object[] args)
         {
-            var messageString = FormatMessageWithArguments(message, args);
-            DoLog(new LogEntry(LogEntry.EntryLevel.Debug, messageString));
-        }
-
-        public static void Info(string message)
-        {
-            DoLog(new LogEntry(LogEntry.EntryLevel.Info, message));
-        }
-
-        public static void Info(string message, Guid sourceId)
-        {
-            DoLog(new LogEntry(LogEntry.EntryLevel.Info, sourceId, message));
-        }
-
-        public static void InfoFormat(string message, params object[] args)
-        {
-            var messageString = FormatMessageWithArguments(message, args);
-            DoLog(new LogEntry(LogEntry.EntryLevel.Info, messageString));
-        }
-
-
-        public static void Warning(string message)
-        {
-            DoLog(new LogEntry(LogEntry.EntryLevel.Warning, message));
-        }
-
-        public static void Warning(string message, Guid sourceId)
-        {
-            DoLog(new LogEntry(LogEntry.EntryLevel.Warning, sourceId, message));
-        }
-
-        // public static void WarningFormat(string message, params object[] args)
-        // {
-        //     var messageString = FormatMessageWithArguments(message, args);
-        //     DoLog(new LogEntry(LogEntry.EntryLevel.Warning, messageString));
-        // }
-
+            ProcessAndLog(LogEntry.EntryLevel.Warning, message, args);
+        }  
+        
         public static void Error(string message, params object[] args)
         {
-            var messageString = FormatMessageWithArguments(message, args);
-            DoLog(new LogEntry(LogEntry.EntryLevel.Error, messageString));
+            ProcessAndLog(LogEntry.EntryLevel.Error, message, args);
         }
-
+        
         public static void Assert(string message)
         {
             DoLog(new LogEntry(LogEntry.EntryLevel.Warning, message));
@@ -85,20 +54,38 @@ namespace T3.Core.Logging
         
         public static void Assert(string message, Guid sourceId)
         {
-            DoLog(new LogEntry(LogEntry.EntryLevel.Warning, sourceId, message));
+            DoLog(new LogEntry(LogEntry.EntryLevel.Warning, message, sourceId));
         }
+
         
-        private const int DEFAULT_LINE_LENGTH = 100;
-        private static readonly StringBuilder _accumulatedInfoLine = new StringBuilder(String.Empty, DEFAULT_LINE_LENGTH);
-        public static void AccumulateAsInfoLine(String c, int lineLength = DEFAULT_LINE_LENGTH)
+        /// <summary>
+        /// A helper function to unite different method API 
+        /// </summary>
+        private static void ProcessAndLog(LogEntry.EntryLevel level, string message, object[] args)
         {
-            _accumulatedInfoLine.Append(c);
-            if (_accumulatedInfoLine.Length > lineLength)
+            switch (args)
             {
-                InfoFormat(_accumulatedInfoLine.ToString());
-                _accumulatedInfoLine.Clear();
+                case { Length: 1 } when args[0] is Instance instance:
+                {
+                    DoLog(new LogEntry(level, message, OperatorUtils.BuildIdPathForInstance(instance).ToArray()));
+                    break;
+                }
+                
+                case { Length: 1 } when args[0] is List<Guid> idPath:
+                    DoLog(new LogEntry(level, message, idPath.ToArray()));
+                    break;
+                case { Length: 1 } when args[0] is Guid[] idPathArray:
+                    DoLog(new LogEntry(level, message, idPathArray));
+                    break;
+                default:
+                {
+                    var messageString = FormatMessageWithArguments(message, args);
+                    DoLog(new LogEntry(level, messageString));
+                    break;
+                }
             }
-        }
+        } 
+        
 
         #endregion
 
@@ -114,22 +101,15 @@ namespace T3.Core.Logging
             }
             return messageString;
         }
-
-        // private static void LogDebug(LogEntry.EntryLevel level, String message)
-        // {
-        //     DoLog(new LogEntry(level, Guid.Empty, message));
-        // }
-
+        
         private static void DoLog(LogEntry entry)
         {
             _instance._logWriters.ForEach(writer => writer.ProcessEntry(entry));
         }
 
-
-
+        
         private static readonly Log _instance = new Log();
         private readonly List<ILogWriter> _logWriters = new List<ILogWriter>();
-
         private Log() { }   // Prevent construction
     }
 }

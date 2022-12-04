@@ -168,17 +168,6 @@
       }
     },
     {
-      "ChildId": "1ae71479-c2f5-40f3-9223-d06c91ac9a6f"/*PointsToBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -316.05286,
-        "Y": 1204.3513
-      }
-    },
-    {
       "ChildId": "9e6426b1-e2e1-4830-92d2-aff39b248171"/*Multiply*/,
       "Size": {
         "X": 110.0,
@@ -197,17 +186,6 @@
       },
       "Position": {
         "X": -466.05286,
-        "Y": 1141.3513
-      }
-    },
-    {
-      "ChildId": "ebeb7865-9a13-42ef-94c7-104a2f4ee3c5"/*PointsToBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -316.05286,
         "Y": 1141.3513
       }
     },
@@ -322,7 +300,7 @@
       }
     },
     {
-      "ChildId": "77995d98-c486-4a1d-b0f7-d9d64798e2b1"/*LoadTexture2d*/,
+      "ChildId": "77995d98-c486-4a1d-b0f7-d9d64798e2b1"/*LoadImage*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -388,7 +366,7 @@
       }
     },
     {
-      "ChildId": "29b3a7f3-1127-4920-b7ab-64b99c9687e2"/*AnalyzeSound*/,
+      "ChildId": "29b3a7f3-1127-4920-b7ab-64b99c9687e2"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -586,7 +564,7 @@
       }
     },
     {
-      "ChildId": "bf9ddfc2-2a3d-41b1-818d-1b17328ee3a6"/*RandomCamera*/,
+      "ChildId": "bf9ddfc2-2a3d-41b1-818d-1b17328ee3a6"/*OrbitCamera*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -751,7 +729,7 @@
       }
     },
     {
-      "ChildId": "0fbb28a1-9186-440e-9693-015859e47e47"/*RandomCamera*/,
+      "ChildId": "0fbb28a1-9186-440e-9693-015859e47e47"/*OrbitCamera*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -960,7 +938,7 @@
       }
     },
     {
-      "ChildId": "c8b3bdc4-04ed-4362-a16a-1013fb1c3d44"/*RandomCamera*/,
+      "ChildId": "c8b3bdc4-04ed-4362-a16a-1013fb1c3d44"/*OrbitCamera*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -982,7 +960,7 @@
       }
     },
     {
-      "ChildId": "cc6430f3-9ab5-4f97-beb8-5999b84f2aeb"/*AnalyzeSound*/,
+      "ChildId": "cc6430f3-9ab5-4f97-beb8-5999b84f2aeb"/*_AnalyzeSound*/,
       "Style": "Expanded",
       "Size": {
         "X": 110.0,
@@ -1203,7 +1181,7 @@
       }
     },
     {
-      "ChildId": "4eb5fca4-4153-424a-b69a-b25cedf073bd"/*RandomCamera*/,
+      "ChildId": "4eb5fca4-4153-424a-b69a-b25cedf073bd"/*OrbitCamera*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -1214,7 +1192,7 @@
       }
     },
     {
-      "ChildId": "ab6291d8-3eb4-4632-9647-9413d37d775f"/*AnalyzeSound*/,
+      "ChildId": "ab6291d8-3eb4-4632-9647-9413d37d775f"/*_AnalyzeSound*/,
       "Style": "Expanded",
       "Size": {
         "X": 110.0,
@@ -1512,7 +1490,7 @@
       }
     },
     {
-      "ChildId": "c294266e-f75c-4809-8ae1-72d73135b40e"/*AnimValue*/,
+      "ChildId": "c294266e-f75c-4809-8ae1-72d73135b40e"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -1545,7 +1523,7 @@
       }
     },
     {
-      "ChildId": "aba824f1-c16e-4aae-bff4-cde4f15f9d6a"/*AnimValue*/,
+      "ChildId": "aba824f1-c16e-4aae-bff4-cde4f15f9d6a"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -1699,7 +1677,7 @@
       }
     },
     {
-      "ChildId": "12d6fe5e-160b-4947-afe6-98b01ee2d6bd"/*AnalyzeSound*/,
+      "ChildId": "12d6fe5e-160b-4947-afe6-98b01ee2d6bd"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -1842,7 +1820,7 @@
       }
     },
     {
-      "ChildId": "80678412-e1bc-47d1-aa50-4b5e1df848b1"/*AnimValue*/,
+      "ChildId": "80678412-e1bc-47d1-aa50-4b5e1df848b1"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -1897,7 +1875,7 @@
       }
     },
     {
-      "ChildId": "e1c25de1-33aa-455e-947e-ab887b830390"/*AnimValue*/,
+      "ChildId": "e1c25de1-33aa-455e-947e-ab887b830390"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -2015,17 +1993,6 @@
       "Position": {
         "X": 1894.9497,
         "Y": 5773.2827
-      }
-    },
-    {
-      "ChildId": "e720e126-5207-4774-bc37-b01b09a7401b"/*SetParticleSystem*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 1824.4645,
-        "Y": 5994.0933
       }
     },
     {

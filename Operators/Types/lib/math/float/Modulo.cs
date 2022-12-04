@@ -27,7 +27,7 @@ namespace T3.Operators.Types.Id_5202d3f6_c970_4006_933d_3c60d6c202dc
             }
             else
             {
-                Log.Debug("Modulo caused division by zero", SymbolChildId);
+                Log.Debug("Modulo caused division by zero", this);
                 Result.Value = 0;
             }
         }

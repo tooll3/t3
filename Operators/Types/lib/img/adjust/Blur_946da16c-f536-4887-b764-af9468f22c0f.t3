@@ -37,7 +37,7 @@
   ],
   "Children": [
     {
-      "Id": "fd12816a-56a1-482d-9e44-4d2f8cd3c781"/*LoadTexture2d*/,
+      "Id": "fd12816a-56a1-482d-9e44-4d2f8cd3c781"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {

@@ -247,7 +247,7 @@
         },
         {
           "Id": "81e652c3-d12c-4b45-afd2-f6de9de20df1"/*ScaleForW*/,
-          "Type": "T3.Core.Animation.Curve",
+          "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
               "PreCurve": "Constant",
@@ -339,7 +339,7 @@
       "Outputs": []
     },
     {
-      "Id": "db7473ad-cb26-476d-a733-52375607df8b"/*AnimValue*/,
+      "Id": "db7473ad-cb26-476d-a733-52375607df8b"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -506,7 +506,7 @@
       "Outputs": []
     },
     {
-      "Id": "43695ff4-97ad-4dbf-973f-1b18c8a75aa7"/*AnimValue*/,
+      "Id": "43695ff4-97ad-4dbf-973f-1b18c8a75aa7"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -711,7 +711,7 @@
       "Outputs": []
     },
     {
-      "Id": "6841ed0c-5c7b-4885-acf2-b3d8b14b7ebc"/*AnalyzeSound*/,
+      "Id": "6841ed0c-5c7b-4885-acf2-b3d8b14b7ebc"/*_AnalyzeSound*/,
       "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
       "InputValues": [],
       "Outputs": []
@@ -784,7 +784,7 @@
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [
         {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*Input*/,
+          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
           "Type": "System.String",
           "Value": "?"
         },

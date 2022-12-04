@@ -18,6 +18,15 @@ namespace T3.Operators.Types.Id_1a411be2_1757_4019_8ce2_e29f808ed839
         [Input(Guid = "70c4ecc7-72a2-42ee-8546-cbff2c08aa27")]
         public readonly InputSlot<System.Numerics.Vector2> Size = new InputSlot<System.Numerics.Vector2>();
 
+        [Input(Guid = "48d5cd1d-3ca1-4075-a55e-21cec39b4525")]
+        public readonly InputSlot<bool> UseAspectRatio = new InputSlot<bool>();
+
+        [Input(Guid = "e367bd72-c37c-4a7f-8441-698161ba75f8")]
+        public readonly InputSlot<float> Scale = new InputSlot<float>();
+
+        [Input(Guid = "cb36f66b-99d7-4468-adbf-86e168a76ade")]
+        public readonly InputSlot<System.Numerics.Vector2> Offset = new InputSlot<System.Numerics.Vector2>();
+
         [Input(Guid = "63ebb6c9-e8a5-43e4-97a4-3a34ad585474")]
         public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
     }

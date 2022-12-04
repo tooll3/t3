@@ -1,170 +1,139 @@
-[
-  {
-    "Title": "Graph##1",
-    "Visible": true,
-    "Position": {
-      "X": 0.002734375,
-      "Y": 0.71700776
+{
+  "Title": null,
+  "WindowConfigs": [
+    {
+      "Title": "Graph##1",
+      "Visible": true,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.018055556
+      },
+      "Size": {
+        "X": 1.0,
+        "Y": 0.98194444
+      }
     },
-    "Size": {
-      "X": 0.66914064,
-      "Y": 0.2858151
-    }
-  },
-  {
-    "Title": "Settings",
-    "Visible": false,
-    "Position": {
-      "X": 0.8027344,
-      "Y": 0.022582922
+    {
+      "Title": "Settings",
+      "Visible": false,
+      "Position": {
+        "X": 0.2,
+        "Y": 0.2
+      },
+      "Size": {
+        "X": 0.3,
+        "Y": 0.2
+      }
     },
-    "Size": {
-      "X": 0.19960937,
-      "Y": 0.17078334
-    }
-  },
-  {
-    "Title": "Parameters##1",
-    "Visible": true,
-    "Position": {
-      "X": 0.67265624,
-      "Y": 0.4318984
+    {
+      "Title": "Parameters##1",
+      "Visible": false,
+      "Position": {
+        "X": 0.5644531,
+        "Y": 0.018348623
+      },
+      "Size": {
+        "X": 0.1671875,
+        "Y": 0.98165137
+      }
     },
-    "Size": {
-      "X": 0.3265625,
-      "Y": 0.5702188
-    }
-  },
-  {
-    "Title": "Parameters##2",
-    "Visible": false,
-    "Position": {
-      "X": 0.6078125,
-      "Y": 0.4474929
+    {
+      "Title": "Explore Variations",
+      "Visible": false,
+      "Position": {
+        "X": 0.31640625,
+        "Y": 0.2159492
+      },
+      "Size": {
+        "X": 0.3,
+        "Y": 0.19971772
+      }
     },
-    "Size": {
-      "X": 0.16927083,
-      "Y": 0.46168402
-    }
-  },
-  {
-    "Title": "Explore Variations",
-    "Visible": false,
-    "Position": {
-      "X": 0.0,
-      "Y": 0.0
+    {
+      "Title": "Variations",
+      "Visible": false,
+      "Position": {
+        "X": 0.5644531,
+        "Y": 0.018055556
+      },
+      "Size": {
+        "X": 0.43554688,
+        "Y": 0.98194444
+      }
     },
-    "Size": {
-      "X": 0.3,
-      "Y": 0.2
-    }
-  },
-  {
-    "Title": "Variations",
-    "Visible": true,
-    "Position": {
-      "X": 0.67226565,
-      "Y": 0.015525758
+    {
+      "Title": "Output##1",
+      "Visible": false,
+      "Position": {
+        "X": 0.49765626,
+        "Y": 0.018348623
+      },
+      "Size": {
+        "X": 0.5023438,
+        "Y": 0.50247
+      }
     },
-    "Size": {
-      "X": 0.32539064,
-      "Y": 0.41354975
-    }
-  },
-  {
-    "Title": "Output##0",
-    "Visible": true,
-    "Position": {
-      "X": 0.001171875,
-      "Y": 0.016231475
+    {
+      "Title": "Console",
+      "Visible": false,
+      "Position": {
+        "X": 0.2140625,
+        "Y": 0.47847566
+      },
+      "Size": {
+        "X": 0.3,
+        "Y": 0.19971772
+      }
     },
-    "Size": {
-      "X": 0.6707031,
-      "Y": 0.7007763
-    }
-  },
-  {
-    "Title": "Output##1",
-    "Visible": false,
-    "Position": {
-      "X": 967.0,
-      "Y": 24.0
+    {
+      "Title": "Symbol Library",
+      "Visible": false,
+      "Position": {
+        "X": 0.2,
+        "Y": 0.2
+      },
+      "Size": {
+        "X": 0.3,
+        "Y": 0.2
+      }
     },
-    "Size": {
-      "X": 881.0,
-      "Y": 450.0
-    }
-  },
-  {
-    "Title": "Output##2",
-    "Visible": false,
-    "Position": {
-      "X": 0.00078125,
-      "Y": 0.019760057
+    {
+      "Title": "Legacy Variations",
+      "Visible": false,
+      "Position": {
+        "X": 0.2,
+        "Y": 0.2
+      },
+      "Size": {
+        "X": 0.3,
+        "Y": 0.2
+      }
     },
-    "Size": {
-      "X": 0.37304688,
-      "Y": 0.5010586
-    }
-  },
-  {
-    "Title": "Output##3",
-    "Visible": false,
-    "Position": {
-      "X": 0.7,
-      "Y": 0.016083255
+    {
+      "Title": "Render Sequence",
+      "Visible": false,
+      "Position": {
+        "X": 0.2,
+        "Y": 0.2
+      },
+      "Size": {
+        "X": 350.0,
+        "Y": 300.0
+      }
     },
-    "Size": {
-      "X": 0.30260417,
-      "Y": 0.974456
+    {
+      "Title": "Render Video",
+      "Visible": false,
+      "Position": {
+        "X": 0.2,
+        "Y": 0.2
+      },
+      "Size": {
+        "X": 350.0,
+        "Y": 300.0
+      }
     }
-  },
-  {
-    "Title": "Output##4",
-    "Visible": false,
-    "Position": {
-      "X": 0.6088542,
-      "Y": 0.024597919
-    },
-    "Size": {
-      "X": 0.3859375,
-      "Y": 0.4219489
-    }
-  },
-  {
-    "Title": "Console",
-    "Visible": false,
-    "Position": {
-      "X": 0.15585938,
-      "Y": 0.86873674
-    },
-    "Size": {
-      "X": 0.6417969,
-      "Y": 0.09386027
-    }
-  },
-  {
-    "Title": "Symbol Library",
-    "Visible": false,
-    "Position": {
-      "X": 0.00234375,
-      "Y": 0.029640084
-    },
-    "Size": {
-      "X": 0.14765625,
-      "Y": 0.9654199
-    }
-  },
-  {
-    "Title": "Legacy Variations",
-    "Visible": false,
-    "Position": {
-      "X": 0.0,
-      "Y": 0.0
-    },
-    "Size": {
-      "X": 0.3,
-      "Y": 0.2
-    }
-  }
-]
+  ],
+  "ImGuiSettings": "[Window][DockSpaceViewport_11111111]\nPos=0,26\nSize=2560,1414\nCollapsed=0\n\n[Window][Graph##1]\nPos=0,26\nSize=2560,1414\nCollapsed=0\nDockId=0x00000001,0\n\n[Window][Parameters##1]\nPos=1445,26\nSize=428,1391\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Variations]\nPos=1445,26\nSize=1115,1414\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Output##0]\nPos=1445,26\nSize=1115,793\nCollapsed=0\nDockId=0x00000003,0\n\n[Window][Debug##Default]\nPos=60,60\nSize=400,400\nCollapsed=0\n\n[Window][Explore Variations]\nPos=810,306\nSize=768,283\nCollapsed=0\n\n[Window][Console]\nPos=548,678\nSize=768,283\nCollapsed=0\n\n[Window][Output##1]\nPos=0,26\nSize=2304,712\nCollapsed=0\n\n[Docking][Data]\nDockSpace       ID=0x8B93E3BD Window=0xA787BDB4 Pos=0,26 Size=2560,1414 Split=X Selected=0x1F46795C\n  DockNode      ID=0x00000001 Parent=0x8B93E3BD SizeRef=1443,1391 CentralNode=1 HiddenTabBar=1 Selected=0x1F46795C\n  DockNode      ID=0x00000002 Parent=0x8B93E3BD SizeRef=1115,1391 Split=Y Selected=0x9CE63BF6\n    DockNode    ID=0x00000003 Parent=0x00000002 SizeRef=768,793 Selected=0x67835975\n    DockNode    ID=0x00000004 Parent=0x00000002 SizeRef=768,596 Split=X Selected=0x9CE63BF6\n      DockNode  ID=0x00000005 Parent=0x00000004 SizeRef=428,596 Selected=0x9CE63BF6\n      DockNode  ID=0x00000006 Parent=0x00000004 SizeRef=685,596 Selected=0x14EE5C8E\n\n",
+  "IsGraphOverContent": false
+}

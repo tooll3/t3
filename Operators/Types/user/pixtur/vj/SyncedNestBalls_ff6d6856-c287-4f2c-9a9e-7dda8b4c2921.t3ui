@@ -59,7 +59,7 @@
       }
     },
     {
-      "ChildId": "f3662f75-be47-40ae-aa9a-bfa5d2d292ff"/*AnalyzeSound*/,
+      "ChildId": "f3662f75-be47-40ae-aa9a-bfa5d2d292ff"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -235,7 +235,7 @@
       }
     },
     {
-      "ChildId": "d35bd376-bde6-477e-b3b9-a77dc4b1857e"/*RandomCamera*/,
+      "ChildId": "d35bd376-bde6-477e-b3b9-a77dc4b1857e"/*OrbitCamera*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -246,7 +246,7 @@
       }
     },
     {
-      "ChildId": "e7361bde-3e41-4ece-b75a-46ecb95f6058"/*AddDOF*/,
+      "ChildId": "e7361bde-3e41-4ece-b75a-46ecb95f6058"/*DepthOfField*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

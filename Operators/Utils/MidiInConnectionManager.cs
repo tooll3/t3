@@ -64,8 +64,9 @@ namespace Operators.Utils
             {
                 var deviceInfo = MidiIn.DeviceInfo(index);
 
+                var deviceInfoProductName = deviceInfo.ProductName;
                 if (logInformation)
-                    Log.Debug("Scanning " + deviceInfo.ProductName);
+                    Log.Debug("Scanning " + deviceInfoProductName);
 
                 MidiIn newMidiIn;
                 try
@@ -74,7 +75,9 @@ namespace Operators.Utils
                 }
                 catch (NAudio.MmException e)
                 {
-                    Log.Error(" > " + e.Message + " " + MidiIn.DeviceInfo(index).ProductName);
+                    Log.Error(e.Message == "MemoryAllocationError"
+                                  ? " > The device is already being used by an application"
+                                  : $" > {e.Message} {deviceInfoProductName}");
                     continue;
                 }
 
@@ -86,7 +89,7 @@ namespace Operators.Utils
 
                 newMidiIn.Start();
                 MidiInsWithDevices[newMidiIn] = deviceInfo;
-                MidiInsByDeviceIdHash[deviceInfo.ProductName.GetHashCode()] = newMidiIn;
+                MidiInsByDeviceIdHash[deviceInfoProductName.GetHashCode()] = newMidiIn;
             }
         }
 

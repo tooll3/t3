@@ -1,5 +1,5 @@
 {
-  "Id": "dab61a12-9996-401e-9aa6-328dd6292beb"/*HomeCanvas*/,
+  "Id": "dab61a12-9996-401e-9aa6-328dd6292beb"/*Dashboard*/,
   "Description": "Your personal Workspace.",
   "InputUis": [],
   "SymbolChildUis": [
@@ -109,8 +109,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -2232.4702,
-        "Y": -4606.786
+        "X": -2231.4658,
+        "Y": -4604.3564
       }
     },
     {
@@ -180,7 +180,7 @@
     },
     {
       "Id": "1bb9e84d-84fb-4bc0-a070-ba1d76092369",
-      "Title": "This is the Graph Window.\n\nIn the top right corner, you'll see your\ncurrent status [HomeCanvas].",
+      "Title": "This is the Graph Window.\n\nIn the top right corner, you see,  that it's \ncurrently showing your [Dashboard].",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -188,8 +188,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -2264.1956,
-        "Y": -5322.6045
+        "X": -2267.1064,
+        "Y": -5322.4688
       },
       "Size": {
         "X": 406.215,
@@ -198,7 +198,7 @@
     },
     {
       "Id": "3abc855f-23b7-4e19-b575-d7afc764b9ca",
-      "Title": "You can...\n- zoom in and out with mouse wheel\n- pan by clicking and holding the right mouse button\n- press [F] to adjust the view to show all \n  content.",
+      "Title": "You can...\n- zoom with mouse wheel\n- pan with the right mouse button\n- or press [F] to adjust to the view to show all \n  content.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -216,7 +216,7 @@
     },
     {
       "Id": "589f0a56-7537-4b0e-9305-ec21b76ae7fa",
-      "Title": "This is an Operator.\n\nIf you select it, you will see its output in the Output Window.\n\nDouble click this operator for an interactive tutorial that will guide you\nthrough Tooll's user interface.\n\n\n\n\n\n\n       Double click ------>",
+      "Title": "This is an Operator.\n\nIf you select it, you will see its output in the Output-Window.\n\nTry to double-click it, for an interactive tutorial that will guide you\nthrough Tooll's user interface.\n\n\n\n\n\n\n       Double click ------>",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -270,7 +270,7 @@
     },
     {
       "Id": "b4fc7f16-73ac-48ea-93d2-6253527680e3",
-      "Title": "These interactive playgrounds give you an introduction on how to use different operators.\nThere is also the \"Tip of the Day\" playlist on YouTube.",
+      "Title": "These interactive playgrounds give you a first introduction on how to use different Operators.\nThere is also the \"Tip of the Day\"-playlist on YouTube.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

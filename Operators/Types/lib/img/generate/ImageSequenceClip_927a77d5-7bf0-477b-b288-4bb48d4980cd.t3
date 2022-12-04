@@ -69,13 +69,13 @@
       "Outputs": []
     },
     {
-      "Id": "5491d337-5724-4f20-969e-7cdca220a446"/*PickFromStrings*/,
+      "Id": "5491d337-5724-4f20-969e-7cdca220a446"/*PickFromStringList*/,
       "SymbolId": "ef357e66-24e9-4f54-8d86-869db74602f4",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "a7141bee-87ed-4e99-bc5a-8be6a348fc6d"/*LoadTexture2d*/,
+      "Id": "a7141bee-87ed-4e99-bc5a-8be6a348fc6d"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
       "Outputs": []

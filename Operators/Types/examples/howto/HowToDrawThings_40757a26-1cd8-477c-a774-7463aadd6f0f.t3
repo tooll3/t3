@@ -23,7 +23,7 @@
       "Outputs": []
     },
     {
-      "Id": "0823549b-0920-4918-914a-6b5dd46ee73b"/*RandomCamera*/,
+      "Id": "0823549b-0920-4918-914a-6b5dd46ee73b"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
@@ -181,7 +181,7 @@
       "Outputs": []
     },
     {
-      "Id": "dcb2eec4-39d1-450c-b2ef-e3863112ee20"/*RandomCamera*/,
+      "Id": "dcb2eec4-39d1-450c-b2ef-e3863112ee20"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [],
       "Outputs": []
@@ -294,7 +294,7 @@
       "Outputs": []
     },
     {
-      "Id": "df8b434b-a61b-4927-b6f8-f6cb293e716f"/*RandomCamera*/,
+      "Id": "df8b434b-a61b-4927-b6f8-f6cb293e716f"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
@@ -426,7 +426,7 @@
       "Outputs": []
     },
     {
-      "Id": "e069a7da-016d-475c-952b-0f69a551ef9d"/*UglySSAO*/,
+      "Id": "e069a7da-016d-475c-952b-0f69a551ef9d"/*SSAO*/,
       "SymbolId": "13d5260d-4e50-48f8-909c-7d84d6f0a43f",
       "InputValues": [
         {
@@ -848,7 +848,7 @@
       "Outputs": []
     },
     {
-      "Id": "859c196d-7fb8-4b49-aa21-37f5a44e4f3d"/*LoadTexture2d*/,
+      "Id": "859c196d-7fb8-4b49-aa21-37f5a44e4f3d"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
       "Outputs": []

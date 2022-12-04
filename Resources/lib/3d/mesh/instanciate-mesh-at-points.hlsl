@@ -90,9 +90,9 @@ psInput vsMain(uint id: SV_VertexID)
     PbrVertex vertex = PbrVertices[FaceIndices[faceIndex][faceVertexIndex]];
     float4 posInObject = float4( vertex.Position,1);
 
-    float4x4 orientationMatrix = transpose(quaternion_to_matrix(Points[instanceIndex].rotation));
 
     posInObject.xyz *= (UseWForSize ? Points[instanceIndex].w : 1) * Size;
+    float4x4 orientationMatrix = transpose(quaternion_to_matrix(Points[instanceIndex].rotation));
     posInObject = mul( float4(posInObject.xyz, 1), orientationMatrix) ;
 
     posInObject += float4(Points[instanceIndex].position, 0); 

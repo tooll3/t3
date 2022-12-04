@@ -3,7 +3,7 @@
 cbuffer Params : register(b0)
 {
     float ConnectPointsMode;
-    float ApplyTargetOrietnation;
+    float ApplyTargetOrientation;
     float ApplyTargetScaleW;
     float MultiplyTargetW;
 }
@@ -15,30 +15,41 @@ RWStructuredBuffer<Point> ResultPoints : u0;    // output
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
-    uint sourcePointCount, targetPointCount, stride;
+
+// ResultPoints[i.x] = SourcePoints[i.x];
+// return;
+
+    uint resultPointCount, sourcePointCount, targetPointCount, stride;
+    
     SourcePoints.GetDimensions(sourcePointCount,stride);
     TargetPoints.GetDimensions(targetPointCount,stride);
+    ResultPoints.GetDimensions(resultPointCount,stride);
+
+    if(i.x >= resultPointCount) {
+        return;
+    }
 
     if(ConnectPointsMode < 0.5) {
-        uint sourceIndex = i.x % sourcePointCount;
-        uint targetIndex = (i.x / sourcePointCount )  % targetPointCount;
+        uint sourceLength = sourcePointCount + 1;
+
+        uint sourceIndex = i.x % (sourceLength);
+        uint targetIndex = (i.x / sourceLength )  % targetPointCount;
         
-        if(sourceIndex == sourcePointCount-1) {
+        if(sourceIndex == sourcePointCount) {
             ResultPoints[i.x].position =  0;
-            ResultPoints[i.x].w = sqrt(-1);
+            ResultPoints[i.x].w = sqrt(-1);            
         }
         else {
-            
             Point A = SourcePoints[sourceIndex];
             Point B = TargetPoints[targetIndex];
             float s = ApplyTargetScaleW > 0.5 ? B.w : 1;
-            float3  pLocal = ApplyTargetOrietnation  > 0.5
+            float3  pLocal = ApplyTargetOrientation  > 0.5
                             ? rotate_vector(A.position, B.rotation)
                             : A.position;
 
             ResultPoints[i.x].position = pLocal  * s + B.position;
             ResultPoints[i.x].w = MultiplyTargetW > 0.5 ? A.w * B.w : A.w;
-            ResultPoints[i.x].rotation = ApplyTargetOrietnation  > 0.5 ? qmul(B.rotation, A.rotation)
+            ResultPoints[i.x].rotation = ApplyTargetOrientation  > 0.5 ? qmul(B.rotation, A.rotation)
                                                                     : A.rotation;
         }
     }
@@ -60,13 +71,13 @@ void main(uint3 i : SV_DispatchThreadID)
 
             float s = ApplyTargetScaleW > 0.5 ? targetP.w : 1;
             
-            float3  pLocal = ApplyTargetOrietnation  > 0.5
+            float3  pLocal = ApplyTargetOrientation  > 0.5
                             ? rotate_vector(sourceP.position, targetP.rotation)
                             : sourceP.position;
 
             ResultPoints[i.x].position = pLocal  * s  + targetP.position;
             ResultPoints[i.x].w = MultiplyTargetW > 0.5 ? sourceP.w * targetP.w : sourceP.w;
-            ResultPoints[i.x].rotation = ApplyTargetOrietnation  > 0.5 ? qmul(targetP.rotation, sourceP.rotation)
+            ResultPoints[i.x].rotation = ApplyTargetOrientation  > 0.5 ? qmul(targetP.rotation, sourceP.rotation)
                                                                     : sourceP.rotation;
         }
 

@@ -1,6 +1,6 @@
 {
   "Id": "eb13f8e8-0fe1-47f0-8e86-45f85cf2f0f6"/*RevisionPanic*/,
-  "Description": "",
+  "Description": "A quick VJ experiment.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -103,7 +103,7 @@
       }
     },
     {
-      "ChildId": "71214d4b-0fba-4d4d-ae7e-7a820266e8d8"/*RandomCamera*/,
+      "ChildId": "71214d4b-0fba-4d4d-ae7e-7a820266e8d8"/*OrbitCamera*/,
       "Size": {
         "X": 110.0,
         "Y": 62.0
@@ -180,7 +180,7 @@
       }
     },
     {
-      "ChildId": "b2760617-ab80-40a6-8c66-8f0b6bdaa8e3"/*AddDOF*/,
+      "ChildId": "b2760617-ab80-40a6-8c66-8f0b6bdaa8e3"/*DepthOfField*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -290,7 +290,7 @@
       }
     },
     {
-      "ChildId": "4341bbbc-9d41-4b22-841f-d6e2eefc88da"/*AnimValue*/,
+      "ChildId": "4341bbbc-9d41-4b22-841f-d6e2eefc88da"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -345,7 +345,7 @@
       }
     },
     {
-      "ChildId": "d78305ea-8c87-4625-a617-f361f4e00f2d"/*AnimValue*/,
+      "ChildId": "d78305ea-8c87-4625-a617-f361f4e00f2d"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -455,7 +455,7 @@
       }
     },
     {
-      "ChildId": "e432e168-29fa-47a6-9eea-2b7eddaa8398"/*String*/,
+      "ChildId": "e432e168-29fa-47a6-9eea-2b7eddaa8398"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -466,7 +466,7 @@
       }
     },
     {
-      "ChildId": "2cf0f58a-b202-4d6c-9a32-f04053933395"/*String*/,
+      "ChildId": "2cf0f58a-b202-4d6c-9a32-f04053933395"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

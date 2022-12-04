@@ -1,5 +1,6 @@
 {
   "Id": "a9784e5e-7696-49a0-bb77-2302587ede59"/*PickString*/,
+  "Description": "Picks a string of multiple connected.",
   "InputUis": [
     {
       "InputId": "202ce6d5-ee5a-41c7-bd04-4c1490f3ea9c"/*Input*/,

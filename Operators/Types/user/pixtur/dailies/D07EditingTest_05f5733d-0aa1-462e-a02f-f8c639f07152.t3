@@ -122,7 +122,7 @@
       "Outputs": []
     },
     {
-      "Id": "b311776a-6532-4e72-96be-b05eef56d317"/*AddDOF*/,
+      "Id": "b311776a-6532-4e72-96be-b05eef56d317"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {
@@ -646,7 +646,7 @@
       "Outputs": []
     },
     {
-      "Id": "a2940de4-5b69-40b5-8529-ae849e8e726d"/*LoadTexture2d*/,
+      "Id": "a2940de4-5b69-40b5-8529-ae849e8e726d"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {
@@ -963,7 +963,7 @@
       "Outputs": []
     },
     {
-      "Id": "ea32d1ed-5b84-4165-8b32-f24afac1f13e"/*PickFromStrings*/,
+      "Id": "ea32d1ed-5b84-4165-8b32-f24afac1f13e"/*PickFromStringList*/,
       "SymbolId": "ef357e66-24e9-4f54-8d86-869db74602f4",
       "InputValues": [],
       "Outputs": []
@@ -1263,7 +1263,7 @@
           "Value": 69
         },
         {
-          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
           "Type": "System.Boolean",
           "Value": true
         }
@@ -1336,7 +1336,7 @@
       "Outputs": []
     },
     {
-      "Id": "f6a03a5b-8bb0-4677-89de-66849eebb0f5"/*AddDOF*/,
+      "Id": "f6a03a5b-8bb0-4677-89de-66849eebb0f5"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {
@@ -1378,7 +1378,7 @@
       ]
     },
     {
-      "Id": "e7450a30-ad92-4317-b843-739ce6a86c3b"/*AddDOF*/,
+      "Id": "e7450a30-ad92-4317-b843-739ce6a86c3b"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {
@@ -2514,7 +2514,7 @@
       "Outputs": []
     },
     {
-      "Id": "664d2965-9d74-4951-b635-24b49c2fb6ae"/*LoadTexture2d*/,
+      "Id": "664d2965-9d74-4951-b635-24b49c2fb6ae"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {
@@ -2731,7 +2731,7 @@
       "Outputs": []
     },
     {
-      "Id": "50ca77bd-e575-4ac6-97fd-a1517c24d86f"/*LoadTexture2d*/,
+      "Id": "50ca77bd-e575-4ac6-97fd-a1517c24d86f"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
       "Outputs": []
@@ -3359,7 +3359,7 @@
       "Outputs": []
     },
     {
-      "Id": "f8c80116-6053-4a99-b298-0aea2a14f3b4"/*LoadTexture2d*/,
+      "Id": "f8c80116-6053-4a99-b298-0aea2a14f3b4"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
       "Outputs": []
@@ -3483,7 +3483,7 @@
       "Outputs": []
     },
     {
-      "Id": "fc024488-8eae-4ee5-a01c-f4eabb3c98a1"/*RandomCamera*/,
+      "Id": "fc024488-8eae-4ee5-a01c-f4eabb3c98a1"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
@@ -3768,7 +3768,7 @@
       "Outputs": []
     },
     {
-      "Id": "07a75f0f-fc33-4eef-a902-2c5d7504fd62"/*LoadTexture2d*/,
+      "Id": "07a75f0f-fc33-4eef-a902-2c5d7504fd62"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {
@@ -3894,7 +3894,7 @@
       "Outputs": []
     },
     {
-      "Id": "0a53de4c-0535-4a6b-9a27-9366c47b3069"/*UglySSAO*/,
+      "Id": "0a53de4c-0535-4a6b-9a27-9366c47b3069"/*SSAO*/,
       "SymbolId": "13d5260d-4e50-48f8-909c-7d84d6f0a43f",
       "InputValues": [
         {
@@ -3968,7 +3968,7 @@
       "Outputs": []
     },
     {
-      "Id": "69da4c87-4a40-431d-90a4-db7db18ffce4"/*AnalyzeSound*/,
+      "Id": "69da4c87-4a40-431d-90a4-db7db18ffce4"/*_AnalyzeSound*/,
       "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
       "InputValues": [
         {

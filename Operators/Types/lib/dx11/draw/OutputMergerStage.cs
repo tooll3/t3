@@ -1,10 +1,13 @@
 ﻿using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
 using T3.Core;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_5efaf208_ba62_42ce_b3df_059b37fc1382 {
     public class OutputMergerStage : Instance<OutputMergerStage> {
@@ -18,7 +21,7 @@ namespace T3.Operators.Types.Id_5efaf208_ba62_42ce_b3df_059b37fc1382 {
 
         private void Update(EvaluationContext context) {
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var outputMerger = deviceContext.OutputMerger;
 
@@ -49,7 +52,7 @@ namespace T3.Operators.Types.Id_5efaf208_ba62_42ce_b3df_059b37fc1382 {
         }
 
         private void Restore(EvaluationContext context) {
-            var deviceContext = ResourceManager.Instance().Device.ImmediateContext;
+            var deviceContext = ResourceManager.Device.ImmediateContext;
             var outputMerger = deviceContext.OutputMerger;
 
             outputMerger.BlendState = _prevBlendState;

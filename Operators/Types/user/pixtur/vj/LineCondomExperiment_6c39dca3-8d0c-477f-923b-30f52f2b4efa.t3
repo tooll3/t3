@@ -19,7 +19,7 @@
           "Value": 1.13
         },
         {
-          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
           "Type": "System.Boolean",
           "Value": true
         },
@@ -276,7 +276,7 @@
       "Outputs": []
     },
     {
-      "Id": "00792662-b45a-4dc4-b692-19dc95a22977"/*AnalyzeSound*/,
+      "Id": "00792662-b45a-4dc4-b692-19dc95a22977"/*_AnalyzeSound*/,
       "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
       "InputValues": [
         {
@@ -375,7 +375,7 @@
       "Outputs": []
     },
     {
-      "Id": "0a1be0aa-e7e4-4896-81d1-5b8352d07493"/*RandomCamera*/,
+      "Id": "0a1be0aa-e7e4-4896-81d1-5b8352d07493"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {

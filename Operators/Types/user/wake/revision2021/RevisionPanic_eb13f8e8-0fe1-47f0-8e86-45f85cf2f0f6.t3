@@ -167,7 +167,7 @@
       "Outputs": []
     },
     {
-      "Id": "71214d4b-0fba-4d4d-ae7e-7a820266e8d8"/*RandomCamera*/,
+      "Id": "71214d4b-0fba-4d4d-ae7e-7a820266e8d8"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
@@ -313,7 +313,7 @@
       "Outputs": []
     },
     {
-      "Id": "b2760617-ab80-40a6-8c66-8f0b6bdaa8e3"/*AddDOF*/,
+      "Id": "b2760617-ab80-40a6-8c66-8f0b6bdaa8e3"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {
@@ -496,7 +496,7 @@
       "Outputs": []
     },
     {
-      "Id": "4341bbbc-9d41-4b22-841f-d6e2eefc88da"/*AnimValue*/,
+      "Id": "4341bbbc-9d41-4b22-841f-d6e2eefc88da"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -528,7 +528,7 @@
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [
         {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*Input*/,
+          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
           "Type": "System.String",
           "Value": "PANICPANICPANIC\nPANICPANICPANIC\nPANICPANICPANIC"
         },
@@ -592,7 +592,7 @@
       "Outputs": []
     },
     {
-      "Id": "d78305ea-8c87-4625-a617-f361f4e00f2d"/*AnimValue*/,
+      "Id": "d78305ea-8c87-4625-a617-f361f4e00f2d"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -710,7 +710,7 @@
         },
         {
           "Id": "9645b08f-ed92-4b82-8090-0a31162e83fb"/*Scale*/,
-          "Type": "T3.Core.Animation.Curve",
+          "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
               "PreCurve": "Constant",
@@ -789,7 +789,7 @@
       "Outputs": []
     },
     {
-      "Id": "e432e168-29fa-47a6-9eea-2b7eddaa8398"/*String*/,
+      "Id": "e432e168-29fa-47a6-9eea-2b7eddaa8398"/*AString*/,
       "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
       "InputValues": [
         {
@@ -801,7 +801,7 @@
       "Outputs": []
     },
     {
-      "Id": "2cf0f58a-b202-4d6c-9a32-f04053933395"/*String*/,
+      "Id": "2cf0f58a-b202-4d6c-9a32-f04053933395"/*AString*/,
       "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
       "InputValues": [
         {

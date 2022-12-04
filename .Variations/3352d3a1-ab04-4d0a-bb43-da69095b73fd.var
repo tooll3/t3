@@ -8,7 +8,7 @@
       "Title": "spiral",
       "PosOnCanvas": {
         "X": 0.0,
-        "Y": 0.0
+        "Y": 93.0
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -26,8 +26,8 @@
       "ActivationIndex": 2,
       "Title": "untitled",
       "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 163.0,
+        "Y": 93.0
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -64,7 +64,7 @@
       "ActivationIndex": 5,
       "Title": "Ring XY",
       "PosOnCanvas": {
-        "X": 326.0,
+        "X": 163.0,
         "Y": 0.0
       },
       "ParameterSetsForChildIds": {

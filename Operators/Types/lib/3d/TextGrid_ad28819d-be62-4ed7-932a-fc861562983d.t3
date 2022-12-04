@@ -167,7 +167,7 @@
       "Outputs": []
     },
     {
-      "Id": "48312cc6-05fd-412d-92f7-62169f0bb632"/*LoadTexture2d*/,
+      "Id": "48312cc6-05fd-412d-92f7-62169f0bb632"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {
@@ -185,7 +185,7 @@
         {
           "Id": "a870921f-a28c-4501-9f31-38a18b0acdcc"/*Filter*/,
           "Type": "SharpDX.Direct3D11.Filter",
-          "Value": "MinLinearMagPointMipLinear"
+          "Value": "MinMagMipPoint"
         }
       ],
       "Outputs": []

@@ -9,6 +9,13 @@
       }
     },
     {
+      "InputId": "165f7e0e-6ef0-4be1-8ed3-61ed0db752ed"/*UseFullList*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
       "InputId": "ca67bfaf-ede7-43ba-b279-fc1ddfbe2ffa"/*RangeStart*/,
       "Position": {
         "X": -200.0,
@@ -34,6 +41,13 @@
       "Position": {
         "X": -200.0,
         "Y": 180.0
+      }
+    },
+    {
+      "InputId": "63e90d86-5ad5-4333-8b99-7f8d285c4913"/*Direction*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
       }
     }
   ],

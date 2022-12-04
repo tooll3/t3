@@ -1,8 +1,10 @@
 ﻿using SharpDX.Direct3D11;
 using T3.Core;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_c676b9c7_06d7_4ee0_8ffc_9bee96c5dc18
 {
@@ -23,7 +25,7 @@ namespace T3.Operators.Types.Id_c676b9c7_06d7_4ee0_8ffc_9bee96c5dc18
                 return;
             
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             deviceContext.DrawInstancedIndirect(buffer, AlignedByteOffsetForArgs.GetValue(context));
         }

@@ -1,7 +1,9 @@
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_44d57201_addf_455c_9e31_709b018ba29f
 {
@@ -9,7 +11,7 @@ namespace T3.Operators.Types.Id_44d57201_addf_455c_9e31_709b018ba29f
     {
 
         [Output(Guid = "5f0e1d16-41a4-4c55-95c3-6e3b66a724b7")]
-        public readonly Slot<T3.Core.Command> Output = new Slot<T3.Core.Command>();
+        public readonly Slot<Command> Output = new Slot<Command>();
 
         [Input(Guid = "1bf7d8c0-1c8c-4791-8960-389869059489")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> PointsA_ = new InputSlot<T3.Core.DataTypes.BufferWithViews>();

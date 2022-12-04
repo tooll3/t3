@@ -46,7 +46,7 @@ namespace T3.Operators.Types.Id_3352d3a1_ab04_4d0a_bb43_da69095b73fd
         public readonly InputSlot<float> Cycles = new InputSlot<float>();
 
         [Input(Guid = "76124db6-4b89-4d7c-bd25-2ebf95b1c141")]
-        public readonly InputSlot<bool> CloseCircle = new InputSlot<bool>();
+        public readonly InputSlot<bool> CloseCircleLine = new InputSlot<bool>();
 
         [Input(Guid = "6df5829e-a534-4620-bcd5-9324f94b4f54")]
         public readonly InputSlot<System.Numerics.Vector3> Axis = new InputSlot<System.Numerics.Vector3>();

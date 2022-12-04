@@ -112,7 +112,7 @@
       "Outputs": []
     },
     {
-      "Id": "de222ff0-cee8-44da-81d3-1f04d75df63f"/*RandomCamera*/,
+      "Id": "de222ff0-cee8-44da-81d3-1f04d75df63f"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
@@ -154,14 +154,14 @@
       "SymbolId": "18251874-5d5a-4384-8dcd-fcf297e54886",
       "InputValues": [
         {
-          "Id": "519d77c0-5605-433a-b8ce-6d84f99edd7b"/*Count*/,
-          "Type": "System.Int32",
-          "Value": 30
-        },
-        {
           "Id": "f32458a5-f19f-487b-8ae2-a575de0b4ff2"/*StartIndex*/,
           "Type": "System.Int32",
           "Value": 18
+        },
+        {
+          "Id": "519d77c0-5605-433a-b8ce-6d84f99edd7b"/*Count*/,
+          "Type": "System.Int32",
+          "Value": 30
         },
         {
           "Id": "60cea2c3-02ae-4132-ad11-3f16c2f71b6e"/*ScatterSelect*/,
@@ -204,7 +204,7 @@
       "Outputs": []
     },
     {
-      "Id": "36f1c41d-1fca-44ab-a6f4-442fd864e122"/*AnimValue*/,
+      "Id": "36f1c41d-1fca-44ab-a6f4-442fd864e122"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -540,7 +540,7 @@
         },
         {
           "Id": "81e652c3-d12c-4b45-afd2-f6de9de20df1"/*ScaleForW*/,
-          "Type": "T3.Core.Animation.Curve",
+          "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
               "PreCurve": "Constant",

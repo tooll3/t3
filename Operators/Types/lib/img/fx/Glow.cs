@@ -1,8 +1,10 @@
 using SharpDX.Direct3D11;
 using T3.Core;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_d392d4af_4c78_4f4a_bc3f_4c54c8c73538
 {
@@ -33,6 +35,9 @@ namespace T3.Operators.Types.Id_d392d4af_4c78_4f4a_bc3f_4c54c8c73538
 
         [Input(Guid = "7f6dba80-bf4e-4e55-bd9a-ac1e2a077898")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+
+        [Input(Guid = "03f2bd5c-b599-47f5-b697-9f881639a598")]
+        public readonly InputSlot<float> AmplifyFineBlur = new InputSlot<float>();
 
     }
 }

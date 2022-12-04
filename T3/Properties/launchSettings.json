@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "t3": {
-      "commandName": "Project",
-      "workingDirectory": ".."
-    }
-  }
-}

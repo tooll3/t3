@@ -9,7 +9,8 @@
         "Y": 45.0
       },
       "Min": 0.0,
-      "Max": 1.0
+      "Max": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "dcf2d659-7b51-4a87-8378-ca01419e4b7c"/*MixAverage*/,

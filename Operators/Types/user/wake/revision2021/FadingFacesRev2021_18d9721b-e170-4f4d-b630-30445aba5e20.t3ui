@@ -1,12 +1,12 @@
 {
   "Id": "18d9721b-e170-4f4d-b630-30445aba5e20"/*FadingFacesRev2021*/,
-  "Description": "",
+  "Description": "An experiment displacing images fetched via the unsplash API. Used for WAKE Revision 2021 VJ set ",
   "InputUis": [
     {
       "InputId": "71eb23a5-dde7-42bd-916a-5278343b64ad"/*OverrideTime*/,
       "Position": {
-        "X": -509.18994,
-        "Y": -8.77836
+        "X": -569.5769,
+        "Y": -7.0773106
       }
     }
   ],
@@ -133,7 +133,7 @@
       }
     },
     {
-      "ChildId": "84cb6ba6-bc9d-41b5-99cb-be56a3d9efd9"/*String*/,
+      "ChildId": "84cb6ba6-bc9d-41b5-99cb-be56a3d9efd9"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -144,7 +144,7 @@
       }
     },
     {
-      "ChildId": "ba6f7f65-4c9b-4024-8ea0-1bdab3b5e018"/*String*/,
+      "ChildId": "ba6f7f65-4c9b-4024-8ea0-1bdab3b5e018"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -155,7 +155,7 @@
       }
     },
     {
-      "ChildId": "52b01615-4a7a-465c-a9b3-02e2d1f71011"/*AnimValue*/,
+      "ChildId": "52b01615-4a7a-465c-a9b3-02e2d1f71011"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -169,7 +169,7 @@
       "ChildId": "73b4ec65-14e3-46e4-a868-fb6f68c3a2be"/*Float2ToVector2*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 935.6587,
@@ -177,7 +177,7 @@
       }
     },
     {
-      "ChildId": "1fbf8950-2aa5-496a-950c-b31a62fb51e0"/*AnimValue*/,
+      "ChildId": "1fbf8950-2aa5-496a-950c-b31a62fb51e0"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -199,7 +199,7 @@
       }
     },
     {
-      "ChildId": "a214afd7-87f4-4dad-89de-e5d0f7e97462"/*AnimValue*/,
+      "ChildId": "a214afd7-87f4-4dad-89de-e5d0f7e97462"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -216,8 +216,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": 1617.916,
-        "Y": 50.406494
+        "X": 1645.8403,
+        "Y": -65.69989
       }
     },
     {
@@ -287,7 +287,7 @@
       }
     },
     {
-      "ChildId": "b2704565-8150-4573-9ac8-5254b255787e"/*String*/,
+      "ChildId": "b2704565-8150-4573-9ac8-5254b255787e"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -298,7 +298,7 @@
       }
     },
     {
-      "ChildId": "78ed24c8-721a-4f6c-9653-423775b0e200"/*String*/,
+      "ChildId": "78ed24c8-721a-4f6c-9653-423775b0e200"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -386,7 +386,7 @@
       }
     },
     {
-      "ChildId": "931d792d-260d-49b6-8a20-9650858d2e8b"/*AnimValue*/,
+      "ChildId": "931d792d-260d-49b6-8a20-9650858d2e8b"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -400,7 +400,7 @@
       "ChildId": "bf7516b1-1f4c-48aa-a1f1-1bbb87968413"/*FluidFeedback*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 36.0
       },
       "Position": {
         "X": 1123.5593,
@@ -408,7 +408,7 @@
       }
     },
     {
-      "ChildId": "2c90ae8a-f726-4855-87fd-fc240f364262"/*AnimValue*/,
+      "ChildId": "2c90ae8a-f726-4855-87fd-fc240f364262"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -423,8 +423,15 @@
     {
       "OutputId": "29a0bc9a-4c33-4777-aa73-b2c7074a89fa"/*Output2*/,
       "Position": {
+        "X": 1823.9698,
+        "Y": 104.119644
+      }
+    },
+    {
+      "OutputId": "fc1d05ff-7395-4408-a025-4f3d4247a2ea"/*Output3*/,
+      "Position": {
         "X": 1820.2955,
-        "Y": 35.533646
+        "Y": -72.673935
       }
     }
   ]

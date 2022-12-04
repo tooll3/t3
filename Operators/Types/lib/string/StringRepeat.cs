@@ -1,11 +1,8 @@
-using System;
 using System.Text;
-using System.Text.RegularExpressions;
-using T3.Core;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_04d0d6d7_8c40_4d18_aa44_6806c51fe139
 {

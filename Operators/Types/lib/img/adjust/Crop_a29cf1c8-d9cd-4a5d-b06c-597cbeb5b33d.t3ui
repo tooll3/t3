@@ -290,17 +290,6 @@
       }
     },
     {
-      "ChildId": "ba94a516-c308-4fae-9d2d-189aeac5871c"/*CalcSize2DispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 1580.7966,
-        "Y": 415.37003
-      }
-    },
-    {
       "ChildId": "2000577b-3ab5-48ef-8ead-70f59bae4fdf"/*GenerateMips*/,
       "Size": {
         "X": 110.0,
@@ -309,6 +298,17 @@
       "Position": {
         "X": 1596.589,
         "Y": 991.67194
+      }
+    },
+    {
+      "ChildId": "428f1a43-14d1-43b0-8adf-aa55b1ba5005"/*CalcSize2DispatchCount*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1522.7407,
+        "Y": 351.90253
       }
     }
   ],

@@ -92,17 +92,6 @@
       }
     },
     {
-      "ChildId": "d84b3cc1-eacf-4a84-9d40-9d94f4a230b3"/*RevisionPhotoWall*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 659.5654,
-        "Y": 1373.3317
-      }
-    },
-    {
       "ChildId": "4829d5f3-e7ef-475f-b9c4-7c35877395be"/*SortPixelGlitch*/,
       "Size": {
         "X": 110.0,
@@ -191,7 +180,7 @@
       }
     },
     {
-      "ChildId": "ab4bad5f-2f9e-41e0-b284-236abd90156e"/*AnalyzeSound*/,
+      "ChildId": "ab4bad5f-2f9e-41e0-b284-236abd90156e"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

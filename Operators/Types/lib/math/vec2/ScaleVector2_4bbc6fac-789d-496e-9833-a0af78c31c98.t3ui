@@ -14,6 +14,13 @@
         "X": -200.0,
         "Y": 45.0
       }
+    },
+    {
+      "InputId": "927443fe-4338-462a-bf78-90a08f77467b"/*UniformScale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
     }
   ],
   "SymbolChildUis": [],

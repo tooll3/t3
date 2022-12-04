@@ -1,4 +1,3 @@
-using SharpDX;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -17,17 +16,7 @@ namespace T3.Operators.Types.Id_eff2ffff_dc39_4b90_9b1c_3c0a9a0108c6
         [Output(Guid = "78CAABCF-9C3B-4E50-9D80-BDCBABAEB003", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<bool> IsLeftButtonDown = new Slot<bool>();
 
-        /// <summary>
-        /// This needs to be called from Imgui or Program 
-        /// </summary>
-        public static void Set(Vector2 newPosition, bool isLeftButtonDown)
-        {
-            _lastPosition = newPosition;
-            _isLeftButtonDown = isLeftButtonDown;
-        }
 
-        private static Vector2 _lastPosition = Vector2.Zero;
-        private static bool _isLeftButtonDown;
         
         public MouseInput()
         {
@@ -37,8 +26,8 @@ namespace T3.Operators.Types.Id_eff2ffff_dc39_4b90_9b1c_3c0a9a0108c6
 
         private void Update(EvaluationContext context)
         {
-            Position.Value = _lastPosition;
-            IsLeftButtonDown.Value = _isLeftButtonDown;
+            Position.Value = Core.IO.MouseInput.LastPosition;
+            IsLeftButtonDown.Value = Core.IO.MouseInput.IsLeftButtonDown;
         }
         
         [Input(Guid = "49775CC2-35B7-4C9F-A502-59FE8FBBE2A7")]

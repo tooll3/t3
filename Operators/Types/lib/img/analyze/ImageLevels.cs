@@ -21,6 +21,9 @@ namespace T3.Operators.Types.Id_592a2b6f_d4e3_43e0_9e73_034cca3b3900
 
         [Input(Guid = "f1084d72-f8b8-4723-82be-e1e98880faf3")]
         public readonly InputSlot<float> Rotation = new InputSlot<float>();
+
+        [Input(Guid = "a8a4d660-7356-40de-8dc6-549a72b69973")]
+        public readonly InputSlot<float> ShowOriginal = new InputSlot<float>();
     }
 }
 

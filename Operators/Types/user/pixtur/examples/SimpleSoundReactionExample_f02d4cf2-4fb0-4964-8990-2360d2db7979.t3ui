@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "740a4bd7-96b6-4e94-a40f-3f4ad4a5c473"/*AnalyzeSound*/,
+      "ChildId": "740a4bd7-96b6-4e94-a40f-3f4ad4a5c473"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -158,7 +158,7 @@
       }
     },
     {
-      "ChildId": "bd7e83bd-24c7-46ec-9763-5690f4197355"/*Jitter2d*/,
+      "ChildId": "bd7e83bd-24c7-46ec-9763-5690f4197355"/*_Jitter2d*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -235,7 +235,7 @@
       }
     },
     {
-      "ChildId": "bccbe27c-e7c9-4174-af7d-88a6c846f09c"/*GetStringPart*/,
+      "ChildId": "bccbe27c-e7c9-4174-af7d-88a6c846f09c"/*PickStringPart*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -345,7 +345,7 @@
       }
     },
     {
-      "ChildId": "ea36f8d0-810c-4022-afd6-1ad37ea13dbd"/*String*/,
+      "ChildId": "ea36f8d0-810c-4022-afd6-1ad37ea13dbd"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

@@ -1,6 +1,6 @@
 {
   "Id": "b23f04e1-a648-4734-9b8e-265c794a0811"/*RevisionSoundRev*/,
-  "Description": "",
+  "Description": "A visual VJ experiments with synced words. Requires correct soundtrack an playback timing.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -147,7 +147,7 @@
       }
     },
     {
-      "ChildId": "2b0e0422-9b45-43a5-91e6-20ad75436ee9"/*Jitter2d*/,
+      "ChildId": "2b0e0422-9b45-43a5-91e6-20ad75436ee9"/*_Jitter2d*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -224,7 +224,7 @@
       }
     },
     {
-      "ChildId": "af7bcb67-f594-427e-855f-8304ab364bfa"/*GetStringPart*/,
+      "ChildId": "af7bcb67-f594-427e-855f-8304ab364bfa"/*PickStringPart*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -334,7 +334,7 @@
       }
     },
     {
-      "ChildId": "aebe47ce-742d-4b5a-a1a7-aa7af063879a"/*String*/,
+      "ChildId": "aebe47ce-742d-4b5a-a1a7-aa7af063879a"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -422,7 +422,7 @@
       }
     },
     {
-      "ChildId": "43a831c3-5eee-40da-b600-e161514a254f"/*String*/,
+      "ChildId": "43a831c3-5eee-40da-b600-e161514a254f"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -433,7 +433,7 @@
       }
     },
     {
-      "ChildId": "63867c5e-fa90-4b0f-9086-3b52f61d62c4"/*GetStringPart*/,
+      "ChildId": "63867c5e-fa90-4b0f-9086-3b52f61d62c4"/*PickStringPart*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -656,7 +656,7 @@
       "ChildId": "857a45ae-555a-46e9-a9ce-769e57be19b0"/*Float2ToVector2*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": -741.32263,
@@ -796,7 +796,7 @@
       }
     },
     {
-      "ChildId": "59f0359d-10b2-45e6-a11d-2c2143dd2049"/*GetStringPart*/,
+      "ChildId": "59f0359d-10b2-45e6-a11d-2c2143dd2049"/*PickStringPart*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -929,7 +929,7 @@
       }
     },
     {
-      "ChildId": "f30d3874-28f7-4ebe-ba77-3e3b22adaacc"/*String*/,
+      "ChildId": "f30d3874-28f7-4ebe-ba77-3e3b22adaacc"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -951,7 +951,7 @@
       }
     },
     {
-      "ChildId": "5b6aa928-78e0-44a9-9bd4-8ac668186196"/*String*/,
+      "ChildId": "5b6aa928-78e0-44a9-9bd4-8ac668186196"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -1017,7 +1017,7 @@
       }
     },
     {
-      "ChildId": "08f519db-b5a7-4da4-b4c9-75ac8cdd0191"/*String*/,
+      "ChildId": "08f519db-b5a7-4da4-b4c9-75ac8cdd0191"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

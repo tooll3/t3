@@ -1,8 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0-windows</TargetFramework>
+        <TargetFramework>net6.0-windows</TargetFramework>
         <UseWindowsForms>true</UseWindowsForms>
+	<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+	<RootNamespace>T3.Core</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

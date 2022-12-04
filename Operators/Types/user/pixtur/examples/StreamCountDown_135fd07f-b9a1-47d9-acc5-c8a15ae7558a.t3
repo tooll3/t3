@@ -9,7 +9,7 @@
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [
         {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*Input*/,
+          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
           "Type": "System.String",
           "Value": "STREAM WILL BE \nSTARTING VERY SOON"
         },
@@ -156,7 +156,7 @@
       "Outputs": []
     },
     {
-      "Id": "0b14b189-a44f-44b4-86d8-2a2012e74a8c"/*AddDOF*/,
+      "Id": "0b14b189-a44f-44b4-86d8-2a2012e74a8c"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {

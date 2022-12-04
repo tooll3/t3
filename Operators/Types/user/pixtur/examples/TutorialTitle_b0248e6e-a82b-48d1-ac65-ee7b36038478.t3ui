@@ -54,7 +54,7 @@
       }
     },
     {
-      "ChildId": "677d91e1-1aea-4555-aeaf-7ae819f6c8a0"/*AnimValue*/,
+      "ChildId": "677d91e1-1aea-4555-aeaf-7ae819f6c8a0"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

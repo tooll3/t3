@@ -8,6 +8,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_8c41b312_6628_411c_a61d_604413b73a72
 {
@@ -49,7 +50,7 @@ namespace T3.Operators.Types.Id_8c41b312_6628_411c_a61d_604413b73a72
                                                       ElementCount = elementCount
                                                   }
                                };
-                ShaderResourceView.Value = new ShaderResourceView(resourceManager.Device, buffer, desc); // todo: create via resource manager
+                ShaderResourceView.Value = new ShaderResourceView(ResourceManager.Device, buffer, desc); // todo: create via resource manager
                 ElementCount.Value = elementCount;
             }
         }

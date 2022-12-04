@@ -2,10 +2,12 @@ using System;
 using System.Numerics;
 using SharpDX.Direct3D11;
 using T3.Core;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 using T3.Operators.Types.Id_fd9bffd3_5c57_462f_8761_85f94c5a629b;
 
 namespace T3.Operators.Types.Id_d8c5330f_59b5_4907_b845_a02def3042fa

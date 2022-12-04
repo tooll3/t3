@@ -5,6 +5,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_32a6a351_6d22_4915_aa0e_e0483b7f4e76
 {
@@ -32,10 +33,10 @@ namespace T3.Operators.Types.Id_32a6a351_6d22_4915_aa0e_e0483b7f4e76
                         if (_srv == null || _srv.Resource != texture)
                         {
                             _srv?.Dispose();
-                            _srv = new ShaderResourceView(resourceManager.Device, texture); // todo: create via resource manager
+                            _srv = new ShaderResourceView(ResourceManager.Device, texture); // todo: create via resource manager
                         }
 
-                        resourceManager.Device.ImmediateContext.GenerateMips(_srv);
+                        ResourceManager.Device.ImmediateContext.GenerateMips(_srv);
                     }
                     else
                     {
@@ -44,7 +45,7 @@ namespace T3.Operators.Types.Id_32a6a351_6d22_4915_aa0e_e0483b7f4e76
                 }
                 catch (Exception e)
                 {
-                    Log.Warning("Generating MipMaps resulted in an Exception: " + e.Message, SymbolChildId);
+                    Log.Warning("Generating MipMaps resulted in an Exception: " + e.Message, this);
                 }
             }
 

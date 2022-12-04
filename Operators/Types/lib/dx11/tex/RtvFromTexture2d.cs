@@ -5,6 +5,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_57a1ee33_702a_41ad_a17e_b43033d58638
 {
@@ -47,11 +48,11 @@ namespace T3.Operators.Types.Id_57a1ee33_702a_41ad_a17e_b43033d58638
                                                                    }                                                           
                                           };
                         //rtvDesc.Texture2DArray.MipSlice = 0;
-                        RenderTargetView.Value = new RenderTargetView(resourceManager.Device, texture, rtvDesc);
+                        RenderTargetView.Value = new RenderTargetView(ResourceManager.Device, texture, rtvDesc);
                     }
                     else
                     {
-                        RenderTargetView.Value = new RenderTargetView(resourceManager.Device, texture); // todo: create via resource manager
+                        RenderTargetView.Value = new RenderTargetView(ResourceManager.Device, texture); // todo: create via resource manager
                     }
                 }
                 else

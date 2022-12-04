@@ -6,6 +6,8 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_b0453fd5_e9c5_481a_aa6b_0040bd5c1318
 {
@@ -146,7 +148,7 @@ namespace T3.Operators.Types.Id_b0453fd5_e9c5_481a_aa6b_0040bd5c1318
             // if (newState == _state)
             //     return;
 
-            Log.Debug($"Switch {_state} -> {newState}", SymbolChildId);
+            Log.Debug($"Switch {_state} -> {newState}", this);
 
             switch (newState)
             {

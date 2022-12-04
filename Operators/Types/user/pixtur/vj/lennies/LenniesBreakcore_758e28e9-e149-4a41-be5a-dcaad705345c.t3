@@ -53,7 +53,7 @@
       "Outputs": []
     },
     {
-      "Id": "2ae468a6-fe51-4663-8655-3aa9c4f1d5a0"/*RandomCamera*/,
+      "Id": "2ae468a6-fe51-4663-8655-3aa9c4f1d5a0"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
@@ -442,7 +442,7 @@
       "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
       "InputValues": [
         {
-          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
           "Type": "System.Boolean",
           "Value": true
         },
@@ -511,7 +511,7 @@
       "Outputs": []
     },
     {
-      "Id": "7453ab83-fe6e-4747-8743-25990bf91c90"/*AddDOF*/,
+      "Id": "7453ab83-fe6e-4747-8743-25990bf91c90"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {
@@ -809,7 +809,7 @@
           "Value": 0.2
         },
         {
-          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
           "Type": "System.Boolean",
           "Value": true
         }
@@ -854,7 +854,7 @@
           "Value": 8.699999
         },
         {
-          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
           "Type": "System.Boolean",
           "Value": true
         },

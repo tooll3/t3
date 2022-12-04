@@ -1,7 +1,6 @@
 ﻿using System;
-using System.IO;
-using Newtonsoft.Json;
-using T3.Core.Logging;
+using T3.Core.Resource;
+using T3.Core.Utils;
 
 namespace T3.Core.IO
 {
@@ -16,61 +15,23 @@ namespace T3.Core.IO
         {
             if(saveOnQuit)
                 AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
-            
-            Config = TryLoading(filepath) ?? new T();
+
+            Config = Utilities.TryLoadingJson<T>(filepath) ?? new T();
+            _filepath = filepath;
             _instance = this;
         }
-        
 
-        private T TryLoading(string filepath)
+        private static void OnProcessExit(object sender, EventArgs e)
         {
-            _filepath = filepath;
-            if (!File.Exists(_filepath))
-            {
-                Log.Warning($"{_filepath} doesn't exist yet");
-                return null;
-            }
-
-            var jsonBlob = File.ReadAllText(_filepath);
-            var serializer = JsonSerializer.Create();
-            var fileTextReader = new StringReader(jsonBlob);
-            try
-            {
-                if (serializer.Deserialize(fileTextReader, typeof(T)) is T configurations)
-                    return configurations;
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Can't load {_filepath}:" + e.Message);
-                return null;
-            }
-
-            Log.Error($"Can't load {_filepath}");
-            return null;
-        }
-
-        private void SaveSettings(T configuration)
-        {
-            Log.Debug($"Saving {_filepath}...");
-            var serializer = JsonSerializer.Create();
-            serializer.Formatting = Formatting.Indented;
-            using (var file = File.CreateText(_filepath))
-            {
-                serializer.Serialize(file, configuration);
-            }
-        }
-
-        private void OnProcessExit(object sender, EventArgs e)
-        {
-            SaveSettings(Config);
+            Save();
         }
 
         public static void Save()
         {
-            _instance.SaveSettings(Config);
+            Utilities.SaveJson(Config, _instance._filepath);
         }
 
         private static Settings<T> _instance;
-        private string _filepath;
+        private readonly string _filepath;
     }
 }

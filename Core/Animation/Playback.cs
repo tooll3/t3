@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 
 namespace T3.Core.Animation
@@ -13,7 +13,7 @@ namespace T3.Core.Animation
     /// Examples for this are [Pulsate] or [Counter]. 
     /// 
     /// "Time" vs "FxTime"
-    ///  - FxTime keeps running if "continued playback" is activated. The effect time should be used for most Operators.
+    ///  - FxTime keeps running if "Idle Motion" (aka. "continued playback") is activated. The effect time should be used for most Operators.
     ///  - Time is used for all UI interactions and everything that is driven by keyframes.
     /// 
     /// RunTime is the time since application.
@@ -50,7 +50,7 @@ namespace T3.Core.Animation
         public double PlaybackSpeed { get; set; }
         public bool IsLooping = false;
         
-        public static double RunTimeInSecs => _runTimeWatch.ElapsedMilliseconds / 1000.0;
+        public static double RunTimeInSecs =>   _runTimeWatch.Elapsed.TotalSeconds;
         public static double LastFrameDuration { get; private set; }
         public double LastFrameDurationInBars => BarsFromSeconds(LastFrameDuration);
         
@@ -93,12 +93,12 @@ namespace T3.Core.Animation
 
         public double BarsFromSeconds(double secs)
         {
-            return secs * Bpm / 240f;
+            return secs * Bpm / 240.0;
         }
         
         public double SecondsFromBars(double bars)
         {
-            return bars * 240 / Bpm;
+            return bars * 240.0 / Bpm;
         }
         
         private static double _lastFrameStart;

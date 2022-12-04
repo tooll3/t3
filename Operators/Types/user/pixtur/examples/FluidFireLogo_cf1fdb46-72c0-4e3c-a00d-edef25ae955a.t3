@@ -351,7 +351,7 @@
       "Outputs": []
     },
     {
-      "Id": "017c0340-18d4-48ea-9c74-870f3209da99"/*SvgToPoints*/,
+      "Id": "017c0340-18d4-48ea-9c74-870f3209da99"/*LoadSvg*/,
       "SymbolId": "e8d94dd7-eb54-42fe-a7b1-b43543dd457e",
       "InputValues": [
         {
@@ -395,7 +395,7 @@
       "Outputs": []
     },
     {
-      "Id": "54dbf23d-70a7-413b-95dc-e56e61f129c4"/*LoadTexture2d*/,
+      "Id": "54dbf23d-70a7-413b-95dc-e56e61f129c4"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {
@@ -636,7 +636,7 @@
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [
         {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*Input*/,
+          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
           "Type": "System.String",
           "Value": "TOOLL 3"
         },
@@ -700,7 +700,7 @@
       "Outputs": []
     },
     {
-      "Id": "dbdf0a88-3a43-4bde-915f-c99f7085e1b3"/*LoadTexture2d*/,
+      "Id": "dbdf0a88-3a43-4bde-915f-c99f7085e1b3"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {

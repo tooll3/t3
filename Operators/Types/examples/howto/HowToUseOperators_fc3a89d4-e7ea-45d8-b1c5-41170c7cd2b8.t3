@@ -138,7 +138,7 @@
       "Outputs": []
     },
     {
-      "Id": "521038dd-6d3e-449d-bf14-69805857646a"/*String*/,
+      "Id": "521038dd-6d3e-449d-bf14-69805857646a"/*AString*/,
       "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
       "InputValues": [
         {
@@ -224,7 +224,7 @@
       "InputValues": [
         {
           "Id": "108cb829-5f9e-4a45-bc6b-7cf40a0a0f89"/*Curve*/,
-          "Type": "T3.Core.Animation.Curve",
+          "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
               "PreCurve": "Constant",
@@ -270,13 +270,13 @@
       "Outputs": []
     },
     {
-      "Id": "94c58a3f-97fc-4ed8-9c22-f37b5adc8a36"/*RandomCamera*/,
+      "Id": "94c58a3f-97fc-4ed8-9c22-f37b5adc8a36"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "208b31a2-c742-4669-8b9d-cbc0c2ce4479"/*RandomCamera*/,
+      "Id": "208b31a2-c742-4669-8b9d-cbc0c2ce4479"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [],
       "Outputs": []
@@ -470,7 +470,7 @@
       "Outputs": []
     },
     {
-      "Id": "cce29d86-6dbd-4200-b588-7a92fc42e2a7"/*AnimValue*/,
+      "Id": "cce29d86-6dbd-4200-b588-7a92fc42e2a7"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [],
       "Outputs": []
@@ -537,7 +537,7 @@
       "Outputs": []
     },
     {
-      "Id": "246ebb95-a615-44b8-bb27-5a759acac9f7"/*RandomCamera*/,
+      "Id": "246ebb95-a615-44b8-bb27-5a759acac9f7"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [],
       "Outputs": []
@@ -547,7 +547,7 @@
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [
         {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*Input*/,
+          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
           "Type": "System.String",
           "Value": "OPERATOR\nGRAPHS"
         },

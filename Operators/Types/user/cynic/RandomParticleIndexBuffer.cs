@@ -1,13 +1,9 @@
 using System;
 using System.Runtime.InteropServices;
-using SharpDX;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using Utilities = T3.Core.Utilities;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_6fae395d_c3a0_4693_a3dc_8959cda5a92b
 {
@@ -49,7 +45,7 @@ namespace T3.Operators.Types.Id_6fae395d_c3a0_4693_a3dc_8959cda5a92b
                 }
             }
 
-            ResourceManager.Instance().SetupStructuredBuffer(_data, ref Buffer.Value);
+            ResourceManager.SetupStructuredBuffer(_data, ref Buffer.Value);
         }
 
         private ParticleIndex[] _data;

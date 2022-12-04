@@ -118,6 +118,11 @@
           "Id": "ff7cb999-aa3a-4e11-b9c8-d027bdb55ff6"/*OutputFormat*/,
           "Type": "SharpDX.DXGI.Format",
           "Value": "R16G16B16A16_Float"
+        },
+        {
+          "Id": "480d6c19-a33c-48b3-b9fa-aaf8bd31e6d9"/*GenerateMips*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
       "Outputs": []

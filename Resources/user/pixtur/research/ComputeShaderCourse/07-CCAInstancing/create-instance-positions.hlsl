@@ -68,8 +68,8 @@ void main(uint3 DTid : SV_DispatchThreadID)
 
     float4 col = FxTexture[DTid.xy];
 
-    //if(col.r > Threshold) 
-    //{
+    if(col.r > Threshold) 
+    {
         uint counter;
         InterlockedAdd(Counters[0], 1,  counter);
         uint pointIndex = counter % pointCount;
@@ -78,5 +78,5 @@ void main(uint3 DTid : SV_DispatchThreadID)
                                     ? col.r
                                     : sqrt(-1); // NaN -> don't render
         PointBuffer[pointIndex].rotation =  float4(0,0,0,1);// float4(col.rgb,1);//float4(0,0,0,1);
-    //}
+    }
 }

@@ -395,7 +395,7 @@
       "Outputs": []
     },
     {
-      "Id": "c23c4a14-31a7-4532-9f6d-6b1b7a0f8029"/*LoadTexture2d*/,
+      "Id": "c23c4a14-31a7-4532-9f6d-6b1b7a0f8029"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {
@@ -456,7 +456,7 @@
       "InputValues": [
         {
           "Id": "83c5a68a-2685-4506-8d79-d0db7d739102"/*Curves*/,
-          "Type": "T3.Core.Animation.Curve",
+          "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
               "PreCurve": "Constant",
@@ -518,7 +518,7 @@
       "InputValues": [
         {
           "Id": "83c5a68a-2685-4506-8d79-d0db7d739102"/*Curves*/,
-          "Type": "T3.Core.Animation.Curve",
+          "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
               "PreCurve": "Constant",

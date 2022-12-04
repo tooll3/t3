@@ -40,7 +40,7 @@
       "DefaultValue": 1.0
     },
     {
-      "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+      "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
       "DefaultValue": true
     },
     {
@@ -164,12 +164,6 @@
     {
       "Id": "6bcaab5e-4151-4e74-aa9d-56e9ea2ad228"/*Value*/,
       "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "7ae90114-a998-4c78-a57c-de81c4f57b82"/*CalcSize2DispatchCount*/,
-      "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []
     },

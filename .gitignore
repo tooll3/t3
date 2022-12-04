@@ -285,9 +285,8 @@ Resources/user/pixtur/VJ/Agro
 Resources/user/pixtur/VJ/Terror
 Render
 
-*.obj
-
 # T3 Operators
-Operators/Types/**/Dashboard.cs
-Operators/Types/**/Dashboard_dab61a12-9996-401e-9aa6-328dd6292beb.t3
-Operators/Types/**/Dashboard_dab61a12-9996-401e-9aa6-328dd6292beb.t3ui
+Resources/user/pixtur/VJ
+Resources/user/still/proj-fc2/3d/cat-run
+Resources/user/still/prod-80s
+Resources/user/pixtur/SceneCityLogo1

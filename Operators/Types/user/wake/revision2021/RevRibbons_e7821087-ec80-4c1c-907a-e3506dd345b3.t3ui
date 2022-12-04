@@ -1,6 +1,6 @@
 {
   "Id": "e7821087-ec80-4c1c-907a-e3506dd345b3"/*RevRibbons*/,
-  "Description": "",
+  "Description": "A part of the WAKE Revision 2021 VJ set. Needs correct soundtrack to work.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -48,7 +48,7 @@
       }
     },
     {
-      "ChildId": "cec5d414-bd1a-42fe-b858-5a814b22764c"/*AddDOF*/,
+      "ChildId": "cec5d414-bd1a-42fe-b858-5a814b22764c"/*DepthOfField*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -335,7 +335,7 @@
       }
     },
     {
-      "ChildId": "a8a049de-c168-48cc-9e82-bc64999556ad"/*GetStringPart*/,
+      "ChildId": "a8a049de-c168-48cc-9e82-bc64999556ad"/*PickStringPart*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -456,7 +456,7 @@
       }
     },
     {
-      "ChildId": "f22526b3-39a6-49b3-bc3e-04ec29ba6e1b"/*AnimValue*/,
+      "ChildId": "f22526b3-39a6-49b3-bc3e-04ec29ba6e1b"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -533,7 +533,7 @@
       }
     },
     {
-      "ChildId": "314f8bbb-7c9a-49bf-a59e-2b5372ee9752"/*AnalyzeSound*/,
+      "ChildId": "314f8bbb-7c9a-49bf-a59e-2b5372ee9752"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -566,7 +566,7 @@
       }
     },
     {
-      "ChildId": "0bc10d49-4c34-4e01-bdce-2e5ec8e1c6c5"/*GetStringPart*/,
+      "ChildId": "0bc10d49-4c34-4e01-bdce-2e5ec8e1c6c5"/*PickStringPart*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -643,7 +643,7 @@
       }
     },
     {
-      "ChildId": "91855310-4233-45e1-b80b-039899c25d4d"/*PickFromStrings*/,
+      "ChildId": "91855310-4233-45e1-b80b-039899c25d4d"/*PickFromStringList*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

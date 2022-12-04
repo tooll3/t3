@@ -8,7 +8,7 @@ cbuffer ParamConstants : register(b0)
 }
 
 
-cbuffer TimeConstants : register(b2)
+cbuffer Resolution : register(b1)
 {
     float TargetWidth;
     float TargetHeight;

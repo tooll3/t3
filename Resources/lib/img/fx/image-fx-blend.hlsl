@@ -3,7 +3,8 @@ cbuffer ParamConstants : register(b0)
     float4 ImageAColor;
     float4 ImageBColor;
     float ColorMode;
-    float AlphaMode;
+    float AlphaMode;    
+    float UseNormalForUpperHalf;
 }
 
 cbuffer TimeConstants : register(b1)
@@ -62,14 +63,19 @@ float4 psMain(vsOutput psInput) : SV_TARGET
             break;
     }
 
-    
+    float normalRatio = saturate(tB.a * 2 - 1);
+
+    if(UseNormalForUpperHalf > 0.5)
+        tB.a = saturate(tB.a * 2);
+
     //float3 rgb = (1.0 - tB.a)*tA.rgb + tB.a*tB.rgb;   
-    float3 rgb = (1.0 - tB.a) * tA.rgb + tB.a * tB.rgb;   
-    
+    float3 rgbNormalBlended = (1.0 - tB.a) * tA.rgb + tB.a * tB.rgb;   
+    float3 rgb = 1;
+
     switch( (int)ColorMode) {
         // normal
         case 0:
-            //rgb = (1.0 - a) * tA.rgb + tB.a * tB.rgb;
+            rgb = rgbNormalBlended;
             break;
             
         // screen
@@ -77,7 +83,6 @@ float4 psMain(vsOutput psInput) : SV_TARGET
             rgb = 1-(1-tA.rgb) * (1-tB.rgb * tB.a);            
             break;
     
-
         // multiply
         case 2:
             rgb =  lerp(tA.rgb, tA.rgb * tB.rgb, tB.a);
@@ -108,7 +113,19 @@ float4 psMain(vsOutput psInput) : SV_TARGET
             rgb = tB.rgb;
             break;
 
+        // overlay 50p
+        case 7:            
+            rgb =  float3( 
+                tA.r < 0.5?(2.0 * tA.r * tB.r) : (1.0-2.0*(1.0-tA.r)*(1.0- tB.r)),
+                tA.g < 0.5?(2.0 * tA.g * tB.g) : (1.0-2.0*(1.0-tA.g)*(1.0- tB.g)),
+                tA.b < 0.5?(2.0 * tA.b * tB.b) : (1.0-2.0*(1.0-tA.b)*(1.0- tB.b)));
+                
+            rgb = lerp(tA.rgb, rgb, tB.a);
+            break;
     }
+
+    if(UseNormalForUpperHalf > 0.5)
+        rgb = lerp(rgb, rgbNormalBlended, normalRatio);
 
     //rgb = lerp(tA.rgb, rgb, tB.a);
     

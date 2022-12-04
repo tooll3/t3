@@ -79,7 +79,7 @@
         },
         {
           "Id": "9645b08f-ed92-4b82-8090-0a31162e83fb"/*Scale*/,
-          "Type": "T3.Core.Animation.Curve",
+          "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
               "PreCurve": "Constant",
@@ -161,7 +161,7 @@
       "Outputs": []
     },
     {
-      "Id": "1a3f4e90-d43f-41e3-98b2-46fb40ab9240"/*AnalyzeSound*/,
+      "Id": "1a3f4e90-d43f-41e3-98b2-46fb40ab9240"/*_AnalyzeSound*/,
       "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
       "InputValues": [
         {
@@ -190,7 +190,7 @@
       "Outputs": []
     },
     {
-      "Id": "b885053b-521d-40b4-8720-2c0341205eac"/*AddDOF*/,
+      "Id": "b885053b-521d-40b4-8720-2c0341205eac"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {
@@ -238,7 +238,7 @@
           "Value": 123
         },
         {
-          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
           "Type": "System.Boolean",
           "Value": true
         }
@@ -283,7 +283,7 @@
           "Value": 1.0
         },
         {
-          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
           "Type": "System.Boolean",
           "Value": false
         },
@@ -727,7 +727,7 @@
       "Outputs": []
     },
     {
-      "Id": "1b8d1502-739c-41a5-9cbc-11ede6ceb0df"/*GetStringPart*/,
+      "Id": "1b8d1502-739c-41a5-9cbc-11ede6ceb0df"/*PickStringPart*/,
       "SymbolId": "7baaa83d-5c09-42a0-b7bc-35dbcfa5156d",
       "InputValues": [
         {

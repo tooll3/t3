@@ -1,6 +1,6 @@
 {
   "Id": "fb5e9e3c-6ded-4e62-b456-28c8d5b29a1d"/*RevisionEnds*/,
-  "Description": "",
+  "Description": "A VJ-scene for WAKE revision 2021 set.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -59,7 +59,7 @@
       }
     },
     {
-      "ChildId": "bb105276-d98a-45e0-aca6-a919f390f686"/*SvgToPoints*/,
+      "ChildId": "bb105276-d98a-45e0-aca6-a919f390f686"/*LoadSvg*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -158,7 +158,7 @@
       }
     },
     {
-      "ChildId": "5880aec2-e419-4cdd-8495-e6def37e41c8"/*RandomCamera*/,
+      "ChildId": "5880aec2-e419-4cdd-8495-e6def37e41c8"/*OrbitCamera*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -400,7 +400,7 @@
       }
     },
     {
-      "ChildId": "a8af95c5-7fe9-42a0-943e-95effbc6be2c"/*AnalyzeSound*/,
+      "ChildId": "a8af95c5-7fe9-42a0-943e-95effbc6be2c"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

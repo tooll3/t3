@@ -7,6 +7,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_cc4847f8_a8a3_4da5_8b71_c4f3a3f488e6
 {
@@ -23,7 +24,7 @@ namespace T3.Operators.Types.Id_cc4847f8_a8a3_4da5_8b71_c4f3a3f488e6
         private void Update(EvaluationContext context)
         {
             var buffer = Buffer.GetValue(context);
-            ResourceManager.Instance().CreateBufferUav<uint>(buffer, Format.R32_UInt, ref UnorderedAccessView.Value);
+            ResourceManager.CreateBufferUav<uint>(buffer, Format.R32_UInt, ref UnorderedAccessView.Value);
         }
 
         [Input(Guid = "58EBAE6E-7D8C-45A0-8266-8B71F601DA0A")]

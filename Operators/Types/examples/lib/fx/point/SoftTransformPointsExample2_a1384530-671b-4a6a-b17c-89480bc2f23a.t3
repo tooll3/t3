@@ -293,7 +293,7 @@
       "Outputs": []
     },
     {
-      "Id": "81ad263a-2e08-496e-b3fe-ab86220f9917"/*AnimValue*/,
+      "Id": "81ad263a-2e08-496e-b3fe-ab86220f9917"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -543,7 +543,7 @@
           "Value": 0.69
         },
         {
-          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
           "Type": "System.Boolean",
           "Value": true
         }

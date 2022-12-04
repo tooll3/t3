@@ -405,7 +405,7 @@
       }
     },
     {
-      "ChildId": "6571b0ef-dffc-46b9-b375-4addea48677f"/*LoadTexture2d*/,
+      "ChildId": "6571b0ef-dffc-46b9-b375-4addea48677f"/*LoadImage*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -468,6 +468,28 @@
       "Position": {
         "X": 271.70453,
         "Y": 767.7558
+      }
+    },
+    {
+      "ChildId": "6f078aa0-c8cc-4619-a79c-aba81fdc11d4"/*BlendColors*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 43.45685,
+        "Y": -169.07
+      }
+    },
+    {
+      "ChildId": "0535bf2b-20fe-4036-9e13-a102a2e5bf97"/*GetForegroundColor*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -106.54315,
+        "Y": -169.07
       }
     }
   ],

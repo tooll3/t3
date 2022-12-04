@@ -213,7 +213,7 @@
       "Outputs": []
     },
     {
-      "Id": "6febac3a-e871-45fc-841d-405064327ed4"/*RandomCamera*/,
+      "Id": "6febac3a-e871-45fc-841d-405064327ed4"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
@@ -273,7 +273,7 @@
       "Outputs": []
     },
     {
-      "Id": "252ee0d0-2fec-4bdc-8968-df194c02eb7d"/*UglySSAO*/,
+      "Id": "252ee0d0-2fec-4bdc-8968-df194c02eb7d"/*SSAO*/,
       "SymbolId": "13d5260d-4e50-48f8-909c-7d84d6f0a43f",
       "InputValues": [
         {
@@ -424,7 +424,7 @@
       "Outputs": []
     },
     {
-      "Id": "611e10f1-5164-4537-a2f5-580760c010bf"/*AddDOF*/,
+      "Id": "611e10f1-5164-4537-a2f5-580760c010bf"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {
@@ -651,7 +651,7 @@
       "Outputs": []
     },
     {
-      "Id": "fa8fb1c3-42c8-428c-a942-5664733757ce"/*RandomCamera*/,
+      "Id": "fa8fb1c3-42c8-428c-a942-5664733757ce"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
@@ -691,7 +691,7 @@
       "Outputs": []
     },
     {
-      "Id": "cbd81894-e1db-4327-9cde-1dade40f279a"/*AnalyzeSound*/,
+      "Id": "cbd81894-e1db-4327-9cde-1dade40f279a"/*_AnalyzeSound*/,
       "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
       "InputValues": [
         {
@@ -862,7 +862,7 @@
       "Outputs": []
     },
     {
-      "Id": "4a7f5775-b351-4cab-bdaa-b47902183bd1"/*AddDOF*/,
+      "Id": "4a7f5775-b351-4cab-bdaa-b47902183bd1"/*DepthOfField*/,
       "SymbolId": "53d3eebd-4ead-4965-b26d-10a8bbd48182",
       "InputValues": [
         {

@@ -5,6 +5,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_84e02044_3011_4a5e_b76a_c904d9b4557f
 {
@@ -32,7 +33,7 @@ namespace T3.Operators.Types.Id_84e02044_3011_4a5e_b76a_c904d9b4557f
                     if (((int)texture.Description.BindFlags & (int)BindFlags.UnorderedAccess) > 0)
                     {
                         UnorderedAccessView.Value?.Dispose();
-                        UnorderedAccessView.Value = new UnorderedAccessView(resourceManager.Device, texture); // todo: create via resource manager
+                        UnorderedAccessView.Value = new UnorderedAccessView(ResourceManager.Device, texture); // todo: create via resource manager
                     }
                     else
                     {
@@ -41,7 +42,7 @@ namespace T3.Operators.Types.Id_84e02044_3011_4a5e_b76a_c904d9b4557f
                 }
                 catch (Exception e)
                 {   
-                    Log.Error("UavFromTexture2d exception: " + e.Message, SymbolChildId);
+                    Log.Error("UavFromTexture2d exception: " + e.Message, this);
                     UnorderedAccessView.Value = null;
                 }
             }

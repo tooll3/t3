@@ -7,6 +7,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
 {
@@ -24,12 +25,12 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
             ComputerShader.UpdateAction = Update;
         }
         
-        public string GetDescriptiveString()
+        public InputSlot<string> GetSourcePathSlot()
         {
-            return _description;
+            return Source;
         }
 
-        private string _description = "ComputeShader";
+        private string _description = "not loaded";
 
         private void Update(EvaluationContext context)
         {
@@ -46,20 +47,20 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
                 }
                 _computeShaderResId = resourceManager.CreateComputeShaderFromFile(sourcePath, entryPoint, debugName,
                                                                                   () => ComputerShader.DirtyFlag.Invalidate());
-                //Log.Debug($"compute shader {sourcePath}:{entryPoint}", SymbolChildId);
+                //Log.Debug($"compute shader {sourcePath}:{entryPoint}", this);
 
                 try
                 {
-                    _description =  "ComputeShader\n" + Path.GetFileName(sourcePath);
+                    _description =  Path.GetFileName(sourcePath);
                 }
                 catch
                 {
-                    Log.Warning($"Unable to get filename from {sourcePath}", SymbolChildId);
+                    Log.Warning($"Unable to get filename from {sourcePath}", this);
                 }
             }
             else
             {
-                resourceManager.UpdateComputeShaderFromFile(Source.Value, _computeShaderResId, ref ComputerShader.Value);
+                ResourceManager.UpdateComputeShaderFromFile(Source.Value, _computeShaderResId, ref ComputerShader.Value);
             }
 
             if (_computeShaderResId != ResourceManager.NullResource)

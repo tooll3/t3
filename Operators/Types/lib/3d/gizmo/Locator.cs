@@ -1,10 +1,12 @@
 using System;
 using System.Numerics;
 using T3.Core;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_348652c3_abf5_4fe9_873b_89d1acaaf0ff
 {

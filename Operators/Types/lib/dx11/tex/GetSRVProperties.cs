@@ -6,6 +6,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Operators.Types.Id_bc489196_9a30_4580_af6f_dc059f226da1
@@ -28,7 +29,9 @@ namespace T3.Operators.Types.Id_bc489196_9a30_4580_af6f_dc059f226da1
         {
             var srv = SRV.GetValue(context);
             if (srv == null)
+            {
                 return;
+            }
 
             try
             {
@@ -36,11 +39,11 @@ namespace T3.Operators.Types.Id_bc489196_9a30_4580_af6f_dc059f226da1
             }
             catch (Exception e)
             {
-                Log.Error("Failed to get SRVProperties: " + e.Message, SymbolChildId);
+                Log.Error("Failed to get SRVProperties: " + e.Message, this);
             }
         }
 
         [Input(Guid = "E79473F4-3FD2-467E-ACDA-B27EF7DAE6A9")]
-        public readonly InputSlot<ShaderResourceView> SRV = new InputSlot<ShaderResourceView>();
+        public readonly InputSlot<ShaderResourceView> SRV = new();
     }
 }

@@ -170,7 +170,7 @@
       }
     },
     {
-      "ChildId": "2e440b1b-c7ca-43c7-b3de-e7afd71545f8"/*AnimValue*/,
+      "ChildId": "2e440b1b-c7ca-43c7-b3de-e7afd71545f8"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -225,7 +225,7 @@
       }
     },
     {
-      "ChildId": "59ecadd4-c5b3-4999-bf10-73ce250650ac"/*AnimValue*/,
+      "ChildId": "59ecadd4-c5b3-4999-bf10-73ce250650ac"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -280,7 +280,7 @@
       }
     },
     {
-      "ChildId": "c40aa9b5-247c-40fd-9625-5d7cbcbd5a7e"/*AnimValue*/,
+      "ChildId": "c40aa9b5-247c-40fd-9625-5d7cbcbd5a7e"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -302,7 +302,7 @@
       }
     },
     {
-      "ChildId": "76fc9e20-79c0-4346-af62-c24f45648a2c"/*GetStringPart*/,
+      "ChildId": "76fc9e20-79c0-4346-af62-c24f45648a2c"/*PickStringPart*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -412,7 +412,7 @@
       }
     },
     {
-      "ChildId": "8ad658b4-d4a0-47d0-ac1b-689613eb3774"/*AnimValue*/,
+      "ChildId": "8ad658b4-d4a0-47d0-ac1b-689613eb3774"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -489,7 +489,7 @@
       }
     },
     {
-      "ChildId": "c73858db-54a4-4920-9353-7a22abded0d4"/*AnimValue*/,
+      "ChildId": "c73858db-54a4-4920-9353-7a22abded0d4"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -522,7 +522,7 @@
       }
     },
     {
-      "ChildId": "1f1c8508-b26b-433d-8b4b-ef6462f29811"/*AnimValue*/,
+      "ChildId": "1f1c8508-b26b-433d-8b4b-ef6462f29811"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -585,17 +585,6 @@
       "Position": {
         "X": -1001.93384,
         "Y": -1364.457
-      }
-    },
-    {
-      "ChildId": "4255007f-c44a-488c-b2e5-395c87d77c7b"/*Demo_Home*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -1006.77673,
-        "Y": -752.6261
       }
     },
     {
@@ -877,7 +866,7 @@
       }
     },
     {
-      "ChildId": "18e2320a-6c98-4a71-8a71-7a0eab673a2b"/*RandomCamera*/,
+      "ChildId": "18e2320a-6c98-4a71-8a71-7a0eab673a2b"/*OrbitCamera*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

@@ -88,7 +88,7 @@
       ]
     },
     {
-      "Id": "bb105276-d98a-45e0-aca6-a919f390f686"/*SvgToPoints*/,
+      "Id": "bb105276-d98a-45e0-aca6-a919f390f686"/*LoadSvg*/,
       "SymbolId": "e8d94dd7-eb54-42fe-a7b1-b43543dd457e",
       "InputValues": [
         {
@@ -224,7 +224,7 @@
       "Outputs": []
     },
     {
-      "Id": "5880aec2-e419-4cdd-8495-e6def37e41c8"/*RandomCamera*/,
+      "Id": "5880aec2-e419-4cdd-8495-e6def37e41c8"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
@@ -324,7 +324,7 @@
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [
         {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*Input*/,
+          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
           "Type": "System.String",
           "Value": "NEXT YEAR FOR REAL"
         },
@@ -458,7 +458,7 @@
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [
         {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*Input*/,
+          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
           "Type": "System.String",
           "Value": "WAKE-AUDIOVISUAL.COM"
         },
@@ -509,7 +509,7 @@
       "Outputs": []
     },
     {
-      "Id": "a8af95c5-7fe9-42a0-943e-95effbc6be2c"/*AnalyzeSound*/,
+      "Id": "a8af95c5-7fe9-42a0-943e-95effbc6be2c"/*_AnalyzeSound*/,
       "SymbolId": "112ea923-a349-412f-8dd3-4d9d9fc42dc6",
       "InputValues": [],
       "Outputs": []

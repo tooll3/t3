@@ -1,17 +1,12 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using System.Runtime.CompilerServices;
-using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
-using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
 {
@@ -69,7 +64,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                 case Modes.AllVertices:
                 {
                     //var list = new StructuredList<Point>(pointCount);
-                    Log.Warning("Object mode not implemented", SymbolChildId);
+                    Log.Warning("Object mode not implemented", this);
                     break;
                 }
                 case Modes.Vertices_ColorInOrientation: 
@@ -78,12 +73,12 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                 {
                     if (mesh.Colors.Count == 0)
                     {
-                        Log.Warning($"{path} doesn't contain colors definitions. You can use MeshLab to export such files.", SymbolChildId);
+                        Log.Warning($"{path} doesn't contain colors definitions. You can use MeshLab to export such files.", this);
                     }
 
                     if (mesh.Positions.Count == 0)
                     {
-                        Log.Warning($"{path} doesn't contain vertex definitions.", SymbolChildId);
+                        Log.Warning($"{path} doesn't contain vertex definitions.", this);
                     }
 
                     try

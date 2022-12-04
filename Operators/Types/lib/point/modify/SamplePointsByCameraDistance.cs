@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -21,7 +22,7 @@ namespace T3.Operators.Types.Id_0f40e5e5_e406_4f87_854b_fbdd670b5504
         public readonly InputSlot<float> FarRange = new InputSlot<float>();
 
         [Input(Guid = "4b41cfe4-303e-4748-a585-45babdf18e0e")]
-        public readonly InputSlot<T3.Core.Animation.Curve> WForDistance = new InputSlot<T3.Core.Animation.Curve>();
+        public readonly InputSlot<Curve> WForDistance = new InputSlot<Curve>();
     }
 }
 

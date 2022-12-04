@@ -4,6 +4,8 @@ using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
+using T3.Core.Utils;
 using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
@@ -30,7 +32,7 @@ namespace T3.Operators.Types.Id_a38626d8_3145_4aa9_820f_ca16b3411985
 
             if (_pointList.NumElements != listCount)
             {
-                //_points = new T3.Core.DataTypes.Point[count];
+                //_points = new T3.Core.DataStructures.Point[count];
                 _pointList.SetLength(listCount);
             }
 

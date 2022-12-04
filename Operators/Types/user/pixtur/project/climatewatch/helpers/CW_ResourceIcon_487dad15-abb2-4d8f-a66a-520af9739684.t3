@@ -29,7 +29,7 @@
   ],
   "Children": [
     {
-      "Id": "792985da-7ebf-4314-af79-61dd4a60dd77"/*LoadTexture2d*/,
+      "Id": "792985da-7ebf-4314-af79-61dd4a60dd77"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {
@@ -80,13 +80,7 @@
     {
       "Id": "7e3f22d8-87d7-4764-add4-dcbf6b7e3b28"/*Damp*/,
       "SymbolId": "af9c5db8-7144-4164-b605-b287aaf71bf6",
-      "InputValues": [
-        {
-          "Id": "f29d5426-5e31-4c7c-be77-5e45bfb9daa9"/*Damping*/,
-          "Type": "System.Single",
-          "Value": 50.0
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -158,7 +152,7 @@
           "Value": -90.0
         },
         {
-          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircle*/,
+          "Id": "76124db6-4b89-4d7c-bd25-2ebf95b1c141"/*CloseCircleLine*/,
           "Type": "System.Boolean",
           "Value": true
         }
@@ -186,12 +180,6 @@
     {
       "Id": "0aeaed2b-3124-4d42-af4c-9593d9b1bf6a"/*Damp*/,
       "SymbolId": "af9c5db8-7144-4164-b605-b287aaf71bf6",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "3690440d-3d27-4794-870f-e84a9330d920"/*Switch*/,
-      "SymbolId": "e64f95e4-c045-400f-98ca-7c020ad46174",
       "InputValues": [],
       "Outputs": []
     },

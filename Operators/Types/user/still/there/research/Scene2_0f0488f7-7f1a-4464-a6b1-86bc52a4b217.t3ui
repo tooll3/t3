@@ -3,17 +3,6 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "1140b898-f548-4598-a894-bce306d0f70f"/*ParticleSystemSetup*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 1544.6254,
-        "Y": 1202.306
-      }
-    },
-    {
       "ChildId": "52b48448-1589-4386-afa3-8bc620d17c05"/*Execute*/,
       "Style": "Resizable",
       "Size": {
@@ -70,7 +59,7 @@
       }
     },
     {
-      "ChildId": "a4037412-c9d6-43aa-b208-c04a033f7c76"/*GridPlaneGizmo*/,
+      "ChildId": "a4037412-c9d6-43aa-b208-c04a033f7c76"/*_OutputWindowGrid*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -78,28 +67,6 @@
       "Position": {
         "X": 1103.1733,
         "Y": 2959.606
-      }
-    },
-    {
-      "ChildId": "eea29975-dae7-4ede-8b57-b5e2ccd44e9e"/*LifetimeUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 1172.8684,
-        "Y": 1122.1292
-      }
-    },
-    {
-      "ChildId": "6581483b-84f1-479c-a2f3-e599668fb976"/*CurlNoiseWithGizmo*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 1172.8684,
-        "Y": 1165.1292
       }
     },
     {
@@ -114,40 +81,7 @@
       }
     },
     {
-      "ChildId": "3e7e1c00-c30e-435e-b721-e93a0188f48c"/*PointCloudFromObj*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 690.892,
-        "Y": 1128.8966
-      }
-    },
-    {
-      "ChildId": "82f22117-ac95-455a-ba86-55e9ff09be27"/*SetParticleSystem*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 1691.5918,
-        "Y": 1163.4652
-      }
-    },
-    {
-      "ChildId": "a52ddd1b-1914-45e3-9ef0-613804e937e3"/*EmitFromMesh*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
-      "Position": {
-        "X": 852.36365,
-        "Y": 864.94464
-      }
-    },
-    {
-      "ChildId": "e6426eea-c91b-43b2-b6e3-3173525efaa6"/*RandomCamera*/,
+      "ChildId": "e6426eea-c91b-43b2-b6e3-3173525efaa6"/*OrbitCamera*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -214,17 +148,6 @@
       }
     },
     {
-      "ChildId": "7ef48b5f-5ef1-491a-babe-df6fb03226be"/*EmitFromMesh*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
-      "Position": {
-        "X": 862.4541,
-        "Y": 1086.5591
-      }
-    },
-    {
       "ChildId": "569bcf86-0260-4906-a9c3-e94024600f55"/*Execute*/,
       "Size": {
         "X": 110.0,
@@ -288,17 +211,6 @@
       "Position": {
         "X": 3421.9927,
         "Y": 880.1898
-      }
-    },
-    {
-      "ChildId": "e6df3757-cb44-40f0-9ab4-00ef3ad3d58c"/*PointCloudFromObj*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 722.36365,
-        "Y": 864.94464
       }
     },
     {

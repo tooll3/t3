@@ -11,7 +11,10 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
+using T3.Core.Utils;
 using Device = SharpDX.Direct3D11.Device;
+using Utilities = T3.Core.Utils.Utilities;
 
 namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
 {
@@ -37,8 +40,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
 
         private void Update(EvaluationContext context)
         {
-            var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             
             Size2 size = Resolution.GetValue(context);
             bool generateMips = GenerateMips.GetValue(context);
@@ -46,6 +48,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             var clear = Clear.GetValue(context);
             var clearColor = ClearColor.GetValue(context);
             var reference = TextureReference.GetValue(context);
+            var enableUpdate = EnableUpdate.GetValue(context);
             
             if (size.Width == 0 || size.Height == 0)
             {
@@ -68,102 +71,104 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                 TextureFormat.SetTypedInputValue(textureFormat);
             }
             
-            UpdateTextures(device, size, textureFormat, withDepthBuffer ? Format.R32_Typeless : Format.Unknown, generateMips);
+            var formatChanged = UpdateTextures(device, size, textureFormat, withDepthBuffer ? Format.R32_Typeless : Format.Unknown, generateMips);
 
-            var deviceContext = device.ImmediateContext;
-
-            // Save settings in context
-            var prevRequestedResolution = context.RequestedResolution;
-            var prevViewports = deviceContext.Rasterizer.GetViewports<RawViewportF>();
-            var prevTargets = deviceContext.OutputMerger.GetRenderTargets(2, out var prevDepthStencilView);
-            var prevObjectToWorld = context.ObjectToWorld;
-            var prevWorldToCamera = context.WorldToCamera;
-            var prevCameraToClipSpace = context.CameraToClipSpace;
-            var keepCameraBypass = context.BypassCameras;
-            context.BypassCameras = false;
-
-            deviceContext.Rasterizer.SetViewport(new SharpDX.Viewport(0, 0, size.Width, size.Height, 0.0f, 1.0f));
-            deviceContext.OutputMerger.SetTargets(_multiSampledDepthBufferDsv, _multiSampledColorBufferRtv);
-
-            // Clear
-
-            if (clear || !_wasClearedOnce)
+            if (formatChanged || enableUpdate)
             {
-                try
+                var deviceContext = device.ImmediateContext;
+
+                // Save settings in context
+                var prevRequestedResolution = context.RequestedResolution;
+                var prevViewports = deviceContext.Rasterizer.GetViewports<RawViewportF>();
+                var prevTargets = deviceContext.OutputMerger.GetRenderTargets(2, out var prevDepthStencilView);
+                var prevObjectToWorld = context.ObjectToWorld;
+                var prevWorldToCamera = context.WorldToCamera;
+                var prevCameraToClipSpace = context.CameraToClipSpace;
+                var keepCameraBypass = context.BypassCameras;
+                context.BypassCameras = false;
+
+                deviceContext.Rasterizer.SetViewport(new SharpDX.Viewport(0, 0, size.Width, size.Height, 0.0f, 1.0f));
+                deviceContext.OutputMerger.SetTargets(_multiSampledDepthBufferDsv, _multiSampledColorBufferRtv);
+
+                // Clear
+
+                if (clear || !_wasClearedOnce)
                 {
-                    deviceContext.ClearRenderTargetView(_multiSampledColorBufferRtv, new Color(clearColor.X, clearColor.Y, clearColor.Z, clearColor.W));
-                    if (_multiSampledDepthBufferDsv != null)
+                    try
                     {
-                        deviceContext.ClearDepthStencilView(_multiSampledDepthBufferDsv, DepthStencilClearFlags.Depth, 1.0f, 0);
+                        deviceContext.ClearRenderTargetView(_multiSampledColorBufferRtv, new Color(clearColor.X, clearColor.Y, clearColor.Z, clearColor.W));
+                        if (_multiSampledDepthBufferDsv != null)
+                        {
+                            deviceContext.ClearDepthStencilView(_multiSampledDepthBufferDsv, DepthStencilClearFlags.Depth, 1.0f, 0);
+                        }
+
+                        _wasClearedOnce = true;
+                    } 
+                    catch
+                    {
+                        Log.Error($"{Parent.Symbol.Name}: Error clearing actual render target.", this);
                     }
-
-                    _wasClearedOnce = true;
-                } 
-                catch
-                {
-                    Log.Error($"{Parent.Symbol.Name}: Error clearing actual render target.", SymbolChildId);
                 }
-            }
-            
-            
-
-            // Set default values for new sub tree
-            context.RequestedResolution = size;
-            context.SetDefaultCamera();
-
-            if (TextureReference.IsConnected)
-            {
                 
-                reference.ColorTexture = ColorTexture;
-                reference.DepthTexture = DepthTexture;
-            }
+                
 
-            // Render
-            Command.GetValue(context);
+                // Set default values for new sub tree
+                context.RequestedResolution = size;
+                context.SetDefaultCamera();
 
-            // Restore context
-            context.BypassCameras = keepCameraBypass;
-            context.ObjectToWorld = prevObjectToWorld;
-            context.WorldToCamera = prevWorldToCamera;
-            context.CameraToClipSpace = prevCameraToClipSpace;
-            context.RequestedResolution = prevRequestedResolution;
-            deviceContext.Rasterizer.SetViewports(prevViewports);
-            deviceContext.OutputMerger.SetTargets(prevDepthStencilView, prevTargets);
-            
-
-            if (_sampleCount > 1)
-            {
-                try
+                if (TextureReference.IsConnected && TextureReference != null)
                 {
-                    device.ImmediateContext.ResolveSubresource(_multiSampledColorBuffer,
-                                                               0,
-                                                               _resolvedColorBuffer, 0,
-                                                               _resolvedColorBuffer.Description.Format);
+                    reference.ColorTexture = ColorTexture;
+                    reference.DepthTexture = DepthTexture;
+                }
 
-                    if (withDepthBuffer)
+                // Render
+                Command.GetValue(context);
+
+                // Restore context
+                context.BypassCameras = keepCameraBypass;
+                context.ObjectToWorld = prevObjectToWorld;
+                context.WorldToCamera = prevWorldToCamera;
+                context.CameraToClipSpace = prevCameraToClipSpace;
+                context.RequestedResolution = prevRequestedResolution;
+                deviceContext.Rasterizer.SetViewports(prevViewports);
+                deviceContext.OutputMerger.SetTargets(prevDepthStencilView, prevTargets);
+                
+
+                if (_sampleCount > 1)
+                {
+                    try
                     {
-                        ResolveDepthBuffer();
+                        device.ImmediateContext.ResolveSubresource(_multiSampledColorBuffer,
+                                                                   0,
+                                                                   _resolvedColorBuffer, 0,
+                                                                   _resolvedColorBuffer.Description.Format);
+
+                        if (withDepthBuffer)
+                        {
+                            ResolveDepthBuffer();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error("resolving render target buffer failed:" + e.Message);
                     }
                 }
-                catch (Exception e)
+                
+                if (generateMips)
                 {
-                    Log.Error("resolving render target buffer failed:" + e.Message);
+                    deviceContext.GenerateMips(DownSamplingRequired ? _resolvedColorBufferSrv : _multiSampledColorBufferSrv);
                 }
+
+                // Clean up ref counts for RTVs
+                for (int i = 0; i < prevTargets.Length; i++)
+                {
+                    prevTargets[i]?.Dispose();
+                }
+
+                prevDepthStencilView?.Dispose();
             }
             
-            if (generateMips)
-            {
-                deviceContext.GenerateMips(DownSamplingRequired ? _resolvedColorBufferSrv : _multiSampledColorBufferSrv);
-            }
-
-            // Clean up ref counts for RTVs
-            for (int i = 0; i < prevTargets.Length; i++)
-            {
-                prevTargets[i]?.Dispose();
-            }
-
-            prevDepthStencilView?.Dispose();
-
             ColorBuffer.Value = ColorTexture;
             ColorBuffer.DirtyFlag.Clear();
             DepthBuffer.Value = DepthTexture;
@@ -189,7 +194,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
         private void ResolveDepthBuffer()
         {
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var csStage = deviceContext.ComputeShader;
             var prevShader = csStage.Get();
@@ -213,11 +218,12 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
         }
         
         
-        private void UpdateTextures(Device device, Size2 size, Format colorFormat, Format depthFormat, bool generateMips)
+        private bool UpdateTextures(Device device, Size2 size, Format colorFormat, Format depthFormat, bool generateMips)
         {
             int w = Math.Max(size.Width, size.Height);
             int mipLevels = generateMips ? (int)MathUtils.Log2(w) + 1 : 1;
             // Log.Debug($"miplevel: {mipLevels}, w: {w}");
+            bool wasChanged= false;
 
             bool colorFormatChanged = _multiSampledColorBuffer == null
                                       || _multiSampledColorBuffer.Description.Format != colorFormat
@@ -230,10 +236,11 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
 
             if (colorFormatChanged)
             {
+                wasChanged = true;
                 // Color / Multi sampling
-                Core.Utilities.Dispose(ref _multiSampledColorBufferSrv);
-                Core.Utilities.Dispose(ref _multiSampledColorBufferRtv);
-                Core.Utilities.Dispose(ref _multiSampledColorBuffer);
+                Utilities.Dispose(ref _multiSampledColorBufferSrv);
+                Utilities.Dispose(ref _multiSampledColorBufferRtv);
+                Utilities.Dispose(ref _multiSampledColorBuffer);
 
                 try
                 {
@@ -269,18 +276,18 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                 }
                 catch (Exception e)
                 {
-                    Log.Error("Error creating color render target." + e.Message, SymbolChildId);
-                    Core.Utilities.Dispose(ref _multiSampledColorBufferSrv);
-                    Core.Utilities.Dispose(ref _multiSampledColorBufferRtv);
-                    Core.Utilities.Dispose(ref _multiSampledColorBuffer);
+                    Log.Error("Error creating color render target." + e.Message, this);
+                    Utilities.Dispose(ref _multiSampledColorBufferSrv);
+                    Utilities.Dispose(ref _multiSampledColorBufferRtv);
+                    Utilities.Dispose(ref _multiSampledColorBuffer);
                 }
 
                 // Color / Down sampled
                 if (_resolvedColorBuffer != null)
                 {
-                    Core.Utilities.Dispose(ref _resolvedColorBufferSrv);
-                    Core.Utilities.Dispose(ref _resolvedColorBufferRtv);
-                    Core.Utilities.Dispose(ref _resolvedColorBuffer);
+                    Utilities.Dispose(ref _resolvedColorBufferSrv);
+                    Utilities.Dispose(ref _resolvedColorBufferRtv);
+                    Utilities.Dispose(ref _resolvedColorBuffer);
                 }
 
                 if (DownSamplingRequired)
@@ -308,10 +315,10 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                     }
                     catch
                     {
-                        Log.Error("Error creating color render target.", SymbolChildId);
-                        Core.Utilities.Dispose(ref _resolvedColorBufferSrv);
-                        Core.Utilities.Dispose(ref _resolvedColorBufferRtv);
-                        Core.Utilities.Dispose(ref _resolvedColorBuffer);
+                        Log.Error("Error creating color render target.", this);
+                        Utilities.Dispose(ref _resolvedColorBufferSrv);
+                        Utilities.Dispose(ref _resolvedColorBufferRtv);
+                        Utilities.Dispose(ref _resolvedColorBuffer);
                     }
                 }
 
@@ -329,15 +336,16 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
 
             if (depthFormatChanged || (!depthRequired && depthInitialized))
             {
-                Core.Utilities.Dispose(ref _multiSampledDepthBufferDsv);
-                Core.Utilities.Dispose(ref _multiSampledDepthBufferSrv);
-                Core.Utilities.Dispose(ref _multiSampledDepthBuffer);
-                Core.Utilities.Dispose(ref _resolvedDepthBufferUav);
-                Core.Utilities.Dispose(ref _resolvedDepthBuffer);
+                Utilities.Dispose(ref _multiSampledDepthBufferDsv);
+                Utilities.Dispose(ref _multiSampledDepthBufferSrv);
+                Utilities.Dispose(ref _multiSampledDepthBuffer);
+                Utilities.Dispose(ref _resolvedDepthBufferUav);
+                Utilities.Dispose(ref _resolvedDepthBuffer);
             }
 
             if (depthRequired && (depthFormatChanged || !depthInitialized))
             {
+                wasChanged = true;
                 // Depth / Multi sampled
                 try
                 {
@@ -377,10 +385,10 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                 }
                 catch
                 {
-                    Core.Utilities.Dispose(ref _multiSampledDepthBufferDsv);
-                    Core.Utilities.Dispose(ref _multiSampledDepthBufferSrv);
-                    Core.Utilities.Dispose(ref _multiSampledDepthBuffer);
-                    Log.Error("Error  creating multisampled depth/stencil buffer.", SymbolChildId);
+                    Utilities.Dispose(ref _multiSampledDepthBufferDsv);
+                    Utilities.Dispose(ref _multiSampledDepthBufferSrv);
+                    Utilities.Dispose(ref _multiSampledDepthBuffer);
+                    Log.Error("Error  creating multisampled depth/stencil buffer.", this);
                 }
 
                 if (DownSamplingRequired)
@@ -406,12 +414,14 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                     }
                     catch
                     {
-                        Core.Utilities.Dispose(ref _resolvedDepthBufferUav);
-                        Core.Utilities.Dispose(ref _resolvedDepthBuffer);
-                        Log.Error("Error creating depth/stencil downsampling buffer.", SymbolChildId);
+                        Utilities.Dispose(ref _resolvedDepthBufferUav);
+                        Utilities.Dispose(ref _resolvedDepthBuffer);
+                        Log.Error("Error creating depth/stencil downsampling buffer.", this);
                     }
                 }
             }
+
+            return wasChanged;
         }
 
         private enum Samples
@@ -445,7 +455,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
         private int _sampleCount;
 
         [Input(Guid = "4da253b7-4953-439a-b03f-1d515a78bddf")]
-        public readonly InputSlot<T3.Core.Command> Command = new InputSlot<T3.Core.Command>();
+        public readonly InputSlot<Command> Command = new InputSlot<Command>();
 
         [Input(Guid = "03749b41-cc3c-4f38-aea6-d7cea19fc073")]
         public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
@@ -473,5 +483,9 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
 
         [Input(Guid = "E882E0F0-03F9-46E6-AC7A-709E6FA66613", MappedType = typeof(Samples))]
         public readonly InputSlot<int> Multisampling = new InputSlot<int>();
+        
+        [Input(Guid = "ABEBB02B-BCAA-42C7-8EB8-DA3C1B2FC840", MappedType = typeof(Samples))]
+        public readonly InputSlot<bool> EnableUpdate = new();
+        
     }
 }

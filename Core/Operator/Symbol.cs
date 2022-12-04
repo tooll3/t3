@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Core.Audio;
+using T3.Core.Audio;
 using T3.Core.Logging;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
+using T3.Core.Utils;
 
 namespace T3.Core.Operator
 {
@@ -269,7 +271,13 @@ namespace T3.Core.Operator
             {
                 var parent = instance.Parent;
                 //
-                if (!parent.Children.Contains(instance))
+                if (parent == null)
+                {
+                    Log.Error($"Warning: Skipping instance without parent {instance.Symbol}");
+                    continue;
+                }
+                
+                if (parent == null || !parent.Children.Contains(instance))
                 {
                     Log.Error($"Warning: Skipping no longer valid instance of {instance.Symbol} in {parent.Symbol}");
                     continue;
@@ -357,7 +365,7 @@ namespace T3.Core.Operator
             // now remove the old instances itself...
             foreach (var instance in InstancesOfSymbol)
             {
-                instance.Parent.Children.Remove(instance);
+                instance.Parent?.Children.Remove(instance);
                 instance.Dispose();
             }
             InstancesOfSymbol.Clear();

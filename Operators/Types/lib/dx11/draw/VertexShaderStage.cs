@@ -1,8 +1,10 @@
 ﻿using SharpDX.Direct3D11;
 using T3.Core;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Operators.Types.Id_a9600440_4203_4315_bdb1_4dfd603b4515
@@ -21,7 +23,7 @@ namespace T3.Operators.Types.Id_a9600440_4203_4315_bdb1_4dfd603b4515
         private void Update(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
-            var device = resourceManager.Device;
+            var device = ResourceManager.Device;
             var deviceContext = device.ImmediateContext;
             var vsStage = deviceContext.VertexShader;
 
@@ -46,7 +48,7 @@ namespace T3.Operators.Types.Id_a9600440_4203_4315_bdb1_4dfd603b4515
 
         private void Restore(EvaluationContext context)
         {
-            var deviceContext = ResourceManager.Instance().Device.ImmediateContext;
+            var deviceContext = ResourceManager.Device.ImmediateContext;
             var vsStage = deviceContext.VertexShader;
             vsStage.Set(_prevVertexShader);
             vsStage.SetConstantBuffers(0, _prevConstantBuffers.Length, _prevConstantBuffers);

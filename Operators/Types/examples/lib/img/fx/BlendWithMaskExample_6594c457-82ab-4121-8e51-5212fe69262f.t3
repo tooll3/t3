@@ -80,13 +80,13 @@
       "Outputs": []
     },
     {
-      "Id": "3448034f-e4c9-453c-b21e-288c112cf2bb"/*LoadTexture2d*/,
+      "Id": "3448034f-e4c9-453c-b21e-288c112cf2bb"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "65bd2f7a-29eb-404b-8d24-aba1cce3f151"/*LoadTexture2d*/,
+      "Id": "65bd2f7a-29eb-404b-8d24-aba1cce3f151"/*LoadImage*/,
       "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
       "InputValues": [
         {

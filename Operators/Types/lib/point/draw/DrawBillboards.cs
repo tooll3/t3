@@ -1,7 +1,9 @@
 using T3.Core;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 using T3.Operators.Types.Id_fd9bffd3_5c57_462f_8761_85f94c5a629b;
 
 namespace T3.Operators.Types.Id_071c9aad_ecbf_47bf_b2f6_c43e8212d5b1
@@ -46,7 +48,7 @@ namespace T3.Operators.Types.Id_071c9aad_ecbf_47bf_b2f6_c43e8212d5b1
         public readonly InputSlot<T3.Core.DataTypes.Gradient> GradientForW = new InputSlot<T3.Core.DataTypes.Gradient>();
 
         [Input(Guid = "81e652c3-d12c-4b45-afd2-f6de9de20df1")]
-        public readonly InputSlot<T3.Core.Animation.Curve> ScaleForW = new InputSlot<T3.Core.Animation.Curve>();
+        public readonly InputSlot<Curve> ScaleForW = new InputSlot<Curve>();
 
         [Input(Guid = "c82b7f84-508e-4a04-905e-39b55f75f4e6")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();

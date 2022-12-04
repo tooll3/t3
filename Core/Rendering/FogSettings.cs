@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
+using T3.Core.Resource;
 
 namespace T3.Core.Rendering
 {
@@ -12,12 +13,12 @@ namespace T3.Core.Rendering
             {
                 if (_defaultSettingsBuffer == null)
                 {
-                    ResourceManager.Instance().SetupConstBuffer(new FogParameters()
-                                                                    {
-                                                                        Bias = 2,
-                                                                        Distance = 10000,
-                                                                        Color = new Vector4(0, 0, 0, 1),
-                                                                    }, ref _defaultSettingsBuffer);
+                    ResourceManager.SetupConstBuffer(new FogParameters()
+                                                         {
+                                                             Bias = 2,
+                                                             Distance = 10000,
+                                                             Color = new Vector4(0, 0, 0, 1),
+                                                         }, ref _defaultSettingsBuffer);
                 }
 
                 return _defaultSettingsBuffer;

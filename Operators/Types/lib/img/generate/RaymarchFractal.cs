@@ -1,7 +1,9 @@
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_c454abd8_62a8_4413_a463_668013a6a5bd
 {
@@ -11,7 +13,7 @@ namespace T3.Operators.Types.Id_c454abd8_62a8_4413_a463_668013a6a5bd
         public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new Slot<SharpDX.Direct3D11.Texture2D>();
 
         [Output(Guid = "5bb98ed6-8d29-428f-b5c3-1953df353c8c")]
-        public readonly Slot<T3.Core.Command> DrawCommand = new Slot<T3.Core.Command>();
+        public readonly Slot<Command> DrawCommand = new Slot<Command>();
 
         [Input(Guid = "34805b11-c0d5-40da-945d-5282fcb48921")]
         public readonly InputSlot<float> MaxSteps = new InputSlot<float>();

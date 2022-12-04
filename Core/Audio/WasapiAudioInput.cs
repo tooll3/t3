@@ -6,7 +6,7 @@ using ManagedBass.Wasapi;
 using T3.Core.IO;
 using T3.Core.Logging;
 
-namespace Core.Audio
+namespace T3.Core.Audio
 {
     /// <summary>
     /// Uses the windows Wasapi audio API to get audio reaction from devices like speakers and microphones
@@ -15,7 +15,6 @@ namespace Core.Audio
     {
         /// <summary>
         /// Initializes the default device list and input.
-        /// NOTE This can take several seconds(!)
         /// </summary>
         public static void Initialize()
         {
@@ -25,7 +24,7 @@ namespace Core.Audio
             InitializeInputDeviceList();
 
             var deviceName = ProjectSettings.Config.AudioInputDeviceName;
-            var device = _inputDevices.SingleOrDefault(d => d.DeviceInfo.Name == deviceName);
+            var device = _inputDevices.FirstOrDefault(d => d.DeviceInfo.Name == deviceName);
             StartInputCapture(device);
         }
         
@@ -40,8 +39,9 @@ namespace Core.Audio
             }
         }
         
-        private static List<WasapiInputDevice> _inputDevices;
-
+        /// <summary>
+        /// Needs to be called once a frame
+        /// </summary>
         public static void CompleteFrame()
         {
             _fftUpdatesSinceLastFrame = 0;
@@ -168,6 +168,7 @@ namespace Core.Audio
             public WasapiDeviceInfo DeviceInfo;
         }
 
+        private static List<WasapiInputDevice> _inputDevices;
         private static readonly float[] _fftIntermediate = new float[AudioAnalysis.FftHalfSize];
         private static readonly WasapiProcedure _wasapiProcedure = Process;
     }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using T3.Core.DataTypes;
 
 namespace T3.Core.Operator.Slots
 {

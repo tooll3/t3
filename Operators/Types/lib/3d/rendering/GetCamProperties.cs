@@ -4,6 +4,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 using T3.Operators.Types.Id_a60adc26_d7c6_4615_af78_8d2d6da46b79;
 using T3.Operators.Utils;
 using Buffer = SharpDX.Direct3D11.Buffer;
@@ -41,19 +42,19 @@ namespace T3.Operators.Types.Id_843c9378_6836_4f39_b676_06fd2828af3e
 
             if (obj is not ICameraPropertiesProvider camera)
             {
-                Log.Warning("Can't GetCamProperties from invalid reference type", SymbolChildId);
+                Log.Warning("Can't GetCamProperties from invalid reference type", this);
                 return;
             }
 
             if (_previousBufferInitialized)
             {
-                ResourceManager.Instance().SetupConstBuffer(_bufferContent, ref PreviousBuffer.Value);
+                ResourceManager.SetupConstBuffer(_bufferContent, ref PreviousBuffer.Value);
                 PreviousBuffer.Value.DebugName=nameof(TransformsConstBuffer);
                 PreviousBuffer.DirtyFlag.Clear();
             }
             
             _bufferContent = new TransformsConstBuffer.TransformBufferLayout(camera.CameraToClipSpace, camera.WorldToCamera, camera.LastObjectToWorld);
-            ResourceManager.Instance().SetupConstBuffer(_bufferContent, ref Buffer.Value);
+            ResourceManager.SetupConstBuffer(_bufferContent, ref Buffer.Value);
             Buffer.Value.DebugName=nameof(TransformsConstBuffer);
             _previousBufferInitialized = true;
         }

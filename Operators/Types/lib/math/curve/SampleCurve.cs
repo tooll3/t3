@@ -1,4 +1,5 @@
 using T3.Core.Animation;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -40,7 +41,7 @@ namespace T3.Operators.Types.Id_b724ea74_d5d7_4928_9cd1_7a7850e4e179
         }
 
         [Input(Guid = "108CB829-5F9E-4A45-BC6B-7CF40A0A0F89")]
-        public readonly InputSlot<Curve> Curve = new InputSlot<T3.Core.Animation.Curve>();
+        public readonly InputSlot<Curve> Curve = new InputSlot<Curve>();
 
         [Input(Guid = "2c24d4fe-6c96-4502-bf76-dac756a16215")]
         public readonly InputSlot<float> U = new InputSlot<float>();

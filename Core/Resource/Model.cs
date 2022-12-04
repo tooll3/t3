@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,6 +6,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
@@ -17,13 +17,14 @@ using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
 using Vector4 = System.Numerics.Vector4;
 
 // ReSharper disable RedundantNameQualifier
 
-namespace T3.Core
+namespace T3.Core.Resource
 {
     public static class JsonToTypeValueConverters
     {
@@ -43,12 +44,6 @@ namespace T3.Core
     public static class TypeNameRegistry
     {
         public static Dictionary<Type, string> Entries { get; } = new(20);
-    }
-
-    public class Command
-    {
-        public Action<EvaluationContext> PrepareAction { get; init; }
-        public Action<EvaluationContext> RestoreAction { get; set; }
     }
 
     public class Model
@@ -218,18 +213,18 @@ namespace T3.Core
 
             RegisterType(typeof(Command), "Command",
                          () => new InputValue<Command>(null));
-            RegisterType(typeof(Animation.Curve), "Curve",
-                         InputDefaultValueCreator<Animation.Curve>,
+            RegisterType(typeof(Curve), "Curve",
+                         InputDefaultValueCreator<Curve>,
                          (writer, obj) =>
                          {
-                             Animation.Curve curve = (Animation.Curve)obj;
+                             Curve curve = (Curve)obj;
                              writer.WriteStartObject();
                              curve?.Write(writer);
                              writer.WriteEndObject();
                          },
                          jsonToken =>
                          {
-                             Animation.Curve curve = new Animation.Curve();
+                             Curve curve = new Curve();
                              if (jsonToken == null || !jsonToken.HasValues)
                              {
                                  curve.AddOrUpdateV(0, new VDefinition() { Value = 0 });
@@ -527,13 +522,13 @@ namespace T3.Core
 
         public virtual void SaveAll()
         {
-            ResourceManager.Instance().DisableOperatorFileWatcher(); // don't update ops if file is written during save
+            ResourceFileWatcher.DisableOperatorFileWatcher(); // don't update ops if file is written during save
 
             RemoveAllSymbolFiles();
             SortAllSymbolSourceFiles();
             SaveSymbolDefinitionAndSourceFiles(SymbolRegistry.Entries.Values);
 
-            ResourceManager.Instance().EnableOperatorFileWatcher();
+            ResourceFileWatcher.EnableOperatorFileWatcher();
         }
 
         protected static void SaveSymbolDefinitionAndSourceFiles(IEnumerable<Symbol> valueCollection)
@@ -667,7 +662,7 @@ namespace T3.Core
                 File.Delete(symbol.DeprecatedSourcePath);
 
                 // Adjust path of file resource
-                ResourceManager.Instance().RenameOperatorResource(symbol.DeprecatedSourcePath, sourcePath);
+                ResourceManager.RenameOperatorResource(symbol.DeprecatedSourcePath, sourcePath);
 
                 symbol.DeprecatedSourcePath = string.Empty;
             }

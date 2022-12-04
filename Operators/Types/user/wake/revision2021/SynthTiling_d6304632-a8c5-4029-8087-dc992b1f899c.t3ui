@@ -1,6 +1,6 @@
 {
   "Id": "d6304632-a8c5-4029-8087-dc992b1f899c"/*SynthTiling*/,
-  "Description": "",
+  "Description": "An nice animation example that uses [SampleGridAttributes] and inverted blendmap to generate abstract patterns.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -103,7 +103,7 @@
       }
     },
     {
-      "ChildId": "db7473ad-cb26-476d-a733-52375607df8b"/*AnimValue*/,
+      "ChildId": "db7473ad-cb26-476d-a733-52375607df8b"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -180,7 +180,7 @@
       }
     },
     {
-      "ChildId": "43695ff4-97ad-4dbf-973f-1b18c8a75aa7"/*AnimValue*/,
+      "ChildId": "43695ff4-97ad-4dbf-973f-1b18c8a75aa7"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -312,7 +312,7 @@
       }
     },
     {
-      "ChildId": "6841ed0c-5c7b-4885-acf2-b3d8b14b7ebc"/*AnalyzeSound*/,
+      "ChildId": "6841ed0c-5c7b-4885-acf2-b3d8b14b7ebc"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

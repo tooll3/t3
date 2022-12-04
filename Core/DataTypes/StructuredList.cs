@@ -1,10 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SharpDX;
 using T3.Core.Logging;
+using T3.Core.Resource;
 
 namespace T3.Core.DataTypes
 {
@@ -14,6 +14,13 @@ namespace T3.Core.DataTypes
         {
             Type = type;
         }
+
+        
+        // public StructuredList(JsonTextReader reader, Type type)
+        // {
+        //     Type = type;
+        //     var testList = Read(reader);
+        // }
 
         public Type Type { get; }
         public abstract object Elements { get; }
@@ -30,7 +37,9 @@ namespace T3.Core.DataTypes
         public abstract void Insert(int index, object obj);
         public abstract void Remove(int index);
         public abstract void SetLength(int length);
-        public abstract string Write(JsonTextWriter writerNotUsed);
+        public abstract void Write(JsonTextWriter writerNotUsed);
+
+        public abstract StructuredList Read(JsonTextReader reader);
     }
 
     public class StructuredList<T> : StructuredList where T : struct
@@ -39,6 +48,12 @@ namespace T3.Core.DataTypes
         {
             TypedElements = new T[count];
         }
+
+        public StructuredList() : base(typeof(T))
+        {
+            //TypedElements = new T[count];
+        }
+
 
         public T[] TypedElements { get; private set; }
 
@@ -65,7 +80,7 @@ namespace T3.Core.DataTypes
 
         public override void WriteToStream(DataStream stream)
         {
-            if(NumElements > 0)
+            if (NumElements > 0)
                 stream.WriteRange(TypedElements);
         }
 
@@ -158,40 +173,102 @@ namespace T3.Core.DataTypes
             TypedElements = newArray;
         }
 
-        public override string Write(JsonTextWriter writerNotUsed)
+        public override void Write(JsonTextWriter writer)
         {
-            using (var sw = new StringWriter())
-            using (var writer = new JsonTextWriter(sw))
+            writer.Formatting = Formatting.Indented;
+            writer.WriteStartObject();
+            writer.WritePropertyName("StructuredList");
+            writer.WriteStartArray();
+
+            var fieldInfos = Type.GetFields();
+
+            foreach (var entry in TypedElements)
             {
-                writer.Formatting = Formatting.Indented;
-                writer.WritePropertyName("StructureList");
-                writer.WriteStartArray();
+                writer.WriteStartObject();
 
-                var fieldInfos = Type.GetFields();
-
-                foreach (var entry in TypedElements)
+                foreach (var fieldInfo in fieldInfos)
                 {
-                    writer.WriteStartObject();
-
-                    foreach (var fieldInfo in fieldInfos)
-                    {
-                        var name = fieldInfo.Name;
-                        writer.WritePropertyName(name);
-                        var value = fieldInfo.GetValue(entry);
-                        TypeValueToJsonConverters.Entries[fieldInfo.FieldType](writer, value);
-                    }
-
-                    writer.WriteEndObject();
+                    var name = fieldInfo.Name;
+                    writer.WritePropertyName(name);
+                    var value = fieldInfo.GetValue(entry);
+                    TypeValueToJsonConverters.Entries[fieldInfo.FieldType](writer, value);
                 }
 
-                writer.WriteEndArray();
-                var json = sw.ToString();
-                return json;
+                writer.WriteEndObject();
             }
+
+            writer.WriteEndArray();
+            writer.WriteEndObject();
         }
 
-        public void Read(JToken inputToken)
+        public override StructuredList Read(JsonTextReader reader)
         {
+            var inputToken = JToken.ReadFrom(reader);
+
+            var jArray = (JArray)inputToken["StructuredList"];
+            if (jArray == null)
+            {
+                TypedElements = Array.Empty<T>();
+                return this;
+            }
+            var elementCount = jArray.Count;
+            
+            TypedElements = new T[elementCount];
+
+            var fieldInfos = Type.GetFields();
+            for (var index = 0; index < jArray.Count; index++)
+            {
+                TypedElements[index]= new T();
+                object boxedEntry = TypedElements[index];
+                
+                var childJson = jArray[index];
+                foreach (var fieldInfo in fieldInfos)
+                {
+                    var valueConverter = JsonToTypeValueConverters.Entries[fieldInfo.FieldType];
+                    var valueJson = childJson[fieldInfo.Name];
+                    var objValue =valueConverter(valueJson);
+                    fieldInfo.SetValue(boxedEntry, objValue);
+                }
+
+                TypedElements[index] = (T)boxedEntry;
+            }
+            
+            return this;
+        }
+    }
+
+    public class StructuredListConverter : JsonConverter
+    {
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (writer is not JsonTextWriter textWriter)
+                return;
+
+            if (value is not StructuredList list)
+                return;
+
+            list.Write(textWriter);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            if (reader is not JsonTextReader textReader)
+                return null;
+
+            var obj = Activator.CreateInstance(objectType) as StructuredList;
+            if (obj == null)
+            {
+                Log.Warning($"Can't create instance of {objectType}");
+                return null;
+            }
+            
+            obj.Read(textReader);
+            return obj;
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return true;
         }
     }
 }

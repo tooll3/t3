@@ -79,7 +79,7 @@
         },
         {
           "Id": "81e652c3-d12c-4b45-afd2-f6de9de20df1"/*ScaleForW*/,
-          "Type": "T3.Core.Animation.Curve",
+          "Type": "T3.Core.DataTypes.Curve",
           "Value": {
             "Curve": {
               "PreCurve": "Constant",
@@ -134,7 +134,7 @@
       "Outputs": []
     },
     {
-      "Id": "68f82425-6764-47d7-a9ea-74daca6f230c"/*RandomCamera*/,
+      "Id": "68f82425-6764-47d7-a9ea-74daca6f230c"/*OrbitCamera*/,
       "SymbolId": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
       "InputValues": [
         {
@@ -161,7 +161,7 @@
       "Outputs": []
     },
     {
-      "Id": "2b0b88d7-dae5-4ee8-bb75-de94ece27af4"/*AnimValue*/,
+      "Id": "2b0b88d7-dae5-4ee8-bb75-de94ece27af4"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {
@@ -189,7 +189,7 @@
       "Outputs": []
     },
     {
-      "Id": "ad5ad6d8-aeb2-4073-b718-eef07d9399ee"/*AnimValue*/,
+      "Id": "ad5ad6d8-aeb2-4073-b718-eef07d9399ee"/*_AnimValueOld*/,
       "SymbolId": "c5e39c67-256f-4cb9-a635-b62a0d9c796c",
       "InputValues": [
         {

@@ -367,11 +367,6 @@
           "Id": "82464caa-a407-4f6d-a062-cef322d131f0"/*Twist*/,
           "Type": "System.Single",
           "Value": 22.0
-        },
-        {
-          "Id": "ae06f89e-d5a4-43a3-957d-718b66d76918"/*WriteAngleAndStrength*/,
-          "Type": "System.Boolean",
-          "Value": false
         }
       ],
       "Outputs": []
@@ -1157,11 +1152,6 @@
           "Id": "82464caa-a407-4f6d-a062-cef322d131f0"/*Twist*/,
           "Type": "System.Single",
           "Value": 0.0
-        },
-        {
-          "Id": "ae06f89e-d5a4-43a3-957d-718b66d76918"/*WriteAngleAndStrength*/,
-          "Type": "System.Boolean",
-          "Value": true
         }
       ],
       "Outputs": []
@@ -1215,7 +1205,7 @@
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [
         {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*Input*/,
+          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
           "Type": "System.String",
           "Value": "BOID EXPLORATION 2"
         },
@@ -1292,7 +1282,7 @@
       "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
       "InputValues": [
         {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*Input*/,
+          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
           "Type": "System.String",
           "Value": "FORCE FIELDS"
         },

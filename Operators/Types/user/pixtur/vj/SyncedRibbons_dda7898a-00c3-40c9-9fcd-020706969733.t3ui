@@ -37,7 +37,7 @@
       }
     },
     {
-      "ChildId": "1a3f4e90-d43f-41e3-98b2-46fb40ab9240"/*AnalyzeSound*/,
+      "ChildId": "1a3f4e90-d43f-41e3-98b2-46fb40ab9240"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -59,7 +59,7 @@
       }
     },
     {
-      "ChildId": "b885053b-521d-40b4-8720-2c0341205eac"/*AddDOF*/,
+      "ChildId": "b885053b-521d-40b4-8720-2c0341205eac"/*DepthOfField*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -345,7 +345,7 @@
       }
     },
     {
-      "ChildId": "1b8d1502-739c-41a5-9cbc-11ede6ceb0df"/*GetStringPart*/,
+      "ChildId": "1b8d1502-739c-41a5-9cbc-11ede6ceb0df"/*PickStringPart*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

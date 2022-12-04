@@ -102,14 +102,14 @@
       }
     },
     {
-      "ChildId": "6193a66e-bb09-4232-be47-0fa9b0a7caa0"/*UglySSAO*/,
+      "ChildId": "6193a66e-bb09-4232-be47-0fa9b0a7caa0"/*SSAO*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
       },
       "Position": {
-        "X": 1841.5211,
-        "Y": 408.7844
+        "X": 1873.1781,
+        "Y": 161.86093
       }
     },
     {
@@ -119,8 +119,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": 721.8131,
-        "Y": 365.46692
+        "X": 691.5539,
+        "Y": 385.25244
       }
     },
     {
@@ -179,7 +179,7 @@
       }
     },
     {
-      "ChildId": "2e6d8e5a-920a-488a-aa8f-d3dfdb4d35d4"/*GridPlaneGizmo*/,
+      "ChildId": "2e6d8e5a-920a-488a-aa8f-d3dfdb4d35d4"/*_OutputWindowGrid*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -312,7 +312,7 @@
       }
     },
     {
-      "ChildId": "22b8b257-00c7-43ad-8ebb-d027c9e0c997"/*DepthOfField*/,
+      "ChildId": "22b8b257-00c7-43ad-8ebb-d027c9e0c997"/*_DepthOfField*/,
       "Size": {
         "X": 110.0,
         "Y": 62.0
@@ -367,7 +367,7 @@
       }
     },
     {
-      "ChildId": "94227b52-b1ed-47c8-8e2e-1f04c76f45a4"/*DepthToLinear*/,
+      "ChildId": "94227b52-b1ed-47c8-8e2e-1f04c76f45a4"/*_ComputeDepthToLinear*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -400,17 +400,6 @@
       }
     },
     {
-      "ChildId": "4c67dc17-7889-4a34-ba20-21602d25240d"/*PointCloudFromObj*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 1039.9973,
-        "Y": 1168.6449
-      }
-    },
-    {
       "ChildId": "a778a3cd-b77c-40b3-8301-9f332faaefe2"/*GetSRVProperties*/,
       "Size": {
         "X": 110.0,
@@ -436,7 +425,7 @@
       "ChildId": "eacbd170-e24a-418a-b147-d75cf840affc"/*DrawPoints*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 36.0
       },
       "Position": {
         "X": 1154.9003,
@@ -447,7 +436,7 @@
       "ChildId": "102548f6-1408-45a7-8baa-5c50c6e2190d"/*DrawMeshAtPoints*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 49.0
       },
       "Position": {
         "X": 435.67767,
@@ -466,14 +455,14 @@
       }
     },
     {
-      "ChildId": "5fd83b60-1e1c-4796-b874-57a53f8f1547"/*PointCloudFromObj*/,
+      "ChildId": "7331afd1-9958-4d77-8815-17db44451767"/*CubeMesh*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
       },
       "Position": {
-        "X": 555.43646,
-        "Y": 47.458405
+        "X": 691.27124,
+        "Y": 176.01605
       }
     }
   ],

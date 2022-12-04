@@ -12,7 +12,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "1454a921-db1d-48f8-91f9-d564d5de45e7"/*String*/,
+      "ChildId": "1454a921-db1d-48f8-91f9-d564d5de45e7"/*AString*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -34,17 +34,6 @@
       }
     },
     {
-      "ChildId": "23206960-e633-469c-b404-b8318602686b"/*_SlotMachineRoll*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 361.5078,
-        "Y": 459.83032
-      }
-    },
-    {
       "ChildId": "91ce6da4-2f9f-4a8f-bc3d-4ecb0312551a"/*Transform*/,
       "Size": {
         "X": 110.0,
@@ -56,17 +45,6 @@
       }
     },
     {
-      "ChildId": "ebeb0e9a-824f-40b1-b87a-082d47d5832c"/*_SlotMachineRoll*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 361.5078,
-        "Y": 515.8303
-      }
-    },
-    {
       "ChildId": "37cb3efd-49c7-4553-8e80-bb3d887b1c07"/*Transform*/,
       "Size": {
         "X": 110.0,
@@ -75,17 +53,6 @@
       "Position": {
         "X": 518.6289,
         "Y": 456.95996
-      }
-    },
-    {
-      "ChildId": "78edea7c-082f-418c-9eab-b59c392cf39c"/*_SlotMachineRoll*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 361.5078,
-        "Y": 403.83032
       }
     },
     {
@@ -265,7 +232,7 @@
       }
     },
     {
-      "ChildId": "5e54b05b-6dee-4f03-a86b-c1b13a0894f9"/*AnimValue*/,
+      "ChildId": "5e54b05b-6dee-4f03-a86b-c1b13a0894f9"/*_AnimValueOld*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

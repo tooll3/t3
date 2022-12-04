@@ -10,7 +10,8 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using Utilities = T3.Core.Utilities;
+using T3.Core.Resource;
+using Utilities = T3.Core.Utils.Utilities;
 
 namespace T3.Operators.Types.Id_2c53eee7_eb38_449b_ad2a_d7a674952e5b
 {
@@ -66,7 +67,7 @@ namespace T3.Operators.Types.Id_2c53eee7_eb38_449b_ad2a_d7a674952e5b
 
                     for (var sampleIndex = 0; sampleIndex < sampleCount; sampleIndex++)
                     {
-                        var sampledColor = gradient.Sample((float)sampleIndex / sampleCount);
+                        var sampledColor = gradient.Sample((float)sampleIndex / (sampleCount-1f));
                         dataStream.Write(sampledColor.X);
                         dataStream.Write(sampledColor.Y);
                         dataStream.Write(sampledColor.Z);
@@ -78,7 +79,7 @@ namespace T3.Operators.Types.Id_2c53eee7_eb38_449b_ad2a_d7a674952e5b
                 dataStream.Position = 0;
                 var dataRectangles = new DataRectangle[] { new DataRectangle(dataStream.DataPointer, gradientSizeInBytes) };
                 Utilities.Dispose(ref GradientsTexture.Value);
-                GradientsTexture.Value = new Texture2D(ResourceManager.Instance().Device, texDesc, dataRectangles);
+                GradientsTexture.Value = new Texture2D(ResourceManager.Device, texDesc, dataRectangles);
             }
         }
 

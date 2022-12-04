@@ -4,7 +4,7 @@
 
 cbuffer Params : register(b0)
 {
-    float Count;
+    float __padding;
     float Radius;
     float RadiusOffset;
     float __padding1;
@@ -55,11 +55,17 @@ float3 RotatePointAroundAxis(float3 In, float3 Axis, float Rotation)
 void main(uint3 i : SV_DispatchThreadID)
 //void main(uint i : SV_GroupIndex)
 {
+    uint pointCount,stride;
+    ResultPoints.GetDimensions(pointCount, stride);
+
+    if(i.x >= pointCount)
+        return;
+
     uint index = i.x; 
     bool closeCircle =  CloseCircle > 0.5;
-    float count = closeCircle ? (Count -2) : Count;
+    float angleStepCount = closeCircle ? (pointCount -2) : pointCount;
 
-    float f = (float)(index)/count;
+    float f = (float)(index)/angleStepCount;
     float l = Radius + RadiusOffset * f;
     float angle = (StartAngle * 3.141578/180 + Cycles * 2 *3.141578 * f);
     float3 up = Axis.y > 0.7 ? float3(0,0,1) :  float3(0,1,0);
@@ -73,7 +79,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     
     ResultPoints[index].position = v;
-    ResultPoints[index].w = (closeCircle && index == Count -1)
+    ResultPoints[index].w = (closeCircle && index == pointCount -1)
                           ? sqrt(-1) // NaN
                           : W + WOffset * f;
 

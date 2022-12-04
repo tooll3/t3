@@ -21,6 +21,10 @@
     {
       "Id": "f1084d72-f8b8-4723-82be-e1e98880faf3"/*Rotation*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "a8a4d660-7356-40de-8dc6-549a72b69973"/*ShowOriginal*/,
+      "DefaultValue": 1.0
     }
   ],
   "Children": [
@@ -32,6 +36,21 @@
           "Id": "16dce9bc-02d9-48f8-b07e-94a9af48d27b"/*Source*/,
           "Type": "System.String",
           "Value": "Resources\\lib\\img\\fx\\image-analyze-Levels.hlsl"
+        },
+        {
+          "Id": "499e7ff0-3b6a-414b-be19-03c615931ab8"/*BufferColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 0.0
+          }
+        },
+        {
+          "Id": "9911dc7e-cd3b-4c58-a5d0-2e9abc8e528a"/*BlendMode*/,
+          "Type": "System.Int32",
+          "Value": 6
         }
       ],
       "Outputs": []
@@ -83,6 +102,12 @@
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "SourceSlotId": "f1084d72-f8b8-4723-82be-e1e98880faf3",
+      "TargetParentOrChildId": "e0755f36-83a3-40ec-b3f0-45171aa56dcc",
+      "TargetSlotId": "8e9b8826-5870-4db6-93c2-9fb469cfeec9"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "a8a4d660-7356-40de-8dc6-549a72b69973",
       "TargetParentOrChildId": "e0755f36-83a3-40ec-b3f0-45171aa56dcc",
       "TargetSlotId": "8e9b8826-5870-4db6-93c2-9fb469cfeec9"
     }

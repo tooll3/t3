@@ -1,7 +1,9 @@
 using T3.Core;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_3036067a_a4c2_434b_b0e3_ac95c5c943f4
 {
@@ -21,6 +23,6 @@ namespace T3.Operators.Types.Id_3036067a_a4c2_434b_b0e3_ac95c5c943f4
         }
 
         [Input(Guid = "35f501f4-5c79-4628-9441-8b3782544bf6")]
-        public readonly InputSlot<T3.Core.Command> Command = new();
+        public readonly InputSlot<Command> Command = new();
     }
 }

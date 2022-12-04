@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Resource;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
+using T3.Core.Resource;
+using T3.Core.Utils;
 using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core.DataTypes
@@ -59,9 +60,9 @@ namespace T3.Core.DataTypes
 
             try
             {
-                if (inputToken["Interpolation"] != null)
+                if (gradientToken["Interpolation"] != null)
                 {
-                    Interpolation = (Interpolations)Enum.Parse(typeof(Interpolations), inputToken["Interpolation"].Value<string>());
+                    Interpolation = (Interpolations)Enum.Parse(typeof(Interpolations), gradientToken["Interpolation"].Value<string>());
                 }
 
                 foreach (var keyEntry in (JArray)gradientToken["Steps"])
