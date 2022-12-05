@@ -228,10 +228,13 @@ namespace T3.Editor.Gui
                     ImGui.MenuItem("Show Timeline", "", ref UserSettings.Config.ShowTimeline);
                     ImGui.MenuItem("Show Minimap", "", ref UserSettings.Config.ShowMiniMap);
                     ImGui.MenuItem("Show Toolbar", "", ref UserSettings.Config.ShowToolbar);
-                    if(ImGui.MenuItem("Toggle Interface Elements", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), false, !IsCurrentlySaving))
+                    if(ImGui.MenuItem("Toggle All UI Elements", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), false, !IsCurrentlySaving))
                     {
                         ToggleFocusMode();
                     }
+                    
+                    ImGui.Separator();
+                    ImGui.MenuItem("FullScreen", "", ref UserSettings.Config.FullScreen);
                     ImGui.EndMenu();
                 }
                 

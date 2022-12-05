@@ -25,6 +25,7 @@ namespace T3.Editor.Gui.Windows
             Config.Title = "Parameters##" + _instanceCounter;
             AllowMultipleInstances = true;
             Config.Visible = true;
+            MenuTitle = "Open New Parameter";
 
             _parameterWindowInstances.Add(this);
         }

@@ -21,14 +21,21 @@ namespace T3.Editor.Gui.Windows
         {
             if (AllowMultipleInstances)
             {
-                if (ImGui.MenuItem("New " + Config.Title))
+                var menuTitle = string.IsNullOrEmpty(MenuTitle) 
+                                    ? $"Open new {Config.Title} Window"
+                                    : MenuTitle;
+                if (ImGui.MenuItem(menuTitle))
                 {
                     AddAnotherInstance();
                 }
             }
             else
             {
-                if (ImGui.MenuItem(Config.Title, "", Config.Visible))
+                var menuTitle = string.IsNullOrEmpty(MenuTitle) 
+                                    ? Config.Title 
+                                    : MenuTitle;
+
+                if (ImGui.MenuItem(menuTitle, "", Config.Visible))
                 {
                     Config.Visible = !Config.Visible;
                 }
@@ -119,8 +126,9 @@ namespace T3.Editor.Gui.Windows
             public bool Visible;
         }
 
-        public WindowConfig Config = new WindowConfig();
+        public WindowConfig Config = new();
 
+        public string MenuTitle;
 
         private bool _wasVisible;
     }

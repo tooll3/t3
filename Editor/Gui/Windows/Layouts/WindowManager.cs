@@ -48,16 +48,16 @@ namespace T3.Editor.Gui.Windows.Layouts
             
             _windows = new List<Window>()
                            {
-                               new GraphWindow(),
-                               new SettingsWindow(),
                                new ParameterWindow(),
-                               new ExplorationWindow(),
-                               new VariationsWindow(),
+                               new GraphWindow(),
                                new OutputWindow(),
-                               new ConsoleLogWindow(),
+                               new VariationsWindow(),
+                               new ExplorationWindow(),
                                new SymbolLibrary(),
                                new RenderSequenceWindow(),
                                new RenderVideoWindow(),
+                               new SettingsWindow(),
+                               new ConsoleLogWindow(),
                            };            
 
             LayoutHandling.LoadAndApplyLayout(UserSettings.Config.WindowLayoutIndex);
@@ -72,18 +72,27 @@ namespace T3.Editor.Gui.Windows.Layouts
             {
                 window.DrawMenuItemToggle();
             }
+            ImGui.Separator();
+            
+            if (ImGui.BeginMenu("Debug"))
+            {
+                if (ImGui.MenuItem("ImGUI Demo", "", _demoWindowVisible))
+                    _demoWindowVisible = !_demoWindowVisible;
 
-            ImGui.MenuItem("FullScreen", "", ref UserSettings.Config.FullScreen);
+                if (ImGui.MenuItem("ImGUI Metrics", "", _metricsWindowVisible))
+                    _metricsWindowVisible = !_metricsWindowVisible;
+                
+                ImGui.EndMenu();
+            }
+            //ImGui.EndMenu();
+            
+            ImGui.Separator();
+            
+            
             if (ImGui.MenuItem("2nd Render Window", "", ShowSecondaryRenderWindow))
                 ShowSecondaryRenderWindow = !ShowSecondaryRenderWindow;
-
+            
             ImGui.Separator();
-
-            if (ImGui.MenuItem("ImGUI Demo", "", _demoWindowVisible))
-                _demoWindowVisible = !_demoWindowVisible;
-
-            if (ImGui.MenuItem("ImGUI Metrics", "", _metricsWindowVisible))
-                _metricsWindowVisible = !_metricsWindowVisible;
 
             LayoutHandling.DrawMainMenuItems();
         }
