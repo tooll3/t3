@@ -524,7 +524,8 @@ namespace T3.Editor.Gui.Graph
 
                     if (_isVisible)
                     {
-                        DrawInputSlot(childUi, inputDefinition, usableSlotArea, colorForType, hovered);
+                        var isMissing = inputUi.Relevancy == Relevancy.Required && connectedLines.Count == 0; 
+                        DrawInputSlot(childUi, inputDefinition, usableSlotArea, colorForType, hovered, isMissing);
                     }
                 }
 
@@ -912,7 +913,8 @@ namespace T3.Editor.Gui.Graph
         /// <summary>
         /// Draws slot for non multi-input
         /// </summary>
-        private static void DrawInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered)
+        private static void DrawInputSlot(SymbolChildUi targetUi, Symbol.InputDefinition inputDef, ImRect usableArea, Color colorForType, bool hovered,
+                                          bool isMissing)
         {
             if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(targetUi, inputDef))
             {
@@ -1016,6 +1018,15 @@ namespace T3.Editor.Gui.Graph
                                         pos + size,
                                         connectionColor
                                        );
+
+                if (isMissing)
+                {
+                    _drawList.AddCircleFilled(
+                                            pos + new Vector2(-6, size.Y /2),
+                                            MathF.Min(3, size.Y-1),
+                                            connectionColor
+                                           );
+                }
             }
         }
 
