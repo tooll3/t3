@@ -3,6 +3,7 @@
   "InputUis": [
     {
       "InputId": "c115fd60-86c5-425f-975b-0b5e92c0f42b"/*Image*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -308.4377,
         "Y": 58.11561
