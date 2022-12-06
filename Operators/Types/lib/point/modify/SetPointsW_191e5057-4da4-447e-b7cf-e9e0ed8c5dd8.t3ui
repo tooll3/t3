@@ -1,6 +1,6 @@
 {
   "Id": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8"/*SetPointsW*/,
-  "Description": "Sets the W attribute of points from a curve.\n\nDifferent modes allow to...\n- distribute the curve range along all points\n- or use different mapping ranges.",
+  "Description": "Sets the W attribute of points from a curve.\n\nDifferent modes allow to...\n- distribute the curve range along all points\n- or use different mapping ranges.\n\nYou can also connect a texture to provide override the curve.",
   "InputUis": [
     {
       "InputId": "d5a5862b-d3a2-4e6e-ad54-32cff7ced0fd"/*Amount*/,
@@ -42,8 +42,8 @@
     {
       "InputId": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*WCurve*/,
       "Position": {
-        "X": -465.04187,
-        "Y": 1407.1638
+        "X": -462.01703,
+        "Y": 1150.0518
       }
     },
     {
@@ -52,6 +52,13 @@
       "Position": {
         "X": -465.04187,
         "Y": 1452.1638
+      }
+    },
+    {
+      "InputId": "cd91ff45-7f21-40fd-86c8-8dd95204c3b3"/*ValueTexture*/,
+      "Position": {
+        "X": -447.90106,
+        "Y": 1044.445
       }
     }
   ],
@@ -163,7 +170,7 @@
         "Y": 49.0
       },
       "Position": {
-        "X": -126.45705,
+        "X": -230.31013,
         "Y": 1137.4827
       }
     },
@@ -198,6 +205,28 @@
       "Position": {
         "X": -309.58484,
         "Y": 733.14197
+      }
+    },
+    {
+      "ChildId": "60334074-19be-4c11-8d54-02913b44f08d"/*FirstValidBuffer*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -144.52502,
+        "Y": 962.8714
+      }
+    },
+    {
+      "ChildId": "ef24f862-a9d4-4fa7-82d5-9373a92513cf"/*FirstValidTexture*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": -93.97089,
+        "Y": 1035.1437
       }
     }
   ],

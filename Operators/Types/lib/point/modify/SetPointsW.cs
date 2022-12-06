@@ -33,6 +33,9 @@ namespace T3.Operators.Types.Id_191e5057_4da4_447e_b7cf_e9e0ed8c5dd8
         [Input(Guid = "d504c3f9-290f-4a73-bf9d-f9266ea955f6")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
+        [Input(Guid = "cd91ff45-7f21-40fd-86c8-8dd95204c3b3")]
+        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> ValueTexture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+
 
         private enum MappingModes
         {
