@@ -1,7 +1,7 @@
 {
   "Name": "DrawMeshAtPoints",
   "Id": "42cb88bc-beb8-4d89-ac99-44b77be5f03e",
-  "Namespace": "lib.3d.mesh.draw",
+  "Namespace": "lib.3d.draw",
   "Inputs": [
     {
       "Id": "408ae7c7-9aa8-4537-8c55-b5689f8f9b56"/*GPoints*/,

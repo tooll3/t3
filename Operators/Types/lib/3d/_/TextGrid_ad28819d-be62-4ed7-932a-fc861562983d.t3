@@ -1,7 +1,7 @@
 {
   "Name": "TextGrid",
   "Id": "ad28819d-be62-4ed7-932a-fc861562983d",
-  "Namespace": "lib.3d",
+  "Namespace": "lib.3d._",
   "Inputs": [
     {
       "Id": "7c3dbe80-da67-430b-9aaa-f2e2f34fed73"/*Text*/,

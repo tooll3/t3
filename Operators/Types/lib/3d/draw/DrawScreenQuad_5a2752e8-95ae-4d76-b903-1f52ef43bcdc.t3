@@ -1,7 +1,7 @@
 {
   "Name": "DrawScreenQuad",
   "Id": "5a2752e8-95ae-4d76-b903-1f52ef43bcdc",
-  "Namespace": "lib.3d.rendering",
+  "Namespace": "lib.3d.draw",
   "Inputs": [
     {
       "Id": "92c66734-dce9-402a-95f6-cde0e58bf32f"/*Texture*/,

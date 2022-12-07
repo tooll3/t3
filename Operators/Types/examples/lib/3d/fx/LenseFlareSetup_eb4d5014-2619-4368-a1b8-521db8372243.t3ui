@@ -1,6 +1,6 @@
 {
   "Id": "eb4d5014-2619-4368-a1b8-521db8372243"/*LenseFlareSetup*/,
-  "Description": "Pre-made complex light flare setups with various styles.",
+  "Description": "Pre-made complex light flare setups with various styles.\n\nRequire at least one [PointLight] on the left side.",
   "InputUis": [
     {
       "InputId": "6485746d-1f22-4c39-bbc5-773e29feb4c0"/*Brightness*/,

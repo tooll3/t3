@@ -1,7 +1,7 @@
 {
   "Name": "Sketch",
   "Id": "8e6ed99c-a3e0-42c0-9f81-a89b1e340757",
-  "Namespace": "lib.2d.helper",
+  "Namespace": "lib.img.generate",
   "Inputs": [
     {
       "Id": "1c5d0d86-c000-449e-903a-3212d19d8e1d"/*StrokeSize*/,

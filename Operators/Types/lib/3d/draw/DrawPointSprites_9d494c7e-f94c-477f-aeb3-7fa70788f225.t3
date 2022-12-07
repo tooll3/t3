@@ -1,7 +1,7 @@
 {
   "Name": "DrawPointSprites",
   "Id": "9d494c7e-f94c-477f-aeb3-7fa70788f225",
-  "Namespace": "lib.3d.rendering",
+  "Namespace": "lib.3d.draw",
   "Inputs": [
     {
       "Id": "32a76e06-db29-40e0-9a4e-29ad88c2f62b"/*Points*/,

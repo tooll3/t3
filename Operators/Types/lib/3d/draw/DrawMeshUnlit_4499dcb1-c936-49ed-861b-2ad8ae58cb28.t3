@@ -1,7 +1,7 @@
 {
   "Name": "DrawMeshUnlit",
   "Id": "4499dcb1-c936-49ed-861b-2ad8ae58cb28",
-  "Namespace": "lib.3d.mesh.draw",
+  "Namespace": "lib.3d.draw",
   "Inputs": [
     {
       "Id": "be057b0a-1302-4076-bde1-6ae453815642"/*Mesh*/,

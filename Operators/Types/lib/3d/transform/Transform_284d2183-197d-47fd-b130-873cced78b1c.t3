@@ -1,7 +1,7 @@
 {
   "Name": "Transform",
   "Id": "284d2183-197d-47fd-b130-873cced78b1c",
-  "Namespace": "lib.3d",
+  "Namespace": "lib.3d.transform",
   "Inputs": [
     {
       "Id": "dcd066ce-ac44-4e76-85b3-78821245d9dc"/*Command*/,

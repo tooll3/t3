@@ -1,7 +1,7 @@
 {
   "Name": "DrawMesh",
   "Id": "a3c5471e-079b-4d4b-886a-ec02d6428ff6",
-  "Namespace": "lib.3d.mesh.draw",
+  "Namespace": "lib.3d.draw",
   "Inputs": [
     {
       "Id": "8c9dee45-d165-48c8-b8dd-b7f47e77fd00"/*Color*/,

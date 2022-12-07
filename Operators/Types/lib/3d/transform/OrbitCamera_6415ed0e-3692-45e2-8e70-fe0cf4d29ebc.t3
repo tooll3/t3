@@ -1,7 +1,7 @@
 {
   "Name": "OrbitCamera",
   "Id": "6415ed0e-3692-45e2-8e70-fe0cf4d29ebc",
-  "Namespace": "lib.3d.rendering",
+  "Namespace": "lib.3d.transform",
   "Inputs": [
     {
       "Id": "33752356-8348-4938-8f73-6257e6bb1c1f"/*Command*/,

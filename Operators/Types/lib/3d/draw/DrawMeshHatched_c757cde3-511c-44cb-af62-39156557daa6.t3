@@ -1,7 +1,7 @@
 {
   "Name": "DrawMeshHatched",
   "Id": "c757cde3-511c-44cb-af62-39156557daa6",
-  "Namespace": "lib.3d.mesh.draw",
+  "Namespace": "lib.3d.draw",
   "Inputs": [
     {
       "Id": "42042144-1ca7-41c7-92b8-21ea1136698a"/*Color*/,
