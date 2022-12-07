@@ -1,7 +1,7 @@
 {
   "Name": "SliceViewPort",
   "Id": "8b888408-e472-4bf9-be25-17a3dd8b90fd",
-  "Namespace": "examples.lib.2d",
+  "Namespace": "lib.3d.transform",
   "Inputs": [
     {
       "Id": "21532b24-fed2-403b-abb1-6faa19311366"/*SubGraph*/,
