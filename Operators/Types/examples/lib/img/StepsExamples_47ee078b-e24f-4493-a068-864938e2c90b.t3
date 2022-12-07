@@ -453,9 +453,9 @@
   "Connections": [
     {
       "SourceParentOrChildId": "2192418a-6d2a-49b6-9071-7549e5acc108",
-      "SourceSlotId": "78523193-3df8-4189-88c0-46091d53892e",
+      "SourceSlotId": "2ce1453b-432b-4d12-8fb7-d883e3d0c136",
       "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "TargetSlotId": "38a2d5b9-e584-4b40-8943-51924f9e04f2"
+      "TargetSlotId": "1a00cbdb-8ead-4c34-92f2-2da3c73571c2"
     },
     {
       "SourceParentOrChildId": "b11d6638-2ba6-4b42-9ed9-49d36b6c08f9",

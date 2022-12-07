@@ -102,7 +102,7 @@
       }
     },
     {
-      "ChildId": "709db9e1-8d89-410c-be19-33eaa15db6c0"/*SetEnvironmet*/,
+      "ChildId": "709db9e1-8d89-410c-be19-33eaa15db6c0"/*SetEnvironment*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

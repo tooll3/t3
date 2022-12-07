@@ -225,7 +225,7 @@
       }
     },
     {
-      "ChildId": "e007d40f-d990-4f5a-a992-101a8f299a77"/*SetEnvironmet*/,
+      "ChildId": "e007d40f-d990-4f5a-a992-101a8f299a77"/*SetEnvironment*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -236,7 +236,7 @@
       }
     },
     {
-      "ChildId": "1fea1bfa-154a-443e-8a01-0ea5154da53a"/*TextureToCubeMap2*/,
+      "ChildId": "1fea1bfa-154a-443e-8a01-0ea5154da53a"/*TextureToCubeMap*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

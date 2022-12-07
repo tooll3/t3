@@ -100,17 +100,6 @@
       }
     },
     {
-      "ChildId": "79b457fa-dabc-4c87-9151-9a0f679d7b95"/*ScaleVector2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -253.51266,
-        "Y": 641.2245
-      }
-    },
-    {
       "ChildId": "2a350f7f-e7f5-49c3-a958-fd23bd3d6f03"/*LinearGradient*/,
       "Size": {
         "X": 110.0,
@@ -122,25 +111,14 @@
       }
     },
     {
-      "ChildId": "fddecb5e-8ffb-4f99-95d9-07335a9aa4e7"/*WaveForm*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 787.0037,
-        "Y": 467.65067
-      }
-    },
-    {
       "ChildId": "9adef827-09cc-4193-8e22-e999dcfcfeb6"/*ExecuteTextureUpdate*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
       },
       "Position": {
-        "X": 835.9145,
-        "Y": -440.55975
+        "X": 913.13495,
+        "Y": 127.384155
       }
     }
   ],
@@ -148,8 +126,8 @@
     {
       "OutputId": "2d59fec4-af4e-4db2-bc11-3685f31e9de5"/*TextureOutput*/,
       "Position": {
-        "X": 1245.9105,
-        "Y": -153.24353
+        "X": 1218.2328,
+        "Y": 11.092072
       }
     }
   ]

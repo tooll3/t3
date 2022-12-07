@@ -1138,13 +1138,13 @@
       "Outputs": []
     },
     {
-      "Id": "ac1b1d2f-792b-4069-bfe9-0e28b9192fef"/*SetEnvironmet*/,
+      "Id": "ac1b1d2f-792b-4069-bfe9-0e28b9192fef"/*SetEnvironment*/,
       "SymbolId": "f3b66187-34b2-4018-8380-279f9f296ded",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "ce121135-59ee-4605-8388-6503204b0ff7"/*TextureToCubeMap2*/,
+      "Id": "ce121135-59ee-4605-8388-6503204b0ff7"/*TextureToCubeMap*/,
       "SymbolId": "e85d98cf-9240-4f5d-8df6-35425d325778",
       "InputValues": [],
       "Outputs": []
@@ -1843,7 +1843,7 @@
       "Outputs": []
     },
     {
-      "Id": "b6cab46d-fb95-4c43-b377-70025c335f46"/*SetEnvironmet*/,
+      "Id": "b6cab46d-fb95-4c43-b377-70025c335f46"/*SetEnvironment*/,
       "SymbolId": "f3b66187-34b2-4018-8380-279f9f296ded",
       "InputValues": [
         {
@@ -1855,7 +1855,7 @@
       "Outputs": []
     },
     {
-      "Id": "031c7f8b-7054-4156-9e20-757f56c08d3f"/*TextureToCubeMap2*/,
+      "Id": "031c7f8b-7054-4156-9e20-757f56c08d3f"/*TextureToCubeMap*/,
       "SymbolId": "e85d98cf-9240-4f5d-8df6-35425d325778",
       "InputValues": [],
       "Outputs": []

@@ -23,10 +23,10 @@
     {
       "Id": "e97a432e-4996-41b0-8ae8-10c9f2d15bc4"/*Background*/,
       "DefaultValue": {
-        "X": 1.0,
-        "Y": 0.99999,
-        "Z": 0.99999,
-        "W": 0.804
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0,
+        "W": 0.0
       }
     },
     {
@@ -50,11 +50,11 @@
     },
     {
       "Id": "dab4e3df-aaa6-411c-83f6-e4c730b740ce"/*Rotation*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 45.0
     },
     {
       "Id": "82a572d3-a39f-4ab3-bc17-804d3098d1c1"/*EffectWidth*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.25
     },
     {
       "Id": "8d4e1265-8479-4525-adbc-fe5c31d9984a"/*EffectCenter*/,
@@ -71,7 +71,7 @@
       }
     },
     {
-      "Id": "d99d5c03-2563-41e6-9bfe-bd61a7fed37d"/*TestParam*/,
+      "Id": "d99d5c03-2563-41e6-9bfe-bd61a7fed37d"/*Scatter*/,
       "DefaultValue": 0.0
     }
   ],

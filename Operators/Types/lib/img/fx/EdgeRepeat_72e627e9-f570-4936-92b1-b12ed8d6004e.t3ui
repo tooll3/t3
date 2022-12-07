@@ -1,9 +1,10 @@
 {
   "Id": "72e627e9-f570-4936-92b1-b12ed8d6004e"/*EdgeRepeat*/,
-  "Description": "Repeats pixel values found along a line",
+  "Description": "Repeats (stretches) pixels of the input image along a line.\n\nPlease explore the presets.",
   "InputUis": [
     {
       "InputId": "22b41600-7d42-44ad-8e94-3819f8d24964"/*Image*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0
@@ -53,13 +54,6 @@
       "Scale": 1.0
     },
     {
-      "InputId": "0f597b6c-eec8-4b06-92de-28f7cbe2243a"/*PingPong*/,
-      "Position": {
-        "X": -222.20561,
-        "Y": 413.4823
-      }
-    },
-    {
       "InputId": "881e04f7-1014-4e87-81c9-f4791086e57d"/*LineThickness*/,
       "Position": {
         "X": -222.20561,
@@ -67,24 +61,10 @@
       }
     },
     {
-      "InputId": "3acc47a3-83a8-4994-8456-e365595ed38c"/*SmoothGradient*/,
-      "Position": {
-        "X": -234.16248,
-        "Y": 527.66125
-      }
-    },
-    {
       "InputId": "c30a5d00-681c-490d-80d4-d58577cd65db"/*Resolution*/,
       "Position": {
         "X": -234.16248,
         "Y": 572.6613
-      }
-    },
-    {
-      "InputId": "294af91e-65f2-4e2c-8bd2-0896019f8e65"/*Bias*/,
-      "Position": {
-        "X": -234.16248,
-        "Y": 617.6613
       }
     }
   ],
