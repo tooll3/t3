@@ -537,17 +537,6 @@
       }
     },
     {
-      "ChildId": "3035ae1b-e15a-4900-81e4-143256b2ed08"/*WaveForm*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 101.232185,
-        "Y": 2702.2732
-      }
-    },
-    {
       "ChildId": "99b20f17-ea38-40fa-b7d5-3a463f09e2ad"/*SamplerStateOp*/,
       "Size": {
         "X": 110.0,

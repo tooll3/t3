@@ -296,17 +296,6 @@
       }
     },
     {
-      "ChildId": "e0eabc97-f5c0-4206-8943-5d64cee378c8"/*WaveForm*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 3667.0298,
-        "Y": 1418.4082
-      }
-    },
-    {
       "ChildId": "5c4700d7-11f2-4cd1-9eb6-406a4b661dd5"/*GpuMeasure*/,
       "Size": {
         "X": 110.0,

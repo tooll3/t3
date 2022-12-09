@@ -974,17 +974,6 @@
       }
     },
     {
-      "ChildId": "58cbad3d-cf4d-4d3d-a431-dbd647d5d13d"/*WaveForm*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 1858.841,
-        "Y": 53.585575
-      }
-    },
-    {
       "ChildId": "74513201-5b3e-428b-9819-4c1440e8de67"/*ColorGrade*/,
       "Size": {
         "X": 110.0,
