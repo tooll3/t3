@@ -1,206 +1,6 @@
 {
   "WindowConfigs": [
     {
-      "Title": "Graph##1",
-      "Visible": true
-    },
-    {
-      "Title": "Graph##2",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##3",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##4",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##5",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##6",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##7",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##8",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##9",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##10",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##11",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##12",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##13",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##14",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##15",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##16",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##17",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##18",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##19",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##20",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##21",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##22",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##23",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##24",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##25",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##26",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##27",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##28",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##29",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##30",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##31",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##32",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##33",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##34",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##35",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##36",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##37",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##38",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##39",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##40",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##41",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##42",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##43",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##44",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##45",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##46",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##47",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##48",
-      "Visible": false
-    },
-    {
-      "Title": "Graph##49",
-      "Visible": false
-    },
-    {
-      "Title": "Settings",
-      "Visible": false
-    },
-    {
       "Title": "Parameters##1",
       "Visible": true
     },
@@ -589,12 +389,416 @@
       "Visible": false
     },
     {
-      "Title": "Explore Variations",
+      "Title": "Parameters##98",
       "Visible": false
     },
     {
-      "Title": "Variations",
+      "Title": "Parameters##99",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##100",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##101",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##102",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##103",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##104",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##105",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##106",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##107",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##108",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##109",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##110",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##111",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##112",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##113",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##114",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##115",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##116",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##117",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##118",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##119",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##120",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##121",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##122",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##123",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##124",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##125",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##126",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##127",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##128",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##129",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##130",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##131",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##132",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##133",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##134",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##135",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##136",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##137",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##138",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##139",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##140",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##141",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##142",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##143",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##144",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##145",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##146",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##147",
+      "Visible": false
+    },
+    {
+      "Title": "Parameters##148",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##1",
       "Visible": true
+    },
+    {
+      "Title": "Graph##2",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##3",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##4",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##5",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##6",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##7",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##8",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##9",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##10",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##11",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##12",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##13",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##14",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##15",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##16",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##17",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##18",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##19",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##20",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##21",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##22",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##23",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##24",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##25",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##26",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##27",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##28",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##29",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##30",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##31",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##32",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##33",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##34",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##35",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##36",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##37",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##38",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##39",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##40",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##41",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##42",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##43",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##44",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##45",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##46",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##47",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##48",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##49",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##50",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##51",
+      "Visible": false
+    },
+    {
+      "Title": "Graph##52",
+      "Visible": false
     },
     {
       "Title": "Output##0",
@@ -985,12 +1189,220 @@
       "Visible": false
     },
     {
-      "Title": "Console",
+      "Title": "Output##97",
+      "Visible": false
+    },
+    {
+      "Title": "Output##98",
+      "Visible": false
+    },
+    {
+      "Title": "Output##99",
+      "Visible": false
+    },
+    {
+      "Title": "Output##100",
+      "Visible": false
+    },
+    {
+      "Title": "Output##101",
+      "Visible": false
+    },
+    {
+      "Title": "Output##102",
+      "Visible": false
+    },
+    {
+      "Title": "Output##103",
+      "Visible": false
+    },
+    {
+      "Title": "Output##104",
+      "Visible": false
+    },
+    {
+      "Title": "Output##105",
+      "Visible": false
+    },
+    {
+      "Title": "Output##106",
+      "Visible": false
+    },
+    {
+      "Title": "Output##107",
+      "Visible": false
+    },
+    {
+      "Title": "Output##108",
+      "Visible": false
+    },
+    {
+      "Title": "Output##109",
+      "Visible": false
+    },
+    {
+      "Title": "Output##110",
+      "Visible": false
+    },
+    {
+      "Title": "Output##111",
+      "Visible": false
+    },
+    {
+      "Title": "Output##112",
+      "Visible": false
+    },
+    {
+      "Title": "Output##113",
+      "Visible": false
+    },
+    {
+      "Title": "Output##114",
+      "Visible": false
+    },
+    {
+      "Title": "Output##115",
+      "Visible": false
+    },
+    {
+      "Title": "Output##116",
+      "Visible": false
+    },
+    {
+      "Title": "Output##117",
+      "Visible": false
+    },
+    {
+      "Title": "Output##118",
+      "Visible": false
+    },
+    {
+      "Title": "Output##119",
+      "Visible": false
+    },
+    {
+      "Title": "Output##120",
+      "Visible": false
+    },
+    {
+      "Title": "Output##121",
+      "Visible": false
+    },
+    {
+      "Title": "Output##122",
+      "Visible": false
+    },
+    {
+      "Title": "Output##123",
+      "Visible": false
+    },
+    {
+      "Title": "Output##124",
+      "Visible": false
+    },
+    {
+      "Title": "Output##125",
+      "Visible": false
+    },
+    {
+      "Title": "Output##126",
+      "Visible": false
+    },
+    {
+      "Title": "Output##127",
+      "Visible": false
+    },
+    {
+      "Title": "Output##128",
+      "Visible": false
+    },
+    {
+      "Title": "Output##129",
+      "Visible": false
+    },
+    {
+      "Title": "Output##130",
+      "Visible": false
+    },
+    {
+      "Title": "Output##131",
+      "Visible": false
+    },
+    {
+      "Title": "Output##132",
+      "Visible": false
+    },
+    {
+      "Title": "Output##133",
+      "Visible": false
+    },
+    {
+      "Title": "Output##134",
+      "Visible": false
+    },
+    {
+      "Title": "Output##135",
+      "Visible": false
+    },
+    {
+      "Title": "Output##136",
+      "Visible": false
+    },
+    {
+      "Title": "Output##137",
+      "Visible": false
+    },
+    {
+      "Title": "Output##138",
+      "Visible": false
+    },
+    {
+      "Title": "Output##139",
+      "Visible": false
+    },
+    {
+      "Title": "Output##140",
+      "Visible": false
+    },
+    {
+      "Title": "Output##141",
+      "Visible": false
+    },
+    {
+      "Title": "Output##142",
+      "Visible": false
+    },
+    {
+      "Title": "Output##143",
+      "Visible": false
+    },
+    {
+      "Title": "Output##144",
+      "Visible": false
+    },
+    {
+      "Title": "Output##145",
+      "Visible": false
+    },
+    {
+      "Title": "Output##146",
+      "Visible": false
+    },
+    {
+      "Title": "Output##147",
+      "Visible": false
+    },
+    {
+      "Title": "Variations",
+      "Visible": true
+    },
+    {
+      "Title": "Explore Variations",
       "Visible": false
     },
     {
       "Title": "Symbol Library",
-      "Visible": false
+      "Visible": true
     },
     {
       "Title": "Render Sequence",
@@ -999,7 +1411,15 @@
     {
       "Title": "Render Video",
       "Visible": false
+    },
+    {
+      "Title": "Settings",
+      "Visible": false
+    },
+    {
+      "Title": "Console",
+      "Visible": false
     }
   ],
-  "ImGuiSettings": "[Window][DockSpaceViewport_11111111]\nPos=0,26\nSize=1920,1031\nCollapsed=0\n\n[Window][Graph##1]\nPos=0,26\nSize=1019,1031\nCollapsed=0\nDockId=0x00000001,0\n\n[Window][Parameters##1]\nPos=1021,525\nSize=443,532\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Variations]\nPos=1466,525\nSize=454,532\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Output##0]\nPos=1021,26\nSize=899,497\nCollapsed=0\nDockId=0x00000003,0\n\n[Window][Debug##Default]\nPos=60,60\nSize=400,400\nCollapsed=0\n\n[Window][Explore Variations]\nPos=810,306\nSize=768,283\nCollapsed=0\n\n[Window][Console]\nPos=548,678\nSize=768,283\nCollapsed=0\n\n[Window][Output##1]\nPos=0,26\nSize=2304,712\nCollapsed=0\n\n[Docking][Data]\nDockSpace       ID=0x8B93E3BD Window=0xA787BDB4 Pos=0,26 Size=1920,1031 Split=X Selected=0x1F46795C\n  DockNode      ID=0x00000001 Parent=0x8B93E3BD SizeRef=1019,1391 CentralNode=1 Selected=0x1F46795C\n  DockNode      ID=0x00000002 Parent=0x8B93E3BD SizeRef=899,1391 Split=Y Selected=0x9CE63BF6\n    DockNode    ID=0x00000003 Parent=0x00000002 SizeRef=768,497 Selected=0x75327DBA\n    DockNode    ID=0x00000004 Parent=0x00000002 SizeRef=768,532 Split=X Selected=0x9CE63BF6\n      DockNode  ID=0x00000005 Parent=0x00000004 SizeRef=443,596 Selected=0x9CE63BF6\n      DockNode  ID=0x00000006 Parent=0x00000004 SizeRef=454,596 Selected=0x3BC11B9B\n\n"
+  "ImGuiSettings": "[Window][DockSpaceViewport_11111111]\nPos=0,26\nSize=2560,1391\nCollapsed=0\n\n[Window][Graph##1]\nPos=224,26\nSize=1435,1391\nCollapsed=0\nDockId=0x00000001,0\n\n[Window][Parameters##1]\nPos=1661,699\nSize=443,718\nCollapsed=0\nDockId=0x00000005,0\n\n[Window][Variations]\nPos=2106,699\nSize=454,718\nCollapsed=0\nDockId=0x00000006,0\n\n[Window][Output##0]\nPos=1661,26\nSize=899,671\nCollapsed=0\nDockId=0x00000003,0\n\n[Window][Debug##Default]\nPos=60,60\nSize=400,400\nCollapsed=0\n\n[Window][Explore Variations]\nPos=810,306\nSize=768,283\nCollapsed=0\n\n[Window][Console]\nPos=548,678\nSize=768,283\nCollapsed=0\n\n[Window][Output##1]\nPos=0,26\nSize=2304,712\nCollapsed=0\n\n[Window][Symbol Library]\nPos=0,26\nSize=222,1391\nCollapsed=0\nDockId=0x00000007,0\n\n[Docking][Data]\nDockSpace         ID=0x8B93E3BD Window=0xA787BDB4 Pos=0,26 Size=2560,1391 Split=X Selected=0x1F46795C\n  DockNode        ID=0x00000007 Parent=0x8B93E3BD SizeRef=222,1391 Selected=0xCA18E6EB\n  DockNode        ID=0x00000008 Parent=0x8B93E3BD SizeRef=2336,1391 Split=X\n    DockNode      ID=0x00000001 Parent=0x00000008 SizeRef=1435,1391 CentralNode=1 Selected=0x1F46795C\n    DockNode      ID=0x00000002 Parent=0x00000008 SizeRef=899,1391 Split=Y Selected=0x9CE63BF6\n      DockNode    ID=0x00000003 Parent=0x00000002 SizeRef=768,497 Selected=0x75327DBA\n      DockNode    ID=0x00000004 Parent=0x00000002 SizeRef=768,532 Split=X Selected=0x9CE63BF6\n        DockNode  ID=0x00000005 Parent=0x00000004 SizeRef=443,596 Selected=0x9CE63BF6\n        DockNode  ID=0x00000006 Parent=0x00000004 SizeRef=454,596 Selected=0x3BC11B9B\n\n"
 }
