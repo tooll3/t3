@@ -340,6 +340,11 @@ namespace T3.Editor.Gui
             _hoveredIdsForNextFrame.Add(id);
         }
 
+        public static void AddPinnedId(Guid id)
+        {
+            _renderedIdsForNextFrame.Add(id);
+        }
+
         public static void SelectAndCenterChildIdInView(Guid symbolChildId)
         {
             var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
@@ -359,8 +364,10 @@ namespace T3.Editor.Gui
         {
             (HoveredIdsLastFrame, _hoveredIdsForNextFrame) = (_hoveredIdsForNextFrame, HoveredIdsLastFrame);
             _hoveredIdsForNextFrame.Clear();
+            
+            (RenderedIdsLastFrame, _renderedIdsForNextFrame) = (_renderedIdsForNextFrame, RenderedIdsLastFrame);
+            _renderedIdsForNextFrame.Clear();            
         }
-        
         
         /// <summary>
         /// Statistics method for debug purpose
@@ -385,14 +392,15 @@ namespace T3.Editor.Gui
         }
         
 
-        private static HashSet<Guid> _hoveredIdsForNextFrame = new HashSet<Guid>();
-        public static HashSet<Guid> HoveredIdsLastFrame { get; private set; } = new HashSet<Guid>();
+        private static HashSet<Guid> _hoveredIdsForNextFrame = new();
+        public static HashSet<Guid> HoveredIdsLastFrame { get; private set; } = new();
 
-        private readonly StatusErrorLine _statusErrorLine = new StatusErrorLine();
+        private static HashSet<Guid> _renderedIdsForNextFrame = new();
+        public static HashSet<Guid> RenderedIdsLastFrame { get; private set; } = new();
+        
+        private readonly StatusErrorLine _statusErrorLine = new();
         public static readonly UiModel UiModel;
-        
-        
-        
+
         public static string OpenedPopUpName; // This is reset on Frame start and can be useful for allow context menu to stay open even if a
         // later context menu would also be opened. There is probably some ImGui magic to do this probably. 
 

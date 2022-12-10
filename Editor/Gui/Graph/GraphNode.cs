@@ -81,7 +81,7 @@ namespace T3.Editor.Gui.Graph
 
                         ImGui.SetMouseCursor(ImGuiMouseCursor.Arrow);
                     }
-
+                    
                     // Rendering
                     //var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == childUi.SymbolChild.Id);
 
@@ -297,9 +297,19 @@ namespace T3.Editor.Gui.Graph
                         var compositionOp = GraphCanvas.Current.CompositionOp;
                         if (compositionOp.Symbol.Animator.IsInstanceAnimated(instance))
                         {
-                            _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, (_usableScreenRect.Max.Y - 12).Clamp(_usableScreenRect.Min.Y, _usableScreenRect.Max.Y)),
+                            _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, (_usableScreenRect.Max.Y - 12).Clamp(_usableScreenRect.Min.Y+2 , _usableScreenRect.Max.Y)),
                                                     new Vector2(_usableScreenRect.Max.X - 2, _usableScreenRect.Max.Y - 3),
                                                     Color.Orange);
+                        }
+                    }
+                    
+                    // Pinned indicator
+                    {
+                        if (T3Ui.RenderedIdsLastFrame.Contains(instance.SymbolChildId))
+                        {
+                            _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 9, (_usableScreenRect.Max.Y - 12).Clamp(_usableScreenRect.Min.Y+2, _usableScreenRect.Max.Y)),
+                                                    new Vector2(_usableScreenRect.Max.X - 6, _usableScreenRect.Max.Y - 3),
+                                                    Color.White);
                         }
                     }
 
