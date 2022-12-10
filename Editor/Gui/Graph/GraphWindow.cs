@@ -165,8 +165,8 @@ namespace T3.Editor.Gui.Graph
 
         protected override void DrawContent()
         {
-            if (GraphCanvas.CompositionOp == null)
-                return;
+            //if (GraphCanvas.CompositionOp == null)
+            //    return;
             
             if (FitViewToSelectionHandling.FitViewToSelectionRequested)
                 FitViewToSelection();
@@ -211,7 +211,7 @@ namespace T3.Editor.Gui.Graph
                 drawList.ChannelsSplit(2);
                 drawList.ChannelsSetCurrent(1);
                 {
-                    if (UserSettings.Config.ShowTitleAndDescription)
+                    if (GraphCanvas.CompositionOp != null && UserSettings.Config.ShowTitleAndDescription)
                     {
                         GraphCanvas.MakeCurrent();
                         TitleAndBreadCrumbs.Draw(GraphCanvas.CompositionOp);
@@ -226,13 +226,14 @@ namespace T3.Editor.Gui.Graph
                 }
                 drawList.ChannelsMerge();
 
-                EditDescriptionDialog.Draw(GraphCanvas.CompositionOp.Symbol);
+                if(GraphCanvas.CompositionOp != null)
+                    EditDescriptionDialog.Draw(GraphCanvas.CompositionOp.Symbol);
             }
             ImGui.EndChild();
             
 
 
-            if (UserSettings.Config.ShowTimeline)
+            if (GraphCanvas.CompositionOp != null && UserSettings.Config.ShowTimeline)
             {
                 var availableRestHeight = ImGui.GetContentRegionAvail().Y;
                 if (availableRestHeight <= 3)

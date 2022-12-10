@@ -39,17 +39,29 @@ namespace T3.Editor.Gui
         {
             var operatorsAssembly = Assembly.GetAssembly(typeof(Value));
             UiModel = new UiModel(operatorsAssembly);
-            
-            var playback = new Playback();
 
+            var playback = new Playback();
             //WindowManager = new WindowManager();
             WindowManager.TryToInitialize();
             ExampleSymbolLinking.UpdateExampleLinks();
             VariationHandling.Init();
+
         }
-        
+
+        private void InitializeAfterAppWindowReady()
+        {
+            if (_initialed || ImGui.GetWindowSize() == Vector2.Zero)
+                return;
+            
+            _initialed = true;
+        }
+
+        private bool _initialed = false;
+
         public void Draw()
         {
+            //InitializeAfterAppWindowReady();
+            
             // Prepare the current frame 
             Playback.Current.Update(UserSettings.Config.EnableIdleMotion);
             SoundtrackUtils.UpdateMainSoundtrack();
