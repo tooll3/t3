@@ -136,7 +136,7 @@ namespace T3.Editor.Gui.Styling
         {
             public IconSource(Icon icon, int slotIndex)
             {
-                SourceArea = ImRect.RectWithSize(new Vector2(SlotSize * slotIndex, 0), new Vector2(16,16));
+                SourceArea = ImRect.RectWithSize(new Vector2(SlotSize * slotIndex, 0), new Vector2(15,15));
                 Char = (char)icon;
             }            
             

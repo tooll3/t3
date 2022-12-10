@@ -108,7 +108,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     var bar = (int)(playback.FxTimeInBars) % 4;
                     const int gridSize = 4;
                     var drawList = ImGui.GetWindowDrawList();
-                    var min = center - new Vector2(8, 7) + new Vector2(beat * gridSize, bar * gridSize);
+                    var min = center - new Vector2(7, 7) + new Vector2(beat * gridSize, bar * gridSize);
                     drawList.AddRectFilled(min, min + new Vector2(gridSize - 1, gridSize - 1), Color.Orange);
                 }
 
