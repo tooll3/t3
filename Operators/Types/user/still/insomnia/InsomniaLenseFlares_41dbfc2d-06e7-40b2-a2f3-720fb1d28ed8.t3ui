@@ -55,7 +55,7 @@
       }
     },
     {
-      "ChildId": "2f61c083-638b-4f5a-bf36-ec2ed52a914c"/*Legacy_DrawSprites*/,
+      "ChildId": "2f61c083-638b-4f5a-bf36-ec2ed52a914c"/*_DrawLenseFlareSprites*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -88,7 +88,7 @@
       }
     },
     {
-      "ChildId": "92ff3566-7fcf-4a77-9a2c-e83b29e1c917"/*DrawShimmer*/,
+      "ChildId": "92ff3566-7fcf-4a77-9a2c-e83b29e1c917"/*_DrawShimmer*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -132,7 +132,7 @@
       }
     },
     {
-      "ChildId": "623b915b-eb87-4615-8aa0-321b7a79543f"/*DrawShimmer*/,
+      "ChildId": "623b915b-eb87-4615-8aa0-321b7a79543f"/*_DrawShimmer*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -187,7 +187,7 @@
       }
     },
     {
-      "ChildId": "cdf72963-bbeb-40a1-b0b8-d3fca05ee47f"/*Legacy_DrawSprites*/,
+      "ChildId": "cdf72963-bbeb-40a1-b0b8-d3fca05ee47f"/*_DrawLenseFlareSprites*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -242,7 +242,7 @@
       }
     },
     {
-      "ChildId": "868090d1-9ef9-492b-a6c6-96d56690e579"/*Legacy_DrawSprites*/,
+      "ChildId": "868090d1-9ef9-492b-a6c6-96d56690e579"/*_DrawLenseFlareSprites*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

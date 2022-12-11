@@ -45,7 +45,7 @@
     },
     {
       "Id": "52f3be7b-c155-430a-97ca-e2cf36631089"/*Bias*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 2.5
     },
     {
       "Id": "86bb9127-10fb-47cb-9aee-45be01567810"/*Resolution*/,

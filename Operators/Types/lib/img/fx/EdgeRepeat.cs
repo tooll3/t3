@@ -31,20 +31,11 @@ namespace T3.Operators.Types.Id_72e627e9_f570_4936_92b1_b12ed8d6004e
         [Input(Guid = "b465481c-8b5d-4c6d-a659-6f51135b86fa")]
         public readonly InputSlot<float> Rotation = new InputSlot<float>();
 
-        [Input(Guid = "0f597b6c-eec8-4b06-92de-28f7cbe2243a")]
-        public readonly InputSlot<float> PingPong = new InputSlot<float>();
-
         [Input(Guid = "881e04f7-1014-4e87-81c9-f4791086e57d")]
         public readonly InputSlot<float> LineThickness = new InputSlot<float>();
 
-        [Input(Guid = "3acc47a3-83a8-4994-8456-e365595ed38c")]
-        public readonly InputSlot<float> SmoothGradient = new InputSlot<float>();
-
         [Input(Guid = "c30a5d00-681c-490d-80d4-d58577cd65db")]
         public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
-
-        [Input(Guid = "294af91e-65f2-4e2c-8bd2-0896019f8e65")]
-        public readonly InputSlot<float> Bias = new InputSlot<float>();
     }
 }
 

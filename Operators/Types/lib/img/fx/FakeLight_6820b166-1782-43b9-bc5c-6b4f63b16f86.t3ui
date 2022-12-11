@@ -1,5 +1,6 @@
 {
   "Id": "6820b166-1782-43b9-bc5c-6b4f63b16f86"/*FakeLight*/,
+  "Description": "Applies a fake shading to the image.",
   "InputUis": [
     {
       "InputId": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
@@ -18,7 +19,7 @@
     },
     {
       "InputId": "56eccacb-65ac-4813-ad7e-fad8e581f570"/*LightMap*/,
-      "Relevancy": "Required",
+      "Relevancy": "Relevant",
       "Position": {
         "X": -761.0598,
         "Y": 140.2838

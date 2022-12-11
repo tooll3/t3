@@ -394,7 +394,7 @@
       "Outputs": []
     },
     {
-      "Id": "e007d40f-d990-4f5a-a992-101a8f299a77"/*SetEnvironmet*/,
+      "Id": "e007d40f-d990-4f5a-a992-101a8f299a77"/*SetEnvironment*/,
       "SymbolId": "f3b66187-34b2-4018-8380-279f9f296ded",
       "InputValues": [
         {
@@ -406,7 +406,7 @@
       "Outputs": []
     },
     {
-      "Id": "1fea1bfa-154a-443e-8a01-0ea5154da53a"/*TextureToCubeMap2*/,
+      "Id": "1fea1bfa-154a-443e-8a01-0ea5154da53a"/*TextureToCubeMap*/,
       "SymbolId": "e85d98cf-9240-4f5d-8df6-35425d325778",
       "InputValues": [
         {

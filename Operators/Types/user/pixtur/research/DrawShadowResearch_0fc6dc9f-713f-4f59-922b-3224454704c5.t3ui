@@ -4,28 +4,6 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "6c5cc926-70ba-4772-a0b9-d9cf3281e293"/*SetShadow*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 530.6153,
-        "Y": -6.4229736
-      }
-    },
-    {
-      "ChildId": "37befaf6-cf9c-454d-aaa2-ee87e5913fca"/*DrawMeshWithShadow*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -69.384705,
-        "Y": 56.577026
-      }
-    },
-    {
       "ChildId": "f5a284f9-c966-46b9-ae99-e9dfbf88065f"/*QuadMesh*/,
       "Size": {
         "X": 110.0,
@@ -34,17 +12,6 @@
       "Position": {
         "X": -219.3847,
         "Y": 56.577026
-      }
-    },
-    {
-      "ChildId": "7e8a5e52-50de-43dc-8597-38f588c19216"/*DrawMeshWithShadow*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 80.615295,
-        "Y": -6.4229736
       }
     },
     {

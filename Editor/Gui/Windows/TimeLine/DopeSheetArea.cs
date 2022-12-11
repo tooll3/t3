@@ -358,8 +358,18 @@ namespace T3.Editor.Gui.Windows.TimeLine
         private void DrawKeyframe(VDefinition vDef, ImRect layerArea, TimeLineCanvas.AnimationParameter parameter,
                                   VDefinition nextVDef)
         {
+            var vDefU = (float)vDef.U;
+            if (vDefU < Playback.Current.TimeInBars)
+            {
+                FrameStats.Current.HasKeyframesBeforeCurrentTime = true;
+            }
+            if (vDefU > Playback.Current.TimeInBars)
+            {
+                FrameStats.Current.HasKeyframesAfterCurrentTime = true;
+            }
+            
             var posOnScreen = new Vector2(
-                                          TimeLineCanvas.Current.TransformX((float)vDef.U) - KeyframeIconWidth / 2 + 1,
+                                          TimeLineCanvas.Current.TransformX(vDefU) - KeyframeIconWidth / 2 + 1,
                                           layerArea.Min.Y);
 
             if (vDef.OutEditMode == VDefinition.EditMode.Constant)

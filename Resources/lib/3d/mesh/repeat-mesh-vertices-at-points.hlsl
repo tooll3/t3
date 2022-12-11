@@ -4,6 +4,7 @@
 
 cbuffer Params : register(b0)
 {
+    float3 Stretch;
     float UseWForSize;
     float Size;
 }
@@ -31,15 +32,17 @@ void main(uint3 i : SV_DispatchThreadID)
     int targetVertexIndex = pointIndex * sourceVertexCount + vertexIndex;
 
     PbrVertex v = SourceVertices[vertexIndex];
+    
     Point p = Points[pointIndex];
 
     // Apply point transform
-    //PbrVertex vertex = SourceVertices[FaceIndices[faceIndex][faceVertexIndex]];
     float4 posInObject = float4( v.Position,1);
 
     float4x4 orientationMatrix = transpose(quaternion_to_matrix(p.rotation));
 
-    posInObject.xyz *= (UseWForSize ? p.w : 1) * Size;
+    posInObject.xyz *= Size;
+    posInObject.xyz *= UseWForSize ? (lerp(Size, Size + p.w,  Stretch) ) :1;
+    //posInObject.xyz *= (UseWForSize ? (lerp(Size, Size + p.w,  Stretch) ) : Size);
     posInObject = mul( float4(posInObject.xyz, 1), orientationMatrix) ;
 
     posInObject += float4(p.position, 0); 

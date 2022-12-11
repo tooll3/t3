@@ -26,12 +26,16 @@ namespace T3.Editor.Gui.Windows
             if (pinnedOrSelectedInstance == null)
                 return;
 
+            FrameStats.AddPinnedId(pinnedOrSelectedInstance.SymbolChildId);    
+            
             if (CustomComponents.ToggleIconButton(Icon.Pin, "##pin", ref _isPinned, new Vector2(T3Style.ToolBarHeight, T3Style.ToolBarHeight)))
             {
                 if (_isPinned)
                     PinSelectionToView();
             }
 
+            
+            
             ImGui.SameLine();
             ImGui.SetNextItemWidth(300);
             var suffix = _isPinned ? " (pinned)" : " (selected)";

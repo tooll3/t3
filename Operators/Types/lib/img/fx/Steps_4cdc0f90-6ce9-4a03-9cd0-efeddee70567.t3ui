@@ -1,5 +1,6 @@
 {
   "Id": "4cdc0f90-6ce9-4a03-9cd0-efeddee70567"/*Steps*/,
+  "Description": "A versatile effect that uses the value of the input image to draw \"steps\". These can be shaded and animated.",
   "InputUis": [
     {
       "InputId": "3fa998ee-becf-4a32-948f-5c5be67d7728"/*Resolution*/,
@@ -10,6 +11,7 @@
     },
     {
       "InputId": "c5c7888a-294d-4a51-a68d-446cc7f1444c"/*Image*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -198.16037,
         "Y": -12.877563

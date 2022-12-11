@@ -11,12 +11,10 @@ namespace T3.Editor.Gui.Audio
         public static void UpdateMainSoundtrack()
         {
             var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
-            if (primaryGraphWindow == null)
-                return;
 
-            var composition = primaryGraphWindow.GraphCanvas.CompositionOp;
+            var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
 
-            if (TryFindingSoundtrack(composition, out var soundtrack))
+            if (composition != null && TryFindingSoundtrack(composition, out var soundtrack))
             {
                 Playback.Current.Bpm = soundtrack.Bpm;
                 AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);

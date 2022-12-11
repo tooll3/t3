@@ -1,0 +1,8 @@
+{
+  "Name": "GetPbrParameters",
+  "Id": "ca4fe8c4-cf61-4196-84e4-d69dc8869a25",
+  "Namespace": "lib.3d.rendering._",
+  "Inputs": [],
+  "Children": [],
+  "Connections": []
+}

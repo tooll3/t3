@@ -2271,17 +2271,6 @@
       }
     },
     {
-      "ChildId": "2c4347a7-fa5e-4108-bb3d-ae4c44fb7fd0"/*OBSOLETE_Displace*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 4135.7114,
-        "Y": -3679.1348
-      }
-    },
-    {
       "ChildId": "2835133f-4d31-41b8-8fe7-62bc760dc563"/*CheckerBoard*/,
       "Size": {
         "X": 110.0,

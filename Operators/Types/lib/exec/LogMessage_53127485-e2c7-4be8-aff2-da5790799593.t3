@@ -1,0 +1,21 @@
+{
+  "Name": "LogMessage",
+  "Id": "53127485-e2c7-4be8-aff2-da5790799593",
+  "Namespace": "lib.exec",
+  "Inputs": [
+    {
+      "Id": "183cd865-7939-4110-8192-f112fff3cc60"/*SubGraph*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "acd53819-c248-4c95-a1a5-92a583e9b49b"/*Message*/,
+      "DefaultValue": ""
+    },
+    {
+      "Id": "42a673ee-c323-401c-b5d9-8d8f9dbebc2b"/*LogLevel*/,
+      "DefaultValue": 1
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -1005,7 +1005,7 @@
       }
     },
     {
-      "ChildId": "ac1b1d2f-792b-4069-bfe9-0e28b9192fef"/*SetEnvironmet*/,
+      "ChildId": "ac1b1d2f-792b-4069-bfe9-0e28b9192fef"/*SetEnvironment*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -1016,7 +1016,7 @@
       }
     },
     {
-      "ChildId": "ce121135-59ee-4605-8388-6503204b0ff7"/*TextureToCubeMap2*/,
+      "ChildId": "ce121135-59ee-4605-8388-6503204b0ff7"/*TextureToCubeMap*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -1423,7 +1423,7 @@
       }
     },
     {
-      "ChildId": "b6cab46d-fb95-4c43-b377-70025c335f46"/*SetEnvironmet*/,
+      "ChildId": "b6cab46d-fb95-4c43-b377-70025c335f46"/*SetEnvironment*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -1434,7 +1434,7 @@
       }
     },
     {
-      "ChildId": "031c7f8b-7054-4156-9e20-757f56c08d3f"/*TextureToCubeMap2*/,
+      "ChildId": "031c7f8b-7054-4156-9e20-757f56c08d3f"/*TextureToCubeMap*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

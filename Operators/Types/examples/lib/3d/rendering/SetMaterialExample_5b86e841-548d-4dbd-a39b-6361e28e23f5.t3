@@ -53,7 +53,7 @@
       "Outputs": []
     },
     {
-      "Id": "2eca363d-e6ec-496e-8bde-330c6755bc7b"/*SetEnvironmet*/,
+      "Id": "2eca363d-e6ec-496e-8bde-330c6755bc7b"/*SetEnvironment*/,
       "SymbolId": "f3b66187-34b2-4018-8380-279f9f296ded",
       "InputValues": [
         {
@@ -94,18 +94,18 @@
           "Id": "313596cc-3854-436b-89da-5fd40164ce76"/*Position*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": -4.2511854,
-            "Y": 1.535946,
-            "Z": 0.67356634
+            "X": -2.0133057,
+            "Y": 0.47592932,
+            "Z": 0.8843285
           }
         },
         {
           "Id": "a7acb25c-d60c-43a6-b1df-2cd5c6e183f3"/*Target*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 3.377993,
-            "Y": -1.381171,
-            "Z": -0.6061162
+            "X": 5.05188,
+            "Y": -2.0681367,
+            "Z": -2.5462508
           }
         }
       ],

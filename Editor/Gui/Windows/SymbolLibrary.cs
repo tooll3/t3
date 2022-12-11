@@ -26,6 +26,13 @@ namespace T3.Editor.Gui.Windows
             _filter.SearchString = "";
             Config.Title = "Symbol Library";
             _treeNode.PopulateCompleteTree();
+            // foreach (var c in _treeNode.Children)
+            // {
+            //     if (c.Name == "lib")
+            //     {
+            //         //c.
+            //     }
+            // }
         }
 
         protected override void DrawContent()
@@ -86,6 +93,7 @@ namespace T3.Editor.Gui.Windows
         }
 
         private NamespaceTreeNode _subtreeNodeToRename;
+        private bool _openedLibFolderOnce;
         
         private void DrawNode(NamespaceTreeNode subtree)
         {
@@ -97,6 +105,11 @@ namespace T3.Editor.Gui.Windows
             {
                 ImGui.PushID(subtree.Name);
                 ImGui.SetNextItemWidth(10);
+                if (subtree.Name == "lib" && !_openedLibFolderOnce)
+                {
+                    ImGui.SetNextItemOpen(true);
+                    _openedLibFolderOnce = true;
+                }
 
                 var isOpen = ImGui.TreeNode(subtree.Name);
                 CustomComponents.ContextMenuForItem(() =>

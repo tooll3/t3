@@ -47,7 +47,7 @@ namespace T3.Operators.Types.Id_da8ebc61_87cf_44ff_888e_994c8628ddb7
         public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
 
         [Input(Guid = "d99d5c03-2563-41e6-9bfe-bd61a7fed37d")]
-        public readonly InputSlot<float> TestParam = new InputSlot<float>();
+        public readonly InputSlot<float> Scatter = new InputSlot<float>();
     }
 }
 

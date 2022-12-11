@@ -3,6 +3,7 @@
   "InputUis": [
     {
       "InputId": "f6bdd487-c16e-4fb0-bfba-b3801f121314"/*Texture*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -673.6466,
         "Y": -49.818146
@@ -114,17 +115,6 @@
       }
     },
     {
-      "ChildId": "c178b0e1-776d-434f-b966-657f69c66657"/*WaveForm*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 1452.6309,
-        "Y": -168.27853
-      }
-    },
-    {
       "ChildId": "9af7a722-7c9a-489a-aa29-ca99b5f975ce"/*"Clear Blendstate bug"*/,
       "Size": {
         "X": 110.0,
@@ -232,17 +222,6 @@
       "Position": {
         "X": 429.21863,
         "Y": 535.8537
-      }
-    },
-    {
-      "ChildId": "aebb364e-6a75-4946-b2ed-50da362e0767"/*WaveForm*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 793.8854,
-        "Y": -215.9562
       }
     },
     {

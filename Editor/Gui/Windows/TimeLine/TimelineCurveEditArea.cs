@@ -255,6 +255,17 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         protected internal override void HandleCurvePointDragging(VDefinition vDef, bool isSelected)
         {
+            if (vDef.U < Playback.Current.TimeInBars)
+            {
+                FrameStats.Current.HasKeyframesBeforeCurrentTime = true;
+            }
+            
+            if (vDef.U > Playback.Current.TimeInBars)
+            {
+                FrameStats.Current.HasKeyframesAfterCurrentTime = true;
+            }
+
+            
             if (ImGui.IsItemHovered())
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);

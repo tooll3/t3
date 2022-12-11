@@ -15,6 +15,7 @@ namespace T3.Editor.Gui.Windows.Variations
             _presetCanvas = new PresetCanvas();
             _snapshotCanvas = new SnapshotCanvas();
             Config.Title = "Variations";
+            MenuTitle = "Presets";
             WindowFlags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse;
         }
 

@@ -203,17 +203,6 @@
       }
     },
     {
-      "ChildId": "14e1ca0b-b0a7-48dc-95c7-63de9b99a718"/*WaveForm*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 2339.9146,
-        "Y": 1484.7317
-      }
-    },
-    {
       "ChildId": "d6067623-58a7-4ace-bf78-0998a011fdf3"/*ColorGrade*/,
       "Size": {
         "X": 110.0,

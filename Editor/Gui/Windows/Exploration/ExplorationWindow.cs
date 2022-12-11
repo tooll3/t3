@@ -272,7 +272,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                             // Hover relevant operators
                             foreach (var param in _lastHoveredVariation.ValuesForParameters.Keys)
                             {
-                                T3Ui.AddHoveredId(param.SymbolChildUi.Id);
+                                FrameStats.AddHoveredId(param.SymbolChildUi.Id);
                             }
                         }
                         else

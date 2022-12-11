@@ -12,7 +12,7 @@
         public class ConfigData
         {
             public string MainOperatorName = "";
-            public float AudioResyncThreshold = 1.65f / 60f;
+            public float AudioResyncThreshold = 0.04f;
             
             public string AudioInputDeviceName = string.Empty;
             public float AudioGainFactor = 1;

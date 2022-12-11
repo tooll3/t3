@@ -309,7 +309,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             if (ImGui.IsItemHovered())
             {
-                T3Ui.AddHoveredId(symbolChildUi.Id);
+                FrameStats.AddHoveredId(symbolChildUi.Id);
             }
 
             var notClickingOrDragging = !ImGui.IsItemActive() && !ImGui.IsMouseDragging(ImGuiMouseButton.Left);

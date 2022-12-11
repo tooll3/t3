@@ -35,9 +35,6 @@ namespace T3.Editor.Gui.Windows.Layouts
 
         public static void DrawMainMenuItems()
         {
-            if (ImGui.MenuItem("Save layout", ""))
-                SaveLayout(0);
-
             if (ImGui.BeginMenu("Load layout"))
             {
                 for (int i = 0; i < 10; i++)
@@ -63,6 +60,9 @@ namespace T3.Editor.Gui.Windows.Layouts
 
                 ImGui.EndMenu();
             }
+            
+            if (ImGui.MenuItem("Save current layout", ""))
+                SaveLayout(0);            
         }
 
         public static void UpdateAfterResize(Vector2 newSize)

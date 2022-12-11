@@ -50,6 +50,11 @@
           "Id": "bcc7fb78-1ac3-46f7-be46-885233420e80"/*FloatParams*/,
           "Type": "System.Single",
           "Value": 0.33
+        },
+        {
+          "Id": "a5cb5bda-0fb2-4863-bd8d-9ac09135fc30"/*WrapMode*/,
+          "Type": "SharpDX.Direct3D11.TextureAddressMode",
+          "Value": "Mirror"
         }
       ],
       "Outputs": []

@@ -6,10 +6,7 @@ cbuffer ParamConstants : register(b0)
     float2 Center;
     float Width;
     float Rotation;
-    float PingPong;
     float LineThickness;
-    float Smooth;
-    float Bias;
 }
 
 cbuffer TimeConstants : register(b1)

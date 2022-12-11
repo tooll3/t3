@@ -555,17 +555,6 @@
       }
     },
     {
-      "ChildId": "9908e52e-a5b7-4bb3-a2a6-cdad5b4dcf54"/*WaveForm*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 3106.1326,
-        "Y": 630.3397
-      }
-    },
-    {
       "ChildId": "4be4befc-79f5-49dd-b593-81e2543c78e3"/*ExecuteOnce*/,
       "Size": {
         "X": 110.0,
