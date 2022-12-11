@@ -26,7 +26,7 @@ namespace T3.Editor.Gui.Windows
             if (pinnedOrSelectedInstance == null)
                 return;
 
-            T3Ui.AddPinnedId(pinnedOrSelectedInstance.SymbolChildId);    
+            FrameStats.AddPinnedId(pinnedOrSelectedInstance.SymbolChildId);    
             
             if (CustomComponents.ToggleIconButton(Icon.Pin, "##pin", ref _isPinned, new Vector2(T3Style.ToolBarHeight, T3Style.ToolBarHeight)))
             {

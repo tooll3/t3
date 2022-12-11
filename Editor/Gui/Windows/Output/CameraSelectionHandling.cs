@@ -255,7 +255,7 @@ namespace T3.Editor.Gui.Windows.Output
                 CustomComponents.TooltipForLastItem("Shows the first scene camera. For manipulation select the camera operator in graph or in the list below.");
                 if (ImGui.IsItemHovered() && _firstCamInGraph != null)
                 {
-                    T3Ui.AddHoveredId(_firstCamInGraph.SymbolChildId);
+                    FrameStats.AddHoveredId(_firstCamInGraph.SymbolChildId);
                 }
                 
                 if (ImGui.Selectable(SceneViewerModeLabel, _controlMode == ControlModes.UseViewer))
@@ -272,7 +272,7 @@ namespace T3.Editor.Gui.Windows.Output
                 }
                 if (ImGui.IsItemHovered() && _firstCamInGraph != null)
                 {
-                    T3Ui.AddHoveredId(_firstCamInGraph.SymbolChildId);
+                    FrameStats.AddHoveredId(_firstCamInGraph.SymbolChildId);
                 }
                 CustomComponents.TooltipForLastItem("During playback the scene viewer is following the scene camera. Otherwise it can be independently manipulated without affecting the scene camera.");
                 
@@ -298,7 +298,7 @@ namespace T3.Editor.Gui.Windows.Output
 
                         if (ImGui.IsItemHovered())
                         {
-                            T3Ui.AddHoveredId(cam.SymbolChildId);
+                            FrameStats.AddHoveredId(cam.SymbolChildId);
                         }
                     }
                     ImGui.PopID();

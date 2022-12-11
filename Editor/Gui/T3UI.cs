@@ -99,7 +99,7 @@ namespace T3.Editor.Gui
             SingleValueEdit.StartNextFrame();
             SelectableNodeMovement.CompleteFrame();
 
-            SwapHoveringBuffers();
+            FrameStats.CompleteFrame();
             TriggerGlobalActionsFromKeyBindings();
             
             if ( UserSettings.Config.ShowMainMenu || ImGui.GetMousePos().Y < 20)
@@ -335,15 +335,7 @@ namespace T3.Editor.Gui
             }
         }
 
-        public static void AddHoveredId(Guid id)
-        {
-            _hoveredIdsForNextFrame.Add(id);
-        }
 
-        public static void AddPinnedId(Guid id)
-        {
-            _renderedIdsForNextFrame.Add(id);
-        }
 
         public static void SelectAndCenterChildIdInView(Guid symbolChildId)
         {
@@ -360,14 +352,14 @@ namespace T3.Editor.Gui
             FitViewToSelectionHandling.FitViewToSelection();
         }
 
-        private static void SwapHoveringBuffers()
-        {
-            (HoveredIdsLastFrame, _hoveredIdsForNextFrame) = (_hoveredIdsForNextFrame, HoveredIdsLastFrame);
-            _hoveredIdsForNextFrame.Clear();
-            
-            (RenderedIdsLastFrame, _renderedIdsForNextFrame) = (_renderedIdsForNextFrame, RenderedIdsLastFrame);
-            _renderedIdsForNextFrame.Clear();            
-        }
+        // private static void SwapHoveringBuffers()
+        // {
+        //     (HoveredIdsLastFrame, _hoveredIdsForNextFrame) = (_hoveredIdsForNextFrame, HoveredIdsLastFrame);
+        //     _hoveredIdsForNextFrame.Clear();
+        //     
+        //     (RenderedIdsLastFrame, _renderedIdsForNextFrame) = (_renderedIdsForNextFrame, RenderedIdsLastFrame);
+        //     _renderedIdsForNextFrame.Clear();            
+        // }
         
         /// <summary>
         /// Statistics method for debug purpose
@@ -390,14 +382,7 @@ namespace T3.Editor.Gui
                 Log.Debug($"{s.Name} - {s.Namespace}  {c}");
             }
         }
-        
 
-        private static HashSet<Guid> _hoveredIdsForNextFrame = new();
-        public static HashSet<Guid> HoveredIdsLastFrame { get; private set; } = new();
-
-        private static HashSet<Guid> _renderedIdsForNextFrame = new();
-        public static HashSet<Guid> RenderedIdsLastFrame { get; private set; } = new();
-        
         private readonly StatusErrorLine _statusErrorLine = new();
         public static readonly UiModel UiModel;
 

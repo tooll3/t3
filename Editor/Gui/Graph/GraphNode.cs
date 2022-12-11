@@ -92,7 +92,7 @@ namespace T3.Editor.Gui.Graph
                     var backgroundColor = typeColor;
 
                     // background
-                    var isHovered = T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId);
+                    var isHovered = FrameStats.Last.HoveredIds.Contains(instance.SymbolChildId);
                     if (framesSinceLastUpdate > 2)
                     {
                         var fadeFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 0f, 1.0f);
@@ -171,7 +171,7 @@ namespace T3.Editor.Gui.Graph
                             SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
 
                         //ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-                        T3Ui.AddHoveredId(childUi.SymbolChild.Id);
+                        FrameStats.AddHoveredId(childUi.SymbolChild.Id);
 
                         ImGui.SetNextWindowSizeConstraints(new Vector2(200, 120), new Vector2(200, 120));
                         if (UserSettings.Config.HoverMode != GraphCanvas.HoverModes.Disabled
@@ -208,7 +208,7 @@ namespace T3.Editor.Gui.Graph
 
                     var hovered = ImGui.IsWindowFocused()
                                   && (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) ||
-                                      T3Ui.HoveredIdsLastFrame.Contains(instance.SymbolChildId));
+                                      FrameStats.Last.HoveredIds.Contains(instance.SymbolChildId));
 
                     // A horrible work around to prevent exception because CompositionOp changed during drawing.
                     // A better solution would defer setting the compositionOp to the beginning of next frame.
@@ -291,7 +291,7 @@ namespace T3.Editor.Gui.Graph
                     }
 
                     // Pinned indicator
-                    if (T3Ui.RenderedIdsLastFrame.Contains(instance.SymbolChildId))
+                    if (FrameStats.Last.RenderedIds.Contains(instance.SymbolChildId))
                     {
                         DrawIndicator(Color.White, ref indicatorCount);
                         // _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 11, (_usableScreenRect.Max.Y - 7).Clamp(_usableScreenRect.Min.Y+2, _usableScreenRect.Max.Y)),

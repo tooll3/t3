@@ -120,7 +120,7 @@ namespace T3.Editor.Gui.Windows.Variations
                     {
                         foreach (var childId in variation.ParameterSetsForChildIds.Keys)
                         {
-                            T3Ui.AddHoveredId(childId);
+                            FrameStats.AddHoveredId(childId);
                         }
                     }
                     

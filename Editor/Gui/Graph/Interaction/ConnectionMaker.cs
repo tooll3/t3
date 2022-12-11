@@ -975,8 +975,8 @@ namespace T3.Editor.Gui.Graph.Interaction
                             }
                             ImGui.EndChild();
                             
-                            T3Ui.AddHoveredId(targetOp.Id);
-                            T3Ui.AddHoveredId(sourceOp.Id);
+                            FrameStats.AddHoveredId(targetOp.Id);
+                            FrameStats.AddHoveredId(sourceOp.Id);
                         }
                     }
                     ImGui.EndTooltip();

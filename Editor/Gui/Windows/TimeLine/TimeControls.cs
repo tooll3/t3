@@ -198,11 +198,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.SameLine();
 
                 // Prev Keyframe
+                ImGui.PushStyleColor(ImGuiCol.Text, FrameStats.Last.HasKeyframesBeforeCurrentTime ? T3Style.Colors.Text.Rgba : Color.Black);
                 if (CustomComponents.IconButton(Icon.JumpToPreviousKeyframe, "##prevKeyframe", ControlSize)
                     || KeyboardBinding.Triggered(UserActions.PlaybackJumpToPreviousKeyframe))
                 {
                     UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
                 }
+                ImGui.PopStyleColor();
 
                 CustomComponents.TooltipForLastItem("Jump to previous keyframe",
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToPreviousKeyframe));
@@ -330,11 +332,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.SameLine();
 
                 // Next Keyframe
+                ImGui.PushStyleColor(ImGuiCol.Text, FrameStats.Last.HasKeyframesAfterCurrentTime ? T3Style.Colors.Text.Rgba : Color.Black);
                 if (CustomComponents.IconButton(Icon.JumpToNextKeyframe, "##nextKeyframe", ControlSize)
                     || KeyboardBinding.Triggered(UserActions.PlaybackJumpToNextKeyframe))
                 {
                     UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToNextKeyframe);
                 }
+                ImGui.PopStyleColor();
 
                 CustomComponents.TooltipForLastItem("Jump to next keyframe",
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToNextKeyframe));

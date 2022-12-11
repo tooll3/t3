@@ -911,11 +911,11 @@ namespace T3.Editor.Gui.Graph
         {
             var selectedChildren = GetSelectedChildUis();
 
-            var isNodeHovered = T3Ui.HoveredIdsLastFrame.Count == 1 && CompositionOp != null;
+            var isNodeHovered = FrameStats.Last.HoveredIds.Count == 1 && CompositionOp != null;
             if (isNodeHovered)
             {
                 var hoveredChildUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis
-                                                     .SingleOrDefault(c => c.Id == T3Ui.HoveredIdsLastFrame.First());
+                                                     .SingleOrDefault(c => c.Id == FrameStats.Last.HoveredIds.First());
                 if (hoveredChildUi == null)
                     return;
 

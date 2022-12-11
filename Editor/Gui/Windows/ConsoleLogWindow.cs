@@ -160,13 +160,13 @@ namespace T3.Editor.Gui.Windows
             ImGui.SameLine(90);
 
             var color = GetColorForLogLevel(entryLevel)
-               .Fade(T3Ui.HoveredIdsLastFrame.Contains(entry.SourceId) ? 1 : 0.6f);
+               .Fade(FrameStats.Last.HoveredIds.Contains(entry.SourceId) ? 1 : 0.6f);
             ImGui.TextColored(color, entry.Message);
 
             if (!IsLineHovered() || !(entry.SourceIdPath?.Length > 1))
                 return;
 
-            T3Ui.AddHoveredId(entry.SourceId);
+            FrameStats.AddHoveredId(entry.SourceId);
             var childIdPath = entry.SourceIdPath.ToList();
             var hoveredSourceInstance = NodeOperations.GetInstanceFromIdPath(childIdPath);
             ImGui.BeginTooltip();

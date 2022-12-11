@@ -93,7 +93,7 @@ namespace T3.Editor.Gui.Windows.Variations
                     {
                         foreach (var id in filterSet)
                         {
-                            T3Ui.AddHoveredId(id);
+                            FrameStats.AddHoveredId(id);
                         }
                     }
                 }
