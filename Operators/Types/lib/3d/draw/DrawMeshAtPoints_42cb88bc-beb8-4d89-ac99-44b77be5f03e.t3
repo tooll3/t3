@@ -622,8 +622,8 @@
       "TargetSlotId": "d5afa102-2f88-431e-9cd4-af91e41f88f6"
     },
     {
-      "SourceParentOrChildId": "977451f3-27d6-4d5b-a33a-2fde63cfdc90",
-      "SourceSlotId": "f962854b-00d6-4eb3-aa4c-e5d4bd500672",
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "ba7befdf-270b-4ac0-bfc2-7543e2c3097b",
       "TargetParentOrChildId": "b7afcd08-c2ef-4189-b870-fa367661bf1e",
       "TargetSlotId": "b9e5c6f3-7052-456f-9d1b-c182b4412433"
     },
