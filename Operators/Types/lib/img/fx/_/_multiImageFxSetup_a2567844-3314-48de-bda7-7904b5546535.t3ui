@@ -27,6 +27,7 @@
     },
     {
       "InputId": "bcc7fb78-1ac3-46f7-be46-885233420e80"/*FloatParams*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -313.40988,
         "Y": 464.9937
