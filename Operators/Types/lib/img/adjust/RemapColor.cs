@@ -24,6 +24,16 @@ namespace T3.Operators.Types.Id_da93f7d1_ef91_4b4a_9708_2d9b1baa4c14
 
         [Input(Guid = "7777f86d-dbf7-44d4-9da4-99a819038095")]
         public readonly InputSlot<bool> DontColorAlpha = new InputSlot<bool>();
+
+        [Input(Guid = "e3363c0e-819a-45e2-8202-439bcce64d69",MappedType = typeof(Modes))]
+        public readonly InputSlot<int> Mode = new InputSlot<int>();
+
+
+        private enum Modes
+        {
+            UseGrayScale,
+            IndividualChannels,
+        }
     }
 }
 

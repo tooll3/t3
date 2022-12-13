@@ -1,6 +1,6 @@
 {
   "Id": "da93f7d1-ef91-4b4a-9708-2d9b1baa4c14"/*RemapColor*/,
-  "Description": "Replaces the colors of an image with a gradient depending on its brightness. \nThis can be used to emulate gradient curves or level adjustments.\n\nNote that you can use the gradient's alpha channel to control the intensity of the effect.",
+  "Description": "Replaces the colors of an image with a gradient depending on its brightness. \nThis can be used to emulate gradient curves or level adjustments.\n\nNote that you can use the gradient's alpha channel to control the intensity of the effect.\n\nAlso consider using [Tint]",
   "InputUis": [
     {
       "InputId": "876f6f64-7cb4-4060-8571-e0b78b437d41"/*Image*/,
@@ -35,6 +35,13 @@
       "Position": {
         "X": -314.36774,
         "Y": 570.138
+      }
+    },
+    {
+      "InputId": "e3363c0e-819a-45e2-8202-439bcce64d69"/*Mode*/,
+      "Position": {
+        "X": -314.36774,
+        "Y": 615.138
       }
     }
   ],
@@ -71,6 +78,17 @@
       "Position": {
         "X": -31.77472,
         "Y": 560.756
+      }
+    },
+    {
+      "ChildId": "05aef49e-71e0-4f76-b01f-536dc193d0dd"/*IntToFloat*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -142.40942,
+        "Y": 635.2346
       }
     }
   ],
