@@ -74,7 +74,7 @@ psInput vsMain(uint id: SV_VertexID)
     Point p = Points[entryIndex];
 
     float3 quadCorners = Quad[vertexIndex];
-    float3 posInObject =  (-float3(sprite.Pivot, 0) + quadCorners * float3(sprite.Size,0)) * Size;
+    float3 posInObject =  (-float3(sprite.Pivot, 0) + quadCorners * float3(sprite.Size,0)) * Size * p.w;
 
     float4x4 orientationMatrix = transpose(quaternion_to_matrix(p.rotation));
     posInObject = mul( float4(posInObject.xyz, 1), orientationMatrix);
