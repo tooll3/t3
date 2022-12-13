@@ -62,6 +62,7 @@ namespace T3.Editor.Gui.ChildUi
             {
                 usableArea.Expand(GraphCanvas.Current.Scale.X < 0.75f ? 0 : -4);
                 if (usableArea.Contains(ImGui.GetMousePos())
+                    && ImGui.IsWindowHovered()
                     && ImGui.IsMouseReleased(ImGuiMouseButton.Left)
                     && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).Length() < UserSettings.Config.ClickThreshold)
                 {
