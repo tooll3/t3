@@ -73,8 +73,8 @@
       "ActivationIndex": 3,
       "Title": "Gray Tonal",
       "PosOnCanvas": {
-        "X": -166.08554,
-        "Y": 276.28308
+        "X": -184.92625,
+        "Y": 254.28809
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -587,8 +587,8 @@
       "ActivationIndex": 18,
       "Title": "untitled",
       "PosOnCanvas": {
-        "X": -21.926254,
-        "Y": -24.711914
+        "X": 132.71832,
+        "Y": 88.06143
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -626,8 +626,8 @@
       "ActivationIndex": 19,
       "Title": "untitled",
       "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": -21.926254,
+        "Y": 254.28809
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {

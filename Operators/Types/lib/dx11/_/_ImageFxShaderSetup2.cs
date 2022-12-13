@@ -2,6 +2,7 @@ using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Operators.Types.Id_fd9bffd3_5c57_462f_8761_85f94c5a629b;
 
 namespace T3.Operators.Types.Id_2b20afce_2b54_4bcc_ba0e_e456a0d92833
 {
@@ -34,7 +35,7 @@ namespace T3.Operators.Types.Id_2b20afce_2b54_4bcc_ba0e_e456a0d92833
         [Input(Guid = "3ca67d25-72ec-487b-91b3-ece912b76462")]
         public readonly InputSlot<bool> GenerateMipmaps = new InputSlot<bool>();
 
-        [Input(Guid = "9911dc7e-cd3b-4c58-a5d0-2e9abc8e528a")]
+        [Input(Guid = "9911dc7e-cd3b-4c58-a5d0-2e9abc8e528a", MappedType = typeof(PickBlendMode.BlendModes))]
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();
 
     }

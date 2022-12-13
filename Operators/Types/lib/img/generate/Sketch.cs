@@ -38,6 +38,9 @@ namespace T3.Operators.Types.Id_8e6ed99c_a3e0_42c0_9f81_a89b1e340757
         [Input(Guid = "37093302-053a-47b2-ace6-b9d310d3f4b7")]
         public readonly InputSlot<int> OverridePageIndex = new InputSlot<int>();
 
+        [Input(Guid = "5cdb04d5-9bef-4789-8082-ea04e56b3ca7")]
+        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+
         private enum ShowModes
         {
             OnlyAtFrame,
