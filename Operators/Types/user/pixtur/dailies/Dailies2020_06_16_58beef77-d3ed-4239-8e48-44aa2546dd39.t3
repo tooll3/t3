@@ -808,7 +808,7 @@
       "Outputs": []
     },
     {
-      "Id": "750ddbcc-d3a3-47b0-be2d-2184d9f18e8c"/*ToUpperCase*/,
+      "Id": "750ddbcc-d3a3-47b0-be2d-2184d9f18e8c"/*ChangeCase*/,
       "SymbolId": "acdd78b1-4e66-4fd0-a36b-5318670fefd4",
       "InputValues": [],
       "Outputs": []

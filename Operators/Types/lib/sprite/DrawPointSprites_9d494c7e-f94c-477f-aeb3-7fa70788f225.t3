@@ -38,7 +38,7 @@
     },
     {
       "Id": "926bdbc2-ee14-4125-8886-18f445766ef3"/*AlphaCutOff*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.001
     }
   ],
   "Children": [

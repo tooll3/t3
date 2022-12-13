@@ -1,0 +1,31 @@
+{
+  "Id": "acdd78b1-4e66-4fd0-a36b-5318670fefd4"/*ChangeCase*/,
+  "Description": "Changes a case of string to upper or lower case.",
+  "InputUis": [
+    {
+      "InputId": "041c98b6-4450-46d7-9dae-c9030c88b9e6"/*InputText*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      },
+      "Usage": "Default"
+    },
+    {
+      "InputId": "8bd38031-de22-40a8-9b6d-a241b2fcd7f2"/*Mode*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "ecf66a1e-45e5-4e0c-ac9e-a784a9339153"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

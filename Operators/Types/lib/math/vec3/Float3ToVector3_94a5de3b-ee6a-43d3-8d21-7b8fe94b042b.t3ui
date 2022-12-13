@@ -3,6 +3,7 @@
   "InputUis": [
     {
       "InputId": "084d5d0d-8fd4-431d-bf6c-8f082cce1d3f"/*X*/,
+      "Relevancy": "Relevant",
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -10,6 +11,7 @@
     },
     {
       "InputId": "458891b9-0244-401a-b0a5-3a7ee365e7cb"/*Y*/,
+      "Relevancy": "Relevant",
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -17,6 +19,7 @@
     },
     {
       "InputId": "627f766e-056c-413e-8530-838d673bd031"/*Z*/,
+      "Relevancy": "Relevant",
       "Position": {
         "X": 0.0,
         "Y": 0.0

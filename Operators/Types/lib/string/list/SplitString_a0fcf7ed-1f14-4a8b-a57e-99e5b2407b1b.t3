@@ -9,7 +9,7 @@
     },
     {
       "Id": "c54e4b16-b185-41f8-bc50-230b7624d093"/*Split*/,
-      "DefaultValue": ""
+      "DefaultValue": "\\n"
     }
   ],
   "Children": [],

@@ -520,7 +520,7 @@
       "Outputs": []
     },
     {
-      "Id": "f88c9f77-7f44-4f92-848f-5b776d694655"/*ToUpperCase*/,
+      "Id": "f88c9f77-7f44-4f92-848f-5b776d694655"/*ChangeCase*/,
       "SymbolId": "acdd78b1-4e66-4fd0-a36b-5318670fefd4",
       "InputValues": [],
       "Outputs": []

@@ -58,7 +58,7 @@
     },
     {
       "Id": "938e7f13-c78f-4474-abe1-38e413fb74e6"/*ForceColorUpdate*/,
-      "DefaultValue": false
+      "DefaultValue": true
     }
   ],
   "Children": [],
