@@ -119,6 +119,7 @@ namespace T3.Editor
             ResourceManager resourceManager = ResourceManager.Instance();
             SharedResources.Initialize(resourceManager);
 
+            // initialize UI and load complete symbol model
             try
             {
                 _t3ui = new T3Ui();
@@ -127,6 +128,8 @@ namespace T3.Editor
             {
                 Log.Error(e.Message + "\n" + e.StackTrace);
             }
+            
+            SymbolAnalysis.UpdateUsagesOnly();
             
             // Setup file watching the operator source
             resourceManager.OperatorsAssembly = T3Ui.UiModel.OperatorsAssembly;

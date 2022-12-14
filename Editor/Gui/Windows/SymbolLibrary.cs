@@ -51,7 +51,7 @@ namespace T3.Editor.Gui.Windows
                 {
                     _treeNode.PopulateCompleteTree();
                     ExampleSymbolLinking.UpdateExampleLinks();
-                    SymbolAnalysis.Update();
+                    SymbolAnalysis.UpdateDetails();
                 }
                 CustomComponents.TooltipForLastItem("Rescans the current symbol tree. This can useful after renaming namespaces.");
 

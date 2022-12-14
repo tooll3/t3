@@ -35,7 +35,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             _filter.SearchString = "";
             _selectedSymbolUi = null;
             _filter.OnlyMultiInputs = onlyMultiInputs;
-            _filter.UpdateIfNecessary();
+            _filter.UpdateIfNecessary(forceUpdate:true);
             THelpers.DisableImGuiKeyboardNavigation();
 
             if (_selectedSymbolUi == null && _filter.MatchingSymbolUis.Count > 0)

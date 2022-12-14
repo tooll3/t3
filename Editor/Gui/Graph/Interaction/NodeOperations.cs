@@ -1164,6 +1164,23 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
         }
 
+        public static Dictionary<Guid, int> CollectSymbolUsageCounts()
+        {
+            var results = new Dictionary<Guid, int>();
+
+            foreach (var s in SymbolRegistry.Entries.Values)
+            {
+                foreach (var child in s.Children)
+                {
+                    results.TryGetValue(child.Symbol.Id, out var currentCount); 
+                    results[child.Symbol.Id] = currentCount + 1;
+                }
+
+            }
+
+            return results;
+        }
+
         public static HashSet<Guid> CollectRequiredSymbolIds(Symbol symbol, HashSet<Guid> all = null)
         {
             all ??= new HashSet<Guid>();

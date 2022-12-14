@@ -29,7 +29,6 @@ using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;
-using T3.Operators.Types.Id_cda108a1_db4f_4a0a_ae4d_d50e9aade467;
 
 namespace T3.Editor.Gui
 {

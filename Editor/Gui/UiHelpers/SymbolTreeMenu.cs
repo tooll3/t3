@@ -82,7 +82,7 @@ namespace T3.Editor.Gui.UiHelpers
                 ImGui.PopStyleColor(4);
                 HandleDragAndDropForSymbolItem(symbol);
 
-                if (SymbolAnalysis.InformationForSymbolIds.TryGetValue(symbol.Id, out var info))
+                if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(symbol.Id, out var info))
                 {
                     ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
                     ListSymbolSetWithTooltip("  (needs {0}/", "  (",  info.RequiredSymbolIds);

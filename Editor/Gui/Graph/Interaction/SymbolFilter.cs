@@ -17,24 +17,24 @@ namespace T3.Editor.Gui.Graph.Interaction
         public Type FilterOutputType { get; set; }
         public bool OnlyMultiInputs { get; set; }
 
-        public void UpdateIfNecessary()
+        public void UpdateIfNecessary(bool forceUpdate = false)
         {
-            var needsUpdate = false;
-
+            var needsUpdate = forceUpdate;
+            
             if (_currentSearchString != SearchString)
             {
                 _currentSearchString = SearchString;
                 var pattern = string.Join(".*", _currentSearchString.ToCharArray());
                 try
                 {
-                    _currentRegex = new Regex(pattern, RegexOptions.IgnoreCase);    
+                    _currentRegex = new Regex(pattern, RegexOptions.IgnoreCase);
                 }
-                catch(ArgumentException)
+                catch (ArgumentException)
                 {
                     Log.Debug("Invalid Regex format: " + pattern);
                     return;
                 }
-                
+
                 needsUpdate = true;
             }
 
@@ -52,6 +52,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             if (needsUpdate)
             {
+                UpdateConnectSlotHashes();
                 UpdateMatchingSymbols();
             }
 
@@ -62,15 +63,37 @@ namespace T3.Editor.Gui.Graph.Interaction
         private Type _outputType;
         public bool WasUpdated;
 
+        private static int _sourceInputHash;
+        private int _targetInputHash;
+
+        private void UpdateConnectSlotHashes()
+        {
+            _sourceInputHash = 0;
+            _targetInputHash = 0;
+
+            foreach (var c in ConnectionMaker.TempConnections)
+            {
+                switch (c.GetStatus())
+                {
+                    case ConnectionMaker.TempConnection.Status.SourceIsDraftNode:
+                        _targetInputHash = c.TargetSlotId.GetHashCode();
+                        break;
+
+                    case ConnectionMaker.TempConnection.Status.TargetIsDraftNode:
+                        _sourceInputHash = c.SourceSlotId.GetHashCode();
+                        break;
+                }
+            }
+        }
+
         private void UpdateMatchingSymbols()
         {
             var composition = NodeSelection.GetSelectedComposition();
             var parentSymbolIds = composition != null
-                                     ? new HashSet<Guid>(NodeOperations.GetParentInstances(composition, includeChildInstance: true).Select(p => p.Symbol.Id))
-                                     : new HashSet<Guid>();
+                                      ? new HashSet<Guid>(NodeOperations.GetParentInstances(composition, includeChildInstance: true).Select(p => p.Symbol.Id))
+                                      : new HashSet<Guid>();
 
             MatchingSymbolUis.Clear();
-
             foreach (var symbolUi in SymbolUiRegistry.Entries.Values)
             {
                 // Prevent graph cycles
@@ -83,7 +106,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                     if (matchingInputDef == null)
                         continue;
 
-                    if (OnlyMultiInputs && !matchingInputDef.IsMultiInput )
+                    if (OnlyMultiInputs && !matchingInputDef.IsMultiInput)
                         continue;
                 }
 
@@ -93,10 +116,10 @@ namespace T3.Editor.Gui.Graph.Interaction
                     if (matchingOutputDef == null)
                         continue;
                 }
-                
-                if (!(_currentRegex.IsMatch(symbolUi.Symbol.Name) 
-                      || symbolUi.Symbol.Namespace.Contains(SearchString, StringComparison.InvariantCultureIgnoreCase) 
-                      || (!string.IsNullOrEmpty(symbolUi.Description) 
+
+                if (!(_currentRegex.IsMatch(symbolUi.Symbol.Name)
+                      || symbolUi.Symbol.Namespace.Contains(SearchString, StringComparison.InvariantCultureIgnoreCase)
+                      || (!string.IsNullOrEmpty(symbolUi.Description)
                           && symbolUi.Description.Contains(SearchString, StringComparison.InvariantCultureIgnoreCase))))
                     continue;
 
@@ -109,9 +132,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                                                  .ToList();
         }
 
-
-
-        private static double ComputeRelevancy(SymbolUi symbolUi, string query, string currentProjectName)
+        private double ComputeRelevancy(SymbolUi symbolUi, string query, string currentProjectName)
         {
             float relevancy = 1;
 
@@ -136,22 +157,25 @@ namespace T3.Editor.Gui.Graph.Interaction
                 }
             }
 
-
-            if (!string.IsNullOrEmpty(symbolUi.Description) 
+            if (!string.IsNullOrEmpty(symbolUi.Description)
                 && symbolUi.Description.Contains(query, StringComparison.InvariantCultureIgnoreCase))
             {
                 relevancy *= 1.5f;
             }
-            
+
             if (symbolName.Equals(query, StringComparison.InvariantCultureIgnoreCase))
             {
                 relevancy *= 5;
             }
-            
+
             // Add usage count (the following statement is slow and should be cached)
-            var count = symbolUi.Symbol.InstancesOfSymbol.Select(instance =>instance.SymbolChildId).Distinct().Count();
-            relevancy *= 1 + count/100f;
-            
+            var count = SymbolAnalysis.InformationForSymbolIds.TryGetValue(symbolUi.Symbol.Id, out var info)
+                            ? info.UsageCount
+                            : 0;
+
+            //symbolUi.Symbol.InstancesOfSymbol.Select(instance =>instance.SymbolChildId).Distinct().Count();
+            relevancy *= 1 + count / 100f;
+
             // Bump if characters match upper characters
             // e.g. "ds" matches "DrawState"
             var pascalCaseMatch = true;
@@ -160,12 +184,13 @@ namespace T3.Editor.Gui.Graph.Interaction
             for (var charIndex = 0; charIndex < uppercaseQuery.Length; charIndex++)
             {
                 var c = uppercaseQuery[charIndex];
-                var indexInName = symbolName.IndexOf(c); 
+                var indexInName = symbolName.IndexOf(c);
                 if (indexInName < maxIndex)
                 {
                     pascalCaseMatch = false;
                     break;
                 }
+
                 maxIndex = indexInName;
             }
 
@@ -173,25 +198,24 @@ namespace T3.Editor.Gui.Graph.Interaction
             {
                 relevancy *= 2.5f;
             }
-            
+
             if (!string.IsNullOrEmpty(symbolUi.Symbol.Namespace))
             {
                 if (symbolUi.Symbol.Namespace.Contains("dx11")
                     || symbolUi.Symbol.Namespace.Contains("_"))
                     relevancy *= 0.1f;
-                
+
                 if (symbolUi.Symbol.Namespace.StartsWith("lib"))
                 {
                     relevancy *= 3f;
                 }
-                
+
                 if (symbolUi.Symbol.Namespace.StartsWith("examples"))
                 {
                     relevancy *= 2f;
                 }
-
             }
-            
+
             if (symbolName.StartsWith("_"))
             {
                 relevancy *= 0.1f;
@@ -201,7 +225,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             {
                 relevancy *= 0.01f;
             }
-            
+
             // TODO: Implement
             // if (IsCompositionOperatorInNamespaceOf(symbolUi))
             // {
@@ -218,9 +242,44 @@ namespace T3.Editor.Gui.Graph.Interaction
             // if (projectName != null && projectName == currentProjectName)
             //     relevancy *= 5;
 
+            // Bump operators with matching connections 
+            var matchingConnectionsCount = 0;
+            if (_sourceInputHash != 0)
+            {
+                foreach (var inputDefinition in symbolUi.Symbol.InputDefinitions.FindAll(i => i.DefaultValue.ValueType == FilterInputType))
+                {
+                        var connectionHash = _sourceInputHash * 31 + inputDefinition.Id.GetHashCode();
+
+                        if (SymbolAnalysis.ConnectionHashCounts.TryGetValue(connectionHash, out var connectionCount))
+                        {
+                            //Log.Debug($" <{connectionCount}x> --> {symbolUi.Symbol.Name}");
+                            matchingConnectionsCount += connectionCount;
+                        }
+                }
+            }
+            
+            if (_targetInputHash != 0)
+            {
+                foreach (var outputDefinition in symbolUi.Symbol.OutputDefinitions.FindAll(o => o.ValueType == FilterOutputType))
+                {
+                    var connectionHash = outputDefinition.Id.GetHashCode() * 31 + _targetInputHash;
+
+                    if (SymbolAnalysis.ConnectionHashCounts.TryGetValue(connectionHash, out var connectionCount))
+                    {
+                        //Log.Debug($"  {symbolUi.Symbol.Name} --> <{connectionCount}x>");
+                        matchingConnectionsCount += connectionCount;
+                    }
+                }
+            }
+
+            if (matchingConnectionsCount > 0)
+            {
+                relevancy *= 1 + MathF.Pow(matchingConnectionsCount, 0.33f) * 4f;
+                //Log.Debug($"Bump relevancy {symbolUi.Symbol.Name}  {oldRelevancy:0.00} -> {relevancy:0.00}");
+            }
+
             return relevancy;
         }
-        
 
         public List<SymbolUi> MatchingSymbolUis { get; private set; } = new List<SymbolUi>();
 
