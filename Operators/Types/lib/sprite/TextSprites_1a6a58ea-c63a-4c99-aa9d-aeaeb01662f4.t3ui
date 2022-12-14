@@ -96,10 +96,10 @@
       }
     },
     {
-      "OutputId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037"/*Texture*/,
+      "OutputId": "5bb66419-9fa8-4bd0-8476-d389e9ec78d5"/*Texture*/,
       "Position": {
         "X": 300.0,
-        "Y": 400.0
+        "Y": 500.0
       }
     }
   ]

@@ -23,7 +23,7 @@ namespace T3.Operators.Types.Id_1a6a58ea_c63a_4c99_aa9d_aeaeb01662f4
         [Output(Guid = "0BEA15C8-329A-4705-BC11-12EEF4F1A70A")]
         public readonly Slot<T3.Core.DataTypes.BufferWithViews> SpriteBuffer = new();
 
-        [Output(Guid = "{E0C4FEDD-5C2F-46C8-B67D-5667435FB037}")]
+        [Output(Guid = "5BB66419-9FA8-4BD0-8476-D389E9EC78D5")]
         public readonly Slot<Texture2D> Texture = new();
 
         public TextSprites()
