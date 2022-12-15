@@ -538,13 +538,20 @@ namespace T3.Core.Operator
             parentInstance.Children.Remove(childInstanceToRemove);
         }
 
-        public void AddConnection(Connection connection, int multiInputIndex = 0)
+        public bool IsTargetMultiInput(Connection connection)
         {
             var childInputTarget = (from child in Children
                                     where child.Id == connection.TargetParentOrChildId
                                     where child.InputValues.ContainsKey(connection.TargetSlotId)
                                     select child.InputValues[connection.TargetSlotId]).SingleOrDefault();
             bool isMultiInput = childInputTarget?.InputDefinition.IsMultiInput ?? false;
+
+            return isMultiInput;
+        }
+
+        public void AddConnection(Connection connection, int multiInputIndex = 0)
+        {
+            bool isMultiInput = IsTargetMultiInput(connection);
 
             // check if another connection is already existing to the target input, ignoring multi inputs for now
             var existingConnections = Connections.FindAll(c => c.TargetParentOrChildId == connection.TargetParentOrChildId &&
@@ -604,7 +611,7 @@ namespace T3.Core.Operator
                                                                c.TargetSlotId == connection.TargetSlotId);
             if (existingConnections.Count == 0 || multiInputIndex >= existingConnections.Count)
             {
-                Log.Error($"Trying to remove a connection that doesn't exist.");
+                Log.Error($"Trying to remove a connection that doesn't exist. Index {multiInputIndex} of {existingConnections.Count}");
                 return;
             }
 
