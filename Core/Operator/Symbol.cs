@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -549,6 +549,13 @@ namespace T3.Core.Operator
             // check if another connection is already existing to the target input, ignoring multi inputs for now
             var existingConnections = Connections.FindAll(c => c.TargetParentOrChildId == connection.TargetParentOrChildId &&
                                                                c.TargetSlotId == connection.TargetSlotId);
+
+            if (multiInputIndex > existingConnections.Count)
+            {
+                Log.Error($"Trying to add a connection at the index {multiInputIndex}. Out of bound of the {existingConnections.Count} existing connections.");
+                return;
+            }
+
             if (isMultiInput)
             {
                 if (multiInputIndex == existingConnections.Count)
