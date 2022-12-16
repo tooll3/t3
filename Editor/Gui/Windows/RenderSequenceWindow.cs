@@ -18,14 +18,9 @@ namespace T3.Editor.Gui.Windows
             _lastHelpString = "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for faster exports.";
         }
 
-        protected override void UpdateBeforeDraw()
-        {
-            ImGui.SetNextWindowSize(new Vector2(550, 270));
-        }
 
         protected override void DrawContent()
         {
-            //ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, 10);
             DrawTimeSetup();
 
             // custom parameters for this renderer

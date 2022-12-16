@@ -395,18 +395,17 @@ namespace T3.Editor.Gui.Styling
         public static bool DrawFloatParameter(string label, ref float value, float min = float.NegativeInfinity, float max = float.PositiveInfinity, float scale = 0.01f, bool clamp = false, string tooltip= null)
         {
             var labelSize = ImGui.CalcTextSize(label);
-            const float leftPadding = 200;
             var p = ImGui.GetCursorPos();
-            ImGui.SetCursorPosX(MathF.Max(leftPadding - labelSize.X, 0) + 10);
+            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding - labelSize.X, 0) + 10);
             ImGui.AlignTextToFramePadding();
             
             ImGui.TextUnformatted(label);
             ImGui.SetCursorPos(p);
 
             ImGui.SameLine();
-            ImGui.SetCursorPosX(leftPadding + 20);
+            ImGui.SetCursorPosX(LeftParameterPadding + ParameterSpacing);
             ImGui.PushID(label);
-            var size = new Vector2(150, ImGui.GetFrameHeight());
+            var size = new Vector2(150 * T3Ui.UiScaleFactor, ImGui.GetFrameHeight());
             var result = SingleValueEdit.Draw(ref value, size, min, max, clamp, scale);
             ImGui.PopID();
             var modified = (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
@@ -422,9 +421,8 @@ namespace T3.Editor.Gui.Styling
         public static bool DrawIntParameter(string label, ref int value, int min = int.MinValue, int max = int.MaxValue, float scale = 1)
         {
             var labelSize = ImGui.CalcTextSize(label);
-            const float leftPadding = 200;
             var p = ImGui.GetCursorPos();
-            ImGui.SetCursorPosX(MathF.Max(leftPadding - labelSize.X, 0) + 10);
+            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding - labelSize.X, 0) + 10);
             ImGui.AlignTextToFramePadding();
             
             ImGui.TextUnformatted(label);
@@ -432,24 +430,26 @@ namespace T3.Editor.Gui.Styling
             ImGui.SetCursorPos(p);
 
             ImGui.SameLine();
-            ImGui.SetCursorPosX(leftPadding + 20);
+            ImGui.SetCursorPosX(LeftParameterPadding + ParameterSpacing);
 
             ImGui.PushID(label);
-            var size = new Vector2(150, ImGui.GetFrameHeight());
+            var size = new Vector2(150 * T3Ui.UiScaleFactor, ImGui.GetFrameHeight());
             var result = SingleValueEdit.Draw(ref value, size, min, max, true, scale);
             ImGui.PopID();
             var modified = (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
             return modified;
         }
 
+        private static float LeftParameterPadding => 200 * T3Ui.UiScaleFactor; 
+        private static float ParameterSpacing => 20 * T3Ui.UiScaleFactor; 
         public static bool DrawStringParameter(string label, 
                                                ref string value, 
                                                string placeHolder = null, 
                                                string warning=null,  
                                                FileOperations.FilePickerTypes showFilePicker = FileOperations.FilePickerTypes.None)
         {
-            const float leftPadding = 200;
-            const float spacing = 20;
+            var leftPadding = LeftParameterPadding;
+            var spacing = ParameterSpacing;
             var isFilePickerVisible = showFilePicker != FileOperations.FilePickerTypes.None;
             float spaceForFilePicker = isFilePickerVisible ? 30 : 0;
             var labelSize = ImGui.CalcTextSize(label);
@@ -512,7 +512,7 @@ namespace T3.Editor.Gui.Styling
             if (wasNull)
                 value = string.Empty;
             
-            ImGui.SetNextItemWidth(width-20);
+            ImGui.SetNextItemWidth(width-ParameterSpacing);
             var modified = ImGui.InputText("##" + placeHolderLabel, ref value, 1000);
             if (!modified && wasNull)
                 value = null;
@@ -546,7 +546,7 @@ namespace T3.Editor.Gui.Styling
             var labelSize = ImGui.CalcTextSize(label);
 
             var p = ImGui.GetCursorPos();
-            ImGui.SetCursorPosX(MathF.Max(200 - labelSize.X, 0) + 10);
+            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding - labelSize.X, 0) + 10);
             ImGui.AlignTextToFramePadding();
 
             string cleanedLabel = label.Split(ImGuiIdSpecifier)[0];
@@ -556,8 +556,8 @@ namespace T3.Editor.Gui.Styling
 
             // Dropdown
             ImGui.SameLine();
-            ImGui.SetCursorPosX(220);
-            var size = new Vector2(150, ImGui.GetFrameHeight());
+            ImGui.SetCursorPosX(LeftParameterPadding + ParameterSpacing);
+            var size = new Vector2(150 * T3Ui.UiScaleFactor, ImGui.GetFrameHeight());
             
             Type enumType = typeof(T);
             var values = Enum.GetValues(enumType);

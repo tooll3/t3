@@ -79,7 +79,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 ImGui.SetNextWindowFocus();
 
                 Vector2 browserPositionInWindow = posInWindow + _browserPositionOffset;
-                Vector2 browserSize = _resultListSize;
+                Vector2 browserSize = _resultListSize * T3Ui.UiScaleFactor;
                 ShiftPositionToFitOnCanvas(ref browserPositionInWindow, ref browserSize);
 
                 ImGui.SetCursorPos(browserPositionInWindow);
@@ -91,7 +91,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                     DrawDescriptionPanel(browserPositionInWindow, browserSize, _symbolUiForDescription);
                 }
 
-                DrawSearchInput(posInWindow, _posInScreen, _size);
+                DrawSearchInput(posInWindow, _posInScreen, _size * T3Ui.UiScaleFactor);
             }
 
             ImGui.PopID();

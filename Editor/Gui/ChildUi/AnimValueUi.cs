@@ -36,7 +36,7 @@ namespace T3.Editor.Gui.ChildUi
             
             var highlightEditable = ImGui.GetIO().KeyCtrl;
 
-            if (h > 14)
+            if (h > 14 * T3Ui.UiScaleFactor)
             {
                 ValueLabel.Draw(drawList, graphRect, new Vector2(1, 0), animValue.Amplitude);
                 ValueLabel.Draw(drawList, graphRect, new Vector2(1, 1), animValue.Offset);

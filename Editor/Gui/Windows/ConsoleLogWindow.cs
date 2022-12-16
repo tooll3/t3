@@ -35,7 +35,7 @@ namespace T3.Editor.Gui.Windows
                 CustomComponents.ToggleButton("Scroll", ref _shouldScrollToBottom, Vector2.Zero);
                 ImGui.SameLine();
 
-                ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
+                //ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
                 if (ImGui.Button("Clear"))
                 {
                     lock (_logEntries)

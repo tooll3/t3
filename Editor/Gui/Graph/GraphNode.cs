@@ -71,8 +71,8 @@ namespace T3.Editor.Gui.Graph
                     if (childUi.Style == SymbolChildUi.Styles.Resizable)
                     {
                         ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
-                        ImGui.SetCursorScreenPos(_usableScreenRect.Max - new Vector2(10, 10));
-                        ImGui.Button("##resize", new Vector2(10, 10));
+                        ImGui.SetCursorScreenPos(_usableScreenRect.Max - new Vector2(10, 10) * T3Ui.UiScaleFactor);
+                        ImGui.Button("##resize", new Vector2(10, 10) * T3Ui.UiScaleFactor);
                         if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                         {
                             var delta = GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
@@ -328,7 +328,7 @@ namespace T3.Editor.Gui.Graph
                         && _selectableScreenRect.GetHeight() > 8)
                     {
                         drawList.PushClipRect(_usableScreenRect.Min, _usableScreenRect.Max, true);
-                        ImGui.PushFont(GraphCanvas.Current.Scale.X < 1 ? Fonts.FontSmall : Fonts.FontBold);
+                        ImGui.PushFont(GraphCanvas.Current.Scale.X < 1 * T3Ui.UiScaleFactor ? Fonts.FontSmall : Fonts.FontBold);
                         var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
 
                         drawList.AddText(_usableScreenRect.Min + LabelPos,

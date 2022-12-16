@@ -6,6 +6,7 @@ using SharpDX.DXGI;
 using SharpDX.Windows;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Threading;
@@ -35,28 +36,19 @@ namespace T3.Editor
         public static Device Device { get; private set; }
         public static SpaceMouse SpaceMouse { get; private set; }
 
-        public static bool IsStandAlone = File.Exists("StartT3.exe");
-        public const string Version = "v3.5.1";
-
-        public static void GenerateFonts(float scaleFactor)
-        {
-            var fontAtlasPtr = ImGui.GetIO().Fonts;
-            fontAtlasPtr.Clear();
-            Fonts.FontNormal = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Regular.ttf", 18f * scaleFactor);
-            Fonts.FontBold = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Medium.ttf", 18f * scaleFactor);
-            Fonts.FontSmall = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Regular.ttf", 13f * scaleFactor);
-            Fonts.FontLarge = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Light.ttf", 30f * scaleFactor);
-
-            _t3RenderForm.CreateDeviceObjects();
-        }
-
-        private static float _lastUiScale = 1;
+        public static readonly bool IsStandAlone = File.Exists("StartT3.exe");
+        private const string Version = "v3.5.1";
         
         [STAThread]
         private static void Main(string[] args)
         {
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
+            
+            // Enable DPI aware scaling
+            Application.EnableVisualStyles();
+            Application.SetHighDpiMode(HighDpiMode.PerMonitor);
+            Application.SetCompatibleTextRenderingDefault(false);
             
             Log.AddWriter(new ConsoleWriter());
             Log.AddWriter(FileWriter.CreateDefault());
@@ -74,6 +66,7 @@ namespace T3.Editor
             
             _main.CreateRenderForm("T3 " + Version, false);
 
+
             // Create Device and SwapChain
             SharpDX.Direct3D11.Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.Debug, _main.SwapChainDescription, out var device, out _main.SwapChain);
             _deviceContext = device.ImmediateContext;
@@ -85,7 +78,6 @@ namespace T3.Editor
 
             _t3RenderForm = new T3RenderForm(device, _main.Form.Width, _main.Form.Height);
 
-            GenerateFonts(UserSettings.Config.UiScaleFactor);
 
             // Initialize T3 main window
             _main.InitRenderTargetsAndEventHandlers(device);
@@ -104,8 +96,6 @@ namespace T3.Editor
                                       }
                                   };
 
-            
-            
             _main.Form.WindowState = FormWindowState.Maximized;
             SpaceMouse = new SpaceMouse(_main.Form.Handle);
             
@@ -119,7 +109,8 @@ namespace T3.Editor
             ResourceManager resourceManager = ResourceManager.Instance();
             SharedResources.Initialize(resourceManager);
 
-            // initialize UI and load complete symbol model
+            
+            // Initialize UI and load complete symbol model
             try
             {
                 _t3ui = new T3Ui();
@@ -130,6 +121,11 @@ namespace T3.Editor
             }
             
             SymbolAnalysis.UpdateUsagesOnly();
+
+            ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DpiEnableScaleFonts;
+            ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.DpiEnableScaleViewports;
+            
+            GenerateFontsWithScaleFactor(UserSettings.Config.UiScaleFactor);
             
             // Setup file watching the operator source
             resourceManager.OperatorsAssembly = T3Ui.UiModel.OperatorsAssembly;
@@ -164,7 +160,7 @@ namespace T3.Editor
                 // Update font atlas texture if UI-Scale changed
                 if (Math.Abs(UserSettings.Config.UiScaleFactor - _lastUiScale) > 0.005f)
                 {
-                    GenerateFonts(UserSettings.Config.UiScaleFactor);
+                    GenerateFontsWithScaleFactor(UserSettings.Config.UiScaleFactor);
                     _lastUiScale = UserSettings.Config.UiScaleFactor;
                 }
                 
@@ -347,6 +343,27 @@ namespace T3.Editor
                 KeyHandler.PressedKeys[keyIndex] = false;
             }
         }
+        
+        public static void GenerateFontsWithScaleFactor(float scaleFactor)
+        {
+            // See https://stackoverflow.com/a/5977638
+            Graphics graphics = _main.Form.CreateGraphics();
+            T3Ui.DisplayScaleFactor = graphics.DpiX/ 96f;
+            var dpiAwareScale = scaleFactor * T3Ui.DisplayScaleFactor;
+
+            T3Ui.UiScaleFactor = dpiAwareScale;
+            
+            var fontAtlasPtr = ImGui.GetIO().Fonts;
+            fontAtlasPtr.Clear();
+            Fonts.FontNormal = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Regular.ttf", 18f * dpiAwareScale);
+            Fonts.FontBold = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Medium.ttf", 18f * dpiAwareScale);
+            Fonts.FontSmall = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Regular.ttf", 13f * dpiAwareScale);
+            Fonts.FontLarge = fontAtlasPtr.AddFontFromFileTTF(@"Resources/t3-editor/fonts/Roboto-Light.ttf", 30f * dpiAwareScale);
+
+            _t3RenderForm.CreateDeviceObjects();
+        }
+
+        private static float _lastUiScale = 1;        
 
         private static readonly AppWindow _main = new();
         public static readonly AppWindow Viewer = new();    // Required it distinguish 2nd render view in mouse handling   

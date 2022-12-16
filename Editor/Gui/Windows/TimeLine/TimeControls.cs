@@ -605,6 +605,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
         }
 
-        public static readonly Vector2 ControlSize = new Vector2(45, 30);
+        public static Vector2 ControlSize => new Vector2(45, 30) * T3Ui.UiScaleFactor;
     }
 }

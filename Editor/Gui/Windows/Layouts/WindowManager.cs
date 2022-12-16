@@ -55,8 +55,8 @@ namespace T3.Editor.Gui.Windows.Layouts
                                new ExplorationWindow(),
                                new SymbolLibrary(),
                                new RenderSequenceWindow(),
-                               new RenderVideoWindow(),
                                new SettingsWindow(),
+                               new RenderVideoWindow(),
                                new ConsoleLogWindow(),
                            };            
 
@@ -172,12 +172,10 @@ namespace T3.Editor.Gui.Windows.Layouts
         }
 
         private static Vector2 _appWindowSize;
-        private const float MainMenuBarHeight = 25;
         private static List<Window> _windows;
         private static bool _demoWindowVisible;
         private static bool _metricsWindowVisible;
         public static bool ShowSecondaryRenderWindow { get; private set; }
-        public static bool IsWindowMinimized => _appWindowSize == Vector2.Zero;
         private static bool _hasBeenInitialized;
     }
 }

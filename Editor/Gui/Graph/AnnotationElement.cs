@@ -34,11 +34,11 @@ namespace T3.Editor.Gui.Graph
             {
                 _screenArea = GraphCanvas.Current.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + annotation.Size));
                 var titleSize = annotation.Size;
-                titleSize.Y = MathF.Min(titleSize.Y, 14);
+                titleSize.Y = MathF.Min(titleSize.Y, 14 * T3Ui.UiScaleFactor);
 
                 // Keep height of title area at a minimum height when zooming out
                 var clickableArea = GraphCanvas.Current.TransformRect(new ImRect(annotation.PosOnCanvas, annotation.PosOnCanvas + titleSize));
-                var height = MathF.Min(16, _screenArea.GetHeight());
+                var height = MathF.Min(16 * T3Ui.UiScaleFactor, _screenArea.GetHeight());
                 clickableArea.Max.Y = clickableArea.Min.Y + height;
 
                 _isVisible = ImGui.IsRectVisible(_screenArea.Min, _screenArea.Max);
@@ -52,7 +52,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
                     ImGui.SetCursorScreenPos(_screenArea.Max - new Vector2(10, 10));
-                    ImGui.Button("##resize", new Vector2(10, 10));
+                    ImGui.Button("##resize", new Vector2(10, 10) * T3Ui.UiScaleFactor);
                     if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                     {
                         var delta = GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
@@ -105,7 +105,7 @@ namespace T3.Editor.Gui.Graph
 
                 // Label
                 {
-                    var isScaledDown = GraphCanvas.Current.Scale.X < 1;
+                    var isScaledDown = GraphCanvas.Current.Scale.X < 1 * T3Ui.UiScaleFactor;
                     ImGui.PushFont(isScaledDown ? Fonts.FontSmall : Fonts.FontNormal);
 
                     drawList.PushClipRect(_screenArea.Min, _screenArea.Max, true);

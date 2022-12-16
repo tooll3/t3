@@ -16,7 +16,7 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
     {
         public static void DrawTitle(ImDrawListPtr drawList, ImRect widgetRect, string title)
         {
-            var canvasScale = GraphCanvas.Current.Scale.Y;
+            var canvasScale = GraphCanvas.Current.Scale.Y / T3Ui.UiScaleFactor;
             var font = canvasScale > ScaleFactors.LargerScale
                            ? Fonts.FontNormal
                            : Fonts.FontSmall;

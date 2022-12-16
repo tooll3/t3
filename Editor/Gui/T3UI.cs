@@ -143,8 +143,8 @@ namespace T3.Editor.Gui
         
         private void DrawAppMenu()
         {
-            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6, 6));
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6) * T3Ui.UiScaleFactor);
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6, 6) * T3Ui.UiScaleFactor);
             ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
             
             if (ImGui.BeginMainMenuBar())
@@ -395,6 +395,8 @@ namespace T3.Editor.Gui
         public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
         public const string FloatNumberFormat = "{0:F2}";
         public static bool IsCurrentlySaving => _saveStopwatch != null && _saveStopwatch.IsRunning;
+        public static float UiScaleFactor { get; set; } = 1;
+        public static float DisplayScaleFactor { get; set; } = 1;
 
         //private static readonly AutoBackup.AutoBackup _autoBackup = new();
         

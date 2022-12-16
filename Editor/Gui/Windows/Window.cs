@@ -70,7 +70,7 @@ namespace T3.Editor.Gui.Windows
             
             if (!_wasVisible)
             {
-                ImGui.SetNextWindowSize(new Vector2(400,350));
+                ImGui.SetNextWindowSize(new Vector2(550,450));
                 _wasVisible = true;
             }
             

@@ -74,7 +74,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             {
                 int index = Array.IndexOf(enumInfo.Values, value);
                 InputEditStateFlags editStateFlags = InputEditStateFlags.Nothing;
-                bool modified = ImGui.Combo("##dropDownParam", ref index, enumInfo.ValueNames, enumInfo.ValueNames.Length);
+                bool modified = ImGui.Combo("##dropDownParam", ref index, enumInfo.ValueNames, enumInfo.ValueNames.Length, 20);
                 if (modified)
                 {
                     value = enumInfo[index];

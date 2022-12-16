@@ -13,7 +13,7 @@ namespace T3.Editor.Gui.Windows.Output
             resolutionDialog?.Draw(_resolutionForEdit);
 
             ImGui.SetNextItemWidth(100);
-            if (ImGui.BeginCombo("##ResolutionSelection", selectedResolution.Title))
+            if (ImGui.BeginCombo("##ResolutionSelection", selectedResolution.Title, ImGuiComboFlags.HeightLargest))
             {
                 foreach (var resolution in Resolutions.ToArray())
                 {
