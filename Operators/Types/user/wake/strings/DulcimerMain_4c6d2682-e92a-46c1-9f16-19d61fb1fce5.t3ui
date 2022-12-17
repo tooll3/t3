@@ -2912,7 +2912,7 @@
       }
     },
     {
-      "ChildId": "e29d1db2-1683-4563-9b85-ad96abea54ec"/*DidTimeChange*/,
+      "ChildId": "e29d1db2-1683-4563-9b85-ad96abea54ec"/*HasTimeChanged*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

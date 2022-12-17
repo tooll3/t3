@@ -1,5 +1,5 @@
 {
-  "Id": "2443b2fd-c397-4ea6-9588-b595f918cf01"/*DidTimeChange*/,
+  "Id": "2443b2fd-c397-4ea6-9588-b595f918cf01"/*HasTimeChanged*/,
   "Description": "Triggers a bool, if time was scrubbed back in timeline by user or by looping",
   "InputUis": [
     {

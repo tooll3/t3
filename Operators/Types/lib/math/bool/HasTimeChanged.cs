@@ -5,13 +5,13 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_2443b2fd_c397_4ea6_9588_b595f918cf01
 {
-    public class DidTimeChange : Instance<DidTimeChange>
+    public class HasTimeChanged : Instance<HasTimeChanged>
     {
         [Output(Guid = "4883b1ec-16c1-422f-8db6-c74c3d48e5be", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<bool> HasChanged = new();
         
 
-        public DidTimeChange()
+        public HasTimeChanged()
         {
             HasChanged.UpdateAction = Update;
         }
@@ -49,9 +49,9 @@ namespace T3.Operators.Types.Id_2443b2fd_c397_4ea6_9588_b595f918cf01
             var wasRewind = time < _lastTime - threshold;
             var wasAdvanced = time > _lastTime + threshold;
             
-            _lastTime = time;
 
             bool hasChanged = false;
+            bool wasAdditionalMotionBlurPass = false;
             
             switch (mode)
             {
@@ -66,27 +66,27 @@ namespace T3.Operators.Types.Id_2443b2fd_c397_4ea6_9588_b595f918cf01
                 case Modes.DidChange:
                     hasChanged = wasAdvanced | wasRewind;
                     break;
+
+                case Modes.DidAdvancedWithMotionBlur:
+                    if (context.IntVariables.TryGetValue("__MotionBlurPass", out var pass))
+                    {
+                        if (pass == 0)
+                        {
+                            hasChanged = wasAdvanced;
+                        }
+                        else
+                        {
+                            wasAdditionalMotionBlurPass = true;
+                        }
+                    }
+
+                    break;
             }
             
+            if(!wasAdditionalMotionBlurPass)
+                _lastTime = time;
             
-            // if (wasRewind)
-            // {
-            //     _triggeredLastFrame = true;
-            //     HasChanged.Value = true;
-            //     return;
-            // }
-            // else
-            // {
-            //     if (_triggeredLastFrame)
-            //     {
-            //         _triggeredLastFrame = false;
-            //         HasChanged.Value = false;
-            //         return;
-            //     }
-            // }
-
             HasChanged.Value = hasChanged;
-            
             HasChanged.DirtyFlag.Clear(); // FIXME: is this necessary?
         }
 
@@ -95,6 +95,7 @@ namespace T3.Operators.Types.Id_2443b2fd_c397_4ea6_9588_b595f918cf01
             DidRewind,
             DidAdvanced,
             DidChange,
+            DidAdvancedWithMotionBlur,
         }
 
         private enum Times
