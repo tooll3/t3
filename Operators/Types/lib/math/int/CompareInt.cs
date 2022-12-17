@@ -1,5 +1,6 @@
 using System;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -26,6 +27,7 @@ namespace T3.Operators.Types.Id_05cf9ea7_045d_421f_8ed3_2c2f6b325a46
         {
             var v = Value.GetValue(context);
             var test = TestValue.GetValue(context);
+            
             
             var result = false;
             switch ((Modes)Mode.GetValue(context).Clamp(0, Enum.GetValues(typeof(Modes)).Length -1))

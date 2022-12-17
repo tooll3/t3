@@ -236,7 +236,7 @@
       }
     },
     {
-      "ChildId": "9eda7d26-a849-4501-b797-ad9036680a23"/*DidTimeChange*/,
+      "ChildId": "9eda7d26-a849-4501-b797-ad9036680a23"/*HasTimeChanged*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
