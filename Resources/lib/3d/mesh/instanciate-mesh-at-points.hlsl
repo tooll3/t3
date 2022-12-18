@@ -57,6 +57,7 @@ struct psInput
 };
 
 sampler texSampler : register(s0);
+sampler clampedSampler : register(s1);
 
 StructuredBuffer<PbrVertex> PbrVertices : t0;
 StructuredBuffer<int3> FaceIndices : t1;
@@ -233,7 +234,7 @@ float4 psMain(psInput pin) : SV_TARGET
         //return float4(specularIrradiance * 1, 1);
 
         // Split-sum approximation factors for Cook-Torrance specular BRDF.
-        float2 specularBRDF = BRDFLookup.Sample(texSampler, float2(cosLo, roughness)).rg;
+        float2 specularBRDF = BRDFLookup.Sample(clampedSampler, float2(cosLo, roughness)).rg;
         //return float4(cosLo, roughness,0,1);
 
         // Total specular IBL contribution.

@@ -143,7 +143,7 @@
       "ChildId": "ace9e53b-398b-4a31-8fdd-cc2fd5cf1dc0"/*PixelShaderStage*/,
       "Size": {
         "X": 110.0,
-        "Y": 270.0
+        "Y": 283.0
       },
       "Position": {
         "X": 2139.7566,
@@ -492,6 +492,17 @@
       "Position": {
         "X": 1212.6295,
         "Y": 4506.5728
+      }
+    },
+    {
+      "ChildId": "c9a5a194-a095-4667-980c-88b84f19d2d2"/*SamplerStateOp*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1861.328,
+        "Y": 4354.8213
       }
     }
   ],
