@@ -1,4 +1,5 @@
 using System;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -73,11 +74,16 @@ namespace T3.Operators.Types.Id_2443b2fd_c397_4ea6_9588_b595f918cf01
                         if (pass == 0)
                         {
                             hasChanged = wasAdvanced;
+                            
                         }
                         else
                         {
                             wasAdditionalMotionBlurPass = true;
                         }
+                    }
+                    else
+                    {
+                        hasChanged = wasAdvanced;
                     }
 
                     break;
