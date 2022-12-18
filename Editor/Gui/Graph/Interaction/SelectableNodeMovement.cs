@@ -182,9 +182,9 @@ namespace T3.Editor.Gui.Graph.Interaction
             var outputConnections = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex)>();
             var outConnectionInputIndex = 0;
             var listOutConnectionInputIndex = new List<int>();
-            foreach (var nod in _draggedNodes)
+            foreach (var node in _draggedNodes)
             {
-                if (!(nod is SymbolChildUi childUi))
+                if (node is not SymbolChildUi childUi)
                     continue;
 
                 var instance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
@@ -200,6 +200,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                         continue;
 
                     var connectionsToInput = instance.Parent.Symbol.Connections.FindAll(c => c.TargetParentOrChildId == instance.SymbolChildId
+                                                                                             && c.TargetSlotId == input.Id
                                                                                              && _draggedNodes.All(c2 => c2.Id != c.SourceParentOrChildId));
                     var lastTargetId = Guid.Empty;
                     var lastInputId = Guid.Empty;
@@ -226,10 +227,15 @@ namespace T3.Editor.Gui.Graph.Interaction
                 {
                     var connectionsToOutput =
                         instance.Parent.Symbol.Connections.FindAll(c => c.SourceParentOrChildId == instance.SymbolChildId
+                                                                        && c.SourceSlotId == output.Id
                                                                         && _draggedNodes.All(c2 => c2.Id != c.TargetParentOrChildId));
+
+                    if (connectionsToOutput.Count == 0)
+                        continue;
+
                     foreach (var outputConnection in connectionsToOutput)
                     {
-                        bool isMultiInput = instance.Parent.Symbol.IsTargetMultiInput(outputConnection);
+                        var isMultiInput = instance.Parent.Symbol.IsTargetMultiInput(outputConnection);
                         if (isMultiInput)
                         {
                             outConnectionInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(outputConnection);
