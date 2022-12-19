@@ -207,8 +207,8 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             const int threadNumX = 16, threadNumY = 16;
             csStage.SetShaderResource(0, _multiSampledDepthBufferSrv);
             csStage.SetUnorderedAccessView(0, _resolvedDepthBufferUav, 0);
-            int dispatchCountX = _multiSampledDepthBuffer.Description.Width / threadNumX ;
-            int dispatchCountY = _multiSampledDepthBuffer.Description.Height / threadNumY;
+            int dispatchCountX = (_multiSampledDepthBuffer.Description.Width / threadNumX) + 1;
+            int dispatchCountY = (_multiSampledDepthBuffer.Description.Height / threadNumY) + 1;
             deviceContext.Dispatch(dispatchCountX, dispatchCountY, 1);
             
             // Restore prev setup
