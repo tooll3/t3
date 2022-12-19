@@ -126,6 +126,12 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
             }
 
             var time = context.LocalFxTime * _rate;
+            var overrideTime = OverrideTime.GetValue(context) / CurrentSequence.Count;
+            if (OverrideTime.IsConnected)
+            {
+                time = overrideTime;
+            }
+                 
             NormalizedBarTime = (float)(time % 1).Clamp(0, 0.999999f);
 
             var updateMode = (UpdateModes)UpdateMode.GetValue(context).Clamp(0, Enum.GetNames(typeof(UpdateModes)).Length - 1);
@@ -276,5 +282,10 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
         
         [Input(Guid = "3CE54CA0-CD50-4DC2-BD3D-51E26EBF05CE")]
         public readonly InputSlot<float> RecordValue = new();
+        
+        [Input(Guid = "0E2FB821-460A-4147-99C0-5F6C696E7847")]
+        public readonly InputSlot<float> OverrideTime = new();
+
+        
     }
 }

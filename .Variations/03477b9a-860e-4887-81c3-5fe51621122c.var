@@ -59,6 +59,46 @@
           "80294096-ae64-471a-bcf1-622684e06d56": 3
         }
       }
+    },
+    {
+      "Id": "2cfb2e02-dfeb-4420-9797-f86b0b39cdab",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "Snares",
+      "PosOnCanvas": {
+        "X": 489.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "44409811-1a0f-4be6-83ea-b2f040ebf08b": 2,
+          "f3d7c7fd-4280-4fb4-9f9a-c39b28d1a72b": 0.696,
+          "f920a79d-c946-4a78-9e68-f64fc3c4a696": 0.14,
+          "1d3a1132-e8b9-4c04-99bf-80f6f1530309": 0.18,
+          "02f71a92-d5c8-4dd7-af5f-da12330f60eb": 0.5000002,
+          "80294096-ae64-471a-bcf1-622684e06d56": 3
+        }
+      }
+    },
+    {
+      "Id": "d0b1856f-c464-42e9-b20c-313e0ce3e741",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "44409811-1a0f-4be6-83ea-b2f040ebf08b": 2,
+          "f3d7c7fd-4280-4fb4-9f9a-c39b28d1a72b": 0.026000006,
+          "f920a79d-c946-4a78-9e68-f64fc3c4a696": 0.06,
+          "1d3a1132-e8b9-4c04-99bf-80f6f1530309": 0.0,
+          "02f71a92-d5c8-4dd7-af5f-da12330f60eb": 0.9100002,
+          "80294096-ae64-471a-bcf1-622684e06d56": 3
+        }
+      }
     }
   ]
 }
