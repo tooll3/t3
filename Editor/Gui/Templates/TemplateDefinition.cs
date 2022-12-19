@@ -65,7 +65,7 @@ namespace T3.Editor.Gui.Templates
                                                      // Duplicate and assign new shader source file
                                                      try
                                                      {
-                                                         var newShaderFilename = $@"{resourceFolder}\shader\{name}.hlsl";
+                                                         var newShaderFilename = $@"{resourceFolder}shader\{name}.hlsl";
                                                          var shaderInstance = newInstance.Children.SingleOrDefault(c => c.Symbol.Id ==
                                                              Guid.Parse("a256d70f-adb3-481d-a926-caf35bd3e64c"));
 
@@ -107,7 +107,7 @@ namespace T3.Editor.Gui.Templates
                                                      // Duplicate and assign new shader source file
                                                      try
                                                      {
-                                                         var newShaderFilename = $@"{resourceFolder}\shader\{name}.hlsl";
+                                                         var newShaderFilename = $@"{resourceFolder}shader\{name}.hlsl";
                                                          var shaderSetupInstance = newInstance.Children.SingleOrDefault(c => c.Symbol.Id ==
                                                              Guid.Parse("bd0b9c5b-c611-42d0-8200-31af9661f189"));
                       
