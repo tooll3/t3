@@ -178,10 +178,8 @@ namespace T3.Editor.Gui.Graph.Interaction
         private static void DisconnectDraggedNodes()
         {
             var removeCommands = new List<ICommand>();
-            var inputConnections = new List<(Symbol.Connection connection, Type connectionType)>();
-            var outputConnections = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex)>();
-            var outConnectionInputIndex = 0;
-            var listOutConnectionInputIndex = new List<int>();
+            var inputConnections = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex, int multiInputIndex)>();
+            var outputConnections = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex, int multiInputIndex)>();
             foreach (var node in _draggedNodes)
             {
                 if (node is not SymbolChildUi childUi)
@@ -194,65 +192,60 @@ namespace T3.Editor.Gui.Graph.Interaction
                     continue;
                 }
 
-                foreach (var input in instance.Inputs)
+                // Get all input connections and
+                // relative index if they have multi-index inputs
+                var connectionsToInput = instance.Parent.Symbol.Connections.FindAll(c => c.TargetParentOrChildId == instance.SymbolChildId
+                                                                                   && _draggedNodes.All(c2 => c2.Id != c.SourceParentOrChildId));                
+                var inConnectionInputIndex = 0;
+                foreach (var connectionToInput in connectionsToInput)
                 {
-                    if (!input.IsConnected)
-                        continue;
-
-                    var connectionsToInput = instance.Parent.Symbol.Connections.FindAll(c => c.TargetParentOrChildId == instance.SymbolChildId
-                                                                                             && c.TargetSlotId == input.Id
-                                                                                             && _draggedNodes.All(c2 => c2.Id != c.SourceParentOrChildId));
-                    var lastTargetId = Guid.Empty;
-                    var lastInputId = Guid.Empty;
-                    var multiInputSlotIndex = 0;
-                    
-                    
-                    foreach (var connectionToInput in connectionsToInput)
+                    bool isMultiInput = instance.Parent.Symbol.IsTargetMultiInput(connectionToInput);
+                    if (isMultiInput)
                     {
-                        removeCommands.Add(new DeleteConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, connectionToInput, multiInputSlotIndex));
-                        inputConnections.Add((connectionToInput, input.ValueType));
-                        if (connectionToInput.TargetParentOrChildId == lastTargetId
-                            && connectionToInput.TargetSlotId == lastInputId)
-                        {
-                            multiInputSlotIndex++;
-                        }
-                        else
-                        {
-                            multiInputSlotIndex = 0;
-                        }
+                        inConnectionInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(connectionToInput);
                     }
+                    Type connectionType = instance.Inputs.Find(c => c.Id == connectionToInput.TargetSlotId).ValueType;
+                    inputConnections.Add((connectionToInput, connectionType, isMultiInput, isMultiInput ? inConnectionInputIndex : 0));
                 }
 
-                foreach (var output in instance.Outputs)
+                // Get all output connections and
+                // relative index if they have multi-index inputs
+                var connectionsToOutput = instance.Parent.Symbol.Connections.FindAll(c => c.SourceParentOrChildId == instance.SymbolChildId
+                                                                                    && _draggedNodes.All(c2 => c2.Id != c.TargetParentOrChildId));
+                var outConnectionInputIndex = 0;
+                foreach (var connectionToOutput in connectionsToOutput)
                 {
-                    var connectionsToOutput =
-                        instance.Parent.Symbol.Connections.FindAll(c => c.SourceParentOrChildId == instance.SymbolChildId
-                                                                        && c.SourceSlotId == output.Id
-                                                                        && _draggedNodes.All(c2 => c2.Id != c.TargetParentOrChildId));
-
-                    if (connectionsToOutput.Count == 0)
-                        continue;
-
-                    foreach (var outputConnection in connectionsToOutput)
+                    bool isMultiInput = instance.Parent.Symbol.IsTargetMultiInput(connectionToOutput);
+                    if (isMultiInput)
                     {
-                        var isMultiInput = instance.Parent.Symbol.IsTargetMultiInput(outputConnection);
-                        if (isMultiInput)
-                        {
-                            outConnectionInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(outputConnection);
-                            listOutConnectionInputIndex.Add(outConnectionInputIndex);
-                        }
-                        removeCommands.Add(new DeleteConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, outputConnection, isMultiInput? outConnectionInputIndex : 0));
-                        outputConnections.Add((outputConnection, output.ValueType, isMultiInput));
+                        outConnectionInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(connectionToOutput);
                     }
+                    Type connectionType = instance.Outputs.Find(c => c.Id == connectionToOutput.SourceSlotId).ValueType;
+                    outputConnections.Add((connectionToOutput, connectionType, isMultiInput, isMultiInput ? outConnectionInputIndex : 0));
                 }
             }
 
-            // reconnect inputs of 1th node and outputs of last node if are of the same type
-            // use a list with the indexes of the multiInput disconnected nodes
-            // to reconnect them in order
-            listOutConnectionInputIndex.Sort();
-            int multiIndex = 0;
-            var outputConnectionsRemaining = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex)>(outputConnections);
+            // Remove the input connections in index descending order to
+            // prevent to get the wrong index in case of multi-input properties
+            inputConnections.Sort((x, y) => y.multiInputIndex.CompareTo(x.multiInputIndex));
+            foreach (var inputConnection in inputConnections)
+            {
+                removeCommands.Add(new DeleteConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, inputConnection.connection, inputConnection.multiInputIndex));
+            }
+
+            // Remove the output connections in index descending order to
+            // prevent to get the wrong index in case of multi-input properties
+            outputConnections.Sort((x, y) => y.multiInputIndex.CompareTo(x.multiInputIndex));
+            foreach(var outputConnection in outputConnections)
+            {
+                removeCommands.Add(new DeleteConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, outputConnection.connection, outputConnection.multiInputIndex));
+            }
+
+            // Reconnect inputs of 1th nodes and outputs of last nodes if are of the same type
+            // and reconnect them in ascending order
+            outputConnections.Sort((x, y) => x.multiInputIndex.CompareTo(y.multiInputIndex));
+            inputConnections.Sort((x, y) => x.multiInputIndex.CompareTo(y.multiInputIndex));
+            var outputConnectionsRemaining = new List<(Symbol.Connection connection, Type connectionType, bool isMultiIndex, int multiInputIndex)>(outputConnections);
             foreach (var itemInputConnection in inputConnections)
             {
                 foreach (var itemOutputConnectionRemaining in outputConnectionsRemaining)
@@ -263,17 +256,10 @@ namespace T3.Editor.Gui.Graph.Interaction
                                                                   sourceSlotId: itemInputConnection.connection.SourceSlotId,
                                                                   targetParentOrChildId: itemOutputConnectionRemaining.connection.TargetParentOrChildId,
                                                                   targetSlotId: itemOutputConnectionRemaining.connection.TargetSlotId);
-                        if(listOutConnectionInputIndex.Count > 0 && itemOutputConnectionRemaining.isMultiIndex)
-                        {
-                            multiIndex = listOutConnectionInputIndex[0];
-                            listOutConnectionInputIndex.RemoveAt(0);
-                            removeCommands.Add(new AddConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, newConnection, multiIndex));
-                            outputConnectionsRemaining.Remove(itemOutputConnectionRemaining);
-                        }
-                        else
-                        {
-                            removeCommands.Add(new AddConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, newConnection, 0));
-                        }
+
+                        removeCommands.Add(new AddConnectionCommand(GraphCanvas.Current.CompositionOp.Symbol, newConnection, itemOutputConnectionRemaining.multiInputIndex));
+                        outputConnectionsRemaining.Remove(itemOutputConnectionRemaining);
+
                         break;
                     }
                 }
