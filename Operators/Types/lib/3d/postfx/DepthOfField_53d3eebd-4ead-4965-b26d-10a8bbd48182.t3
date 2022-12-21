@@ -139,8 +139,8 @@
           "Id": "52b2f067-5619-4d8d-a982-58668a8dc6a4"/*OverrideSize*/,
           "Type": "SharpDX.Size2",
           "Value": {
-            "Width": -1,
-            "Height": -1
+            "Width": 0,
+            "Height": 0
           }
         }
       ],
