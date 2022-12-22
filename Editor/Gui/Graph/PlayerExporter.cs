@@ -80,6 +80,7 @@ namespace T3.Editor.Gui.Graph
                               {
                                   playerBuildPath + "bass.dll",
                                   playerBuildPath + "basswasapi.dll",
+                                  playerBuildPath + "Processing.NDI.Lib.x64.dll",
                                   playerBuildPath + "Spout.dll",
                                   playerBuildPath + "SpoutDX.dll",
                                   playerBuildPath + "CommandLine.dll",
