@@ -16,58 +16,49 @@ StructuredBuffer<Point> TargetPoints : t2;
 
 RWStructuredBuffer<PbrVertex> ResultVertices : u0;
 
+float cross( in float2 a, in float2 b ) { return a.x*b.y - a.y*b.x; }
 
-
-// Define weights for controlpoints in clockwise order
-// Y pointsup
-static const float2 PointWeights[4] = {
-    float2(0,1),    // Top left
-    float2(1,1),    // Top Right
-    float2(0,1),    // Bottom right
-    float2(0,0),    // Bottom left
-};
-
-
-// static float f;
-// static float3 posA;
-// static float3 posB;
-// static float4x4 orientationA;
-// static float4x4 orientationB;
-
-// float3 TransformVector(float3 v) {
-//     float3 v2 = float3(0,v.yz) * Scale + lerp(posA, posB, f);
-//     v2 = lerp(mul( float4(v2 - posA, 1), orientationA).xyz + posA,
-//               mul( float4(v2 - posB, 1), orientationB).xyz + posB,
-//               f);
-//     return v2;
-// }
-
-// float3 TransformDirection(float3 v) {
-//     // float3 v2 = float3(0,v.yz) + lerp(posA, posB, f);
-//     // v2 = lerp(mul( float4(v2 - posA, 0), orientationA).xyz,
-//     //           mul( float4(v2 - posB, 0), orientationB).xyz,
-//     //           f);
-
-//     return lerp( mul( float4(v, 0), orientationA).xyz,
-//     mul( float4(v, 0), orientationA).xyz,
-//     f);
-
-// }
-
-static const int MaxControlPointCount = 10;
-
-
-
-float GetWeight(float2 delta) 
+// From Inigo Quilez: https://iquilezles.org/articles/ibilinear/
+float2 invBilinear( in float2 p, in float2 a, in float2 b, in float2 c, in float2 d )
 {
-    //return  pow(1/length(delta) , 1.3);
+    float2 res = float2(-1.0, -1.0);
 
-    float d = length(delta);
-    if(d < 0.000001)
-        return 9999999;
+    float2 e = b-a;
+    float2 f = d-a;
+    float2 g = a-b+c-d;
+    float2 h = p-a;
+        
+    float k2 = cross( g, f );
+    float k1 = cross( e, f ) + cross( h, g );
+    float k0 = cross( h, e );
     
-    return  1/d;
+    // if edges are parallel, this is a linear equation
+    if( abs(k2)<0.001 )
+    {
+        res = float2( (h.x*k1+f.x*k0)/(e.x*k1-g.x*k0), -k0/k1 );
+    }
+    // otherwise, it's a quadratic
+    else
+    {
+        float w = k1*k1 - 4.0*k0*k2;
+        if( w<0.0 ) return float2(-1.0, -1.0);
+        w = sqrt( w );
+
+        float ik2 = 0.5/k2;
+        float v = (-k1 - w)*ik2;
+        float u = (h.x - f.x*v)/(e.x + g.x*v);
+        
+        if( u<0.0 || u>1.0 || v<0.0 || v>1.0 )
+        {
+           v = (-k1 + w)*ik2;
+           u = (h.x - f.x*v)/(e.x + g.x*v);
+        }
+        res = float2( u, v );
+    }
+    
+    return res;
 }
+
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
@@ -83,90 +74,29 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
     }
 
-
-    // float weight = 1;
-    // float3 offset;
-
     PbrVertex v = SourceVertices[vertexIndex];
 
-    float3 posInWorld = v.Position;
+    float3 vp = v.Position;
+    float2 p0= SourcePoints[0].position.xy;
+    float2 p1= SourcePoints[1].position.xy;
+    float2 p2= SourcePoints[2].position.xy;
+    float2 p3= SourcePoints[3].position.xy;
 
-    int maxPointCount = min(min(sourcePointCount, targetPointCount), MaxControlPointCount);
+    float2 uv = saturate(invBilinear(vp.xy, p0, p1, p2, p3));
 
-    float2 maxD= 0;
-    float maxD2= 0;
+    float3 pt0= TargetPoints[0].position;
+    float3 pt1= TargetPoints[1].position;
+    float3 pt2= TargetPoints[2].position;
+    float3 pt3= TargetPoints[3].position;
 
-    // float2 Distances[MaxControlPointCount]; // Cache distances to avoid recomputation
-    // float2 Weights[MaxControlPointCount]; // Cache distances to avoid recomputation
+    float2 targetPos = 
+    lerp(
+        lerp(pt0, pt1, uv.x),
+        lerp(pt2, pt3, 1-uv.x),
+        uv.y);
 
-    // Get max weight
-    int pi;
-
-    float weightSum=0;
-
-    for(pi = 0; pi < maxPointCount; pi++) 
-    {
-        // float2 d= float2(
-        //     length(v.Position.x - SourcePoints[pi].position.x),
-        //     length(v.Position.y - SourcePoints[pi].position.y)
-        // );
-        //float weight = GetWeight(v.Position.xy - SourcePoints[pi].position.xy);
-
-        // float d = length(v.Position.xy - SourcePoints[pi].position.xy);
-
-        // // Distances[pi]= d;
-
-        // float weight =  d> 0.00001 ? 1/d : 999999999;
-        // // Weights[pi] = weight;
-
-        weightSum += GetWeight(v.Position.xy - SourcePoints[pi].position.xy);
-        // maxD = max(d, maxD);        
-        // maxD2 = max(length(d), length(maxD2));
-    }
-
-    // Transform with weights
-    float3 offsetSum = 0;
-    float2 weightsSum =0;
-    for(pi = 0; pi < maxPointCount; pi++) 
-    {
-        float3 targetPointPos = TargetPoints[pi].position;
-        float3 offset = targetPointPos - SourcePoints[pi].position;
-        float weightP = GetWeight(v.Position.xy - SourcePoints[pi].position.xy) / weightSum;
-
-        offsetSum += offset * weightP;    // TODO: Clarify what to do with Z. Maybe average?
-
-        float3 pInPointSpace = v.Position - targetPointPos;
-
-
-        // Matrix t = transpose(quaternion_to_matrix(TargetPoints[pi].rotation));
-
-        // float3 p2 =  mul( float4(pInPointSpace, 0), t).xyz;
-        // p2 += targetPointPos + offset * weightP;
-        // offsetSum += p2;
-    }
-
-    v.Position += offsetSum;
-
-    // float floatIndex = posInWorld.x * (Range) * pointCount * Scale   + Offset * pointCount + 0.00001;
-
-    // uint aIndex = (int)clamp(floatIndex, 0, pointCount-2);
-    // uint bIndex = aIndex + 1;
-    // f = floatIndex - aIndex;
-
-    // Point pointA = SourcePoints[aIndex];
-    // Point pointB = SourcePoints[bIndex];
-
-    // orientationA = transpose(quaternion_to_matrix(pointA.rotation));
-    // orientationB = transpose(quaternion_to_matrix(pointB.rotation));
-    // posA = pointA.position;
-    // posB = pointB.position;
-
-    // v.Position = TransformVector(v.Position);
-
-    // v.Normal = normalize(TransformDirection(v.Normal));
-    // v.Tangent = normalize(TransformDirection(v.Tangent));
-    // v.Bitangent = normalize(TransformDirection(v.Bitangent));
-
+    
+    v.Position = float3(targetPos.xy, vp.z);
     ResultVertices[vertexIndex] = v;
 }
 

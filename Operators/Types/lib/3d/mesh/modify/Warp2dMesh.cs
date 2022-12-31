@@ -20,15 +20,6 @@ namespace T3.Operators.Types.Id_99435f7a_4969_4a0e_83f5_404ee6a0cfa2
         [Input(Guid = "9d00b18c-46f4-446c-8953-2972d90d9685")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> TargetPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
-        [Input(Guid = "ea2941fc-8b6e-443e-80b9-e20a8e6ebbf5")]
-        public readonly InputSlot<float> Range = new InputSlot<float>();
-
-        [Input(Guid = "9a43e818-1e44-4a7b-84c7-0127d655a733")]
-        public readonly InputSlot<float> Offset = new InputSlot<float>();
-
-        [Input(Guid = "6b8baea9-6475-4cb0-bbd9-704963501264")]
-        public readonly InputSlot<float> Scale = new InputSlot<float>();
-
         
         private enum Spaces
         {
