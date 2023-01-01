@@ -12,6 +12,12 @@ cbuffer Params : register(b0)
 StructuredBuffer<Point> SourcePoints : t0;        
 RWStructuredBuffer<Point> ResultPoints : u0;   
 
+int imod(int x, int y) {
+    return x >= 0 ? x % y
+             :y + ((x+1) % y) - 1;  // there are probably easier ways to do this
+} 
+
+
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
@@ -29,7 +35,9 @@ void main(uint3 i : SV_DispatchThreadID)
                 ? (float)sourceCount * Scatter * hash11(i.x+ Seed%4321 + StartIndex%1234)
                 : 0;
 
-    uint index = ((uint)StartIndex + (i.x * StepSize) + scatterOffset + 0.1) % sourceCount;
+    //uint index = imod((int)StartIndex + (i.x * StepSize) + scatterOffset + 0.1,  sourceCount);
+    int index = imod(StartIndex, sourceCount);
+    //index=9;
     ResultPoints[i.x] = SourcePoints[index];
 }
 

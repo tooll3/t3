@@ -40,7 +40,7 @@
       "ChildId": "6d8dd534-2ad6-4d5a-a772-d7e7164e0cba"/*ComputeShader*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 23.0
       },
       "Position": {
         "X": -171.15038,
@@ -85,7 +85,7 @@
       "ChildId": "2b9eb84c-03f3-4c49-b9eb-86abcc1e46f0"/*ExecuteBufferUpdate*/,
       "Size": {
         "X": 110.0,
-        "Y": 49.0
+        "Y": 62.0
       },
       "Position": {
         "X": 813.2322,
@@ -178,6 +178,17 @@
       "Position": {
         "X": 41.316734,
         "Y": 690.4735
+      }
+    },
+    {
+      "ChildId": "4f762afb-bf16-45d8-946e-74a8e8fceb17"/*HasTimeChanged*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 547.7903,
+        "Y": 719.5547
       }
     }
   ],
