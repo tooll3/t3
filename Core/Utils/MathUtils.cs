@@ -1,8 +1,10 @@
 using System;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using T3.Core.Animation;
-using T3.Core.Resource;
+using Quaternion = System.Numerics.Quaternion;
+using Vector2 = System.Numerics.Vector2;
+using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Core.Utils
 {
@@ -84,19 +86,19 @@ namespace T3.Core.Utils
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Min<T>(T lhs, T rhs) where T : System.IComparable<T>
+        public static T Min<T>(T lhs, T rhs) where T : IComparable<T>
         {
             return lhs.CompareTo(rhs) < 0 ? lhs : rhs;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Max<T>(T lhs, T rhs) where T : System.IComparable<T>
+        public static T Max<T>(T lhs, T rhs) where T : IComparable<T>
         {
             return lhs.CompareTo(rhs) >= 0 ? lhs : rhs;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T Clamp<T>(this T val, T min, T max) where T : System.IComparable<T>
+        public static T Clamp<T>(this T val, T min, T max) where T : IComparable<T>
         {
             if (val.CompareTo(min) < 0) return min;
             else if (val.CompareTo(max) > 0) return max;
@@ -371,6 +373,11 @@ namespace T3.Core.Utils
             bool isInvalid = double.IsNaN(val) || double.IsInfinity(val);
             val = isInvalid ? defaultValue : val;
             return isInvalid;
+        }
+
+        public static Quaternion RotationFromTwoPositions(Vector3 p1, Vector3 p2)
+        {
+            return Quaternion.CreateFromAxisAngle(new Vector3(0, 0, 1), (float)(Math.Atan2(p1.X - p2.X, -(p1.Y - p2.Y)) + Math.PI / 2));
         }
     }
 

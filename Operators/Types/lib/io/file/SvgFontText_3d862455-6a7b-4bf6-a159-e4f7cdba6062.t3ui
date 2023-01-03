@@ -1,0 +1,32 @@
+{
+  "Id": "3d862455-6a7b-4bf6-a159-e4f7cdba6062"/*SvgFontText*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "24b82f4f-2381-4c20-8de8-fe9496ffed95"/*FilePath*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      },
+      "Usage": "FilePath"
+    },
+    {
+      "InputId": "8ee43c95-869e-4390-a567-cb0bb9c31bdd"/*Text*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      },
+      "Usage": "Multiline"
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "618e9151-cd91-4aa6-9d91-4bb51610cc8b"/*ResultList*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "Name": "SvgFontText",
+  "Id": "3d862455-6a7b-4bf6-a159-e4f7cdba6062",
+  "Namespace": "lib.io.file",
+  "Inputs": [
+    {
+      "Id": "24b82f4f-2381-4c20-8de8-fe9496ffed95"/*FilePath*/,
+      "DefaultValue": "Resources\\common\\test-footage\\svg-line-sample-01.svg"
+    },
+    {
+      "Id": "8ee43c95-869e-4390-a567-cb0bb9c31bdd"/*Text*/,
+      "DefaultValue": ""
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
