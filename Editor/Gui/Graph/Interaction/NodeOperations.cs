@@ -684,7 +684,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                    && _validTypeNameSpacePattern.IsMatch(nameSpaceString);
         }
 
-        private static readonly Regex _validTypeNameSpacePattern = new Regex(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z][A-Za-z\d]*))*$");
+        private static readonly Regex _validTypeNameSpacePattern = new Regex(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$");
 
         public static bool IsValidUserName(string userName)
         {
