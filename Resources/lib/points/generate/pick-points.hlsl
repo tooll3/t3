@@ -36,8 +36,7 @@ void main(uint3 i : SV_DispatchThreadID)
                 : 0;
 
     //uint index = imod((int)StartIndex + (i.x * StepSize) + scatterOffset + 0.1,  sourceCount);
-    int index = imod(StartIndex, sourceCount);
-    //index=9;
+    int index = imod(StartIndex + (i.x * StepSize), sourceCount);
     ResultPoints[i.x] = SourcePoints[index];
 }
 
