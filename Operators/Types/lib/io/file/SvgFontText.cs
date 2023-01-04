@@ -30,8 +30,6 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
             _pointListWithSeparator.TypedElements[_pointListWithSeparator.NumElements - 1] = Point.Separator();
         }
 
-
-
         private void Update(EvaluationContext context)
         {
             var fontNeedsUpdate = FilePath.DirtyFlag.IsDirty;
@@ -63,7 +61,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
 
             var cursorPos = Vector3.Zero;
             var points = new List<Point>(); // TODO: optimize without list
-            
+
             foreach (var c in text)
             {
                 if (_definition.GlyphsForCharacters.TryGetValue(c, out var glyph))
@@ -71,7 +69,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
                     for (var index = 0; index < glyph.Points.Length; index++)
                     {
                         var p = glyph.Points[index];
-                        
+
                         p.Position += cursorPos;
                         points.Add(p);
                     }
@@ -86,16 +84,17 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
                 ResultList.Value = null;
                 return;
             }
-            
+
             if (_pointListWithSeparator.TypedElements.Length != points.Count)
             {
                 _pointListWithSeparator = new StructuredList<Point>(points.Count);
             }
+
             for (int index = 0; index < points.Count; index++)
             {
                 _pointListWithSeparator.TypedElements[index] = points[index];
             }
-            
+
             ResultList.Value = _pointListWithSeparator;
         }
 
@@ -122,11 +121,9 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
         private SvgFontDefinition _definition;
     }
 
- 
-    
     internal class SvgFontDefinition
     {
-        public Dictionary<char,SvgFontGlyph> GlyphsForCharacters = new();
+        public Dictionary<char, SvgFontGlyph> GlyphsForCharacters = new();
         public readonly Dictionary<int, float> KerningForPairs = new();
 
         public static SvgFontDefinition CreateFromFilepath(string filepath, bool forceUpdate = false)
@@ -153,138 +150,174 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
 
             var glyphs = new Dictionary<char, SvgFontGlyph>();
 
-            if (svgDoc.Children.Count != 1)
+            if (svgDoc.Children == null || svgDoc.Children.Count == 1)
             {
                 Log.Debug("Unexpected child in SvgFont definition.");
                 return null;
             }
 
-            if (svgDoc.Children[0] is not SvgFont svgFont)
+            foreach (var svgDocChild in svgDoc.Children)
             {
-                Log.Debug("Can't find SvgFont definition in svg file.");
-                return null;
-            }
-
-            foreach (var child in svgFont.Children)
-            {
-                if (child is not SvgGlyph svgGlyph)
-                    continue;
-
-                var svgElements = new List<SvgElement>() { svgGlyph };
-
-                var pathElements = SvgHelper.ConvertAllNodesIntoGraphicPaths(svgElements, true);
-                if (pathElements.Count == 0)
-                    continue;
-
-                // Flatten and sum total point count including separators 
-                var totalPointCount = 0;
-
-                foreach (var t in pathElements)
+                if (svgDocChild is SvgFont svgFont)
                 {
-                    var p = t;
-                    try
+                    foreach (var svgFontChild in svgFont.Children)
                     {
-                        p.GraphicsPath.Flatten(null, 1);
-                        _ = p.GraphicsPath.PathPoints.Length; // Access path points to see if result is valid. 
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Debug("Can't flatten element" + e.Message);
-                        t.Invalid = true;
-                        continue;
-                    }
+                        if (svgFontChild is not SvgGlyph svgGlyph)
+                            continue;
 
-                    var closePoint = p.NeedsClosing ? 1 : 0;
-                    totalPointCount += p.GraphicsPath.PointCount + 1 + closePoint;
-                }
+                        var points = GetPointsFromSvgGroup(svgGlyph, centerOffset, scale);
+                        if (points == null || points.Length == 0)
+                            continue;
 
-                var pointListWithSeparator = new Point[totalPointCount];
-
-                // Copy points
-                var pointIndex = 0;
-                foreach (var pathElement in pathElements)
-                {
-                    if (pathElement.Invalid)
-                        continue;
-
-                    var startIndex = pointIndex;
-
-                    var path = pathElement.GraphicsPath;
-
-                    var pathPointCount = path.PathPoints.Length;
-
-                    for (var pathPointIndex = 0; pathPointIndex < pathPointCount; pathPointIndex++)
-                    {
-                        var point = path.PathPoints[pathPointIndex];
-
-                        pointListWithSeparator[startIndex + pathPointIndex].Position
-                            = (new Vector3(point.X, 1 - point.Y, 0) + centerOffset) * scale;
-                        pointListWithSeparator[startIndex + pathPointIndex].W = 1;
-                        pointListWithSeparator[startIndex + pathPointIndex].Orientation = Quaternion.Identity;
-                    }
-
-                    // Calculate normals
-                    if (pathPointCount > 1)
-                    {
-                        for (var pathPointIndex = 0; pathPointIndex < pathPointCount; pathPointIndex++)
+                        if (string.IsNullOrEmpty(svgGlyph.Unicode) || svgGlyph.Unicode.Length != 1)
                         {
-                            if (pathPointIndex == 0)
-                            {
-                                pointListWithSeparator[startIndex + pathPointIndex].Orientation =
-                                    MathUtils.RotationFromTwoPositions(pointListWithSeparator[0].Position,
-                                                                       pointListWithSeparator[1].Position);
-                            }
-                            else if (pathPointIndex == pathPointCount - 1)
-                            {
-                                pointListWithSeparator[startIndex + pathPointIndex].Orientation =
-                                    MathUtils.RotationFromTwoPositions(pointListWithSeparator[pathPointCount - 2].Position,
-                                                                       pointListWithSeparator[pathPointCount - 1].Position);
-                            }
-                            else
-                            {
-                                pointListWithSeparator[startIndex + pathPointIndex].Orientation =
-                                    MathUtils.RotationFromTwoPositions(pointListWithSeparator[startIndex + pathPointIndex].Position,
-                                                                       pointListWithSeparator[startIndex + pathPointIndex + 1].Position);
-                            }
+                            Log.Warning("Skipping svg glyph with missing or invalid unicode:" + svgGlyph.GlyphName);
+                            continue;
                         }
+
+                        glyphs[svgGlyph.Unicode[0]] = new SvgFontGlyph
+                                                          {
+                                                              Points = points,
+                                                              UniCode = svgGlyph.Unicode,
+                                                              Name = svgGlyph.GlyphName,
+                                                              AdvanceX = svgGlyph.HorizAdvX,
+                                                          };
                     }
-
-                    // Close loop?
-                    if (pathElement.NeedsClosing)
-                    {
-                        pointListWithSeparator[startIndex + pathPointCount] = pointListWithSeparator[startIndex];
-                        pointIndex++;
-                    }
-
-                    pointIndex += path.PathPoints.Length;
-
-                    pointListWithSeparator[pointIndex] = Point.Separator();
-                    pointIndex++;
                 }
-
-                if (string.IsNullOrEmpty(svgGlyph.Unicode) || svgGlyph.Unicode.Length != 1)
+                else if (svgDocChild is SvgGroup svgGroup && svgGroup.ID.EndsWith("-Font"))
                 {
-                    Log.Warning("Skipping svg glyph with missing or invalid unicode:" + svgGlyph.GlyphName);
-                    continue;
-                }
-                
-                glyphs[svgGlyph.Unicode[0]] = new SvgFontGlyph
-                                                  {
-                                                      Points = pointListWithSeparator,
-                                                      UniCode = svgGlyph.Unicode,
-                                                      Name = svgGlyph.GlyphName,
-                                                      AdvanceX = svgGlyph.HorizAdvX,
-                                                      // VertOriginX = svgGlyph.VertOriginX,
-                                                      // VertOriginY = svgGlyph.VertOriginY,
-                                                  };
-            }
+                    foreach (var groupChild in svgGroup.Children)
+                    {
+                        if (groupChild is not SvgGroup glyphGroup)
+                            continue;
 
+                        var points = GetPointsFromSvgGroup(glyphGroup, centerOffset, scale);
+                        if (points == null || points.Length == 0)
+                            continue;
+
+                        var svgGroupId = glyphGroup.ID;
+                        if (string.IsNullOrEmpty(svgGroupId) || svgGroupId.Length != 1)
+                        {
+                            Log.Warning("Skipping svg group with missing or invalid single character ID" + svgGroupId);
+                            continue;
+                        }
+
+                        glyphs[svgGroupId[0]] = new SvgFontGlyph
+                                                    {
+                                                        Points = points,
+                                                        UniCode = svgGroupId,
+                                                        Name = svgGroupId,
+                                                        AdvanceX = glyphGroup.Bounds.Width,
+                                                    };
+                    }
+                }
+
+            }
             var newDefinition = new SvgFontDefinition
                                     {
                                         GlyphsForCharacters = glyphs
                                     };
             _definitionsForFilePaths[filepath] = newDefinition;
             return newDefinition;
+
+            Log.Debug("Can't find SvgFont definition in svg file.");
+            return null;
+        }
+
+        private static Point[] GetPointsFromSvgGroup(SvgElement svgGlyph, Vector3 centerOffset, float scale)
+        {
+            var svgElements = new List<SvgElement>() { svgGlyph };
+            var pathElements = SvgHelper.ConvertAllNodesIntoGraphicPaths(svgElements, true);
+            if (pathElements.Count == 0)
+                return null;
+
+            // Flatten and sum total point count including separators 
+            var totalPointCount = 0;
+
+            foreach (var t in pathElements)
+            {
+                var p = t;
+                try
+                {
+                    p.GraphicsPath.Flatten(null, 1);
+                    _ = p.GraphicsPath.PathPoints.Length; // Access path points to see if result is valid. 
+                }
+                catch (Exception e)
+                {
+                    Log.Debug("Can't flatten element" + e.Message);
+                    t.Invalid = true;
+                    continue;
+                }
+
+                var closePoint = p.NeedsClosing ? 1 : 0;
+                totalPointCount += p.GraphicsPath.PointCount + 1 + closePoint;
+            }
+
+            var pointListWithSeparator = new Point[totalPointCount];
+
+            // Copy points
+            var pointIndex = 0;
+            foreach (var pathElement in pathElements)
+            {
+                if (pathElement.Invalid)
+                    continue;
+
+                var startIndex = pointIndex;
+
+                var path = pathElement.GraphicsPath;
+
+                var pathPointCount = path.PathPoints.Length;
+
+                for (var pathPointIndex = 0; pathPointIndex < pathPointCount; pathPointIndex++)
+                {
+                    var point = path.PathPoints[pathPointIndex];
+
+                    pointListWithSeparator[startIndex + pathPointIndex].Position
+                        = (new Vector3(point.X, 1 - point.Y, 0) + centerOffset) * scale;
+                    pointListWithSeparator[startIndex + pathPointIndex].W = 1;
+                    pointListWithSeparator[startIndex + pathPointIndex].Orientation = Quaternion.Identity;
+                }
+
+                // Calculate normals
+                if (pathPointCount > 1)
+                {
+                    for (var pathPointIndex = 0; pathPointIndex < pathPointCount; pathPointIndex++)
+                    {
+                        if (pathPointIndex == 0)
+                        {
+                            pointListWithSeparator[startIndex + pathPointIndex].Orientation =
+                                MathUtils.RotationFromTwoPositions(pointListWithSeparator[0].Position,
+                                                                   pointListWithSeparator[1].Position);
+                        }
+                        else if (pathPointIndex == pathPointCount - 1)
+                        {
+                            pointListWithSeparator[startIndex + pathPointIndex].Orientation =
+                                MathUtils.RotationFromTwoPositions(pointListWithSeparator[pathPointCount - 2].Position,
+                                                                   pointListWithSeparator[pathPointCount - 1].Position);
+                        }
+                        else
+                        {
+                            pointListWithSeparator[startIndex + pathPointIndex].Orientation =
+                                MathUtils.RotationFromTwoPositions(pointListWithSeparator[startIndex + pathPointIndex].Position,
+                                                                   pointListWithSeparator[startIndex + pathPointIndex + 1].Position);
+                        }
+                    }
+                }
+
+                // Close loop?
+                if (pathElement.NeedsClosing)
+                {
+                    pointListWithSeparator[startIndex + pathPointCount] = pointListWithSeparator[startIndex];
+                    pointIndex++;
+                }
+
+                pointIndex += path.PathPoints.Length;
+
+                pointListWithSeparator[pointIndex] = Point.Separator();
+                pointIndex++;
+            }
+
+            return pointListWithSeparator;
         }
 
         private static readonly Dictionary<string, SvgFontDefinition> _definitionsForFilePaths = new();
@@ -300,7 +333,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
         public float VertOriginX;
         public float VertOriginY;
     }
-    
+
     public class GraphicsPathEntry
     {
         public GraphicsPath GraphicsPath;
