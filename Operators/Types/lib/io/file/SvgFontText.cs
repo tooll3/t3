@@ -69,8 +69,10 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
                     for (var index = 0; index < glyph.Points.Length; index++)
                     {
                         var p = glyph.Points[index];
+                        p.Position.Y *= -1; 
 
                         p.Position += cursorPos;
+                        p.Position *= 0.01f;
                         points.Add(p);
                     }
 
@@ -150,69 +152,9 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
 
             var glyphs = new Dictionary<char, SvgFontGlyph>();
 
-            if (svgDoc.Children == null || svgDoc.Children.Count == 1)
-            {
-                Log.Debug("Unexpected child in SvgFont definition.");
-                return null;
-            }
+            var svgElementCollection = svgDoc.Children;
+            ParseFontDefinitionsInElements(svgElementCollection, centerOffset, scale, glyphs);
 
-            foreach (var svgDocChild in svgDoc.Children)
-            {
-                if (svgDocChild is SvgFont svgFont)
-                {
-                    foreach (var svgFontChild in svgFont.Children)
-                    {
-                        if (svgFontChild is not SvgGlyph svgGlyph)
-                            continue;
-
-                        var points = GetPointsFromSvgGroup(svgGlyph, centerOffset, scale);
-                        if (points == null || points.Length == 0)
-                            continue;
-
-                        if (string.IsNullOrEmpty(svgGlyph.Unicode) || svgGlyph.Unicode.Length != 1)
-                        {
-                            Log.Warning("Skipping svg glyph with missing or invalid unicode:" + svgGlyph.GlyphName);
-                            continue;
-                        }
-
-                        glyphs[svgGlyph.Unicode[0]] = new SvgFontGlyph
-                                                          {
-                                                              Points = points,
-                                                              UniCode = svgGlyph.Unicode,
-                                                              Name = svgGlyph.GlyphName,
-                                                              AdvanceX = svgGlyph.HorizAdvX,
-                                                          };
-                    }
-                }
-                else if (svgDocChild is SvgGroup svgGroup && svgGroup.ID.EndsWith("-Font"))
-                {
-                    foreach (var groupChild in svgGroup.Children)
-                    {
-                        if (groupChild is not SvgGroup glyphGroup)
-                            continue;
-
-                        var points = GetPointsFromSvgGroup(glyphGroup, centerOffset, scale);
-                        if (points == null || points.Length == 0)
-                            continue;
-
-                        var svgGroupId = glyphGroup.ID;
-                        if (string.IsNullOrEmpty(svgGroupId) || svgGroupId.Length != 1)
-                        {
-                            Log.Warning("Skipping svg group with missing or invalid single character ID" + svgGroupId);
-                            continue;
-                        }
-
-                        glyphs[svgGroupId[0]] = new SvgFontGlyph
-                                                    {
-                                                        Points = points,
-                                                        UniCode = svgGroupId,
-                                                        Name = svgGroupId,
-                                                        AdvanceX = glyphGroup.Bounds.Width,
-                                                    };
-                    }
-                }
-
-            }
             var newDefinition = new SvgFontDefinition
                                     {
                                         GlyphsForCharacters = glyphs
@@ -222,6 +164,102 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
 
             Log.Debug("Can't find SvgFont definition in svg file.");
             return null;
+        }
+
+        private static void ParseFontDefinitionsInElements(SvgElementCollection svgElementCollection, Vector3 centerOffset, float scale, Dictionary<char, SvgFontGlyph> glyphs)
+        {
+            foreach (var svgDocChild in svgElementCollection)
+            {
+                if (svgDocChild is SvgFont svgFont)
+                {
+                    CollectGlyphsFromSvgFont(svgFont, centerOffset, scale, glyphs);
+                }
+                else if (svgDocChild is SvgGroup svgGroup
+                         && !string.IsNullOrEmpty(svgGroup.ID)
+                         && svgGroup.ID.EndsWith("-Font"))
+                {
+                    CollectGlyphsFromPathGroup(svgGroup, glyphs, centerOffset, scale);
+                }
+                else if (svgDocChild is SvgDefinitionList svgDefinitionList)
+                {
+                    ParseFontDefinitionsInElements(svgDefinitionList.Children, centerOffset, scale, glyphs);
+                }
+            }
+        }
+
+        private static void CollectGlyphsFromPathGroup(SvgGroup svgGroup, Dictionary<char, SvgFontGlyph> glyphs, Vector3 centerOffset, float scale)
+        {
+            foreach (var groupChild in svgGroup.Children)
+            {
+                if (groupChild is not SvgGroup glyphGroup)
+                    continue;
+
+                var points = GetPointsFromSvgGroup(glyphGroup, centerOffset, scale);
+                if (points == null || points.Length == 0)
+                    continue;
+
+                var svgGroupId = glyphGroup.ID;
+                if (string.IsNullOrEmpty(svgGroupId))
+                {
+                    Log.Warning("Skipping svg group with missing or invalid single character ID" + svgGroupId);
+                    continue;
+                }
+
+
+                if (svgGroupId.Length > 1)
+                {
+                    svgGroupId = System.Net.WebUtility.HtmlDecode(svgGroupId);
+                }
+
+                if (svgGroupId.Length != 1)
+                {
+                    Log.Warning("Skipping svg invalid single character ID" + svgGroupId);
+                    continue;
+                }
+
+                glyphs[svgGroupId[0]] = new SvgFontGlyph
+                                            {
+                                                Points = points,
+                                                UniCode = svgGroupId,
+                                                Name = svgGroupId,
+                                                AdvanceX = glyphGroup.Bounds.Width,
+                                            };
+            }
+        }
+
+        private static void CollectGlyphsFromSvgFont(SvgFont svgFont, Vector3 centerOffset, float scale, Dictionary<char, SvgFontGlyph> glyphs)
+        {
+            foreach (var svgFontChild in svgFont.Children)
+            {
+                if (svgFontChild is not SvgGlyph svgGlyph)
+                    continue;
+
+                var points = GetPointsFromSvgGroup(svgGlyph, centerOffset, scale);
+                if (points == null || points.Length == 0)
+                    continue;
+                
+                
+                if (string.IsNullOrEmpty(svgGlyph.Unicode) || svgGlyph.Unicode.Length != 1)
+                {
+                    Log.Warning("Skipping svg glyph with missing or invalid unicode:" + svgGlyph.GlyphName);
+                    continue;
+                }
+
+                var uniCode = svgGlyph.Unicode[0];
+                var glyphValue = (int)uniCode;
+                if (glyphValue > 1000 && svgGlyph.GlyphName.Length == 1)
+                {
+                    uniCode = svgGlyph.GlyphName[0];
+                }
+
+                glyphs[uniCode] = new SvgFontGlyph
+                                                  {
+                                                      Points = points,
+                                                      UniCode = ""+uniCode,
+                                                      Name = svgGlyph.GlyphName,
+                                                      AdvanceX = svgGlyph.HorizAdvX,
+                                                  };
+            }
         }
 
         private static Point[] GetPointsFromSvgGroup(SvgElement svgGlyph, Vector3 centerOffset, float scale)
@@ -239,7 +277,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
                 var p = t;
                 try
                 {
-                    p.GraphicsPath.Flatten(null, 1);
+                    p.GraphicsPath.Flatten(null, 0.2f);
                     _ = p.GraphicsPath.PathPoints.Length; // Access path points to see if result is valid. 
                 }
                 catch (Exception e)
@@ -358,39 +396,16 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
                 {
                     case SvgPath svgPath:
                     {
-                        foreach (var s in svgPath.PathData)
-                        {
-                            var segmentIsJump = s is SvgMoveToSegment or SvgClosePathSegment;
-                            if (segmentIsJump)
-                            {
-                                if (newPath == null)
-                                    continue;
-
-                                paths.Add(new GraphicsPathEntry
-                                              {
-                                                  GraphicsPath = newPath,
-                                                  NeedsClosing = false
-                                              });
-                                newPath = null;
-                            }
-                            else
-                            {
-                                newPath ??= new GraphicsPath();
-                                s.AddToPath(newPath);
-                            }
-                        }
-
-                        if (newPath != null)
-                        {
-                            paths.Add(new GraphicsPathEntry
-                                          {
-                                              GraphicsPath = newPath,
-                                              NeedsClosing = false
-                                          });
-                        }
-
+                        ConvertPathDataElements(svgPath.PathData, newPath, paths);
                         break;
                     }
+                    
+                    case SvgGlyph svgGlyph:
+                    {
+                        ConvertPathDataElements(svgGlyph.PathData, newPath, paths);
+                        break;
+                    }
+
                     case SvgGroup:
                         break;
 
@@ -424,6 +439,43 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
             }
 
             return paths;
+        }
+
+        private static void ConvertPathDataElements(SvgPathSegmentList svgPathSegmentList, GraphicsPath newPath, List<GraphicsPathEntry> paths)
+        {
+            if (svgPathSegmentList == null)
+                return;
+            
+            foreach (var s in svgPathSegmentList)
+            {
+                var segmentIsJump = s is SvgMoveToSegment or SvgClosePathSegment;
+                if (segmentIsJump)
+                {
+                    if (newPath == null)
+                        continue;
+
+                    paths.Add(new GraphicsPathEntry
+                                  {
+                                      GraphicsPath = newPath,
+                                      NeedsClosing = false
+                                  });
+                    newPath = null;
+                }
+                else
+                {
+                    newPath ??= new GraphicsPath();
+                    s.AddToPath(newPath);
+                }
+            }
+
+            if (newPath != null)
+            {
+                paths.Add(new GraphicsPathEntry
+                              {
+                                  GraphicsPath = newPath,
+                                  NeedsClosing = false
+                              });
+            }
         }
     }
 }
