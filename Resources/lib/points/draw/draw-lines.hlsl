@@ -106,10 +106,13 @@ psInput vsMain(uint id: SV_VertexID)
     float3 normal =  normalize( cross(direction, float3(0,0,1))); 
     float3 normalA =  normalize( cross(directionA, float3(0,0,1))); 
     float3 normalB =  normalize( cross(directionB, float3(0,0,1))); 
-    if(isnan(pointAA.w) || pointAA.w < 0.01) {
+    
+    //if(isnan(pointAA.w) || pointAA.w < 0.000001) {
+    if(isnan(pointAA.w)) {
         normalA =normal;
     }
-    if(isnan(pointBB.w) || pointAA.w < 0.01) {
+    //if(isnan(pointBB.w) || pointAA.w < 0.000001) {
+    if(isnan(pointBB.w)) {
         normalB =normal;
     }
 
