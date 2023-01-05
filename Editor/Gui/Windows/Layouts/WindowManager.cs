@@ -58,6 +58,7 @@ namespace T3.Editor.Gui.Windows.Layouts
                                new SettingsWindow(),
                                new RenderVideoWindow(),
                                new ConsoleLogWindow(),
+                               new UtilitiesWindow(),
                            };            
 
             LayoutHandling.LoadAndApplyLayout(UserSettings.Config.WindowLayoutIndex);

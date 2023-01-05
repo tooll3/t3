@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Gui\UiHelpers\ConvertSvgFonts" />
     <Folder Include="Gui\Windows\LegacyVariations" />
   </ItemGroup>
 
