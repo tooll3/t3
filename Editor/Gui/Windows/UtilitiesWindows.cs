@@ -95,7 +95,7 @@ namespace T3.Editor.Gui.Windows
                 
                 var newGlyph = new XElement(_ns + "glyph");
                 newGlyph.SetAttributeValue("horiz-adv-x", width);
-                newGlyph.SetAttributeValue("offset-x", xTransform);
+                newGlyph.SetAttributeValue("vert-origin-x", xTransform);
                 newGlyph.SetAttributeValue("unicode", id);
                 newGlyph.SetAttributeValue("glyph-name", id);
                 newGlyph.SetAttributeValue("d", d);

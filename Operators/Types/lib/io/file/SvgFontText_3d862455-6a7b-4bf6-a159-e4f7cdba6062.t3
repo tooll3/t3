@@ -5,11 +5,11 @@
   "Inputs": [
     {
       "Id": "24b82f4f-2381-4c20-8de8-fe9496ffed95"/*FilePath*/,
-      "DefaultValue": "Resources\\common\\test-footage\\svg-line-sample-01.svg"
+      "DefaultValue": "Resources\\user\\pixtur\\research\\SvgFonts\\svgfont-Monono-from-figma2.svg"
     },
     {
       "Id": "8ee43c95-869e-4390-a567-cb0bb9c31bdd"/*Text*/,
-      "DefaultValue": ""
+      "DefaultValue": "ABCDabcd"
     }
   ],
   "Children": [],
