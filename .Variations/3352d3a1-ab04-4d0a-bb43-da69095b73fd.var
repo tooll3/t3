@@ -179,6 +179,51 @@
           "cd917c3d-489e-4e4d-b5dc-eacc846d82ef": 90.0
         }
       }
+    },
+    {
+      "Id": "32ddbd58-c8ac-495f-bafe-4fdfc5bd4aca",
+      "IsPreset": true,
+      "ActivationIndex": 8,
+      "Title": "Letter Spiral",
+      "PosOnCanvas": {
+        "X": -2.433628,
+        "Y": 315.81415
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "b654ffe2-d46e-4a62-89b3-a9692d5c6481": 1000,
+          "acce4779-56d6-47c4-9c52-874fca91a3a1": 0.0,
+          "13cbb509-f90c-4ae7-a9d3-a8fc907794e3": 1.0,
+          "94b2a118-f760-4043-933c-31283e6e7006": -10.0,
+          "cd917c3d-489e-4e4d-b5dc-eacc846d82ef": -83.0
+        }
+      }
+    },
+    {
+      "Id": "cbbc489e-55bd-47fc-ad4f-9777950630a0",
+      "IsPreset": true,
+      "ActivationIndex": 9,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "acce4779-56d6-47c4-9c52-874fca91a3a1": -0.41000003,
+          "6df5829e-a534-4620-bcd5-9324f94b4f54": {
+            "X": 0.0,
+            "Y": 1.0,
+            "Z": 0.0
+          },
+          "01a62754-7629-487d-a43a-f0cd2fbfafce": {
+            "X": 0.0,
+            "Y": 1.0,
+            "Z": 0.0
+          },
+          "cd917c3d-489e-4e4d-b5dc-eacc846d82ef": -90.0
+        }
+      }
     }
   ]
 }
