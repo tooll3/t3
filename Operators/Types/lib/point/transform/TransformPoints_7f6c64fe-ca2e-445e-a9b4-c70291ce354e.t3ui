@@ -3,14 +3,6 @@
   "Description": "Transforms incoming points.\n\nTips: \n- Try to activate .WIsWeight and combine this operator with [SelectPoints].\n- Changing the Space to Point can be used to offset the points.\n\n\n",
   "InputUis": [
     {
-      "InputId": "565ff364-c3d9-4c60-a9a0-79fdd36d3477"/*Points*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -488.51422,
-        "Y": 626.3017
-      }
-    },
-    {
       "InputId": "9e803bd1-c5a3-4f6f-926d-d19f32dcbae5"/*Translation*/,
       "Position": {
         "X": -461.1681,
@@ -73,6 +65,14 @@
         "X": -461.1681,
         "Y": 1234.401
       }
+    },
+    {
+      "InputId": "565ff364-c3d9-4c60-a9a0-79fdd36d3477"/*Points*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -484.74,
+        "Y": 1328.3052
+      }
     }
   ],
   "SymbolChildUis": [
@@ -80,7 +80,7 @@
       "ChildId": "4a35fd19-11d2-49d3-9d62-d4a46933db93"/*ComputeShader*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 23.0
       },
       "Position": {
         "X": 109.659775,

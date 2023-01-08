@@ -23,9 +23,6 @@ namespace T3.Operators.Types.Id_7f6c64fe_ca2e_445e_a9b4_c70291ce354e
         IInputSlot ITransformable.ScaleInput => Scale;
         public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
-        [Input(Guid = "565ff364-c3d9-4c60-a9a0-79fdd36d3477")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
-
         [Input(Guid = "9e803bd1-c5a3-4f6f-926d-d19f32dcbae5")]
         public readonly InputSlot<System.Numerics.Vector3> Translation = new InputSlot<System.Numerics.Vector3>();
 
@@ -47,11 +44,14 @@ namespace T3.Operators.Types.Id_7f6c64fe_ca2e_445e_a9b4_c70291ce354e
         [Input(Guid = "af0cff8a-126e-47bd-bb60-9198567f85e0")]
         public readonly InputSlot<float> OffsetW = new InputSlot<float>();
 
-        [Input(Guid = "1ab4671f-7977-4e7e-bb06-f828ae32e3af", MappedType = typeof(Spaces))]
+        [Input(Guid = "1ab4671f-7977-4e7e-bb06-f828ae32e3af")]
         public readonly InputSlot<int> Space = new InputSlot<int>();
 
         [Input(Guid = "56cd97c5-f4f1-4eb4-a53c-312373ee7706")]
         public readonly InputSlot<bool> WIsWeight = new InputSlot<bool>();
+
+        [Input(Guid = "565ff364-c3d9-4c60-a9a0-79fdd36d3477")]
+        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
         
         
         

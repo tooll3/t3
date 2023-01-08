@@ -4,17 +4,32 @@
   "InputUis": [
     {
       "InputId": "4d31be7a-3011-4fdf-9c63-425387b9bbfc"/*RailPoints*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -1425.0002,
         "Y": 679.3753
       }
     },
     {
-      "InputId": "5e2ada8d-10fa-419d-a377-0b504437fd72"/*Points*/,
+      "InputId": "5e2ada8d-10fa-419d-a377-0b504437fd72"/*ProfilePoints*/,
       "Relevancy": "Required",
       "Position": {
         "X": -1425.9536,
         "Y": 809.96735
+      }
+    },
+    {
+      "InputId": "7c24f499-8021-4c67-9790-5cc7efb83287"/*UseWAsWidth*/,
+      "Position": {
+        "X": -1423.521,
+        "Y": 1079.9822
+      }
+    },
+    {
+      "InputId": "332e7d07-f6a2-4f58-8fe4-d2b368a63f4a"/*Width*/,
+      "Position": {
+        "X": -1423.521,
+        "Y": 1124.9822
       }
     }
   ],
@@ -23,7 +38,7 @@
       "ChildId": "1641928b-9226-453d-803c-36e1340513ad"/*ComputeShader*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 23.0
       },
       "Position": {
         "X": -172.07574,
@@ -45,7 +60,7 @@
       "ChildId": "2b43c2d3-ff99-4d59-9d15-f989499ed6c6"/*FloatsToBuffer*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 62.0
       },
       "Position": {
         "X": 82.98674,
@@ -93,7 +108,7 @@
       },
       "Position": {
         "X": 82.98674,
-        "Y": 705.2196
+        "Y": 744.2196
       }
     },
     {
@@ -248,6 +263,17 @@
       "Position": {
         "X": -297.9114,
         "Y": 962.7078
+      }
+    },
+    {
+      "ChildId": "8be8c5cf-efeb-4f3e-8187-fbe127ea5e33"/*BoolToFloats*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -1134.7095,
+        "Y": 1144.9644
       }
     }
   ],

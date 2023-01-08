@@ -40,7 +40,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     if(MappingMode < 0.5 ) {
         // Normal
-        f= ((float)index / pointCount - 0.5)/Range + 0.5 + Phase;
+        f= ((float)index / pointCount - 0.5)/Range + 0.5 + Phase/Range;
     
     }
     else if(MappingMode < 1.5) {
@@ -70,7 +70,7 @@ void main(uint3 i : SV_DispatchThreadID)
     float w = 0;
 
     if(Mode < 0.5) {
-        w= curveValue;
+        w= !isnan(p.w) ? curveValue : p.w;
     }
     else if(Mode < 1.5) {
         w= p.w * curveValue;

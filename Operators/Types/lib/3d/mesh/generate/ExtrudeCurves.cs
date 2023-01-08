@@ -15,7 +15,13 @@ namespace T3.Operators.Types.Id_816336a8_e214_4d2c_b8f9_05b1aa3ff2e2
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> RailPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
         [Input(Guid = "5e2ada8d-10fa-419d-a377-0b504437fd72")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> ProfilePoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+
+        [Input(Guid = "7c24f499-8021-4c67-9790-5cc7efb83287")]
+        public readonly InputSlot<bool> UseWAsWidth = new InputSlot<bool>();
+
+        [Input(Guid = "332e7d07-f6a2-4f58-8fe4-d2b368a63f4a")]
+        public readonly InputSlot<float> Width = new InputSlot<float>();
 
 
         private enum SampleModes

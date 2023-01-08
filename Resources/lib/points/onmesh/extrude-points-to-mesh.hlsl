@@ -5,9 +5,8 @@
 
 cbuffer Params : register(b0)
 {
-    // float SmoothDistance;
-    // float SampleMode;
-    // float2 SampleRange;
+    float UseWAsWidth;
+    float Width;
 }
 
 StructuredBuffer<Point> RailPoints : t0;
@@ -32,7 +31,6 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
     }
 
-    
 
     uint rows;
     ShapePoints.GetDimensions(rows, stride);
@@ -48,13 +46,17 @@ void main(uint3 i : SV_DispatchThreadID)
     Point railPoint = RailPoints[columnIndex];
     Point shapePoint = ShapePoints[rowIndex];
 
-    float4 rotation = normalize(qmul(shapePoint.rotation, railPoint.rotation ));
-    float3 position = rotate_vector(shapePoint.position * railPoint.w, railPoint.rotation) + railPoint.position;
+    float width = (UseWAsWidth ? railPoint.w : 1) * Width;
+
+    float4 rotation = normalize(qmul( railPoint.rotation ,shapePoint.rotation ));
+    float3 position = rotate_vector(shapePoint.position * width, railPoint.rotation) + railPoint.position;
+
+    //float3 normal =
 
     v.Position =  position;
     v.Normal = rotate_vector(float3(0,0,1), rotation);
-    v.Tangent = rotate_vector(float3(1,0,0), rotation);
-    v.Bitangent = rotate_vector(float3(0,1,0), rotation);
+    v.Tangent = rotate_vector(float3(0,1,0), rotation);
+    v.Bitangent = rotate_vector(float3(1,0,0), rotation);
     v.TexCoord = float2((float)columnIndex/(columns-1),(float)rowIndex/(rows-1));
     v.Selected = 1;
     v.__padding =0;
