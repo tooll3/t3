@@ -8,9 +8,6 @@ namespace T3.Operators.Types.Id_7f6c64fe_ca2e_445e_a9b4_c70291ce354e
 {
     public class TransformPoints : Instance<TransformPoints>, ITransformable
     {
-
-        
-        
         [Output(Guid = "ba17981e-ef9f-46f1-a653-6d50affa8838")]
         public readonly TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews> Output = new TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews>();
 
@@ -44,7 +41,7 @@ namespace T3.Operators.Types.Id_7f6c64fe_ca2e_445e_a9b4_c70291ce354e
         [Input(Guid = "af0cff8a-126e-47bd-bb60-9198567f85e0")]
         public readonly InputSlot<float> OffsetW = new InputSlot<float>();
 
-        [Input(Guid = "1ab4671f-7977-4e7e-bb06-f828ae32e3af")]
+        [Input(Guid = "1ab4671f-7977-4e7e-bb06-f828ae32e3af", MappedType = typeof(Spaces))]
         public readonly InputSlot<int> Space = new InputSlot<int>();
 
         [Input(Guid = "56cd97c5-f4f1-4eb4-a53c-312373ee7706")]
