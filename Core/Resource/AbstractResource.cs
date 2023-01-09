@@ -1,4 +1,6 @@
-﻿using SharpDX.D3DCompiler;
+﻿using System.Linq;
+using System.Text.RegularExpressions;
+using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 
 namespace T3.Core.Resource
@@ -28,6 +30,29 @@ namespace T3.Core.Resource
         public string EntryPoint { get; }
         protected ShaderBytecode _blob;
         public ShaderBytecode Blob { get => _blob; private init => _blob = value; }
+
+        public static string ExtractMeaningfulShaderErrorMessage(string message)
+        {
+            var t = new Regex(@"(.*?)\((.*)\):(.*)");
+            
+            var shaderErrorMatch = t.Match(message);
+            if (!shaderErrorMatch.Success)
+                return message;
+
+            var shaderName = shaderErrorMatch.Groups[1].Value;
+            var lineNumber = shaderErrorMatch.Groups[2].Value;
+            var errorMessage = shaderErrorMatch.Groups[3].Value;
+
+            errorMessage = Enumerable.First<string>(errorMessage.Split('\n'));
+            return $"Line {lineNumber}: {errorMessage}\n\n{shaderName}";
+        }
+
+        /// <summary>
+        /// Matches errors like....
+        ///
+        /// Failed to compile shader 'ComputeWobble': C:\Users\pixtur\coding\t3\Resources\compute-ColorGrade.hlsl(32,12-56): warning X3206: implicit truncation of vector type
+        /// </summary>
+        private static readonly Regex ShaderErrorPattern = new(@".*?\((.*)\):(.*)");
     }
 
     public class VertexShaderResource : ShaderResource

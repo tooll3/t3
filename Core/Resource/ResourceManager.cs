@@ -53,9 +53,20 @@ namespace T3.Core.Resource
             return GetResource<PixelShaderResource>(resourceId).PixelShader;
         }
 
+        public ShaderBytecode GetPixelShaderBytecode(uint resourceId)
+        {
+            return GetResource<PixelShaderResource>(resourceId).Blob;
+        }
+        
+        
         public ComputeShader GetComputeShader(uint resourceId)
         {
             return GetResource<ComputeShaderResource>(resourceId).ComputeShader;
+        }
+        
+        public ShaderBytecode GetComputeShaderBytecode(uint resourceId)
+        {
+            return GetResource<ComputeShaderResource>(resourceId).Blob;
         }
         
         public GeometryShader GetGeometryShader(uint resourceId)
@@ -63,10 +74,6 @@ namespace T3.Core.Resource
             return GetResource<GeometryShaderResource>(resourceId).GeometryShader;
         }
 
-        public ShaderBytecode GetComputeShaderBytecode(uint resourceId)
-        {
-            return GetResource<ComputeShaderResource>(resourceId).Blob;
-        }
         
         public OperatorResource GetOperatorFileResource(string path)
         {
@@ -358,7 +365,8 @@ namespace T3.Core.Resource
             }
             catch (Exception ce)
             {
-                Log.Error($"Failed to compile shader '{name}': {ce.Message}\nUsing previous resource state.");
+                var message = ShaderResource.ExtractMeaningfulShaderErrorMessage(ce.Message);
+                Log.Error($"Shader error: {message} '{name}': {ce.Message}\nUsing previous resource state.");
                 return;
             }
 
@@ -391,7 +399,8 @@ namespace T3.Core.Resource
             }
             catch (Exception ce)
             {
-                Log.Error($"Failed to compile shader '{name}': {ce.Message}\nUsing previous resource state.");
+                var message = ShaderResource.ExtractMeaningfulShaderErrorMessage(ce.Message);
+                Log.Error($"{message}\n{name}");
                 return;
             }
 
@@ -455,6 +464,36 @@ namespace T3.Core.Resource
             return newShaderResource.Id;
         }
 
+        public bool CreatePixelShaderFromSource(string shaderSource, string name, string entryPoint, ref uint resourceId)
+        {
+            if (string.IsNullOrEmpty(shaderSource) || string.IsNullOrEmpty(entryPoint))
+            {
+                resourceId = NullResource;
+                return false;        
+            }
+            
+            if (ResourcesById.TryGetValue(resourceId, out var resource) 
+                && resource is PixelShaderResource pixelShaderResource)
+            {
+                pixelShaderResource.PixelShader?.Dispose();
+            }
+            resourceId = GetNextResourceId();
+            
+            PixelShader shader = null;
+            ShaderBytecode blob = null;
+            CompileShaderFromSource(shaderSource, entryPoint, name, "ps_5_0", ref shader, ref blob);
+            if (shader == null)
+            {
+                //Log.Info($"Failed to create compute shader '{name}'.");
+                resourceId = NullResource;
+                return false;
+            }
+
+            var resourceEntry = new PixelShaderResource(resourceId, name, entryPoint, blob, shader);
+            ResourcesById.Add(resourceId, resourceEntry);
+            return true;
+        }        
+        
         public uint CreatePixelShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
         {
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
