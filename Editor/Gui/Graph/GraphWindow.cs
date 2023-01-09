@@ -265,6 +265,9 @@ namespace T3.Editor.Gui.Graph
 
         private static void DrawMiniMap(Instance compositionOp, ScalableCanvas canvas)
         {
+            if (compositionOp == null || canvas == null)
+                return;
+            
             var widgetSize = new Vector2(200, 200);
             var localPos = new Vector2(ImGui.GetWindowWidth() - widgetSize.X, 0);
             ImGui.SetCursorPos(localPos);
