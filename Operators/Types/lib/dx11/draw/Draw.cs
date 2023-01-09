@@ -29,12 +29,19 @@ namespace T3.Operators.Types.Id_9b28e6b9_1d1f_42d8_8a9e_33497b1df820
             var setPs = deviceContext.PixelShader.Get();
             if (setVs == null || setPs == null)
             {
-                Log.Warning("Trying to issue draw call, but pixel and/or vertex shader are null.");
+                if (!_complainedOnce)
+                {
+                    Log.Warning("Trying to issue draw call, but pixel and/or vertex shader are null.");
+                }
+                _complainedOnce = true;
                 return;
             }
 
+            _complainedOnce = false;
             deviceContext.Draw(VertexCount.GetValue(context), VertexStartLocation.GetValue(context));
         }
+
+        private bool _complainedOnce = false;
 
         [Input(Guid = "8716B11A-EF71-437E-9930-BB747DA818A7")]
         public readonly InputSlot<int> VertexCount = new InputSlot<int>();

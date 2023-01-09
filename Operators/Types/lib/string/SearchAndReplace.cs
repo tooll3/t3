@@ -20,21 +20,19 @@ namespace T3.Operators.Types.Id_b7910fc6_c3b2_4daf_93cd_010dcfe22a57
         private void Update(EvaluationContext context)
         {
             var content = OriginalString.GetValue(context);
-            if (string.IsNullOrEmpty(content))
+            var replacement = Replace.GetValue(context)?.Replace("\\n","\n");
+            var pattern = SearchPattern.GetValue(context);
+            if (string.IsNullOrEmpty(content) 
+                || string.IsNullOrEmpty(replacement)
+                || string.IsNullOrEmpty(pattern))
             {
                 Result.Value = string.Empty;
                 return;
             }
             
-            
-            //const string pattern = @"(-)(\d+)(-)";
-            var pattern = SearchPattern.GetValue(context);
-            
-            var replace = Replace.GetValue(context).Replace("\\n","\n");
-            
             try
             {
-                Result.Value= Regex.Replace(content, pattern, replace, RegexOptions.Multiline| RegexOptions.Singleline);
+                Result.Value= Regex.Replace(content, pattern, replacement, RegexOptions.Multiline| RegexOptions.Singleline);
             }
             catch (Exception)
             {

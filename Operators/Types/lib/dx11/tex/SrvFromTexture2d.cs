@@ -55,12 +55,19 @@ namespace T3.Operators.Types.Id_c2078514_cf1d_439c_a732_0d7b31b5084a
                 {
                     Utilities.Dispose(ref ShaderResourceView.Value);
                 }
+                _complainedOnce = false;
             }
             catch (Exception e)
             {
-                Log.Error("Updating Shader Resource View failed: " + e.Message, this);
+                if(!_complainedOnce)
+                    Log.Error("Updating Shader Resource View failed: " + e.Message, this);
+
+                _complainedOnce = true;
+                
             }
         }
+
+        private bool _complainedOnce = false;
 
         [Input(Guid = "{D5AFA102-2F88-431E-9CD4-AF91E41F88F6}")]
         public readonly InputSlot<Texture2D> Texture = new InputSlot<Texture2D>();

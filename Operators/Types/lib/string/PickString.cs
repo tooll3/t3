@@ -18,10 +18,11 @@ namespace T3.Operators.Types.Id_a9784e5e_7696_49a0_bb77_2302587ede59
         private void Update(EvaluationContext context)
         {
             var connections = Input.GetCollectedTypedInputs();
+            var index = Index.GetValue(context);
+            Input.DirtyFlag.Clear();
             if (connections == null || connections.Count == 0)
                 return;
 
-            var index = Index.GetValue(context);
             if (index < 0)
                 index = -index;
 
