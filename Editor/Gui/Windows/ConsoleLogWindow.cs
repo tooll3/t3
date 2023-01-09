@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -161,39 +162,59 @@ namespace T3.Editor.Gui.Windows
 
             var color = GetColorForLogLevel(entryLevel)
                .Fade(FrameStats.Last.HoveredIds.Contains(entry.SourceId) ? 1 : 0.6f);
-            ImGui.TextColored(color, entry.Message);
 
-            if (!IsLineHovered() || !(entry.SourceIdPath?.Length > 1))
-                return;
+            //var lines = entry.Message.Split('\n').First();
+            //using var reader = new StringReader(entry.Message);
+            //ImGui.TextUnformatted(reader.ReadLine());
+            var lineBreak = entry.Message.IndexOf('\n');
+            var hasMessageWithLineBreaks = lineBreak != -1;
+            var firstLine = hasMessageWithLineBreaks ? entry.Message.Substring(0, lineBreak) : entry.Message;
 
-            FrameStats.AddHoveredId(entry.SourceId);
-            var childIdPath = entry.SourceIdPath.ToList();
-            var hoveredSourceInstance = NodeOperations.GetInstanceFromIdPath(childIdPath);
-            ImGui.BeginTooltip();
+            //ImGui.TextUnformatted(firstLine);
+            ImGui.TextColored(color, firstLine);
+
+            var hasInstancePath = entry.SourceIdPath?.Length > 1;
+            if (IsLineHovered() && (hasInstancePath || hasMessageWithLineBreaks))
             {
-                if (hoveredSourceInstance == null)
-                {
-                    ImGui.Text("Source Instance of message not longer valid");
-                }
-                else
-                {
-                    ImGui.TextColored(T3Style.Colors.TextMuted, "from ");
+                FrameStats.AddHoveredId(entry.SourceId);
 
-                    foreach (var p in NodeOperations.GetReadableInstancePath(childIdPath))
+                ImGui.BeginTooltip();
+                {
+                    // Show instance details
+                    if (hasInstancePath)
                     {
-                        ImGui.SameLine();
-                        ImGui.TextColored(T3Style.Colors.TextMuted, " / ");
+                        var childIdPath = entry.SourceIdPath?.ToList();
+                        var hoveredSourceInstance = NodeOperations.GetInstanceFromIdPath(childIdPath);
+                        if (hoveredSourceInstance == null)
+                        {
+                            ImGui.Text("Source Instance of message not longer valid");
+                        }
+                        else
+                        {
+                            ImGui.TextColored(T3Style.Colors.TextMuted, "from ");
 
-                        ImGui.SameLine();
-                        ImGui.Text(p);
+                            foreach (var p in NodeOperations.GetReadableInstancePath(childIdPath))
+                            {
+                                ImGui.SameLine();
+                                ImGui.TextColored(T3Style.Colors.TextMuted, " / ");
+
+                                ImGui.SameLine();
+                                ImGui.Text(p);
+                            }
+                        }
+                    }
+
+                    if (hasMessageWithLineBreaks)
+                    {
+                        ImGui.Text(entry.Message);
                     }
                 }
+                ImGui.EndTooltip();
             }
-            ImGui.EndTooltip();
 
-            if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+            if (hasInstancePath && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
             {
-                GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(childIdPath);
+                GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(entry.SourceIdPath?.ToList());
             }
         }
 
@@ -248,7 +269,6 @@ namespace T3.Editor.Gui.Windows
         {
             _logEntries = null;
         }
-
 
         public LogEntry.EntryLevel Filter { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 

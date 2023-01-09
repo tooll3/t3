@@ -93,11 +93,11 @@ namespace T3.Core.Logging
         {
             try
             {
-                messageString = args.Length == 0 ? messageString : String.Format(messageString, args);
+                messageString = args.Length == 0 ? messageString : string.Format(messageString, args);
             }
             catch (FormatException)
             {
-                DoLog(new LogEntry(LogEntry.EntryLevel.Info, "Ignoring arguments mal-formated debug message. Did you mess with curly braces?"));
+                DoLog(new LogEntry(LogEntry.EntryLevel.Info, "Ignoring arguments mal-formatted debug message. Did you mess with curly braces?"));
             }
             return messageString;
         }
@@ -108,8 +108,8 @@ namespace T3.Core.Logging
         }
 
         
-        private static readonly Log _instance = new Log();
-        private readonly List<ILogWriter> _logWriters = new List<ILogWriter>();
+        private static readonly Log _instance = new();
+        private readonly List<ILogWriter> _logWriters = new();
         private Log() { }   // Prevent construction
     }
 }
