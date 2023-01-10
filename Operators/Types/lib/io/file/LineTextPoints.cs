@@ -26,12 +26,12 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
      * This operator is a compromise: Please also review the additional documentation
      * on the wiki: https://github.com/still-scene/t3/wiki/SvgLineFonts
      */
-    public class SvgFontText : Instance<SvgFontText>
+    public class LineTextPoints : Instance<LineTextPoints>
     {
         [Output(Guid = "618e9151-cd91-4aa6-9d91-4bb51610cc8b")]
         public readonly Slot<StructuredList> ResultList = new Slot<StructuredList>();
 
-        public SvgFontText()
+        public LineTextPoints()
         {
             ResultList.UpdateAction = Update;
             _pointListWithSeparator.TypedElements[_pointListWithSeparator.NumElements - 1] = Point.Separator();
@@ -118,7 +118,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
             _points.Clear();
 
             var lastCharForKerning = 0;
-            var size = Size.GetValue(context) / MathF.Abs(_lineFont.UnitsPerEm); // Scaling to match 1080p 72DPI pt font sizes
+            var size = Size.GetValue(context) / MathF.Abs(_lineFont.UnitsPerEm) * 2/1080f; // Scaling to match 1080p 72DPI pt font sizes
 
             var horizontalLineOffset = 0f;
             var needUpdateCurrentLineWidth = needComputeLineWidths;

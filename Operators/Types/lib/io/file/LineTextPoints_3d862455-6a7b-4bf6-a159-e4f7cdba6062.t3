@@ -1,5 +1,5 @@
 {
-  "Name": "SvgFontText",
+  "Name": "LineTextPoints",
   "Id": "3d862455-6a7b-4bf6-a159-e4f7cdba6062",
   "Namespace": "lib.io.file",
   "Inputs": [
@@ -17,7 +17,7 @@
     },
     {
       "Id": "fb14eabb-b3c8-437c-b083-ebc5e0a46f7b"/*Size*/,
-      "DefaultValue": 1.0
+      "DefaultValue": 50.0
     },
     {
       "Id": "eb22073e-2348-4e76-a096-a4f6f80e2c01"/*LineHeight*/,
