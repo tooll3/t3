@@ -72,7 +72,7 @@ namespace T3.Editor.Gui.Styling
 
         public override string ToString()
         {
-            return Rgba.ToString();
+            return $"[{Rgba.X:0.00}, {Rgba.Y:0.00}, {Rgba.Z:0.00}, {Rgba.W:0.00}]";
         }
 
         static public Color FromHSV(float h, float s, float v, float a = 1.0f)

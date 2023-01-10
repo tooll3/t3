@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.IO;
+using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.App;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using Color = T3.Editor.Gui.Styling.Color;
+using Icon = T3.Editor.Gui.Styling.Icon;
 
 namespace T3.Editor.Gui.Interaction
 {
@@ -17,7 +23,8 @@ namespace T3.Editor.Gui.Interaction
             var cColor = new Color(color);
             const float saturationWarp = 1.5f; 
             ImGui.SetNextWindowSize(new Vector2(270, 350));
-            if (ImGui.BeginPopup("##colorEdit"))
+            var dontCloseIfColorPicking = _isPickingColor ? ImGuiWindowFlags.Modal : ImGuiWindowFlags.None; 
+            if (ImGui.BeginPopup("##colorEdit", dontCloseIfColorPicking ))
             {
                 var drawList = ImGui.GetForegroundDrawList();
                 ImGui.Dummy(new Vector2(10,10));
@@ -179,8 +186,6 @@ namespace T3.Editor.Gui.Interaction
                 }                
 
                 
-                
-                
                 // Draw HSV input values
                 const float inputWidth = 60;
                 const float paddedInputWidth = inputWidth + 1;
@@ -283,6 +288,49 @@ namespace T3.Editor.Gui.Interaction
                         }
                     }
                 }
+                
+                if (ImGui.IsKeyPressed(ImGuiKey.ModAlt, false))
+                {
+                    _isPickingColor = true;
+                }
+                else if (ImGui.IsKeyReleased(ImGuiKey.ModAlt))
+                {
+                    _isPickingColor = false;
+                }
+
+                var altKeyPressed = ImGui.GetIO().KeyAlt;
+                
+                if (_isPickingColor || altKeyPressed)
+                {
+                    if (ImGui.IsMouseClicked(ImGuiMouseButton.Left) || altKeyPressed)
+                    {
+                        var mousePOs = ImGui.GetMousePos();
+                        var c = GetColorAtMousePosition();
+                        cColor = c;
+                        
+                        edited |=  altKeyPressed ? InputEditStateFlags.Modified : InputEditStateFlags.ModifiedAndFinished;
+                        _isPickingColor = false;
+                    }
+                    if (ImGui.IsKeyPressed((ImGuiKey)Key.Esc))
+                    {
+                        _isPickingColor = false;
+                    }
+                    
+                    if (altKeyPressed)
+                    {
+                        //var pos = ImGui.GetMousePos();
+                        var dl = ImGui.GetForegroundDrawList();
+                        var pos = ImGui.GetMousePos();
+
+                        pos += Vector2.One * 25;
+                        dl.AddRectFilled(pos, pos+ new Vector2(40,38), T3Style.Colors.DarkGray);
+                        ImGui.PushFont(Fonts.FontSmall);
+                        dl.AddText(pos + new Vector2(5, 2+0), Color.White, $"{cColor.R:0.000}");
+                        dl.AddText(pos + new Vector2(5, 2+10), Color.White, $"{cColor.G:0.000}");
+                        dl.AddText(pos + new Vector2(5, 2+20), Color.White, $"{cColor.B:0.000}");
+                        ImGui.PopFont();
+                    }                    
+                }
 
                 ImGui.EndPopup();
             }
@@ -290,6 +338,23 @@ namespace T3.Editor.Gui.Interaction
             color = cColor.Rgba;
             return edited;
         }
+
+        static private bool _isPickingColor;
+        
+        static Color GetColorAtMousePosition()
+        {
+            var pos =Program.GetOsScreenCursorPosition();
+            var x = (int)pos.X;
+            var y = (int)pos.Y;
+            
+            Bitmap bmp = new Bitmap(1, 1);
+            Rectangle bounds = new Rectangle(x, y, 1, 1);
+            using (Graphics g = Graphics.FromImage(bmp))
+                g.CopyFromScreen(bounds.Location, Point.Empty, bounds.Size);
+            
+            var c = bmp.GetPixel(0, 0);
+            return new Color(c.R, c.G, c.B, c.A);
+        }        
         
         private static Color _labelColor = Color.Gray;
     }
