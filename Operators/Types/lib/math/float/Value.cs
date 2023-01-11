@@ -13,6 +13,9 @@ namespace T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe
         public Value()
         {
             Result.UpdateAction = Update;
+            SliderMin.DirtyFlag.Clear();
+            SliderMax.DirtyFlag.Clear();
+            ClampSlider.DirtyFlag.Clear();
         }
 
         private void Update(EvaluationContext context)
