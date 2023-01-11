@@ -77,7 +77,7 @@ namespace T3.Editor.Gui.Windows
                 }
                 else
                 {
-                    var estimatedTimeLeft = durationSoFar * (1 - Progress);
+                    var estimatedTimeLeft = durationSoFar - durationSoFar /  Progress;
                     _lastHelpString = $"Saved {ScreenshotWriter.LastFilename} frame {GetRealFrame()+1}/{_frameCount}  ";
                     _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0}s left";
                 }
@@ -128,7 +128,6 @@ namespace T3.Editor.Gui.Windows
         private static string Extension => _fileFormat.ToString().ToLower(); 
 
         private static double _exportStartedTime;
-        private static bool _isExporting;
         private static string _targetFolder = "./Render";
 
         private static ScreenshotWriter.FileFormats _fileFormat;

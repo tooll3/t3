@@ -67,6 +67,9 @@ namespace T3.Editor.Gui.Windows
             }
             else
             {
+                // 
+                
+                
                 var success = SaveCurrentFrameAndAdvance(ref mainTexture);
                 ImGui.ProgressBar(Progress, new Vector2(-1, 4));
 
@@ -85,9 +88,9 @@ namespace T3.Editor.Gui.Windows
                 }
                 else
                 {
-                    var estimatedTimeLeft = durationSoFar * (1 - Progress);
+                    var estimatedTimeLeft = durationSoFar - durationSoFar /  Progress;
                     _lastHelpString = $"Saved {_videoWriter.FilePath} frame {GetRealFrame()+1}/{_frameCount}  ";
-                    _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0}s left";
+                    _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0.0}s left";
                 }
 
                 if (!_isExporting)
@@ -128,7 +131,7 @@ namespace T3.Editor.Gui.Windows
         }
 
         private static double _exportStartedTime;
-        private static bool _isExporting;
+        
         private static int _bitrate = 15000000;
         private static string _targetFile = "./Render/output.mp4";
 

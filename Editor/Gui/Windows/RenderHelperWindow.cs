@@ -21,11 +21,8 @@ namespace T3.Editor.Gui.Windows
 
         protected static void DrawTimeSetup()
         {
-            // use our loop range instead of entered values?
-            CustomComponents.DrawCheckboxParameter("Use Loop Range", ref _useLoopRange);
-            //ImGui.Checkbox("Use Loop Range", ref _useLoopRange);
-            if (_useLoopRange) UseLoopRange();
 
+            
             // convert times if reference time selection changed
             int newTimeReferenceIndex = (int)_timeReference;
             if (CustomComponents.DrawEnumParameter<TimeReference>(ref newTimeReferenceIndex, "Time reference"))
@@ -47,11 +44,19 @@ namespace T3.Editor.Gui.Windows
             }
             CustomComponents.DrawFloatParameter($"Start in {_timeReference}", ref _startTime);
             CustomComponents.DrawFloatParameter($"End in {_timeReference}", ref _endTime);
-
-
+            
+            // use our loop range instead of entered values?
+            CustomComponents.DrawCheckboxParameter("Use Loop Range", ref _useLoopRange);
+            if (_useLoopRange) UseLoopRange();
+            
             double startTimeInSeconds = ReferenceTimeToSeconds(_startTime, _timeReference);
             double endTimeInSeconds = ReferenceTimeToSeconds(_endTime, _timeReference);
             _frameCount = (int)Math.Round((endTimeInSeconds - startTimeInSeconds) * _fps);
+            
+            if (CustomComponents.DrawIntParameter($"Motion Blur Samples", ref _overrideMotionBlurSamples, -1, 50, 1, "This requires a [RenderWithMotionBlur] operator. Please check its documentation."))
+            {
+                _overrideMotionBlurSamples = _overrideMotionBlurSamples.Clamp(-1, 50);
+            }            
         }
 
         protected static bool ValidateOrCreateTargetFolder(string targetFile)
@@ -170,6 +175,11 @@ namespace T3.Editor.Gui.Windows
         protected static float _fps = 60.0f;
         private static float _lastValidFps = _fps;
 
+        public static bool IsExporting => _isExporting;
+        public static int OverrideMotionBlurSamples => _overrideMotionBlurSamples;
+        private static int _overrideMotionBlurSamples = -1;
+        
+        protected static bool _isExporting;
         protected static int _frameIndex;
         protected static int _frameCount;
     }

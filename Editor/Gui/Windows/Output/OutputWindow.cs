@@ -94,7 +94,9 @@ namespace T3.Editor.Gui.Windows.Output
                 // Move down to avoid overlapping with toolbar
                 ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
                 var drawnInstance = Pinning.GetPinnedOrSelectedInstance();
-                var drawnType = DrawOutput(drawnInstance, Pinning.GetPinnedEvaluationInstance());
+                
+                
+                var drawnType = UpdateAndDrawOutput(drawnInstance, Pinning.GetPinnedEvaluationInstance());
                 _imageCanvas.Deactivate();
 
                 _camSelectionHandling.Update(drawnInstance, drawnType);
@@ -177,8 +179,10 @@ namespace T3.Editor.Gui.Windows.Output
             }
         }
 
-        
-        private Type DrawOutput(Instance instanceForOutput, Instance instanceForEvaluation = null)
+        /// <summary>
+        /// Update content with an <see cref="EvaluationContext"/> and use the DrawImplementation for the given type to draw it. 
+        /// </summary>
+        private Type UpdateAndDrawOutput(Instance instanceForOutput, Instance instanceForEvaluation = null)
         {
             if (instanceForEvaluation == null)
                 instanceForEvaluation = instanceForOutput;
@@ -216,6 +220,20 @@ namespace T3.Editor.Gui.Windows.Output
             }
             _evaluationContext.BackgroundColor = _backgroundColor;
 
+            const string overrideSampleVariableName = "OverrideMotionBlurSamples";
+            if (RenderHelperWindow.IsExporting)
+            {
+                var samples = RenderHelperWindow.OverrideMotionBlurSamples;
+                if (samples >= 0)
+                {
+                    _evaluationContext.IntVariables[overrideSampleVariableName] = samples;
+                }
+            }
+            else
+            {
+                _evaluationContext.IntVariables.Remove(overrideSampleVariableName);
+            }
+
             // Ugly hack to hide final target
             if (instanceForOutput != instanceForEvaluation)
             {
@@ -233,11 +251,13 @@ namespace T3.Editor.Gui.Windows.Output
                 if (!viewSymbolUi.OutputUis.TryGetValue(viewOutput.Id, out IOutputUi viewOutputUi))
                     return null;
 
+                // Render!
                 viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute: false);
                 return viewOutputUi.Type;
             }
             else
             {
+                // Render!
                 evaluatedOutputUi.DrawValue(evalOutput, _evaluationContext);
                 return evalOutput.ValueType;
             }

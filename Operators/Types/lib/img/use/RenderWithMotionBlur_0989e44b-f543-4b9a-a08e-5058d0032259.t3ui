@@ -1,6 +1,6 @@
 {
   "Id": "0989e44b-f543-4b9a-a08e-5058d0032259"/*RenderWithMotionBlur*/,
-  "Description": "This will render multiple instances of the incoming op each pass with slightly offset local time.\n\nIt's primary purpose for increasing rendering quality for output with Render to Image Sequences or Video. Depending on the complexity of the graph this effect but very slow. \n\nYou can use [HasTimeChanged] with Mode= AdvancedWithMotionBlur to trigger updates to the first pass. This can be useful to simulation or feedback effects.\n",
+  "Description": "This will render multiple instances of the incoming op each pass with slightly offset local time.\n\nIt's primary purpose for increasing rendering quality for output with Render to Image Sequences or Video. Depending on the complexity of the graph this effect but very slow. \n\nYou can use [HasTimeChanged] with Mode= AdvancedWithMotionBlur to trigger updates to the first pass. This can be useful to simulation or feedback effects.\n\nTip: When rendering videos or sequences you can override the sample count.",
   "InputUis": [
     {
       "InputId": "a341c7d8-b324-4b5e-82e4-b9fae958e913"/*Texture*/,
@@ -13,15 +13,15 @@
     {
       "InputId": "27f2bbbd-a1d6-4489-9bb4-f856872ff5de"/*Passes*/,
       "Position": {
-        "X": -512.32825,
-        "Y": 264.9367
+        "X": -671.0575,
+        "Y": 274.6548
       }
     },
     {
       "InputId": "5305a99b-c9ee-41d8-b3e8-918b17ed2107"/*Strength*/,
       "Position": {
-        "X": -512.32825,
-        "Y": 309.9367
+        "X": -524.4759,
+        "Y": 422.50494
       },
       "Scale": 0.001
     }
@@ -111,8 +111,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": -362.32822,
-        "Y": 264.9367
+        "X": -461.1291,
+        "Y": 270.6056
       }
     },
     {
@@ -144,8 +144,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": -37.36682,
-        "Y": 334.47925
+        "X": -30.024231,
+        "Y": 446.97412
       }
     },
     {
@@ -155,8 +155,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": 112.63318,
-        "Y": 334.47925
+        "X": 119.97577,
+        "Y": 446.97412
       }
     },
     {
@@ -234,6 +234,28 @@
       "Position": {
         "X": 1105.1012,
         "Y": -160.64035
+      }
+    },
+    {
+      "ChildId": "c42bbcce-e663-4fae-b270-b814d887cc23"/*GetIntVar*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -487.82266,
+        "Y": 339.5117
+      }
+    },
+    {
+      "ChildId": "72176096-f142-42fb-9dc3-79c245f3e523"/*GetIntVar*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -311.1291,
+        "Y": 270.6056
       }
     }
   ],

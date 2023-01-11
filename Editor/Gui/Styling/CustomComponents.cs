@@ -419,7 +419,7 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
         
-        public static bool DrawIntParameter(string label, ref int value, int min = int.MinValue, int max = int.MaxValue, float scale = 1)
+        public static bool DrawIntParameter(string label, ref int value, int min = int.MinValue, int max = int.MaxValue, float scale = 1, string tooltip = null)
         {
             var labelSize = ImGui.CalcTextSize(label);
             var p = ImGui.GetCursorPos();
@@ -438,6 +438,11 @@ namespace T3.Editor.Gui.Styling
             var result = SingleValueEdit.Draw(ref value, size, min, max, true, scale);
             ImGui.PopID();
             var modified = (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
+            
+            if (!string.IsNullOrEmpty(tooltip))
+            {
+                TooltipForLastItem(tooltip);
+            }            
             return modified;
         }
 
