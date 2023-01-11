@@ -92,7 +92,14 @@ namespace T3.Editor.Gui
             
             // Set selected id so operator can check if they are selected or not  
             var selectedInstance = NodeSelection.GetSelectedInstance();
-            MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty; 
+            MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
+
+            
+            if (selectedInstance != null && selectedInstance.Inputs.Count >0)
+            {
+                // Keep invalidating selected op to enforce rendering of Transform gizmo  
+                selectedInstance.Inputs[0].DirtyFlag.Invalidate();
+            }
             
             // Draw everything!
             ImGui.DockSpaceOverViewport();
