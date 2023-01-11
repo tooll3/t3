@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
@@ -18,7 +19,7 @@ using Utilities = T3.Core.Utils.Utilities;
 
 namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
 {
-    public class RenderTarget : Instance<RenderTarget>
+    public class RenderTarget : Instance<RenderTarget>, IRenderStatsProvider
     {
         [Output(Guid = "7A4C4FEB-BE2F-463E-96C6-CD9A6BAD77A2")]
         public readonly Slot<Texture2D> ColorBuffer = new Slot<Texture2D>();
@@ -34,6 +35,12 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             ColorBuffer.UpdateAction = Update;
             DepthBuffer.UpdateAction = Update;
             SetupShaderResources();
+            
+            if (!_registeredStats)
+            {
+                RenderStatsCollector.RegisterProvider(this);
+                _registeredStats = true;
+            }
         }
 
         private const int MaximumTexture2DSize = SharpDX.Direct3D11.Resource.MaximumTexture2DSize;
@@ -173,6 +180,18 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             ColorBuffer.DirtyFlag.Clear();
             DepthBuffer.Value = DepthTexture;
             DepthBuffer.DirtyFlag.Clear();
+
+            _statsCount++;
+            _statsCountPixels += size.Height * size.Width;
+            if (withDepthBuffer)
+            {
+                _statsCountPixels += size.Height * size.Width;
+            }
+
+            if (_sampleCount > 1)
+                _statsCountWithMsaa++;
+            
+            Log.Debug("here");
         }
         
         private uint _resolveComputeShaderResourceId = ResourceManager.NullResource;
@@ -486,6 +505,25 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
         
         [Input(Guid = "ABEBB02B-BCAA-42C7-8EB8-DA3C1B2FC840", MappedType = typeof(Samples))]
         public readonly InputSlot<bool> EnableUpdate = new();
+
+        public IEnumerable<(string, int)> GetStats()
+        {
+            yield return ("RenderTargets", _statsCount);
+            yield return ("with MSAA", _statsCountWithMsaa);
+            yield return ("pixels", _statsCountPixels);
+        }
+
+
+        public void StartNewFrame()
+        {
+            _statsCount = 0;
+            _statsCountPixels = 0;
+            _statsCountWithMsaa = 0;
+        }
         
+        private static int _statsCount;
+        private static int _statsCountWithMsaa;
+        private static int _statsCountPixels;
+        private static bool _registeredStats;
     }
 }

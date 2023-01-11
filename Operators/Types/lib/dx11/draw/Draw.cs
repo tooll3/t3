@@ -58,12 +58,7 @@ namespace T3.Operators.Types.Id_9b28e6b9_1d1f_42d8_8a9e_33497b1df820
             yield return ("Triangles", _vertexCount/3);
             yield return ("Draw calls", _drawCallCount);
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            RenderStatsCollector.UnregisterProvider(this);
-            base.Dispose(disposing);
-        }
+        
 
         public void StartNewFrame()
         {

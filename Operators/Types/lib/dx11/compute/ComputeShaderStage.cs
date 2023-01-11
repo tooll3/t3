@@ -13,7 +13,7 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Operators.Types.Id_8bef116d_7d1c_4c1b_b902_25c1d5e925a9
 {
-    public class ComputeShaderStage : Instance<ComputeShaderStage>
+    public class ComputeShaderStage : Instance<ComputeShaderStage>, IRenderStatsProvider
     {
         [Output(Guid = "{C382284F-7E37-4EB0-B284-BC735247F26B}", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
         public readonly Slot<Command> Output = new Slot<Command>();
@@ -21,6 +21,11 @@ namespace T3.Operators.Types.Id_8bef116d_7d1c_4c1b_b902_25c1d5e925a9
         public ComputeShaderStage()
         {
             Output.UpdateAction = Update;
+            if (!_statsRegistered)
+            {
+                RenderStatsCollector.RegisterProvider(this);
+                _statsRegistered = true;
+            }
         }
 
         private void Update(EvaluationContext context)
@@ -68,8 +73,6 @@ namespace T3.Operators.Types.Id_8bef116d_7d1c_4c1b_b902_25c1d5e925a9
                 csStage.SetUnorderedAccessViews(0, _uavs);
             }
 
-
-
             for (int i = 0; i < count; i++)
             {
                 deviceContext.Dispatch(dispatchCount.X, dispatchCount.Y, dispatchCount.Z);
@@ -84,6 +87,9 @@ namespace T3.Operators.Types.Id_8bef116d_7d1c_4c1b_b902_25c1d5e925a9
                 csStage.SetShaderResource(i, null);
             for (int i = 0; i < _constantBuffers.Length; i++)
                 csStage.SetConstantBuffer(i, null);
+            
+            _statsUpdateCount++;
+            _statsDispatchCount += dispatchCount.X * dispatchCount.Y * dispatchCount.Z;
         }
 
         private SharpDX.Direct3D11.ComputeShader _cs;
@@ -91,6 +97,23 @@ namespace T3.Operators.Types.Id_8bef116d_7d1c_4c1b_b902_25c1d5e925a9
         private ShaderResourceView[] _shaderResourceViews = new ShaderResourceView[0];
         private SamplerState[] _samplerStates = new SamplerState[0];
         private UnorderedAccessView[] _uavs = new UnorderedAccessView[0];
+        
+        
+        public IEnumerable<(string, int)> GetStats()
+        {
+            yield return ("Compute shaders", _statsUpdateCount);
+            yield return ("Dispatches", _statsDispatchCount);
+        }
+
+        public void StartNewFrame()
+        {
+            _statsUpdateCount = 0;
+            _statsDispatchCount = 0;
+        }
+        
+        private static int _statsUpdateCount;
+        private static int _statsDispatchCount;
+        private static bool _statsRegistered;        
 
         [Input(Guid = "5c0e9c96-9aba-4757-ae1f-cc50fb6173f1")]
         public readonly InputSlot<SharpDX.Direct3D11.ComputeShader> ComputeShader = new InputSlot<SharpDX.Direct3D11.ComputeShader>();
@@ -116,5 +139,6 @@ namespace T3.Operators.Types.Id_8bef116d_7d1c_4c1b_b902_25c1d5e925a9
         [Input(Guid = "1495157D-601F-4054-84E2-29EBEBB461D8")]
         public readonly InputSlot<int> DispatchCallCount = new InputSlot<int>();
 
+        
     }
 }
