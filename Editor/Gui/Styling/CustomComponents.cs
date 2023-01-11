@@ -384,6 +384,7 @@ namespace T3.Editor.Gui.Styling
 
         public static bool DrawCheckboxParameter(string label, ref bool value, string tooltip= null)
         {
+            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 15);            
             var modified = ImGui.Checkbox(label, ref value);
             if (!string.IsNullOrEmpty(tooltip))
             {

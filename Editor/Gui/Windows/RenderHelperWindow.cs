@@ -22,7 +22,8 @@ namespace T3.Editor.Gui.Windows
         protected static void DrawTimeSetup()
         {
             // use our loop range instead of entered values?
-            ImGui.Checkbox("Use Loop Range", ref _useLoopRange);
+            CustomComponents.DrawCheckboxParameter("Use Loop Range", ref _useLoopRange);
+            //ImGui.Checkbox("Use Loop Range", ref _useLoopRange);
             if (_useLoopRange) UseLoopRange();
 
             // convert times if reference time selection changed
@@ -35,9 +36,6 @@ namespace T3.Editor.Gui.Windows
                 _timeReference = newTimeReference;
             }
 
-            CustomComponents.DrawFloatParameter($"Start in {_timeReference}", ref _startTime);
-            CustomComponents.DrawFloatParameter($"End in {_timeReference}", ref _endTime);
-
             // change FPS if required
             CustomComponents.DrawFloatParameter("FPS", ref _fps, 0);
             if (_fps < 0) _fps = -_fps;
@@ -47,6 +45,9 @@ namespace T3.Editor.Gui.Windows
                 _endTime = (float)ConvertFPS(_endTime, _lastValidFps, _fps);
                 _lastValidFps = _fps;
             }
+            CustomComponents.DrawFloatParameter($"Start in {_timeReference}", ref _startTime);
+            CustomComponents.DrawFloatParameter($"End in {_timeReference}", ref _endTime);
+
 
             double startTimeInSeconds = ReferenceTimeToSeconds(_startTime, _timeReference);
             double endTimeInSeconds = ReferenceTimeToSeconds(_endTime, _timeReference);
