@@ -191,7 +191,6 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             if (_sampleCount > 1)
                 _statsCountWithMsaa++;
             
-            Log.Debug("here");
         }
         
         private uint _resolveComputeShaderResourceId = ResourceManager.NullResource;
