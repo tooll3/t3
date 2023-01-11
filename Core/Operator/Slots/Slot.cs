@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using T3.Core.Logging;
+using T3.Core.Stats;
 
 namespace T3.Core.Operator.Slots
 {
@@ -70,6 +71,7 @@ namespace T3.Core.Operator.Slots
         {
             if (DirtyFlag.IsDirty || IsConnected)
             {
+                OpUpdateCounter.CountUp();
                 _updateAction?.Invoke(context);
                 DirtyFlag.Clear();
                 DirtyFlag.SetUpdated();
@@ -252,4 +254,7 @@ namespace T3.Core.Operator.Slots
 
         protected Action<EvaluationContext> _defaultUpdateAction;
     }
+
+    
+    
 }

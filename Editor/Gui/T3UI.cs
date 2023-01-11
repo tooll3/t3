@@ -13,6 +13,7 @@ using T3.Core.Audio;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
@@ -44,9 +45,11 @@ namespace T3.Editor.Gui
             WindowManager.TryToInitialize();
             ExampleSymbolLinking.UpdateExampleLinks();
             VariationHandling.Init();
-
+            
         }
 
+
+        
         private void InitializeAfterAppWindowReady()
         {
             if (_initialed || ImGui.GetWindowSize() == Vector2.Zero)
@@ -62,6 +65,7 @@ namespace T3.Editor.Gui
             //InitializeAfterAppWindowReady();
             
             // Prepare the current frame 
+            RenderStatsCollector.StartNewFrame();
             Playback.Current.Update(UserSettings.Config.EnableIdleMotion);
             SoundtrackUtils.UpdateMainSoundtrack();
             BeatTiming.Update(ImGui.GetTime());

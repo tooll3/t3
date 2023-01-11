@@ -18,6 +18,7 @@ using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Core.Stats;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
 using Vector4 = System.Numerics.Vector4;
@@ -48,10 +49,13 @@ namespace T3.Core.Resource
 
     public class Model
     {
+        
         public Assembly OperatorsAssembly { get; }
 
         public Model(Assembly operatorAssembly)
         {
+            
+            
             OperatorsAssembly = operatorAssembly;
 
             // generic enum value from json function, must be local function
@@ -418,6 +422,8 @@ namespace T3.Core.Resource
                          () => new InputValue<SharpDX.Vector4[]>(Array.Empty<SharpDX.Vector4>()));
             RegisterType(typeof(Dict<float>), "Dict<float>",
                          () => new InputValue<Dict<float>>());
+
+            _updateCounter = new OpUpdateCounter();
         }
 
         private static void RegisterType(Type type, string typeName,
@@ -696,6 +702,8 @@ namespace T3.Core.Resource
         }
         #endregion
 
+        private static OpUpdateCounter _updateCounter;
+        
         public const string SourceExtension = ".cs";
         private const string SymbolExtension = ".t3";
         protected const string SymbolUiExtension = ".t3ui";
