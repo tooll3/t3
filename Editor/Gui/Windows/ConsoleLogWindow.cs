@@ -210,11 +210,10 @@ namespace T3.Editor.Gui.Windows
                     }
                 }
                 ImGui.EndTooltip();
-            }
-
-            if (hasInstancePath && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-            {
-                GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(entry.SourceIdPath?.ToList());
+                if (hasInstancePath && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                {
+                    GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(entry.SourceIdPath?.ToList());
+                }
             }
         }
 
