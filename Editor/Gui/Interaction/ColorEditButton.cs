@@ -30,6 +30,8 @@ namespace T3.Editor.Gui.Interaction
             
             edited |= HandleQuickSliders(ref color, buttonPosition);
             edited |= ColorEditPopup.DrawPopup(ref color, _previousColor);
+            if (edited == InputEditStateFlags.ModifiedAndFinished)
+                _previousColor = color;
             return edited;
         }
 

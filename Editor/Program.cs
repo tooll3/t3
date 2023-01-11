@@ -26,6 +26,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using Device = SharpDX.Direct3D11.Device;
+using Point = System.Drawing.Point;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor
@@ -152,9 +153,13 @@ namespace T3.Editor
 
             T3Style.Apply();
 
+            var p = Cursor.Position;
             // Main loop
             void RenderCallback()
             {
+                CursorPosOnScreen = new Vector2(Cursor.Position.X, Cursor.Position.Y);
+                IsCursorInsideAppWindow= _main.Form.Bounds.Contains(Cursor.Position);
+
                 // Update font atlas texture if UI-Scale changed
                 if (Math.Abs(UserSettings.Config.UiScaleFactor - _lastUiScale) > 0.005f)
                 {
@@ -276,6 +281,8 @@ namespace T3.Editor
             Log.Debug("Shutdown complete");
         }
 
+        
+
         private static void HandleFullscreenToggle()
         {
             var isBorderStyleFullScreen = _main.Form.FormBorderStyle == FormBorderStyle.None;
@@ -360,15 +367,7 @@ namespace T3.Editor
 
             _t3RenderForm.CreateDeviceObjects();
         }
-
-        public static Vector2 GetOsScreenCursorPosition()
-        {
-            var mousePosInsideContent = ImGui.GetMousePos();
-            var frameWidth = _main.Form.Bounds.Size - _main.Form.DisplayRectangle.Size;
-            
-            return new Vector2(mousePosInsideContent.X + _main.Form.Bounds.Left + (int)(frameWidth.Width/2),
-                               mousePosInsideContent.Y + _main.Form.Bounds.Top + frameWidth.Height -8);
-        }
+        
 
         private static float _lastUiScale = 1;
 
@@ -377,6 +376,8 @@ namespace T3.Editor
 
         private static T3Ui _t3ui = null;
         private static DeviceContext _deviceContext;
+        public static Vector2 CursorPosOnScreen  {get; private set;}
+        public static bool IsCursorInsideAppWindow { get; private set; }
         public static string RequestImGuiLayoutUpdate;
     }
 }
