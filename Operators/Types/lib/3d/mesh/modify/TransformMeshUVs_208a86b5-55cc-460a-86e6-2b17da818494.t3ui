@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "b9e7efdf-98d6-4d5a-94e8-16f38cfe4e55"/*InputMesh*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -78.940186,
         "Y": 2525.8523

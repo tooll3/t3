@@ -30,7 +30,10 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
         {
             try
             {
-                var resourceManager = ResourceManager.Instance();
+                var rotation = Rotation.GetValue(context);
+                var rotationMatrix = Matrix.RotationYawPitchRoll(MathUtil.DegreesToRadians(rotation.Y),
+                                                                     MathUtil.DegreesToRadians(rotation.X),
+                                                                     MathUtil.DegreesToRadians(rotation.Z));
 
                 var lowerRadius = Radius.GetValue(context);
                 var upperRadius = lowerRadius + RadiusOffset.GetValue(context);
@@ -112,6 +115,7 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
                         var tangent0 = SharpDX.Vector3.Cross(normal0, binormal0);
 
                         var vertexIndex = rowIndex * vertexHullColumns + columnIndex;
+                        p = SharpDX.Vector3.TransformNormal(p, rotationMatrix);
                         _vertexBufferData[vertexIndex] = new PbrVertex
                                                              {
                                                                  Position = p + center,
@@ -186,6 +190,8 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
                                 var capUvOffset = isLowerCap 
                                                       ? new SharpDX.Vector2(-0.25f, -0.25f)
                                                       : new SharpDX.Vector2(0.25f, -0.25f);
+                                
+                                p = SharpDX.Vector3.TransformNormal(p, rotationMatrix);                                
                                 _vertexBufferData[vertexIndex] = new PbrVertex
                                                                      {
                                                                          Position = p + center,
@@ -196,13 +202,15 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
                                                                          Selection = 1
                                                                      };
 
-                                if (isCenterSegment)
+                                if (isCenterSegment) 
                                 {
                                     if (columnIndex == 0)
                                     {
+                                        var p2 = new SharpDX.Vector3(0, capLevel, 0);
+                                        p2 = SharpDX.Vector3.TransformNormal(p2, rotationMatrix);
                                         _vertexBufferData[centerVertexIndex] = new PbrVertex
                                                                                    {
-                                                                                       Position = new SharpDX.Vector3(0, capLevel, 0) + center,
+                                                                                       Position = p2 + center,
                                                                                        Normal = (isFlipped) ? normal0 * -1 : normal0,
                                                                                        Tangent = tangent0,
                                                                                        Bitangent = (isFlipped ^ isLowerCap) ? binormal0 * -1 : binormal0,
@@ -311,5 +319,9 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
 
         [Input(Guid = "DB5E3C51-5765-44D8-A61B-A7B552FCE5B3")]
         public readonly InputSlot<int> CapSegments = new InputSlot<int>();
+        
+        [Input(Guid = "4C7E0F67-A35B-4A23-B640-B0375C1A3259")]
+        public readonly InputSlot<Vector3> Rotation = new();
+
     }
 }

@@ -34,6 +34,7 @@ cbuffer Params : register(b1)
     float Twist;
     float TextureMode;
     float2 TextureRange;    
+    float UseWAsWeight;
 };
 
 cbuffer FogParams : register(b2)
@@ -100,7 +101,8 @@ psInput vsMain(uint id: SV_VertexID)
     //float3 side = float3(0, cos(spinRad), sin(spinRad)) * cornerFactors.y;
     float3 side = float3(cos(spinRad), 0, sin(spinRad)) * cornerFactors.y;
 
-    float3 widthV = rotate_vector(side, p.rotation) * Width * p.w;;
+    float WidthFactor = UseWAsWeight || isnan(p.w)> 0.5 ? p.w  : 1;
+    float3 widthV = rotate_vector(side, p.rotation) * Width * WidthFactor;
     float3 pInObject = p.position + widthV;
 
     float3 normalTwisted =  float3(0, cos(spinRad + 3.141578/2), sin(spinRad + 3.141578/2));

@@ -43,6 +43,9 @@ namespace T3.Operators.Types.Id_37a747b0_ec0e_4ebc_83dd_2e03022ad100
 
         [Input(Guid = "99252905-B0F0-48BB-AA92-39FFB5CD949C")]
         public readonly InputSlot<CullMode> Culling = new InputSlot<CullMode>();
+
+        [Input(Guid = "31791971-8c6e-4f8f-8b04-a3abf02ad69b")]
+        public readonly InputSlot<bool> UseWAsWeight = new InputSlot<bool>();
         
         private enum TextureModes
         {
