@@ -88,7 +88,7 @@ namespace T3.Editor.Gui.Windows
                 }
                 else
                 {
-                    var estimatedTimeLeft = durationSoFar - durationSoFar /  Progress;
+                    var estimatedTimeLeft = durationSoFar /  Progress - durationSoFar;
                     _lastHelpString = $"Saved {_videoWriter.FilePath} frame {GetRealFrame()+1}/{_frameCount}  ";
                     _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0.0}s left";
                 }
