@@ -1,10 +1,8 @@
 using System;
-using System.Diagnostics;
-using T3.Core;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_9cb4d49e_135b_400b_a035_2b02c5ea6a72
@@ -28,7 +26,7 @@ namespace T3.Operators.Types.Id_9cb4d49e_135b_400b_a035_2b02c5ea6a72
         {
             var contextLocalTime = (float)context.LocalTime;
             var contextLocalFxTime = (float)context.LocalFxTime;
-
+            
             float time = 0;
 
             switch ((Modes)Mode.GetValue(context).Clamp(0,Enum.GetValues(typeof(Modes)).Length))
@@ -39,9 +37,12 @@ namespace T3.Operators.Types.Id_9cb4d49e_135b_400b_a035_2b02c5ea6a72
                 case Modes.LocalTimeInBars:
                     time = contextLocalTime;
                     break;
-                case Modes.PlaybackTimeInSecs:
+                case Modes.LocalTimeInSecs:
                     time = contextLocalTime * 240 / (float)context.Playback.Bpm;
                     break;
+                case Modes.PlaybackTimeInBars:
+                    time = (float)context.Playback.TimeInBars;
+                    break;                
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -55,7 +56,8 @@ namespace T3.Operators.Types.Id_9cb4d49e_135b_400b_a035_2b02c5ea6a72
         {
             LocalFxTimeInBars,
             LocalTimeInBars,
-            PlaybackTimeInSecs,
+            LocalTimeInSecs,
+            PlaybackTimeInBars,
         }
         
         [Input(Guid = "8DA7D58D-10A5-4378-8F44-B98F87EC2697", MappedType = typeof(Modes))]

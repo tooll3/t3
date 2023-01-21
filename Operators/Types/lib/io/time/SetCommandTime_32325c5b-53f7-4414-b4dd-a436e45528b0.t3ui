@@ -17,6 +17,13 @@
         "X": -200.0,
         "Y": 45.0
       }
+    },
+    {
+      "InputId": "efa8c97d-769c-4a26-b442-e702ac74a1f4"/*OffsetMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
     }
   ],
   "SymbolChildUis": [],
