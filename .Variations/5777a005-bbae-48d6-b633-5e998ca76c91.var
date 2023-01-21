@@ -184,6 +184,81 @@
           "321693a5-4e2c-47a0-a42e-95cbdc6ebf80": 64
         }
       }
+    },
+    {
+      "Id": "3f619c8c-f15d-47af-8f47-9fa645791c1e",
+      "IsPreset": true,
+      "ActivationIndex": 11,
+      "Title": "Square",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8d290afb-2574-4afa-a545-a0d3588f89f6": 1.0,
+          "4c91b66c-670d-45ff-94cc-01d1a68cd040": -1.0,
+          "57f3310c-6ed2-4a52-af72-43e083f73360": 0.0,
+          "4dd4c4f0-c6b7-4ee8-92e2-cb8df6131e0a": 1,
+          "321693a5-4e2c-47a0-a42e-95cbdc6ebf80": 4,
+          "c29b5881-85bc-4d29-bc72-6dd36730fa8f": 45.0,
+          "4c7e0f67-a35b-4a23-b640-b0375c1a3259": {
+            "X": -90.0,
+            "Y": 0.0,
+            "Z": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "4aab182e-5d29-42a2-9883-84aff14e847e",
+      "IsPreset": true,
+      "ActivationIndex": 12,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8d290afb-2574-4afa-a545-a0d3588f89f6": 1.0,
+          "4c91b66c-670d-45ff-94cc-01d1a68cd040": 0.5,
+          "57f3310c-6ed2-4a52-af72-43e083f73360": 0.0,
+          "4dd4c4f0-c6b7-4ee8-92e2-cb8df6131e0a": 1,
+          "321693a5-4e2c-47a0-a42e-95cbdc6ebf80": 64,
+          "db5e3c51-5765-44d8-a61b-a7b552fce5b3": 0,
+          "4c7e0f67-a35b-4a23-b640-b0375c1a3259": {
+            "X": -90.0,
+            "Y": 0.0,
+            "Z": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Id": "3a5c39aa-68eb-4e53-92e5-9dd21a413a6c",
+      "IsPreset": true,
+      "ActivationIndex": 13,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8d290afb-2574-4afa-a545-a0d3588f89f6": 0.5,
+          "4c91b66c-670d-45ff-94cc-01d1a68cd040": 0.5,
+          "57f3310c-6ed2-4a52-af72-43e083f73360": 0.0,
+          "4dd4c4f0-c6b7-4ee8-92e2-cb8df6131e0a": 1,
+          "321693a5-4e2c-47a0-a42e-95cbdc6ebf80": 64,
+          "db5e3c51-5765-44d8-a61b-a7b552fce5b3": 0,
+          "4c7e0f67-a35b-4a23-b640-b0375c1a3259": {
+            "X": -90.0,
+            "Y": 0.0,
+            "Z": 0.0
+          }
+        }
+      }
     }
   ]
 }

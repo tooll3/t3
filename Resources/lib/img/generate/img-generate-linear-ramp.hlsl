@@ -9,6 +9,7 @@ cbuffer ParamConstants : register(b0)
     float Repeat;
     float Bias;
     float Offset;
+    float SizeMode;
 }
 
 cbuffer TimeConstants : register(b1)
@@ -41,16 +42,19 @@ float fmod(float x, float y) {
 } 
 
 float4 psMain(vsOutput psInput) : SV_TARGET
-{    
+{   
     float2 uv = psInput.texCoord;
-    //float4 orgColor = inputTexture.SampleLevel(texSampler, uv, 0.0);
 
     float aspectRation = TargetWidth/TargetHeight;
     float2 p = uv;
     p-= 0.5;
-    p.x *=aspectRation;
 
-    //float2 p = psInput.texCoord;
+    if(SizeMode < 0.5) {
+        p.x *=aspectRation;
+    }
+    else {
+        p.y /= aspectRation;
+    }
 
     float radians = Rotation / 180 *3.141578;
     float2 angle =  float2(sin(radians),cos(radians));
@@ -68,19 +72,11 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         ? fmod(c,1)
         : saturate(c);
 
-    // if(Smooth > 0.5) {
-    //     c= smoothstep(0,1,c);
-    // }
-
     float dBiased = Bias>= 0
         ? pow( c, Bias+1)
         : 1-pow( clamp(1-c,0,10), -Bias+1);
     
     dBiased= clamp(dBiased,0.001, 0.999);
-    //dBiased = c;
-    //return float4(dBiased,0,0,1);
-    //float4 cOut= lerp(Fill, Background, dBiased);
-
 
     float4 gradient = Gradient.Sample(texSampler, float2(dBiased, 0));
     float a = orgColor.a + gradient.a - orgColor.a*gradient.a;

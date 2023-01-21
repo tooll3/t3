@@ -54,7 +54,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     }
 
     float a =  DontColorAlpha < 0.5 
-                    ? gradient.a
+                    ? gradient.a * orgColor.a
                     : (orgColor.a + gradient.a - orgColor.a * gradient.a);
 
     float3 rgb = (1.0 - gradient.a)*orgColor.rgb + gradient.a*gradient.rgb;   

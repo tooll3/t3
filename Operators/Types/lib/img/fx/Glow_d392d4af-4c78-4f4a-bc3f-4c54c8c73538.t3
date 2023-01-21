@@ -394,9 +394,9 @@
           "Id": "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f"/*ClearColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0,
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
             "W": 1.0
           }
         },
