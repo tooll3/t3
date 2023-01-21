@@ -8,7 +8,7 @@ cbuffer ParamConstants : register(b0)
     //float2 DepthRange;
     float Near;
     float Far;
-    float2 DepthClip;
+    float2 FarClipRange;
 
     float4 Color;
 
@@ -21,13 +21,6 @@ cbuffer ParamConstants : register(b0)
     float2 NoiseOffset;
 }
 
-// cbuffer TimeConstants : register(b1)
-// {
-//     float globalTime;
-//     float time;
-//     float runTime;
-//     float beatTime;
-// }
 
 struct vsOutput
 {
@@ -35,34 +28,14 @@ struct vsOutput
     float2 texCoord : TEXCOORD;
 };
 
-// float SchlickBias(float x, float bias)
-// {
-//     float x1 = x * 2;
-//     float x2 = x * 2 - 1;
-//     float bias1 = 1 - bias;
-//     return x < 0.5
-//         ? x1 / ((1 / bias - 2) * (1 - x1) + 1) / 2
-//         : x2 / ((1 / bias1 - 2) * (1 - x2) + 1) / 2 + 0.5;
-// }
-
 float DepthToSceneZ(float depth) 
 {
-    //return (2.0 * Near) / (Far + Near - depth * (Far - Near));
-    //return (Near) / (Far +Near - depth * (Far -Near));
     float n = Near;
     float f = Far;
     return (2.0 * n) / (f + n - depth * (f - n)) * (Far-Near) + Near;    
 }
 
 
-float DepthToLinearNormalized(float depth) 
-{
-    //return (2.0 * Near) / (Far + Near - depth * (Far - Near));
-    //return (Near) / (Far +Near - depth * (Far -Near));
-    float n = Near;
-    float f = Far;
-    return (2.0 * n) / (f + n - depth * (f - n));    
-}
 
 
 SamplerState samLinear
@@ -86,8 +59,6 @@ const static float3 avKernel[KERNEL_SIZE] = {
 };
 
 const static float2 textureSize= float2(256,256);
-//float initSum = 0;
-//float4 params= float4(1,0,   1, 1);
 
 
 float4 psMain(vsOutput psInput) : SV_TARGET
@@ -100,19 +71,17 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float factor = 0;
     float factorIncrement = 1.0/(Passes*float(KERNEL_SIZE));
     
-    //float refSceneZ = ( DepthRange.x) / (DepthRange.y + DepthRange.x - refDepth * (DepthRange.y - DepthRange.x));    
     float refSceneZ = DepthToSceneZ(refDepth);
-    //return float4(refSceneZ.xxx,1);
 
 
-    //return float4(Near,Far,0,1);    
-    //return float4(refSceneZ.rrr * 2,1);
-
+    
     for (int j = 0; j < Passes; j++)
     {
         float2 randomCoords= float2( fmod( psInput.texCoord.x * 21.7 + 2.412* j + NoiseOffset.x,1) , 
-                                     fmod( psInput.texCoord.y * 23.91  + 1.1123* j + NoiseOffset.y,1));
+                                    fmod( psInput.texCoord.y * 23.91  + 1.1123* j + NoiseOffset.y,1));
+        
         float3 random = NoiseTexture.Sample(samLinear, randomCoords).rgb;
+
         random = normalize(random * 2.0 - 1.0);
         for (int i = 0; i < KERNEL_SIZE; i++)
         {
@@ -122,31 +91,39 @@ float4 psMain(vsOutput psInput) : SV_TARGET
                         
             //float sceneZ = ( DepthRange.x) / (DepthRange.y + DepthRange.x - depth * (DepthRange.y - DepthRange.x));    
             float sceneZ = DepthToSceneZ(depth);
-            if (sceneZ > refSceneZ)
-            {
-              factor += factorIncrement;
+            if (refSceneZ < FarClipRange.y && refSceneZ < sceneZ + 0.006)
+            {                
+            factor += factorIncrement;
             }
         }
     }
+    
+
 
     float4 orgColor= ImageTexture.Sample(samLinear, psInput.texCoord);
-    //return float4(factor * 0.5,0,0,1);
+
     
-    factor = (factor - BoostShadows.x) * BoostShadows.y;
-    factor = clamp(factor, 0.0, 1.0);
+    //factor = (factor - BoostShadows.x) * BoostShadows.y;
+    factor = pow(saturate(factor + BoostShadows.x), BoostShadows.y);
+    //factor = clamp(factor, 0.0, 1.0);
+
+    //return float4(factor ,0,0,1);
+
     float3 AOColor= lerp( Color.rgb,  float3(1,1,1), factor);   // mix shadow color
-    //return float4(AOColor.rgb,1);
-        
-    float fadeInBackgroundFactor =    clamp(( refSceneZ - DepthClip.x ) /  (DepthClip.y - DepthClip.x), 0,1);
-    //return float4(fadeInBackgroundFactor,0,0,1);
+
+    //return float4(factor,0,0,1);
     
+        
+    float fadeInBackgroundFactor =    clamp(( refSceneZ - FarClipRange.x ) /  (FarClipRange.y - FarClipRange.x), 0,1);
+    //return fadeInBackgroundFactor;
+        
     AOColor = lerp( float3(1,1,1), AOColor, Color.a);           // fade with color Alpha    
     AOColor = lerp ( AOColor,  float3(1,1,1), (fadeInBackgroundFactor));
     
-    float3 blendedColor = MixOriginal < 1 ? orgColor * MixOriginal 
+    float4 blendedColor = MixOriginal < 1 ? orgColor * MixOriginal 
                                           : orgColor + (1-orgColor) * (MixOriginal-1);
     blendedColor *= MultiplyOriginal;
-    return float4( blendedColor * AOColor,1);
+    return float4( blendedColor.rgb  * AOColor,1);
 }
 
 
