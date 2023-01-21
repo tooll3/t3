@@ -6,22 +6,45 @@ cbuffer Params : register(b0)
 {
     float BlendFactor;
     float BlendMode;
+    float PairingMode;
 }
+ 
 
-
-StructuredBuffer<Point> Points1 : t0;         // input
-StructuredBuffer<Point> Points2 : t1;         // input
+StructuredBuffer<Point> PointsA : t0;         // input
+StructuredBuffer<Point> PointsB : t1;         // input
 RWStructuredBuffer<Point> ResultPoints : u0;    // output
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
-    Point A = Points1[i.x];
-    Point B = Points2[i.x];
+    uint resultCount, countA, countB, stride;
+    ResultPoints.GetDimensions(resultCount, stride);
+    PointsA.GetDimensions(countA, stride);
+    PointsB.GetDimensions(countB, stride);
 
-    float f =BlendFactor;
+    if(i.x > resultCount)
+        return;
 
-    if(BlendMode < 1.5) {
+    uint aIndex = i.x;
+    uint bIndex = i.x;
+
+
+    if(PairingMode > 0.5 && countA != countB) {
+        float t = i.x / (float)resultCount;
+        aIndex = (int)(countA *t);
+        bIndex = (int)(countB *t);
+    }
+        
+
+    Point A = PointsA[aIndex];
+    Point B = PointsB[bIndex];
+    
+    float f =0;
+
+    if(BlendMode < 0.5) {
+        f = BlendFactor;
+    }
+    else if(BlendMode < 1.5) {
         f = A.w;        
     }
     else if(BlendMode < 2.5) {
