@@ -1,0 +1,25 @@
+{
+  "Name": "Lerp",
+  "Id": "1f5294e1-9d0b-4cd5-9d65-14c8bbf59e61",
+  "Namespace": "lib.math.float",
+  "Inputs": [
+    {
+      "Id": "f5904a0e-f7a6-4fd3-b8f3-8ecccd9363d7"/*A*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "1aed2c36-696a-4508-a8b6-3546ca570997"/*B*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "2b969154-edf6-4fa6-972c-23d27e77e356"/*F*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "cc1a1668-795d-44b9-9be0-23455c338aaf"/*Clamp*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
