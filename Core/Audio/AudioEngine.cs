@@ -227,7 +227,7 @@ namespace T3.Core.Audio
             
             var currentStreamPos = Bass.ChannelGetPosition(StreamHandle);
             var currentPos = Bass.ChannelBytes2Seconds(StreamHandle, currentStreamPos) - AudioSyncingOffset;
-            var soundDelta = currentPos - localTargetTimeInSecs;
+            var soundDelta = (currentPos - localTargetTimeInSecs) * playback.PlaybackSpeed;
 
             
             if (Math.Abs(soundDelta) <=  ProjectSettings.Config.AudioResyncThreshold * Math.Abs(Playback.Current.PlaybackSpeed)) 
