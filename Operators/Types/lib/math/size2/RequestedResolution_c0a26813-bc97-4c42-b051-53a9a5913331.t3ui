@@ -24,6 +24,13 @@
         "X": 0.0,
         "Y": 0.0
       }
+    },
+    {
+      "OutputId": "0f5cb8a7-8cc5-4a2d-9741-c8a3b9adc049"/*AspectRatio*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
     }
   ]
 }
