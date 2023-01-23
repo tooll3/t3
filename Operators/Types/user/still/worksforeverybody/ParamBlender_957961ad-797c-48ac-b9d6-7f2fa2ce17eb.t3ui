@@ -1,0 +1,208 @@
+{
+  "Id": "957961ad-797c-48ac-b9d6-7f2fa2ce17eb"/*ParamBlender*/,
+  "Description": "A helper that uses the mouse input to explore two parameter ranges.\n\nIt either returns are default value or a alternative ranges mapped to mouse x y.\n",
+  "InputUis": [
+    {
+      "InputId": "534229d1-8728-4925-bd46-3bb351e4e95b"/*ADefault*/,
+      "Position": {
+        "X": -211.50517,
+        "Y": 158.51941
+      }
+    },
+    {
+      "InputId": "dec2dd0d-ea78-4475-8b26-76bf6d8b724c"/*A_ExporeRange*/,
+      "Position": {
+        "X": -211.50517,
+        "Y": 203.51941
+      }
+    },
+    {
+      "InputId": "e997cb93-de68-4430-9c06-32bb46836d98"/*B_Default*/,
+      "Position": {
+        "X": -211.50517,
+        "Y": 248.51941
+      }
+    },
+    {
+      "InputId": "46801ba5-4e1d-4148-aa91-fe2491822e26"/*B_ExploreRange*/,
+      "Position": {
+        "X": -211.50517,
+        "Y": 293.5194
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "1bc597d2-b7de-4fc1-bf3f-c0e9619dca99"/*Lerp*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 438.41187,
+        "Y": -150.6467
+      }
+    },
+    {
+      "ChildId": "f2bec0e4-58f6-46b5-8a78-ac0458393a24"/*Remap*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 101.0
+      },
+      "Position": {
+        "X": 288.41187,
+        "Y": -150.6467
+      }
+    },
+    {
+      "ChildId": "230114b3-72dc-4daa-9528-f02b9b6d548c"/*MouseInput*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -251.95312,
+        "Y": 27.429382
+      }
+    },
+    {
+      "ChildId": "e4426a01-5c13-43e0-b829-07003384b715"/*Vector2ToFloat2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -101.953125,
+        "Y": 27.429382
+      }
+    },
+    {
+      "ChildId": "da492763-067a-4bb5-833a-c7c4a91caa40"/*MouseInput*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -851.9531,
+        "Y": 83.42938
+      }
+    },
+    {
+      "ChildId": "edc72318-fd3d-47c3-b6f7-aa0fa44546c2"/*Vector2ToFloat2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -701.9531,
+        "Y": 83.42938
+      }
+    },
+    {
+      "ChildId": "07102fd5-040d-4f6c-81b3-5d0b2ebde415"/*BoolToFloats*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -251.95312,
+        "Y": 83.42938
+      }
+    },
+    {
+      "ChildId": "15f9f59e-0685-4cbb-b8b8-adbd6ea09027"/*Damp*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -101.953125,
+        "Y": 83.42938
+      }
+    },
+    {
+      "ChildId": "9e290b5e-d356-4e20-8b41-b6c60f07fa77"/*HasValueChanged*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -551.9531,
+        "Y": 83.42938
+      }
+    },
+    {
+      "ChildId": "8ad60147-a216-44ca-9c49-12faf95dc62b"/*DelayTrigger*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -401.95312,
+        "Y": 83.42938
+      }
+    },
+    {
+      "ChildId": "3cd1a9bc-9e97-4d11-b764-0d6320220565"/*Vector2ToFloat2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 131.90164,
+        "Y": -81.18701
+      }
+    },
+    {
+      "ChildId": "8cb2f77e-e57d-4c2e-bbe0-43ac1e31f5d8"/*Lerp*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 447.2797,
+        "Y": 228.73212
+      }
+    },
+    {
+      "ChildId": "04659be3-b845-42ba-bd76-dd27b0e190af"/*Remap*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 101.0
+      },
+      "Position": {
+        "X": 297.2797,
+        "Y": 228.73212
+      }
+    },
+    {
+      "ChildId": "faa46c11-23f3-40a0-b2eb-af9d6605bcae"/*Vector2ToFloat2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 140.76947,
+        "Y": 298.1918
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "eea2e2e1-540f-4388-a626-b9885c77a29c"/*A*/,
+      "Position": {
+        "X": 588.41187,
+        "Y": -150.6467
+      }
+    },
+    {
+      "OutputId": "4571000e-b180-4f69-a3c2-a2af1fa40660"/*B*/,
+      "Position": {
+        "X": 597.27966,
+        "Y": 228.73212
+      }
+    }
+  ]
+}
