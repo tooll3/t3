@@ -55,7 +55,6 @@ namespace T3.Operators.Types.Id_7e28c796_85e7_47ee_99bb_9599284dbeeb
             }
             else
             {
-                var resourceManager = ResourceManager.Instance();
                 using (var data = new DataStream(totalSizeInBytes, true, true))
                 {
                     foreach (var entry in listsCollectedInputs)

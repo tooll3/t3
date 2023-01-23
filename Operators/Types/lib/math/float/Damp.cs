@@ -27,7 +27,7 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
             var inputValue = Value.GetValue(context);
             var damping = Damping.GetValue(context);
 
-            var currentTime = context.LocalFxTime;
+            var currentTime = UseAppRunTime.GetValue(context) ? Playback.RunTimeInSecs : context.LocalFxTime;
             if (Math.Abs(currentTime - _lastEvalTime) < MinTimeElapsedBeforeEvaluation)
                 return;
 
@@ -55,5 +55,8 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
         [Input(Guid = "76D52DF1-597E-4429-9916-13E6E0D93248", MappedType = typeof(DampFunctions.Methods))]
         public readonly InputSlot<int> Method = new();
         
+        [Input(Guid = "8909933C-79A8-4127-987B-7B23940A0052")]
+        public readonly InputSlot<bool> UseAppRunTime = new();
+
     }
 }

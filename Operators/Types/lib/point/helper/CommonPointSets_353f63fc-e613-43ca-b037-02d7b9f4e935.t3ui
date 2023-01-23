@@ -13,10 +13,17 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "2e45df97-e5c9-454d-b6ea-569c16cc04d5"/*Result*/,
+      "OutputId": "2e45df97-e5c9-454d-b6ea-569c16cc04d5"/*CpuBuffer*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "e5dc2cd0-c57f-4e72-9452-e162fe1c37d5"/*GpuBuffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
       }
     }
   ]

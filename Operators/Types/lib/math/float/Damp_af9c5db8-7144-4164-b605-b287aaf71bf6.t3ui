@@ -26,6 +26,13 @@
         "X": 36.0,
         "Y": 424.0
       }
+    },
+    {
+      "InputId": "8909933c-79a8-4127-987b-7b23940a0052"/*UseAppRunTime*/,
+      "Position": {
+        "X": 36.0,
+        "Y": 469.0
+      }
     }
   ],
   "SymbolChildUis": [],
