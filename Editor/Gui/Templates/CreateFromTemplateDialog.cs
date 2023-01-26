@@ -100,13 +100,13 @@ namespace T3.Editor.Gui.Templates
                     ImGui.Dummy(new Vector2(10,10));
 
                     var isNewSymbolNameValid = NodeOperations.IsNewSymbolNameValid(_newSymbolName);
-                    CustomComponents.DrawStringParameter("Name",
+                    FormInputs.DrawStringField("Name",
                                                          ref _newSymbolName,
                                                          null,
                                                          isNewSymbolNameValid ? null : "Symbols must by unique and not contain spaces or special characters.");
 
                     var isNamespaceValid = NodeOperations.IsNameSpaceValid(NameSpace);
-                    CustomComponents.DrawStringParameter("NameSpace",
+                    FormInputs.DrawStringField("NameSpace",
                                                          ref _newNameSpace,
                                                          NameSpace,
                                                          isNamespaceValid ? null : "Is required and may only include characters, numbers and dots."
@@ -114,13 +114,13 @@ namespace T3.Editor.Gui.Templates
 
                     
                     var isResourceFolderValid = _validResourceFolderPattern.IsMatch(ResourceDirectory);
-                    CustomComponents.DrawStringParameter("Resource Director",
+                    FormInputs.DrawStringField("Resource Director",
                                                          ref _resourceFolder,
                                                          ResourceDirectory,
                                                          isResourceFolderValid ? null : "Your project files must be in Resources\\ directory for exporting."
                                                         );
                     
-                    CustomComponents.DrawStringParameter("Description", ref _newDescription);
+                    FormInputs.DrawStringField("Description", ref _newDescription);
                     
                     ImGui.Dummy(new Vector2(10,10));
 

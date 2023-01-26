@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using ImGuiNET;
-using ManagedBass;
-using Newtonsoft.Json;
 using T3.Core.Animation;
 using T3.Core.Audio;
-using T3.Core.IO;
 using T3.Core.Logging;
-using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Timing;
@@ -28,11 +23,14 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var playback = Playback.Current; // TODO, this should be non-static eventually
 
             // Settings
-            if (CustomComponents.IconButton(Icon.Settings, "##timelineSettings", ControlSize))
+            if (CustomComponents.IconButton(Icon.Settings, PlaybackSettingsPopup.PlaybackSettingsPopupId, ControlSize))
             {
                 //playback.TimeInBars = playback.LoopRange.Start;
-                ImGui.OpenPopup("##TimeSettings");
+                ImGui.OpenPopup(PlaybackSettingsPopup.PlaybackSettingsPopupId);
             }
+            
+            PlaybackSettingsPopup.DrawPlaybackSettings(ref playback);
+
 
             CustomComponents.TooltipForLastItem("Timeline Settings",
                                                 "Switch between soundtrack and VJ modes. Control BPM and other inputs.");
@@ -84,7 +82,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
             CustomComponents.TooltipForLastItem("Timeline format",
                                                 "Click to toggle through BPM, Frames and Normal time modes");
 
-            DrawPlaybackSettings(ref playback);
             ImGui.SameLine();
 
             // Continue Beat indicator
@@ -413,197 +410,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
             ImGui.SameLine();
         }
 
-        private static void DrawPlaybackSettings(ref Playback playback)
-        {
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
-            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
-            ImGui.SetNextWindowSize(new Vector2(400, 300));
-            if (!ImGui.BeginPopupContextItem("##TimeSettings"))
-            {
-                ImGui.PopStyleVar(2);
-                return;
-            }
-
-            T3Ui.OpenedPopUpName = "##TimeSettings";
-
-            ImGui.PushFont(Fonts.FontLarge);
-            ImGui.TextUnformatted("Playback and audio settings");
-            ImGui.PopFont();
-
-            if (ImGui.BeginTabBar("##timeMode"))
-            {
-                if (ImGui.BeginTabItem("AudioFile"))
-                {
-                    ImGui.TextUnformatted("Soundtrack");
-
-                    var composition = GraphWindow.GetMainComposition();
-                    if (composition == null)
-                    {
-                        ImGui.TextUnformatted("no composition active");
-                    }
-                    else
-                    {
-                        if (!SoundtrackUtils.TryFindingSoundtrack(composition, out var soundtrack))
-                        {
-                            if (ImGui.Button("Add soundtrack to composition"))
-                            {
-                                composition.Symbol.AudioClips.Add(new AudioClip
-                                                                      {
-                                                                          IsSoundtrack = true,
-                                                                      });
-                            }
-                        }
-                        else
-                        {
-                            var filepathModified =
-                                FileOperations.DrawSoundFilePicker(FileOperations.FilePickerTypes.File, ref soundtrack.FilePath);
-
-                            if (ImGui.Button("Reload"))
-                            {
-                                AudioEngine.ReloadClip(soundtrack);
-                            }
-
-                            ImGui.SameLine();
-                            if (ImGui.Button("Remove"))
-                            {
-                                composition.Symbol.AudioClips.Remove(soundtrack);
-                            }
-
-                            ImGui.SetNextItemWidth(150);
-                            if (ImGui.DragFloat("BPM", ref soundtrack.Bpm, 0.02f))
-                            {
-                                playback.Bpm = soundtrack.Bpm;
-                            }
-
-                            var soundtrackStartTime = (float)soundtrack.StartTime;
-                            ImGui.SetNextItemWidth(150);
-                            if (ImGui.DragFloat("Offset", ref soundtrackStartTime, 0.01f))
-                            {
-                                soundtrack.StartTime = soundtrackStartTime;
-                            }
-
-                            ImGui.SetNextItemWidth(150);
-                            if (ImGui.DragFloat("Resync Threshold in Seconds", ref ProjectSettings.Config.AudioResyncThreshold, 0.001f, 0.01f, 1f))
-                            {
-                                UserSettings.Save();
-                            }
-
-                            if (filepathModified)
-                            {
-                                UpdateBpmFromSoundtrackConfig(soundtrack);
-                            }
-                        }
-                    }
-
-                    ImGui.EndTabItem();
-                }
-
-                
-                if (ImGui.BeginTabItem("Tapping"))
-                {
-                    CustomComponents.HelpText("Tab the Sync button to set begin of measure and to improve BPM detection.");
-                    var isInitialized = playback is BeatTimingPlayback;
-                    if (isInitialized)
-                    {
-                    }
-                    else
-                    {
-                        if (ImGui.Button("Initialize"))
-                        {
-                            playback = new BeatTimingPlayback();
-                        }
-                    }
-
-                    ImGui.EndTabItem();
-                }
-                
-                if (ImGui.BeginTabItem("Audio input"))
-                {
-                    ImGui.DragFloat("AudioGain", ref ProjectSettings.Config.AudioGainFactor, 0.01f, 0, 100);
-                    ImGui.DragFloat("AudioDecay", ref ProjectSettings.Config.AudioDecayFactor, 0.001f, 0, 1);
-                    
-                    ImGui.Spacing();
-                    ImGui.TextColored(Color.Gray, "Select source for audio analysis...");
-                    if (ImGui.Selectable("Internal Soundtrack", string.IsNullOrEmpty(ProjectSettings.Config.AudioInputDeviceName)))
-                    {
-                        ProjectSettings.Config.AudioInputDeviceName = string.Empty;
-                        AudioAnalysis.InputMode = AudioAnalysis.InputModes.Soundtrack;
-                        Bass.Configure(Configuration.UpdateThreads, true);
-                    }
-                    
-                    if (!WasapiAudioInput.DevicesInitialized)
-                    {
-                        ImGui.Spacing();
-                        if (ImGui.Button("Init sound input devices"))
-                        {
-                            WasapiAudioInput.InitializeInputDeviceList();
-                        }
-
-                        CustomComponents.HelpText("Scanning WASAPI input devices can take several seconds...");
-                    }
-                    else
-                    {
-                        foreach (var d in WasapiAudioInput.InputDevices)
-                        {
-                            var isSelected = d.DeviceInfo.Name == ProjectSettings.Config.AudioInputDeviceName;
-                            if (ImGui.Selectable($"{d.DeviceInfo.Name}", isSelected))
-                            {
-                                Bass.Configure(Configuration.UpdateThreads, false);
-
-                                ProjectSettings.Config.AudioInputDeviceName = d.DeviceInfo.Name;
-                                ProjectSettings.Save();
-                                WasapiAudioInput.StartInputCapture(d);
-                            }
-
-                            var di = d.DeviceInfo;
-                            var j = JsonConvert.SerializeObject(di);
-
-                            CustomComponents.TooltipForLastItem($"{j}");
-                        }
-                    }
-                }
 
 
-                if (ImGui.BeginTabItem("OSC"))
-                {
-                    CustomComponents.HelpText("Use OSC to send events to /beatTimer on every beat.");
-                    //var isInitialized = playback is BeatTimingPlayback;
-                    if (OscBeatTiming.Initialized)
-                    {
-                        ImGui.TextUnformatted($"Last received beat {OscBeatTiming.BeatCounter}");
-                    }
-                    else
-                    {
-                        if (ImGui.Button("Initialize"))
-                        {
-                            OscBeatTiming.Init();
-                            playback = new BeatTimingPlayback();
-                        }
-                    }
-
-                    ImGui.EndTabItem();
-                }
-
-                ImGui.EndTabBar();
-            }
-
-            ImGui.EndPopup();
-            ImGui.PopStyleVar(2);
-        }
-
-        private static void UpdateBpmFromSoundtrackConfig(AudioClip audioClip)
-        {
-            var matchBpmPattern = new Regex(@"(\d+\.?\d*)bpm");
-            var result = matchBpmPattern.Match(audioClip.FilePath);
-            if (!result.Success)
-                return;
-
-            if (float.TryParse(result.Groups[1].Value, out var bpm))
-            {
-                Log.Debug($"Using bpm-rate {bpm} from filename.");
-                audioClip.Bpm = bpm;
-            }
-        }
 
         public static Vector2 ControlSize => new Vector2(45, 30) * T3Ui.UiScaleFactor;
     }

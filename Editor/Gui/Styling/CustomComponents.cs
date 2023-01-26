@@ -6,8 +6,6 @@ using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Styling
@@ -381,144 +379,13 @@ namespace T3.Editor.Gui.Styling
             return changed;
         }
 
-
-        public static bool DrawCheckboxParameter(string label, ref bool value, string tooltip= null)
-        {
-            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 15);            
-            var modified = ImGui.Checkbox(label, ref value);
-            if (!string.IsNullOrEmpty(tooltip))
-            {
-                TooltipForLastItem(tooltip);
-            }
-            return modified;
-        }
-        
-        public static bool DrawFloatParameter(string label, ref float value, float min = float.NegativeInfinity, float max = float.PositiveInfinity, float scale = 0.01f, bool clamp = false, string tooltip= null)
-        {
-            var labelSize = ImGui.CalcTextSize(label);
-            var p = ImGui.GetCursorPos();
-            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding - labelSize.X, 0) + 10);
-            ImGui.AlignTextToFramePadding();
-            
-            ImGui.TextUnformatted(label);
-            ImGui.SetCursorPos(p);
-
-            ImGui.SameLine();
-            ImGui.SetCursorPosX(LeftParameterPadding + ParameterSpacing);
-            ImGui.PushID(label);
-            var size = new Vector2(150 * T3Ui.UiScaleFactor, ImGui.GetFrameHeight());
-            var result = SingleValueEdit.Draw(ref value, size, min, max, clamp, scale);
-            ImGui.PopID();
-            var modified = (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
-
-            if (!string.IsNullOrEmpty(tooltip))
-            {
-                TooltipForLastItem(tooltip);
-            }
-            
-            return modified;
-        }
-        
-        public static bool DrawIntParameter(string label, ref int value, int min = int.MinValue, int max = int.MaxValue, float scale = 1, string tooltip = null)
-        {
-            var labelSize = ImGui.CalcTextSize(label);
-            var p = ImGui.GetCursorPos();
-            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding - labelSize.X, 0) + 10);
-            ImGui.AlignTextToFramePadding();
-            
-            ImGui.TextUnformatted(label);
-
-            ImGui.SetCursorPos(p);
-
-            ImGui.SameLine();
-            ImGui.SetCursorPosX(LeftParameterPadding + ParameterSpacing);
-
-            ImGui.PushID(label);
-            var size = new Vector2(150 * T3Ui.UiScaleFactor, ImGui.GetFrameHeight());
-            var result = SingleValueEdit.Draw(ref value, size, min, max, true, scale);
-            ImGui.PopID();
-            var modified = (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
-            
-            if (!string.IsNullOrEmpty(tooltip))
-            {
-                TooltipForLastItem(tooltip);
-            }            
-            return modified;
-        }
-
-        private static float LeftParameterPadding => 200 * T3Ui.UiScaleFactor; 
-        private static float ParameterSpacing => 20 * T3Ui.UiScaleFactor; 
-        public static bool DrawStringParameter(string label, 
-                                               ref string value, 
-                                               string placeHolder = null, 
-                                               string warning=null,  
-                                               FileOperations.FilePickerTypes showFilePicker = FileOperations.FilePickerTypes.None)
-        {
-            var leftPadding = LeftParameterPadding;
-            var spacing = ParameterSpacing;
-            var isFilePickerVisible = showFilePicker != FileOperations.FilePickerTypes.None;
-            float spaceForFilePicker = isFilePickerVisible ? 30 : 0;
-            var labelSize = ImGui.CalcTextSize(label);
-
-            var p = ImGui.GetCursorPos();
-            ImGui.SetCursorPosX( MathF.Max(leftPadding - labelSize.X,0)+10);
-            ImGui.AlignTextToFramePadding();
-
-            var cleanedLabel = label.Split(ImGuiIdSpecifier)[0];
-            ImGui.TextUnformatted(cleanedLabel);
-
-            ImGui.SetCursorPos(p);
-            
-            ImGui.SameLine();
-            ImGui.SetCursorPosX(leftPadding + spacing);
-            
-            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X- 50 - spaceForFilePicker);
-            
-            var wasNull = value == null;
-            if (wasNull)
-                value = string.Empty;
-            
-            var modified = ImGui.InputText("##" + label, ref value, 1000);
-            if (!modified && wasNull)
-                value = null;
-
-            if (string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(placeHolder))
-            {
-                var drawList = ImGui.GetWindowDrawList();
-                var minPos = ImGui.GetItemRectMin();
-                var maxPos = ImGui.GetItemRectMax();
-                drawList.PushClipRect(minPos,maxPos);
-                drawList.AddText(minPos + new Vector2(8,3), Color.White.Fade(0.25f), placeHolder);
-                drawList.PopClipRect();
-            }
-
-            
-            if (isFilePickerVisible)
-            {
-                modified |= FileOperations.DrawFileSelector(showFilePicker, ref value);                
-            } 
-
-            if (!string.IsNullOrEmpty(warning))
-            {
-                ImGui.Indent(leftPadding + spacing);
-                ImGui.PushFont(Fonts.FontSmall);
-                ImGui.PushStyleColor(ImGuiCol.Text, Color.Red.Rgba);
-                ImGui.TextUnformatted(warning);
-                ImGui.PopStyleColor();
-                ImGui.PopFont();
-                ImGui.Unindent(leftPadding + spacing);
-            }
-            
-            return modified;
-        }
-
         public static bool DrawSearchField(string placeHolderLabel, ref string value, float width=0)
         {
             var wasNull = value == null;
             if (wasNull)
                 value = string.Empty;
             
-            ImGui.SetNextItemWidth(width-ParameterSpacing);
+            ImGui.SetNextItemWidth(width- FormInputs.ParameterSpacing);
             var modified = ImGui.InputText("##" + placeHolderLabel, ref value, 1000);
             if (!modified && wasNull)
                 value = null;
@@ -543,47 +410,6 @@ namespace T3.Editor.Gui.Styling
             }
 
             return modified;
-        }        
-        
-        
-        public static bool DrawEnumParameter<T>(ref int index, string label)
-        {
-            // Label
-            var labelSize = ImGui.CalcTextSize(label);
-
-            var p = ImGui.GetCursorPos();
-            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding - labelSize.X, 0) + 10);
-            ImGui.AlignTextToFramePadding();
-
-            string cleanedLabel = label.Split(ImGuiIdSpecifier)[0];
-            ImGui.TextUnformatted(cleanedLabel);
-
-            ImGui.SetCursorPos(p);
-
-            // Dropdown
-            ImGui.SameLine();
-            ImGui.SetCursorPosX(LeftParameterPadding + ParameterSpacing);
-            var size = new Vector2(150 * T3Ui.UiScaleFactor, ImGui.GetFrameHeight());
-            
-            Type enumType = typeof(T);
-            var values = Enum.GetValues(enumType);
-
-            var valueNames = new string[values.Length];
-            for (var i = 0; i < values.Length; i++)
-            {
-                var v = values.GetValue(i);
-                valueNames[i] = v != null
-                                    ? Enum.GetName(typeof(T), v)
-                                    : "?? undefined";
-            }
-
-            ImGui.SetNextItemWidth(size.X);
-            // FIXME: using only "##dropdown" did not allow for multiple combos (see for example renderSequenceWindow.cs)
-            // so we add the type and label here - but this is only a temporary hack...
-            var modified = ImGui.Combo($"##dropDown{enumType}{label}", ref index, valueNames, valueNames.Length, valueNames.Length);
-            return modified;
         }
-
-        private const string ImGuiIdSpecifier = "##";
     }
 }

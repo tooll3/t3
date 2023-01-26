@@ -19,56 +19,75 @@ namespace T3.Editor.Gui.Windows
             ImGui.NewLine();
             if (ImGui.TreeNode("User Interface"))
             {
-                changed |= CustomComponents.DrawCheckboxParameter("Warn before Lib modifications",
+                FormInputs.VerticalSpace();
+                FormInputs.SetIndent(20);
+                changed |= FormInputs.DrawCheckBox("Warn before Lib modifications",
                                                        ref UserSettings.Config.WarnBeforeLibEdit,
                                                        "This warning pops up when you attempt to enter an Operator that ships with the application.\n" +
-                                                       "If unsure, this is best left checked.");
+                                                       "If unsure, this is best left checked.",
+                                                   UserSettings.Defaults.WarnBeforeLibEdit);
                 
-                changed |= CustomComponents.DrawCheckboxParameter("Use arc connections",
+                changed |= FormInputs.DrawCheckBox("Use arc connections",
                                                                   ref UserSettings.Config.UseArcConnections,
-                                                                  "Affects the shape of the connections between your Operators");
+                                                                  "Affects the shape of the connections between your Operators",
+                                                                  UserSettings.Defaults.UseArcConnections);
                 
 
-                changed |= CustomComponents.DrawCheckboxParameter("Use Jog Dial Control",
+                changed |= FormInputs.DrawCheckBox("Use Jog Dial Control",
                                                                   ref UserSettings.Config.UseJogDialControl,
-                                                                  "Affects the shape of the connections between your Operators");
+                                                                  "Affects the shape of the connections between your Operators",
+                                                                  UserSettings.Defaults.UseJogDialControl);
 
-                changed |= CustomComponents.DrawCheckboxParameter("Show Graph thumbnails",
-                                                                  ref UserSettings.Config.ShowThumbnails);
+                changed |= FormInputs.DrawCheckBox("Show Graph thumbnails",
+                                                                  ref UserSettings.Config.ShowThumbnails,
+                                                   null,
+                                                                  UserSettings.Defaults.ShowThumbnails);
 
-                changed |= CustomComponents.DrawCheckboxParameter("Drag snapped nodes",
-                                                                  ref UserSettings.Config.SmartGroupDragging);
+                changed |= FormInputs.DrawCheckBox("Drag snapped nodes",
+                                                                  ref UserSettings.Config.SmartGroupDragging, 
+                                                                  "An experimental features that will drag neighbouring snapped operators.",
+                                                                  UserSettings.Defaults.SmartGroupDragging);
                 
-                changed |= CustomComponents.DrawCheckboxParameter("Fullscreen Window Swap",
+                changed |= FormInputs.DrawCheckBox("Fullscreen Window Swap",
                                                                   ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen,
-                                                                  "Swap main and second windows when fullscreen");
+                                                                  "Swap main and second windows when fullscreen",
+                                                                  UserSettings.Defaults.SwapMainAnd2ndWindowsWhenFullscreen);
 
-                ImGui.Dummy(new Vector2(20,20));
+                FormInputs.ResetIndent();
+                FormInputs.VerticalSpace();
+                //ImGui.Dummy(new Vector2(20,20));
                 
 
-                changed |= CustomComponents.DrawFloatParameter("UI Scale",
+                changed |= FormInputs.DrawFloatField("UI Scale",
                                                                ref UserSettings.Config.UiScaleFactor,
                                                                0.1f, 5f, 0.01f, true, 
-                                                               "The global scale of all rendered UI in the application");
+                                                               "The global scale of all rendered UI in the application",
+                                                               UserSettings.Defaults.UiScaleFactor);
                 
 
-                changed |= CustomComponents.DrawFloatParameter("Scroll smoothing",
+                changed |= FormInputs.DrawFloatField("Scroll smoothing",
                                                                ref UserSettings.Config.ScrollSmoothing,
-                                                               0.0f, 0.2f, 0.01f, true);
+                                                               0.0f, 0.2f, 0.01f, true,
+                                                     null,
+                                                     UserSettings.Defaults.ScrollSmoothing);
 
-                changed |= CustomComponents.DrawFloatParameter("Snap strength",
+                changed |= FormInputs.DrawFloatField("Snap strength",
                                                     ref UserSettings.Config.SnapStrength,
-                                                    0.0f, 0.2f, 0.01f, true);
+                                                    0.0f, 0.2f, 0.01f, true,
+                                                    "Controls the distance until items like keyframes snap in the timeline.",
+                                                    UserSettings.Defaults.SnapStrength);
                 
-                changed |= CustomComponents.DrawFloatParameter("Click threshold",
+                changed |= FormInputs.DrawFloatField("Click threshold",
                                                                ref UserSettings.Config.ClickThreshold,
                                                                0.0f, 10f, 0.1f, true, 
-                                                               "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input.");
+                                                               "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input.",
+                                                               UserSettings.Defaults.ClickThreshold);
                 
-                changed |= CustomComponents.DrawFloatParameter("Timeline Raster Density",
+                changed |= FormInputs.DrawFloatField("Timeline Raster Density",
                                                                ref UserSettings.Config.TimeRasterDensity,
                                                                0.0f, 10f, 0.01f, true, 
-                                                               "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input.");
+                                                               "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input.",
+                                                               UserSettings.Defaults.TimeRasterDensity);
                 ImGui.Dummy(new Vector2(20,20));
                 ImGui.TreePop();
             }
@@ -77,15 +96,15 @@ namespace T3.Editor.Gui.Windows
             {
                 CustomComponents.HelpText("These settings only apply with a connected space mouse controller");
                 
-                changed |= CustomComponents.DrawFloatParameter("Smoothing",
+                changed |= FormInputs.DrawFloatField("Smoothing",
                                                                ref UserSettings.Config.SpaceMouseDamping,
                                                                0.0f, 10f, 0.01f, true);                
 
-                changed |= CustomComponents.DrawFloatParameter("Move Speed",
+                changed |= FormInputs.DrawFloatField("Move Speed",
                                                                ref UserSettings.Config.SpaceMouseMoveSpeedFactor,
                                                                0.0f, 10f, 0.01f, true);                
 
-                changed |= CustomComponents.DrawFloatParameter("Rotation Speed",
+                changed |= FormInputs.DrawFloatField("Rotation Speed",
                                                                ref UserSettings.Config.SpaceMouseRotationSpeedFactor,
                                                                0.0f, 10f, 0.01f, true);                
                 
@@ -95,15 +114,15 @@ namespace T3.Editor.Gui.Windows
 
             if (ImGui.TreeNode("Additional Settings"))
             {
-                changed |= CustomComponents.DrawFloatParameter("Gizmo size",
+                changed |= FormInputs.DrawFloatField("Gizmo size",
                                                                ref UserSettings.Config.GizmoSize,
                                                                0.0f, 10f, 0.01f, true);                        
 
-                changed |= CustomComponents.DrawFloatParameter("Tooltip delay in Seconds",
+                changed |= FormInputs.DrawFloatField("Tooltip delay in Seconds",
                                                                ref UserSettings.Config.TooltipDelay,
                                                                0.0f, 30f, 0.01f, true);        
                 
-                changed |= CustomComponents.DrawCheckboxParameter("Always show description in Symbol Browser",
+                changed |= FormInputs.DrawCheckBox("Always show description in Symbol Browser",
                                                                ref UserSettings.Config.AlwaysShowDescriptionPanel,
                                                                "Shifts the Description panel to the left of the Symbol Browser when\n" +
                                                                "it is too close to the right edge of the screen to display it.");

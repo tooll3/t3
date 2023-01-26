@@ -10,12 +10,14 @@ namespace T3.Core.IO
     public class Settings<T> where T : class, new()
     {
         public static T Config;
+        public static T Defaults;
 
         protected Settings(string filepath, bool saveOnQuit)
         {
             if(saveOnQuit)
                 AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
 
+            Defaults = new T();
             Config = Utilities.TryLoadingJson<T>(filepath) ?? new T();
             _filepath = filepath;
             _instance = this;

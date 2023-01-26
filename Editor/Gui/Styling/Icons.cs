@@ -223,6 +223,11 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.HoverScrub,  55),
                 new (Icon.AutoRefresh,  56),
                 new (Icon.Camera,  57),
+                new (Icon.Move, 58),
+                new (Icon.Scale, 59),
+                new (Icon.Rotate, 60),
+                new (Icon.Help, 61),
+                new (Icon.Hint, 62),                
             };
 
         public const string IconAtlasPath = @"Resources\t3-editor\images\t3-icons.png";
@@ -286,6 +291,11 @@ namespace T3.Editor.Gui.Styling
         Plus,
         HoverScrub,
         AutoRefresh,
-        Camera
+        Camera,
+        Move,
+        Scale,
+        Rotate,
+        Help,
+        Hint,
     }
 }

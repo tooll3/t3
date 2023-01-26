@@ -20,6 +20,8 @@ namespace T3.Editor.Gui.UiHelpers
         {
         }
 
+        
+
         public class ConfigData
         {
             public readonly Dictionary<Guid, ScalableCanvas.Scope> OperatorViewSettings = new Dictionary<Guid, ScalableCanvas.Scope>();

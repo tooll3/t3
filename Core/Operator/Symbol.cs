@@ -26,15 +26,6 @@ namespace T3.Core.Operator
         public string Name { get; set; }
         public string Namespace { get; set; }
         public string PendingSource { get; set; }
-
-        // public string SourcePath
-        // {
-        //     get
-        //     {
-        //         
-        //     }
-        // }
-
         public string DeprecatedSourcePath { get; set; }
 
         public readonly List<Instance> InstancesOfSymbol = new();
@@ -50,8 +41,11 @@ namespace T3.Core.Operator
 
         public Type InstanceType { get; private set; }
 
-        public Animator Animator { get; } = new Animator();
-        public List<AudioClip> AudioClips { get; private set; } = new();
+        public Animator Animator { get; } = new();
+        
+        
+        public SoundSettings SoundSettings { get; set; } = new();
+        
 
         #region public API =======================================================================
 
@@ -782,5 +776,11 @@ namespace T3.Core.Operator
                 slot.DirtyFlag.Invalidate();
             }
         }
+    }
+
+    public class SoundSettings
+    {
+        public List<AudioClip> AudioClips { get; private set; } = new();
+        public bool HasSettings { get; set; }
     }
 }

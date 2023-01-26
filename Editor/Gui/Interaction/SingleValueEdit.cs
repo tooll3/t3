@@ -133,7 +133,7 @@ namespace T3.Editor.Gui.Interaction
                     case InputStates.TextInput:
                         ImGui.PushStyleColor(ImGuiCol.Text, double.IsNaN(_editValue)
                                                                 ? Color.Red.Rgba
-                                                                : Color.White.Rgba);
+                                                                : Color.White);
                         ImGui.SetNextItemWidth(size.X);
                         ImGui.InputText("##dialInput", ref _jogDialText, 20);
 
@@ -322,7 +322,7 @@ namespace T3.Editor.Gui.Interaction
         /// </summary>
         private static void DrawButtonWithDynamicLabel(string label, ref Vector2 size)
         {
-            var color1 = Color.GetStyleColor(ImGuiCol.Text);
+            var color1 = Color.GetStyleColor(ImGuiCol.Text).Fade(ImGui.GetStyle().Alpha);
             var keepPos = ImGui.GetCursorScreenPos();
             ImGui.Button("##dial", size);
             ImGui.GetWindowDrawList().AddText(keepPos + new Vector2(4, 4), color1, label);

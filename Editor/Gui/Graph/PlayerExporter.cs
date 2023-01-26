@@ -172,7 +172,7 @@ namespace T3.Editor.Gui.Graph
                 var resourcePaths = exportInfo.UniqueResourcePaths;
 
                 {
-                    var soundtrack = childUi.SymbolChild.Symbol.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
+                    var soundtrack = childUi.SymbolChild.Symbol.SoundSettings.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
                     if (soundtrack == null)
                     {
                         if (SoundtrackUtils.TryFindingSoundtrack(instance, out var otherSoundtrack))

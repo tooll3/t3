@@ -25,7 +25,7 @@ namespace T3.Editor.Gui.Windows
             
             // convert times if reference time selection changed
             int newTimeReferenceIndex = (int)_timeReference;
-            if (CustomComponents.DrawEnumParameter<TimeReference>(ref newTimeReferenceIndex, "Time reference"))
+            if (FormInputs.DrawEnum<TimeReference>(ref newTimeReferenceIndex, "Time reference"))
             {
                 TimeReference newTimeReference = (TimeReference)newTimeReferenceIndex;
                 _startTime = (float)ConvertReferenceTime(_startTime, _timeReference, newTimeReference);
@@ -34,7 +34,7 @@ namespace T3.Editor.Gui.Windows
             }
 
             // change FPS if required
-            CustomComponents.DrawFloatParameter("FPS", ref _fps, 0);
+            FormInputs.DrawFloatField("FPS", ref _fps, 0);
             if (_fps < 0) _fps = -_fps;
             if (_fps != 0)
             {
@@ -42,18 +42,18 @@ namespace T3.Editor.Gui.Windows
                 _endTime = (float)ConvertFPS(_endTime, _lastValidFps, _fps);
                 _lastValidFps = _fps;
             }
-            CustomComponents.DrawFloatParameter($"Start in {_timeReference}", ref _startTime);
-            CustomComponents.DrawFloatParameter($"End in {_timeReference}", ref _endTime);
+            FormInputs.DrawFloatField($"Start in {_timeReference}", ref _startTime);
+            FormInputs.DrawFloatField($"End in {_timeReference}", ref _endTime);
             
             // use our loop range instead of entered values?
-            CustomComponents.DrawCheckboxParameter("Use Loop Range", ref _useLoopRange);
+            FormInputs.DrawCheckBox("Use Loop Range", ref _useLoopRange);
             if (_useLoopRange) UseLoopRange();
             
             double startTimeInSeconds = ReferenceTimeToSeconds(_startTime, _timeReference);
             double endTimeInSeconds = ReferenceTimeToSeconds(_endTime, _timeReference);
             _frameCount = (int)Math.Round((endTimeInSeconds - startTimeInSeconds) * _fps);
             
-            if (CustomComponents.DrawIntParameter($"Motion Blur Samples", ref _overrideMotionBlurSamples, -1, 50, 1, "This requires a [RenderWithMotionBlur] operator. Please check its documentation."))
+            if (FormInputs.DrawIntField($"Motion Blur Samples", ref _overrideMotionBlurSamples, -1, 50, 1, "This requires a [RenderWithMotionBlur] operator. Please check its documentation."))
             {
                 _overrideMotionBlurSamples = _overrideMotionBlurSamples.Clamp(-1, 50);
             }            

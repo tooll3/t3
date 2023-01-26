@@ -213,7 +213,7 @@ namespace T3
             _project = demoSymbol.CreateInstance(Guid.NewGuid());
             _evalContext = new EvaluationContext();
             
-            _soundtrack = demoSymbol.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
+            _soundtrack = demoSymbol.SoundSettings.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
             
             var soundtrackDefined = _soundtrack != null && File.Exists(_soundtrack.FilePath);
             

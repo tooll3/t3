@@ -83,15 +83,15 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         {
             base.DrawSettings();
 
-            CustomComponents.DrawFloatParameter("Scale", ref _scale);
-            CustomComponents.DrawFloatParameter("Min", ref Min);
-            CustomComponents.DrawFloatParameter("Max", ref Max);
-            CustomComponents.DrawCheckboxParameter("Clamp Range", ref Clamp);
+            FormInputs.DrawFloatField("Scale", ref _scale);
+            FormInputs.DrawFloatField("Min", ref Min);
+            FormInputs.DrawFloatField("Max", ref Max);
+            FormInputs.DrawCheckBox("Clamp Range", ref Clamp);
             //ImGui.DragFloat("Min", ref Min);
             //ImGui.DragFloat("Max", ref Max);
             //ImGui.DragFloat("Scale", ref _scale);
             //ImGui.Checkbox("Clamp Range", ref Clamp);
-            CustomComponents.DrawStringParameter("Custom Format", ref Format);
+            FormInputs.DrawStringField("Custom Format", ref Format);
         }
 
         public override void Write(JsonTextWriter writer)

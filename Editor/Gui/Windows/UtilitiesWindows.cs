@@ -28,12 +28,12 @@ namespace T3.Editor.Gui.Windows
         protected override void DrawContent()
         {
             var modified = false;
-            modified |= CustomComponents.DrawStringParameter("SvgFile", ref _svgFilePath, "not-a-font.svg", null, FileOperations.FilePickerTypes.File);
-            modified |= CustomComponents.DrawFloatParameter("UnitsPerEm", ref _unitsPerEm, -1000, 2000, 1);
-            modified |= CustomComponents.DrawFloatParameter("Ascent", ref _svgFontAscent, 0, 2000, 1);
-            modified |= CustomComponents.DrawFloatParameter("Descent", ref _svgFontDescent, 0, 2000, 1);
-            modified |= CustomComponents.DrawFloatParameter("AdvanceX", ref _svgAdvanceX, 0, 2000, 1);
-            CustomComponents.DrawCheckboxParameter("Convert on change", ref _autoConvertOnParameterChange);
+            modified |= FormInputs.FilePicker("SvgFile", ref _svgFilePath, "not-a-font.svg", null, FileOperations.FilePickerTypes.File);
+            modified |= FormInputs.DrawFloatField("UnitsPerEm", ref _unitsPerEm, -1000, 2000, 1);
+            modified |= FormInputs.DrawFloatField("Ascent", ref _svgFontAscent, 0, 2000, 1);
+            modified |= FormInputs.DrawFloatField("Descent", ref _svgFontDescent, 0, 2000, 1);
+            modified |= FormInputs.DrawFloatField("AdvanceX", ref _svgAdvanceX, 0, 2000, 1);
+            FormInputs.DrawCheckBox("Convert on change", ref _autoConvertOnParameterChange);
             
             var autoTriggered = _autoConvertOnParameterChange && modified;
             if (autoTriggered || CustomComponents.DisablableButton("Convert To SvgFont", File.Exists(_svgFilePath)))

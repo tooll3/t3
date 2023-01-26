@@ -25,11 +25,11 @@ namespace T3.Editor.Gui.Windows
 
             // custom parameters for this renderer
             var intFileFormat = (int)_fileFormat;
-            if (CustomComponents.DrawEnumParameter<ScreenshotWriter.FileFormats>(ref intFileFormat, "FileFormat"))
+            if (FormInputs.DrawEnum<ScreenshotWriter.FileFormats>(ref intFileFormat, "FileFormat"))
             {
                 _fileFormat = (ScreenshotWriter.FileFormats)intFileFormat;
             }
-            CustomComponents.DrawStringParameter("Folder", ref _targetFolder);
+            FormInputs.DrawStringField("Folder", ref _targetFolder);
             ImGui.SameLine();
             FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.Folder, ref _targetFolder);
             ImGui.Separator();

@@ -48,7 +48,7 @@ namespace T3.Core.Resource
             WriteSymbolInputs(symbol.InputDefinitions);
             WriteSymbolChildren(symbol.Children);
             WriteConnections(symbol.Connections);
-            WriteSoundtracks(symbol.AudioClips);
+            WriteSoundSettings(symbol.SoundSettings);
             symbol.Animator.Write(Writer);
 
             Writer.WriteEndObject();
@@ -165,11 +165,16 @@ namespace T3.Core.Resource
             Writer.WriteEndArray();
         }
 
-        private void WriteSoundtracks(List<AudioClip> audioClips)
+        private void WriteSoundSettings(SoundSettings soundSettings)
         {
+            Writer.WriteValue("HasSettings", soundSettings.HasSettings);
+            
+            // Write audio clips
+            var audioClips = soundSettings.AudioClips;
             if (audioClips == null || audioClips.Count == 0)
                 return;
 
+            
             Writer.WritePropertyName("AudioClips");
             Writer.WriteStartArray();
             foreach (var audioClip in audioClips)
@@ -383,14 +388,24 @@ namespace T3.Core.Resource
                 }
             }
 
-            var jAudioClipArray = (JArray)o[nameof(symbol.AudioClips)];
+            // Read sound settings
+
+            var jSettingsToken = o["HasSettings"];
+            var hasSettings = jSettingsToken != null && jSettingsToken.Value<bool>();
+            
+            symbol.SoundSettings = new SoundSettings
+                                       {
+                                           HasSettings = hasSettings
+                                       };
+
+            var jAudioClipArray = (JArray)o[nameof(Symbol.SoundSettings.AudioClips)];
             if (jAudioClipArray == null)
                 return symbol;
 
             foreach (var c in jAudioClipArray)
             {
                 var clip = AudioClip.FromJson(c);
-                symbol.AudioClips.Add(clip);
+                symbol.SoundSettings.AudioClips.Add(clip);
             }
 
             return symbol;
