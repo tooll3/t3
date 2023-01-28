@@ -19,71 +19,71 @@ namespace T3.Editor.Gui.Windows
             ImGui.NewLine();
             if (ImGui.TreeNode("User Interface"))
             {
-                FormInputs.VerticalSpace();
+                FormInputs.AddVerticalSpace();
                 FormInputs.SetIndent(20);
-                changed |= FormInputs.DrawCheckBox("Warn before Lib modifications",
+                changed |= FormInputs.AddCheckBox("Warn before Lib modifications",
                                                        ref UserSettings.Config.WarnBeforeLibEdit,
                                                        "This warning pops up when you attempt to enter an Operator that ships with the application.\n" +
                                                        "If unsure, this is best left checked.",
                                                    UserSettings.Defaults.WarnBeforeLibEdit);
                 
-                changed |= FormInputs.DrawCheckBox("Use arc connections",
+                changed |= FormInputs.AddCheckBox("Use arc connections",
                                                                   ref UserSettings.Config.UseArcConnections,
                                                                   "Affects the shape of the connections between your Operators",
                                                                   UserSettings.Defaults.UseArcConnections);
                 
 
-                changed |= FormInputs.DrawCheckBox("Use Jog Dial Control",
+                changed |= FormInputs.AddCheckBox("Use Jog Dial Control",
                                                                   ref UserSettings.Config.UseJogDialControl,
                                                                   "Affects the shape of the connections between your Operators",
                                                                   UserSettings.Defaults.UseJogDialControl);
 
-                changed |= FormInputs.DrawCheckBox("Show Graph thumbnails",
+                changed |= FormInputs.AddCheckBox("Show Graph thumbnails",
                                                                   ref UserSettings.Config.ShowThumbnails,
                                                    null,
                                                                   UserSettings.Defaults.ShowThumbnails);
 
-                changed |= FormInputs.DrawCheckBox("Drag snapped nodes",
+                changed |= FormInputs.AddCheckBox("Drag snapped nodes",
                                                                   ref UserSettings.Config.SmartGroupDragging, 
                                                                   "An experimental features that will drag neighbouring snapped operators.",
                                                                   UserSettings.Defaults.SmartGroupDragging);
                 
-                changed |= FormInputs.DrawCheckBox("Fullscreen Window Swap",
+                changed |= FormInputs.AddCheckBox("Fullscreen Window Swap",
                                                                   ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen,
                                                                   "Swap main and second windows when fullscreen",
                                                                   UserSettings.Defaults.SwapMainAnd2ndWindowsWhenFullscreen);
 
                 FormInputs.ResetIndent();
-                FormInputs.VerticalSpace();
+                FormInputs.AddVerticalSpace();
                 //ImGui.Dummy(new Vector2(20,20));
                 
 
-                changed |= FormInputs.DrawFloatField("UI Scale",
+                changed |= FormInputs.AddFloat("UI Scale",
                                                                ref UserSettings.Config.UiScaleFactor,
                                                                0.1f, 5f, 0.01f, true, 
                                                                "The global scale of all rendered UI in the application",
                                                                UserSettings.Defaults.UiScaleFactor);
                 
 
-                changed |= FormInputs.DrawFloatField("Scroll smoothing",
+                changed |= FormInputs.AddFloat("Scroll smoothing",
                                                                ref UserSettings.Config.ScrollSmoothing,
                                                                0.0f, 0.2f, 0.01f, true,
                                                      null,
                                                      UserSettings.Defaults.ScrollSmoothing);
 
-                changed |= FormInputs.DrawFloatField("Snap strength",
+                changed |= FormInputs.AddFloat("Snap strength",
                                                     ref UserSettings.Config.SnapStrength,
                                                     0.0f, 0.2f, 0.01f, true,
                                                     "Controls the distance until items like keyframes snap in the timeline.",
                                                     UserSettings.Defaults.SnapStrength);
                 
-                changed |= FormInputs.DrawFloatField("Click threshold",
+                changed |= FormInputs.AddFloat("Click threshold",
                                                                ref UserSettings.Config.ClickThreshold,
                                                                0.0f, 10f, 0.1f, true, 
                                                                "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input.",
                                                                UserSettings.Defaults.ClickThreshold);
                 
-                changed |= FormInputs.DrawFloatField("Timeline Raster Density",
+                changed |= FormInputs.AddFloat("Timeline Raster Density",
                                                                ref UserSettings.Config.TimeRasterDensity,
                                                                0.0f, 10f, 0.01f, true, 
                                                                "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input.",
@@ -96,15 +96,15 @@ namespace T3.Editor.Gui.Windows
             {
                 CustomComponents.HelpText("These settings only apply with a connected space mouse controller");
                 
-                changed |= FormInputs.DrawFloatField("Smoothing",
+                changed |= FormInputs.AddFloat("Smoothing",
                                                                ref UserSettings.Config.SpaceMouseDamping,
                                                                0.0f, 10f, 0.01f, true);                
 
-                changed |= FormInputs.DrawFloatField("Move Speed",
+                changed |= FormInputs.AddFloat("Move Speed",
                                                                ref UserSettings.Config.SpaceMouseMoveSpeedFactor,
                                                                0.0f, 10f, 0.01f, true);                
 
-                changed |= FormInputs.DrawFloatField("Rotation Speed",
+                changed |= FormInputs.AddFloat("Rotation Speed",
                                                                ref UserSettings.Config.SpaceMouseRotationSpeedFactor,
                                                                0.0f, 10f, 0.01f, true);                
                 
@@ -114,15 +114,15 @@ namespace T3.Editor.Gui.Windows
 
             if (ImGui.TreeNode("Additional Settings"))
             {
-                changed |= FormInputs.DrawFloatField("Gizmo size",
+                changed |= FormInputs.AddFloat("Gizmo size",
                                                                ref UserSettings.Config.GizmoSize,
                                                                0.0f, 10f, 0.01f, true);                        
 
-                changed |= FormInputs.DrawFloatField("Tooltip delay in Seconds",
+                changed |= FormInputs.AddFloat("Tooltip delay in Seconds",
                                                                ref UserSettings.Config.TooltipDelay,
                                                                0.0f, 30f, 0.01f, true);        
                 
-                changed |= FormInputs.DrawCheckBox("Always show description in Symbol Browser",
+                changed |= FormInputs.AddCheckBox("Always show description in Symbol Browser",
                                                                ref UserSettings.Config.AlwaysShowDescriptionPanel,
                                                                "Shifts the Description panel to the left of the Symbol Browser when\n" +
                                                                "it is too close to the right edge of the screen to display it.");

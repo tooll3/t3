@@ -23,8 +23,8 @@ namespace T3.Editor.Gui.Windows
             DrawTimeSetup();
 
             // custom parameters for this renderer
-            FormInputs.DrawIntField("Bitrate", ref _bitrate, 0, 25000000, 1000);
-            FormInputs.DrawStringField("File", ref _targetFile);
+            FormInputs.AddInt("Bitrate", ref _bitrate, 0, 25000000, 1000);
+            FormInputs.AddStringInput("File", ref _targetFile);
             ImGui.SameLine();
             FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref _targetFile);
             ImGui.Separator();

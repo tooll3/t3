@@ -19,7 +19,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
 {
     public static class PlaybackSettingsPopup
     {
-        public static readonly string PlaybackSettingsPopupId = "##PlaybackSettings";
 
         public static void DrawPlaybackSettings(ref Playback playback)
         {
@@ -55,7 +54,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             // Main toggle with composition name 
             var isEnabledForCurrent = compositionWithSettings == composition && compositionSettings is { Enabled: true };
 
-            if (FormInputs.DrawCheckBox("Specify settings for", ref isEnabledForCurrent))
+            if (FormInputs.AddCheckBox("Specify settings for", ref isEnabledForCurrent))
             {
                 if (isEnabledForCurrent)
                 {
@@ -76,8 +75,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
             ImGui.PopFont();
 
             // Explanation hint
-            //var compositionHasSoundtrack = compWithSoundtrack == composition;
-
             string hint;
             if (compositionSettings != null && isEnabledForCurrent)
             {
@@ -92,7 +89,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 hint = string.Empty;
             }
 
-            FormInputs.DrawHint(hint);
+            FormInputs.AddHint(hint);
 
             if (compositionSettings == null || !compositionSettings.Enabled)
             {
@@ -104,9 +101,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             FormInputs.ResetIndent();
             ImGui.Separator();
-            FormInputs.VerticalSpace();
+            FormInputs.AddVerticalSpace();
 
-            if (FormInputs.DrawEnumSelector(ref compositionSettings.SyncMode, "Sync Mode"))
+            if (FormInputs.AddSegmentedButton(ref compositionSettings.SyncMode, "Sync Mode"))
             {
                 if (compositionSettings.SyncMode == PlaybackSettings.SyncModes.ProjectSoundTrack)
                 {
@@ -127,7 +124,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 }
             }
 
-            FormInputs.VerticalSpace();
+            FormInputs.AddVerticalSpace();
 
             if (compositionSettings.SyncMode == PlaybackSettings.SyncModes.ProjectSoundTrack)
             {
@@ -143,7 +140,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 }
                 else
                 {
-                    var filepathModified = FormInputs.FilePicker("Soundtrack",
+                    var filepathModified = FormInputs.AddFilePicker("Soundtrack",
                                                                  ref soundtrack.FilePath,
                                                                  "filepath to soundtrack",
                                                                  null,
@@ -161,9 +158,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         compositionSettings.AudioClips.Remove(soundtrack);
                     }
 
-                    FormInputs.VerticalSpace();
+                    FormInputs.AddVerticalSpace();
 
-                    if (FormInputs.DrawFloatField("BPM",
+                    if (FormInputs.AddFloat("BPM",
                                                   ref soundtrack.Bpm,
                                                   0,
                                                   1000,
@@ -177,7 +174,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                     var soundtrackStartTime = (float)soundtrack.StartTime;
 
-                    if (FormInputs.DrawFloatField("Offset",
+                    if (FormInputs.AddFloat("Offset",
                                                   ref soundtrackStartTime,
                                                   -100,
                                                   100,
@@ -189,9 +186,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         soundtrack.StartTime = soundtrackStartTime;
                     }
 
-                    FormInputs.DrawEnum(ref UserSettings.Config.TimeDisplayMode, "Display Timeline in");
+                    FormInputs.AddEnumDropdown(ref UserSettings.Config.TimeDisplayMode, "Display Timeline in");
 
-                    if (FormInputs.DrawFloatField("Resync Threshold",
+                    if (FormInputs.AddFloat("Resync Threshold",
                                                   ref ProjectSettings.Config.AudioResyncThreshold,
                                                   0.001f,
                                                   0.1f,
@@ -219,11 +216,11 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     playback = new BeatTimingPlayback();
                 }
 
-                FormInputs.DrawFloatField("AudioGain", ref ProjectSettings.Config.AudioGainFactor, 0.01f, 100, 0.01f, true,
+                FormInputs.AddFloat("AudioGain", ref ProjectSettings.Config.AudioGainFactor, 0.01f, 100, 0.01f, true,
                                           "Can be used to adjust the input signal (e.g. in live situation where the input level might vary.",
                                           ProjectSettings.Defaults.AudioGainFactor);
 
-                FormInputs.DrawFloatField("AudioDecay", ref ProjectSettings.Config.AudioDecayFactor,
+                FormInputs.AddFloat("AudioDecay", ref ProjectSettings.Config.AudioDecayFactor,
                                           0.001f,
                                           1f,
                                           0.01f,
@@ -336,7 +333,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
         }
 
-        public static bool FindParentWithPlaybackSettings(Instance startInstance, out Instance instanceWithSettings, out PlaybackSettings settings)
+        public static void FindParentWithPlaybackSettings(Instance startInstance, out Instance instanceWithSettings, out PlaybackSettings settings)
         {
             instanceWithSettings = startInstance;
             while (true)
@@ -347,18 +344,21 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 settings = instanceWithSettings.Symbol.PlaybackSettings;
                 if(settings != null && settings.Enabled)
                 {
-                    return true;
+                    return;
                 }
 
                 if (instanceWithSettings.Parent == null)
                 {
                     settings = null;
                     instanceWithSettings = null;
-                    return false;
+                    return;
                 }
 
                 instanceWithSettings = instanceWithSettings.Parent;
             }
         }
+        
+        
+        public const string PlaybackSettingsPopupId = "##PlaybackSettings";
     }
 }

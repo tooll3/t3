@@ -34,7 +34,7 @@ namespace T3.Editor.Gui.Dialog
                     }
 
                     var hasChanged = false;
-                    hasChanged |= FormInputs.DrawStringField("User Namespace", ref _userNamespace);
+                    hasChanged |= FormInputs.AddStringInput("User Namespace", ref _userNamespace);
 
                     var fullPath = (_otherToollDir != null && Directory.Exists(_otherToollDir)) ? Path.GetFullPath(_otherToollDir) : "";
                     var startUpPath = Path.GetFullPath(".");
@@ -49,7 +49,7 @@ namespace T3.Editor.Gui.Dialog
                         warning = "Can't import from itself";
                     }
 
-                    hasChanged |= FormInputs.FilePicker("Tooll directory", ref _otherToollDir, null, warning,
+                    hasChanged |= FormInputs.AddFilePicker("Tooll directory", ref _otherToollDir, null, warning,
                                                              FileOperations.FilePickerTypes.Folder);
                     
 

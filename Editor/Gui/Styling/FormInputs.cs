@@ -13,7 +13,7 @@ namespace T3.Editor.Gui.Styling
     /// </summary>
     public static class FormInputs
     {
-        public static bool DrawIntField(string label,
+        public static bool AddInt(string label,
                                         ref int value,
                                         int min = int.MinValue,
                                         int max = int.MaxValue,
@@ -44,7 +44,7 @@ namespace T3.Editor.Gui.Styling
 
         private const float DefaultFadeAlpha = 0.7f;
 
-        public static bool DrawFloatField(string label, 
+        public static bool AddFloat(string label, 
                                           ref float value, 
                                           float min = float.NegativeInfinity, 
                                           float max = float.PositiveInfinity,
@@ -83,7 +83,7 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
 
-        public static bool DrawEnum<T>(ref int index, string label)
+        public static bool AddEnumDropdown<T>(ref int index, string label)
         {
             DrawInputLabel(label);
             var size = new Vector2(150 * T3Ui.UiScaleFactor, ImGui.GetFrameHeight());
@@ -107,7 +107,7 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
         
-        public static bool DrawEnum<T>(ref T selectedValue, string label) where T : struct, Enum, IConvertible, IFormattable
+        public static bool AddEnumDropdown<T>(ref T selectedValue, string label) where T : struct, Enum, IConvertible, IFormattable
         {
             DrawInputLabel(label);
             var size = new Vector2(150 * T3Ui.UiScaleFactor, ImGui.GetFrameHeight());
@@ -136,7 +136,7 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }        
         
-        public static bool DrawEnumSelector<T>(ref T selectedValue, string label) where T : struct, Enum
+        public static bool AddSegmentedButton<T>(ref T selectedValue, string label) where T : struct, Enum
         {
             DrawInputLabel(label);
             
@@ -181,7 +181,7 @@ namespace T3.Editor.Gui.Styling
         /// <summary>
         /// Draws string input or file picker. 
         /// </summary>
-        public static bool DrawStringField(string label,
+        public static bool AddStringInput(string label,
                                            ref string value,
                                            string placeHolder = null,
                                            string warning = null)
@@ -215,7 +215,7 @@ namespace T3.Editor.Gui.Styling
         /// <summary>
         /// Draws string input or file picker. 
         /// </summary>
-        public static bool FilePicker(string label,
+        public static bool AddFilePicker(string label,
                                       ref string value,
                                       string placeHolder = null,
                                       string warning = null,
@@ -263,7 +263,7 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
 
-        public static bool DrawCheckBox(
+        public static bool AddCheckBox(
             string label, 
             ref bool value, 
             string tooltip = null,
@@ -295,7 +295,7 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
 
-        public static void DrawHint(string label)
+        public static void AddHint(string label)
         {
             if (string.IsNullOrEmpty(label))
                 return;
@@ -313,7 +313,7 @@ namespace T3.Editor.Gui.Styling
             ImGui.PopStyleVar(2);
         }
 
-        public static void VerticalSpace(float size = 10)
+        public static void AddVerticalSpace(float size = 10)
         {
             ImGui.Dummy(new Vector2(1, size * T3Ui.UiScaleFactor));
         }
