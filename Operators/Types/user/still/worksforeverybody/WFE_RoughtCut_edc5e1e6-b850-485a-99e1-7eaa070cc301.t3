@@ -1886,17 +1886,25 @@
       "TargetSlotId": "afadb109-37b2-49aa-8c32-627cc35fd574"
     }
   ],
-  "AudioClips": [
-    {
-      "Id": "00000000-0000-0000-0000-000000000000",
-      "StartTime": 0.0,
-      "EndTime": 0.0,
-      "Bpm": 120.0,
-      "DiscardAfterUse": true,
-      "IsSoundtrack": true,
-      "FilePath": "Resources\\user\\still\\proj-worksforeverybody\\soundtrack\\works-for-everybody.mp3"
-    }
-  ],
+  "PlaybackSettings": {
+    "Enabled": true,
+    "Bpm": 120.0,
+    "SyncMode": 0,
+    "AudioDecayFactor": 0.98,
+    "AudioGainFactor": 1.0,
+    "AudioInputDeviceName": "",
+    "AudioClips": [
+      {
+        "Id": "00000000-0000-0000-0000-000000000000",
+        "StartTime": 0.0,
+        "EndTime": 0.0,
+        "Bpm": 120.0,
+        "DiscardAfterUse": true,
+        "IsSoundtrack": true,
+        "FilePath": "Resources\\user\\still\\proj-worksforeverybody\\soundtrack\\works-for-everybody.mp3"
+      }
+    ]
+  },
   "Animator": [
     {
       "InstanceId": "86b57d6f-2aaa-4d4b-9c4c-556599eb715d",

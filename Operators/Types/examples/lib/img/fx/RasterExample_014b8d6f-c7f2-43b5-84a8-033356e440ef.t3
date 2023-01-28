@@ -427,15 +427,23 @@
       "TargetSlotId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"
     }
   ],
-  "AudioClips": [
-    {
-      "Id": "493bd395-c0c5-4b62-aa71-53a3cb33206b",
-      "StartTime": 0.0,
-      "EndTime": 0.0,
-      "Bpm": 120.0,
-      "DiscardAfterUse": true,
-      "IsSoundtrack": true,
-      "FilePath": "Resources\\proj-synchotron\\soundtrack\\synthjam.mp3"
-    }
-  ]
+  "PlaybackSettings": {
+    "Enabled": true,
+    "Bpm": 120.0,
+    "SyncMode": 0,
+    "AudioDecayFactor": 0.98,
+    "AudioGainFactor": 1.0,
+    "AudioInputDeviceName": "",
+    "AudioClips": [
+      {
+        "Id": "493bd395-c0c5-4b62-aa71-53a3cb33206b",
+        "StartTime": 0.0,
+        "EndTime": 0.0,
+        "Bpm": 120.0,
+        "DiscardAfterUse": true,
+        "IsSoundtrack": true,
+        "FilePath": "Resources\\proj-synchotron\\soundtrack\\synthjam.mp3"
+      }
+    ]
+  }
 }

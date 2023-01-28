@@ -167,17 +167,25 @@
       "TargetSlotId": "35f501f4-5c79-4628-9441-8b3782544bf6"
     }
   ],
-  "AudioClips": [
-    {
-      "Id": "00000000-0000-0000-0000-000000000000",
-      "StartTime": 0.0,
-      "EndTime": 0.0,
-      "Bpm": 120.0,
-      "DiscardAfterUse": true,
-      "IsSoundtrack": true,
-      "FilePath": "Resources\\user\\1x\\mars-express\\soundtrack\\mars-express.mp3"
-    }
-  ],
+  "PlaybackSettings": {
+    "Enabled": true,
+    "Bpm": 120.0,
+    "SyncMode": 0,
+    "AudioDecayFactor": 0.98,
+    "AudioGainFactor": 1.0,
+    "AudioInputDeviceName": "",
+    "AudioClips": [
+      {
+        "Id": "00000000-0000-0000-0000-000000000000",
+        "StartTime": 0.0,
+        "EndTime": 0.0,
+        "Bpm": 120.0,
+        "DiscardAfterUse": true,
+        "IsSoundtrack": true,
+        "FilePath": "Resources\\user\\1x\\mars-express\\soundtrack\\mars-express.mp3"
+      }
+    ]
+  },
   "Animator": [
     {
       "InstanceId": "9a7e8d3c-53ad-4d5e-a6a1-c8a063ade175",

@@ -1510,15 +1510,23 @@
       "TargetSlotId": "d2c934bb-de5c-449c-adf8-7a2f48082e9c"
     }
   ],
-  "AudioClips": [
-    {
-      "Id": "00000000-0000-0000-0000-000000000000",
-      "StartTime": 0.0,
-      "EndTime": 0.0,
-      "Bpm": 120.0,
-      "DiscardAfterUse": true,
-      "IsSoundtrack": true,
-      "FilePath": "Resources\\user\\still\\proj-drd5\\soundtrack\\nevoke-02.mp3"
-    }
-  ]
+  "PlaybackSettings": {
+    "Enabled": true,
+    "Bpm": 120.0,
+    "SyncMode": 0,
+    "AudioDecayFactor": 0.98,
+    "AudioGainFactor": 1.0,
+    "AudioInputDeviceName": "",
+    "AudioClips": [
+      {
+        "Id": "00000000-0000-0000-0000-000000000000",
+        "StartTime": 0.0,
+        "EndTime": 0.0,
+        "Bpm": 120.0,
+        "DiscardAfterUse": true,
+        "IsSoundtrack": true,
+        "FilePath": "Resources\\user\\still\\proj-drd5\\soundtrack\\nevoke-02.mp3"
+      }
+    ]
+  }
 }

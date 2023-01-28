@@ -7496,17 +7496,25 @@
       "TargetSlotId": "850e3a32-11ba-4ad2-a2b1-6164f077ddd6"
     }
   ],
-  "AudioClips": [
-    {
-      "Id": "00000000-0000-0000-0000-000000000000",
-      "StartTime": 0.0,
-      "EndTime": 0.0,
-      "Bpm": 165.0,
-      "DiscardAfterUse": true,
-      "IsSoundtrack": true,
-      "FilePath": "Resources\\user\\still\\prod-insomnia\\soundtrack\\jungleDeez_4Evoke-01.3_master-1.mp3"
-    }
-  ],
+  "PlaybackSettings": {
+    "Enabled": true,
+    "Bpm": 165.0,
+    "SyncMode": 0,
+    "AudioDecayFactor": 0.98,
+    "AudioGainFactor": 1.0,
+    "AudioInputDeviceName": "",
+    "AudioClips": [
+      {
+        "Id": "00000000-0000-0000-0000-000000000000",
+        "StartTime": 0.0,
+        "EndTime": 0.0,
+        "Bpm": 165.0,
+        "DiscardAfterUse": true,
+        "IsSoundtrack": true,
+        "FilePath": "Resources\\user\\still\\prod-insomnia\\soundtrack\\jungleDeez_4Evoke-01.3_master-1.mp3"
+      }
+    ]
+  },
   "Animator": [
     {
       "InstanceId": "77c358d6-ee22-45b8-861f-382da59fcc89",
