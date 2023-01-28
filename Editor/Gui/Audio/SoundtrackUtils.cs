@@ -30,7 +30,7 @@ namespace T3.Editor.Gui.Audio
             while (true)
             {
                 var soundtrackSymbol = composition.Symbol;
-                soundtrack = soundtrackSymbol.SoundSettings.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
+                soundtrack = soundtrackSymbol.PlaybackSettings.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
                 if (soundtrack != null)
                 {
                     return true;

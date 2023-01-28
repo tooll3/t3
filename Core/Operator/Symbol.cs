@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using T3.Core.Audio;
 using T3.Core.Logging;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -44,7 +43,7 @@ namespace T3.Core.Operator
         public Animator Animator { get; } = new();
         
         
-        public SoundSettings SoundSettings { get; set; } = new();
+        public PlaybackSettings PlaybackSettings { get; set; } = new();
         
 
         #region public API =======================================================================
@@ -776,11 +775,5 @@ namespace T3.Core.Operator
                 slot.DirtyFlag.Invalidate();
             }
         }
-    }
-
-    public class SoundSettings
-    {
-        public List<AudioClip> AudioClips { get; private set; } = new();
-        public bool HasSettings { get; set; }
     }
 }

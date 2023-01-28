@@ -1,7 +1,6 @@
 ﻿using System;
 using ManagedBass;
 using T3.Core.IO;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Core.Audio
@@ -128,6 +127,5 @@ namespace T3.Core.Audio
         public const DataFlags BassFlagForFftBufferSize = DataFlags.FFT2048;
         public const int FftHalfSize = 1024; // Half the fft resolution
 
-        public static float AudioLevel;
     }
 }

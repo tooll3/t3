@@ -48,7 +48,7 @@ namespace T3.Core.Resource
             WriteSymbolInputs(symbol.InputDefinitions);
             WriteSymbolChildren(symbol.Children);
             WriteConnections(symbol.Connections);
-            WriteSoundSettings(symbol.SoundSettings);
+            WriteSoundSettings(symbol.PlaybackSettings);
             symbol.Animator.Write(Writer);
 
             Writer.WriteEndObject();
@@ -165,12 +165,12 @@ namespace T3.Core.Resource
             Writer.WriteEndArray();
         }
 
-        private void WriteSoundSettings(SoundSettings soundSettings)
+        private void WriteSoundSettings(PlaybackSettings playbackSettings)
         {
-            Writer.WriteValue("HasSettings", soundSettings.HasSettings);
+            Writer.WriteValue("HasSettings", playbackSettings.Enabled);
             
             // Write audio clips
-            var audioClips = soundSettings.AudioClips;
+            var audioClips = playbackSettings.AudioClips;
             if (audioClips == null || audioClips.Count == 0)
                 return;
 
@@ -393,19 +393,19 @@ namespace T3.Core.Resource
             var jSettingsToken = o["HasSettings"];
             var hasSettings = jSettingsToken != null && jSettingsToken.Value<bool>();
             
-            symbol.SoundSettings = new SoundSettings
+            symbol.PlaybackSettings = new PlaybackSettings
                                        {
-                                           HasSettings = hasSettings
+                                           Enabled = hasSettings
                                        };
 
-            var jAudioClipArray = (JArray)o[nameof(Symbol.SoundSettings.AudioClips)];
+            var jAudioClipArray = (JArray)o[nameof(Symbol.PlaybackSettings.AudioClips)];
             if (jAudioClipArray == null)
                 return symbol;
 
             foreach (var c in jAudioClipArray)
             {
                 var clip = AudioClip.FromJson(c);
-                symbol.SoundSettings.AudioClips.Add(clip);
+                symbol.PlaybackSettings.AudioClips.Add(clip);
             }
 
             return symbol;

@@ -4,6 +4,7 @@ using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.Logging;
 using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Styling;
@@ -28,9 +29,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 //playback.TimeInBars = playback.LoopRange.Start;
                 ImGui.OpenPopup(PlaybackSettingsPopup.PlaybackSettingsPopupId);
             }
-            
-            PlaybackSettingsPopup.DrawPlaybackSettings(ref playback);
 
+            PlaybackSettingsPopup.DrawPlaybackSettings(ref playback);
 
             CustomComponents.TooltipForLastItem("Timeline Settings",
                                                 "Switch between soundtrack and VJ modes. Control BPM and other inputs.");
@@ -113,21 +113,14 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.SameLine();
             }
 
-            var hideTimeControls = playback is BeatTimingPlayback;
+            var showBeatTimingControls = playback is BeatTimingPlayback;
 
-            if (hideTimeControls)
+            if (showBeatTimingControls)
             {
-                if (ImGui.Button($"{BeatTiming.Bpm:0.0} BPM?"))
+                var bpm = BeatTiming.Bpm;
+                if (SingleValueEdit.Draw(ref bpm, new Vector2(100, ControlSize.Y), 1, 360, true, 0.01f, "{0:0.0 BPM}") == InputEditStateFlags.Modified)
                 {
-                    var newBpm = T3Ui._bpmDetection.ComputeBpmRate();
-                    if (newBpm > 0)
-                    {
-                        Log.Debug("Setting bpm to" + newBpm);
-                        BeatTiming.SetBpmRate(newBpm);
-                    }
-                    // T3Ui.BeatTiming.SetBpmFromSystemAudio();
-                    // if (newBpm > 0)
-                    //     playback.Bpm = newBpm;
+                    BeatTiming.SetBpmRate(bpm);
                 }
 
                 var min = ImGui.GetItemRectMin();
@@ -141,7 +134,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 ImGui.SameLine();
 
-                ImGui.Button("Sync");
+                ImGui.Button("Sync", ControlSize);
                 if (ImGui.IsItemActivated())
                 {
                     BeatTiming.TriggerSyncTap();
@@ -159,14 +152,14 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 ImGui.PushButtonRepeat(true);
                 {
-                    if (ImGui.ArrowButton("##left", ImGuiDir.Left))
+                    if (CustomComponents.IconButton(Icon.ChevronLeft, "##left", ControlSize))
                     {
                         BeatTiming.TriggerDelaySync();
                     }
 
                     ImGui.SameLine();
 
-                    if (ImGui.ArrowButton("##right", ImGuiDir.Right))
+                    if (CustomComponents.IconButton(Icon.ChevronRight, "##right", ControlSize))
                     {
                         BeatTiming.TriggerAdvanceSync();
                     }
@@ -201,6 +194,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 {
                     UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
                 }
+
                 ImGui.PopStyleColor();
 
                 CustomComponents.TooltipForLastItem("Jump to previous keyframe",
@@ -335,6 +329,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 {
                     UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToNextKeyframe);
                 }
+
                 ImGui.PopStyleColor();
 
                 CustomComponents.TooltipForLastItem("Jump to next keyframe",
@@ -356,17 +351,17 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 CustomComponents.TooltipForLastItem("Loop playback", "This will initialize one bar around current time.");
 
                 ImGui.SameLine();
+
+                // Curve Mode
+                if (ImGui.Button(timeLineCanvas.Mode.ToString(), ControlSize))
+                {
+                    timeLineCanvas.Mode = (TimeLineCanvas.Modes)(((int)timeLineCanvas.Mode + 1) % Enum.GetNames(typeof(TimeLineCanvas.Modes)).Length);
+                }
+
+                CustomComponents.TooltipForLastItem("Toggle keyframe view between Dope sheet and Curve mode.");
+
+                ImGui.SameLine();
             }
-
-            // Curve Mode
-            if (ImGui.Button(timeLineCanvas.Mode.ToString(), ControlSize))
-            {
-                timeLineCanvas.Mode = (TimeLineCanvas.Modes)(((int)timeLineCanvas.Mode + 1) % Enum.GetNames(typeof(TimeLineCanvas.Modes)).Length);
-            }
-
-            CustomComponents.TooltipForLastItem("Toggle keyframe view between Dope sheet and Curve mode.");
-
-            ImGui.SameLine();
 
             // ToggleAudio
             if (CustomComponents.IconButton(UserSettings.Config.AudioMuted ? Icon.ToggleAudioOff : Icon.ToggleAudioOn, "##audioToggle", ControlSize))
@@ -409,9 +404,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             ImGui.SameLine();
         }
-
-
-
 
         public static Vector2 ControlSize => new Vector2(45, 30) * T3Ui.UiScaleFactor;
     }

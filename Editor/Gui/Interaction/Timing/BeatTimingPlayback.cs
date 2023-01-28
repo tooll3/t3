@@ -12,13 +12,7 @@ namespace T3.Editor.Gui.Interaction.Timing
         {
             FxTimeInBars = BeatTiming.BeatTime;
             Bpm = BeatTiming.Bpm;
-            TimeInBars = FxTimeInBars;            
-            
-            // TODO: setting the context time here is kind of awkward
-            //GlobalTimeForKeyframes = TimeInBars;
-            // context.Playback.BeatTime = BeatTime;
-            // context.Playback.Bpm = Bpm;
-            // context.Playback.TimeInSecs = TimeInSecs;
+            TimeInBars = FxTimeInBars;
         }
     }
 }

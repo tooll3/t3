@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ManagedBass;
 using ManagedBass.Wasapi;
+using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
 
@@ -132,6 +133,8 @@ namespace T3.Core.Audio
             if (length < 3000)
                  return length;
 
+            LastUpdateTime = Playback.RunTimeInSecs;
+
             int resultCode;
             if (_fftUpdatesSinceLastFrame == 0)
             {
@@ -154,7 +157,7 @@ namespace T3.Core.Audio
                 Log.Debug($"Can't get Wasapi FFT-Data: {Bass.LastError}");
             }
 
-            var audioLevel = level * 0.00001;
+            _lastAudioLevel = (float)(level * 0.00001);
             _fftUpdatesSinceLastFrame++;
             //Log.Debug($"Process with {length} #{_fftUpdatesSinceLastFrame}  L:{audioLevel:0.0}  DevBufLen:{BassWasapi.Info.BufferLength}");
             return length;
@@ -171,5 +174,9 @@ namespace T3.Core.Audio
         private static List<WasapiInputDevice> _inputDevices;
         private static readonly float[] _fftIntermediate = new float[AudioAnalysis.FftHalfSize];
         private static readonly WasapiProcedure _wasapiProcedure = Process;
+        private static double LastUpdateTime;
+
+        private static float _lastAudioLevel;
+        public static float DecayingAudioLevel => (float)(_lastAudioLevel / Math.Max(1,(Playback.RunTimeInSecs - LastUpdateTime) * 100));
     }
 }

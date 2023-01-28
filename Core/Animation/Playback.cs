@@ -25,7 +25,7 @@ namespace T3.Core.Animation
             Current = this;
         }
         
-        public static Playback Current { get; private set; }
+        public static Playback Current { get; set; }
         
         /// <summary>
         /// The absolute current time as controlled by the timeline interaction in bars.

@@ -106,6 +106,77 @@ namespace T3.Editor.Gui.Styling
             var modified = ImGui.Combo($"##dropDown{enumType}{label}", ref index, valueNames, valueNames.Length, valueNames.Length);
             return modified;
         }
+        
+        public static bool DrawEnum<T>(ref T selectedValue, string label) where T : struct, Enum, IConvertible, IFormattable
+        {
+            DrawInputLabel(label);
+            var size = new Vector2(150 * T3Ui.UiScaleFactor, ImGui.GetFrameHeight());
+            
+            var names = Enum.GetNames<T>();
+            var index = 0;
+            var selectedIndex = 0;
+            
+            foreach (var n in names)
+            {
+                if (n == selectedValue.ToString())
+                    selectedIndex = index;
+                
+                index++;
+            }
+
+            ImGui.SetNextItemWidth(size.X);
+            // FIXME: using only "##dropdown" did not allow for multiple combos (see for example renderSequenceWindow.cs)
+            // so we add the type and label here - but this is only a temporary hack...
+            var modified = ImGui.Combo($"##dropDown{label}", ref selectedIndex, names, names.Length, names.Length);
+            if (modified)
+            {
+                selectedValue = Enum.GetValues<T>()[selectedIndex];
+            }
+
+            return modified;
+        }        
+        
+        public static bool DrawEnumSelector<T>(ref T selectedValue, string label) where T : struct, Enum
+        {
+            DrawInputLabel(label);
+            
+            var modified = false;
+            var selectedValueString = selectedValue.ToString();
+            var isFirst = true;
+            foreach(var value in Enum.GetValues<T>())
+            {
+                var name = Enum.GetName(value);
+                if (!isFirst)
+                {
+                    ImGui.SameLine();
+                }
+                
+                var isSelected = selectedValueString == value.ToString();
+                var clicked = DrawSelectButton(name, isSelected);
+                
+                if(clicked)
+                {
+                    modified = true;
+                    selectedValue = value;
+                }
+
+                isFirst = false;
+            }
+            
+            return modified;
+        }
+
+        private static bool DrawSelectButton(string name, bool isSelected)
+        {
+            ImGui.PushStyleColor(ImGuiCol.Button, isSelected ? T3Style.Colors.ButtonActive.Rgba: T3Style.Colors.ButtonHover.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, isSelected ? T3Style.Colors.ButtonActive.Rgba: T3Style.Colors.ButtonHover.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, T3Style.Colors.ButtonActive.Rgba);
+
+            var clicked = ImGui.Button(name);
+            //ImGui.SameLine();
+            ImGui.PopStyleColor(3);
+            return clicked;
+        }
 
         /// <summary>
         /// Draws string input or file picker. 
@@ -229,13 +300,17 @@ namespace T3.Editor.Gui.Styling
             if (string.IsNullOrEmpty(label))
                 return;
             
+            ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10f);
             ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
-
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10,20));
+            
+            ImGui.Indent(13);
             AddIcon(Icon.Hint);
 
             ImGui.SameLine();
             ImGui.TextUnformatted(label);
-            ImGui.PopStyleVar();
+            ImGui.Indent(-13);
+            ImGui.PopStyleVar(2);
         }
 
         public static void VerticalSpace(float size = 10)
@@ -256,10 +331,10 @@ namespace T3.Editor.Gui.Styling
 
         public static void ApplyIndent()
         {
-            ImGui.SetCursorPosX(LeftParameterPadding);
+            ImGui.SetCursorPosX(LeftParameterPadding + ParameterSpacing);
         }
         
-        private static void DrawInputLabel(string label)
+        public static void DrawInputLabel(string label)
         {
             var labelSize = ImGui.CalcTextSize(label);
             var p = ImGui.GetCursorPos();

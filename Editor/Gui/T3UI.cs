@@ -40,15 +40,13 @@ namespace T3.Editor.Gui
             var operatorsAssembly = Assembly.GetAssembly(typeof(Value));
             UiModel = new UiModel(operatorsAssembly);
 
-            var playback = new Playback();
-            //WindowManager = new WindowManager();
             WindowManager.TryToInitialize();
             ExampleSymbolLinking.UpdateExampleLinks();
             VariationHandling.Init();
             
         }
 
-
+        public static Playback DefaultPlayback = new();
         
         private void InitializeAfterAppWindowReady()
         {
