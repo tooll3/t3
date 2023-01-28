@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq.Expressions;
 using System.Numerics;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -120,6 +121,20 @@ namespace T3.Core.Utils
             {
                 Log.Warning($"Can't create file {filepath} to save {typeof(T)} " + e.Message);
             }
+        }
+
+        public static T ReadToken<T>(JToken o, string name, T defaultValue= default)
+        {
+            var jSettingsToken = o[name];
+            return jSettingsToken == null ? defaultValue : jSettingsToken.Value<T>();
+        }
+
+        public static T ReadEnum<T>(JToken o, string name) where  T: struct, Enum
+        {
+            var dirtyFlagJson = o[name];
+            return dirtyFlagJson != null 
+                       ? Enum.Parse<T>(dirtyFlagJson.Value<string>()) 
+                       : default;
         }
     }
 

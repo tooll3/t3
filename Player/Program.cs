@@ -207,28 +207,32 @@ namespace T3
             var symbols = SymbolRegistry.Entries;
             var demoSymbol = symbols.First(entry => entry.Value.Name == ProjectSettings.Config.MainOperatorName).Value;
 
-            _playback = new Playback();
-            
+            _playback = new Playback
+                            {
+                                Settings = demoSymbol.PlaybackSettings
+                            };
+
             // Create instance of project op, all children are create automatically
             _project = demoSymbol.CreateInstance(Guid.NewGuid());
             _evalContext = new EvaluationContext();
             
-            _soundtrack = demoSymbol.PlaybackSettings.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
-            
-            var soundtrackDefined = _soundtrack != null && File.Exists(_soundtrack.FilePath);
+            var soundtrackDefined = demoSymbol.PlaybackSettings.GetMainSoundtrack(out _soundtrack) && File.Exists(_soundtrack.FilePath);
             
             // Init wasapi input if required
-            if (!string.IsNullOrEmpty(ProjectSettings.Config.AudioInputDeviceName))
+            if (demoSymbol.PlaybackSettings is { SyncMode:  PlaybackSettings.SyncModes.ExternalSource } settings)
             {
-                Bass.Free();
-                Bass.Init();
-                WasapiAudioInput.Initialize();
-                if (soundtrackDefined)
+                if (!string.IsNullOrEmpty(  settings.AudioInputDeviceName))
                 {
-                    _playback.Bpm = _soundtrack.Bpm;
-                    Log.Warning("Simultaneous audio analysis from project soundtrack and WASAPI is not support. Muting soundtrack");
-                    soundtrackDefined = false;
-                    _soundtrack = null;
+                    Bass.Free();
+                    Bass.Init();
+                    WasapiAudioInput.Initialize(settings);
+                    if (soundtrackDefined)
+                    {
+                        _playback.Bpm = _soundtrack.Bpm;
+                        Log.Warning("Simultaneous audio analysis from project soundtrack and WASAPI is not support. Muting soundtrack");
+                        soundtrackDefined = false;
+                        _soundtrack = null;
+                    }
                 }
             }
             

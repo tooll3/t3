@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Operator;
 using T3.Core.Resource;
 
 namespace T3.Core.Audio
@@ -40,7 +41,7 @@ namespace T3.Core.Audio
                 Bass.Init();
                 _bassInitialized = true;
             }
-            AudioAnalysis.CompleteFrame();
+            AudioAnalysis.CompleteFrame(playback);
             
             // Create new streams
             foreach (var (audioClip, time) in _updatedClipTimes)
@@ -76,7 +77,7 @@ namespace T3.Core.Audio
 
                     if (!handledMainSoundtrack && clipStream.AudioClip.IsSoundtrack)
                     {
-                        UpdateFftBuffer(clipStream.StreamHandle);
+                        UpdateFftBuffer(clipStream.StreamHandle, playback);
                         handledMainSoundtrack = true;
                     }
                     clipStream.UpdateTime(playback);
@@ -108,10 +109,11 @@ namespace T3.Core.Audio
             }
         }
         
-        private static void UpdateFftBuffer(int soundStreamHandle)
+        private static void UpdateFftBuffer(int soundStreamHandle, Playback playback)
         {
             const int get256FftValues = (int)DataFlags.FFT512;
-            if (AudioAnalysis.InputMode == AudioAnalysis.InputModes.Soundtrack)
+            
+            if (playback.Settings != null && playback.Settings.SyncMode == PlaybackSettings.SyncModes.ProjectSoundTrack)
             {
                 Bass.ChannelGetData(soundStreamHandle, AudioAnalysis.FftGainBuffer, get256FftValues);
             }

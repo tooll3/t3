@@ -1,6 +1,7 @@
 ﻿using System;
 using ManagedBass;
-using T3.Core.IO;
+using T3.Core.Animation;
+using T3.Core.Operator;
 using T3.Core.Utils;
 
 namespace T3.Core.Audio
@@ -11,24 +12,19 @@ namespace T3.Core.Audio
     /// </summary>
     public static class AudioAnalysis
     {
-        public enum InputModes
+        public static void CompleteFrame(Playback playback)
         {
-            Soundtrack,
-            WasapiDevice,
-        }
-
-        public static void CompleteFrame()
-        {
-            if (InputMode == InputModes.WasapiDevice)
+            if (playback.Settings is { SyncMode: PlaybackSettings.SyncModes.ExternalSource })
             {
                 WasapiAudioInput.CompleteFrame();
             }
-            
+
+            var gainFactor = playback.Settings?.AudioGainFactor ?? 1;
             var lastTargetIndex = -1;
 
             for (var binIndex = 0; binIndex < FftHalfSize; binIndex++)
             {
-                var gain = FftGainBuffer[binIndex];
+                var gain = FftGainBuffer[binIndex] * gainFactor;
                 var gainDb = (gain <= 0.000001f) ? float.NegativeInfinity : (20 * MathF.Log10(gain));
 
                 var normalizedValue = MathUtils.RemapAndClamp(gainDb, -80, 0, 0, 1);
@@ -51,14 +47,16 @@ namespace T3.Core.Audio
             for (var bandIndex = 0; bandIndex < FrequencyBandCount; bandIndex++)
             {
                 var lastPeak = FrequencyBandPeaks[bandIndex];
-                var decayed = lastPeak * ProjectSettings.Config.AudioDecayFactor;
+
+                var decayFactor = playback.Settings?.AudioDecayFactor ?? 1;
+                var decayed =  lastPeak * decayFactor;
                 var currentValue = FrequencyBands[bandIndex];
                 var newPeak = MathF.Max(decayed, currentValue);
                 FrequencyBandPeaks[bandIndex] = newPeak;
 
                 const float attackAmplification = 4;
                 var newAttack = (newPeak - lastPeak).Clamp(0, 1000) * attackAmplification;
-                var lastAttackDecayed = FrequencyBandAttacks[bandIndex] * ProjectSettings.Config.AudioDecayFactor; 
+                var lastAttackDecayed = FrequencyBandAttacks[bandIndex] * decayFactor; 
                 FrequencyBandAttacks[bandIndex] = MathF.Max(newAttack, lastAttackDecayed);
                 FrequencyBandAttackPeaks[bandIndex] = MathF.Max(FrequencyBandAttackPeaks[bandIndex]*0.995f, FrequencyBandAttacks[bandIndex]);
             }
@@ -105,7 +103,6 @@ namespace T3.Core.Audio
         private static int[] _bandIndexForFftBinIndices = InitializeBandsLookupsTable();
         private const int NoBandIndex = -1;
  
-        public static InputModes InputMode = InputModes.Soundtrack;
 
         public const int FrequencyBandCount = 32;
         public static readonly float[] FrequencyBands = new float[FrequencyBandCount];

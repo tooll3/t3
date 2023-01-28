@@ -6,6 +6,7 @@ using ManagedBass.Wasapi;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Operator;
 
 namespace T3.Core.Audio
 {
@@ -17,14 +18,14 @@ namespace T3.Core.Audio
         /// <summary>
         /// Initializes the default device list and input.
         /// </summary>
-        public static void Initialize()
+        public static void Initialize(PlaybackSettings playbackSettings)
         {
             if (_inputDevices != null)
                 return;
             
             InitializeInputDeviceList();
 
-            var deviceName = ProjectSettings.Config.AudioInputDeviceName;
+            var deviceName = playbackSettings?.AudioInputDeviceName;
             var device = _inputDevices.FirstOrDefault(d => d.DeviceInfo.Name == deviceName);
             StartInputCapture(device);
         }
@@ -54,7 +55,6 @@ namespace T3.Core.Audio
         public static void StartInputCapture(WasapiInputDevice device)
         {
             int inputDeviceIndex = BassWasapi.DefaultInputDevice;
-            AudioAnalysis.InputMode = AudioAnalysis.InputModes.WasapiDevice;
             
             if (device == null)
             {
@@ -92,7 +92,6 @@ namespace T3.Core.Audio
             }
             
             BassWasapi.Start();
-            AudioAnalysis.InputMode = AudioAnalysis.InputModes.WasapiDevice;
         }
 
         public static void StopInputCapture()
@@ -133,7 +132,7 @@ namespace T3.Core.Audio
             if (length < 3000)
                  return length;
 
-            LastUpdateTime = Playback.RunTimeInSecs;
+            _lastUpdateTime = Playback.RunTimeInSecs;
 
             int resultCode;
             if (_fftUpdatesSinceLastFrame == 0)
@@ -174,9 +173,9 @@ namespace T3.Core.Audio
         private static List<WasapiInputDevice> _inputDevices;
         private static readonly float[] _fftIntermediate = new float[AudioAnalysis.FftHalfSize];
         private static readonly WasapiProcedure _wasapiProcedure = Process;
-        private static double LastUpdateTime;
+        private static double _lastUpdateTime;
 
         private static float _lastAudioLevel;
-        public static float DecayingAudioLevel => (float)(_lastAudioLevel / Math.Max(1,(Playback.RunTimeInSecs - LastUpdateTime) * 100));
+        public static float DecayingAudioLevel => (float)(_lastAudioLevel / Math.Max(1,(Playback.RunTimeInSecs - _lastUpdateTime) * 100));
     }
 }

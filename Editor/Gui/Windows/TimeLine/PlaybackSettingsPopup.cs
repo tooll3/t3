@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.IO;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using ImGuiNET;
@@ -60,6 +61,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 {
                     composition.Symbol.PlaybackSettings ??= new PlaybackSettings();
                     composition.Symbol.PlaybackSettings.Enabled = true;
+                    Playback.Current.Settings = composition.Symbol.PlaybackSettings;
                     compositionSettings = composition.Symbol.PlaybackSettings;
                 }
                 else
@@ -142,10 +144,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 }
                 else
                 {
+                    var warning = !string.IsNullOrEmpty(soundtrack.FilePath) && !File.Exists(soundtrack.FilePath)
+                                      ? "File not found?"
+                                      : null;
                     var filepathModified = FormInputs.AddFilePicker("Soundtrack",
                                                                  ref soundtrack.FilePath,
                                                                  "filepath to soundtrack",
-                                                                 null,
+                                                                 warning,
                                                                  FileOperations.FilePickerTypes.File
                                                                 );
                     FormInputs.ApplyIndent();
@@ -218,17 +223,17 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     playback = new BeatTimingPlayback();
                 }
 
-                FormInputs.AddFloat("AudioGain", ref ProjectSettings.Config.AudioGainFactor, 0.01f, 100, 0.01f, true,
+                FormInputs.AddFloat("AudioGain", ref compositionSettings.AudioGainFactor, 0.01f, 100, 0.01f, true,
                                           "Can be used to adjust the input signal (e.g. in live situation where the input level might vary.",
-                                          ProjectSettings.Defaults.AudioGainFactor);
+                                          1);
 
-                FormInputs.AddFloat("AudioDecay", ref ProjectSettings.Config.AudioDecayFactor,
+                FormInputs.AddFloat("AudioDecay", ref compositionSettings.AudioDecayFactor,
                                           0.001f,
                                           1f,
                                           0.01f,
                                           true,
                                           "The decay factors controls the impact of [AudioReaction] when AttackMode. Good values strongly depend on style, loudness and variation of input signal.",
-                                          ProjectSettings.Defaults.AudioDecayFactor);
+                                          0.9f);
 
                 if (!WasapiAudioInput.DevicesInitialized)
                 {
@@ -244,7 +249,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 var max = ImGui.GetItemRectMax();
                 var dl = ImGui.GetWindowDrawList();
 
-                var level = ProjectSettings.Config.AudioGainFactor * WasapiAudioInput.DecayingAudioLevel;
+                var level = compositionSettings.AudioGainFactor * WasapiAudioInput.DecayingAudioLevel;
 
                 dl.AddRectFilled(min, new Vector2(min.X + level, max.Y), T3Style.Colors.ButtonHover);
 
@@ -254,13 +259,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 var found = false;
                 foreach (var d in WasapiAudioInput.InputDevices)
                 {
-                    var isSelected = d.DeviceInfo.Name == ProjectSettings.Config.AudioInputDeviceName;
+                    var isSelected = d.DeviceInfo.Name == compositionSettings.AudioInputDeviceName;
                     found |= isSelected;
                     if (ImGui.Selectable($"{d.DeviceInfo.Name}", isSelected, ImGuiSelectableFlags.DontClosePopups))
                     {
                         Bass.Configure(Configuration.UpdateThreads, false);
 
-                        ProjectSettings.Config.AudioInputDeviceName = d.DeviceInfo.Name;
+                        compositionSettings.AudioInputDeviceName = d.DeviceInfo.Name;
                         ProjectSettings.Save();
                         WasapiAudioInput.StartInputCapture(d);
                     }
@@ -287,10 +292,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     }
                 }
 
-                if (!found)
+                if (!string.IsNullOrEmpty(compositionSettings.AudioInputDeviceName) &&  !found)
                 {
                     ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.Warning.Rgba);
-                    ImGui.TextUnformatted(ProjectSettings.Config.AudioInputDeviceName + " (NOT FOUND)");
+                    ImGui.TextUnformatted(compositionSettings.AudioInputDeviceName + " (NOT FOUND)");
                     ImGui.PopStyleColor();
                 }
 

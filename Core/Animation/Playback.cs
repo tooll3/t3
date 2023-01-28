@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using T3.Core.Operator;
 
 namespace T3.Core.Animation
 {
@@ -26,6 +27,7 @@ namespace T3.Core.Animation
         }
         
         public static Playback Current { get; set; }
+        public PlaybackSettings Settings { get; set; }
         
         /// <summary>
         /// The absolute current time as controlled by the timeline interaction in bars.

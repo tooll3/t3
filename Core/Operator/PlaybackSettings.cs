@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Audio;
 using T3.Core.Resource;
+using T3.Core.Utils;
 
 namespace T3.Core.Operator
 {
@@ -17,6 +18,10 @@ namespace T3.Core.Operator
         public float Bpm { get; set; }
         public List<AudioClip> AudioClips { get; private set; } = new();
         public SyncModes SyncMode;
+        
+        public string AudioInputDeviceName = string.Empty;
+        public float AudioGainFactor = 1;
+        public float AudioDecayFactor = 0.98f;
 
         public bool GetMainSoundtrack(out AudioClip soundtrack)
         {
@@ -39,12 +44,9 @@ namespace T3.Core.Operator
             ExternalSource,
         }
 
-        public static void WriteToJson(JsonTextWriter writer, PlaybackSettings playbackSettings)
+        public void WriteToJson(JsonTextWriter writer)
         {
-            if (playbackSettings == null)
-                return;
-
-            var hasSettingsForClips = playbackSettings.Enabled || playbackSettings.AudioClips.Count > 0;
+            var hasSettingsForClips = Enabled || AudioClips.Count > 0;
             if (!hasSettingsForClips)
                 return;
 
@@ -54,10 +56,15 @@ namespace T3.Core.Operator
             {
                 //writer.WriteEndArray();
 
-                writer.WriteValue(nameof(PlaybackSettings.Enabled), playbackSettings.Enabled);
+                writer.WriteValue(nameof(Enabled), Enabled);
+                writer.WriteValue(nameof(Bpm), Bpm);
+                writer.WriteValue(nameof(SyncMode), SyncMode);
+                writer.WriteValue(nameof(AudioDecayFactor), AudioDecayFactor);
+                writer.WriteValue(nameof(AudioGainFactor), AudioGainFactor);
+                writer.WriteObject(nameof(AudioInputDeviceName), AudioInputDeviceName);
 
                 // Write audio clips
-                var audioClips = playbackSettings.AudioClips;
+                var audioClips = AudioClips;
                 if (audioClips != null && audioClips.Count != 0)
                 {
                     writer.WritePropertyName("AudioClips");
@@ -88,9 +95,13 @@ namespace T3.Core.Operator
             
             if (settingsToken != null)
             {
-                newSettings.Enabled = SymbolJson.ReadBoolean(settingsToken, nameof(PlaybackSettings.Enabled));
-                newSettings.Bpm = SymbolJson.ReadFloat(settingsToken, nameof(PlaybackSettings.Bpm));
-                newSettings.SyncMode = SymbolJson.ReadEnum<PlaybackSettings.SyncModes>(settingsToken, nameof(PlaybackSettings.SyncMode));
+                newSettings.Enabled = Utilities.ReadToken(settingsToken, nameof(Enabled),false);
+                newSettings.Bpm = Utilities.ReadToken(settingsToken, nameof(Bpm), 0f);
+                newSettings.SyncMode = Utilities.ReadEnum<PlaybackSettings.SyncModes>(settingsToken, nameof(SyncMode));
+                newSettings.AudioDecayFactor = Utilities.ReadToken(settingsToken, nameof(AudioDecayFactor),0.5f);
+                newSettings.AudioGainFactor = Utilities.ReadToken(settingsToken, nameof(AudioGainFactor), 1f);
+                newSettings.AudioInputDeviceName = Utilities.ReadToken<string>(settingsToken, nameof(AudioInputDeviceName), null);
+                
                 newSettings.AudioClips.AddRange(GetClips(settingsToken)); // Support correct format
             }
             

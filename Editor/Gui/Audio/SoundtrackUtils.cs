@@ -16,6 +16,7 @@ namespace T3.Editor.Gui.Audio
                 return;
                 
             Playback.Current.Bpm = settings.Bpm;
+            Playback.Current.Settings = settings;
             if (settings.GetMainSoundtrack(out var soundtrack))
             {
                 AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);                
