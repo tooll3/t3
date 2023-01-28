@@ -220,7 +220,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                 ImGui.PopFont();
                 ImGui.SameLine(itemWidth);
                 
-                if (CustomComponents.IconButton(Icon.Trash, "##line", new Vector2(16, 16)))
+                if (CustomComponents.IconButton(Icon.Trash, new Vector2(16, 16)))
                 {
                     Log.Debug("Not implemented");
                 }
@@ -234,7 +234,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                     ImGui.PushID(variation.GetHashCode());
                     {
                         var isSelected = _blendedVariations.Contains(variation);
-                        if (CustomComponents.IconButton(isSelected ? Icon.ChevronRight : Icon.Pin, "selection", new Vector2(16, 16)))
+                        if (CustomComponents.IconButton(isSelected ? Icon.ChevronRight : Icon.Pin, new Vector2(16, 16)))
                         {
                             if (isSelected)
                             {
@@ -288,7 +288,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                         ImGui.SameLine();
 
                         // Delete button
-                        if (CustomComponents.IconButton(variation.IsLiked ? Icon.Heart : Icon.HeartOutlined, "selection", new Vector2(16, 16)))
+                        if (CustomComponents.IconButton(variation.IsLiked ? Icon.Heart : Icon.HeartOutlined, new Vector2(16, 16)))
                         {
                             variation.IsLiked = !variation.IsLiked;
                             //deleteAfterIteration = variation;

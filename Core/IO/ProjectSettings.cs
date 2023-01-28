@@ -13,8 +13,6 @@
         {
             public string MainOperatorName = "";
             public float AudioResyncThreshold = 0.04f;
-            
-
         }
     }
 }

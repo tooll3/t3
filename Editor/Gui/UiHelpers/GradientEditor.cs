@@ -158,7 +158,7 @@ namespace T3.Editor.Gui.UiHelpers
                                                                     DrawGradient(preset, foregroundDrawList, rect);
 
                                                                     ImGui.SameLine();
-                                                                    if (CustomComponents.IconButton(Icon.Trash, "##delete",
+                                                                    if (CustomComponents.IconButton(Icon.Trash,
                                                                                                     Vector2.One * ImGui.GetFrameHeight()))
                                                                     {
                                                                         UserSettings.Config.GradientPresets.Remove(preset);

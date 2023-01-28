@@ -406,8 +406,7 @@ namespace T3.Editor.Gui.Graph
 
             ImGui.BeginChild("TimeControls", Vector2.Zero, false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
             {
-                if (CustomComponents.IconButton(UsingCustomTimelineHeight ?  Icon.ChevronDown : Icon.ChevronUp,
-                                                "##TimelineToggle", TimeControls.ControlSize))
+                if (CustomComponents.IconButton(UsingCustomTimelineHeight ?  Icon.ChevronDown : Icon.ChevronUp, TimeControls.ControlSize))
                 {
                     _customTimeLineHeight = UsingCustomTimelineHeight ? UseComputedHeight : 200;
                     UserSettings.Config.ShowTimeline = true;

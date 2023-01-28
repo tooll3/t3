@@ -21,7 +21,7 @@ namespace T3.Editor.Gui.Windows.Variations
         {
             var s = ImGui.GetFrameHeight();
 
-            if (CustomComponents.IconButton(Icon.Plus, "##addbutton", new Vector2(s, s)))
+            if (CustomComponents.IconButton(Icon.Plus, new Vector2(s, s)))
             {
                 CreateVariation();
             }

@@ -15,7 +15,7 @@ namespace T3.Core.Operator
     public class PlaybackSettings
     {
         public bool Enabled { get; set; }
-        public float Bpm { get; set; }
+        public float Bpm { get; set; } = 120;
         public List<AudioClip> AudioClips { get; private set; } = new();
         public SyncModes SyncMode;
         
@@ -96,7 +96,7 @@ namespace T3.Core.Operator
             if (settingsToken != null)
             {
                 newSettings.Enabled = Utilities.ReadToken(settingsToken, nameof(Enabled),false);
-                newSettings.Bpm = Utilities.ReadToken(settingsToken, nameof(Bpm), 0f);
+                newSettings.Bpm = Utilities.ReadToken(settingsToken, nameof(Bpm), 120f);
                 newSettings.SyncMode = Utilities.ReadEnum<PlaybackSettings.SyncModes>(settingsToken, nameof(SyncMode));
                 newSettings.AudioDecayFactor = Utilities.ReadToken(settingsToken, nameof(AudioDecayFactor),0.5f);
                 newSettings.AudioGainFactor = Utilities.ReadToken(settingsToken, nameof(AudioGainFactor), 1f);

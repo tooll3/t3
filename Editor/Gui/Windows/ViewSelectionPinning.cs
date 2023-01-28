@@ -28,12 +28,13 @@ namespace T3.Editor.Gui.Windows
 
             FrameStats.AddPinnedId(pinnedOrSelectedInstance.SymbolChildId);    
             
-            if (CustomComponents.ToggleIconButton(Icon.Pin, 
-                                                  "##pin", 
-                                                  ref _isPinned, 
-                                                  new Vector2(T3Style.ToolBarHeight, T3Style.ToolBarHeight) * T3Ui.UiScaleFactor
+            if (CustomComponents.IconButton(Icon.Pin, 
+                                                   
+                                                  new Vector2(T3Style.ToolBarHeight, T3Style.ToolBarHeight) * T3Ui.UiScaleFactor,
+                                            _isPinned ? CustomComponents.ButtonStates.Activated : CustomComponents.ButtonStates.Normal
                                                   ))
             {
+                _isPinned = !_isPinned;
                 if (_isPinned)
                     PinSelectionToView();
             }

@@ -202,7 +202,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                                   0.001f,
                                                   true,
                                                   "If audio playbacks drifts too far from the animation playback it will be resynced. If the threshold for this is too low you will encounter audio glitches. If the threshold is too large you will lose precision. A normal range is between 0.02s and 0.05s.",
-                                                  0.02f))
+                                                  ProjectSettings.Defaults.AudioResyncThreshold))
 
                     {
                         UserSettings.Save();

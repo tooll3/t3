@@ -30,7 +30,7 @@ namespace T3.Editor.Gui.Styling
             public static readonly Color TextWidgetTitle = new Color(0.65f);
             public static readonly Color Text = new Color(0.9f);
             public static readonly Color TextMuted = new Color(0.5f);
-            public static readonly Color TextDisabled = new Color(0.328f, 0.328f, 0.328f, 1.000f);
+            public static readonly Color TextDisabled = new Color( 0.2f);
             public static readonly Color Warning = new Color(203, 19,113, 255);
             
             public static readonly Color WindowBackground = new Color(0.05f, 0.05f,0.05f, 1);

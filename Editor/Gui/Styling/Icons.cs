@@ -171,7 +171,7 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.PlayForwards, 7),
                 new (Icon.JumpToNextKeyframe, 8),
                 new (Icon.JumpToRangeEnd, 9),
-                new (Icon.Loop, 10, new Vector2(32, 15)),
+                new (Icon.Loop, 10, new Vector2(24, 15)),
                 new (Icon.BeatGrid, 12),
                 new (Icon.ConnectedParameter, 13),
                 new (Icon.Stripe4PxPattern, 14),

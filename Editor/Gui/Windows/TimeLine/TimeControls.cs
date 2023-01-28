@@ -24,7 +24,15 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var playback = Playback.Current; // TODO, this should be non-static eventually
 
             // Settings
-            if (CustomComponents.IconButton(Icon.Settings, PlaybackSettingsPopup.PlaybackSettingsPopupId, ControlSize))
+            var hasSettings = false;
+            var xxx = GraphCanvas.Current?.CompositionOp;
+            if (xxx?.Symbol.PlaybackSettings !=null && xxx.Symbol.PlaybackSettings.Enabled )
+            {
+                hasSettings = true;
+            }
+            if (CustomComponents.IconButton(Icon.Settings, ControlSize, hasSettings 
+                                                                            ? CustomComponents.ButtonStates.Normal
+                                                                            : CustomComponents.ButtonStates.Dimmed))
             {
                 //playback.TimeInBars = playback.LoopRange.Start;
                 ImGui.OpenPopup(PlaybackSettingsPopup.PlaybackSettingsPopupId);
@@ -73,11 +81,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
             ImGui.SameLine();
 
             // Time Mode with context menu
+            ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
             if (ImGui.Button(UserSettings.Config.TimeDisplayMode.ToString(), ControlSize))
             {
                 UserSettings.Config.TimeDisplayMode =
                     (TimeFormat.TimeDisplayModes)(((int)UserSettings.Config.TimeDisplayMode + 1) % Enum.GetNames(typeof(TimeFormat.TimeDisplayModes)).Length);
             }
+            ImGui.PopStyleColor();
 
             CustomComponents.TooltipForLastItem("Timeline format",
                                                 "Click to toggle through BPM, Frames and Normal time modes");
@@ -87,10 +97,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
             // Continue Beat indicator
             {
                 ImGui.PushStyleColor(ImGuiCol.Text, UserSettings.Config.EnableIdleMotion
-                                                        ? new Vector4(1, 1, 1, 0.5f)
+                                                        ? T3Style.Colors.TextDisabled
                                                         : new Vector4(0, 0, 0, 0.5f));
 
-                if (CustomComponents.IconButton(Icon.BeatGrid, "##continueBeat", ControlSize))
+                if (CustomComponents.IconButton(Icon.BeatGrid, ControlSize))
                 {
                     UserSettings.Config.EnableIdleMotion = !UserSettings.Config.EnableIdleMotion;
                 }
@@ -102,11 +112,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 {
                     var center = (ImGui.GetItemRectMin() + ImGui.GetItemRectMax()) / 2;
                     var beat = (int)(playback.FxTimeInBars * 4) % 4;
+                    var beatPulse = (playback.FxTimeInBars * 4) % 4 - beat;
                     var bar = (int)(playback.FxTimeInBars) % 4;
                     const int gridSize = 4;
                     var drawList = ImGui.GetWindowDrawList();
                     var min = center - new Vector2(7, 7) + new Vector2(beat * gridSize, bar * gridSize);
-                    drawList.AddRectFilled(min, min + new Vector2(gridSize - 1, gridSize - 1), Color.Orange);
+
+                    drawList.AddRectFilled(min, min + new Vector2(gridSize - 1, gridSize - 1), Color.Mix(Color.Orange, Color.DarkGray, (float)beatPulse));
                 }
 
                 ImGui.PopStyleColor();
@@ -152,14 +164,14 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 ImGui.PushButtonRepeat(true);
                 {
-                    if (CustomComponents.IconButton(Icon.ChevronLeft, "##left", ControlSize))
+                    if (CustomComponents.IconButton(Icon.ChevronLeft, ControlSize))
                     {
                         BeatTiming.TriggerDelaySync();
                     }
 
                     ImGui.SameLine();
 
-                    if (CustomComponents.IconButton(Icon.ChevronRight, "##right", ControlSize))
+                    if (CustomComponents.IconButton(Icon.ChevronRight, ControlSize))
                     {
                         BeatTiming.TriggerAdvanceSync();
                     }
@@ -171,11 +183,12 @@ namespace T3.Editor.Gui.Windows.TimeLine
             else
             {
                 // Jump to start
-                var isSelected = playback.TimeInBars != playback.LoopRange.Start;
-                if (CustomComponents.ToggleIconButton(Icon.JumpToRangeStart,
-                                                      label: "##jumpToBeginning",
-                                                      isSelected: ref isSelected,
-                                                      ControlSize)
+                if (CustomComponents.IconButton(Icon.JumpToRangeStart,
+                                                ControlSize,
+                                                playback.TimeInBars != playback.LoopRange.Start
+                                                    ? CustomComponents.ButtonStates.Dimmed
+                                                    : CustomComponents.ButtonStates.Disabled
+                                               )
                     || KeyboardBinding.Triggered(UserActions.PlaybackJumpToStartTime)
                     )
                 {
@@ -188,14 +201,15 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.SameLine();
 
                 // Prev Keyframe
-                ImGui.PushStyleColor(ImGuiCol.Text, FrameStats.Last.HasKeyframesBeforeCurrentTime ? T3Style.Colors.Text.Rgba : Color.Black);
-                if (CustomComponents.IconButton(Icon.JumpToPreviousKeyframe, "##prevKeyframe", ControlSize)
+                if (CustomComponents.IconButton(Icon.JumpToPreviousKeyframe, 
+                                                ControlSize,
+                                                FrameStats.Last.HasKeyframesBeforeCurrentTime
+                                                    ? CustomComponents.ButtonStates.Dimmed
+                                                    : CustomComponents.ButtonStates.Disabled)
                     || KeyboardBinding.Triggered(UserActions.PlaybackJumpToPreviousKeyframe))
                 {
                     UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
                 }
-
-                ImGui.PopStyleColor();
 
                 CustomComponents.TooltipForLastItem("Jump to previous keyframe",
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToPreviousKeyframe));
@@ -203,11 +217,12 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.SameLine();
 
                 // Play backwards
-                var isPlayingBackwards = playback.PlaybackSpeed < 0;
-                if (CustomComponents.ToggleIconButton(Icon.PlayBackwards,
-                                                      label: isPlayingBackwards ? $"{(int)playback.PlaybackSpeed}x##backwards" : "##backwards",
-                                                      isSelected: ref isPlayingBackwards,
-                                                      ControlSize))
+                if (CustomComponents.IconButton(Icon.PlayBackwards,
+                                                ControlSize,
+                                                playback.PlaybackSpeed < 0
+                                                    ? CustomComponents.ButtonStates.Activated
+                                                    : CustomComponents.ButtonStates.Dimmed
+                                               ))
                 {
                     if (playback.PlaybackSpeed != 0)
                     {
@@ -227,11 +242,12 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.SameLine();
 
                 // Play forward
-                var isPlaying = playback.PlaybackSpeed > 0;
-                if (CustomComponents.ToggleIconButton(Icon.PlayForwards,
-                                                      label: isPlaying ? $"{(int)playback.PlaybackSpeed}x##forward" : "##forward",
-                                                      ref isPlaying,
-                                                      ControlSize))
+                if (CustomComponents.IconButton(Icon.PlayForwards,
+                                                ControlSize,
+                                                playback.PlaybackSpeed > 0
+                                                    ? CustomComponents.ButtonStates.Activated
+                                                    : CustomComponents.ButtonStates.Dimmed
+                                               ))
                 {
                     if (Math.Abs(playback.PlaybackSpeed) > 0.001f)
                     {
@@ -323,14 +339,15 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.SameLine();
 
                 // Next Keyframe
-                ImGui.PushStyleColor(ImGuiCol.Text, FrameStats.Last.HasKeyframesAfterCurrentTime ? T3Style.Colors.Text.Rgba : Color.Black);
-                if (CustomComponents.IconButton(Icon.JumpToNextKeyframe, "##nextKeyframe", ControlSize)
+                if (CustomComponents.IconButton(Icon.JumpToNextKeyframe, 
+                                                ControlSize,
+                                                FrameStats.Last.HasKeyframesAfterCurrentTime
+                                                    ? CustomComponents.ButtonStates.Dimmed
+                                                    : CustomComponents.ButtonStates.Disabled)
                     || KeyboardBinding.Triggered(UserActions.PlaybackJumpToNextKeyframe))
                 {
                     UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToNextKeyframe);
                 }
-
-                ImGui.PopStyleColor();
 
                 CustomComponents.TooltipForLastItem("Jump to next keyframe",
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToNextKeyframe));
@@ -338,8 +355,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 // // End
                 // Loop
-                if (CustomComponents.ToggleIconButton(Icon.Loop, "##loop", ref playback.IsLooping, ControlSize))
+                if (CustomComponents.IconButton(Icon.Loop, 
+                                                ControlSize,
+                                                playback.IsLooping
+                                                    ? CustomComponents.ButtonStates.Activated
+                                                    : CustomComponents.ButtonStates.Dimmed))
                 {
+                    playback.IsLooping = !playback.IsLooping;
                     var loopRangeMatchesTime = playback.LoopRange.IsValid && playback.LoopRange.Contains(playback.TimeInBars);
                     if (playback.IsLooping && !loopRangeMatchesTime)
                     {
@@ -353,10 +375,14 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.SameLine();
 
                 // Curve Mode
+                var hasKeyframes = FrameStats.Current.HasKeyframesAfterCurrentTime || FrameStats.Current.HasKeyframesAfterCurrentTime;
+                ImGui.PushStyleColor(ImGuiCol.Text, hasKeyframes ? T3Style.Colors.Text.Rgba : T3Style.Colors.TextMuted);
                 if (ImGui.Button(timeLineCanvas.Mode.ToString(), ControlSize))
                 {
                     timeLineCanvas.Mode = (TimeLineCanvas.Modes)(((int)timeLineCanvas.Mode + 1) % Enum.GetNames(typeof(TimeLineCanvas.Modes)).Length);
                 }
+
+                ImGui.PopStyleColor();
 
                 CustomComponents.TooltipForLastItem("Toggle keyframe view between Dope sheet and Curve mode.");
 
@@ -364,7 +390,12 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
 
             // ToggleAudio
-            if (CustomComponents.IconButton(UserSettings.Config.AudioMuted ? Icon.ToggleAudioOff : Icon.ToggleAudioOn, "##audioToggle", ControlSize))
+            if (CustomComponents.IconButton(UserSettings.Config.AudioMuted ? Icon.ToggleAudioOff : Icon.ToggleAudioOn, 
+                                            ControlSize,
+                                            UserSettings.Config.AudioMuted
+                                                ? CustomComponents.ButtonStates.Dimmed
+                                                : CustomComponents.ButtonStates.Normal
+                                            ))
             {
                 UserSettings.Config.AudioMuted = !UserSettings.Config.AudioMuted;
                 AudioEngine.SetMute(UserSettings.Config.AudioMuted);
@@ -376,9 +407,11 @@ namespace T3.Editor.Gui.Windows.TimeLine
             Icon icon;
             string tooltip;
             string additionalTooltip = null;
+            CustomComponents.ButtonStates state = CustomComponents.ButtonStates.Normal;
             switch (UserSettings.Config.HoverMode)
             {
                 case GraphCanvas.HoverModes.Disabled:
+                    state = CustomComponents.ButtonStates.Dimmed;
                     icon = Icon.HoverPreviewDisabled;
                     tooltip = "No preview images on hover";
                     break;
@@ -394,7 +427,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     break;
             }
 
-            if (CustomComponents.IconButton(icon, "##hoverPreview", ControlSize))
+            if (CustomComponents.IconButton(icon, ControlSize, state))
             {
                 UserSettings.Config.HoverMode =
                     (GraphCanvas.HoverModes)(((int)UserSettings.Config.HoverMode + 1) % Enum.GetNames(typeof(GraphCanvas.HoverModes)).Length);

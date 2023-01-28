@@ -15,7 +15,7 @@ namespace T3.Editor.Gui.Windows.Variations
             if (VariationHandling.ActivePoolForPresets == null)
                 return;
             
-            if (CustomComponents.IconButton(Icon.Plus, "##addbutton", new Vector2(s, s)))
+            if (CustomComponents.IconButton(Icon.Plus, new Vector2(s, s)))
             {
                 CreateVariation();
             }

@@ -408,7 +408,7 @@ namespace T3.Editor.Gui.Styling
                 return false;
 
             ImGui.SameLine();
-            return CustomComponents.IconButton(Icon.Revert, "##revert", Vector2.One * ImGui.GetFrameHeight());
+            return CustomComponents.IconButton(Icon.Revert, Vector2.One * ImGui.GetFrameHeight());
         }
 
         private static void AddIcon(Icon icon)
