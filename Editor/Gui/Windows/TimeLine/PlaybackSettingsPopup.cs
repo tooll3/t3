@@ -48,7 +48,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             FormInputs.SetIndent(0);
 
-            FindParentWithPlaybackSettings(composition, out var compositionWithSettings, out var compositionSettings );
+            SoundtrackUtils.FindParentWithPlaybackSettings(composition, out var compositionWithSettings, out var compositionSettings );
             //var compositionSettings = compWithSoundtrack == composition ? composition.Symbol.PlaybackSettings : null;
 
             // Main toggle with composition name 
@@ -128,7 +128,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             if (compositionSettings.SyncMode == PlaybackSettings.SyncModes.ProjectSoundTrack)
             {
-                if (!SoundtrackUtils.TryFindingSoundtrack(composition, out var soundtrack))
+                
+                //var soundtrack = ;
+                if (!compositionSettings.GetMainSoundtrack(out var soundtrack))
                 {
                     if (ImGui.Button("Add soundtrack to composition"))
                     {
@@ -333,32 +335,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
         }
 
-        public static void FindParentWithPlaybackSettings(Instance startInstance, out Instance instanceWithSettings, out PlaybackSettings settings)
-        {
-            instanceWithSettings = startInstance;
-            while (true)
-            {
-                //var soundtrackSymbol = instance.Symbol;
-                //var soundtrack = soundtrackSymbol.PlaybackSettings.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
-
-                settings = instanceWithSettings.Symbol.PlaybackSettings;
-                if(settings != null && settings.Enabled)
-                {
-                    return;
-                }
-
-                if (instanceWithSettings.Parent == null)
-                {
-                    settings = null;
-                    instanceWithSettings = null;
-                    return;
-                }
-
-                instanceWithSettings = instanceWithSettings.Parent;
-            }
-        }
-        
-        
         public const string PlaybackSettingsPopupId = "##PlaybackSettings";
     }
 }

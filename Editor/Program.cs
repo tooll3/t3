@@ -234,7 +234,7 @@ namespace T3.Editor
                     _deviceContext.PixelShader.SetShaderResource(0, null);
                 }
 
-                _t3ui.Draw();
+                _t3ui.ProcessFrame();
 
                 _deviceContext.Rasterizer.SetViewport(new Viewport(0, 0, _main.Form.ClientSize.Width, _main.Form.ClientSize.Height, 0.0f, 1.0f));
                 _deviceContext.OutputMerger.SetTargets(_main.RenderTargetView);

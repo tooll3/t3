@@ -58,7 +58,7 @@ namespace T3.Editor.Gui
 
         private bool _initialed = false;
 
-        public void Draw()
+        public void ProcessFrame()
         {
             //InitializeAfterAppWindowReady();
             

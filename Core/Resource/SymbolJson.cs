@@ -48,7 +48,7 @@ namespace T3.Core.Resource
             WriteSymbolInputs(symbol.InputDefinitions);
             WriteSymbolChildren(symbol.Children);
             WriteConnections(symbol.Connections);
-            WriteSoundSettings(symbol.PlaybackSettings);
+            PlaybackSettings.WriteToJson(Writer, symbol.PlaybackSettings);
             symbol.Animator.Write(Writer);
 
             Writer.WriteEndObject();
@@ -160,26 +160,6 @@ namespace T3.Core.Resource
                 Writer.WriteEndArray();
 
                 Writer.WriteEndObject(); // child
-            }
-
-            Writer.WriteEndArray();
-        }
-
-        private void WriteSoundSettings(PlaybackSettings playbackSettings)
-        {
-            Writer.WriteValue("HasSettings", playbackSettings.Enabled);
-            
-            // Write audio clips
-            var audioClips = playbackSettings.AudioClips;
-            if (audioClips == null || audioClips.Count == 0)
-                return;
-
-            
-            Writer.WritePropertyName("AudioClips");
-            Writer.WriteStartArray();
-            foreach (var audioClip in audioClips)
-            {
-                audioClip.ToJson(Writer);
             }
 
             Writer.WriteEndArray();
@@ -388,28 +368,31 @@ namespace T3.Core.Resource
                 }
             }
 
-            // Read sound settings
-
-            var jSettingsToken = o["HasSettings"];
-            var hasSettings = jSettingsToken != null && jSettingsToken.Value<bool>();
-            
-            symbol.PlaybackSettings = new PlaybackSettings
-                                       {
-                                           Enabled = hasSettings
-                                       };
-
-            var jAudioClipArray = (JArray)o[nameof(Symbol.PlaybackSettings.AudioClips)];
-            if (jAudioClipArray == null)
-                return symbol;
-
-            foreach (var c in jAudioClipArray)
-            {
-                var clip = AudioClip.FromJson(c);
-                symbol.PlaybackSettings.AudioClips.Add(clip);
-            }
-
+            symbol.PlaybackSettings = PlaybackSettings.ReadFromJson(o);
             return symbol;
         }
+
+        public static bool ReadBoolean(JToken o, string name)
+        {
+            var jSettingsToken = o[name];
+            var hasSettings = jSettingsToken != null && jSettingsToken.Value<bool>();
+            return hasSettings;
+        }
+        
+        public static float ReadFloat(JToken o, string name, float defaultValue=0)
+        {
+            var jSettingsToken = o[name];
+            return jSettingsToken?.Value<float>() ?? defaultValue;
+        }
+
+        public static T ReadEnum<T>(JToken o, string name) where  T: struct, Enum
+        {
+            var dirtyFlagJson = o[name];
+            return dirtyFlagJson != null 
+                       ? Enum.Parse<T>(dirtyFlagJson.Value<string>()) 
+                       : default;
+        } 
+        
         #endregion
     }
 }
