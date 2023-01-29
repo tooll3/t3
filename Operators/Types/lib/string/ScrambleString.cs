@@ -28,21 +28,24 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
         private void Update(EvaluationContext context)
         {
             var maxLength = MaxLength.GetValue(context);
-            var stringBuilder = InputBuffer.GetValue(context);
+            var stringBuilder = OverrideBuilder.GetValue(context);
             var lastIndex = _index;
+            
+            //var lastIndex = _index;
 
             if (maxLength <= 0)
             {
                 Result.Value= String.Empty;
+                Result.Value= string.Empty;
                 return;
             }
-
-            if (!InputBuffer.IsConnected || stringBuilder == null)
+            
+            if (!OverrideBuilder.IsConnected || stringBuilder == null)
             {
                 stringBuilder = _fallbackBuffer;
             }
-
-            if (ClearTrigger.GetValue(context))
+            
+            if (Clear.GetValue(context))
             {
                 stringBuilder.Clear();
                 _index = 0;
@@ -54,7 +57,7 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
             {
                 if (Insert.GetValue(context))
                 {
-                    if (TriggerRandomPos.GetValue(context))
+                    if (JumpToRandomPos.GetValue(context))
                         _index = (int)_random.NextLong(0, stringBuilder.Length);
 
                     var separator = Separator.GetValue(context); ;
@@ -84,14 +87,13 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
 
                     if (pos > currentLength)
                     {
-                        var fillString = FillCharacter.GetValue(context);
-                        var fillChar = string.IsNullOrEmpty(fillString) ?  '_' : fillString[0];
-                        stringBuilder.Append(new string(fillChar, pos - currentLength));
+                        stringBuilder.Append(new string(' ', pos - currentLength));
                     }
                     
                     stringBuilder.Insert(pos, insertString);
                     
                     InsertLineWraps(lineWrap, stringBuilder, pos, insertLength, WrapLineColumn.GetValue(context).Clamp(1,1000));
+
                     switch (mode)
                     {
                         case Modes.Insert:
@@ -106,7 +108,7 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
                             break;
                         }
                         case Modes.OverwriteAtFixedOffset:
-                            _index += FillOffset.GetValue(context);
+                            _index += OverwriteOffset.GetValue(context);
                             if (_index > maxLength)
                             {
                                 _index = _index % maxLength;
@@ -144,7 +146,6 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
         {
             if (lineWrap == WrapLinesModes.WrapAtCharacters)
             {
-                //var columnPosAfterInsert = 0;
                 var lookBackIndex = insertPos;
                 while (lookBackIndex > 0 && stringBuilder[lookBackIndex] != '\n')
                 {
@@ -169,6 +170,76 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
                     stringBuilder[insertPos + insertLength - 1] = '\n';
                 }
             }
+            else if (lineWrap == WrapLinesModes.WrapAtWords)
+            {
+                int pos = 0;
+                int currentLineLength = 0;
+                int lastValidBreakPos = -1;
+                while (pos < stringBuilder.Length)
+                {
+                    var c = stringBuilder[pos];
+                    if (c == '\n') 
+                    {
+                        currentLineLength = 0;
+                        lastValidBreakPos = -1;
+                    }
+                    
+                    else if (c == ' ' || c == '.' || c == ',' || c == '/')
+                    {
+                        lastValidBreakPos = pos;
+                        currentLineLength++;
+                    }
+                    else
+                    {
+                        currentLineLength++;
+                    }
+
+                    if (currentLineLength > wrapColumn && lastValidBreakPos != -1)
+                    {
+                        stringBuilder[lastValidBreakPos] = '\n';
+                        pos = lastValidBreakPos;
+                        lastValidBreakPos = -1;
+                        currentLineLength = 0;
+                    }
+                    pos++;
+                }
+            }
+            else if (lineWrap == WrapLinesModes.WrapToFillBlock)
+            {
+                int pos = 0;
+                int currentLineLength = 0;
+                int lastValidBreakPos = -1;
+                while (pos < stringBuilder.Length)
+                {
+                    var c = stringBuilder[pos];
+                    if (c == '\n')
+                    {
+                        stringBuilder[pos] = ' ';
+                        //currentLineLength = 0;
+                        lastValidBreakPos = pos;
+                        currentLineLength++;
+                    }
+                    
+                    else if (c == ' ' || c == '.' || c == ',' || c == '/')
+                    {
+                        lastValidBreakPos = pos;
+                        currentLineLength++;
+                    }
+                    else
+                    {
+                        currentLineLength++;
+                    }
+
+                    if (currentLineLength > wrapColumn && lastValidBreakPos != -1)
+                    {
+                        stringBuilder[lastValidBreakPos] = '\n';
+                        pos = lastValidBreakPos;
+                        lastValidBreakPos = -1;
+                        currentLineLength = 0;
+                    }
+                    pos++;
+                }
+            }            
         }
 
         private enum Modes
@@ -183,24 +254,30 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
             DontWrap,
             WrapAtWords,
             WrapAtCharacters,
+            WrapToFillBlock,
         }
 
-        private StringBuilder _fallbackBuffer = new StringBuilder();
+        private StringBuilder _fallbackBuffer = new();
 
         private int _index = 0;
         private Random _random = new Random();
 
         [Input(Guid = "CE436E27-05A5-431D-9AA2-920DBFF639A7", MappedType = typeof(Modes))]
         public readonly InputSlot<int> WriteMode = new InputSlot<int>();
-
+        
+        [Input(Guid = "77A5604A-034A-4352-BD46-BE3CB57F90B7")]
+        public readonly InputSlot<bool> Clear = new InputSlot<bool>();
+        
         [Input(Guid = "095202BF-118F-4C4C-802E-7916BC290A60")]
         public readonly InputSlot<bool> Insert = new InputSlot<bool>();
+        
+        [Input(Guid = "F977FAAF-1840-4A75-9BC5-43176F2E88E9")]
+        public readonly InputSlot<bool> JumpToRandomPos = new InputSlot<bool>();
+
+
 
         [Input(Guid = "960179BD-286F-4629-BBCB-CD31AA9C9AE2")]
         public readonly InputSlot<string> InsertString = new InputSlot<string>();
-
-        [Input(Guid = "38CE7F47-C117-47A2-AEEA-609716C60555")]
-        public readonly InputSlot<int> MaxLength = new InputSlot<int>();
 
         [Input(Guid = "8EEE8067-1A4E-4372-93D0-2DBC368AA45A")]
         public readonly InputSlot<string> Separator = new InputSlot<string>();
@@ -209,10 +286,10 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
         // public readonly InputSlot<bool> Fill = new InputSlot<bool>();
         //
         [Input(Guid = "1559C0E9-BA56-447F-8241-03D8D59AC205")]
-        public readonly InputSlot<int> FillOffset = new InputSlot<int>();
+        public readonly InputSlot<int> OverwriteOffset = new InputSlot<int>();
 
-        [Input(Guid = "F977FAAF-1840-4A75-9BC5-43176F2E88E9")]
-        public readonly InputSlot<bool> TriggerRandomPos = new InputSlot<bool>();
+        [Input(Guid = "38CE7F47-C117-47A2-AEEA-609716C60555")]
+        public readonly InputSlot<int> MaxLength = new InputSlot<int>();
 
         [Input(Guid = "875CBFA9-FFA8-4204-810C-C04F5F421441", MappedType = typeof(WrapLinesModes))]
         public readonly InputSlot<int> WrapLines = new InputSlot<int>();
@@ -220,15 +297,7 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
         [Input(Guid = "BD941C4B-18A8-4687-85A8-3FE53B4F6213")]
         public readonly InputSlot<int> WrapLineColumn = new InputSlot<int>();
 
-
-        [Input(Guid = "77A5604A-034A-4352-BD46-BE3CB57F90B7")]
-        public readonly InputSlot<bool> ClearTrigger = new InputSlot<bool>();
-
         [Input(Guid = "CCFAC8A9-0954-4869-A47C-B66C714F6545")]
-        public readonly InputSlot<StringBuilder> InputBuffer = new InputSlot<StringBuilder>();
-        
-        [Input(Guid = "5E8FB3EE-48A6-46D5-8CF9-368F5A1EA507")]
-        public readonly InputSlot<string> FillCharacter = new InputSlot<string>();
-        
+        public readonly InputSlot<StringBuilder> OverrideBuilder = new();
     }
 }

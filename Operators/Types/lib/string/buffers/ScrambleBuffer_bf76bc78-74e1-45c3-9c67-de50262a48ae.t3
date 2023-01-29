@@ -13,7 +13,7 @@
     },
     {
       "Id": "7e68d5fd-f9be-4f23-bc1b-0bdb72e63137"/*MaxLength*/,
-      "DefaultValue": 0
+      "DefaultValue": 1000
     },
     {
       "Id": "b5deeff1-7188-4742-a438-cb3ce1afde59"/*TriggerChop*/,

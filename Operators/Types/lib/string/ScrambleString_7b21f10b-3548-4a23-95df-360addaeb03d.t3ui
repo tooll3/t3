@@ -10,10 +10,24 @@
       }
     },
     {
+      "InputId": "77a5604a-034a-4352-bd46-be3cb57f90b7"/*Clear*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
+      }
+    },
+    {
       "InputId": "095202bf-118f-4c4c-802e-7916bc290a60"/*Insert*/,
       "Position": {
         "X": -200.0,
         "Y": 135.0
+      }
+    },
+    {
+      "InputId": "f977faaf-1840-4a75-9bc5-43176f2e88e9"/*JumpToRandomPos*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 315.0
       }
     },
     {
@@ -25,13 +39,6 @@
       "Usage": "Default"
     },
     {
-      "InputId": "38ce7f47-c117-47a2-aeea-609716c60555"/*MaxLength*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      }
-    },
-    {
       "InputId": "8eee8067-1a4e-4372-93d0-2dbc368aa45a"/*Separator*/,
       "Position": {
         "X": -200.0,
@@ -40,17 +47,17 @@
       "Usage": "Default"
     },
     {
-      "InputId": "1559c0e9-ba56-447f-8241-03d8d59ac205"/*FillOffset*/,
+      "InputId": "1559c0e9-ba56-447f-8241-03d8d59ac205"/*OverwriteOffset*/,
       "Position": {
         "X": -200.0,
         "Y": 270.0
       }
     },
     {
-      "InputId": "f977faaf-1840-4a75-9bc5-43176f2e88e9"/*TriggerRandomPos*/,
+      "InputId": "38ce7f47-c117-47a2-aeea-609716c60555"/*MaxLength*/,
       "Position": {
         "X": -200.0,
-        "Y": 315.0
+        "Y": 90.0
       }
     },
     {
@@ -68,26 +75,11 @@
       }
     },
     {
-      "InputId": "77a5604a-034a-4352-bd46-be3cb57f90b7"/*ClearTrigger*/,
+      "InputId": "ccfac8a9-0954-4869-a47c-b66c714f6545"/*OverrideBuilder*/,
       "Position": {
         "X": -200.0,
-        "Y": 405.0
+        "Y": 90.0
       }
-    },
-    {
-      "InputId": "ccfac8a9-0954-4869-a47c-b66c714f6545"/*InputBuffer*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 0.0
-      }
-    },
-    {
-      "InputId": "5e8fb3ee-48a6-46d5-8cf9-368f5a1ea507"/*FillCharacter*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      },
-      "Usage": "Default"
     }
   ],
   "SymbolChildUis": [],
