@@ -23,7 +23,12 @@ namespace T3.Editor.Gui.ChildUi
             var symbolChild = valueInstance.Parent.Symbol.Children.Single(c => c.Id == valueInstance.SymbolChildId);
             ImGui.PushClipRect(area.Min, area.Max, true);
             
-            var value = (double)valueInstance.Float.TypedInputValue.Value;
+            //valueInstance.Float.
+            var isAnimated = instance.Parent?.Symbol.Animator.IsInputSlotAnimated(valueInstance.Float)??false;
+            
+            var value = (isAnimated) 
+                            ? (double)valueInstance.Float.Value 
+                            :(double)valueInstance.Float.TypedInputValue.Value;
             
             // Draw slider
             var rangeMin = valueInstance.SliderMin.TypedInputValue.Value;
@@ -97,7 +102,7 @@ namespace T3.Editor.Gui.ChildUi
             WidgetElements.DrawPrimaryValue(drawList, area, $"{value:0.000}");
             
             ImGui.PopClipRect();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels | SymbolChildUi.CustomUiResult.PreventOpenSubGraph;
         }
 
         private static Vector2 _jogDialCenter;
