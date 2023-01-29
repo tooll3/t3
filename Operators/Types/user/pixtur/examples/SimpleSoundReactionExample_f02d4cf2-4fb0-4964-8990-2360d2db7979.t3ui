@@ -213,7 +213,7 @@
       }
     },
     {
-      "ChildId": "ff4c52ea-9908-428f-bb5f-61e0aeeb99be"/*ScrambleString*/,
+      "ChildId": "ff4c52ea-9908-428f-bb5f-61e0aeeb99be"/*BuildRandomString*/,
       "Size": {
         "X": 110.0,
         "Y": 62.0

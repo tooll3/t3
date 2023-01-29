@@ -223,7 +223,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
             return 0;
         }
 
-        private List<Point> _points = new(1000);
+        private readonly List<Point> _points = new(1000);
         private StructuredList<Point> _pointListWithSeparator = new(1);
 
         public enum HorizontalAligns
@@ -315,12 +315,15 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
 
         public static LineFont CreateFromFilepath(string filepath, float reduceCurveThreshold, float cornerBalance, bool forceUpdate = false)
         {
-            if (string.IsNullOrEmpty(filepath) || !File.Exists(filepath))
+            if (string.IsNullOrEmpty(filepath))
                 return null;
 
             if (!forceUpdate && _definitionsForFilePaths.TryGetValue(filepath, out var definition))
                 return definition;
 
+            if (!File.Exists(filepath))
+                return null;
+            
             Log.Debug($"Loading SvgFont definition {filepath}");
             SvgDocument svgDoc;
             try

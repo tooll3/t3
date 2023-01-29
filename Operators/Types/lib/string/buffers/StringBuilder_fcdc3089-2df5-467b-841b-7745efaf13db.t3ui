@@ -7,6 +7,14 @@
         "X": -200.0,
         "Y": 0.0
       }
+    },
+    {
+      "InputId": "85f3d00c-005d-4c2f-bf41-f5b5c672f286"/*InitialString*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      },
+      "Usage": "Default"
     }
   ],
   "SymbolChildUis": [],

@@ -449,7 +449,7 @@
       "ChildId": "88e9468f-f369-4231-8a48-c0486be8d842"/*DepthOfField*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 62.0
       },
       "Position": {
         "X": 3643.4727,
@@ -647,7 +647,7 @@
       "ChildId": "11eef7c1-8dc8-4d1f-aa2f-6a719d05c291"/*AddNoise*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 36.0
       },
       "Position": {
         "X": 98.67944,

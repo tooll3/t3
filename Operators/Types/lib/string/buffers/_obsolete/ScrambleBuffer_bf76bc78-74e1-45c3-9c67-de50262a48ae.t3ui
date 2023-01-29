@@ -1,8 +1,9 @@
 {
   "Id": "bf76bc78-74e1-45c3-9c67-de50262a48ae"/*ScrambleBuffer*/,
+  "Description": "An obsolete string experiment. \n\nPlease consider [RandomStringBuilder].\n",
   "InputUis": [
     {
-      "InputId": "c80a289a-e0d5-459f-b79e-fff72757b416"/*InputBuffer*/,
+      "InputId": "c80a289a-e0d5-459f-b79e-fff72757b416"/*StringBuilder*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,

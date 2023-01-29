@@ -218,7 +218,7 @@
       "Outputs": []
     },
     {
-      "Id": "4a982b30-42cf-4244-9bba-41f5e39bff66"/*ScrambleString*/,
+      "Id": "4a982b30-42cf-4244-9bba-41f5e39bff66"/*BuildRandomString*/,
       "SymbolId": "7b21f10b-3548-4a23-95df-360addaeb03d",
       "InputValues": [
         {
@@ -227,19 +227,19 @@
           "Value": 0
         },
         {
-          "Id": "38ce7f47-c117-47a2-aeea-609716c60555"/*MaxLength*/,
-          "Type": "System.Int32",
-          "Value": 2000
-        },
-        {
           "Id": "8eee8067-1a4e-4372-93d0-2dbc368aa45a"/*Separator*/,
           "Type": "System.String",
           "Value": ""
         },
         {
-          "Id": "1559c0e9-ba56-447f-8241-03d8d59ac205"/*FillOffset*/,
+          "Id": "1559c0e9-ba56-447f-8241-03d8d59ac205"/*OverwriteOffset*/,
           "Type": "System.Int32",
           "Value": 10
+        },
+        {
+          "Id": "38ce7f47-c117-47a2-aeea-609716c60555"/*MaxLength*/,
+          "Type": "System.Int32",
+          "Value": 2000
         },
         {
           "Id": "875cbfa9-ffa8-4204-810c-c04f5f421441"/*WrapLines*/,

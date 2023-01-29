@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_bf76bc78_74e1_45c3_9c67_de50262a48ae
     public class ScrambleBuffer : Instance<ScrambleBuffer>
     {
         [Output(Guid = "f460db31-2603-4468-ac68-d1a3b93c41da", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<System.Text.StringBuilder> Builder = new Slot<System.Text.StringBuilder>();
+        public readonly Slot<System.Text.StringBuilder> Builder = new();
 
         
         public ScrambleBuffer()
@@ -20,7 +20,7 @@ namespace T3.Operators.Types.Id_bf76bc78_74e1_45c3_9c67_de50262a48ae
 
         private void Update(EvaluationContext context)
         {
-            var stringBuilder = InputBuffer.GetValue(context);
+            var stringBuilder = StringBuilder.GetValue(context);
             Builder.Value = stringBuilder;
             if (stringBuilder == null)
                 return;
@@ -70,7 +70,7 @@ namespace T3.Operators.Types.Id_bf76bc78_74e1_45c3_9c67_de50262a48ae
         private int _fillIndex = 0;
         
         [Input(Guid = "c80a289a-e0d5-459f-b79e-fff72757b416")]
-        public readonly InputSlot<StringBuilder> InputBuffer = new InputSlot<StringBuilder>();
+        public readonly InputSlot<StringBuilder> StringBuilder = new InputSlot<StringBuilder>();
 
         [Input(Guid = "2A078B1D-0115-467F-8625-6D36EF2FDAF9")]
         public readonly InputSlot<int> MinLength = new InputSlot<int>();

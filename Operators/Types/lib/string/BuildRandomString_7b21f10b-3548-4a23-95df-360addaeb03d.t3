@@ -1,5 +1,5 @@
 {
-  "Name": "ScrambleString",
+  "Name": "BuildRandomString",
   "Id": "7b21f10b-3548-4a23-95df-360addaeb03d",
   "Namespace": "lib.string",
   "Inputs": [
@@ -21,7 +21,7 @@
     },
     {
       "Id": "960179bd-286f-4629-bbcb-cd31aa9c9ae2"/*InsertString*/,
-      "DefaultValue": "Smile"
+      "DefaultValue": "Tooll likes Cats."
     },
     {
       "Id": "8eee8067-1a4e-4372-93d0-2dbc368aa45a"/*Separator*/,

@@ -11,7 +11,7 @@ using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
 {
-    public class ScrambleString : Instance<ScrambleString>
+    public class BuildRandomString : Instance<BuildRandomString>
     {
         [Output(Guid = "ABA9EB42-5AF0-4165-A2BD-FDFCD4340484", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<string> Result = new Slot<string>();
@@ -19,17 +19,23 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
         [Output(Guid = "8116d50e-0220-4bb7-b09d-881f722804cd")]
         public readonly Slot<System.Text.StringBuilder> Builder = new Slot<System.Text.StringBuilder>();
 
-        public ScrambleString()
+        public BuildRandomString()
         {
             Result.UpdateAction = Update;
             Builder.UpdateAction = Update;
         }
 
+        private double _lastUpdateTime = 0;
+
         private void Update(EvaluationContext context)
         {
             var maxLength = MaxLength.GetValue(context);
             var stringBuilder = OverrideBuilder.GetValue(context);
-            var lastIndex = _index;
+
+            if (Math.Abs(context.LocalFxTime - _lastUpdateTime) < 0.001)
+                return;
+
+            _lastUpdateTime = context.LocalFxTime;
             
             //var lastIndex = _index;
 
@@ -99,6 +105,7 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
                         case Modes.Insert:
                         {
                             _index += insertLength;
+                            _index %= maxLength;
                             break;
                         }
                         case Modes.Overwrite:

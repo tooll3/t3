@@ -1,10 +1,10 @@
 {
   "Name": "ScrambleBuffer",
   "Id": "bf76bc78-74e1-45c3-9c67-de50262a48ae",
-  "Namespace": "lib.string.buffers",
+  "Namespace": "lib.string.buffers._obsolete",
   "Inputs": [
     {
-      "Id": "c80a289a-e0d5-459f-b79e-fff72757b416"/*InputBuffer*/,
+      "Id": "c80a289a-e0d5-459f-b79e-fff72757b416"/*StringBuilder*/,
       "DefaultValue": null
     },
     {
