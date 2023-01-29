@@ -13,8 +13,6 @@ cbuffer Params : register(b0)
 StructuredBuffer<Point> NewPoints : t0;         // input
 RWStructuredBuffer<Point> CollectedPoints : u0;    // output
 
-
-
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
@@ -35,27 +33,49 @@ void main(uint3 i : SV_DispatchThreadID)
     }
 
     int spawnIndex = (int)CollectCycleIndex % collectedPointCount;
-    int addIndex = gi - CollectCycleIndex;
-    if(AddNewPoints > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount ) 
+
+    if(Mode < 0.5) 
     {
-        // uint trailLength = (uint)(TrailLength + 0.5);
-        // uint bufferLength = (uint)(PointCount + 0.5) * trailLength;
-        // uint cycleIndex = (uint)(CycleIndex + 0.5);
-        // uint targetIndex = (cycleIndex + gi * trailLength) % bufferLength;
-        CollectedPoints[gi] = NewPoints[addIndex];
-        CollectedPoints[gi].w = 0.0001;
-    }
-    else 
-    {
-        float age = CollectedPoints[gi].w;
-        if(age <= 0) 
+        int addIndex = gi - CollectCycleIndex;
+        if(AddNewPoints > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount ) 
         {
-            CollectedPoints[gi].w = sqrt(-1); // Flag non-initialized points 
+            // uint trailLength = (uint)(TrailLength + 0.5);
+            // uint bufferLength = (uint)(PointCount + 0.5) * trailLength;
+            // uint cycleIndex = (uint)(CycleIndex + 0.5);
+            // uint targetIndex = (cycleIndex + gi * trailLength) % bufferLength;
+            CollectedPoints[gi] = NewPoints[addIndex];
+            CollectedPoints[gi].w = 0.0001;
         }
-        else if(age < MaxAge)
+        else 
         {
-            CollectedPoints[gi].w = age+  1/60.0 * AgingRate;
-        } 
+            float age = CollectedPoints[gi].w;
+            if(age <= 0) 
+            {
+                CollectedPoints[gi].w = sqrt(-1); // Flag non-initialized points 
+            }
+            else if(age < MaxAge)
+            {
+                CollectedPoints[gi].w = age+  1/60.0 * AgingRate;
+            } 
+        }
+    }
+    else {
+        int targetIndex = ( (int)CollectCycleIndex  + i.x) % collectedPointCount;
+        if( i.x == 0 || targetIndex >= collectedPointCount -1 || targetIndex <= 1) 
+        {
+            CollectedPoints[targetIndex].w = sqrt(-1); 
+            return;
+        }
+
+
+        if(i.x >= newPointCount) 
+        {
+            return;
+        }        
+        int sourceIndex = gi;
+
+        CollectedPoints[targetIndex] = NewPoints[sourceIndex];
+        //CollectedPoints[gi].w = 0.0001;
     }
 
 
