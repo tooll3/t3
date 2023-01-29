@@ -439,6 +439,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 HandleCurvePointDragging(vDef, isSelected);
 
+                // Draw value input
                 var valueInputVisible = isSelected && keyHash == _clickedKeyframeHash;
                 if (valueInputVisible)
                 {
@@ -451,6 +452,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         ImGui.BeginChildFrame((uint)keyHash, size, ImGuiWindowFlags.NoScrollbar);
                         ImGui.PushFont(Fonts.FontSmall);
                         var tmp = (float)vDef.Value;
+
                         var result = floatInputUi.DrawEditControl(ref tmp);
                         if (result == InputEditStateFlags.Started)
                         {
@@ -593,7 +595,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
         public void UpdateSelectionForArea(ImRect screenArea, SelectionFence.SelectModes selectMode)
         {
             if (selectMode == SelectionFence.SelectModes.Replace)
+            {
                 SelectedKeyframes.Clear();
+                _clickedKeyframeHash = 0;
+            }
 
             var startTime = TimeLineCanvas.Current.InverseTransformX(screenArea.Min.X);
             var endTime = TimeLineCanvas.Current.InverseTransformX(screenArea.Max.X);
