@@ -157,6 +157,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     if (ImGui.Button("Reload"))
                     {
                         AudioEngine.ReloadClip(soundtrack);
+                        filepathModified = true;
                     }
 
                     ImGui.SameLine();
@@ -177,6 +178,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                                   120))
                     {
                         playback.Bpm = soundtrack.Bpm;
+                        Playback.Current.Bpm = soundtrack.Bpm;
+                        compositionSettings.Bpm = soundtrack.Bpm;
                     }
 
                     var soundtrackStartTime = (float)soundtrack.StartTime;

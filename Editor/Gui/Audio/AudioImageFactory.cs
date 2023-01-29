@@ -15,12 +15,12 @@ namespace T3.Editor.Gui.Audio
                 return null;
             }
             
-            if (ImageForAudioClips.TryGetValue(audioClip, out var imagePath))
+            if (ImageForAudioFiles.TryGetValue(audioClip.FilePath, out var imagePath))
             {
                 return imagePath;
             }
             
-            ImageForAudioClips[audioClip] = null; // Prevent double creation
+            ImageForAudioFiles[audioClip.FilePath] = null; // Prevent double creation
 
             var task = new AsyncImageGeneratorTask(audioClip);
             task.Run();
@@ -50,7 +50,7 @@ namespace T3.Editor.Gui.Audio
                 }
                 else
                 {
-                    ImageForAudioClips[_audioClip] = imageFilePath;
+                    ImageForAudioFiles[_audioClip.FilePath] = imageFilePath;
                 }
             }
 
@@ -58,6 +58,6 @@ namespace T3.Editor.Gui.Audio
             private readonly AudioImageGenerator _generator;
         }
 
-        public static readonly Dictionary<AudioClip, string> ImageForAudioClips = new();
+        public static readonly Dictionary<string, string> ImageForAudioFiles = new();
     }
 }

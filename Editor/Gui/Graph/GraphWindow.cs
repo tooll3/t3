@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
+using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
@@ -252,7 +253,7 @@ namespace T3.Editor.Gui.Graph
                                      | ImGuiWindowFlags.NoScrollWithMouse
                                      | ImGuiWindowFlags.NoDecoration);
                     {
-                        _timeLineCanvas.Draw(GraphCanvas.CompositionOp);
+                        _timeLineCanvas.Draw(GraphCanvas.CompositionOp, Playback.Current);
                     }
                     ImGui.EndChild();
                     ImGui.PopStyleVar(1);

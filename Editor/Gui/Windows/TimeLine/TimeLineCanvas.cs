@@ -27,7 +27,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
     {
         public TimeLineCanvas()
         {
-            Playback = Playback.Current;
+            //Playback = Playback.Current;
             DopeSheetArea = new DopeSheetArea(SnapHandlerForU, this);
             _timelineCurveEditArea = new TimelineCurveEditArea(this, SnapHandlerForU, SnapHandlerForV);
             _timeSelectionRange = new TimeSelectionRange(this, SnapHandlerForU);
@@ -43,9 +43,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
         }
 
 
-        public void Draw(Instance compositionOp)
+        public void Draw(Instance compositionOp, Playback playback)
         {
             Current = this;
+            Playback = playback;
             SelectedAnimationParameters = GetAnimationParametersForSelectedNodes(compositionOp);
 
             // UpdateLocalTimeTranslation(compositionOp);
@@ -359,7 +360,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
 
 
-        internal readonly Playback Playback;
+        internal Playback Playback;
 
         private readonly TimeRasterSwitcher _timeRasterSwitcher = new TimeRasterSwitcher();
         private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster();
