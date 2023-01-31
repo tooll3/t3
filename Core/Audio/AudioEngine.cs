@@ -216,14 +216,18 @@ namespace T3.Core.Audio
             
             if (isOutOfBounds)
             {
-                if(isPlaying)
+                if (isPlaying)
+                {
+                    Log.Debug("Pausing");
                     Bass.ChannelPause(StreamHandle);
+                }
                 
                 return;
             }
 
             if (!isPlaying)
             {
+                Log.Debug("Restarting");
                 Bass.ChannelPlay(StreamHandle);
             }
             

@@ -15,18 +15,15 @@ namespace T3.Editor.Gui.Audio
 
             FindPlaybackSettings(composition, out var compWithSettings, out var settings);
 
-            if (settings.AudioSource == PlaybackSettings.AudioSources.ExternalDevice)
-            {
-                WasapiAudioInput.StartFrame(settings);
-            }
-            else
+            WasapiAudioInput.StartFrame(settings);
+            if (settings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
             {
                 if (settings.GetMainSoundtrack(out var soundtrack))
                 {
-                    AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);                
-                }                
+                    AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
+                }
             }
-            
+
             Playback.Current.Update(UserSettings.Config.EnableIdleMotion);
             Playback.Current.Bpm = settings.Bpm;
             Playback.Current.Settings = settings;
