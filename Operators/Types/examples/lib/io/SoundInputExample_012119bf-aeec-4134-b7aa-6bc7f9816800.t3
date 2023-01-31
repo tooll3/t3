@@ -141,7 +141,7 @@
         {
           "Id": "cc812393-f080-4e17-a525-15b09f8acdd0"/*Gain*/,
           "Type": "System.Single",
-          "Value": 0.003
+          "Value": 0.02
         },
         {
           "Id": "51545316-69fc-441f-b59f-44979e32972c"/*Pow*/,

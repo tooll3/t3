@@ -1145,7 +1145,8 @@
   "PlaybackSettings": {
     "Enabled": true,
     "Bpm": 120.0,
-    "SyncMode": 1,
+    "AudioSource": 0,
+    "Syncing": 0,
     "AudioDecayFactor": 0.98,
     "AudioGainFactor": 0.99,
     "AudioInputDeviceName": "Speakers (Realtek(R) Audio)"

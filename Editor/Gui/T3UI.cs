@@ -64,8 +64,9 @@ namespace T3.Editor.Gui
             
             // Prepare the current frame 
             RenderStatsCollector.StartNewFrame();
-            Playback.Current.Update(UserSettings.Config.EnableIdleMotion);
-            SoundtrackUtils.UpdateMainSoundtrack();
+            
+            PlaybackUtils.UpdatePlaybackForCurrentComposition();
+            
             BeatTiming.Update(ImGui.GetTime());
             _bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
             

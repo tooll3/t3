@@ -215,40 +215,28 @@ namespace T3
             // Create instance of project op, all children are create automatically
             _project = demoSymbol.CreateInstance(Guid.NewGuid());
             _evalContext = new EvaluationContext();
-            
-            var soundtrackDefined = demoSymbol.PlaybackSettings.GetMainSoundtrack(out _soundtrack) && File.Exists(_soundtrack.FilePath);
+
+            var prerenderRequired = false;
             
             // Init wasapi input if required
-            if (demoSymbol.PlaybackSettings is { SyncMode:  PlaybackSettings.SyncModes.ExternalSource } settings)
+            if (demoSymbol.PlaybackSettings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
             {
-                if (!string.IsNullOrEmpty(  settings.AudioInputDeviceName))
+                if (demoSymbol.PlaybackSettings.GetMainSoundtrack(out _soundtrack))
                 {
-                    Bass.Free();
-                    Bass.Init();
-                    WasapiAudioInput.Initialize(settings);
-                    if (soundtrackDefined)
+                    if (File.Exists(_soundtrack.FilePath))
                     {
-                        _playback.Bpm = _soundtrack.Bpm;
-                        Log.Warning("Simultaneous audio analysis from project soundtrack and WASAPI is not support. Muting soundtrack");
-                        soundtrackDefined = false;
-                        _soundtrack = null;
+                        Log.Warning($"Can't find soundtrack {_soundtrack.FilePath}");
                     }
+
+                    _playback.Bpm = _soundtrack.Bpm;
+
+                    // Trigger loading clip
+                    AudioEngine.UseAudioClip(_soundtrack, 0);
+                    AudioEngine.CompleteFrame(_playback); // Initialize
+                    prerenderRequired = true;
                 }
             }
-            
-            if (soundtrackDefined)
-            {
-                _playback.Bpm = _soundtrack.Bpm;
-                
-                // Trigger loading clip
-                AudioEngine.UseAudioClip(_soundtrack, 0);
-                AudioEngine.CompleteFrame(_playback);// Initialize   
-            }
-            // else
-            // {
-            //     _playback.PlaybackSpeed = 0.5f; // Todo: Clarify, if this is a work around for default BPM mismatch 
-            // }
-            
+
             var rasterizerDesc = new RasterizerStateDescription()
                                      {
                                          FillMode = FillMode.Solid,
@@ -259,8 +247,9 @@ namespace T3
             var rasterizerState = new RasterizerState(device, rasterizerDesc);
             
             // Sample some frames to preload all shaders and resources
-            if (soundtrackDefined)
+            if (prerenderRequired)
             {
+                _playback.PlaybackSpeed = 0.1f;
                 for (double timeInSecs = 0; timeInSecs < _soundtrack.LengthInSeconds; timeInSecs += 2.0)
                 {
                     Playback.Current.TimeInSecs = timeInSecs;
@@ -302,6 +291,7 @@ namespace T3
             // Main loop
             RenderLoop.Run(form, () =>
                                  {
+                                     WasapiAudioInput.StartFrame(_playback.Settings);
                                      _playback.Update();
 
                                      Log.Debug($" render at playback time {_playback.TimeInSecs:0.00}s");

@@ -2,7 +2,10 @@
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Operator;
+using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
@@ -19,18 +22,21 @@ namespace T3.Editor.Gui.Windows.TimeLine
 {
     internal static class TimeControls
     {
+
+        
         internal static void DrawTimeControls(TimeLineCanvas timeLineCanvas)
         {
             var playback = Playback.Current; // TODO, this should be non-static eventually
 
+            var composition = GraphCanvas.Current?.CompositionOp;
+            if (composition == null)
+                return;
+            
             // Settings
-            var hasSettings = false;
-            var xxx = GraphCanvas.Current?.CompositionOp;
-            if (xxx?.Symbol.PlaybackSettings !=null && xxx.Symbol.PlaybackSettings.Enabled )
-            {
-                hasSettings = true;
-            }
-            if (CustomComponents.IconButton(Icon.Settings, ControlSize, hasSettings 
+            PlaybackUtils.FindPlaybackSettings(composition, out var compositionWithSettings, out var settings);
+            var opHasSettings = compositionWithSettings == composition;
+            
+            if (CustomComponents.IconButton(Icon.Settings, ControlSize, opHasSettings 
                                                                             ? CustomComponents.ButtonStates.Normal
                                                                             : CustomComponents.ButtonStates.Dimmed))
             {
@@ -125,9 +131,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.SameLine();
             }
 
-            var showBeatTimingControls = playback is BeatTimingPlayback;
-
-            if (showBeatTimingControls)
+            if (settings.Syncing == PlaybackSettings.SyncModes.Tapping)
             {
                 var bpm = BeatTiming.Bpm;
                 if (SingleValueEdit.Draw(ref bpm, new Vector2(100, ControlSize.Y), 1, 360, true, 0.01f, "{0:0.0 BPM}") == InputEditStateFlags.Modified)

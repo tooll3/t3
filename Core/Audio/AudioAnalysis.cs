@@ -14,10 +14,10 @@ namespace T3.Core.Audio
     {
         public static void CompleteFrame(Playback playback)
         {
-            if (playback.Settings is { SyncMode: PlaybackSettings.SyncModes.ExternalSource })
-            {
-                WasapiAudioInput.CompleteFrame();
-            }
+            // if (playback.Settings is { AudioSource: PlaybackSettings.AudioSources.ExternalDevice })
+            // {
+            //     WasapiAudioInput.CompleteFrame();
+            // }
 
             var gainFactor = playback.Settings?.AudioGainFactor ?? 1;
             var lastTargetIndex = -1;

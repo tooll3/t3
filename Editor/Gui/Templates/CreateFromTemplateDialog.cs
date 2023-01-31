@@ -31,7 +31,8 @@ namespace T3.Editor.Gui.Templates
                 ImGui.BeginChild("templates", new Vector2(200, -1));
                 {
                     var windowMin = ImGui.GetWindowPos();
-                    ImGui.GetWindowDrawList().AddRectFilled(windowMin, windowMin + ImGui.GetContentRegionAvail(), T3Style.Colors.DarkGray);                    
+                    ImGui.GetWindowDrawList().AddRectFilled(windowMin, windowMin + ImGui.GetContentRegionAvail(), T3Style.Colors.DarkGray);
+                    FormInputs.ResetIndent();
                     
                     //ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(10,10));
                     //ImGui.PushStyleVar(ImGuiStyleVar.ItemInnerSpacing, new Vector2(4, 4));

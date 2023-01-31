@@ -15,13 +15,14 @@ namespace T3.Core.Operator
     public class PlaybackSettings
     {
         public bool Enabled { get; set; }
-        public float Bpm { get; set; } = 120;
+        public float Bpm  = 120;
         public List<AudioClip> AudioClips { get; private set; } = new();
-        public SyncModes SyncMode;
+        public AudioSources AudioSource;
+        public SyncModes Syncing;
         
         public string AudioInputDeviceName = string.Empty;
         public float AudioGainFactor = 1;
-        public float AudioDecayFactor = 0.98f;
+        public float AudioDecayFactor = 0.9f;
 
         public bool GetMainSoundtrack(out AudioClip soundtrack)
         {
@@ -38,11 +39,18 @@ namespace T3.Core.Operator
             return false;
         }
 
-        public enum SyncModes
+        public enum AudioSources
         {
             ProjectSoundTrack,
-            ExternalSource,
+            ExternalDevice,
         }
+        
+        public enum SyncModes
+        {
+            Timeline,
+            Tapping,
+        }
+
 
         public void WriteToJson(JsonTextWriter writer)
         {
@@ -58,7 +66,8 @@ namespace T3.Core.Operator
 
                 writer.WriteValue(nameof(Enabled), Enabled);
                 writer.WriteValue(nameof(Bpm), Bpm);
-                writer.WriteValue(nameof(SyncMode), SyncMode);
+                writer.WriteValue(nameof(AudioSource), AudioSource);
+                writer.WriteValue(nameof(Syncing), Syncing);
                 writer.WriteValue(nameof(AudioDecayFactor), AudioDecayFactor);
                 writer.WriteValue(nameof(AudioGainFactor), AudioGainFactor);
                 writer.WriteObject(nameof(AudioInputDeviceName), AudioInputDeviceName);
@@ -97,7 +106,8 @@ namespace T3.Core.Operator
             {
                 newSettings.Enabled = Utilities.ReadToken(settingsToken, nameof(Enabled),false);
                 newSettings.Bpm = Utilities.ReadToken(settingsToken, nameof(Bpm), 120f);
-                newSettings.SyncMode = Utilities.ReadEnum<PlaybackSettings.SyncModes>(settingsToken, nameof(SyncMode));
+                newSettings.AudioSource = Utilities.ReadEnum<AudioSources>(settingsToken, nameof(AudioSource));
+                newSettings.Syncing = Utilities.ReadEnum<SyncModes>(settingsToken, nameof(Syncing));
                 newSettings.AudioDecayFactor = Utilities.ReadToken(settingsToken, nameof(AudioDecayFactor),0.5f);
                 newSettings.AudioGainFactor = Utilities.ReadToken(settingsToken, nameof(AudioGainFactor), 1f);
                 newSettings.AudioInputDeviceName = Utilities.ReadToken<string>(settingsToken, nameof(AudioInputDeviceName), null);

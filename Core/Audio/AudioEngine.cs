@@ -113,7 +113,7 @@ namespace T3.Core.Audio
         {
             const int get256FftValues = (int)DataFlags.FFT512;
             
-            if (playback.Settings != null && playback.Settings.SyncMode == PlaybackSettings.SyncModes.ProjectSoundTrack)
+            if (playback.Settings != null && playback.Settings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
             {
                 Bass.ChannelGetData(soundStreamHandle, AudioAnalysis.FftGainBuffer, get256FftValues);
             }

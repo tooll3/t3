@@ -300,11 +300,13 @@ namespace T3.Editor.Gui.Styling
             if (string.IsNullOrEmpty(label))
                 return;
             
-            ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10f);
+            AddVerticalSpace(5);
+            ApplyIndent();
+            //ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10f);
             ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10,20));
             
-            ImGui.Indent(13);
+            //ImGui.Indent(13);
             AddIcon(Icon.Hint);
 
             ImGui.SameLine();

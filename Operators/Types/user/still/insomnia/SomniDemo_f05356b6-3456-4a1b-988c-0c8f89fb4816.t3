@@ -7499,7 +7499,8 @@
   "PlaybackSettings": {
     "Enabled": true,
     "Bpm": 165.0,
-    "SyncMode": 0,
+    "AudioSource": 0,
+    "Syncing": 0,
     "AudioDecayFactor": 0.98,
     "AudioGainFactor": 1.0,
     "AudioInputDeviceName": "",

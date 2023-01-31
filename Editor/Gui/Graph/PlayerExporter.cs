@@ -175,7 +175,7 @@ namespace T3.Editor.Gui.Graph
                     var soundtrack = childUi.SymbolChild.Symbol.PlaybackSettings.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
                     if (soundtrack == null)
                     {
-                        if (SoundtrackUtils.TryFindingSoundtrack(instance, out var otherSoundtrack))
+                        if (PlaybackUtils.TryFindingSoundtrack(instance, out var otherSoundtrack))
                         {
                             Log.Warning($"You should define soundtracks withing the exported operators. Falling back to {otherSoundtrack.FilePath} set in parent...");
                             resourcePaths.Add(otherSoundtrack.FilePath);
