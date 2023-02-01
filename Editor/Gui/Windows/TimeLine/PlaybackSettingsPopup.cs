@@ -267,7 +267,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 var found = false;
 
-                if (ImGui.BeginCombo("##CameraSelection", settings.AudioInputDeviceName, ImGuiComboFlags.HeightLarge))
+                if (ImGui.BeginCombo("##SelectDevice", settings.AudioInputDeviceName, ImGuiComboFlags.HeightLarge))
                 {
                     foreach (var d in WasapiAudioInput.InputDevices)
                     {
@@ -349,8 +349,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 
                 if (settings.AudioClips.Count > 0)
                 {
+                    Bass.Configure(Configuration.UpdateThreads, true);
                     Bass.Free();
                     Bass.Init();
+                    Bass.Start();
                     Playback.Current.Bpm = settings.AudioClips[0].Bpm;
                 }
 
