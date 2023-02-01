@@ -43,7 +43,8 @@ namespace T3.Editor.Gui
             WindowManager.TryToInitialize();
             ExampleSymbolLinking.UpdateExampleLinks();
             VariationHandling.Init();
-            
+
+            Playback.Current = DefaultTimelinePlayback;
         }
 
         public static Playback DefaultPlayback = new();
