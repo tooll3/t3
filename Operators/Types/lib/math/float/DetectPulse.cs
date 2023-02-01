@@ -16,9 +16,13 @@ namespace T3.Operators.Types.Id_7ff47023_622e_4834_8de5_2438d56c09bd
         [Output(Guid = "b3254af8-03c6-41af-a775-5724aaaa91ef")]
         public readonly Slot<bool> HasChanged = new();
         
+        [Output(Guid = "637DDDDA-A2D9-4E13-9EE3-9CB3790A103A")]
+        public readonly Slot<float> DebugValue = new();
+        
         public DetectPulse()
         {
             HasChanged.UpdateAction = Update;
+            DebugValue.UpdateAction = Update;
         }
 
         private void Update(EvaluationContext context)
@@ -31,18 +35,23 @@ namespace T3.Operators.Types.Id_7ff47023_622e_4834_8de5_2438d56c09bd
             if (hasTimeDecreased)
                 _lastHitTime = 0;
             
-            var deltaToDamped = MathF.Abs(_dampedValue - newValue);
+            var deltaToDamped = _dampedValue - newValue;
             
             var dampFactor = Damping.GetValue(context).Clamp(0,1);
             _dampedValue = MathUtils.Lerp(newValue, _dampedValue, dampFactor);
 
+            DebugValue.Value = deltaToDamped;
+            
             var exceedsThreshold = deltaToDamped > threshold;
             var wasTriggered = MathUtils.WasTriggered(exceedsThreshold, ref _wasHit);
 
             var isHit = false;
             var timeSinceLastHit = context.LocalFxTime - _lastHitTime;
+            
+            Log.Debug($"{deltaToDamped}  triggered: {wasTriggered}  delta: {deltaToDamped}");
             if (wasTriggered && timeSinceLastHit >= minTimeBetweenHits)
             {
+                
                 if (timeSinceLastHit >= minTimeBetweenHits)
                 {
                     _lastHitTime = context.LocalFxTime;
@@ -53,7 +62,7 @@ namespace T3.Operators.Types.Id_7ff47023_622e_4834_8de5_2438d56c09bd
             HasChanged.Value = isHit;
         }
 
-        private double _lastHitTime;
+        private double _lastHitTime = Double.NegativeInfinity;
         private bool _wasHit;
         private float _dampedValue;
 

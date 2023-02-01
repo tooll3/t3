@@ -211,12 +211,15 @@ namespace T3
                             {
                                 Settings = demoSymbol.PlaybackSettings
                             };
-
+            
             // Create instance of project op, all children are create automatically
             _project = demoSymbol.CreateInstance(Guid.NewGuid());
             _evalContext = new EvaluationContext();
 
             var prerenderRequired = false;
+            
+            Bass.Free();
+            Bass.Init();
             
             // Init wasapi input if required
             if (demoSymbol.PlaybackSettings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
@@ -225,15 +228,17 @@ namespace T3
                 {
                     if (File.Exists(_soundtrack.FilePath))
                     {
-                        Log.Warning($"Can't find soundtrack {_soundtrack.FilePath}");
+                        _playback.Bpm = _soundtrack.Bpm;
+                        // Trigger loading clip
+                        AudioEngine.UseAudioClip(_soundtrack, 0);
+                        AudioEngine.CompleteFrame(_playback); // Initialize
+                        prerenderRequired = true;
                     }
-
-                    _playback.Bpm = _soundtrack.Bpm;
-
-                    // Trigger loading clip
-                    AudioEngine.UseAudioClip(_soundtrack, 0);
-                    AudioEngine.CompleteFrame(_playback); // Initialize
-                    prerenderRequired = true;
+                    else
+                    {
+                        Log.Warning($"Can't find soundtrack {_soundtrack.FilePath}");
+                        _soundtrack = null;
+                    }
                 }
             }
 
@@ -285,6 +290,7 @@ namespace T3
             _playback.TimeInBars = 0;
             _playback.PlaybackSpeed = 1.0;
 
+
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
@@ -293,7 +299,7 @@ namespace T3
                                  {
                                      WasapiAudioInput.StartFrame(_playback.Settings);
                                      _playback.Update();
-
+                                     
                                      Log.Debug($" render at playback time {_playback.TimeInSecs:0.00}s");
                                      if (_soundtrack != null)
                                      {

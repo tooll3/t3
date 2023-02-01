@@ -8,12 +8,12 @@
       "DefaultValue": 1.0
     },
     {
-      "Id": "4424863b-b25c-449a-8ac9-16796617af7b"/*Damping*/,
-      "DefaultValue": 0.95
-    },
-    {
       "Id": "b9a322a3-b85d-4e51-ad1c-17d61a6f5f5e"/*Threshold*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "4424863b-b25c-449a-8ac9-16796617af7b"/*Damping*/,
+      "DefaultValue": 0.95
     },
     {
       "Id": "2cf8d9e3-a984-4760-88cd-5dc2c8b66d7b"/*MinTimeBetweenHits*/,

@@ -47,7 +47,8 @@ namespace T3.Editor.Gui
             Playback.Current = DefaultTimelinePlayback;
         }
 
-        public static Playback DefaultPlayback = new();
+        public static readonly Playback DefaultTimelinePlayback = new();
+        public static readonly BeatTimingPlayback DefaultBeatTimingPlayback = new BeatTimingPlayback();
         
         private void InitializeAfterAppWindowReady()
         {
@@ -67,17 +68,22 @@ namespace T3.Editor.Gui
             RenderStatsCollector.StartNewFrame();
             
             PlaybackUtils.UpdatePlaybackForCurrentComposition();
-            
-            BeatTiming.Update(ImGui.GetTime());
-            _bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
+
+            if (Playback.Current.Settings.Syncing == PlaybackSettings.SyncModes.Tapping)
+            {
+                BeatTiming.Update(ImGui.GetTime());
+                
+                if (ForwardBeatTaps.BeatTapTriggered)
+                    BeatTiming.TriggerSyncTap();
+
+                if (ForwardBeatTaps.ResyncTriggered)
+                    BeatTiming.TriggerResyncMeasure();
+            }
+            //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
             
             AudioEngine.CompleteFrame(Playback.Current);    // Update
             
-            if (ForwardBeatTaps.BeatTapTriggered)
-                BeatTiming.TriggerSyncTap();
 
-            if (ForwardBeatTaps.ResyncTriggered)
-                BeatTiming.TriggerResyncMeasure();
 
             AutoBackup.AutoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
             OpenedPopUpName = string.Empty;

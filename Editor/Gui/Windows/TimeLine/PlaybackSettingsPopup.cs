@@ -20,7 +20,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 {
     public static class PlaybackSettingsPopup
     {
-        public static void DrawPlaybackSettings(ref Playback playback)
+        public static void DrawPlaybackSettings()
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(2, 2));
@@ -107,18 +107,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             if (FormInputs.AddSegmentedButton(ref settings.AudioSource, "Audio Source"))
             {
-                if (settings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
-                {
-                    Playback.Current = T3Ui.DefaultPlayback;
-                    playback = T3Ui.DefaultPlayback;
-
-                    if (settings.AudioClips.Count > 0)
-                    {
-                        playback.Bpm = settings.AudioClips[0].Bpm;
-                    }
-
-                    UserSettings.Config.ShowTimeline = true;
-                }
+                UpdatePlaybackAndTimeline(settings);
             }
 
             FormInputs.AddVerticalSpace();
@@ -174,7 +163,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                             "In T3 animation units are in bars.\nThe BPM rate controls the animation speed of your project.",
                                             120))
                     {
-                        playback.Bpm = soundtrack.Bpm;
                         Playback.Current.Bpm = soundtrack.Bpm;
                         settings.Bpm = soundtrack.Bpm;
                     }
@@ -220,15 +208,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 if (FormInputs.AddSegmentedButton(ref settings.Syncing, "Sync Mode"))
                 {
-                    if(settings.Syncing == PlaybackSettings.SyncModes.Tapping)
-                    {
-                        UserSettings.Config.ShowTimeline = false;
-                        UserSettings.Config.EnableIdleMotion = true;
-                    }
-                    else
-                    {
-                        UserSettings.Config.ShowTimeline = true;
-                    }
+                    UpdatePlaybackAndTimeline(settings);
                 }
 
                 if (settings.Syncing == PlaybackSettings.SyncModes.Tapping)
@@ -250,11 +230,11 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 }
 
                 
-                var isInitialized = playback is BeatTimingPlayback;
-                if (!isInitialized)
-                {
-                    playback = new BeatTimingPlayback();
-                }
+                // var isInitialized = playback is BeatTimingPlayback;
+                // if (!isInitialized)
+                // {
+                //     playback = new BeatTimingPlayback();
+                // }
 
                 FormInputs.AddFloat("AudioGain", ref settings.AudioGainFactor , 0.01f, 100, 0.01f, true,
                                     "Can be used to adjust the input signal (e.g. in live situation where the input level might vary.",
@@ -287,7 +267,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 var found = false;
 
-                if (ImGui.BeginCombo("##CameraSelection", settings.AudioInputDeviceName, ImGuiComboFlags.HeightLarge))
+                if (ImGui.BeginCombo("##SelectDevice", settings.AudioInputDeviceName, ImGuiComboFlags.HeightLarge))
                 {
                     foreach (var d in WasapiAudioInput.InputDevices)
                     {
@@ -359,6 +339,40 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             ImGui.EndPopup();
             ImGui.PopStyleVar(2);
+        }
+
+        private static void UpdatePlaybackAndTimeline(PlaybackSettings settings)
+        {
+            if (settings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
+            {
+                Playback.Current = T3Ui.DefaultTimelinePlayback;
+                
+                if (settings.AudioClips.Count > 0)
+                {
+                    Bass.Configure(Configuration.UpdateThreads, true);
+                    Bass.Free();
+                    Bass.Init();
+                    Bass.Start();
+                    Playback.Current.Bpm = settings.AudioClips[0].Bpm;
+                }
+
+                UserSettings.Config.ShowTimeline = true;
+            }
+            else
+            {
+                if (settings.Syncing == PlaybackSettings.SyncModes.Tapping)
+                {
+                    Playback.Current = T3Ui.DefaultBeatTimingPlayback;
+                    UserSettings.Config.ShowTimeline = false;
+                    UserSettings.Config.EnableIdleMotion = true;
+                
+                }
+                else
+                {
+                    Playback.Current = T3Ui.DefaultTimelinePlayback;
+                    UserSettings.Config.ShowTimeline = true;
+                }
+            }
         }
 
         private static void UpdateBpmFromSoundtrackConfig(AudioClip audioClip)
