@@ -118,12 +118,12 @@ namespace T3.Core.Audio
 
             ActiveInputDeviceName = device.DeviceInfo.Name;
             var result = BassWasapi.Start();
-            Log.Debug("Wasapi.StartInputCapture() -> BassWasapi.Start():" + result);
+            //Log.Debug("Wasapi.StartInputCapture() -> BassWasapi.Start():" + result);
         }
         
         private static void Stop()
         {
-            Log.Debug("Wasapi.Stop()");
+            //Log.Debug("Wasapi.Stop()");
             BassWasapi.Stop();
             BassWasapi.Free();
             ActiveInputDeviceName = null;
@@ -158,7 +158,7 @@ namespace T3.Core.Audio
 
         private static int Process(IntPtr buffer, int length, IntPtr user)
         {
-            Log.Debug("Wasapi.Process() #1");
+            //Log.Debug("Wasapi.Process() #1");
             var level = BassWasapi.GetLevel();
             if (length < 3000)
                 return length;
@@ -169,12 +169,12 @@ namespace T3.Core.Audio
             if (_fftUpdatesSinceLastFrame == 0)
             {
                 resultCode = BassWasapi.GetData(AudioAnalysis.FftGainBuffer, (int)(AudioAnalysis.BassFlagForFftBufferSize | DataFlags.FFTRemoveDC));
-                Log.Debug("Wasapi.Process() Result code after first update:" +resultCode);
+                //Log.Debug("Wasapi.Process() Result code after first update:" +resultCode);
             }
             else
             {
                 resultCode = BassWasapi.GetData(_fftIntermediate, (int)(AudioAnalysis.BassFlagForFftBufferSize | DataFlags.FFTRemoveDC));
-                Log.Debug("Wasapi.Process() Result code after another update:" +resultCode);
+                //Log.Debug("Wasapi.Process() Result code after another update:" +resultCode);
                 if (resultCode >= 0)
                 {
                     for (var i = 0; i < AudioAnalysis.FftHalfSize; i++)
