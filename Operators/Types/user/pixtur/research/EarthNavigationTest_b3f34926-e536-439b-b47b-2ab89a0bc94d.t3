@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "f5b2a750-9c2e-488f-90cd-9905e75382a7"/*Longitude*/,
-      "DefaultValue": 6004.8477
+      "DefaultValue": 0.0
     },
     {
       "Id": "5cc61c18-e4d2-4042-8a30-06dc107d864f"/*Latitude*/,
@@ -37,7 +37,7 @@
     },
     {
       "Id": "9305e2f7-b51c-4a99-a462-948cec25c4c0"/*EarthRadius*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 100.0
     },
     {
       "Id": "c0dbc42d-bf79-417b-af75-840611eba4c5"/*Translation*/,

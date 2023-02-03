@@ -26,7 +26,7 @@
         "Y": 90.0
       },
       "Min": 0.0,
-      "Max": 200.0,
+      "Max": 300.0,
       "Scale": 1.0,
       "Clamp": true
     },
@@ -118,6 +118,34 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "8dbfc03f-7dcf-42eb-a8b1-301c0085bf40"/*P1*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    },
+    {
+      "OutputId": "71e2ef72-12ca-4705-9f9c-9cda4256fae2"/*P2*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
+      }
+    },
+    {
+      "OutputId": "3187b8b8-2d08-480d-9975-a09ae9eb140c"/*P3*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 300.0
+      }
+    },
+    {
+      "OutputId": "f5244e55-9520-44c2-80e8-98bc3b97bc7f"/*P4*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 400.0
       }
     }
   ]
