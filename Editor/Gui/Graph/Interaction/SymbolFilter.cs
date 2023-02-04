@@ -227,7 +227,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             if (pascalCaseMatch)
             {
-                relevancy *= 4.5f;
+                relevancy *= 5f;
             }
 
             if (!string.IsNullOrEmpty(symbolUi.Symbol.Namespace))

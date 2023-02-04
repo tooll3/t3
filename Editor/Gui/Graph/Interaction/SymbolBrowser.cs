@@ -7,7 +7,6 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Resource;
-using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.InputUi;
@@ -80,10 +79,10 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                 ImGui.SetNextWindowFocus();
 
-                Vector2 browserPositionInWindow = posInWindow + BrowserPositionOffset;
-                Vector2 browserSize = _resultListSize * T3Ui.UiScaleFactor;
+                var browserPositionInWindow = posInWindow + BrowserPositionOffset;
+                var browserSize = ResultListSize;
 
-                ShiftPositionToFitOnCanvas(ref browserPositionInWindow, ref browserSize);
+                ClampPanelToCanvas(ref browserPositionInWindow, ref browserSize);
 
                 ImGui.SetCursorPos(browserPositionInWindow);
 
@@ -105,7 +104,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                     if (_filter.PresetFilterString != null)
                     {
                         AdvanceSelectedItem(_matchingPresets, ref _selectedPreset, 0);
-                        DrawPresetPanel(browserPositionInWindow, browserSize);
+                        DrawPresetPanel(browserPositionInWindow, new Vector2(140, browserSize.Y));
                     }
                     else
                     {
@@ -181,19 +180,9 @@ namespace T3.Editor.Gui.Graph.Interaction
                 PosOnCanvas += GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
             }
         }
+        
 
-        // private void AdvanceSelectedSymbol(SymbolUi currentSelectedSymbolUi, int offset)
-        // {
-        //     if (_filter.MatchingSymbolUis.Count == 0)
-        //         return;
-        //
-        //     var index = _filter.MatchingSymbolUis.IndexOf(currentSelectedSymbolUi);
-        //     var newIndex = WrapIndex(index, offset, _filter.MatchingSymbolUis.Count);
-        //     _selectedSymbolUi = _filter.MatchingSymbolUis[newIndex];
-        //     _selectedItemWasChanged = true;
-        // }
-
-        private void AdvanceSelectedItem<T>(List<T> list, ref T currentItem, int offset)
+        private static void AdvanceSelectedItem<T>(List<T> list, ref T currentItem, int offset)
         {
             if (list.Count == 0)
             {
@@ -370,7 +359,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.PopFont();
         }
 
-        private static void ShiftPositionToFitOnCanvas(ref Vector2 position, ref Vector2 size)
+        private static void ClampPanelToCanvas(ref Vector2 position, ref Vector2 size)
         {
             var maxXPos = position.X + size.X;
             var maxYPos = position.Y + size.Y;
@@ -475,15 +464,11 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
 
             ImGui.PopStyleVar();
-
-            // _descriptionPanelHovered = ImGui.IsItemHovered();
-            // if (_descriptionPanelHovered)
-            //     _timeDescriptionSymbolUiLastHovered = DateTime.Now;
         }
 
         private static bool TryFindValidPanelPosition(ref Vector2 position, Vector2 size)
         {
-            var maxXPos = position.X + size.X * 2;
+            var maxXPos = position.X + size.X + ResultListSize.X;
             var wouldExceedWindowBounds = maxXPos >= GraphCanvas.Current.WindowSize.X;
 
             if (wouldExceedWindowBounds)
@@ -575,7 +560,11 @@ namespace T3.Editor.Gui.Graph.Interaction
             // Select new node
             var symbolUi = SymbolUiRegistry.Entries[parent.Id];
             var newChildUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
-
+            if (newChildUi == null)
+            {
+                Log.Warning("Unable to create new operator");
+                return;
+            }
             var newInstance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == newChildUi.Id);
 
             var presetPool = VariationHandling.GetOrLoadVariations(_selectedSymbolUi.Symbol.Id);
@@ -668,12 +657,10 @@ namespace T3.Editor.Gui.Graph.Interaction
         private ImDrawListPtr _drawList;
         private bool _selectedItemChanged;
 
-        private static readonly Vector2 _resultListSize = new Vector2(250, 300);
+        private static Vector2 ResultListSize => new Vector2(250, 300) * T3Ui.UiScaleFactor;
         private readonly Vector4 _namespaceColor = new Color(1, 1, 1, 0.4f);
 
         private SymbolUi _selectedSymbolUi;
-        private bool _descriptionPanelHovered;
-        private DateTime _timeDescriptionSymbolUiLastHovered;
         private static readonly int _uiId = "DraftNode".GetHashCode();
         private readonly List<Variation> _matchingPresets = new();
     }
