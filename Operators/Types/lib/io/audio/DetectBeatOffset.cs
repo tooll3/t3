@@ -38,8 +38,8 @@ namespace T3.Operators.Types.Id_1fa651c8_ab73_4ca0_9506_84602bbf2fcb
         
         private void Update(EvaluationContext context)
         {
-            var fft = FftInput.GetValue(context);
-            if (fft == null || fft.Count == 0)
+            var inputFft = FftInput.GetValue(context);
+            if (inputFft == null || inputFft.Count == 0)
             {
                 return;
             }
@@ -50,26 +50,30 @@ namespace T3.Operators.Types.Id_1fa651c8_ab73_4ca0_9506_84602bbf2fcb
             
             _lastEvalTime = Playback.RunTimeInSecs;
 
-            const float assumedFrameCount = 10f;
+            const float assumedFrameRate = 60f;
             var timeSinceLastUpdate = Playback.LastFrameDuration;
-            var fillCount =  (int)Math.Round(timeSinceLastUpdate / (1 / assumedFrameCount) - 0.5f) + 1; 
+            //var fillCount =  (int)Math.Round(timeSinceLastUpdate / (1 / assumedFrameRate) - 0.5f) + 1; 
             
-            var historyDurationInSecs = 20f;
-            var maxFftHistoryLength =  (int)(assumedFrameCount * historyDurationInSecs);
+            var historyDurationInSecs = 16f;
+            var maxFftHistoryLength =  (int)(assumedFrameRate * historyDurationInSecs);
 
             var currentTime = context.Playback.TimeInSecs;
-            var maxValueCount = 20;
+            var maxValueCount = 8;
 
-            if (fft.Count < maxValueCount)
+            if (inputFft.Count < maxValueCount)
+            {
                 return;
+            }
+            
+            //Log.Debug("her",this);
             
             // Down sample
             var values = new float[maxValueCount];
-            var delta = (fft.Count / (float)maxValueCount);
+            var delta = (inputFft.Count / (float)maxValueCount);
             var sourceIndex = 0f;
-            for (var valueIndex = 0; valueIndex < maxValueCount && sourceIndex <= fft.Count; valueIndex++)
+            for (var valueIndex = 0; valueIndex < maxValueCount && sourceIndex <= inputFft.Count; valueIndex++)
             {
-                values[valueIndex] = fft[(int)sourceIndex];
+                values[valueIndex] = inputFft[(int)sourceIndex];
                 sourceIndex += delta;
             }
 
@@ -79,38 +83,39 @@ namespace T3.Operators.Types.Id_1fa651c8_ab73_4ca0_9506_84602bbf2fcb
                 _slicesForSmoothing.RemoveRange(smoothWindow , _slicesForSmoothing.Count - smoothWindow );
             
             // Smooth
-            var smoothedValues = new float[maxValueCount];
-            for (var valueIndex = 0; valueIndex < maxValueCount; valueIndex++)
-            {
-                var s = 0f;
-                for (var smoothIndex = 0; smoothIndex < _slicesForSmoothing.Count; smoothIndex++)
-                {
-                    s += _slicesForSmoothing[smoothIndex][valueIndex];
-                }
-                smoothedValues[valueIndex] = s / _slicesForSmoothing.Count;
-            }
+            // var smoothedValues = new float[maxValueCount];
+            // for (var valueIndex = 0; valueIndex < maxValueCount; valueIndex++)
+            // {
+            //     var s = 0f;
+            //     for (var smoothIndex = 0; smoothIndex < _slicesForSmoothing.Count; smoothIndex++)
+            //     {
+            //         s += _slicesForSmoothing[smoothIndex][valueIndex];
+            //     }
+            //     smoothedValues[valueIndex] = s / _slicesForSmoothing.Count;
+            // }
             
             _fftHistory.Insert(0, new TimeEntry()
                                       {
                                           Time= currentTime,
-                                          FftValues= smoothedValues,
+                                          FftValues= values,
                                       });
             
-            // Clamp length of buffer            
+            // Clamp history to length of buffer            
             if(_fftHistory.Count >= maxFftHistoryLength)
                 _fftHistory.RemoveRange(maxFftHistoryLength , _fftHistory.Count - maxFftHistoryLength);
+
+            var durationOfMeasure = context.Playback.SecondsFromBars(4);
+            var sliceIndexForBar = (int)(durationOfMeasure * assumedFrameRate);
             
-            var sliceCountForBar = (int)(Playback.Current.SecondsFromBars(8) * assumedFrameCount);
-            
-            Log.Debug($"Slice count {sliceCountForBar}");
-            var shiftCount = 50;
+            //Log.Debug($"Slice count {sliceIndexForBar} {durationOfMeasure:0.00} {context.Playback.Bpm}");
+            var shiftCount = 25;
             
             _results.Clear();
             var min = float.PositiveInfinity;
             var max = float.NegativeInfinity;
             for (var shiftIndex = - shiftCount / 2; shiftIndex < shiftCount /2; shiftIndex++)
             {
-                var energyDifference = GetEnergyDifference(shiftIndex + sliceCountForBar, sliceCountForBar * 2);
+                var energyDifference = GetEnergyDifference(shiftIndex + sliceIndexForBar, sliceIndexForBar * 2);
                 min = MathF.Min(energyDifference, min);
                 max = MathF.Max(energyDifference, max);
                 _results.Add(energyDifference );

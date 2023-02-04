@@ -24,8 +24,8 @@ namespace T3.Editor.Gui.Audio
                 }
             }
 
-            Playback.Current.Update(UserSettings.Config.EnableIdleMotion);
             Playback.Current.Bpm = settings.Bpm;
+            Playback.Current.Update(UserSettings.Config.EnableIdleMotion);
             Playback.Current.Settings = settings;
         }
 
