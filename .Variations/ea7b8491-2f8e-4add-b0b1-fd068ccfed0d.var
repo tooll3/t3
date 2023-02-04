@@ -60,6 +60,22 @@
           "4cf5d20b-7335-4584-b246-c260ac5cdf4f": 10
         }
       }
+    },
+    {
+      "Id": "57dff4f6-0a29-4d8f-902b-2f2e9ba92f8d",
+      "IsPreset": true,
+      "ActivationIndex": 5,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "4cf5d20b-7335-4584-b246-c260ac5cdf4f": 0,
+          "79917ef7-64ca-4825-9c6a-c9b2a7f6ff86": 15.0
+        }
+      }
     }
   ]
 }

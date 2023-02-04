@@ -1,0 +1,53 @@
+{
+  "Id": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
+  "Variations": [
+    {
+      "Id": "1007809f-bc3a-4f4b-8e7b-4256db021948",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Plan XY",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "6de4f08a-5834-4b9b-93e8-8f93fe32164c": 1,
+          "9748853e-5f13-45c9-bca6-d07b07185aab": 0
+        }
+      }
+    },
+    {
+      "Id": "7284619d-c2b9-40d1-867f-045131a8a990",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Rect XY",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "6de4f08a-5834-4b9b-93e8-8f93fe32164c": 1,
+          "9748853e-5f13-45c9-bca6-d07b07185aab": 1
+        }
+      }
+    },
+    {
+      "Id": "8e073661-9f9c-46c9-b1b0-1b32ef2f76ba",
+      "IsPreset": true,
+      "ActivationIndex": 3,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8c46fc72-8960-4247-a5ef-dd38f822f1bb": 1,
+          "6de4f08a-5834-4b9b-93e8-8f93fe32164c": 1
+        }
+      }
+    }
+  ]
+}

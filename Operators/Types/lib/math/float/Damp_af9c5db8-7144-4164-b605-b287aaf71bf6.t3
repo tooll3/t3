@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "795aca79-dd10-4f28-a290-a30e7b27b436"/*Value*/,
-      "DefaultValue": 29.0
+      "DefaultValue": 0.0
     },
     {
       "Id": "f29d5426-5e31-4c7c-be77-5e45bfb9daa9"/*Damping*/,
