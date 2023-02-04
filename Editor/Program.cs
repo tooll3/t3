@@ -26,7 +26,6 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using Device = SharpDX.Direct3D11.Device;
-using Point = System.Drawing.Point;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor

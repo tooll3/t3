@@ -14,12 +14,12 @@ using T3.Editor.Gui.Windows.Variations;
 namespace T3.Editor.Gui.Interaction.Variations.Model
 {
     /// <summary>
-    /// Base class for serialization 
+    /// Base class for serialization of presents and snapshots
     /// </summary>
     public class Variation : ISelectableCanvasObject
     {
         // Serialized fields...
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
         public string Title;
         public int ActivationIndex;
         public bool IsPreset;

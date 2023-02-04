@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Editor.Gui.Interaction.Variations;
+using T3.Editor.Gui.Interaction.Variations.Model;
 
 namespace T3.Editor.Gui.Graph.Interaction
 {
@@ -12,60 +14,88 @@ namespace T3.Editor.Gui.Graph.Interaction
     /// </summary>
     public class SymbolFilter
     {
-        public string SearchString; // not a property to allow ref passing
-        public Type FilterInputType { get; set; }
-        public Type FilterOutputType { get; set; }
-        public bool OnlyMultiInputs { get; set; }
-
-        public void UpdateIfNecessary(bool forceUpdate = false)
-        {
-            var needsUpdate = forceUpdate;
-            
-            if (_currentSearchString != SearchString)
+        public string SearchString;  // not a property to allow ref passing
+        public Type FilterInputType {
+            get => _inputType;
+            set
             {
-                _currentSearchString = SearchString;
-                var pattern = string.Join(".*", _currentSearchString.ToCharArray());
-                try
-                {
-                    _currentRegex = new Regex(pattern, RegexOptions.IgnoreCase);
-                }
-                catch (ArgumentException)
-                {
-                    Log.Debug("Invalid Regex format: " + pattern);
-                    return;
-                }
-
-                needsUpdate = true;
+                _needsUpdate = true;
+                _inputType = value;
             }
-
-            if (_inputType != FilterInputType)
+        }
+        public Type FilterOutputType {
+            get => _outputType;
+            set
             {
-                _inputType = FilterInputType;
-                needsUpdate = true;
+                _needsUpdate = true;
+                _outputType = value;
             }
-
-            if (_outputType != FilterOutputType)
-            {
-                _outputType = FilterOutputType;
-                needsUpdate = true;
-            }
-
-            if (needsUpdate)
-            {
-                UpdateConnectSlotHashes();
-                UpdateMatchingSymbols();
-            }
-
-            WasUpdated = needsUpdate;
         }
 
-        private Type _inputType;
-        private Type _outputType;
-        public bool WasUpdated;
+        public bool OnlyMultiInputs { get; set; }
+        public List<SymbolUi> MatchingSymbolUis { get; private set; } = new();
+        //public List<Variation> MatchingPresets { get; } = new();
+        public SymbolVariationPool PresetPool { get; private set; }
+        
+        public void UpdateIfNecessary(bool forceUpdate = false)
+        {
+            _needsUpdate |= forceUpdate;
+            _needsUpdate |= UpdateFilters(SearchString, 
+                                              ref _lastSearchString, 
+                                              ref _symbolFilterString, 
+                                              ref PresetFilterString, 
+                                              ref _currentRegex);
+            
+            if (_needsUpdate)
+            {
+                //UpdateConnectSlotHashes();
+                UpdateMatchingSymbols();
 
-        private static int _sourceInputHash;
-        private int _targetInputHash;
+            }
 
+            WasUpdated = _needsUpdate;
+            _needsUpdate = false;
+        }
+
+        private static bool UpdateFilters(string search, 
+                                          ref string lastSearch, ref string symbolFilter, ref string presetFilter, ref Regex searchRegex)
+        {
+            if (search == lastSearch)
+                return false;
+            
+            lastSearch = search;
+            
+            // Check if template search was initiated 
+            var twoPartSearchResult = new Regex(@"(.+?)\s+(.*)").Match(search);
+            if (twoPartSearchResult.Success)
+            {
+                symbolFilter = twoPartSearchResult.Groups[1].Value;
+                presetFilter = twoPartSearchResult.Groups[2].Value;
+            }
+            else
+            {
+                symbolFilter = search;
+                presetFilter = null;
+            }
+            
+            var pattern = string.Join(".*", symbolFilter.ToCharArray());
+            try
+            {
+                searchRegex = new Regex(pattern, RegexOptions.IgnoreCase);
+            }
+            catch (ArgumentException)
+            {
+                Log.Debug("Invalid Regex format: " + pattern);
+                return true;
+            }
+
+            return true;
+        }        
+        
+        /// <summary>
+        /// Build hashes for symbol specific input slots. These are then used
+        /// the compute relevancy. 
+        /// </summary>
         private void UpdateConnectSlotHashes()
         {
             _sourceInputHash = 0;
@@ -86,6 +116,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
         }
 
+        
         private void UpdateMatchingSymbols()
         {
             var composition = NodeSelection.GetSelectedComposition();
@@ -118,15 +149,15 @@ namespace T3.Editor.Gui.Graph.Interaction
                 }
 
                 if (!(_currentRegex.IsMatch(symbolUi.Symbol.Name)
-                      || symbolUi.Symbol.Namespace.Contains(SearchString, StringComparison.InvariantCultureIgnoreCase)
+                      || symbolUi.Symbol.Namespace.Contains(_symbolFilterString, StringComparison.InvariantCultureIgnoreCase)
                       || (!string.IsNullOrEmpty(symbolUi.Description)
-                          && symbolUi.Description.Contains(SearchString, StringComparison.InvariantCultureIgnoreCase))))
+                          && symbolUi.Description.Contains(_symbolFilterString, StringComparison.InvariantCultureIgnoreCase))))
                     continue;
 
                 MatchingSymbolUis.Add(symbolUi);
             }
 
-            MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _currentSearchString, ""))
+            MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _symbolFilterString, ""))
                                                  .Reverse()
                                                  .Take(30)
                                                  .ToList();
@@ -160,7 +191,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (!string.IsNullOrEmpty(symbolUi.Description)
                 && symbolUi.Description.Contains(query, StringComparison.InvariantCultureIgnoreCase))
             {
-                relevancy *= 1.5f;
+                relevancy *= 1.01f;
             }
 
             if (symbolName.Equals(query, StringComparison.InvariantCultureIgnoreCase))
@@ -196,7 +227,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             if (pascalCaseMatch)
             {
-                relevancy *= 2.5f;
+                relevancy *= 4.5f;
             }
 
             if (!string.IsNullOrEmpty(symbolUi.Symbol.Namespace))
@@ -281,9 +312,19 @@ namespace T3.Editor.Gui.Graph.Interaction
             return relevancy;
         }
 
-        public List<SymbolUi> MatchingSymbolUis { get; private set; } = new List<SymbolUi>();
+        
+        private bool _needsUpdate;
+        private string _symbolFilterString;
+        public string PresetFilterString;
+
+        private Type _inputType;
+        private Type _outputType;
+        public bool WasUpdated;
+
+        private static int _sourceInputHash;
+        private int _targetInputHash;
 
         private Regex _currentRegex;
-        private string _currentSearchString;
+        private string _lastSearchString;
     }
 }

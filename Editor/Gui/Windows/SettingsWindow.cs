@@ -122,10 +122,6 @@ namespace T3.Editor.Gui.Windows
                                                                ref UserSettings.Config.TooltipDelay,
                                                                0.0f, 30f, 0.01f, true);        
                 
-                changed |= FormInputs.AddCheckBox("Always show description in Symbol Browser",
-                                                               ref UserSettings.Config.AlwaysShowDescriptionPanel,
-                                                               "Shifts the Description panel to the left of the Symbol Browser when\n" +
-                                                               "it is too close to the right edge of the screen to display it.");
                 ImGui.TreePop();
             }
             if (changed)

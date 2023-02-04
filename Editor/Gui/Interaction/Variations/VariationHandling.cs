@@ -23,9 +23,9 @@ namespace T3.Editor.Gui.Interaction.Variations
     /// These input slots can also include the symbols out inputs which thus can be used for defining
     /// and applying "presets" to instances of that symbol.
     ///
-    /// Most variations will modify(!) the symbol. This is great while working within a single symbol
+    /// Most variations will modify(!) the parent symbol. This is great while working within a single symbol
     /// and tweaking an blending parameters. However it's potentially unintended (or dangerous) if the
-    /// modified symbol has many instances. That's why applying symbol-variations is restricted for Symbols
+    /// modified symbol has many instances. That's why applying symbol-variations is not allowed for Symbols
     /// in the lib-namespace.  
     /// </remarks>
     public static class VariationHandling
