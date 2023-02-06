@@ -33,7 +33,7 @@
     },
     {
       "Id": "cc6594c9-b6e3-453a-8be0-e3305f2e1309"/*TangentA_WFactor*/,
-      "DefaultValue": 1.0
+      "DefaultValue": 0.0
     },
     {
       "Id": "89f4ac50-b4b8-427c-9770-ef931ce91d1c"/*TangentB*/,
