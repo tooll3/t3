@@ -134,7 +134,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             if (settings.Syncing == PlaybackSettings.SyncModes.Tapping)
             {
                 var bpm = BeatTiming.Bpm;
-                if (SingleValueEdit.Draw(ref bpm, new Vector2(100, ControlSize.Y), 1, 360, true, 0.01f, "{0:0.0 BPM}") == InputEditStateFlags.Modified)
+                if (SingleValueEdit.Draw(ref bpm, new Vector2(100, ControlSize.Y), 1, 360, true, 0.01f, "{0:0.00 BPM}") == InputEditStateFlags.Modified)
                 {
                     BeatTiming.SetBpmRate(bpm);
                 }
@@ -157,12 +157,11 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 }
                 else if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
                 {
-                    Log.Debug("Resync!");
+                    //Log.Debug("Resync!");
                     BeatTiming.TriggerResyncMeasure();
                 }
 
-                CustomComponents.TooltipForLastItem("Click on beat to sync. Tap later once to refine. Click right to sync measure.",
-                                                    KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToStartTime));
+                CustomComponents.TooltipForLastItem("Click on beat to sync. Tap later once to refine. Click right to sync measure.");
 
                 ImGui.SameLine();
 
@@ -196,7 +195,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     || KeyboardBinding.Triggered(UserActions.PlaybackJumpToStartTime)
                     )
                 {
-                    playback.TimeInBars = playback.LoopRange.Start;
+                    playback.TimeInBars = playback.IsLooping ? playback.LoopRange.Start : 0;
                 }
 
                 CustomComponents.TooltipForLastItem("Jump to beginning",

@@ -14,6 +14,10 @@
     {
       "Id": "58b6df86-b02e-4183-9b63-1033c9dff25f"/*TriggerResync*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "2e18ae65-044e-443d-9288-7a9bb6864514"/*SlideSyncTimeOffset*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [],

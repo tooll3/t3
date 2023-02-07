@@ -1,14 +1,17 @@
-﻿using T3.Editor.Gui.Graph;
+﻿using ImGuiNET;
+using T3.Editor.Gui.Graph;
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.Operator;
+using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.UiHelpers;
+using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;
 
 namespace T3.Editor.Gui.Audio
 {
     public static class PlaybackUtils
     {
-        public static void UpdatePlaybackForCurrentComposition()
+        public static void UpdatePlaybackAndSyncing()
         {
             var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
             var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
@@ -23,6 +26,31 @@ namespace T3.Editor.Gui.Audio
                     AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
                 }
             }
+
+            if (settings.AudioSource == PlaybackSettings.AudioSources.ExternalDevice
+                && settings.Syncing == PlaybackSettings.SyncModes.Tapping)
+            {
+                Playback.Current = T3Ui.DefaultBeatTimingPlayback;
+                
+                if (Playback.Current.Settings is { Syncing: PlaybackSettings.SyncModes.Tapping })
+                {
+                    if (ForwardBeatTaps.BeatTapTriggered)
+                        BeatTiming.TriggerSyncTap();
+
+                    if (ForwardBeatTaps.ResyncTriggered)
+                        BeatTiming.TriggerResyncMeasure();
+
+                    BeatTiming.SlideSyncTime = ForwardBeatTaps.SlideSyncTime;
+                    Playback.Current.Settings.Bpm = (float)Playback.Current.Bpm;
+                    
+                    BeatTiming.Update(0);
+                }                
+            }
+            else
+            {
+                Playback.Current = T3Ui.DefaultTimelinePlayback;
+            }
+            
 
             Playback.Current.Bpm = settings.Bpm;
             Playback.Current.Update(UserSettings.Config.EnableIdleMotion);

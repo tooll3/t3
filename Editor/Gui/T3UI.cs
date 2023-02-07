@@ -67,18 +67,9 @@ namespace T3.Editor.Gui
             // Prepare the current frame 
             RenderStatsCollector.StartNewFrame();
             
-            PlaybackUtils.UpdatePlaybackForCurrentComposition();
+            PlaybackUtils.UpdatePlaybackAndSyncing();
 
-            if (Playback.Current.Settings.Syncing == PlaybackSettings.SyncModes.Tapping)
-            {
-                BeatTiming.Update(ImGui.GetTime());
-                
-                if (ForwardBeatTaps.BeatTapTriggered)
-                    BeatTiming.TriggerSyncTap();
 
-                if (ForwardBeatTaps.ResyncTriggered)
-                    BeatTiming.TriggerResyncMeasure();
-            }
             //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
             
             AudioEngine.CompleteFrame(Playback.Current);    // Update

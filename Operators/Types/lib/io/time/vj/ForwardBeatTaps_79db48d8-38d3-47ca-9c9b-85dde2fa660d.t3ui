@@ -22,6 +22,13 @@
         "X": -200.0,
         "Y": 90.0
       }
+    },
+    {
+      "InputId": "2e18ae65-044e-443d-9288-7a9bb6864514"/*SlideSyncTimeOffset*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
     }
   ],
   "SymbolChildUis": [],

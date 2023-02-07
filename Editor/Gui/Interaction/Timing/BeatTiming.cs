@@ -4,6 +4,7 @@ using System.Linq;
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.Logging;
+//using T3.Core.Utils;
 
 namespace T3.Editor.Gui.Interaction.Timing
 {
@@ -27,9 +28,13 @@ namespace T3.Editor.Gui.Interaction.Timing
         public static void TriggerDelaySync() => _delayTriggered = true;
         public static void TriggerAdvanceSync() => _advanceTriggered = true;
         public static void TriggerResyncMeasure() => _syncMeasureTriggered = true;
-
+        
+        public static float SlideSyncTime;
+        
         public static void Update(double runTime2)
         {
+            //BeatTime = (_measureCount + (_runTime - _measureStartTime) / MeasureDuration + _syncMeasureOffset) * BeatsPerBar;
+            
             _runTime = Playback.RunTimeInSecs;
             
             BeatTimingDetails.WasResyncTriggered = _syncMeasureTriggered ? 1 : 0;
@@ -57,7 +62,7 @@ namespace T3.Editor.Gui.Interaction.Timing
 
             if (_syncMeasureTriggered)
             {
-                _syncMeasureOffset = -(_runTime - _measureStartTime) / MeasureDuration;
+                _syncMeasureOffset = -(_runTime - _measureStartTime) / MeasureDuration;// + Playback.Current.BarsFromSeconds(0.03f);
                 _syncMeasureTriggered = false;
             }
 
@@ -66,26 +71,16 @@ namespace T3.Editor.Gui.Interaction.Timing
                 _syncMeasureOffset += 0.01;
                 _advanceTriggered = false;
             }
-
+            
             if (_delayTriggered)
             {
                 _syncMeasureOffset -= 0.01;
                 _delayTriggered = false;
             }
-
-            // Slide phase
-            var slideMax = Math.Min(PhaseSlideInBarsPerUpdate, Math.Abs(_lastPhaseOffset));
-            if (_lastPhaseOffset > 0)
-            {
-                _measureStartTime += slideMax;
-            }
-            else
-            {
-                _measureStartTime -= slideMax;
-            }
-
-            BeatTime = (_measureCount + (_runTime - _measureStartTime) / MeasureDuration + _syncMeasureOffset) * BeatsPerBar;
-
+            
+            var tInMeasure = (_runTime - _measureStartTime) / MeasureDuration;
+            BeatTime = (_measureCount + tInMeasure + _syncMeasureOffset) * BeatsPerBar;
+            
             BeatTimingDetails.Bpm = (float)Bpm;
             BeatTimingDetails.SyncMeasureOffset = (float)_syncMeasureOffset;
             BeatTimingDetails.BeatTime = (float)BeatTime;
@@ -97,11 +92,15 @@ namespace T3.Editor.Gui.Interaction.Timing
             if (!_tapTriggered && !_syncMeasureTriggered)
                 return;
             
+            var normalizedMeasureSync = (float)Math.Abs((BeatTime % 4)/4 - 0.5) * 2;
+            if (normalizedMeasureSync < 0.8 && _syncMeasureTriggered)
+                return;
+                
             _tapTriggered = false;
 
-            DetectAndProcessOffSeriesTaps();
+            DetectAndProcessOffSeriesTaps(_syncMeasureTriggered);
             KeepTap();
-            UpdatePhaseAndDurationFromMultipleTaps();
+            UpdatePhaseAndDurationFromMultipleTaps(_syncMeasureTriggered);
         }
 
         
@@ -116,10 +115,12 @@ namespace T3.Editor.Gui.Interaction.Timing
         }
         
         
-        private static void DetectAndProcessOffSeriesTaps()
+        private static void DetectAndProcessOffSeriesTaps(bool wasResync)
         {
+            
             var normalizedMeasureSync = (float)Math.Abs((BeatTime % 4)/4 - 0.5) * 2;            
             BeatTimingDetails.LastTapBarSync = normalizedMeasureSync;
+
 
             if (_tapTimes.Count == 0)
                 return;
@@ -143,7 +144,17 @@ namespace T3.Editor.Gui.Interaction.Timing
             var beatsSinceFirstTap = Math.Round(timeSinceFirstTap / _lastBeatDuration);
                     
             var originalBpm = Bpm;
-            _lastBeatDuration = timeSinceFirstTap / beatsSinceFirstTap;
+            var newBeatDuration = timeSinceFirstTap / beatsSinceFirstTap;
+            var newBpm = 60f / newBeatDuration;
+            var newBpmIsValid = newBpm > 20f && newBpm < 200f;
+            if (wasResync && !newBpmIsValid)
+            {
+                _tapTimes.Clear();
+                Log.Debug("Ignoring resync for bpm measure");
+                return;
+            }
+
+            _lastBeatDuration = newBeatDuration;
             Log.Debug($"Refining BPM rate {originalBpm:0.0} -> {Bpm:0.0}.  ({beatsSinceFirstTap:0.0} over {timeSinceFirstTap:0.00s})");
 
             // Also shift resync
@@ -152,7 +163,7 @@ namespace T3.Editor.Gui.Interaction.Timing
             _tapTimes.Add(_runTime);
         }
         
-        private static void UpdatePhaseAndDurationFromMultipleTaps()
+        private static void UpdatePhaseAndDurationFromMultipleTaps(bool wasResync)
         {
             if (_tapTimes.Count < 4)
             {
@@ -164,6 +175,7 @@ namespace T3.Editor.Gui.Interaction.Timing
             if (_runTime - lastTapTime > 4)
             {
                 _lastPhaseOffset = 0;
+                _tapTimes.Clear();
                 return;
             }
 
