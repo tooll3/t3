@@ -61,10 +61,8 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             
             var rot = Matrix.RotationYawPitchRoll(
                                                   ComputeAngle(SpinAngleAndWobble,1) 
-                                                  + MathUtil.DegreesToRadians((float)(SpinRate.GetValue(context) * (context.LocalFxTime 
-                                                                                                  + SpinOffset.GetValue(context)) * 360  
-                                                                                      + MathUtils.PerlinNoise(0, 1, 6, seed) * 360 ) )
-                                                                                      , 
+                                                  + MathUtil.DegreesToRadians((float)((SpinRate.GetValue(context) * context.LocalFxTime) * 360+ SpinOffset.GetValue(context)  
+                                                                                      + MathUtils.PerlinNoise(0, 1, 6, seed) * 360 ) ), 
                                                   -ComputeAngle(OrbitAngleAndWobble, 2), 
                                                   0);
             var p2 = Vector3.Transform(p, rot);
