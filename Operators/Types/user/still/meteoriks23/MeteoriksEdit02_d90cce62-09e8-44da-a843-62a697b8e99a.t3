@@ -2362,6 +2362,15 @@
       "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
     }
   ],
+  "PlaybackSettings": {
+    "Enabled": true,
+    "Bpm": 120.0,
+    "AudioSource": 0,
+    "Syncing": 0,
+    "AudioDecayFactor": 0.9,
+    "AudioGainFactor": 1.0,
+    "AudioInputDeviceName": ""
+  },
   "Animator": [
     {
       "InstanceId": "be01cacb-0d35-41cd-b8cb-b5f24eeecc71",
