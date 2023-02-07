@@ -75,6 +75,27 @@
       }
     },
     {
+      "InputId": "7dabd7c8-5c2b-4be2-b1b6-bf8b8fcbfd8d"/*ScrambleRatio*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
+      "InputId": "9253b148-325b-427a-819e-1ae1b1019ade"/*Scramble*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 180.0
+      }
+    },
+    {
+      "InputId": "3ea4f12e-7184-45bc-a523-ef6a2e1c5c3d"/*ScrambleSeed*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
+    },
+    {
       "InputId": "ccfac8a9-0954-4869-a47c-b66c714f6545"/*OverrideBuilder*/,
       "Position": {
         "X": -200.0,

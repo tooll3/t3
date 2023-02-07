@@ -32,7 +32,7 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
             var maxLength = MaxLength.GetValue(context);
             var stringBuilder = OverrideBuilder.GetValue(context);
 
-            if (Math.Abs(context.LocalFxTime - _lastUpdateTime) < 0.001)
+            if (Result.Value != null &&  Math.Abs(context.LocalFxTime - _lastUpdateTime) < 0.001)
                 return;
 
             _lastUpdateTime = context.LocalFxTime;
@@ -99,6 +99,37 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
                     stringBuilder.Insert(pos, insertString);
                     
                     InsertLineWraps(lineWrap, stringBuilder, pos, insertLength, WrapLineColumn.GetValue(context).Clamp(1,1000));
+
+                    
+                    var scrambleRatio = ScrambleRatio.GetValue(context);
+
+                    var scrambleEnabled = Scramble.GetValue(context);
+                    if (scrambleRatio > 0 && scrambleEnabled)
+                    {
+                        var seed = ScrambleSeed.GetValue(context);
+                        
+                        for (int index = 0; index < stringBuilder.Length; index++)
+                        {
+                            var hash = (float)((double)MathUtils.XxHash((uint)index + (uint)seed * 123127) / uint.MaxValue);
+                            if (hash < scrambleRatio)
+                            {
+                                var scrambleChunkEnd = index + hash * stringBuilder.Length + 1;
+                                while (index < stringBuilder.Length && index < scrambleChunkEnd)
+                                {
+                                    var c = stringBuilder[index];
+                                    if (c != '\n')
+                                    {
+                                        if (c == 32)
+                                            c = (char)90;
+
+                                        c= (char)(c-1);
+                                        stringBuilder[index] = c;
+                                    }
+                                    index++;
+                                }
+                            }
+                        }
+                    }
 
                     switch (mode)
                     {
@@ -216,6 +247,7 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
                 int pos = 0;
                 int currentLineLength = 0;
                 int lastValidBreakPos = -1;
+                
                 while (pos < stringBuilder.Length)
                 {
                     var c = stringBuilder[pos];
@@ -247,6 +279,31 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
                     pos++;
                 }
             }            
+            else if (lineWrap == WrapLinesModes.SolidBlock)
+            {
+                int pos = 0;
+                int currentLineLength = 0;
+                while (pos < stringBuilder.Length)
+                {
+                    var c = stringBuilder[pos];
+                    
+                    if (c == '\n')
+                    {
+                        stringBuilder.Remove(pos, 1);
+                        continue;
+                    }
+                    
+                    currentLineLength++;
+                    pos++;
+
+                    if (currentLineLength == wrapColumn)
+                    {
+                        stringBuilder.Insert(pos, '\n');
+                        pos++;
+                        currentLineLength = 0;
+                    }
+                }
+            }
         }
 
         private enum Modes
@@ -262,6 +319,7 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
             WrapAtWords,
             WrapAtCharacters,
             WrapToFillBlock,
+            SolidBlock,
         }
 
         private StringBuilder _fallbackBuffer = new();
@@ -277,7 +335,9 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
         
         [Input(Guid = "095202BF-118F-4C4C-802E-7916BC290A60")]
         public readonly InputSlot<bool> Insert = new InputSlot<bool>();
-        
+
+
+
         [Input(Guid = "F977FAAF-1840-4A75-9BC5-43176F2E88E9")]
         public readonly InputSlot<bool> JumpToRandomPos = new InputSlot<bool>();
 
@@ -289,9 +349,6 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
         [Input(Guid = "8EEE8067-1A4E-4372-93D0-2DBC368AA45A")]
         public readonly InputSlot<string> Separator = new InputSlot<string>();
 
-        // [Input(Guid = "B5027A5D-BA50-4BDC-8488-3F71B188FCBC")]
-        // public readonly InputSlot<bool> Fill = new InputSlot<bool>();
-        //
         [Input(Guid = "1559C0E9-BA56-447F-8241-03D8D59AC205")]
         public readonly InputSlot<int> OverwriteOffset = new InputSlot<int>();
 
@@ -304,6 +361,16 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
         [Input(Guid = "BD941C4B-18A8-4687-85A8-3FE53B4F6213")]
         public readonly InputSlot<int> WrapLineColumn = new InputSlot<int>();
 
+        [Input(Guid = "7DABD7C8-5C2B-4BE2-B1B6-BF8B8FCBFD8D")]
+        public readonly InputSlot<float> ScrambleRatio = new();
+        
+        [Input(Guid = "9253B148-325B-427A-819E-1AE1B1019ADE")]
+        public readonly InputSlot<bool> Scramble = new();
+
+        [Input(Guid = "3EA4F12E-7184-45BC-A523-EF6A2E1C5C3D")]
+        public readonly InputSlot<int> ScrambleSeed = new();        
+        
+        
         [Input(Guid = "CCFAC8A9-0954-4869-A47C-B66C714F6545")]
         public readonly InputSlot<StringBuilder> OverrideBuilder = new();
     }
