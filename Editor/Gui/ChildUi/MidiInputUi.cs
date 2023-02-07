@@ -17,11 +17,23 @@ namespace T3.Editor.Gui.ChildUi
             if (!(instance is MidiInput midiInput)
                 || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
                 return SymbolChildUi.CustomUiResult.None;
-
+            
+            
+            
+            
             // Draw label and current value
             ImGui.SetCursorScreenPos(screenRect.Min);
             ImGui.BeginGroup();
             ImGui.PushClipRect(screenRect.Min, screenRect.Max, true);
+
+            const float flashDuration = 0.6f;
+            // Flash on changes
+            var flashProgress = (float)(Playback.RunTimeInSecs - midiInput.LastMessageTime).Clamp(0,flashDuration)/flashDuration;
+            if (flashProgress < 1)
+            {
+                drawList.AddRectFilled(screenRect.Min, screenRect.Max, Color.Mix(Color.Orange.Fade(0.4f), Color.Transparent, flashProgress*flashProgress));
+            }
+            
 
             ImGui.PushFont(Fonts.FontSmall);
 
