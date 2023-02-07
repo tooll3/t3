@@ -109,18 +109,7 @@
     {
       "Id": "75d8d70b-7fd2-4ca0-9829-fcf15f1f832e"/*SetVJVariables*/,
       "SymbolId": "e14af8a3-8672-4348-af9e-735714c31c92",
-      "InputValues": [
-        {
-          "Id": "dc9285f2-dab8-4960-b74f-783cc675e5b8"/*BeatThreshold*/,
-          "Type": "System.Single",
-          "Value": 1.01
-        },
-        {
-          "Id": "4e8d6ee1-b210-48fb-ac32-e093f877de25"/*HihatThreshold*/,
-          "Type": "System.Single",
-          "Value": 1.0
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {
