@@ -1,7 +1,4 @@
 {
   "MainOperatorName": "CarpeDiem",
-  "AudioResyncThreshold": 0.02,
-  "AudioInputDeviceName": "",
-  "AudioGainFactor": 1.0,
-  "AudioDecayFactor": 0.884
+  "AudioResyncThreshold": 0.04
 }

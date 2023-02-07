@@ -535,7 +535,7 @@
       "ChildId": "20972e6d-ec60-4689-a0b7-2cb6fada5b70"/*DrawPoints*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 668.2764,
@@ -615,8 +615,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": -266.27045,
-        "Y": -1610.9033
+        "X": -329.8258,
+        "Y": -1556.6943
       }
     },
     {
@@ -656,7 +656,7 @@
       "ChildId": "f6bfb4dd-693d-4b7f-8831-429ed2d5dd55"/*DrawPoints*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 668.2764,
@@ -906,25 +906,157 @@
       }
     },
     {
-      "ChildId": "2dc0aeb0-50bc-4c9c-84b9-c3663d89f2f8"/*FraserGrid*/,
+      "ChildId": "c0db46ca-5dc1-46d3-877c-6cb00805c1fd"/*Time*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
       },
       "Position": {
-        "X": 2516.8853,
-        "Y": -189.39612
+        "X": 1861.1426,
+        "Y": 52.626465
       }
     },
     {
-      "ChildId": "8a6429d6-6ed3-4938-9aed-ba79e8783b2e"/*ZollnerGrid*/,
+      "ChildId": "44706ef0-51a0-482c-824f-5428aaab8577"/*AnimValue*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
       },
       "Position": {
-        "X": 2510.2893,
-        "Y": -59.34883
+        "X": 2107.706,
+        "Y": 118.58711
+      }
+    },
+    {
+      "ChildId": "8ef5f2a3-982b-47ef-bcbb-3174cd86edf0"/*InvertFloat*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2011.1426,
+        "Y": 52.626465
+      }
+    },
+    {
+      "ChildId": "c89f92da-54f3-4c20-8c6a-8bfe63a02e7d"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2874.5867,
+        "Y": -181.48035
+      }
+    },
+    {
+      "ChildId": "a8fc957c-9c9e-44a6-826f-5f6cce6ce4bd"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 3019.627,
+        "Y": -554.8517
+      }
+    },
+    {
+      "ChildId": "ddd97b46-8d62-41d4-a108-4038eb83cbd2"/*Group*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 3169.627,
+        "Y": -554.8517
+      }
+    },
+    {
+      "ChildId": "b24ee52d-b302-46a3-8504-619c07ad1a15"/*ZollnerTransition*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 2699.1238,
+        "Y": -185.72144
+      }
+    },
+    {
+      "ChildId": "d54f9ac9-1b31-4dee-a6cb-b194ee6b019d"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 3319.627,
+        "Y": -554.8517
+      }
+    },
+    {
+      "ChildId": "35bb8b8f-b2cb-4eb9-987c-ca3218fa495e"/*ZollnerGrid*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 2753.2715,
+        "Y": -21.069946
+      }
+    },
+    {
+      "ChildId": "27854b68-153b-4dc4-90fc-d8c9f2dd9802"/*LinearGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 2241.5667,
+        "Y": -79.01752
+      }
+    },
+    {
+      "ChildId": "0b2aae5f-f4ea-4623-9d4d-ba3cc806ec54"/*Value*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 2453.2715,
+        "Y": 21.930054
+      }
+    },
+    {
+      "ChildId": "03e2683e-5d70-4f71-946f-3fb35c097911"/*Add*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 2603.2715,
+        "Y": 21.930054
+      }
+    },
+    {
+      "ChildId": "149501f2-aaf6-4544-8893-1989a20b14a9"/*RadialGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 2409.2668,
+        "Y": -247.81656
+      }
+    },
+    {
+      "ChildId": "749fe42c-ee92-4f50-a8b2-cea15b1e8e3f"/*pointSize*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 502.615,
+        "Y": -939.6704
       }
     }
   ],
