@@ -437,7 +437,7 @@
       "Outputs": []
     },
     {
-      "Id": "61be024b-d1ad-4a8d-8f94-2d867c916693"/*ScrambleString*/,
+      "Id": "61be024b-d1ad-4a8d-8f94-2d867c916693"/*BuildRandomString*/,
       "SymbolId": "7b21f10b-3548-4a23-95df-360addaeb03d",
       "InputValues": [
         {
@@ -446,14 +446,19 @@
           "Value": 0
         },
         {
+          "Id": "77a5604a-034a-4352-bd46-be3cb57f90b7"/*Clear*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
           "Id": "095202bf-118f-4c4c-802e-7916bc290a60"/*Insert*/,
           "Type": "System.Boolean",
           "Value": true
         },
         {
-          "Id": "38ce7f47-c117-47a2-aeea-609716c60555"/*MaxLength*/,
-          "Type": "System.Int32",
-          "Value": 134
+          "Id": "f977faaf-1840-4a75-9bc5-43176f2e88e9"/*JumpToRandomPos*/,
+          "Type": "System.Boolean",
+          "Value": false
         },
         {
           "Id": "8eee8067-1a4e-4372-93d0-2dbc368aa45a"/*Separator*/,
@@ -461,14 +466,14 @@
           "Value": " "
         },
         {
-          "Id": "1559c0e9-ba56-447f-8241-03d8d59ac205"/*FillOffset*/,
+          "Id": "1559c0e9-ba56-447f-8241-03d8d59ac205"/*OverwriteOffset*/,
           "Type": "System.Int32",
           "Value": 20
         },
         {
-          "Id": "f977faaf-1840-4a75-9bc5-43176f2e88e9"/*TriggerRandomPos*/,
-          "Type": "System.Boolean",
-          "Value": false
+          "Id": "38ce7f47-c117-47a2-aeea-609716c60555"/*MaxLength*/,
+          "Type": "System.Int32",
+          "Value": 134
         },
         {
           "Id": "875cbfa9-ffa8-4204-810c-c04f5f421441"/*WrapLines*/,
@@ -479,16 +484,6 @@
           "Id": "bd941c4b-18a8-4687-85a8-3fe53b4f6213"/*WrapLineColumn*/,
           "Type": "System.Int32",
           "Value": 30
-        },
-        {
-          "Id": "77a5604a-034a-4352-bd46-be3cb57f90b7"/*ClearTrigger*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "5e8fb3ee-48a6-46d5-8cf9-368f5a1ea507"/*FillCharacter*/,
-          "Type": "System.String",
-          "Value": " "
         }
       ],
       "Outputs": []
@@ -1286,7 +1281,7 @@
       "Outputs": []
     },
     {
-      "Id": "656c1a1b-0f4a-4985-a4b3-01495baee8b7"/*ScrambleString*/,
+      "Id": "656c1a1b-0f4a-4985-a4b3-01495baee8b7"/*BuildRandomString*/,
       "SymbolId": "7b21f10b-3548-4a23-95df-360addaeb03d",
       "InputValues": [
         {
@@ -1295,14 +1290,19 @@
           "Value": 0
         },
         {
+          "Id": "77a5604a-034a-4352-bd46-be3cb57f90b7"/*Clear*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
           "Id": "095202bf-118f-4c4c-802e-7916bc290a60"/*Insert*/,
           "Type": "System.Boolean",
           "Value": true
         },
         {
-          "Id": "38ce7f47-c117-47a2-aeea-609716c60555"/*MaxLength*/,
-          "Type": "System.Int32",
-          "Value": 1000
+          "Id": "f977faaf-1840-4a75-9bc5-43176f2e88e9"/*JumpToRandomPos*/,
+          "Type": "System.Boolean",
+          "Value": false
         },
         {
           "Id": "8eee8067-1a4e-4372-93d0-2dbc368aa45a"/*Separator*/,
@@ -1310,14 +1310,14 @@
           "Value": " "
         },
         {
-          "Id": "1559c0e9-ba56-447f-8241-03d8d59ac205"/*FillOffset*/,
+          "Id": "1559c0e9-ba56-447f-8241-03d8d59ac205"/*OverwriteOffset*/,
           "Type": "System.Int32",
           "Value": 20
         },
         {
-          "Id": "f977faaf-1840-4a75-9bc5-43176f2e88e9"/*TriggerRandomPos*/,
-          "Type": "System.Boolean",
-          "Value": false
+          "Id": "38ce7f47-c117-47a2-aeea-609716c60555"/*MaxLength*/,
+          "Type": "System.Int32",
+          "Value": 1000
         },
         {
           "Id": "875cbfa9-ffa8-4204-810c-c04f5f421441"/*WrapLines*/,
@@ -1328,16 +1328,6 @@
           "Id": "bd941c4b-18a8-4687-85a8-3fe53b4f6213"/*WrapLineColumn*/,
           "Type": "System.Int32",
           "Value": 30
-        },
-        {
-          "Id": "77a5604a-034a-4352-bd46-be3cb57f90b7"/*ClearTrigger*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "5e8fb3ee-48a6-46d5-8cf9-368f5a1ea507"/*FillCharacter*/,
-          "Type": "System.String",
-          "Value": " "
         }
       ],
       "Outputs": []

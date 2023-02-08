@@ -78,7 +78,6 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float hookWidth = HookWidth / 2;
     float hookRotation = HookRotation + 90;
 
-
     float4 imgColorForCel = inputTexture.SampleLevel(texSampler, uv , 0.0);        
 
     barWidth += imgColorForCel.r * RAffects_BarWidth;
@@ -109,16 +108,25 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     // Compute raster cells
     float2 divisions = float2(TargetWidth / Size.x, TargetHeight / Size.y) / ScaleFactor;
-    float2 p1 = (p + Offset * float2(-1,1));
+    float2 pCentered = (p + Offset / divisions * float2(-1,1));
         
-    float2 y = p1.y* divisions.y;
-    float pInCellY = mod(y, 1);
-    int cellY = (int)(y - pInCellY);
-    if(cellY % 2 == 0) {
+    //float2 y = pCentered.y * divisions.y;
+    float2 pScaled = pCentered * divisions;
+    float2 pInCell = float2(
+        pCentered.x * divisions.x,
+        mod(pScaled.y, 1));
+    //float pInCellX = pCentered.x * divisions.x;
+    int2 cell = (int2)(pScaled - pInCell);
 
-        pInCellY = 1-pInCellY;
-        p1.x += 0.25 / divisions.x;
+    if(cell.y % 2 == 0) {
+
+        pInCell.y = (1-pInCell.y);
+        pInCell.x += 0.5;// / divisions.x;
     }
+
+    //float2 p1 = float2(pInCellX, pInCellY);
+    float2 p1 = pInCell;
+    //return float4(mod(p1,0.3),0,1);
     
     // Sheer x
     {        
@@ -126,12 +134,13 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         float sina = sin(-a - 3.141578/2);
         float cosa = cos(-a - 3.141578/2);
 
-        float px = (p1.x * divisions.x * aspectRatio);
-        p1.x = (cosa * px - sina * pInCellY) / sin(-a);
-        p1.x +=cellY * RowSwift;
+        float px = (p1.x);
+        p1.x = (cosa * px - sina * pInCell.y) / sin(-a);
+        p1.x +=cell.y * RowSwift;
     }
 
-    float2 pInCell = float2( mod(p1.x ,1), pInCellY);
+    pInCell.x = mod(p1.x ,1);
+    //float2 pInCell = float2( mod(p1.x ,1), pInCellY);
     
     float sHookLine = smoothstep(hookWidth + edgeSmooth * aspectRatio , hookWidth  - edgeSmooth * aspectRatio , abs(pInCell.x - 0.5));
     float sHookBar =  smoothstep(hookLength + edgeSmooth, hookLength - edgeSmooth, abs(pInCell.y - 0.5));

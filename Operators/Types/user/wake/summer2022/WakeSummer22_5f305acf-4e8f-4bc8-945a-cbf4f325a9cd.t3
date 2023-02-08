@@ -288,23 +288,7 @@
     {
       "Id": "14b1d93f-67d7-4502-a6c4-c575c59f57e0"/*SetVJVariables*/,
       "SymbolId": "e14af8a3-8672-4348-af9e-735714c31c92",
-      "InputValues": [
-        {
-          "Id": "dc9285f2-dab8-4960-b74f-783cc675e5b8"/*BeatThreshold*/,
-          "Type": "System.Single",
-          "Value": 0.5
-        },
-        {
-          "Id": "4e8d6ee1-b210-48fb-ac32-e093f877de25"/*HihatThreshold*/,
-          "Type": "System.Single",
-          "Value": 0.59
-        },
-        {
-          "Id": "51bb8ea2-3afd-41ff-a9e6-7ac5a3c3fc9a"/*AudioInGain*/,
-          "Type": "System.Single",
-          "Value": 0.99
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -1513,7 +1497,8 @@
   "PlaybackSettings": {
     "Enabled": true,
     "Bpm": 120.0,
-    "SyncMode": 0,
+    "AudioSource": 0,
+    "Syncing": 0,
     "AudioDecayFactor": 0.98,
     "AudioGainFactor": 1.0,
     "AudioInputDeviceName": "",
