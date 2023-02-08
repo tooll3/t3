@@ -1,5 +1,6 @@
 ﻿using System;
 using ImGuiNET;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.IO;
@@ -22,8 +23,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
 {
     internal static class TimeControls
     {
-
-        
         internal static void DrawTimeControls(TimeLineCanvas timeLineCanvas)
         {
             var playback = Playback.Current; // TODO, this should be non-static eventually
@@ -31,12 +30,12 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var composition = GraphCanvas.Current?.CompositionOp;
             if (composition == null)
                 return;
-            
+
             // Settings
             PlaybackUtils.FindPlaybackSettings(composition, out var compositionWithSettings, out var settings);
             var opHasSettings = compositionWithSettings == composition;
-            
-            if (CustomComponents.IconButton(Icon.Settings, ControlSize, opHasSettings 
+
+            if (CustomComponents.IconButton(Icon.Settings, ControlSize, opHasSettings
                                                                             ? CustomComponents.ButtonStates.Normal
                                                                             : CustomComponents.ButtonStates.Dimmed))
             {
@@ -93,6 +92,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 UserSettings.Config.TimeDisplayMode =
                     (TimeFormat.TimeDisplayModes)(((int)UserSettings.Config.TimeDisplayMode + 1) % Enum.GetNames(typeof(TimeFormat.TimeDisplayModes)).Length);
             }
+
             ImGui.PopStyleColor();
 
             CustomComponents.TooltipForLastItem("Timeline format",
@@ -204,7 +204,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.SameLine();
 
                 // Prev Keyframe
-                if (CustomComponents.IconButton(Icon.JumpToPreviousKeyframe, 
+                if (CustomComponents.IconButton(Icon.JumpToPreviousKeyframe,
                                                 ControlSize,
                                                 FrameStats.Last.HasKeyframesBeforeCurrentTime
                                                     ? CustomComponents.ButtonStates.Dimmed
@@ -342,7 +342,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.SameLine();
 
                 // Next Keyframe
-                if (CustomComponents.IconButton(Icon.JumpToNextKeyframe, 
+                if (CustomComponents.IconButton(Icon.JumpToNextKeyframe,
                                                 ControlSize,
                                                 FrameStats.Last.HasKeyframesAfterCurrentTime
                                                     ? CustomComponents.ButtonStates.Dimmed
@@ -358,7 +358,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 // // End
                 // Loop
-                if (CustomComponents.IconButton(Icon.Loop, 
+                if (CustomComponents.IconButton(Icon.Loop,
                                                 ControlSize,
                                                 playback.IsLooping
                                                     ? CustomComponents.ButtonStates.Activated
@@ -393,12 +393,12 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
 
             // ToggleAudio
-            if (CustomComponents.IconButton(UserSettings.Config.AudioMuted ? Icon.ToggleAudioOff : Icon.ToggleAudioOn, 
+            if (CustomComponents.IconButton(UserSettings.Config.AudioMuted ? Icon.ToggleAudioOff : Icon.ToggleAudioOn,
                                             ControlSize,
                                             UserSettings.Config.AudioMuted
                                                 ? CustomComponents.ButtonStates.Dimmed
                                                 : CustomComponents.ButtonStates.Normal
-                                            ))
+                                           ))
             {
                 UserSettings.Config.AudioMuted = !UserSettings.Config.AudioMuted;
                 AudioEngine.SetMute(UserSettings.Config.AudioMuted);
@@ -435,6 +435,38 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 UserSettings.Config.HoverMode =
                     (GraphCanvas.HoverModes)(((int)UserSettings.Config.HoverMode + 1) % Enum.GetNames(typeof(GraphCanvas.HoverModes)).Length);
             }
+
+            CustomComponents.TooltipForLastItem(tooltip, additionalTooltip);
+
+            if (FrameStats.Last.HasAnimatedParameters)
+            {
+                ImGui.SameLine();
+                // Lock all animated parameters
+                if (CustomComponents.IconButton(Icon.PinParams,
+                                                ControlSize)
+                    || KeyboardBinding.Triggered(UserActions.PinAllAnimationParameter))
+                {
+                    foreach (var p in timeLineCanvas.SelectedAnimationParameters)
+                    {
+                        timeLineCanvas.DopeSheetArea.PinnedParameters.Add(p.Input.GetHashCode());
+                    }
+                }
+
+                ImGui.SameLine();
+                // Lock all animated parameters
+                if (CustomComponents.IconButton(Icon.Params,
+                                                ControlSize,
+                                                timeLineCanvas.DopeSheetArea.PinnedParameters.Count == 0
+                                                    ? CustomComponents.ButtonStates.Disabled
+                                                    : CustomComponents.ButtonStates.Normal)
+                    || KeyboardBinding.Triggered(UserActions.UnpinAllAnimationParameters))
+                {
+                    timeLineCanvas.DopeSheetArea.PinnedParameters.Clear();
+                }
+            }
+
+            CustomComponents.TooltipForLastItem("Jump to previous keyframe",
+                                                KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToPreviousKeyframe));
 
             CustomComponents.TooltipForLastItem(tooltip, additionalTooltip);
 

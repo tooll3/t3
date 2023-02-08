@@ -228,6 +228,8 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.Rotate, 60),
                 new (Icon.Help, 61),
                 new (Icon.Hint, 62),                
+                new (Icon.PinParams, 63),
+                new (Icon.Params, 64),
             };
 
         public const string IconAtlasPath = @"Resources\t3-editor\images\t3-icons.png";
@@ -297,5 +299,7 @@ namespace T3.Editor.Gui.Styling
         Rotate,
         Help,
         Hint,
+        PinParams,
+        Params
     }
 }

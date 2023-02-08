@@ -31,6 +31,7 @@ namespace T3.Editor.Gui
             public readonly HashSet<Guid> RenderedIds = new();
             public bool HasKeyframesBeforeCurrentTime;
             public bool HasKeyframesAfterCurrentTime;
+            public bool HasAnimatedParameters => HasKeyframesBeforeCurrentTime || HasKeyframesAfterCurrentTime;
             
             public void Clear()
             {

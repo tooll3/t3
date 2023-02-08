@@ -41,6 +41,9 @@ namespace T3.Editor.Gui.Interaction
         InsertKeyframe,
         InsertKeyframeWithIncrement,
         
+        PinAllAnimationParameter,
+        UnpinAllAnimationParameters,
+        
         // Graph
         PinToOutputWindow,
         DisplayImageAsBackground,

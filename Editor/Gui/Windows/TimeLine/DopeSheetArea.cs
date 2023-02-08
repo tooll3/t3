@@ -8,6 +8,7 @@ using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Animation;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.Interaction;
@@ -79,20 +80,29 @@ namespace T3.Editor.Gui.Windows.TimeLine
         private void DrawProperty(TimeLineCanvas.AnimationParameter parameter)
         {
             var min = ImGui.GetCursorScreenPos();
-            var max = min + new Vector2(ImGui.GetContentRegionAvail().X, LayerHeight - 1);
+            var max = min + new Vector2(ImGui.GetContentRegionAvail().X, LayerHeight );
             _drawList.AddRectFilled(new Vector2(min.X, max.Y),
                                     new Vector2(max.X, max.Y + 1), Color.Black);
-
+            
             var mousePos = ImGui.GetMousePos();
             var mouseTime = TimeLineCanvas.InverseTransformX(mousePos.X);
             var layerArea = new ImRect(min, max);
             var layerHovered = ImGui.IsWindowHovered() && layerArea.Contains(mousePos);
+
+            var isCurrentSelected = NodeSelection.GetSelectedInstance()?.SymbolChildId == parameter.Input.Parent.SymbolChildId;
+            if(FrameStats.Last.HoveredIds.Contains(parameter.Input.Parent.SymbolChildId) || isCurrentSelected || layerHovered )
+            {
+                _drawList.AddRectFilled(new Vector2(min.X, min.Y),
+                                        new Vector2(max.X, max.Y), Color.White.Fade(0.04f));
+            }
+
             if (layerHovered)
             {
                 ImGui.BeginTooltip();
 
                 ImGui.PushFont(Fonts.FontSmall);
                 ImGui.TextUnformatted(parameter.Input.Input.Name);
+                FrameStats.Current.HoveredIds.Add(parameter.Input.Parent.SymbolChildId);
 
                 foreach (var curve in parameter.Curves)
                 {
