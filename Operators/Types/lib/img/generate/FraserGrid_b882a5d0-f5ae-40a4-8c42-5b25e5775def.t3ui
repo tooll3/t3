@@ -208,6 +208,28 @@
         "X": -31.066011,
         "Y": 68.89713
       }
+    },
+    {
+      "ChildId": "0b08d21f-91cf-4cc5-9e06-4fae0bfe97be"/*FirstValidTexture*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 371.31152,
+        "Y": -251.3772
+      }
+    },
+    {
+      "ChildId": "feeb09bc-916b-4bc6-bbcf-9f260c271120"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 214.4076,
+        "Y": -223.57785
+      }
     }
   ],
   "OutputUis": [

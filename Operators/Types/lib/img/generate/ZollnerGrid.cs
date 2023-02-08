@@ -60,6 +60,9 @@ namespace T3.Operators.Types.Id_f2a0a8d9_e2dc_476b_ac97_de13101a6fdb
 
         [Input(Guid = "c409ea13-e805-4e37-94d6-f3633810f906")]
         public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+
+        [Input(Guid = "98131a97-a883-473f-809a-1c4d9eabce63")]
+        public readonly InputSlot<float> AmplifyIllusion = new InputSlot<float>();
     }
 }
 

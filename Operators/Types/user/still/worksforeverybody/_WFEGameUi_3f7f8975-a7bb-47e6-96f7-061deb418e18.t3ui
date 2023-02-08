@@ -1,0 +1,203 @@
+{
+  "Id": "3f7f8975-a7bb-47e6-96f7-061deb418e18"/*_WFEGameUi*/,
+  "Description": "Renders a visual representation for the timing game",
+  "InputUis": [
+    {
+      "InputId": "8d294996-7f87-424e-9869-12d383cb7869"/*IsActive*/,
+      "Position": {
+        "X": -178.24605,
+        "Y": -37.354248
+      }
+    },
+    {
+      "InputId": "dd0ca7a1-9fa1-4364-80a4-ecf0892fa66b"/*SceneIndex*/,
+      "Position": {
+        "X": -178.24605,
+        "Y": 7.645752
+      }
+    },
+    {
+      "InputId": "cee4bca4-e9d4-493d-b4dd-56dd69d7fb3f"/*PerfectTime*/,
+      "Position": {
+        "X": -178.24605,
+        "Y": 52.645752
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "92e099e1-543b-4ae0-ad99-85b591862c5b"/*KeyboardInput*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -34.18477,
+        "Y": 110.791565
+      }
+    },
+    {
+      "ChildId": "3a5e9b99-363d-466d-9b51-a0cad7884e3d"/*_WFEGameState*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 88.0
+      },
+      "Position": {
+        "X": 163.3396,
+        "Y": 78.9082
+      }
+    },
+    {
+      "ChildId": "a7174632-ddd9-4b2b-aa5b-6ea9d4cec642"/*Text*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 691.3115,
+        "Y": 69.0
+      }
+    },
+    {
+      "ChildId": "ae40cb66-f9f5-4814-b796-36b7e461f615"/*IntToString*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 391.31152,
+        "Y": 66.323364
+      }
+    },
+    {
+      "ChildId": "9e60afcb-92bf-4820-9593-2f092699296f"/*TriggerAnim*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 391.31152,
+        "Y": 148.32336
+      }
+    },
+    {
+      "ChildId": "d14cbe0b-ff30-4e1a-8669-98749512fc8c"/*SampleGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 541.3115,
+        "Y": 148.32336
+      }
+    },
+    {
+      "ChildId": "5cb7842f-65fb-42dc-90f1-60418c20d966"/*CombineStrings*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 541.3115,
+        "Y": 66.323364
+      }
+    },
+    {
+      "ChildId": "d71c54b1-3c6c-400a-9ed2-2deaeb312d4b"/*Text*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 691.3115,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "64227468-8734-481f-a7bb-4d2a84daa407"/*TriggerAnim*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 391.31152,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "2ada423f-bc2d-49e3-b90c-ffb60676618a"/*SampleGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 541.3115,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "5cdea4f8-cac8-42dc-bb3b-21b09c625085"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": 841.3115,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "95e8e524-b8a5-417a-a8de-7ee0c0577868"/*Camera*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 991.3115,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "bc2636bf-3d67-432f-8051-6d904c4d787d"/*Text*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 691.3115,
+        "Y": 148.32336
+      }
+    },
+    {
+      "ChildId": "d47aa48a-d88c-4273-8d33-acc788b09aed"/*IntToString*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 444.15106,
+        "Y": 250.09607
+      }
+    },
+    {
+      "ChildId": "0b94a008-4099-4fce-a5dc-11327803b0ba"/*HasTimeChanged*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -44.199463,
+        "Y": 268.40424
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "9f6bd5f3-eb31-40de-894a-51d55b4e0fa3"/*Output*/,
+      "Position": {
+        "X": 1138.3153,
+        "Y": 20.56012
+      }
+    }
+  ]
+}

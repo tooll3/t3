@@ -20,6 +20,8 @@ cbuffer ParamConstants : register(b0)
     float RAffects_BarWidth;
     float GAffects_HookLength;
     float BAffects_HookRotation;
+
+    float AmplifyIllustion;
 }
 
 cbuffer Resolution : register(b1)
@@ -128,14 +130,18 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 p1 = pInCell;
     //return float4(mod(p1,0.3),0,1);
     
+    pInCell.y -= p1.x * AmplifyIllustion;
+
+    //return float4(p1,0,1);
+
     // Sheer x
     {        
         float a= hookRotation / 180 * 3.141578;
         float sina = sin(-a - 3.141578/2);
         float cosa = cos(-a - 3.141578/2);
 
-        float px = (p1.x);
-        p1.x = (cosa * px - sina * pInCell.y) / sin(-a);
+        //float px = (p1.x);
+        p1.x = (cosa * p1.x - sina * pInCell.y) / sin(-a);
         p1.x +=cell.y * RowSwift;
     }
 

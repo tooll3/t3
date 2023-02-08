@@ -55,7 +55,7 @@
       },
       "Min": -180.0,
       "Max": 180.0,
-      "Scale": 0.5
+      "Scale": 0.01
     },
     {
       "InputId": "44e1a24c-ee74-4fcf-8704-f6f2b1d567b0"/*Feather*/,
@@ -128,6 +128,13 @@
       "Position": {
         "X": -195.6851,
         "Y": 1497.3857
+      }
+    },
+    {
+      "InputId": "98131a97-a883-473f-809a-1c4d9eabce63"/*AmplifyIllusion*/,
+      "Position": {
+        "X": -195.6851,
+        "Y": 1542.3857
       }
     }
   ],

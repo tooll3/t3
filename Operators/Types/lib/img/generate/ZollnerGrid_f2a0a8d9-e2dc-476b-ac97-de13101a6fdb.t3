@@ -89,6 +89,10 @@
         "Width": 0,
         "Height": 0
       }
+    },
+    {
+      "Id": "98131a97-a883-473f-809a-1c4d9eabce63"/*AmplifyIllusion*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [
@@ -292,6 +296,12 @@
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "SourceSlotId": "8f8a92bf-cdc6-45cd-9ff7-5d01cd31bd8e",
+      "TargetParentOrChildId": "469a583c-e7e8-4221-b444-5209e25c0916",
+      "TargetSlotId": "4ef6f204-1894-4b0a-bb2d-8b5ecbad4040"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "98131a97-a883-473f-809a-1c4d9eabce63",
       "TargetParentOrChildId": "469a583c-e7e8-4221-b444-5209e25c0916",
       "TargetSlotId": "4ef6f204-1894-4b0a-bb2d-8b5ecbad4040"
     },
