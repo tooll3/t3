@@ -1,5 +1,6 @@
 using System;
 using T3.Core;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -33,56 +34,85 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             _shape = (Shapes)(int)Shape.GetValue(context).Clamp(0,Enum.GetNames(typeof(Shapes)).Length -1);
             _duration = Duration.GetValue(context);
             _delay = Delay.GetValue(context);
+
             
             
             var animMode = (AnimModes)AnimMode.GetValue(context).Clamp(0, Enum.GetNames(typeof(AnimModes)).Length -1);
-            var newTrigger = Trigger.GetValue(context);
-            if (newTrigger != _trigger)
+            var triggered = Trigger.GetValue(context);
+            if (triggered != _trigger)
             {
-                if (newTrigger)
+                _triggerTime = context.Playback.FxTimeInBars;
+                _trigger = triggered;
+                
+                if (animMode == AnimModes.ForwardAndBackwards)
                 {
-                    if (animMode == AnimModes.OnlyOnTrue || animMode == AnimModes.OnTrueAndFalse)
-                    {
-                        _currentDirection = Directions.Forward;
-                        _triggerTime = context.Playback.FxTimeInBars;
-                        if (animMode == AnimModes.OnlyOnTrue)
-                        {
-                            LastFraction = -_delay;
-                        }
-                    }
+                    _currentDirection = triggered ? Directions.Forward : Directions.Backwards;
+                    _startProgress = LastFraction;
                 }
                 else
                 {
-                    if (animMode == AnimModes.OnlyOnFalse || animMode == AnimModes.OnTrueAndFalse)
+                    if (triggered)
                     {
-                        _currentDirection = Directions.Backwards;
-                        _triggerTime = context.Playback.FxTimeInBars;
+                        if (animMode == AnimModes.OnlyOnTrue)
+                        {
+                            _currentDirection = Directions.Forward;
+                            LastFraction = -_delay;
+                        }
+                    }
+                    else
+                    {
                         if (animMode == AnimModes.OnlyOnFalse)
                         {
+                            _currentDirection = Directions.Backwards;
                             LastFraction = 1;
                         }
-
                     }
                 }
-                _trigger = newTrigger;
             }
 
-            LastFraction = (context.LocalFxTime - _triggerTime)/_duration; 
-            
-            if (_currentDirection == Directions.Forward)
+
+            if (animMode == AnimModes.ForwardAndBackwards)
             {
-                if(LastFraction >= 1)
+                var dp = (float)((context.LocalFxTime - _triggerTime) / _duration);
+                if (_currentDirection == Directions.Forward)
                 {
-                    LastFraction = 1;
-                    _currentDirection = Directions.None;
+                    LastFraction = _startProgress + dp;
+                    if (LastFraction >= 1)
+                    {
+                        LastFraction = 1;
+                        _currentDirection = Directions.None;
+                    }
+                }
+                else if (_currentDirection == Directions.Backwards)
+                {
+                    LastFraction = _startProgress - dp;
+                    if (LastFraction <= 0)
+                    {
+                        LastFraction = 0;
+                        _currentDirection = Directions.None;
+                    }
                 }
             }
-            else if  (_currentDirection == Directions.Backwards)
+            else
             {
-                if (LastFraction <= 0)
+                if (_currentDirection == Directions.Forward)
                 {
-                    LastFraction = 0;
-                    _currentDirection = Directions.None;
+                    LastFraction = (context.LocalFxTime - _triggerTime)/_duration;
+                    if(LastFraction >= 1)
+                    {
+                        LastFraction = 1;
+                        _currentDirection = Directions.None;
+                    }
+                }
+                else if  (_currentDirection == Directions.Backwards)
+                {
+                    LastFraction =   ( _triggerTime- context.LocalFxTime )/_duration;
+
+                    if (LastFraction <= 0)
+                    {
+                        LastFraction = 0;
+                        _currentDirection = Directions.None;
+                    }
                 }
             }
             
@@ -128,6 +158,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
         private float _duration = 1;
         private float _delay;
 
+        private double _startProgress;
         public double LastFraction;
         
         public enum Shapes
@@ -145,7 +176,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
         {
             OnlyOnTrue,
             OnlyOnFalse,
-            OnTrueAndFalse,
+            ForwardAndBackwards,
         }
         
         private Directions _currentDirection = Directions.None;
