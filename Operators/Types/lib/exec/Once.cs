@@ -21,7 +21,7 @@ namespace T3.Operators.Types.Id_e8d2b4ac_0ba2_400f_9c82_e5dd15a23d32
             OutputTrigger.Value = Trigger.DirtyFlag.IsDirty;
             if (Trigger.DirtyFlag.IsDirty)
             {
-                Log.Info("ExecuteOnce triggered " + OutputTrigger.Value);
+                //Log.Info("ExecuteOnce triggered " + OutputTrigger.Value);
                 Trigger.DirtyFlag.Clear();
             }
             else
