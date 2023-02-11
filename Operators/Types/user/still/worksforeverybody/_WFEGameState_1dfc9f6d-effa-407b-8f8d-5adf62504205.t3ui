@@ -64,7 +64,7 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "7794eb92-94dd-46a3-9f73-691421b8ddec"/*Result*/,
+      "OutputId": "7794eb92-94dd-46a3-9f73-691421b8ddec"/*TotalScore*/,
       "Position": {
         "X": 133.0,
         "Y": 138.0
