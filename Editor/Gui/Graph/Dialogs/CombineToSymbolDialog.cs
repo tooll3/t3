@@ -29,7 +29,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.PopFont();
 
                     ImGui.SetNextItemWidth(250);
-                    InputWithTypeAheadSearch.Draw("##namespace", ref nameSpace,
+                    InputWithTypeAheadSearch.Draw("##namespace2", ref nameSpace,
                                                               SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i));
                         
                     ImGui.SetNextItemWidth(150);

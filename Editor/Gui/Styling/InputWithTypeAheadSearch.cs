@@ -11,8 +11,10 @@ namespace T3.Editor.Gui.Styling
     {
         public static bool Draw(string id, ref string text, IOrderedEnumerable<string> items)
         {
+            var inputId = ImGui.GetID(id);
+            var isSearchResultWindowOpen = inputId == _activeInputId;
             
-            if (_isSearchResultWindowOpen)
+            if (isSearchResultWindowOpen)
             {
                 if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorDown, true))
                 {
@@ -47,14 +49,14 @@ namespace T3.Editor.Gui.Styling
             // We defer exit to get clicks on opened popup list
             var lostFocus = isItemDeactivated || ImGui.IsKeyDown((ImGuiKey)Key.Esc);
             
-            if ( ImGui.IsItemActive() || _isSearchResultWindowOpen)
+            if ( ImGui.IsItemActive() || isSearchResultWindowOpen)
             {
-                _isSearchResultWindowOpen = true;
+                _activeInputId = inputId;
 
                 ImGui.SetNextWindowPos(new Vector2(ImGui.GetItemRectMin().X, ImGui.GetItemRectMax().Y));
                 ImGui.SetNextWindowSize(new Vector2(ImGui.GetItemRectSize().X, 0));
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(7, 7));
-                if (ImGui.Begin("##typeAheadSearchPopup", ref _isSearchResultWindowOpen,
+                if (ImGui.Begin("##typeAheadSearchPopup", ref isSearchResultWindowOpen,
                                 ImGuiWindowFlags.NoTitleBar 
                                 | ImGuiWindowFlags.NoMove 
                                 | ImGuiWindowFlags.NoResize 
@@ -77,7 +79,8 @@ namespace T3.Editor.Gui.Styling
                             {
                                 text = word;
                                 wasChanged = true;
-                                _isSearchResultWindowOpen = false;
+                                _activeInputId = 0;
+                                //isSearchResultWindowOpen = false;
                             }
 
                             _lastTypeAheadResults.Add(word);
@@ -95,7 +98,8 @@ namespace T3.Editor.Gui.Styling
             if (lostFocus)
             {
                 THelpers.RestoreImGuiKeyboardNavigation();
-                _isSearchResultWindowOpen = false;
+                _activeInputId = 0;
+                //isSearchResultWindowOpen = false;
             }
 
             return wasChanged;
@@ -103,6 +107,7 @@ namespace T3.Editor.Gui.Styling
 
         private static readonly List<string> _lastTypeAheadResults = new();
         private static int _selectedResultIndex = 0;
-        private static bool _isSearchResultWindowOpen;
+        private static uint _activeInputId;
+        //private static bool _isSearchResultWindowOpen;
     }
 }
