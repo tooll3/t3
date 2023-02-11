@@ -92,10 +92,20 @@ namespace T3.Editor.Gui
             MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
 
             
+            // Keep invalidating selected op to enforce rendering of Transform gizmo  
             if (selectedInstance != null && selectedInstance.Inputs.Count >0)
             {
-                // Keep invalidating selected op to enforce rendering of Transform gizmo  
-                selectedInstance.Inputs[0].DirtyFlag.Invalidate();
+                foreach (var i in selectedInstance.Inputs)
+                {
+                    // Skip string inputs to prevent potential interference with resource file paths hooks
+                    // I.e. Invalidating these every frame breaks shader recompiling if Shader-op is selected
+                    if (i.ValueType == typeof(string))
+                    {
+                        continue;
+                    }
+                    i.DirtyFlag.Invalidate();
+                    break;
+                }
             }
             
             // Draw everything!
