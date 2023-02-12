@@ -5,7 +5,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "eccb0098-0c48-49a2-9e30-1680144b4c50"/*ZollnerGrid*/,
+      "Id": "eccb0098-0c48-49a2-9e30-1680144b4c50"/*ZollnerPattern*/,
       "SymbolId": "f2a0a8d9-e2dc-476b-ac97-de13101a6fdb",
       "InputValues": [
         {

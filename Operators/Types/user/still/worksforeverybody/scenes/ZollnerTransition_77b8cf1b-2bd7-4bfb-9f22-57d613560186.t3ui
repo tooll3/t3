@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "eccb0098-0c48-49a2-9e30-1680144b4c50"/*ZollnerGrid*/,
+      "ChildId": "eccb0098-0c48-49a2-9e30-1680144b4c50"/*ZollnerPattern*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

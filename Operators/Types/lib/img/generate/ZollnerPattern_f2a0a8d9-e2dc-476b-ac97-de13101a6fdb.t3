@@ -1,5 +1,5 @@
 {
-  "Name": "ZollnerGrid",
+  "Name": "ZollnerPattern",
   "Id": "f2a0a8d9-e2dc-476b-ac97-de13101a6fdb",
   "Namespace": "lib.img.generate",
   "Inputs": [
@@ -26,10 +26,10 @@
       }
     },
     {
-      "Id": "23782414-01b3-437a-ab6f-99e1770c4126"/*Size*/,
+      "Id": "23782414-01b3-437a-ab6f-99e1770c4126"/*Stretch*/,
       "DefaultValue": {
-        "X": 32.0,
-        "Y": 32.0
+        "X": 0.5,
+        "Y": 1.0
       }
     },
     {
@@ -41,7 +41,7 @@
     },
     {
       "Id": "ecaf4537-146d-4765-8b88-b5a33f5544a1"/*Scale*/,
-      "DefaultValue": 4.0
+      "DefaultValue": 1.0
     },
     {
       "Id": "da1779e6-36fd-4b5d-9730-3f3da244ca40"/*Rotate*/,

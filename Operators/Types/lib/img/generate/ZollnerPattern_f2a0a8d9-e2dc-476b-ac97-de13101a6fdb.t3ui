@@ -1,5 +1,5 @@
 {
-  "Id": "f2a0a8d9-e2dc-476b-ac97-de13101a6fdb"/*ZollnerGrid*/,
+  "Id": "f2a0a8d9-e2dc-476b-ac97-de13101a6fdb"/*ZollnerPattern*/,
   "Description": "",
   "InputUis": [
     {
@@ -24,7 +24,7 @@
       }
     },
     {
-      "InputId": "23782414-01b3-437a-ab6f-99e1770c4126"/*Size*/,
+      "InputId": "23782414-01b3-437a-ab6f-99e1770c4126"/*Stretch*/,
       "Position": {
         "X": -223.4553,
         "Y": 474.05212

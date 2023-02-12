@@ -1,0 +1,44 @@
+{
+  "Id": "82a5f040-926b-4970-9da2-aa36de94b436"/*RgbaToColor*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "5f2de1d3-6803-4f56-aaf1-9e29b4d81eb8"/*X*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "0742e707-1557-4f66-98d9-3f277416b7a3"/*Y*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "80bc1511-7210-4710-a45f-ac961f1d672d"/*Z*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "f2fd304f-11e7-466f-b594-b1c3af901852"/*W*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "ce1c3293-99ed-4309-b040-92931ee706d1"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

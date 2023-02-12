@@ -23,7 +23,7 @@ namespace T3.Operators.Types.Id_6854e04f_8b60_41b2_a369_ca0b715c4df3
         public readonly InputSlot<System.Numerics.Vector4> EdgeColor = new InputSlot<System.Numerics.Vector4>();
 
         [Input(Guid = "78082902-ffb0-47c2-a611-6c1ca8d2a599")]
-        public readonly InputSlot<System.Numerics.Vector2> Size = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "6c55b1a0-8092-42ec-b143-69d782298e7a")]
         public readonly InputSlot<System.Numerics.Vector2> Offset = new InputSlot<System.Numerics.Vector2>();

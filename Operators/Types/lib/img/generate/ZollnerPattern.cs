@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_f2a0a8d9_e2dc_476b_ac97_de13101a6fdb
 {
-    public class ZollnerGrid : Instance<ZollnerGrid>
+    public class ZollnerPattern : Instance<ZollnerPattern>
     {
         [Output(Guid = "16393dfd-962c-4dbb-b698-c2099143d98c")]
         public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new Slot<SharpDX.Direct3D11.Texture2D>();
@@ -20,7 +20,7 @@ namespace T3.Operators.Types.Id_f2a0a8d9_e2dc_476b_ac97_de13101a6fdb
         public readonly InputSlot<System.Numerics.Vector4> Background = new InputSlot<System.Numerics.Vector4>();
 
         [Input(Guid = "23782414-01b3-437a-ab6f-99e1770c4126")]
-        public readonly InputSlot<System.Numerics.Vector2> Size = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "4bdef8db-3057-4e45-a7f8-b1c2e06cb1a5")]
         public readonly InputSlot<System.Numerics.Vector2> Offset = new InputSlot<System.Numerics.Vector2>();

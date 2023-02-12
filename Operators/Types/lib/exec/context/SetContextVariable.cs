@@ -28,17 +28,14 @@ namespace T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789
                 Log.Warning($"Can't set variable with invalid name {name}");
                 return;
             }
-            if (!SubGraph.IsConnected)
-            {
-                context.FloatVariables[name] = newValue;
-            }
-            else
+
+            if (SubGraph.IsConnected)
             {
                 var hadPreviousValue = context.FloatVariables.TryGetValue(name, out var previous);
                 context.FloatVariables[name] = newValue;
-                
+
                 SubGraph.GetValue(context);
-                
+
                 if (hadPreviousValue)
                 {
                     context.FloatVariables[name] = previous;
@@ -47,6 +44,10 @@ namespace T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789
                 {
                     context.FloatVariables.Remove(name);
                 }
+            }
+            else
+            {
+                context.FloatVariables[name] = newValue;
             }
         }
 

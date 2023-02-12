@@ -5,7 +5,7 @@ cbuffer ParamConstants : register(b0)
 {
     float4 Fill;    
     float4 Background;
-    float2 Size;
+    float2 Stretch;
     float2 Offset;
     float ScaleFactor;
     float Rotate;
@@ -89,7 +89,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     hookRotation += imgColorForCel.b * BAffects_HookRotation;
     
     float aspectRatio = TargetWidth/TargetHeight;
-    float edgeSmooth = Feather / (ScaleFactor * (Size.x + Size.y)/2) * 100;
+    float edgeSmooth = Feather / (ScaleFactor * (Stretch.x + Stretch.y)/2);
 
     float2 p = uv;
     p-= 0.5;
@@ -109,7 +109,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     p.x /=aspectRatio;
 
     // Compute raster cells
-    float2 divisions = float2(TargetWidth / Size.x, TargetHeight / Size.y) / ScaleFactor;
+    //float2 divisions = float2(TargetWidth / Stretch.x, TargetHeight / Stretch.y) / ScaleFactor;
+    float2 divisions = float2(aspectRatio,1) * 4 / (ScaleFactor * Stretch);
     float2 pCentered = (p + Offset / divisions * float2(-1,1));
         
     //float2 y = pCentered.y * divisions.y;

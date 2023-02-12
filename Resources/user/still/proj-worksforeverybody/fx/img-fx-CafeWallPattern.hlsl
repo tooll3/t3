@@ -6,7 +6,7 @@ cbuffer ParamConstants : register(b0)
     float4 Fill;    
     float4 Background;
     float4 EdgeColor;
-    float2 Size;
+    float2 Stretch;
     float2 Offset;
     float ScaleFactor;
     float Rotate;
@@ -36,13 +36,13 @@ struct vsOutput
 };
 
 
-#define mod(x,y) ((x)-(y*floor(x/y)))
+#define mod(x,y) ((x)-((y)*floor((x)/(y))))
 
 
 float4 psMain(vsOutput psInput) : SV_TARGET
-{
+{    
     float2 uv = psInput.texCoord;
-    
+   
     float ratio = Ratio;
     float edgeWidth = EdgeWidth /2;
     float rowShift = RowShift;
@@ -54,7 +54,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     rowShift += imgColorForCel.b * BAffects_RowShift;
 
     float aspectRatio = TargetWidth/TargetHeight;
-    float edgeSmooth = Feather / (ScaleFactor * (Size.x + Size.y)/2) * 100;
+    float edgeSmooth = Feather / (ScaleFactor * (Stretch.x + Stretch.y)/2);
 
     float2 p = uv;
     p-= 0.5;
@@ -74,38 +74,34 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     p.x /=aspectRatio;
 
     // Compute raster cells
-    float2 divisions = float2(TargetWidth / Size.x, TargetHeight / Size.y) / ScaleFactor;
-    float2 pCentered = (p + Offset / divisions * float2(-1,1));
-        
+    //float2 divisions = float2(TargetWidth / Stretch.x, TargetHeight / Stretch.y) / ScaleFactor;
+    float2 divisions = float2(aspectRatio,1) * 4 / (ScaleFactor * Stretch);
+    float2 pCentered = (p + Offset / divisions * float2(-1,1));        
     float2 pScaled = pCentered * divisions;
 
-    //return float4(pScaled,0,1);
+    float tt = abs(mod(pScaled.y +0.5, 2.0)/2.0 - 1)-0.5;
+    float sign = tt<0 ? -1:1;
 
+    float r = sign * pScaled.x * AmplifyIllustion; 
+    pScaled.y+= r;
+    
     float2 pInCell = float2(
-        pCentered.x * divisions.x,
+        pScaled.x,
         mod(pScaled.y, 1));
-
 
     int2 cell = (int2)(pScaled - pInCell);
 
     // Offset odd rows
     pInCell.x += cell.y % 2 == 0 ? -rowShift/2 : rowShift/2;
 
-    float2 p1 = pInCell;
-    
-
-    pInCell.x = mod(p1.x ,1);
+    pInCell.x = mod(pInCell.x ,1);
 
     float sEdge = smoothstep(edgeWidth - edgeSmooth, edgeWidth + edgeSmooth, 0.5-abs(pInCell.y-0.5));
-    float sForeGroundTile = smoothstep(ratio + edgeSmooth, ratio - edgeSmooth, abs( pInCell.x - 0.5) + 0.25 );;
-
-
+    float sForeGroundTile = smoothstep(ratio + edgeSmooth, ratio - edgeSmooth, abs( pInCell.x - 0.5) *2 );;
 
     return 
     lerp(
         lerp (Background, Fill, sForeGroundTile),
         EdgeColor,
         1-sEdge);
-
-
 }

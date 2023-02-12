@@ -13,6 +13,9 @@ namespace T3.Operators.Types.Id_957961ad_797c_48ac_b9d6_7f2fa2ce17eb
         [Output(Guid = "4571000e-b180-4f69-a3c2-a2af1fa40660")]
         public readonly Slot<float> B = new Slot<float>();
 
+        [Output(Guid = "dc403770-bd73-4dba-a67f-d94054e01d03")]
+        public readonly Slot<float> AnimParam1Out = new Slot<float>();
+
         [Input(Guid = "534229d1-8728-4925-bd46-3bb351e4e95b")]
         public readonly InputSlot<float> ADefault = new InputSlot<float>();
 
@@ -24,6 +27,9 @@ namespace T3.Operators.Types.Id_957961ad_797c_48ac_b9d6_7f2fa2ce17eb
 
         [Input(Guid = "46801ba5-4e1d-4148-aa91-fe2491822e26")]
         public readonly InputSlot<System.Numerics.Vector2> B_ExploreRange = new InputSlot<System.Numerics.Vector2>();
+
+        [Input(Guid = "ec71dd37-2aa2-45a2-96d9-a32853572855")]
+        public readonly InputSlot<float> AnimParam1 = new InputSlot<float>();
 
     }
 }
