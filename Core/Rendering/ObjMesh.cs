@@ -34,12 +34,11 @@ namespace T3.Core.Rendering
             }
 
             var mesh = new ObjMesh();
-
-            using var stream = new StreamReader(objFilePath);
-
+            
             var line = "";
             try
             {
+                using var stream = new StreamReader(objFilePath);
                 while ((line = stream.ReadLine()) != null)
                 {
                     var lineEntries = line.Split(' ');
