@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Security.Policy;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
 {
@@ -144,6 +147,11 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                 {
                     try
                     {
+                        if (mesh.Lines.Count == 0)
+                        {
+                            Log.Warning("This mode requires the obj file to have line objects (I.e. with two points per face)", this);
+                            break;
+                        }
                         int segmentCount = 0;
                         int vertexCount = 0;
 
@@ -192,7 +200,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                         }
 
                         _points.TypedElements[pointIndex] = Point.Separator();
-                        Log.Debug($"loaded {path} with {segmentCount} segments and {vertexCount} points");
+                        Log.Debug($"loaded {path} with {segmentCount} segments and {vertexCount} points", this);
                     }
                     catch (Exception e)
                     {
@@ -201,10 +209,100 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
 
                     break;
                 }
+                
+                case Modes.WireframeLines:
+                {
+                    try
+                    {
+                        var points = new List<Point>();
+                        var usedEdges = new HashSet<int>();
+                        foreach (var f in mesh.Faces)
+                        {
+                            AppendLineOnce(mesh, f.V0, f.V1, f.V2, points, usedEdges);
+                            AppendLineOnce(mesh, f.V1, f.V2, f.V0, points, usedEdges);
+                            AppendLineOnce(mesh, f.V2, f.V0, f.V1, points, usedEdges);
+                        }
+
+                        if (points.Count == 0)
+                        {
+                            Log.Warning("No points found", this);
+                            break;
+                        }
+                        
+                        _points = new StructuredList<Point>(points.Count);
+
+                        for (var index = 0; index < points.Count; index++)
+                        {
+                            _points.TypedElements[index] = points[index];
+                        }
+
+                        Log.Debug($"loaded {path} with {_points.Elements} points found");
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error("Reading vertices failed " + e);
+                    }
+
+                    break;
+                }                
             }
 
             Points.Value = _points;
         }
+
+        private void AppendLineOnce(ObjMesh mesh, int vertexIndexA, int vertexIndexB, int oppositeVertexIndex,  ICollection<Point> points, ISet<int> collectedPool)
+        {
+            if (vertexIndexA > vertexIndexB)
+            {
+                (vertexIndexB, vertexIndexA) = (vertexIndexA, vertexIndexB);
+            }
+            
+            
+            var hashForward = Utilities.Hash(vertexIndexA, vertexIndexB);
+            if (!collectedPool.Add(hashForward))
+            {
+                //Log.Debug($"Skipping hash {hashForward}");
+                return;
+            }
+            
+            // Skip if opposite right angle
+
+            var eA = SharpDX.Vector3.Normalize(mesh.Positions[vertexIndexA] - mesh.Positions[oppositeVertexIndex]);  
+            var eB = SharpDX.Vector3.Normalize(mesh.Positions[vertexIndexB] - mesh.Positions[oppositeVertexIndex]);
+            
+            var dot = SharpDX.Vector3.Dot(eA, eB);
+            if (MathF.Abs(dot) < 0.05)
+            {
+                //Log.Debug($"Skipping triangulation line {hashForward}");
+                return;
+            }
+            
+            points.Add(new Point()
+                           {
+                               Position = new Vector3(
+                                                      mesh.Positions[vertexIndexA].X,
+                                                      mesh.Positions[vertexIndexA].Y,
+                                                      mesh.Positions[vertexIndexA].Z),
+                               W = 1
+                           });
+            
+            points.Add(new Point()
+                           {
+                               Position = new Vector3(
+                                                      mesh.Positions[vertexIndexB].X,
+                                                      mesh.Positions[vertexIndexB].Y,
+                                                      mesh.Positions[vertexIndexB].Z),
+                               W = 1
+                           });
+            
+            points.Add(new Point()
+                           {
+                               W = float.NaN
+                           });            
+
+            
+        }
+        
 
         private StructuredList<Point> _points = new StructuredList<Point>(0);
 
@@ -215,7 +313,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
             Vertices_ColorInOrientation,
             Vertices_GrayscaleInOrientation,
             Vertices_GrayscaleAsW,
-            //WireframeLines, // Todo: Not implemented 
+            WireframeLines,  
         }
 
         [Input(Guid = "895dab2c-e3be-4e73-9c96-0f6101cea113")]

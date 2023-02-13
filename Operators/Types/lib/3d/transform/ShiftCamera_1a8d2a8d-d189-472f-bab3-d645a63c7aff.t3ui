@@ -1,0 +1,45 @@
+{
+  "Id": "1a8d2a8d-d189-472f-bab3-d645a63c7aff"/*ShiftCamera*/,
+  "Description": "Shifts the clip space of the current context projection matrix.\nThis might be useful for the implementation of obscure rendering tricks.",
+  "InputUis": [
+    {
+      "InputId": "b5df04f5-c648-4436-ae1c-b633fc5c16fa"/*Command*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 15.714638,
+        "Y": 12.576044
+      }
+    },
+    {
+      "InputId": "3f580113-4117-4f87-9a7e-c151f26fa1ed"/*Translation*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "b48ff02f-f8cf-4daf-9c57-5c74c491b05a"/*Scale*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "22e755fd-235f-40ac-b9c3-4ae948164870"/*UniformScale*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "4525b575-31ee-4e6a-9f9b-4b0e3127e493"/*Output*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}
