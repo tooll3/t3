@@ -54,6 +54,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 if (KeyboardBinding.Triggered(UserActions.InsertKeyframeWithIncrement))
                 {
+                    SelectedKeyframes.Clear();
                     foreach (var p in AnimationParameters)
                     {
                         InsertNewKeyframe(p, (float)TimeLineCanvas.Playback.TimeInBars, false, 1);
