@@ -173,11 +173,22 @@ namespace T3.Operators.Types.Id_353f63fc_e613_43ca_b037_02d7b9f4e935
                 new() { W = float.NaN },
             };
 
+        private static readonly Point[] CrossQuadPoints =
+            {
+                new() { Position = new Vector3(-S, -S, 0), W = 1 },
+                new() { Position = new Vector3(+S, -S, 0), W = 1 },
+                new() { Position = new Vector3(+S, +S, 0), W = 1 },
+                new() { Position = new Vector3(-S, +S, 0), W = 1 },
+                new() { Position = new Vector3(-S, -S, 0), W = 1 },
+                new() { W = float.NaN },
+            };        
+        
         private enum Shapes
         {
             Cross,
             CrossXY,
             Cube,
+            Quad,
         }
 
         private static readonly List<Point[]> Definitions = new()
@@ -185,6 +196,7 @@ namespace T3.Operators.Types.Id_353f63fc_e613_43ca_b037_02d7b9f4e935
                                                                     CrossPoints,
                                                                     CrossXYPoints,
                                                                     CubePoints,
+                                                                    CrossQuadPoints
                                                                 };
     }
 }

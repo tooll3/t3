@@ -1,6 +1,5 @@
 using T3.Core.DataTypes;
 using System;
-using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -45,6 +44,9 @@ namespace T3.Operators.Types.Id_a5ec9aa9_73fc_44f9_8530_e62afc0b112d
 
         [Input(Guid = "10e1a3e8-8f18-44f4-8efc-dec2a6bfa62e")]
         public readonly InputSlot<float> ZOffsetCenterPass = new InputSlot<float>();
+
+        [Input(Guid = "e4280a81-15f6-42cd-9bbf-4cab66a15c17")]
+        public readonly InputSlot<System.Numerics.Vector4> FadeOutColor = new InputSlot<System.Numerics.Vector4>();
 
     }
 }
