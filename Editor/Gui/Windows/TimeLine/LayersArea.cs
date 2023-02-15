@@ -527,13 +527,19 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 if (dragContent)
                 {
                     //TODO: fix continuous dragging
-                    clip.SourceRange.Start += (float)dt;
-                    clip.SourceRange.End += (float)dt;
+                    clip.TimeRange.Start += (float)dt;
+                    clip.TimeRange.End += (float)dt;
+                    
+                    // clip.SourceRange.Start += (float)dt;
+                    // clip.SourceRange.End += (float)dt;
                 }
                 else
                 {
                     clip.TimeRange.Start += (float)dt;
                     clip.TimeRange.End += (float)dt;
+                    clip.SourceRange.Start += (float)dt;
+                    clip.SourceRange.End += (float)dt;
+
                 }
 
                 if (clip.LayerIndex > _minLayerIndex && dy > LayerHeight)
