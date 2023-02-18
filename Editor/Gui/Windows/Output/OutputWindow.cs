@@ -10,6 +10,7 @@ using T3.Core.Resource;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.UiHelpers;
 using Color = T3.Editor.Gui.Styling.Color;
 using Vector2 = System.Numerics.Vector2;
 
@@ -177,6 +178,11 @@ namespace T3.Editor.Gui.Windows.Output
                     ScreenshotWriter.SaveBufferToFile(texture, filename, ScreenshotWriter.FileFormats.Jpg);
                 }
             }
+            
+            ImGui.SameLine();
+            ImGui.PushID("CamSpeed");
+            var result = SingleValueEdit.Draw(ref UserSettings.Config.CameraSpeed,  new Vector2(ImGui.GetFrameHeight() * 2, ImGui.GetFrameHeight()), 0.001f, 100, true, 0.01f, "{0:G3}");
+            ImGui.PopID();
         }
 
         /// <summary>

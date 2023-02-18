@@ -4,6 +4,7 @@ using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Operator.Interfaces;
 using T3.Editor.Gui.Interaction.TransformGizmos;
+using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Interaction.Camera
 {
@@ -87,7 +88,7 @@ namespace T3.Editor.Gui.Interaction.Camera
                 _orbitVelocity = Vector2.Lerp(_orbitVelocity, Vector2.Zero, _deltaTime * CameraInteractionParameters.OrbitHorizontalDamping * 60);
             }
 
-            var maxVelocityForScale = _viewAxis.ViewDistance.Length() * CameraInteractionParameters.MaxMoveVelocity;
+            var maxVelocityForScale = _viewAxis.ViewDistance.Length() * CameraInteractionParameters.MaxMoveVelocity * UserSettings.Config.CameraSpeed;
             if (_moveVelocity.Length() > maxVelocityForScale)
             {
                 _moveVelocity *= maxVelocityForScale / _moveVelocity.Length();
@@ -148,18 +149,34 @@ namespace T3.Editor.Gui.Interaction.Camera
 
             var zoomFactorForCurrentFramerate = 1 + (CameraInteractionParameters.ZoomSpeed * FrameDurationFactor);
 
-            if (delta < 0)
+            if (ImGui.IsMouseDown(ImGuiMouseButton.Left)
+                ||ImGui.IsMouseDown(ImGuiMouseButton.Middle)
+                ||ImGui.IsMouseDown(ImGuiMouseButton.Right))
             {
-                viewDistance *= zoomFactorForCurrentFramerate;
-            }
+                if (delta < 0)
+                {
+                    //viewDistance *= zoomFactorForCurrentFramerate;
+                    UserSettings.Config.CameraSpeed *= zoomFactorForCurrentFramerate;
+                }
 
-            if (delta > 0)
+                if (delta > 0)
+                {
+                    //viewDistance /= zoomFactorForCurrentFramerate;
+                    UserSettings.Config.CameraSpeed /= zoomFactorForCurrentFramerate;
+                }
+
+                _intendedSetup.Position = _intendedSetup.Target + viewDistance;
+                _manipulatedByMouseWheel = true;
+            }
+            else
             {
-                viewDistance /= zoomFactorForCurrentFramerate;
-            }
+                //var viewDirLength = _viewAxis.ViewDistance.Length();
+                var acc = CameraInteractionParameters.CameraAcceleration * UserSettings.Config.CameraSpeed * _deltaTime * 60;
+                var sign = delta < 0 ? -1 : 1;
+                _moveVelocity += Vector3.Normalize(_viewAxis.ViewDistance) * acc * sign;
 
-            _intendedSetup.Position = _intendedSetup.Target + viewDistance;
-            _manipulatedByMouseWheel = true;
+                _manipulatedByKeyboard = true;
+            }
         }
 
         private void LookAround()
@@ -168,8 +185,8 @@ namespace T3.Editor.Gui.Interaction.Camera
                 return;
 
             var dragDelta = ImGui.GetIO().MouseDelta;
-            var factorX = -dragDelta.X * CameraInteractionParameters.RotateMouseSensitivity;
-            var factorY = dragDelta.Y * CameraInteractionParameters.RotateMouseSensitivity;
+            var factorX = -dragDelta.X * CameraInteractionParameters.RotateMouseSensitivity * 1.5f;
+            var factorY = dragDelta.Y * CameraInteractionParameters.RotateMouseSensitivity * 1.5f;
             var rotAroundX = Matrix4x4.CreateFromAxisAngle(_viewAxis.Left, factorY);
             var rotAroundY = Matrix4x4.CreateFromAxisAngle(_viewAxis.Up, factorX);
             var rot = Matrix4x4.Multiply(rotAroundX, rotAroundY);
@@ -184,17 +201,32 @@ namespace T3.Editor.Gui.Interaction.Camera
 
         private void ApplyOrbitVelocity(Vector2 orbitVelocity)
         {
-            var viewDir = new Vector4(_intendedSetup.Target - _intendedSetup.Position, 1);
-            var viewDirLength = viewDir.Length();
-            viewDir /= viewDirLength;
-
             var rotAroundX = Matrix4x4.CreateFromAxisAngle(_viewAxis.Left, orbitVelocity.Y);
             var rotAroundY = Matrix4x4.CreateFromAxisAngle(_viewAxis.Up, orbitVelocity.X);
             var rot = Matrix4x4.Multiply(rotAroundX, rotAroundY);
-
+            
+            
+            // The following was an attempt to offset rotation target with cameraSpeed.
+            // This approach had too many side effects. I'm leaving it here for reference...
+            //
+            // var view = _intendedSetup.Target - _intendedSetup.Position;
+            // var viewLength = view.Length();
+            // var viewDirection = view / viewLength;
+            //
+            // var rotatedViewDir = Vector3.Transform(viewDirection, rot);
+            //
+            // var tempTarget = _intendedSetup.Position + viewDirection * UserSettings.Config.CameraSpeed * 3;
+            // _intendedSetup.Position = tempTarget - rotatedViewDir  * UserSettings.Config.CameraSpeed * 3;
+            // _intendedSetup.Target = _intendedSetup.Position + rotatedViewDir * viewLength;
+            
+            var viewDir = _intendedSetup.Target - _intendedSetup.Position;
+            var viewDirLength = viewDir.Length();
+            viewDir /= viewDirLength;
+            
             var newViewDir = Vector4.Transform(viewDir, rot);
             newViewDir = Vector4.Normalize(newViewDir);
-            _intendedSetup.Position = _intendedSetup.Target - new Vector3(newViewDir.X, newViewDir.Y, newViewDir.Z) * viewDirLength;
+            _intendedSetup.Position = _intendedSetup.Target - new Vector3(newViewDir.X, newViewDir.Y, newViewDir.Z);
+            
         }
 
         private void Pan()
@@ -206,7 +238,7 @@ namespace T3.Editor.Gui.Interaction.Camera
             var factorX = dragDelta.X / CameraInteractionParameters.RenderWindowHeight;
             var factorY = dragDelta.Y / CameraInteractionParameters.RenderWindowHeight;
 
-            var length = (_intendedSetup.Target - _intendedSetup.Position).Length();
+            var length = (_intendedSetup.Target - _intendedSetup.Position).Length() * UserSettings.Config.CameraSpeed;
             var delta = _viewAxis.Left * factorX * length
                         + _viewAxis.Up * factorY * length;
 
@@ -219,8 +251,7 @@ namespace T3.Editor.Gui.Interaction.Camera
             if (!ImGui.IsWindowHovered() || ImGui.GetIO().KeyCtrl)
                 return;
 
-            var viewDirLength = _viewAxis.ViewDistance.Length();
-            var acc = CameraInteractionParameters.CameraAcceleration * _deltaTime * 60 * viewDirLength;
+            var acc = CameraInteractionParameters.CameraAcceleration * UserSettings.Config.CameraSpeed * _deltaTime * 60;
 
             if (ImGui.IsKeyDown((ImGuiKey)Key.A) || ImGui.IsKeyDown((ImGuiKey)Key.CursorLeft))
             {
