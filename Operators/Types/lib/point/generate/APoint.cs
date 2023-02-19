@@ -15,10 +15,10 @@ namespace T3.Operators.Types.Id_9989f539_f86c_4508_83d7_3fc0e559f502
 {
     public class APoint : Instance<APoint>, ITransformable
     {
-        [Output(Guid = "D9C04756-8922-496D-8380-120F280EF65B", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        [Output(Guid = "D9C04756-8922-496D-8380-120F280EF65B")]
         public readonly Slot<StructuredList> ResultList = new();
         
-        [Output(Guid = "8698D60D-8CD9-4A3F-9001-19DAC29028CC", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        [Output(Guid = "8698D60D-8CD9-4A3F-9001-19DAC29028CC")]
         public readonly Slot<Vector3> OutPosition = new();
         
         public APoint()

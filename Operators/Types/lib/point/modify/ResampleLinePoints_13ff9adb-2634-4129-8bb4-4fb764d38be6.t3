@@ -1,5 +1,5 @@
 {
-  "Name": "SamplePoints",
+  "Name": "ResampleLinePoints",
   "Id": "13ff9adb-2634-4129-8bb4-4fb764d38be6",
   "Namespace": "lib.point.modify",
   "Inputs": [

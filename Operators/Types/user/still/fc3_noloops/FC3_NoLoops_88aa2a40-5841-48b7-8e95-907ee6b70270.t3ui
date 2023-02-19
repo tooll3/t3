@@ -389,7 +389,7 @@
       }
     },
     {
-      "ChildId": "1fcf78ad-8d67-484f-bf6b-a5dba1360ce8"/*SamplePoints*/,
+      "ChildId": "1fcf78ad-8d67-484f-bf6b-a5dba1360ce8"/*ResampleLinePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -730,7 +730,7 @@
       }
     },
     {
-      "ChildId": "f06e837f-9ef2-466e-946f-babe6c2af6be"/*SamplePoints*/,
+      "ChildId": "f06e837f-9ef2-466e-946f-babe6c2af6be"/*ResampleLinePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

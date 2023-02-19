@@ -170,7 +170,7 @@
       }
     },
     {
-      "ChildId": "430afa13-5706-421a-a444-3026874cfda8"/*SamplePoints*/,
+      "ChildId": "430afa13-5706-421a-a444-3026874cfda8"/*ResampleLinePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

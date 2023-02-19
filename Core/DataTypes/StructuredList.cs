@@ -44,6 +44,11 @@ namespace T3.Core.DataTypes
 
     public class StructuredList<T> : StructuredList where T : struct
     {
+        public StructuredList(T[] array) : base(typeof(T))
+        {
+            TypedElements = array;
+        }
+        
         public StructuredList(int count) : base(typeof(T))
         {
             TypedElements = new T[count];

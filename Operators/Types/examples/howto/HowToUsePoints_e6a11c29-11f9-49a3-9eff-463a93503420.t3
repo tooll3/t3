@@ -609,7 +609,7 @@
       "Outputs": []
     },
     {
-      "Id": "2cd8ae17-7c30-489b-a29d-99bdec29f170"/*SamplePoints*/,
+      "Id": "2cd8ae17-7c30-489b-a29d-99bdec29f170"/*ResampleLinePoints*/,
       "SymbolId": "13ff9adb-2634-4129-8bb4-4fb764d38be6",
       "InputValues": [],
       "Outputs": []

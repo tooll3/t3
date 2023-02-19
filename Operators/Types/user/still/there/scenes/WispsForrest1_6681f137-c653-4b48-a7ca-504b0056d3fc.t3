@@ -484,7 +484,7 @@
       "Outputs": []
     },
     {
-      "Id": "5c5e82ea-626f-4699-ba47-11d9befe8e77"/*SamplePoints*/,
+      "Id": "5c5e82ea-626f-4699-ba47-11d9befe8e77"/*ResampleLinePoints*/,
       "SymbolId": "13ff9adb-2634-4129-8bb4-4fb764d38be6",
       "InputValues": [
         {

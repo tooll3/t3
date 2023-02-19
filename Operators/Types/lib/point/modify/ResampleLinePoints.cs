@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_13ff9adb_2634_4129_8bb4_4fb764d38be6
 {
-    public class SamplePoints : Instance<SamplePoints>
+    public class ResampleLinePoints : Instance<ResampleLinePoints>
     {
 
         [Output(Guid = "28cba376-7037-4d8c-bc4b-a8c747687f03")]

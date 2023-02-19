@@ -13,6 +13,7 @@ using T3.Core.Audio;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Commands;
@@ -90,12 +91,14 @@ namespace T3.Editor.Gui
             // Set selected id so operator can check if they are selected or not  
             var selectedInstance = NodeSelection.GetSelectedInstance();
             MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
-
             
             // Keep invalidating selected op to enforce rendering of Transform gizmo  
-            if (selectedInstance != null && selectedInstance.Inputs.Count >0)
+            foreach (var si in NodeSelection.GetSelectedInstances())
             {
-                foreach (var i in selectedInstance.Inputs)
+                if (si is not ITransformable transformable)
+                    continue;
+                
+                foreach (var i in si.Inputs)
                 {
                     // Skip string inputs to prevent potential interference with resource file paths hooks
                     // I.e. Invalidating these every frame breaks shader recompiling if Shader-op is selected
@@ -104,9 +107,10 @@ namespace T3.Editor.Gui
                         continue;
                     }
                     i.DirtyFlag.Invalidate();
-                    break;
                 }
             }
+            
+            
             
             // Draw everything!
             ImGui.DockSpaceOverViewport();

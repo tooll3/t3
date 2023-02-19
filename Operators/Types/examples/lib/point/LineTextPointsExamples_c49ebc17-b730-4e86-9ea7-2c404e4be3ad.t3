@@ -451,7 +451,7 @@
       "Outputs": []
     },
     {
-      "Id": "ee7a2678-0770-490f-a325-1c26e8c83f93"/*SamplePoints*/,
+      "Id": "ee7a2678-0770-490f-a325-1c26e8c83f93"/*ResampleLinePoints*/,
       "SymbolId": "13ff9adb-2634-4129-8bb4-4fb764d38be6",
       "InputValues": [
         {
@@ -548,7 +548,7 @@
       "Outputs": []
     },
     {
-      "Id": "da72945c-bd24-4612-b766-c591132110c9"/*SamplePoints*/,
+      "Id": "da72945c-bd24-4612-b766-c591132110c9"/*ResampleLinePoints*/,
       "SymbolId": "13ff9adb-2634-4129-8bb4-4fb764d38be6",
       "InputValues": [
         {

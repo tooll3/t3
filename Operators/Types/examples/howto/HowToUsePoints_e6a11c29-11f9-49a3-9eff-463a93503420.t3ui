@@ -523,7 +523,7 @@
       }
     },
     {
-      "ChildId": "2cd8ae17-7c30-489b-a29d-99bdec29f170"/*SamplePoints*/,
+      "ChildId": "2cd8ae17-7c30-489b-a29d-99bdec29f170"/*ResampleLinePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

@@ -1,0 +1,37 @@
+{
+  "Id": "edecd98f-209b-423d-8201-0fd7d590c4cf"/*SplinePoints*/,
+  "Description": "Samples the incoming points into a set of spline points.",
+  "InputUis": [
+    {
+      "InputId": "88ab4088-efa9-42b7-afe9-d44a2ff6e58a"/*SampleCount*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "02968cef-1a5e-4a7f-b451-b692f4c9b6ab"/*Points*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "28b45955-1e05-43a9-87b6-44eabc30bea7"/*OutBuffer*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "1b0a8c95-cf11-4ef6-bdb7-c54d0cd7beb7"/*SampledPoints*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

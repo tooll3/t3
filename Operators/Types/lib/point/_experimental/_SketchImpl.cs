@@ -97,12 +97,12 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                 else if (KeyHandler.PressedKeys[(int)Key.X])
                 {
                     if(!KeyHandler.PressedKeys[(int)Key.CtrlKey])
-                        _paging.Cut();
+                        _paging.Cut(overridePageIndex);
                 }
                 else if (KeyHandler.PressedKeys[(int)Key.V])
                 {
                     if(!KeyHandler.PressedKeys[(int)Key.CtrlKey])
-                        _paging.Paste(context.LocalTime);
+                        _paging.Paste(context.LocalTime, overridePageIndex);
                 }
             }
 
@@ -404,17 +404,29 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
             public bool HasCutPage => _cutPage != null;
 
-            public void Cut()
+            public void Cut(int overridePageIndex)
             {
                 if (!HasActivePage)
                     return;
 
                 _cutPage = ActivePage;
                 Pages.Remove(ActivePage);
-                UpdatePageIndex(_lastContextTime, NoPageIndex);
+                //if (overridePageIndex < 0)
+                //{
+                //
+                //}
+                // else
+                // {
+                //     var index = Pages.IndexOf(ActivePage);
+                //     if (index != -1)
+                //     {
+                //         Pages[index] = null;
+                //     }
+                // }
+                UpdatePageIndex(_lastContextTime, overridePageIndex);
             }
 
-            public void Paste(double time)
+            public void Paste(double time, int overridePageIndex)
             {
                 if (_cutPage == null)
                     return;
@@ -424,7 +436,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
                 _cutPage.Time = time;
                 Pages.Add(_cutPage);
-                UpdatePageIndex(_lastContextTime, NoPageIndex);
+                UpdatePageIndex(_lastContextTime, overridePageIndex);
             }
 
             public int ActivePageIndex { get; private set; } = NoPageIndex;

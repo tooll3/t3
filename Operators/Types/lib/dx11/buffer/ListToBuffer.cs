@@ -57,9 +57,9 @@ namespace T3.Operators.Types.Id_7e28c796_85e7_47ee_99bb_9599284dbeeb
             {
                 using (var data = new DataStream(totalSizeInBytes, true, true))
                 {
-                    foreach (var entry in listsCollectedInputs)
+                    foreach (var structuredList in listsCollectedInputs)
                     {
-                        entry?.WriteToStream(data);
+                        structuredList?.WriteToStream(data);
                     }
 
                     data.Position = 0;
