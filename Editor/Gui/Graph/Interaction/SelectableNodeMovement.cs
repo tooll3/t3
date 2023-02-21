@@ -509,7 +509,13 @@ namespace T3.Editor.Gui.Graph.Interaction
                 verticalOffset += RecursivelyAlignChildren(connectedChildUi, commands, freshlySnappedOpWidgets);
 
                 freshlySnappedOpWidgets.Add(connectedChildUi);
-                NodeSelection.AddSelection(connectedChildUi);
+                //NodeSelection.AddSelection(connectedChildUi);
+
+                var instance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == connectedChildUi.Id);
+                if (instance != null)
+                {
+                    NodeSelection.AddSymbolChildToSelection(connectedChildUi, instance);
+                }
                 snappedCount++;
             }
             

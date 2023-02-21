@@ -93,7 +93,7 @@ namespace T3.Editor.Gui
             MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
             
             // Keep invalidating selected op to enforce rendering of Transform gizmo  
-            foreach (var si in NodeSelection.GetSelectedInstances())
+            foreach (var si in NodeSelection.GetSelectedInstances().ToList())
             {
                 if (si is not ITransformable transformable)
                     continue;
