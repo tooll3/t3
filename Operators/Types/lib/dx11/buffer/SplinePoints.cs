@@ -245,7 +245,7 @@ namespace T3.Operators.Types.Id_edecd98f_209b_423d_8201_0fd7d590c4cf
                 lastPos = pos;
 
                 result[index].W = 1;
-                result[index].Orientation = -LookAt(Vector3.Normalize(d), -Vector3.UnitY);
+                result[index].Orientation = LookAt(-Vector3.Normalize(d), -Vector3.UnitY);
             }
 
             return result;

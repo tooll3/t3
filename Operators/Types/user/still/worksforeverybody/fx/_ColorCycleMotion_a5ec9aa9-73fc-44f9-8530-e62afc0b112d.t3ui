@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "3ad5ed8e-947c-4c47-9e97-407017fa4b46"/*Command*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0
@@ -246,8 +247,8 @@
         "Y": 62.0
       },
       "Position": {
-        "X": 689.78156,
-        "Y": 786.10974
+        "X": 848.40454,
+        "Y": 720.961
       }
     },
     {
