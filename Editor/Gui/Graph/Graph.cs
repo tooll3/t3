@@ -45,8 +45,9 @@ namespace T3.Editor.Gui.Graph
             Operators = 1,
         }
 
-        
-        public static void DrawGraph(ImDrawListPtr drawList, bool needsReinit= true)
+        private static int _lastCheckSum;
+
+        public static void DrawGraph(ImDrawListPtr drawList, bool needsReinit= false)
         {
             DrawList = drawList;
             var graphSymbol = GraphCanvas.Current.CompositionOp.Symbol;
@@ -57,6 +58,30 @@ namespace T3.Editor.Gui.Graph
             _inputUisById = _symbolUi.InputUis;
             _outputUisById = _symbolUi.OutputUis;
 
+            if (ConnectionMaker.TempConnections.Count > 0)
+            {
+                _lastCheckSum = 0;
+                needsReinit = true;
+            }
+            
+            // Checksum
+            if (!needsReinit)
+            {
+                var checkSum = 0;
+                foreach (var c in graphSymbol.Connections)
+                {
+                    checkSum += c.GetHashCode();
+                }
+                
+                if (checkSum != _lastCheckSum)
+                {
+                    Log.Debug("Update connections");
+                    needsReinit = true;
+                    _lastCheckSum = checkSum;
+                }
+            }
+            
+            //needsReinit = true;
             if (needsReinit)
             {
                 AllConnections.Clear();
