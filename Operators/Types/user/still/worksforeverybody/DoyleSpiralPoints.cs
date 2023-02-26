@@ -16,9 +16,6 @@ namespace T3.Operators.Types.Id_4895a804_84df_4642_a2d3_db34a268d887
         [Input(Guid = "f7f2b987-32be-4aac-a513-3331cd6abf07")]
         public readonly InputSlot<float> PointsPerRing = new InputSlot<float>();
 
-        [Output(Guid = "ee903f87-89fc-48d9-8833-b36ec20ac726")]
-        public readonly Slot<BufferWithViews> OutBuffer2 = new Slot<BufferWithViews>();
-
 
     }
 }

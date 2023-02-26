@@ -5,15 +5,15 @@
     {
       "InputId": "5ab2f357-5845-435e-9339-df06b57a5cf4"/*Points*/,
       "Position": {
-        "X": -200.0,
-        "Y": 0.0
+        "X": -150.0,
+        "Y": 14.6171875
       }
     },
     {
       "InputId": "f7f2b987-32be-4aac-a513-3331cd6abf07"/*PointsPerRing*/,
       "Position": {
-        "X": -200.0,
-        "Y": 45.0
+        "X": -150.0,
+        "Y": 59.617188
       }
     }
   ],
@@ -144,15 +144,8 @@
     {
       "OutputId": "16e5ed75-fdef-4cea-9c20-0c68e156311b"/*OutBuffer*/,
       "Position": {
-        "X": 1378.365,
-        "Y": 80.5
-      }
-    },
-    {
-      "OutputId": "ee903f87-89fc-48d9-8833-b36ec20ac726"/*OutBuffer2*/,
-      "Position": {
-        "X": 1378.365,
-        "Y": 180.5
+        "X": 1118.365,
+        "Y": 0.0
       }
     }
   ]
