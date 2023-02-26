@@ -52,7 +52,7 @@ namespace T3.Operators.Types.Id_185452c6_f299_42a3_b618_c6aa00d66c62
                                             Id = Color1Pos.Id
                                         });
             }
-            _gradient.Steps.Sort((x, y) => x.NormalizedPosition.CompareTo(y.NormalizedPosition));
+            _gradient.SortHandles();
             
             OutGradient.Value = _gradient;    //FIXME: This might not be efficient or required
         }

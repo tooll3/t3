@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
+using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
@@ -195,15 +196,23 @@ namespace T3.Editor.Gui.Styling
         public static void ContextMenuForItem(Action drawMenuItems, string title = null, string id = "context_menu",
                                               ImGuiPopupFlags flags = ImGuiPopupFlags.MouseButtonRight)
         {
+            var wasAlreadyOpen = ImGui.IsPopupOpen(id);
+            
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
 
             if (ImGui.BeginPopupContextItem(id, flags))
             {
+                if(wasAlreadyOpen)
+                    ImGui.Separator();
+                
+                FrameStats.Current.IsItemContextMenuOpen = true;
                 if (title != null)
                 {
-                    ImGui.PushFont(Fonts.FontLarge);
+                    ImGui.PushFont(Fonts.FontSmall);
+                    ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
                     ImGui.TextUnformatted(title);
+                    ImGui.PopStyleColor();
                     ImGui.PopFont();
                 }
 
@@ -216,12 +225,12 @@ namespace T3.Editor.Gui.Styling
 
         public static void DrawContextMenuForScrollCanvas(Action drawMenuContent, ref bool contextMenuIsOpen)
         {
-            // This is a horrible hack to distinguish right mouse click from right mouse drag
-            //var rightMouseDragDelta = (ImGui.GetIO().MouseClickedPos[1] - ImGui.GetIO().MousePos).Length();
-            var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
-
             if (!contextMenuIsOpen)
             {
+                if (FrameStats.Current.IsItemContextMenuOpen)
+                    return;
+                
+                var wasDraggingRight = ImGui.GetMouseDragDelta(ImGuiMouseButton.Right).Length() > UserSettings.Config.ClickThreshold;
                 if (wasDraggingRight)
                     return;
 
@@ -232,7 +241,8 @@ namespace T3.Editor.Gui.Styling
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
 
-            if (ImGui.BeginPopupContextWindow("context_menu"))
+
+            if (ImGui.BeginPopupContextWindow("windows_context_menu"))
             {
                 ImGui.GetMousePosOnOpeningCurrentPopup();
                 contextMenuIsOpen = true;

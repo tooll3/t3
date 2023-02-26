@@ -32,6 +32,7 @@ namespace T3.Editor.Gui
             public bool HasKeyframesBeforeCurrentTime;
             public bool HasKeyframesAfterCurrentTime;
             public bool HasAnimatedParameters => HasKeyframesBeforeCurrentTime || HasKeyframesAfterCurrentTime;
+            public bool IsItemContextMenuOpen;
             
             public void Clear()
             {
@@ -39,6 +40,7 @@ namespace T3.Editor.Gui
                 RenderedIds.Clear();
                 HasKeyframesBeforeCurrentTime = false;
                 HasKeyframesAfterCurrentTime = false;
+                IsItemContextMenuOpen = false;
             }
         }
         public static Stats Current = new();

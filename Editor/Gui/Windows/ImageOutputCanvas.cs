@@ -98,24 +98,25 @@ namespace T3.Editor.Gui.Windows
                         break;
                 }
             }
-                
-                
-                
-            ImGui.PushFont(Fonts.FontSmall);
-            var zoom = Math.Abs(Scale.X) < 0.001f ? "" : $" ×{Scale.X:G2}";
-            var description = $"{size.X}x{size.Y}  {format} {zoom}";
-            var descriptionWidth = ImGui.CalcTextSize(description).X;
 
-            var textPos = new Vector2(WindowPos.X + (WindowSize.X - descriptionWidth) / 2,
-                                      WindowPos.Y + WindowSize.Y - 16);
+            if (UserSettings.Config.ShowToolbar)
+            {
+                ImGui.PushFont(Fonts.FontSmall);
+                var zoom = Math.Abs(Scale.X) < 0.001f ? "" : $" ×{Scale.X:G2}";
+                var description = $"{size.X}x{size.Y}  {format} {zoom}";
+                var descriptionWidth = ImGui.CalcTextSize(description).X;
 
-            var drawList = ImGui.GetWindowDrawList();
-            drawList.AddText(textPos + new Vector2(1,0), ShadowColor, description );
-            drawList.AddText(textPos + new Vector2(-1,0), ShadowColor, description );
-            drawList.AddText(textPos + new Vector2(0,1), ShadowColor, description );
-            drawList.AddText(textPos + new Vector2(0,-1), ShadowColor, description );
-            drawList.AddText(textPos, Color.White, description );
-            ImGui.PopFont();
+                var textPos = new Vector2(WindowPos.X + (WindowSize.X - descriptionWidth) / 2,
+                                          WindowPos.Y + WindowSize.Y - 16);
+
+                var drawList = ImGui.GetWindowDrawList();
+                drawList.AddText(textPos + new Vector2(1,0), ShadowColor, description );
+                drawList.AddText(textPos + new Vector2(-1,0), ShadowColor, description );
+                drawList.AddText(textPos + new Vector2(0,1), ShadowColor, description );
+                drawList.AddText(textPos + new Vector2(0,-1), ShadowColor, description );
+                drawList.AddText(textPos, Color.White, description );
+                ImGui.PopFont();
+            }
         }
         
         private static readonly Color ShadowColor = new Color(0.0f, 0.0f, 0.0f, 0.6f);

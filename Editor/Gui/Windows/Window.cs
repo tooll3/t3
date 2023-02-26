@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Logging;
 
 namespace T3.Editor.Gui.Windows
 {
@@ -90,7 +91,13 @@ namespace T3.Editor.Gui.Windows
                 if (PreventWindowDragging)
                     ImGui.BeginChild("inner", ImGui.GetWindowContentRegionMax()- ImGui.GetWindowContentRegionMin(), false, ImGuiWindowFlags.NoMove| preventMouseScrolling | WindowFlags);
 
+                var idBefore = ImGui.GetID("");
                 DrawContent();
+                var idAfter = ImGui.GetID("");
+                if (idBefore != idAfter)
+                {
+                    Log.Warning($"Inconsistent ImGui-ID after rendering {this}  {idBefore} != {idAfter}");
+                }
 
                 if (PreventWindowDragging)
                     ImGui.EndChild();

@@ -169,7 +169,10 @@ namespace T3.Editor.Gui.Windows
         }
 
         
-        
+        /// <summary>
+        /// Draw all parameters of the selected instance.
+        /// The actual implementation is done in <see cref="InputValueUi{T}.DrawInputEdit"/>  
+        /// </summary>
         public static void DrawParameters(Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi,
                                           SymbolUi compositionSymbolUi)
         {

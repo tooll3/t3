@@ -88,6 +88,11 @@ namespace T3.Core.DataTypes
 
         public object Clone() => TypedClone();
 
+        public void SortHandles()
+        {
+            Steps.Sort((x, y) => x.NormalizedPosition.CompareTo(y.NormalizedPosition));
+        }
+        
         public Gradient TypedClone()
         {
             return new Gradient
