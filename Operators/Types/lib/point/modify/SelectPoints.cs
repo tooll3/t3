@@ -16,32 +16,32 @@ namespace T3.Operators.Types.Id_371d72b8_69d4_4ced_beda_271386ad2fd6
             Result2.TransformableOp = this;
         }
 
-        IInputSlot ITransformable.TranslationInput => Center;
-        IInputSlot ITransformable.RotationInput => Rotate;
-        IInputSlot ITransformable.ScaleInput => Scale;
+        IInputSlot ITransformable.TranslationInput => VolumeCenter;
+        IInputSlot ITransformable.RotationInput => VolumeRotate;
+        IInputSlot ITransformable.ScaleInput => VolumeScale;
         public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
 
         [Input(Guid = "f9a61731-c35e-48fd-b297-922fb4c3da4a")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
+        [Input(Guid = "2c5e5bb5-6023-4ff4-906d-d0a905110e95", MappedType = typeof(Shapes))]
+        public readonly InputSlot<int> VolumeShape = new InputSlot<int>();
+        
         [Input(Guid = "0b11d459-01cc-4e91-99d2-37e77a0c8a35")]
-        public readonly InputSlot<System.Numerics.Vector3> Center = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<System.Numerics.Vector3> VolumeCenter = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "ebe18d4c-547b-4946-8367-098e61ec9942")]
-        public readonly InputSlot<System.Numerics.Vector3> Stretch = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<System.Numerics.Vector3> VolumeStretch = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "ef02525a-3a75-4ae7-bc01-7581efeda246")]
-        public readonly InputSlot<float> Scale = new InputSlot<float>();
+        public readonly InputSlot<float> VolumeScale = new InputSlot<float>();
 
         [Input(Guid = "1b762425-c35a-4ba0-bbed-71d6c42a082b")]
-        public readonly InputSlot<System.Numerics.Vector3> Rotate = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<System.Numerics.Vector3> VolumeRotate = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "56bf96b4-e7c4-4747-b57a-64a39e0d6314")]
         public readonly InputSlot<float> FallOff = new InputSlot<float>();
-
-        [Input(Guid = "2c5e5bb5-6023-4ff4-906d-d0a905110e95", MappedType = typeof(Shapes))]
-        public readonly InputSlot<int> VolumeShape = new InputSlot<int>();
 
         [Input(Guid = "687fdc7e-8867-4883-9c41-06b9435c0562", MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new InputSlot<int>();

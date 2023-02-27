@@ -20,7 +20,7 @@
       }
     },
     {
-      "Id": "523b7acd-d8e7-4473-9ec7-15eec1d795df"/*Scale*/,
+      "Id": "523b7acd-d8e7-4473-9ec7-15eec1d795df"/*Stretch*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 1.0,
@@ -28,7 +28,7 @@
       }
     },
     {
-      "Id": "a6e5770b-39dc-4d7b-b92e-53302dc89395"/*UniformScale*/,
+      "Id": "a6e5770b-39dc-4d7b-b92e-53302dc89395"/*Scale*/,
       "DefaultValue": 1.0
     },
     {

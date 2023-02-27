@@ -65,6 +65,34 @@
         "X": -1234.0884,
         "Y": 1544.298
       }
+    },
+    {
+      "InputId": "c0e1a16c-7b1f-43bb-aa13-42cd37f499b8"/*Bias*/,
+      "Position": {
+        "X": -1234.0884,
+        "Y": 1589.298
+      }
+    },
+    {
+      "InputId": "51748370-6134-4297-90bd-cbd77531d854"/*CutOff*/,
+      "Position": {
+        "X": -1235.5399,
+        "Y": 1685.1013
+      }
+    },
+    {
+      "InputId": "58e4f212-dc64-4697-a561-296bb66e39ca"/*CutOff2*/,
+      "Position": {
+        "X": -1235.5399,
+        "Y": 1730.1013
+      }
+    },
+    {
+      "InputId": "5af0a50e-0da1-4800-9fef-c1217eb2368a"/*Bias2*/,
+      "Position": {
+        "X": -1234.0884,
+        "Y": 1634.298
+      }
     }
   ],
   "SymbolChildUis": [
@@ -94,8 +122,8 @@
       "ChildId": "fe783651-4b14-4f0e-86e1-4f9b790abd9c"/*FloatsToBuffer*/,
       "Style": "Resizable",
       "Size": {
-        "X": 109.3293,
-        "Y": 625.1855
+        "X": 110.78082,
+        "Y": 906.7811
       },
       "Position": {
         "X": 231.37524,

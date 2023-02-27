@@ -17,6 +17,13 @@
       }
     },
     {
+      "InputId": "a867c29a-3cca-49c0-92ae-a7d094b5213b"/*Dither*/,
+      "Position": {
+        "X": -787.35974,
+        "Y": 1402.0607
+      }
+    },
+    {
       "InputId": "663e5d09-da7a-447c-abdd-984cc3ef5e4a"/*Stretch*/,
       "Position": {
         "X": -800.68945,
@@ -39,17 +46,31 @@
       "Scale": 1.0
     },
     {
-      "InputId": "24a0635f-9599-4a53-a35a-de90f4719f56"/*VolumeType*/,
+      "InputId": "5934035c-098f-41b8-863a-c276f2bd9699"/*ScaleW*/,
       "Position": {
-        "X": -748.0601,
-        "Y": 1811.5486
+        "X": -802.3694,
+        "Y": 1646.2703
+      }
+    },
+    {
+      "InputId": "d82e0f6a-138a-43fd-8774-29dc33ddd672"/*OffsetW*/,
+      "Position": {
+        "X": -778.7888,
+        "Y": 1689.144
       }
     },
     {
       "InputId": "3a7828e2-f58e-4229-b6c2-636cd5dbd011"/*VolumeCenter*/,
       "Position": {
-        "X": -802.3694,
-        "Y": 1691.2703
+        "X": -778.7888,
+        "Y": 1734.144
+      }
+    },
+    {
+      "InputId": "24a0635f-9599-4a53-a35a-de90f4719f56"/*VolumeType*/,
+      "Position": {
+        "X": -748.0601,
+        "Y": 1811.5486
       }
     },
     {
@@ -84,13 +105,6 @@
       "Clamp": true
     },
     {
-      "InputId": "a867c29a-3cca-49c0-92ae-a7d094b5213b"/*Dither*/,
-      "Position": {
-        "X": -787.35974,
-        "Y": 1402.0607
-      }
-    },
-    {
       "InputId": "8cd72c75-e73d-4d29-a5a9-e2d1a9ebe5e7"/*UseWAsWeight*/,
       "Position": {
         "X": -750.1524,
@@ -103,7 +117,7 @@
       "ChildId": "61e28ca5-bebc-45c5-b4d2-ad98ad15d0a0"/*ComputeShader*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 23.0
       },
       "Position": {
         "X": -155.55084,
@@ -472,6 +486,17 @@
       "Position": {
         "X": -600.1524,
         "Y": 2041.7649
+      }
+    },
+    {
+      "ChildId": "1cf282c8-4a61-419d-853a-d1cef8ac696a"/*Padding*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -338.35193,
+        "Y": 2101.329
       }
     }
   ],

@@ -52,6 +52,18 @@ namespace T3.Operators.Types.Id_eaeb8937_f6ff_4a4a_8f00_27484285cd2d
         [Input(Guid = "ffbfa2dd-75ed-439e-8bab-eb0104ab9c0d")]
         public readonly InputSlot<float> Offset = new InputSlot<float>();
 
+        [Input(Guid = "c0e1a16c-7b1f-43bb-aa13-42cd37f499b8")]
+        public readonly InputSlot<float> Bias = new InputSlot<float>();
+
+        [Input(Guid = "51748370-6134-4297-90bd-cbd77531d854")]
+        public readonly InputSlot<float> CutOff = new InputSlot<float>();
+
+        [Input(Guid = "58e4f212-dc64-4697-a561-296bb66e39ca")]
+        public readonly InputSlot<float> CutOff2 = new InputSlot<float>();
+
+        [Input(Guid = "5af0a50e-0da1-4800-9fef-c1217eb2368a")]
+        public readonly InputSlot<float> Bias2 = new InputSlot<float>();
+
         private enum SizeModes
         {
             Cell,

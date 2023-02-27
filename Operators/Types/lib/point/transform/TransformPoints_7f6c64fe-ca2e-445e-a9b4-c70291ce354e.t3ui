@@ -18,14 +18,14 @@
       "Scale": 0.1
     },
     {
-      "InputId": "523b7acd-d8e7-4473-9ec7-15eec1d795df"/*Scale*/,
+      "InputId": "523b7acd-d8e7-4473-9ec7-15eec1d795df"/*Stretch*/,
       "Position": {
         "X": -461.1681,
         "Y": 964.4012
       }
     },
     {
-      "InputId": "a6e5770b-39dc-4d7b-b92e-53302dc89395"/*UniformScale*/,
+      "InputId": "a6e5770b-39dc-4d7b-b92e-53302dc89395"/*Scale*/,
       "Position": {
         "X": -461.1681,
         "Y": 1009.401

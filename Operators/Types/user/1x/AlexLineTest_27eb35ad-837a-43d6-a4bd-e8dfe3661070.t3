@@ -493,6 +493,11 @@
           }
         },
         {
+          "Id": "a867c29a-3cca-49c0-92ae-a7d094b5213b"/*Dither*/,
+          "Type": "System.Single",
+          "Value": 6.8
+        },
+        {
           "Id": "24a0635f-9599-4a53-a35a-de90f4719f56"/*VolumeType*/,
           "Type": "System.Int32",
           "Value": 1
@@ -501,11 +506,6 @@
           "Id": "1e1f40ea-15af-4191-b3ce-d2edc3eee243"/*FallOff*/,
           "Type": "System.Single",
           "Value": 10.0
-        },
-        {
-          "Id": "a867c29a-3cca-49c0-92ae-a7d094b5213b"/*Dither*/,
-          "Type": "System.Single",
-          "Value": 6.8
         }
       ],
       "Outputs": []

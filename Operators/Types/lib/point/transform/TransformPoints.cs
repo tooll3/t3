@@ -17,7 +17,7 @@ namespace T3.Operators.Types.Id_7f6c64fe_ca2e_445e_a9b4_c70291ce354e
         }        
         IInputSlot ITransformable.TranslationInput => Translation;
         IInputSlot ITransformable.RotationInput => Rotation;
-        IInputSlot ITransformable.ScaleInput => Scale;
+        IInputSlot ITransformable.ScaleInput => Stretch;
         public Action<Instance, EvaluationContext> TransformCallback { get; set; }
 
         [Input(Guid = "9e803bd1-c5a3-4f6f-926d-d19f32dcbae5")]
@@ -27,10 +27,10 @@ namespace T3.Operators.Types.Id_7f6c64fe_ca2e_445e_a9b4_c70291ce354e
         public readonly InputSlot<System.Numerics.Vector3> Rotation = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "523b7acd-d8e7-4473-9ec7-15eec1d795df")]
-        public readonly InputSlot<System.Numerics.Vector3> Scale = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<System.Numerics.Vector3> Stretch = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "a6e5770b-39dc-4d7b-b92e-53302dc89395")]
-        public readonly InputSlot<float> UniformScale = new InputSlot<float>();
+        public readonly InputSlot<float> Scale = new InputSlot<float>();
 
         [Input(Guid = "0192b746-ff90-4c26-a7d4-754b6ec8006b")]
         public readonly InputSlot<bool> UpdateRotation = new InputSlot<bool>();
