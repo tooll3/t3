@@ -24,7 +24,7 @@ namespace T3.Operators.Types.Id_edecd98f_209b_423d_8201_0fd7d590c4cf
 
         [Output(Guid = "1B0A8C95-CF11-4EF6-BDB7-C54D0CD7BEB7")]
         public readonly Slot<StructuredList> SampledPoints = new();
-        
+
         public SplinePoints()
         {
             OutBuffer.UpdateAction = Update;
@@ -33,69 +33,73 @@ namespace T3.Operators.Types.Id_edecd98f_209b_423d_8201_0fd7d590c4cf
 
         private void Update(EvaluationContext context)
         {
-            
-            if (Points.DirtyFlag.IsDirty || SampleCount.DirtyFlag.IsDirty)
+            var preSampleSteps = PreSampleSteps.GetValue(context).Clamp(5, 100);
+            var upVector = UpVector.GetValue(context);
+            var curvature = Curvature.GetValue(context);
+
+            var resultCount = SampleCount.GetValue(context).Clamp(1, 1000);
+            try
             {
-                var resultCount = SampleCount.GetValue(context).Clamp(1, 1000);
-                try
+                Log.Debug("Update spline");
+                var pointsCollectedInputs = Points.CollectedInputs;
+
+                var connectedLists = pointsCollectedInputs.Select(c => c.GetValue(context)).Where(c => c != null).ToList();
+                Points.DirtyFlag.Clear();
+
+                if (connectedLists.Count < 2)
                 {
-                    var pointsCollectedInputs = Points.CollectedInputs;
-
-                    var connectedLists = pointsCollectedInputs.Select(c => c.GetValue(context)).Where(c => c != null).ToList();
-                    Points.DirtyFlag.Clear();
-
-                    if (connectedLists.Count < 2)
-                    {
-                        _buffer = null;
-                        OutBuffer.Value = null;
-                        Log.Warning("Need at least 2 points", this);
-                        return;
-                    }
-
-                    var sourceItems = connectedLists.Count == 1
-                                          ? connectedLists[0].Clone()
-                                          : connectedLists[0].Join(connectedLists.GetRange(1, connectedLists.Count - 1).ToArray());
-                    
-                    if (sourceItems != null
-                        && sourceItems.NumElements > 0
-                        && sourceItems is StructuredList<Point> sourcePointSet)
-                    {
-                        var sourcePoints = sourcePointSet.TypedElements;
-                        _sampledPoints = BezierSpline.SamplePointsEvenly(resultCount, ref sourcePoints);
-                        _sampledPointsList = new StructuredList<Point>(_sampledPoints);
-
-                        // Upload points
-                        var totalSizeInBytes = _sampledPointsList.TotalSizeInBytes;
-
-                        using (var data = new DataStream(totalSizeInBytes, true, true))
-                        {
-                            _sampledPointsList.WriteToStream(data);
-                            data.Position = 0;
-
-                            try
-                            {
-                                ResourceManager.SetupStructuredBuffer(data, totalSizeInBytes, _sampledPointsList.ElementSizeInBytes, ref _buffer);
-                            }
-                            catch (Exception e)
-                            {
-                                Log.Error("Failed to setup structured buffer " + e.Message, this);
-                                return;
-                            }
-                        }
-
-                        ResourceManager.CreateStructuredBufferSrv(_buffer, ref _bufferWithViews.Srv);
-                        ResourceManager.CreateStructuredBufferUav(_buffer, UnorderedAccessViewBufferFlags.None, ref _bufferWithViews.Uav);
-
-                        _bufferWithViews.Buffer = _buffer;
-                        OutBuffer.Value = _bufferWithViews;
-                        SampledPoints.Value = _sampledPointsList;
-                    }
+                    _buffer = null;
+                    OutBuffer.Value = null;
+                    Log.Warning("Need at least 2 points", this);
+                    return;
                 }
-                catch (Exception e)
+
+                var sourceItems = connectedLists.Count == 1
+                                      ? connectedLists[0].Clone()
+                                      : connectedLists[0].Join(connectedLists.GetRange(1, connectedLists.Count - 1).ToArray());
+
+                if (sourceItems != null
+                    && sourceItems.NumElements > 0
+                    && sourceItems is StructuredList<Point> sourcePointSet)
                 {
-                    Log.Warning("Failed to setup point buffer: " + e.Message, this);
+                    var sourcePoints = sourcePointSet.TypedElements;
+                    _sampledPoints = BezierSpline.SamplePointsEvenly(resultCount, preSampleSteps, curvature, upVector, ref sourcePoints);
+                    _sampledPointsList = new StructuredList<Point>(_sampledPoints);
+
+                    // Upload points
+                    var totalSizeInBytes = _sampledPointsList.TotalSizeInBytes;
+
+                    using (var data = new DataStream(totalSizeInBytes, true, true))
+                    {
+                        _sampledPointsList.WriteToStream(data);
+                        data.Position = 0;
+
+                        try
+                        {
+                            ResourceManager.SetupStructuredBuffer(data, totalSizeInBytes, _sampledPointsList.ElementSizeInBytes, ref _buffer);
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error("Failed to setup structured buffer " + e.Message, this);
+                            return;
+                        }
+                    }
+
+                    ResourceManager.CreateStructuredBufferSrv(_buffer, ref _bufferWithViews.Srv);
+                    ResourceManager.CreateStructuredBufferUav(_buffer, UnorderedAccessViewBufferFlags.None, ref _bufferWithViews.Uav);
+
+                    _bufferWithViews.Buffer = _buffer;
+                    OutBuffer.Value = _bufferWithViews;
+                    SampledPoints.Value = _sampledPointsList;
                 }
             }
+            catch (Exception e)
+            {
+                Log.Warning("Failed to setup point buffer: " + e.Message, this);
+            }
+
+            OutBuffer.DirtyFlag.Clear();
+            SampledPoints.DirtyFlag.Clear();
         }
 
         private Buffer _buffer;
@@ -106,20 +110,78 @@ namespace T3.Operators.Types.Id_edecd98f_209b_423d_8201_0fd7d590c4cf
         [Input(Guid = "88AB4088-EFA9-42B7-AFE9-D44A2FF6E58A")]
         public readonly InputSlot<int> SampleCount = new();
 
-        // [Input(Guid = "E031F80A-203C-4863-BCBA-1DE1EEBD34A8")]
-        // public readonly InputSlot<float> U = new();
-        //
-        // [Input(Guid = "B28E5BBC-049D-48AC-A7F2-42D265623AAE")]
-        // public readonly InputSlot<float> URange = new();
+        [Input(Guid = "A438A275-7633-4502-9718-E548BB0CE4DE")]
+        public readonly InputSlot<int> PreSampleSteps = new();
+
+        [Input(Guid = "336F26E1-853F-41A3-AFE0-E2402A9D7452")]
+        public readonly InputSlot<Vector3> UpVector = new();
+
+        [Input(Guid = "2AB21E92-6838-4AC7-8D10-6F8B3C8B5612")]
+        public readonly InputSlot<float> Curvature = new();
 
         [Input(Guid = "02968cef-1a5e-4a7f-b451-b692f4c9b6ab")]
         public readonly MultiInputSlot<StructuredList> Points = new();
-
-        
     }
 
     public class BezierSpline
     {
+        public static Point[] SamplePointsEvenly(int count, int preSampleSteps, float curvature, Vector3 upVector, ref Point[] sourcePoints)
+        {
+            count.Clamp(1, 1000);
+            var result = new Point[count];
+
+            if (_lengthList.Length < preSampleSteps)
+            {
+                _lengthList = new float[preSampleSteps];
+            }
+
+            // Pre-sample bezier curve for even distribution
+            var totalLength = 0f;
+            var lastPoint = SampleCubicBezier(0, curvature, ref sourcePoints);
+            for (var preSampleIndex = 1; preSampleIndex < preSampleSteps; preSampleIndex++)
+            {
+                var t = (float)preSampleIndex / preSampleSteps;
+                var newPoint = SampleCubicBezier(t, curvature, ref sourcePoints);
+                var stepLength = Vector3.Distance(newPoint, lastPoint);
+                lastPoint = newPoint;
+                totalLength += stepLength;
+                _lengthList[preSampleIndex] = totalLength;
+            }
+
+            var walkedIndex = 0;
+
+            Vector3 lastPos = SampleCubicBezier(0, curvature, ref sourcePoints);
+
+            for (var index = 0; index < count; index++)
+            {
+                var wantedLength = totalLength * index / (count - 1) + 0.0002f;
+
+                while (wantedLength > _lengthList[walkedIndex + 1] && walkedIndex < preSampleSteps - 2)
+                {
+                    walkedIndex++;
+                }
+
+                var l0 = _lengthList[walkedIndex];
+                var l1 = _lengthList[walkedIndex + 1];
+
+                var deltaL = (l1 - l0);
+
+                var fraction = (wantedLength - l0) / (deltaL + 0.00001f);
+
+                var t = (walkedIndex + fraction) / (preSampleSteps - 1);
+                var pos = SampleCubicBezier(t - 0.0002f, curvature, ref sourcePoints);
+                result[index].Position = pos;
+
+                var d = pos - lastPos;
+                lastPos = pos;
+
+                result[index].W = 1;
+                result[index].Orientation = LookAt(-Vector3.Normalize(d), -upVector);
+            }
+
+            return result;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static System.Numerics.Vector3 SampleCubicBezier2(float t, ref Point[] points)
         {
@@ -141,7 +203,7 @@ namespace T3.Operators.Types.Id_edecd98f_209b_423d_8201_0fd7d590c4cf
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static System.Numerics.Vector3 SampleCubicBezier(float t, ref Point[] points)
+        public static System.Numerics.Vector3 SampleCubicBezier(float t, float curvature, ref Point[] points)
         {
             int i;
 
@@ -156,8 +218,7 @@ namespace T3.Operators.Types.Id_edecd98f_209b_423d_8201_0fd7d590c4cf
                 i = (int)tt;
                 t = tt - i;
             }
-            
-            
+
             var pA = points[i].Position;
             var pB = points[i + 1].Position;
 
@@ -174,16 +235,14 @@ namespace T3.Operators.Types.Id_edecd98f_209b_423d_8201_0fd7d590c4cf
                 pNext = points[i + 2].Position;
             }
 
-            
             return Bezier.GetPoint(pA,
-                                   pA - (pLast - pB) / 4,
-                                   pB + (pA - pNext) / 4,
+                                   pA - (pLast - pB) / curvature * points[i].W,
+                                   pB + (pA - pNext) / curvature * points[i + 1].W,
                                    pB,
                                    t);
         }
 
-        private const int PreStepCount = 20;
-        private static readonly float[] _lengthList = new float[PreStepCount];
+        private static float[] _lengthList = new float[10];
 
         public static Point[] SamplePoints(int count, ref Point[] sourcePoints)
         {
@@ -193,59 +252,8 @@ namespace T3.Operators.Types.Id_edecd98f_209b_423d_8201_0fd7d590c4cf
             {
                 var t = (float)index / count;
 
-                result[index].Position = SampleCubicBezier(t, ref sourcePoints);
+                result[index].Position = SampleCubicBezier(t, 4, ref sourcePoints);
                 result[index].W = 1;
-            }
-
-            return result;
-        }
-
-        public static Point[] SamplePointsEvenly(int count, ref Point[] sourcePoints)
-        {
-            count.Clamp(1, 1000);
-            var result = new Point[count];
-
-            // Pre-sample bezier curve for even distribution
-            var totalLength = 0f;
-            var lastPoint = SampleCubicBezier(0, ref sourcePoints);
-            for (var preSampleIndex = 1; preSampleIndex < PreStepCount; preSampleIndex++)
-            {
-                var t = (float)preSampleIndex / PreStepCount;
-                var newPoint = SampleCubicBezier(t, ref sourcePoints);
-                var stepLength = Vector3.Distance(newPoint, lastPoint);
-                lastPoint = newPoint;
-                totalLength += stepLength;
-                _lengthList[preSampleIndex] = totalLength;
-            }
-
-            var walkedIndex = 0;
-
-            Vector3 lastPos = Vector3.One; 
-            for (var index = 0; index < count; index++)
-            {
-                var wantedLength = totalLength * index / (count-1);
-
-                while (wantedLength > _lengthList[walkedIndex +1] && walkedIndex < PreStepCount - 2)
-                {
-                    walkedIndex++;
-                }
-
-                var l0 = _lengthList[walkedIndex];
-                var l1 = _lengthList[walkedIndex + 1];
-
-                var deltaL = (l1 - l0);
-                
-                var fraction = (wantedLength - l0) / (deltaL + 0.0001f);
-                
-                var t = (walkedIndex + fraction) / (PreStepCount-1);
-                var pos = SampleCubicBezier(t, ref sourcePoints);
-                result[index].Position = pos;
-
-                var d = pos - lastPos;
-                lastPos = pos;
-
-                result[index].W = 1;
-                result[index].Orientation = LookAt(-Vector3.Normalize(d), -Vector3.UnitY);
             }
 
             return result;

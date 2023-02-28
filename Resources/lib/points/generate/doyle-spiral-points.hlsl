@@ -38,9 +38,15 @@ static const float ToRad = 3.141578 / 180;
 
     int index = Di.x;
     int p = (int)(P + 0.5);
+    // int q = (int)(Q + 0.5);
 
-    int _i = index % p;
-    int _j = index / p;
+    int steps = (count / p) - 1;
+
+    int _j = index % steps;
+    int _i = index / steps;
+
+    // int _j = index / p;
+    // int _i = index % p;
 
     float i = _i;
     float j = _j - Offset;

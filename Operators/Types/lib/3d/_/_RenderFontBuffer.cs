@@ -35,6 +35,9 @@ namespace T3.Operators.Types.Id_c5707b79_859b_4d53_92e0_cbed53aae648
             if (Filepath.DirtyFlag.IsDirty || _font == null)
             {
                 var filepath = Filepath.GetValue(context);
+                
+                ResourceFileWatcher.AddFileHook(filepath, () => {Filepath.DirtyFlag.Invalidate();});
+                
                 _font = BmFontDescription.InitializeFromFile(filepath);
             }
             
