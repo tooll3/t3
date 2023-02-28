@@ -23,12 +23,8 @@ namespace T3.Editor.Gui.Windows
         {
             DrawTimeSetup();
 
-            // custom parameters for this renderer
-            var intFileFormat = (int)_fileFormat;
-            if (FormInputs.AddEnumDropdown<ScreenshotWriter.FileFormats>(ref intFileFormat, "FileFormat"))
-            {
-                _fileFormat = (ScreenshotWriter.FileFormats)intFileFormat;
-            }
+            // Custom parameters for this renderer
+            FormInputs.AddEnumDropdown(ref _fileFormat, "FileFormat");
             FormInputs.AddStringInput("Folder", ref _targetFolder);
             ImGui.SameLine();
             FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.Folder, ref _targetFolder);

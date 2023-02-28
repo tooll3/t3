@@ -14,12 +14,12 @@ namespace T3.Editor.Gui.Styling
     public static class FormInputs
     {
         public static bool AddInt(string label,
-                                        ref int value,
-                                        int min = int.MinValue,
-                                        int max = int.MaxValue,
-                                        float scale = 1,
-                                        string tooltip = null,
-                                        int defaultValue = NotADefaultValue)
+                                  ref int value,
+                                  int min = int.MinValue,
+                                  int max = int.MaxValue,
+                                  float scale = 1,
+                                  string tooltip = null,
+                                  int defaultValue = NotADefaultValue)
         {
             DrawInputLabel(label);
 
@@ -27,12 +27,12 @@ namespace T3.Editor.Gui.Styling
 
             var hasReset = defaultValue != NotADefaultValue;
 
-            var size = GetAvailableParamSize(tooltip, hasReset);
+            var size = GetAvailableInputSize(tooltip, hasReset);
             var result = SingleValueEdit.Draw(ref value, size, min, max, true, scale);
             ImGui.PopID();
 
             AppendTooltip(tooltip);
-            if (AppendResetButton(hasReset))
+            if (AppendResetButton(hasReset, label))
             {
                 value = defaultValue;
                 result |= InputEditStateFlags.ModifiedAndFinished;
@@ -44,117 +44,95 @@ namespace T3.Editor.Gui.Styling
 
         private const float DefaultFadeAlpha = 0.7f;
 
-        public static bool AddFloat(string label, 
-                                          ref float value, 
-                                          float min = float.NegativeInfinity, 
-                                          float max = float.PositiveInfinity,
-                                          float scale = 0.01f, 
-                                          bool clamp = false, 
-                                          string tooltip = null,
-                                          float defaultValue = float.NaN)
+        public static bool AddFloat(string label,
+                                    ref float value,
+                                    float min = float.NegativeInfinity,
+                                    float max = float.PositiveInfinity,
+                                    float scale = 0.01f,
+                                    bool clamp = false,
+                                    string tooltip = null,
+                                    float defaultValue = float.NaN)
         {
             var hasReset = !float.IsNaN(defaultValue);
             var isDefault = hasReset && Math.Abs(value - defaultValue) < 0.0001f;
             if (isDefault)
             {
-                ImGui.PushStyleVar(ImGuiStyleVar.Alpha,DefaultFadeAlpha * ImGui.GetStyle().Alpha);
+                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha * ImGui.GetStyle().Alpha);
             }
-            
+
             DrawInputLabel(label);
-            var size = GetAvailableParamSize(tooltip, hasReset);
-            
+            var size = GetAvailableInputSize(tooltip, hasReset);
+
             ImGui.PushID(label);
             var result = SingleValueEdit.Draw(ref value, size, min, max, clamp, scale);
             ImGui.PopID();
 
             AppendTooltip(tooltip);
-            if (AppendResetButton(hasReset && !isDefault))
+            if (AppendResetButton(hasReset && !isDefault, label))
             {
                 value = defaultValue;
                 result |= InputEditStateFlags.ModifiedAndFinished;
             }
-            
+
             if (isDefault)
             {
                 ImGui.PopStyleVar();
             }
-            
+
             var modified = (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
             return modified;
         }
-
-        public static bool AddEnumDropdown<T>(ref int index, string label)
-        {
-            DrawInputLabel(label);
-            var size = new Vector2(150 * T3Ui.UiScaleFactor, ImGui.GetFrameHeight());
-
-            Type enumType = typeof(T);
-            var values = Enum.GetValues(enumType);
-
-            var valueNames = new string[values.Length];
-            for (var i = 0; i < values.Length; i++)
-            {
-                var v = values.GetValue(i);
-                valueNames[i] = v != null
-                                    ? Enum.GetName(typeof(T), v)
-                                    : "?? undefined";
-            }
-
-            ImGui.SetNextItemWidth(size.X);
-            // FIXME: using only "##dropdown" did not allow for multiple combos (see for example renderSequenceWindow.cs)
-            // so we add the type and label here - but this is only a temporary hack...
-            var modified = ImGui.Combo($"##dropDown{enumType}{label}", ref index, valueNames, valueNames.Length, valueNames.Length);
-            return modified;
-        }
         
-        public static bool AddEnumDropdown<T>(ref T selectedValue, string label) where T : struct, Enum, IConvertible, IFormattable
+
+        public static bool AddEnumDropdown<T>(ref T selectedValue, string label, string tooltip = null) where T : struct, Enum, IConvertible, IFormattable
         {
             DrawInputLabel(label);
-            var size = new Vector2(150 * T3Ui.UiScaleFactor, ImGui.GetFrameHeight());
-            
+
+            var inputSize = GetAvailableInputSize(tooltip, false, true);
+            ImGui.SetNextItemWidth(inputSize.X);
+
             var names = Enum.GetNames<T>();
             var index = 0;
             var selectedIndex = 0;
-            
+
             foreach (var n in names)
             {
                 if (n == selectedValue.ToString())
                     selectedIndex = index;
-                
+
                 index++;
             }
 
-            ImGui.SetNextItemWidth(size.X);
-            // FIXME: using only "##dropdown" did not allow for multiple combos (see for example renderSequenceWindow.cs)
-            // so we add the type and label here - but this is only a temporary hack...
-            var modified = ImGui.Combo($"##dropDown{label}", ref selectedIndex, names, names.Length, names.Length);
+            var modified = ImGui.Combo($"##dropDown{typeof(T)}{label}", ref selectedIndex, names, names.Length, names.Length);
             if (modified)
             {
                 selectedValue = Enum.GetValues<T>()[selectedIndex];
             }
 
+            AppendTooltip(tooltip);
+
             return modified;
-        }        
-        
+        }
+
         public static bool AddSegmentedButton<T>(ref T selectedValue, string label) where T : struct, Enum
         {
             DrawInputLabel(label);
-            
+
             var modified = false;
             var selectedValueString = selectedValue.ToString();
             var isFirst = true;
-            foreach(var value in Enum.GetValues<T>())
+            foreach (var value in Enum.GetValues<T>())
             {
                 var name = Enum.GetName(value);
                 if (!isFirst)
                 {
                     ImGui.SameLine();
                 }
-                
+
                 var isSelected = selectedValueString == value.ToString();
                 var clicked = DrawSelectButton(name, isSelected);
-                
-                if(clicked)
+
+                if (clicked)
                 {
                     modified = true;
                     selectedValue = value;
@@ -162,18 +140,17 @@ namespace T3.Editor.Gui.Styling
 
                 isFirst = false;
             }
-            
+
             return modified;
         }
 
         private static bool DrawSelectButton(string name, bool isSelected)
         {
-            ImGui.PushStyleColor(ImGuiCol.Button, isSelected ? T3Style.Colors.ButtonActive.Rgba: T3Style.Colors.ButtonHover.Rgba);
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, isSelected ? T3Style.Colors.ButtonActive.Rgba: T3Style.Colors.ButtonHover.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Button, isSelected ? T3Style.Colors.ButtonActive.Rgba : T3Style.Colors.ButtonHover.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, isSelected ? T3Style.Colors.ButtonActive.Rgba : T3Style.Colors.ButtonHover.Rgba);
             ImGui.PushStyleColor(ImGuiCol.ButtonActive, T3Style.Colors.ButtonActive.Rgba);
 
             var clicked = ImGui.Button(name);
-            //ImGui.SameLine();
             ImGui.PopStyleColor(3);
             return clicked;
         }
@@ -182,20 +159,23 @@ namespace T3.Editor.Gui.Styling
         /// Draws string input or file picker. 
         /// </summary>
         public static bool AddStringInput(string label,
-                                           ref string value,
-                                           string placeHolder = null,
-                                           string warning = null)
+                                          ref string value,
+                                          string placeHolder = null,
+                                          string warning = null,
+                                          string tooltip = null)
         {
             DrawInputLabel(label);
-            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 50);
-
             var wasNull = value == null;
             if (wasNull)
                 value = string.Empty;
 
+            var inputSize = GetAvailableInputSize(tooltip, false, true);
+            ImGui.SetNextItemWidth(inputSize.X);
             var modified = ImGui.InputText("##" + label, ref value, 1000);
             if (!modified && wasNull)
                 value = null;
+
+            AppendTooltip(tooltip);
 
             if (string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(placeHolder))
             {
@@ -216,16 +196,17 @@ namespace T3.Editor.Gui.Styling
         /// Draws string input or file picker. 
         /// </summary>
         public static bool AddFilePicker(string label,
-                                      ref string value,
-                                      string placeHolder = null,
-                                      string warning = null,
-                                      FileOperations.FilePickerTypes showFilePicker = FileOperations.FilePickerTypes.None)
+                                         ref string value,
+                                         string placeHolder = null,
+                                         string warning = null,
+                                         FileOperations.FilePickerTypes showFilePicker = FileOperations.FilePickerTypes.None)
         {
             DrawInputLabel(label);
-            var cursorX = ImGui.GetCursorPosX();
+
             var isFilePickerVisible = showFilePicker != FileOperations.FilePickerTypes.None;
             float spaceForFilePicker = isFilePickerVisible ? 30 : 0;
-            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 50 - spaceForFilePicker);
+            var inputSize = GetAvailableInputSize(null, false, true, spaceForFilePicker);
+            ImGui.SetNextItemWidth(inputSize.X);
 
             var wasNull = value == null;
             if (wasNull)
@@ -250,48 +231,38 @@ namespace T3.Editor.Gui.Styling
                 modified |= FileOperations.DrawFileSelector(showFilePicker, ref value);
             }
 
-            if (!string.IsNullOrEmpty(warning))
-            {
-                ImGui.SetCursorPosX(cursorX);
-                ImGui.PushFont(Fonts.FontSmall);
-                ImGui.PushStyleColor(ImGuiCol.Text, Color.Red.Rgba);
-                ImGui.TextUnformatted(warning);
-                ImGui.PopStyleColor();
-                ImGui.PopFont();
-            }
-
+            DrawWarningBelowField(warning);
             return modified;
         }
 
-        public static bool AddCheckBox(
-            string label, 
-            ref bool value, 
-            string tooltip = null,
-            bool? defaultValue = null)
+        public static bool AddCheckBox(string label,
+                                       ref bool value,
+                                       string tooltip = null,
+                                       bool? defaultValue = null)
         {
             var hasDefault = defaultValue != null;
             var isDefault = hasDefault && value == (bool)defaultValue;
-            
+
             if (isDefault)
             {
                 ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha);
             }
-            
+
             ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 15);
             var modified = ImGui.Checkbox(label, ref value);
-            
-            
+
             AppendTooltip(tooltip);
             if (isDefault)
             {
                 ImGui.PopStyleVar();
             }
-            
-            if (AppendResetButton(hasDefault && !isDefault))
+
+            if (AppendResetButton(hasDefault && !isDefault, label))
             {
                 value = defaultValue ?? false;
                 modified = true;
             }
+
             return modified;
         }
 
@@ -299,14 +270,12 @@ namespace T3.Editor.Gui.Styling
         {
             if (string.IsNullOrEmpty(label))
                 return;
-            
+
             AddVerticalSpace(5);
             ApplyIndent();
-            //ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 10f);
             ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
-            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10,20));
-            
-            //ImGui.Indent(13);
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 20));
+
             AddIcon(Icon.Hint);
 
             ImGui.SameLine();
@@ -335,7 +304,7 @@ namespace T3.Editor.Gui.Styling
         {
             ImGui.SetCursorPosX(LeftParameterPadding + ParameterSpacing);
         }
-        
+
         public static void DrawInputLabel(string label)
         {
             var labelSize = ImGui.CalcTextSize(label);
@@ -365,14 +334,20 @@ namespace T3.Editor.Gui.Styling
         #endregion
 
         #region internal helpers
-        private static Vector2 GetAvailableParamSize(string tooltip, bool hasReset)
+        private static Vector2 GetAvailableInputSize(string tooltip, bool hasReset, bool fillWidth = false, float rightPadding = 0)
         {
-            var toolWidth = 30 * T3Ui.UiScaleFactor;
+            var toolWidth = 20f * T3Ui.UiScaleFactor;
             var sizeForResetToDefault = hasReset ? toolWidth : 0;
             var sizeForTooltip = !string.IsNullOrEmpty(tooltip) ? toolWidth : 0;
-            var vector2 = new Vector2(150 * T3Ui.UiScaleFactor
+
+            var availableWidth = fillWidth ? ImGui.GetContentRegionAvail().X : 200;
+
+            var vector2 = new Vector2(availableWidth
+                                      - 20
+                                      - rightPadding
                                       - sizeForResetToDefault
-                                      - sizeForTooltip, ImGui.GetFrameHeight());
+                                      - sizeForTooltip,
+                                      ImGui.GetFrameHeight());
             return vector2;
         }
 
@@ -382,21 +357,20 @@ namespace T3.Editor.Gui.Styling
                 return;
 
             ImGui.SameLine();
-            //CustomComponents.IconButton(Icon.Help, "##tooltip", Vector2.One * ImGui.GetFrameHeight());
-            
+
             ImGui.PushFont(Icons.IconFont);
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.5f));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-            
+
             ImGui.AlignTextToFramePadding();
-            ImGui.TextUnformatted(" "+(char)Icon.Help);
+            ImGui.TextUnformatted(" " + (char)Icon.Help);
 
             ImGui.PopStyleVar(2);
             ImGui.PopFont();
-            
+
             if (!ImGui.IsItemHovered())
                 return;
-            
+
             ImGui.BeginTooltip();
             ImGui.PushTextWrapPos(300);
             ImGui.TextUnformatted(tooltip);
@@ -404,13 +378,16 @@ namespace T3.Editor.Gui.Styling
             ImGui.EndTooltip();
         }
 
-        private static bool AppendResetButton(bool hasReset)
+        private static bool AppendResetButton(bool hasReset, string id)
         {
             if (!hasReset)
                 return false;
 
             ImGui.SameLine();
-            return CustomComponents.IconButton(Icon.Revert, Vector2.One * ImGui.GetFrameHeight());
+            ImGui.PushID(id);
+            var clicked = CustomComponents.IconButton(Icon.Revert, Vector2.One * ImGui.GetFrameHeight());
+            ImGui.PopID();
+            return clicked;
         }
 
         private static void AddIcon(Icon icon)

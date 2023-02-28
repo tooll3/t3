@@ -467,19 +467,12 @@ namespace T3.Editor.Gui.InputUi
 
         public virtual void DrawSettings()
         {
-            Type enumType = typeof(Relevancy);
-            var values = Enum.GetValues(enumType);
-            var valueNames = new string[values.Length];
-            for (int i = 0; i < values.Length; i++)
             {
-                valueNames[i] = Enum.GetName(typeof(Relevancy), values.GetValue(i));
-            }
+                var tmpForRef = Relevancy;
+                if (FormInputs.AddEnumDropdown(ref tmpForRef, "Relevancy"))
+                    Relevancy = tmpForRef;
 
-            int index = (int)Relevancy;
-            ImGui.Combo("##dropDownRelevancy", ref index, valueNames, valueNames.Length);
-            Relevancy = (Relevancy)index;
-            ImGui.SameLine();
-            ImGui.TextUnformatted("Relevancy");
+            }
         }
 
         public virtual void Write(JsonTextWriter writer)

@@ -109,7 +109,7 @@ namespace T3.Core.Utils
                 Log.Warning($"Can't save {typeof(T)} to empty filename...");
                 return;
             }
-            Log.Debug($"Saving {filepath}...");
+
             var serializer = JsonSerializer.Create();
             serializer.Formatting = Formatting.Indented;
             try

@@ -13,18 +13,31 @@ namespace T3.Editor.Gui.UiHelpers
     {
         private const string ResourcesFolder = "Resources";
 
-        public static string PickResourceFilePath(string initialPath = "")
+        public static string PickResourceFilePath(string initialPath = "", string filter = null)
         {
             using (var openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = String.IsNullOrEmpty(initialPath)
                                                       ? GetAbsoluteResourcePath()
                                                       : GetAbsoluteDirectory(initialPath);
-                openFileDialog.Filter = "jpg files (*.jpg)|*.jpg|All files (*.*)|*.*";
+                
+                openFileDialog.Filter = string.IsNullOrEmpty(filter) 
+                                            ? "jpg files (*.jpg)|*.jpg|All files (*.*)|*.*"
+                                            : filter;
+                
+                //openFileDialog.Filter = "Font files (*.fnt)|*.fnt";
                 openFileDialog.FilterIndex = 2;
 
-                if (openFileDialog.ShowDialog() != DialogResult.OK)
+                try
+                {
+                    if (openFileDialog.ShowDialog() != DialogResult.OK)
+                        return null;
+                }
+                catch (Exception e)
+                {
+                    Log.Warning("Couldn't open file picker:" +e.Message);
                     return null;
+                }
 
                 var absolutePath = openFileDialog.FileName;
                 return ConvertToRelativeFilepath(absolutePath);
@@ -54,33 +67,17 @@ namespace T3.Editor.Gui.UiHelpers
             File,
             Folder,
         }
+        
 
-        public static bool DrawSoundFilePicker(FilePickerTypes type, ref string value)
-        {
-            ImGui.SetNextItemWidth(-70);
-            var tmp = value;
-            if (tmp == null)
-                tmp = string.Empty;
-
-            var modified = ImGui.InputText("##filepath", ref tmp, 255);
-            modified |= DrawFileSelector(type, ref tmp);
-            if (modified && tmp != null)
-            {
-                value = tmp;
-            }
-
-            return modified;
-        }
-
-        public static bool DrawFileSelector(FilePickerTypes type, ref string value)
+        public static bool DrawFileSelector(FilePickerTypes type, ref string value, string filter=null)
         {
             var modified = false;
             ImGui.SameLine();
             if (ImGui.Button("...", new Vector2(30, 0)))
             {
                 string newPath = type == FilePickerTypes.File
-                                     ? FileOperations.PickResourceFilePath(value)
-                                     : FileOperations.PickResourceDirectory();
+                                     ? PickResourceFilePath(value, filter)
+                                     : PickResourceDirectory();
                 if (!string.IsNullOrEmpty(newPath))
                 {
                     value = newPath;

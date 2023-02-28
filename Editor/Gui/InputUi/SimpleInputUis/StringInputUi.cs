@@ -4,6 +4,7 @@ using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Resource;
+using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.InputUi.SimpleInputUis
@@ -20,19 +21,21 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             Multiline,
         }
 
-        public UsageType Usage { get; set; } = UsageType.Default;
+        public UsageType Usage { get; private set; } = UsageType.Default;
+        public string FileFilter { get; private set; } = null;
 
         public override IInputUi Clone()
         {
             return new StringInputUi
-                   {
-                       InputDefinition = InputDefinition,
-                       Parent = Parent,
-                       PosOnCanvas = PosOnCanvas,
-                       Relevancy = Relevancy,
-                       Size = Size,
-                       Usage = Usage
-                   };
+                       {
+                           InputDefinition = InputDefinition,
+                           Parent = Parent,
+                           PosOnCanvas = PosOnCanvas,
+                           Relevancy = Relevancy,
+                           Size = Size,
+                           Usage = Usage,
+                           FileFilter = FileFilter,
+                       };
         }
 
         protected override InputEditStateFlags DrawEditControl(string name, ref string value)
@@ -54,7 +57,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                     inputEditStateFlags = DrawMultilineTextEdit(ref value);
                     break;
                 case UsageType.FilePath:
-                    inputEditStateFlags = DrawEditWithSelectors(FileOperations.FilePickerTypes.File, ref value);
+                    inputEditStateFlags = DrawEditWithSelectors(FileOperations.FilePickerTypes.File, ref value, FileFilter);
                     break;
                 case UsageType.DirectoryPath:
                     inputEditStateFlags = DrawEditWithSelectors(FileOperations.FilePickerTypes.Folder, ref value);
@@ -67,24 +70,22 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             return inputEditStateFlags;
         }
 
-
-        private static InputEditStateFlags DrawEditWithSelectors(FileOperations.FilePickerTypes type, ref string value)
+        private static InputEditStateFlags DrawEditWithSelectors(FileOperations.FilePickerTypes type, ref string value, string filter = null)
         {
             ImGui.SetNextItemWidth(-70);
             var inputEditStateFlags = DrawDefaultTextEdit(ref value);
 
-
             if (ImGui.IsItemHovered() && ImGui.CalcTextSize(value).X > ImGui.GetItemRectSize().X)
             {
-                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One*5);
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
                 ImGui.BeginTooltip();
                 ImGui.TextUnformatted(value);
                 ImGui.EndTooltip();
                 ImGui.PopStyleVar();
             }
-            
+
             ImGui.SameLine();
-            var modifiedByPicker = FileOperations.DrawFileSelector(type, ref value);
+            var modifiedByPicker = FileOperations.DrawFileSelector(type, ref value, filter);
             if (modifiedByPicker)
             {
                 inputEditStateFlags = InputEditStateFlags.Modified | InputEditStateFlags.Finished;
@@ -101,12 +102,11 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
 
         private static InputEditStateFlags DrawMultilineTextEdit(ref string value)
         {
-            ImGui.Dummy(new Vector2(1,1));
+            ImGui.Dummy(new Vector2(1, 1));
             var changed = ImGui.InputTextMultiline("##textEdit", ref value, MAX_STRING_LENGTH, new Vector2(-1, 150));
             return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
         }
 
-        
         protected override void DrawReadOnlyControl(string name, ref string value)
         {
             if (value != null)
@@ -123,20 +123,27 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
         public override void DrawSettings()
         {
             base.DrawSettings();
+            FormInputs.AddVerticalSpace();
 
-            Type enumType = typeof(UsageType);
-            var values = Enum.GetValues(enumType);
-            var valueNames = new string[values.Length];
-            for (int i = 0; i < values.Length; i++)
             {
-                valueNames[i] = Enum.GetName(typeof(UsageType), values.GetValue(i));
-            }
+                var tmpForRef = Usage;
+                if (FormInputs.AddEnumDropdown(ref tmpForRef, "Usage"))
+                    Usage = tmpForRef;
 
-            int index = (int)Usage;
-            ImGui.Combo("##dropDownStringUsage", ref index, valueNames, valueNames.Length);
-            Usage = (UsageType)index;
-            ImGui.SameLine();
-            ImGui.TextUnformatted("Usage");
+            }
+            
+            {
+                var tmp = FileFilter;
+                var warning = !string.IsNullOrEmpty(tmp) && !tmp.Contains('|')
+                                  ? "Filter must include at least one | symbol.\nPlease read tooltip for examples"
+                                  : null;
+
+                if (FormInputs.AddStringInput("File Filter", ref tmp, null, warning,
+                                              "This will only work for file FilePath-Mode.\nThe filter has to be in following format:\n\n Your Description (*.ext)|*.ext"))
+                {
+                    FileFilter = tmp;
+                }
+            }
         }
 
         public override void Write(JsonTextWriter writer)
@@ -144,6 +151,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             base.Write(writer);
 
             writer.WriteObject("Usage", Usage.ToString());
+            writer.WriteObject("Filter", FileFilter);
         }
 
         public override void Read(JToken inputToken)

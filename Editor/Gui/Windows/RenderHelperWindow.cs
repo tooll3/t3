@@ -21,16 +21,13 @@ namespace T3.Editor.Gui.Windows
 
         protected static void DrawTimeSetup()
         {
-
-            
             // convert times if reference time selection changed
-            int newTimeReferenceIndex = (int)_timeReference;
-            if (FormInputs.AddEnumDropdown<TimeReference>(ref newTimeReferenceIndex, "Time reference"))
+            var oldTimeReference = _timeReference;
+            
+            if (FormInputs.AddEnumDropdown(ref _timeReference, "Time reference"))
             {
-                TimeReference newTimeReference = (TimeReference)newTimeReferenceIndex;
-                _startTime = (float)ConvertReferenceTime(_startTime, _timeReference, newTimeReference);
-                _endTime = (float)ConvertReferenceTime(_endTime, _timeReference, newTimeReference);
-                _timeReference = newTimeReference;
+                _startTime = (float)ConvertReferenceTime(_startTime, oldTimeReference, _timeReference);
+                _endTime = (float)ConvertReferenceTime(_endTime, oldTimeReference, _timeReference);
             }
 
             // change FPS if required

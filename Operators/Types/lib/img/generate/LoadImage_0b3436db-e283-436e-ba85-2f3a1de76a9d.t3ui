@@ -8,7 +8,8 @@
         "X": 51.512096,
         "Y": 46.995968
       },
-      "Usage": "FilePath"
+      "Usage": "FilePath",
+      "Filter": "All Files|*.*|Image Files (jpg, jpeg, png, tif, tga, gif, dds)|*.jpg;*.jpeg;*.png;*.tif;*.tga;*.gif;*.dds"
     }
   ],
   "SymbolChildUis": [],
