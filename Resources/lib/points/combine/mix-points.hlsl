@@ -51,6 +51,7 @@ void main(uint3 i : SV_DispatchThreadID)
         f = (1-B.w);
     }
 
+    ResultPoints[i.x].rotation =  q_slerp(A.rotation, B.rotation, f); 
     ResultPoints[i.x].position =  lerp(A.position, B.position, f); 
     ResultPoints[i.x].w = lerp(A.w, B.w, f);
 }
