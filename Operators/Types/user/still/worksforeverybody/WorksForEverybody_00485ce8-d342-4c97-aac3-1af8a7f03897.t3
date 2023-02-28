@@ -6998,7 +6998,7 @@
       "Outputs": []
     },
     {
-      "Id": "ef8a8332-4467-487b-885c-e4624c9a261e"/*PointsOnSphere*/,
+      "Id": "ef8a8332-4467-487b-885c-e4624c9a261e"/*SpherePoints*/,
       "SymbolId": "1a241222-200b-417d-a8c7-131e3b48cc36",
       "InputValues": [
         {
@@ -7110,7 +7110,7 @@
       "Outputs": []
     },
     {
-      "Id": "077d7b7a-ea86-44e3-822f-9ff8acdc6d9e"/*MixPoints*/,
+      "Id": "077d7b7a-ea86-44e3-822f-9ff8acdc6d9e"/*BlendPoints*/,
       "SymbolId": "2dc5c9d1-ea93-4597-a4d9-7b610aad603a",
       "InputValues": [
         {
@@ -7122,7 +7122,7 @@
       "Outputs": []
     },
     {
-      "Id": "41e80ba5-9e08-461b-af07-5cd3c4eadd0d"/*PointsOnSphere*/,
+      "Id": "41e80ba5-9e08-461b-af07-5cd3c4eadd0d"/*SpherePoints*/,
       "SymbolId": "1a241222-200b-417d-a8c7-131e3b48cc36",
       "InputValues": [
         {

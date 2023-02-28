@@ -1831,7 +1831,7 @@
       }
     },
     {
-      "ChildId": "ec9a3f19-6265-4bc9-b05b-64b3d453f6f3"/*MixPoints*/,
+      "ChildId": "ec9a3f19-6265-4bc9-b05b-64b3d453f6f3"/*BlendPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -2007,7 +2007,7 @@
       }
     },
     {
-      "ChildId": "51c9524d-0fa6-4d53-8b38-0bf224c21175"/*MixPoints*/,
+      "ChildId": "51c9524d-0fa6-4d53-8b38-0bf224c21175"/*BlendPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

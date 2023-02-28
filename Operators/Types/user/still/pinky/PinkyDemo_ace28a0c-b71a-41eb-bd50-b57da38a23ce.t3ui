@@ -2580,7 +2580,7 @@
       }
     },
     {
-      "ChildId": "c4dac203-4ea5-462b-b2cd-c8aea0be1bc0"/*PointsOnSphere*/,
+      "ChildId": "c4dac203-4ea5-462b-b2cd-c8aea0be1bc0"/*SpherePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

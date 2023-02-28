@@ -1,5 +1,5 @@
 {
-  "Name": "MixPoints",
+  "Name": "BlendPoints",
   "Id": "2dc5c9d1-ea93-4597-a4d9-7b610aad603a",
   "Namespace": "lib.point.combine",
   "Inputs": [
@@ -22,6 +22,14 @@
     {
       "Id": "91b903a2-5127-431b-ab66-d5a38ce1693c"/*PointsB_*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "bdb712a8-3dbc-458a-887a-5add51813196"/*RangeWidth*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "ee8e9e15-ce18-4034-abc6-dd56108c8a02"/*Scatter*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [
@@ -32,7 +40,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\combine\\mix-points.hlsl"
+          "Value": "Resources\\lib\\points\\combine\\blend-points.hlsl"
         }
       ],
       "Outputs": []
@@ -184,6 +192,18 @@
     {
       "SourceParentOrChildId": "ec56cf28-5896-4dfb-a701-b3b33e659935",
       "SourceSlotId": "db1073a1-b9d8-4d52-bc5c-7ae8c0ee1ac3",
+      "TargetParentOrChildId": "76ab5ba5-897f-4f96-b57e-aed844481f88",
+      "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "bdb712a8-3dbc-458a-887a-5add51813196",
+      "TargetParentOrChildId": "76ab5ba5-897f-4f96-b57e-aed844481f88",
+      "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "ee8e9e15-ce18-4034-abc6-dd56108c8a02",
       "TargetParentOrChildId": "76ab5ba5-897f-4f96-b57e-aed844481f88",
       "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
     },

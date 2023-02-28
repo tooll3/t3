@@ -805,7 +805,7 @@
       "Outputs": []
     },
     {
-      "Id": "05d3ffe7-7e79-423b-affd-bda09a93a33d"/*MixPoints*/,
+      "Id": "05d3ffe7-7e79-423b-affd-bda09a93a33d"/*BlendPoints*/,
       "SymbolId": "2dc5c9d1-ea93-4597-a4d9-7b610aad603a",
       "InputValues": [
         {

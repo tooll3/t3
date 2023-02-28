@@ -455,7 +455,7 @@
       }
     },
     {
-      "ChildId": "05d3ffe7-7e79-423b-affd-bda09a93a33d"/*MixPoints*/,
+      "ChildId": "05d3ffe7-7e79-423b-affd-bda09a93a33d"/*BlendPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

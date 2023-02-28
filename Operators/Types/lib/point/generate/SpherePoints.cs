@@ -6,7 +6,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_1a241222_200b_417d_a8c7_131e3b48cc36
 {
-    public class PointsOnSphere : Instance<PointsOnSphere>
+    public class SpherePoints : Instance<SpherePoints>
     {
 
         [Output(Guid = "c20f4675-6387-45da-b14f-8d0a3af5e672")]

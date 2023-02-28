@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "061cf4d2-c671-4b59-8f06-57fcb01b68b3"/*PointsOnSphere*/,
+      "ChildId": "061cf4d2-c671-4b59-8f06-57fcb01b68b3"/*SpherePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

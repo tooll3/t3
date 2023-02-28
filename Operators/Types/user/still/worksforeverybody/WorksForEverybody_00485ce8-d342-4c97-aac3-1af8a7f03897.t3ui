@@ -3504,7 +3504,7 @@
       }
     },
     {
-      "ChildId": "ef8a8332-4467-487b-885c-e4624c9a261e"/*PointsOnSphere*/,
+      "ChildId": "ef8a8332-4467-487b-885c-e4624c9a261e"/*SpherePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
@@ -3592,7 +3592,7 @@
       }
     },
     {
-      "ChildId": "077d7b7a-ea86-44e3-822f-9ff8acdc6d9e"/*MixPoints*/,
+      "ChildId": "077d7b7a-ea86-44e3-822f-9ff8acdc6d9e"/*BlendPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -3603,7 +3603,7 @@
       }
     },
     {
-      "ChildId": "41e80ba5-9e08-461b-af07-5cd3c4eadd0d"/*PointsOnSphere*/,
+      "ChildId": "41e80ba5-9e08-461b-af07-5cd3c4eadd0d"/*SpherePoints*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
