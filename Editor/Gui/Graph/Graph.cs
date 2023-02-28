@@ -97,6 +97,13 @@ namespace T3.Editor.Gui.Graph
                     Connections.CreateAndSortLineUi(c);
                 }
             }
+            else
+            {
+                foreach (var c in Connections.Lines)
+                {
+                    c.IsSelected = false;
+                }
+            }
             
             drawList.ChannelsSplit(2);
             DrawList.ChannelsSetCurrent((int)Channels.Operators);
