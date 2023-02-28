@@ -182,6 +182,7 @@ namespace T3.Editor.Gui.Windows.Output
             ImGui.SameLine();
             ImGui.PushID("CamSpeed");
             var result = SingleValueEdit.Draw(ref UserSettings.Config.CameraSpeed,  new Vector2(ImGui.GetFrameHeight() * 2, ImGui.GetFrameHeight()), 0.001f, 100, true, 0.01f, "{0:G3}");
+            CustomComponents.TooltipForLastItem("Camera speed when flying with ASDW keys.", "TIP: Use mouse wheel while flying to adjust on the fly.");
             ImGui.PopID();
         }
 
