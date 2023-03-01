@@ -47,12 +47,12 @@ namespace T3.Editor.Gui.Graph
 
         private static int _lastCheckSum;
 
-        public static void DrawGraph(ImDrawListPtr drawList, bool needsReinit= false)
+        public static void DrawGraph(ImDrawListPtr drawList, bool needsReinit = false)
         {
             DrawList = drawList;
             var graphSymbol = GraphCanvas.Current.CompositionOp.Symbol;
             var children = GraphCanvas.Current.CompositionOp.Children;
-            
+
             _symbolUi = SymbolUiRegistry.Entries[graphSymbol.Id];
             _childUis = _symbolUi.ChildUis;
             _inputUisById = _symbolUi.InputUis;
@@ -63,7 +63,7 @@ namespace T3.Editor.Gui.Graph
                 _lastCheckSum = 0;
                 needsReinit = true;
             }
-            
+
             // Checksum
             if (!needsReinit)
             {
@@ -72,7 +72,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     checkSum += c.GetHashCode();
                 }
-                
+
                 if (checkSum != _lastCheckSum)
                 {
                     Log.Debug("Update connections");
@@ -80,14 +80,14 @@ namespace T3.Editor.Gui.Graph
                     _lastCheckSum = checkSum;
                 }
             }
-            
+
             //needsReinit = true;
             if (needsReinit)
             {
                 AllConnections.Clear();
                 AllConnections.AddRange(graphSymbol.Connections);
                 AllConnections.AddRange(ConnectionMaker.TempConnections);
-                
+
                 // 1. Initializes lists of ConnectionLineUis
                 Connections.Init();
 
@@ -99,15 +99,18 @@ namespace T3.Editor.Gui.Graph
             }
             else
             {
-                foreach (var c in Connections.Lines)
+                if (Connections != null && Connections.Lines != null)
                 {
-                    c.IsSelected = false;
+                    foreach (var c in Connections.Lines)
+                    {
+                        c.IsSelected = false;
+                    }
                 }
             }
-            
+
             drawList.ChannelsSplit(2);
             DrawList.ChannelsSetCurrent((int)Channels.Operators);
-            
+
             // 3. Draw Nodes and their sockets and set positions for connection lines
             for (var childIndex = 0; childIndex < children.Count; childIndex++)
             {
@@ -115,11 +118,11 @@ namespace T3.Editor.Gui.Graph
                 if (graphSymbol != GraphCanvas.Current.CompositionOp.Symbol)
                     break;
 
-                foreach (var childUi in _childUis)  // Don't use linq to avoid allocations
+                foreach (var childUi in _childUis) // Don't use linq to avoid allocations
                 {
                     if (childUi.Id != instance.SymbolChildId)
                         continue;
-                    
+
                     GraphNode.Draw(childUi, instance);
                     break;
                 }
@@ -163,7 +166,7 @@ namespace T3.Editor.Gui.Graph
             {
                 line.Draw();
             }
-            
+
             // 7. Draw Annotations
             drawList.ChannelsSetCurrent((int)Channels.Annotations);
             foreach (var annotation in _symbolUi.Annotations.Values)
@@ -172,6 +175,7 @@ namespace T3.Editor.Gui.Graph
                 //drawList.AddRectFilled(  posOnScreen, posOnScreen + new Vector2(300,300), Color.Green);
                 AnnotationElement.Draw(annotation);
             }
+
             drawList.ChannelsMerge();
         }
 
@@ -285,21 +289,20 @@ namespace T3.Editor.Gui.Graph
                 }
             }
 
-            
-            
-            private static readonly List<ConnectionLineUi> _resultConnection = new List<ConnectionLineUi>(20); 
+            private static readonly List<ConnectionLineUi> _resultConnection = new List<ConnectionLineUi>(20);
+
             public List<ConnectionLineUi> GetLinesFromNodeOutput(SymbolChildUi childUi, Guid outputId)
             {
                 _resultConnection.Clear();
-                
+
                 if (!_linesFromNodes.TryGetValue(childUi, out var lines))
                     return NoLines;
-                
+
                 foreach (var l in lines)
                 {
                     if (l.Connection.SourceSlotId != outputId)
                         continue;
-                    
+
                     _resultConnection.Add(l);
                 }
 
@@ -311,7 +314,7 @@ namespace T3.Editor.Gui.Graph
                 _resultConnection.Clear();
                 if (!_linesIntoNodes.TryGetValue(childUi, out var lines))
                     return NoLines;
-                
+
                 foreach (var l in lines)
                 {
                     if (l.Connection.TargetSlotId != inputId)
@@ -320,7 +323,6 @@ namespace T3.Editor.Gui.Graph
                 }
 
                 return _resultConnection;
-
             }
 
             public List<ConnectionLineUi> GetLinesIntoNode(SymbolChildUi childUi)
@@ -379,9 +381,9 @@ namespace T3.Editor.Gui.Graph
                 if (IsAboutToBeReplaced)
                     color = Color.Mix(color, Color.Red, (float)Math.Sin(ImGui.GetTime() * 10) / 2 + 0.5f);
 
-                if(!IsSelected)
+                if (!IsSelected)
                     color = color.Fade(0.6f);
-                
+
                 var usageFactor = Math.Max(0, 1 - FramesSinceLastUsage / 50f);
                 var thickness = ((1 - 1 / (UpdateCount + 1f)) * 3 + 1) * 0.5f * (usageFactor * 2 + 1);
 
@@ -408,7 +410,7 @@ namespace T3.Editor.Gui.Graph
                     var tangentLength = MathUtils.RemapAndClamp(Vector2.Distance(SourcePosition, TargetPosition),
                                                                 30, 300,
                                                                 5, 200);
-                    
+
                     DrawList.AddBezierCubic(
                                             SourcePosition,
                                             SourcePosition + new Vector2(tangentLength, 0),
