@@ -167,10 +167,25 @@ namespace T3.Core.Operator
             // check if inputs have changed
             Type inputSlotType = typeof(IInputSlot);
             var inputInfos = instanceType.GetFields().Where(f => inputSlotType.IsAssignableFrom(f.FieldType));
-            var inputs = (from inputInfo in inputInfos
+                
+            (FieldInfo inputInfo, InputAttribute)[] inputs = null;
+
+            try
+            {
+
+                inputs = (from inputInfo in inputInfos
                           let customAttributes = inputInfo.GetCustomAttributes(typeof(InputAttribute), false)
                           where customAttributes.Any()
                           select (inputInfo, (InputAttribute)customAttributes[0])).ToArray();
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed get input attribute type:{e.Message}\n {e.InnerException}");    
+            }
+
+            if (inputs == null)
+                return;
+            
             // todo: it's probably better to first check if there's a change and only then allocate
             var oldInputDefinitions = new List<InputDefinition>(InputDefinitions);
             InputDefinitions.Clear();
@@ -192,6 +207,7 @@ namespace T3.Core.Operator
                     InputDefinitions.Add(inputDef);
                 }
             }
+            
 
             // check if outputs have changed
             var outputs = (from field in instanceType.GetFields()
