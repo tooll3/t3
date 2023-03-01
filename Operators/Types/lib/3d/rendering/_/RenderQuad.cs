@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using T3.Operators.Types.Id_fd9bffd3_5c57_462f_8761_85f94c5a629b;
+
 
 namespace T3.Operators.Types.Id_b89c5923_cc58_4d7a_8dce_eb1f8cdfc6e8
 {
@@ -25,7 +25,7 @@ namespace T3.Operators.Types.Id_b89c5923_cc58_4d7a_8dce_eb1f8cdfc6e8
         [Input(Guid = "a2d39e5b-38c7-4751-bc29-7389f9e9d8e5")]
         public readonly InputSlot<float> Height = new InputSlot<float>();
 
-        [Input(Guid = "08a058b0-9889-49d3-87a0-a1a98278eb06", MappedType = typeof(PickBlendMode.BlendModes))]
+        [Input(Guid = "08a058b0-9889-49d3-87a0-a1a98278eb06", MappedType = typeof(SharedEnums.BlendModes))]
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();
 
         [Input(Guid = "a4630612-743f-4396-8e2f-982052d508f4")]

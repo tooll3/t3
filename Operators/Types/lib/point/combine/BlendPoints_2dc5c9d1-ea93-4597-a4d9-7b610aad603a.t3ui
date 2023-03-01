@@ -6,7 +6,9 @@
       "Position": {
         "X": -448.6706,
         "Y": 662.0187
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "c5480ce5-a8ba-4a26-8cee-c28e442020b7"/*BlendMode*/,

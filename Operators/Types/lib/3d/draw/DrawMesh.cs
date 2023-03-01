@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using T3.Operators.Types.Id_fd9bffd3_5c57_462f_8761_85f94c5a629b;
+
 
 namespace T3.Operators.Types.Id_a3c5471e_079b_4d4b_886a_ec02d6428ff6
 {
@@ -20,7 +20,7 @@ namespace T3.Operators.Types.Id_a3c5471e_079b_4d4b_886a_ec02d6428ff6
         [Input(Guid = "97429e1f-3f30-4789-89a6-8e930e356ee6")]
         public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
 
-        [Input(Guid = "9c17fa15-35f1-49d4-802f-a3a796cad96a", MappedType = typeof(PickBlendMode.BlendModes))]
+        [Input(Guid = "9c17fa15-35f1-49d4-802f-a3a796cad96a", MappedType = typeof(SharedEnums.BlendModes))]
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();
 
         [Input(Guid = "9e957f4a-6502-4905-8d97-331f8b54097c")]

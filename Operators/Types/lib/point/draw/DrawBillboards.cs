@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using T3.Operators.Types.Id_fd9bffd3_5c57_462f_8761_85f94c5a629b;
+
 
 namespace T3.Operators.Types.Id_071c9aad_ecbf_47bf_b2f6_c43e8212d5b1
 {
@@ -35,7 +35,7 @@ namespace T3.Operators.Types.Id_071c9aad_ecbf_47bf_b2f6_c43e8212d5b1
         [Input(Guid = "407b79be-13da-477d-8123-90e6408de354")]
         public readonly InputSlot<float> RotateRandomly = new InputSlot<float>();
 
-        [Input(Guid = "0555c899-3049-4d47-a2da-0febf6871754", MappedType = typeof(PickBlendMode.BlendModes))]
+        [Input(Guid = "0555c899-3049-4d47-a2da-0febf6871754", MappedType = typeof(SharedEnums.BlendModes))]
         public readonly InputSlot<int> BlendMod = new InputSlot<int>();
 
         [Input(Guid = "6176e442-a1b5-4762-be92-3f65df4ccdae")]

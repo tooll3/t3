@@ -1,8 +1,9 @@
+using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Operators.Types.Id_fd9bffd3_5c57_462f_8761_85f94c5a629b;
+
 
 namespace T3.Operators.Types.Id_d14233a2_8240_47d3_bb92_0854f6d3b218
 {
@@ -59,8 +60,20 @@ namespace T3.Operators.Types.Id_d14233a2_8240_47d3_bb92_0854f6d3b218
         [Input(Guid = "60b17724-e469-463f-9700-745b4d45d6ff")]
         public readonly InputSlot<bool> EnableZWrite = new InputSlot<bool>();
 
-        [Input(Guid = "a8f0a422-4846-48ad-8756-9d542b3141d3", MappedType = typeof(PickBlendMode.BlendModes))]
+        [Input(Guid = "a8f0a422-4846-48ad-8756-9d542b3141d3", MappedType = typeof(SharedEnums.BlendModes))]
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();
+
+        [Input(Guid = "132833d1-3f70-491e-ac19-a48cba0c7736")]
+        public readonly InputSlot<float> Test = new InputSlot<float>();
+
+        [Input(Guid = "3fb3d759-9d58-4699-a8d8-3ba3889cbc6e")]
+        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Test2 = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+
+        [Input(Guid = "9b42caa4-040a-4f83-8822-bc5bfbdff334")]
+        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+
+        [Input(Guid = "b8a3025d-1ad4-47a7-8d1f-c108333ea91d")]
+        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> textureinput = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
 
     }

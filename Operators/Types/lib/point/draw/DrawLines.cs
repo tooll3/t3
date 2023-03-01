@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using T3.Operators.Types.Id_fd9bffd3_5c57_462f_8761_85f94c5a629b;
+
 
 namespace T3.Operators.Types.Id_836f211f_b387_417c_8316_658e0dc6e117
 {
@@ -43,7 +43,7 @@ namespace T3.Operators.Types.Id_836f211f_b387_417c_8316_658e0dc6e117
         [Input(Guid = "c9cf2182-1297-463c-b5c1-d4ee7ad0895c")]
         public readonly InputSlot<bool> EnableDepthWrite = new InputSlot<bool>();
 
-        [Input(Guid = "d90ff4e6-7d70-441f-a064-b40401025c36", MappedType = typeof(PickBlendMode.BlendModes))]
+        [Input(Guid = "d90ff4e6-7d70-441f-a064-b40401025c36", MappedType = typeof(SharedEnums.BlendModes))]
         public readonly InputSlot<int> BlendMod = new InputSlot<int>();
     }
 }

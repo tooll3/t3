@@ -26,19 +26,20 @@ namespace T3.StartEditor
             
             Log.Debug("Building operators.dll...");
             Log.Debug(" Collecting sources...");
-            var operatorAssemblySources = new List<string>();
             
-            foreach (var sourceFile in Directory.GetFiles(Model.OperatorTypesFolder, "*.cs", SearchOption.AllDirectories))
-            {
-                Log.Debug($"+ {sourceFile}");
-                operatorAssemblySources.Add(File.ReadAllText(sourceFile));
-            }
+            var sourceFilePaths = new HashSet<string>();
+            
+            sourceFilePaths.UnionWith(Directory.GetFiles(Model.OperatorTypesFolder, "*.cs", SearchOption.AllDirectories).ToArray().ToArray());
+            sourceFilePaths.UnionWith(Directory.GetFiles(@"Operators\Utils\", "*.cs", SearchOption.AllDirectories));
+            sourceFilePaths.Add(@"Operators\Types\lib\dx11\draw\PickBlendMode.cs");
 
-            foreach (var filepath in Directory.GetFiles(@"Operators\Utils\", "*.cs", SearchOption.AllDirectories))
+            var operatorAssemblySources = new List<string>();
+            foreach (var filepath in sourceFilePaths)
             {
+                Log.Debug($"+ {filepath}");
                 operatorAssemblySources.Add(File.ReadAllText(filepath));
             }
-
+            
             Log.Debug("Compiling...");
             var references = CompileSymbolsFromSource(".", operatorAssemblySources.ToArray());
 

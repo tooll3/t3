@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using T3.Operators.Types.Id_fd9bffd3_5c57_462f_8761_85f94c5a629b;
+
 
 namespace T3.Operators.Types.Id_ffc0a7ed_fe61_4188_8db9_0b0f07c6b981
 {
@@ -44,7 +44,7 @@ namespace T3.Operators.Types.Id_ffc0a7ed_fe61_4188_8db9_0b0f07c6b981
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
         
-        [Input(Guid = "a6069687-171d-417b-a746-7557486204bc", MappedType = typeof(PickBlendMode.BlendModes))]
+        [Input(Guid = "a6069687-171d-417b-a746-7557486204bc", MappedType = typeof(SharedEnums.BlendModes))]
         public readonly InputSlot<int> BlendMod = new InputSlot<int>();
 
         [Input(Guid = "b83c1c1d-fef9-48d0-bf6b-da5b4ad8b094")]

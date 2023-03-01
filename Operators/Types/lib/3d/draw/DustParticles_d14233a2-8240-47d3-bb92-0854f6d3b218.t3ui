@@ -125,6 +125,34 @@
         "X": -1380.4293,
         "Y": 1433.5939
       }
+    },
+    {
+      "InputId": "132833d1-3f70-491e-ac19-a48cba0c7736"/*Test*/,
+      "Position": {
+        "X": -1380.4293,
+        "Y": 1478.5939
+      }
+    },
+    {
+      "InputId": "3fb3d759-9d58-4699-a8d8-3ba3889cbc6e"/*Test2*/,
+      "Position": {
+        "X": -1380.4293,
+        "Y": 1523.5939
+      }
+    },
+    {
+      "InputId": "9b42caa4-040a-4f83-8822-bc5bfbdff334"/*Texture_*/,
+      "Position": {
+        "X": -1380.4293,
+        "Y": 1568.5939
+      }
+    },
+    {
+      "InputId": "b8a3025d-1ad4-47a7-8d1f-c108333ea91d"/*textureinput*/,
+      "Position": {
+        "X": -1380.4293,
+        "Y": 1613.5939
+      }
     }
   ],
   "SymbolChildUis": [

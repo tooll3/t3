@@ -8,7 +8,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using T3.Operators.Types.Id_fd9bffd3_5c57_462f_8761_85f94c5a629b;
+
 
 namespace T3.Operators.Types.Id_d8c5330f_59b5_4907_b845_a02def3042fa
 {
@@ -35,7 +35,7 @@ namespace T3.Operators.Types.Id_d8c5330f_59b5_4907_b845_a02def3042fa
         [Input(Guid = "ed4f8c30-7b71-4649-97e6-710a718039b0")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
 
-        [Input(Guid = "c8d0e44e-acd1-4045-b565-e1ce0b722e70", MappedType = typeof(PickBlendMode.BlendModes))]
+        [Input(Guid = "c8d0e44e-acd1-4045-b565-e1ce0b722e70", MappedType = typeof(SharedEnums.BlendModes))]
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();
 
         [Input(Guid = "a384be77-c5fc-47b3-9ec3-960db9f9bae9")]
