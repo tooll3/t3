@@ -10,6 +10,9 @@ namespace T3.Operators.Types.Id_b60f2321_0df5_42a7_bdcf_4660bbe549d6
         [Output(Guid = "434a3d5c-96c3-4f5e-962e-b88a4415fce3")]
         public readonly Slot<Command> Output = new Slot<Command>();
 
+        [Input(Guid = "2095ce9d-2b92-45cb-bf30-91c32d8ebd90")]
+        public readonly InputSlot<string> InputString = new InputSlot<string>();
+
 
     }
 }

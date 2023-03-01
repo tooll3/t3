@@ -1545,7 +1545,7 @@
       }
     },
     {
-      "ChildId": "35c5364d-917d-41e6-bf3f-b38d19cfcfdb"/*TimeClip*/,
+      "ChildId": "35c5364d-917d-41e6-bf3f-b38d19cfcfdb"/*Intro sequence*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -2191,6 +2191,28 @@
       "Position": {
         "X": 4998.557,
         "Y": 3448.802
+      }
+    },
+    {
+      "ChildId": "3f539f51-3a1b-482e-9085-c7985865e147"/*FadingSlideShow*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 6292.944,
+        "Y": -287.84634
+      }
+    },
+    {
+      "ChildId": "cd6ac926-d81e-4f3a-845c-bd59a6d7e4b8"/*ColorCycling*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 6769.853,
+        "Y": -74.05658
       }
     }
   ],
