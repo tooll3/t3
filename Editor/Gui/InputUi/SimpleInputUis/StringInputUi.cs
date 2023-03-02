@@ -11,7 +11,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
 {
     public class StringInputUi : InputValueUi<string>
     {
-        private const int MAX_STRING_LENGTH = 4000;
+        private const int MaxStringLength = 4000;
 
         public enum UsageType
         {
@@ -22,7 +22,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
         }
 
         public UsageType Usage { get; private set; } = UsageType.Default;
-        public string FileFilter { get; private set; } = null;
+        public string FileFilter { get; private set; }
 
         public override IInputUi Clone()
         {
@@ -47,7 +47,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                 return InputEditStateFlags.Nothing;
             }
 
-            InputEditStateFlags inputEditStateFlags = InputEditStateFlags.Nothing;
+            var inputEditStateFlags = InputEditStateFlags.Nothing;
             switch (Usage)
             {
                 case UsageType.Default:
@@ -96,14 +96,14 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
 
         private static InputEditStateFlags DrawDefaultTextEdit(ref string value)
         {
-            bool changed = ImGui.InputText("##textEdit", ref value, MAX_STRING_LENGTH);
+            bool changed = ImGui.InputText("##textEdit", ref value, MaxStringLength);
             return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
         }
 
         private static InputEditStateFlags DrawMultilineTextEdit(ref string value)
         {
             ImGui.Dummy(new Vector2(1, 1));
-            var changed = ImGui.InputTextMultiline("##textEdit", ref value, MAX_STRING_LENGTH, new Vector2(-1, 150));
+            var changed = ImGui.InputTextMultiline("##textEdit", ref value, MaxStringLength, new Vector2(-1, 150));
             return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
         }
 
@@ -111,12 +111,12 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
         {
             if (value != null)
             {
-                ImGui.InputText(name, ref value, MAX_STRING_LENGTH, ImGuiInputTextFlags.ReadOnly);
+                ImGui.InputText(name, ref value, MaxStringLength, ImGuiInputTextFlags.ReadOnly);
             }
             else
             {
                 string nullString = "<null>";
-                ImGui.InputText(name, ref nullString, MAX_STRING_LENGTH, ImGuiInputTextFlags.ReadOnly);
+                ImGui.InputText(name, ref nullString, MaxStringLength, ImGuiInputTextFlags.ReadOnly);
             }
         }
 
@@ -132,6 +132,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
 
             }
             
+            if (Usage == UsageType.FilePath) 
             {
                 var tmp = FileFilter;
                 var warning = !string.IsNullOrEmpty(tmp) && !tmp.Contains('|')
@@ -150,15 +151,25 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
         {
             base.Write(writer);
 
-            writer.WriteObject("Usage", Usage.ToString());
-            writer.WriteObject("Filter", FileFilter);
+            writer.WriteObject(nameof(Usage), Usage.ToString());
+            
+            if(!string.IsNullOrEmpty(FileFilter))
+                writer.WriteObject(nameof(FileFilter), FileFilter);
         }
 
         public override void Read(JToken inputToken)
         {
+            if (inputToken == null)
+                return;
+            
             base.Read(inputToken);
 
-            Usage = (UsageType)Enum.Parse(typeof(UsageType), inputToken["Usage"].Value<string>());
+            if (Enum.TryParse<UsageType>(inputToken[nameof(Usage)].Value<string>(), out var enumValue))
+            {
+                Usage = enumValue;
+            }
+
+            FileFilter = inputToken[nameof(FileFilter)]?.Value<string>();
         }
     }
 }

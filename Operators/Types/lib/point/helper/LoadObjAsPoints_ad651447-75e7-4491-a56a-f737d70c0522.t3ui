@@ -8,7 +8,8 @@
         "X": 51.512096,
         "Y": 46.995968
       },
-      "Usage": "FilePath"
+      "Usage": "FilePath",
+      "FileFilter": "Obj-Files|*.obj"
     },
     {
       "InputId": "dcacd412-1885-4a10-b073-54192f074ae8"/*Mode*/,

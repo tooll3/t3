@@ -8,7 +8,8 @@
         "X": 51.512096,
         "Y": 46.995968
       },
-      "Usage": "FilePath"
+      "Usage": "FilePath",
+      "FileFilter": "OBJ-Files|*.obj"
     },
     {
       "InputId": "ffd22736-a600-4c97-a4a4-ad3526b8b35c"/*UseGPUCaching*/,
