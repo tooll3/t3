@@ -628,7 +628,7 @@ namespace T3.Core.Operator
             int connectionsIndex = Connections.FindIndex(c => c == existingConnection); // == is intended
             if (connectionsIndex != -1)
             {
-                Log.Info($"Remove  MI with index {multiInputIndex} at existing index {connectionsIndex}");
+                //Log.Info($"Remove  MI with index {multiInputIndex} at existing index {connectionsIndex}");
                 Connections.RemoveAt(connectionsIndex);
                 foreach (var instance in InstancesOfSymbol)
                 {
@@ -653,11 +653,25 @@ namespace T3.Core.Operator
             return newChild.Id;
         }
 
-        public void CreateUpdateActionsAnimatedChildren()
+        public void CreateOrUpdateActionsForAnimatedChildren()
         {
             foreach (var symbolInstance in InstancesOfSymbol)
             {
                 Animator.CreateUpdateActionsForExistingCurves(symbolInstance.Children);
+            }
+        }
+        
+        public void CreateAnimationUpdateActionsForSymbolInstances()
+        {
+            var parents = new HashSet<Symbol>();
+            foreach (var instance in InstancesOfSymbol)
+            {
+                parents.Add(instance.Parent.Symbol);
+            }
+
+            foreach (var parentSymbol in parents)
+            {
+                parentSymbol.CreateOrUpdateActionsForAnimatedChildren();
             }
         }
 

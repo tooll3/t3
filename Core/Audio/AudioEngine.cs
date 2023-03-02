@@ -218,7 +218,7 @@ namespace T3.Core.Audio
             {
                 if (isPlaying)
                 {
-                    Log.Debug("Pausing");
+                    //Log.Debug("Pausing");
                     Bass.ChannelPause(StreamHandle);
                 }
                 
@@ -227,7 +227,7 @@ namespace T3.Core.Audio
 
             if (!isPlaying)
             {
-                Log.Debug("Restarting");
+                //Log.Debug("Restarting");
                 Bass.ChannelPlay(StreamHandle);
             }
             

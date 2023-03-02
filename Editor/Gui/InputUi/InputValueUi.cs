@@ -306,7 +306,7 @@ namespace T3.Editor.Gui.InputUi
                         if (IsAnimatable)
                         {
                             animator.CreateInputUpdateAction(inputSlot); // todo: create command
-                            inputSlot.Parent.Parent.Symbol.CreateUpdateActionsAnimatedChildren();
+                            inputSlot.Parent.Parent.Symbol.CreateOrUpdateActionsForAnimatedChildren();
                         }
                     }
 

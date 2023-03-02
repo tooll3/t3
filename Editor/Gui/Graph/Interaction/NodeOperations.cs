@@ -1102,6 +1102,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             foreach (var symbol in modifiedSymbols)
             {
                 UiModel.UpdateUiEntriesForSymbol(symbol);
+                symbol.CreateAnimationUpdateActionsForSymbolInstances();
             }
         }
 

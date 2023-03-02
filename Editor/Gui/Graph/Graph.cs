@@ -75,7 +75,7 @@ namespace T3.Editor.Gui.Graph
 
                 if (checkSum != _lastCheckSum)
                 {
-                    Log.Debug("Update connections");
+                    //Log.Debug("Update connections");
                     needsReinit = true;
                     _lastCheckSum = checkSum;
                 }
