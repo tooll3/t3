@@ -502,15 +502,22 @@ namespace T3.Core.Resource
             using var streamReader = new StreamReader(filepath);
             using var jsonReader = new JsonTextReader(streamReader);
 
-            var symbolJson = new SymbolJson { Reader = jsonReader };
-            var symbol = symbolJson.ReadSymbol(this);
-            if (symbol == null)
-                return null;
+            try 
+            {
+                var symbolJson = new SymbolJson { Reader = jsonReader };
+                var symbol = symbolJson.ReadSymbol(this);
+                if (symbol == null)
+                    return null;
 
-            //symbol.SourcePath = OperatorTypesFolder + symbol.Name + SourceExtension;
-            SymbolRegistry.Entries.Add(symbol.Id, symbol);
+                //symbol.SourcePath = OperatorTypesFolder + symbol.Name + SourceExtension;
+                SymbolRegistry.Entries.Add(symbol.Id, symbol);
 
-            return symbol;
+                return symbol;
+            }
+            catch (Newtonsoft.Json.JsonReaderException e)
+            {
+                throw new Exception($"Failed to load...\n\n {filepath}\n\n{e.Message}");
+            }
         }
 
         public Symbol ReadSymbolWithId(Guid id)

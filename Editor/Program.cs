@@ -26,6 +26,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using Device = SharpDX.Direct3D11.Device;
+using Message = System.Windows.Forms.Message;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor
@@ -115,7 +116,11 @@ namespace T3.Editor
             }
             catch (Exception e)
             {
-                Log.Error(e.Message + "\n" + e.StackTrace);
+                Log.Error(e.Message + "\n\n" + e.StackTrace);
+                var innerException = e.InnerException != null ? e.InnerException.Message.Replace("\\r", "\r") : string.Empty;
+                MessageBox.Show($"Loading Operators failed:\n\n{e.Message}\n{innerException}\n\nThis is liked caused by a corrupted operator file.\nPlease try restarting and restore backup.",@"Error", MessageBoxButtons.OK);
+                Application.Exit();
+                return;
             }
 
             SymbolAnalysis.UpdateUsagesOnly();
