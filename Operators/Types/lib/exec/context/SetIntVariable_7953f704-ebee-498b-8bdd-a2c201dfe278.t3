@@ -17,7 +17,7 @@
     },
     {
       "Id": "4ab2a742-7f3f-4d96-b67e-73e14b4a8f47"/*LogLevel*/,
-      "DefaultValue": 2
+      "DefaultValue": 0
     }
   ],
   "Children": [],

@@ -110,6 +110,13 @@
         "X": -750.1524,
         "Y": 2041.7649
       }
+    },
+    {
+      "InputId": "f9025937-8e74-4f2d-b8f1-90e56e601137"/*Visibility*/,
+      "Position": {
+        "X": -750.1524,
+        "Y": 2086.765
+      }
     }
   ],
   "SymbolChildUis": [
@@ -261,7 +268,7 @@
       "ChildId": "6e4428ff-9934-40f7-8a61-d374dd2f2bda"/*VisibleGizmos*/,
       "Size": {
         "X": 110.0,
-        "Y": 49.0
+        "Y": 62.0
       },
       "Position": {
         "X": 1489.5684,

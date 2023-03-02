@@ -3,6 +3,13 @@
   "Description": "A helper that uses the mouse input to explore two parameter ranges.\n\nIt either returns are default value or a alternative ranges mapped to mouse x y.\n",
   "InputUis": [
     {
+      "InputId": "726b3606-9d03-4b67-af4c-70e144b5c471"/*SceneIndex*/,
+      "Position": {
+        "X": -868.5432,
+        "Y": 176.84125
+      }
+    },
+    {
       "InputId": "534229d1-8728-4925-bd46-3bb351e4e95b"/*ADefault*/,
       "Position": {
         "X": -322.97293,
@@ -84,72 +91,6 @@
       }
     },
     {
-      "ChildId": "da492763-067a-4bb5-833a-c7c4a91caa40"/*MouseInput*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -1351.9126,
-        "Y": 73.8999
-      }
-    },
-    {
-      "ChildId": "edc72318-fd3d-47c3-b6f7-aa0fa44546c2"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -1201.9124,
-        "Y": 73.8999
-      }
-    },
-    {
-      "ChildId": "07102fd5-040d-4f6c-81b3-5d0b2ebde415"/*BoolToFloats*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -751.91254,
-        "Y": 73.8999
-      }
-    },
-    {
-      "ChildId": "15f9f59e-0685-4cbb-b8b8-adbd6ea09027"/*Damp*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -601.9125,
-        "Y": 73.8999
-      }
-    },
-    {
-      "ChildId": "9e290b5e-d356-4e20-8b41-b6c60f07fa77"/*HasValueChanged*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -1051.9126,
-        "Y": 73.8999
-      }
-    },
-    {
-      "ChildId": "8ad60147-a216-44ca-9c49-12faf95dc62b"/*DelayTrigger*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": -901.91254,
-        "Y": 73.8999
-      }
-    },
-    {
       "ChildId": "3cd1a9bc-9e97-4d11-b764-0d6320220565"/*Vector2ToFloat2*/,
       "Size": {
         "X": 110.0,
@@ -205,26 +146,14 @@
       }
     },
     {
-      "ChildId": "104d433e-7174-4d46-932d-2ec28e5a2ba1"/*GetFloatVar*/,
+      "ChildId": "104d433e-7174-4d46-932d-2ec28e5a2ba1"/*Get PlaybackSpeedOverride*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
       },
       "Position": {
-        "X": -640.5435,
-        "Y": 192.46722
-      }
-    },
-    {
-      "ChildId": "dab7b9df-29e7-4862-953a-092b998f15a1"/*Multiply*/,
-      "Style": "Expanded",
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": -170.77704,
-        "Y": 46.37036
+        "X": -718.5432,
+        "Y": 133.84125
       }
     },
     {
@@ -235,6 +164,50 @@
       },
       "Position": {
         "X": -418.54318,
+        "Y": 90.84125
+      }
+    },
+    {
+      "ChildId": "bf3e58ef-e255-472d-b26f-632ac856d754"/*CompareInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -718.5432,
+        "Y": 176.84125
+      }
+    },
+    {
+      "ChildId": "ad466a4a-040e-4b7a-aa6b-34f7af8fbe21"/*Get "SceneIndex"*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -868.5432,
+        "Y": 221.84125
+      }
+    },
+    {
+      "ChildId": "d23a4013-e7f4-4707-80fb-84203fa98555"/*PickFloat*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": -568.5432,
+        "Y": 90.84125
+      }
+    },
+    {
+      "ChildId": "7f51ec31-4f43-42b4-ae02-812409cc973d"/*Disabled*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": -718.5432,
         "Y": 90.84125
       }
     }

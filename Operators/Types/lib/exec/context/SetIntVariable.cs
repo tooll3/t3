@@ -44,35 +44,32 @@ namespace T3.Operators.Types.Id_7953f704_ebee_498b_8bdd_a2c201dfe278
                 
                 return;
             }
-            
-            if (!SubGraph.IsConnected)
-            {
-                if(logLevel >= (int)LogLevels.Warnings) 
-                    Log.Warning($"No subgraph defined for variable {name}", this);
-                
-                context.IntVariables[name] = newValue;
-            }
-            else
+
+            if (SubGraph.IsConnected)
             {
                 var hadPreviousValue = context.IntVariables.TryGetValue(name, out var previous);
                 context.IntVariables[name] = newValue;
-                
+
                 SubGraph.GetValue(context);
-                
+
                 if (hadPreviousValue)
                 {
-                    if(logLevel >= (int)LogLevels.Changes) 
+                    if (logLevel >= (int)LogLevels.Changes)
                         Log.Debug($"Changing {name} from {previous} -> {newValue}", this);
-                    
+
                     context.IntVariables[name] = previous;
                 }
                 else
                 {
-                    if(logLevel >= (int)LogLevels.AllUpdates) 
+                    if (logLevel >= (int)LogLevels.AllUpdates)
                         Log.Debug($"Setting {name} to {newValue}", this);
-                    
+
                     context.IntVariables.Remove(name);
                 }
+            }
+            else
+            {
+                context.IntVariables[name] = newValue;
             }
         }
 

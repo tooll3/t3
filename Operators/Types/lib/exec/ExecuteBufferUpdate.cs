@@ -25,7 +25,6 @@ namespace T3.Operators.Types.Id_58351c8f_4a73_448e_b7bb_69412e71bd76
 
         private void Update(EvaluationContext context)
         {
-            // This will execute the input
             if (!IsEnabled.GetValue(context))
             {
                 UpdateCommand.DirtyFlag.Clear();
@@ -33,8 +32,11 @@ namespace T3.Operators.Types.Id_58351c8f_4a73_448e_b7bb_69412e71bd76
                 return;
             }
 
+            // This will execute the input
             UpdateCommand.GetValue(context);
+            
             Output2.Value = BufferWithViews.GetValue(context);
+            
             Output2.DirtyFlag.Clear();
         }
 

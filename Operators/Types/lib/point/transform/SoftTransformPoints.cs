@@ -67,6 +67,9 @@ namespace T3.Operators.Types.Id_697bbc2d_0b2e_4013_bbc3_d58a28a79f31
         [Input(Guid = "8cd72c75-e73d-4d29-a5a9-e2d1a9ebe5e7")]
         public readonly InputSlot<bool> UseWAsWeight = new InputSlot<bool>();
 
+        [Input(Guid = "f9025937-8e74-4f2d-b8f1-90e56e601137")]
+        public readonly InputSlot<T3.Core.Operator.GizmoVisibility> Visibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+
         
         private enum Shapes
         {

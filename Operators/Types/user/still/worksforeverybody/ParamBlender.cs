@@ -16,6 +16,9 @@ namespace T3.Operators.Types.Id_957961ad_797c_48ac_b9d6_7f2fa2ce17eb
         [Output(Guid = "dc403770-bd73-4dba-a67f-d94054e01d03")]
         public readonly Slot<float> AnimParam1Out = new Slot<float>();
 
+        [Input(Guid = "726b3606-9d03-4b67-af4c-70e144b5c471")]
+        public readonly InputSlot<int> SceneIndex = new InputSlot<int>();
+
         [Input(Guid = "534229d1-8728-4925-bd46-3bb351e4e95b")]
         public readonly InputSlot<float> ADefault = new InputSlot<float>();
 

@@ -598,6 +598,11 @@
           "Value": 0.0
         },
         {
+          "Id": "83986e05-af3e-469f-a656-9956d37d12ba"/*Orientation*/,
+          "Type": "System.Int32",
+          "Value": 134
+        },
+        {
           "Id": "a8dfe0e7-ad33-47cf-ab78-726385e38434"/*OrientationAxis*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -605,11 +610,6 @@
             "Y": 0.0,
             "Z": 1.0
           }
-        },
-        {
-          "Id": "83986e05-af3e-469f-a656-9956d37d12ba"/*Orientation*/,
-          "Type": "System.Int32",
-          "Value": 134
         }
       ],
       "Outputs": []
