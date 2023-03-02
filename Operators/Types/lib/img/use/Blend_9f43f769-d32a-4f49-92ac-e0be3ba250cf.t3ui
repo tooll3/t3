@@ -52,6 +52,13 @@
         "X": -48.61692,
         "Y": 316.24066
       }
+    },
+    {
+      "InputId": "d7b83780-c4be-4337-b1df-0c98310b1926"/*GenerateMips*/,
+      "Position": {
+        "X": -48.61692,
+        "Y": 361.24066
+      }
     }
   ],
   "SymbolChildUis": [
@@ -59,7 +66,7 @@
       "ChildId": "65a46696-fe6d-4abf-9ff0-9f12c6ac1dcc"/*_multiImageFxSetup*/,
       "Size": {
         "X": 110.0,
-        "Y": 205.0
+        "Y": 218.0
       },
       "Position": {
         "X": 422.33575,

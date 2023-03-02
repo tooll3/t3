@@ -30,6 +30,9 @@ namespace T3.Operators.Types.Id_9f43f769_d32a_4f49_92ac_e0be3ba250cf
         [Input(Guid = "cdc2cf4b-f788-4cb4-a3f5-8dfaa8bd54b3")]
         public readonly InputSlot<bool> NormalForUpperHalf = new InputSlot<bool>();
 
+        [Input(Guid = "d7b83780-c4be-4337-b1df-0c98310b1926")]
+        public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
+
         private enum RgbBlendModes
         {
             Normal = 0,
