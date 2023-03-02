@@ -38,11 +38,11 @@ namespace T3.Operators.Types.Id_4ae9e2f5_7cb3_40b0_a662_0662e8cb7c68
         [Input(Guid = "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f")]
         public readonly InputSlot<float> Twist = new InputSlot<float>();
 
+        [Input(Guid = "83986e05-af3e-469f-a656-9956d37d12ba")]
+        public readonly InputSlot<int> Orientation = new InputSlot<int>();
+
         [Input(Guid = "a8dfe0e7-ad33-47cf-ab78-726385e38434")]
         public readonly InputSlot<System.Numerics.Vector3> OrientationAxis = new InputSlot<System.Numerics.Vector3>();
-
-        [Input(Guid = "83986e05-af3e-469f-a656-9956d37d12ba", MappedType = typeof(OrientationModes))]
-        public readonly InputSlot<int> Orientation = new InputSlot<int>();
 
         [Input(Guid = "ddc2ea6a-d356-46c9-b333-4cce69c02570")]
         public readonly InputSlot<bool> AddSeparator = new InputSlot<bool>();

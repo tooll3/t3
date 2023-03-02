@@ -39,7 +39,12 @@
           }
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "c382284f-7e37-4eb0-b284-bc735247f26b"/*ComputeShaderStage*/,
+          "DirtyFlagTrigger": "None"
+        }
+      ]
     },
     {
       "Id": "a87fc711-9115-4294-832e-4ce56464238a"/*FloatsToBuffer*/,
