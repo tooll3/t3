@@ -36,7 +36,7 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
                 return;
 
             _lastUpdateTime = context.LocalFxTime;
-            
+            var scrambleSeed = ScrambleSeed.GetValue(context);
             //var lastIndex = _index;
 
             if (maxLength <= 0)
@@ -106,11 +106,11 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
                     var scrambleEnabled = Scramble.GetValue(context);
                     if (scrambleRatio > 0 && scrambleEnabled)
                     {
-                        var seed = ScrambleSeed.GetValue(context);
+                        
                         
                         for (int index = 0; index < stringBuilder.Length; index++)
                         {
-                            var hash = (float)((double)MathUtils.XxHash((uint)index + (uint)seed * 123127) / uint.MaxValue);
+                            var hash = (float)((double)MathUtils.XxHash((uint)index + (uint)scrambleSeed * 123127) / uint.MaxValue);
                             if (hash < scrambleRatio)
                             {
                                 var scrambleChunkEnd = index + hash * stringBuilder.Length + 1;

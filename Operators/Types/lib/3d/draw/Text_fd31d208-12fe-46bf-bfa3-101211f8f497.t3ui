@@ -76,7 +76,8 @@
         "X": -437.7634,
         "Y": 762.48706
       },
-      "Usage": "FilePath"
+      "Usage": "FilePath",
+      "Filter": "FontFiles (*.fnt)|*.fnt"
     },
     {
       "InputId": "28be4e86-6761-4d07-80bf-abf6f82897e4"/*CullMode*/,

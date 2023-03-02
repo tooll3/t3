@@ -25,7 +25,7 @@
     },
     {
       "Id": "bdb712a8-3dbc-458a-887a-5add51813196"/*RangeWidth*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.1
     },
     {
       "Id": "ee8e9e15-ce18-4034-abc6-dd56108c8a02"/*Scatter*/,
