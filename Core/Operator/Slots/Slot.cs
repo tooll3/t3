@@ -158,7 +158,7 @@ namespace T3.Core.Operator.Slots
 
         public List<Slot<T>> InputConnection => _inputConnection;
 
-        public int Invalidate()
+        public virtual int Invalidate()
         {
             if (DirtyFlag.IsAlreadyInvalidated || DirtyFlag.HasBeenVisited)
                 return DirtyFlag.Target;

@@ -1,5 +1,6 @@
 using System;
 using T3.Core.Animation;
+using T3.Core.IO;
 using T3.Core.Logging;
 
 namespace T3.Core.Operator.Slots
@@ -29,22 +30,36 @@ namespace T3.Core.Operator.Slots
             TimeClip.Id = Parent.SymbolChildId;
         }
 
+        private LastUpdateResults _lastUpdateResult;
+
         private void UpdateWithTimeRangeCheck(EvaluationContext context)
         {
             if ((context.LocalTime < TimeClip.TimeRange.Start) || (context.LocalTime >= TimeClip.TimeRange.End))
+            {
+                _lastUpdateResult = ProjectSettings.Config.TimeClipSuspending ? LastUpdateResults.Suspended : LastUpdateResults.Active;
                 return;
+            }
 
             // TODO: Setting local time should flag time accessors as dirty 
             var prevTime = context.LocalTime;
             double factor = (context.LocalTime - TimeClip.TimeRange.Start) / (TimeClip.TimeRange.End - TimeClip.TimeRange.Start);
             context.LocalTime = factor * (TimeClip.SourceRange.End - TimeClip.SourceRange.Start) + TimeClip.SourceRange.Start;
-            
+
             _baseUpdateAction(context);
 
             context.LocalTime = prevTime;
+            _lastUpdateResult = LastUpdateResults.Active;
         }
 
         private Action<EvaluationContext> _baseUpdateAction;
+
+        private enum LastUpdateResults
+        {
+            Undefined,
+            Active,
+            Inactive, // Out of range
+            Suspended,
+        }
 
         public override Action<EvaluationContext> UpdateAction
         {
@@ -73,6 +88,49 @@ namespace T3.Core.Operator.Slots
             }
 
             _isDisabled = isDisabled;
+        }
+
+        public override int Invalidate()
+        {
+            if (DirtyFlag.IsAlreadyInvalidated || DirtyFlag.HasBeenVisited)
+                return DirtyFlag.Target;
+
+            // Slot is an output of an composition op
+            if (IsConnected)
+            {
+                DirtyFlag.Target = GetConnection(0).Invalidate();
+            }
+            else
+            {
+                if (_lastUpdateResult != LastUpdateResults.Suspended)
+                {
+                    Instance parent = Parent;
+
+                    bool outputDirty = DirtyFlag.IsDirty;
+                    foreach (var inputSlot in parent.Inputs)
+                    {
+                        if (inputSlot.IsConnected)
+                        {
+                            inputSlot.DirtyFlag.Target = inputSlot.GetConnection(0).Invalidate();
+                        }
+                        else if ((inputSlot.DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
+                        {
+                            inputSlot.DirtyFlag.Invalidate();
+                        }
+
+                        inputSlot.DirtyFlag.SetVisited();
+                        outputDirty |= inputSlot.DirtyFlag.IsDirty;
+                    }
+
+                    if (outputDirty || (DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
+                    {
+                        DirtyFlag.Invalidate();
+                    }
+                }
+            }
+
+            DirtyFlag.SetVisited();
+            return DirtyFlag.Target;
         }
     }
 }

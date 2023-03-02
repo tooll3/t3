@@ -11,6 +11,7 @@
         
         public class ConfigData
         {
+            public bool TimeClipSuspending = false;
             public string MainOperatorName = "";
             public float AudioResyncThreshold = 0.04f;
         }

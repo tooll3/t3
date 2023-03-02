@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.IO;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -21,6 +22,12 @@ namespace T3.Editor.Gui.Windows
             {
                 FormInputs.AddVerticalSpace();
                 FormInputs.SetIndent(20);
+                changed |= FormInputs.AddCheckBox("Suspend invalidation of inactive time clips",
+                                                  ref ProjectSettings.Config.TimeClipSuspending,
+                                                  "An experimental optimization that avoids dirty flag evaluation of graph behind inactive TimeClips. This is only relevant for very complex projects and multiple parts separated by timelines.",
+                                                  ProjectSettings.Defaults.TimeClipSuspending);
+                
+                
                 changed |= FormInputs.AddCheckBox("Warn before Lib modifications",
                                                        ref UserSettings.Config.WarnBeforeLibEdit,
                                                        "This warning pops up when you attempt to enter an Operator that ships with the application.\n" +
