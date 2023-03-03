@@ -42,9 +42,16 @@ namespace T3.Operators.Types.Id_97eb35ec_2825_4f63_8fdf_3fe38fa9e652
         [Input(Guid = "6ae1817e-eeeb-4bc9-802f-00fc26303023")]
         public readonly InputSlot<int> Iterations = new InputSlot<int>();
 
-        [Input(Guid = "145c356f-7068-4728-9e48-1df4f0a2d7bc")]
-        public readonly InputSlot<float> TestParam = new InputSlot<float>();
+        [Input(Guid = "270f9603-1d9b-412b-9c76-330eafc8a958", MappedType = typeof(Methods))]
+        public readonly InputSlot<int> Method = new InputSlot<int>();
 
+
+        private enum Methods
+        {
+            Legacy,
+            OpenSimplex2S,
+            OpenSimplex2S_NormalMap,
+        }
     }
 }
 

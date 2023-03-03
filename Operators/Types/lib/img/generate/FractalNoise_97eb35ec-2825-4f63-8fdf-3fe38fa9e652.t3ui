@@ -1,6 +1,6 @@
 {
   "Id": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652"/*FractalNoise*/,
-  "Description": "Generates an animated 2d perlin noise. \n\nNOTE: This is very expensive for higher resolution. and might not run in realtime in 1080p.",
+  "Description": "Generates an animated 2d perlin noise. \n\nNOTE:  The legacy version is very expensive for higher resolution. and might not run in realtime in 1080p.\n\nThe OpenSimplex is a faster implementation from https://www.shadertoy.com/view/ttdGR8\n\n",
   "InputUis": [
     {
       "InputId": "3b2533d8-b929-4367-8418-cba3f9c3db43"/*PixelShaderPath*/,
@@ -87,10 +87,10 @@
       }
     },
     {
-      "InputId": "145c356f-7068-4728-9e48-1df4f0a2d7bc"/*TestParam*/,
+      "InputId": "270f9603-1d9b-412b-9c76-330eafc8a958"/*Method*/,
       "Position": {
         "X": -164.5605,
-        "Y": 546.6141
+        "Y": 591.6141
       }
     }
   ],
@@ -143,12 +143,12 @@
       "ChildId": "5704272b-42c8-403c-b5c7-5786c1d8c31a"/*_ImageFxShaderSetupStatic*/,
       "Style": "Resizable",
       "Size": {
-        "X": 114.37077,
-        "Y": 576.36523
+        "X": 110.47982,
+        "Y": 1030.8274
       },
       "Position": {
-        "X": 498.08112,
-        "Y": -249.73524
+        "X": 534.65594,
+        "Y": -296.42657
       }
     },
     {
@@ -171,6 +171,17 @@
       "Position": {
         "X": -4.2940354,
         "Y": 503.6467
+      }
+    },
+    {
+      "ChildId": "3e087c62-4789-4777-8136-5d26200b08e6"/*IntToFloat*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 206.58966,
+        "Y": 608.0117
       }
     }
   ],

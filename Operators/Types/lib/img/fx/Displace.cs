@@ -51,7 +51,8 @@ namespace T3.Operators.Types.Id_1b149f1f_529c_4418_ac9d_3871f24a9e38
         
         private enum DisplaceModes {
             UseIntensityGradient,
-            UseIntensity
+            UseIntensity,
+            UseNormalMap,
         }
     }
 }
