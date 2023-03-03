@@ -94,6 +94,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         }
         float a = (d.x == 0 && d.y == 0) ? 0 : atan2(d.x, d.y) + Twist / 180 * 3.14158;
         direction = float2(sin(a), cos(a));
+        len = length(d) + 0.00001;
     }
     else
     {
