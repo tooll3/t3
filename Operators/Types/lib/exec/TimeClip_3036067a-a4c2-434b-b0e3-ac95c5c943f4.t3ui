@@ -8,13 +8,6 @@
         "X": -200.0,
         "Y": 0.0
       }
-    },
-    {
-      "InputId": "1bf03d71-1393-4409-9cf2-2210901f0773"/*LogUpdates*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
     }
   ],
   "SymbolChildUis": [],

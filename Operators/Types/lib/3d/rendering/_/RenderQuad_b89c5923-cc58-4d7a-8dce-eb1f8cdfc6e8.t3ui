@@ -218,17 +218,6 @@
       }
     },
     {
-      "ChildId": "27893144-189a-48e1-a88c-744d423ed6eb"/*RenderTarget*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 19.954853,
-        "Y": 189.26962
-      }
-    },
-    {
       "ChildId": "ca3ffb2a-7532-43a2-a00c-4a5383f6ee5d"/*PickBlendMode*/,
       "Size": {
         "X": 110.0,
@@ -270,6 +259,17 @@
       "Position": {
         "X": 663.7761,
         "Y": 490.78137
+      }
+    },
+    {
+      "ChildId": "79ad614d-edf0-40fb-86da-f20a37b5456e"/*LoadImage*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 82.931335,
+        "Y": 193.02661
       }
     }
   ],

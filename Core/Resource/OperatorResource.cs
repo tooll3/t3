@@ -61,7 +61,7 @@ namespace T3.Core.Resource
                 symbol.UpdateInstanceType(type);
                 opResource.Updated = false;
                 _operatorUpdateStopwatch.Stop();
-                Log.Info($"type updating took: {(double)_operatorUpdateStopwatch.ElapsedTicks / Stopwatch.Frequency}s");
+                //Log.Info($"type updating took: {(double)_operatorUpdateStopwatch.ElapsedTicks / Stopwatch.Frequency}s");
                 _modifiedSymbols.Add(symbol);
                 
             }

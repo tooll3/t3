@@ -64,7 +64,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             
             if (size.Width <= 0 || size.Height <= 0 || size.Width > MaximumTexture2DSize || size.Height > MaximumTexture2DSize)
             {
-                Log.Warning("Invalid texture size: " + size);
+                Log.Warning("Ignoring invalid texture size: " + size, this);
                 return;
             }
 
@@ -158,7 +158,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                     }
                     catch (Exception e)
                     {
-                        Log.Error("resolving render target buffer failed:" + e.Message);
+                        Log.Error("resolving render target buffer failed:" + e.Message, this);
                     }
                 }
                 

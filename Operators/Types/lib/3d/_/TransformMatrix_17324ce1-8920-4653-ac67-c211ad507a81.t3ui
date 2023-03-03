@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "3b817e6c-f532-4a8c-a2ff-a00dc926eeb2"/*Translation*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0
@@ -11,6 +12,7 @@
     },
     {
       "InputId": "5339862d-5a18-4d0c-b908-9277f5997563"/*Rotation*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0
@@ -18,6 +20,7 @@
     },
     {
       "InputId": "58b9dfb6-0596-4f0d-baf6-7fb3ae426c94"/*Scale*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 90.0
@@ -25,6 +28,7 @@
     },
     {
       "InputId": "566f1619-1de0-4b41-b167-7fc261730d62"/*UniformScale*/,
+      "Relevancy": "Relevant",
       "Position": {
         "X": -200.0,
         "Y": 135.0

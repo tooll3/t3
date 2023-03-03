@@ -21,8 +21,8 @@ namespace T3.Editor.Compilation
         /// </summary>
         public static void ResourceUpdateHandler(OperatorResource resource, string path)
         {
-            Log.Info($"Operator source '{path}' changed.");
-            Log.Info($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
+            //Log.Info($"Operator source '{path}' changed.");
+            //Log.Info($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
 
             string source;
             try
@@ -82,7 +82,7 @@ namespace T3.Editor.Compilation
             using var pdbStream = new MemoryStream();
             
             var emitResult = compilation.Emit(dllStream, pdbStream);
-            Log.Info($"compilation results of '{symbolName}':");
+            //Log.Info($"Compilation results of '{symbolName}':");
             if (!emitResult.Success)
             {
                 foreach (var entry in emitResult.Diagnostics)
