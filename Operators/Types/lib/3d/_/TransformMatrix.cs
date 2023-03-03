@@ -33,6 +33,16 @@ namespace T3.Operators.Types.Id_17324ce1_8920_4653_ac67_c211ad507a81
             var t = Translation.GetValue(context);
             var objectToParentObject = Matrix.Transformation(scalingCenter: Vector3.Zero, scalingRotation: Quaternion.Identity, scaling: new Vector3(s.X, s.Y, s.Z), rotationCenter: Vector3.Zero,
                                                              rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll), translation: new Vector3(t.X, t.Y, t.Z));
+
+            var shearing = Shear.GetValue(context);
+            
+              
+            
+            Matrix m = Matrix.Identity;
+            m.M12=shearing.Y; 
+            m.M21=shearing.X; 
+            m.M13=shearing.Z;             
+            objectToParentObject = Matrix.Multiply(objectToParentObject,m);
             
             // transpose all as mem layout in hlsl constant buffer is row based
             objectToParentObject.Transpose();
@@ -74,6 +84,11 @@ namespace T3.Operators.Types.Id_17324ce1_8920_4653_ac67_c211ad507a81
 
         [Input(Guid = "566F1619-1DE0-4B41-B167-7FC261730D62")]
         public readonly InputSlot<float> UniformScale = new InputSlot<float>();
+        
+        [Input(Guid = "F53F3311-E1FC-418B-8861-74ADC175D5FA")]
+        public readonly InputSlot<System.Numerics.Vector3> Shear = new();
+
+
         
         [Input(Guid = "E19808D8-6D73-4638-B5F2-DDDDC49AD815")]
         public readonly InputSlot<bool> Invert = new InputSlot<bool>();        

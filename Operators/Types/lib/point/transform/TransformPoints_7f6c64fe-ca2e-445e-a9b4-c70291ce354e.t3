@@ -36,6 +36,14 @@
       "DefaultValue": true
     },
     {
+      "Id": "319d71a9-b8dd-406f-a3a2-1c7508ba2ca7"/*Shearing*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
       "Id": "4af2dbdd-1005-465e-a193-756ed2b29a33"/*ScaleW*/,
       "DefaultValue": 1.0
     },
@@ -343,6 +351,12 @@
       "SourceSlotId": "523b7acd-d8e7-4473-9ec7-15eec1d795df",
       "TargetParentOrChildId": "c9390e2c-0150-4ec8-9738-f4a218418bc5",
       "TargetSlotId": "58b9dfb6-0596-4f0d-baf6-7fb3ae426c94"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "319d71a9-b8dd-406f-a3a2-1c7508ba2ca7",
+      "TargetParentOrChildId": "c9390e2c-0150-4ec8-9738-f4a218418bc5",
+      "TargetSlotId": "f53f3311-e1fc-418b-8861-74adc175d5fa"
     },
     {
       "SourceParentOrChildId": "b16a669b-1511-426b-b6c8-a385231fa637",

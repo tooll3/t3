@@ -23,7 +23,6 @@ namespace T3.Operators.Types.Id_c3d35057_2544_4b82_b2de_b70fe205662b
 
         private void Update(EvaluationContext context)
         {
-            
             var shearing = Translation.GetValue(context);
             
             Matrix m = Matrix.Identity;
@@ -43,16 +42,5 @@ namespace T3.Operators.Types.Id_c3d35057_2544_4b82_b2de_b70fe205662b
         
         [Input(Guid = "c3b260f4-4bd1-4964-8874-a1cf400fa1b9")]
         public readonly InputSlot<System.Numerics.Vector3> Translation = new();
-        
-        // [Input(Guid = "e6ecebbb-c139-4058-9d7e-92358c868039")]
-        // public readonly InputSlot<System.Numerics.Vector3> Rotation = new();
-        //
-        // [Input(Guid = "8a375290-bbdc-46cf-8b12-223b399841c0")]
-        // public readonly InputSlot<System.Numerics.Vector3> Scale = new();
-        //
-        // [Input(Guid = "7b2213e4-05ae-4668-b236-86fed9e75ada")]
-        // public readonly InputSlot<float> UniformScale = new();
-
-
     }
 }
