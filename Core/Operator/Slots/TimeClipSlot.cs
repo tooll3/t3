@@ -30,13 +30,13 @@ namespace T3.Core.Operator.Slots
             TimeClip.Id = Parent.SymbolChildId;
         }
 
-        private LastUpdateResults _lastUpdateResult;
+        public UpdateStates LastUpdateStatus;
 
         private void UpdateWithTimeRangeCheck(EvaluationContext context)
         {
             if ((context.LocalTime < TimeClip.TimeRange.Start) || (context.LocalTime >= TimeClip.TimeRange.End))
             {
-                _lastUpdateResult = ProjectSettings.Config.TimeClipSuspending ? LastUpdateResults.Suspended : LastUpdateResults.Active;
+                LastUpdateStatus = ProjectSettings.Config.TimeClipSuspending ? UpdateStates.Suspended : UpdateStates.Active;
                 return;
             }
 
@@ -48,12 +48,12 @@ namespace T3.Core.Operator.Slots
             _baseUpdateAction(context);
 
             context.LocalTime = prevTime;
-            _lastUpdateResult = LastUpdateResults.Active;
+            LastUpdateStatus = UpdateStates.Active;
         }
 
         private Action<EvaluationContext> _baseUpdateAction;
 
-        private enum LastUpdateResults
+        public enum UpdateStates
         {
             Undefined,
             Active,
@@ -102,7 +102,7 @@ namespace T3.Core.Operator.Slots
             }
             else
             {
-                if (_lastUpdateResult != LastUpdateResults.Suspended)
+                if (LastUpdateStatus != UpdateStates.Suspended)
                 {
                     Instance parent = Parent;
 
@@ -126,6 +126,10 @@ namespace T3.Core.Operator.Slots
                     {
                         DirtyFlag.Invalidate();
                     }
+                }
+                else
+                {
+                    DirtyFlag.Invalidate();
                 }
             }
 
