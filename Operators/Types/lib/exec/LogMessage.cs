@@ -22,8 +22,7 @@ namespace T3.Operators.Types.Id_53127485_e2c7_4be8_aff2_da5790799593
         private void Update(EvaluationContext context)
         {
             var message = Message.GetValue(context);
-            var logLevel = LogLevel.GetValue(context).ClampForEnum<LogLevels>();
-
+            var logLevel = LogLevel.GetEnumValue<LogLevels>(context);
             if (logLevel > (int)LogLevels.None)
             {
                 Log.Debug($"{new string(' ', _nestingLevel * 4)} { (string.IsNullOrEmpty( message) ? fallbackMessage : message)  }  @{context.LocalFxTime:0.00}b  {_dampedPreviousUpdateDuration*1000.0:0.00}ms", this);
@@ -38,7 +37,7 @@ namespace T3.Operators.Types.Id_53127485_e2c7_4be8_aff2_da5790799593
             
             _nestingLevel--;
 
-            if (logLevel >= (int)LogLevels.UpdateTime)
+            if ((int)logLevel >= (int)LogLevels.UpdateTime)
             {
                 Log.Debug($"{new string(' ', _nestingLevel)} Update took {updateDuration*1000.0:0.00}ms", this);
             }

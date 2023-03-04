@@ -38,7 +38,7 @@ namespace T3.Operators.Types.Id_353f63fc_e613_43ca_b037_02d7b9f4e935
 
         private void Update(EvaluationContext context)
         {
-            var bufferIndex = Set.GetValue(context).ClampForEnum<Shapes>();
+            var bufferIndex = (int)Set.GetEnumValue<Shapes>(context);
             CpuBuffer.Value = _cpuPointBuffers[bufferIndex];
             GpuBuffer.Value = _gpuBuffersWithViews[bufferIndex];
         }

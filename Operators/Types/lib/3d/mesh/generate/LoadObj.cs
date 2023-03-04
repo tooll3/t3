@@ -12,6 +12,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Resource;
+using T3.Core.Utils;
 using Buffer = SharpDX.Direct3D11.Buffer;
 // ReSharper disable RedundantNameQualifier
 
@@ -32,7 +33,7 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
         private void Update(EvaluationContext context)
         {
             var path = Path.GetValue(context);
-            var vertexSorting = SortVertices.GetValue(context);
+            var vertexSorting = SortVertices.GetEnumValue<ObjMesh.SortDirections>(context);
             var useGpuCaching = UseGPUCaching.GetValue(context);
             var scaleFactor = ScaleFactor.GetValue(context);
             if (ClearGPUCache.GetValue(context))
@@ -40,14 +41,16 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
                 _meshBufferCache.Clear();
             }
             
-            if (_sourceFileChanged ||  path != _lastFilePath || SortVertices.DirtyFlag.IsDirty || Math.Abs(scaleFactor - _scaleFactor) > 0.001f)
+            if (_sourceFileChanged ||  path != _lastFilePath 
+                                   || SortVertices.DirtyFlag.IsDirty 
+                                   || Math.Abs(scaleFactor - _scaleFactor) > 0.001f
+                                   || vertexSorting != _lastSorting)
             {
                 ResourceFileWatcher.AddFileHook(path, FileChangedHandler);
                 _sourceFileChanged = false;
-                
+                _lastSorting = vertexSorting;
                 _scaleFactor = scaleFactor;
-                _description = System.IO.Path.GetFileName(path);
-
+                
                 if (useGpuCaching)
                 {
                     if (_meshBufferCache.TryGetValue(path, out var cachedBuffer))
@@ -154,8 +157,8 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
         }
 
         private bool _sourceFileChanged;
-        private string _description;
         private string _lastFilePath;
+        private ObjMesh.SortDirections _lastSorting;
         private MeshDataSet _meshData = new MeshDataSet();
 
         private class MeshDataSet

@@ -59,10 +59,15 @@ namespace T3.Core.Utils
             return Array.Empty<float>();
         }
         
-        
+        /// <summary>
+        /// Clamps an integer to the number of enums.
+        /// This prevents cast exceptions if index is out of range.   
+        /// </summary>
+        /// <remarks>Note that this doesn't work for Enums with non-zero start index.</remarks>
         public static T GetEnumValue<T>(this InputSlot<int> intInputSlot, EvaluationContext context) where T : Enum
         {
-            return CastTo<T>.From(intInputSlot.GetValue(context));
+            var i = intInputSlot.GetValue(context).Clamp(0, Enum.GetValues(typeof(T)).Length - 1);
+            return CastTo<T>.From(i);
         }
         
         public static int Hash<T>(T a, T b)

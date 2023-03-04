@@ -69,8 +69,8 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
             if (string.IsNullOrEmpty(text))
                 text = " ";
 
-            var horizontalAlign = (HorizontalAligns)HorizontalAlign.GetValue(context).ClampForEnum<HorizontalAligns>();
-            var verticalAlign = (VerticalAligns)VerticalAlign.GetValue(context).ClampForEnum<VerticalAligns>();
+            var horizontalAlign = HorizontalAlign.GetEnumValue<HorizontalAligns>(context);
+            var verticalAlign = VerticalAlign.GetEnumValue<VerticalAligns>(context);
 
             var characterSpacing = Spacing.GetValue(context);
             var lineHeightFactor = LineHeight.GetValue(context);

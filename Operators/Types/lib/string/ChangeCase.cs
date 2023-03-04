@@ -20,7 +20,7 @@ namespace T3.Operators.Types.Id_acdd78b1_4e66_4fd0_a36b_5318670fefd4
         private void Update(EvaluationContext context)
         {
             var str = InputText.GetValue(context);
-            var mode = (Modes)Mode.GetValue(context).ClampForEnum<Modes>();
+            var mode = Mode.GetEnumValue<Modes>(context);
             switch (mode)
             {
                 case Modes.ToUpperCase:

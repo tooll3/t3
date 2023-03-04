@@ -20,7 +20,7 @@ namespace T3.Operators.Types.Id_470db771_c7f2_4c52_8897_d3a9b9fc6a4e
 
         private void Update(EvaluationContext context)
         {
-            var logUpdates = (LogLevels)LogUpdates.GetValue(context).ClampForEnum<LogLevels>();
+            var logUpdates = LogUpdates.GetEnumValue<LogLevels>(context);
             var fallbackValue = FallbackValue.GetValue(context);
             var variableName = VariableName.GetValue(context);
 

@@ -44,8 +44,8 @@ namespace T3.Operators.Types.Id_fbd9ac37_4427_4852_95d7_d8383fefbe36
             
             var delayDuration = DelayDuration.GetValue(context);
 
-            var delayMode = (DelayModes)Mode.GetValue(context).ClampForEnum<DelayModes>();
-            var timeMode = (TimeModes)TimeMode.GetValue(context).ClampForEnum<TimeModes>();
+            var delayMode = Mode.GetEnumValue<DelayModes>(context);
+            var timeMode = TimeMode.GetEnumValue<TimeModes>(context);
 
             var currentTime = timeMode switch
                                   {

@@ -35,11 +35,11 @@ namespace T3.Operators.Types.Id_7953f704_ebee_498b_8bdd_a2c201dfe278
             var name = VariableName.GetValue(context);
             var newValue = Value.GetValue(context);
 
-            var logLevel = LogLevel.GetValue(context).ClampForEnum<LogLevels>();
+            var logLevel =  LogLevel.GetEnumValue<LogLevels>(context);
             
             if (string.IsNullOrEmpty(name))
             {
-                if(logLevel >= (int)LogLevels.Warnings) 
+                if((int)logLevel >= (int)LogLevels.Warnings) 
                     Log.Warning($"Can't set variable with invalid name {name}", this);
                 
                 return;
@@ -54,14 +54,14 @@ namespace T3.Operators.Types.Id_7953f704_ebee_498b_8bdd_a2c201dfe278
 
                 if (hadPreviousValue)
                 {
-                    if (logLevel >= (int)LogLevels.Changes)
+                    if ((int)logLevel >= (int)LogLevels.Changes)
                         Log.Debug($"Changing {name} from {previous} -> {newValue}", this);
 
                     context.IntVariables[name] = previous;
                 }
                 else
                 {
-                    if (logLevel >= (int)LogLevels.AllUpdates)
+                    if ((int)logLevel >= (int)LogLevels.AllUpdates)
                         Log.Debug($"Setting {name} to {newValue}", this);
 
                     context.IntVariables.Remove(name);

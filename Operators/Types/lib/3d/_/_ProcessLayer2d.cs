@@ -6,6 +6,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
+using Utilities = T3.Core.Utils.Utilities;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Operators.Types.Id_d8699da1_13aa_42f7_816a_88abb1d0ba06 
@@ -20,11 +21,6 @@ namespace T3.Operators.Types.Id_d8699da1_13aa_42f7_816a_88abb1d0ba06
             Result.UpdateAction = Update;
         }
 
-        public static T IntToEnum<T>(int i) where T:Enum
-        {
-            var clampedIndex = i.Clamp(0, Enum.GetValues(typeof(T)).Length - 1);
-            return (T)Enum.ToObject(typeof(T), clampedIndex);
-        }
         
         private void Update(EvaluationContext context)
         {
@@ -57,17 +53,7 @@ namespace T3.Operators.Types.Id_d8699da1_13aa_42f7_816a_88abb1d0ba06
             var posXy = PositionXy.GetValue(context);
             var posZ = PositionZ.GetValue(context);
             
-            ScaleModes mode = ScaleModes.Cover;
-
-            try
-            {
-                mode = IntToEnum<ScaleModes>(ScaleMode.GetValue(context));
-            }
-            catch (Exception e)
-            {
-                Log.Warning("Didn't work");
-            }
-
+            var mode = ScaleMode.GetEnumValue<ScaleModes>(context);
             if (mode == ScaleModes.FitBoth)
             {
                 mode = imageAspect < viewAspect ? ScaleModes.FitHeight : ScaleModes.FitWidth;
