@@ -259,6 +259,31 @@
           }
         }
       }
+    },
+    {
+      "Id": "f3f4e080-3908-404c-a315-8e7c5e5a2127",
+      "IsPreset": true,
+      "ActivationIndex": 14,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "8d290afb-2574-4afa-a545-a0d3588f89f6": 1.0,
+          "4c91b66c-670d-45ff-94cc-01d1a68cd040": -0.5,
+          "57f3310c-6ed2-4a52-af72-43e083f73360": 0.0,
+          "4dd4c4f0-c6b7-4ee8-92e2-cb8df6131e0a": 1,
+          "321693a5-4e2c-47a0-a42e-95cbdc6ebf80": 64,
+          "db5e3c51-5765-44d8-a61b-a7b552fce5b3": 0,
+          "4c7e0f67-a35b-4a23-b640-b0375c1a3259": {
+            "X": 90.0,
+            "Y": 0.0,
+            "Z": 0.0
+          }
+        }
+      }
     }
   ]
 }

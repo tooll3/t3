@@ -58,7 +58,7 @@
     },
     {
       "Id": "80bd2460-c28d-490c-981b-77a6e89f3983"/*Stroke*/,
-      "DefaultValue": 0.1
+      "DefaultValue": 0.0
     },
     {
       "Id": "be43e160-f9a0-4991-b764-2b5e533b37cc"/*Feather*/,
