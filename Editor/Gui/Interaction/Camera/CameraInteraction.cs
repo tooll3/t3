@@ -231,7 +231,7 @@ namespace T3.Editor.Gui.Interaction.Camera
         }
 
         private const float DefaultCamFovDegrees = 45;
-        public readonly  float DefaultCameraDistance = 1f/MathF.Tan(DefaultCamFovDegrees * MathF.PI / 90f);
+        public readonly  float DefaultCameraDistance = 1f/MathF.Tan(DefaultCamFovDegrees * MathF.PI / 360f);
 
         private void Pan()
         {
