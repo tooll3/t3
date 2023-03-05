@@ -39,9 +39,9 @@
         "Y": 266.67236
       },
       "Min": 0.0,
-      "Max": 10.0,
+      "Max": 1.0,
       "Scale": 0.001,
-      "Clamp": true
+      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "cb36f66b-99d7-4468-adbf-86e168a76ade"/*Offset*/,

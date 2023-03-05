@@ -76,7 +76,7 @@
         "Y": 780.9896
       },
       "Min": 0.0,
-      "Max": 1.0
+      "Max": 0.1
     },
     {
       "InputId": "40ea5583-313d-4a48-82f4-d52bfa7c9e17"/*RotateShapes*/,

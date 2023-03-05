@@ -1,6 +1,6 @@
 {
   "Id": "16d10dc8-63b9-4ddf-90b8-41caef99d945"/*DrawQuads*/,
-  "Description": "Draws 3d rotated quads at point positions.\n\nThis can be useful for drawing oriented sprite like shapes.\nPlease note that the oriention is to aligned towards the camera. ",
+  "Description": "Draws 3d rotated quads at point positions.\n\nThis can be useful for drawing oriented sprite like shapes.\nPlease note that the oriention is not aligned towards the camera. ",
   "InputUis": [
     {
       "InputId": "ad6b28be-ba14-4063-baf9-cfaf0096f1ea"/*GPoints*/,
@@ -36,7 +36,10 @@
       "Position": {
         "X": -654.8518,
         "Y": 329.3372
-      }
+      },
+      "Min": 0.0,
+      "Max": 0.1,
+      "Format": "{0:0.000} ×"
     },
     {
       "InputId": "7fd87d1d-bb54-4366-b0ac-ea2850ed13fb"/*UseWForSize*/,
@@ -50,7 +53,10 @@
       "Position": {
         "X": -654.8518,
         "Y": 419.3372
-      }
+      },
+      "Min": -90.0,
+      "Max": 90.0,
+      "Format": "{0:0.000}°"
     },
     {
       "InputId": "94116342-bc50-42ed-934b-7dd408eafe45"/*RotateAxis*/,
@@ -85,6 +91,13 @@
       "Position": {
         "X": -653.29877,
         "Y": 878.2939
+      }
+    },
+    {
+      "InputId": "154ccdc4-c918-499f-8acb-ca09e6daa8b1"/*EnableDepthTest*/,
+      "Position": {
+        "X": -653.29877,
+        "Y": 923.2939
       }
     }
   ],
@@ -276,7 +289,7 @@
       },
       "Position": {
         "X": 794.2416,
-        "Y": 581.583
+        "Y": 594.583
       }
     },
     {
@@ -382,7 +395,7 @@
       "ChildId": "72ace9cd-445a-4bf9-9796-010df6be7eb5"/*DepthStencilStateOp*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 794.2416,

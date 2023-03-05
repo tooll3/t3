@@ -14,7 +14,9 @@
       "Position": {
         "X": -200.0,
         "Y": 0.0
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "4c91b66c-670d-45ff-94cc-01d1a68cd040"/*RadiusOffset*/,
@@ -50,7 +52,10 @@
         "X": -200.0,
         "Y": 180.0
       },
-      "Scale": 1.0
+      "Min": -90.0,
+      "Max": 90.0,
+      "Scale": 1.0,
+      "Format": "{0:0.000}°"
     },
     {
       "InputId": "1d1ce8c4-fd3c-4d69-be0e-679247a811c9"/*Twist*/,
@@ -58,7 +63,10 @@
         "X": -200.0,
         "Y": 225.0
       },
-      "Scale": 1.0
+      "Min": -90.0,
+      "Max": 90.0,
+      "Scale": 1.0,
+      "Format": "{0:0.000}°"
     },
     {
       "InputId": "91fd4fbf-1cec-4d89-8014-ceed0021a5ee"/*Fill*/,
@@ -66,14 +74,19 @@
         "X": -200.0,
         "Y": 270.0
       },
-      "Scale": 1.0
+      "Min": 0.0,
+      "Max": 360.0,
+      "Scale": 1.0,
+      "Format": "{0:0.000}°"
     },
     {
       "InputId": "6ddf5966-9140-4bea-a56b-20690f9f436f"/*BasePivot*/,
       "Position": {
         "X": -200.0,
         "Y": 315.0
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "db5e3c51-5765-44d8-a61b-a7b552fce5b3"/*CapSegments*/,
@@ -90,7 +103,8 @@
       },
       "Min": -180.0,
       "Max": 180.0,
-      "Scale": 1.0
+      "Scale": 1.0,
+      "Format": "{0:0.000}°"
     }
   ],
   "SymbolChildUis": [],

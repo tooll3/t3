@@ -23,7 +23,10 @@
       "Position": {
         "X": -704.83606,
         "Y": 404.13895
-      }
+      },
+      "Min": -90.0,
+      "Max": 90.0,
+      "Format": "{0:0.000}°"
     },
     {
       "InputId": "beada8f0-cece-4526-aa29-3546bebd276a"/*Center*/,
