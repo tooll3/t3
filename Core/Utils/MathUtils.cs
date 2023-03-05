@@ -76,6 +76,18 @@ namespace T3.Core.Utils
             return x * x * (3 - 2 * x);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float ToDegrees(this float val)
+        {
+            return val * 180 / MathF.PI;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float ToRadians(this float val)
+        {
+            return val * MathF.PI / 180;
+        }        
+        
         public static Vector2 Clamp(Vector2 v, Vector2 mn, Vector2 mx)
         {
             return new Vector2((v.X < mn.X)
