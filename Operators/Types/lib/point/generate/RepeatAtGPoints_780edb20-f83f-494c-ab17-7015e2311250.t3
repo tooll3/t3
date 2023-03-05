@@ -4,11 +4,11 @@
   "Namespace": "lib.point.generate",
   "Inputs": [
     {
-      "Id": "a952d91a-a86b-4370-acd9-e17b19025966"/*GTargets*/,
+      "Id": "47c3c549-78bb-41fd-a88c-58f643870b40"/*GPoints*/,
       "DefaultValue": null
     },
     {
-      "Id": "47c3c549-78bb-41fd-a88c-58f643870b40"/*GPoints*/,
+      "Id": "a952d91a-a86b-4370-acd9-e17b19025966"/*GTargets*/,
       "DefaultValue": null
     },
     {
@@ -22,6 +22,10 @@
     {
       "Id": "f582aa39-f5e0-46ad-89ae-6f29ab60d3e6"/*MultiplyTargetW*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "9df1f57c-a079-49c1-b537-d8eb08f2d0d3"/*Scale*/,
+      "DefaultValue": 1.0
     },
     {
       "Id": "796d3d55-32b3-436e-a4c3-f15e1585a914"/*ConnectLines*/,
@@ -270,6 +274,12 @@
     {
       "SourceParentOrChildId": "e77f4341-2aa2-484b-81dc-07a3a6ed0ae3",
       "SourceSlotId": "f0321a54-e844-482f-a161-7f137abc54b0",
+      "TargetParentOrChildId": "21df6466-7ba9-4fad-bef5-767491d39747",
+      "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "9df1f57c-a079-49c1-b537-d8eb08f2d0d3",
       "TargetParentOrChildId": "21df6466-7ba9-4fad-bef5-767491d39747",
       "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
     },

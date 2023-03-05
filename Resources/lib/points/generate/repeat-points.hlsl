@@ -6,6 +6,7 @@ cbuffer Params : register(b0)
     float ApplyTargetOrientation;
     float ApplyTargetScaleW;
     float MultiplyTargetW;
+    float Scale;
 }
 
 StructuredBuffer<Point> SourcePoints : t0;         // input
@@ -43,6 +44,7 @@ void main(uint3 i : SV_DispatchThreadID)
             Point A = SourcePoints[sourceIndex];
             Point B = TargetPoints[targetIndex];
             float s = ApplyTargetScaleW > 0.5 ? B.w : 1;
+            s *= Scale;
             float3  pLocal = ApplyTargetOrientation  > 0.5
                             ? rotate_vector(A.position, B.rotation)
                             : A.position;
@@ -70,6 +72,7 @@ void main(uint3 i : SV_DispatchThreadID)
             Point targetP = TargetPoints[targetIndex];
 
             float s = ApplyTargetScaleW > 0.5 ? targetP.w : 1;
+            s *= Scale;
             
             float3  pLocal = ApplyTargetOrientation  > 0.5
                             ? rotate_vector(sourceP.position, targetP.rotation)
