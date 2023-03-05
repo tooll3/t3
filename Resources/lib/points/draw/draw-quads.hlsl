@@ -1,14 +1,14 @@
 #include "lib/shared/point.hlsl"
 #include "lib/shared/hash-functions.hlsl"
 
-static const float3 Corners[] = 
-{
-  float3(-1, -1, 0),
-  float3(1, -1, 0), 
-  float3(1,  1, 0), 
-  float3(1,  1, 0), 
-  float3(-1,  1, 0), 
-  float3(-1, -1, 0),  
+static const float3 Corners[] =
+    {
+        float3(-1, -1, 0),
+        float3(1, -1, 0),
+        float3(1, 1, 0),
+        float3(1, 1, 0),
+        float3(-1, 1, 0),
+        float3(-1, -1, 0),
 };
 
 cbuffer Transforms : register(b0)
@@ -25,7 +25,6 @@ cbuffer Transforms : register(b0)
     float4x4 ObjectToClipSpace;
 };
 
-
 cbuffer Params : register(b2)
 {
     float4 Color;
@@ -41,6 +40,7 @@ cbuffer Params : register(b2)
     float3 RotateAxis;
     float TextureCellsX;
     float TextureCellsY;
+    float AtlasMode;
 };
 
 struct psInput
@@ -55,7 +55,8 @@ sampler texSampler : register(s0);
 StructuredBuffer<Point> Points : t0;
 Texture2D<float4> texture2 : register(t1);
 
-psInput vsMain(uint id: SV_VertexID)
+psInput vsMain(uint id
+               : SV_VertexID)
 {
     psInput output;
     float discardFactor = 1;
@@ -67,40 +68,39 @@ psInput vsMain(uint id: SV_VertexID)
 
     float3 axis = cornerFactors;
 
-    float2 atlasResolution = 1./float2(TextureCellsX, TextureCellsY);
-    float atlasRatio = (float)TextureCellsX/TextureCellsY;
+    float2 atlasResolution = 1. / float2(TextureCellsX, TextureCellsY);
+    float atlasRatio = (float)TextureCellsX / TextureCellsY;
 
-    axis.xy = (axis.xy + Offset) * Stretch * float2(1,atlasRatio);
+    axis.xy = (axis.xy + Offset) * Stretch;
     axis.z = 0;
 
-    float4 rotation = qmul( normalize(p.rotation), rotate_angle_axis((Rotate + 180)/180*PI , RotateAxis));
+    float4 rotation = qmul(normalize(p.rotation), rotate_angle_axis((Rotate + 180) / 180 * PI, RotateAxis));
 
-
-    axis = rotate_vector(axis, rotation) * Size * lerp(1,p.w, UseWForSize);
+    axis = rotate_vector(axis, rotation) * Size * lerp(1, p.w, UseWForSize);
     float3 pInObject = p.position + axis;
-    output.position  = mul(float4(pInObject,1), ObjectToClipSpace);
-    
-    output.texCoord = cornerFactors.xy /2 +0.5;
+    output.position = mul(float4(pInObject, 1), ObjectToClipSpace);
 
-    int randomParticleId = (int)(hash11((particleId + 13.2) * 123.17) * 12345.3);
+    output.texCoord = cornerFactors.xy / 2 + 0.5;
+
+    int randomParticleId = AtlasMode < 0.5 ? (int)(hash11((particleId + 13.2) * 123.17) * 12345.3)
+                                           : particleId % int(TextureCellsX * TextureCellsY + 0.1);
 
     float textureCelX = (float)randomParticleId % (TextureCellsX);
     float textureCelY = (int)(((float)randomParticleId / TextureCellsX) % (float)(TextureCellsY));
 
-    
-    //output.texCoord = float2(textureCelX, textureCelY) * 1;
+    // output.texCoord = float2(textureCelX, textureCelY) * 1;
     output.texCoord *= atlasResolution;
     output.texCoord += atlasResolution * float2(textureCelX, textureCelY);
 
     output.color = Color;
-    return output;    
+    return output;
 }
 
 float4 psMain(psInput input) : SV_TARGET
 {
-    //return float4(input.texCoord, 0,1);
+    // return float4(input.texCoord, 0,1);
     float4 imgColor = texture2.Sample(texSampler, input.texCoord);
     float4 color = input.color * imgColor;
 
-    return clamp(float4(color.rgb, color.a), 0, float4(100,100,100,1));
+    return clamp(float4(color.rgb, color.a), 0, float4(100, 100, 100, 1));
 }

@@ -205,7 +205,7 @@
           }
         },
         {
-          "Id": "6f95e60a-f259-45fa-b23f-ce284cc9275e"/*Size*/,
+          "Id": "6f95e60a-f259-45fa-b23f-ce284cc9275e"/*Stretch*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 1.0,

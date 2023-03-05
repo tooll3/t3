@@ -67,6 +67,11 @@
           "Id": "a83bdfb1-c92d-4844-9e43-8ce09959fae9"/*EnableDepthTest*/,
           "Type": "System.Boolean",
           "Value": false
+        },
+        {
+          "Id": "022f1959-a62b-49de-817a-3930bc8ec32b"/*EnableDepthWrite*/,
+          "Type": "System.Boolean",
+          "Value": false
         }
       ],
       "Outputs": []

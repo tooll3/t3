@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "a3929303-170b-496a-b8e0-fc5f604a0ec7"/*Commands*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 93.13742,
         "Y": 106.84622
@@ -16,6 +17,20 @@
         "Y": 248.32947
       },
       "Usage": "Multiline"
+    },
+    {
+      "InputId": "3cb0dfab-deaa-4ed4-ba45-ac63e886e212"/*Stretch*/,
+      "Position": {
+        "X": 94.50925,
+        "Y": 293.32947
+      }
+    },
+    {
+      "InputId": "b1cdb551-0045-42d4-a6ba-fa8aa0f1f98f"/*Mode*/,
+      "Position": {
+        "X": 94.50925,
+        "Y": 338.32947
+      }
     }
   ],
   "SymbolChildUis": [
@@ -89,11 +104,11 @@
       "ChildId": "114a2a4b-cd0c-4ab0-9ec9-43d26e023d64"/*SliceViewPort*/,
       "Size": {
         "X": 110.0,
-        "Y": 62.0
+        "Y": 88.0
       },
       "Position": {
-        "X": 1008.6897,
-        "Y": 84.52084
+        "X": 1014.9741,
+        "Y": 25.448456
       }
     },
     {

@@ -28,6 +28,9 @@ namespace T3.Operators.Types.Id_18251874_5d5a_4384_8dcd_fcf297e54886
 
         [Input(Guid = "af0758b6-3876-4c95-a80f-0233b96bc1a7")]
         public readonly InputSlot<float> Step = new InputSlot<float>();
+
+        [Input(Guid = "5171f411-42de-4701-acec-eb8ab69f21c5")]
+        public readonly InputSlot<int> StepInt = new InputSlot<int>();
     }
 }
 

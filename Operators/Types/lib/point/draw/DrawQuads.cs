@@ -19,11 +19,11 @@ namespace T3.Operators.Types.Id_16d10dc8_63b9_4ddf_90b8_41caef99d945
         [Input(Guid = "edf0f842-5ab8-4366-83d1-972653056220")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
 
-        [Input(Guid = "9cb2ad14-dac0-44f2-a87d-3ae29c8a7d97")]
-        public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
-
         [Input(Guid = "f02e81bb-441f-4d78-9e6c-71f931b6bb5c")]
         public readonly InputSlot<System.Numerics.Vector2> Offset = new InputSlot<System.Numerics.Vector2>();
+
+        [Input(Guid = "9cb2ad14-dac0-44f2-a87d-3ae29c8a7d97")]
+        public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "2bf3f3ef-43f4-4fbb-ac8c-c6b3777aa3ed")]
         public readonly InputSlot<float> Size = new InputSlot<float>();
@@ -37,13 +37,16 @@ namespace T3.Operators.Types.Id_16d10dc8_63b9_4ddf_90b8_41caef99d945
         [Input(Guid = "94116342-bc50-42ed-934b-7dd408eafe45")]
         public readonly InputSlot<System.Numerics.Vector3> RotateAxis = new InputSlot<System.Numerics.Vector3>();
 
-        [Input(Guid = "fc19ad98-65ea-46f2-896d-6b9279a9eaa4")]
-        public readonly InputSlot<SharpDX.Size2> TextureCells = new InputSlot<SharpDX.Size2>();
-
         [Input(Guid = "ae975647-36f6-494c-b4f1-3289e4d8c03e")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
-        [Input(Guid = "dc21d7ab-5988-4df8-99b5-1b107eb6c3c9", MappedType = typeof(SharedEnums.BlendModes))]
+        [Input(Guid = "fc19ad98-65ea-46f2-896d-6b9279a9eaa4")]
+        public readonly InputSlot<SharpDX.Size2> TextureCells = new InputSlot<SharpDX.Size2>();
+
+        [Input(Guid = "285eedd2-50d1-43ff-ae18-7a9475ba8e89")]
+        public readonly InputSlot<int> AltasMode = new InputSlot<int>();
+
+        [Input(Guid = "dc21d7ab-5988-4df8-99b5-1b107eb6c3c9")]
         public readonly InputSlot<int> BlendMod = new InputSlot<int>();
 
         [Input(Guid = "c1163955-3d1e-48aa-a4c1-ba81790b08c8")]

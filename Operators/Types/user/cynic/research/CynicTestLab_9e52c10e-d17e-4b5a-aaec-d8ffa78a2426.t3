@@ -309,7 +309,7 @@
       "SymbolId": "9123651a-5df8-4f85-9e14-2068f33e2ff1",
       "InputValues": [
         {
-          "Id": "6f95e60a-f259-45fa-b23f-ce284cc9275e"/*Size*/,
+          "Id": "6f95e60a-f259-45fa-b23f-ce284cc9275e"/*Stretch*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 10.0,

@@ -18,6 +18,12 @@ namespace T3.Operators.Types.Id_f19a9234_cd23_4229_a794_aa9d97ad8027
 
         [Input(Guid = "987bda72-6a6b-4216-9ecf-d87b7299553d")]
         public readonly InputSlot<string> Labels = new InputSlot<string>();
+
+        [Input(Guid = "3cb0dfab-deaa-4ed4-ba45-ac63e886e212")]
+        public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
+
+        [Input(Guid = "b1cdb551-0045-42d4-a6ba-fa8aa0f1f98f")]
+        public readonly InputSlot<int> Mode = new InputSlot<int>();
     }
 }
 
