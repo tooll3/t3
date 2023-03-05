@@ -156,13 +156,13 @@ namespace T3.Editor.Gui.Interaction.Camera
                 if (delta < 0)
                 {
                     //viewDistance *= zoomFactorForCurrentFramerate;
-                    UserSettings.Config.CameraSpeed *= zoomFactorForCurrentFramerate;
+                    UserSettings.Config.CameraSpeed /= zoomFactorForCurrentFramerate;
                 }
 
                 if (delta > 0)
                 {
                     //viewDistance /= zoomFactorForCurrentFramerate;
-                    UserSettings.Config.CameraSpeed /= zoomFactorForCurrentFramerate;
+                    UserSettings.Config.CameraSpeed *= zoomFactorForCurrentFramerate;
                 }
 
                 _intendedSetup.Position = _intendedSetup.Target + viewDistance;
@@ -223,11 +223,15 @@ namespace T3.Editor.Gui.Interaction.Camera
             var viewDirLength = viewDir.Length();
             viewDir /= viewDirLength;
             
-            var newViewDir = Vector4.Transform(viewDir, rot);
-            newViewDir = Vector4.Normalize(newViewDir);
-            _intendedSetup.Position = _intendedSetup.Target - new Vector3(newViewDir.X, newViewDir.Y, newViewDir.Z);
-            
+            var newViewDir = Vector3.Transform(viewDir, rot);
+            var newViewVector = newViewDir * viewDirLength;
+            _intendedSetup.Position = _intendedSetup.Target - newViewVector;
+
+            _intendedSetup.Target = _intendedSetup.Position + newViewDir * UserSettings.Config.CameraSpeed * DefaultCameraDistance;
         }
+
+        private const float DefaultCamFovDegrees = 45;
+        public readonly  float DefaultCameraDistance = 1f/MathF.Tan(DefaultCamFovDegrees * MathF.PI / 90f);
 
         private void Pan()
         {
@@ -251,7 +255,7 @@ namespace T3.Editor.Gui.Interaction.Camera
             if (!ImGui.IsWindowHovered() || ImGui.GetIO().KeyCtrl)
                 return;
 
-            var acc = CameraInteractionParameters.CameraAcceleration * UserSettings.Config.CameraSpeed * _deltaTime * 60;
+            var acc = CameraInteractionParameters.CameraAcceleration * UserSettings.Config.CameraSpeed  * _deltaTime * 60;
 
             if (ImGui.IsKeyDown((ImGuiKey)Key.A) || ImGui.IsKeyDown((ImGuiKey)Key.CursorLeft))
             {
