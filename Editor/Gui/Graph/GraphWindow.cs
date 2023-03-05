@@ -247,12 +247,11 @@ namespace T3.Editor.Gui.Graph
                     ImGui.PushStyleVar(ImGuiStyleVar.ChildBorderSize,0);
                     
                     ImGui.BeginChild("##timeline", Vector2.Zero, false,
-                                     ImGuiWindowFlags.NoScrollbar 
-                                     | ImGuiWindowFlags.NoMove 
-                                     | ImGuiWindowFlags.NoResize
-                                     | ImGuiWindowFlags.NoScrollWithMouse
-                                     | ImGuiWindowFlags.NoDecoration);
+                                     ImGuiWindowFlags.NoResize
+                                     );
                     {
+
+                        
                         _timeLineCanvas.Draw(GraphCanvas.CompositionOp, Playback.Current);
                     }
                     ImGui.EndChild();

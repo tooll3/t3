@@ -17,7 +17,7 @@ namespace T3.Editor.Gui.Selection
 
             if (state == States.Inactive)
             {
-                if (ImGui.IsAnyItemHovered() || !ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) || !ImGui.IsMouseClicked(ImGuiMouseButton.Left) || ImGui.GetIO().KeyAlt)
+                if (ImGui.IsAnyItemHovered() || !ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup | ImGuiHoveredFlags.ChildWindows) || !ImGui.IsMouseClicked(ImGuiMouseButton.Left) || ImGui.GetIO().KeyAlt)
                     return state;
                 
                 _startPositionInScreen = ImGui.GetMousePos();

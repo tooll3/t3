@@ -386,7 +386,7 @@ namespace T3.Editor.Gui.Interaction
         protected void HandleInteraction(T3Ui.EditingFlags flags)
         {
             var isDraggingConnection = (ConnectionMaker.TempConnections.Count > 0) && ImGui.IsWindowFocused();
-            if (!ImGui.IsWindowHovered() && !isDraggingConnection)
+            if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) && !isDraggingConnection)
                 return;
 
             if (PreventMouseInteraction)

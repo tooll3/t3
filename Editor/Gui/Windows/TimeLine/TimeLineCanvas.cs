@@ -59,47 +59,56 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             void DrawCanvasContent()
             {
+                //return;   
                 if (PlaybackUtils.TryFindingSoundtrack(compositionOp, out var soundtrack))
                 {
                     _timeLineImage.Draw(Drawlist, soundtrack);
                 }
-                
-                ImGui.SetScrollY(0);
-
-                HandleDeferredActions();
-
-                if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
-                    DeleteSelectedElements();
-
                 _timeRasterSwitcher.Draw(Playback);
 
-                switch (Mode)
-                {
-                    case Modes.DopeView:
-                        LayersArea.Draw(compositionOp, Playback);
-                        DopeSheetArea.Draw(compositionOp, SelectedAnimationParameters);
-                        break;
-                    case Modes.CurveEditor:
-                        _horizontalRaster.Draw(this);
-                        _timelineCurveEditArea.Draw(compositionOp, SelectedAnimationParameters, fitCurvesVertically: modeChanged);
-                        break;
-                }
+                
+                HandleDeferredActions();
 
-                var compositionTimeClip = NodeOperations.GetCompositionTimeClip(compositionOp);
+                ImGui.BeginChild(ImGuiTitle, new Vector2(0, -30), true,
+                                 //ImGuiWindowFlags.NoScrollbar | 
+                                 ImGuiWindowFlags.NoMove | 
+                                 ImGuiWindowFlags.NoScrollWithMouse);
 
-                if (Playback.IsLooping)
                 {
-                    _loopRange.Draw(this, Playback, Drawlist, SnapHandlerForU);
-                }
-                else if (compositionTimeClip != null)
-                {
-                    _clipRange.Draw(this, compositionTimeClip, Drawlist, SnapHandlerForU);
+                    if (KeyboardBinding.Triggered(UserActions.DeleteSelection))
+                        DeleteSelectedElements();
+                    
+                    switch (Mode)
+                    {
+                        case Modes.DopeView:
+                            LayersArea.Draw(compositionOp, Playback);
+                            DopeSheetArea.Draw(compositionOp, SelectedAnimationParameters);
+                            break;
+                        case Modes.CurveEditor:
+                            _horizontalRaster.Draw(this);
+                            _timelineCurveEditArea.Draw(compositionOp, SelectedAnimationParameters, fitCurvesVertically: modeChanged);
+                            break;
+                    }
+
+                    var compositionTimeClip = NodeOperations.GetCompositionTimeClip(compositionOp);
+
+                    if (Playback.IsLooping)
+                    {
+                        _loopRange.Draw(this, Playback, Drawlist, SnapHandlerForU);
+                    }
+                    else if (compositionTimeClip != null)
+                    {
+                        _clipRange.Draw(this, compositionTimeClip, Drawlist, SnapHandlerForU);
+                    }
                 }
                 
-                _timeSelectionRange.Draw(Drawlist);
+                ImGui.EndChild();
                 
                 _currentTimeMarker.Draw(Playback);
+                _timeSelectionRange.Draw(Drawlist);
                 DrawDragTimeArea();
+                //ImGui.SetCursorPosY(0);
+                
 
                 if (FenceState == SelectionFence.States.CompletedAsClick)
                 {

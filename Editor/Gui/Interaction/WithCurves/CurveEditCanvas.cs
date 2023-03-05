@@ -30,7 +30,9 @@ namespace T3.Editor.Gui.Interaction.WithCurves
         {
 
             ImGui.BeginChild(ImGuiTitle, new Vector2(0, height), true,
-                             ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
+                             ImGuiWindowFlags.NoScrollbar | 
+                             ImGuiWindowFlags.NoMove | 
+                             ImGuiWindowFlags.NoScrollWithMouse);
             {
                 Drawlist = ImGui.GetWindowDrawList();
                 UpdateCanvas(flags);
