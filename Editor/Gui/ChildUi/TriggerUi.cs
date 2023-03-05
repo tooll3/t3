@@ -28,10 +28,20 @@ namespace T3.Editor.Gui.ChildUi
             var label = string.IsNullOrEmpty(symbolChild.Name)
                             ? "Trigger"
                             : symbolChild.ReadableName;
-            
-            if (ImGui.Button(label, screenRect.GetSize()))
+
+            ImGui.Button(label, screenRect.GetSize());
+            if (ImGui.IsItemActivated())
             {
-                trigger.Activate();
+                trigger.BoolValue.TypedInputValue.Value = true;
+                trigger.BoolValue.Input.IsDefault = false;
+                trigger.BoolValue.DirtyFlag.Invalidate();
+
+            }
+            else if (ImGui.IsItemDeactivated())
+            {
+                trigger.BoolValue.TypedInputValue.Value = false;
+                trigger.BoolValue.Input.IsDefault = false;
+                trigger.BoolValue.DirtyFlag.Invalidate();
             }
 
             ImGui.PopClipRect();

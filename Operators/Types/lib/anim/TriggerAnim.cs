@@ -35,17 +35,16 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             _duration = Duration.GetValue(context);
             _delay = Delay.GetValue(context);
 
-            
-            
-            var animMode = (AnimModes)AnimMode.GetValue(context).Clamp(0, Enum.GetNames(typeof(AnimModes)).Length -1);
+            var animMode = AnimMode.GetEnumValue<AnimModes>(context);//   (AnimModes)AnimMode.GetValue(context).Clamp(0, Enum.GetNames(typeof(AnimModes)).Length -1);
             var triggered = Trigger.GetValue(context);
             if (triggered != _trigger)
             {
-                _triggerTime = context.Playback.FxTimeInBars;
+                //Log.Debug(" Trigger changed to " + triggered, this);
                 _trigger = triggered;
                 
                 if (animMode == AnimModes.ForwardAndBackwards)
                 {
+                    _triggerTime = context.Playback.FxTimeInBars;
                     _currentDirection = triggered ? Directions.Forward : Directions.Backwards;
                     _startProgress = LastFraction;
                 }
@@ -55,6 +54,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
                     {
                         if (animMode == AnimModes.OnlyOnTrue)
                         {
+                            _triggerTime = context.Playback.FxTimeInBars;
                             _currentDirection = Directions.Forward;
                             LastFraction = -_delay;
                         }
@@ -63,6 +63,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
                     {
                         if (animMode == AnimModes.OnlyOnFalse)
                         {
+                            _triggerTime = context.Playback.FxTimeInBars;
                             _currentDirection = Directions.Backwards;
                             LastFraction = 1;
                         }
