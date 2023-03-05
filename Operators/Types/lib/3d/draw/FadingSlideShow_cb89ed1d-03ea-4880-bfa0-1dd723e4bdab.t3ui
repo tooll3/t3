@@ -25,14 +25,18 @@
       "Position": {
         "X": -500.27405,
         "Y": 196.57614
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "8feb4ec2-acc6-4a46-852b-70c4f156f6de"/*Position*/,
       "Position": {
         "X": -500.27405,
         "Y": 241.57614
-      }
+      },
+      "Min": -1.0,
+      "Max": 1.0
     },
     {
       "InputId": "651d479c-a3d4-4d18-bdcd-2400e2cdb56b"/*RandomOffset*/,
