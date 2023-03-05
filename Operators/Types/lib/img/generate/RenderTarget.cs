@@ -16,6 +16,7 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using Device = SharpDX.Direct3D11.Device;
 using Utilities = T3.Core.Utils.Utilities;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
 {
@@ -92,8 +93,13 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                 var prevWorldToCamera = context.WorldToCamera;
                 var prevCameraToClipSpace = context.CameraToClipSpace;
                 var keepCameraBypass = context.BypassCameras;
-                context.BypassCameras = false;
-
+                var keepBackgroundColor = context.BackgroundColor;
+                var keepForegroundColor = context.ForegroundColor;
+                context.BypassCameras = false; 
+                context.BackgroundColor = Vector4.One;
+                context.ForegroundColor = Vector4.One;
+                
+                
                 deviceContext.Rasterizer.SetViewport(new SharpDX.Viewport(0, 0, size.Width, size.Height, 0.0f, 1.0f));
                 deviceContext.OutputMerger.SetTargets(_multiSampledDepthBufferDsv, _multiSampledColorBufferRtv);
 
@@ -138,6 +144,8 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                 context.WorldToCamera = prevWorldToCamera;
                 context.CameraToClipSpace = prevCameraToClipSpace;
                 context.RequestedResolution = prevRequestedResolution;
+                context.BackgroundColor = keepBackgroundColor;
+                context.ForegroundColor = keepForegroundColor;
                 deviceContext.Rasterizer.SetViewports(prevViewports);
                 deviceContext.OutputMerger.SetTargets(prevDepthStencilView, prevTargets);
                 
