@@ -3,19 +3,19 @@
   "Description": "Repeats a list of GPU points at positions provided by another list of points. The orientation of the target points can be applied, so this operator can be used to create point instanciation.\n\nIf the .ApplyTargetScaleW parameter is activated, the .W attribute of the target points is used as a scale factor.",
   "InputUis": [
     {
+      "InputId": "a952d91a-a86b-4370-acd9-e17b19025966"/*GTargets*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -982.13513,
+        "Y": 436.47513
+      }
+    },
+    {
       "InputId": "47c3c549-78bb-41fd-a88c-58f643870b40"/*GPoints*/,
       "Relevancy": "Required",
       "Position": {
         "X": -957.8456,
         "Y": 515.27374
-      }
-    },
-    {
-      "InputId": "a952d91a-a86b-4370-acd9-e17b19025966"/*GTargets*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -984.57556,
-        "Y": 695.9719
       }
     },
     {
@@ -184,8 +184,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": -805.1762,
-        "Y": 701.63043
+        "X": -802.7358,
+        "Y": 442.13364
       }
     },
     {

@@ -60,8 +60,8 @@
       "ActivationIndex": 4,
       "Title": "Horizon",
       "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 93.0
+        "X": -2.2485657,
+        "Y": 206.22285
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -148,44 +148,6 @@
       }
     },
     {
-      "Id": "2cd911be-937d-419e-b622-2a9831d37adb",
-      "IsPreset": true,
-      "ActivationIndex": 9,
-      "Title": "Ring 32s",
-      "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 372.0
-      },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {
-          "8d290afb-2574-4afa-a545-a0d3588f89f6": 1.0,
-          "4c91b66c-670d-45ff-94cc-01d1a68cd040": -0.5,
-          "57f3310c-6ed2-4a52-af72-43e083f73360": 0.0,
-          "4dd4c4f0-c6b7-4ee8-92e2-cb8df6131e0a": 1,
-          "321693a5-4e2c-47a0-a42e-95cbdc6ebf80": 32
-        }
-      }
-    },
-    {
-      "Id": "67eb1c5d-0cf3-4386-ad92-f09c2f44e703",
-      "IsPreset": true,
-      "ActivationIndex": 10,
-      "Title": "untitled",
-      "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
-      },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {
-          "8d290afb-2574-4afa-a545-a0d3588f89f6": 1.0,
-          "4c91b66c-670d-45ff-94cc-01d1a68cd040": -0.5,
-          "57f3310c-6ed2-4a52-af72-43e083f73360": 0.0,
-          "4dd4c4f0-c6b7-4ee8-92e2-cb8df6131e0a": 8,
-          "321693a5-4e2c-47a0-a42e-95cbdc6ebf80": 64
-        }
-      }
-    },
-    {
       "Id": "3f619c8c-f15d-47af-8f47-9fa645791c1e",
       "IsPreset": true,
       "ActivationIndex": 11,
@@ -211,88 +173,13 @@
       }
     },
     {
-      "Id": "4aab182e-5d29-42a2-9883-84aff14e847e",
-      "IsPreset": true,
-      "ActivationIndex": 12,
-      "Title": "untitled",
-      "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
-      },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {
-          "8d290afb-2574-4afa-a545-a0d3588f89f6": 1.0,
-          "4c91b66c-670d-45ff-94cc-01d1a68cd040": 0.5,
-          "57f3310c-6ed2-4a52-af72-43e083f73360": 0.0,
-          "4dd4c4f0-c6b7-4ee8-92e2-cb8df6131e0a": 1,
-          "321693a5-4e2c-47a0-a42e-95cbdc6ebf80": 64,
-          "db5e3c51-5765-44d8-a61b-a7b552fce5b3": 0,
-          "4c7e0f67-a35b-4a23-b640-b0375c1a3259": {
-            "X": -90.0,
-            "Y": 0.0,
-            "Z": 0.0
-          }
-        }
-      }
-    },
-    {
-      "Id": "3a5c39aa-68eb-4e53-92e5-9dd21a413a6c",
-      "IsPreset": true,
-      "ActivationIndex": 13,
-      "Title": "untitled",
-      "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
-      },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {
-          "8d290afb-2574-4afa-a545-a0d3588f89f6": 0.5,
-          "4c91b66c-670d-45ff-94cc-01d1a68cd040": 0.5,
-          "57f3310c-6ed2-4a52-af72-43e083f73360": 0.0,
-          "4dd4c4f0-c6b7-4ee8-92e2-cb8df6131e0a": 1,
-          "321693a5-4e2c-47a0-a42e-95cbdc6ebf80": 64,
-          "db5e3c51-5765-44d8-a61b-a7b552fce5b3": 0,
-          "4c7e0f67-a35b-4a23-b640-b0375c1a3259": {
-            "X": -90.0,
-            "Y": 0.0,
-            "Z": 0.0
-          }
-        }
-      }
-    },
-    {
-      "Id": "f3f4e080-3908-404c-a315-8e7c5e5a2127",
-      "IsPreset": true,
-      "ActivationIndex": 14,
-      "Title": "untitled",
-      "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
-      },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {
-          "8d290afb-2574-4afa-a545-a0d3588f89f6": 1.0,
-          "4c91b66c-670d-45ff-94cc-01d1a68cd040": -0.5,
-          "57f3310c-6ed2-4a52-af72-43e083f73360": 0.0,
-          "4dd4c4f0-c6b7-4ee8-92e2-cb8df6131e0a": 1,
-          "321693a5-4e2c-47a0-a42e-95cbdc6ebf80": 64,
-          "db5e3c51-5765-44d8-a61b-a7b552fce5b3": 0,
-          "4c7e0f67-a35b-4a23-b640-b0375c1a3259": {
-            "X": 90.0,
-            "Y": 0.0,
-            "Z": 0.0
-          }
-        }
-      }
-    },
-    {
-      "Id": "d87b3a62-9e6a-4c1b-8729-4b455564d03d",
+      "Id": "5bdfe3d3-3ef7-44aa-974d-cb501c5ec805",
       "IsPreset": true,
       "ActivationIndex": 15,
-      "Title": "untitled",
+      "Title": "Ring XY 32",
       "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": -163.29993,
+        "Y": 372.0
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -300,14 +187,8 @@
           "4c91b66c-670d-45ff-94cc-01d1a68cd040": -0.5,
           "57f3310c-6ed2-4a52-af72-43e083f73360": 0.0,
           "4dd4c4f0-c6b7-4ee8-92e2-cb8df6131e0a": 1,
-          "321693a5-4e2c-47a0-a42e-95cbdc6ebf80": 4,
-          "c29b5881-85bc-4d29-bc72-6dd36730fa8f": 45.0,
-          "db5e3c51-5765-44d8-a61b-a7b552fce5b3": 0,
-          "4c7e0f67-a35b-4a23-b640-b0375c1a3259": {
-            "X": 90.0,
-            "Y": 0.0,
-            "Z": 0.0
-          }
+          "321693a5-4e2c-47a0-a42e-95cbdc6ebf80": 32,
+          "db5e3c51-5765-44d8-a61b-a7b552fce5b3": 0
         }
       }
     }

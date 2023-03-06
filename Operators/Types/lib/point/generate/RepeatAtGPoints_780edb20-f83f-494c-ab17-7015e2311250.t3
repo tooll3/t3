@@ -4,11 +4,11 @@
   "Namespace": "lib.point.generate",
   "Inputs": [
     {
-      "Id": "47c3c549-78bb-41fd-a88c-58f643870b40"/*GPoints*/,
+      "Id": "a952d91a-a86b-4370-acd9-e17b19025966"/*GTargets*/,
       "DefaultValue": null
     },
     {
-      "Id": "a952d91a-a86b-4370-acd9-e17b19025966"/*GTargets*/,
+      "Id": "47c3c549-78bb-41fd-a88c-58f643870b40"/*GPoints*/,
       "DefaultValue": null
     },
     {

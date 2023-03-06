@@ -1023,19 +1023,19 @@
           }
         },
         {
-          "Id": "9cb2ad14-dac0-44f2-a87d-3ae29c8a7d97"/*Stretch*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 1.47,
-            "Y": 0.32
-          }
-        },
-        {
           "Id": "f02e81bb-441f-4d78-9e6c-71f931b6bb5c"/*Offset*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": -1.0,
             "Y": 0.0
+          }
+        },
+        {
+          "Id": "9cb2ad14-dac0-44f2-a87d-3ae29c8a7d97"/*Stretch*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 1.47,
+            "Y": 0.32
           }
         },
         {

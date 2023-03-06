@@ -11,8 +11,7 @@ namespace T3.Operators.Types.Id_f19a9234_cd23_4229_a794_aa9d97ad8027
     {
         [Output(Guid = "65456554-355b-41a3-893e-960d28113f53")]
         public readonly Slot<Command> Output = new Slot<Command>();
-
-
+        
         [Input(Guid = "a3929303-170b-496a-b8e0-fc5f604a0ec7")]
         public readonly MultiInputSlot<Command> Commands = new MultiInputSlot<Command>();
 
@@ -22,8 +21,16 @@ namespace T3.Operators.Types.Id_f19a9234_cd23_4229_a794_aa9d97ad8027
         [Input(Guid = "3cb0dfab-deaa-4ed4-ba45-ac63e886e212")]
         public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
 
-        [Input(Guid = "b1cdb551-0045-42d4-a6ba-fa8aa0f1f98f")]
+        [Input(Guid = "b1cdb551-0045-42d4-a6ba-fa8aa0f1f98f", MappedType = typeof(ViewModes))]
         public readonly InputSlot<int> Mode = new InputSlot<int>();
+        
+        
+        private enum ViewModes
+        {
+            RepeatView,
+            SliceView,
+        }
     }
+    
 }
 

@@ -77,7 +77,7 @@
       "Min": 0.0,
       "Max": 360.0,
       "Scale": 1.0,
-      "Format": "{0:0.000}°"
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "6ddf5966-9140-4bea-a56b-20690f9f436f"/*BasePivot*/,
