@@ -26,7 +26,7 @@
       },
       "Min": -90.0,
       "Max": 90.0,
-      "Format": "{0:0.000}°"
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "beada8f0-cece-4526-aa29-3546bebd276a"/*Center*/,

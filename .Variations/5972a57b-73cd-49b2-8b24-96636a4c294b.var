@@ -1,0 +1,68 @@
+{
+  "Id": "5972a57b-73cd-49b2-8b24-96636a4c294b",
+  "Variations": [
+    {
+      "Id": "f054e87d-807f-4e54-96a1-b54d58468017",
+      "IsPreset": true,
+      "ActivationIndex": 1,
+      "Title": "Test1",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "38529a44-4622-4c87-886e-72f4400ec468": 0.82,
+          "866493b5-50ec-4587-861f-87d5d3a698e5": 0.02,
+          "be5ee091-ceea-4b69-8e81-427c8696cdeb": 0.5,
+          "f58da234-b925-40ca-b449-1ac882bd2e96": -0.01999998,
+          "9b3a821b-3bad-4411-99ba-669436e240fd": {
+            "X": 0.52,
+            "Y": 5.2
+          },
+          "e3e3f393-0c43-4c71-b134-adc094ca2965": 0.38,
+          "5f536f1f-49da-435d-a02b-002a3673c240": {
+            "X": 0.13,
+            "Y": 0.16
+          },
+          "9964e5dc-071a-4dce-bca4-994fbda19906": 2.0,
+          "be2bf88f-870e-4dd9-a0a7-e10e38b9a8d1": 0.24,
+          "c96bcad4-c73e-4731-9aa0-16dfaa91ba57": 3.8999999,
+          "fc4e5ca3-edb3-4ebc-8210-b339d7914741": 1.37,
+          "1d2328ce-d0c2-4b0b-9318-4a7c5dcfd411": 0.34,
+          "95c2f7b3-52e9-4d22-bf1f-c2ad2d0fb8da": 0.98,
+          "6d4c28fd-2bea-48a6-a87a-df0b46f76d7c": 0.3
+        }
+      }
+    },
+    {
+      "Id": "200309d2-d781-4eb9-aea2-9e7fb4f38643",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "7ba6f801-3d73-4f67-a6bc-40b409f9d116": 0.42,
+          "866493b5-50ec-4587-861f-87d5d3a698e5": 0.05,
+          "f58da234-b925-40ca-b449-1ac882bd2e96": 0.1,
+          "e3e3f393-0c43-4c71-b134-adc094ca2965": 0.38,
+          "5f536f1f-49da-435d-a02b-002a3673c240": {
+            "X": 0.71,
+            "Y": 0.37
+          },
+          "9964e5dc-071a-4dce-bca4-994fbda19906": 2.0,
+          "be2bf88f-870e-4dd9-a0a7-e10e38b9a8d1": 0.24,
+          "c96bcad4-c73e-4731-9aa0-16dfaa91ba57": 3.8999999,
+          "fc4e5ca3-edb3-4ebc-8210-b339d7914741": 1.5999999,
+          "1d2328ce-d0c2-4b0b-9318-4a7c5dcfd411": 0.85,
+          "95c2f7b3-52e9-4d22-bf1f-c2ad2d0fb8da": 0.90000004,
+          "6d4c28fd-2bea-48a6-a87a-df0b46f76d7c": 0.02
+        }
+      }
+    }
+  ]
+}
