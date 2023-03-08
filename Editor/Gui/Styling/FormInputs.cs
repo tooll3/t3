@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
 using T3.Editor.Gui.InputUi;
@@ -13,6 +14,37 @@ namespace T3.Editor.Gui.Styling
     /// </summary>
     public static class FormInputs
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public static bool BeginGroup(string label)
+        {
+            var shouldBeOpenByDefault = !label.EndsWith("...");
+            
+            AddVerticalSpace(5);
+            ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+            ImGui.PushFont(Fonts.FontBold);
+
+            var id = ImGui.GetID(label);
+            if (shouldBeOpenByDefault && !_openedGroups.Contains(id))
+            {
+                ImGui.SetNextItemOpen(true);
+                _openedGroups.Add(id);
+            }
+            var isOpen = ImGui.TreeNode(label);
+            ImGui.PopStyleColor();
+            ImGui.PopFont();
+
+            return isOpen;
+        }
+
+        private static HashSet<uint> _openedGroups = new();
+
+        public static void EndGroup()
+        {
+            ImGui.TreePop();
+        }
+        
         public static bool AddInt(string label,
                                   ref int value,
                                   int min = int.MinValue,

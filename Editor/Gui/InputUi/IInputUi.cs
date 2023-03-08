@@ -32,12 +32,13 @@ namespace T3.Editor.Gui.InputUi
         Symbol.InputDefinition InputDefinition { get; set; }
         Type Type { get; }
         Relevancy Relevancy { get; set; }
+        string GroupTitle { get; set; } 
         bool IsAnimatable { get; }
 
 
         void ApplyValueToAnimation(IInputSlot inputSlot, InputValue inputValue, Animator animator, double time);
         
-        InputEditStateFlags DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi);
+        InputEditStateFlags DrawInputEdit(IInputSlot input, SymbolUi compositionUi, SymbolChildUi symbolChildUi, bool skipIfDefault);
         string GetSlotValue(IInputSlot inputSlot);
         void DrawSettings();
 

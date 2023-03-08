@@ -32,6 +32,7 @@ namespace T3.Editor.Gui.InputUi
         public Symbol.InputDefinition InputDefinition { get; set; }
         public Guid Id => InputDefinition.Id;
         public Relevancy Relevancy { get; set; } = Relevancy.Optional;
+        public string GroupTitle { get; set; }
         public virtual bool IsAnimatable => false;
         public virtual bool IsVariable => false;
         protected Type MappedType { get; set; }
@@ -86,7 +87,7 @@ namespace T3.Editor.Gui.InputUi
                                                                Icon.KeyframeToggleOnBoth,
                                                            };
 
-        public InputEditStateFlags DrawInputEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi)
+        public InputEditStateFlags DrawInputEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi, bool skipIfDefault = false)
         {
             var name = inputSlot.Input.Name;
             var editState = InputEditStateFlags.Nothing;
@@ -101,6 +102,9 @@ namespace T3.Editor.Gui.InputUi
             if (inputSlot is InputSlot<T> typedInputSlot)
             {
                 var input = inputSlot.Input;
+                if (input.IsDefault && skipIfDefault)
+                    return InputEditStateFlags.Nothing;
+                
                 if (inputSlot.IsConnected)
                 {
                     if (typedInputSlot.IsMultiInput)
@@ -467,12 +471,34 @@ namespace T3.Editor.Gui.InputUi
 
         public virtual void DrawSettings()
         {
+            var opensGroups = !string.IsNullOrEmpty(GroupTitle);
+            if (FormInputs.AddCheckBox("Starts Parameter group", ref opensGroups))
             {
-                var tmpForRef = Relevancy;
-                if (FormInputs.AddEnumDropdown(ref tmpForRef, "Relevancy"))
-                    Relevancy = tmpForRef;
-
+                if (opensGroups)
+                {
+                    GroupTitle = "Group Title";
+                }
+                else
+                {
+                    GroupTitle = null;
+                }
             }
+
+            if (opensGroups)
+            {
+                {
+                    var groupTitle = GroupTitle;
+                    if (FormInputs.AddStringInput("Group Title", ref groupTitle, "GroupTitle", null, "Group title shown above parameter"))
+                    {
+                        GroupTitle = groupTitle;
+                    }
+                }
+            }
+            FormInputs.AddVerticalSpace();
+            
+            var tmpForRef = Relevancy;
+            if (FormInputs.AddEnumDropdown(ref tmpForRef, "Relevancy"))
+                Relevancy = tmpForRef;
         }
 
         public virtual void Write(JsonTextWriter writer)
@@ -483,6 +509,8 @@ namespace T3.Editor.Gui.InputUi
             var vec2writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
             writer.WritePropertyName("Position");
             vec2writer(writer, PosOnCanvas);
+            if(!string.IsNullOrEmpty(GroupTitle))
+                writer.WriteObject("GroupTitle", GroupTitle);
         }
 
         public virtual void Read(JToken inputToken)
@@ -493,6 +521,7 @@ namespace T3.Editor.Gui.InputUi
 
             JToken positionToken = inputToken["Position"];
             PosOnCanvas = new Vector2(positionToken["X"].Value<float>(), positionToken["Y"].Value<float>());
+            GroupTitle = inputToken["GroupTitle"]?.Value<string>();
         }
 
         public Type Type { get; } = typeof(T);

@@ -168,6 +168,13 @@ namespace T3.Editor.Gui.Windows
             
         }
 
+
+        private enum GroupState
+        {
+            None,
+            InsideClosed,
+            InsideOpened,
+        }
         
         /// <summary>
         /// Draw all parameters of the selected instance.
@@ -176,6 +183,8 @@ namespace T3.Editor.Gui.Windows
         public static void DrawParameters(Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi,
                                           SymbolUi compositionSymbolUi)
         {
+            var groupState = GroupState.None; 
+            
             foreach (var inputSlot in instance.Inputs)
             {
                 if (!symbolUi.InputUis.TryGetValue(inputSlot.Id, out IInputUi inputUi))
@@ -184,8 +193,18 @@ namespace T3.Editor.Gui.Windows
                     continue;
                 }
 
+                if (!string.IsNullOrEmpty(inputUi.GroupTitle))
+                {
+                    if(groupState == GroupState.InsideOpened)
+                        FormInputs.EndGroup();
+                    
+                    var isOpen=FormInputs.BeginGroup(inputUi.GroupTitle);
+                    groupState = isOpen ? GroupState.InsideOpened : GroupState.InsideClosed;
+                }
+                
                 ImGui.PushID(inputSlot.Id.GetHashCode());
-                var editState = inputUi.DrawInputEdit(inputSlot, compositionSymbolUi, symbolChildUi);
+                var skipIfDefault = groupState == GroupState.InsideClosed;
+                var editState = inputUi.DrawInputEdit(inputSlot, compositionSymbolUi, symbolChildUi, skipIfDefault);
 
                 if ((editState & InputEditStateFlags.Started) != InputEditStateFlags.Nothing)
                 {
@@ -224,6 +243,9 @@ namespace T3.Editor.Gui.Windows
                 
                 ImGui.PopID();
             }
+            
+            if(groupState == GroupState.InsideOpened)
+                FormInputs.EndGroup();
         }
 
         private bool DrawSelectedSymbolHeader(Instance op, SymbolChildUi symbolChildUi)

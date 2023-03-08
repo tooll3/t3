@@ -121,7 +121,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
             Max = inputToken["Max"]?.Value<float>() ?? DefaultMax;
             _scale = inputToken["Scale"]?.Value<float>() ?? DefaultScale;
             Clamp = inputToken["Clamp"]?.Value<bool>() ?? false;
-            Format = inputToken["Format"]?.Value<string>() ?? null;
+            Format = inputToken["Format"]?.Value<string>();
         }
 
         private static float GetScaleFromRange(float scale, float min, float max)
