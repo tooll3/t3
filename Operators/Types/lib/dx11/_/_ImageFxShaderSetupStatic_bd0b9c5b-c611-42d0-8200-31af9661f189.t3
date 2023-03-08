@@ -335,6 +335,12 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "05db2ccc-bdba-485b-a1ac-fa1f50be00e0"/*LoadImage*/,
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [

@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "53aeef4f-37f8-40a6-b552-cb35f5fb887c"/*Position*/,
+      "Relevancy": "Relevant",
       "Position": {
         "X": -428.06122,
         "Y": -274.36325
@@ -218,21 +219,54 @@
         "X": 324.8646,
         "Y": 392.7878
       }
+    },
+    {
+      "ChildId": "bdea751d-06b1-4f3b-a086-4a8ed37ac8d4"/*CamPosition*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 543.52075,
+        "Y": 307.00183
+      }
+    },
+    {
+      "ChildId": "2a9efde2-971e-494b-a6a7-a24cf70bb5fa"/*Vec3Distances*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 767.36975,
+        "Y": 346.66565
+      }
+    },
+    {
+      "ChildId": "775e76e6-2877-4861-8ac1-2fbd1d8358aa"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 937.2508,
+        "Y": 0.0
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "357c4c25-2b08-4470-84b1-9707a3d8e56e"/*Output*/,
       "Position": {
-        "X": 929.3435,
-        "Y": -18.45505
+        "X": 1090.578,
+        "Y": -13.416475
       }
     },
     {
-      "OutputId": "7599cf50-cbb6-49ce-bb41-9f709b593b0b"/*Pos*/,
+      "OutputId": "0986beb0-16ab-4836-9071-87052ab19602"/*DistanceToCamera*/,
       "Position": {
-        "X": 648.97363,
-        "Y": 237.73486
+        "X": 929.3435,
+        "Y": 337.73486
       }
     }
   ]

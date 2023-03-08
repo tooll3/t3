@@ -78,6 +78,13 @@
       },
       "Min": -2.0,
       "Max": 2.0
+    },
+    {
+      "InputId": "b3e7d147-5f9a-480f-a5da-ea611e5b4805"/*GenerateMipmaps*/,
+      "Position": {
+        "X": -8.08049,
+        "Y": 707.35626
+      }
     }
   ],
   "SymbolChildUis": [

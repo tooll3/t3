@@ -1,8 +1,10 @@
 using System;
 using System.Numerics;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_6b7c541a_ca36_4f21_ac95_89e874820c5a
 {
@@ -31,7 +33,10 @@ namespace T3.Operators.Types.Id_6b7c541a_ca36_4f21_ac95_89e874820c5a
                     result = c1 * (1-m) + c2 * m;
                     break;
                 case Modes.Multiply:
-                    result = c1 *  Vector4.Lerp(new Vector4(1), c2, m);
+                    
+                    var factor = MathUtils.Lerp(new Vector4(1), c2, m);
+                    result = c1 * factor ;
+                    
                     break;
                 
                 case Modes.Add:
@@ -64,7 +69,7 @@ namespace T3.Operators.Types.Id_6b7c541a_ca36_4f21_ac95_89e874820c5a
         public readonly InputSlot<Vector4> ColorB = new InputSlot<Vector4>();
         
         [Input(Guid = "40803D0E-C37C-4B5D-B64B-FD1EF090A4F7")]
-        public readonly InputSlot<float> Factor = new InputSlot<float>(1f);
+        public readonly InputSlot<float> Factor = new InputSlot<float>();
 
         [Input(Guid = "8D444E8C-D9B5-4206-9202-5ABF23B13BAF", MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new InputSlot<int>();

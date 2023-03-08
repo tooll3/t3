@@ -421,6 +421,11 @@
             "Width": 720,
             "Height": 560
           }
+        },
+        {
+          "Id": "f0cf3325-4967-4419-9beb-036cd6dbfd6a"/*GenerateMips*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
       "Outputs": []
@@ -433,9 +438,9 @@
           "Id": "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f"/*ClearColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.11126189,
-            "Y": 0.0,
-            "Z": 0.72727275,
+            "X": 0.085048795,
+            "Y": 0.09789973,
+            "Z": 0.31100476,
             "W": 1.0
           }
         }
@@ -1300,9 +1305,9 @@
           "Id": "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f"/*ClearColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.34554017,
-            "Y": 0.604685,
-            "Z": 0.6938659,
+            "X": 0.14003542,
+            "Y": 0.25857645,
+            "Z": 0.29937062,
             "W": 1.0
           }
         }
@@ -1542,6 +1547,30 @@
       "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "3c852de5-1190-4155-9265-bed23db2003a"/*RgbTV*/,
+      "SymbolId": "5972a57b-73cd-49b2-8b24-96636a4c294b",
+      "InputValues": [
+        {
+          "Id": "e29b1dad-d3ef-405f-99c0-4552caedaf7c"/*GlowIntensity*/,
+          "Type": "System.Single",
+          "Value": 0.4
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "8698676e-24d2-4cfe-b91a-85cf18a95b2f"/*TVIntroScene*/,
+      "SymbolId": "d71f9aa0-687f-4537-9154-eed685a8ecc2",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "b7fc884f-160e-45ad-8c6b-56a1cd911e49"/*LoadImage*/,
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -1690,6 +1719,12 @@
       "TargetSlotId": "be057b0a-1302-4076-bde1-6ae453815642"
     },
     {
+      "SourceParentOrChildId": "918ffd4a-3812-4da4-8ecb-03478fc58de5",
+      "SourceSlotId": "7a4c4feb-be2f-463e-96c6-cd9a6bad77a2",
+      "TargetParentOrChildId": "3c852de5-1190-4155-9265-bed23db2003a",
+      "TargetSlotId": "2dbfdd5d-8b4b-447c-bd19-326d46657ea1"
+    },
+    {
       "SourceParentOrChildId": "d593c4b1-29dc-4155-980a-609e3af02de7",
       "SourceSlotId": "2e1742d8-9ba3-4236-a0cd-a2b02c9f5924",
       "TargetParentOrChildId": "40247810-5684-4fb6-bc6b-aa30cb9fe0f1",
@@ -1780,6 +1815,12 @@
       "TargetSlotId": "4da253b7-4953-439a-b03f-1d515a78bddf"
     },
     {
+      "SourceParentOrChildId": "918ffd4a-3812-4da4-8ecb-03478fc58de5",
+      "SourceSlotId": "7a4c4feb-be2f-463e-96c6-cd9a6bad77a2",
+      "TargetParentOrChildId": "8698676e-24d2-4cfe-b91a-85cf18a95b2f",
+      "TargetSlotId": "97ba38a4-78d5-4d27-ae3f-8859bddbfbba"
+    },
+    {
       "SourceParentOrChildId": "0c64167d-68bb-4cac-857d-f710cdf1d9df",
       "SourceSlotId": "1f4e7cac-1f62-4633-b0f3-a3017a026753",
       "TargetParentOrChildId": "86e762de-2b44-470f-9139-f8a02e872be1",
@@ -1834,8 +1875,8 @@
       "TargetSlotId": "2a585a23-b60c-4c8b-8cfa-9ab2a8b04c7a"
     },
     {
-      "SourceParentOrChildId": "8c7aefa8-ab02-4bc4-8653-d4df88b808ac",
-      "SourceSlotId": "0da718da-11a9-4d48-8a39-2097a5a8c2a8",
+      "SourceParentOrChildId": "3c852de5-1190-4155-9265-bed23db2003a",
+      "SourceSlotId": "22eac013-881d-486a-8041-5cae32b8dca1",
       "TargetParentOrChildId": "b79be4c6-4bb6-4698-b880-4b358aee0b98",
       "TargetSlotId": "6d859756-0243-42c5-973d-6de2dcdc5609"
     },
@@ -1912,8 +1953,8 @@
       "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
     },
     {
-      "SourceParentOrChildId": "a1a17c6c-400a-4550-9506-547b5a98f7fe",
-      "SourceSlotId": "7a4c4feb-be2f-463e-96c6-cd9a6bad77a2",
+      "SourceParentOrChildId": "8698676e-24d2-4cfe-b91a-85cf18a95b2f",
+      "SourceSlotId": "2bdf54ac-ce7b-4f71-802f-0adb54e02083",
       "TargetParentOrChildId": "e6198df3-7dc7-4850-b400-b13eaf9751b4",
       "TargetSlotId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"
     },

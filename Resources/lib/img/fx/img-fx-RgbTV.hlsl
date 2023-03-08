@@ -71,7 +71,7 @@ float GetColor(int rgbIndex, float x, float py, float sourceImageChannel)
     // return center;
     //  float xx = center ; // pow((center + Contrast + sourceImageChannel * ImageBrightness), BlackLevel);
     float xx = center + pow(sourceImageChannel * ImageBrightness, Contrast) + BlackLevel;
-    float s = smoothstep(1 - PatternBlurX, 1 + PatternBlurY, xx);
+    float s = smoothstep(1 - PatternBlurX, 1 + PatternBlurY, xx) * ImageBrightness;
     return s;
 }
 

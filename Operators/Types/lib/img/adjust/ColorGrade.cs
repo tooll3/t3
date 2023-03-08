@@ -38,5 +38,8 @@ namespace T3.Operators.Types.Id_42d86738_d644_47c8_ab92_cc426d958e51
         [Input(Guid = "f493d824-0f3e-4b30-838b-59ee0fba755b")]
         public readonly InputSlot<System.Numerics.Vector2> VignetteCenter = new InputSlot<System.Numerics.Vector2>();
 
+        [Input(Guid = "b3e7d147-5f9a-480f-a5da-ea611e5b4805")]
+        public readonly InputSlot<bool> GenerateMipmaps = new InputSlot<bool>();
+
     }
 }

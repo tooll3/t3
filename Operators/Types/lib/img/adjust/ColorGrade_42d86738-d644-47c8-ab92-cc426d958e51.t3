@@ -61,6 +61,10 @@
         "X": 0.0,
         "Y": 0.0
       }
+    },
+    {
+      "Id": "b3e7d147-5f9a-480f-a5da-ea611e5b4805"/*GenerateMipmaps*/,
+      "DefaultValue": false
     }
   ],
   "Children": [
@@ -107,6 +111,11 @@
           "Id": "c80d3700-ceb6-43d0-9ffd-f4854e67a41d"/*Wrap*/,
           "Type": "SharpDX.Direct3D11.TextureAddressMode",
           "Value": "Clamp"
+        },
+        {
+          "Id": "3ca67d25-72ec-487b-91b3-ece912b76462"/*GenerateMipmaps*/,
+          "Type": "System.Boolean",
+          "Value": false
         }
       ],
       "Outputs": []
@@ -172,6 +181,12 @@
       "SourceSlotId": "777b2c27-a3c8-40d0-a196-80a08af51296",
       "TargetParentOrChildId": "b030f451-c74a-4f90-b46b-4fc177740417",
       "TargetSlotId": "36abde68-0d79-4fb6-b8ce-ac8a27b66850"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "b3e7d147-5f9a-480f-a5da-ea611e5b4805",
+      "TargetParentOrChildId": "b030f451-c74a-4f90-b46b-4fc177740417",
+      "TargetSlotId": "3ca67d25-72ec-487b-91b3-ece912b76462"
     },
     {
       "SourceParentOrChildId": "861b22f0-5267-4160-8887-3ec9ffdf9653",

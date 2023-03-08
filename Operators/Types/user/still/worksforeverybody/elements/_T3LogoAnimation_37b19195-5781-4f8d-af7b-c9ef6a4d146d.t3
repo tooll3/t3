@@ -849,7 +849,13 @@
     {
       "Id": "bcd32223-a773-410a-934a-85d04aa652fa"/*Blend*/,
       "SymbolId": "9f43f769-d32a-4f49-92ac-e0be3ba250cf",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "d7b83780-c4be-4337-b1df-0c98310b1926"/*GenerateMips*/,
+          "Type": "System.Boolean",
+          "Value": true
+        }
+      ],
       "Outputs": []
     },
     {
@@ -1230,8 +1236,8 @@
   ],
   "Connections": [
     {
-      "SourceParentOrChildId": "0a97843c-970d-4f2e-b066-4c28a19b2afd",
-      "SourceSlotId": "1680781d-af5e-4b77-beb6-3e4a12d73d59",
+      "SourceParentOrChildId": "bcd32223-a773-410a-934a-85d04aa652fa",
+      "SourceSlotId": "536fae14-b814-498c-a6b4-07775de36991",
       "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "TargetSlotId": "4a5f3a14-29aa-47e6-8c31-3782df466a57"
     },
