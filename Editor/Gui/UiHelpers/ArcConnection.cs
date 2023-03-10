@@ -54,7 +54,7 @@ namespace T3.Editor.Gui.UiHelpers
 
             var d = pointB - pointA;
             const float limitArcConnectionRadius = 100;
-            var maxRadius = limitArcConnectionRadius * GraphCanvas.Current.Scale.X;
+            var maxRadius = limitArcConnectionRadius * GraphCanvas.Current.Scale.X*1.1f;
             const float shrinkArkAngle = 0.8f;
             const float edgeFactor = 0.4f; // 0 -> overlap  ... 1 concentric around node edge
             const float outlineWidth = 3;
@@ -176,9 +176,13 @@ namespace T3.Editor.Gui.UiHelpers
                 }
             }
 
-            
-            var isHovering = TestHover(ref drawList, ref hoverPosition );
-            drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, ImDrawFlags.None, thickness + outlineWidth);
+
+            var isHovering =                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          TestHover(ref drawList, ref hoverPosition );
+            if (GraphCanvas.Current.Scale.X > 0.5f)
+            {
+                drawList.AddPolyline(ref drawList._Path[0], drawList._Path.Size, OutlineColor, ImDrawFlags.None, thickness + outlineWidth);
+            }
+
             drawList.PathStroke(color, ImDrawFlags.None, thickness);
             return isHovering;
             
@@ -191,7 +195,7 @@ namespace T3.Editor.Gui.UiHelpers
                 drawList.PathBezierCubicCurveTo(pointA + new Vector2(tangentLength, 0),
                                            pointB + new Vector2(-tangentLength, 0),
                                            pointB,
-                                           30
+                                           GraphCanvas.Current.Scale.X < 0.5f ? 11 : 29
                                           );
             }
         }
@@ -201,7 +205,7 @@ namespace T3.Editor.Gui.UiHelpers
             if (radius < 0.01)
                 return;
             
-            drawList.PathArcTo(center, radius, angleA, angleB, radius< 20? 5:10);
+            drawList.PathArcTo(center, radius, angleA, angleB, radius< 50? 4:10);
         }
 
         public static bool TestHover(ref ImDrawListPtr drawList, ref Vector2 positionOnLine)
