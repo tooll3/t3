@@ -64,6 +64,9 @@ namespace T3.Operators.Types.Id_33424f7f_ea2d_4753_bbc3_8df00830c4b5
         [Input(Guid = "c3827e2e-2d15-475c-9b2f-03a861e97fc5")]
         public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
 
+        [Input(Guid = "af523ebc-0791-430c-8fff-e50779b8af4f")]
+        public readonly InputSlot<bool> Reset = new InputSlot<bool>();
+
     }
 }
 

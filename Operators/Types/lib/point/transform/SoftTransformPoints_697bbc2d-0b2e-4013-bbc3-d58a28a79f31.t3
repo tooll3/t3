@@ -48,16 +48,16 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "24a0635f-9599-4a53-a35a-de90f4719f56"/*VolumeType*/,
-      "DefaultValue": 0
-    },
-    {
       "Id": "3a7828e2-f58e-4229-b6c2-636cd5dbd011"/*VolumeCenter*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,
         "Z": 0.0
       }
+    },
+    {
+      "Id": "24a0635f-9599-4a53-a35a-de90f4719f56"/*VolumeType*/,
+      "DefaultValue": 0
     },
     {
       "Id": "76a7afbe-4782-4b3c-bc35-cc818cf06ab2"/*VolumeStretch*/,

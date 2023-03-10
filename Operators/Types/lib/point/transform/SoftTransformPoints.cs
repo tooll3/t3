@@ -46,11 +46,11 @@ namespace T3.Operators.Types.Id_697bbc2d_0b2e_4013_bbc3_d58a28a79f31
         [Input(Guid = "d82e0f6a-138a-43fd-8774-29dc33ddd672")]
         public readonly InputSlot<float> OffsetW = new InputSlot<float>();
 
-        [Input(Guid = "24a0635f-9599-4a53-a35a-de90f4719f56", MappedType = typeof(Shapes))]
-        public readonly InputSlot<int> VolumeType = new InputSlot<int>();
-
         [Input(Guid = "3a7828e2-f58e-4229-b6c2-636cd5dbd011")]
         public readonly InputSlot<System.Numerics.Vector3> VolumeCenter = new InputSlot<System.Numerics.Vector3>();
+
+        [Input(Guid = "24a0635f-9599-4a53-a35a-de90f4719f56")]
+        public readonly InputSlot<int> VolumeType = new InputSlot<int>();
 
         [Input(Guid = "76a7afbe-4782-4b3c-bc35-cc818cf06ab2")]
         public readonly InputSlot<System.Numerics.Vector3> VolumeStretch = new InputSlot<System.Numerics.Vector3>();

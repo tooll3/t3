@@ -634,6 +634,11 @@
       "SymbolId": "bf7fcd04-0cf6-4518-86cc-48f74483d98d",
       "InputValues": [
         {
+          "Id": "ef3d0313-50a1-42d3-b3cb-e8ea1b93cd34"/*Round*/,
+          "Type": "System.Single",
+          "Value": 1.0
+        },
+        {
           "Id": "d4f79203-401a-4f6e-8f83-74a3d61c0177"/*Outline*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -642,11 +647,6 @@
             "Z": 1.0,
             "W": 1.0
           }
-        },
-        {
-          "Id": "ef3d0313-50a1-42d3-b3cb-e8ea1b93cd34"/*Round*/,
-          "Type": "System.Single",
-          "Value": 1.0
         },
         {
           "Id": "80bd2460-c28d-490c-981b-77a6e89f3983"/*Stroke*/,

@@ -27,6 +27,8 @@ cbuffer Transforms : register(b0)
 
 cbuffer Params : register(b1)
 {
+  float4x4 transform;
+
   float L;
   float LFactor;
   float LOffset;
@@ -66,8 +68,9 @@ sampler texSampler : register(s0);
   float3 pos = P.position;
   pos -= Center;
 
-  float3 posInObject = mul(float4(pos.xyz, 0), WorldToObject).xyz;
   // float3 posInObject = pos.xyz;
+  float3 posInObject = mul(float4(pos.xyz, 0), transform).xyz;
+  //  float3 posInObject = pos.xyz;
 
   float4 c = inputTexture.SampleLevel(texSampler, posInObject.xy * float2(1, -1) + float2(0.5, 0.5), 0.0);
   float gray = (c.r + c.g + c.b) / 3;

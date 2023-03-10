@@ -71,7 +71,8 @@ RWStructuredBuffer<Point> ResultPoints : u0; // output
         f = 1 - smoothstep(0, 1, saturate((t - b) / Width - b + 1));
     }
 
-    f += (hash11(t) - 0.5) * Scatter;
+    float fallOffFromCenter = smoothstep(0, 1, 1 - abs(f - 0.5) * 2);
+    f += (hash11(t) - 0.5) * Scatter * fallOffFromCenter;
 
     ResultPoints[i.x].rotation = q_slerp(A.rotation, B.rotation, f);
     ResultPoints[i.x].position = lerp(A.position, B.position, f);
