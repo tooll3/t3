@@ -18,9 +18,9 @@ namespace T3.Operators.Types.Id_b3de7a93_e921_4e43_8a56_6c84b2d18b74
         
         IInputSlot ITransformable.TranslationInput => Center;
         IInputSlot ITransformable.RotationInput => TextureRotate;
-        IInputSlot ITransformable.ScaleInput => TextureScale;
+        IInputSlot ITransformable.ScaleInput => Stretch;
         public Action<Instance, EvaluationContext> TransformCallback { get; set; }
-        
+
         [Input(Guid = "d42b8adc-f1d6-4f32-94a3-24802630d763")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
@@ -67,7 +67,10 @@ namespace T3.Operators.Types.Id_b3de7a93_e921_4e43_8a56_6c84b2d18b74
         public readonly InputSlot<System.Numerics.Vector3> Center = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "7e86bf8f-1d9d-4212-bf9f-987a03b55565")]
-        public readonly InputSlot<System.Numerics.Vector2> TextureScale = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
+
+        [Input(Guid = "3afdb344-0a09-4907-89f1-447c991273da")]
+        public readonly InputSlot<float> Scale = new InputSlot<float>();
 
         [Input(Guid = "9c53bca4-57fc-495f-ba07-02278c023680")]
         public readonly InputSlot<System.Numerics.Vector3> TextureRotate = new InputSlot<System.Numerics.Vector3>();
