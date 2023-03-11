@@ -23,6 +23,13 @@
         "X": -200.0,
         "Y": 45.0
       }
+    },
+    {
+      "InputId": "da431996-4c4c-4cdc-9723-9116bbb5440c"/*ClearAfterExecution*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
     }
   ],
   "SymbolChildUis": [],

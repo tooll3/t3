@@ -23,6 +23,8 @@ namespace T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789
         {
             var name = VariableName.GetValue(context);
             var newValue = Value.GetValue(context);
+            var clearAfterExecution = ClearAfterExecution.GetValue(context);
+            
             if (string.IsNullOrEmpty(name))
             {
                 Log.Warning($"Can't set variable with invalid name {name}");
@@ -40,7 +42,7 @@ namespace T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789
                 {
                     context.FloatVariables[name] = previous;
                 }
-                else
+                else if(!clearAfterExecution)
                 {
                     context.FloatVariables.Remove(name);
                 }
@@ -61,6 +63,8 @@ namespace T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789
         [Input(Guid = "68E31EAA-1481-48F4-B742-5177A241FE6D")]
         public readonly InputSlot<float> Value = new InputSlot<float>();
 
+        [Input(Guid = "DA431996-4C4C-4CDC-9723-9116BBB5440C")]
+        public readonly InputSlot<bool> ClearAfterExecution = new ();
         
 
         
