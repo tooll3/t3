@@ -532,7 +532,7 @@ namespace T3.Core.Operator
         }
 
         
-        public void Read(JToken inputToken)
+        public void Read(JToken inputToken, Symbol symbol)
         {
             var curves = new List< KeyValuePair<CurveId, Curve>>();
             foreach (JToken entry in inputToken)
@@ -542,6 +542,10 @@ namespace T3.Core.Operator
                 var indexToken = entry.SelectToken("Index");
                 int index = indexToken?.Value<int>() ?? 0;
                 Curve curve = new Curve();
+
+                if (symbol.Children.All(c => c.Id != instanceId))
+                    continue;
+                
                 curve.Read(entry);
                 curves.Add( new KeyValuePair<CurveId, Curve>(new CurveId(instanceId, inputId, index), curve));
             }

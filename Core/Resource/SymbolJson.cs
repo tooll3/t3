@@ -356,7 +356,7 @@ namespace T3.Core.Resource
 
             if (animatorData != null)
             {
-                symbol.Animator.Read(animatorData);
+                symbol.Animator.Read(animatorData, symbol);
             }
 
             foreach (var input in symbol.InputDefinitions)
