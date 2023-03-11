@@ -49,8 +49,9 @@ namespace T3.Operators.Types.Id_ab511978_bad5_4b69_90b2_c028447fe9f7
             }
             else
             {
-                if (Curves.Value != null)
-                    _curves.Add(Curves.Value);
+                var c = Curves.GetValue(context);
+                if (c != null)
+                    _curves.Add(c);
             }
 
             var curveCount = _curves.Count;

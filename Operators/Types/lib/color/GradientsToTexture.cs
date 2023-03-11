@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using T3.Core.Animation;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -30,19 +27,38 @@ namespace T3.Operators.Types.Id_2c53eee7_eb38_449b_ad2a_d7a674952e5b
         
         private void Update(EvaluationContext context)
         {
-            if (!Gradients.IsConnected)
-                return;
-            
+            // if (!Gradients.IsConnected)
+            // {
+            //     Log.Debug("Gradients count:" + Gradients.Value.Steps.Count);
+            //     return;
+            // }
+            var gradients = new List<Gradient>(4);
             var useHorizontal = Direction.GetValue(context) == 0;
-            var gradientsCount = Gradients.CollectedInputs.Count;
-            if (gradientsCount == 0)
-                return;
+            int gradientsCount = 0;
+            if (Gradients.IsConnected)
+            {
+                gradientsCount = Gradients.CollectedInputs.Count;
+                if (gradientsCount == 0)
+                    return;
+                
+                var gradientsCollectedInputs = Gradients.CollectedInputs;
+                foreach (var gradientsInput in gradientsCollectedInputs)
+                {
+                    gradients.Add(gradientsInput.GetValue(context));
+                }                
+            }
+            else
+            {
+                var g = Gradients.GetValue(context);
+                gradientsCount = 1;
+                gradients.Add(g);
+            }
 
             var sampleCount = Resolution.GetValue(context).Clamp(1,16384);
             const int entrySizeInBytes = sizeof(float) * 4;
             var gradientSizeInBytes = sampleCount * entrySizeInBytes;
             var bufferSizeInBytes = gradientsCount * gradientSizeInBytes;
-            var gradientsCollectedInputs = Gradients.CollectedInputs;
+            
             try
             {
                 using var dataStream = new DataStream(bufferSizeInBytes, true, true);
@@ -62,9 +78,8 @@ namespace T3.Operators.Types.Id_2c53eee7_eb38_449b_ad2a_d7a674952e5b
 
                 if (useHorizontal)
                 {
-                    foreach (var gradientsInput in gradientsCollectedInputs)
+                    foreach (var gradient in gradients)
                     {
-                        var gradient = gradientsInput.GetValue(context);
                         if (gradient == null)
                         {
                             dataStream.Seek(gradientSizeInBytes, SeekOrigin.Current);
@@ -83,11 +98,8 @@ namespace T3.Operators.Types.Id_2c53eee7_eb38_449b_ad2a_d7a674952e5b
                 }
                 else
                 {
-                    var gradients = new List<Gradient>(gradientsCollectedInputs.Count);
-                    foreach (var gradientsInput in gradientsCollectedInputs)
-                    {
-                        gradients.Add(gradientsInput.GetValue(context));
-                    }
+                    
+
                     
                     
                     for (var sampleIndex = 0; sampleIndex < sampleCount; sampleIndex++)
