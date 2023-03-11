@@ -35,7 +35,8 @@
       "Position": {
         "X": -1359.4902,
         "Y": 400.22437
-      }
+      },
+      "GroupTitle": "Noise"
     },
     {
       "InputId": "10fa40ee-c6f6-4f6b-bf70-54eeb4c11891"/*NoiseFrequency*/,
@@ -65,7 +66,8 @@
       "Position": {
         "X": -1358.6415,
         "Y": 629.25867
-      }
+      },
+      "GroupTitle": "Trails..."
     },
     {
       "InputId": "fd8340d5-b604-4605-9c3a-a57477d85919"/*TrailColor*/,
@@ -110,7 +112,8 @@
       "Position": {
         "X": -1380.4293,
         "Y": 1343.5939
-      }
+      },
+      "GroupTitle": "Rendering..."
     },
     {
       "InputId": "60b17724-e469-463f-9700-745b4d45d6ff"/*EnableZWrite*/,

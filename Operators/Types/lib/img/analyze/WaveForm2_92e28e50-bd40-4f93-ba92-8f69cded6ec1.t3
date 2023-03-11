@@ -627,14 +627,6 @@
       "SymbolId": "82ad8911-c930-4851-803d-3f24422445bc",
       "InputValues": [
         {
-          "Id": "cf2e1698-f996-4b83-8b59-3150e75d59c6"/*Resolution*/,
-          "Type": "SharpDX.Size2",
-          "Value": {
-            "Width": 32,
-            "Height": 32
-          }
-        },
-        {
           "Id": "3f5a284b-e2f0-47e2-bf79-2a7fe8949519"/*Gradient*/,
           "Type": "T3.Core.DataTypes.Gradient",
           "Value": {
@@ -693,6 +685,14 @@
                 }
               ]
             }
+          }
+        },
+        {
+          "Id": "cf2e1698-f996-4b83-8b59-3150e75d59c6"/*Resolution*/,
+          "Type": "SharpDX.Size2",
+          "Value": {
+            "Width": 32,
+            "Height": 32
           }
         }
       ],

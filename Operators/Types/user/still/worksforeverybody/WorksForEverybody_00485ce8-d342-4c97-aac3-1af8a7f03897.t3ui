@@ -4162,6 +4162,391 @@
         "X": -2443.375,
         "Y": 9606.3125
       }
+    },
+    {
+      "ChildId": "79a71668-6c3a-4439-a2b2-059051dd3061"/*FadingSlideShow*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1972.0964,
+        "Y": 15176.247
+      }
+    },
+    {
+      "ChildId": "d0e7db90-9b98-4a75-8417-d97205794a98"/*DrawAsSplitView*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 2122.0964,
+        "Y": 15176.247
+      }
+    },
+    {
+      "ChildId": "d4b3cff5-570d-4912-a90a-5faf184746a8"/*Group*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 1672.0964,
+        "Y": 15232.247
+      }
+    },
+    {
+      "ChildId": "cb51d78c-b0d1-4735-816e-beda99d7cb02"/*GridPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 780.6234,
+        "Y": 15004.95
+      }
+    },
+    {
+      "ChildId": "5327e276-c11e-4048-8e96-e9c66d7d428f"/*DrawQuads*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": 1352.74,
+        "Y": 14961.95
+      }
+    },
+    {
+      "ChildId": "e5112372-43cc-48bb-9c09-8cf0a4b7e5eb"/*LinearGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1210.591,
+        "Y": 15167.014
+      }
+    },
+    {
+      "ChildId": "73355179-c093-4c99-a76b-ecb9d022f81f"/*SamplePointAttributes*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1052.74,
+        "Y": 15004.95
+      }
+    },
+    {
+      "ChildId": "55903964-fdfe-42d1-9e32-8e2dfe01604f"/*RenderTarget*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1822.0964,
+        "Y": 15232.247
+      }
+    },
+    {
+      "ChildId": "6cdf8fc6-62eb-45ea-b51d-16634b723de6"/*Layer2d*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1972.0964,
+        "Y": 15232.247
+      }
+    },
+    {
+      "ChildId": "aeb298ef-301d-4c68-8acd-4baf8fcf8a98"/*RadialGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 752.74,
+        "Y": 15310.607
+      }
+    },
+    {
+      "ChildId": "c4ba25d9-0635-44ac-93fd-d77f0523f3ea"/*SampleGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 281.29028,
+        "Y": 8056.314
+      }
+    },
+    {
+      "ChildId": "62016515-503a-431c-9bed-462085b32829"/*GradientsToTexture*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 426.25928,
+        "Y": 8092.232
+      }
+    },
+    {
+      "ChildId": "ab70ed0a-e1bb-481a-b9f4-4f16f67bf7c9"/*RadialPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1052.74,
+        "Y": 14961.95
+      }
+    },
+    {
+      "ChildId": "6c19bfde-3309-4b73-8b60-cd248795b306"/*RepeatAtGPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1202.74,
+        "Y": 14961.95
+      }
+    },
+    {
+      "ChildId": "f7768fed-58b8-45e4-8cc9-889ff352e07a"/*GridPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 935.5337,
+        "Y": 15427.928
+      }
+    },
+    {
+      "ChildId": "c272bce2-1989-481a-8de4-c24c31e780c6"/*DrawQuads*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 75.0
+      },
+      "Position": {
+        "X": 1385.5337,
+        "Y": 15384.928
+      }
+    },
+    {
+      "ChildId": "97cb494e-5db2-4d69-a95c-c1c407f06cac"/*LinearGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1243.3846,
+        "Y": 15589.991
+      }
+    },
+    {
+      "ChildId": "db045aa0-aec3-4047-a794-6843c0252783"/*SamplePointAttributes*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1085.5337,
+        "Y": 15427.928
+      }
+    },
+    {
+      "ChildId": "af107ef9-12c3-43f2-bc10-c40be77ef0d2"/*RadialGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 714.49176,
+        "Y": 15858.203
+      }
+    },
+    {
+      "ChildId": "67c2bfef-aaaf-4b9f-939c-619e16808e31"/*RadialPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1085.5337,
+        "Y": 15384.928
+      }
+    },
+    {
+      "ChildId": "07795891-ee3d-4a87-90be-18e9f1b10140"/*RepeatAtGPoints*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1235.5337,
+        "Y": 15384.928
+      }
+    },
+    {
+      "ChildId": "133ef7d6-cf11-4466-a775-2e3d02162954"/*size*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 1131.1223,
+        "Y": 15284.487
+      }
+    },
+    {
+      "ChildId": "62eaff17-e31e-44d2-9181-beb1846738fa"/*width*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 311.37735,
+        "Y": 15203.598
+      }
+    },
+    {
+      "ChildId": "9eea5a1e-429b-4cd6-9544-531ef7df3e55"/*IntDiv*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 459.36163,
+        "Y": 15250.329
+      }
+    },
+    {
+      "ChildId": "d46d64c3-c247-433f-98fe-8ef05517b801"/*AddInts*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 785.5337,
+        "Y": 15483.928
+      }
+    },
+    {
+      "ChildId": "a8e63fa6-f0cc-4349-9ac4-b39f69ce4e11"/*AddInts*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 785.5337,
+        "Y": 15427.928
+      }
+    },
+    {
+      "ChildId": "4239de07-0966-4b74-8b28-cd41570353c2"/*Execute*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1222.7959,
+        "Y": 14642.295
+      }
+    },
+    {
+      "ChildId": "273ccce1-1e48-478e-8da1-ab5142dbf454"/*rotate*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 960.37616,
+        "Y": 14807.838
+      }
+    },
+    {
+      "ChildId": "db7a54d4-2d55-40a5-9d19-5ab47cc59302"/*Combine3Images*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 931.7857,
+        "Y": 15741.374
+      }
+    },
+    {
+      "ChildId": "5e70e830-09d6-4458-bb85-03fd88fd8945"/*RadialGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 727.7757,
+        "Y": 15658.35
+      }
+    },
+    {
+      "ChildId": "b9299a2c-0754-48ca-b3ae-e74caa0fed58"/*RadialGradient*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 587.57983,
+        "Y": 15130.279
+      }
+    },
+    {
+      "ChildId": "5cf4e1a4-4451-4993-ba35-07789a38a53e"/*Combine3Images*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 1008.2396,
+        "Y": 15211.243
+      }
+    },
+    {
+      "ChildId": "7550b40a-edb5-4a54-85a4-4068b74828e1"/*Offset*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 277.27997,
+        "Y": 14919.986
+      }
+    },
+    {
+      "ChildId": "31fd420c-e993-4f8c-8ef9-8cf75bfae0e8"/*AnimValue*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 97.268616,
+        "Y": 15004.1045
+      }
+    },
+    {
+      "ChildId": "51361d3e-15b7-4bc3-bccd-fb48a3143877"/*transitionWidth*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 129.04712,
+        "Y": 15373.111
+      }
     }
   ],
   "OutputUis": [

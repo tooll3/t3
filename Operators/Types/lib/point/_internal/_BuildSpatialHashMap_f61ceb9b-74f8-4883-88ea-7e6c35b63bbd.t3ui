@@ -60,7 +60,7 @@
       "ChildId": "d6617889-06c7-4996-845f-7acc5158193a"/*ComputeShader*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 23.0
       },
       "Position": {
         "X": 1067.2267,
@@ -216,7 +216,7 @@
       "ChildId": "b18f495f-d0b1-4a20-9795-4a37f436f756"/*ComputeShader*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 23.0
       },
       "Position": {
         "X": 1542.494,
@@ -261,7 +261,7 @@
       "ChildId": "f5cfa01d-25ab-4065-8308-0b71f08ef76b"/*ComputeShader*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 23.0
       },
       "Position": {
         "X": 2101.951,

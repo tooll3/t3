@@ -244,7 +244,7 @@
       "ChildId": "1f47d69f-a499-46e1-a96c-5234ffd6e773"/*ComputeShader*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 23.0
       },
       "Position": {
         "X": 2865.5044,
@@ -599,7 +599,7 @@
       "ChildId": "1d2cd884-453c-461d-aac4-120f9d5b4eea"/*ComputeShader*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 23.0
       },
       "Position": {
         "X": 3189.986,

@@ -51,6 +51,9 @@ namespace T3.Operators.Types.Id_1d958538_98e7_4053_b1e2_3b9f1bc4faa9
         [Input(Guid = "0aa7851e-1845-4cd0-98fd-25d2a77a35a7", MappedType = typeof(SelectAlphaInput))]
         public readonly InputSlot<int> SelectAlphaChannel = new InputSlot<int>();
 
+        [Input(Guid = "2b6f8853-5836-45d5-800b-c56e1c59e3c9")]
+        public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
+
         private enum SelectInput
         {
             ImageA_R = 0,
