@@ -96,6 +96,21 @@
           "Id": "a5cb5bda-0fb2-4863-bd8d-9ac09135fc30"/*WrapMode*/,
           "Type": "SharpDX.Direct3D11.TextureAddressMode",
           "Value": "Clamp"
+        },
+        {
+          "Id": "fe1695b3-54db-4b53-8987-3216bcf59da9"/*ClearColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 0.0
+          }
+        },
+        {
+          "Id": "109d0526-615c-401e-bc78-f29fe730c836"/*BlendEnabled*/,
+          "Type": "System.Boolean",
+          "Value": false
         }
       ],
       "Outputs": []
