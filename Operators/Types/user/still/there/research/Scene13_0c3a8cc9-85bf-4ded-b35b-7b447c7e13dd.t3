@@ -2122,36 +2122,6 @@
       }
     },
     {
-      "InstanceId": "037cdc98-d679-4460-b465-d487fb34bf8b",
-      "InputId": "13d679fa-cd25-44d5-b617-c9911f73c276",
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "Constant",
-        "Keys": [
-          {
-            "Time": 10.2808,
-            "Value": 0.0020000000949949026,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Smooth",
-            "OutEditMode": "Smooth",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": 3.141592653589793
-          },
-          {
-            "Time": 13.3048,
-            "Value": 0.004999999888241291,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Smooth",
-            "OutEditMode": "Smooth",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": -3.141592653589793
-          }
-        ]
-      }
-    },
-    {
       "InstanceId": "ee298a30-f1ce-463b-ad99-76bcb19d9961",
       "InputId": "1b9b4455-d510-4151-93c6-e03a5eb325b8",
       "Curve": {

@@ -44,37 +44,5 @@
         "FilePath": "Resources\\user\\still\\proj-meteoriks23\\soundtrack\\Meteoriks.idea.26.1..wav"
       }
     ]
-  },
-  "Animator": [
-    {
-      "InstanceId": "64c3d17d-b4ab-43e5-9ba0-de4bd989fed8",
-      "InputId": "7773837e-104a-4b3d-a41f-cadbd9249af2",
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "Constant",
-        "Keys": [
-          {
-            "Time": 98.6912,
-            "Value": 0.0,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": 0.2938733477740154,
-            "OutTangentAngle": 3.4354660013638085
-          },
-          {
-            "Time": 101.9955,
-            "Value": 1.0,
-            "InType": "Linear",
-            "OutType": "Linear",
-            "InEditMode": "Linear",
-            "OutEditMode": "Linear",
-            "InTangentAngle": 0.2938733477740154,
-            "OutTangentAngle": -2.8477193058157777
-          }
-        ]
-      }
-    }
-  ]
+  }
 }
