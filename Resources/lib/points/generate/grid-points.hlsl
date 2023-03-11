@@ -67,7 +67,6 @@ static const float ToRad = 3.141578 / 180;
         ResultPoints[index].position = pos;
         ResultPoints[index].w = W;
         ResultPoints[index].rotation = rotate_angle_axis(OrientationAngle * PI / 180, normalize(OrientationAxis));
-
         return;
     }
 
@@ -112,5 +111,27 @@ static const float ToRad = 3.141578 / 180;
         ResultPoints[index].w = W;
 
         ResultPoints[index].rotation = rotate_angle_axis((OrientationAngle)*PI / 180, normalize(OrientationAxis));
+    }
+
+    // Diagonal
+    if (Tiling < 3.5)
+    {
+        bool isOddRow = cell.x % 2 > 0;
+        pos.x /= SizeMode > 0.5 ? 1 : 2;
+        pos += Center;
+
+        if (isOddRow)
+        {
+            // SizeMode > 0.5 ? (cell / clampedCount) - (Pivot + 0.5)
+            //                : cell - clampedCount *(Pivot + 0.5);
+
+            pos += SizeMode > 0.5 ? float3(0, 0.5, 0.5) * zeroAdjustedSize / clampedCount
+                                  : float3(0, 0.5, 0.5) * zeroAdjustedSize;
+        }
+
+        ResultPoints[index].position = pos;
+        ResultPoints[index].w = W;
+        ResultPoints[index].rotation = rotate_angle_axis(OrientationAngle * PI / 180, normalize(OrientationAxis));
+        return;
     }
 }
