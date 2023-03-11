@@ -32,6 +32,14 @@
           ]
         }
       }
+    },
+    {
+      "Id": "1f1838e4-8502-4ac4-a8df-dcb4cae57da4"/*Resolution*/,
+      "DefaultValue": 256
+    },
+    {
+      "Id": "65b83219-4e3f-4a3e-a35b-705e8658cc7b"/*Direction*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],
