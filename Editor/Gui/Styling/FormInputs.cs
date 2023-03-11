@@ -22,8 +22,9 @@ namespace T3.Editor.Gui.Styling
             var shouldBeOpenByDefault = !label.EndsWith("...");
             
             AddVerticalSpace(5);
-            ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+            
             ImGui.PushFont(Fonts.FontBold);
+            ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
 
             var id = ImGui.GetID(label);
             if (shouldBeOpenByDefault && !_openedGroups.Contains(id))
@@ -32,6 +33,7 @@ namespace T3.Editor.Gui.Styling
                 _openedGroups.Add(id);
             }
             var isOpen = ImGui.TreeNode(label);
+            ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 0);
             ImGui.PopStyleColor();
             ImGui.PopFont();
 
@@ -42,6 +44,7 @@ namespace T3.Editor.Gui.Styling
 
         public static void EndGroup()
         {
+            ImGui.PopStyleVar();
             ImGui.TreePop();
         }
         

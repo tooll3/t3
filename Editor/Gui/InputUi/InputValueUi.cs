@@ -471,7 +471,7 @@ namespace T3.Editor.Gui.InputUi
 
         public virtual void DrawSettings()
         {
-            var opensGroups = !string.IsNullOrEmpty(GroupTitle);
+            var opensGroups = GroupTitle != null;
             if (FormInputs.AddCheckBox("Starts Parameter group", ref opensGroups))
             {
                 if (opensGroups)
@@ -480,7 +480,7 @@ namespace T3.Editor.Gui.InputUi
                 }
                 else
                 {
-                    GroupTitle = null;
+                    GroupTitle = string.Empty;
                 }
             }
 
@@ -488,7 +488,7 @@ namespace T3.Editor.Gui.InputUi
             {
                 {
                     var groupTitle = GroupTitle;
-                    if (FormInputs.AddStringInput("Group Title", ref groupTitle, "GroupTitle", null, "Group title shown above parameter"))
+                    if (FormInputs.AddStringInput("Group Title", ref groupTitle, "GroupTitle", null, "Group title shown above parameter\n\nGroup will be collapsed by default if name ends with '...' (three dots)."))
                     {
                         GroupTitle = groupTitle;
                     }

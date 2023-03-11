@@ -89,10 +89,13 @@ namespace T3.Editor.Gui.Windows
                 // Draw parameters
                 DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi);
 
+                // Description
+                //ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
                 ImGui.PushFont(Fonts.FontSmall);
 
-                ImGui.Dummy(new Vector2(10,10));
-                ImGui.Indent();
+                //ImGui.Dummy(new Vector2(10,10));
+                FormInputs.AddVerticalSpace(10);
+                ImGui.Indent(10);
                 ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10,10));
                 
                 if (!string.IsNullOrEmpty(symbolUi.Description))
