@@ -223,7 +223,7 @@ namespace T3.Editor.Gui.Interaction
                             var factor = 1f;
                             if (ImGui.GetIO().KeyShift)
                             {
-                                factor = 0.1f;
+                                factor = 0.01f;
                             }
                             else if (ImGui.GetIO().KeyCtrl)
                             {
