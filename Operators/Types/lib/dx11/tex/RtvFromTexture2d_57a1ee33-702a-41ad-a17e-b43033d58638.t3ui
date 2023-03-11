@@ -3,6 +3,7 @@
   "InputUis": [
     {
       "InputId": "73cf7c5d-cf0c-49db-91e8-dafe812e0232"/*Texture*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 0.0,
         "Y": 0.0

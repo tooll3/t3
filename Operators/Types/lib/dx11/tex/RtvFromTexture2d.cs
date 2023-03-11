@@ -24,41 +24,48 @@ namespace T3.Operators.Types.Id_57a1ee33_702a_41ad_a17e_b43033d58638
             if (!Texture.DirtyFlag.IsDirty)
                 return; // nothing to do
 
-            var resourceManager = ResourceManager.Instance();
-            
-            
-            
-            Texture2D texture = Texture.GetValue(context);
-            if (texture != null)
+
+            try
             {
-                if (((int)texture.Description.BindFlags & (int)BindFlags.RenderTarget) > 0)
+
+                Texture2D texture = Texture.GetValue(context);
+                if (texture != null)
                 {
-                    RenderTargetView.Value?.Dispose();
-                    if ((texture.Description.OptionFlags & ResourceOptionFlags.TextureCube) != 0)
+                    if (((int)texture.Description.BindFlags & (int)BindFlags.RenderTarget) > 0)
                     {
-                        var rtvDesc = new RenderTargetViewDescription()
-                                          {
-                                              Dimension = RenderTargetViewDimension.Texture2DArray,
-                                              Format = texture.Description.Format,
-                                              Texture2DArray = new RenderTargetViewDescription.Texture2DArrayResource() 
-                                                                   {
-                                                                       ArraySize = 6,
-                                                                       FirstArraySlice = 0,
-                                                                       MipSlice = 0
-                                                                   }                                                           
-                                          };
-                        //rtvDesc.Texture2DArray.MipSlice = 0;
-                        RenderTargetView.Value = new RenderTargetView(ResourceManager.Device, texture, rtvDesc);
+                        RenderTargetView.Value?.Dispose();
+
+                        var isTextureCube = (texture.Description.OptionFlags & ResourceOptionFlags.TextureCube) != 0;
+                        if (isTextureCube)
+                        {
+                            var rtvDesc = new RenderTargetViewDescription()
+                                              {
+                                                  Dimension = RenderTargetViewDimension.Texture2DArray,
+                                                  Format = texture.Description.Format,
+                                                  Texture2DArray = new RenderTargetViewDescription.Texture2DArrayResource()
+                                                                       {
+                                                                           ArraySize = 6,
+                                                                           FirstArraySlice = 0,
+                                                                           MipSlice = 0
+                                                                       }
+                                              };
+                            //rtvDesc.Texture2DArray.MipSlice = 0;
+                            RenderTargetView.Value = new RenderTargetView(ResourceManager.Device, texture, rtvDesc);
+                        }
+                        else
+                        {
+                            RenderTargetView.Value = new RenderTargetView(ResourceManager.Device, texture); // todo: create via resource manager
+                        }
                     }
                     else
                     {
-                        RenderTargetView.Value = new RenderTargetView(ResourceManager.Device, texture); // todo: create via resource manager
+                        Log.Warning("Trying to create an render target view for resource which doesn't have the rtv bind flag set");
                     }
                 }
-                else
-                {
-                    Log.Warning("Trying to create an render target view for resource which doesn't have the rtv bind flag set");
-                }
+            }
+            catch (Exception e)
+            {
+                Log.Warning($"Failed to create RenderTextureView: {e.Message}", this);                
             }
         }
 
