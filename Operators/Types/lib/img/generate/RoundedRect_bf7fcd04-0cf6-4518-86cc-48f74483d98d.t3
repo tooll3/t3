@@ -81,7 +81,7 @@
     },
     {
       "Id": "c9c66f57-5c8c-4481-9b9d-a8aa8569ac12"/*GenerateMips*/,
-      "DefaultValue": true
+      "DefaultValue": false
     }
   ],
   "Children": [

@@ -8,9 +8,9 @@
             Additive,
             Multiply,
             Invert,
-            
             None,
-            PreMultipliedExperimental
+            PreMultipliedExperimental,
+            BlendOnWhite,
         }
     }
 }

@@ -38,7 +38,7 @@
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0,
-            "W": 1.0
+            "W": 0.5
           }
         }
       ],
@@ -64,9 +64,9 @@
           "Id": "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f"/*ClearColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.16000003,
-            "Y": 0.16000003,
-            "Z": 0.16000003,
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
             "W": 1.0
           }
         },
@@ -717,12 +717,12 @@
             "Type": "T3.Core.Animation.TimeClip",
             "TimeClip": {
               "TimeRange": {
-                "Start": 123.0,
-                "End": 164.41058
+                "Start": 145.44278,
+                "End": 173.52847
               },
               "SourceRange": {
-                "Start": 123.0,
-                "End": 164.41058
+                "Start": 145.44278,
+                "End": 173.52847
               },
               "LayerIndex": -1
             }
@@ -743,11 +743,11 @@
             "TimeClip": {
               "TimeRange": {
                 "Start": 36.081963,
-                "End": 124.13493
+                "End": 164.41058
               },
               "SourceRange": {
                 "Start": 36.081963,
-                "End": 124.13493
+                "End": 164.41058
               },
               "LayerIndex": 2
             }
@@ -829,6 +829,68 @@
       "SymbolId": "5f5b787e-dc9b-4d0e-a826-13ce6fd38afd",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "ba627b2a-017b-4ff8-801b-33b724113b4a"/*Part 1 - B/W*/,
+      "SymbolId": "3036067a-a4c2-434b-b0e3-ac95c5c943f4",
+      "Name": "Part 1 - B/W",
+      "InputValues": [],
+      "Outputs": [
+        {
+          "Id": "de6ff8b5-40fe-47fa-b9f2-d926b17f9a7f"/*Part 1 - B/W*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 47.63453,
+                "End": 123.0
+              },
+              "SourceRange": {
+                "Start": 47.63453,
+                "End": 123.0
+              },
+              "LayerIndex": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Id": "107334b8-fe8e-4666-90f0-37f5d173b7e7"/*Part 2 - Colors*/,
+      "SymbolId": "3036067a-a4c2-434b-b0e3-ac95c5c943f4",
+      "Name": "Part 2 - Colors",
+      "InputValues": [],
+      "Outputs": [
+        {
+          "Id": "de6ff8b5-40fe-47fa-b9f2-d926b17f9a7f"/*Part 2 - Colors*/,
+          "OutputData": {
+            "Type": "T3.Core.Animation.TimeClip",
+            "TimeClip": {
+              "TimeRange": {
+                "Start": 123.0,
+                "End": 165.0
+              },
+              "SourceRange": {
+                "Start": 123.0,
+                "End": 165.0
+              },
+              "LayerIndex": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Id": "f85b94bc-44df-4b62-b3f1-aab5a4fe8635"/*_WFE_MainPart2*/,
+      "SymbolId": "97015a6e-c2f3-41da-8ce1-e26bef85eb4d",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "48df8b97-809e-4a2f-a717-f749da18408b"/*_WFE_MainPart2_*/,
+      "SymbolId": "8373fee8-b212-4118-8803-dd53b7c02bca",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -843,6 +905,12 @@
       "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
       "TargetParentOrChildId": "04301eb8-7c87-48e8-9ce1-749df17ca8bf",
       "TargetSlotId": "4da253b7-4953-439a-b03f-1d515a78bddf"
+    },
+    {
+      "SourceParentOrChildId": "48df8b97-809e-4a2f-a717-f749da18408b",
+      "SourceSlotId": "89c138d7-3662-4d1b-944a-66046242e8b6",
+      "TargetParentOrChildId": "107334b8-fe8e-4666-90f0-37f5d173b7e7",
+      "TargetSlotId": "35f501f4-5c79-4628-9441-8b3782544bf6"
     },
     {
       "SourceParentOrChildId": "63533ca0-745d-4b8b-a42f-aa543f68fcbf",
@@ -1007,12 +1075,6 @@
       "TargetSlotId": "a3929303-170b-496a-b8e0-fc5f604a0ec7"
     },
     {
-      "SourceParentOrChildId": "9edb70bb-9798-4ec0-a27a-b333c58baf20",
-      "SourceSlotId": "977ca2f4-cddb-4b9a-82b2-ff66453bbf9b",
-      "TargetParentOrChildId": "4fcdaea9-f7de-459c-99f9-1c5428578df5",
-      "TargetSlotId": "a3929303-170b-496a-b8e0-fc5f604a0ec7"
-    },
-    {
       "SourceParentOrChildId": "2ff223ee-a624-4485-b58e-edf3047af530",
       "SourceSlotId": "eb4fce05-0667-43fe-a7bb-4fb21fe891bc",
       "TargetParentOrChildId": "519c8c86-91b7-49c8-aa48-e13babe13493",
@@ -1091,6 +1153,12 @@
       "TargetSlotId": "565ff364-c3d9-4c60-a9a0-79fdd36d3477"
     },
     {
+      "SourceParentOrChildId": "7132a5f4-1ee7-4c39-902f-8847d40c144d",
+      "SourceSlotId": "736f93fe-1d33-4504-8000-8e2cab2f7c43",
+      "TargetParentOrChildId": "ba627b2a-017b-4ff8-801b-33b724113b4a",
+      "TargetSlotId": "35f501f4-5c79-4628-9441-8b3782544bf6"
+    },
+    {
       "SourceParentOrChildId": "d54f9ac9-1b31-4dee-a6cb-b194ee6b019d",
       "SourceSlotId": "7a4c4feb-be2f-463e-96c6-cd9a6bad77a2",
       "TargetParentOrChildId": "c4538645-c5f1-4644-8c45-2b32e9df85fd",
@@ -1127,8 +1195,14 @@
       "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
     },
     {
-      "SourceParentOrChildId": "7132a5f4-1ee7-4c39-902f-8847d40c144d",
-      "SourceSlotId": "736f93fe-1d33-4504-8000-8e2cab2f7c43",
+      "SourceParentOrChildId": "ba627b2a-017b-4ff8-801b-33b724113b4a",
+      "SourceSlotId": "de6ff8b5-40fe-47fa-b9f2-d926b17f9a7f",
+      "TargetParentOrChildId": "ddd97b46-8d62-41d4-a108-4038eb83cbd2",
+      "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
+    },
+    {
+      "SourceParentOrChildId": "107334b8-fe8e-4666-90f0-37f5d173b7e7",
+      "SourceSlotId": "de6ff8b5-40fe-47fa-b9f2-d926b17f9a7f",
       "TargetParentOrChildId": "ddd97b46-8d62-41d4-a108-4038eb83cbd2",
       "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
     },
@@ -2799,7 +2873,17 @@
             "InEditMode": "Linear",
             "OutEditMode": "Linear",
             "InTangentAngle": -0.026331912599989904,
-            "OutTangentAngle": -3.1679245661897832
+            "OutTangentAngle": 3.496988879194644
+          },
+          {
+            "Time": 123.0,
+            "Value": 1.0,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": 0.35539622560485107,
+            "OutTangentAngle": -2.786196427984942
           }
         ]
       }
@@ -2951,7 +3035,17 @@
             "InEditMode": "Linear",
             "OutEditMode": "Linear",
             "InTangentAngle": -0.026331912599989904,
-            "OutTangentAngle": -3.1679245661897832
+            "OutTangentAngle": 3.496988879194644
+          },
+          {
+            "Time": 123.0,
+            "Value": 1.0,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": 0.35539622560485107,
+            "OutTangentAngle": -2.786196427984942
           }
         ]
       }
@@ -3072,7 +3166,17 @@
             "InEditMode": "Linear",
             "OutEditMode": "Linear",
             "InTangentAngle": -0.026331912599989904,
-            "OutTangentAngle": -3.1679245661897832
+            "OutTangentAngle": 3.496988879194644
+          },
+          {
+            "Time": 123.0,
+            "Value": 1.0,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": 0.35539622560485107,
+            "OutTangentAngle": -2.786196427984942
           }
         ]
       }
@@ -3187,6 +3291,16 @@
           },
           {
             "Time": 120.7368,
+            "Value": 1.0,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": 3.141592653589793
+          },
+          {
+            "Time": 123.0,
             "Value": 1.0,
             "InType": "Linear",
             "OutType": "Linear",
