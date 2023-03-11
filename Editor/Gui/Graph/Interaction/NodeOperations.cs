@@ -604,10 +604,10 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
 
             // Copy names of instances
-            for (var index = 0; index < sourceSymbol.Children.Count; index++)
-            {
-                newSymbol.Children[index].Name = sourceSymbol.Children[index].Name;
-            }
+            // for (var index = 0; index < sourceSymbol.Children.Count; index++)
+            // {
+            //     newSymbol.Children[index].Name = sourceSymbol.Children[index].Name;
+            // }
 
             //T3Ui.SaveAll();
 

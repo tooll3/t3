@@ -637,7 +637,7 @@ namespace T3.Core.Operator
             }
         }
 
-        public Guid AddChild(Symbol symbol, Guid addedChildId)
+        public SymbolChild AddChild(Symbol symbol, Guid addedChildId)
         {
             var newChild = new SymbolChild(symbol, addedChildId, this);
             Children.Add(newChild);
@@ -649,8 +649,7 @@ namespace T3.Core.Operator
                 childInstances.Add(newChildInstance);
             }
             Animator.CreateUpdateActionsForExistingCurves(childInstances);
-
-            return newChild.Id;
+            return newChild;
         }
 
         public void CreateOrUpdateActionsForAnimatedChildren()

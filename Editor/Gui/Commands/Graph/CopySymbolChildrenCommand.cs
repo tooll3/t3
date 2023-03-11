@@ -95,20 +95,23 @@ namespace T3.Editor.Gui.Commands.Graph
             var oldToNewIdDict = _childrenToCopy.ToDictionary(entry => entry.ChildId, entry => entry.AddedId);
             sourceCompositionSymbolUi.Symbol.Animator.CopyAnimationsTo(targetSymbol.Animator, childIdsToCopyAnimations, oldToNewIdDict);
 
-            foreach (var childToCopy in _childrenToCopy)
+            foreach (var childEntryToCopy in _childrenToCopy)
             {
-                SymbolChild symbolChildToCopy = sourceCompositionSymbolUi.Symbol.Children.Find(child => child.Id == childToCopy.ChildId);
+                SymbolChild symbolChildToCopy = sourceCompositionSymbolUi.Symbol.Children.Find(child => child.Id == childEntryToCopy.ChildId);
                 if (symbolChildToCopy == null)
                 {
                     Log.Warning("Skipping attempt to copy undefined operator. This can be related to undo/redo operations. Please try to reproduce and tell pixtur");
                     continue;
                 }
-
+                
                 var symbolToAdd = SymbolRegistry.Entries[symbolChildToCopy.Symbol.Id];
-                targetCompositionSymbolUi.AddChildAsCopyFromSource(symbolToAdd, childToCopy.AddedId, sourceCompositionSymbolUi, childToCopy.ChildId,
-                                                                   _targetPosition + childToCopy.RelativePosition);
+                var newSymbolChild = targetCompositionSymbolUi.AddChildAsCopyFromSource(symbolToAdd, 
+                                                                                        symbolChildToCopy, 
+                                                                                        sourceCompositionSymbolUi,
+                                                                                        _targetPosition + childEntryToCopy.RelativePosition,
+                                                                                        childEntryToCopy.AddedId);
 
-                SymbolChild newSymbolChild = targetSymbol.Children.Find(child => child.Id == childToCopy.AddedId);
+                //SymbolChild newSymbolChild = targetSymbol.Children.Find(child => child.Id == childToCopy.AddedId);
                 NewSymbolChildIds.Add(newSymbolChild.Id);
                 var newSymbolInputs = newSymbolChild.InputValues;
                 foreach (var (id, input) in symbolChildToCopy.InputValues)

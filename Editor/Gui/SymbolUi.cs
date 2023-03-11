@@ -248,17 +248,22 @@ namespace T3.Editor.Gui
             return addedChildId;
         }
         
-        public Guid AddChildAsCopyFromSource(Symbol symbolToAdd, Guid addedChildId, SymbolUi sourceCompositionSymbolUi, Guid sourceChildId, Vector2 posInCanvas)
+        public SymbolChild AddChildAsCopyFromSource(Symbol symbolToAdd, SymbolChild sourceChild, SymbolUi sourceCompositionSymbolUi, Vector2 posInCanvas,
+                                                    Guid newChildId)
         {
             HasBeenModified = true;
-            Symbol.AddChild(symbolToAdd, addedChildId);
-            var sourceChildUi = sourceCompositionSymbolUi.ChildUis.Single(child => child.Id == sourceChildId);
-            var childUi = sourceChildUi.Clone();
-            childUi.SymbolChild = Symbol.Children.Find(entry => entry.Id == addedChildId);
-            childUi.PosOnCanvas = posInCanvas;
-            ChildUis.Add(childUi);
+            var newChild = Symbol.AddChild(symbolToAdd, newChildId);
+            newChild.Name = sourceChild.Name;
+            
+            var sourceChildUi = sourceCompositionSymbolUi.ChildUis.Single(child => child.Id == sourceChild.Id);
+            var newChildUi = sourceChildUi.Clone();
+            
 
-            return addedChildId;
+            newChildUi.SymbolChild = newChild;// Symbol.Children.Find(entry => entry.Id == newChildId);
+            newChildUi.PosOnCanvas = posInCanvas;
+            
+            ChildUis.Add(newChildUi);
+            return newChild;
         }
 
         public void RemoveChild(Guid id)
