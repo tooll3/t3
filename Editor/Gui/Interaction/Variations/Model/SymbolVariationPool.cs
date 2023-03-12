@@ -277,7 +277,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
             var command = new AddPresetOrVariationCommand(instance.Symbol, newVariation);
             UndoRedoStack.AddAndExecute(command);
-            SaveVariationsToFile();
+            //SaveVariationsToFile();
             return newVariation;
         }
 

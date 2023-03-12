@@ -31,6 +31,7 @@ namespace T3.Editor.Gui.Windows.Variations
                 if (ImGui.IsItemDeactivatedAfterEdit() || ImGui.IsItemDeactivated())
                 {
                     VariationForRenaming = null;
+                    VariationHandling.ActivePoolForPresets.SaveVariationsToFile();
                 }
 
                 ImGui.PopID();

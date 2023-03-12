@@ -43,6 +43,7 @@ namespace T3.Editor.Gui.Windows.Variations
             {
                 newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForPresets.Variations);
                 VariationThumbnail.VariationForRenaming = newVariation;
+                VariationHandling.ActivePoolForPresets.SaveVariationsToFile();
             }
 
             Selection.SetSelection(newVariation);
