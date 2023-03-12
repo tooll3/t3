@@ -38,7 +38,7 @@
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0,
-            "W": 0.5
+            "W": 1.0
           }
         }
       ],
@@ -717,11 +717,11 @@
             "Type": "T3.Core.Animation.TimeClip",
             "TimeClip": {
               "TimeRange": {
-                "Start": 145.44278,
+                "Start": 135.0,
                 "End": 173.52847
               },
               "SourceRange": {
-                "Start": 145.44278,
+                "Start": 135.0,
                 "End": 173.52847
               },
               "LayerIndex": -1
@@ -997,8 +997,8 @@
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
     {
-      "SourceParentOrChildId": "4fcdaea9-f7de-459c-99f9-1c5428578df5",
-      "SourceSlotId": "65456554-355b-41a3-893e-960d28113f53",
+      "SourceParentOrChildId": "86b57d6f-2aaa-4d4b-9c4c-556599eb715d",
+      "SourceSlotId": "fd703cd6-ed0a-473b-9620-d5b5f5547774",
       "TargetParentOrChildId": "28decc68-604d-4397-aeea-a7325c5faacc",
       "TargetSlotId": "35f501f4-5c79-4628-9441-8b3782544bf6"
     },
@@ -1067,12 +1067,6 @@
       "SourceSlotId": "ad163f27-d9c1-4326-94c8-2bc59e19b903",
       "TargetParentOrChildId": "4c85438a-fb76-4d3a-abc9-5434c126fbc6",
       "TargetSlotId": "e15b6dc7-aaf9-4244-a4b8-4ac13ee7d23f"
-    },
-    {
-      "SourceParentOrChildId": "86b57d6f-2aaa-4d4b-9c4c-556599eb715d",
-      "SourceSlotId": "fd703cd6-ed0a-473b-9620-d5b5f5547774",
-      "TargetParentOrChildId": "4fcdaea9-f7de-459c-99f9-1c5428578df5",
-      "TargetSlotId": "a3929303-170b-496a-b8e0-fc5f604a0ec7"
     },
     {
       "SourceParentOrChildId": "2ff223ee-a624-4485-b58e-edf3047af530",

@@ -36,7 +36,10 @@
       "Position": {
         "X": 298.87473,
         "Y": 3043.3635
-      }
+      },
+      "Min": -90.0,
+      "Max": 90.0,
+      "Format": "{0:0.0}°"
     },
     {
       "InputId": "888017f2-3ac2-464b-ae6f-9f8caf53ba6d"/*UseVertexSelection*/,

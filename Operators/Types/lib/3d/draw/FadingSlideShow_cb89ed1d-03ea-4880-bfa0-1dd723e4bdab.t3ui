@@ -78,6 +78,7 @@
     },
     {
       "ChildId": "af025c51-6dd8-4ab6-92bc-faec5391ebd4"/*LoadImage*/,
+      "Style": "Expanded",
       "Size": {
         "X": 110.0,
         "Y": 36.0
