@@ -16,7 +16,7 @@
     },
     {
       "Id": "dc99dcb5-481e-4b43-afdf-ad6d318ed24f"/*Count*/,
-      "DefaultValue": 10.0
+      "DefaultValue": 4.0
     },
     {
       "Id": "8508a689-e4bd-45a7-9b3b-947bc34f4051"/*Repeats*/,
@@ -40,7 +40,7 @@
         "X": 1.0,
         "Y": 1.0,
         "Z": 1.0,
-        "W": 1.0
+        "W": 0.0
       }
     },
     {
@@ -227,7 +227,7 @@
         {
           "Id": "93d8bf26-5067-4ccc-b4cb-e03970686462"/*AddressW*/,
           "Type": "SharpDX.Direct3D11.TextureAddressMode",
-          "Value": "Wrap"
+          "Value": "Clamp"
         }
       ],
       "Outputs": []
