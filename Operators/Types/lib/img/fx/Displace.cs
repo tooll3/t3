@@ -48,6 +48,9 @@ namespace T3.Operators.Types.Id_1b149f1f_529c_4418_ac9d_3871f24a9e38
 
         [Input(Guid = "6a5c120f-7c04-439b-ad2d-6f78ceb3b378", MappedType = typeof(DisplaceModes))]
         public readonly InputSlot<int> DisplaceMode = new InputSlot<int>();
+
+        [Input(Guid = "b2f58dc7-e5c6-4c57-a704-94aaa0b1e002")]
+        public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
         
         private enum DisplaceModes {
             UseIntensityGradient,

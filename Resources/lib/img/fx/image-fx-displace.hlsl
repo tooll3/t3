@@ -90,7 +90,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         else if (DisplaceMode < 1.5)
         {
             float4 rgba = DisplaceMap.Sample(texSampler, uv + DisplaceMapOffset) * padding;
-            d = (rgba.r + rgba.g + rgba.b) / 3;
+            d = float2(0, (rgba.r + rgba.g + rgba.b) / 3) / 10;
         }
         float a = (d.x == 0 && d.y == 0) ? 0 : atan2(d.x, d.y) + Twist / 180 * 3.14158;
         direction = float2(sin(a), cos(a));
