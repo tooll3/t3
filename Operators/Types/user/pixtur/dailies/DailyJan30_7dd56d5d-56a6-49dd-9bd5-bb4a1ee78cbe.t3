@@ -476,7 +476,7 @@
           }
         },
         {
-          "Id": "dc21d7ab-5988-4df8-99b5-1b107eb6c3c9"/*BlendMod*/,
+          "Id": "dc21d7ab-5988-4df8-99b5-1b107eb6c3c9"/*BlendMode*/,
           "Type": "System.Int32",
           "Value": 0
         }

@@ -46,8 +46,8 @@ namespace T3.Operators.Types.Id_16d10dc8_63b9_4ddf_90b8_41caef99d945
         [Input(Guid = "285eedd2-50d1-43ff-ae18-7a9475ba8e89")]
         public readonly InputSlot<int> AltasMode = new InputSlot<int>();
 
-        [Input(Guid = "dc21d7ab-5988-4df8-99b5-1b107eb6c3c9")]
-        public readonly InputSlot<int> BlendMod = new InputSlot<int>();
+        [Input(Guid = "dc21d7ab-5988-4df8-99b5-1b107eb6c3c9", MappedType = typeof(SharedEnums.BlendModes))]
+        public readonly InputSlot<int> BlendMode = new InputSlot<int>();
 
         [Input(Guid = "c1163955-3d1e-48aa-a4c1-ba81790b08c8")]
         public readonly InputSlot<bool> EnableDepthWrite = new InputSlot<bool>();

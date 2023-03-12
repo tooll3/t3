@@ -249,105 +249,29 @@
       }
     },
     {
-      "Id": "8d6440c0-bf8b-4adb-8c19-837892063fc3",
+      "Id": "17c6366c-742f-431f-a96f-83b16baf79ae",
       "IsPreset": true,
       "ActivationIndex": 9,
-      "Title": "untitled",
+      "Title": "256px white alpha blob",
       "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
+        "X": 163.0,
+        "Y": 186.0
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
-          "a20d31a3-115f-4d38-a988-2a41f6e5cbea": {
-            "X": 1.0,
-            "Y": 1.0,
-            "Z": 1.0,
-            "W": 1.0
-          },
-          "d4f79203-401a-4f6e-8f83-74a3d61c0177": {
-            "X": 1.0,
-            "Y": 1.0,
-            "Z": 1.0,
-            "W": 0.0
-          },
           "d4c20bfc-3943-4c5d-a8f8-5175fa152e91": {
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0,
             "W": 0.0
           },
-          "d2401798-593b-4cc3-85d8-3570ddec1f2a": 1.0,
           "ef3d0313-50a1-42d3-b3cb-e8ea1b93cd34": 1.0,
-          "80bd2460-c28d-490c-981b-77a6e89f3983": 0.1,
-          "be43e160-f9a0-4991-b764-2b5e533b37cc": 1.0
-        }
-      }
-    },
-    {
-      "Id": "c64dcb4f-40e0-4cda-a6cc-a98b89eb39c4",
-      "IsPreset": true,
-      "ActivationIndex": 10,
-      "Title": "untitled",
-      "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
-      },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {
-          "d4c20bfc-3943-4c5d-a8f8-5175fa152e91": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0,
-            "W": 1.0
-          },
-          "d2401798-593b-4cc3-85d8-3570ddec1f2a": 0.959,
-          "ef3d0313-50a1-42d3-b3cb-e8ea1b93cd34": 1.0,
-          "be43e160-f9a0-4991-b764-2b5e533b37cc": 0.04,
+          "be43e160-f9a0-4991-b764-2b5e533b37cc": 1.0,
           "07e57992-ea38-4e3b-8d69-cb4e99ae587c": {
             "Width": 256,
             "Height": 256
-          }
-        }
-      }
-    },
-    {
-      "Id": "0a0ab9ef-f871-4a65-85cd-52be7d9f5d22",
-      "IsPreset": true,
-      "ActivationIndex": 11,
-      "Title": "untitled",
-      "PosOnCanvas": {
-        "X": 0.0,
-        "Y": 0.0
-      },
-      "ParameterSetsForChildIds": {
-        "00000000-0000-0000-0000-000000000000": {
-          "a20d31a3-115f-4d38-a988-2a41f6e5cbea": {
-            "X": 1.0,
-            "Y": 1.0,
-            "Z": 1.0,
-            "W": 1.0
           },
-          "d4c20bfc-3943-4c5d-a8f8-5175fa152e91": {
-            "X": 1.0,
-            "Y": 1.0,
-            "Z": 1.0,
-            "W": 0.0
-          },
-          "d2401798-593b-4cc3-85d8-3570ddec1f2a": 0.98399997,
-          "ef3d0313-50a1-42d3-b3cb-e8ea1b93cd34": 1.0,
-          "d4f79203-401a-4f6e-8f83-74a3d61c0177": {
-            "X": 0.0,
-            "Y": 0.0,
-            "Z": 0.0,
-            "W": 0.0
-          },
-          "80bd2460-c28d-490c-981b-77a6e89f3983": 0.1,
-          "be43e160-f9a0-4991-b764-2b5e533b37cc": 0.019,
-          "07e57992-ea38-4e3b-8d69-cb4e99ae587c": {
-            "Width": 512,
-            "Height": 512
-          }
+          "c9c66f57-5c8c-4481-9b9d-a8aa8569ac12": true
         }
       }
     }

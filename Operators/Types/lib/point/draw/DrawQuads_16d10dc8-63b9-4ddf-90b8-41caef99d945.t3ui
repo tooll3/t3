@@ -87,7 +87,7 @@
       }
     },
     {
-      "InputId": "dc21d7ab-5988-4df8-99b5-1b107eb6c3c9"/*BlendMod*/,
+      "InputId": "dc21d7ab-5988-4df8-99b5-1b107eb6c3c9"/*BlendMode*/,
       "Position": {
         "X": -653.29877,
         "Y": 833.2939

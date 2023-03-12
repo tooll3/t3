@@ -70,7 +70,7 @@
     },
     {
       "Id": "574e7268-27aa-46b6-a13f-8ab63f5990d9"/*FeatherBias*/,
-      "DefaultValue": 0.0
+      "DefaultValue": -0.001
     },
     {
       "Id": "07e57992-ea38-4e3b-8d69-cb4e99ae587c"/*Resolution*/,

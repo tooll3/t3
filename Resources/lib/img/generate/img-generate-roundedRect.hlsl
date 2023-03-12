@@ -64,6 +64,9 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 rsize = size - roundOffset;
 
     float d = sdBox(p, rsize / 2);
+    d = GradientBias >= 0
+            ? pow(d, GradientBias + 1)
+            : 1 - pow(clamp(1 - d, 0, 10), -GradientBias + 1);
 
     float feather = Scale * Feather / 2;
     float dInside = smoothstep(-feather, feather, d - roundOffset / 2);

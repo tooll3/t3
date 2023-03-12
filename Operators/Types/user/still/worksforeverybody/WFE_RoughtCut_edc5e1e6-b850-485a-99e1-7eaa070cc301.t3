@@ -717,11 +717,11 @@
             "Type": "T3.Core.Animation.TimeClip",
             "TimeClip": {
               "TimeRange": {
-                "Start": 135.0,
+                "Start": 139.0,
                 "End": 173.52847
               },
               "SourceRange": {
-                "Start": 135.0,
+                "Start": 139.0,
                 "End": 173.52847
               },
               "LayerIndex": -1
@@ -879,12 +879,6 @@
           }
         }
       ]
-    },
-    {
-      "Id": "f85b94bc-44df-4b62-b3f1-aab5a4fe8635"/*_WFE_MainPart2*/,
-      "SymbolId": "97015a6e-c2f3-41da-8ce1-e26bef85eb4d",
-      "InputValues": [],
-      "Outputs": []
     },
     {
       "Id": "48df8b97-809e-4a2f-a717-f749da18408b"/*_WFE_MainPart2_*/,

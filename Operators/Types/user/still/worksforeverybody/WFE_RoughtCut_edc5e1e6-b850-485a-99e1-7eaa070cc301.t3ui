@@ -566,17 +566,6 @@
       }
     },
     {
-      "ChildId": "f85b94bc-44df-4b62-b3f1-aab5a4fe8635"/*_WFE_MainPart2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 0.0,
-        "Y": 0.0
-      }
-    },
-    {
       "ChildId": "48df8b97-809e-4a2f-a717-f749da18408b"/*_WFE_MainPart2_*/,
       "Size": {
         "X": 110.0,
