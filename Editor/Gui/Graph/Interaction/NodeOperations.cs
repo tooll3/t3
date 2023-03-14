@@ -1023,7 +1023,22 @@ namespace T3.Editor.Gui.Graph.Interaction
                     @namespace = String.Empty;
                 else
                     @namespace += ".";
-                var attributeString = "\n        [Input(Guid = \"" + inputDef.Id + "\")]\n";
+
+                
+                string foundAttributeString = null; 
+                foreach (var (nodeName, syntaxNode) in inputNodeFinder.InputNodesFound)
+                {
+                    if (nodeName != inputDef.Name)
+                        continue;
+                    
+                    foundAttributeString = syntaxNode.ToString().Split("\n").First();
+                    break;
+                }
+                
+                var fallbackAttributeString = "\n        [Input(Guid = \"" + inputDef.Id + "\")]\n";
+                var attributeString = foundAttributeString == null ? fallbackAttributeString
+                    :$"\n        {foundAttributeString}\n";
+                
                 var typeName = TypeNameRegistry.Entries[inputType];
                 var slotString = (inputDef.IsMultiInput ? "MultiInputSlot<" : "InputSlot<") + @namespace + typeName + ">";
                 var inputString = "        public readonly " + slotString + " " + inputDef.Name + " = new " + slotString + "();\n";
