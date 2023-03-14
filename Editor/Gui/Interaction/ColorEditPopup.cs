@@ -49,7 +49,7 @@ namespace T3.Editor.Gui.Interaction
                 edited |= DrawColorInputs(ref cColor, hNormalized, linearSaturation, v);
                 edited |= DrawUsedColors(ref cColor);
 
-                if (edited != InputEditStateFlags.ModifiedAndFinished)
+                if (edited == InputEditStateFlags.ModifiedAndFinished)
                     ColorUsage.CollectUsedColors();
 
                 ImGui.EndPopup();

@@ -19,10 +19,6 @@
       "DefaultValue": 1.0
     },
     {
-      "Id": "bfcb7f48-517a-4791-96fa-4aa26862839b"/*Mode*/,
-      "DefaultValue": 0
-    },
-    {
       "Id": "d796cbc2-26b4-4805-b1b7-bd23b42d1984"/*RadialBias*/,
       "DefaultValue": 1.0
     },
@@ -47,6 +43,10 @@
         "Width": 0,
         "Height": 0
       }
+    },
+    {
+      "Id": "bfcb7f48-517a-4791-96fa-4aa26862839b"/*Mode*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [

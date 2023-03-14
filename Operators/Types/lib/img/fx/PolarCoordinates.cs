@@ -10,7 +10,6 @@ namespace T3.Operators.Types.Id_941410e5_2023_43c6_87b1_55386bb048ac
         [Output(Guid = "1758e789-809c-430a-a5c8-22fd8bbe5e54")]
         public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new Slot<SharpDX.Direct3D11.Texture2D>();
 
-
         [Input(Guid = "dfa1d71d-2964-41c2-bb04-86a39c36ce6e")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
@@ -19,9 +18,6 @@ namespace T3.Operators.Types.Id_941410e5_2023_43c6_87b1_55386bb048ac
 
         [Input(Guid = "83f2dc32-5830-4558-9137-f6805f3f6ff6")]
         public readonly InputSlot<float> Radius = new InputSlot<float>();
-
-        [Input(Guid = "bfcb7f48-517a-4791-96fa-4aa26862839b")]
-        public readonly InputSlot<int> Mode = new InputSlot<int>();
 
         [Input(Guid = "d796cbc2-26b4-4805-b1b7-bd23b42d1984")]
         public readonly InputSlot<float> RadialBias = new InputSlot<float>();
@@ -37,6 +33,15 @@ namespace T3.Operators.Types.Id_941410e5_2023_43c6_87b1_55386bb048ac
 
         [Input(Guid = "caa14f08-f004-4af8-a448-116e21106d5b")]
         public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+
+        [Input(Guid = "bfcb7f48-517a-4791-96fa-4aa26862839b", MappedType = typeof(Modes))]
+        public readonly InputSlot<int> Mode = new InputSlot<int>();
+
+        private enum Modes
+        {
+            Cartesian2Polar,
+            Polar2Cartesian,
+        }
     }
 }
 
