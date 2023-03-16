@@ -538,7 +538,7 @@
           "Value": 1.0
         },
         {
-          "Id": "d4f79203-401a-4f6e-8f83-74a3d61c0177"/*Outline*/,
+          "Id": "d4f79203-401a-4f6e-8f83-74a3d61c0177"/*StrokeColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.5,
@@ -3077,7 +3077,7 @@
           "Value": 1.0
         },
         {
-          "Id": "d4f79203-401a-4f6e-8f83-74a3d61c0177"/*Outline*/,
+          "Id": "d4f79203-401a-4f6e-8f83-74a3d61c0177"/*StrokeColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.0,
@@ -6285,7 +6285,7 @@
           "Value": 1.0
         },
         {
-          "Id": "d4f79203-401a-4f6e-8f83-74a3d61c0177"/*Outline*/,
+          "Id": "d4f79203-401a-4f6e-8f83-74a3d61c0177"/*StrokeColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.0,

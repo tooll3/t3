@@ -35,7 +35,7 @@ namespace T3.Operators.Types.Id_bf7fcd04_0cf6_4518_86cc_48f74483d98d
         public readonly InputSlot<float> Round = new InputSlot<float>();
 
         [Input(Guid = "d4f79203-401a-4f6e-8f83-74a3d61c0177")]
-        public readonly InputSlot<System.Numerics.Vector4> Outline = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<System.Numerics.Vector4> StrokeColor = new InputSlot<System.Numerics.Vector4>();
 
         [Input(Guid = "80bd2460-c28d-490c-981b-77a6e89f3983")]
         public readonly InputSlot<float> Stroke = new InputSlot<float>();

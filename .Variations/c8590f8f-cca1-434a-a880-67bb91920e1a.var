@@ -269,6 +269,36 @@
           "2d3a7e9a-9efe-486a-8c33-10a5a16dc17b": -4.3
         }
       }
+    },
+    {
+      "Id": "c6f24218-0aef-4f27-9e38-683eb8672731",
+      "IsPreset": true,
+      "ActivationIndex": 10,
+      "Title": "Shadow Blob 256px",
+      "PosOnCanvas": {
+        "X": 43.397537,
+        "Y": 156.90338
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "bbda1c8c-fa81-43ef-b773-f7ecfb8968e1": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          },
+          "de54f18b-6a1e-4610-8d6d-58897df6959b": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 0.0
+          },
+          "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76": {
+            "Width": 256,
+            "Height": 256
+          }
+        }
+      }
     }
   ]
 }

@@ -52,7 +52,7 @@
       "DefaultValue": 0.5
     },
     {
-      "Id": "d4f79203-401a-4f6e-8f83-74a3d61c0177"/*Outline*/,
+      "Id": "d4f79203-401a-4f6e-8f83-74a3d61c0177"/*StrokeColor*/,
       "DefaultValue": {
         "X": 1.0,
         "Y": 1.0,

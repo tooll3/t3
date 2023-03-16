@@ -37,11 +37,11 @@
     },
     {
       "Id": "bfc2279a-7bf8-436a-a04d-813ecee1776a"/*P*/,
-      "DefaultValue": 0
+      "DefaultValue": 8
     },
     {
       "Id": "77f01a41-38ff-4186-8336-84a030be124f"/*Q*/,
-      "DefaultValue": 0
+      "DefaultValue": 31
     },
     {
       "Id": "ffbfa2dd-75ed-439e-8bab-eb0104ab9c0d"/*Offset*/,
