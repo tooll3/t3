@@ -59,7 +59,18 @@ namespace T3.Operators.Types.Id_b3de7a93_e921_4e43_8a56_6c84b2d18b74
 
         [Input(Guid = "b9cff4dd-52cd-4a36-ab17-b04794402d94")]
         public readonly InputSlot<float> BlueOffset = new InputSlot<float>();
+        
+        
+        [Input(Guid = "fcc59369-bb28-41e5-a7cf-452f0a844e77", MappedType = typeof(Modes))]
+        public readonly InputSlot<int> Mode = new InputSlot<int>();
 
+        [Input(Guid = "D22095C2-15B5-4708-93B2-D6AE2DCD0DCA", MappedType = typeof(Spaces))]
+        public readonly InputSlot<int> TranslationSpace = new InputSlot<int>();
+
+        [Input(Guid = "5225DB75-5F9D-49F9-BCEB-0CBC8A56A3F4", MappedType = typeof(Spaces))]
+        public readonly InputSlot<int> RotationSpace = new InputSlot<int>();
+
+        
         [Input(Guid = "d1f3b362-7ed4-4833-99e9-0fdc46ca2319")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
@@ -92,6 +103,18 @@ namespace T3.Operators.Types.Id_b3de7a93_e921_4e43_8a56_6c84b2d18b74
             Rotate_X =5,
             Rotate_Y =6 ,
             Rotate_Z =7,
+        }
+
+        private enum Modes
+        {
+            Add,
+            Multiply,
+        }
+        
+        private enum Spaces
+        {
+            Object,
+            Point,
         }
     }
 }
