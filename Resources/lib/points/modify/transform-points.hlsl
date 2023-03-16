@@ -50,18 +50,6 @@ static const float WorldSpace = 2;
     // Transform rotation is kind of tricky. There might be more efficient ways to do this.
     if (UpdateRotation > 0.5)
     {
-        // float3 xDir = rotate_vector(float3(1,0,0), rotation);
-        // float3 rotatedXDir = normalize(mul(float4(xDir,0), TransformMatrix).xyz);
-
-        // float3 yDir = rotate_vector(float3(0, 1,0), rotation);
-        // float3 rotatedYDir = normalize(mul(float4(yDir,0), TransformMatrix).xyz);
-
-        // float3 crossXY = cross(rotatedXDir, rotatedYDir);
-        // float3x3 orientationDest= float3x3(
-        //     rotatedXDir,
-        //     cross(crossXY, rotatedXDir),
-        //     crossXY );
-
         float3x3 orientationDest = float3x3(
             TransformMatrix._m00_m01_m02,
             TransformMatrix._m10_m11_m12,
