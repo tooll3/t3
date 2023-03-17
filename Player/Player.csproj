@@ -4,8 +4,8 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net6.0-windows</TargetFramework>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <StartupObject>T3.Program</StartupObject>
 	<ApplicationIcon>..\Resources\t3-editor\images\t3.ico</ApplicationIcon>
+	<RootNamespace>T3.Player</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

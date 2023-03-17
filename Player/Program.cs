@@ -1,21 +1,19 @@
-using SharpDX;
-using SharpDX.Direct3D;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-using SharpDX.Windows;
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using CommandLine;
 using CommandLine.Text;
 using ManagedBass;
-using T3.Core;
+using SharpDX;
+using SharpDX.Direct3D;
+using SharpDX.Direct3D11;
+using SharpDX.DXGI;
+using SharpDX.Windows;
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.IO;
@@ -27,9 +25,9 @@ using Color = SharpDX.Color;
 using Device = SharpDX.Direct3D11.Device;
 using Vector2 = System.Numerics.Vector2;
 
-namespace T3
+namespace T3.Player
 {
-    public class Program
+    internal static class Program
     {
         public static Device Device { get; private set; }
 
@@ -378,22 +376,22 @@ namespace T3
         private static void HandleKeyDown(object sender, KeyEventArgs e)
         {
             var keyIndex = (int)e.KeyCode;
-            if (keyIndex >= Core.IO.KeyHandler.PressedKeys.Length)
+            if (keyIndex >= T3.Core.IO.KeyHandler.PressedKeys.Length)
             {
                 Log.Warning($"Ignoring out of range key code {e.KeyCode} with index {keyIndex}");
             }
             else
             {
-                Core.IO.KeyHandler.PressedKeys[keyIndex] = true;
+                T3.Core.IO.KeyHandler.PressedKeys[keyIndex] = true;
             }
         }
 
         private static void HandleKeyUp(object sender, KeyEventArgs e)
         {
             var keyIndex = (int)e.KeyCode;
-            if (keyIndex < Core.IO.KeyHandler.PressedKeys.Length)
+            if (keyIndex < T3.Core.IO.KeyHandler.PressedKeys.Length)
             {
-                Core.IO.KeyHandler.PressedKeys[keyIndex] = false;
+                T3.Core.IO.KeyHandler.PressedKeys[keyIndex] = false;
             }
         }
 
