@@ -29,9 +29,7 @@ namespace T3.Player
 {
     internal static class Program
     {
-        public static Device Device { get; private set; }
-
-        public class Options
+        private class Options
         {
             [Option(Default = false, Required = false, HelpText = "Disable vsync")]
             public bool NoVsync { get; set; }
@@ -54,38 +52,14 @@ namespace T3.Player
             public bool Logging { get; set; }
         }
 
-        private static Options ParseCommandLine(string[] args)
-        {
-            Options parsedOptions = null;
-            var parser = new Parser(config =>
-                                    {
-                                        config.HelpWriter = null;
-                                        config.AutoVersion = false;
-                                    });
-            var parserResult = parser.ParseArguments<Options>(args);
-            var helpText = HelpText.AutoBuild(parserResult,
-                                              h =>
-                                              {
-                                                  h.AdditionalNewLineAfterOption = false;
-                                                  h.Heading = "still::partial - v0.1";
-                                                  h.Copyright = "Copyright (c) 2021 lucid & pixtur";
-                                                  h.AutoVersion = false;
-                                                  return h;
-                                              },
-                                              e => e);
-
-            parserResult.WithParsed(o => { parsedOptions = o; })
-                        .WithNotParsed(o => { Log.Debug(helpText); });
-            return parsedOptions;
-        }
-
+        
         [STAThread]
         private static void Main(string[] args)
         {
             Log.AddWriter(new ConsoleWriter());
             Log.AddWriter(FileWriter.CreateDefault());
             
-            var tmp = new ProjectSettings(saveOnQuit: false);            
+            var _ = new ProjectSettings(saveOnQuit: false);            
             
             Options options = ParseCommandLine(args);
             if (options == null)
@@ -93,6 +67,8 @@ namespace T3.Player
 
             _vsync = !options.NoVsync;
             Log.Debug($"using vsync: {_vsync}, windowed: {options.Windowed}, size: {options.Size}, loop: {options.Loop}, logging: {options.Logging}");
+            
+            // Todo: Should use correct title
             var form = new RenderForm("still::partial")
                            {
                                ClientSize = options.Size,
@@ -122,7 +98,6 @@ namespace T3.Player
             #endif
             Device.CreateWithSwapChain(DriverType.Hardware, deviceCreationFlags, desc, out var device, out _swapChain);
             var context = device.ImmediateContext;
-            Device = device;
 
             if (_swapChain.IsFullScreen)
             {
@@ -358,8 +333,6 @@ namespace T3.Player
             context.Flush();
             device.Dispose();
             context.Dispose();
-            //_swapChain.Dispose();
-            //factory.Dispose();
         }
 
         private static void MouseMoveHandler(object sender, MouseEventArgs e)
@@ -404,6 +377,35 @@ namespace T3.Player
             rtv = new RenderTargetView(device, buffer);
         }
 
+        private static Options ParseCommandLine(string[] args)
+        {
+            Options parsedOptions = null;
+            var parser = new Parser(config =>
+                                    {
+                                        config.HelpWriter = null;
+                                        config.AutoVersion = false;
+                                    });
+            var parserResult = parser.ParseArguments<Options>(args);
+            var helpText = HelpText.AutoBuild(parserResult,
+                                              h =>
+                                              {
+                                                  h.AdditionalNewLineAfterOption = false;
+                                                  
+                                                  // Todo: This should use information from the main operator
+                                                  h.Heading = $"still::{ProjectSettings.Config.MainOperatorName} - v0.1";
+                                                  
+                                                  // Todo: This should use information from the main operator
+                                                  h.Copyright = "Author";
+                                                  h.AutoVersion = false;
+                                                  return h;
+                                              },
+                                              e => e);
+
+            parserResult.WithParsed(o => { parsedOptions = o; })
+                        .WithNotParsed(o => { Log.Debug(helpText); });
+            return parsedOptions;
+        }
+        
         // Private static bool _inResize;
         private static bool _vsync;
         private static SwapChain _swapChain;
