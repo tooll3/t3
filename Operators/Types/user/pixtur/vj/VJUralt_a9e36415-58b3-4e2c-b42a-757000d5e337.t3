@@ -1060,11 +1060,6 @@
       "SymbolId": "185452c6-f299-42a3-b618-c6aa00d66c62",
       "InputValues": [
         {
-          "Id": "35470c79-275b-4a88-bc4b-4681a35d804d"/*Color1Pos*/,
-          "Type": "System.Single",
-          "Value": 1.0
-        },
-        {
           "Id": "4723c177-9941-4fcb-9d5a-9a4ed18f3b5f"/*Color1*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -1075,9 +1070,9 @@
           }
         },
         {
-          "Id": "fe6c6818-4aa9-439f-91fa-98db8c6dc1e6"/*Color2Pos*/,
+          "Id": "35470c79-275b-4a88-bc4b-4681a35d804d"/*Color1Pos*/,
           "Type": "System.Single",
-          "Value": 0.0
+          "Value": 1.0
         },
         {
           "Id": "97147836-0858-4fd0-9532-a5636ff8567d"/*Color2*/,
@@ -1088,6 +1083,11 @@
             "Z": 1.0,
             "W": 0.0
           }
+        },
+        {
+          "Id": "fe6c6818-4aa9-439f-91fa-98db8c6dc1e6"/*Color2Pos*/,
+          "Type": "System.Single",
+          "Value": 0.0
         }
       ],
       "Outputs": []

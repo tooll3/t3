@@ -36,7 +36,8 @@
       "Position": {
         "X": -1562.4236,
         "Y": 601.2689
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "1531e949-fe17-4718-9ac6-4dc3884c23fc"/*RedFactor*/,
@@ -57,7 +58,8 @@
       "Position": {
         "X": -1562.4236,
         "Y": 736.2689
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "6b05ba32-f445-4403-aaba-160c7876b03b"/*GreenFactor*/,
@@ -78,7 +80,8 @@
       "Position": {
         "X": -1562.4236,
         "Y": 871.2689
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "d4a0385e-1dfb-4af0-bf52-5fab61f713bb"/*BlueFactor*/,

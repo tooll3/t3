@@ -1593,11 +1593,6 @@
           }
         },
         {
-          "Id": "fe6c6818-4aa9-439f-91fa-98db8c6dc1e6"/*Color2Pos*/,
-          "Type": "System.Single",
-          "Value": 1.0
-        },
-        {
           "Id": "97147836-0858-4fd0-9532-a5636ff8567d"/*Color2*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -1606,6 +1601,11 @@
             "Z": 9.9999E-07,
             "W": 0.056768537
           }
+        },
+        {
+          "Id": "fe6c6818-4aa9-439f-91fa-98db8c6dc1e6"/*Color2Pos*/,
+          "Type": "System.Single",
+          "Value": 1.0
         },
         {
           "Id": "2823fed8-9b37-4521-a37c-fcc3b9c4e6f2"/*Color3Pos*/,
