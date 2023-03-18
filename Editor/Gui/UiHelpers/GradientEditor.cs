@@ -38,7 +38,10 @@ namespace T3.Editor.Gui.UiHelpers
             }
 
             if (removedStep != null)
+            {
                 gradient.Steps.Remove(removedStep);
+                modified = true;
+            }
 
             // Insert new range
             var insertRangeMin = new Vector2(areaOnScreen.Min.X, areaOnScreen.Max.Y - StepHandleSize.Y);
@@ -75,6 +78,7 @@ namespace T3.Editor.Gui.UiHelpers
                                                             s.NormalizedPosition = 1f - s.NormalizedPosition;
                                                         }   
                                                         gradient.SortHandles();
+                                                        modified = true;
                                                     }
 
                                                     if (ImGui.MenuItem("Distribute evenly", gradient.Steps.Count > 2))
@@ -85,6 +89,7 @@ namespace T3.Editor.Gui.UiHelpers
                                                         }
 
                                                         gradient.SortHandles();
+                                                        modified = true;
                                                     }
                                                     
                                                     if (ImGui.BeginMenu("Gradient presets..."))
@@ -101,6 +106,7 @@ namespace T3.Editor.Gui.UiHelpers
                                                                 var clone = preset.TypedClone();
                                                                 gradient.Steps = clone.Steps;
                                                                 gradient.Interpolation = clone.Interpolation;
+                                                                modified = true;
                                                             }
 
                                                             var rect = new ImRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax());
@@ -136,6 +142,7 @@ namespace T3.Editor.Gui.UiHelpers
                                                             if (ImGui.MenuItem(value.ToString(), "", isSelected))
                                                             {
                                                                 gradient.Interpolation = value;
+                                                                modified = true;
                                                             }
                                                         }
 
@@ -147,6 +154,7 @@ namespace T3.Editor.Gui.UiHelpers
 
             bool DrawHandle(Gradient.Step step)
             {
+                var handleModified = false;
                 ImGui.PushID(step.Id.GetHashCode());
                 var handleArea = GetHandleAreaForPosition(step.NormalizedPosition);
 
@@ -155,7 +163,7 @@ namespace T3.Editor.Gui.UiHelpers
                 ImGui.InvisibleButton("gradientStep", new Vector2(StepHandleSize.X, areaOnScreen.GetHeight()));
 
                 // Stub for ColorEditButton that allows quick sliders. Sadly this doesn't work with right mouse button drag.
-                //modified |= ColorEditButton.Draw(ref step.Color, new Vector2(StepHandleSize.X, areaOnScreen.GetHeight()));
+                //handleModified |= ColorEditButton.Draw(ref step.Color, new Vector2(StepHandleSize.X, areaOnScreen.GetHeight()));
 
                 if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
                 {
@@ -171,7 +179,7 @@ namespace T3.Editor.Gui.UiHelpers
                         ColorEditButton.VerticalColorSlider(step.Color, handleArea.GetCenter(), step.Color.W);
                         var mouseDragDelta = ImGui.GetMouseDragDelta().Y / 100;
                         ImGui.ResetMouseDragDelta();
-                        Log.Debug("drag delta = " + mouseDragDelta);
+                        //Log.Debug("drag delta = " + mouseDragDelta);
                         step.Color.W = (previousColor.W - mouseDragDelta).Clamp(0, 1);
                     }
                     else
@@ -180,7 +188,7 @@ namespace T3.Editor.Gui.UiHelpers
                     }
 
                     isDraggedOutside = ImGui.GetMousePos().Y > areaOnScreen.Max.Y + RemoveThreshold;
-                    modified = true;
+                    handleModified = true;
                 }
 
                 // Draw handle
@@ -219,9 +227,9 @@ namespace T3.Editor.Gui.UiHelpers
                 }
 
                 var popUpResult = ColorEditPopup.DrawPopup(ref step.Color, step.Color);
-                modified |= popUpResult == InputEditStateFlags.Nothing;
+                handleModified |= popUpResult != InputEditStateFlags.Nothing;
                 ImGui.PopID();
-                return modified;
+                return handleModified;
             }
 
             ImRect GetHandleAreaForPosition(float normalizedStepPosition)
