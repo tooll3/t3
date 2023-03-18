@@ -104,9 +104,9 @@
                   "Id": "f080f701-4357-44da-9271-137f642466a0",
                   "NormalizedPosition": 1.0,
                   "Color": {
-                    "R": 0.884874,
-                    "G": 0.74109375,
-                    "B": 0.036258627,
+                    "R": 0.9607,
+                    "G": 0.7803,
+                    "B": 0.0,
                     "A": 1.0
                   }
                 }
@@ -156,6 +156,53 @@
     {
       "Id": "91042db3-81d6-4a17-8cef-423811aabb17"/*HowToUsePoints*/,
       "SymbolId": "e6a11c29-11f9-49a3-9eff-463a93503420",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "a178f1b4-a4bf-46af-a579-02df469ecfca"/*WFE_RoughtCut*/,
+      "SymbolId": "edc5e1e6-b850-485a-99e1-7eaa070cc301",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "c4f91806-49bd-4a20-82eb-ab5b9afabf7a"/*WorksForEverybody*/,
+      "SymbolId": "00485ce8-d342-4c97-aac3-1af8a7f03897",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "ef0dbd40-22b7-4a5a-a824-de285306acf9"/*LoopExample*/,
+      "SymbolId": "a3945dbe-d5be-4f0f-a904-8ee287d14a9f",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "bda52f51-6762-4081-8392-e007dcbf3102"/*Layer2d*/,
+      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
+      "InputValues": [
+        {
+          "Id": "ed4f8c30-7b71-4649-97e6-710a718039b0"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.14901961,
+            "Y": 0.14901961,
+            "Z": 0.14901961,
+            "W": 1.0
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "c02a801b-8eac-406c-91ed-159560d7add6"/*ThereDemo*/,
+      "SymbolId": "5ea8bc54-d1f6-4748-9839-e3e4415a5608",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "47947b3e-7c80-418d-80f8-35647d9b471f"/*Layer2d*/,
+      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
       "InputValues": [],
       "Outputs": []
     }

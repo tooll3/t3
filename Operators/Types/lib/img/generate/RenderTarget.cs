@@ -188,6 +188,8 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             ColorBuffer.DirtyFlag.Clear();
             DepthBuffer.Value = DepthTexture;
             DepthBuffer.DirtyFlag.Clear();
+            
+            VelocityBuffer.DirtyFlag.Clear();
 
             _statsCount++;
             _statsCountPixels += size.Height * size.Width;
