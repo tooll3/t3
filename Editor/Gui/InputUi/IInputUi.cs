@@ -32,7 +32,12 @@ namespace T3.Editor.Gui.InputUi
         Symbol.InputDefinition InputDefinition { get; set; }
         Type Type { get; }
         Relevancy Relevancy { get; set; }
-        string GroupTitle { get; set; } 
+        string GroupTitle { get; set; }
+        
+        /// <summary>
+        /// Insert a vertical padding
+        /// </summary>
+        bool AddPadding { get; set; }
         bool IsAnimatable { get; }
 
 

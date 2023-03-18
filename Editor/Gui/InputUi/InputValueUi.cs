@@ -33,6 +33,7 @@ namespace T3.Editor.Gui.InputUi
         public Guid Id => InputDefinition.Id;
         public Relevancy Relevancy { get; set; } = Relevancy.Optional;
         public string GroupTitle { get; set; }
+        public bool AddPadding { get; set; }
         public virtual bool IsAnimatable => false;
         public virtual bool IsVariable => false;
         protected Type MappedType { get; set; }
@@ -471,6 +472,12 @@ namespace T3.Editor.Gui.InputUi
 
         public virtual void DrawSettings()
         {
+            var addPadding = AddPadding;
+            if (FormInputs.AddCheckBox("Insert Padding above", ref addPadding))
+            {
+                AddPadding = addPadding;
+            }
+            
             var opensGroups = GroupTitle != null;
             if (FormInputs.AddCheckBox("Starts Parameter group", ref opensGroups))
             {
@@ -494,6 +501,7 @@ namespace T3.Editor.Gui.InputUi
                     }
                 }
             }
+            
             FormInputs.AddVerticalSpace();
             
             var tmpForRef = Relevancy;
@@ -504,24 +512,28 @@ namespace T3.Editor.Gui.InputUi
         public virtual void Write(JsonTextWriter writer)
         {
             if (Relevancy != DefaultRelevancy)
-                writer.WriteObject("Relevancy", Relevancy.ToString());
+                writer.WriteObject(nameof(Relevancy), Relevancy.ToString());
 
             var vec2writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
             writer.WritePropertyName("Position");
             vec2writer(writer, PosOnCanvas);
             if(!string.IsNullOrEmpty(GroupTitle))
-                writer.WriteObject("GroupTitle", GroupTitle);
+                writer.WriteObject(nameof(GroupTitle), GroupTitle);
+
+            if (AddPadding)
+                writer.WriteObject(nameof(AddPadding), AddPadding);
         }
 
         public virtual void Read(JToken inputToken)
         {
-            Relevancy = (inputToken["Relevancy"] == null)
+            Relevancy = (inputToken[nameof(Relevancy)] == null)
                             ? DefaultRelevancy
                             : (Relevancy)Enum.Parse(typeof(Relevancy), inputToken["Relevancy"].ToString());
 
             JToken positionToken = inputToken["Position"];
             PosOnCanvas = new Vector2(positionToken["X"].Value<float>(), positionToken["Y"].Value<float>());
-            GroupTitle = inputToken["GroupTitle"]?.Value<string>();
+            GroupTitle = inputToken[nameof(GroupTitle)]?.Value<string>();
+            AddPadding = inputToken[nameof(AddPadding)]?.Value<bool>() ?? false;
         }
 
         public Type Type { get; } = typeof(T);

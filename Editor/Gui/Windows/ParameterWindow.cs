@@ -188,6 +188,7 @@ namespace T3.Editor.Gui.Windows
         {
             var groupState = GroupState.None; 
             
+            
             foreach (var inputSlot in instance.Inputs)
             {
                 if (!symbolUi.InputUis.TryGetValue(inputSlot.Id, out IInputUi inputUi))
@@ -195,6 +196,9 @@ namespace T3.Editor.Gui.Windows
                     Log.Warning("Trying to access an non existing input, probably the op instance is not the actual one.");
                     continue;
                 }
+                
+                if(inputUi.AddPadding) 
+                    FormInputs.AddVerticalSpace(4);
 
                 if (!string.IsNullOrEmpty(inputUi.GroupTitle))
                 {
