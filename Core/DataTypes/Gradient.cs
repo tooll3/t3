@@ -282,10 +282,10 @@ namespace T3.Core.DataTypes
 
             var uniArray = new[] { t };
             return new Vector4(
-                               _cubicSpline[0].Eval(uniArray)[0],
-                               _cubicSpline[1].Eval(uniArray)[0],
-                               _cubicSpline[2].Eval(uniArray)[0],
-                               _cubicSpline[3].Eval(uniArray)[0]
+                               MathF.Max(_cubicSpline[0].Eval(uniArray)[0],0),
+                               MathF.Max(_cubicSpline[1].Eval(uniArray)[0],0),
+                               MathF.Max(_cubicSpline[2].Eval(uniArray)[0],0),
+                               _cubicSpline[3].Eval(uniArray)[0].Clamp(0,1)
                               );
         }
     }
