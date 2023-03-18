@@ -14,7 +14,7 @@ namespace T3.Operators.Types.Id_d8c5330f_59b5_4907_b845_a02def3042fa
 {
     public class Layer2d : Instance<Layer2d>, ITransformable
     {
-        [Output(Guid = "e4a8d926-7abd-4d2a-82a1-b7d140cb457f", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "e4a8d926-7abd-4d2a-82a1-b7d140cb457f")]
         public readonly TransformCallbackSlot<Command> Output = new TransformCallbackSlot<Command>();
 
         public Layer2d()

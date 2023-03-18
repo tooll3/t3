@@ -21,6 +21,7 @@ namespace T3.Operators.Types.Id_2f851b5b_b66d_40b0_9445_e733dc4b907d
             {
                 Result.Value += input.GetValue(context);
             }
+            Input.DirtyFlag.Clear();
         }
 
         [Input(Guid = "{AF4A49E6-1ECD-4E94-AE6D-FB5D2BC8430C}")]

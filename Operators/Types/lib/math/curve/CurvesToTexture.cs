@@ -46,6 +46,7 @@ namespace T3.Operators.Types.Id_ab511978_bad5_4b69_90b2_c028447fe9f7
 
                     _curves.Add(curve);
                 }
+                Curves.DirtyFlag.Clear();
             }
             else
             {

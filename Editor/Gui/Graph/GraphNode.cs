@@ -54,13 +54,13 @@ namespace T3.Editor.Gui.Graph
             _usableScreenRect = GraphCanvas.Current.TransformRect(new ImRect(childUi.PosOnCanvas,
                                                                              childUi.PosOnCanvas + childUi.Size));
             _selectableScreenRect = _usableScreenRect;
+            if (UserSettings.Config.ShowThumbnails)
+                PreparePreviewAndExpandSelectableArea(instance);
+
             _isVisible = ImGui.IsRectVisible(_selectableScreenRect.Min, _selectableScreenRect.Max);
 
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
-                if (UserSettings.Config.ShowThumbnails)
-                    PreparePreviewAndExpandSelectableArea(instance);
-
                 var drawList = GraphCanvas.Current.DrawList;
                 
 
@@ -567,11 +567,26 @@ namespace T3.Editor.Gui.Graph
                 }
             
                 {
-                    DrawOutput(childUi, outputDef, usableArea, colorForType, hovered);
             
                     // Visualize update
                     if (_isVisible)
                     {
+                        // Draw update indicator
+                        if (output.DirtyFlag.Trigger != DirtyFlagTrigger.None && usableArea.GetHeight() > 6)
+                        {
+                            var r = usableArea.GetWidth() / 4;
+                            var center = new Vector2(usableArea.Max.X + 2*r, usableArea.GetCenter().Y - 3*r);
+                            if (output.DirtyFlag.Trigger == DirtyFlagTrigger.Always)
+                            {
+                                _drawList.AddCircle(center, r, colorForType);
+                            }
+                            else if (output.DirtyFlag.Trigger == DirtyFlagTrigger.Animated)
+                            {
+                                _drawList.AddCircleFilled(center, r, colorForType);
+                            }
+                        }
+                        
+                        DrawOutput(childUi, outputDef, usableArea, colorForType, hovered);
                         if (dirtyFlagNumUpdatesWithinFrame > 0)
                         {
                             var movement = (float)(ImGui.GetTime() * dirtyFlagNumUpdatesWithinFrame) % 1f * (usableArea.GetWidth() - 1);
@@ -839,7 +854,7 @@ namespace T3.Editor.Gui.Graph
                         ImGui.BeginTooltip();
                         ImGui.TextUnformatted($".{outputDef.Name}");
                         ImGui.PushFont(Fonts.FontSmall);
-                        ImGui.TextColored(Color.Gray, $"<{TypeNameRegistry.Entries[outputDef.ValueType]}>\n{output.DirtyFlag.NumUpdatesWithinFrame} Updates");
+                        ImGui.TextColored(Color.Gray, $"<{TypeNameRegistry.Entries[outputDef.ValueType]}>\n{output.DirtyFlag.NumUpdatesWithinFrame} Updates\n({output.DirtyFlag.Trigger})");
                         ImGui.PopFont();
                         ImGui.EndTooltip();
                         ImGui.PopStyleVar();
