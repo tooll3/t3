@@ -1,24 +1,35 @@
 {
   "Id": "185452c6-f299-42a3-b618-c6aa00d66c62"/*DefineGradient*/,
-  "Description": "Defines a Gradient from a set of Colors and positions.\nThis can be useful for animating gradients.",
+  "Description": "Defines a Gradient from a set of Colors and positions.\nThis can be useful for animating gradients.\n\nPosition outside the range of 0 ... 1 will be ignored.",
   "InputUis": [
+    {
+      "InputId": "4723c177-9941-4fcb-9d5a-9a4ed18f3b5f"/*Color1*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 373.0
+      },
+      "Min": 0.0,
+      "Max": 1.0
+    },
     {
       "InputId": "35470c79-275b-4a88-bc4b-4681a35d804d"/*Color1Pos*/,
       "Position": {
         "X": 197.0,
         "Y": 328.0
       },
-      "Min": -0.01,
+      "Min": -0.001,
       "Max": 1.0,
-      "Scale": 0.01,
       "Clamp": true
     },
     {
-      "InputId": "4723c177-9941-4fcb-9d5a-9a4ed18f3b5f"/*Color1*/,
+      "InputId": "97147836-0858-4fd0-9532-a5636ff8567d"/*Color2*/,
       "Position": {
         "X": 197.0,
-        "Y": 373.0
-      }
+        "Y": 463.0
+      },
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "fe6c6818-4aa9-439f-91fa-98db8c6dc1e6"/*Color2Pos*/,
@@ -31,11 +42,14 @@
       "Clamp": true
     },
     {
-      "InputId": "97147836-0858-4fd0-9532-a5636ff8567d"/*Color2*/,
+      "InputId": "f62eacf0-5237-4f20-9fb2-c59b63b24dad"/*Color3*/,
       "Position": {
         "X": 197.0,
-        "Y": 463.0
-      }
+        "Y": 553.0
+      },
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "2823fed8-9b37-4521-a37c-fcc3b9c4e6f2"/*Color3Pos*/,
@@ -49,11 +63,14 @@
       "Clamp": true
     },
     {
-      "InputId": "f62eacf0-5237-4f20-9fb2-c59b63b24dad"/*Color3*/,
+      "InputId": "f90bf3a5-3ad0-4dfe-82e0-1630cd8e27d7"/*Color4*/,
       "Position": {
         "X": 197.0,
-        "Y": 553.0
-      }
+        "Y": 643.0
+      },
+      "AddPadding": "True",
+      "Min": 0.0,
+      "Max": 1.0
     },
     {
       "InputId": "c3c4d160-61bd-483a-ada8-0395d160a009"/*Color4Pos*/,
@@ -67,11 +84,12 @@
       "Clamp": true
     },
     {
-      "InputId": "f90bf3a5-3ad0-4dfe-82e0-1630cd8e27d7"/*Color4*/,
+      "InputId": "e3ef0e14-6ed1-482e-bd31-0c9cba5aa126"/*Interpolation*/,
       "Position": {
         "X": 197.0,
-        "Y": 643.0
-      }
+        "Y": 688.0
+      },
+      "AddPadding": "True"
     }
   ],
   "SymbolChildUis": [],
