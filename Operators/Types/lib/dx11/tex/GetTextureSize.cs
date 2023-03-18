@@ -18,10 +18,15 @@ namespace T3.Operators.Types.Id_daec568f_f7b4_4d81_a401_34d62462daab
         [Output(Guid = "E54A3185-2E19-466B-9A1E-52A05A947FCD", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<int> TotalSize = new Slot<int>();
 
+        [Output(Guid = "209BF938-E317-4F9C-8906-265C2AFAE1E5")]
+        public readonly Slot<bool> IsTextureValid = new ();
+
+
         public GetTextureSize()
         {
             Size.UpdateAction = Update;
             SizeFloat.UpdateAction = Update;
+            IsTextureValid.UpdateAction = Update;
             //Size.DirtyFlag.Trigger = DirtyFlagTrigger.Always;
         }
 
@@ -32,6 +37,8 @@ namespace T3.Operators.Types.Id_daec568f_f7b4_4d81_a401_34d62462daab
             var useContext = fallbackSize.Width < 0 || fallbackSize.Height < 0;
 
             var texture = Texture.GetValue(context);
+            IsTextureValid.Value = texture != null;
+            
             if (useContext)
             {
                 Size.Value = context.RequestedResolution;

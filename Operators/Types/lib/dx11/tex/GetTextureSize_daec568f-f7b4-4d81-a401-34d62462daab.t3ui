@@ -39,6 +39,13 @@
         "X": 0.0,
         "Y": 0.0
       }
+    },
+    {
+      "OutputId": "209bf938-e317-4f9c-8906-265c2afae1e5"/*IsTextureValid*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
     }
   ]
 }
