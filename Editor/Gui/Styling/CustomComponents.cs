@@ -152,7 +152,7 @@ namespace T3.Editor.Gui.Styling
             Activated,
         }
 
-        public static bool IconButton(Icon icon, Vector2 size, ButtonStates state = ButtonStates.Normal)
+        public static bool IconButton(Icon icon, Vector2 size, ButtonStates state = ButtonStates.Normal, bool triggered =false)
         {
             ImGui.PushFont(Icons.IconFont);
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.5f));
@@ -180,7 +180,7 @@ namespace T3.Editor.Gui.Styling
                 }
             }
 
-            var clicked = ImGui.Button("" + (char)icon, size);
+            var clicked = ImGui.Button("" + (char)icon, size) || triggered;
 
             if (state != ButtonStates.Normal)
                 ImGui.PopStyleColor();

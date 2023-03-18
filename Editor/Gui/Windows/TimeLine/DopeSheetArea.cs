@@ -80,6 +80,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         private void DrawProperty(TimeLineCanvas.AnimationParameter parameter)
         {
+
             var min = ImGui.GetCursorScreenPos();
             var max = min + new Vector2(ImGui.GetContentRegionAvail().X, LayerHeight );
             _drawList.AddRectFilled(new Vector2(min.X, max.Y),
@@ -120,11 +121,18 @@ namespace T3.Editor.Gui.Windows.TimeLine
             {
                 var hash = parameter.Input.GetHashCode();
                 ImGui.PushID(hash);
+                
                 var label = $"{parameter.ChildUi.SymbolChild.ReadableName}.{parameter.Input.Input.Name}";
                 var opLabelSize = ImGui.CalcTextSize(label);
                 var buttonSize = opLabelSize + new Vector2(16, 0);
                 var isPinned = PinnedParameters.Contains(hash);
-                if (ImGui.InvisibleButton("label", buttonSize))
+                
+                if (UserSettings.Config.AutoPinAllAnimations)
+                {
+                    PinnedParameters.Add(hash);
+                }
+
+                if (ImGui.InvisibleButton("label", buttonSize) && !UserSettings.Config.AutoPinAllAnimations)
                 {
                     if (!isPinned)
                     {

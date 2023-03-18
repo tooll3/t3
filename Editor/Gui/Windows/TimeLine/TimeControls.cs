@@ -403,72 +403,88 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 UserSettings.Config.AudioMuted = !UserSettings.Config.AudioMuted;
                 AudioEngine.SetMute(UserSettings.Config.AudioMuted);
             }
-
-            ImGui.SameLine();
-
+            
             // ToggleHover
-            Icon icon;
-            string tooltip;
-            string additionalTooltip = null;
-            CustomComponents.ButtonStates state = CustomComponents.ButtonStates.Normal;
-            switch (UserSettings.Config.HoverMode)
             {
-                case GraphCanvas.HoverModes.Disabled:
-                    state = CustomComponents.ButtonStates.Dimmed;
-                    icon = Icon.HoverPreviewDisabled;
-                    tooltip = "No preview images on hover";
-                    break;
-                case GraphCanvas.HoverModes.Live:
-                    icon = Icon.HoverPreviewPlay;
-                    tooltip = "Live Hover Preview - Render explicit thumbnail image.";
-                    additionalTooltip = "This can interfere with the rendering of the current output.";
-                    break;
-                default:
-                    icon = Icon.HoverPreviewSmall;
-                    tooltip = "Last - Show the current state of the operator.";
-                    additionalTooltip = "This can be outdated if operator is not require for current output.";
-                    break;
-            }
+                ImGui.SameLine();
+                Icon icon;
+                string hoverModeTooltip;
+                string hoverModeAdditionalTooltip = null;
+                CustomComponents.ButtonStates state = CustomComponents.ButtonStates.Normal;
+                switch (UserSettings.Config.HoverMode)
+                {
+                    case GraphCanvas.HoverModes.Disabled:
+                        state = CustomComponents.ButtonStates.Dimmed;
+                        icon = Icon.HoverPreviewDisabled;
+                        hoverModeTooltip = "No preview images on hover";
+                        break;
+                    case GraphCanvas.HoverModes.Live:
+                        icon = Icon.HoverPreviewPlay;
+                        hoverModeTooltip = "Live Hover Preview - Render explicit thumbnail image.";
+                        hoverModeAdditionalTooltip = "This can interfere with the rendering of the current output.";
+                        break;
+                    default:
+                        icon = Icon.HoverPreviewSmall;
+                        hoverModeTooltip = "Last - Show the current state of the operator.";
+                        hoverModeAdditionalTooltip = "This can be outdated if operator is not require for current output.";
+                        break;
+                }
 
-            if (CustomComponents.IconButton(icon, ControlSize, state))
-            {
-                UserSettings.Config.HoverMode =
-                    (GraphCanvas.HoverModes)(((int)UserSettings.Config.HoverMode + 1) % Enum.GetNames(typeof(GraphCanvas.HoverModes)).Length);
-            }
+                if (CustomComponents.IconButton(icon, ControlSize, state))
+                {
+                    UserSettings.Config.HoverMode =
+                        (GraphCanvas.HoverModes)(((int)UserSettings.Config.HoverMode + 1) % Enum.GetNames(typeof(GraphCanvas.HoverModes)).Length);
+                }
 
-            CustomComponents.TooltipForLastItem(tooltip, additionalTooltip);
+                CustomComponents.TooltipForLastItem(hoverModeTooltip, hoverModeAdditionalTooltip);
+            }
 
             if (FrameStats.Last.HasAnimatedParameters)
             {
-                ImGui.SameLine();
                 // Lock all animated parameters
-                if (CustomComponents.IconButton(Icon.PinParams,
-                                                ControlSize)
-                    || KeyboardBinding.Triggered(UserActions.PinAllAnimationParameter))
+                ImGui.SameLine();
+                var state = UserSettings.Config.AutoPinAllAnimations 
+                                ? CustomComponents.ButtonStates.Activated 
+                                : CustomComponents.ButtonStates.Dimmed;
+
+                if (CustomComponents.IconButton(Icon.PinParams, ControlSize,  state, KeyboardBinding.Triggered(UserActions.ToggleAnimationPinning)))
                 {
-                    foreach (var p in timeLineCanvas.SelectedAnimationParameters)
+                    UserSettings.Config.AutoPinAllAnimations = !UserSettings.Config.AutoPinAllAnimations;
+                    
+                    if (!UserSettings.Config.AutoPinAllAnimations)
                     {
-                        timeLineCanvas.DopeSheetArea.PinnedParameters.Add(p.Input.GetHashCode());
+                        timeLineCanvas.DopeSheetArea.PinnedParameters.Clear();        
                     }
                 }
-
-                ImGui.SameLine();
-                // Lock all animated parameters
-                if (CustomComponents.IconButton(Icon.Params,
-                                                ControlSize,
-                                                timeLineCanvas.DopeSheetArea.PinnedParameters.Count == 0
-                                                    ? CustomComponents.ButtonStates.Disabled
-                                                    : CustomComponents.ButtonStates.Normal)
-                    || KeyboardBinding.Triggered(UserActions.UnpinAllAnimationParameters))
-                {
-                    timeLineCanvas.DopeSheetArea.PinnedParameters.Clear();
-                }
+                
+                // // Lock all animated parameters
+                // if (CustomComponents.IconButton(Icon.PinParams,
+                //                                 ControlSize)
+                //     || KeyboardBinding.Triggered(UserActions.PinAllAnimationParameter))
+                // {
+                //     foreach (var p in timeLineCanvas.SelectedAnimationParameters)
+                //     {
+                //         timeLineCanvas.DopeSheetArea.PinnedParameters.Add(p.Input.GetHashCode());
+                //     }
+                // }
+                //
+                // ImGui.SameLine();
+                // // Lock all animated parameters
+                // if (CustomComponents.IconButton(Icon.Params,
+                //                                 ControlSize,
+                //                                 timeLineCanvas.DopeSheetArea.PinnedParameters.Count == 0
+                //                                     ? CustomComponents.ButtonStates.Disabled
+                //                                     : CustomComponents.ButtonStates.Normal)
+                //     || KeyboardBinding.Triggered(UserActions.UnpinAllAnimationParameters))
+                // {
+                //     timeLineCanvas.DopeSheetArea.PinnedParameters.Clear();
+                // }
             }
 
-            CustomComponents.TooltipForLastItem("Jump to previous keyframe",
-                                                KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToPreviousKeyframe));
+            // CustomComponents.TooltipForLastItem("Jump to previous keyframe",
+            //                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToPreviousKeyframe));
 
-            CustomComponents.TooltipForLastItem(tooltip, additionalTooltip);
+            //CustomComponents.TooltipForLastItem(hoverModeTooltip, hoverModeAdditionalTooltip);
 
             ImGui.SameLine();
         }

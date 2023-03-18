@@ -41,8 +41,8 @@ namespace T3.Editor.Gui.Interaction
         InsertKeyframe,
         InsertKeyframeWithIncrement,
         
-        PinAllAnimationParameter,
-        UnpinAllAnimationParameters,
+        ToggleAnimationPinning,
+        
         
         // Graph
         PinToOutputWindow,
@@ -243,6 +243,7 @@ namespace T3.Editor.Gui.Interaction
                             // Timeline
                             new KeyboardBinding(UserActions.InsertKeyframe, new KeyCombination(Key.C)) { NeedsWindowFocus = true },
                             new KeyboardBinding(UserActions.InsertKeyframeWithIncrement, new KeyCombination(Key.C, shift: true)),
+                            new KeyboardBinding(UserActions.ToggleAnimationPinning, new KeyCombination(Key.K, shift: true)),
                             
                             // Graph window
                             new KeyboardBinding(UserActions.ToggleDisabled, new KeyCombination(Key.D, shift:true)) { NeedsWindowFocus = true },
