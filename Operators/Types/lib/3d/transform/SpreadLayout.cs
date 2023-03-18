@@ -51,7 +51,8 @@ namespace T3.Operators.Types.Id_e07550cf_033a_443d_b6f3_73eb71c72d9d
                     spread = System.Numerics.Vector3.Zero;
                 
 
-                var spreadDelta = spread / commands.Count; 
+                var count = commands.Count;
+                //var spreadDelta = spread / (count); 
                 
                 var previousColor = context.ForegroundColor;
                 var previousWorldTobject = context.ObjectToWorld;
@@ -61,8 +62,9 @@ namespace T3.Operators.Types.Id_e07550cf_033a_443d_b6f3_73eb71c72d9d
                 for (var spreadIndex = 0; spreadIndex < commands.Count; spreadIndex++)
                 {
                     var t1 = commands[spreadIndex];
-                    //t += spreadDelta;
-                    var tSpreaded = t + spreadDelta * spreadIndex - spread / 2;  
+                    
+                    float f =  (float)spreadIndex / (count-1) - 0.5f;
+                    var tSpreaded = t + spread * f;  
 
                     // Build and set transform matrix
                     var objectToParentObject

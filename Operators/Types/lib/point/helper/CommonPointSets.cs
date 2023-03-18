@@ -173,7 +173,7 @@ namespace T3.Operators.Types.Id_353f63fc_e613_43ca_b037_02d7b9f4e935
                 new() { W = float.NaN },
             };
 
-        private static readonly Point[] CrossQuadPoints =
+        private static readonly Point[] QuadPoints =
             {
                 new() { Position = new Vector3(-S, -S, 0), W = 1 },
                 new() { Position = new Vector3(+S, -S, 0), W = 1 },
@@ -181,7 +181,19 @@ namespace T3.Operators.Types.Id_353f63fc_e613_43ca_b037_02d7b9f4e935
                 new() { Position = new Vector3(-S, +S, 0), W = 1 },
                 new() { Position = new Vector3(-S, -S, 0), W = 1 },
                 new() { W = float.NaN },
+            };
+        
+        private static readonly Point[] ArrowXPoints =
+            {
+                new() { Position = new Vector3(-S, 0, 0), W = 1 },
+                new() { Position = new Vector3(+S, 0, 0), W = 1 },
+                new() { W = float.NaN },
+                new() { Position = new Vector3(S/2, -S/2, 0), W = 1 },
+                new() { Position = new Vector3(+S, 0, 0), W = 1 },
+                new() { Position = new Vector3(S/2, S/2, 0), W = 1 },
+                new() { W = float.NaN },
             };        
+
         
         private enum Shapes
         {
@@ -189,6 +201,7 @@ namespace T3.Operators.Types.Id_353f63fc_e613_43ca_b037_02d7b9f4e935
             CrossXY,
             Cube,
             Quad,
+            ArrowX
         }
 
         private static readonly List<Point[]> Definitions = new()
@@ -196,7 +209,8 @@ namespace T3.Operators.Types.Id_353f63fc_e613_43ca_b037_02d7b9f4e935
                                                                     CrossPoints,
                                                                     CrossXYPoints,
                                                                     CubePoints,
-                                                                    CrossQuadPoints
+                                                                    QuadPoints,
+                                                                    ArrowXPoints,
                                                                 };
     }
 }

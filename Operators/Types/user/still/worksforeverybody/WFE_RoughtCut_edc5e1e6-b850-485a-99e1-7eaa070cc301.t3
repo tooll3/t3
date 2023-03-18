@@ -38,7 +38,7 @@
             "X": 1.0,
             "Y": 1.0,
             "Z": 1.0,
-            "W": 1.0
+            "W": 0.0
           }
         }
       ],
@@ -696,7 +696,18 @@
     {
       "Id": "04301eb8-7c87-48e8-9ce1-749df17ca8bf"/*RenderTarget*/,
       "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "e882e0f0-03f9-46e6-ac7a-709e6fa66613"/*Multisampling*/,
+          "Type": "System.Int32",
+          "Value": 1
+        }
+      ],
       "Outputs": []
     },
     {
@@ -717,11 +728,11 @@
             "Type": "T3.Core.Animation.TimeClip",
             "TimeClip": {
               "TimeRange": {
-                "Start": 149.09091,
+                "Start": 149.0,
                 "End": 173.52847
               },
               "SourceRange": {
-                "Start": 149.09091,
+                "Start": 149.0,
                 "End": 173.52847
               },
               "LayerIndex": -1
@@ -767,14 +778,14 @@
             "Type": "T3.Core.Animation.TimeClip",
             "TimeClip": {
               "TimeRange": {
-                "Start": 165.0,
+                "Start": 148.68582,
                 "End": 298.12006
               },
               "SourceRange": {
-                "Start": 165.0,
+                "Start": 148.68582,
                 "End": 298.12006
               },
-              "LayerIndex": 0
+              "LayerIndex": 1
             }
           }
         }
@@ -868,11 +879,11 @@
             "TimeClip": {
               "TimeRange": {
                 "Start": 123.0,
-                "End": 165.0
+                "End": 149.34306
               },
               "SourceRange": {
                 "Start": 123.0,
-                "End": 165.0
+                "End": 149.34306
               },
               "LayerIndex": 0
             }

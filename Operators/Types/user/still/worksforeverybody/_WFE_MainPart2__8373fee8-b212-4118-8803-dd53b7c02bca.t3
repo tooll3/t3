@@ -7242,11 +7242,11 @@
             "TimeClip": {
               "TimeRange": {
                 "Start": 146.2979,
-                "End": 149.0
+                "End": 149.20901
               },
               "SourceRange": {
                 "Start": 146.2979,
-                "End": 149.0
+                "End": 149.20901
               },
               "LayerIndex": 2
             }
@@ -11545,7 +11545,7 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 147.9829,
+            "Time": 148.1375,
             "Value": 0.0,
             "InType": "Spline",
             "OutType": "Spline",
@@ -11555,7 +11555,7 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 149.0,
+            "Time": 149.1546,
             "Value": 1.9900000095367432,
             "InType": "Spline",
             "OutType": "Spline",
@@ -11635,7 +11635,7 @@
         "PostCurve": "Constant",
         "Keys": [
           {
-            "Time": 148.5969,
+            "Time": 148.7515,
             "Value": 0.0,
             "InType": "Spline",
             "OutType": "Spline",
@@ -11645,7 +11645,7 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 149.0,
+            "Time": 149.1546,
             "Value": 1.0,
             "InType": "Spline",
             "OutType": "Spline",
