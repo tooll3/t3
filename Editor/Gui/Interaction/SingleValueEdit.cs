@@ -336,9 +336,10 @@ namespace T3.Editor.Gui.Interaction
                 var itemPos = ImGui.GetItemRectMin();
 
                 var center = 0.0;
-                if (min < 0)
+                if (Math.Abs(min) > 0.001f)
                 {
-                    center = MathUtils.RemapAndClamp((min + max) * 0.5, min, max, 0, itemSize.X);
+                    center = MathUtils.RemapAndClamp(0, min, max, 0, itemSize.X);
+                    // center = MathUtils.RemapAndClamp((min + max) * 0.5, min, max, 0, itemSize.X);
                 }
 
                 var end = MathUtils.RemapAndClamp(value, min, max, 0, itemSize.X);
