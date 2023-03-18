@@ -7,6 +7,7 @@ cbuffer ParamConstants : register(b0)
     float Repeat;
     float PolarOrientation;
     float Bias;
+    float IsTextureValid;
 }
 
 cbuffer TimeConstants : register(b1)
@@ -40,6 +41,9 @@ float fmod(float x, float y)
 
 float4 psMain(vsOutput psInput) : SV_TARGET
 {
+    // int orgMips, orgWidth, orgHeight;
+    // ImageA.GetDimensions(0, orgWidth, orgHeight, orgMips);
+
     float2 uv = psInput.texCoord;
 
     float aspectRation = TargetWidth / TargetHeight;
@@ -51,7 +55,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     if (PolarOrientation < 0.5)
     {
-        c = distance(p, Center) * 2 - Offset;
+        c = distance(p, Center) * 2 - Offset * Width;
     }
     else
     {
@@ -60,7 +64,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         float l = 2 * length(p) / Radius;
 
         float2 polar = float2(atan2(p.x, p.y) / 3.141578 / 2 + 0.5, l) + Center - Center.x;
-        c = polar.x + Offset;
+        c = polar.x + Offset * Width;
     }
 
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
@@ -80,7 +84,12 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     dBiased = clamp(dBiased, 0.001, 0.999);
     float4 gradient = Gradient.Sample(texSampler, float2(dBiased, 0));
-    float a = orgColor.a + gradient.a - orgColor.a * gradient.a;
-    float3 rgb = (1.0 - gradient.a) * orgColor.rgb + gradient.a * gradient.rgb;
-    return float4(rgb, a);
+
+    return (IsTextureValid < 0.5) ? gradient
+                                  : float4((1.0 - gradient.a) * orgColor.rgb + gradient.a * gradient.rgb,
+                                           orgColor.a + gradient.a - orgColor.a * gradient.a);
+
+    // float a = orgColor.a + gradient.a - orgColor.a * gradient.a;
+    // float3 rgb = (1.0 - gradient.a) * orgColor.rgb + gradient.a * gradient.rgb;
+    // return float4(rgb, a);
 }
