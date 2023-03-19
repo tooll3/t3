@@ -45,7 +45,7 @@
     },
     {
       "Id": "4d3e9f64-8307-4def-bfe6-abc23d2aaf5d"/*TimeSpread*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.0019999999
     },
     {
       "Id": "496edb83-3ce4-4815-b82a-7e3b2ec51cd9"/*ZOffsetCenterPass*/,
@@ -59,6 +59,10 @@
         "Z": 1.0,
         "W": 0.0
       }
+    },
+    {
+      "Id": "f8bd71d3-22cc-4b66-822f-6c0bbee6fbb1"/*LoopCount*/,
+      "DefaultValue": 3
     }
   ],
   "Children": [
@@ -395,7 +399,7 @@
         {
           "Id": "1f6e2adb-cff8-4dc4-9cb4-a26e3ad8b087"/*Count*/,
           "Type": "System.Int32",
-          "Value": 7
+          "Value": 3
         }
       ],
       "Outputs": []
@@ -570,6 +574,12 @@
       "SourceSlotId": "7a4c4feb-be2f-463e-96c6-cd9a6bad77a2",
       "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "TargetSlotId": "0f4bfa87-7681-46d1-94b5-49559d6ab8fd"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "f8bd71d3-22cc-4b66-822f-6c0bbee6fbb1",
+      "TargetParentOrChildId": "011de32b-25c2-47c4-9e13-79fa5321f1e0",
+      "TargetSlotId": "1f6e2adb-cff8-4dc4-9cb4-a26e3ad8b087"
     },
     {
       "SourceParentOrChildId": "8192722d-4a05-4655-8d28-ffa4876a26d6",

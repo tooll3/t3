@@ -83,6 +83,13 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "f8bd71d3-22cc-4b66-822f-6c0bbee6fbb1"/*LoopCount*/,
+      "Position": {
+        "X": -413.78943,
+        "Y": 1114.881
+      }
     }
   ],
   "SymbolChildUis": [
@@ -277,7 +284,7 @@
       "ChildId": "011de32b-25c2-47c4-9e13-79fa5321f1e0"/*Loop*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 1750.416,

@@ -661,17 +661,17 @@
           }
         },
         {
+          "Id": "b1a7da14-d6bd-4862-ad69-dfa7ae1cfbb8"/*Size*/,
+          "Type": "System.Single",
+          "Value": 0.033
+        },
+        {
           "Id": "6fb70409-1cdd-488d-b7bb-aeb8ffaf084c"/*Offset*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 1.38,
             "Y": 0.0
           }
-        },
-        {
-          "Id": "b1a7da14-d6bd-4862-ad69-dfa7ae1cfbb8"/*Size*/,
-          "Type": "System.Single",
-          "Value": 0.033
         },
         {
           "Id": "c080dd2e-3043-4f3f-a8fe-19cdce6ca5b4"/*Gradient*/,

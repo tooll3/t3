@@ -48,6 +48,9 @@ namespace T3.Operators.Types.Id_7b18587a_e75a_47c0_88de_c92ac6442c4c
         [Input(Guid = "ce87be78-6466-4265-b65c-80811dc9fdd7")]
         public readonly InputSlot<System.Numerics.Vector4> FadeOutColor = new InputSlot<System.Numerics.Vector4>();
 
+        [Input(Guid = "f8bd71d3-22cc-4b66-822f-6c0bbee6fbb1")]
+        public readonly InputSlot<int> LoopCount = new InputSlot<int>();
+
     }
 }
 
