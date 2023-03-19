@@ -324,6 +324,25 @@
           "c9c66f57-5c8c-4481-9b9d-a8aa8569ac12": true
         }
       }
+    },
+    {
+      "Id": "a90da521-60de-426f-a4da-1fb4235fd302",
+      "IsPreset": true,
+      "ActivationIndex": 12,
+      "Title": "Square 256px",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 279.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "ef3d0313-50a1-42d3-b3cb-e8ea1b93cd34": 0.0,
+          "07e57992-ea38-4e3b-8d69-cb4e99ae587c": {
+            "Width": 256,
+            "Height": 256
+          }
+        }
+      }
     }
   ]
 }

@@ -87,7 +87,7 @@
         {
           "Id": "bfe68cee-b0f2-4140-931a-c8e089f7e2c2"/*DelayDuration*/,
           "Type": "System.Single",
-          "Value": 2.0
+          "Value": 5.0
         }
       ],
       "Outputs": []
@@ -961,8 +961,8 @@
           "Id": "a384be77-c5fc-47b3-9ec3-960db9f9bae9"/*Position*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 1.2151363,
-            "Y": -0.8251514
+            "X": 1.634728,
+            "Y": -0.883
           }
         },
         {
