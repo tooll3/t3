@@ -3,48 +3,50 @@
   "Description": "Draws instances at Point-positions with the W-attribute driving properties like Color, Size and Offset; This can be especially useful in compbination with [CollectSpawnPoints].",
   "InputUis": [
     {
-      "InputId": "a3543b5d-0ee1-47de-9ef3-7747d7f9903f"/*GPoints*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -625.3908,
-        "Y": 63.0006
-      }
-    },
-    {
       "InputId": "82230324-b1cd-41ba-8d03-933c939001ad"/*Color*/,
       "Position": {
         "X": -635.8282,
-        "Y": 145.8467
+        "Y": 82.12138
       }
     },
     {
       "InputId": "c25ab214-7fb3-4595-8740-96471df44905"/*Stretch*/,
       "Position": {
         "X": -635.8282,
-        "Y": 190.8467
-      }
-    },
-    {
-      "InputId": "6fb70409-1cdd-488d-b7bb-aeb8ffaf084c"/*Offset*/,
-      "Position": {
-        "X": -654.8518,
-        "Y": 284.3372
+        "Y": 127.12138
       }
     },
     {
       "InputId": "b1a7da14-d6bd-4862-ad69-dfa7ae1cfbb8"/*Size*/,
       "Position": {
-        "X": -654.8518,
-        "Y": 329.3372
+        "X": -635.8282,
+        "Y": 172.12138
       },
       "Min": 0.0,
       "Max": 0.1
     },
     {
-      "InputId": "a0d7fc98-590d-481a-83a2-8522a3053082"/*WSpeed*/,
+      "InputId": "6fb70409-1cdd-488d-b7bb-aeb8ffaf084c"/*Offset*/,
+      "Position": {
+        "X": -638.9205,
+        "Y": 275.7588
+      }
+    },
+    {
+      "InputId": "4be3c132-1318-426e-a2ed-9534110ca03f"/*Rotate*/,
       "Position": {
         "X": -650.9863,
-        "Y": 405.2608
+        "Y": 450.2608
+      },
+      "AddPadding": "True",
+      "Min": -90.0,
+      "Max": 90.0
+    },
+    {
+      "InputId": "c15a2562-824d-416a-91fd-6bab0380ff0f"/*RotateAxis*/,
+      "Position": {
+        "X": -651.5868,
+        "Y": 550.5729
       }
     },
     {
@@ -55,40 +57,12 @@
       }
     },
     {
-      "InputId": "4be3c132-1318-426e-a2ed-9534110ca03f"/*Rotate*/,
-      "Position": {
-        "X": -650.9863,
-        "Y": 450.2608
-      },
-      "Scale": 1.0
-    },
-    {
-      "InputId": "c15a2562-824d-416a-91fd-6bab0380ff0f"/*RotateAxis*/,
-      "Position": {
-        "X": -651.5868,
-        "Y": 550.5729
-      }
-    },
-    {
-      "InputId": "4256223c-ed88-4263-90f0-96cbc6da84d2"/*Texture_*/,
+      "InputId": "a0d7fc98-590d-481a-83a2-8522a3053082"/*WSpeed*/,
       "Position": {
         "X": -648.3819,
         "Y": 798.2668
-      }
-    },
-    {
-      "InputId": "a6069687-171d-417b-a746-7557486204bc"/*BlendMod*/,
-      "Position": {
-        "X": -648.3819,
-        "Y": 843.2668
-      }
-    },
-    {
-      "InputId": "b83c1c1d-fef9-48d0-bf6b-da5b4ad8b094"/*EnableDepthWrite*/,
-      "Position": {
-        "X": -648.3819,
-        "Y": 888.2668
-      }
+      },
+      "GroupTitle": "Changes for W-Attribute  0 ... 1"
     },
     {
       "InputId": "c080dd2e-3043-4f3f-a8fe-19cdce6ca5b4"/*Gradient*/,
@@ -102,6 +76,36 @@
       "Position": {
         "X": -648.3819,
         "Y": 978.2668
+      }
+    },
+    {
+      "InputId": "a6069687-171d-417b-a746-7557486204bc"/*BlendMod*/,
+      "Position": {
+        "X": -648.3819,
+        "Y": 1023.2668
+      },
+      "GroupTitle": "Additional Settings..."
+    },
+    {
+      "InputId": "b83c1c1d-fef9-48d0-bf6b-da5b4ad8b094"/*EnableDepthWrite*/,
+      "Position": {
+        "X": -648.3819,
+        "Y": 1068.2668
+      }
+    },
+    {
+      "InputId": "a3543b5d-0ee1-47de-9ef3-7747d7f9903f"/*GPoints*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -661.6171,
+        "Y": 1169.4421
+      }
+    },
+    {
+      "InputId": "4256223c-ed88-4263-90f0-96cbc6da84d2"/*Texture_*/,
+      "Position": {
+        "X": -661.6171,
+        "Y": 1214.4421
       }
     }
   ],
@@ -336,8 +340,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": -475.3908,
-        "Y": 63.0006
+        "X": -511.61713,
+        "Y": 1169.4421
       }
     },
     {
@@ -468,8 +472,8 @@
         "Y": 36.0
       },
       "Position": {
-        "X": 271.70453,
-        "Y": 767.7558
+        "X": 15.373596,
+        "Y": 775.92566
       }
     },
     {
