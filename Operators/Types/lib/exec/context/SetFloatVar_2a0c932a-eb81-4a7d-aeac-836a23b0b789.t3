@@ -1,5 +1,5 @@
 {
-  "Name": "SetContextVariable",
+  "Name": "SetFloatVar",
   "Id": "2a0c932a-eb81-4a7d-aeac-836a23b0b789",
   "Namespace": "lib.exec.context",
   "Inputs": [

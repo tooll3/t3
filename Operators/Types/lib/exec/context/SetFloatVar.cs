@@ -9,12 +9,12 @@ using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789
 {
-    public class SetContextVariable : Instance<SetContextVariable>
+    public class SetFloatVar : Instance<SetFloatVar>
     {
         [Output(Guid = "9c0c1734-453e-4f88-b20a-47c7e34b7caa")]
         public readonly Slot<Command> Output = new Slot<Command>();
 
-        public SetContextVariable()
+        public SetFloatVar()
         {
             Output.UpdateAction = Update;
         }

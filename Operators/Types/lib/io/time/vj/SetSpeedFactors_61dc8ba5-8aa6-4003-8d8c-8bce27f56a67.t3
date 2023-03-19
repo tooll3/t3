@@ -26,7 +26,7 @@
   ],
   "Children": [
     {
-      "Id": "945a41f1-b4ff-474c-8de5-ade6fda08d14"/*SetContextVariable*/,
+      "Id": "945a41f1-b4ff-474c-8de5-ade6fda08d14"/*SetFloatVar*/,
       "SymbolId": "2a0c932a-eb81-4a7d-aeac-836a23b0b789",
       "InputValues": [
         {
@@ -50,7 +50,7 @@
       "Outputs": []
     },
     {
-      "Id": "836b32e0-5749-44aa-a1dc-27deeccc4073"/*SetContextVariable*/,
+      "Id": "836b32e0-5749-44aa-a1dc-27deeccc4073"/*SetFloatVar*/,
       "SymbolId": "2a0c932a-eb81-4a7d-aeac-836a23b0b789",
       "InputValues": [
         {

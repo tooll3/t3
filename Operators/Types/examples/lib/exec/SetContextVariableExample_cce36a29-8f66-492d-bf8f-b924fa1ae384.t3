@@ -17,7 +17,7 @@
       "Outputs": []
     },
     {
-      "Id": "7ea0d73d-307b-4daf-9ef6-6c30f45803e5"/*SetContextVariable*/,
+      "Id": "7ea0d73d-307b-4daf-9ef6-6c30f45803e5"/*SetFloatVar*/,
       "SymbolId": "2a0c932a-eb81-4a7d-aeac-836a23b0b789",
       "InputValues": [
         {

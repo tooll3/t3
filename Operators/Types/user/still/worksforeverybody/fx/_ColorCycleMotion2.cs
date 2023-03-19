@@ -11,9 +11,6 @@ namespace T3.Operators.Types.Id_7b18587a_e75a_47c0_88de_c92ac6442c4c
         [Output(Guid = "0340f641-d087-42e6-831f-ae6083d834b1")]
         public readonly Slot<Command> Result = new Slot<Command>();
 
-        [Output(Guid = "0f4bfa87-7681-46d1-94b5-49559d6ab8fd")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new Slot<SharpDX.Direct3D11.Texture2D>();
-
 
         [Input(Guid = "78c7396f-3ce8-4565-b043-ec92602c0ae7")]
         public readonly InputSlot<Command> Command = new InputSlot<Command>();

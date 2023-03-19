@@ -136,7 +136,7 @@
       }
     },
     {
-      "ChildId": "bd264c77-c6b9-471d-806c-055cfe0ad28a"/*SetContextVariable*/,
+      "ChildId": "bd264c77-c6b9-471d-806c-055cfe0ad28a"/*SetFloatVar*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

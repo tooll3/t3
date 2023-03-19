@@ -13,7 +13,7 @@ namespace T3.Editor.Gui.ChildUi
     {
         public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance1, ImDrawListPtr drawList, ImRect area)
         {
-            if (!(instance1 is SetContextVariable instance))
+            if (!(instance1 is SetFloatVar instance))
                 return SymbolChildUi.CustomUiResult.PreventOpenSubGraph;
 
             var symbolChild = instance.Parent.Symbol.Children.Single(c => c.Id == instance.SymbolChildId);

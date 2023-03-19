@@ -1,5 +1,5 @@
 {
-  "Id": "2a0c932a-eb81-4a7d-aeac-836a23b0b789"/*SetContextVariable*/,
+  "Id": "2a0c932a-eb81-4a7d-aeac-836a23b0b789"/*SetFloatVar*/,
   "Description": "Writes a float value to the context float variable dictionary. \nUse [ContextFloat] to read this value further down the graph.",
   "InputUis": [
     {

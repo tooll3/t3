@@ -47,7 +47,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "945a41f1-b4ff-474c-8de5-ade6fda08d14"/*SetContextVariable*/,
+      "ChildId": "945a41f1-b4ff-474c-8de5-ade6fda08d14"/*SetFloatVar*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -69,7 +69,7 @@
       }
     },
     {
-      "ChildId": "836b32e0-5749-44aa-a1dc-27deeccc4073"/*SetContextVariable*/,
+      "ChildId": "836b32e0-5749-44aa-a1dc-27deeccc4073"/*SetFloatVar*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

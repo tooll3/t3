@@ -3373,7 +3373,7 @@
       }
     },
     {
-      "ChildId": "3112228e-6160-4d2e-bc65-8cd45d7bb939"/*SetContextVariable*/,
+      "ChildId": "3112228e-6160-4d2e-bc65-8cd45d7bb939"/*SetFloatVar*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -3395,7 +3395,7 @@
       }
     },
     {
-      "ChildId": "7ef7ec3b-5b86-43ae-be21-14be6f8163a4"/*SetContextVariable*/,
+      "ChildId": "7ef7ec3b-5b86-43ae-be21-14be6f8163a4"/*SetFloatVar*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -3406,7 +3406,7 @@
       }
     },
     {
-      "ChildId": "b20882f5-5624-4533-b554-2cdde23094b7"/*SetContextVariable*/,
+      "ChildId": "b20882f5-5624-4533-b554-2cdde23094b7"/*SetFloatVar*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
