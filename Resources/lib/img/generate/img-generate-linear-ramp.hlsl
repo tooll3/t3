@@ -10,6 +10,7 @@ cbuffer ParamConstants : register(b0)
     float Bias;
     float Offset;
     float SizeMode;
+    float IsTextureValid;
 }
 
 cbuffer TimeConstants : register(b1)
@@ -59,7 +60,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float radians = Rotation / 180 *3.141578;
     float2 angle =  float2(sin(radians),cos(radians));
 
-    float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
+    
 
     float c=  dot(p-Center, angle);
     c += Offset;
@@ -79,8 +80,11 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     dBiased= clamp(dBiased,0.001, 0.999);
 
     float4 gradient = Gradient.Sample(texSampler, float2(dBiased, 0));
-    float a = orgColor.a + gradient.a - orgColor.a*gradient.a;
-    float3 rgb = (1.0 - gradient.a)*orgColor.rgb + gradient.a*gradient.rgb;   
 
-    return float4(rgb,a);
+    if (IsTextureValid < 0.5)
+        return gradient;
+
+    float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
+    return float4((1.0 - gradient.a) * orgColor.rgb + gradient.a * gradient.rgb,
+                                           orgColor.a + gradient.a - orgColor.a * gradient.a);
 }
