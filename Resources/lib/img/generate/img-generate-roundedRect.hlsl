@@ -13,6 +13,8 @@ cbuffer ParamConstants : register(b0)
     float Feather;
     float GradientBias;
     float Rotate;
+
+    float IsTextureValid;
 }
 
 cbuffer Resolution : register(b1)
@@ -84,8 +86,12 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float4 c = lerp(cInside, cStroke, dStroke);
 
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
-    float a = clamp(orgColor.a + c.a - orgColor.a * c.a, 0, 1);
+    return (IsTextureValid < 0.5) ? c
+                                  : float4((1.0 - c.a) * orgColor.rgb + c.a * c.rgb,
+                                           orgColor.a + c.a - orgColor.a * c.a);
 
-    float3 rgb = (1.0 - c.a) * orgColor.rgb + c.a * c.rgb;
-    return float4(rgb, a);
+    // float a = clamp(orgColor.a + c.a - orgColor.a * c.a, 0, 1);
+
+    // float3 rgb = (1.0 - c.a) * orgColor.rgb + c.a * c.rgb;
+    // return float4(rgb, a);
 }
