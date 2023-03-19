@@ -18,7 +18,7 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
 {
     public class LoadGltf : Instance<LoadGltf>
-                          , IDescriptiveGraphNode
+                          , IDescriptiveFilename
     {
         [Output(Guid = "47588d3a-28fe-4417-9ffc-2e79e59d2540")]
         public readonly Slot<MeshBuffers> Data = new Slot<MeshBuffers>();

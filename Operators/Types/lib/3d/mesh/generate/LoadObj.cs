@@ -18,7 +18,7 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
 {
-    public class LoadObj : Instance<LoadObj>, IDescriptiveGraphNode
+    public class LoadObj : Instance<LoadObj>, IDescriptiveFilename
     {
         [Output(Guid = "1F4E7CAC-1F62-4633-B0F3-A3017A026753")]
         public readonly Slot<MeshBuffers> Data = new Slot<MeshBuffers>();

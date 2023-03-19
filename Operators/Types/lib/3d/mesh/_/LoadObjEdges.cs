@@ -10,7 +10,7 @@ using T3.Core.Rendering;
 
 namespace T3.Operators.Types.Id_dd3d7e16_f33e_4fb0_89c6_4d8cbc9d702f
 {
-    public class LoadObjEdges : Instance<LoadObjEdges>, IDescriptiveGraphNode
+    public class LoadObjEdges : Instance<LoadObjEdges>, IDescriptiveFilename
     {
         [Output(Guid = "C0D0420D-84E6-4C57-8E88-D2B04DB26B89")]
         public readonly Slot<StructuredList> Data = new Slot<StructuredList>();

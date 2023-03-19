@@ -52,7 +52,7 @@ namespace T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789
                 context.FloatVariables[name] = newValue;
             }
         }
-
+        
         
         [Input(Guid = "E64D396E-855A-4B20-A8F5-39B4F98E8036")]
         public readonly InputSlot<Command> SubGraph = new InputSlot<Command>();

@@ -21,7 +21,7 @@ namespace T3.Editor.Gui.ChildUi
                 return SymbolChildUi.CustomUiResult.None;
 
             var symbolChild = valueInstance.Parent.Symbol.Children.Single(c => c.Id == valueInstance.SymbolChildId);
-            ImGui.PushClipRect(area.Min, area.Max, true);
+            drawList.PushClipRect(area.Min, area.Max, true);
             
             //valueInstance.Float.
             var isAnimated = instance.Parent?.Symbol.Animator.IsInputSlotAnimated(valueInstance.Float)??false;
@@ -96,12 +96,15 @@ namespace T3.Editor.Gui.ChildUi
             // Label if instance has title
             if (!string.IsNullOrEmpty(symbolChild.Name))
             {
-                WidgetElements.DrawTitle(drawList, area, symbolChild.Name);
+                WidgetElements.DrawPrimaryTitle(drawList, area, symbolChild.Name);
+                WidgetElements.DrawSmallValue(drawList, area, $"{value:0.000}");
             }
-
-            WidgetElements.DrawPrimaryValue(drawList, area, $"{value:0.000}");
+            else
+            {
+                WidgetElements.DrawPrimaryValue(drawList, area, $"{value:0.000}");
+            }
             
-            ImGui.PopClipRect();
+            drawList.PopClipRect();
             return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels | SymbolChildUi.CustomUiResult.PreventOpenSubGraph;
         }
 

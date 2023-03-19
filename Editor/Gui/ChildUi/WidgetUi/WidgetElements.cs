@@ -14,7 +14,32 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
     /// </summary>
     public static class WidgetElements
     {
-        public static void DrawTitle(ImDrawListPtr drawList, ImRect widgetRect, string title)
+        public static void DrawPrimaryTitle(ImDrawListPtr drawList, ImRect widgetRect, string formattedValue)
+        {
+            var canvasScale = GraphCanvas.Current.Scale.Y;
+            var font = canvasScale < ScaleFactors.NormalScale
+                           ? Fonts.FontSmall
+                           : canvasScale > ScaleFactors.BigScale
+                               ? Fonts.FontLarge
+                               : Fonts.FontNormal;
+        
+            ImGui.PushFont(font);
+            var fadingColor = T3Style.Colors.TextWidgetTitle
+                                     .Fade(MathUtils.NormalizeAndClamp
+                                               (
+                                                canvasScale,
+                                                ScaleFactors.SmallerScale,
+                                                ScaleFactors.SmallScale));
+        
+            //var labelSize = ImGui.CalcTextSize(formattedValue);
+            drawList.AddText(new Vector2
+                                 (widgetRect.Min.X + 5,
+                                  widgetRect.Min.Y + 2),
+                             fadingColor, formattedValue);
+            ImGui.PopFont();
+        }      
+        
+        public static void DrawSmallTitle(ImDrawListPtr drawList, ImRect widgetRect, string title)
         {
             var canvasScale = GraphCanvas.Current.Scale.Y / T3Ui.UiScaleFactor;
             var font = canvasScale > ScaleFactors.LargerScale
@@ -35,7 +60,7 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
 
             ImGui.PopFont();
         }
-
+        
         public static void DrawPrimaryValue(ImDrawListPtr drawList, ImRect widgetRect, string formattedValue)
         {
             var canvasScale = GraphCanvas.Current.Scale.Y;
@@ -61,6 +86,30 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
 
             ImGui.PopFont();
         }
+        
+        public static void DrawSmallValue(ImDrawListPtr drawList, ImRect widgetRect, string title)
+        {
+            var canvasScale = GraphCanvas.Current.Scale.Y / T3Ui.UiScaleFactor;
+            var font = canvasScale > ScaleFactors.LargerScale
+                           ? Fonts.FontNormal
+                           : Fonts.FontSmall;
+        
+            ImGui.PushFont(font);
+        
+            var fadingColor = T3Style.Colors.TextWidgetTitle
+                                     .Fade(MathUtils.NormalizeAndClamp
+                                               (
+                                                canvasScale,
+                                                ScaleFactors.NormalScale,
+                                                ScaleFactors.BigScale));
+            var labelSize = ImGui.CalcTextSize(title);
+            drawList.AddText(new Vector2
+                                 (widgetRect.Min.X + 5,
+                                  widgetRect.Max.Y - labelSize.Y -2),
+                             fadingColor, title);
+        
+            ImGui.PopFont();
+        }             
         
         public static bool DrawRateLabelWithTitle(InputSlot<float> inputSlot, ImRect selectableScreenRect, ImDrawListPtr drawList,  string nodeLabel)
         {
@@ -112,7 +161,7 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
                 }
             }
             
-            DrawTitle(drawList, selectableScreenRect, nodeLabel);
+            DrawSmallTitle(drawList, selectableScreenRect, nodeLabel);
             
             return modified;
         }        

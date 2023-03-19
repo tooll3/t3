@@ -11,7 +11,7 @@ using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
 {
-    public class ComputeShader : Instance<ComputeShader>, IDescriptiveGraphNode
+    public class ComputeShader : Instance<ComputeShader>, IDescriptiveFilename
     {
         [Output(Guid = "{6C118567-8827-4422-86CC-4D4D00762D87}")]
         public readonly Slot<SharpDX.Direct3D11.ComputeShader> ComputerShader = new Slot<SharpDX.Direct3D11.ComputeShader>();

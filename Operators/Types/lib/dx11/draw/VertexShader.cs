@@ -7,7 +7,7 @@ using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad
 {
-    public class VertexShader : Instance<VertexShader>, IDescriptiveGraphNode
+    public class VertexShader : Instance<VertexShader>, IDescriptiveFilename
     {
         [Output(Guid = "ED31838B-14B5-4875-A0FC-DC427E874362")]
         public readonly Slot<SharpDX.Direct3D11.VertexShader> Shader = new Slot<SharpDX.Direct3D11.VertexShader>();

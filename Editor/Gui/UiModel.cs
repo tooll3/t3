@@ -209,13 +209,16 @@ namespace T3.Editor.Gui
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c.ComputeShader), DescriptiveUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad.VertexShader), DescriptiveUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985.PixelShader), DescriptiveUi.DrawChildUi);
+            
+            CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_e6072ecf_30d2_4c52_afa1_3b195d61617b.GetFloatVar), GetFloatVarUi.DrawChildUi);
+            CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789.SetContextVariable), SetFloatVarUi.DrawChildUi);
 
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c.AudioReaction), AudioReactionUi.DrawChildUi);
 
             foreach (var symbolEntry in SymbolRegistry.Entries)
             {
                 var valueInstanceType = symbolEntry.Value.InstanceType;
-                if (typeof(IDescriptiveGraphNode).IsAssignableFrom(valueInstanceType))
+                if (typeof(IDescriptiveFilename).IsAssignableFrom(valueInstanceType))
                 {
                     CustomChildUiRegistry.Entries.Add(valueInstanceType, DescriptiveUi.DrawChildUi);
                 }

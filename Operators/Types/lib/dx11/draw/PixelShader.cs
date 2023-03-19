@@ -10,7 +10,7 @@ using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985
 {
-    public class PixelShader : Instance<PixelShader>, IDescriptiveGraphNode
+    public class PixelShader : Instance<PixelShader>, IDescriptiveFilename
     {
         [Output(Guid = "9C6E72F8-5CE6-42C3-ABAA-1829D2C066C1")]
         public readonly Slot<SharpDX.Direct3D11.PixelShader> Shader = new Slot<SharpDX.Direct3D11.PixelShader>();
