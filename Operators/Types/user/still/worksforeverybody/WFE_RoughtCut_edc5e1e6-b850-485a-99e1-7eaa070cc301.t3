@@ -754,11 +754,11 @@
             "TimeClip": {
               "TimeRange": {
                 "Start": 36.081963,
-                "End": 164.41058
+                "End": 150.47922
               },
               "SourceRange": {
                 "Start": 36.081963,
-                "End": 164.41058
+                "End": 150.47922
               },
               "LayerIndex": 2
             }
@@ -978,13 +978,13 @@
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
     {
-      "SourceParentOrChildId": "e4318bae-cd3a-4df4-90f4-c33adea8e00e",
+      "SourceParentOrChildId": "28decc68-604d-4397-aeea-a7325c5faacc",
       "SourceSlotId": "de6ff8b5-40fe-47fa-b9f2-d926b17f9a7f",
       "TargetParentOrChildId": "257e71ca-678a-42fe-8cba-21f4cad02133",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
     {
-      "SourceParentOrChildId": "28decc68-604d-4397-aeea-a7325c5faacc",
+      "SourceParentOrChildId": "e4318bae-cd3a-4df4-90f4-c33adea8e00e",
       "SourceSlotId": "de6ff8b5-40fe-47fa-b9f2-d926b17f9a7f",
       "TargetParentOrChildId": "257e71ca-678a-42fe-8cba-21f4cad02133",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
