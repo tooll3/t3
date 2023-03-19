@@ -55,6 +55,12 @@ namespace T3.Operators.Types.Id_ffc0a7ed_fe61_4188_8db9_0b0f07c6b981
         [Input(Guid = "4256223c-ed88-4263-90f0-96cbc6da84d2")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
+        [Input(Guid = "7d021815-20a0-475d-91e0-1514173bf5d5")]
+        public readonly InputSlot<float> AlphaCutOff = new InputSlot<float>();
+
+        [Input(Guid = "cb4b567b-2a1e-4548-82ce-6683ba3c39de")]
+        public readonly InputSlot<bool> ApplyFog = new InputSlot<bool>();
+
     }
 }
 
