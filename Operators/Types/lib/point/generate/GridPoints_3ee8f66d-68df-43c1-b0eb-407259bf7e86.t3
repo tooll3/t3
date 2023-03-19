@@ -290,6 +290,34 @@
       "SymbolId": "17db8a36-079d-4c83-8a2a-7ea4c1aa49e6",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "badfba64-22d8-416c-af90-bd3775ace15b"/*CompareInt*/,
+      "SymbolId": "05cf9ea7-045d-421f-8ed3-2c2f6b325a46",
+      "InputValues": [
+        {
+          "Id": "a2e3a00e-10e4-4f52-b923-5e09cc0bfc08"/*TestValue*/,
+          "Type": "System.Int32",
+          "Value": 3
+        },
+        {
+          "Id": "bfa7d45a-0f98-4016-ae34-d5f653e821d6"/*ResultForTrue*/,
+          "Type": "System.Int32",
+          "Value": 2
+        },
+        {
+          "Id": "158e2790-1244-4509-8911-b850ffcee29f"/*ResultForFalse*/,
+          "Type": "System.Int32",
+          "Value": 1
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "17dca063-4cb7-4aec-ada1-42eaf8e60c71"/*IntDiv*/,
+      "SymbolId": "eae8b8af-ce79-4e0a-9777-2dd0a99c18cb",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -322,6 +350,18 @@
       "SourceSlotId": "e6aae72f-8c22-4133-ba0d-c3635751d715",
       "TargetParentOrChildId": "0e72ccfc-5b63-4a61-bfa0-62478059bf2c",
       "TargetSlotId": "01809b63-4b4a-47be-9588-98d5998ddb0c"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "72eda38f-fc49-4b1f-b7c0-97e07bee4f7c",
+      "TargetParentOrChildId": "17dca063-4cb7-4aec-ada1-42eaf8e60c71",
+      "TargetSlotId": "95aaaa60-5582-40b0-907d-74a39710c006"
+    },
+    {
+      "SourceParentOrChildId": "badfba64-22d8-416c-af90-bd3775ace15b",
+      "SourceSlotId": "b8d8d223-b914-4d00-b438-e286ca97707f",
+      "TargetParentOrChildId": "17dca063-4cb7-4aec-ada1-42eaf8e60c71",
+      "TargetSlotId": "996cc728-62ab-4c77-b454-59f0d2f25c00"
     },
     {
       "SourceParentOrChildId": "030c34d3-68c2-4b79-a6e1-066b4a806108",
@@ -562,6 +602,12 @@
       "SourceSlotId": "e6aae72f-8c22-4133-ba0d-c3635751d715",
       "TargetParentOrChildId": "ac4e6dc4-c9f6-4aa1-8a85-ed17d009d7c5",
       "TargetSlotId": "e02f9e84-a7bf-45bf-9cb1-0b0c1c396796"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "4686aa6e-c8e0-45ee-b9c3-1cc7294f305e",
+      "TargetParentOrChildId": "badfba64-22d8-416c-af90-bd3775ace15b",
+      "TargetSlotId": "3b6ca34b-4a64-458a-874f-a0aa094fc278"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",

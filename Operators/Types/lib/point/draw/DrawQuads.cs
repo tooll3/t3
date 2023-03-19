@@ -54,6 +54,9 @@ namespace T3.Operators.Types.Id_16d10dc8_63b9_4ddf_90b8_41caef99d945
 
         [Input(Guid = "154ccdc4-c918-499f-8acb-ca09e6daa8b1")]
         public readonly InputSlot<bool> EnableDepthTest = new InputSlot<bool>();
+
+        [Input(Guid = "64837573-d5d1-4cc2-9dd2-337649308cb0")]
+        public readonly InputSlot<SharpDX.Direct3D11.CullMode> CullMode = new InputSlot<SharpDX.Direct3D11.CullMode>();
     }
 }
 

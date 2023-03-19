@@ -36,7 +36,5 @@ namespace T3.Editor.Gui.ChildUi
             return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels | SymbolChildUi.CustomUiResult.PreventOpenSubGraph;
         }
 
-        private static Vector2 _jogDialCenter;
-        private static InputSlot<float> _activeJogDialInputSlot;
     }
 }
