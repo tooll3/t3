@@ -283,12 +283,7 @@
       "Id": "5e5582db-1152-478a-b822-b5fdf7ed96a3"/*GetTextureSize*/,
       "SymbolId": "daec568f-f7b4-4d81-a401-34d62462daab",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "be16d5d3-4d21-4d5a-9e4c-c7b2779b6bdc"/*GetTextureSize*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "c6b7f935-c140-4081-b189-8cdf21b4311f"/*ResolutionConstBuffer*/,

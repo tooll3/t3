@@ -6,13 +6,6 @@ cbuffer ParamConstants : register(b0)
     float AlphaMode;
 }
 
-cbuffer TimeConstants : register(b1)
-{
-    float globalTime;
-    float time;
-    float runTime;
-    float beatTime;
-}
 
 struct vsOutput
 {

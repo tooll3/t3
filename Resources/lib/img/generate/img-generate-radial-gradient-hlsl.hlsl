@@ -10,15 +10,7 @@ cbuffer ParamConstants : register(b0)
     float IsTextureValid;
 }
 
-cbuffer TimeConstants : register(b1)
-{
-    float globalTime;
-    float time;
-    float runTime;
-    float beatTime;
-}
-
-cbuffer Resolution : register(b2)
+cbuffer Resolution : register(b1)
 {
     float TargetWidth;
     float TargetHeight;
@@ -33,6 +25,7 @@ struct vsOutput
 Texture2D<float4> ImageA : register(t0);
 Texture2D<float4> Gradient : register(t1);
 sampler texSampler : register(s0);
+sampler clammpedSampler : register(s1);
 
 float fmod(float x, float y)
 {
@@ -71,7 +64,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     c = PingPong > 0.5
             ? (Repeat < 0.5 ? (abs(c) / Width)
-                            : saturate(0.9999999 - abs(fmod(c, Width * 2) - Width) / Width))
+                            : 1 - abs(fmod(c, Width * 2) - Width) / Width)
             : c / Width;
 
     c = Repeat > 0.5
@@ -83,13 +76,9 @@ float4 psMain(vsOutput psInput) : SV_TARGET
                         : 1 - pow(clamp(1 - c, 0, 10), -Bias + 1);
 
     dBiased = clamp(dBiased, 0.001, 0.999);
-    float4 gradient = Gradient.Sample(texSampler, float2(dBiased, 0));
+    float4 gradient = Gradient.Sample(clammpedSampler, float2(dBiased, 0));
 
     return (IsTextureValid < 0.5) ? gradient
                                   : float4((1.0 - gradient.a) * orgColor.rgb + gradient.a * gradient.rgb,
                                            orgColor.a + gradient.a - orgColor.a * gradient.a);
-
-    // float a = orgColor.a + gradient.a - orgColor.a * gradient.a;
-    // float3 rgb = (1.0 - gradient.a) * orgColor.rgb + gradient.a * gradient.rgb;
-    // return float4(rgb, a);
 }

@@ -90,48 +90,14 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "3dfe7491-8496-460b-b889-5588f73a141a"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -25.082056,
-        "Y": 29.952059
-      }
-    },
-    {
-      "ChildId": "a8ab8569-d2e1-4f3b-b87b-18bcc00e09bc"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -25.082056,
-        "Y": 74.952194
-      }
-    },
-    {
       "ChildId": "de66c2b3-8e69-4534-bdbe-5f756169a7ad"/*Vector2ToFloat2*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
       },
       "Position": {
-        "X": -25.082056,
-        "Y": 117.952194
-      }
-    },
-    {
-      "ChildId": "ad9245a1-1dd4-40bd-8ec2-2f83112c8573"/*_multiImageFxSetup*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 193.62566,
-        "Y": 863.8263
-      },
-      "Position": {
-        "X": 302.5092,
-        "Y": -386.72745
+        "X": -46.264427,
+        "Y": 43.813797
       }
     },
     {
@@ -143,17 +109,6 @@
       "Position": {
         "X": 15.739555,
         "Y": 542.5111
-      }
-    },
-    {
-      "ChildId": "8e289511-c617-428a-ab7f-d7a3be67a46e"/*BoolToInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 574.0718,
-        "Y": 555.30414
       }
     },
     {
@@ -185,8 +140,19 @@
         "Y": 36.0
       },
       "Position": {
-        "X": -96.71472,
-        "Y": 678.3146
+        "X": -78.70969,
+        "Y": 639.1271
+      }
+    },
+    {
+      "ChildId": "58c8c801-c758-41dc-bc6d-52a901b0583a"/*_multiImageFxSetupStatic*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 205.0
+      },
+      "Position": {
+        "X": 259.04932,
+        "Y": 96.50137
       }
     }
   ],
@@ -194,8 +160,8 @@
     {
       "OutputId": "d140f068-d71e-4af5-a563-ab599dae5dbf"/*TextureOutput*/,
       "Position": {
-        "X": 577.0464,
-        "Y": -29.479145
+        "X": 507.50885,
+        "Y": -20.51485
       }
     }
   ]
