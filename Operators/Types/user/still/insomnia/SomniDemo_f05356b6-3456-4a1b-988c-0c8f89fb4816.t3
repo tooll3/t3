@@ -5519,12 +5519,12 @@
         {
           "Id": "3655d507-96b3-4ded-9cef-886ea703ca89"/*Amount*/,
           "Type": "System.Single",
-          "Value": 20.0
+          "Value": 10.0
         },
         {
           "Id": "97b76d02-e735-4e93-88ad-5c9b8766a63c"/*FocusDistance*/,
           "Type": "System.Single",
-          "Value": 334.0
+          "Value": 3.0
         }
       ],
       "Outputs": []
@@ -5811,6 +5811,12 @@
           "Value": 0.0
         }
       ],
+      "Outputs": []
+    },
+    {
+      "Id": "4654c24c-9276-4c4b-a72a-a87f84f7b575"/*Locator*/,
+      "SymbolId": "348652c3-abf5-4fe9-873b-89d1acaaf0ff",
+      "InputValues": [],
       "Outputs": []
     }
   ],
@@ -9926,23 +9932,23 @@
         "Keys": [
           {
             "Time": 3.6107,
-            "Value": 334.0,
+            "Value": 3.0,
             "InType": "Spline",
             "OutType": "Spline",
             "InEditMode": "Linear",
             "OutEditMode": "Linear",
-            "InTangentAngle": -1.4755966726906138,
-            "OutTangentAngle": 1.6659959808991793
+            "InTangentAngle": 0.36695356200857976,
+            "OutTangentAngle": 3.508546215598373
           },
           {
             "Time": 21.5625,
-            "Value": 146.0,
+            "Value": 9.899999618530273,
             "InType": "Linear",
             "OutType": "Linear",
             "InEditMode": "Linear",
             "OutEditMode": "Linear",
-            "InTangentAngle": -1.4755966726906138,
-            "OutTangentAngle": -4.617189326280407
+            "InTangentAngle": 0.36695356200857976,
+            "OutTangentAngle": -2.7746390915812134
           }
         ]
       }

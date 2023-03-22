@@ -100,7 +100,17 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     {
         float4 rgba = DisplaceMap.Sample(texSampler, uv + DisplaceMapOffset) * padding;
         d = (rgba.rg - 0.5) * 0.01;
-        len = length(d) + 0.00001;
+        len = length(d) + 0.000001;
+
+        float rRad = Twist / 180 * 3.14158;
+        float sina = sin(-rRad);
+        float cosa = cos(-rRad);
+        d = float2(
+            cosa * d.x - sina * d.y,
+            cosa * d.y + sina * d.x);
+
+        // d = float2(cos(Twist / 180 * 3.14158) * d.x, sin(Twist / 180 * 3.14158) * d.y);
+
         direction = d / len;
     }
     // float len = length(d);
