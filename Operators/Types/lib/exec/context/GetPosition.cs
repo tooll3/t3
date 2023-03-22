@@ -24,32 +24,39 @@ namespace T3.Operators.Types.Id_b7731197_b922_4ed8_8e22_bc7596c64f6c
         public GetPosition()
         {
             UpdateCommand.UpdateAction = Update;
-            Position.UpdateAction = Update;
+            Position.UpdateAction = UpdateReturnResults;
+            Scale.UpdateAction = UpdateReturnResults;
+            ObjectToWorld.UpdateAction = UpdateReturnResults;
+        }
+
+        private void UpdateReturnResults(EvaluationContext context)
+        {
+            Position.Value = _lastPosition;
+            Scale.Value = _lastScale;
+            ObjectToWorld.Value = _matrix;
         }
 
         private void Update(EvaluationContext context)
         {
             var p = new SharpDX.Vector4(0, 0, 0, 1);
             var pInWorld = SharpDX.Vector4.Transform(p, context.ObjectToWorld);
-            Position.Value = new Vector3(pInWorld.X, pInWorld.Y, pInWorld.Z);
+            _lastPosition = new Vector3(pInWorld.X, pInWorld.Y, pInWorld.Z);
             
             var s = new SharpDX.Vector4(1, 1, 1, 0);
             var sInWorld = SharpDX.Vector4.Transform(s, context.ObjectToWorld);
-            Scale.Value = new Vector3(sInWorld.X, sInWorld.Y, sInWorld.Z);
-            Position.DirtyFlag.Clear();
-            Position.DirtyFlag.Clear();
-            
+            _lastScale = new Vector3(sInWorld.X, sInWorld.Y, sInWorld.Z);
             
             _matrix[0] = context.ObjectToWorld.Row1;
             _matrix[1] = context.ObjectToWorld.Row2;
             _matrix[2] = context.ObjectToWorld.Row3;
             _matrix[3] = context.ObjectToWorld.Row4;
-            ObjectToWorld.Value = _matrix;
-            ObjectToWorld.DirtyFlag.Clear();
         }
 
         private readonly SharpDX.Vector4[] _matrix = new SharpDX.Vector4[4] ;
+        private Vector3 _lastPosition;
+        private Vector3 _lastScale;
         
+
     }
 }
 
