@@ -210,6 +210,7 @@ namespace T3.Editor.Gui
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad.VertexShader), DescriptiveUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985.PixelShader), DescriptiveUi.DrawChildUi);
             
+            CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_470db771_c7f2_4c52_8897_d3a9b9fc6a4e.GetIntVar), GetIntVarUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_e6072ecf_30d2_4c52_afa1_3b195d61617b.GetFloatVar), GetFloatVarUi.DrawChildUi);
             CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789.SetFloatVar), SetFloatVarUi.DrawChildUi);
 
