@@ -53,12 +53,7 @@
       "SymbolId": "284d2183-197d-47fd-b130-873cced78b1c",
       "Name": "OutputCaching",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "2d329133-29b9-4f56-b5a6-5ff7d83638fa"/*OutputCaching*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "3966bf7a-ff5f-4ddf-b193-de22046f8f2a"/*Time*/,

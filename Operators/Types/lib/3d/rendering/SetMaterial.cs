@@ -14,7 +14,7 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
 {
     public class SetMaterial : Instance<SetMaterial>
     {
-        [Output(Guid = "d80e1028-a48d-4171-8c8c-e6856bd2143d", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "d80e1028-a48d-4171-8c8c-e6856bd2143d")]
         public readonly Slot<Command> Output = new Slot<Command>();
 
         public SetMaterial()

@@ -9,7 +9,7 @@ namespace T3.Operators.Types.Id_936e4324_bea2_463a_b196_6064a2d8a6b2
 {
     public class Execute : Instance<Execute>
     {
-        [Output(Guid = "E81C99CE-FCEE-4E7C-A1C7-0AA3B352B7E1", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "E81C99CE-FCEE-4E7C-A1C7-0AA3B352B7E1")]
         public readonly Slot<Command> Output = new Slot<Command>();
 
         public Execute()

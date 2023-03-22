@@ -12,7 +12,7 @@ namespace T3.Operators.Types.Id_e64f95e4_c045_400f_98ca_7c020ad46174
 {
     public class Switch : Instance<Switch>
     {
-        [Output(Guid = "9300b07e-977d-47b0-908e-c4b1e5e53a64", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "9300b07e-977d-47b0-908e-c4b1e5e53a64")]
         public readonly Slot<Command> Output = new();
 
         [Output(Guid = "044538A4-4499-4F8F-8843-D880677EE1E7")]

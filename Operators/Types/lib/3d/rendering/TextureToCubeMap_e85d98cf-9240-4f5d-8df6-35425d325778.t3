@@ -140,12 +140,7 @@
       "Id": "a9aa92c7-35e5-4efc-bbff-3cefd49bf5b0"/*Execute*/,
       "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1"/*Execute*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "8c3df43e-253a-4511-984a-40154a5f7f63"/*FloatsToBuffer*/,
@@ -289,12 +284,7 @@
       "Id": "f4e7ec7f-09e6-42b4-be20-6332104b8586"/*Execute*/,
       "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1"/*Execute*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "ec3fd5a9-3a49-478f-8df7-df76f8ac9e8f"/*Int2ToSize2*/,

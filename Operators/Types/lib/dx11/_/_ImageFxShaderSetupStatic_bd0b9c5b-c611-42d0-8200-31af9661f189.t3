@@ -201,12 +201,7 @@
       "Id": "60ad40b7-b6ac-4750-837a-73afad8182f5"/*Execute*/,
       "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1"/*Execute*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "92964e5d-4224-46ff-947b-c983128fe296"/*RenderTarget*/,

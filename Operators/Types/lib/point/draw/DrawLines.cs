@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_836f211f_b387_417c_8316_658e0dc6e117
 {
     public class DrawLines : Instance<DrawLines>
     {
-        [Output(Guid = "73ebf863-ba71-421c-bee7-312f13c5eff0", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "73ebf863-ba71-421c-bee7-312f13c5eff0")]
         public readonly Slot<Command> Output = new Slot<Command>();
 
         [Input(Guid = "e15b6dc7-aaf9-4244-a4b8-4ac13ee7d23f")]

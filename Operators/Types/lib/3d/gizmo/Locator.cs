@@ -12,7 +12,7 @@ namespace T3.Operators.Types.Id_348652c3_abf5_4fe9_873b_89d1acaaf0ff
 {
     public class Locator : Instance<Locator>, ITransformable
     {
-        [Output(Guid = "357c4c25-2b08-4470-84b1-9707a3d8e56e", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "357c4c25-2b08-4470-84b1-9707a3d8e56e")]
         public readonly TransformCallbackSlot<Command> Output = new TransformCallbackSlot<Command>();
 
         [Output(Guid = "7599cf50-cbb6-49ce-bb41-9f709b593b0b", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

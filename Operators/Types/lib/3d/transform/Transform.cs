@@ -13,7 +13,7 @@ namespace T3.Operators.Types.Id_284d2183_197d_47fd_b130_873cced78b1c
 {
     public class Transform : Instance<Transform>, ITransformable
     {
-        [Output(Guid = "2D329133-29B9-4F56-B5A6-5FF7D83638FA", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "2D329133-29B9-4F56-B5A6-5FF7D83638FA")]
         public readonly Slot<Command> Output = new Slot<Command>();
         
         IInputSlot ITransformable.TranslationInput => Translation;

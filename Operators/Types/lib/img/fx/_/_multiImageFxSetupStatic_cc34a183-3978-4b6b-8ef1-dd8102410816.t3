@@ -173,12 +173,7 @@
       "Id": "eb992ff5-74f8-4bc0-86f5-94cbc34a82b3"/*Execute*/,
       "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1"/*Execute*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "019ac41b-4792-4000-994c-58576e4d9a70"/*RenderTarget*/,
