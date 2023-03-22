@@ -402,7 +402,8 @@ namespace T3.Editor.Gui.Graph
                         ImGui.PushStyleColor(ImGuiCol.Text, labelColor.Rgba);
                         //var inputSlot = instance.Inputs.Single(slot => inputDefinition.Id == slot.Id);
                         var inputSlot = instance.GetInput(inputDefinition.Id);
-                        var valueAsString = inputUi.GetSlotValue(inputSlot);
+                        //var valueAsString = inputUi.GetSlotValue(inputSlot);
+                        var valueAsString = GetValueString(inputSlot);
                 
                         var valueColor = labelColor;
                         valueColor.Rgba.W *= 0.6f;
@@ -1140,7 +1141,7 @@ namespace T3.Editor.Gui.Graph
             return inputValue switch
                        {
                            InputValue<float> f    => $"{f.Value:G3}",
-                           InputValue<int> i      => $"{i.Value:G3}",
+                           InputValue<int> i      => $"{i.Value:0}",
                            InputValue<Int3> i     => $"{i.Value:G3}",
                            InputValue<bool> b     => $"{b.Value}",
                            InputValue<Vector3> v3 => $"{v3.Value:G3}",
@@ -1154,12 +1155,12 @@ namespace T3.Editor.Gui.Graph
         {
             return outputSlot switch
                        {
-                           Slot<float> f    => $"{f.Value:G3}",
+                           Slot<float> f    => $"{f.Value:0.00}",
                            Slot<int> i      => $"{i.Value:G3}",
                            Slot<Int3> i     => $"{i.Value:G3}",
                            Slot<bool> b     => $"{b.Value}",
-                           Slot<Vector3> v3 => $"{v3.Value:G3}",
-                           Slot<Vector2> v2 => $"{v2.Value:G3}",
+                           Slot<Vector3> v3 => $"{v3.Value:0.0}",
+                           Slot<Vector2> v2 => $"{v2.Value:0.0}",
                            Slot<string> s   => Truncate(s.Value),
                            _                => ""
                        };
