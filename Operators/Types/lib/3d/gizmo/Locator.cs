@@ -15,7 +15,10 @@ namespace T3.Operators.Types.Id_348652c3_abf5_4fe9_873b_89d1acaaf0ff
         [Output(Guid = "357c4c25-2b08-4470-84b1-9707a3d8e56e", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
         public readonly TransformCallbackSlot<Command> Output = new TransformCallbackSlot<Command>();
 
-        [Output(Guid = "0986BEB0-16AB-4836-9071-87052AB19602")]
+        [Output(Guid = "7599cf50-cbb6-49ce-bb41-9f709b593b0b", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<System.Numerics.Vector3> Pos = new Slot<System.Numerics.Vector3>();
+        
+        [Output(Guid = "0986BEB0-16AB-4836-9071-87052AB19602", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> DistanceToCamera = new ();
         
         public Locator()

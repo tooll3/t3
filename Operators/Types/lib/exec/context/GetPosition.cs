@@ -9,16 +9,16 @@ namespace T3.Operators.Types.Id_b7731197_b922_4ed8_8e22_bc7596c64f6c
 {
     public class GetPosition : Instance<GetPosition>
     {
-        [Output(Guid = "C809C405-81D3-44CA-A39C-C8DFA6AB3205", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "C809C405-81D3-44CA-A39C-C8DFA6AB3205", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Command> UpdateCommand = new();
 
-        [Output(Guid = "BB81C71D-9E19-4371-8995-BD61AE426A16")]
+        [Output(Guid = "BB81C71D-9E19-4371-8995-BD61AE426A16", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Vector3> Position = new();
 
-        [Output(Guid = "ACE050AC-8E49-409A-A194-4CB3192148CA")]
+        [Output(Guid = "ACE050AC-8E49-409A-A194-4CB3192148CA", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Vector3> Scale = new();
         
-        [Output(Guid = "751E97DE-C418-48C7-823E-D4660073A559")]
+        [Output(Guid = "751E97DE-C418-48C7-823E-D4660073A559", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<SharpDX.Vector4[]> ObjectToWorld = new();
         
         public GetPosition()
@@ -32,11 +32,11 @@ namespace T3.Operators.Types.Id_b7731197_b922_4ed8_8e22_bc7596c64f6c
             var p = new SharpDX.Vector4(0, 0, 0, 1);
             var pInWorld = SharpDX.Vector4.Transform(p, context.ObjectToWorld);
             Position.Value = new Vector3(pInWorld.X, pInWorld.Y, pInWorld.Z);
-            Position.DirtyFlag.Clear();
             
             var s = new SharpDX.Vector4(1, 1, 1, 0);
             var sInWorld = SharpDX.Vector4.Transform(s, context.ObjectToWorld);
             Scale.Value = new Vector3(sInWorld.X, sInWorld.Y, sInWorld.Z);
+            Position.DirtyFlag.Clear();
             Position.DirtyFlag.Clear();
             
             
