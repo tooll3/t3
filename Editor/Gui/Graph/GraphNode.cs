@@ -1140,12 +1140,12 @@ namespace T3.Editor.Gui.Graph
         {
             return inputValue switch
                        {
-                           InputValue<float> f    => $"{f.Value:G3}",
-                           InputValue<int> i      => $"{i.Value:0}",
+                           InputValue<float> f    => $"{f.Value:0.00}",
+                           InputValue<int> i      => $"{i.Value:G3}",
                            InputValue<Int3> i     => $"{i.Value:G3}",
                            InputValue<bool> b     => $"{b.Value}",
-                           InputValue<Vector3> v3 => $"{v3.Value:G3}",
-                           InputValue<Vector2> v2 => $"{v2.Value:G3}",
+                           InputValue<Vector3> v3 => $"{v3.Value:0.0}",
+                           InputValue<Vector2> v2 => $"{v2.Value:0.0}",
                            InputValue<string> s   => Truncate(s.Value),
                            _                      => ""
                        };
