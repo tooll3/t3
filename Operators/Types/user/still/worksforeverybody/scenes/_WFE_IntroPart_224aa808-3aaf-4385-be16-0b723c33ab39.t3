@@ -761,7 +761,7 @@
         {
           "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
           "Type": "System.Single",
-          "Value": 69.0
+          "Value": 63.9
         },
         {
           "Id": "eaf9dc37-e70f-4197-895c-b5607456b4a2"/*LineHeight*/,
@@ -854,7 +854,7 @@
         {
           "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
           "Type": "System.String",
-          "Value": "Use your Mouse to \nPause and Explore"
+          "Value": "Use your mouse to \npause and explore."
         }
       ],
       "Outputs": []
@@ -878,7 +878,7 @@
         {
           "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
           "Type": "System.String",
-          "Value": "Press Space\nto test your\ntiming."
+          "Value": "Press Space to \ntest your timing."
         }
       ],
       "Outputs": []
@@ -896,7 +896,7 @@
         {
           "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
           "Type": "System.String",
-          "Value": "The show\nis about \nto start"
+          "Value": "The show\nis about \nto start."
         }
       ],
       "Outputs": []
@@ -908,7 +908,7 @@
         {
           "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
           "Type": "System.String",
-          "Value": "Please skip class,\nif you're senstive \nto flashing images. "
+          "Value": "Plesae skip class\nif you're sensitive \nto flashing images"
         }
       ],
       "Outputs": []
@@ -971,7 +971,7 @@
         {
           "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
           "Type": "System.String",
-          "Value": "Based on the work of:\n\nMichael Bach, Prof, Dr. rer. nat. , Uni Freiburg\nAkiyoshi Kitaoka, Prof, Ph.D /  Ritsumei, Osaka\n@jagarikin\nFramefield GmbH, Berlin"
+          "Value": "Based on the work of:\n\nMichael Bach, Prof., Dr. rer. nat. / Uni Freiburg\nAkiyoshi Kitaoka, Prof., Ph. D. /  Ritsumei, Osaka\n@jagarikin\nFramefield GmbH / Berlin"
         },
         {
           "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
@@ -1913,7 +1913,7 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 4.1942,
+            "Time": 5.4171,
             "Value": 1.0,
             "InType": "Constant",
             "OutType": "Constant",
@@ -1923,7 +1923,7 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 9.4793,
+            "Time": 12.6193,
             "Value": 2.0,
             "InType": "Constant",
             "OutType": "Constant",
@@ -1933,7 +1933,7 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 16.6905,
+            "Time": 20.0,
             "Value": 3.0,
             "InType": "Constant",
             "OutType": "Constant",

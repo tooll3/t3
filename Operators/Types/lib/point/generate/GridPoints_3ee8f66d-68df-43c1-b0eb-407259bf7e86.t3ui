@@ -60,7 +60,8 @@
       "Position": {
         "X": -1147.5215,
         "Y": 1277.2802
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "28f5fea3-b7c1-4e46-84d5-47b5f311be80"/*OrientationAngle*/,
