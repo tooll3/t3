@@ -23,10 +23,9 @@ namespace T3.Editor.Gui.ChildUi
             var symbolChild = valueInstance.Parent.Symbol.Children.Single(c => c.Id == valueInstance.SymbolChildId);
             drawList.PushClipRect(area.Min, area.Max, true);
             
-            //valueInstance.Float.
             var isAnimated = instance.Parent?.Symbol.Animator.IsInputSlotAnimated(valueInstance.Float)??false;
             
-            var value = (isAnimated) 
+            var value = (isAnimated || valueInstance.Float.IsConnected) 
                             ? (double)valueInstance.Float.Value 
                             :(double)valueInstance.Float.TypedInputValue.Value;
             
