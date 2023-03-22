@@ -62,7 +62,12 @@
           "Value": -1
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "c382284f-7e37-4eb0-b284-bc735247f26b"/*ComputeShaderStage*/,
+          "DirtyFlagTrigger": "None"
+        }
+      ]
     },
     {
       "Id": "149c7a76-cd3a-4f71-8369-26ff90a8e3b8"/*GetSRVProperties*/,
@@ -121,7 +126,12 @@
       "Id": "bc86792e-3181-4ec6-8dc9-07193acb34b2"/*ComputeShaderStage*/,
       "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
       "InputValues": [],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "c382284f-7e37-4eb0-b284-bc735247f26b"/*ComputeShaderStage*/,
+          "DirtyFlagTrigger": "None"
+        }
+      ]
     },
     {
       "Id": "9017e90f-053e-4b03-b61e-5b2640c25e26"/*ComputeShader*/,
