@@ -129,20 +129,23 @@ namespace T3.Editor.Gui.Graph
             }
 
             // 4. Draw Inputs Nodes
-            foreach (var inputNode in _inputUisById)
+            if (Connections != null)
             {
-                var index = graphSymbol.InputDefinitions.FindIndex(def => def.Id == inputNode.Key);
-                var inputDef = graphSymbol.InputDefinitions[index];
-                InputNode.Draw(inputDef, inputNode.Value, index);
-
-                var sourcePos = new Vector2(
-                                            InputNode._lastScreenRect.Max.X + GraphNode.UsableSlotThickness,
-                                            InputNode._lastScreenRect.GetCenter().Y
-                                           );
-
-                foreach (var line in Connections.GetLinesFromInputNodes(inputNode.Value, inputNode.Key))
+                foreach (var (nodeId, node) in _inputUisById)
                 {
-                    line.SourcePosition = sourcePos;
+                    var index = graphSymbol.InputDefinitions.FindIndex(def => def.Id == nodeId);
+                    var inputDef = graphSymbol.InputDefinitions[index];
+                    var isSelectedOrHovered = InputNode.Draw(inputDef, node, index);
+
+                    var sourcePos = new Vector2(
+                                                InputNode._lastScreenRect.Max.X + GraphNode.UsableSlotThickness,
+                                                InputNode._lastScreenRect.GetCenter().Y
+                                               );
+                    foreach (var line in Connections.GetLinesFromInputNodes(node, nodeId))
+                    {
+                        line.SourcePosition = sourcePos;
+                        line.IsSelected |= isSelectedOrHovered;
+                    }
                 }
             }
 

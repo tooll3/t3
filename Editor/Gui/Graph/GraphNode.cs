@@ -59,6 +59,7 @@ namespace T3.Editor.Gui.Graph
 
             _isVisible = ImGui.IsRectVisible(_selectableScreenRect.Min, _selectableScreenRect.Max);
 
+            var isNodeHovered = false;
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
                 var drawList = GraphCanvas.Current.DrawList;
@@ -160,11 +161,13 @@ namespace T3.Editor.Gui.Graph
 
                     SelectableNodeMovement.Handle(childUi, instance);
 
+                    isNodeHovered = ImGui.IsItemHovered() 
+                                        && !GraphCanvas.Current.SymbolBrowser.IsOpen
+                        && ImGui.IsWindowFocused();
                     // Tooltip
-                    if (ImGui.IsItemHovered()
+                    if (isNodeHovered
                         && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip
-                        && !GraphCanvas.Current.SymbolBrowser.IsOpen
-                        && ImGui.IsWindowFocused())
+                        )
                     {
                         if (UserSettings.Config.SmartGroupDragging)
                             SelectableNodeMovement.HighlightSnappedNeighbours(childUi);
@@ -481,7 +484,7 @@ namespace T3.Editor.Gui.Graph
                 
                             line.TargetPosition = targetPos;
                             line.TargetNodeArea = connectionBorderArea;
-                            line.IsSelected |= childUi.IsSelected | isSocketHovered;
+                            line.IsSelected |= childUi.IsSelected | isSocketHovered | isNodeHovered;
                             line.FramesSinceLastUsage = framesSinceLastUpdate;
                             line.IsAboutToBeReplaced = ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, socketIndex);
                         }
@@ -513,7 +516,7 @@ namespace T3.Editor.Gui.Graph
                         line.TargetPosition = new Vector2(usableSlotArea.Max.X - 4,
                                                           usableSlotArea.GetCenter().Y);
                         line.TargetNodeArea = connectionBorderArea;
-                        line.IsSelected |= childUi.IsSelected | hovered;
+                        line.IsSelected |= childUi.IsSelected | hovered | isNodeHovered;
                         line.IsAboutToBeReplaced = isAboutToBeReconnected;
                         line.FramesSinceLastUsage = framesSinceLastUpdate;
                     }
@@ -564,7 +567,7 @@ namespace T3.Editor.Gui.Graph
                         line.ColorForType.Rgba.W = 0.3f;
                     }
             
-                    line.IsSelected |= childUi.IsSelected;
+                    line.IsSelected |= childUi.IsSelected || hovered | isNodeHovered;
                 }
             
                 {

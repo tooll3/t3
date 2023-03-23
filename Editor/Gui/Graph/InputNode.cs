@@ -14,10 +14,12 @@ namespace T3.Editor.Gui.Graph
     /// </summary>
     static class InputNode
     {
-        internal static void Draw(Symbol.InputDefinition inputDef, IInputUi inputUi, int index)
-        {
+        internal static bool Draw(Symbol.InputDefinition inputDef, IInputUi inputUi, int index)
+        { 
+            var isSelectedOrHovered = false;
             ImGui.PushID(inputDef.Id.GetHashCode());
             {
+                
                 _lastScreenRect = GraphCanvas.Current.TransformRect(new ImRect(inputUi.PosOnCanvas, inputUi.PosOnCanvas + inputUi.Size));
                 _lastScreenRect.Floor();
 
@@ -30,6 +32,7 @@ namespace T3.Editor.Gui.Graph
                 if (hovered)
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+                    isSelectedOrHovered = true;
                 }
 
                 SelectableNodeMovement.Handle(inputUi);
@@ -43,7 +46,10 @@ namespace T3.Editor.Gui.Graph
                                            ? ColorVariations.OperatorHover.Apply(typeColor)
                                            : ColorVariations.ConnectionLines.Apply(typeColor));
 
-                if (inputUi.IsSelected)
+                var inputUiIsSelected = inputUi.IsSelected;
+                isSelectedOrHovered |= inputUiIsSelected;
+                
+                if (inputUiIsSelected)
                 {
                     const float thickness = 1;
                     drawList.AddRect(_lastScreenRect.Min - Vector2.One * thickness,
@@ -133,6 +139,7 @@ namespace T3.Editor.Gui.Graph
                 }
             }
             ImGui.PopID();
+            return isSelectedOrHovered;
         }
 
         internal static ImRect _lastScreenRect;
