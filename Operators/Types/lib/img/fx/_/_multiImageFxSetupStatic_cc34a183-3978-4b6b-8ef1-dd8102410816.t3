@@ -294,8 +294,9 @@
       "Outputs": []
     },
     {
-      "Id": "6077ceb4-4957-4b79-87dc-ab819b5d9b6b"/*SamplerStateOp*/,
+      "Id": "6077ceb4-4957-4b79-87dc-ab819b5d9b6b"/*ClampedSampler*/,
       "SymbolId": "9515d59d-0bd5-406b-96da-6a5f60215700",
+      "Name": "ClampedSampler",
       "InputValues": [
         {
           "Id": "a870921f-a28c-4501-9f31-38a18b0acdcc"/*Filter*/,

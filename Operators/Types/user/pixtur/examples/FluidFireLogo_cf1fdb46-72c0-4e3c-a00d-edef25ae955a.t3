@@ -56,7 +56,7 @@
           "Value": -90.0
         },
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
           "Type": "System.Single",
           "Value": 0.69
         },
@@ -523,7 +523,7 @@
           "Value": 67.0
         },
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
           "Type": "System.Single",
           "Value": 0.11
         },
@@ -908,7 +908,7 @@
           "Value": 77.0
         },
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Width*/,
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
           "Type": "System.Single",
           "Value": 0.52
         },

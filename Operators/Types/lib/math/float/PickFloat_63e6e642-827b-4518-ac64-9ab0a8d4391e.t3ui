@@ -2,7 +2,7 @@
   "Id": "63e6e642-827b-4518-ac64-9ab0a8d4391e"/*PickFloat*/,
   "InputUis": [
     {
-      "InputId": "d7ef7f1a-a6bd-4f94-a29a-bb19e2854001"/*Input*/,
+      "InputId": "d7ef7f1a-a6bd-4f94-a29a-bb19e2854001"/*FloatValues*/,
       "Relevancy": "Required",
       "Position": {
         "X": -200.0,

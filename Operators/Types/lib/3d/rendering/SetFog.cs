@@ -14,7 +14,7 @@ namespace T3.Operators.Types.Id_74cbfce0_f8b8_46a1_b5d6_38477d4eec99
 {
     public class SetFog : Instance<SetFog>
     {
-        [Output(Guid = "7c2134d1-45c6-4dc7-b591-a4a5113f5747", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "7c2134d1-45c6-4dc7-b591-a4a5113f5747")]
         public readonly Slot<Command> Output = new Slot<Command>();
 
         public SetFog()

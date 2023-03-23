@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -17,7 +18,9 @@ namespace T3.Operators.Types.Id_63e6e642_827b_4518_ac64_9ab0a8d4391e
 
         private void Update(EvaluationContext context)
         {
-            var connections = Input.GetCollectedTypedInputs();
+            var connections = FloatValues.GetCollectedTypedInputs();
+            FloatValues.DirtyFlag.Clear();
+            
             if (connections == null || connections.Count == 0)
                 return;
 
@@ -27,10 +30,23 @@ namespace T3.Operators.Types.Id_63e6e642_827b_4518_ac64_9ab0a8d4391e
 
             index %= connections.Count;
             Selected.Value = connections[index].GetValue(context);
+
+            // Clear dirty flag
+            if (_isFirstUpdate)
+            {
+                foreach (var c in connections)
+                {
+                    c.GetValue(context);
+                }
+
+                _isFirstUpdate = false;
+            }
         }
 
+        private bool _isFirstUpdate = true; 
+
         [Input(Guid = "D7EF7F1A-A6BD-4F94-A29A-BB19E2854001")]
-        public readonly MultiInputSlot<float> Input = new MultiInputSlot<float>();
+        public readonly MultiInputSlot<float> FloatValues = new MultiInputSlot<float>();
 
         [Input(Guid = "465B4FC3-899C-4B97-9892-F237FA6613E8")]
         public readonly InputSlot<int> Index = new InputSlot<int>(0);

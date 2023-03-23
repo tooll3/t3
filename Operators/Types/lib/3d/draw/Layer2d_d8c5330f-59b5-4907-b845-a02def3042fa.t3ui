@@ -41,7 +41,7 @@
       }
     },
     {
-      "InputId": "da0941c9-c700-4552-9d8a-799bf7a08826"/*Rotate*/,
+      "InputId": "da0941c9-c700-4552-9d8a-799bf7a08826"/*Rotation*/,
       "Position": {
         "X": -455.0904,
         "Y": 943.4808

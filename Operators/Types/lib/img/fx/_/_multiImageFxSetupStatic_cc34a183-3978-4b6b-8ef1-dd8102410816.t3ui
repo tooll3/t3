@@ -290,7 +290,7 @@
       }
     },
     {
-      "ChildId": "6077ceb4-4957-4b79-87dc-ab819b5d9b6b"/*SamplerStateOp*/,
+      "ChildId": "6077ceb4-4957-4b79-87dc-ab819b5d9b6b"/*ClampedSampler*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0

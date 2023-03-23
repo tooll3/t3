@@ -33,6 +33,9 @@ namespace T3.Operators.Types.Id_9f43f769_d32a_4f49_92ac_e0be3ba250cf
         [Input(Guid = "d7b83780-c4be-4337-b1df-0c98310b1926")]
         public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
 
+        [Input(Guid = "93e63b73-e572-4bb2-bbbd-11bbffad89e7")]
+        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+
         private enum RgbBlendModes
         {
             Normal = 0,

@@ -4,7 +4,7 @@
   "Namespace": "lib.math.float",
   "Inputs": [
     {
-      "Id": "d7ef7f1a-a6bd-4f94-a29a-bb19e2854001"/*Input*/,
+      "Id": "d7ef7f1a-a6bd-4f94-a29a-bb19e2854001"/*FloatValues*/,
       "DefaultValue": 0.0
     },
     {

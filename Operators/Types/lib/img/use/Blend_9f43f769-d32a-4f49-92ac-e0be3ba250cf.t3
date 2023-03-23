@@ -44,6 +44,13 @@
     {
       "Id": "d7b83780-c4be-4337-b1df-0c98310b1926"/*GenerateMips*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "93e63b73-e572-4bb2-bbbd-11bbffad89e7"/*Resolution*/,
+      "DefaultValue": {
+        "Width": 0,
+        "Height": 0
+      }
     }
   ],
   "Children": [
@@ -134,6 +141,12 @@
       "SourceSlotId": "d7b83780-c4be-4337-b1df-0c98310b1926",
       "TargetParentOrChildId": "65a46696-fe6d-4abf-9ff0-9f12c6ac1dcc",
       "TargetSlotId": "440e471b-9f67-435c-9e21-304cd57728aa"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "93e63b73-e572-4bb2-bbbd-11bbffad89e7",
+      "TargetParentOrChildId": "65a46696-fe6d-4abf-9ff0-9f12c6ac1dcc",
+      "TargetSlotId": "6aa3113a-7f53-4dc6-a79e-2d818c5c5c25"
     },
     {
       "SourceParentOrChildId": "46965dc5-8929-4d8f-82ff-29cebdce3b8d",

@@ -44,7 +44,7 @@ namespace T3.Operators.Types.Id_d8c5330f_59b5_4907_b845_a02def3042fa
         public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "da0941c9-c700-4552-9d8a-799bf7a08826")]
-        public readonly InputSlot<float> Rotate = new InputSlot<float>();
+        public readonly InputSlot<float> Rotation = new InputSlot<float>();
 
         [Input(Guid = "ed4f8c30-7b71-4649-97e6-710a718039b0")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
