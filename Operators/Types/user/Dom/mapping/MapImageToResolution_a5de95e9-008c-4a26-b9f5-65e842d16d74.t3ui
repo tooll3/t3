@@ -1,0 +1,212 @@
+{
+  "Id": "a5de95e9-008c-4a26-b9f5-65e842d16d74"/*MapImageToResolution*/,
+  "Description": "Maps the provided image to the provided resolution.\n\nIf any dimension is left at the default (0), then it will simply map to the context's [RequestedResolution]",
+  "InputUis": [
+    {
+      "InputId": "13fd6036-aa8c-4694-9c7b-0f4cbeb74b7b"/*Texture*/,
+      "Position": {
+        "X": -109.66957,
+        "Y": 137.6984
+      }
+    },
+    {
+      "InputId": "66ef98f5-9d92-479a-8124-65ee0ce366fe"/*Resolution*/,
+      "Position": {
+        "X": -109.66957,
+        "Y": 182.6984
+      },
+      "Min": 0,
+      "Clamp": true
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "beb5f144-5c8b-41a1-9556-ce5e1b9e60b7"/*TransformImage*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 127.0
+      },
+      "Position": {
+        "X": 1529.546,
+        "Y": 122.61252
+      }
+    },
+    {
+      "ChildId": "0b605884-66ce-4e0d-a9d1-799010e42200"/*GetTextureSize*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 81.1671,
+        "Y": 75.6301
+      }
+    },
+    {
+      "ChildId": "ad2a90bb-01f0-4115-ac36-2bcf2e88365b"/*Size2Components*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 905.5849,
+        "Y": 57.33194
+      }
+    },
+    {
+      "ChildId": "5309afa5-ff76-436e-a748-358c2b8f1c0f"/*Size2Components*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 60.126183,
+        "Y": 218.8341
+      }
+    },
+    {
+      "ChildId": "dbb369e7-5570-4ebe-973c-5ce0ee8daf41"/*Div*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1198.0273,
+        "Y": 212.25412
+      }
+    },
+    {
+      "ChildId": "0869c855-ee5e-4ca0-a8d1-c516982cb45c"/*Float2ToVector2*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1332.6897,
+        "Y": 215.51073
+      }
+    },
+    {
+      "ChildId": "e97ab1f9-7118-424f-a6c5-8d86fc399550"/*If width is 0*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 263.5119,
+        "Y": 276.31
+      }
+    },
+    {
+      "ChildId": "ad6c0a91-88c6-455f-ab3d-533b50cf1ec6"/*if height is 0*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 266.7002,
+        "Y": 365.69696
+      }
+    },
+    {
+      "ChildId": "a1a647da-e39f-488a-8e5d-7d680f60ff52"/*Or*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 428.1325,
+        "Y": 302.53928
+      }
+    },
+    {
+      "ChildId": "5856acd3-f282-4174-9a45-3946be256bb6"/*Width*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 615.51154,
+        "Y": 259.99045
+      }
+    },
+    {
+      "ChildId": "bced7cd2-4306-4df1-a685-f7f4f47ccd35"/*RequestedResolution*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 455.27972,
+        "Y": 422.6176
+      }
+    },
+    {
+      "ChildId": "2698b814-3201-463a-aab2-8e44a89e7151"/*Height*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 625.49146,
+        "Y": 388.21313
+      }
+    },
+    {
+      "ChildId": "9b2b5623-c03b-44c9-beb4-437b7c4bff42"/*ResolutionToUse*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 782.1704,
+        "Y": 326.64993
+      }
+    },
+    {
+      "ChildId": "8956b008-46f7-4fad-a48e-933ebf6359ad"/*Size2Components*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 1024.0756,
+        "Y": 259.5273
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "7005e7bf-1a9e-4893-8b17-a05b8845532d"/*TextureOutput*/,
+      "Position": {
+        "X": 1699.2245,
+        "Y": 171.1485
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "9550ebc6-4a94-48a4-9ebd-353f23de8f0a",
+      "Title": "todo: This could be simplified/\nmore efficient with a \nBoolToSize2 op",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 593.7381,
+        "Y": 201.73106
+      },
+      "Size": {
+        "X": 327.31836,
+        "Y": 265.95236
+      }
+    }
+  ]
+}

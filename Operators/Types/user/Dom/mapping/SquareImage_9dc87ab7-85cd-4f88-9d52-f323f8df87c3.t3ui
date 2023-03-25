@@ -1,0 +1,110 @@
+{
+  "Id": "9dc87ab7-85cd-4f88-9d52-f323f8df87c3"/*SquareImage*/,
+  "Description": "turn a given input image into a square of its largest resolution",
+  "InputUis": [
+    {
+      "InputId": "55b08c47-edc8-49f0-a2c1-02e39a6e344d"/*Input*/,
+      "Position": {
+        "X": -216.86865,
+        "Y": 56.159348
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "e980fa81-dfbd-49df-aebe-2fe19b8ae79a"/*GetTextureSize*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": -66.86865,
+        "Y": 56.159348
+      }
+    },
+    {
+      "ChildId": "dd62b5ac-4619-4988-bc6f-8f71562c2a68"/*Size2Components*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 139.0191,
+        "Y": 65.59981
+      }
+    },
+    {
+      "ChildId": "66de32d6-580a-46e9-8e8a-3a9edc1af4d5"/*MaxInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 382.14258,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "7c744a6b-e1e8-45ee-9b82-bfd336257561"/*Int2ToSize2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 549.77673,
+        "Y": 2.8214722
+      }
+    },
+    {
+      "ChildId": "8beb704d-aff6-477e-8234-d0aa004a03e2"/*TransformImage*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 127.0
+      },
+      "Position": {
+        "X": 827.9459,
+        "Y": 29.679428
+      }
+    },
+    {
+      "ChildId": "6c36991e-a0ed-4bd2-9e39-bf53dcd6ed2a"/*Div*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 363.4638,
+        "Y": 119.595825
+      }
+    },
+    {
+      "ChildId": "d449bc33-b52e-4928-acd9-ffec51f42295"/*Float2ToVector2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 567.6205,
+        "Y": 115.6622
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "bebebcd3-6894-4ff0-b7db-91aa3f9c5987"/*Texture*/,
+      "Position": {
+        "X": 1060.8074,
+        "Y": 44.838333
+      }
+    },
+    {
+      "OutputId": "eec35ed1-7ef7-4b4d-8f38-55ac1d614661"/*Resolution*/,
+      "Position": {
+        "X": 1052.4108,
+        "Y": 141.76405
+      }
+    }
+  ]
+}

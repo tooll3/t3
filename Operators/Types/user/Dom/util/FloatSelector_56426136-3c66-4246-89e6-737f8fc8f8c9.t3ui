@@ -1,0 +1,116 @@
+{
+  "Id": "56426136-3c66-4246-89e6-737f8fc8f8c9"/*FloatSelector*/,
+  "Description": "A simple way to select a float from a series of float inputs by index.\n\nIf \"wrap\" is selected, indexes that exceed the number of provided values will wrap (via modulo). This allows you to cycle through your values using something like [Counter], for example",
+  "InputUis": [
+    {
+      "InputId": "c9c651d2-b456-43fc-bbdb-583018e4f2bd"/*Values*/,
+      "Position": {
+        "X": -150.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "94c5cdf6-33b6-43cc-a861-a8a1a4885096"/*SelectedIndex*/,
+      "Position": {
+        "X": -150.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "2a2f177c-f5c6-4538-a99a-9b2eb37f2269"/*Wrap*/,
+      "Position": {
+        "X": -150.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "bf2b40f1-0010-43e1-9cd6-0d2365499b05"/*SelectFloatFromList*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 744.745,
+        "Y": 170.35188
+      }
+    },
+    {
+      "ChildId": "675da7a8-75c2-4005-aba9-187b95499000"/*FloatsToList*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 45.417526,
+        "Y": -22.659744
+      }
+    },
+    {
+      "ChildId": "32fba763-679d-4193-a3cb-c9e37147602c"/*FloatListLength*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 68.34085,
+        "Y": 203.09421
+      }
+    },
+    {
+      "ChildId": "55eb3d8a-d810-4a4f-90c8-ce88d1679393"/*ClampInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 412.92426,
+        "Y": 161.49945
+      }
+    },
+    {
+      "ChildId": "569277f7-8da3-4a49-8dc2-b61a390293bb"/*SubInts*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 255.11905,
+        "Y": 177.94505
+      }
+    },
+    {
+      "ChildId": "45f868da-28a1-45ec-8496-98727e45991a"/*BoolToInt*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 562.92426,
+        "Y": 161.49945
+      }
+    },
+    {
+      "ChildId": "84b68f01-d16d-4803-a5cf-fc2f046200ca"/*ModInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 240.1575,
+        "Y": 255.13147
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "f7493e26-69dc-488f-9eae-f3a291750684"/*SelectedValue*/,
+      "Position": {
+        "X": 919.5343,
+        "Y": 181.25908
+      }
+    }
+  ]
+}

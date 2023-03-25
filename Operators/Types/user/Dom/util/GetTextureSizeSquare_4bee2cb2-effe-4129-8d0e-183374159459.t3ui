@@ -1,0 +1,106 @@
+{
+  "Id": "4bee2cb2-effe-4129-8d0e-183374159459"/*GetTextureSizeSquare*/,
+  "Description": "Returns a Size2 containing the smallest or largest dimension of the provided texture.\n\nFor example, if a texture provided is 1920x1080, this would return (1920, 1920) if UseMaxSize is true, and (1080, 1080) if false.",
+  "InputUis": [
+    {
+      "InputId": "a6c7f778-26db-4e7c-b19c-1c462ee87f01"/*Texture*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "34461e92-7217-4c2e-be63-27dca0eddb8d"/*UseMaxSize*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "9f348a64-2b99-4527-b840-390d86a6e6e2"/*GetTextureSize*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "e52b59ec-995b-448f-beb3-b80e17a148a4"/*Size2Components*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 150.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "77b510f7-9f78-48b5-8a5c-50462dc9935d"/*MaxInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 320.62988,
+        "Y": 102.71074
+      }
+    },
+    {
+      "ChildId": "755f6239-2bdd-41d1-aa55-b408445b3822"/*Int2ToSize2*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 670.22986,
+        "Y": -19.02362
+      }
+    },
+    {
+      "ChildId": "384f3a7d-a2db-46e3-8ae0-c5232e6dd863"/*BoolToInt*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 518.17126,
+        "Y": 22.148117
+      }
+    },
+    {
+      "ChildId": "dd0c8249-01b5-4ad5-b26f-18d90c433881"/*MinInt*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 62.0
+      },
+      "Position": {
+        "X": 319.92587,
+        "Y": -107.47183
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "5edc74b5-7b9a-4f84-b505-a691aebedfb0"/*Result*/,
+      "Position": {
+        "X": 820.22986,
+        "Y": -19.02362
+      }
+    },
+    {
+      "OutputId": "c88a65e1-194a-4a61-abeb-a64cd4a3983b"/*ResultInt*/,
+      "Position": {
+        "X": 834.4517,
+        "Y": 73.098045
+      }
+    }
+  ]
+}
