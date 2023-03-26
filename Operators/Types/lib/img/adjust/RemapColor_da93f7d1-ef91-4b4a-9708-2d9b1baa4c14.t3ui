@@ -17,13 +17,6 @@
       }
     },
     {
-      "InputId": "f10896b4-b8fa-4e16-a7ec-4a641ddda926"/*Bias*/,
-      "Position": {
-        "X": -314.36774,
-        "Y": 480.138
-      }
-    },
-    {
       "InputId": "c45d487b-3221-44c7-bf9e-b982a65280f6"/*Gradient*/,
       "Position": {
         "X": -314.36774,
@@ -90,14 +83,25 @@
         "X": -142.40942,
         "Y": 635.2346
       }
+    },
+    {
+      "ChildId": "9c2895b1-8571-4326-a744-0f65ed4b5420"/*_multiImageFxSetupStatic*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 101.0
+      },
+      "Position": {
+        "X": 853.66644,
+        "Y": 46.401245
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "16e37306-05e1-4de6-babd-80a8d1472a2f"/*TextureOutput*/,
       "Position": {
-        "X": 577.0464,
-        "Y": -29.479145
+        "X": 1125.3413,
+        "Y": -46.14464
       }
     }
   ]
