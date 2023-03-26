@@ -6310,12 +6310,27 @@
           "Value": -45.0
         },
         {
+          "Id": "e39e2fd3-6820-4353-b098-44127303bb51"/*Width*/,
+          "Type": "System.Single",
+          "Value": 1.0
+        },
+        {
+          "Id": "bb6c1508-1849-4c40-b609-06ddfe62a6ea"/*Offset*/,
+          "Type": "System.Single",
+          "Value": 0.0
+        },
+        {
           "Id": "5a5fc5e7-4fec-4146-9183-161fff71ee97"/*Offsetimage*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 1.0,
             "Y": 0.0
           }
+        },
+        {
+          "Id": "341ee76d-f431-40e8-ba14-aa4e0a1f10c4"/*ShadeAmount*/,
+          "Type": "System.Single",
+          "Value": 0.0
         },
         {
           "Id": "6809a355-47fc-4e27-98a2-956dcc7f41ef"/*Resolution*/,
