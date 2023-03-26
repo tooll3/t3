@@ -64,7 +64,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     c = PingPong > 0.5
             ? (Repeat < 0.5 ? (abs(c) / Width)
-                            : 1 - abs(fmod(c, Width * 2) - Width) / Width)
+                            : 1.000001 - abs(fmod(c, Width * 1.99999) - Width) / Width)
             : c / Width;
 
     c = Repeat > 0.5
