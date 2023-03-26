@@ -250,12 +250,13 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
         {
             int w = Math.Max(size.Width, size.Height);
             int mipLevels = generateMips ? (int)MathUtils.Log2(w) + 1 : 1;
+            var multiSampleTexture2dMipLevels=  DownSamplingRequired ? 1 : mipLevels;
             // Log.Debug($"miplevel: {mipLevels}, w: {w}");
             bool wasChanged= false;
 
             bool colorFormatChanged = _multiSampledColorBuffer == null
                                       || _multiSampledColorBuffer.Description.Format != colorFormat
-                                      || _multiSampledColorBuffer.Description.MipLevels != mipLevels
+                                      || _multiSampledColorBuffer.Description.MipLevels != multiSampleTexture2dMipLevels
                                       || _multiSampledColorBuffer.Description.Width != size.Width
                                       || _multiSampledColorBuffer.Description.Height != size.Height
                                       || _multiSampledColorBuffer.Description.SampleDescription.Count != _sampleCount;
@@ -272,6 +273,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
 
                 try
                 {
+                    
                     var texture2DDescription = new Texture2DDescription
                                                    {
                                                        ArraySize = 1,
@@ -356,12 +358,13 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             var depthRequired = depthFormat != Format.Unknown;
             var depthInitialized = _multiSampledDepthBuffer != null;
 
-            bool depthFormatChanged = _multiSampledDepthBuffer == null
+            bool depthFormatChanged = (_multiSampledDepthBuffer == null)
                                       || _multiSampledDepthBuffer.Description.Width != size.Width
                                       || _multiSampledDepthBuffer.Description.Height != size.Height
                                       || _multiSampledDepthBuffer.Description.SampleDescription.Count != _sampleCount
                                       || _multiSampledDepthBuffer.Description.Format != depthFormat;
-
+                
+            
             if (depthFormatChanged || (!depthRequired && depthInitialized))
             {
                 Utilities.Dispose(ref _multiSampledDepthBufferDsv);
