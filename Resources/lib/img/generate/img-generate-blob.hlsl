@@ -8,7 +8,7 @@ cbuffer ParamConstants : register(b0)
     float Feather;
     float GradientBias;
     float Rotate;
-
+    float ColorMode;
     float IsTextureValid;
 }
 
@@ -79,6 +79,45 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
     // orgColor = float4(1,1,1,0);
+    float a = clamp(orgColor.a + c.a - orgColor.a*c.a, 0,1);
+
+    // Mab mess blend modes 
+     float3 rgb = 1;
+
+     switch( (int)ColorMode) {
+        // normal
+        case 0:
+            rgb = (1.0 - c.a)*orgColor.rgb + c.a*c.rgb;
+            break;
+            
+        // screen
+        case 1:
+            rgb = 1-(1-orgColor.rgb) * (1-c.rgb * c.a);            
+            break;
+    
+        // multiply
+        case 2:
+            rgb =  lerp(orgColor.rgb, orgColor.rgb * c.rgb, c.a);
+            break;
+        // overlay
+        case 3:
+            rgb =  float3( 
+                orgColor.r < 0.5?(2.0 * orgColor.r * c.r) : (1.0-2.0*(1.0-orgColor.r)*(1.0- c.r)),
+                orgColor.g < 0.5?(2.0 * orgColor.g * c.g) : (1.0-2.0*(1.0-orgColor.g)*(1.0- c.g)),
+                orgColor.b < 0.5?(2.0 * orgColor.b * c.b) : (1.0-2.0*(1.0-orgColor.b)*(1.0- c.b)));
+                
+            rgb = lerp(orgColor.rgb, rgb, c.a);
+            break;
+            
+        // difference
+        case 4:
+            rgb = abs(orgColor.rgb - c.rgb) * c.a + c.rgb * (1.0 - c.a);
+            break;        
+
+               
+    }
+    return float4(rgb,a);
+    
 
     return (IsTextureValid < 0.5) ? c
                                   : float4((1.0 - c.a) * orgColor.rgb + c.a * c.rgb,

@@ -13,6 +13,8 @@ cbuffer ParamConstants : register(b0)
     float LineWidth;
     float Fade;
     float Copies;
+    float ColorMode;
+    
 }
 
 
@@ -97,7 +99,42 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     //float4 orgColor = inputTexture.Sample(texSampler, psInput.texCoord);
     float a = clamp(orgColor.a + col.a - orgColor.a*col.a, 0,1);
-    float3 rgb = (1.0 - col.a)*orgColor.rgb + col.a*col.rgb;   
+   // float3 rgb = (1.0 - col.a)*orgColor.rgb + col.a*col.rgb;  
+    float3 rgb = 1;
+  
+    switch( (int)ColorMode) {
+        // normal
+        case 0:
+            rgb = (1.0 - col.a)*orgColor.rgb + col.a*col.rgb;
+            break;
+            
+        // screen
+        case 1:
+            rgb = 1-(1-orgColor.rgb) * (1-col.rgb * col.a);            
+            break;
+    
+        // multiply
+        case 2:
+            rgb =  lerp(orgColor.rgb, orgColor.rgb * col.rgb, col.a);
+            break;
+        // overlay
+        case 3:
+            rgb =  float3( 
+                orgColor.r < 0.5?(2.0 * orgColor.r * col.r) : (1.0-2.0*(1.0-orgColor.r)*(1.0- col.r)),
+                orgColor.g < 0.5?(2.0 * orgColor.g * col.g) : (1.0-2.0*(1.0-orgColor.g)*(1.0- col.g)),
+                orgColor.b < 0.5?(2.0 * orgColor.b * col.b) : (1.0-2.0*(1.0-orgColor.b)*(1.0- col.b)));
+                
+            rgb = lerp(orgColor.rgb, rgb, col.a);
+            break;
+            
+        // difference
+        case 4:
+            rgb = abs(orgColor.rgb - col.rgb) * col.a + col.rgb * (1.0 - col.a);
+            break;        
+
+     
+    }
+ 
     return float4(rgb,a);
 
 }

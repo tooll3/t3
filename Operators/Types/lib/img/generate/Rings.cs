@@ -72,6 +72,18 @@ namespace T3.Operators.Types.Id_d002bd90_5921_48b0_a940_a8d0c779f674
 
         [Input(Guid = "a46daf9d-ebb3-478f-8462-c183ea2ef15e")]
         public readonly InputSlot<int> Seed = new InputSlot<int>();
+
+        [Input(Guid = "d609a23f-c774-4214-b2df-29f9c53b5df7", MappedType = typeof(RgbBlendModes))]
+        public readonly InputSlot<int> BlendModes = new InputSlot<int>();
+
+        private enum RgbBlendModes
+        {
+            Normal = 0,
+            Screen = 1,
+            Multiply = 2,
+            Overlay = 3,
+            Difference = 4,
+        }
     }
 }
 

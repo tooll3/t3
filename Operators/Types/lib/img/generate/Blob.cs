@@ -43,6 +43,18 @@ namespace T3.Operators.Types.Id_c8590f8f_cca1_434a_a880_67bb91920e1a
 
         [Input(Guid = "fca535e3-ea35-455f-b4ef-0a9d7feacef8")]
         public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
+
+        [Input(Guid = "eac589ad-d80a-4a84-b933-2a4dbded7f96", MappedType = typeof(RgbBlendModes))]
+        public readonly InputSlot<int> BlendModes = new InputSlot<int>();
+
+        private enum RgbBlendModes
+        {
+            Normal = 0,
+            Screen = 1,
+            Multiply = 2,
+            Overlay = 3,
+            Difference = 4,
+        }
     }
 }
 

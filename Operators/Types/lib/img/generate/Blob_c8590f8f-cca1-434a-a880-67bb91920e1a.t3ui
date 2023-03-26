@@ -92,6 +92,13 @@
         "X": -200.0,
         "Y": 450.0
       }
+    },
+    {
+      "InputId": "eac589ad-d80a-4a84-b933-2a4dbded7f96"/*BlendModes*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 495.0
+      }
     }
   ],
   "SymbolChildUis": [
@@ -154,11 +161,22 @@
       "ChildId": "96ed4415-be06-49d3-83b7-7f242a8da8ba"/*_ImageFxShaderSetupStatic*/,
       "Size": {
         "X": 110.0,
-        "Y": 296.0
+        "Y": 309.0
       },
       "Position": {
         "X": 427.0464,
         "Y": -29.479145
+      }
+    },
+    {
+      "ChildId": "25cd54ba-933b-47a9-9081-da91784feafd"/*IntToFloat*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": 201.93369,
+        "Y": 474.79037
       }
     }
   ],

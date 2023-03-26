@@ -25,6 +25,8 @@ cbuffer ParamConstants : register(b0)
     float Distort;
     float Contrast;
     float Seed;
+
+    float ColorMode;
 }
 
 cbuffer TimeConstants : register(b1)
@@ -133,7 +135,43 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
     float a = clamp(orgColor.a + colorOut.a - orgColor.a*colorOut.a, 0,1);
-    float3 rgb = (1.0 - colorOut.a)*orgColor.rgb + colorOut.a*colorOut.rgb;   
+    //float3 rgb = (1.0 - colorOut.a)*orgColor.rgb + colorOut.a*colorOut.rgb;  
+
+    float3 rgb = 1;
+  
+    switch( (int)ColorMode) {
+        // normal
+        case 0:
+            rgb = (1.0 - colorOut.a)*orgColor.rgb + colorOut.a*colorOut.rgb;
+            break;
+            
+        // screen
+        case 1:
+            rgb = 1-(1-orgColor.rgb) * (1-colorOut.rgb * colorOut.a);            
+            break;
+    
+        // multiply
+        case 2:
+            rgb =  lerp(orgColor.rgb, orgColor.rgb * colorOut.rgb, colorOut.a);
+            break;
+        // overlay
+        case 3:
+            rgb =  float3( 
+                orgColor.r < 0.5?(2.0 * orgColor.r * colorOut.r) : (1.0-2.0*(1.0-orgColor.r)*(1.0- colorOut.r)),
+                orgColor.g < 0.5?(2.0 * orgColor.g * colorOut.g) : (1.0-2.0*(1.0-orgColor.g)*(1.0- colorOut.g)),
+                orgColor.b < 0.5?(2.0 * orgColor.b * colorOut.b) : (1.0-2.0*(1.0-orgColor.b)*(1.0- colorOut.b)));
+                
+            rgb = lerp(orgColor.rgb, rgb, colorOut.a);
+            break;
+            
+        // difference
+        case 4:
+            rgb = abs(orgColor.rgb - colorOut.rgb) * colorOut.a + colorOut.rgb * (1.0 - colorOut.a);
+            break;        
+
+     
+    }
+
     return float4(rgb,a);    
 /*
 
