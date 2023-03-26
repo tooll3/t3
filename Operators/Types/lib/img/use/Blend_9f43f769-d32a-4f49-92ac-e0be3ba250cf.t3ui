@@ -73,11 +73,11 @@
       "ChildId": "65a46696-fe6d-4abf-9ff0-9f12c6ac1dcc"/*_multiImageFxSetup*/,
       "Size": {
         "X": 110.0,
-        "Y": 231.0
+        "Y": 62.0
       },
       "Position": {
-        "X": 422.33575,
-        "Y": -2.909243
+        "X": 512.50415,
+        "Y": -21.226952
       }
     },
     {
@@ -134,14 +134,25 @@
         "X": 120.221344,
         "Y": 310.80862
       }
+    },
+    {
+      "ChildId": "30ce4abc-21c1-4ad1-8b33-52aaa2df4dfb"/*_multiImageFxSetupStatic*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 231.0
+      },
+      "Position": {
+        "X": 683.5539,
+        "Y": 78.61325
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "536fae14-b814-498c-a6b4-07775de36991"/*Output*/,
       "Position": {
-        "X": 552.33594,
-        "Y": -2.909243
+        "X": 926.4041,
+        "Y": -8.463083
       }
     }
   ]

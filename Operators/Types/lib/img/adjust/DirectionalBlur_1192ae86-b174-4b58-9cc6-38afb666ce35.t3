@@ -62,11 +62,6 @@
             "Z": 0.0,
             "W": 0.0
           }
-        },
-        {
-          "Id": "109d0526-615c-401e-bc78-f29fe730c836"/*BlendEnabled*/,
-          "Type": "System.Boolean",
-          "Value": false
         }
       ],
       "Outputs": []

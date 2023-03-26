@@ -61,11 +61,6 @@
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
-          "Type": "System.Single",
-          "Value": 1.5
-        },
-        {
           "Id": "e47e9e63-9c94-4c29-9555-2452fa498d57"/*Gradient*/,
           "Type": "T3.Core.DataTypes.Gradient",
           "Value": {
@@ -115,6 +110,11 @@
               ]
             }
           }
+        },
+        {
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Type": "System.Single",
+          "Value": 1.5
         }
       ],
       "Outputs": []

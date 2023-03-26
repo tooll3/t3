@@ -23,11 +23,23 @@ namespace T3.Operators.Types.Id_d61d7192_9ca3_494e_91e2_10a530ee9375
             if (visibility == T3.Core.Operator.GizmoVisibility.Inherit)
                 visibility = context.ShowGizmos;
 
+            var commands = Commands.GetCollectedTypedInputs();
+            if (!_updatedOnce)
+            {
+                foreach (var t in commands)
+                {
+                    t.GetValue(context);
+                }
+
+                _updatedOnce = true;
+            }
+            
+            
             if (visibility != T3.Core.Operator.GizmoVisibility.On)
                 return;
+
+
             
-            
-            var commands = Commands.GetCollectedTypedInputs();
             if (commands.Count == 0)
             {
                 return;
@@ -38,6 +50,8 @@ namespace T3.Operators.Types.Id_d61d7192_9ca3_494e_91e2_10a530ee9375
                 t.GetValue(context);
             }
         }
+
+        private bool _updatedOnce = false;
 
         
         [Input(Guid = "4F52683C-F2AA-4D3F-A964-F5232FA98872")]

@@ -108,12 +108,7 @@
           }
         }
       ],
-      "Outputs": [
-        {
-          "Id": "c382284f-7e37-4eb0-b284-bc735247f26b"/*ComputeShaderStage*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "d138bbe1-dfb0-4c47-9738-3f9bcc7a8c12"/*GetSRVProperties*/,
