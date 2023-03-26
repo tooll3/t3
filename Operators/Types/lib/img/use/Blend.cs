@@ -55,6 +55,8 @@ namespace T3.Operators.Types.Id_9f43f769_d32a_4f49_92ac_e0be3ba250cf
             SetToOne = 2,
             UseImageA_Alpha = 3,
             UseImageB_Alpha = 4,
+            UseImageA_Brightness = 5,
+            UseImageB_Brightness = 6,
         }
     }
 }

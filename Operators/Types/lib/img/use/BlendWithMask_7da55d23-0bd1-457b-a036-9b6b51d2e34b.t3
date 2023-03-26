@@ -148,56 +148,31 @@
       "Id": "8d93274d-1cb8-4227-baef-1f6ad48e9496"/*Rasterizer*/,
       "SymbolId": "fbd7f0f0-36a3-4fbb-91e1-cb33d4666d09",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "c723ad69-ff0c-47b2-9327-bd27c0d7b6d1"/*Rasterizer*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "1bc9e608-ea29-443e-9b01-8b41394ef63b"/*PixelShaderStage*/,
       "SymbolId": "75306997-4329-44e9-a17a-050dae532182",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "76e7ad5d-a31d-4b1f-9c42-b63c5161117c"/*PixelShaderStage*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "2a968224-41dd-4287-b77b-edd059d01993"/*VertexShaderStage*/,
       "SymbolId": "a9600440-4203-4315-bdb1-4dfd603b4515",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "65b394a9-06dc-4d9b-8819-15394ede2997"/*VertexShaderStage*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "a43d74bf-48d7-4c62-939c-2f425fdf697e"/*InputAssemblerStage*/,
       "SymbolId": "9d1266c5-23db-439f-a475-8000fdd1c318",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "18cae035-c050-4f98-9e5e-b3a6db70dda7"/*InputAssemblerStage*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "4cc47435-94fd-4e57-a197-f3c4333a6346"/*OutputMergerStage*/,
       "SymbolId": "5efaf208-ba62-42ce-b3df-059b37fc1382",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "cee8c3f0-64ea-4e4d-b967-ec7e3688dd03"/*OutputMergerStage*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "b20b8517-d563-428a-82c3-5da9e05af41a"/*Execute*/,
@@ -257,12 +232,7 @@
           "Value": 6
         }
       ],
-      "Outputs": [
-        {
-          "Id": "49b28dc3-fcd1-4067-bc83-e1cc848ae55c"/*Draw*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "706f35fd-7ea0-4ab8-8e23-2e2e2febb9b4"/*RenderTargetBlendDesc*/,

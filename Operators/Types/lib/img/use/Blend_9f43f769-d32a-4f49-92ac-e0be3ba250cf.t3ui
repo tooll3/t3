@@ -70,17 +70,6 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "65a46696-fe6d-4abf-9ff0-9f12c6ac1dcc"/*_multiImageFxSetup*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
-      "Position": {
-        "X": 512.50415,
-        "Y": -21.226952
-      }
-    },
-    {
       "ChildId": "46965dc5-8929-4d8f-82ff-29cebdce3b8d"/*Vector4ToFloat4*/,
       "Size": {
         "X": 110.0,
