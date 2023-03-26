@@ -669,7 +669,7 @@
         {
           "Id": "2b3dc8be-2ead-40fa-8dab-0f85bb470815"/*PreventPlaybackControl*/,
           "Type": "System.Boolean",
-          "Value": true
+          "Value": false
         },
         {
           "Id": "76343cef-1851-4627-b0a7-477e0b33915c"/*DarkOnWhite*/,
@@ -2259,7 +2259,7 @@
         "Bpm": 120.0,
         "DiscardAfterUse": true,
         "IsSoundtrack": true,
-        "FilePath": "C:\\Users\\pixtur\\Framefield Dropbox\\Thomas Mann\\_T3Assets\\user\\still\\proj-worksforeverybody\\_shared\\soundtrack\\works-for-everybody.mp3"
+        "FilePath": "Resources\\user\\still\\proj-worksforeverybody\\_shared\\soundtrack\\works-for-everybody.mp3"
       }
     ]
   },
