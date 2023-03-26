@@ -118,56 +118,31 @@
       "Id": "f321a1e5-b006-4d97-9a2d-bd71ce1d46fe"/*Rasterizer*/,
       "SymbolId": "fbd7f0f0-36a3-4fbb-91e1-cb33d4666d09",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "c723ad69-ff0c-47b2-9327-bd27c0d7b6d1"/*Rasterizer*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "d747ee54-ad84-4a89-9285-de98bdd79d0e"/*PixelShaderStage*/,
       "SymbolId": "75306997-4329-44e9-a17a-050dae532182",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "76e7ad5d-a31d-4b1f-9c42-b63c5161117c"/*PixelShaderStage*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "7ee63f38-7056-4e8c-aebe-a8eeee4f959d"/*VertexShaderStage*/,
       "SymbolId": "a9600440-4203-4315-bdb1-4dfd603b4515",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "65b394a9-06dc-4d9b-8819-15394ede2997"/*VertexShaderStage*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "fa068e3d-897b-4daa-9b22-f5549b9e9b91"/*InputAssemblerStage*/,
       "SymbolId": "9d1266c5-23db-439f-a475-8000fdd1c318",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "18cae035-c050-4f98-9e5e-b3a6db70dda7"/*InputAssemblerStage*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "4ac515f0-074c-4638-b2a5-b4759d394239"/*OutputMergerStage*/,
       "SymbolId": "5efaf208-ba62-42ce-b3df-059b37fc1382",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "cee8c3f0-64ea-4e4d-b967-ec7e3688dd03"/*OutputMergerStage*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "eb992ff5-74f8-4bc0-86f5-94cbc34a82b3"/*Execute*/,
@@ -232,12 +207,7 @@
           "Value": 6
         }
       ],
-      "Outputs": [
-        {
-          "Id": "49b28dc3-fcd1-4067-bc83-e1cc848ae55c"/*Draw*/,
-          "DirtyFlagTrigger": "None"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "bd526de0-a395-482f-9ed3-9e4deafa5e38"/*GetTextureSize*/,

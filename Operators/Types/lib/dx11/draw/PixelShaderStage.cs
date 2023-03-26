@@ -11,7 +11,7 @@ namespace T3.Operators.Types.Id_75306997_4329_44e9_a17a_050dae532182
 {
     public class PixelShaderStage : Instance<PixelShaderStage>
     {
-        [Output(Guid = "76E7AD5D-A31D-4B1F-9C42-B63C5161117C", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "76E7AD5D-A31D-4B1F-9C42-B63C5161117C")]
         public readonly Slot<Command> Output = new Slot<Command>(new Command());
 
         public PixelShaderStage()

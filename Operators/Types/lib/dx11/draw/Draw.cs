@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_9b28e6b9_1d1f_42d8_8a9e_33497b1df820
 {
     public class Draw : Instance<Draw>, IRenderStatsProvider
     {
-        [Output(Guid = "49B28DC3-FCD1-4067-BC83-E1CC848AE55C", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "49B28DC3-FCD1-4067-BC83-E1CC848AE55C")]
         public readonly Slot<Command> Output = new Slot<Command>();
 
         public Draw()

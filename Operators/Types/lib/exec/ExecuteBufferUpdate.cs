@@ -36,8 +36,6 @@ namespace T3.Operators.Types.Id_58351c8f_4a73_448e_b7bb_69412e71bd76
             UpdateCommand.GetValue(context);
             
             Output2.Value = BufferWithViews.GetValue(context);
-            
-            Output2.DirtyFlag.Clear();
         }
 
         [Input(Guid = "51110D89-083E-42B8-B566-87B144DFBED9")]
