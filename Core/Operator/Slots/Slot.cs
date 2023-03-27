@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Stats;
@@ -93,16 +94,15 @@ namespace T3.Core.Operator.Slots
 
         public void AddConnection(ISlot sourceSlot, int index = 0)
         {
-            if (!IsConnected && sourceSlot != null)
+            Debug.Assert(sourceSlot is not null);
+            
+            if (!IsConnected)
             {
                 _actionBeforeAddingConnecting = UpdateAction;
                 UpdateAction = ConnectedUpdate;
                 DirtyFlag.Target = sourceSlot.DirtyFlag.Target;
                 DirtyFlag.Reference = DirtyFlag.Target - 1;
             }
-
-            if (sourceSlot == null)
-                return;
             
             if (sourceSlot.ValueType != ValueType)
             {

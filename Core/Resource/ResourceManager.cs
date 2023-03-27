@@ -466,7 +466,7 @@ namespace T3.Core.Resource
 
         public bool CreatePixelShaderFromSource(string shaderSource, string name, string entryPoint, ref uint resourceId)
         {
-            if (string.IsNullOrEmpty(shaderSource) || string.IsNullOrEmpty(entryPoint))
+            if (string.IsNullOrWhiteSpace(shaderSource) || string.IsNullOrWhiteSpace(entryPoint))
             {
                 resourceId = NullResource;
                 return false;        
@@ -607,7 +607,7 @@ namespace T3.Core.Resource
             if (fileResource == null)
             {
                 fileResource = new ResourceFileHook(srcFile, new[] { newResource.Id });
-                ResourceFileWatcher._resourceFileHooks.Add(srcFile, fileResource);
+                ResourceFileWatcher._resourceFileHooks.TryAdd(srcFile, fileResource);
             }
             else
             {

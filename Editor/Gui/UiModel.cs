@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
@@ -225,7 +227,7 @@ namespace T3.Editor.Gui
                 }
             }
 
-            Load();
+            Load(log: false);
 
             var symbols = SymbolRegistry.Entries;
             foreach (var symbolEntry in symbols)
@@ -242,34 +244,41 @@ namespace T3.Editor.Gui
         }
         
         public static Guid HomeSymbolId = Guid.Parse("dab61a12-9996-401e-9aa6-328dd6292beb");
-
-        public override void Load()
+        
+        public override void Load(bool log)
         {
             // first load core data
-            base.Load();
-
-            var uiJson = new SymbolUiJson();
+            base.Load(log);
 
             var symbolUiFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);
+            var symbolUiJsons = symbolUiFiles.AsParallel()
+                                         .Select(JsonResult<SymbolUi>.ReadAndCreate)
+                                         .Select(symbolUiJson =>
+                                                  {
+                                                      var gotSymbolUi = SymbolUiJson.TryReadSymbolUi(symbolUiJson.JToken, symbolUiJson.Guid, out var symbolUi);
+                                                      if (!gotSymbolUi)
+                                                      {
+                                                          Log.Error($"Error reading symbol Ui for {symbolUiJson.Guid} from file \"{symbolUiJson.FilePath}\"");
+                                                          return null;
+                                                      }
 
-            foreach (var symbolUiFile in symbolUiFiles)
+                                                      symbolUiJson.Object = symbolUi;
+                                                      return symbolUiJson;
+                                                  })
+                                         .Where(x => x.ObjectWasSet)
+                                         .ToList();
+
+            foreach (var symbolUiJson in symbolUiJsons)
             {
-                var symbolUi = uiJson.ReadSymbolUi(symbolUiFile);
-                if (symbolUi != null)
+                var symbolUi = symbolUiJson.Object;
+                if (!SymbolUiRegistry.Entries.TryAdd(symbolUi.Symbol.Id, symbolUi))
                 {
-                    if (SymbolUiRegistry.Entries.ContainsKey(symbolUi.Symbol.Id))
-                    {
-                        Log.Error($"Can't load UI for [{symbolUi.Symbol.Name}] Registry already contains id {symbolUi.Symbol.Id}.");
-                        continue;
-                    }
-
+                    Log.Error($"Can't load UI for [{symbolUi.Symbol.Name}] Registry already contains id {symbolUi.Symbol.Id}.");
+                    continue;
+                }
+                
+                if(log)
                     Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
-                    SymbolUiRegistry.Entries.Add(symbolUi.Symbol.Id, symbolUi);
-                }
-                else
-                {
-                    Log.Error("Failed reading " + symbolUiFile);
-                }
             }
         }
 
@@ -282,6 +291,7 @@ namespace T3.Editor.Gui
             base.SaveAll();
 
             // Remove all old ui files before storing to get rid off invalid ones
+            // TODO: this also seems dangerous, similar to how the Symbol SaveAll works
             var symbolUiFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);            
             foreach (var filepath in symbolUiFiles)
             {
@@ -326,8 +336,6 @@ namespace T3.Editor.Gui
 
         private static void WriteSymbolUis(IEnumerable<SymbolUi> symbolUis)
         {
-            
-            var json = new SymbolUiJson();
             var resourceManager = ResourceManager.Instance();
 
             foreach (var symbolUi in symbolUis)
@@ -338,9 +346,8 @@ namespace T3.Editor.Gui
                 using (var sw = new StreamWriter(filepath))
                 using (var writer = new JsonTextWriter(sw))
                 {
-                    json.Writer = writer;
-                    json.Writer.Formatting = Formatting.Indented;
-                    json.WriteSymbolUi(symbolUi);
+                    writer.Formatting = Formatting.Indented;
+                    SymbolUiJson.WriteSymbolUi(symbolUi, writer);
                 }
 
                 var symbolSourceFilepath = BuildFilepathForSymbol(symbol, Model.SourceExtension);

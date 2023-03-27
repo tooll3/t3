@@ -86,7 +86,7 @@ namespace T3.Core.Operator.Slots
             }
             else
             {
-                //Log.Error($"Trying to read a json value for type '{ValueType}' but no converter registered in JsonToTypeValueConverters. Skipping value reading.");
+                //T3.Core.Logging.Log.Error($"Trying to read a json value for type '{ValueType}' but no converter registered in JsonToTypeValueConverters. Skipping value reading.");
             }
         }
 

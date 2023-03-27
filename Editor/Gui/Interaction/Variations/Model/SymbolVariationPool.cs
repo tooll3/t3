@@ -55,7 +55,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
             try
             {
-                var jToken = JToken.ReadFrom(jsonReader);
+                var jToken = JToken.ReadFrom(jsonReader, SymbolJson.LoadSettings);
                 var jArray = (JArray)jToken["Variations"];
                 if (jArray != null)
                 {

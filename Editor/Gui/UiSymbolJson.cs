@@ -19,216 +19,192 @@ using Truncon.Collections;
 
 namespace T3.Editor.Gui
 {
-    public class SymbolUiJson 
+    public static class SymbolUiJson
     {
-        public JsonTextWriter Writer { get; set; }
-        public JsonTextReader Reader { get; init; }
-        
-        public void WriteSymbolUi(SymbolUi symbolUi)
+        public static void WriteSymbolUi(SymbolUi symbolUi, JsonTextWriter writer)
         {
-            Writer.WriteStartObject();
+            writer.WriteStartObject();
 
-            Writer.WriteObject("Id", symbolUi.Symbol.Id);
-            Writer.WriteComment(symbolUi.Symbol.Name);
+            writer.WriteObject(JsonKeys.Id, symbolUi.Symbol.Id);
+            writer.WriteComment(symbolUi.Symbol.Name);
 
-            Writer.WriteObject("Description", symbolUi.Description);
+            writer.WriteObject(JsonKeys.Description, symbolUi.Description);
 
-            WriteInputUis(symbolUi);
-            WriteChildUis(symbolUi);
-            WriteOutputUis(symbolUi);
-            WriteAnnotations(symbolUi);
+            WriteInputUis(symbolUi, writer);
+            WriteChildUis(symbolUi, writer);
+            WriteOutputUis(symbolUi, writer);
+            WriteAnnotations(symbolUi, writer);
 
-            Writer.WriteEndObject();
+            writer.WriteEndObject();
         }
 
-        private void WriteInputUis(SymbolUi symbolUi)
+        private static void WriteInputUis(SymbolUi symbolUi, JsonTextWriter writer)
         {
-            Writer.WritePropertyName("InputUis");
-            Writer.WriteStartArray();
+            writer.WritePropertyName(JsonKeys.InputUis);
+            writer.WriteStartArray();
 
             foreach (var inputEntry in symbolUi.InputUis)
             {
-                var symbolInput = symbolUi.Symbol.InputDefinitions.SingleOrDefault(inputDef => inputDef.Id == inputEntry.Key);
+                var symbolInput = symbolUi.Symbol.InputDefinitions.FirstOrDefault(inputDef => inputDef.Id == inputEntry.Key);
                 if (symbolInput == null)
                 {
                     Log.Info($"In '{symbolUi.Symbol.Name}': Didn't found input definition for InputUi, skipping this one. This can happen if an input got removed.");
                     continue;
                 }
 
-                Writer.WriteStartObject(); // input entry
-                Writer.WriteObject("InputId", inputEntry.Key);
-                Writer.WriteComment(symbolInput.Name);
+                writer.WriteStartObject(); // input entry
+                writer.WriteObject(JsonKeys.InputId, inputEntry.Key);
+                writer.WriteComment(symbolInput.Name);
                 var inputUi = inputEntry.Value;
-                inputUi.Write(Writer);
-                Writer.WriteEndObject();
+                inputUi.Write(writer);
+                writer.WriteEndObject();
             }
 
-            Writer.WriteEndArray();
+            writer.WriteEndArray();
         }
 
-        private void WriteChildUis(SymbolUi symbolUi)
+        private static void WriteChildUis(SymbolUi symbolUi, JsonTextWriter writer)
         {
-            var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
+            var vec2Writer = TypeValueToJsonConverters.Entries[Vector2Type];
 
-            Writer.WritePropertyName("SymbolChildUis");
-            Writer.WriteStartArray();
+            writer.WritePropertyName(JsonKeys.SymbolChildUis);
+            writer.WriteStartArray();
 
             foreach (var childUi in symbolUi.ChildUis)
             {
-                Writer.WriteStartObject(); // child entry
-                Writer.WriteObject("ChildId", childUi.Id);
+                writer.WriteStartObject(); // child entry
+                writer.WriteObject(JsonKeys.ChildId, childUi.Id);
                 {
-                    Writer.WriteComment(childUi.SymbolChild.ReadableName);
+                    writer.WriteComment(childUi.SymbolChild.ReadableName);
 
                     if (childUi.Style != SymbolChildUi.Styles.Default)
-                        Writer.WriteObject("Style", childUi.Style);
+                        writer.WriteObject(JsonKeys.Style, childUi.Style);
 
                     if (childUi.Size != SymbolChildUi.DefaultOpSize)
                     {
-                        Writer.WritePropertyName("Size");
-                        vec2Writer(Writer, childUi.Size);
+                        writer.WritePropertyName(JsonKeys.Size);
+                        vec2Writer(writer, childUi.Size);
                     }
 
-                    Writer.WritePropertyName("Position");
-                    vec2Writer(Writer, childUi.PosOnCanvas);
+                    writer.WritePropertyName(JsonKeys.Position);
+                    vec2Writer(writer, childUi.PosOnCanvas);
 
                     if (childUi.ConnectionStyleOverrides.Count > 0)
                     {
-                        Writer.WritePropertyName("ConnectionStyleOverrides");
-                        Writer.WriteStartArray();
+                        writer.WritePropertyName(JsonKeys.ConnectionStyleOverrides);
+                        writer.WriteStartArray();
                         foreach (var (key, value) in childUi.ConnectionStyleOverrides)
                         {
-                            Writer.WriteStartObject();
-                            Writer.WriteObject("Id", key);
-                            Writer.WriteObject("Style", value);
-                            Writer.WriteEndObject();
+                            writer.WriteStartObject();
+                            writer.WriteObject(JsonKeys.Id, key);
+                            writer.WriteObject(JsonKeys.Style, value);
+                            writer.WriteEndObject();
                         }
 
-                        Writer.WriteEndArray();
+                        writer.WriteEndArray();
                     }
                 }
-                Writer.WriteEndObject();
+                writer.WriteEndObject();
             }
 
-            Writer.WriteEndArray();
+            writer.WriteEndArray();
         }
 
-        private void WriteOutputUis(SymbolUi symbolUi)
+        private static void WriteOutputUis(SymbolUi symbolUi, JsonTextWriter writer)
         {
-            var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
+            var vec2Writer = TypeValueToJsonConverters.Entries[Vector2Type];
 
-            Writer.WritePropertyName("OutputUis");
-            Writer.WriteStartArray();
+            writer.WritePropertyName(JsonKeys.OutputUis);
+            writer.WriteStartArray();
 
             foreach (var outputEntry in symbolUi.OutputUis)
             {
-                Writer.WriteStartObject(); // output entry
-                Writer.WriteObject("OutputId", outputEntry.Key);
+                writer.WriteStartObject(); // output entry
+                writer.WriteObject(JsonKeys.OutputId, outputEntry.Key);
                 var outputName = symbolUi.Symbol.OutputDefinitions.Single(outputDef => outputDef.Id == outputEntry.Key).Name;
-                Writer.WriteComment(outputName);
+                writer.WriteComment(outputName);
                 var outputUi = outputEntry.Value;
-                Writer.WritePropertyName("Position");
-                vec2Writer(Writer, outputUi.PosOnCanvas);
+                writer.WritePropertyName(JsonKeys.Position);
+                vec2Writer(writer, outputUi.PosOnCanvas);
 
-                Writer.WriteEndObject();
+                writer.WriteEndObject();
             }
 
-            Writer.WriteEndArray();
+            writer.WriteEndArray();
         }
 
-        private void WriteAnnotations(SymbolUi symbolUi)
+        private static void WriteAnnotations(SymbolUi symbolUi, JsonTextWriter writer)
         {
             if (symbolUi.Annotations.Count == 0)
                 return;
 
-            var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
-            var vec4Writer = TypeValueToJsonConverters.Entries[typeof(Vector4)];
-            Writer.WritePropertyName("Annotations");
-            Writer.WriteStartArray();
+            var vec2Writer = TypeValueToJsonConverters.Entries[Vector2Type];
+            var vec4Writer = TypeValueToJsonConverters.Entries[Vector4Type];
+            writer.WritePropertyName(JsonKeys.Annotations);
+            writer.WriteStartArray();
 
             foreach (var annotation in symbolUi.Annotations.Values)
             {
-                Writer.WriteStartObject();
-                Writer.WriteObject("Id", annotation.Id);
-                Writer.WriteObject("Title", annotation.Title);
+                writer.WriteStartObject();
+                writer.WriteObject(JsonKeys.Id, annotation.Id);
+                writer.WriteObject(JsonKeys.Title, annotation.Title);
 
-                Writer.WritePropertyName("Color");
-                vec4Writer(Writer, annotation.Color.Rgba);
+                writer.WritePropertyName(JsonKeys.Color);
+                vec4Writer(writer, annotation.Color.Rgba);
 
-                Writer.WritePropertyName("Position");
-                vec2Writer(Writer, annotation.PosOnCanvas);
+                writer.WritePropertyName(JsonKeys.Position);
+                vec2Writer(writer, annotation.PosOnCanvas);
 
-                Writer.WritePropertyName("Size");
-                vec2Writer(Writer, annotation.Size);
-                Writer.WriteEndObject();
+                writer.WritePropertyName(JsonKeys.Size);
+                vec2Writer(writer, annotation.Size);
+                writer.WriteEndObject();
             }
 
-            Writer.WriteEndArray();
+            writer.WriteEndArray();
+        }
+        
+        internal static bool TryReadSymbolUi(JToken mainObject, out SymbolUi symbolUi)
+        {
+            symbolUi = null;
+            var guidString = mainObject[JsonKeys.Id].Value<string>();
+            var hasGuid = Guid.TryParse(guidString, out var symbolId);
+
+            if (!hasGuid)
+            {
+                Log.Warning($"Error parsing guid {guidString}");
+                return false;
+            }
+
+            return TryReadSymbolUi(mainObject, symbolId, out symbolUi);
         }
 
-        public SymbolUi ReadSymbolUi(string filePath)
+        internal static bool TryReadSymbolUi(JToken mainObject, Guid symbolId, out SymbolUi symbolUi)
         {
-            using var streamReader = new StreamReader(filePath);
-            using var jsonTextReader = new JsonTextReader(streamReader);
-
-            return ReadSymbolUi(jsonTextReader);
-        }
-
-        private static SymbolUi ReadSymbolUi(JsonTextReader jsonTextReader)
-        {
-            try
-            {
-                var mainObject = JToken.ReadFrom(jsonTextReader);
-                return ReadSymbolUi(mainObject);
-            }
-            catch (TypeInitializationException e)
-            {
-                Log.Error("Failed to initialize type from json: " + e + "\nLine-Number" + jsonTextReader.LineNumber);
-            }
-            catch (Exception e)
-            {
-                Log.Error("Can't read json " + e);
-            }
-
-            return null;
-        }
-
-        public static SymbolUi ReadSymbolUi(JToken mainObject)
-        {
-            var vector2Converter = JsonToTypeValueConverters.Entries[typeof(Vector2)];
-            var vector4Converter = JsonToTypeValueConverters.Entries[typeof(Vector4)];
-
-            Guid symbolId;
-            try
-            {
-                symbolId = Guid.Parse(mainObject["Id"].Value<string>() ?? string.Empty);
-            }
-            catch
-            {
-                Log.Error("Failed reading symbolUi id");
-                return null;
-            }
+            var vector2Converter = JsonToTypeValueConverters.Entries[Vector2Type];
+            var vector4Converter = JsonToTypeValueConverters.Entries[Vector4Type];
 
             var symbol = SymbolRegistry.Entries[symbolId];
 
             var inputDict = new OrderedDictionary<Guid, IInputUi>();
-            foreach (JToken uiInputEntry in (JArray)mainObject["InputUis"])
+            foreach (JToken uiInputEntry in (JArray)mainObject[JsonKeys.InputUis])
             {
                 Guid inputId;
                 try
                 {
-                    inputId = Guid.Parse(uiInputEntry["InputId"].Value<string>() ?? string.Empty);
+                    inputId = Guid.Parse(uiInputEntry[JsonKeys.InputId].Value<string>() ?? string.Empty);
                 }
                 catch
                 {
                     Log.Error("Skipping input with invalid symbolChildUi id");
-                    return null;
+                    symbolUi = null;
+                    return false;
                 }
 
-                var inputDefinition = symbol.InputDefinitions.SingleOrDefault(def => def.Id == inputId);
+                var inputDefinition = symbol.InputDefinitions.FirstOrDefault(def => def.Id == inputId);
                 if (inputDefinition == null)
                 {
-                    Log.Warning($"Found input entry in ui file for symbol '{symbol.Name}', but no corresponding input in symbol. Assuming that the input was removed and ignoring the ui information.");
+                    Log.Warning($"Found input entry in ui file for symbol '{symbol.Name}', but no corresponding input in symbol. " +
+                                $"Assuming that the input was removed and ignoring the ui information.");
                     continue;
                 }
 
@@ -248,43 +224,52 @@ namespace T3.Editor.Gui
             }
 
             var symbolChildUis = new List<SymbolChildUi>();
-            foreach (var childEntry in (JArray)mainObject["SymbolChildUis"])
+            foreach (var childEntry in (JArray)mainObject[JsonKeys.SymbolChildUis])
             {
                 var childUi = new SymbolChildUi();
-                var childId = Guid.Parse(childEntry["ChildId"].Value<string>());
-                childUi.SymbolChild = symbol.Children.SingleOrDefault(child => child.Id == childId);
+                var childIdString = childEntry[JsonKeys.ChildId].Value<string>();
+                var hasChildId = Guid.TryParse(childIdString, out var childId);
+
+                if (!hasChildId)
+                {
+                    Log.Warning($"Skipping UI child definition in {symbol.Name} {symbolId} for invalid child id `{childIdString}`");
+                    continue;
+                }
+                
+                childUi.SymbolChild = symbol.Children.FirstOrDefault(child => child.Id == childId);
                 if (childUi.SymbolChild == null)
                 {
                     Log.Warning($"Skipping UI child definition in {symbol.Name} {symbolId} for undefined child {childId}");
                     continue;
                 }
 
-                JToken positionToken = childEntry["Position"];
+                JToken positionToken = childEntry[JsonKeys.Position];
                 childUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
 
-                if (childEntry["Size"] != null)
+                if (childEntry[JsonKeys.Size] != null)
                 {
-                    JToken sizeToken = childEntry["Size"];
+                    JToken sizeToken = childEntry[JsonKeys.Size];
                     childUi.Size = (Vector2)vector2Converter(sizeToken);
                 }
 
-                if (childEntry["Style"] != null)
+                var childStyleEntry = childEntry[JsonKeys.Style];
+                if (childStyleEntry != null)
                 {
-                    childUi.Style = (SymbolChildUi.Styles)Enum.Parse(typeof(SymbolChildUi.Styles), childEntry["Style"].Value<string>());
+                    childUi.Style = (SymbolChildUi.Styles)Enum.Parse(StylesType, childStyleEntry.Value<string>());
                 }
                 else
                 {
                     childUi.Style = SymbolChildUi.Styles.Default;
                 }
 
-                var conStyleEntry = childEntry["ConnectionStyleOverrides"];
+                var conStyleEntry = childEntry[JsonKeys.ConnectionStyleOverrides];
                 if (conStyleEntry != null)
                 {
                     var dict = childUi.ConnectionStyleOverrides;
                     foreach (var styleEntry in (JArray)conStyleEntry)
                     {
-                        var id = Guid.Parse(styleEntry["Id"].Value<string>());
-                        var style = (SymbolChildUi.ConnectionStyles)Enum.Parse(typeof(SymbolChildUi.ConnectionStyles), styleEntry["Style"].Value<string>());
+                        var id = Guid.Parse(styleEntry[JsonKeys.Id].Value<string>());
+                        var style = (SymbolChildUi.ConnectionStyles)Enum.Parse(ConnectionStylesType, styleEntry[JsonKeys.Style].Value<string>());
                         dict.Add(id, style);
                     }
                 }
@@ -293,13 +278,22 @@ namespace T3.Editor.Gui
             }
 
             var outputDict = new OrderedDictionary<Guid, IOutputUi>();
-            foreach (var uiOutputEntry in (JArray)mainObject["OutputUis"])
+            foreach (var uiOutputEntry in (JArray)mainObject[JsonKeys.OutputUis])
             {
-                var outputId = Guid.Parse(uiOutputEntry["OutputId"].Value<string>());
-                var outputDefinition = symbol.OutputDefinitions.SingleOrDefault(def => def.Id == outputId);
+                var outputIdString = uiOutputEntry[JsonKeys.OutputId].Value<string>();
+                var hasOutputId = Guid.TryParse(outputIdString, out var outputId);
+
+                if (!hasOutputId)
+                {
+                    Log.Warning($"Skipping UI output in {symbol.Name} {symbolId} for invalid output id `{outputIdString}`");
+                    continue;
+                }
+                
+                var outputDefinition = symbol.OutputDefinitions.FirstOrDefault(def => def.Id == outputId);
                 if (outputDefinition == null)
                 {
-                    Log.Warning($"Found output entry in ui file for symbol '{symbol.Name}', but no corresponding output in symbol. Assuming that the output was removed and ignoring the ui information.");
+                    Log.Warning($"Found output entry in ui file for symbol '{symbol.Name}', but no corresponding output in symbol. " +
+                                $"Assuming that the output was removed and ignoring the ui information.");
                     continue;
                 }
 
@@ -307,9 +301,9 @@ namespace T3.Editor.Gui
                 if (OutputUiFactory.Entries.TryGetValue(type, out var outputCreator))
                 {
                     var outputUi = outputCreator();
-                    outputUi.OutputDefinition = symbol.OutputDefinitions.Single(def => def.Id == outputId);
+                    outputUi.OutputDefinition = symbol.OutputDefinitions.First(def => def.Id == outputId);
 
-                    JToken positionToken = uiOutputEntry["Position"];
+                    JToken positionToken = uiOutputEntry[JsonKeys.Position];
                     outputUi.PosOnCanvas = (Vector2)vector2Converter(positionToken);
 
                     outputDict.Add(outputId, outputUi);
@@ -321,33 +315,58 @@ namespace T3.Editor.Gui
             }
 
             var annotationDict = new OrderedDictionary<Guid, Annotation>();
-            var annotationsArray = (JArray)mainObject["Annotations"];
+            var annotationsArray = (JArray)mainObject[JsonKeys.Annotations];
             if (annotationsArray != null)
             {
                 foreach (var annotationEntry in annotationsArray)
                 {
                     var annotation = new Annotation
                                          {
-                                             Id = Guid.Parse(annotationEntry["Id"].Value<string>()),
-                                             Title = annotationEntry["Title"].Value<string>(),
-                                             PosOnCanvas = (Vector2)vector2Converter(annotationEntry["Position"])
+                                             Id = Guid.Parse(annotationEntry[JsonKeys.Id].Value<string>()),
+                                             Title = annotationEntry[JsonKeys.Title].Value<string>(),
+                                             PosOnCanvas = (Vector2)vector2Converter(annotationEntry[JsonKeys.Position])
                                          };
 
-                    if (annotationEntry["Color"] != null)
+                    var colorEntry = annotationEntry[JsonKeys.Color];
+                    if (colorEntry != null)
                     {
-                        annotation.Color = new Color((Vector4)vector4Converter(annotationEntry["Color"]));
+                        annotation.Color = new Color((Vector4)vector4Converter(colorEntry));
                     }
 
-                    annotation.Size = (Vector2)vector2Converter(annotationEntry["Size"]);
+                    annotation.Size = (Vector2)vector2Converter(annotationEntry[JsonKeys.Size]);
                     annotationDict[annotation.Id] = annotation;
                 }
             }
 
-            var newSymbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict, annotationDict)
+            symbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict, annotationDict)
                                   {
-                                      Description = mainObject["Description"]?.Value<string>()
+                                      Description = mainObject[JsonKeys.Description]?.Value<string>()
                                   };
-            return newSymbolUi;
+            return true;
+        }
+
+        private static readonly Type Vector2Type = typeof(Vector2);
+        private static readonly Type Vector4Type = typeof(Vector4);
+        private static readonly Type StylesType = typeof(SymbolChildUi.Styles);
+        private static readonly Type ConnectionStylesType = typeof(SymbolChildUi.ConnectionStyles);
+
+        private readonly struct JsonKeys
+        {
+            public const string InputUis = "InputUis";
+            public const string InputId = "InputId";
+            public const string OutputUis = "OutputUis";
+            public const string OutputId = "OutputId";
+            public const string SymbolChildUis = "SymbolChildUis";
+            public const string ChildId = "ChildId";
+            public const string Position = "Position";
+            public const string Annotations = "Annotations";
+            public const string Id = "Id";
+            public const string Title = "Title";
+            public const string Color = "Color";
+            public const string Size = "Size";
+            public const string Description = "Description";
+            public const string Style = "Style";
+            public const string ConnectionStyleOverrides = "ConnectionStyleOverrides";
         }
     }
 }

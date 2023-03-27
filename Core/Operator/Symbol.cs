@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using T3.Core.Logging;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -433,6 +435,7 @@ namespace T3.Core.Operator
         {
             // order the inputs by the given input definitions. original order is coming from code, but input def order is the relevant one
             int numInputs = inputs.Count;
+            
             for (int i = 0; i < numInputs - 1; i++)
             {
                 Guid inputId = InputDefinitions[i].Id;
@@ -460,49 +463,45 @@ namespace T3.Core.Operator
 
             SortInputSlotsByDefinitionOrder(newInstance.Inputs);
 
-            // create child instances
-            foreach (var symbolChild in Children)
+            foreach (var child in Children)
             {
-                CreateAndAddNewChildInstance(symbolChild, newInstance);
+                CreateAndAddNewChildInstance(child, newInstance);
             }
 
             // create connections between instances
-            var conHashToCount = new Dictionary<ulong, int>(Connections.Count);
-            var invalidConnections = new List<Connection>();
-            foreach (var connection in Connections)
+            if (Connections.Count != 0)
             {
-                ulong highPart = 0xFFFFFFFF & (ulong)connection.TargetSlotId.GetHashCode();
-                ulong lowPart = 0xFFFFFFFF & (ulong)connection.TargetParentOrChildId.GetHashCode();
-                ulong hash = (highPart << 32) | lowPart;
-                if (!conHashToCount.TryGetValue(hash, out int count))
-                    conHashToCount.Add(hash, 0);
-
-                var valid = newInstance.AddConnection(connection, count);
-                if (!valid)
+                var conHashToCount = new Dictionary<ulong, int>(Connections.Count);
+                for (var index = 0; index < Connections.Count; index++) // warning: the order in which these are processed matters
                 {
-                    Log.Warning("Skipping connection to no longer existing targets");
-                    invalidConnections.Add(connection);
-                    continue;
-                }
- 
-                conHashToCount[hash] = count + 1;
-            }
+                    var connection = Connections[index];
+                    ulong highPart = 0xFFFFFFFF & (ulong)connection.TargetSlotId.GetHashCode();
+                    ulong lowPart = 0xFFFFFFFF & (ulong)connection.TargetParentOrChildId.GetHashCode();
+                    ulong hash = (highPart << 32) | lowPart;
+                    if (!conHashToCount.TryGetValue(hash, out int count))
+                        conHashToCount.Add(hash, 0);
 
-            foreach (var c in invalidConnections)
-            {
-                Connections.Remove(c);
+                    var valid = newInstance.AddConnection(connection, count);
+                    if (!valid)
+                    {
+                        Log.Warning("Skipping connection to no longer existing targets");
+                        Connections.RemoveAt(index);
+                        index--;
+                        continue;
+                    }
+
+                    conHashToCount[hash] = count + 1;
+                }
             }
 
             // connect animations if available
             Animator.CreateUpdateActionsForExistingCurves(newInstance.Children);
-
             InstancesOfSymbol.Add(newInstance);
 
             return newInstance;
         }
 
-
-        private Instance CreateAndAddNewChildInstance(SymbolChild symbolChild, Instance parentInstance)
+        private static Instance CreateAndAddNewChildInstance(SymbolChild symbolChild, Instance parentInstance)
         {
             var childSymbol = symbolChild.Symbol;
             var childInstance = childSymbol.CreateInstance(symbolChild.Id);
@@ -513,27 +512,30 @@ namespace T3.Core.Operator
             {
                 Debug.Assert(i < childInstance.Inputs.Count);
                 Guid inputDefinitionId = childSymbol.InputDefinitions[i].Id;
-                childInstance.Inputs[i].Input = symbolChild.InputValues[inputDefinitionId];
-                childInstance.Inputs[i].Id = inputDefinitionId;
+                var inputSlot = childInstance.Inputs[i];
+                inputSlot.Input = symbolChild.InputValues[inputDefinitionId];
+                inputSlot.Id = inputDefinitionId;
             }
 
             // set up the outputs for the child instance
             for (int i = 0; i < symbolChild.Symbol.OutputDefinitions.Count; i++)
             {
                 Debug.Assert(i < childInstance.Outputs.Count);
-                childInstance.Outputs[i].Id = childSymbol.OutputDefinitions[i].Id;
-                var symbolChildOutput = symbolChild.Outputs[childInstance.Outputs[i].Id];
-                if (childSymbol.OutputDefinitions[i].OutputDataType != null)
+                var outputSlot = childInstance.Outputs[i];
+                var outputDefinition = childSymbol.OutputDefinitions[i];
+                outputSlot.Id = outputDefinition.Id;
+                var symbolChildOutput = symbolChild.Outputs[outputSlot.Id];
+                if (outputDefinition.OutputDataType != null)
                 {
                     // output is using data, so link it
-                    if (childInstance.Outputs[i] is IOutputDataUser outputDataConsumer)
+                    if (outputSlot is IOutputDataUser outputDataConsumer)
                     {
                         outputDataConsumer.SetOutputData(symbolChildOutput.OutputData);
                     }
                 }
 
-                childInstance.Outputs[i].DirtyFlag.Trigger = symbolChildOutput.DirtyFlagTrigger;
-                childInstance.Outputs[i].IsDisabled = symbolChildOutput.IsDisabled;
+                outputSlot.DirtyFlag.Trigger = symbolChildOutput.DirtyFlagTrigger;
+                outputSlot.IsDisabled = symbolChildOutput.IsDisabled;
             }
 
             parentInstance.Children.Add(childInstance);

@@ -175,7 +175,7 @@ namespace T3.Player
             }
 
             _model = new Model(operatorsAssembly);
-            _model.Load();
+            _model.Load(log: false);
 
             var symbols = SymbolRegistry.Entries;
             var demoSymbol = symbols.First(entry => entry.Value.Name == ProjectSettings.Config.MainOperatorName).Value;

@@ -74,28 +74,28 @@ namespace T3.Core.Operator
 
         public bool AddConnection(Symbol.Connection connection, int multiInputIndex)
         {
-            var (_, sourceSlot, _, targetSlot) = GetInstancesForConnection(connection);
-            if (targetSlot != null)
-            {
-                targetSlot.AddConnection(sourceSlot, multiInputIndex);
-                return true;
-            }
+            var foundInstance = TryGetInstancesForConnection(connection, out _, out var sourceSlot, out _, out var targetSlot);
 
-            return false;
+            if (!foundInstance)
+                return false;
+            
+            targetSlot.AddConnection(sourceSlot, multiInputIndex);
+            return true;
         }
 
         public void RemoveConnection(Symbol.Connection connection, int index)
         {
-            var (_, _, _, targetSlot) = GetInstancesForConnection(connection);
+            var foundInstance = TryGetInstancesForConnection(connection, out _, out _, out _, out var targetSlot);
+            if (!foundInstance)
+                return;
             targetSlot.RemoveConnection(index);
         }
 
-        private (Instance, ISlot, Instance, ISlot) GetInstancesForConnection(Symbol.Connection connection)
+        private bool TryGetInstancesForConnection(Symbol.Connection connection, out Instance sourceInstance, out ISlot sourceSlot, out Instance targetInstance, out ISlot targetSlot)
         {
             Instance compositionInstance = this;
 
-            var sourceInstance = compositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == connection.SourceParentOrChildId);
-            ISlot sourceSlot;
+            sourceInstance = compositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == connection.SourceParentOrChildId);
             if (sourceInstance != null)
             {
                 sourceSlot = sourceInstance.Outputs.SingleOrDefault(output => output.Id == connection.SourceSlotId);
@@ -105,14 +105,16 @@ namespace T3.Core.Operator
                 if (connection.SourceParentOrChildId != Guid.Empty)
                 {
                     Log.Error($"connection has incorrect Source: { connection.SourceParentOrChildId}");
-                    return (null, null, null, null);
+                    sourceSlot = null;
+                    targetInstance = null;
+                    targetSlot = null;
+                    return false;
                 }
                 sourceInstance = compositionInstance;
                 sourceSlot = sourceInstance.Inputs.SingleOrDefault(input => input.Id == connection.SourceSlotId);
             }
 
-            var targetInstance = compositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == connection.TargetParentOrChildId);
-            ISlot targetSlot;
+            targetInstance = compositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == connection.TargetParentOrChildId);
             if (targetInstance != null)
             {
                 targetSlot = targetInstance.Inputs.SingleOrDefault(e => e.Id == connection.TargetSlotId);
@@ -124,7 +126,7 @@ namespace T3.Core.Operator
                 targetSlot = targetInstance.Outputs.SingleOrDefault(e => e.Id == connection.TargetSlotId);
             }
 
-            return (sourceInstance, sourceSlot, targetInstance, targetSlot);
+            return true;
         }
     }
 

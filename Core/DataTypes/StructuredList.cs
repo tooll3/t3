@@ -40,6 +40,14 @@ namespace T3.Core.DataTypes
         public abstract void Write(JsonTextWriter writerNotUsed);
 
         public abstract StructuredList Read(JsonTextReader reader);
+        
+
+        protected static readonly JsonLoadSettings LoadSettings = new()
+                                                                    {
+                                                                        CommentHandling = CommentHandling.Ignore,
+                                                                        DuplicatePropertyNameHandling = DuplicatePropertyNameHandling.Error,
+                                                                        LineInfoHandling = LineInfoHandling.Ignore
+                                                                    };
     }
 
     public class StructuredList<T> : StructuredList where T : struct
@@ -208,7 +216,7 @@ namespace T3.Core.DataTypes
 
         public override StructuredList Read(JsonTextReader reader)
         {
-            var inputToken = JToken.ReadFrom(reader);
+            var inputToken = JToken.ReadFrom(reader, LoadSettings);
 
             var jArray = (JArray)inputToken["StructuredList"];
             if (jArray == null)
