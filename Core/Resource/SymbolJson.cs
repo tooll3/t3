@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using T3.Core.Audio;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -30,218 +30,243 @@ namespace T3.Core.Resource
             }
         }
     }
-
-    public class SymbolJson
+    
+    public static class SymbolJson
     {
-        public JsonTextWriter Writer { get; set; }
-        public JsonTextReader Reader { get; init; }
-
         #region writing
-        public void WriteSymbol(Symbol symbol)
+        public static void WriteSymbol(Symbol symbol, JsonTextWriter writer)
         {
-            Writer.WriteStartObject();
+            writer.WriteStartObject();
 
-            Writer.WriteObject("Name", symbol.Name);
-            Writer.WriteValue("Id", symbol.Id);
-            Writer.WriteObject("Namespace", symbol.Namespace);
+            writer.WriteObject(JsonKeys.Name, symbol.Name);
+            writer.WriteValue(JsonKeys.Id, symbol.Id);
+            writer.WriteObject(JsonKeys.Namespace, symbol.Namespace);
 
-            WriteSymbolInputs(symbol.InputDefinitions);
-            WriteSymbolChildren(symbol.Children);
-            WriteConnections(symbol.Connections);
-            symbol.PlaybackSettings?.WriteToJson(Writer);
-            symbol.Animator.Write(Writer);
+            WriteSymbolInputs(symbol.InputDefinitions, writer);
+            WriteSymbolChildren(symbol.Children, writer);
+            WriteConnections(symbol.Connections, writer);
+            symbol.PlaybackSettings?.WriteToJson(writer);
+            symbol.Animator.Write(writer);
 
-            Writer.WriteEndObject();
+            writer.WriteEndObject();
         }
 
-        private void WriteSymbolInputs(List<Symbol.InputDefinition> inputs)
+        private static void WriteSymbolInputs(List<Symbol.InputDefinition> inputs, JsonTextWriter writer)
         {
-            Writer.WritePropertyName("Inputs");
-            Writer.WriteStartArray();
+            writer.WritePropertyName(JsonKeys.Inputs);
+            writer.WriteStartArray();
 
             foreach (var input in inputs)
             {
-                Writer.WriteStartObject();
-                Writer.WriteObject("Id", input.Id);
-                Writer.WriteComment(input.Name);
-                Writer.WritePropertyName("DefaultValue");
-                input.DefaultValue.ToJson(Writer);
-                Writer.WriteEndObject();
+                writer.WriteStartObject();
+                writer.WriteObject(JsonKeys.Id, input.Id);
+                writer.WriteComment(input.Name);
+                writer.WritePropertyName(JsonKeys.DefaultValue);
+                input.DefaultValue.ToJson(writer);
+                writer.WriteEndObject();
             }
 
-            Writer.WriteEndArray();
+            writer.WriteEndArray();
         }
-        
 
-        private void WriteConnections(List<Symbol.Connection> connections)
+
+        private static void WriteConnections(List<Symbol.Connection> connections, JsonTextWriter writer)
         {
-            Writer.WritePropertyName("Connections");
-            Writer.WriteStartArray();
+            writer.WritePropertyName(JsonKeys.Connections);
+            writer.WriteStartArray();
             foreach (var connection in connections.OrderBy(c => c.TargetParentOrChildId.ToString() + c.TargetSlotId))
             {
-                Writer.WriteStartObject();
-                Writer.WriteValue("SourceParentOrChildId", connection.SourceParentOrChildId);
-                Writer.WriteValue("SourceSlotId", connection.SourceSlotId);
-                Writer.WriteValue("TargetParentOrChildId", connection.TargetParentOrChildId);
-                Writer.WriteValue("TargetSlotId", connection.TargetSlotId);
-                Writer.WriteEndObject();
+                writer.WriteStartObject();
+                writer.WriteValue(JsonKeys.SourceParentOrChildId, connection.SourceParentOrChildId);
+                writer.WriteValue(JsonKeys.SourceSlotId, connection.SourceSlotId);
+                writer.WriteValue(JsonKeys.TargetParentOrChildId, connection.TargetParentOrChildId);
+                writer.WriteValue(JsonKeys.TargetSlotId, connection.TargetSlotId);
+                writer.WriteEndObject();
             }
 
-            Writer.WriteEndArray();
+            writer.WriteEndArray();
         }
 
-        private void WriteSymbolChildren(List<SymbolChild> children)
+        private static void WriteSymbolChildren(List<SymbolChild> children, JsonTextWriter writer)
         {
-            Writer.WritePropertyName("Children");
-            Writer.WriteStartArray();
+            writer.WritePropertyName(JsonKeys.Children);
+            writer.WriteStartArray();
             foreach (var child in children)
             {
-                Writer.WriteStartObject();
-                Writer.WriteValue("Id", child.Id);
-                Writer.WriteComment(child.ReadableName);
-                Writer.WriteValue("SymbolId", child.Symbol.Id);
+                writer.WriteStartObject();
+                writer.WriteValue(JsonKeys.Id, child.Id);
+                writer.WriteComment(child.ReadableName);
+                writer.WriteValue(JsonKeys.SymbolId, child.Symbol.Id);
                 if (!string.IsNullOrEmpty(child.Name))
                 {
-                    Writer.WriteObject("Name", child.Name);
+                    writer.WriteObject(JsonKeys.Name, child.Name);
                 }
 
-                Writer.WritePropertyName("InputValues");
-                Writer.WriteStartArray();
+                writer.WritePropertyName(JsonKeys.InputValues);
+                writer.WriteStartArray();
                 foreach (var (id, inputValue) in child.Inputs)
                 {
                     if (inputValue.IsDefault)
                         continue;
 
-                    Writer.WriteStartObject();
-                    Writer.WriteValue("Id", id);
-                    Writer.WriteComment(inputValue.Name);
-                    Writer.WriteObject("Type", inputValue.Value.ValueType);
-                    Writer.WritePropertyName("Value");
-                    inputValue.Value.ToJson(Writer);
-                    Writer.WriteEndObject();
+                    writer.WriteStartObject();
+                    writer.WriteValue(JsonKeys.Id, id);
+                    writer.WriteComment(inputValue.Name);
+                    writer.WriteObject(JsonKeys.Type, inputValue.Value.ValueType);
+                    writer.WritePropertyName(JsonKeys.Value);
+                    inputValue.Value.ToJson(writer);
+                    writer.WriteEndObject();
                 }
 
-                Writer.WriteEndArray();
+                writer.WriteEndArray();
 
-                Writer.WritePropertyName("Outputs");
-                Writer.WriteStartArray();
+                writer.WritePropertyName(JsonKeys.Outputs);
+                writer.WriteStartArray();
 
                 foreach (var (id, output) in child.Outputs)
                 {
                     if (output.DirtyFlagTrigger != output.OutputDefinition.DirtyFlagTrigger || output.OutputData != null || output.IsDisabled)
                     {
-                        Writer.WriteStartObject();
-                        Writer.WriteValue("Id", id);
-                        Writer.WriteComment(child.ReadableName);
+                        writer.WriteStartObject();
+                        writer.WriteValue(JsonKeys.Id, id);
+                        writer.WriteComment(child.ReadableName);
 
                         if (output.OutputData != null)
                         {
-                            Writer.WritePropertyName("OutputData");
-                            Writer.WriteStartObject();
-                            Writer.WriteObject("Type", output.OutputData.DataType);
-                            output.OutputData.ToJson(Writer);
-                            Writer.WriteEndObject();
+                            writer.WritePropertyName(JsonKeys.OutputData);
+                            writer.WriteStartObject();
+                            writer.WriteObject(JsonKeys.Type, output.OutputData.DataType);
+                            output.OutputData.ToJson(writer);
+                            writer.WriteEndObject();
                         }
 
                         if (output.DirtyFlagTrigger != output.OutputDefinition.DirtyFlagTrigger)
                         {
-                            Writer.WriteObject("DirtyFlagTrigger", output.DirtyFlagTrigger);
+                            writer.WriteObject(JsonKeys.DirtyFlagTrigger, output.DirtyFlagTrigger);
                         }
 
                         if (output.IsDisabled)
                         {
-                            Writer.WriteValue("IsDisabled", output.IsDisabled);
+                            writer.WriteValue(JsonKeys.IsDisabled, output.IsDisabled);
                         }
 
-                        Writer.WriteEndObject();
+                        writer.WriteEndObject();
                     }
                 }
 
-                Writer.WriteEndArray();
+                writer.WriteEndArray();
 
-                Writer.WriteEndObject(); // child
+                writer.WriteEndObject(); // child
             }
 
-            Writer.WriteEndArray();
+            writer.WriteEndArray();
         }
         #endregion
 
         #region reading
-        private static SymbolChild ReadSymbolChild(Model model, JToken symbolChildJson)
+
+        internal static bool TryReadAndApplySymbolChildren(SymbolReadResult symbolReadResult)
         {
-            var childId = Guid.Parse(symbolChildJson["Id"].Value<string>());
-            var symbolId = Guid.Parse(symbolChildJson["SymbolId"].Value<string>());
-            if (!SymbolRegistry.Entries.TryGetValue(symbolId, out var symbol))
+            var childrenJson = symbolReadResult.ChildrenJsonArray;
+            
+            if (childrenJson.Length == 0)
+                return true;
+            
+            var parent = symbolReadResult.Symbol;
+            var success = true;
+            
+            List<SymbolChild> children = new(childrenJson.Length); // todo: ordered dictioanry
+            foreach (var childJson in childrenJson)
             {
-                // If the used symbol hasn't been loaded so far ensure it's loaded now
-                symbol = model.ReadSymbolWithId(symbolId);
+                var gotChild = TryReadSymbolChild(in childJson, out var symbolChild);
+                success &= gotChild;
+
+                if (!gotChild)
+                    continue;
+                
+                children.Add(symbolChild);
+                symbolChild.Parent = parent;
+            }
+            
+            parent.SetChildren(children, setChildrensParent: false);
+            
+            if(symbolReadResult.AnimatorJsonData != null)
+                parent.Animator.Read(symbolReadResult.AnimatorJsonData, parent);
+            
+            return success;
+        }
+        
+        private static bool TryReadSymbolChild(in JsonChildResult childJsonResult, out SymbolChild child)
+        {
+            // If the used symbol hasn't been loaded so far ensure it's loaded now
+            var haveChildSymbolDefinition = SymbolRegistry.Entries.TryGetValue(childJsonResult.SymbolId, out var symbol);
+            if (!haveChildSymbolDefinition)
+            {
+                Log.Warning($"Error loading symbol child {childJsonResult.SymbolId}");
+                child = null;
+                return false;
             }
 
-            if (symbol == null)
-            {
-                Log.Warning($"Failed to load symbol {symbolId}.");
-                return null;
-            }
+            child = new SymbolChild(symbol, childJsonResult.ChildId, null);
 
-            var symbolChild = new SymbolChild(symbol, childId, null);
-
-            var nameToken = symbolChildJson["Name"];
+            var symbolChildJson = childJsonResult.Json;
+            var nameToken = symbolChildJson[JsonKeys.Name]?.Value<string>();
             if (nameToken != null)
             {
-                symbolChild.Name = nameToken.Value<string>();
+                child.Name = nameToken;
             }
 
-            foreach (var inputValue in (JArray)symbolChildJson["InputValues"])
+            foreach (var inputValue in (JArray)symbolChildJson[JsonKeys.InputValues])
             {
-                ReadChildInputValue(symbolChild, inputValue);
+                ReadChildInputValue(child, inputValue);
             }
 
-            foreach (var outputJson in (JArray)symbolChildJson["Outputs"])
+            foreach (var outputJson in (JArray)symbolChildJson[JsonKeys.Outputs])
             {
-                var outputId = Guid.Parse(outputJson["Id"].Value<string>());
-                var outputDataJson = outputJson["OutputData"];
+                var outputId = Guid.Parse(outputJson[JsonKeys.Id].Value<string>());
+                var outputDataJson = outputJson[JsonKeys.OutputData];
                 if (outputDataJson != null)
                 {
-                    ReadChildOutputData(symbolChild, outputId, outputDataJson);
+                    ReadChildOutputData(child, outputId, outputDataJson);
                 }
 
-                var dirtyFlagJson = outputJson["DirtyFlagTrigger"];
+                var dirtyFlagJson = outputJson[JsonKeys.DirtyFlagTrigger];
                 if (dirtyFlagJson != null)
                 {
-                    symbolChild.Outputs[outputId].DirtyFlagTrigger = (DirtyFlagTrigger)Enum.Parse(typeof(DirtyFlagTrigger), dirtyFlagJson.Value<string>());
+                    child.Outputs[outputId].DirtyFlagTrigger = (DirtyFlagTrigger)Enum.Parse(typeof(DirtyFlagTrigger), dirtyFlagJson.Value<string>());
                 }
 
-                var isDisabledJson = outputJson["IsDisabled"];
+                var isDisabledJson = outputJson[JsonKeys.IsDisabled];
                 if (isDisabledJson != null)
                 {
-                    symbolChild.Outputs[outputId].IsDisabled = isDisabledJson.Value<bool>();
+                    child.Outputs[outputId].IsDisabled = isDisabledJson.Value<bool>();
                 }
             }
 
-            return symbolChild;
+            return true;
         }
 
         private static (Guid, JToken) ReadSymbolInputDefaults(JToken jsonInput)
         {
-            var id = Guid.Parse(jsonInput["Id"].Value<string>());
-            var jsonValue = jsonInput["DefaultValue"];
+            var id = Guid.Parse(jsonInput[JsonKeys.Id].Value<string>());
+            var jsonValue = jsonInput[JsonKeys.DefaultValue];
             return (id, jsonValue);
         }
 
         private static Symbol.Connection ReadConnection(JToken jsonConnection)
         {
-            var sourceInstanceId = Guid.Parse(jsonConnection["SourceParentOrChildId"].Value<string>());
-            var sourceSlotId = Guid.Parse(jsonConnection["SourceSlotId"].Value<string>());
-            var targetInstanceId = Guid.Parse(jsonConnection["TargetParentOrChildId"].Value<string>());
-            var targetSlotId = Guid.Parse(jsonConnection["TargetSlotId"].Value<string>());
+            var sourceInstanceId = Guid.Parse(jsonConnection[JsonKeys.SourceParentOrChildId].Value<string>());
+            var sourceSlotId = Guid.Parse(jsonConnection[JsonKeys.SourceSlotId].Value<string>());
+            var targetInstanceId = Guid.Parse(jsonConnection[JsonKeys.TargetParentOrChildId].Value<string>());
+            var targetSlotId = Guid.Parse(jsonConnection[JsonKeys.TargetSlotId].Value<string>());
 
             return new Symbol.Connection(sourceInstanceId, sourceSlotId, targetInstanceId, targetSlotId);
         }
 
         private static void ReadChildInputValue(SymbolChild symbolChild, JToken inputJson)
         {
-            var id = Guid.Parse(inputJson["Id"].Value<string>());
-            var jsonValue = inputJson["Value"];
+            var id = Guid.Parse(inputJson[JsonKeys.Id].Value<string>());
+            var jsonValue = inputJson[JsonKeys.Value];
             try
             {
                 symbolChild.Inputs[id].Value.SetValueFromJson(jsonValue);
@@ -255,109 +280,89 @@ namespace T3.Core.Resource
 
         private static void ReadChildOutputData(SymbolChild symbolChild, Guid outputId, JToken json)
         {
-            if (json["Type"] != null)
+            if (json[JsonKeys.Type] != null)
             {
                 symbolChild.Outputs[outputId].OutputData.ReadFromJson(json);
             }
         }
 
-        public Symbol ReadSymbol(Model model)
+        public static bool GetPastedSymbol(JToken jToken, out Symbol symbol)
         {
-            var o = JToken.ReadFrom(Reader);
-            return ReadSymbol(model, o);
+            var guidString = jToken[JsonKeys.Id].Value<string>();
+            var hasId = Guid.TryParse(guidString, out var guid);
+
+            if (!hasId)
+            {
+                Log.Error($"Failed to parse guid in symbol json: `{guidString}`");
+                symbol = null;
+                return false;
+            }
+
+            var hasSymbol = SymbolRegistry.Entries.TryGetValue(guid, out symbol);
+
+            // is this really necessary? just bringing things into parity with what was previously there, but I feel like
+            // everything below can be skipped, unless "allowNonOperatorInstanceType" actually matters
+            if (hasSymbol)
+                return true;
+            
+            var jsonResult = ReadSymbolRoot(guid, jToken, allowNonOperatorInstanceType: true);
+            
+            if (jsonResult.Symbol is null)
+                return false;
+
+            if (TryReadAndApplySymbolChildren(jsonResult))
+                return true;
+            
+            Log.Error($"Failed to get children of pasted token:\n{jToken}");
+            return false;
         }
 
-        public Symbol ReadSymbol(Model model, JToken o, bool allowNonOperatorInstanceType = false)
+        internal static SymbolReadResult ReadSymbolRoot(in Guid id, JToken jToken, bool allowNonOperatorInstanceType)
         {
-            var id = Guid.Parse(o["Id"].Value<string>());
-            if (SymbolRegistry.Entries.ContainsKey(id))
-                return null; // symbol already in registry - nothing to do
+            // Read symbol with Id - dictionary of Guid-JToken?
+            var name = jToken[JsonKeys.Name].Value<string>();
 
-            var name = o["Name"].Value<string>();
-            var @namespace = o["Namespace"]?.Value<string>() ?? "";
-            var symbolChildren = new List<SymbolChild>();
-
-            var missingSymbolChildIds = new HashSet<Guid>();
-            var missingSymbolsIds = new HashSet<Guid>();
-
-            foreach (var childJson in ((JArray)o["Children"]))
+            var childrenJsonArray = (JArray)jToken[JsonKeys.Children];
+            JsonChildResult[] childrenJsons = new JsonChildResult[childrenJsonArray.Count];
+            for (int i = 0; i < childrenJsonArray.Count; i++)
             {
-                SymbolChild symbolChild = ReadSymbolChild(model, childJson);
-                if (symbolChild == null)
-                {
-                    var childId = Guid.Parse((childJson["Id"] ?? "").Value<string>() ?? string.Empty);
-                    var symbolId = Guid.Parse((childJson["SymbolId"] ?? "").Value<string>() ?? string.Empty);
-                    Log.Warning($"Skipping child of undefined type {symbolId} in {name}");
-
-                    if (childId != Guid.Empty)
-                        missingSymbolChildIds.Add(childId);
-
-                    if (symbolId != Guid.Empty)
-                        missingSymbolsIds.Add(symbolId);
-                }
-                else
-                {
-                    symbolChildren.Add(symbolChild);
-                }
+                childrenJsons[i] = new JsonChildResult(childrenJsonArray[i]);
             }
 
             var connections = new List<Symbol.Connection>();
-            foreach (var c in ((JArray)o["Connections"]))
+            var connectionsJson = ((JArray)jToken[JsonKeys.Connections]);
+            var hasConnections = connectionsJson.Count > 0;
+            if (hasConnections)
             {
-                Symbol.Connection connection = ReadConnection(c);
-                if (connection == null)
-                {
-                    Log.Warning($"Skipping invalid connection in {name}");
-                }
-                else if (missingSymbolChildIds.Contains(connection.TargetParentOrChildId)
-                         || missingSymbolChildIds.Contains(connection.SourceParentOrChildId)
-                    )
-                {
-                    Log.Warning("Skipping connection to child of undefined type");
-                }
-                else
-                {
-                    connections.Add(connection);
-                }
+                ObtainConnections(connectionsJson, connections);
             }
 
-            var orderedInputIds = (from jsonInput in (JArray)o["Inputs"]
-                                   let idAndValue = ReadSymbolInputDefaults(jsonInput)
-                                   select idAndValue.Item1).ToArray();
+            var inputJsonArray = (JArray)jToken[JsonKeys.Inputs];
+            var inputDefaults = inputJsonArray
+                               .Select(ReadSymbolInputDefaults).ToArray();
 
-            var inputDefaultValues = (from jsonInput in (JArray)o["Inputs"]
-                                      let idAndValue = ReadSymbolInputDefaults(jsonInput)
-                                      select idAndValue).ToDictionary(entry => entry.Item1, entry => entry.Item2);
-            var animatorData = (JArray)o["Animator"];
+            var orderedInputIds = inputDefaults
+               .Select(idAndValue => idAndValue.Item1).ToArray();
 
-            var namespaceId = id.ToString().ToLower().Replace('-', '_');
+            var inputDefaultValues = new Dictionary<Guid, JToken>();
+            foreach (var idAndValue in inputDefaults)
+            {
+                inputDefaultValues[idAndValue.Item1] = idAndValue.Item2;
+            }
+
+            var namespaceId = CreateGuidNamespaceString(id);
             var instanceTypeName = $"T3.Operators.Types.Id_{namespaceId}.{name}, Operators, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null";
-            var instanceType = Type.GetType(instanceTypeName);
-            if (instanceType == null)
-            {
-                if (allowNonOperatorInstanceType)
-                {
-                    instanceType = typeof(object);
-                }
-                else
-                {
-                    MessageBox.Show($"Definition '{instanceTypeName}' is missing in Operator.dll.\nPlease try to rebuild your solution.");
-                    Application.Exit();
-                    Application.ExitThread();
-                }
-            }
+            var instanceType = !allowNonOperatorInstanceType ? GetOperatorInstanceType(instanceTypeName) : GetAnyInstanceType(instanceTypeName);
 
-            var symbol = new Symbol(instanceType, id, orderedInputIds, symbolChildren)
-                             {
-                                 Name = name,
-                                 Namespace = @namespace,
-                             };
-            symbol.Connections.AddRange(connections);
-
-            if (animatorData != null)
-            {
-                symbol.Animator.Read(animatorData, symbol);
-            }
+            var @namespace = jToken[JsonKeys.Namespace]?.Value<string>() ?? string.Empty;
+            var symbol = new Symbol(instanceType, id, orderedInputIds)
+                         {
+                             Name = name,
+                             Namespace = @namespace,
+                         };
+            
+            if(hasConnections)
+                symbol.Connections.AddRange(connections);
 
             foreach (var input in symbol.InputDefinitions)
             {
@@ -368,9 +373,119 @@ namespace T3.Core.Resource
                 }
             }
 
-            symbol.PlaybackSettings = PlaybackSettings.ReadFromJson(o);
-            return symbol;
+            symbol.PlaybackSettings = PlaybackSettings.ReadFromJson(jToken);
+
+            var animatorData = (JArray)jToken[JsonKeys.Animator];
+            return new SymbolReadResult(symbol, childrenJsons, animatorData);
         }
+        
+        // returns an id with valid C# namespace characters ('_' instead of '-') and all-lowercase
+        static string CreateGuidNamespaceString(Guid guid)
+        {
+            var idSpan = guid.ToString().AsSpan();
+            Span<char> namespaceIdSpan = stackalloc char[idSpan.Length];
+            idSpan.ToLowerInvariant(namespaceIdSpan);
+
+            int index;
+            while ((index = namespaceIdSpan.IndexOf('-')) != -1)
+            {
+                namespaceIdSpan[index] = '_';
+            }
+
+            return new string(namespaceIdSpan);
+        }
+
+        // Method for when allowNonOpInstanceType = true
+        static Type GetOperatorInstanceType(string typeName)
+        {
+            var thisType = Type.GetType(typeName);
+                
+            if (thisType is not null)
+                return thisType;
+                
+            MessageBox.Show($"Definition '{typeName}' is missing in Operator.dll.\nPlease try to rebuild your solution.");
+            Application.Exit();
+            Application.ExitThread();
+
+            return null;
+        }
+        
+        // Method for when allowNonOpInstanceType = false
+        static Type GetAnyInstanceType(string typeName) => Type.GetType(typeName) ?? typeof(object);
+        
+        private static void ObtainConnections(JArray connectionsJson, List<Symbol.Connection> connections)
+        {
+            foreach (var c in connectionsJson)
+            {
+                var connection = ReadConnection(c);
+                connections.Add(connection);
+            }
+        }
+
         #endregion
+        
+        internal readonly struct JsonKeys
+        {
+            public const string Connections = "Connections";
+            public const string SourceParentOrChildId = "SourceParentOrChildId";
+            public const string SourceSlotId = "SourceSlotId";
+            public const string TargetParentOrChildId = "TargetParentOrChildId";
+            public const string TargetSlotId = "TargetSlotId";
+            public const string Children = "Children";
+            public const string Id = "Id";
+            public const string SymbolId = "SymbolId";
+            public const string Name = "Name";
+            public const string Namespace = "Namespace";
+            public const string InputValues = "InputValues";
+            public const string OutputData = "OutputData";
+            public const string Type = "Type";
+            public const string DirtyFlagTrigger = "DirtyFlagTrigger";
+            public const string IsDisabled = "IsDisabled";
+            public const string DefaultValue = "DefaultValue";
+            public const string Value = "Value";
+            public const string Inputs = "Inputs";
+            public const string Outputs = "Outputs";
+            public const string Animator = "Animator";
+        }
+        
+        internal readonly struct SymbolReadResult
+        {
+            public readonly Symbol Symbol;
+            public readonly JsonChildResult[] ChildrenJsonArray;
+            public readonly JArray AnimatorJsonData;
+
+            public SymbolReadResult(Symbol symbol, JsonChildResult[] childrenJsonArray, JArray animatorJsonData)
+            {
+                Symbol = symbol;
+                ChildrenJsonArray = childrenJsonArray;
+                AnimatorJsonData = animatorJsonData;
+            }
+        }
+
+        internal readonly struct JsonChildResult
+        {
+            public readonly Guid SymbolId;
+            public readonly Guid ChildId;
+            public readonly JToken Json;
+
+            public JsonChildResult(JToken json)
+            { 
+                // todo: handle failure
+                var symbolIdString = json[JsonKeys.SymbolId].Value<string>();
+                _ = Guid.TryParse(symbolIdString, out SymbolId);
+                
+                var childIdString = json[JsonKeys.Id].Value<string>();
+                _ = Guid.TryParse(childIdString, out ChildId);
+                
+                Json = json;
+            }
+        }
+
+        public static JsonLoadSettings LoadSettings { get; } = new()
+                                                                   {
+                                                                       CommentHandling = CommentHandling.Ignore,
+                                                                       DuplicatePropertyNameHandling = DuplicatePropertyNameHandling.Error,
+                                                                       LineInfoHandling = LineInfoHandling.Ignore
+                                                                   };
     }
 }

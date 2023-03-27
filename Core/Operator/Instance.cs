@@ -72,59 +72,70 @@ namespace T3.Core.Operator
             }
         }
 
-        public bool AddConnection(Symbol.Connection connection, int multiInputIndex)
+        public bool TryAddConnection(Symbol.Connection connection, int multiInputIndex)
         {
-            var (_, sourceSlot, _, targetSlot) = GetInstancesForConnection(connection);
-            if (targetSlot != null)
-            {
-                targetSlot.AddConnection(sourceSlot, multiInputIndex);
-                return true;
-            }
+            var gotSource = TryGetSourceSlot(connection, out var sourceSlot);
+            var gotTarget = TryGetTargetSlot(connection, out var targetSlot);
 
-            return false;
+            if (!gotSource || !gotTarget)
+                return false;
+            
+            targetSlot.AddConnection(sourceSlot, multiInputIndex);
+            return true;
         }
 
         public void RemoveConnection(Symbol.Connection connection, int index)
         {
-            var (_, _, _, targetSlot) = GetInstancesForConnection(connection);
+            var success = TryGetTargetSlot(connection, out var targetSlot);
+            if (!success)
+                return;
             targetSlot.RemoveConnection(index);
         }
 
-        private (Instance, ISlot, Instance, ISlot) GetInstancesForConnection(Symbol.Connection connection)
+        private bool TryGetSourceSlot(Symbol.Connection connection, out ISlot sourceSlot)
         {
-            Instance compositionInstance = this;
+            var compositionInstance = this;
 
+            // Get source Instance
             var sourceInstance = compositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == connection.SourceParentOrChildId);
-            ISlot sourceSlot;
-            if (sourceInstance != null)
+            var gotSourceInstance = sourceInstance != null;
+
+            // Evaluate correctness of slot source Instance
+            var connectionBelongsToThis = connection.SourceParentOrChildId == Guid.Empty;
+            if (!gotSourceInstance && !connectionBelongsToThis)
             {
-                sourceSlot = sourceInstance.Outputs.SingleOrDefault(output => output.Id == connection.SourceSlotId);
-            }
-            else
-            {
-                if (connection.SourceParentOrChildId != Guid.Empty)
-                {
-                    Log.Error($"connection has incorrect Source: { connection.SourceParentOrChildId}");
-                    return (null, null, null, null);
-                }
-                sourceInstance = compositionInstance;
-                sourceSlot = sourceInstance.Inputs.SingleOrDefault(input => input.Id == connection.SourceSlotId);
+                Log.Error($"Connection has incorrect source slot: {connection.SourceParentOrChildId}");
+                sourceSlot = null;
+                return false;
             }
 
+            // Get source Slot
+            var sourceSlotList = gotSourceInstance ? sourceInstance.Outputs : compositionInstance.Inputs.Cast<ISlot>();
+            sourceSlot = sourceSlotList.SingleOrDefault(slot => slot.Id == connection.SourceSlotId);
+            return sourceSlot is not null;
+        }
+
+        private bool TryGetTargetSlot(Symbol.Connection connection, out ISlot targetSlot)
+        {
+            var compositionInstance = this;
+              
+            // Get target Instance
             var targetInstance = compositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == connection.TargetParentOrChildId);
-            ISlot targetSlot;
-            if (targetInstance != null)
-            {
-                targetSlot = targetInstance.Inputs.SingleOrDefault(e => e.Id == connection.TargetSlotId);
-            }
-            else
+            var gotTargetInstance = targetInstance is not null;
+
+            // Get target Slot
+            var targetSlotList = gotTargetInstance ? targetInstance.Inputs.Cast<ISlot>() : compositionInstance.Outputs;
+            targetSlot = targetSlotList.SingleOrDefault(slot => slot.Id == connection.TargetSlotId);
+            var gotTargetSlot = targetSlot is not null;
+            
+            #if DEBUG
+            if (!gotTargetInstance)
             {
                 Debug.Assert(connection.TargetParentOrChildId == Guid.Empty);
-                targetInstance = compositionInstance;
-                targetSlot = targetInstance.Outputs.SingleOrDefault(e => e.Id == connection.TargetSlotId);
             }
-
-            return (sourceInstance, sourceSlot, targetInstance, targetSlot);
+            #endif
+            
+            return gotTargetSlot;
         }
     }
 

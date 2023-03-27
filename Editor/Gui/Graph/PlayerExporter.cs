@@ -151,7 +151,6 @@ namespace T3.Editor.Gui.Graph
                 }
 
                 // Generate exported .t3 files
-                var json = new SymbolJson();
 
                 var symbolExportDir = Path.Combine(exportDir, Model.OperatorTypesFolder);
                 if (Directory.Exists(symbolExportDir))
@@ -163,9 +162,8 @@ namespace T3.Editor.Gui.Graph
                     using (var sw = new StreamWriter(symbolExportDir + symbol.Name + "_" + symbol.Id + ".t3"))
                     using (var writer = new JsonTextWriter(sw))
                     {
-                        json.Writer = writer;
-                        json.Writer.Formatting = Formatting.Indented;
-                        json.WriteSymbol(symbol);
+                        writer.Formatting = Formatting.Indented;
+                        SymbolJson.WriteSymbol(symbol, writer);
                     }
                 }
 
