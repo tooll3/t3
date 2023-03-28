@@ -669,7 +669,7 @@
         {
           "Id": "2b3dc8be-2ead-40fa-8dab-0f85bb470815"/*PreventPlaybackControl*/,
           "Type": "System.Boolean",
-          "Value": false
+          "Value": true
         },
         {
           "Id": "76343cef-1851-4627-b0a7-477e0b33915c"/*DarkOnWhite*/,
@@ -1759,6 +1759,28 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "acd07c60-a765-4c36-b068-18c76109381d"/*TVIntroSceneSetup*/,
+      "SymbolId": "1cdedb32-f23b-4649-b4d3-9e158ef9be40",
+      "InputValues": [
+        {
+          "Id": "7b9c9b05-4654-48c5-9ee4-8eff949f106f"/*TransitionProgress*/,
+          "Type": "System.Single",
+          "Value": 0.98
+        },
+        {
+          "Id": "b9b50526-af84-4a25-927d-a4b64f230edb"/*MainIntensity*/,
+          "Type": "System.Single",
+          "Value": 2.7
+        },
+        {
+          "Id": "4a3bb4d3-89ad-4d1f-969d-6791c6384a41"/*FX_Amount*/,
+          "Type": "System.Single",
+          "Value": 0.87
+        }
+      ],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -2109,6 +2131,12 @@
       "SourceSlotId": "43b8050a-1f18-4d15-9c03-78a275d1ff2b",
       "TargetParentOrChildId": "a87f1ba2-73a6-489e-a20e-039a7fcf8bb0",
       "TargetSlotId": "35f501f4-5c79-4628-9441-8b3782544bf6"
+    },
+    {
+      "SourceParentOrChildId": "04301eb8-7c87-48e8-9ce1-749df17ca8bf",
+      "SourceSlotId": "7a4c4feb-be2f-463e-96c6-cd9a6bad77a2",
+      "TargetParentOrChildId": "acd07c60-a765-4c36-b068-18c76109381d",
+      "TargetSlotId": "4c5c6be2-05d0-4a70-8705-1c0aad83fa2d"
     },
     {
       "SourceParentOrChildId": "6f0ae1d1-e2c0-4ce1-bc21-5719164dfcf9",

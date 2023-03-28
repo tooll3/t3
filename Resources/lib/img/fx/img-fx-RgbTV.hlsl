@@ -120,7 +120,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     noiseColor += 0.03;
 
     float2 glichOffset = pow(noiseColor.r, 4) * GlitchDistort * float2(1, 0.1);
-    uv2 -= glichOffset;
+    uv2 -= glichOffset * Visibility;
 
     int sourceWidth, sourceHeight, mipLevelCount;
     inputTexture.GetDimensions(0, sourceWidth, sourceHeight, mipLevelCount);
@@ -154,7 +154,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     glowCol /= glowSum;
     float4 imgCol = blurredCol + clamp((glowCol)*GlowIntensity, 0, 10) * Visibility;
 
-    imgCol.rgb *= clamp(1 - pow(noiseColor.r, 1.4) * ShadeDistortion * GlitchDistort * GlitchAmount, 0, 10);
+    imgCol.rgb *= clamp(1 - pow(noiseColor.r, 1.4) * ShadeDistortion * GlitchDistort * GlitchAmount * Visibility, 0, 10);
 
     imgCol.a = saturate(imgCol.a);
 
@@ -191,7 +191,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float4 r = lerp(imgCol, pattern, PatternAmount * Visibility);
 
     // Vignette
-    r.rgb *= lerp(1.5 - Vignette * (1 - (0.5 - dot(p, p)) - 0.5), 1, Visibility);
+    r.rgb *= lerp(1.5 - Vignette * (1 - (0.5 - dot(p, p)) - 0.5), 1, Visibility + 1);
 
     return float4(r);
 }
