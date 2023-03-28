@@ -198,7 +198,8 @@ namespace T3.Editor.Gui.Graph
         #region drawing UI ====================================================================
         public void Draw(ImDrawListPtr dl, bool showGrid)
         {
-            UpdateCanvas();
+            var flags = SymbolBrowser.IsOpen ? T3Ui.EditingFlags.PreventZoomWithMouseWheel : T3Ui.EditingFlags.None ;
+            UpdateCanvas(flags);
 
             /*
              * This is work around to delay setting the composition until ImGui has
