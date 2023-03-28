@@ -42,6 +42,13 @@
       }
     },
     {
+      "InputId": "279730b7-c427-4924-9fde-77eb65a3076c"/*Pivot*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 270.0
+      }
+    },
+    {
       "InputId": "e19808d8-6d73-4638-b5f2-ddddc49ad815"/*Invert*/,
       "Position": {
         "X": -200.0,

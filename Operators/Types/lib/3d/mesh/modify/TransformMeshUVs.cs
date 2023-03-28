@@ -29,6 +29,9 @@ namespace T3.Operators.Types.Id_208a86b5_55cc_460a_86e6_2b17da818494
         [Input(Guid = "888017f2-3ac2-464b-ae6f-9f8caf53ba6d")]
         public readonly InputSlot<bool> UseVertexSelection = new InputSlot<bool>();
 
+        [Input(Guid = "590e24cc-00cc-4c9a-8f96-850857686c4a")]
+        public readonly InputSlot<System.Numerics.Vector3> Pivot = new InputSlot<System.Numerics.Vector3>();
+
         
         private enum Spaces
         {

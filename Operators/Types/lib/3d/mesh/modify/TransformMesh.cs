@@ -38,6 +38,9 @@ namespace T3.Operators.Types.Id_026e6917_6e6f_4ee3_b2d4_58f4f1de74c9
 
         [Input(Guid = "71531810-78ab-449e-bb13-bfe5fe3d2a69")]
         public readonly InputSlot<bool> UseVertexSelection = new InputSlot<bool>();
+
+        [Input(Guid = "ccd89dd2-1baa-4a0c-8ec3-5a0e77551379")]
+        public readonly InputSlot<System.Numerics.Vector3> Pivot = new InputSlot<System.Numerics.Vector3>();
         
         
         
