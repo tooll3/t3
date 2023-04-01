@@ -25,10 +25,17 @@ namespace T3.Operators.Types.Id_e6072ecf_30d2_4c52_afa1_3b195d61617b
                 // Log.Debug($"{variableName} : {value}");
                 Result.Value = value;
             }
+            else
+            {
+                Result.Value = FallbackDefault.GetValue(context);
+            }
         }
 
         [Input(Guid = "015d1ea0-ea51-4038-893a-4af2f8584631")]
-        public readonly InputSlot<string> Variable = new InputSlot<string>();
+        public readonly InputSlot<string> Variable = new();
+        
+        [Input(Guid = "AE76829B-D17D-4443-9CF1-63E3C44B90C8")]
+        public readonly InputSlot<float> FallbackDefault = new();
     }
 }
 

@@ -18,7 +18,6 @@ cbuffer Transforms : register(b0)
 cbuffer Params : register(b1)
 {
     float4x4 Transform;
-    float Mode;
 }
 
 

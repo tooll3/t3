@@ -3,14 +3,6 @@
   "Description": "A new implementation with loop interation count.",
   "InputUis": [
     {
-      "InputId": "78c7396f-3ce8-4565-b043-ec92602c0ae7"/*Command*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -422.1501,
-        "Y": 122.52573
-      }
-    },
-    {
       "InputId": "71c3818f-bd7a-4979-bf83-56b56ccea6b0"/*CameraReference*/,
       "Relevancy": "Required",
       "Position": {
@@ -89,6 +81,14 @@
       "Position": {
         "X": -411.93866,
         "Y": 935.35754
+      }
+    },
+    {
+      "InputId": "78c7396f-3ce8-4565-b043-ec92602c0ae7"/*Command*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -415.07062,
+        "Y": 1269.4015
       }
     }
   ],
@@ -199,8 +199,8 @@
         "Y": 49.0
       },
       "Position": {
-        "X": 440.70148,
-        "Y": 116.536896
+        "X": 447.78094,
+        "Y": 1263.4126
       }
     },
     {
@@ -221,8 +221,8 @@
         "Y": 23.0
       },
       "Position": {
-        "X": 151.75348,
-        "Y": 153.98724
+        "X": 158.83295,
+        "Y": 1300.863
       }
     },
     {
@@ -232,8 +232,8 @@
         "Y": 62.0
       },
       "Position": {
-        "X": 286.32172,
-        "Y": 151.6513
+        "X": 293.40118,
+        "Y": 1298.5271
       }
     },
     {
@@ -254,15 +254,15 @@
         "Y": 49.0
       },
       "Position": {
-        "X": 614.42694,
-        "Y": 118.36844
+        "X": 621.50635,
+        "Y": 1265.2441
       }
     },
     {
       "ChildId": "18dfd723-1bae-4cc2-b309-3a5d57997503"/*BlendColors*/,
       "Size": {
         "X": 110.0,
-        "Y": 49.0
+        "Y": 62.0
       },
       "Position": {
         "X": 642.8628,
@@ -350,7 +350,7 @@
       "ChildId": "3f2e3061-570f-4925-ba8c-cabd9dd96365"/*Multiply*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 1277.4536,
@@ -499,6 +499,17 @@
       "Position": {
         "X": 502.05832,
         "Y": 1088.2675
+      }
+    },
+    {
+      "ChildId": "c5ade91c-62db-4a2e-89c3-fd4a158b59a6"/*GetFloatVar*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 318.68848,
+        "Y": 455.53717
       }
     }
   ],
