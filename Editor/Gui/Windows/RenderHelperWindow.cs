@@ -22,6 +22,24 @@ namespace T3.Editor.Gui.Windows
             Frames
         }
 
+        protected static int soundtrackChannels()
+        {
+            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
+            var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
+            PlaybackUtils.FindPlaybackSettings(composition, out var compWithSettings, out var settings);
+            settings.GetMainSoundtrack(out var soundtrack);
+            return AudioEngine.clipChannels(soundtrack);
+        }
+
+        protected static int soundtrackSampleRate()
+        {
+            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
+            var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
+            PlaybackUtils.FindPlaybackSettings(composition, out var compWithSettings, out var settings);
+            settings.GetMainSoundtrack(out var soundtrack);
+            return AudioEngine.clipSampleRate(soundtrack);
+        }
+
         protected static void DrawTimeSetup()
         {
             // convert times if reference time selection changed
@@ -154,13 +172,17 @@ namespace T3.Editor.Gui.Windows
             return timeInSeconds;
         }
 
+        protected static bool MyRecording(int Handle, IntPtr Buffer, int Length, IntPtr User)
+        {
+            return !_bassChanged;
+        }
+
         protected static void SetPlaybackTimeForNextFrame()
         {
             double startTimeInSeconds = ReferenceTimeToSeconds(_startTime, _timeReference);
             double endTimeInSeconds = ReferenceTimeToSeconds(_endTime, _timeReference);
             var oldTimeInSecs = Playback.Current.TimeInSecs;
             Playback.Current.TimeInSecs = MathUtils.Lerp(startTimeInSeconds, endTimeInSeconds, Progress);
-            var fixedDeltaTime = Math.Max(Playback.Current.TimeInSecs - oldTimeInSecs, 0.0);
             var adaptedDeltaTime = Math.Max(Playback.Current.TimeInSecs - oldTimeInSecs + _timingOverhang, 0.0);
 
             //PlaybackUtils.UpdatePlaybackAndSyncing();
@@ -172,7 +194,12 @@ namespace T3.Editor.Gui.Windows
 
             if (!_bassChanged)
             {
+                _bassChanged = true;
+
                 // save the old live playback values
+                int recHandle = Bass.RecordStart(soundtrackSampleRate(), soundtrackChannels(),
+                    0, MyRecording, IntPtr.Zero);
+
                 _bassUpdatePeriod = Bass.GetConfig(Configuration.UpdatePeriod);
                 _bassPlaybackBufferLength = Bass.GetConfig(Configuration.PlaybackBufferLength);
                 _bassGlobalStreamVolume = Bass.GetConfig(Configuration.GlobalStreamVolume);
@@ -180,7 +207,6 @@ namespace T3.Editor.Gui.Windows
                 Bass.Configure(Configuration.UpdatePeriod, 0);
                 Bass.Configure(Configuration.GlobalStreamVolume, 0);
                 //Bass.Configure(Configuration.NetPreBuffer, 0);
-                _bassChanged = true;
 
                 Playback.Current.IsLive = false;
                 _timingOverhang = 0.0;
@@ -219,7 +245,11 @@ namespace T3.Editor.Gui.Windows
                 Bass.Configure(Configuration.UpdatePeriod, _bassUpdatePeriod);
                 Bass.Configure(Configuration.PlaybackBufferLength, _bassPlaybackBufferLength);
                 Bass.Configure(Configuration.GlobalStreamVolume, _bassGlobalStreamVolume);
+
+                // this will stop the recording
                 _bassChanged = false;
+
+                Bass.RecordFree();
             }
         }
 

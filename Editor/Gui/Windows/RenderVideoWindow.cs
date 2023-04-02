@@ -39,8 +39,6 @@ namespace T3.Editor.Gui.Windows
                 return;
             }
 
-            var audioFrame = AudioEngine.LastMixDownBuffer(1.0 / _fps);
-
             if (!_isExporting)
             {
                 if (ImGui.Button("Start Export"))
@@ -51,6 +49,8 @@ namespace T3.Editor.Gui.Windows
                         _exportStartedTime = Playback.RunTimeInSecs;
                         _frameIndex = 0;
                         SetPlaybackTimeForNextFrame();
+
+                        var audioFrame = AudioEngine.LastMixDownBuffer(1.0 / _fps);
 
                         if (_videoWriter == null)
                         {
@@ -65,14 +65,17 @@ namespace T3.Editor.Gui.Windows
                             _videoWriter.Framerate = (int)_fps;
                         }
 
-                        SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame);
+                        SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame,
+                                                   soundtrackChannels(), soundtrackSampleRate());
                     }
                 }
             }
             else
             {
                 // Save current frame and determine what to do next
-                var success = SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame);
+                var audioFrame = AudioEngine.LastMixDownBuffer(1.0 / _fps);
+                var success = SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame,
+                                                         soundtrackChannels(), soundtrackSampleRate());
                 ImGui.ProgressBar(Progress, new Vector2(-1, 4));
 
                 var currentTime = Playback.RunTimeInSecs;
@@ -113,12 +116,13 @@ namespace T3.Editor.Gui.Windows
             return _frameIndex - MediaFoundationVideoWriter.SkipImages;
         }
 
-        private static bool SaveCurrentFrameAndAdvance(ref Texture2D mainTexture, ref byte[] audioFrame)
+        private static bool SaveCurrentFrameAndAdvance(ref Texture2D mainTexture, ref byte[] audioFrame,
+                                                       int channels, int sampleRate)
         {
             try
             {
-                if (audioFrame != null && audioFrame.Length != 0)
-                    _videoWriter.AddVideoAndAudioFrame(ref mainTexture, ref audioFrame);
+                if (audioFrame != null)
+                    _videoWriter.AddVideoAndAudioFrame(ref mainTexture, ref audioFrame, channels, sampleRate);
                 else
                     _videoWriter.AddVideoFrame(ref mainTexture);
 

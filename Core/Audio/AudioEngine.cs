@@ -5,12 +5,14 @@ using System.Linq;
 using ManagedBass;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Resource;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace T3.Core.Audio
 {
@@ -19,6 +21,27 @@ namespace T3.Core.Audio
     /// </summary>
     public static class AudioEngine
     {
+        public static int clipChannels(AudioClip clip)
+        {
+            if (_clipPlaybacks.TryGetValue(clip.Id, out var stream))
+            {
+                Bass.ChannelGetInfo(stream.StreamHandle, out var info);
+                return info.Channels;
+            }
+
+            return 0;
+        }
+        public static int clipSampleRate(AudioClip clip)
+        {
+            if (_clipPlaybacks.TryGetValue(clip.Id, out var stream))
+            {
+                Bass.ChannelGetInfo(stream.StreamHandle, out var info);
+                return info.Frequency;
+            }
+
+            return 0;
+        }
+
         public static void UseAudioClip(AudioClip clip, double time, bool forceRepositioning = false)
         {
             _updatedClipTimes[clip] = time;

@@ -382,7 +382,7 @@ namespace T3.Editor.Gui.Windows
             return sample;
         }
 
-        public void InitializeWriters(ref Texture2D frame)
+        public void InitializeWriters(ref Texture2D frame, int channels, int sampleRate)
         {
             try
             {
@@ -426,6 +426,10 @@ namespace T3.Editor.Gui.Windows
                     {
                         // initialize audio writer
                         var waveFormat = WAVEFORMATEX.DefaultIEEE;
+                        waveFormat.nChannels = (ushort)channels;
+                        waveFormat.nSamplesPerSec = (uint)sampleRate;
+                        waveFormat.nBlockAlign = (ushort)(waveFormat.nChannels * waveFormat.wBitsPerSample / 8);
+                        waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
                         audioWriter = new MP3AudioWriter(_sinkWriter, ref waveFormat);
                     }
 
@@ -445,7 +449,7 @@ namespace T3.Editor.Gui.Windows
         public void AddVideoFrame(ref Texture2D frame)
         {
             Debug.Assert(frame != null);
-            InitializeWriters(ref frame);
+            InitializeWriters(ref frame, 0, 0);
 
             // Create the sample (includes image and timing information)
             var videoSample = CreateSampleFromFrame(ref frame);
@@ -470,19 +474,22 @@ namespace T3.Editor.Gui.Windows
             }
         }
 
-        public void AddVideoAndAudioFrame(ref Texture2D frame, ref byte[] audioFrame)
+        public void AddVideoAndAudioFrame(ref Texture2D frame, ref byte[] audioFrame,
+                                          int channels, int sampleRate)
         {
             Debug.Assert(frame != null);
-            InitializeWriters(ref frame);
+            InitializeWriters(ref frame, channels, sampleRate);
 
             var currentDesc = frame.Description;
-            Debug.Assert(currentDesc.Width != 0 &&
-                         currentDesc.Height != 0 &&
-                         audioFrame != null &&
-                         audioFrame.Length != 0);
+            if (currentDesc.Width != 0 &&
+                currentDesc.Height != 0);
 
             var videoSample = CreateSampleFromFrame(ref frame);
-            var audioSample = audioWriter.CreateSampleFromFrame(ref audioFrame);
+
+            Sample audioSample = null;
+            if (audioFrame != null && audioFrame.Length != 0)
+                audioSample = audioWriter.CreateSampleFromFrame(ref audioFrame);
+
             try
             {
                 var samples = new Dictionary<int, Sample>();
