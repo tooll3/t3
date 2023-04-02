@@ -57,7 +57,7 @@ namespace T3.Editor.Gui.Windows
                 var WaveFormatEx = new WAVEFORMATEX();
                 WaveFormatEx.wFormatTag = SharpDX.Multimedia.WaveFormatEncoding.Pcm;
                 WaveFormatEx.nChannels = 2;
-                WaveFormatEx.nSamplesPerSec = 44100;
+                WaveFormatEx.nSamplesPerSec = 48000;
                 WaveFormatEx.wBitsPerSample = 24;
                 WaveFormatEx.nBlockAlign = (ushort)(WaveFormatEx.nChannels * WaveFormatEx.wBitsPerSample / 8);
                 WaveFormatEx.nAvgBytesPerSec = WaveFormatEx.nSamplesPerSec * WaveFormatEx.nBlockAlign;
@@ -74,7 +74,7 @@ namespace T3.Editor.Gui.Windows
                 var WaveFormatEx = new WAVEFORMATEX();
                 WaveFormatEx.wFormatTag = SharpDX.Multimedia.WaveFormatEncoding.IeeeFloat;
                 WaveFormatEx.nChannels = 2;
-                WaveFormatEx.nSamplesPerSec = 44100;
+                WaveFormatEx.nSamplesPerSec = 48000;
                 WaveFormatEx.wBitsPerSample = 32;
                 WaveFormatEx.nBlockAlign = (ushort)(WaveFormatEx.nChannels * WaveFormatEx.wBitsPerSample / 8);
                 WaveFormatEx.nAvgBytesPerSec = WaveFormatEx.nSamplesPerSec * WaveFormatEx.nBlockAlign;
