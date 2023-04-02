@@ -1,6 +1,5 @@
 using System;
 using ImGuiNET;
-using ManagedBass;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
 using T3.Core.Audio;

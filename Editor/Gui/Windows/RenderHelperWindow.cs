@@ -172,11 +172,6 @@ namespace T3.Editor.Gui.Windows
             return timeInSeconds;
         }
 
-        protected static bool MyRecording(int Handle, IntPtr Buffer, int Length, IntPtr User)
-        {
-            return !_bassChanged;
-        }
-
         protected static void SetPlaybackTimeForNextFrame()
         {
             double startTimeInSeconds = ReferenceTimeToSeconds(_startTime, _timeReference);
@@ -194,11 +189,7 @@ namespace T3.Editor.Gui.Windows
 
             if (!_bassChanged)
             {
-                _bassChanged = true;
-
-                // save the old live playback values
-                //int recHandle = Bass.RecordStart(soundtrackSampleRate(), soundtrackChannels(),
-                //    0, MyRecording, IntPtr.Zero);
+                AudioEngine.prepareRecording();
 
                 _bassUpdatePeriod = Bass.GetConfig(Configuration.UpdatePeriod);
                 _bassPlaybackBufferLength = Bass.GetConfig(Configuration.PlaybackBufferLength);
@@ -210,6 +201,7 @@ namespace T3.Editor.Gui.Windows
 
                 Playback.Current.IsLive = false;
                 _timingOverhang = 0.0;
+                _bassChanged = true;
             }
 
             Playback.Current.Bpm = settings.Bpm;
@@ -221,7 +213,7 @@ namespace T3.Editor.Gui.Windows
                 var bufferLengthInMS = (int)Math.Floor(1000.0 * adaptedDeltaTime);
                 _timingOverhang = adaptedDeltaTime - (double)bufferLengthInMS / 1000.0;
                 _timingOverhang = Math.Max(_timingOverhang, 0.0);
-                Bass.Configure(Configuration.PlaybackBufferLength, bufferLengthInMS);
+                // Bass.Configure(Configuration.PlaybackBufferLength, bufferLengthInMS);
 
                 AudioEngine.CompleteFrame(Playback.Current, (double)bufferLengthInMS / 1000.0);
             }

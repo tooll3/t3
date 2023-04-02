@@ -67,6 +67,11 @@ namespace T3.Core.Audio
             UseAudioClip(clip,0);
         }
 
+        public static void prepareRecording()
+        {
+            _fifoBuffers.Clear();
+        }
+
         public static void CompleteFrame(Playback playback, double frameDurationInSeconds)
         {
             if (!_bassInitialized)
@@ -135,16 +140,12 @@ namespace T3.Core.Audio
                                 }
                             }
                         }
-                        else
-                        {
-                            _fifoBuffers.Clear();
-                        }
 
                         UpdateFftBuffer(clipStream.StreamHandle, playback);
+                        clipStream.UpdateTime(playback);
+
                         handledMainSoundtrack = true;
                     }
-
-                    clipStream.UpdateTime(playback);
                 }
             }
 
