@@ -107,8 +107,8 @@ namespace T3.Editor.Gui.Windows
             return writer;
         }
 
-        public MediaFoundationVideoWriter(string filePath, Size2 videoPixelSize)
-            : this(filePath, videoPixelSize, VIDEO_INPUT_FORMAT)
+        public MediaFoundationVideoWriter(string filePath, Size2 videoPixelSize, bool supportAudio = false)
+            : this(filePath, videoPixelSize, VIDEO_INPUT_FORMAT, supportAudio)
         {
         }
 
@@ -382,7 +382,7 @@ namespace T3.Editor.Gui.Windows
             return sample;
         }
 
-        public void AddVideoFrame(ref Texture2D frame)
+        public void InitializeWriters(ref Texture2D frame)
         {
             try
             {
@@ -425,7 +425,7 @@ namespace T3.Editor.Gui.Windows
                     if (_supportAudio)
                     {
                         // initialize audio writer
-                        var waveFormat = WAVEFORMATEX.DefaultPCM;
+                        var waveFormat = WAVEFORMATEX.DefaultIEEE;
                         audioWriter = new MP3AudioWriter(_sinkWriter, ref waveFormat);
                     }
 
@@ -440,6 +440,12 @@ namespace T3.Editor.Gui.Windows
                 throw new InvalidOperationException(e.ToString() +
                     "(image size may be unsupported with the requested codec)");
             }
+        }
+
+        public void AddVideoFrame(ref Texture2D frame)
+        {
+            Debug.Assert(frame != null);
+            InitializeWriters(ref frame);
 
             // Create the sample (includes image and timing information)
             var videoSample = CreateSampleFromFrame(ref frame);
@@ -464,9 +470,11 @@ namespace T3.Editor.Gui.Windows
             }
         }
 
-        public void AddVideoAndAudioFrame(ref Texture2D frame, byte[] audioFrame)
+        public void AddVideoAndAudioFrame(ref Texture2D frame, ref byte[] audioFrame)
         {
             Debug.Assert(frame != null);
+            InitializeWriters(ref frame);
+
             var currentDesc = frame.Description;
             Debug.Assert(currentDesc.Width != 0 &&
                          currentDesc.Height != 0 &&
@@ -474,12 +482,12 @@ namespace T3.Editor.Gui.Windows
                          audioFrame.Length != 0);
 
             var videoSample = CreateSampleFromFrame(ref frame);
-            var audioSample = audioWriter.CreateSampleFromFrame(audioFrame);
+            var audioSample = audioWriter.CreateSampleFromFrame(ref audioFrame);
             try
             {
                 var samples = new Dictionary<int, Sample>();
-                samples.Add(StreamIndex, videoSample);
-                samples.Add(audioWriter.StreamIndex, audioSample);
+                if (videoSample != null) samples.Add(StreamIndex, videoSample);
+                if (audioSample != null) samples.Add(audioWriter.StreamIndex, audioSample);
 
                 WriteSamples(samples);
             }
@@ -490,8 +498,8 @@ namespace T3.Editor.Gui.Windows
             }
             finally
             {
-                videoSample.Dispose();
-                audioSample.Dispose();
+                videoSample?.Dispose();
+                audioSample?.Dispose();
             }
         }
 
@@ -506,11 +514,12 @@ namespace T3.Editor.Gui.Windows
             {
                 var streamIndex = item.Key;
                 var sample = item.Value;
-
-                sample.SampleTime = frameDuration * _frameIndex;
-                sample.SampleDuration = frameDuration;
-
-                _sinkWriter.WriteSample(streamIndex, sample);
+                if (sample != null)
+                {
+                    sample.SampleTime = frameDuration * _frameIndex;
+                    sample.SampleDuration = frameDuration;
+                    _sinkWriter.WriteSample(streamIndex, sample);
+                }
             }
         }
 
@@ -587,8 +596,8 @@ namespace T3.Editor.Gui.Windows
     {
         private static readonly Guid VIDEO_ENCODING_FORMAT = MF.VideoFormatGuids.H264;
 
-        public MP4VideoWriter(string filePath, Size2 videoPixelSize)
-            : base(filePath, videoPixelSize)
+        public MP4VideoWriter(string filePath, Size2 videoPixelSize, bool supportAudio = false)
+            : base(filePath, videoPixelSize, supportAudio)
         {
 
         }

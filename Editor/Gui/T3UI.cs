@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -67,15 +67,13 @@ namespace T3.Editor.Gui
             
             // Prepare the current frame 
             RenderStatsCollector.StartNewFrame();
-            
-            PlaybackUtils.UpdatePlaybackAndSyncing();
 
-
-            //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
-            
-            AudioEngine.CompleteFrame(Playback.Current);    // Update
-            
-
+            if (Playback.Current.IsLive)
+            {
+                PlaybackUtils.UpdatePlaybackAndSyncing();
+                //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
+                AudioEngine.CompleteFrame(Playback.Current, Playback.LastFrameDuration);    // Update
+            }
 
             AutoBackup.AutoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
             OpenedPopUpName = string.Empty;

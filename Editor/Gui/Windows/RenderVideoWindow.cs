@@ -1,7 +1,9 @@
 using System;
 using ImGuiNET;
+using ManagedBass;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
+using T3.Core.Audio;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
@@ -37,6 +39,8 @@ namespace T3.Editor.Gui.Windows
                 return;
             }
 
+            var audioFrame = AudioEngine.LastMixDownBuffer(1.0 / _fps);
+
             if (!_isExporting)
             {
                 if (ImGui.Button("Start Export"))
@@ -55,22 +59,20 @@ namespace T3.Editor.Gui.Windows
                             size.Width = currentDesc.Width;
                             size.Height = currentDesc.Height;
 
-                            _videoWriter = new MP4VideoWriter(_targetFile, size);
+                            _videoWriter = new MP4VideoWriter(_targetFile, size, true);
                             _videoWriter.Bitrate = _bitrate;
                             // FIXME: Allow floating point FPS in a future version
                             _videoWriter.Framerate = (int)_fps;
                         }
 
-                        SaveCurrentFrameAndAdvance(ref mainTexture);
+                        SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame);
                     }
                 }
             }
             else
             {
-                // 
-                
-                
-                var success = SaveCurrentFrameAndAdvance(ref mainTexture);
+                // Save current frame and determine what to do next
+                var success = SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame);
                 ImGui.ProgressBar(Progress, new Vector2(-1, 4));
 
                 var currentTime = Playback.RunTimeInSecs;
@@ -97,6 +99,7 @@ namespace T3.Editor.Gui.Windows
                 {
                     _videoWriter?.Dispose();
                     _videoWriter = null;
+                    ReleasePlaybackTime();
                 }
             }
 
@@ -110,11 +113,15 @@ namespace T3.Editor.Gui.Windows
             return _frameIndex - MediaFoundationVideoWriter.SkipImages;
         }
 
-        private static bool SaveCurrentFrameAndAdvance(ref Texture2D mainTexture)
+        private static bool SaveCurrentFrameAndAdvance(ref Texture2D mainTexture, ref byte[] audioFrame)
         {
             try
             {
-                _videoWriter.AddVideoFrame(ref mainTexture);
+                if (audioFrame != null && audioFrame.Length != 0)
+                    _videoWriter.AddVideoAndAudioFrame(ref mainTexture, ref audioFrame);
+                else
+                    _videoWriter.AddVideoFrame(ref mainTexture);
+
                 _frameIndex++;
                 SetPlaybackTimeForNextFrame();
             }
@@ -124,6 +131,7 @@ namespace T3.Editor.Gui.Windows
                 _isExporting = false;
                 _videoWriter?.Dispose();
                 _videoWriter = null;
+                ReleasePlaybackTime();
                 return false;
             }
 

@@ -204,7 +204,7 @@ namespace T3.Player
                         _playback.Bpm = _soundtrack.Bpm;
                         // Trigger loading clip
                         AudioEngine.UseAudioClip(_soundtrack, 0);
-                        AudioEngine.CompleteFrame(_playback); // Initialize
+                        AudioEngine.CompleteFrame(_playback, Playback.LastFrameDuration); // Initialize
                         prerenderRequired = true;
                     }
                     else
@@ -291,7 +291,7 @@ namespace T3.Player
                                      }
                                      
                                      // Update
-                                     AudioEngine.CompleteFrame(_playback); 
+                                     AudioEngine.CompleteFrame(_playback, Playback.LastFrameDuration); 
                                      
                                      DirtyFlag.IncrementGlobalTicks();
                                      DirtyFlag.InvalidationRefFrame++;

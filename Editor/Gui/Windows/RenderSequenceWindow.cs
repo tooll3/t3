@@ -81,6 +81,7 @@ namespace T3.Editor.Gui.Windows
                 if (!_isExporting)
                 {
                     ScreenshotWriter.Dispose();
+                    ReleasePlaybackTime();
                 }
             }
 
@@ -112,6 +113,7 @@ namespace T3.Editor.Gui.Windows
             {
                 _lastHelpString = e.ToString();
                 _isExporting = false;
+                ReleasePlaybackTime();
                 return false;
             }
         }

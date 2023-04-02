@@ -18,47 +18,67 @@ namespace T3.Core.Animation
     ///  - Time is used for all UI interactions and everything that is driven by keyframes.
     /// 
     /// RunTime is the time since application.
+    /// IsLive is true if we are playing live, false if we are rendering
     /// </summary>
     public class Playback
     {
-        public Playback()
+       public Playback()
         {
+            _isLive = true;
             Current = this;
         }
-        
+
         public static Playback Current { get; set; }
         public PlaybackSettings Settings { get; set; }
-        
+
         /// <summary>
         /// The absolute current time as controlled by the timeline interaction in bars.
         /// </summary>
         public virtual double TimeInBars { get; set; }
-        
+
         /// <summary>
         /// The current time used for animation (would advance from <see cref="TimeInBars"/> if Idle Motion is enabled. 
         /// </summary>
         public double FxTimeInBars { get; protected set; }
-        
+
         /// <summary>
         /// Convenience function to convert from internal TimeInBars mapped to seconds for current BPM. 
         /// </summary>
-        public double TimeInSecs { get => TimeInBars * 240 / Bpm; 
+        public double TimeInSecs { get => TimeInBars * 240 / Bpm;
             set => TimeInBars = value * Bpm / 240f; }
 
         public TimeRange LoopRange;
-        
+
         public double Bpm = 120;
+        public bool IsLive
+        {
+            get => _isLive;
+            set {
+                _isLive = value;
+                if (value)
+                {
+                    PlaybackSpeed = 0;
+                    _lastFrameStart = RunTimeInSecs;
+                }
+                else
+                {
+                    _lastFrameStart = TimeInSecs;
+                }
+            }
+        }
         
         public double PlaybackSpeed { get; set; }
         public bool IsLooping = false;
         
-        public static double RunTimeInSecs =>   _runTimeWatch.Elapsed.TotalSeconds;
+        public static double RunTimeInSecs => _runTimeWatch.Elapsed.TotalSeconds;
         public static double LastFrameDuration { get; private set; }
         public double LastFrameDurationInBars => BarsFromSeconds(LastFrameDuration);
         
         public virtual void Update(bool idleMotionEnabled = false)
         {
-            var currentRuntime = RunTimeInSecs;
+            // if we are not live, TimeInBars is provided externally
+            var currentRuntime = (IsLive) ? RunTimeInSecs : TimeInSecs;
+
             LastFrameDuration = currentRuntime - _lastFrameStart;
             _lastFrameStart = currentRuntime;
 
@@ -106,5 +126,6 @@ namespace T3.Core.Animation
         private static double _lastFrameStart;
         private double _previousTime;
         private static readonly Stopwatch _runTimeWatch = Stopwatch.StartNew();
+        private bool _isLive;
     }
 }

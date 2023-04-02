@@ -56,9 +56,9 @@ namespace T3.Editor.Gui.Windows
             {
                 var WaveFormatEx = new WAVEFORMATEX();
                 WaveFormatEx.wFormatTag = SharpDX.Multimedia.WaveFormatEncoding.Pcm;
-                WaveFormatEx.nChannels = 1;
-                WaveFormatEx.nSamplesPerSec = 16000;
-                WaveFormatEx.wBitsPerSample = 32;
+                WaveFormatEx.nChannels = 2;
+                WaveFormatEx.nSamplesPerSec = 44100;
+                WaveFormatEx.wBitsPerSample = 24;
                 WaveFormatEx.nBlockAlign = (ushort)(WaveFormatEx.nChannels * WaveFormatEx.wBitsPerSample / 8);
                 WaveFormatEx.nAvgBytesPerSec = WaveFormatEx.nSamplesPerSec * WaveFormatEx.nBlockAlign;
                 WaveFormatEx.cbSize = 0;
@@ -73,8 +73,8 @@ namespace T3.Editor.Gui.Windows
             {
                 var WaveFormatEx = new WAVEFORMATEX();
                 WaveFormatEx.wFormatTag = SharpDX.Multimedia.WaveFormatEncoding.IeeeFloat;
-                WaveFormatEx.nChannels = 1;
-                WaveFormatEx.nSamplesPerSec = 16000;
+                WaveFormatEx.nChannels = 2;
+                WaveFormatEx.nSamplesPerSec = 44100;
                 WaveFormatEx.wBitsPerSample = 32;
                 WaveFormatEx.nBlockAlign = (ushort)(WaveFormatEx.nChannels * WaveFormatEx.wBitsPerSample / 8);
                 WaveFormatEx.nAvgBytesPerSec = WaveFormatEx.nSamplesPerSec * WaveFormatEx.nBlockAlign;
@@ -125,9 +125,8 @@ namespace T3.Editor.Gui.Windows
             var mediaTypes = new List<MF.MediaType>(count);
             for (int n = 0; n < count; n++)
             {
-                var mediaTypeObject = availableTypes.GetElement(n);
-                mediaTypes.Add(new MF.MediaType((System.IntPtr)(mediaTypeObject.AddReference())));
-                mediaTypeObject.Release();
+                ComObject mediaTypeObject = (ComObject) availableTypes.GetElement(n);
+                mediaTypes.Add(new MF.MediaType( mediaTypeObject.NativePointer ));
             }
             availableTypes.Dispose();
             return mediaTypes.ToArray();
@@ -192,7 +191,7 @@ namespace T3.Editor.Gui.Windows
             sinkWriter.SetInputMediaType(streamIndex, inputMediaType, null);
         }
 
-        public MF.Sample CreateSampleFromFrame(byte[] data)
+        public MF.Sample CreateSampleFromFrame(ref byte[] data)
         {
             MF.MediaBuffer mediaBuffer = MF.MediaFactory.CreateMemoryBuffer(data.Length);
 
@@ -202,7 +201,6 @@ namespace T3.Editor.Gui.Windows
             IntPtr mediaBufferPointer = mediaBuffer.Lock(out cbMaxLength, out cbCurrentLength);
             try
             {
-
                 Marshal.Copy(data, 0, mediaBufferPointer, data.Length);
             }
             finally
