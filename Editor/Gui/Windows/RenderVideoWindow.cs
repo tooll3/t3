@@ -50,7 +50,6 @@ namespace T3.Editor.Gui.Windows
                         SetPlaybackTimeForNextFrame();
 
                         var audioFrame = AudioEngine.LastMixDownBuffer(1.0 / _fps);
-
                         if (_videoWriter == null)
                         {
                             var currentDesc = mainTexture.Description;
@@ -72,7 +71,7 @@ namespace T3.Editor.Gui.Windows
             else
             {
                 // Save current frame and determine what to do next
-                var audioFrame = AudioEngine.LastMixDownBuffer(1.0 / _fps);
+                var audioFrame = AudioEngine.LastMixDownBuffer(Playback.LastFrameDuration);
                 var success = SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame,
                                                          soundtrackChannels(), soundtrackSampleRate());
                 ImGui.ProgressBar(Progress, new Vector2(-1, 4));
