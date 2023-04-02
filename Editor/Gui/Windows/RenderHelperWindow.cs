@@ -185,7 +185,7 @@ namespace T3.Editor.Gui.Windows
             var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
             PlaybackUtils.FindPlaybackSettings(composition, out var compWithSettings, out var settings);
             settings.GetMainSoundtrack(out var soundtrack);
-            AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs, Playback.Current.IsLive == true);
+            AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs, Playback.Current.IsLive);
 
             if (!_bassChanged)
             {

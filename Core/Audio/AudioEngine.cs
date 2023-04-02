@@ -137,11 +137,15 @@ namespace T3.Core.Audio
                                     newBuffer = new byte[newBytes];
                                     Bass.ChannelGetData(clipStream.StreamHandle, newBuffer, newBytes);
                                     _fifoBuffers[clipStream.AudioClip] = buffer.Concat(newBuffer).ToArray();
+                                    UpdateFftBuffer(clipStream.StreamHandle, playback);
                                 }
                             }
                         }
+                        else
+                        {
+                            UpdateFftBuffer(clipStream.StreamHandle, playback);
+                        }
 
-                        UpdateFftBuffer(clipStream.StreamHandle, playback);
                         clipStream.UpdateTime(playback);
 
                         handledMainSoundtrack = true;
@@ -329,7 +333,7 @@ namespace T3.Core.Audio
                 return;
             
             // Resync
-            //Log.Debug($"Sound delta {soundDelta:0.000}s for {AudioClip.FilePath}");
+            Log.Debug($"Sound delta {soundDelta:0.000}s for {AudioClip.FilePath}");
             var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs + AudioTriggerDelayOffset * Playback.Current.PlaybackSpeed + AudioSyncingOffset);
             Bass.ChannelSetPosition(StreamHandle, newStreamPos);
         }
