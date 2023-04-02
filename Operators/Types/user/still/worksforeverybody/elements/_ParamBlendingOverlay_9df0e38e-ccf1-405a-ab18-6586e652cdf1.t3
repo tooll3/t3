@@ -243,7 +243,7 @@
         {
           "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
           "Type": "System.String",
-          "Value": "Use mouse to explore"
+          "Value": "Use your mouse to explore.\nClick to contribute the settings with the strongest effect."
         },
         {
           "Id": "989e6950-fd32-4d0b-97c2-d03264cb2db5"/*Shadow*/,
@@ -264,9 +264,19 @@
           }
         },
         {
+          "Id": "d89c518c-a862-4f46-865b-0380350b7417"/*Size*/,
+          "Type": "System.Single",
+          "Value": 34.0
+        },
+        {
+          "Id": "eaf9dc37-e70f-4197-895c-b5607456b4a2"/*LineHeight*/,
+          "Type": "System.Single",
+          "Value": 1.26
+        },
+        {
           "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
           "Type": "System.String",
-          "Value": "Resources\\fonts\\RobotoSlab-Black.fnt"
+          "Value": "Resources\\fonts\\Roboto-Light.fnt"
         }
       ],
       "Outputs": []
@@ -331,7 +341,7 @@
                     "R": 0.0,
                     "G": 0.0,
                     "B": 0.0,
-                    "A": 1.0
+                    "A": 0.50239235
                   }
                 },
                 {
@@ -416,7 +426,7 @@
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.0,
-            "Y": -1.46
+            "Y": -1.58
           }
         },
         {
@@ -448,7 +458,7 @@
                     "R": 1.0,
                     "G": 1.0,
                     "B": 1.0,
-                    "A": 1.0
+                    "A": 0.53110045
                   }
                 },
                 {
