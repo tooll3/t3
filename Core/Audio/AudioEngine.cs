@@ -175,8 +175,12 @@ namespace T3.Core.Audio
         
         private static void UpdateFftBuffer(int soundStreamHandle, Playback playback)
         {
-            const int get256FftValues = (int)DataFlags.FFT512 | (int)268435456; // BASS_DATA_NOREMOVE
-            
+            int get256FftValues = (int)DataFlags.FFT512;
+
+            // do not advance plaback if we are not in live mode
+            if (!playback.IsLive)
+                get256FftValues |= (int)268435456; // TODO: find BASS_DATA_NOREMOVE in ManagedBass
+
             if (playback.Settings != null && playback.Settings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
             {
                 Bass.ChannelGetData(soundStreamHandle, AudioAnalysis.FftGainBuffer, get256FftValues);
