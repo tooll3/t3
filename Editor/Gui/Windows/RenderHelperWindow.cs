@@ -197,7 +197,7 @@ namespace T3.Editor.Gui.Windows
                 _timingOverhang = Math.Max(_timingOverhang, 0.0);
                 Bass.Configure(Configuration.PlaybackBufferLength, bufferLengthInMS);
 
-                AudioEngine.CompleteFrame(Playback.Current, fixedDeltaTime);
+                AudioEngine.CompleteFrame(Playback.Current, (double)bufferLengthInMS / 1000.0);
             }
             else
             {
