@@ -239,9 +239,9 @@ namespace T3.Editor.Gui.Windows
             Playback.Current.TimeInSecs = ReferenceTimeToSeconds(_endTime, _timeReference);
             Playback.Current.IsLive = true;
 
-            // restore live playback values
             if (_bassChanged)
             {
+                // restore live playback values
                 Bass.Configure(Configuration.UpdatePeriod, _bassUpdatePeriod);
                 Bass.Configure(Configuration.PlaybackBufferLength, _bassPlaybackBufferLength);
                 Bass.Configure(Configuration.GlobalStreamVolume, _bassGlobalStreamVolume);

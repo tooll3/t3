@@ -135,6 +135,10 @@ namespace T3.Core.Audio
                                 }
                             }
                         }
+                        else
+                        {
+                            _fifoBuffers.Clear();
+                        }
 
                         UpdateFftBuffer(clipStream.StreamHandle, playback);
                         handledMainSoundtrack = true;
