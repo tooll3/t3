@@ -175,7 +175,7 @@ namespace T3.Core.Audio
         
         private static void UpdateFftBuffer(int soundStreamHandle, Playback playback)
         {
-            const int get256FftValues = (int)DataFlags.FFT512;
+            const int get256FftValues = (int)DataFlags.FFT512 | (int)268435456; // BASS_DATA_NOREMOVE
             
             if (playback.Settings != null && playback.Settings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
             {

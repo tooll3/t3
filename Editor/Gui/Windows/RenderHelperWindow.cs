@@ -197,8 +197,8 @@ namespace T3.Editor.Gui.Windows
                 _bassChanged = true;
 
                 // save the old live playback values
-                int recHandle = Bass.RecordStart(soundtrackSampleRate(), soundtrackChannels(),
-                    0, MyRecording, IntPtr.Zero);
+                //int recHandle = Bass.RecordStart(soundtrackSampleRate(), soundtrackChannels(),
+                //    0, MyRecording, IntPtr.Zero);
 
                 _bassUpdatePeriod = Bass.GetConfig(Configuration.UpdatePeriod);
                 _bassPlaybackBufferLength = Bass.GetConfig(Configuration.PlaybackBufferLength);
