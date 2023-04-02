@@ -191,6 +191,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float4 r = lerp(imgCol, pattern, PatternAmount * Visibility);
 
     // Vignette
+    p.x *= 1.5;
     r.rgb *= lerp(1.5 - Vignette * (1 - (0.5 - dot(p, p)) - 0.5), 1, Visibility + 1);
 
     return float4(r);

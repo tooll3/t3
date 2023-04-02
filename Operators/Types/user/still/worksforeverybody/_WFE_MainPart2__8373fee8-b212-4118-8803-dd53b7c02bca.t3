@@ -9303,6 +9303,16 @@
           "Id": "42d296cf-6c53-4da9-bef8-da36c4ca3aea"/*Hue*/,
           "Type": "System.Single",
           "Value": 370.0
+        },
+        {
+          "Id": "689fdfbe-e78d-42f8-af0b-ae8159dec216"/*Background*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.89019614,
+            "Y": 0.7490196,
+            "Z": 0.0,
+            "W": 0.0
+          }
         }
       ],
       "Outputs": []
@@ -9347,6 +9357,16 @@
           "Value": {
             "X": 0.0,
             "Y": 5.0
+          }
+        },
+        {
+          "Id": "689fdfbe-e78d-42f8-af0b-ae8159dec216"/*Background*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.8000001,
+            "Z": 0.79215693,
+            "W": 0.0
           }
         }
       ],

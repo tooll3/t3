@@ -28,6 +28,9 @@ namespace T3.Operators.Types.Id_1cdedb32_f23b_4649_b4d3_9e158ef9be40
         [Input(Guid = "b8191816-955d-4152-bc61-cf1d33351f22")]
         public readonly InputSlot<bool> Bypass = new InputSlot<bool>();
 
+        [Input(Guid = "3fb860f8-2c9b-4c5f-b589-2d08a13764ad")]
+        public readonly InputSlot<float> ImageBrightess = new InputSlot<float>();
+
 
     }
 }

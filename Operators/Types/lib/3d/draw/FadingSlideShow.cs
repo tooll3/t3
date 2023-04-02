@@ -36,6 +36,12 @@ namespace T3.Operators.Types.Id_cb89ed1d_03ea_4880_bfa0_1dd723e4bdab
         [Input(Guid = "3cb08250-213c-4fa6-b9a0-1c92bf01ad6e")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
 
+        [Input(Guid = "cabb74b7-72c3-4916-8096-5890fc8e7023")]
+        public readonly InputSlot<System.Numerics.Vector4> BackgroundColor = new InputSlot<System.Numerics.Vector4>();
+
+        [Input(Guid = "0f7305c9-4372-4e62-82ff-a377bcbffc12")]
+        public readonly InputSlot<int> ScaleMode = new InputSlot<int>();
+
     }
 }
 
