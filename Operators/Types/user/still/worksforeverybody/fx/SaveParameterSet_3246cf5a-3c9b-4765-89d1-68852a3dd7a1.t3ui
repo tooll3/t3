@@ -1,0 +1,51 @@
+{
+  "Id": "3246cf5a-3c9b-4765-89d1-68852a3dd7a1"/*SaveParameterSet*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "d6a017af-df4e-4532-8a4a-208df224d60a"/*Trigger*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "bdf7d9ab-0e73-4323-816d-af5ca0a60989"/*Position*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "4aa59a00-b56e-4634-ad96-a72eac3eb859"/*SceneIndex*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "a01bf21f-7673-4d4a-ab65-c2333bd4c8da"/*TimeStampInSeconds*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "be977a53-7b32-4eb7-b23a-338b0d1c7b6e"/*UserHash*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "a75a50ac-9361-4cac-8208-3c79f329bad2"/*Result*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
+    }
+  ]
+}

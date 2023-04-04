@@ -9,6 +9,13 @@
         "Y": 46.995968
       },
       "Usage": "FilePath"
+    },
+    {
+      "InputId": "710ba03d-d26e-496a-b6cd-68abb2e9f369"/*TriggerUpdate*/,
+      "Position": {
+        "X": 51.512096,
+        "Y": 91.99597
+      }
     }
   ],
   "SymbolChildUis": [],

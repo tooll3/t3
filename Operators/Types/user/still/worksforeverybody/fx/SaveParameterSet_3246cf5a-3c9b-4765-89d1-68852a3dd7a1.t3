@@ -1,0 +1,32 @@
+{
+  "Name": "SaveParameterSet",
+  "Id": "3246cf5a-3c9b-4765-89d1-68852a3dd7a1",
+  "Namespace": "user.still.worksforeverybody.fx",
+  "Inputs": [
+    {
+      "Id": "d6a017af-df4e-4532-8a4a-208df224d60a"/*Trigger*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "bdf7d9ab-0e73-4323-816d-af5ca0a60989"/*Position*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "Id": "4aa59a00-b56e-4634-ad96-a72eac3eb859"/*SceneIndex*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "a01bf21f-7673-4d4a-ab65-c2333bd4c8da"/*TimeStampInSeconds*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "be977a53-7b32-4eb7-b23a-338b0d1c7b6e"/*UserHash*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
