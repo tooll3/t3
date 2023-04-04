@@ -275,7 +275,8 @@ namespace T3.Core.Resource
 
         internal static bool TryReadSymbol(Model model, Guid id, JToken jToken, out Symbol symbol, bool allowNonOperatorInstanceType)
         {
-            // read symbol with Id - dictionary of Guid-JToken?
+            // Read symbol with Id - dictionary of Guid-JToken?
+
             var name = jToken[JsonKeys.Name].Value<string>();
             
             var symbolChildren = new List<SymbolChild>();
