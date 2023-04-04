@@ -72,11 +72,12 @@ namespace T3.Core.Operator
             }
         }
 
-        public bool AddConnection(Symbol.Connection connection, int multiInputIndex)
+        public bool TryAddConnection(Symbol.Connection connection, int multiInputIndex)
         {
-            var foundInstance = TryGetInstancesForConnection(connection, out _, out var sourceSlot, out _, out var targetSlot);
+            var gotSource = TryGetSourceSlot(connection, out var sourceSlot);
+            var gotTarget = TryGetTargetSlot(connection, out var targetSlot);
 
-            if (!foundInstance)
+            if (!gotSource || !gotTarget)
                 return false;
             
             targetSlot.AddConnection(sourceSlot, multiInputIndex);
@@ -85,48 +86,56 @@ namespace T3.Core.Operator
 
         public void RemoveConnection(Symbol.Connection connection, int index)
         {
-            var foundInstance = TryGetInstancesForConnection(connection, out _, out _, out _, out var targetSlot);
-            if (!foundInstance)
+            var success = TryGetTargetSlot(connection, out var targetSlot);
+            if (!success)
                 return;
             targetSlot.RemoveConnection(index);
         }
 
-        private bool TryGetInstancesForConnection(Symbol.Connection connection, out Instance sourceInstance, out ISlot sourceSlot, out Instance targetInstance, out ISlot targetSlot)
+        private bool TryGetSourceSlot(Symbol.Connection connection, out ISlot sourceSlot)
         {
-            Instance compositionInstance = this;
+            var compositionInstance = this;
 
-            sourceInstance = compositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == connection.SourceParentOrChildId);
-            if (sourceInstance != null)
+            // Get source Instance
+            var sourceInstance = compositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == connection.SourceParentOrChildId);
+            var gotSourceInstance = sourceInstance != null;
+
+            // Evaluate correctness of slot source Instance
+            var connectionBelongsToThis = connection.SourceParentOrChildId == Guid.Empty;
+            if (!gotSourceInstance && !connectionBelongsToThis)
             {
-                sourceSlot = sourceInstance.Outputs.SingleOrDefault(output => output.Id == connection.SourceSlotId);
-            }
-            else
-            {
-                if (connection.SourceParentOrChildId != Guid.Empty)
-                {
-                    Log.Error($"connection has incorrect Source: { connection.SourceParentOrChildId}");
-                    sourceSlot = null;
-                    targetInstance = null;
-                    targetSlot = null;
-                    return false;
-                }
-                sourceInstance = compositionInstance;
-                sourceSlot = sourceInstance.Inputs.SingleOrDefault(input => input.Id == connection.SourceSlotId);
+                Log.Error($"Connection has incorrect source slot: {connection.SourceParentOrChildId}");
+                sourceSlot = null;
+                return false;
             }
 
-            targetInstance = compositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == connection.TargetParentOrChildId);
-            if (targetInstance != null)
-            {
-                targetSlot = targetInstance.Inputs.SingleOrDefault(e => e.Id == connection.TargetSlotId);
-            }
-            else
+            // Get source Slot
+            var sourceSlotList = gotSourceInstance ? sourceInstance.Outputs : compositionInstance.Inputs.Cast<ISlot>();
+            sourceSlot = sourceSlotList.SingleOrDefault(slot => slot.Id == connection.SourceSlotId);
+            return sourceSlot is not null;
+        }
+
+        private bool TryGetTargetSlot(Symbol.Connection connection, out ISlot targetSlot)
+        {
+            var compositionInstance = this;
+              
+            // Get target Instance
+            var targetInstance = compositionInstance.Children.SingleOrDefault(child => child.SymbolChildId == connection.TargetParentOrChildId);
+            var gotTargetInstance = targetInstance is not null;
+
+            // Get target Slot
+            var targetSlotList = gotTargetInstance ? targetInstance.Inputs.Cast<ISlot>() : compositionInstance.Outputs;
+            targetSlot = targetSlotList.SingleOrDefault(slot => slot.Id == connection.TargetSlotId);
+            var gotTargetSlot = targetSlot is not null;
+            
+            #if DEBUG
+            if (!gotTargetInstance)
             {
                 Debug.Assert(connection.TargetParentOrChildId == Guid.Empty);
-                targetInstance = compositionInstance;
-                targetSlot = targetInstance.Outputs.SingleOrDefault(e => e.Id == connection.TargetSlotId);
             }
-
-            return true;
+            #endif
+            
+            return gotTargetSlot;
         }
     }
 

@@ -607,7 +607,7 @@ namespace T3.Core.Resource
             if (fileResource == null)
             {
                 fileResource = new ResourceFileHook(srcFile, new[] { newResource.Id });
-                ResourceFileWatcher._resourceFileHooks.TryAdd(srcFile, fileResource);
+                ResourceFileWatcher._resourceFileHooks.Add(srcFile, fileResource);
             }
             else
             {

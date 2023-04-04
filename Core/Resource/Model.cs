@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -444,58 +443,41 @@ namespace T3.Core.Resource
             InputValueCreators.Entries.Add(type, defaultValueCreator);
         }
 
-        private Dictionary<Guid, JsonResult<Symbol>> _symbolJsonTokens = new();
+        private Dictionary<Guid, JsonFileResult<Symbol>> _symbolJsonTokens = new();
 
-        public virtual void Load(bool log)
+        public virtual void Load(bool enableLog)
         {
             var symbolFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolExtension}", SearchOption.AllDirectories);
 
             _symbolJsonTokens = symbolFiles.AsParallel()
-                                           .Select(JsonResult<Symbol>.ReadAndCreate)
+                                           .Select(JsonFileResult<Symbol>.ReadAndCreate)
                                            .ToDictionary(x => x.Guid, x => x);
             
             _ = _symbolJsonTokens.AsParallel()
-                                 .Select(jsonInfoKvp =>
-                                         {
-                                             var jsonInfo = jsonInfoKvp.Value;
-                                             var success = SymbolJson.TryReadSymbol(this, jsonInfo.Guid, jsonInfo.JToken, out var symbol, false);
-                                             if (success)
-                                             {
-                                                 lock (jsonInfo)
-                                                 {
-                                                     jsonInfo.Object = symbol;
-                                                 }
-                                             }
-                                             else
-                                             {
-                                                 Log.Warning($"Failed to load symbol {jsonInfo.Guid}");
-                                             }
+                                 .Select(TryReadSymbolFromJsonFileResult)
+                                 .ToList(); // Execute and bring back to main thread
 
-                                             return (success, symbol);
-                                         })
-                                 .ToList(); // execute and bring back to main thread
-
-            foreach (var j in _symbolJsonTokens )
+            foreach (var idJsonTokenPair in _symbolJsonTokens )
             {
-                var jsonResult = j.Value;
+                var jsonResult = idJsonTokenPair.Value;
                 if (jsonResult.ObjectWasSet)
                 {
                     SymbolRegistry.Entries.TryAdd(jsonResult.Object.Id, jsonResult.Object);
                 }
             }
 
-            // check if there are symbols without a file, if yes add these
-            var instanceTypes = (from type in OperatorsAssembly.ExportedTypes
-                                 where type.IsSubclassOf(InstanceType)
+            // Check if there are symbols without a file, if yes add these
+            var instanceTypesWithoutFile = (from type in OperatorsAssembly.ExportedTypes
+                                 where type.IsSubclassOf(typeof(Instance))
                                  where !type.IsGenericType
                                  select type).ToHashSet();
 
             foreach (var symbol in SymbolRegistry.Entries.Values)
             {
-                instanceTypes.Remove(symbol.InstanceType);
+                instanceTypesWithoutFile.Remove(symbol.InstanceType);
             }
 
-            foreach (var newType in instanceTypes)
+            foreach (var newType in instanceTypesWithoutFile)
             {
                 var typeNamespace = newType.Namespace;
                 if (string.IsNullOrWhiteSpace(typeNamespace))
@@ -504,10 +486,11 @@ namespace T3.Core.Resource
                     continue;
                 } 
                 
-                var @namespace = _innerNamespace.Replace(typeNamespace, string.Empty).ToLowerInvariant();
-                var idFromNamespace = _idFromNamespace.Match(typeNamespace).Value;
-                idFromNamespace = ReplaceCharacter(idFromNamespace, '_', '-');
-                
+                var @namespace = _innerNamespace.Replace(newType.Namespace ?? string.Empty, "").ToLower();
+                var idFromNamespace = _idFromNamespace
+                                     .Match(newType.Namespace ?? string.Empty).Value
+                                     .Replace('_', '-');
+
                 Debug.Assert(!string.IsNullOrWhiteSpace(idFromNamespace));
                 var symbol = new Symbol(newType, Guid.Parse(idFromNamespace))
                                  {
@@ -522,8 +505,28 @@ namespace T3.Core.Resource
                     continue;
                 }
                 
-                if(log)
+                if(enableLog)
                     Log.Debug($"new added symbol: {newType}");
+            }
+
+            (bool success, Symbol symbol) TryReadSymbolFromJsonFileResult(KeyValuePair<Guid, JsonFileResult<Symbol>> idJsonResultPair)
+            {
+                var jsonInfo = idJsonResultPair.Value;
+                var success = SymbolJson.TryReadSymbol(this, jsonInfo.Guid, jsonInfo.JToken, out var symbol, allowNonOperatorInstanceType: false);
+                if (success)
+                {
+                    // This jsonInfo.Object can be read/assigned outside of this thread, so we should lock it 
+                    lock (jsonInfo)
+                    {
+                        jsonInfo.Object = symbol;
+                    }
+                }
+                else
+                {
+                    Log.Warning($"Failed to load symbol {jsonInfo.Guid}");
+                }
+
+                return (success, symbol);
             }
         }
 
@@ -532,22 +535,7 @@ namespace T3.Core.Resource
 
         private readonly Regex _idFromNamespace = new Regex(@"(\{){0,1}[0-9a-fA-F]{8}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{12}(\}){0,1}",
                                                             RegexOptions.IgnoreCase);
-        
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static string ReplaceCharacter(string idString, char toReplace, char toReplaceWith)
-        {
-            var idReadOnlySpan = idString.AsSpan();
-            Span<char> namespaceIdSpan = stackalloc char[idReadOnlySpan.Length];
 
-            for (int i = 0; i < idReadOnlySpan.Length; i++)
-            {
-                var c = idReadOnlySpan[i];
-                namespaceIdSpan[i] = c == toReplace ? toReplaceWith : c;
-            }
-
-            return new string(namespaceIdSpan);
-        }
-        
         internal bool TryReadSymbolWithId(Guid symbolId, out Symbol symbol)
         {
             var hasJsonInfo = _symbolJsonTokens.TryGetValue(symbolId, out var jsonInfo); // todo: TryGet
@@ -755,7 +743,6 @@ namespace T3.Core.Resource
         protected const string SymbolUiExtension = ".t3ui";
         public const string OperatorTypesFolder = @"Operators\Types\";
 
-        private static readonly Type InstanceType = typeof(Instance);
         private static readonly List<string> OperatorFileExtensions = new()
                                                                            {
                                                                                SymbolExtension,

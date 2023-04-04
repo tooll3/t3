@@ -65,7 +65,7 @@ namespace T3.Editor.Gui
 
         private static void WriteChildUis(SymbolUi symbolUi, JsonTextWriter writer)
         {
-            var vec2Writer = TypeValueToJsonConverters.Entries[Vector2Type];
+            var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
 
             writer.WritePropertyName(JsonKeys.SymbolChildUis);
             writer.WriteStartArray();
@@ -112,7 +112,7 @@ namespace T3.Editor.Gui
 
         private static void WriteOutputUis(SymbolUi symbolUi, JsonTextWriter writer)
         {
-            var vec2Writer = TypeValueToJsonConverters.Entries[Vector2Type];
+            var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
 
             writer.WritePropertyName(JsonKeys.OutputUis);
             writer.WriteStartArray();
@@ -138,8 +138,8 @@ namespace T3.Editor.Gui
             if (symbolUi.Annotations.Count == 0)
                 return;
 
-            var vec2Writer = TypeValueToJsonConverters.Entries[Vector2Type];
-            var vec4Writer = TypeValueToJsonConverters.Entries[Vector4Type];
+            var vec2Writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
+            var vec4Writer = TypeValueToJsonConverters.Entries[typeof(Vector4)];
             writer.WritePropertyName(JsonKeys.Annotations);
             writer.WriteStartArray();
 
@@ -180,8 +180,8 @@ namespace T3.Editor.Gui
 
         internal static bool TryReadSymbolUi(JToken mainObject, Guid symbolId, out SymbolUi symbolUi)
         {
-            var vector2Converter = JsonToTypeValueConverters.Entries[Vector2Type];
-            var vector4Converter = JsonToTypeValueConverters.Entries[Vector4Type];
+            var vector2Converter = JsonToTypeValueConverters.Entries[typeof(Vector2)];
+            var vector4Converter = JsonToTypeValueConverters.Entries[typeof(Vector4)];
 
             var symbol = SymbolRegistry.Entries[symbolId];
 
@@ -255,7 +255,7 @@ namespace T3.Editor.Gui
                 var childStyleEntry = childEntry[JsonKeys.Style];
                 if (childStyleEntry != null)
                 {
-                    childUi.Style = (SymbolChildUi.Styles)Enum.Parse(StylesType, childStyleEntry.Value<string>());
+                    childUi.Style = (SymbolChildUi.Styles)Enum.Parse(typeof(SymbolChildUi.Styles), childStyleEntry.Value<string>());
                 }
                 else
                 {
@@ -269,7 +269,7 @@ namespace T3.Editor.Gui
                     foreach (var styleEntry in (JArray)conStyleEntry)
                     {
                         var id = Guid.Parse(styleEntry[JsonKeys.Id].Value<string>());
-                        var style = (SymbolChildUi.ConnectionStyles)Enum.Parse(ConnectionStylesType, styleEntry[JsonKeys.Style].Value<string>());
+                        var style = (SymbolChildUi.ConnectionStyles)Enum.Parse(typeof(SymbolChildUi.ConnectionStyles), styleEntry[JsonKeys.Style].Value<string>());
                         dict.Add(id, style);
                     }
                 }
@@ -344,11 +344,6 @@ namespace T3.Editor.Gui
                                   };
             return true;
         }
-
-        private static readonly Type Vector2Type = typeof(Vector2);
-        private static readonly Type Vector4Type = typeof(Vector4);
-        private static readonly Type StylesType = typeof(SymbolChildUi.Styles);
-        private static readonly Type ConnectionStylesType = typeof(SymbolChildUi.ConnectionStyles);
 
         private readonly struct JsonKeys
         {

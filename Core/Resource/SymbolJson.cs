@@ -291,7 +291,7 @@ namespace T3.Core.Resource
             var hasConnections = connectionsJson.Count > 0;
             if (hasConnections)
             {
-                ReadConnections(connectionsJson, name, missingSymbolChildIds, connections);
+                ObtainConnections(connectionsJson, name, missingSymbolChildIds, connections);
             }
 
             var inputJsonArray = (JArray)jToken[JsonKeys.Inputs];
@@ -388,16 +388,10 @@ namespace T3.Core.Resource
         // Method for when allowNonOpInstanceType = true
         static Type GetOperatorInstanceType(string typeName)
         {
-            bool typeIsCached = TypeCache.TryGetValue(typeName, out var type);
-
-            if (!typeIsCached)
-            {
-                type = Type.GetType(typeName);
-                TypeCache.TryAdd(typeName, type);
-            }
-
-            if (type is not null)
-                return type;
+            var thisType = Type.GetType(typeName);
+                
+            if (thisType is not null)
+                return thisType;
                 
             MessageBox.Show($"Definition '{typeName}' is missing in Operator.dll.\nPlease try to rebuild your solution.");
             Application.Exit();
@@ -407,21 +401,9 @@ namespace T3.Core.Resource
         }
         
         // Method for when allowNonOpInstanceType = false
-        static Type GetAnyInstanceType(string typeName)
-        {
-            var typeIsCached = TypeCache.TryGetValue(typeName, out var type);
-            if (typeIsCached)
-            {
-                return type ?? ObjectType;
-            }
-
-            type = Type.GetType(typeName) ?? ObjectType;
-            TypeCache.TryAdd(typeName, type);
-
-            return type;
-        }
+        static Type GetAnyInstanceType(string typeName) => Type.GetType(typeName) ?? typeof(object);
         
-        private static void ReadConnections(JArray connectionsJson, string name, HashSet<Guid> missingSymbolChildIds, List<Symbol.Connection> connections)
+        private static void ObtainConnections(JArray connectionsJson, string name, HashSet<Guid> missingSymbolChildIds, List<Symbol.Connection> connections)
         {
             foreach (var c in connectionsJson)
             {
@@ -440,9 +422,6 @@ namespace T3.Core.Resource
             }
         }
 
-        private static readonly Type ObjectType = typeof(object);
-        // Define a static dictionary to cache Type instances by instanceTypeName
-        private static readonly ConcurrentDictionary<string, Type> TypeCache = new();
         #endregion
         
         internal readonly struct JsonKeys

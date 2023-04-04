@@ -227,7 +227,7 @@ namespace T3.Editor.Gui
                 }
             }
 
-            Load(log: false);
+            Load(enableLog: false);
 
             var symbols = SymbolRegistry.Entries;
             foreach (var symbolEntry in symbols)
@@ -245,14 +245,14 @@ namespace T3.Editor.Gui
         
         public static Guid HomeSymbolId = Guid.Parse("dab61a12-9996-401e-9aa6-328dd6292beb");
         
-        public override void Load(bool log)
+        public override void Load(bool enableLog)
         {
             // first load core data
-            base.Load(log);
+            base.Load(enableLog);
 
             var symbolUiFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);
             var symbolUiJsons = symbolUiFiles.AsParallel()
-                                         .Select(JsonResult<SymbolUi>.ReadAndCreate)
+                                         .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
                                          .Select(symbolUiJson =>
                                                   {
                                                       var gotSymbolUi = SymbolUiJson.TryReadSymbolUi(symbolUiJson.JToken, symbolUiJson.Guid, out var symbolUi);
@@ -277,7 +277,7 @@ namespace T3.Editor.Gui
                     continue;
                 }
                 
-                if(log)
+                if(enableLog)
                     Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
             }
         }

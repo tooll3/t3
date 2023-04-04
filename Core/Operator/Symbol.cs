@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using T3.Core.Logging;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -481,7 +479,7 @@ namespace T3.Core.Operator
                     if (!conHashToCount.TryGetValue(hash, out int count))
                         conHashToCount.Add(hash, 0);
 
-                    var valid = newInstance.AddConnection(connection, count);
+                    var valid = newInstance.TryAddConnection(connection, count);
                     if (!valid)
                     {
                         Log.Warning("Skipping connection to no longer existing targets");
@@ -612,7 +610,7 @@ namespace T3.Core.Operator
 
             foreach (var instance in InstancesOfSymbol)
             {
-                instance.AddConnection(connection, multiInputIndex);
+                instance.TryAddConnection(connection, multiInputIndex);
             }
         }
 
