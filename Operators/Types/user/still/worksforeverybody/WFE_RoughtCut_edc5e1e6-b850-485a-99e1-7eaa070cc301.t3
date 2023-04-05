@@ -566,12 +566,12 @@
         {
           "Id": "d19f4570-225e-4de5-b86e-3499011dd4e1"/*IsEnabled*/,
           "Type": "System.Boolean",
-          "Value": false
+          "Value": true
         },
         {
           "Id": "2b3dc8be-2ead-40fa-8dab-0f85bb470815"/*PreventPlaybackControl*/,
           "Type": "System.Boolean",
-          "Value": false
+          "Value": true
         },
         {
           "Id": "76343cef-1851-4627-b0a7-477e0b33915c"/*DarkOnWhite*/,
@@ -2284,6 +2284,12 @@
       "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
       "TargetParentOrChildId": "74d9141f-d142-4cd0-9bf3-884fd05925e7",
       "TargetSlotId": "35f501f4-5c79-4628-9441-8b3782544bf6"
+    },
+    {
+      "SourceParentOrChildId": "9d864293-852e-432b-ac3a-5fe37ffc4103",
+      "SourceSlotId": "8a65b34b-40be-4dbf-812c-d4c663464c7f",
+      "TargetParentOrChildId": "80955cae-53a5-4af4-96b4-cd1e9935ebd8",
+      "TargetSlotId": "c88b36f7-d8c1-4fa6-9fd1-b002f9850196"
     },
     {
       "SourceParentOrChildId": "aece87d5-6505-4c46-a24d-443e22e5237c",

@@ -3,7 +3,7 @@
   "Description": "",
   "InputUis": [
     {
-      "InputId": "d6a017af-df4e-4532-8a4a-208df224d60a"/*Trigger*/,
+      "InputId": "d6a017af-df4e-4532-8a4a-208df224d60a"/*TriggerSaveParameters*/,
       "Position": {
         "X": -200.0,
         "Y": 0.0
@@ -45,6 +45,13 @@
       "Position": {
         "X": 0.0,
         "Y": 100.0
+      }
+    },
+    {
+      "OutputId": "90f4d983-685e-499b-b121-0d7f34669490"/*Points*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 200.0
       }
     }
   ]

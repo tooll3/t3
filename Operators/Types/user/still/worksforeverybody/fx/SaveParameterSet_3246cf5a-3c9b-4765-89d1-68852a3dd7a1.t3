@@ -4,7 +4,7 @@
   "Namespace": "user.still.worksforeverybody.fx",
   "Inputs": [
     {
-      "Id": "d6a017af-df4e-4532-8a4a-208df224d60a"/*Trigger*/,
+      "Id": "d6a017af-df4e-4532-8a4a-208df224d60a"/*TriggerSaveParameters*/,
       "DefaultValue": false
     },
     {
