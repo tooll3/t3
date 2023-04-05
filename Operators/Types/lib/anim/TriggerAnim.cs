@@ -14,9 +14,13 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
         [Output(Guid = "aac4ecbf-436a-4414-94c1-53d517a8e587", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<float> Result = new();
 
+        [Output(Guid = "863C0A57-E893-4536-9EFE-6D001CB9D999", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<bool> HasCompleted = new();
+        
         public TriggerAnim()
         {
             Result.UpdateAction = Update;
+            HasCompleted.UpdateAction = Update;
         }
 
         private enum Directions
@@ -36,10 +40,13 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             _delay = Delay.GetValue(context);
 
             var animMode = AnimMode.GetEnumValue<AnimModes>(context);//   (AnimModes)AnimMode.GetValue(context).Clamp(0, Enum.GetNames(typeof(AnimModes)).Length -1);
+            
+            
+            
             var triggered = Trigger.GetValue(context);
             if (triggered != _trigger)
             {
-                //Log.Debug(" Trigger changed to " + triggered, this);
+                HasCompleted.Value = false;
                 _trigger = triggered;
                 
                 if (animMode == AnimModes.ForwardAndBackwards)
@@ -80,6 +87,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
                     LastFraction = _startProgress + dp;
                     if (LastFraction >= 1)
                     {
+                        HasCompleted.Value = true;
                         LastFraction = 1;
                         _currentDirection = Directions.None;
                     }
@@ -102,6 +110,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
                     if(LastFraction >= 1)
                     {
                         LastFraction = 1;
+                        HasCompleted.Value = true;
                         _currentDirection = Directions.None;
                     }
                 }
