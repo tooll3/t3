@@ -39,6 +39,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.MediaFoundation;
 using SharpDX.WIC;
+using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using MF = SharpDX.MediaFoundation;
@@ -430,7 +431,7 @@ namespace T3.Editor.Gui.Windows
                         waveFormat.nSamplesPerSec = (uint)sampleRate;
                         waveFormat.nBlockAlign = (ushort)(waveFormat.nChannels * waveFormat.wBitsPerSample / 8);
                         waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
-                        audioWriter = new MP3AudioWriter(_sinkWriter, ref waveFormat);
+                        audioWriter = new FLACAudioWriter(_sinkWriter, ref waveFormat);
                     }
 
                     // Start writing the video file. MUST be called before write operations.
@@ -481,20 +482,27 @@ namespace T3.Editor.Gui.Windows
             InitializeWriters(ref frame, channels, sampleRate);
 
             var currentDesc = frame.Description;
-            if (currentDesc.Width != 0 &&
-                currentDesc.Height != 0);
+            Debug.Assert(currentDesc.Width != 0 &&
+                         currentDesc.Height != 0);
 
             var videoSample = CreateSampleFromFrame(ref frame);
 
             Sample audioSample = null;
             if (audioFrame != null && audioFrame.Length != 0)
+            {
+                //Log.Debug("adding audio");
                 audioSample = audioWriter.CreateSampleFromFrame(ref audioFrame);
+            }
+            else
+            {
+                //Log.Debug("audio missing");
+            }
 
             try
             {
                 var samples = new Dictionary<int, Sample>();
-                if (videoSample != null) samples.Add(StreamIndex, videoSample);
                 if (audioSample != null) samples.Add(audioWriter.StreamIndex, audioSample);
+                if (videoSample != null) samples.Add(StreamIndex, videoSample);
 
                 WriteSamples(samples);
             }

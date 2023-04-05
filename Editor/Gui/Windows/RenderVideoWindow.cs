@@ -49,7 +49,6 @@ namespace T3.Editor.Gui.Windows
                         _frameIndex = 0;
                         SetPlaybackTimeForNextFrame();
 
-                        var audioFrame = AudioEngine.LastMixDownBuffer(1.0 / _fps);
                         if (_videoWriter == null)
                         {
                             var currentDesc = mainTexture.Description;
@@ -63,8 +62,9 @@ namespace T3.Editor.Gui.Windows
                             _videoWriter.Framerate = (int)_fps;
                         }
 
+                        var audioFrame = AudioEngine.LastMixDownBuffer(0.0);
                         SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame,
-                                                   soundtrackChannels(), soundtrackSampleRate());
+                                                    soundtrackChannels(), soundtrackSampleRate());
                     }
                 }
             }
@@ -74,14 +74,17 @@ namespace T3.Editor.Gui.Windows
                 var audioFrame = AudioEngine.LastMixDownBuffer(Playback.LastFrameDuration);
                 var success = SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame,
                                                          soundtrackChannels(), soundtrackSampleRate());
-                ImGui.ProgressBar(Progress, new Vector2(-1, 4));
 
+                ImGui.ProgressBar(Progress, new Vector2(-1, 4));
                 var currentTime = Playback.RunTimeInSecs;
                 var durationSoFar = currentTime - _exportStartedTime;
                 if (GetRealFrame() >= _frameCount || !success)
                 {
-                    var successful = success ? "successfully" : "unsuccessfully";
-                    _lastHelpString = $"Sequence export finished {successful} in {durationSoFar:0.00}s";
+                    if (success)
+                        _lastHelpString = $"Sequence export of {_frameCount} frames finished successfully in {durationSoFar:0.00}s";
+                    else
+                        _lastHelpString = $"Sequence export finished unsuccessfully in {durationSoFar:0.00}s\n" + _lastHelpString;
+
                     _isExporting = false;
                 }
                 else if (ImGui.Button("Cancel"))
@@ -91,7 +94,7 @@ namespace T3.Editor.Gui.Windows
                 }
                 else
                 {
-                    var estimatedTimeLeft = durationSoFar /  Progress - durationSoFar;
+                    var estimatedTimeLeft = durationSoFar / Progress - durationSoFar;
                     _lastHelpString = $"Saved {_videoWriter.FilePath} frame {GetRealFrame()+1}/{_frameCount}  ";
                     _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0.0}s left";
                 }

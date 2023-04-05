@@ -233,4 +233,20 @@ namespace T3.Editor.Gui.Windows
         }
     }
 
+    class FLACAudioWriter : MediaFoundationAudioWriter
+    {
+        public FLACAudioWriter(MF.SinkWriter sinkWriter, ref WAVEFORMATEX waveFormat, int desiredBitRate = 192000)
+            : base(sinkWriter, ref waveFormat, desiredBitRate)
+        {
+        }
+
+        public override Guid AudioFormat
+        {
+            get
+            {
+                return MF.AudioFormatGuids.Flac;
+            }
+        }
+    }
+
 } // namespace

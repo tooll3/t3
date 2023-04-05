@@ -172,6 +172,11 @@ namespace T3.Editor.Gui.Windows
             return timeInSeconds;
         }
 
+        protected static bool MyRecord(int Handle, IntPtr Buffer, int Length, IntPtr User)
+        {
+            return !_bassChanged;
+        }
+
         protected static void SetPlaybackTimeForNextFrame()
         {
             double startTimeInSeconds = ReferenceTimeToSeconds(_startTime, _timeReference);
@@ -185,35 +190,44 @@ namespace T3.Editor.Gui.Windows
             var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
             PlaybackUtils.FindPlaybackSettings(composition, out var compWithSettings, out var settings);
             settings.GetMainSoundtrack(out var soundtrack);
-            AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs, Playback.Current.IsLive);
+            AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
 
             if (!_bassChanged)
             {
-                AudioEngine.prepareRecording();
-
                 _bassUpdatePeriod = Bass.GetConfig(Configuration.UpdatePeriod);
                 _bassPlaybackBufferLength = Bass.GetConfig(Configuration.PlaybackBufferLength);
                 _bassGlobalStreamVolume = Bass.GetConfig(Configuration.GlobalStreamVolume);
                 // turn off automatic sound generation
+                // Bass.Configure(Configuration.UpdateThreads, false);
                 Bass.Configure(Configuration.UpdatePeriod, 0);
                 Bass.Configure(Configuration.GlobalStreamVolume, 0);
-                //Bass.Configure(Configuration.NetPreBuffer, 0);
+                Bass.Configure(Configuration.PlaybackBufferLength, 0);
 
                 Playback.Current.IsLive = false;
+                Playback.Current.PlaybackSpeed = 1.0;
+
                 _timingOverhang = 0.0;
                 _bassChanged = true;
+                adaptedDeltaTime = 0.0;
+
+                // Bass.RecordStart(soundtrackSampleRate(), soundtrackChannels(), BassFlags.Float, MyRecord);
+                AudioEngine.prepareRecording(Playback.Current);
             }
 
             Playback.Current.Bpm = settings.Bpm;
+            Playback.Current.PlaybackSpeed = 0.0;
             Playback.Current.Update(false);
+            Playback.Current.PlaybackSpeed = 1.0;
             Playback.Current.Settings = settings;
 
-            if (adaptedDeltaTime > 0)
+            if (adaptedDeltaTime > 0.0)
             {
                 var bufferLengthInMS = (int)Math.Floor(1000.0 * adaptedDeltaTime);
                 _timingOverhang = adaptedDeltaTime - (double)bufferLengthInMS / 1000.0;
                 _timingOverhang = Math.Max(_timingOverhang, 0.0);
-                // Bass.Configure(Configuration.PlaybackBufferLength, bufferLengthInMS);
+                Bass.Configure(Configuration.PlaybackBufferLength, bufferLengthInMS);
+                Bass.Configure(Configuration.DeviceBufferLength, bufferLengthInMS);
+                Bass.Configure(Configuration.DevicePeriod, bufferLengthInMS);
 
                 AudioEngine.CompleteFrame(Playback.Current, (double)bufferLengthInMS / 1000.0);
             }
@@ -227,7 +241,6 @@ namespace T3.Editor.Gui.Windows
 
         protected static void ReleasePlaybackTime()
         {
-            // Bass.Configure(Configuration.UpdateThreads, true);
             Playback.Current.TimeInSecs = ReferenceTimeToSeconds(_endTime, _timeReference);
             Playback.Current.IsLive = true;
 
@@ -237,11 +250,12 @@ namespace T3.Editor.Gui.Windows
                 Bass.Configure(Configuration.UpdatePeriod, _bassUpdatePeriod);
                 Bass.Configure(Configuration.PlaybackBufferLength, _bassPlaybackBufferLength);
                 Bass.Configure(Configuration.GlobalStreamVolume, _bassGlobalStreamVolume);
+                // Bass.Configure(Configuration.UpdateThreads, true);
 
                 // this will stop the recording
                 _bassChanged = false;
 
-                Bass.RecordFree();
+                // Bass.RecordFree();
             }
         }
 

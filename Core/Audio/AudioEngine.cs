@@ -5,14 +5,11 @@ using System.Linq;
 using ManagedBass;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SharpDX;
-using SharpDX.Direct3D11;
 using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Resource;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace T3.Core.Audio
 {
@@ -42,18 +39,9 @@ namespace T3.Core.Audio
             return 0;
         }
 
-        public static void UseAudioClip(AudioClip clip, double time, bool forceRepositioning = false)
+        public static void UseAudioClip(AudioClip clip, double time)
         {
             _updatedClipTimes[clip] = time;
-
-            if (forceRepositioning)
-            {
-                if (_clipPlaybacks.TryGetValue(clip.Id, out var stream))
-                {
-                    var newStreamPos = Bass.ChannelSeconds2Bytes(stream.StreamHandle, time);
-                    Bass.ChannelSetPosition(stream.StreamHandle, newStreamPos);
-                }
-            }
         }
 
         public static void ReloadClip(AudioClip clip)
@@ -67,8 +55,14 @@ namespace T3.Core.Audio
             UseAudioClip(clip,0);
         }
 
-        public static void prepareRecording()
+        public static void prepareRecording(Playback playback)
         {
+            foreach (var (audioClipId, clipStream) in _clipPlaybacks)
+            {
+                Bass.ChannelStop(clipStream.StreamHandle);
+                clipStream.UpdateTimeRecord(playback);
+            }
+
             _fifoBuffers.Clear();
         }
 
@@ -111,7 +105,7 @@ namespace T3.Core.Audio
                 }
                 else
                 {
-                    if (playbackSpeedChanged)
+                    if (playback.IsLive && playbackSpeedChanged)
                         clipStream.UpdatePlaybackSpeed(playback.PlaybackSpeed);
 
                     if (!handledMainSoundtrack && clipStream.AudioClip.IsSoundtrack)
@@ -126,34 +120,39 @@ namespace T3.Core.Audio
                             if (!_fifoBuffers.TryGetValue(clipStream.AudioClip, out buffer))
                                 buffer = _fifoBuffers[clipStream.AudioClip] = new byte[0];
 
-                            if (bytes > 0 && bytes >= buffer.Length)
+                            if (bytes > 0)
                             {
-                                Bass.ChannelUpdate(clipStream.StreamHandle, (int)(frameDurationInSeconds * 1000.0));
-
-                                var newBuffer = new byte[bytes];
-                                var newBytes = Bass.ChannelGetData(clipStream.StreamHandle, newBuffer, (int)DataFlags.Available);
-                                if (newBytes > 0)
+                                while (bytes >= buffer.Length)
                                 {
-                                    newBuffer = new byte[newBytes];
-                                    Bass.ChannelGetData(clipStream.StreamHandle, newBuffer, newBytes);
-                                    _fifoBuffers[clipStream.AudioClip] = buffer.Concat(newBuffer).ToArray();
-                                    UpdateFftBuffer(clipStream.StreamHandle, playback);
+                                    clipStream.UpdateTimeRecord(playback);
+
+                                    Bass.ChannelUpdate(clipStream.StreamHandle, (int)(frameDurationInSeconds * 1000.0));
+                                    var newBuffer = new byte[bytes];
+                                    var newBytes = Bass.ChannelGetData(clipStream.StreamHandle, newBuffer, (int)DataFlags.Available);
+
+                                    if (newBytes > 0)
+                                    {
+                                        newBuffer = new byte[newBytes];
+                                        Bass.ChannelGetData(clipStream.StreamHandle, newBuffer, newBytes);
+                                        buffer = buffer.Concat(newBuffer).ToArray();
+                                        UpdateFftBuffer(clipStream.StreamHandle, playback);
+                                    }
                                 }
+                                _fifoBuffers[clipStream.AudioClip] = buffer;
                             }
                         }
                         else
                         {
                             UpdateFftBuffer(clipStream.StreamHandle, playback);
+                            clipStream.UpdateTimeLive(playback);
                         }
-
-                        clipStream.UpdateTime(playback);
 
                         handledMainSoundtrack = true;
                     }
                 }
             }
 
-            foreach(var id in obsoleteIds)
+            foreach (var id in obsoleteIds)
             {
                 _clipPlaybacks[id].Disable();
                 _clipPlaybacks.Remove(id);
@@ -296,7 +295,7 @@ namespace T3.Core.Audio
         /// Too large of a threshold can disrupt syncing and increase latency.
         /// </summary>
         /// <param name="playback"></param>
-        public void UpdateTime(Playback playback)
+        public void UpdateTimeLive(Playback playback)
         {
             if (Playback.Current.IsLive && Playback.Current.PlaybackSpeed == 0)
             {
@@ -315,7 +314,6 @@ namespace T3.Core.Audio
                     //Log.Debug("Pausing");
                     Bass.ChannelPause(StreamHandle);
                 }
-                
                 return;
             }
 
@@ -329,13 +327,45 @@ namespace T3.Core.Audio
             var currentPos = Bass.ChannelBytes2Seconds(StreamHandle, currentStreamPos) - AudioSyncingOffset;
             var soundDelta = (currentPos - localTargetTimeInSecs) * playback.PlaybackSpeed;
 
-            if (Math.Abs(soundDelta) <= ProjectSettings.Config.AudioResyncThreshold * Math.Abs(Playback.Current.PlaybackSpeed))
+            // we may not fall behind or skip ahead in playback
+            var maxSoundDelta = ProjectSettings.Config.AudioResyncThreshold * Math.Abs(Playback.Current.PlaybackSpeed);
+            if (Math.Abs(soundDelta) <= maxSoundDelta)
                 return;
-            
+
             // Resync
             Log.Debug($"Sound delta {soundDelta:0.000}s for {AudioClip.FilePath}");
-            var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs + AudioTriggerDelayOffset * Playback.Current.PlaybackSpeed + AudioSyncingOffset);
+            var resyncOffset = AudioTriggerDelayOffset * Playback.Current.PlaybackSpeed + AudioSyncingOffset;
+            var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs + resyncOffset);
             Bass.ChannelSetPosition(StreamHandle, newStreamPos);
+        }
+
+        /// <summary>
+        /// Update timeline time when recoding
+        /// </summary>
+        /// <param name="playback"></param>
+        public void UpdateTimeRecord(Playback playback)
+        {
+            var resyncOffset = AudioSyncingOffset;
+            var localTargetTimeInSecs = TargetTime - playback.SecondsFromBars(AudioClip.StartTime) + resyncOffset;
+            var isOutOfBounds = localTargetTimeInSecs < -0.001 || localTargetTimeInSecs >= AudioClip.LengthInSeconds + 0.001;
+            var isPlaying = Bass.ChannelIsActive(StreamHandle) == PlaybackState.Playing;
+
+            if (!isPlaying)
+            {
+                if (!isOutOfBounds)
+                {
+                    Bass.ChannelSetAttribute(StreamHandle, ChannelAttribute.NoRamp, 0);
+                    Bass.ChannelSetAttribute(StreamHandle, ChannelAttribute.Volume, 1);
+                    Bass.ChannelSetAttribute(StreamHandle, ChannelAttribute.ReverseDirection, 1);
+                    Bass.ChannelSetAttribute(StreamHandle, ChannelAttribute.Frequency, DefaultPlaybackFrequency);
+
+                    var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs);
+                    var flags = PositionFlags.Bytes | PositionFlags.MixerReset;
+                    Bass.ChannelSetPosition(StreamHandle, newStreamPos, flags);
+
+                    Bass.ChannelPlay(StreamHandle);
+                }
+            }
         }
 
         public void Disable()
