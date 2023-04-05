@@ -172,11 +172,6 @@ namespace T3.Editor.Gui.Windows
             return timeInSeconds;
         }
 
-        protected static bool MyRecord(int Handle, IntPtr Buffer, int Length, IntPtr User)
-        {
-            return !_bassChanged;
-        }
-
         protected static void SetPlaybackTimeForNextFrame()
         {
             double startTimeInSeconds = ReferenceTimeToSeconds(_startTime, _timeReference);
@@ -198,7 +193,7 @@ namespace T3.Editor.Gui.Windows
                 _bassPlaybackBufferLength = Bass.GetConfig(Configuration.PlaybackBufferLength);
                 _bassGlobalStreamVolume = Bass.GetConfig(Configuration.GlobalStreamVolume);
                 // turn off automatic sound generation
-                // Bass.Configure(Configuration.UpdateThreads, false);
+                Bass.Configure(Configuration.UpdateThreads, false);
                 Bass.Configure(Configuration.UpdatePeriod, 0);
                 Bass.Configure(Configuration.GlobalStreamVolume, 0);
                 Bass.Configure(Configuration.PlaybackBufferLength, 0);
@@ -210,7 +205,6 @@ namespace T3.Editor.Gui.Windows
                 _bassChanged = true;
                 adaptedDeltaTime = 0.0;
 
-                // Bass.RecordStart(soundtrackSampleRate(), soundtrackChannels(), BassFlags.Float, MyRecord);
                 AudioEngine.prepareRecording(Playback.Current);
             }
 
@@ -226,16 +220,13 @@ namespace T3.Editor.Gui.Windows
                 _timingOverhang = adaptedDeltaTime - (double)bufferLengthInMS / 1000.0;
                 _timingOverhang = Math.Max(_timingOverhang, 0.0);
                 Bass.Configure(Configuration.PlaybackBufferLength, bufferLengthInMS);
-                Bass.Configure(Configuration.DeviceBufferLength, bufferLengthInMS);
-                Bass.Configure(Configuration.DevicePeriod, bufferLengthInMS);
 
                 AudioEngine.CompleteFrame(Playback.Current, (double)bufferLengthInMS / 1000.0);
             }
             else
             {
-                // Do not advance audio on the initial time setting.
-                // We may still be off since video is normally two frames behind...
-                AudioEngine.CompleteFrame(Playback.Current, 0.0);
+                // Do not advance audio on the initial time setting
+                AudioEngine.CompleteFrame(Playback.Current, 0.0, true);
             }
         }
 
@@ -250,12 +241,10 @@ namespace T3.Editor.Gui.Windows
                 Bass.Configure(Configuration.UpdatePeriod, _bassUpdatePeriod);
                 Bass.Configure(Configuration.PlaybackBufferLength, _bassPlaybackBufferLength);
                 Bass.Configure(Configuration.GlobalStreamVolume, _bassGlobalStreamVolume);
-                // Bass.Configure(Configuration.UpdateThreads, true);
+                Bass.Configure(Configuration.UpdateThreads, true);
 
                 // this will stop the recording
                 _bassChanged = false;
-
-                // Bass.RecordFree();
             }
         }
 
