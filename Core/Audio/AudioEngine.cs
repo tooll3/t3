@@ -69,6 +69,17 @@ namespace T3.Core.Audio
             _fifoBuffers.Clear();
         }
 
+        public static void endRecording(Playback playback)
+        {
+            foreach (var (audioClipId, clipStream) in _clipPlaybacks)
+            {
+                Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Volume, 0);
+                Bass.ChannelPause(clipStream.StreamHandle);
+                clipStream.UpdateTimeRecord(playback);
+                Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.NoRamp, 0);
+            }
+        }
+
         public static void CompleteFrame(Playback playback,
             double frameDurationInSeconds,
             bool clearBuffers = false)
