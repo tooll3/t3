@@ -45,7 +45,7 @@ namespace T3.Editor.Gui
 
             foreach (var inputEntry in symbolUi.InputUis)
             {
-                var symbolInput = symbolUi.Symbol.InputDefinitions.FirstOrDefault(inputDef => inputDef.Id == inputEntry.Key);
+                var symbolInput = symbolUi.Symbol.InputDefinitions.SingleOrDefault(inputDef => inputDef.Id == inputEntry.Key);
                 if (symbolInput == null)
                 {
                     Log.Info($"In '{symbolUi.Symbol.Name}': Didn't found input definition for InputUi, skipping this one. This can happen if an input got removed.");
@@ -200,7 +200,7 @@ namespace T3.Editor.Gui
                     return false;
                 }
 
-                var inputDefinition = symbol.InputDefinitions.FirstOrDefault(def => def.Id == inputId);
+                var inputDefinition = symbol.InputDefinitions.SingleOrDefault(def => def.Id == inputId);
                 if (inputDefinition == null)
                 {
                     Log.Warning($"Found input entry in ui file for symbol '{symbol.Name}', but no corresponding input in symbol. " +
@@ -236,7 +236,7 @@ namespace T3.Editor.Gui
                     continue;
                 }
                 
-                childUi.SymbolChild = symbol.Children.FirstOrDefault(child => child.Id == childId);
+                childUi.SymbolChild = symbol.Children.SingleOrDefault(child => child.Id == childId);
                 if (childUi.SymbolChild == null)
                 {
                     Log.Warning($"Skipping UI child definition in {symbol.Name} {symbolId} for undefined child {childId}");
@@ -289,7 +289,7 @@ namespace T3.Editor.Gui
                     continue;
                 }
                 
-                var outputDefinition = symbol.OutputDefinitions.FirstOrDefault(def => def.Id == outputId);
+                var outputDefinition = symbol.OutputDefinitions.SingleOrDefault(def => def.Id == outputId);
                 if (outputDefinition == null)
                 {
                     Log.Warning($"Found output entry in ui file for symbol '{symbol.Name}', but no corresponding output in symbol. " +
