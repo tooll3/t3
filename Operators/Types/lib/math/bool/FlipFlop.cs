@@ -8,6 +8,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
+
 // ReSharper disable InconsistentNaming
 
 namespace T3.Operators.Types.Id_ec1ba1fb_ceb7_4d4f_86b4_389589c7e6f0
@@ -17,26 +18,26 @@ namespace T3.Operators.Types.Id_ec1ba1fb_ceb7_4d4f_86b4_389589c7e6f0
         [Output(Guid = "c49bcf90-dee5-4132-b791-27f023be5d93")]
         public readonly Slot<bool> Result = new();
 
-        
         public FlipFlop()
         {
             Result.UpdateAction = Update;
-            
         }
-        
+
         private void Update(EvaluationContext context)
         {
             var isTriggered = Trigger.GetValue(context);
-            var isReset = Trigger.GetValue(context);
+            var isReset = ResetTrigger.GetValue(context);
             var defaultValue = DefaultValue.GetValue(context);
-            
+
             if (isReset)
             {
+                // Log.Debug(" exit default " + defaultValue, this);
                 Result.Value = defaultValue;
             }
-            else if(isTriggered)
+            else if (isTriggered)
             {
-                Result.Value =  true;
+                // Log.Debug(" exit true", this);
+                Result.Value = true;
             }
         }
 
@@ -48,7 +49,5 @@ namespace T3.Operators.Types.Id_ec1ba1fb_ceb7_4d4f_86b4_389589c7e6f0
 
         [Input(Guid = "1E8C11A9-D0FC-4016-9428-BED7FBD0BF68")]
         public readonly InputSlot<bool> DefaultValue = new();
-        
-        
     }
 }

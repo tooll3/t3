@@ -97,7 +97,6 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
                     if (s == null)
                         continue;
 
-                    Log.Debug("Found parameters! " + s.X);
                     _parameterSets.Add(s);
                 }
 
@@ -151,7 +150,7 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
 
         private void SaveNewEntry(EvaluationContext context, int sceneIndex)
         {
-            Log.Debug("Save triggered");
+            //Log.Debug("Save triggered");
             var position = Position.GetValue(context);
             var newSet = new ParameterSet
                              {
