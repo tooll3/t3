@@ -432,6 +432,12 @@ namespace T3.Editor.Gui.Interaction
             //DrawCanvasDebugInfos();
 
             var zoomDelta = ComputeZoomDeltaFromMouseWheel();
+            
+            ApplyZoomDelta(focusCenterOnScreen, zoomDelta);
+        }
+
+        protected void ApplyZoomDelta(Vector2 focusCenterOnScreen, float zoomDelta)
+        {
             var clamped = ClampScaleToValidRange(ScaleTarget * zoomDelta);
             if (clamped == ScaleTarget)
                 return;

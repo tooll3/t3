@@ -57,6 +57,8 @@ namespace T3.Editor.Gui.Interaction
         ScrollRight,
         ScrollUp,
         ScrollDown,
+        ZoomIn,
+        ZoomOut,
         
         // Layout and window management
         ToggleFocusMode,

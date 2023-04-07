@@ -331,6 +331,17 @@ namespace T3.Editor.Gui.Graph
                         {
                             _dampedScrollVelocity.X += InverseTransformDirection(Vector2.One * UserSettings.Config.KeyboardScrollAcceleration).X;
                         }
+                        
+                        if (ImGui.IsKeyDown((ImGuiKey)Key.Q))
+                        {
+                            var center = WindowPos + WindowSize / 2;
+                            ApplyZoomDelta( center, 1.05f);
+                        }
+                        if (ImGui.IsKeyDown((ImGuiKey)Key.E))
+                        {
+                            var center = WindowPos + WindowSize / 2;
+                            ApplyZoomDelta( center, 1/1.05f);
+                        }
                     }
                 }
 
