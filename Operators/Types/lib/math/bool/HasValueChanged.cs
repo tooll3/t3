@@ -12,7 +12,7 @@ namespace T3.Operators.Types.Id_146fae64_18da_4183_9794_a322f47c669e
 {
     public class HasValueChanged : Instance<HasValueChanged>
     {
-        [Output(Guid = "35ab8188-77a1-4cd9-b2ad-c503034e49f9", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "35ab8188-77a1-4cd9-b2ad-c503034e49f9")]
         public readonly Slot<bool> HasChanged = new Slot<bool>();
 
         [Output(Guid = "ab818835-77a1-4cd9-b2ad-c503034e49f9")]
