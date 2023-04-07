@@ -28,7 +28,7 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "c49bcf90-dee5-4132-b791-27f023be5d93"/*DelayedTrigger*/,
+      "OutputId": "c49bcf90-dee5-4132-b791-27f023be5d93"/*Result*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

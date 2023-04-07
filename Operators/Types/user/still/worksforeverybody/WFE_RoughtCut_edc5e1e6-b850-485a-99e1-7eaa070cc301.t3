@@ -509,14 +509,14 @@
           "Id": "cee4bca4-e9d4-493d-b4dd-56dd69d7fb3f"/*PerfectTime*/,
           "Type": "System.Single",
           "Value": 2.2
+        },
+        {
+          "Id": "84d0d959-0a87-4f8b-9470-d9117e2b365f"/*SaveScore*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
-      "Outputs": [
-        {
-          "Id": "9f6bd5f3-eb31-40de-894a-51d55b4e0fa3"/*_WFEGameUi*/,
-          "IsDisabled": true
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "44c1d69b-38b7-4a1a-995a-e8ed2a5ac204"/*_CreditOverlay*/,
@@ -2404,6 +2404,12 @@
       "SourceSlotId": "7a4c4feb-be2f-463e-96c6-cd9a6bad77a2",
       "TargetParentOrChildId": "c4538645-c5f1-4644-8c45-2b32e9df85fd",
       "TargetSlotId": "4525c76c-cdcf-47f3-aa96-335cfc5b5c1b"
+    },
+    {
+      "SourceParentOrChildId": "96c10fd3-8149-4545-a937-b1e349ab1f9f",
+      "SourceSlotId": "acb35d19-baaf-4042-9664-7f784b697831",
+      "TargetParentOrChildId": "c5b4f7c8-5f71-450f-8cac-e61bb991db9a",
+      "TargetSlotId": "fb0adf5b-f16a-4ccc-b270-9fb87f0c9529"
     },
     {
       "SourceParentOrChildId": "23301fa8-ca85-49a1-b65c-caf6a089901d",
@@ -7169,6 +7175,36 @@
             "OutEditMode": "Linear",
             "InTangentAngle": -0.6669082105029562,
             "OutTangentAngle": -3.8085008640927493
+          }
+        ]
+      }
+    },
+    {
+      "InstanceId": "96c10fd3-8149-4545-a937-b1e349ab1f9f",
+      "InputId": "84d0d959-0a87-4f8b-9470-d9117e2b365f",
+      "Curve": {
+        "PreCurve": "Constant",
+        "PostCurve": "Constant",
+        "Keys": [
+          {
+            "Time": 181.7041,
+            "Value": 0.0,
+            "InType": "Constant",
+            "OutType": "Constant",
+            "InEditMode": "Constant",
+            "OutEditMode": "Constant",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": 3.141592653589793
+          },
+          {
+            "Time": 182.0008,
+            "Value": 1.0,
+            "InType": "Constant",
+            "OutType": "Constant",
+            "InEditMode": "Constant",
+            "OutEditMode": "Constant",
+            "InTangentAngle": 0.0,
+            "OutTangentAngle": -3.141592653589793
           }
         ]
       }

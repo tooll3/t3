@@ -14,6 +14,10 @@
     {
       "Id": "cee4bca4-e9d4-493d-b4dd-56dd69d7fb3f"/*PerfectTime*/,
       "DefaultValue": 1.0
+    },
+    {
+      "Id": "84d0d959-0a87-4f8b-9470-d9117e2b365f"/*SaveScore*/,
+      "DefaultValue": false
     }
   ],
   "Children": [
@@ -307,6 +311,40 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "9038c415-d933-4114-aaf0-5edc72e7957d"/*WFESaveScore*/,
+      "SymbolId": "40676c51-ecca-4bc3-bd4a-eeb80fc0b937",
+      "InputValues": [
+        {
+          "Id": "c0a2bbea-663b-4e15-8861-57b7db7a7300"/*TriggerSave*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
+          "Id": "7bb45f86-c144-4cf0-a13f-9a60fe4d83cf"/*Score*/,
+          "Type": "System.Int32",
+          "Value": 1639
+        },
+        {
+          "Id": "a5713c6d-df65-4e36-851e-01dfffcdeb9b"/*GreetingScores*/,
+          "Type": "System.String",
+          "Value": "Adapt\nAlcatraz\nAltair \nAttention W!\nCNCD\nCocoon\nConspiracy\nDesire\nFms-Cat\nFuturis\nHolon\nLJ\nMercury?\nMFX\nNinjaDev\nPeisik\nPoo-Brain \nPrismbeings \nOutracks\nRazor1911\nSpectrals\nTEK "
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "12a3a412-6340-402c-b26a-8bacc6785e86"/*AddInts*/,
+      "SymbolId": "ab73a49e-c548-437d-a4ab-b3fa41e30097",
+      "InputValues": [
+        {
+          "Id": "d5efbe02-8f33-42e9-a205-859c218acbec"/*Input2*/,
+          "Type": "System.Int32",
+          "Value": 251
+        }
+      ],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -315,6 +353,18 @@
       "SourceSlotId": "2e1742d8-9ba3-4236-a0cd-a2b02c9f5924",
       "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "TargetSlotId": "9f6bd5f3-eb31-40de-894a-51d55b4e0fa3"
+    },
+    {
+      "SourceParentOrChildId": "9038c415-d933-4114-aaf0-5edc72e7957d",
+      "SourceSlotId": "54e534a7-3659-486c-8b27-67296d1db7cc",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "acb35d19-baaf-4042-9664-7f784b697831"
+    },
+    {
+      "SourceParentOrChildId": "3a5e9b99-363d-466d-9b51-a0cad7884e3d",
+      "SourceSlotId": "bfeec4e7-01ac-47a2-83f4-67ec8d1456ec",
+      "TargetParentOrChildId": "12a3a412-6340-402c-b26a-8bacc6785e86",
+      "TargetSlotId": "8496877c-6186-4a9f-acb2-ceb90026dc1d"
     },
     {
       "SourceParentOrChildId": "64227468-8734-481f-a7bb-4d2a84daa407",
@@ -387,6 +437,18 @@
       "SourceSlotId": "8d294996-7f87-424e-9869-12d383cb7869",
       "TargetParentOrChildId": "64227468-8734-481f-a7bb-4d2a84daa407",
       "TargetSlotId": "62949257-adb3-4c67-ac0a-d37ee28da81b"
+    },
+    {
+      "SourceParentOrChildId": "12a3a412-6340-402c-b26a-8bacc6785e86",
+      "SourceSlotId": "9b3e42f6-8980-4f30-8d8f-ed1dea5f19b9",
+      "TargetParentOrChildId": "9038c415-d933-4114-aaf0-5edc72e7957d",
+      "TargetSlotId": "7bb45f86-c144-4cf0-a13f-9a60fe4d83cf"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "84d0d959-0a87-4f8b-9470-d9117e2b365f",
+      "TargetParentOrChildId": "9038c415-d933-4114-aaf0-5edc72e7957d",
+      "TargetSlotId": "c0a2bbea-663b-4e15-8861-57b7db7a7300"
     },
     {
       "SourceParentOrChildId": "5cdea4f8-cac8-42dc-bb3b-21b09c625085",
