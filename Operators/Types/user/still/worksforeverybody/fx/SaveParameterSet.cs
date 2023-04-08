@@ -69,7 +69,7 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
                 var client = new HttpClient(new HttpClientHandler() { UseDefaultCredentials = true });
                 var request = new HttpRequestMessage
                                   {
-                                      RequestUri = new Uri("https://oyjobypyozkufrbrmqnt.supabase.co/rest/v1/scores?select=data"),
+                                      RequestUri = new Uri("https://oyjobypyozkufrbrmqnt.supabase.co/rest/v1/params?select=data"),
                                       Method = HttpMethod.Get,
                                   };
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -183,7 +183,7 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
                 var client = new HttpClient(new HttpClientHandler() { UseDefaultCredentials = true });
                 var request = new HttpRequestMessage
                                   {
-                                      RequestUri = new Uri("https://oyjobypyozkufrbrmqnt.supabase.co/rest/v1/scores"),
+                                      RequestUri = new Uri("https://oyjobypyozkufrbrmqnt.supabase.co/rest/v1/params"),
                                       Method = HttpMethod.Post,
                                   };
                 request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

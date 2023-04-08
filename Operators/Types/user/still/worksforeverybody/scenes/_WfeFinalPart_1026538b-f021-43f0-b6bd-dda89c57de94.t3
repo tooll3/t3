@@ -361,11 +361,11 @@
             "TimeClip": {
               "TimeRange": {
                 "Start": 181.0,
-                "End": 272.17334
+                "End": 311.9646
               },
               "SourceRange": {
                 "Start": 181.0,
-                "End": 272.17334
+                "End": 311.9646
               },
               "LayerIndex": 1
             }
@@ -498,12 +498,12 @@
             "Type": "T3.Core.Animation.TimeClip",
             "TimeClip": {
               "TimeRange": {
-                "Start": 188.99232,
-                "End": 272.17334
+                "Start": 188.79567,
+                "End": 311.9646
               },
               "SourceRange": {
-                "Start": 188.99232,
-                "End": 272.17334
+                "Start": 188.79567,
+                "End": 311.9646
               },
               "LayerIndex": 0
             }
@@ -589,18 +589,6 @@
       "Outputs": []
     },
     {
-      "Id": "5f74b350-457f-4546-878c-333ac22f333b"/*BlendScenes*/,
-      "SymbolId": "6e67d136-9285-48c6-a557-0a07361fc847",
-      "InputValues": [
-        {
-          "Id": "ce0e7890-b25c-45bd-8d7f-20865cc0a51a"/*BlendFraction*/,
-          "Type": "System.Single",
-          "Value": 1.0
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "fbed4d32-e448-4b91-a96d-cb6a50eeb516"/*Group*/,
       "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
       "InputValues": [
@@ -623,31 +611,6 @@
       "Outputs": []
     },
     {
-      "Id": "58bb6bf5-1621-4d3d-99b6-42f6f15d4a4b"/*Text*/,
-      "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
-      "InputValues": [
-        {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
-          "Type": "System.String",
-          "Value": "[  ]  Press space at right time to earn points."
-        },
-        {
-          "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": -0.7559438
-          }
-        },
-        {
-          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\fonts\\Iceland.fnt"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "dffc9173-ae3e-45b6-b4b2-b431db159a8f"/*Blur*/,
       "SymbolId": "946da16c-f536-4887-b764-af9468f22c0f",
       "InputValues": [
@@ -655,162 +618,6 @@
           "Id": "99188668-b6ac-468b-a892-cd020a3862b2"/*Size*/,
           "Type": "System.Single",
           "Value": 0.0
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "806842a6-c173-4ee1-9ce9-4d2a56410e04"/*Text*/,
-      "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
-      "InputValues": [
-        {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
-          "Type": "System.String",
-          "Value": "Better timing gives more points."
-        },
-        {
-          "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": -0.7559438
-          }
-        },
-        {
-          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\fonts\\Iceland.fnt"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "287465fb-3ef8-4007-a5df-703a395b77d7"/*Text*/,
-      "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
-      "InputValues": [
-        {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
-          "Type": "System.String",
-          "Value": "USE CURSOR LEFT / RIGHT TO SELECT SCENES."
-        },
-        {
-          "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": -0.7559438
-          }
-        },
-        {
-          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\fonts\\Iceland.fnt"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "19f67d04-2a30-4dad-b145-6d6ed1a13db8"/*Text*/,
-      "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
-      "InputValues": [
-        {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
-          "Type": "System.String",
-          "Value": "** USE MOUSE TO EXPLORE PARAMETERS,  THEN..."
-        },
-        {
-          "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": -0.7559438
-          }
-        },
-        {
-          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\fonts\\Iceland.fnt"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "d53fe6c2-4118-49e8-a2d6-ab30f425c065"/*Text*/,
-      "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
-      "InputValues": [
-        {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
-          "Type": "System.String",
-          "Value": "** CLICK TO SUBMIT THE PARAMETERS\nPRODUCES THE STRONGEST EFFECT."
-        },
-        {
-          "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": -0.7559438
-          }
-        },
-        {
-          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\fonts\\Iceland.fnt"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "91f1a7b6-09be-4832-a773-b02be08e592a"/*Group*/,
-      "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "e7f0a24b-7c11-4071-b23c-04419ed77e64"/*Text*/,
-      "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
-      "InputValues": [
-        {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
-          "Type": "System.String",
-          "Value": "WE HAVE 123.412.124 BYTES LEFT TO FILL THE DEMO SIZE LIMIT."
-        },
-        {
-          "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": -0.7559438
-          }
-        },
-        {
-          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\fonts\\Iceland.fnt"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "b896b644-f4ef-43a6-981c-e6112fdf811b"/*Text*/,
-      "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
-      "InputValues": [
-        {
-          "Id": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"/*InputText*/,
-          "Type": "System.String",
-          "Value": "AND I ALWAYS WANTED TO WRITE AN END TITLE SCROLLER..."
-        },
-        {
-          "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 0.0,
-            "Y": -0.7559438
-          }
-        },
-        {
-          "Id": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"/*FontPath*/,
-          "Type": "System.String",
-          "Value": "Resources\\fonts\\Iceland.fnt"
         }
       ],
       "Outputs": []
@@ -4588,45 +4395,6 @@
       "Outputs": []
     },
     {
-      "Id": "09b5186f-22dd-42c0-8800-cfb48da683b6"/*Font*/,
-      "SymbolId": "5880cbc3-a541-4484-a06a-0e6f77cdbe8e",
-      "Name": "Font",
-      "InputValues": [
-        {
-          "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
-          "Type": "System.String",
-          "Value": "Resources\\fonts\\ShareTechMono.fnt"
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "7041fd19-cfed-496d-a147-5d4c3fd3d1dc"/*Group*/,
-      "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
-      "InputValues": [
-        {
-          "Id": "9e24c5d1-191a-4c1a-b88e-03df826fffc0"/*Translation*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 0.0,
-            "Y": -0.27999997,
-            "Z": 0.0
-          }
-        },
-        {
-          "Id": "25eb87f8-43b6-46fa-8066-3fdc1efb5e01"/*UniformScale*/,
-          "Type": "System.Single",
-          "Value": 0.61
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "977ca2f4-cddb-4b9a-82b2-ff66453bbf9b"/*Group*/,
-          "IsDisabled": true
-        }
-      ]
-    },
-    {
       "Id": "9bffbb40-b510-4d18-829d-a6c397e07b0c"/*CreditsTime*/,
       "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
       "Name": "CreditsTime",
@@ -4836,7 +4604,7 @@
         {
           "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
           "Type": "System.String",
-          "Value": "Hello...\n           \n52dgbfgbr benj bod bundie \nchaos cupe d.fxo darya dBiz \ndeadmau5 dmvrg dojoe drxian \nemoon fiver2 flopine forstpfote \ngasman gizmo gloom glxblt \ngmpreussner gopher guillaume \nh0ffman hellfire hexler imdom \niq jco joreg kb keyj kirell lev \nlj maali mad made mellinoe messy \nmetamuscat mog mrvux muhmac \nneocord no-one ntsc ob5vr ocornut \nopensouler pestis praystation \npreacher ps rez ronny rufusul \ns!rwa sableraph shana sheijk \nslerpy sonikBuster tebjan tenfour \nthomas henzle titus unc uncle-x \nv3nom vdmo veiss wayfinder willb \nwrighter xerxes yoda \n\n\n\n                                        "
+          "Value": "Hello...\n           \n52dgbfgbr anne benj bod bundie \nchaos cupe d.fxo darya dBiz \ndeadmau5 dmvrg dojoe drxian \nemoon fiver2 flopine frostpfote \ngasman gizmo gloom glxblt \ngmpreussner gopher guillaume \nh0ffman hellfire hexler \nhigher than imdom iq jco joreg \njulie+jordan kb keyj kirell \nlev Lj maali mad made mellinoe \nmessy metamuscat mog mrvux \nmuhmac neocord no-one ntsc \nob5vr ocornut opensouler pestis \npraystation preacher ps rez \nronny rufusul s!rwa sableraph \nshana sheijk slerpy sonikBuster \nsmash tebjan tenfour thomas henzle \ntitus unc uncle-x v3nom vdmo \nveiss wayfinder willb wrighter \nxerxes yoda                                                 \n"
         }
       ],
       "Outputs": []
@@ -5332,7 +5100,7 @@
         {
           "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
           "Type": "System.String",
-          "Value": "\n<INSERT> "
+          "Value": "\n<INSERT> \n                \n"
         }
       ],
       "Outputs": []
@@ -5652,12 +5420,6 @@
       "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
     },
     {
-      "SourceParentOrChildId": "09b5186f-22dd-42c0-8800-cfb48da683b6",
-      "SourceSlotId": "dd9d8718-addc-49b1-bd33-aac22b366f94",
-      "TargetParentOrChildId": "19f67d04-2a30-4dad-b145-6d6ed1a13db8",
-      "TargetSlotId": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"
-    },
-    {
       "SourceParentOrChildId": "4cee5b05-61a8-4330-a30d-45952199e8c7",
       "SourceSlotId": "c20f4675-6387-45da-b14f-8d0a3af5e672",
       "TargetParentOrChildId": "1c336027-95c8-44d0-9cb0-9529e148f7f5",
@@ -5752,12 +5514,6 @@
       "SourceSlotId": "73ebf863-ba71-421c-bee7-312f13c5eff0",
       "TargetParentOrChildId": "28517a13-86ac-401c-901f-a044253c2834",
       "TargetSlotId": "7fee8751-6784-49d2-9862-c8fd3759e82f"
-    },
-    {
-      "SourceParentOrChildId": "09b5186f-22dd-42c0-8800-cfb48da683b6",
-      "SourceSlotId": "dd9d8718-addc-49b1-bd33-aac22b366f94",
-      "TargetParentOrChildId": "287465fb-3ef8-4007-a5df-703a395b77d7",
-      "TargetSlotId": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"
     },
     {
       "SourceParentOrChildId": "d100b0e4-9ab2-4cdf-b491-c26e0d537f1f",
@@ -6054,12 +5810,6 @@
       "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
     },
     {
-      "SourceParentOrChildId": "09b5186f-22dd-42c0-8800-cfb48da683b6",
-      "SourceSlotId": "dd9d8718-addc-49b1-bd33-aac22b366f94",
-      "TargetParentOrChildId": "58bb6bf5-1621-4d3d-99b6-42f6f15d4a4b",
-      "TargetSlotId": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"
-    },
-    {
       "SourceParentOrChildId": "a455e3e5-c395-4ffe-ab91-a25f19a8b826",
       "SourceSlotId": "bea6aa18-e751-4ce7-b7d7-b7a026c8e019",
       "TargetParentOrChildId": "58f444ce-447a-4272-b12d-5247fe40dc61",
@@ -6112,60 +5862,6 @@
       "SourceSlotId": "14a63b62-5fbb-4f82-8cf3-d0faf279eff8",
       "TargetParentOrChildId": "5b54d7bf-117b-4163-bff2-89c3bbf74969",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
-    },
-    {
-      "SourceParentOrChildId": "91f1a7b6-09be-4832-a773-b02be08e592a",
-      "SourceSlotId": "977ca2f4-cddb-4b9a-82b2-ff66453bbf9b",
-      "TargetParentOrChildId": "5f74b350-457f-4546-878c-333ac22f333b",
-      "TargetSlotId": "998b7cbc-b54c-4e81-bc61-31a7e05ce8e0"
-    },
-    {
-      "SourceParentOrChildId": "58bb6bf5-1621-4d3d-99b6-42f6f15d4a4b",
-      "SourceSlotId": "3f8b20a7-c8b8-45ab-86a1-0efcd927358e",
-      "TargetParentOrChildId": "5f74b350-457f-4546-878c-333ac22f333b",
-      "TargetSlotId": "998b7cbc-b54c-4e81-bc61-31a7e05ce8e0"
-    },
-    {
-      "SourceParentOrChildId": "806842a6-c173-4ee1-9ce9-4d2a56410e04",
-      "SourceSlotId": "3f8b20a7-c8b8-45ab-86a1-0efcd927358e",
-      "TargetParentOrChildId": "5f74b350-457f-4546-878c-333ac22f333b",
-      "TargetSlotId": "998b7cbc-b54c-4e81-bc61-31a7e05ce8e0"
-    },
-    {
-      "SourceParentOrChildId": "19f67d04-2a30-4dad-b145-6d6ed1a13db8",
-      "SourceSlotId": "3f8b20a7-c8b8-45ab-86a1-0efcd927358e",
-      "TargetParentOrChildId": "5f74b350-457f-4546-878c-333ac22f333b",
-      "TargetSlotId": "998b7cbc-b54c-4e81-bc61-31a7e05ce8e0"
-    },
-    {
-      "SourceParentOrChildId": "d53fe6c2-4118-49e8-a2d6-ab30f425c065",
-      "SourceSlotId": "3f8b20a7-c8b8-45ab-86a1-0efcd927358e",
-      "TargetParentOrChildId": "5f74b350-457f-4546-878c-333ac22f333b",
-      "TargetSlotId": "998b7cbc-b54c-4e81-bc61-31a7e05ce8e0"
-    },
-    {
-      "SourceParentOrChildId": "287465fb-3ef8-4007-a5df-703a395b77d7",
-      "SourceSlotId": "3f8b20a7-c8b8-45ab-86a1-0efcd927358e",
-      "TargetParentOrChildId": "5f74b350-457f-4546-878c-333ac22f333b",
-      "TargetSlotId": "998b7cbc-b54c-4e81-bc61-31a7e05ce8e0"
-    },
-    {
-      "SourceParentOrChildId": "e7f0a24b-7c11-4071-b23c-04419ed77e64",
-      "SourceSlotId": "3f8b20a7-c8b8-45ab-86a1-0efcd927358e",
-      "TargetParentOrChildId": "5f74b350-457f-4546-878c-333ac22f333b",
-      "TargetSlotId": "998b7cbc-b54c-4e81-bc61-31a7e05ce8e0"
-    },
-    {
-      "SourceParentOrChildId": "b896b644-f4ef-43a6-981c-e6112fdf811b",
-      "SourceSlotId": "3f8b20a7-c8b8-45ab-86a1-0efcd927358e",
-      "TargetParentOrChildId": "5f74b350-457f-4546-878c-333ac22f333b",
-      "TargetSlotId": "998b7cbc-b54c-4e81-bc61-31a7e05ce8e0"
-    },
-    {
-      "SourceParentOrChildId": "30ef6cff-27d7-4a74-8980-9e554c247c78",
-      "SourceSlotId": "e011dd8c-1b9c-458f-8960-e6c38e83ca74",
-      "TargetParentOrChildId": "5f74b350-457f-4546-878c-333ac22f333b",
-      "TargetSlotId": "ce0e7890-b25c-45bd-8d7f-20865cc0a51a"
     },
     {
       "SourceParentOrChildId": "a239cf17-fd2f-4b88-b140-ff9b755ebaae",
@@ -6324,12 +6020,6 @@
       "TargetSlotId": "40606d4e-acaf-4f23-a845-16f0eb9b73cf"
     },
     {
-      "SourceParentOrChildId": "5f74b350-457f-4546-878c-333ac22f333b",
-      "SourceSlotId": "bb6e9504-2e2c-413a-a455-5dd4ef41e3cb",
-      "TargetParentOrChildId": "7041fd19-cfed-496d-a147-5d4c3fd3d1dc",
-      "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
-    },
-    {
       "SourceParentOrChildId": "825c4671-d3af-487d-9dcc-f801c179e69f",
       "SourceSlotId": "65bf6652-0187-4c5f-8e1f-ccc4254b843b",
       "TargetParentOrChildId": "723468da-321e-40d5-b192-78196ab4860b",
@@ -6430,12 +6120,6 @@
       "SourceSlotId": "e47bf25e-351a-44e6-84c6-ad3abc93531a",
       "TargetParentOrChildId": "7fe18d18-b793-4ffa-839c-91eb133a9ec9",
       "TargetSlotId": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"
-    },
-    {
-      "SourceParentOrChildId": "09b5186f-22dd-42c0-8800-cfb48da683b6",
-      "SourceSlotId": "dd9d8718-addc-49b1-bd33-aac22b366f94",
-      "TargetParentOrChildId": "806842a6-c173-4ee1-9ce9-4d2a56410e04",
-      "TargetSlotId": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"
     },
     {
       "SourceParentOrChildId": "4c8540b6-ab21-4008-9ce3-b588808375fe",
@@ -6834,12 +6518,6 @@
       "TargetSlotId": "5ae4bb07-4214-4ec3-a499-24d9f6d404a5"
     },
     {
-      "SourceParentOrChildId": "09b5186f-22dd-42c0-8800-cfb48da683b6",
-      "SourceSlotId": "dd9d8718-addc-49b1-bd33-aac22b366f94",
-      "TargetParentOrChildId": "b896b644-f4ef-43a6-981c-e6112fdf811b",
-      "TargetSlotId": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"
-    },
-    {
       "SourceParentOrChildId": "2b124203-4e71-49e2-be28-54397f8e1775",
       "SourceSlotId": "51ecdea7-7f3a-475b-bb15-7bf0e23342bb",
       "TargetParentOrChildId": "b9a00ecc-7cc9-49d6-9ef1-298a7a509fc9",
@@ -6954,12 +6632,6 @@
       "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
     },
     {
-      "SourceParentOrChildId": "09b5186f-22dd-42c0-8800-cfb48da683b6",
-      "SourceSlotId": "dd9d8718-addc-49b1-bd33-aac22b366f94",
-      "TargetParentOrChildId": "d53fe6c2-4118-49e8-a2d6-ab30f425c065",
-      "TargetSlotId": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"
-    },
-    {
       "SourceParentOrChildId": "4154bde4-16de-4842-82c4-108bc4feb062",
       "SourceSlotId": "f83f1835-477e-4bb6-93f0-14bf273b8e94",
       "TargetParentOrChildId": "d6c09195-34b6-4ea6-a083-c08221effe88",
@@ -7072,12 +6744,6 @@
       "SourceSlotId": "9ff1bfed-4554-4c55-9557-8b318ac47afe",
       "TargetParentOrChildId": "e59c138b-c996-423b-9219-df7a30cae8f8",
       "TargetSlotId": "fb86f0d6-1e5c-478f-b723-9f9462e2966c"
-    },
-    {
-      "SourceParentOrChildId": "09b5186f-22dd-42c0-8800-cfb48da683b6",
-      "SourceSlotId": "dd9d8718-addc-49b1-bd33-aac22b366f94",
-      "TargetParentOrChildId": "e7f0a24b-7c11-4071-b23c-04419ed77e64",
-      "TargetSlotId": "50c9ab21-39f4-4e92-b5a7-ad9e60ae6ec3"
     },
     {
       "SourceParentOrChildId": "d55df146-74eb-49f6-8cc1-4c92debe5164",
@@ -7238,12 +6904,6 @@
     {
       "SourceParentOrChildId": "41f47c4d-560e-48c4-a022-7afe02bd023b",
       "SourceSlotId": "3f8b20a7-c8b8-45ab-86a1-0efcd927358e",
-      "TargetParentOrChildId": "fbed4d32-e448-4b91-a96d-cb6a50eeb516",
-      "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
-    },
-    {
-      "SourceParentOrChildId": "7041fd19-cfed-496d-a147-5d4c3fd3d1dc",
-      "SourceSlotId": "977ca2f4-cddb-4b9a-82b2-ff66453bbf9b",
       "TargetParentOrChildId": "fbed4d32-e448-4b91-a96d-cb6a50eeb516",
       "TargetSlotId": "9e961f73-1ee7-4369-9ac7-5c653e570b6f"
     },
@@ -9351,7 +9011,7 @@
         "PostCurve": "CycleWithOffset",
         "Keys": [
           {
-            "Time": 189.0726,
+            "Time": 188.8252,
             "Value": 0.0,
             "InType": "Spline",
             "OutType": "Spline",
@@ -9361,7 +9021,7 @@
             "OutTangentAngle": 3.4635833809063223
           },
           {
-            "Time": 192.0702,
+            "Time": 191.8228,
             "Value": 1.0,
             "InType": "Linear",
             "OutType": "Linear",

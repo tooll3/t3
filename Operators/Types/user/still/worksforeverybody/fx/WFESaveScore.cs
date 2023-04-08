@@ -225,7 +225,7 @@ namespace T3.Operators.Types.Id_40676c51_ecca_4bc3_bd4a_eeb80fc0b937
         private bool _initialized;
         private string _greetings;
 
-
+ 
         [Serializable]
         private class HighScoreEntry
         {

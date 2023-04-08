@@ -571,7 +571,7 @@
         {
           "Id": "2b3dc8be-2ead-40fa-8dab-0f85bb470815"/*PreventPlaybackControl*/,
           "Type": "System.Boolean",
-          "Value": true
+          "Value": false
         },
         {
           "Id": "76343cef-1851-4627-b0a7-477e0b33915c"/*DarkOnWhite*/,
@@ -711,11 +711,11 @@
             "TimeClip": {
               "TimeRange": {
                 "Start": 148.68582,
-                "End": 298.12006
+                "End": 309.75854
               },
               "SourceRange": {
                 "Start": 148.68582,
-                "End": 298.12006
+                "End": 309.75854
               },
               "LayerIndex": 1
             }
