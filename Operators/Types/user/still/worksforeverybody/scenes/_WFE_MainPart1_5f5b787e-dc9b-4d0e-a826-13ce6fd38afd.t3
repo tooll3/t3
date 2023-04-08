@@ -1117,8 +1117,8 @@
           "Id": "dec2dd0d-ea78-4475-8b26-76bf6d8b724c"/*A_ExporeRange*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": -0.3,
-            "Y": 0.3
+            "X": -0.5,
+            "Y": 0.5
           }
         },
         {
@@ -1130,7 +1130,7 @@
           "Id": "46801ba5-4e1d-4148-aa91-fe2491822e26"/*B_ExploreRange*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": -0.1,
+            "X": -0.2,
             "Y": 0.6
           }
         }

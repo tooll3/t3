@@ -18,12 +18,12 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
 {
     public class SaveParameterSet : Instance<SaveParameterSet>
     {
-        [Output(Guid = "a75a50ac-9361-4cac-8208-3c79f329bad2")]
-        public readonly Slot<string> Result = new();
-
         [Output(Guid = "90F4D983-685E-499B-B121-0D7F34669490")]
         public readonly Slot<StructuredList> Points = new();
 
+        [Output(Guid = "a75a50ac-9361-4cac-8208-3c79f329bad2")]
+        public readonly Slot<string> Result = new();
+        
         public SaveParameterSet()
         {
             Result.UpdateAction = Update;
@@ -33,30 +33,37 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
 
         private void Update(EvaluationContext context)
         {
-            if (!_initialized)
-            {
-                _initialized = true;
-                FetchParameters();
-            }
-
             var sceneIndex = SceneIndex.GetValue(context).Clamp(0, MaxSceneCount - 1);
             var saveNewTriggered = MathUtils.WasTriggered(TriggerSaveParameters.GetValue(context), ref _triggerSaveParameters);
+            
+            if (!_initialized)
+            {
+                FetchParameters();
+            }
+            else
+            {
+                if (saveNewTriggered)
+                    SaveNewEntry(context, sceneIndex);
 
-            if (saveNewTriggered)
-                SaveNewEntry(context, sceneIndex);
-
-            var points = _parameterPoints[sceneIndex];
-            if (points.NumElements == 0)
-                points = _emptyList;
-
+                var points = _parameterPoints[sceneIndex];
+                if (points.NumElements == 0)
+                    points = _emptyList;
+                
+                Points.Value = points;
+            }
+            
             // Avoid double evaluation
-            Points.Value = points;
             Points.DirtyFlag.Clear();
             Result.DirtyFlag.Clear();
         }
 
+        
         private async void FetchParameters()
         {
+            if (_requesting)
+                return;
+
+            _requesting = true;
             try
             {
                 var client = new HttpClient(new HttpClientHandler() { UseDefaultCredentials = true });
@@ -79,6 +86,8 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
             {
                 Log.Warning("Download failed: " + e.Message);
             }
+
+            _initialized = true;
         }
 
         private void ParseData(string jsonString)
@@ -111,7 +120,7 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
         private void UpdatePointLists()
         {
             var paramsForScenes = new List<ParameterSet>[MaxSceneCount];
-            for (var i = 0; i < MaxSceneCount - 1; i++)
+            for (var i = 0; i < MaxSceneCount ; i++)
             {
                 paramsForScenes[i] = new List<ParameterSet>();
             }
@@ -129,7 +138,7 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
             }
 
             // Initialize point buffers
-            for (var sceneIndex = 0; sceneIndex < MaxSceneCount - 1; sceneIndex++)
+            for (var sceneIndex = 0; sceneIndex < MaxSceneCount ; sceneIndex++)
             {
                 var pointList = new StructuredList<Point>(paramsForScenes[sceneIndex].Count);
 
@@ -197,7 +206,7 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
             }
         }
 
-        private const int MaxSceneCount = 30;
+        private const int MaxSceneCount = 40;
 
         private const string Token =
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95am9ieXB5b3prdWZyYnJtcW50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODAwMDA4MTUsImV4cCI6MTk5NTU3NjgxNX0.9Km2SmPnOQre_obeKr_DSr2l33PECtMWIF1VuxE1zck";
@@ -207,6 +216,7 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
         private readonly StructuredList<Point>[] _parameterPoints = new StructuredList<Point>[MaxSceneCount];
         private readonly List<ParameterSet> _parameterSets = new();
 
+        private bool _requesting;
         private bool _initialized;
 
         [Serializable]

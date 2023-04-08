@@ -244,7 +244,7 @@
             "X": 1E-06,
             "Y": 9.9999E-07,
             "Z": 9.9999E-07,
-            "W": 1.0
+            "W": 0.0
           }
         },
         {
@@ -286,9 +286,9 @@
       "Outputs": []
     },
     {
-      "Id": "3483704b-d314-4413-a165-2979d513fb4c"/*DarkFrame*/,
+      "Id": "3483704b-d314-4413-a165-2979d513fb4c"/*Pointer Cross*/,
       "SymbolId": "836f211f-b387-417c-8316-658e0dc6e117",
-      "Name": "DarkFrame",
+      "Name": "Pointer Cross",
       "InputValues": [
         {
           "Id": "75419a73-8a3e-4538-9a1d-e3b0ce7f8561"/*Color*/,
@@ -389,6 +389,16 @@
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
+          "Id": "bbda1c8c-fa81-43ef-b773-f7ecfb8968e1"/*Fill*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 1.0,
+            "Y": 1.0,
+            "Z": 1.0,
+            "W": 0.36
+          }
+        },
+        {
           "Id": "de54f18b-6a1e-4610-8d6d-58897df6959b"/*Background*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
@@ -418,7 +428,7 @@
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.0,
-            "Y": -1.58
+            "Y": -0.98
           }
         },
         {
@@ -426,7 +436,7 @@
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 2.73,
-            "Y": 1.0
+            "Y": 0.34
           }
         }
       ],
@@ -450,7 +460,7 @@
                     "R": 1.0,
                     "G": 1.0,
                     "B": 1.0,
-                    "A": 0.53110045
+                    "A": 0.9282297
                   }
                 },
                 {
@@ -897,7 +907,7 @@
                     "R": 0.0,
                     "G": 0.0,
                     "B": 0.0,
-                    "A": 1.0
+                    "A": 0.5645933
                   }
                 },
                 {
@@ -1171,6 +1181,18 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "14b33466-7533-4d93-b43b-505624e0a27e"/*LoadImage*/,
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+      "InputValues": [
+        {
+          "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
+          "Type": "System.String",
+          "Value": "Resources\\user\\still\\proj-worksforeverybody\\icon\\click.png"
+        }
+      ],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -1313,7 +1335,7 @@
       "TargetSlotId": "5df18658-ef86-4c0f-8bb4-4ac3fbbf9a33"
     },
     {
-      "SourceParentOrChildId": "d3fc5ef5-e7d9-4cdf-8b71-ee487490663a",
+      "SourceParentOrChildId": "14b33466-7533-4d93-b43b-505624e0a27e",
       "SourceSlotId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037",
       "TargetParentOrChildId": "32c59524-6f9f-4411-a5e5-a582e86f6ad1",
       "TargetSlotId": "850e3a32-11ba-4ad2-a2b1-6164f077ddd6"

@@ -31,6 +31,9 @@ namespace T3.Operators.Types.Id_1cdedb32_f23b_4649_b4d3_9e158ef9be40
         [Input(Guid = "3fb860f8-2c9b-4c5f-b589-2d08a13764ad")]
         public readonly InputSlot<float> ImageBrightess = new InputSlot<float>();
 
+        [Input(Guid = "556055e6-9fde-41c4-94d5-c98c8e6e74d2")]
+        public readonly InputSlot<bool> ShowClassroom = new InputSlot<bool>();
+
 
     }
 }
