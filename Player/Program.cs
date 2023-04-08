@@ -52,22 +52,21 @@ namespace T3.Player
             public bool Logging { get; set; }
         }
 
-        
         [STAThread]
         private static void Main(string[] args)
         {
             Log.AddWriter(new ConsoleWriter());
             Log.AddWriter(FileWriter.CreateDefault());
-            
-            var _ = new ProjectSettings(saveOnQuit: false);            
-            
+
+            var _ = new ProjectSettings(saveOnQuit: false);
+
             Options options = ParseCommandLine(args);
             if (options == null)
                 return;
 
             _vsync = !options.NoVsync;
             Log.Debug($"using vsync: {_vsync}, windowed: {options.Windowed}, size: {options.Size}, loop: {options.Loop}, logging: {options.Logging}");
-            
+
             // Todo: Should use correct title
             var form = new RenderForm("still::partial")
                            {
@@ -75,7 +74,7 @@ namespace T3.Player
                                AllowUserResizing = false,
                                Icon = new Icon(@"Resources\t3-editor\images\t3.ico")
                            };
-            
+
             // SwapChain description
             var desc = new SwapChainDescription()
                            {
@@ -129,21 +128,22 @@ namespace T3.Player
                                   }
                               }
 
-                              if (keyArgs.KeyCode == Keys.Left)
+                              if (ProjectSettings.Config.EnablePlaybackControlWithKeyboard)
                               {
-                                  Playback.Current.TimeInBars -= 4;
+                                  switch (keyArgs.KeyCode)
+                                  {
+                                      case Keys.Left:
+                                          Playback.Current.TimeInBars -= 4;
+                                          break;
+                                      case Keys.Right:
+                                          Playback.Current.TimeInBars += 4;
+                                          break;
+                                      case Keys.Space:
+                                          Playback.Current.PlaybackSpeed = Math.Abs(Playback.Current.PlaybackSpeed) > 0.01f ? 0 : 1;
+                                          break;
+                                  }
                               }
-                              
-                              if (keyArgs.KeyCode == Keys.Right)
-                              {
-                                  Playback.Current.TimeInBars += 4;
-                              }
-                              
-                              if (keyArgs.KeyCode == Keys.Space)
-                              {
-                                  Playback.Current.PlaybackSpeed = Math.Abs(Playback.Current.PlaybackSpeed) > 0.01f ? 0 : 1;
-                              }
-                              
+
                               if (keyArgs.KeyCode == Keys.Escape)
                               {
                                   Application.Exit();
@@ -184,16 +184,16 @@ namespace T3.Player
                             {
                                 Settings = demoSymbol.PlaybackSettings
                             };
-            
+
             // Create instance of project op, all children are create automatically
             _project = demoSymbol.CreateInstance(Guid.NewGuid());
             _evalContext = new EvaluationContext();
 
             var prerenderRequired = false;
-            
+
             Bass.Free();
             Bass.Init();
-            
+
             // Init wasapi input if required
             if (demoSymbol.PlaybackSettings.AudioSource == PlaybackSettings.AudioSources.ProjectSoundTrack)
             {
@@ -223,7 +223,7 @@ namespace T3.Player
                                          IsDepthClipEnabled = false
                                      };
             var rasterizerState = new RasterizerState(device, rasterizerDesc);
-            
+
             // Sample some frames to preload all shaders and resources
             if (prerenderRequired)
             {
@@ -246,13 +246,14 @@ namespace T3.Player
                     {
                         textureOutput.Invalidate();
                         textureOutput.GetValue(_evalContext);
-                        
+
                         var tex = textureOutput.GetValue(_evalContext);
                         if (tex == null)
                         {
                             Log.Error("Failed to initialize texture");
                         }
                     }
+
                     Thread.Sleep(20);
                     _swapChain.Present(1, PresentFlags.None);
                 }
@@ -263,7 +264,6 @@ namespace T3.Player
             _playback.TimeInBars = 0;
             _playback.PlaybackSpeed = 1.0;
 
-
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
@@ -272,7 +272,7 @@ namespace T3.Player
                                  {
                                      WasapiAudioInput.StartFrame(_playback.Settings);
                                      _playback.Update();
-                                     
+
                                      Log.Debug($" render at playback time {_playback.TimeInSecs:0.00}s");
                                      if (_soundtrack != null)
                                      {
@@ -289,10 +289,10 @@ namespace T3.Player
                                              }
                                          }
                                      }
-                                     
+
                                      // Update
-                                     AudioEngine.CompleteFrame(_playback); 
-                                     
+                                     AudioEngine.CompleteFrame(_playback);
+
                                      DirtyFlag.IncrementGlobalTicks();
                                      DirtyFlag.InvalidationRefFrame++;
 
@@ -339,7 +339,7 @@ namespace T3.Player
         {
             if (sender is not Form form)
                 return;
-            
+
             var relativePosition = new Vector2((float)e.X / form.Size.Width,
                                                (float)e.Y / form.Size.Height);
 
@@ -390,10 +390,10 @@ namespace T3.Player
                                               h =>
                                               {
                                                   h.AdditionalNewLineAfterOption = false;
-                                                  
+
                                                   // Todo: This should use information from the main operator
                                                   h.Heading = $"still::{ProjectSettings.Config.MainOperatorName} - v0.1";
-                                                  
+
                                                   // Todo: This should use information from the main operator
                                                   h.Copyright = "Author";
                                                   h.AutoVersion = false;
@@ -405,7 +405,7 @@ namespace T3.Player
                         .WithNotParsed(o => { Log.Debug(helpText); });
             return parsedOptions;
         }
-        
+
         // Private static bool _inResize;
         private static bool _vsync;
         private static SwapChain _swapChain;

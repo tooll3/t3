@@ -99,6 +99,21 @@ namespace T3.Editor.Gui.Windows
                 ImGui.TreePop();
             }
 
+            if (ImGui.TreeNode("Project settings"))
+            {
+                var projectSettingsChanged = false;
+                CustomComponents.HelpText("These settings only when playback as executable");
+
+                projectSettingsChanged |= FormInputs.AddCheckBox("Enable Playback Control",
+                                                                 ref ProjectSettings.Config.EnablePlaybackControlWithKeyboard,
+                                                                 "Users can use cursor left/right to skip through time\nand space key to pause playback\nof exported executable.",
+                                                                 ProjectSettings.Defaults.EnablePlaybackControlWithKeyboard);
+                if(projectSettingsChanged)
+                    ProjectSettings.Save();
+                
+                ImGui.TreePop();
+            }
+
             if (ImGui.TreeNode("Space Mouse"))
             {
                 CustomComponents.HelpText("These settings only apply with a connected space mouse controller");
