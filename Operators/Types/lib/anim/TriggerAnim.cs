@@ -1,5 +1,6 @@
 using System;
 using T3.Core;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -39,8 +40,16 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             _duration = Duration.GetValue(context);
             _delay = Delay.GetValue(context);
 
+            var timeMode = TimeMode.GetEnumValue<Times>(context);
+            var currentTime = timeMode switch
+                                  {
+                                      Times.PlayTime   => context.Playback.TimeInBars,
+                                      Times.AppRunTime => Playback.RunTimeInSecs,
+                                      _                => context.LocalFxTime
+                                  };
+
             var animMode = AnimMode.GetEnumValue<AnimModes>(context);//   (AnimModes)AnimMode.GetValue(context).Clamp(0, Enum.GetNames(typeof(AnimModes)).Length -1);
-            
+
             
             
             var triggered = Trigger.GetValue(context);
@@ -48,10 +57,10 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             {
                 HasCompleted.Value = false;
                 _trigger = triggered;
-                
+
                 if (animMode == AnimModes.ForwardAndBackwards)
                 {
-                    _triggerTime = context.Playback.FxTimeInBars;
+                    _triggerTime = currentTime;
                     _currentDirection = triggered ? Directions.Forward : Directions.Backwards;
                     _startProgress = LastFraction;
                 }
@@ -61,7 +70,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
                     {
                         if (animMode == AnimModes.OnlyOnTrue)
                         {
-                            _triggerTime = context.Playback.FxTimeInBars;
+                            _triggerTime = currentTime;
                             _currentDirection = Directions.Forward;
                             LastFraction = -_delay;
                         }
@@ -70,7 +79,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
                     {
                         if (animMode == AnimModes.OnlyOnFalse)
                         {
-                            _triggerTime = context.Playback.FxTimeInBars;
+                            _triggerTime = currentTime;
                             _currentDirection = Directions.Backwards;
                             LastFraction = 1;
                         }
@@ -81,7 +90,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
 
             if (animMode == AnimModes.ForwardAndBackwards)
             {
-                var dp = (float)((context.LocalFxTime - _triggerTime) / _duration);
+                var dp = (float)((currentTime - _triggerTime) / _duration);
                 if (_currentDirection == Directions.Forward)
                 {
                     LastFraction = _startProgress + dp;
@@ -106,7 +115,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             {
                 if (_currentDirection == Directions.Forward)
                 {
-                    LastFraction = (context.LocalFxTime - _triggerTime)/_duration;
+                    LastFraction = (currentTime - _triggerTime)/_duration;
                     if(LastFraction >= 1)
                     {
                         LastFraction = 1;
@@ -116,7 +125,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
                 }
                 else if  (_currentDirection == Directions.Backwards)
                 {
-                    LastFraction =   ( _triggerTime- context.LocalFxTime )/_duration;
+                    LastFraction =   ( _triggerTime- currentTime )/_duration;
 
                     if (LastFraction <= 0)
                     {
@@ -215,5 +224,15 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
 
         [Input(Guid = "9bfd5ae3-9ca6-4f7b-b24b-f554ad4d0255")]
         public readonly InputSlot<float> Bias = new();
+        
+        [Input(Guid = "06E511D2-891A-4F81-B49E-327410A2CB95", MappedType = typeof(Times))]
+        public readonly InputSlot<int> TimeMode = new();
+        
+        private enum Times
+        {
+            LocalFxTime,
+            PlayTime,
+            AppRunTime,
+        }
     }
 }

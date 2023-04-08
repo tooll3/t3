@@ -34,6 +34,10 @@
     {
       "Id": "9bfd5ae3-9ca6-4f7b-b24b-f554ad4d0255"/*Bias*/,
       "DefaultValue": 0.5
+    },
+    {
+      "Id": "06e511d2-891a-4f81-b49e-327410a2cb95"/*TimeMode*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],

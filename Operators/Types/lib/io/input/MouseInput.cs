@@ -9,14 +9,9 @@ namespace T3.Operators.Types.Id_eff2ffff_dc39_4b90_9b1c_3c0a9a0108c6
     {
         [Output(Guid = "CDC87CE1-FAB8-4B96-9137-9965E064BFA3", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Vector2> Position = new Slot<Vector2>();
-
-        // [Output(Guid = "4BCD7A08-0E47-4DD8-BB67-8E1B3793321E", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        // public readonly Slot<Int3> MousePressed = new Slot<Int3>();
-
+        
         [Output(Guid = "78CAABCF-9C3B-4E50-9D80-BDCBABAEB003", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<bool> IsLeftButtonDown = new Slot<bool>();
-
-
         
         public MouseInput()
         {

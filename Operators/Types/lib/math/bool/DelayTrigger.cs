@@ -36,7 +36,6 @@ namespace T3.Operators.Types.Id_fbd9ac37_4427_4852_95d7_d8383fefbe36
         
         private void Update(EvaluationContext context)
         {
-            
             var isTriggered = Trigger.GetValue(context);
 
             var hasBeenChanged = isTriggered != _triggered;
