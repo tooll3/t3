@@ -151,6 +151,7 @@ namespace T3.Player
                           };
 
             form.MouseMove += MouseMoveHandler;
+            form.MouseClick += MouseMoveHandler;
 
             // New RenderTargetView from the backbuffer
             _backBuffer = Texture2D.FromSwapChain<Texture2D>(_swapChain, 0);
@@ -273,7 +274,7 @@ namespace T3.Player
                                      WasapiAudioInput.StartFrame(_playback.Settings);
                                      _playback.Update();
 
-                                     Log.Debug($" render at playback time {_playback.TimeInSecs:0.00}s");
+                                     //Log.Debug($" render at playback time {_playback.TimeInSecs:0.00}s");
                                      if (_soundtrack != null)
                                      {
                                          AudioEngine.UseAudioClip(_soundtrack, _playback.TimeInSecs);
@@ -345,6 +346,7 @@ namespace T3.Player
 
             MouseInput.Set(relativePosition, (e.Button & MouseButtons.Left) != 0);
         }
+        
 
         private static void HandleKeyDown(object sender, KeyEventArgs e)
         {

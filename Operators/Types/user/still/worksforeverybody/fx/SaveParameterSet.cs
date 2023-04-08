@@ -36,8 +36,10 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
             var sceneIndex = SceneIndex.GetValue(context).Clamp(0, MaxSceneCount - 1);
             var saveNewTriggered = MathUtils.WasTriggered(TriggerSaveParameters.GetValue(context), ref _triggerSaveParameters);
             
+            //Log.Debug("  save new triggered " + saveNewTriggered, this);
             if (!_initialized)
             {
+                _initialized = true;
                 FetchParameters();
             }
             else
@@ -159,7 +161,7 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
 
         private void SaveNewEntry(EvaluationContext context, int sceneIndex)
         {
-            //Log.Debug("Save triggered");
+            Log.Debug("Save triggered");
             var position = Position.GetValue(context);
             var newSet = new ParameterSet
                              {
@@ -169,13 +171,13 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
                                  UserHash = 0
                              };
 
-            //SendDataAsync(newSet);
+            SendDataAsync(newSet);
             _parameterSets.Add(newSet);
 
             UpdatePointLists();
         }
 
-        private async void SendDataAsync(ParameterSet parameterSet)
+        private static async void SendDataAsync(ParameterSet parameterSet)
         {
             Log.Debug("Saving parameterSet...");
             try

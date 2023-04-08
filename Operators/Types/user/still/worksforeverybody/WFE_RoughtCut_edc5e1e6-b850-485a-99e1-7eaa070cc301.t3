@@ -571,7 +571,7 @@
         {
           "Id": "2b3dc8be-2ead-40fa-8dab-0f85bb470815"/*PreventPlaybackControl*/,
           "Type": "System.Boolean",
-          "Value": false
+          "Value": true
         },
         {
           "Id": "76343cef-1851-4627-b0a7-477e0b33915c"/*DarkOnWhite*/,
@@ -728,23 +728,6 @@
       "SymbolId": "224aa808-3aaf-4385-be16-0b723c33ab39",
       "InputValues": [],
       "Outputs": []
-    },
-    {
-      "Id": "aa73d9db-c4f3-4568-b684-7393ec28f0bc"/*WipOverlay*/,
-      "SymbolId": "b60f2321-0df5-42a7-bdcf-4660bbe549d6",
-      "InputValues": [
-        {
-          "Id": "2095ce9d-2b92-45cb-bf30-91c32d8ebd90"/*InputString*/,
-          "Type": "System.String",
-          "Value": "WIP#9   2023-03-23"
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "434a3d5c-96c3-4f5e-962e-b88a4415fce3"/*WipOverlay*/,
-          "IsDisabled": true
-        }
-      ]
     },
     {
       "Id": "9d864293-852e-432b-ac3a-5fe37ffc4103"/*SceneIndex*/,
@@ -1897,6 +1880,12 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "db20f0c2-63a2-4c02-a94d-4d086c718686"/*PlotValueCurve*/,
+      "SymbolId": "92f3193e-a7dd-4417-b569-129823607fbe",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -2041,12 +2030,6 @@
     {
       "SourceParentOrChildId": "21e9d680-43b6-430f-9334-81a721e85ad4",
       "SourceSlotId": "977ca2f4-cddb-4b9a-82b2-ff66453bbf9b",
-      "TargetParentOrChildId": "3134ac61-c44d-45d6-bdb3-40935e252226",
-      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
-    },
-    {
-      "SourceParentOrChildId": "aa73d9db-c4f3-4568-b684-7393ec28f0bc",
-      "SourceSlotId": "434a3d5c-96c3-4f5e-962e-b88a4415fce3",
       "TargetParentOrChildId": "3134ac61-c44d-45d6-bdb3-40935e252226",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
@@ -3114,7 +3097,7 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 50.5914,
+            "Time": 51.3233,
             "Value": 0.0,
             "InType": "Constant",
             "OutType": "Constant",
@@ -3194,7 +3177,7 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 86.3665,
+            "Time": 87.0314,
             "Value": 0.0,
             "InType": "Constant",
             "OutType": "Constant",
@@ -3214,7 +3197,7 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 94.8125,
+            "Time": 96.4372,
             "Value": 0.0,
             "InType": "Constant",
             "OutType": "Constant",
@@ -3234,7 +3217,7 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 102.665,
+            "Time": 103.3169,
             "Value": 0.0,
             "InType": "Constant",
             "OutType": "Constant",
@@ -3274,7 +3257,7 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 117.6528,
+            "Time": 118.2332,
             "Value": 0.0,
             "InType": "Constant",
             "OutType": "Constant",
@@ -3294,7 +3277,7 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 130.7322,
+            "Time": 130.9635,
             "Value": 0.0,
             "InType": "Constant",
             "OutType": "Constant",
@@ -3314,7 +3297,7 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 134.0614,
+            "Time": 134.8256,
             "Value": 0.0,
             "InType": "Constant",
             "OutType": "Constant",
@@ -3354,7 +3337,7 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 140.6922,
+            "Time": 141.286,
             "Value": 0.0,
             "InType": "Constant",
             "OutType": "Constant",
@@ -3374,7 +3357,7 @@
             "OutTangentAngle": 3.141592653589793
           },
           {
-            "Time": 147.6845,
+            "Time": 148.3628,
             "Value": 0.0,
             "InType": "Constant",
             "OutType": "Constant",
@@ -3395,7 +3378,7 @@
         "Keys": [
           {
             "Time": 44.5723,
-            "Value": 31.200000762939453,
+            "Value": 45.0,
             "InType": "Spline",
             "OutType": "Constant",
             "InEditMode": "Linear",
@@ -3405,7 +3388,7 @@
           },
           {
             "Time": 49.0615,
-            "Value": 44.0,
+            "Value": 49.0,
             "InType": "Linear",
             "OutType": "Constant",
             "InEditMode": "Linear",
