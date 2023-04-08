@@ -13,6 +13,9 @@ namespace T3.Operators.Types.Id_3f7f8975_a7bb_47e6_96f7_061deb418e18
         [Output(Guid = "acb35d19-baaf-4042-9664-7f784b697831")]
         public readonly Slot<System.Collections.Generic.List<string>> Scores = new Slot<System.Collections.Generic.List<string>>();
 
+        [Output(Guid = "6a689686-0ba5-430e-b3ca-8ddbfb2bacf7")]
+        public readonly Slot<int> LastScore = new Slot<int>();
+
         [Input(Guid = "8d294996-7f87-424e-9869-12d383cb7869")]
         public readonly InputSlot<bool> IsActive = new InputSlot<bool>();
 
