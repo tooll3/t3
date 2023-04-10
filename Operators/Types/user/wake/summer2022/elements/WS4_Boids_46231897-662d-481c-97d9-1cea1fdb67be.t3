@@ -1314,6 +1314,12 @@
         }
       ],
       "Outputs": []
+    },
+    {
+      "Id": "813c81ba-a864-42f1-a360-b9aa1a7d6670"/*AudioReaction*/,
+      "SymbolId": "03477b9a-860e-4887-81c3-5fe51621122c",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -1630,8 +1636,8 @@
       "TargetSlotId": "ca84209e-d821-40c6-b23c-38fc4bbd47b0"
     },
     {
-      "SourceParentOrChildId": "a8bbef8d-a58a-49bd-9770-fc278bb6ece1",
-      "SourceSlotId": "2aa4d0cb-c49d-41ce-aa74-794cc8682590",
+      "SourceParentOrChildId": "813c81ba-a864-42f1-a360-b9aa1a7d6670",
+      "SourceSlotId": "e1749c60-41f0-4e8f-9317-909ef31eeef1",
       "TargetParentOrChildId": "cda48750-3f12-4000-938c-d2c4e0075d11",
       "TargetSlotId": "af4a49e6-1ecd-4e94-ae6d-fb5d2bc8430c"
     },
