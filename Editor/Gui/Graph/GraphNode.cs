@@ -1203,7 +1203,7 @@ namespace T3.Editor.Gui.Graph
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        ConnectionMaker.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef, multiInputIndex);
+                        ConnectionMaker.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef, multiInputIndex, true);
                     }
                 }
                 else
