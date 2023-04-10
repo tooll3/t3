@@ -96,14 +96,19 @@ namespace T3.Editor.Gui.Graph.Interaction
                 if (wasDragging)
                 {
                     _moveCommand.StoreCurrentValues();
-                    UndoRedoStack.Add(_moveCommand);
 
                     if (singleDraggedNode != null && ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolChildUi childUi)
                     {
                         var instanceForSymbolChildUi = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
                         ConnectionMaker.SplitConnectionWithDraggedNode(childUi, 
                                                                        ConnectionSplitHelper.BestMatchLastFrame.Connection, 
-                                                                       instanceForSymbolChildUi);
+                                                                       instanceForSymbolChildUi,
+                                                                       _moveCommand);
+                        _moveCommand = null;
+                    }
+                    else
+                    {
+                        UndoRedoStack.Add(_moveCommand);
                     }
 
                     // Reorder inputs nodes if dragged
