@@ -2,6 +2,7 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
+using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -148,6 +149,36 @@ namespace T3.Editor.Gui.Windows
             }
             if (changed)
                 UserSettings.Save();
+            
+            if (ImGui.TreeNode("Debug information"))
+            {
+                if (ImGui.TreeNode("Undo history"))
+                {
+                    int index = 0;
+                    int count = UndoRedoStack.UndoStack.Count;
+                    foreach (var c in UndoRedoStack.UndoStack)
+                    {
+                        ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.5f/(index+1) + 0.5f));
+                        ImGui.PushFont(index == 0 ? Fonts.FontBold : Fonts.FontNormal);
+                        if (c is MacroCommand macroCommand)
+                        {
+                            ImGui.Selectable($"{c.Name} ({macroCommand.Count})");
+                        }
+                        else
+                        {
+                            ImGui.Selectable(c.Name);
+                        }
+                        ImGui.PopFont();
+                        ImGui.PopStyleColor();
+                        index++;
+                    }
+
+                
+                    ImGui.TreePop();
+                }
+                
+                ImGui.TreePop();
+            }
         }
 
         public override List<Window> GetInstances()

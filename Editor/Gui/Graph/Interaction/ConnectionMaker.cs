@@ -28,7 +28,9 @@ namespace T3.Editor.Gui.Graph.Interaction
     /// </summary>
     public static class ConnectionMaker
     {
-        public static List<TempConnection> TempConnections = new List<TempConnection>();
+        public static readonly List<TempConnection> TempConnections = new();
+        //private static readonly List<DeleteConnectionCommand> _tempDeletionCommands = new();
+        public static MacroCommand _inProgressCommand;
 
         public static bool IsMatchingInputType(Type valueType)
         {
@@ -170,6 +172,22 @@ namespace T3.Editor.Gui.Graph.Interaction
             ConnectionSnapEndHelper.PrepareNewFrame();
         }
 
+        public static void StartOperation()
+        {
+            if (TempConnections.Count != 1)
+            {
+                Log.Warning($"Inconsistent TempConnection count of {TempConnections.Count}. Last operation incomplete?");
+            }
+
+            if (_inProgressCommand != null)
+            {
+                Log.Warning($"Incomplete command {_inProgressCommand.Name}");
+                _inProgressCommand =null;
+            }
+
+            _inProgressCommand = new MacroCommand("modifying connections");
+        }
+        
         public static void Cancel()
         {
             TempConnections.Clear();
@@ -177,6 +195,13 @@ namespace T3.Editor.Gui.Graph.Interaction
             ConnectionSnapEndHelper.ResetSnapping();
         }
 
+        private static void Reset()
+        {
+            //_tempDeletionCommands.Clear();
+            TempConnections.Clear();
+            ConnectionSnapEndHelper.ResetSnapping();
+        }
+        
         public static MacroCommand AdjustGraphLayoutForNewNode(Symbol parent, Symbol.Connection connection)
         {
             if (connection.IsConnectedToSymbolOutput || connection.IsConnectedToSymbolInput)
@@ -466,8 +491,9 @@ namespace T3.Editor.Gui.Graph.Interaction
             
             var primaryOutput = instance.Outputs[0];
             InsertSymbolBrowser(symbolBrowser, childUi, instance, primaryOutput);
-        }        
+        }
 
+        
         private static void InsertSymbolBrowser(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance, ISlot primaryOutput)
         {
             var connections = instance.Parent.Symbol.Connections.FindAll(connection => connection.SourceParentOrChildId == instance.SymbolChildId
@@ -488,6 +514,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 {
                     var multiInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(oldConnection);
                     commands.Add(new DeleteConnectionCommand(instance.Parent.Symbol, oldConnection, multiInputIndex));
+                    //_tempDeletionCommands.Add( new DeleteConnectionCommand(instance.Parent.Symbol, oldConnection, multiInputIndex));
                     TempConnections.Add(new TempConnection(sourceParentOrChildId: UseDraftChildId,
                                                            sourceSlotId: NotConnectedId,
                                                            targetParentOrChildId: oldConnection.TargetParentOrChildId,
@@ -532,6 +559,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             var commands = new List<ICommand>();
             var multiInputIndex = parentSymbol.GetMultiInputIndexFor(connection);
+            //_tempDeletionCommands.Add(  new DeleteConnectionCommand(parentSymbol, connection, multiInputIndex));;
             commands.Add(new DeleteConnectionCommand(parentSymbol, connection, multiInputIndex));
 
             var adjustLayoutCommand = AdjustGraphLayoutForNewNode(parentSymbol, connection);
@@ -638,15 +666,17 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         public static void CompleteAtSymbolInputNode(Symbol parentSymbol, Symbol.InputDefinition inputDef)
         {
+            var macroCommand = new MacroCommand("Insert node");
             foreach (var c in TempConnections)
             {
                 var newConnection = new Symbol.Connection(sourceParentOrChildId: UseSymbolContainerId,
                                                           sourceSlotId: inputDef.Id,
                                                           targetParentOrChildId: c.TargetParentOrChildId,
                                                           targetSlotId: c.TargetSlotId);
-                UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, 0));
+                macroCommand.AddCommand(new AddConnectionCommand(parentSymbol, newConnection, 0));
             }
 
+            UndoRedoStack.AddAndExecute(macroCommand); 
             Reset();
         }
 
@@ -695,11 +725,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             TempConnections.Add(c);
         }
 
-        private static void Reset()
-        {
-            TempConnections.Clear();
-            ConnectionSnapEndHelper.ResetSnapping();
-        }
+
 
         public class TempConnection : Symbol.Connection
         {
