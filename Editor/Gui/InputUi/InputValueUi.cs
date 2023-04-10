@@ -13,6 +13,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Animation;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
@@ -311,8 +312,7 @@ namespace T3.Editor.Gui.InputUi
                     {
                         if (IsAnimatable)
                         {
-                            animator.CreateInputUpdateAction(inputSlot); // todo: create command
-                            inputSlot.Parent.Parent.Symbol.CreateOrUpdateActionsForAnimatedChildren();
+                            UndoRedoStack.AddAndExecute(new AddAnimationCommand(animator, inputSlot));
                         }
                     }
 
