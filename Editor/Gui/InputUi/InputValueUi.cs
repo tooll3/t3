@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
@@ -279,7 +280,9 @@ namespace T3.Editor.Gui.InputUi
                                                             ImGui.Separator();
 
                                                             if (ImGui.MenuItem("Remove Animation"))
-                                                                animator.RemoveAnimationFrom(inputSlot);
+                                                            {
+                                                                UndoRedoStack.AddAndExecute(new RemoveAnimationsCommand(animator, new[] {inputSlot}));
+                                                            }
 
                                                             if (ImGui.MenuItem("Parameters settings"))
                                                                 editState = InputEditStateFlags.ShowOptions;
@@ -303,11 +306,13 @@ namespace T3.Editor.Gui.InputUi
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
 
-                    var hash = Utilities.Hash(symbolChildUi.SymbolChild.Id, input.InputDefinition.Id);
+                    //var hash = Utilities.Hash(symbolChildUi.SymbolChild.Id, input.InputDefinition.Id);
                     //var blendGroup = T3Ui.VariationHandling.ActiveOperatorVariation?.GetBlendGroupForHashedInput(hash);
 
-                    var label = "";// blendGroup == null ? "" : "G" + (blendGroup.Index + 1);
-
+                    var isAnimatable = IsAnimatable;
+                    
+                    ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.DarkGray.Rgba);
+                    var label = isAnimatable ? "+" : "";// blendGroup == null ? "" : "G" + (blendGroup.Index + 1);
                     if (ImGui.Button(label, new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
                         if (IsAnimatable)
@@ -315,6 +320,7 @@ namespace T3.Editor.Gui.InputUi
                             UndoRedoStack.AddAndExecute(new AddAnimationCommand(animator, inputSlot));
                         }
                     }
+                    ImGui.PopStyleColor();
 
                     if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickThreshold)
                     {

@@ -5,27 +5,20 @@ namespace T3.Editor.Gui.Commands.Animation
 {
     public class AddAnimationCommand : ICommand
     {
-        public string Name => "Add Animation for parameter";
+        public string Name { get; set; }
         public bool IsUndoable => true;
         
-        // private readonly Curve _curve;
-        // private readonly VDefinition _originalKey;
-        // private readonly VDefinition _newKey;
-
-        private Animator _animator;
-        private IInputSlot _inputSlot;
-        private bool _wasDefault;
-
         public AddAnimationCommand(Animator animator, IInputSlot inputSlot)
         {
             _animator = animator;
             _inputSlot = inputSlot;
+            Name = $"Add animation to {inputSlot.Parent.Symbol.Name}.{inputSlot.Input.Name}";
         }
         
         public void Do()
         {
             _wasDefault = _inputSlot.Input.IsDefault; 
-            _animator.CreateInputUpdateAction(_inputSlot); // todo: create command
+            _animator.CreateInputUpdateAction(_inputSlot); 
             _inputSlot.Parent.Parent.Symbol.CreateOrUpdateActionsForAnimatedChildren();
         }
         
@@ -38,5 +31,8 @@ namespace T3.Editor.Gui.Commands.Animation
             _inputSlot.Parent.Parent.Symbol.CreateOrUpdateActionsForAnimatedChildren();
         }
 
+        private readonly Animator _animator;
+        private readonly IInputSlot _inputSlot;
+        private bool _wasDefault;
     }
 }
