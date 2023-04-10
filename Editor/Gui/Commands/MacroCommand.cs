@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using T3.Core.Logging;
 
 namespace T3.Editor.Gui.Commands
 {
@@ -18,7 +19,8 @@ namespace T3.Editor.Gui.Commands
         }
 
         public string Name { get; set; }
-
+        private bool _lastCommandAlreadyExecuted;
+        
         public bool IsUndoable => _commands.Aggregate(true, (result, current) => result && current.IsUndoable);
 
         /// <summary>
@@ -30,11 +32,19 @@ namespace T3.Editor.Gui.Commands
         }
         
         /// <summary>
-        /// All commands must be added before executing the command.
+        /// For certain macro-operations it can be necessary to executed some of its sub commands
+        /// early on. If this is the case ALL further commands need to be added end executed immediately.
         /// </summary>
-        public void AddCommands(IEnumerable<ICommand> commands)
+        public void AddAndExecCommand(ICommand command)
         {
-            _commands.AddRange(commands);
+            if (_commands.Count > 0 && !_lastCommandAlreadyExecuted)
+            {
+                Log.Warning($"Can't have {_commands.Count} non-executed macro-commands before AddAndExecuted.");
+            }
+
+            _lastCommandAlreadyExecuted = true;
+            _commands.Add(command);
+            command.Do();
         }
         
         public void Do()

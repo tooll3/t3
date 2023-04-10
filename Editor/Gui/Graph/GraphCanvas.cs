@@ -384,9 +384,10 @@ namespace T3.Editor.Gui.Graph
                     }
                     else
                     {
-                        if (ConnectionMaker.TempConnections[0].GetStatus() != ConnectionMaker.TempConnection.Status.TargetIsDraftNode)
+                        var connectionDroppedOnBackground = ConnectionMaker.TempConnections[0].GetStatus() != ConnectionMaker.TempConnection.Status.TargetIsDraftNode;
+                        if (connectionDroppedOnBackground)
                         {
-                            ConnectionMaker.Cancel();
+                            ConnectionMaker.CompleteOperation();
                         }
                     }
                 }

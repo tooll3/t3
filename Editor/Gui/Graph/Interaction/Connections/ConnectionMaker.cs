@@ -67,8 +67,9 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
 
         public static void StartFromOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, Symbol.OutputDefinition outputDef)
         {
-            TempConnections.Clear();
-            _isDisconnectingFromInput = false;
+            StartOperation($"Connect from {sourceUi.SymbolChild.ReadableName}.{outputDef.Name}");
+            //TempConnections.Clear();
+            //_isDisconnectingFromInput = false;
 
             var selectedSymbolChildUis = NodeSelection.GetSelectedChildUis().OrderBy(c => c.PosOnCanvas.Y * 100 + c.PosOnCanvas.X).ToList();
             selectedSymbolChildUis.Reverse();
@@ -106,7 +107,8 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             var existingConnection = FindConnectionToInputSlot(parentSymbol, targetUi, inputDef, multiInputIndex);
             if (existingConnection != null)
             {
-                UndoRedoStack.AddAndExecute(new DeleteConnectionCommand(parentSymbol, existingConnection, multiInputIndex));
+                StartOperation($"Disconnect {targetUi.SymbolChild.ReadableName}.{inputDef.Name}");
+                _inProgressCommand.AddAndExecCommand(new DeleteConnectionCommand(parentSymbol, existingConnection, multiInputIndex));
                 SetTempConnection(new TempConnection(sourceParentOrChildId: existingConnection.SourceParentOrChildId,
                                                      sourceSlotId: existingConnection.SourceSlotId,
                                                      targetParentOrChildId: NotConnectedId,
@@ -116,6 +118,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             }
             else
             {
+                StartOperation($"Connecting from {targetUi.SymbolChild.ReadableName}.{inputDef.Name}");
                 SetTempConnection(new TempConnection(sourceParentOrChildId: NotConnectedId,
                                                      sourceSlotId: NotConnectedId,
                                                      targetParentOrChildId: targetUi.SymbolChild.Id,
@@ -163,9 +166,9 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             ConnectionSnapEndHelper.PrepareNewFrame();
         }
 
-        public static void StartOperation()
+        private static void StartOperation(string commandName)
         {
-            if (TempConnections.Count != 1)
+            if (TempConnections.Count != 0)
             {
                 Log.Warning($"Inconsistent TempConnection count of {TempConnections.Count}. Last operation incomplete?");
             }
@@ -176,19 +179,53 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 _inProgressCommand = null;
             }
 
-            _inProgressCommand = new MacroCommand("modifying connections");
+            _inProgressCommand = new MacroCommand(commandName);
         }
 
+        
         public static void Cancel()
         {
-            TempConnections.Clear();
-            _isDisconnectingFromInput = false;
-            ConnectionSnapEndHelper.ResetSnapping();
+            AbortOperation(); // TODO: Clarify if this means ABORT?
+            Reset();
+            
+            // TempConnections.Clear();
+            // _isDisconnectingFromInput = false;
+            // ConnectionSnapEndHelper.ResetSnapping();
         }
 
+        
+        public static void CompleteOperation()
+        {
+            if (_inProgressCommand == null)
+            {
+                Log.Warning("Can't complete undefined connection operation");
+            }
+            else
+            {
+                UndoRedoStack.Add(_inProgressCommand);
+            }
+
+            Reset();
+        }
+
+        private static void AbortOperation()
+        {
+            if (_inProgressCommand == null)
+            {
+                Log.Warning("Can't abort undefined connection operation");
+            }
+            else
+            {
+                _inProgressCommand.Undo();
+            }
+            Reset();
+        }
+
+        
         private static void Reset()
         {
-            //_tempDeletionCommands.Clear();
+            _isDisconnectingFromInput = false;
+            _inProgressCommand = null;
             TempConnections.Clear();
             ConnectionSnapEndHelper.ResetSnapping();
         }
@@ -289,8 +326,9 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                         continue;
 
                     Log.Debug("Sorry, you can't do this. This connection would result in a cycle.");
-                    TempConnections.Clear();
-                    ConnectionSnapEndHelper.ResetSnapping();
+                    //TempConnections.Clear();
+                    //ConnectionSnapEndHelper.ResetSnapping();
+                    AbortOperation();
                     return;
                 }
             }
@@ -301,27 +339,35 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                                                       targetParentOrChildId: targetUi.SymbolChild.Id,
                                                       targetSlotId: input.Id);
 
-            bool replaceConnection = multiInputIndex % 2 != 0;
-            multiInputIndex /= 2; // divide by 2 to get correct insertion index in existing connections
-            var addCommand = new AddConnectionCommand(parentSymbol, newConnection, multiInputIndex);
-
-            if (replaceConnection)
+            // get the previous connection
+            var allConnectionsToSlot = parentSymbol.Connections.FindAll(c => c.TargetParentOrChildId == targetUi.SymbolChild.Id &&
+                                                                             c.TargetSlotId == input.Id);
+            var replacesConnection = false;
+            if (insertMultiInput)
             {
-                // get the previous connection
-                var allConnectionsToSlot = parentSymbol.Connections.FindAll(c => c.TargetParentOrChildId == targetUi.SymbolChild.Id &&
-                                                                                 c.TargetSlotId == input.Id);
-                var connectionToRemove = allConnectionsToSlot[multiInputIndex];
-                var deleteCommand = new DeleteConnectionCommand(parentSymbol, connectionToRemove, multiInputIndex);
-                var replaceCommand = new MacroCommand("Replace Connection", new ICommand[] { deleteCommand, addCommand });
-                UndoRedoStack.AddAndExecute(replaceCommand);
+                replacesConnection = multiInputIndex % 2 != 0;
+                multiInputIndex /= 2; // divide by 2 to get correct insertion index in existing connections
             }
             else
             {
-                UndoRedoStack.AddAndExecute(addCommand);
+                replacesConnection = allConnectionsToSlot.Count != 0;
             }
+            
+            var addCommand = new AddConnectionCommand(parentSymbol, newConnection, multiInputIndex);
 
-            TempConnections.Clear();
-            ConnectionSnapEndHelper.ResetSnapping();
+            if (replacesConnection)
+            {
+                var connectionToRemove = allConnectionsToSlot[multiInputIndex];
+                var deleteCommand = new DeleteConnectionCommand(parentSymbol, connectionToRemove, multiInputIndex);
+                _inProgressCommand.AddAndExecCommand(deleteCommand);
+                _inProgressCommand.AddAndExecCommand(addCommand);
+                _inProgressCommand.Name = $"Reconnect to {targetUi.SymbolChild.ReadableName}.{input.Name}";
+            }
+            else
+            {
+                _inProgressCommand.AddAndExecCommand(addCommand);
+            }
+            CompleteOperation();
         }
 
         public static void CompleteAtOutputSlot(Symbol parentSymbol, SymbolChildUi sourceUi, Symbol.OutputDefinition output)
@@ -369,8 +415,9 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
 
             if (_isDisconnectingFromInput)
             {
-                TempConnections.Clear();
-                _isDisconnectingFromInput = false;
+                CompleteOperation();
+                //TempConnections.Clear();
+                //_isDisconnectingFromInput = false;
                 return;
             }
 
