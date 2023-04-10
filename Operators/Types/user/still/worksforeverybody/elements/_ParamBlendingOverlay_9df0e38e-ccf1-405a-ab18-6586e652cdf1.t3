@@ -164,13 +164,7 @@
     {
       "Id": "ea277fcd-b8a5-4512-ad45-2d3cc8a01ad3"/*HasValueChanged*/,
       "SymbolId": "146fae64-18da-4183-9794-a322f47c669e",
-      "InputValues": [
-        {
-          "Id": "1e03f11b-f6cc-497e-9528-ed9490e878b5"/*Threshold*/,
-          "Type": "System.Single",
-          "Value": 0.002
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {
