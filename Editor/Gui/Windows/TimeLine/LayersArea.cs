@@ -631,8 +631,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         void ITimeObjectManipulation.DeleteSelectedElements()
         {
-            Log.Assert("Deleting not implemented yet");
-            //TODO: Implement
+            //TODO: Implement deleting of layers with delete key
         }
         #endregion
 
