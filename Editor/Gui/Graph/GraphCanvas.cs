@@ -18,6 +18,7 @@ using T3.Editor.Gui.Commands.Annotations;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
@@ -355,7 +356,7 @@ namespace T3.Editor.Gui.Graph
 
                 if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem))
                 {
-                    ConnectionMaker.ConnectionSplitHelper.PrepareNewFrame(this);
+                    ConnectionSplitHelper.PrepareNewFrame(this);
                 }
 
                 SymbolBrowser.Draw();

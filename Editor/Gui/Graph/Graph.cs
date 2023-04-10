@@ -7,6 +7,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
@@ -260,10 +261,10 @@ namespace T3.Editor.Gui.Graph
 
                 if (c.TargetParentOrChildId == ConnectionMaker.NotConnectedId)
                 {
-                    if (ConnectionMaker.ConnectionSnapEndHelper.BestMatchLastFrame != null)
+                    if (ConnectionSnapEndHelper.BestMatchLastFrame != null)
                     {
-                        newLine.TargetPosition = new Vector2(ConnectionMaker.ConnectionSnapEndHelper.BestMatchLastFrame.Area.Min.X,
-                                                             ConnectionMaker.ConnectionSnapEndHelper.BestMatchLastFrame.Area.GetCenter().Y);
+                        newLine.TargetPosition = new Vector2(ConnectionSnapEndHelper.BestMatchLastFrame.Area.Min.X,
+                                                             ConnectionSnapEndHelper.BestMatchLastFrame.Area.GetCenter().Y);
                     }
                     else
                     {
@@ -405,7 +406,7 @@ namespace T3.Editor.Gui.Graph
                     if (isHovering && Vector2.Distance(hoverPositionOnLine, TargetPosition) > minDistanceToTargetSocket
                                    && Vector2.Distance(hoverPositionOnLine, SourcePosition) > minDistanceToTargetSocket)
                     {
-                        ConnectionMaker.ConnectionSplitHelper.RegisterAsPotentialSplit(Connection, ColorForType, hoverPositionOnLine);
+                        ConnectionSplitHelper.RegisterAsPotentialSplit(Connection, ColorForType, hoverPositionOnLine);
                     }
                 }
                 else

@@ -1,25 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ImGuiNET;
-using SharpDX;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.Interaction.TransformGizmos;
-using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
-using T3.Editor.Gui.Styling;
-using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows;
-using Color = T3.Editor.Gui.Styling.Color;
 using Vector2 = System.Numerics.Vector2;
 
-namespace T3.Editor.Gui.Graph.Interaction
+namespace T3.Editor.Gui.Graph.Interaction.Connections
 {
     /// <summary>
     /// Handles the creation of new  <see cref="Symbol.Connection"/>s. 
@@ -29,8 +19,9 @@ namespace T3.Editor.Gui.Graph.Interaction
     public static class ConnectionMaker
     {
         public static readonly List<TempConnection> TempConnections = new();
+
         //private static readonly List<DeleteConnectionCommand> _tempDeletionCommands = new();
-        public static MacroCommand _inProgressCommand;
+        private static MacroCommand _inProgressCommand;
 
         public static bool IsMatchingInputType(Type valueType)
         {
@@ -81,7 +72,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             var selectedSymbolChildUis = NodeSelection.GetSelectedChildUis().OrderBy(c => c.PosOnCanvas.Y * 100 + c.PosOnCanvas.X).ToList();
             selectedSymbolChildUis.Reverse();
-            
+
             if (selectedSymbolChildUis.Count > 1 && selectedSymbolChildUis.Any(c => c.Id == sourceUi.Id))
             {
                 selectedSymbolChildUis.Reverse();
@@ -182,12 +173,12 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (_inProgressCommand != null)
             {
                 Log.Warning($"Incomplete command {_inProgressCommand.Name}");
-                _inProgressCommand =null;
+                _inProgressCommand = null;
             }
 
             _inProgressCommand = new MacroCommand("modifying connections");
         }
-        
+
         public static void Cancel()
         {
             TempConnections.Clear();
@@ -201,8 +192,8 @@ namespace T3.Editor.Gui.Graph.Interaction
             TempConnections.Clear();
             ConnectionSnapEndHelper.ResetSnapping();
         }
-        
-        public static MacroCommand AdjustGraphLayoutForNewNode(Symbol parent, Symbol.Connection connection)
+
+        private static MacroCommand AdjustGraphLayoutForNewNode(Symbol parent, Symbol.Connection connection)
         {
             if (connection.IsConnectedToSymbolOutput || connection.IsConnectedToSymbolInput)
             {
@@ -230,16 +221,16 @@ namespace T3.Editor.Gui.Graph.Interaction
                 return null;
 
             var offset = Math.Min(requiredGap - currentGap, requiredGap);
-            
+
             // Collect all connected ops further down the tree
             var connectedOps = new HashSet<SymbolChild>();
             RecursivelyAddChildren(ref connectedOps, parent, targetNodeUi.SymbolChild);
-            
-            foreach( var child in connectedOps)
+
+            foreach (var child in connectedOps)
             {
                 var childUi = parentSymbolUi.ChildUis.FirstOrDefault(c => c.Id == child.Id);
-                
-                if ( childUi == null || childUi.PosOnCanvas.X > center.X)
+
+                if (childUi == null || childUi.PosOnCanvas.X > center.X)
                     continue;
 
                 changedSymbols.Add(childUi);
@@ -257,14 +248,14 @@ namespace T3.Editor.Gui.Graph.Interaction
         {
             foreach (var inputDef in targetNode.Symbol.InputDefinitions)
             {
-                var connections = parent.Connections.FindAll(c => c.TargetSlotId == inputDef.Id 
+                var connections = parent.Connections.FindAll(c => c.TargetSlotId == inputDef.Id
                                                                   && c.TargetParentOrChildId == targetNode.Id);
 
                 foreach (var c in connections)
                 {
                     if (c.SourceParentOrChildId == UseSymbolContainerId) // TODO move symbol inputs?
                         continue;
-                    
+
                     var sourceOp = parent.Children.FirstOrDefault(child => child.Id == c.SourceParentOrChildId);
                     if (sourceOp == null)
                     {
@@ -274,8 +265,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                     if (set.Contains(sourceOp))
                         continue;
-                    
-                    
+
                     set.Add(sourceOp);
                     RecursivelyAddChildren(ref set, parent, sourceOp);
                 }
@@ -290,21 +280,21 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (sourceInstance != null)
             {
                 var outputSlot = sourceInstance.Outputs[0];
-                var deps = new HashSet<ISlot>();  
+                var deps = new HashSet<ISlot>();
                 NodeOperations.CollectSlotDependencies(outputSlot, deps);
-                
+
                 foreach (var d in deps)
                 {
                     if (d.Parent.SymbolChildId != targetUi.SymbolChild.Id)
                         continue;
-                    
+
                     Log.Debug("Sorry, you can't do this. This connection would result in a cycle.");
                     TempConnections.Clear();
                     ConnectionSnapEndHelper.ResetSnapping();
                     return;
                 }
             }
-            
+
             // TODO: Support simultaneous connection to multiInput
             var newConnection = new Symbol.Connection(sourceParentOrChildId: TempConnections[0].SourceParentOrChildId,
                                                       sourceSlotId: TempConnections[0].SourceSlotId,
@@ -345,12 +335,12 @@ namespace T3.Editor.Gui.Graph.Interaction
                 {
                     NodeOperations.CollectSlotDependencies(inputSlot, deps);
                 }
-                
+
                 foreach (var d in deps)
                 {
                     if (d.Parent.SymbolChildId != TempConnections[0].TargetParentOrChildId)
                         continue;
-                    
+
                     Log.Debug("Sorry, you can't do this. This connection would result in a cycle.");
                     TempConnections.Clear();
                     ConnectionSnapEndHelper.ResetSnapping();
@@ -358,8 +348,6 @@ namespace T3.Editor.Gui.Graph.Interaction
                 }
             }
 
-            
-            
             // Todo: Support simultaneous connection from multiple inputs
             var newConnection = new Symbol.Connection(sourceParentOrChildId: sourceUi.SymbolChild.Id,
                                                       sourceSlotId: output.Id,
@@ -472,28 +460,25 @@ namespace T3.Editor.Gui.Graph.Interaction
             Reset();
         }
 
-
         public static void OpenSymbolBrowserAtOutput(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance,
-                                                       Guid outputId)
+                                                     Guid outputId)
         {
             var primaryOutput = instance.Outputs.SingleOrDefault(o => o.Id == outputId);
             if (primaryOutput == null)
                 return;
-            
+
             InsertSymbolBrowser(symbolBrowser, childUi, instance, primaryOutput);
         }
-        
 
         public static void OpenBrowserWithSingleSelection(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance)
         {
             if (instance.Outputs.Count < 1)
                 return;
-            
+
             var primaryOutput = instance.Outputs[0];
             InsertSymbolBrowser(symbolBrowser, childUi, instance, primaryOutput);
         }
 
-        
         private static void InsertSymbolBrowser(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance, ISlot primaryOutput)
         {
             var connections = instance.Parent.Symbol.Connections.FindAll(connection => connection.SourceParentOrChildId == instance.SymbolChildId
@@ -586,7 +571,6 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             symbolBrowser.OpenAt(positionInCanvas, connectionType, connectionType, false, prepareCommand);
         }
-
         #endregion
 
         public static void SplitConnectionWithDraggedNode(SymbolChildUi childUi, Symbol.Connection oldConnection, Instance instance)
@@ -676,7 +660,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 macroCommand.AddCommand(new AddConnectionCommand(parentSymbol, newConnection, 0));
             }
 
-            UndoRedoStack.AddAndExecute(macroCommand); 
+            UndoRedoStack.AddAndExecute(macroCommand);
             Reset();
         }
 
@@ -724,8 +708,6 @@ namespace T3.Editor.Gui.Graph.Interaction
             TempConnections.Clear();
             TempConnections.Add(c);
         }
-
-
 
         public class TempConnection : Symbol.Connection
         {
@@ -787,273 +769,6 @@ namespace T3.Editor.Gui.Graph.Interaction
                 TargetIsUndefined,
                 TargetIsDraftNode,
                 Undefined,
-            }
-        }
-
-        /// <summary>
-        /// A helper that collects potential collection targets during connection drag operations.
-        /// </summary>
-        public static class ConnectionSnapEndHelper
-        {
-            public static void PrepareNewFrame()
-            {
-                _mousePosition = ImGui.GetMousePos();
-                BestMatchLastFrame = _bestMatchYetForCurrentFrame;
-                if (BestMatchLastFrame != null)
-                {
-                    // drawList.AddRect(_bestMatchLastFrame.Area.Min, _bestMatchLastFrame.Area.Max, Color.Orange);
-                    var textSize = ImGui.CalcTextSize(BestMatchLastFrame.Name);
-                    ImGui.SetNextWindowPos(_mousePosition + new Vector2(-textSize.X - 20, -textSize.Y / 2));
-                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
-                    ImGui.BeginTooltip();
-                    ImGui.TextUnformatted(BestMatchLastFrame.Name);
-                    ImGui.EndTooltip();
-                    ImGui.PopStyleVar();
-                }
-
-                _bestMatchYetForCurrentFrame = null;
-                _bestMatchDistance = float.PositiveInfinity;
-            }
-
-            public static void ResetSnapping()
-            {
-                BestMatchLastFrame = null;
-            }
-
-            public static void RegisterAsPotentialTarget(SymbolChildUi childUi, IInputUi inputUi, int slotIndex, ImRect areaOnScreen)
-            {
-                if (TempConnections == null || TempConnections.Count == 0)
-                    return;
-
-                if (TempConnections.All(c => c.ConnectionType != inputUi.Type))
-                    return;
-
-                var distance = Vector2.Distance(areaOnScreen.Min, _mousePosition);
-                if (distance > SnapDistance || distance > _bestMatchDistance)
-                {
-                    return;
-                }
-
-                _bestMatchYetForCurrentFrame = new PotentialConnectionTarget()
-                                                   {
-                                                       TargetParentOrChildId = childUi.SymbolChild.Id,
-                                                       TargetInputId = inputUi.InputDefinition.Id,
-                                                       Area = areaOnScreen,
-                                                       Name = inputUi.InputDefinition.Name,
-                                                       SlotIndex = slotIndex
-                                                   };
-                _bestMatchDistance = distance;
-            }
-
-            public static void RegisterAsPotentialTarget(IOutputUi outputUi, ImRect areaOnScreen)
-            {
-                if (TempConnections == null || TempConnections.Count == 0)
-                    return;
-
-                if (TempConnections.All(c => c.ConnectionType != outputUi.Type))
-                    return;
-
-                var distance = Vector2.Distance(areaOnScreen.Min, _mousePosition);
-                if (distance > SnapDistance || distance > _bestMatchDistance)
-                {
-                    return;
-                }
-
-                _bestMatchYetForCurrentFrame = new PotentialConnectionTarget()
-                                                   {
-                                                       TargetParentOrChildId = UseSymbolContainerId,
-                                                       TargetInputId = outputUi.OutputDefinition.Id,
-                                                       Area = areaOnScreen,
-                                                       Name = outputUi.OutputDefinition.Name,
-                                                       SlotIndex = 0
-                                                   };
-                _bestMatchDistance = distance;
-            }
-            
-            
-            public static bool IsNextBestTarget(SymbolChildUi childUi, Guid inputDefinitionId, int socketIndex)
-            {
-                return BestMatchLastFrame != null && BestMatchLastFrame.TargetParentOrChildId == childUi.SymbolChild.Id
-                                                  && BestMatchLastFrame.TargetInputId == inputDefinitionId
-                                                  && BestMatchLastFrame.SlotIndex == socketIndex;
-            }
-            
-            public static bool IsNextBestTarget(IOutputUi outputUi)
-            {
-                return BestMatchLastFrame != null && BestMatchLastFrame.TargetParentOrChildId == UseSymbolContainerId
-                                                  && BestMatchLastFrame.TargetInputId == outputUi.Id
-                                                  && BestMatchLastFrame.SlotIndex == 0;
-            }
-
-            public static PotentialConnectionTarget BestMatchLastFrame;
-            private static PotentialConnectionTarget _bestMatchYetForCurrentFrame;
-            private static float _bestMatchDistance = float.PositiveInfinity;
-            private const int SnapDistance = 50;
-            private static Vector2 _mousePosition;
-
-            public class PotentialConnectionTarget
-            {
-                public Guid TargetParentOrChildId;
-                public Guid TargetInputId;
-                public ImRect Area;
-                public string Name;
-                public int SlotIndex;
-            }
-        }
-
-        public class ConnectionSplitHelper
-        {
-            public static void PrepareNewFrame(GraphCanvas graphCanvas)
-            {
-                _mousePosition = ImGui.GetMousePos();
-                BestMatchLastFrame = _bestMatchYetForCurrentFrame;
-                if (BestMatchLastFrame != null && TempConnections.Count == 0)
-                {
-                    var time = ImGui.GetTime();
-                    if (_hoverStartTime < 0)
-                        _hoverStartTime = time;
-
-                    var hoverDuration = time - _hoverStartTime;
-                    var radius = EaseFunctions.EaseOutElastic((float)hoverDuration) * 4;
-                    var drawList = ImGui.GetForegroundDrawList();
-
-                    drawList.AddCircleFilled(_bestMatchYetForCurrentFrame.PositionOnScreen, radius, _bestMatchYetForCurrentFrame.Color, 30);
-                    
-                    var buttonMin = _mousePosition - Vector2.One * radius / 2;
-                    ImGui.SetCursorScreenPos(buttonMin);
-
-                    if(ImGui.InvisibleButton("splitMe", Vector2.One * radius))
-                    {
-                        var posOnScreen = graphCanvas.InverseTransformPositionFloat(_bestMatchYetForCurrentFrame.PositionOnScreen) 
-                                          - new Vector2(SymbolChildUi.DefaultOpSize.X * 0.25f, 
-                                                        SymbolChildUi.DefaultOpSize.Y * 0.5f);
-
-                        SplitConnectionWithSymbolBrowser(graphCanvas.CompositionOp.Symbol,
-                                                         graphCanvas.SymbolBrowser,
-                                                         _bestMatchYetForCurrentFrame.Connection,
-                                                         posOnScreen);
-                    }
-
-                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
-                    ImGui.BeginTooltip();
-                    {
-                        var connection = _bestMatchYetForCurrentFrame.Connection;
-                        
-                        ISlot outputSlot = null;
-                        SymbolChild.Output output = null;
-                        Symbol.OutputDefinition outputDefinition = null;
-                        
-                        var sourceOpInstance = graphCanvas.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == connection.SourceParentOrChildId);
-                        var sourceOp =  graphCanvas.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == connection.SourceParentOrChildId);
-                        if (sourceOpInstance != null)
-                        {
-                            outputDefinition = sourceOpInstance.Symbol.OutputDefinitions.SingleOrDefault(outDef => outDef.Id == connection.SourceSlotId);
-                            if (outputDefinition != null && sourceOp != null)
-                            {
-                                output = sourceOp.Outputs[connection.SourceSlotId];
-                                outputSlot = sourceOpInstance.Outputs.Single(slot => slot.Id == outputDefinition.Id);
-                            }
-                        }
-
-                        SymbolChild.Input input = null;
-                        var targetOp = graphCanvas.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == connection.TargetParentOrChildId);
-                        if (targetOp != null)
-                        {
-                            input = targetOp.InputValues[connection.TargetSlotId];
-                        }
-                        
-                        
-                        if (outputSlot != null && output != null && input != null)
-                        {
-                            ImGui.PushFont(Fonts.FontSmall);
-                            var connectionSource = sourceOp.ReadableName + "." + output.OutputDefinition.Name;
-                            ImGui.TextColored(Color.Gray, connectionSource);
-                            
-                            var connectionTarget = "->" + targetOp.ReadableName + "." + input.InputDefinition.Name;
-                            ImGui.TextColored(Color.Gray, connectionTarget);
-                            ImGui.PopFont();
-
-                            var width = 160f;
-                            ImGui.BeginChild("thumbnail", new Vector2(width, width*9/16f));
-                            {
-                                TransformGizmoHandling.SetDrawList(drawList);
-                                ImageCanvasForTooltips.Update();
-                                ImageCanvasForTooltips.SetAsCurrent();
-                                
-                                //var sourceOpUi = SymbolUiRegistry.Entries[graphCanvas.CompositionOp.Symbol.Id].ChildUis.Single(childUi => childUi.Id == sourceOp.Id);
-                                var sourceOpUi = SymbolUiRegistry.Entries[sourceOpInstance.Symbol.Id];
-                                IOutputUi outputUi = sourceOpUi.OutputUis[output.OutputDefinition.Id];
-                                EvaluationContext.Reset();
-                                EvaluationContext.RequestedResolution = new Size2(1280 / 2, 720 / 2);
-                                outputUi.DrawValue(outputSlot, EvaluationContext, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
-
-                                if (!string.IsNullOrEmpty(sourceOpUi.Description))
-                                {
-                                    ImGui.Spacing();
-                                    ImGui.PushFont(Fonts.FontSmall);
-                                    ImGui.PushStyleColor(ImGuiCol.Text, new Color(1, 1, 1, 0.5f).Rgba);
-                                    ImGui.TextWrapped(sourceOpUi.Description);
-                                    ImGui.PopStyleColor();
-                                    ImGui.PopFont();
-                                }
-                                ImageCanvasForTooltips.Deactivate();
-                                TransformGizmoHandling.RestoreDrawList();
-                            }
-                            ImGui.EndChild();
-                            
-                            FrameStats.AddHoveredId(targetOp.Id);
-                            FrameStats.AddHoveredId(sourceOp.Id);
-                        }
-                    }
-                    ImGui.EndTooltip();
-                    ImGui.PopStyleVar();
-                }
-                else
-                {
-                    _hoverStartTime = -1;
-                }
-
-                _bestMatchYetForCurrentFrame = null;
-                _bestMatchDistance = float.PositiveInfinity;
-            }
-
-            public static void ResetSnapping()
-            {
-                BestMatchLastFrame = null;
-            }
-
-            public static void RegisterAsPotentialSplit(Symbol.Connection connection, Color color, Vector2 position)
-            {
-                var distance = Vector2.Distance(position, _mousePosition);
-                if (distance > SnapDistance || distance > _bestMatchDistance)
-                {
-                    return;
-                }
-
-                _bestMatchYetForCurrentFrame = new PotentialConnectionSplit()
-                                                   {
-                                                       Connection = connection,
-                                                       PositionOnScreen = position,
-                                                       Color = color,
-                                                   };
-                _bestMatchDistance = distance;
-            }
-            
-            private static readonly ImageOutputCanvas ImageCanvasForTooltips = new ImageOutputCanvas();
-            private static readonly EvaluationContext EvaluationContext = new EvaluationContext();
-            
-            public static PotentialConnectionSplit BestMatchLastFrame;
-            private static PotentialConnectionSplit _bestMatchYetForCurrentFrame;
-            private static float _bestMatchDistance = float.PositiveInfinity;
-            private const int SnapDistance = 50;
-            private static Vector2 _mousePosition;
-            private static double _hoverStartTime = -1;
-
-            public class PotentialConnectionSplit
-            {
-                public Vector2 PositionOnScreen;
-                public Symbol.Connection Connection;
-                public Color Color;
             }
         }
     }

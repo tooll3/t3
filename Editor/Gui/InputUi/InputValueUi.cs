@@ -15,6 +15,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Animation;
 using T3.Editor.Gui.Selection;

@@ -2,6 +2,7 @@
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
@@ -75,7 +76,7 @@ namespace T3.Editor.Gui.Graph
                                                     new Vector2(LastScreenRect.Min.X,
                                                                 LastScreenRect.Max.Y)); 
                     
-                    ConnectionMaker.ConnectionSnapEndHelper.RegisterAsPotentialTarget(outputUi, usableSlotArea);
+                    ConnectionSnapEndHelper.RegisterAsPotentialTarget(outputUi, usableSlotArea);
                     
                     
                     ImGui.SetCursorScreenPos(usableSlotArea.Min);
@@ -97,7 +98,7 @@ namespace T3.Editor.Gui.Graph
                             ConnectionMaker.Update();
                         }
                     }
-                    else if (ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(outputUi) || slotHovered)
+                    else if (ConnectionSnapEndHelper.IsNextBestTarget(outputUi) || slotHovered)
                     {
                         if (ConnectionMaker.IsMatchingInputType(outputDef.ValueType))
                         {

@@ -7,6 +7,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
@@ -97,11 +98,11 @@ namespace T3.Editor.Gui.Graph.Interaction
                     _moveCommand.StoreCurrentValues();
                     UndoRedoStack.Add(_moveCommand);
 
-                    if (singleDraggedNode != null && ConnectionMaker.ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolChildUi childUi)
+                    if (singleDraggedNode != null && ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolChildUi childUi)
                     {
                         var instanceForSymbolChildUi = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
                         ConnectionMaker.SplitConnectionWithDraggedNode(childUi, 
-                                                                       ConnectionMaker.ConnectionSplitHelper.BestMatchLastFrame.Connection, 
+                                                                       ConnectionSplitHelper.BestMatchLastFrame.Connection, 
                                                                        instanceForSymbolChildUi);
                     }
 
