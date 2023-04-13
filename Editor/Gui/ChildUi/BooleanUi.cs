@@ -25,7 +25,7 @@ namespace T3.Editor.Gui.ChildUi
 
             var refValue = boolean.BoolValue.Value; // we reference here to show correct state when connected
 
-            if (CustomComponents.ToggleIconButton(Icon.Checkmark, "", ref refValue, new Vector2(16, 16)))
+            if (CustomComponents.ToggleIconButton(Icon.Checkmark, "", ref refValue, new Vector2(20, 20)))
             {
                 if (!boolean.BoolValue.IsConnected)
                 {
