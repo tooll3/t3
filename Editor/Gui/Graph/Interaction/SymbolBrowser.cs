@@ -167,7 +167,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             if (shouldCancelConnectionMaker)
             {
-                ConnectionMaker.Cancel();
+                ConnectionMaker.AbortOperation();
                 Cancel();
             }
 
@@ -621,9 +621,9 @@ namespace T3.Editor.Gui.Graph.Interaction
                 }
             }
 
-            var newCommand = new MacroCommand("Insert Op", commands);
-            UndoRedoStack.Add(newCommand);
-            ConnectionMaker.Cancel();
+            // var newCommand = new MacroCommand("Insert Op", commands);
+            // UndoRedoStack.Add(newCommand);
+            ConnectionMaker.CompleteOperation(commands, "Insert Op " + newChildUi.SymbolChild.ReadableName);
             Close();
         }
 

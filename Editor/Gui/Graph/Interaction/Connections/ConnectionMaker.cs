@@ -181,27 +181,39 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
         }
 
         
-        public static void Cancel()
-        {
-            AbortOperation(); // TODO: Clarify if this means ABORT?
-            Reset();
-        }
+        // public static void Cancel()
+        // {
+        //     AbortOperation(); // TODO: Clarify if this means ABORT?
+        //     //Reset();
+        // }
 
         
-        public static void CompleteOperation()
+        public static void CompleteOperation(List<ICommand> additionalCommands = null, string newCommandTitle = null)
         {
             if (_inProgressCommand == null)
             {
-                Log.Warning("Can't complete undefined connection operation");
+                //Log.Debug("Setup temp op");
+                StartOperation("Temp op");
             }
-            else
+            
+            if (additionalCommands != null)
             {
-                UndoRedoStack.Add(_inProgressCommand);
+                foreach (var c in additionalCommands)
+                {
+                    _inProgressCommand.AddCommand(c);
+                }
             }
+
+            if (!string.IsNullOrEmpty(newCommandTitle))
+            {
+                _inProgressCommand.Name = newCommandTitle;
+            }
+            
+            UndoRedoStack.Add(_inProgressCommand);
             Reset();
         }
 
-        private static void AbortOperation()
+        public static void AbortOperation()
         {
             if (_inProgressCommand == null)
             {
@@ -458,7 +470,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             }
             else
             {
-                Cancel();
+                AbortOperation();
             }
         }
 
