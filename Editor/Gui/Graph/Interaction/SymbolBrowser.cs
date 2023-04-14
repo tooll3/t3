@@ -26,9 +26,9 @@ namespace T3.Editor.Gui.Graph.Interaction
     public class SymbolBrowser
     {
         #region public API ------------------------------------------------------------------------
-        public void OpenAt(Vector2 positionOnCanvas, Type filterInputType, Type filterOutputType, bool onlyMultiInputs, MacroCommand prepareCommand)
+        public void OpenAt(Vector2 positionOnCanvas, Type filterInputType, Type filterOutputType, bool onlyMultiInputs)
         {
-            _prepareCommand = prepareCommand;
+            //_prepareCommand = prepareCommand;
             IsOpen = true;
             PosOnCanvas = positionOnCanvas;
             _focusInputNextTime = true;
@@ -55,7 +55,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                 if (NodeSelection.GetSelectedChildUis().Count() != 1)
                 {
-                    OpenAt(GraphCanvas.Current.InverseTransformPositionFloat(ImGui.GetIO().MousePos + new Vector2(-4, -20)), null, null, false, null);
+                    OpenAt(GraphCanvas.Current.InverseTransformPositionFloat(ImGui.GetIO().MousePos + new Vector2(-4, -20)), null, null, false);
                     return;
                 }
 
@@ -64,6 +64,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                     var instance = NodeSelection.GetInstanceForSymbolChildUi(childUi);
                     ConnectionMaker.OpenBrowserWithSingleSelection(this, childUi, instance);
                 }
+                //TODO: support multiple selected ops?
 
                 return;
             }
@@ -167,7 +168,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             if (shouldCancelConnectionMaker)
             {
-                ConnectionMaker.AbortOperation();
+                //ConnectionMaker.AbortOperation();
                 Cancel();
             }
 
@@ -204,11 +205,12 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         private void Cancel()
         {
-            if (_prepareCommand != null)
-            {
-                _prepareCommand.Undo();
-                _prepareCommand = null;
-            }
+            ConnectionMaker.AbortOperation();
+            // if (_prepareCommand != null)
+            // {
+            //     _prepareCommand.Undo();
+            //     _prepareCommand = null;
+            // }
 
             Close();
         }
@@ -550,11 +552,11 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         private void CreateInstance(Symbol symbol)
         {
-            var commands = new List<ICommand>();
+            var commandsForUndo = new List<ICommand>();
             var parent = GraphCanvas.Current.CompositionOp.Symbol;
 
             var addSymbolChildCommand = new AddSymbolChildCommand(parent, symbol.Id) { PosOnCanvas = PosOnCanvas };
-            commands.Add(addSymbolChildCommand);
+            commandsForUndo.Add(addSymbolChildCommand);
             addSymbolChildCommand.Do();
             var newSymbolChild = parent.Children.Single(entry => entry.Id == addSymbolChildCommand.AddedChildId);
 
@@ -576,10 +578,11 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             NodeSelection.SetSelectionToChildUi(newChildUi, newInstance);
 
-            if (_prepareCommand != null)
-            {
-                commands.Add(_prepareCommand);
-            }
+            // if (_prepareCommand != null)
+            // {
+            //     additionalCommands.Add(_prepareCommand);
+            // }
+            
 
             foreach (var c in ConnectionMaker.TempConnections)
             {
@@ -599,7 +602,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                                                                           targetSlotId: c.TargetSlotId);
                         var addConnectionCommand = new AddConnectionCommand(parent, newConnectionToSource, c.MultiInputIndex);
                         addConnectionCommand.Do();
-                        commands.Add(addConnectionCommand);
+                        commandsForUndo.Add(addConnectionCommand);
                         break;
 
                     case ConnectionMaker.TempConnection.Status.TargetIsDraftNode:
@@ -616,21 +619,21 @@ namespace T3.Editor.Gui.Graph.Interaction
                                                                          targetSlotId: inputDef.Id);
                         var connectionCommand = new AddConnectionCommand(parent, newConnectionToInput, c.MultiInputIndex);
                         connectionCommand.Do();
-                        commands.Add(connectionCommand);
+                        commandsForUndo.Add(connectionCommand);
                         break;
                 }
             }
 
             // var newCommand = new MacroCommand("Insert Op", commands);
             // UndoRedoStack.Add(newCommand);
-            ConnectionMaker.CompleteOperation(commands, "Insert Op " + newChildUi.SymbolChild.ReadableName);
+            ConnectionMaker.CompleteOperation(commandsForUndo, "Insert Op " + newChildUi.SymbolChild.ReadableName);
             Close();
         }
 
         /// <summary>
         /// required to correctly restore original state when closing the browser  
         /// </summary>
-        private MacroCommand _prepareCommand;
+        //private MacroCommand _prepareCommand;
         #endregion
 
         private static int WrapIndex(int startIndex, int offset, int count)
