@@ -69,11 +69,12 @@ namespace T3.Editor.Gui.Graph
             if (!needsReinit)
             {
                 var checkSum = 0;
-                foreach (var c in graphSymbol.Connections)
+                for (var index = 0; index < graphSymbol.Connections.Count; index++)
                 {
-                    checkSum += c.GetHashCode();
+                    var c = graphSymbol.Connections[index];
+                    checkSum += c.GetHashCode() * index;
                 }
-                
+
                 foreach (var c in ConnectionMaker.TempConnections)
                 {
                     checkSum += c.GetHashCode();
