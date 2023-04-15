@@ -143,9 +143,9 @@ namespace T3.Core.Audio
 
                             if (bytes > 0)
                             {
-                                while (buffer.Length < bytes)
+                                for (int loop = 0; loop < 3 && buffer.Length < bytes; loop++)
                                 {
-                                    Bass.ChannelUpdate(clipStream.StreamHandle, (int)Math.Round(frameDurationInSeconds * 1000.0 * 3.0));
+                                    Bass.ChannelUpdate(clipStream.StreamHandle, (int)Math.Round(frameDurationInSeconds * 1000.0));
                                     if (Bass.ChannelIsActive(clipStream.StreamHandle) != PlaybackState.Playing)
                                     {
                                         if (!clipStream.UpdateTimeRecord(playback))
