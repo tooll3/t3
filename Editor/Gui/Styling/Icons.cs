@@ -176,7 +176,7 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.ConnectedParameter, 13),
                 new (Icon.Stripe4PxPattern, 14),
                 new (Icon.CurveKeyframe, 15),
-                new (Icon.CurveKeyframeSelected, 15),
+                new (Icon.CurveKeyframeSelected, 16),
                 new (Icon.CurrentTimeMarkerHandle, 17),
                 new (Icon.FollowTime, 18),
                 new (Icon.ToggleAudioOn, 19),
