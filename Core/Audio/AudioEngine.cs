@@ -147,7 +147,7 @@ namespace T3.Core.Audio
                                        Bass.ChannelIsActive(clipStream.StreamHandle) == PlaybackState.Playing)
                                 {
                                     // update timing
-                                    clipStream.UpdateTimeRecord(playback);
+                                    //clipStream.UpdateTimeRecord(playback);
 
                                     Bass.ChannelUpdate(clipStream.StreamHandle, (int)(frameDurationInSeconds * 1000.0));
                                     var newBuffer = new byte[bytes];
