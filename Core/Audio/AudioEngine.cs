@@ -60,7 +60,7 @@ namespace T3.Core.Audio
             foreach (var (audioClipId, clipStream) in _clipPlaybacks)
             {
                 _oldBufferInSeconds = Bass.ChannelGetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer);
-                Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer, 3.0 / fps);
+                Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer, 4.0 / fps);
                 Bass.ChannelStop(clipStream.StreamHandle);
                 clipStream.UpdateTimeRecord(playback);
                 Bass.ChannelPlay(clipStream.StreamHandle);
@@ -167,7 +167,7 @@ namespace T3.Core.Audio
                                         buffer = buffer.Concat(newBuffer).ToArray();
                                         // shorten the buffer from here on
                                         Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer,
-                                            (int)Math.Round(frameDurationInSeconds * 1000.0 * 2.0));
+                                            frameDurationInSeconds * 2.0);
                                         // update the FFT
                                         UpdateFftBuffer(clipStream.StreamHandle, playback);
                                     }
