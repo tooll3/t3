@@ -389,7 +389,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         public ICommand StartDragCommand()
         {
-            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, SelectedKeyframes);
+            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, SelectedKeyframes, GetAllCurves());
             return _changeKeyframesCommand;
         }
 

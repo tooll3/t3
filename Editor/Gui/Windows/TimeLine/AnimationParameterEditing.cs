@@ -50,5 +50,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         protected List<TimeLineCanvas.AnimationParameter> AnimationParameters;
         protected TimeLineCanvas TimeLineCanvas; // This gets initialized in constructor of implementations 
+        public static bool CurvesTablesNeedsRefresh;
     }
 }
