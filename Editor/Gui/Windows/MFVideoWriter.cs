@@ -430,8 +430,8 @@ namespace T3.Editor.Gui.Windows
                         waveFormat.nSamplesPerSec = (uint)sampleRate;
                         waveFormat.nBlockAlign = (ushort)(waveFormat.nChannels * waveFormat.wBitsPerSample / 8);
                         waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
-                        //audioWriter = new FLACAudioWriter(_sinkWriter, ref waveFormat);
-                        _audioWriter = new MP3AudioWriter(_sinkWriter, ref waveFormat);
+                        _audioWriter = new FLACAudioWriter(_sinkWriter, ref waveFormat);
+                        //_audioWriter = new MP3AudioWriter(_sinkWriter, ref waveFormat);
                     }
 
                     // Start writing the video file. MUST be called before write operations.

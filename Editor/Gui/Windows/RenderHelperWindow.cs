@@ -174,22 +174,31 @@ namespace T3.Editor.Gui.Windows
 
         protected static void SetPlaybackTimeForNextFrame()
         {
+            if (Progress <= 0.0)
+                _timingOverhang = 0.0;
+
             double startTimeInSeconds = ReferenceTimeToSeconds(_startTime, _timeReference);
             double endTimeInSeconds = ReferenceTimeToSeconds(_endTime, _timeReference);
             var oldTimeInSecs = Playback.Current.TimeInSecs;
             Playback.Current.TimeInSecs = MathUtils.Lerp(startTimeInSeconds, endTimeInSeconds, Progress);
             var adaptedDeltaTime = Math.Max(Playback.Current.TimeInSecs - oldTimeInSecs + _timingOverhang, 0.0);
 
+            // get playback settings
+            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
+            var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
+            PlaybackUtils.FindPlaybackSettings(composition, out var compWithSettings, out var settings);
+            // user time in secs for audio playback
+            settings.GetMainSoundtrack(out var soundtrack);
+            AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
+
             if (!_bassChanged)
             {
                 _bassUpdatePeriod = Bass.GetConfig(Configuration.UpdatePeriod);
-                _bassPlaybackBufferLength = Bass.GetConfig(Configuration.PlaybackBufferLength);
                 _bassGlobalStreamVolume = Bass.GetConfig(Configuration.GlobalStreamVolume);
                 // turn off automatic sound generation
                 Bass.Configure(Configuration.UpdateThreads, false);
                 Bass.Configure(Configuration.UpdatePeriod, 0);
                 Bass.Configure(Configuration.GlobalStreamVolume, 0);
-                Bass.Configure(Configuration.PlaybackBufferLength, 0);
 
                 Playback.Current.IsLive = false;
                 Playback.Current.PlaybackSpeed = 1.0;
@@ -198,13 +207,8 @@ namespace T3.Editor.Gui.Windows
                 _bassChanged = true;
                 adaptedDeltaTime = 0.0;
 
-                AudioEngine.prepareRecording(Playback.Current);
+                AudioEngine.prepareRecording(Playback.Current, _fps);
             }
-
-            // get playback settings
-            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
-            var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
-            PlaybackUtils.FindPlaybackSettings(composition, out var compWithSettings, out var settings);
 
             // update audio parameters, respecting looping etc.
             Playback.Current.Bpm = settings.Bpm;
@@ -213,24 +217,11 @@ namespace T3.Editor.Gui.Windows
             Playback.Current.Settings = settings;
             Playback.Current.PlaybackSpeed = 1.0;
 
-            // user possibly altered/looped time in secs for audio playback
-            settings.GetMainSoundtrack(out var soundtrack);
-            AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
+            var bufferLengthInMS = (int)Math.Floor(1000.0 * adaptedDeltaTime);
+            _timingOverhang = adaptedDeltaTime - (double)bufferLengthInMS / 1000.0;
+            _timingOverhang = Math.Max(_timingOverhang, 0.0);
 
-            if (adaptedDeltaTime > 0.0)
-            {
-                var bufferLengthInMS = (int)Math.Floor(1000.0 * adaptedDeltaTime);
-                _timingOverhang = adaptedDeltaTime - (double)bufferLengthInMS / 1000.0;
-                _timingOverhang = Math.Max(_timingOverhang, 0.0);
-                Bass.Configure(Configuration.PlaybackBufferLength, bufferLengthInMS);
-
-                AudioEngine.CompleteFrame(Playback.Current, (double)bufferLengthInMS / 1000.0);
-            }
-            else
-            {
-                // Do not advance audio on the initial time setting
-                AudioEngine.CompleteFrame(Playback.Current, 0.0, true);
-            }
+            AudioEngine.CompleteFrame(Playback.Current, (double)bufferLengthInMS / 1000.0);
         }
 
         protected static void ReleasePlaybackTime()
@@ -244,7 +235,6 @@ namespace T3.Editor.Gui.Windows
             {
                 // restore live playback values
                 Bass.Configure(Configuration.UpdatePeriod, _bassUpdatePeriod);
-                Bass.Configure(Configuration.PlaybackBufferLength, _bassPlaybackBufferLength);
                 Bass.Configure(Configuration.GlobalStreamVolume, _bassGlobalStreamVolume);
                 Bass.Configure(Configuration.UpdateThreads, true);
 
@@ -271,7 +261,6 @@ namespace T3.Editor.Gui.Windows
 
         private static bool _bassChanged = false; // were Bass library settings changed?
         private static int _bassUpdatePeriod; // initial Bass library update period in MS
-        private static int _bassPlaybackBufferLength; // initial Bass library playback buffer length in MS
         private static int _bassGlobalStreamVolume; // initial Bass library sample volume (range 0 to 10000)
 
         public static bool IsExporting => _isExporting;
