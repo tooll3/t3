@@ -73,7 +73,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                     var targetOp = graphCanvas.CompositionOp.Symbol.Children.SingleOrDefault(child => child.Id == connection.TargetParentOrChildId);
                     if (targetOp != null)
                     {
-                        input = targetOp.InputValues[connection.TargetSlotId];
+                        input = targetOp.Inputs[connection.TargetSlotId];
                     }
 
                     if (outputSlot != null && output != null && input != null)

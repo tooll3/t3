@@ -386,7 +386,7 @@ namespace T3.Editor.Gui.Graph
 
             var compositionSymbol = parent.Parent.Symbol;
             var parentSymbolChild = compositionSymbol.Children.Single(child => child.Id == parent.SymbolChildId);
-            var value = parentSymbolChild.InputValues[inputSlot.Id].Value;
+            var value = parentSymbolChild.Inputs[inputSlot.Id].Value;
             if (value is not InputValue<string> stringValue)
                 return;
 

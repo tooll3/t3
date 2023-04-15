@@ -27,12 +27,12 @@ namespace T3.Editor.Gui.Graph.Interaction
                     if (stringInputUi.Usage != StringInputUi.UsageType.FilePath)
                         continue;
 
-                    if (!symbolChild.InputValues.ContainsKey(input.Id))
+                    if (!symbolChild.Inputs.ContainsKey(input.Id))
                         continue;
                     
-                    var inputValue = symbolChild.InputValues[input.Id].IsDefault
-                                         ? symbolChild.InputValues[input.Id].DefaultValue
-                                         : symbolChild.InputValues[input.Id].Value;
+                    var inputValue = symbolChild.Inputs[input.Id].IsDefault
+                                         ? symbolChild.Inputs[input.Id].DefaultValue
+                                         : symbolChild.Inputs[input.Id].Value;
 
                     var stringInputValue = inputValue as InputValue<string>;
                     if (stringInputValue == null)

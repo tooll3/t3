@@ -333,17 +333,17 @@ namespace T3.Core.Operator
                 var symbolChild = parentSymbol.Children.Single(child => child.Id == instance.SymbolChildId);
 
                 // update inputs of symbol child
-                var oldChildInputs = new Dictionary<Guid, SymbolChild.Input>(symbolChild.InputValues);
-                symbolChild.InputValues.Clear();
+                var oldChildInputs = new Dictionary<Guid, SymbolChild.Input>(symbolChild.Inputs);
+                symbolChild.Inputs.Clear();
                 foreach (var inputDefinition in InputDefinitions)
                 {
                     if (oldChildInputs.TryGetValue(inputDefinition.Id, out var input))
                     {
-                        symbolChild.InputValues.Add(inputDefinition.Id, input);
+                        symbolChild.Inputs.Add(inputDefinition.Id, input);
                     }
                     else
                     {
-                        symbolChild.InputValues.Add(inputDefinition.Id, new SymbolChild.Input(inputDefinition));
+                        symbolChild.Inputs.Add(inputDefinition.Id, new SymbolChild.Input(inputDefinition));
                     }
                 }
 
@@ -511,7 +511,7 @@ namespace T3.Core.Operator
             {
                 Debug.Assert(i < childInstance.Inputs.Count);
                 Guid inputDefinitionId = childSymbol.InputDefinitions[i].Id;
-                childInstance.Inputs[i].Input = symbolChild.InputValues[inputDefinitionId];
+                childInstance.Inputs[i].Input = symbolChild.Inputs[inputDefinitionId];
                 childInstance.Inputs[i].Id = inputDefinitionId;
             }
 
@@ -549,8 +549,8 @@ namespace T3.Core.Operator
         {
             var childInputTarget = (from child in Children
                                     where child.Id == connection.TargetParentOrChildId
-                                    where child.InputValues.ContainsKey(connection.TargetSlotId)
-                                    select child.InputValues[connection.TargetSlotId]).SingleOrDefault();
+                                    where child.Inputs.ContainsKey(connection.TargetSlotId)
+                                    select child.Inputs[connection.TargetSlotId]).SingleOrDefault();
             bool isMultiInput = childInputTarget?.InputDefinition.IsMultiInput ?? false;
 
             return isMultiInput;

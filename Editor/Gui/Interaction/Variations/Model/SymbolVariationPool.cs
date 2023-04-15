@@ -385,7 +385,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
                     continue;
                 }
 
-                foreach (var input in symbolChild.InputValues.Values)
+                foreach (var input in symbolChild.Inputs.Values)
                 {
                     if (!ValueUtils.BlendMethods.TryGetValue(input.Value.ValueType, out var blendFunction))
                         continue;
