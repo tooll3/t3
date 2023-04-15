@@ -211,7 +211,7 @@ namespace T3.Editor.Gui.Windows
             Playback.Current.PlaybackSpeed = 0.0;
             Playback.Current.Update(false);
             Playback.Current.Settings = settings;
-            Playback.Current.PlaybackSpeed = 240.0 / Playback.Current.Bpm;
+            Playback.Current.PlaybackSpeed = 1.0;
 
             // user possibly altered/looped time in secs for audio playback
             settings.GetMainSoundtrack(out var soundtrack);
