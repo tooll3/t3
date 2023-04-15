@@ -145,7 +145,7 @@ namespace T3.Core.Audio
                             {
                                 while (buffer.Length < bytes)
                                 {
-                                    Bass.ChannelUpdate(clipStream.StreamHandle, (int)Math.Round(frameDurationInSeconds * 1000.0 * 3.0));
+                                    Bass.ChannelUpdate(clipStream.StreamHandle, (int)Math.Round(frameDurationInSeconds * 1000.0 * 4.0));
                                     if (Bass.ChannelIsActive(clipStream.StreamHandle) != PlaybackState.Playing)
                                     {
                                         if (!clipStream.UpdateTimeRecord(playback))
@@ -167,7 +167,7 @@ namespace T3.Core.Audio
                                         buffer = buffer.Concat(newBuffer).ToArray();
                                         // shorten the buffer from here on
                                         Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer,
-                                            (int)Math.Round(frameDurationInSeconds * 1000.0));
+                                            (int)Math.Round(frameDurationInSeconds * 1000.0 * 2.0));
                                         // update the FFT
                                         UpdateFftBuffer(clipStream.StreamHandle, playback);
                                     }
