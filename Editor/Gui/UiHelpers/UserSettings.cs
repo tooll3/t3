@@ -58,6 +58,9 @@ namespace T3.Editor.Gui.UiHelpers
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
             public float CameraSpeed = 1;
             public bool AutoPinAllAnimations = false;
+
+            public bool RepositionLoopRangeOnClick = false;
+            
             
             public float KeyboardScrollAcceleration = 2.5f;
 

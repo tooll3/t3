@@ -96,6 +96,11 @@ namespace T3.Editor.Gui.Windows
                                                                0.0f, 10f, 0.01f, true, 
                                                                "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input.",
                                                                UserSettings.Defaults.TimeRasterDensity);
+                
+                changed |= FormInputs.AddCheckBox("Reposition loop range on click",
+                                                  ref UserSettings.Config.RepositionLoopRangeOnClick,
+                                                  "When using the timeline with bar units, this setting allows you to move the current loop range by clicking outside the loop.",
+                                                  UserSettings.Defaults.RepositionLoopRangeOnClick);
                 ImGui.Dummy(new Vector2(20,20));
                 ImGui.TreePop();
             }
