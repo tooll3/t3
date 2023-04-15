@@ -143,11 +143,13 @@ namespace T3.Core.Audio
 
                             if (bytes > 0)
                             {
-                                while (bytes >= buffer.Length &&
-                                       Bass.ChannelIsActive(clipStream.StreamHandle) == PlaybackState.Playing)
+                                while (bytes >= buffer.Length)
                                 {
+                                    if (Bass.ChannelIsActive(clipStream.StreamHandle) != PlaybackState.Playing)
+                                        Bass.ChannelPlay(clipStream.StreamHandle);
+
                                     // update timing
-                                    //clipStream.UpdateTimeRecord(playback);
+                                    clipStream.UpdateTimeRecord(playback);
 
                                     Bass.ChannelUpdate(clipStream.StreamHandle, (int)(frameDurationInSeconds * 1000.0));
                                     var newBuffer = new byte[bytes];
