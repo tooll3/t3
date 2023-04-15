@@ -28,6 +28,7 @@ namespace T3.Editor.Gui.Windows
             FormInputs.AddStringInput("File", ref _targetFile);
             ImGui.SameLine();
             FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref _targetFile);
+            FormInputs.AddCheckBox("Export Audio", ref _exportAudio);
             ImGui.Separator();
 
             var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
@@ -56,7 +57,7 @@ namespace T3.Editor.Gui.Windows
                             size.Width = currentDesc.Width;
                             size.Height = currentDesc.Height;
 
-                            _videoWriter = new MP4VideoWriter(_targetFile, size, true);
+                            _videoWriter = new MP4VideoWriter(_targetFile, size, _exportAudio);
                             _videoWriter.Bitrate = _bitrate;
                             // FIXME: Allow floating point FPS in a future version
                             _videoWriter.Framerate = (int)_fps;
@@ -147,6 +148,7 @@ namespace T3.Editor.Gui.Windows
         
         private static int _bitrate = 15000000;
         private static string _targetFile = "./Render/output.mp4";
+        private static bool _exportAudio = false;
 
         private static MP4VideoWriter _videoWriter = null;
         private static string _lastHelpString = string.Empty;

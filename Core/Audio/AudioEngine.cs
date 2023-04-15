@@ -326,7 +326,7 @@ namespace T3.Core.Audio
         /// <param name="playback"></param>
         public void UpdateTimeLive(Playback playback)
         {
-            if (Playback.Current.IsLive && Playback.Current.PlaybackSpeed == 0)
+            if (Playback.Current.PlaybackSpeed == 0)
             {
                 Bass.ChannelPause(StreamHandle);
                 return;
@@ -362,7 +362,7 @@ namespace T3.Core.Audio
                 return;
 
             // Resync
-            Log.Debug($"Sound delta {soundDelta:0.000}s for {AudioClip.FilePath}");
+            //Log.Debug($"Sound delta {soundDelta:0.000}s for {AudioClip.FilePath}");
             var resyncOffset = AudioTriggerDelayOffset * Playback.Current.PlaybackSpeed + AudioSyncingOffset;
             var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs + resyncOffset);
             Bass.ChannelSetPosition(StreamHandle, newStreamPos, PositionFlags.Bytes);

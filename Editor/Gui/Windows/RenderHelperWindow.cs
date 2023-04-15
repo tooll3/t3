@@ -180,13 +180,6 @@ namespace T3.Editor.Gui.Windows
             Playback.Current.TimeInSecs = MathUtils.Lerp(startTimeInSeconds, endTimeInSeconds, Progress);
             var adaptedDeltaTime = Math.Max(Playback.Current.TimeInSecs - oldTimeInSecs + _timingOverhang, 0.0);
 
-            //PlaybackUtils.UpdatePlaybackAndSyncing();
-            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
-            var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
-            PlaybackUtils.FindPlaybackSettings(composition, out var compWithSettings, out var settings);
-            settings.GetMainSoundtrack(out var soundtrack);
-            AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
-
             if (!_bassChanged)
             {
                 _bassUpdatePeriod = Bass.GetConfig(Configuration.UpdatePeriod);
@@ -208,11 +201,21 @@ namespace T3.Editor.Gui.Windows
                 AudioEngine.prepareRecording(Playback.Current);
             }
 
+            // get playback settings
+            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
+            var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
+            PlaybackUtils.FindPlaybackSettings(composition, out var compWithSettings, out var settings);
+
+            // update audio parameters, respecting looping etc.
             Playback.Current.Bpm = settings.Bpm;
             Playback.Current.PlaybackSpeed = 0.0;
             Playback.Current.Update(false);
-            Playback.Current.PlaybackSpeed = 1.0;
             Playback.Current.Settings = settings;
+            Playback.Current.PlaybackSpeed = 240.0 / Playback.Current.Bpm;
+
+            // user possibly altered/looped time in secs for audio playback
+            settings.GetMainSoundtrack(out var soundtrack);
+            AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
 
             if (adaptedDeltaTime > 0.0)
             {

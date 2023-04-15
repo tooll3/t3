@@ -103,11 +103,16 @@ namespace T3.Core.Animation
                 }
             }
 
-            if (IsLooping && TimeInBars > LoopRange.End)
+            // don't support looping if recording (looping sound is not implemented yet)
+            if (IsLive && IsLooping && TimeInBars > LoopRange.End)
             {
-                TimeInBars = TimeInBars - LoopRange.End > 1.0 // Jump to start if too far out of time region
-                                 ? LoopRange.Start
-                                 : TimeInBars - (LoopRange.End - LoopRange.Start);
+                double loopDuration = LoopRange.End - LoopRange.Start;
+
+                // Jump to start if loop is negative or sound is too far out of time region
+                if (loopDuration <= 0 || TimeInBars - LoopRange.End > 1.0)
+                    TimeInBars = LoopRange.Start;
+                else
+                    TimeInBars -= loopDuration;
             }
 
             _previousTime = TimeInBars;

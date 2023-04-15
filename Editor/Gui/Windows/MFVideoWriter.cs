@@ -83,8 +83,7 @@ namespace T3.Editor.Gui.Windows
 
         public string FilePath { get { return _filePath; } }
 
-        private MediaFoundationAudioWriter audioWriter;
-
+        private MediaFoundationAudioWriter _audioWriter;
         private static SinkWriter CreateSinkWriter(string outputFile)
         {
             SinkWriter writer;
@@ -431,7 +430,8 @@ namespace T3.Editor.Gui.Windows
                         waveFormat.nSamplesPerSec = (uint)sampleRate;
                         waveFormat.nBlockAlign = (ushort)(waveFormat.nChannels * waveFormat.wBitsPerSample / 8);
                         waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
-                        audioWriter = new FLACAudioWriter(_sinkWriter, ref waveFormat);
+                        //audioWriter = new FLACAudioWriter(_sinkWriter, ref waveFormat);
+                        _audioWriter = new MP3AudioWriter(_sinkWriter, ref waveFormat);
                     }
 
                     // Start writing the video file. MUST be called before write operations.
@@ -488,20 +488,23 @@ namespace T3.Editor.Gui.Windows
             var videoSample = CreateSampleFromFrame(ref frame);
 
             Sample audioSample = null;
-            if (audioFrame != null && audioFrame.Length != 0)
+            if (_audioWriter != null)
             {
-                //Log.Debug("adding audio");
-                audioSample = audioWriter.CreateSampleFromFrame(ref audioFrame);
-            }
-            else
-            {
-                //Log.Debug("audio missing");
+                if (audioFrame != null && audioFrame.Length != 0)
+                {
+                    //Log.Debug("adding audio");
+                    audioSample = _audioWriter.CreateSampleFromFrame(ref audioFrame);
+                }
+                else
+                {
+                    //Log.Debug("audio missing");
+                }
             }
 
             try
             {
                 var samples = new Dictionary<int, Sample>();
-                if (audioSample != null) samples.Add(audioWriter.StreamIndex, audioSample);
+                if (_audioWriter != null && audioSample != null) samples.Add(_audioWriter.StreamIndex, audioSample);
                 if (videoSample != null) samples.Add(StreamIndex, videoSample);
 
                 WriteSamples(samples);
