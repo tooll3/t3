@@ -13,6 +13,7 @@ using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using Truncon.Collections;
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace T3.Editor.Gui.Graph
 {
@@ -69,10 +70,11 @@ namespace T3.Editor.Gui.Graph
             if (!needsReinit)
             {
                 var checkSum = 0;
+                
                 for (var index = 0; index < graphSymbol.Connections.Count; index++)
                 {
                     var c = graphSymbol.Connections[index];
-                    checkSum += c.GetHashCode() * index;
+                    checkSum += c.GetHashCode() * (index+1);
                 }
 
                 foreach (var c in ConnectionMaker.TempConnections)
@@ -82,7 +84,6 @@ namespace T3.Editor.Gui.Graph
 
                 if (checkSum != _lastCheckSum)
                 {
-                    //Log.Debug("Update connections");
                     needsReinit = true;
                     _lastCheckSum = checkSum;
                 }
@@ -433,7 +434,7 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        internal static readonly ConnectionSorter Connections = new ConnectionSorter();
+        internal static readonly ConnectionSorter Connections = new();
         public static ImDrawListPtr DrawList;
         private static List<SymbolChildUi> _childUis;
         private static SymbolUi _symbolUi;
