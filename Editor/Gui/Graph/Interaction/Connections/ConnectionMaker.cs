@@ -128,6 +128,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
 
         public static void StartFromInputNode(Symbol.InputDefinition inputDef)
         {
+            StartOperation($"Connecting from {inputDef.Name}");
             SetTempConnection(new TempConnection(sourceParentOrChildId: UseSymbolContainerId,
                                                  sourceSlotId: inputDef.Id,
                                                  targetParentOrChildId: NotConnectedId,
@@ -137,12 +138,13 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
 
         public static void StartFromOutputNode(Symbol parentSymbol, Symbol.OutputDefinition outputDef)
         {
+            
+            StartOperation($"Connecting to {outputDef.Name}");
             var existingConnection = parentSymbol.Connections.Find(c => c.TargetParentOrChildId == UseSymbolContainerId
                                                                         && c.TargetSlotId == outputDef.Id);
-
             if (existingConnection != null)
             {
-                UndoRedoStack.AddAndExecute(new DeleteConnectionCommand(parentSymbol, existingConnection, 0));
+                _inProgressCommand.AddAndExecCommand(new DeleteConnectionCommand(parentSymbol, existingConnection, 0));
                 SetTempConnection(new TempConnection(sourceParentOrChildId: existingConnection.SourceParentOrChildId,
                                                      sourceSlotId: existingConnection.SourceSlotId,
                                                      targetParentOrChildId: NotConnectedId,
