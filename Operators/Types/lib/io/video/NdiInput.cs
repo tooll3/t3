@@ -5,7 +5,6 @@ using NewTek.NDI;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using SharpDX.WIC;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -16,6 +15,8 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using Resource = SharpDX.Direct3D11.Resource;
+using PixelFormat = SharpDX.WIC.PixelFormat;
 
 
 namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
@@ -370,16 +371,17 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
                             var writableImage = ImagesWithCpuAccess[_currentIndex];
                             _currentIndex = (_currentIndex + 1) % NumTextureEntries;
 
-                            // copy our finished RGBA buffer to the media buffer pointer
+                            // we have to map with a stride that represents multiples of 16 pixels here
+                            // (it is yet unclear why, but works)
                             var formatId = PixelFormat.Format32bppBGRA;
-                            int outputStride = PixelFormat.GetStride(formatId, xres);
-                            DataStream outputStream;
-                            DataBox dataBox = immediateContext.MapSubresource(writableImage,
-                                                                              0,
-                                                                              0,
-                                                                              MapMode.WriteDiscard,
-                                                                              SharpDX.Direct3D11.MapFlags.None,
-                                                                              out outputStream);
+                            int outputStride = PixelFormat.GetStride(formatId, ((xres+15)/16)*16);
+
+                            // map resource manually using our stride...
+                            int mipSize;
+                            DataBox dataBox = immediateContext.MapSubresource((Resource)writableImage, 0, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out mipSize);
+                            DataStream outputStream = new DataStream(dataBox.DataPointer, mipSize * outputStride, canRead: true, canWrite: true);
+
+                            // copy our BGRA frame to the texture
                             for (int loopY = 0; loopY < yres; loopY++)
                             {
                                 int index = loopY * stride;
