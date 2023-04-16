@@ -22,7 +22,7 @@ namespace T3.Core.Operator
 
         public string ReadableName => string.IsNullOrEmpty(Name) ? Symbol.Name : Name;
 
-        public Dictionary<InputDefinitionId, Input> InputValues { get; } = new Dictionary<InputDefinitionId, Input>();
+        public Dictionary<InputDefinitionId, Input> Inputs { get; } = new Dictionary<InputDefinitionId, Input>();
         public Dictionary<Guid, Output> Outputs { get; } = new Dictionary<Guid, Output>();
 
         public SymbolChild(Symbol symbol, Guid childId, Symbol parent)
@@ -33,7 +33,7 @@ namespace T3.Core.Operator
 
             foreach (var inputDefinition in symbol.InputDefinitions)
             {
-                if(!InputValues.TryAdd(inputDefinition.Id, new Input(inputDefinition)))
+                if(!Inputs.TryAdd(inputDefinition.Id, new Input(inputDefinition)))
                 {  
                     throw new ApplicationException($"The ID for symbol input {symbol.Name}.{inputDefinition.Name} must be unique.");
                 }

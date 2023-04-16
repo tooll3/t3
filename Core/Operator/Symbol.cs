@@ -41,13 +41,10 @@ namespace T3.Core.Operator
         public Type InstanceType { get; private set; }
 
         public Animator Animator { get; } = new();
-        
-        
+
         public PlaybackSettings PlaybackSettings { get; set; } = new();
-        
 
         #region public API =======================================================================
-
         internal Symbol(Type instanceType, Guid id, Guid[] orderedInputIds, IEnumerable<SymbolChild> children)
             : this(instanceType, id, orderedInputIds)
         {
@@ -55,6 +52,7 @@ namespace T3.Core.Operator
             {
                 child.Parent = this;
             }
+
             Children.AddRange(children);
         }
 
@@ -167,12 +165,11 @@ namespace T3.Core.Operator
             // check if inputs have changed
             Type inputSlotType = typeof(IInputSlot);
             var inputInfos = instanceType.GetFields().Where(f => inputSlotType.IsAssignableFrom(f.FieldType));
-                
+
             (FieldInfo inputInfo, InputAttribute)[] inputs = null;
 
             try
             {
-
                 inputs = (from inputInfo in inputInfos
                           let customAttributes = inputInfo.GetCustomAttributes(typeof(InputAttribute), false)
                           where customAttributes.Any()
@@ -180,12 +177,12 @@ namespace T3.Core.Operator
             }
             catch (Exception e)
             {
-                Log.Error($"Failed get input attribute type:{e.Message}\n {e.InnerException}");    
+                Log.Error($"Failed get input attribute type:{e.Message}\n {e.InnerException}");
             }
 
             if (inputs == null)
                 return;
-            
+
             // todo: it's probably better to first check if there's a change and only then allocate
             var oldInputDefinitions = new List<InputDefinition>(InputDefinitions);
             InputDefinitions.Clear();
@@ -207,7 +204,6 @@ namespace T3.Core.Operator
                     InputDefinitions.Add(inputDef);
                 }
             }
-            
 
             // check if outputs have changed
             var outputs = (from field in instanceType.GetFields()
@@ -260,14 +256,14 @@ namespace T3.Core.Operator
             var connectionEntriesToRemove = new List<ConnectionEntry>(connectionsToRemoveWithinSymbol.Count);
             foreach (var con in connectionsToRemoveWithinSymbol)
             {
-                    var entry = new ConnectionEntry
+                var entry = new ConnectionEntry
                                 {
                                     Connection = con,
                                     MultiInputIndex = Connections.FindAll(c => c.TargetParentOrChildId == con.TargetParentOrChildId
                                                                                && c.TargetSlotId == con.TargetSlotId)
                                                                  .FindIndex(cc => cc == con) // todo: fix this mess! connection rework!
                                 };
-                    connectionEntriesToRemove.Add(entry);
+                connectionEntriesToRemove.Add(entry);
             }
 
             foreach (var entry in connectionEntriesToRemove)
@@ -285,13 +281,13 @@ namespace T3.Core.Operator
                     Log.Error($"Warning: Skipping instance without parent {instance.Symbol}");
                     continue;
                 }
-                
+
                 if (parent == null || !parent.Children.Contains(instance))
                 {
                     Log.Error($"Warning: Skipping no longer valid instance of {instance.Symbol} in {parent.Symbol}");
                     continue;
                 }
-                    
+
                 var parentSymbol = parent.Symbol;
                 // get all connections that belong to this instance
                 var connectionsToReplace = parentSymbol.Connections.FindAll(c => c.SourceParentOrChildId == instance.SymbolChildId ||
@@ -300,8 +296,10 @@ namespace T3.Core.Operator
                 var connectionsToRemove =
                     connectionsToReplace.FindAll(c =>
                                                  {
-                                                     return oldOutputDefinitions.FirstOrDefault(output => output.Id == c.SourceSlotId || output.Id == c.TargetSlotId) != null ||
-                                                            oldInputDefinitions.FirstOrDefault(input => input.Id == c.SourceSlotId || input.Id == c.TargetSlotId) != null;
+                                                     return oldOutputDefinitions.FirstOrDefault(output => output.Id == c.SourceSlotId ||
+                                                                                                    output.Id == c.TargetSlotId) != null ||
+                                                            oldInputDefinitions.FirstOrDefault(input => input.Id == c.SourceSlotId ||
+                                                                                                        input.Id == c.TargetSlotId) != null;
                                                  });
 
                 foreach (var connection in connectionsToRemove)
@@ -316,12 +314,12 @@ namespace T3.Core.Operator
                 foreach (var con in connectionsToReplace)
                 {
                     var entry = new ConnectionEntry
-                                {
-                                    Connection = con,
-                                    MultiInputIndex = parentSymbol.Connections.FindAll(c => c.TargetParentOrChildId == con.TargetParentOrChildId
-                                                                                            && c.TargetSlotId == con.TargetSlotId)
-                                                                  .FindIndex(cc => cc == con) // todo: fix this mess! connection rework!
-                                };
+                                    {
+                                        Connection = con,
+                                        MultiInputIndex = parentSymbol.Connections.FindAll(c => c.TargetParentOrChildId == con.TargetParentOrChildId
+                                                                                                && c.TargetSlotId == con.TargetSlotId)
+                                                                      .FindIndex(cc => cc == con) // todo: fix this mess! connection rework!
+                                    };
                     connectionEntriesToReplace.Add(entry);
                 }
 
@@ -335,17 +333,17 @@ namespace T3.Core.Operator
                 var symbolChild = parentSymbol.Children.Single(child => child.Id == instance.SymbolChildId);
 
                 // update inputs of symbol child
-                var oldChildInputs = new Dictionary<Guid, SymbolChild.Input>(symbolChild.InputValues);
-                symbolChild.InputValues.Clear();
+                var oldChildInputs = new Dictionary<Guid, SymbolChild.Input>(symbolChild.Inputs);
+                symbolChild.Inputs.Clear();
                 foreach (var inputDefinition in InputDefinitions)
                 {
                     if (oldChildInputs.TryGetValue(inputDefinition.Id, out var input))
                     {
-                        symbolChild.InputValues.Add(inputDefinition.Id, input);
+                        symbolChild.Inputs.Add(inputDefinition.Id, input);
                     }
                     else
                     {
-                        symbolChild.InputValues.Add(inputDefinition.Id, new SymbolChild.Input(inputDefinition));
+                        symbolChild.Inputs.Add(inputDefinition.Id, new SymbolChild.Input(inputDefinition));
                     }
                 }
 
@@ -377,6 +375,7 @@ namespace T3.Core.Operator
                 instance.Parent?.Children.Remove(instance);
                 instance.Dispose();
             }
+
             InstancesOfSymbol.Clear();
 
             // ... and create the new ones...
@@ -484,7 +483,7 @@ namespace T3.Core.Operator
                     invalidConnections.Add(connection);
                     continue;
                 }
- 
+
                 conHashToCount[hash] = count + 1;
             }
 
@@ -501,7 +500,6 @@ namespace T3.Core.Operator
             return newInstance;
         }
 
-
         private Instance CreateAndAddNewChildInstance(SymbolChild symbolChild, Instance parentInstance)
         {
             var childSymbol = symbolChild.Symbol;
@@ -513,7 +511,7 @@ namespace T3.Core.Operator
             {
                 Debug.Assert(i < childInstance.Inputs.Count);
                 Guid inputDefinitionId = childSymbol.InputDefinitions[i].Id;
-                childInstance.Inputs[i].Input = symbolChild.InputValues[inputDefinitionId];
+                childInstance.Inputs[i].Input = symbolChild.Inputs[inputDefinitionId];
                 childInstance.Inputs[i].Id = inputDefinitionId;
             }
 
@@ -551,61 +549,73 @@ namespace T3.Core.Operator
         {
             var childInputTarget = (from child in Children
                                     where child.Id == connection.TargetParentOrChildId
-                                    where child.InputValues.ContainsKey(connection.TargetSlotId)
-                                    select child.InputValues[connection.TargetSlotId]).SingleOrDefault();
+                                    where child.Inputs.ContainsKey(connection.TargetSlotId)
+                                    select child.Inputs[connection.TargetSlotId]).SingleOrDefault();
             bool isMultiInput = childInputTarget?.InputDefinition.IsMultiInput ?? false;
 
             return isMultiInput;
         }
 
+        /// <summary>
+        /// Add connection to symbol and its instances
+        /// </summary>
+        /// <remarks>All connections of a symbol are stored in a single List, from which sorting of multi-inputs
+        /// is define. That why inserting connections for those requires to first find the correct index within that
+        /// larger list. 
+        /// </remarks>
         public void AddConnection(Connection connection, int multiInputIndex = 0)
         {
-            bool isMultiInput = IsTargetMultiInput(connection);
+            var isMultiInput = IsTargetMultiInput(connection);
 
-            // check if another connection is already existing to the target input, ignoring multi inputs for now
-            var existingConnections = Connections.FindAll(c => c.TargetParentOrChildId == connection.TargetParentOrChildId &&
-                                                               c.TargetSlotId == connection.TargetSlotId);
+            // Check if another connection is already existing to the target input, ignoring multi inputs for now
+            var connectionsAtInput = Connections.FindAll(c =>
+                                                             c.TargetParentOrChildId == connection.TargetParentOrChildId &&
+                                                             c.TargetSlotId == connection.TargetSlotId);
 
-            if (multiInputIndex > existingConnections.Count)
+            if (multiInputIndex > connectionsAtInput.Count)
             {
-                Log.Error($"Trying to add a connection at the index {multiInputIndex}. Out of bound of the {existingConnections.Count} existing connections.");
+                Log.Error($"Trying to add a connection at the index {multiInputIndex}. Out of bound of the {connectionsAtInput.Count} existing connections.");
                 return;
             }
 
-            if (isMultiInput)
+            if (!isMultiInput)
             {
-                if (multiInputIndex == existingConnections.Count)
+                // Replace existing on single inputs
+                if (connectionsAtInput.Count > 0)
                 {
-                    if (multiInputIndex == 0)
-                    {
-                        Connections.Add(connection);
-                        //Log.Info($"Added MI with index {multiInputIndex} at existing index {Connections.Count - 1}");
-                    }
-                    else
-                    {
-                        var existingConnection = existingConnections[multiInputIndex - 1];
-                        int existingAtIndex = Connections.FindIndex(c => c == existingConnection); // == is intended
-                        Connections.Insert(existingAtIndex + 1, connection);
-                        //Log.Info($"Added MI with index {multiInputIndex} at existing index {existingAtIndex}");
-                    }
-                }
-                else
-                {
-                    // use the target index to find the existing successor among the connections
-                    var existingConnection = existingConnections[multiInputIndex];
-                    int existingAtIndex = Connections.FindIndex(c => c == existingConnection); // == is intended
-                    Connections.Insert(existingAtIndex, connection);
-                    //Log.Info($"Added MI with index {multiInputIndex} at existing index {existingAtIndex}");
-                }
-            }
-            else
-            {
-                if (existingConnections.Count > 0)
-                {
-                    RemoveConnection(existingConnections[0]);
+                    RemoveConnection(connectionsAtInput[0]);
                 }
 
                 Connections.Add(connection);
+            }
+            else
+            {
+                var insertBefore = multiInputIndex < connectionsAtInput.Count;
+                if (insertBefore)
+                {
+                    // Use the target index to find the existing successor among the connections
+                    var existingConnection = connectionsAtInput[multiInputIndex];
+
+                    // ReSharper disable once PossibleUnintendedReferenceComparison
+                    var insertIndex = Connections.FindIndex(c => c == existingConnection);
+
+                    Connections.Insert(insertIndex, connection);
+                }
+                else
+                {
+                    if (connectionsAtInput.Count == 0)
+                    {
+                        Connections.Add(connection);
+                    }
+                    else
+                    {
+                        var existingConnection = connectionsAtInput[^1];
+
+                        // ReSharper disable once PossibleUnintendedReferenceComparison
+                        var insertIndex = Connections.FindIndex(c => c == existingConnection);
+                        Connections.Insert(insertIndex + 1, connection);
+                    }
+                }
             }
 
             foreach (var instance in InstancesOfSymbol)
@@ -616,24 +626,28 @@ namespace T3.Core.Operator
 
         public void RemoveConnection(Connection connection, int multiInputIndex = 0)
         {
-            var existingConnections = Connections.FindAll(c => c.TargetParentOrChildId == connection.TargetParentOrChildId &&
-                                                               c.TargetSlotId == connection.TargetSlotId);
-            if (existingConnections.Count == 0 || multiInputIndex >= existingConnections.Count)
+            var connectionsAtInput = Connections.FindAll(c =>
+                                                              c.TargetParentOrChildId == connection.TargetParentOrChildId &&
+                                                              c.TargetSlotId == connection.TargetSlotId);
+            
+            if (connectionsAtInput.Count == 0 || multiInputIndex >= connectionsAtInput.Count)
             {
-                Log.Error($"Trying to remove a connection that doesn't exist. Index {multiInputIndex} of {existingConnections.Count}");
+                Log.Error($"Trying to remove a connection that doesn't exist. Index {multiInputIndex} of {connectionsAtInput.Count}");
                 return;
             }
 
-            var existingConnection = existingConnections[multiInputIndex];
-            int connectionsIndex = Connections.FindIndex(c => c == existingConnection); // == is intended
-            if (connectionsIndex != -1)
+            var existingConnection = connectionsAtInput[multiInputIndex];
+            
+            // ReSharper disable once PossibleUnintendedReferenceComparison
+            var connectionIndex = Connections.FindIndex(c => c == existingConnection); // == is intended
+            if (connectionIndex == -1)
+                return;
+            
+            //Log.Info($"Remove  MI with index {multiInputIndex} at existing index {connectionsIndex}");
+            Connections.RemoveAt(connectionIndex);
+            foreach (var instance in InstancesOfSymbol)
             {
-                //Log.Info($"Remove  MI with index {multiInputIndex} at existing index {connectionsIndex}");
-                Connections.RemoveAt(connectionsIndex);
-                foreach (var instance in InstancesOfSymbol)
-                {
-                    instance.RemoveConnection(connection, multiInputIndex);
-                }
+                instance.RemoveConnection(connection, multiInputIndex);
             }
         }
 
@@ -648,6 +662,7 @@ namespace T3.Core.Operator
                 var newChildInstance = CreateAndAddNewChildInstance(newChild, instance);
                 childInstances.Add(newChildInstance);
             }
+
             Animator.CreateUpdateActionsForExistingCurves(childInstances);
             return newChild;
         }
@@ -659,7 +674,7 @@ namespace T3.Core.Operator
                 Animator.CreateUpdateActionsForExistingCurves(symbolInstance.Children);
             }
         }
-        
+
         public void CreateAnimationUpdateActionsForSymbolInstances()
         {
             var parents = new HashSet<Symbol>();
@@ -684,6 +699,7 @@ namespace T3.Core.Operator
             {
                 RemoveChildInstance(childToRemove, instance);
             }
+
             Children.Remove(childToRemove);
         }
 
@@ -691,7 +707,7 @@ namespace T3.Core.Operator
         {
             InstancesOfSymbol.Remove(op);
         }
-        
+
         public InputDefinition GetInputMatchingType(Type type)
         {
             foreach (var inputDefinition in InputDefinitions)
@@ -712,7 +728,7 @@ namespace T3.Core.Operator
             }
 
             return null;
-        }        
+        }
 
         public Connection GetConnectionForInput(InputDefinition input)
         {
@@ -723,12 +739,9 @@ namespace T3.Core.Operator
         {
             return Connections.FirstOrDefault(c => c.SourceParentOrChildId == output.Id);
         }
-
         #endregion
 
-
         #region sub classses =============================================================================
-
         /// <summary>
         /// Options on the visual presentation of <see cref="Symbol"/> input.
         /// </summary>

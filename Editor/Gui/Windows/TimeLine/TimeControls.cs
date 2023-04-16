@@ -82,6 +82,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     playback.TimeInSecs = Math.Floor(playback.TimeInSecs * 30) / 30;
                 }
             }
+            CustomComponents.TooltipForLastItem($"Current playtime at {settings.Bpm:0.0} BPM.","Click mode button to toggle between timeline formats.");
 
             ImGui.SameLine();
 

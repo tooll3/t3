@@ -120,8 +120,8 @@ namespace T3.Editor.Gui.Styling
             var clicked = false;
 
             var stateColor = isSelected
-                                 ? T3Style.Colors.Text.Rgba
-                                 : T3Style.Colors.TextMuted.Rgba;
+                                 ? Color.White.Rgba
+                                 : T3Style.Colors.DarkGray.Rgba;
             ImGui.PushStyleColor(ImGuiCol.Text, stateColor);
 
             var padding = string.IsNullOrEmpty(label) ? new Vector2(0.1f, 0.5f) : new Vector2(0.5f, 0.5f);

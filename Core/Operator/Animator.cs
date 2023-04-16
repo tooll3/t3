@@ -44,14 +44,7 @@ namespace T3.Core.Operator
             public int Index;
         }
 
-        public void CopyAllAnimationsTo(Animator targetAnimator, Dictionary<Guid, Guid> oldToNewIdDict)
-        {
-            Debug.Assert(targetAnimator._animatedInputCurves.Count == 0);
-            foreach (var (id, curve) in _animatedInputCurves)
-            {
-                CloneAndAddCurve(targetAnimator, oldToNewIdDict, id, curve);
-            }
-        }
+
 
         public void CopyAnimationsTo(Animator targetAnimator, List<Guid> childrenToCopyAnimationsFrom, Dictionary<Guid, Guid> oldToNewIdDict)
         {
@@ -416,6 +409,8 @@ namespace T3.Core.Operator
             }
         }
         
+
+        
         public bool TryGetFirstInputAnimationCurve(IInputSlot inputSlot, out Curve curve)
         {
             return _animatedInputCurves.TryGetValue(new CurveId(inputSlot), out curve);
@@ -516,7 +511,7 @@ namespace T3.Core.Operator
             {
                 writer.WriteStartObject();
 
-                writer.WriteValue("InstanceId", key.SymbolChildId);
+                writer.WriteValue("InstanceId", key.SymbolChildId); // TODO: "InstanceId" is a misleading identifier
                 writer.WriteValue("InputId", key.InputId);
                 if (key.Index != 0)
                 {
@@ -537,17 +532,17 @@ namespace T3.Core.Operator
             var curves = new List< KeyValuePair<CurveId, Curve>>();
             foreach (JToken entry in inputToken)
             {
-                Guid instanceId = Guid.Parse(entry["InstanceId"].Value<string>());
-                Guid inputId = Guid.Parse(entry["InputId"].Value<string>());
+                var symbolChildId = Guid.Parse(entry["InstanceId"].Value<string>());
+                var inputId = Guid.Parse(entry["InputId"].Value<string>());
                 var indexToken = entry.SelectToken("Index");
-                int index = indexToken?.Value<int>() ?? 0;
-                Curve curve = new Curve();
+                var index = indexToken?.Value<int>() ?? 0;
+                var curve = new Curve();
 
-                if (symbol.Children.All(c => c.Id != instanceId))
+                if (symbol.Children.All(c => c.Id != symbolChildId))
                     continue;
                 
                 curve.Read(entry);
-                curves.Add( new KeyValuePair<CurveId, Curve>(new CurveId(instanceId, inputId, index), curve));
+                curves.Add( new KeyValuePair<CurveId, Curve>(new CurveId(symbolChildId, inputId, index), curve));
             }
 
             foreach (var (key, value) in curves.OrderBy(curveId => curveId.Key.Index))
@@ -555,6 +550,18 @@ namespace T3.Core.Operator
                 _animatedInputCurves.Add(key, value);
             }
         }
+
+        public void AddCurvesToInput(List<Curve> curves, IInputSlot inputSlot)
+        {
+            for (var index = 0; index < curves.Count; index++)
+            {
+                var curve = curves[index];
+                var curveId = new CurveId(inputSlot.Parent.SymbolChildId, inputSlot.Id, index);
+                _animatedInputCurves.Add(curveId, curve);
+            }
+            inputSlot.Parent.Parent.Symbol.CreateOrUpdateActionsForAnimatedChildren();
+        }
+        
         
         private readonly Dictionary<CurveId, Curve> _animatedInputCurves = new();
         

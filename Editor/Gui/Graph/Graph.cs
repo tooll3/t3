@@ -7,6 +7,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
@@ -58,7 +59,7 @@ namespace T3.Editor.Gui.Graph
             _inputUisById = _symbolUi.InputUis;
             _outputUisById = _symbolUi.OutputUis;
 
-            if (ConnectionMaker.TempConnections.Count > 0)
+            if (ConnectionMaker.TempConnections.Count > 0 || AllConnections.Count != ConnectionMaker.TempConnections.Count + graphSymbol.Connections.Count)
             {
                 _lastCheckSum = 0;
                 needsReinit = true;
@@ -68,7 +69,13 @@ namespace T3.Editor.Gui.Graph
             if (!needsReinit)
             {
                 var checkSum = 0;
-                foreach (var c in graphSymbol.Connections)
+                for (var index = 0; index < graphSymbol.Connections.Count; index++)
+                {
+                    var c = graphSymbol.Connections[index];
+                    checkSum += c.GetHashCode() * index;
+                }
+
+                foreach (var c in ConnectionMaker.TempConnections)
                 {
                     checkSum += c.GetHashCode();
                 }
@@ -184,11 +191,11 @@ namespace T3.Editor.Gui.Graph
 
         internal class ConnectionSorter
         {
-            public List<ConnectionLineUi> Lines;
+            public readonly List<ConnectionLineUi> Lines = new();
 
             public void Init()
             {
-                Lines = new List<ConnectionLineUi>();
+                Lines.Clear();
                 _linesFromNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>();
                 _linesIntoNodes = new Dictionary<SymbolChildUi, List<ConnectionLineUi>>();
                 _linesToOutputNodes = new Dictionary<IOutputUi, List<ConnectionLineUi>>();
@@ -260,10 +267,10 @@ namespace T3.Editor.Gui.Graph
 
                 if (c.TargetParentOrChildId == ConnectionMaker.NotConnectedId)
                 {
-                    if (ConnectionMaker.ConnectionSnapEndHelper.BestMatchLastFrame != null)
+                    if (ConnectionSnapEndHelper.BestMatchLastFrame != null)
                     {
-                        newLine.TargetPosition = new Vector2(ConnectionMaker.ConnectionSnapEndHelper.BestMatchLastFrame.Area.Min.X,
-                                                             ConnectionMaker.ConnectionSnapEndHelper.BestMatchLastFrame.Area.GetCenter().Y);
+                        newLine.TargetPosition = new Vector2(ConnectionSnapEndHelper.BestMatchLastFrame.Area.Min.X,
+                                                             ConnectionSnapEndHelper.BestMatchLastFrame.Area.GetCenter().Y);
                     }
                     else
                     {
@@ -405,7 +412,7 @@ namespace T3.Editor.Gui.Graph
                     if (isHovering && Vector2.Distance(hoverPositionOnLine, TargetPosition) > minDistanceToTargetSocket
                                    && Vector2.Distance(hoverPositionOnLine, SourcePosition) > minDistanceToTargetSocket)
                     {
-                        ConnectionMaker.ConnectionSplitHelper.RegisterAsPotentialSplit(Connection, ColorForType, hoverPositionOnLine);
+                        ConnectionSplitHelper.RegisterAsPotentialSplit(Connection, ColorForType, hoverPositionOnLine);
                     }
                 }
                 else

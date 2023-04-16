@@ -179,7 +179,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
 
             private ICommand StartDragCommand()
             {
-                _changeKeyframesCommand = new ChangeKeyframesCommand(Guid.Empty, SelectedKeyframes);
+                _changeKeyframesCommand = new ChangeKeyframesCommand(Guid.Empty, SelectedKeyframes, GetAllCurves());
                 return _changeKeyframesCommand;
             }
 

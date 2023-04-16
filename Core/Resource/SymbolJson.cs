@@ -107,7 +107,7 @@ namespace T3.Core.Resource
 
                 Writer.WritePropertyName("InputValues");
                 Writer.WriteStartArray();
-                foreach (var (id, inputValue) in child.InputValues)
+                foreach (var (id, inputValue) in child.Inputs)
                 {
                     if (inputValue.IsDefault)
                         continue;
@@ -244,8 +244,8 @@ namespace T3.Core.Resource
             var jsonValue = inputJson["Value"];
             try
             {
-                symbolChild.InputValues[id].Value.SetValueFromJson(jsonValue);
-                symbolChild.InputValues[id].IsDefault = false;
+                symbolChild.Inputs[id].Value.SetValueFromJson(jsonValue);
+                symbolChild.Inputs[id].IsDefault = false;
             }
             catch
             {

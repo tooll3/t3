@@ -47,7 +47,7 @@ namespace T3.Core.Animation
 
         public TimeRange LoopRange;
         
-        public double Bpm = 120;
+        public double Bpm { get;  set; } = 120;
         
         public double PlaybackSpeed { get; set; }
         public bool IsLooping = false;
@@ -58,6 +58,7 @@ namespace T3.Core.Animation
         
         public virtual void Update(bool idleMotionEnabled = false)
         {
+            Current = this;
             var currentRuntime = RunTimeInSecs;
             LastFrameDuration = currentRuntime - _lastFrameStart;
             _lastFrameStart = currentRuntime;

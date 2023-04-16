@@ -90,7 +90,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                 ImGui.PushID(symbolChildUi.Id.GetHashCode());
                 
                 var keepX = ImGui.GetCursorPosX();
-                foreach (var input in symbolChildUi.SymbolChild.InputValues.Values)
+                foreach (var input in symbolChildUi.SymbolChild.Inputs.Values)
                 {
                     ImGui.PushID(input.InputDefinition.Id.GetHashCode());
                     var p = input.DefaultValue;

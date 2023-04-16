@@ -11,6 +11,7 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction.TransformGizmos;
@@ -452,7 +453,7 @@ namespace T3.Editor.Gui.Graph
                         var usableSocketArea = new ImRect(topLeft, topLeft + socketSize);
                 
                         var isSocketHovered = usableSocketArea.Contains(ImGui.GetMousePos());
-                        ConnectionMaker.ConnectionSnapEndHelper.RegisterAsPotentialTarget(childUi, inputUi, socketIndex, usableSocketArea);
+                        ConnectionSnapEndHelper.RegisterAsPotentialTarget(childUi, inputUi, socketIndex, usableSocketArea);
                 
                         bool isGap = false;
                         if (showGaps)
@@ -486,7 +487,7 @@ namespace T3.Editor.Gui.Graph
                             line.TargetNodeArea = connectionBorderArea;
                             line.IsSelected |= childUi.IsSelected | isSocketHovered | isNodeHovered;
                             line.FramesSinceLastUsage = framesSinceLastUpdate;
-                            line.IsAboutToBeReplaced = ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, socketIndex);
+                            line.IsAboutToBeReplaced = ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, socketIndex);
                         }
                 
                         DrawMultiInputSocket(childUi, inputDefinition, usableSocketArea, isSocketHovered, socketIndex, isGap, colorForType, reactiveSlotColor);
@@ -508,9 +509,9 @@ namespace T3.Editor.Gui.Graph
                 }
                 else
                 {
-                    ConnectionMaker.ConnectionSnapEndHelper.RegisterAsPotentialTarget(childUi, inputUi, 0, usableSlotArea);
+                    ConnectionSnapEndHelper.RegisterAsPotentialTarget(childUi, inputUi, 0, usableSlotArea);
                     //ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id,0)
-                    var isAboutToBeReconnected = ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, 0);
+                    var isAboutToBeReconnected = ConnectionSnapEndHelper.IsNextBestTarget(childUi, inputDefinition.Id, 0);
                     foreach (var line in connectedLines)
                     {
                         line.TargetPosition = new Vector2(usableSlotArea.Max.X - 4,
@@ -950,7 +951,7 @@ namespace T3.Editor.Gui.Graph
                     ConnectionMaker.Update();
                 }
             }
-            else if (ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id, 0) || hovered)
+            else if (ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id, 0) || hovered)
             {
                 if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
@@ -1193,7 +1194,7 @@ namespace T3.Editor.Gui.Graph
                     ConnectionMaker.Update();
                 }
             }
-            else if (ConnectionMaker.ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id, multiInputIndex) || isInputHovered)
+            else if (ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id, multiInputIndex) || isInputHovered)
             {
                 if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
@@ -1202,7 +1203,7 @@ namespace T3.Editor.Gui.Graph
 
                     if (ImGui.IsMouseReleased(0))
                     {
-                        ConnectionMaker.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef, multiInputIndex);
+                        ConnectionMaker.CompleteAtInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef, multiInputIndex, true);
                     }
                 }
                 else

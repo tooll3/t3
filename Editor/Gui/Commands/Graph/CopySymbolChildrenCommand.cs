@@ -113,8 +113,8 @@ namespace T3.Editor.Gui.Commands.Graph
 
                 //SymbolChild newSymbolChild = targetSymbol.Children.Find(child => child.Id == childToCopy.AddedId);
                 NewSymbolChildIds.Add(newSymbolChild.Id);
-                var newSymbolInputs = newSymbolChild.InputValues;
-                foreach (var (id, input) in symbolChildToCopy.InputValues)
+                var newSymbolInputs = newSymbolChild.Inputs;
+                foreach (var (id, input) in symbolChildToCopy.Inputs)
                 {
                     var newInput = newSymbolInputs[id];
                     newInput.Value.Assign(input.Value.Clone());

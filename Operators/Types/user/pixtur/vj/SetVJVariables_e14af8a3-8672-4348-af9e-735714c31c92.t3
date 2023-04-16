@@ -33,6 +33,11 @@
           "Value": 0.5
         },
         {
+          "Id": "ca3ce08d-6a19-4ad5-9435-08b050753311"/*Damping*/,
+          "Type": "System.Single",
+          "Value": 0.0
+        },
+        {
           "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
           "Type": "System.Boolean",
           "Value": false
@@ -83,6 +88,11 @@
           "Id": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
           "Type": "System.Single",
           "Value": 0.5
+        },
+        {
+          "Id": "ca3ce08d-6a19-4ad5-9435-08b050753311"/*Damping*/,
+          "Type": "System.Single",
+          "Value": 0.0
         },
         {
           "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
@@ -256,12 +266,6 @@
     {
       "SourceParentOrChildId": "0fbc2d52-b596-4a68-9904-034a9ca31883",
       "SourceSlotId": "9c0c1734-453e-4f88-b20a-47c7e34b7caa",
-      "TargetParentOrChildId": "71f6614e-aed8-4de8-b279-214b0c5a408c",
-      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
-    },
-    {
-      "SourceParentOrChildId": "e9d0e6f2-05ff-402f-acb1-d2c249641799",
-      "SourceSlotId": "71d05d91-d18b-44b3-a469-392739fd6941",
       "TargetParentOrChildId": "71f6614e-aed8-4de8-b279-214b0c5a408c",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
