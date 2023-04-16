@@ -1,8 +1,10 @@
 {
-  "Id": "0841cdd4-0106-4f4e-826b-8de23bb5b5f0"/*SelectFloatFromList*/,
+  "Id": "0841cdd4-0106-4f4e-826b-8de23bb5b5f0"/*PickFloatFromList*/,
+  "Description": "Picks a float value from the connected float list. \n\nAlso see [PickFloat].",
   "InputUis": [
     {
       "InputId": "329ba6a4-5b84-43fc-8899-0c04465844da"/*Input*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 0.0,
         "Y": 0.0

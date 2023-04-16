@@ -743,7 +743,7 @@
       }
     },
     {
-      "ChildId": "70a7ea94-0dc9-4268-b153-6efbd18aac56"/*SelectFloatFromList*/,
+      "ChildId": "70a7ea94-0dc9-4268-b153-6efbd18aac56"/*PickFloatFromList*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

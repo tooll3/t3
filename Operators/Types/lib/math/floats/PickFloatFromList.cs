@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_0841cdd4_0106_4f4e_826b_8de23bb5b5f0
 {
-    public class SelectFloatFromList : Instance<SelectFloatFromList>
+    public class PickFloatFromList : Instance<PickFloatFromList>
     {
         [Output(Guid = "{EC2286AF-3EE0-4AF0-AA23-272D4B3710E0}")]
         public readonly Slot<float> Selected = new Slot<float>();
 
-        public SelectFloatFromList()
+        public PickFloatFromList()
         {
             Selected.UpdateAction = Update;
         }
