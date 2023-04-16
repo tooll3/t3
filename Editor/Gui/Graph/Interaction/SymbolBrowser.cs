@@ -55,6 +55,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                 if (NodeSelection.GetSelectedChildUis().Count() != 1)
                 {
+                    ConnectionMaker.StartOperation("Add operator");
                     OpenAt(GraphCanvas.Current.InverseTransformPositionFloat(ImGui.GetIO().MousePos + new Vector2(-4, -20)), null, null, false);
                     return;
                 }

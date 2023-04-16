@@ -166,7 +166,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             ConnectionSnapEndHelper.PrepareNewFrame();
         }
 
-        private static void StartOperation(string commandName)
+        public static void StartOperation(string commandName)
         {
             if (TempConnections.Count != 0)
             {

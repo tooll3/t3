@@ -7,7 +7,7 @@
       "ChildId": "7a2939e4-8c15-4c86-bf83-cc0555c4e3d3"/*_AnalyzeSound*/,
       "Size": {
         "X": 110.0,
-        "Y": 23.0
+        "Y": 36.0
       },
       "Position": {
         "X": 0.0,
@@ -73,7 +73,7 @@
       "ChildId": "f692c808-dc0d-43f5-9c09-f7f66cce0f2c"/*Execute*/,
       "Size": {
         "X": 110.0,
-        "Y": 62.0
+        "Y": 49.0
       },
       "Position": {
         "X": 1337.1614,
@@ -139,7 +139,7 @@
       "ChildId": "bd16aff8-14d6-4143-9903-487693c92607"/*DepthOfField*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 62.0
       },
       "Position": {
         "X": 1187.1614,
@@ -173,7 +173,7 @@
     {
       "OutputId": "299efba2-9ec6-492e-809b-3597fd7fe04b"/*Output*/,
       "Position": {
-        "X": 0.0,
+        "X": 1487.1614,
         "Y": 0.0
       }
     }
