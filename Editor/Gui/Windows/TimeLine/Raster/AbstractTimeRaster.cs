@@ -3,6 +3,7 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Styling;
@@ -12,8 +13,10 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
 {
     public abstract class AbstractTimeRaster : IValueSnapAttractor
     {
-        public abstract void Draw(Playback playback);
+        public abstract void Draw(Playback playback, float unitsPerSeconds);
         protected abstract string BuildLabel(Raster raster, double timeInSeconds);
+        
+        protected double UnitsPerSecond { get; set; } = 1;
 
         protected virtual IEnumerable<Raster> GetRastersForScale(double invertedScale, out float fadeFactor)
         {
@@ -67,8 +70,10 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
 
                     if (xIndex > 0 && xIndex < width && !_usedPositions.ContainsKey(xIndex))
                     {
-                        var time = t + scroll;
-                        _usedPositions[xIndex] = time;
+                        var timeInUnits = t + scroll;
+
+                        _usedPositions[xIndex] = timeInUnits / UnitsPerSecond;
+
 
                         drawList.AddRectFilled(
                                                new Vector2(topLeft.X + xIndex, topLeft.Y),
@@ -76,7 +81,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
 
                         if (raster.Label != "")
                         {
-                            var output = BuildLabel(raster, time);
+                            var output = BuildLabel(raster, timeInUnits);
 
                             var p = topLeft + new Vector2(xIndex + 1, viewHeight - 17);
                             drawList.AddText(p, textColor, output);
