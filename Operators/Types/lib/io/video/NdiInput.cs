@@ -8,7 +8,6 @@ using SharpDX.DXGI;
 using SharpDX.WIC;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using T3.Core.DataTypes;
@@ -17,7 +16,6 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using Resource = SharpDX.DXGI.Resource;
 
 
 namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
