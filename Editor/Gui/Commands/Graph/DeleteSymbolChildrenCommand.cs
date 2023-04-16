@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
@@ -22,15 +23,24 @@ namespace T3.Editor.Gui.Commands.Graph
                 var childUi = uiChildrenToRemove[i];
                 var child = childUi.SymbolChild;
 
-                var values = new Dictionary<Guid, InputValue>();
+                var originalValuesForNonDefaultInputs = new Dictionary<Guid, InputValue>();
                 foreach (var (id, input) in child.Inputs)
                 {
                     if(input.IsDefault )
                         continue;
 
-                    values[id] = input.Value.Clone();
+                    originalValuesForNonDefaultInputs[id] = input.Value.Clone();
                 }
 
+                var timeClipSettingsForOutputs = new Dictionary<Guid, TimeClip>();
+                foreach (var (id, output) in child.Outputs)
+                {
+                    if (output.OutputData is TimeClip timeClip)
+                    {
+                        timeClipSettingsForOutputs[id] =timeClip.Clone();
+                    }
+                }
+                
                 _removedChildren[i] = new ChildEntry()
                                           {
                                               SymbolId = child.Symbol.Id,
@@ -38,7 +48,8 @@ namespace T3.Editor.Gui.Commands.Graph
                                               ChildName = child.Name,
                                               PosInCanvas = childUi.PosOnCanvas,
                                               Size = childUi.Size,
-                                              OriginalValuesForInputsIds = values
+                                              OriginalValuesForInputs = originalValuesForNonDefaultInputs,
+                                              TimeClipSettingsForOutputs = timeClipSettingsForOutputs,
                                           };
             }
 
@@ -86,10 +97,18 @@ namespace T3.Editor.Gui.Commands.Graph
                 
                 foreach (var (inputId, input) in symbolChild.Inputs)
                 {
-                    if(childUndoData.OriginalValuesForInputsIds.TryGetValue(inputId, out var originalValue))
+                    if(childUndoData.OriginalValuesForInputs.TryGetValue(inputId, out var originalValue))
                     {
                         input.Value.Assign(originalValue);
                         input.IsDefault = false;
+                    }
+                }
+
+                foreach (var (outputId, output) in symbolChild.Outputs)
+                {
+                    if (childUndoData.TimeClipSettingsForOutputs.TryGetValue(outputId, out var timeClip))
+                    {
+                        output.OutputData.Assign(timeClip);
                     }
                 }
                     
@@ -111,7 +130,8 @@ namespace T3.Editor.Gui.Commands.Graph
             public Vector2 PosInCanvas { get; set; }
             public Vector2 Size { get; set; }
             
-            public Dictionary<Guid, InputValue> OriginalValuesForInputsIds { get; set; }
+            public Dictionary<Guid, InputValue> OriginalValuesForInputs { get; set; }
+            public Dictionary<Guid, TimeClip> TimeClipSettingsForOutputs { get; set; }
         }
 
         private class ConnectionEntry

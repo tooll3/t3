@@ -4,7 +4,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Core.Operator
 {
-    using InputDefinitionId = Guid;
+    
 
     /// <summary>
     /// Represents an instance of a <see cref="Symbol"/> within a combined symbol group.
@@ -22,8 +22,8 @@ namespace T3.Core.Operator
 
         public string ReadableName => string.IsNullOrEmpty(Name) ? Symbol.Name : Name;
 
-        public Dictionary<InputDefinitionId, Input> Inputs { get; } = new Dictionary<InputDefinitionId, Input>();
-        public Dictionary<Guid, Output> Outputs { get; } = new Dictionary<Guid, Output>();
+        public Dictionary<Guid, Input> Inputs { get; } = new();
+        public Dictionary<Guid, Output> Outputs { get; } = new();
 
         public SymbolChild(Symbol symbol, Guid childId, Symbol parent)
         {
