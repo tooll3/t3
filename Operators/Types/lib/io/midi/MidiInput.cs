@@ -115,7 +115,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                 _lastMatchingSignals.Clear();
             }
 
-            if (_isDefaultValue)
+            if (_isDefaultValue && _trainedEventType != MidiEventTypes.MidiTime)
             {
                 Result.Value = defaultOutputValue;
                 return;
@@ -124,6 +124,12 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             var currentValue = UseControlRange
                                    ? _currentControllerId
                                    : MathUtils.RemapAndClamp(_currentControllerValue, 0, 127, outRange.X, outRange.Y);
+
+            if (_trainedEventType == MidiEventTypes.MidiTime)
+            {
+                currentValue = (float)(_timingMsgCount / (24.0 * 4 ));
+            }
+            
 
             _dampedOutputValue = MathUtils.Lerp(currentValue, _dampedOutputValue, damping);
 
@@ -188,7 +194,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                                         };
                     }
                 }
-
+                
                 if (msg.MidiEvent is NoteEvent noteEvent)
                 {
                     switch (noteEvent.CommandCode)
@@ -216,12 +222,25 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                                                 EventType = MidiEventTypes.Notes,
                                             };
                             break;
+
                     }
                 }
-                else if (msg.MidiEvent.CommandCode == MidiCommandCode.TimingClock
-                         && device.ProductName == _trainedDeviceName)
+                
+                if (!_teachingActive && msg.MidiEvent.CommandCode == MidiCommandCode.TimingClock)
                 {
-                    //_timingMsgCount++;
+                    _timingMsgCount++;
+                    if (_trainedEventType == MidiEventTypes.MidiTime)
+                    {
+                        newSignal = new MidiSignal()
+                                        {
+                                            Channel = msg.MidiEvent.Channel,
+                                            ControllerId = 0,
+                                            ControllerValue = _timingMsgCount,
+                                            EventType = MidiEventTypes.MidiTime,
+                                        };                    
+                        //Log.Debug($"Got MidiTimingClock 2{_timingMsgCount}  d:{msg.MidiEvent.DeltaTime}");
+                        
+                    }                    
                 }
 
                 if (newSignal == null)
@@ -281,12 +300,14 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
         private float _currentControllerValue;
         private float _dampedOutputValue;
         private int _currentControllerId;
+        private int _timingMsgCount;
 
         private enum MidiEventTypes
         {
             All,
             Notes,
             ControllerChanges,
+            MidiTime,
         }
         
         [Input(Guid = "AAD1E576-F144-423F-83B5-5694B1119C23")]
@@ -318,7 +339,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
         public readonly InputSlot<Size2> ControlRange = new();
 
         [Input(Guid = "6C15E743-9A70-47E7-A0A4-75636817E441")]
-        public readonly InputSlot<bool> PrintLogMessages = new();        
-        
+        public readonly InputSlot<bool> PrintLogMessages = new();
+
     }
 }
