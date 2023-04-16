@@ -121,6 +121,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     var beat = (int)(playback.FxTimeInBars * 4) % 4;
                     var beatPulse = (playback.FxTimeInBars * 4) % 4 - beat;
                     var bar = (int)(playback.FxTimeInBars) % 4;
+
+                    if (beat < 0)
+                        beat = 4 + beat;
+                    
+                    if (bar < 0)
+                        bar = 4 + bar;
+                    
                     const int gridSize = 4;
                     var drawList = ImGui.GetWindowDrawList();
                     var min = center - new Vector2(7, 7) + new Vector2(beat * gridSize, bar * gridSize);
