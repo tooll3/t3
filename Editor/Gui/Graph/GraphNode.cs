@@ -109,7 +109,7 @@ namespace T3.Editor.Gui.Graph
                                            backgroundColorWithHover);
 
                     // Custom ui
-                    customUiResult = childUi.DrawCustomUi(instance, _drawList, _selectableScreenRect);
+                    customUiResult = SymbolChildUi.DrawCustomUi(instance, _drawList, _selectableScreenRect);
 
                     // Size toggle
                     if (customUiResult == SymbolChildUi.CustomUiResult.None && GraphCanvas.Current.Scale.X > 0.7f)
