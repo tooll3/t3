@@ -151,11 +151,12 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
         public void Apply(Instance instance, Variation variation)
         {
             StopHover();
+            ActiveVariation = variation;
 
             var command = variation.IsPreset
                               ? CreateApplyPresetCommand(instance, variation)
                               : CreateApplyVariationCommand(instance, variation);
-            ;
+            
             UndoRedoStack.AddAndExecute(command);
         }
 
