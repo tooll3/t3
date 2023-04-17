@@ -18,10 +18,24 @@
       }
     },
     {
-      "InputId": "bd88e545-743e-4caa-8fd1-e1f7f3c78b21"/*SetTrigger*/,
+      "InputId": "bd88e545-743e-4caa-8fd1-e1f7f3c78b21"/*Enabled*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
+      }
+    },
+    {
+      "InputId": "61ad3f49-8188-45bd-8d72-bbb35c04ca3c"/*TriggerMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    },
+    {
+      "InputId": "16b2b1f5-4087-4e77-902b-3cdde1b22179"/*ShowLogMessages*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
       }
     }
   ],

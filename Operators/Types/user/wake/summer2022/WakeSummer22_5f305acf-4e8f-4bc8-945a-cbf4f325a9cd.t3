@@ -880,7 +880,7 @@
           "Value": 0.0
         },
         {
-          "Id": "bd88e545-743e-4caa-8fd1-e1f7f3c78b21"/*SetTrigger*/,
+          "Id": "bd88e545-743e-4caa-8fd1-e1f7f3c78b21"/*Enabled*/,
           "Type": "System.Boolean",
           "Value": false
         }
