@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Editor.Gui.Graph.Interaction;
@@ -114,7 +116,18 @@ namespace T3.Editor.Gui.Windows.Variations
                         || VariationHandling.ActiveInstanceForSnapshots == null 
                         || VariationHandling.ActivePoolForSnapshots.Variations.Count == 0)
                     {
-                        CustomComponents.EmptyWindowMessage("No Snapshots yet.\n\nSnapshots save parameters for selected\nOperators in the current composition.");
+                        
+                        var childUi = SymbolUiRegistry.Entries[VariationHandling.ActiveInstanceForSnapshots.Symbol.Id];
+                        var shapshotsEnabledForNone = !childUi.ChildUis.Any(s => s.SnapshotGroupIndex > 0);
+                        var additionalHint = shapshotsEnabledForNone ? "Use the graph window context menu\nto activate snapshots for operators." : "";
+
+                        if (CustomComponents
+                           .EmptyWindowMessage("No Snapshots yet.\n\nWith shapshots you can switch or blend\nbetween parameter sets in your composition.\n\n"
+                                               + additionalHint, "Learn More"))
+                        {
+                            var url = "https://github.com/still-scene/t3/wiki/PresetsAndSnapshots";
+                            Process.Start("explorer", url);
+                        }
                     }
                     else
                     {

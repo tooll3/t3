@@ -53,6 +53,8 @@ namespace T3.Editor.Gui.Interaction
         ToggleDisabled,
         AddAnnotation,
         
+        ToggleSnapshotControl,
+        
         ScrollLeft,
         ScrollRight,
         ScrollUp,

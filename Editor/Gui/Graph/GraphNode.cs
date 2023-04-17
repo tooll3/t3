@@ -92,7 +92,7 @@ namespace T3.Editor.Gui.Graph
 
                     var backgroundColor = typeColor;
 
-                    // background
+                    // Background
                     var isHovered = FrameStats.Last.HoveredIds.Contains(instance.SymbolChildId);
                     if (framesSinceLastUpdate > 2)
                     {
@@ -164,7 +164,8 @@ namespace T3.Editor.Gui.Graph
 
                     isNodeHovered = ImGui.IsItemHovered() 
                                         && !GraphCanvas.Current.SymbolBrowser.IsOpen
-                        && ImGui.IsWindowFocused();
+                                        && ImGui.IsWindowFocused();
+                    
                     // Tooltip
                     if (isNodeHovered
                         && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip
@@ -276,7 +277,7 @@ namespace T3.Editor.Gui.Graph
 
                     DrawPreview();
 
-                    // outline
+                    // Outline
                     drawList.AddRect(_selectableScreenRect.Min,
                                      _selectableScreenRect.Max + Vector2.One,
                                      new Color(0.03f, 0.03f, 0.03f, 0.8f),
@@ -304,14 +305,23 @@ namespace T3.Editor.Gui.Graph
 
                     // Snapshot indicator
                     {
-                        if (VariationHandling.FocusSetsForCompositions.TryGetValue(GraphCanvas.Current.CompositionOp.Symbol.Id, out var focusSet))
+                        if (childUi.SnapshotGroupIndex > 0)
                         {
-                            if (focusSet.Contains(instance.SymbolChildId))
-                                _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, _usableScreenRect.Min.Y + 3),
-                                                        new Vector2(_usableScreenRect.Max.X - 2,
-                                                                    (_usableScreenRect.Min.Y + 12).Clamp(0, _usableScreenRect.Max.Y)),
-                                                        Color.Blue);
+                            DrawIndicator(Color.Blue, ref indicatorCount);
+                            // _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, _usableScreenRect.Min.Y + 3),
+                            //                         new Vector2(_usableScreenRect.Max.X - 2,
+                            //                                     (_usableScreenRect.Min.Y + 12).Clamp(0, _usableScreenRect.Max.Y)),
+                            //                         Color.Blue);
+                            
                         }
+                        // if (VariationHandling.FocusSetsForCompositions.TryGetValue(GraphCanvas.Current.CompositionOp.Symbol.Id, out var focusSet))
+                        // {
+                        //     if (focusSet.Contains(instance.SymbolChildId))
+                        //         _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, _usableScreenRect.Min.Y + 3),
+                        //                                 new Vector2(_usableScreenRect.Max.X - 2,
+                        //                                             (_usableScreenRect.Min.Y + 12).Clamp(0, _usableScreenRect.Max.Y)),
+                        //                                 Color.Blue);
+                        // }
                     }
 
                     // Hidden inputs indicator
@@ -613,9 +623,10 @@ namespace T3.Editor.Gui.Graph
             var dx = (s + 1) * indicatorCount;
 
             var pMin = new Vector2(_usableScreenRect.Max.X - 2 - s - dx,
-                                   (_usableScreenRect.Max.Y - 3 - s).Clamp(_usableScreenRect.Min.Y + 2, _usableScreenRect.Max.Y));
-            var pMax = new Vector2(_usableScreenRect.Max.X - 2 - dx, _usableScreenRect.Max.Y - 3);
+                                   (_usableScreenRect.Max.Y - 2 - s).Clamp(_usableScreenRect.Min.Y + 2, _usableScreenRect.Max.Y));
+            var pMax = new Vector2(_usableScreenRect.Max.X - 2 - dx, _usableScreenRect.Max.Y - 2);
             _drawList.AddRectFilled(pMin, pMax, color);
+            _drawList.AddRect(pMin-Vector2.One, pMax+Vector2.One, Color.Black.Fade(0.4f));
             indicatorCount++;
         }
 

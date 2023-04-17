@@ -610,6 +610,7 @@ namespace T3.Editor.Gui.Graph
             // ------ for selection -----------------------
             var oneOpSelected = selectedChildUis.Count == 1;
             var someOpsSelected = selectedChildUis.Count > 0;
+            var snapShotsEnabledFromSomeOps = !selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.SnapshotGroupIndex == 0);;
 
             var label = oneOpSelected
                             ? $"{selectedChildUis[0].SymbolChild.ReadableName}..."
@@ -663,6 +664,20 @@ namespace T3.Editor.Gui.Graph
                                enabled: someOpsSelected))
             {
                 SelectableNodeMovement.ArrangeOps();
+            }
+            
+            if (ImGui.MenuItem("Enable for snapshots",
+                               KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleSnapshotControl, false),
+                               selected: snapShotsEnabledFromSomeOps,
+                               enabled: someOpsSelected))
+            {
+                // Disable if already enabled for all
+                var enabledForAll = selectedChildUis.TrueForAll(c2 => c2.SnapshotGroupIndex > 0);
+                foreach (var c in selectedChildUis)
+                {
+                    c.SnapshotGroupIndex = enabledForAll ? 0 : 1;
+                }
+                FlagCurrentCompositionAsModified();
             }
 
             if (ImGui.BeginMenu("Display as..."))
@@ -817,6 +832,11 @@ namespace T3.Editor.Gui.Graph
             {
                 PlayerExporter.ExportInstance(this, selectedChildUis.Single());
             }
+        }
+
+        private void FlagCurrentCompositionAsModified()
+        {
+            SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].FlagAsModified();
         }
 
         private void AddAnnotation()

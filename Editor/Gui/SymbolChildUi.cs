@@ -41,6 +41,7 @@ namespace T3.Editor.Gui
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = DefaultOpSize;
         public bool IsSelected => NodeSelection.IsNodeSelected(this);
+        public int SnapshotGroupIndex { get; set; }
         public Styles Style { get; set; }
 
         public bool IsDisabled {

@@ -92,6 +92,9 @@ namespace T3.Editor.Gui
                     Writer.WritePropertyName("Position");
                     vec2Writer(Writer, childUi.PosOnCanvas);
 
+                    if(childUi.SnapshotGroupIndex > 0)
+                        Writer.WriteObject(nameof(SymbolChildUi.SnapshotGroupIndex), childUi.SnapshotGroupIndex);
+
                     if (childUi.ConnectionStyleOverrides.Count > 0)
                     {
                         Writer.WritePropertyName("ConnectionStyleOverrides");
@@ -266,6 +269,11 @@ namespace T3.Editor.Gui
                 {
                     JToken sizeToken = childEntry["Size"];
                     childUi.Size = (Vector2)vector2Converter(sizeToken);
+                }
+                
+                if (childEntry[nameof(SymbolChildUi.SnapshotGroupIndex)] != null)
+                {
+                    childUi.SnapshotGroupIndex = childEntry[nameof(SymbolChildUi.SnapshotGroupIndex)].Value<int>();
                 }
 
                 if (childEntry["Style"] != null)
