@@ -416,9 +416,11 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                                                       sourceSlotId: output.Id,
                                                       targetParentOrChildId: TempConnections[0].TargetParentOrChildId,
                                                       targetSlotId: TempConnections[0].TargetSlotId);
-            UndoRedoStack.AddAndExecute(new AddConnectionCommand(parentSymbol, newConnection, 0));
-            TempConnections.Clear();
-            ConnectionSnapEndHelper.ResetSnapping();
+            
+            _inProgressCommand.AddAndExecCommand(new AddConnectionCommand(parentSymbol, newConnection, 0));
+            //TempConnections.Clear();
+            //ConnectionSnapEndHelper.ResetSnapping();
+            CompleteOperation();
         }
 
         #region related to SymbolBrowser
@@ -486,41 +488,41 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             }
         }
 
-        public static void CompleteConnectsToBuiltNode(Symbol parent, SymbolChild newSymbolChild)
-        {
-            foreach (var c in TempConnections)
-            {
-                switch (c.GetStatus())
-                {
-                    case TempConnection.Status.SourceIsDraftNode:
-                        var outputDef = newSymbolChild.Symbol.GetOutputMatchingType(c.ConnectionType);
-                        var newConnectionToSource = new Symbol.Connection(sourceParentOrChildId: newSymbolChild.Id,
-                                                                          sourceSlotId: outputDef.Id,
-                                                                          targetParentOrChildId: c.TargetParentOrChildId,
-                                                                          targetSlotId: c.TargetSlotId);
-                        UndoRedoStack.AddAndExecute(new AddConnectionCommand(parent, newConnectionToSource, 0));
-                        break;
-
-                    case TempConnection.Status.TargetIsDraftNode:
-                        var inputDef = newSymbolChild.Symbol.GetInputMatchingType(c.ConnectionType);
-                        if (inputDef == null)
-                        {
-                            Log.Warning("Failed to complete node creation");
-                            Reset();
-                            return;
-                        }
-
-                        var newConnectionToInput = new Symbol.Connection(sourceParentOrChildId: c.SourceParentOrChildId,
-                                                                         sourceSlotId: c.SourceSlotId,
-                                                                         targetParentOrChildId: newSymbolChild.Id,
-                                                                         targetSlotId: inputDef.Id);
-                        UndoRedoStack.AddAndExecute(new AddConnectionCommand(parent, newConnectionToInput, 0));
-                        break;
-                }
-            }
-
-            Reset();
-        }
+        // public static void CompleteConnectsToBuiltNode(Symbol parent, SymbolChild newSymbolChild)
+        // {
+        //     foreach (var c in TempConnections)
+        //     {
+        //         switch (c.GetStatus())
+        //         {
+        //             case TempConnection.Status.SourceIsDraftNode:
+        //                 var outputDef = newSymbolChild.Symbol.GetOutputMatchingType(c.ConnectionType);
+        //                 var newConnectionToSource = new Symbol.Connection(sourceParentOrChildId: newSymbolChild.Id,
+        //                                                                   sourceSlotId: outputDef.Id,
+        //                                                                   targetParentOrChildId: c.TargetParentOrChildId,
+        //                                                                   targetSlotId: c.TargetSlotId);
+        //                 UndoRedoStack.AddAndExecute(new AddConnectionCommand(parent, newConnectionToSource, 0));
+        //                 break;
+        //
+        //             case TempConnection.Status.TargetIsDraftNode:
+        //                 var inputDef = newSymbolChild.Symbol.GetInputMatchingType(c.ConnectionType);
+        //                 if (inputDef == null)
+        //                 {
+        //                     Log.Warning("Failed to complete node creation");
+        //                     Reset();
+        //                     return;
+        //                 }
+        //
+        //                 var newConnectionToInput = new Symbol.Connection(sourceParentOrChildId: c.SourceParentOrChildId,
+        //                                                                  sourceSlotId: c.SourceSlotId,
+        //                                                                  targetParentOrChildId: newSymbolChild.Id,
+        //                                                                  targetSlotId: inputDef.Id);
+        //                 UndoRedoStack.AddAndExecute(new AddConnectionCommand(parent, newConnectionToInput, 0));
+        //                 break;
+        //         }
+        //     }
+        //
+        //     Reset();
+        // }
 
         public static void OpenSymbolBrowserAtOutput(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance,
                                                      Guid outputId)
@@ -528,7 +530,8 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             var primaryOutput = instance.Outputs.SingleOrDefault(o => o.Id == outputId);
             if (primaryOutput == null)
                 return;
-
+            
+            StartOperation("Insert Operator");
             InsertSymbolBrowser(symbolBrowser, childUi, instance, primaryOutput);
         }
 
@@ -536,7 +539,8 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
         {
             if (instance.Outputs.Count < 1)
                 return;
-
+            
+            StartOperation("Insert Operator");
             var primaryOutput = instance.Outputs[0];
             InsertSymbolBrowser(symbolBrowser, childUi, instance, primaryOutput);
         }
@@ -602,21 +606,20 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 Log.Debug("Splitting connections from inputs is not implemented yet");
                 return;
             }
+            
+            StartOperation("Split connection with new Operator");
 
             // Todo: Fix me for output nodes
             var child = parentSymbol.Children.Single(child2 => child2.Id == connection.TargetParentOrChildId);
             var inputDef = child.Symbol.InputDefinitions.Single(i => i.Id == connection.TargetSlotId);
 
-            var commands = new List<ICommand>();
+            //var commands = new List<ICommand>();
             var multiInputIndex = parentSymbol.GetMultiInputIndexFor(connection);
             //_tempDeletionCommands.Add(  new DeleteConnectionCommand(parentSymbol, connection, multiInputIndex));;
-            commands.Add(new DeleteConnectionCommand(parentSymbol, connection, multiInputIndex));
 
             AdjustGraphLayoutForNewNode(parentSymbol, connection);
-
-            var prepareCommand = new MacroCommand("Split", commands);
-            UndoRedoStack.AddAndExecute(prepareCommand);
-
+            _inProgressCommand.AddAndExecCommand(new DeleteConnectionCommand(parentSymbol, connection, multiInputIndex));
+            
             TempConnections.Clear();
             var connectionType = inputDef.DefaultValue.ValueType;
             TempConnections.Add(new TempConnection(sourceParentOrChildId: connection.SourceParentOrChildId,
@@ -717,18 +720,21 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
 
         public static void CompleteAtSymbolInputNode(Symbol parentSymbol, Symbol.InputDefinition inputDef)
         {
-            var macroCommand = new MacroCommand("Insert node");
+            //StartOperation("Insert Node");
+            //var macroCommand = new MacroCommand("Insert node");
             foreach (var c in TempConnections)
             {
                 var newConnection = new Symbol.Connection(sourceParentOrChildId: UseSymbolContainerId,
                                                           sourceSlotId: inputDef.Id,
                                                           targetParentOrChildId: c.TargetParentOrChildId,
                                                           targetSlotId: c.TargetSlotId);
-                macroCommand.AddExecutedCommandForUndo(new AddConnectionCommand(parentSymbol, newConnection, 0));
+                _inProgressCommand.AddAndExecCommand(new AddConnectionCommand(parentSymbol, newConnection, 0));
             }
 
-            UndoRedoStack.AddAndExecute(macroCommand);
-            Reset();
+            //UndoRedoStack.AddAndExecute(macroCommand);
+            //Reset();
+            CompleteOperation();
+            
         }
 
         public static void CompleteAtSymbolOutputNode(Symbol parentSymbol, Symbol.OutputDefinition outputDef)
