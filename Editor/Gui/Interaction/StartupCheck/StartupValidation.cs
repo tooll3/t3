@@ -110,9 +110,12 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                     return;
 
                 const string caption = "Tooll3 setup looks incomplete";
-
+                
                 var sb = new StringBuilder();
-                sb.Append("We can't find the following files...\n\n  " + string.Join("\n  ", missingPaths));
+
+                sb.Append($"Startup folder is:\n{Application.StartupPath}\n\n");
+                
+                sb.Append($"We can't find the following files...\n\n  {string.Join("\n  ", missingPaths)}");
                 sb.Append("\n\n");
                 sb.Append(Message);
                 if (!string.IsNullOrEmpty(URL))
