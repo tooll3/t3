@@ -1,4 +1,3 @@
-using CppSharp.Types;
 using NAudio.Wave;
 using NewTek;
 using NewTek.NDI;
