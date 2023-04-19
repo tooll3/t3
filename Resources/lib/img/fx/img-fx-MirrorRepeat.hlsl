@@ -10,7 +10,6 @@ cbuffer ParamConstants : register(b0)
     float ShadeAmount;
 
     float4 ShadeColor;
-    float2 Center;
 }
 
 // cbuffer TimeConstants : register(b1)
@@ -46,6 +45,11 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float rotateScreenRad = (-RotateMirror + RotateImage - 90) / 180 * 3.141578;
 
+    uint imageWidth, imageHeight;
+    ImageA.GetDimensions(imageWidth, imageHeight);
+
+    float imageAspect = (float)imageWidth / imageHeight;
+
     float aspectRatio = TargetWidth / TargetHeight;
     float2 p = psInput.texCoord;
     p -= 0.5;
@@ -69,8 +73,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float mirrorRotationRad = (+RotateImage - 90) / 180 * 3.141578;
     float2 angle = float2(sin(mirrorRotationRad), cos(mirrorRotationRad));
 
-    float dist = dot(p - Center, angle);
-    float offset = Offset % 1;
+    float dist = dot(p, angle);
+    float offset = Offset % 2;
     dist += offset;
     float shade = 0;
 
@@ -101,11 +105,12 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     p += d * angle;
     p.x /= aspectRatio;
 
-    p += OffsetImage;
-
-    p += float2(0.5 / aspectRatio, 0.5);
+    p *= float2(aspectRatio / imageAspect, 1);
+    p += float2(0.5, 0.5);
+    p += OffsetImage * float2(1 / imageAspect, 1);
 
     float4 texColor = ImageA.Sample(texSampler, p);
+
     float4 color = lerp(texColor, ShadeColor, shade * ShadeAmount);
 
     color = clamp(color, float4(0, 0, 0, 0), float4(100, 100, 100, 1));
