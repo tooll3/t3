@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Utils;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
@@ -164,10 +167,49 @@ namespace T3.Editor.Gui.UiHelpers
             }
         }
 
+
+        private static bool IsSymbolCurrentCompositionOrAParent(Symbol symbol)
+        {
+            var comp = GraphWindow.GetPrimaryGraphWindow()?.GraphCanvas?.CompositionOp;
+            if (comp == null)
+            {
+                return true;
+            }
+
+            if (comp.Symbol == symbol)
+            {
+                return true;
+            }
+
+            var instance = comp;
+            while (instance != null)
+            {
+                if (instance.Symbol == symbol)
+                    return true;
+                
+                instance = instance.Parent;
+            }
+
+            return false;
+        }
+        
+        
+        
         public static void HandleDragAndDropForSymbolItem(Symbol symbol)
         {
+
+            if (ImGui.IsItemActivated())
+            {
+                Log.Debug("Can't insert that symbol because it would create a cycle.");
+                return;
+            }
+            
             if (ImGui.IsItemActive())
             {
+                if (IsSymbolCurrentCompositionOrAParent(symbol))
+                {
+                    return;
+                }
                 if (ImGui.BeginDragDropSource())
                 {
                     if (_dropData == new IntPtr(0))
