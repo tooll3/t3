@@ -18,7 +18,7 @@ namespace T3.Operators.Types.Id_d1530d89_32b9_4e16_97fe_c08d095d9d03
 
         private void Update(EvaluationContext context)
         {
-            var min = Int32.MinValue;
+            var min = Int32.MaxValue;
             
             foreach (var i in Ints.CollectedInputs)
             {
