@@ -311,8 +311,11 @@ namespace T3.Core.Resource
                 return false;
 
             if (TryReadAndApplySymbolChildren(jsonResult))
+            {
+                symbol = jsonResult.Symbol;
                 return true;
-            
+            }
+
             Log.Error($"Failed to get children of pasted token:\n{jToken}");
             return false;
         }
