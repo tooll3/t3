@@ -51,13 +51,16 @@ namespace T3.Editor
             Application.SetHighDpiMode(HighDpiMode.PerMonitor);
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Log.AddWriter(new ConsoleWriter());
+            var logWriter = new ConsoleWriter();
+            Log.AddWriter(logWriter);
             Log.AddWriter(FileWriter.CreateDefault());
             Log.Debug($"Starting {Version}");
 
             StartUp.FlagBeginStartupSequence();
 
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
+
+            SplashScreen.SplashScreen.OpenSplashScreen("C:/Users/Dom/Downloads/t3-splash-example.png");
 
             new UserSettings(saveOnQuit: true);
             new ProjectSettings(saveOnQuit: true);
@@ -146,10 +149,11 @@ namespace T3.Editor
                 ImGui.GetIO().NativePtr->IniFilename = null;
             }
 
+            SplashScreen.SplashScreen.CloseSplashScreen();
             StartUp.FlagStartupSequenceComplete();
 
             startupStopWatch.Stop();
-            Log.Debug($"startup took {startupStopWatch.ElapsedMilliseconds}ms.");
+            Log.Debug($"Startup took {startupStopWatch.ElapsedMilliseconds}ms.");
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();

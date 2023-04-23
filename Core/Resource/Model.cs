@@ -30,6 +30,7 @@ namespace T3.Core.Resource
 
         public virtual void Load(bool enableLog)
         {
+            Console.WriteLine("Loading symbols...");
             var symbolFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolExtension}", SearchOption.AllDirectories);
 
             var symbolsRead = symbolFiles.AsParallel()
@@ -38,6 +39,8 @@ namespace T3.Core.Resource
                                                 .Where(symbolReadResult => symbolReadResult.Symbol is not null)
                                                 .ToList(); // Execute and bring back to main thread
 
+            
+            Console.WriteLine("Registering loaded symbols...");
             // Check if there are symbols without a file, if yes add these
             var instanceTypesWithoutFile = OperatorsAssembly.ExportedTypes.AsParallel()
                                                             .Where(type => type.IsSubclassOf(typeof(Instance)))
@@ -56,6 +59,7 @@ namespace T3.Core.Resource
                 RegisterTypeWithoutFile(newType);
             }
 
+            Console.WriteLine("Applying symbol children...");
             Parallel.ForEach(symbolsRead, ReadAndApplyChildren);
 
             void ReadAndApplyChildren(SymbolJson.SymbolReadResult readSymbolResult)
