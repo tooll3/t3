@@ -39,7 +39,7 @@ namespace T3.Editor.Gui
         static T3Ui()
         {
             var operatorsAssembly = Assembly.GetAssembly(typeof(Value));
-            UiModel = new UiModel(operatorsAssembly);
+            UiModel = new UiModel(operatorsAssembly, enableLog: false);
 
             WindowManager.TryToInitialize();
             ExampleSymbolLinking.UpdateExampleLinks();

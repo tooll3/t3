@@ -35,13 +35,13 @@ namespace T3.Editor.Gui
 
     public partial class UiModel : Model
     {
-        public UiModel(Assembly operatorAssembly)
+        public UiModel(Assembly operatorAssembly, bool enableLog)
             : base(operatorAssembly)
         {
-            Init();
+            Init(enableLog);
         }
 
-        private void Init()
+        private void Init(bool enableLog)
         {
             foreach (var symbolEntry in SymbolRegistry.Entries)
             {
@@ -52,29 +52,31 @@ namespace T3.Editor.Gui
                 }
             }
 
-            Load(enableLog: false);
+            Load(enableLog);
 
+            Console.WriteLine(@"Updating UI entries...");
             var symbols = SymbolRegistry.Entries;
             foreach (var symbolEntry in symbols)
             {
                 UpdateUiEntriesForSymbol(symbolEntry.Value);
             }
 
-            // create instance of project op, all children are create automatically
-            
+            // Create instance of project op, all children are created automatically
+            Console.WriteLine(@"Creating home...");
             var homeSymbol = symbols[HomeSymbolId];
-            
-            Guid homeInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
+            var homeInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
             RootInstance = homeSymbol.CreateInstance(homeInstanceId);
         }
 
-        public static Guid HomeSymbolId = Guid.Parse("dab61a12-9996-401e-9aa6-328dd6292beb");
+        internal static readonly Guid HomeSymbolId = Guid.Parse("dab61a12-9996-401e-9aa6-328dd6292beb");
         
         public override void Load(bool enableLog)
         {
             // first load core data
             base.Load(enableLog);
 
+            
+            Console.WriteLine(@"Loading Symbol UIs...");
             var symbolUiFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);
             var symbolUiJsons = symbolUiFiles.AsParallel()
                                          .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
@@ -93,6 +95,7 @@ namespace T3.Editor.Gui
                                          .Where(x => x.ObjectWasSet)
                                          .ToList();
 
+            Console.WriteLine(@"Registering Symbol UIs...");
             foreach (var symbolUiJson in symbolUiJsons)
             {
                 var symbolUi = symbolUiJson.Object;
