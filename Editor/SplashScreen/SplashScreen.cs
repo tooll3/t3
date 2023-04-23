@@ -63,7 +63,7 @@ internal static partial class SplashScreen
                                                 Console.SetOut(consoleWriter);
 
                                                 _splashForm.Show();
-
+                                                _splashForm.FormClosed += (_, _) => Application.ExitThread();
                                                 Application.Run();
                                             });
 
@@ -77,9 +77,9 @@ internal static partial class SplashScreen
             throw new InvalidOperationException("Splash screen cannot be closed when it is not open");
 
         _isOpen = false;
+        Console.SetOut(_defaultConsoleOut);
 
         _splashForm.Invoke(() => _splashForm.Close());
-        Console.SetOut(_defaultConsoleOut);
     }
 
     private static Size GetScaledSize(Image image)
