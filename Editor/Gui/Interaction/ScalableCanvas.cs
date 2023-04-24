@@ -395,8 +395,9 @@ namespace T3.Editor.Gui.Interaction
 
             if ((flags & T3Ui.EditingFlags.PreventPanningWithMouse) == 0
                 && (
-                       ImGui.IsMouseDragging(ImGuiMouseButton.Right)
-                       || ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
+                        ImGui.IsMouseDragging(ImGuiMouseButton.Right)
+                        || ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
+                        || ImGui.IsMouseDragging(ImGuiMouseButton.Middle)
                )
             {
                 ScrollTarget -= Io.MouseDelta / (ParentScale * ScaleTarget);
