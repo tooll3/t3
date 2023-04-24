@@ -26,12 +26,13 @@ namespace T3.Editor.App
             Form = disableClose
                        ? new NoCloseRenderForm(windowTitle)
                              {
-                                 ClientSize = new Size(640, 360+20),
-                                 Icon = new Icon(@"Resources\t3-editor\images\t3.ico", 48, 48)
+                                 ClientSize = new Size(1, 1),
+                                 Icon = new Icon(@"Resources\t3-editor\images\t3.ico", 48, 48),
+                                 FormBorderStyle = FormBorderStyle.None,
                              }
                        : new ImGuiDx11RenderForm(windowTitle)
                              {
-                                 ClientSize = new Size(640, 480),
+                                 ClientSize = new Size(1, 1),
                                  Icon = new Icon(@"Resources\t3-editor\images\t3.ico", 48, 48)
                              };
 

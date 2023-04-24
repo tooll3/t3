@@ -1,85 +1,51 @@
 using System;
 using System.Drawing;
-using System.Drawing.Text;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using CppSharp.Utils.FSM;
-using T3.Core.Resource;
+using T3.Core.Logging;
 
 namespace T3.Editor.SplashScreen;
 
-internal static partial class SplashScreen
+internal class SplashScreen : ILogWriter
 {
-    private static readonly Size BaseDpi = new Size(96, 96);
-    private static bool _isOpen;
-    private static TextWriter _defaultConsoleOut;
-    private static readonly CancellationTokenSource CancellationTokenSource = new();
-    private static Form _splashForm;
-
-    public static void OpenSplashScreen(string imagePath)
+    
+    private delegate void SafeCallDelegate(string text);
+    
+    public void Show(string imagePath)
     {
-        if (_isOpen)
-            throw new InvalidOperationException("Splash screen already open");
-        _isOpen = true;
+        var backgroundImage = Image.FromFile(imagePath);
+        var imageSize = GetScaledSize(backgroundImage);
 
-        var splashScreenThread = new Thread(() =>
-                                            {
-                                                var backgroundImage = Image.FromFile(imagePath);
-                                                var imageSize = GetScaledSize(backgroundImage);
+        _splashForm = new Form
+                          {
+                              FormBorderStyle = FormBorderStyle.None,
+                              StartPosition = FormStartPosition.CenterScreen,
+                              BackgroundImage = backgroundImage,
+                              BackgroundImageLayout = ImageLayout.Stretch,
+                              Size = imageSize
+                          };
 
-                                                _splashForm = new Form
-                                                                  {
-                                                                      FormBorderStyle = FormBorderStyle.None,
-                                                                      StartPosition = FormStartPosition.CenterScreen,
-                                                                      BackgroundImage = backgroundImage,
-                                                                      BackgroundImageLayout = ImageLayout.Stretch,
-                                                                      Size = imageSize
-                                                                  };
+        _logMessageLabel = new Label
+                               {
+                                   Dock = DockStyle.Bottom,
+                                   AutoSize = false,
+                                   TextAlign = ContentAlignment.BottomRight,
+                                   BackColor = Color.Transparent,
+                                   ForeColor = Color.Ivory,
+                                   Text = @"Loading T3...",
+                                   UseMnemonic = false,
+                                   Font = new Font("Arial", 8),
+                               };
+        _splashForm.Controls.Add(_logMessageLabel);
 
-                                                PrivateFontCollection fontCollection = new PrivateFontCollection();
-                                                var fontPath = Path.Combine(ResourceManager.ResourcesFolder, "t3-editor", "fonts", "Roboto-Light.ttf");
-                                                fontCollection.AddFontFile(fontPath);
-                                                var logsTextBox = new Label
-                                                                      {
-                                                                          Dock = DockStyle.Bottom,
-                                                                          AutoSize = false,
-                                                                          TextAlign = ContentAlignment.BottomRight,
-                                                                          BackColor = Color.Transparent,
-                                                                          ForeColor = Color.Ivory,
-                                                                          Text = @"Loading T3...",
-                                                                          UseMnemonic = false,
-                                                                          Font = new Font(fontCollection.Families[0], 8),
-                                                                      };
-
-                                                _splashForm.Controls.Add(logsTextBox);
-
-                                                _defaultConsoleOut = Console.Out;
-                                                var splashScreenLogWriter = new ControlWriter(logsTextBox);
-                                                var consoleWriter = new DualTextWriter(_defaultConsoleOut, splashScreenLogWriter);
-
-                                                // Redirect the console output to the logs TextBox
-                                                Console.SetOut(consoleWriter);
-
-                                                _splashForm.Show();
-                                                _splashForm.FormClosed += (_, _) => Application.ExitThread();
-                                                Application.Run();
-                                            });
-
-        splashScreenThread.SetApartmentState(ApartmentState.STA);
-        splashScreenThread.Start();
+        _splashForm.Show();
+        _splashForm.Refresh();
+        _splashForm.TopMost = true;
     }
 
-    public static void CloseSplashScreen()
+    public void Close()
     {
-        if (!_isOpen)
-            throw new InvalidOperationException("Splash screen cannot be closed when it is not open");
-
-        _isOpen = false;
-        Console.SetOut(_defaultConsoleOut);
-
-        _splashForm.Invoke(() => _splashForm.Close());
+        _splashForm.Close();
+        _splashForm = null;
     }
 
     private static Size GetScaledSize(Image image)
@@ -89,9 +55,47 @@ internal static partial class SplashScreen
         var dpiX = graphics.DpiX;
         var dpiY = graphics.DpiY;
 
-        var width = (int)(image.Width * (dpiX / BaseDpi.Width));
-        var height = (int)(image.Height * (dpiY / BaseDpi.Height));
+        var width = (int)(image.Width * (dpiX / _baseDpi.Width));
+        var height = (int)(image.Height * (dpiY / _baseDpi.Height));
 
         return new Size(width, height);
+    }
+
+    private static readonly Size _baseDpi = new(96, 96);
+
+    private bool _isOpen;
+
+    private Form _splashForm;
+    private Label _logMessageLabel;
+
+    public void Dispose()
+    {
+        //throw new NotImplementedException();
+    }
+
+    
+    private void WriteTextSafe(string text)
+    {
+        if (_logMessageLabel.InvokeRequired)
+        {
+            var d = new SafeCallDelegate(WriteTextSafe);
+            _logMessageLabel.Invoke(d, text);
+            
+        }
+        else
+        {
+            _logMessageLabel.Text = text;
+            _logMessageLabel.Refresh();
+        }
+    }
+    
+    public LogEntry.EntryLevel Filter { get; set; }
+
+    public void ProcessEntry(LogEntry entry)
+    {
+        if (_logMessageLabel == null)
+            return;
+        
+        WriteTextSafe(entry.Message);
     }
 }

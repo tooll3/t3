@@ -24,6 +24,11 @@ namespace T3.Core.Logging
         {
             _instance._logWriters.Add(writer);
         }
+        
+        public static void RemoveWriter(ILogWriter writer)
+        {
+            _instance._logWriters.Remove(writer);
+        }
 
         #region API for logging
 

@@ -26,7 +26,6 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using Device = SharpDX.Direct3D11.Device;
-using Message = System.Windows.Forms.Message;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor
@@ -51,16 +50,17 @@ namespace T3.Editor
             Application.SetHighDpiMode(HighDpiMode.PerMonitor);
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var logWriter = new ConsoleWriter();
-            Log.AddWriter(logWriter);
+            var splashScreen = new SplashScreen.SplashScreen();
+            splashScreen.Show(  "Resources/t3-editor/images/t3-splash-screen-v3.5.png");
+            Log.AddWriter(splashScreen);
+            
+            Log.AddWriter(new ConsoleWriter());
             Log.AddWriter(FileWriter.CreateDefault());
             Log.Debug($"Starting {Version}");
 
             StartUp.FlagBeginStartupSequence();
 
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
-
-            SplashScreen.SplashScreen.OpenSplashScreen("C:/Users/Dom/Downloads/t3-splash-example.png");
 
             new UserSettings(saveOnQuit: true);
             new ProjectSettings(saveOnQuit: true);
@@ -148,8 +148,13 @@ namespace T3.Editor
                 // Disable ImGui ini file settings
                 ImGui.GetIO().NativePtr->IniFilename = null;
             }
-
-            SplashScreen.SplashScreen.CloseSplashScreen();
+            
+            Log.RemoveWriter(splashScreen);
+            splashScreen.Close();
+            splashScreen.Dispose();
+            _main.Form.ClientSize = new Size(640, 360);
+            _main.Form.FormBorderStyle = FormBorderStyle.Sizable;
+            
             StartUp.FlagStartupSequenceComplete();
 
             startupStopWatch.Stop();
@@ -159,7 +164,11 @@ namespace T3.Editor
             stopwatch.Start();
             Int64 lastElapsedTicks = stopwatch.ElapsedTicks;
 
+            
             T3Style.Apply();
+            
+            
+            
 
             var p = Cursor.Position;
             // Main loop
