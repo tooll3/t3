@@ -540,7 +540,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             if (instance.Outputs.Count < 1)
                 return;
             
-            StartOperation("Insert Operator");
+            //StartOperation("Insert Operator");
             var primaryOutput = instance.Outputs[0];
             InsertSymbolBrowser(symbolBrowser, childUi, instance, primaryOutput);
         }
