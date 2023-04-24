@@ -61,12 +61,6 @@ internal class SplashScreen : ILogWriter
         return new Size(width, height);
     }
 
-    private static readonly Size _baseDpi = new(96, 96);
-
-    private bool _isOpen;
-
-    private Form _splashForm;
-    private Label _logMessageLabel;
 
     public void Dispose()
     {
@@ -89,6 +83,7 @@ internal class SplashScreen : ILogWriter
         }
     }
     
+    
     public LogEntry.EntryLevel Filter { get; set; }
 
     public void ProcessEntry(LogEntry entry)
@@ -98,4 +93,9 @@ internal class SplashScreen : ILogWriter
         
         WriteTextSafe(entry.Message);
     }
+    
+    private static readonly Size _baseDpi = new(96, 96);
+    private Form _splashForm;
+    private Label _logMessageLabel;
+
 }
