@@ -32,6 +32,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
 
             T3Ui.OpenedPopUpName = PlaybackSettingsPopupId;
+            FrameStats.Current.IsItemContextMenuOpen = true;
 
             ImGui.PushFont(Fonts.FontLarge);
             ImGui.TextUnformatted("Playback settings");
