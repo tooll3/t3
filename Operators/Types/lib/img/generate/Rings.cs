@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -72,6 +73,9 @@ namespace T3.Operators.Types.Id_d002bd90_5921_48b0_a940_a8d0c779f674
 
         [Input(Guid = "a46daf9d-ebb3-478f-8462-c183ea2ef15e")]
         public readonly InputSlot<int> Seed = new InputSlot<int>();
+
+        [Input(Guid = "4084b10d-d0be-4a88-a713-29107193f694",MappedType = typeof(SharedEnums.RgbBlendModes))]
+        public readonly InputSlot<int> BlendMode = new InputSlot<int>();
     }
 }
 
