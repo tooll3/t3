@@ -25,7 +25,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
 
         public static bool IsMatchingInputType(Type valueType)
         {
-            return TempConnections.Count == 1
+            return TempConnections.Count > 0
                    && TempConnections[0].TargetSlotId == NotConnectedId
                    && TempConnections[0].ConnectionType == valueType;
         }
@@ -350,11 +350,16 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 }
             }
 
-            // TODO: Support simultaneous connection to multiInput
-            var newConnection = new Symbol.Connection(sourceParentOrChildId: TempConnections[0].SourceParentOrChildId,
-                                                      sourceSlotId: TempConnections[0].SourceSlotId,
-                                                      targetParentOrChildId: targetUi.SymbolChild.Id,
-                                                      targetSlotId: input.Id);
+            var newConnections = new List<Symbol.Connection>();
+
+            for (var index = TempConnections.Count - 1; index >= 0; index--)
+            {
+                var tempConnection = TempConnections[index];
+                newConnections.Add(new Symbol.Connection(sourceParentOrChildId: tempConnection.SourceParentOrChildId,
+                                                         sourceSlotId: tempConnection.SourceSlotId,
+                                                         targetParentOrChildId: targetUi.SymbolChild.Id,
+                                                         targetSlotId: input.Id));
+            }
 
             // get the previous connection
             var allConnectionsToSlot = parentSymbol.Connections.FindAll(c => c.TargetParentOrChildId == targetUi.SymbolChild.Id &&
@@ -369,20 +374,30 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             {
                 replacesConnection = allConnectionsToSlot.Count != 0;
             }
-            
-            var addCommand = new AddConnectionCommand(parentSymbol, newConnection, multiInputIndex);
+
+            var addCommands = new List<ICommand>();
+            foreach (var newConnection in newConnections)
+            {
+                addCommands.Add(new AddConnectionCommand(parentSymbol, newConnection, multiInputIndex));
+            }
 
             if (replacesConnection)
             {
                 var connectionToRemove = allConnectionsToSlot[multiInputIndex];
                 var deleteCommand = new DeleteConnectionCommand(parentSymbol, connectionToRemove, multiInputIndex);
                 _inProgressCommand.AddAndExecCommand(deleteCommand);
-                _inProgressCommand.AddAndExecCommand(addCommand);
+                foreach (var addCommand in addCommands)
+                {
+                    _inProgressCommand.AddAndExecCommand(addCommand);
+                }
                 _inProgressCommand.Name = $"Reconnect to {targetUi.SymbolChild.ReadableName}.{input.Name}";
             }
             else
             {
-                _inProgressCommand.AddAndExecCommand(addCommand);
+                foreach (var addCommand in addCommands)
+                {
+                    _inProgressCommand.AddAndExecCommand(addCommand);
+                }
             }
             CompleteOperation();
         }
