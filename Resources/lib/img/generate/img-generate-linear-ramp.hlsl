@@ -1,3 +1,5 @@
+#include "lib/shared/blend-functions.hlsl"
+
 cbuffer ParamConstants : register(b0)
 {
     float2 Center;
@@ -8,7 +10,9 @@ cbuffer ParamConstants : register(b0)
     float Bias;
     float Offset;
     float SizeMode;
-    float IsTextureValid;
+    float BlendMode;
+
+    float IsTextureValid; // Automatically added by _FxShaderSetup
 }
 
 cbuffer Resolution : register(b1)
@@ -79,6 +83,5 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         return gradient;
 
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
-    return float4((1.0 - gradient.a) * orgColor.rgb + gradient.a * gradient.rgb,
-                  orgColor.a + gradient.a - orgColor.a * gradient.a);
+    return (IsTextureValid < 0.5) ? gradient : BlendColors(orgColor, gradient, (int)BlendMode);
 }

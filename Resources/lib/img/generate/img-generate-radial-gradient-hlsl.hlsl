@@ -1,3 +1,5 @@
+#include "lib/shared/blend-functions.hlsl"
+
 cbuffer ParamConstants : register(b0)
 {
     float2 Center;
@@ -7,7 +9,9 @@ cbuffer ParamConstants : register(b0)
     float Repeat;
     float PolarOrientation;
     float Bias;
-    float IsTextureValid;
+    float BlendMode;
+
+    float IsTextureValid; // Automatically added by _FxShaderSetup
 }
 
 cbuffer Resolution : register(b1)
@@ -34,9 +38,6 @@ float fmod(float x, float y)
 
 float4 psMain(vsOutput psInput) : SV_TARGET
 {
-    // int orgMips, orgWidth, orgHeight;
-    // ImageA.GetDimensions(0, orgWidth, orgHeight, orgMips);
-
     float2 uv = psInput.texCoord;
 
     float aspectRation = TargetWidth / TargetHeight;
@@ -78,7 +79,5 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     dBiased = clamp(dBiased, 0.001, 0.999);
     float4 gradient = Gradient.Sample(clammpedSampler, float2(dBiased, 0));
 
-    return (IsTextureValid < 0.5) ? gradient
-                                  : float4((1.0 - gradient.a) * orgColor.rgb + gradient.a * gradient.rgb,
-                                           orgColor.a + gradient.a - orgColor.a * gradient.a);
+    return (IsTextureValid < 0.5) ? gradient : BlendColors(orgColor, gradient, (int)BlendMode);
 }

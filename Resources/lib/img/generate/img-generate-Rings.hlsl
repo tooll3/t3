@@ -137,8 +137,4 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
 
     return (IsTextureValid < 0.5) ? c : BlendColors(orgColor, colorOut, (int)BlendMode);
-
-    // float a = clamp(orgColor.a + colorOut.a - orgColor.a * colorOut.a, 0, 1);
-    // float3 rgb = (1.0 - colorOut.a) * orgColor.rgb + colorOut.a * colorOut.rgb;
-    // return float4(rgb, a);
 }
