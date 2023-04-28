@@ -177,17 +177,23 @@ namespace T3.Editor.Gui.Windows
             if (Progress <= 0.0)
                 _timingOverhang = 0.0;
 
+            // get playback settings
+            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
+            var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
+            PlaybackUtils.FindPlaybackSettings(composition, out var compWithSettings, out var settings);
+
+            // change settings for all playback before calculating times
+            Playback.Current.Bpm = settings.Bpm;
+            Playback.Current.Settings = settings;
+
+            // set user time in secs for video playback
             double startTimeInSeconds = ReferenceTimeToSeconds(_startTime, _timeReference);
             double endTimeInSeconds = ReferenceTimeToSeconds(_endTime, _timeReference);
             var oldTimeInSecs = Playback.Current.TimeInSecs;
             Playback.Current.TimeInSecs = MathUtils.Lerp(startTimeInSeconds, endTimeInSeconds, Progress);
             var adaptedDeltaTime = Math.Max(Playback.Current.TimeInSecs - oldTimeInSecs + _timingOverhang, 0.0);
 
-            // get playback settings
-            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
-            var composition = primaryGraphWindow?.GraphCanvas.CompositionOp;
-            PlaybackUtils.FindPlaybackSettings(composition, out var compWithSettings, out var settings);
-            // user time in secs for audio playback
+            // set user time in secs for audio playback
             settings.GetMainSoundtrack(out var soundtrack);
             AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
 
@@ -211,10 +217,8 @@ namespace T3.Editor.Gui.Windows
             }
 
             // update audio parameters, respecting looping etc.
-            Playback.Current.Bpm = settings.Bpm;
             Playback.Current.PlaybackSpeed = 0.0;
             Playback.Current.Update(false);
-            Playback.Current.Settings = settings;
             Playback.Current.PlaybackSpeed = 1.0;
 
             var bufferLengthInMS = (int)Math.Floor(1000.0 * adaptedDeltaTime);
