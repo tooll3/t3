@@ -167,7 +167,6 @@ namespace T3.Core.Audio
                                             buffer = new byte[0];
                                             break;
                                         }
-                                        Log.Debug("lost playback, triggering play again");
                                         Bass.ChannelPlay(clipStream.StreamHandle);
                                     }
 
