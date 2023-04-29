@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using ManagedBass;
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.Logging;
@@ -197,28 +196,20 @@ namespace T3.Editor.Gui.Windows
             settings.GetMainSoundtrack(out var soundtrack);
             AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
 
-            if (!_bassChanged)
+            if (!_recording)
             {
-                _bassUpdateThreads = Bass.GetConfig(Configuration.UpdateThreads);
-                _bassUpdatePeriod = Bass.GetConfig(Configuration.UpdatePeriod);
-                _bassGlobalStreamVolume = Bass.GetConfig(Configuration.GlobalStreamVolume);
-
-                // turn off automatic sound generation
-                Bass.Configure(Configuration.UpdateThreads, false);
-                Bass.Configure(Configuration.UpdatePeriod, 0);
-                Bass.Configure(Configuration.GlobalStreamVolume, 0);
+                _timingOverhang = 0.0;
+                adaptedDeltaTime = 0.0;
 
                 Playback.Current.IsLive = false;
                 Playback.Current.PlaybackSpeed = 1.0;
 
+                AudioEngine.prepareRecording(Playback.Current, _fps);
+
                 Log.Debug($"Recording from '{startTimeInSeconds}' to '{endTimeInSeconds}' seconds");
                 Log.Debug($"Using '{Playback.Current.Bpm}' bpm");
 
-                _timingOverhang = 0.0;
-                _bassChanged = true;
-                adaptedDeltaTime = 0.0;
-
-                AudioEngine.prepareRecording(Playback.Current, _fps);
+                _recording = true;
             }
 
             // update audio parameters, respecting looping etc.
@@ -242,16 +233,7 @@ namespace T3.Editor.Gui.Windows
             Playback.Current.PlaybackSpeed = 0.0;
             Playback.Current.Update(false);
 
-            if (_bassChanged)
-            {
-                // restore live playback values
-                Bass.Configure(Configuration.UpdatePeriod, _bassUpdatePeriod);
-                Bass.Configure(Configuration.GlobalStreamVolume, _bassGlobalStreamVolume);
-                Bass.Configure(Configuration.UpdateThreads, _bassUpdateThreads);
-
-                // this will stop the recording
-                _bassChanged = false;
-            }
+            _recording = false;
         }
 
         public override List<Window> GetInstances()
@@ -269,11 +251,7 @@ namespace T3.Editor.Gui.Windows
         private static float _lastValidFps = _fps;
 
         private static double _timingOverhang; // time that could not be updated due to MS resolution (in seconds)
-
-        private static bool _bassChanged = false; // were Bass library settings changed?
-        private static int _bassUpdatePeriod; // initial Bass library update period in MS
-        private static int _bassGlobalStreamVolume; // initial Bass library sample volume (range 0 to 10000)
-        private static int _bassUpdateThreads; // initial Bass library update threads
+        private static bool _recording = false; // are we recording?
 
         public static bool IsExporting => _isExporting;
         public static int OverrideMotionBlurSamples => _overrideMotionBlurSamples;

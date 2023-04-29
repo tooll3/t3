@@ -57,9 +57,19 @@ namespace T3.Core.Audio
 
         public static void prepareRecording(Playback playback, double fps)
         {
+            _bassUpdateThreads = Bass.GetConfig(Configuration.UpdateThreads);
+            _bassUpdatePeriod = Bass.GetConfig(Configuration.UpdatePeriod);
+            _bassGlobalStreamVolume = Bass.GetConfig(Configuration.GlobalStreamVolume);
+
+            // turn off automatic sound generation
+            Bass.Configure(Configuration.UpdateThreads, false);
+            Bass.Configure(Configuration.UpdatePeriod, 0);
+            Bass.Configure(Configuration.GlobalStreamVolume, 0);
+
             foreach (var (audioClipId, clipStream) in _clipPlaybacks)
             {
                 _oldBufferInSeconds = Bass.ChannelGetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer);
+
                 Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer, 4.0 / fps);
                 Bass.ChannelStop(clipStream.StreamHandle);
                 clipStream.UpdateTimeRecord(playback, true);
@@ -79,6 +89,11 @@ namespace T3.Core.Audio
                 Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.NoRamp, 0);
                 Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer, _oldBufferInSeconds);
             }
+
+            // restore live playback values
+            Bass.Configure(Configuration.UpdatePeriod, _bassUpdatePeriod);
+            Bass.Configure(Configuration.GlobalStreamVolume, _bassGlobalStreamVolume);
+            Bass.Configure(Configuration.UpdateThreads, _bassUpdateThreads);
         }
 
         public static void CompleteFrame(Playback playback,
@@ -144,7 +159,7 @@ namespace T3.Core.Audio
                             {
                                 while (buffer.Length < bytes)
                                 {
-                                    Bass.ChannelUpdate(clipStream.StreamHandle, (int)Math.Round(frameDurationInSeconds * 1000.0 * 4.0));
+                                    Bass.ChannelUpdate(clipStream.StreamHandle, (int)Math.Round(frameDurationInSeconds * 1000.0 * 8.0));
                                     if (Bass.ChannelIsActive(clipStream.StreamHandle) != PlaybackState.Playing)
                                     {
                                         if (!clipStream.UpdateTimeRecord(playback, false))
@@ -152,6 +167,7 @@ namespace T3.Core.Audio
                                             buffer = new byte[0];
                                             break;
                                         }
+                                        Log.Debug("lost playback, triggering play again");
                                         Bass.ChannelPlay(clipStream.StreamHandle);
                                     }
 
@@ -166,7 +182,7 @@ namespace T3.Core.Audio
                                         buffer = buffer.Concat(newBuffer).ToArray();
                                         // shorten the buffer from here on
                                         Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer,
-                                            frameDurationInSeconds * 2.0);
+                                            frameDurationInSeconds * 4.0);
                                         // update the FFT
                                         UpdateFftBuffer(clipStream.StreamHandle, playback);
                                     }
@@ -251,6 +267,10 @@ namespace T3.Core.Audio
         private static readonly Dictionary<AudioClip, double> _updatedClipTimes = new();
         private static readonly Dictionary<AudioClip, byte[]> _fifoBuffers = new();
 
+        // to save bass state before recording
+        private static int _bassUpdatePeriod; // initial Bass library update period in MS
+        private static int _bassGlobalStreamVolume; // initial Bass library sample volume (range 0 to 10000)
+        private static int _bassUpdateThreads; // initial Bass library update threads
     }
 
 
