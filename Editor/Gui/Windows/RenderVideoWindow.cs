@@ -15,7 +15,8 @@ namespace T3.Editor.Gui.Windows
         public RenderVideoWindow()
         {
             Config.Title = "Render Video";
-            _lastHelpString = "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for faster exports.";
+            _lastHelpString = "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for faster exports.\n" +
+                              "Audio hint: Please ensure your BPM is set corrrectly with the Soundtrack.";
         }
 
 
@@ -148,7 +149,7 @@ namespace T3.Editor.Gui.Windows
         
         private static int _bitrate = 15000000;
         private static string _targetFile = "./Render/output.mp4";
-        private static bool _exportAudio = false;
+        private static bool _exportAudio = true;
 
         private static MP4VideoWriter _videoWriter = null;
         private static string _lastHelpString = string.Empty;

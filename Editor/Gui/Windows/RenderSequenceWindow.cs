@@ -3,6 +3,7 @@ using System.IO;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
+using T3.Core.Audio;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
@@ -15,7 +16,8 @@ namespace T3.Editor.Gui.Windows
         public RenderSequenceWindow()
         {
             Config.Title = "Render Sequence";
-            _lastHelpString = "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for faster exports.";
+            _lastHelpString = "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for faster exports.\n" +
+                              "Audio hint: Please ensure your BPM is set corrrectly with the Soundtrack.";
         }
 
 
@@ -49,12 +51,16 @@ namespace T3.Editor.Gui.Windows
                         _frameIndex = 0;
                         SetPlaybackTimeForNextFrame();
 
+                        // handle audio although we do not save it
+                        var audioFrame = AudioEngine.LastMixDownBuffer(0.0);
                         SaveCurrentFrameAndAdvance(mainTexture);
                     }
                 }
             }
             else
             {
+                // handle audio although we do not save it
+                var audioFrame = AudioEngine.LastMixDownBuffer(Playback.LastFrameDuration);
                 var success = SaveCurrentFrameAndAdvance(mainTexture);
                 ImGui.ProgressBar(Progress, new Vector2(-1, 4));
 

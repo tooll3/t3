@@ -504,8 +504,10 @@ namespace T3.Editor.Gui.Windows
             try
             {
                 var samples = new Dictionary<int, Sample>();
-                if (_audioWriter != null && audioSample != null) samples.Add(_audioWriter.StreamIndex, audioSample);
-                if (videoSample != null) samples.Add(StreamIndex, videoSample);
+                if (_audioWriter != null && audioSample != null)
+                    samples.Add(_audioWriter.StreamIndex, audioSample);
+                if (videoSample != null)
+                    samples.Add(StreamIndex, videoSample);
 
                 WriteSamples(samples);
             }
