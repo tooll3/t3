@@ -199,8 +199,10 @@ namespace T3.Editor.Gui.Windows
 
             if (!_bassChanged)
             {
+                _bassUpdateThreads = Bass.GetConfig(Configuration.UpdateThreads);
                 _bassUpdatePeriod = Bass.GetConfig(Configuration.UpdatePeriod);
                 _bassGlobalStreamVolume = Bass.GetConfig(Configuration.GlobalStreamVolume);
+
                 // turn off automatic sound generation
                 Bass.Configure(Configuration.UpdateThreads, false);
                 Bass.Configure(Configuration.UpdatePeriod, 0);
@@ -208,6 +210,9 @@ namespace T3.Editor.Gui.Windows
 
                 Playback.Current.IsLive = false;
                 Playback.Current.PlaybackSpeed = 1.0;
+
+                Log.Debug($"Recording from '{startTimeInSeconds}' to '{endTimeInSeconds}' seconds");
+                Log.Debug($"Using '{Playback.Current.Bpm}' bpm");
 
                 _timingOverhang = 0.0;
                 _bassChanged = true;
@@ -234,13 +239,15 @@ namespace T3.Editor.Gui.Windows
 
             Playback.Current.TimeInSecs = ReferenceTimeToSeconds(_endTime, _timeReference);
             Playback.Current.IsLive = true;
+            Playback.Current.PlaybackSpeed = 0.0;
+            Playback.Current.Update(false);
 
             if (_bassChanged)
             {
                 // restore live playback values
                 Bass.Configure(Configuration.UpdatePeriod, _bassUpdatePeriod);
                 Bass.Configure(Configuration.GlobalStreamVolume, _bassGlobalStreamVolume);
-                Bass.Configure(Configuration.UpdateThreads, true);
+                Bass.Configure(Configuration.UpdateThreads, _bassUpdateThreads);
 
                 // this will stop the recording
                 _bassChanged = false;
@@ -266,6 +273,7 @@ namespace T3.Editor.Gui.Windows
         private static bool _bassChanged = false; // were Bass library settings changed?
         private static int _bassUpdatePeriod; // initial Bass library update period in MS
         private static int _bassGlobalStreamVolume; // initial Bass library sample volume (range 0 to 10000)
+        private static int _bassUpdateThreads; // initial Bass library update threads
 
         public static bool IsExporting => _isExporting;
         public static int OverrideMotionBlurSamples => _overrideMotionBlurSamples;

@@ -62,7 +62,7 @@ namespace T3.Core.Audio
                 _oldBufferInSeconds = Bass.ChannelGetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer);
                 Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer, 4.0 / fps);
                 Bass.ChannelStop(clipStream.StreamHandle);
-                clipStream.UpdateTimeRecord(playback);
+                clipStream.UpdateTimeRecord(playback, true);
                 Bass.ChannelPlay(clipStream.StreamHandle);
                 Bass.ChannelPause(clipStream.StreamHandle);
             }
@@ -74,9 +74,8 @@ namespace T3.Core.Audio
         {
             foreach (var (audioClipId, clipStream) in _clipPlaybacks)
             {
-                Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Volume, 0);
                 Bass.ChannelPause(clipStream.StreamHandle);
-                clipStream.UpdateTimeRecord(playback);
+                clipStream.UpdateTimeRecord(playback, false);
                 Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.NoRamp, 0);
                 Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer, _oldBufferInSeconds);
             }
@@ -148,7 +147,7 @@ namespace T3.Core.Audio
                                     Bass.ChannelUpdate(clipStream.StreamHandle, (int)Math.Round(frameDurationInSeconds * 1000.0 * 4.0));
                                     if (Bass.ChannelIsActive(clipStream.StreamHandle) != PlaybackState.Playing)
                                     {
-                                        if (!clipStream.UpdateTimeRecord(playback))
+                                        if (!clipStream.UpdateTimeRecord(playback, false))
                                         {
                                             buffer = new byte[0];
                                             break;
@@ -382,7 +381,7 @@ namespace T3.Core.Audio
         /// Update time when recoding, returns true if audio is valid and shall be recorded.
         /// </summary>
         /// <param name="playback"></param>
-        public bool UpdateTimeRecord(Playback playback)
+        public bool UpdateTimeRecord(Playback playback, bool reinitialize)
         {
             // offset timing dependent on position in clip
             var resyncOffset = AudioSyncingOffset;
@@ -390,7 +389,7 @@ namespace T3.Core.Audio
             var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs);
 
             // re-initialize playback?
-            if (newStreamPos <= 0)
+            if (reinitialize)
             {
                 var flags = PositionFlags.Bytes | PositionFlags.MixerNoRampIn | PositionFlags.Decode;
 
