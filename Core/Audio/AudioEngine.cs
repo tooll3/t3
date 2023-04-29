@@ -72,7 +72,7 @@ namespace T3.Core.Audio
 
                 Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer, 4.0 / fps);
                 Bass.ChannelStop(clipStream.StreamHandle);
-                clipStream.UpdateTimeRecord(playback, true);
+                clipStream.UpdateTimeRecord(playback, fps, true);
                 Bass.ChannelPlay(clipStream.StreamHandle);
                 Bass.ChannelPause(clipStream.StreamHandle);
             }
@@ -80,12 +80,12 @@ namespace T3.Core.Audio
             _fifoBuffers.Clear();
         }
 
-        public static void endRecording(Playback playback)
+        public static void endRecording(Playback playback, double fps)
         {
             foreach (var (audioClipId, clipStream) in _clipPlaybacks)
             {
                 Bass.ChannelPause(clipStream.StreamHandle);
-                clipStream.UpdateTimeRecord(playback, false);
+                clipStream.UpdateTimeRecord(playback, fps, false);
                 Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.NoRamp, 0);
                 Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer, _oldBufferInSeconds);
             }
@@ -142,7 +142,7 @@ namespace T3.Core.Audio
 
                     if (!handledMainSoundtrack && clipStream.AudioClip.IsSoundtrack)
                     {
-                        if (!Playback.Current.IsLive)
+                        if (!playback.IsLive)
                         {
                             var sampleRate = Bass.ChannelGetAttribute(clipStream.StreamHandle, ChannelAttribute.Frequency);
                             var samples = (int)Math.Max(Math.Round(frameDurationInSeconds * sampleRate), 0.0);
@@ -162,7 +162,7 @@ namespace T3.Core.Audio
                                     Bass.ChannelUpdate(clipStream.StreamHandle, (int)Math.Round(frameDurationInSeconds * 1000.0 * 8.0));
                                     if (Bass.ChannelIsActive(clipStream.StreamHandle) != PlaybackState.Playing)
                                     {
-                                        if (!clipStream.UpdateTimeRecord(playback, false))
+                                        if (!clipStream.UpdateTimeRecord(playback, 1.0 / frameDurationInSeconds, false))
                                         {
                                             buffer = new byte[0];
                                             break;
@@ -341,7 +341,7 @@ namespace T3.Core.Audio
             clip.LengthInSeconds = duration;
             return stream;
         }
-        
+
         private const double AudioSyncingOffset = -2f / 60f;
         private const double AudioTriggerDelayOffset = 2f / 60f;
 
@@ -355,7 +355,7 @@ namespace T3.Core.Audio
         /// <param name="playback"></param>
         public void UpdateTimeLive(Playback playback)
         {
-            if (Playback.Current.PlaybackSpeed == 0)
+            if (playback.PlaybackSpeed == 0)
             {
                 Bass.ChannelPause(StreamHandle);
                 return;
@@ -386,13 +386,13 @@ namespace T3.Core.Audio
             var soundDelta = (currentPos - localTargetTimeInSecs) * playback.PlaybackSpeed;
 
             // we may not fall behind or skip ahead in playback
-            var maxSoundDelta = ProjectSettings.Config.AudioResyncThreshold * Math.Abs(Playback.Current.PlaybackSpeed);
+            var maxSoundDelta = ProjectSettings.Config.AudioResyncThreshold * Math.Abs(playback.PlaybackSpeed);
             if (Math.Abs(soundDelta) <= maxSoundDelta)
                 return;
 
             // Resync
             //Log.Debug($"Sound delta {soundDelta:0.000}s for {AudioClip.FilePath}");
-            var resyncOffset = AudioTriggerDelayOffset * Playback.Current.PlaybackSpeed + AudioSyncingOffset;
+            var resyncOffset = AudioTriggerDelayOffset * playback.PlaybackSpeed + AudioSyncingOffset;
             var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs + resyncOffset);
             Bass.ChannelSetPosition(StreamHandle, newStreamPos, PositionFlags.Bytes);
         }
@@ -401,10 +401,10 @@ namespace T3.Core.Audio
         /// Update time when recoding, returns true if audio is valid and shall be recorded.
         /// </summary>
         /// <param name="playback"></param>
-        public bool UpdateTimeRecord(Playback playback, bool reinitialize)
+        public bool UpdateTimeRecord(Playback playback, double fps, bool reinitialize)
         {
             // offset timing dependent on position in clip
-            var resyncOffset = AudioSyncingOffset;
+            var resyncOffset = -1.0 / fps;
             var localTargetTimeInSecs = playback.TimeInSecs - playback.SecondsFromBars(AudioClip.StartTime) + resyncOffset;
             var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs);
 

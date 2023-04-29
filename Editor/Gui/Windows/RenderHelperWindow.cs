@@ -226,7 +226,7 @@ namespace T3.Editor.Gui.Windows
 
         protected static void ReleasePlaybackTime()
         {
-            AudioEngine.endRecording(Playback.Current);
+            AudioEngine.endRecording(Playback.Current, _fps);
 
             Playback.Current.TimeInSecs = ReferenceTimeToSeconds(_endTime, _timeReference);
             Playback.Current.IsLive = true;
