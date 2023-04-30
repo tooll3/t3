@@ -6,6 +6,8 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
+using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Animation;
 using T3.Editor.Gui.Graph;
@@ -26,29 +28,51 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
     /// </remarks>
     public static class CurveInputEditing
     {
-        public static InputEditStateFlags DrawCanvasForCurve(Curve curve, T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
+
+        public static InputEditStateFlags DrawCanvasForCurve(ref Curve curveRef, SymbolChild.Input input, bool cloneIfModified,
+                                                             T3Ui.EditingFlags flags = T3Ui.EditingFlags.None)
         {
-            //Log.Debug("ID " + ImGui.GetID("") );
             var imGuiId = ImGui.GetID("");
+            var curveForEditing = curveRef;
+            if (cloneIfModified)
+            {
+                if (!_clonedDefaultCurves.TryGetValue(input.DefaultValue, out var clonedCurve))
+                {
+                    clonedCurve = curveRef.TypedClone();
+                    _clonedDefaultCurves[input.DefaultValue] = clonedCurve;
+                }
+
+                curveForEditing = clonedCurve;
+            }
+            
             _interactionFlags = flags;
-            if (!InteractionForCurve.TryGetValue(imGuiId, out var curveInteraction))
+            if (!_interactionForCurve.TryGetValue(imGuiId, out var curveInteraction))
             {
                 curveInteraction = new CurveInteraction()
                                        {
-                                           Curves = new List<Curve>() { curve }
+                                           Curves = new List<Curve>() { curveForEditing }
                                        };
 
-                InteractionForCurve.Add(imGuiId, curveInteraction);
+                _interactionForCurve.Add(imGuiId, curveInteraction);
             }
-            else if (curveInteraction.Curves.Count != 1 || curveInteraction.Curves[0] != curve)
+            else if (curveInteraction.Curves.Count != 1 || curveInteraction.Curves[0] != curveForEditing)
             {
                 curveInteraction.Curves.Clear();
-                curveInteraction.Curves.Add(curve);
+                curveInteraction.Curves.Add(curveForEditing);
             }
+            
 
             curveInteraction.EditState = InputEditStateFlags.Nothing;
             curveInteraction.Draw();
 
+            var modified = curveInteraction.EditState != InputEditStateFlags.Nothing;
+
+            if (modified && cloneIfModified)
+            {
+                curveRef = curveForEditing;
+                _clonedDefaultCurves.Remove(input.DefaultValue);
+            }
+            
             return curveInteraction.EditState;
         }
 
@@ -56,10 +80,6 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
         {
             return null;
 
-            // if (!InteractionForCurve.TryGetValue(curve, out var curveInteraction))
-            //     return null;
-            //
-            // return curveInteraction.Canvas;
         }
 
         /// <summary>
@@ -68,7 +88,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
         private class CurveInteraction : CurveEditing
         {
             public List<Curve> Curves = new List<Curve>();
-            private readonly SingleCurveEditCanvas _singleCurveCanvas = new SingleCurveEditCanvas() { ImGuiTitle = "canvas" + InteractionForCurve.Count };
+            private readonly SingleCurveEditCanvas _singleCurveCanvas = new SingleCurveEditCanvas() { ImGuiTitle = "canvas" + _interactionForCurve.Count };
 
             //public ScalableCanvas Canvas => _canvas;
 
@@ -281,6 +301,9 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                             CurvePoint.Draw(keyframe, this, interaction.SelectedKeyframes.Contains(keyframe), interaction);
                         }
 
+                        //var min = ImGui.GetWindowPos() ;
+                        //ImGui.GetWindowDrawList().AddText(min, Color.Green, " Curve #" + _objectIdGenerator.GetId(curve, out _));
+
                         interaction.HandleFenceSelection();
 
                         // Handle keyboard interaction 
@@ -306,13 +329,14 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                 }
 
                 private const float DefaultCurveParameterHeight = 130;
-                private readonly StandardValueRaster _standardRaster = new StandardValueRaster() { EnableSnapping = true };
-                private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster();
+                private readonly StandardValueRaster _standardRaster = new() { EnableSnapping = true };
+                private readonly HorizontalRaster _horizontalRaster = new();
                 public bool NeedToAdjustScopeAfterFirstRendering = true;
             }
         }
 
-        private static readonly Dictionary<uint, CurveInteraction> InteractionForCurve = new Dictionary<uint, CurveInteraction>();
+        private static readonly Dictionary<uint, CurveInteraction> _interactionForCurve = new(); 
+        private static readonly Dictionary<InputValue, Curve> _clonedDefaultCurves = new();
 
         private static T3Ui.EditingFlags _interactionFlags;
 

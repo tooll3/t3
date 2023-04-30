@@ -36,13 +36,13 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
             var area = new ImRect(ImGui.GetCursorScreenPos() + new Vector2(GradientEditor.StepHandleSize.X * 0.5f,0), 
                                   ImGui.GetCursorScreenPos() + size);
             var drawList = ImGui.GetWindowDrawList();
-            
-            var modified1= GradientEditor.Draw(ref gradient, drawList, area, cloneIfModified: input.IsDefault);
+
+            var cloneIfModified = input.IsDefault;
+            var modified1= GradientEditor.Draw(ref gradient, drawList, area, cloneIfModified);
 
             var modified= modified1 ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
-            if (input.IsDefault && (modified & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
+            if (cloneIfModified && (modified & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
             {
-                Log.Debug("no longer default");
                 input.IsDefault = false;
             } 
             return modified;

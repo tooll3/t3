@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -33,13 +34,28 @@ namespace T3.Editor.Gui.ChildUi
             ImGui.SetCursorScreenPos(innerRect.Min);
             ImGui.BeginChild("curve" + instance.SymbolChildId.GetHashCode(), innerRect.GetSize());
             {
+                var cloneIfModified = sampleCurve.Curve.Input.IsDefault;
+                
                 var preventEditingUnlessCtrlPressed = ImGui.GetIO().KeyCtrl
                                                           ? T3Ui.EditingFlags.None
                                                           : T3Ui.EditingFlags.PreventMouseInteractions;
 
-                CurveInputEditing.DrawCanvasForCurve(curve, T3Ui.EditingFlags.ExpandVertically
-                                                            | preventEditingUnlessCtrlPressed
-                                                            | T3Ui.EditingFlags.PreventZoomWithMouseWheel);
+                var modified2 = CurveInputEditing.DrawCanvasForCurve(ref curve, 
+                                                                     sampleCurve.Curve.Input,
+                                                     cloneIfModified,
+                                                     T3Ui.EditingFlags.ExpandVertically
+                                                     | preventEditingUnlessCtrlPressed
+                                                     | T3Ui.EditingFlags.PreventZoomWithMouseWheel);
+
+                if ((modified2 & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
+                {
+                    if (cloneIfModified)
+                    {
+                        sampleCurve.Curve.SetTypedInputValue(curve);
+                    }
+                    sampleCurve.Result.DirtyFlag.Invalidate();
+                    sampleCurve.CurveOutput.DirtyFlag.Invalidate();
+                }
 
                 DrawSamplePointIndicator();
             }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
@@ -108,7 +107,7 @@ namespace T3.Editor.Gui.InputUi
                 var input = inputSlot.Input;
                 if (input.IsDefault && skipIfDefault)
                     return InputEditStateFlags.Nothing;
-                
+
                 if (inputSlot.IsConnected)
                 {
                     if (typedInputSlot.IsMultiInput)
@@ -281,7 +280,7 @@ namespace T3.Editor.Gui.InputUi
 
                                                             if (ImGui.MenuItem("Remove Animation"))
                                                             {
-                                                                UndoRedoStack.AddAndExecute(new RemoveAnimationsCommand(animator, new[] {inputSlot}));
+                                                                UndoRedoStack.AddAndExecute(new RemoveAnimationsCommand(animator, new[] { inputSlot }));
                                                             }
 
                                                             if (ImGui.MenuItem("Parameters settings"))
@@ -296,9 +295,8 @@ namespace T3.Editor.Gui.InputUi
 
                     ImGui.SetNextItemWidth(-1);
 
-                    editState |= DrawAnimatedValue(name, typedInputSlot, animator); 
-                    
-                    
+                    editState |= DrawAnimatedValue(name, typedInputSlot, animator);
+
                     ImGui.PopStyleColor(2);
                     ImGui.PopItemWidth();
                 }
@@ -310,9 +308,9 @@ namespace T3.Editor.Gui.InputUi
                     //var blendGroup = T3Ui.VariationHandling.ActiveOperatorVariation?.GetBlendGroupForHashedInput(hash);
 
                     var isAnimatable = IsAnimatable;
-                    
+
                     ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.DarkGray.Rgba);
-                    var label = isAnimatable ? "+" : "";// blendGroup == null ? "" : "G" + (blendGroup.Index + 1);
+                    var label = isAnimatable ? "+" : ""; // blendGroup == null ? "" : "G" + (blendGroup.Index + 1);
                     if (ImGui.Button(label, new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
                         if (IsAnimatable)
@@ -320,6 +318,7 @@ namespace T3.Editor.Gui.InputUi
                             UndoRedoStack.AddAndExecute(new AddAnimationCommand(animator, inputSlot));
                         }
                     }
+
                     ImGui.PopStyleColor();
 
                     if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickThreshold)
@@ -370,14 +369,7 @@ namespace T3.Editor.Gui.InputUi
                                                                 // Todo: Implement Undo/Redo Command
                                                                 input.SetCurrentValueAsDefault();
                                                                 var symbolUi = SymbolUiRegistry.Entries[symbolChildUi.SymbolChild.Symbol.Id];
-                                                                try
-                                                                {
-                                                                    symbolUi.Symbol.InvalidateInputDefaultInInstances(inputSlot);
-                                                                }
-                                                                catch (Exception e)
-                                                                {
-                                                                    Log.Warning(" Failed to invalidate: " + e.Message);
-                                                                }
+                                                                symbolUi.Symbol.InvalidateInputDefaultInInstances(inputSlot);
                                                                 symbolUi.FlagAsModified();
                                                             }
 
@@ -386,17 +378,7 @@ namespace T3.Editor.Gui.InputUi
                                                                 UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id,
                                                                                                 input));
                                                             }
-
-                                                            // if (blendGroup == null && ImGui.BeginMenu("Add to Blending", true))
-                                                            // {
-                                                            //     T3Ui.VariationHandling.DrawInputContextMenu(inputSlot, compositionUi, symbolChildUi);
-                                                            // }
-                                                            //
-                                                            // if (blendGroup != null && ImGui.MenuItem("Remove blending"))
-                                                            // {
-                                                            //     T3Ui.VariationHandling.ActiveOperatorVariation?.RemoveBlending(hash);
-                                                            // }
-
+                                                            
                                                             if (ImGui.MenuItem("Publish as Input"))
                                                             {
                                                                 PublishAsInput(inputSlot, symbolChildUi, input);
@@ -423,15 +405,13 @@ namespace T3.Editor.Gui.InputUi
                     }
 
                     ImGui.SetNextItemWidth(-1);
-                    
+
                     editState |= DrawEditControl(name, input, ref typedInputSlot.TypedInputValue.Value);
                     if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified ||
                         (editState & InputEditStateFlags.Finished) == InputEditStateFlags.Finished)
                     {
                         compositionSymbol.InvalidateInputInAllChildInstances(inputSlot);
                     }
-                    
-
 
                     if ((editState & InputEditStateFlags.ResetToDefault) == InputEditStateFlags.ResetToDefault)
                     {
@@ -495,7 +475,7 @@ namespace T3.Editor.Gui.InputUi
             {
                 AddPadding = addPadding;
             }
-            
+
             var opensGroups = GroupTitle != null;
             if (FormInputs.AddCheckBox("Starts Parameter group", ref opensGroups))
             {
@@ -513,15 +493,16 @@ namespace T3.Editor.Gui.InputUi
             {
                 {
                     var groupTitle = GroupTitle;
-                    if (FormInputs.AddStringInput("Group Title", ref groupTitle, "GroupTitle", null, "Group title shown above parameter\n\nGroup will be collapsed by default if name ends with '...' (three dots)."))
+                    if (FormInputs.AddStringInput("Group Title", ref groupTitle, "GroupTitle", null,
+                                                  "Group title shown above parameter\n\nGroup will be collapsed by default if name ends with '...' (three dots)."))
                     {
                         GroupTitle = groupTitle;
                     }
                 }
             }
-            
+
             FormInputs.AddVerticalSpace();
-            
+
             var tmpForRef = Relevancy;
             if (FormInputs.AddEnumDropdown(ref tmpForRef, "Relevancy"))
                 Relevancy = tmpForRef;
@@ -535,7 +516,7 @@ namespace T3.Editor.Gui.InputUi
             var vec2writer = TypeValueToJsonConverters.Entries[typeof(Vector2)];
             writer.WritePropertyName("Position");
             vec2writer(writer, PosOnCanvas);
-            if(!string.IsNullOrEmpty(GroupTitle))
+            if (!string.IsNullOrEmpty(GroupTitle))
                 writer.WriteObject(nameof(GroupTitle), GroupTitle);
 
             if (AddPadding)
