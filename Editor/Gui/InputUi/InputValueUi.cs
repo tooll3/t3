@@ -54,7 +54,7 @@ namespace T3.Editor.Gui.InputUi
         /// <summary>
         /// Wraps the implementation of an parameter control to handle <see cref="InputEditStateFlags"/>
         /// </summary>
-        protected abstract InputEditStateFlags DrawEditControl(string name, ref T value);
+        protected abstract InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref T value);
 
         protected abstract void DrawReadOnlyControl(string name, ref T value);
 
@@ -367,8 +367,17 @@ namespace T3.Editor.Gui.InputUi
                                                         {
                                                             if (ImGui.MenuItem("Set as default", !input.IsDefault))
                                                             {
+                                                                // Todo: Implement Undo/Redo Command
                                                                 input.SetCurrentValueAsDefault();
                                                                 var symbolUi = SymbolUiRegistry.Entries[symbolChildUi.SymbolChild.Symbol.Id];
+                                                                try
+                                                                {
+                                                                    symbolUi.Symbol.InvalidateInputDefaultInInstances(inputSlot);
+                                                                }
+                                                                catch (Exception e)
+                                                                {
+                                                                    Log.Warning(" Failed to invalidate: " + e.Message);
+                                                                }
                                                                 symbolUi.FlagAsModified();
                                                             }
 
@@ -414,13 +423,15 @@ namespace T3.Editor.Gui.InputUi
                     }
 
                     ImGui.SetNextItemWidth(-1);
-                    editState |= DrawEditControl(name, ref typedInputSlot.TypedInputValue.Value);
-
+                    
+                    editState |= DrawEditControl(name, input, ref typedInputSlot.TypedInputValue.Value);
                     if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified ||
                         (editState & InputEditStateFlags.Finished) == InputEditStateFlags.Finished)
                     {
                         compositionSymbol.InvalidateInputInAllChildInstances(inputSlot);
                     }
+                    
+
 
                     if ((editState & InputEditStateFlags.ResetToDefault) == InputEditStateFlags.ResetToDefault)
                     {

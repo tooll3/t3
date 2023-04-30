@@ -3,6 +3,7 @@ using System.Numerics;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -38,7 +39,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                        };
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, ref string value)
+        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref string value)
         {
             if (value == null)
             {

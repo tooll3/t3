@@ -45,7 +45,6 @@ namespace T3.Core.Operator.Slots
                 if (_input.IsDefault && TypedDefaultValue.IsEditableInputReferenceType)
                 {
                     TypedInputValue.AssignClone(TypedDefaultValue);
-                    _input.IsDefault = false;
                 }
             }
         }

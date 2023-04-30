@@ -32,7 +32,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
             Curve.UpdateCurveValues(curves, time, FloatComponents);
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, ref Vector4 float4Value)
+        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref Vector4 float4Value)
         {
             float4Value.CopyTo(FloatComponents);
             var thumbWidth = ImGui.GetFrameHeight();

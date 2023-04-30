@@ -820,5 +820,21 @@ namespace T3.Core.Operator
                 slot.DirtyFlag.Invalidate();
             }
         }
+        
+        /// <summary>
+        /// Invalidates all instances of a symbol input (e.g. if that input's default was modified)
+        /// </summary>
+        public void InvalidateInputDefaultInInstances(IInputSlot inputSlot)
+        {
+            var inputId = inputSlot.Id;
+            foreach (var symbolInstance in InstancesOfSymbol)
+            {
+                var slot = symbolInstance.Inputs.Single(i => i.Id == inputId);
+                if (!slot.Input.IsDefault)
+                    continue;
+                
+                slot.DirtyFlag.Invalidate();
+            }
+        }
     }
 }

@@ -98,13 +98,13 @@ namespace T3.Core.Operator
                 if (DefaultValue.IsEditableInputReferenceType)
                 {
                     DefaultValue.AssignClone(Value);
-                    IsDefault = false;
                 }
                 else
                 {
                     DefaultValue.Assign(Value);
-                    IsDefault = true;
                 }
+
+                IsDefault = true;
             }
 
             public void ResetToDefault()
@@ -112,13 +112,12 @@ namespace T3.Core.Operator
                 if (DefaultValue.IsEditableInputReferenceType)
                 {
                     Value.AssignClone(DefaultValue);
-                    IsDefault = false;
                 }
                 else
                 {
                     Value.Assign(DefaultValue);
-                    IsDefault = true;
                 }
+                IsDefault = true;
             }
         }
 

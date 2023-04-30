@@ -1,6 +1,10 @@
 ﻿using System.Numerics;
+using System.Runtime.Serialization;
 using ImGuiNET;
 using T3.Core.DataTypes;
+using T3.Core.Logging;
+using T3.Core.Operator;
+using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs
@@ -19,30 +23,33 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                    };
         }
         
-        protected override InputEditStateFlags DrawEditControl(string name, ref Gradient gradient)
+        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref Gradient gradient)
         {
             if (gradient == null)
             {
-                // value was null!
                 ImGui.TextUnformatted(name + " is null?!");
                 return InputEditStateFlags.Nothing;
             }
-            
-            return DrawEditor(gradient);
-        }
 
-        // TODO: Implement proper edit flags and Undo
-        private static InputEditStateFlags DrawEditor(Gradient gradient)
-        {
             var size = new Vector2(ImGui.GetContentRegionAvail().X - GradientEditor.StepHandleSize.X, 
                                    ImGui.GetFrameHeight());
             var area = new ImRect(ImGui.GetCursorScreenPos() + new Vector2(GradientEditor.StepHandleSize.X * 0.5f,0), 
                                   ImGui.GetCursorScreenPos() + size);
-            var modified= GradientEditor.Draw(gradient, ImGui.GetWindowDrawList(), area);
-            return modified ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
+            var drawList = ImGui.GetWindowDrawList();
+            
+            var modified1= GradientEditor.Draw(ref gradient, drawList, area, cloneIfModified: input.IsDefault);
+
+            var modified= modified1 ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
+            if (input.IsDefault && (modified & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
+            {
+                Log.Debug("no longer default");
+                input.IsDefault = false;
+            } 
+            return modified;
         }
-        
-        
+
+        // TODO: Implement proper edit flags and Undo
+
         protected override void DrawReadOnlyControl(string name, ref Gradient value)
         {
             ImGui.NewLine();
