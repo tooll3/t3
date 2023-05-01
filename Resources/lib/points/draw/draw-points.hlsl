@@ -103,6 +103,6 @@ float4 psMain(psInput input) : SV_TARGET
         discard;
 
     float4 col = input.color * textureCol;
-    col.rgb = lerp(col.rgb, FogColor.rgb, input.fog);
+    col.rgb = lerp(col.rgb, FogColor.rgb, input.fog * FogColor.a);
     return clamp(col, float4(0, 0, 0, 0), float4(1000, 1000, 1000, 1));
 }

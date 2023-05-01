@@ -33,7 +33,7 @@ Texture2D<float4> Gradient : register(t1);
 sampler texSampler : register(s0);
 sampler clampedSampler : register(s1);
 
-float fmod(float x, float y)
+inline float fmod(float x, float y)
 {
     return (x - y * floor(x / y));
 }
