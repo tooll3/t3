@@ -60,7 +60,12 @@ namespace T3.Editor.Gui.Windows
                                                                   ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen,
                                                                   "Swap main and second windows when fullscreen",
                                                                   UserSettings.Defaults.SwapMainAnd2ndWindowsWhenFullscreen);
-
+                
+                changed |= FormInputs.AddCheckBox("Mousewheel adjust flight speed",
+                                                  ref UserSettings.Config.AdjustCameraSpeedWithMouseWheel,
+                                                  "If enabled, scrolling the mouse wheel while holding left of right mouse button will control navigation speed with WASD keys. This is similar to Unity and Unreal.",
+                                                  UserSettings.Defaults.AdjustCameraSpeedWithMouseWheel);
+                
                 FormInputs.ResetIndent();
                 FormInputs.AddVerticalSpace();
                 //ImGui.Dummy(new Vector2(20,20));

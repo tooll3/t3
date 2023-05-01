@@ -21,7 +21,6 @@ namespace T3.Editor.Gui.UiHelpers
         }
 
         
-
         public class ConfigData
         {
             public readonly Dictionary<Guid, ScalableCanvas.Scope> OperatorViewSettings = new Dictionary<Guid, ScalableCanvas.Scope>();
@@ -56,6 +55,7 @@ namespace T3.Editor.Gui.UiHelpers
             public float ScrollSmoothing = 0.06f;
             public float TooltipDelay = 1.2f;
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
+            public bool AdjustCameraSpeedWithMouseWheel = false;
             public float CameraSpeed = 1;
             public bool AutoPinAllAnimations = false;
 

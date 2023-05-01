@@ -403,14 +403,20 @@ namespace T3.Editor.Gui.Styling
             ImGui.PopStyleVar(2);
             ImGui.PopFont();
 
+            //CustomComponents.TooltipForLastItem(tooltip, null, false);
             if (!ImGui.IsItemHovered())
                 return;
-
+            
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
+            ImGui.PushStyleColor(ImGuiCol.PopupBg, Color.Black.Rgba);
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 1);
             ImGui.BeginTooltip();
             ImGui.PushTextWrapPos(300);
             ImGui.TextUnformatted(tooltip);
             ImGui.PopTextWrapPos();
             ImGui.EndTooltip();
+            ImGui.PopStyleColor();
+            ImGui.PopStyleVar(2);
         }
 
         private static bool AppendResetButton(bool hasReset, string id)

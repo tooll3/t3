@@ -1,5 +1,6 @@
 using System.Numerics;
 using T3.Core.Operator.Interfaces;
+using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Interaction.Camera
 {
@@ -18,6 +19,7 @@ namespace T3.Editor.Gui.Interaction.Camera
         {
             Position = new Vector3(0, 0, CameraInteractionParameters.DefaultCameraPositionZ);
             Target = Vector3.Zero;
+            UserSettings.Config.CameraSpeed = 1;
         }
 
         public bool MatchesSetup(CameraSetup other)
