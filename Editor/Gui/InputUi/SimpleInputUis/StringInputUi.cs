@@ -39,7 +39,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                        };
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref string value)
+        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref string value, bool readOnly)
         {
             if (value == null)
             {

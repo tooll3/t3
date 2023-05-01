@@ -27,7 +27,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
                        };
         }
         
-        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref int value)
+        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref int value, bool readOnly)
         {
             InputEditStateFlags result;
             
@@ -39,6 +39,9 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
             {
                 IntComponents[0] = value;
                 result = VectorValueEdit.Draw(IntComponents, Min, Max, Scale, Clamp);
+                if (readOnly)
+                    return InputEditStateFlags.Nothing;
+                
                 value = IntComponents[0];
             }
             

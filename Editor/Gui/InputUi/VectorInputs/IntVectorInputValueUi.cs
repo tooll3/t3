@@ -51,7 +51,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
             }
             
             ImGui.PushID(inputSlot.Parent.SymbolChildId.GetHashCode() + inputSlot.Id.GetHashCode());
-            var inputEditState = DrawEditControl(name,inputSlot.Input, ref inputSlot.Value);
+            var inputEditState = DrawEditControl(name,inputSlot.Input, ref inputSlot.Value, false);
             ImGui.PopID();
             
             if ((inputEditState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
@@ -66,7 +66,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         protected override void DrawReadOnlyControl(string name, ref T int2Value)
         {
             ImGui.PushStyleColor(ImGuiCol.Text, Color.Blue.Rgba);
-            DrawEditControl(name,null, ref int2Value);
+            DrawEditControl(name,null, ref int2Value, true);
             ImGui.PopStyleColor();
         }
         

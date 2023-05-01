@@ -53,7 +53,7 @@ namespace T3.Editor.Gui.InputUi
         /// <summary>
         /// Wraps the implementation of an parameter control to handle <see cref="InputEditStateFlags"/>
         /// </summary>
-        protected abstract InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref T value);
+        protected abstract InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref T value, bool readOnly);
 
         protected abstract void DrawReadOnlyControl(string name, ref T value);
 
@@ -406,7 +406,7 @@ namespace T3.Editor.Gui.InputUi
 
                     ImGui.SetNextItemWidth(-1);
 
-                    editState |= DrawEditControl(name, input, ref typedInputSlot.TypedInputValue.Value);
+                    editState |= DrawEditControl(name, input, ref typedInputSlot.TypedInputValue.Value, false);
                     if ((editState & InputEditStateFlags.Modified) == InputEditStateFlags.Modified ||
                         (editState & InputEditStateFlags.Finished) == InputEditStateFlags.Finished)
                     {

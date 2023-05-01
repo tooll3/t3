@@ -19,7 +19,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                        };
         }
         
-        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref StructuredList slist)
+        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref StructuredList slist, bool readOnly)
         {
             if (slist == null)
             {

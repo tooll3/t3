@@ -20,13 +20,15 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
             return CloneWithType<Size2InputUi>();
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref Size2 int3Value)
+        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref Size2 int3Value, bool readOnly)
         {
             IntComponents[0] = int3Value.Width;
             IntComponents[1] = int3Value.Height;
 
             var inputEditState = VectorValueEdit.Draw(IntComponents, Min, Max, Scale, Clamp);
-            int3Value = new Size2(IntComponents[0], IntComponents[1]);
+            if(!readOnly) 
+                int3Value = new Size2(IntComponents[0], IntComponents[1]);
+
             return inputEditState;
         }
 
