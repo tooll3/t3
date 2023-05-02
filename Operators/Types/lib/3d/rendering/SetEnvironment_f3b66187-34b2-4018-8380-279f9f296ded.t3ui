@@ -37,7 +37,8 @@
       "Position": {
         "X": 114.808914,
         "Y": 1201.7096
-      }
+      },
+      "GroupTitle": "Render Background..."
     },
     {
       "InputId": "96094239-9d82-4a32-bbb0-e9da7f6501da"/*BackgroundBlur*/,
@@ -191,7 +192,7 @@
       "ChildId": "d21fdf03-5b23-4752-bf5e-a01c4b525f55"/*Multiply*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 606.5238,
