@@ -162,14 +162,15 @@ float4 psMain(psInput input) : SV_TARGET
     float f2 = 1-saturate( (input.texCoord.x ) * 100);
     float t = f1*f2;
 
-    return float4(imgColor.rgb, imgColor.a * t);
+    return float4(lerp(imgColor.rgb, FogColor.rgb, input.fog * FogColor.a), imgColor.a * t);
     //return float4(0, input.texCoord.x + VisibleRange,0,t);
     //return float4( (f1*f2).xxx,1);
     //return float4(f1,f2, f1*f2,1);
     
     //float t = smoothstep(0.0,0.01, f);
     //t= max(0, t - VisibleRange);
-    return float4(Color.rgb, t);
+    //col.rgb = lerp(col.rgb, FogColor.rgb, input.fog * FogColor.a);
+    return float4(lerp(Color.rgb, FogColor.rgb, input.fog * FogColor.a), t);
     //return lerp(float4(0,0,0,1) , float4(0,0,0,1), t );
     //return float4(input.texCoord,0,1);
 

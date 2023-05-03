@@ -261,7 +261,7 @@
       "ChildId": "a2b92aa8-4d25-471c-b460-fc0f0b1eff5e"/*MultiplyInt*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 809.4666,
@@ -360,7 +360,7 @@
       "ChildId": "b625b0aa-dfca-4015-a0b6-b3df4ff55cf8"/*Add*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": -285.44116,
