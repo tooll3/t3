@@ -3,7 +3,9 @@ mkdir "..\T3-Standalone"
 
 Xcopy "Resources" "..\T3-Standalone\Resources" /E /H /C /I
 Xcopy ".Variations" "..\T3-Standalone\.Variations" /E /H /C /I
-Xcopy "Operators" "..\T3-Standalone\Operators" /E /H /C /I
+Xcopy "Operators\Resources" "..\T3-Standalone\Operators\Resources" /E /H /C /I
+Xcopy "Operators\Types" "..\T3-Standalone\Operators\Types" /E /H /C /I
+Xcopy "Operators\Utils" "..\T3-Standalone\Operators\Utils" /E /H /C /I
 Xcopy "Editor\bin\Release\net6.0-windows" "..\T3-Standalone\" /E /H /C /I
 Xcopy "StartT3\bin\Release\net6.0-windows" "..\T3-Standalone\" /E /H /C /I
 Xcopy "Player\bin\Release\net6.0-windows" "..\T3-Standalone\Player\bin\Release\net6.0-windows" /E /H /C /I
@@ -49,3 +51,5 @@ Xcopy "Install\default-layouts" "..\T3-Standalone\.t3\layouts" /E /H /C /I
 
 @RD /S /Q "..\T3-Standalone\Resources\user\wake"
 @RD /S /Q "..\T3-Standalone\Resources\user\pixtur\Vj\Faces"
+@RD /S /Q "..\T3-Standalone\Resources\user\still\proj-monsters"
+@RD /S /Q "..\T3-Standalone\Resources\user\still\carpe-diem"
