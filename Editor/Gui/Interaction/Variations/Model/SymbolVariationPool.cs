@@ -287,7 +287,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             var changeSets = new Dictionary<Guid, Dictionary<Guid, InputValue>>();
             if (instances == null || instances.Count == 0)
             {
-                Log.Warning("Not instances to create variation for");
+                Log.Warning("No instances to create variation for");
                 return null;
             }
 

@@ -15,6 +15,13 @@
         "X": -200.0,
         "Y": 180.0
       }
+    },
+    {
+      "InputId": "9ad1267b-6d0a-43f4-a4e9-0f77659ddd44"/*Mode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 225.0
+      }
     }
   ],
   "SymbolChildUis": [],
