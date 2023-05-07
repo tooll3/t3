@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "8f203c5f-6eb8-42a1-bfea-9ca52a49e132"/*Scale*/,
-      "DefaultValue": 10.0
+      "DefaultValue": 2.0
     },
     {
       "Id": "7df44a8d-af20-400f-b8a7-4b2200f55ec1"/*Stretch*/,

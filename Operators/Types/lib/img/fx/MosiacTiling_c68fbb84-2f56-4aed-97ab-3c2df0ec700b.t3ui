@@ -1,6 +1,6 @@
 {
   "Id": "c68fbb84-2f56-4aed-97ab-3c2df0ec700b"/*MosiacTiling*/,
-  "Description": "This is a test shader",
+  "Description": "This subdevides the incoming image into resursive tiles.\n\nCheck out the presets for an overview.",
   "InputUis": [
     {
       "InputId": "5a5ebec0-88ac-4e8e-873b-88e5d68fb920"/*Image*/,

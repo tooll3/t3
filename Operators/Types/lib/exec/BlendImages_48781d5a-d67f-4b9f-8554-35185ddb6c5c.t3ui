@@ -11,6 +11,7 @@
     },
     {
       "InputId": "12a875e2-89c8-4a16-91ec-9f9ac431f10c"/*Input*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -1099.2083,
         "Y": 281.588

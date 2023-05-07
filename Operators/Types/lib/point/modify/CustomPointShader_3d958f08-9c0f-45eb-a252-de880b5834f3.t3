@@ -1,11 +1,11 @@
 {
   "Name": "CustomPointShader",
   "Id": "3d958f08-9c0f-45eb-a252-de880b5834f3",
-  "Namespace": "lib.point.noise",
+  "Namespace": "lib.point.modify",
   "Inputs": [
     {
       "Id": "e9712b03-e7aa-4fe5-b5cf-f2c5d0c0b0df"/*ShaderCode*/,
-      "DefaultValue": "Point p = SourcePoints[i.x];\n\nResultPoints[i].position = p.position + float3(0,0.1,0);\nResultPoints[i].rotation = p.rotation;\nResultPoints[i].w =  p.w;"
+      "DefaultValue": "p.position += Center + sin(f * A) * (B + 1);"
     },
     {
       "Id": "e77660e2-0fd0-45ea-8e0b-c607a757bb49"/*Points*/,
