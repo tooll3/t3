@@ -45,7 +45,7 @@ namespace T3.StartEditor
             Log.Debug("Starting Tooll 3");
             try
             {
-                var filepath = "Editor.exe";
+                var filepath = "T3Editor.exe";
                 Process.Start(new ProcessStartInfo(filepath)
                                   {
                                       UseShellExecute = true,

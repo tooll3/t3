@@ -29,10 +29,23 @@ Xcopy "Install\default-layouts" "..\T3-Standalone\.t3\layouts" /E /H /C /I
 @RD /S /Q "..\T3-Standalone\zh-Hant"
 
 
+@RD /S /Q "..\T3-Standalone\runtimes\freebsd"
+@RD /S /Q "..\T3-Standalone\runtimes\illumos"
+@RD /S /Q "..\T3-Standalone\runtimes\ios"
+@RD /S /Q "..\T3-Standalone\runtimes\linux-arm"
+@RD /S /Q "..\T3-Standalone\runtimes\linux-arm64"
 @RD /S /Q "..\T3-Standalone\runtimes\linux-x64"
+@RD /S /Q "..\T3-Standalone\runtimes\linux"
+@RD /S /Q "..\T3-Standalone\runtimes\osx-arm64"
 @RD /S /Q "..\T3-Standalone\runtimes\osx-universal"
 @RD /S /Q "..\T3-Standalone\runtimes\osx-x64"
+@RD /S /Q "..\T3-Standalone\runtimes\osx"
+@RD /S /Q "..\T3-Standalone\runtimes\solaris"
+@RD /S /Q "..\T3-Standalone\runtimes\tvos"
+@RD /S /Q "..\T3-Standalone\runtimes\unix"
+@RD /S /Q "..\T3-Standalone\runtimes\win-arm64"
 @RD /S /Q "..\T3-Standalone\runtimes\win-x86"
+@RD /S /Q "..\T3-Standalone\runtimes\win"
 
 @RD /S /Q "..\T3-Standalone\Resources\user\wake"
 @RD /S /Q "..\T3-Standalone\Resources\user\pixtur\Vj\Faces"

@@ -4,17 +4,6 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "86b57d6f-2aaa-4d4b-9c4c-556599eb715d"/*FadingSlideShow*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 6007.6357,
-        "Y": -858.56244
-      }
-    },
-    {
       "ChildId": "ddd97b46-8d62-41d4-a108-4038eb83cbd2"/*Group*/,
       "Size": {
         "X": 110.0,
@@ -235,28 +224,6 @@
       }
     },
     {
-      "ChildId": "4636cc86-6fe6-4468-8c6c-f45f3ddc4fa8"/*AdjustColors*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 5124.0034,
-        "Y": -721.12134
-      }
-    },
-    {
-      "ChildId": "c4538645-c5f1-4644-8c45-2b32e9df85fd"/*Grain*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 4974.0034,
-        "Y": -721.12134
-      }
-    },
-    {
       "ChildId": "c118178d-0077-48cc-8c27-3d16416cf0e5"/*IsActive*/,
       "Size": {
         "X": 110.0,
@@ -356,17 +323,6 @@
       }
     },
     {
-      "ChildId": "28decc68-604d-4397-aeea-a7325c5faacc"/*Storboard*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 6157.6357,
-        "Y": -858.56244
-      }
-    },
-    {
       "ChildId": "e4318bae-cd3a-4df4-90f4-c33adea8e00e"/*MainPart*/,
       "Size": {
         "X": 110.0,
@@ -419,28 +375,6 @@
       "Position": {
         "X": 5253.9834,
         "Y": -219.73016
-      }
-    },
-    {
-      "ChildId": "4fcdaea9-f7de-459c-99f9-1c5428578df5"/*DrawAsSplitView*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 5887.231,
-        "Y": -799.3599
-      }
-    },
-    {
-      "ChildId": "9edb70bb-9798-4ec0-a27a-b333c58baf20"/*Group*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 5992.9434,
-        "Y": -782.72766
       }
     },
     {
@@ -507,193 +441,6 @@
       "Position": {
         "X": 4078.1523,
         "Y": 14.808044
-      }
-    },
-    {
-      "ChildId": "cbc66a05-3c97-422c-93c7-f5b9d45de6b4"/*PickTexture*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 1746.8837,
-        "Y": -282.8263
-      }
-    },
-    {
-      "ChildId": "23301fa8-ca85-49a1-b65c-caf6a089901d"/*Displace*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 1610.409,
-        "Y": -310.88184
-      }
-    },
-    {
-      "ChildId": "aece87d5-6505-4c46-a24d-443e22e5237c"/*LinearGradient*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 1357.3422,
-        "Y": -109.918274
-      }
-    },
-    {
-      "ChildId": "35118d0d-e22e-411b-b339-388647df7679"/*count*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 1075.0306,
-        "Y": -218.97574
-      }
-    },
-    {
-      "ChildId": "6f0ae1d1-e2c0-4ce1-bc21-5719164dfcf9"/*Div*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 1210.5306,
-        "Y": -229.38147
-      }
-    },
-    {
-      "ChildId": "7467c481-a661-4a39-a045-a6d9cbe8d28d"/*LinearGradient*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 1657.3422,
-        "Y": -111.04404
-      }
-    },
-    {
-      "ChildId": "0a98b76f-262e-4f2e-a816-de0b6d2dca2d"/*LinearGradient*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 1355.7225,
-        "Y": 49.731567
-      }
-    },
-    {
-      "ChildId": "855bfdb2-c9c0-403b-8a89-92d1a1e02cd1"/*BlendWithMask*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
-      "Position": {
-        "X": 1512.6556,
-        "Y": -104.17792
-      }
-    },
-    {
-      "ChildId": "57b7261a-9c3d-4eed-824e-fcb1c60142fa"/*LinearGradient*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 1357.8182,
-        "Y": 219.95679
-      }
-    },
-    {
-      "ChildId": "a1d62b88-87f4-4866-a19b-42943ac11e6f"/*Displace*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 5453.808,
-        "Y": 1048.2573
-      }
-    },
-    {
-      "ChildId": "96c00c46-d588-44c0-8fbc-f84a6a78bcb4"/*LinearGradient*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 5004.781,
-        "Y": 1216.1188
-      }
-    },
-    {
-      "ChildId": "5410d24a-5bdb-423a-9cf3-466e26c345f3"/*count*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 4719.281,
-        "Y": 1392.5244
-      }
-    },
-    {
-      "ChildId": "4aba6d71-4e2b-4544-97ff-085e7d824dc7"/*Div*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 4854.781,
-        "Y": 1382.1187
-      }
-    },
-    {
-      "ChildId": "cc3ce3b0-a74e-4e71-a43b-96ea25e915c1"/*LinearGradient*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 5304.781,
-        "Y": 1216.1188
-      }
-    },
-    {
-      "ChildId": "24bac464-2ea9-4a21-80fa-f0ace236d00d"/*LinearGradient*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
-      "Position": {
-        "X": 5004.781,
-        "Y": 1382.1187
-      }
-    },
-    {
-      "ChildId": "ec2994bf-72f8-4819-bb9f-4df2513fe517"/*BlendWithMask*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
-      "Position": {
-        "X": 5154.781,
-        "Y": 1216.1188
-      }
-    },
-    {
-      "ChildId": "4f6898c9-07aa-4701-b33d-6d1b74d4c5d6"/*LinearGradient*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": 5004.781,
-        "Y": 1548.1187
       }
     },
     {
@@ -971,24 +718,6 @@
       "Size": {
         "X": 1425.3817,
         "Y": 314.53546
-      }
-    },
-    {
-      "Id": "c8dcf87b-64e8-4b7e-b345-00ffc6b6d30a",
-      "Title": "Displace Amplify Fraser",
-      "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
-        "W": 1.0
-      },
-      "Position": {
-        "X": 4662.469,
-        "Y": 988.2573
-      },
-      "Size": {
-        "X": 961.33887,
-        "Y": 641.8623
       }
     }
   ]

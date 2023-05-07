@@ -7,6 +7,7 @@
     <StartupObject>T3.Editor.Program</StartupObject>
     <ApplicationIcon>..\Resources\t3-editor\images\t3.ico</ApplicationIcon>
     <RootNamespace>T3.Editor</RootNamespace>
+    <AssemblyName>T3Editor</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

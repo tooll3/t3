@@ -37,7 +37,7 @@ namespace T3.Editor
         public static SpaceMouse SpaceMouse { get; private set; }
 
         public static readonly bool IsStandAlone = File.Exists("StartT3.exe");
-        public const string Version = "v3.5.1";
+        public const string Version = "v3.6.0";
 
         [STAThread]
         private static void Main(string[] args)
@@ -168,9 +168,6 @@ namespace T3.Editor
             T3Style.Apply();
             
             
-            
-
-            var p = Cursor.Position;
             // Main loop
             void RenderCallback()
             {
