@@ -130,7 +130,7 @@
       "ChildId": "35da294c-48c0-465f-b978-963e3c3dbada"/*ComputeShader*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 23.0
       },
       "Position": {
         "X": 1014.63226,
@@ -141,7 +141,7 @@
       "ChildId": "ff1cf54e-05b8-4a32-b26f-3fab98cc7d16"/*ComputeShaderStage*/,
       "Size": {
         "X": 110.0,
-        "Y": 153.0
+        "Y": 140.0
       },
       "Position": {
         "X": 1397.4193,

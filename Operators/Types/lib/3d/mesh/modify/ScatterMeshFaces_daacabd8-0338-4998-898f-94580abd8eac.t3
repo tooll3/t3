@@ -87,12 +87,7 @@
           "Value": "Resources\\lib\\3d\\mesh\\fx\\scatter-mesh-faces.hlsl"
         }
       ],
-      "Outputs": [
-        {
-          "Id": "a6fe06e0-b6a9-463c-9e62-930c58b0a0a1"/*ComputeShader*/,
-          "DirtyFlagTrigger": "Always"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "ff1cf54e-05b8-4a32-b26f-3fab98cc7d16"/*ComputeShaderStage*/,
@@ -450,12 +445,6 @@
       "SourceSlotId": "35c0e513-812f-49e2-96fa-17541751c19b",
       "TargetParentOrChildId": "ff1cf54e-05b8-4a32-b26f-3fab98cc7d16",
       "TargetSlotId": "180cae35-10e3-47f3-8191-f6ecea7d321c"
-    },
-    {
-      "SourceParentOrChildId": "d78e3c51-22d2-47fa-8a10-3454de465f1e",
-      "SourceSlotId": "7a76d147-4b8e-48cf-aa3e-aac3aa90e888",
-      "TargetParentOrChildId": "ff1cf54e-05b8-4a32-b26f-3fab98cc7d16",
-      "TargetSlotId": "34cf06fe-8f63-4f14-9c59-35a2c021b817"
     },
     {
       "SourceParentOrChildId": "6e1540a7-f8ba-4bbf-85c8-454627e2e02d",
