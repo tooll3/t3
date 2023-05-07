@@ -189,7 +189,7 @@
     },
     {
       "Id": "c676823b-97d0-4e3e-a59e-e2297816ec69"/*AlphaCut*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.5
     },
     {
       "Id": "a129bf5c-e549-4f7c-b30b-5199ffd38f8c"/*GPoints*/,
@@ -703,6 +703,18 @@
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "6dcc3e96-5e5d-47a3-bc1b-1594815b2dcc"/*LoadImage*/,
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+      "InputValues": [
+        {
+          "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
+          "Type": "System.String",
+          "Value": "Resources\\common\\images\\white-dot-256px.png"
+        }
+      ],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -863,7 +875,7 @@
       "TargetSlotId": "588be11f-d0db-4e51-8dbb-92a25408511c"
     },
     {
-      "SourceParentOrChildId": "b9476ab8-83bc-479f-b59d-fc1cf26875f1",
+      "SourceParentOrChildId": "6dcc3e96-5e5d-47a3-bc1b-1594815b2dcc",
       "SourceSlotId": "e0c4fedd-5c2f-46c8-b67d-5667435fb037",
       "TargetParentOrChildId": "70ff724c-37de-4b71-8c23-dcc793ee561a",
       "TargetSlotId": "38b478fa-c431-4dc1-80ef-d6c53c90389e"

@@ -97,7 +97,8 @@ inline float GetUFromMode(float mode, float f, float3 scatter, float w, float fo
     {
 
     case 0:
-        return scatter.x;
+        return (scatter.x + scatter.y * 7.123 + scatter.z * 13.33) % 1;
+        // return scatter.x;
 
     case 1:
         float f1 = (f + SpreadPhase) / SpreadLength;
@@ -139,8 +140,8 @@ psInput vsMain(uint id
     float phase = RandomPhase + 133.1123 * f;
     int phaseId = (int)phase;
 
-    float3 normalizedScatter = lerp(hash31(particleId % 123121 + phaseId),
-                                    hash31(particleId % 123121 + phaseId + 1),
+    float3 normalizedScatter = lerp(hash31((particleId + phaseId) % 123121),
+                                    hash31((particleId + phaseId) % 123121 + 1),
                                     smoothstep(0, 1,
                                                phase - phaseId));
     float3 scatterForScale = normalizedScatter * 2 - 1;
@@ -156,7 +157,7 @@ psInput vsMain(uint id
 
     float4 posInObject = float4(p.position, 1);
 
-    float3 randomOffset = rotate_vector((normalizedScatter - 0.5) * 2 * RandomPosition * Randomize, p.rotation);
+    float3 randomOffset = rotate_vector((scatterForScale - 0.5) * 2 * RandomPosition * Randomize, p.rotation);
     posInObject += float4(randomOffset, 0);
 
     // float3 axis = rotate_vector(p.position, rotation) * Size * sizeFromW;
