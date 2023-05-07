@@ -8,7 +8,7 @@
       "DefaultValue": null
     },
     {
-      "Id": "5969cc2b-654e-490e-ab66-1511483f50ae"/*Freeze*/,
+      "Id": "5969cc2b-654e-490e-ab66-1511483f50ae"/*ResyncTrigger*/,
       "DefaultValue": false
     }
   ],

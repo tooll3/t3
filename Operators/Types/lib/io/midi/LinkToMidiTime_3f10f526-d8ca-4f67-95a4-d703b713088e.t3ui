@@ -10,7 +10,7 @@
       }
     },
     {
-      "InputId": "5969cc2b-654e-490e-ab66-1511483f50ae"/*Freeze*/,
+      "InputId": "5969cc2b-654e-490e-ab66-1511483f50ae"/*ResyncTrigger*/,
       "Position": {
         "X": -200.0,
         "Y": 45.0
