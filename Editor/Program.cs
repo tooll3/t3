@@ -37,7 +37,7 @@ namespace T3.Editor
         public static SpaceMouse SpaceMouse { get; private set; }
 
         public static readonly bool IsStandAlone = File.Exists("StartT3.exe");
-        private const string Version = "v3.5.1";
+        public const string Version = "v3.5.1";
 
         [STAThread]
         private static void Main(string[] args)
@@ -51,7 +51,7 @@ namespace T3.Editor
             Application.SetCompatibleTextRenderingDefault(false);
 
             var splashScreen = new SplashScreen.SplashScreen();
-            splashScreen.Show(  "Resources/t3-editor/images/t3-splash-screen-v3.5.png");
+            splashScreen.Show(  "Resources/t3-editor/images/t3-SplashScreen.png");
             Log.AddWriter(splashScreen);
             
             Log.AddWriter(new ConsoleWriter());

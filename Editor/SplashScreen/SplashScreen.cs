@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using T3.Core.Logging;
 
@@ -8,7 +9,6 @@ namespace T3.Editor.SplashScreen;
 internal class SplashScreen : ILogWriter
 {
     
-    private delegate void SafeCallDelegate(string text);
     
     public void Show(string imagePath)
     {
@@ -23,7 +23,31 @@ internal class SplashScreen : ILogWriter
                               BackgroundImageLayout = ImageLayout.Stretch,
                               Size = imageSize
                           };
+        
+        var tableLayoutPanel = new TableLayoutPanel
+                                   {
+                                       Dock = DockStyle.Fill,
+                                       ColumnCount = 2,
+                                       RowCount = 1,
+                                       CellBorderStyle = TableLayoutPanelCellBorderStyle.None,
+                                       BackColor = Color.Transparent,
+                                   };
+        tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+        tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
 
+        tableLayoutPanel.Controls.Add(new Label
+                                          {
+                                              Dock = DockStyle.Fill,
+                                              AutoSize = false,
+                                              TextAlign = ContentAlignment.BottomLeft,
+                                              BackColor = Color.Transparent,
+                                              ForeColor = Color.Ivory,
+                                              Text = "" + Program.Version,
+                                              UseMnemonic = false,
+                                              Font = new Font("Arial", 8),
+                                              Anchor = AnchorStyles.Bottom | AnchorStyles.Left,
+                                          }, 0, 0);
+        
         _logMessageLabel = new Label
                                {
                                    Dock = DockStyle.Bottom,
@@ -34,9 +58,15 @@ internal class SplashScreen : ILogWriter
                                    Text = @"Loading T3...",
                                    UseMnemonic = false,
                                    Font = new Font("Arial", 8),
+                                   Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
+                                   Size = new Size(400, 20)
                                };
-        _splashForm.Controls.Add(_logMessageLabel);
+        
+        tableLayoutPanel.Controls.Add(_logMessageLabel, 1, 0);
+        
 
+        _splashForm.Controls.Add(tableLayoutPanel);
+        
         _splashForm.Show();
         _splashForm.Refresh();
         _splashForm.TopMost = true;
@@ -64,10 +94,13 @@ internal class SplashScreen : ILogWriter
 
     public void Dispose()
     {
-        //throw new NotImplementedException();
+
     }
 
-    
+    /// <summary>
+    /// Defer the setting the form UI element on the main Thread.
+    /// </summary>
+    private delegate void SafeCallDelegate(string text);
     private void WriteTextSafe(string text)
     {
         if (_logMessageLabel.InvokeRequired)
@@ -82,17 +115,19 @@ internal class SplashScreen : ILogWriter
             _logMessageLabel.Refresh();
         }
     }
-    
-    
+
+    #region implement ILogWriter
     public LogEntry.EntryLevel Filter { get; set; }
 
     public void ProcessEntry(LogEntry entry)
     {
         if (_logMessageLabel == null)
             return;
-        
-        WriteTextSafe(entry.Message);
+
+        var firstLine = entry.Message.Split("\n").First();
+        WriteTextSafe(firstLine[..Math.Min(60, firstLine.Length)]);
     }
+    #endregion
     
     private static readonly Size _baseDpi = new(96, 96);
     private Form _splashForm;
