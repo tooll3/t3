@@ -66,7 +66,7 @@ namespace T3.Editor.Gui.Windows
 
                 var currentTime = Playback.RunTimeInSecs;
                 var durationSoFar = currentTime - _exportStartedTime;
-                if (GetRealFrame() > _frameCount || !success)
+                if (GetRealFrame() >= _frameCount || !success)
                 {
                     var successful = success ? "successfully" : "unsuccessfully";
                     _lastHelpString = $"Sequence export finished {successful} in {durationSoFar:0.00}s";

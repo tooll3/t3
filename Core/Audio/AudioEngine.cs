@@ -168,10 +168,6 @@ namespace T3.Core.Audio
                                 bool quitLoop = false;
                                 while (buffer.Length < bytes && !quitLoop)
                                 {
-                                    // set the channel buffer size from here on
-                                    Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer,
-                                        (int)Math.Round(frameDurationInSeconds * 1000.0 * 2.0));
-
                                     // update and read the data
                                     if (Bass.ChannelIsActive(clipStream.StreamHandle) != PlaybackState.Playing)
                                     {
@@ -185,6 +181,10 @@ namespace T3.Core.Audio
                                             Bass.ChannelPlay(clipStream.StreamHandle);
                                         }
                                     }
+
+                                    // set the channel buffer size from here on
+                                    Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer,
+                                        (int)Math.Round(frameDurationInSeconds * 1000.0 * 2.0));
 
                                     Bass.ChannelUpdate(clipStream.StreamHandle, (int)Math.Round(frameDurationInSeconds * 1000.0 * 4.0));
 

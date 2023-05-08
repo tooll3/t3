@@ -19,7 +19,6 @@ namespace T3.Editor.Gui.Windows
                               "Audio hint: Please ensure your BPM is set corrrectly with the Soundtrack.";
         }
 
-
         protected override void DrawContent()
         {
             DrawTimeSetup();
@@ -80,7 +79,7 @@ namespace T3.Editor.Gui.Windows
                 ImGui.ProgressBar((float) Progress, new Vector2(-1, 4));
                 var currentTime = Playback.RunTimeInSecs;
                 var durationSoFar = currentTime - _exportStartedTime;
-                if (GetRealFrame() > _frameCount || !success)
+                if (GetRealFrame() >= _frameCount || !success)
                 {
                     if (success)
                         _lastHelpString = $"Sequence export of {_frameCount} frames finished successfully in {durationSoFar:0.00}s";
