@@ -20,23 +20,25 @@ namespace T3.Core.Audio
     {
         public static int clipChannels(AudioClip clip)
         {
-            if (_clipPlaybacks.TryGetValue(clip.Id, out var stream))
+            if (clip != null && _clipPlaybacks.TryGetValue(clip.Id, out var stream))
             {
                 Bass.ChannelGetInfo(stream.StreamHandle, out var info);
                 return info.Channels;
             }
 
-            return 0;
+            // by default use stereo
+            return 2;
         }
         public static int clipSampleRate(AudioClip clip)
         {
-            if (_clipPlaybacks.TryGetValue(clip.Id, out var stream))
+            if (clip != null && _clipPlaybacks.TryGetValue(clip.Id, out var stream))
             {
                 Bass.ChannelGetInfo(stream.StreamHandle, out var info);
                 return info.Frequency;
             }
 
-            return 0;
+            // return default sample rate (48000Hz)
+            return 48000;
         }
 
         public static void UseAudioClip(AudioClip clip, double time)
@@ -66,11 +68,15 @@ namespace T3.Core.Audio
             Bass.Configure(Configuration.UpdatePeriod, 0);
             Bass.Configure(Configuration.GlobalStreamVolume, 0);
 
+            // TODO: Find this in Managed Bass library. It doesn't seem to be present.
+            int tailAttribute = (int)16;
+
             foreach (var (audioClipId, clipStream) in _clipPlaybacks)
             {
                 _oldBufferInSeconds = Bass.ChannelGetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer);
 
-                Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer, 4.0 / fps);
+                Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer, 2.0 / fps);
+                Bass.ChannelSetAttribute(clipStream.StreamHandle, (ChannelAttribute) tailAttribute, 2.0 / fps);
                 Bass.ChannelStop(clipStream.StreamHandle);
                 clipStream.UpdateTimeRecord(playback, fps, true);
                 Bass.ChannelPlay(clipStream.StreamHandle);
@@ -82,11 +88,15 @@ namespace T3.Core.Audio
 
         public static void endRecording(Playback playback, double fps)
         {
+            // TODO: Find this in Managed Bass library. It doesn't seem to be present.
+            int tailAttribute = (int)16;
+
             foreach (var (audioClipId, clipStream) in _clipPlaybacks)
             {
                 Bass.ChannelPause(clipStream.StreamHandle);
                 clipStream.UpdateTimeRecord(playback, fps, false);
                 Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.NoRamp, 0);
+                Bass.ChannelSetAttribute(clipStream.StreamHandle, (ChannelAttribute)tailAttribute, 0.0);
                 Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer, _oldBufferInSeconds);
             }
 
@@ -144,8 +154,6 @@ namespace T3.Core.Audio
                     {
                         if (!playback.IsLive)
                         {
-                            var sampleRate = Bass.ChannelGetAttribute(clipStream.StreamHandle, ChannelAttribute.Frequency);
-                            var samples = (int)Math.Max(Math.Round(frameDurationInSeconds * sampleRate), 0.0);
                             var bytes = (int)Math.Max(Bass.ChannelSeconds2Bytes(clipStream.StreamHandle, frameDurationInSeconds), 0);
 
                             // create or clear buffers if necessary
@@ -157,19 +165,33 @@ namespace T3.Core.Audio
 
                             if (bytes > 0)
                             {
-                                while (buffer.Length < bytes)
+                                bool quitLoop = false;
+                                while (buffer.Length < bytes && !quitLoop)
                                 {
-                                    Bass.ChannelUpdate(clipStream.StreamHandle, (int)Math.Round(frameDurationInSeconds * 1000.0 * 8.0));
+                                    // set the channel buffer size from here on
+                                    Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer,
+                                        (int)Math.Round(frameDurationInSeconds * 1000.0 * 2.0));
+
+                                    // update and read the data
                                     if (Bass.ChannelIsActive(clipStream.StreamHandle) != PlaybackState.Playing)
                                     {
                                         if (!clipStream.UpdateTimeRecord(playback, 1.0 / frameDurationInSeconds, false))
                                         {
-                                            buffer = new byte[0];
-                                            break;
+                                            Log.Error("AudioClip playback positioning error.");
+                                            quitLoop = true;
                                         }
-                                        Bass.ChannelPlay(clipStream.StreamHandle);
+                                        else
+                                        {
+                                            Bass.ChannelPlay(clipStream.StreamHandle);
+                                        }
                                     }
 
+                                    Bass.ChannelUpdate(clipStream.StreamHandle, (int)Math.Round(frameDurationInSeconds * 1000.0 * 4.0));
+
+                                    // update the FFT without reading new data
+                                    UpdateFftBuffer(clipStream.StreamHandle, playback);
+
+                                    // read all new data that is available
                                     var newBuffer = new byte[bytes];
                                     var newBytes = Bass.ChannelGetData(clipStream.StreamHandle, newBuffer, (int)DataFlags.Available);
                                     if (newBytes > 0)
@@ -179,11 +201,6 @@ namespace T3.Core.Audio
                                         Bass.ChannelGetData(clipStream.StreamHandle, newBuffer, newBytes);
                                         // append data to our previous buffer
                                         buffer = buffer.Concat(newBuffer).ToArray();
-                                        // shorten the buffer from here on
-                                        Bass.ChannelSetAttribute(clipStream.StreamHandle, ChannelAttribute.Buffer,
-                                            frameDurationInSeconds * 4.0);
-                                        // update the FFT
-                                        UpdateFftBuffer(clipStream.StreamHandle, playback);
                                     }
                                 }
 
@@ -225,7 +242,7 @@ namespace T3.Core.Audio
                 Bass.ChannelSetAttribute(stream.StreamHandle,ChannelAttribute.Volume, volume);
             }
         }
-        
+
         private static void UpdateFftBuffer(int soundStreamHandle, Playback playback)
         {
             int get256FftValues = (int)DataFlags.FFT512;
@@ -242,16 +259,29 @@ namespace T3.Core.Audio
 
         public static byte[] LastMixDownBuffer(double frameDurationInSeconds)
         {
-            foreach (var (audioClipId, clipStream) in _clipPlaybacks)
+            if (_clipPlaybacks.Count == 0)
             {
-                if (_fifoBuffers.TryGetValue(clipStream.AudioClip, out var buffer))
+                // get default sample rate
+                var channels = clipChannels(null);
+                var sampleRate = clipSampleRate(null);
+                var samples = (int)Math.Max(Math.Round(frameDurationInSeconds * sampleRate), 0.0);
+                var bytes = samples * channels * sizeof(float);
+
+                return new byte[bytes];
+            }
+            else
+            {
+                foreach (var (audioClipId, clipStream) in _clipPlaybacks)
                 {
-                    var bytes = (int)Bass.ChannelSeconds2Bytes(clipStream.StreamHandle, frameDurationInSeconds);
+                    if (_fifoBuffers.TryGetValue(clipStream.AudioClip, out var buffer))
+                    {
+                        var bytes = (int)Bass.ChannelSeconds2Bytes(clipStream.StreamHandle, frameDurationInSeconds);
 
-                    var result = buffer.SkipLast(buffer.Length - bytes).ToArray();
-                    _fifoBuffers[clipStream.AudioClip] = buffer.Skip(bytes).ToArray();
+                        var result = buffer.SkipLast(buffer.Length - bytes).ToArray();
+                        _fifoBuffers[clipStream.AudioClip] = buffer.Skip(bytes).ToArray();
 
-                    return result;
+                        return result;
+                    }
                 }
             }
 
@@ -403,8 +433,7 @@ namespace T3.Core.Audio
         public bool UpdateTimeRecord(Playback playback, double fps, bool reinitialize)
         {
             // offset timing dependent on position in clip
-            var resyncOffset = -1.0 / fps;
-            var localTargetTimeInSecs = playback.TimeInSecs - playback.SecondsFromBars(AudioClip.StartTime) + resyncOffset;
+            var localTargetTimeInSecs = playback.TimeInSecs - playback.SecondsFromBars(AudioClip.StartTime);
             var newStreamPos = Bass.ChannelSeconds2Bytes(StreamHandle, localTargetTimeInSecs);
 
             // re-initialize playback?

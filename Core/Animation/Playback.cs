@@ -85,7 +85,11 @@ namespace T3.Core.Animation
             var timeSinceLastFrameInSecs = LastFrameDuration;
             var isPlaying = Math.Abs(PlaybackSpeed) > 0.001;
 
-            if (isPlaying)
+            if (!IsLive)
+            {
+                FxTimeInBars = TimeInBars;
+            }
+            else if (isPlaying)
             {
                 TimeInBars += timeSinceLastFrameInSecs * PlaybackSpeed * Bpm / 240.0;
                 FxTimeInBars = TimeInBars;

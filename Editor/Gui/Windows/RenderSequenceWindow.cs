@@ -49,10 +49,10 @@ namespace T3.Editor.Gui.Windows
                         _isExporting = true;
                         _exportStartedTime = Playback.RunTimeInSecs;
                         _frameIndex = 0;
-                        SetPlaybackTimeForNextFrame();
+                        SetPlaybackTimeForThisFrame();
 
                         // handle audio although we do not save it
-                        var audioFrame = AudioEngine.LastMixDownBuffer(0.0);
+                        var audioFrame = AudioEngine.LastMixDownBuffer(1.0 / _fps);
                         SaveCurrentFrameAndAdvance(mainTexture);
                     }
                 }
@@ -62,11 +62,11 @@ namespace T3.Editor.Gui.Windows
                 // handle audio although we do not save it
                 var audioFrame = AudioEngine.LastMixDownBuffer(Playback.LastFrameDuration);
                 var success = SaveCurrentFrameAndAdvance(mainTexture);
-                ImGui.ProgressBar(Progress, new Vector2(-1, 4));
+                ImGui.ProgressBar((float) Progress, new Vector2(-1, 4));
 
                 var currentTime = Playback.RunTimeInSecs;
                 var durationSoFar = currentTime - _exportStartedTime;
-                if (GetRealFrame() >= _frameCount || !success)
+                if (GetRealFrame() > _frameCount || !success)
                 {
                     var successful = success ? "successfully" : "unsuccessfully";
                     _lastHelpString = $"Sequence export finished {successful} in {durationSoFar:0.00}s";
@@ -80,7 +80,7 @@ namespace T3.Editor.Gui.Windows
                 else
                 {
                     var estimatedTimeLeft = durationSoFar - durationSoFar /  Progress;
-                    _lastHelpString = $"Saved {ScreenshotWriter.LastFilename} frame {GetRealFrame()+1}/{_frameCount}  ";
+                    _lastHelpString = $"Saved {ScreenshotWriter.LastFilename} frame {GetRealFrame()}/{_frameCount}  ";
                     _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0}s left";
                 }
 
@@ -112,7 +112,7 @@ namespace T3.Editor.Gui.Windows
             {
                 var success = SaveImage(mainTexture);
                 _frameIndex++;
-                SetPlaybackTimeForNextFrame();
+                SetPlaybackTimeForThisFrame();
                 return success;
             }
             catch (Exception e)

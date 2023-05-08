@@ -29,7 +29,7 @@ namespace T3.Editor.Gui.Windows
             FormInputs.AddStringInput("File", ref _targetFile);
             ImGui.SameLine();
             FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref _targetFile);
-            FormInputs.AddCheckBox("Export Audio", ref _exportAudio);
+            FormInputs.AddCheckBox("Export Audio (experimental)", ref _exportAudio);
             ImGui.Separator();
 
             var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
@@ -49,7 +49,6 @@ namespace T3.Editor.Gui.Windows
                         _isExporting = true;
                         _exportStartedTime = Playback.RunTimeInSecs;
                         _frameIndex = 0;
-                        SetPlaybackTimeForNextFrame();
 
                         if (_videoWriter == null)
                         {
@@ -64,9 +63,10 @@ namespace T3.Editor.Gui.Windows
                             _videoWriter.Framerate = (int)_fps;
                         }
 
-                        var audioFrame = AudioEngine.LastMixDownBuffer(0.0);
+                        SetPlaybackTimeForThisFrame();
+                        var audioFrame = AudioEngine.LastMixDownBuffer(1.0 / _fps);
                         SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame,
-                                                    soundtrackChannels(), soundtrackSampleRate());
+                                                   soundtrackChannels(), soundtrackSampleRate());
                     }
                 }
             }
@@ -77,10 +77,10 @@ namespace T3.Editor.Gui.Windows
                 var success = SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame,
                                                          soundtrackChannels(), soundtrackSampleRate());
 
-                ImGui.ProgressBar(Progress, new Vector2(-1, 4));
+                ImGui.ProgressBar((float) Progress, new Vector2(-1, 4));
                 var currentTime = Playback.RunTimeInSecs;
                 var durationSoFar = currentTime - _exportStartedTime;
-                if (GetRealFrame() >= _frameCount || !success)
+                if (GetRealFrame() > _frameCount || !success)
                 {
                     if (success)
                         _lastHelpString = $"Sequence export of {_frameCount} frames finished successfully in {durationSoFar:0.00}s";
@@ -97,13 +97,20 @@ namespace T3.Editor.Gui.Windows
                 else
                 {
                     var estimatedTimeLeft = durationSoFar / Progress - durationSoFar;
-                    _lastHelpString = $"Saved {_videoWriter.FilePath} frame {GetRealFrame()+1}/{_frameCount}  ";
+                    _lastHelpString = $"Saved {_videoWriter.FilePath} frame {GetRealFrame()}/{_frameCount}  ";
                     _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0.0}s left";
                 }
 
                 if (!_isExporting)
                 {
-                    _videoWriter?.Dispose();
+                    try
+                    {
+                        _videoWriter?.Dispose();
+                    }
+                    catch (Exception eDispose)
+                    {
+                        _lastHelpString = eDispose.Message;
+                    }
                     _videoWriter = null;
                     ReleasePlaybackTime();
                 }
@@ -130,13 +137,21 @@ namespace T3.Editor.Gui.Windows
                     _videoWriter.AddVideoFrame(ref mainTexture);
 
                 _frameIndex++;
-                SetPlaybackTimeForNextFrame();
+                SetPlaybackTimeForThisFrame();
             }
             catch (Exception e)
             {
                 _lastHelpString = e.ToString();
                 _isExporting = false;
-                _videoWriter?.Dispose();
+
+                try
+                {
+                    _videoWriter?.Dispose();
+                }
+                catch (Exception eDispose)
+                {
+                    _lastHelpString += "\n" + eDispose.Message;
+                }
                 _videoWriter = null;
                 ReleasePlaybackTime();
                 return false;

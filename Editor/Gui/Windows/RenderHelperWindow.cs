@@ -46,30 +46,41 @@ namespace T3.Editor.Gui.Windows
             
             if (FormInputs.AddEnumDropdown(ref _timeReference, "Time reference"))
             {
-                _startTime = (float)ConvertReferenceTime(_startTime, oldTimeReference, _timeReference);
-                _endTime = (float)ConvertReferenceTime(_endTime, oldTimeReference, _timeReference);
+                _startTime = ConvertReferenceTime(_startTime, oldTimeReference, _timeReference);
+                _endTime = ConvertReferenceTime(_endTime, oldTimeReference, _timeReference);
             }
 
+            // convert times to float for GUI
+            var fpsFloat = (float)_fps;
+            var startTimeFloat = (float)_startTime;
+            var endTimeFloat = (float)_endTime;
+
+            FormInputs.AddFloat("FPS", ref fpsFloat, 0);
+            FormInputs.AddFloat($"Start in {_timeReference}", ref startTimeFloat);
+            FormInputs.AddFloat($"End in {_timeReference}", ref endTimeFloat);
+
+            // convert back to double
+            _fps = (double)fpsFloat;
+            _startTime = (double)startTimeFloat;
+            _endTime = (double)endTimeFloat;
+
             // change FPS if required
-            FormInputs.AddFloat("FPS", ref _fps, 0);
             if (_fps < 0) _fps = -_fps;
             if (_fps != 0)
             {
-                _startTime = (float)ConvertFPS(_startTime, _lastValidFps, _fps);
-                _endTime = (float)ConvertFPS(_endTime, _lastValidFps, _fps);
+                _startTime = ConvertFPS(_startTime, _lastValidFps, _fps);
+                _endTime = ConvertFPS(_endTime, _lastValidFps, _fps);
                 _lastValidFps = _fps;
             }
-            FormInputs.AddFloat($"Start in {_timeReference}", ref _startTime);
-            FormInputs.AddFloat($"End in {_timeReference}", ref _endTime);
             
             // use our loop range instead of entered values?
             FormInputs.AddCheckBox("Use Loop Range", ref _useLoopRange);
             if (_useLoopRange) UseLoopRange();
             
             double startTimeInSeconds = ReferenceTimeToSeconds(_startTime, _timeReference);
-            double endTimeInSeconds = ReferenceTimeToSeconds(_endTime, _timeReference);
-            _frameCount = (int)Math.Round((endTimeInSeconds - startTimeInSeconds) * _fps);
-            
+            double requestedEndTimeInSeconds = ReferenceTimeToSeconds(_endTime, _timeReference);
+            _frameCount = (int)Math.Ceiling((requestedEndTimeInSeconds - startTimeInSeconds) * _fps);
+
             if (FormInputs.AddInt($"Motion Blur Samples", ref _overrideMotionBlurSamples, -1, 50, 1, "This requires a [RenderWithMotionBlur] operator. Please check its documentation."))
             {
                 _overrideMotionBlurSamples = _overrideMotionBlurSamples.Clamp(-1, 50);
@@ -108,8 +119,8 @@ namespace T3.Editor.Gui.Windows
             var playback = Playback.Current; // TODO, this should be non-static eventually
             var startInSeconds = playback.SecondsFromBars(playback.LoopRange.Start);
             var endInSeconds = playback.SecondsFromBars(playback.LoopRange.End);
-            _startTime = (float)SecondsToReferenceTime(startInSeconds, _timeReference);
-            _endTime = (float)SecondsToReferenceTime(endInSeconds, _timeReference);
+            _startTime = SecondsToReferenceTime(startInSeconds, _timeReference);
+            _endTime = SecondsToReferenceTime(endInSeconds, _timeReference);
         }
 
         private static double ConvertReferenceTime(double time,
@@ -171,7 +182,7 @@ namespace T3.Editor.Gui.Windows
             return timeInSeconds;
         }
 
-        protected static void SetPlaybackTimeForNextFrame()
+        protected static void SetPlaybackTimeForThisFrame()
         {
             if (Progress <= 0.0)
                 _timingOverhang = 0.0;
@@ -187,35 +198,38 @@ namespace T3.Editor.Gui.Windows
 
             // set user time in secs for video playback
             double startTimeInSeconds = ReferenceTimeToSeconds(_startTime, _timeReference);
-            double endTimeInSeconds = ReferenceTimeToSeconds(_endTime, _timeReference);
+            double endTimeInSeconds = startTimeInSeconds + (_frameCount-1) / _fps;
             var oldTimeInSecs = Playback.Current.TimeInSecs;
             Playback.Current.TimeInSecs = MathUtils.Lerp(startTimeInSeconds, endTimeInSeconds, Progress);
             var adaptedDeltaTime = Math.Max(Playback.Current.TimeInSecs - oldTimeInSecs + _timingOverhang, 0.0);
 
             // set user time in secs for audio playback
             settings.GetMainSoundtrack(out var soundtrack);
-            AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
+            if (soundtrack != null)
+                AudioEngine.UseAudioClip(soundtrack, Playback.Current.TimeInSecs);
 
             if (!_recording)
             {
                 _timingOverhang = 0.0;
-                adaptedDeltaTime = 0.0;
+                adaptedDeltaTime = 1.0 / _fps;
 
                 Playback.Current.IsLive = false;
                 Playback.Current.PlaybackSpeed = 1.0;
 
                 AudioEngine.prepareRecording(Playback.Current, _fps);
 
-                Log.Debug($"Recording from '{startTimeInSeconds}' to '{endTimeInSeconds}' seconds");
-                Log.Debug($"Using '{Playback.Current.Bpm}' bpm");
+                double requestedEndTimeInSeconds = ReferenceTimeToSeconds(_endTime, _timeReference);
+                double actualEndTimeInSeconds = startTimeInSeconds + _frameCount / _fps;
+
+                Log.Debug($"Requested recording from {startTimeInSeconds:0.0000} to {requestedEndTimeInSeconds:0.0000} seconds");
+                Log.Debug($"Actually recording from {startTimeInSeconds:0.0000} to {actualEndTimeInSeconds:0.0000} seconds due to frame raster");
+                Log.Debug($"Using {Playback.Current.Bpm} bpm");
 
                 _recording = true;
             }
 
             // update audio parameters, respecting looping etc.
-            Playback.Current.PlaybackSpeed = 0.0;
             Playback.Current.Update(false);
-            Playback.Current.PlaybackSpeed = 1.0;
 
             var bufferLengthInMS = (int)Math.Floor(1000.0 * adaptedDeltaTime);
             _timingOverhang = adaptedDeltaTime - (double)bufferLengthInMS / 1000.0;
@@ -241,14 +255,15 @@ namespace T3.Editor.Gui.Windows
             return new List<Window>();
         }
 
-        protected static float Progress => (float)((double)_frameIndex / (double)_frameCount).Clamp(0, 1);
+        protected static double Progress => (_frameCount <= 1) ? 0 :
+            ((double)_frameIndex / (double)(_frameCount-1)).Clamp(0, 1);
 
         private static bool _useLoopRange;
         private static TimeReference _timeReference;
-        private static float _startTime;
-        private static float _endTime = 1.0f; // one Bar
-        protected static float _fps = 60.0f;
-        private static float _lastValidFps = _fps;
+        private static double _startTime;
+        private static double _endTime = 1.0f; // one Bar
+        protected static double _fps = 60.0f;
+        private static double _lastValidFps = _fps;
 
         private static double _timingOverhang; // time that could not be updated due to MS resolution (in seconds)
         private static bool _recording = false; // are we recording?
