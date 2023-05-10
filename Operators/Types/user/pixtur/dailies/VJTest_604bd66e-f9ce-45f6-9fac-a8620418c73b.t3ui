@@ -268,7 +268,7 @@
       }
     },
     {
-      "ChildId": "c8ac6ce8-d23e-442e-bfdb-034c038264c3"/*CollectSpawnPoints*/,
+      "ChildId": "c8ac6ce8-d23e-442e-bfdb-034c038264c3"/*ParticleSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -290,7 +290,7 @@
       }
     },
     {
-      "ChildId": "8071fd14-aad8-49fd-b4fd-0efc25e3738e"/*CollectSpawnPoints*/,
+      "ChildId": "8071fd14-aad8-49fd-b4fd-0efc25e3738e"/*ParticleSimulation*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
