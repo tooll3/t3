@@ -414,11 +414,11 @@
       "Outputs": []
     },
     {
-      "Id": "bd782926-6448-414d-a75b-35edd1b3f7fc"/*CollectSpawnPoints*/,
+      "Id": "bd782926-6448-414d-a75b-35edd1b3f7fc"/*ParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {
-          "Id": "a03ffef9-11e3-41f9-9f13-71f107b484df"/*GrowRate*/,
+          "Id": "a03ffef9-11e3-41f9-9f13-71f107b484df"/*AgingRate*/,
           "Type": "System.Single",
           "Value": 0.398
         }
@@ -651,7 +651,7 @@
       "Outputs": []
     },
     {
-      "Id": "2e582673-851f-479a-b2e7-18145e3b9406"/*CollectSpawnPoints*/,
+      "Id": "2e582673-851f-479a-b2e7-18145e3b9406"/*ParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {

@@ -254,11 +254,11 @@
       "Outputs": []
     },
     {
-      "Id": "db32fcca-421e-4bde-b87b-8b299bdb2d3d"/*CollectSpawnPoints*/,
+      "Id": "db32fcca-421e-4bde-b87b-8b299bdb2d3d"/*ParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {
-          "Id": "a03ffef9-11e3-41f9-9f13-71f107b484df"/*GrowRate*/,
+          "Id": "a03ffef9-11e3-41f9-9f13-71f107b484df"/*AgingRate*/,
           "Type": "System.Single",
           "Value": 0.15
         }

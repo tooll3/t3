@@ -348,11 +348,11 @@
       "Outputs": []
     },
     {
-      "Id": "c8ac6ce8-d23e-442e-bfdb-034c038264c3"/*CollectSpawnPoints*/,
+      "Id": "c8ac6ce8-d23e-442e-bfdb-034c038264c3"/*ParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {
-          "Id": "18903940-ff20-4b64-a4f0-6078977edd7a"/*BufferSize*/,
+          "Id": "18903940-ff20-4b64-a4f0-6078977edd7a"/*MaxParticleCount*/,
           "Type": "System.Int32",
           "Value": 100000
         },
@@ -362,7 +362,7 @@
           "Value": 1
         },
         {
-          "Id": "a03ffef9-11e3-41f9-9f13-71f107b484df"/*GrowRate*/,
+          "Id": "a03ffef9-11e3-41f9-9f13-71f107b484df"/*AgingRate*/,
           "Type": "System.Single",
           "Value": 0.06
         }
@@ -376,16 +376,16 @@
       "Outputs": []
     },
     {
-      "Id": "8071fd14-aad8-49fd-b4fd-0efc25e3738e"/*CollectSpawnPoints*/,
+      "Id": "8071fd14-aad8-49fd-b4fd-0efc25e3738e"/*ParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {
-          "Id": "18903940-ff20-4b64-a4f0-6078977edd7a"/*BufferSize*/,
+          "Id": "18903940-ff20-4b64-a4f0-6078977edd7a"/*MaxParticleCount*/,
           "Type": "System.Int32",
           "Value": 300000
         },
         {
-          "Id": "5525b00a-eea5-46ed-b4b4-cbcadcee3820"/*CollectPoints*/,
+          "Id": "5525b00a-eea5-46ed-b4b4-cbcadcee3820"/*Emit*/,
           "Type": "System.Boolean",
           "Value": true
         },
@@ -395,7 +395,7 @@
           "Value": 1
         },
         {
-          "Id": "a03ffef9-11e3-41f9-9f13-71f107b484df"/*GrowRate*/,
+          "Id": "a03ffef9-11e3-41f9-9f13-71f107b484df"/*AgingRate*/,
           "Type": "System.Single",
           "Value": 0.06
         },
