@@ -123,11 +123,11 @@
       "Outputs": []
     },
     {
-      "Id": "c6f18d20-450c-4096-9c8f-3fb3bace9976"/*ParticleSimulation*/,
+      "Id": "c6f18d20-450c-4096-9c8f-3fb3bace9976"/*CollectSpawnPoints*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {
-          "Id": "18903940-ff20-4b64-a4f0-6078977edd7a"/*MaxParticleCount*/,
+          "Id": "18903940-ff20-4b64-a4f0-6078977edd7a"/*BufferSize*/,
           "Type": "System.Int32",
           "Value": 30
         },

@@ -334,7 +334,7 @@
       }
     },
     {
-      "ChildId": "f939d4ba-3352-44f1-8e79-7d1d2b7093bc"/*ParticleSimulation*/,
+      "ChildId": "f939d4ba-3352-44f1-8e79-7d1d2b7093bc"/*CollectSpawnPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

@@ -3,13 +3,11 @@
 cbuffer Params : register(b0)
 {
     float CollectCycleIndex;
-    float AddNewPoints;    
+    float AddNewPoints;
+    float Mode;
     float AgingRate;
     float MaxAge;
-
-    float ClampAtMaxAge;
     float Reset;
-    float DeltaTime;
 }
 
 StructuredBuffer<Point> NewPoints : t0;         // input
@@ -36,8 +34,8 @@ void main(uint3 i : SV_DispatchThreadID)
 
     int spawnIndex = (int)CollectCycleIndex % collectedPointCount;
 
-    // if(Mode < 0.5) 
-    // {
+    if(Mode < 0.5) 
+    {
         int addIndex = gi - CollectCycleIndex;
         if(AddNewPoints > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount ) 
         {
@@ -50,45 +48,35 @@ void main(uint3 i : SV_DispatchThreadID)
         }
         else 
         {
-            
-
             float age = CollectedPoints[gi].w;
-            if(isnan(age))
-                return;
-
             if(age <= 0) 
             {
                 CollectedPoints[gi].w = sqrt(-1); // Flag non-initialized points 
             }
             else if(age < MaxAge)
             {
-                CollectedPoints[gi].w = age+  DeltaTime * AgingRate;
+                CollectedPoints[gi].w = age+  1/60.0 * AgingRate;
             } 
-            else if(ClampAtMaxAge) {
-                CollectedPoints[gi].w = MaxAge;
-            }
-            //CollectedPoints[gi].w = 0.1;
         }
-    // }
-    // else 
-    // {
-    //     int targetIndex = ( (int)CollectCycleIndex  + i.x) % collectedPointCount;
-    //     if( i.x == 0 || targetIndex >= collectedPointCount -1 || targetIndex <= 1) 
-    //     {
-    //         CollectedPoints[targetIndex].w = sqrt(-1); 
-    //         return;
-    //     }
+    }
+    else {
+        int targetIndex = ( (int)CollectCycleIndex  + i.x) % collectedPointCount;
+        if( i.x == 0 || targetIndex >= collectedPointCount -1 || targetIndex <= 1) 
+        {
+            CollectedPoints[targetIndex].w = sqrt(-1); 
+            return;
+        }
 
 
-    //     if(i.x >= newPointCount) 
-    //     {
-    //         return;
-    //     }        
-    //     int sourceIndex = gi;
+        if(i.x >= newPointCount) 
+        {
+            return;
+        }        
+        int sourceIndex = gi;
 
-    //     CollectedPoints[targetIndex] = NewPoints[sourceIndex];
-    //     //CollectedPoints[gi].w = 0.0001;
-    // }
+        CollectedPoints[targetIndex] = NewPoints[sourceIndex];
+        //CollectedPoints[gi].w = 0.0001;
+    }
 
 
     //float3 lastPos = CollectedPoints[(targetIndex-1) % bufferLength ].position;

@@ -133,7 +133,7 @@
       "Outputs": []
     },
     {
-      "Id": "bcb78765-11b9-4e1e-9f2c-5422d114f6b8"/*ParticleSimulation*/,
+      "Id": "bcb78765-11b9-4e1e-9f2c-5422d114f6b8"/*CollectSpawnPoints*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [],
       "Outputs": []

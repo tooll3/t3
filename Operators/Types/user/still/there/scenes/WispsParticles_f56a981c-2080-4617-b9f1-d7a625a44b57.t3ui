@@ -478,7 +478,7 @@
       }
     },
     {
-      "ChildId": "fa040204-059a-45b0-be32-a86660f30b96"/*ParticleSimulation*/,
+      "ChildId": "fa040204-059a-45b0-be32-a86660f30b96"/*CollectSpawnPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -1095,7 +1095,7 @@
       }
     },
     {
-      "ChildId": "091ad9c1-ff3b-4c00-8cda-73cc3be514cb"/*ParticleSimulation*/,
+      "ChildId": "091ad9c1-ff3b-4c00-8cda-73cc3be514cb"/*CollectSpawnPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -1205,7 +1205,7 @@
       }
     },
     {
-      "ChildId": "5fbec8f8-bb75-4c27-ad85-3326a0c14824"/*ParticleSimulation*/,
+      "ChildId": "5fbec8f8-bb75-4c27-ad85-3326a0c14824"/*CollectSpawnPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -1293,7 +1293,7 @@
       }
     },
     {
-      "ChildId": "db5f532a-cee3-4cf1-9695-55bf5a693931"/*ParticleSimulation*/,
+      "ChildId": "db5f532a-cee3-4cf1-9695-55bf5a693931"/*CollectSpawnPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

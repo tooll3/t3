@@ -11,9 +11,7 @@ namespace T3.Operators.Types.Id_2443b2fd_c397_4ea6_9588_b595f918cf01
         [Output(Guid = "4883b1ec-16c1-422f-8db6-c74c3d48e5be", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<bool> HasChanged = new();
         
-        [Output(Guid = "B459946D-253A-4583-88EE-897E8041F468", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> DeltaTime = new();
-        
+
         public HasTimeChanged()
         {
             HasChanged.UpdateAction = Update;
@@ -48,10 +46,10 @@ namespace T3.Operators.Types.Id_2443b2fd_c397_4ea6_9588_b595f918cf01
                     break;
             }
             
-                
+            
             var wasRewind = time < _lastTime - threshold;
             var wasAdvanced = time > _lastTime + threshold;
-            DeltaTime.Value = (float)(time - _lastTime);
+            
 
             bool hasChanged = false;
             bool wasAdditionalMotionBlurPass = false;

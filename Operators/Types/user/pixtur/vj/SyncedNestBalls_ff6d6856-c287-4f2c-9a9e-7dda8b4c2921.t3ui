@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "bbd9c132-8e7e-4983-a22b-5a0db3022840"/*ParticleSimulation*/,
+      "ChildId": "bbd9c132-8e7e-4983-a22b-5a0db3022840"/*CollectSpawnPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
@@ -81,7 +81,7 @@
       }
     },
     {
-      "ChildId": "7168062d-466d-43f9-9e1e-3f1d6957fc91"/*ParticleSimulation*/,
+      "ChildId": "7168062d-466d-43f9-9e1e-3f1d6957fc91"/*CollectSpawnPoints*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
