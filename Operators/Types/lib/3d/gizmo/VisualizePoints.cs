@@ -15,17 +15,26 @@ namespace T3.Operators.Types.Id_37bdbafc_d14c_4b81_91c3_8f63c3b63812
         [Input(Guid = "54fc4cd7-dfc3-4690-9fd1-2b555f7656d4")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
-        [Input(Guid = "621bf2cf-8d49-4b5f-88b9-4460045e8914")]
-        public readonly InputSlot<float> Size = new InputSlot<float>();
-
-        [Input(Guid = "C85649DF-A235-49D6-A964-C69B299FB4B5")]
-        public readonly InputSlot<T3.Core.Operator.GizmoVisibility> Visibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+        [Input(Guid = "8f72275d-d903-4372-852c-51c3db35fe90")]
+        public readonly InputSlot<bool> ShowCenter = new InputSlot<bool>();
 
         [Input(Guid = "40a04de8-54aa-4f66-acea-80ffc4dab7bd")]
         public readonly InputSlot<float> PointSize = new InputSlot<float>();
 
+        [Input(Guid = "d0ac63c5-639b-4b3c-b40b-348b76fa0fd2")]
+        public readonly InputSlot<bool> ShowAxis = new InputSlot<bool>();
+
+        [Input(Guid = "621bf2cf-8d49-4b5f-88b9-4460045e8914")]
+        public readonly InputSlot<float> Size = new InputSlot<float>();
+
         [Input(Guid = "b857b40b-2ca7-42a4-bebe-1cb11700ed71")]
         public readonly InputSlot<float> LineThickness = new InputSlot<float>();
+
+        [Input(Guid = "C85649DF-A235-49D6-A964-C69B299FB4B5")]
+        public readonly InputSlot<T3.Core.Operator.GizmoVisibility> Visibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+
+        [Input(Guid = "d2472768-dd40-436f-af1b-7359289b5118")]
+        public readonly InputSlot<bool> ShowIndex = new InputSlot<bool>();
 
     }
 }
