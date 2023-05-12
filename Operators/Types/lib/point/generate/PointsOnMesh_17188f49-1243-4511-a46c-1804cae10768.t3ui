@@ -39,6 +39,13 @@
         "X": -470.665,
         "Y": 1347.371
       }
+    },
+    {
+      "InputId": "1843683c-53a2-4862-a9a5-4b3afe729ace"/*UseVertexSelection*/,
+      "Position": {
+        "X": -470.665,
+        "Y": 1392.371
+      }
     }
   ],
   "SymbolChildUis": [
@@ -295,6 +302,28 @@
       "Position": {
         "X": -357.14862,
         "Y": 1631.0552
+      }
+    },
+    {
+      "ChildId": "3dcba1ac-cd74-466e-aff2-02aaf5d28abd"/*BoolToFloats*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
+      "Position": {
+        "X": -156.21463,
+        "Y": 1396.0405
+      }
+    },
+    {
+      "ChildId": "61b54ff2-617f-462a-af57-9dc181f86235"/*FloatsToBuffer*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 648.49475,
+        "Y": 1088.8062
       }
     }
   ],

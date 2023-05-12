@@ -5,6 +5,12 @@ struct FaceProperties {
     float cdf;
 };
 
+cbuffer EmitParameter : register(b0)
+{
+    float UseVertexSelection;
+};
+
+
 StructuredBuffer<PbrVertex> Vertices : t0;
 StructuredBuffer<int3> FaceIndices : t1;
 
@@ -35,9 +41,11 @@ void main(uint3 i : SV_DispatchThreadID)
         float faceArea = a * b * 0.5;
         faceArea = isnan(faceArea) ? 0 : faceArea;
 
-        float selection = Vertices[f[0]].Selected
+        float selection = UseVertexSelection > 0.5 
+                        ? (Vertices[f[0]].Selected
                         + Vertices[f[1]].Selected
-                        + Vertices[f[2]].Selected;
+                        + Vertices[f[2]].Selected) 
+                        : 1;
 
         FaceData[j].normalizedFaceArea =  faceArea * selection;
         sum += faceArea;

@@ -3,9 +3,11 @@
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
 
+
 cbuffer EmitParameter : register(b0)
 {
     float Seed;
+    float UseVertexSelection;
 };
 
 uint wang_hash(in out uint seed)
