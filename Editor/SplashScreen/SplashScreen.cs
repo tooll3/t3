@@ -105,16 +105,24 @@ internal class SplashScreen : ILogWriter
     {
         if (_logMessageLabel.InvokeRequired)
         {
+            if (!_invoked)
+                return;
+            
             var d = new SafeCallDelegate(WriteTextSafe);
             _logMessageLabel.Invoke(d, text);
-            
+            _invoked = true;
+
         }
         else
         {
             _logMessageLabel.Text = text;
             _logMessageLabel.Refresh();
+            _invoked = false;
+            
         }
     }
+
+    private bool _invoked;
 
     #region implement ILogWriter
     public LogEntry.EntryLevel Filter { get; set; }
