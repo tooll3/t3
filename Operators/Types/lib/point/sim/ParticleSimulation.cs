@@ -20,6 +20,9 @@ namespace T3.Operators.Types.Id_dc3d1571_ad9f_46aa_bed9_df2f4e1c7040
         [Input(Guid = "18903940-ff20-4b64-a4f0-6078977edd7a")]
         public readonly InputSlot<int> MaxParticleCount = new InputSlot<int>();
 
+        [Input(Guid = "ec99463b-c3e9-4eef-9321-3840d5d323b6")]
+        public readonly InputSlot<bool> UseAging = new InputSlot<bool>();
+
         [Input(Guid = "a03ffef9-11e3-41f9-9f13-71f107b484df")]
         public readonly InputSlot<float> AgingRate = new InputSlot<float>();
 

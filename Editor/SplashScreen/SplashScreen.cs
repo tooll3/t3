@@ -117,6 +117,7 @@ internal class SplashScreen : ILogWriter
         {
             _logMessageLabel.Text = text;
             _logMessageLabel.Refresh();
+            _splashForm.Refresh();
             _invoked = false;
             
         }

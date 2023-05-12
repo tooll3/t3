@@ -2,8 +2,8 @@
 
 cbuffer Params : register(b0)
 {
-    float CollectCycleIndex;
-    float AddNewPoints;    
+    float AddNewPoints;
+    float UseAging;
     float AgingRate;
     float MaxAge;
 
@@ -12,8 +12,13 @@ cbuffer Params : register(b0)
     float DeltaTime;
 }
 
-StructuredBuffer<Point> NewPoints : t0;         // input
-RWStructuredBuffer<Point> CollectedPoints : u0;    // output
+cbuffer IntParams : register(b1)
+{
+    int CollectCycleIndex;
+}
+
+StructuredBuffer<Point> NewPoints : t0;
+RWStructuredBuffer<Point> CollectedPoints : u0;
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
@@ -28,7 +33,7 @@ void main(uint3 i : SV_DispatchThreadID)
     if(i.x >= collectedPointCount)
         return;
 
-    if(Reset > 0.5) 
+    if(Reset > 0.5)
     {
         CollectedPoints[gi].w =  sqrt(-1);
         return;
@@ -36,67 +41,38 @@ void main(uint3 i : SV_DispatchThreadID)
 
     int spawnIndex = (int)CollectCycleIndex % collectedPointCount;
 
-    // if(Mode < 0.5) 
-    // {
-        int addIndex = gi - CollectCycleIndex;
-        if(AddNewPoints > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount ) 
-        {
-            // uint trailLength = (uint)(TrailLength + 0.5);
-            // uint bufferLength = (uint)(PointCount + 0.5) * trailLength;
-            // uint cycleIndex = (uint)(CycleIndex + 0.5);
-            // uint targetIndex = (cycleIndex + gi * trailLength) % bufferLength;
-            CollectedPoints[gi] = NewPoints[addIndex];
+    int addIndex = gi - CollectCycleIndex;
+
+    // Insert emit points
+    if(AddNewPoints > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount )
+    {
+        CollectedPoints[gi] = NewPoints[addIndex];
+        if(UseAging > 0.5)
             CollectedPoints[gi].w = 0.0001;
-        }
-        else 
+
+        // if(addIndex == newPointCount )
+        // {
+        //     CollectedPoints[gi].w = sqrt(-1);
+        // }
+    }
+    // Update other points
+    else
+    {
+
+        float age = CollectedPoints[gi].w;
+        if(isnan(age) || UseAging < 0.5)
+            return;
+
+        if(age <= 0)
         {
-            
-
-            float age = CollectedPoints[gi].w;
-            if(isnan(age))
-                return;
-
-            if(age <= 0) 
-            {
-                CollectedPoints[gi].w = sqrt(-1); // Flag non-initialized points 
-            }
-            else if(age < MaxAge)
-            {
-                CollectedPoints[gi].w = age+  DeltaTime * AgingRate;
-            } 
-            else if(ClampAtMaxAge) {
-                CollectedPoints[gi].w = MaxAge;
-            }
-            //CollectedPoints[gi].w = 0.1;
+            CollectedPoints[gi].w = sqrt(-1); // Flag non-initialized points
         }
-    // }
-    // else 
-    // {
-    //     int targetIndex = ( (int)CollectCycleIndex  + i.x) % collectedPointCount;
-    //     if( i.x == 0 || targetIndex >= collectedPointCount -1 || targetIndex <= 1) 
-    //     {
-    //         CollectedPoints[targetIndex].w = sqrt(-1); 
-    //         return;
-    //     }
-
-
-    //     if(i.x >= newPointCount) 
-    //     {
-    //         return;
-    //     }        
-    //     int sourceIndex = gi;
-
-    //     CollectedPoints[targetIndex] = NewPoints[sourceIndex];
-    //     //CollectedPoints[gi].w = 0.0001;
-    // }
-
-
-    //float3 lastPos = CollectedPoints[(targetIndex-1) % bufferLength ].position;
-    //CollectedPoints[targetIndex].rotation = normalize(q_look_at(NewPoints[gi].position, lastPos));
-
-    //Point p = NewPoints[i.x];
-    //CollectedPoints[targetIndex].w = 0.4;
-
-    // Flag follow position W as NaN line devider
-    //CollectedPoints[(targetIndex + 1) % bufferLength].w = sqrt(-1);
+        else if(age < MaxAge)
+        {
+            CollectedPoints[gi].w = age+  DeltaTime * AgingRate;
+        }
+        else if(ClampAtMaxAge) {
+            CollectedPoints[gi].w = MaxAge;
+        }
+    }
 }
