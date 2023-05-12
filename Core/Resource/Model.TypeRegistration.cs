@@ -11,6 +11,7 @@ using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
+using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
@@ -267,7 +268,31 @@ public partial class Model
         RegisterType(typeof(Object), "Object",
                      () => new InputValue<Object>());
         RegisterType(typeof(StructuredList), "StructuredList",
-                     () => new InputValue<StructuredList>());
+                     () => new InputValue<StructuredList>()
+                    ,
+                     (writer, obj) =>
+                     {
+                         if (obj is StructuredList l)
+                         {
+                            l.Write(writer);    
+                         }
+                     },
+                     token =>
+                     {
+                         // This is currently a proof-of-concept implementation.
+                         // TODO: support generic structure types
+                         try
+                         {
+                             return new StructuredList<Point>().Read(token);
+                         }
+                         catch(Exception e)
+                         {
+                             
+                             //Log.Warning("Failed to load structured list:" + e.Message);
+                             return null;
+                         }
+                     }
+                     );
         RegisterType(typeof(Texture3dWithViews), "Texture3dWithViews",
                      () => new InputValue<Texture3dWithViews>(new Texture3dWithViews()));
         RegisterType(typeof(MeshBuffers), "MeshBuffers",

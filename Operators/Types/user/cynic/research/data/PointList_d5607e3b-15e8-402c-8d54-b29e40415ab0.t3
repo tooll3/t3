@@ -5,7 +5,24 @@
   "Inputs": [
     {
       "Id": "b3d57d74-ac47-4287-b42a-d85e64501eb5"/*InputList*/,
-      "DefaultValue": null
+      "DefaultValue": {
+        "StructuredList": [
+          {
+            "Position": {
+              "X": 42.0,
+              "Y": 0.0,
+              "Z": 0.0
+            },
+            "W": 0.0,
+            "Orientation": {
+              "X": 0.0,
+              "Y": 0.0,
+              "Z": 0.0,
+              "W": 0.0
+            }
+          }
+        ]
+      }
     }
   ],
   "Children": [],

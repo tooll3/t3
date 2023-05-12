@@ -29,8 +29,9 @@ namespace T3.Core.DataTypes
         public abstract int ElementSizeInBytes { get; }
         public abstract int TotalSizeInBytes { get; }
         public abstract void WriteToStream(DataStream stream);
-        public abstract StructuredList Clone();
-
+        public abstract StructuredList TypedClone();
+        public abstract object Clone();
+        
         public abstract StructuredList Join(params StructuredList[] other);
 
         // public abstract StructuredList Filter(Func<object, bool> filter);
@@ -40,6 +41,7 @@ namespace T3.Core.DataTypes
         public abstract void Write(JsonTextWriter writerNotUsed);
 
         public abstract StructuredList Read(JsonTextReader reader);
+        public abstract StructuredList Read(JToken inputToken);
     }
 
     public class StructuredList<T> : StructuredList where T : struct
@@ -89,12 +91,17 @@ namespace T3.Core.DataTypes
                 stream.WriteRange(TypedElements);
         }
 
-        public override StructuredList Clone()
+        public override StructuredList TypedClone()
         {
             var clone = new StructuredList<T>(NumElements);
             Array.Copy(TypedElements, clone.TypedElements, NumElements);
 
             return clone;
+        }
+
+        public override object Clone()
+        {
+            return this.TypedClone();
         }
 
         public override StructuredList Join(params StructuredList[] lists)
@@ -240,6 +247,41 @@ namespace T3.Core.DataTypes
             
             return this;
         }
+        
+        public  override StructuredList Read(JToken inputToken)
+        {
+            //var inputToken = JToken.ReadFrom(reader);
+
+            var jArray = (JArray)inputToken["StructuredList"];
+            if (jArray == null)
+            {
+                TypedElements = Array.Empty<T>();
+                return this;
+            }
+            var elementCount = jArray.Count;
+            
+            TypedElements = new T[elementCount];
+
+            var fieldInfos = Type.GetFields();
+            for (var index = 0; index < jArray.Count; index++)
+            {
+                TypedElements[index]= new T();
+                object boxedEntry = TypedElements[index];
+                
+                var childJson = jArray[index];
+                foreach (var fieldInfo in fieldInfos)
+                {
+                    var valueConverter = JsonToTypeValueConverters.Entries[fieldInfo.FieldType];
+                    var valueJson = childJson[fieldInfo.Name];
+                    var objValue =valueConverter(valueJson);
+                    fieldInfo.SetValue(boxedEntry, objValue);
+                }
+
+                TypedElements[index] = (T)boxedEntry;
+            }
+            
+            return this;
+        }        
     }
 
     public class StructuredListConverter : JsonConverter
