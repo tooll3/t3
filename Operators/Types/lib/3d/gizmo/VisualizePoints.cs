@@ -16,7 +16,7 @@ namespace T3.Operators.Types.Id_37bdbafc_d14c_4b81_91c3_8f63c3b63812
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
         [Input(Guid = "8f72275d-d903-4372-852c-51c3db35fe90")]
-        public readonly InputSlot<bool> ShowCenter = new InputSlot<bool>();
+        public readonly InputSlot<bool> ShowCenterPoints = new InputSlot<bool>();
 
         [Input(Guid = "40a04de8-54aa-4f66-acea-80ffc4dab7bd")]
         public readonly InputSlot<float> PointSize = new InputSlot<float>();
@@ -34,7 +34,13 @@ namespace T3.Operators.Types.Id_37bdbafc_d14c_4b81_91c3_8f63c3b63812
         public readonly InputSlot<T3.Core.Operator.GizmoVisibility> Visibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
 
         [Input(Guid = "d2472768-dd40-436f-af1b-7359289b5118")]
-        public readonly InputSlot<bool> ShowIndex = new InputSlot<bool>();
+        public readonly InputSlot<bool> ShowIndices = new InputSlot<bool>();
+
+        [Input(Guid = "bbc26907-416d-4168-9e89-72ee1c6a530e")]
+        public readonly InputSlot<bool> ShowAttributeList = new InputSlot<bool>();
+
+        [Input(Guid = "90173b57-cd09-4270-a16e-6e2454882b9b")]
+        public readonly InputSlot<int> StartIndex = new InputSlot<int>();
 
     }
 }

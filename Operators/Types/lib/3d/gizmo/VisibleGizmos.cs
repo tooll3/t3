@@ -51,7 +51,7 @@ namespace T3.Operators.Types.Id_d61d7192_9ca3_494e_91e2_10a530ee9375
             }
         }
 
-        private bool _updatedOnce = false;
+        private bool _updatedOnce = true;
 
         
         [Input(Guid = "4F52683C-F2AA-4D3F-A964-F5232FA98872")]

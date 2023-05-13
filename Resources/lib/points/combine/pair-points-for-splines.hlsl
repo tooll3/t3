@@ -25,18 +25,16 @@ RWStructuredBuffer<Point> ResultPoints : u0; // output
     PointsA.GetDimensions(countA, stride);
     PointsB.GetDimensions(countB, stride);
 
-    if (i.x >= resultCount)
-        return;
+    // if (i.x >= resultCount)
+    //     return;
 
     int segmentCount = (int)(SegmentCount + 0.5);
 
-    int pointsPerSegment = segmentCount + 1;
+    int pointsPerSegment = segmentCount ;
 
     uint pairIndex = i.x / pointsPerSegment;
     uint indexInLine = i.x % pointsPerSegment;
     float f = (float)indexInLine / (float)(pointsPerSegment - 2);
-
-    // f = f*f;
 
     if (indexInLine == pointsPerSegment - 1)
     {
@@ -51,28 +49,15 @@ RWStructuredBuffer<Point> ResultPoints : u0; // output
     float3 pB1 = PointsB[indexB].position;
     float3 forward = TangentDirection;
 
-    float3 tA = rotate_vector(forward, PointsA[indexA].rotation) * (TangentA + PointsA[indexA].w * TangentA_WFactor);
-    float3 tB = rotate_vector(forward, PointsB[indexB].rotation) * (TangentB + PointsB[indexB].w * TangentB_WFactor);
-
-    // float3 pAA = lerp(pA1, pA1+tA, 1-(1-f)* (1-f));
-    // float3 pBB = lerp(pB1, pB1+tB,  1-(f*f));
-
-    // ResultPoints[i.x].position = lerp(
-    //                                 pAA,
-    //                                 pBB,
-    //                                 f);
+    float paW = PointsA[indexA].w;
+    float pbW = PointsA[indexB].w;
+    float3 tA = rotate_vector(forward, PointsA[indexA].rotation) * (TangentA + paW * TangentA_WFactor);
+    float3 tB = rotate_vector(forward, PointsB[indexB].rotation) * (TangentB + pbW * TangentB_WFactor);
 
     float3 v0 = pA1;
     float3 v1 = pA1 + tA;
     float3 v2 = pB1 + tB;
     float3 v3 = pB1;
-
-    // float3 A = (v3-v2)-(v0-v1);
-    // float3 B = (v0-v1)-A;
-    // float3 C = v2-v0;
-    // float3 D = v1;
-
-    // float3 pF = D + f * (C + f * (B + f * A));
 
     float t = f;
     float t2 = t * t;
@@ -86,8 +71,9 @@ RWStructuredBuffer<Point> ResultPoints : u0; // output
 
     ResultPoints[i.x].rotation = float4(1, 0, 0, 1);
 
-    // ResultPoints[i.x].position = float3(1,0,0);
-    ResultPoints[i.x].w = InitWTo01 > 0.5 ? t : 1;
+
+    float w = isnan(paW) || isnan(paW) ? sqrt(-1) : 1;
+    ResultPoints[i.x].w = InitWTo01 > 0.5 ? t : w;
     // ResultPoints[i.x] = PointsA[0];
 
     // if(InitWTo01 > 0.5)

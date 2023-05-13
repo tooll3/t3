@@ -285,7 +285,7 @@ public partial class Model
                          {
                              return new StructuredList<Point>().Read(token);
                          }
-                         catch(Exception e)
+                         catch(Exception)
                          {
                              
                              //Log.Warning("Failed to load structured list:" + e.Message);

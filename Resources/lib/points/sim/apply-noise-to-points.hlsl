@@ -33,7 +33,7 @@ void main(uint3 i : SV_DispatchThreadID)
     float3 variationOffset = hash31((float)(i.x%1234)/0.123 ) * Variation;
 
     float3 pos = ResultPoints[i.x].position*0.9; // avoid simplex noice glitch at -1,0,0 
-    float3 noiseLookup = (pos + variationOffset + Phase ) * Frequency;
+    float3 noiseLookup = (pos + variationOffset + Phase* float3(1,-1,0)  ) * Frequency;
 
     float3 noise = UseCurlNoise < 0.5 
         ? snoiseVec3(noiseLookup) * Amount/100 * AmountDistribution
@@ -42,7 +42,7 @@ void main(uint3 i : SV_DispatchThreadID)
     float3 n = float3(1, 0.0, 0) * RotationLookupDistance;
 
     float3 posNormal = ResultPoints[i.x].position*0.9; // avoid simplex noice glitch at -1,0,0 
-    float3 noiseLookupNormal = (posNormal + variationOffset + Phase  ) * Frequency + n/Frequency;
+    float3 noiseLookupNormal = (posNormal + variationOffset + Phase * float3(0,-1,0)  ) * Frequency + n/Frequency;
     float3 noiseNormal = UseCurlNoise < 0.5
         ? snoiseVec3(noiseLookup) * Amount/100 * AmountDistribution
         : curlNoise(noiseLookup) * Amount/100 * AmountDistribution;
