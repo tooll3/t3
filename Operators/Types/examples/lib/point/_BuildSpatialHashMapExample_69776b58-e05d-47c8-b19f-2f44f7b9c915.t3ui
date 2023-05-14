@@ -1,6 +1,6 @@
 {
   "Id": "69776b58-e05d-47c8-b19f-2f44f7b9c915"/*_BuildSpatialHashMapExample*/,
-  "Description": "Illustrates how to embed the SpatialHashMap algorithm.",
+  "Description": "Illustrates how to embed the SpatialHashMap algorithm.\n\nTHIS IS EXAMPE CURRENTLY BROKEN.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -12,17 +12,6 @@
       "Position": {
         "X": 517.7412,
         "Y": 446.78076
-      }
-    },
-    {
-      "ChildId": "a0009473-3fe8-4a02-8373-fb9e63d13ee9"/*DrawBillboards*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
-      "Position": {
-        "X": 1858.8955,
-        "Y": 0.0
       }
     },
     {
@@ -51,7 +40,7 @@
       "ChildId": "574295ec-2d90-4245-a72d-b03807792dd4"/*Multiply*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 367.7412,
@@ -133,14 +122,14 @@
       },
       "Position": {
         "X": 1025.7422,
-        "Y": 248.82458
+        "Y": 235.82458
       }
     },
     {
       "ChildId": "fe490a1a-ceb0-4542-8908-2fd0f1bae30a"/*ComputeShader*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 23.0
       },
       "Position": {
         "X": 1025.7422,
@@ -188,7 +177,7 @@
       },
       "Position": {
         "X": 1025.7422,
-        "Y": 355.1151
+        "Y": 342.1151
       }
     },
     {
@@ -426,11 +415,11 @@
       "ChildId": "5c855d01-9c6a-4dd1-8dee-4d21cbf9fb45"/*Multiply*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
-        "X": 333.26767,
-        "Y": 19.372208
+        "X": 339.14084,
+        "Y": -34.66063
       }
     },
     {
@@ -442,6 +431,17 @@
       "Position": {
         "X": 617.92096,
         "Y": 318.3724
+      }
+    },
+    {
+      "ChildId": "2975cbce-860b-49dd-bc2f-cdc68ed48142"/*DrawBillboards*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1858.8955,
+        "Y": 0.0
       }
     }
   ],

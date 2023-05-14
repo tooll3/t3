@@ -1143,7 +1143,7 @@
       "Outputs": []
     },
     {
-      "Id": "b633f3b6-853d-4c3b-93d9-6ece1a6544dc"/*DrawBillboards*/,
+      "Id": "b633f3b6-853d-4c3b-93d9-6ece1a6544dc"/*_DrawBillboardsOld*/,
       "SymbolId": "071c9aad-ecbf-47bf-b2f6-c43e8212d5b1",
       "InputValues": [
         {
@@ -1636,7 +1636,7 @@
       "Outputs": []
     },
     {
-      "Id": "1f00c2d3-934f-45fc-b031-03cafc8bd811"/*DrawBillboards*/,
+      "Id": "1f00c2d3-934f-45fc-b031-03cafc8bd811"/*_DrawBillboardsOld*/,
       "SymbolId": "071c9aad-ecbf-47bf-b2f6-c43e8212d5b1",
       "InputValues": [
         {
@@ -2351,7 +2351,7 @@
       "Outputs": []
     },
     {
-      "Id": "4d5784f1-6745-46c4-8621-5e2be88f146d"/*DrawVaryingQuads*/,
+      "Id": "4d5784f1-6745-46c4-8621-5e2be88f146d"/*_DrawVaryingQuads*/,
       "SymbolId": "ffc0a7ed-fe61-4188-8db9-0b0f07c6b981",
       "InputValues": [
         {

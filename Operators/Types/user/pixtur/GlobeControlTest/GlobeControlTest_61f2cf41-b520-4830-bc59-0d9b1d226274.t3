@@ -285,12 +285,12 @@
         {
           "Id": "f5b2a750-9c2e-488f-90cd-9905e75382a7"/*Longitude*/,
           "Type": "System.Single",
-          "Value": 57.889656
+          "Value": -35.651325
         },
         {
           "Id": "5cc61c18-e4d2-4042-8a30-06dc107d864f"/*Latitude*/,
           "Type": "System.Single",
-          "Value": -69.926125
+          "Value": 151.71066
         },
         {
           "Id": "e1bb90f8-b9f2-441e-acca-c2cf5ca56258"/*HeightAboveSurface*/,

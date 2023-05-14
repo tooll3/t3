@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "0bdecd80-161e-4f7f-be42-ca9c8758ced0"/*DrawVaryingQuads*/,
+      "ChildId": "0bdecd80-161e-4f7f-be42-ca9c8758ced0"/*_DrawVaryingQuads*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0

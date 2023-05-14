@@ -1,7 +1,7 @@
 {
-  "Name": "DrawVaryingQuads",
+  "Name": "_DrawVaryingQuads",
   "Id": "ffc0a7ed-fe61-4188-8db9-0b0f07c6b981",
-  "Namespace": "lib.point.draw",
+  "Namespace": "lib.point.draw.legacy",
   "Inputs": [
     {
       "Id": "82230324-b1cd-41ba-8d03-933c939001ad"/*Color*/,

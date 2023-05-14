@@ -1,6 +1,6 @@
 {
-  "Id": "071c9aad-ecbf-47bf-b2f6-c43e8212d5b1"/*DrawBillboards*/,
-  "Description": "Draws points as animated camera aligned sprites. \nThe point's .W attributes control the lookup within the \"animation\" tracks for color and size.\n\nThis can be used for particle like animations or to generate procedural designs.\n",
+  "Id": "071c9aad-ecbf-47bf-b2f6-c43e8212d5b1"/*_DrawBillboardsOld*/,
+  "Description": "Draws points as animated camera aligned sprites. \nThe point's .W attributes control the lookup within the \"animation\" tracks for color and size.\n\nThis can be used for particle like animations or to generate procedural designs.\n\nThis operator has been deprecated. Consider using [DrawBillboards] instead.\n",
   "InputUis": [
     {
       "InputId": "2548a5d8-b2ab-4783-9298-c2e261d390f0"/*Color*/,

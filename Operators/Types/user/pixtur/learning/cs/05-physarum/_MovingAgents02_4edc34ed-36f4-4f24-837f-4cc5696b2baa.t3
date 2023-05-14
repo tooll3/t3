@@ -380,7 +380,7 @@
       "Outputs": []
     },
     {
-      "Id": "929a7ae4-8b3b-43d7-8c97-fdec0ba380b9"/*DrawQuads*/,
+      "Id": "929a7ae4-8b3b-43d7-8c97-fdec0ba380b9"/*_DrawQuads*/,
       "SymbolId": "16d10dc8-63b9-4ddf-90b8-41caef99d945",
       "InputValues": [
         {

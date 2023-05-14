@@ -2437,7 +2437,7 @@
       }
     },
     {
-      "ChildId": "6e4bbd35-0def-4332-a158-cb506828855c"/*DrawVaryingQuads*/,
+      "ChildId": "6e4bbd35-0def-4332-a158-cb506828855c"/*_DrawVaryingQuads*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

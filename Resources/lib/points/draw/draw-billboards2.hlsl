@@ -27,20 +27,23 @@ cbuffer Transforms : register(b0)
 
 cbuffer Params : register(b1)
 {
-    float2 Stretch;
-    float2 Offset;
-
     float Scale;
+    float2 Stretch;
+    float __padding;
+
+    float3 Offset;
     float OrientationMode;
+
     float Rotate;
+    float3 RotationAxis;
+
     float Randomize;
-
     float RandomPhase;
-    float3 RandomPosition;
-
     float RandomRotate;
+    float __padding0;
+
+    float3 RandomPosition;
     float RandomScale;
-    float2 __padding0;
 
     float4 Color;
 
@@ -61,6 +64,10 @@ cbuffer Params : register(b1)
     // float __padding1; // order adjusted for 4x4 padding
 
     float4 FxTextureAmount;
+
+    float UseRotationAsRgba;
+
+    float UseWFoScale;
 };
 
 cbuffer FogParams : register(b2)
@@ -103,14 +110,12 @@ inline float GetUFromMode(float mode, float f, float3 scatter, float w, float fo
     case 1:
         float f1 = (f + SpreadPhase) / SpreadLength;
         f1 = SpreadRepeat > 0.5 ? fmod(f1, 1) : f1;
-        // float ff = SpreadPingPong > 0.5 ? abs(fmod(f1 * 2, 2) - 1) : 1;
         return SpreadPingPong > 0.5 ? (1 - abs(f1 * 2 - 1)) : f1;
 
-        // return SpreadRepeat > 0.5 ? fmod(ff * SpreadLength + SpreadPhase, 1)
-        //                           : ff * SpreadLength + SpreadPhase;
-
     case 2:
-        return w;
+        float w1 = (w + SpreadPhase) / SpreadLength;
+        w1 = SpreadRepeat > 0.5 ? fmod(w1, 1) : w1;
+        return SpreadPingPong > 0.5 ? (1 - abs(w1 * 2 - 1)) : w1;
 
     default:
         return fog;
@@ -158,9 +163,14 @@ psInput vsMain(uint id
     float4 posInObject = float4(p.position, 1);
 
     float3 randomOffset = rotate_vector((scatterForScale - 0.5) * 2 * RandomPosition * Randomize, p.rotation);
-    posInObject += float4(randomOffset, 0);
+    posInObject.xyz += randomOffset;
 
-    // float3 axis = rotate_vector(p.position, rotation) * Size * sizeFromW;
+    if (OrientationMode <= 1.5)
+    {
+            posInObject.xyz += rotate_vector(float3(0,0,Offset.z), p.rotation);
+    }
+
+    // float3 axis = rotate_vector(p.position, rotation) * Size * scaleFromCurve;
 
     float4 quadPosInCamera = mul(posInObject, ObjectToCamera);
 
@@ -170,16 +180,44 @@ psInput vsMain(uint id
 
     output.fog = pow(saturate(-posInCamera.z / FogDistance), FogBias);
 
+    float4 colorFromPoint = (UseRotationAsRgba > 0.5) ? p.rotation : 1;
+
+    float colorFxU = GetUFromMode(ColorVariationMode, f, normalizedScatter, p.w, output.fog);
+    output.color = Color * ColorOverW.SampleLevel(texSampler, float2(colorFxU, 0), 0) * colorFromPoint;
+
+    float adjustedRotate = Rotate;
+    float adjustedScale = Scale;
+    float adjustedRandomize = Randomize;
+
+    if (IsFxTextureConnected)
+    {
+        float4 centerPos = mul(float4(quadPosInCamera.xyz, 1), CameraToClipSpace);
+        centerPos.xyz /= centerPos.w;
+
+        float4 fxColor = FxTexture.SampleLevel(texSampler, (centerPos.xy * float2(1, -1) + 1) / 2, 0);
+
+        if(FxTextureMode < 0.5) 
+        {
+            output.color *= fxColor;
+        }
+        else {
+            adjustedRotate += FxTextureAmount.r * fxColor.r * fxColor.a * 360;
+            adjustedScale += FxTextureAmount.g * fxColor.g * fxColor.a;
+            adjustedRandomize += FxTextureAmount.b * fxColor.b * fxColor.a;
+        }
+    }
+
+
     float scaleFxU = GetUFromMode(ScaleDistribution, f, normalizedScatter, p.w, output.fog);
-    float sizeFromW = SizeOverW.SampleLevel(texSampler, float2(scaleFxU, 0), 0);
-    float hideUndefinedPoints = isnan(p.w) ? 0 : 1;
-    float computedScale = Scale * (RandomScale * scatterForScale.y + 1) * tooCloseFactor * sizeFromW * hideUndefinedPoints;
+    float scaleFromCurve = SizeOverW.SampleLevel(texSampler, float2(scaleFxU, 0), 0);
+    float hideUndefinedPoints = isnan(p.w) ? 0 : (UseWFoScale > 0.5 ? p.w : 1 );
+    float computedScale = adjustedScale * (RandomScale * scatterForScale.y *adjustedRandomize + 1) * tooCloseFactor * scaleFromCurve * hideUndefinedPoints;
 
     if (OrientationMode <= 1.5)
     {
-        float2 corner = float2((cornerFactors.xy + Offset) * 0.010 * Stretch * textureAspect) * float2(-1, -1);
+        float2 corner = float2((cornerFactors.xy + Offset.xy) * 0.010 * Stretch * textureAspect) * float2(-1, -1);
 
-        float4 rot = rotate_angle_axis((Rotate + RandomRotate * scatterForScale.x) * 3.141578 / 180, float3(0, 0, 1));
+        float4 rot = rotate_angle_axis((adjustedRotate + RandomRotate * scatterForScale.x * adjustedRandomize) * 3.141578 / 180, RotationAxis);
 
         if ((int)OrientationMode == 1)
         {
@@ -196,28 +234,12 @@ psInput vsMain(uint id
     }
     else
     {
-        float3 axis = float3((cornerFactors.xy + Offset) * 0.010 * Stretch * textureAspect, 0);
-        float4 rotation = qmul(normalize(p.rotation), rotate_angle_axis((Rotate + 180 + RandomRotate * scatterForScale.x) / 180 * PI, float3(0, 0, 1)));
+        float3 axis = ( cornerFactors + Offset) * 0.010 * float3(Stretch * textureAspect,1);
+        float4 rotation = qmul(normalize(p.rotation), rotate_angle_axis((adjustedRotate + 180 + RandomRotate * scatterForScale.x) / 180 * PI, RotationAxis));
         axis = rotate_vector(axis, rotation) * computedScale;
         // float3 pInObject = p.position + axis;
         output.position = mul(posInObject + float4(axis, 0), ObjectToClipSpace);
     }
-
-    // TODO: use effect texture
-    float4 colorFromPoint = 1; //((int)UsePointOrientation == 2) ? p.rotation : 1;
-
-    float colorFxU = GetUFromMode(ColorVariationMode, f, normalizedScatter, p.w, output.fog);
-    output.color = Color * ColorOverW.SampleLevel(texSampler, float2(colorFxU, 0), 0) * colorFromPoint;
-
-    if (IsFxTextureConnected)
-    {
-        float4 centerPos = mul(float4(quadPosInCamera.xyz, 1), CameraToClipSpace);
-        centerPos.xyz /= centerPos.w;
-
-        float4 fxColor = FxTexture.SampleLevel(texSampler, (centerPos.xy * float2(1, -1) + 1) / 2, 0);
-        output.color *= fxColor;
-    }
-
     return output;
 }
 

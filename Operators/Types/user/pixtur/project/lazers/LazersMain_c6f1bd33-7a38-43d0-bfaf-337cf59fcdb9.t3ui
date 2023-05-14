@@ -588,7 +588,7 @@
       }
     },
     {
-      "ChildId": "311c4793-e51e-43cf-91e4-d9722469bb3f"/*DrawQuads*/,
+      "ChildId": "311c4793-e51e-43cf-91e4-d9722469bb3f"/*_DrawQuads*/,
       "Size": {
         "X": 110.0,
         "Y": 36.0
@@ -599,7 +599,7 @@
       }
     },
     {
-      "ChildId": "c79b0d7b-1ce6-41f3-ab75-a15d085e3628"/*DrawBillboards*/,
+      "ChildId": "c79b0d7b-1ce6-41f3-ab75-a15d085e3628"/*_DrawBillboardsOld*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

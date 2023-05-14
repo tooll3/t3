@@ -1186,7 +1186,7 @@
       "Outputs": []
     },
     {
-      "Id": "c2737fef-7df3-49bc-8bb1-d9b7b28b2857"/*DrawQuads*/,
+      "Id": "c2737fef-7df3-49bc-8bb1-d9b7b28b2857"/*_DrawQuads*/,
       "SymbolId": "16d10dc8-63b9-4ddf-90b8-41caef99d945",
       "InputValues": [
         {
@@ -1220,7 +1220,7 @@
       ],
       "Outputs": [
         {
-          "Id": "5c6f0299-16bd-4553-9ca1-e8d7c7634b37"/*DrawQuads*/,
+          "Id": "5c6f0299-16bd-4553-9ca1-e8d7c7634b37"/*_DrawQuads*/,
           "IsDisabled": true
         }
       ]

@@ -1115,7 +1115,7 @@
       }
     },
     {
-      "ChildId": "d25853e5-883e-4d72-9c1d-4f0c014ac637"/*DrawVaryingQuads*/,
+      "ChildId": "d25853e5-883e-4d72-9c1d-4f0c014ac637"/*_DrawVaryingQuads*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0

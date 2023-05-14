@@ -1,7 +1,7 @@
 {
-  "Name": "DrawBillboards",
+  "Name": "_DrawBillboardsOld",
   "Id": "071c9aad-ecbf-47bf-b2f6-c43e8212d5b1",
-  "Namespace": "lib.point.draw",
+  "Namespace": "lib.point.draw.legacy",
   "Inputs": [
     {
       "Id": "2548a5d8-b2ab-4783-9298-c2e261d390f0"/*Color*/,

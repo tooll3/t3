@@ -389,7 +389,7 @@
       }
     },
     {
-      "ChildId": "48a185cc-d9f7-4de6-a68a-c1e26cb13398"/*DrawVaryingQuads*/,
+      "ChildId": "48a185cc-d9f7-4de6-a68a-c1e26cb13398"/*_DrawVaryingQuads*/,
       "Size": {
         "X": 110.0,
         "Y": 49.0
