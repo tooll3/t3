@@ -8,10 +8,6 @@
       "DefaultValue": null
     },
     {
-      "Id": "fe61ff9e-7f1b-4f69-9f4b-313f30b57124"/*Command*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "7c27ebd7-3746-4b70-a252-dd0ac0445b74"/*SenderName*/,
       "DefaultValue": "Tooll3"
     }
