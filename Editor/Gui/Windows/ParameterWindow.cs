@@ -94,7 +94,7 @@ namespace T3.Editor.Gui.Windows
                 ImGui.PushFont(Fonts.FontSmall);
 
                 //ImGui.Dummy(new Vector2(10,10));
-                FormInputs.AddVerticalSpace(10);
+                FormInputs.AddVerticalSpace(30);
                 ImGui.Indent(10);
                 ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10,10));
                 

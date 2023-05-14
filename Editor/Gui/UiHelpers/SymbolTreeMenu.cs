@@ -88,8 +88,11 @@ namespace T3.Editor.Gui.UiHelpers
                 if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(symbol.Id, out var info))
                 {
                     ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
-                    ListSymbolSetWithTooltip("  (needs {0}/", "  (",  info.RequiredSymbolIds);
-                    ListSymbolSetWithTooltip("used by {0})  ", "NOT USED)  ",  info.DependingSymbolIds);
+                    ListSymbolSetWithTooltip("  (needs {0}/", "  (", info.RequiredSymbolIds);
+                    if (ListSymbolSetWithTooltip("used by {0})  ", "NOT USED)  ", info.DependingSymbolIds))
+                    {
+                        SymbolLibrary._listUsagesFilter = symbol;
+                    }
                     ImGui.PopStyleColor();
                 }
 
@@ -131,8 +134,9 @@ namespace T3.Editor.Gui.UiHelpers
             ImGui.PopID();
         }
 
-        private static void ListSymbolSetWithTooltip(string setTitleFormat, string emptySetTitle, HashSet<Guid> symbolIdSet)
+        private static bool ListSymbolSetWithTooltip(string setTitleFormat, string emptySetTitle, HashSet<Guid> symbolIdSet)
         {
+            var activated = false;
             ImGui.PushID(setTitleFormat);
             ImGui.SameLine();
             
@@ -149,9 +153,15 @@ namespace T3.Editor.Gui.UiHelpers
                     ListSymbols(symbolIdSet);
                     ImGui.EndTooltip();
                 }
+
+                if (ImGui.IsItemClicked())
+                {
+                    activated = true;
+                }
             }
             
             ImGui.PopID();
+            return activated;
         }
 
         private static void ListSymbols(HashSet<Guid> valueRequiredSymbolIds)

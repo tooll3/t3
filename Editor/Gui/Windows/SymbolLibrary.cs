@@ -35,42 +35,75 @@ namespace T3.Editor.Gui.Windows
             
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
             ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 10);
+
+            if (_listUsagesFilter != null)
             {
-                ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
-
-                //ImGui.SetNextItemWidth(-120);
-                CustomComponents.DrawSearchField("Search symbols...", ref _filter.SearchString, -60);
-                
-                ImGui.SameLine();
-                if (ImGui.Button("Rescan"))
+                ImGui.Text("Usages of " + _listUsagesFilter.Name + ":");
+                if (ImGui.Button("Clear"))
                 {
-                    _treeNode.PopulateCompleteTree();
-                    ExampleSymbolLinking.UpdateExampleLinks();
-                    SymbolAnalysis.UpdateDetails();
+                    _listUsagesFilter = null;
                 }
-                CustomComponents.TooltipForLastItem("Rescans the current symbol tree. This can useful after renaming namespaces.");
-
-                ImGui.Separator();
-
-                ImGui.BeginChild("scrolling");
+                else
                 {
-                    if (string.IsNullOrEmpty(_filter.SearchString))
+                    ImGui.Separator();
+
+                    ImGui.BeginChild("scrolling");
                     {
-                        DrawNode(_treeNode);
+                        if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(_listUsagesFilter.Id, out var info))
+                        {
+                            foreach (var s in info.DependingSymbolIds)
+                            {
+                                var symbol = SymbolRegistry.Entries[s];
+                                SymbolTreeMenu.DrawSymbolItem(symbol);
+                            }
+                        }
                     }
-                    else
-                    {
-                        DrawList();
-                    }
+                    ImGui.EndChild();
                 }
-                ImGui.EndChild();
             }
+            else
+            {
+                DrawSymbolTree();
+            }
+            
             ImGui.PopStyleVar(2);
 
             if (ImGui.IsMouseReleased(0))
             {
                 StopDrag();
             }
+        }
+
+        private void DrawSymbolTree()
+        {
+            //ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
+
+            CustomComponents.DrawSearchField("Search symbols...", ref _filter.SearchString, -60);
+
+            ImGui.SameLine();
+            if (ImGui.Button("Rescan"))
+            {
+                _treeNode.PopulateCompleteTree();
+                ExampleSymbolLinking.UpdateExampleLinks();
+                SymbolAnalysis.UpdateDetails();
+            }
+
+            CustomComponents.TooltipForLastItem("Rescans the current symbol tree. This can useful after renaming namespaces.");
+
+            ImGui.Separator();
+
+            ImGui.BeginChild("scrolling");
+            {
+                if (string.IsNullOrEmpty(_filter.SearchString))
+                {
+                    DrawNode(_treeNode);
+                }
+                else
+                {
+                    DrawList();
+                }
+            }
+            ImGui.EndChild();
         }
 
         private void DrawList()
@@ -203,5 +236,6 @@ namespace T3.Editor.Gui.Windows
         private readonly NamespaceTreeNode _treeNode = new(NamespaceTreeNode.RootNodeId);
         private readonly SymbolFilter _filter = new();
         private static readonly RenameNamespaceDialog _renameNamespaceDialog = new();
+        public static Symbol _listUsagesFilter;
     }
 }
