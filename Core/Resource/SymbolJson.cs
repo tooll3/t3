@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Core.SystemUi;
 
 // ReSharper disable AssignNullToNotNullAttribute
 
@@ -416,9 +415,9 @@ namespace T3.Core.Resource
             if (thisType is not null)
                 return thisType;
                 
-            MessageBox.Show($"Definition '{typeName}' is missing in Operator.dll.\nPlease try to rebuild your solution.");
-            Application.Exit();
-            Application.ExitThread();
+            CoreUi.Instance.ShowMessageBox($"Definition '{typeName}' is missing in Operator.dll.\nPlease try to rebuild your solution.");
+            CoreUi.Instance.ExitApplication();
+            CoreUi.Instance.ExitThread();
 
             return null;
         }

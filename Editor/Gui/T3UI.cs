@@ -5,7 +5,6 @@ using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using T3.Editor.Gui.Graph;
 using ImGuiNET;
 using T3.Core.Animation;
@@ -30,6 +29,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.UiHelpers.Wiki;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
+using T3.Editor.SystemUi;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;
 
@@ -196,7 +196,7 @@ namespace T3.Editor.Gui
 
                     if (ImGui.MenuItem("Quit", !IsCurrentlySaving))
                     {
-                        Application.Exit();
+                        EditorUi.Instance.ExitApplication();
                     }
 
                     if (ImGui.IsItemHovered() && IsCurrentlySaving)

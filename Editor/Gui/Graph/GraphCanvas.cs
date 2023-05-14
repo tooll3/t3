@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -28,6 +27,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.Gui.Windows.TimeLine;
+using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.Graph
 {
@@ -1011,7 +1011,7 @@ namespace T3.Editor.Gui.Graph
 
                 try
                 {
-                    Clipboard.SetText(writer.ToString(), TextDataFormat.UnicodeText);
+                    EditorUi.Instance.SetClipboardText(writer.ToString());
                     //Log.Info(Clipboard.GetText(TextDataFormat.UnicodeText));
                 }
                 catch (Exception)
@@ -1027,7 +1027,7 @@ namespace T3.Editor.Gui.Graph
         {
             try
             {
-                var text = Clipboard.GetText();
+                var text = EditorUi.Instance.GetClipboardText();
                 using (var reader = new StringReader(text))
                 {
                     var jsonReader = new JsonTextReader(reader);

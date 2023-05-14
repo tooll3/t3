@@ -4,8 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms;
+using T3.Core.SystemUi;
 using T3.Editor.Gui.Windows.Layouts;
+using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.Interaction.StartupCheck
 {
@@ -114,7 +115,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                 
                 var sb = new StringBuilder();
 
-                sb.Append($"Startup folder is:\n{Application.StartupPath}\n\n");
+                sb.Append($"Startup folder is:\n{EditorUi.Instance.StartupPath}\n\n");
                 
                 sb.Append($"We can't find the following files...\n\n  {string.Join("\n  ", missingPaths)}");
                 sb.Append("\n\n");
@@ -125,15 +126,15 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                     sb.Append("Click Yes to get help");
                 }
 
-                const MessageBoxButtons buttons = MessageBoxButtons.YesNo;
 
-                var result = MessageBox.Show(sb.ToString(), caption, buttons);
-                if (result == DialogResult.Yes)
+                var result = EditorUi.Instance.ShowMessageBox(sb.ToString(), caption, PopUpButtons.YesNo);
+                if (result == PopUpResult.Yes)
                 {
                     OpenUrl(URL);
                 }
-                Application.Exit();
-                Application.ExitThread();
+                
+                EditorUi.Instance.ExitApplication();
+                EditorUi.Instance.ExitThread();
                 return false;
             }
         }
