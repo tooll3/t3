@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -251,6 +251,8 @@ namespace T3.Core.DataTypes
         public  override StructuredList Read(JToken inputToken)
         {
             //var inputToken = JToken.ReadFrom(reader);
+            if (inputToken == null || inputToken is JValue)
+                return null;
 
             var jArray = (JArray)inputToken["StructuredList"];
             if (jArray == null)
