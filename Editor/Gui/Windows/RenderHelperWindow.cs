@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Logging;
+using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
+using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.Windows
 {
@@ -61,11 +62,9 @@ namespace T3.Editor.Gui.Windows
             string directory = Path.GetDirectoryName(targetFile);
             if (targetFile != directory && File.Exists(targetFile))
             {
-                const MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-
                 // FIXME: get a nicer popup window here...
-                var result = MessageBox.Show("File exists. Overwrite?", "Render Video", buttons);
-                return (result == DialogResult.Yes);
+                var result = EditorUi.Instance.ShowMessageBox("File exists. Overwrite?", "Render Video", PopUpButtons.YesNo);
+                return (result == PopUpResult.Yes);
             }
 
             if (!Directory.Exists(directory))

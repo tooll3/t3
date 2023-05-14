@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
@@ -14,6 +15,7 @@ namespace T3.Editor.Gui.Interaction.Camera
     /// </summary>
     public class CameraInteraction
     {
+        internal static ICameraManipulator[] ManipulationDevices = Array.Empty<ICameraManipulator>();
         public void Update(ICamera camera, bool allowCameraInteraction)
         {
             if (camera == null)
@@ -47,7 +49,11 @@ namespace T3.Editor.Gui.Interaction.Camera
             }
 
             var frameTime = ImGui.GetTime();
-            SpaceMouseInteraction.ManipulateCamera(_intendedSetup, frameTime);
+
+            foreach (var device in ManipulationDevices)
+            {
+                device.ManipulateCamera(_intendedSetup, frameTime);
+            }
 
             var updateRequired = ComputeSmoothMovement();
             if (!updateRequired)

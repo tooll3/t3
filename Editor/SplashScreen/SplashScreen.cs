@@ -3,13 +3,12 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using T3.Core.Logging;
+using T3.Editor.SystemUi;
 
 namespace T3.Editor.SplashScreen;
 
-internal class SplashScreen : ILogWriter
+internal class SplashScreen : ISplashScreen
 {
-    
-    
     public void Show(string imagePath)
     {
         var backgroundImage = Image.FromFile(imagePath);

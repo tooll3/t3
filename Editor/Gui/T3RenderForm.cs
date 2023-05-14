@@ -19,7 +19,10 @@ using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui
 {
-    public class T3RenderForm : IDisposable
+    /// <summary>
+    /// Binds ImGui to a SharpDX render form
+    /// </summary>
+    public class T3RenderForm : IDisposable // likely the first place to abstract other renderers
     {
         //public Device Device => _device;
         private Device _device;
@@ -422,6 +425,7 @@ namespace T3.Editor.Gui
 
         private static void SetKeyMappings()
         {
+            // Todo : keymap should be defined by SystemUi
             ImGuiIOPtr io = ImGui.GetIO();
             io.KeyMap[(int)ImGuiKey.Tab] = (int)Keys.Tab;
             io.KeyMap[(int)ImGuiKey.LeftArrow] = (int)Keys.Left;

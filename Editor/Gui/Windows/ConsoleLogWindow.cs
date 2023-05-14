@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
-using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Utils;
@@ -12,6 +11,7 @@ using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.Windows
 {
@@ -62,7 +62,7 @@ namespace T3.Editor.Gui.Windows
                             sb.Append('\n');
                         }
 
-                        Clipboard.SetText(sb.ToString());
+                        EditorUi.Instance.SetClipboardText(sb.ToString());
                     }
                 }
 
