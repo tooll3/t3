@@ -135,8 +135,8 @@ psInput vsMain(uint id
 
     psInput output;
 
-    int quadIndex = id % 6;
-    int particleId = id / 6;
+    uint quadIndex = id % 6;
+    uint particleId = id / 6;
     float3 cornerFactors = Corners[quadIndex];
 
     Point p = Points[particleId];
@@ -152,13 +152,16 @@ psInput vsMain(uint id
     float3 scatterForScale = normalizedScatter * 2 - 1;
 
     // float4 aspect = float4(CameraToClipSpace[1][1] / CameraToClipSpace[0][0],1,1,1);
+    output.fog = 0;
 
-    float cellIndex = particleId;
-    float textureCelX = (float)cellIndex % (AtlasSize.x);
-    float textureCelY = (int)(((float)cellIndex / AtlasSize.x) % (float)(AtlasSize.y));
+    int2 altasSize = (int2)AtlasSize;
+    float textureU = GetUFromMode(TextureAtlasMode, f, normalizedScatter, p.w, output.fog);
+    int cellIndex = textureU * altasSize.x * altasSize.y;// particleId;
+    int textureCelX =  cellIndex % altasSize.x;
+    int textureCelY =  ((cellIndex / altasSize.x) % altasSize.y);
     output.texCoord = (cornerFactors.xy * float2(-1, 1) * 0.5 + 0.5);
-    output.texCoord /= AtlasSize;
-    output.texCoord += float2(textureCelX, textureCelY) / AtlasSize;
+    output.texCoord /= altasSize;
+    output.texCoord += float2(textureCelX, textureCelY) / altasSize;
 
     float4 posInObject = float4(p.position, 1);
 
@@ -209,9 +212,11 @@ psInput vsMain(uint id
 
 
     float scaleFxU = GetUFromMode(ScaleDistribution, f, normalizedScatter, p.w, output.fog);
-    float scaleFromCurve = SizeOverW.SampleLevel(texSampler, float2(scaleFxU, 0), 0);
+    float scaleFromCurve = SizeOverW.SampleLevel(texSampler, float2(scaleFxU, 0), 0).r;
     float hideUndefinedPoints = isnan(p.w) ? 0 : (UseWFoScale > 0.5 ? p.w : 1 );
     float computedScale = adjustedScale * (RandomScale * scatterForScale.y *adjustedRandomize + 1) * tooCloseFactor * scaleFromCurve * hideUndefinedPoints;
+
+    output.position = 0;
 
     if (OrientationMode <= 1.5)
     {
@@ -228,7 +233,7 @@ psInput vsMain(uint id
             rot = qmul(xx, rot);
         }
 
-        corner = rotate_vector(float3(corner, 0), rot);
+        corner = rotate_vector(float3(corner, 0), rot).xy;
         // quadPosInCamera.xy += corner * computedScale;
         output.position = mul(quadPosInCamera + float4(corner * computedScale, 0, 0), CameraToClipSpace);
     }
