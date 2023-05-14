@@ -42,6 +42,9 @@ namespace T3.Editor
         [STAThread]
         private static void Main(string[] args)
         {
+            if (!IsStandAlone)
+                StartupValidation.CheckInstallation();
+            
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
 
@@ -65,8 +68,6 @@ namespace T3.Editor
             new UserSettings(saveOnQuit: true);
             new ProjectSettings(saveOnQuit: true);
 
-            if (!IsStandAlone && UserSettings.Config.EnableStartupConsistencyCheck)
-                StartupValidation.CheckInstallation();
 
             _main.CreateRenderForm("T3 " + Version, false);
 

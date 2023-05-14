@@ -74,7 +74,6 @@ namespace T3.Editor.Gui.UiHelpers
             // Other settings
             public float GizmoSize = 100;
             public bool SwapMainAnd2ndWindowsWhenFullscreen = false;
-            public bool EnableStartupConsistencyCheck = true;
 
             // Timeline
             public float TimeRasterDensity = 1f;
