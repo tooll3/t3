@@ -72,16 +72,25 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             var selectedSymbolChildUis = NodeSelection.GetSelectedChildUis().OrderBy(c => c.PosOnCanvas.Y * 100 + c.PosOnCanvas.X).ToList();
             selectedSymbolChildUis.Reverse();
 
-            if (selectedSymbolChildUis.Count > 1 && selectedSymbolChildUis.Any(c => c.Id == sourceUi.Id))
+            //if (selectedSymbolChildUis.Count > 1 && selectedSymbolChildUis.Any(c => c.Id == sourceUi.Id))
+            if (selectedSymbolChildUis.Count > 1)
             {
                 selectedSymbolChildUis.Reverse();
+                
+                // add temp connections for all selected nodes that have the same primary output type
                 foreach (var selectedChild in selectedSymbolChildUis)
                 {
-                    if (selectedChild.SymbolChild.Symbol.Id != sourceUi.SymbolChild.Symbol.Id)
-                        return;
+                    var outputDefinitions = selectedChild.SymbolChild.Symbol.OutputDefinitions;
+                    if (outputDefinitions.Count == 0)
+                        continue;
+
+                    var firstOutput = selectedChild == sourceUi ? outputDef 
+                                          :    outputDefinitions[0];
+                    if(firstOutput.ValueType != outputDef.ValueType)
+                        continue;
 
                     TempConnections.Add(new TempConnection(sourceParentOrChildId: selectedChild.SymbolChild.Id,
-                                                           sourceSlotId: outputDef.Id,
+                                                           sourceSlotId: firstOutput.Id,
                                                            targetParentOrChildId: NotConnectedId,
                                                            targetSlotId: NotConnectedId,
                                                            outputDef.ValueType));
@@ -426,15 +435,12 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 }
             }
 
-            // Todo: Support simultaneous connection from multiple inputs
             var newConnection = new Symbol.Connection(sourceParentOrChildId: sourceUi.SymbolChild.Id,
                                                       sourceSlotId: output.Id,
                                                       targetParentOrChildId: TempConnections[0].TargetParentOrChildId,
                                                       targetSlotId: TempConnections[0].TargetSlotId);
             
             _inProgressCommand.AddAndExecCommand(new AddConnectionCommand(parentSymbol, newConnection, 0));
-            //TempConnections.Clear();
-            //ConnectionSnapEndHelper.ResetSnapping();
             CompleteOperation();
         }
 
