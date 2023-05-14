@@ -22,6 +22,9 @@ namespace T3.Core.Audio
         {
             _fftUpdatesSinceLastFrame = 0;
             
+            if (settings == null)
+                return;
+                    
             if (settings.AudioSource != PlaybackSettings.AudioSources.ExternalDevice)
             {
                 if (!string.IsNullOrEmpty(ActiveInputDeviceName))
