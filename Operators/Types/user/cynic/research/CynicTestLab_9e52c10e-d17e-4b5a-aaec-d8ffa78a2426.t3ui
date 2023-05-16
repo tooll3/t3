@@ -725,7 +725,7 @@
       }
     },
     {
-      "ChildId": "e91da103-3557-4193-bbf5-b6518d9da221"/*PointList*/,
+      "ChildId": "e91da103-3557-4193-bbf5-b6518d9da221"/*ExportPointList*/,
       "Size": {
         "X": 110.0,
         "Y": 23.0
