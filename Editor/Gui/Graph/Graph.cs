@@ -210,8 +210,9 @@ namespace T3.Editor.Gui.Graph
 
                 if (c.IsConnectedToSymbolOutput)
                 {
-                    var outputNode = _outputUisById[c.TargetSlotId];
-
+                    if (!_outputUisById.TryGetValue(c.TargetSlotId, out var outputNode))
+                        return;
+                    
                     if (!_linesToOutputNodes.ContainsKey(outputNode))
                         _linesToOutputNodes.Add(outputNode, new List<ConnectionLineUi>());
 

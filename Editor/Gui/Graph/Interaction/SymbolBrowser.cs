@@ -63,10 +63,14 @@ namespace T3.Editor.Gui.Graph.Interaction
                 var childUi = NodeSelection.GetSelectedChildUis().ToList()[0];
                 {
                     var instance = NodeSelection.GetInstanceForSymbolChildUi(childUi);
+                    if (instance == null)
+                    {
+                        NodeSelection.Clear();
+                        return;
+                    }
+                    
                     ConnectionMaker.OpenBrowserWithSingleSelection(this, childUi, instance);
                 }
-                //TODO: support multiple selected ops?
-
                 return;
             }
 

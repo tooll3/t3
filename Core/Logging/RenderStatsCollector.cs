@@ -37,6 +37,9 @@ namespace T3.Core.Logging
         {
             foreach (var p in _providers)
             {
+                if (p == null)
+                    continue;
+                
                 foreach (var statAndCount in p.GetStats())
                 {
                     yield return statAndCount;
