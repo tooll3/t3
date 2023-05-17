@@ -81,6 +81,7 @@ namespace T3.Core.Operator
                 return false;
             
             targetSlot.AddConnection(sourceSlot, multiInputIndex);
+            sourceSlot.DirtyFlag.Invalidate();
             return true;
         }
 
