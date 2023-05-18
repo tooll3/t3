@@ -4,7 +4,11 @@
   "Namespace": "lib.3d.postfx",
   "Inputs": [
     {
-      "Id": "22f5e8db-0b80-47dc-b30b-4bc49d9fad59"/*Command*/,
+      "Id": "bc1685a8-0a92-460f-85ca-7f096db965f0"/*TextureBuffer*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "c2e7ebf7-5056-4380-9a9f-850b350804c9"/*DepthBuffer*/,
       "DefaultValue": null
     },
     {
@@ -36,11 +40,7 @@
       }
     },
     {
-      "Id": "bc1685a8-0a92-460f-85ca-7f096db965f0"/*TextureBuffer*/,
-      "DefaultValue": null
-    },
-    {
-      "Id": "c2e7ebf7-5056-4380-9a9f-850b350804c9"/*DepthBuffer*/,
+      "Id": "22f5e8db-0b80-47dc-b30b-4bc49d9fad59"/*Command*/,
       "DefaultValue": null
     }
   ],

@@ -11,14 +11,14 @@ namespace T3.Operators.Types.Id_5f846187_e109_45d1_97e0_ae95e3e7d9ba
         [Output(Guid = "cf976e9a-ea57-44f7-aeb9-f57f2e712b41")]
         public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new Slot<T3.Core.DataTypes.BufferWithViews>();
 
+        [Input(Guid = "679d6321-a5d7-41cc-a191-5e6cf353dfc4")]
+        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+
         [Input(Guid = "cc98bda7-34a5-4c18-9b9e-fabe51b02d71")]
         public readonly InputSlot<float> Amount = new InputSlot<float>();
 
         [Input(Guid = "757c259a-118c-4438-bc09-cdc5708af2bc")]
         public readonly InputSlot<float> Frequency = new InputSlot<float>();
-
-        [Input(Guid = "679d6321-a5d7-41cc-a191-5e6cf353dfc4")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
         [Input(Guid = "cb3ae9c7-5146-4bc6-9a87-3d17012fab52")]
         public readonly InputSlot<float> Phase = new InputSlot<float>();

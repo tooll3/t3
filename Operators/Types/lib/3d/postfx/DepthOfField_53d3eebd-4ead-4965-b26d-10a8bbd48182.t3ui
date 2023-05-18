@@ -3,10 +3,19 @@
   "Description": "Adds a depth of field effect.\n\nHint: Use a [Locator] and its DistanceToCamera output to use automatic focus distance.",
   "InputUis": [
     {
-      "InputId": "22f5e8db-0b80-47dc-b30b-4bc49d9fad59"/*Command*/,
+      "InputId": "bc1685a8-0a92-460f-85ca-7f096db965f0"/*TextureBuffer*/,
+      "Relevancy": "Required",
       "Position": {
-        "X": -416.71564,
-        "Y": -30.796173
+        "X": -425.7929,
+        "Y": -112.3403
+      }
+    },
+    {
+      "InputId": "c2e7ebf7-5056-4380-9a9f-850b350804c9"/*DepthBuffer*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -425.7929,
+        "Y": -67.3403
       }
     },
     {
@@ -45,19 +54,10 @@
       }
     },
     {
-      "InputId": "bc1685a8-0a92-460f-85ca-7f096db965f0"/*TextureBuffer*/,
-      "Relevancy": "Required",
+      "InputId": "22f5e8db-0b80-47dc-b30b-4bc49d9fad59"/*Command*/,
       "Position": {
-        "X": -477.11346,
-        "Y": 452.1857
-      }
-    },
-    {
-      "InputId": "c2e7ebf7-5056-4380-9a9f-850b350804c9"/*DepthBuffer*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -477.11346,
-        "Y": 497.1857
+        "X": -422.11786,
+        "Y": 794.3843
       }
     }
   ],
@@ -69,8 +69,8 @@
         "Y": 49.0
       },
       "Position": {
-        "X": -118.72081,
-        "Y": -90.73712
+        "X": -124.12303,
+        "Y": 734.44336
       }
     },
     {
@@ -298,7 +298,7 @@
       "ChildId": "cb5a5789-f357-4ffc-a4a3-aa4306212d95"/*Multiply*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 242.50897,

@@ -2,6 +2,14 @@
   "Id": "5f846187-e109-45d1-97e0-ae95e3e7d9ba"/*SimNoise*/,
   "InputUis": [
     {
+      "InputId": "679d6321-a5d7-41cc-a191-5e6cf353dfc4"/*GPoints*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -292.88382,
+        "Y": 213.58644
+      }
+    },
+    {
       "InputId": "cc98bda7-34a5-4c18-9b9e-fabe51b02d71"/*Amount*/,
       "Position": {
         "X": -70.61095,
@@ -13,14 +21,6 @@
       "Position": {
         "X": -70.61095,
         "Y": 539.00476
-      }
-    },
-    {
-      "InputId": "679d6321-a5d7-41cc-a191-5e6cf353dfc4"/*GPoints*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -292.88382,
-        "Y": 230.41301
       }
     },
     {
