@@ -31,19 +31,19 @@ namespace T3.Core.Operator.Slots
             }
         }
 
-        public override void OverrideOrRestoreUpdateAction(Action<EvaluationContext> newAction)
-        {
-            if (newAction != null)
-            {
-                _bypassedUpdateAction = _baseUpdateAction;
-                UpdateAction = newAction;
-                DirtyFlag.Invalidate();
-            }
-            else
-            {
-                RestoreUpdateAction();
-            }
-        }
+        // public  void OverrideOrRestoreUpdateAction(Action<EvaluationContext> newAction)
+        // {
+        //     if (newAction != null)
+        //     {
+        //         _keepBypassedUpdateAction = _baseUpdateAction;
+        //         UpdateAction = newAction;
+        //         DirtyFlag.Invalidate();
+        //     }
+        //     else
+        //     {
+        //         RestoreUpdateAction();
+        //     }
+        // }
         
         protected override void SetDisabled(bool isDisabled)
         {
@@ -52,7 +52,7 @@ namespace T3.Core.Operator.Slots
 
             if (isDisabled)
             {
-                _bypassedUpdateAction = _baseUpdateAction;
+                _keepBypassedUpdateAction = _baseUpdateAction;
                 base.UpdateAction = EmptyAction;
                 DirtyFlag.Invalidate();
             }

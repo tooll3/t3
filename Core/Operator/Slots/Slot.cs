@@ -16,7 +16,7 @@ namespace T3.Core.Operator.Slots
         public T Value; // { get; set; }
         public bool IsMultiInput { get; protected set; } = false;
 
-        protected bool _isDisabled = false;
+        protected bool _isDisabled;
 
         protected virtual void SetDisabled(bool shouldBeDisabled)
         {
@@ -31,7 +31,7 @@ namespace T3.Core.Operator.Slots
                 }
                 else
                 {
-                    _bypassedUpdateAction = _updateAction;
+                    _keepBypassedUpdateAction = _updateAction;
                     UpdateAction = EmptyAction;
                     DirtyFlag.Invalidate();
                 }
@@ -45,25 +45,25 @@ namespace T3.Core.Operator.Slots
         }
 
 
-        public virtual void OverrideOrRestoreUpdateAction(Action<EvaluationContext> newAction)
+        public void OverrideOrRestoreUpdateAction2(Action<EvaluationContext> newAction, Slot<T> targetSlot)
         {
             if (newAction == null)
             {
-                RestoreUpdateAction();
+                UpdateAction = _keepBypassedUpdateAction;
+                _targetInputForBypass = null;
+                _keepBypassedUpdateAction = null;
+                DirtyFlag.Invalidate();
             }
             else
             {
-                _bypassedUpdateAction = UpdateAction;
-                UpdateAction = newAction;
+                _keepBypassedUpdateAction = UpdateAction;
+                UpdateAction = ByPassUpdate;
                 DirtyFlag.Invalidate();
-                if (newAction.Target is InputSlot<BufferWithViews> buffer)
-                {
-                    buffer.DirtyFlag.Invalidate();
-                }
+                _targetInputForBypass = targetSlot;
             }
         }
 
-        private bool IsBypassedOrDisabled => _bypassedUpdateAction != null;
+        private bool IsBypassedOrDisabled => _keepBypassedUpdateAction != null;
         
         
         public Action<EvaluationContext> GetUpdateAction()
@@ -109,6 +109,11 @@ namespace T3.Core.Operator.Slots
                 _updateAction?.Invoke(context);
                 DirtyFlag.Clear();
                 DirtyFlag.SetUpdated();
+
+                if (_targetInputForBypass != null)
+                {
+                    Value = _targetInputForBypass.Value;
+                }
             }
         }
 
@@ -117,11 +122,10 @@ namespace T3.Core.Operator.Slots
             Value = InputConnection[0].GetValue(context);
         }
         
-        // public void ByPassUpdate(EvaluationContext context)
-        // {
-        //     _bypassedUpdateAction?.Invoke(context);
-        //     Value = _bypassedUpdateAction.
-        // }
+        public void ByPassUpdate(EvaluationContext context)
+        {
+            Value = _targetInputForBypass.GetValue(context);
+        }
 
         public T GetValue(EvaluationContext context)
         {
@@ -184,8 +188,8 @@ namespace T3.Core.Operator.Slots
 
         public void RestoreUpdateAction()
         {
-            UpdateAction = _bypassedUpdateAction;
-            _bypassedUpdateAction = null;
+            UpdateAction = _keepBypassedUpdateAction;
+            _keepBypassedUpdateAction = null;
             DirtyFlag.Invalidate();
         }
 
@@ -294,7 +298,8 @@ namespace T3.Core.Operator.Slots
         private Action<EvaluationContext> _updateAction;
         public virtual Action<EvaluationContext> UpdateAction { get => _updateAction; set => _updateAction = value; }
 
-        protected Action<EvaluationContext> _bypassedUpdateAction;
+        protected Action<EvaluationContext> _keepBypassedUpdateAction;
+        protected Slot<T> _targetInputForBypass;
     }
 
     

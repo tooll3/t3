@@ -148,22 +148,23 @@ namespace T3.Editor.Gui
                 var mainInputSlot = instance.Inputs[0];
                 var mainOutputSlot = instance.Outputs[0];
                 
-                if (shouldBypass)
+                switch (mainOutputSlot)
                 {
-                    mainOutputSlot.OverrideOrRestoreUpdateAction( mainInputSlot.GetUpdateAction());
-                    if(mainOutputSlot is Slot<BufferWithViews> bufferOutput && mainInputSlot is Slot<BufferWithViews> bufferInput)
-                        bufferOutput.Value = bufferInput.Value;
-
-                    if(mainOutputSlot is Slot<Texture2D> texture2dOutput && mainInputSlot is Slot<Texture2D> texture2dInput)
-                        texture2dOutput.Value = texture2dInput.Value;
-
-                    if(mainOutputSlot is Slot<float> floatOutput && mainInputSlot is Slot<float> floatInput)
-                        floatOutput.Value = floatInput.Value;
+                    case Slot<Command> commandOutput when mainInputSlot is Slot<Command> commandInput:
+                        commandOutput.OverrideOrRestoreUpdateAction2(shouldBypass ? mainInputSlot.GetUpdateAction() : null, commandInput);
+                        break;
+                    
+                    case Slot<BufferWithViews> bufferOutput when mainInputSlot is Slot<BufferWithViews> bufferInput:
+                        bufferOutput.OverrideOrRestoreUpdateAction2(shouldBypass ? mainInputSlot.GetUpdateAction() : null, bufferInput);
+                        break;
+                    case Slot<Texture2D> texture2dOutput when mainInputSlot is Slot<Texture2D> texture2dInput:
+                        texture2dOutput.OverrideOrRestoreUpdateAction2(shouldBypass ? mainInputSlot.GetUpdateAction() : null, texture2dInput);
+                        break;
+                    case Slot<float> floatOutput when mainInputSlot is Slot<float> floatInput:
+                        floatOutput.OverrideOrRestoreUpdateAction2(shouldBypass ? mainInputSlot.GetUpdateAction() : null, floatInput);
+                        break;
                 }
-                else
-                {
-                    mainOutputSlot.OverrideOrRestoreUpdateAction(null);
-                }
+
                 _isBypassed = shouldBypass;
 
             }
