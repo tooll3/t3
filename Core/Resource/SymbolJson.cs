@@ -96,6 +96,10 @@ namespace T3.Core.Resource
                 writer.WriteStartObject();
                 writer.WriteValue(JsonKeys.Id, child.Id);
                 writer.WriteComment(child.ReadableName);
+                if (child.IsBypassed)
+                {
+                    writer.WriteValue(JsonKeys.IsBypassed, child.IsBypassed);
+                }
                 writer.WriteValue(JsonKeys.SymbolId, child.Symbol.Id);
                 if (!string.IsNullOrEmpty(child.Name))
                 {
@@ -175,7 +179,7 @@ namespace T3.Core.Resource
             var parent = symbolReadResult.Symbol;
             var success = true;
             
-            List<SymbolChild> children = new(childrenJson.Length); // todo: ordered dictioanry
+            List<SymbolChild> children = new(childrenJson.Length); // todo: ordered dictionary
             foreach (var childJson in childrenJson)
             {
                 var gotChild = TryReadSymbolChild(in childJson, out var symbolChild);
@@ -196,7 +200,7 @@ namespace T3.Core.Resource
             return success;
         }
         
-        private static bool TryReadSymbolChild(in JsonChildResult childJsonResult, out SymbolChild child)
+        private static bool TryReadSymbolChild(in JsonChildResult childJsonResult,  out SymbolChild child)
         {
             // If the used symbol hasn't been loaded so far ensure it's loaded now
             var haveChildSymbolDefinition = SymbolRegistry.Entries.TryGetValue(childJsonResult.SymbolId, out var symbol);
@@ -214,6 +218,12 @@ namespace T3.Core.Resource
             if (nameToken != null)
             {
                 child.Name = nameToken;
+            }
+
+            var isBypassedJson = symbolChildJson[JsonKeys.IsBypassed];
+            if (isBypassedJson != null)
+            {
+                child.IsBypassed = isBypassedJson.Value<bool>();
             }
 
             foreach (var inputValue in (JArray)symbolChildJson[JsonKeys.InputValues])
@@ -442,6 +452,7 @@ namespace T3.Core.Resource
             public const string InputValues = "InputValues";
             public const string OutputData = "OutputData";
             public const string Type = "Type";
+            public const string IsBypassed = "IsBypassed";
             public const string DirtyFlagTrigger = "DirtyFlagTrigger";
             public const string IsDisabled = "IsDisabled";
             public const string DefaultValue = "DefaultValue";

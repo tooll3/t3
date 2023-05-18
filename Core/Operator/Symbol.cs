@@ -461,6 +461,7 @@ namespace T3.Core.Operator
             newInstance.Symbol = this;
 
             SortInputSlotsByDefinitionOrder(newInstance.Inputs);
+            InstancesOfSymbol.Add(newInstance);
 
             foreach (var child in Children)
             {
@@ -495,7 +496,6 @@ namespace T3.Core.Operator
 
             // connect animations if available
             Animator.CreateUpdateActionsForExistingCurves(newInstance.Children);
-            InstancesOfSymbol.Add(newInstance);
 
             return newInstance;
         }
@@ -538,6 +538,11 @@ namespace T3.Core.Operator
             }
 
             parentInstance.Children.Add(childInstance);
+
+            if (symbolChild.IsBypassed)
+            {
+                symbolChild.IsBypassed = true;
+            }
 
             return childInstance;
         }

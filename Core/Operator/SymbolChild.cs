@@ -25,6 +25,11 @@ namespace T3.Core.Operator
 
         public string ReadableName => string.IsNullOrEmpty(Name) ? Symbol.Name : Name;
 
+        public bool IsBypassed {
+            get => _isBypassed;
+            set => SetBypassed(value);
+        }
+        
         public Dictionary<Guid, Input> Inputs { get; } = new();
         public Dictionary<Guid, Output> Outputs { get; } = new();
 
@@ -126,10 +131,7 @@ namespace T3.Core.Operator
 
         #endregion
         
-        public bool IsBypassed {
-            get => _isBypassed;
-            set => SetBypassed(value);
-        }
+
         private bool _isBypassed;
         
         private bool IsBypassable()
@@ -165,6 +167,13 @@ namespace T3.Core.Operator
         {
             if(!IsBypassable())
                 return;
+
+            if (Parent == null)
+            {
+                _isBypassed = true;  // during loading parents are not yet assigned. This flag will later be used when creating instances
+                return;
+            }
+            
             
             var parentInstancesOfSymbol = Parent.InstancesOfSymbol;
             foreach (var parentInstance in parentInstancesOfSymbol)
