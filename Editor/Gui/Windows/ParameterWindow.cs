@@ -291,7 +291,7 @@ namespace T3.Editor.Gui.Windows
             // SymbolChild Name
             {
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
-                ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 105);
+                ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 205);
 
                 var nameForEdit = symbolChildUi.SymbolChild.Name;
 
@@ -341,6 +341,34 @@ namespace T3.Editor.Gui.Windows
                     if (ImGui.Button("ENABLED", new Vector2(100, 0)))
                     {
                         UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, true));
+                    }
+
+                    ImGui.PopStyleColor();
+                }
+
+                ImGui.PopFont();
+            }
+            
+            
+            // Bypass
+            {
+                ImGui.PushFont(Fonts.FontBold);
+                if (symbolChildUi.IsBypassed)
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Button, T3Style.Colors.Warning.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, Color.White.Rgba);
+                    if (ImGui.Button("BYPASSED", new Vector2(100, 0)))
+                    {
+                        UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi, false));
+                    }
+                    ImGui.PopStyleColor(2);
+                }
+                else
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+                    if (ImGui.Button("BYPASSED", new Vector2(100, 0)))
+                    {
+                        UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi, true));
                     }
 
                     ImGui.PopStyleColor();

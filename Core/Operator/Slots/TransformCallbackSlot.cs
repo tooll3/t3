@@ -30,6 +30,20 @@ namespace T3.Core.Operator.Slots
                 base.UpdateAction = Update;
             }
         }
+
+        public override void OverrideOrRestoreUpdateAction(Action<EvaluationContext> newAction)
+        {
+            if (newAction != null)
+            {
+                _bypassedUpdateAction = _baseUpdateAction;
+                UpdateAction = newAction;
+                DirtyFlag.Invalidate();
+            }
+            else
+            {
+                RestoreUpdateAction();
+            }
+        }
         
         protected override void SetDisabled(bool isDisabled)
         {
@@ -38,14 +52,13 @@ namespace T3.Core.Operator.Slots
 
             if (isDisabled)
             {
-                _defaultUpdateAction = _baseUpdateAction;
+                _bypassedUpdateAction = _baseUpdateAction;
                 base.UpdateAction = EmptyAction;
                 DirtyFlag.Invalidate();
             }
             else
             {
-                SetUpdateActionBackToDefault();
-                DirtyFlag.Invalidate();
+                RestoreUpdateAction();
             }
 
             _isDisabled = isDisabled;

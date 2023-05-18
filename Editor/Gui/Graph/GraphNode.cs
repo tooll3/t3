@@ -144,13 +144,20 @@ namespace T3.Editor.Gui.Graph
                     }
 
                     // Disabled indicator
-                    if (instance.Outputs.Count > 0 && instance.Outputs[0].IsDisabled)
+                    if (childUi.IsDisabled)
                     {
-                        drawList.AddLine(_usableScreenRect.Min + new Vector2(3, 2), _usableScreenRect.Max - new Vector2(3, 2), T3Style.Colors.Warning, 3);
-                        drawList.AddLine(
-                                         new Vector2(_usableScreenRect.Min.X + 3, _usableScreenRect.Max.Y - 2),
-                                         new Vector2(_usableScreenRect.Max.X - 3, _usableScreenRect.Min.Y + 2),
-                                         T3Style.Colors.Warning, 3);
+                        DrawOverlayLine(drawList, Vector2.Zero, Vector2.One );
+                        DrawOverlayLine(drawList, new Vector2(1,0), new Vector2(0,1) );
+                    }
+                    
+                    // Bypass indicator
+                    if (childUi.IsBypassed)
+                    {
+                        DrawOverlayLine(drawList, new Vector2(0.05f,0.5f), new Vector2(0.4f,0.5f) );
+                        DrawOverlayLine(drawList, new Vector2(0.6f,0.5f), new Vector2(0.95f,0.5f) );
+                        
+                        DrawOverlayLine(drawList, new Vector2(0.35f,0.1f), new Vector2(0.65f,0.9f) );
+                        DrawOverlayLine(drawList, new Vector2(0.65f,0.1f), new Vector2(0.35f,0.9f) );
                     }
 
                     // Interaction
@@ -615,6 +622,16 @@ namespace T3.Editor.Gui.Graph
                 outputIndex++;
                 ImGui.PopID();
             }
+        }
+
+        private static void DrawOverlayLine(ImDrawListPtr drawList, Vector2 p1, Vector2 p2)
+        {
+            var padding = new Vector2(3, 2);
+            var size = _usableScreenRect.GetSize() - padding * 2;
+            drawList.AddLine(_usableScreenRect.Min + p1 * size + padding,
+                             _usableScreenRect.Min + p2 * size + padding,
+                             T3Style.Colors.Warning, 3);
+
         }
 
         private static void DrawIndicator(Color color, ref int indicatorCount)

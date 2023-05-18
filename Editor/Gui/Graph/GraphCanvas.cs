@@ -267,7 +267,12 @@ namespace T3.Editor.Gui.Graph
                 {
                     ToggleDisabledForSelectedElements();
                 }
-
+                
+                if (KeyboardBinding.Triggered(UserActions.ToggleBypassed))
+                {
+                    ToggleBypassedForSelectedElements();
+                }
+                
                 if (KeyboardBinding.Triggered(UserActions.PinToOutputWindow))
                 {
                     PinSelectedToOutputWindow();
@@ -622,35 +627,23 @@ namespace T3.Editor.Gui.Graph
             ImGui.PopStyleColor();
             ImGui.PopFont();
 
-            // Enable / Disable
             var allSelectedDisabled = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.IsDisabled);
-            var allSelectedEnabled = selectedChildUis.TrueForAll(selectedChildUi => !selectedChildUi.IsDisabled);
-            if (!allSelectedDisabled && ImGui.MenuItem("Disable",
+            if (ImGui.MenuItem("Disable",
                                                        KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleDisabled, false),
-                                                       selected: false,
+                                                       selected: allSelectedDisabled,
                                                        enabled: selectedChildUis.Count > 0))
             {
-                var commands = new List<ICommand>();
-                foreach (var selectedChildUi in selectedChildUis)
-                {
-                    commands.Add(new ChangeInstanceIsDisabledCommand(selectedChildUi, true));
-                }
+                ToggleDisabledForSelectedElements();
 
-                UndoRedoStack.AddAndExecute(new MacroCommand("Disable operators", commands));
             }
 
-            if (!allSelectedEnabled && ImGui.MenuItem("Enable",
-                                                      KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleDisabled, false),
-                                                      selected: false,
-                                                      enabled: someOpsSelected))
+            var allSelectedBypassed = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.IsBypassed);
+            if (ImGui.MenuItem("Bypassed",
+                               KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleBypassed, false),
+                               selected: allSelectedBypassed,
+                               enabled: selectedChildUis.Count > 0))
             {
-                var commands = new List<ICommand>();
-                foreach (var selectedChildUi in selectedChildUis)
-                {
-                    commands.Add(new ChangeInstanceIsDisabledCommand(selectedChildUi, false));
-                }
-
-                UndoRedoStack.AddAndExecute(new MacroCommand("Enable operators", commands));
+                ToggleBypassedForSelectedElements();
             }
 
             if (ImGui.MenuItem("Rename", oneOpSelected))
@@ -944,18 +937,7 @@ namespace T3.Editor.Gui.Graph
         private void ToggleDisabledForSelectedElements()
         {
             var selectedChildren = GetSelectedChildUis();
-
-            var isNodeHovered = FrameStats.Last.HoveredIds.Count == 1 && CompositionOp != null;
-            if (isNodeHovered)
-            {
-                var hoveredChildUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id].ChildUis
-                                                     .SingleOrDefault(c => c.Id == FrameStats.Last.HoveredIds.First());
-                if (hoveredChildUi == null)
-                    return;
-
-                selectedChildren = new List<SymbolChildUi> { hoveredChildUi };
-            }
-
+            
             var allSelectedDisabled = selectedChildren.TrueForAll(selectedChildUi => selectedChildUi.IsDisabled);
             var shouldDisable = !allSelectedDisabled;
 
@@ -967,6 +949,23 @@ namespace T3.Editor.Gui.Graph
 
             UndoRedoStack.AddAndExecute(new MacroCommand("Disable/Enable", commands));
         }
+        
+        private void ToggleBypassedForSelectedElements()
+        {
+            var selectedChildUis = GetSelectedChildUis();
+            
+            var allSelectedAreBypassed = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.IsBypassed);
+            var shouldBypass = !allSelectedAreBypassed;
+
+            var commands = new List<ICommand>();
+            foreach (var selectedChildUi in selectedChildUis)
+            {
+                commands.Add(new ChangeInstanceBypassedCommand(selectedChildUi, shouldBypass));
+            }
+
+            UndoRedoStack.AddAndExecute(new MacroCommand("Changed Bypassed", commands));
+        }
+        
 
         private static List<SymbolChildUi> GetSelectedChildUis()
         {

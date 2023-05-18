@@ -18,24 +18,57 @@ namespace T3.Core.Operator.Slots
 
         protected bool _isDisabled = false;
 
-        protected virtual void SetDisabled(bool isDisabled)
+        protected virtual void SetDisabled(bool shouldBeDisabled)
         {
-            if (isDisabled == _isDisabled)
+            if (shouldBeDisabled == _isDisabled)
                 return;
 
-            if (isDisabled)
+            if (shouldBeDisabled)
             {
-                _defaultUpdateAction = _updateAction;
-                UpdateAction = EmptyAction;
-                DirtyFlag.Invalidate();
+                if (IsBypassedOrDisabled)
+                {
+                    Log.Warning("Is already bypassed or disabled");
+                }
+                else
+                {
+                    _bypassedUpdateAction = _updateAction;
+                    UpdateAction = EmptyAction;
+                    DirtyFlag.Invalidate();
+                }
             }
             else
             {
-                SetUpdateActionBackToDefault();
-                DirtyFlag.Invalidate();
+                RestoreUpdateAction();
             }
 
-            _isDisabled = isDisabled;
+            _isDisabled = shouldBeDisabled;
+        }
+
+
+        public virtual void OverrideOrRestoreUpdateAction(Action<EvaluationContext> newAction)
+        {
+            if (newAction == null)
+            {
+                RestoreUpdateAction();
+            }
+            else
+            {
+                _bypassedUpdateAction = UpdateAction;
+                UpdateAction = newAction;
+                DirtyFlag.Invalidate();
+                if (newAction.Target is InputSlot<BufferWithViews> buffer)
+                {
+                    buffer.DirtyFlag.Invalidate();
+                }
+            }
+        }
+
+        private bool IsBypassedOrDisabled => _bypassedUpdateAction != null;
+        
+        
+        public Action<EvaluationContext> GetUpdateAction()
+        {
+            return _updateAction;
         }
 
         public bool IsDisabled 
@@ -83,6 +116,12 @@ namespace T3.Core.Operator.Slots
         {
             Value = InputConnection[0].GetValue(context);
         }
+        
+        // public void ByPassUpdate(EvaluationContext context)
+        // {
+        //     _bypassedUpdateAction?.Invoke(context);
+        //     Value = _bypassedUpdateAction.
+        // }
 
         public T GetValue(EvaluationContext context)
         {
@@ -137,15 +176,17 @@ namespace T3.Core.Operator.Slots
                 else
                 {
                     // if no connection is set anymore restore the default update action
-                    SetUpdateActionBackToDefault();
+                    RestoreUpdateAction();
                 }
                 DirtyFlag.Invalidate();
             }
         }
 
-        public void SetUpdateActionBackToDefault()
+        public void RestoreUpdateAction()
         {
-            UpdateAction = _defaultUpdateAction;
+            UpdateAction = _bypassedUpdateAction;
+            _bypassedUpdateAction = null;
+            DirtyFlag.Invalidate();
         }
 
         public bool IsConnected => InputConnection.Count > 0;
@@ -253,7 +294,7 @@ namespace T3.Core.Operator.Slots
         private Action<EvaluationContext> _updateAction;
         public virtual Action<EvaluationContext> UpdateAction { get => _updateAction; set => _updateAction = value; }
 
-        protected Action<EvaluationContext> _defaultUpdateAction;
+        protected Action<EvaluationContext> _bypassedUpdateAction;
     }
 
     

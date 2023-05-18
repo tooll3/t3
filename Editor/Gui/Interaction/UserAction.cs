@@ -51,6 +51,7 @@ namespace T3.Editor.Gui.Interaction
         Duplicate,
         LayoutSelection,
         ToggleDisabled,
+        ToggleBypassed,
         AddAnnotation,
         
         ToggleSnapshotControl,

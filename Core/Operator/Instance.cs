@@ -19,6 +19,8 @@ namespace T3.Core.Operator
         public List<Instance> Children { get; set; } = new List<Instance>();
         public List<IInputSlot> Inputs { get; set; } = new List<IInputSlot>();
 
+        public Action<EvaluationContext> KeepUpdatedAction;
+        
         /// <summary>
         /// get input without GC allocations 
         /// </summary>

@@ -77,13 +77,13 @@ namespace T3.Core.Operator.Slots
 
             if (isDisabled)
             {
-                _defaultUpdateAction = _baseUpdateAction;
+                _bypassedUpdateAction = _baseUpdateAction;
                 base.UpdateAction = EmptyAction;
                 DirtyFlag.Invalidate();
             }
             else
             {
-                SetUpdateActionBackToDefault();
+                RestoreUpdateAction();
                 DirtyFlag.Invalidate();
             }
 

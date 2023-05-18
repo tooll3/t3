@@ -397,7 +397,7 @@ namespace T3.Core.Operator
 
         public void RemoveAnimationFrom(IInputSlot inputSlot)
         {
-            inputSlot.SetUpdateActionBackToDefault();
+            inputSlot.RestoreUpdateAction();
             inputSlot.DirtyFlag.Trigger &= ~DirtyFlagTrigger.Animated;
             var curveKeysToRemove = (from curveId in _animatedInputCurves.Keys
                                      where curveId.SymbolChildId == inputSlot.Parent.SymbolChildId

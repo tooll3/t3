@@ -10,6 +10,6 @@ namespace T3.Core.Operator.Slots
         Type MappedType { get; set; }
         List<int> LimitMultiInputInvalidationToIndices { get; set; }
 
-        void SetUpdateActionBackToDefault();
+        void RestoreUpdateAction();
     }
 }
