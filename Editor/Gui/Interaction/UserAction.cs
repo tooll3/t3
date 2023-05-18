@@ -252,6 +252,7 @@ namespace T3.Editor.Gui.Interaction
                             
                             // Graph window
                             new KeyboardBinding(UserActions.ToggleDisabled, new KeyCombination(Key.D, shift:true)) { NeedsWindowFocus = true },
+                            new KeyboardBinding(UserActions.ToggleBypassed, new KeyCombination(Key.B, shift:true)) { NeedsWindowFocus = true },
                             new KeyboardBinding(UserActions.PinToOutputWindow, new KeyCombination(Key.P)) { NeedsWindowFocus = true },
                             new KeyboardBinding(UserActions.DisplayImageAsBackground, new KeyCombination(Key.P, ctrl:true)) { NeedsWindowFocus = false },
                             new KeyboardBinding(UserActions.ClearBackgroundImage, new KeyCombination(Key.P, ctrl:true, shift: true)) { NeedsWindowFocus = true },
