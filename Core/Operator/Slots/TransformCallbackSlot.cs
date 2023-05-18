@@ -30,28 +30,21 @@ namespace T3.Core.Operator.Slots
                 base.UpdateAction = Update;
             }
         }
-
-        // public  void OverrideOrRestoreUpdateAction(Action<EvaluationContext> newAction)
-        // {
-        //     if (newAction != null)
-        //     {
-        //         _keepBypassedUpdateAction = _baseUpdateAction;
-        //         UpdateAction = newAction;
-        //         DirtyFlag.Invalidate();
-        //     }
-        //     else
-        //     {
-        //         RestoreUpdateAction();
-        //     }
-        // }
         
-        protected override void SetDisabled(bool isDisabled)
+        
+        protected override void SetDisabled(bool shouldBeDisabled)
         {
-            if (isDisabled == _isDisabled)
+            if (shouldBeDisabled == _isDisabled)
                 return;
 
-            if (isDisabled)
+            if (shouldBeDisabled)
             {
+                if (_keepBypassedUpdateAction != null)
+                {
+                    Log.Warning("Is already bypassed or disabled");
+                    return;
+                }
+                
                 _keepBypassedUpdateAction = _baseUpdateAction;
                 base.UpdateAction = EmptyAction;
                 DirtyFlag.Invalidate();
@@ -61,7 +54,22 @@ namespace T3.Core.Operator.Slots
                 RestoreUpdateAction();
             }
 
-            _isDisabled = isDisabled;
+            _isDisabled = shouldBeDisabled;
+        }
+
+        public override bool TrySetBypassToInput(Slot<T> targetSlot)
+        {
+            if (_keepBypassedUpdateAction != null)
+            {
+                Log.Warning("Already disabled or bypassed");
+                return false;
+            }
+            
+            _keepBypassedUpdateAction = _baseUpdateAction;
+            base.UpdateAction = ByPassUpdate;
+            DirtyFlag.Invalidate();
+            _targetInputForBypass = targetSlot;
+            return true;
         }
     }
 }

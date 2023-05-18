@@ -151,7 +151,7 @@ namespace T3.Editor.Gui.Graph
                     }
                     
                     // Bypass indicator
-                    if (childUi.IsBypassed)
+                    if (childUi.SymbolChild.IsBypassed)
                     {
                         DrawOverlayLine(drawList, new Vector2(0.05f,0.5f), new Vector2(0.4f,0.5f) );
                         DrawOverlayLine(drawList, new Vector2(0.6f,0.5f), new Vector2(0.95f,0.5f) );

@@ -319,17 +319,17 @@ namespace T3.Editor.Gui.Windows
                                                       T3Style.Colors.TextMuted,
                                                       "Untitled instance");
 
-                ImGui.SameLine();
             }
 
             // Disabled toggle
             {
+                ImGui.SameLine();
                 ImGui.PushFont(Fonts.FontBold);
                 if (symbolChildUi.IsDisabled)
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, T3Style.Colors.Warning.Rgba);
                     ImGui.PushStyleColor(ImGuiCol.Text, Color.White.Rgba);
-                    if (ImGui.Button("DISABLED", new Vector2(100, 0)))
+                    if (ImGui.Button("DISABLED", new Vector2(90, 0)))
                     {
                         UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, false));
                     }
@@ -338,7 +338,7 @@ namespace T3.Editor.Gui.Windows
                 else
                 {
                     ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
-                    if (ImGui.Button("ENABLED", new Vector2(100, 0)))
+                    if (ImGui.Button("ENABLED", new Vector2(90, 0)))
                     {
                         UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, true));
                     }
@@ -352,23 +352,26 @@ namespace T3.Editor.Gui.Windows
             
             // Bypass
             {
+                ImGui.SameLine();
                 ImGui.PushFont(Fonts.FontBold);
-                if (symbolChildUi.IsBypassed)
+                if (symbolChildUi.SymbolChild.IsBypassed)
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, T3Style.Colors.Warning.Rgba);
                     ImGui.PushStyleColor(ImGuiCol.Text, Color.White.Rgba);
-                    if (ImGui.Button("BYPASSED", new Vector2(100, 0)))
+                    
+                    // TODO: check if bypassable
+                    if (ImGui.Button("BYPASSED", new Vector2(90, 0)))
                     {
-                        UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi, false));
+                        UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, false));
                     }
                     ImGui.PopStyleColor(2);
                 }
                 else
                 {
                     ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
-                    if (ImGui.Button("BYPASSED", new Vector2(100, 0)))
+                    if (ImGui.Button("BYPASS", new Vector2(90, 0)))
                     {
-                        UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi, true));
+                        UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, true));
                     }
 
                     ImGui.PopStyleColor();

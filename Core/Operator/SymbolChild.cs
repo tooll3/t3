@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Operator.Slots;
 
 namespace T3.Core.Operator
@@ -122,5 +125,104 @@ namespace T3.Core.Operator
         }
 
         #endregion
+        
+        public bool IsBypassed {
+            get => _isBypassed;
+            set => SetBypassed(value);
+        }
+        private bool _isBypassed;
+        
+        private bool IsBypassable()
+        {
+            if(Symbol.OutputDefinitions.Count == 0)
+                return false;
+            
+            if(Symbol.InputDefinitions.Count == 0)
+                return false;
+
+            var mainInput = Symbol.InputDefinitions[0];
+            var mainOutput = Symbol.OutputDefinitions[0];
+
+            if (mainInput.DefaultValue.ValueType != mainOutput.ValueType)
+                return false;
+            
+            if(mainInput.DefaultValue.ValueType == typeof(Command))
+                return true;
+            
+            if(mainInput.DefaultValue.ValueType == typeof(Texture2D))
+                return true;
+
+            if(mainInput.DefaultValue.ValueType == typeof(BufferWithViews))
+                return true;
+
+            if(mainInput.DefaultValue.ValueType == typeof(float))
+                return true;
+
+            return false;
+        }
+
+        private void SetBypassed(bool shouldBypass)
+        {
+            if(!IsBypassable())
+                return;
+            
+            var parentInstancesOfSymbol = Parent.InstancesOfSymbol;
+            foreach (var parentInstance in parentInstancesOfSymbol)
+            {
+                var instance = parentInstance.Children.First(child => child.SymbolChildId == Id);
+
+                var mainInputSlot = instance.Inputs[0];
+                var mainOutputSlot = instance.Outputs[0];
+
+                var wasByPassed = false;
+                
+                switch (mainOutputSlot)
+                {
+                    case Slot<Command> commandOutput when mainInputSlot is Slot<Command> commandInput:
+                        if (shouldBypass)
+                        {
+                            wasByPassed= commandOutput.TrySetBypassToInput(commandInput);
+                        }
+                        else
+                        {
+                            commandOutput.RestoreUpdateAction();
+                        }
+                        break;
+                    
+                    case Slot<BufferWithViews> bufferOutput when mainInputSlot is Slot<BufferWithViews> bufferInput:
+                        if (shouldBypass)
+                        {
+                            wasByPassed= bufferOutput.TrySetBypassToInput(bufferInput);
+                        }
+                        else
+                        {
+                            bufferOutput.RestoreUpdateAction();
+                        }
+                        break;
+                    case Slot<Texture2D> texture2dOutput when mainInputSlot is Slot<Texture2D> texture2dInput:
+                        if (shouldBypass)
+                        {
+                            wasByPassed= texture2dOutput.TrySetBypassToInput(texture2dInput);
+                        }
+                        else
+                        {
+                            texture2dOutput.RestoreUpdateAction();
+                        }
+                        break;
+                    case Slot<float> floatOutput when mainInputSlot is Slot<float> floatInput:
+                        if (shouldBypass)
+                        {
+                            wasByPassed= floatOutput.TrySetBypassToInput(floatInput);
+                        }
+                        else
+                        {
+                            floatOutput.RestoreUpdateAction();
+                        }
+                        break;
+                }
+
+                _isBypassed = wasByPassed;
+            }
+        }
     }
 }

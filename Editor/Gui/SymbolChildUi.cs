@@ -52,11 +52,6 @@ namespace T3.Editor.Gui
             set => SetDisabled(value);
         }
 
-        public bool IsBypassed {
-            get => _isBypassed;
-            set => SetBypassed(value);
-        }
-        private bool _isBypassed = false;
         
         private void SetDisabled(bool shouldBeDisabled)
         {
@@ -104,74 +99,7 @@ namespace T3.Editor.Gui
             }
         }
 
-        private bool IsBypassable()
-        {
-            var symbol = SymbolChild.Symbol;
-            
-            if(symbol.OutputDefinitions.Count == 0)
-                return false;
-            
-            if(symbol.InputDefinitions.Count == 0)
-                return false;
-
-            var mainInput = symbol.InputDefinitions[0];
-            var mainOutput = symbol.OutputDefinitions[0];
-
-            if (mainInput.DefaultValue.ValueType != mainOutput.ValueType)
-                return false;
-            
-            if(mainInput.DefaultValue.ValueType == typeof(Command))
-                return true;
-            
-            if(mainInput.DefaultValue.ValueType == typeof(Texture2D))
-                return true;
-
-            if(mainInput.DefaultValue.ValueType == typeof(BufferWithViews))
-                return true;
-
-            if(mainInput.DefaultValue.ValueType == typeof(float))
-                return true;
-
-            return false;
-        }
-
-        private void SetBypassed(bool shouldBypass)
-        {
-            if(!IsBypassable())
-                return;
-            
-            var parentInstancesOfSymbol = SymbolChild.Parent.InstancesOfSymbol;
-            foreach (var parentInstance in parentInstancesOfSymbol)
-            {
-                var instance = parentInstance.Children.First(child => child.SymbolChildId == Id);
-
-                var mainInputSlot = instance.Inputs[0];
-                var mainOutputSlot = instance.Outputs[0];
-                
-                switch (mainOutputSlot)
-                {
-                    case Slot<Command> commandOutput when mainInputSlot is Slot<Command> commandInput:
-                        commandOutput.OverrideOrRestoreUpdateAction2(shouldBypass ? mainInputSlot.GetUpdateAction() : null, commandInput);
-                        break;
-                    
-                    case Slot<BufferWithViews> bufferOutput when mainInputSlot is Slot<BufferWithViews> bufferInput:
-                        bufferOutput.OverrideOrRestoreUpdateAction2(shouldBypass ? mainInputSlot.GetUpdateAction() : null, bufferInput);
-                        break;
-                    case Slot<Texture2D> texture2dOutput when mainInputSlot is Slot<Texture2D> texture2dInput:
-                        texture2dOutput.OverrideOrRestoreUpdateAction2(shouldBypass ? mainInputSlot.GetUpdateAction() : null, texture2dInput);
-                        break;
-                    case Slot<float> floatOutput when mainInputSlot is Slot<float> floatInput:
-                        floatOutput.OverrideOrRestoreUpdateAction2(shouldBypass ? mainInputSlot.GetUpdateAction() : null, floatInput);
-                        break;
-                }
-
-                _isBypassed = shouldBypass;
-
-            }
-        }
-
-
-
+        
         public static CustomUiResult DrawCustomUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
         {
             return CustomChildUiRegistry.Entries.TryGetValue(instance.Type, out var drawFunction) 

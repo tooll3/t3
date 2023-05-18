@@ -25,16 +25,15 @@ namespace T3.Core.Operator.Slots
 
             if (shouldBeDisabled)
             {
-                if (IsBypassedOrDisabled)
+                if (_keepBypassedUpdateAction != null)
                 {
                     Log.Warning("Is already bypassed or disabled");
+                    return;
                 }
-                else
-                {
-                    _keepBypassedUpdateAction = _updateAction;
-                    UpdateAction = EmptyAction;
-                    DirtyFlag.Invalidate();
-                }
+                
+                _keepBypassedUpdateAction = _updateAction;
+                UpdateAction = EmptyAction;
+                DirtyFlag.Invalidate();
             }
             else
             {
@@ -44,28 +43,21 @@ namespace T3.Core.Operator.Slots
             _isDisabled = shouldBeDisabled;
         }
 
-
-        public void OverrideOrRestoreUpdateAction2(Action<EvaluationContext> newAction, Slot<T> targetSlot)
+        public virtual bool TrySetBypassToInput(Slot<T> targetSlot)
         {
-            if (newAction == null)
+            if (_keepBypassedUpdateAction != null)
             {
-                UpdateAction = _keepBypassedUpdateAction;
-                _targetInputForBypass = null;
-                _keepBypassedUpdateAction = null;
-                DirtyFlag.Invalidate();
+                Log.Warning("Already disabled or bypassed");
+                return false;
             }
-            else
-            {
-                _keepBypassedUpdateAction = UpdateAction;
-                UpdateAction = ByPassUpdate;
-                DirtyFlag.Invalidate();
-                _targetInputForBypass = targetSlot;
-            }
+            
+            _keepBypassedUpdateAction = UpdateAction;
+            UpdateAction = ByPassUpdate;
+            DirtyFlag.Invalidate();
+            _targetInputForBypass = targetSlot;
+            return true;
         }
 
-        private bool IsBypassedOrDisabled => _keepBypassedUpdateAction != null;
-        
-        
         public Action<EvaluationContext> GetUpdateAction()
         {
             return _updateAction;
@@ -109,11 +101,6 @@ namespace T3.Core.Operator.Slots
                 _updateAction?.Invoke(context);
                 DirtyFlag.Clear();
                 DirtyFlag.SetUpdated();
-
-                if (_targetInputForBypass != null)
-                {
-                    Value = _targetInputForBypass.Value;
-                }
             }
         }
 
@@ -186,8 +173,14 @@ namespace T3.Core.Operator.Slots
             }
         }
 
-        public void RestoreUpdateAction()
+        public virtual void RestoreUpdateAction()
         {
+            if (_keepBypassedUpdateAction == null)
+            {
+                Log.Warning("Can't restore undefined update action");
+                return;
+            }
+            
             UpdateAction = _keepBypassedUpdateAction;
             _keepBypassedUpdateAction = null;
             DirtyFlag.Invalidate();

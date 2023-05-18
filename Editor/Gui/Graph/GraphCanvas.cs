@@ -637,7 +637,7 @@ namespace T3.Editor.Gui.Graph
 
             }
 
-            var allSelectedBypassed = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.IsBypassed);
+            var allSelectedBypassed = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.SymbolChild.IsBypassed);
             if (ImGui.MenuItem("Bypassed",
                                KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleBypassed, false),
                                selected: allSelectedBypassed,
@@ -954,13 +954,13 @@ namespace T3.Editor.Gui.Graph
         {
             var selectedChildUis = GetSelectedChildUis();
             
-            var allSelectedAreBypassed = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.IsBypassed);
+            var allSelectedAreBypassed = selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.SymbolChild.IsBypassed);
             var shouldBypass = !allSelectedAreBypassed;
 
             var commands = new List<ICommand>();
             foreach (var selectedChildUi in selectedChildUis)
             {
-                commands.Add(new ChangeInstanceBypassedCommand(selectedChildUi, shouldBypass));
+                commands.Add(new ChangeInstanceBypassedCommand(selectedChildUi.SymbolChild, shouldBypass));
             }
 
             UndoRedoStack.AddAndExecute(new MacroCommand("Changed Bypassed", commands));
