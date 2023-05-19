@@ -553,55 +553,44 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             
             //StartOperation("Insert Operator");
             var primaryOutput = instance.Outputs[0];
+            
             InsertSymbolBrowser(symbolBrowser, childUi, instance, primaryOutput);
         }
 
         private static void InsertSymbolBrowser(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance, ISlot primaryOutput)
         {
             StartOperation("Insert Operator");
+            
             var connections = instance.Parent.Symbol.Connections.FindAll(connection => connection.SourceParentOrChildId == instance.SymbolChildId
                                                                                        && connection.SourceSlotId == primaryOutput.Id);
 
-            //TempConnections.Clear();
             TempConnections.Add(new TempConnection(sourceParentOrChildId: instance.SymbolChildId,
                                                    sourceSlotId: primaryOutput.Id,
                                                    targetParentOrChildId: UseDraftChildId,
                                                    targetSlotId: NotConnectedId,
                                                    primaryOutput.ValueType));
 
-            //var commands = new List<ICommand>();
-            
+            Type filterOutputType = null;
             if (connections.Count > 0)
             {
                 AdjustGraphLayoutForNewNode(instance.Parent.Symbol, connections[0]);
-                // if (adjustLayoutCommand != null)
-                //     _inProgressCommand.AddAndExecCommand(adjustLayoutCommand);
-            }
-
-            if (connections.Count > 0)
-            {
                 foreach (var oldConnection in connections)
                 {
                     var multiInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(oldConnection);
                     _inProgressCommand.AddAndExecCommand(new DeleteConnectionCommand(instance.Parent.Symbol, oldConnection, multiInputIndex));
-                    //_tempDeletionCommands.Add( new DeleteConnectionCommand(instance.Parent.Symbol, oldConnection, multiInputIndex));
                     TempConnections.Add(new TempConnection(sourceParentOrChildId: UseDraftChildId,
                                                            sourceSlotId: NotConnectedId,
                                                            targetParentOrChildId: oldConnection.TargetParentOrChildId,
                                                            targetSlotId: oldConnection.TargetSlotId,
                                                            primaryOutput.ValueType,
                                                            multiInputIndex));
+                    filterOutputType = primaryOutput.ValueType;
                 }
             }
 
-
-
-            //var prepareCommand = new MacroCommand("insert operator", commands);
-            //prepareCommand.Do();
-
             symbolBrowser.OpenAt(childUi.PosOnCanvas + new Vector2(childUi.Size.X, 0)
                                                      + new Vector2(SelectableNodeMovement.SnapPadding.X, 0),
-                                 primaryOutput.ValueType, null, false);
+                                 primaryOutput.ValueType, filterOutputType, false);
         }
 
         public static void SplitConnectionWithSymbolBrowser(Symbol parentSymbol, SymbolBrowser symbolBrowser, Symbol.Connection connection,
