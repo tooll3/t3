@@ -103,11 +103,6 @@ namespace T3.Editor.Gui.Graph
                     if (ConnectionMaker.IsInputNodeCurrentConnectionSource(inputDef))
                     {
                         drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, color);
-
-                        if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-                        {
-                            ConnectionMaker.Update();
-                        }
                     }
                     else if (ImGui.IsItemHovered())
                     {

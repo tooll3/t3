@@ -92,11 +92,6 @@ namespace T3.Editor.Gui.Graph
                     if (ConnectionMaker.IsOutputNodeCurrentConnectionTarget(outputDef))
                     {
                         drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, color);
-
-                        if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-                        {
-                            ConnectionMaker.Update();
-                        }
                     }
                     else if (ConnectionSnapEndHelper.IsNextBestTarget(outputUi) || slotHovered)
                     {

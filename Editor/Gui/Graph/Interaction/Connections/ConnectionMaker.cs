@@ -169,11 +169,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                                                      outputDef.ValueType));
             }
         }
-
-        public static void Update()
-        {
-            ConnectionSnapEndHelper.PrepareNewFrame();
-        }
+        
 
         public static void StartOperation(string commandName)
         {
@@ -190,13 +186,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
 
             _inProgressCommand = new MacroCommand(commandName);
         }
-
         
-        // public static void Cancel()
-        // {
-        //     AbortOperation(); // TODO: Clarify if this means ABORT?
-        //     //Reset();
-        // }
 
         
         public static void CompleteOperation(List<ICommand> doneCommands = null, string newCommandTitle = null)

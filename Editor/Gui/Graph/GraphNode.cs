@@ -846,12 +846,7 @@ namespace T3.Editor.Gui.Graph
             {
                 _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
                                         ColorVariations.Highlight.Apply(colorForType));
-
-                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-                {
-                    ConnectionMaker.Update();
-                }
-
+                
                 var isMouseReleasedWithoutDrag =
                     ImGui.IsMouseReleased(ImGuiMouseButton.Left) &&
                     ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() < UserSettings.Config.ClickThreshold;
@@ -974,10 +969,6 @@ namespace T3.Editor.Gui.Graph
         {
             if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(targetUi, inputDef))
             {
-                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-                {
-                    ConnectionMaker.Update();
-                }
             }
             else if (ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id, 0) || hovered)
             {
@@ -1217,10 +1208,6 @@ namespace T3.Editor.Gui.Graph
         {
             if (ConnectionMaker.IsInputSlotCurrentConnectionTarget(targetUi, inputDef, multiInputIndex))
             {
-                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-                {
-                    ConnectionMaker.Update();
-                }
             }
             else if (ConnectionSnapEndHelper.IsNextBestTarget(targetUi, inputDef.Id, multiInputIndex) || isInputHovered)
             {
