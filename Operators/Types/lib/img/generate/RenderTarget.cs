@@ -36,11 +36,14 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             ColorBuffer.UpdateAction = Update;
             DepthBuffer.UpdateAction = Update;
             SetupShaderResources();
-            
-            if (!_registeredStats)
+
+            lock (_lock)
             {
-                RenderStatsCollector.RegisterProvider(this);
-                _registeredStats = true;
+                if (!_registeredStats)
+                {
+                    RenderStatsCollector.RegisterProvider(this);
+                    _registeredStats = true;
+                }
             }
         }
 
@@ -525,7 +528,8 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             yield return ("pixels", _statsCountPixels);
         }
 
-
+        private static readonly object _lock = new ();
+        
         public void StartNewFrame()
         {
             _statsCount = 0;
