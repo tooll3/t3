@@ -17,11 +17,19 @@
       }
     },
     {
+      "InputId": "2f1383f3-f5ae-4f2d-bb8e-0ad8e35dd621"/*StartW*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
       "InputId": "3a1a829d-d273-4ec0-b327-30be0e0463c4"/*Translate*/,
       "Position": {
         "X": -200.0,
         "Y": 270.0
-      }
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "5956a2c7-addc-409a-87d8-62e67da212f4"/*Scale*/,
@@ -38,13 +46,6 @@
       }
     },
     {
-      "InputId": "af3c87e3-889d-410f-b4bc-62bd29bee8fa"/*Offset*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 405.0
-      }
-    },
-    {
       "InputId": "283f9939-7b04-4733-8130-edcf34305fe5"/*Pivot*/,
       "Position": {
         "X": -200.0,
@@ -52,11 +53,12 @@
       }
     },
     {
-      "InputId": "2f1383f3-f5ae-4f2d-bb8e-0ad8e35dd621"/*StartW*/,
+      "InputId": "af3c87e3-889d-410f-b4bc-62bd29bee8fa"/*Phase*/,
       "Position": {
         "X": -200.0,
-        "Y": 135.0
-      }
+        "Y": 405.0
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "ff0c0b01-6272-4580-8ce0-8629c7807d68"/*AddSeparator*/,

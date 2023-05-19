@@ -23,6 +23,11 @@
           }
         },
         {
+          "Id": "2f1383f3-f5ae-4f2d-bb8e-0ad8e35dd621"/*StartW*/,
+          "Type": "System.Single",
+          "Value": -3.1
+        },
+        {
           "Id": "3a1a829d-d273-4ec0-b327-30be0e0463c4"/*Translate*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
@@ -44,11 +49,6 @@
             "Y": 1.8000001,
             "Z": 1.89
           }
-        },
-        {
-          "Id": "2f1383f3-f5ae-4f2d-bb8e-0ad8e35dd621"/*StartW*/,
-          "Type": "System.Single",
-          "Value": -3.1
         },
         {
           "Id": "ff0c0b01-6272-4580-8ce0-8629c7807d68"/*AddSeparator*/,

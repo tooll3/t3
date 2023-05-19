@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "ceeae47b-d792-471d-a825-49e22749b7b9"/*InputString*/,
-      "DefaultValue": ""
+      "DefaultValue": "Hello Tooll"
     }
   ],
   "Children": [],
