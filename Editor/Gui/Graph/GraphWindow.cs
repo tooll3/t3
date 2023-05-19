@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
@@ -208,7 +210,8 @@ namespace T3.Editor.Gui.Graph
                     _focusOnNextFrame = false;
                 }
                 ImGui.SetScrollX(0);
-                    
+             
+
                 drawList.ChannelsSplit(2);
                 drawList.ChannelsSetCurrent(1);
                 {
@@ -236,14 +239,15 @@ namespace T3.Editor.Gui.Graph
 
             if (GraphCanvas.CompositionOp != null && UserSettings.Config.ShowTimeline)
             {
+                const int splitterWidth = 3;
                 var availableRestHeight = ImGui.GetContentRegionAvail().Y;
-                if (availableRestHeight <= 3)
+                if (availableRestHeight <= splitterWidth)
                 {
                     //Log.Warning($"skipping rending of timeline because layout is inconsistent: only {availableRestHeight}px left.");
                 }
                 else
                 {
-                    ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 3);
+                    ImGui.SetCursorPosY(ImGui.GetCursorPosY() + splitterWidth); // leave gap for splitter
                     ImGui.PushStyleVar(ImGuiStyleVar.ChildBorderSize,0);
                     
                     ImGui.BeginChild("##timeline", Vector2.Zero, false,
@@ -402,7 +406,7 @@ namespace T3.Editor.Gui.Graph
             ImGui.SetCursorPos(
                                new Vector2(
                                            ImGui.GetWindowContentRegionMin().X,
-                                           ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y));
+                                           ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y -2));
 
             ImGui.BeginChild("TimeControls", Vector2.Zero, false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
             {
@@ -541,7 +545,7 @@ namespace T3.Editor.Gui.Graph
         private float ComputedTimelineHeight => (_timeLineCanvas.SelectedAnimationParameters.Count * DopeSheetArea.LayerHeight)
                                                 + _timeLineCanvas.LayersArea.LastHeight
                                                 + TimeLineCanvas.TimeLineDragHeight
-                                                + 2;
+                                                + 7;
 
         private readonly TimeLineCanvas _timeLineCanvas;
 

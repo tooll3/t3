@@ -104,6 +104,7 @@ namespace T3.Editor.Gui.Windows.Output
                 _imageCanvas.PreventMouseInteraction = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction;
                 _imageCanvas.Update();
                 DrawToolbar(drawnType);
+                CustomComponents.DrawWindowFocusFrame();
             }
             ImGui.EndChild();
         }

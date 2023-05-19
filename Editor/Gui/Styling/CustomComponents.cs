@@ -58,7 +58,7 @@ namespace T3.Editor.Gui.Styling
             var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
             var contentMin = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos();
 
-            var pos = new Vector2(contentMin.X, contentMin.Y + size.Y - offsetFromBottom - thickness);
+            var pos = new Vector2(contentMin.X, contentMin.Y + size.Y - offsetFromBottom - thickness-1);
             ImGui.SetCursorScreenPos(pos);
 
             ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 1));
@@ -458,6 +458,19 @@ namespace T3.Editor.Gui.Styling
             }
 
             return modified;
+        }
+
+        /// <summary>
+        /// Draws a frame that indicates if the current window is focused.
+        /// This is useful for windows that have window specific keyboard short cuts.
+        /// </summary>
+        public static void DrawWindowFocusFrame()
+        {
+            if (!ImGui.IsWindowFocused())
+                return;
+            
+            var min = ImGui.GetWindowPos() + new Vector2(1,0);
+            ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(-2,-1) , Color.White.Fade(0.1f));
         }
     }
 }

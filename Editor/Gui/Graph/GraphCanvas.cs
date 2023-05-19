@@ -247,6 +247,8 @@ namespace T3.Editor.Gui.Graph
             DrawList = dl;
             ImGui.BeginGroup();
             {
+                CustomComponents.DrawWindowFocusFrame();
+                
                 DrawDropHandler();
 
                 if (KeyboardBinding.Triggered(UserActions.FocusSelection))

@@ -497,6 +497,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
             ImGui.SameLine();
         }
 
-        public static Vector2 ControlSize => new Vector2(45, 30) * T3Ui.UiScaleFactor;
+        public static Vector2 ControlSize => new Vector2(45, 28) * T3Ui.UiScaleFactor;
     }
 }
