@@ -69,7 +69,10 @@ namespace T3.Editor.Gui.Commands.Graph
             {
                 if (_wasDefault)
                 {
-                    var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
+                    var symbolChild = inputParentSymbol.Children.SingleOrDefault(child => child.Id == _childId);
+                    if (symbolChild == null)
+                        return;
+                    
                     var input = symbolChild.Inputs[_inputId];
                     input.ResetToDefault();
                     InvalidateInstances(inputParentSymbol, symbolChild);

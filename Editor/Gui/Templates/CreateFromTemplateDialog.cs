@@ -115,7 +115,7 @@ namespace T3.Editor.Gui.Templates
 
                     
                     var isResourceFolderValid = _validResourceFolderPattern.IsMatch(ResourceDirectory);
-                    FormInputs.AddStringInput("Resource Director",
+                    FormInputs.AddStringInput("Resource Directory",
                                                          ref _resourceFolder,
                                                          ResourceDirectory,
                                                          isResourceFolderValid ? null : "Your project files must be in Resources\\ directory for exporting."
