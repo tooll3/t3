@@ -905,7 +905,7 @@ namespace T3.Editor.Gui.Graph
                                     ConnectionMaker.OpenSymbolBrowserAtOutput(GraphCanvas.Current.SymbolBrowser, childUi, instance, output.Id);
                                 }
                             }
-                            else if (ImGui.IsMouseReleased(ImGuiMouseButton.Right))
+                            else if (ImGui.IsMouseReleased(ImGuiMouseButton.Right) && ImGui.GetIO().KeyCtrl)
                             {
                                 GraphCanvas.Current.EditNodeOutputDialog.OpenForOutput(GraphCanvas.Current.CompositionOp.Symbol, childUi, outputDef);
                             }
