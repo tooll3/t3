@@ -200,7 +200,7 @@ namespace T3.Editor.Gui.Interaction.Camera
 
         private void LookAround()
         {
-            if (!ImGui.IsWindowFocused())
+            if (!ImGui.IsWindowHovered())
                 return;
 
             var dragDelta = ImGui.GetIO().MouseDelta;
@@ -271,7 +271,7 @@ namespace T3.Editor.Gui.Interaction.Camera
 
         private void Pan()
         {
-            if (!ImGui.IsWindowFocused())
+            if (!ImGui.IsWindowHovered())
                 return;
 
             var dragDelta = ImGui.GetIO().MouseDelta;
