@@ -217,7 +217,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                     var newCommand = new ChangeInputValueCommand(param.Instance.Parent.Symbol, param.SymbolChildUi.Id, param.Input, value);
                     commands.Add(newCommand);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     Log.Warning("Skipping no longer valid variation parameter");
                 }
