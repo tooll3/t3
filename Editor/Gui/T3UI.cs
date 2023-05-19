@@ -19,6 +19,7 @@ using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Timing;
@@ -87,6 +88,7 @@ namespace T3.Editor.Gui
             FitViewToSelectionHandling.ProcessNewFrame();
             SrvManager.FreeUnusedTextures();
             KeyboardBinding.InitFrame();
+            ConnectionSnapEndHelper.PrepareNewFrame();
             
             // Set selected id so operator can check if they are selected or not  
             var selectedInstance = NodeSelection.GetSelectedInstance();
