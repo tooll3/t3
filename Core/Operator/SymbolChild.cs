@@ -233,5 +233,10 @@ namespace T3.Core.Operator
                 _isBypassed = wasByPassed;
             }
         }
+
+        public override string ToString()
+        {
+            return Parent.Name + ">" + ReadableName;
+        }
     }
 }

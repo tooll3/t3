@@ -131,5 +131,10 @@ namespace T3.Editor.Gui
                        SymbolChild = SymbolChild,
                    };
         }
+        
+        public override string ToString()
+        {
+            return $"{SymbolChild.Parent.Name}>[{SymbolChild.ReadableName}]";
+        }
     }
 }
