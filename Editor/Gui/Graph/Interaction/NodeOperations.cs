@@ -1213,6 +1213,28 @@ namespace T3.Editor.Gui.Graph.Interaction
             return all;
         }
 
+        public static HashSet<Guid> CollectConnectedChildren(SymbolChild child, HashSet<Guid> set=null)
+        {
+            set ??= new HashSet<Guid>();
+
+            set.Add(child.Id);
+            var compositionSymbol = GraphCanvas.Current.CompositionOp.Symbol;
+            var connectedChildren = (from con in compositionSymbol.Connections
+                                     where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
+                                     from sourceChild in compositionSymbol.Children
+                                     where con.SourceParentOrChildId == sourceChild.Id
+                                           && con.TargetParentOrChildId == child.Id
+                                     select sourceChild).Distinct().ToArray();
+            
+            foreach (var connectedChild in connectedChildren)
+            {
+                set.Add(connectedChild.Id);
+                CollectConnectedChildren(connectedChild, set);
+            }
+
+            return set;
+        }
+
         /// <summary>
         /// Scan all slots required for updating a Slot.
         /// This can be used for invalidation and cycle checking. 
