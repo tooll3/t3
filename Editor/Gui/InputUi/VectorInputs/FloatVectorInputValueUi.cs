@@ -84,10 +84,19 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
             base.DrawSettings();
 
             FormInputs.AddFloat("Scale", ref _scale, 0.1f,0,100, false, "This will affect how responsive value ladder or jog dial are in Parameter Window. Use 0 to derived scale from Min/Max range.", 0f);
-            FormInputs.AddFloat("Min", ref Min, float.NegativeInfinity, float.PositiveInfinity, 0.1f, false, "Set to range to defined a visible slider bar in parameter window", float.NegativeInfinity);
-            FormInputs.AddFloat("Max", ref Max, float.NegativeInfinity, float.PositiveInfinity, 0.1f, false, "Set to range to defined a visible slider bar in parameter window", float.PositiveInfinity);
+            FormInputs.AddFloat("Min", ref Min, -99999999, +99999999, 0.1f, false, "Set to range to defined a visible slider bar in parameter window", -99999999);
+            FormInputs.AddFloat("Max", ref Max, -99999999, +99999999, 0.1f, false, "Set to range to defined a visible slider bar in parameter window", 99999999);
             FormInputs.AddCheckBox("Clamp slider to range", ref Clamp, "This will only clamp slider. Users are still able to enter numerical values outside of range.");
-            FormInputs.AddStringInput("Custom Format", ref Format, "Custom format like {0:0.0}", null, "Defines custom value format. Here are some examples:\n\n{0:0.00000} - High precision\n{0:0}× - With a suffix");
+            FormInputs.AddVerticalSpace();
+            if(
+            FormInputs.AddStringInput("Custom Format", ref Format, "Custom format like {0:0.0}", null, "Defines custom value format. Here are some examples:\n\n{0:0.00000} - High precision\n{0:0}× - With a suffix", null)
+            )
+            {
+                if (string.IsNullOrWhiteSpace(Format))
+                {
+                    Format = null;
+                }
+            }
         }
 
         public override void Write(JsonTextWriter writer)

@@ -485,7 +485,7 @@ namespace T3.Editor.Gui.InputUi
                 }
                 else
                 {
-                    GroupTitle = string.Empty;
+                    GroupTitle = null;
                 }
             }
 

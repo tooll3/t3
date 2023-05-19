@@ -19,7 +19,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref Vector2 float2Value, bool readOnly)
         {
             float2Value.CopyTo(FloatComponents);
-            var inputEditState = VectorValueEdit.Draw(FloatComponents, Min, Max, Scale, Clamp);
+            var inputEditState = VectorValueEdit.Draw(FloatComponents, Min, Max, Scale, Clamp, 0, Format);
             if (readOnly)
                 return InputEditStateFlags.Nothing;
             

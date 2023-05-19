@@ -190,6 +190,8 @@ namespace T3.Editor.Gui.Styling
             return clicked;
         }
 
+        private const string NoDefaultString = "_";
+        
         /// <summary>
         /// Draws string input or file picker. 
         /// </summary>
@@ -197,8 +199,17 @@ namespace T3.Editor.Gui.Styling
                                           ref string value,
                                           string placeHolder = null,
                                           string warning = null,
-                                          string tooltip = null)
+                                          string tooltip = null,
+                                          string defaultValue = NoDefaultString)
         {
+            var hasDefault = defaultValue != NoDefaultString;
+            var isDefault = hasDefault && value == defaultValue;
+
+            if (isDefault)
+            {
+                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha);
+            }
+            
             DrawInputLabel(label);
             var wasNull = value == null;
             if (wasNull)
@@ -221,9 +232,21 @@ namespace T3.Editor.Gui.Styling
                 drawList.AddText(minPos + new Vector2(8, 3), Color.White.Fade(0.25f), placeHolder);
                 drawList.PopClipRect();
             }
+            
+            if (isDefault)
+            {
+                ImGui.PopStyleVar();
+            }
+
+            if (AppendResetButton(hasDefault && !isDefault, label))
+            {
+                value = defaultValue;
+                modified = true;
+            }
 
             DrawWarningBelowField(warning);
 
+            
             return modified;
         }
 
