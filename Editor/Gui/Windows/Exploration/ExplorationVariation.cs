@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
@@ -211,8 +212,15 @@ namespace T3.Editor.Gui.Windows.Exploration
 
             foreach (var (param, value) in ValuesForParameters)
             {
-                var newCommand = new ChangeInputValueCommand(param.Instance.Parent.Symbol, param.SymbolChildUi.Id, param.Input, value);
-                commands.Add(newCommand);
+                try
+                {
+                    var newCommand = new ChangeInputValueCommand(param.Instance.Parent.Symbol, param.SymbolChildUi.Id, param.Input, value);
+                    commands.Add(newCommand);
+                }
+                catch (Exception e)
+                {
+                    Log.Warning("Skipping no longer valid variation parameter");
+                }
             }
 
             return new MacroCommand("Set Preset Values", commands);
