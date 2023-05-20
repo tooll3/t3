@@ -6,6 +6,7 @@ using System.Linq;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_f90fcd0a_eab9_4e2a_b393_e8d3a0380823
 {
@@ -21,30 +22,33 @@ namespace T3.Operators.Types.Id_f90fcd0a_eab9_4e2a_b393_e8d3a0380823
         public FilesInFolder()
         {
             Files.UpdateAction = Update;
+            NumberOfFiles.UpdateAction = Update;
         }
 
         private void Update(EvaluationContext context)
         {
-            if (TriggerUpdate.GetValue(context))
+            var wasTriggered = MathUtils.WasTriggered(TriggerUpdate.GetValue(context), ref _trigger);
+            if (wasTriggered || Folder.DirtyFlag.IsDirty)
             {
-                TriggerUpdate.Value = false;
-                TriggerUpdate.TypedInputValue.Value = false;
-                TriggerUpdate.DirtyFlag.Invalidate();
-                TriggerUpdate.DirtyFlag.Clear();
+                TriggerUpdate.SetTypedInputValue(false);
+                
+                var folderPath = Folder.GetValue(context);
+                var filter = Filter.GetValue(context);
+                var filePaths = Directory.Exists(folderPath) 
+                                  ? Directory.GetFiles(folderPath).ToList() 
+                                  : new List<string>();
+                
+                Files.Value = string.IsNullOrEmpty(Filter.Value) 
+                                  ? filePaths 
+                                  : filePaths.FindAll(filepath => filepath.Contains(filter)).ToList();
             }
             
-            var folderPath = Folder.GetValue(context);
-            var filter = Filter.GetValue(context);
-            var filePaths = Directory.Exists(folderPath) 
-                              ? Directory.GetFiles(folderPath).ToList() 
-                              : new List<string>();
 
             
-            Files.Value = string.IsNullOrEmpty(Filter.Value) 
-                              ? filePaths 
-                              : filePaths.FindAll(filepath => filepath.Contains(filter)).ToList();
             NumberOfFiles.Value = Files.Value.Count;
         }
+
+        private bool _trigger;
 
         [Input(Guid = "ca9778e7-072c-4304-9043-eeb2dc4ca5d7")]
         public readonly InputSlot<string> Folder = new InputSlot<string>(".");
