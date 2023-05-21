@@ -1,27 +1,4 @@
 {
   "Id": "dab61a12-9996-401e-9aa6-328dd6292beb",
-  "Variations": [
-    {
-      "Id": "de33fe63-05b9-48ff-b89e-11ff93b5bbbe",
-      "IsPreset": false,
-      "ActivationIndex": 1,
-      "Title": "Default",
-      "PosOnCanvas": {
-        "X": 163.0,
-        "Y": 0.0
-      },
-      "ParameterSetsForChildIds": {}
-    },
-    {
-      "Id": "35f1244c-f296-4c2e-bbc6-73da8292af8e",
-      "IsPreset": false,
-      "ActivationIndex": 2,
-      "Title": "untitled",
-      "PosOnCanvas": {
-        "X": 326.0,
-        "Y": 0.0
-      },
-      "ParameterSetsForChildIds": {}
-    }
-  ]
+  "Variations": []
 }

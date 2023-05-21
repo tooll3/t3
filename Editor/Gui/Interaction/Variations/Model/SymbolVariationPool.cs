@@ -91,8 +91,8 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
         public void SaveVariationsToFile()
         {
-            if (Variations.Count == 0)
-                return;
+            // if (Variations.Count == 0)
+            //     return;
 
             CreateFolderIfNotExists(VariationsFolder);
             
