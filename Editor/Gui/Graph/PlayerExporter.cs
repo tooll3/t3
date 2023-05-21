@@ -106,6 +106,8 @@ namespace T3.Editor.Gui.Graph
                                   {
                                       playerBuildPath + "Rug.OSC.dll",
                                       operatorDependenciesPath + "Core.dll",
+                                      operatorDependenciesPath + "SystemUi.dll",
+                                      operatorDependenciesPath + "MsForms.dll",
                                       operatorDependenciesPath + "DdsImport.dll",
                                       operatorDependenciesPath + "ManagedBass.Wasapi.dll",
                                       operatorDependenciesPath + "ManagedBass.dll",
