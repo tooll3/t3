@@ -459,6 +459,7 @@ namespace T3.Editor.Gui.Windows.Variations
             }
 
             VariationsWindow.DeleteVariationsFromPool(PoolForBlendOperations, list);
+            PoolForBlendOperations.SaveVariationsToFile();
         }
 
         #region thumbnail rendering
