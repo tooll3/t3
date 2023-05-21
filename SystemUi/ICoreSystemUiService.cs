@@ -1,6 +1,4 @@
-using T3.SystemUi;
-
-namespace T3.Core.SystemUi;
+namespace T3.SystemUi;
 
 public interface ICoreSystemUiService 
 {

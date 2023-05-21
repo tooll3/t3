@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartT3", "StartT3\StartT3.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemUi", "SystemUi\SystemUi.csproj", "{5F5437E3-66C2-467E-AD6D-5F3388C3FCAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows", "Windows\Windows.csproj", "{81F28C2F-CE99-4BE7-B643-6B8EA0A3E78E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsForms", "MsForms\MsForms.csproj", "{8D29BDE3-EE22-4EE5-981B-D45BAD0A1F03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +47,10 @@ Global
 		{5F5437E3-66C2-467E-AD6D-5F3388C3FCAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F5437E3-66C2-467E-AD6D-5F3388C3FCAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F5437E3-66C2-467E-AD6D-5F3388C3FCAA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{81F28C2F-CE99-4BE7-B643-6B8EA0A3E78E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{81F28C2F-CE99-4BE7-B643-6B8EA0A3E78E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{81F28C2F-CE99-4BE7-B643-6B8EA0A3E78E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{81F28C2F-CE99-4BE7-B643-6B8EA0A3E78E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D29BDE3-EE22-4EE5-981B-D45BAD0A1F03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D29BDE3-EE22-4EE5-981B-D45BAD0A1F03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D29BDE3-EE22-4EE5-981B-D45BAD0A1F03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D29BDE3-EE22-4EE5-981B-D45BAD0A1F03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
