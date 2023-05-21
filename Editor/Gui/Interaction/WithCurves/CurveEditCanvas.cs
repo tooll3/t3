@@ -19,7 +19,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
     {
         protected CurveEditCanvas()
         {
-            ScrollTarget = new Vector2(-1f, 0.0f);
+            ScrollTarget = new Vector2(-2.5f, 0.0f);
             ScaleTarget = new Vector2(80, -1);
         }
 
