@@ -13,16 +13,17 @@ using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
 using T3.Core.Logging;
 using T3.Editor.Gui.Styling;
+using T3.SystemUi;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui
-{
+{   
     /// <summary>
     /// Binds ImGui to a SharpDX render form
     /// </summary>
-    public class T3RenderForm : IDisposable // likely the first place to abstract other renderers
+    public class T3RenderForm : IRenderGui<Device, ImDrawDataPtr>
     {
         //public Device Device => _device;
         private Device _device;
@@ -32,7 +33,7 @@ namespace T3.Editor.Gui
         private ShaderBytecode _vertexShaderBlob;
         private VertexShader _vertexShader;
         private InputLayout _inputLayout;
-        private Buffer _vertexContantBuffer;
+        private Buffer _vertexConstantBuffer;
         private ShaderBytecode _pixelShaderBlob;
         private PixelShader _pixelShader;
         private SamplerState _fontSampler;
@@ -48,8 +49,7 @@ namespace T3.Editor.Gui
 
         private Vector2 _scaleFactor = Vector2.One;
 
-
-        public T3RenderForm(Device device, int width, int height)
+        public void Initialize(Device device, int width, int height)
         {
             _device = device;
             _deviceContext = device.ImmediateContext;
@@ -68,20 +68,7 @@ namespace T3.Editor.Gui
             //ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.ViewportsEnable;
         }
 
-
-
-        public void WindowResized(int width, int height)
-        {
-            _windowWidth = width;
-            _windowHeight = height;
-        }
-
-        public void DestroyDeviceObjects()
-        {
-            Dispose();
-        }
-
-        public void RenderImDrawData(ImDrawDataPtr draw_data)
+        public void RenderDrawData(ImDrawDataPtr draw_data)
         {
             if (_vb == null || _vertexBufferSize < draw_data.TotalVtxCount)
             {
@@ -131,10 +118,10 @@ namespace T3.Editor.Gui
             ImGuiIOPtr io = ImGui.GetIO();
             Matrix4x4 mvp = Matrix4x4.CreateOrthographicOffCenter(0.0f, io.DisplaySize.X, io.DisplaySize.Y, 0.0f, -1.0f, 1.0f);
             SharpDX.DataStream cbStream;
-            _deviceContext.MapSubresource(_vertexContantBuffer, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out cbStream);
+            _deviceContext.MapSubresource(_vertexConstantBuffer, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out cbStream);
             cbStream.Write(mvp);
             cbStream.Dispose();
-            _deviceContext.UnmapSubresource(_vertexContantBuffer, 0);
+            _deviceContext.UnmapSubresource(_vertexConstantBuffer, 0);
 
             // Backup DX state that will be modified to restore it afterwards (unfortunately this is very ugly looking and verbose. Close your eyes!)
             var prevScissorRects = new SharpDX.Mathematics.Interop.RawRectangle[16];
@@ -169,7 +156,7 @@ namespace T3.Editor.Gui
             _deviceContext.InputAssembler.SetIndexBuffer(_ib, Format.R16_UInt, 0);
             _deviceContext.InputAssembler.PrimitiveTopology = SharpDX.Direct3D.PrimitiveTopology.TriangleList;
             _deviceContext.VertexShader.SetShader(_vertexShader, null, 0);
-            _deviceContext.VertexShader.SetConstantBuffer(0, _vertexContantBuffer);
+            _deviceContext.VertexShader.SetConstantBuffer(0, _vertexConstantBuffer);
             _deviceContext.PixelShader.SetShader(_pixelShader, null, 0);
             _deviceContext.PixelShader.SetSampler(0, _fontSampler);
 
@@ -240,7 +227,6 @@ namespace T3.Editor.Gui
             _deviceContext.InputAssembler.InputLayout = prevInputLayout;
         }
 
-
         public bool CreateDeviceObjects()
         {
             if (_device == null)
@@ -294,7 +280,7 @@ namespace T3.Editor.Gui
                                                });
 
             // Create the constant buffer
-            _vertexContantBuffer = new Buffer(_device,
+            _vertexConstantBuffer = new Buffer(_device,
                                               new BufferDescription()
                                                   {
                                                       SizeInBytes = 4 * 4 * 4 /*TODO sizeof(Matrix4x4)*/,
@@ -381,7 +367,7 @@ namespace T3.Editor.Gui
             {
                 // Sadly a resource leak causes this to trigger memory exceptions.
                 // So disabled for now
-                
+
                 // foreach (var entry in _srvCache)
                 // {
                 //     try
@@ -404,7 +390,7 @@ namespace T3.Editor.Gui
                 DisposeObj(ref _rasterizerState);
                 DisposeObj(ref _pixelShader);
                 DisposeObj(ref _pixelShaderBlob);
-                DisposeObj(ref _vertexContantBuffer);
+                DisposeObj(ref _vertexConstantBuffer);
                 DisposeObj(ref _inputLayout);
                 DisposeObj(ref _vertexShader);
                 DisposeObj(ref _vertexShaderBlob);
@@ -447,7 +433,6 @@ namespace T3.Editor.Gui
             io.KeyMap[(int)ImGuiKey.Y] = (int)Keys.Y;
             io.KeyMap[(int)ImGuiKey.Z] = (int)Keys.Z;
         }
-
 
         private unsafe void CreateFontsTexture()
         {
@@ -542,6 +527,4 @@ namespace T3.Editor.Gui
             InvalidateDeviceObjects();
         }
     }
-
-
 }

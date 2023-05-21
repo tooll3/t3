@@ -30,7 +30,7 @@ namespace T3.Editor
 {
     public static class Program
     {
-        private static T3RenderForm _t3RenderForm;
+        private static IRenderGui<SharpDX.Direct3D11.Device, ImDrawDataPtr> _t3RenderForm;
         public static Device Device { get; private set; }
 
         public static readonly bool IsStandAlone = File.Exists("StartT3.exe");
@@ -70,7 +70,8 @@ namespace T3.Editor
 
             Device = device;
 
-            _t3RenderForm = new T3RenderForm(device, ProgramWindows.Main.Width, ProgramWindows.Main.Height);
+            _t3RenderForm = new T3RenderForm();
+            _t3RenderForm.Initialize(device, ProgramWindows.Main.Width, ProgramWindows.Main.Height);
 
 
             var spaceMouse = new SpaceMouse(ProgramWindows.Main.HwndHandle);
@@ -223,7 +224,7 @@ namespace T3.Editor
                 ProgramWindows.RefreshViewport();
 
                 ImGui.Render();
-                _t3RenderForm.RenderImDrawData(ImGui.GetDrawData());
+                _t3RenderForm.RenderDrawData(ImGui.GetDrawData());
 
                 T3Metrics.UiRenderingCompleted();
 
