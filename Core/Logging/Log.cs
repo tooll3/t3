@@ -106,7 +106,7 @@ namespace T3.Core.Logging
             return messageString;
         }
         
-        private static void DoLog(LogEntry entry)
+        private static void DoLog(ILogEntry entry)
         {
             _instance._logWriters.ForEach(writer => writer.ProcessEntry(entry));
         }
