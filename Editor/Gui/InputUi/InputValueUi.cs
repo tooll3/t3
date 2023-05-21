@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
@@ -315,7 +316,15 @@ namespace T3.Editor.Gui.InputUi
                     {
                         if (IsAnimatable)
                         {
-                            UndoRedoStack.AddAndExecute(new AddAnimationCommand(animator, inputSlot));
+                            var cmd = new MacroCommand("add animation",
+                                                       new List<ICommand>()
+                                                           {
+                                                               new ChangeInputValueCommand(compositionUi.Symbol, symbolChildUi.SymbolChild.Id, input,
+                                                                                           inputSlot.Input.Value),
+                                                               new AddAnimationCommand(animator, inputSlot),
+                                                           });
+                            
+                            UndoRedoStack.AddAndExecute(cmd);
                         }
                     }
 
