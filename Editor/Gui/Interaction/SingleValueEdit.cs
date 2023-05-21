@@ -50,6 +50,8 @@ namespace T3.Editor.Gui.Interaction
             return result;
         }
 
+        private static int _editInteractionCounter =0;
+        
         public static InputEditStateFlags Draw(ref double value,
                                                Vector2 size,
                                                double min = double.NegativeInfinity,
@@ -126,6 +128,7 @@ namespace T3.Editor.Gui.Interaction
                         break;
 
                     case InputStates.StartedTextInput:
+                        _editInteractionCounter++;
                         ImGui.SetKeyboardFocusHere();
                         SetState(InputStates.TextInput);
                         goto case InputStates.TextInput;
@@ -135,7 +138,7 @@ namespace T3.Editor.Gui.Interaction
                                                                 ? Color.Red.Rgba
                                                                 : Color.White);
                         ImGui.SetNextItemWidth(size.X);
-                        ImGui.InputText("##dialInput", ref _jogDialText, 20);
+                        ImGui.InputText("##dialInput" + _editInteractionCounter, ref _jogDialText, 20);
 
                         // Keep Focusing until Tab-Key released
                         if (shouldFocus)
