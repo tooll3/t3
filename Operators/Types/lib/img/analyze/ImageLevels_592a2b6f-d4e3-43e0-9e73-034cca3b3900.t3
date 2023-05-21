@@ -16,7 +16,7 @@
     },
     {
       "Id": "48e80f45-9685-4ded-aa1c-d05e16658c5a"/*Width*/,
-      "DefaultValue": 0.08
+      "DefaultValue": 0.1
     },
     {
       "Id": "f1084d72-f8b8-4723-82be-e1e98880faf3"/*Rotation*/,

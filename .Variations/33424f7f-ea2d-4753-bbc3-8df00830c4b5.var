@@ -1082,6 +1082,25 @@
           "c3827e2e-2d15-475c-9b2f-03a861e97fc5": true
         }
       }
+    },
+    {
+      "Id": "2f19a41b-2059-42bf-8e9d-220cbe4d099c",
+      "IsPreset": true,
+      "ActivationIndex": 42,
+      "Title": "SpinZoom",
+      "PosOnCanvas": {
+        "X": 123.91879,
+        "Y": 1397.024
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "f1a53a46-fa5c-49af-9d53-0d68cfe1b33e": 0.8000016,
+          "fc1b2bc8-6756-4e78-a90b-8af691d85875": 79.0,
+          "d2b9ef03-1641-4949-86ff-b71dc1fb3ad0": 1.0016,
+          "849540c3-7ffd-40a7-a78b-3d051256e5f1": -0.099999994,
+          "640de6a7-14ce-4c72-b78e-aa72f642b765": -0.44
+        }
+      }
     }
   ]
 }
