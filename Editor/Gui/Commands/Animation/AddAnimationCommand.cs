@@ -1,4 +1,5 @@
-﻿using T3.Core.Operator;
+﻿using T3.Core.DataTypes;
+using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 
 namespace T3.Editor.Gui.Commands.Animation
@@ -18,7 +19,7 @@ namespace T3.Editor.Gui.Commands.Animation
         public void Do()
         {
             _wasDefault = _inputSlot.Input.IsDefault; 
-            _animator.AddAnimationToInput(_inputSlot); 
+            _keepCurves = _animator.AddOrRestoreCurvesToInput(_inputSlot, _keepCurves); 
             _inputSlot.Parent.Parent.Symbol.CreateOrUpdateActionsForAnimatedChildren();
         }
         
@@ -34,5 +35,6 @@ namespace T3.Editor.Gui.Commands.Animation
         private readonly Animator _animator;
         private readonly IInputSlot _inputSlot;
         private bool _wasDefault;
+        private Curve[] _keepCurves;
     }
 }

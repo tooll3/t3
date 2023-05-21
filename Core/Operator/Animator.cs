@@ -10,6 +10,7 @@ using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Core.Utils;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
@@ -82,161 +83,70 @@ namespace T3.Core.Operator
             targetAnimator._animatedInputCurves.Add(newCurveId, newCurve);
         }
 
-        public void AddAnimationToInput(IInputSlot inputSlot)
+        public Curve[] AddOrRestoreCurvesToInput(IInputSlot inputSlot, Curve[] originalCurves)
         {
-            if (inputSlot is Slot<float> floatInputSlot)
+            switch (inputSlot)
             {
-                var newCurve = new Curve();
-                newCurve.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
-                                                                              {
-                                                                                  Value = floatInputSlot.Value,
-                                                                                  InType = VDefinition.Interpolation.Spline,
-                                                                                  OutType = VDefinition.Interpolation.Spline,
-                                                                              });
-                _animatedInputCurves.Add(new CurveId(inputSlot), newCurve);
+                case Slot<float> floatInputSlot:
+                    return AddCurvesForFloatValue(inputSlot, new[] { floatInputSlot.Value }, originalCurves);
+                case Slot<Vector2> vector2InputSlot:
+                    return AddCurvesForFloatValue(inputSlot, vector2InputSlot.Value.ToArray(), originalCurves);
+                case Slot<Vector3> vector3InputSlot:
+                    return AddCurvesForFloatValue(inputSlot, vector3InputSlot.Value.ToArray(), originalCurves);
+                case Slot<Vector4> vector4InputSlot:
+                    return AddCurvesForFloatValue(inputSlot, vector4InputSlot.Value.ToArray(), originalCurves);
+                case Slot<int> intInputSlot:
+                    return AddCurvesForIntValue(inputSlot, new []{intInputSlot.Value}, originalCurves);
+                case Slot<Size2> size2InputSlot:
+                    return AddCurvesForIntValue(inputSlot, new []{size2InputSlot.Value.Width, size2InputSlot.Value.Height }, originalCurves);
+                case Slot<bool> boolInputSlot:
+                    return AddCurvesForIntValue(inputSlot, new []{boolInputSlot.Value ? 1 :0 }, originalCurves);
+                default:
+                    Log.Error("Could not create curves for this type");
+                    break;
             }
-            else if (inputSlot is Slot<Vector2> vector2InputSlot)
-            {
-                var newCurveX = new Curve();
-                newCurveX.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
-                                                                               {
-                                                                                   Value = vector2InputSlot.Value.X,
-                                                                                   InType = VDefinition.Interpolation.Spline,
-                                                                                   OutType = VDefinition.Interpolation.Spline,
-                                                                               });
-                _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
 
-                var newCurveY = new Curve();
-                newCurveY.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
-                                                                               {
-                                                                                   Value = vector2InputSlot.Value.Y,
-                                                                                   InType = VDefinition.Interpolation.Spline,
-                                                                                   OutType = VDefinition.Interpolation.Spline,
-                                                                               });
-                _animatedInputCurves.Add(new CurveId(inputSlot, 1), newCurveY);
+            return null;
+        }
+
+        private Curve[] AddCurvesForFloatValue(IInputSlot inputSlot, float[] values, Curve[] originalCurves)
+        {
+            var curves = originalCurves ?? new Curve[values.Length];
+            for (var index = 0; index < values.Length; index++)
+            {
+                if(originalCurves == null)
+                    curves[index] = new Curve();
+                
+                curves[index].AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
+                                                                           {
+                                                                               Value = values[index],
+                                                                               InType = VDefinition.Interpolation.Spline,
+                                                                               OutType = VDefinition.Interpolation.Spline,
+                                                                           });
+                _animatedInputCurves.Add(new CurveId(inputSlot, index), curves[index]);
             }
-            else if (inputSlot is Slot<Vector3> vector3InputSlot)
+            return curves;
+        }
+        
+        private Curve[] AddCurvesForIntValue(IInputSlot inputSlot, int[] values, Curve[] originalCurves)
+        {
+            var curves = originalCurves ?? new Curve[values.Length];
+            for (var index = 0; index < values.Length; index++)
             {
-                var newCurveX = new Curve();
-                newCurveX.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
+                if(originalCurves == null)
+                    curves[index] = new Curve();
+                
+                curves[index].AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
                                                                                {
-                                                                                   Value = vector3InputSlot.Value.X,
-                                                                                   InType = VDefinition.Interpolation.Spline,
-                                                                                   OutType = VDefinition.Interpolation.Spline,
-                                                                               });
-                _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
-
-                var newCurveY = new Curve();
-                newCurveY.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
-                                                                               {
-                                                                                   Value = vector3InputSlot.Value.Y,
-                                                                                   InType = VDefinition.Interpolation.Spline,
-                                                                                   OutType = VDefinition.Interpolation.Spline,
-                                                                               });
-                _animatedInputCurves.Add(new CurveId(inputSlot, 1), newCurveY);
-
-                var newCurveZ = new Curve();
-                newCurveZ.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
-                                                                               {
-                                                                                   Value = vector3InputSlot.Value.Z,
-                                                                                   InType = VDefinition.Interpolation.Spline,
-                                                                                   OutType = VDefinition.Interpolation.Spline,
-                                                                               });
-                _animatedInputCurves.Add(new CurveId(inputSlot, 2), newCurveZ);
-            }
-            else if (inputSlot is Slot<Vector4> vector4InputSlot)
-            {
-                var newCurveX = new Curve();
-                newCurveX.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
-                                                                               {
-                                                                                   Value = vector4InputSlot.Value.X,
-                                                                                   InType = VDefinition.Interpolation.Spline,
-                                                                                   OutType = VDefinition.Interpolation.Spline,
-                                                                               });
-                _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
-
-                var newCurveY = new Curve();
-                newCurveY.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
-                                                                               {
-                                                                                   Value = vector4InputSlot.Value.Y,
-                                                                                   InType = VDefinition.Interpolation.Spline,
-                                                                                   OutType = VDefinition.Interpolation.Spline,
-                                                                               });
-                _animatedInputCurves.Add(new CurveId(inputSlot, 1), newCurveY);
-
-                var newCurveZ = new Curve();
-                newCurveZ.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
-                                                                               {
-                                                                                   Value = vector4InputSlot.Value.Z,
-                                                                                   InType = VDefinition.Interpolation.Spline,
-                                                                                   OutType = VDefinition.Interpolation.Spline,
-                                                                               });
-                _animatedInputCurves.Add(new CurveId(inputSlot, 2), newCurveZ);
-
-                var newCurveW = new Curve();
-                newCurveW.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
-                                                                               {
-                                                                                   Value = vector4InputSlot.Value.W,
-                                                                                   InType = VDefinition.Interpolation.Spline,
-                                                                                   OutType = VDefinition.Interpolation.Spline,
-                                                                               });
-                _animatedInputCurves.Add(new CurveId(inputSlot, 3), newCurveW);
-            }
-            else if (inputSlot is Slot<int> intInputSlot)
-            {
-                var newCurve = new Curve();
-                newCurve.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
-                                                                              {
-                                                                                  Value = intInputSlot.Value,
-                                                                                  InType = VDefinition.Interpolation.Constant,
-                                                                                  OutType = VDefinition.Interpolation.Constant,
-                                                                                  InEditMode = VDefinition.EditMode.Constant,
-                                                                                  OutEditMode = VDefinition.EditMode.Constant,
-                                                                              });
-                _animatedInputCurves.Add(new CurveId(inputSlot), newCurve);
-            }
-            else if (inputSlot is Slot<Size2> size2InputSlot)
-            {
-                var newCurveX = new Curve();
-                newCurveX.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
-                                                                               {
-                                                                                   Value = size2InputSlot.Value.Width,
+                                                                                   Value = values[index],
                                                                                    InType = VDefinition.Interpolation.Constant,
                                                                                    OutType = VDefinition.Interpolation.Constant,
                                                                                    InEditMode = VDefinition.EditMode.Constant,
                                                                                    OutEditMode = VDefinition.EditMode.Constant,
                                                                                });
-                _animatedInputCurves.Add(new CurveId(inputSlot, 0), newCurveX);
-
-                var newCurveY = new Curve();
-                newCurveY.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
-                                                                               {
-                                                                                   Value = size2InputSlot.Value.Height,
-                                                                                   InType = VDefinition.Interpolation.Constant,
-                                                                                   OutType = VDefinition.Interpolation.Constant,
-                                                                                   InEditMode = VDefinition.EditMode.Constant,
-                                                                                   OutEditMode = VDefinition.EditMode.Constant,
-                                                                               });
-                _animatedInputCurves.Add(new CurveId(inputSlot, 1), newCurveY);
-                size2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
+                _animatedInputCurves.Add(new CurveId(inputSlot, index), curves[index]);
             }
-            else if (inputSlot is Slot<bool> boolInputSlot)
-            {
-                var newCurve = new Curve();
-                newCurve.AddOrUpdateV(Playback.Current.TimeInBars, new VDefinition()
-                                                                              {
-                                                                                  Value = boolInputSlot.Value ? 1 :0,
-                                                                                  InType = VDefinition.Interpolation.Constant,
-                                                                                  OutType = VDefinition.Interpolation.Constant,
-                                                                                  InEditMode = VDefinition.EditMode.Constant,
-                                                                                  OutEditMode = VDefinition.EditMode.Constant,
-                                                                              });
-                _animatedInputCurves.Add(new CurveId(inputSlot), newCurve);
-            }
-            else
-            {
-                Log.Error("Could not create update action.");
-            }
+            return curves;
         }
 
         public void CreateUpdateActionsForExistingCurves(IEnumerable<Instance> childInstances)
@@ -512,6 +422,9 @@ namespace T3.Core.Operator
             }
         }
 
+        /// <summary>
+        /// This is used when loading operators 
+        /// </summary>
         public void AddCurvesToInput(List<Curve> curves, IInputSlot inputSlot)
         {
             for (var index = 0; index < curves.Count; index++)
