@@ -110,7 +110,7 @@ namespace T3.Editor.Gui.Templates
                                                          var newShaderFilename = $@"{resourceFolder}shader\{name}.hlsl";
                                                          var shaderSetupInstance = newInstance.Children.SingleOrDefault(c => c.Symbol.Id ==
                                                              Guid.Parse("bd0b9c5b-c611-42d0-8200-31af9661f189"));
-                      
+
                                                          File.Copy(@"Resources\examples\templates\ImgFxShaderTemplate.hlsl",
                                                                    newShaderFilename);
                       
@@ -128,7 +128,7 @@ namespace T3.Editor.Gui.Templates
                                                          // Open editor
                                                          Process.Start(new ProcessStartInfo(newShaderFilename) { UseShellExecute = true });
                                                      }
-                                                     catch (Win32Exception e)
+                                                     catch (Exception e)
                                                      {
                                                          Log.Warning("Assigning new shader failed: " + e.Message);
                                                      }
