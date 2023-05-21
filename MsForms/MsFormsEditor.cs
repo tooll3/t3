@@ -1,7 +1,5 @@
-using System.Windows.Forms;
 using T3.SystemUi;
-
-namespace T3.MSWindows;
+namespace T3.MsForms;
 
 public class MsFormsEditor : MsForms, IEditorSystemUiService
 {

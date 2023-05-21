@@ -25,7 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Operators\Operators.csproj" />
-    <ProjectReference Include="..\Windows\Windows.csproj" />
+    <ProjectReference Include="..\MsForms\MsForms.csproj" />
   </ItemGroup>
 
   <ItemGroup>
