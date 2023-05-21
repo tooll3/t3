@@ -5,7 +5,7 @@ namespace T3.Core.SystemUi;
 internal static class CoreUi
 {
     private static ICoreSystemUiService _instance;
-    public static ICoreSystemUiService Instance
+    internal static ICoreSystemUiService Instance
     {
         get => _instance;
         set

@@ -2,8 +2,8 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using T3.Core.Logging;
-using T3.Editor.SystemUi;
+using T3.SystemUi;
+using T3.SystemUi.Logging;
 
 namespace T3.Editor.SplashScreen;
 
@@ -125,9 +125,9 @@ internal class SplashScreen : ISplashScreen
     private bool _invoked;
 
     #region implement ILogWriter
-    public LogEntry.EntryLevel Filter { get; set; }
+    public ILogEntry.EntryLevel Filter { get; set; }
 
-    public void ProcessEntry(LogEntry entry)
+    public void ProcessEntry(ILogEntry entry)
     {
         if (_logMessageLabel == null)
             return;

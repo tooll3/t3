@@ -1,25 +1,16 @@
 ﻿using System;
+using T3.SystemUi.Logging;
 
 namespace T3.Core.Logging
 {
-    public class LogEntry
+    public class LogEntry : ILogEntry
     {
-        [Flags]
-        public enum EntryLevel
-        {
-            Debug = 1,
-            Info = 2,
-            Warning = 4,
-            Error = 8,
-            All = Debug | Info | Warning | Error
-        }
-
         public DateTime TimeStamp { get; }
-        public EntryLevel Level { get; }
+        public ILogEntry.EntryLevel Level { get; }
         public string Message { get; }
         public Guid[] SourceIdPath  { get; }
 
-        public LogEntry(EntryLevel level, string message, Guid[] sourceIdPath)
+        public LogEntry(ILogEntry.EntryLevel level, string message, Guid[] sourceIdPath)
         {
             TimeStamp = DateTime.Now;
             Level = level;
@@ -27,7 +18,7 @@ namespace T3.Core.Logging
             SourceIdPath = sourceIdPath;
         }
         
-        public LogEntry(EntryLevel level, string message, Guid sourceId)
+        public LogEntry(ILogEntry.EntryLevel level, string message, Guid sourceId)
         {
             TimeStamp = DateTime.Now;
             Level = level;
@@ -35,7 +26,7 @@ namespace T3.Core.Logging
             SourceIdPath = new []{sourceId};
         }
 
-        public LogEntry(EntryLevel level, string message)
+        public LogEntry(ILogEntry.EntryLevel level, string message)
         {
             TimeStamp = DateTime.Now;
             Level = level;

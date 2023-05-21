@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <TargetFrameworks>net6.0;net6.0-windows</TargetFrameworks>
+        <RootNamespace>T3.SystemUi</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="System.Windows.Forms">
+        <HintPath>..\..\..\..\..\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\6.0.16\System.Windows.Forms.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

@@ -1,7 +1,6 @@
-using System;
 using T3.Core.SystemUi;
 
-namespace T3.Editor.SystemUi;
+namespace T3.SystemUi;
 
 public interface IEditorSystemUiService : ICoreSystemUiService
 {
