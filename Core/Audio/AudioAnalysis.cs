@@ -1,7 +1,6 @@
 ﻿using System;
 using ManagedBass;
 using T3.Core.Animation;
-using T3.Core.Operator;
 using T3.Core.Utils;
 
 namespace T3.Core.Audio

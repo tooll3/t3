@@ -11,7 +11,6 @@ using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
