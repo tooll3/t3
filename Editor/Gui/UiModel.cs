@@ -1,32 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using SharpDX;
-using SharpDX.Direct3D;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-using SharpDX.Mathematics.Interop;
-using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.ChildUi;
-using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.InputUi.CombinedInputs;
-using T3.Editor.Gui.InputUi.SimpleInputUis;
-using T3.Editor.Gui.InputUi.SingleControl;
-using T3.Editor.Gui.InputUi.VectorInputs;
-using T3.Editor.Gui.OutputUi;
-using Buffer = SharpDX.Direct3D11.Buffer;
-using Point = T3.Core.DataTypes.Point;
 
 // ReSharper disable RedundantNameQualifier
 

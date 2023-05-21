@@ -5,7 +5,6 @@ using System.IO;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Logging;
-using T3.Core.SystemUi;
 using T3.Editor.SystemUi;
 using T3.SystemUi;
 
