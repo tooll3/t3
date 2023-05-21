@@ -77,7 +77,7 @@ namespace T3.Core.Operator.Slots
 
             if (isDisabled)
             {
-                _keepBypassedUpdateAction = _baseUpdateAction;
+                _keepOriginalUpdateAction = _baseUpdateAction;
                 base.UpdateAction = EmptyAction;
                 DirtyFlag.Invalidate();
             }

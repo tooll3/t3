@@ -82,7 +82,7 @@ namespace T3.Core.Operator
             targetAnimator._animatedInputCurves.Add(newCurveId, newCurve);
         }
 
-        public void CreateInputUpdateAction(IInputSlot inputSlot)
+        public void AddAnimationToInput(IInputSlot inputSlot)
         {
             if (inputSlot is Slot<float> floatInputSlot)
             {
@@ -94,9 +94,6 @@ namespace T3.Core.Operator
                                                                                   OutType = VDefinition.Interpolation.Spline,
                                                                               });
                 _animatedInputCurves.Add(new CurveId(inputSlot), newCurve);
-
-                floatInputSlot.UpdateAction = context => { floatInputSlot.Value = (float)newCurve.GetSampledValue(context.LocalTime); };
-                floatInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else if (inputSlot is Slot<Vector2> vector2InputSlot)
             {
@@ -117,13 +114,6 @@ namespace T3.Core.Operator
                                                                                    OutType = VDefinition.Interpolation.Spline,
                                                                                });
                 _animatedInputCurves.Add(new CurveId(inputSlot, 1), newCurveY);
-
-                vector2InputSlot.UpdateAction = context =>
-                                                {
-                                                    vector2InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.LocalTime);
-                                                    vector2InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.LocalTime);
-                                                };
-                vector2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else if (inputSlot is Slot<Vector3> vector3InputSlot)
             {
@@ -153,14 +143,6 @@ namespace T3.Core.Operator
                                                                                    OutType = VDefinition.Interpolation.Spline,
                                                                                });
                 _animatedInputCurves.Add(new CurveId(inputSlot, 2), newCurveZ);
-
-                vector3InputSlot.UpdateAction = context =>
-                                                {
-                                                    vector3InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.LocalTime);
-                                                    vector3InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.LocalTime);
-                                                    vector3InputSlot.Value.Z = (float)newCurveZ.GetSampledValue(context.LocalTime);
-                                                };
-                vector3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else if (inputSlot is Slot<Vector4> vector4InputSlot)
             {
@@ -199,15 +181,6 @@ namespace T3.Core.Operator
                                                                                    OutType = VDefinition.Interpolation.Spline,
                                                                                });
                 _animatedInputCurves.Add(new CurveId(inputSlot, 3), newCurveW);
-
-                vector4InputSlot.UpdateAction = context =>
-                                                {
-                                                    vector4InputSlot.Value.X = (float)newCurveX.GetSampledValue(context.LocalTime);
-                                                    vector4InputSlot.Value.Y = (float)newCurveY.GetSampledValue(context.LocalTime);
-                                                    vector4InputSlot.Value.Z = (float)newCurveZ.GetSampledValue(context.LocalTime);
-                                                    vector4InputSlot.Value.W = (float)newCurveW.GetSampledValue(context.LocalTime);
-                                                };
-                vector4InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else if (inputSlot is Slot<int> intInputSlot)
             {
@@ -221,9 +194,6 @@ namespace T3.Core.Operator
                                                                                   OutEditMode = VDefinition.EditMode.Constant,
                                                                               });
                 _animatedInputCurves.Add(new CurveId(inputSlot), newCurve);
-
-                intInputSlot.UpdateAction = context => { intInputSlot.Value = (int)newCurve.GetSampledValue(context.LocalTime); };
-                intInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else if (inputSlot is Slot<Size2> size2InputSlot)
             {
@@ -248,12 +218,6 @@ namespace T3.Core.Operator
                                                                                    OutEditMode = VDefinition.EditMode.Constant,
                                                                                });
                 _animatedInputCurves.Add(new CurveId(inputSlot, 1), newCurveY);
-
-                size2InputSlot.UpdateAction = context =>
-                                                {
-                                                    size2InputSlot.Value.Width = (int)newCurveX.GetSampledValue(context.LocalTime);
-                                                    size2InputSlot.Value.Height = (int)newCurveY.GetSampledValue(context.LocalTime);
-                                                };
                 size2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else if (inputSlot is Slot<bool> boolInputSlot)
@@ -268,9 +232,6 @@ namespace T3.Core.Operator
                                                                                   OutEditMode = VDefinition.EditMode.Constant,
                                                                               });
                 _animatedInputCurves.Add(new CurveId(inputSlot), newCurve);
-
-                boolInputSlot.UpdateAction = context => { boolInputSlot.Value = newCurve.GetSampledValue(context.LocalTime) > 0.5f; };
-                boolInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
             }
             else
             {
@@ -298,17 +259,17 @@ namespace T3.Core.Operator
                     var (inputSlot, curve) = groupEntry.First();
                     if (inputSlot is Slot<float> typedInputSlot)
                     {
-                        typedInputSlot.UpdateAction = context => { typedInputSlot.Value = (float)curve.GetSampledValue(context.LocalTime); };
+                        typedInputSlot.OverrideWithAnimationAction(context => { typedInputSlot.Value = (float)curve.GetSampledValue(context.LocalTime); });
                         typedInputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
                     else if (inputSlot is Slot<int> intSlot)
                     {
-                        intSlot.UpdateAction = context => { intSlot.Value = (int)curve.GetSampledValue(context.LocalTime); };
+                        intSlot.OverrideWithAnimationAction(context => { intSlot.Value = (int)curve.GetSampledValue(context.LocalTime); });
                         intSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
                     else if (inputSlot is Slot<bool> boolSlot)
                     {
-                        boolSlot.UpdateAction = context => { boolSlot.Value = curve.GetSampledValue(context.LocalTime) > 0.5f; };
+                        boolSlot.OverrideWithAnimationAction(context => { boolSlot.Value = curve.GetSampledValue(context.LocalTime) > 0.5f; });
                         boolSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
                 }
@@ -318,20 +279,20 @@ namespace T3.Core.Operator
                     var inputSlot = entries[0].inputSlot;
                     if (inputSlot is Slot<Vector2> vector2InputSlot)
                     {
-                        vector2InputSlot.UpdateAction = context =>
+                        vector2InputSlot.OverrideWithAnimationAction(context =>
                                                         {
                                                             vector2InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.LocalTime);
                                                             vector2InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.LocalTime);
-                                                        };
+                                                        });
                         vector2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
                     else if (inputSlot is Slot<Size2> size2InputSlot)
                     {
-                        size2InputSlot.UpdateAction = context =>
+                        size2InputSlot.OverrideWithAnimationAction(context =>
                                                         {
                                                             size2InputSlot.Value.Width = (int)entries[0].Value.GetSampledValue(context.LocalTime);
                                                             size2InputSlot.Value.Height = (int)entries[1].Value.GetSampledValue(context.LocalTime);
-                                                        };
+                                                        });
                         size2InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
                 }
@@ -341,22 +302,22 @@ namespace T3.Core.Operator
                     var inputSlot = entries[0].inputSlot;
                     if (inputSlot is Slot<Vector3> vector3InputSlot)
                     {
-                        vector3InputSlot.UpdateAction = context =>
+                        vector3InputSlot.OverrideWithAnimationAction(context =>
                                                         {
                                                             vector3InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.LocalTime);
                                                             vector3InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.LocalTime);
                                                             vector3InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.LocalTime);
-                                                        };
+                                                        });
                         vector3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
                     else if (inputSlot is Slot<Int3> int3InputSlot)
                     {
-                        int3InputSlot.UpdateAction = context =>
+                        int3InputSlot.OverrideWithAnimationAction(context =>
                                                         {
                                                             int3InputSlot.Value.X = (int)entries[0].Value.GetSampledValue(context.LocalTime);
                                                             int3InputSlot.Value.Y = (int)entries[1].Value.GetSampledValue(context.LocalTime);
                                                             int3InputSlot.Value.Z = (int)entries[2].Value.GetSampledValue(context.LocalTime);
-                                                        };
+                                                        });
                         int3InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
                 }
@@ -366,13 +327,13 @@ namespace T3.Core.Operator
                     var inputSlot = entries[0].inputSlot;
                     if (inputSlot is Slot<Vector4> vector4InputSlot)
                     {
-                        vector4InputSlot.UpdateAction = context =>
+                        vector4InputSlot.OverrideWithAnimationAction(context =>
                                                         {
                                                             vector4InputSlot.Value.X = (float)entries[0].Value.GetSampledValue(context.LocalTime);
                                                             vector4InputSlot.Value.Y = (float)entries[1].Value.GetSampledValue(context.LocalTime);
                                                             vector4InputSlot.Value.Z = (float)entries[2].Value.GetSampledValue(context.LocalTime);
                                                             vector4InputSlot.Value.W = (float)entries[3].Value.GetSampledValue(context.LocalTime);
-                                                        };
+                                                        });
                         vector4InputSlot.DirtyFlag.Trigger |= DirtyFlagTrigger.Animated;
                     }
                 }

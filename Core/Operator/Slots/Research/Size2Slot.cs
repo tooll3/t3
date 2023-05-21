@@ -7,13 +7,13 @@ namespace T3.Core.Operator.Slots.Research
         public Size2Slot(Size2 defaultValue) : base(defaultValue)
         {
             UpdateAction = Update;
-            _keepBypassedUpdateAction = UpdateAction;
+            _keepOriginalUpdateAction = UpdateAction;
         }
 
         public Size2Slot(InputValue<Size2> typedInputValue) : base(typedInputValue)
         {
             UpdateAction = Update;
-            _keepBypassedUpdateAction = UpdateAction;
+            _keepOriginalUpdateAction = UpdateAction;
         }
 
         public new void Update(EvaluationContext context)

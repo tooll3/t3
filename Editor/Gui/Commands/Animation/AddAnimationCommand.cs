@@ -18,7 +18,7 @@ namespace T3.Editor.Gui.Commands.Animation
         public void Do()
         {
             _wasDefault = _inputSlot.Input.IsDefault; 
-            _animator.CreateInputUpdateAction(_inputSlot); 
+            _animator.AddAnimationToInput(_inputSlot); 
             _inputSlot.Parent.Parent.Symbol.CreateOrUpdateActionsForAnimatedChildren();
         }
         
