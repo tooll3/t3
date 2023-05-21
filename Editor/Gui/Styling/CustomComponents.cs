@@ -4,7 +4,6 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
-using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;

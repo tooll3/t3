@@ -1,5 +1,4 @@
-﻿using ImGuiNET;
-using T3.Editor.Gui.Graph;
+﻿using T3.Editor.Gui.Graph;
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.Logging;

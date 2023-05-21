@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Logging;
-using T3.Core.SystemUi;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.SystemUi;

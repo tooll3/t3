@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
-using T3.Editor.Gui.Interaction.WithCurves;
 using T3.Editor.Gui.Windows.TimeLine;
 
 namespace T3.Editor.Gui.Commands.Animation

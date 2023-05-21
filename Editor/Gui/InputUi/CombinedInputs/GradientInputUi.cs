@@ -1,10 +1,7 @@
 ﻿using System.Numerics;
-using System.Runtime.Serialization;
 using ImGuiNET;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs
