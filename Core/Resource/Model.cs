@@ -7,10 +7,8 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Core.Operator.Slots;
 using T3.Core.Stats;
 
 // ReSharper disable RedundantNameQualifier
