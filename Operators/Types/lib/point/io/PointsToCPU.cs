@@ -21,13 +21,13 @@ namespace T3.Operators.Types.Id_a5f4552f_7e25_43a5_bb14_21ab836fa0b3
         {
             Output.UpdateAction = Update;
         }
-
         
         private void Update(EvaluationContext context)
         {
+            var updateContinuously = UpdateContinuously.GetValue(context);
+            
             try
             {
-
                 var wasTriggered = MathUtils.WasTriggered(TriggerUpdate.GetValue(context), ref _triggerUpdate);
                 var pointBuffer = PointBuffer.GetValue(context);
 
@@ -41,6 +41,7 @@ namespace T3.Operators.Types.Id_a5f4552f_7e25_43a5_bb14_21ab836fa0b3
                 var immediateContext = d3DDevice.ImmediateContext;
 
                 if (wasTriggered
+                    || updateContinuously
                     || _bufferWithViewsCpuAccess == null
                     || _bufferWithViewsCpuAccess.Buffer == null
                     || _bufferWithViewsCpuAccess.Buffer.Description.SizeInBytes != pointBuffer.Buffer.Description.SizeInBytes
@@ -93,7 +94,7 @@ namespace T3.Operators.Types.Id_a5f4552f_7e25_43a5_bb14_21ab836fa0b3
                     
                     var points = sourceStream.ReadRange<Point>(elementCount);
                     
-                    Log.Debug($"Read {points.Length} elements");
+                    //Log.Debug($"Read {points.Length} elements");
                     Output.Value = new StructuredList<Point>(points);
                 }
 
@@ -114,5 +115,10 @@ namespace T3.Operators.Types.Id_a5f4552f_7e25_43a5_bb14_21ab836fa0b3
         
         [Input(Guid = "EFF239DA-39E9-41D3-968B-C74723EC2545")]
         public readonly InputSlot<bool> TriggerUpdate = new();
+        
+        [Input(Guid = "77EE7CA9-A2DB-4DE9-BB9C-21EC4F1BBEAF")]
+        public readonly InputSlot<bool> UpdateContinuously = new();
+
+        
     }
 }
