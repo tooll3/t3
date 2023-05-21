@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using T3.Core.Operator;
 using T3.Core.Utils;
+using T3.SystemUi.Logging;
 
 namespace T3.Core.Logging
 {
@@ -34,39 +33,39 @@ namespace T3.Core.Logging
 
         public static void Debug(string message, params object[] args)
         {
-            ProcessAndLog(LogEntry.EntryLevel.Debug, message, args);
+            ProcessAndLog(ILogEntry.EntryLevel.Debug, message, args);
         }        
         
         public static void Info(string message, params object[] args)
         {
-            ProcessAndLog(LogEntry.EntryLevel.Info, message, args);
+            ProcessAndLog(ILogEntry.EntryLevel.Info, message, args);
         }  
         
         public static void Warning(string message, params object[] args)
         {
-            ProcessAndLog(LogEntry.EntryLevel.Warning, message, args);
+            ProcessAndLog(ILogEntry.EntryLevel.Warning, message, args);
         }  
         
         public static void Error(string message, params object[] args)
         {
-            ProcessAndLog(LogEntry.EntryLevel.Error, message, args);
+            ProcessAndLog(ILogEntry.EntryLevel.Error, message, args);
         }
         
         public static void Assert(string message)
         {
-            DoLog(new LogEntry(LogEntry.EntryLevel.Warning, message));
+            DoLog(new LogEntry(ILogEntry.EntryLevel.Warning, message));
         }
         
         public static void Assert(string message, Guid sourceId)
         {
-            DoLog(new LogEntry(LogEntry.EntryLevel.Warning, message, sourceId));
+            DoLog(new LogEntry(ILogEntry.EntryLevel.Warning, message, sourceId));
         }
 
         
         /// <summary>
         /// A helper function to unite different method API 
         /// </summary>
-        private static void ProcessAndLog(LogEntry.EntryLevel level, string message, object[] args)
+        private static void ProcessAndLog(ILogEntry.EntryLevel level, string message, object[] args)
         {
             switch (args)
             {
@@ -102,7 +101,7 @@ namespace T3.Core.Logging
             }
             catch (FormatException)
             {
-                DoLog(new LogEntry(LogEntry.EntryLevel.Info, "Ignoring arguments mal-formatted debug message. Did you mess with curly braces?"));
+                DoLog(new LogEntry(ILogEntry.EntryLevel.Info, "Ignoring arguments mal-formatted debug message. Did you mess with curly braces?"));
             }
             return messageString;
         }

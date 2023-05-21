@@ -1,7 +1,8 @@
-using System.Collections.Generic;
 using System.Windows.Forms;
+using T3.Core.SystemUi;
+using T3.SystemUi;
 
-namespace T3.Core.SystemUi;
+namespace T3.MSWindows;
 
 public class MsForms : ICoreSystemUiService
 {
@@ -35,7 +36,7 @@ public class MsForms : ICoreSystemUiService
         Application.ExitThread();
     }
 
-    protected static readonly Dictionary<PopUpButtons, MessageBoxButtons> ButtonEnumConversion =
+    private static readonly Dictionary<PopUpButtons, MessageBoxButtons> ButtonEnumConversion =
         new()
             {
                 { PopUpButtons.Ok, MessageBoxButtons.OK },

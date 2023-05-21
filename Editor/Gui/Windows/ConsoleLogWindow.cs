@@ -12,6 +12,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
+using T3.SystemUi.Logging;
 
 namespace T3.Editor.Gui.Windows
 {
@@ -27,7 +28,7 @@ namespace T3.Editor.Gui.Windows
             Config.Visible = true;
         }
 
-        private readonly List<LogEntry> _filteredEntries = new(1000);
+        private readonly List<ILogEntry> _filteredEntries = new(1000);
 
         protected override void DrawContent()
         {
@@ -138,7 +139,7 @@ namespace T3.Editor.Gui.Windows
 
         private static double _lastLimeTime;
 
-        public static void DrawEntry(LogEntry entry)
+        public static void DrawEntry(ILogEntry entry)
         {
             var entryLevel = entry.Level;
 
@@ -217,7 +218,7 @@ namespace T3.Editor.Gui.Windows
             }
         }
 
-        public static Color GetColorForLogLevel(LogEntry.EntryLevel entryLevel)
+        public static Color GetColorForLogLevel(ILogEntry.EntryLevel entryLevel)
         {
             return _colorForLogLevel.TryGetValue(entryLevel, out var color)
                        ? color
@@ -240,18 +241,18 @@ namespace T3.Editor.Gui.Windows
             return lineRect.Contains(ImGui.GetMousePos());
         }
 
-        private static readonly Dictionary<LogEntry.EntryLevel, Color> _colorForLogLevel = new Dictionary<LogEntry.EntryLevel, Color>()
+        private static readonly Dictionary<ILogEntry.EntryLevel, Color> _colorForLogLevel = new Dictionary<ILogEntry.EntryLevel, Color>()
                                                                                                {
-                                                                                                   { LogEntry.EntryLevel.Debug, new Color(1, 1, 1, 0.6f) },
-                                                                                                   { LogEntry.EntryLevel.Info, new Color(1, 1, 1, 0.6f) },
+                                                                                                   { ILogEntry.EntryLevel.Debug, new Color(1, 1, 1, 0.6f) },
+                                                                                                   { ILogEntry.EntryLevel.Info, new Color(1, 1, 1, 0.6f) },
                                                                                                    {
-                                                                                                       LogEntry.EntryLevel.Warning,
+                                                                                                       ILogEntry.EntryLevel.Warning,
                                                                                                        new Color(1, 0.5f, 0.5f, 0.9f)
                                                                                                    },
-                                                                                                   { LogEntry.EntryLevel.Error, new Color(1, 0.2f, 0.2f, 1f) },
+                                                                                                   { ILogEntry.EntryLevel.Error, new Color(1, 0.2f, 0.2f, 1f) },
                                                                                                };
 
-        public void ProcessEntry(LogEntry entry)
+        public void ProcessEntry(ILogEntry entry)
         {
             lock (_logEntries)
             {
@@ -269,11 +270,11 @@ namespace T3.Editor.Gui.Windows
             _logEntries = null;
         }
 
-        public LogEntry.EntryLevel Filter { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public ILogEntry.EntryLevel Filter { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         private bool FilterIsActive => !string.IsNullOrEmpty(_filterString);
         private const float LinePadding = 3;
-        private List<LogEntry> _logEntries = new();
+        private List<ILogEntry> _logEntries = new();
         private bool _shouldScrollToBottom = true;
         private string _filterString = "";
         private bool _isAtBottom = true;

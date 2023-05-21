@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using T3.Core.SystemUi;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.SystemUi;
+using T3.SystemUi;
 
 namespace T3.Editor.Gui.Interaction.StartupCheck
 {

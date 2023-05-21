@@ -1,4 +1,4 @@
-namespace T3.Core.SystemUi;
+namespace T3.SystemUi;
 
 /// <summary>
 /// PopUpButtons enum, derived from System.Windows.Forms.MessageBoxButtons
