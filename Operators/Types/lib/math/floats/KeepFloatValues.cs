@@ -22,10 +22,17 @@ namespace T3.Operators.Types.Id_32a1d28e_23bc_44a8_becc_b52972464526
 
         private void Update(EvaluationContext context)
         {
+            var addValueToList = AddValueToList.GetValue(context);
             var length = BufferLength.GetValue(context).Clamp(1, 100000);
+            var newValue = Value.GetValue(context);
+
+            var reset = Reset.GetValue(context);
+            
+            if(reset)
+                _list.Clear();
+            
             try
             {
-
                 if (_list.Count != length)
                 {
                     while (_list.Count < length)
@@ -34,9 +41,8 @@ namespace T3.Operators.Types.Id_32a1d28e_23bc_44a8_becc_b52972464526
                     }
                 }
 
-                var newValue = Value.GetValue(context);
-                _list.Insert(0, newValue);
-                
+                if (addValueToList)
+                    _list.Insert(0, newValue);
                 
                 if (_list.Count > length)
                 {
@@ -57,11 +63,15 @@ namespace T3.Operators.Types.Id_32a1d28e_23bc_44a8_becc_b52972464526
         [Input(Guid = "A5ED1DB1-2DC9-43B2-97C3-CD416D07089B")]
         public readonly InputSlot<float> Value = new();
         
+        [Input(Guid = "C84AA4CF-CE04-43E2-8D88-4CE3B8A7155E")]
+        public readonly InputSlot<bool> AddValueToList = new();
+        
         [Input(Guid = "519133D3-0440-4C8A-8BC8-75AA17219AD5")]
         public readonly InputSlot<int> BufferLength = new();
-        
+
         [Input(Guid = "D11E3F87-ECFA-44B9-8672-96562685CDCE")]
         public readonly InputSlot<bool> Reset = new();
 
+        
     }
 }
