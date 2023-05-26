@@ -66,6 +66,13 @@ namespace T3.Editor.Gui.Windows
                                                   "If enabled, scrolling the mouse wheel while holding left of right mouse button will control navigation speed with WASD keys. This is similar to Unity and Unreal.",
                                                   UserSettings.Defaults.AdjustCameraSpeedWithMouseWheel);
                 
+                changed |= FormInputs.AddCheckBox("Editing values with mousewheel needs CTRL key",
+                                                  ref UserSettings.Config.MouseWheelEditsNeedCtrlKey,
+                                                  "In parameter window you can edit numeric values by using the mouse wheel. This setting will prevent accidental modifications while scrolling because by using ctrl key for activation.",
+                                                  UserSettings.Defaults.AdjustCameraSpeedWithMouseWheel);
+                
+                
+                
                 FormInputs.ResetIndent();
                 FormInputs.AddVerticalSpace();
                 //ImGui.Dummy(new Vector2(20,20));
