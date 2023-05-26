@@ -43,6 +43,9 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             if (ConnectionMaker.TempConnections == null || ConnectionMaker.TempConnections.Count == 0)
                 return;
 
+            if (T3Ui.IsAnyPopupOpen)
+                return;
+            
             if (ConnectionMaker.TempConnections.All(c => c.ConnectionType != inputUi.Type))
                 return;
 
@@ -68,6 +71,9 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             if (ConnectionMaker.TempConnections == null || ConnectionMaker.TempConnections.Count == 0)
                 return;
 
+            if (!string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName))
+                return;
+            
             if (ConnectionMaker.TempConnections.All(c => c.ConnectionType != outputUi.Type))
                 return;
 
