@@ -88,6 +88,7 @@ namespace T3.Editor.Gui.Interaction
             var showBrightnessSlider = ImGui.IsMouseDragging(ImGuiMouseButton.Right) && ImGui.GetID(string.Empty) == _rightClickedItemId;
             if (showBrightnessSlider)
             {
+                FrameStats.Current.OpenedPopUpName = "ColorBrightnessSlider";
                 var hsb = new Color(color).AsHsl;
                 var previousHsb = new Color(_previousColor).AsHsl;
 
