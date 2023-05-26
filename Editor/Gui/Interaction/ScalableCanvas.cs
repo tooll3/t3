@@ -407,11 +407,10 @@ namespace T3.Editor.Gui.Interaction
                 UserScrolledCanvas = false;
             }
 
-            if ((flags & T3Ui.EditingFlags.PreventZoomWithMouseWheel) == 0)
+            if ((flags & T3Ui.EditingFlags.PreventZoomWithMouseWheel) == 0
+                && !ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup))
             {
                 ZoomWithMouseWheel(_mouse);
-                //ZoomWithMiddleMouseDrag();
-
                 ScaleTarget = ClampScaleToValidRange(ScaleTarget);
             }
         }
