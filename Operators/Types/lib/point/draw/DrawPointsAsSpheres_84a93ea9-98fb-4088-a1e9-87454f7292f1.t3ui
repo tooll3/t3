@@ -241,7 +241,7 @@
       "ChildId": "27295b17-c9f0-4d77-a191-60fb1cb94279"/*MultiplyInt*/,
       "Size": {
         "X": 110.0,
-        "Y": 36.0
+        "Y": 49.0
       },
       "Position": {
         "X": 1909.7183,
@@ -389,6 +389,28 @@
       "Position": {
         "X": 1079.0012,
         "Y": 4034.0288
+      }
+    },
+    {
+      "ChildId": "a247f2e4-a675-456b-b457-fdc8897fdbe7"/*BlendColors*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
+      "Position": {
+        "X": 1093.8691,
+        "Y": 3527.1763
+      }
+    },
+    {
+      "ChildId": "ed1cba1c-c3e6-4f9f-97fe-c4d23c8576a5"/*GetForegroundColor*/,
+      "Size": {
+        "X": 110.0,
+        "Y": 23.0
+      },
+      "Position": {
+        "X": 969.64435,
+        "Y": 3593.1187
       }
     }
   ],
