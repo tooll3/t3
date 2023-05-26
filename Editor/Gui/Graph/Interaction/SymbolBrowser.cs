@@ -74,7 +74,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 return;
             }
 
-            T3Ui.OpenedPopUpName = "SymbolBrowser";
+            FrameStats.Current.OpenedPopUpName = "SymbolBrowser";
 
             _filter.UpdateIfNecessary();
 

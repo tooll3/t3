@@ -434,6 +434,10 @@ namespace T3.Editor.Gui.Graph
                     break;
 
                 case SelectionFence.States.CompletedAsClick:
+                    // A hack to prevent clearing selection when opening parameter popup
+                    if (ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup))
+                        break;
+                    
                     NodeSelection.Clear();
                     NodeSelection.SetSelectionToParent(CompositionOp);
                     break;
@@ -594,7 +598,7 @@ namespace T3.Editor.Gui.Graph
 
         private void DrawContextMenu()
         {
-            if (T3Ui.OpenedPopUpName == string.Empty)
+            if (FrameStats.Current.OpenedPopUpName == string.Empty)
             {
                 CustomComponents.DrawContextMenuForScrollCanvas(DrawContextMenuContent, ref _contextMenuIsOpen);
             }

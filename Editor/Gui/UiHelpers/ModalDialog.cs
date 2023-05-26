@@ -57,7 +57,7 @@ namespace T3.Editor.Gui.UiHelpers
                 return false;
             
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, ItemSpacing);
-            T3Ui.OpenedPopUpName = title;
+            FrameStats.Current.OpenedPopUpName = title;
             return true;
         }
 

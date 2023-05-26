@@ -325,7 +325,7 @@ namespace T3.Editor.Gui.Windows.Variations
 
         private void DrawContextMenu()
         {
-            if (T3Ui.OpenedPopUpName == string.Empty)
+            if (FrameStats.Current.OpenedPopUpName == string.Empty)
             {
                 CustomComponents.DrawContextMenuForScrollCanvas(() =>
                                                                 {

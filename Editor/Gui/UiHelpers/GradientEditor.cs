@@ -245,7 +245,7 @@ namespace T3.Editor.Gui.UiHelpers
                     && ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length() < UserSettings.Config.ClickThreshold
                     && !ImGui.IsPopupOpen("##colorEdit"))
                 {
-                    T3Ui.OpenedPopUpName = "##colorEdit";
+                    FrameStats.Current.OpenedPopUpName = "##colorEdit";
                     ImGui.OpenPopup("##colorEdit");
                     ImGui.SetNextWindowPos(new Vector2(handleArea.Min.X, handleArea.Max.Y));
                 }

@@ -31,7 +31,7 @@ namespace T3.Editor.Gui.Graph
                     && !ImGui.IsAnyItemActive() 
                     && !ImGui.IsAnyItemFocused() 
                     && (renameTriggered || ImGui.IsKeyPressed((ImGuiKey)Key.Return))
-                    && string.IsNullOrEmpty(T3Ui.OpenedPopUpName))
+                    && string.IsNullOrEmpty(FrameStats.Current.OpenedPopUpName))
                 {
                     var selectedInstances = NodeSelection.GetSelectedNodes<SymbolChildUi>().ToList();
                     if (_nextFocusedInstanceId != Guid.Empty)

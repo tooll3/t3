@@ -74,10 +74,7 @@ namespace T3.Editor.Gui
             
             AudioEngine.CompleteFrame(Playback.Current);    // Update
             
-
-
             AutoBackup.AutoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
-            OpenedPopUpName = string.Empty;
 
             VariationHandling.Update();
             MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
@@ -407,8 +404,6 @@ namespace T3.Editor.Gui
         private readonly StatusErrorLine _statusErrorLine = new();
         public static readonly UiModel UiModel;
 
-        public static string OpenedPopUpName; // This is reset on Frame start and can be useful for allow context menu to stay open even if a
-        // later context menu would also be opened. There is probably some ImGui magic to do this probably. 
 
         public static IntPtr NotDroppingPointer = new IntPtr(0);
         public static bool DraggingIsInProgress = false;
@@ -419,13 +414,13 @@ namespace T3.Editor.Gui
         public static bool IsCurrentlySaving => _saveStopwatch != null && _saveStopwatch.IsRunning;
         public static float UiScaleFactor { get; set; } = 1;
         public static float DisplayScaleFactor { get; set; } = 1;
+        public static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
 
         //private static readonly AutoBackup.AutoBackup _autoBackup = new();
         
         private static readonly CreateFromTemplateDialog _createFromTemplateDialog = new();
         private static readonly UserNameDialog _userNameDialog = new();
         private static readonly MigrateOperatorsDialog _importDialog = new();
-
         public static readonly BpmDetection _bpmDetection = new ();
 
         [Flags]

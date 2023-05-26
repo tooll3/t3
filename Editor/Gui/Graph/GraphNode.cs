@@ -263,7 +263,7 @@ namespace T3.Editor.Gui.Graph
 
                     if ((activatedWithLeftMouse || activatedWithMiddleMouse)
                         && !justOpenedChild
-                        && string.IsNullOrEmpty(T3Ui.OpenedPopUpName)
+                        && string.IsNullOrEmpty(FrameStats.Current.OpenedPopUpName)
                         && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp) == 0)
                     {
                         NodeSelection.SetSelectionToChildUi(childUi, instance);

@@ -30,7 +30,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 return;
             }
 
-            T3Ui.OpenedPopUpName = PlaybackSettingsPopupId;
+            FrameStats.Current.OpenedPopUpName = PlaybackSettingsPopupId;
             FrameStats.Current.IsItemContextMenuOpen = true;
 
             ImGui.PushFont(Fonts.FontLarge);
