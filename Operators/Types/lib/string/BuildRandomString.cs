@@ -61,6 +61,34 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
 
             try
             {
+                var scrambleRatio = ScrambleRatio.GetValue(context);
+
+                var scrambleEnabled = Scramble.GetValue(context);
+                if (scrambleRatio > 0 && scrambleEnabled)
+                {
+                    for (int index = 0; index < stringBuilder.Length; index++)
+                    {
+                        var hash = (float)((double)MathUtils.XxHash((uint)index + (uint)scrambleSeed * 123127) / uint.MaxValue);
+                        if (hash < scrambleRatio)
+                        {
+                            var scrambleChunkEnd = index + hash * stringBuilder.Length + 1;
+                            while (index < stringBuilder.Length && index < scrambleChunkEnd)
+                            {
+                                var c = stringBuilder[index];
+                                if (c != '\n')
+                                {
+                                    if (c == 32)
+                                        c = (char)90;
+
+                                    c= (char)(c-1);
+                                    stringBuilder[index] = c;
+                                }
+                                index++;
+                            }
+                        }
+                    }
+                }
+                
                 if (Insert.GetValue(context))
                 {
                     if (JumpToRandomPos.GetValue(context))
@@ -101,36 +129,7 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
                     InsertLineWraps(lineWrap, stringBuilder, pos, insertLength, WrapLineColumn.GetValue(context).Clamp(1,1000));
 
                     
-                    var scrambleRatio = ScrambleRatio.GetValue(context);
-
-                    var scrambleEnabled = Scramble.GetValue(context);
-                    if (scrambleRatio > 0 && scrambleEnabled)
-                    {
-                        
-                        
-                        for (int index = 0; index < stringBuilder.Length; index++)
-                        {
-                            var hash = (float)((double)MathUtils.XxHash((uint)index + (uint)scrambleSeed * 123127) / uint.MaxValue);
-                            if (hash < scrambleRatio)
-                            {
-                                var scrambleChunkEnd = index + hash * stringBuilder.Length + 1;
-                                while (index < stringBuilder.Length && index < scrambleChunkEnd)
-                                {
-                                    var c = stringBuilder[index];
-                                    if (c != '\n')
-                                    {
-                                        if (c == 32)
-                                            c = (char)90;
-
-                                        c= (char)(c-1);
-                                        stringBuilder[index] = c;
-                                    }
-                                    index++;
-                                }
-                            }
-                        }
-                    }
-
+                    
                     switch (mode)
                     {
                         case Modes.Insert:
@@ -168,6 +167,8 @@ namespace T3.Operators.Types.Id_7b21f10b_3548_4a23_95df_360addaeb03d
                         stringBuilder.Length = maxLength;
                     
                 }
+                
+                
             }
             catch (Exception e)
             {
