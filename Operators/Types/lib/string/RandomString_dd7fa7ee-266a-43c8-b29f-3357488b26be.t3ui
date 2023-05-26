@@ -20,10 +20,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "3af5dc6c-89f4-44b0-8c89-13b006d318cb"/*MockStrings*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 150.0,
         "Y": 0.0
@@ -31,10 +27,6 @@
     },
     {
       "ChildId": "9a2ba5ae-1660-48d2-bc58-a9a97f575741"/*PickStringPart*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 300.0,
         "Y": 0.0
@@ -42,10 +34,6 @@
     },
     {
       "ChildId": "5f0f0745-cb7f-4191-92c8-c1cd062dcfae"/*Counter*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -0.19548035,
         "Y": 85.84247
@@ -53,10 +41,6 @@
     },
     {
       "ChildId": "d49a1aed-efe6-48b7-a6e7-8c2d3f4db751"/*FloatToInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 150.0,
         "Y": 56.0

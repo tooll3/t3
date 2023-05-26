@@ -60,10 +60,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "47b9d823-abc9-4915-bf2b-9f523477e080"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 122.01576,
         "Y": 552.8011
@@ -71,10 +67,6 @@
     },
     {
       "ChildId": "679dff61-1551-4fb8-8936-fc5852f003d2"/*ComputeShaderStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 127.0
-      },
       "Position": {
         "X": 471.04163,
         "Y": 587.7994
@@ -94,10 +86,6 @@
     },
     {
       "ChildId": "4f15ef13-4d85-40c1-a9d4-cd58e6f43a51"/*ExecuteBufferUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 641.2465,
         "Y": 646.7957
@@ -105,10 +93,6 @@
     },
     {
       "ChildId": "941ce9b7-d4da-42f7-a34a-966453db9c50"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 273.14893,
         "Y": 590.2168
@@ -116,10 +100,6 @@
     },
     {
       "ChildId": "e7bca03d-a5d1-485f-a9cc-27654b1be4de"/*StructuredBuffer2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 77.5927,
         "Y": 799.58417
@@ -127,10 +107,6 @@
     },
     {
       "ChildId": "7b7029cf-8853-46a5-bb0b-b3f6d19d1f78"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -213.77097,
         "Y": 700.4401
@@ -138,10 +114,6 @@
     },
     {
       "ChildId": "c28149ce-aa09-4c42-ad20-603a4d876f15"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 273.14893,
         "Y": 659.2168
@@ -149,10 +121,6 @@
     },
     {
       "ChildId": "0dc76d3b-7e60-459d-abe0-779d5d0dcd9e"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -47.369926,
         "Y": 908.67883
@@ -160,10 +128,6 @@
     },
     {
       "ChildId": "4038f156-f640-4850-83ee-c589c08b820f"/*ClampInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -182.01859,
         "Y": 759.8851
@@ -171,10 +135,6 @@
     },
     {
       "ChildId": "e1b685cc-0bd6-4dce-9727-45c8a14a473a"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -46.684986,
         "Y": 1006.406

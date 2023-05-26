@@ -65,10 +65,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "523b7aec-d6f1-4982-8e10-02da1c410d89"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -25.117218,
         "Y": 79.04767
@@ -88,10 +84,6 @@
     },
     {
       "ChildId": "a6a5cc16-8a4b-40cb-9f5a-6f4f161d168c"/*GradientsToTexture*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 42.83197,
         "Y": 415.25153
@@ -99,10 +91,6 @@
     },
     {
       "ChildId": "14682724-90f1-4596-8c32-ee64c0208f08"/*BoolToInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 574.0718,
         "Y": 555.30414

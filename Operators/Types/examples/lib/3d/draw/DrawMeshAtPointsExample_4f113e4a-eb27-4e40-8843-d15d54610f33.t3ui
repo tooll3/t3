@@ -5,10 +5,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "ec957247-0313-4679-b495-e18eb64aa71e"/*DrawMeshAtPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 257.3291,
         "Y": 67.248535
@@ -16,10 +12,6 @@
     },
     {
       "ChildId": "264e9fd5-ce72-470a-9d2c-8bfe31a60a17"/*TorusMesh*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -42.6709,
         "Y": 130.24854
@@ -27,10 +19,6 @@
     },
     {
       "ChildId": "e5315f37-a88a-479a-88c3-f00f1e32affd"/*RadialPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 107.3291,
         "Y": 67.248535
@@ -38,10 +26,6 @@
     },
     {
       "ChildId": "6a98b9c4-e2f0-46a4-9640-35e95e56a603"/*TransformMesh*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 107.3291,
         "Y": 130.24854
@@ -49,10 +33,6 @@
     },
     {
       "ChildId": "9f0b44c9-4cb7-4a57-a128-dc5224d5ffb4"/*OscillateVec3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -42.6709,
         "Y": 67.248535
@@ -60,10 +40,6 @@
     },
     {
       "ChildId": "d48cb405-e06e-4cc2-89ca-17f3ae0885f3"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 420.6748,
         "Y": 22.717285
@@ -71,10 +47,6 @@
     },
     {
       "ChildId": "aacdecb6-5db8-434c-8a1a-cf02e728b129"/*VisualizePoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 257.3291,
         "Y": -1.7514648
@@ -82,10 +54,6 @@
     },
     {
       "ChildId": "000a42bd-1658-44f9-811e-9a471e2786f0"/*RenderTarget*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 720.6748,
         "Y": 42.02365
@@ -93,10 +61,6 @@
     },
     {
       "ChildId": "6906d1df-5cf6-4f75-9175-aea46a969dd9"/*SetFog*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 570.6748,
         "Y": 22.717285

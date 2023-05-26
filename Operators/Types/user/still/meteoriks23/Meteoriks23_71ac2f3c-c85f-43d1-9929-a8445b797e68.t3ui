@@ -5,10 +5,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "cb230429-fdaf-456f-851f-7834ba965762"/*MeteoriksEdit01*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 2116.356,
         "Y": 751.85864
@@ -16,10 +12,6 @@
     },
     {
       "ChildId": "7f3680cb-c3fb-48f8-bbee-bd63b3542610"/*MeteoriksEdit02*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 2133.7017,
         "Y": 1004.5006

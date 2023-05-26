@@ -71,10 +71,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "3a6caa14-06fe-428b-ba61-33f910f4869c"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -25.082056,
         "Y": 29.952059
@@ -82,10 +78,6 @@
     },
     {
       "ChildId": "f7d47c1b-cc8e-492f-a12b-d608406ba557"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -25.082056,
         "Y": 74.952194
@@ -105,10 +97,6 @@
     },
     {
       "ChildId": "b1a93100-d55f-41e8-8201-5a1b0e93235c"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -45.57954,
         "Y": 253.93704
@@ -116,10 +104,6 @@
     },
     {
       "ChildId": "c2dc66ce-c73f-4a7e-a449-e111791e8688"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -25.082056,
         "Y": 130.9522

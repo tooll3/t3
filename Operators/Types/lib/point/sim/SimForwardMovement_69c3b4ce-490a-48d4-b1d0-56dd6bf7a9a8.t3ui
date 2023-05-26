@@ -36,10 +36,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "88bb9f9a-2372-4146-87e6-fdd79020749a"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 61.013245,
         "Y": 301.01743
@@ -47,10 +43,6 @@
     },
     {
       "ChildId": "1e1042c2-096e-4830-b516-524737a97307"/*ComputeShaderStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 101.0
-      },
       "Position": {
         "X": 483.2537,
         "Y": 316.74768
@@ -70,10 +62,6 @@
     },
     {
       "ChildId": "47474927-19ae-4c3f-b6df-38fa535c1e64"/*GetSRVProperties*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 64.20232,
         "Y": 381.3481
@@ -81,10 +69,6 @@
     },
     {
       "ChildId": "e9b718af-96d7-40aa-af64-2ec1f9a591ac"/*ExecuteBufferUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 835.0588,
         "Y": 341.18228
@@ -92,10 +76,6 @@
     },
     {
       "ChildId": "c8ee93cc-f01c-4fab-b407-274c72d3f388"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 258.8332,
         "Y": 349.5899
@@ -103,10 +83,6 @@
     },
     {
       "ChildId": "999dd83c-deb8-435a-b581-6aed8687309f"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -92.42416,
         "Y": 444.56506
@@ -114,10 +90,6 @@
     },
     {
       "ChildId": "f4140bfe-485a-4d76-b1c1-b23459e2a0aa"/*Time*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -62.457672,
         "Y": 883.2104
@@ -125,10 +97,6 @@
     },
     {
       "ChildId": "bbd99c67-1cc8-493a-8c45-aa1f944d1d6d"/*HasValueIncreased*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 87.54233,
         "Y": 883.2104
@@ -136,10 +104,6 @@
     },
     {
       "ChildId": "da0fc2e1-4698-475d-8448-2cb4679ad14a"/*And*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 237.54233,
         "Y": 883.2104

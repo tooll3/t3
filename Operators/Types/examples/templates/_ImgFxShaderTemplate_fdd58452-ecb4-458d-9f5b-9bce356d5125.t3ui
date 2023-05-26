@@ -61,10 +61,6 @@
     },
     {
       "ChildId": "bcd266c6-ab5f-43ee-8297-deaf9ffc14bd"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 315.8498,
         "Y": 163.31819

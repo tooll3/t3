@@ -115,10 +115,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "de66c2b3-8e69-4534-bdbe-5f756169a7ad"/*Vector2ToFloat2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -46.264427,
         "Y": 43.813797
@@ -126,10 +122,6 @@
     },
     {
       "ChildId": "6e9cfe0c-c7ea-45d6-8b35-140208425b6c"/*GradientsToTexture*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": -38.132706,
         "Y": -48.742477
@@ -137,10 +129,6 @@
     },
     {
       "ChildId": "693baad7-d351-44de-af5c-cd0212003e35"/*BoolToFloats*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -3.5769958,
         "Y": 266.08337
@@ -148,10 +136,6 @@
     },
     {
       "ChildId": "67faeb1c-65dc-4b2c-9a33-2c99f979dfc3"/*BoolToFloats*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -3.5769958,
         "Y": 322.08337
@@ -159,10 +143,6 @@
     },
     {
       "ChildId": "6f71bad8-200a-4638-a8d5-e9966f6820a3"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -30.29837,
         "Y": 643.6305
@@ -170,10 +150,6 @@
     },
     {
       "ChildId": "58c8c801-c758-41dc-bc6d-52a901b0583a"/*_multiImageFxSetupStatic*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 218.0
-      },
       "Position": {
         "X": 259.04932,
         "Y": 96.50137
@@ -181,10 +157,6 @@
     },
     {
       "ChildId": "3cf139ae-0d71-4a68-bb75-2276154b988a"/*PickFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": 45.691803,
         "Y": 727.37524
@@ -192,10 +164,6 @@
     },
     {
       "ChildId": "3c0c9eae-d119-4fbc-96d0-154cce0b8989"/*Multiply*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": -102.627594,
         "Y": 859.9049
@@ -203,10 +171,6 @@
     },
     {
       "ChildId": "622d64d8-d845-47a9-a87f-31be42832aa6"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -132.10107,
         "Y": 990.65155

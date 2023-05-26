@@ -53,10 +53,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "d337499a-e4f4-487c-a699-09a72316b8e3"/*KeepFloatValues*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 21.056793,
         "Y": 142.63365
@@ -64,10 +60,6 @@
     },
     {
       "ChildId": "109651f5-81aa-4000-adbc-19c844344c1b"/*ValuesToTexture*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 149.99998,
         "Y": 56.0
@@ -75,10 +67,6 @@
     },
     {
       "ChildId": "a44ac1eb-1394-44b9-bc88-df21a8278d51"/*DrawLines*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 450.0,
         "Y": 0.0
@@ -86,10 +74,6 @@
     },
     {
       "ChildId": "9aed5db3-e4b3-4cd8-b46a-03ace7d7c343"/*LinePoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 149.99998,
         "Y": 0.0
@@ -97,10 +81,6 @@
     },
     {
       "ChildId": "d8e88e64-14e0-4319-821c-bbe76bc54d8c"/*LinearSamplePointAttributes*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 300.0,
         "Y": 0.0
@@ -108,10 +88,6 @@
     },
     {
       "ChildId": "f3adab7c-2ff8-431a-a4e2-ac1f854f704c"/*Group*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": 660.12573,
         "Y": 1.9402771
@@ -119,10 +95,6 @@
     },
     {
       "ChildId": "901b84fd-a2d6-4729-9429-e12669b06594"/*Text*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 497.84668,
         "Y": 209.03596
@@ -130,10 +102,6 @@
     },
     {
       "ChildId": "d03f8aeb-f6a5-4387-b215-e60ab6272a35"/*Remap*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": -128.9432,
         "Y": 142.63365
@@ -141,10 +109,6 @@
     },
     {
       "ChildId": "340f504b-b741-4269-843f-83faf09d0b60"/*FloatToString*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 104.189514,
         "Y": 298.0761
@@ -152,10 +116,6 @@
     },
     {
       "ChildId": "d92699aa-309d-4b00-94ca-ddd0f836fc14"/*CombineStrings*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 347.84668,
         "Y": 209.03596

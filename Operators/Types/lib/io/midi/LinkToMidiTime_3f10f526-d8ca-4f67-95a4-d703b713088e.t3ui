@@ -20,10 +20,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "1b8b830f-07ce-4b99-bc2b-a50c05caf552"/*SetPlaybackTime*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 486.65454,
         "Y": 0.0
@@ -31,10 +27,6 @@
     },
     {
       "ChildId": "dacc71d9-5aab-45a5-b5c0-6e419cc3d97b"/*MidiInput/ MidiTime*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 0.0,
         "Y": 50.76364
@@ -42,10 +34,6 @@
     },
     {
       "ChildId": "8b39cc63-1c74-4833-bc66-8ab347c69ca5"/*FreezeValue*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 186.65454,
         "Y": 99.0
@@ -53,10 +41,6 @@
     },
     {
       "ChildId": "8ed9e9de-b914-45a7-8906-90b7f1205013"/*Sub*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 336.65454,
         "Y": 56.0

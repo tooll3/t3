@@ -79,14 +79,15 @@ namespace T3.Editor.Gui
                     writer.WriteComment(childUi.SymbolChild.ReadableName);
 
                     if (childUi.Style != SymbolChildUi.Styles.Default)
-                        writer.WriteObject(JsonKeys.Style, childUi.Style);
-
-                    if (childUi.Size != SymbolChildUi.DefaultOpSize)
                     {
-                        writer.WritePropertyName(JsonKeys.Size);
-                        Vector2ToJson(writer, childUi.Size);
+                        writer.WriteObject(JsonKeys.Style, childUi.Style);
+                        if (childUi.Size != SymbolChildUi.DefaultOpSize)
+                        {
+                            writer.WritePropertyName(JsonKeys.Size);
+                            Vector2ToJson(writer, childUi.Size);
+                        }
                     }
-
+                    
                     writer.WritePropertyName(JsonKeys.Position);
                     Vector2ToJson(writer, childUi.PosOnCanvas);
 
