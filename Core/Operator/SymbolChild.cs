@@ -157,6 +157,9 @@ namespace T3.Core.Operator
             if(mainInput.DefaultValue.ValueType == typeof(BufferWithViews))
                 return true;
 
+            if(mainInput.DefaultValue.ValueType == typeof(MeshBuffers))
+                return true;
+
             if(mainInput.DefaultValue.ValueType == typeof(float))
                 return true;
 
@@ -199,6 +202,16 @@ namespace T3.Core.Operator
                         break;
                     
                     case Slot<BufferWithViews> bufferOutput when mainInputSlot is Slot<BufferWithViews> bufferInput:
+                        if (shouldBypass)
+                        {
+                            wasByPassed= bufferOutput.TrySetBypassToInput(bufferInput);
+                        }
+                        else
+                        {
+                            bufferOutput.RestoreUpdateAction();
+                        }
+                        break;
+                    case Slot<MeshBuffers> bufferOutput when mainInputSlot is Slot<MeshBuffers> bufferInput:
                         if (shouldBypass)
                         {
                             wasByPassed= bufferOutput.TrySetBypassToInput(bufferInput);
