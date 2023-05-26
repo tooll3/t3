@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="ImGui.NET" Version="1.89.5" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="3.11.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.7.0-1.final" />
     <PackageReference Include="Rug.Osc" Version="1.2.5">
       <NoWarn>NU1701</NoWarn>
     </PackageReference>
