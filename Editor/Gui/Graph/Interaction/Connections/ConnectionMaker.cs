@@ -435,6 +435,17 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
         }
 
         #region related to SymbolBrowser
+
+        public static void InitSymbolBrowserOnPrimaryGraphWindow(Vector2 canvasPosition)
+        {
+            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
+            if (primaryGraphWindow == null)
+                return;
+
+            InitSymbolBrowserAtPosition(primaryGraphWindow.GraphCanvas.SymbolBrowser, canvasPosition);
+        }
+        
+        
         /// <remarks>
         /// Assumes that a temp connection has be created earlier and is now dropped on the background
         /// </remarks>

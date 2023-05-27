@@ -394,7 +394,8 @@ namespace T3.Editor.Gui.Graph
                         var connectionDroppedOnBackground = ConnectionMaker.TempConnections[0].GetStatus() != ConnectionMaker.TempConnection.Status.TargetIsDraftNode;
                         if (connectionDroppedOnBackground)
                         {
-                            ConnectionMaker.CompleteOperation();
+                            Log.Warning("Skipping complete operation on background drop?");
+                            //ConnectionMaker.CompleteOperation();
                         }
                     }
                 }
@@ -508,7 +509,7 @@ namespace T3.Editor.Gui.Graph
         }
 
         /// <remarks>
-        /// This method is completed, because it has to handle several edge cases and has potential to remove previous user data:
+        /// This method is complex, because it has to handle several edge cases and has potential to remove previous user data:
         /// - We have to preserve the previous state.
         /// - We have to make space -> Shift all connected operators towards the right.
         /// - We have to convert all existing connections from the output into temporary connections.
