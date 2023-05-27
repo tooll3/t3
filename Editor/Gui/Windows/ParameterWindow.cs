@@ -181,7 +181,7 @@ namespace T3.Editor.Gui.Windows
         
         /// <summary>
         /// Draw all parameters of the selected instance.
-        /// The actual implementation is done in <see cref="InputValueUi{T}.DrawInputEdit"/>  
+        /// The actual implementation is done in <see cref="InputValueUi{T}.DrawParameterEdit"/>  
         /// </summary>
         public static void DrawParameters(Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi,
                                           SymbolUi compositionSymbolUi)
@@ -211,7 +211,7 @@ namespace T3.Editor.Gui.Windows
                 
                 ImGui.PushID(inputSlot.Id.GetHashCode());
                 var skipIfDefault = groupState == GroupState.InsideClosed;
-                var editState = inputUi.DrawInputEdit(inputSlot, compositionSymbolUi, symbolChildUi, skipIfDefault);
+                var editState = inputUi.DrawParameterEdit(inputSlot, compositionSymbolUi, symbolChildUi, skipIfDefault);
 
                 if ((editState & InputEditStateFlags.Started) != InputEditStateFlags.Nothing)
                 {

@@ -92,7 +92,7 @@ namespace T3.Editor.Gui.InputUi
                                                                Icon.KeyframeToggleOnBoth,
                                                            };
 
-        public InputEditStateFlags DrawInputEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi, bool skipIfDefault = false)
+        public InputEditStateFlags DrawParameterEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi, bool skipIfDefault = false)
         {
             var name = inputSlot.Input.Name;
             var editState = InputEditStateFlags.Nothing;
@@ -129,6 +129,7 @@ namespace T3.Editor.Gui.InputUi
 
             return editState;
 
+            #region draw parameter types --------------------------------------------------------
             InputEditStateFlags DrawConnectedParameter()
             {
                 if (typedInputSlot.IsMultiInput)
@@ -341,7 +342,8 @@ namespace T3.Editor.Gui.InputUi
                         if (ConnectionMaker.TempConnections.Count == 0)
                         {
                             ConnectionMaker.StartFromInputSlot(compositionSymbol, symbolChildUi, InputDefinition);
-                            ConnectionMaker.InitSymbolBrowserOnPrimaryGraphWindow(symbolChildUi.PosOnCanvas + new Vector2(-SelectableNodeMovement.PaddedDefaultOpSize.X, 20));
+                            var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionSymbol, symbolChildUi, InputDefinition);
+                            ConnectionMaker.InitSymbolBrowserOnPrimaryGraphWindow(freePosition);
                         }
                     }
                     else if (IsAnimatable)
@@ -455,6 +457,7 @@ namespace T3.Editor.Gui.InputUi
                 ImGui.PopItemWidth();
                 return editState;
             }
+            #endregion
         }
 
         private static void PublishAsInput(IInputSlot inputSlot, SymbolChildUi symbolChildUi, SymbolChild.Input input)

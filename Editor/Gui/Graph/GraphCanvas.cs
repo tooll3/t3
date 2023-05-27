@@ -292,7 +292,7 @@ namespace T3.Editor.Gui.Graph
 
                 if (KeyboardBinding.Triggered(UserActions.LayoutSelection))
                 {
-                    SelectableNodeMovement.ArrangeOps();
+                    NodeGraphLayouting.ArrangeOps();
                 }
 
                 if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.AddAnnotation))
@@ -663,7 +663,7 @@ namespace T3.Editor.Gui.Graph
                                selected: false,
                                enabled: someOpsSelected))
             {
-                SelectableNodeMovement.ArrangeOps();
+                NodeGraphLayouting.ArrangeOps();
             }
             
             if (ImGui.MenuItem("Enable for snapshots",
