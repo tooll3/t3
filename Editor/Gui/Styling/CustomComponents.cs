@@ -396,6 +396,7 @@ namespace T3.Editor.Gui.Styling
 
         private static double _hoverStartTime;
 
+        // TODO: this should be merged with FormInputs.SegmentedEnumButton
         public static bool DrawSegmentedToggle(ref int currentIndex, List<string> options)
         {
             var changed = false;

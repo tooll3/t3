@@ -29,7 +29,7 @@ namespace T3.Editor.Gui.Windows.Variations
         private ViewModes _viewMode = 0;
         private int _selectedNodeCount = 0;
 
-        private void DrawWindowContent()
+        public void DrawWindowContent()
         {
             // Delete actions need be deferred to prevent collection modification during iteration
             if (_variationsToBeDeletedNextFrame.Count > 0)
