@@ -238,6 +238,7 @@ namespace T3.Editor.Gui.Graph
                 return;
             }
 
+            
             GraphBookmarkNavigation.HandleForCanvas(this);
 
             MakeCurrent();
@@ -370,7 +371,8 @@ namespace T3.Editor.Gui.Graph
 
                 T3.Editor.Gui.Graph.Graph.DrawGraph(DrawList);
                 RenameInstanceOverlay.Draw();
-                HandleFenceSelection();
+                if(!ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup))
+                    HandleFenceSelection();
 
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
                 if (isOnBackground && ImGui.IsMouseDoubleClicked(0))
