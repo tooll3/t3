@@ -64,7 +64,7 @@ namespace T3.Editor.Gui.Windows.Output
             {
                 PreventCameraInteraction = true;
                 CameraForRendering = _outputWindowViewCamera;
-                _recentlyUsedCameras = new List<Camera>();
+                _recentlyUsedCameras = new List<ICamera>();
                 return;
             }
 
@@ -82,7 +82,10 @@ namespace T3.Editor.Gui.Windows.Output
                 var isPickStillValid = false;
                 foreach (var recentCam in _recentlyUsedCameras)
                 {
-                    if (recentCam.SymbolChildId == _pickedCameraId)
+                    if (recentCam is not Instance camInstance)
+                        continue;
+                    
+                    if (camInstance.SymbolChildId == _pickedCameraId)
                     {
                         cameraForManipulation = recentCam;
                         CameraForRendering = _outputWindowViewCamera;
@@ -190,10 +193,10 @@ namespace T3.Editor.Gui.Windows.Output
                 var children = parentInstance.Children;
                 foreach (var child in children)
                 {
-                    if (child is not Camera cam2)
+                    if (child is not ICamera cam2)
                         continue;
 
-                    if (cam2.Outputs[0].DirtyFlag.FramesSinceLastUpdate > 1)
+                    if (child.Outputs[0].DirtyFlag.FramesSinceLastUpdate > 1)
                         continue;
 
                     if (_firstCamInGraph == null)
@@ -252,11 +255,9 @@ namespace T3.Editor.Gui.Windows.Output
                     _pickedCameraId = Guid.Empty;
                 }
                 CustomComponents.TooltipForLastItem("Shows the first scene camera. For manipulation select the camera operator in graph or in the list below.");
-                if (ImGui.IsItemHovered() && _firstCamInGraph != null)
-                {
-                    FrameStats.AddHoveredId(_firstCamInGraph.SymbolChildId);
-                }
-                
+                if (ImGui.IsItemHovered() && _firstCamInGraph is Instance camInstance)
+                    FrameStats.AddHoveredId(camInstance.SymbolChildId);
+
                 if (ImGui.Selectable(SceneViewerModeLabel, _controlMode == ControlModes.UseViewer))
                 {
                     _controlMode = ControlModes.UseViewer;
@@ -269,35 +270,37 @@ namespace T3.Editor.Gui.Windows.Output
                     _controlMode = ControlModes.SceneViewerFollowing;
                     _pickedCameraId = Guid.Empty;
                 }
-                if (ImGui.IsItemHovered() && _firstCamInGraph != null)
-                {
-                    FrameStats.AddHoveredId(_firstCamInGraph.SymbolChildId);
-                }
+                if (ImGui.IsItemHovered() && _firstCamInGraph is Instance camInstance2)
+                    FrameStats.AddHoveredId(camInstance2.SymbolChildId);
+                
                 CustomComponents.TooltipForLastItem("During playback the scene viewer is following the scene camera. Otherwise it can be independently manipulated without affecting the scene camera.");
                 
                 ImGui.Separator();
                 
                 foreach (var cam in _recentlyUsedCameras)
                 {
-                    ImGui.PushID(cam.SymbolChildId.GetHashCode());
+                    if (cam is not Instance cameraInstance)
+                        continue;
+                    
+                    ImGui.PushID(cameraInstance.SymbolChildId.GetHashCode());
                     {
                         // This is expensive, but happens only if dropdown is open...
                         var symbolChild = SymbolRegistry.Entries[_drawnInstance.Parent.Symbol.Id].Children
-                                                        .SingleOrDefault(child => child.Id == cam.SymbolChildId);
+                                                        .SingleOrDefault(child => child.Id == cameraInstance.SymbolChildId);
 
                         if (symbolChild == null)
                             continue;
                         
-                        if(ImGui.Selectable(symbolChild.ReadableName, cam.SymbolChildId == _pickedCameraId))
+                        if(ImGui.Selectable(symbolChild.ReadableName, cameraInstance.SymbolChildId == _pickedCameraId))
                         {
                             _lastControlMode = _controlMode;
                             _controlMode = ControlModes.PickedACamera;
-                            _pickedCameraId = cam.SymbolChildId;
+                            _pickedCameraId = cameraInstance.SymbolChildId;
                         }
 
                         if (ImGui.IsItemHovered())
                         {
-                            FrameStats.AddHoveredId(cam.SymbolChildId);
+                            FrameStats.AddHoveredId(cameraInstance.SymbolChildId);
                         }
                     }
                     ImGui.PopID();
@@ -325,10 +328,10 @@ namespace T3.Editor.Gui.Windows.Output
         private Guid _pickedCameraId = Guid.Empty;
         
         private Instance _drawnInstance;
-        private List<Camera> _recentlyUsedCameras = new();
+        private List<ICamera> _recentlyUsedCameras = new();
 
         private ControlModes _lastControlMode;
 
-        private Camera _firstCamInGraph;
+        private ICamera _firstCamInGraph;
     }
 }
