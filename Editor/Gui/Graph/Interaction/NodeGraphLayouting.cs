@@ -170,24 +170,30 @@ public static class NodeGraphLayouting
     public static Vector2 FindPositionForNodeConnectedToInput(Symbol compositionSymbol, SymbolChildUi connectionTargetUi, Symbol.InputDefinition inputDefinition)
     {
         var idealPos = connectionTargetUi.PosOnCanvas 
-                       + new Vector2(-SelectableNodeMovement.PaddedDefaultOpSize.X, 20);
+                       + new Vector2(-SelectableNodeMovement.PaddedDefaultOpSize.X, 0);
 
         var symbolUi = SymbolUiRegistry.Entries[compositionSymbol.Id];
         var interferingOps = symbolUi.ChildUis
                                      .Where(op =>
-                                                op.PosOnCanvas.Y > idealPos.Y
-                                                && op.PosOnCanvas.X + op.Size.X > idealPos.X
-                                                && op.PosOnCanvas.X < idealPos.X + SelectableNodeMovement.PaddedDefaultOpSize.X)
-                                     .OrderBy(op => op.PosOnCanvas.Y);
+                                                op.PosOnCanvas.Y >= idealPos.Y
+                                                && op.PosOnCanvas.X + op.Size.X >= idealPos.X
+                                                && op.PosOnCanvas.X <= idealPos.X + SelectableNodeMovement.PaddedDefaultOpSize.X)
+                                     .OrderBy(op => op.PosOnCanvas.Y).ToList();
 
-        foreach (var op in interferingOps)
+        var needsMoreChecks = true;
+        while (needsMoreChecks)
         {
-            var idealArea = ImRect.RectWithSize(idealPos, SelectableNodeMovement.PaddedDefaultOpSize);
-            var opArea = ImRect.RectWithSize(op.PosOnCanvas, op.Size);
-            if (!idealArea.Overlaps(opArea))
-                return idealArea.Min;
-
-            idealPos.Y = opArea.Max.Y + SelectableNodeMovement.SnapPadding.Y;
+            needsMoreChecks = false;
+            foreach (var op in interferingOps)
+            {
+                var idealArea = ImRect.RectWithSize(idealPos, SelectableNodeMovement.PaddedDefaultOpSize);
+                var opArea = ImRect.RectWithSize(op.PosOnCanvas, op.Size);
+                if (idealArea.Overlaps(opArea))
+                {
+                    idealPos.Y = opArea.Max.Y + SelectableNodeMovement.SnapPadding.Y;
+                    needsMoreChecks = true;
+                }
+            }
         }
         
         return idealPos;
