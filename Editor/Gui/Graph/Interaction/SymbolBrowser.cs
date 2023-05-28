@@ -633,7 +633,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             // var newCommand = new MacroCommand("Insert Op", commands);
             // UndoRedoStack.Add(newCommand);
             ConnectionMaker.CompleteOperation(commandsForUndo, "Insert Op " + newChildUi.SymbolChild.ReadableName);
-            GraphCanvas.NodeIdRequestedForParameterWindowActivation = newSymbolChild.Id;
+            ParameterPopUp.NodeIdRequestedForParameterWindowActivation = newSymbolChild.Id;
             Close();
         }
 

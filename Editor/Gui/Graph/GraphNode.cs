@@ -250,47 +250,11 @@ namespace T3.Editor.Gui.Graph
                         }
                     }
 
-                    // Show Parameter window as context menu
-                    var activatedWithLeftMouse = ImGui.IsItemHovered()
-                                                 && ImGui.IsMouseReleased(ImGuiMouseButton.Left)
-                                                 && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).Length() < UserSettings.Config.ClickThreshold
-                                                 && !ParameterWindow.IsAnyInstanceVisible()
-                                                 && !ImGui.GetIO().KeyShift; // allow double click to open
-
-                    var activatedWithMiddleMouse = ImGui.IsItemHovered()
-                                                   && ImGui.IsMouseReleased(ImGuiMouseButton.Middle)
-                                                   && ImGui.GetMouseDragDelta(ImGuiMouseButton.Middle, 0).Length() < UserSettings.Config.ClickThreshold;
-
-                    var activationRequested = GraphCanvas.NodeIdRequestedForParameterWindowActivation == instance.SymbolChildId
-                                              && !ParameterWindow.IsAnyInstanceVisible();
-                    
-                    if ((activatedWithLeftMouse || activatedWithMiddleMouse || activationRequested)
-                        && !justOpenedChild
-                        && string.IsNullOrEmpty(FrameStats.Current.OpenedPopUpName)
-                        && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp) == 0
-                        && FrameStats.Last.OpenedPopUpName != "parameterContextPopup")
+                    if (!justOpenedChild)
                     {
-                        GraphCanvas.NodeIdRequestedForParameterWindowActivation = Guid.Empty;
-                        NodeSelection.SetSelectionToChildUi(childUi, instance);
-
-                        var screenPos = new Vector2(_selectableScreenRect.Min.X + 5, _selectableScreenRect.Max.Y + 5);
-                        ImGui.SetNextWindowPos(screenPos);
-                        // Log.Debug("Open parameter popup");
-                        // Log.Debug("AnyPopup open?" + ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup));
-                        ImGui.OpenPopup("parameterContextPopup");
+                        ParameterPopUp.OpenParameterPopUp(childUi, instance, customUiResult, _selectableScreenRect);
                     }
-
-                    ImGui.SetNextWindowSizeConstraints(new Vector2(280, 40), new Vector2(280, 320));
-                    if (!justOpenedChild && ImGui.BeginPopup("parameterContextPopup"))
-                    {
-                        FrameStats.Current.OpenedPopUpName = "parameterContextPopup";
-                        ImGui.PushFont(Fonts.FontSmall);
-                        var compositionSymbolUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-                        var symbolChildUi = compositionSymbolUi.ChildUis.Single(symbolChildUi2 => symbolChildUi2.Id == instance.SymbolChildId);
-                        ParameterWindow.DrawParameters(instance, symbolUi, symbolChildUi, compositionSymbolUi);
-                        ImGui.PopFont();
-                        ImGui.EndPopup();
-                    }
+                    ParameterPopUp.DrawParameterPopUp(instance, justOpenedChild, symbolUi);
 
                     DrawPreview();
 
