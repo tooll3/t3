@@ -50,7 +50,8 @@ namespace T3.Editor.Gui.Graph.Interaction
         {
             if (!IsOpen)
             {
-                if (!ImGui.IsWindowFocused() || !ImGui.IsKeyReleased((ImGuiKey)Key.Tab) || !ImGui.IsWindowHovered())
+                var hasFocus = ImGui.IsWindowFocused() || FrameStats.Last.OpenedPopUpName == "parameterContextPopup";
+                if (!hasFocus || !ImGui.IsKeyReleased((ImGuiKey)Key.Tab))
                     return;
 
                 if (NodeSelection.GetSelectedChildUis().Count() != 1)
@@ -632,6 +633,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             // var newCommand = new MacroCommand("Insert Op", commands);
             // UndoRedoStack.Add(newCommand);
             ConnectionMaker.CompleteOperation(commandsForUndo, "Insert Op " + newChildUi.SymbolChild.ReadableName);
+            GraphCanvas.NodeIdRequestedForParameterWindowActivation = newSymbolChild.Id;
             Close();
         }
 
