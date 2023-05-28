@@ -111,19 +111,19 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
                                                             MathF.Cos(-squeezeAngle),
                                                             MathF.Sin(squeezeAngle) * MathF.Cos(columnAngle)
                                                            );
-
-                        var tangent0 = SharpDX.Vector3.Cross(normal0, binormal0);
+                        
+                        var tangent0 = SharpDX.Vector3.Cross(-normal0, binormal0);
 
                         var vertexIndex = rowIndex * vertexHullColumns + columnIndex;
                         p = SharpDX.Vector3.TransformNormal(p, rotationMatrix);
                         _vertexBufferData[vertexIndex] = new PbrVertex
                                                              {
                                                                  Position = p + center,
-                                                                 Normal = isFlipped ? normal0 * -1 : normal0,
-                                                                 Tangent = tangent0,
-                                                                 Bitangent = isFlipped ? binormal0 * -1 : binormal0,
-                                                                 Texcoord = uv0,
-                                                                 Selection = 1
+                                                                 Normal =  (isFlipped ? normal0 * -1 : normal0),
+                                                                                           Tangent = tangent0,
+                                                                                           Bitangent = isFlipped ? binormal0 * -1 : binormal0,
+                                                                                           Texcoord = uv0,
+                                                                                           Selection = 1
                                                              };
 
                         var faceIndex = 2 * (rowIndex * (vertexHullColumns - 1) + columnIndex);
