@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.IO;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
@@ -46,17 +48,21 @@ internal static class ParameterPopUp
 
     public static void DrawParameterPopUp(Instance instance, bool justOpenedChild, SymbolUi symbolUi_)
     {
-        // if (!justOpenedChild)
-        //     return;
-
         ImGui.SetNextWindowSizeConstraints(new Vector2(280, 140), new Vector2(280, 320));
         if (ImGui.BeginPopup(CurrentOpenedPopUpName))
         {
+            var io = ImGui.GetIO();
+            
             if (ImGui.IsKeyDown(ImGuiKey.Escape))
             {
                 ImGui.CloseCurrentPopup();
             }
-            
+
+            if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorLeft))
+            {
+                //Log.Debug("Left!");
+            }
+
             var symbolUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
             var compositionSymbolUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
             var symbolChildUi = compositionSymbolUi.ChildUis.Single(symbolChildUi2 => symbolChildUi2.Id == _selectedInstance.SymbolChildId);

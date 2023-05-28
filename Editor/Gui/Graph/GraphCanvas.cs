@@ -200,6 +200,10 @@ namespace T3.Editor.Gui.Graph
         public void Draw(ImDrawListPtr dl, bool showGrid)
         {
             var flags = SymbolBrowser.IsOpen ? T3Ui.EditingFlags.PreventZoomWithMouseWheel : T3Ui.EditingFlags.None ;
+
+            if (UserSettings.Config.ControlGraphBackground)
+                flags |= T3Ui.EditingFlags.PreventMouseInteractions;
+            
             UpdateCanvas(flags);
 
             /*
@@ -232,7 +236,7 @@ namespace T3.Editor.Gui.Graph
                 return;
             }
 
-            if (this.CompositionOp == null)
+            if (CompositionOp == null)
             {
                 Log.Error("Can't show graph for undefined CompositionOp");
                 return;
@@ -252,74 +256,79 @@ namespace T3.Editor.Gui.Graph
                 
                 DrawDropHandler();
 
-                if (KeyboardBinding.Triggered(UserActions.FocusSelection))
-                    FocusViewToSelection();
+                if (!UserSettings.Config.ControlGraphBackground)
+                {
+                    
+                    if (KeyboardBinding.Triggered(UserActions.FocusSelection))
+                        FocusViewToSelection();
 
-                if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.Duplicate))
-                {
-                    CopySelectedNodesToClipboard();
-                    PasteClipboard();
-                }
-
-                if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
-                {
-                    DeleteSelectedElements();
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.ToggleDisabled))
-                {
-                    ToggleDisabledForSelectedElements();
-                }
-                
-                if (KeyboardBinding.Triggered(UserActions.ToggleBypassed))
-                {
-                    ToggleBypassedForSelectedElements();
-                }
-                
-                if (KeyboardBinding.Triggered(UserActions.PinToOutputWindow))
-                {
-                    PinSelectedToOutputWindow();
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.CopyToClipboard))
-                {
-                    CopySelectedNodesToClipboard();
-                }
-
-                if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.PasteFromClipboard))
-                {
-                    PasteClipboard();
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.LayoutSelection))
-                {
-                    NodeGraphLayouting.ArrangeOps();
-                }
-
-                if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.AddAnnotation))
-                {
-                    AddAnnotation();
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
-                {
-                    var selectedImage = NodeSelection.GetFirstSelectedInstance();
-                    if (selectedImage != null)
+                    if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.Duplicate))
                     {
-                        GraphWindow.SetBackgroundOutput(selectedImage);
+                        CopySelectedNodesToClipboard();
+                        PasteClipboard();
                     }
-                }
 
-                if (KeyboardBinding.Triggered(UserActions.ClearBackgroundImage))
-                {
-                    GraphWindow.ClearBackground();
+                    if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.DeleteSelection))
+                    {
+                        DeleteSelectedElements();
+                    }
+
+                    if (KeyboardBinding.Triggered(UserActions.ToggleDisabled))
+                    {
+                        ToggleDisabledForSelectedElements();
+                    }
+                    
+                    if (KeyboardBinding.Triggered(UserActions.ToggleBypassed))
+                    {
+                        ToggleBypassedForSelectedElements();
+                    }
+                    
+                    if (KeyboardBinding.Triggered(UserActions.PinToOutputWindow))
+                    {
+                        PinSelectedToOutputWindow();
+                    }
+
+                    if (KeyboardBinding.Triggered(UserActions.CopyToClipboard))
+                    {
+                        CopySelectedNodesToClipboard();
+                    }
+
+                    if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.PasteFromClipboard))
+                    {
+                        PasteClipboard();
+                    }
+
+                    if (KeyboardBinding.Triggered(UserActions.LayoutSelection))
+                    {
+                        NodeGraphLayouting.ArrangeOps();
+                    }
+
+                    if (!T3Ui.IsCurrentlySaving && KeyboardBinding.Triggered(UserActions.AddAnnotation))
+                    {
+                        AddAnnotation();
+                    }
+
+                    if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
+                    {
+                        var selectedImage = NodeSelection.GetFirstSelectedInstance();
+                        if (selectedImage != null)
+                        {
+                            GraphWindow.SetBackgroundOutput(selectedImage);
+                        }
+                    }
+
+                    if (KeyboardBinding.Triggered(UserActions.ClearBackgroundImage))
+                    {
+                        GraphWindow.ClearBackground();
+                    }
                 }
 
                 if (ImGui.IsWindowFocused())
                 {
                     var io = ImGui.GetIO();
                     var editingSomething = ImGui.IsAnyItemActive();
-                    if (!io.KeyCtrl && !io.KeyShift && !io.KeyAlt && !editingSomething)
+                    
+                    if (!io.KeyCtrl && !io.KeyShift && !io.KeyAlt && !editingSomething && !UserSettings.Config.ControlGraphBackground)
                     {
                         if (ImGui.IsKeyDown((ImGuiKey)Key.W))
                         {
@@ -371,7 +380,8 @@ namespace T3.Editor.Gui.Graph
 
                 T3.Editor.Gui.Graph.Graph.DrawGraph(DrawList);
                 RenameInstanceOverlay.Draw();
-                if(!ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup))
+                if(!ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup)
+                   && !UserSettings.Config.ControlGraphBackground)
                     HandleFenceSelection();
 
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();

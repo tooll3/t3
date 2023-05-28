@@ -53,7 +53,7 @@ namespace T3.Editor.Gui.Windows.Output
             PickedACamera,
         }
         
-        public void Update(Instance drawnInstance, Type drawnType)
+        public void Update(Instance drawnInstance, Type drawnType, bool preventInteractions = false)
         {
             _hasAnimationTimeChanged = Math.Abs(_lastUpdateTime - Playback.Current.TimeInBars) > 0.001f;
             _lastUpdateTime = Playback.Current.TimeInBars;
@@ -74,7 +74,7 @@ namespace T3.Editor.Gui.Windows.Output
             ICamera cameraForManipulation = null;
             CameraForRendering = null;
 
-            PreventCameraInteraction = false;
+            PreventCameraInteraction = preventInteractions;
 
 
             if (_controlMode == ControlModes.PickedACamera)
@@ -222,7 +222,7 @@ namespace T3.Editor.Gui.Windows.Output
         const string SceneViewerModeLabel = "Viewer";
         const string CameraModeLabel = "Camera";
 
-        public void DrawCameraControlSelection(ViewSelectionPinning pinning)
+        public void DrawCameraControlSelection()
         {
             ImGui.SetNextItemWidth(115);
 

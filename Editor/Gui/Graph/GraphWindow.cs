@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
@@ -224,7 +225,13 @@ namespace T3.Editor.Gui.Graph
 
                 drawList.ChannelsSetCurrent(0);
                 {
-                    GraphCanvas.Draw(drawList, showGrid: !_imageBackground.IsActive);
+                    var showBackgroundOnly = _imageBackground.IsActive && ImGui.GetMousePos().X > ImGui.GetWindowSize().X + ImGui.GetWindowPos().X - 2;
+                    if (showBackgroundOnly && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                    {
+                        UserSettings.Config.ControlGraphBackground = !UserSettings.Config.ControlGraphBackground;
+                    }
+                    if(!showBackgroundOnly)
+                        GraphCanvas.Draw(drawList, showGrid: !_imageBackground.IsActive);
                 }
                 drawList.ChannelsMerge();
 
@@ -417,27 +424,7 @@ namespace T3.Editor.Gui.Graph
                 ImGui.SameLine();
 
                 TimeControls.DrawTimeControls(_timeLineCanvas);
-                if (_imageBackground.IsActive)
-                {
-                    _imageBackground.DrawResolutionSelector();
-                    ImGui.SameLine();
-                    if (ImGui.Button("Clear BG"))
-                    {
-                        ClearBackground();
-                    }
-
-                    ImGui.SameLine();
-                    
-
-                    var showGizmos = _imageBackground.ShowGizmos != T3.Core.Operator.GizmoVisibility.Off;
-                    if (CustomComponents.ToggleIconButton(Icon.Grid, "##gizmos", ref showGizmos, Vector2.One * ImGui.GetFrameHeight()))
-                    {
-                        _imageBackground.ShowGizmos = showGizmos
-                                                            ? T3.Core.Operator.GizmoVisibility.On
-                                                            : T3.Core.Operator.GizmoVisibility.Off;
-                    }                    
-                    ImGui.SameLine();
-                }
+                _imageBackground.DrawToolbarItems();
             }
             ImGui.EndChild();
         }

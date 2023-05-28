@@ -40,11 +40,12 @@ namespace T3.Editor.Gui.Interaction.Camera
                 _lastCameraNode = camera;
             }
 
-            if (allowCameraInteraction && ImGui.IsWindowHovered())
+            //if (allowCameraInteraction && ImGui.IsWindowHovered())
+            if (allowCameraInteraction)
             {
                 ManipulateCameraByMouse();
-                if (ImGui.IsWindowFocused())
-                    ManipulateCameraByKeyboard();
+                //if (ImGui.IsWindowFocused())
+                ManipulateCameraByKeyboard();
             }
 
             var frameTime = ImGui.GetTime();
@@ -276,7 +277,7 @@ namespace T3.Editor.Gui.Interaction.Camera
 
         private void Pan()
         {
-            if (!ImGui.IsWindowHovered())
+            if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows))
                 return;
 
             var dragDelta = ImGui.GetIO().MouseDelta;
@@ -293,7 +294,7 @@ namespace T3.Editor.Gui.Interaction.Camera
 
         private void ManipulateCameraByKeyboard()
         {
-            if (!ImGui.IsWindowHovered() || ImGui.GetIO().KeyCtrl)
+            if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) || ImGui.GetIO().KeyCtrl)
                 return;
 
             var acc = CameraInteractionParameters.CameraAcceleration * UserSettings.Config.CameraSpeed * _deltaTime * 60;

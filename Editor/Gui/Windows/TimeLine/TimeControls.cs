@@ -462,36 +462,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         timeLineCanvas.DopeSheetArea.PinnedParameters.Clear();        
                     }
                 }
-                
-                // // Lock all animated parameters
-                // if (CustomComponents.IconButton(Icon.PinParams,
-                //                                 ControlSize)
-                //     || KeyboardBinding.Triggered(UserActions.PinAllAnimationParameter))
-                // {
-                //     foreach (var p in timeLineCanvas.SelectedAnimationParameters)
-                //     {
-                //         timeLineCanvas.DopeSheetArea.PinnedParameters.Add(p.Input.GetHashCode());
-                //     }
-                // }
-                //
-                // ImGui.SameLine();
-                // // Lock all animated parameters
-                // if (CustomComponents.IconButton(Icon.Params,
-                //                                 ControlSize,
-                //                                 timeLineCanvas.DopeSheetArea.PinnedParameters.Count == 0
-                //                                     ? CustomComponents.ButtonStates.Disabled
-                //                                     : CustomComponents.ButtonStates.Normal)
-                //     || KeyboardBinding.Triggered(UserActions.UnpinAllAnimationParameters))
-                // {
-                //     timeLineCanvas.DopeSheetArea.PinnedParameters.Clear();
-                // }
             }
-
-            // CustomComponents.TooltipForLastItem("Jump to previous keyframe",
-            //                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToPreviousKeyframe));
-
-            //CustomComponents.TooltipForLastItem(hoverModeTooltip, hoverModeAdditionalTooltip);
-
             ImGui.SameLine();
         }
 

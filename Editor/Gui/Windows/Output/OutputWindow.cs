@@ -154,7 +154,7 @@ namespace T3.Editor.Gui.Windows.Output
 
             ImGui.SameLine();
 
-            _camSelectionHandling.DrawCameraControlSelection(Pinning);
+            _camSelectionHandling.DrawCameraControlSelection();
             ResolutionHandling.DrawSelector(ref _selectedResolution, _resolutionDialog);
             
             ImGui.SameLine();
@@ -216,15 +216,11 @@ namespace T3.Editor.Gui.Windows.Output
             _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
             
             // Set camera
-            //var usedCam = _lastInteractiveCam ?? _outputWindowViewCamera;
             if (_camSelectionHandling.CameraForRendering != null)
             {
                 _evaluationContext.SetViewFromCamera(_camSelectionHandling.CameraForRendering);
             }
-            else
-            {
-                //Log.Error("Viewer camera undefined");
-            }
+
             _evaluationContext.BackgroundColor = _backgroundColor;
 
             const string overrideSampleVariableName = "OverrideMotionBlurSamples";

@@ -389,6 +389,9 @@ namespace T3.Editor.Gui.Interaction
             if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) && !isDraggingConnection)
                 return;
 
+            if ((flags & T3Ui.EditingFlags.PreventMouseInteractions) != T3Ui.EditingFlags.None)
+                return;
+
             if (FrameStats.Last.OpenedPopUpName != string.Empty)
                 return;
 
