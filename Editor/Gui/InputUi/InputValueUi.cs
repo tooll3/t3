@@ -16,6 +16,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Animation;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Interaction;
@@ -337,7 +338,7 @@ namespace T3.Editor.Gui.InputUi
                 var label = IsAnimatable ? "+" : ""; 
                 if (ImGui.Button(label, new Vector2(ConnectionAreaWidth, 0.0f)))
                 {
-                    if (ImGui.GetIO().KeyCtrl)
+                    if (UserSettings.Config.ParameterMode == UserSettings.ParameterModes.CreatesConnectedOp || ImGui.GetIO().KeyCtrl)
                     {
                         if (ConnectionMaker.TempConnections.Count == 0)
                         {
@@ -346,7 +347,7 @@ namespace T3.Editor.Gui.InputUi
                             ConnectionMaker.InitSymbolBrowserOnPrimaryGraphWindow(freePosition);
                         }
                     }
-                    else if (IsAnimatable)
+                    else if (IsAnimatable && UserSettings.Config.ParameterMode == UserSettings.ParameterModes.AnimatesInput || ImGui.GetIO().KeyCtrl)
                     {
                         var cmd = new MacroCommand("add animation",
                                                    new List<ICommand>()

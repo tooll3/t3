@@ -1168,5 +1168,8 @@ namespace T3.Editor.Gui.Graph
             Live,
             LastValue,
         }
+        
+        public static Guid NodeIdRequestedForParameterWindowActivation;
+
     }
 }

@@ -56,6 +56,8 @@ namespace T3.Editor.Gui.UiHelpers
             public float TooltipDelay = 1.2f;
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
             public bool AdjustCameraSpeedWithMouseWheel = false;
+
+            public ParameterModes ParameterMode = ParameterModes.CreatesConnectedOp; 
             public float CameraSpeed = 1;
             
             public bool MouseWheelEditsNeedCtrlKey = true;
@@ -93,6 +95,13 @@ namespace T3.Editor.Gui.UiHelpers
             public List<Gradient> GradientPresets = new();
 
             
+        }
+
+        public enum ParameterModes
+        {
+            CreatesConnectedOp,
+            AnimatesInput,
+            ShowContextMenu,
         }
 
         public static bool IsUserNameDefined()

@@ -70,9 +70,9 @@ namespace T3.Editor.Gui.Windows
                                                   ref UserSettings.Config.MouseWheelEditsNeedCtrlKey,
                                                   "In parameter window you can edit numeric values by using the mouse wheel. This setting will prevent accidental modifications while scrolling because by using ctrl key for activation.",
                                                   UserSettings.Defaults.AdjustCameraSpeedWithMouseWheel);
-                
-                
-                
+                FormInputs.SetIndent(170);
+                changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.ParameterMode, "Clicking on Parameter...");
+                FormInputs.SetIndent(20);
                 FormInputs.ResetIndent();
                 FormInputs.AddVerticalSpace();
                 //ImGui.Dummy(new Vector2(20,20));

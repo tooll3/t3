@@ -261,18 +261,29 @@ namespace T3.Editor.Gui.Graph
                                                    && ImGui.IsMouseReleased(ImGuiMouseButton.Middle)
                                                    && ImGui.GetMouseDragDelta(ImGuiMouseButton.Middle, 0).Length() < UserSettings.Config.ClickThreshold;
 
-                    if ((activatedWithLeftMouse || activatedWithMiddleMouse)
+                    var activationRequested = GraphCanvas.NodeIdRequestedForParameterWindowActivation == instance.SymbolChildId
+                                              && !ParameterWindow.IsAnyInstanceVisible();
+                    
+                    if ((activatedWithLeftMouse || activatedWithMiddleMouse || activationRequested)
                         && !justOpenedChild
                         && string.IsNullOrEmpty(FrameStats.Current.OpenedPopUpName)
-                        && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp) == 0)
+                        && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp) == 0
+                        && FrameStats.Last.OpenedPopUpName != "parameterContextPopup")
                     {
+                        GraphCanvas.NodeIdRequestedForParameterWindowActivation = Guid.Empty;
                         NodeSelection.SetSelectionToChildUi(childUi, instance);
+
+                        var screenPos = new Vector2(_selectableScreenRect.Min.X + 5, _selectableScreenRect.Max.Y + 5);
+                        ImGui.SetNextWindowPos(screenPos);
+                        // Log.Debug("Open parameter popup");
+                        // Log.Debug("AnyPopup open?" + ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup));
                         ImGui.OpenPopup("parameterContextPopup");
                     }
 
                     ImGui.SetNextWindowSizeConstraints(new Vector2(280, 40), new Vector2(280, 320));
                     if (!justOpenedChild && ImGui.BeginPopup("parameterContextPopup"))
                     {
+                        FrameStats.Current.OpenedPopUpName = "parameterContextPopup";
                         ImGui.PushFont(Fonts.FontSmall);
                         var compositionSymbolUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
                         var symbolChildUi = compositionSymbolUi.ChildUis.Single(symbolChildUi2 => symbolChildUi2.Id == instance.SymbolChildId);
@@ -291,7 +302,6 @@ namespace T3.Editor.Gui.Graph
                                      ImDrawFlags.None);
 
                     // Animation indicator
-
                     var indicatorCount = 0;
                     var compositionOp = GraphCanvas.Current.CompositionOp;
                     var isInstanceAnimated = compositionOp.Symbol.Animator.IsInstanceAnimated(instance);
@@ -304,9 +314,6 @@ namespace T3.Editor.Gui.Graph
                     if (FrameStats.Last.RenderedIds.Contains(instance.SymbolChildId))
                     {
                         DrawIndicator(Color.White, ref indicatorCount);
-                        // _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 11, (_usableScreenRect.Max.Y - 7).Clamp(_usableScreenRect.Min.Y+2, _usableScreenRect.Max.Y)),
-                        //                         new Vector2(_usableScreenRect.Max.X - 7, _usableScreenRect.Max.Y - 3),
-                        //                         Color.White);
                     }
 
                     // Snapshot indicator
@@ -314,20 +321,7 @@ namespace T3.Editor.Gui.Graph
                         if (childUi.SnapshotGroupIndex > 0)
                         {
                             DrawIndicator(Color.Blue, ref indicatorCount);
-                            // _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, _usableScreenRect.Min.Y + 3),
-                            //                         new Vector2(_usableScreenRect.Max.X - 2,
-                            //                                     (_usableScreenRect.Min.Y + 12).Clamp(0, _usableScreenRect.Max.Y)),
-                            //                         Color.Blue);
-                            
                         }
-                        // if (VariationHandling.FocusSetsForCompositions.TryGetValue(GraphCanvas.Current.CompositionOp.Symbol.Id, out var focusSet))
-                        // {
-                        //     if (focusSet.Contains(instance.SymbolChildId))
-                        //         _drawList.AddRectFilled(new Vector2(_usableScreenRect.Max.X - 5, _usableScreenRect.Min.Y + 3),
-                        //                                 new Vector2(_usableScreenRect.Max.X - 2,
-                        //                                             (_usableScreenRect.Min.Y + 12).Clamp(0, _usableScreenRect.Max.Y)),
-                        //                                 Color.Blue);
-                        // }
                     }
 
                     // Hidden inputs indicator
