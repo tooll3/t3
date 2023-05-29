@@ -23,7 +23,7 @@ namespace T3.Editor.Gui.Styling
             
             AddVerticalSpace(5);
             
-            ImGui.PushFont(Fonts.FontBold);
+            //ImGui.PushFont(Fonts.FontBold);
             ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
 
             var id = ImGui.GetID(label);
@@ -35,7 +35,7 @@ namespace T3.Editor.Gui.Styling
             var isOpen = ImGui.TreeNode(label);
             ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 0);
             ImGui.PopStyleColor();
-            ImGui.PopFont();
+            //ImGui.PopFont();
 
             return isOpen;
         }
