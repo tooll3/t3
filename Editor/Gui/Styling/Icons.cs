@@ -243,6 +243,8 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.Presets, 69),
                 new (Icon.HelpOutline, 70),
                 new (Icon.PlayOutput, 71),
+                new (Icon.AddKeyframe, 72),
+                new (Icon.AddOpToInput, 73),
             };
 
         public const string IconAtlasPath = @"Resources\t3-editor\images\t3-icons.png";
@@ -320,6 +322,8 @@ namespace T3.Editor.Gui.Styling
         ParamsList,
         Presets,
         HelpOutline,
-        PlayOutput
+        PlayOutput,
+        AddKeyframe,
+        AddOpToInput
     }
 }

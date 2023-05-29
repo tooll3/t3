@@ -508,7 +508,7 @@ namespace T3.Editor.Gui.Styling
             if (!ImGui.IsWindowFocused())
                 return;
             
-            var min = ImGui.GetWindowPos() + new Vector2(1,0);
+            var min = ImGui.GetWindowPos() + new Vector2(1,1);
             ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(-2,-1) , Color.White.Fade(0.1f));
         }
     }

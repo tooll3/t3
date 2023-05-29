@@ -335,19 +335,10 @@ namespace T3.Editor.Gui.InputUi
                 
                 ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.DarkGray.Rgba);
                 
-                var label = IsAnimatable ? "+" : ""; 
+                var label = IsAnimatable ? "" : ""; 
                 if (ImGui.Button(label, new Vector2(ConnectionAreaWidth, 0.0f)))
                 {
-                    if (UserSettings.Config.ParameterMode == UserSettings.ParameterModes.CreatesConnectedOp || ImGui.GetIO().KeyCtrl)
-                    {
-                        if (ConnectionMaker.TempConnections.Count == 0)
-                        {
-                            ConnectionMaker.StartFromInputSlot(compositionSymbol, symbolChildUi, InputDefinition);
-                            var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionSymbol, symbolChildUi, InputDefinition);
-                            ConnectionMaker.InitSymbolBrowserOnPrimaryGraphWindow(freePosition);
-                        }
-                    }
-                    else if (IsAnimatable && UserSettings.Config.ParameterMode == UserSettings.ParameterModes.AnimatesInput || ImGui.GetIO().KeyCtrl)
+                    if (IsAnimatable && (UserSettings.Config.ParameterMode == UserSettings.ParameterModes.AnimatesInput || ImGui.GetIO().KeyCtrl))
                     {
                         var cmd = new MacroCommand("add animation",
                                                    new List<ICommand>()
@@ -359,6 +350,25 @@ namespace T3.Editor.Gui.InputUi
 
                         UndoRedoStack.AddAndExecute(cmd);
                     }
+                    else if (UserSettings.Config.ParameterMode == UserSettings.ParameterModes.CreatesConnectedOp || ImGui.GetIO().KeyCtrl)
+                    {
+                        if (ConnectionMaker.TempConnections.Count == 0)
+                        {
+                            ConnectionMaker.StartFromInputSlot(compositionSymbol, symbolChildUi, InputDefinition);
+                            var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionSymbol, symbolChildUi, InputDefinition);
+                            ConnectionMaker.InitSymbolBrowserOnPrimaryGraphWindow(freePosition);
+                        }
+                    }
+                }
+
+                
+                if (IsAnimatable && ImGui.GetIO().KeyCtrl)
+                {
+                    Icons.DrawIconOnLastItem(Icon.AddKeyframe, T3Style.Colors.TextMuted.Fade(0.3f));
+                }
+                else
+                {
+                    Icons.DrawIconOnLastItem(Icon.AddOpToInput, T3Style.Colors.TextMuted.Fade(0.3f));
                 }
 
 
@@ -371,8 +381,9 @@ namespace T3.Editor.Gui.InputUi
                 }
                 ImGui.PopStyleColor(2);
 
+                //CustomComponents.TooltipForLastItem("");
                 if (ImGui.IsItemHovered() && IsAnimatable)
-                    ImGui.SetTooltip($"Click to animate\n{input.DefaultValue.ValueType}");
+                    ImGui.SetTooltip($"Click CTRL to Animate\n{input.DefaultValue.ValueType}");
 
                 ImGui.SameLine();
 

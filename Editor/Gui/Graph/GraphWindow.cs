@@ -268,7 +268,7 @@ namespace T3.Editor.Gui.Graph
                 }
                 else
                 {
-                    ImGui.SetCursorPosY(ImGui.GetCursorPosY() + splitterWidth); // leave gap for splitter
+                    ImGui.SetCursorPosY(ImGui.GetCursorPosY() + splitterWidth-1); // leave gap for splitter
                     ImGui.PushStyleVar(ImGuiStyleVar.ChildBorderSize,0);
                     
                     ImGui.BeginChild("##timeline", Vector2.Zero, false,
@@ -552,7 +552,7 @@ namespace T3.Editor.Gui.Graph
         private float ComputedTimelineHeight => (_timeLineCanvas.SelectedAnimationParameters.Count * DopeSheetArea.LayerHeight)
                                                 + _timeLineCanvas.LayersArea.LastHeight
                                                 + TimeLineCanvas.TimeLineDragHeight
-                                                + 7;
+                                                + 1;
 
         private readonly TimeLineCanvas _timeLineCanvas;
 

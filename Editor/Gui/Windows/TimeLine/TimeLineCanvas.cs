@@ -59,7 +59,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             void DrawCanvasContent()
             {
-                //return;   
+                ImGui.SetCursorPosY(ImGui.GetCursorPosY()-6);
                 if (PlaybackUtils.TryFindingSoundtrack(compositionOp, out var soundtrack))
                 {
                     _timeLineImage.Draw(Drawlist, soundtrack);
