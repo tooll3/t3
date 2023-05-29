@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
@@ -425,6 +426,44 @@ namespace T3.Editor.Gui.Styling
             }
 
             return changed;
+        }
+
+        public static bool AddSegmentedIconButton<T>(ref T selectedValue, List<Icon> icons) where T : struct, Enum
+        {
+            //DrawInputLabel(label);
+
+            var modified = false;
+            var selectedValueString = selectedValue.ToString();
+            var isFirst = true;
+            var enums = Enum.GetValues<T>();
+            //Debug.Assert(enums.Length != icons.Count,"Icon enum mismatch");
+                
+                
+            for (var index = 0; index < enums.Length; index++)
+            {
+                var icon = icons[index];
+                var value = enums[index];
+                var name = Enum.GetName(value);
+                if (!isFirst)
+                {
+                    ImGui.SameLine();
+                }
+
+                var isSelected = selectedValueString == value.ToString();
+                var clicked = ImGui.InvisibleButton(name, new Vector2(17, 17));
+
+                if (clicked)
+                {
+                    modified = true;
+                    selectedValue = value;
+                }
+
+                Icons.DrawIconOnLastItem(icon, isSelected ? T3Style.Colors.ButtonActive : T3Style.Colors.TextMuted);
+
+                isFirst = false;
+            }
+
+            return modified;
         }
 
         public static bool DrawSearchField(string placeHolderLabel, ref string value, float width = 0)

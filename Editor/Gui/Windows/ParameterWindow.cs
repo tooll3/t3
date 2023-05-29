@@ -240,7 +240,7 @@ namespace T3.Editor.Gui.Windows
                     }
                     else
                     {
-                        Log.Debug($"finished but wrong inputSlot {inputSlot.Input.Name}");
+                        //Log.Debug($"finished but wrong inputSlot {inputSlot.Input.Name}");
                     }
                     _inputValueCommandInFlight = null;
                 }

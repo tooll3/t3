@@ -179,6 +179,8 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
 
+
+        
         private static bool DrawSelectButton(string name, bool isSelected)
         {
             ImGui.PushStyleColor(ImGuiCol.Button, isSelected ? T3Style.Colors.ButtonActive.Rgba : T3Style.Colors.ButtonHover.Rgba);

@@ -165,7 +165,7 @@ namespace T3.Editor.Gui.Graph
             if (FitViewToSelectionHandling.FitViewToSelectionRequested)
                 FitViewToSelection();
 
-            var fadeBackgroundImage = _graphImageBackground.IsActive ? (ImGui.GetMousePos().X).Clamp(0, 100) / 100 : 1;
+            var fadeBackgroundImage = _graphImageBackground.IsActive ? (ImGui.GetMousePos().X - ImGui.GetWindowPos().X).Clamp(0, 100) / 100 : 1;
             if (_graphImageBackground.IsActive && fadeBackgroundImage == 0)
             {
                 if(ImGui.IsMouseClicked(ImGuiMouseButton.Left))
@@ -233,7 +233,7 @@ namespace T3.Editor.Gui.Graph
                     
                     if (showBackgroundOnly)
                     {
-                        if(ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                        if(ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                             _graphImageBackground.HasInteractionFocus = !_graphImageBackground.HasInteractionFocus;
                     }
                     else

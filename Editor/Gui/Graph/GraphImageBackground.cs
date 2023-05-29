@@ -96,6 +96,7 @@ namespace T3.Editor.Gui.Graph
 
             ImGui.SameLine();
             DrawResolutionSelector();
+            ImGui.SameLine();
 
             var showGizmos = ShowGizmos != T3.Core.Operator.GizmoVisibility.Off;
             if (CustomComponents.ToggleIconButton(Icon.Grid, "##gizmos", ref showGizmos, Vector2.One * ImGui.GetFrameHeight()))
@@ -116,6 +117,7 @@ namespace T3.Editor.Gui.Graph
         public void ClearBackground()
         {
             BackgroundNodePath = null;
+            HasInteractionFocus = false;
         }
 
         public GizmoVisibility ShowGizmos;

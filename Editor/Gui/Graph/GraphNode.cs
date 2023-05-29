@@ -227,7 +227,7 @@ namespace T3.Editor.Gui.Graph
                                 && !RenameInstanceOverlay.IsOpen
                                 && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenSubGraph) == 0)
                     {
-                        if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
+                        if (ImGui.IsWindowFocused() || ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
                         {
                             var blocked = false;
                             if (UserSettings.Config.WarnBeforeLibEdit && instance.Symbol.Namespace.StartsWith("lib."))

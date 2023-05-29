@@ -266,7 +266,7 @@ namespace T3.Editor.Gui.InputUi
                     }
                 }
 
-                Icons.DrawIconOnLastItem(icon);
+                Icons.DrawIconOnLastItem(icon, Color.White);
 
                 ImGui.SameLine();
 

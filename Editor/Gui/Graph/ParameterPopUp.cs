@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
@@ -44,6 +45,7 @@ internal static class ParameterPopUp
     private static bool _isOpen;
     private static GraphCanvas _graphCanvas;
 
+    
     public static void DrawParameterPopUp()
     {
         if (_selectedInstance == null || _graphCanvas == null)
@@ -83,13 +85,14 @@ internal static class ParameterPopUp
 
             if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorLeft))
             {
+                // TODO: implement quick node selection
                 //Log.Debug("Left!");
             }
 
-            //var symbolUi = SymbolUiRegistry.Entries[_selectedInstance.Parent]
-
             FormInputs.SetIndent(20);
-            FormInputs.AddSegmentedButton(ref _viewMode, "");
+
+            CustomComponents.AddSegmentedIconButton(ref _viewMode, new List<Icon>() { Icon.ParamsList, Icon.Presets, Icon.HelpOutline });
+            //FormInputs.AddSegmentedButton(ref _viewMode, "");
             switch (_viewMode)
             {
                 case ViewModes.Parameters:
