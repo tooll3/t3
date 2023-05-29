@@ -197,7 +197,7 @@ namespace T3.Editor.Gui.Graph
         }
 
         #region drawing UI ====================================================================
-        public void Draw(ImDrawListPtr dl, bool showGrid)
+        public void Draw(ImDrawListPtr dl, bool hasImageInBackground, float graphOpacity=1)
         {
             var flags = SymbolBrowser.IsOpen ? T3Ui.EditingFlags.PreventZoomWithMouseWheel : T3Ui.EditingFlags.None ;
 
@@ -316,11 +316,6 @@ namespace T3.Editor.Gui.Graph
                             GraphWindow.SetBackgroundOutput(selectedImage);
                         }
                     }
-
-                    if (KeyboardBinding.Triggered(UserActions.ClearBackgroundImage))
-                    {
-                        GraphWindow.ClearBackground();
-                    }
                 }
 
                 if (ImGui.IsWindowFocused())
@@ -368,7 +363,7 @@ namespace T3.Editor.Gui.Graph
 
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
-                if (showGrid)
+                if (!hasImageInBackground)
                     DrawGrid();
 
                 if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem))
@@ -378,7 +373,9 @@ namespace T3.Editor.Gui.Graph
 
                 SymbolBrowser.Draw();
 
-                T3.Editor.Gui.Graph.Graph.DrawGraph(DrawList);
+                graphOpacity *= (hasImageInBackground && UserSettings.Config.ControlGraphBackground) ? 0.3f : 1;
+                Graph.DrawGraph(DrawList, graphOpacity);
+                
                 RenameInstanceOverlay.Draw();
                 if(!ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup)
                    && !UserSettings.Config.ControlGraphBackground)

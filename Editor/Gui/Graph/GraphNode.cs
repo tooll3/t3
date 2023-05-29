@@ -59,6 +59,7 @@ namespace T3.Editor.Gui.Graph
 
             _isVisible = ImGui.IsRectVisible(_selectableScreenRect.Min, _selectableScreenRect.Max);
 
+            
             var isNodeHovered = false;
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
@@ -85,9 +86,9 @@ namespace T3.Editor.Gui.Graph
                     // Rendering
                     //var childInstance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == childUi.SymbolChild.Id);
 
-                    var typeColor = childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0
+                    var typeColor = (childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0
                                         ? TypeUiRegistry.GetPropertiesForType(childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType).Color
-                                        : Color.Gray;
+                                        : Color.Gray).Fade(Graph.GraphOpacity);
 
                     var backgroundColor = typeColor;
 
@@ -96,7 +97,7 @@ namespace T3.Editor.Gui.Graph
                     if (framesSinceLastUpdate > 2)
                     {
                         var fadeFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 0f, 1.0f);
-                        var mutedColor = ColorVariations.OperatorIdle.Apply(backgroundColor);
+                        var mutedColor = ColorVariations.OperatorIdle.Apply(backgroundColor).Fade(Graph.GraphOpacity);
                         backgroundColor = Color.Mix(backgroundColor, mutedColor, fadeFactor);
                     }
 
@@ -105,7 +106,7 @@ namespace T3.Editor.Gui.Graph
                                                        : ColorVariations.Operator.Apply(backgroundColor);
 
                     drawList.AddRectFilled(_usableScreenRect.Min, _usableScreenRect.Max,
-                                           backgroundColorWithHover);
+                                           backgroundColorWithHover.Fade(Graph.GraphOpacity));
 
                     // Custom ui
                     customUiResult = SymbolChildUi.DrawCustomUi(instance, _drawList, _selectableScreenRect);
@@ -117,9 +118,9 @@ namespace T3.Editor.Gui.Graph
 
                         ImGui.SetCursorScreenPos(pos);
                         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-                        ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-                        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Color(1, 1, 1, .3f).Rgba);
-                        ImGui.PushStyleColor(ImGuiCol.Text, new Color(1, 1, 1, .3f).Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba * Graph.GraphOpacity);
+                        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Color(1, 1, 1, .3f * Graph.GraphOpacity).Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Text, new Color(1, 1, 1, .3f * Graph.GraphOpacity).Rgba);
                         ImGui.PushFont(Icons.IconFont);
 
                         if (childUi.Style == SymbolChildUi.Styles.Default)
@@ -261,7 +262,7 @@ namespace T3.Editor.Gui.Graph
                     // Outline
                     drawList.AddRect(_selectableScreenRect.Min,
                                      _selectableScreenRect.Max + Vector2.One,
-                                     new Color(0.03f, 0.03f, 0.03f, 0.8f),
+                                     new Color(0.03f, 0.03f, 0.03f, 0.8f).Fade(Graph.GraphOpacity),
                                      rounding: 0,
                                      ImDrawFlags.None);
 
@@ -319,8 +320,8 @@ namespace T3.Editor.Gui.Graph
 
                     if (childUi.IsSelected)
                     {
-                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One * 2, _selectableScreenRect.Max + Vector2.One * 2, Color.Black);
-                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One, _selectableScreenRect.Max + Vector2.One, Color.White);
+                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One * 2, _selectableScreenRect.Max + Vector2.One * 2, Color.Black.Fade(Graph.GraphOpacity));
+                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One, _selectableScreenRect.Max + Vector2.One, Color.White.Fade(Graph.GraphOpacity));
                     }
                 }
             }
@@ -348,7 +349,7 @@ namespace T3.Editor.Gui.Graph
                                   : ImGui.IsItemHovered();
                 
                 var isPotentialConnectionTarget = ConnectionMaker.IsMatchingInputType(inputDefinition.DefaultValue.ValueType);
-                var colorForType = ColorForInputType(inputDefinition);
+                var colorForType = ColorForInputType(inputDefinition).Fade(Graph.GraphOpacity);
                 
                 var connectedLines = global::T3.Editor.Gui.Graph.Graph.Connections.GetLinesToNodeInputSlot(childUi, inputDefinition.Id);
                 
@@ -357,7 +358,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     var inputLabelOpacity = MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X,
                                                                     0.75f, 1.5f,
-                                                                    0f, 1f);
+                                                                    0f, 1f) * Graph.GraphOpacity;
                 
                     var screenCursor = usableSlotArea.GetCenter() + new Vector2(14, -7);
                     if (inputLabelOpacity > 0)
@@ -519,7 +520,7 @@ namespace T3.Editor.Gui.Graph
                 ImGui.InvisibleButton("output", usableArea.GetSize());
                 THelpers.DebugItemRect();
                 var valueType = outputDef.ValueType;
-                var colorForType = TypeUiRegistry.Entries[valueType].Color;
+                var colorForType = TypeUiRegistry.Entries[valueType].Color.Fade(Graph.GraphOpacity);
             
                 //Note: isItemHovered does not work when dragging is active
                 var hovered = ConnectionMaker.TempConnections.Count > 0
@@ -579,6 +580,7 @@ namespace T3.Editor.Gui.Graph
                 outputIndex++;
                 ImGui.PopID();
             }
+            
         }
 
         private static void DrawOverlayLine(ImDrawListPtr drawList, Vector2 p1, Vector2 p2)
@@ -587,7 +589,7 @@ namespace T3.Editor.Gui.Graph
             var size = _usableScreenRect.GetSize() - padding * 2;
             drawList.AddLine(_usableScreenRect.Min + p1 * size + padding,
                              _usableScreenRect.Min + p2 * size + padding,
-                             T3Style.Colors.Warning, 3);
+                             T3Style.Colors.Warning.Fade(Graph.GraphOpacity), 3);
 
         }
 
@@ -599,8 +601,8 @@ namespace T3.Editor.Gui.Graph
             var pMin = new Vector2(_usableScreenRect.Max.X - 2 - s - dx,
                                    (_usableScreenRect.Max.Y - 2 - s).Clamp(_usableScreenRect.Min.Y + 2, _usableScreenRect.Max.Y));
             var pMax = new Vector2(_usableScreenRect.Max.X - 2 - dx, _usableScreenRect.Max.Y - 2);
-            _drawList.AddRectFilled(pMin, pMax, color);
-            _drawList.AddRect(pMin-Vector2.One, pMax+Vector2.One, Color.Black.Fade(0.4f));
+            _drawList.AddRectFilled(pMin, pMax, color * Graph.GraphOpacity);
+            _drawList.AddRect(pMin-Vector2.One, pMax+Vector2.One, Color.Black.Fade(0.4f * Graph.GraphOpacity));
             indicatorCount++;
         }
 
@@ -772,7 +774,7 @@ namespace T3.Editor.Gui.Graph
             if (_previewTextureView == null)
                 return;
 
-            global::T3.Editor.Gui.Graph.Graph.DrawList.AddImage((IntPtr)_previewTextureView, _previewArea.Min, _previewArea.Max);
+            global::T3.Editor.Gui.Graph.Graph.DrawList.AddImage((IntPtr)_previewTextureView, _previewArea.Min, _previewArea.Max,  Vector2.Zero, Vector2.One, Color.White.Fade(Graph.GraphOpacity));
         }
 
         private static Vector2 ComputeNodeSize(SymbolChildUi childUi, List<IInputUi> visibleInputUis)

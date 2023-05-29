@@ -40,16 +40,11 @@ namespace T3.Editor.Gui.Graph
     ///</remarks>
     public static class Graph
     {
-        private enum Channels
-        {
-            Annotations = 0,
-            Operators = 1,
-        }
 
-        private static int _lastCheckSum;
 
-        public static void DrawGraph(ImDrawListPtr drawList, bool needsReinit = false)
+        public static void DrawGraph(ImDrawListPtr drawList, float graphOpacity= 1, bool needsReinit = false)
         {
+            GraphOpacity = graphOpacity; //MathF.Sin((float)ImGui.GetTime() * 2) * 0.5f + 0.5f;
             DrawList = drawList;
             var graphSymbol = GraphCanvas.Current.CompositionOp.Symbol;
             var children = GraphCanvas.Current.CompositionOp.Children;
@@ -433,7 +428,16 @@ namespace T3.Editor.Gui.Graph
                 }
             }
         }
+        
+        private enum Channels
+        {
+            Annotations = 0,
+            Operators = 1,
+        }
 
+        public static float GraphOpacity = 0.2f;
+        
+        private static int _lastCheckSum;
         internal static readonly ConnectionSorter Connections = new();
         public static ImDrawListPtr DrawList;
         private static List<SymbolChildUi> _childUis;

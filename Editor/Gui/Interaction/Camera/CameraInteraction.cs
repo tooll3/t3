@@ -117,6 +117,9 @@ namespace T3.Editor.Gui.Interaction.Camera
 
         private void ManipulateCameraByMouse()
         {
+            if (!(ImGui.IsWindowFocused() || ImGui.IsWindowHovered()))
+                return;
+            
             HandleMouseWheel();
             if (ImGui.IsMouseDragging(ImGuiMouseButton.Left))
             {

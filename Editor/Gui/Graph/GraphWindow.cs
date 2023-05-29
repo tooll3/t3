@@ -156,14 +156,6 @@ namespace T3.Editor.Gui.Graph
                                                                      ? OperatorUtils.BuildIdPathForInstance(instance)
                                                                      : null;
         }
-        
-        public static void ClearBackground()
-        {
-            if (_currentWindow == null)
-                return;
-
-            _currentWindow._imageBackground.BackgroundNodePath = null;
-        }
 
         protected override void DrawContent()
         {
@@ -173,7 +165,15 @@ namespace T3.Editor.Gui.Graph
             if (FitViewToSelectionHandling.FitViewToSelectionRequested)
                 FitViewToSelection();
 
-            _imageBackground.Draw();
+            var fadeBackgroundImage = _imageBackground.IsActive ? (ImGui.GetMousePos().X).Clamp(0, 100) / 100 : 1;
+            if (_imageBackground.IsActive && fadeBackgroundImage == 0)
+            {
+                if(ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                {
+                    _imageBackground.ClearBackground();
+                }
+            }
+            _imageBackground.Draw(fadeBackgroundImage);
 
             ImGui.SetCursorPos(Vector2.Zero);
 
@@ -225,13 +225,19 @@ namespace T3.Editor.Gui.Graph
 
                 drawList.ChannelsSetCurrent(0);
                 {
+                    
                     var showBackgroundOnly = _imageBackground.IsActive && ImGui.GetMousePos().X > ImGui.GetWindowSize().X + ImGui.GetWindowPos().X - 2;
+                    var graphFade = _imageBackground.IsActive ? 
+                                        (ImGui.GetWindowSize().X + ImGui.GetWindowPos().X - ImGui.GetMousePos().X).Clamp(0, 100) / 100
+                                        :1;
+
+                                        
                     if (showBackgroundOnly && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                     {
                         UserSettings.Config.ControlGraphBackground = !UserSettings.Config.ControlGraphBackground;
                     }
                     if(!showBackgroundOnly)
-                        GraphCanvas.Draw(drawList, showGrid: !_imageBackground.IsActive);
+                        GraphCanvas.Draw(drawList, hasImageInBackground: _imageBackground.IsActive, graphFade);
                 }
                 drawList.ChannelsMerge();
 
@@ -520,7 +526,7 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private readonly GraphWindow.ImageBackground _imageBackground = new();
+        private readonly ImageBackground _imageBackground = new();
 
         public readonly GraphCanvas GraphCanvas;
         private const int UseComputedHeight = -1;
