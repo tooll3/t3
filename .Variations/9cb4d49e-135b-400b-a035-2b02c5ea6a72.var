@@ -45,6 +45,21 @@
           "2d9c040d-5244-40ac-8090-d8d57323487b": 0.0625
         }
       }
+    },
+    {
+      "Id": "3dd9f475-ddf6-463a-9225-ff00f2b3c94a",
+      "IsPreset": true,
+      "ActivationIndex": 4,
+      "Title": "Fast16",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "2d9c040d-5244-40ac-8090-d8d57323487b": 16.0
+        }
+      }
     }
   ]
 }
