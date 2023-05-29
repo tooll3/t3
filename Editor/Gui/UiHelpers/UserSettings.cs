@@ -57,7 +57,6 @@ namespace T3.Editor.Gui.UiHelpers
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
             public bool AdjustCameraSpeedWithMouseWheel = false;
 
-            public bool ControlGraphBackground;
 
             public ParameterModes ParameterMode = ParameterModes.CreatesConnectedOp; 
             public float CameraSpeed = 1;

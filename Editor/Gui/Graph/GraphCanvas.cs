@@ -90,9 +90,9 @@ namespace T3.Editor.Gui.Graph
             if (CompositionOp != null)
             {
                 UserSettings.SaveLastViewedOpForWindow(_window, CompositionOp.SymbolChildId);
-                if (UserSettings.Config.OperatorViewSettings.ContainsKey(CompositionOp.SymbolChildId))
+                if (UserSettings.Config.OperatorViewSettings.TryGetValue(CompositionOp.SymbolChildId, out var viewSetting))
                 {
-                    newProps = UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId];
+                    newProps = viewSetting;
                 }
             }
 
@@ -196,18 +196,31 @@ namespace T3.Editor.Gui.Graph
             Current = this;
         }
 
-        #region drawing UI ====================================================================
-        public void Draw(ImDrawListPtr dl, bool hasImageInBackground, float graphOpacity=1)
+        [Flags]
+        public enum GraphDrawingFlags
         {
-            var flags = SymbolBrowser.IsOpen ? T3Ui.EditingFlags.PreventZoomWithMouseWheel : T3Ui.EditingFlags.None ;
+            None = 0,
+            PreventInteractions = 1<<1,
+            ShowGrid= 1 << 2,
+        }
 
-            if (UserSettings.Config.ControlGraphBackground)
-                flags |= T3Ui.EditingFlags.PreventMouseInteractions;
+        #region drawing UI ====================================================================
+        public void Draw(ImDrawListPtr dl, GraphDrawingFlags drawingFlags, float graphOpacity=1)
+        {
+            var preventInteractions = drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions);
+
+            var editingFlags = T3Ui.EditingFlags.None;
+
+            if (SymbolBrowser.IsOpen)
+                editingFlags |= T3Ui.EditingFlags.PreventZoomWithMouseWheel;
+
+            if (preventInteractions)
+                editingFlags |= T3Ui.EditingFlags.PreventMouseInteractions;
             
-            UpdateCanvas(flags);
+            UpdateCanvas(editingFlags);
 
             /*
-             * This is work around to delay setting the composition until ImGui has
+             * This is a work around to delay setting the composition until ImGui has
              * finally updated its window size and applied its layout so we can use
              * Graph window size to properly fit the content into view.
              *
@@ -256,9 +269,8 @@ namespace T3.Editor.Gui.Graph
                 
                 DrawDropHandler();
 
-                if (!UserSettings.Config.ControlGraphBackground)
+                if (!preventInteractions)
                 {
-                    
                     if (KeyboardBinding.Triggered(UserActions.FocusSelection))
                         FocusViewToSelection();
 
@@ -318,12 +330,12 @@ namespace T3.Editor.Gui.Graph
                     }
                 }
 
-                if (ImGui.IsWindowFocused())
+                if (ImGui.IsWindowFocused()  && !preventInteractions)
                 {
                     var io = ImGui.GetIO();
                     var editingSomething = ImGui.IsAnyItemActive();
                     
-                    if (!io.KeyCtrl && !io.KeyShift && !io.KeyAlt && !editingSomething && !UserSettings.Config.ControlGraphBackground)
+                    if (!io.KeyCtrl && !io.KeyShift && !io.KeyAlt && !editingSomething)
                     {
                         if (ImGui.IsKeyDown((ImGuiKey)Key.W))
                         {
@@ -363,7 +375,7 @@ namespace T3.Editor.Gui.Graph
 
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
-                if (!hasImageInBackground)
+                if (drawingFlags.HasFlag(GraphDrawingFlags.ShowGrid))
                     DrawGrid();
 
                 if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem))
@@ -373,12 +385,13 @@ namespace T3.Editor.Gui.Graph
 
                 SymbolBrowser.Draw();
 
-                graphOpacity *= (hasImageInBackground && UserSettings.Config.ControlGraphBackground) ? 0.3f : 1;
+                graphOpacity *= preventInteractions ? 0.3f : 1;
                 Graph.DrawGraph(DrawList, graphOpacity);
                 
                 RenameInstanceOverlay.Draw();
+                
                 if(!ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup)
-                   && !UserSettings.Config.ControlGraphBackground)
+                   && !preventInteractions)
                     HandleFenceSelection();
 
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();
@@ -631,7 +644,7 @@ namespace T3.Editor.Gui.Graph
             // ------ for selection -----------------------
             var oneOpSelected = selectedChildUis.Count == 1;
             var someOpsSelected = selectedChildUis.Count > 0;
-            var snapShotsEnabledFromSomeOps = !selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.SnapshotGroupIndex == 0);;
+            var snapShotsEnabledFromSomeOps = !selectedChildUis.TrueForAll(selectedChildUi => selectedChildUi.SnapshotGroupIndex == 0);
 
             var label = oneOpSelected
                             ? $"{selectedChildUis[0].SymbolChild.ReadableName}..."
@@ -920,7 +933,7 @@ namespace T3.Editor.Gui.Graph
             var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
 
             var commands = new List<ICommand>();
-            selectedChildUis = selectedChildUis == null ? GetSelectedChildUis() : selectedChildUis;
+            selectedChildUis ??= GetSelectedChildUis();
             if (selectedChildUis.Any())
             {
                 var cmd = new DeleteSymbolChildrenCommand(compositionSymbolUi, selectedChildUis);
@@ -1042,57 +1055,55 @@ namespace T3.Editor.Gui.Graph
             try
             {
                 var text = EditorUi.Instance.GetClipboardText();
-                using (var reader = new StringReader(text))
+                using var reader = new StringReader(text);
+                var jsonReader = new JsonTextReader(reader);
+                if (JToken.ReadFrom(jsonReader, SymbolJson.LoadSettings) is not JArray jArray)
+                    return;
+
+                var symbolJson = jArray[0];
+                    
+                var gotSymbolJson = SymbolJson.GetPastedSymbol(symbolJson, out var containerSymbol);
+                if (!gotSymbolJson)
                 {
-                    var jsonReader = new JsonTextReader(reader);
-                    if (JToken.ReadFrom(jsonReader, SymbolJson.LoadSettings) is not JArray jArray)
-                        return;
-
-                    var symbolJson = jArray[0];
+                    Log.Error($"Failed to paste symbol due to invalid symbol json");
+                    return;
+                }
                     
-                    var gotSymbolJson = SymbolJson.GetPastedSymbol(symbolJson, out var containerSymbol);
-                    if (!gotSymbolJson)
-                    {
-                        Log.Error($"Failed to paste symbol due to invalid symbol json");
-                        return;
-                    }
+                SymbolRegistry.Entries.Add(containerSymbol.Id, containerSymbol);
+
+                var symbolUiJson = jArray[1];
+                var hasContainerSymbolUi = SymbolUiJson.TryReadSymbolUi(symbolUiJson, out var containerSymbolUi);
+                if (!hasContainerSymbolUi)
+                {
+                    Log.Error($"Failed to paste symbol due to invalid symbol ui json");
+                    return;
+                }
                     
-                    SymbolRegistry.Entries.Add(containerSymbol.Id, containerSymbol);
+                var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
+                SymbolUiRegistry.Entries.Add(containerSymbolUi.Symbol.Id, containerSymbolUi);
+                var cmd = new CopySymbolChildrenCommand(containerSymbolUi,
+                                                        null,
+                                                        containerSymbolUi.Annotations.Values.ToList(),
+                                                        compositionSymbolUi,
+                                                        InverseTransformPositionFloat(ImGui.GetMousePos()));
+                cmd.Do(); // FIXME: Shouldn't this be UndoRedoQueue.AddAndExecute() ? 
+                SymbolUiRegistry.Entries.Remove(containerSymbolUi.Symbol.Id);
+                SymbolRegistry.Entries.Remove(containerSymbol.Id);
 
-                    var symbolUiJson = jArray[1];
-                    var hasContainerSymbolUi = SymbolUiJson.TryReadSymbolUi(symbolUiJson, out var containerSymbolUi);
-                    if (!hasContainerSymbolUi)
-                    {
-                        Log.Error($"Failed to paste symbol due to invalid symbol ui json");
-                        return;
-                    }
-                    
-                    var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-                    SymbolUiRegistry.Entries.Add(containerSymbolUi.Symbol.Id, containerSymbolUi);
-                    var cmd = new CopySymbolChildrenCommand(containerSymbolUi,
-                                                            null,
-                                                            containerSymbolUi.Annotations.Values.ToList(),
-                                                            compositionSymbolUi,
-                                                            InverseTransformPositionFloat(ImGui.GetMousePos()));
-                    cmd.Do(); // FIXME: Shouldn't this be UndoRedoQueue.AddAndExecute() ? 
-                    SymbolUiRegistry.Entries.Remove(containerSymbolUi.Symbol.Id);
-                    SymbolRegistry.Entries.Remove(containerSymbol.Id);
+                // Select new operators
+                NodeSelection.Clear();
 
-                    // Select new operators
-                    NodeSelection.Clear();
+                foreach (var id in cmd.NewSymbolChildIds)
+                {
+                    var newChildUi = compositionSymbolUi.ChildUis.Single(c => c.Id == id);
+                    var instance = CompositionOp.Children.Single(c2 => c2.SymbolChildId == id);
+                    NodeSelection.AddSymbolChildToSelection(newChildUi, instance);
+                }
 
-                    foreach (var id in cmd.NewSymbolChildIds)
-                    {
-                        var newChildUi = compositionSymbolUi.ChildUis.Single(c => c.Id == id);
-                        var instance = CompositionOp.Children.Single(c2 => c2.SymbolChildId == id);
-                        NodeSelection.AddSymbolChildToSelection(newChildUi, instance);
-                    }
-
-                    foreach (var id in cmd.NewSymbolAnnotationIds)
-                    {
-                        var annotation = compositionSymbolUi.Annotations[id];
-                        NodeSelection.AddSelection(annotation);
-                    }
+                foreach (var id in cmd.NewSymbolAnnotationIds)
+                {
+                    var annotation = compositionSymbolUi.Annotations[id];
+                    NodeSelection.AddSelection(annotation);
                 }
             }
             catch (Exception e)
@@ -1109,7 +1120,7 @@ namespace T3.Editor.Gui.Graph
             {
                 DrawList.AddLine(new Vector2(x, 0.0f) + WindowPos,
                                  new Vector2(x, WindowSize.Y) + WindowPos,
-                                 GridColor);
+                                 _gridColor);
             }
 
             for (var y = (-Scroll.Y * Scale.Y) % gridSize; y < WindowSize.Y; y += gridSize)
@@ -1117,7 +1128,7 @@ namespace T3.Editor.Gui.Graph
                 DrawList.AddLine(
                                  new Vector2(0.0f, y) + WindowPos,
                                  new Vector2(WindowSize.X, y) + WindowPos,
-                                 GridColor);
+                                 _gridColor);
             }
         }
 
@@ -1161,7 +1172,7 @@ namespace T3.Editor.Gui.Graph
         public static readonly LibWarningDialog LibWarningDialog = new();
 
         //public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
-        private static readonly Color GridColor = new(0, 0, 0, 0.15f);
+        private static readonly Color _gridColor = new(0, 0, 0, 0.15f);
         private List<SymbolChildUi> ChildUis { get; set; }
         public readonly SymbolBrowser SymbolBrowser = new SymbolBrowser();
         private string _symbolNameForDialogEdits = "";

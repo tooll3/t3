@@ -17,16 +17,19 @@ namespace T3.Editor.Gui.Graph
     /// <summary>
     /// A helper class to render an image output into the background of the graph window 
     /// </summary>
-    public class ImageBackground
+    public class GraphImageBackground
     {
         internal List<Guid> BackgroundNodePath;
 
         public bool IsActive => BackgroundNodePath != null;
+        public bool HasInteractionFocus;
 
         public void DrawResolutionSelector()
         {
             ResolutionHandling.DrawSelector(ref _selectedResolution, null);
         }
+        
+
 
         public void Draw(float imageOpacity)
         {
@@ -36,7 +39,7 @@ namespace T3.Editor.Gui.Graph
             var selectedInstance = NodeSelection.GetSelectedInstance();
             if (selectedInstance is ICamera camera)
             {
-                _cameraInteraction.Update(camera, UserSettings.Config.ControlGraphBackground);
+                _cameraInteraction.Update(camera, HasInteractionFocus);
             }
 
             _evaluationContext.ShowGizmos = T3.Core.Operator.GizmoVisibility.Off;
@@ -54,7 +57,7 @@ namespace T3.Editor.Gui.Graph
                 return;
 
             var viewOutput = instanceForOutput.Outputs[0];
-            var preventCameraInteraction = !UserSettings.Config.ControlGraphBackground 
+            var preventCameraInteraction = !HasInteractionFocus 
                                            || !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
             _camSelectionHandling.Update(instanceForOutput, instanceForOutput.Outputs[0].ValueType, preventCameraInteraction);
 
@@ -107,7 +110,7 @@ namespace T3.Editor.Gui.Graph
             _camSelectionHandling.DrawCameraControlSelection();
             ImGui.SameLine();
 
-            ImGui.Checkbox("ControlBackground", ref UserSettings.Config.ControlGraphBackground);
+            ImGui.Checkbox("ControlBackground", ref HasInteractionFocus);
         }
 
         public void ClearBackground()
