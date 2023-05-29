@@ -33,7 +33,7 @@ public static class NodeGraphLayouting
                 if (secondPassOp is not SymbolChildUi childUi)
                     continue;
 
-                childUi.PosOnCanvas += new Vector2(0, +20);
+                childUi.PosOnCanvas += new Vector2(0, +40);
                 var morePasses = new Dictionary<ISelectableCanvasObject, int>();
 
                 var pos = Vector2.Zero;
