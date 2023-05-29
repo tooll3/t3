@@ -227,13 +227,13 @@ namespace T3.Editor.Gui.Graph
                 {
                     
                     var showBackgroundOnly = _graphImageBackground.IsActive && ImGui.GetMousePos().X > ImGui.GetWindowSize().X + ImGui.GetWindowPos().X - 2;
-                    var graphFade = (_graphImageBackground.IsActive && !ImGui.IsAnyItemActive() ) ? 
+                    var graphFade = (_graphImageBackground.IsActive && !ImGui.IsMouseDown(ImGuiMouseButton.Left)) ? 
                                         (ImGui.GetWindowSize().X + ImGui.GetWindowPos().X - ImGui.GetMousePos().X).Clamp(0, 100) / 100
                                         :1;
                     
                     if (showBackgroundOnly)
                     {
-                        if(ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                        if((!ImGui.IsAnyItemActive() && ImGui.IsMouseClicked(ImGuiMouseButton.Left)))
                             _graphImageBackground.HasInteractionFocus = !_graphImageBackground.HasInteractionFocus;
                     }
                     else
