@@ -88,56 +88,9 @@ namespace T3.Editor.Gui.Windows
 
                 // Draw parameters
                 DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi);
-
-                // Description
-                //ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
-                ImGui.PushFont(Fonts.FontSmall);
-
-                //ImGui.Dummy(new Vector2(10,10));
                 FormInputs.AddVerticalSpace(30);
-                ImGui.Indent(10);
-                ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10,10));
-                
-                if (!string.IsNullOrEmpty(symbolUi.Description))
-                {
-                    ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-                    ImGui.TextWrapped(symbolUi.Description);
-                    ImGui.PopStyleColor();                        
-                }
-                
-                if (ImGui.Button("Edit description..."))
-                    _editDescriptionDialog.ShowNextFrame();                
-                
-                SymbolBrowser.ListExampleOperators(symbolUi);
-                if (!string.IsNullOrEmpty(symbolUi.Description))
-                {
-                    var alreadyListedSymbolNames = new HashSet<string>();
-                    
-                    foreach (Match  match in _itemRegex.Matches(symbolUi.Description))
-                    {
-                        var referencedName = match.Groups[1].Value;
 
-                        if (referencedName == symbolUi.Symbol.Name)
-                            continue;
-
-                        if (alreadyListedSymbolNames.Contains(referencedName))
-                            continue;
-                        
-                        // This is slow and could be optimized by dictionary
-                        var referencedSymbolUi = SymbolRegistry.Entries.Values.SingleOrDefault(s => s.Name == referencedName);
-                        if (referencedSymbolUi != null)
-                        {
-                            SymbolBrowser.DrawExampleOperator(referencedSymbolUi.Id,referencedName);
-                        }
-
-                        alreadyListedSymbolNames.Add(referencedName);
-                    }
-                }
-                
-                ImGui.PopStyleVar();
-                ImGui.Unindent();
-                
-                ImGui.PopFont();
+                DrawDescription(symbolUi);
                 return;
             }
 
@@ -171,6 +124,55 @@ namespace T3.Editor.Gui.Windows
             
         }
 
+        public static void DrawDescription(SymbolUi symbolUi)
+        {
+            // Description
+            ImGui.PushFont(Fonts.FontSmall);
+
+            ImGui.Indent(10);
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
+
+            if (!string.IsNullOrEmpty(symbolUi.Description))
+            {
+                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                ImGui.TextWrapped(symbolUi.Description);
+                ImGui.PopStyleColor();
+            }
+
+            if (ImGui.Button("Edit description..."))
+                _editDescriptionDialog.ShowNextFrame();
+
+            SymbolBrowser.ListExampleOperators(symbolUi);
+            if (!string.IsNullOrEmpty(symbolUi.Description))
+            {
+                var alreadyListedSymbolNames = new HashSet<string>();
+
+                foreach (Match match in _itemRegex.Matches(symbolUi.Description))
+                {
+                    var referencedName = match.Groups[1].Value;
+
+                    if (referencedName == symbolUi.Symbol.Name)
+                        continue;
+
+                    if (alreadyListedSymbolNames.Contains(referencedName))
+                        continue;
+
+                    // This is slow and could be optimized by dictionary
+                    var referencedSymbolUi = SymbolRegistry.Entries.Values.SingleOrDefault(s => s.Name == referencedName);
+                    if (referencedSymbolUi != null)
+                    {
+                        SymbolBrowser.DrawExampleOperator(referencedSymbolUi.Id, referencedName);
+                    }
+
+                    alreadyListedSymbolNames.Add(referencedName);
+                }
+            }
+
+            ImGui.PopStyleVar();
+            ImGui.Unindent();
+
+            ImGui.PopFont();
+        }
 
         private enum GroupState
         {

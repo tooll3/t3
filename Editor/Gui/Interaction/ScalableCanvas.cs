@@ -1,6 +1,7 @@
 using System;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
@@ -386,14 +387,14 @@ namespace T3.Editor.Gui.Interaction
         protected void HandleInteraction(T3Ui.EditingFlags flags)
         {
             var isDraggingConnection = (ConnectionMaker.TempConnections.Count > 0) && ImGui.IsWindowFocused();
-            if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) && !isDraggingConnection)
+            if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && !isDraggingConnection)
                 return;
 
             if ((flags & T3Ui.EditingFlags.PreventMouseInteractions) != T3Ui.EditingFlags.None)
                 return;
 
-            if (FrameStats.Last.OpenedPopUpName != string.Empty)
-                return;
+            // if (FrameStats.Last.OpenedPopUpName != string.Empty)
+            //     return;
 
             if (PreventMouseInteraction)
                 return;
@@ -413,8 +414,8 @@ namespace T3.Editor.Gui.Interaction
                 UserScrolledCanvas = false;
             }
 
-            if ((flags & T3Ui.EditingFlags.PreventZoomWithMouseWheel) == 0
-                && !ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup))
+            if (!flags.HasFlag(T3Ui.EditingFlags.PreventZoomWithMouseWheel))
+                //&& !ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup))
             {
                 ZoomWithMouseWheel(_mouse);
                 ScaleTarget = ClampScaleToValidRange(ScaleTarget);
@@ -493,9 +494,12 @@ namespace T3.Editor.Gui.Interaction
 
         protected float ComputeZoomDeltaFromMouseWheel()
         {
+            var ioMouseWheel = Io.MouseWheel;
+            if (ioMouseWheel == 0)
+                return 1;
+            
             const float zoomSpeed = 1.2f;
             var zoomSum = 1f;
-            var ioMouseWheel = Io.MouseWheel;
 
             if (ioMouseWheel < 0.0f)
             {

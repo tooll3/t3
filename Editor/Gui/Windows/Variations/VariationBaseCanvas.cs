@@ -45,7 +45,7 @@ namespace T3.Editor.Gui.Windows.Variations
                 RefreshView();
             }
             
-            UpdateCanvas();
+            //UpdateCanvas();
             HandleFenceSelection();
 
             // Blending...

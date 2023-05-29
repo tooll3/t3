@@ -16,7 +16,7 @@ namespace T3.Editor.Gui.Graph;
 
 internal static class ParameterPopUp
 {
-    public static void OpenParameterPopUp(SymbolChildUi childUi, Instance instance, SymbolChildUi.CustomUiResult customUiResult, ImRect nodeScreenRect)
+    public static void HandleOpenParameterPopUp(SymbolChildUi childUi, Instance instance, SymbolChildUi.CustomUiResult customUiResult, ImRect nodeScreenRect)
     {
         var activatedWithLeftMouse = ImGui.IsItemHovered()
                                      && ImGui.IsMouseReleased(ImGuiMouseButton.Left)
@@ -34,22 +34,40 @@ internal static class ParameterPopUp
         if ((activatedWithLeftMouse || activatedWithMiddleMouse || activationRequested)
             && string.IsNullOrEmpty(FrameStats.Current.OpenedPopUpName)
             && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp) == 0
-            && FrameStats.Last.OpenedPopUpName != CurrentOpenedPopUpName)
+            && FrameStats.Last.OpenedPopUpName != ParameterPopUpName)
         {
-            NodeIdRequestedForParameterWindowActivation = Guid.Empty;
-            NodeSelection.SetSelectionToChildUi(childUi, instance);
             _selectedInstance = instance;
-
-            var screenPos = new Vector2(nodeScreenRect.Min.X + 5, nodeScreenRect.Max.Y + 5);
-            ImGui.SetNextWindowPos(screenPos);
-            ImGui.OpenPopup(CurrentOpenedPopUpName);
+            _graphCanvas = GraphCanvas.Current;
         }
     }
 
-    public static void DrawParameterPopUp(Instance instance, bool justOpenedChild, SymbolUi symbolUi_)
+    private static bool _isOpen;
+    private static GraphCanvas _graphCanvas;
+
+    public static void DrawParameterPopUp()
     {
+        if (_selectedInstance == null || _graphCanvas == null)
+            return;
+        
+        var symbolUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
+        var compositionSymbolUi = SymbolUiRegistry.Entries[_graphCanvas.CompositionOp.Symbol.Id];
+        var symbolChildUi = compositionSymbolUi.ChildUis.Single(symbolChildUi2 => symbolChildUi2.Id == _selectedInstance.SymbolChildId);
+        
+        if (!_isOpen)
+        {
+            NodeIdRequestedForParameterWindowActivation = Guid.Empty;
+            NodeSelection.SetSelectionToChildUi(symbolChildUi, _selectedInstance);
+
+            var nodeScreenRect = _graphCanvas.TransformRect(ImRect.RectWithSize(symbolChildUi.PosOnCanvas, symbolChildUi.Size));
+            
+            var screenPos = new Vector2(nodeScreenRect.Min.X + 5, nodeScreenRect.Max.Y + 5);
+            ImGui.SetNextWindowPos(screenPos);
+            ImGui.OpenPopup(ParameterPopUpName);
+            _isOpen = true;
+        }
+        
         ImGui.SetNextWindowSizeConstraints(new Vector2(280, 140), new Vector2(280, 320));
-        if (ImGui.BeginPopup(CurrentOpenedPopUpName))
+        if (ImGui.BeginPopup(ParameterPopUpName, ImGuiWindowFlags.NoMove))
         {
             var io = ImGui.GetIO();
             
@@ -63,9 +81,6 @@ internal static class ParameterPopUp
                 //Log.Debug("Left!");
             }
 
-            var symbolUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
-            var compositionSymbolUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-            var symbolChildUi = compositionSymbolUi.ChildUis.Single(symbolChildUi2 => symbolChildUi2.Id == _selectedInstance.SymbolChildId);
             //var symbolUi = SymbolUiRegistry.Entries[_selectedInstance.Parent]
 
             FormInputs.SetIndent(20);
@@ -73,7 +88,7 @@ internal static class ParameterPopUp
             switch (_viewMode)
             {
                 case ViewModes.Parameters:
-                    FrameStats.Current.OpenedPopUpName = CurrentOpenedPopUpName;
+                    FrameStats.Current.OpenedPopUpName = ParameterPopUpName;
                     ImGui.PushFont(Fonts.FontSmall);
                     ParameterWindow.DrawParameters(_selectedInstance, symbolUi, symbolChildUi, compositionSymbolUi);
                     ImGui.PopFont();
@@ -87,15 +102,27 @@ internal static class ParameterPopUp
                         
                         variationsWindow.DrawWindowContent();
                     }
-                    //VariationsWindow.DrawWindowContent();
                     break;
                 case ViewModes.Help:
-                    ImGui.Text(symbolUi.Description);
+                    FormInputs.AddVerticalSpace(10);
+                    ImGui.PushFont(Fonts.FontNormal);
+                    ImGui.SetCursorPosX(10);
+                    ImGui.TextUnformatted(symbolUi.Symbol.Name);
+                    ImGui.PopFont();
+                    FormInputs.AddVerticalSpace(10);
+                    ParameterWindow.DrawDescription(symbolUi);
+                    FormInputs.AddVerticalSpace(10);
                     break;
+                
                 default:
                     throw new ArgumentOutOfRangeException();
             }
             ImGui.EndPopup();
+        }
+        else
+        {
+            _selectedInstance = null;
+            _isOpen = false;
         }
     }
 
@@ -107,9 +134,8 @@ internal static class ParameterPopUp
     }
 
     private static ViewModes _viewMode = ViewModes.Parameters;
-    private static PresetCanvas _presetCanvas = new();
-    public static Instance _selectedInstance;
-
-    public static readonly string CurrentOpenedPopUpName = "parameterContextPopup";
+    //private static PresetCanvas _presetCanvas = new();
+    private static Instance _selectedInstance;
+    public static readonly string ParameterPopUpName = "parameterContextPopup";
     public static Guid NodeIdRequestedForParameterWindowActivation;
 }

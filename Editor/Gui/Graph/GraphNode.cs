@@ -253,9 +253,8 @@ namespace T3.Editor.Gui.Graph
 
                     if (!justOpenedChild)
                     {
-                        ParameterPopUp.OpenParameterPopUp(childUi, instance, customUiResult, _selectableScreenRect);
+                        ParameterPopUp.HandleOpenParameterPopUp(childUi, instance, customUiResult, _selectableScreenRect);
                     }
-                    ParameterPopUp.DrawParameterPopUp(instance, justOpenedChild, symbolUi);
 
                     DrawPreview();
 

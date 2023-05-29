@@ -246,6 +246,7 @@ namespace T3.Editor.Gui.Graph
                             flags |= GraphCanvas.GraphDrawingFlags.PreventInteractions;
                         
                         GraphCanvas.Draw(drawList, flags , graphFade);
+                        ParameterPopUp.DrawParameterPopUp();
                     }
                 }
                 drawList.ChannelsMerge();
