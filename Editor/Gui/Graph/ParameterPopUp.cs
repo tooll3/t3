@@ -74,7 +74,7 @@ internal static class ParameterPopUp
         }
         
         ImGui.SetNextWindowSizeConstraints(new Vector2(280, 140), new Vector2(280, 320));
-        if (ImGui.BeginPopup(ParameterPopUpName, ImGuiWindowFlags.NoMove))
+        if (ImGui.BeginPopup(ParameterPopUpName,  ImGuiWindowFlags.NoMove))
         {
             var io = ImGui.GetIO();
             
@@ -108,7 +108,7 @@ internal static class ParameterPopUp
                         if (w is not VariationsWindow variationsWindow)
                             continue;
                         
-                        variationsWindow.DrawWindowContent();
+                        variationsWindow.DrawWindowContent(hideHeader:true);
                     }
                     break;
                 case ViewModes.Help:

@@ -184,11 +184,11 @@ namespace T3.Editor.Gui.Graph
                         //ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                         FrameStats.AddHoveredId(childUi.SymbolChild.Id);
 
-                        ImGui.SetNextWindowSizeConstraints(new Vector2(200, 120), new Vector2(200, 120));
                         if (UserSettings.Config.HoverMode != GraphCanvas.HoverModes.Disabled
                             && !ImGui.IsMouseDragging(ImGuiMouseButton.Left)
                             && !RenameInstanceOverlay.IsOpen)
                         {
+                            ImGui.SetNextWindowSizeConstraints(new Vector2(200, 120), new Vector2(200, 120));
                             ImGui.BeginTooltip();
                             {
                                 TransformGizmoHandling.SetDrawList(drawList);

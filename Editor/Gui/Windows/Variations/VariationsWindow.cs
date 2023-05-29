@@ -29,7 +29,7 @@ namespace T3.Editor.Gui.Windows.Variations
         private ViewModes _viewMode = 0;
         private int _selectedNodeCount = 0;
 
-        public void DrawWindowContent()
+        public void DrawWindowContent(bool hideHeader = false)
         {
             // Delete actions need be deferred to prevent collection modification during iteration
             if (_variationsToBeDeletedNextFrame.Count > 0)
@@ -45,12 +45,12 @@ namespace T3.Editor.Gui.Windows.Variations
             if (selectionChanged)
             {
                 _selectedNodeCount = NodeSelection.Selection.Count;
-                
+
                 if (oneChildSelected)
                 {
                     _viewMode = ViewModes.Presets;
                 }
-                else if (compositionHasVariations && _selectedNodeCount == 0) 
+                else if (compositionHasVariations && _selectedNodeCount == 0)
                 {
                     _viewMode = ViewModes.Snapshots;
                 }
@@ -62,35 +62,38 @@ namespace T3.Editor.Gui.Windows.Variations
             drawList.ChannelsSplit(2);
             drawList.ChannelsSetCurrent(1);
             {
-                ImGui.BeginChild("header", 
-                                 new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetFrameHeight()), 
-                                 false, 
-                                 ImGuiWindowFlags.NoScrollbar);
-
-                var viewModeIndex = (int)_viewMode;
-                
-                if (CustomComponents.DrawSegmentedToggle(ref viewModeIndex, _options))
+                if (!hideHeader)
                 {
-                    _viewMode = (ViewModes)viewModeIndex;
-                    _presetCanvas.RefreshView();
-                    _snapshotCanvas.RefreshView();
-                }
+                    ImGui.BeginChild("header",
+                                     new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetFrameHeight()),
+                                     false,
+                                     ImGuiWindowFlags.NoScrollbar);
 
-                ImGui.SameLine();
-                ImGui.Dummy(new Vector2(10,10));
-                ImGui.SameLine();
-                switch (_viewMode)
-                {
-                    case ViewModes.Presets:
-                        _presetCanvas.DrawToolbarFunctions();
-                        break;
-                        
-                    case ViewModes.Snapshots:
-                        _snapshotCanvas.DrawToolbarFunctions();
-                        break;
-                }
+                    var viewModeIndex = (int)_viewMode;
 
-                ImGui.EndChild();
+                    if (CustomComponents.DrawSegmentedToggle(ref viewModeIndex, _options))
+                    {
+                        _viewMode = (ViewModes)viewModeIndex;
+                        _presetCanvas.RefreshView();
+                        _snapshotCanvas.RefreshView();
+                    }
+
+                    ImGui.SameLine();
+                    ImGui.Dummy(new Vector2(10, 10));
+                    ImGui.SameLine();
+                    switch (_viewMode)
+                    {
+                        case ViewModes.Presets:
+                            _presetCanvas.DrawToolbarFunctions();
+                            break;
+
+                        case ViewModes.Snapshots:
+                            _snapshotCanvas.DrawToolbarFunctions();
+                            break;
+                    }
+
+                    ImGui.EndChild();
+                }
             }
 
             drawList.ChannelsSetCurrent(0);
@@ -99,24 +102,23 @@ namespace T3.Editor.Gui.Windows.Variations
 
                 if (_viewMode == ViewModes.Presets)
                 {
-                    if (VariationHandling.ActivePoolForPresets == null 
-                        || VariationHandling.ActiveInstanceForPresets == null 
+                    if (VariationHandling.ActivePoolForPresets == null
+                        || VariationHandling.ActiveInstanceForPresets == null
                         || VariationHandling.ActivePoolForPresets.Variations.Count == 0)
                     {
                         CustomComponents.EmptyWindowMessage("No presets yet.");
                     }
                     else
                     {
-                        _presetCanvas.Draw(drawList);
+                        _presetCanvas.Draw(drawList, hideHeader);
                     }
                 }
                 else
                 {
-                    if (VariationHandling.ActivePoolForSnapshots == null 
-                        || VariationHandling.ActiveInstanceForSnapshots == null 
+                    if (VariationHandling.ActivePoolForSnapshots == null
+                        || VariationHandling.ActiveInstanceForSnapshots == null
                         || VariationHandling.ActivePoolForSnapshots.Variations.Count == 0)
                     {
-                        
                         var childUi = SymbolUiRegistry.Entries[VariationHandling.ActiveInstanceForSnapshots.Symbol.Id];
                         var shapshotsEnabledForNone = !childUi.ChildUis.Any(s => s.SnapshotGroupIndex > 0);
                         var additionalHint = shapshotsEnabledForNone ? "Use the graph window context menu\nto activate snapshots for operators." : "";
@@ -154,7 +156,6 @@ namespace T3.Editor.Gui.Windows.Variations
 
         public static void DeleteVariationsFromPool(SymbolVariationPool pool, IEnumerable<Variation> selectionSelection)
         {
-            
             _poolWithVariationToBeDeleted = pool;
             _variationsToBeDeletedNextFrame.AddRange(selectionSelection); // TODO: mixing Snapshots and variations in same list is dangerous
             pool.StopHover();
