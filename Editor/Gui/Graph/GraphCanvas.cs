@@ -201,7 +201,7 @@ namespace T3.Editor.Gui.Graph
         {
             None = 0,
             PreventInteractions = 1<<1,
-            ShowGrid= 1 << 2,
+            HideGrid= 1 << 2,
         }
 
         #region drawing UI ====================================================================
@@ -375,7 +375,7 @@ namespace T3.Editor.Gui.Graph
 
                 DrawList.PushClipRect(WindowPos, WindowPos + WindowSize);
 
-                if (drawingFlags.HasFlag(GraphDrawingFlags.ShowGrid))
+                if (!drawingFlags.HasFlag(GraphDrawingFlags.HideGrid))
                     DrawGrid();
 
                 if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByActiveItem))
@@ -390,8 +390,9 @@ namespace T3.Editor.Gui.Graph
                 
                 RenameInstanceOverlay.Draw();
                 
-                if(!ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup)
-                   && !preventInteractions)
+                if(ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup)
+                   && !preventInteractions
+                   && ConnectionMaker.TempConnections.Count == 0)
                     HandleFenceSelection();
 
                 var isOnBackground = ImGui.IsWindowFocused() && !ImGui.IsAnyItemActive();

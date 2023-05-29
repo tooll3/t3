@@ -42,52 +42,59 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
         }
 
+
+        //private static Guid _activeChildId;
         
         /// <summary>
         /// NOTE: This has to be called for ALL movable elements and directly after ImGui.Item
         /// </summary>
         public static void Handle(ISelectableCanvasObject node, Instance instance = null)
         {
-            if (ImGui.IsItemActive())
+            if (instance == null)
+                return;
+            
+            //Log.Debug("Testing  " + node.Id);
+            
+            var justClicked = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
+            
+            var isActiveNode = instance.SymbolChildId == _draggedNodeId;
+
+            if (justClicked)
             {
-                if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
+                var compositionSymbolId = GraphCanvas.Current.CompositionOp.Symbol.Id;
+                _draggedNodeId = node.Id;
+                if (node.IsSelected)
                 {
-                    var compositionSymbolId = GraphCanvas.Current.CompositionOp.Symbol.Id;
-                    _draggedNodeId = node.Id;
-                    if (node.IsSelected)
-                    {
-                        _draggedNodes = NodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
-                    }
-                    else
-                    {
-                        var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-                        if(UserSettings.Config.SmartGroupDragging)
-                            _draggedNodes = FindSnappedNeighbours(parentUi, node).ToList();
-                        
-                        _draggedNodes.Add(node);
-                    }
-
-                    _moveCommand = new ModifyCanvasElementsCommand(compositionSymbolId, _draggedNodes);
-                    ShakeDetector.Reset();
+                    _draggedNodes = NodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
                 }
-                else if (_moveCommand != null)
+                else
                 {
-                    if (!T3Ui.IsCurrentlySaving && ShakeDetector.TestDragForShake(ImGui.GetMousePos()))
-                    {
-                        _moveCommand.StoreCurrentValues();
-                        UndoRedoStack.Add(_moveCommand);
-                        _moveCommand = null;
-                        DisconnectDraggedNodes();
-                    }
+                    var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+                    if(UserSettings.Config.SmartGroupDragging)
+                        _draggedNodes = FindSnappedNeighbours(parentUi, node).ToList();
+                    
+                    _draggedNodes.Add(node);
                 }
 
+                _moveCommand = new ModifyCanvasElementsCommand(compositionSymbolId, _draggedNodes);
+                ShakeDetector.Reset();
+            }
+            else if (isActiveNode && ImGui.IsMouseDown(ImGuiMouseButton.Left) && _moveCommand != null)
+            {
+                if (!T3Ui.IsCurrentlySaving && ShakeDetector.TestDragForShake(ImGui.GetMousePos()))
+                {
+                    _moveCommand.StoreCurrentValues();
+                    UndoRedoStack.Add(_moveCommand);
+                    _moveCommand = null;
+                    DisconnectDraggedNodes();
+                }
                 HandleNodeDragging(node);
             }
-            else if (ImGui.IsMouseReleased(0) && _moveCommand != null)
+            else if (isActiveNode && ImGui.IsMouseReleased(0) && _moveCommand != null)
             {
                 if (_draggedNodeId != node.Id)
                     return;
-
+                
                 var singleDraggedNode = (_draggedNodes.Count == 1) ? _draggedNodes[0] : null;
                 _draggedNodeId = Guid.Empty;
                 _draggedNodes.Clear();

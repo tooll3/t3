@@ -227,7 +227,7 @@ namespace T3.Editor.Gui.Graph
                 {
                     
                     var showBackgroundOnly = _graphImageBackground.IsActive && ImGui.GetMousePos().X > ImGui.GetWindowSize().X + ImGui.GetWindowPos().X - 2;
-                    var graphFade = _graphImageBackground.IsActive ? 
+                    var graphFade = (_graphImageBackground.IsActive && !ImGui.IsAnyItemActive() ) ? 
                                         (ImGui.GetWindowSize().X + ImGui.GetWindowPos().X - ImGui.GetMousePos().X).Clamp(0, 100) / 100
                                         :1;
                     
@@ -240,7 +240,7 @@ namespace T3.Editor.Gui.Graph
                     {
                         var flags = GraphCanvas.GraphDrawingFlags.None;
                         if(_graphImageBackground.IsActive)
-                            flags |=  GraphCanvas.GraphDrawingFlags.ShowGrid;
+                            flags |=  GraphCanvas.GraphDrawingFlags.HideGrid;
 
                         if (_graphImageBackground.HasInteractionFocus)
                             flags |= GraphCanvas.GraphDrawingFlags.PreventInteractions;
@@ -427,7 +427,7 @@ namespace T3.Editor.Gui.Graph
             ImGui.SetCursorPos(
                                new Vector2(
                                            ImGui.GetWindowContentRegionMin().X,
-                                           ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y -2));
+                                           ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y ));
 
             ImGui.BeginChild("TimeControls", Vector2.Zero, false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
             {
@@ -439,8 +439,14 @@ namespace T3.Editor.Gui.Graph
 
                 ImGui.SameLine();
 
+                ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
                 TimeControls.DrawTimeControls(_timeLineCanvas);
+                ImGui.PopStyleVar();
+                ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 10);
+                
+                ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5,5));
                 _graphImageBackground.DrawToolbarItems();
+                ImGui.PopStyleVar();
             }
             ImGui.EndChild();
         }

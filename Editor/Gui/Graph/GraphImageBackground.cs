@@ -88,14 +88,14 @@ namespace T3.Editor.Gui.Graph
             if (!IsActive)
                 return;
 
-            DrawResolutionSelector();
-            ImGui.SameLine();
+            //ImGui.SameLine();
             if (ImGui.Button("Clear BG"))
             {
                 ClearBackground();
             }
 
             ImGui.SameLine();
+            DrawResolutionSelector();
 
             var showGizmos = ShowGizmos != T3.Core.Operator.GizmoVisibility.Off;
             if (CustomComponents.ToggleIconButton(Icon.Grid, "##gizmos", ref showGizmos, Vector2.One * ImGui.GetFrameHeight()))

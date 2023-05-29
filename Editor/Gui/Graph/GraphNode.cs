@@ -169,9 +169,9 @@ namespace T3.Editor.Gui.Graph
 
                     SelectableNodeMovement.Handle(childUi, instance);
 
-                    isNodeHovered = ImGui.IsItemHovered() 
+                    isNodeHovered = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) 
                                         && !GraphCanvas.Current.SymbolBrowser.IsOpen
-                                        && ImGui.IsWindowFocused();
+                                        && ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup);
                     
                     // Tooltip
                     if (isNodeHovered
@@ -217,8 +217,7 @@ namespace T3.Editor.Gui.Graph
                         _hoveredNodeIdForConnectionTarget = childUi.Id;
                     }
 
-                    var hovered = ImGui.IsWindowFocused()
-                                  && (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) ||
+                    var hovered =  (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) ||
                                       FrameStats.Last.HoveredIds.Contains(instance.SymbolChildId));
 
                     // A horrible work around to prevent exception because CompositionOp changed during drawing.
@@ -228,7 +227,7 @@ namespace T3.Editor.Gui.Graph
                                 && !RenameInstanceOverlay.IsOpen
                                 && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenSubGraph) == 0)
                     {
-                        if (ImGui.IsWindowFocused())
+                        if (ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
                         {
                             var blocked = false;
                             if (UserSettings.Config.WarnBeforeLibEdit && instance.Symbol.Namespace.StartsWith("lib."))
@@ -524,7 +523,7 @@ namespace T3.Editor.Gui.Graph
                 //Note: isItemHovered does not work when dragging is active
                 var hovered = ConnectionMaker.TempConnections.Count > 0
                                   ? usableArea.Contains(ImGui.GetMousePos())
-                                  : ImGui.IsItemHovered();
+                                  : ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup);
             
                 // Update connection lines
                 var dirtyFlagNumUpdatesWithinFrame = output.DirtyFlag.NumUpdatesWithinFrame;
@@ -845,7 +844,7 @@ namespace T3.Editor.Gui.Graph
                         ImGui.EndTooltip();
                         ImGui.PopStyleVar();
 
-                        if (ImGui.IsItemActivated())
+                        if(ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                         {
                             _draggedOutputOpId = childUi.Id;
                             _draggedOutputDefId = outputDef.Id;

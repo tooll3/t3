@@ -51,7 +51,12 @@ internal static class ParameterPopUp
         
         var symbolUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
         var compositionSymbolUi = SymbolUiRegistry.Entries[_graphCanvas.CompositionOp.Symbol.Id];
-        var symbolChildUi = compositionSymbolUi.ChildUis.Single(symbolChildUi2 => symbolChildUi2.Id == _selectedInstance.SymbolChildId);
+        var symbolChildUi = compositionSymbolUi.ChildUis.SingleOrDefault(symbolChildUi2 => symbolChildUi2.Id == _selectedInstance.SymbolChildId);
+        if (symbolChildUi == null)
+        {
+            Close();
+            return;
+        }
         
         if (!_isOpen)
         {
@@ -121,9 +126,14 @@ internal static class ParameterPopUp
         }
         else
         {
-            _selectedInstance = null;
-            _isOpen = false;
+            Close();
         }
+    }
+
+    private static void Close()
+    {
+        _selectedInstance = null;
+        _isOpen = false;
     }
 
     private enum ViewModes
