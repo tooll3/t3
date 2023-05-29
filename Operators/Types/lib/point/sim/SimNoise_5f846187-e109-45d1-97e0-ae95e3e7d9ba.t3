@@ -4,16 +4,16 @@
   "Namespace": "lib.point.sim",
   "Inputs": [
     {
+      "Id": "679d6321-a5d7-41cc-a191-5e6cf353dfc4"/*GPoints*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "cc98bda7-34a5-4c18-9b9e-fabe51b02d71"/*Amount*/,
       "DefaultValue": 0.2
     },
     {
       "Id": "757c259a-118c-4438-bc09-cdc5708af2bc"/*Frequency*/,
       "DefaultValue": 1.0
-    },
-    {
-      "Id": "679d6321-a5d7-41cc-a191-5e6cf353dfc4"/*GPoints*/,
-      "DefaultValue": null
     },
     {
       "Id": "cb3ae9c7-5146-4bc6-9a87-3d17012fab52"/*Phase*/,

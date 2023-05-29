@@ -6,13 +6,14 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_32325c5b_53f7_4414_b4dd_a436e45528b0
 {
     public class SetCommandTime : Instance<SetCommandTime>
     {
        
-        [Output(Guid = "FE01C3B6-72E2-494E-8511-6D50C527463F", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        [Output(Guid = "FE01C3B6-72E2-494E-8511-6D50C527463F")]
         public readonly Slot<Command> Result = new Slot<Command>();
 
         
@@ -24,27 +25,34 @@ namespace T3.Operators.Types.Id_32325c5b_53f7_4414_b4dd_a436e45528b0
         private void Update(EvaluationContext context)
         {
             var newTime = NewTime.GetValue(context);
-            var previousKeyframeTime = context.LocalTime;
-            
+            var mode = OffsetMode.GetEnumValue<Modes>(context);
 
-            var previousEffectTime = context.LocalFxTime;
+            if (SubTree.IsConnected)
+            {
+                var previousKeyframeTime = context.LocalTime;
+                var previousEffectTime = context.LocalFxTime;
 
-            var mode = OffsetMode.GetValue(context);
-            if (mode == 0)
+                if (mode == Modes.Absolute)
+                {
+                    context.LocalTime = newTime;
+                    context.LocalFxTime = newTime;
+                }
+                else
+                {
+                    context.LocalTime += newTime;
+                    context.LocalFxTime += newTime;
+                }
+                
+                // Execute subtree
+                Result.Value = SubTree.GetValue(context);
+                context.LocalTime = previousKeyframeTime;
+                context.LocalFxTime = previousEffectTime;
+            }
+            else if(mode == Modes.GlobalAbsolute)
             {
                 context.LocalTime = newTime;
                 context.LocalFxTime = newTime;
             }
-            else
-            {
-                context.LocalTime += newTime;
-                context.LocalFxTime += newTime;
-            }
-            
-            // Execute subtree
-            Result.Value = SubTree.GetValue(context);
-            context.LocalTime = previousKeyframeTime;
-            context.LocalFxTime = previousEffectTime;
         }
         
         [Input(Guid = "01F2EEF1-E3C1-49A5-B532-9C12DA8CAAC5")]
@@ -60,6 +68,7 @@ namespace T3.Operators.Types.Id_32325c5b_53f7_4414_b4dd_a436e45528b0
         {
             Absolute,
             Relative,
+            GlobalAbsolute,
         }
     }
 }

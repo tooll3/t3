@@ -1,0 +1,23 @@
+{
+  "Name": "FloatListToString",
+  "Id": "abf1ec99-049d-474c-9023-5302d5a5c804",
+  "Namespace": "lib.string",
+  "Inputs": [
+    {
+      "Id": "010c814b-be7d-4bf9-82be-1869217bd1ad"/*Value*/,
+      "DefaultValue": {
+        "Values": []
+      }
+    },
+    {
+      "Id": "ab4eef8d-8b76-48ff-8a3c-d9fc352b5a6c"/*Format*/,
+      "DefaultValue": "{0:0.000}"
+    },
+    {
+      "Id": "fa19703a-be58-4c51-8674-a0eafbcf96c4"/*Separator*/,
+      "DefaultValue": ""
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

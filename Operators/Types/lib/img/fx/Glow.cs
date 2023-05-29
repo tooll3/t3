@@ -39,6 +39,9 @@ namespace T3.Operators.Types.Id_d392d4af_4c78_4f4a_bc3f_4c54c8c73538
         [Input(Guid = "03f2bd5c-b599-47f5-b697-9f881639a598")]
         public readonly InputSlot<float> AmplifyFineBlur = new InputSlot<float>();
 
+        [Input(Guid = "53fe4db2-128c-43e3-8c58-8f01694d13ac", MappedType = typeof(SharedEnums.BlendModes))]
+        public readonly InputSlot<int> BlendMode = new InputSlot<int>();
+
     }
 }
 

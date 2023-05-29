@@ -5,10 +5,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "129c3c72-080f-48c0-af3f-2bb31928bbf6"/*GridPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 4.4589844,
         "Y": 0.0
@@ -16,10 +12,6 @@
     },
     {
       "ChildId": "41ead94a-a6fb-4029-bc22-89b512d196cd"/*DrawPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 454.45898,
         "Y": 0.6491699
@@ -27,10 +19,6 @@
     },
     {
       "ChildId": "61e4062c-7410-4628-a634-4b1560dddea4"/*SelectPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 154.45898,
         "Y": 0.0
@@ -38,10 +26,6 @@
     },
     {
       "ChildId": "3f7f85ee-0208-444f-a064-eca32283bac1"/*TransformPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 304.45898,
         "Y": 0.0
@@ -49,10 +33,6 @@
     },
     {
       "ChildId": "5188e433-1b28-4022-b8bd-c5d07129e859"/*OscillateVec3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 154.45898,
         "Y": 56.0
@@ -60,10 +40,6 @@
     },
     {
       "ChildId": "3a6c8ebc-5aa6-4ba7-aec6-ad342bd03d3b"/*OscillateVec3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -133.15332,
         "Y": 0.00024414062
@@ -71,10 +47,6 @@
     },
     {
       "ChildId": "fbfe673f-d3bf-4486-8076-ec72a2e50518"/*RenderTarget*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 754.459,
         "Y": 0.17260742
@@ -82,10 +54,6 @@
     },
     {
       "ChildId": "eb454251-6595-48ce-918a-64dc67fff674"/*SetFog*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 604.459,
         "Y": 0.6491699

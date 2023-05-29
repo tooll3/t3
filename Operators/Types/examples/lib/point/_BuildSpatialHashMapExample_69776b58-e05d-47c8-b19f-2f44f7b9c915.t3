@@ -51,91 +51,6 @@
       "Outputs": []
     },
     {
-      "Id": "a0009473-3fe8-4a02-8373-fb9e63d13ee9"/*DrawBillboards*/,
-      "SymbolId": "071c9aad-ecbf-47bf-b2f6-c43e8212d5b1",
-      "InputValues": [
-        {
-          "Id": "2548a5d8-b2ab-4783-9298-c2e261d390f0"/*Color*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 1.0,
-            "Y": 1.0,
-            "Z": 1.0,
-            "W": 0.5
-          }
-        },
-        {
-          "Id": "0e4e5d78-8fe1-4b84-a0ab-d21f9704ccda"/*Scale*/,
-          "Type": "System.Single",
-          "Value": -0.32
-        },
-        {
-          "Id": "7d0f3c5d-4860-4dde-ad33-22376520b59d"/*GradientForW*/,
-          "Type": "T3.Core.DataTypes.Gradient",
-          "Value": {
-            "Gradient": {
-              "Interpolation": "Linear",
-              "Steps": [
-                {
-                  "Id": "449ef7c3-8bec-4d52-9154-2475c1dd8606",
-                  "NormalizedPosition": 0.0,
-                  "Color": {
-                    "R": 1.0,
-                    "G": 0.98725796,
-                    "B": 0.99049765,
-                    "A": 1.0
-                  }
-                },
-                {
-                  "Id": "15cdc441-ce3e-4238-a05c-473fb5524093",
-                  "NormalizedPosition": 1.0,
-                  "Color": {
-                    "R": 1.0,
-                    "G": 1.0,
-                    "B": 1.0,
-                    "A": 1.0
-                  }
-                }
-              ]
-            }
-          }
-        },
-        {
-          "Id": "81e652c3-d12c-4b45-afd2-f6de9de20df1"/*ScaleForW*/,
-          "Type": "T3.Core.DataTypes.Curve",
-          "Value": {
-            "Curve": {
-              "PreCurve": "Constant",
-              "PostCurve": "Constant",
-              "Keys": [
-                {
-                  "Time": 0.0,
-                  "Value": 0.7031277418136597,
-                  "InType": "Spline",
-                  "OutType": "Spline",
-                  "InEditMode": "Smooth",
-                  "OutEditMode": "Smooth",
-                  "InTangentAngle": 0.0,
-                  "OutTangentAngle": 3.141592653589793
-                },
-                {
-                  "Time": 1.0,
-                  "Value": 1.8280762434005737,
-                  "InType": "Spline",
-                  "OutType": "Spline",
-                  "InEditMode": "Smooth",
-                  "OutEditMode": "Smooth",
-                  "InTangentAngle": 0.0,
-                  "OutTangentAngle": -3.141592653589793
-                }
-              ]
-            }
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "2791c346-fea4-4815-a125-e8f5eb27a255"/*ModInt*/,
       "SymbolId": "cf3268d7-4f3d-47bd-8cb5-0214c75432ec",
       "InputValues": [
@@ -299,7 +214,7 @@
             "X": 1.0,
             "Y": 0.556543,
             "Z": 0.0,
-            "W": 0.55
+            "W": 0.77
           }
         },
         {
@@ -604,6 +519,49 @@
       "Name": "z",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "2975cbce-860b-49dd-bc2f-cdc68ed48142"/*DrawBillboards*/,
+      "SymbolId": "18d3d929-e530-45fa-9131-658368060ae2",
+      "InputValues": [
+        {
+          "Id": "8f203c5f-6eb8-42a1-bfea-9ca52a49e132"/*Scale*/,
+          "Type": "System.Single",
+          "Value": 0.3
+        },
+        {
+          "Id": "dd345d58-09e4-4353-93e7-c20e576f0e82"/*ColorVariations*/,
+          "Type": "T3.Core.DataTypes.Gradient",
+          "Value": {
+            "Gradient": {
+              "Interpolation": "Linear",
+              "Steps": [
+                {
+                  "Id": "2ab4bd46-b013-40f0-9f8f-9aa494016ca5",
+                  "NormalizedPosition": 0.014018691,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 1.0,
+                    "B": 1.0,
+                    "A": 0.40191388
+                  }
+                },
+                {
+                  "Id": "ee1fb3ba-fdc2-4925-8db4-84da51706853",
+                  "NormalizedPosition": 1.0,
+                  "Color": {
+                    "R": 1.0,
+                    "G": 1.0,
+                    "B": 1.0,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -666,6 +624,12 @@
       "SourceSlotId": "c47e8843-6e8d-4eaf-a554-874b3af9ee63",
       "TargetParentOrChildId": "293a514c-400c-4581-901a-a3e1b5efc4c1",
       "TargetSlotId": "7773837e-104a-4b3d-a41f-cadbd9249af2"
+    },
+    {
+      "SourceParentOrChildId": "6c0210e3-4971-4d6b-ad0f-a83937a7bbbf",
+      "SourceSlotId": "9a66687e-a834-452c-a652-ba1fc70c2c7b",
+      "TargetParentOrChildId": "2975cbce-860b-49dd-bc2f-cdc68ed48142",
+      "TargetSlotId": "a129bf5c-e549-4f7c-b30b-5199ffd38f8c"
     },
     {
       "SourceParentOrChildId": "14cc743c-6c2a-4263-94f6-df0ab0959e7c",
@@ -794,12 +758,6 @@
       "TargetSlotId": "01809b63-4b4a-47be-9588-98d5998ddb0c"
     },
     {
-      "SourceParentOrChildId": "6c0210e3-4971-4d6b-ad0f-a83937a7bbbf",
-      "SourceSlotId": "9a66687e-a834-452c-a652-ba1fc70c2c7b",
-      "TargetParentOrChildId": "a0009473-3fe8-4a02-8373-fb9e63d13ee9",
-      "TargetSlotId": "c82b7f84-508e-4a04-905e-39b55f75f4e6"
-    },
-    {
       "SourceParentOrChildId": "293a514c-400c-4581-901a-a3e1b5efc4c1",
       "SourceSlotId": "f83f1835-477e-4bb6-93f0-14bf273b8e94",
       "TargetParentOrChildId": "a7630bd7-8696-40c5-965a-0d215b891010",
@@ -818,8 +776,8 @@
       "TargetSlotId": "f79ccc37-05fd-4f81-97d6-6c1cafca180c"
     },
     {
-      "SourceParentOrChildId": "a0009473-3fe8-4a02-8373-fb9e63d13ee9",
-      "SourceSlotId": "b90aed8c-8c65-4dca-9ed3-fc2f08fc2cd1",
+      "SourceParentOrChildId": "2975cbce-860b-49dd-bc2f-cdc68ed48142",
+      "SourceSlotId": "363d4ef2-c8c9-4785-8848-2ea930457959",
       "TargetParentOrChildId": "b1c4ae66-1e62-4c8c-afb5-ca9b89df881a",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },

@@ -52,6 +52,9 @@ namespace T3.Operators.Types.Id_7f6c64fe_ca2e_445e_a9b4_c70291ce354e
 
         [Input(Guid = "565ff364-c3d9-4c60-a9a0-79fdd36d3477")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+
+        [Input(Guid = "0ef7556a-950f-406c-8e1d-511d17b4ea10")]
+        public readonly InputSlot<System.Numerics.Vector3> Pivot = new InputSlot<System.Numerics.Vector3>();
         
         
         

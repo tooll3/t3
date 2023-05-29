@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Text;
-using System.Windows.Forms;
 using T3.Core.Logging;
+using T3.Editor.SystemUi;
+using T3.SystemUi;
 
 namespace T3.Editor.Gui.Interaction.StartupCheck
 {
@@ -38,11 +38,10 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
             var isThereABackup = !string.IsNullOrEmpty(AutoBackup.AutoBackup.GetLatestArchiveFilePath());
             if (!isThereABackup)
             {
-                var result2 = MessageBox.Show("It looks like the last startup failed.\nSadly there is no backup yet.", "Startup Failed",
-                                              MessageBoxButtons.RetryCancel);
-                if (result2 != DialogResult.Retry)
+                var result2 = EditorUi.Instance.ShowMessageBox("It looks like the last startup failed.\nSadly there is no backup yet.", "Startup Failed", PopUpButtons.RetryCancel);
+                if (result2 != PopUpResult.Retry)
                 {
-                    Application.Exit();
+                    EditorUi.Instance.ExitApplication();
                 }
 
                 return;
@@ -60,34 +59,34 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                              "  NO to open a link to documentation\n" +
                              "  CANCEL to attempt starting anyways.\n";
 
-            var result = MessageBox.Show(message, caption, MessageBoxButtons.YesNoCancel);
+            var result = EditorUi.Instance.ShowMessageBox(message, caption, PopUpButtons.YesNoCancel);
             switch (result)
             {
-                case DialogResult.Yes:
+                case PopUpResult.Yes:
                 {
                     var wasSuccessful = AutoBackup.AutoBackup.RestoreLast();
                     if (wasSuccessful)
                     {
                         FlagStartupSequenceComplete();
-                        MessageBox.Show("Backup restored. Click OK to restart.\nFingers crossed.", "Complete", MessageBoxButtons.OK);
+                        EditorUi.Instance.ShowMessageBox("Backup restored. Click OK to restart.\nFingers crossed.", "Complete", PopUpButtons.Ok);
                         //Application.Exit();
                         Environment.Exit(0);
                     }
                     else
                     {
-                        MessageBox.Show("Restoring backup failed.\nYou might want to try an earlier archive in .t3\\backup\\...", "Failed",
-                                        MessageBoxButtons.OK);
+                        EditorUi.Instance.ShowMessageBox("Restoring backup failed.\nYou might want to try an earlier archive in .t3\\backup\\...", "Failed",
+                                        PopUpButtons.Ok);
                         Environment.Exit(0);
                     }
 
                     break;
                 }
-                case DialogResult.No:
+                case PopUpResult.No:
                     StartupValidation.OpenUrl(HelpUrl);
                     Environment.Exit(0);
                     break;
                 
-                case DialogResult.Cancel:
+                case PopUpResult.Cancel:
                     break;
             }
         }

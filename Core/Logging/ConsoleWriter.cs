@@ -1,5 +1,7 @@
 ﻿
 using System;
+using T3.SystemUi.Logging;
+
 //using System.Diagnostics;
 
 namespace T3.Core.Logging
@@ -9,13 +11,13 @@ namespace T3.Core.Logging
     /// </summary>
     public class ConsoleWriter : ILogWriter
     {
-        public LogEntry.EntryLevel Filter { get; set; }
+        public ILogEntry.EntryLevel Filter { get; set; }
 
         public void Dispose()
         {
         }
 
-        public void ProcessEntry(LogEntry newEntry)
+        public void ProcessEntry(ILogEntry newEntry)
         {
             try
             {

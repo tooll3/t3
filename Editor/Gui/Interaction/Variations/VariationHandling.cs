@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Operators.Utils;
 using T3.Core.Animation;
 using T3.Core.Logging;
@@ -304,39 +306,8 @@ namespace T3.Editor.Gui.Interaction.Variations
             }
             
             _affectedInstances.Clear();
-            if(FocusSetsForCompositions.TryGetValue(ActiveInstanceForSnapshots.Symbol.Id, out var filteredChildIds))
-            {
-                foreach (var child in ActiveInstanceForSnapshots.Children)
-                {
-                    if (filteredChildIds.Contains(child.SymbolChildId))
-                    {
-                        _affectedInstances.Add(child);    
-                    }
-                }
-
-                // add new children...
-                if (ChildIdsWhenFocusedForCompositions.TryGetValue(ActiveInstanceForSnapshots.Symbol.Id, out var previousChildIds))
-                {
-                    var countNewFocusItems = 0;
-                    foreach (var child in ActiveInstanceForSnapshots.Children)
-                    {
-                        if (!previousChildIds.Contains(child.SymbolChildId))
-                        {
-                            countNewFocusItems++;
-                            _affectedInstances.Add(child);    
-                        }
-                    }
-
-                    if (countNewFocusItems > 0)
-                    {
-                        Log.Debug($"Added {countNewFocusItems} items added since setting focus to snapshot.");
-                    }
-                }
-            }
-            else
-            {
-                _affectedInstances.AddRange(ActiveInstanceForSnapshots.Children);
-            }
+            
+            AddSnapshotEnabledChildrenToList(ActiveInstanceForSnapshots, _affectedInstances);
             
             var newVariation = ActivePoolForSnapshots.CreateVariationForCompositionInstances(_affectedInstances);
             if (newVariation == null)
@@ -371,13 +342,37 @@ namespace T3.Editor.Gui.Interaction.Variations
             }
             ActivePoolForSnapshots.SaveVariationsToFile();
         }
+
+        private static void AddSnapshotEnabledChildrenToList(Instance instance, List<Instance> list)
+        {
+            var compositionUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+            foreach (var childInstance in instance.Children)
+            {
+                var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
+                Debug.Assert(symbolChildUi != null);
+                
+                if (symbolChildUi.SnapshotGroupIndex == 0)
+                    continue;
+
+                list.Add(childInstance);
+            }
+        }
+
+        private static IEnumerable<Instance> GetSnapshotEnabledChildren(Instance instance)
+        {
+            var compositionUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+            foreach (var childInstance in instance.Children)
+            {
+                var symbolChildUi = compositionUi.ChildUis.SingleOrDefault(cui => cui.Id == childInstance.SymbolChildId);
+                Debug.Assert(symbolChildUi != null);
+                
+                if (symbolChildUi.SnapshotGroupIndex == 0)
+                    continue;
+
+                yield return childInstance;
+            }
+        }
         
-        
-        public static readonly Dictionary<Guid, HashSet<Guid>> FocusSetsForCompositions = new();
-        /// <summary>
-        /// This set can be used to find new children since the focus was set...
-        /// </summary>
-        public static readonly Dictionary<Guid, HashSet<Guid>> ChildIdsWhenFocusedForCompositions = new();
         private static readonly List<Instance> _affectedInstances = new(100);
     }
 }

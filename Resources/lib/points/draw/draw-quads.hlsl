@@ -66,16 +66,15 @@ psInput vsMain(uint id
 
     Point p = Points[particleId];
 
-    float3 axis = cornerFactors;
-
     float2 atlasResolution = 1. / float2(TextureCellsX, TextureCellsY);
     float atlasRatio = (float)TextureCellsX / TextureCellsY;
 
-    axis.xy = (axis.xy + Offset) * Stretch;
-    axis.z = 0;
+    // axis.xy = (axis.xy + Offset) * Stretch;
+    // axis.z = 0;
 
     float4 rotation = qmul(normalize(p.rotation), rotate_angle_axis((Rotate + 180) / 180 * PI, RotateAxis));
 
+    float3 axis = float3((cornerFactors.xy + Offset) * Stretch, 0);
     axis = rotate_vector(axis, rotation) * Size * lerp(1, p.w, UseWForSize);
     float3 pInObject = p.position + axis;
     output.position = mul(float4(pInObject, 1), ObjectToClipSpace);

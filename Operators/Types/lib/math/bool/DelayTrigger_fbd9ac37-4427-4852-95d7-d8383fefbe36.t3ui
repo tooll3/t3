@@ -1,6 +1,6 @@
 {
   "Id": "fbd9ac37-4427-4852-95d7-d8383fefbe36"/*DelayTrigger*/,
-  "Description": "Delays the change of boolean flag. This can be useful for implementation interaction where a value needs to stay true for minimum duration.\n\nIn \"DelayTrue\" mode, it will immediately switch to true, but delay switching back to false.\n\nNote: This is NOT a queue. Frequent changes of the incoming signal can lead to the delayed state filter out changes within the delay duration.",
+  "Description": "Delays the change of boolean flag. This can be useful for implementation interaction where a value needs to stay true for minimum duration.\n\nIn \"DelayTrue\" mode, it will immediately switch to true, but delay switching back to false.\n\nNote: This is NOT a queue. Frequent changes of the incoming signal can lead to the delayed state filter out changes within the delay duration.\n\nIn vvvv this op is called a MonoFlop.",
   "InputUis": [
     {
       "InputId": "ab225218-f4b6-4ab6-be28-f2526da4b1a0"/*Trigger*/,

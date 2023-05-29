@@ -40,6 +40,14 @@
       }
     },
     {
+      "Id": "279730b7-c427-4924-9fde-77eb65a3076c"/*Pivot*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
       "Id": "e19808d8-6d73-4638-b5f2-ddddc49ad815"/*Invert*/,
       "DefaultValue": false
     }

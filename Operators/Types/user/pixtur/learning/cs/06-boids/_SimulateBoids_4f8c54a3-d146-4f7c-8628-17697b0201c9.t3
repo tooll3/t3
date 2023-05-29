@@ -231,7 +231,7 @@
       "Outputs": []
     },
     {
-      "Id": "21385d2f-79da-4751-a2f9-eb7b5f9d5a99"/*DrawQuads*/,
+      "Id": "21385d2f-79da-4751-a2f9-eb7b5f9d5a99"/*_DrawQuads*/,
       "SymbolId": "16d10dc8-63b9-4ddf-90b8-41caef99d945",
       "InputValues": [
         {
@@ -1009,7 +1009,7 @@
       "Outputs": []
     },
     {
-      "Id": "dde1f52f-9c3a-4bc2-b567-a6ffcc998834"/*DrawQuads*/,
+      "Id": "dde1f52f-9c3a-4bc2-b567-a6ffcc998834"/*_DrawQuads*/,
       "SymbolId": "16d10dc8-63b9-4ddf-90b8-41caef99d945",
       "InputValues": [
         {

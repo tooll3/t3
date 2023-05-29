@@ -3,6 +3,8 @@
 #include "lib/shared/point.hlsl"
 #include "lib/shared/pbr.hlsl"
 
+
+
 cbuffer Transforms : register(b0)
 {
     float4x4 CameraToClipSpace;
@@ -27,6 +29,7 @@ cbuffer Params : register(b1)
     float Strength;
     float Phase;
     float Threshold;
+    float UseVertexSelection;
 }
 
 StructuredBuffer<PbrVertex> SourceVertices : t0;        

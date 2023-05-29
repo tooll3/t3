@@ -33,6 +33,7 @@ namespace T3.Editor.Gui.ChildUi
             if (modified)
             {
                 dataList.InputList.DirtyFlag.Invalidate();
+                dataList.Result.DirtyFlag.Invalidate();
             }
 
             return DefaultResult;

@@ -34,6 +34,12 @@ namespace T3.Editor.Gui
             public bool HasAnimatedParameters => HasKeyframesBeforeCurrentTime || HasKeyframesAfterCurrentTime;
             public bool IsItemContextMenuOpen;
             
+            /// <summary>
+            /// This is reset on Frame start and can be useful for allow context menu to stay open even if a
+            /// later context menu would also be opened. There is probably some ImGui magic to do this probably. 
+            /// </summary>
+            public string OpenedPopUpName;
+            
             public void Clear()
             {
                 HoveredIds.Clear();
@@ -41,7 +47,9 @@ namespace T3.Editor.Gui
                 HasKeyframesBeforeCurrentTime = false;
                 HasKeyframesAfterCurrentTime = false;
                 IsItemContextMenuOpen = false;
+                OpenedPopUpName = string.Empty;
             }
+
         }
         public static Stats Current = new();
         public static Stats Last = new();

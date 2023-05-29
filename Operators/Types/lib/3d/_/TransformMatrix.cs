@@ -4,6 +4,7 @@ using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Operators.Types.Id_17324ce1_8920_4653_ac67_c211ad507a81 
@@ -30,9 +31,14 @@ namespace T3.Operators.Types.Id_17324ce1_8920_4653_ac67_c211ad507a81
             float yaw = MathUtil.DegreesToRadians(r.Y);
             float pitch = MathUtil.DegreesToRadians(r.X);
             float roll = MathUtil.DegreesToRadians(r.Z);
+            var pivot = Pivot.GetValue(context).ToSharpDxVector3();
             var t = Translation.GetValue(context);
-            var objectToParentObject = Matrix.Transformation(scalingCenter: Vector3.Zero, scalingRotation: Quaternion.Identity, scaling: new Vector3(s.X, s.Y, s.Z), rotationCenter: Vector3.Zero,
-                                                             rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll), translation: new Vector3(t.X, t.Y, t.Z));
+            var objectToParentObject = Matrix.Transformation(scalingCenter: pivot, 
+                                                             scalingRotation: Quaternion.Identity, 
+                                                             scaling: new Vector3(s.X, s.Y, s.Z), 
+                                                             rotationCenter: pivot,
+                                                             rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll), 
+                                                             translation: new Vector3(t.X, t.Y, t.Z));
 
             var shearing = Shear.GetValue(context);
             
@@ -87,6 +93,9 @@ namespace T3.Operators.Types.Id_17324ce1_8920_4653_ac67_c211ad507a81
         
         [Input(Guid = "F53F3311-E1FC-418B-8861-74ADC175D5FA")]
         public readonly InputSlot<System.Numerics.Vector3> Shear = new();
+
+        [Input(Guid = "279730B7-C427-4924-9FDE-77EB65A3076C")]
+        public readonly InputSlot<System.Numerics.Vector3> Pivot = new();
 
 
         

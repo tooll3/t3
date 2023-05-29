@@ -1,7 +1,6 @@
 using System;
 using T3.Core.Animation;
 using T3.Core.IO;
-using T3.Core.Logging;
 
 namespace T3.Core.Operator.Slots
 {
@@ -77,13 +76,13 @@ namespace T3.Core.Operator.Slots
 
             if (isDisabled)
             {
-                _defaultUpdateAction = _baseUpdateAction;
+                _keepOriginalUpdateAction = _baseUpdateAction;
                 base.UpdateAction = EmptyAction;
                 DirtyFlag.Invalidate();
             }
             else
             {
-                SetUpdateActionBackToDefault();
+                RestoreUpdateAction();
                 DirtyFlag.Invalidate();
             }
 
@@ -104,10 +103,9 @@ namespace T3.Core.Operator.Slots
             {
                 if (LastUpdateStatus != UpdateStates.Suspended)
                 {
-                    Instance parent = Parent;
-
-                    bool outputDirty = DirtyFlag.IsDirty;
-                    foreach (var inputSlot in parent.Inputs)
+                    var parentInstance = Parent;
+                    var isOutputDirty = DirtyFlag.IsDirty;
+                    foreach (var inputSlot in parentInstance.Inputs)
                     {
                         if (inputSlot.IsConnected)
                         {
@@ -119,10 +117,10 @@ namespace T3.Core.Operator.Slots
                         }
 
                         inputSlot.DirtyFlag.SetVisited();
-                        outputDirty |= inputSlot.DirtyFlag.IsDirty;
+                        isOutputDirty |= inputSlot.DirtyFlag.IsDirty;
                     }
 
-                    if (outputDirty || (DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
+                    if (isOutputDirty || (DirtyFlag.Trigger & DirtyFlagTrigger.Animated) == DirtyFlagTrigger.Animated)
                     {
                         DirtyFlag.Invalidate();
                     }

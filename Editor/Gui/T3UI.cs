@@ -5,7 +5,6 @@ using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using T3.Editor.Gui.Graph;
 using ImGuiNET;
 using T3.Core.Animation;
@@ -14,11 +13,11 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
-using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Timing;
@@ -29,8 +28,8 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.UiHelpers.Wiki;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
+using T3.Editor.SystemUi;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
-using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;
 
 namespace T3.Editor.Gui
 {
@@ -39,7 +38,7 @@ namespace T3.Editor.Gui
         static T3Ui()
         {
             var operatorsAssembly = Assembly.GetAssembly(typeof(Value));
-            UiModel = new UiModel(operatorsAssembly);
+            UiModel = new UiModel(operatorsAssembly, enableLog: false);
 
             WindowManager.TryToInitialize();
             ExampleSymbolLinking.UpdateExampleLinks();
@@ -76,7 +75,6 @@ namespace T3.Editor.Gui
             }
 
             AutoBackup.AutoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
-            OpenedPopUpName = string.Empty;
 
             VariationHandling.Update();
             MouseWheelFieldWasHoveredLastFrame = MouseWheelFieldHovered;
@@ -85,6 +83,7 @@ namespace T3.Editor.Gui
             FitViewToSelectionHandling.ProcessNewFrame();
             SrvManager.FreeUnusedTextures();
             KeyboardBinding.InitFrame();
+            ConnectionSnapEndHelper.PrepareNewFrame();
             
             // Set selected id so operator can check if they are selected or not  
             var selectedInstance = NodeSelection.GetSelectedInstance();
@@ -192,7 +191,7 @@ namespace T3.Editor.Gui
 
                     if (ImGui.MenuItem("Quit", !IsCurrentlySaving))
                     {
-                        Application.Exit();
+                        EditorUi.Instance.ExitApplication();
                     }
 
                     if (ImGui.IsItemHovered() && IsCurrentlySaving)
@@ -405,8 +404,6 @@ namespace T3.Editor.Gui
         private readonly StatusErrorLine _statusErrorLine = new();
         public static readonly UiModel UiModel;
 
-        public static string OpenedPopUpName; // This is reset on Frame start and can be useful for allow context menu to stay open even if a
-        // later context menu would also be opened. There is probably some ImGui magic to do this probably. 
 
         public static IntPtr NotDroppingPointer = new IntPtr(0);
         public static bool DraggingIsInProgress = false;
@@ -417,13 +414,13 @@ namespace T3.Editor.Gui
         public static bool IsCurrentlySaving => _saveStopwatch != null && _saveStopwatch.IsRunning;
         public static float UiScaleFactor { get; set; } = 1;
         public static float DisplayScaleFactor { get; set; } = 1;
+        public static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
 
         //private static readonly AutoBackup.AutoBackup _autoBackup = new();
         
         private static readonly CreateFromTemplateDialog _createFromTemplateDialog = new();
         private static readonly UserNameDialog _userNameDialog = new();
         private static readonly MigrateOperatorsDialog _importDialog = new();
-
         public static readonly BpmDetection _bpmDetection = new ();
 
         [Flags]

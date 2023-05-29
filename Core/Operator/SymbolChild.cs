@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Operator.Slots;
 
 namespace T3.Core.Operator
 {
-    using InputDefinitionId = Guid;
+    
 
     /// <summary>
     /// Represents an instance of a <see cref="Symbol"/> within a combined symbol group.
@@ -22,8 +25,13 @@ namespace T3.Core.Operator
 
         public string ReadableName => string.IsNullOrEmpty(Name) ? Symbol.Name : Name;
 
-        public Dictionary<InputDefinitionId, Input> InputValues { get; } = new Dictionary<InputDefinitionId, Input>();
-        public Dictionary<Guid, Output> Outputs { get; } = new Dictionary<Guid, Output>();
+        public bool IsBypassed {
+            get => _isBypassed;
+            set => SetBypassed(value);
+        }
+        
+        public Dictionary<Guid, Input> Inputs { get; } = new();
+        public Dictionary<Guid, Output> Outputs { get; } = new();
 
         public SymbolChild(Symbol symbol, Guid childId, Symbol parent)
         {
@@ -33,7 +41,7 @@ namespace T3.Core.Operator
 
             foreach (var inputDefinition in symbol.InputDefinitions)
             {
-                if(!InputValues.TryAdd(inputDefinition.Id, new Input(inputDefinition)))
+                if(!Inputs.TryAdd(inputDefinition.Id, new Input(inputDefinition)))
                 {  
                     throw new ApplicationException($"The ID for symbol input {symbol.Name}.{inputDefinition.Name} must be unique.");
                 }
@@ -98,13 +106,13 @@ namespace T3.Core.Operator
                 if (DefaultValue.IsEditableInputReferenceType)
                 {
                     DefaultValue.AssignClone(Value);
-                    IsDefault = false;
                 }
                 else
                 {
                     DefaultValue.Assign(Value);
-                    IsDefault = true;
                 }
+
+                IsDefault = true;
             }
 
             public void ResetToDefault()
@@ -112,16 +120,136 @@ namespace T3.Core.Operator
                 if (DefaultValue.IsEditableInputReferenceType)
                 {
                     Value.AssignClone(DefaultValue);
-                    IsDefault = false;
                 }
                 else
                 {
                     Value.Assign(DefaultValue);
-                    IsDefault = true;
                 }
+                IsDefault = true;
             }
         }
 
         #endregion
+        
+
+        private bool _isBypassed;
+        
+        private bool IsBypassable()
+        {
+            if(Symbol.OutputDefinitions.Count == 0)
+                return false;
+            
+            if(Symbol.InputDefinitions.Count == 0)
+                return false;
+
+            var mainInput = Symbol.InputDefinitions[0];
+            var mainOutput = Symbol.OutputDefinitions[0];
+
+            if (mainInput.DefaultValue.ValueType != mainOutput.ValueType)
+                return false;
+            
+            if(mainInput.DefaultValue.ValueType == typeof(Command))
+                return true;
+            
+            if(mainInput.DefaultValue.ValueType == typeof(Texture2D))
+                return true;
+
+            if(mainInput.DefaultValue.ValueType == typeof(BufferWithViews))
+                return true;
+
+            if(mainInput.DefaultValue.ValueType == typeof(MeshBuffers))
+                return true;
+
+            if(mainInput.DefaultValue.ValueType == typeof(float))
+                return true;
+
+            return false;
+        }
+
+        private void SetBypassed(bool shouldBypass)
+        {
+            if(!IsBypassable())
+                return;
+
+            if (Parent == null)
+            {
+                _isBypassed = true;  // during loading parents are not yet assigned. This flag will later be used when creating instances
+                return;
+            }
+            
+            
+            var parentInstancesOfSymbol = Parent.InstancesOfSymbol;
+            foreach (var parentInstance in parentInstancesOfSymbol)
+            {
+                var instance = parentInstance.Children.First(child => child.SymbolChildId == Id);
+
+                var mainInputSlot = instance.Inputs[0];
+                var mainOutputSlot = instance.Outputs[0];
+
+                var wasByPassed = false;
+                
+                switch (mainOutputSlot)
+                {
+                    case Slot<Command> commandOutput when mainInputSlot is Slot<Command> commandInput:
+                        if (shouldBypass)
+                        {
+                            wasByPassed= commandOutput.TrySetBypassToInput(commandInput);
+                        }
+                        else
+                        {
+                            commandOutput.RestoreUpdateAction();
+                        }
+                        break;
+                    
+                    case Slot<BufferWithViews> bufferOutput when mainInputSlot is Slot<BufferWithViews> bufferInput:
+                        if (shouldBypass)
+                        {
+                            wasByPassed= bufferOutput.TrySetBypassToInput(bufferInput);
+                        }
+                        else
+                        {
+                            bufferOutput.RestoreUpdateAction();
+                        }
+                        break;
+                    case Slot<MeshBuffers> bufferOutput when mainInputSlot is Slot<MeshBuffers> bufferInput:
+                        if (shouldBypass)
+                        {
+                            wasByPassed= bufferOutput.TrySetBypassToInput(bufferInput);
+                        }
+                        else
+                        {
+                            bufferOutput.RestoreUpdateAction();
+                        }
+                        break;
+                    case Slot<Texture2D> texture2dOutput when mainInputSlot is Slot<Texture2D> texture2dInput:
+                        if (shouldBypass)
+                        {
+                            wasByPassed= texture2dOutput.TrySetBypassToInput(texture2dInput);
+                        }
+                        else
+                        {
+                            texture2dOutput.RestoreUpdateAction();
+                        }
+                        break;
+                    case Slot<float> floatOutput when mainInputSlot is Slot<float> floatInput:
+                        if (shouldBypass)
+                        {
+                            wasByPassed= floatOutput.TrySetBypassToInput(floatInput);
+                        }
+                        else
+                        {
+                            floatOutput.RestoreUpdateAction();
+                        }
+                        break;
+                }
+
+                _isBypassed = wasByPassed;
+            }
+        }
+
+        public override string ToString()
+        {
+            return Parent.Name + ">" + ReadableName;
+        }
     }
 }

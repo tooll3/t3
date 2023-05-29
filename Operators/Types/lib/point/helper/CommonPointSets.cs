@@ -60,7 +60,7 @@ namespace T3.Operators.Types.Id_353f63fc_e613_43ca_b037_02d7b9f4e935
                 for (var pointIndex = 0; pointIndex < definitionPoints.Length; pointIndex++)
                 {
                     var p = definitionPoints[pointIndex];
-                    tmpBuffer[pointIndex] = p;
+                    tmpBuffer.TypedElements[pointIndex] = p;
                 }
 
                 _cpuPointBuffers[bufferIndex] = tmpBuffer;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
@@ -25,87 +24,13 @@ namespace T3.Editor.Gui.Windows.Variations
             {
                 CreateVariation();
             }
-
-            var filteredOpCount = 0;
-
-            var compositionId = VariationHandling.ActiveInstanceForSnapshots.Symbol.Id;
-            if (VariationHandling.FocusSetsForCompositions.TryGetValue(compositionId, out var filterSet))
-            {
-                filteredOpCount = filterSet.Count;
-            }
-
-            ImGui.SameLine();
-            ImGui.Dummy(new Vector2(20, 20));
-
-            ImGui.SameLine();
-            if (filteredOpCount == 0)
-            {
-                if (ImGui.Button("Set focus"))
-                {
-                    var set = new HashSet<Guid>();
-                    foreach (var selectedOp in NodeSelection.GetSelectedInstances())
-                    {
-                        set.Add(selectedOp.SymbolChildId);
-                    }
-
-                    VariationHandling.FocusSetsForCompositions[compositionId] = set;
-
-                    var childrenWhenSettingFocus = new HashSet<Guid>();
-                    foreach (var child in InstanceForBlendOperations.Children)
-                    {
-                        childrenWhenSettingFocus.Add(child.SymbolChildId);
-                    }
-
-                    VariationHandling.ChildIdsWhenFocusedForCompositions[compositionId] = childrenWhenSettingFocus;
-                }
-
-                CustomComponents.TooltipForLastItem("This will limit the parameters stored in new snapshots to the Operators selected when setting the focus.");
-            }
-            else
-            {
-                if (ImGui.Button($"Clear focus ({filteredOpCount})"))
-                {
-                    // Select focused ops
-                    var parentSymbolUi = SymbolUiRegistry.Entries[InstanceForBlendOperations.Symbol.Id];
-
-                    if (filterSet != null)
-                    {
-                        NodeSelection.Clear();
-                        foreach (var symbolChildUi in parentSymbolUi.ChildUis)
-                        {
-                            if (!filterSet.Contains(symbolChildUi.Id))
-                                continue;
-
-                            var instance = InstanceForBlendOperations.Children.FirstOrDefault(c => c.SymbolChildId == symbolChildUi.Id);
-                            if (instance != null)
-                                NodeSelection.AddSymbolChildToSelection(symbolChildUi, instance);
-                        }
-                    }
-                    FitViewToSelectionHandling.FitViewToSelection();
-
-                    VariationHandling.FocusSetsForCompositions.Remove(compositionId);
-                    VariationHandling.ChildIdsWhenFocusedForCompositions.Remove(compositionId);
-                }
-
-                if (ImGui.IsItemHovered())
-                {
-                    if (filterSet != null)
-                    {
-                        foreach (var id in filterSet)
-                        {
-                            FrameStats.AddHoveredId(id);
-                        }
-                    }
-                }
-            }
         }
 
         public override string GetTitle()
         {
-            if (VariationHandling.ActiveInstanceForSnapshots == null)
-                return "";
-
-            return $"...for {VariationHandling.ActiveInstanceForSnapshots.Symbol.Name}";
+            return VariationHandling.ActiveInstanceForSnapshots != null 
+                       ? $"...for {VariationHandling.ActiveInstanceForSnapshots.Symbol.Name}" 
+                       : string.Empty;
         }
 
         protected override void DrawAdditionalContextMenuContent()

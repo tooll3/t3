@@ -11,6 +11,7 @@ using SharpDX.WIC;
 using System.Net.Http;
 using System.Threading.Tasks;
 using T3.Core.Resource;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
 {
@@ -28,11 +29,21 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
             ShaderResourceView.UpdateAction = UpdateShaderResourceView;
         }
 
+        private bool _triggerUpdate;
+        
         private void UpdateShaderResourceView(EvaluationContext context)
         {
+            var wasUpdated = MathUtils.WasTriggered(TriggerUpdate.GetValue(context), ref _triggerUpdate);
+            
             var url = Url.GetValue(context);
-            if (url != _url && !string.IsNullOrEmpty(url))
+            if (wasUpdated || url != _url && !string.IsNullOrEmpty(url))
             {
+                if (wasUpdated && !TriggerUpdate.IsConnected)
+                {
+                    TriggerUpdate.SetTypedInputValue(false);
+                }
+                    
+                    
                 _url = url;
                 HttpClient httpClient = null;
                 Dispose();
@@ -140,6 +151,9 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
         private string _url;
 
         [Input(Guid = "21b2e219-0b2a-4323-b288-f39ed791e676")]
-        public readonly InputSlot<string> Url = new InputSlot<string>();
+        public readonly InputSlot<string> Url = new();
+        
+        [Input(Guid = "710BA03D-D26E-496A-B6CD-68ABB2E9F369")]
+        public readonly InputSlot<bool> TriggerUpdate = new();        
     }
 }

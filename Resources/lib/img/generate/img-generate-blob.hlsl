@@ -1,3 +1,5 @@
+#include "lib/shared/blend-functions.hlsl"
+
 cbuffer ParamConstants : register(b0)
 {
     float4 Fill;
@@ -8,6 +10,7 @@ cbuffer ParamConstants : register(b0)
     float Feather;
     float GradientBias;
     float Rotate;
+    float BlendMode;
 
     float IsTextureValid;
 }
@@ -80,7 +83,9 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
     // orgColor = float4(1,1,1,0);
 
-    return (IsTextureValid < 0.5) ? c
-                                  : float4((1.0 - c.a) * orgColor.rgb + c.a * c.rgb,
-                                           orgColor.a + c.a - orgColor.a * c.a);
+    // return (IsTextureValid < 0.5) ? c
+    //                               : float4((1.0 - c.a) * orgColor.rgb + c.a * c.rgb,
+    //                                        orgColor.a + c.a - orgColor.a * c.a);
+
+    return (IsTextureValid < 0.5) ? c : BlendColors(orgColor, c, (int)BlendMode);
 }

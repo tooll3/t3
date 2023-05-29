@@ -1,9 +1,7 @@
 ﻿using System;
 using ImGuiNET;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using T3.Core.Animation;
 using T3.Core.Audio;
-using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Audio;
@@ -82,6 +80,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     playback.TimeInSecs = Math.Floor(playback.TimeInSecs * 30) / 30;
                 }
             }
+            CustomComponents.TooltipForLastItem($"Current playtime at {settings.Bpm:0.0} BPM.","Click mode button to toggle between timeline formats.");
 
             ImGui.SameLine();
 
@@ -120,6 +119,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     var beat = (int)(playback.FxTimeInBars * 4) % 4;
                     var beatPulse = (playback.FxTimeInBars * 4) % 4 - beat;
                     var bar = (int)(playback.FxTimeInBars) % 4;
+
+                    if (beat < 0)
+                        beat = 4 + beat;
+                    
+                    if (bar < 0)
+                        bar = 4 + bar;
+                    
                     const int gridSize = 4;
                     var drawList = ImGui.GetWindowDrawList();
                     var min = center - new Vector2(7, 7) + new Vector2(beat * gridSize, bar * gridSize);
@@ -456,39 +462,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         timeLineCanvas.DopeSheetArea.PinnedParameters.Clear();        
                     }
                 }
-                
-                // // Lock all animated parameters
-                // if (CustomComponents.IconButton(Icon.PinParams,
-                //                                 ControlSize)
-                //     || KeyboardBinding.Triggered(UserActions.PinAllAnimationParameter))
-                // {
-                //     foreach (var p in timeLineCanvas.SelectedAnimationParameters)
-                //     {
-                //         timeLineCanvas.DopeSheetArea.PinnedParameters.Add(p.Input.GetHashCode());
-                //     }
-                // }
-                //
-                // ImGui.SameLine();
-                // // Lock all animated parameters
-                // if (CustomComponents.IconButton(Icon.Params,
-                //                                 ControlSize,
-                //                                 timeLineCanvas.DopeSheetArea.PinnedParameters.Count == 0
-                //                                     ? CustomComponents.ButtonStates.Disabled
-                //                                     : CustomComponents.ButtonStates.Normal)
-                //     || KeyboardBinding.Triggered(UserActions.UnpinAllAnimationParameters))
-                // {
-                //     timeLineCanvas.DopeSheetArea.PinnedParameters.Clear();
-                // }
             }
-
-            // CustomComponents.TooltipForLastItem("Jump to previous keyframe",
-            //                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackJumpToPreviousKeyframe));
-
-            //CustomComponents.TooltipForLastItem(hoverModeTooltip, hoverModeAdditionalTooltip);
-
             ImGui.SameLine();
         }
 
-        public static Vector2 ControlSize => new Vector2(45, 30) * T3Ui.UiScaleFactor;
+        public static Vector2 ControlSize => new Vector2(45, 28) * T3Ui.UiScaleFactor;
     }
 }

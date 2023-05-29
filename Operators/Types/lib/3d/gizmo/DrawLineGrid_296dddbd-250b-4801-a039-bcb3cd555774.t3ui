@@ -30,10 +30,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "05da9fe7-b92a-4050-bb45-d736d62409ca"/*LinePoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -188.20523,
         "Y": 29.807922
@@ -41,10 +37,6 @@
     },
     {
       "ChildId": "6e820e56-1b24-465b-a073-93ca51cca07b"/*LinePoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -188.20523,
         "Y": -13.192078
@@ -52,10 +44,6 @@
     },
     {
       "ChildId": "c333138d-bc14-4d6d-bdeb-7d1640bc08ad"/*RepeatAtGPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": -38.20523,
         "Y": -13.192078
@@ -63,10 +51,6 @@
     },
     {
       "ChildId": "f40a2e1f-f213-4a21-bde3-5241103cb075"/*DrawLines*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 111.79477,
         "Y": -13.192078
@@ -74,10 +58,6 @@
     },
     {
       "ChildId": "7dca1326-b172-416e-9e11-e93ed8146bc4"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 430.89935,
         "Y": 138.28873
@@ -85,10 +65,6 @@
     },
     {
       "ChildId": "e482aab6-6911-4f50-a0f6-b5c8b6f8e0a8"/*Transform*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 275.08972,
         "Y": 77.28531
@@ -96,10 +72,6 @@
     },
     {
       "ChildId": "19edcaaa-6c26-470d-8f72-72db86cc30dd"/*Transform*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 600.0,
         "Y": 0.0
@@ -107,10 +79,6 @@
     },
     {
       "ChildId": "ca5809cf-2b79-44af-8752-0a06d4170e36"/*Multiply*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -194.79291,
         "Y": 204.38275
@@ -118,10 +86,6 @@
     },
     {
       "ChildId": "a2572288-c064-4de2-9292-f08c22e6b09d"/*Group*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 450.0,
         "Y": 0.0

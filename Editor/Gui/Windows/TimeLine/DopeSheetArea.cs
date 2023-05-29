@@ -32,6 +32,12 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         public void Draw(Instance compositionOp, List<TimeLineCanvas.AnimationParameter> animationParameters)
         {
+            if (CurvesTablesNeedsRefresh)
+            {
+                RebuildCurveTables();
+                CurvesTablesNeedsRefresh = false;
+            }
+                
             _drawList = ImGui.GetWindowDrawList();
             AnimationParameters = animationParameters;
             _compositionOp = compositionOp;
@@ -475,7 +481,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         var result = floatInputUi.DrawEditControl(ref tmp);
                         if (result == InputEditStateFlags.Started)
                         {
-                            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.SymbolChildId, SelectedKeyframes);
+                            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.SymbolChildId, SelectedKeyframes, _currentAnimationParameter.Curves);
                         }
 
                         if ((result & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
@@ -507,7 +513,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         var result = intInputUi.DrawEditControl(ref tmp);
                         if (result == InputEditStateFlags.Started)
                         {
-                            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.SymbolChildId, SelectedKeyframes);
+                            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.SymbolChildId, SelectedKeyframes, _currentAnimationParameter.Curves);
                         }
 
                         if ((result & InputEditStateFlags.Modified) == InputEditStateFlags.Modified)
@@ -655,7 +661,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         ICommand ITimeObjectManipulation.StartDragCommand()
         {
-            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, SelectedKeyframes);
+            _changeKeyframesCommand = new ChangeKeyframesCommand(_compositionOp.Symbol.Id, SelectedKeyframes, GetAllCurves());
             return _changeKeyframesCommand;
         }
 
@@ -690,7 +696,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         void ITimeObjectManipulation.DeleteSelectedElements()
         {
-            AnimationOperations.DeleteSelectedKeyframesFromAnimationParameters(SelectedKeyframes, AnimationParameters);
+            AnimationOperations.DeleteSelectedKeyframesFromAnimationParameters(SelectedKeyframes, AnimationParameters, _compositionOp);
             RebuildCurveTables();
         }
         #endregion

@@ -32,74 +32,77 @@ namespace T3.Editor.Gui
             FadedOut,
         }
         
-        public static Vector2 DefaultOpSize { get; } = new Vector2(110, 25);
+        public static Vector2 DefaultOpSize { get; } = new(110, 25);
         
-        public Dictionary<Guid, ConnectionStyles> ConnectionStyleOverrides { get; } = new Dictionary<Guid, ConnectionStyles>();
+        public Dictionary<Guid, ConnectionStyles> ConnectionStyleOverrides { get; } = new();
         
         public SymbolChild SymbolChild;
+
         public Guid Id => SymbolChild.Id;
         public Vector2 PosOnCanvas { get; set; } = Vector2.Zero;
         public Vector2 Size { get; set; } = DefaultOpSize;
         public bool IsSelected => NodeSelection.IsNodeSelected(this);
+        public int SnapshotGroupIndex { get; set; }
         public Styles Style { get; set; }
 
         public bool IsDisabled {
             get => SymbolChild.Outputs.FirstOrDefault().Value?.IsDisabled ?? false;
-            set 
+            set => SetDisabled(value);
+        }
+
+        
+        private void SetDisabled(bool shouldBeDisabled)
+        {
+            var outputDefinitions = SymbolChild.Symbol.OutputDefinitions;
+
+            // Set disabled status on this child's outputs
+            foreach (var outputDef in outputDefinitions)
             {
-                List<Symbol.OutputDefinition> outputDefinitions = SymbolChild.Symbol.OutputDefinitions;
-
-                // Set disabled status on this child's outputs
-                foreach (var outputDef in outputDefinitions)
+                if (outputDef == null)
                 {
-                    if (outputDef == null)
-                    {
-                        Log.Warning($"{SymbolChild.Symbol.GetType()} {SymbolChild.Symbol.Name} contains a null {typeof(Symbol.OutputDefinition)}", Id);
-                        continue;
-                    }
-
-                    SymbolChild.Output childOutput;
-                    bool hasOutput = SymbolChild.Outputs.TryGetValue(outputDef.Id, out childOutput);
-
-                    if(!hasOutput)
-                    {
-                        Log.Warning($"{typeof(SymbolChild)} {SymbolChild.ReadableName} does not have the following child output as defined: " +
-                            $"{childOutput.OutputDefinition.Name}({nameof(Guid)}{childOutput.OutputDefinition.Id})");
-                        continue;
-                    }
-
-                    childOutput.IsDisabled = value;
+                    Log.Warning($"{SymbolChild.Symbol.GetType()} {SymbolChild.Symbol.Name} contains a null {typeof(Symbol.OutputDefinition)}", Id);
+                    continue;
                 }
 
-                // Set disabled status on outputs of each instanced copy of this child within all parents that contain it
-                foreach (var parentInstance in SymbolChild.Parent.InstancesOfSymbol)
+                var hasOutput = SymbolChild.Outputs.TryGetValue(outputDef.Id, out var childOutput);
+                if (!hasOutput)
                 {
-                    var matchingChildInstances = parentInstance.Children.Where(child => child.SymbolChildId == Id).ToArray();
+                    Log.Warning($"{typeof(SymbolChild)} {SymbolChild.ReadableName} does not have the following child output as defined: " +
+                                $"{childOutput.OutputDefinition.Name}({nameof(Guid)}{childOutput.OutputDefinition.Id})");
+                    continue;
+                }
 
-                    //this parent doesn't have an instance of our SymbolChild. Ignoring and continuing.
-                    if(matchingChildInstances.Length == 0)
-                        continue;
+                childOutput.IsDisabled = shouldBeDisabled;
+            }
 
-                    //set disabled status on all outputs of each instance
-                    foreach (var instance in matchingChildInstances)
+            // Set disabled status on outputs of each instanced copy of this child within all parents that contain it
+            foreach (var parentInstance in SymbolChild.Parent.InstancesOfSymbol)
+            {
+                var matchingChildInstances = parentInstance.Children.Where(child => child.SymbolChildId == Id).ToArray();
+
+                // This parent doesn't have an instance of our SymbolChild. Ignoring and continuing.
+                if (matchingChildInstances.Length == 0)
+                    continue;
+
+                // Set disabled status on all outputs of each instance
+                foreach (var instance in matchingChildInstances)
+                {
+                    List<ISlot> outputs = instance.Outputs;
+
+                    foreach (var t in outputs)
                     {
-                        List<ISlot> outputs = instance.Outputs;
-
-                        foreach (var t in outputs)
-                        {
-                            t.IsDisabled = value;
-                        }
+                        t.IsDisabled = shouldBeDisabled;
                     }
                 }
             }
         }
 
-        public CustomUiResult DrawCustomUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
+        
+        public static CustomUiResult DrawCustomUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
         {
-            if (!CustomChildUiRegistry.Entries.TryGetValue(instance.Type, out var drawFunction))
-                return CustomUiResult.None;
-
-            return drawFunction(instance, drawList, selectableScreenRect);
+            return CustomChildUiRegistry.Entries.TryGetValue(instance.Type, out var drawFunction) 
+                       ? drawFunction(instance, drawList, selectableScreenRect) 
+                       : CustomUiResult.None;
         }
 
         /// <summary>
@@ -126,10 +129,10 @@ namespace T3.Editor.Gui
                        SymbolChild = SymbolChild,
                    };
         }
-
-        public Instance GetInstance(Instance compositionOp)
+        
+        public override string ToString()
         {
-            return compositionOp.Children.Single(child => child.SymbolChildId == Id);
+            return $"{SymbolChild.Parent.Name}>[{SymbolChild.ReadableName}]";
         }
     }
 }

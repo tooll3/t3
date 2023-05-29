@@ -1,6 +1,4 @@
-﻿using T3.Core.DataTypes;
-
-namespace T3.Core.Audio
+﻿namespace T3.Core.Audio
 {
     /// <summary>
     /// A helper class to provides current status details of the beat tapping / and timing offsets.

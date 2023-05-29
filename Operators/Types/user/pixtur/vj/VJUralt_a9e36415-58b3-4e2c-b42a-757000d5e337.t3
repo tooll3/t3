@@ -1433,7 +1433,7 @@
       "Outputs": []
     },
     {
-      "Id": "70a7ea94-0dc9-4268-b153-6efbd18aac56"/*SelectFloatFromList*/,
+      "Id": "70a7ea94-0dc9-4268-b153-6efbd18aac56"/*PickFloatFromList*/,
       "SymbolId": "0841cdd4-0106-4f4e-826b-8de23bb5b5f0",
       "InputValues": [
         {

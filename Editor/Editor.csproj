@@ -7,11 +7,12 @@
     <StartupObject>T3.Editor.Program</StartupObject>
     <ApplicationIcon>..\Resources\t3-editor\images\t3.ico</ApplicationIcon>
     <RootNamespace>T3.Editor</RootNamespace>
+    <AssemblyName>T3Editor</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ImGui.NET" Version="1.87.3" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="3.11.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.7.0-1.final" />
     <PackageReference Include="Rug.Osc" Version="1.2.5">
       <NoWarn>NU1701</NoWarn>
     </PackageReference>
@@ -24,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Operators\Operators.csproj" />
+    <ProjectReference Include="..\MsForms\MsForms.csproj" />
   </ItemGroup>
 
   <ItemGroup>

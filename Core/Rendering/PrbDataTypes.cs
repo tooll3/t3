@@ -89,7 +89,7 @@ namespace T3.Core.Rendering
             NormalFallbackTexture = CreateFallBackTexture(new Vector4(0.5f, 0.5f, 1, 0));
             _normalMapSrv = new ShaderResourceView(device, NormalFallbackTexture);
             
-            _pbrLookUpTexture = LoadTextureAsSRV(@"Resources\common\images\BRDF-LookUp.dds");
+            _pbrLookUpTexture = LoadTextureAsSRV(@"Resources\common\images\BRDF-LookUp.png");
             _prefilteredBrdfTexture = LoadTexture(@"Resources\common\HDRI\studio_small_08-prefiltered.dds");
             
             _wasInitialized = true;

@@ -15,5 +15,7 @@ namespace T3.Core.Operator.Slots
         void RemoveConnection(int index = 0);
         bool IsConnected { get; }
         ISlot GetConnection(int index);
+
+        Action<EvaluationContext> GetUpdateAction();
     }
 }

@@ -41,7 +41,7 @@ namespace T3.Operators.Types.Id_0b99ab8b_5d61_49da_9851_9ad723cad3ae
 
             if (connectedLists.Count == 1)
             {
-                Result.Value = connectedLists[0].Clone();
+                Result.Value = connectedLists[0].TypedClone();
                 Length.Value = 1;
                 return;
             }

@@ -7,6 +7,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
@@ -41,52 +42,59 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
         }
 
+
+        //private static Guid _activeChildId;
         
         /// <summary>
         /// NOTE: This has to be called for ALL movable elements and directly after ImGui.Item
         /// </summary>
         public static void Handle(ISelectableCanvasObject node, Instance instance = null)
         {
-            if (ImGui.IsItemActive())
+            if (instance == null)
+                return;
+            
+            //Log.Debug("Testing  " + node.Id);
+            
+            var justClicked = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
+            
+            var isActiveNode = instance.SymbolChildId == _draggedNodeId;
+
+            if (justClicked)
             {
-                if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
+                var compositionSymbolId = GraphCanvas.Current.CompositionOp.Symbol.Id;
+                _draggedNodeId = node.Id;
+                if (node.IsSelected)
                 {
-                    var compositionSymbolId = GraphCanvas.Current.CompositionOp.Symbol.Id;
-                    _draggedNodeId = node.Id;
-                    if (node.IsSelected)
-                    {
-                        _draggedNodes = NodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
-                    }
-                    else
-                    {
-                        var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-                        if(UserSettings.Config.SmartGroupDragging)
-                            _draggedNodes = FindSnappedNeighbours(parentUi, node).ToList();
-                        
-                        _draggedNodes.Add(node);
-                    }
-
-                    _moveCommand = new ModifyCanvasElementsCommand(compositionSymbolId, _draggedNodes);
-                    ShakeDetector.Reset();
+                    _draggedNodes = NodeSelection.GetSelectedNodes<ISelectableCanvasObject>().ToList();
                 }
-                else if (_moveCommand != null)
+                else
                 {
-                    if (!T3Ui.IsCurrentlySaving && ShakeDetector.TestDragForShake(ImGui.GetMousePos()))
-                    {
-                        _moveCommand.StoreCurrentValues();
-                        UndoRedoStack.Add(_moveCommand);
-                        _moveCommand = null;
-                        DisconnectDraggedNodes();
-                    }
+                    var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
+                    if(UserSettings.Config.SmartGroupDragging)
+                        _draggedNodes = FindSnappedNeighbours(parentUi, node).ToList();
+                    
+                    _draggedNodes.Add(node);
                 }
 
+                _moveCommand = new ModifyCanvasElementsCommand(compositionSymbolId, _draggedNodes);
+                ShakeDetector.Reset();
+            }
+            else if (isActiveNode && ImGui.IsMouseDown(ImGuiMouseButton.Left) && _moveCommand != null)
+            {
+                if (!T3Ui.IsCurrentlySaving && ShakeDetector.TestDragForShake(ImGui.GetMousePos()))
+                {
+                    _moveCommand.StoreCurrentValues();
+                    UndoRedoStack.Add(_moveCommand);
+                    _moveCommand = null;
+                    DisconnectDraggedNodes();
+                }
                 HandleNodeDragging(node);
             }
-            else if (ImGui.IsMouseReleased(0) && _moveCommand != null)
+            else if (isActiveNode && ImGui.IsMouseReleased(0) && _moveCommand != null)
             {
                 if (_draggedNodeId != node.Id)
                     return;
-
+                
                 var singleDraggedNode = (_draggedNodes.Count == 1) ? _draggedNodes[0] : null;
                 _draggedNodeId = Guid.Empty;
                 _draggedNodes.Clear();
@@ -95,14 +103,19 @@ namespace T3.Editor.Gui.Graph.Interaction
                 if (wasDragging)
                 {
                     _moveCommand.StoreCurrentValues();
-                    UndoRedoStack.Add(_moveCommand);
 
-                    if (singleDraggedNode != null && ConnectionMaker.ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolChildUi childUi)
+                    if (singleDraggedNode != null && ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolChildUi childUi)
                     {
                         var instanceForSymbolChildUi = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(child => child.SymbolChildId == childUi.Id);
                         ConnectionMaker.SplitConnectionWithDraggedNode(childUi, 
-                                                                       ConnectionMaker.ConnectionSplitHelper.BestMatchLastFrame.Connection, 
-                                                                       instanceForSymbolChildUi);
+                                                                       ConnectionSplitHelper.BestMatchLastFrame.Connection, 
+                                                                       instanceForSymbolChildUi,
+                                                                       _moveCommand);
+                        _moveCommand = null;
+                    }
+                    else
+                    {
+                        UndoRedoStack.Add(_moveCommand);
                     }
 
                     // Reorder inputs nodes if dragged
@@ -432,103 +445,6 @@ namespace T3.Editor.Gui.Graph.Interaction
             return Alignment.NoSnapped;
         }
 
-        public static void ArrangeOps()
-        {
-            var commands = new List<ICommand>();
-            
-            var freshlySnapped = new List<ISelectableCanvasObject>();
-            foreach (var n in NodeSelection.GetSelectedChildUis())
-            {
-                RecursivelyAlignChildren(n, commands, freshlySnapped);
-            }
-            var command = new MacroCommand("arrange", commands);
-            UndoRedoStack.Add(command);
-        }
-
-        private static float RecursivelyAlignChildren(SymbolChildUi childUi, List<ICommand> commands, List<ISelectableCanvasObject> freshlySnappedOpWidgets)
-        {
-            if (freshlySnappedOpWidgets == null)
-                freshlySnappedOpWidgets = new List<ISelectableCanvasObject>();
-            
-            var parentUi = SymbolUiRegistry.Entries[GraphCanvas.Current.CompositionOp.Symbol.Id];
-            var compositionSymbol = GraphCanvas.Current.CompositionOp.Symbol;
-            var connectedChildUis = (from con in compositionSymbol.Connections
-                                     where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
-                                     from sourceChildUi in parentUi.ChildUis
-                                     where con.SourceParentOrChildId == sourceChildUi.Id
-                                           && con.TargetParentOrChildId == childUi.Id
-                                     select sourceChildUi).Distinct().ToArray();
-            
-            // Order connections by input definition order
-            var connections = (from con in compositionSymbol.Connections
-                                     where !con.IsConnectedToSymbolInput && !con.IsConnectedToSymbolOutput
-                                     from sourceChildUi in parentUi.ChildUis
-                                     where con.SourceParentOrChildId == sourceChildUi.Id
-                                           && con.TargetParentOrChildId == childUi.Id
-                                     select con).Distinct().ToArray();
-
-            // Sort the incoming operators into the correct input order and
-            // ignore operators that can't be auto-layouted because their outputs
-            // have connection to multiple operators
-            var sortedInputOps = new List<SymbolChildUi>();
-            foreach (var inputDef in childUi.SymbolChild.Symbol.InputDefinitions)
-            {
-                var matchingConnections = connections.Where(c => c.TargetSlotId == inputDef.Id).ToArray();
-                var connectedOpsForInput=  matchingConnections.SelectMany(c => connectedChildUis.Where(ccc => ccc.Id == c.SourceParentOrChildId));
-                
-                foreach (var op in connectedOpsForInput)
-                {
-                    var connectionsFromOutput = compositionSymbol.Connections.Where(c5 => c5.SourceParentOrChildId == op.Id
-                                                                                          && c5.TargetParentOrChildId != childUi.Id);
-                    var opHasUnpredictableConnections = connectionsFromOutput.Any();
-                    if (!opHasUnpredictableConnections)
-                    {
-                        sortedInputOps.Add(op);
-                    }
-                }
-            }
-
-            float verticalOffset = 0;
-            var snappedCount = 0;
-            foreach (var connectedChildUi in sortedInputOps)
-            {
-                if (freshlySnappedOpWidgets.Contains(connectedChildUi))
-                    continue;
-
-                
-                var thumbnailPadding = HasThumbnail(connectedChildUi) ? connectedChildUi.Size.X : 0;
-                if (snappedCount > 0)
-                    verticalOffset += thumbnailPadding;
-                
-                var moveCommand = new ModifyCanvasElementsCommand(compositionSymbol.Id, new List<ISelectableCanvasObject>() {connectedChildUi}); 
-                connectedChildUi.PosOnCanvas = childUi.PosOnCanvas + new Vector2(- (childUi.Size.X + SnapPadding.X),verticalOffset);
-                moveCommand.StoreCurrentValues();
-                commands.Add(moveCommand);
-
-                freshlySnappedOpWidgets.Add(connectedChildUi);
-                verticalOffset += RecursivelyAlignChildren(connectedChildUi, commands, freshlySnappedOpWidgets);
-
-                freshlySnappedOpWidgets.Add(connectedChildUi);
-                //NodeSelection.AddSelection(connectedChildUi);
-
-                var instance = GraphCanvas.Current.CompositionOp.Children.SingleOrDefault(c => c.SymbolChildId == connectedChildUi.Id);
-                if (instance != null)
-                {
-                    NodeSelection.AddSymbolChildToSelection(connectedChildUi, instance);
-                }
-                snappedCount++;
-            }
-            
-            var requiredHeight =Math.Max(verticalOffset, childUi.Size.Y);
-            return requiredHeight + SnapPadding.Y;
-        }
-
-        private static bool HasThumbnail(SymbolChildUi childUi)
-        {
-            return childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0 && childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType == typeof(Texture2D);
-        }
-        
-
         private enum Alignment
         {
             NoSnapped,
@@ -539,6 +455,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         }
 
         public static readonly Vector2 SnapPadding = new Vector2(40, 20);
+        public static readonly Vector2 PaddedDefaultOpSize = SymbolChildUi.DefaultOpSize + SnapPadding;
 
         private static readonly Vector2[] _snapOffsetsInCanvas =
             {

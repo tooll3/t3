@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows;
+using T3.SystemUi.Logging;
 
 namespace T3.Editor.Gui.UiHelpers
 {
@@ -37,7 +36,7 @@ namespace T3.Editor.Gui.UiHelpers
                 ImGui.PushFont(Fonts.FontBold);
 
                 var logMessage = lastEntry.Message;
-                if (lastEntry.Level == LogEntry.EntryLevel.Error)
+                if (lastEntry.Level == ILogEntry.EntryLevel.Error)
                 {
                     logMessage = ShaderResource.ExtractMeaningfulShaderErrorMessage(logMessage);
                 }
@@ -75,9 +74,9 @@ namespace T3.Editor.Gui.UiHelpers
         {
         }
 
-        public LogEntry.EntryLevel Filter { get; set; }
+        public ILogEntry.EntryLevel Filter { get; set; }
 
-        public void ProcessEntry(LogEntry entry)
+        public void ProcessEntry(ILogEntry entry)
         {
             lock (_logEntries)
             {
@@ -90,6 +89,6 @@ namespace T3.Editor.Gui.UiHelpers
             }
         }
 
-        private readonly List<LogEntry> _logEntries = new();
+        private readonly List<ILogEntry> _logEntries = new();
     }
 }

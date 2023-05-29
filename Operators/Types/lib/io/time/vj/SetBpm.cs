@@ -29,21 +29,40 @@ namespace T3.Operators.Types.Id_f5158500_39e4_481e_aa4f_f7dbe8cbe0fa
 
             var wasTriggered = MathUtils.WasTriggered(TriggerUpdate.GetValue(context), ref _triggerUpdate);
             
-            var clamped = bpm.Clamp(54, 240);
-            if (wasTriggered)
+            var clampedRate = bpm.Clamp(54, 240);
+            if (wasTriggered && bpm > 1)
             {
                 if (Playback.Current == null)
                 {
                     Log.Warning("Can't set BPM-Rate without active Playback");
                     return;
                 }
-                Log.Debug($"Setting BPM rate to {clamped}");
-                Playback.Current.Bpm = clamped;
+                Log.Debug($"Setting BPM rate to {clampedRate}");
+                //Playback.Current.Bpm = clampedRate;
+                _setBpmTriggered = true;
+                _newBpmRate = clampedRate;
             }
             
             SubGraph.GetValue(context);
         }
 
+        
+        // This will be process every frame by the editor
+        public static bool TryGetNewBpmRate(out float bpm)
+        {
+            if (!_setBpmTriggered)
+            {
+                bpm = _newBpmRate;
+                return false;
+            }
+
+            _setBpmTriggered = false;
+            bpm = _newBpmRate;
+            return true;
+        }
+        
+        private static bool _setBpmTriggered;
+        private static float _newBpmRate;
         private bool _triggerUpdate;
         
         [Input(Guid = "9CC32DA8-F939-4AD3-B381-6DF8338A371B")]

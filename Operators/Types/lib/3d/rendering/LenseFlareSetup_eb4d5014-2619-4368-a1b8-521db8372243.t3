@@ -138,6 +138,11 @@
           "Value": 0.14
         },
         {
+          "Id": "4d9bfddb-901e-4524-a99c-ba594d317e8a"/*Feather*/,
+          "Type": "System.Single",
+          "Value": 1.0
+        },
+        {
           "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
           "Type": "SharpDX.Size2",
           "Value": {

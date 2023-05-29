@@ -69,6 +69,14 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     case 6:
         a = (tB.r + tB.g + tB.b) / 3;
         break;
+
+    case 7:
+        a = tA.a + tB.a;
+        break;
+
+    case 8:
+        a = max(tA.a, tB.a);
+        break;
     }
 
     float normalRatio = saturate(tB.a * 2 - 1);
@@ -89,7 +97,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     // screen
     case 1:
-        rgb = 1 - (1 - tA.rgb) * (1 - tB.rgb * tB.a);
+        // rgb = 1 - saturate(1 - tA.rgb) * saturate(1 - tB.rgb * tB.a);
+        rgb = tA.rgb + tB.rgb * tB.a;
         break;
 
     // multiply
@@ -122,14 +131,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         rgb = tB.rgb;
         break;
 
-    // overlay 50p
-    case 7:
-        rgb = float3(
-            tA.r < 0.5 ? (2.0 * tA.r * tB.r) : (1.0 - 2.0 * (1.0 - tA.r) * (1.0 - tB.r)),
-            tA.g < 0.5 ? (2.0 * tA.g * tB.g) : (1.0 - 2.0 * (1.0 - tA.g) * (1.0 - tB.g)),
-            tA.b < 0.5 ? (2.0 * tA.b * tB.b) : (1.0 - 2.0 * (1.0 - tA.b) * (1.0 - tB.b)));
-
-        rgb = lerp(tA.rgb, rgb, tB.a);
+    case 8:
+        rgb = max(tA.rgb, tB.rgb);
         break;
     }
 

@@ -23,6 +23,10 @@
       "DefaultValue": true
     },
     {
+      "Id": "044168eb-791c-405f-867f-3d5702924165"/*EventType*/,
+      "DefaultValue": 0
+    },
+    {
       "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
       "DefaultValue": "APC MINI"
     },

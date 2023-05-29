@@ -3,9 +3,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Numerics;
-using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core.Logging;
+using T3.Editor.SystemUi;
+using T3.SystemUi;
 
 namespace T3.Editor.Gui.UiHelpers
 {
@@ -15,7 +16,7 @@ namespace T3.Editor.Gui.UiHelpers
 
         public static string PickResourceFilePath(string initialPath = "", string filter = null)
         {
-            using (var openFileDialog = new OpenFileDialog())
+            using (var openFileDialog = EditorUi.Instance.CreateFilePicker())
             {
                 openFileDialog.InitialDirectory = String.IsNullOrEmpty(initialPath)
                                                       ? GetAbsoluteResourcePath()
@@ -30,7 +31,7 @@ namespace T3.Editor.Gui.UiHelpers
 
                 try
                 {
-                    if (openFileDialog.ShowDialog() != DialogResult.OK)
+                    if (openFileDialog.ShowDialog() != PopUpResult.Ok)
                         return null;
                 }
                 catch (Exception e)
@@ -46,14 +47,14 @@ namespace T3.Editor.Gui.UiHelpers
 
         public static string PickResourceDirectory()
         {
-            using (var folderBrowser = new OpenFileDialog())
+            using (var folderBrowser = EditorUi.Instance.CreateFilePicker())
             {
                 folderBrowser.InitialDirectory = GetAbsoluteResourcePath();
                 folderBrowser.ValidateNames = false;
                 folderBrowser.CheckFileExists = false;
                 folderBrowser.CheckPathExists = true;
                 folderBrowser.FileName = "Folder Selection.";
-                if (folderBrowser.ShowDialog() != DialogResult.OK)
+                if (folderBrowser.ShowDialog() != PopUpResult.Ok)
                     return null;
 
                 var absoluteFolderPath = System.IO.Path.GetDirectoryName(folderBrowser.FileName);

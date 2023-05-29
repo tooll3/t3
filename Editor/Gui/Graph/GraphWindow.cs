@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
@@ -151,17 +152,9 @@ namespace T3.Editor.Gui.Graph
             if (_currentWindow == null)
                 return;
 
-            _currentWindow._imageBackground.BackgroundNodePath = instance != null
+            _currentWindow._graphImageBackground.BackgroundNodePath = instance != null
                                                                      ? OperatorUtils.BuildIdPathForInstance(instance)
                                                                      : null;
-        }
-        
-        public static void ClearBackground()
-        {
-            if (_currentWindow == null)
-                return;
-
-            _currentWindow._imageBackground.BackgroundNodePath = null;
         }
 
         protected override void DrawContent()
@@ -172,11 +165,19 @@ namespace T3.Editor.Gui.Graph
             if (FitViewToSelectionHandling.FitViewToSelectionRequested)
                 FitViewToSelection();
 
-            _imageBackground.Draw();
+            var fadeBackgroundImage = _graphImageBackground.IsActive ? (ImGui.GetMousePos().X - ImGui.GetWindowPos().X).Clamp(0, 100) / 100 : 1;
+            if (_graphImageBackground.IsActive && fadeBackgroundImage == 0)
+            {
+                if(ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                {
+                    _graphImageBackground.ClearBackground();
+                }
+            }
+            _graphImageBackground.Draw(fadeBackgroundImage);
 
             ImGui.SetCursorPos(Vector2.Zero);
 
-            if (_imageBackground.IsActive && TransformGizmoHandling.IsDragging)
+            if (_graphImageBackground.IsActive && TransformGizmoHandling.IsDragging)
                 return;
             
             var drawList = ImGui.GetWindowDrawList();
@@ -208,7 +209,8 @@ namespace T3.Editor.Gui.Graph
                     _focusOnNextFrame = false;
                 }
                 ImGui.SetScrollX(0);
-                    
+             
+
                 drawList.ChannelsSplit(2);
                 drawList.ChannelsSetCurrent(1);
                 {
@@ -223,7 +225,29 @@ namespace T3.Editor.Gui.Graph
 
                 drawList.ChannelsSetCurrent(0);
                 {
-                    GraphCanvas.Draw(drawList, showGrid: !_imageBackground.IsActive);
+                    
+                    var showBackgroundOnly = _graphImageBackground.IsActive && ImGui.GetMousePos().X > ImGui.GetWindowSize().X + ImGui.GetWindowPos().X - 2;
+                    var graphFade = (_graphImageBackground.IsActive && !ImGui.IsMouseDown(ImGuiMouseButton.Left)) ? 
+                                        (ImGui.GetWindowSize().X + ImGui.GetWindowPos().X - ImGui.GetMousePos().X).Clamp(0, 100) / 100
+                                        :1;
+                    
+                    if (showBackgroundOnly)
+                    {
+                        if((!ImGui.IsAnyItemActive() && ImGui.IsMouseClicked(ImGuiMouseButton.Left)))
+                            _graphImageBackground.HasInteractionFocus = !_graphImageBackground.HasInteractionFocus;
+                    }
+                    else
+                    {
+                        var flags = GraphCanvas.GraphDrawingFlags.None;
+                        if(_graphImageBackground.IsActive)
+                            flags |=  GraphCanvas.GraphDrawingFlags.HideGrid;
+
+                        if (_graphImageBackground.HasInteractionFocus)
+                            flags |= GraphCanvas.GraphDrawingFlags.PreventInteractions;
+                        
+                        GraphCanvas.Draw(drawList, flags , graphFade);
+                        ParameterPopUp.DrawParameterPopUp();
+                    }
                 }
                 drawList.ChannelsMerge();
 
@@ -236,14 +260,15 @@ namespace T3.Editor.Gui.Graph
 
             if (GraphCanvas.CompositionOp != null && UserSettings.Config.ShowTimeline)
             {
+                const int splitterWidth = 3;
                 var availableRestHeight = ImGui.GetContentRegionAvail().Y;
-                if (availableRestHeight <= 3)
+                if (availableRestHeight <= splitterWidth)
                 {
                     //Log.Warning($"skipping rending of timeline because layout is inconsistent: only {availableRestHeight}px left.");
                 }
                 else
                 {
-                    ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 3);
+                    ImGui.SetCursorPosY(ImGui.GetCursorPosY() + splitterWidth-1); // leave gap for splitter
                     ImGui.PushStyleVar(ImGuiStyleVar.ChildBorderSize,0);
                     
                     ImGui.BeginChild("##timeline", Vector2.Zero, false,
@@ -402,7 +427,7 @@ namespace T3.Editor.Gui.Graph
             ImGui.SetCursorPos(
                                new Vector2(
                                            ImGui.GetWindowContentRegionMin().X,
-                                           ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y));
+                                           ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y ));
 
             ImGui.BeginChild("TimeControls", Vector2.Zero, false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
             {
@@ -414,28 +439,14 @@ namespace T3.Editor.Gui.Graph
 
                 ImGui.SameLine();
 
+                ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
                 TimeControls.DrawTimeControls(_timeLineCanvas);
-                if (_imageBackground.IsActive)
-                {
-                    _imageBackground.DrawResolutionSelector();
-                    ImGui.SameLine();
-                    if (ImGui.Button("Clear BG"))
-                    {
-                        ClearBackground();
-                    }
-
-                    ImGui.SameLine();
-                    
-
-                    var showGizmos = _imageBackground.ShowGizmos != T3.Core.Operator.GizmoVisibility.Off;
-                    if (CustomComponents.ToggleIconButton(Icon.Grid, "##gizmos", ref showGizmos, Vector2.One * ImGui.GetFrameHeight()))
-                    {
-                        _imageBackground.ShowGizmos = showGizmos
-                                                            ? T3.Core.Operator.GizmoVisibility.On
-                                                            : T3.Core.Operator.GizmoVisibility.Off;
-                    }                    
-                    ImGui.SameLine();
-                }
+                ImGui.PopStyleVar();
+                ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 10);
+                
+                ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5,5));
+                _graphImageBackground.DrawToolbarItems();
+                ImGui.PopStyleVar();
             }
             ImGui.EndChild();
         }
@@ -531,7 +542,7 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private readonly GraphWindow.ImageBackground _imageBackground = new();
+        private readonly GraphImageBackground _graphImageBackground = new();
 
         public readonly GraphCanvas GraphCanvas;
         private const int UseComputedHeight = -1;
@@ -541,7 +552,7 @@ namespace T3.Editor.Gui.Graph
         private float ComputedTimelineHeight => (_timeLineCanvas.SelectedAnimationParameters.Count * DopeSheetArea.LayerHeight)
                                                 + _timeLineCanvas.LayersArea.LastHeight
                                                 + TimeLineCanvas.TimeLineDragHeight
-                                                + 2;
+                                                + 1;
 
         private readonly TimeLineCanvas _timeLineCanvas;
 

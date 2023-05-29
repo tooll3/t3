@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Logging;
-using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 

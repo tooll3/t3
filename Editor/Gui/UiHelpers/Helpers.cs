@@ -112,12 +112,12 @@ namespace T3.Editor.Gui.UiHelpers
             return new Vector2(Max.X - Min.X, Max.Y - Min.Y);
         }
 
-        public float GetWidth()
+        public readonly float GetWidth()
         {
             return Max.X - Min.X;
         }
 
-        public float GetHeight()
+        public readonly float GetHeight()
         {
             return Max.Y - Min.Y;
         }

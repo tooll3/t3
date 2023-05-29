@@ -118,6 +118,24 @@ namespace T3.Core.Utils
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float[] ToArray(this Vector2 vec2)
+        {
+            return new[] { vec2.X, vec2.Y };
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float[] ToArray(this Vector3 vec3)
+        {
+            return new[] { vec3.X, vec3.Y, vec3.Z };
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float[] ToArray(this Vector4 vec4)
+        {
+            return new[] { vec4.X, vec4.Y, vec4.Z, vec4.W };
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Lerp(float a, float b, float t)
         {
             return (float)(a + (b - a) * t);

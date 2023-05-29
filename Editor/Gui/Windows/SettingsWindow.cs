@@ -2,6 +2,7 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
+using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -59,7 +60,19 @@ namespace T3.Editor.Gui.Windows
                                                                   ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen,
                                                                   "Swap main and second windows when fullscreen",
                                                                   UserSettings.Defaults.SwapMainAnd2ndWindowsWhenFullscreen);
-
+                
+                changed |= FormInputs.AddCheckBox("Mousewheel adjust flight speed",
+                                                  ref UserSettings.Config.AdjustCameraSpeedWithMouseWheel,
+                                                  "If enabled, scrolling the mouse wheel while holding left of right mouse button will control navigation speed with WASD keys. This is similar to Unity and Unreal.",
+                                                  UserSettings.Defaults.AdjustCameraSpeedWithMouseWheel);
+                
+                changed |= FormInputs.AddCheckBox("Editing values with mousewheel needs CTRL key",
+                                                  ref UserSettings.Config.MouseWheelEditsNeedCtrlKey,
+                                                  "In parameter window you can edit numeric values by using the mouse wheel. This setting will prevent accidental modifications while scrolling because by using ctrl key for activation.",
+                                                  UserSettings.Defaults.AdjustCameraSpeedWithMouseWheel);
+                FormInputs.SetIndent(170);
+                changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.ParameterMode, "Clicking on Parameter...");
+                FormInputs.SetIndent(20);
                 FormInputs.ResetIndent();
                 FormInputs.AddVerticalSpace();
                 //ImGui.Dummy(new Vector2(20,20));
@@ -95,7 +108,27 @@ namespace T3.Editor.Gui.Windows
                                                                0.0f, 10f, 0.01f, true, 
                                                                "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input.",
                                                                UserSettings.Defaults.TimeRasterDensity);
+                
+                changed |= FormInputs.AddCheckBox("Reposition loop range on click",
+                                                  ref UserSettings.Config.RepositionLoopRangeOnClick,
+                                                  "When using the timeline with bar units, this setting allows you to move the current loop range by clicking outside the loop.",
+                                                  UserSettings.Defaults.RepositionLoopRangeOnClick);
                 ImGui.Dummy(new Vector2(20,20));
+                ImGui.TreePop();
+            }
+
+            if (ImGui.TreeNode("Project settings"))
+            {
+                var projectSettingsChanged = false;
+                CustomComponents.HelpText("These settings only when playback as executable");
+
+                projectSettingsChanged |= FormInputs.AddCheckBox("Enable Playback Control",
+                                                                 ref ProjectSettings.Config.EnablePlaybackControlWithKeyboard,
+                                                                 "Users can use cursor left/right to skip through time\nand space key to pause playback\nof exported executable.",
+                                                                 ProjectSettings.Defaults.EnablePlaybackControlWithKeyboard);
+                if(projectSettingsChanged)
+                    ProjectSettings.Save();
+                
                 ImGui.TreePop();
             }
 
@@ -133,6 +166,36 @@ namespace T3.Editor.Gui.Windows
             }
             if (changed)
                 UserSettings.Save();
+            
+            if (ImGui.TreeNode("Debug information"))
+            {
+                if (ImGui.TreeNode("Undo history"))
+                {
+                    int index = 0;
+                    int count = UndoRedoStack.UndoStack.Count;
+                    foreach (var c in UndoRedoStack.UndoStack)
+                    {
+                        ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.5f/(index+1) + 0.5f));
+                        ImGui.PushFont(index == 0 ? Fonts.FontBold : Fonts.FontNormal);
+                        if (c is MacroCommand macroCommand)
+                        {
+                            ImGui.Selectable($"{c.Name} ({macroCommand.Count})");
+                        }
+                        else
+                        {
+                            ImGui.Selectable(c.Name);
+                        }
+                        ImGui.PopFont();
+                        ImGui.PopStyleColor();
+                        index++;
+                    }
+
+                
+                    ImGui.TreePop();
+                }
+                
+                ImGui.TreePop();
+            }
         }
 
         public override List<Window> GetInstances()

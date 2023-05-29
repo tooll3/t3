@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
@@ -85,8 +87,11 @@ namespace T3.Editor.Gui.UiHelpers
                 if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(symbol.Id, out var info))
                 {
                     ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
-                    ListSymbolSetWithTooltip("  (needs {0}/", "  (",  info.RequiredSymbolIds);
-                    ListSymbolSetWithTooltip("used by {0})  ", "NOT USED)  ",  info.DependingSymbolIds);
+                    ListSymbolSetWithTooltip("  (needs {0}/", "  (", info.RequiredSymbolIds);
+                    if (ListSymbolSetWithTooltip("used by {0})  ", "NOT USED)  ", info.DependingSymbolIds))
+                    {
+                        SymbolLibrary._listUsagesFilter = symbol;
+                    }
                     ImGui.PopStyleColor();
                 }
 
@@ -128,8 +133,9 @@ namespace T3.Editor.Gui.UiHelpers
             ImGui.PopID();
         }
 
-        private static void ListSymbolSetWithTooltip(string setTitleFormat, string emptySetTitle, HashSet<Guid> symbolIdSet)
+        private static bool ListSymbolSetWithTooltip(string setTitleFormat, string emptySetTitle, HashSet<Guid> symbolIdSet)
         {
+            var activated = false;
             ImGui.PushID(setTitleFormat);
             ImGui.SameLine();
             
@@ -146,9 +152,15 @@ namespace T3.Editor.Gui.UiHelpers
                     ListSymbols(symbolIdSet);
                     ImGui.EndTooltip();
                 }
+
+                if (ImGui.IsItemClicked())
+                {
+                    activated = true;
+                }
             }
             
             ImGui.PopID();
+            return activated;
         }
 
         private static void ListSymbols(HashSet<Guid> valueRequiredSymbolIds)
@@ -164,10 +176,49 @@ namespace T3.Editor.Gui.UiHelpers
             }
         }
 
+
+        private static bool IsSymbolCurrentCompositionOrAParent(Symbol symbol)
+        {
+            var comp = GraphWindow.GetPrimaryGraphWindow()?.GraphCanvas?.CompositionOp;
+            if (comp == null)
+            {
+                return true;
+            }
+
+            if (comp.Symbol == symbol)
+            {
+                return true;
+            }
+
+            var instance = comp;
+            while (instance != null)
+            {
+                if (instance.Symbol == symbol)
+                    return true;
+                
+                instance = instance.Parent;
+            }
+
+            return false;
+        }
+        
+        
+        
         public static void HandleDragAndDropForSymbolItem(Symbol symbol)
         {
+
+            if (ImGui.IsItemActivated())
+            {
+                Log.Debug("Can't insert that symbol because it would create a cycle.");
+                return;
+            }
+            
             if (ImGui.IsItemActive())
             {
+                if (IsSymbolCurrentCompositionOrAParent(symbol))
+                {
+                    return;
+                }
                 if (ImGui.BeginDragDropSource())
                 {
                     if (_dropData == new IntPtr(0))

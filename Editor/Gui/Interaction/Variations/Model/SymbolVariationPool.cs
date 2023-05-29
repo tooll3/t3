@@ -55,7 +55,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
             try
             {
-                var jToken = JToken.ReadFrom(jsonReader);
+                var jToken = JToken.ReadFrom(jsonReader, SymbolJson.LoadSettings);
                 var jArray = (JArray)jToken["Variations"];
                 if (jArray != null)
                 {
@@ -91,8 +91,8 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
         public void SaveVariationsToFile()
         {
-            if (Variations.Count == 0)
-                return;
+            // if (Variations.Count == 0)
+            //     return;
 
             CreateFolderIfNotExists(VariationsFolder);
             
@@ -151,11 +151,12 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
         public void Apply(Instance instance, Variation variation)
         {
             StopHover();
+            ActiveVariation = variation;
 
             var command = variation.IsPreset
                               ? CreateApplyPresetCommand(instance, variation)
                               : CreateApplyVariationCommand(instance, variation);
-            ;
+            
             UndoRedoStack.AddAndExecute(command);
         }
 
@@ -286,7 +287,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             var changeSets = new Dictionary<Guid, Dictionary<Guid, InputValue>>();
             if (instances == null || instances.Count == 0)
             {
-                Log.Warning("Not instances to create variation for");
+                Log.Warning("No instances to create variation for");
                 return null;
             }
 
@@ -385,7 +386,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
                     continue;
                 }
 
-                foreach (var input in symbolChild.InputValues.Values)
+                foreach (var input in symbolChild.Inputs.Values)
                 {
                     if (!ValueUtils.BlendMethods.TryGetValue(input.Value.ValueType, out var blendFunction))
                         continue;

@@ -23,7 +23,7 @@ namespace T3.Editor.Gui.Styling
             
             AddVerticalSpace(5);
             
-            ImGui.PushFont(Fonts.FontBold);
+            //ImGui.PushFont(Fonts.FontBold);
             ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
 
             var id = ImGui.GetID(label);
@@ -35,7 +35,7 @@ namespace T3.Editor.Gui.Styling
             var isOpen = ImGui.TreeNode(label);
             ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 0);
             ImGui.PopStyleColor();
-            ImGui.PopFont();
+            //ImGui.PopFont();
 
             return isOpen;
         }
@@ -179,6 +179,8 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
 
+
+        
         private static bool DrawSelectButton(string name, bool isSelected)
         {
             ImGui.PushStyleColor(ImGuiCol.Button, isSelected ? T3Style.Colors.ButtonActive.Rgba : T3Style.Colors.ButtonHover.Rgba);
@@ -190,6 +192,8 @@ namespace T3.Editor.Gui.Styling
             return clicked;
         }
 
+        private const string NoDefaultString = "_";
+        
         /// <summary>
         /// Draws string input or file picker. 
         /// </summary>
@@ -197,8 +201,17 @@ namespace T3.Editor.Gui.Styling
                                           ref string value,
                                           string placeHolder = null,
                                           string warning = null,
-                                          string tooltip = null)
+                                          string tooltip = null,
+                                          string defaultValue = NoDefaultString)
         {
+            var hasDefault = defaultValue != NoDefaultString;
+            var isDefault = hasDefault && value == defaultValue;
+
+            if (isDefault)
+            {
+                ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha);
+            }
+            
             DrawInputLabel(label);
             var wasNull = value == null;
             if (wasNull)
@@ -221,9 +234,21 @@ namespace T3.Editor.Gui.Styling
                 drawList.AddText(minPos + new Vector2(8, 3), Color.White.Fade(0.25f), placeHolder);
                 drawList.PopClipRect();
             }
+            
+            if (isDefault)
+            {
+                ImGui.PopStyleVar();
+            }
+
+            if (AppendResetButton(hasDefault && !isDefault, label))
+            {
+                value = defaultValue;
+                modified = true;
+            }
 
             DrawWarningBelowField(warning);
 
+            
             return modified;
         }
 
@@ -403,14 +428,20 @@ namespace T3.Editor.Gui.Styling
             ImGui.PopStyleVar(2);
             ImGui.PopFont();
 
+            //CustomComponents.TooltipForLastItem(tooltip, null, false);
             if (!ImGui.IsItemHovered())
                 return;
-
+            
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
+            ImGui.PushStyleColor(ImGuiCol.PopupBg, Color.Black.Rgba);
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 1);
             ImGui.BeginTooltip();
             ImGui.PushTextWrapPos(300);
             ImGui.TextUnformatted(tooltip);
             ImGui.PopTextWrapPos();
             ImGui.EndTooltip();
+            ImGui.PopStyleColor();
+            ImGui.PopStyleVar(2);
         }
 
         private static bool AppendResetButton(bool hasReset, string id)

@@ -4,11 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.Dialog
 {
@@ -64,8 +64,8 @@ namespace T3.Editor.Gui.Dialog
                     if (CustomComponents.DisablableButton("Import and Restart", isValid))
                     {
                         MigrateSelection();
-                        MessageBox.Show("Tooll now has to restart to complete the import.");
-                        Application.Exit();
+                        EditorUi.Instance.ShowMessageBox("Tooll now has to restart to complete the import.");
+                        EditorUi.Instance.ExitApplication();
                         //Application.Restart();
                         //Environment.Exit(0);
 

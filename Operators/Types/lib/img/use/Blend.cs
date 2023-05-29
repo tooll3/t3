@@ -45,7 +45,7 @@ namespace T3.Operators.Types.Id_9f43f769_d32a_4f49_92ac_e0be3ba250cf
             Difference = 4,
             UseImageA_RGB = 5,
             UseImageB_RGB = 6,
-            Overlay50p = 7,
+            Max = 7,
         }
 
         private enum AlphaBlendModes
@@ -57,6 +57,8 @@ namespace T3.Operators.Types.Id_9f43f769_d32a_4f49_92ac_e0be3ba250cf
             UseImageB_Alpha = 4,
             UseImageA_Brightness = 5,
             UseImageB_Brightness = 6,
+            Additive = 7,
+            Max = 8,
         }
     }
 }

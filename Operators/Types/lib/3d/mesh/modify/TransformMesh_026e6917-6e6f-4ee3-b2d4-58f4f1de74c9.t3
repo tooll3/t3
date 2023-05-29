@@ -38,6 +38,14 @@
     {
       "Id": "71531810-78ab-449e-bb13-bfe5fe3d2a69"/*UseVertexSelection*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "ccd89dd2-1baa-4a0c-8ec3-5a0e77551379"/*Pivot*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
     }
   ],
   "Children": [
@@ -257,6 +265,12 @@
       "SourceSlotId": "751e97de-c418-48c7-823e-d4660073a559",
       "TargetParentOrChildId": "99c9771e-4112-4520-816e-32a0b9644897",
       "TargetSlotId": "914ea6e8-abc6-4294-b895-8bfbe5afea0e"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "ccd89dd2-1baa-4a0c-8ec3-5a0e77551379",
+      "TargetParentOrChildId": "b3de1c6c-3781-4512-b80e-c7e9f21a95bd",
+      "TargetSlotId": "279730b7-c427-4924-9fde-77eb65a3076c"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",

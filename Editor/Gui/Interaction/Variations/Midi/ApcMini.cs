@@ -57,6 +57,12 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
                                     return (int)color;
                                     
                                 }
+
+                                if (variation == activeVariation)
+                                {
+                                    return (int)ApcButtonColor.Red;
+                                }
+                                
                                 switch (variation.State)
                                 {
                                     case Variation.States.Undefined:

@@ -23,6 +23,9 @@ namespace T3.Operators.Types.Id_1dfc9f6d_effa_407b_8f8d_5adf62504205
         [Output(Guid = "BF20C1BB-5261-4AA2-AD80-EB69E2210B11")]
         public readonly Slot<string> LastResult = new();
         
+        [Output(Guid = "301463A0-75C1-4B1A-8AF2-1048421A8BFE", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<float> P = new();
+        
         public _WFEGameState()
         {
             TotalScore.UpdateAction = Update;
@@ -46,6 +49,11 @@ namespace T3.Operators.Types.Id_1dfc9f6d_effa_407b_8f8d_5adf62504205
             var scoreForScene = ScoreForScene.GetValue(context);
             var sceneIndex = SceneIndex.GetValue(context);
 
+            var dt = (float)(context.Playback.TimeInBars - perfectTime);
+            var rp = 1 / MathF.Max(timeDifferenceAmplify, 0.001f);
+            var p = rp / (rp + MathF.Abs(dt));
+            P.Value = p;
+            
             var scoreDelta = 0;
             
             if (wasTriggered)
@@ -60,31 +68,33 @@ namespace T3.Operators.Types.Id_1dfc9f6d_effa_407b_8f8d_5adf62504205
                     if (_scoredSceneIndices.Contains(sceneIndex))
                     {
                         //Log.Debug($"added score {scoreDelta}");
-                        scoreDelta = -10;
+                        scoreDelta = 0;
                         LastResult.Value = "Too often!";
+                        LastScore.Value = scoreDelta;
                         
                     }
                     else
                     {
-                        var dt = (float)(context.Playback.TimeInBars - perfectTime);
-                        var rp = 1 / MathF.Max(timeDifferenceAmplify, 0.001f);
-                        var p = rp / (rp + MathF.Abs(dt));
+                        // var dt = (float)(context.Playback.TimeInBars - perfectTime);
+                        // var rp = 1 / MathF.Max(timeDifferenceAmplify, 0.001f);
+                        // var p = rp / (rp + MathF.Abs(dt));
                         
                         _scoredSceneIndices.Add(sceneIndex);
 
                         if (dt < 0)
                         {
                             LastResult.Value = "Too early!";
-                            scoreDelta = -1;
+                            scoreDelta = -10;
+                            LastScore.Value = scoreDelta;
                         }
                         else
                         {
                             scoreDelta = (int)(scoreForScene * p);
-                            if (p > 0.8)
+                            if (p > 0.5)
                             {
                                 LastResult.Value = "Perfect!";    
                             }
-                            else if (p > 0.5 )
+                            else if (p > 0.04 )
                             {
                                 
                                 LastResult.Value =  "Nice!";
@@ -93,6 +103,7 @@ namespace T3.Operators.Types.Id_1dfc9f6d_effa_407b_8f8d_5adf62504205
                             {
                                 LastResult.Value = "Almost";
                             }
+                            LastScore.Value = scoreDelta;
                         }
                     }
                 }
@@ -105,6 +116,7 @@ namespace T3.Operators.Types.Id_1dfc9f6d_effa_407b_8f8d_5adf62504205
                 Log.Debug($"added score {scoreDelta}", this);
                 _score += scoreDelta;
             }
+
 
             TotalScore.Value = _score;
         }

@@ -28,6 +28,9 @@ namespace T3.Operators.Types.Id_2a5475c8_9e16_409f_8c40_a3063e045d38
 
         [Input(Guid = "c0a17636-f75b-45c0-ab63-cb0f9130a7ac")]
         public readonly InputSlot<float> MixOriginal = new InputSlot<float>();
+
+        [Input(Guid = "921b8a04-d3b5-408e-ad3e-311a4c9890b1")]
+        public readonly InputSlot<bool> OutputAsTransparent = new InputSlot<bool>();
     }
 }
 

@@ -12,7 +12,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
     /// </summary>
     public class SiTimeRaster : AbstractTimeRaster
     {
-        public override void Draw(Playback playback)
+        public override void Draw(Playback playback, float unitsPerSeconds)
         {
             if (ScaleRanges == null || Math.Abs(UserSettings.Config.TimeRasterDensity - _initializedDensity) > 0.0001f)
             {

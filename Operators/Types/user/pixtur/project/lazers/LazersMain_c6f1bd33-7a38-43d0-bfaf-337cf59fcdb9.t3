@@ -1404,13 +1404,13 @@
       "Outputs": []
     },
     {
-      "Id": "311c4793-e51e-43cf-91e4-d9722469bb3f"/*DrawQuads*/,
+      "Id": "311c4793-e51e-43cf-91e4-d9722469bb3f"/*_DrawQuads*/,
       "SymbolId": "16d10dc8-63b9-4ddf-90b8-41caef99d945",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "c79b0d7b-1ce6-41f3-ab75-a15d085e3628"/*DrawBillboards*/,
+      "Id": "c79b0d7b-1ce6-41f3-ab75-a15d085e3628"/*_DrawBillboardsOld*/,
       "SymbolId": "071c9aad-ecbf-47bf-b2f6-c43e8212d5b1",
       "InputValues": [
         {

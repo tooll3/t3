@@ -26,8 +26,14 @@ namespace T3.Editor.Gui.ChildUi
                 return SymbolChildUi.CustomUiResult.None;
             }
 
-            if (GradientEditor.Draw(gradient, drawList, innerRect))
+            var cloneIfModified = gradientSlider.Gradient.Input.IsDefault;
+            
+            if (GradientEditor.Draw(ref gradient, drawList, innerRect, cloneIfModified))
             {
+                if (cloneIfModified)
+                {
+                    gradientSlider.Gradient.SetTypedInputValue(gradient);
+                }
                 gradientSlider.Color.DirtyFlag.Invalidate();
                 gradientSlider.OutGradient.DirtyFlag.Invalidate();
             }

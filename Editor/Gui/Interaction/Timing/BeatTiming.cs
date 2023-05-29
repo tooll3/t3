@@ -31,7 +31,7 @@ namespace T3.Editor.Gui.Interaction.Timing
         
         public static float SlideSyncTime;
         
-        public static void Update(double runTime2)
+        public static void Update()
         {
             //BeatTime = (_measureCount + (_runTime - _measureStartTime) / MeasureDuration + _syncMeasureOffset) * BeatsPerBar;
             

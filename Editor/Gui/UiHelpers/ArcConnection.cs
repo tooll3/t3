@@ -29,6 +29,10 @@ namespace T3.Editor.Gui.UiHelpers
 
         public static bool Draw(ImRect rectA, Vector2 pointA, ImRect rectB, Vector2 pointB, Color color, float thickness, ref Vector2 hoverPosition)
         {
+            var currentCanvasScale = GraphCanvas.Current.Scale.X.Clamp(0.2f,2f);
+            pointA.X -= (3-1 * currentCanvasScale).Clamp(1,1);
+            pointB.X += (4-4 * currentCanvasScale).Clamp(0,4);
+            
             var r2 = rectA;
             r2.Add(rectB);
             r2.Add(pointB);
@@ -39,7 +43,6 @@ namespace T3.Editor.Gui.UiHelpers
             
             var drawList = ImGui.GetWindowDrawList();
 
-            var currentCanvasScale = GraphCanvas.Current.Scale.X;
             var fallbackRectSize = new Vector2(120, 50) * currentCanvasScale;
             if (rectA.GetHeight() < 1)
             {
@@ -59,7 +62,8 @@ namespace T3.Editor.Gui.UiHelpers
             const float shrinkArkAngle = 0.8f;
             var edgeFactor = (0.35f * (currentCanvasScale- 0.3f)).Clamp(0.01f, 0.35f); // 0 -> overlap  ... 1 concentric around node edge
             const float outlineWidth = 3;
-            var edgeOffset = 10 * currentCanvasScale;
+            var edgeOffset =  1 * currentCanvasScale;
+
 
             var pointAOrg = pointA;
 

@@ -52,6 +52,9 @@ MidiInput_59a0458e-2f3a-4856-96cd-32936f783cc5.t3ui
 MouseInput.cs
 MouseInput_eff2ffff-dc39-4b90-9b1c-3c0a9a0108c6.t3
 MouseInput_eff2ffff-dc39-4b90-9b1c-3c0a9a0108c6.t3ui
+NdiInput.cs
+NdiInput_7567c3b0-9d91-40d2-899d-3a95b481d023.t3
+NdiInput_7567c3b0-9d91-40d2-899d-3a95b481d023.t3ui
 PixelShader.cs
 PixelShader_f7c625da-fede-4993-976c-e259e0ee4985.t3
 PixelShader_f7c625da-fede-4993-976c-e259e0ee4985.t3ui

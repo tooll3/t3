@@ -15,7 +15,7 @@
     /// This enumeration is directly derived from <see cref="System.Windows.Forms.Keys"/>.
     /// Make sure to not confuse these with ImGuiKey enumeration.
     /// </summary>
-    public enum Key
+    public enum Key // Todo: can we make this frontend-agnostic?
     {
         D0 = 48,
         D1 = 49,

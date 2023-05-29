@@ -101,7 +101,7 @@
         {
           "Id": "23e55b5d-b469-4d0f-a495-7e87fe65cccf"/*Max*/,
           "Type": "System.Int32",
-          "Value": 1000
+          "Value": 1000000
         }
       ],
       "Outputs": []
