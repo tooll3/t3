@@ -31,7 +31,7 @@ namespace T3.Editor.Gui.Graph
     /// </summary>
     internal static class GraphNode
     {
-        public static void Draw(SymbolChildUi childUi, Instance instance)
+        public static void Draw(SymbolChildUi childUi, Instance instance, bool preventInteraction= false)
         {
             if (instance == null)
                 return;
@@ -93,7 +93,7 @@ namespace T3.Editor.Gui.Graph
                     var backgroundColor = typeColor;
 
                     // Background
-                    var isHovered = FrameStats.Last.HoveredIds.Contains(instance.SymbolChildId);
+                    var isHighlighted = FrameStats.Last.HoveredIds.Contains(instance.SymbolChildId);
                     if (framesSinceLastUpdate > 2)
                     {
                         var fadeFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 0f, 1.0f);
@@ -101,7 +101,7 @@ namespace T3.Editor.Gui.Graph
                         backgroundColor = Color.Mix(backgroundColor, mutedColor, fadeFactor);
                     }
 
-                    var backgroundColorWithHover = isHovered
+                    var backgroundColorWithHover = isHighlighted
                                                        ? ColorVariations.OperatorHover.Apply(backgroundColor)
                                                        : ColorVariations.Operator.Apply(backgroundColor);
 
@@ -161,17 +161,26 @@ namespace T3.Editor.Gui.Graph
                     }
 
                     // Interaction
-                    ImGui.SetCursorScreenPos(_selectableScreenRect.Min);
+                    if (preventInteraction)
+                    {
+                        ImGui.SetCursorScreenPos( new Vector2(-5000,-5000));
+                    }
+                    else
+                    {
+                        ImGui.SetCursorScreenPos(_selectableScreenRect.Min);
+                    }
 
                     //--------------------------------------------------------------------------
                     ImGui.InvisibleButton("node", _selectableScreenRect.GetSize());
                     //--------------------------------------------------------------------------
 
-                    SelectableNodeMovement.Handle(childUi, instance);
+                    if(!preventInteraction)
+                        SelectableNodeMovement.Handle(childUi, instance);
 
-                    isNodeHovered = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) 
-                                        && !GraphCanvas.Current.SymbolBrowser.IsOpen
-                                        && ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup);
+                    isNodeHovered = !preventInteraction 
+                                    && ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) 
+                                    && !GraphCanvas.Current.SymbolBrowser.IsOpen
+                                    && ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup);
                     
                     // Tooltip
                     if (isNodeHovered

@@ -40,10 +40,10 @@ namespace T3.Editor.Gui.Graph
     ///</remarks>
     public static class Graph
     {
-
-
-        public static void DrawGraph(ImDrawListPtr drawList, float graphOpacity= 1, bool needsReinit = false)
+        public static void DrawGraph(ImDrawListPtr drawList, bool preventInteraction , float graphOpacity= 1)
         {
+            
+            var needsReinit = false;
             GraphOpacity = graphOpacity; //MathF.Sin((float)ImGui.GetTime() * 2) * 0.5f + 0.5f;
             DrawList = drawList;
             var graphSymbol = GraphCanvas.Current.CompositionOp.Symbol;
@@ -125,7 +125,7 @@ namespace T3.Editor.Gui.Graph
                     if (childUi.Id != instance.SymbolChildId)
                         continue;
 
-                    GraphNode.Draw(childUi, instance);
+                    GraphNode.Draw(childUi, instance, preventInteraction);
                     break;
                 }
             }

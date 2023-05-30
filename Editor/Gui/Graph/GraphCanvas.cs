@@ -386,7 +386,7 @@ namespace T3.Editor.Gui.Graph
                 SymbolBrowser.Draw();
 
                 graphOpacity *= preventInteractions ? 0.3f : 1;
-                Graph.DrawGraph(DrawList, graphOpacity);
+                Graph.DrawGraph(DrawList,drawingFlags.HasFlag(GraphDrawingFlags.PreventInteractions), graphOpacity);
                 
                 RenameInstanceOverlay.Draw();
                 
