@@ -46,18 +46,13 @@ namespace T3.Editor.Gui.Graph.Interaction
         //private static Guid _activeChildId;
         
         /// <summary>
-        /// NOTE: This has to be called for ALL movable elements and directly after ImGui.Item
+        /// NOTE: This has to be called for ALL movable elements (ops, inputs, outputs) and directly after ImGui.Item
         /// </summary>
         public static void Handle(ISelectableCanvasObject node, Instance instance = null)
         {
-            if (instance == null)
-                return;
-            
-            //Log.Debug("Testing  " + node.Id);
-            
             var justClicked = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
             
-            var isActiveNode = instance.SymbolChildId == _draggedNodeId;
+            var isActiveNode = node.Id == _draggedNodeId;
 
             if (justClicked)
             {
