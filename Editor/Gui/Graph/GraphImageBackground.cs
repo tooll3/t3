@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Camera;
 using T3.Editor.Gui.OutputUi;
@@ -19,17 +20,22 @@ namespace T3.Editor.Gui.Graph
     /// </summary>
     public class GraphImageBackground
     {
-        internal List<Guid> BackgroundNodePath;
+        private List<Guid> BackgroundNodePath;
 
         public bool IsActive => BackgroundNodePath != null;
         public bool HasInteractionFocus;
 
+        public Instance OutputInstance
+        {
+            set => BackgroundNodePath = OperatorUtils.BuildIdPathForInstance(value);
+            get => NodeOperations.GetInstanceFromIdPath(BackgroundNodePath);
+        }
+        
+        
         public void DrawResolutionSelector()
         {
             ResolutionHandling.DrawSelector(ref _selectedResolution, null);
         }
-        
-
 
         public void Draw(float imageOpacity)
         {
@@ -57,7 +63,7 @@ namespace T3.Editor.Gui.Graph
                 return;
 
             var viewOutput = instanceForOutput.Outputs[0];
-            var preventCameraInteraction = !HasInteractionFocus 
+            var preventCameraInteraction = !HasInteractionFocus
                                            || !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
             _camSelectionHandling.Update(instanceForOutput, instanceForOutput.Outputs[0].ValueType, preventCameraInteraction);
 

@@ -93,10 +93,14 @@ namespace T3.Editor.Gui.InputUi
                                                                Icon.KeyframeToggleOnBoth,
                                                            };
 
-        public InputEditStateFlags DrawParameterEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi, bool skipIfDefault = false)
+        public InputEditStateFlags DrawParameterEdit(IInputSlot inputSlot, SymbolUi compositionUi, SymbolChildUi symbolChildUi, bool hideNonEssentials,
+                                                     bool skipIfDefault)
         {
-            var name = inputSlot.Input.Name;
             var editState = InputEditStateFlags.Nothing;
+            if ((inputSlot.IsConnected || inputSlot.IsMultiInput) && hideNonEssentials)
+                return editState;
+            
+            var name = inputSlot.Input.Name;
             var typeColor = TypeUiRegistry.Entries[Type].Color;
             var compositionSymbol = compositionUi.Symbol;
             var animator = compositionSymbol.Animator;

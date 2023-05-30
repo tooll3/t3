@@ -87,7 +87,7 @@ namespace T3.Editor.Gui.Windows
                 var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
 
                 // Draw parameters
-                DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi);
+                DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, true);
                 FormInputs.AddVerticalSpace(30);
 
                 DrawDescription(symbolUi);
@@ -186,7 +186,7 @@ namespace T3.Editor.Gui.Windows
         /// The actual implementation is done in <see cref="InputValueUi{T}.DrawParameterEdit"/>  
         /// </summary>
         public static void DrawParameters(Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi,
-                                          SymbolUi compositionSymbolUi)
+                                          SymbolUi compositionSymbolUi, bool hideNonEssentials)
         {
             var groupState = GroupState.None; 
             
@@ -213,7 +213,7 @@ namespace T3.Editor.Gui.Windows
                 
                 ImGui.PushID(inputSlot.Id.GetHashCode());
                 var skipIfDefault = groupState == GroupState.InsideClosed;
-                var editState = inputUi.DrawParameterEdit(inputSlot, compositionSymbolUi, symbolChildUi, skipIfDefault);
+                var editState = inputUi.DrawParameterEdit(inputSlot, compositionSymbolUi, symbolChildUi, hideNonEssentials:hideNonEssentials, skipIfDefault);
 
                 if ((editState & InputEditStateFlags.Started) != InputEditStateFlags.Nothing)
                 {

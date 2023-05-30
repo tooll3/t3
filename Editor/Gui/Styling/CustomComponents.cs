@@ -450,20 +450,27 @@ namespace T3.Editor.Gui.Styling
                 }
 
                 var isSelected = selectedValueString == value.ToString();
-                var clicked = ImGui.InvisibleButton(name, new Vector2(17, 17));
-
+                
+                var clicked = DrawIconToggle(name, icon, ref isSelected);
                 if (clicked)
                 {
                     modified = true;
                     selectedValue = value;
                 }
-
-                Icons.DrawIconOnLastItem(icon, isSelected ? T3Style.Colors.ButtonActive : T3Style.Colors.TextMuted);
-
+                
                 isFirst = false;
             }
 
             return modified;
+        }
+
+        public static bool DrawIconToggle(string name, Icon icon, ref bool isSelected)
+        {
+            var clicked = ImGui.InvisibleButton(name, new Vector2(17, 17));
+            Icons.DrawIconOnLastItem(icon, isSelected ? T3Style.Colors.ButtonActive : T3Style.Colors.TextMuted);
+            if (clicked)
+                isSelected = !isSelected;
+            return clicked;
         }
 
         public static bool DrawSearchField(string placeHolderLabel, ref string value, float width = 0)

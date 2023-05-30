@@ -27,7 +27,7 @@ namespace T3.Editor.Gui.Graph
             
             if (_focusedInstanceId == Guid.Empty)
             {
-                if ((renameTriggered || ImGui.IsWindowFocused()) 
+                if ((renameTriggered || ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows) || ImGui.IsWindowFocused()) 
                     && !ImGui.IsAnyItemActive() 
                     && !ImGui.IsAnyItemFocused() 
                     && (renameTriggered || ImGui.IsKeyPressed((ImGuiKey)Key.Return))

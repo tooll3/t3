@@ -268,7 +268,8 @@ namespace T3.Editor.Gui.Graph
                 CustomComponents.DrawWindowFocusFrame();
                 
                 DrawDropHandler();
-
+                ImGui.SetCursorScreenPos(Vector2.One * 100); 
+                
                 if (!preventInteractions)
                 {
                     if (KeyboardBinding.Triggered(UserActions.FocusSelection))
@@ -325,7 +326,7 @@ namespace T3.Editor.Gui.Graph
                         var selectedImage = NodeSelection.GetFirstSelectedInstance();
                         if (selectedImage != null)
                         {
-                            GraphWindow.SetBackgroundOutput(selectedImage);
+                            GraphWindow.SetBackgroundInstanceForCurrentGraph(selectedImage);
                         }
                     }
                 }
@@ -746,7 +747,7 @@ namespace T3.Editor.Gui.Graph
                                    enabled: isImage))
                 {
                     var instance = CompositionOp.Children.Single(child => child.SymbolChildId == selectedChildUis[0].Id);
-                    GraphWindow.SetBackgroundOutput(instance);
+                    GraphWindow.SetBackgroundInstanceForCurrentGraph(instance);
                 }
 
                 if (ImGui.MenuItem("Pin to output", oneOpSelected))

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
-using T3.Core.IO;
-using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -33,24 +32,30 @@ internal static class ParameterPopUp
                                   && !ParameterWindow.IsAnyInstanceVisible();
 
         if ((activatedWithLeftMouse || activatedWithMiddleMouse || activationRequested)
-            && string.IsNullOrEmpty(FrameStats.Current.OpenedPopUpName)
             && (customUiResult & SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp) == 0
-            && FrameStats.Last.OpenedPopUpName != ParameterPopUpName)
+           )
         {
-            _selectedInstance = instance;
-            _graphCanvas = GraphCanvas.Current;
+            Open(instance);
         }
     }
 
-    private static bool _isOpen;
-    private static GraphCanvas _graphCanvas;
-
-    
-    public static void DrawParameterPopUp()
+    private static void Open(Instance instance)
     {
-        if (_selectedInstance == null || _graphCanvas == null)
+        _selectedInstance = instance;
+        _graphCanvas = GraphCanvas.Current;
+
+        NodeIdRequestedForParameterWindowActivation = Guid.Empty;
+
+        _isOpen = true;
+        _lastRequiredHeight = 0;
+        _focusDelayCount = 3;
+    }
+
+    public static void DrawParameterPopUp(GraphWindow graphWindow)
+    {
+        if (!_isOpen || _selectedInstance == null || _graphCanvas == null)
             return;
-        
+
         var symbolUi = SymbolUiRegistry.Entries[_selectedInstance.Symbol.Id];
         var compositionSymbolUi = SymbolUiRegistry.Entries[_graphCanvas.CompositionOp.Symbol.Id];
         var symbolChildUi = compositionSymbolUi.ChildUis.SingleOrDefault(symbolChildUi2 => symbolChildUi2.Id == _selectedInstance.SymbolChildId);
@@ -59,46 +64,56 @@ internal static class ParameterPopUp
             Close();
             return;
         }
-        
-        if (!_isOpen)
-        {
-            NodeIdRequestedForParameterWindowActivation = Guid.Empty;
-            NodeSelection.SetSelectionToChildUi(symbolChildUi, _selectedInstance);
 
-            var nodeScreenRect = _graphCanvas.TransformRect(ImRect.RectWithSize(symbolChildUi.PosOnCanvas, symbolChildUi.Size));
-            
-            var screenPos = new Vector2(nodeScreenRect.Min.X + 5, nodeScreenRect.Max.Y + 5);
-            ImGui.SetNextWindowPos(screenPos);
-            ImGui.OpenPopup(ParameterPopUpName);
-            _isOpen = true;
-        }
-        
-        ImGui.SetNextWindowSizeConstraints(new Vector2(280, 140), new Vector2(280, 320));
-        if (ImGui.BeginPopup(ParameterPopUpName,  ImGuiWindowFlags.NoMove))
+        if (!NodeSelection.IsAnythingSelected())
         {
-            var io = ImGui.GetIO();
-            
+            Close();
+            return;
+        }
+
+        var nodeScreenRect = _graphCanvas.TransformRect(ImRect.RectWithSize(symbolChildUi.PosOnCanvas, symbolChildUi.Size));
+        var screenPos = new Vector2(nodeScreenRect.Min.X, nodeScreenRect.Max.Y + 5);
+        var height = _lastRequiredHeight.Clamp(MinHeight, MaxHeight);
+        ImGui.SetNextWindowPos(screenPos);
+
+
+        if (ImGui.BeginChild("Popup", new Vector2(280, height), true, ImGuiWindowFlags.Tooltip))
+        {
             if (ImGui.IsKeyDown(ImGuiKey.Escape))
             {
-                ImGui.CloseCurrentPopup();
-            }
-
-            if (ImGui.IsKeyPressed((ImGuiKey)Key.CursorLeft))
-            {
-                // TODO: implement quick node selection
-                //Log.Debug("Left!");
+                Close();
             }
 
             FormInputs.SetIndent(20);
 
-            CustomComponents.AddSegmentedIconButton(ref _viewMode, new List<Icon>() { Icon.ParamsList, Icon.Presets, Icon.HelpOutline });
-            //FormInputs.AddSegmentedButton(ref _viewMode, "");
+            if (_focusDelayCount >= 0)
+            {
+                ImGui.SetWindowFocus();
+                _focusDelayCount--;
+            }
+            
+            else if (!ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows))
+            {
+                //if(_lostFocusCount ++ > 1)
+                    Close();
+//                    return;
+            }
+            CustomComponents.AddSegmentedIconButton(ref _viewMode, _modeIcons);
+            ImGui.SameLine(0, 20);
+
+            var isPinned = _selectedInstance == graphWindow.GraphImageBackground.OutputInstance;
+            if (CustomComponents.DrawIconToggle("enabled", Icon.PlayOutput, ref isPinned))
+            {
+                if (isPinned)
+                    graphWindow.SetBackgroundOutput(_selectedInstance);
+            }
+
             switch (_viewMode)
             {
                 case ViewModes.Parameters:
                     FrameStats.Current.OpenedPopUpName = ParameterPopUpName;
                     ImGui.PushFont(Fonts.FontSmall);
-                    ParameterWindow.DrawParameters(_selectedInstance, symbolUi, symbolChildUi, compositionSymbolUi);
+                    ParameterWindow.DrawParameters(_selectedInstance, symbolUi, symbolChildUi, compositionSymbolUi, hideNonEssentials: true);
                     ImGui.PopFont();
                     break;
                 case ViewModes.Presets:
@@ -107,35 +122,35 @@ internal static class ParameterPopUp
                     {
                         if (w is not VariationsWindow variationsWindow)
                             continue;
-                        
-                        variationsWindow.DrawWindowContent(hideHeader:true);
+
+                        variationsWindow.DrawWindowContent(hideHeader: true);
                     }
+
                     break;
                 case ViewModes.Help:
-                    FormInputs.AddVerticalSpace(10);
+                    FormInputs.AddVerticalSpace();
                     ImGui.PushFont(Fonts.FontNormal);
                     ImGui.SetCursorPosX(10);
                     ImGui.TextUnformatted(symbolUi.Symbol.Name);
                     ImGui.PopFont();
-                    FormInputs.AddVerticalSpace(10);
+                    FormInputs.AddVerticalSpace();
                     ParameterWindow.DrawDescription(symbolUi);
-                    FormInputs.AddVerticalSpace(10);
+                    FormInputs.AddVerticalSpace();
                     break;
-                
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            ImGui.EndPopup();
+
+            _lastRequiredHeight = ImGui.GetCursorPosY();
+
         }
-        else
-        {
-            Close();
-        }
+
+        ImGui.EndChild();
     }
 
     private static void Close()
     {
-        _selectedInstance = null;
         _isOpen = false;
     }
 
@@ -146,9 +161,23 @@ internal static class ParameterPopUp
         Help,
     }
 
+    private static readonly List<Icon> _modeIcons = new()
+                                                        {
+                                                            Icon.ParamsList,
+                                                            Icon.Presets,
+                                                            Icon.HelpOutline
+                                                        };
+
+    private static float _lastRequiredHeight;
+    private const float MaxHeight = 280;
+    private const float MinHeight = 50;
+
+    private static bool _isOpen;
+    private static int _focusDelayCount;
+    
+    private static GraphCanvas _graphCanvas;
     private static ViewModes _viewMode = ViewModes.Parameters;
-    //private static PresetCanvas _presetCanvas = new();
     private static Instance _selectedInstance;
-    public static readonly string ParameterPopUpName = "parameterContextPopup";
+    private const string ParameterPopUpName = "parameterContextPopup";
     public static Guid NodeIdRequestedForParameterWindowActivation;
 }

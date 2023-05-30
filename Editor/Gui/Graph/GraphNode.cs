@@ -521,9 +521,14 @@ namespace T3.Editor.Gui.Graph
             {
                 var output = instance.Outputs[outputIndex];
                 var usableArea = GetUsableOutputSlotArea(childUi, outputIndex);
-                ImGui.SetCursorScreenPos(usableArea.Min);
+
+
+                if (!preventInteraction)
+                {
+                    ImGui.SetCursorScreenPos(usableArea.Min);
+                }
+                
                 ImGui.PushID(childUi.SymbolChild.Id.GetHashCode() + outputDef.Id.GetHashCode());
-            
                 ImGui.InvisibleButton("output", usableArea.GetSize());
                 THelpers.DebugItemRect();
                 var valueType = outputDef.ValueType;
