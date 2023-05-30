@@ -15,7 +15,7 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
 {
     public class Camera : Instance<Camera>, ICamera, ICameraPropertiesProvider
     {
-        [Output(Guid = "2E1742D8-9BA3-4236-A0CD-A2B02C9F5924", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "2E1742D8-9BA3-4236-A0CD-A2B02C9F5924")]
         public readonly Slot<Command> Output = new();
 
         [Output(Guid = "761245E2-AC0B-435A-841E-7C9EDC804606")]
