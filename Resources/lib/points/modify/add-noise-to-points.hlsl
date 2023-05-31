@@ -92,82 +92,8 @@ void main(uint3 i : SV_DispatchThreadID)
     float4 posInWorld = mul(float4(p.position ,1), ObjectToWorld);
     GetTranslationAndRotation(weight , posInWorld.xyz + variationOffset, p.rotation, offset, newRotation);
 
-    float3 oldPosition = ResultPoints[i.x].position;
-    float3 newPosition = p.position + offset; 
-    ResultPoints[i.x].position = newPosition;
-
-   newRotation = q_look_at(  normalize(newPosition- oldPosition), float3(0,1,0));
-   ResultPoints[i.x].rotation = q_slerp(ResultPoints[i.x].rotation, newRotation, 0.8);;
-
-
-    float3 velocity = newPosition- oldPosition;
-
-    // // Normalize the velocity and up vectors
-    // velocity = -normalize(velocity);
-    // float3 up = float3(0,1,0);
-
-    // // // Calculate the forward direction (project velocity onto the plane defined by up)
-    // float3 forward = velocity - dot(velocity, up) * up;
-    // forward = normalize(forward);
-
-    // // Calculate the right direction (cross product of up and forward)
-    // float3 right = cross(up, forward);
-    // right = normalize(right);
-
-    // // Calculate the final up direction (cross product of forward and right)
-    // up = cross(forward, right);
-    // up = normalize(up);
-
-    // // Create a rotation matrix using the right, up, and forward vectors
-    // float4x4 rotation;
-    // rotation[0] = float4(right, 0.0f);
-    // rotation[1] = float4(up, 0.0f);
-    // rotation[2] = float4(forward, 0.0f);
-    // rotation[3] = float4(0.0f, 0.0f, 0.0f, 1.0f);
-
-    // // Convert the rotation matrix to a quaternion
-    // float4x4 rotationTranspose = transpose(rotation);
-    // float4 quaternion;
-    // quaternion.x = sqrt(1.0 + rotationTranspose[0].x + rotationTranspose[1].y + rotationTranspose[2].z) / 2.0;
-    // quaternion.y = (rotationTranspose[2].y - rotationTranspose[1].z) / (4.0 * quaternion.x);
-    // quaternion.z = (rotationTranspose[0].z - rotationTranspose[2].x) / (4.0 * quaternion.x);
-    // quaternion.w = (rotationTranspose[1].x - rotationTranspose[0].y) / (4.0 * quaternion.x);
-
-    // // Normalize the quaternion
-    // quaternion = normalize(quaternion);
-    // ResultPoints[i.x].rotation = quaternion;
-
-    // // Calculate the forward direction (project velocity onto the plane defined by up)
-    // float3 forward = velocity - dot(velocity, up) * up;
-    // forward = normalize(forward);
-
-    // // Calculate the right direction (cross product of forward and up)
-    // float3 right = cross(forward, up);
-    // right = normalize(right);
-
-    // // Calculate the final up direction (cross product of right and forward)
-    // up = cross(right, forward);
-    // up = normalize(up);
-
-    // // Create a rotation matrix using the right, up, and forward vectors
-    // float4x4 rotation;
-    // rotation[0] = float4(right, 0.0f);
-    // rotation[1] = float4(up, 0.0f);
-    // rotation[2] = float4(forward, 0.0f);
-    // rotation[3] = float4(0.0f, 0.0f, 0.0f, 1.0f);
-
-    // // Convert the rotation matrix to a quaternion
-    // float4x4 rotationTranspose = transpose(rotation);
-    // float4 quaternion;
-    // quaternion.x = sqrt(1.0 + rotationTranspose[0].x + rotationTranspose[1].y + rotationTranspose[2].z) / 2.0;
-    // quaternion.y = (rotationTranspose[2].y - rotationTranspose[1].z) / (4.0 * quaternion.x);
-    // quaternion.z = (rotationTranspose[0].z - rotationTranspose[2].x) / (4.0 * quaternion.x);
-    // quaternion.w = (rotationTranspose[1].x - rotationTranspose[0].y) / (4.0 * quaternion.x);
-
-    // // Normalize the quaternion
-    // quaternion = normalize(quaternion);
-    // ResultPoints[i.x].rotation = quaternion;
-
+    ResultPoints[i.x].position = p.position + offset ;
+    ResultPoints[i.x].rotation = newRotation;
 
     ResultPoints[i.x].w =  SourcePoints[i.x].w ;
 }

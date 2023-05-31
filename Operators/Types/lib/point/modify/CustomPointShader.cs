@@ -42,6 +42,9 @@ namespace T3.Operators.Types.Id_3d958f08_9c0f_45eb_a252_de880b5834f3
 
         [Input(Guid = "20226539-a481-4df6-8dc7-cc65de915ea9")]
         public readonly InputSlot<float> D = new();
+
+        [Input(Guid = "dfbb9327-6cd2-41d3-8b2b-0abd7716471b")]
+        public readonly InputSlot<bool> IgnoreTemplate = new InputSlot<bool>();
     }
 }
 
