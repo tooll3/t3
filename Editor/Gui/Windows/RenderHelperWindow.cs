@@ -21,6 +21,7 @@ namespace T3.Editor.Gui.Windows
 
         protected static void DrawTimeSetup()
         {
+            FormInputs.ResetIndent();
             // convert times if reference time selection changed
             var oldTimeReference = _timeReference;
             

@@ -49,7 +49,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             FormInputs.SetIndent(0);
 
-            PlaybackUtils.FindPlaybackSettings(composition, out var compositionWithSettings, out var settings);
+            PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var compositionWithSettings, out var settings);
             //var compositionSettings = compWithSoundtrack == composition ? composition.Symbol.PlaybackSettings : null;
 
             // Main toggle with composition name 

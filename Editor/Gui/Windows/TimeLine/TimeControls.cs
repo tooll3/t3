@@ -30,7 +30,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 return;
 
             // Settings
-            PlaybackUtils.FindPlaybackSettings(composition, out var compositionWithSettings, out var settings);
+            PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var compositionWithSettings, out var settings);
             var opHasSettings = compositionWithSettings == composition;
 
             if (CustomComponents.IconButton(Icon.Settings, ControlSize, opHasSettings
