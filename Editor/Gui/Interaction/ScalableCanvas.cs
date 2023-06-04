@@ -386,10 +386,18 @@ namespace T3.Editor.Gui.Interaction
 
         protected void HandleInteraction(T3Ui.EditingFlags flags)
         {
+            
             var isDraggingConnection = (ConnectionMaker.TempConnections.Count > 0) && ImGui.IsWindowFocused();
-            if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && !isDraggingConnection)
+            
+            // This is a work around to allow the curve edit canvas to control zooming the timeline window
+            var allowChildHover = flags.HasFlag(T3Ui.EditingFlags.AllowHoveredChildWindows)
+                                      ? ImGuiHoveredFlags.ChildWindows
+                                      : ImGuiHoveredFlags.None;
+            if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup | allowChildHover) && !isDraggingConnection)
                 return;
 
+            //DrawCanvasDebugInfos();
+            
             if ((flags & T3Ui.EditingFlags.PreventMouseInteractions) != T3Ui.EditingFlags.None)
                 return;
 
@@ -436,7 +444,7 @@ namespace T3.Editor.Gui.Interaction
         {
             UserZoomedCanvas = false;
             
-            //DrawCanvasDebugInfos();
+            
 
             var zoomDelta = ComputeZoomDeltaFromMouseWheel();
             
@@ -488,6 +496,9 @@ namespace T3.Editor.Gui.Interaction
             dl.AddText(wp + new Vector2(0, 0), Color.Orange, $"SCAL: {ScaleTarget.X:0.0} {ScaleTarget.Y:0.0} ");
             dl.AddText(wp + new Vector2(0, 16), Color.Orange, $"SCRL: {ScrollTarget.X:0.0} {ScrollTarget.Y:0.0} ");
             dl.AddText(wp + new Vector2(0, 32), Color.Orange, $"CNVS: {focusCenterOnCanvas.X:0.0} {focusCenterOnCanvas.Y:0.0} ");
+            var hovered = ImGui.IsWindowHovered() ? "hovered" : "";
+            var hoveredChild = ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) ? "hoveredChildWindows" : "";
+            dl.AddText(wp + new Vector2(0, 48), Color.Orange, $"{hovered} {hoveredChild}");
         }
 
         protected bool IsCurveCanvas => Scale.Y < 0;

@@ -431,6 +431,7 @@ namespace T3.Editor.Gui
             PreventMouseInteractions = 1 << 2,
             PreventZoomWithMouseWheel = 1 << 3,
             PreventPanningWithMouse = 1 << 4,
+            AllowHoveredChildWindows = 1 << 5,
         }
 
         public static bool UseVSync = true;

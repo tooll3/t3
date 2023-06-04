@@ -55,7 +55,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             ScrollToTimeAfterStopped();
 
             var modeChanged = UpdateMode();
-            DrawCurveCanvas(drawAdditionalCanvasContent: DrawCanvasContent);
+            DrawCurveCanvas(drawAdditionalCanvasContent: DrawCanvasContent, 0, T3Ui.EditingFlags.AllowHoveredChildWindows);
 
             void DrawCanvasContent()
             {
