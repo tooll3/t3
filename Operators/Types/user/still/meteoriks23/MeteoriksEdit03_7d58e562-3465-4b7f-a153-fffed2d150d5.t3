@@ -1754,11 +1754,6 @@
           "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
           "Type": "System.Single",
           "Value": 0.0
-        },
-        {
-          "Id": "1785eabd-54fa-4b8c-ae5a-54112c2e50b8"/*SliderMax*/,
-          "Type": "System.Single",
-          "Value": 10.0
         }
       ],
       "Outputs": []
