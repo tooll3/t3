@@ -5,8 +5,9 @@
 cbuffer Params : register(b0)
 {
     float3 Center;
-    float Radius;
-    float Force;
+    float MaxAcceleration;
+    float Acceleration;
+    float ApplyMovement;
 }
 
 RWStructuredBuffer<Point> Points : u0; 
@@ -24,23 +25,24 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float3 pos = Points[i.x].position;
 
+    float3 velocity = rotate_vector(float3(0,0, Points[i.x].w), Points[i.x].rotation);
 
     float3 direction = pos-Center;
-    float3 v = Points[i.x].w * rotate_vector(float3(0,0,1), Points[i.x].rotation);
+    float distance = length(direction);
 
-    float distanceToCenter = length(direction);
+    //float f= 1- saturate( distance / Radius);
+    // if(force < 0.0001)
+    //     return;
 
-    float f= 1- saturate( distanceToCenter / Radius);
-    if(f < 0.001)
-        return;
+    float force = clamp( Acceleration/ (distance * distance), 0, MaxAcceleration);
+    float3 newV = velocity - normalize(direction) * force;
 
-    
-    float3 newV = v + (direction/ distanceToCenter) * Force * f;
-    float4 newOrientation = q_look_at( normalize(newV), float3(0,1,0));
+    float3 up = float3(0,1,0);// cross(normalize(direction), normalize(velocity));
+    float4 newOrientation = normalize(q_look_at( normalize(newV), up));
     Points[i.x].w = length(newV);
 
     //float4 newOrientation = q_look_at( normalize(direction), float3(0,1,0));
     Points[i.x].rotation = newOrientation;
-    Points[i.x].position += newV * 0.01;
+    Points[i.x].position += newV * ApplyMovement ;
 }
 

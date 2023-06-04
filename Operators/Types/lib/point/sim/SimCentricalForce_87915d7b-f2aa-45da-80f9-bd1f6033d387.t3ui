@@ -17,7 +17,7 @@
       }
     },
     {
-      "InputId": "cbcfcceb-309b-4a25-856a-cb4eb3798cf4"/*Radius*/,
+      "InputId": "cbcfcceb-309b-4a25-856a-cb4eb3798cf4"/*MaxAcceleration*/,
       "Position": {
         "X": -75.717575,
         "Y": 558.1459
@@ -35,6 +35,13 @@
       "Position": {
         "X": -75.717575,
         "Y": 648.1459
+      }
+    },
+    {
+      "InputId": "ac4bf799-f2e8-4bb8-ab57-e1260ba0421e"/*ApplyMovement*/,
+      "Position": {
+        "X": -75.717575,
+        "Y": 693.1459
       }
     }
   ],
@@ -94,34 +101,6 @@
       }
     },
     {
-      "ChildId": "cb0545f3-b531-4bae-a7a5-f8d4aac6018e"/*Time*/,
-      "Position": {
-        "X": -87.33325,
-        "Y": 983.76416
-      }
-    },
-    {
-      "ChildId": "4a6750d1-b46e-46a5-bc07-e22009fb8e1c"/*HasValueIncreased*/,
-      "Position": {
-        "X": 42.666683,
-        "Y": 983.76416
-      }
-    },
-    {
-      "ChildId": "b82d6437-bb72-4779-9caa-67c5b28a1144"/*Not*/,
-      "Position": {
-        "X": 448.6909,
-        "Y": 1006.8473
-      }
-    },
-    {
-      "ChildId": "5c553c14-079b-47d8-b985-033ef4c3adbd"/*Or*/,
-      "Position": {
-        "X": 699.79694,
-        "Y": 952.6009
-      }
-    },
-    {
       "ChildId": "eef35470-852f-40d1-a958-fd83a6b476ce"/*And*/,
       "Position": {
         "X": 237.54233,
@@ -133,6 +112,13 @@
       "Position": {
         "X": 74.282425,
         "Y": 513.1459
+      }
+    },
+    {
+      "ChildId": "c7bed291-a6a3-4de1-9107-c556fbd89a19"/*HasTimeChanged*/,
+      "Position": {
+        "X": 31.236969,
+        "Y": 903.1672
       }
     }
   ],
