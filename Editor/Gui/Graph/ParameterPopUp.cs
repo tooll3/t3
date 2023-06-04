@@ -83,7 +83,7 @@ internal static class ParameterPopUp
             {
                 Close();
             }
-            ImGui.GetWindowDrawList().AddRectFilled(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), Color.Black.Fade(0.6f));
+            ImGui.GetWindowDrawList().AddRectFilled(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), T3Style.Colors.Background);
 
             FormInputs.SetIndent(20);
 
@@ -95,9 +95,7 @@ internal static class ParameterPopUp
             
             else if (!ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows))
             {
-                //if(_lostFocusCount ++ > 1)
-                    Close();
-//                    return;
+                Close();
             }
             CustomComponents.AddSegmentedIconButton(ref _viewMode, _modeIcons);
             ImGui.SameLine(0, 20);

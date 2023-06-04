@@ -53,7 +53,6 @@ namespace T3.Editor.Gui.Graph.Interaction
             var justClicked = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
             
             var isActiveNode = node.Id == _draggedNodeId;
-
             if (justClicked)
             {
                 var compositionSymbolId = GraphCanvas.Current.CompositionOp.Symbol.Id;
@@ -80,7 +79,6 @@ namespace T3.Editor.Gui.Graph.Interaction
                 {
                     _moveCommand.StoreCurrentValues();
                     UndoRedoStack.Add(_moveCommand);
-                    _moveCommand = null;
                     DisconnectDraggedNodes();
                 }
                 HandleNodeDragging(node);
