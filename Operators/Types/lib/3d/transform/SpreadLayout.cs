@@ -63,7 +63,7 @@ namespace T3.Operators.Types.Id_e07550cf_033a_443d_b6f3_73eb71c72d9d
                 {
                     var t1 = commands[spreadIndex];
                     
-                    float f =  (float)spreadIndex / (count-1) - 0.5f;
+                    float f =  1 - ((float)spreadIndex / (count-1) - 0.5f);
                     var tSpreaded = t + spread * f;  
 
                     // Build and set transform matrix
