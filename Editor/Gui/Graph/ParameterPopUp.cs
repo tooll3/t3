@@ -77,12 +77,13 @@ internal static class ParameterPopUp
         ImGui.SetNextWindowPos(screenPos);
 
 
-        if (ImGui.BeginChild("Popup", new Vector2(280, height), true, ImGuiWindowFlags.Tooltip))
+        if (ImGui.BeginChild("Popup", new Vector2(280, height), true))
         {
             if (ImGui.IsKeyDown(ImGuiKey.Escape))
             {
                 Close();
             }
+            ImGui.GetWindowDrawList().AddRectFilled(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), Color.Black.Fade(0.6f));
 
             FormInputs.SetIndent(20);
 

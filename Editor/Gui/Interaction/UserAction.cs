@@ -148,10 +148,10 @@ namespace T3.Editor.Gui.Interaction
                 if (binding.Action != action)
                     continue;
 
-                if (binding.NeedsWindowFocus && !ImGui.IsWindowFocused())
+                if (binding.NeedsWindowFocus && !ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows))
                     continue;
 
-                if (binding.NeedsWindowHover && !ImGui.IsWindowHovered())
+                if (binding.NeedsWindowHover && !ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows))
                     continue;
 
                 var c = binding.Combination;

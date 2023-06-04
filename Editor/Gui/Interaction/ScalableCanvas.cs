@@ -499,6 +499,10 @@ namespace T3.Editor.Gui.Interaction
             var hovered = ImGui.IsWindowHovered() ? "hovered" : "";
             var hoveredChild = ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) ? "hoveredChildWindows" : "";
             dl.AddText(wp + new Vector2(0, 48), Color.Orange, $"{hovered} {hoveredChild}");
+            
+            var focused = ImGui.IsWindowFocused() ? "focused" : "";
+            var focusedChild = ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows) ? "focusedChildWindows" : "";
+            dl.AddText(wp + new Vector2(0, 64), Color.Orange, $"{focused} {focusedChild}");
         }
 
         protected bool IsCurveCanvas => Scale.Y < 0;
