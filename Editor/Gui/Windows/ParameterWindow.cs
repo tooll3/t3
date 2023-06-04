@@ -87,7 +87,7 @@ namespace T3.Editor.Gui.Windows
                 var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
 
                 // Draw parameters
-                DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, true);
+                DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false);
                 FormInputs.AddVerticalSpace(30);
 
                 DrawDescription(symbolUi);
