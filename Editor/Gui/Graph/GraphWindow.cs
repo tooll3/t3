@@ -166,7 +166,7 @@ namespace T3.Editor.Gui.Graph
             if (FitViewToSelectionHandling.FitViewToSelectionRequested)
                 FitViewToSelection();
 
-            var fadeBackgroundImage = GraphImageBackground.IsActive ? (ImGui.GetMousePos().X - ImGui.GetWindowPos().X).Clamp(0, 100) / 100 : 1;
+            var fadeBackgroundImage = GraphImageBackground.IsActive ? (ImGui.GetMousePos().X).Clamp(0, 100) / 100 : 1;
             if (GraphImageBackground.IsActive && fadeBackgroundImage == 0)
             {
                 if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
@@ -227,9 +227,14 @@ namespace T3.Editor.Gui.Graph
 
                 drawList.ChannelsSetCurrent(0);
                 {
-                    var showBackgroundOnly = GraphImageBackground.IsActive && ImGui.GetMousePos().X > ImGui.GetWindowSize().X + ImGui.GetWindowPos().X - 2;
+                    // Fade and toggle graph on right edge
+                    var windowPos = Vector2.Zero;
+                    var windowSize = ImGui.GetIO().DisplaySize;
+                    var mousePos = ImGui.GetMousePos();
+                    var showBackgroundOnly = GraphImageBackground.IsActive && mousePos.X > windowSize.X + windowPos.X - 2;
+
                     var graphFade = (GraphImageBackground.IsActive && !ImGui.IsMouseDown(ImGuiMouseButton.Left))
-                                        ? (ImGui.GetWindowSize().X + ImGui.GetWindowPos().X - ImGui.GetMousePos().X).Clamp(0, 100) / 100
+                                        ? (windowSize.X + windowPos.X - mousePos.X).Clamp(0, 100) / 100
                                         : 1;
 
                     if (showBackgroundOnly)

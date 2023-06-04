@@ -328,7 +328,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
                 }
             }
 
-            bounds.Expand(0.2f);
+            //bounds.Expand(0.2f);
             return bounds;
         }
     }

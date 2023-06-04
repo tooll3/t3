@@ -20,14 +20,20 @@ namespace T3.Editor.Gui.ChildUi
             innerRect.Expand(-7);
 
             if (innerRect.GetHeight() < 0)
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolChildUi.CustomUiResult.PreventTooltip
+                       | SymbolChildUi.CustomUiResult.PreventOpenSubGraph
+                       | SymbolChildUi.CustomUiResult.PreventInputLabels
+                       | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
             
 
             var curve = sampleCurve.Curve.Value;
             if (curve == null)
             {
                 //Log.Warning("Can't draw undefined gradient");
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolChildUi.CustomUiResult.PreventTooltip
+                       | SymbolChildUi.CustomUiResult.PreventOpenSubGraph
+                       | SymbolChildUi.CustomUiResult.PreventInputLabels
+                       | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
             }
 
             ImGui.PushClipRect(innerRect.Min, innerRect.Max, true);

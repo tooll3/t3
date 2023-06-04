@@ -217,34 +217,38 @@ namespace T3.Editor.Gui.Interaction
             Scroll = ScrollTarget;
         }
 
-        public void SetScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null)
+        public void SetScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null, float paddingX = 0, float paddingY = 0)
         {
             var areaSize = area.GetSize();
             if (areaSize.X == 0)
+            {
                 areaSize.X = 1;
+            }
+
 
             if (areaSize.Y == 0)
                 areaSize.Y = 1;
-
+            
             if (Scale.X == 0 || Scale.Y == 0)
             {
                 Scale = Vector2.One;
             }
 
-            ScaleTarget = WindowSize / areaSize;
+            ScaleTarget = (WindowSize - new Vector2(paddingX, paddingY)) / areaSize;
 
             if (flipY)
             {
                 ScaleTarget.Y *= -1;
             }
 
+            ScrollTarget = new Vector2(area.Min.X - paddingX / ScaleTarget.X / 2,
+                                       area.Max.Y - paddingY / ScaleTarget.Y / 2);
+            
             if (parent != null)
             {
                 ScaleTarget /= parent.Scale;
             }
 
-            ScrollTarget = new Vector2(area.Min.X,
-                                       area.Max.Y);
         }
 
         public void SetVerticalScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null)

@@ -909,14 +909,14 @@ namespace T3.Editor.Gui.Graph
             var outputWindow = OutputWindow.OutputWindowInstances.FirstOrDefault(ow => ow.Config.Visible) as OutputWindow;
             if (outputWindow == null)
             {
-                Log.Warning("Can't pin selection without visible output window");
+                //Log.Warning("Can't pin selection without visible output window");
                 return;
             }
 
             var selection = GetSelectedChildUis();
             if (selection.Count != 1)
             {
-                Log.Warning("Please select only one operator to pin to output window");
+                Log.Info("Please select only one operator to pin to output window");
                 return;
             }
 

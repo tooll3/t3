@@ -322,7 +322,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                         if (NeedToAdjustScopeAfterFirstRendering)
                         {
                             var bounds = GetBoundsOnCanvas(interaction.GetAllKeyframes());
-                            SetScopeToCanvasArea(bounds, flipY: true, GraphCanvas.Current);
+                            SetScopeToCanvasArea(bounds, flipY: true, GraphCanvas.Current, 100, 100);
                             NeedToAdjustScopeAfterFirstRendering = false;
                         }
                     }

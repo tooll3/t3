@@ -20,15 +20,14 @@ namespace T3.Editor.Gui.Graph
     /// </summary>
     public class GraphImageBackground
     {
-        private List<Guid> BackgroundNodePath;
 
-        public bool IsActive => BackgroundNodePath != null;
+        public bool IsActive => _backgroundNodePath != null;
         public bool HasInteractionFocus;
 
         public Instance OutputInstance
         {
-            set => BackgroundNodePath = OperatorUtils.BuildIdPathForInstance(value);
-            get => NodeOperations.GetInstanceFromIdPath(BackgroundNodePath);
+            set => _backgroundNodePath = OperatorUtils.BuildIdPathForInstance(value);
+            get => NodeOperations.GetInstanceFromIdPath(_backgroundNodePath);
         }
         
         
@@ -39,7 +38,7 @@ namespace T3.Editor.Gui.Graph
 
         public void Draw(float imageOpacity)
         {
-            if (BackgroundNodePath == null)
+            if (_backgroundNodePath == null)
                 return;
 
             var selectedInstance = NodeSelection.GetSelectedInstance();
@@ -57,7 +56,7 @@ namespace T3.Editor.Gui.Graph
             var windowContentRegionMin = ImGui.GetWindowContentRegionMin() + new Vector2(0, 0);
             ImGui.SetCursorPos(windowContentRegionMin);
 
-            var instanceForOutput = NodeOperations.GetInstanceFromIdPath(BackgroundNodePath);
+            var instanceForOutput = NodeOperations.GetInstanceFromIdPath(_backgroundNodePath);
 
             if (instanceForOutput == null || instanceForOutput.Outputs.Count == 0)
                 return;
@@ -122,7 +121,7 @@ namespace T3.Editor.Gui.Graph
 
         public void ClearBackground()
         {
-            BackgroundNodePath = null;
+            _backgroundNodePath = null;
             HasInteractionFocus = false;
         }
 
@@ -133,5 +132,7 @@ namespace T3.Editor.Gui.Graph
         private readonly EvaluationContext _evaluationContext = new();
         private ResolutionHandling.Resolution _selectedResolution = ResolutionHandling.DefaultResolution;
         private readonly CameraInteraction _cameraInteraction = new();
+        private List<Guid> _backgroundNodePath;
+
     }
 }
