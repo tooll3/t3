@@ -77,7 +77,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 {
                     break;
                 }
-                
+
                 var parentSymbolUi = SymbolUiRegistry.Entries[parent.Symbol.Id];
                 var childUisWithThatType = parentSymbolUi.ChildUis.FindAll(c => c.SymbolChild.Symbol == instance.Symbol);
                 var indexLabel = "";
@@ -95,7 +95,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                                               : "";
 
                 newList.Insert(0, instance.Symbol.Name + indexLabel + readableNameSuffice);
-                
+
                 instance = parent;
             }
 
@@ -1024,21 +1024,21 @@ namespace T3.Editor.Gui.Graph.Interaction
                 else
                     @namespace += ".";
 
-                
-                string foundAttributeString = null; 
+                string foundAttributeString = null;
                 foreach (var (nodeName, syntaxNode) in inputNodeFinder.InputNodesFound)
                 {
                     if (nodeName != inputDef.Name)
                         continue;
-                    
+
                     foundAttributeString = syntaxNode.ToString().Split("\n").First();
                     break;
                 }
-                
+
                 var fallbackAttributeString = "\n        [Input(Guid = \"" + inputDef.Id + "\")]\n";
-                var attributeString = foundAttributeString == null ? fallbackAttributeString
-                    :$"\n        {foundAttributeString}\n";
-                
+                var attributeString = foundAttributeString == null
+                                          ? fallbackAttributeString
+                                          : $"\n        {foundAttributeString}\n";
+
                 var typeName = TypeNameRegistry.Entries[inputType];
                 var slotString = (inputDef.IsMultiInput ? "MultiInputSlot<" : "InputSlot<") + @namespace + typeName + ">";
                 var inputString = "        public readonly " + slotString + " " + inputDef.Name + " = new " + slotString + "();\n";
@@ -1188,10 +1188,9 @@ namespace T3.Editor.Gui.Graph.Interaction
             {
                 foreach (var child in s.Children)
                 {
-                    results.TryGetValue(child.Symbol.Id, out var currentCount); 
+                    results.TryGetValue(child.Symbol.Id, out var currentCount);
                     results[child.Symbol.Id] = currentCount + 1;
                 }
-
             }
 
             return results;
@@ -1213,7 +1212,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             return all;
         }
 
-        public static HashSet<Guid> CollectConnectedChildren(SymbolChild child, HashSet<Guid> set=null)
+        public static HashSet<Guid> CollectConnectedChildren(SymbolChild child, HashSet<Guid> set = null)
         {
             set ??= new HashSet<Guid>();
 
@@ -1225,7 +1224,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                                      where con.SourceParentOrChildId == sourceChild.Id
                                            && con.TargetParentOrChildId == child.Id
                                      select sourceChild).Distinct().ToArray();
-            
+
             foreach (var connectedChild in connectedChildren)
             {
                 set.Add(connectedChild.Id);

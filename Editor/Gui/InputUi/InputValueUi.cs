@@ -339,8 +339,7 @@ namespace T3.Editor.Gui.InputUi
                 
                 ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.DarkGray.Rgba);
                 
-                var label = IsAnimatable ? "" : ""; 
-                if (ImGui.Button(label, new Vector2(ConnectionAreaWidth, 0.0f)))
+                if (ImGui.Button(string.Empty, new Vector2(ConnectionAreaWidth, 0.0f)))
                 {
                     if (IsAnimatable && (UserSettings.Config.ParameterMode == UserSettings.ParameterModes.AnimatesInput || ImGui.GetIO().KeyCtrl))
                     {
@@ -433,6 +432,11 @@ namespace T3.Editor.Gui.InputUi
                                                                                             input));
                                                         }
 
+                                                        if (ImGui.MenuItem("Extract as connection operator"))
+                                                        {
+                                                            ParameterExtraction.ExtractAsConnectedOperator(inputSlot, symbolChildUi, input);
+                                                        }
+                                                        
                                                         if (ImGui.MenuItem("Publish as Input"))
                                                         {
                                                             PublishAsInput(inputSlot, symbolChildUi, input);

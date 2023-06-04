@@ -659,9 +659,12 @@ namespace T3.Core.Operator
             }
         }
 
-        public SymbolChild AddChild(Symbol symbol, Guid addedChildId)
+        public SymbolChild AddChild(Symbol symbol, Guid addedChildId, string name = null)
         {
-            var newChild = new SymbolChild(symbol, addedChildId, this);
+            var newChild = new SymbolChild(symbol, addedChildId, this)
+                               {
+                                   Name = name
+                               };
             Children.Add(newChild);
 
             var childInstances = new List<Instance>(InstancesOfSymbol.Count);

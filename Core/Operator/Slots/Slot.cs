@@ -165,7 +165,7 @@ namespace T3.Core.Operator.Slots
             
             if (sourceSlot.ValueType != ValueType)
             {
-                Log.Warning("Type match during connection");
+                Log.Warning("Type mismatch during connection");
                 return;
             }
             InputConnection.Insert(index, (Slot<T>)sourceSlot);
