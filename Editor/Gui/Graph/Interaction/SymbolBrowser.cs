@@ -50,8 +50,10 @@ namespace T3.Editor.Gui.Graph.Interaction
         {
             if (!IsOpen)
             {
-                var hasFocus = ImGui.IsWindowFocused() || FrameStats.Last.OpenedPopUpName == "parameterContextPopup";
-                if (!hasFocus || !ImGui.IsKeyReleased((ImGuiKey)Key.Tab))
+                var hasFocus =  ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows);
+
+                var anythingActive = ImGui.IsAnyItemActive();
+                if (!hasFocus || anythingActive || !ImGui.IsKeyReleased((ImGuiKey)Key.Tab))
                     return;
 
                 if (NodeSelection.GetSelectedChildUis().Count() != 1)
