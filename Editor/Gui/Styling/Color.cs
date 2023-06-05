@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using ImGuiNET;
 using T3.Core.Utils;
 using Vector3 = System.Numerics.Vector3;
@@ -26,13 +26,13 @@ namespace T3.Editor.Gui.Styling
         
         public static readonly Color Transparent = new Color(1f, 1f, 1f, 0f);
         public static readonly Color TransparentBlack = new Color(0f, 0f, 0f, 0f);
-        public static readonly  Color White = new Color(1f, 1f, 1f, 1f);
+        public static readonly Color White = new Color(1f, 1f, 1f, 1f);
         public static readonly Color Gray = new Color(0.6f, 0.6f, 0.6f, 1);
         public static readonly Color DarkGray = new Color(0.3f, 0.3f, 0.3f, 1);
         public static readonly Color Black = new Color(0, 0, 0, 1f);
         public static readonly Color Red = new Color(1f, 0.2f, 0.2f, 1f);
         public static readonly Color Green = new Color(0.2f, 0.9f, 0.2f, 1f);
-        public static readonly Color Blue = new Color(0.4f, 0.5f, 1f, 1);
+        public static readonly Color Blue = new Color(0.2f, 0.25f, 0.5f, 1);
         public static readonly Color Orange = new Color(1f, 0.46f, 0f, 1f);
 
         /// <summary>
