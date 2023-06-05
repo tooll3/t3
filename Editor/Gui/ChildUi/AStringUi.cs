@@ -36,7 +36,9 @@ namespace T3.Editor.Gui.ChildUi
 
             ImGui.PushFont(GraphCanvas.Current.Scale.X < 2
                                ? Fonts.FontSmall
-                               : Fonts.FontNormal);
+                               : GraphCanvas.Current.Scale.X < 4 
+                                   ? Fonts.FontNormal
+                                   : Fonts.FontLarge);
 
             // Draw edit window
             if (instance.SymbolChildId == _focusedInstanceId)
