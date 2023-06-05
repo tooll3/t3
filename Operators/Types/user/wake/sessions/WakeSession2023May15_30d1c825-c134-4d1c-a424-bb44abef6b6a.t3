@@ -981,7 +981,7 @@
           }
         },
         {
-          "Id": "cbcfcceb-309b-4a25-856a-cb4eb3798cf4"/*Radius*/,
+          "Id": "cbcfcceb-309b-4a25-856a-cb4eb3798cf4"/*MaxAcceleration*/,
           "Type": "System.Single",
           "Value": 9.4
         },
@@ -1068,7 +1068,7 @@
           }
         },
         {
-          "Id": "cbcfcceb-309b-4a25-856a-cb4eb3798cf4"/*Radius*/,
+          "Id": "cbcfcceb-309b-4a25-856a-cb4eb3798cf4"/*MaxAcceleration*/,
           "Type": "System.Single",
           "Value": 1.2199998
         },
@@ -1177,7 +1177,7 @@
       "Outputs": []
     },
     {
-      "Id": "9d1eb751-6feb-4ea2-be59-aec20900e6d3"/*DrawPointsAsSpheres*/,
+      "Id": "9d1eb751-6feb-4ea2-be59-aec20900e6d3"/*DrawPointsShaded*/,
       "SymbolId": "84a93ea9-98fb-4088-a1e9-87454f7292f1",
       "InputValues": [],
       "Outputs": []

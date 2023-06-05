@@ -410,7 +410,7 @@
       }
     },
     {
-      "ChildId": "9d1eb751-6feb-4ea2-be59-aec20900e6d3"/*DrawPointsAsSpheres*/,
+      "ChildId": "9d1eb751-6feb-4ea2-be59-aec20900e6d3"/*DrawPointsShaded*/,
       "Position": {
         "X": -939.0989,
         "Y": 1871.6564

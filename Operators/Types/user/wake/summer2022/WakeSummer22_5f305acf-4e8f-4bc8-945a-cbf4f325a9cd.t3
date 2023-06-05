@@ -368,43 +368,6 @@
       "Outputs": []
     },
     {
-      "Id": "ee6bcc89-d6d7-4943-ac8e-1519c2fd68f2"/*MidiInput*/,
-      "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
-      "InputValues": [
-        {
-          "Id": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
-          "Type": "System.Single",
-          "Value": 1.0
-        },
-        {
-          "Id": "ca3ce08d-6a19-4ad5-9435-08b050753311"/*Damping*/,
-          "Type": "System.Single",
-          "Value": 0.95
-        },
-        {
-          "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
-          "Type": "System.String",
-          "Value": "APC MINI"
-        },
-        {
-          "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
-          "Type": "System.Int32",
-          "Value": 53
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "22a2be14-b7bc-4d54-831b-5f9fbac09f5e"/*IntToString*/,
       "SymbolId": "416a1c8d-4143-4de7-bcf9-466c4009112a",
       "InputValues": [
@@ -424,7 +387,7 @@
         {
           "Id": "4515c98e-05bc-4186-8773-4d2b31a8c323"/*Int*/,
           "Type": "System.Int32",
-          "Value": 5
+          "Value": 4
         }
       ],
       "Outputs": []
@@ -488,6 +451,11 @@
           "Value": false
         },
         {
+          "Id": "044168eb-791c-405f-867f-3d5702924165"/*EventType*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
           "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
           "Type": "System.String",
           "Value": "Tom-Midi2"
@@ -495,7 +463,7 @@
         {
           "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
           "Type": "System.Int32",
-          "Value": 1
+          "Value": 16
         },
         {
           "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
@@ -877,7 +845,7 @@
         {
           "Id": "24cf475d-a5b7-46b5-92cf-1ffcefb0693e"/*TimeInBars*/,
           "Type": "System.Single",
-          "Value": 0.0
+          "Value": -0.01999998
         },
         {
           "Id": "bd88e545-743e-4caa-8fd1-e1f7f3c78b21"/*Enabled*/,
@@ -945,75 +913,6 @@
       "Id": "07a26bab-a0d1-440a-b14f-9c914fccfbdb"/*AudioFrequencies*/,
       "SymbolId": "b72d968b-0045-408d-a2f9-5c739c692a66",
       "InputValues": [],
-      "Outputs": []
-    },
-    {
-      "Id": "40757108-d66c-4eb9-a890-806955abce02"/*MidiInput*/,
-      "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
-      "InputValues": [
-        {
-          "Id": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
-          "Type": "System.Single",
-          "Value": 1.0
-        },
-        {
-          "Id": "ca3ce08d-6a19-4ad5-9435-08b050753311"/*Damping*/,
-          "Type": "System.Single",
-          "Value": 0.95
-        },
-        {
-          "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
-          "Type": "System.String",
-          "Value": "APC MINI"
-        },
-        {
-          "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
-          "Type": "System.Int32",
-          "Value": 53
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "179243f5-c293-4c2e-87b4-4b3b35677e96"/*MidiInput*/,
-      "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
-      "InputValues": [
-        {
-          "Id": "4636d6cf-8233-4281-8840-5ba079b5f1a6"/*DefaultOutputValue*/,
-          "Type": "System.Single",
-          "Value": 0.0
-        },
-        {
-          "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
-          "Type": "System.String",
-          "Value": "nanoKONTROL2"
-        },
-        {
-          "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
-          "Type": "System.Int32",
-          "Value": 1
-        }
-      ],
       "Outputs": []
     },
     {
@@ -1158,6 +1057,121 @@
           "Id": "e7c1f0af-da6d-4e33-ac86-7dc96bfe7eb3"/*BoolValue*/,
           "Type": "System.Boolean",
           "Value": false
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "4345077a-c44e-4e25-889f-f6d3272a572a"/*MidiInput*/,
+      "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
+      "InputValues": [
+        {
+          "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "044168eb-791c-405f-867f-3d5702924165"/*EventType*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
+          "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
+          "Type": "System.String",
+          "Value": "Tom-Midi2"
+        },
+        {
+          "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
+          "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
+          "Type": "System.Int32",
+          "Value": 55
+        },
+        {
+          "Id": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
+          "Type": "System.Boolean",
+          "Value": true
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "852b2ce8-ab1e-4ba5-88b8-64602b9702d9"/*MidiInput*/,
+      "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
+      "InputValues": [
+        {
+          "Id": "aad1e576-f144-423f-83b5-5694b1119c23"/*OutputRange*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.0,
+            "Y": 127.0
+          }
+        },
+        {
+          "Id": "ca3ce08d-6a19-4ad5-9435-08b050753311"/*Damping*/,
+          "Type": "System.Single",
+          "Value": 0.0
+        },
+        {
+          "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
+          "Type": "System.String",
+          "Value": "Tom-Midi2"
+        },
+        {
+          "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
+          "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
+          "Type": "System.Int32",
+          "Value": 36
+        },
+        {
+          "Id": "6c15e743-9a70-47e7-a0a4-75636817e441"/*PrintLogMessages*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "b809fa44-270a-458e-91f7-401f312898a0"/*AturiaModWheel*/,
+      "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
+      "Name": "AturiaModWheel",
+      "InputValues": [
+        {
+          "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "044168eb-791c-405f-867f-3d5702924165"/*EventType*/,
+          "Type": "System.Int32",
+          "Value": 2
+        },
+        {
+          "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
+          "Type": "System.String",
+          "Value": "Tom-Midi2"
+        },
+        {
+          "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
+          "Type": "System.Int32",
+          "Value": 5
+        },
+        {
+          "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
+          "Type": "System.Int32",
+          "Value": 1
         }
       ],
       "Outputs": []
