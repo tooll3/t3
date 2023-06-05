@@ -8,7 +8,7 @@ using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_84a93ea9_98fb_4088_a1e9_87454f7292f1
 {
-    public class DrawPointsAsSpheres : Instance<DrawPointsAsSpheres>
+    public class DrawPointsShaded : Instance<DrawPointsShaded>
     {
         [Output(Guid = "037f6608-c1c8-417c-8a35-04e1357110fe")]
         public readonly Slot<Command> Output = new Slot<Command>();

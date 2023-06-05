@@ -178,7 +178,7 @@
       "Outputs": []
     },
     {
-      "Id": "9e9746d2-0f3c-4b6d-85dd-6f1496a44dd4"/*DrawPointsAsSpheres*/,
+      "Id": "9e9746d2-0f3c-4b6d-85dd-6f1496a44dd4"/*DrawPointsShaded*/,
       "SymbolId": "84a93ea9-98fb-4088-a1e9-87454f7292f1",
       "InputValues": [],
       "Outputs": []

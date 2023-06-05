@@ -480,7 +480,7 @@
       "Outputs": []
     },
     {
-      "Id": "c6e8c1d1-f7f6-40c8-be38-efe660f89e41"/*DrawPointsAsSpheres*/,
+      "Id": "c6e8c1d1-f7f6-40c8-be38-efe660f89e41"/*DrawPointsShaded*/,
       "SymbolId": "84a93ea9-98fb-4088-a1e9-87454f7292f1",
       "InputValues": [
         {
