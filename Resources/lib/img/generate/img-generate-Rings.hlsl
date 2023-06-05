@@ -68,7 +68,6 @@ float sdBox(in float2 p, in float2 b)
 
 float4 psMain(vsOutput psInput) : SV_TARGET
 {
-
     float aspectRatio = TargetWidth / TargetHeight;
     float ringRadius = (Radius.y - Radius.x) / RingCount;
     float scaledFeather = Feather / ringRadius / 10;
@@ -136,5 +135,5 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
 
-    return (IsTextureValid < 0.5) ? c : BlendColors(orgColor, colorOut, (int)BlendMode);
+    return (IsTextureValid < 0.5) ? colorOut : BlendColors(orgColor, colorOut, (int)BlendMode);
 }
