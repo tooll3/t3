@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Interaction;
@@ -76,8 +77,8 @@ internal static class ParameterPopUp
         var height = _lastRequiredHeight.Clamp(MinHeight, MaxHeight);
         ImGui.SetNextWindowPos(screenPos);
 
-
-        if (ImGui.BeginChild("Popup", new Vector2(280, height), true))
+        var preventTabbingIntoUnfocusedStringInputs = ImGui.IsAnyItemActive() ? ImGuiWindowFlags.None : ImGuiWindowFlags.NoNavInputs;
+        if (ImGui.BeginChild("Popup", new Vector2(280, height), true, preventTabbingIntoUnfocusedStringInputs))
         {
             if (ImGui.IsKeyDown(ImGuiKey.Escape))
             {
