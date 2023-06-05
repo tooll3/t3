@@ -17,7 +17,7 @@
     },
     {
       "Id": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3"/*Radius*/,
-      "DefaultValue": 6.0
+      "DefaultValue": 3.0
     },
     {
       "Id": "df65e717-e2fd-4e4f-9e41-d6bcd3fe67f1"/*SpinRate*/,
