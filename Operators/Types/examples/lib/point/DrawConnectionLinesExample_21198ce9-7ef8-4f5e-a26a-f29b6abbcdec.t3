@@ -458,21 +458,6 @@
           "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
           "Type": "System.Single",
           "Value": 0.041
-        },
-        {
-          "Id": "90045a45-f549-4cb5-b57c-c39a0664e84f"/*SliderMin*/,
-          "Type": "System.Single",
-          "Value": 0.1
-        },
-        {
-          "Id": "1785eabd-54fa-4b8c-ae5a-54112c2e50b8"/*SliderMax*/,
-          "Type": "System.Single",
-          "Value": 0.08
-        },
-        {
-          "Id": "97eaecbb-9290-4d23-932d-dc183ebfcda6"/*ClampSlider*/,
-          "Type": "System.Boolean",
-          "Value": true
         }
       ],
       "Outputs": []

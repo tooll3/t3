@@ -16,9 +16,10 @@
 
   <ItemGroup>
     <PackageReference Include="CppSharp" Version="1.0.1" />
-    <PackageReference Include="ManagedBass" Version="3.1.0" />
-    <PackageReference Include="ManagedBass.Wasapi" Version="3.1.0" />
+    <PackageReference Include="ManagedBass" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Wasapi" Version="3.1.1" />
     <PackageReference Include="NAudio" Version="2.1.0" />
+    <PackageReference Include="NDILibDotNet6" Version="1.0.11" />
     <PackageReference Include="OpenGL.Net" Version="0.8.4">
       <NoWarn>NU1701</NoWarn>
     </PackageReference>

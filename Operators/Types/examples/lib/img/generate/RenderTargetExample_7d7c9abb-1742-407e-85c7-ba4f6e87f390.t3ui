@@ -5,10 +5,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "81fe0f5c-383c-4a94-984b-7db3449864d9"/*RenderTarget*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 889.61,
         "Y": 0.0
@@ -16,10 +12,6 @@
     },
     {
       "ChildId": "c15b45ca-dfa5-46d6-8a33-17d9c0fdd169"/*RenderQuad*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 289.61,
         "Y": 0.0
@@ -27,10 +19,6 @@
     },
     {
       "ChildId": "41b1c513-4819-4176-8fc9-967d613efa6c"/*Transform*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 439.61,
         "Y": 0.0
@@ -38,10 +26,6 @@
     },
     {
       "ChildId": "849a1f9a-a851-4775-a9ff-9a923ce82bd5"/*Camera*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 589.61,
         "Y": 0.0
@@ -49,10 +33,6 @@
     },
     {
       "ChildId": "c08a73be-0aca-4567-bd8f-d4c93c4b933a"/*Time*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 139.60999,
         "Y": 63.0
@@ -60,10 +40,6 @@
     },
     {
       "ChildId": "9e53bfe5-0a6c-41b5-a9c8-1271d4a8f0af"/*Float3ToVector3*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 289.61,
         "Y": 63.0
@@ -71,10 +47,6 @@
     },
     {
       "ChildId": "1154763f-3b1f-48f0-b1db-e00f8be625b1"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 739.61,
         "Y": 0.0
@@ -82,10 +54,6 @@
     },
     {
       "ChildId": "8746d95a-a7b5-4891-86fa-2207b4cacc52"/*Layer2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 589.61,
         "Y": 166.0
@@ -93,10 +61,6 @@
     },
     {
       "ChildId": "73aec722-50bd-4c08-9102-aef5d0e4621d"/*RenderTarget*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 439.61,
         "Y": 166.0
@@ -104,10 +68,6 @@
     },
     {
       "ChildId": "ae8eea94-3610-4df6-b4d9-179a2b9db695"/*LinearGradient*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 139.60999,
         "Y": 0.0
@@ -115,10 +75,6 @@
     },
     {
       "ChildId": "b5ce9eb1-18fe-4e39-9276-f0875281035b"/*Time*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 439.61,
         "Y": 222.0

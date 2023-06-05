@@ -7,7 +7,7 @@ namespace T3.Operators.Types.Id_c0a26813_bc97_4c42_b051_53a9a5913331
 {
     public class RequestedResolution : Instance<RequestedResolution>
     {
-        [Output(Guid = "dd1c6ce4-fb30-47b6-8325-5f645279ef2d")]
+        [Output(Guid = "dd1c6ce4-fb30-47b6-8325-5f645279ef2d", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
         public readonly Slot<SharpDX.Size2> Size = new();
 
         [Output(Guid = "FE01CC08-0573-4CD3-970C-67FC2B0A4E60", DirtyFlagTrigger = DirtyFlagTrigger.Always)]

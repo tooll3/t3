@@ -16,10 +16,13 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
             return CloneWithType<Float2InputUi>();
         }
         
-        protected override InputEditStateFlags DrawEditControl(string name, ref Vector2 float2Value)
+        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref Vector2 float2Value, bool readOnly)
         {
             float2Value.CopyTo(FloatComponents);
-            var inputEditState = VectorValueEdit.Draw(FloatComponents, Min, Max, Scale, Clamp);
+            var inputEditState = VectorValueEdit.Draw(FloatComponents, Min, Max, Scale, Clamp, 0, Format);
+            if (readOnly)
+                return InputEditStateFlags.Nothing;
+            
             float2Value = new Vector2(FloatComponents[0], FloatComponents[1]);
 
             return inputEditState;

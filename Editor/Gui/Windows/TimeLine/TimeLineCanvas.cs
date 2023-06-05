@@ -55,12 +55,12 @@ namespace T3.Editor.Gui.Windows.TimeLine
             ScrollToTimeAfterStopped();
 
             var modeChanged = UpdateMode();
-            DrawCurveCanvas(drawAdditionalCanvasContent: DrawCanvasContent);
+            DrawCurveCanvas(drawAdditionalCanvasContent: DrawCanvasContent, 0, T3Ui.EditingFlags.AllowHoveredChildWindows);
 
             void DrawCanvasContent()
             {
-                //return;   
-                if (PlaybackUtils.TryFindingSoundtrack(compositionOp, out var soundtrack))
+                ImGui.SetCursorPosY(ImGui.GetCursorPosY()-6);
+                if (PlaybackUtils.TryFindingSoundtrack(out var soundtrack))
                 {
                     _timeLineImage.Draw(Drawlist, soundtrack);
                 }
@@ -113,7 +113,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 if (FenceState == SelectionFence.States.CompletedAsClick)
                 {
                     var newTime = InverseTransformPositionFloat(ImGui.GetMousePos()).X;
-                    if (Playback.IsLooping)
+                    if (Playback.IsLooping && UserSettings.Config.RepositionLoopRangeOnClick)
                     {
                         var newStartTime = newTime - newTime % 4;
                         var duration = Playback.LoopRange.Duration;
@@ -365,22 +365,20 @@ namespace T3.Editor.Gui.Windows.TimeLine
             return _pinnedParams;
         }
 
-        public List<AnimationParameter> SelectedAnimationParameters = new List<AnimationParameter>();
-
-
+        public List<AnimationParameter> SelectedAnimationParameters = new();
 
         internal Playback Playback;
 
-        private readonly TimeRasterSwitcher _timeRasterSwitcher = new TimeRasterSwitcher();
-        private readonly HorizontalRaster _horizontalRaster = new HorizontalRaster();
-        private readonly ClipRange _clipRange = new ClipRange();
-        private readonly LoopRange _loopRange = new LoopRange();
+        private readonly TimeRasterSwitcher _timeRasterSwitcher = new();
+        private readonly HorizontalRaster _horizontalRaster = new();
+        private readonly ClipRange _clipRange = new();
+        private readonly LoopRange _loopRange = new();
 
         public readonly DopeSheetArea DopeSheetArea;
         private readonly TimelineCurveEditArea _timelineCurveEditArea;
-        private readonly TimeLineImage _timeLineImage = new TimeLineImage();
+        private readonly TimeLineImage _timeLineImage = new();
 
-        private readonly CurrentTimeMarker _currentTimeMarker = new CurrentTimeMarker();
+        private readonly CurrentTimeMarker _currentTimeMarker = new();
         private readonly TimeSelectionRange _timeSelectionRange;
         public readonly LayersArea LayersArea;
 
@@ -388,7 +386,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         private double _lastPlaybackSpeed;
         private readonly List<AnimationParameter> _pinnedParams = new(20);
-        private List<AnimationParameter> _curvesForSelection = new(64);
+        private readonly List<AnimationParameter> _curvesForSelection = new(64);
 
         // Styling
         public const float TimeLineDragHeight = 30;

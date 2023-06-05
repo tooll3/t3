@@ -11,23 +11,9 @@ static const float4 Factors[] =
         float4(0, 0, 0, 0), // avoid rotation effects
 };
 
-cbuffer Transforms : register(b0)
+cbuffer Params : register(b0)
 {
-    float4x4 CameraToClipSpace;
-    float4x4 ClipSpaceToCamera;
-    float4x4 WorldToCamera;
-    float4x4 CameraToWorld;
-    float4x4 WorldToClipSpace;
-    float4x4 ClipSpaceToWorld;
-    float4x4 ObjectToWorld;
-    float4x4 WorldToObject;
-    float4x4 ObjectToCamera;
-    float4x4 ObjectToClipSpace;
-};
-
-cbuffer Params : register(b1)
-{
-    float4x4 transform;
+    float4x4 transformSampleSpace;
 
     float L;
     float LFactor;
@@ -72,7 +58,7 @@ sampler texSampler : register(s0);
     float3 pos = P.position;
     pos -= Center;
 
-    float3 posInObject = mul(float4(pos.xyz, 0), transform).xyz;
+    float3 posInObject = mul(float4(pos.xyz, 0), transformSampleSpace).xyz;
     float4 c = inputTexture.SampleLevel(texSampler, posInObject.xy * float2(1, -1) + float2(0.5, 0.5), 0.0);
     float gray = (c.r + c.g + c.b) / 3;
 

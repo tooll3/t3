@@ -1,4 +1,5 @@
 ﻿using ImGuiNET;
+using T3.Core.Operator;
 
 namespace T3.Editor.Gui.InputUi.SimpleInputUis
 {
@@ -16,7 +17,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                    };
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, ref T value)
+        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref T value, bool readOnly)
         {
             ImGui.TextUnformatted(""); // Print an empty text to force layout to next line
             return InputEditStateFlags.Nothing;

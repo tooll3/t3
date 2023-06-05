@@ -12,5 +12,16 @@
             PreMultipliedExperimental,
             BlendOnWhite,
         }
+
+        public enum RgbBlendModes
+        {
+            Normal = 0,
+            Screen = 1,
+            Multiply = 2,
+            Overlay = 3,
+            Difference = 4,
+            UseImageA_RGB = 5,
+            UseImageB_RGB = 6,
+        }
     }
 }

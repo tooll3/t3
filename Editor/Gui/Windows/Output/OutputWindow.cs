@@ -6,7 +6,6 @@ using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
-using T3.Core.Resource;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
@@ -104,6 +103,7 @@ namespace T3.Editor.Gui.Windows.Output
                 _imageCanvas.PreventMouseInteraction = _camSelectionHandling.PreventCameraInteraction | _camSelectionHandling.PreventImageCanvasInteraction;
                 _imageCanvas.Update();
                 DrawToolbar(drawnType);
+                CustomComponents.DrawWindowFocusFrame();
             }
             ImGui.EndChild();
         }
@@ -154,7 +154,7 @@ namespace T3.Editor.Gui.Windows.Output
 
             ImGui.SameLine();
 
-            _camSelectionHandling.DrawCameraControlSelection(Pinning);
+            _camSelectionHandling.DrawCameraControlSelection();
             ResolutionHandling.DrawSelector(ref _selectedResolution, _resolutionDialog);
             
             ImGui.SameLine();
@@ -216,15 +216,11 @@ namespace T3.Editor.Gui.Windows.Output
             _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
             
             // Set camera
-            //var usedCam = _lastInteractiveCam ?? _outputWindowViewCamera;
             if (_camSelectionHandling.CameraForRendering != null)
             {
                 _evaluationContext.SetViewFromCamera(_camSelectionHandling.CameraForRendering);
             }
-            else
-            {
-                //Log.Error("Viewer camera undefined");
-            }
+
             _evaluationContext.BackgroundColor = _backgroundColor;
 
             const string overrideSampleVariableName = "OverrideMotionBlurSamples";

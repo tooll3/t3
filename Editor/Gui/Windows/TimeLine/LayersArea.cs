@@ -5,7 +5,6 @@ using System.Numerics;
 using T3.Editor.Gui.Graph;
 using ImGuiNET;
 using T3.Core.Animation;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
@@ -631,8 +630,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         void ITimeObjectManipulation.DeleteSelectedElements()
         {
-            Log.Assert("Deleting not implemented yet");
-            //TODO: Implement
+            //TODO: Implement deleting of layers with delete key
         }
         #endregion
 

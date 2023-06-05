@@ -49,9 +49,12 @@ namespace T3.Editor.Gui.ChildUi
             if (ImGui.GetIO().KeyCtrl)
             {
                 ImGui.InvisibleButton("dragMicroGraph", graphRect.GetSize());
-                isActive = ImGui.IsItemActive();
+                if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left) || ImGui.IsItemActive())
+                {
+                    isActive = true;
+                }
 
-                if (ImGui.IsItemHovered())
+                if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
                 }

@@ -13,9 +13,9 @@
 
   <ItemGroup>
     <PackageReference Include="CppSharp" Version="1.0.1" />
-    <PackageReference Include="ManagedBass" Version="3.1.0" />
-    <PackageReference Include="ManagedBass.Wasapi" Version="3.1.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.11.0" />
+    <PackageReference Include="ManagedBass" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Wasapi" Version="3.1.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0-1.final" />
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="NAudio.Midi" Version="2.1.0" />
     <PackageReference Include="OpenGL.Net" Version="0.8.4">

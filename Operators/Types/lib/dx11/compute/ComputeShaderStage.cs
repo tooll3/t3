@@ -15,7 +15,7 @@ namespace T3.Operators.Types.Id_8bef116d_7d1c_4c1b_b902_25c1d5e925a9
 {
     public class ComputeShaderStage : Instance<ComputeShaderStage>, IRenderStatsProvider
     {
-        [Output(Guid = "{C382284F-7E37-4EB0-B284-BC735247F26B}", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "{C382284F-7E37-4EB0-B284-BC735247F26B}")]
         public readonly Slot<Command> Output = new Slot<Command>();
 
         public ComputeShaderStage()

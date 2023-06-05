@@ -25,22 +25,20 @@ sampler texSampler : register(s0);
 
 float4 psMain(vsOutput input) : SV_TARGET
 {
+    float2 uv = input.texCoord;
+    
     float width, height;
     Image.GetDimensions(width, height);
     
     float sx = SampleRadius / width;
     float sy = SampleRadius / height;
     
-    float x = input.texCoord.x;
-    float y = input.texCoord.y;
-
-    float4 y1= Image.Sample(texSampler, float2(input.texCoord.x,       input.texCoord.y + sy));
-    float4 y2= Image.Sample(texSampler, float2(input.texCoord.x,       input.texCoord.y - sy));
+    float4 y1= Image.Sample(texSampler, float2(uv.x,       uv.y + sy));
+    float4 y2= Image.Sample(texSampler, float2(uv.x,       uv.y - sy));
     
-    float4 x1= Image.Sample(texSampler,  float2(input.texCoord.x + sx, input.texCoord.y));
-    float4 x2= Image.Sample(texSampler,  float2(input.texCoord.x - sx, input.texCoord.y)); 
-    float4 m =  Image.Sample(texSampler, float2(input.texCoord.x,      input.texCoord.y)); 
-    //return ((m-y1) + (m-y2) + (m-x1) + (m-x2)) * Strength;
+    float4 x1= Image.Sample(texSampler,  float2(uv.x + sx, uv.y));
+    float4 x2= Image.Sample(texSampler,  float2(uv.x - sx, uv.y)); 
+    float4 m =  Image.Sample(texSampler, float2(uv.x,      uv.y)); 
     
     float average =  (           
                     abs(x1.r-m.r) + abs(x2.r-m.r) + abs(y1.r - m.r) +abs(y2.r - m.r) +

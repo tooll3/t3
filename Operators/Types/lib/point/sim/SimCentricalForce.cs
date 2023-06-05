@@ -18,13 +18,16 @@ namespace T3.Operators.Types.Id_87915d7b_f2aa_45da_80f9_bd1f6033d387
         public readonly InputSlot<System.Numerics.Vector3> Center = new InputSlot<System.Numerics.Vector3>();
 
         [Input(Guid = "cbcfcceb-309b-4a25-856a-cb4eb3798cf4")]
-        public readonly InputSlot<float> Radius = new InputSlot<float>();
+        public readonly InputSlot<float> MaxAcceleration = new InputSlot<float>();
 
         [Input(Guid = "02f34a62-bd83-47ac-962a-f1af6a92f0b8")]
         public readonly InputSlot<float> Amount = new InputSlot<float>();
 
         [Input(Guid = "77aa9e9a-b73c-4cf4-8b00-c5a9860cdeed")]
         public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
+
+        [Input(Guid = "ac4bf799-f2e8-4bb8-ab57-e1260ba0421e")]
+        public readonly InputSlot<float> ApplyMovement = new InputSlot<float>();
     }
 }
 

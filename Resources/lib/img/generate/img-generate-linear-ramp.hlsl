@@ -1,3 +1,5 @@
+#include "lib/shared/blend-functions.hlsl"
+
 cbuffer ParamConstants : register(b0)
 {
     float2 Center;
@@ -8,7 +10,9 @@ cbuffer ParamConstants : register(b0)
     float Bias;
     float Offset;
     float SizeMode;
-    float IsTextureValid;
+    float BlendMode;
+
+    float IsTextureValid; // Automatically added by _FxShaderSetup
 }
 
 cbuffer Resolution : register(b1)
@@ -29,7 +33,7 @@ Texture2D<float4> Gradient : register(t1);
 sampler texSampler : register(s0);
 sampler clampedSampler : register(s1);
 
-float fmod(float x, float y)
+inline float fmod(float x, float y)
 {
     return (x - y * floor(x / y));
 }
@@ -58,7 +62,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     c += Offset;
     c = PingPong > 0.5
             ? (Repeat < 0.5 ? (abs(c) / Width)
-                            : 1 - abs(fmod(c, Width * 2) - Width) / Width)
+                            : 1.00001 - abs(fmod(c, Width * 1.999999) - Width) / Width)
             : c / Width + 0.5;
 
     c = Repeat > 0.5
@@ -69,14 +73,15 @@ float4 psMain(vsOutput psInput) : SV_TARGET
                         ? pow(c, Bias + 1)
                         : 1 - pow(clamp(1 - c, 0, 10), -Bias + 1);
 
-    dBiased = clamp(dBiased, 0.001, 0.999);
+    dBiased = clamp(dBiased, 0.000001, 0.99999);
+    // dBiased = c;
 
     float4 gradient = Gradient.Sample(clampedSampler, float2(dBiased, 0));
+    // return gradient;
 
     if (IsTextureValid < 0.5)
         return gradient;
 
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
-    return float4((1.0 - gradient.a) * orgColor.rgb + gradient.a * gradient.rgb,
-                  orgColor.a + gradient.a - orgColor.a * gradient.a);
+    return (IsTextureValid < 0.5) ? gradient : BlendColors(orgColor, gradient, (int)BlendMode);
 }

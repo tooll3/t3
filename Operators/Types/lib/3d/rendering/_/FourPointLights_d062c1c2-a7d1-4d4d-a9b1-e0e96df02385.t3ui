@@ -20,10 +20,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "0feb220c-ff33-426d-93dc-655634fdbdc5"/*PointLight*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 7.3394494,
         "Y": 90.694626
@@ -31,10 +27,6 @@
     },
     {
       "ChildId": "3048c3f7-e6be-4711-b60d-0495050f5c01"/*PointLight*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 137.33945,
         "Y": 90.694626
@@ -42,10 +34,6 @@
     },
     {
       "ChildId": "b25d805b-9859-4c77-8f67-9fe7a7a1fbae"/*PointLight*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 267.33948,
         "Y": 90.694626
@@ -53,10 +41,6 @@
     },
     {
       "ChildId": "b16f386f-22f8-47c8-9e77-0d5aeb3ac03d"/*PointLight*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 397.33948,
         "Y": 90.694626

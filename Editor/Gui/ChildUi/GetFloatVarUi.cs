@@ -1,8 +1,6 @@
 ﻿using System.Linq;
-using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
-using T3.Core.Operator.Slots;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_e6072ecf_30d2_4c52_afa1_3b195d61617b;

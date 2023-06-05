@@ -1383,7 +1383,7 @@
           "Id": "b8409f71-d2e3-4fb3-91dc-abf96b55379f"/*Translate*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 0.019,
+            "X": -0.087,
             "Y": -0.038,
             "Z": 0.0
           }
@@ -1392,7 +1392,7 @@
           "Id": "4b8a067d-8630-485e-b390-1fca7cc06323"/*Stretch*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": -1.048,
+            "X": -0.8,
             "Y": 1.063,
             "Z": 1.0
           }
@@ -1596,9 +1596,9 @@
                   "Id": "aec86c75-c159-4a8d-937f-1682c04ce810",
                   "NormalizedPosition": 1.0,
                   "Color": {
-                    "R": 3.1385243,
-                    "G": 3.1384938,
-                    "B": 3.1385243,
+                    "R": 1.0,
+                    "G": 0.99999005,
+                    "B": 1.0,
                     "A": 1.0
                   }
                 }

@@ -25,7 +25,13 @@ namespace T3.Core.Logging
         
         public static void StartNewFrame()
         {
-            ResultsForLastFrame = GetFrameResults().ToList();
+            ResultsForLastFrame.Clear();
+
+            foreach (var (topic, count) in GetFrameResults())
+            {
+                ResultsForLastFrame.TryGetValue(topic, out var sum);
+                ResultsForLastFrame[topic] = sum + count;
+            }
             
             foreach (var p in _providers)
             {
@@ -37,6 +43,9 @@ namespace T3.Core.Logging
         {
             foreach (var p in _providers)
             {
+                if (p == null)
+                    continue;
+                
                 foreach (var statAndCount in p.GetStats())
                 {
                     yield return statAndCount;
@@ -45,6 +54,6 @@ namespace T3.Core.Logging
         }
 
         private static readonly List<IRenderStatsProvider> _providers = new();
-        public static List<(string, int)> ResultsForLastFrame { get; private set; }
+        public static Dictionary<string, int> ResultsForLastFrame { get; private set; } = new();
     }
 }

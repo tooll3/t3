@@ -4861,11 +4861,6 @@
       "SymbolId": "da93f7d1-ef91-4b4a-9708-2d9b1baa4c14",
       "InputValues": [
         {
-          "Id": "f10896b4-b8fa-4e16-a7ec-4a641ddda926"/*Bias*/,
-          "Type": "System.Single",
-          "Value": 4.1
-        },
-        {
           "Id": "c45d487b-3221-44c7-bf9e-b982a65280f6"/*Gradient*/,
           "Type": "T3.Core.DataTypes.Gradient",
           "Value": {
@@ -6114,16 +6109,6 @@
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
         {
-          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
-          "Type": "System.Single",
-          "Value": 1.91
-        },
-        {
-          "Id": "fbe7e415-5740-4f44-ad4e-32e01c6eb1ad"/*Bias*/,
-          "Type": "System.Single",
-          "Value": 0.53
-        },
-        {
           "Id": "e47e9e63-9c94-4c29-9555-2452fa498d57"/*Gradient*/,
           "Type": "T3.Core.DataTypes.Gradient",
           "Value": {
@@ -6153,6 +6138,16 @@
               ]
             }
           }
+        },
+        {
+          "Id": "10d59d0f-a5a3-42e6-b874-345ab028978e"/*Size*/,
+          "Type": "System.Single",
+          "Value": 1.91
+        },
+        {
+          "Id": "fbe7e415-5740-4f44-ad4e-32e01c6eb1ad"/*Bias*/,
+          "Type": "System.Single",
+          "Value": 0.53
         }
       ],
       "Outputs": []

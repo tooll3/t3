@@ -11,10 +11,6 @@ namespace T3.Operators.Types.Id_7b18587a_e75a_47c0_88de_c92ac6442c4c
         [Output(Guid = "0340f641-d087-42e6-831f-ae6083d834b1")]
         public readonly Slot<Command> Result = new Slot<Command>();
 
-
-        [Input(Guid = "78c7396f-3ce8-4565-b043-ec92602c0ae7")]
-        public readonly InputSlot<Command> Command = new InputSlot<Command>();
-
         [Input(Guid = "71c3818f-bd7a-4979-bf83-56b56ccea6b0")]
         public readonly InputSlot<Object> CameraReference = new InputSlot<Object>();
 
@@ -47,6 +43,9 @@ namespace T3.Operators.Types.Id_7b18587a_e75a_47c0_88de_c92ac6442c4c
 
         [Input(Guid = "f8bd71d3-22cc-4b66-822f-6c0bbee6fbb1")]
         public readonly InputSlot<int> LoopCount = new InputSlot<int>();
+
+        [Input(Guid = "78c7396f-3ce8-4565-b043-ec92602c0ae7")]
+        public readonly InputSlot<T3.Core.DataTypes.Command> Command = new InputSlot<T3.Core.DataTypes.Command>();
 
     }
 }

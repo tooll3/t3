@@ -5,6 +5,7 @@ cbuffer ParamConstants : register(b0)
     float Strength;
     float Contrast;
     float MixOriginal;
+    float OutputAsTransparent;
 }
 
 cbuffer Resolution : register(b1)
@@ -49,6 +50,8 @@ float4 psMain(vsOutput input) : SV_TARGET
                 ) * Strength + Contrast;
                 
 
-    float4 edgeColor = clamp(float4(average,average,average,1),0 , 10000) * Color;
+    float4 edgeColor = OutputAsTransparent < 0.5 
+            ? clamp(float4(average,average,average,1),0 , 10000) * Color
+            : float4(Color.rgb, clamp(average,0, 1));
     return lerp(edgeColor, m, MixOriginal);
 }

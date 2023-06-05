@@ -2,6 +2,10 @@
   "profiles": {
     "t3": {
       "commandName": "Project",
+      "workingDirectory": ".."
+    },
+    "t3_RIDER": {
+      "commandName": "Project",
       "workingDirectory": "../../../.."
     }
   }

@@ -11,7 +11,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
     /// </summary>
     public class BeatTimeRaster : AbstractTimeRaster
     {
-        public override void Draw(Playback playback)
+        public override void Draw(Playback playback, float unitsPerSeconds)
         {
             var hasChanged = Math.Abs(_lastRasterBpm - playback.Bpm) > 0.001f;
             if (ScaleRanges == null || hasChanged)

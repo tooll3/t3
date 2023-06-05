@@ -41,6 +41,7 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             }
 
             _lastEvalTime = context.LocalFxTime;
+            var timeSinceLastHit = _lastEvalTime - _lastHitTime;
             
             // if (!string.IsNullOrEmpty(context.Playback.Settings?.AudioInputDeviceName) && !WasapiAudioInput.DevicesInitialized)
             // {
@@ -120,10 +121,10 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
 
                 if (couldBeHit != _isHitActive)
                 {
-                    if (!_isHitActive && TimeSinceLastHit > minTimeBetweenHits)
+                    if (!_isHitActive && timeSinceLastHit > minTimeBetweenHits)
                     {
                         _isHitActive = couldBeHit;
-                        _lastHitTime = Playback.RunTimeInSecs;
+                        _lastHitTime = _lastEvalTime;
                         _hitCount++;
                     }
                     else
@@ -133,7 +134,7 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
                 }
                 
                 AccumulatedLevel +=  MathF.Pow((Sum * 2) / threshold, 2) * 0.001 * amplitude;
-                _dampedTimeBetweenHits = MathUtils.Lerp((float)TimeSinceLastHit, _dampedTimeBetweenHits, 0.94f);
+                _dampedTimeBetweenHits = MathUtils.Lerp((float)timeSinceLastHit, _dampedTimeBetweenHits, 0.94f);
             }
 
             float v;
@@ -143,11 +144,11 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             switch ((OutputModes)Output.GetValue(context).Clamp(0, Enum.GetNames(typeof(OutputModes)).Length - 1))
             {
                 case OutputModes.Pulse:
-                    v = MathF.Pow((1 - (float)TimeSinceLastHit).Clamp(0, 1), bias) * amplitude;
+                    v = MathF.Pow((1 - (float)timeSinceLastHit).Clamp(0, 1), bias) * amplitude;
                     break;
                 
                 case OutputModes.TimeSinceHit:
-                    v = MathF.Pow((float)TimeSinceLastHit, bias) * amplitude;
+                    v = MathF.Pow((float)timeSinceLastHit, bias) * amplitude;
                     break;
                 
                 case OutputModes.Count:
@@ -248,6 +249,10 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
         public readonly InputSlot<bool> Reset = new();
         
         private static readonly List<float> _emptyList = new();
+        
+        /// <summary>
+        /// This is used only for visualization
+        /// </summary>
         public double TimeSinceLastHit => Playback.RunTimeInSecs - _lastHitTime;
 
         public bool AccumulationActive;

@@ -14,6 +14,7 @@
             public bool TimeClipSuspending = false;
             public string MainOperatorName = "";
             public float AudioResyncThreshold = 0.04f;
+            public bool EnablePlaybackControlWithKeyboard = true;
         }
     }
 }

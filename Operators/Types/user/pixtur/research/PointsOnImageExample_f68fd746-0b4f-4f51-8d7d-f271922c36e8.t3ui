@@ -1,0 +1,177 @@
+{
+  "Id": "f68fd746-0b4f-4f51-8d7d-f271922c36e8"/*PointsOnImageExample*/,
+  "Description": "Experimenting with emitting points based on image brightness",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "d3f3ef8f-c8de-4062-b997-1d6bf4ad2c2c"/*PointsOnImage*/,
+      "Position": {
+        "X": 773.5136,
+        "Y": 161.83374
+      }
+    },
+    {
+      "ChildId": "e4a07bc2-f2b2-4b9f-bf02-7a5620af60c4"/*Execute*/,
+      "Position": {
+        "X": 1523.5137,
+        "Y": 161.83374
+      }
+    },
+    {
+      "ChildId": "8774e87c-972b-42af-bb33-80b2863a02a2"/*Camera*/,
+      "Position": {
+        "X": 1973.5137,
+        "Y": 154.7727
+      }
+    },
+    {
+      "ChildId": "fd3ea550-2b52-46e9-b8e8-9274a507bda8"/*RenderTarget*/,
+      "Position": {
+        "X": 323.51355,
+        "Y": 161.83374
+      }
+    },
+    {
+      "ChildId": "ac93d349-fa09-467c-ab29-55fc5a915f38"/*Text*/,
+      "Position": {
+        "X": 173.51355,
+        "Y": 161.83374
+      }
+    },
+    {
+      "ChildId": "a5cd52b9-eaff-4ae3-aaa7-1c655b4a4997"/*SimNoise*/,
+      "Position": {
+        "X": 1073.5137,
+        "Y": 161.83374
+      }
+    },
+    {
+      "ChildId": "0fef70ba-de2f-4369-8dc2-e95dcc640ede"/*Time*/,
+      "Position": {
+        "X": 923.5136,
+        "Y": 347.83374
+      }
+    },
+    {
+      "ChildId": "65c9059d-b987-4c72-91f8-481cd307c4e2"/*Blur*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 187.99902
+      }
+    },
+    {
+      "ChildId": "9f981b08-b8f4-49ff-b35f-7cef2d747340"/*Time*/,
+      "Position": {
+        "X": 323.51355,
+        "Y": 264.83374
+      }
+    },
+    {
+      "ChildId": "6449f997-e3b0-4e79-9178-c42c063e55d6"/*ParticleSimulation*/,
+      "Position": {
+        "X": 923.5136,
+        "Y": 161.83374
+      }
+    },
+    {
+      "ChildId": "455c2d7d-1be0-48a9-ad07-b63dabfc9020"/*SimDirectedForce*/,
+      "Position": {
+        "X": 1223.5137,
+        "Y": 161.83374
+      }
+    },
+    {
+      "ChildId": "9e9746d2-0f3c-4b6d-85dd-6f1496a44dd4"/*DrawPointsAsSpheres*/,
+      "Position": {
+        "X": 1373.5137,
+        "Y": 161.83374
+      }
+    },
+    {
+      "ChildId": "3891f903-c841-47ad-bef4-591cedb676bc"/*SetFog*/,
+      "Position": {
+        "X": 1673.5137,
+        "Y": 161.83374
+      }
+    },
+    {
+      "ChildId": "fa68f53e-378e-4a97-9c3f-a550f444b561"/*Time*/,
+      "Position": {
+        "X": 246.72461,
+        "Y": 161.83374
+      }
+    },
+    {
+      "ChildId": "1503420a-1505-43ef-aecf-5a6479f8e359"/*FloatToString*/,
+      "Position": {
+        "X": 396.7246,
+        "Y": 161.83374
+      }
+    },
+    {
+      "ChildId": "13aaba1f-a621-4115-a1b9-fcb811c7a6fd"/*OscillateVec2*/,
+      "Position": {
+        "X": 42.044678,
+        "Y": 336.13623
+      }
+    },
+    {
+      "ChildId": "2d683571-5033-4a67-acc0-e651d4e5163f"/*RandomString*/,
+      "Position": {
+        "X": 25.371948,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "5cd2fdc2-87ab-437a-b227-b0a8f8c89c53"/*LinearGradient*/,
+      "Position": {
+        "X": 473.51355,
+        "Y": 161.83374
+      }
+    },
+    {
+      "ChildId": "6b6aab35-8fda-412a-830b-a3d7003b441f"/*AnimValue*/,
+      "Position": {
+        "X": 323.51355,
+        "Y": 217.83374
+      }
+    },
+    {
+      "ChildId": "1b3fda9d-f7d3-45f2-a712-581b18089bcd"/*RoundedRect*/,
+      "Position": {
+        "X": 623.5136,
+        "Y": 161.83374
+      }
+    },
+    {
+      "ChildId": "e594cff2-1e0f-4583-827c-36724e960c3e"/*PointLight*/,
+      "Position": {
+        "X": 1823.5137,
+        "Y": 161.83374
+      }
+    },
+    {
+      "ChildId": "a5781cc4-dd03-44ed-bcf2-775b5d2ac628"/*RenderTarget*/,
+      "Position": {
+        "X": 2131.7632,
+        "Y": 161.76562
+      }
+    },
+    {
+      "ChildId": "ae12cf56-5e5c-4b3e-8aad-4a646492b9ed"/*DrawBillboards*/,
+      "Position": {
+        "X": 1373.5137,
+        "Y": 217.83374
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "f22aa72c-19d2-4fd4-bae2-8eb3b2c0ba82"/*ColorBuffer*/,
+      "Position": {
+        "X": 2541.7632,
+        "Y": 185.41687
+      }
+    }
+  ]
+}

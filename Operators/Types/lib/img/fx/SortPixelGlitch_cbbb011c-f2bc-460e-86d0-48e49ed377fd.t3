@@ -9,7 +9,7 @@
     },
     {
       "Id": "615af268-5f30-4600-8c36-e37dbc2108c7"/*Vertical*/,
-      "DefaultValue": false
+      "DefaultValue": true
     },
     {
       "Id": "10553b67-45f7-4e9d-b769-05865f4b2357"/*ScanHighlights*/,

@@ -1,10 +1,11 @@
 using System;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine;
@@ -216,34 +217,38 @@ namespace T3.Editor.Gui.Interaction
             Scroll = ScrollTarget;
         }
 
-        public void SetScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null)
+        public void SetScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null, float paddingX = 0, float paddingY = 0)
         {
             var areaSize = area.GetSize();
             if (areaSize.X == 0)
+            {
                 areaSize.X = 1;
+            }
+
 
             if (areaSize.Y == 0)
                 areaSize.Y = 1;
-
+            
             if (Scale.X == 0 || Scale.Y == 0)
             {
                 Scale = Vector2.One;
             }
 
-            ScaleTarget = WindowSize / areaSize;
+            ScaleTarget = (WindowSize - new Vector2(paddingX, paddingY)) / areaSize;
 
             if (flipY)
             {
                 ScaleTarget.Y *= -1;
             }
 
+            ScrollTarget = new Vector2(area.Min.X - paddingX / ScaleTarget.X / 2,
+                                       area.Max.Y - paddingY / ScaleTarget.Y / 2);
+            
             if (parent != null)
             {
                 ScaleTarget /= parent.Scale;
             }
 
-            ScrollTarget = new Vector2(area.Min.X,
-                                       area.Max.Y);
         }
 
         public void SetVerticalScopeToCanvasArea(ImRect area, bool flipY = false, ScalableCanvas parent = null)
@@ -385,17 +390,32 @@ namespace T3.Editor.Gui.Interaction
 
         protected void HandleInteraction(T3Ui.EditingFlags flags)
         {
+            
             var isDraggingConnection = (ConnectionMaker.TempConnections.Count > 0) && ImGui.IsWindowFocused();
-            if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) && !isDraggingConnection)
+            
+            // This is a work around to allow the curve edit canvas to control zooming the timeline window
+            var allowChildHover = flags.HasFlag(T3Ui.EditingFlags.AllowHoveredChildWindows)
+                                      ? ImGuiHoveredFlags.ChildWindows
+                                      : ImGuiHoveredFlags.None;
+            if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup | allowChildHover) && !isDraggingConnection)
                 return;
+
+            //DrawCanvasDebugInfos();
+            
+            if ((flags & T3Ui.EditingFlags.PreventMouseInteractions) != T3Ui.EditingFlags.None)
+                return;
+
+            // if (FrameStats.Last.OpenedPopUpName != string.Empty)
+            //     return;
 
             if (PreventMouseInteraction)
                 return;
 
             if ((flags & T3Ui.EditingFlags.PreventPanningWithMouse) == 0
                 && (
-                       ImGui.IsMouseDragging(ImGuiMouseButton.Right)
-                       || ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
+                        ImGui.IsMouseDragging(ImGuiMouseButton.Right)
+                        || ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
+                        || ImGui.IsMouseDragging(ImGuiMouseButton.Middle)
                )
             {
                 ScrollTarget -= Io.MouseDelta / (ParentScale * ScaleTarget);
@@ -406,11 +426,10 @@ namespace T3.Editor.Gui.Interaction
                 UserScrolledCanvas = false;
             }
 
-            if ((flags & T3Ui.EditingFlags.PreventZoomWithMouseWheel) == 0)
+            if (!flags.HasFlag(T3Ui.EditingFlags.PreventZoomWithMouseWheel))
+                //&& !ImGui.IsPopupOpen("", ImGuiPopupFlags.AnyPopup))
             {
                 ZoomWithMouseWheel(_mouse);
-                //ZoomWithMiddleMouseDrag();
-
                 ScaleTarget = ClampScaleToValidRange(ScaleTarget);
             }
         }
@@ -429,9 +448,15 @@ namespace T3.Editor.Gui.Interaction
         {
             UserZoomedCanvas = false;
             
-            //DrawCanvasDebugInfos();
+            
 
             var zoomDelta = ComputeZoomDeltaFromMouseWheel();
+            
+            ApplyZoomDelta(focusCenterOnScreen, zoomDelta);
+        }
+
+        protected void ApplyZoomDelta(Vector2 focusCenterOnScreen, float zoomDelta)
+        {
             var clamped = ClampScaleToValidRange(ScaleTarget * zoomDelta);
             if (clamped == ScaleTarget)
                 return;
@@ -475,15 +500,25 @@ namespace T3.Editor.Gui.Interaction
             dl.AddText(wp + new Vector2(0, 0), Color.Orange, $"SCAL: {ScaleTarget.X:0.0} {ScaleTarget.Y:0.0} ");
             dl.AddText(wp + new Vector2(0, 16), Color.Orange, $"SCRL: {ScrollTarget.X:0.0} {ScrollTarget.Y:0.0} ");
             dl.AddText(wp + new Vector2(0, 32), Color.Orange, $"CNVS: {focusCenterOnCanvas.X:0.0} {focusCenterOnCanvas.Y:0.0} ");
+            var hovered = ImGui.IsWindowHovered() ? "hovered" : "";
+            var hoveredChild = ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) ? "hoveredChildWindows" : "";
+            dl.AddText(wp + new Vector2(0, 48), Color.Orange, $"{hovered} {hoveredChild}");
+            
+            var focused = ImGui.IsWindowFocused() ? "focused" : "";
+            var focusedChild = ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows) ? "focusedChildWindows" : "";
+            dl.AddText(wp + new Vector2(0, 64), Color.Orange, $"{focused} {focusedChild}");
         }
 
         protected bool IsCurveCanvas => Scale.Y < 0;
 
         protected float ComputeZoomDeltaFromMouseWheel()
         {
+            var ioMouseWheel = Io.MouseWheel;
+            if (ioMouseWheel == 0)
+                return 1;
+            
             const float zoomSpeed = 1.2f;
             var zoomSum = 1f;
-            var ioMouseWheel = Io.MouseWheel;
 
             if (ioMouseWheel < 0.0f)
             {

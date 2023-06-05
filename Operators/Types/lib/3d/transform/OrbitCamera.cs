@@ -179,12 +179,6 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
         [Input(Guid = "DD81B2AA-3252-4130-8DEF-A5B399D3E283")]
         public readonly InputSlot<int> Seed = new InputSlot<int>();
         
-        // [Input(Guid = "e0d9f53c-9d64-4e02-a8d6-6b60c7ea7a17")]
-        // public readonly InputSlot<System.Numerics.Vector3> Position = new InputSlot<System.Numerics.Vector3>();
-        
-        // [Input(Guid = "43090c3d-7f39-408b-85c0-1f907503aca2")]
-        // public readonly InputSlot<System.Numerics.Vector3> Target = new InputSlot<System.Numerics.Vector3>();
-        
         [Input(Guid = "f51b38d7-2380-457f-897d-2429b2ad6ac3")]
         public readonly InputSlot<System.Numerics.Vector3> Up = new InputSlot<System.Numerics.Vector3>();
         
@@ -196,12 +190,6 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
         
         [Input(Guid = "21f595ad-0808-48f1-bdd8-118d1527944c")]
         public readonly InputSlot<float> Fov = new InputSlot<float>();
-        // [Input(Guid = "0bd7cb53-fb5b-47da-a1b6-61d20f0c77d2")]
-        // public readonly InputSlot<float> Roll = new InputSlot<float>();
-        
-        [Input(Guid = "7A87791D-C2CF-4853-BEFE-47ABB2D8742F")]
-        public readonly InputSlot<string> HelloString = new();
-        
-        
+
     }
 }

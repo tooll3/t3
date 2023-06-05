@@ -1754,11 +1754,6 @@
           "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
           "Type": "System.Single",
           "Value": 0.0
-        },
-        {
-          "Id": "1785eabd-54fa-4b8c-ae5a-54112c2e50b8"/*SliderMax*/,
-          "Type": "System.Single",
-          "Value": 10.0
         }
       ],
       "Outputs": []
@@ -1945,16 +1940,16 @@
       "Outputs": []
     },
     {
-      "Id": "7bb2bcfd-421e-496f-a671-7a9a892a706f"/*CollectSpawnPoints*/,
+      "Id": "7bb2bcfd-421e-496f-a671-7a9a892a706f"/*ParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {
-          "Id": "18903940-ff20-4b64-a4f0-6078977edd7a"/*BufferSize*/,
+          "Id": "18903940-ff20-4b64-a4f0-6078977edd7a"/*MaxParticleCount*/,
           "Type": "System.Int32",
           "Value": 1000
         },
         {
-          "Id": "a03ffef9-11e3-41f9-9f13-71f107b484df"/*GrowRate*/,
+          "Id": "a03ffef9-11e3-41f9-9f13-71f107b484df"/*AgingRate*/,
           "Type": "System.Single",
           "Value": 0.46
         }
@@ -1984,7 +1979,7 @@
       "Outputs": []
     },
     {
-      "Id": "d25853e5-883e-4d72-9c1d-4f0c014ac637"/*DrawVaryingQuads*/,
+      "Id": "d25853e5-883e-4d72-9c1d-4f0c014ac637"/*_DrawVaryingQuads*/,
       "SymbolId": "ffc0a7ed-fe61-4188-8db9-0b0f07c6b981",
       "InputValues": [
         {

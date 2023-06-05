@@ -37,9 +37,6 @@ namespace T3.Operators.Types.Id_97ffb173_f4cc_4143_a479_80cf3465cc7e
 
         [Input(Guid = "2ce29895-0bfd-4b73-ad57-50aca7fd1a96")]
         public readonly InputSlot<float> Scale = new InputSlot<float>();
-
-        [Input(Guid = "eaada05a-34c0-44c9-aa02-7c4670f4f663")]
-        public readonly InputSlot<int> Mapping = new InputSlot<int>();
     }
 }
 

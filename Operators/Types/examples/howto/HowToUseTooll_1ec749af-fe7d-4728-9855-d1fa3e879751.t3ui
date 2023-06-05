@@ -5,10 +5,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "3ca68ae8-02bd-432b-94a4-be80b6eb5d1a"/*LoadImage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 5.9398956,
         "Y": 242.6807
@@ -16,10 +12,6 @@
     },
     {
       "ChildId": "73ef00c1-942d-4464-9390-b9632fef8468"/*DetectEdges*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 242.08734,
         "Y": 233.85025
@@ -27,10 +19,6 @@
     },
     {
       "ChildId": "e841cd12-d601-4bde-94f3-85e9dd02a60a"/*Blob*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 522.53015,
         "Y": 455.3374

@@ -1,0 +1,21 @@
+{
+  "Name": "FreezeValue",
+  "Id": "587dbb73-fd79-4481-a79e-f77055abda9a",
+  "Namespace": "lib.anim",
+  "Inputs": [
+    {
+      "Id": "7d64e809-3280-47fa-ad0f-218c6081534f"/*Value*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "b53df009-a0eb-46c9-90db-04d8ccdb0ae4"/*Freeze*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "9ad1267b-6d0a-43f4-a4e9-0f77659ddd44"/*Mode*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

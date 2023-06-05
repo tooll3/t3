@@ -3,6 +3,7 @@ using System.Numerics;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -38,7 +39,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                        };
         }
 
-        protected override InputEditStateFlags DrawEditControl(string name, ref string value)
+        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref string value, bool readOnly)
         {
             if (value == null)
             {
@@ -103,7 +104,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
         private static InputEditStateFlags DrawMultilineTextEdit(ref string value)
         {
             ImGui.Dummy(new Vector2(1, 1));
-            var changed = ImGui.InputTextMultiline("##textEdit", ref value, MaxStringLength, new Vector2(-1, 150));
+            var changed = ImGui.InputTextMultiline("##textEdit", ref value, MaxStringLength, new Vector2(-1, 3 * ImGui.GetFrameHeight()));
             return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
         }
 

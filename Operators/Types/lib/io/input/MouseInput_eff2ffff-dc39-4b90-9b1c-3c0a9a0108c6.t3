@@ -6,6 +6,10 @@
     {
       "Id": "49775cc2-35b7-4c9f-a502-59fe8fbbe2a7"/*DoUpdate*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "1327525c-716c-43e4-a5d1-58cf35440462"/*OutputMode*/,
+      "DefaultValue": 0
     }
   ],
   "Children": [],

@@ -104,10 +104,6 @@
     {
       "Id": "21f595ad-0808-48f1-bdd8-118d1527944c"/*Fov*/,
       "DefaultValue": 45.0
-    },
-    {
-      "Id": "7a87791d-c2cf-4853-befe-47abb2d8742f"/*HelloString*/,
-      "DefaultValue": ""
     }
   ],
   "Children": [],

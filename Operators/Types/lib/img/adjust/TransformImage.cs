@@ -33,6 +33,9 @@ namespace T3.Operators.Types.Id_32e18957_3812_4f64_8663_18454518d005
 
         [Input(Guid = "c31a95a9-2cfb-4eea-8006-97f883d11847")]
         public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
+
+        [Input(Guid = "64e5cdf2-19b0-461c-b936-ea46ee58028f")]
+        public readonly InputSlot<SharpDX.Direct3D11.Filter> Filter = new InputSlot<SharpDX.Direct3D11.Filter>();
     }
 }
 

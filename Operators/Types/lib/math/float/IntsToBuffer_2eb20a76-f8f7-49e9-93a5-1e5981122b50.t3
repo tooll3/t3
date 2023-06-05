@@ -1,0 +1,13 @@
+{
+  "Name": "IntsToBuffer",
+  "Id": "2eb20a76-f8f7-49e9-93a5-1e5981122b50",
+  "Namespace": "lib.math.float",
+  "Inputs": [
+    {
+      "Id": "49556d12-4cd1-4341-b9d8-c356668d296c"/*Params*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

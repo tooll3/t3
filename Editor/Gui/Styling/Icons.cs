@@ -80,7 +80,7 @@ namespace T3.Editor.Gui.Styling
                               color);
         }
 
-        public static void DrawIconOnLastItem(Icon icon)
+        public static void DrawIconOnLastItem(Icon icon, Color color)
         {
             var pos = ImGui.GetItemRectMin();
             var size = ImGui.GetItemRectMax() - pos;
@@ -92,7 +92,13 @@ namespace T3.Editor.Gui.Styling
                                                alignedPos + iconSize,
                                                uvRange.Min,
                                                uvRange.Max,
-                                               Color.White);
+                                               color);
+            ImGui.GetWindowDrawList().AddImage(ImGui.GetIO().Fonts.TexID,
+                                               alignedPos,
+                                               alignedPos + iconSize,
+                                               uvRange.Min,
+                                               uvRange.Max,
+                                               color);
         }
         
         private static void GetGlyphDefinition(Icon icon, out ImRect uvRange, out Vector2 size)
@@ -176,7 +182,7 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.ConnectedParameter, 13),
                 new (Icon.Stripe4PxPattern, 14),
                 new (Icon.CurveKeyframe, 15),
-                new (Icon.CurveKeyframeSelected, 15),
+                new (Icon.CurveKeyframeSelected, 16),
                 new (Icon.CurrentTimeMarkerHandle, 17),
                 new (Icon.FollowTime, 18),
                 new (Icon.ToggleAudioOn, 19),
@@ -229,7 +235,16 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.Help, 61),
                 new (Icon.Hint, 62),                
                 new (Icon.PinParams, 63),
-                new (Icon.Params, 64),
+                new (Icon.Unpin, 64),
+                new (Icon.Pipette, 65),
+                new (Icon.Link, 66),
+                new (Icon.Search, 67),
+                new (Icon.ParamsList, 68),
+                new (Icon.Presets, 69),
+                new (Icon.HelpOutline, 70),
+                new (Icon.PlayOutput, 71),
+                new (Icon.AddKeyframe, 72),
+                new (Icon.AddOpToInput, 73),
             };
 
         public const string IconAtlasPath = @"Resources\t3-editor\images\t3-icons.png";
@@ -300,6 +315,15 @@ namespace T3.Editor.Gui.Styling
         Help,
         Hint,
         PinParams,
-        Params
+        Unpin,
+        Pipette,
+        Link,
+        Search,
+        ParamsList,
+        Presets,
+        HelpOutline,
+        PlayOutput,
+        AddKeyframe,
+        AddOpToInput
     }
 }

@@ -313,6 +313,24 @@
       "SymbolId": "80dff680-5abf-484a-b9e0-81d72f3b7aa4",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "a247f2e4-a675-456b-b457-fdc8897fdbe7"/*BlendColors*/,
+      "SymbolId": "6b7c541a-ca36-4f21-ac95-89e874820c5a",
+      "InputValues": [
+        {
+          "Id": "8d444e8c-d9b5-4206-9202-5abf23b13baf"/*Mode*/,
+          "Type": "System.Int32",
+          "Value": 1
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "ed1cba1c-c3e6-4f9f-97fe-c4d23c8576a5"/*GetForegroundColor*/,
+      "SymbolId": "6c1271a0-058f-4ff0-940b-f196e5debdf7",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -605,14 +623,26 @@
       "TargetSlotId": "01809b63-4b4a-47be-9588-98d5998ddb0c"
     },
     {
+      "SourceParentOrChildId": "ed1cba1c-c3e6-4f9f-97fe-c4d23c8576a5",
+      "SourceSlotId": "f962854b-00d6-4eb3-aa4c-e5d4bd500672",
+      "TargetParentOrChildId": "a247f2e4-a675-456b-b457-fdc8897fdbe7",
+      "TargetSlotId": "b9e5c6f3-7052-456f-9d1b-c182b4412433"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "f5b4e08b-a49a-47ac-838d-577b621005b2",
+      "TargetParentOrChildId": "a247f2e4-a675-456b-b457-fdc8897fdbe7",
+      "TargetSlotId": "eb601c57-2025-4135-8292-223eaedaf187"
+    },
+    {
       "SourceParentOrChildId": "bf3e7f5a-7504-49b6-813d-958d826373f6",
       "SourceSlotId": "1368ab8e-d75e-429f-8ecd-0944f3ede9ab",
       "TargetParentOrChildId": "a8bd9433-aa6e-4ba9-b766-3962ab583b65",
       "TargetSlotId": "e79473f4-3fd2-467e-acda-b27ef7dae6a9"
     },
     {
-      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "SourceSlotId": "f5b4e08b-a49a-47ac-838d-577b621005b2",
+      "SourceParentOrChildId": "a247f2e4-a675-456b-b457-fdc8897fdbe7",
+      "SourceSlotId": "66ce8660-253c-4a0b-8aec-f7a56751a1e4",
       "TargetParentOrChildId": "b6a0b951-c889-4ca4-9c9e-3fd16627ff50",
       "TargetSlotId": "980ef785-6ae2-44d1-803e-febfc75791c5"
     },

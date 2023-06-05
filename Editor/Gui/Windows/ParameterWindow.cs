@@ -87,57 +87,10 @@ namespace T3.Editor.Gui.Windows
                 var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
 
                 // Draw parameters
-                DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi);
+                DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false);
+                FormInputs.AddVerticalSpace(30);
 
-                // Description
-                //ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
-                ImGui.PushFont(Fonts.FontSmall);
-
-                //ImGui.Dummy(new Vector2(10,10));
-                FormInputs.AddVerticalSpace(10);
-                ImGui.Indent(10);
-                ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10,10));
-                
-                if (!string.IsNullOrEmpty(symbolUi.Description))
-                {
-                    ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
-                    ImGui.TextWrapped(symbolUi.Description);
-                    ImGui.PopStyleColor();                        
-                }
-                
-                if (ImGui.Button("Edit description..."))
-                    _editDescriptionDialog.ShowNextFrame();                
-                
-                SymbolBrowser.ListExampleOperators(symbolUi);
-                if (!string.IsNullOrEmpty(symbolUi.Description))
-                {
-                    var alreadyListedSymbolNames = new HashSet<string>();
-                    
-                    foreach (Match  match in _itemRegex.Matches(symbolUi.Description))
-                    {
-                        var referencedName = match.Groups[1].Value;
-
-                        if (referencedName == symbolUi.Symbol.Name)
-                            continue;
-
-                        if (alreadyListedSymbolNames.Contains(referencedName))
-                            continue;
-                        
-                        // This is slow and could be optimized by dictionary
-                        var referencedSymbolUi = SymbolRegistry.Entries.Values.SingleOrDefault(s => s.Name == referencedName);
-                        if (referencedSymbolUi != null)
-                        {
-                            SymbolBrowser.DrawExampleOperator(referencedSymbolUi.Id,referencedName);
-                        }
-
-                        alreadyListedSymbolNames.Add(referencedName);
-                    }
-                }
-                
-                ImGui.PopStyleVar();
-                ImGui.Unindent();
-                
-                ImGui.PopFont();
+                DrawDescription(symbolUi);
                 return;
             }
 
@@ -171,6 +124,55 @@ namespace T3.Editor.Gui.Windows
             
         }
 
+        public static void DrawDescription(SymbolUi symbolUi)
+        {
+            // Description
+            ImGui.PushFont(Fonts.FontSmall);
+
+            ImGui.Indent(10);
+            ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
+
+            if (!string.IsNullOrEmpty(symbolUi.Description))
+            {
+                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                ImGui.TextWrapped(symbolUi.Description);
+                ImGui.PopStyleColor();
+            }
+
+            if (ImGui.Button("Edit description..."))
+                _editDescriptionDialog.ShowNextFrame();
+
+            SymbolBrowser.ListExampleOperators(symbolUi);
+            if (!string.IsNullOrEmpty(symbolUi.Description))
+            {
+                var alreadyListedSymbolNames = new HashSet<string>();
+
+                foreach (Match match in _itemRegex.Matches(symbolUi.Description))
+                {
+                    var referencedName = match.Groups[1].Value;
+
+                    if (referencedName == symbolUi.Symbol.Name)
+                        continue;
+
+                    if (alreadyListedSymbolNames.Contains(referencedName))
+                        continue;
+
+                    // This is slow and could be optimized by dictionary
+                    var referencedSymbolUi = SymbolRegistry.Entries.Values.SingleOrDefault(s => s.Name == referencedName);
+                    if (referencedSymbolUi != null)
+                    {
+                        SymbolBrowser.DrawExampleOperator(referencedSymbolUi.Id, referencedName);
+                    }
+
+                    alreadyListedSymbolNames.Add(referencedName);
+                }
+            }
+
+            ImGui.PopStyleVar();
+            ImGui.Unindent();
+
+            ImGui.PopFont();
+        }
 
         private enum GroupState
         {
@@ -181,10 +183,10 @@ namespace T3.Editor.Gui.Windows
         
         /// <summary>
         /// Draw all parameters of the selected instance.
-        /// The actual implementation is done in <see cref="InputValueUi{T}.DrawInputEdit"/>  
+        /// The actual implementation is done in <see cref="InputValueUi{T}.DrawParameterEdit"/>  
         /// </summary>
         public static void DrawParameters(Instance instance, SymbolUi symbolUi, SymbolChildUi symbolChildUi,
-                                          SymbolUi compositionSymbolUi)
+                                          SymbolUi compositionSymbolUi, bool hideNonEssentials)
         {
             var groupState = GroupState.None; 
             
@@ -211,7 +213,7 @@ namespace T3.Editor.Gui.Windows
                 
                 ImGui.PushID(inputSlot.Id.GetHashCode());
                 var skipIfDefault = groupState == GroupState.InsideClosed;
-                var editState = inputUi.DrawInputEdit(inputSlot, compositionSymbolUi, symbolChildUi, skipIfDefault);
+                var editState = inputUi.DrawParameterEdit(inputSlot, compositionSymbolUi, symbolChildUi, hideNonEssentials:hideNonEssentials, skipIfDefault);
 
                 if ((editState & InputEditStateFlags.Started) != InputEditStateFlags.Nothing)
                 {
@@ -238,7 +240,7 @@ namespace T3.Editor.Gui.Windows
                     }
                     else
                     {
-                        Log.Debug($"finished but wrong inputSlot {inputSlot.Input.Name}");
+                        //Log.Debug($"finished but wrong inputSlot {inputSlot.Input.Name}");
                     }
                     _inputValueCommandInFlight = null;
                 }
@@ -291,7 +293,7 @@ namespace T3.Editor.Gui.Windows
             // SymbolChild Name
             {
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
-                ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 105);
+                ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 205);
 
                 var nameForEdit = symbolChildUi.SymbolChild.Name;
 
@@ -319,17 +321,17 @@ namespace T3.Editor.Gui.Windows
                                                       T3Style.Colors.TextMuted,
                                                       "Untitled instance");
 
-                ImGui.SameLine();
             }
 
             // Disabled toggle
             {
+                ImGui.SameLine();
                 ImGui.PushFont(Fonts.FontBold);
                 if (symbolChildUi.IsDisabled)
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, T3Style.Colors.Warning.Rgba);
                     ImGui.PushStyleColor(ImGuiCol.Text, Color.White.Rgba);
-                    if (ImGui.Button("DISABLED", new Vector2(100, 0)))
+                    if (ImGui.Button("DISABLED", new Vector2(90, 0)))
                     {
                         UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, false));
                     }
@@ -338,9 +340,40 @@ namespace T3.Editor.Gui.Windows
                 else
                 {
                     ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
-                    if (ImGui.Button("ENABLED", new Vector2(100, 0)))
+                    if (ImGui.Button("ENABLED", new Vector2(90, 0)))
                     {
                         UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, true));
+                    }
+
+                    ImGui.PopStyleColor();
+                }
+
+                ImGui.PopFont();
+            }
+            
+            
+            // Bypass
+            {
+                ImGui.SameLine();
+                ImGui.PushFont(Fonts.FontBold);
+                if (symbolChildUi.SymbolChild.IsBypassed)
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Button, T3Style.Colors.Warning.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, Color.White.Rgba);
+                    
+                    // TODO: check if bypassable
+                    if (ImGui.Button("BYPASSED", new Vector2(90, 0)))
+                    {
+                        UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, false));
+                    }
+                    ImGui.PopStyleColor(2);
+                }
+                else
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+                    if (ImGui.Button("BYPASS", new Vector2(90, 0)))
+                    {
+                        UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, true));
                     }
 
                     ImGui.PopStyleColor();

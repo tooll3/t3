@@ -17,7 +17,7 @@ namespace T3.Core.Stats
         
         public IEnumerable<(string, int)> GetStats()
         {
-            yield return ("Updates", _updateCount);
+            yield return ("Slots", _updateCount);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

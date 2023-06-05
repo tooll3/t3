@@ -4,6 +4,7 @@
   "InputUis": [
     {
       "InputId": "3979e440-7888-4249-9975-74b21c6b813c"/*ThreadGroupSize*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 0.0,
         "Y": 45.0
@@ -11,6 +12,7 @@
     },
     {
       "InputId": "f79ccc37-05fd-4f81-97d6-6c1cafca180c"/*Count*/,
+      "Relevancy": "Required",
       "Position": {
         "X": 0.0,
         "Y": 90.0

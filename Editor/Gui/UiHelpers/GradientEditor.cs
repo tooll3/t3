@@ -17,11 +17,21 @@ namespace T3.Editor.Gui.UiHelpers
         /// <summary>
         /// Draw a gradient control that returns true, if gradient has been modified
         /// </summary>
-        public static bool Draw(Gradient gradient, ImDrawListPtr drawList, ImRect areaOnScreen)
+        public static bool Draw(ref Gradient gradientRef, ImDrawListPtr drawList, ImRect areaOnScreen, bool cloneIfModified = false)
         {
-            gradient.SortHandles();
+            var gradientForEditing = gradientRef;
 
-            DrawGradient(gradient, drawList, areaOnScreen);
+            if (cloneIfModified)
+            {
+                // gradientForEditing = gradientRef.TypedClone();
+                gradientForEditing = gradientRef != _hoveredGradientRef
+                                         ? gradientRef.TypedClone()
+                                         : _hoveredGradientForEditing;
+            }
+
+            gradientForEditing.SortHandles();
+
+            DrawGradient(gradientForEditing, drawList, areaOnScreen);
 
             if (!(areaOnScreen.GetHeight() >= RequiredHeightForHandles))
                 return false;
@@ -32,33 +42,39 @@ namespace T3.Editor.Gui.UiHelpers
             var modified = false;
 
             Gradient.Step removedStep = null;
-            foreach (var step in gradient.Steps)
+            foreach (var step in gradientForEditing.Steps)
             {
                 modified |= DrawHandle(step);
             }
 
             if (removedStep != null)
             {
-                gradient.Steps.Remove(removedStep);
+                gradientForEditing.Steps.Remove(removedStep);
                 modified = true;
             }
+            
+            if (cloneIfModified && hoveredStep != null)
+            {
+                _hoveredGradientForEditing = gradientForEditing;
+                _hoveredGradientRef = gradientRef;
+            }
 
-            // Insert new range
+            // Insert step area...
             var insertRangeMin = new Vector2(areaOnScreen.Min.X, areaOnScreen.Max.Y - StepHandleSize.Y);
             ImGui.SetCursorScreenPos(insertRangeMin);
 
             var canInsertNewStep = areaOnScreen.GetHeight() > MinInsertHeight && hoveredStep == null;
-            
+
             var normalizedPosition = (ImGui.GetMousePos().X - insertRangeMin.X) / areaOnScreen.GetWidth();
 
             if (ImGui.InvisibleButton("insertRange", areaOnScreen.Max - insertRangeMin) && canInsertNewStep)
             {
-                gradient.Steps.Add(new Gradient.Step()
-                                       {
-                                           NormalizedPosition = normalizedPosition,
-                                           Id = Guid.NewGuid(),
-                                           Color = gradient.Sample(normalizedPosition)
-                                       });
+                gradientForEditing.Steps.Add(new Gradient.Step()
+                                                 {
+                                                     NormalizedPosition = normalizedPosition,
+                                                     Id = Guid.NewGuid(),
+                                                     Color = gradientForEditing.Sample(normalizedPosition)
+                                                 });
                 modified = true;
             }
 
@@ -67,31 +83,32 @@ namespace T3.Editor.Gui.UiHelpers
                 var handleArea = GetHandleAreaForPosition(normalizedPosition);
                 drawList.AddRect(handleArea.Min + Vector2.One, handleArea.Max - Vector2.One, new Color(1f, 1f, 1f, 0.4f));
             }
-            
-            
+
             CustomComponents.ContextMenuForItem(() =>
                                                 {
                                                     if (ImGui.MenuItem("Reverse"))
                                                     {
-                                                        foreach (var s in gradient.Steps)
+                                                        foreach (var s in gradientForEditing.Steps)
                                                         {
                                                             s.NormalizedPosition = 1f - s.NormalizedPosition;
-                                                        }   
-                                                        gradient.SortHandles();
-                                                        modified = true;
-                                                    }
-
-                                                    if (ImGui.MenuItem("Distribute evenly", gradient.Steps.Count > 2))
-                                                    {
-                                                        for (var index = 0; index < gradient.Steps.Count; index++)
-                                                        {
-                                                            gradient.Steps[index].NormalizedPosition = (float)index / (gradient.Steps.Count -1);
                                                         }
 
-                                                        gradient.SortHandles();
+                                                        gradientForEditing.SortHandles();
                                                         modified = true;
                                                     }
-                                                    
+
+                                                    if (ImGui.MenuItem("Distribute evenly", gradientForEditing.Steps.Count > 2))
+                                                    {
+                                                        for (var index = 0; index < gradientForEditing.Steps.Count; index++)
+                                                        {
+                                                            gradientForEditing.Steps[index].NormalizedPosition =
+                                                                (float)index / (gradientForEditing.Steps.Count - 1);
+                                                        }
+
+                                                        gradientForEditing.SortHandles();
+                                                        modified = true;
+                                                    }
+
                                                     if (ImGui.BeginMenu("Gradient presets..."))
                                                     {
                                                         var foregroundDrawList = ImGui.GetForegroundDrawList();
@@ -104,8 +121,8 @@ namespace T3.Editor.Gui.UiHelpers
                                                             if (ImGui.InvisibleButton("" + index, new Vector2(100, ImGui.GetFrameHeight())))
                                                             {
                                                                 var clone = preset.TypedClone();
-                                                                gradient.Steps = clone.Steps;
-                                                                gradient.Interpolation = clone.Interpolation;
+                                                                gradientForEditing.Steps = clone.Steps;
+                                                                gradientForEditing.Interpolation = clone.Interpolation;
                                                                 modified = true;
                                                             }
 
@@ -127,7 +144,7 @@ namespace T3.Editor.Gui.UiHelpers
 
                                                         if (ImGui.MenuItem("Save"))
                                                         {
-                                                            UserSettings.Config.GradientPresets.Add(gradient.TypedClone());
+                                                            UserSettings.Config.GradientPresets.Add(gradientForEditing.TypedClone());
                                                             UserSettings.Save();
                                                         }
 
@@ -138,10 +155,10 @@ namespace T3.Editor.Gui.UiHelpers
                                                     {
                                                         foreach (Gradient.Interpolations value in Enum.GetValues(typeof(Gradient.Interpolations)))
                                                         {
-                                                            var isSelected = gradient.Interpolation == value;
+                                                            var isSelected = gradientForEditing.Interpolation == value;
                                                             if (ImGui.MenuItem(value.ToString(), "", isSelected))
                                                             {
-                                                                gradient.Interpolation = value;
+                                                                gradientForEditing.Interpolation = value;
                                                                 modified = true;
                                                             }
                                                         }
@@ -150,11 +167,18 @@ namespace T3.Editor.Gui.UiHelpers
                                                     }
                                                 }, "Gradient");
 
+            if (modified && cloneIfModified)
+            {
+                gradientRef = gradientForEditing;
+                _hoveredGradientRef = null;
+                _hoveredGradientForEditing = null;
+            }
+
             return modified;
 
             bool DrawHandle(Gradient.Step step)
             {
-                var handleModified = false;
+                var stepModified = false;
                 ImGui.PushID(step.Id.GetHashCode());
                 var handleArea = GetHandleAreaForPosition(step.NormalizedPosition);
 
@@ -188,7 +212,7 @@ namespace T3.Editor.Gui.UiHelpers
                     }
 
                     isDraggedOutside = ImGui.GetMousePos().Y > areaOnScreen.Max.Y + RemoveThreshold;
-                    handleModified = true;
+                    stepModified = true;
                 }
 
                 // Draw handle
@@ -201,7 +225,7 @@ namespace T3.Editor.Gui.UiHelpers
                 if (ImGui.IsItemDeactivated())
                 {
                     var mouseOutsideThresholdAfterDrag = ImGui.GetMousePos().Y > areaOnScreen.Max.Y + RemoveThreshold;
-                    if (mouseOutsideThresholdAfterDrag && gradient.Steps.Count > 1)
+                    if (mouseOutsideThresholdAfterDrag && gradientForEditing.Steps.Count > 1)
                         removedStep = step;
                 }
 
@@ -221,15 +245,15 @@ namespace T3.Editor.Gui.UiHelpers
                     && ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length() < UserSettings.Config.ClickThreshold
                     && !ImGui.IsPopupOpen("##colorEdit"))
                 {
-                    T3Ui.OpenedPopUpName = "##colorEdit";
+                    FrameStats.Current.OpenedPopUpName = "##colorEdit";
                     ImGui.OpenPopup("##colorEdit");
                     ImGui.SetNextWindowPos(new Vector2(handleArea.Min.X, handleArea.Max.Y));
                 }
 
                 var popUpResult = ColorEditPopup.DrawPopup(ref step.Color, step.Color);
-                handleModified |= popUpResult != InputEditStateFlags.Nothing;
+                stepModified |= popUpResult != InputEditStateFlags.Nothing;
                 ImGui.PopID();
-                return handleModified;
+                return stepModified;
             }
 
             ImRect GetHandleAreaForPosition(float normalizedStepPosition)
@@ -238,6 +262,20 @@ namespace T3.Editor.Gui.UiHelpers
                 return new ImRect(new Vector2(x, areaOnScreen.Max.Y - StepHandleSize.Y), new Vector2(x + StepHandleSize.X, areaOnScreen.Max.Y + 2));
             }
         }
+
+        /// <summary>
+        /// Dealing with default reference values is complex:
+        /// 1. We want to render the default gradient.
+        /// 2. We directly want to start manipulating from the default without modifying the default.
+        /// 3. We NEVER ever want to modify the references default gradient.
+        /// 4. To manipulate a gradient step we have to have a stable step GUID
+        ///
+        /// To do this, we...
+        /// - clone gradients before rendering (which results in new random ids for steps)
+        /// - reused a previously cloned gradient one of it's steps is being hovered.
+        /// </summary>
+        private static Gradient _hoveredGradientRef;
+        private static Gradient _hoveredGradientForEditing;
 
         private static void DrawGradient(Gradient gradient, ImDrawListPtr drawList, ImRect areaOnScreen)
         {

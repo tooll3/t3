@@ -69,8 +69,11 @@ namespace T3.Editor.Gui.Commands.Graph
             {
                 if (_wasDefault)
                 {
-                    var symbolChild = inputParentSymbol.Children.Single(child => child.Id == _childId);
-                    var input = symbolChild.InputValues[_inputId];
+                    var symbolChild = inputParentSymbol.Children.SingleOrDefault(child => child.Id == _childId);
+                    if (symbolChild == null)
+                        return;
+                    
+                    var input = symbolChild.Inputs[_inputId];
                     input.ResetToDefault();
                     InvalidateInstances(inputParentSymbol, symbolChild);
                 }
@@ -102,7 +105,7 @@ namespace T3.Editor.Gui.Commands.Graph
                 Log.Error($"Can't assign value to missing symbolChild {_childId}");
                 return;
             }
-            var input = symbolChild.InputValues[_inputId];
+            var input = symbolChild.Inputs[_inputId];
             
             if (_isAnimated)
             {

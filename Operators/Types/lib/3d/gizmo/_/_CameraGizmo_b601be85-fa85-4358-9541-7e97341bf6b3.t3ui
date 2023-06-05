@@ -5,10 +5,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "3681d5ec-1522-416d-85c8-973a80ec6c56"/*RadialPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 0.0,
         "Y": 0.0
@@ -16,10 +12,6 @@
     },
     {
       "ChildId": "7e5d4017-6aee-4429-b02b-be6bfb29f6cc"/*RadialPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 71.58887,
         "Y": 43.0
@@ -27,10 +19,6 @@
     },
     {
       "ChildId": "bc339a4b-cfac-4118-9c65-c28e109453fe"/*PairPointsForLines*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 221.58887,
         "Y": 43.0
@@ -38,10 +26,6 @@
     },
     {
       "ChildId": "5d37b825-6ef1-4a36-ab81-e01ddd8e20e2"/*_AppendPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 371.58887,
         "Y": 43.0
@@ -49,10 +33,6 @@
     },
     {
       "ChildId": "d06892d5-03c9-4140-ba0a-58f8bf85de09"/*DrawLines*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 821.58887,
         "Y": 0.0
@@ -60,10 +40,6 @@
     },
     {
       "ChildId": "a384dda1-45e1-4106-9d2b-c2cf0f2fcdb4"/*TransformPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 671.58887,
         "Y": 0.0
@@ -71,10 +47,6 @@
     },
     {
       "ChildId": "ce9c75ec-3798-42fd-8014-507ad938885e"/*RadialPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 371.58887,
         "Y": 0.0
@@ -82,10 +54,6 @@
     },
     {
       "ChildId": "ffa45004-e04a-4c58-9cdd-a76307f7e8f6"/*_AppendPoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 521.58887,
         "Y": 0.0
@@ -93,10 +61,6 @@
     },
     {
       "ChildId": "95be4cd5-fcd2-4931-b347-f29971a3ebe2"/*CylinderMesh*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 371.58887,
         "Y": 112.0
@@ -104,10 +68,6 @@
     },
     {
       "ChildId": "1fd84667-5ea1-455a-bf80-286fd20cab9b"/*SplitMeshVertices*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 521.5888,
         "Y": 112.0
@@ -115,10 +75,6 @@
     },
     {
       "ChildId": "98a016f6-8e7b-4650-9aa8-e43b0c6ee311"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 971.58887,
         "Y": 0.0
@@ -126,10 +82,6 @@
     },
     {
       "ChildId": "a2209b80-c8b6-4ab5-be63-4bc92e105be3"/*DrawMesh*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 821.58887,
         "Y": 112.0
@@ -137,10 +89,6 @@
     },
     {
       "ChildId": "3950e9fd-bf56-4fa9-ad5c-7189e079041e"/*TransformMesh*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 671.58887,
         "Y": 112.0

@@ -34,6 +34,11 @@ namespace T3.Core.Operator.Slots
 
         public override InputValue Clone()
         {
+            if (Value is IEditableInputType xxx)
+            {
+                return new InputValue<T>((T)xxx.Clone());
+            }
+
             return new InputValue<T>(Value);
         }
 

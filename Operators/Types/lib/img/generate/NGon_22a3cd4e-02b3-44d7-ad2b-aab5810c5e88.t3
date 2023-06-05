@@ -45,7 +45,7 @@
     },
     {
       "Id": "4d9bfddb-901e-4524-a99c-ba594d317e8a"/*Feather*/,
-      "DefaultValue": 1.0
+      "DefaultValue": 0.05
     },
     {
       "Id": "1df7ac79-b5c8-4f51-80e0-5f6503c3f158"/*FeatherBias*/,
@@ -64,7 +64,7 @@
     },
     {
       "Id": "e7a99144-1f59-42ae-bdac-906ca1e54e0d"/*Sides*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 3.0
     },
     {
       "Id": "c6c3d50e-9731-42cc-a0fc-ee8d15ac6cca"/*Radius*/,

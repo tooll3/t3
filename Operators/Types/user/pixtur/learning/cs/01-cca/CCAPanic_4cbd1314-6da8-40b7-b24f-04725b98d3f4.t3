@@ -260,11 +260,6 @@
       "SymbolId": "da93f7d1-ef91-4b4a-9708-2d9b1baa4c14",
       "InputValues": [
         {
-          "Id": "f10896b4-b8fa-4e16-a7ec-4a641ddda926"/*Bias*/,
-          "Type": "System.Single",
-          "Value": 0.85
-        },
-        {
           "Id": "c45d487b-3221-44c7-bf9e-b982a65280f6"/*Gradient*/,
           "Type": "T3.Core.DataTypes.Gradient",
           "Value": {

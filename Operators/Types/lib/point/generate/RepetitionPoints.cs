@@ -25,7 +25,6 @@ namespace T3.Operators.Types.Id_73d99108_f49a_48fb_aa5d_707c00abb1c2
         public RepetitionPoints()
         {
             ResultList.UpdateAction = Update;
-            //_pointListWithSeparator.TypedElements[2] = Point.Separator();
         }
         
         private void Update(EvaluationContext context)
@@ -34,7 +33,7 @@ namespace T3.Operators.Types.Id_73d99108_f49a_48fb_aa5d_707c00abb1c2
             var addSeparator = AddSeparator.GetValue(context);
             var startW = StartW.GetValue(context);
             
-            var offset = Offset.GetValue(context);
+            var offset = Phase.GetValue(context);
             var translateStep = Translate.GetValue(context);
             var rotateStep = Rotate.GetValue(context);
             var scaleStep = Scale.GetValue(context);
@@ -61,8 +60,7 @@ namespace T3.Operators.Types.Id_73d99108_f49a_48fb_aa5d_707c00abb1c2
                                                                            rotateStep.Y / 360.0f * (float)(2.0 * Math.PI) * u,
                                                                            rotateStep.Z / 360.0f * (float)(2.0 * Math.PI) * u);
                 var scale = (SharpDX.Vector3.One - scaleStep) * u + SharpDX.Vector3.One;
-                //var scale = Vector3.One;
-                
+
                 var transform = Matrix.Transformation(scalingCenter: SharpDX.Vector3.Zero, 
                                                       scalingRotation: SharpDX.Quaternion.Identity, 
                                                       scaling: scale, 
@@ -77,7 +75,7 @@ namespace T3.Operators.Types.Id_73d99108_f49a_48fb_aa5d_707c00abb1c2
                 SharpDX.Vector4.Transform(ref v, ref transform, out SharpDX.Vector4 pos);
             
                 _pointList.TypedElements[i].Position = new Vector3(pos.X, pos.Y, pos.Z);
-                _pointList.TypedElements[i].W = scale.Length() + startW;
+                _pointList.TypedElements[i].W = scale.Length() / Vector3.One.Length() + startW;
                 _pointList.TypedElements[i].Orientation =  new Quaternion(rotation.X, rotation.Y, rotation.Z, rotation.W);
             }
             
@@ -98,6 +96,9 @@ namespace T3.Operators.Types.Id_73d99108_f49a_48fb_aa5d_707c00abb1c2
         [Input(Guid = "4213911b-4103-481f-85c6-9bccac116264")]
         public readonly InputSlot<Vector3> StartPosition = new();
 
+        [Input(Guid = "2f1383f3-f5ae-4f2d-bb8e-0ad8e35dd621")]
+        public readonly InputSlot<float> StartW = new();
+
         [Input(Guid = "3A1A829D-D273-4EC0-B327-30BE0E0463C4")]
         public readonly InputSlot<Vector3> Translate = new();
 
@@ -107,20 +108,17 @@ namespace T3.Operators.Types.Id_73d99108_f49a_48fb_aa5d_707c00abb1c2
         [Input(Guid = "5956A2C7-ADDC-409A-87D8-62E67DA212F4")]
         public readonly InputSlot<float> Scale = new();
 
-        
         [Input(Guid = "AF208E67-43BB-4C09-8076-859E7FEFA93F")]
         public readonly InputSlot<Vector3> Rotate = new();
-
-        [Input(Guid = "AF3C87E3-889D-410F-B4BC-62BD29BEE8FA")]
-        public readonly InputSlot<float> Offset = new();
-
         
         [Input(Guid = "283f9939-7b04-4733-8130-edcf34305fe5")]
         public readonly InputSlot<Vector3> Pivot = new();
-        
-        [Input(Guid = "2f1383f3-f5ae-4f2d-bb8e-0ad8e35dd621")]
-        public readonly InputSlot<float> StartW = new();
 
+        [Input(Guid = "AF3C87E3-889D-410F-B4BC-62BD29BEE8FA")]
+        public readonly InputSlot<float> Phase = new();
+
+        
+        
         [Input(Guid = "ff0c0b01-6272-4580-8ce0-8629c7807d68")]
         public readonly InputSlot<bool> AddSeparator = new();
     }

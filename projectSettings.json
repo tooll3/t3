@@ -1,5 +1,6 @@
 {
-  "TimeClipSuspending": false,
-  "MainOperatorName": "CarpeDiem",
-  "AudioResyncThreshold": 0.04
+  "TimeClipSuspending": true,
+  "MainOperatorName": "WFE_RoughtCut",
+  "AudioResyncThreshold": 0.04,
+  "EnablePlaybackControlWithKeyboard": false
 }

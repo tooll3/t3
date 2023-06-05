@@ -20,6 +20,9 @@ namespace T3.Operators.Types.Id_9df0e38e_ccf1_405a_ab18_6586e652cdf1
         [Input(Guid = "76343cef-1851-4627-b0a7-477e0b33915c")]
         public readonly InputSlot<bool> DarkOnWhite = new InputSlot<bool>();
 
+        [Input(Guid = "c88b36f7-d8c1-4fa6-9fd1-b002f9850196")]
+        public readonly InputSlot<int> SceneIndex = new InputSlot<int>();
+
         [Output(Guid = "2c1800cd-ea63-4cd5-baf4-582a8127d50f")]
         public readonly Slot<float> NewPlaybackSpeed = new Slot<float>();
 

@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -48,6 +49,9 @@ namespace T3.Operators.Types.Id_2c3d2c26_ac45_42e9_8f13_6ea338333568
 
         [Input(Guid = "d6e157fb-5300-4a9a-aea8-8b0ea0104ea3")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+
+        [Input(Guid = "1d0cf561-858d-4510-95c4-f3ad9148355d", MappedType = typeof(SharedEnums.RgbBlendModes))]
+        public readonly InputSlot<int> BlendMode = new InputSlot<int>();
 
         private enum Modes
         {

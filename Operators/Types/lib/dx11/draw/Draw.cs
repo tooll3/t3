@@ -10,21 +10,26 @@ namespace T3.Operators.Types.Id_9b28e6b9_1d1f_42d8_8a9e_33497b1df820
 {
     public class Draw : Instance<Draw>, IRenderStatsProvider
     {
-        [Output(Guid = "49B28DC3-FCD1-4067-BC83-E1CC848AE55C", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
+        [Output(Guid = "49B28DC3-FCD1-4067-BC83-E1CC848AE55C")]
         public readonly Slot<Command> Output = new Slot<Command>();
 
+        
         public Draw()
         {
-            if (!_registeredForStats)
+            lock (_lock)
             {
-                RenderStatsCollector.RegisterProvider(this);
-                _registeredForStats = true;
+                if (!_registeredForStats)
+                {
+                    RenderStatsCollector.RegisterProvider(this);
+                    _registeredForStats = true;
+                }
             }
             Output.UpdateAction = Update;
         }
 
         private void Update(EvaluationContext context)
         {
+            //Log.Debug("Draw2", this);
             var vertexCount = VertexCount.GetValue(context);
             var startVertexLocation = VertexStartLocation.GetValue(context);
             
@@ -52,6 +57,11 @@ namespace T3.Operators.Types.Id_9b28e6b9_1d1f_42d8_8a9e_33497b1df820
             deviceContext.Draw(vertexCount, startVertexLocation);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            RenderStatsCollector.UnregisterProvider(this);
+            base.Dispose(disposing);
+        }
 
         public IEnumerable<(string, int)> GetStats()
         {
@@ -71,6 +81,7 @@ namespace T3.Operators.Types.Id_9b28e6b9_1d1f_42d8_8a9e_33497b1df820
         private static int _drawCallCount;
         private static bool _registeredForStats;
         private static readonly Dictionary<string, int> _statResults = new();
+        private static readonly object _lock = new ();
         
         [Input(Guid = "8716B11A-EF71-437E-9930-BB747DA818A7")]
         public readonly InputSlot<int> VertexCount = new InputSlot<int>();

@@ -51,12 +51,17 @@ namespace T3.Editor.Gui.Interaction
         Duplicate,
         LayoutSelection,
         ToggleDisabled,
+        ToggleBypassed,
         AddAnnotation,
+        
+        ToggleSnapshotControl,
         
         ScrollLeft,
         ScrollRight,
         ScrollUp,
         ScrollDown,
+        ZoomIn,
+        ZoomOut,
         
         // Layout and window management
         ToggleFocusMode,
@@ -143,10 +148,10 @@ namespace T3.Editor.Gui.Interaction
                 if (binding.Action != action)
                     continue;
 
-                if (binding.NeedsWindowFocus && !ImGui.IsWindowFocused())
+                if (binding.NeedsWindowFocus && !ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows))
                     continue;
 
-                if (binding.NeedsWindowHover && !ImGui.IsWindowHovered())
+                if (binding.NeedsWindowHover && !ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows))
                     continue;
 
                 var c = binding.Combination;
@@ -247,6 +252,7 @@ namespace T3.Editor.Gui.Interaction
                             
                             // Graph window
                             new KeyboardBinding(UserActions.ToggleDisabled, new KeyCombination(Key.D, shift:true)) { NeedsWindowFocus = true },
+                            new KeyboardBinding(UserActions.ToggleBypassed, new KeyCombination(Key.B, shift:true)) { NeedsWindowFocus = true },
                             new KeyboardBinding(UserActions.PinToOutputWindow, new KeyCombination(Key.P)) { NeedsWindowFocus = true },
                             new KeyboardBinding(UserActions.DisplayImageAsBackground, new KeyCombination(Key.P, ctrl:true)) { NeedsWindowFocus = false },
                             new KeyboardBinding(UserActions.ClearBackgroundImage, new KeyCombination(Key.P, ctrl:true, shift: true)) { NeedsWindowFocus = true },
@@ -257,8 +263,7 @@ namespace T3.Editor.Gui.Interaction
 
                             // Layout and window management
                             new KeyboardBinding(UserActions.ToggleFocusMode, new KeyCombination(Key.Esc, shift: true)),
-                            new KeyboardBinding(UserActions.ToggleFocusMode, new KeyCombination(Key.Esc, shift: true)),
-                            
+
                             new KeyboardBinding(UserActions.LoadBookmark1, new KeyCombination(Key.D1, ctrl: true)),
                             new KeyboardBinding(UserActions.LoadBookmark2, new KeyCombination(Key.D2, ctrl: true)),
                             new KeyboardBinding(UserActions.LoadBookmark3, new KeyCombination(Key.D3, ctrl: true)),

@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using T3.Core.DataTypes;
+using T3.Core.Operator;
 using T3.Editor.Gui.TableView;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs
@@ -18,7 +19,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                        };
         }
         
-        protected override InputEditStateFlags DrawEditControl(string name, ref StructuredList slist)
+        protected override InputEditStateFlags DrawEditControl(string name, SymbolChild.Input input, ref StructuredList slist, bool readOnly)
         {
             if (slist == null)
             {

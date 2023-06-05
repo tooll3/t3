@@ -262,8 +262,8 @@
       "ActivationIndex": 12,
       "Title": "untitled",
       "PosOnCanvas": {
-        "X": 179.28653,
-        "Y": 302.55157
+        "X": 163.0,
+        "Y": 279.0
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -294,8 +294,8 @@
       "ActivationIndex": 13,
       "Title": "untitled",
       "PosOnCanvas": {
-        "X": 489.0,
-        "Y": 302.55157
+        "X": 326.0,
+        "Y": 186.0
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {

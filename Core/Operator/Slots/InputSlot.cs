@@ -11,7 +11,7 @@ namespace T3.Core.Operator.Slots
         public InputSlot(InputValue<T> typedInputValue)
         {
             UpdateAction = InputUpdate;
-            _defaultUpdateAction = UpdateAction;
+            _keepOriginalUpdateAction = UpdateAction;
             TypedInputValue = typedInputValue;
             Value = typedInputValue.Value;
         }
@@ -19,7 +19,7 @@ namespace T3.Core.Operator.Slots
         public InputSlot() : this(default(T))
         {
             UpdateAction = InputUpdate;
-            _defaultUpdateAction = UpdateAction;
+            _keepOriginalUpdateAction = UpdateAction;
         }
 
         public InputSlot(T value) : this(new InputValue<T>(value))
@@ -45,7 +45,6 @@ namespace T3.Core.Operator.Slots
                 if (_input.IsDefault && TypedDefaultValue.IsEditableInputReferenceType)
                 {
                     TypedInputValue.AssignClone(TypedDefaultValue);
-                    _input.IsDefault = false;
                 }
             }
         }

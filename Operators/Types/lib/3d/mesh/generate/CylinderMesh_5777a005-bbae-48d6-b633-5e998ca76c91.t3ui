@@ -1,6 +1,6 @@
 {
   "Id": "5777a005-bbae-48d6-b633-5e998ca76c91"/*CylinderMesh*/,
-  "Description": "Creates a cylinder mesh with or without closing caps. You can use the Height, Fill, and RadiusOffset parameters to generate things like pie charts, torus diagrams, Cones and other shapes.\n\nCheck the presets.\n\nAlso see [NGonMesh]",
+  "Description": "Creates a cylinder mesh with or without closing caps. You can use the Height, Fill, and RadiusOffset parameters to generate things like pie charts, torus diagrams, Cones and other shapes.\n\nCheck the presets.\n\nTip:\n- set the cap segments to 0 to skip drawing caps.\n\nAlso see [NGonMesh]",
   "InputUis": [
     {
       "InputId": "66332a91-e0c2-442a-99f6-347dedaed72e"/*Center*/,

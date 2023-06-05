@@ -27,11 +27,11 @@ namespace T3.Editor.Gui.Graph
             
             if (_focusedInstanceId == Guid.Empty)
             {
-                if ((renameTriggered || ImGui.IsWindowFocused()) 
+                if ((renameTriggered || ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows) || ImGui.IsWindowFocused()) 
                     && !ImGui.IsAnyItemActive() 
                     && !ImGui.IsAnyItemFocused() 
                     && (renameTriggered || ImGui.IsKeyPressed((ImGuiKey)Key.Return))
-                    && string.IsNullOrEmpty(T3Ui.OpenedPopUpName))
+                    && string.IsNullOrEmpty(FrameStats.Current.OpenedPopUpName))
                 {
                     var selectedInstances = NodeSelection.GetSelectedNodes<SymbolChildUi>().ToList();
                     if (_nextFocusedInstanceId != Guid.Empty)

@@ -64,6 +64,13 @@
       "Max": 0.99,
       "Scale": 0.01,
       "Clamp": true
+    },
+    {
+      "InputId": "06e511d2-891a-4f81-b49e-327410a2cb95"/*TimeMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 360.0
+      }
     }
   ],
   "SymbolChildUis": [],
@@ -73,6 +80,13 @@
       "Position": {
         "X": 149.09799,
         "Y": -6.8220024
+      }
+    },
+    {
+      "OutputId": "863c0a57-e893-4536-9efe-6d001cb9d999"/*HasCompleted*/,
+      "Position": {
+        "X": 149.09799,
+        "Y": 93.17799
       }
     }
   ]

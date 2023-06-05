@@ -9,27 +9,6 @@
       },
       "Min": -1.0,
       "Max": 1.0
-    },
-    {
-      "InputId": "90045a45-f549-4cb5-b57c-c39a0664e84f"/*SliderMin*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 379.0
-      }
-    },
-    {
-      "InputId": "1785eabd-54fa-4b8c-ae5a-54112c2e50b8"/*SliderMax*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 424.0
-      }
-    },
-    {
-      "InputId": "97eaecbb-9290-4d23-932d-dc183ebfcda6"/*ClampSlider*/,
-      "Position": {
-        "X": 36.0,
-        "Y": 469.0
-      }
     }
   ],
   "SymbolChildUis": [],

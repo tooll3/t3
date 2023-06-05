@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>T3.MSWindows</RootNamespace>
+        <AssemblyName>MSWindows</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SystemUi\SystemUi.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="System.Windows.Forms">
+        <HintPath>..\..\..\..\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\6.0.16\System.Windows.Forms.dll</HintPath>
+      </Reference>
+      <Reference Include="System.Windows.Forms.Primitives">
+        <HintPath>..\..\..\..\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\6.0.16\System.Windows.Forms.Primitives.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

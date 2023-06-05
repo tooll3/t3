@@ -103,7 +103,7 @@ namespace T3.Editor.Gui.TableView
                         var o = fi.GetValue(obj);
                         if (o is float f)
                         {
-                            if (DrawFloatManipulation(ref f, fieldIndex))
+                            if (DrawFloatManipulation(ref f, objectIndex* 1000+ fieldIndex))
                             {
                                 fi.SetValue(obj, f);
                                 objModified = true;
@@ -212,8 +212,8 @@ namespace T3.Editor.Gui.TableView
                 {
                     ImGui.PushStyleColor(ImGuiCol.Text, Color.DarkGray.Rgba);
                 }
-                
-                var fieldModified = ImGui.DragFloat("##sdf", ref f);
+
+                var fieldModified = ImGui.DragFloat("##sdf", ref f, 0.01f);
 
                 if (grayedOut)
                 {

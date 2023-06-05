@@ -19,8 +19,6 @@ namespace T3.Editor.Gui.Windows.Variations
     {
         public static bool Draw(VariationBaseCanvas canvas, Variation variation, ImDrawListPtr drawList, ShaderResourceView canvasSrv, ImRect uvRect)
         {
-            
-            
             if (VariationForRenaming == variation)
             {
                 ImGui.PushID(variation.ActivationIndex);
@@ -31,25 +29,21 @@ namespace T3.Editor.Gui.Windows.Variations
                 if (ImGui.IsItemDeactivatedAfterEdit() || ImGui.IsItemDeactivated())
                 {
                     VariationForRenaming = null;
-                    VariationHandling.ActivePoolForPresets.SaveVariationsToFile();
+                    if (VariationHandling.ActivePoolForPresets != null)
+                    {
+                        VariationHandling.ActivePoolForPresets.SaveVariationsToFile();
+                    }
+                    else if (VariationHandling.ActiveInstanceForSnapshots != null)
+                    {
+                        VariationHandling.ActivePoolForSnapshots.SaveVariationsToFile();
+                    }
                 }
 
                 ImGui.PopID();
             }
 
             var focusOpacity = 1f;
-            if (variation.IsSnapshot && VariationHandling.FocusSetsForCompositions.TryGetValue(VariationHandling.ActiveInstanceForSnapshots.Symbol.Id, out var focusSet))
-            {
-                var isWithinFocus = false;
-                foreach (var childId in variation.ParameterSetsForChildIds.Keys)
-                {
-                    if (focusSet.Contains(childId))
-                        isWithinFocus = true;
-                }
-
-                focusOpacity = isWithinFocus ? 1 : 0.2f;
-            }
-                
+            
             _canvas = canvas;
             var pMin = canvas.TransformPosition(variation.PosOnCanvas);
             var sizeOnScreen = canvas.TransformDirectionFloored(ThumbnailSize);

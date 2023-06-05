@@ -19,10 +19,21 @@ namespace T3.Operators.Types.Id_cea732a4_c4c2_40df_a0ff_f209125e7c99
         [Input(Guid = "40420d46-f866-411e-a5fa-6d3996c6cf10")]
         public readonly InputSlot<float> Visibility = new InputSlot<float>();
 
-        [Input(Guid = "69707763-2952-493d-8ccd-c41bf9b86ca0")]
+        [Input(Guid = "69707763-2952-493d-8ccd-c41bf9b86ca0", MappedType = typeof(Styles))]
         public readonly InputSlot<int> Style = new InputSlot<int>();
 
+        [Input(Guid = "68151ebb-2476-4f30-a41d-1425fe48a4e5")]
+        public readonly InputSlot<bool> ShowDebug = new InputSlot<bool>();
 
+        [Input(Guid = "eae23f5a-68ef-464e-a7e5-a465b01370de")]
+        public readonly InputSlot<System.Numerics.Vector3> Translation = new InputSlot<System.Numerics.Vector3>();
+
+
+        private enum Styles
+        {
+            WhiteOnBlack,
+            BlackOnWhite,
+        }
     }
 }
 

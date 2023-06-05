@@ -43,10 +43,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "af0eccfc-3655-4aed-ba13-72e5e4b857e1"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 107.91193,
         "Y": 203.6352
@@ -54,10 +50,6 @@
     },
     {
       "ChildId": "4db19a19-38f3-4fdd-a2c9-d258eee8772f"/*ComputeShaderStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 127.0
-      },
       "Position": {
         "X": 499.13733,
         "Y": 199.82413
@@ -65,10 +57,6 @@
     },
     {
       "ChildId": "26138413-215b-4abe-a509-8b11b14eeb28"/*FloatsToBuffer*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": 269.3983,
         "Y": 328.45685
@@ -76,10 +64,6 @@
     },
     {
       "ChildId": "d034136a-61f3-4d93-a0a6-1aa135210d9f"/*GetSRVProperties*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -783.6004,
         "Y": 246.75826
@@ -87,10 +71,6 @@
     },
     {
       "ChildId": "c93bb7cc-79f4-4aa4-b857-49e8f73a2eac"/*ExecuteBufferUpdate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 1211.2576,
         "Y": -150.8234
@@ -98,10 +78,6 @@
     },
     {
       "ChildId": "7439911c-859f-4f0e-be2c-188b4fa1e890"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": 269.3983,
         "Y": 259.45685
@@ -109,10 +85,6 @@
     },
     {
       "ChildId": "b00a56e7-cdb5-44c4-ae06-d047f320bd6f"/*AddInts*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -783.6004,
         "Y": 190.75826
@@ -120,10 +92,6 @@
     },
     {
       "ChildId": "77fa6ac7-ed5c-4b0e-b7d8-c38152be5ef5"/*MultiplyInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": -485.2234,
         "Y": 183.75716
@@ -131,10 +99,6 @@
     },
     {
       "ChildId": "61b5d86f-8887-41f8-896d-f43fe24915f9"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 119.39828,
         "Y": 328.45685
@@ -142,10 +106,6 @@
     },
     {
       "ChildId": "0899e1e9-7904-48ab-a49d-fa5ea788265b"/*StructuredBuffer2*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -342.2774,
         "Y": 139.50482
@@ -153,10 +113,6 @@
     },
     {
       "ChildId": "81c25e23-2498-40aa-82ab-41b0bd8c169a"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -172.91103,
         "Y": 90.5401
@@ -164,10 +120,6 @@
     },
     {
       "ChildId": "d52520c4-cab7-4dc1-97d0-aa00f943d221"/*GetBufferComponents*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -1032.7197,
         "Y": 488.0679
@@ -175,10 +127,6 @@
     },
     {
       "ChildId": "5f66c180-c547-488e-8a7c-09e2fd907323"/*Counter*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 119.39828,
         "Y": 384.45682
@@ -186,10 +134,6 @@
     },
     {
       "ChildId": "f58e6118-455c-432e-9d96-1c60ee229afd"/*HasIntChanged*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -698.4326,
         "Y": -203.00441
@@ -197,10 +141,6 @@
     },
     {
       "ChildId": "579708d8-8488-40d9-a63e-98e4977d65d9"/*ComputeShader*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -348.5007,
         "Y": -87.0076
@@ -208,10 +148,6 @@
     },
     {
       "ChildId": "a7193711-4814-4e56-9964-3aa854204ee7"/*ComputeShaderStage*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": 38.74858,
         "Y": -170.90097
@@ -219,10 +155,6 @@
     },
     {
       "ChildId": "bc378a28-7ae4-43e5-9b66-15114b7c163e"/*CalcDispatchCount*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": -157.89545,
         "Y": -153.43925
@@ -230,10 +162,6 @@
     },
     {
       "ChildId": "671fe7f3-b820-4bd1-a793-f7a3996c98d3"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 191.44696,
         "Y": -220.155
@@ -241,10 +169,6 @@
     },
     {
       "ChildId": "acb045c1-7104-4d75-936f-e09df6e0e9d0"/*Execute*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 684.5636,
         "Y": -168.87582
@@ -252,10 +176,6 @@
     },
     {
       "ChildId": "5f0bdce4-6134-4870-b65b-c570117003cd"/*HasTimeChanged*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -698.4326,
         "Y": -246.0044
@@ -263,10 +183,6 @@
     },
     {
       "ChildId": "0c8caa25-78dd-4af4-a3ad-6a64fb6f7b77"/*Any*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 75.0
-      },
       "Position": {
         "X": -548.4326,
         "Y": -246.0044
@@ -274,10 +190,6 @@
     },
     {
       "ChildId": "09e0f893-38b8-4c1d-b621-9c3f0067abf6"/*HasTimeChanged*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": 15.544006,
         "Y": 854.29333
@@ -285,10 +197,6 @@
     },
     {
       "ChildId": "d50db386-d5aa-44f6-bb7b-b4739672bfb1"/*GetIntVar*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -306.62268,
         "Y": 767.3782
@@ -296,10 +204,6 @@
     },
     {
       "ChildId": "df35cbf5-d2ce-4ea3-b249-188afe3068e9"/*CompareInt*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -156.62268,
         "Y": 767.3782
@@ -307,10 +211,6 @@
     },
     {
       "ChildId": "51038808-7536-4ee1-a759-2bc62c6dd268"/*All*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": 195.93655,
         "Y": 815.73126

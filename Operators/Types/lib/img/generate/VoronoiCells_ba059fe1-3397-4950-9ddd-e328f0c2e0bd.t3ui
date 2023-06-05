@@ -62,10 +62,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "ac5f45de-7b15-4563-8d92-cb54f065a808"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -20.37726,
         "Y": 12.897135
@@ -73,10 +69,6 @@
     },
     {
       "ChildId": "513b1255-f9c5-4a08-bf30-db3a1641ade0"/*Vector4ToFloat4*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -20.37726,
         "Y": 68.89713
@@ -96,10 +88,6 @@
     },
     {
       "ChildId": "558e8dd4-f524-4798-817b-743837996458"/*BoolToFloats*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -20.37726,
         "Y": 124.89713

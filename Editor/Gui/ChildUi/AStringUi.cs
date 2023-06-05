@@ -1,5 +1,6 @@
 ﻿using System;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
@@ -60,9 +61,10 @@ namespace T3.Editor.Gui.ChildUi
             // Draw viewer
             else
             {
+                //Log.Debug("hovered " + ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows | ImGuiHoveredFlags.AllowWhenBlockedByPopup | ImGuiHoveredFlags.AllowWhenDisabled ) + " focus" + ImGui.IsWindowFocused(), stringInstance);
                 usableArea.Expand(GraphCanvas.Current.Scale.X < 0.75f ? 0 : -4);
                 if (usableArea.Contains(ImGui.GetMousePos())
-                    && ImGui.IsWindowHovered()
+                    && (ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) || ImGui.IsWindowFocused())
                     && ImGui.IsMouseReleased(ImGuiMouseButton.Left)
                     && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left, 0).Length() < UserSettings.Config.ClickThreshold)
                 {
@@ -81,7 +83,7 @@ namespace T3.Editor.Gui.ChildUi
 
             ImGui.PopFont();
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventOpenSubGraph | SymbolChildUi.CustomUiResult.PreventTooltip;
+            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventOpenSubGraph | SymbolChildUi.CustomUiResult.PreventTooltip | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
         }
 
         private static Guid _focusedInstanceId;

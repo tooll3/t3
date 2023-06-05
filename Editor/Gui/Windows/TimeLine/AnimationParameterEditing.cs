@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Editor.Gui.Interaction.WithCurves;
@@ -45,10 +46,11 @@ namespace T3.Editor.Gui.Windows.TimeLine
         protected override void ViewAllOrSelectedKeys(bool alsoChangeTimeRange = false)
         {
             var bounds = GetBoundsOnCanvas(GetSelectedOrAllPoints());
-            TimeLineCanvas.Current.SetScopeToCanvasArea(bounds, flipY:true);
+            TimeLineCanvas.Current.SetScopeToCanvasArea(bounds, flipY:true, null, 300, 1000);
         }
 
         protected List<TimeLineCanvas.AnimationParameter> AnimationParameters;
         protected TimeLineCanvas TimeLineCanvas; // This gets initialized in constructor of implementations 
+        public static bool CurvesTablesNeedsRefresh;
     }
 }

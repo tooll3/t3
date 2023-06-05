@@ -49,10 +49,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "7cf1c6fe-79f7-47bf-9524-4405ab4218fd"/*_ImageFxShaderSetupStatic*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 114.0
-      },
       "Position": {
         "X": 344.9021,
         "Y": 283.4281
@@ -60,10 +56,6 @@
     },
     {
       "ChildId": "28e1c561-216a-4988-b59d-09a7109d3490"/*IntToFloat*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -85.75668,
         "Y": 441.74847

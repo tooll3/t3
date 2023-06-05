@@ -9,7 +9,7 @@ namespace T3.Core.Operator.Slots.Research
         public ConverterSlot(Slot<TFrom> sourceSlot, Func<TFrom, TTo> converterFunc)
         {
             UpdateAction = Update;
-            _defaultUpdateAction = UpdateAction;
+            _keepOriginalUpdateAction = UpdateAction;
             SourceSlot = sourceSlot;
             //var floatToInt = new Converter2<float, int>(f => (int)f);
             _converterFunc = converterFunc;

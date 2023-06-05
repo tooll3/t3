@@ -28,6 +28,9 @@ namespace T3.Operators.Types.Id_17188f49_1243_4511_a46c_1804cae10768
 
         [Input(Guid = "132584c0-c27c-448a-b31d-ae72f0fb4baa")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+
+        [Input(Guid = "1843683c-53a2-4862-a9a5-4b3afe729ace")]
+        public readonly InputSlot<bool> UseVertexSelection = new InputSlot<bool>();
     }
 }
 

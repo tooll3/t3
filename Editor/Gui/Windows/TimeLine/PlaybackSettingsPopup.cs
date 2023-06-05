@@ -12,7 +12,6 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Graph;
-using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -31,7 +30,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 return;
             }
 
-            T3Ui.OpenedPopUpName = PlaybackSettingsPopupId;
+            FrameStats.Current.OpenedPopUpName = PlaybackSettingsPopupId;
+            FrameStats.Current.IsItemContextMenuOpen = true;
 
             ImGui.PushFont(Fonts.FontLarge);
             ImGui.TextUnformatted("Playback settings");
@@ -49,7 +49,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             FormInputs.SetIndent(0);
 
-            PlaybackUtils.FindPlaybackSettings(composition, out var compositionWithSettings, out var settings);
+            PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var compositionWithSettings, out var settings);
             //var compositionSettings = compWithSoundtrack == composition ? composition.Symbol.PlaybackSettings : null;
 
             // Main toggle with composition name 

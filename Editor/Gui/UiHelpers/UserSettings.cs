@@ -21,7 +21,6 @@ namespace T3.Editor.Gui.UiHelpers
         }
 
         
-
         public class ConfigData
         {
             public readonly Dictionary<Guid, ScalableCanvas.Scope> OperatorViewSettings = new Dictionary<Guid, ScalableCanvas.Scope>();
@@ -56,8 +55,17 @@ namespace T3.Editor.Gui.UiHelpers
             public float ScrollSmoothing = 0.06f;
             public float TooltipDelay = 1.2f;
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
+            public bool AdjustCameraSpeedWithMouseWheel = false;
+
+
+            public ParameterModes ParameterMode = ParameterModes.CreatesConnectedOp; 
             public float CameraSpeed = 1;
+            
+            public bool MouseWheelEditsNeedCtrlKey = true;
             public bool AutoPinAllAnimations = false;
+
+            public bool RepositionLoopRangeOnClick = false;
+            
             
             public float KeyboardScrollAcceleration = 2.5f;
 
@@ -71,7 +79,6 @@ namespace T3.Editor.Gui.UiHelpers
             // Other settings
             public float GizmoSize = 100;
             public bool SwapMainAnd2ndWindowsWhenFullscreen = false;
-            public bool EnableStartupConsistencyCheck = true;
 
             // Timeline
             public float TimeRasterDensity = 1f;
@@ -89,6 +96,13 @@ namespace T3.Editor.Gui.UiHelpers
             public List<Gradient> GradientPresets = new();
 
             
+        }
+
+        public enum ParameterModes
+        {
+            CreatesConnectedOp,
+            AnimatesInput,
+            ShowContextMenu,
         }
 
         public static bool IsUserNameDefined()

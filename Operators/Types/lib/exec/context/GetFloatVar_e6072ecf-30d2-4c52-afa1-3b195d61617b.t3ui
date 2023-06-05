@@ -9,6 +9,13 @@
         "Y": 0.0
       },
       "Usage": "Default"
+    },
+    {
+      "InputId": "ae76829b-d17d-4443-9cf1-63e3c44b90c8"/*FallbackDefault*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
     }
   ],
   "SymbolChildUis": [],

@@ -28,10 +28,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "524dda12-de31-4378-87bd-9e587c087871"/*PlayVideo*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 62.0
-      },
       "Position": {
         "X": -84.20642,
         "Y": 11.760132
@@ -39,10 +35,6 @@
     },
     {
       "ChildId": "a054b8bc-67ad-4610-92a9-d51d1d57aab4"/*Layer2d*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 336.13715,
         "Y": -14.279541
@@ -50,10 +42,6 @@
     },
     {
       "ChildId": "49676bbc-9566-479e-87ff-68741dedf878"/*_VideoFormatConversion*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": 65.79358,
         "Y": 11.760132

@@ -1,7 +1,7 @@
-mkdir ..\T3\bin\Debug\net6.0-windows
+mkdir ..\Editor\bin\Debug\net6.0-windows
 xcopy /S dependencies\*.dll ..\Editor\bin\Debug\net6.0-windows\
 
-mkdir ..\T3\bin\Release\net6.0-windows
+mkdir ..\Editor\bin\Release\net6.0-windows
 xcopy /S dependencies\*.dll ..\Editor\bin\Release\net6.0-windows\
 
 mkdir ..\Player\bin\Release\net6.0-windows

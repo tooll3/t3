@@ -232,11 +232,10 @@ namespace T3.Editor.Gui
             return lastInputUi.PosOnCanvas + new Vector2(0, lastInputUi.Size.Y + SelectableNodeMovement.SnapPadding.Y);
         }
 
-        public Guid AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size)
+        public Guid AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size, string name = null)
         {
             HasBeenModified = true;
-
-            Symbol.AddChild(symbolToAdd, addedChildId);
+            Symbol.AddChild(symbolToAdd, addedChildId, name);
             var childUi = new SymbolChildUi
                           {
                               SymbolChild = Symbol.Children.Find(entry => entry.Id == addedChildId),

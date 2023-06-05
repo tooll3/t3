@@ -30,8 +30,9 @@ namespace T3.Editor.Gui.ChildUi
                             :(double)valueInstance.Float.TypedInputValue.Value;
             
             // Draw slider
-            var rangeMin = valueInstance.SliderMin.TypedInputValue.Value;
-            var rangeMax = valueInstance.SliderMax.TypedInputValue.Value;
+            const float rangeMin = 0f;
+            const float rangeMax = 1f;
+            
             if (MathF.Abs(rangeMax - rangeMin) > 0.0001f)
             {
                 var f = MathUtils.NormalizeAndClamp((float)value, rangeMin, rangeMax);
@@ -45,11 +46,11 @@ namespace T3.Editor.Gui.ChildUi
                                        T3Style.Colors.GraphActiveLine);
             }
             
-            // Slider Range
-            if (rangeMin == 0 && rangeMax != 0)
-            {
-                ValueLabel.Draw(drawList, area, new Vector2(1, 1), valueInstance.SliderMax);
-            }
+            // // Slider Range
+            // if (rangeMin == 0 && rangeMax != 0)
+            // {
+            //     ValueLabel.Draw(drawList, area, new Vector2(1, 1), valueInstance.SliderMax);
+            // }
 
             // Interaction
             {
@@ -75,10 +76,6 @@ namespace T3.Editor.Gui.ChildUi
                                                            0.01f);
                             if (modified)
                             {
-                                if (valueInstance.ClampSlider.TypedInputValue.Value)
-                                {
-                                    value = value.Clamp(rangeMin, rangeMax);
-                                }
                                 inputSlot.TypedInputValue.Value = (float)value;
                                 inputSlot.Input.IsDefault = false;
                                 inputSlot.DirtyFlag.Invalidate();

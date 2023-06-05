@@ -177,7 +177,11 @@ namespace T3.Editor.Gui.Windows
                 return NodeSelection.GetFirstSelectedInstance();
 
             var instance = NodeOperations.GetInstanceFromIdPath(_pinnedInstancePath);
-            return instance ?? NodeSelection.GetFirstSelectedInstance();
+            if (instance != null)
+                return instance;
+            
+            _isPinned = false;
+            return NodeSelection.GetFirstSelectedInstance();
         }
 
         public Instance GetPinnedEvaluationInstance()

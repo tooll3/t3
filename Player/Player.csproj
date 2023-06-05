@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CommandLineParser" Version="2.9.0-preview1" />
+        <PackageReference Include="CommandLineParser" Version="2.9.1" />
         <PackageReference Include="CppSharp" Version="1.0.1" />
         <PackageReference Include="OpenGL.Net" Version="0.8.4">
             <NoWarn>NU1701</NoWarn>

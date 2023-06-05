@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -19,27 +20,48 @@ namespace T3.Editor.Gui.ChildUi
             innerRect.Expand(-7);
 
             if (innerRect.GetHeight() < 0)
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolChildUi.CustomUiResult.PreventTooltip
+                       | SymbolChildUi.CustomUiResult.PreventOpenSubGraph
+                       | SymbolChildUi.CustomUiResult.PreventInputLabels
+                       | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
             
 
             var curve = sampleCurve.Curve.Value;
             if (curve == null)
             {
                 //Log.Warning("Can't draw undefined gradient");
-                return SymbolChildUi.CustomUiResult.None;
+                return SymbolChildUi.CustomUiResult.PreventTooltip
+                       | SymbolChildUi.CustomUiResult.PreventOpenSubGraph
+                       | SymbolChildUi.CustomUiResult.PreventInputLabels
+                       | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
             }
 
             ImGui.PushClipRect(innerRect.Min, innerRect.Max, true);
             ImGui.SetCursorScreenPos(innerRect.Min);
             ImGui.BeginChild("curve" + instance.SymbolChildId.GetHashCode(), innerRect.GetSize());
             {
+                var cloneIfModified = sampleCurve.Curve.Input.IsDefault;
+                
                 var preventEditingUnlessCtrlPressed = ImGui.GetIO().KeyCtrl
                                                           ? T3Ui.EditingFlags.None
                                                           : T3Ui.EditingFlags.PreventMouseInteractions;
 
-                CurveInputEditing.DrawCanvasForCurve(curve, T3Ui.EditingFlags.ExpandVertically
-                                                            | preventEditingUnlessCtrlPressed
-                                                            | T3Ui.EditingFlags.PreventZoomWithMouseWheel);
+                var modified2 = CurveInputEditing.DrawCanvasForCurve(ref curve, 
+                                                                     sampleCurve.Curve.Input,
+                                                     cloneIfModified,
+                                                     T3Ui.EditingFlags.ExpandVertically
+                                                     | preventEditingUnlessCtrlPressed
+                                                     | T3Ui.EditingFlags.PreventZoomWithMouseWheel);
+
+                if ((modified2 & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
+                {
+                    if (cloneIfModified)
+                    {
+                        sampleCurve.Curve.SetTypedInputValue(curve);
+                    }
+                    sampleCurve.Result.DirtyFlag.Invalidate();
+                    sampleCurve.CurveOutput.DirtyFlag.Invalidate();
+                }
 
                 DrawSamplePointIndicator();
             }

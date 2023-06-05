@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
-using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
@@ -58,7 +58,7 @@ namespace T3.Editor.Gui.Styling
             var size = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
             var contentMin = ImGui.GetWindowContentRegionMin() + ImGui.GetWindowPos();
 
-            var pos = new Vector2(contentMin.X, contentMin.Y + size.Y - offsetFromBottom - thickness);
+            var pos = new Vector2(contentMin.X, contentMin.Y + size.Y - offsetFromBottom - thickness-1);
             ImGui.SetCursorScreenPos(pos);
 
             ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 1));
@@ -120,8 +120,8 @@ namespace T3.Editor.Gui.Styling
             var clicked = false;
 
             var stateColor = isSelected
-                                 ? T3Style.Colors.Text.Rgba
-                                 : T3Style.Colors.TextMuted.Rgba;
+                                 ? Color.White.Rgba
+                                 : T3Style.Colors.DarkGray.Rgba;
             ImGui.PushStyleColor(ImGuiCol.Text, stateColor);
 
             var padding = string.IsNullOrEmpty(label) ? new Vector2(0.1f, 0.5f) : new Vector2(0.5f, 0.5f);
@@ -397,6 +397,7 @@ namespace T3.Editor.Gui.Styling
 
         private static double _hoverStartTime;
 
+        // TODO: this should be merged with FormInputs.SegmentedEnumButton
         public static bool DrawSegmentedToggle(ref int currentIndex, List<string> options)
         {
             var changed = false;
@@ -425,6 +426,51 @@ namespace T3.Editor.Gui.Styling
             }
 
             return changed;
+        }
+
+        public static bool AddSegmentedIconButton<T>(ref T selectedValue, List<Icon> icons) where T : struct, Enum
+        {
+            //DrawInputLabel(label);
+
+            var modified = false;
+            var selectedValueString = selectedValue.ToString();
+            var isFirst = true;
+            var enums = Enum.GetValues<T>();
+            //Debug.Assert(enums.Length != icons.Count,"Icon enum mismatch");
+                
+                
+            for (var index = 0; index < enums.Length; index++)
+            {
+                var icon = icons[index];
+                var value = enums[index];
+                var name = Enum.GetName(value);
+                if (!isFirst)
+                {
+                    ImGui.SameLine();
+                }
+
+                var isSelected = selectedValueString == value.ToString();
+                
+                var clicked = DrawIconToggle(name, icon, ref isSelected);
+                if (clicked)
+                {
+                    modified = true;
+                    selectedValue = value;
+                }
+                
+                isFirst = false;
+            }
+
+            return modified;
+        }
+
+        public static bool DrawIconToggle(string name, Icon icon, ref bool isSelected)
+        {
+            var clicked = ImGui.InvisibleButton(name, new Vector2(17, 17));
+            Icons.DrawIconOnLastItem(icon, isSelected ? T3Style.Colors.ButtonActive : T3Style.Colors.TextMuted);
+            if (clicked)
+                isSelected = !isSelected;
+            return clicked;
         }
 
         public static bool DrawSearchField(string placeHolderLabel, ref string value, float width = 0)
@@ -458,6 +504,19 @@ namespace T3.Editor.Gui.Styling
             }
 
             return modified;
+        }
+
+        /// <summary>
+        /// Draws a frame that indicates if the current window is focused.
+        /// This is useful for windows that have window specific keyboard short cuts.
+        /// </summary>
+        public static void DrawWindowFocusFrame()
+        {
+            if (!ImGui.IsWindowFocused())
+                return;
+            
+            var min = ImGui.GetWindowPos() + new Vector2(1,1);
+            ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(-2,-1) , Color.White.Fade(0.1f));
         }
     }
 }

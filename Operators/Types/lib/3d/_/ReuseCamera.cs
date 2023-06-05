@@ -38,7 +38,6 @@ namespace T3.Operators.Types.Id_484bec1b_e441_440a_85b4_b3865c57b4ed
                     return;
                 }
 
-                Log.Debug("here");
                 // Set properties and evaluate sub tree
                 var prevWorldToCamera = context.WorldToCamera;
                 var prevCameraToClipSpace = context.CameraToClipSpace;

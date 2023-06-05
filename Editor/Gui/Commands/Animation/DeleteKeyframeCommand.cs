@@ -1,35 +1,31 @@
-﻿using System.Collections.Generic;
-using T3.Core.Animation;
+﻿using T3.Core.Animation;
 using T3.Core.DataTypes;
 
 namespace T3.Editor.Gui.Commands.Animation
 {
-    public class DeleteKeyframesCommand : ICommand
+    public class DeleteKeyframeCommand : ICommand
     {
         public string Name => "Delete keyframe";
         public bool IsUndoable => true;
         
-        private Curve _curve;
-        private VDefinition _originalKey;
-        
-        private readonly Dictionary<VDefinition, VDefinition> _originalDefForReferences = new Dictionary<VDefinition, VDefinition>();
-
-        public DeleteKeyframesCommand(Curve curve, VDefinition originalKey)
+        public DeleteKeyframeCommand(Curve curve, VDefinition keyframe)
         {
             _curve = curve;
-            _originalKey = originalKey;
+            _keyframe = keyframe;
+        }
+        public void Do()
+        {
+            _curve.RemoveKeyframeAt(_keyframe.U);
+            _curve.UpdateTangents();
         }
         
         public void Undo()
         {
-            _curve.AddOrUpdateV(_originalKey.U, _originalKey);                
+            _curve.AddOrUpdateV(_keyframe.U, _keyframe);                
             _curve.UpdateTangents();
         }
 
-        public void Do()
-        {
-            _curve.RemoveKeyframeAt(_originalKey.U);
-            _curve.UpdateTangents();
-        }
+        private readonly Curve _curve;
+        private readonly VDefinition _keyframe;
     }
 }
