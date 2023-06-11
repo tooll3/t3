@@ -174,8 +174,8 @@ namespace T3.Editor.Gui.Windows.Output
                         Directory.CreateDirectory(folder);
                     }
                     
-                    var filename = Path.Join(folder, $"{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.jpg");
-                    ScreenshotWriter.SaveBufferToFile(texture, filename, ScreenshotWriter.FileFormats.Jpg);
+                    var filename = Path.Join(folder, $"{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.png");
+                    ScreenshotWriter.SaveBufferToFile(texture, filename, ScreenshotWriter.FileFormats.Png);
                 }
             }
             
