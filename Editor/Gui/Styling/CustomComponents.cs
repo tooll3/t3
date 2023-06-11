@@ -362,7 +362,7 @@ namespace T3.Editor.Gui.Styling
             return false;
         }
 
-        public static void TooltipForLastItem(string message, string additionalNotes = null, bool useHoverDelay = true)
+        public static void TooltipForLastItem(Color color, string message, string additionalNotes = null, bool useHoverDelay = true)
         {
             if (!ImGui.IsAnyItemHovered())
             {
@@ -383,16 +383,21 @@ namespace T3.Editor.Gui.Styling
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
             ImGui.BeginTooltip();
             ImGui.PushTextWrapPos(300);
-            ImGui.TextUnformatted(message);
+            ImGui.TextColored(color, message);
             if (!string.IsNullOrEmpty(additionalNotes))
             {
-                ImGui.TextColored(Color.Gray, additionalNotes);
+                ImGui.TextColored(color.Fade(0.7f), additionalNotes);
             }
 
             ImGui.PopTextWrapPos();
 
             ImGui.EndTooltip();
             ImGui.PopStyleVar();
+        }
+
+        public static void TooltipForLastItem(string message, string additionalNotes = null, bool useHoverDelay = true)
+        {
+            TooltipForLastItem(Color.Gray, message, additionalNotes, useHoverDelay);
         }
 
         private static double _hoverStartTime;

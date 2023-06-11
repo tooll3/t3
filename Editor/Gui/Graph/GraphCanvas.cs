@@ -265,6 +265,7 @@ namespace T3.Editor.Gui.Graph
             DrawList = dl;
             ImGui.BeginGroup();
             {
+                ImGui.SetScrollY(0);
                 CustomComponents.DrawWindowFocusFrame();
                 
                 DrawDropHandler();

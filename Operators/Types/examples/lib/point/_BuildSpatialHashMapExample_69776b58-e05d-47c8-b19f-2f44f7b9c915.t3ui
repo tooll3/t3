@@ -1,6 +1,6 @@
 {
   "Id": "69776b58-e05d-47c8-b19f-2f44f7b9c915"/*_BuildSpatialHashMapExample*/,
-  "Description": "Illustrates how to embed the SpatialHashMap algorithm.\n\nTHIS IS EXAMPE CURRENTLY BROKEN.",
+  "Description": "Illustrates how to embed the SpatialHashMap algorithm.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -8,6 +8,13 @@
       "Position": {
         "X": 517.7412,
         "Y": 446.78076
+      }
+    },
+    {
+      "ChildId": "a0009473-3fe8-4a02-8373-fb9e63d13ee9"/*_DrawBillboardsOld*/,
+      "Position": {
+        "X": 1858.8955,
+        "Y": 0.0
       }
     },
     {
@@ -270,8 +277,8 @@
     {
       "ChildId": "5c855d01-9c6a-4dd1-8dee-4d21cbf9fb45"/*Multiply*/,
       "Position": {
-        "X": 339.14084,
-        "Y": -34.66063
+        "X": 333.26767,
+        "Y": 19.372208
       }
     },
     {
@@ -279,13 +286,6 @@
       "Position": {
         "X": 617.92096,
         "Y": 318.3724
-      }
-    },
-    {
-      "ChildId": "2975cbce-860b-49dd-bc2f-cdc68ed48142"/*DrawBillboards*/,
-      "Position": {
-        "X": 1858.8955,
-        "Y": 0.0
       }
     }
   ],

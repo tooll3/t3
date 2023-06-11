@@ -17,12 +17,6 @@ namespace T3.Operators.Types.Id_8228a543_f725_41d9_8629_f6d85f9e858e
         [Input(Guid = "15f43187-123d-4d40-8bcc-70c8c8b0392f")]
         public readonly InputSlot<float> CellSize = new InputSlot<float>();
 
-        [Input(Guid = "60d5eaf4-2e51-4a5b-9990-b494bc798f7b")]
-        public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
-
-        [Input(Guid = "27b34d18-e256-413b-9acd-e61816c1b898")]
-        public readonly InputSlot<int> CenterPointIndex = new InputSlot<int>();
-
         [Input(Guid = "3b64cb71-71dc-4f68-8daa-6b2d15bb6353")]
         public readonly InputSlot<System.Numerics.Vector3> Center = new InputSlot<System.Numerics.Vector3>();
     }
