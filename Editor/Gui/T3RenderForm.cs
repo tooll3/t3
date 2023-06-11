@@ -455,7 +455,7 @@ namespace T3.Editor.Gui
             var bitmapDecoder = new BitmapDecoder(factory, Icons.IconAtlasPath, DecodeOptions.CacheOnDemand);
             var formatConverter = new FormatConverter(factory);
             var bitmapFrameDecode = bitmapDecoder.GetFrame(0);
-            formatConverter.Initialize(bitmapFrameDecode, PixelFormat.Format32bppPRGBA, BitmapDitherType.None, null, 0.0, BitmapPaletteType.Custom);
+            formatConverter.Initialize(bitmapFrameDecode, PixelFormat.Format32bppRGBA, BitmapDitherType.None, null, 0.0, BitmapPaletteType.Custom);
 
             // Copy the data into the font atlas texture
             for (int i = 0; i < glyphIds.Length; i++)

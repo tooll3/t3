@@ -125,7 +125,7 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
                             var bitmapDecoder = new BitmapDecoder(factory, memStream, DecodeOptions.CacheOnDemand);
                             var formatConverter = new FormatConverter(factory);
                             var bitmapFrameDecode = bitmapDecoder.GetFrame(0);
-                            formatConverter.Initialize(bitmapFrameDecode, SharpDX.WIC.PixelFormat.Format32bppPRGBA, BitmapDitherType.None, null, 0.0,
+                            formatConverter.Initialize(bitmapFrameDecode, SharpDX.WIC.PixelFormat.Format32bppRGBA, BitmapDitherType.None, null, 0.0,
                                                        BitmapPaletteType.Custom);
 
                             _image?.Dispose();
