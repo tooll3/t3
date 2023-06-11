@@ -158,7 +158,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
         private void DrawAllLayers(IReadOnlyCollection<ITimeClip> clips)
         {
             if (clips.Count == 0)
+            {
+                LastHeight = 0;
                 return;
+            }
 
             _minLayerIndex = int.MaxValue;
             _maxLayerIndex = int.MinValue;
