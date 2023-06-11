@@ -27,7 +27,7 @@ namespace T3.Operators.Types.Id_3dae14a8_3d0b_432f_b951_bdd7afd7e5f8
             var worldToCam = MatrixFromRows(WorldToCamRows.GetValue(context));
             var camToClipSpace = MatrixFromRows(CamToClipSpaceRows.GetValue(context));
             var aspect = camToClipSpace.M22 / camToClipSpace.M11;
-            //Log.Debug($" M11: {camToClipSpace.M11:0.00}  M22: {camToClipSpace.M22:0.00} ");
+            //Log.Debug($" M11: {camToClipSpace.M11:0.00}  M22: {camToClipSpace.M22:0.00} ", this);
             
             var x = 1;            
             worldToCam.M11 /= camToClipSpace.M11 / x;

@@ -176,7 +176,7 @@ namespace T3.Operators.Types.Id_b2267122_4223_4eff_8ae4_91d149df535c
                         return (false, 0, 0, 0);
                 }
 
-                Log.Debug("couldn't solve");
+                Log.Debug("couldn't solve", this);
                 return (false, 0, 0, 0);
             }
 
@@ -190,7 +190,7 @@ namespace T3.Operators.Types.Id_b2267122_4223_4eff_8ae4_91d149df535c
             //     coroot = {z: Math.Pow(d1, p/q), t: (p*t1+2*pi)/q},
             //     b = [coroot.z * Math.Cos(coroot.t), coroot.z * sin(coroot.t) ];
 
-            //Log.Debug($"{rootZ}  {rootT}  {rootR}");
+            //Log.Debug($"{rootZ}  {rootT}  {rootR}", this);
             //rootT = Math.Max(rootT, 0.00000001);
             var r2 = (float)Math.Sqrt(_r(rootZ, rootT, 0, 1));
             var w = Math.Pow(rootZ, (p / q));
@@ -216,7 +216,7 @@ namespace T3.Operators.Types.Id_b2267122_4223_4eff_8ae4_91d149df535c
             B.DirtyFlag.Clear();
             R.DirtyFlag.Clear();
 
-            //Log.Debug($" DoyleParams: {aMag}, {aAng} {bMag} {bAng}");
+            //Log.Debug($" DoyleParams: {aMag}, {aAng} {bMag} {bAng}", this);
         }
 
         [Input(Guid = "e0ee8c5d-d8c2-4856-858c-d25570a71679")]

@@ -138,7 +138,7 @@ namespace T3.Operators.Types.Id_40676c51_ecca_4bc3_bd4a_eeb80fc0b937
         {
             if (score <= 0)
             {
-                Log.Debug($"Score {score} not good enough to save...");
+                Log.Debug($"Score {score} not good enough to save...", this);
                 return;
             }
 
@@ -167,7 +167,7 @@ namespace T3.Operators.Types.Id_40676c51_ecca_4bc3_bd4a_eeb80fc0b937
                 return; 
             }
             
-            Log.Debug($"Save score {score} , {shortenedPlayerName}");
+            Log.Debug($"Save score {score} , {shortenedPlayerName}", this);
             _lastScoreHash = hash;
             var newEntry = new HighScoreEntry
                                {
@@ -185,7 +185,7 @@ namespace T3.Operators.Types.Id_40676c51_ecca_4bc3_bd4a_eeb80fc0b937
 
         private async void SendDataAsync(HighScoreEntry newEntry)
         {
-            Log.Debug("Saving new scores...");
+            Log.Debug("Saving new scores...", this);
             try
             {
                 var client = new HttpClient(new HttpClientHandler() { UseDefaultCredentials = true });

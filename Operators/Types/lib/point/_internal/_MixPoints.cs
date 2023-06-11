@@ -80,7 +80,7 @@ namespace T3.Operators.Types.Id_bdd982c4_dfc4_48d6_888a_f067081dbe8e
                         }
                         catch (Exception)
                         {
-                            Log.Error("incorrect index calculation: \nindex: {index}  bIndex {bIndex}  fraction: {fraction}  lengthA:{listA.Length}  lengthB:{listB.Length}");
+                            Log.Error("incorrect index calculation: \nindex: {index}  bIndex {bIndex}  fraction: {fraction}  lengthA:{listA.Length}  lengthB:{listB.Length}", this);
                         }
                     }
                     break;

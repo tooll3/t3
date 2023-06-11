@@ -40,7 +40,7 @@ namespace T3.Operators.Types.Id_edecd98f_209b_423d_8201_0fd7d590c4cf
             var resultCount = SampleCount.GetValue(context).Clamp(1, 1000);
             try
             {
-                //Log.Debug("Update spline");
+                //Log.Debug("Update spline", this);
                 var pointsCollectedInputs = Points.CollectedInputs;
 
                 var connectedLists = pointsCollectedInputs.Select(c => c.GetValue(context)).Where(c => c != null).ToList();

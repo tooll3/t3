@@ -268,13 +268,13 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
         {
             if (!_paging.HasActivePage)
             {
-                Log.Warning("Tried writing to undefined sketch page");
+                Log.Warning("Tried writing to undefined sketch page", this);
                 return;
             }
 
             if (_paging.ActivePage.WriteIndex >= CurrentPointList.NumElements - 1)
             {
-                //Log.Debug($"Increasing paint buffer length of {CurrentPointList.NumElements} by {BufferIncreaseStep}...");
+                //Log.Debug($"Increasing paint buffer length of {CurrentPointList.NumElements} by {BufferIncreaseStep}...", this);
                 CurrentPointList.SetLength(CurrentPointList.NumElements + BufferIncreaseStep);
             }
 
@@ -288,7 +288,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
         {
             if (!_paging.HasActivePage || _currentStrokeLength == 0 || _paging.ActivePage.WriteIndex == 0)
             {
-                Log.Warning("Can't get previous stroke point");
+                Log.Warning("Can't get previous stroke point", this);
                 point = new Point();
                 return false;
             }
@@ -388,7 +388,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
                         if (page.PointsList.NumElements > page.WriteIndex)
                             continue;
 
-                        //Log.Warning($"Adjusting writing index {page.WriteIndex} -> {page.PointsList.NumElements}");
+                        //Log.Warning($"Adjusting writing index {page.WriteIndex} -> {page.PointsList.NumElements}", this);
                         page.WriteIndex = page.PointsList.NumElements + 1;
                     }
                 }

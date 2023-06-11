@@ -48,7 +48,7 @@ namespace T3.Operators.Types.Id_7ff47023_622e_4834_8de5_2438d56c09bd
             var isHit = false;
             var timeSinceLastHit = context.LocalFxTime - _lastHitTime;
             
-            Log.Debug($"{deltaToDamped}  triggered: {wasTriggered}  delta: {deltaToDamped}");
+            Log.Debug($"{deltaToDamped}  triggered: {wasTriggered}  delta: {deltaToDamped}", this);
             if (wasTriggered && timeSinceLastHit >= minTimeBetweenHits)
             {
                 

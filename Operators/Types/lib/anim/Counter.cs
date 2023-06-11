@@ -75,7 +75,7 @@ namespace T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c
                 var activationIndex = (int)(_beatTime * _rate + _phase);
                 if (activationIndex != _lastActivationIndex)
                 {
-                    //Log.Debug($"ai {activationIndex}  != {_lastActivationIndex}  rate={_rate} t = {_beatTime} ");
+                    //Log.Debug($"ai {activationIndex}  != {_lastActivationIndex}  rate={_rate} t = {_beatTime} ", this);
                     _lastActivationIndex = activationIndex;
                     jump = true;
                 }

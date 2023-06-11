@@ -73,7 +73,7 @@ namespace T3.Operators.Types.Id_7ad3a38a_9f04_43ba_a16f_6982b87dd2d4
                 }
                 else
                 {
-                    Log.Warning($"Undefined BufferWithViews at index {connectionIndex}");
+                    Log.Warning($"Undefined BufferWithViews at index {connectionIndex}", this);
                 }
             }
 

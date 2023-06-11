@@ -32,7 +32,7 @@ namespace T3.Operators.Types.Id_afcd4aad_8c8d_4e59_8e8e_a8c12d312200
 
             if (image == null)
             {
-                Log.Debug("input not completet");
+                Log.Debug("input not completet", this);
                 return;
             }
 

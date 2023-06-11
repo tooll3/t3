@@ -41,7 +41,7 @@ namespace T3.Operators.Types.Id_e8d94dd7_eb54_42fe_a7b1_b43543dd457e
             var filepath = FilePath.GetValue(context);
             if (!File.Exists(filepath))
             {
-                Log.Debug($"File {filepath} doesn't exist");
+                Log.Debug($"File {filepath} doesn't exist", this);
                 return;
             }
             
@@ -140,7 +140,7 @@ namespace T3.Operators.Types.Id_e8d94dd7_eb54_42fe_a7b1_b43543dd457e
                 pointIndex++;
             }
 
-            Log.Debug($"Loaded svg {filepath} with {pointIndex} points");
+            Log.Debug($"Loaded svg {filepath} with {pointIndex} points", this);
 
             ResultList.Value = _pointListWithSeparator;
         }

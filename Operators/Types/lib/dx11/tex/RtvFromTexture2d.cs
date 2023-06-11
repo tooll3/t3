@@ -59,7 +59,7 @@ namespace T3.Operators.Types.Id_57a1ee33_702a_41ad_a17e_b43033d58638
                     }
                     else
                     {
-                        Log.Warning("Trying to create an render target view for resource which doesn't have the rtv bind flag set");
+                        Log.Warning("Trying to create an render target view for resource which doesn't have the rtv bind flag set", this);
                     }
                 }
             }

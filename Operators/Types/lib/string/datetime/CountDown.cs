@@ -32,7 +32,7 @@ namespace T3.Operators.Types.Id_e4a38f3c_bd4c_406a_9979_bb683d79b39b
                 }
                 else
                 {
-                    Log.Warning($"invalid format for lauchTime '{launchTime}'");
+                    Log.Warning($"invalid format for lauchTime '{launchTime}'", this);
                 }
                 //var v = Duration.GetValue(context);
                 var duration = DateTime.Now - targetTime;

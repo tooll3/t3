@@ -67,7 +67,7 @@ namespace T3.Operators.Types.Id_1dfc9f6d_effa_407b_8f8d_5adf62504205
                 {
                     if (_scoredSceneIndices.Contains(sceneIndex))
                     {
-                        //Log.Debug($"added score {scoreDelta}");
+                        //Log.Debug($"added score {scoreDelta}", this);
                         scoreDelta = 0;
                         LastResult.Value = "Too often!";
                         LastScore.Value = scoreDelta;

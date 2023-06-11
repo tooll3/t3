@@ -1,7 +1,5 @@
-using System.IO;
 using SharpDX;
 using SharpDX.D3DCompiler;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -11,7 +9,7 @@ using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_4e5bc624_9cda_46a8_9681_7fd412ea3893
 {
-    public class ComputeShaderFromSource : Instance<ComputeShaderFromSource>
+    public class ComputeShaderFromSource : Instance<ComputeShaderFromSource>, IStatusProvider
     {
         [Output(Guid = "190e262f-6554-4b34-b5b6-6617a98ab123")]
         public readonly Slot<SharpDX.Direct3D11.ComputeShader> ComputerShader = new();
@@ -25,14 +23,8 @@ namespace T3.Operators.Types.Id_4e5bc624_9cda_46a8_9681_7fd412ea3893
         {
             ComputerShader.UpdateAction = Update;
         }
-
-        public string GetDescriptiveString()
-        {
-            return _description;
-        }
-
-        private string _description = "not loaded";
-
+        
+        
         private void Update(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
@@ -60,8 +52,11 @@ namespace T3.Operators.Types.Id_4e5bc624_9cda_46a8_9681_7fd412ea3893
 
             if (_computeShaderResId == ResourceManager.NullResource)
             {
+                _warningMessage = ResourceManager.LastShaderError;
                 return;
             }
+
+            _warningMessage = null;
             
             ComputerShader.Value = resourceManager.GetComputeShader(_computeShaderResId);
             
@@ -70,7 +65,18 @@ namespace T3.Operators.Types.Id_4e5bc624_9cda_46a8_9681_7fd412ea3893
             ThreadCount.Value = new Int3(x, y, z);
         }
 
+        public IStatusProvider.StatusLevel GetStatusLevel()
+        {
+            return string.IsNullOrEmpty(_warningMessage) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Warning;
+        }
+
+        public string GetStatusMessage()
+        {
+            return _warningMessage;
+        }
+        
         private string _code;
+        private string _warningMessage;
 
         [Input(Guid = "a8ee59c3-cb62-42e5-a3c9-f4968876c9cc")]
         public readonly InputSlot<string> ShaderSource = new();
@@ -80,5 +86,7 @@ namespace T3.Operators.Types.Id_4e5bc624_9cda_46a8_9681_7fd412ea3893
 
         [Input(Guid = "08399b7a-a390-4a11-83eb-36ac68f76bc6")]
         public readonly InputSlot<string> DebugName = new();
+
+
     }
 }

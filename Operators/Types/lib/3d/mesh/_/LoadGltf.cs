@@ -54,7 +54,7 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
                         var children = model.DefaultScene.VisualChildren.ToList();
                         if (childIndex < 0 && childIndex >= children.Count)
                         {
-                            Log.Warning($"gltf child index {childIndex} exceeds visible children in default scene {children.Count}");
+                            Log.Warning($"gltf child index {childIndex} exceeds visible children in default scene {children.Count}", this);
                         }
                         else
                         {
@@ -65,11 +65,11 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
                                 var vertexAccessors = child.Mesh.Primitives[0].VertexAccessors;
                                 var keys = vertexAccessors.Keys;
                                 var keys2 = string.Join(",", keys);
-                                Log.Debug($"found attributes :{keys2}");
+                                Log.Debug($"found attributes :{keys2}", this);
                                 
                                 if (!vertexAccessors.TryGetValue("POSITION", out var positionAccessor))
                                 {
-                                    Log.Warning("Can't find POSITION attribute in gltf mesh");
+                                    Log.Warning("Can't find POSITION attribute in gltf mesh", this);
                                 }
                                 else
                                 {
@@ -146,7 +146,7 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
                                 const int stride = 3 * 4;
                                 if (faceCount == 0)
                                 {
-                                    Log.Warning("No faces found");
+                                    Log.Warning("No faces found", this);
                                     return;
                                 }
                                 ResourceManager.SetupStructuredBuffer(newData.IndexBufferData, stride * faceCount, stride, ref newData.IndexBuffer);
@@ -159,10 +159,10 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
 
                             if (verticesCount == 0)
                             {
-                                Log.Warning("No vertices found");
+                                Log.Warning("No vertices found", this);
                                 return;
                             }
-                            Log.Debug($"  loaded {path} Child {childIndex}:  {verticesCount} vertices  {faceCount} faces");
+                            Log.Debug($"  loaded {path} Child {childIndex}:  {verticesCount} vertices  {faceCount} faces", this);
                             newData.VertexBufferWithViews.Buffer = newData.VertexBuffer;
                             ResourceManager.SetupStructuredBuffer(newData.VertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride,
                                                                   ref newData.VertexBuffer);
@@ -175,7 +175,7 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
                     }
                     catch (Exception e)
                     {
-                        Log.Warning($"Failed loading {path}: {e.Message}");
+                        Log.Warning($"Failed loading {path}: {e.Message}", this);
                     }
                 }
                 

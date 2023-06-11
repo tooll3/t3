@@ -33,7 +33,7 @@ namespace T3.Operators.Types.Id_fcd32cac_6544_42a3_8a14_203b8ca3559e
             {
                 if (Playback.Current == null)
                 {
-                    Log.Warning("Can't set BPM-Rate without active Playback");
+                    Log.Warning("Can't set BPM-Rate without active Playback", this);
                     return;
                 }
 

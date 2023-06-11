@@ -56,7 +56,7 @@ namespace T3.Operators.Types.Id_89162b9f_75f5_4d32_9d28_8259cf47cf58
                     var index = Math.Abs(_photoIndex) % _photos.Count;
                     PhotoAuthor.Value = _photos[index].User.Name;
                     PhotoUrl.Value = _photos[index].Urls.Regular;
-                    Log.Debug($"Update photo properties: Author {PhotoAuthor.Value}   Url {PhotoUrl.Value}");
+                    Log.Debug($"Update photo properties: Author {PhotoAuthor.Value}   Url {PhotoUrl.Value}", this);
                 }
             }
         }
@@ -80,7 +80,7 @@ namespace T3.Operators.Types.Id_89162b9f_75f5_4d32_9d28_8259cf47cf58
             }
             
             _photos = photosFound;
-            Log.Debug($"got {photosFound.Count} images from Unsplash");
+            Log.Debug($"got {photosFound.Count} images from Unsplash", this);
             _urls.Clear();
             foreach (var p in photosFound)
             {

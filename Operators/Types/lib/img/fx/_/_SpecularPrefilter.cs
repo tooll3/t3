@@ -47,7 +47,7 @@ namespace T3.Operators.Types.Id_cc3cc712_9e87_49c6_b04b_49a12cf2ba75
 
             if (CubeMap.IsConnected && CubeMap.DirtyFlag.IsDirty)
             {
-                //Log.Debug("Dirty");
+                //Log.Debug("Dirty", this);
             }
 
             var cubeMapSrc = CubeMap.GetValue(context); // Needs to be checked for null!
@@ -123,7 +123,7 @@ namespace T3.Operators.Types.Id_cc3cc712_9e87_49c6_b04b_49a12cf2ba75
             // }
 
             Vector2 cubeMapSize = new Vector2(cubeMapSrc.Description.Width, cubeMapSrc.Description.Height);
-            // Log.Debug($"source size: {cubeMapSrc.Description.Width} num mips in src: {cubeMapSrc.Description.MipLevels}");
+            // Log.Debug($"source size: {cubeMapSrc.Description.Width} num mips in src: {cubeMapSrc.Description.MipLevels}", this);
 
             // if ( _prefilteredCubeMap == null )
             // {
@@ -148,7 +148,7 @@ namespace T3.Operators.Types.Id_cc3cc712_9e87_49c6_b04b_49a12cf2ba75
             }
             catch(SharpDXException e)
             {
-                Log.Debug($"can't create CubeMap target {e.Message}");
+                Log.Debug($"can't create CubeMap target {e.Message}", this);
                 return;
             }
 
@@ -194,7 +194,7 @@ namespace T3.Operators.Types.Id_cc3cc712_9e87_49c6_b04b_49a12cf2ba75
             
             while (mipSlice < numMipLevels)
             {
-                // Log.Debug($"Update mipmap level {mipSlice} size: {size}");
+                // Log.Debug($"Update mipmap level {mipSlice} size: {size}", this);
                 var viewport = new RawViewportF { X = 0, Y = 0, Width = size, Height = size , MinDepth = 0, MaxDepth = 1};
                 device.ImmediateContext.Rasterizer.SetViewports(new[] { viewport });
                 

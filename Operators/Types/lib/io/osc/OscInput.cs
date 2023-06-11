@@ -65,7 +65,7 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
                 {
                     if (_teachingActive)
                     {
-                        Log.Debug($" connected to OSC address '{message.Address}'");
+                        Log.Debug($" connected to OSC address '{message.Address}'", this);
                         Address.TypedInputValue.Value = message.Address;
                         Address.Input.IsDefault = false;
                         Address.DirtyFlag.Invalidate();
@@ -129,7 +129,7 @@ namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a
             {
                 if (_printLogMessages)
                 {
-                    Log.Debug($"Received OSC: {msg.Address}  {msg}");
+                    Log.Debug($"Received OSC: {msg.Address}  {msg}", this);
                 }
 
                 var matchesAddress = msg.Address == _address;

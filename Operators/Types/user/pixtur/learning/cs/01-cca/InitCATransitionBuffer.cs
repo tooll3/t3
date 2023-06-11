@@ -153,7 +153,7 @@ namespace T3.Operators.Types.Id_8f696d89_a23f_42ae_b382_8670febb546b
 
             if (combinedResult >= _ruleTableLength)
             {
-                Log.Warning($"  NOPE: {combinedResult} exceed table {_ruleTableLength}");
+                Log.Warning($"  NOPE: {combinedResult} exceed table {_ruleTableLength}", this);
                 combinedResult = 0;
             }
 

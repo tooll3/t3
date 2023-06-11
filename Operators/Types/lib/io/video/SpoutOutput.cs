@@ -133,8 +133,8 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
                     currentDesc.Format != Format.R16G16B16A16_UNorm &&
                     currentDesc.Format != Format.R16G16B16A16_Float)
                 {
-                    Log.Debug("Spout output supports texture formats B8G8R8A8_UNorm, R8G8B8A8_UNorm, R16G16B16A16_UNorm and R16G16B16A16_Float.");
-                    Log.Debug("Please use a render target operator to change the format accordingly.");
+                    Log.Debug("Spout output supports texture formats B8G8R8A8_UNorm, R8G8B8A8_UNorm, R16G16B16A16_UNorm and R16G16B16A16_Float.", this);
+                    Log.Debug("Please use a render target operator to change the format accordingly.", this);
                     return false;
                 }
                 width = currentDesc.Width;
@@ -144,7 +144,7 @@ namespace T3.Operators.Types.Id_13be1e3f_861d_4350_a94e_e083637b3e55
             }
             catch (Exception e)
             {
-                Log.Debug("Initialization of Spout failed. Are Spout.dll and SpoutDX.dll present in the executable folder?");
+                Log.Debug("Initialization of Spout failed. Are Spout.dll and SpoutDX.dll present in the executable folder?", this);
                 Log.Debug(e.ToString());
                 _spoutDX?.ReleaseSender();
                 _spoutDX?.CloseDirectX11();

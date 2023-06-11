@@ -43,7 +43,7 @@ namespace T3.Operators.Types.Id_9b28e6b9_1d1f_42d8_8a9e_33497b1df820
             {
                 if (!_complainedOnce)
                 {
-                    Log.Warning("Trying to issue draw call, but pixel and/or vertex shader are null.");
+                    Log.Warning("Trying to issue draw call, but pixel and/or vertex shader are null.", this);
                 }
                 _complainedOnce = true;
                 return;

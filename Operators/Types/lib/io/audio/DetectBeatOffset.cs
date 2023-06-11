@@ -113,7 +113,7 @@ namespace T3.Operators.Types.Id_1fa651c8_ab73_4ca0_9506_84602bbf2fcb
                 _fftHistory.RemoveRange(maxFftHistoryLength , _fftHistory.Count - maxFftHistoryLength);
 
             
-            //Log.Debug($"Slice count {sliceIndexForBar} {durationOfMeasure:0.00} {context.Playback.Bpm}");
+            //Log.Debug($"Slice count {sliceIndexForBar} {durationOfMeasure:0.00} {context.Playback.Bpm}", this);
             var shiftCount = 25;
 
             // Swipe scan 

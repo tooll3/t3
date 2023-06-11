@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using SharpDX;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -18,7 +16,7 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
 {
-    public class LoadObj : Instance<LoadObj>, IDescriptiveFilename
+    public class LoadObj : Instance<LoadObj>, IDescriptiveFilename, IStatusProvider
     {
         [Output(Guid = "1F4E7CAC-1F62-4633-B0F3-A3017A026753")]
         public readonly Slot<MeshBuffers> Data = new Slot<MeshBuffers>();
@@ -63,18 +61,17 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
                 var mesh = ObjMesh.LoadFromFile(path);
                 if (mesh == null || mesh.DistinctDistinctVertices.Count == 0)
                 {
-                    Log.Warning($"Can't read file {path}", this);
+                    var warningMessage = $"Can't read file {path}";
+                    Log.Warning(warningMessage, this);
+                    _warningMessage = warningMessage;
                     return;
                 }
 
-                mesh.UpdateVertexSorting((ObjMesh.SortDirections)vertexSorting);
+                mesh.UpdateVertexSorting(vertexSorting);
 
                 _lastFilePath = path;
 
-                var resourceManager = ResourceManager.Instance();
-
                 var newData = new MeshDataSet();
-
                 var reversedLookup = new int[mesh.DistinctDistinctVertices.Count];
 
                 // Create Vertex buffer
@@ -143,6 +140,7 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
             _meshData.DataBuffers.VertexBuffer = _meshData.VertexBufferWithViews;
             _meshData.DataBuffers.IndicesBuffer = _meshData.IndexBufferWithViews;
             Data.Value = _meshData.DataBuffers;
+            _warningMessage = null;
         }
 
         private void FileChangedHandler()
@@ -174,6 +172,20 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
             public readonly BufferWithViews IndexBufferWithViews = new();
         }
 
+        
+        public IStatusProvider.StatusLevel GetStatusLevel()
+        {
+            return string.IsNullOrEmpty(_warningMessage) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Warning;
+        }
+
+        public string GetStatusMessage()
+        {
+            return _warningMessage;
+        }
+
+        private string _warningMessage;
+        
+        
         private static readonly Dictionary<string, MeshDataSet> _meshBufferCache = new();
 
         [Input(Guid = "7d576017-89bd-4813-bc9b-70214efe6a27")]
@@ -190,6 +202,7 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
         
         [Input(Guid = "C39A61B3-FB6B-4611-8F13-273F13C9C491")]
         public readonly InputSlot<float> ScaleFactor = new();
+
 
     }
 }

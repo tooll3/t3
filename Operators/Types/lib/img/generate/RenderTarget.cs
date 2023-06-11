@@ -77,7 +77,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             var textureFormat = TextureFormat.GetValue(context);
             if (textureFormat == Format.Unknown)
             {
-                Log.Warning("Texture format unknown is not supported. Falling back to default");
+                Log.Warning("Texture format unknown is not supported. Falling back to default", this);
                 textureFormat = TextureFormat.TypedDefaultValue.Value;
                 TextureFormat.SetTypedInputValue(textureFormat);
             }
@@ -254,7 +254,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             int w = Math.Max(size.Width, size.Height);
             int mipLevels = generateMips ? (int)MathUtils.Log2(w) + 1 : 1;
             var multiSampleTexture2dMipLevels=  DownSamplingRequired ? 1 : mipLevels;
-            // Log.Debug($"miplevel: {mipLevels}, w: {w}");
+            // Log.Debug($"miplevel: {mipLevels}, w: {w}", this);
             bool wasChanged= false;
 
             bool colorFormatChanged = _multiSampledColorBuffer == null

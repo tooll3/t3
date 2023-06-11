@@ -238,7 +238,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                                             ControllerValue = _timingMsgCount,
                                             EventType = MidiEventTypes.MidiTime,
                                         };                    
-                        //Log.Debug($"Got MidiTimingClock 2{_timingMsgCount}  d:{msg.MidiEvent.DeltaTime}");
+                        //Log.Debug($"Got MidiTimingClock 2{_timingMsgCount}  d:{msg.MidiEvent.DeltaTime}", this);
                         
                     }                    
                 }

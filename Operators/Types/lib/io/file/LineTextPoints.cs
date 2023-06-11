@@ -48,7 +48,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
             var filepath = FilePath.GetValue(context);
             if (!File.Exists(filepath))
             {
-                Log.Debug($"File {filepath} doesn't exist");
+                Log.Debug($"File {filepath} doesn't exist", this);
                 return;
             }
 
@@ -285,7 +285,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
             if (value < GlyphTableLength)
                 return _glyphTable[value];
 
-            Log.Debug($"need dictionary for {c}");
+            Log.Debug($"need dictionary for {c}", this);
             return _glyphsForCharacters.TryGetValue(c, out var glyph) ? glyph : null;
         }
 

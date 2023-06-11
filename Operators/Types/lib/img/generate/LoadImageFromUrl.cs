@@ -95,11 +95,11 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
                     return streamResponse;
                 }
                 // 404 etc.
-                Log.Info($"No success loading {url}: {response.StatusCode}");
+                Log.Info($"No success loading {url}: {response.StatusCode}", this);
                 return null;
             } catch (Exception e)
             {
-                Log.Info($"Failed to load URL : {e.Message}");
+                Log.Info($"Failed to load URL : {e.Message}", this);
                 return null;
             }
         }
@@ -140,7 +140,7 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
                     }
                     catch (Exception e)
                     {
-                        Log.Info($"Failed to decode image data: {e.Message}");
+                        Log.Info($"Failed to decode image data: {e.Message}", this);
                     }
                 }
             }

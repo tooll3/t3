@@ -37,7 +37,7 @@ namespace T3.Operators.Types.Id_84e02044_3011_4a5e_b76a_c904d9b4557f
                     }
                     else
                     {
-                        Log.Warning("Trying to create an unordered access view for resource which doesn't have the uav bind flag set");
+                        Log.Warning("Trying to create an unordered access view for resource which doesn't have the uav bind flag set", this);
                     }
                 }
                 catch (Exception e)

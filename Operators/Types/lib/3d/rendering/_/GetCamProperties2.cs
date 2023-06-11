@@ -61,7 +61,7 @@ namespace T3.Operators.Types.Id_5b538cf5_e3b6_4674_b23e_ab55fc59ada6
 
             if (_cameraInstances.Count == 0)
             {
-                Log.Debug("No cameras found");
+                Log.Debug("No cameras found", this);
                 return;
             }
 
@@ -69,7 +69,7 @@ namespace T3.Operators.Types.Id_5b538cf5_e3b6_4674_b23e_ab55fc59ada6
 
             if (cam is not ICameraPropertiesProvider camInstance)
             {
-                Log.Warning($"Camera #{index}/{_cameraInstances.Count} is not a Camera");
+                Log.Warning($"Camera #{index}/{_cameraInstances.Count} is not a Camera", this);
                 return;
             }
 

@@ -30,7 +30,7 @@ namespace T3.Operators.Types.Id_fc1ef086_c160_4174_8e60_a4eda931163d
             Int3 size = Size.GetValue(context);
             if (size.X < 1 || size.Y < 1 || size.Z < 1)
             {
-                Log.Warning($"Requested invalid texture resolution: {size}");
+                Log.Warning($"Requested invalid texture resolution: {size}", this);
                 return;
             }
 

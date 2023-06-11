@@ -26,7 +26,7 @@ namespace T3.Operators.Types.Id_1de05a51_4a22_44cd_a584_6f1ae1c0e8d1
             var obj = CameraReference.GetValue(context);
             if (obj == null)
             {
-                Log.Warning("Camera reference is undefined");
+                Log.Warning("Camera reference is undefined", this);
                 return;
             }
 

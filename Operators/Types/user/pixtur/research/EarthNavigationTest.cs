@@ -87,7 +87,7 @@ namespace T3.Operators.Types.Id_b3f34926_e536_439b_b47b_2ab89a0bc94d
             
             //long2 = MathUtils.Clamp(long2, -179, 179);
             
-            Log.Debug($"Long: {long2:0.0}, Lat:{lat2:0.0} + AdjL:{adjustment:0.00}");
+            Log.Debug($"Long: {long2:0.0}, Lat:{lat2:0.0} + AdjL:{adjustment:0.00}", this);
             P2.Value =  T(Vector3.Zero + forwardOnSurface * 10, surfaceToWorld);
             
             // var pOnSurfaceForward = SharpDX.Vector3.TransformNormal(new SharpDX.Vector3(0,0,1), objectToSurface);             

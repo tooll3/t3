@@ -40,7 +40,7 @@ namespace T3.Operators.Types.Id_32a6a351_6d22_4915_aa0e_e0483b7f4e76
                     }
                     else
                     {
-                        Log.Warning("Trying to create mips for a texture2d that doesn't have 'RenderTarget` Bindflags set");
+                        Log.Warning("Trying to create mips for a texture2d that doesn't have 'RenderTarget` Bindflags set", this);
                     }
                 }
                 catch (Exception e)

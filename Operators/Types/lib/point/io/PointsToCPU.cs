@@ -94,7 +94,7 @@ namespace T3.Operators.Types.Id_a5f4552f_7e25_43a5_bb14_21ab836fa0b3
                     
                     var points = sourceStream.ReadRange<Point>(elementCount);
                     
-                    //Log.Debug($"Read {points.Length} elements");
+                    //Log.Debug($"Read {points.Length} elements", this);
                     Output.Value = new StructuredList<Point>(points);
                 }
 

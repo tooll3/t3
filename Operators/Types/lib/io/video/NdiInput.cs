@@ -88,12 +88,12 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
                     // you can check this directly with a call to NDIlib.is_supported_CPU()
                     if (!NDIlib.is_supported_CPU())
                     {
-                        Log.Error("CPU unsupported.");
+                        Log.Error("CPU unsupported.", this);
                     }
                     else
                     {
                         // not sure why, but it's not going to run
-                        Log.Error("Cannot run NDI.");
+                        Log.Error("Cannot run NDI.", this);
                     }
                 }
             }

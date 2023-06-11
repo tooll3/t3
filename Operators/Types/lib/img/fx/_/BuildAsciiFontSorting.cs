@@ -40,7 +40,7 @@ namespace T3.Operators.Types.Id_b536f791_ae9a_45a7_a153_e2f36a65cfb3
                 return;
             } 
 
-            //Log.Debug("Generating texture");
+            //Log.Debug("Generating texture", this);
 
             var sampleCount = brightnessTable.Length;
             const int entrySizeInBytes = sizeof(float);
@@ -112,7 +112,7 @@ namespace T3.Operators.Types.Id_b536f791_ae9a_45a7_a153_e2f36a65cfb3
                     var letterIndex = letterRowIndex * Columns + letterColumnIndex;
                     if (letterIndex >= letterBrightnessArray.Length)
                     {
-                        Log.Warning("Letter index calculation  failed");
+                        Log.Warning("Letter index calculation  failed", this);
                         continue;
                     }
 

@@ -94,7 +94,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             
             
             
-            //Log.Debug($" PlayVideo.Update({shouldBeTimeInSecs:0.00s})");
+            //Log.Debug($" PlayVideo.Update({shouldBeTimeInSecs:0.00s})", this);
             var clampedSeekTime = Math.Clamp(shouldBeTimeInSecs, 0.0, _engine.Duration);
             var clampedVideoTime = Math.Clamp(_engine.CurrentTime, 0.0, _engine.Duration);
             var deltaTime = clampedSeekTime - clampedVideoTime;
@@ -110,7 +110,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             // initiate seeking if necessary
             if (shouldSeek)
             {
-                Log.Debug($"Seeked video to {clampedSeekTime:0.00} delta was {deltaTime:0.0000)}s");
+                Log.Debug($"Seeked video to {clampedSeekTime:0.00} delta was {deltaTime:0.0000)}s",this);
                 SeekTime = (float)clampedSeekTime + 1.1f/60f;
                 Seek = true;
             }
@@ -214,7 +214,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 case MediaEngineEvent.LoadedMetadata:
                     _invalidated = true;
                     _engine.Volume = 0.0;
-                    Log.Debug("pausing...");
+                    Log.Debug("pausing...", this);
                     _engine.Pause();
                     break;
                 case MediaEngineEvent.FirstFrameReady:
@@ -341,7 +341,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 _invalidated = false;
 
                 _engine.GetNativeVideoSize(out var width, out var height);
-                Log.Debug($"should set size to: {width}x{height}");
+                Log.Debug($"should set size to: {width}x{height}", this);
                 SetupTexture(new Size2(width, height));
 
                 // _SRGB doesn't work :/ Getting invalid argument exception in TransferVideoFrame
@@ -393,7 +393,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             if (!isDisposing)
                 return;
             
-            Log.Debug(" Disposing video");
+            Log.Debug(" Disposing video", this);
 
             //base.Dispose();
             if (_engine != null)

@@ -39,13 +39,13 @@ namespace T3.Operators.Types.Id_c6d22dc3_a6ff_4a6f_aa14_8be6595da2b1
             {
                 if (Playback.Current == null)
                 {
-                    Log.Warning("Can't set playback time without active Playback");
+                    Log.Warning("Can't set playback time without active Playback", this);
                     return;
                 }
 
                 if (ShowLogMessages.GetValue(context))
                 {
-                    Log.Debug($"Setting playback time to {newTime}");
+                    Log.Debug($"Setting playback time to {newTime}", this);
                 }                
                 Playback.Current.TimeInBars = newTime;
             }

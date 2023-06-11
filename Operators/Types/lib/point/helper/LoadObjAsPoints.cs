@@ -46,7 +46,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
 
             if (mesh == null)
             {
-                Log.Warning($"Can't read file {path}");
+                Log.Warning($"Can't read file {path}", this);
                 return;
             }
 
@@ -134,7 +134,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                             }
                         }
 
-                        Log.Debug($"loaded {path} with and {mesh.Colors.Count} colored points");
+                        Log.Debug($"loaded {path} with and {mesh.Colors.Count} colored points", this);
                     }
                     catch (Exception e)
                     {
@@ -236,7 +236,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                             _points.TypedElements[index] = points[index];
                         }
 
-                        Log.Debug($"loaded {path} with {_points.Elements} points found");
+                        Log.Debug($"loaded {path} with {_points.Elements} points found", this);
                     }
                     catch (Exception e)
                     {
@@ -261,7 +261,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
             var hashForward = Utilities.Hash(vertexIndexA, vertexIndexB);
             if (!collectedPool.Add(hashForward))
             {
-                //Log.Debug($"Skipping hash {hashForward}");
+                //Log.Debug($"Skipping hash {hashForward}", this);
                 return;
             }
             
@@ -273,7 +273,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
             var dot = SharpDX.Vector3.Dot(eA, eB);
             if (MathF.Abs(dot) < 0.05)
             {
-                //Log.Debug($"Skipping triangulation line {hashForward}");
+                //Log.Debug($"Skipping triangulation line {hashForward}", this);
                 return;
             }
             

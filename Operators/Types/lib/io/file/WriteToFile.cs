@@ -41,7 +41,7 @@ namespace T3.Operators.Types.Id_0db15e2d_b457_44d7_bb58_ace0a0708073
             }
             else
             {
-                Log.Debug("Just updating???");
+                Log.Debug("Just updating???", this);
             }
 
             Result.Value = Content.GetValue(context);

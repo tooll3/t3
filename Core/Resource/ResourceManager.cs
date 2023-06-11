@@ -403,6 +403,7 @@ namespace T3.Core.Resource
             catch (Exception ce)
             {
                 var message = ShaderResource.ExtractMeaningfulShaderErrorMessage(ce.Message);
+                LastShaderError = message;
                 Log.Error($"{message}\n{name}");
                 return;
             }
@@ -418,6 +419,7 @@ namespace T3.Core.Resource
             PropertyInfo debugNameInfo = shaderType.GetProperty("DebugName");
             debugNameInfo?.SetValue(shader, name);
 
+            LastShaderError = null;
             Log.Debug("Successfully Compiled shader");
         }        
         

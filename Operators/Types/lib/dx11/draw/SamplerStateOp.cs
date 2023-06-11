@@ -52,11 +52,11 @@ namespace T3.Operators.Types.Id_9515d59d_0bd5_406b_96da_6a5f60215700
                 {
                     // there was no previous valid sampler state, so set default sampler state
                     SamplerState.Value = ResourceManager.Instance().DefaultSamplerState;
-                    Log.Error("Using the default sampler state instead.");
+                    Log.Error("Using the default sampler state instead.", this);
                 }
                 else
                 {
-                    Log.Error("Using the last valid sampler state instead.");
+                    Log.Error("Using the last valid sampler state instead.", this);
                 }
             }
         }

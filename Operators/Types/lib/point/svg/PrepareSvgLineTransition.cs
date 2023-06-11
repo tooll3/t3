@@ -101,7 +101,7 @@ namespace T3.Operators.Types.Id_b7345438_f3f4_4ad3_9c57_6076ed0e9399
 
             if (totalLength < 0.0001f || segments.Count < 2)
             {
-                Log.Warning("Stroke animation requires at least two segments with of some length");
+                Log.Warning("Stroke animation requires at least two segments with of some length", this);
                 return;
             }
 

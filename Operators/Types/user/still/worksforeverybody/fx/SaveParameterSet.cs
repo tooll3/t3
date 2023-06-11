@@ -132,7 +132,7 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
             {
                 if (p.SceneIndex < 0 && p.SceneIndex >= MaxSceneCount)
                 {
-                    Log.Warning($"Skipping parameter set for invalid scene index {p.SceneIndex}");
+                    Log.Warning($"Skipping parameter set for invalid scene index {p.SceneIndex}", this);
                     continue;
                 }
 
@@ -161,7 +161,7 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
 
         private void SaveNewEntry(EvaluationContext context, int sceneIndex)
         {
-            Log.Debug("Save triggered");
+            Log.Debug("Save triggered", this);
             var position = Position.GetValue(context);
             var newSet = new ParameterSet
                              {

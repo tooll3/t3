@@ -27,7 +27,7 @@ namespace T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789
             
             if (string.IsNullOrEmpty(name))
             {
-                Log.Warning($"Can't set variable with invalid name {name}");
+                Log.Warning($"Can't set variable with invalid name {name}", this);
                 return;
             }
 

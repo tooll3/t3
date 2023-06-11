@@ -34,10 +34,10 @@ namespace T3.Operators.Types.Id_f5158500_39e4_481e_aa4f_f7dbe8cbe0fa
             {
                 if (Playback.Current == null)
                 {
-                    Log.Warning("Can't set BPM-Rate without active Playback");
+                    Log.Warning("Can't set BPM-Rate without active Playback", this);
                     return;
                 }
-                Log.Debug($"Setting BPM rate to {clampedRate}");
+                Log.Debug($"Setting BPM rate to {clampedRate}", this);
                 //Playback.Current.Bpm = clampedRate;
                 _setBpmTriggered = true;
                 _newBpmRate = clampedRate;

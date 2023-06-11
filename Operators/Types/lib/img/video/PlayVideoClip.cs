@@ -120,7 +120,7 @@ namespace T3.Operators.Types.Id_04c1a6dc_3042_48a8_81d2_0a5a162016dc
             // initiate seeking if necessary
             if (shouldSeek)
             {
-                Log.Debug($"Seeking video to {clampedTime:0.00} delta was {deltaTime:0.0000)}s");
+                Log.Debug($"Seeking video to {clampedTime:0.00} delta was {deltaTime:0.0000)}s", this);
                 SeekTime = (float)clampedTime;
                 Seek = true;
             }
@@ -225,7 +225,7 @@ namespace T3.Operators.Types.Id_04c1a6dc_3042_48a8_81d2_0a5a162016dc
                 case MediaEngineEvent.LoadedMetadata:
                     _invalidated = true;
                     _engine.Volume = 0.0;
-                    Log.Debug("pausing...");
+                    Log.Debug("pausing...", this);
                     _engine.Pause();
                     break;
                 case MediaEngineEvent.FirstFrameReady:
@@ -341,7 +341,7 @@ namespace T3.Operators.Types.Id_04c1a6dc_3042_48a8_81d2_0a5a162016dc
                 _invalidated = false;
 
                 _engine.GetNativeVideoSize(out var width, out var height);
-                Log.Debug($"should set size to: {width}x{height}");
+                Log.Debug($"should set size to: {width}x{height}", this);
                 SetupTexture(new Size2(width, height));
 
                 // _SRGB doesn't work :/ Getting invalid argument exception in TransferVideoFrame

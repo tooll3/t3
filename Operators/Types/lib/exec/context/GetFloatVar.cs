@@ -20,7 +20,7 @@ namespace T3.Operators.Types.Id_e6072ecf_30d2_4c52_afa1_3b195d61617b
             string variableName = Variable.GetValue(context);
             if (context.FloatVariables.TryGetValue(variableName, out float value))
             {
-                // Log.Debug($"{variableName} : {value}");
+                // Log.Debug($"{variableName} : {value}", this);
                 Result.Value = value;
             }
             else

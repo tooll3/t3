@@ -51,7 +51,7 @@ namespace T3.Operators.Types.Id_a9e77500_ccb5_45b9_9f17_0d9bf9b58fb5
                         _upLevels = JsonConvert.DeserializeObject<float[]>(jsonString);
                         if (_upLevels == null || _upLevels.Length == 0)
                         {
-                            Log.Warning("Loading sound levels failed");
+                            Log.Warning("Loading sound levels failed", this);
                             return;
                         }
                     }

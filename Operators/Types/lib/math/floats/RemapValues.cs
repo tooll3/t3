@@ -40,7 +40,7 @@ namespace T3.Operators.Types.Id_efb9ecfc_5aa2_45f1_87b0_1455d7702aa7
 
             if (bestMatchingIndex == -1)
             {
-                Log.Warning("RemapValues requires at least one remap pair");
+                Log.Warning("RemapValues requires at least one remap pair", this);
                 Result.Value = 0;
             }
             else

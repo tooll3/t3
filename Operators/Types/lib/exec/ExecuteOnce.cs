@@ -27,7 +27,7 @@ namespace T3.Operators.Types.Id_7a09136e_18b2_46b7_afff_8ef999e3965d
             OutputTrigger.Value = Trigger.DirtyFlag.IsDirty;
             if (Trigger.DirtyFlag.IsDirty)
             {
-                //Log.Info("ExecuteOnce triggered");
+                //Log.Info("ExecuteOnce triggered", this);
                 Trigger.DirtyFlag.Clear();
                 var commands = Command.GetCollectedTypedInputs();
 

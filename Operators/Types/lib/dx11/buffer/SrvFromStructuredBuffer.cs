@@ -34,7 +34,7 @@ namespace T3.Operators.Types.Id_8c41b312_6628_411c_a61d_604413b73a72
             {
                 if ((buffer.Description.OptionFlags & ResourceOptionFlags.BufferStructured) == 0)
                 {
-                    Log.Warning($"{nameof(SrvFromStructuredBuffer)} - input buffer is not structured, skipping SRV creation.");
+                    Log.Warning($"{nameof(SrvFromStructuredBuffer)} - input buffer is not structured, skipping SRV creation.", this);
                     return;
                 }
                 ShaderResourceView.Value?.Dispose();
