@@ -11,7 +11,7 @@ using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
 {
-    public class ComputeShader : Instance<ComputeShader>, IDescriptiveFilename
+    public class ComputeShader : Instance<ComputeShader>, IDescriptiveFilename, IStatusProvider
     {
         [Output(Guid = "{6C118567-8827-4422-86CC-4D4D00762D87}")]
         public readonly Slot<SharpDX.Direct3D11.ComputeShader> ComputerShader = new Slot<SharpDX.Direct3D11.ComputeShader>();
@@ -23,6 +23,7 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
         public ComputeShader()
         {
             ComputerShader.UpdateAction = Update;
+            ThreadCount.UpdateAction = Update;
         }
         
         public InputSlot<string> GetSourcePathSlot()
@@ -30,7 +31,6 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
             return Source;
         }
 
-        private string _description = "not loaded";
 
         private void Update(EvaluationContext context)
         {
@@ -38,25 +38,15 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
 
             if (Source.DirtyFlag.IsDirty || EntryPoint.DirtyFlag.IsDirty || DebugName.DirtyFlag.IsDirty)
             {
-                string sourcePath = Source.GetValue(context);
-                string entryPoint = EntryPoint.GetValue(context);
-                string debugName = DebugName.GetValue(context);
-                if (string.IsNullOrEmpty(debugName) && !string.IsNullOrEmpty(sourcePath))
+                _sourcePath = Source.GetValue(context);
+                var entryPoint = EntryPoint.GetValue(context);
+                var debugName = DebugName.GetValue(context);
+                if (string.IsNullOrEmpty(debugName) && !string.IsNullOrEmpty(_sourcePath))
                 {
-                    debugName = new FileInfo(sourcePath).Name;
+                    debugName = new FileInfo(_sourcePath).Name;
                 }
-                _computeShaderResId = resourceManager.CreateComputeShaderFromFile(sourcePath, entryPoint, debugName,
+                _computeShaderResId = resourceManager.CreateComputeShaderFromFile(_sourcePath, entryPoint, debugName,
                                                                                   () => ComputerShader.DirtyFlag.Invalidate());
-                //Log.Debug($"compute shader {sourcePath}:{entryPoint}", this);
-
-                try
-                {
-                    _description =  Path.GetFileName(sourcePath);
-                }
-                catch
-                {
-                    Log.Warning($"Unable to get filename from {sourcePath}", this);
-                }
             }
             else
             {
@@ -69,7 +59,16 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
                 var shaderReflection = new ShaderReflection(resourceManager.GetComputeShaderBytecode(_computeShaderResId));
                 shaderReflection.GetThreadGroupSize(out int x, out int y, out int z);
                 ThreadCount.Value = new Int3(x, y, z);
+                _statusWarning = null;
             }
+            else
+            {
+                _statusWarning = !File.Exists(_sourcePath) 
+                                     ? "Source file not found" 
+                                     : "Compiling not successful\n" + ResourceManager.LastShaderError;
+            }
+            ComputerShader.DirtyFlag.Clear();
+            ThreadCount.DirtyFlag.Clear();
         }
 
         [Input(Guid = "{AFB69C81-5063-4CB9-9D42-841B994B5EC0}")]
@@ -80,5 +79,18 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
 
         [Input(Guid = "{C0701D0B-D37F-4570-9E9A-EC2E88B919D1}")]
         public readonly InputSlot<string> DebugName = new InputSlot<string>();
+
+        public IStatusProvider.StatusLevel GetStatusLevel()
+        {
+            return string.IsNullOrEmpty(_statusWarning) ? IStatusProvider.StatusLevel.Undefined : IStatusProvider.StatusLevel.Warning;
+        }
+
+        public string GetStatusMessage()
+        {
+            return _statusWarning;
+        }
+
+        private string _statusWarning;
+        private string _sourcePath;
     }
 }

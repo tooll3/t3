@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Numerics;
 using ImGuiNET;
 using Newtonsoft.Json;
@@ -74,13 +75,27 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
         private static InputEditStateFlags DrawEditWithSelectors(FileOperations.FilePickerTypes type, ref string value, string filter = null)
         {
             ImGui.SetNextItemWidth(-70);
+
+            var warning = type switch
+                              {
+                                  FileOperations.FilePickerTypes.File when !File.Exists(value)        => "File doesn't exist:\n",
+                                  FileOperations.FilePickerTypes.Folder when !Directory.Exists(value) => "Directory doesn't exist:\n",
+                                  _                                                                   => string.Empty
+                              };
+
+            if (warning != string.Empty)
+                ImGui.PushStyleColor(ImGuiCol.Text, Color.Orange.Rgba);
+            
             var inputEditStateFlags = DrawDefaultTextEdit(ref value);
+            
+            if(warning !=string.Empty) 
+                ImGui.PopStyleColor();
 
             if (ImGui.IsItemHovered() && ImGui.CalcTextSize(value).X > ImGui.GetItemRectSize().X)
             {
                 ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
                 ImGui.BeginTooltip();
-                ImGui.TextUnformatted(value);
+                ImGui.TextUnformatted(warning + value);
                 ImGui.EndTooltip();
                 ImGui.PopStyleVar();
             }

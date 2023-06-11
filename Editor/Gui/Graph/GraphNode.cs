@@ -6,6 +6,7 @@ using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
@@ -64,10 +65,21 @@ namespace T3.Editor.Gui.Graph
             ImGui.PushID(childUi.SymbolChild.Id.GetHashCode());
             {
                 var drawList = GraphCanvas.Current.DrawList;
-                
 
                 if (_isVisible)
                 {
+                    if (instance is IStatusProvider statusProvider)
+                    {
+                        var statusLevel = statusProvider.GetStatusLevel();
+                        if (statusLevel == IStatusProvider.StatusLevel.Warning)
+                        {
+                            ImGui.SetCursorScreenPos(_usableScreenRect.Min - new Vector2(10, 10) * T3Ui.UiScaleFactor);
+                            ImGui.InvisibleButton("#warning", new Vector2(15, 15));
+                            Icons.DrawIconOnLastItem(Icon.Warning, T3Style.Colors.Warning);
+                            CustomComponents.TooltipForLastItem( T3Style.Colors.Warning, statusLevel.ToString(), statusProvider.GetStatusMessage(), false);
+                        }
+                    }
+                    
                     // Resize indicator
                     if (childUi.Style == SymbolChildUi.Styles.Resizable)
                     {

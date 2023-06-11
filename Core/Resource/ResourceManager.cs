@@ -351,6 +351,8 @@ namespace T3.Core.Resource
             }
         }
 
+        public static string LastShaderError;
+        
         internal static void CompileShaderFromFile<TShader>(string srcFile, string entryPoint, string name, string profile, ref TShader shader, ref ShaderBytecode blob)
             where TShader : class, IDisposable
         {
@@ -366,6 +368,7 @@ namespace T3.Core.Resource
             catch (Exception ce)
             {
                 var message = ShaderResource.ExtractMeaningfulShaderErrorMessage(ce.Message);
+                LastShaderError = message;
                 Log.Error($"Shader error: {message} '{name}': {ce.Message}\nUsing previous resource state.");
                 return;
             }
@@ -380,7 +383,7 @@ namespace T3.Core.Resource
             shader = (TShader)Activator.CreateInstance(shaderType, Device, blob.Data, null);
             PropertyInfo debugNameInfo = shaderType.GetProperty("DebugName");
             debugNameInfo?.SetValue(shader, name);
-
+            LastShaderError = null;
             //Log.Info($"Successfully compiled shader '{name}' with profile '{profile}' from '{srcFile}'");
         }
 
@@ -692,14 +695,17 @@ namespace T3.Core.Resource
             }
         }
 
-        public static void UpdateComputeShaderFromFile(string path, uint id, ref ComputeShader computeShader)
+        public static bool UpdateComputeShaderFromFile(string path, uint id, ref ComputeShader computeShader)
         {
             ResourcesById.TryGetValue(id, out var resource);
             if (resource is ComputeShaderResource csResource)
             {
                 csResource.UpdateFromFile(path);
                 computeShader = csResource.ComputeShader;
+                return true;
             }
+
+            return false;
         }
 
         public static void UpdateGeometryShaderFromFile(string path, uint id, ref GeometryShader geometryShader)
