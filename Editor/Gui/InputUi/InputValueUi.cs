@@ -16,7 +16,6 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Animation;
 using T3.Editor.Gui.Commands.Graph;
-using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Interaction;
@@ -157,7 +156,7 @@ namespace T3.Editor.Gui.InputUi
                         ImGui.PushID(multiInputIndex);
 
                         ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
-                        if (ImGui.Button("->", new Vector2(ConnectionAreaWidth, 0)))
+                        if (ImGui.Button(string.Empty, new Vector2(ConnectionAreaWidth, 0)))
                         {
                             // TODO: implement with proper SelectionManager
                             //var compositionSymbol = compositionSymbol;
@@ -166,6 +165,8 @@ namespace T3.Editor.Gui.InputUi
                             // var sourceUi = compositionUi.GetSelectables()
                             //                             .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
                         }
+                        Icons.DrawIconOnLastItem(Icon.ConnectedParameter, Color.White);
+
 
                         ImGui.PopStyleColor();
 
@@ -190,7 +191,7 @@ namespace T3.Editor.Gui.InputUi
                 {
                     // Connected single inputs
                     ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
-                    if (ImGui.Button("->", new Vector2(ConnectionAreaWidth, 0.0f)))
+                    if (ImGui.Button(String.Empty, new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
                         // TODO: implement with proper selectionManager
                         //var compositionSymbol = compositionSymbol;
@@ -207,6 +208,7 @@ namespace T3.Editor.Gui.InputUi
                             FitViewToSelectionHandling.FitViewToSelection();
                         }
                     }
+                    Icons.DrawIconOnLastItem(Icon.ConnectedParameter, Color.White);
 
                     ImGui.PopStyleColor();
                     ImGui.SameLine();
@@ -223,7 +225,6 @@ namespace T3.Editor.Gui.InputUi
                     }
 
                     ImGui.PopStyleVar();
-
                     ImGui.SameLine();
 
                     //// Draw name
@@ -338,43 +339,70 @@ namespace T3.Editor.Gui.InputUi
 
                 
                 ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.DarkGray.Rgba);
+
+
+                var inputOperation = InputOperations.None;
+
+                if (ConnectionMaker.TempConnections.Count == 0)
+                {
+                    if (IsAnimatable && ImGui.GetIO().KeyAlt)
+                    {
+                        inputOperation = InputOperations.Animate;
+                    }
+                    else if(ImGui.GetIO().KeyCtrl && ParameterExtraction.IsInputSlotExtractable(inputSlot))
+                    {
+                        inputOperation = InputOperations.Extract;
+                    }
+                    else
+                    {
+                        inputOperation = InputOperations.ConnectWithSearch;
+                    }
+                }
                 
                 if (ImGui.Button(string.Empty, new Vector2(ConnectionAreaWidth, 0.0f)))
                 {
-                    if (IsAnimatable && (UserSettings.Config.ParameterMode == UserSettings.ParameterModes.AnimatesInput || ImGui.GetIO().KeyCtrl))
+                    switch (inputOperation)
                     {
-                        var cmd = new MacroCommand("add animation",
-                                                   new List<ICommand>()
-                                                       {
-                                                           new ChangeInputValueCommand(compositionUi.Symbol, symbolChildUi.SymbolChild.Id, input,
-                                                                                       inputSlot.Input.Value),
-                                                           new AddAnimationCommand(animator, inputSlot),
-                                                       });
+                        case InputOperations.Animate:
+                        {
+                            var cmd = new MacroCommand("add animation",
+                                                       new List<ICommand>()
+                                                           {
+                                                               new ChangeInputValueCommand(compositionUi.Symbol, symbolChildUi.SymbolChild.Id, input,
+                                                                                           inputSlot.Input.Value),
+                                                               new AddAnimationCommand(animator, inputSlot),
+                                                           });
 
-                        UndoRedoStack.AddAndExecute(cmd);
-                    }
-                    else if (UserSettings.Config.ParameterMode == UserSettings.ParameterModes.CreatesConnectedOp || ImGui.GetIO().KeyCtrl)
-                    {
-                        if (ConnectionMaker.TempConnections.Count == 0)
+                            UndoRedoStack.AddAndExecute(cmd);
+                            break;
+                        }
+                        case InputOperations.Extract:
+                            ParameterExtraction.ExtractAsConnectedOperator(inputSlot, symbolChildUi, input);
+                            break;
+                        case InputOperations.ConnectWithSearch:
                         {
                             ConnectionMaker.StartFromInputSlot(compositionSymbol, symbolChildUi, InputDefinition);
                             var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(compositionSymbol, symbolChildUi, InputDefinition);
                             ConnectionMaker.InitSymbolBrowserOnPrimaryGraphWindow(freePosition);
+                            break;
                         }
                     }
                 }
 
+                var icon = inputOperation switch
+                               {
+                                   InputOperations.None              => Icon.AddKeyframe,
+                                   InputOperations.Animate           => Icon.AddKeyframe,
+                                   InputOperations.ConnectWithSearch => Icon.AddOpToInput,
+                                   InputOperations.Extract           => Icon.ExtractInput,
+                                   _                                 => throw new ArgumentOutOfRangeException()
+                               };
+
+
+                Icons.DrawIconOnLastItem(icon, T3Style.Colors.TextMuted.Fade(0.3f));
                 
-                if (IsAnimatable && ImGui.GetIO().KeyCtrl)
-                {
-                    Icons.DrawIconOnLastItem(Icon.AddKeyframe, T3Style.Colors.TextMuted.Fade(0.3f));
-                }
-                else
-                {
-                    Icons.DrawIconOnLastItem(Icon.AddOpToInput, T3Style.Colors.TextMuted.Fade(0.3f));
-                }
 
-
+                // Draw out input
                 if (ImGui.IsItemActive() && ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).Length() > UserSettings.Config.ClickThreshold)
                 {
                     if (ConnectionMaker.TempConnections.Count == 0)
@@ -384,9 +412,23 @@ namespace T3.Editor.Gui.InputUi
                 }
                 ImGui.PopStyleColor(2);
 
-                //CustomComponents.TooltipForLastItem("");
-                if (ImGui.IsItemHovered() && IsAnimatable)
-                    ImGui.SetTooltip($"Click CTRL to Animate\n{input.DefaultValue.ValueType}");
+                if (ImGui.IsItemHovered())
+                {
+                    var tooltip = $"{input.DefaultValue.ValueType}\n\nAdd input connection";
+                    if (IsAnimatable)
+                    {
+                        tooltip += "\nHold ALT to animate";
+                    }
+                    if (ParameterExtraction.IsInputSlotExtractable(inputSlot))
+                    {
+                        tooltip += "\nHold CTRL to extract";
+                    }
+                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding,new Vector2(5,5));
+                    ImGui.PushFont(Fonts.FontSmall);
+                    ImGui.SetTooltip(tooltip);
+                    ImGui.PopFont();
+                    ImGui.PopStyleVar();
+                }
 
                 ImGui.SameLine();
 
@@ -478,6 +520,14 @@ namespace T3.Editor.Gui.InputUi
                 return editState;
             }
             #endregion
+        }
+
+        private enum InputOperations
+        {
+            None,
+            Animate,
+            ConnectWithSearch,
+            Extract,
         }
 
         private static void PublishAsInput(IInputSlot inputSlot, SymbolChildUi symbolChildUi, SymbolChild.Input input)

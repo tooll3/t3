@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
 using T3.Core.Animation;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
@@ -22,7 +21,7 @@ namespace T3.Editor.Gui.Graph
     /// <summary>
     /// A window that renders a node graph 
     /// </summary>
-    public partial class GraphWindow : Window
+    public class GraphWindow : Window
     {
         public GraphWindow()
         {
@@ -54,7 +53,7 @@ namespace T3.Editor.Gui.Graph
             return true;
         }
 
-        public static Instance FindIdInNestedChildren(Instance instance, Guid childId)
+        private static Instance FindIdInNestedChildren(Instance instance, Guid childId)
         {
             foreach (var child in instance.Children)
             {
@@ -343,7 +342,6 @@ namespace T3.Editor.Gui.Graph
                         var mapSize = widgetSize - Vector2.One * padding * 2;
 
                         var boundsMin = bounds.Min;
-                        var boundsMax = bounds.Max;
                         var boundsSize = bounds.GetSize();
                         var boundsAspect = boundsSize.X / boundsSize.Y;
 
@@ -465,7 +463,7 @@ namespace T3.Editor.Gui.Graph
                 DrawNameAndDescription(compositionOp);
             }
 
-            public static void DrawBreadcrumbs(Instance compositionOp)
+            private static void DrawBreadcrumbs(Instance compositionOp)
             {
                 ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
                 IEnumerable<Instance> parents = NodeOperations.GetParentInstances(compositionOp);

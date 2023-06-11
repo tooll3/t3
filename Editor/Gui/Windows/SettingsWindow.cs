@@ -70,9 +70,7 @@ namespace T3.Editor.Gui.Windows
                                                   ref UserSettings.Config.MouseWheelEditsNeedCtrlKey,
                                                   "In parameter window you can edit numeric values by using the mouse wheel. This setting will prevent accidental modifications while scrolling because by using ctrl key for activation.",
                                                   UserSettings.Defaults.AdjustCameraSpeedWithMouseWheel);
-                FormInputs.SetIndent(170);
-                changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.ParameterMode, "Clicking on Parameter...");
-                FormInputs.SetIndent(20);
+
                 FormInputs.ResetIndent();
                 FormInputs.AddVerticalSpace();
                 //ImGui.Dummy(new Vector2(20,20));
@@ -172,7 +170,6 @@ namespace T3.Editor.Gui.Windows
                 if (ImGui.TreeNode("Undo history"))
                 {
                     int index = 0;
-                    int count = UndoRedoStack.UndoStack.Count;
                     foreach (var c in UndoRedoStack.UndoStack)
                     {
                         ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.5f/(index+1) + 0.5f));

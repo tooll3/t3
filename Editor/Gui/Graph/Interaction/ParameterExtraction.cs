@@ -19,6 +19,11 @@ namespace T3.Editor.Gui.Graph.Interaction;
 
 internal static class ParameterExtraction
 {
+    public static bool IsInputSlotExtractable(IInputSlot inputSlot)
+    {
+        return _symbolIdsForTypes.ContainsKey(inputSlot.ValueType);
+    }
+    
     public static void ExtractAsConnectedOperator(IInputSlot inputSlot, SymbolChildUi symbolChildUi, SymbolChild.Input input)
     {
         var composition = NodeSelection.GetSelectedComposition() ?? inputSlot.Parent.Parent;
@@ -155,6 +160,6 @@ internal static class ParameterExtraction
 
     private static readonly Dictionary<Type, Vector2> _sizesForTypes = new()
                                                                            {
-                                                                               { typeof(string), new Vector2(120, 120) },
+                                                                               { typeof(string), new Vector2(120, 80) },
                                                                            };
 }
