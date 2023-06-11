@@ -9,7 +9,11 @@
     },
     {
       "Id": "1327525c-716c-43e4-a5d1-58cf35440462"/*OutputMode*/,
-      "DefaultValue": 0
+      "DefaultValue": 1
+    },
+    {
+      "Id": "6b1e81bd-2430-4439-ad0c-859b2433c38b"/*Scale*/,
+      "DefaultValue": 1.0
     }
   ],
   "Children": [],

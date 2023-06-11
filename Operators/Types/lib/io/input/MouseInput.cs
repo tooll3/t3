@@ -22,11 +22,12 @@ namespace T3.Operators.Types.Id_eff2ffff_dc39_4b90_9b1c_3c0a9a0108c6
 
         private void Update(EvaluationContext context)
         {
+            var scale = Scale.GetValue(context);
             var mode = OutputMode.GetEnumValue<OutputModes>(context);
             var aspectRatio = (float)context.RequestedResolution.Width / context.RequestedResolution.Height;
                                          Position.Value = mode == OutputModes.Normalized 
                                                               ? Core.IO.MouseInput.LastPosition
-                                                              : (Core.IO.MouseInput.LastPosition - new Vector2(0.5f,0.5f)) * new Vector2(aspectRatio,-1) * 2;
+                                                              : (Core.IO.MouseInput.LastPosition - new Vector2(0.5f,0.5f)) * new Vector2(aspectRatio,-1) * scale;
                                          
             IsLeftButtonDown.Value = Core.IO.MouseInput.IsLeftButtonDown;
         }
@@ -36,7 +37,11 @@ namespace T3.Operators.Types.Id_eff2ffff_dc39_4b90_9b1c_3c0a9a0108c6
         
         [Input(Guid = "1327525C-716C-43E4-A5D1-58CF35440462", MappedType = typeof(OutputModes))]
         public readonly InputSlot<int> OutputMode = new ();
-        
+
+        [Input(Guid = "6B1E81BD-2430-4439-AD0C-859B2433C38B")]
+        public readonly InputSlot<float> Scale = new ();
+
+
         private enum OutputModes
         {
             Normalized,
