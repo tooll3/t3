@@ -414,7 +414,8 @@ namespace T3.Core.Resource
                 
             if (thisType is not null)
                 return thisType;
-                
+            
+            // TODO: this cause Null reference exceptions because CoreUi.Instance has not been initialized
             CoreUi.Instance.ShowMessageBox($"Definition '{typeName}' is missing in Operator.dll.\nPlease try to rebuild your solution.");
             CoreUi.Instance.ExitApplication();
             CoreUi.Instance.ExitThread();
