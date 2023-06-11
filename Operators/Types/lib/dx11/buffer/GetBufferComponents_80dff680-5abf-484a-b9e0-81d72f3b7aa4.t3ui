@@ -3,6 +3,7 @@
   "InputUis": [
     {
       "InputId": "7a13b834-21e5-4cef-ad5b-23c3770ea763"/*BufferWithViews*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 0.0
