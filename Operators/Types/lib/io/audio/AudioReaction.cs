@@ -42,6 +42,10 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
 
             _lastEvalTime = context.LocalFxTime;
             var timeSinceLastHit = _lastEvalTime - _lastHitTime;
+            if (timeSinceLastHit < -1)
+            {
+                _lastHitTime = timeSinceLastHit;
+            }
             
             // if (!string.IsNullOrEmpty(context.Playback.Settings?.AudioInputDeviceName) && !WasapiAudioInput.DevicesInitialized)
             // {
