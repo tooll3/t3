@@ -170,7 +170,7 @@ namespace T3.Editor.Gui
             {
                 ImGui.SetCursorPos(new Vector2(0,-1)); // Shift to make menu items selected when hitting top of screen
                 
-                if (ImGui.BeginMenu("File"))
+                if (ImGui.BeginMenu("Project"))
                 {
                     UserSettings.Config.ShowMainMenu = true;
 
@@ -183,6 +183,13 @@ namespace T3.Editor.Gui
                     {
                         _importDialog.ShowNextFrame();
                     }
+                    
+                    if (ImGui.MenuItem("Fix File references", ""))
+                    {
+                        FileReferenceOperations.FixOperatorFilepathsCommand_Executed();
+                    }
+                    
+                    ImGui.Separator();
 
                     if (ImGui.MenuItem("Save", KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !IsCurrentlySaving))
                     {
@@ -199,15 +206,9 @@ namespace T3.Editor.Gui
                         ImGui.SetTooltip("Can't exit while saving is in progress");
                     }
                     
-                    ImGui.Separator();
-                    if (ImGui.BeginMenu("Documentation"))
-                    {
-                        if (ImGui.MenuItem("Export Operator Descriptions"))
-                        {
-                            ExportWikiDocumentation.ExportWiki();
-                        }
-                        ImGui.EndMenu();
-                    }
+
+                    
+
                     ImGui.EndMenu();
                 }
 
@@ -226,10 +227,7 @@ namespace T3.Editor.Gui
 
                     ImGui.Separator();
 
-                    if (ImGui.MenuItem("Fix File references", ""))
-                    {
-                        FileReferenceOperations.FixOperatorFilepathsCommand_Executed();
-                    }
+
 
                     if (ImGui.BeginMenu("Bookmarks"))
                     {
@@ -237,6 +235,15 @@ namespace T3.Editor.Gui
                         ImGui.EndMenu();
                     }
 
+                    if (ImGui.BeginMenu("Tools"))
+                    {
+                        if (ImGui.MenuItem("Export Operator Descriptions"))
+                        {
+                            ExportWikiDocumentation.ExportWiki();
+                        }
+                        ImGui.EndMenu();
+                    }
+                    
                     ImGui.EndMenu();
                 }
 
