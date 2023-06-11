@@ -63,7 +63,7 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
                 var mesh = ObjMesh.LoadFromFile(path);
                 if (mesh == null || mesh.DistinctDistinctVertices.Count == 0)
                 {
-                    Log.Warning($"Can't read file {path}");
+                    Log.Warning($"Can't read file {path}", this);
                     return;
                 }
 

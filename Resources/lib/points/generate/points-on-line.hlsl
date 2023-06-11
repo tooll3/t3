@@ -45,6 +45,8 @@ void main(uint3 i : SV_DispatchThreadID)
 
     uint pointCount, stride;
     ResultPoints.GetDimensions(pointCount, stride);
+    if(index > pointCount)
+        return;
 
     if(AddSeparator > 0.5 && index == pointCount -1) {
         ResultPoints[index].w = sqrt(-1);
@@ -52,7 +54,9 @@ void main(uint3 i : SV_DispatchThreadID)
     }
 
     int seperatorOffset = AddSeparator > 0.5 ? 1 :0;
-    float f = (float)(index)/(pointCount-1 - seperatorOffset) - Pivot;
+    int steps = (pointCount - 1 - seperatorOffset);
+    float f =  (steps > 0 ? (float)(index)/steps : 0.5) - Pivot;
+    
 
     ResultPoints[index].position = lerp(Center, Center + Direction * LengthFactor, f);
     ResultPoints[index].w = W + WOffset * f;
