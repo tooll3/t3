@@ -62,7 +62,8 @@ namespace T3.Editor.Gui.Interaction
         ScrollDown,
         ZoomIn,
         ZoomOut,
-        
+        SearchGraph,
+
         // Layout and window management
         ToggleFocusMode,
         ToggleVariationsWindow,
@@ -260,6 +261,7 @@ namespace T3.Editor.Gui.Interaction
 
                             new KeyboardBinding(UserActions.AddAnnotation, new KeyCombination(Key.A, shift:true)){ NeedsWindowFocus = true },
                             new KeyboardBinding(UserActions.ToggleVariationsWindow, new KeyCombination(Key.V, alt:true)){ NeedsWindowFocus = false },
+                            new KeyboardBinding(UserActions.SearchGraph, new KeyCombination(Key.F, ctrl:true)){ NeedsWindowFocus = false },
 
                             // Layout and window management
                             new KeyboardBinding(UserActions.ToggleFocusMode, new KeyCombination(Key.Esc, shift: true)),

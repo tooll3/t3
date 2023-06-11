@@ -113,7 +113,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                     if (_filter.PresetFilterString != null)
                     {
-                        AdvanceSelectedItem(_matchingPresets, ref _selectedPreset, 0);
+                        UiListHelpers.AdvanceSelectedItem(_matchingPresets, ref _selectedPreset, 0);
                         DrawPresetPanel(browserPositionInWindow, new Vector2(140, browserSize.Y));
                     }
                     else
@@ -132,7 +132,6 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         //private bool IsSearchingPresets => _filter.MatchingPresets.Count > 0;
 
-        #region internal implementation -----------------------------------------------------------
         private void DrawSearchInput(Vector2 posInWindow, Vector2 posInScreen, Vector2 size)
         {
             if (_focusInputNextTime)
@@ -190,26 +189,6 @@ namespace T3.Editor.Gui.Graph.Interaction
                 PosOnCanvas += GraphCanvas.Current.InverseTransformDirection(ImGui.GetIO().MouseDelta);
             }
         }
-        
-
-        private static void AdvanceSelectedItem<T>(List<T> list, ref T currentItem, int offset)
-        {
-            if (list.Count == 0)
-            {
-                currentItem = default;
-                return;
-            }
-
-            var index = list.IndexOf(currentItem);
-            if (index == -1)
-            {
-                currentItem = list[0];
-                return;
-            }
-
-            var newIndex = WrapIndex(index, offset, list.Count);
-            currentItem = list[newIndex];
-        }
 
         private void Cancel()
         {
@@ -243,12 +222,12 @@ namespace T3.Editor.Gui.Graph.Interaction
                 {
                     if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorDown))
                     {
-                        AdvanceSelectedItem(_filter.MatchingSymbolUis, ref _selectedSymbolUi, 1);
+                        UiListHelpers.AdvanceSelectedItem(_filter.MatchingSymbolUis, ref _selectedSymbolUi, 1);
                         _selectedItemChanged = true;
                     }
                     else if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorUp))
                     {
-                        AdvanceSelectedItem(_filter.MatchingSymbolUis, ref _selectedSymbolUi, -1);
+                        UiListHelpers.AdvanceSelectedItem(_filter.MatchingSymbolUis, ref _selectedSymbolUi, -1);
                         _selectedItemChanged = true;
                     }
                 }
@@ -313,7 +292,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                         }
                         else if (_selectedItemChanged && _selectedSymbolUi == symbolUi)
                         {
-                            ScrollToMakeItemVisible();
+                            UiListHelpers.ScrollToMakeItemVisible();
                             _selectedItemChanged = false;
                         }
 
@@ -400,11 +379,11 @@ namespace T3.Editor.Gui.Graph.Interaction
             {
                 if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorDown))
                 {
-                    AdvanceSelectedItem(_matchingPresets, ref _selectedPreset, 1);
+                    UiListHelpers.AdvanceSelectedItem(_matchingPresets, ref _selectedPreset, 1);
                 }
                 else if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorUp))
                 {
-                    AdvanceSelectedItem(_matchingPresets, ref _selectedPreset, -1);
+                    UiListHelpers.AdvanceSelectedItem(_matchingPresets, ref _selectedPreset, -1);
                 }
 
                 ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.One); // Padding between panels
@@ -541,23 +520,6 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.PopStyleColor(4);
         }
 
-        private static void ScrollToMakeItemVisible()
-        {
-            var windowSize = ImGui.GetWindowSize();
-            var scrollTarget = ImGui.GetCursorPos();
-            scrollTarget -= new Vector2(0, ImGui.GetFrameHeight() + 4); // adjust to start pos of previous item
-            var scrollPos = ImGui.GetScrollY();
-
-            if (scrollTarget.Y < scrollPos)
-            {
-                ImGui.SetScrollY(scrollTarget.Y);
-            }
-            else if (scrollTarget.Y + 20 > scrollPos + windowSize.Y)
-            {
-                ImGui.SetScrollY(scrollPos + windowSize.Y - 20);
-            }
-        }
-
         private void CreateInstance(Symbol symbol)
         {
             var commandsForUndo = new List<ICommand>();
@@ -637,23 +599,6 @@ namespace T3.Editor.Gui.Graph.Interaction
             ConnectionMaker.CompleteOperation(commandsForUndo, "Insert Op " + newChildUi.SymbolChild.ReadableName);
             ParameterPopUp.NodeIdRequestedForParameterWindowActivation = newSymbolChild.Id;
             Close();
-        }
-
-        /// <summary>
-        /// required to correctly restore original state when closing the browser  
-        /// </summary>
-        //private MacroCommand _prepareCommand;
-        #endregion
-
-        private static int WrapIndex(int startIndex, int offset, int count)
-        {
-            if (count == 0)
-                return 0;
-
-            var wrappedIndex = (startIndex + offset) % count;
-            return wrappedIndex < 0
-                       ? count - 1
-                       : wrappedIndex;
         }
 
         private readonly SymbolFilter _filter = new SymbolFilter();

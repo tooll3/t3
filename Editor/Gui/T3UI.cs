@@ -126,6 +126,7 @@ namespace T3.Editor.Gui
             }
             
             _userNameDialog.Draw();
+            _searchDialog.Draw();
             _importDialog.Draw();
             _createFromTemplateDialog.Draw();
             
@@ -158,6 +159,11 @@ namespace T3.Editor.Gui
             {
                 ToggleFocusMode();
             }
+            else if (KeyboardBinding.Triggered(UserActions.SearchGraph))
+            {
+                _searchDialog.ShowNextFrame();
+            }
+            
         }
         
         private void DrawAppMenu()
@@ -427,6 +433,7 @@ namespace T3.Editor.Gui
         
         private static readonly CreateFromTemplateDialog _createFromTemplateDialog = new();
         private static readonly UserNameDialog _userNameDialog = new();
+        private static readonly SearchDialog _searchDialog = new();
         private static readonly MigrateOperatorsDialog _importDialog = new();
         public static readonly BpmDetection _bpmDetection = new ();
 
