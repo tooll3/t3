@@ -366,7 +366,7 @@
     {
       "ChildId": "70ff724c-37de-4b71-8c23-dcc793ee561a"/*UseFallbackTexture*/,
       "Position": {
-        "X": 503.3877,
+        "X": 483.38794,
         "Y": 1430.3638
       }
     },
@@ -597,8 +597,8 @@
     {
       "ChildId": "6dcc3e96-5e5d-47a3-bc1b-1594815b2dcc"/*LoadImage*/,
       "Position": {
-        "X": 203.14494,
-        "Y": 1416.1343
+        "X": 210.18724,
+        "Y": 1454.547
       }
     },
     {

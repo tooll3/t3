@@ -16,7 +16,7 @@
     },
     {
       "Id": "3247ff54-e470-466a-a70c-cdba1e264f6b"/*UseWForScale*/,
-      "DefaultValue": false
+      "DefaultValue": true
     },
     {
       "Id": "4763d03c-7fae-4466-870c-693bb1acb9a0"/*Offset*/,
@@ -206,7 +206,7 @@
     },
     {
       "Id": "c676823b-97d0-4e3e-a59e-e2297816ec69"/*AlphaCut*/,
-      "DefaultValue": 0.001
+      "DefaultValue": 0.4
     },
     {
       "Id": "a129bf5c-e549-4f7c-b30b-5199ffd38f8c"/*GPoints*/,
@@ -722,7 +722,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\common\\images\\white-pixel.png"
+          "Value": "Resources\\common\\images\\white-dot-256px.png"
         }
       ],
       "Outputs": []
