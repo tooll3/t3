@@ -199,15 +199,9 @@ namespace T3.Editor.Gui.Graph
 
                 resourcePaths.Add(@"projectSettings.json");
 
-                resourcePaths.Add(@"Resources\lib\shared\bias.hlsl");
-                resourcePaths.Add(@"Resources\lib\shared\hash-functions.hlsl");
-                resourcePaths.Add(@"Resources\lib\points\spatial-hash-map\hash-map-settings.hlsl");
+                resourcePaths.UnionWith(Directory.GetFiles(@"Resources\lib\shared\") );
 
-                resourcePaths.Add(@"Resources\lib\shared\noise-functions.hlsl");
-                resourcePaths.Add(@"Resources\lib\shared\particle.hlsl");
-                resourcePaths.Add(@"Resources\lib\shared\pbr.hlsl");
-                resourcePaths.Add(@"Resources\lib\shared\point.hlsl");
-                resourcePaths.Add(@"Resources\lib\shared\point-light.hlsl");
+                resourcePaths.Add(@"Resources\lib\points\spatial-hash-map\hash-map-settings.hlsl");
 
                 resourcePaths.Add(@"Resources\lib\dx11\fullscreen-texture.hlsl");
                 resourcePaths.Add(@"Resources\lib\img\internal\resolve-multisampled-depth-buffer-cs.hlsl");
