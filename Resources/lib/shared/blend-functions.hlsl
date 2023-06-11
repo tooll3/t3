@@ -52,6 +52,16 @@ float4 BlendColors(float4 tA, float4 tB, int blendMode)
     case 6:
         rgb = tB.rgb;
         break;
+
+    // colorDodge
+    case 7:
+        rgb = tA.rgb / (1.0001 - saturate( tB.rgb)); 
+        break;
+        
+    // linearDodge  
+    case 8: 
+        rgb = tA.rgb + tB.rgb;
+        break;
     }
 
     return float4(rgb, a);

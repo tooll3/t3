@@ -22,6 +22,8 @@
             Difference = 4,
             UseImageA_RGB = 5,
             UseImageB_RGB = 6,
+            ColorDodge = 7,
+            LinearDodge = 8,
         }
     }
 }
