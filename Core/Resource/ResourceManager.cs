@@ -415,7 +415,7 @@ namespace T3.Core.Resource
             PropertyInfo debugNameInfo = shaderType.GetProperty("DebugName");
             debugNameInfo?.SetValue(shader, name);
 
-            //Log.Info($"Successfully compiled shader '{name}' with profile '{profile}' from source '{shaderSource}'");
+            Log.Debug("Successfully Compiled shader");
         }        
         
         public uint CreateVertexShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
@@ -787,7 +787,7 @@ namespace T3.Core.Resource
                 var bitmapDecoder = new BitmapDecoder(factory, filename, DecodeOptions.CacheOnDemand);
                 var formatConverter = new FormatConverter(factory);
                 var bitmapFrameDecode = bitmapDecoder.GetFrame(0);
-                formatConverter.Initialize(bitmapFrameDecode, PixelFormat.Format32bppPRGBA, BitmapDitherType.None, null, 0.0, BitmapPaletteType.Custom);
+                formatConverter.Initialize(bitmapFrameDecode, PixelFormat.Format32bppRGBA, BitmapDitherType.None, null, 0.0, BitmapPaletteType.Custom);
 
                 texture?.Dispose();
                 texture = CreateTexture2DFromBitmap(Device, formatConverter);

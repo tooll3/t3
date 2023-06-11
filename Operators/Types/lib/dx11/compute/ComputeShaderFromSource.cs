@@ -42,18 +42,19 @@ namespace T3.Operators.Types.Id_4e5bc624_9cda_46a8_9681_7fd412ea3893
                 var shaderSource = ShaderSource.GetValue(context);
                 var entryPoint = EntryPoint.GetValue(context);
                 var debugName = DebugName.GetValue(context);
-                if (string.IsNullOrEmpty(debugName) && !string.IsNullOrEmpty(shaderSource))
-                {
-                    debugName = new FileInfo(shaderSource).Name;
-                }
 
-                var success = resourceManager.CreateComputeShaderFromSource(shaderSource: shaderSource,
-                                                                            name: debugName,
-                                                                            entryPoint: entryPoint,
-                                                                            ref _computeShaderResId);
-                if (!success)
+                if (_code != shaderSource)
                 {
-                    // We don't have to log a failure here, because the ResourceManager already did that.
+                    _code = shaderSource;
+                    if (string.IsNullOrEmpty(debugName) && !string.IsNullOrEmpty(shaderSource))
+                    {
+                        debugName = "customComputeShader"; //new FileInfo(shaderSource).Name;
+                    }
+                    
+                    var success = resourceManager.CreateComputeShaderFromSource(shaderSource: shaderSource,
+                                                                                name: debugName,
+                                                                                entryPoint: entryPoint,
+                                                                                ref _computeShaderResId);
                 }
             }
 
@@ -68,6 +69,8 @@ namespace T3.Operators.Types.Id_4e5bc624_9cda_46a8_9681_7fd412ea3893
             shaderReflection.GetThreadGroupSize(out int x, out int y, out int z);
             ThreadCount.Value = new Int3(x, y, z);
         }
+
+        private string _code;
 
         [Input(Guid = "a8ee59c3-cb62-42e5-a3c9-f4968876c9cc")]
         public readonly InputSlot<string> ShaderSource = new();
