@@ -9,19 +9,19 @@
     },
     {
       "Id": "94219a67-deae-46bc-844b-97a29cc5bea5"/*Threshold*/,
-      "DefaultValue": 0.2
+      "DefaultValue": 1.0
     },
     {
       "Id": "fa0f6143-24a5-4277-a23a-3ac535f29fed"/*Dispersion*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.2
     },
     {
       "Id": "dbb567d1-0b9d-4848-afe5-99b0ec436934"/*CellSize*/,
-      "DefaultValue": 0.92
+      "DefaultValue": 0.2
     },
     {
       "Id": "7cc4cb31-81aa-40c4-a439-5c2ee5ca2868"/*ClampAccelleration*/,
-      "DefaultValue": 0.03
+      "DefaultValue": 0.1
     },
     {
       "Id": "93f9dfed-4efd-43fb-ac70-6c43d78d0f0f"/*IsEnabled*/,
@@ -102,6 +102,12 @@
     {
       "Id": "c3a42107-7033-4783-ac4a-7ac8679c6994"/*Execute*/,
       "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "6978f873-2d2c-4a10-ba12-01eed2926976"/*Time*/,
+      "SymbolId": "9cb4d49e-135b-400b-a035-2b02c5ea6a72",
       "InputValues": [],
       "Outputs": []
     }
@@ -200,6 +206,12 @@
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "SourceSlotId": "7cc4cb31-81aa-40c4-a439-5c2ee5ca2868",
+      "TargetParentOrChildId": "5ae1c747-132c-449b-8f4e-a02c80ccf078",
+      "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
+    },
+    {
+      "SourceParentOrChildId": "6978f873-2d2c-4a10-ba12-01eed2926976",
+      "SourceSlotId": "b20573fe-7a7e-48e1-9370-744288ca6e32",
       "TargetParentOrChildId": "5ae1c747-132c-449b-8f4e-a02c80ccf078",
       "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
     },
