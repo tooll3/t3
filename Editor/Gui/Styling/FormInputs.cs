@@ -365,8 +365,21 @@ namespace T3.Editor.Gui.Styling
             ImGui.SetCursorPosX(LeftParameterPadding + ParameterSpacing);
         }
 
+        public static void SetWidth(float ratio)
+        {
+            _widthRatio = ratio;
+        }
+
+        public static void ResetWidth()
+        {
+            _widthRatio = 1;
+        }
+        
         public static void DrawInputLabel(string label)
         {
+            if (string.IsNullOrEmpty(label))
+                return;
+            
             var labelSize = ImGui.CalcTextSize(label);
             var p = ImGui.GetCursorPos();
             ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding - labelSize.X, 0) + 10);
@@ -400,7 +413,7 @@ namespace T3.Editor.Gui.Styling
             var sizeForResetToDefault = hasReset ? toolWidth : 0;
             var sizeForTooltip = !string.IsNullOrEmpty(tooltip) ? toolWidth : 0;
 
-            var availableWidth = fillWidth ? ImGui.GetContentRegionAvail().X : 200;
+            var availableWidth = fillWidth ? ImGui.GetContentRegionAvail().X * _widthRatio : 200;
 
             var vector2 = new Vector2(availableWidth
                                       - 20
@@ -473,6 +486,7 @@ namespace T3.Editor.Gui.Styling
 
         private const float DefaultParameterIndent = 170;
         private static float _paramIndent = DefaultParameterIndent;
+        private static float _widthRatio = 1;
         private static float LeftParameterPadding => _paramIndent * T3Ui.UiScaleFactor;
         public static float ParameterSpacing => 20 * T3Ui.UiScaleFactor;
     }

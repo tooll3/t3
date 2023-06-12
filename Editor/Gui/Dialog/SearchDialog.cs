@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
@@ -27,6 +28,7 @@ namespace T3.Editor.Gui.Dialog
             if (BeginDialog("Search"))
             {
                 ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
+                
                 if (!_isOpen)
                 {
                     _justOpened = true;
@@ -44,14 +46,24 @@ namespace T3.Editor.Gui.Dialog
 
                 var needsUpdate = _justOpened;
                 FormInputs.SetIndent(0);
+                
+                FormInputs.SetWidth(0.7f);
                 needsUpdate |= FormInputs.AddStringInput("", ref _searchString, "Search", null, null, string.Empty);
-
+                ImGui.SameLine();
+                FormInputs.SetWidth(1f);
+                needsUpdate |= FormInputs.AddEnumDropdown(ref _searchMode, "");
+                FormInputs.ResetWidth();
+                
+                
                 if (needsUpdate)
                 {
                     UpdateResults();
                 }
 
-                if (ImGui.IsKeyPressed(ImGuiKey.Escape) && string.IsNullOrEmpty(_searchString))
+
+                var clickedOutside = ImGui.IsMouseClicked(ImGuiMouseButton.Left) 
+                                     && !ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows| ImGuiHoveredFlags.AllowWhenBlockedByActiveItem );
+                if (ImGui.IsKeyReleased(ImGuiKey.Escape) || clickedOutside)
                 {
                     ImGui.CloseCurrentPopup();
                 }
@@ -75,7 +87,6 @@ namespace T3.Editor.Gui.Dialog
             var size = ImGui.GetContentRegionAvail();
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5, 5));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
-            //var itemForHelpIsHovered = false;
 
             if (ImGui.BeginChildFrame(999, size))
             {
@@ -144,29 +155,17 @@ namespace T3.Editor.Gui.Dialog
                 ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(2, 4));
 
                 var isSelected = instance == _selectedInstance;
-
                 _selectedItemChanged |= ImGui.Selectable($"##Selectable{symbolHash.ToString()}", isSelected);
-                //bool selectionChangedToThis = isSelected && _selectedItemChanged;
 
                 var path = OperatorUtils.BuildIdPathForInstance(instance);
                 var readablePath = string.Join('/', NodeOperations.GetReadableInstancePath(path));
-
-                var isHovered = ImGui.IsItemHovered();
-                // var hasMouseMoved = ImGui.GetIO().MouseDelta.LengthSquared() > 0;
-                // if (hasMouseMoved && isHovered)
-                // {
-                //     _selectedInstance = instance;
-                //     //_timeDescriptionSymbolUiLastHovered = DateTime.Now;
-                //     _selectedItemChanged = true;
-                // }
-                // else 
+                
                 if (_selectedItemChanged && _selectedInstance == instance)
                 {
                     UiListHelpers.ScrollToMakeItemVisible();
                     GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(path);
                     _selectedItemChanged = false;
                 }
-
                 if (ImGui.IsItemActivated())
                 {
                     GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(path);
@@ -181,16 +180,7 @@ namespace T3.Editor.Gui.Dialog
                 ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Fade(0.5f).Rgba);
                 ImGui.TextUnformatted(readablePath);
                 ImGui.PopStyleColor();
-
-                // if (!string.IsNullOrEmpty(symbolNamespace))
-                // {
-                //     ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Fade(0.5f).Rgba);
-                //     ImGui.Text(symbolNamespace);
-                //     ImGui.PopStyleColor();
-                //     ImGui.SameLine();
-                // }
-
-                // ImGui.NewLine();
+                
                 ImGui.PopStyleVar();
                 ImGui.PopStyleColor(4);
             }
@@ -202,7 +192,8 @@ namespace T3.Editor.Gui.Dialog
             foreach (var child in instance.Children)
             {
                 callback(child);
-                //yield return child;
+                if (_searchMode == SearchModes.Local)
+                    continue;
                 FindAllChildren(child, callback);
             }
         }
@@ -210,11 +201,19 @@ namespace T3.Editor.Gui.Dialog
         private void UpdateResults()
         {
             _matchingInstances.Clear();
-            var mainComposition = T3Ui.UiModel.RootInstance;
-            if (mainComposition == null)
+
+            var composition = _searchMode switch
+                                      {
+                                          SearchModes.Global             => T3Ui.UiModel.RootInstance,
+                                          SearchModes.Local              => GraphWindow.GetMainComposition(),
+                                          SearchModes.LocalAndInChildren => GraphWindow.GetMainComposition(),
+                                          _                              => throw new ArgumentOutOfRangeException()
+                                      };
+
+            if (composition == null)
                 return;
 
-            FindAllChildren(mainComposition,
+            FindAllChildren(composition,
                             instance =>
                             {
                                 if (string.IsNullOrEmpty(_searchString)
@@ -232,5 +231,13 @@ namespace T3.Editor.Gui.Dialog
         private static string _searchString;
         private Instance _selectedInstance;
         private bool _selectedItemChanged;
+        private SearchModes _searchMode = SearchModes.Local;
+
+        private enum SearchModes
+        {
+            Local,
+            LocalAndInChildren,
+            Global,
+        }
     }
 }
