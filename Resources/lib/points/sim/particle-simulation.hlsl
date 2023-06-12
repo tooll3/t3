@@ -39,9 +39,9 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
     }
 
-    int spawnIndex = (int)CollectCycleIndex % collectedPointCount;
+    //int spawnIndex = (int)CollectCycleIndex % collectedPointCount;
 
-    int addIndex = gi - CollectCycleIndex;
+    int addIndex = (gi - CollectCycleIndex) % collectedPointCount;
 
     // Insert emit points
     if(AddNewPoints > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount )
@@ -49,11 +49,6 @@ void main(uint3 i : SV_DispatchThreadID)
         CollectedPoints[gi] = NewPoints[addIndex];
         if(UseAging > 0.5)
             CollectedPoints[gi].w = 0.0001;
-
-        // if(addIndex == newPointCount )
-        // {
-        //     CollectedPoints[gi].w = sqrt(-1);
-        // }
     }
     // Update other points
     else
