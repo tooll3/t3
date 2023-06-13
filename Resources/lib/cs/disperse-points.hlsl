@@ -14,7 +14,7 @@ cbuffer Params : register(b0)
 #include "lib/points/spatial-hash-map/spatial-hash-map-lookup.hlsl"
 
 
-[numthreads( 256, 1, 1 )]
+[numthreads( 16, 1, 1 )]
 void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
 {
     uint pointCount, stride;
@@ -36,7 +36,7 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
         int count =0;
         float3 sumForces = 0;
 
-        endIndex = max(startIndex + 128 , endIndex);
+        endIndex = max(startIndex + 64 , endIndex);
 
         for(uint i=startIndex; i < endIndex; ++i) 
         {
