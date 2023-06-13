@@ -18,6 +18,13 @@
       "Usage": "Default"
     },
     {
+      "InputId": "b2158c69-e671-4110-b398-59c323359d2d"/*FilterDoubleNaN*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      }
+    },
+    {
       "InputId": "b3d57d74-ac47-4287-b42a-d85e64501eb5"/*InputList*/,
       "Relevancy": "Required",
       "Position": {

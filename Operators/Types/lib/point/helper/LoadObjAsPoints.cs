@@ -198,7 +198,16 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
 
                             lastVertexIndex = line.V2;
                         }
-
+                        
+                        _points.TypedElements[pointIndex++] = new Point()
+                                                                  {
+                                                                      Position = new Vector3(
+                                                                                             mesh.Positions[sortedVertexIndices[lastVertexIndex]].X,
+                                                                                             mesh.Positions[sortedVertexIndices[lastVertexIndex]].Y,
+                                                                                             mesh.Positions[sortedVertexIndices[lastVertexIndex]].Z),
+                                                                      W = 1
+                                                                  };
+                        
                         _points.TypedElements[pointIndex] = Point.Separator();
                         Log.Debug($"loaded {path} with {segmentCount} segments and {vertexCount} points", this);
                     }
