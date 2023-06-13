@@ -15,6 +15,7 @@ using T3.Editor.App;
 using T3.Editor.Compilation;
 using T3.Editor.Gui;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction.Camera;
 using T3.Editor.Gui.Interaction.StartupCheck;
 using T3.Editor.Gui.Styling;
@@ -165,7 +166,7 @@ namespace T3.Editor
 
                 ProgramWindows.HandleFullscreenToggle();
 
-                NodeOperations.UpdateChangedOperators();
+                GraphOperations.UpdateChangedOperators();
 
                 DirtyFlag.IncrementGlobalTicks();
                 T3Metrics.UiRenderingStarted();

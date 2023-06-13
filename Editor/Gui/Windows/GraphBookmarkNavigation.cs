@@ -5,7 +5,9 @@ using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 
@@ -110,7 +112,7 @@ namespace T3.Editor.Gui.Windows
                 return;
             }
 
-            var op = NodeOperations.GetInstanceFromIdPath(bookmark.IdPath);
+            var op = Structure.GetInstanceFromIdPath(bookmark.IdPath);
             if (op == null)
             {
                 Log.Error("Invalid node path");

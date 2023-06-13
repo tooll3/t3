@@ -11,6 +11,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Rendering;
@@ -255,7 +256,7 @@ namespace T3.Editor.Gui.Graph
                             {
                                 if (UserSettings.Config.WarnBeforeLibEdit)
                                 {
-                                    var count = NodeOperations.GetDependingSymbols(instance.Symbol).Count();
+                                    var count = Structure.CollectDependingSymbols(instance.Symbol).Count();
                                     LibWarningDialog.DependencyCount = count;
                                     GraphCanvas.LibWarningDialog.ShowNextFrame();
                                     blocked = true;

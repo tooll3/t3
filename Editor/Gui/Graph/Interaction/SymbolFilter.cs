@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction.Connections;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction.Variations.Model;
 
 namespace T3.Editor.Gui.Graph.Interaction
@@ -121,7 +123,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         {
             var composition = NodeSelection.GetSelectedComposition();
             var parentSymbolIds = composition != null
-                                      ? new HashSet<Guid>(NodeOperations.GetParentInstances(composition, includeChildInstance: true).Select(p => p.Symbol.Id))
+                                      ? new HashSet<Guid>(Structure.CollectParentInstances(composition, includeChildInstance: true).Select(p => p.Symbol.Id))
                                       : new HashSet<Guid>();
 
             MatchingSymbolUis.Clear();

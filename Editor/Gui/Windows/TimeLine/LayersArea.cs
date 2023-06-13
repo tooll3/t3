@@ -10,7 +10,9 @@ using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Animation;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
@@ -303,7 +305,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 //FitViewToSelectionHandling.FitViewToSelection();
                 //ClipSelection.Select(timeClip);
                 var primaryGraphWindow = GraphWindow.GetVisibleInstances().FirstOrDefault();
-                if (primaryGraphWindow != null && NodeOperations.TryGetUiAndInstanceInComposition(timeClip.Id, _compositionOp, out var childUi, out var instance))
+                if (primaryGraphWindow != null && Structure.TryGetUiAndInstanceInComposition(timeClip.Id, _compositionOp, out var childUi, out var instance))
                 {
                     primaryGraphWindow.GraphCanvas.SetCompositionToChildInstance(instance);
                 }
@@ -490,7 +492,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var layerMinIndex = (screenArea.Min.Y - _minScreenPos.Y) / LayerHeight + _minLayerIndex;
             var layerMaxIndex = (screenArea.Max.Y - _minScreenPos.Y) / LayerHeight + _minLayerIndex;
 
-            foreach (var clip in NodeOperations.GetAllTimeClips(_compositionOp))
+            foreach (var clip in Structure.GetAllTimeClips(_compositionOp))
             {
                  var matches = clip.TimeRange.Start <= endTime
                          && clip.TimeRange.End >= startTime
@@ -645,7 +647,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
         {
             SnapResult bestSnapResult = null;
 
-            var allClips = NodeOperations.GetAllTimeClips(_compositionOp);
+            var allClips = Structure.GetAllTimeClips(_compositionOp);
 
             foreach (var clip in allClips)
             {

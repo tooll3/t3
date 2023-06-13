@@ -3,6 +3,7 @@ using System.Numerics;
 using T3.Core.Logging;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Templates
@@ -32,7 +33,7 @@ namespace T3.Editor.Gui.Templates
             var centerOnScreen = graphCanvas.WindowPos + graphCanvas.WindowSize / 2;
             var positionOnCanvas2 = graphCanvas.InverseTransformPositionFloat(centerOnScreen);
             var freePosition = FindFreePositionOnCanvas(graphCanvas, positionOnCanvas2);
-            var newSymbol = NodeOperations.DuplicateAsNewType(compositionSymbolUi, template.TemplateSymbolId, symbolName, nameSpace, description, freePosition);
+            var newSymbol = Duplicate.DuplicateAsNewType(compositionSymbolUi, template.TemplateSymbolId, symbolName, nameSpace, description, freePosition);
             
             // Select instance of new symbol
             var newChildUi = compositionSymbolUi.ChildUis.SingleOrDefault(c => c.SymbolChild.Symbol.Id == newSymbol.Id);

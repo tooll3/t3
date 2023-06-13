@@ -6,7 +6,9 @@ using T3.Core.Animation;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.Selection;
@@ -466,7 +468,7 @@ namespace T3.Editor.Gui.Graph
             private static void DrawBreadcrumbs(Instance compositionOp)
             {
                 ImGui.SetCursorScreenPos(ImGui.GetWindowPos() + new Vector2(1, 1));
-                IEnumerable<Instance> parents = NodeOperations.GetParentInstances(compositionOp);
+                IEnumerable<Instance> parents = Structure.CollectParentInstances(compositionOp);
 
                 ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
                 ImGui.PushFont(Fonts.FontSmall);

@@ -8,7 +8,9 @@ using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Audio;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Snapping;
 using T3.Editor.Gui.Interaction.WithCurves;
@@ -90,7 +92,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                             break;
                     }
 
-                    var compositionTimeClip = NodeOperations.GetCompositionTimeClip(compositionOp);
+                    var compositionTimeClip = Structure.GetCompositionTimeClip(compositionOp);
 
                     if (Playback.IsLooping)
                     {
@@ -140,7 +142,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var oldScale = Scale;
             var oldScroll = Scroll;
 
-            var clip = NodeOperations.GetCompositionTimeClip(compositionOp);
+            var clip = Structure.GetCompositionTimeClip(compositionOp);
             if (clip == null) return;
 
             // determine scaling factor

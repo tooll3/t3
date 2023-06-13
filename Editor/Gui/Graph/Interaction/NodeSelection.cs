@@ -4,6 +4,8 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph.Helpers;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.Selection;
 
@@ -75,7 +77,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         public static void SelectCompositionChild(Instance compositionOp, Guid id, bool replaceSelection = true)
         {
-            if (!NodeOperations.TryGetUiAndInstanceInComposition(id, compositionOp, out var childUi, out var instance))
+            if (!Structure.TryGetUiAndInstanceInComposition(id, compositionOp, out var childUi, out var instance))
                 return;
             
             if (replaceSelection)
@@ -148,7 +150,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 }
 
                 var idPath = _childUiInstanceIdPaths[firstNode];
-                return NodeOperations.GetInstanceFromIdPath(idPath);
+                return Structure.GetInstanceFromIdPath(idPath);
             }
 
             return null;
@@ -169,7 +171,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 }
 
                 var idPath = _childUiInstanceIdPaths[symbolChildUi];
-                yield return NodeOperations.GetInstanceFromIdPath(idPath);
+                yield return Structure.GetInstanceFromIdPath(idPath);
 
             }
         }
@@ -189,7 +191,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 return null;
 
             var idPath = _childUiInstanceIdPaths[firstNode];
-            var instanceFromIdPath = NodeOperations.GetInstanceFromIdPath(idPath);
+            var instanceFromIdPath = Structure.GetInstanceFromIdPath(idPath);
             return instanceFromIdPath?.Parent;
         }
 
@@ -209,7 +211,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         public static void DeselectCompositionChild(Instance compositionOp, Guid symbolChildId)
         {
-            if (!NodeOperations.TryGetUiAndInstanceInComposition(symbolChildId, compositionOp, out var childUi, out var instance))
+            if (!Structure.TryGetUiAndInstanceInComposition(symbolChildId, compositionOp, out var childUi, out var instance))
                 return;
 
             Selection.Remove(childUi);
@@ -231,7 +233,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         public static Instance GetInstanceForSymbolChildUi(SymbolChildUi symbolChildUi)
         {
             var idPath = _childUiInstanceIdPaths[symbolChildUi];
-            return NodeOperations.GetInstanceFromIdPath(idPath);
+            return Structure.GetInstanceFromIdPath(idPath);
         }
 
         public static readonly List<ISelectableCanvasObject> Selection = new();

@@ -4,7 +4,9 @@ using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction.Camera;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
@@ -27,7 +29,7 @@ namespace T3.Editor.Gui.Graph
         public Instance OutputInstance
         {
             set => _backgroundNodePath = OperatorUtils.BuildIdPathForInstance(value);
-            get => NodeOperations.GetInstanceFromIdPath(_backgroundNodePath);
+            get => Structure.GetInstanceFromIdPath(_backgroundNodePath);
         }
         
         
@@ -56,7 +58,7 @@ namespace T3.Editor.Gui.Graph
             var windowContentRegionMin = ImGui.GetWindowContentRegionMin() + new Vector2(0, 0);
             ImGui.SetCursorPos(windowContentRegionMin);
 
-            var instanceForOutput = NodeOperations.GetInstanceFromIdPath(_backgroundNodePath);
+            var instanceForOutput = Structure.GetInstanceFromIdPath(_backgroundNodePath);
 
             if (instanceForOutput == null || instanceForOutput.Outputs.Count == 0)
                 return;

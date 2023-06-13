@@ -4,7 +4,9 @@ using System.Linq;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Utils;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
@@ -375,7 +377,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                 VariationParameters.Add(param);
                 if (!alreadyAdded.Contains(param.SymbolChildUi))
                 {
-                    NodeSelection.AddSymbolChildToSelection(param.SymbolChildUi, NodeOperations.GetInstanceFromIdPath(param.InstanceIdPath));
+                    NodeSelection.AddSymbolChildToSelection(param.SymbolChildUi, Structure.GetInstanceFromIdPath(param.InstanceIdPath));
                     alreadyAdded.Add(param.SymbolChildUi);
                 }
             }

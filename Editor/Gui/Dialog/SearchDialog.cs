@@ -8,7 +8,9 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -158,7 +160,7 @@ namespace T3.Editor.Gui.Dialog
                 _selectedItemChanged |= ImGui.Selectable($"##Selectable{symbolHash.ToString()}", isSelected);
 
                 var path = OperatorUtils.BuildIdPathForInstance(instance);
-                var readablePath = string.Join('/', NodeOperations.GetReadableInstancePath(path));
+                var readablePath = string.Join('/', Structure.GetReadableInstancePath(path));
                 
                 if (_selectedItemChanged && _selectedInstance == instance)
                 {

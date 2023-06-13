@@ -3,7 +3,9 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -55,10 +57,10 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
                 ImGui.Checkbox("Combine as time clip", ref _shouldBeTimeClip);
 
-                if (CustomComponents.DisablableButton("Combine", NodeOperations.IsNewSymbolNameValid(combineName), enableTriggerWithReturn:false))
+                if (CustomComponents.DisablableButton("Combine", GraphUtils.IsNewSymbolNameValid(combineName), enableTriggerWithReturn:false))
                 {
                     var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
-                    NodeOperations.CombineAsNewType(compositionSymbolUi, selectedChildUis, selectedAnnotations, combineName, nameSpace, description, _shouldBeTimeClip);
+                    Combine.CombineAsNewType(compositionSymbolUi, selectedChildUis, selectedAnnotations, combineName, nameSpace, description, _shouldBeTimeClip);
                     _shouldBeTimeClip = false; // Making timeclips this is normally a one off operation
                     ImGui.CloseCurrentPopup();
                 }

@@ -6,7 +6,9 @@ using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Output;
@@ -176,7 +178,7 @@ namespace T3.Editor.Gui.Windows
             if (!_isPinned)
                 return NodeSelection.GetFirstSelectedInstance();
 
-            var instance = NodeOperations.GetInstanceFromIdPath(_pinnedInstancePath);
+            var instance = Structure.GetInstanceFromIdPath(_pinnedInstancePath);
             if (instance != null)
                 return instance;
             
@@ -186,7 +188,7 @@ namespace T3.Editor.Gui.Windows
 
         public Instance GetPinnedEvaluationInstance()
         {
-            return NodeOperations.GetInstanceFromIdPath(_pinnedEvaluationInstancePath);
+            return Structure.GetInstanceFromIdPath(_pinnedEvaluationInstancePath);
         }
 
         private bool _isPinned;

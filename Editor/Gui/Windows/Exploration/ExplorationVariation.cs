@@ -7,7 +7,9 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
@@ -41,7 +43,7 @@ namespace T3.Editor.Gui.Windows.Exploration
 
             foreach (var p in ValuesForParameters.Keys)
             {
-                instances.Add(NodeOperations.GetInstanceFromIdPath(p.InstanceIdPath));
+                instances.Add(Structure.GetInstanceFromIdPath(p.InstanceIdPath));
             }
 
             return instances.ToList();
@@ -229,7 +231,7 @@ namespace T3.Editor.Gui.Windows.Exploration
         public class VariationParameter
         {
             public List<Guid> InstanceIdPath = new List<Guid>();
-            public Instance Instance => NodeOperations.GetInstanceFromIdPath(InstanceIdPath);
+            public Instance Instance => Structure.GetInstanceFromIdPath(InstanceIdPath);
             public SymbolChildUi SymbolChildUi;
             public IInputSlot InputSlot { get; set; }
             public SymbolChild.Input Input;

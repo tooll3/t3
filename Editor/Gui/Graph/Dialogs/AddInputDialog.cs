@@ -4,7 +4,9 @@ using System.Linq;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Resource;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.Styling;
@@ -70,10 +72,10 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 ImGui.AlignTextToFramePadding();
                 ImGui.Checkbox("Multi-Input", ref _multiInput);
 
-                bool isValid = NodeOperations.IsNewSymbolNameValid(_parameterName) && _selectedType != null;
+                bool isValid = GraphUtils.IsNewSymbolNameValid(_parameterName) && _selectedType != null;
                 if (CustomComponents.DisablableButton("Add", isValid))
                 {
-                    NodeOperations.AddInputToSymbol(_parameterName, _multiInput, _selectedType, symbol);
+                    InputsAndOutputs.AddInputToSymbol(_parameterName, _multiInput, _selectedType, symbol);
                     // NodeOperations.AddOutputToSymbol(_parameterName, _multiInput, _selectedType, symbol);
                     var symbolUi = SymbolUiRegistry.Entries[symbol.Id];
                     var inputUi = symbolUi.InputUis.Values.SingleOrDefault(i => i.InputDefinition.Name == _parameterName);

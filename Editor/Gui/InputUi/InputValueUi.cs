@@ -16,8 +16,10 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Animation;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Animation;
 using T3.Editor.Gui.Selection;
@@ -540,10 +542,10 @@ namespace T3.Editor.Gui.InputUi
                 return;
             }
 
-            NodeOperations.AddInputToSymbol(input.Name, input.InputDefinition.IsMultiInput, input.DefaultValue.ValueType, composition.Symbol);
-            NodeOperations.UpdateChangedOperators();
+            InputsAndOutputs.AddInputToSymbol(input.Name, input.InputDefinition.IsMultiInput, input.DefaultValue.ValueType, composition.Symbol);
+            GraphOperations.UpdateChangedOperators();
 
-            var updatedComposition = NodeOperations.GetInstanceFromIdPath(OperatorUtils.BuildIdPathForInstance(composition));
+            var updatedComposition = Structure.GetInstanceFromIdPath(OperatorUtils.BuildIdPathForInstance(composition));
 
             var newInput = updatedComposition.Symbol.InputDefinitions.SingleOrDefault(i => i.Name == input.Name);
             if (newInput != null)

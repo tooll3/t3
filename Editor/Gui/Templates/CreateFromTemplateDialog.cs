@@ -1,7 +1,9 @@
 ﻿using System.Numerics;
 using System.Text.RegularExpressions;
 using ImGuiNET;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -100,13 +102,13 @@ namespace T3.Editor.Gui.Templates
                     ImGui.PopStyleColor();
                     ImGui.Dummy(new Vector2(10,10));
 
-                    var isNewSymbolNameValid = NodeOperations.IsNewSymbolNameValid(_newSymbolName);
+                    var isNewSymbolNameValid = GraphUtils.IsNewSymbolNameValid(_newSymbolName);
                     FormInputs.AddStringInput("Name",
                                                          ref _newSymbolName,
                                                          null,
                                                          isNewSymbolNameValid ? null : "Symbols must by unique and not contain spaces or special characters.");
 
-                    var isNamespaceValid = NodeOperations.IsNameSpaceValid(NameSpace);
+                    var isNamespaceValid = GraphUtils.IsNameSpaceValid(NameSpace);
                     FormInputs.AddStringInput("NameSpace",
                                                          ref _newNameSpace,
                                                          NameSpace,

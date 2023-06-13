@@ -6,6 +6,7 @@ using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.UiHelpers;
 
@@ -21,7 +22,7 @@ public static class NodeGraphLayouting
         foreach (var n in NodeSelection.GetSelectedChildUis())
         {
             //var xxx = NodeOperations.CollectSlotDependencies(n)
-            var connectedChildren = NodeOperations.CollectConnectedChildren(n.SymbolChild);
+            var connectedChildren = Structure.CollectConnectedChildren(n.SymbolChild);
 
             // First pass is rough layout
             var nodesForSecondPass = new Dictionary<ISelectableCanvasObject, int>();

@@ -16,8 +16,10 @@ using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Annotations;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Dialogs;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
@@ -61,7 +63,7 @@ namespace T3.Editor.Gui.Graph
             if (previousInstanceWasSet)
             {
                 //NodeOperations.GetInstanceFromIdPath(_compositionPath)
-                var previousInstance = NodeOperations.GetInstanceFromIdPath(_compositionPath);
+                var previousInstance = Structure.GetInstanceFromIdPath(_compositionPath);
                 UserSettings.Config.OperatorViewSettings[CompositionOp.SymbolChildId] = GetTargetScope();
 
                 var newUiContainer = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
@@ -74,7 +76,7 @@ namespace T3.Editor.Gui.Graph
             }
 
             _compositionPath = childIdPath;
-            var comp = NodeOperations.GetInstanceFromIdPath(childIdPath);
+            var comp = Structure.GetInstanceFromIdPath(childIdPath);
             if (comp == null)
             {
                 Log.Error("Can't resolve instance for id-path " + childIdPath);
@@ -112,7 +114,7 @@ namespace T3.Editor.Gui.Graph
         /// </summary>
         public void OpenAndFocusInstance(List<Guid> childIdPath)
         {
-            var instance = NodeOperations.GetInstanceFromIdPath(childIdPath);
+            var instance = Structure.GetInstanceFromIdPath(childIdPath);
             if (instance == null)
             {
                 return;
@@ -138,7 +140,7 @@ namespace T3.Editor.Gui.Graph
         {
             // Validation that instance is valid
             // TODO: only do in debug mode
-            var op = NodeOperations.GetInstanceFromIdPath(_compositionPath);
+            var op = Structure.GetInstanceFromIdPath(_compositionPath);
             var matchingChild = op.Children.SingleOrDefault(child => child == instance);
             if (matchingChild == null)
             {
@@ -242,7 +244,7 @@ namespace T3.Editor.Gui.Graph
 
             // TODO: Refresh reference on every frame. Since this uses lists instead of dictionary
             // it can be really slow
-            CompositionOp = NodeOperations.GetInstanceFromIdPath(_compositionPath);
+            CompositionOp = Structure.GetInstanceFromIdPath(_compositionPath);
             if (CompositionOp == null)
             {
                 Log.Error("unable to get composition op");
@@ -578,7 +580,7 @@ namespace T3.Editor.Gui.Graph
                         var symbol = SymbolRegistry.Entries[guid];
                         var parent = CompositionOp.Symbol;
                         var posOnCanvas = InverseTransformPositionFloat(ImGui.GetMousePos());
-                        var childUi = NodeOperations.CreateInstance(symbol, parent, posOnCanvas);
+                        var childUi = GraphOperations.AddSymbolChild(symbol, parent, posOnCanvas);
 
                         var instance = CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
                         NodeSelection.SetSelectionToChildUi(childUi, instance);
@@ -593,7 +595,7 @@ namespace T3.Editor.Gui.Graph
 
         public IEnumerable<Symbol> GetParentSymbols()
         {
-            return NodeOperations.GetParentInstances(CompositionOp, includeChildInstance: true).Select(p => p.Symbol);
+            return Structure.CollectParentInstances(CompositionOp, includeChildInstance: true).Select(p => p.Symbol);
         }
 
         private void FocusViewToSelection()
@@ -952,13 +954,13 @@ namespace T3.Editor.Gui.Graph
             selectedInputUis ??= NodeSelection.GetSelectedNodes<IInputUi>().ToList();
             if (selectedInputUis.Count > 0)
             {
-                NodeOperations.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), CompositionOp.Symbol);
+                InputsAndOutputs.RemoveInputsFromSymbol(selectedInputUis.Select(entry => entry.Id).ToArray(), CompositionOp.Symbol);
             }
 
             selectedOutputUis ??= NodeSelection.GetSelectedNodes<IOutputUi>().ToList();
             if (selectedOutputUis.Count > 0)
             {
-                NodeOperations.RemoveOutputsFromSymbol(selectedOutputUis.Select(entry => entry.Id).ToArray(), CompositionOp.Symbol);
+                InputsAndOutputs.RemoveOutputsFromSymbol(selectedOutputUis.Select(entry => entry.Id).ToArray(), CompositionOp.Symbol);
             }
 
             var deleteCommand = new MacroCommand("Delete elements", commands);

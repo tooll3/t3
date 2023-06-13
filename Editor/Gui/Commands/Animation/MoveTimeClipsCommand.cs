@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using T3.Core.Animation;
 using T3.Core.Operator;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 
 namespace T3.Editor.Gui.Commands.Animation
 {
@@ -44,7 +46,7 @@ namespace T3.Editor.Gui.Commands.Animation
 
         public void StoreCurrentValues()
         {
-            foreach (var clip in NodeOperations.GetAllTimeClips(_compositionOp))
+            foreach (var clip in Structure.GetAllTimeClips(_compositionOp))
             {
                 var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
@@ -59,7 +61,7 @@ namespace T3.Editor.Gui.Commands.Animation
 
         public void Undo()
         {
-            foreach (var clip in NodeOperations.GetAllTimeClips(_compositionOp))
+            foreach (var clip in Structure.GetAllTimeClips(_compositionOp))
             {
                 var selectedEntry = _entries.SingleOrDefault(entry => entry.Id == clip.Id);
                 if (selectedEntry == null)
@@ -73,7 +75,7 @@ namespace T3.Editor.Gui.Commands.Animation
 
         public void Do()
         {
-            var allTimeClips = NodeOperations.GetAllTimeClips(_compositionOp).ToList();
+            var allTimeClips = Structure.GetAllTimeClips(_compositionOp).ToList();
             
             foreach (var clip in allTimeClips)
             {

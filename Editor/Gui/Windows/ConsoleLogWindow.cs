@@ -7,7 +7,9 @@ using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
@@ -184,7 +186,7 @@ namespace T3.Editor.Gui.Windows
                     if (hasInstancePath)
                     {
                         var childIdPath = entry.SourceIdPath?.ToList();
-                        var hoveredSourceInstance = NodeOperations.GetInstanceFromIdPath(childIdPath);
+                        var hoveredSourceInstance = Structure.GetInstanceFromIdPath(childIdPath);
                         if (hoveredSourceInstance == null)
                         {
                             ImGui.Text("Source Instance of message not longer valid");
@@ -193,7 +195,7 @@ namespace T3.Editor.Gui.Windows
                         {
                             ImGui.TextColored(T3Style.Colors.TextMuted, "from ");
 
-                            foreach (var p in NodeOperations.GetReadableInstancePath(childIdPath))
+                            foreach (var p in Structure.GetReadableInstancePath(childIdPath))
                             {
                                 ImGui.SameLine();
                                 ImGui.TextColored(T3Style.Colors.TextMuted, " / ");

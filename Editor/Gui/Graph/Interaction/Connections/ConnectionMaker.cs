@@ -6,6 +6,8 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph.Helpers;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Selection;
 using Vector2 = System.Numerics.Vector2;
 
@@ -334,7 +336,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             {
                 var outputSlot = sourceInstance.Outputs[0];
                 var deps = new HashSet<ISlot>();
-                NodeOperations.CollectSlotDependencies(outputSlot, deps);
+                Structure.CollectSlotDependencies(outputSlot, deps);
 
                 foreach (var d in deps)
                 {
@@ -410,7 +412,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 var deps = new HashSet<ISlot>();
                 foreach (var inputSlot in sourceInstance.Inputs)
                 {
-                    NodeOperations.CollectSlotDependencies(inputSlot, deps);
+                    Structure.CollectSlotDependencies(inputSlot, deps);
                 }
 
                 foreach (var d in deps)

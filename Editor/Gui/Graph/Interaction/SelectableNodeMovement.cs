@@ -8,6 +8,7 @@ using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Interaction.Connections;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
@@ -125,7 +126,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                                                                             (int)(childB.PosOnCanvas.Y * 10000 + childB.PosOnCanvas.X);
                                                                  });
                         composition.Symbol.SortInputSlotsByDefinitionOrder();
-                        NodeOperations.AdjustInputOrderOfSymbol(composition.Symbol);
+                        InputsAndOutputs.AdjustInputOrderOfSymbol(composition.Symbol);
                     }
                 }
                 else

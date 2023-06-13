@@ -4,7 +4,9 @@ using System.Linq;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Resource;
+using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -69,10 +71,10 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 ImGui.AlignTextToFramePadding();
                 ImGui.Checkbox("IsTimeClip", ref _isTimeClip);
 
-                bool isValid = NodeOperations.IsNewSymbolNameValid(_parameterName) && _selectedType != null;
+                bool isValid = GraphUtils.IsNewSymbolNameValid(_parameterName) && _selectedType != null;
                 if (CustomComponents.DisablableButton("Add", isValid))
                 {
-                    NodeOperations.AddOutputToSymbol(_parameterName, _isTimeClip, _selectedType, symbol);
+                    InputsAndOutputs.AddOutputToSymbol(_parameterName, _isTimeClip, _selectedType, symbol);
                 }
 
                 ImGui.SameLine();
