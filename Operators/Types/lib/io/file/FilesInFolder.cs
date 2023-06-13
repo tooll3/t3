@@ -41,11 +41,9 @@ namespace T3.Operators.Types.Id_f90fcd0a_eab9_4e2a_b393_e8d3a0380823
                 Files.Value = string.IsNullOrEmpty(Filter.Value) 
                                   ? filePaths 
                                   : filePaths.FindAll(filepath => filepath.Contains(filter)).ToList();
+                
+                NumberOfFiles.Value = Files.Value.Count;
             }
-            
-
-            
-            NumberOfFiles.Value = Files.Value.Count;
         }
 
         private bool _trigger;
