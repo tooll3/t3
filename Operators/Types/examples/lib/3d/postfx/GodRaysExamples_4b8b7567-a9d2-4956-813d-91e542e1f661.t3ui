@@ -1,0 +1,149 @@
+{
+  "Id": "4b8b7567-a9d2-4956-813d-91e542e1f661"/*GodRaysExamples*/,
+  "Description": "Shows a simple setup for using the godrays post render effect.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "93f7243f-5c9a-44df-a5e2-222d2237bf79"/*GodRays*/,
+      "Position": {
+        "X": 1500.0,
+        "Y": 439.0
+      }
+    },
+    {
+      "ChildId": "14634954-9362-4256-8701-a5afc9ef7e6c"/*SpherePoints*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 80.0
+      }
+    },
+    {
+      "ChildId": "8989efb1-bb79-4f7b-80d0-432192814460"/*RenderTarget*/,
+      "Position": {
+        "X": 1350.0,
+        "Y": 40.0
+      }
+    },
+    {
+      "ChildId": "ab9733cb-8bb3-4042-920f-594272e3c2f6"/*Layer2d*/,
+      "Position": {
+        "X": 1650.0,
+        "Y": 439.0
+      }
+    },
+    {
+      "ChildId": "17734892-fbd4-44c8-ac15-a1545436657e"/*Group*/,
+      "Position": {
+        "X": 1800.0,
+        "Y": 439.0
+      }
+    },
+    {
+      "ChildId": "0db483a8-8f68-45a4-8ea6-85b86993a06e"/*Locator*/,
+      "Position": {
+        "X": 600.0,
+        "Y": 286.0
+      }
+    },
+    {
+      "ChildId": "ded77fd1-cfec-4d73-abb8-6a6146007c1c"/*Group*/,
+      "Position": {
+        "X": 750.0,
+        "Y": 80.0
+      }
+    },
+    {
+      "ChildId": "2516d63a-2497-4480-9f26-6785465cbff7"/*Camera*/,
+      "Position": {
+        "X": 1200.0,
+        "Y": 80.0
+      }
+    },
+    {
+      "ChildId": "4214c25c-e0ac-42bb-918c-7610e45ffbd8"/*RenderTarget*/,
+      "Position": {
+        "X": 1950.0,
+        "Y": 439.0
+      }
+    },
+    {
+      "ChildId": "86f50b3f-61fb-4b23-992c-2a9c32927c04"/*OscillateVec3*/,
+      "Position": {
+        "X": 450.0,
+        "Y": 286.0
+      }
+    },
+    {
+      "ChildId": "1498973c-0610-48e8-bcbd-e515d78ed375"/*RandomizePoints*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 80.0
+      }
+    },
+    {
+      "ChildId": "6d94b9ab-648b-480d-8bfb-ba09566a2fee"/*DrawPointsShaded*/,
+      "Position": {
+        "X": 450.0,
+        "Y": 80.0
+      }
+    },
+    {
+      "ChildId": "18eb46ff-4a34-4c69-9fba-45cbb06a5e03"/*PointLight*/,
+      "Position": {
+        "X": 900.0,
+        "Y": 80.0
+      }
+    },
+    {
+      "ChildId": "74c887e5-a916-4b8c-8c49-78dc49067af7"/*Blend*/,
+      "Position": {
+        "X": 2100.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "ac7fbf9f-f511-4528-b04d-ce34cf2e35b9"/*AddNoise*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 80.0
+      }
+    },
+    {
+      "ChildId": "5a1ce537-a9b9-480a-9392-0c760869c75a"/*Time*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 143.0
+      }
+    },
+    {
+      "ChildId": "53d05b34-c125-49b3-ba32-03eac31745de"/*Glow*/,
+      "Position": {
+        "X": 2250.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "87ffd02c-e062-48ec-bb81-d9dc50bd5a80"/*SetMaterial*/,
+      "Position": {
+        "X": 600.0,
+        "Y": 80.0
+      }
+    },
+    {
+      "ChildId": "ca1485fd-95db-4f58-8168-e8960dfb3dd3"/*SetEnvironment*/,
+      "Position": {
+        "X": 1050.0,
+        "Y": 80.0
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "6fa518a4-6e57-4d6a-8eb4-539b580c0947"/*ImgOutput*/,
+      "Position": {
+        "X": 2660.0,
+        "Y": 257.0
+      }
+    }
+  ]
+}

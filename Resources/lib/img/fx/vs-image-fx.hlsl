@@ -24,7 +24,7 @@ vsOutput vsMain(uint vertexId: SV_VertexID)
 {
     vsOutput output;
     float4 quadPos = float4(Quad[vertexId], 1) ;
-    output.texCoord = quadPos.xy*float2(0.5, -0.5) + 0.5;
+    output.texCoord = quadPos.xy * float2(0.5, -0.5) + 0.5;
     output.position = quadPos;
     return output; 
 }
