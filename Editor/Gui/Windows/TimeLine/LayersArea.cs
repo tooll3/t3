@@ -175,13 +175,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
 
             // Draw layer lines
-            var min = ImGui.GetCursorScreenPos();
+            var min = ImGui.GetCursorScreenPos() + new Vector2(0,5);
             var max = min + new Vector2(ImGui.GetContentRegionAvail().X, LayerHeight * (_maxLayerIndex - _minLayerIndex + 1) + 1);
             var layerArea = new ImRect(min, max);
-            LastHeight = max.Y - min.Y;
+            LastHeight = max.Y - min.Y + 5;
 
-            _drawList.AddRectFilled(new Vector2(min.X, max.Y - 2),
-                                    new Vector2(max.X, max.Y - 1), new Color(0, 0, 0, 0.4f));
+            _drawList.AddRectFilled(new Vector2(min.X, max.Y - 4+ 5),
+                                    new Vector2(max.X, max.Y - 1 + 5), new Color(0, 0, 0, 0.4f));
 
             foreach (var clip in clips)
             {
@@ -205,8 +205,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                 ? (clipWidth - 2 * HandleWidth)
                                 : clipWidth;
 
-            var bodySize = new Vector2(bodyWidth, LayerHeight);
-            var clipSize = new Vector2(clipWidth, LayerHeight - 1);
+            var bodySize = new Vector2(bodyWidth, LayerHeight-2);
+            var clipSize = new Vector2(clipWidth, LayerHeight - 2);
 
             var symbolUi = SymbolUiRegistry.Entries[_compositionOp.Symbol.Id];
             var symbolChildUi = symbolUi.ChildUis.Single(child => child.Id == timeClip.Id);
@@ -341,8 +341,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var aHandleClicked = ImGui.InvisibleButton("startHandle", handleSize);
             if (ImGui.IsItemHovered() || ImGui.IsItemActive())
             {
-                _drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.White);
-                _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.Black);
+                _drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax() - new Vector2(0,2), Color.White.Fade(0.5f));
+                _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax() - new Vector2(0,2), Color.Black);
             }
 
             HandleDragging(timeClip, isSelected, false, HandleDragMode.Start, position);
@@ -351,8 +351,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
             aHandleClicked |= ImGui.InvisibleButton("endHandle", handleSize);
             if (ImGui.IsItemHovered() || ImGui.IsItemActive())
             {
-                _drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.White);
-                _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.Black);
+                _drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax() - new Vector2(0,2), Color.White.Fade(0.5f));
+                _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax() - new Vector2(0,2), Color.Black);
             }
             
             HandleDragging(timeClip, isSelected, false, HandleDragMode.End, position);
@@ -667,7 +667,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
         //public readonly HashSet<ITimeClip> SelectedTimeClips = new HashSet<ITimeClip>();
         private static MoveTimeClipsCommand _moveClipsCommand;
         private const int LayerHeight = 18;
-        private const float HandleWidth = 5;
+        private const float HandleWidth = 7;
         private readonly Vector2 _handleOffset = new Vector2(HandleWidth, 0);
 
         private ImDrawListPtr _drawList;
