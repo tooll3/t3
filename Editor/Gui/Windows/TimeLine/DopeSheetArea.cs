@@ -709,8 +709,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
             SnapResult best = null;
             foreach (var vDefinition in GetAllKeyframes())
             {
-                if (SelectedKeyframes.Contains(vDefinition))
-                    continue;
+                // if (SelectedKeyframes.Contains(vDefinition))
+                //     continue;
 
                 ValueSnapHandler.CheckForBetterSnapping(targetTime, vDefinition.U, canvasScale, ref best);
             }
