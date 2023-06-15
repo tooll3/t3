@@ -329,11 +329,10 @@ namespace T3.Editor.Gui.Graph
                         ImGui.PushFont(GraphCanvas.Current.Scale.X < 1 * T3Ui.UiScaleFactor ? Fonts.FontSmall : Fonts.FontBold);
                         var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
 
+
                         drawList.AddText(_usableScreenRect.Min + LabelPos,
                                          ColorVariations.OperatorLabel.Apply(typeColor),
-                                         string.Format(isRenamed
-                                                           ? $"\"{childUi.SymbolChild.ReadableName}\""
-                                                           : childUi.SymbolChild.ReadableName));
+                                         isRenamed ? $"\"{childUi.SymbolChild.ReadableName}\"" : childUi.SymbolChild.ReadableName);
                         ImGui.PopFont();
                         drawList.PopClipRect();
                     }
