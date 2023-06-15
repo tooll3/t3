@@ -13,22 +13,23 @@ static const float3 Quad[] =
 
 cbuffer ParamConstants : register(b0)
 {
-    float Size;
-    float Samples;
-    float Offset;
-    float Rays;
+    float3 Position;
+    float _padding;
 
-    float4 Color;
+    float4 RayColor;
+    float4 OriginalColor;
+
+    float Intensity;
+    float Size;
+    float Streaks;
+    float Samples;
 
     float ShiftDepth;
-    float Constrast;
+    float Offset;
     float BlurSamples;
     float BlurSize;
 
     float BlurOffset;
-    float3 Position;
-
-    float Amount;
 }
 
 
@@ -74,12 +75,13 @@ vsOutput vsMain(uint vertexId: SV_VertexID)
 Texture2D<float4> Image : register(t0);
 Texture2D<float4> Depth : register(t1);
 sampler samLinear : register(s0);
+sampler samPoint : register(s1);
 
 
 float4 psMain(vsOutput input) : SV_TARGET
 {
-    float4 c = Image.Sample(samLinear, input.texCoord);
-    float depth = Depth.SampleLevel(samLinear, input.texCoord, 0).r;
+    //float4 c = Image.Sample(samPoint, input.texCoord);
+    float depth = Depth.SampleLevel(samPoint, input.texCoord, 0).r;
     float4 viewTFragPos = float4(input.texCoord.x*2.0 - 1.0, -input.texCoord.y*2.0 + 1.0, depth, 1.0);
     float4 cameraTFragPos = mul(viewTFragPos, ClipSpaceToCamera); 
     cameraTFragPos /= cameraTFragPos.w;
@@ -91,6 +93,7 @@ float4 psMain(vsOutput input) : SV_TARGET
 
     float2 pos = dir;
     float distanceToCenter;
+    float4 c = 0;
     for (int i = 0; i < Samples; ++i)
     {
         float2 p = input.texCoord + pos;
@@ -100,14 +103,14 @@ float4 psMain(vsOutput input) : SV_TARGET
             float depth2 = Depth.SampleLevel(samLinear, p, 0).r;
             if (depth2 > input.lightPosInCam.z + ShiftDepth/100)
             {                
-                distanceToCenter = Amount / (length(pos)*10);
-                c += float4(1,1,1,1)*distanceToCenter+Rays;
+                distanceToCenter = Intensity / (length(pos)*10);
+                c += float4(1,1,1,1)*distanceToCenter + Streaks;
             }
         }        
         pos += dir;
     }
     c /= 100;
-    c*=Color;
+    c *= RayColor;
     return c;
 }
 
