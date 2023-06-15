@@ -16,17 +16,20 @@ internal static class Structure
         return OperatorUtils.GetInstanceFromIdPath(T3Ui.UiModel.RootInstance, compositionPath);
     }
 
-    public static List<string> GetReadableInstancePath(List<Guid> path)
+    public static List<string> GetReadableInstancePath(List<Guid> path, bool includeLeave= true)
     {
-        if (path == null || path.Count == 0)
+        if (path == null || (includeLeave && path.Count == 0) || (!includeLeave && path.Count == 1)) 
             return new List<string> { "Path empty" };
 
-        var instance = Structure.GetInstanceFromIdPath(path);
+        var instance = GetInstanceFromIdPath(path);
+        
         if (instance == null)
             return new List<string> { "Path invalid" };
 
         var newList = new List<string>();
 
+        var isFirst = true;
+        
         while (true)
         {
             var parent = instance.Parent;
@@ -34,6 +37,15 @@ internal static class Structure
             {
                 break;
             }
+
+            if (!includeLeave && isFirst)
+            {
+                isFirst = false;
+                instance = parent;
+                continue;
+            }
+
+            isFirst = false;
 
             var parentSymbolUi = SymbolUiRegistry.Entries[parent.Symbol.Id];
             var childUisWithThatType = parentSymbolUi.ChildUis.FindAll(c => c.SymbolChild.Symbol == instance.Symbol);

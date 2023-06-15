@@ -27,6 +27,7 @@ namespace T3.Editor.Gui.Windows
         
         protected override void DrawContent()
         {
+            FormInputs.ResetIndent();
             var modified = false;
             modified |= FormInputs.AddFilePicker("SvgFile", ref _svgFilePath, "not-a-font.svg", null, FileOperations.FilePickerTypes.File);
             modified |= FormInputs.AddFloat("UnitsPerEm", ref _unitsPerEm, -1000, 2000, 1);

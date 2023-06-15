@@ -10,7 +10,6 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -21,7 +20,7 @@ namespace T3.Editor.Gui.Dialog
     {
         public SearchDialog()
         {
-            DialogSize = new Vector2(400, 300);
+            DialogSize = new Vector2(500, 300);
             Padding = 4;
         }
 
@@ -65,7 +64,7 @@ namespace T3.Editor.Gui.Dialog
 
                 var clickedOutside = ImGui.IsMouseClicked(ImGuiMouseButton.Left) 
                                      && !ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows| ImGuiHoveredFlags.AllowWhenBlockedByActiveItem );
-                if (ImGui.IsKeyReleased(ImGuiKey.Escape) || clickedOutside)
+                if (ImGui.IsKeyReleased(ImGuiKey.Enter) || ImGui.IsKeyReleased(ImGuiKey.Escape) || clickedOutside)
                 {
                     ImGui.CloseCurrentPopup();
                 }
@@ -96,11 +95,22 @@ namespace T3.Editor.Gui.Dialog
                 {
                     UiListHelpers.AdvanceSelectedItem(_matchingInstances, ref _selectedInstance, 1);
                     _selectedItemChanged = true;
+                    var index = _matchingInstances.IndexOf(_selectedInstance);
+                    if(index == 0)
+                        ImGui.SetScrollY(0);
                 }
                 else if (ImGui.IsKeyReleased((ImGuiKey)Key.CursorUp))
                 {
                     UiListHelpers.AdvanceSelectedItem(_matchingInstances, ref _selectedInstance, -1);
                     _selectedItemChanged = true;
+                    
+                    var index = _matchingInstances.IndexOf(_selectedInstance);
+
+                    if (index * ImGui.GetTextLineHeight() > ImGui.GetScrollY() + ImGui.GetContentRegionAvail().Y)
+                    {
+                        Log.Debug("Would scroll down");
+                        ImGui.SetScrollY(ImGui.GetScrollY() + ImGui.GetContentRegionAvail().Y);
+                    }
                 }
 
                 unsafe
@@ -119,7 +129,7 @@ namespace T3.Editor.Gui.Dialog
                             DrawItem(_matchingInstances[i]);
                         }
                     }
-
+                    
                     listClipperPtr.End();
                 }
             }
@@ -157,22 +167,25 @@ namespace T3.Editor.Gui.Dialog
                 ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(2, 4));
 
                 var isSelected = instance == _selectedInstance;
-                _selectedItemChanged |= ImGui.Selectable($"##Selectable{symbolHash.ToString()}", isSelected);
+                var hasBeenClicked = ImGui.Selectable($"##Selectable{symbolHash.ToString()}", isSelected);
+                _selectedItemChanged |= hasBeenClicked; 
 
                 var path = OperatorUtils.BuildIdPathForInstance(instance);
-                var readablePath = string.Join('/', Structure.GetReadableInstancePath(path));
+                var readablePath = string.Join(" / ", Structure.GetReadableInstancePath(path, false));
                 
-                if (_selectedItemChanged && _selectedInstance == instance)
+                if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                {
+                    GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(path);
+                    _selectedInstance = instance;
+                    _selectedItemChanged = false;
+                }
+                else if (_selectedItemChanged && _selectedInstance == instance)
                 {
                     UiListHelpers.ScrollToMakeItemVisible();
                     GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(path);
                     _selectedItemChanged = false;
                 }
-                if (ImGui.IsItemActivated())
-                {
-                    GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(path);
-                    _selectedItemChanged = false;
-                }
+
 
                 ImGui.SameLine();
 
@@ -203,7 +216,15 @@ namespace T3.Editor.Gui.Dialog
         private void UpdateResults()
         {
             _matchingInstances.Clear();
-
+            
+            if(string.IsNullOrEmpty(_searchString))
+            {
+                _matchingInstances.AddRange(NavigationHistory.GetPreviouslySelectedInstances());
+                _selectedInstance = _matchingInstances.Count > 0 ? _matchingInstances[0] : null;
+                
+                return;
+            }
+            
             var composition = _searchMode switch
                                       {
                                           SearchModes.Global             => T3Ui.UiModel.RootInstance,

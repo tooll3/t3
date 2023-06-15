@@ -52,7 +52,7 @@ namespace T3.Editor.Gui.UiHelpers
             public bool UseArcConnections = true;
             public float SnapStrength = 5;
             public bool UseJogDialControl = true;
-            public float ScrollSmoothing = 0.06f;
+            public float ScrollSmoothing = 0.1f;
             public float TooltipDelay = 1.2f;
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
             public bool AdjustCameraSpeedWithMouseWheel = false;

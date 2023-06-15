@@ -11,14 +11,12 @@ public abstract class UiListHelpers
         if (list.Count == 0)
         {
             currentItem = default;
-            return;
         }
 
         var index = list.IndexOf(currentItem);
         if (index == -1)
         {
             currentItem = list[0];
-            return;
         }
 
         var newIndex = WrapIndex(index, offset, list.Count);

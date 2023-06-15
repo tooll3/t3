@@ -33,6 +33,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         /// </summary>
         public static void SetSelectionToParent(Instance instance)
         {
+            NavigationHistory.UpdateSelectedInstance(instance);
             Clear();
             _childUiInstanceIdPaths.Clear();
             _selectedComposition = instance;
@@ -73,6 +74,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         {
             Clear();
             AddSymbolChildToSelection(node, instance);
+            NavigationHistory.UpdateSelectedInstance(instance);
         }
 
         public static void SelectCompositionChild(Instance compositionOp, Guid id, bool replaceSelection = true)

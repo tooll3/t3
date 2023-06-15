@@ -133,18 +133,28 @@ namespace T3.Editor.Gui.Graph.Interaction
                 {
                     if (!NodeSelection.IsNodeSelected(node))
                     {
-                        if (!ImGui.GetIO().KeyShift)
+                        var replaceSelection = !ImGui.GetIO().KeyShift;
+                        if (replaceSelection)
                         {
-                            NodeSelection.Clear();
-                        }
-
-                        if (node is SymbolChildUi childUi2)
-                        {
-                            NodeSelection.AddSymbolChildToSelection(childUi2, instance);
+                            if (node is SymbolChildUi childUi3)
+                            {
+                                NodeSelection.SetSelectionToChildUi(childUi3, instance);
+                            }
+                            else
+                            {
+                                NodeSelection.SetSelection(node);
+                            }
                         }
                         else
                         {
-                            NodeSelection.AddSelection(node);
+                            if (node is SymbolChildUi childUi2)
+                            {
+                                NodeSelection.AddSymbolChildToSelection(childUi2, instance);
+                            }
+                            else
+                            {
+                                NodeSelection.AddSelection(node);
+                            }
                         }
                     }
                     else
