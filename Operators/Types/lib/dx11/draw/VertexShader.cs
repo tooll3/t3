@@ -7,7 +7,7 @@ using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad
 {
-    public class VertexShader : Instance<VertexShader>, IDescriptiveFilename
+    public class VertexShader : Instance<VertexShader>, IDescriptiveFilename, IStatusProvider
     {
         [Output(Guid = "ED31838B-14B5-4875-A0FC-DC427E874362")]
         public readonly Slot<SharpDX.Direct3D11.VertexShader> Shader = new Slot<SharpDX.Direct3D11.VertexShader>();
@@ -57,16 +57,32 @@ namespace T3.Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad
                 ResourceManager.UpdateVertexShaderFromFile(Source.Value, _vertexShaderResId, ref Shader.Value);
             }
 
-            if (_vertexShaderResId != ResourceManager.NullResource)
+            if (_vertexShaderResId == ResourceManager.NullResource)
             {
-                Shader.Value = resourceManager.GetVertexShader(_vertexShaderResId);
+                _warningMessage = ResourceManager.LastShaderError;
+                return;
             }
+            _warningMessage = null;
+            Shader.Value = resourceManager.GetVertexShader(_vertexShaderResId);
         }
         
         public InputSlot<string> GetSourcePathSlot()
         {
             return Source;
         }
+        
+        
+        public IStatusProvider.StatusLevel GetStatusLevel()
+        {
+            return string.IsNullOrEmpty(_warningMessage) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Warning;
+        }
+
+        public string GetStatusMessage()
+        {
+            return _warningMessage;
+        }
+        
+        private string _warningMessage;
         
         [Input(Guid = "78FB7501-74D9-4A27-8DB2-596F25482C87")]
         public readonly InputSlot<string> Source = new InputSlot<string>();
