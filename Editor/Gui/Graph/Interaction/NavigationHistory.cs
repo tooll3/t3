@@ -11,7 +11,7 @@ namespace T3.Editor.Gui.Graph.Interaction;
 /// Manage the navigation between previously selected instances.
 /// This can also be used sort items by relevance in search dialog.
 /// </summary>
-static class NavigationHistory
+internal static class NavigationHistory
 {
         
     /// <summary>
@@ -60,6 +60,7 @@ static class NavigationHistory
         _previousSelections.Insert(0, previousPath);
         _currentIndex = 0;
     }
+    
 
     public static IEnumerable<Instance> GetPreviouslySelectedInstances()
     {
@@ -73,15 +74,33 @@ static class NavigationHistory
         }
     }
 
-
-    private static Instance GetPreviousNavigationInstance()
+    internal static void NavigateBackwards()
     {
-        return null;
+        while (_currentIndex < _previousSelections.Count - 1)
+        {
+            _currentIndex++;
+            var path = _previousSelections[_currentIndex];
+            if (Structure.GetInstanceFromIdPath(path) == null)
+                continue;
+            
+            GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(path);
+            break;
+        }
     }
 
-    private static Instance GetNextNavigationInstance()
+    internal static void NavigateForward()
     {
-        return null;
+        while (_currentIndex > 0)
+        {
+            _currentIndex--;
+            var path = _previousSelections[_currentIndex];
+            if (Structure.GetInstanceFromIdPath(path) == null)
+                continue;
+            
+            GraphWindow.GetPrimaryGraphWindow().GraphCanvas.OpenAndFocusInstance(path);
+            break;
+            
+        }
     }
 
     private static long GetHashForIdPath(List<Guid> path)

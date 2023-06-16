@@ -324,6 +324,17 @@ namespace T3.Editor.Gui.Graph
                         AddAnnotation();
                     }
 
+                    // Navigation
+                    if (KeyboardBinding.Triggered(UserActions.NavigateBackwards))
+                    {
+                        NavigationHistory.NavigateBackwards();
+                    }
+                    
+                    if (KeyboardBinding.Triggered(UserActions.NavigateForward))
+                    {
+                        NavigationHistory.NavigateForward();
+                    }
+                    
                     if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))
                     {
                         var selectedImage = NodeSelection.GetFirstSelectedInstance();

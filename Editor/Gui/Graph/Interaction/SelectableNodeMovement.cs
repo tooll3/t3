@@ -10,6 +10,7 @@ using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -43,9 +44,6 @@ namespace T3.Editor.Gui.Graph.Interaction
             }
         }
 
-
-        //private static Guid _activeChildId;
-        
         /// <summary>
         /// NOTE: This has to be called for ALL movable elements (ops, inputs, outputs) and directly after ImGui.Item
         /// </summary>

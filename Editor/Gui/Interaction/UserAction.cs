@@ -62,6 +62,9 @@ namespace T3.Editor.Gui.Interaction
         ScrollDown,
         ZoomIn,
         ZoomOut,
+        
+        NavigateBackwards,
+        NavigateForward,
         SearchGraph,
 
         // Layout and window management
@@ -262,7 +265,10 @@ namespace T3.Editor.Gui.Interaction
                             new KeyboardBinding(UserActions.AddAnnotation, new KeyCombination(Key.A, shift:true)){ NeedsWindowFocus = true },
                             new KeyboardBinding(UserActions.ToggleVariationsWindow, new KeyCombination(Key.V, alt:true)){ NeedsWindowFocus = false },
                             new KeyboardBinding(UserActions.SearchGraph, new KeyCombination(Key.F, ctrl:true)){ NeedsWindowFocus = false },
-
+                            
+                            new KeyboardBinding(UserActions.NavigateBackwards, new KeyCombination(Key.CursorLeft, alt:true)){ NeedsWindowFocus = false },
+                            new KeyboardBinding(UserActions.NavigateForward, new KeyCombination(Key.CursorRight, alt:true)){ NeedsWindowFocus = false },
+                            
                             // Layout and window management
                             new KeyboardBinding(UserActions.ToggleFocusMode, new KeyCombination(Key.Esc, shift: true)),
 
