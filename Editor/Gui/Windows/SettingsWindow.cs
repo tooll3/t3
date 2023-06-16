@@ -3,6 +3,7 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -190,7 +191,24 @@ namespace T3.Editor.Gui.Windows
                 
                     ImGui.TreePop();
                 }
-                
+
+                if (ImGui.TreeNode("Navigation history"))
+                {
+                    int index = 0;
+                    foreach (var c in NavigationHistory.GetPreviouslySelectedInstances())
+                    {
+                        ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.5f/(index+1) + 0.5f));
+                        ImGui.PushFont(index == 0 ? Fonts.FontBold : Fonts.FontNormal);
+                        ImGui.Selectable($" {c})");
+                        ImGui.PopFont();
+                        ImGui.PopStyleColor();
+                        index++;
+                    }
+                    
+                    ImGui.TreePop();
+
+                }
+
                 ImGui.TreePop();
             }
         }

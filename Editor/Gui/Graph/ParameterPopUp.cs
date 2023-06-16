@@ -40,7 +40,7 @@ internal static class ParameterPopUp
         }
     }
 
-    private static void Open(Instance instance)
+    public static void Open(Instance instance)
     {
         _selectedInstance = instance;
         _graphCanvas = GraphCanvas.Current;
@@ -73,7 +73,7 @@ internal static class ParameterPopUp
         }
 
         var nodeScreenRect = _graphCanvas.TransformRect(ImRect.RectWithSize(symbolChildUi.PosOnCanvas, symbolChildUi.Size));
-        var screenPos = new Vector2(nodeScreenRect.Min.X, nodeScreenRect.Max.Y + 5);
+        var screenPos = new Vector2(nodeScreenRect.Min.X + 5, nodeScreenRect.Max.Y + 5);
         var height = _lastRequiredHeight.Clamp(MinHeight, MaxHeight);
         ImGui.SetNextWindowPos(screenPos);
 

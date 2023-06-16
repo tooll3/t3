@@ -65,6 +65,12 @@ namespace T3.Editor.Gui.Interaction
         
         NavigateBackwards,
         NavigateForward,
+        
+        SelectToAbove,
+        SelectToRight,
+        SelectToBelow,
+        SelectToLeft,
+        
         SearchGraph,
 
         // Layout and window management
@@ -268,6 +274,12 @@ namespace T3.Editor.Gui.Interaction
                             
                             new KeyboardBinding(UserActions.NavigateBackwards, new KeyCombination(Key.CursorLeft, alt:true)){ NeedsWindowFocus = false },
                             new KeyboardBinding(UserActions.NavigateForward, new KeyCombination(Key.CursorRight, alt:true)){ NeedsWindowFocus = false },
+                            
+                            new KeyboardBinding(UserActions.SelectToAbove, new KeyCombination(Key.CursorUp)){ NeedsWindowFocus = true },
+                            new KeyboardBinding(UserActions.SelectToRight, new KeyCombination(Key.CursorRight)){ NeedsWindowFocus = true },
+                            new KeyboardBinding(UserActions.SelectToBelow, new KeyCombination(Key.CursorDown)){ NeedsWindowFocus = true },
+                            new KeyboardBinding(UserActions.SelectToLeft, new KeyCombination(Key.CursorLeft)){ NeedsWindowFocus = true },
+
                             
                             // Layout and window management
                             new KeyboardBinding(UserActions.ToggleFocusMode, new KeyCombination(Key.Esc, shift: true)),

@@ -141,7 +141,7 @@ namespace T3.Editor.Gui.Graph
                                     selectedItem.PosOnCanvas + selectedItem.Size));
             }
 
-            area.Expand(400);
+            area.Expand(550);
 
             GraphCanvas.FitAreaOnCanvas(area);
         }

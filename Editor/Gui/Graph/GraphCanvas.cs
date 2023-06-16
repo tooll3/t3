@@ -131,8 +131,9 @@ namespace T3.Editor.Gui.Graph
             var parentComposition = instance.Parent;
             var parentUi = SymbolUiRegistry.Entries[parentComposition.Symbol.Id];
             var childInstanceUi = parentUi.ChildUis.SingleOrDefault(c => c.Id == instance.SymbolChildId);
-            NodeSelection.Clear();
-            NodeSelection.AddSymbolChildToSelection(childInstanceUi, instance);
+            NodeSelection.SetSelectionToChildUi(childInstanceUi, instance);
+            // NodeSelection.Clear();
+            // NodeSelection.AddSymbolChildToSelection(childInstanceUi, instance);
             FitViewToSelectionHandling.FitViewToSelection();
         }
 
@@ -333,6 +334,26 @@ namespace T3.Editor.Gui.Graph
                     if (KeyboardBinding.Triggered(UserActions.NavigateForward))
                     {
                         NavigationHistory.NavigateForward();
+                    }
+                    
+                    if (KeyboardBinding.Triggered(UserActions.SelectToAbove))
+                    {
+                        NodeNavigation.SelectAbove();
+                    }
+
+                    if (KeyboardBinding.Triggered(UserActions.SelectToRight))
+                    {
+                        NodeNavigation.SelectRight();
+                    }
+                    
+                    if (KeyboardBinding.Triggered(UserActions.SelectToBelow))
+                    {
+                        NodeNavigation.SelectBelow();
+                    }
+                    
+                    if (KeyboardBinding.Triggered(UserActions.SelectToLeft))
+                    {
+                        NodeNavigation.SelectLeft();
                     }
                     
                     if (KeyboardBinding.Triggered(UserActions.DisplayImageAsBackground))

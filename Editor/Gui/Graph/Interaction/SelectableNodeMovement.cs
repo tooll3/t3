@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
-using SharpDX.Direct3D11;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
@@ -10,7 +9,6 @@ using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -70,7 +68,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 }
 
                 _moveCommand = new ModifyCanvasElementsCommand(compositionSymbolId, _draggedNodes);
-                ShakeDetector.Reset();
+                ShakeDetector.ResetShaking();
             }
             else if (isActiveNode && ImGui.IsMouseDown(ImGuiMouseButton.Left) && _moveCommand != null)
             {
@@ -482,7 +480,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 var delta = mousePosition - _lastPosition;
                 _lastPosition = mousePosition;
 
-                int dx = 0;
+                var dx = 0;
                 if (Math.Abs(delta.X) > 2)
                 {
                     dx = delta.X > 0 ? 1 : -1;
@@ -520,12 +518,12 @@ namespace T3.Editor.Gui.Graph.Interaction
                 
                 var wasShaking = changeDirectionCount >= ChangeDirectionThreshold;
                 if (wasShaking)
-                    Reset();
+                    ResetShaking();
 
                 return wasShaking;
             }
 
-            public static void Reset()
+            public static void ResetShaking()
             {
                 _directions.Clear();
             }

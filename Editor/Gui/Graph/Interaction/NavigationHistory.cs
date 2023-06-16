@@ -39,28 +39,33 @@ internal static class NavigationHistory
         {
             Log.Warning("Inconsistent navigation path");
             return;
-            
         }
 
         if (index == 0)
         {
+            _currentIndex = 0;
             return;
         }
             
 
         // Keep order
-        if (Math.Abs(index - _currentIndex) == 1)
+        if (Math.Abs(index - _currentIndex) <= 1)
         {
             _currentIndex = index;
             return;
         }
         
         // Rearrange
+
         _previousSelections.RemoveAt(index);
         _previousSelections.Insert(0, previousPath);
         _currentIndex = 0;
     }
-    
+
+    public static Instance GetLastSelectedInstance()
+    {
+        return _previousSelections.Count < _currentIndex ? null : Structure.GetInstanceFromIdPath(_previousSelections[ _currentIndex]);
+    }
 
     public static IEnumerable<Instance> GetPreviouslySelectedInstances()
     {
