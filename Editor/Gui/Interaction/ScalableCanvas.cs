@@ -397,6 +397,7 @@ namespace T3.Editor.Gui.Interaction
             var allowChildHover = flags.HasFlag(T3Ui.EditingFlags.AllowHoveredChildWindows)
                                       ? ImGuiHoveredFlags.ChildWindows
                                       : ImGuiHoveredFlags.None;
+            
             if (!ImGui.IsWindowHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup | allowChildHover) && !isDraggingConnection)
                 return;
 
@@ -411,9 +412,13 @@ namespace T3.Editor.Gui.Interaction
             if (PreventMouseInteraction)
                 return;
 
-            if ((flags & T3Ui.EditingFlags.PreventPanningWithMouse) == 0
+            var isVerticalColorSliderActive = FrameStats.Last.OpenedPopUpName == "ColorBrightnessSlider";
+            
+            if (!isVerticalColorSliderActive 
+                && !flags.HasFlag(T3Ui.EditingFlags.PreventPanningWithMouse)
                 && (
-                        ImGui.IsMouseDragging(ImGuiMouseButton.Right)
+                        
+                       ImGui.IsMouseDragging(ImGuiMouseButton.Right)
                         || ImGui.IsMouseDragging(ImGuiMouseButton.Left) && ImGui.GetIO().KeyAlt)
                         || ImGui.IsMouseDragging(ImGuiMouseButton.Middle)
                )
