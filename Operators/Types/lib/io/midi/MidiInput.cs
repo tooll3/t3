@@ -20,13 +20,15 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
         [Output(Guid = "D7114289-4B1D-47E9-B5C1-DCDC8A371087")]
         public readonly Slot<List<float>> Range = new();
-
-
-
+        
+        [Output(Guid = "4BF74648-207F-4275-83BA-09E1C048C33B")]
+        public readonly Slot<bool> WasHit = new();
+        
         public MidiInput()
         {
             Result.UpdateAction = Update;
             Range.UpdateAction = Update;
+            WasHit.UpdateAction = Update;
             MidiInConnectionManager.RegisterConsumer(this);
         }
 
@@ -73,6 +75,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                 _currentControllerValue = 0;
             }
 
+            var wasHit = false;
             lock (this)
             {
                 foreach (var signal in _lastMatchingSignals)
@@ -107,7 +110,11 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                         var index = signal.ControllerId - _controlRange.Width;
                         _valuesForControlRange[index] = signal.ControllerValue;
                     }
-
+                    
+                    if (signal.EventType == MidiEventTypes.ControllerChanges
+                        || (signal.EventType == MidiEventTypes.Notes && signal.ControllerValue > 0))
+                        wasHit = true;
+                    
                     LastMessageTime = Playback.RunTimeInSecs;
                     _isDefaultValue = false;
                 }
@@ -145,10 +152,12 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             if (!float.IsNormal(_dampedOutputValue))
                 _dampedOutputValue = 0;
 
+            WasHit.Value = wasHit;
             Result.Value = _dampedOutputValue;
             Range.Value = _valuesForControlRange;
             Result.DirtyFlag.Clear();
             Range.DirtyFlag.Clear();
+            WasHit.DirtyFlag.Clear();
         }
 
         public void ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg)
