@@ -3,18 +3,11 @@
   "Description": "Applies a fake shading to the image.",
   "InputUis": [
     {
-      "InputId": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
-      "Position": {
-        "X": -975.6439,
-        "Y": 462.92966
-      }
-    },
-    {
       "InputId": "00c53b57-7347-4ebc-97d7-1ab48483f09b"/*HeightMap*/,
       "Relevancy": "Required",
       "Position": {
-        "X": -765.90405,
-        "Y": -21.191006
+        "X": -764.6415,
+        "Y": 5.323948
       }
     },
     {
@@ -55,6 +48,13 @@
         "Y": 436.7386
       },
       "Scale": 0.001
+    },
+    {
+      "InputId": "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40"/*Amount*/,
+      "Position": {
+        "X": -975.6439,
+        "Y": 462.92966
+      }
     },
     {
       "InputId": "9d5e3055-c17e-4013-963d-e17c76b707c1"/*HighlightColor*/,

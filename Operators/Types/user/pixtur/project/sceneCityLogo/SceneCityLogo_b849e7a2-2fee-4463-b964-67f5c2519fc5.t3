@@ -90,14 +90,14 @@
           "Value": 0.68
         },
         {
-          "Id": "fcf28205-bcc4-46f3-af4c-1a3896a991a5"/*FX_B_AddRemoveMass*/,
-          "Type": "System.Single",
-          "Value": 0.0
-        },
-        {
           "Id": "c07bdf4d-8395-4327-b57e-6ba38f36e8a0"/*SpeedFactor*/,
           "Type": "System.Single",
           "Value": 0.99
+        },
+        {
+          "Id": "fcf28205-bcc4-46f3-af4c-1a3896a991a5"/*FX_B_AddRemoveMass*/,
+          "Type": "System.Single",
+          "Value": 0.0
         },
         {
           "Id": "18d0f554-e8f7-4b0f-98c7-24c9742b66af"/*StabilizeFactor*/,
@@ -1241,14 +1241,14 @@
           "Value": 0.12
         },
         {
-          "Id": "fcf28205-bcc4-46f3-af4c-1a3896a991a5"/*FX_B_AddRemoveMass*/,
-          "Type": "System.Single",
-          "Value": 0.63
-        },
-        {
           "Id": "c07bdf4d-8395-4327-b57e-6ba38f36e8a0"/*SpeedFactor*/,
           "Type": "System.Single",
           "Value": 0.995
+        },
+        {
+          "Id": "fcf28205-bcc4-46f3-af4c-1a3896a991a5"/*FX_B_AddRemoveMass*/,
+          "Type": "System.Single",
+          "Value": 0.63
         }
       ],
       "Outputs": []

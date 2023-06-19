@@ -10,10 +10,6 @@ namespace T3.Operators.Types.Id_6820b166_1782_43b9_bc5c_6b4f63b16f86
         [Output(Guid = "27e1e1b6-89e0-4dca-98e1-5989286f6331")]
         public readonly Slot<SharpDX.Direct3D11.Texture2D> Output = new Slot<SharpDX.Direct3D11.Texture2D>();
 
-        
-        [Input(Guid = "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40")]
-        public readonly InputSlot<float> Amount = new InputSlot<float>();
-        
         [Input(Guid = "00c53b57-7347-4ebc-97d7-1ab48483f09b")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> HeightMap = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
@@ -31,6 +27,9 @@ namespace T3.Operators.Types.Id_6820b166_1782_43b9_bc5c_6b4f63b16f86
 
         [Input(Guid = "03298545-a5d6-44d5-bb7c-4747172d2667")]
         public readonly InputSlot<System.Numerics.Vector2> Direction = new InputSlot<System.Numerics.Vector2>();
+
+        [Input(Guid = "767ddbe0-202f-4d0b-9aa1-9a22d61a2d40")]
+        public readonly InputSlot<float> Amount = new InputSlot<float>();
 
         [Input(Guid = "9d5e3055-c17e-4013-963d-e17c76b707c1")]
         public readonly InputSlot<System.Numerics.Vector4> HighlightColor = new InputSlot<System.Numerics.Vector4>();
