@@ -31,11 +31,11 @@ namespace T3.Operators.Types.Id_d1a1f207_0537_416a_985b_e350c3f7e655
         [Input(Guid = "83b4782b-9ac3-4426-b7d9-1669e97c89b1")]
         public readonly InputSlot<float> FX_RG_Velocity = new InputSlot<float>();
 
-        [Input(Guid = "fcf28205-bcc4-46f3-af4c-1a3896a991a5")]
-        public readonly InputSlot<float> FX_B_AddRemoveMass = new InputSlot<float>();
-
         [Input(Guid = "c07bdf4d-8395-4327-b57e-6ba38f36e8a0")]
         public readonly InputSlot<float> SpeedFactor = new InputSlot<float>();
+
+        [Input(Guid = "fcf28205-bcc4-46f3-af4c-1a3896a991a5")]
+        public readonly InputSlot<float> FX_B_AddRemoveMass = new InputSlot<float>();
 
         [Input(Guid = "18d0f554-e8f7-4b0f-98c7-24c9742b66af")]
         public readonly InputSlot<float> StabilizeFactor = new InputSlot<float>();

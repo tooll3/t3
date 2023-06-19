@@ -35,6 +35,7 @@ RWTexture2D<float4> BufferB  : register(u1);
 RWTexture2D<float4> BufferBRead  : register(u2); 
 RWTexture2D<float4> ColorOutput  : register(u3); 
 
+static const int MaxSteps = 2;
 
 [numthreads(32,32,1)]
 void main1(uint3 DTid : SV_DispatchThreadID)
@@ -60,10 +61,10 @@ void main1(uint3 DTid : SV_DispatchThreadID)
              -float(uv.y > 1 - borderWidth)*float2(0,1)*border; //wall
 
     float s = 0;
-    float maxSteps = 4;                          // maxStepsernel convolution size
-    for(float i=-maxSteps; i<=maxSteps; ++i)
+    //float maxSteps = 3;                          // maxStepsernel convolution size
+    for(float i=-MaxSteps; i<=MaxSteps; ++i)
     {
-        for(float j=-maxSteps; j<=maxSteps; ++j)
+        for(float j=-MaxSteps; j<=MaxSteps; ++j)
         {
             float2 c = -velocity + float2(i,j) ; // translate the gaussian 2Dimage using the velocity
             s += exp(-dot(c,c));                 // calculate the gaussian 2Dimage
@@ -89,11 +90,11 @@ void main2(uint3 DTid : SV_DispatchThreadID)
     float2 uv = DTid.xy / float2(width,height);
 
     float4 o = 0;
-    int steps = 4;           
+    //int steps = 3;           
     int2 d =0;                                      // kernel convolution size
-    for(d.x=-steps; d.x<=steps; ++d.x)
+    for(d.x=-MaxSteps; d.x<=MaxSteps; ++d.x)
     {
-        for(d.y=-steps; d.y<=steps; ++d.y)
+        for(d.y=-MaxSteps; d.y<=MaxSteps; ++d.y)
         {
             int2 p = DTid.xy + d;
             p=max(0, min(p, int2(width,height)-1));
