@@ -105,6 +105,8 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             var windowEdge = WindowEdge.GetValue(context).Clamp(0.0001f, 1);
             var amplitude = Amplitude.GetValue(context);
             var bias = Bias.GetValue(context);
+
+            var wasHit = false;
             
             Sum = 0f;
             if (bins != null && bins.Count > 0)
@@ -127,12 +129,14 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
                 {
                     if (!_isHitActive && timeSinceLastHit > minTimeBetweenHits)
                     {
+                        wasHit = true;
                         _isHitActive = couldBeHit;
                         _lastHitTime = _lastEvalTime;
                         _hitCount++;
                     }
                     else
                     {
+                        _isHitActive = false;
                         _isHitActive = couldBeHit;
                     }
                 }
@@ -174,7 +178,7 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
             }
 
             
-            WasHit.Value = _isHitActive;
+            WasHit.Value = wasHit;
             HitCount.Value = _hitCount;
 
             if (float.IsInfinity(v) || float.IsNaN(v))
