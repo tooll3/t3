@@ -2,6 +2,7 @@ using System;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
+using T3.Core.Audio;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
@@ -14,9 +15,9 @@ namespace T3.Editor.Gui.Windows
         public RenderVideoWindow()
         {
             Config.Title = "Render Video";
-            _lastHelpString = "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for faster exports.";
+            _lastHelpString = "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for faster exports.\n" +
+                              "Audio hint: Please ensure your BPM is set corrrectly with the Soundtrack.";
         }
-
 
         protected override void DrawContent()
         {
@@ -27,6 +28,7 @@ namespace T3.Editor.Gui.Windows
             FormInputs.AddStringInput("File", ref _targetFile);
             ImGui.SameLine();
             FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref _targetFile);
+            FormInputs.AddCheckBox("Export Audio (experimental)", ref _exportAudio);
             ImGui.Separator();
 
             var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
@@ -46,7 +48,6 @@ namespace T3.Editor.Gui.Windows
                         _isExporting = true;
                         _exportStartedTime = Playback.RunTimeInSecs;
                         _frameIndex = 0;
-                        SetPlaybackTimeForNextFrame();
 
                         if (_videoWriter == null)
                         {
@@ -55,30 +56,36 @@ namespace T3.Editor.Gui.Windows
                             size.Width = currentDesc.Width;
                             size.Height = currentDesc.Height;
 
-                            _videoWriter = new MP4VideoWriter(_targetFile, size);
+                            _videoWriter = new MP4VideoWriter(_targetFile, size, _exportAudio);
                             _videoWriter.Bitrate = _bitrate;
                             // FIXME: Allow floating point FPS in a future version
                             _videoWriter.Framerate = (int)_fps;
                         }
 
-                        SaveCurrentFrameAndAdvance(ref mainTexture);
+                        SetPlaybackTimeForThisFrame();
+                        var audioFrame = AudioEngine.LastMixDownBuffer(1.0 / _fps);
+                        SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame,
+                                                   soundtrackChannels(), soundtrackSampleRate());
                     }
                 }
             }
             else
             {
-                // 
-                
-                
-                var success = SaveCurrentFrameAndAdvance(ref mainTexture);
-                ImGui.ProgressBar(Progress, new Vector2(-1, 4));
+                // Save current frame and determine what to do next
+                var audioFrame = AudioEngine.LastMixDownBuffer(Playback.LastFrameDuration);
+                var success = SaveCurrentFrameAndAdvance(ref mainTexture, ref audioFrame,
+                                                         soundtrackChannels(), soundtrackSampleRate());
 
+                ImGui.ProgressBar((float) Progress, new Vector2(-1, 4));
                 var currentTime = Playback.RunTimeInSecs;
                 var durationSoFar = currentTime - _exportStartedTime;
                 if (GetRealFrame() >= _frameCount || !success)
                 {
-                    var successful = success ? "successfully" : "unsuccessfully";
-                    _lastHelpString = $"Sequence export finished {successful} in {durationSoFar:0.00}s";
+                    if (success)
+                        _lastHelpString = $"Sequence export of {_frameCount} frames finished successfully in {durationSoFar:0.00}s";
+                    else
+                        _lastHelpString = $"Sequence export finished unsuccessfully in {durationSoFar:0.00}s\n" + _lastHelpString;
+
                     _isExporting = false;
                 }
                 else if (ImGui.Button("Cancel"))
@@ -88,15 +95,23 @@ namespace T3.Editor.Gui.Windows
                 }
                 else
                 {
-                    var estimatedTimeLeft = durationSoFar /  Progress - durationSoFar;
-                    _lastHelpString = $"Saved {_videoWriter.FilePath} frame {GetRealFrame()+1}/{_frameCount}  ";
+                    var estimatedTimeLeft = durationSoFar / Progress - durationSoFar;
+                    _lastHelpString = $"Saved {_videoWriter.FilePath} frame {GetRealFrame()}/{_frameCount}  ";
                     _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0.0}s left";
                 }
 
                 if (!_isExporting)
                 {
-                    _videoWriter?.Dispose();
+                    try
+                    {
+                        _videoWriter?.Dispose();
+                    }
+                    catch (Exception eDispose)
+                    {
+                        _lastHelpString = eDispose.Message;
+                    }
                     _videoWriter = null;
+                    ReleasePlaybackTime();
                 }
             }
 
@@ -110,20 +125,34 @@ namespace T3.Editor.Gui.Windows
             return _frameIndex - MediaFoundationVideoWriter.SkipImages;
         }
 
-        private static bool SaveCurrentFrameAndAdvance(ref Texture2D mainTexture)
+        private static bool SaveCurrentFrameAndAdvance(ref Texture2D mainTexture, ref byte[] audioFrame,
+                                                       int channels, int sampleRate)
         {
             try
             {
-                _videoWriter.AddVideoFrame(ref mainTexture);
+                if (audioFrame != null)
+                    _videoWriter.AddVideoAndAudioFrame(ref mainTexture, ref audioFrame, channels, sampleRate);
+                else
+                    _videoWriter.AddVideoFrame(ref mainTexture);
+
                 _frameIndex++;
-                SetPlaybackTimeForNextFrame();
+                SetPlaybackTimeForThisFrame();
             }
             catch (Exception e)
             {
                 _lastHelpString = e.ToString();
                 _isExporting = false;
-                _videoWriter?.Dispose();
+
+                try
+                {
+                    _videoWriter?.Dispose();
+                }
+                catch (Exception eDispose)
+                {
+                    _lastHelpString += "\n" + eDispose.Message;
+                }
                 _videoWriter = null;
+                ReleasePlaybackTime();
                 return false;
             }
 
@@ -134,6 +163,7 @@ namespace T3.Editor.Gui.Windows
         
         private static int _bitrate = 15000000;
         private static string _targetFile = "./Render/output.mp4";
+        private static bool _exportAudio = true;
 
         private static MP4VideoWriter _videoWriter = null;
         private static string _lastHelpString = string.Empty;

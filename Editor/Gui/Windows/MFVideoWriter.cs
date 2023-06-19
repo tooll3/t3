@@ -39,6 +39,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.MediaFoundation;
 using SharpDX.WIC;
+using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using MF = SharpDX.MediaFoundation;
@@ -82,8 +83,7 @@ namespace T3.Editor.Gui.Windows
 
         public string FilePath { get { return _filePath; } }
 
-        private MediaFoundationAudioWriter audioWriter;
-
+        private MediaFoundationAudioWriter _audioWriter;
         private static SinkWriter CreateSinkWriter(string outputFile)
         {
             SinkWriter writer;
@@ -107,8 +107,8 @@ namespace T3.Editor.Gui.Windows
             return writer;
         }
 
-        public MediaFoundationVideoWriter(string filePath, Size2 videoPixelSize)
-            : this(filePath, videoPixelSize, VIDEO_INPUT_FORMAT)
+        public MediaFoundationVideoWriter(string filePath, Size2 videoPixelSize, bool supportAudio = false)
+            : this(filePath, videoPixelSize, VIDEO_INPUT_FORMAT, supportAudio)
         {
         }
 
@@ -382,7 +382,7 @@ namespace T3.Editor.Gui.Windows
             return sample;
         }
 
-        public void AddVideoFrame(ref Texture2D frame)
+        public void InitializeWriters(ref Texture2D frame, int channels, int sampleRate)
         {
             try
             {
@@ -425,8 +425,13 @@ namespace T3.Editor.Gui.Windows
                     if (_supportAudio)
                     {
                         // initialize audio writer
-                        var waveFormat = WAVEFORMATEX.DefaultPCM;
-                        audioWriter = new MP3AudioWriter(_sinkWriter, ref waveFormat);
+                        var waveFormat = WAVEFORMATEX.DefaultIEEE;
+                        waveFormat.nChannels = (ushort)channels;
+                        waveFormat.nSamplesPerSec = (uint)sampleRate;
+                        waveFormat.nBlockAlign = (ushort)(waveFormat.nChannels * waveFormat.wBitsPerSample / 8);
+                        waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
+                        _audioWriter = new FLACAudioWriter(_sinkWriter, ref waveFormat);
+                        //_audioWriter = new MP3AudioWriter(_sinkWriter, ref waveFormat);
                     }
 
                     // Start writing the video file. MUST be called before write operations.
@@ -440,6 +445,12 @@ namespace T3.Editor.Gui.Windows
                 throw new InvalidOperationException(e.ToString() +
                     "(image size may be unsupported with the requested codec)");
             }
+        }
+
+        public void AddVideoFrame(ref Texture2D frame)
+        {
+            Debug.Assert(frame != null);
+            InitializeWriters(ref frame, 0, 0);
 
             // Create the sample (includes image and timing information)
             var videoSample = CreateSampleFromFrame(ref frame);
@@ -464,22 +475,39 @@ namespace T3.Editor.Gui.Windows
             }
         }
 
-        public void AddVideoAndAudioFrame(ref Texture2D frame, byte[] audioFrame)
+        public void AddVideoAndAudioFrame(ref Texture2D frame, ref byte[] audioFrame,
+                                          int channels, int sampleRate)
         {
             Debug.Assert(frame != null);
+            InitializeWriters(ref frame, channels, sampleRate);
+
             var currentDesc = frame.Description;
             Debug.Assert(currentDesc.Width != 0 &&
-                         currentDesc.Height != 0 &&
-                         audioFrame != null &&
-                         audioFrame.Length != 0);
+                         currentDesc.Height != 0);
 
             var videoSample = CreateSampleFromFrame(ref frame);
-            var audioSample = audioWriter.CreateSampleFromFrame(audioFrame);
+
+            Sample audioSample = null;
+            if (_audioWriter != null)
+            {
+                if (audioFrame != null && audioFrame.Length != 0)
+                {
+                    //Log.Debug("adding audio");
+                    audioSample = _audioWriter.CreateSampleFromFrame(ref audioFrame);
+                }
+                else
+                {
+                    //Log.Debug("audio missing");
+                }
+            }
+
             try
             {
                 var samples = new Dictionary<int, Sample>();
-                samples.Add(StreamIndex, videoSample);
-                samples.Add(audioWriter.StreamIndex, audioSample);
+                if (_audioWriter != null && audioSample != null)
+                    samples.Add(_audioWriter.StreamIndex, audioSample);
+                if (videoSample != null)
+                    samples.Add(StreamIndex, videoSample);
 
                 WriteSamples(samples);
             }
@@ -490,8 +518,8 @@ namespace T3.Editor.Gui.Windows
             }
             finally
             {
-                videoSample.Dispose();
-                audioSample.Dispose();
+                videoSample?.Dispose();
+                audioSample?.Dispose();
             }
         }
 
@@ -506,11 +534,12 @@ namespace T3.Editor.Gui.Windows
             {
                 var streamIndex = item.Key;
                 var sample = item.Value;
-
-                sample.SampleTime = frameDuration * _frameIndex;
-                sample.SampleDuration = frameDuration;
-
-                _sinkWriter.WriteSample(streamIndex, sample);
+                if (sample != null)
+                {
+                    sample.SampleTime = frameDuration * _frameIndex;
+                    sample.SampleDuration = frameDuration;
+                    _sinkWriter.WriteSample(streamIndex, sample);
+                }
             }
         }
 
@@ -587,8 +616,8 @@ namespace T3.Editor.Gui.Windows
     {
         private static readonly Guid VIDEO_ENCODING_FORMAT = MF.VideoFormatGuids.H264;
 
-        public MP4VideoWriter(string filePath, Size2 videoPixelSize)
-            : base(filePath, videoPixelSize)
+        public MP4VideoWriter(string filePath, Size2 videoPixelSize, bool supportAudio = false)
+            : base(filePath, videoPixelSize, supportAudio)
         {
 
         }

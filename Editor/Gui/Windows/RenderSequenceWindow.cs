@@ -3,6 +3,7 @@ using System.IO;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
+using T3.Core.Audio;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
@@ -15,7 +16,8 @@ namespace T3.Editor.Gui.Windows
         public RenderSequenceWindow()
         {
             Config.Title = "Render Sequence";
-            _lastHelpString = "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for faster exports.";
+            _lastHelpString = "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for faster exports.\n" +
+                              "Audio hint: Please ensure your BPM is set corrrectly with the Soundtrack.";
         }
 
 
@@ -47,16 +49,20 @@ namespace T3.Editor.Gui.Windows
                         _isExporting = true;
                         _exportStartedTime = Playback.RunTimeInSecs;
                         _frameIndex = 0;
-                        SetPlaybackTimeForNextFrame();
+                        SetPlaybackTimeForThisFrame();
 
+                        // handle audio although we do not save it
+                        var audioFrame = AudioEngine.LastMixDownBuffer(1.0 / _fps);
                         SaveCurrentFrameAndAdvance(mainTexture);
                     }
                 }
             }
             else
             {
+                // handle audio although we do not save it
+                var audioFrame = AudioEngine.LastMixDownBuffer(Playback.LastFrameDuration);
                 var success = SaveCurrentFrameAndAdvance(mainTexture);
-                ImGui.ProgressBar(Progress, new Vector2(-1, 4));
+                ImGui.ProgressBar((float) Progress, new Vector2(-1, 4));
 
                 var currentTime = Playback.RunTimeInSecs;
                 var durationSoFar = currentTime - _exportStartedTime;
@@ -74,13 +80,14 @@ namespace T3.Editor.Gui.Windows
                 else
                 {
                     var estimatedTimeLeft = durationSoFar - durationSoFar /  Progress;
-                    _lastHelpString = $"Saved {ScreenshotWriter.LastFilename} frame {GetRealFrame()+1}/{_frameCount}  ";
+                    _lastHelpString = $"Saved {ScreenshotWriter.LastFilename} frame {GetRealFrame()}/{_frameCount}  ";
                     _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0}s left";
                 }
 
                 if (!_isExporting)
                 {
                     ScreenshotWriter.Dispose();
+                    ReleasePlaybackTime();
                 }
             }
 
@@ -105,13 +112,14 @@ namespace T3.Editor.Gui.Windows
             {
                 var success = SaveImage(mainTexture);
                 _frameIndex++;
-                SetPlaybackTimeForNextFrame();
+                SetPlaybackTimeForThisFrame();
                 return success;
             }
             catch (Exception e)
             {
                 _lastHelpString = e.ToString();
                 _isExporting = false;
+                ReleasePlaybackTime();
                 return false;
             }
         }

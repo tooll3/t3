@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using T3.Core;
 using T3.Core.Animation;
@@ -123,20 +124,23 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
                 
                 var couldBeHit = Sum > threshold;
 
+                if (TimeSinceLastHit <= 0.0)
+                {
+                    // enable possibility to hit on the first frame
+                    _lastHitTime = PlaybackTimeInSecs - minTimeBetweenHits;
+                }
+
                 if (couldBeHit != _isHitActive)
                 {
-                    if (!_isHitActive && timeSinceLastHit > minTimeBetweenHits)
+                    // changed this to >= minTimeBetweenHits to enable more steady beats
+                    if (!_isHitActive && TimeSinceLastHit >= minTimeBetweenHits)
                     {
-                        _isHitActive = couldBeHit;
-                        _lastHitTime = _lastEvalTime;
+                        _lastHitTime = PlaybackTimeInSecs;
                         _hitCount++;
                     }
-                    else
-                    {
-                        _isHitActive = couldBeHit;
-                    }
+                    _isHitActive = couldBeHit;
                 }
-                
+
                 AccumulatedLevel +=  MathF.Pow((Sum * 2) / threshold, 2) * 0.001 * amplitude;
                 _dampedTimeBetweenHits = MathUtils.Lerp((float)timeSinceLastHit, _dampedTimeBetweenHits, 0.94f);
             }
@@ -253,6 +257,9 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
         public readonly InputSlot<bool> Reset = new();
         
         private static readonly List<float> _emptyList = new();
+        public double PlaybackTimeInSecs =>
+            (Playback.Current.IsLive) ? Playback.RunTimeInSecs : Playback.Current.TimeInSecs;
+
         
         /// <summary>
         /// This is used only for visualization
