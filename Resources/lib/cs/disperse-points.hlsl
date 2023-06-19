@@ -36,7 +36,8 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
         int count =0;
         float3 sumForces = 0;
 
-        endIndex = max(startIndex + 64 , endIndex);
+        endIndex = min(startIndex + 64 , endIndex);
+        //return;
 
         for(uint i=startIndex; i < endIndex; ++i) 
         {
@@ -56,12 +57,6 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
 
             float force = (Threshold - distance) / Threshold;
             force = pow(force,2);
-            
-            // float fallOff = max(pow(((distance)/Threshold), 0.5), 0.0001);
-            // direction *= fallOff;
-            // float l = length(direction);
-            // direction /=l;
-            // direction *= min(l, ClampAccelleration);
 
             sumForces += direction * force;
             count++;

@@ -1,87 +1,30 @@
 #include "lib/shared/point.hlsl"
-#include "lib/shared/hash-functions.hlsl"
-#include "lib/points/spatial-hash-map/hash-map-settings.hlsl" 
+// #include "lib/shared/hash-functions.hlsl"
+// #include "lib/points/spatial-hash-map/hash-map-settings.hlsl" 
 
+cbuffer Params : register(b0)
+{
+    float CurrentStep_;           // 0
+    float StepCount;             // 1
+    float LinesPerSteps;         // 2
+    float CellSize;  // 3
+    float Time;                  // 4
+    float ScatterLookUp;         // 5
+    float TestIndex;             // 6
+}
 
-StructuredBuffer<uint> CellPointIndices :register(t0);     // was "IndexToPointBuffer"
-StructuredBuffer<uint2> PointCellIndices :register(t1);    // was "CellIndicesBuffer"
-StructuredBuffer<uint> HashGridCells :register(t2);        // was "HashGridBuffer"
-StructuredBuffer<uint> CellPointCounts :register(t3);      // was "CountBuffer"
-StructuredBuffer<uint> CellRangeIndices :register(t4);     // was "RangeIndexBuffer"
+cbuffer Params : register(b1)
+{
+    int CurrentStep;           // 0
+}
+
+#include "lib/points/spatial-hash-map/spatial-hash-map-lookup.hlsl"
 StructuredBuffer<Point> points :register(t5);
 
 RWStructuredBuffer<uint2> pointIndexPairs :register(u0);
 
 #define THREADS_PER_GROUP 512
 
-cbuffer Params : register(b0)
-{
-    float CurrentStep;           // 0
-    float StepCount;             // 1
-    float LinesPerSteps;         // 2
-    float GridCellSize;  // 3
-    float Time;                  // 4
-    float ScatterLookUp;         // 5
-    float TestIndex;             // 6
-}
-
-//static const uint            ParticleGridEntryCount = 4;
-//static const uint            ParticleGridCellCount = 20;
-//static const float           GridCellSize = 0.1f;
-
-
-// bool ParticleGridFind(in float3 position, out uint rangeStartIndex, out uint rangeEndIndex)
-// {
-//     uint i;
-//     int3 cell = int3(position / GridCellSize);
-//     uint cellIndex = (pcg(cell.x + pcg(cell.y + pcg(cell.z))) % ParticleGridCellCount);
-//     uint hashValue = max(xxhash(cell.x + xxhash(cell.y + xxhash(cell.z))), 1);
-//     uint cellBegin = cellIndex * ParticleGridEntryCount;
-//     uint cellEnd = cellBegin + ParticleGridEntryCount;
-
-//     for(i = cellBegin; i < cellEnd; ++i)
-//     {
-//         const uint entryValue = HashGridCells[i];
-//         if(entryValue == hashValue)
-//             break;  // found existing entry
-//         if(entryValue == 0)
-//             i = cellEnd;
-//     }
-//     if(i >= cellEnd)
-//         return false;
-
-//     rangeStartIndex = CellRangeIndices[i];
-//     rangeEndIndex = CellPointCounts[i] + rangeStartIndex;
-//     return true;
-// }
-
-bool GridFind(in float3 position, out uint startIndex, out uint endIndex)
-{
-    uint i;
-    position+= 100 * GridCellSize;
-    int3 cell = int3(position / GridCellSize);
-    uint cellIndex = (pcg(cell.x + pcg(cell.y + pcg(cell.z))) % ParticleGridCellCount);
-    uint hashValue = max(xxhash(cell.x + xxhash(cell.y + xxhash(cell.z))), 1);
-    uint cellBegin = cellIndex * ParticleGridEntryCount;
-    uint cellEnd = cellBegin + ParticleGridEntryCount;
-    for(i = cellBegin; i < cellEnd; ++i)
-    {
-        const uint entryValue = HashGridCells[i];
-        if(entryValue == hashValue)
-            break;  // found existing entry
-
-        if(entryValue == 0)
-            i = cellEnd;
-    }
-    if(i >= cellEnd)
-        return false;
-
-    startIndex = CellRangeIndices[i];
-    int count = min(CellPointCounts[i], 50);
-
-    endIndex = startIndex + count;
-    return true;
-} 
 
 [numthreads( THREADS_PER_GROUP, 1, 1 )]
 void ClearPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
@@ -99,24 +42,24 @@ void ConnectPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
     uint pairCount;
     pointIndexPairs.GetDimensions(pairCount, __);
 
-    if(TestIndex >= 0) 
-    {
-        int testPointIndex = (int)TestIndex;
-        float3 position = points[testPointIndex].position;
+    // if(TestIndex >= 0) 
+    // {
+    //     int testPointIndex = (int)TestIndex;
+    //     float3 position = points[testPointIndex].position;
 
-        uint rangeStartIndex, rangeEndIndex;
-        if(GridFind(position, rangeStartIndex, rangeEndIndex)) 
-        {
-            int x2=0;
-            for(uint i=rangeStartIndex; i < rangeEndIndex; ++i) 
-            {
-                uint otherIndex = CellPointIndices[i];
-                pointIndexPairs[DTid.x + x2] = uint2( testPointIndex, otherIndex);
-                x2++;
-            }
-        } 
-        return;
-    }
+    //     uint rangeStartIndex, rangeEndIndex;
+    //     if(GridFind(position, rangeStartIndex, rangeEndIndex)) 
+    //     {
+    //         int x2=0;
+    //         for(uint i=rangeStartIndex; i < rangeEndIndex; ++i) 
+    //         {
+    //             uint otherIndex = CellPointIndices[i];
+    //             pointIndexPairs[DTid.x + x2] = uint2( testPointIndex, otherIndex);
+    //             x2++;
+    //         }
+    //     } 
+    //     return;
+    // }
 
 
     uint indexWithingStep = DTid.x;
@@ -127,21 +70,21 @@ void ConnectPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
     uint pairIndex = stepIndex * (int)(LinesPerSteps + 0.5) + indexWithingStep;
 
     uint shuffle =  hash11(CurrentStep * 0.123 + indexWithingStep * 0.121 ) * ScatterLookUp * pointCount;
-    uint pointIndex = (CurrentStep + shuffle + indexWithingStep ) % pointCount;
+    uint pointIndex = (CurrentStep + (int)(shuffle + indexWithingStep) ) % pointCount;
 
     if(pairIndex >= pairCount)
         return;
         
 
     float3 position = points[pointIndex].position;
-    float3 jitter = (hash33u( uint3(DTid.x, DTid.x + 134775813U, DTid.x + 1664525U) + position * 100 + Time % 123.1 ) -0.5f)  * GridCellSize;
+    float3 jitter =  (hash33u( uint3(DTid.x, DTid.x + 134775813U, DTid.x + 1664525U) + position * 100 + Time % 123.1 ) -0.5f)  * CellSize ;
     position+= jitter;
 
     uint rangeStartIndex, rangeEndIndex;
     if(GridFind(position, rangeStartIndex, rangeEndIndex)) 
     {
         const uint particleCount = rangeEndIndex - rangeStartIndex;
-        rangeEndIndex = max(rangeStartIndex + 64 , rangeEndIndex);
+        rangeEndIndex = min(rangeStartIndex + 64 , rangeEndIndex);
 
         float minDistance = 100000;
         uint closestIndex = -1;
@@ -166,14 +109,12 @@ void ConnectPoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
             }
         }
 
-        if(closestIndex != -1 || minDistance > 0.01) {
-
+        if(closestIndex != -1 && minDistance < CellSize)
+        {
             pointIndexPairs[pairIndex] = int2( closestIndex, pointIndex);
-            //pointIndexPairs[pointIndex] = uint2( pointIndex, closestIndex);
-            //pointIndexPairs[pairIndex] = uint2( pointIndex, pointIndex+5);
         }
         else {
-            pointIndexPairs[pairIndex] = int2( closestIndex, pointIndex);
+            pointIndexPairs[pairIndex] = int2( 10,0);
         }
     }
     

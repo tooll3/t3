@@ -118,9 +118,13 @@ void GeneratePoints(uint3 threadID : SV_DispatchThreadID)
     uint columnIndex = index;
 
     float aspectRatio = (columnHeight - 1.0) / (rowWidth -2);
-    float2 samplePosInUV = float2(float(columnIndex)/float(columnHeight -1), (1-float(rowIndex)/float(rowWidth -2)));
+    //float2 samplePosInUV = float2(float(columnIndex)/float(columnHeight -1), (1-float(rowIndex)/float(rowWidth -2)));
+    float2 samplePosInUV = float2(float(columnIndex)/float(rowWidth -1), (1-float(rowIndex)/float(columnHeight -2)));
 
-    ResultPoints[threadID.x].position = float3(samplePosInUV * float2(2,2/ aspectRatio) - 2,0);
+    
+    //ResultPoints[threadID.x].position = float3(samplePosInUV * float2(2, 2/ aspectRatio) + float2(0,-0.5) - 2 ,0);
+    float2 uv = (samplePosInUV -0.5) * 2 * float2(1/aspectRatio,1);
+    ResultPoints[threadID.x].position = float3(uv ,0);
     ResultPoints[threadID.x].w = 1;
     ResultPoints[threadID.x].rotation = float4(0,0,0,1);
 

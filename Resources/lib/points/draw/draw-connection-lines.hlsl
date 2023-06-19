@@ -20,7 +20,7 @@ cbuffer Params : register(b0)
     float4 Color;
     float Size;
 
-    float CurrentStep;
+    float CurrentStep_;
     float StepCount;
     float LinesPerStep;
     // float ShrinkWithDistance;
@@ -29,6 +29,10 @@ cbuffer Params : register(b0)
     // float UseWForU;
 };
 
+cbuffer Params : register(b3)
+{
+    int CurrentStep;
+};
 
 cbuffer Transforms : register(b1)
 {
@@ -123,9 +127,11 @@ psInput vsMain(uint id: SV_VertexID)
     float3 sideInCamera = normalize(cross(lineCenterInCamera, lineInCamera.xyz)); 
 
     output.texCoord = float2(
-        lerp( 0, 1 , cornerFactors.x) + animationProgress * 3 -1, 
-        cornerFactors.y /2 +2);
+        //lerp( 0, 1 , cornerFactors.x) + animationProgress * 3 -1, 
+        animationProgress,
+        1); 
 
+    //output.texCoord = 1;//cornerFactors;
 
     float4 posInCamera = mul(float4(posInObject,1), ObjectToCamera);
     posInCamera.xyz += sideInCamera * Size / 1000 * cornerFactors.y * hide;
@@ -146,7 +152,7 @@ float4 psMain(psInput input) : SV_TARGET
 {
     //return float4(1,1,0,1);
     float4 imgColor = texture2.Sample(texSampler, input.texCoord);
-    float dFromLineCenter= abs(input.texCoord.y -0.5)*2;
+    //float dFromLineCenter= abs(input.texCoord.y -0.5)*2;
     //float a= 1;//smoothstep(1,0.95,dFromLineCenter) ;
 
     float4 col = input.color * imgColor;
