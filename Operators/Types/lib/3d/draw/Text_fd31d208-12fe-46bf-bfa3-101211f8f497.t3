@@ -406,22 +406,6 @@
       "Outputs": []
     },
     {
-      "Id": "7179380b-9f73-401c-9a03-6cdacc8e3375"/*Vector3ToFloat3*/,
-      "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
-      "InputValues": [
-        {
-          "Id": "bc217d95-25d4-44e8-b5ba-05b7facd9a20"/*Value*/,
-          "Type": "System.Numerics.Vector3",
-          "Value": {
-            "X": 2.27,
-            "Y": 0.56,
-            "Z": 0.057
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "aa397f89-22c1-49eb-b54a-8a80482f9715"/*magic1*/,
       "SymbolId": "5d7d61ae-0a41-4ffa-a51d-93bab665e7fe",
       "Name": "magic1",

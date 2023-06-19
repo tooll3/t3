@@ -1832,7 +1832,7 @@
       "Outputs": []
     },
     {
-      "Id": "c1d955cf-41fa-43fc-948f-8fc69b897368"/*PickPoints*/,
+      "Id": "c1d955cf-41fa-43fc-948f-8fc69b897368"/*FilterPoints*/,
       "SymbolId": "18251874-5d5a-4384-8dcd-fcf297e54886",
       "InputValues": [
         {

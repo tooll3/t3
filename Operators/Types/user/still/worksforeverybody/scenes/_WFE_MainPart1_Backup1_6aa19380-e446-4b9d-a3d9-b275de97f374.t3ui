@@ -1493,7 +1493,7 @@
       }
     },
     {
-      "ChildId": "1c2089e8-dd9f-4de8-82cd-2fdbd21221c0"/*PickPoints*/,
+      "ChildId": "1c2089e8-dd9f-4de8-82cd-2fdbd21221c0"/*FilterPoints*/,
       "Position": {
         "X": 4520.32,
         "Y": 10082.381
@@ -1542,7 +1542,7 @@
       }
     },
     {
-      "ChildId": "4df577df-f835-41f3-9173-505ccbdf1d74"/*PickPoints*/,
+      "ChildId": "4df577df-f835-41f3-9173-505ccbdf1d74"/*FilterPoints*/,
       "Position": {
         "X": 4513.934,
         "Y": 10278.871
@@ -1731,7 +1731,7 @@
       }
     },
     {
-      "ChildId": "7b02ed37-088b-4bb8-931e-7beecdaccc3e"/*PickPoints*/,
+      "ChildId": "7b02ed37-088b-4bb8-931e-7beecdaccc3e"/*FilterPoints*/,
       "Position": {
         "X": 4040.1316,
         "Y": 11063.803
@@ -2573,7 +2573,7 @@
       "Style": "Expanded",
       "Size": {
         "X": 110.0,
-        "Y": 166.0
+        "Y": 179.0
       },
       "Position": {
         "X": 4516.042,

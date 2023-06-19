@@ -1,5 +1,5 @@
 {
-  "Id": "18251874-5d5a-4384-8dcd-fcf297e54886"/*PickPoints*/,
+  "Id": "18251874-5d5a-4384-8dcd-fcf297e54886"/*FilterPoints*/,
   "Description": "llSelects points from the given criteria",
   "InputUis": [
     {

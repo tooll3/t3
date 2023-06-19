@@ -1831,7 +1831,7 @@
       "Outputs": []
     },
     {
-      "Id": "721b9bdc-462c-4431-a50d-56d52a0d87c2"/*PickPoints*/,
+      "Id": "721b9bdc-462c-4431-a50d-56d52a0d87c2"/*FilterPoints*/,
       "SymbolId": "18251874-5d5a-4384-8dcd-fcf297e54886",
       "InputValues": [
         {

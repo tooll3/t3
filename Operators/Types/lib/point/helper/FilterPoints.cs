@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_18251874_5d5a_4384_8dcd_fcf297e54886
 {
-    public class PickPoints : Instance<PickPoints>
+    public class FilterPoints : Instance<FilterPoints>
     {
 
         [Output(Guid = "bb886ff1-31a9-47aa-a39a-fa60ebb6c2d6")]

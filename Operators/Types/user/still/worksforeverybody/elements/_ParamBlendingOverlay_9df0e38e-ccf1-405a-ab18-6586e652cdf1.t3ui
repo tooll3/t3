@@ -526,7 +526,7 @@
       "ChildId": "1c218206-15ca-482d-ad51-48abd5bdf289"/*SampleGradient*/,
       "Position": {
         "X": 1069.897,
-        "Y": 1259.3734
+        "Y": 1270.3734
       }
     },
     {
@@ -617,14 +617,14 @@
       "ChildId": "a32b3c8c-ccbc-4d26-af9f-bbaab03e06b8"/*BoolToFloats*/,
       "Position": {
         "X": -258.49023,
-        "Y": 1293.0166
+        "Y": 1304.0166
       }
     },
     {
       "ChildId": "34170228-e4ff-4032-beaf-55ee802ae061"/*BoolToFloats*/,
       "Position": {
         "X": -258.49023,
-        "Y": 1349.0166
+        "Y": 1360.0166
       }
     },
     {

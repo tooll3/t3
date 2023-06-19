@@ -4879,7 +4879,7 @@
       "Outputs": []
     },
     {
-      "Id": "f893d26e-730c-49c1-9423-46e4c8f2f712"/*PickPoints*/,
+      "Id": "f893d26e-730c-49c1-9423-46e4c8f2f712"/*FilterPoints*/,
       "SymbolId": "18251874-5d5a-4384-8dcd-fcf297e54886",
       "InputValues": [
         {
@@ -5032,7 +5032,7 @@
       "Outputs": []
     },
     {
-      "Id": "62c8f868-fb2f-4961-b84c-2b53549e8b0d"/*PickPoints*/,
+      "Id": "62c8f868-fb2f-4961-b84c-2b53549e8b0d"/*FilterPoints*/,
       "SymbolId": "18251874-5d5a-4384-8dcd-fcf297e54886",
       "InputValues": [
         {
@@ -5605,7 +5605,7 @@
       "Outputs": []
     },
     {
-      "Id": "f02924bc-f9d3-4b94-9f60-e6463f44d158"/*PickPoints*/,
+      "Id": "f02924bc-f9d3-4b94-9f60-e6463f44d158"/*FilterPoints*/,
       "SymbolId": "18251874-5d5a-4384-8dcd-fcf297e54886",
       "InputValues": [
         {
