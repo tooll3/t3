@@ -319,12 +319,12 @@
         {
           "Id": "3655d507-96b3-4ded-9cef-886ea703ca89"/*Amount*/,
           "Type": "System.Single",
-          "Value": 1.1
+          "Value": 7.9
         },
         {
           "Id": "97b76d02-e735-4e93-88ad-5c9b8766a63c"/*FocusDistance*/,
           "Type": "System.Single",
-          "Value": 3.0
+          "Value": 0.7
         },
         {
           "Id": "1592e94b-a20d-463c-baec-5fb5dfa85532"/*BackgroundColor*/,
@@ -618,9 +618,24 @@
       "SymbolId": "11882635-4757-4cac-a024-70bb4e8b504c",
       "InputValues": [
         {
+          "Id": "bca3f7b2-a093-4cb3-89a5-0e2681760607"/*Increment*/,
+          "Type": "System.Single",
+          "Value": 1.0
+        },
+        {
           "Id": "286cbbfb-796d-499f-93d3-d467512110be"/*Rate*/,
           "Type": "System.Single",
           "Value": 4.0
+        },
+        {
+          "Id": "b04d475b-a898-421b-bf26-ae5cf982a351"/*Blending*/,
+          "Type": "System.Single",
+          "Value": 0.0
+        },
+        {
+          "Id": "c386b9e0-a987-4d11-9171-2971fa759827"/*AllowSpeedFactor*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -650,7 +665,12 @@
         {
           "Id": "286cbbfb-796d-499f-93d3-d467512110be"/*Rate*/,
           "Type": "System.Single",
-          "Value": 16.0
+          "Value": 1.0
+        },
+        {
+          "Id": "c386b9e0-a987-4d11-9171-2971fa759827"/*AllowSpeedFactor*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -833,7 +853,12 @@
         {
           "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
           "Type": "System.Boolean",
-          "Value": true
+          "Value": false
+        },
+        {
+          "Id": "044168eb-791c-405f-867f-3d5702924165"/*EventType*/,
+          "Type": "System.Int32",
+          "Value": 2
         },
         {
           "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
@@ -848,13 +873,305 @@
         {
           "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
           "Type": "System.Int32",
-          "Value": 48
+          "Value": 49
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "1f0260b8-22b3-41a8-9189-defec52bcb42"/*Layer2d*/,
+      "SymbolId": "d8c5330f-59b5-4907-b845-a02def3042fa",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "dd9368d0-3b37-4c20-be09-09052ec6bd96"/*MidiInput*/,
+      "SymbolId": "59a0458e-2f3a-4856-96cd-32936f783cc5",
+      "InputValues": [
+        {
+          "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "044168eb-791c-405f-867f-3d5702924165"/*EventType*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
+          "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
+          "Type": "System.String",
+          "Value": "Tom-Midi2"
+        },
+        {
+          "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
+          "Type": "System.Int32",
+          "Value": 6
+        },
+        {
+          "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
+          "Type": "System.Int32",
+          "Value": 72
+        },
+        {
+          "Id": "f650985f-00a7-452a-b3e4-69a8e9a78c3f"/*ControlRange*/,
+          "Type": "SharpDX.Size2",
+          "Value": {
+            "Width": 0,
+            "Height": 128
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "29a77415-0f18-42fd-96cd-bfe438b54a49"/*FloatToString*/,
+      "SymbolId": "39c96cfd-dedf-4f76-a471-d1c26c9ba9fa",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "7605e06f-6c5e-43f8-98e7-1b826a878768"/*Text*/,
+      "SymbolId": "fd31d208-12fe-46bf-bfa3-101211f8f497",
+      "InputValues": [],
+      "Outputs": [
+        {
+          "Id": "3f8b20a7-c8b8-45ab-86a1-0efcd927358e"/*Text*/,
+          "IsDisabled": true
+        }
+      ]
+    },
+    {
+      "Id": "1cda8348-53fe-4392-b2e3-92a7ee741fe9"/*Counter*/,
+      "SymbolId": "11882635-4757-4cac-a024-70bb4e8b504c",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "3ab3b97e-fc19-437b-89a6-9a5ee06d0add"/*PickPoints*/,
+      "SymbolId": "18251874-5d5a-4384-8dcd-fcf297e54886",
+      "InputValues": [
+        {
+          "Id": "519d77c0-5605-433a-b8ce-6d84f99edd7b"/*Count*/,
+          "Type": "System.Int32",
+          "Value": 10
+        },
+        {
+          "Id": "60cea2c3-02ae-4132-ad11-3f16c2f71b6e"/*ScatterSelect*/,
+          "Type": "System.Single",
+          "Value": 0.48
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "408f3dac-bc2e-44fc-95af-5e365b3f1fdc"/*CountInt*/,
+      "SymbolId": "0e1d5f4b-3ba0-4e71-aa26-7308b6df214d",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "06ef0583-c75a-4626-a997-6f1d1fbb9079"/*_DrawVaryingQuads*/,
+      "SymbolId": "ffc0a7ed-fe61-4188-8db9-0b0f07c6b981",
+      "InputValues": [
+        {
+          "Id": "82230324-b1cd-41ba-8d03-933c939001ad"/*Color*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 29.942997,
+            "Y": 19.93696,
+            "Z": 15.203226,
+            "W": 1.0
+          }
+        },
+        {
+          "Id": "c25ab214-7fb3-4595-8740-96471df44905"/*Stretch*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 12.6,
+            "Y": 344.3
+          }
+        },
+        {
+          "Id": "b1a7da14-d6bd-4862-ad69-dfa7ae1cfbb8"/*Size*/,
+          "Type": "System.Single",
+          "Value": 0.08
+        },
+        {
+          "Id": "a0d7fc98-590d-481a-83a2-8522a3053082"/*WSpeed*/,
+          "Type": "System.Single",
+          "Value": 3.8
+        },
+        {
+          "Id": "9645b08f-ed92-4b82-8090-0a31162e83fb"/*Scale*/,
+          "Type": "T3.Core.DataTypes.Curve",
+          "Value": {
+            "Curve": {
+              "PreCurve": "Constant",
+              "PostCurve": "Constant",
+              "Keys": [
+                {
+                  "Time": 0.0071,
+                  "Value": -2.384185791015625E-07,
+                  "InType": "Spline",
+                  "OutType": "Spline",
+                  "InEditMode": "Smooth",
+                  "OutEditMode": "Smooth",
+                  "InTangentAngle": 0.0,
+                  "OutTangentAngle": 3.141592653589793
+                },
+                {
+                  "Time": 0.1844,
+                  "Value": 1.678571343421936,
+                  "InType": "Spline",
+                  "OutType": "Spline",
+                  "InEditMode": "Smooth",
+                  "OutEditMode": "Smooth",
+                  "InTangentAngle": 6.283185307179586,
+                  "OutTangentAngle": 3.141592653589793
+                },
+                {
+                  "Time": 1.0071,
+                  "Value": -0.03571438789367676,
+                  "InType": "Spline",
+                  "OutType": "Spline",
+                  "InEditMode": "Smooth",
+                  "OutEditMode": "Smooth",
+                  "InTangentAngle": 0.0,
+                  "OutTangentAngle": -3.141592653589793
+                }
+              ]
+            }
+          }
+        },
+        {
+          "Id": "b83c1c1d-fef9-48d0-bf6b-da5b4ad8b094"/*EnableDepthWrite*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "2aa7cb6f-4ab6-4e95-9260-bdea6a303f72"/*Execute*/,
+      "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "f1d2d65c-9172-4609-9b39-227e6c9fa56d"/*PointSimulation*/,
+      "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
+      "InputValues": [
+        {
+          "Id": "79080698-1097-4178-b7da-7d10fd86be28"/*MixOriginal*/,
+          "Type": "System.Single",
+          "Value": 0.59
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "46aa3d19-cbba-40ca-a8b8-e642899a2e06"/*SampleGradient*/,
+      "SymbolId": "8211249d-7a26-4ad0-8d84-56da72a5c536",
+      "InputValues": [
+        {
+          "Id": "eff10fad-cf95-4133-91db-efc41258cd1b"/*Gradient*/,
+          "Type": "T3.Core.DataTypes.Gradient",
+          "Value": {
+            "Gradient": {
+              "Interpolation": "Linear",
+              "Steps": [
+                {
+                  "Id": "66186fd1-acaf-4b40-8bb2-ef2b20696d34",
+                  "NormalizedPosition": 0.0,
+                  "Color": {
+                    "R": 19.861425,
+                    "G": 19.682302,
+                    "B": 19.701231,
+                    "A": 0.28708133
+                  }
+                },
+                {
+                  "Id": "b15197dc-14fa-4fae-beb7-8bc257bce3de",
+                  "NormalizedPosition": 0.5042017,
+                  "Color": {
+                    "R": 9.9999E-07,
+                    "G": 9.999968E-07,
+                    "B": 1E-06,
+                    "A": 1.0
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "0c1c02ae-010d-4939-8be1-50a3adbe7b92"/*TriggerAnim*/,
+      "SymbolId": "95d586a2-ee14-4ff5-a5bb-40c497efde95",
+      "InputValues": [
+        {
+          "Id": "0d56fc27-fa15-4f1e-aa09-f97af93d42c7"/*Duration*/,
+          "Type": "System.Single",
+          "Value": 0.64
+        },
+        {
+          "Id": "9bfd5ae3-9ca6-4f7b-b24b-f554ad4d0255"/*Bias*/,
+          "Type": "System.Single",
+          "Value": 0.35
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "127bb577-7f0c-48e4-a68f-e4ec68b1796d"/*SetPointsW*/,
+      "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
+      "InputValues": [
+        {
+          "Id": "27bf737b-966e-4203-b8fd-2d9c7b19dcad"/*WCurve*/,
+          "Type": "T3.Core.DataTypes.Curve",
+          "Value": {
+            "Curve": {
+              "PreCurve": "Constant",
+              "PostCurve": "Constant",
+              "Keys": [
+                {
+                  "Time": 0.0,
+                  "Value": 0.9642856121063232,
+                  "InType": "Linear",
+                  "OutType": "Linear",
+                  "InEditMode": "Linear",
+                  "OutEditMode": "Linear",
+                  "InTangentAngle": 0.035699214728549755,
+                  "OutTangentAngle": 3.177291868318343
+                },
+                {
+                  "Time": 1.0,
+                  "Value": 1.0,
+                  "InType": "Linear",
+                  "OutType": "Linear",
+                  "InEditMode": "Linear",
+                  "OutEditMode": "Linear",
+                  "InTangentAngle": 0.035699214728549755,
+                  "OutTangentAngle": -3.1058934388612434
+                }
+              ]
+            }
+          }
         }
       ],
       "Outputs": []
     }
   ],
   "Connections": [
+    {
+      "SourceParentOrChildId": "1f0260b8-22b3-41a8-9189-defec52bcb42",
+      "SourceSlotId": "e4a8d926-7abd-4d2a-82a1-b7d140cb457f",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "b5891c89-a8cf-4325-81be-f869b395e60c"
+    },
     {
       "SourceParentOrChildId": "b2760617-ab80-40a6-8c66-8f0b6bdaa8e3",
       "SourceSlotId": "a54cc25b-9ea2-4012-b462-16c565718cf8",
@@ -874,10 +1191,40 @@
       "TargetSlotId": "e14366ed-0591-424d-a8ab-36f8380dd614"
     },
     {
+      "SourceParentOrChildId": "46aa3d19-cbba-40ca-a8b8-e642899a2e06",
+      "SourceSlotId": "963611e7-f55e-4c94-96e6-34e195558a2b",
+      "TargetParentOrChildId": "06ef0583-c75a-4626-a997-6f1d1fbb9079",
+      "TargetSlotId": "82230324-b1cd-41ba-8d03-933c939001ad"
+    },
+    {
+      "SourceParentOrChildId": "127bb577-7f0c-48e4-a68f-e4ec68b1796d",
+      "SourceSlotId": "39c62e1e-7c63-4a88-9923-3f7f5fffbfbf",
+      "TargetParentOrChildId": "06ef0583-c75a-4626-a997-6f1d1fbb9079",
+      "TargetSlotId": "a3543b5d-0ee1-47de-9ef3-7747d7f9903f"
+    },
+    {
       "SourceParentOrChildId": "12d84766-8c86-4d6d-ad74-d0813aed5f6e",
       "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
       "TargetParentOrChildId": "0b2dfbbb-e003-4089-994f-13c83443cb92",
       "TargetSlotId": "afadb109-37b2-49aa-8c32-627cc35fd574"
+    },
+    {
+      "SourceParentOrChildId": "dd9368d0-3b37-4c20-be09-09052ec6bd96",
+      "SourceSlotId": "4bf74648-207f-4275-83ba-09e1c048c33b",
+      "TargetParentOrChildId": "0c1c02ae-010d-4939-8be1-50a3adbe7b92",
+      "TargetSlotId": "62949257-adb3-4c67-ac0a-d37ee28da81b"
+    },
+    {
+      "SourceParentOrChildId": "3ab3b97e-fc19-437b-89a6-9a5ee06d0add",
+      "SourceSlotId": "bb886ff1-31a9-47aa-a39a-fa60ebb6c2d6",
+      "TargetParentOrChildId": "127bb577-7f0c-48e4-a68f-e4ec68b1796d",
+      "TargetSlotId": "d504c3f9-290f-4a73-bf9d-f9266ea955f6"
+    },
+    {
+      "SourceParentOrChildId": "0c1c02ae-010d-4939-8be1-50a3adbe7b92",
+      "SourceSlotId": "aac4ecbf-436a-4414-94c1-53d517a8e587",
+      "TargetParentOrChildId": "127bb577-7f0c-48e4-a68f-e4ec68b1796d",
+      "TargetSlotId": "d5a5862b-d3a2-4e6e-ad54-32cff7ced0fd"
     },
     {
       "SourceParentOrChildId": "d7346392-7748-4231-a195-cf723632f8b7",
@@ -910,8 +1257,8 @@
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
     {
-      "SourceParentOrChildId": "c00c8275-de25-4a15-b229-5e9f1a805f5c",
-      "SourceSlotId": "65bf6652-0187-4c5f-8e1f-ccc4254b843b",
+      "SourceParentOrChildId": "2aa7cb6f-4ab6-4e95-9260-bdea6a303f72",
+      "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
       "TargetParentOrChildId": "12d84766-8c86-4d6d-ad74-d0813aed5f6e",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
@@ -922,10 +1269,52 @@
       "TargetSlotId": "4389838c-fd1d-4400-b8e5-f373a05adff7"
     },
     {
+      "SourceParentOrChildId": "dd9368d0-3b37-4c20-be09-09052ec6bd96",
+      "SourceSlotId": "4bf74648-207f-4275-83ba-09e1c048c33b",
+      "TargetParentOrChildId": "1cda8348-53fe-4392-b2e3-92a7ee741fe9",
+      "TargetSlotId": "eefdb8ca-68e7-4e39-b302-22eb8930fb8c"
+    },
+    {
+      "SourceParentOrChildId": "b2760617-ab80-40a6-8c66-8f0b6bdaa8e3",
+      "SourceSlotId": "a54cc25b-9ea2-4012-b462-16c565718cf8",
+      "TargetParentOrChildId": "1f0260b8-22b3-41a8-9189-defec52bcb42",
+      "TargetSlotId": "2a95ac54-5ef7-4d3c-a90b-ecd5b422bddc"
+    },
+    {
+      "SourceParentOrChildId": "dd9368d0-3b37-4c20-be09-09052ec6bd96",
+      "SourceSlotId": "01706780-d25b-4c30-a741-8b7b81e04d82",
+      "TargetParentOrChildId": "29a77415-0f18-42fd-96cd-bfe438b54a49",
+      "TargetSlotId": "f36e4078-2608-4308-ab5f-077c05b1181a"
+    },
+    {
+      "SourceParentOrChildId": "c00c8275-de25-4a15-b229-5e9f1a805f5c",
+      "SourceSlotId": "65bf6652-0187-4c5f-8e1f-ccc4254b843b",
+      "TargetParentOrChildId": "2aa7cb6f-4ab6-4e95-9260-bdea6a303f72",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "06ef0583-c75a-4626-a997-6f1d1fbb9079",
+      "SourceSlotId": "65bf6652-0187-4c5f-8e1f-ccc4254b843b",
+      "TargetParentOrChildId": "2aa7cb6f-4ab6-4e95-9260-bdea6a303f72",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
       "SourceParentOrChildId": "3251becf-b578-4ea1-be86-ff09d4ffe154",
       "SourceSlotId": "1d2a7948-4c89-407a-a98f-9810f60ef75e",
       "TargetParentOrChildId": "2c838fcd-ece9-425a-8169-661cf2990d2e",
       "TargetSlotId": "307e2b98-a337-4636-969f-a19841b11511"
+    },
+    {
+      "SourceParentOrChildId": "c308089d-13ff-4589-9d0a-847f4f9a335c",
+      "SourceSlotId": "eb8c79d4-d147-419c-a606-4bbe7b71933f",
+      "TargetParentOrChildId": "3ab3b97e-fc19-437b-89a6-9a5ee06d0add",
+      "TargetSlotId": "3b193782-2a56-4031-a0c6-9ebb576e66a5"
+    },
+    {
+      "SourceParentOrChildId": "408f3dac-bc2e-44fc-95af-5e365b3f1fdc",
+      "SourceSlotId": "2e172f90-3995-4b16-af33-9957be07323b",
+      "TargetParentOrChildId": "3ab3b97e-fc19-437b-89a6-9a5ee06d0add",
+      "TargetSlotId": "f32458a5-f19f-487b-8ae2-a575de0b4ff2"
     },
     {
       "SourceParentOrChildId": "d7346392-7748-4231-a195-cf723632f8b7",
@@ -938,6 +1327,18 @@
       "SourceSlotId": "b0294b73-58a9-4d79-b3e2-caaed304109d",
       "TargetParentOrChildId": "3f904ef0-6c3e-46f2-a9c5-74f3a4039d10",
       "TargetSlotId": "4d663aa5-e2d4-40e0-8901-abe09cb832c3"
+    },
+    {
+      "SourceParentOrChildId": "dd9368d0-3b37-4c20-be09-09052ec6bd96",
+      "SourceSlotId": "4bf74648-207f-4275-83ba-09e1c048c33b",
+      "TargetParentOrChildId": "408f3dac-bc2e-44fc-95af-5e365b3f1fdc",
+      "TargetSlotId": "bfd95809-61d2-49eb-85d4-ff9e36b2d158"
+    },
+    {
+      "SourceParentOrChildId": "0c1c02ae-010d-4939-8be1-50a3adbe7b92",
+      "SourceSlotId": "aac4ecbf-436a-4414-94c1-53d517a8e587",
+      "TargetParentOrChildId": "46aa3d19-cbba-40ca-a8b8-e642899a2e06",
+      "TargetSlotId": "a4527e01-f19a-4200-85e5-00144f3ce061"
     },
     {
       "SourceParentOrChildId": "e432e168-29fa-47a6-9eea-2b7eddaa8398",
@@ -1004,6 +1405,12 @@
       "SourceSlotId": "3f8b20a7-c8b8-45ab-86a1-0efcd927358e",
       "TargetParentOrChildId": "74b2e91f-835d-4ac4-9ab3-5eef41f49e30",
       "TargetSlotId": "047b8fae-468c-48a7-8f3a-5fac8dd5b3c6"
+    },
+    {
+      "SourceParentOrChildId": "29a77415-0f18-42fd-96cd-bfe438b54a49",
+      "SourceSlotId": "c63a1977-a594-490d-b5fb-de4d40bad016",
+      "TargetParentOrChildId": "7605e06f-6c5e-43f8-98e7-1b826a878768",
+      "TargetSlotId": "f1f1be0e-d5bc-4940-bbc1-88bfa958f0e1"
     },
     {
       "SourceParentOrChildId": "a941c5b4-24e3-4945-82b7-39fab9b77b72",
@@ -1108,6 +1515,12 @@
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
     },
     {
+      "SourceParentOrChildId": "7605e06f-6c5e-43f8-98e7-1b826a878768",
+      "SourceSlotId": "3f8b20a7-c8b8-45ab-86a1-0efcd927358e",
+      "TargetParentOrChildId": "cd145061-5331-43c2-ac7b-65c4d1f2ccd4",
+      "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
       "SourceParentOrChildId": "0305fb18-4b4e-44d7-aa11-8e86ffbe5027",
       "SourceSlotId": "943d1c32-e4e7-4502-8927-543b13ed0283",
       "TargetParentOrChildId": "ce9efaa8-78bb-4430-a10f-91bd3badbfc8",
@@ -1141,6 +1554,12 @@
       "SourceParentOrChildId": "3f24289a-48df-410d-aa45-aacbe8eaedc8",
       "SourceSlotId": "eb8c79d4-d147-419c-a606-4bbe7b71933f",
       "TargetParentOrChildId": "ea52f869-8e60-4d52-87ea-220503021dd4",
+      "TargetSlotId": "76263857-27ea-40f5-856f-983c6ddcbfe8"
+    },
+    {
+      "SourceParentOrChildId": "3ab3b97e-fc19-437b-89a6-9a5ee06d0add",
+      "SourceSlotId": "bb886ff1-31a9-47aa-a39a-fa60ebb6c2d6",
+      "TargetParentOrChildId": "f1d2d65c-9172-4609-9b39-227e6c9fa56d",
       "TargetSlotId": "76263857-27ea-40f5-856f-983c6ddcbfe8"
     },
     {
@@ -1199,36 +1618,6 @@
             "OutEditMode": "Linear",
             "InTangentAngle": -1.5545357773139354,
             "OutTangentAngle": -4.696128430903729
-          }
-        ]
-      }
-    },
-    {
-      "InstanceId": "71214d4b-0fba-4d4d-ae7e-7a820266e8d8",
-      "InputId": "dd92fb0a-4b3e-4492-bf59-437d914a1ad3",
-      "Curve": {
-        "PreCurve": "Constant",
-        "PostCurve": "Constant",
-        "Keys": [
-          {
-            "Time": 0.0,
-            "Value": 6.800000190734863,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Horizontal",
-            "OutEditMode": "Horizontal",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": 3.141592653589793
-          },
-          {
-            "Time": 28.1703,
-            "Value": 1.0499999523162842,
-            "InType": "Spline",
-            "OutType": "Spline",
-            "InEditMode": "Horizontal",
-            "OutEditMode": "Horizontal",
-            "InTangentAngle": 0.0,
-            "OutTangentAngle": -3.141592653589793
           }
         ]
       }
