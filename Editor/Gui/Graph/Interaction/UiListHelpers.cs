@@ -11,6 +11,7 @@ public abstract class UiListHelpers
         if (list.Count == 0)
         {
             currentItem = default;
+            return;
         }
 
         var index = list.IndexOf(currentItem);
