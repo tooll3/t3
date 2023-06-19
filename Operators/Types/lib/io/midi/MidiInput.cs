@@ -125,6 +125,9 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             if (_isDefaultValue && _trainedEventType != MidiEventTypes.MidiTime)
             {
                 Result.Value = defaultOutputValue;
+                Result.DirtyFlag.Clear();
+                Range.DirtyFlag.Clear();
+                WasHit.DirtyFlag.Clear();
                 return;
             }
 
@@ -143,6 +146,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             var reachTarget = MathF.Abs(_dampedOutputValue - currentValue) < 0.0001f;
             Result.DirtyFlag.Trigger = reachTarget ? DirtyFlagTrigger.None : DirtyFlagTrigger.Animated;
             Range.DirtyFlag.Trigger = reachTarget ? DirtyFlagTrigger.None : DirtyFlagTrigger.Animated;
+            WasHit.DirtyFlag.Trigger = reachTarget ? DirtyFlagTrigger.None : DirtyFlagTrigger.Animated;
 
             if (reachTarget)
             {
@@ -155,6 +159,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             WasHit.Value = wasHit;
             Result.Value = _dampedOutputValue;
             Range.Value = _valuesForControlRange;
+            
             Result.DirtyFlag.Clear();
             Range.DirtyFlag.Clear();
             WasHit.DirtyFlag.Clear();
@@ -171,6 +176,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
         {
             Result.DirtyFlag.Invalidate();
             Range.DirtyFlag.Invalidate();
+            WasHit.DirtyFlag.Invalidate();
         }
 
         /// <remarks>
