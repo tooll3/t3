@@ -1,8 +1,7 @@
-using System;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_0bec016a_5e1b_467a_8273_368d4d6b9935
 {
@@ -18,14 +17,18 @@ namespace T3.Operators.Types.Id_0bec016a_5e1b_467a_8273_368d4d6b9935
 
         private void Update(EvaluationContext context)
         {
-            //Log.Debug("Update Trigger",this);
-            Result.Value = BoolValue.GetValue(context);
-            // if (Result.Value)
-            // {
-            //     SetTriggered(false);                
-            // }
+            var value = BoolValue.GetValue(context);
+            var wasHit = MathUtils.WasTriggered(value, ref _isSet);
+            var onlyOnDown = OnlyOnDown.GetValue(context);
+
+            Result.Value = onlyOnDown ? wasHit : value;
+
+            var needsRefreshNextFrame = onlyOnDown && wasHit;
+            Result.DirtyFlag.Trigger = needsRefreshNextFrame ? DirtyFlagTrigger.Animated : DirtyFlagTrigger.None;
         }
 
+        private bool _isSet;
+        
         public void Activate()
         {
             SetTriggered(true);
@@ -41,5 +44,8 @@ namespace T3.Operators.Types.Id_0bec016a_5e1b_467a_8273_368d4d6b9935
         
         [Input(Guid = "E7C1F0AF-DA6D-4E33-AC86-7DC96BFE7EB3")]
         public readonly InputSlot<bool> BoolValue = new();
+        
+        [Input(Guid = "6AD61E57-1073-483E-A0DD-96A9033AA39B")]
+        public readonly InputSlot<bool> OnlyOnDown = new();
     }
 }
