@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Globalization;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Logging;
@@ -315,9 +316,17 @@ namespace T3.Editor.Gui.Interaction
         private static string FormatValueForButton(ref double value)
         {
             // Don't use rounding for integers
-            return (_numberFormat == "{0:0}")
-                       ? "" + (int)value
-                       : string.Format(_numberFormat, value);
+            try
+            {
+                return (_numberFormat == "{0:0}")
+                           ? "" + (int)value
+                           : string.Format(_numberFormat, value);
+            }
+            catch (FormatException)
+            {
+                Log.Warning($"Invalid value format '{_numberFormat}'");
+                return value.ToString(CultureInfo.InvariantCulture);
+            }
         }
 
         /// <summary>
