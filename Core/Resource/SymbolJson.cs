@@ -289,10 +289,15 @@ namespace T3.Core.Resource
 
         private static void ReadChildOutputData(SymbolChild symbolChild, Guid outputId, JToken json)
         {
-            if (json[JsonKeys.Type] != null)
+            if (json[JsonKeys.Type] == null)
+                return;
+            
+            if (!symbolChild.Outputs.TryGetValue(outputId, out var output))
             {
-                symbolChild.Outputs[outputId].OutputData.ReadFromJson(json);
+                Log.Warning("Skipping definition of obsolete output " + outputId);
+                return;
             }
+            output.OutputData.ReadFromJson(json);
         }
 
         public static bool GetPastedSymbol(JToken jToken, out Symbol symbol)
