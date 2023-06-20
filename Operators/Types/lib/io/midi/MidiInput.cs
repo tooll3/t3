@@ -64,10 +64,6 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             }
 
             if (MathUtils.WasTriggered(TeachTrigger.GetValue(context), ref _oldTeachTrigger))
-                // var teachTrigger = !TeachTrigger.GetValue(context);
-                // var teachJustTriggered = !teachTrigger && !_oldTeachTrigger;
-                // _oldTeachTrigger = !teachTrigger;
-                // if (teachJustTriggered)
             {
                 MidiInConnectionManager.Rescan();
                 _teachingActive = true;
@@ -98,6 +94,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                         _teachingActive = false;
                     }
 
+                    var hasValueChanged = Math.Abs(_currentControllerValue - signal.ControllerValue) > 0.001f;
                     _currentControllerValue = signal.ControllerValue;
                     _currentControllerId = signal.ControllerId;
 
@@ -110,10 +107,11 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                         var index = signal.ControllerId - _controlRange.Width;
                         _valuesForControlRange[index] = signal.ControllerValue;
                     }
-                    
-                    if (signal.EventType == MidiEventTypes.ControllerChanges
-                        || (signal.EventType == MidiEventTypes.Notes && signal.ControllerValue > 0))
+
+                    if (hasValueChanged && signal.ControllerValue > 0)
+                    {
                         wasHit = true;
+                    }
                     
                     LastMessageTime = Playback.RunTimeInSecs;
                     _isDefaultValue = false;
@@ -144,9 +142,10 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             _dampedOutputValue = MathUtils.Lerp(currentValue, _dampedOutputValue, damping);
 
             var reachTarget = MathF.Abs(_dampedOutputValue - currentValue) < 0.0001f;
-            Result.DirtyFlag.Trigger = reachTarget ? DirtyFlagTrigger.None : DirtyFlagTrigger.Animated;
-            Range.DirtyFlag.Trigger = reachTarget ? DirtyFlagTrigger.None : DirtyFlagTrigger.Animated;
-            WasHit.DirtyFlag.Trigger = reachTarget ? DirtyFlagTrigger.None : DirtyFlagTrigger.Animated;
+            var needsUpdateNextFrame = !reachTarget || wasHit;
+            Result.DirtyFlag.Trigger = needsUpdateNextFrame ? DirtyFlagTrigger.Animated : DirtyFlagTrigger.None;
+            Range.DirtyFlag.Trigger =  needsUpdateNextFrame ? DirtyFlagTrigger.Animated : DirtyFlagTrigger.None;
+            WasHit.DirtyFlag.Trigger = needsUpdateNextFrame ? DirtyFlagTrigger.Animated : DirtyFlagTrigger.None;
 
             if (reachTarget)
             {
