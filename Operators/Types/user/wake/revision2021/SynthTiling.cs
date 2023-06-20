@@ -10,8 +10,8 @@ namespace T3.Operators.Types.Id_d6304632_a8c5_4029_8087_dc992b1f899c
     public class SynthTiling : Instance<SynthTiling>
     {
 
-        [Output(Guid = "d38452b8-73aa-4f1a-8f9d-574eff8111ba")]
-        public readonly TimeClipSlot<Command> Output3 = new TimeClipSlot<Command>();
+        [Output(Guid = "79c9eb66-e495-48e1-ae38-8410721ea1c5")]
+        public readonly Slot<T3.Core.DataTypes.Command> Output = new Slot<T3.Core.DataTypes.Command>();
 
 
     }

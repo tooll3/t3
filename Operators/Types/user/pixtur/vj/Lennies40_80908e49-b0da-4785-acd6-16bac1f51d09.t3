@@ -845,25 +845,7 @@
       "Id": "639e2d11-3419-42c4-bfd9-8f84ace2cf32"/*SynthTiling*/,
       "SymbolId": "d6304632-a8c5-4029-8087-dc992b1f899c",
       "InputValues": [],
-      "Outputs": [
-        {
-          "Id": "d38452b8-73aa-4f1a-8f9d-574eff8111ba"/*SynthTiling*/,
-          "OutputData": {
-            "Type": "T3.Core.Animation.TimeClip",
-            "TimeClip": {
-              "TimeRange": {
-                "Start": 0.0,
-                "End": 212.079
-              },
-              "SourceRange": {
-                "Start": 592.0,
-                "End": 804.07904
-              },
-              "LayerIndex": 0
-            }
-          }
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "943e7a9c-e3e6-4cf6-af62-03b5e65da55b"/*Any*/,

@@ -1643,7 +1643,12 @@
           "Value": 3760.0
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "3f8b20a7-c8b8-45ab-86a1-0efcd927358e"/*Text*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "e4f4bf1b-abb6-4aed-91bc-6139eb3df2eb"/*Counter*/,

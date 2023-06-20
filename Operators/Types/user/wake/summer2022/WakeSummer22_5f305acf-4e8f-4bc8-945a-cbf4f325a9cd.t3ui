@@ -11,55 +11,6 @@
       }
     },
     {
-      "ChildId": "406cab98-c13d-41ec-9311-6632d56a4032"/*PartTwo*/,
-      "Position": {
-        "X": 100.72867,
-        "Y": 1395.502
-      }
-    },
-    {
-      "ChildId": "644afb77-f871-4078-8338-11ed3f553f78"/*Titles for editing*/,
-      "Position": {
-        "X": 250.72867,
-        "Y": 1352.5022
-      }
-    },
-    {
-      "ChildId": "7ab68bf2-3b31-4e80-8897-f12228d02f5d"/*PartOne*/,
-      "Position": {
-        "X": 100.72867,
-        "Y": 1352.5022
-      }
-    },
-    {
-      "ChildId": "3d16d805-4ede-42d4-b8c9-c2d2562fc88c"/*Part Three*/,
-      "Position": {
-        "X": 100.72867,
-        "Y": 1438.5018
-      }
-    },
-    {
-      "ChildId": "8dd95b28-1e83-4a48-8464-59ba0b82f455"/*Part Four*/,
-      "Position": {
-        "X": 100.72867,
-        "Y": 1481.5018
-      }
-    },
-    {
-      "ChildId": "c132a192-7e13-4a1a-bf3e-e58e102ed802"/*Part Five*/,
-      "Position": {
-        "X": 100.72867,
-        "Y": 1524.5018
-      }
-    },
-    {
-      "ChildId": "cd4a29e5-725a-4b00-8e19-a643be4714ca"/*PartTitle*/,
-      "Position": {
-        "X": 100.72867,
-        "Y": 1567.5018
-      }
-    },
-    {
       "ChildId": "8dc4382f-0b34-4912-8c6e-731b80c04136"/*Default*/,
       "Position": {
         "X": 116.590576,
@@ -669,6 +620,13 @@
         "X": -1252.0084,
         "Y": 783.9615
       }
+    },
+    {
+      "ChildId": "d1def54f-9048-4e6c-8ea7-8e63fce12304"/*SynthTiling*/,
+      "Position": {
+        "X": 166.3017,
+        "Y": 458.2301
+      }
     }
   ],
   "OutputUis": [
@@ -700,24 +658,6 @@
       }
     },
     {
-      "Id": "2f296976-1903-4861-87a8-25e12d692314",
-      "Title": "Titles for editing",
-      "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
-        "W": 1.0
-      },
-      "Position": {
-        "X": 40.72867,
-        "Y": 1292.5022
-      },
-      "Size": {
-        "X": 380.0,
-        "Y": 357.99963
-      }
-    },
-    {
       "Id": "54fe7774-2427-4fea-a3c3-4e7f75d9db82",
       "Title": "Old Stuff",
       "Color": {
@@ -733,24 +673,6 @@
       "Size": {
         "X": 530.0,
         "Y": 238.0
-      }
-    },
-    {
-      "Id": "08b6498d-c790-4a77-b298-52aa568d8fca",
-      "Title": "More experments",
-      "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
-        "W": 1.0
-      },
-      "Position": {
-        "X": -894.8965,
-        "Y": 867.11127
-      },
-      "Size": {
-        "X": 545.4592,
-        "Y": 532.4107
       }
     }
   ]
