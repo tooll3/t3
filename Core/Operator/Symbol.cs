@@ -97,7 +97,7 @@ namespace T3.Core.Operator
             {
                 foreach (Guid id in orderedInputIds)
                 {
-                    var inputDefinition = inputDefs.Find(inputDef => inputDef.Id == id);
+                    var inputDefinition = inputDefs.Find(inputDef => inputDef != null && inputDef.Id == id);
                     if (inputDefinition != null)
                     {
                         InputDefinitions.Add(inputDefinition);
