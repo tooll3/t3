@@ -103,6 +103,26 @@ float3 hash33u( uint3 x )
 }
 
 
+float4 hash41u( uint x )
+{
+    const uint k = 1103515245U;  // GLIB C
+    x = ((x>>8U)^x)*k;
+    uint y = ((x>>8U)^x)*k;
+    uint z = ((y>>8U)^x)*k;
+    uint w = ((z>>8U)^y)*k;
+    uint4 i4 = uint4(x,y,z,w);
+    
+    return float4(i4)*(1.0/float(0xffffffffU));
+}
+
+float4 hash11u( uint x )
+{
+    const uint k = 1103515245U;  // GLIB C
+    x = ((x>>8U)^x)*k;
+    x = ((x>>8U)^x)*k;
+    
+    return float1(x)*(1.0/float(0xffffffffU));
+}
 
 //----------------------------------------------------------------------------------------
 // 4 out, 1 in...

@@ -118,6 +118,7 @@ namespace T3.Operators.Types.Id_18d3d929_e530_45fa_9131_658368060ae2
         
         private enum DistributionModes
         {
+            RandomWithPhase,
             Scatter,
             Spread,
             UseW,

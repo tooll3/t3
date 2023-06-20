@@ -98,21 +98,23 @@ inline float fmod(float x, float y)
     return (x - y * floor(x / y));
 }
 
-inline float GetUFromMode(float mode, float f, float3 scatter, float w, float fog)
+inline float GetUFromMode(float mode, int id, float f, float4 scatter, float w, float fog)
 {
     switch ((int)(mode + 0.5))
     {
 
     case 0:
-        return (scatter.x + scatter.y * 7.123 + scatter.z * 13.33) % 1;
-        // return scatter.x;
+        return scatter.w;
 
     case 1:
+        return hash11u(id);
+
+    case 2:
         float f1 = (f + SpreadPhase) / SpreadLength;
         f1 = SpreadRepeat > 0.5 ? fmod(f1, 1) : f1;
         return SpreadPingPong > 0.5 ? (1 - abs(f1 * 2 - 1)) : f1;
 
-    case 2:
+    case 3:
         float w1 = (w + SpreadPhase) / SpreadLength;
         w1 = SpreadRepeat > 0.5 ? fmod(w1, 1) : w1;
         return SpreadPingPong > 0.5 ? (1 - abs(w1 * 2 - 1)) : w1;
@@ -139,33 +141,38 @@ psInput vsMain(uint id
     uint particleId = id / 6;
     float3 cornerFactors = Corners[quadIndex];
 
-    Point p = Points[particleId];
+    Point p = Points[particleId]; 
     float f = particleId / (float)particleCount;
 
     float phase = RandomPhase + 133.1123 * f;
-    int phaseId = (int)phase;
+    int phaseId = (int)phase; 
 
-    float3 normalizedScatter = lerp(hash31((particleId + phaseId) % 123121),
-                                    hash31((particleId + phaseId) % 123121 + 1),
+    float4 normalizedScatter = lerp(hash41u(particleId * 12341 + phaseId),
+                                    hash41u(particleId * 12341 + phaseId + 1),
                                     smoothstep(0, 1,
                                                phase - phaseId));
-    float3 scatterForScale = normalizedScatter * 2 - 1;
 
-    // float4 aspect = float4(CameraToClipSpace[1][1] / CameraToClipSpace[0][0],1,1,1);
+    float3 scatterForScale = normalizedScatter.xyx * 2 - 1;
+
     output.fog = 0;
 
     int2 altasSize = (int2)AtlasSize;
-    float textureU = GetUFromMode(TextureAtlasMode, f, normalizedScatter, p.w, output.fog);
-    int cellIndex = textureU * altasSize.x * altasSize.y;// particleId;
-    int textureCelX =  cellIndex % altasSize.x;
-    int textureCelY =  ((cellIndex / altasSize.x) % altasSize.y);
+
+
+    float textureUx = GetUFromMode(TextureAtlasMode, particleId, f, normalizedScatter, p.w, output.fog);
+    float textureUy = GetUFromMode(TextureAtlasMode, particleId, f, normalizedScatter.wxyz, p.w, output.fog); 
+    //int cellIndex = textureU * altasSize.x * altasSize.y;// particleId;
+    
+    int textureCelX =  textureUx * altasSize.x;
+    int textureCelY =  textureUy * altasSize.y;
+   // int textureCelY =  ((cellIndex / altasSize.x) % altasSize.y);
     output.texCoord = (cornerFactors.xy * float2(-1, 1) * 0.5 + 0.5);
     output.texCoord /= altasSize;
     output.texCoord += float2(textureCelX, textureCelY) / altasSize;
 
     float4 posInObject = float4(p.position, 1);
 
-    float3 randomOffset = rotate_vector((scatterForScale - 0.5) * 2 * RandomPosition * Randomize, p.rotation);
+    float3 randomOffset = rotate_vector((normalizedScatter.xyz - 0.5) * 2 * RandomPosition * Randomize, p.rotation);
     posInObject.xyz += randomOffset;
 
     if (OrientationMode <= 1.5)
@@ -185,7 +192,7 @@ psInput vsMain(uint id
 
     float4 colorFromPoint = (UseRotationAsRgba > 0.5) ? p.rotation : 1;
 
-    float colorFxU = GetUFromMode(ColorVariationMode, f, normalizedScatter, p.w, output.fog);
+    float colorFxU = GetUFromMode(ColorVariationMode, particleId, f, normalizedScatter, p.w, output.fog);
     output.color = Color * ColorOverW.SampleLevel(texSampler, float2(colorFxU, 0), 0) * colorFromPoint;
 
     float adjustedRotate = Rotate;
@@ -210,8 +217,7 @@ psInput vsMain(uint id
         }
     }
 
-
-    float scaleFxU = GetUFromMode(ScaleDistribution, f, normalizedScatter, p.w, output.fog);
+    float scaleFxU = GetUFromMode(ScaleDistribution, particleId, f, normalizedScatter, p.w, output.fog);
     float scaleFromCurve = SizeOverW.SampleLevel(texSampler, float2(scaleFxU, 0), 0).r;
     float hideUndefinedPoints = isnan(p.w) ? 0 : (UseWFoScale > 0.5 ? p.w : 1 );
     float computedScale = adjustedScale * (RandomScale * scatterForScale.y *adjustedRandomize + 1) * tooCloseFactor * scaleFromCurve * hideUndefinedPoints;
