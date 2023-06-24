@@ -815,7 +815,13 @@
     {
       "Id": "539facb3-d4f3-4b32-8f5a-d9bdc9ff45d2"/*PickString*/,
       "SymbolId": "a9784e5e-7696-49a0-bb77-2302587ede59",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "20e76577-92ee-443d-9630-ebc41e38bb85"/*Index*/,
+          "Type": "System.Int32",
+          "Value": 1
+        }
+      ],
       "Outputs": []
     },
     {

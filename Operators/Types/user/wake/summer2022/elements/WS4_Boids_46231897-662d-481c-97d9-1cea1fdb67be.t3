@@ -407,7 +407,7 @@
         {
           "Id": "acce4779-56d6-47c4-9c52-874fca91a3a1"/*Radius*/,
           "Type": "System.Single",
-          "Value": -0.094
+          "Value": 0.73
         },
         {
           "Id": "ca84209e-d821-40c6-b23c-38fc4bbd47b0"/*Center*/,
@@ -543,18 +543,18 @@
           "Id": "313596cc-3854-436b-89da-5fd40164ce76"/*Position*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": -0.37753993,
-            "Y": 0.108505934,
-            "Z": -0.16359028
+            "X": 0.07797082,
+            "Y": -1.1962886,
+            "Z": 0.2986592
           }
         },
         {
           "Id": "a7acb25c-d60c-43a6-b1df-2cd5c6e183f3"/*Target*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 1.913964,
-            "Y": -0.45008224,
-            "Z": 0.36044994
+            "X": -1.6330204,
+            "Y": -1.0390372,
+            "Z": -1.4088104
           }
         }
       ],
@@ -1600,5 +1600,14 @@
       "TargetParentOrChildId": "fd97142d-dfd6-4c25-ba53-8d32326b40b8",
       "TargetSlotId": "afadb109-37b2-49aa-8c32-627cc35fd574"
     }
-  ]
+  ],
+  "PlaybackSettings": {
+    "Enabled": true,
+    "Bpm": 120.0,
+    "AudioSource": 1,
+    "Syncing": 0,
+    "AudioDecayFactor": 0.9,
+    "AudioGainFactor": 1.0,
+    "AudioInputDeviceName": "Microphone Builtin (Realtek(R) Audio)"
+  }
 }
