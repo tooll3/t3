@@ -192,10 +192,11 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
                 var device = MidiInConnectionManager.GetDescriptionForMidiIn(midiIn);
 
+
                 if (msg.MidiEvent is ControlChangeEvent controlEvent)
                 {
                     if (_printLogMessages)
-                        Log.Debug("" + controlEvent + "  ControlValue :" + controlEvent.ControllerValue, this);
+                        Log.Debug($"{device}/{controlEvent}  ControlValue :{controlEvent.ControllerValue}", this);
 
                     if (!UseControlRange)
                     {
@@ -216,7 +217,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                         case MidiCommandCode.NoteOn:
                         {
                             if (_printLogMessages)
-                                Log.Debug("" + noteEvent + "  ControlValue :" + noteEvent.NoteNumber, this);
+                                Log.Debug($"{device}/{noteEvent}  ControlValue :{noteEvent.NoteNumber}", this);
 
                             newSignal = new MidiSignal()
                                             {

@@ -136,6 +136,32 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.PopStyleColor();
                 ImGui.SameLine();
             }
+            
+            // MidiIndicator
+            {
+                if (CustomComponents.IconButton(Icon.Heart, ControlSize))
+                {
+                    T3Ui.MidiStreamRecorder.Reset();
+                }
+
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.BeginTooltip();
+                    foreach (var channel in T3Ui.MidiStreamRecorder.Channels)
+                    {
+                        ImGui.SetNextItemOpen(true);
+                        ImGui.TreeNode(string.Join(" / ", channel.Path));
+                        var lastEvent = channel.GetLastEvent();
+                        if (lastEvent != null)
+                        {
+                            ImGui.TextUnformatted($"{channel.Events.Count}  {lastEvent.Value}");
+                        }
+                        ImGui.TreePop();
+                    }
+                    ImGui.EndTooltip();
+                }
+                ImGui.SameLine();
+            }
 
             if (settings.Syncing == PlaybackSettings.SyncModes.Tapping)
             {

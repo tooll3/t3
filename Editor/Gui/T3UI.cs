@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using T3.Editor.Gui.Graph;
 using ImGuiNET;
+using Operators.Utils.ChannelRecording;
 using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.IO;
@@ -428,7 +429,8 @@ namespace T3.Editor.Gui
         public static float UiScaleFactor { get; set; } = 1;
         public static float DisplayScaleFactor { get; set; } = 1;
         public static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
-
+        public static MidiStreamRecorder MidiStreamRecorder = new();
+        
         //private static readonly AutoBackup.AutoBackup _autoBackup = new();
         
         private static readonly CreateFromTemplateDialog _createFromTemplateDialog = new();
