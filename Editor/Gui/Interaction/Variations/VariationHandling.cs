@@ -316,7 +316,8 @@ namespace T3.Editor.Gui.Interaction.Variations
             newVariation.PosOnCanvas = VariationBaseCanvas.FindFreePositionForNewThumbnail(VariationHandling.ActivePoolForSnapshots.Variations);
             if (activationIndex != AutoIndex)
                 newVariation.ActivationIndex = activationIndex;
-            
+
+            newVariation.State = Variation.States.Active;
             ActivePoolForSnapshots.SaveVariationsToFile();
             return newVariation;
         }
