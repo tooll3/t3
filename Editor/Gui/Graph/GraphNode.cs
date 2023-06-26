@@ -279,12 +279,21 @@ namespace T3.Editor.Gui.Graph
 
                     DrawPreview();
 
-                    // Outline
+                    // Outline shadow
                     drawList.AddRect(_selectableScreenRect.Min,
                                      _selectableScreenRect.Max + Vector2.One,
                                      new Color(0.03f, 0.03f, 0.03f, 0.8f).Fade(Graph.GraphOpacity),
                                      rounding: 0,
                                      ImDrawFlags.None);
+
+                    if (isHighlighted)
+                    {
+                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One  * 2,
+                                         _selectableScreenRect.Max + Vector2.One * 3 ,
+                                         T3Style.Colors.ButtonActive,
+                                         rounding: 0,
+                                         ImDrawFlags.None);
+                    }
 
                     // Animation indicator
                     var indicatorCount = 0;
@@ -339,8 +348,8 @@ namespace T3.Editor.Gui.Graph
 
                     if (childUi.IsSelected)
                     {
-                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One * 2, _selectableScreenRect.Max + Vector2.One * 2, Color.Black.Fade(Graph.GraphOpacity));
-                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One, _selectableScreenRect.Max + Vector2.One, Color.White.Fade(Graph.GraphOpacity));
+                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One , _selectableScreenRect.Max + Vector2.One * 2, Color.Black.Fade(Graph.GraphOpacity));
+                        drawList.AddRect(_selectableScreenRect.Min , _selectableScreenRect.Max + Vector2.One * 1, Color.White.Fade(Graph.GraphOpacity));
                     }
                 }
             }
