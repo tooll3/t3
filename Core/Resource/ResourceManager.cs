@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using JeremyAnsel.Media.Dds;
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
@@ -966,11 +967,44 @@ namespace T3.Core.Resource
             uint srvResourceId = NullResource;
             if (filename.ToLower().EndsWith(".dds"))
             {
-                DdsImport.CreateDdsTextureFromFile(Device.NativePointer, Device.ImmediateContext.NativePointer, filename,
-                                                   out IntPtr texPtr, out IntPtr srvPtr);
+                var ddsFile = JeremyAnsel.Media.Dds.DdsFile.FromFile(filename);
 
-                texture = new Texture2D(texPtr);
-                srv = new ShaderResourceView(srvPtr);
+                // Copy the content of the WIC to the buffer
+                //bitmapSource.CopyPixels(stride, buffer);
+                //int mipLevels = (int)Math.Log(bitmapSource.Size.Width, 2.0) + 1;
+
+                ResourceOptionFlags resourceOptionFlags = 0;
+                
+                if(ddsFile.ResourceMiscOptions.HasFlag(DdsResourceMiscOptions.TextureCube))
+                    resourceOptionFlags |= ResourceOptionFlags.TextureCube;
+                
+                var texDesc = new Texture2DDescription()
+                                  {
+                                      Width = ddsFile.Width,
+                                      Height = ddsFile.Height,
+                                      ArraySize = ddsFile.ArraySize,
+                                      BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
+                                      Usage = ResourceUsage.Default,
+                                      CpuAccessFlags = CpuAccessFlags.None,
+                                      Format = (SharpDX.DXGI.Format)ddsFile.Format,
+                                      MipLevels = ddsFile.MipmapCount,
+                                      OptionFlags = resourceOptionFlags,
+                                      SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
+                                  };
+                
+                texture = new Texture2D( Device, texDesc);
+                srv = new ShaderResourceView(Device, texture);
+                
+                
+                var dataRectangles = new DataRectangle[mipLevels];
+                for (int i = 0; i < mipLevels; i++)
+                {
+                    dataRectangles[i] = new DataRectangle(buffer.DataPointer, stride);
+                    stride /= 2;
+                }
+
+                return new Texture2D(device, texDesc, dataRectangles);
+                
             } 
             else
             {
