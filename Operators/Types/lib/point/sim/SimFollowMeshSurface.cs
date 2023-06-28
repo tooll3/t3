@@ -37,6 +37,9 @@ namespace T3.Operators.Types.Id_03aa5f28_3f74_4feb_aa6a_36cdb2d7f0d9
 
         [Input(Guid = "5f3f2dee-bfbe-449b-b5f8-0a0cc79049bc")]
         public readonly InputSlot<T3.Core.DataTypes.MeshBuffers> Mesh = new InputSlot<T3.Core.DataTypes.MeshBuffers>();
+
+        [Input(Guid = "25dc9800-a7ea-4c28-b76c-829346da3ed0")]
+        public readonly InputSlot<float> Phase = new InputSlot<float>();
     }
 }
 

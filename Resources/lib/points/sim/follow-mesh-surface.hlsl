@@ -12,6 +12,7 @@ cbuffer Params : register(b0)
 
     float SurfaceDistance;
     float RandomSurfaceDistance;
+    float Phase;
 }
 
 StructuredBuffer<PbrVertex> Vertices: t0;
@@ -119,6 +120,8 @@ float3 closestPointOnTriangle( in float3 p0, in float3 p1, in float3 p2, in floa
 }
 
 
+
+
 void findClosestPointAndDistance(
     in uint faceCount, 
     in float3 pos, 
@@ -127,8 +130,6 @@ void findClosestPointAndDistance(
 {
     closestFaceIndex = -1; 
     float closestDistance = 99999;
-    //closestPoint = 0;
-
 
     for(uint faceIndex = 0; faceIndex < faceCount; faceIndex++) 
     {
@@ -148,7 +149,6 @@ void findClosestPointAndDistance(
         }
     }
 }
-
 
 
 float4 q_from_tangentAndNormal(float3 dx, float3 dz)
@@ -187,6 +187,15 @@ void main(uint3 i : SV_DispatchThreadID)
     float signedPointHash = hash11(i.x % 123.567 * 123.1) * 2-1;
     Point p = ResultPoints[i.x];
 
+    float phase = ((Phase + (133.1123 * i.x) ) % 10000) * (1 + signedPointHash * 0.5);
+    int phaseId = (int)phase;
+    float1 normalizedNoise = lerp(hash31((i.x + phaseId) % 123121),
+                                    hash31((i.x + phaseId) % 123121 + 1),
+                                    smoothstep(0, 1,
+                                               phase - phaseId));
+    float3 signedNoise = normalizedNoise * 2 - 1;
+
+
     float3 pos = p.position;
     float3 forward =  rotate_vector( float3(1,0,0), p.rotation);
 
@@ -213,10 +222,10 @@ void main(uint3 i : SV_DispatchThreadID)
     if(!isnan(movement.x) ) 
     {
         p.position += movement;
-        float4 orientation = q_from_tangentAndNormal(movement, distanceFromSurface);
+        float4 orientation = normalize(q_from_tangentAndNormal(movement, distanceFromSurface));
         float4 mixedOrientation = q_slerp(orientation, p.rotation, 0.96);
 
-        float usedSpin = Spin + RandomSpin * signedPointHash;
+        float usedSpin = (Spin + RandomSpin) * signedNoise;
         if(abs(usedSpin) > 0.001) 
         {
             float randomAngle = signedPointHash  * usedSpin;
