@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using JeremyAnsel.DirectX.Dds;
 using JeremyAnsel.Media.Dds;
 using SharpDX;
 using SharpDX.D3DCompiler;
@@ -992,19 +993,8 @@ namespace T3.Core.Resource
                                       SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
                                   };
                 
-                texture = new Texture2D( Device, texDesc);
-                srv = new ShaderResourceView(Device, texture);
-                
-                
-                var dataRectangles = new DataRectangle[mipLevels];
-                for (int i = 0; i < mipLevels; i++)
-                {
-                    dataRectangles[i] = new DataRectangle(buffer.DataPointer, stride);
-                    stride /= 2;
-                }
-
-                return new Texture2D(device, texDesc, dataRectangles);
-                
+                DdsDirectX.CreateTexture(ddsFile, Device, Device.ImmediateContext, out var resource, out srv);
+                texture = (Texture2D)resource;
             } 
             else
             {
