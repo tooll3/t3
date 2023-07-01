@@ -965,34 +965,10 @@ namespace T3.Core.Resource
 
             Texture2D texture = null;
             ShaderResourceView srv = null;
-            uint srvResourceId = NullResource;
+            var srvResourceId = NullResource;
             if (filename.ToLower().EndsWith(".dds"))
             {
                 var ddsFile = JeremyAnsel.Media.Dds.DdsFile.FromFile(filename);
-
-                // Copy the content of the WIC to the buffer
-                //bitmapSource.CopyPixels(stride, buffer);
-                //int mipLevels = (int)Math.Log(bitmapSource.Size.Width, 2.0) + 1;
-
-                ResourceOptionFlags resourceOptionFlags = 0;
-                
-                if(ddsFile.ResourceMiscOptions.HasFlag(DdsResourceMiscOptions.TextureCube))
-                    resourceOptionFlags |= ResourceOptionFlags.TextureCube;
-                
-                var texDesc = new Texture2DDescription()
-                                  {
-                                      Width = ddsFile.Width,
-                                      Height = ddsFile.Height,
-                                      ArraySize = ddsFile.ArraySize,
-                                      BindFlags = BindFlags.ShaderResource | BindFlags.RenderTarget,
-                                      Usage = ResourceUsage.Default,
-                                      CpuAccessFlags = CpuAccessFlags.None,
-                                      Format = (SharpDX.DXGI.Format)ddsFile.Format,
-                                      MipLevels = ddsFile.MipmapCount,
-                                      OptionFlags = resourceOptionFlags,
-                                      SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
-                                  };
-                
                 DdsDirectX.CreateTexture(ddsFile, Device, Device.ImmediateContext, out var resource, out srv);
                 texture = (Texture2D)resource;
             } 
