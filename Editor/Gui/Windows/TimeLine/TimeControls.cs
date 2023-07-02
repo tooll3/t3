@@ -10,6 +10,7 @@ using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Timing;
+using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using Icon = T3.Editor.Gui.Styling.Icon;
@@ -149,18 +150,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.BeginTooltip();
-                    foreach (var channel in T3Ui.MidiDataRecording.DataSet.Channels)
-                    {
-                        ImGui.SetNextItemOpen(true);
-                        ImGui.TreeNode(string.Join(" / ", channel.Path));
-                        
-                        var lastEvent = channel.GetLastEvent();
-                        // if (lastEvent is FloatDataEvent floatEvent)
-                        // {
-                            ImGui.TextUnformatted($"{channel.Events.Count}  {lastEvent.Value}");
-                        // }
-                        ImGui.TreePop();
-                    }
+
+                    var dataSet = T3Ui.MidiDataRecording.DataSet;
+                    DataSetOutputUi.DrawDataSet(dataSet);
                     ImGui.EndTooltip();
                 }
                 ImGui.SameLine();

@@ -10,6 +10,7 @@ using ImGuiNET;
 using Operators.Utils.Recording;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.DataTypes.DataSet;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -56,6 +57,7 @@ namespace T3.Editor.Gui
             if (_initialed || ImGui.GetWindowSize() == Vector2.Zero)
                 return;
             
+            ActiveMidiRecording.ActiveRecordingSet = MidiDataRecording.DataSet;
             _initialed = true;
         }
 
@@ -63,7 +65,7 @@ namespace T3.Editor.Gui
 
         public void ProcessFrame()
         {
-            //InitializeAfterAppWindowReady();
+            InitializeAfterAppWindowReady();
             
             // Prepare the current frame 
             RenderStatsCollector.StartNewFrame();
@@ -429,7 +431,7 @@ namespace T3.Editor.Gui
         public static float UiScaleFactor { get; set; } = 1;
         public static float DisplayScaleFactor { get; set; } = 1;
         public static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
-        public static MidiDataRecording MidiDataRecording = new();
+        public static readonly MidiDataRecording MidiDataRecording = new();
         
         //private static readonly AutoBackup.AutoBackup _autoBackup = new();
         

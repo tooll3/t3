@@ -18,6 +18,16 @@ namespace T3.Editor.Gui.Interaction
     /// </summary>
     public class ScalableCanvas : ICanvas
     {
+        public ScalableCanvas(bool isCurveCanvas = false)
+        {
+            if (!isCurveCanvas)
+                return;
+            
+            Scale = new Vector2(1, -1);
+            ScaleTarget = new Vector2(1, -1);
+        }
+        
+        
         /// <summary>
         /// This needs to be called by the inherited class before drawing its interface. 
         /// </summary>

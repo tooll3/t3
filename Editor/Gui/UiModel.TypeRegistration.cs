@@ -7,6 +7,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.DataSet;
 using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
@@ -122,8 +123,15 @@ public partial class UiModel
 
         RegisterUiType(typeof(MeshBuffers), new FallBackUiProperties(), () => new FallbackInputUi<MeshBuffers>(),
                        () => new ValueOutputUi<MeshBuffers>());
-
-        // sharpdx types
+        
+        RegisterUiType(typeof(Dict<float>), new FloatUiProperties(),
+                       () => new FloatDictInputUi(), () => new FloatDictOutputUi());
+        
+        RegisterUiType(typeof(DataSet), new FloatUiProperties(),
+                       () => new FallbackInputUi<DataSet>(), () => new DataSetOutputUi());
+        
+        #region SharpDx Types
+        
         RegisterUiType(typeof(SharpDX.Int3), new Size2UiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
         RegisterUiType(typeof(SharpDX.Size2), new Size2UiProperties(), () => new Size2InputUi(), () => new ValueOutputUi<Size2>());
         RegisterUiType(typeof(SharpDX.Direct3D.PrimitiveTopology), new FallBackUiProperties(), () => new EnumInputUi<PrimitiveTopology>(),
@@ -196,8 +204,9 @@ public partial class UiModel
                        () => new ValueOutputUi<RawRectangle>());
         RegisterUiType(typeof(SharpDX.Vector4[]), new PointListUiProperties(), () => new FallbackInputUi<SharpDX.Vector4[]>(),
                        () => new ValueOutputUi<SharpDX.Vector4[]>());
-        RegisterUiType(typeof(Dict<float>), new FloatUiProperties(),
-                       () => new FloatDictInputUi(), () => new FloatDictOutputUi());
+        #endregion
+
+
     }
 
     private static void RegisterUiType(Type type, ITypeUiProperties uiProperties, Func<IInputUi> inputUi, Func<IOutputUi> outputUi)

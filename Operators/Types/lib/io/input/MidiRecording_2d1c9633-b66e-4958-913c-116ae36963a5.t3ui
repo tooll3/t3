@@ -1,0 +1,44 @@
+{
+  "Id": "2d1c9633-b66e-4958-913c-116ae36963a5"/*MidiRecording*/,
+  "Description": "An experimental implementation to record midi input signals.",
+  "InputUis": [
+    {
+      "InputId": "9b844a51-d108-426e-a264-d570d30031c6"/*DoUpdate*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "dd24e9ae-4120-4e90-94db-e379c149995d"/*OutputMode*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "366a96a7-1077-43fb-9937-58ba9b73830a"/*Scale*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "f89b5a87-a757-4f10-aa13-396c2cd9829b"/*Position*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "OutputId": "316d90ad-e086-4975-bb85-278c3ffd0b15"/*IsLeftButtonDown*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}

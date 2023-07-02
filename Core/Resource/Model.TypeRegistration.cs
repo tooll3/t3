@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
@@ -272,6 +273,7 @@ public partial class Model
                      () => new InputValue<RenderTargetReference>());
         RegisterType(typeof(Object), "Object",
                      () => new InputValue<Object>());
+        
         RegisterType(typeof(StructuredList), "StructuredList",
                      () => new InputValue<StructuredList>()
                     ,
@@ -302,8 +304,14 @@ public partial class Model
                      () => new InputValue<Texture3dWithViews>(new Texture3dWithViews()));
         RegisterType(typeof(MeshBuffers), "MeshBuffers",
                      () => new InputValue<MeshBuffers>(null));
-
-        // sharpdx types
+        
+        RegisterType(typeof(Dict<float>), "Dict<float>",
+                     () => new InputValue<Dict<float>>());
+        
+        RegisterType(typeof(DataSet), "DataSet",
+                     () => new InputValue<DataSet>());
+        
+        #region SharpDX types
         RegisterType(typeof(SharpDX.Direct3D.PrimitiveTopology), "PrimitiveTopology",
                      InputDefaultValueCreator<PrimitiveTopology>,
                      (writer, obj) => writer.WriteValue(obj.ToString()),
@@ -439,8 +447,8 @@ public partial class Model
                      });
         RegisterType(typeof(SharpDX.Vector4[]), "Vector4[]",
                      () => new InputValue<SharpDX.Vector4[]>(Array.Empty<SharpDX.Vector4>()));
-        RegisterType(typeof(Dict<float>), "Dict<float>",
-                     () => new InputValue<Dict<float>>());
+        #endregion
+
     }
 
     private static void RegisterType(Type type, string typeName,
