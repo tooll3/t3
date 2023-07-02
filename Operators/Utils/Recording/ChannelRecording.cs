@@ -1,70 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using T3.Core.Animation;
+﻿using System.Collections.Generic;
 using NAudio.Midi;
-using T3.Core.Logging;
+using T3.Core.Animation;
+using T3.Core.DataTypes.DataSet;
 
-namespace Operators.Utils.ChannelRecording;
-
-public interface IChannelSet
-{
-    public List<IChannel> Channels { get; set; }
-    public void Reset();
-}
-
-public interface IChannel
-{
-    public List<string> Path { get; set; }
-    public string Name { get; set; }
-    public List<SignalEvent> Events { get; set; }
-
-    public SignalEvent GetLastEvent();
-
-}
-
-public class SignalChannel : IChannel
-{
-    public List<string> Path { get; set; }
-    public string Name { get; set; }
-    public List<SignalEvent> Events { get; set; } = new();
-    public SignalEvent GetLastEvent()
-    {
-        {
-            if (Events == null || Events.Count == 0)
-                return null;
-
-            return Events[^1];
-        }
-    }
-
-    public Type Type;
-}
-
-
-public class SignalEvent
-{
-    public TimeRange TimeRange;
-    public double TimeCode;
-    public float Value { get; set; }
-
-    public bool IsUnfinished => float.IsInfinity(TimeRange.End);
-
-    public void Finish(float someTime)
-    {
-        if (!IsUnfinished)
-        {
-            Log.Warning("setting finish time of fished note?");
-        }
-
-        TimeRange.End = someTime;
-    }
-}
-
-
-
-public class SignalIntervalsChannel : SignalChannel
-{
-}
+namespace Operators.Utils.Recording;
 
 /// <summary>
 /// This is a stub for an implementation of midi signal recording
@@ -72,17 +11,18 @@ public class SignalIntervalsChannel : SignalChannel
 ///   - MidiInput and MidiStream recorder would need to share the same MidiEvent definition (maybe different from NAudio.MidiEvent)
 ///   - Handle MidiEvent should not rely on the MidiIn class to avoid double lookup of device description.
 /// </summary>
-public class MidiStreamRecorder : MidiInConnectionManager.IMidiConsumer, IChannelSet
+public class MidiStreamRecorder : MidiInConnectionManager.IMidiConsumer
 {
+    public readonly DataSet DataSet = new();
+
     public MidiStreamRecorder()
     {
         MidiInConnectionManager.RegisterConsumer(this);
     }
 
-    public List<IChannel> Channels { get; set; } = new();
     public void Reset()
     {
-        Channels.Clear();
+        DataSet.Clear();
         _channelsByHash.Clear();
     }
 
@@ -92,7 +32,10 @@ public class MidiStreamRecorder : MidiInConnectionManager.IMidiConsumer, IChanne
             return;
 
         var device = MidiInConnectionManager.GetDescriptionForMidiIn(midiIn);
-        var deviceName = device.ProductName + ((device.ProductId == 0 || device.ProductId == 65535) ? "" : device.ProductId.ToString());
+        var deviceName = (device.ProductName
+                          + (device.ProductId is not (0 or 65535)
+                                 ? device.ProductId.ToString()
+                                 : string.Empty)).Replace("/", "_");
 
         var someTime = (float)msg.MidiEvent.AbsoluteTime;
         switch (msg.MidiEvent)
@@ -113,11 +56,11 @@ public class MidiStreamRecorder : MidiInConnectionManager.IMidiConsumer, IChanne
                             lastNote.Finish(someTime);
                         }
 
-                        noteChannel.Events.Add(new SignalEvent()
+                        noteChannel.Events.Add(new DataEvent()
                                                    {
                                                        TimeRange = new TimeRange(someTime, float.PositiveInfinity),
                                                        TimeCode = midiNoteEvent.AbsoluteTime,
-                                                       Value = midiNoteEvent.Velocity,
+                                                       Value = (float)midiNoteEvent.Velocity,
                                                    });
                         break;
                     }
@@ -126,17 +69,19 @@ public class MidiStreamRecorder : MidiInConnectionManager.IMidiConsumer, IChanne
                 break;
 
             case ControlChangeEvent controlChangeEvent:
-                FindOrCreateControlChangeChannel(deviceName, controlChangeEvent).Events.Add(new SignalEvent()
-                                                                                                {
-                                                                                                    TimeRange = new TimeRange(someTime, someTime),
-                                                                                                    TimeCode = controlChangeEvent.AbsoluteTime,
-                                                                                                    Value = controlChangeEvent.ControllerValue,
-                                                                                                });
+                FindOrCreateControlChangeChannel(deviceName, controlChangeEvent)
+                   .Events
+                   .Add(new DataEvent()
+                            {
+                                TimeRange = new TimeRange(someTime, someTime),
+                                TimeCode = controlChangeEvent.AbsoluteTime,
+                                Value = (float)controlChangeEvent.ControllerValue,
+                            });
                 break;
         }
     }
 
-    private SignalChannel FindOrCreateControlChangeChannel(string deviceName, ControlChangeEvent controlChangeEvent)
+    private DataChannel FindOrCreateControlChangeChannel(string deviceName, ControlChangeEvent controlChangeEvent)
     {
         var hash = (byte)controlChangeEvent.Controller << 16 + controlChangeEvent.Channel;
         hash = hash * 31 + deviceName.GetHashCode();
@@ -146,21 +91,22 @@ public class MidiStreamRecorder : MidiInConnectionManager.IMidiConsumer, IChanne
             return channel;
         }
 
-        var newChannel = new SignalChannel
+        var newChannel = new DataChannel(typeof(float))
                              {
                                  Path = new List<string>
                                             {
+                                                MidiNamespacePrefix,
                                                 deviceName,
                                                 controlChangeEvent.Channel.ToString(),
                                                 "CC" + (int)controlChangeEvent.Controller
                                             }
                              };
         _channelsByHash[hash] = newChannel;
-        Channels.Add(newChannel);
+        DataSet.Channels.Add(newChannel);
         return newChannel;
     }
 
-    private SignalChannel FindOrCreateNoteChannel(string deviceName, NoteEvent noteEvent)
+    private DataChannel FindOrCreateNoteChannel(string deviceName, NoteEvent noteEvent)
     {
         var hash = (byte)noteEvent.NoteNumber << 16 + noteEvent.Channel;
         hash = hash * 31 + deviceName.GetHashCode();
@@ -170,17 +116,18 @@ public class MidiStreamRecorder : MidiInConnectionManager.IMidiConsumer, IChanne
             return channel;
         }
 
-        var newChannel = new SignalIntervalsChannel
+        var newChannel = new DataChannel(typeof(float))
                              {
                                  Path = new List<string>
                                             {
+                                                MidiNamespacePrefix,
                                                 deviceName,
                                                 noteEvent.Channel.ToString(),
-                                                "N"+noteEvent.NoteNumber
-                                            }
+                                                "N" + noteEvent.NoteNumber
+                                            },
                              };
         _channelsByHash[hash] = newChannel;
-        Channels.Add(newChannel);
+        DataSet.Channels.Add(newChannel);
         return newChannel;
     }
 
@@ -189,5 +136,6 @@ public class MidiStreamRecorder : MidiInConnectionManager.IMidiConsumer, IChanne
         //throw new System.NotImplementedException();
     }
 
-    private readonly Dictionary<int, SignalChannel> _channelsByHash = new();
+    private const string MidiNamespacePrefix = "Midi";
+    private readonly Dictionary<int, DataChannel> _channelsByHash = new();
 }

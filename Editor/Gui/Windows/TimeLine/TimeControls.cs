@@ -2,6 +2,7 @@
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.DataTypes.DataSet;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Audio;
@@ -141,21 +142,23 @@ namespace T3.Editor.Gui.Windows.TimeLine
             {
                 if (CustomComponents.IconButton(Icon.Heart, ControlSize))
                 {
-                    T3Ui.MidiStreamRecorder.Reset();
+                    //T3Ui.MidiStreamRecorder.Reset();
+                    T3Ui.MidiStreamRecorder.DataSet.WriteToFile();
                 }
 
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.BeginTooltip();
-                    foreach (var channel in T3Ui.MidiStreamRecorder.Channels)
+                    foreach (var channel in T3Ui.MidiStreamRecorder.DataSet.Channels)
                     {
                         ImGui.SetNextItemOpen(true);
                         ImGui.TreeNode(string.Join(" / ", channel.Path));
+                        
                         var lastEvent = channel.GetLastEvent();
-                        if (lastEvent != null)
-                        {
+                        // if (lastEvent is FloatDataEvent floatEvent)
+                        // {
                             ImGui.TextUnformatted($"{channel.Events.Count}  {lastEvent.Value}");
-                        }
+                        // }
                         ImGui.TreePop();
                     }
                     ImGui.EndTooltip();
