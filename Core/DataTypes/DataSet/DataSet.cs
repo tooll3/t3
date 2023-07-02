@@ -96,24 +96,12 @@ public class DataChannel
 
 public class DataEvent
 {
-    public TimeRange TimeRange;
+    public double Time;
     public double TimeCode;
 
     public object Value { get; init; }
 
-    public bool IsUnfinished => float.IsInfinity(TimeRange.End);
-
-    public void Finish(float someTime)
-    {
-        if (!IsUnfinished)
-        {
-            Log.Warning("setting finish time of fished note?");
-        }
-
-        TimeRange.End = someTime;
-    }
-
-    public void ToJson(Action<JsonTextWriter, object> converter, JsonTextWriter writer)
+    public virtual void ToJson(Action<JsonTextWriter, object> converter, JsonTextWriter writer)
     {
         writer.WriteStartObject();
         writer.WriteValue("TimeCode", TimeCode);
@@ -123,8 +111,30 @@ public class DataEvent
     }
 }
 
-// public class FloatDataEvent : DataEvent
-// {
-//     // public float FloatValue { get; set; }
-//     //public override object Value { get; set; }
-// }
+public class DataIntervalEvent :DataEvent
+{
+    public double EndTime = double.PositiveInfinity;
+    
+    public bool IsUnfinished => double.IsInfinity(EndTime);
+
+    public void Finish(float someTime)
+    {
+        if (!IsUnfinished)
+        {
+            Log.Warning($"setting finish time of fished note? {EndTime} vs {someTime}");
+        }
+
+        EndTime = someTime;
+    }
+
+    public override void ToJson(Action<JsonTextWriter, object> converter, JsonTextWriter writer)
+    {
+        writer.WriteStartObject();
+        writer.WriteValue("TimeCode", TimeCode);
+        writer.WriteValue("Time", Time);
+        writer.WriteValue("EndTime", EndTime);
+        writer.WritePropertyName("Value");
+        converter(writer, Value);
+        writer.WriteEndObject();
+    }
+}

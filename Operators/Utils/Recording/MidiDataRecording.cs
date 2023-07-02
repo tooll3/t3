@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NAudio.Midi;
 using T3.Core.Animation;
 using T3.Core.DataTypes.DataSet;
+using T3.Core.Resource;
 
 namespace Operators.Utils.Recording;
 
@@ -11,11 +13,11 @@ namespace Operators.Utils.Recording;
 ///   - MidiInput and MidiStream recorder would need to share the same MidiEvent definition (maybe different from NAudio.MidiEvent)
 ///   - Handle MidiEvent should not rely on the MidiIn class to avoid double lookup of device description.
 /// </summary>
-public class MidiStreamRecorder : MidiInConnectionManager.IMidiConsumer
+public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
 {
     public readonly DataSet DataSet = new();
 
-    public MidiStreamRecorder()
+    public MidiDataRecording()
     {
         MidiInConnectionManager.RegisterConsumer(this);
     }
@@ -28,7 +30,7 @@ public class MidiStreamRecorder : MidiInConnectionManager.IMidiConsumer
 
     public void MessageReceivedHandler(object sender, MidiInMessageEventArgs msg)
     {
-        if (sender is not MidiIn midiIn || msg.MidiEvent == null)
+        if (sender is not MidiIn midiIn || msg.MidiEvent == null || TypeNameRegistry.Entries.Values.Count == 0)
             return;
 
         var device = MidiInConnectionManager.GetDescriptionForMidiIn(midiIn);
@@ -37,29 +39,31 @@ public class MidiStreamRecorder : MidiInConnectionManager.IMidiConsumer
                                  ? device.ProductId.ToString()
                                  : string.Empty)).Replace("/", "_");
 
-        var someTime = (float)msg.MidiEvent.AbsoluteTime;
+        var someTime = Playback.RunTimeInSecs;// (float)msg.MidiEvent.AbsoluteTime;
         switch (msg.MidiEvent)
         {
             case NoteEvent midiNoteEvent:
                 var noteChannel = FindOrCreateNoteChannel(deviceName, midiNoteEvent);
-                var lastNote = noteChannel.GetLastEvent();
+                var lastNote = noteChannel.GetLastEvent() as DataIntervalEvent;
 
                 switch (msg.MidiEvent.CommandCode)
                 {
                     case MidiCommandCode.NoteOff:
-                        lastNote?.Finish(someTime);
+                        lastNote?.Finish((float)someTime);
                         break;
+                    
                     case MidiCommandCode.NoteOn:
                     {
                         if (lastNote != null && lastNote.IsUnfinished)
                         {
-                            lastNote.Finish(someTime);
+                            lastNote.Finish((float)someTime);
                         }
 
-                        noteChannel.Events.Add(new DataEvent()
+                        noteChannel.Events.Add(new DataIntervalEvent()
                                                    {
-                                                       TimeRange = new TimeRange(someTime, float.PositiveInfinity),
-                                                       TimeCode = midiNoteEvent.AbsoluteTime,
+                                                       Time = someTime,
+                                                       EndTime = Double.PositiveInfinity,
+                                                       TimeCode = someTime,
                                                        Value = (float)midiNoteEvent.Velocity,
                                                    });
                         break;
@@ -73,8 +77,8 @@ public class MidiStreamRecorder : MidiInConnectionManager.IMidiConsumer
                    .Events
                    .Add(new DataEvent()
                             {
-                                TimeRange = new TimeRange(someTime, someTime),
-                                TimeCode = controlChangeEvent.AbsoluteTime,
+                                Time = someTime,
+                                TimeCode = someTime,
                                 Value = (float)controlChangeEvent.ControllerValue,
                             });
                 break;

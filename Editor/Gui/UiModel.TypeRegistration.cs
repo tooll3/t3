@@ -72,6 +72,7 @@ public partial class UiModel
         // build-in types
         RegisterUiType(typeof(bool), new IntUiProperties(), () => new BoolInputUi(), () => new ValueOutputUi<bool>());
         RegisterUiType(typeof(float), new FloatUiProperties(), () => new FloatInputUi(), () => new FloatOutputUi());
+        RegisterUiType(typeof(double), new FloatUiProperties(), () => new FloatInputUi(), () => new FloatOutputUi());
         RegisterUiType(typeof(int), new IntUiProperties(), () => new IntInputUi(), () => new ValueOutputUi<int>());
         RegisterUiType(typeof(string), new StringUiProperties(), () => new StringInputUi(), () => new ValueOutputUi<string>());
 

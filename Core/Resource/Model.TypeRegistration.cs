@@ -75,6 +75,12 @@ public partial class Model
                      InputDefaultValueCreator<float>,
                      (writer, obj) => writer.WriteValue((float)obj),
                      jsonToken => jsonToken.Value<float>());
+        
+        RegisterType(typeof(double), "double",
+                     InputDefaultValueCreator<double>,
+                     (writer, obj) => writer.WriteValue((double)obj),
+                     jsonToken => jsonToken.Value<double>());
+        
         RegisterType(typeof(string), "string",
                      () => new InputValue<string>(string.Empty),
                      (writer, value) => writer.WriteValue((string)value),

@@ -143,13 +143,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 if (CustomComponents.IconButton(Icon.Heart, ControlSize))
                 {
                     //T3Ui.MidiStreamRecorder.Reset();
-                    T3Ui.MidiStreamRecorder.DataSet.WriteToFile();
+                    T3Ui.MidiDataRecording.DataSet.WriteToFile();
                 }
 
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.BeginTooltip();
-                    foreach (var channel in T3Ui.MidiStreamRecorder.DataSet.Channels)
+                    foreach (var channel in T3Ui.MidiDataRecording.DataSet.Channels)
                     {
                         ImGui.SetNextItemOpen(true);
                         ImGui.TreeNode(string.Join(" / ", channel.Path));

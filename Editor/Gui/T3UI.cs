@@ -429,7 +429,7 @@ namespace T3.Editor.Gui
         public static float UiScaleFactor { get; set; } = 1;
         public static float DisplayScaleFactor { get; set; } = 1;
         public static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
-        public static MidiStreamRecorder MidiStreamRecorder = new();
+        public static MidiDataRecording MidiDataRecording = new();
         
         //private static readonly AutoBackup.AutoBackup _autoBackup = new();
         
