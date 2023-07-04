@@ -1,3 +1,5 @@
+rem please read 
+
 @RD /S /Q "..\T3-Standalone"
 mkdir "..\T3-Standalone"
 
@@ -8,9 +10,17 @@ Xcopy "Operators\Types" "..\T3-Standalone\Operators\Types" /E /H /C /I
 Xcopy "Operators\Utils" "..\T3-Standalone\Operators\Utils" /E /H /C /I
 Xcopy "Editor\bin\Release\net6.0-windows" "..\T3-Standalone\" /E /H /C /I
 Xcopy "StartT3\bin\Release\net6.0-windows" "..\T3-Standalone\" /E /H /C /I
-Xcopy "Player\bin\Release\net6.0-windows" "..\T3-Standalone\Player\bin\Release\net6.0-windows" /E /H /C /I
-    
+rem Xcopy "Player\bin\Release\net6.0-windows\publish\Player.exe" "..\T3-Standalone\Player\bin\Release\net6.0-windows" /E /H /C /I
+
+mkdir "..\T3-Standalone\Player\bin\Release\net6.0-windows\publish"
+copy "Player\bin\Release\net6.0-windows\publish\Player.exe"                    "..\T3-Standalone\Player\bin\Release\net6.0-windows\publish\Player.exe"
+copy "c:\Users\pixtur\dev\tooll\t3\Editor\bin\Release\net6.0-windows\Svg.dll"  "..\T3-Standalone\Player\bin\Release\net6.0-windows\publish\Svg.dll"
+copy "c:\Users\pixtur\dev\tooll\t3\Player\bin\Release\net6.0-windows\bass.dll" "..\T3-Standalone\Player\bin\Release\net6.0-windows\publish\bass.dll"
+copy "c:\Users\pixtur\dev\tooll\t3\Player\bin\Release\net6.0-windows\basswasapi.dll" "..\T3-Standalone\Player\bin\Release\net6.0-windows\publish\basswasapi.dll"
+
 copy "Editor\bin\Release\net6.0-windows\Operators.dll" "..\T3-Standalone\Operators_Reference.dll"
+
+
 
 mkdir "..\T3-Standalone\.t3"
 Xcopy "Install\default-layouts" "..\T3-Standalone\.t3\layouts" /E /H /C /I

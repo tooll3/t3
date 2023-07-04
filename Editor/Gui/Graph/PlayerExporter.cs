@@ -65,12 +65,10 @@ namespace T3.Editor.Gui.Graph
                 // Copy player and dependent assemblies to export dir
                 var currentDir = Directory.GetCurrentDirectory();
 
-                var playerBuildPath = currentDir + @"\Player\bin\Release\net6.0-windows\";
-                var operatorDependenciesPath = Program.IsStandAlone
-                                                   ? @".\"
-                                                   : @"T3\bin\Release\net6.0-windows\";
+                var playerBuildPath = currentDir + @"\Player\bin\Release\net6.0-windows\publish\";
+                //var operatorDependenciesPath = @"T3\bin\Release\net6.0-windows\publish\";
 
-                if (!File.Exists(currentDir + @"\Player\bin\Release\net6.0-windows\Player.exe"))
+                if (!File.Exists(currentDir + @"\Player\bin\Release\net6.0-windows\publish\Player.exe"))
                 {
                     Log.Error($"Can't find valid build in player release folder: (${playerBuildPath})");
                     Log.Error("Please use your IDE to rebuild solution in release mode.");
@@ -82,61 +80,34 @@ namespace T3.Editor.Gui.Graph
                               {
                                   playerBuildPath + "bass.dll",
                                   playerBuildPath + "basswasapi.dll",
-                                  playerBuildPath + "Processing.NDI.Lib.x64.dll",
-                                  playerBuildPath + "Spout.dll",
-                                  playerBuildPath + "SpoutDX.dll",
-                                  playerBuildPath + "CommandLine.dll",
-                                  playerBuildPath + "Player.dll",
+                                  playerBuildPath + "Svg.dll",
                                   playerBuildPath + "Player.exe",
-                                  playerBuildPath + "Player.deps.json",
-                                  playerBuildPath + "Player.runtimeconfig.json",
-                                  playerBuildPath + "Player.runtimeconfig.dev.json",
-
-                                  // FIXME: These dlls should be references as Operators dependencies but aren't found there
-                                  playerBuildPath + "SharpDX.Desktop.dll",
                               },
                           exportDir);
 
                 // NOTE: This is fallback because the Operators.dll compiled for stand alone runner
                 // does not contain all assembly references. So we add these here manually
-                if (Program.IsStandAlone)
-                {
-                    Log.Debug("Copy operator dependencies");
-                    CopyFiles(new[]
-                                  {
-                                      playerBuildPath + "Rug.OSC.dll",
-                                      operatorDependenciesPath + "Core.dll",
-                                      operatorDependenciesPath + "SystemUi.dll",
-                                      operatorDependenciesPath + "MsForms.dll",
-                                      operatorDependenciesPath + "DdsImport.dll",
-                                      operatorDependenciesPath + "ManagedBass.Wasapi.dll",
-                                      operatorDependenciesPath + "ManagedBass.dll",
-                                      operatorDependenciesPath + "Newtonsoft.Json.dll",
-                                      operatorDependenciesPath + "Unsplasharp.dll",
-                                      operatorDependenciesPath + "SharpDX.Mathematics.dll",
-                                      operatorDependenciesPath + "SharpDX.Direct3D11.dll",
-                                      operatorDependenciesPath + "SharpDX.Direct2D1.dll",
-                                      operatorDependenciesPath + "SharpDX.DXGI.dll",
-                                      operatorDependenciesPath + "SharpDX.D3DCompiler.dll",
-                                      operatorDependenciesPath + "SharpDX.dll",
-                                      operatorDependenciesPath + "NAudio.Midi.dll",
-                                      operatorDependenciesPath + "NAudio.Core.dll",
-                                      operatorDependenciesPath + "Svg.dll",
-                                      operatorDependenciesPath + "Fizzler.dll",
-                                      operatorDependenciesPath + "SharpDX.MediaFoundation.dll",
-                                      operatorDependenciesPath + "OpenGL.Net.dll",
-                                      // unsure if all of the below needed but they allow compilation of Spout capable demos
-                                      operatorDependenciesPath + @"runtimes\win-x64\native\Std-symbols.dll",
-                                      operatorDependenciesPath + @"runtimes\win-x64\native\CppSharp.CppParser.dll",
-                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.AST.dll",
-                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.dll",
-                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Generator.dll",
-                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Parser.CSharp.dll",
-                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Parser.dll",
-                                      operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Runtime.dll"
-                                  },
-                              exportDir);
-                }
+                // if (Program.IsStandAlone)
+                // {
+                //     Log.Debug("Copy operator dependencies");
+                //     CopyFiles(new[]
+                //                   {
+                //                       operatorDependenciesPath + "Svg.dll",
+                //                       operatorDependenciesPath + "bass.dll",
+                //                       operatorDependenciesPath + "basswasapi.dll",
+                //                       
+                //                       // unsure if all of the below needed but they allow compilation of Spout capable demos
+                //                       // operatorDependenciesPath + @"runtimes\win-x64\native\Std-symbols.dll",
+                //                       // operatorDependenciesPath + @"runtimes\win-x64\native\CppSharp.CppParser.dll",
+                //                       // operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.AST.dll",
+                //                       // operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.dll",
+                //                       // operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Generator.dll",
+                //                       // operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Parser.CSharp.dll",
+                //                       // operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Parser.dll",
+                //                       // operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Runtime.dll"
+                //                   },
+                //               exportDir);
+                // }
 
                 Log.Debug("Compiling Operators.dll...");
                 var references = CompileSymbolsFromSource(exportDir, operatorAssemblySources.ToArray());
