@@ -35,7 +35,7 @@ namespace T3.Editor.Gui.Dialog
                     UserSettings.Save();
                     
                     // Change home (I.e. dashboard) namespace
-                    if(!SymbolRegistry.Entries.TryGetValue(UiModel.HomeSymbolId, out var homeSymbol))
+                    if(!SymbolRegistry.Entries.TryGetValue(UiModel.UiSymbolData.HomeSymbolId, out var homeSymbol))
                     {
                         Log.Warning("Skipped setting home canvas namespace because symbol wasn't found");
                     }

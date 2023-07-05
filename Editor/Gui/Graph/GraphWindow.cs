@@ -34,7 +34,7 @@ namespace T3.Editor.Gui.Graph
 
             // Legacy work-around
             var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
-            var shownOpInstance = FindIdInNestedChildren(T3Ui.UiModel.RootInstance, opId) ?? T3Ui.UiModel.RootInstance;
+            var shownOpInstance = FindIdInNestedChildren(T3Ui.UiSymbolData.RootInstance, opId) ?? T3Ui.UiSymbolData.RootInstance;
             var path = OperatorUtils.BuildIdPathForInstance(shownOpInstance);
             GraphCanvas = new GraphCanvas(this, path);
 

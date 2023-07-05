@@ -97,7 +97,7 @@ internal static class ProgramWindows
 
     private static void OnCloseMainWindow(object sender, CancelEventArgs args)
     {
-        if (T3Ui.UiModel.IsSaving)
+        if (T3Ui.UiSymbolData.IsSaving)
         {
             args.Cancel = true;
             Log.Debug($"Cancel closing because save-operation is in progress.");

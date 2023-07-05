@@ -8,6 +8,7 @@ using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Windows;
+using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
@@ -39,7 +40,7 @@ namespace T3.Editor.Gui.Graph.Modification
             var modifiedSymbols = OperatorResource.UpdateChangedOperatorTypes();
             foreach (var symbol in modifiedSymbols)
             {
-                UiModel.UpdateUiEntriesForSymbol(symbol);
+                UiSymbolData.UpdateUiEntriesForSymbol(symbol);
                 symbol.CreateAnimationUpdateActionsForSymbolInstances();
             }
         }
