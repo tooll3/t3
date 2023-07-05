@@ -18,6 +18,7 @@ using T3.Core.Animation;
 using T3.Core.Audio;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
@@ -179,8 +180,8 @@ namespace T3.Player
                     return;
                 }
 
-                _model = new Model(operatorsAssembly);
-                _model.Load(enableLog: false);
+                _symbolData = new SymbolData(operatorsAssembly);
+                _symbolData.Load(enableLog: false);
 
                 var symbols = SymbolRegistry.Entries;
                 var demoSymbol = symbols.First(entry => entry.Value.Name == ProjectSettings.Config.MainOperatorName).Value;
@@ -424,7 +425,7 @@ namespace T3.Player
         private static SwapChain _swapChain;
         private static RenderTargetView _renderView;
         private static Texture2D _backBuffer;
-        private static Model _model;
+        private static SymbolData _symbolData;
         private static Instance _project;
         private static EvaluationContext _evalContext;
         private static Playback _playback;

@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using SharpDX.Direct3D11;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
@@ -52,8 +53,8 @@ namespace T3.Editor.Gui.Graph
                 var operatorAssemblySources = exportInfo.UniqueSymbols.Select(symbol =>
                                                                               {
                                                                                   var source =
-                                                                                      File.ReadAllText(Model.BuildFilepathForSymbol(symbol,
-                                                                                                           Model.SourceExtension));
+                                                                                      File.ReadAllText(SymbolData.BuildFilepathForSymbol(symbol,
+                                                                                                           SymbolData.SourceExtension));
                                                                                   return source;
                                                                               }).ToList();
 
@@ -125,7 +126,7 @@ namespace T3.Editor.Gui.Graph
 
                 // Generate exported .t3 files
 
-                var symbolExportDir = Path.Combine(exportDir, Model.OperatorTypesFolder);
+                var symbolExportDir = Path.Combine(exportDir, SymbolData.OperatorTypesFolder);
                 if (Directory.Exists(symbolExportDir))
                     Directory.Delete(symbolExportDir, true);
 

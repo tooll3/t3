@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Editor.Gui.Graph.Helpers;

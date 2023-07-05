@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
@@ -16,7 +17,7 @@ using T3.Editor.Gui.ChildUi;
 namespace T3.Editor.Gui
 {
 
-    public partial class UiModel : Model
+    public partial class UiModel : SymbolData
     {
         public UiModel(Assembly operatorAssembly, bool enableLog)
             : base(operatorAssembly)
@@ -161,7 +162,7 @@ namespace T3.Editor.Gui
                     SymbolUiJson.WriteSymbolUi(symbolUi, writer);
                 }
 
-                var symbolSourceFilepath = BuildFilepathForSymbol(symbol, Model.SourceExtension);
+                var symbolSourceFilepath = BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
                 var opResource = resourceManager.GetOperatorFileResource(symbolSourceFilepath);
                 if (opResource == null)
                 {
