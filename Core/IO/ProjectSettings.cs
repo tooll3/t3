@@ -15,6 +15,8 @@
             public string MainOperatorName = "";
             public float AudioResyncThreshold = 0.04f;
             public bool EnablePlaybackControlWithKeyboard = true;
+            
+            public string LimitMidiDeviceCapture = null; 
         }
     }
 }

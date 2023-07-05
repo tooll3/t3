@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
+using Operators.Utils;
 using T3.Core.IO;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Graph.Interaction;
@@ -128,6 +129,23 @@ namespace T3.Editor.Gui.Windows
                 if(projectSettingsChanged)
                     ProjectSettings.Save();
                 
+                ImGui.TreePop();
+            }
+            
+            if (ImGui.TreeNode("Midi"))
+            {
+                CustomComponents.HelpText("Only listen to the following Midi devices...\n(This can be useful it avoid capturing devices required by other applications)");
+                
+                var limitMidiDevices = string.IsNullOrEmpty(ProjectSettings.Config.LimitMidiDeviceCapture) ? string.Empty : ProjectSettings.Config.LimitMidiDeviceCapture;
+
+                if (ImGui.InputTextMultiline("Limit MidiDevices", ref limitMidiDevices, 2000, new Vector2(-1, 100)))
+                {
+                    changed = true;
+                    ProjectSettings.Config.LimitMidiDeviceCapture = string.IsNullOrEmpty(limitMidiDevices) ? null : limitMidiDevices;
+                    MidiInConnectionManager.Rescan();
+                }
+                
+                ImGui.Dummy(new Vector2(20,20));
                 ImGui.TreePop();
             }
 

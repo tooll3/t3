@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NAudio.Midi;
+using T3.Core.IO;
 using T3.Core.Logging;
 
 namespace Operators.Utils
@@ -57,17 +58,44 @@ namespace Operators.Utils
             return midiIn;
         }
 
+
+        private static bool IsMidiDeviceCaptureEnabled(string deviceName)
+        {
+            var setting = ProjectSettings.Config.LimitMidiDeviceCapture;
+            if (string.IsNullOrEmpty(setting))
+                return true;
+
+            foreach (var s in setting.Split("\n"))
+            {
+                if (deviceName.Contains(setting, StringComparison.InvariantCultureIgnoreCase))
+                    return true;
+            }
+            return false;
+        }
         
         private static void ScanAndRegisterToMidiDevices(bool logInformation = false)
         {
-            for (int index = 0; index < MidiIn.NumberOfDevices; index++)
+            Log.Debug("Capturing Midi devices...");
+            if (!string.IsNullOrEmpty(ProjectSettings.Config.LimitMidiDeviceCapture))
+            {
+                var settingsString = ProjectSettings.Config.LimitMidiDeviceCapture.Replace("\n", "; ");
+                Log.Debug($"NOTE: In settings Midi device capture is limited to '{settingsString}");
+            }
+            
+            for (var index = 0; index < MidiIn.NumberOfDevices; index++)
             {
                 var deviceInfo = MidiIn.DeviceInfo(index);
-
                 var deviceInfoProductName = deviceInfo.ProductName;
-                if (logInformation)
-                    Log.Debug("Scanning " + deviceInfoProductName);
 
+                if (!IsMidiDeviceCaptureEnabled(deviceInfoProductName))
+                {
+                    Log.Debug($" skipping '{deviceInfoProductName}' (disabled in setting)");
+                    continue;
+                }
+                
+                if (logInformation)
+                    Log.Debug($" listening to '{deviceInfoProductName}'...");
+                
                 MidiIn newMidiIn;
                 try
                 {
@@ -76,7 +104,7 @@ namespace Operators.Utils
                 catch (NAudio.MmException e)
                 {
                     Log.Error(e.Message == "MemoryAllocationError"
-                                  ? " > The device is already being used by an application"
+                                  ? " > The device is already being used by an application."
                                   : $" > {e.Message} {deviceInfoProductName}");
                     continue;
                 }
