@@ -430,8 +430,6 @@ public class T3Ui
     public static float DisplayScaleFactor { get; set; } = 1;
     public static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
 
-    //private static readonly AutoBackup.AutoBackup _autoBackup = new();
-        
     private static readonly CreateFromTemplateDialog _createFromTemplateDialog = new();
     private static readonly UserNameDialog _userNameDialog = new();
     private static readonly SearchDialog _searchDialog = new();
@@ -450,5 +448,5 @@ public class T3Ui
     }
 
     public static bool UseVSync = true;
-    public static bool ItemRegionsVisible;
+    public static bool ItemRegionsVisible = false;
 }
