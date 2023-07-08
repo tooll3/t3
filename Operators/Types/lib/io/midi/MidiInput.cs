@@ -8,12 +8,13 @@ using Operators.Utils;
 using SharpDX;
 using T3.Core.Animation;
 using T3.Core.Logging;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 {
-    public class MidiInput : Instance<MidiInput>, MidiInConnectionManager.IMidiConsumer
+    public class MidiInput : Instance<MidiInput>, MidiInConnectionManager.IMidiConsumer, IStatusProvider
     {
         [Output(Guid = "01706780-D25B-4C30-A741-8B7B81E04D82")]
         public readonly Slot<float> Result = new();
@@ -29,9 +30,10 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
             Result.UpdateAction = Update;
             Range.UpdateAction = Update;
             WasHit.UpdateAction = Update;
-            MidiInConnectionManager.RegisterConsumer(this);
         }
 
+        private bool _initialized;
+        
         protected override void Dispose(bool isDisposing)
         {
             if (!isDisposing)
@@ -42,7 +44,17 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
         private void Update(EvaluationContext context)
         {
+            if (!_initialized)
+            {
+                MidiInConnectionManager.RegisterConsumer(this);
+                _initialized = true;
+            }
+            
             _trainedDeviceName = Device.GetValue(context);
+
+            var midiIn = MidiInConnectionManager.GetMidiInForProductNameHash(_trainedDeviceName.GetHashCode());
+            _warningMessage = midiIn == null ? $"Midi device '{_trainedDeviceName}' is not captured" : null;
+            
             _trainedChannel = Channel.GetValue(context);
             _trainedControllerId = Control.GetValue(context);
             _trainedEventType = EventType.GetEnumValue<MidiEventTypes>(context);
@@ -65,7 +77,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
             if (MathUtils.WasTriggered(TeachTrigger.GetValue(context), ref _oldTeachTrigger))
             {
-                MidiInConnectionManager.Rescan();
+                //MidiInConnectionManager.Rescan();
                 _teachingActive = true;
                 _lastMatchingSignals.Clear();
                 _currentControllerValue = 0;
@@ -203,7 +215,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                                         {
                                             Channel = controlEvent.Channel,
                                             ControllerId = (int)controlEvent.Controller,
-                                            ControllerValue = (int)controlEvent.ControllerValue,
+                                            ControllerValue = controlEvent.ControllerValue,
                                             EventType = MidiEventTypes.ControllerChanges,
                                         };
                     }
@@ -252,8 +264,6 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                                             ControllerValue = _timingMsgCount,
                                             EventType = MidiEventTypes.MidiTime,
                                         };                    
-                        //Log.Debug($"Got MidiTimingClock 2{_timingMsgCount}  d:{msg.MidiEvent.DeltaTime}", this);
-                        
                     }                    
                 }
 
@@ -278,17 +288,28 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                     _lastMatchingSignals.Add(newSignal);
                     _lastMessageDevice = device;
                     _isDefaultValue = false;
+                    FlagAsDirty();
                 }
-
-                FlagAsDirty();
             }
         }
+        
+        
+        public IStatusProvider.StatusLevel GetStatusLevel()
+        {
+            return string.IsNullOrEmpty(_warningMessage) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Error;
+        }
+
+        public string GetStatusMessage()
+        {
+            return _warningMessage;
+        }
+
+        private string _warningMessage;
+        
 
         private Size2 _controlRange;
         private bool UseControlRange => _controlRange.Width > 0 || _controlRange.Height > 0;
         private List<float> _valuesForControlRange;
-
-        private static readonly List<MidiInput> Instances = new List<MidiInput>();
 
         private class MidiSignal
         {
@@ -354,6 +375,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
         [Input(Guid = "6C15E743-9A70-47E7-A0A4-75636817E441")]
         public readonly InputSlot<bool> PrintLogMessages = new();
+
 
     }
 }

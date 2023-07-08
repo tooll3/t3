@@ -10,32 +10,49 @@ namespace Operators.Utils
     {
         public static void RegisterConsumer(IMidiConsumer consumer)
         {
-            CloseMidiDevices();
-            MidiConsumers.Add(consumer);
-            ScanAndRegisterToMidiDevices();
+            if (!_initialized)
+            {
+                ScanAndRegisterToMidiDevices();
+                _initialized = true;
+            }
+
+            if (_midiConsumers.Contains(consumer))
+            {
+                Log.Warning("MidiConsumer was already added " + consumer);
+                return;
+            }
+            
+            _midiConsumers.Add(consumer);
+            
+            foreach (var midiInputDevice in _midiInsWithDevices.Keys)
+            {
+                midiInputDevice.MessageReceived -= consumer.MessageReceivedHandler;
+                midiInputDevice.ErrorReceived -= consumer.ErrorReceivedHandler;
+                midiInputDevice.MessageReceived += consumer.MessageReceivedHandler;
+                midiInputDevice.ErrorReceived += consumer.ErrorReceivedHandler;
+            }
         }
-        
+
         public static void UnregisterConsumer(IMidiConsumer consumer)
         {
-            if (!MidiConsumers.Contains(consumer))
+            if (!_midiConsumers.Contains(consumer))
                 return;
 
-            foreach (var midiIn in MidiInsWithDevices.Keys)
+            foreach (var midiIn in _midiInsWithDevices.Keys)
             {
                 midiIn.MessageReceived -= consumer.MessageReceivedHandler;
                 midiIn.ErrorReceived -= consumer.ErrorReceivedHandler;
             }
 
-            MidiConsumers.Remove(consumer);
-            if (MidiConsumers.Count == 0)
+            _midiConsumers.Remove(consumer);
+            if (_midiConsumers.Count == 0)
             {
                 CloseMidiDevices();
             }
         }
 
         public static void Rescan()
-        {
-            CloseMidiDevices();
+        { CloseMidiDevices();
             ScanAndRegisterToMidiDevices(logInformation: true);
         }
         
@@ -48,13 +65,13 @@ namespace Operators.Utils
         
         public static MidiInCapabilities GetDescriptionForMidiIn(MidiIn midiIn)
         {
-            MidiInsWithDevices.TryGetValue(midiIn,  out  var description);
+            _midiInsWithDevices.TryGetValue(midiIn,  out  var description);
             return description;
         }
 
         public static MidiIn GetMidiInForProductNameHash(int hash)
         {
-            MidiInsByDeviceIdHash.TryGetValue(hash, out var midiIn);
+            _midiInsByDeviceIdHash.TryGetValue(hash, out var midiIn);
             return midiIn;
         }
 
@@ -67,7 +84,7 @@ namespace Operators.Utils
 
             foreach (var s in setting.Split("\n"))
             {
-                if (deviceName.Contains(setting, StringComparison.InvariantCultureIgnoreCase))
+                if (deviceName.Contains(s, StringComparison.InvariantCultureIgnoreCase))
                     return true;
             }
             return false;
@@ -109,23 +126,23 @@ namespace Operators.Utils
                     continue;
                 }
 
-                foreach (var midiConsumer in MidiConsumers)
+                foreach (var midiConsumer in _midiConsumers)
                 {
                     newMidiIn.MessageReceived += midiConsumer.MessageReceivedHandler;
                     newMidiIn.ErrorReceived += midiConsumer.ErrorReceivedHandler;
                 }
 
                 newMidiIn.Start();
-                MidiInsWithDevices[newMidiIn] = deviceInfo;
-                MidiInsByDeviceIdHash[deviceInfoProductName.GetHashCode()] = newMidiIn;
+                _midiInsWithDevices[newMidiIn] = deviceInfo;
+                _midiInsByDeviceIdHash[deviceInfoProductName.GetHashCode()] = newMidiIn;
             }
         }
 
         private static void CloseMidiDevices()
         {
-            foreach (var midiInputDevice in MidiInsWithDevices.Keys)
+            foreach (var midiInputDevice in _midiInsWithDevices.Keys)
             {
-                foreach (var midiConsumer in MidiConsumers)
+                foreach (var midiConsumer in _midiConsumers)
                 {
                     midiInputDevice.MessageReceived -= midiConsumer.MessageReceivedHandler;
                     midiInputDevice.ErrorReceived -= midiConsumer.ErrorReceivedHandler;
@@ -143,12 +160,13 @@ namespace Operators.Utils
                 }
             }
 
-            MidiInsWithDevices.Clear();
-            MidiInsByDeviceIdHash.Clear();
+            _midiInsWithDevices.Clear();
+            _midiInsByDeviceIdHash.Clear();
         }
         
-        private static readonly List<IMidiConsumer> MidiConsumers = new List<IMidiConsumer>();
-        private static readonly Dictionary<MidiIn, MidiInCapabilities> MidiInsWithDevices = new Dictionary<MidiIn, MidiInCapabilities>();
-        private static readonly Dictionary<int, MidiIn> MidiInsByDeviceIdHash = new Dictionary<int, MidiIn>();
+        private static readonly List<IMidiConsumer> _midiConsumers = new();
+        private static readonly Dictionary<MidiIn, MidiInCapabilities> _midiInsWithDevices = new();
+        private static readonly Dictionary<int, MidiIn> _midiInsByDeviceIdHash = new();
+        private static bool _initialized;
     }
 }

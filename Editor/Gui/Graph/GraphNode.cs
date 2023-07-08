@@ -73,7 +73,7 @@ namespace T3.Editor.Gui.Graph
                     if (instance is IStatusProvider statusProvider)
                     {
                         var statusLevel = statusProvider.GetStatusLevel();
-                        if (statusLevel == IStatusProvider.StatusLevel.Warning)
+                        if (statusLevel == IStatusProvider.StatusLevel.Warning || statusLevel ==IStatusProvider.StatusLevel.Error)
                         {
                             ImGui.SetCursorScreenPos(_usableScreenRect.Min - new Vector2(10, 10) * T3Ui.UiScaleFactor);
                             ImGui.InvisibleButton("#warning", new Vector2(15, 15));
