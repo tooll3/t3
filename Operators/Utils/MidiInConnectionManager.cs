@@ -84,7 +84,7 @@ namespace Operators.Utils
 
             foreach (var s in setting.Split("\n"))
             {
-                if (deviceName.Contains(s, StringComparison.InvariantCultureIgnoreCase))
+                if (deviceName.Contains(s.Trim(), StringComparison.InvariantCultureIgnoreCase))
                     return true;
             }
             return false;
