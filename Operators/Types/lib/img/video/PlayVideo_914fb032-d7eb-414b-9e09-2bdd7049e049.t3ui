@@ -8,7 +8,8 @@
         "X": 51.512096,
         "Y": 46.995968
       },
-      "Usage": "FilePath"
+      "Usage": "FilePath",
+      "FileFilter": "All Files|*.*|Video files (mp4,webm,mpeg,m4v,mkv)|*.mp4;*.webm;*.mpeg;*.m4v;*.mkv"
     },
     {
       "InputId": "2fecfbb4-f7d9-4c53-95ae-b64ccbb6fbad"/*Volume*/,
@@ -25,7 +26,7 @@
       }
     },
     {
-      "InputId": "48e62a3c-a903-4a9b-a44a-148c6c07ac1e"/*OverrideTime*/,
+      "InputId": "48e62a3c-a903-4a9b-a44a-148c6c07ac1e"/*OverrideTimeInSecs*/,
       "Position": {
         "X": 51.512096,
         "Y": 181.99597

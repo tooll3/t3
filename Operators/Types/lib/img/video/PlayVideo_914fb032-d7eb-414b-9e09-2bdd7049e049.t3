@@ -16,7 +16,7 @@
       "DefaultValue": 0.2
     },
     {
-      "Id": "48e62a3c-a903-4a9b-a44a-148c6c07ac1e"/*OverrideTime*/,
+      "Id": "48e62a3c-a903-4a9b-a44a-148c6c07ac1e"/*OverrideTimeInSecs*/,
       "DefaultValue": 0.0
     }
   ],
