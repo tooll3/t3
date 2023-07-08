@@ -7,6 +7,7 @@ using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows.TimeLine;
 
 namespace T3.Editor.Gui.Windows
 {
@@ -71,7 +72,7 @@ namespace T3.Editor.Gui.Windows
                 changed |= FormInputs.AddCheckBox("Editing values with mousewheel needs CTRL key",
                                                   ref UserSettings.Config.MouseWheelEditsNeedCtrlKey,
                                                   "In parameter window you can edit numeric values by using the mouse wheel. This setting will prevent accidental modifications while scrolling because by using ctrl key for activation.",
-                                                  UserSettings.Defaults.AdjustCameraSpeedWithMouseWheel);
+                                                  UserSettings.Defaults.MouseWheelEditsNeedCtrlKey);
 
                 FormInputs.ResetIndent();
                 FormInputs.AddVerticalSpace();
@@ -109,10 +110,10 @@ namespace T3.Editor.Gui.Windows
                                                                "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input.",
                                                                UserSettings.Defaults.TimeRasterDensity);
                 
-                changed |= FormInputs.AddCheckBox("Reposition loop range on click",
-                                                  ref UserSettings.Config.RepositionLoopRangeOnClick,
-                                                  "When using the timeline with bar units, this setting allows you to move the current loop range by clicking outside the loop.",
-                                                  UserSettings.Defaults.RepositionLoopRangeOnClick);
+                changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.FrameStepAmount,
+                                                      "Frame step amount",
+                                                      "Controls the next rounding and step amount when jumping between frames.\nDefault shortcut is Shift+Cursor Left/Right");
+                
                 ImGui.Dummy(new Vector2(20,20));
                 ImGui.TreePop();
             }

@@ -400,5 +400,15 @@ namespace T3.Editor.Gui.Windows.TimeLine
             public Instance Instance;
             public SymbolChildUi ChildUi;
         }
+        
+        public enum FrameStepAmount
+        {
+            FrameAt60Fps,
+            FrameAt30Fps,
+            FrameAt15Fps,
+            Bar,
+            Beat,
+            Tick,
+        }
     }
 }
