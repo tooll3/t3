@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemUi", "SystemUi\System
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsForms", "MsForms\MsForms.csproj", "{8D29BDE3-EE22-4EE5-981B-D45BAD0A1F03}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serialization", "Serialization\Serialization.csproj", "{E45D9AC2-BCD8-447F-AD72-96D2CFE41B39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{420772CC-2B45-431D-8B25-C5F1F28E0AFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{8D29BDE3-EE22-4EE5-981B-D45BAD0A1F03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D29BDE3-EE22-4EE5-981B-D45BAD0A1F03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D29BDE3-EE22-4EE5-981B-D45BAD0A1F03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E45D9AC2-BCD8-447F-AD72-96D2CFE41B39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E45D9AC2-BCD8-447F-AD72-96D2CFE41B39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E45D9AC2-BCD8-447F-AD72-96D2CFE41B39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E45D9AC2-BCD8-447F-AD72-96D2CFE41B39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{420772CC-2B45-431D-8B25-C5F1F28E0AFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{420772CC-2B45-431D-8B25-C5F1F28E0AFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{420772CC-2B45-431D-8B25-C5F1F28E0AFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{420772CC-2B45-431D-8B25-C5F1F28E0AFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

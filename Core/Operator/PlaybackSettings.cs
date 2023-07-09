@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using T3.Core.Audio;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Serialization;
 
 namespace T3.Core.Operator
 {
@@ -64,13 +65,13 @@ namespace T3.Core.Operator
             {
                 //writer.WriteEndArray();
 
-                writer.WriteValue(nameof(Enabled), Enabled);
-                writer.WriteValue(nameof(Bpm), Bpm);
-                writer.WriteValue(nameof(AudioSource), AudioSource);
-                writer.WriteValue(nameof(Syncing), Syncing);
-                writer.WriteValue(nameof(AudioDecayFactor), AudioDecayFactor);
-                writer.WriteValue(nameof(AudioGainFactor), AudioGainFactor);
-                writer.WriteObject(nameof(AudioInputDeviceName), AudioInputDeviceName);
+                JsonExtensions.WriteValue(writer, nameof(Enabled), Enabled);
+                JsonExtensions.WriteValue(writer, nameof(Bpm), Bpm);
+                JsonExtensions.WriteValue(writer, nameof(AudioSource), AudioSource);
+                JsonExtensions.WriteValue(writer, nameof(Syncing), Syncing);
+                JsonExtensions.WriteValue(writer, nameof(AudioDecayFactor), AudioDecayFactor);
+                JsonExtensions.WriteValue(writer, nameof(AudioGainFactor), AudioGainFactor);
+                JsonExtensions.WriteObject(writer, nameof(AudioInputDeviceName), AudioInputDeviceName);
 
                 // Write audio clips
                 var audioClips = AudioClips;
@@ -104,13 +105,13 @@ namespace T3.Core.Operator
             
             if (settingsToken != null)
             {
-                newSettings.Enabled = Utilities.ReadToken(settingsToken, nameof(Enabled),false);
-                newSettings.Bpm = Utilities.ReadToken(settingsToken, nameof(Bpm), 120f);
-                newSettings.AudioSource = Utilities.ReadEnum<AudioSources>(settingsToken, nameof(AudioSource));
-                newSettings.Syncing = Utilities.ReadEnum<SyncModes>(settingsToken, nameof(Syncing));
-                newSettings.AudioDecayFactor = Utilities.ReadToken(settingsToken, nameof(AudioDecayFactor),0.5f);
-                newSettings.AudioGainFactor = Utilities.ReadToken(settingsToken, nameof(AudioGainFactor), 1f);
-                newSettings.AudioInputDeviceName = Utilities.ReadToken<string>(settingsToken, nameof(AudioInputDeviceName), null);
+                newSettings.Enabled = JsonUtils.ReadToken(settingsToken, nameof(Enabled),false);
+                newSettings.Bpm = JsonUtils.ReadToken(settingsToken, nameof(Bpm), 120f);
+                newSettings.AudioSource = JsonUtils.ReadEnum<AudioSources>(settingsToken, nameof(AudioSource));
+                newSettings.Syncing = JsonUtils.ReadEnum<SyncModes>(settingsToken, nameof(Syncing));
+                newSettings.AudioDecayFactor = JsonUtils.ReadToken(settingsToken, nameof(AudioDecayFactor),0.5f);
+                newSettings.AudioGainFactor = JsonUtils.ReadToken(settingsToken, nameof(AudioGainFactor), 1f);
+                newSettings.AudioInputDeviceName = JsonUtils.ReadToken<string>(settingsToken, nameof(AudioInputDeviceName), null);
                 
                 newSettings.AudioClips.AddRange(GetClips(settingsToken)); // Support correct format
             }

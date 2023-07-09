@@ -10,6 +10,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Serialization;
 using Point = T3.Core.DataTypes.Point;
 using Utilities = T3.Core.Utils.Utilities;
 using Vector2 = System.Numerics.Vector2;
@@ -129,7 +130,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
             if (_needsSave && Playback.RunTimeInSecs - _lastModificationTime > 2)
             {
                 var filepath1 = FilePath.GetValue(context);
-                Utilities.SaveJson(_paging.Pages, filepath1);
+                JsonUtils.SaveJson(_paging.Pages, filepath1);
                 _needsSave = false;
             }
         }
@@ -373,7 +374,7 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
 
             public void LoadPages(string filepath)
             {
-                Pages = Utilities.TryLoadingJson<List<Page>>(filepath);
+                Pages = JsonUtils.TryLoadingJson<List<Page>>(filepath);
 
                 if (Pages != null)
                 {

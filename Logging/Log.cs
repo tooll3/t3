@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using T3.Core.Operator;
-using T3.Core.Utils;
-using T3.SystemUi.Logging;
+﻿using T3.SystemUi.Logging;
 
 namespace T3.Core.Logging
 {
@@ -69,9 +65,9 @@ namespace T3.Core.Logging
         {
             switch (args)
             {
-                case { Length: 1 } when args[0] is Instance instance:
+                case { Length: 1 } when args[0] is IGuidPathContainer instance:
                 {
-                    DoLog(new LogEntry(level, message, OperatorUtils.BuildIdPathForInstance(instance).ToArray()));
+                    DoLog(new LogEntry(level, message, instance.Path));
                     break;
                 }
                 

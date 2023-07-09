@@ -19,6 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Logging\Logging.csproj" />
+      <ProjectReference Include="..\Serialization\Serialization.csproj" />
       <ProjectReference Include="..\SystemUi\SystemUi.csproj" />
     </ItemGroup>
 

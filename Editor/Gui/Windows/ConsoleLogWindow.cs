@@ -175,7 +175,7 @@ namespace T3.Editor.Gui.Windows
 
             ImGui.TextColored(color, firstLine);
 
-            var hasInstancePath = entry.SourceIdPath?.Length > 1;
+            var hasInstancePath = entry.SourceIdPath?.Count > 1;
             if (IsLineHovered() && (hasInstancePath || hasMessageWithLineBreaks))
             {
                 FrameStats.AddHoveredId(entry.SourceId);

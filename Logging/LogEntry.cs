@@ -1,5 +1,4 @@
-﻿using System;
-using T3.SystemUi.Logging;
+﻿using T3.SystemUi.Logging;
 
 namespace T3.Core.Logging
 {
@@ -8,9 +7,9 @@ namespace T3.Core.Logging
         public DateTime TimeStamp { get; }
         public ILogEntry.EntryLevel Level { get; }
         public string Message { get; }
-        public Guid[] SourceIdPath  { get; }
+        public IList<Guid> SourceIdPath  { get; }
 
-        public LogEntry(ILogEntry.EntryLevel level, string message, Guid[] sourceIdPath)
+        public LogEntry(ILogEntry.EntryLevel level, string message, IList<Guid> sourceIdPath)
         {
             TimeStamp = DateTime.Now;
             Level = level;
@@ -36,7 +35,7 @@ namespace T3.Core.Logging
         
         public double SecondsSinceStart => (TimeStamp - _startTime).TotalSeconds;
         public double SecondsAgo => (DateTime.Now - TimeStamp).TotalSeconds;
-        public Guid SourceId => SourceIdPath is { Length: > 0 } ? SourceIdPath[^1] : Guid.Empty;
+        public Guid SourceId => SourceIdPath is { Count: > 0 } ? SourceIdPath[^1] : Guid.Empty;
         private static readonly DateTime _startTime = DateTime.Now;
     }
 }

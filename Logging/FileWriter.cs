@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using T3.SystemUi.Logging;
+﻿using T3.SystemUi.Logging;
 
 namespace T3.Core.Logging
 {
