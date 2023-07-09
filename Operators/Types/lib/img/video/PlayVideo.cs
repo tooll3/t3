@@ -102,7 +102,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
 
             // initiate seeking if necessary
             var isCompositionTimelinePlaying = context.Playback.PlaybackSpeed == 0;
-            var seekThreshold = isCompositionTimelinePlaying ? 1/60f : ResyncThreshold.GetValue(context);
+            var seekThreshold = isCompositionTimelinePlaying ? 1/120f : ResyncThreshold.GetValue(context);
             var shouldSeek = !_engine.IsSeeking && Math.Abs(deltaTime) > seekThreshold;
             if (shouldSeek)
             {
@@ -122,6 +122,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             Duration.Value = _hasUpdatedTexture ? (float)_engine.Duration : -1;
 
             UpdateVideoPlayback();
+            Playback.OpNotReady |= !_hasUpdatedTexture || _isSeeking || _seekRequested;
         }
 
         private void SetupMediaFoundation()

@@ -75,17 +75,6 @@ internal abstract class MfVideoWriter : IDisposable
     }
 
     /// <summary>
-    /// get minimum image buffer size in bytes
-    /// </summary>
-    /// <param name="frame">texture to get information from</param>
-    public static int SizeInBytes(ref Texture2D frame)
-    {
-        var currentDesc = frame.Description;
-        var bitsPerPixel = Math.Max(currentDesc.Format.SizeOfInBits(), 1);
-        return (currentDesc.Width * currentDesc.Height * bitsPerPixel + 7) / 8;
-    }
-
-    /// <summary>
     /// get minimum image buffer size in bytes if imager is RGBA converted
     /// </summary>
     /// <param name="frame">texture to get information from</param>
@@ -101,38 +90,9 @@ internal abstract class MfVideoWriter : IDisposable
     {
         var low = (byte)imageStream.ReadByte();
         var high = (byte)imageStream.ReadByte();
-        return ToTwoByteFloat(low, high);
+        return  FormatConversion.ToTwoByteFloat(low, high);
     }
 
-    // FIXME: Would possibly need some refactoring not to duplicate code from ScreenshotWriter
-    private static float ToTwoByteFloat(byte ho, byte lo)
-    {
-        var intVal = BitConverter.ToInt32(new byte[] { ho, lo, 0, 0 }, 0);
-
-        var mant = intVal & 0x03ff;
-        var exp = intVal & 0x7c00;
-        if (exp == 0x7c00) exp = 0x3fc00;
-        else if (exp != 0)
-        {
-            exp += 0x1c000;
-            if (mant == 0 && exp > 0x1c400)
-                return BitConverter.ToSingle(BitConverter.GetBytes((intVal & 0x8000) << 16 | exp << 13 | 0x3ff), 0);
-        }
-        else if (mant != 0)
-        {
-            exp = 0x1c400;
-            do
-            {
-                mant <<= 1;
-                exp -= 0x400;
-            }
-            while ((mant & 0x400) == 0);
-
-            mant &= 0x3ff;
-        }
-
-        return BitConverter.ToSingle(BitConverter.GetBytes((intVal & 0x8000) << 16 | (exp | mant) << 13), 0);
-    }
 
     private MF.Sample CreateSampleFromFrame(ref Texture2D frame)
     {
@@ -140,7 +100,7 @@ internal abstract class MfVideoWriter : IDisposable
             return null;
 
         // Write all contents to the MediaBuffer for media foundation
-        MF.MediaBuffer mediaBuffer = MF.MediaFactory.CreateMemoryBuffer(RgbaSizeInBytes(ref frame));
+        var mediaBuffer = MF.MediaFactory.CreateMemoryBuffer(RgbaSizeInBytes(ref frame));
         var device = ResourceManager.Device;
         DataStream inputStream = null;
         DataStream outputStream = null;
@@ -395,24 +355,24 @@ internal abstract class MfVideoWriter : IDisposable
 
         // Create the sample (includes image and timing information)
         var videoSample = CreateSampleFromFrame(ref frame);
-        if (videoSample != null)
+        if (videoSample == null)
+            return;
+        
+        try
         {
-            try
-            {
-                // Write to stream
-                var samples = new Dictionary<int, Sample>();
-                samples.Add(StreamIndex, videoSample);
-                WriteSamples(samples);
-            }
-            catch (SharpDXException e)
-            {
-                Debug.WriteLine(e.Message);
-                throw new InvalidOperationException(e.Message);
-            }
-            finally
-            {
-                videoSample.Dispose();
-            }
+            // Write to stream
+            var samples = new Dictionary<int, Sample>();
+            samples.Add(StreamIndex, videoSample);
+            WriteSamples(samples);
+        }
+        catch (SharpDXException e)
+        {
+            Debug.WriteLine(e.Message);
+            throw new InvalidOperationException(e.Message);
+        }
+        finally
+        {
+            videoSample.Dispose();
         }
     }
 

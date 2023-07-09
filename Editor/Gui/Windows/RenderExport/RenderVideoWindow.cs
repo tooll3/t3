@@ -2,6 +2,7 @@ using System;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
+using T3.Core.Logging;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
@@ -109,6 +110,11 @@ public class RenderVideoWindow : RenderHelperWindow
 
     private static bool SaveCurrentFrameAndAdvance(ref Texture2D mainTexture)
     {
+        if (Playback.OpNotReady)
+        {
+            Log.Debug("Waiting for operators to complete");
+            return true;
+        }
         try
         {
             _videoWriter.AddVideoFrame(ref mainTexture);

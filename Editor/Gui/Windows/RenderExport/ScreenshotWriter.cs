@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -75,212 +74,133 @@ public static class ScreenshotWriter
                                                       MapMode.Read,
                                                       SharpDX.Direct3D11.MapFlags.None,
                                                       out var imageStream);
-        using (imageStream)
+        using var dataStream = imageStream;
+        
+        var width = currentDesc.Width;
+        var height = currentDesc.Height;
+        var factory = new ImagingFactory();
+
+        var stream = new WICStream(factory, filepath, NativeFileAccess.Write);
+
+        // Initialize a Jpeg encoder with this stream
+        //var encoder = new PngBitmapEncoder(factory);
+        //var encoder = new JpegBitmapEncoder(factory);
+        BitmapEncoder encoder = (format == FileFormats.Png)
+                                    ? new PngBitmapEncoder(factory)
+                                    : new JpegBitmapEncoder(factory);
+        encoder.Initialize(stream);
+
+        // Create a Frame encoder
+        var bitmapFrameEncode = new BitmapFrameEncode(encoder);
+        bitmapFrameEncode.Initialize();
+        bitmapFrameEncode.SetSize(width, height);
+        var formatId = PixelFormat.Format32bppRGBA;
+        bitmapFrameEncode.SetPixelFormat(ref formatId);
+
+        // Write a pseudo-plasma to a buffer
+        var rowStride = PixelFormat.GetStride(formatId, width);
+        var outBufferSize = height * rowStride;
+        var outDataStream = new DataStream(outBufferSize, true, true);
+        //var pixelByteCount = PixelFormat.GetStride(formatId, 1);
+
+        try
         {
-            var width = currentDesc.Width;
-            var height = currentDesc.Height;
-            var factory = new ImagingFactory();
-
-            var stream = new WICStream(factory, filepath, NativeFileAccess.Write);
-
-            // Initialize a Jpeg encoder with this stream
-            //var encoder = new PngBitmapEncoder(factory);
-            //var encoder = new JpegBitmapEncoder(factory);
-            BitmapEncoder encoder = (format == FileFormats.Png)
-                                        ? new PngBitmapEncoder(factory)
-                                        : new JpegBitmapEncoder(factory);
-            encoder.Initialize(stream);
-
-            // Create a Frame encoder
-            var bitmapFrameEncode = new BitmapFrameEncode(encoder);
-            bitmapFrameEncode.Initialize();
-            bitmapFrameEncode.SetSize(width, height);
-            var formatId = PixelFormat.Format32bppRGBA;
-            bitmapFrameEncode.SetPixelFormat(ref formatId);
-
-            // Write a pseudo-plasma to a buffer
-            var rowStride = PixelFormat.GetStride(formatId, width);
-            var outBufferSize = height * rowStride;
-            var outDataStream = new DataStream(outBufferSize, true, true);
-            //var pixelByteCount = PixelFormat.GetStride(formatId, 1);
-
-            try
+            switch (currentDesc.Format)
             {
-                switch (currentDesc.Format)
-                {
-                    case Format.R16G16B16A16_Float:
-                        for (var y1 = 0; y1 < height; y1++)
+                case Format.R16G16B16A16_Float:
+                    for (var y1 = 0; y1 < height; y1++)
+                    {
+                        for (var x1 = 0; x1 < width; x1++)
                         {
-                            for (var x1 = 0; x1 < width; x1++)
+                            imageStream.Position = (long)(y1) * dataBox.RowPitch + (long)(x1) * 8;
+
+                            var r = FormatConversion.Read2BytesToHalf(imageStream);
+                            var g = FormatConversion.Read2BytesToHalf(imageStream);
+                            var b = FormatConversion.Read2BytesToHalf(imageStream);
+                            var a = FormatConversion.Read2BytesToHalf(imageStream);
+
+                            outDataStream.WriteByte((byte)(b.Clamp(0, 1) * 255));
+                            outDataStream.WriteByte((byte)(g.Clamp(0, 1) * 255));
+                            outDataStream.WriteByte((byte)(r.Clamp(0, 1) * 255));
+                            if (format == FileFormats.Png)
                             {
-                                imageStream.Position = (long)(y1) * dataBox.RowPitch + (long)(x1) * 8;
-
-                                var r = Read2BytesToHalf(imageStream);
-                                var g = Read2BytesToHalf(imageStream);
-                                var b = Read2BytesToHalf(imageStream);
-                                var a = Read2BytesToHalf(imageStream);
-
-                                outDataStream.WriteByte((byte)(b.Clamp(0, 1) * 255));
-                                outDataStream.WriteByte((byte)(g.Clamp(0, 1) * 255));
-                                outDataStream.WriteByte((byte)(r.Clamp(0, 1) * 255));
-                                if (format == FileFormats.Png)
-                                {
-                                    outDataStream.WriteByte((byte)(a.Clamp(0, 1) * 255));
-                                }
+                                outDataStream.WriteByte((byte)(a.Clamp(0, 1) * 255));
                             }
                         }
-                        break;
+                    }
+                    break;
 
-                    case Format.R8G8B8A8_UNorm:
-                        for (var y1 = 0; y1 < height; y1++)
+                case Format.R8G8B8A8_UNorm:
+                    for (var y1 = 0; y1 < height; y1++)
+                    {
+                        imageStream.Position = (long)(y1) * dataBox.RowPitch;
+                        for (var x1 = 0; x1 < width; x1++)
                         {
-                            imageStream.Position = (long)(y1) * dataBox.RowPitch;
-                            for (var x1 = 0; x1 < width; x1++)
-                            {
-                                var r = (byte)imageStream.ReadByte();
-                                var g = (byte)imageStream.ReadByte();
-                                var b = (byte)imageStream.ReadByte();
-                                outDataStream.WriteByte(b);
-                                outDataStream.WriteByte(g);
-                                outDataStream.WriteByte(r);
+                            var r = (byte)imageStream.ReadByte();
+                            var g = (byte)imageStream.ReadByte();
+                            var b = (byte)imageStream.ReadByte();
+                            outDataStream.WriteByte(b);
+                            outDataStream.WriteByte(g);
+                            outDataStream.WriteByte(r);
 
-                                var a = imageStream.ReadByte();
-                                if (format == FileFormats.Png)
-                                {
-                                    outDataStream.WriteByte((byte)a);
-                                }
+                            var a = imageStream.ReadByte();
+                            if (format == FileFormats.Png)
+                            {
+                                outDataStream.WriteByte((byte)a);
                             }
                         }
-                        break;
+                    }
+                    break;
 
-                    case Format.R16G16B16A16_UNorm:
-                        for (var y1 = 0; y1 < height; y1++)
+                case Format.R16G16B16A16_UNorm:
+                    for (var y1 = 0; y1 < height; y1++)
+                    {
+                        imageStream.Position = (long)(y1) * dataBox.RowPitch;
+                        for (var x1 = 0; x1 < width; x1++)
                         {
-                            imageStream.Position = (long)(y1) * dataBox.RowPitch;
-                            for (var x1 = 0; x1 < width; x1++)
-                            {
-                                imageStream.ReadByte(); var r = (byte)imageStream.ReadByte();
-                                imageStream.ReadByte(); var g = (byte)imageStream.ReadByte();
-                                imageStream.ReadByte(); var b = (byte)imageStream.ReadByte();
-                                outDataStream.WriteByte(b);
-                                outDataStream.WriteByte(g);
-                                outDataStream.WriteByte(r);
+                            imageStream.ReadByte(); var r = (byte)imageStream.ReadByte();
+                            imageStream.ReadByte(); var g = (byte)imageStream.ReadByte();
+                            imageStream.ReadByte(); var b = (byte)imageStream.ReadByte();
+                            outDataStream.WriteByte(b);
+                            outDataStream.WriteByte(g);
+                            outDataStream.WriteByte(r);
 
-                                imageStream.ReadByte(); var a = imageStream.ReadByte();
-                                if (format == FileFormats.Png)
-                                {
-                                    outDataStream.WriteByte((byte)a);
-                                }
+                            imageStream.ReadByte(); var a = imageStream.ReadByte();
+                            if (format == FileFormats.Png)
+                            {
+                                outDataStream.WriteByte((byte)a);
                             }
                         }
-                        break;
+                    }
+                    break;
 
-                    default:
-                        throw new InvalidOperationException($"Can't export unknown texture format {currentDesc.Format}");
-                }
+                default:
+                    throw new InvalidOperationException($"Can't export unknown texture format {currentDesc.Format}");
+            }
 
-                // Copy the pixels from the buffer to the Wic Bitmap Frame encoder
-                bitmapFrameEncode.WritePixels(height, new DataRectangle(outDataStream.DataPointer, rowStride));
+            // Copy the pixels from the buffer to the Wic Bitmap Frame encoder
+            bitmapFrameEncode.WritePixels(height, new DataRectangle(outDataStream.DataPointer, rowStride));
 
-                // Commit changes
-                bitmapFrameEncode.Commit();
-                encoder.Commit();
-            }
-            catch (Exception e)
-            {
-                throw new InvalidOperationException("Internal image copy failed : " + e);
-            }
-            finally
-            {
-                immediateContext.UnmapSubresource(readableImage, 0);
-                imageStream.Dispose();
-                outDataStream.Dispose();
-                bitmapFrameEncode.Dispose();
-                encoder.Dispose();
-                stream.Dispose();
-            }
-        } // using (imageStream)
+            // Commit changes
+            bitmapFrameEncode.Commit();
+            encoder.Commit();
+        }
+        catch (Exception e)
+        {
+            throw new InvalidOperationException("Internal image copy failed : " + e);
+        }
+        finally
+        {
+            immediateContext.UnmapSubresource(readableImage, 0);
+            imageStream.Dispose();
+            outDataStream.Dispose();
+            bitmapFrameEncode.Dispose();
+            encoder.Dispose();
+            stream.Dispose();
+        }
 
         return true;
     }
-
-    private static float Read4BytesToFloat(Stream imageStream)
-    {
-        _bytes[0] = (byte)imageStream.ReadByte();
-        _bytes[1] = (byte)imageStream.ReadByte();
-        _bytes[2] = (byte)imageStream.ReadByte();
-        _bytes[3] = (byte)imageStream.ReadByte();
-        var r = BitConverter.ToSingle(_bytes, 0);
-        return r;
-    }
-
-    private static float Read2BytesToHalf(Stream imageStream)
-    {
-        var low = (byte)imageStream.ReadByte();
-        var high = (byte)imageStream.ReadByte();
-        return ToTwoByteFloat(low, high);
-    }
-
-    private static float ToTwoByteFloat(byte ho, byte lo)
-    {
-        var intVal = BitConverter.ToInt32(new byte[] { ho, lo, 0, 0 }, 0);
-
-        var mant = intVal & 0x03ff;
-        var exp = intVal & 0x7c00;
-        if (exp == 0x7c00) exp = 0x3fc00;
-        else if (exp != 0)
-        {
-            exp += 0x1c000;
-            if (mant == 0 && exp > 0x1c400)
-                return BitConverter.ToSingle(BitConverter.GetBytes((intVal & 0x8000) << 16 | exp << 13 | 0x3ff), 0);
-        }
-        else if (mant != 0)
-        {
-            exp = 0x1c400;
-            do
-            {
-                mant <<= 1;
-                exp -= 0x400;
-            }
-            while ((mant & 0x400) == 0);
-
-            mant &= 0x3ff;
-        }
-
-        return BitConverter.ToSingle(BitConverter.GetBytes((intVal & 0x8000) << 16 | (exp | mant) << 13), 0);
-    }
-
-    private static byte[] I2B(int input)
-    {
-        var bytes1 = BitConverter.GetBytes(input);
-        return new[] { bytes1[0], bytes1[1] };
-    }
-
-    public static byte[] ToInt(float twoByteFloat)
-    {
-        var fBits = BitConverter.ToInt32(BitConverter.GetBytes(twoByteFloat), 0);
-        var sign = fBits >> 16 & 0x8000;
-        var val = (fBits & 0x7fffffff) + 0x1000;
-        switch (val)
-        {
-            case >= 0x47800000 when (fBits & 0x7fffffff) >= 0x47800000:
-            {
-                if (val < 0x7f800000) return I2B(sign | 0x7c00);
-                return I2B(sign | 0x7c00 | (fBits & 0x007fffff) >> 13);
-            }
-            case >= 0x47800000:
-                return I2B(sign | 0x7bff);
-            case >= 0x38800000:
-                return I2B(sign | val - 0x38000000 >> 13);
-            case < 0x33000000:
-                return I2B(sign);
-            default:
-                val = (fBits & 0x7fffffff) >> 23;
-                return I2B(sign | ((fBits & 0x7fffff | 0x800000) + (0x800000 >> val - 102) >> 126 - val));
-        }
-    }
-
-    private static readonly byte[] _bytes = new byte[4];
 
     public static readonly string LastFilename = string.Empty;
     
