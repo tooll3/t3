@@ -26,14 +26,25 @@ namespace T3.Operators.Types.Id_0e1d5f4b_3ba0_4e71_aa26_7308b6df214d
                 _initialized = true;
             }
 
-            var triggered = Running.GetValue(context);
-            if (OnlyCountChanges.GetValue(context) && triggered == _lastTrigger)
+            var triggeredIncrement = TriggerIncrement.GetValue(context);
+            var triggeredDecrement = TriggerDecrement.GetValue(context);
+
+            var notChanged = triggeredIncrement == _lastIncrementTrigger && triggeredDecrement == _lastDecrementTrigger;
+            if (OnlyCountChanges.GetValue(context) && notChanged)
                 return;
 
-            _lastTrigger = triggered;
+            _lastIncrementTrigger = triggeredIncrement;
+            _lastDecrementTrigger = triggeredDecrement;
 
-            if (triggered)
-                Result.Value += Increment.GetValue(context);
+            var delta = Delta.GetValue(context);
+            if (triggeredIncrement)
+            {
+                Result.Value += delta;
+            }
+            else if (triggeredDecrement)
+            {
+                Result.Value -= delta;
+            }
 
             var modulo = Modulo.GetValue(context);
             if (modulo != 0)
@@ -43,11 +54,15 @@ namespace T3.Operators.Types.Id_0e1d5f4b_3ba0_4e71_aa26_7308b6df214d
         }
 
         private bool _initialized;
-        private bool _lastTrigger;
+        private bool _lastIncrementTrigger;
+        private bool _lastDecrementTrigger;
 
         [Input(Guid = "bfd95809-61d2-49eb-85d4-ff9e36b2d158")]
-        public readonly InputSlot<bool> Running = new InputSlot<bool>();
-
+        public readonly InputSlot<bool> TriggerIncrement = new InputSlot<bool>();
+        
+        [Input(Guid = "6EBE2842-A8FC-4800-8296-C8664C804E3C")]
+        public readonly InputSlot<bool> TriggerDecrement = new InputSlot<bool>();
+        
         [Input(Guid = "01027ce6-f4ca-44b6-a8ec-e4ab96280864")]
         public readonly InputSlot<bool> TriggerReset = new InputSlot<bool>();
 
@@ -55,7 +70,7 @@ namespace T3.Operators.Types.Id_0e1d5f4b_3ba0_4e71_aa26_7308b6df214d
         public readonly InputSlot<bool> OnlyCountChanges = new InputSlot<bool>();
 
         [Input(Guid = "ABE64676-CCF7-4163-B4DA-26D8B7179AF4")]
-        public readonly InputSlot<int> Increment = new InputSlot<int>();
+        public readonly InputSlot<int> Delta = new InputSlot<int>();
 
         [Input(Guid = "11F9CDB5-84FC-4413-8CA7-77E12047F521")]
         public readonly InputSlot<int> DefaultValue = new InputSlot<int>();

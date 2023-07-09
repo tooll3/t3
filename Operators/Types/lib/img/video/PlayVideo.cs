@@ -27,25 +27,17 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         [Output(Guid = "fa56b47f-1b16-45d5-80cd-32c5a872acf4", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Texture2D> Texture = new();
 
-        // Input parameters
-        [Input(Guid = "0e255347-08bc-4363-9ffa-ab863a1cea8e")]
-        public readonly InputSlot<string> Path = new();
-
-        [Input(Guid = "2FECFBB4-F7D9-4C53-95AE-B64CCBB6FBAD")]
-        public readonly InputSlot<float> Volume = new();
-
-        [Input(Guid = "E9C15B3F-8C4A-411D-B9B3-795D64D6BD20")]
-        public readonly InputSlot<float> ResyncThreshold = new();
-
-        [Input(Guid = "48E62A3C-A903-4A9B-A44A-148C6C07AC1E")]
-        public readonly InputSlot<float> OverrideTimeInSecs = new();
+        [Output(Guid = "2F16BE73-226B-47E7-B7EE-BF4F3738FA13")]
+        public readonly Slot<float> Duration = new();
+        
+        [Output(Guid = "C89EA3AE-82FF-4791-B755-7B7D9EDDF8A7", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<bool> HasCompleted = new();
 
         public PlayVideo()
         {
             Texture.UpdateAction = Update;
         }
-
-
+            
         private void Update(EvaluationContext context)
         {
             // Initialize media foundation library and default values
@@ -56,42 +48,56 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 ResyncThreshold.TypedDefaultValue.Value = 0.2f;
                 _initialized = true;
             }
-
+            
+            var url = Path.GetValue(context);
+            var pathChanged = url != _url;
+            
             if (_engine == null)
             {
                 _errorMessageForStatus = "Initialization of MediaEngine failed";
                 return;
             }
             
-            var pathChanged = Path.DirtyFlag.IsDirty;
+            
+            var requestedTime = OverrideTimeInSecs.IsConnected
+                                         ? OverrideTimeInSecs.GetValue(context)
+                                         : context.Playback.SecondsFromBars(context.LocalTime);
+            
+            const float completionThreshold =  0.016f; // A hack to prevent engine missing the end of playback
+
+            var durationWithMargin = _engine.Duration - completionThreshold;
+            HasCompleted.Value = !_loop && _engine.CurrentTime > durationWithMargin  || requestedTime > durationWithMargin; 
             
             var isSameTime = Math.Abs(context.LocalFxTime - _lastContextTime) < 0.001;
-            if (isSameTime && !pathChanged)
+            var dontUpdate = isSameTime && !pathChanged && _hasUpdatedTexture && !_isSeeking;
+            if (dontUpdate)
+            {
+                //Log.Debug($" DontUpdate: {dontUpdate} <-- {_engine.CurrentTime:0.00}/{_engine.Duration}     same:{isSameTime}  pathChanged:{pathChanged} hasTexture:{_hasUpdatedTexture}  isSeeking:{_isSeeking}");
                 return;
+            }
 
+            _loop = Loop.GetValue(context);
             _lastContextTime = context.LocalFxTime;
             _lastUpdateRunTimeInSecs = Playback.RunTimeInSecs;
             
             if (pathChanged)
             {
-                SetMediaUrl(Path.GetValue(context));
+                SetMediaUrl(url);
                 _engine.Play();
             }
 
-            // shall we seek?
-            var shouldBeTimeInSecs = OverrideTimeInSecs.IsConnected
-                                         ? OverrideTimeInSecs.GetValue(context)
-                                         : context.Playback.SecondsFromBars(context.LocalTime);
 
             //Log.Debug($" PlayVideo.Update({shouldBeTimeInSecs:0.00s})", this);
-            var clampedSeekTime = Math.Clamp(shouldBeTimeInSecs, 0.0, _engine.Duration);
-            var clampedVideoTime = Math.Clamp(_engine.CurrentTime, 0.0, _engine.Duration);
+            var clampedSeekTime = _loop? requestedTime % _engine.Duration 
+                                      : Math.Clamp(requestedTime, 0.0, _engine.Duration);
+            var clampedVideoTime = _loop ? _engine.CurrentTime % _engine.Duration 
+                                       : Math.Clamp(_engine.CurrentTime, 0.0, _engine.Duration);
             var deltaTime = clampedSeekTime - clampedVideoTime;
             
             // Play when we are in the center portion of the video
             // and we are playing the video forward
             var isPlayingForward = clampedSeekTime > _lastUpdateTime;
-            _play = pathChanged || Math.Abs(shouldBeTimeInSecs - clampedSeekTime) < 0.001f && isPlayingForward;
+            _play = pathChanged || _loop || Math.Abs(requestedTime - clampedSeekTime) < 0.001f && isPlayingForward;
             _lastUpdateTime = clampedSeekTime;
 
             // initiate seeking if necessary
@@ -113,6 +119,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
              * an interfaces to register all audio sources and provides functions like muting, stop, setting audio level, etc. 
              */
             _engine.Volume = AudioEngine.IsMuted ? 0 : Volume.GetValue(context).Clamp(0f, 1f);
+            Duration.Value = _hasUpdatedTexture ? (float)_engine.Duration : -1;
 
             UpdateVideoPlayback();
         }
@@ -223,16 +230,17 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             }
         }
 
-        private void SetMediaUrl(string path)
+        private void SetMediaUrl(string url)
         {
-            if (path == _url)
+            if (url == _url)
                 return;
 
-            _url = path;
+            _url = url;
             try
             {
+                _hasUpdatedTexture = false;
                 _engine.Pause();
-                _engine.Source = path;
+                _engine.Source = url;
             }
             catch (SharpDXException e)
             {
@@ -247,9 +255,11 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         {
             if ((ReadyStates)_engine.ReadyState <= ReadyStates.HaveNothing)
             {
+                _hasUpdatedTexture = false;
                 //_texture = null; // FIXME: this is probably stupid
                 return;
             }
+            
 
             if ((ReadyStates)_engine.ReadyState >= ReadyStates.HaveMetadata)
             {
@@ -262,19 +272,19 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                     _seekRequested = false;
                 }
 
+                _engine.Loop = _loop;
+
                 if (!_engine.Loop)
                 {
                     var currentTime = (float)_engine.CurrentTime;
-                    var loopStartTime = LoopStartTime.Clamp(0f, (float)_engine.Duration);
-                    var loopEndTime = (LoopEndTime < 0 ? float.MaxValue : LoopEndTime).Clamp(0f, (float)_engine.Duration);
+                    const float loopStartTime = 0f;
+                    var loopEndTime = (float)_engine.Duration;
                     if (currentTime < loopStartTime || currentTime > loopEndTime)
                     {
-                        if ((float)_engine.PlaybackRate >= 0)
-                            _engine.CurrentTime = loopStartTime;
-                        else
-                            _engine.CurrentTime = loopEndTime;
+                        _engine.CurrentTime = (float)_engine.PlaybackRate >= 0 ? loopStartTime : loopEndTime;
                     }
                 }
+                //Log.Debug("Play: " + _play);
 
                 if (_play && _engine.IsPaused)
                     _engine.Play();
@@ -293,6 +303,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 Log.Debug($"Seeking took {(Playback.RunTimeInSecs - _seekOperationStartTime)*1000:0}ms");
                 _isSeeking = false;
             }
+
                 
             if (_invalidated || _texture == null)
             {
@@ -318,6 +329,8 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                                        new RawRectangle(0, 0, _textureSize.Width, _textureSize.Height),
                                        ToRawColorBgra(default));
             Texture.Value = _texture;
+            _hasUpdatedTexture = true;
+
         }
 
         private static VideoNormalizedRect? ToVideoRect(RectangleF? rect)
@@ -391,12 +404,10 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         }
         
         
-        
         private bool _initialized;
         private MediaEngine _engine;
         private DXGIDeviceManager _dxgiDeviceManager;
         private MediaEngineErr _lastMediaEngineError;
-
         private string _url;
         private Texture2D _texture;
         private Size2 _textureSize = new(0, 0);
@@ -407,9 +418,8 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         private float _seekTime;
         private bool _isSeeking;
         private bool _seekRequested;
-
-        private const float LoopStartTime = 0;
-        private const float LoopEndTime = float.MaxValue;
+        private bool _hasUpdatedTexture;
+        private bool _loop;
 
         private double _lastUpdateTime;
         private double _lastContextTime;
@@ -417,5 +427,24 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         private double _seekOperationStartTime;
 
         private string _errorMessageForStatus;
+        
+        
+        // Input parameters
+        [Input(Guid = "0e255347-08bc-4363-9ffa-ab863a1cea8e")]
+        public readonly InputSlot<string> Path = new();
+
+        [Input(Guid = "2FECFBB4-F7D9-4C53-95AE-B64CCBB6FBAD")]
+        public readonly InputSlot<float> Volume = new();
+
+        [Input(Guid = "E9C15B3F-8C4A-411D-B9B3-795D64D6BD20")]
+        public readonly InputSlot<float> ResyncThreshold = new();
+
+        [Input(Guid = "48E62A3C-A903-4A9B-A44A-148C6C07AC1E")]
+        public readonly InputSlot<float> OverrideTimeInSecs = new();
+
+        [Input(Guid = "21B5671B-862F-4CEA-A355-FA019996C936")]
+        public readonly InputSlot<bool> Loop = new();
+
+
     }
 }

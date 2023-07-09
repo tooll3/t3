@@ -18,6 +18,10 @@
     {
       "Id": "48e62a3c-a903-4a9b-a44a-148c6c07ac1e"/*OverrideTimeInSecs*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "21b5671b-862f-4cea-a355-fa019996c936"/*Loop*/,
+      "DefaultValue": false
     }
   ],
   "Children": [],

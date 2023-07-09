@@ -15,6 +15,13 @@
         "X": -200.0,
         "Y": 45.0
       }
+    },
+    {
+      "InputId": "bf89d8b2-d8fe-4a3c-9255-67944ec831cb"/*PauseWithPlayback*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 90.0
+      }
     }
   ],
   "SymbolChildUis": [],
