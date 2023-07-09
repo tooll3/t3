@@ -106,7 +106,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             var shouldSeek = !_engine.IsSeeking && Math.Abs(deltaTime) > seekThreshold;
             if (shouldSeek)
             {
-                //Log.Debug($"Seeked video to {clampedSeekTime:0.00} delta was {deltaTime:0.0000)}s", this);
+                //Log.Debug($"Seeking video to {clampedSeekTime:0.000} delta was {deltaTime:0.000)}s", this);
                 _seekTime = (float)clampedSeekTime; // + 1.1f/60f;
                 _seekRequested = true;
             }
@@ -120,7 +120,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
              */
             _engine.Volume = AudioEngine.IsMuted ? 0 : Volume.GetValue(context).Clamp(0f, 1f);
             Duration.Value = _hasUpdatedTexture ? (float)_engine.Duration : -1;
-
+            
             UpdateVideoPlayback();
             Playback.OpNotReady |= !_hasUpdatedTexture || _isSeeking || _seekRequested;
         }
@@ -301,7 +301,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
 
             if (_isSeeking && !_engine.IsSeeking)
             {
-                Log.Debug($"Seeking took {(Playback.RunTimeInSecs - _seekOperationStartTime)*1000:0}ms");
+                Log.Debug($"Seeking took {(Playback.RunTimeInSecs - _seekOperationStartTime)*1000:0}ms", this);
                 _isSeeking = false;
             }
 

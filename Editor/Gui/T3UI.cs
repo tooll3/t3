@@ -69,7 +69,7 @@ public class T3Ui
         RenderStatsCollector.StartNewFrame();
             
         PlaybackUtils.UpdatePlaybackAndSyncing();
-
+        
 
         //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
             
@@ -136,7 +136,8 @@ public class T3Ui
             UserSettings.Config.UserName = Environment.UserName;
             _userNameDialog.ShowNextFrame();
         }            
-            
+        
+        Playback.OpNotReady = false;
         AutoBackup.AutoBackup.CheckForSave();
     }
         

@@ -24,73 +24,96 @@ internal abstract class MfVideoWriter : IDisposable
 {
     /** Skip a certain number of images at the beginning since the
      * final content will only appear after several buffer flips*/
-    public const int SkipImages = 2;
+    public const int SkipImages = 0;
 
     public string FilePath { get; }
-
-    private static SinkWriter CreateSinkWriter(string outputFile)
-    {
-        SinkWriter writer;
-        using var attributes = new MediaAttributes();
-        MediaFactory.CreateAttributes(attributes, 1);
-        attributes.Set(SinkWriterAttributeKeys.ReadwriteEnableHardwareTransforms.Guid, (UInt32)1);
-        try
-        {
-            writer = MediaFactory.CreateSinkWriterFromURL(outputFile, null, attributes);
-        }
-        catch (COMException e)
-        {
-            if (e.ErrorCode == unchecked((int)0xC00D36D5))
-            {
-                throw new ArgumentException("Was not able to create a sink writer for this file extension");
-            }
-
-            throw;
-        }
-
-        return writer;
-    }
-
+    
     protected MfVideoWriter(string filePath, Size2 videoPixelSize)
         : this(filePath, videoPixelSize, _videoInputFormatId)
     {
     }
 
-    private MfVideoWriter(string filePath, Size2 videoPixelSize, Guid videoInputFormat, bool supportAudio = false)
+    
+    public void AddVideoFrame(ref Texture2D frame)
     {
-        if (!_mfInitialized)
+        try
         {
-            // Initialize MF library. MUST be called before any MF related operations.
-            MF.MediaFactory.Startup(MF.MediaFactory.Version, 0);
+            if (frame == null)
+            {
+                throw new InvalidOperationException("Handed frame was null");
+            }
+
+            var currentDesc = frame.Description;
+            if (currentDesc.Width == 0 || currentDesc.Height == 0)
+            {
+                throw new InvalidOperationException("Empty image handed over");
+            }
+
+            if (currentDesc.Format != SharpDX.DXGI.Format.R8G8B8A8_UNorm &&
+                currentDesc.Format != SharpDX.DXGI.Format.R16G16B16A16_UNorm &&
+                currentDesc.Format != SharpDX.DXGI.Format.R16G16B16A16_Float)
+            {
+                throw new InvalidOperationException($"Unknown format: {currentDesc.Format.ToString()}. " +
+                                                    "Only R8G8B8A8_UNorm, R16G16B16A16_UNorm and R16G16B16A16_Float " +
+                                                    "input formats are supported so far.");
+            }
+
+            if (SinkWriter == null)
+            {
+                SinkWriter = CreateSinkWriter(FilePath);
+                CreateMediaTarget(SinkWriter, _videoPixelSize, out _streamIndex);
+
+                // Configure media type of video
+                using (var mediaTypeIn = new MF.MediaType())
+                {
+                    mediaTypeIn.Set(MF.MediaTypeAttributeKeys.MajorType, MF.MediaTypeGuids.Video);
+                    mediaTypeIn.Set(MF.MediaTypeAttributeKeys.Subtype, _videoInputFormat);
+                    mediaTypeIn.Set(MF.MediaTypeAttributeKeys.InterlaceMode, (int)MF.VideoInterlaceMode.Progressive);
+                    mediaTypeIn.Set(MF.MediaTypeAttributeKeys.FrameSize, MfHelper.GetMfEncodedIntsByValues(_videoPixelSize.Width, _videoPixelSize.Height));
+                    mediaTypeIn.Set(MF.MediaTypeAttributeKeys.FrameRate, MfHelper.GetMfEncodedIntsByValues(Framerate, 1));
+                    SinkWriter.SetInputMediaType(_streamIndex, mediaTypeIn, null);
+                }
+
+                if (_supportAudio)
+                {
+                    // initialize audio writer
+                    var waveFormat = WaveFormatExtension.DefaultPcm;
+                    _audioWriter = new Mp3AudioWriter(SinkWriter, ref waveFormat);
+                }
+
+                // Start writing the video file. MUST be called before write operations.
+                SinkWriter.BeginWriting();
+            }
+        }
+        catch (Exception e)
+        {
+            SinkWriter?.Dispose();
+            SinkWriter = null;
+            throw new InvalidOperationException(e +
+                                                "(image size may be unsupported with the requested codec)");
         }
 
-        // Set initial default values
-        FilePath = filePath;
-        _videoPixelSize = videoPixelSize;
-        _videoInputFormat = videoInputFormat;
-        _supportAudio = supportAudio;
-        Bitrate = 1500000;
-        Framerate = 15;
-        _frameIndex = -1;
-    }
-
-    /// <summary>
-    /// get minimum image buffer size in bytes if imager is RGBA converted
-    /// </summary>
-    /// <param name="frame">texture to get information from</param>
-    private static int RgbaSizeInBytes(ref Texture2D frame)
-    {
-        var currentDesc = frame.Description;
-        const int bitsPerPixel = 32;
-        return (currentDesc.Width * currentDesc.Height * bitsPerPixel + 7) / 8;
-    }
-
-    // FIXME: Would possibly need some refactoring not to duplicate code from ScreenshotWriter
-    private static float Read2BytesToHalf(DataStream imageStream)
-    {
-        var low = (byte)imageStream.ReadByte();
-        var high = (byte)imageStream.ReadByte();
-        return  FormatConversion.ToTwoByteFloat(low, high);
+        // Create the sample (includes image and timing information)
+        var videoSample = CreateSampleFromFrame(ref frame);
+        if (videoSample == null)
+            return;
+        
+        try
+        {
+            // Write to stream
+            var samples = new Dictionary<int, Sample>();
+            samples.Add(StreamIndex, videoSample);
+            WriteSamples(samples);
+        }
+        catch (SharpDXException e)
+        {
+            Debug.WriteLine(e.Message);
+            throw new InvalidOperationException(e.Message);
+        }
+        finally
+        {
+            videoSample.Dispose();
+        }
     }
 
 
@@ -101,59 +124,28 @@ internal abstract class MfVideoWriter : IDisposable
 
         // Write all contents to the MediaBuffer for media foundation
         var mediaBuffer = MF.MediaFactory.CreateMemoryBuffer(RgbaSizeInBytes(ref frame));
-        var device = ResourceManager.Device;
+        
+        //var device = ResourceManager.Device;
         DataStream inputStream = null;
         DataStream outputStream = null;
         try
         {
-            // create several textures with a given format with CPU access
-            // to be able to read out the initial texture values
             var currentDesc = frame.Description;
-            if (_imagesWithCpuAccess.Count == 0
-                || _imagesWithCpuAccess[0].Description.Format != currentDesc.Format
-                || _imagesWithCpuAccess[0].Description.Width != currentDesc.Width
-                || _imagesWithCpuAccess[0].Description.Height != currentDesc.Height
-                || _imagesWithCpuAccess[0].Description.MipLevels != currentDesc.MipLevels)
-            {
-                var imageDesc = new Texture2DDescription
-                                    {
-                                        BindFlags = BindFlags.None,
-                                        Format = currentDesc.Format,
-                                        Width = currentDesc.Width,
-                                        Height = currentDesc.Height,
-                                        MipLevels = currentDesc.MipLevels,
-                                        SampleDescription = new SampleDescription(1, 0),
-                                        Usage = ResourceUsage.Staging,
-                                        OptionFlags = ResourceOptionFlags.None,
-                                        CpuAccessFlags = CpuAccessFlags.Read,
-                                        ArraySize = 1
-                                    };
+            PrepareCpuAccessTextures(currentDesc);
 
-                DisposeTextures();
-
-                for (int i = 0; i < NumTextureEntries; ++i)
-                {
-                    _imagesWithCpuAccess.Add(new Texture2D(device, imageDesc));
-                }
-
-                _currentIndex = 0;
-                // skip the first two frames since they will only appear
-                // after buffers have been swapped
-                _currentUsageIndex = -SkipImages;
-            }
-
-            // copy the original texture to a readable image
-            var immediateContext = device.ImmediateContext;
+            // Copy the original texture to a readable image
+            var immediateContext = ResourceManager.Device.ImmediateContext;
             var readableImage = _imagesWithCpuAccess[_currentIndex];
             immediateContext.CopyResource(frame, readableImage);
             immediateContext.UnmapSubresource(readableImage, 0);
+            
             _currentIndex = (_currentIndex + 1) % NumTextureEntries;
 
-            // don't return first two samples since buffering is not ready yet
+            // Don't return first two samples since buffering is not ready yet
             if (_currentUsageIndex++ < 0)
                 return null;
 
-            // map image resource to get a stream we can read from
+            // Map image resource to get a stream we can read from
             var dataBox = immediateContext.MapSubresource(readableImage,
                                                           0,
                                                           0,
@@ -165,6 +157,7 @@ internal abstract class MfVideoWriter : IDisposable
             var height = currentDesc.Height;
             var formatId = PixelFormat.Format32bppRGBA;
             var rowStride = PixelFormat.GetStride(formatId, width);
+            
             //var pixelByteCount = PixelFormat.GetStride(formatId, 1);
             var outBufferSize = height * rowStride;
             outputStream = new DataStream(outBufferSize, true, true);
@@ -292,90 +285,108 @@ internal abstract class MfVideoWriter : IDisposable
         return sample;
     }
 
-    public void AddVideoFrame(ref Texture2D frame)
+    private static SinkWriter CreateSinkWriter(string outputFile)
     {
+        SinkWriter writer;
+        using var attributes = new MediaAttributes();
+        MediaFactory.CreateAttributes(attributes, 1);
+        attributes.Set(SinkWriterAttributeKeys.ReadwriteEnableHardwareTransforms.Guid, (UInt32)1);
         try
         {
-            if (frame == null)
-            {
-                throw new InvalidOperationException("Handed frame was null");
-            }
-
-            var currentDesc = frame.Description;
-            if (currentDesc.Width == 0 || currentDesc.Height == 0)
-            {
-                throw new InvalidOperationException("Empty image handed over");
-            }
-
-            if (currentDesc.Format != SharpDX.DXGI.Format.R8G8B8A8_UNorm &&
-                currentDesc.Format != SharpDX.DXGI.Format.R16G16B16A16_UNorm &&
-                currentDesc.Format != SharpDX.DXGI.Format.R16G16B16A16_Float)
-            {
-                throw new InvalidOperationException($"Unknown format: {currentDesc.Format.ToString()}. " +
-                                                    "Only R8G8B8A8_UNorm, R16G16B16A16_UNorm and R16G16B16A16_Float " +
-                                                    "input formats are supported so far.");
-            }
-
-            // Create the sink writer if it does not exist so far
-            if (SinkWriter == null)
-            {
-                SinkWriter = CreateSinkWriter(FilePath);
-                CreateMediaTarget(SinkWriter, _videoPixelSize, out _streamIndex);
-
-                // Configure media type of video
-                using (MF.MediaType mediaTypeIn = new MF.MediaType())
-                {
-                    mediaTypeIn.Set(MF.MediaTypeAttributeKeys.MajorType, MF.MediaTypeGuids.Video);
-                    mediaTypeIn.Set(MF.MediaTypeAttributeKeys.Subtype, _videoInputFormat);
-                    mediaTypeIn.Set(MF.MediaTypeAttributeKeys.InterlaceMode, (int)MF.VideoInterlaceMode.Progressive);
-                    mediaTypeIn.Set(MF.MediaTypeAttributeKeys.FrameSize, MfHelper.GetMfEncodedIntsByValues(_videoPixelSize.Width, _videoPixelSize.Height));
-                    mediaTypeIn.Set(MF.MediaTypeAttributeKeys.FrameRate, MfHelper.GetMfEncodedIntsByValues(Framerate, 1));
-                    SinkWriter.SetInputMediaType(_streamIndex, mediaTypeIn, null);
-                }
-
-                // Create audio support?
-                if (_supportAudio)
-                {
-                    // initialize audio writer
-                    var waveFormat = WaveFormatExtension.DefaultPcm;
-                    _audioWriter = new Mp3AudioWriter(SinkWriter, ref waveFormat);
-                }
-
-                // Start writing the video file. MUST be called before write operations.
-                SinkWriter.BeginWriting();
-            }
+            writer = MediaFactory.CreateSinkWriterFromURL(outputFile, null, attributes);
         }
-        catch (Exception e)
+        catch (COMException e)
         {
-            SinkWriter?.Dispose();
-            SinkWriter = null;
-            throw new InvalidOperationException(e +
-                                                "(image size may be unsupported with the requested codec)");
+            if (e.ErrorCode == unchecked((int)0xC00D36D5))
+            {
+                throw new ArgumentException("Was not able to create a sink writer for this file extension");
+            }
+
+            throw;
         }
 
-        // Create the sample (includes image and timing information)
-        var videoSample = CreateSampleFromFrame(ref frame);
-        if (videoSample == null)
+        return writer;
+    }
+    
+    /// <summary>
+    /// create several textures with a given format with CPU access to be able to read out the initial texture values
+    /// </summary>
+    /// <param name="currentDesc"></param>
+    private static void PrepareCpuAccessTextures(Texture2DDescription currentDesc)
+    {
+        if (_imagesWithCpuAccess.Count != 0
+            && _imagesWithCpuAccess[0].Description.Format == currentDesc.Format
+            && _imagesWithCpuAccess[0].Description.Width == currentDesc.Width
+            && _imagesWithCpuAccess[0].Description.Height == currentDesc.Height
+            && _imagesWithCpuAccess[0].Description.MipLevels == currentDesc.MipLevels)
             return;
         
-        try
+        DisposeTextures();
+        
+        var imageDesc = new Texture2DDescription
+                            {
+                                BindFlags = BindFlags.None,
+                                Format = currentDesc.Format,
+                                Width = currentDesc.Width,
+                                Height = currentDesc.Height,
+                                MipLevels = currentDesc.MipLevels,
+                                SampleDescription = new SampleDescription(1, 0),
+                                Usage = ResourceUsage.Staging,
+                                OptionFlags = ResourceOptionFlags.None,
+                                CpuAccessFlags = CpuAccessFlags.Read,
+                                ArraySize = 1
+                            };
+
+
+        for (var i = 0; i < NumTextureEntries; ++i)
         {
-            // Write to stream
-            var samples = new Dictionary<int, Sample>();
-            samples.Add(StreamIndex, videoSample);
-            WriteSamples(samples);
+            _imagesWithCpuAccess.Add(new Texture2D(ResourceManager.Device, imageDesc));
         }
-        catch (SharpDXException e)
-        {
-            Debug.WriteLine(e.Message);
-            throw new InvalidOperationException(e.Message);
-        }
-        finally
-        {
-            videoSample.Dispose();
-        }
+
+        _currentIndex = 0;
+            
+        // skip the first two frames since they will only appear
+        // after buffers have been swapped
+        _currentUsageIndex = -SkipImages;
     }
 
+    private MfVideoWriter(string filePath, Size2 videoPixelSize, Guid videoInputFormat, bool supportAudio = false)
+    {
+        if (!_mfInitialized)
+        {
+            // Initialize MF library. MUST be called before any MF related operations.
+            MF.MediaFactory.Startup(MF.MediaFactory.Version, 0);
+        }
+
+        // Set initial default values
+        FilePath = filePath;
+        _videoPixelSize = videoPixelSize;
+        _videoInputFormat = videoInputFormat;
+        _supportAudio = supportAudio;
+        Bitrate = 1500000;
+        Framerate = 15;
+        _frameIndex = -1;
+    }
+
+    /// <summary>
+    /// get minimum image buffer size in bytes if imager is RGBA converted
+    /// </summary>
+    /// <param name="frame">texture to get information from</param>
+    private static int RgbaSizeInBytes(ref Texture2D frame)
+    {
+        var currentDesc = frame.Description;
+        const int bitsPerPixel = 32;
+        return (currentDesc.Width * currentDesc.Height * bitsPerPixel + 7) / 8;
+    }
+
+    // FIXME: Would possibly need some refactoring not to duplicate code from ScreenshotWriter
+    private static float Read2BytesToHalf(DataStream imageStream)
+    {
+        var low = (byte)imageStream.ReadByte();
+        var high = (byte)imageStream.ReadByte();
+        return  FormatConversion.ToTwoByteFloat(low, high);
+    }
+    
     public void AddVideoAndAudioFrame(ref Texture2D frame, byte[] audioFrame)
     {
         Debug.Assert(frame != null);
@@ -487,7 +498,7 @@ internal abstract class MfVideoWriter : IDisposable
     private int _streamIndex;
 
     // Hold several textures internally to speed up calculations
-    private const int NumTextureEntries = 2;
+    private const int NumTextureEntries = 3;
     private static readonly List<Texture2D> _imagesWithCpuAccess = new();
     private static int _currentIndex;
     private static int _currentUsageIndex;

@@ -5,6 +5,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.IO;
 using SharpDX.WIC;
+using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.Utils;
 
@@ -18,57 +19,56 @@ public static class ScreenshotWriter
         Jpg,
     }
 
-    public static bool SaveBufferToFile(Texture2D texture2d, string filepath, FileFormats format)
+    public static bool SavingComplete => _saveQueue.Count == 0;
+    
+    public static bool StartSavingToFile(Texture2D texture2d, string filepath, FileFormats format)
     {
         if (texture2d == null)
             return false;
+        
+        PrepareCpuAccessTextures(texture2d.Description);
+        _saveQueue.Add(new SaveRequest
+                              {
+                                  RequestIndex = _swapCounter,
+                                  Filepath = filepath,
+                                  FileFormat = format,
+                              });
 
-        var device = ResourceManager.Device;
-        var currentDesc = texture2d.Description;
-        if (_imagesWithCpuAccess.Count == 0
-            || _imagesWithCpuAccess[0].Description.Format != currentDesc.Format
-            || _imagesWithCpuAccess[0].Description.Width != currentDesc.Width
-            || _imagesWithCpuAccess[0].Description.Height != currentDesc.Height
-            || _imagesWithCpuAccess[0].Description.MipLevels != currentDesc.MipLevels)
-        {
-            Dispose();
-                
-            var imageDesc = new Texture2DDescription
-                                {
-                                    BindFlags = BindFlags.None,
-                                    Format = currentDesc.Format,
-                                    Width = currentDesc.Width,
-                                    Height = currentDesc.Height,
-                                    MipLevels = currentDesc.MipLevels,
-                                    SampleDescription = new SampleDescription(1, 0),
-                                    Usage = ResourceUsage.Staging,
-                                    OptionFlags = ResourceOptionFlags.None,
-                                    CpuAccessFlags = CpuAccessFlags.Read,
-                                    ArraySize = 1
-                                };
-                
-            for (var i = 0; i < NumTextureEntries; ++i)
-            {
-                _imagesWithCpuAccess.Add(new Texture2D(device, imageDesc));
-            }
-            _currentIndex = 0;
-            // skip the first two frames since they will only appear
-            // after buffers have been swapped
-            _currentUsageIndex = -SkipImages;
-        }
+        // Copy the original texture to a readable image
+        var immediateContext = ResourceManager.Device.ImmediateContext;
+        _readableTexture = _imagesWithCpuAccess[SwapIndex];
+        immediateContext.CopyResource(texture2d, _readableTexture);
+        immediateContext.UnmapSubresource(_readableTexture, 0);
+        return true;
+    }
+    
+    /// <summary>
+    /// Saving a screenshot will take several frames because it takes a while until the frames are
+    /// downloaded from the gpu. The method need to be called until once a frame.
+    /// </summary>
+    /// <returns></returns>
+    public static void UpdateSaving()
+    {
+        _swapCounter++;
+        while(_saveQueue.Count >0 && _saveQueue[0].IsObsolete)
+            _saveQueue.RemoveAt(0);
 
-        // copy the original texture to a readable image
-        var immediateContext = device.ImmediateContext;
-        var readableImage = _imagesWithCpuAccess[_currentIndex];
-        immediateContext.CopyResource(texture2d, readableImage);
-        immediateContext.UnmapSubresource(readableImage, 0);
-        _currentIndex = (_currentIndex + 1) % NumTextureEntries;
+        if (_saveQueue.Count == 0)
+            return;
 
-        // don't return first two samples since buffering is not ready yet
-        if (_currentUsageIndex++ < 0)
-            return true;
+        if (!_saveQueue[0].IsReady)
+            return;
+        
+        Save(_saveQueue[0]);
+        _saveQueue.RemoveAt(0);
+    }
+    
+    private static void Save(SaveRequest request) 
+    {
+        var immediateContext = ResourceManager.Device.ImmediateContext;
 
-        var dataBox = immediateContext.MapSubresource(readableImage,
+
+        var dataBox = immediateContext.MapSubresource(_readableTexture,
                                                       0,
                                                       0,
                                                       MapMode.Read,
@@ -76,16 +76,14 @@ public static class ScreenshotWriter
                                                       out var imageStream);
         using var dataStream = imageStream;
         
-        var width = currentDesc.Width;
-        var height = currentDesc.Height;
+        var width = _currentDesc.Width;
+        var height = _currentDesc.Height;
         var factory = new ImagingFactory();
 
-        var stream = new WICStream(factory, filepath, NativeFileAccess.Write);
+        var stream = new WICStream(factory, request.Filepath, NativeFileAccess.Write);
 
         // Initialize a Jpeg encoder with this stream
-        //var encoder = new PngBitmapEncoder(factory);
-        //var encoder = new JpegBitmapEncoder(factory);
-        BitmapEncoder encoder = (format == FileFormats.Png)
+        BitmapEncoder encoder = (request.FileFormat == FileFormats.Png)
                                     ? new PngBitmapEncoder(factory)
                                     : new JpegBitmapEncoder(factory);
         encoder.Initialize(stream);
@@ -101,11 +99,10 @@ public static class ScreenshotWriter
         var rowStride = PixelFormat.GetStride(formatId, width);
         var outBufferSize = height * rowStride;
         var outDataStream = new DataStream(outBufferSize, true, true);
-        //var pixelByteCount = PixelFormat.GetStride(formatId, 1);
 
         try
         {
-            switch (currentDesc.Format)
+            switch (_currentDesc.Format)
             {
                 case Format.R16G16B16A16_Float:
                     for (var y1 = 0; y1 < height; y1++)
@@ -122,7 +119,7 @@ public static class ScreenshotWriter
                             outDataStream.WriteByte((byte)(b.Clamp(0, 1) * 255));
                             outDataStream.WriteByte((byte)(g.Clamp(0, 1) * 255));
                             outDataStream.WriteByte((byte)(r.Clamp(0, 1) * 255));
-                            if (format == FileFormats.Png)
+                            if (request.FileFormat == FileFormats.Png)
                             {
                                 outDataStream.WriteByte((byte)(a.Clamp(0, 1) * 255));
                             }
@@ -144,7 +141,7 @@ public static class ScreenshotWriter
                             outDataStream.WriteByte(r);
 
                             var a = imageStream.ReadByte();
-                            if (format == FileFormats.Png)
+                            if (request.FileFormat == FileFormats.Png)
                             {
                                 outDataStream.WriteByte((byte)a);
                             }
@@ -166,7 +163,7 @@ public static class ScreenshotWriter
                             outDataStream.WriteByte(r);
 
                             imageStream.ReadByte(); var a = imageStream.ReadByte();
-                            if (format == FileFormats.Png)
+                            if (request.FileFormat == FileFormats.Png)
                             {
                                 outDataStream.WriteByte((byte)a);
                             }
@@ -175,7 +172,7 @@ public static class ScreenshotWriter
                     break;
 
                 default:
-                    throw new InvalidOperationException($"Can't export unknown texture format {currentDesc.Format}");
+                    throw new InvalidOperationException($"Can't export unknown texture format {_currentDesc.Format}");
             }
 
             // Copy the pixels from the buffer to the Wic Bitmap Frame encoder
@@ -191,27 +188,76 @@ public static class ScreenshotWriter
         }
         finally
         {
-            immediateContext.UnmapSubresource(readableImage, 0);
+            immediateContext.UnmapSubresource(_readableTexture, 0);
             imageStream.Dispose();
             outDataStream.Dispose();
             bitmapFrameEncode.Dispose();
             encoder.Dispose();
             stream.Dispose();
+            LastFilename = request.Filepath;
         }
-
-        return true;
     }
 
-    public static readonly string LastFilename = string.Empty;
-    
-    // skip a certain number of images at the beginning since the
-    // final content will only appear after several buffer flips
-    public const int SkipImages = 2;
-    // hold several textures internally to speed up calculations
-    private const int NumTextureEntries = 2;
+    private static void PrepareCpuAccessTextures(Texture2DDescription texture2DDescription)
+    {
+        if (_imagesWithCpuAccess.Count != 0
+            && _imagesWithCpuAccess[0].Description.Format == texture2DDescription.Format
+            && _imagesWithCpuAccess[0].Description.Width == texture2DDescription.Width
+            && _imagesWithCpuAccess[0].Description.Height == texture2DDescription.Height
+            && _imagesWithCpuAccess[0].Description.MipLevels == texture2DDescription.MipLevels)
+            return;
+
+        _currentDesc = texture2DDescription;
+        if (_saveQueue.Count > 0)
+        {
+            Log.Warning("Cancelling save...");
+            _saveQueue.Clear();
+            _swapCounter = 0;
+        }
+        
+        Dispose();
+        var imageDesc = new Texture2DDescription
+                            {
+                                BindFlags = BindFlags.None,
+                                Format = texture2DDescription.Format,
+                                Width = texture2DDescription.Width,
+                                Height = texture2DDescription.Height,
+                                MipLevels = texture2DDescription.MipLevels,
+                                SampleDescription = new SampleDescription(1, 0),
+                                Usage = ResourceUsage.Staging,
+                                OptionFlags = ResourceOptionFlags.None,
+                                CpuAccessFlags = CpuAccessFlags.Read,
+                                ArraySize = 1
+                            };
+
+        for (var i = 0; i < CpuAccessTextureCount; ++i)
+        {
+            _imagesWithCpuAccess.Add(new Texture2D(ResourceManager.Device, imageDesc));
+        }
+
+    }
+
+    private static int SwapIndex => _swapCounter % CpuAccessTextureCount;
+
+    public static string LastFilename;
+    private const int CpuAccessTextureCount = 3;
     private static readonly List<Texture2D> _imagesWithCpuAccess = new();
-    private static int _currentIndex;
-    private static int _currentUsageIndex;
+    private static int _swapCounter;
+    private static Texture2D _readableTexture;
+
+    private static readonly List<SaveRequest> _saveQueue = new();
+    private static Texture2DDescription _currentDesc;
+
+    private struct SaveRequest
+    {
+        public int RequestIndex;
+        public string Filepath;
+        public FileFormats FileFormat;
+
+        public bool IsReady=> RequestIndex == _swapCounter - (CpuAccessTextureCount-2);
+        public bool IsObsolete => RequestIndex < _swapCounter - (CpuAccessTextureCount-2);
+        
+    }
 
     public static void Dispose()
     {

@@ -176,8 +176,10 @@ namespace T3.Editor.Gui.Windows.Output
                     }
                     
                     var filename = Path.Join(folder, $"{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.png");
-                    ScreenshotWriter.SaveBufferToFile(texture, filename, ScreenshotWriter.FileFormats.Png);
+                    ScreenshotWriter.StartSavingToFile(texture, filename, ScreenshotWriter.FileFormats.Png);
                 }
+                if(!RenderHelperWindow.IsExporting)
+                    ScreenshotWriter.UpdateSaving();
             }
             
             ImGui.SameLine();

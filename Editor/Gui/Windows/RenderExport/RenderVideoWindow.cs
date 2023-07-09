@@ -62,7 +62,7 @@ public class RenderVideoWindow : RenderHelperWindow
                         _videoWriter.Framerate = (int)Fps;
                     }
 
-                    SaveCurrentFrameAndAdvance(ref mainTexture);
+                    //SaveCurrentFrameAndAdvance(ref mainTexture);
                 }
             }
         }
@@ -87,7 +87,7 @@ public class RenderVideoWindow : RenderHelperWindow
             else
             {
                 var estimatedTimeLeft = durationSoFar /  Progress - durationSoFar;
-                _lastHelpString = $"Saved {_videoWriter.FilePath} frame {GetRealFrame()+1}/{FrameCount}  ";
+                _lastHelpString = $"Saved {_videoWriter.FilePath} frame {FrameIndex}/{FrameCount}  ";
                 _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0.0}s left";
             }
 
@@ -112,7 +112,7 @@ public class RenderVideoWindow : RenderHelperWindow
     {
         if (Playback.OpNotReady)
         {
-            Log.Debug("Waiting for operators to complete");
+            //Log.Debug("Waiting for operators to complete");
             return true;
         }
         try

@@ -48,14 +48,13 @@ public class RenderSequenceWindow : RenderHelperWindow
                     _exportStartedTime = Playback.RunTimeInSecs;
                     FrameIndex = 0;
                     SetPlaybackTimeForNextFrame();
-
-                    SaveCurrentFrameAndAdvance(mainTexture);
                 }
             }
         }
         else
         {
             var success = SaveCurrentFrameAndAdvance(mainTexture);
+            ScreenshotWriter.UpdateSaving();
             ImGui.ProgressBar(Progress, new Vector2(-1, 4));
 
             var currentTime = Playback.RunTimeInSecs;
@@ -78,7 +77,7 @@ public class RenderSequenceWindow : RenderHelperWindow
                 _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0}s left";
             }
 
-            if (!IsExporting)
+            if (!IsExporting &&  ScreenshotWriter.SavingComplete)
             {
                 ScreenshotWriter.Dispose();
             }
@@ -91,7 +90,7 @@ public class RenderSequenceWindow : RenderHelperWindow
     {
         // since we are double-buffering and discarding the first few frames,
         // we have to subtract these frames to get the currently really shown framenumber...
-        return FrameIndex - ScreenshotWriter.SkipImages;
+        return FrameIndex;
     }
 
     private static string GetFilePath()
@@ -118,7 +117,7 @@ public class RenderSequenceWindow : RenderHelperWindow
 
     private static bool SaveImage(Texture2D mainTexture)
     {
-        return ScreenshotWriter.SaveBufferToFile(mainTexture, GetFilePath(), _fileFormat);
+        return ScreenshotWriter.StartSavingToFile(mainTexture, GetFilePath(), _fileFormat);
     }
 
     private static string Extension => _fileFormat.ToString().ToLower(); 
