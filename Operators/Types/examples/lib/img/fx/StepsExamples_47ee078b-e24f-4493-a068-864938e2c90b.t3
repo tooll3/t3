@@ -437,7 +437,7 @@
       "SymbolId": "0e1d5f4b-3ba0-4e71-aa26-7308b6df214d",
       "InputValues": [
         {
-          "Id": "abe64676-ccf7-4163-b4da-26d8b7179af4"/*Increment*/,
+          "Id": "abe64676-ccf7-4163-b4da-26d8b7179af4"/*Delta*/,
           "Type": "System.Int32",
           "Value": -2
         },

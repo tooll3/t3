@@ -1,4 +1,98 @@
 {
   "Id": "dab61a12-9996-401e-9aa6-328dd6292beb",
-  "Variations": []
+  "Variations": [
+    {
+      "Id": "d14ed60f-2b17-4651-b2f1-a2bb81f43efd",
+      "IsPreset": false,
+      "ActivationIndex": 32,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "14f4b2c6-2d47-4097-9e9b-3ff13725d1a3": {}
+      }
+    },
+    {
+      "Id": "5299459b-7450-489c-a0e5-41ecfc2dd401",
+      "IsPreset": false,
+      "ActivationIndex": 24,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "14f4b2c6-2d47-4097-9e9b-3ff13725d1a3": {}
+      }
+    },
+    {
+      "Id": "47ec8204-71d5-4e3c-8ffa-068b9e2c7766",
+      "IsPreset": false,
+      "ActivationIndex": 33,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 489.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "14f4b2c6-2d47-4097-9e9b-3ff13725d1a3": {}
+      }
+    },
+    {
+      "Id": "e66f163a-d0b5-4591-aea8-f87c49233240",
+      "IsPreset": false,
+      "ActivationIndex": 25,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 0.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "14f4b2c6-2d47-4097-9e9b-3ff13725d1a3": {}
+      }
+    },
+    {
+      "Id": "f29bfebc-f717-4881-b9bf-360dbe480094",
+      "IsPreset": false,
+      "ActivationIndex": 16,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "14f4b2c6-2d47-4097-9e9b-3ff13725d1a3": {}
+      }
+    },
+    {
+      "Id": "4463101d-970e-4f0a-9a1b-77bdf2076a17",
+      "IsPreset": false,
+      "ActivationIndex": 34,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "14f4b2c6-2d47-4097-9e9b-3ff13725d1a3": {}
+      }
+    },
+    {
+      "Id": "a6260b15-7148-436f-a3aa-0a2d18bd70f0",
+      "IsPreset": false,
+      "ActivationIndex": 26,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 489.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "14f4b2c6-2d47-4097-9e9b-3ff13725d1a3": {
+          "7773837e-104a-4b3d-a41f-cadbd9249af2": 0.54
+        }
+      }
+    }
+  ]
 }
