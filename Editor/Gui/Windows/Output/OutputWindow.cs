@@ -167,9 +167,9 @@ namespace T3.Editor.Gui.Windows.Output
             {
                 ImGui.SameLine();
 
-                if (ImGui.Button("SaveScr"))
+                if (CustomComponents.IconButton(Icon.Camera, new Vector2(ImGui.GetFrameHeight(), ImGui.GetFrameHeight())))
                 {
-                    var folder = @".t3/screenshots/";
+                    var folder = @"Screenshots/";
                     if (!Directory.Exists(folder))
                     {
                         Directory.CreateDirectory(folder);
@@ -178,6 +178,8 @@ namespace T3.Editor.Gui.Windows.Output
                     var filename = Path.Join(folder, $"{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.png");
                     ScreenshotWriter.StartSavingToFile(texture, filename, ScreenshotWriter.FileFormats.Png);
                 }
+
+                CustomComponents.TooltipForLastItem("Save screenshot");
                 if(!RenderHelperWindow.IsExporting)
                     ScreenshotWriter.UpdateSaving();
             }
