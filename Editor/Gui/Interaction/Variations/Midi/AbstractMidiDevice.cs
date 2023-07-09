@@ -28,7 +28,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
             Default = 1 << 1,
             Delete = 1 << 2,
             Save = 1 << 3,
-            BlendTo = 1 << 4,   
+            BlendTo = 1 << 4,
             None = 0,
         }
 
@@ -57,23 +57,26 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
             var releasedMode = InputModes.None;
 
             // Update modes
-            foreach (var modeButton in ModeButtons)
+            if (ModeButtons != null)
             {
-                var matchingSignal = _combinedButtonSignals.Values.SingleOrDefault(s => modeButton.ButtonRange.IncludesButtonIndex(s.ButtonId));
-                if (matchingSignal == null)
-                    continue;
+                foreach (var modeButton in ModeButtons)
+                {
+                    var matchingSignal = _combinedButtonSignals.Values.SingleOrDefault(s => modeButton.ButtonRange.IncludesButtonIndex(s.ButtonId));
+                    if (matchingSignal == null)
+                        continue;
 
-                if (matchingSignal.State == ButtonSignal.States.JustPressed)
-                {
-                    if (ActiveMode == InputModes.Default)
+                    if (matchingSignal.State == ButtonSignal.States.JustPressed)
                     {
-                        ActiveMode = modeButton.Mode;
+                        if (ActiveMode == InputModes.Default)
+                        {
+                            ActiveMode = modeButton.Mode;
+                        }
                     }
-                }
-                else if (matchingSignal.State == ButtonSignal.States.Released && ActiveMode == modeButton.Mode)
-                {
-                    releasedMode = modeButton.Mode;
-                    ActiveMode = InputModes.Default;
+                    else if (matchingSignal.State == ButtonSignal.States.Released && ActiveMode == modeButton.Mode)
+                    {
+                        releasedMode = modeButton.Mode;
+                        ActiveMode = InputModes.Default;
+                    }
                 }
             }
 
@@ -133,7 +136,6 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
             {
                 if (!(sender is MidiIn midiIn) || msg.MidiEvent == null)
                     return;
-                
 
                 var device = MidiInConnectionManager.GetDescriptionForMidiIn(midiIn);
 
@@ -142,8 +144,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
                     //Log.Debug($"Ingore device {device.ProductName} in AbstractMidiController");
                     return;
                 }
-                    
-                
+
                 if (msg.MidiEvent == null)
                     return;
 

@@ -5,6 +5,7 @@ using ImGuiNET;
 using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
@@ -72,7 +73,7 @@ namespace T3.Editor.Gui.Graph
                     if (instance is IStatusProvider statusProvider)
                     {
                         var statusLevel = statusProvider.GetStatusLevel();
-                        if (statusLevel == IStatusProvider.StatusLevel.Warning)
+                        if (statusLevel == IStatusProvider.StatusLevel.Warning || statusLevel ==IStatusProvider.StatusLevel.Error)
                         {
                             ImGui.SetCursorScreenPos(_usableScreenRect.Min - new Vector2(10, 10) * T3Ui.UiScaleFactor);
                             ImGui.InvisibleButton("#warning", new Vector2(15, 15));
@@ -279,12 +280,21 @@ namespace T3.Editor.Gui.Graph
 
                     DrawPreview();
 
-                    // Outline
+                    // Outline shadow
                     drawList.AddRect(_selectableScreenRect.Min,
                                      _selectableScreenRect.Max + Vector2.One,
                                      new Color(0.03f, 0.03f, 0.03f, 0.8f).Fade(Graph.GraphOpacity),
                                      rounding: 0,
                                      ImDrawFlags.None);
+
+                    if (isHighlighted)
+                    {
+                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One  * 2,
+                                         _selectableScreenRect.Max + Vector2.One * 3 ,
+                                         T3Style.Colors.ButtonActive,
+                                         rounding: 0,
+                                         ImDrawFlags.None);
+                    }
 
                     // Animation indicator
                     var indicatorCount = 0;
@@ -339,8 +349,8 @@ namespace T3.Editor.Gui.Graph
 
                     if (childUi.IsSelected)
                     {
-                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One * 2, _selectableScreenRect.Max + Vector2.One * 2, Color.Black.Fade(Graph.GraphOpacity));
-                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One, _selectableScreenRect.Max + Vector2.One, Color.White.Fade(Graph.GraphOpacity));
+                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One , _selectableScreenRect.Max + Vector2.One * 2, Color.Black.Fade(Graph.GraphOpacity));
+                        drawList.AddRect(_selectableScreenRect.Min , _selectableScreenRect.Max + Vector2.One * 1, Color.White.Fade(Graph.GraphOpacity));
                     }
                 }
             }

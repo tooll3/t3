@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using T3.Core;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Resource;
 
 namespace T3.StartEditor
@@ -28,7 +29,7 @@ namespace T3.StartEditor
 
             var sourceFilePaths = new HashSet<string>();
 
-            sourceFilePaths.UnionWith(Directory.GetFiles(Model.OperatorTypesFolder, "*.cs", SearchOption.AllDirectories).ToArray().ToArray());
+            sourceFilePaths.UnionWith(Directory.GetFiles(SymbolData.OperatorTypesFolder, "*.cs", SearchOption.AllDirectories).ToArray().ToArray());
             sourceFilePaths.UnionWith(Directory.GetFiles(@"Operators\Utils\", "*.cs", SearchOption.AllDirectories));
             sourceFilePaths.Add(@"Operators\Types\lib\dx11\draw\PickBlendMode.cs");
 

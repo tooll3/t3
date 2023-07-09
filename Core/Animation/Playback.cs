@@ -51,6 +51,7 @@ namespace T3.Core.Animation
         
         public double PlaybackSpeed { get; set; }
         public bool IsLooping = false;
+        public static bool OpNotReady;
         
         public static double RunTimeInSecs =>   _runTimeWatch.Elapsed.TotalSeconds;
         public static double LastFrameDuration { get; private set; }

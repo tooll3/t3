@@ -10,6 +10,7 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows.RenderExport;
 using Color = T3.Editor.Gui.Styling.Color;
 using Vector2 = System.Numerics.Vector2;
 
@@ -166,17 +167,21 @@ namespace T3.Editor.Gui.Windows.Output
             {
                 ImGui.SameLine();
 
-                if (ImGui.Button("SaveScr"))
+                if (CustomComponents.IconButton(Icon.Camera, new Vector2(ImGui.GetFrameHeight(), ImGui.GetFrameHeight())))
                 {
-                    var folder = @".t3/screenshots/";
+                    var folder = @"Screenshots/";
                     if (!Directory.Exists(folder))
                     {
                         Directory.CreateDirectory(folder);
                     }
                     
                     var filename = Path.Join(folder, $"{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.png");
-                    ScreenshotWriter.SaveBufferToFile(texture, filename, ScreenshotWriter.FileFormats.Png);
+                    ScreenshotWriter.StartSavingToFile(texture, filename, ScreenshotWriter.FileFormats.Png);
                 }
+
+                CustomComponents.TooltipForLastItem("Save screenshot");
+                if(!RenderHelperWindow.IsExporting)
+                    ScreenshotWriter.UpdateSaving();
             }
             
             ImGui.SameLine();

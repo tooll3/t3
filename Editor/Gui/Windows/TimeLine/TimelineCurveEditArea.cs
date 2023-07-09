@@ -481,7 +481,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             for (var i = 0; i < steps; i++)
             {
-                _curveLinePoints[i] = new Vector2(x, (int)canvas.TransformPosition(new Vector2(0, (float)curve.GetSampledValue(u))).Y - 0.5f);
+                _curveLinePoints[i] = new Vector2(x, (int)canvas.TransformPosition(new Vector2(0, (float)curve.GetSampledValue(u))).Y + 0.5f);
                 u += dU;
                 x += step;
             }

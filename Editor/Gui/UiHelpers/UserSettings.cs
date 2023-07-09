@@ -8,6 +8,7 @@ using T3.Core.IO;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Windows;
+using T3.Editor.Gui.Windows.TimeLine;
 
 namespace T3.Editor.Gui.UiHelpers
 {
@@ -57,12 +58,12 @@ namespace T3.Editor.Gui.UiHelpers
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
             public bool AdjustCameraSpeedWithMouseWheel = false;
             public float CameraSpeed = 1;
+
+            public TimeLineCanvas.FrameStepAmount FrameStepAmount = TimeLineCanvas.FrameStepAmount.FrameAt30Fps;
             
             public bool MouseWheelEditsNeedCtrlKey = true;
             public bool AutoPinAllAnimations = false;
 
-            public bool RepositionLoopRangeOnClick = false;
-            
             
             public float KeyboardScrollAcceleration = 2.5f;
 

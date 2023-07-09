@@ -7,6 +7,7 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Exploration;
 using T3.Editor.Gui.Windows.Output;
+using T3.Editor.Gui.Windows.RenderExport;
 using T3.Editor.Gui.Windows.Variations;
 
 namespace T3.Editor.Gui.Windows.Layouts
@@ -55,10 +56,10 @@ namespace T3.Editor.Gui.Windows.Layouts
                                new ExplorationWindow(),
                                new SymbolLibrary(),
                                new RenderSequenceWindow(),
-                               new SettingsWindow(),
                                new RenderVideoWindow(),
-                               new ConsoleLogWindow(),
                                new UtilitiesWindow(),
+                               new ConsoleLogWindow(),
+                               new SettingsWindow(),
                            };            
 
             LayoutHandling.LoadAndApplyLayout(UserSettings.Config.WindowLayoutIndex);

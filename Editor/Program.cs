@@ -8,6 +8,7 @@ using System.Threading;
 using System.Windows.Forms;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
@@ -106,10 +107,10 @@ namespace T3.Editor
             GenerateFontsWithScaleFactor(UserSettings.Config.UiScaleFactor);
 
             // Setup file watching the operator source
-            resourceManager.OperatorsAssembly = T3Ui.UiModel.OperatorsAssembly;
+            resourceManager.OperatorsAssembly = T3Ui.UiSymbolData.OperatorsAssembly;
             foreach (var (_, symbol) in SymbolRegistry.Entries)
             {
-                var sourceFilePath = Model.BuildFilepathForSymbol(symbol, Model.SourceExtension);
+                var sourceFilePath = SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
                 ResourceManager.Instance().CreateOperatorEntry(sourceFilePath, symbol.Id.ToString(), OperatorUpdating.ResourceUpdateHandler);
             }
 

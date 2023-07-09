@@ -115,12 +115,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 if (FenceState == SelectionFence.States.CompletedAsClick)
                 {
                     var newTime = InverseTransformPositionFloat(ImGui.GetMousePos()).X;
-                    if (Playback.IsLooping && UserSettings.Config.RepositionLoopRangeOnClick)
+                    if (Playback.IsLooping)
                     {
-                        var newStartTime = newTime - newTime % 4;
-                        var duration = Playback.LoopRange.Duration;
-                        Playback.LoopRange.Start = newStartTime;
-                        Playback.LoopRange.Duration = duration;
+                        Playback.TimeInBars = newTime;
+                        // var newStartTime = newTime - newTime % 4;
+                        // var duration = Playback.LoopRange.Duration;
+                        // Playback.LoopRange.Start = newStartTime;
+                        // Playback.LoopRange.Duration = duration;
                     }
                     else
                     {
@@ -399,6 +400,16 @@ namespace T3.Editor.Gui.Windows.TimeLine
             public IInputSlot Input;
             public Instance Instance;
             public SymbolChildUi ChildUi;
+        }
+        
+        public enum FrameStepAmount
+        {
+            FrameAt60Fps,
+            FrameAt30Fps,
+            FrameAt15Fps,
+            Bar,
+            Beat,
+            Tick,
         }
     }
 }

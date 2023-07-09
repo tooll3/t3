@@ -1,12 +1,14 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Windows;
+using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
 // ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
@@ -38,7 +40,7 @@ namespace T3.Editor.Gui.Graph.Modification
             var modifiedSymbols = OperatorResource.UpdateChangedOperatorTypes();
             foreach (var symbol in modifiedSymbols)
             {
-                UiModel.UpdateUiEntriesForSymbol(symbol);
+                UiSymbolData.UpdateUiEntriesForSymbol(symbol);
                 symbol.CreateAnimationUpdateActionsForSymbolInstances();
             }
         }
@@ -65,7 +67,7 @@ namespace T3.Editor.Gui.Graph.Modification
                 return false;
 
             //string path = @"Operators\Types\" + symbol.Name + ".cs";
-            var sourcePath = Model.BuildFilepathForSymbol(symbol, Model.SourceExtension);
+            var sourcePath = SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
 
             var operatorResource = ResourceManager.Instance().GetOperatorFileResource(sourcePath);
             if (operatorResource != null)

@@ -113,7 +113,8 @@
         "Y": 844.91724
       },
       "Min": -0.01,
-      "Max": 0.01
+      "Max": 0.01,
+      "Format": "{0:0.0000}"
     },
     {
       "InputId": "cbe45989-b239-491e-a2d8-83a42ab58b85"/*ShiftBrightness*/,
@@ -122,7 +123,8 @@
         "Y": 975.38855
       },
       "Min": -0.01,
-      "Max": 0.01
+      "Max": 0.01,
+      "Format": "{0:0.0000}"
     },
     {
       "InputId": "640de6a7-14ce-4c72-b78e-aa72f642b765"/*AmplifyEdges*/,

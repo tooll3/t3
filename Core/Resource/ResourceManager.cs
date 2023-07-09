@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using JeremyAnsel.Media.Dds;
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
@@ -12,6 +13,7 @@ using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
 using T3.Core.Logging;
+using T3.Core.Resource.Dds;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
 
@@ -963,14 +965,12 @@ namespace T3.Core.Resource
 
             Texture2D texture = null;
             ShaderResourceView srv = null;
-            uint srvResourceId = NullResource;
+            var srvResourceId = NullResource;
             if (filename.ToLower().EndsWith(".dds"))
             {
-                DdsImport.CreateDdsTextureFromFile(Device.NativePointer, Device.ImmediateContext.NativePointer, filename,
-                                                   out IntPtr texPtr, out IntPtr srvPtr);
-
-                texture = new Texture2D(texPtr);
-                srv = new ShaderResourceView(srvPtr);
+                var ddsFile = JeremyAnsel.Media.Dds.DdsFile.FromFile(filename);
+                DdsDirectX.CreateTexture(ddsFile, Device, Device.ImmediateContext, out var resource, out srv);
+                texture = (Texture2D)resource;
             } 
             else
             {

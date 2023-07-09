@@ -5,14 +5,13 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.MediaFoundation;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Animation;
 using T3.Core.Audio;
-using T3.Core.Resource;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
 using ResourceManager = T3.Core.Resource.ResourceManager;
 
@@ -23,43 +22,24 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
      *
      * https://github.com/vvvv/VL.Video.MediaFoundation/blob/master/src/VideoPlayer.cs
      */
-    public class PlayVideo : Instance<PlayVideo>
+    public class PlayVideo : Instance<PlayVideo>, IStatusProvider
     {
         [Output(Guid = "fa56b47f-1b16-45d5-80cd-32c5a872acf4", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Texture2D> Texture = new();
 
-        // Input parameters
-        [Input(Guid = "0e255347-08bc-4363-9ffa-ab863a1cea8e")]
-        public readonly InputSlot<string> Path = new();
-
-        [Input(Guid = "2FECFBB4-F7D9-4C53-95AE-B64CCBB6FBAD")]
-        public readonly InputSlot<float> Volume = new();
-
-        [Input(Guid = "E9C15B3F-8C4A-411D-B9B3-795D64D6BD20")]
-        public readonly InputSlot<float> ResyncThreshold = new();
+        [Output(Guid = "2F16BE73-226B-47E7-B7EE-BF4F3738FA13")]
+        public readonly Slot<float> Duration = new();
         
-        [Input(Guid = "48E62A3C-A903-4A9B-A44A-148C6C07AC1E")]
-        public readonly InputSlot<float> OverrideTime = new();
-        
+        [Output(Guid = "C89EA3AE-82FF-4791-B755-7B7D9EDDF8A7", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<bool> HasCompleted = new();
 
         public PlayVideo()
         {
             Texture.UpdateAction = Update;
         }
-
-        private double _lastContextTime;
-        
+            
         private void Update(EvaluationContext context)
         {
-            if (Math.Abs(context.LocalFxTime - _lastContextTime) < 0.001)
-                return;
-
-            _lastContextTime = context.LocalFxTime;
-            
-            
-            
-            _lastUpdateRunTimeInSecs = Playback.RunTimeInSecs;
-            
             // Initialize media foundation library and default values
             if (!_initialized)
             {
@@ -68,51 +48,67 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 ResyncThreshold.TypedDefaultValue.Value = 0.2f;
                 _initialized = true;
             }
-
-            // Change texture size if necessary
-            if (Texture.DirtyFlag.IsDirty
-                || _size.Width <= 0 || _size.Height <= 0)
+            
+            var url = Path.GetValue(context);
+            var pathChanged = url != _url;
+            
+            if (_engine == null)
             {
-                SetupTexture(_size);
+                _errorMessageForStatus = "Initialization of MediaEngine failed";
+                return;
+            }
+            
+            
+            var requestedTime = OverrideTimeInSecs.IsConnected
+                                         ? OverrideTimeInSecs.GetValue(context)
+                                         : context.Playback.SecondsFromBars(context.LocalTime);
+            
+            const float completionThreshold =  0.016f; // A hack to prevent engine missing the end of playback
+
+            var durationWithMargin = _engine.Duration - completionThreshold;
+            HasCompleted.Value = !_loop && _engine.CurrentTime > durationWithMargin  || requestedTime > durationWithMargin; 
+            
+            var isSameTime = Math.Abs(context.LocalFxTime - _lastContextTime) < 0.001;
+            var dontUpdate = isSameTime && !pathChanged && _hasUpdatedTexture && !_isSeeking;
+            if (dontUpdate)
+            {
+                //Log.Debug($" DontUpdate: {dontUpdate} <-- {_engine.CurrentTime:0.00}/{_engine.Duration}     same:{isSameTime}  pathChanged:{pathChanged} hasTexture:{_hasUpdatedTexture}  isSeeking:{_isSeeking}");
+                return;
             }
 
-            if (_engine == null)
-                return;
-
-            // Update video if url has changed
-            if (Path.DirtyFlag.IsDirty)
+            _loop = Loop.GetValue(context);
+            _lastContextTime = context.LocalFxTime;
+            _lastUpdateRunTimeInSecs = Playback.RunTimeInSecs;
+            
+            if (pathChanged)
             {
-                _play = true;
-                MediaUrl = Path.GetValue(context);
+                SetMediaUrl(url);
                 _engine.Play();
             }
 
-            // shall we seek?
-            var shouldBeTimeInSecs = OverrideTime.IsConnected
-                                         ? OverrideTime.GetValue(context)
-                                         : context.Playback.SecondsFromBars(context.LocalTime);
-            
-            
-            
-            //Log.Debug($" PlayVideo.Update({shouldBeTimeInSecs:0.00s})", this);
-            var clampedSeekTime = Math.Clamp(shouldBeTimeInSecs, 0.0, _engine.Duration);
-            var clampedVideoTime = Math.Clamp(_engine.CurrentTime, 0.0, _engine.Duration);
-            var deltaTime = clampedSeekTime - clampedVideoTime;
-            var shouldSeek = !_engine.IsSeeking
-                             && Math.Abs(deltaTime) > ResyncThreshold.GetValue(context);
 
+            //Log.Debug($" PlayVideo.Update({shouldBeTimeInSecs:0.00s})", this);
+            var clampedSeekTime = _loop? requestedTime % _engine.Duration 
+                                      : Math.Clamp(requestedTime, 0.0, _engine.Duration);
+            var clampedVideoTime = _loop ? _engine.CurrentTime % _engine.Duration 
+                                       : Math.Clamp(_engine.CurrentTime, 0.0, _engine.Duration);
+            var deltaTime = clampedSeekTime - clampedVideoTime;
+            
             // Play when we are in the center portion of the video
             // and we are playing the video forward
-            var isPlayingForward = (clampedSeekTime - _lastUpdateTime > 0.0);
-            _play = (shouldBeTimeInSecs == clampedSeekTime) && isPlayingForward;
+            var isPlayingForward = clampedSeekTime > _lastUpdateTime;
+            _play = pathChanged || _loop || Math.Abs(requestedTime - clampedSeekTime) < 0.001f && isPlayingForward;
             _lastUpdateTime = clampedSeekTime;
 
             // initiate seeking if necessary
+            var isCompositionTimelinePlaying = context.Playback.PlaybackSpeed == 0;
+            var seekThreshold = isCompositionTimelinePlaying ? 1/120f : ResyncThreshold.GetValue(context);
+            var shouldSeek = !_engine.IsSeeking && Math.Abs(deltaTime) > seekThreshold;
             if (shouldSeek)
             {
-                Log.Debug($"Seeked video to {clampedSeekTime:0.00} delta was {deltaTime:0.0000)}s",this);
-                SeekTime = (float)clampedSeekTime + 1.1f/60f;
-                Seek = true;
+                //Log.Debug($"Seeking video to {clampedSeekTime:0.000} delta was {deltaTime:0.000)}s", this);
+                _seekTime = (float)clampedSeekTime; // + 1.1f/60f;
+                _seekRequested = true;
             }
 
             /***
@@ -122,16 +118,11 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
              * Fixing this will require some thought: To managed audio-levels and playback centrally we probably need
              * an interfaces to register all audio sources and provides functions like muting, stop, setting audio level, etc. 
              */
-            if (AudioEngine.IsMuted)
-            {
-                _engine.Volume = 0.0;
-            }
-            else
-            {
-                _engine.Volume = Volume.GetValue(context).Clamp(0f, 1f);
-            }
-
-            UpdateVideo();
+            _engine.Volume = AudioEngine.IsMuted ? 0 : Volume.GetValue(context).Clamp(0f, 1f);
+            Duration.Value = _hasUpdatedTexture ? (float)_engine.Duration : -1;
+            
+            UpdateVideoPlayback();
+            Playback.OpNotReady |= !_hasUpdatedTexture || _isSeeking || _seekRequested;
         }
 
         private void SetupMediaFoundation()
@@ -147,7 +138,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             var device = ResourceManager.Device;
             if (device != null)
             {
-                // Add multi thread protection on device (MF is multi-threaded)
+                // Add multi thread protection on device (MediaFoundation is multi-threaded)
                 using var deviceMultithread = device.QueryInterface<DeviceMultithread>();
                 deviceMultithread.SetMultithreadProtected(true);
 
@@ -179,10 +170,11 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
 
             Texture.DirtyFlag.Clear();
 
-            if (_texture != null && size == _size)
+            if (_texture != null && size == _textureSize)
                 return;
 
-            var resourceManager = ResourceManager.Instance();
+            _texture?.Dispose();
+            
             var device = ResourceManager.Device;
             _texture = new Texture2D(device,
                                      new Texture2DDescription
@@ -198,7 +190,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                                              SampleDescription = new SampleDescription(1, 0),
                                              Usage = ResourceUsage.Default
                                          });
-            _size = size;
+            _textureSize = size;
         }
 
         private void EnginePlaybackEventHandler(MediaEngineEvent mediaEvent, long param1, int param2)
@@ -206,20 +198,22 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             switch (mediaEvent)
             {
                 case MediaEngineEvent.LoadStart:
-                    LastErrorCode = MediaEngineErr.Noerror;
+                    _lastMediaEngineError = MediaEngineErr.Noerror;
                     break;
                 case MediaEngineEvent.Error:
-                    LastErrorCode = (MediaEngineErr)param1;
+                    _lastMediaEngineError = (MediaEngineErr)param1;
+                    _errorMessageForStatus = _lastMediaEngineError.ToString();
                     break;
+
                 case MediaEngineEvent.LoadedMetadata:
                     _invalidated = true;
                     _engine.Volume = 0.0;
-                    Log.Debug("pausing...", this);
                     _engine.Pause();
                     break;
+                
                 case MediaEngineEvent.FirstFrameReady:
                 case MediaEngineEvent.TimeUpdate:
-                    LastErrorCode = MediaEngineErr.Noerror;
+                    _lastMediaEngineError = MediaEngineErr.Noerror;
 
                     // Pause the video to (mute audio) if Update hasn't been
                     // called for a while. This will happen when using PlayVideo
@@ -229,102 +223,69 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                     {
                         _engine.Pause();
                     }
-                    
+
+                    _errorMessageForStatus = null;
+
                     // TODO: Pause video if no longer evaluated
                     break;
             }
         }
+
+        private void SetMediaUrl(string url)
+        {
+            if (url == _url)
+                return;
+
+            _url = url;
+            try
+            {
+                _hasUpdatedTexture = false;
+                _engine.Pause();
+                _engine.Source = url;
+            }
+            catch (SharpDXException e)
+            {
+                var unableToSwitchVideoSourceError = "unable to switch video source..." + e.Message;
+                _errorMessageForStatus = unableToSwitchVideoSourceError;
+                Log.Debug(unableToSwitchVideoSourceError, this);
+            }
+        }
         
-        private string MediaUrl
+
+        private void UpdateVideoPlayback()
         {
-            set
+            if ((ReadyStates)_engine.ReadyState <= ReadyStates.HaveNothing)
             {
-                if (value != _url)
-                {
-                    _url = value;
-                    try
-                    {
-                        _engine.Pause();
-                        _engine.Source = value;
-                    }
-                    catch (SharpDXException e)
-                    {
-                        Log.Debug("unable to switch video source..." + e.Message);
-                    }
-                }
-            }
-        }
-
-        private MediaEngine _engine;
-        private DXGIDeviceManager _dxgiDeviceManager;
-        private Size2 _size = new Size2(0, 0);
-
-        private string _url;
-        private Texture2D _texture;
-        private bool _invalidated;
-
-        /** Set to true to start playback, false to pause playback. */
-        private bool _play;
-
-        private float SeekTime { get; set; }
-        private bool Seek { get; set; }
-        private float LoopStartTime { get; set; }
-        private float LoopEndTime { get; set; } = float.MaxValue;
-
-        /** The normalized source rectangle. */
-        private RectangleF? SourceBounds { get; set; }
-
-        /** The border color. */
-        private Color4? BorderColor { get; set; }
-
-        /** The size of the output texture. Use zero to take the size from the video. */
-        public Size2 TextureSize
-        {
-            set
-            {
-                if (value != _textureSize)
-                {
-                    _textureSize = value;
-                    _invalidated = true;
-                }
-            }
-        }
-
-        private Size2 _textureSize;
-
-        /** Gets the most recent error status. */
-        private MediaEngineErr LastErrorCode { get; set; }
-
-        private void UpdateVideo()
-        {
-            if (ReadyState <= ReadyStates.HaveNothing)
-            {
-                _texture = null; // FIXME: this is probably stupid
+                _hasUpdatedTexture = false;
+                //_texture = null; // FIXME: this is probably stupid
                 return;
             }
+            
 
-            if (ReadyState >= ReadyStates.HaveMetadata)
+            if ((ReadyStates)_engine.ReadyState >= ReadyStates.HaveMetadata)
             {
-                if (Seek)
+                if (_seekRequested)
                 {
-                    var seekTime = SeekTime.Clamp(0, Duration);
+                    var seekTime = _seekTime.Clamp(0, (float)_engine.Duration);
                     _engine.CurrentTime = seekTime;
-                    Seek = false;
+                    _seekOperationStartTime = Playback.RunTimeInSecs;
+                    _isSeeking = true;
+                    _seekRequested = false;
                 }
 
-                if (Loop)
+                _engine.Loop = _loop;
+
+                if (!_engine.Loop)
                 {
-                    var currentTime = CurrentTime;
-                    var loopStartTime = LoopStartTime.Clamp(0f, Duration);
-                    var loopEndTime = (LoopEndTime < 0 ? float.MaxValue : LoopEndTime).Clamp(0f, Duration);
+                    var currentTime = (float)_engine.CurrentTime;
+                    const float loopStartTime = 0f;
+                    var loopEndTime = (float)_engine.Duration;
                     if (currentTime < loopStartTime || currentTime > loopEndTime)
                     {
-                        if (PlaybackRate >= 0)
-                            _engine.CurrentTime = loopStartTime;
-                        else
-                            _engine.CurrentTime = loopEndTime;
+                        _engine.CurrentTime = (float)_engine.PlaybackRate >= 0 ? loopStartTime : loopEndTime;
                     }
                 }
+                //Log.Debug("Play: " + _play);
 
                 if (_play && _engine.IsPaused)
                     _engine.Play();
@@ -333,31 +294,44 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                     _engine.Pause();
             }
 
-            if (ReadyState < ReadyStates.HaveCurrentData || !_engine.OnVideoStreamTick(out var presentationTimeTicks))
+            
+            
+            if ((ReadyStates)_engine.ReadyState < ReadyStates.HaveCurrentData || !_engine.OnVideoStreamTick(out var presentationTimeTicks))
                 return;
 
+            if (_isSeeking && !_engine.IsSeeking)
+            {
+                Log.Debug($"Seeking took {(Playback.RunTimeInSecs - _seekOperationStartTime)*1000:0}ms", this);
+                _isSeeking = false;
+            }
+
+                
             if (_invalidated || _texture == null)
             {
                 _invalidated = false;
 
                 _engine.GetNativeVideoSize(out var width, out var height);
-                Log.Debug($"should set size to: {width}x{height}", this);
                 SetupTexture(new Size2(width, height));
 
                 // _SRGB doesn't work :/ Getting invalid argument exception in TransferVideoFrame
                 //_renderTarget = Texture.New2D(graphicsDevice, width, height, PixelFormat.B8G8R8A8_UNorm, TextureFlags.RenderTarget | TextureFlags.ShaderResource);
             }
-
+            
             if (_texture == null)
+            {
+                _errorMessageForStatus = "Failed to setup texture";
                 return;
+            }
 
             _engine.TransferVideoFrame(
                                        _texture,
-                                       ToVideoRect(SourceBounds),
+                                       ToVideoRect(default),
                                        //new RawRectangle(0, 0, renderTarget.ViewWidth, renderTarget.ViewHeight),
                                        new RawRectangle(0, 0, _textureSize.Width, _textureSize.Height),
-                                       ToRawColorBgra(BorderColor));
+                                       ToRawColorBgra(default));
             Texture.Value = _texture;
+            _hasUpdatedTexture = true;
+
         }
 
         private static VideoNormalizedRect? ToVideoRect(RectangleF? rect)
@@ -392,42 +366,15 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         {
             if (!isDisposing)
                 return;
-            
-            Log.Debug(" Disposing video", this);
 
-            //base.Dispose();
-            if (_engine != null)
-            {
-                _engine.Shutdown();
-                //_engine.PlaybackEvent -= EnginePlaybackEventHandler;
-                _engine.Dispose();
-                _texture.Dispose();
-            }
-            //colorSpaceConverter.Dispose();
-            //renderTarget?.Dispose();
+            if (_engine == null)
+                return;
+            
+            _engine.Shutdown();
+            _engine?.Dispose();
+            _texture?.Dispose();
         }
 
-        #region Forward engine properties
-        
-        private float PlaybackRate { get => (float)_engine.PlaybackRate; set => _engine.PlaybackRate = value; }
-        
-        private bool Loop { get => _engine.Loop; set => _engine.Loop = value; }
-        
-        /** Whether or not playback started. */
-        public bool Playing => !_engine.IsPaused;
-
-        /** A Boolean which is true if the media contained in the element has finished playing. */
-        public bool IsEnded => _engine.IsEnded;
-
-        /** The current playback time in seconds */
-        private float CurrentTime => (float)_engine.CurrentTime;
-
-        /** The length of the element's media in seconds. */
-        private float Duration => (float)_engine.Duration;
-
-        /** The readiness state of the media. */
-        private ReadyStates ReadyState => (ReadyStates)_engine.ReadyState;
-        #endregion
 
         private enum ReadyStates : short
         {
@@ -447,9 +394,58 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             HaveEnoughData
         }
 
+        public IStatusProvider.StatusLevel GetStatusLevel()
+        {
+            return string.IsNullOrEmpty(_errorMessageForStatus) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Error;
+        }
+
+        public string GetStatusMessage()
+        {
+            return _errorMessageForStatus;
+        }
+        
+        
         private bool _initialized;
+        private MediaEngine _engine;
+        private DXGIDeviceManager _dxgiDeviceManager;
+        private MediaEngineErr _lastMediaEngineError;
+        private string _url;
+        private Texture2D _texture;
+        private Size2 _textureSize = new(0, 0);
+        private bool _invalidated;
+
+        /** Set to true to start playback, false to pause playback. */
+        private bool _play;
+        private float _seekTime;
+        private bool _isSeeking;
+        private bool _seekRequested;
+        private bool _hasUpdatedTexture;
+        private bool _loop;
+
         private double _lastUpdateTime;
-        private double _lastUpdateRunTimeInSecs = 0;
+        private double _lastContextTime;
+        private double _lastUpdateRunTimeInSecs;
+        private double _seekOperationStartTime;
+
+        private string _errorMessageForStatus;
+        
+        
+        // Input parameters
+        [Input(Guid = "0e255347-08bc-4363-9ffa-ab863a1cea8e")]
+        public readonly InputSlot<string> Path = new();
+
+        [Input(Guid = "2FECFBB4-F7D9-4C53-95AE-B64CCBB6FBAD")]
+        public readonly InputSlot<float> Volume = new();
+
+        [Input(Guid = "E9C15B3F-8C4A-411D-B9B3-795D64D6BD20")]
+        public readonly InputSlot<float> ResyncThreshold = new();
+
+        [Input(Guid = "48E62A3C-A903-4A9B-A44A-148C6C07AC1E")]
+        public readonly InputSlot<float> OverrideTimeInSecs = new();
+
+        [Input(Guid = "21B5671B-862F-4CEA-A355-FA019996C936")]
+        public readonly InputSlot<bool> Loop = new();
+
 
     }
 }

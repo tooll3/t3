@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Editor.Compilation;
@@ -55,7 +56,7 @@ internal static class SymbolNaming
         var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newName);
         if (newAssembly != null)
         {
-            var originalSourcePath = Model.BuildFilepathForSymbol(symbol, Model.SourceExtension);
+            var originalSourcePath = SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
             var operatorResource = ResourceManager.Instance().GetOperatorFileResource(originalSourcePath);
             if (operatorResource != null)
             {

@@ -261,7 +261,7 @@ namespace T3.Operators.Types.Id_03477b9a_860e_4887_81c3_5fe51621122c
         /// <summary>
         /// This is used only for visualization
         /// </summary>
-        public double TimeSinceLastHit => Playback.RunTimeInSecs - _lastHitTime;
+        public double TimeSinceLastHit => _lastEvalTime - _lastHitTime;
 
         public bool AccumulationActive;
     }

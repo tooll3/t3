@@ -156,6 +156,11 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             var command = variation.IsPreset
                               ? CreateApplyPresetCommand(instance, variation)
                               : CreateApplyVariationCommand(instance, variation);
+            foreach (var v in Variations)
+            {
+                v.State = Variation.States.InActive;
+            }
+            variation.State = Variation.States.Active;
             
             UndoRedoStack.AddAndExecute(command);
         }

@@ -6,6 +6,12 @@
 cbuffer Params : register(b0)
 {
     float TriggerClear;
+    float SourceSlice;
+}
+
+cbuffer Params : register(b1)
+{
+    int Direction;
 }
 
 Texture2D<float4> SourceImage : register(t0);
@@ -20,24 +26,30 @@ void main(uint3 i : SV_DispatchThreadID)
     int resultWidth,resultHeight;
     ResultImage.GetDimensions( resultWidth, resultHeight);
 
-    int x = i.x;
-    if(i.y > 0)
-        return;
-
-    int yButtom = resultHeight - 1;
-
-    // scrolling up
-    // for(int y = 0; y < resultHeight; y++ )
-    // {
-    //     ResultImage[ int2(x, y)] = ResultImage[ int2(x, y+1)];
-    // }
-    // ResultImage[ int2(x, yButtom)] = SourceImage[int2(x,0)];
-
-    // Scrolling down
-    for(int y = resultHeight -1; y > 0; y-- )
+    int index= i.x;
+    if(Direction == 0)
     {
-        ResultImage[ int2(x, y)] = ResultImage[ int2(x, y-1)];
+        if(index > resultWidth)
+            return;
+
+        // Scrolling down
+        for(int y = resultHeight -1; y > 0; y-- )
+        {
+            ResultImage[ int2(index, y)] = ResultImage[ int2(index, y-1)];
+        }
+        ResultImage[ int2(index, 0)] = SourceImage[int2(index, sourceHeight * SourceSlice)];
     }
-    ResultImage[ int2(x, 0)] = SourceImage[int2(x,0)];
+    else
+    {
+        if(index > resultHeight)
+            return;
+
+        // Scrolling left
+        for(int x = 0;  x < resultWidth; x++ )
+        {
+            ResultImage[ int2(x-1, index)] = ResultImage[ int2(x, index)];
+        }
+        ResultImage[ int2(resultWidth-1, index)] = SourceImage[int2(sourceWidth * SourceSlice ,index)] ;
+    }
 }
 

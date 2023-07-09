@@ -88,6 +88,12 @@ namespace T3.Editor.Gui.Windows.Variations
                              $"{variation.ActivationIndex:00}");
 
             ImGui.PopFont();
+
+            if (variation.State == Variation.States.Active)
+            {
+                drawList.AddCircleFilled(pMax - Vector2.One * 4, 2, T3Style.Colors.GraphActiveLine);
+            }
+            
             ImGui.SetCursorScreenPos(pMin);
             ImGui.PushID(variation.Id.GetHashCode());
 
@@ -103,13 +109,8 @@ namespace T3.Editor.Gui.Windows.Variations
             else
             {
                 // Handle hover
-                if (ImGui.IsItemVisible() && ImGui.IsItemHovered() && UserSettings.Config.VariationHoverPreview)
+                if (ImGui.IsItemVisible() && ImGui.IsItemHovered())
                 {
-                    if (_hoveredVariation == null)
-                    {
-                        _hoveredVariation = variation;
-                        _canvas.StartHover(variation);
-                    }
 
                     if (variation.IsSnapshot)
                     {
@@ -118,13 +119,23 @@ namespace T3.Editor.Gui.Windows.Variations
                             FrameStats.AddHoveredId(childId);
                         }
                     }
-                    
-                    if (ImGui.GetIO().KeyAlt)
+
+                    if (UserSettings.Config.VariationHoverPreview)
                     {
-                        var mouseX = ImGui.GetMousePos().X;
-                        var blend = (mouseX - pMin.X) / sizeOnScreen.X;
-                        _canvas.StartBlendTo(variation, blend);
-                        DrawBlendIndicator(drawList, areaOnScreen, blend);
+                        if (_hoveredVariation == null)
+                        {
+                            _hoveredVariation = variation;
+                            _canvas.StartHover(variation);
+                        }
+                    
+                    
+                        if (ImGui.GetIO().KeyAlt)
+                        {
+                            var mouseX = ImGui.GetMousePos().X;
+                            var blend = (mouseX - pMin.X) / sizeOnScreen.X;
+                            _canvas.StartBlendTo(variation, blend);
+                            DrawBlendIndicator(drawList, areaOnScreen, blend);
+                        }
                     }
                 }
                 else

@@ -31,6 +31,7 @@ using T3.Editor.Gui.UiHelpers.Wiki;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.SystemUi;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 
 namespace T3.Editor.Gui;
@@ -40,7 +41,7 @@ public class T3Ui
     static T3Ui()
     {
         var operatorsAssembly = Assembly.GetAssembly(typeof(Value));
-        UiModel = new UiModel(operatorsAssembly, enableLog: false);
+        UiSymbolData = new UiSymbolData(operatorsAssembly, enableLog: false);
 
         WindowManager.TryToInitialize();
         ExampleSymbolLinking.UpdateExampleLinks();
@@ -138,7 +139,8 @@ public class T3Ui
             UserSettings.Config.UserName = Environment.UserName;
             _userNameDialog.ShowNextFrame();
         }            
-            
+        
+        Playback.OpNotReady = false;
         AutoBackup.AutoBackup.CheckForSave();
     }
         
@@ -346,7 +348,7 @@ public class T3Ui
                 return;
             }                
             _saveStopwatch.Restart();
-            UiModel.SaveModifiedSymbols();
+            UiSymbolData.SaveModifiedSymbols();
             _saveStopwatch.Stop();
             Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
         }
@@ -363,7 +365,7 @@ public class T3Ui
             }
                 
             _saveStopwatch.Restart();
-            UiModel.SaveAll();
+            UiSymbolData.SaveAll();
             _saveStopwatch.Stop();
             Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
         }
@@ -418,7 +420,7 @@ public class T3Ui
     }
 
     private readonly StatusErrorLine _statusErrorLine = new();
-    public static readonly UiModel UiModel;
+    public static readonly UiSymbolData UiSymbolData;
 
 
     public static IntPtr NotDroppingPointer = new IntPtr(0);

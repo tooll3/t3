@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
 
@@ -18,7 +19,7 @@ internal static class GraphUtils
         if (string.IsNullOrEmpty(pendingSource))
         {
             //var path = @"Operators\Types\" + symbol.Name + ".cs";
-            var path = Model.BuildFilepathForSymbol(symbol, Model.SourceExtension);
+            var path = SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
             try
             {
                 pendingSource = File.ReadAllText(path);

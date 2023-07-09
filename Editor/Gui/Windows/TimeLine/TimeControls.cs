@@ -82,7 +82,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     playback.TimeInSecs = Math.Floor(playback.TimeInSecs * 30) / 30;
                 }
             }
-            CustomComponents.TooltipForLastItem($"Current playtime at {settings.Bpm:0.0} BPM.","Click mode button to toggle between timeline formats.");
+
+            CustomComponents.TooltipForLastItem($"Current playtime at {settings.Bpm:0.0} BPM.", "Click mode button to toggle between timeline formats.");
 
             ImGui.SameLine();
 
@@ -124,10 +125,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                     if (beat < 0)
                         beat = 4 + beat;
-                    
+
                     if (bar < 0)
                         bar = 4 + bar;
-                    
+
                     const int gridSize = 4;
                     var drawList = ImGui.GetWindowDrawList();
                     var min = center - new Vector2(7, 7) + new Vector2(beat * gridSize, bar * gridSize);
@@ -220,7 +221,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                                     : CustomComponents.ButtonStates.Disabled
                                                )
                     || KeyboardBinding.Triggered(UserActions.PlaybackJumpToStartTime)
-                    )
+                   )
                 {
                     playback.TimeInBars = playback.IsLooping ? playback.LoopRange.Start : 0;
                 }
@@ -296,28 +297,40 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackForwardHalfSpeed, false) +
                                                     "\n Next frame:" + KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackNextFrame, false));
 
-                const float editFrameRate = 30;
-                const float frameDuration = 1 / editFrameRate;
-
-                // Step to previous frame
-                if (KeyboardBinding.Triggered(UserActions.PlaybackPreviousFrame))
                 {
-                    var rounded = Math.Round(playback.TimeInBars * editFrameRate) / editFrameRate;
-                    playback.TimeInBars = rounded - frameDuration;
-                }
+                    //const float editFrameRate = 30;
 
-                // Step to previous frame
-                if (KeyboardBinding.Triggered(UserActions.PlaybackJumpBack))
-                {
-                    //var rounded = Math.Round(playback.TimeInBars * editFrameRate) / editFrameRate;
-                    playback.TimeInBars -= 1;
-                }
+                    var frameDuration = UserSettings.Config.FrameStepAmount switch
+                                            {
+                                                TimeLineCanvas.FrameStepAmount.FrameAt60Fps => 1 / 60f,
+                                                TimeLineCanvas.FrameStepAmount.FrameAt30Fps => 1 / 30f,
+                                                TimeLineCanvas.FrameStepAmount.FrameAt15Fps => 1 / 15f,
+                                                TimeLineCanvas.FrameStepAmount.Bar          => (float)playback.SecondsFromBars(1),
+                                                TimeLineCanvas.FrameStepAmount.Beat         => (float)playback.SecondsFromBars(1 / 4f),
+                                                TimeLineCanvas.FrameStepAmount.Tick         => (float)playback.SecondsFromBars(1 / 16f),
+                                                _                                           => 1
+                                            };
 
-                // Step to next frame
-                if (KeyboardBinding.Triggered(UserActions.PlaybackNextFrame))
-                {
-                    var rounded = Math.Round(playback.TimeInBars * editFrameRate) / editFrameRate;
-                    playback.TimeInBars = rounded + frameDuration;
+                    var editFrameRate = 1 / frameDuration;
+
+                    // Step to previous frame
+                    if (KeyboardBinding.Triggered(UserActions.PlaybackPreviousFrame))
+                    {
+                        var rounded = Math.Round(playback.TimeInSecs * editFrameRate) / editFrameRate;
+                        playback.TimeInSecs = rounded - frameDuration;
+                    }
+
+                    if (KeyboardBinding.Triggered(UserActions.PlaybackJumpBack))
+                    {
+                        playback.TimeInBars -= 1;
+                    }
+
+                    // Step to next frame
+                    if (KeyboardBinding.Triggered(UserActions.PlaybackNextFrame))
+                    {
+                        var rounded = Math.Round(playback.TimeInSecs * editFrameRate) / editFrameRate;
+                        playback.TimeInSecs = rounded + frameDuration;
+                    }
                 }
 
                 // Play backwards with increasing speed
@@ -430,7 +443,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 UserSettings.Config.AudioMuted = !UserSettings.Config.AudioMuted;
                 AudioEngine.SetMute(UserSettings.Config.AudioMuted);
             }
-            
+
             // ToggleHover
             {
                 ImGui.SameLine();
@@ -470,20 +483,21 @@ namespace T3.Editor.Gui.Windows.TimeLine
             {
                 // Lock all animated parameters
                 ImGui.SameLine();
-                var state = UserSettings.Config.AutoPinAllAnimations 
-                                ? CustomComponents.ButtonStates.Activated 
+                var state = UserSettings.Config.AutoPinAllAnimations
+                                ? CustomComponents.ButtonStates.Activated
                                 : CustomComponents.ButtonStates.Dimmed;
 
-                if (CustomComponents.IconButton(Icon.PinParams, ControlSize,  state, KeyboardBinding.Triggered(UserActions.ToggleAnimationPinning)))
+                if (CustomComponents.IconButton(Icon.PinParams, ControlSize, state, KeyboardBinding.Triggered(UserActions.ToggleAnimationPinning)))
                 {
                     UserSettings.Config.AutoPinAllAnimations = !UserSettings.Config.AutoPinAllAnimations;
-                    
+
                     if (!UserSettings.Config.AutoPinAllAnimations)
                     {
-                        timeLineCanvas.DopeSheetArea.PinnedParameters.Clear();        
+                        timeLineCanvas.DopeSheetArea.PinnedParameters.Clear();
                     }
                 }
             }
+
             ImGui.SameLine();
         }
 
