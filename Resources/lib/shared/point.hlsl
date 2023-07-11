@@ -5,15 +5,31 @@ struct Point
     float4 rotation;
 };
 
+
+
 #define QUATERNION_IDENTITY float4(0, 0, 0, 1)
 
 #ifndef PI
 #define PI 3.14159265359f
 #endif 
 
+
 #ifndef mod
 #define mod(x, y) ((x) - (y) * floor((x) / (y)))
 #endif 
+
+inline float q_separate_v(float4 q, out float4 normalized ) 
+{
+    float l = length(q);
+    normalized = q / l; 
+    return l - 1;
+}
+
+inline float4 q_encode_v(float4 q, float v ) 
+{
+    return q * (v + 1);
+}
+
 
 float4 qmul(float4 q1, float4 q2)
 {
@@ -25,24 +41,19 @@ float4 qmul(float4 q1, float4 q2)
 
 // Vector rotation with a quaternion
 // http://mathworld.wolfram.com/Quaternion.html
-float3 rotate_vector(float3 v, float4 quat)
+inline float3 rotate_vector(float3 v, float4 quat)
 {
     float4 r_c = quat * float4(-1, -1, -1, 1);
     return qmul(quat, qmul(float4(v, 0), r_c)).xyz;
 }
 
 // https://blog.molecular-matters.com/2013/05/24/a-faster-quaternion-vector-multiplication/
-float3 rotate_vector2(float3 v, float4 q)
+inline float3 rotate_vector2(float3 v, float4 q)
 {
     float3 t = 2 * cross(q.xyz, v);
     return v + q.w * t + cross(q.xyz, t);
 }
 
-
-// float3 rotate_vector( float4 quat, float3 vec )
-// {
-//     return vec + 2.0 * cross( cross( vec, quat.xyz ) + quat.w * vec, quat.xyz );
-// }
 
 float4 q_conj(float4 q)
 {

@@ -15,16 +15,22 @@ void main(uint3 i : SV_DispatchThreadID)
 {
     uint numStructs, stride;
     Points.GetDimensions(numStructs, stride);
-    if(i.x >= numStructs) {
-        Points[i.x].w = 0 ;
+    if(i.x >= numStructs) 
         return;
-    }
 
 
-    float3 forward =  normalize(rotate_vector(float3(0,0, 1), Points[i.x].rotation));
-    forward *= Points[i.x].w * 0.01 * Speed;
-    Points[i.x].position += forward;
+    Point p = Points[i.x];
+    float4 rot;
+    float v = q_separate_v(p.rotation, rot);
 
-    Points[i.x].w *= (1-Drag);
+    float3 forward =  normalize(rotate_vector(float3(0, 0, 1), rot));
+
+    forward *= v * 0.01 * Speed;
+    p.position += forward;
+
+    v *= (1-Drag);
+    p.rotation = q_encode_v(rot, v);
+
+    Points[i.x] = p;
 
 }

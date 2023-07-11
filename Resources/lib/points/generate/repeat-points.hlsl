@@ -13,13 +13,11 @@ StructuredBuffer<Point> SourcePoints : t0;         // input
 StructuredBuffer<Point> TargetPoints : t1;         // input
 RWStructuredBuffer<Point> ResultPoints : u0;    // output
 
+static const float NAN = sqrt(-1);
+
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
-
-// ResultPoints[i.x] = SourcePoints[i.x];
-// return;
-
     uint resultPointCount, sourcePointCount, targetPointCount, stride;
     
     SourcePoints.GetDimensions(sourcePointCount,stride);
@@ -30,7 +28,8 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
     }
 
-    if(ConnectPointsMode < 0.5) {
+    if(ConnectPointsMode < 0.5) 
+    {
         uint sourceLength = sourcePointCount + 1;
 
         uint sourceIndex = i.x % (sourceLength);
@@ -38,21 +37,24 @@ void main(uint3 i : SV_DispatchThreadID)
         
         if(sourceIndex == sourcePointCount) {
             ResultPoints[i.x].position =  0;
-            ResultPoints[i.x].w = sqrt(-1);            
+            ResultPoints[i.x].w = NAN;            
         }
         else {
             Point A = SourcePoints[sourceIndex];
             Point B = TargetPoints[targetIndex];
+            float4 rotA = normalize(A.rotation);
+            float4 rotB = normalize(B.rotation);
+
             float s = ApplyTargetScaleW > 0.5 ? B.w : 1;
             s *= Scale;
             float3  pLocal = ApplyTargetOrientation  > 0.5
-                            ? rotate_vector(A.position, B.rotation)
+                            ? rotate_vector(A.position, rotB)
                             : A.position;
 
             ResultPoints[i.x].position = pLocal  * s + B.position;
             ResultPoints[i.x].w = MultiplyTargetW > 0.5 ? A.w * B.w : A.w;
-            ResultPoints[i.x].rotation = ApplyTargetOrientation  > 0.5 ? qmul(B.rotation, A.rotation)
-                                                                    : A.rotation;
+            ResultPoints[i.x].rotation = ApplyTargetOrientation  > 0.5 ? qmul(rotB, rotA)
+                                                                    : rotA;
         }
     }
     else {
@@ -62,14 +64,14 @@ void main(uint3 i : SV_DispatchThreadID)
         
         if(targetIndex == loopLength - 1) {
             ResultPoints[i.x].position =  0;
-            ResultPoints[i.x].w = sqrt(-1);
+            ResultPoints[i.x].w = NAN;
         }
         else {
-            //uint targetIndex = (i.x / sourcePointCount )  % targetPointCount;
-            //uint sourceIndex = i.x % loopLength;
-        
             Point sourceP = SourcePoints[sourceIndex];
             Point targetP = TargetPoints[targetIndex];
+
+            float4 sourceRot = normalize(sourceP.rotation);
+            float4 targetRot = normalize(targetP.rotation);
 
             float s = ApplyTargetScaleW > 0.5 ? targetP.w : 1;
             s *= Scale;
@@ -80,8 +82,8 @@ void main(uint3 i : SV_DispatchThreadID)
 
             ResultPoints[i.x].position = pLocal  * s  + targetP.position;
             ResultPoints[i.x].w = MultiplyTargetW > 0.5 ? sourceP.w * targetP.w : sourceP.w;
-            ResultPoints[i.x].rotation = ApplyTargetOrientation  > 0.5 ? qmul(targetP.rotation, sourceP.rotation)
-                                                                    : sourceP.rotation;
+            ResultPoints[i.x].rotation = ApplyTargetOrientation  > 0.5 ? qmul(targetRot, sourceRot)
+                                                                    : sourceRot;
         }
 
     }
