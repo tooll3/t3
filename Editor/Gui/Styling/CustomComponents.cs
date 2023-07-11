@@ -99,6 +99,7 @@ namespace T3.Editor.Gui.Styling
                 ImGui.PushStyleColor(ImGuiCol.Button, T3Style.Colors.Text.Rgba);
                 ImGui.PushStyleColor(ImGuiCol.ButtonHovered, T3Style.Colors.Text.Rgba);
                 ImGui.PushStyleColor(ImGuiCol.ButtonActive, T3Style.Colors.Text.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.Background.Rgba);
             }
 
             if (ImGui.Button(label, size) || trigger)
@@ -109,7 +110,7 @@ namespace T3.Editor.Gui.Styling
 
             if (wasSelected)
             {
-                ImGui.PopStyleColor(3);
+                ImGui.PopStyleColor(4);
             }
 
             return clicked;
