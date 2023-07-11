@@ -21,10 +21,6 @@ namespace T3.Editor.Gui.Interaction.WithCurves
             var pCenter = _curveEditCanvas.TransformPosition(new Vector2((float)vDef.U, (float)vDef.Value));
             var pTopLeft = pCenter - _controlSizeHalf;
             
-            ImGui.PushFont(Icons.IconFont);
-            _drawList.AddText(pTopLeft + new Vector2(5,4) , Color.White, isSelected ? _keyframeIconSelected : _keyframeIcon);
-            
-            ImGui.PopFont();
 
             if (isSelected)
             {
@@ -43,6 +39,12 @@ namespace T3.Editor.Gui.Interaction.WithCurves
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
             }
+            
+            ImGui.PushFont(Icons.IconFont);
+            var fadeFactor = ImGui.IsItemHovered() ? 1f : 0.9f;
+            var color = Color.White.Fade(fadeFactor);
+            _drawList.AddText(pTopLeft + new Vector2(5,4) , color, isSelected ? _keyframeIconSelected : _keyframeIcon);
+            ImGui.PopFont();
 
             curveEditing?.HandleCurvePointDragging(_vDef, isSelected);
         }
