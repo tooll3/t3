@@ -4,6 +4,10 @@
   "Namespace": "lib.point.transform",
   "Inputs": [
     {
+      "Id": "565ff364-c3d9-4c60-a9a0-79fdd36d3477"/*Points*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "9e803bd1-c5a3-4f6f-926d-d19f32dcbae5"/*Translation*/,
       "DefaultValue": {
         "X": 0.0,
@@ -58,10 +62,6 @@
     {
       "Id": "56cd97c5-f4f1-4eb4-a53c-312373ee7706"/*WIsWeight*/,
       "DefaultValue": false
-    },
-    {
-      "Id": "565ff364-c3d9-4c60-a9a0-79fdd36d3477"/*Points*/,
-      "DefaultValue": null
     },
     {
       "Id": "0ef7556a-950f-406c-8e1d-511d17b4ea10"/*Pivot*/,

@@ -65,9 +65,8 @@
       "Outputs": []
     },
     {
-      "Id": "5a29037d-2de1-4af6-91a4-ef743637638a"/*ConnectPoints*/,
+      "Id": "5a29037d-2de1-4af6-91a4-ef743637638a"/*ComputeShaderStage*/,
       "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
-      "Name": "ConnectPoints",
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,

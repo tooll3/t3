@@ -1,23 +1,23 @@
 {
-  "Id": "7246323c-5cd5-4db1-af25-3e96ce385c23"/*DispersePoints*/,
-  "Description": "A test to get nearest neighbour search working.",
+  "Id": "ed0bc47a-31ef-400b-b4e4-5552a859b309"/*SimPointCollisions*/,
+  "Description": "",
   "InputUis": [
     {
-      "InputId": "b465e626-e8bf-457e-b192-8f3b72a1d443"/*PointsA_*/,
+      "InputId": "7ec04bd6-80c3-4537-b333-f42f0c016730"/*PointsA_*/,
       "Position": {
         "X": 2163.5981,
         "Y": -21.056168
       }
     },
     {
-      "InputId": "94219a67-deae-46bc-844b-97a29cc5bea5"/*Threshold*/,
+      "InputId": "cb2b3cb9-798c-4875-acd7-dd830e110201"/*Threshold*/,
       "Position": {
         "X": 2167.7478,
         "Y": 262.65985
       }
     },
     {
-      "InputId": "fa0f6143-24a5-4277-a23a-3ac535f29fed"/*Dispersion*/,
+      "InputId": "64996b47-cf36-46c4-96cc-424547714bd7"/*Dispersion*/,
       "Position": {
         "X": 2167.7478,
         "Y": 307.65985
@@ -25,7 +25,7 @@
       "Scale": 0.001
     },
     {
-      "InputId": "dbb567d1-0b9d-4848-afe5-99b0ec436934"/*CellSize*/,
+      "InputId": "0724bf0c-8f97-44de-bf42-6a89b89f1632"/*CellSize*/,
       "Position": {
         "X": 2167.7478,
         "Y": 352.65985
@@ -36,7 +36,7 @@
       "Clamp": true
     },
     {
-      "InputId": "7cc4cb31-81aa-40c4-a439-5c2ee5ca2868"/*ClampAccelleration*/,
+      "InputId": "9defe179-7ea3-4f67-a951-a83b0b173a18"/*ClampAccelleration*/,
       "Position": {
         "X": 2167.7478,
         "Y": 397.65985
@@ -44,7 +44,7 @@
       "Scale": 0.001
     },
     {
-      "InputId": "93f9dfed-4efd-43fb-ac70-6c43d78d0f0f"/*IsEnabled*/,
+      "InputId": "78566405-8dee-4661-9cb7-489c8d322f64"/*IsEnabled*/,
       "Position": {
         "X": 2167.7478,
         "Y": 442.65985
@@ -53,7 +53,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "5ae1c747-132c-449b-8f4e-a02c80ccf078"/*FloatsToBuffer*/,
+      "ChildId": "8eba7baf-0085-4576-9a1d-81de46ed5d75"/*FloatsToBuffer*/,
       "Style": "Resizable",
       "Size": {
         "X": 109.896416,
@@ -65,56 +65,56 @@
       }
     },
     {
-      "ChildId": "84ceb815-e647-43c0-8975-4ecacf9672ee"/*ExecuteBufferUpdate*/,
+      "ChildId": "76fa2156-4f10-4717-b48a-423919846d78"/*ExecuteBufferUpdate*/,
       "Position": {
         "X": 3140.1619,
         "Y": -5.8684998
       }
     },
     {
-      "ChildId": "603d275b-44dc-4d5f-87f4-2a90b3616e27"/*GetBufferComponents*/,
+      "ChildId": "6e634bb3-bd15-4ed2-ab6a-e263dfacd66f"/*GetBufferComponents*/,
       "Position": {
         "X": 2540.1619,
         "Y": 146.1315
       }
     },
     {
-      "ChildId": "309eb226-c06f-4c0d-a55a-c4788a99e92b"/*ComputeShader*/,
+      "ChildId": "0c7fe6b5-c668-480e-a75d-842690488f7b"/*ComputeShader*/,
       "Position": {
         "X": 2540.1619,
         "Y": 103.1315
       }
     },
     {
-      "ChildId": "5a29037d-2de1-4af6-91a4-ef743637638a"/*ComputeShaderStage*/,
+      "ChildId": "595b25a0-599a-4730-92c6-d8785a0773f2"/*ComputeShaderStage*/,
       "Position": {
         "X": 2840.1619,
         "Y": 63.1315
       }
     },
     {
-      "ChildId": "aed3acf8-e772-495c-b946-c5b52983f410"/*CalcDispatchCount*/,
+      "ChildId": "814d264e-1181-4569-a12a-a984f1b45f45"/*CalcDispatchCount*/,
       "Position": {
         "X": 2690.1619,
         "Y": 106.1315
       }
     },
     {
-      "ChildId": "4ce13c7b-13f5-4436-8b87-0a922ed89d18"/*_BuildSpatialHashMap*/,
+      "ChildId": "02f3ed4a-bd5b-40c7-8bca-1b4e697d0984"/*_BuildSpatialHashMap*/,
       "Position": {
         "X": 2368.661,
         "Y": 32.774933
       }
     },
     {
-      "ChildId": "c3a42107-7033-4783-ac4a-7ac8679c6994"/*Execute*/,
+      "ChildId": "d57e0521-90eb-4b76-8277-061ea359145b"/*Execute*/,
       "Position": {
         "X": 2990.1619,
         "Y": -5.8684998
       }
     },
     {
-      "ChildId": "6978f873-2d2c-4a10-ba12-01eed2926976"/*Time*/,
+      "ChildId": "15e1e52b-c055-4641-9e26-580df17cfbd4"/*Time*/,
       "Position": {
         "X": 2335.392,
         "Y": 581.6067
@@ -123,7 +123,7 @@
   ],
   "OutputUis": [
     {
-      "OutputId": "77b50dfa-f9e4-4c9b-89d0-12b99c014c4c"/*OutBuffer*/,
+      "OutputId": "28ebbcd9-737d-4c94-8c3b-e67318b06374"/*OutBuffer*/,
       "Position": {
         "X": 3333.6555,
         "Y": -5.820404

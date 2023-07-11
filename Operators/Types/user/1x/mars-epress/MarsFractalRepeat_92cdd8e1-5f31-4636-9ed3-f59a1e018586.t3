@@ -203,14 +203,14 @@
       "SymbolId": "37bdbafc-d14c-4b81-91c3-8f63c3b63812",
       "InputValues": [
         {
-          "Id": "40a04de8-54aa-4f66-acea-80ffc4dab7bd"/*PointSize*/,
-          "Type": "System.Single",
-          "Value": 0.71000004
-        },
-        {
           "Id": "621bf2cf-8d49-4b5f-88b9-4460045e8914"/*Size*/,
           "Type": "System.Single",
           "Value": 0.63
+        },
+        {
+          "Id": "40a04de8-54aa-4f66-acea-80ffc4dab7bd"/*PointSize*/,
+          "Type": "System.Single",
+          "Value": 0.71000004
         }
       ],
       "Outputs": [
