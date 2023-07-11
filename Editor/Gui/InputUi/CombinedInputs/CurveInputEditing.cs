@@ -132,10 +132,10 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                 if ((_interactionFlags & T3Ui.EditingFlags.PreventMouseInteractions) != 0)
                     return;
 
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
-                }
+                // if (ImGui.IsItemHovered())
+                // {
+                //     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
+                // }
 
                 if (!ImGui.IsItemActive())
                 {
