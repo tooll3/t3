@@ -18,9 +18,6 @@ namespace T3.Operators.Types.Id_37bdbafc_d14c_4b81_91c3_8f63c3b63812
         [Input(Guid = "8f72275d-d903-4372-852c-51c3db35fe90")]
         public readonly InputSlot<bool> ShowCenterPoints = new InputSlot<bool>();
 
-        [Input(Guid = "40a04de8-54aa-4f66-acea-80ffc4dab7bd")]
-        public readonly InputSlot<float> PointSize = new InputSlot<float>();
-
         [Input(Guid = "d0ac63c5-639b-4b3c-b40b-348b76fa0fd2")]
         public readonly InputSlot<bool> ShowAxis = new InputSlot<bool>();
 
@@ -30,6 +27,15 @@ namespace T3.Operators.Types.Id_37bdbafc_d14c_4b81_91c3_8f63c3b63812
         [Input(Guid = "b857b40b-2ca7-42a4-bebe-1cb11700ed71")]
         public readonly InputSlot<float> LineThickness = new InputSlot<float>();
 
+        [Input(Guid = "90173b57-cd09-4270-a16e-6e2454882b9b")]
+        public readonly InputSlot<int> StartIndex = new InputSlot<int>();
+
+        [Input(Guid = "c4332cb5-4dbc-4dd1-a738-cee8a3098c17")]
+        public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
+
+        [Input(Guid = "40a04de8-54aa-4f66-acea-80ffc4dab7bd")]
+        public readonly InputSlot<float> PointSize = new InputSlot<float>();
+
         [Input(Guid = "C85649DF-A235-49D6-A964-C69B299FB4B5")]
         public readonly InputSlot<T3.Core.Operator.GizmoVisibility> Visibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
 
@@ -38,9 +44,6 @@ namespace T3.Operators.Types.Id_37bdbafc_d14c_4b81_91c3_8f63c3b63812
 
         [Input(Guid = "bbc26907-416d-4168-9e89-72ee1c6a530e")]
         public readonly InputSlot<bool> ShowAttributeList = new InputSlot<bool>();
-
-        [Input(Guid = "90173b57-cd09-4270-a16e-6e2454882b9b")]
-        public readonly InputSlot<int> StartIndex = new InputSlot<int>();
 
     }
 }
