@@ -287,7 +287,8 @@ namespace T3.Core.Operator
 
                 if (parent == null || !parent.Children.Contains(instance))
                 {
-                    Log.Error($"Warning: Skipping no longer valid instance of {instance.Symbol} in {parent.Symbol}");
+                    // This happens when recompiling ops...
+                    //Log.Error($"Warning: Skipping no longer valid instance of {instance.Symbol} in {parent.Symbol}");
                     continue;
                 }
 

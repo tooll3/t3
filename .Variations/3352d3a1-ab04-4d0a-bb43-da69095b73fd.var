@@ -224,6 +224,22 @@
           "cd917c3d-489e-4e4d-b5dc-eacc846d82ef": -90.0
         }
       }
+    },
+    {
+      "Id": "2f59d0c3-4f1c-43f5-85f1-7780723984eb",
+      "IsPreset": true,
+      "ActivationIndex": 10,
+      "Title": "Square",
+      "PosOnCanvas": {
+        "X": 160.56638,
+        "Y": 315.81415
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "b654ffe2-d46e-4a62-89b3-a9692d5c6481": 6,
+          "5a3347a2-ba87-4b38-a1a8-94bd0ef70f48": 45.0
+        }
+      }
     }
   ]
 }
