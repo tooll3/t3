@@ -176,6 +176,11 @@ public class T3Ui
             
         if (ImGui.BeginMainMenuBar())
         {
+            if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+            {
+                UserSettings.Config.ShowMainMenu = true;
+            }
+            
             ImGui.SetCursorPos(new Vector2(0,-1)); // Shift to make menu items selected when hitting top of screen
                 
             if (ImGui.BeginMenu("Project"))
