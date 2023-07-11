@@ -36,7 +36,22 @@ namespace T3.Editor.Gui.Windows
                                             _isPinned ? CustomComponents.ButtonStates.Activated : CustomComponents.ButtonStates.Normal
                                                   ))
             {
-                _isPinned = !_isPinned;
+                
+                if (_isPinned)
+                {
+                    // Keep pinned if pinned operator changed
+                    var oneSelected = NodeSelection.Selection.Count == 1;
+                    var selectedOp= NodeSelection.GetFirstSelectedInstance();
+                    var opChanged = pinnedOrSelectedInstance != selectedOp;
+                    if (!opChanged || !oneSelected)
+                    {
+                        _isPinned = false;
+                    }
+                }
+                else
+                {
+                    _isPinned = true;
+                }
                 if (_isPinned)
                     PinSelectionToView();
             }
