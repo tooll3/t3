@@ -41,6 +41,9 @@ namespace T3.Operators.Types.Id_15f056a3_ee8b_41a2_92c9_eb85153f8200
         [Input(Guid = "de5d13dd-6cdc-4639-95f8-34b6f91cfe78")]
         public readonly MultiInputSlot<bool> UseWAsSelection = new MultiInputSlot<bool>();
 
+        [Input(Guid = "b2d8f5e0-56fc-4cb1-8bf2-b0f027749055")]
+        public readonly InputSlot<float> RandomPhase = new InputSlot<float>();
+
 
         private enum Spaces
         {

@@ -2,19 +2,6 @@
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
 
-// cbuffer Transforms : register(b0)
-// {
-//     // float4x4 CameraToClipSpace;
-//     // float4x4 ClipSpaceToCamera;
-//     // float4x4 WorldToCamera;
-//     // float4x4 CameraToWorld;
-//     // float4x4 WorldToClipSpace;
-//     // float4x4 ClipSpaceToWorld;
-//     // float4x4 ObjectToWorld;
-//     // float4x4 WorldToObject;
-//     // float4x4 ObjectToCamera;
-//     // float4x4 ObjectToClipSpace;
-// };
 
 cbuffer Params : register(b0)
 {
@@ -51,23 +38,38 @@ float4 GetGain(float4 x, float gain)
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
-    uint numStructs, stride;
-    SourcePoints.GetDimensions(numStructs, stride);
-    if(i.x >= numStructs) {
-        ResultPoints[i.x].w = 0 ;
-        return;
-    }
+    uint pointCount, stride;
+    SourcePoints.GetDimensions(pointCount, stride);
+    // if(i.x >= pointCount) {
+    //     ResultPoints[i.x].w = 0 ;
+    //     return;
+    // }
 
-    float rand = (i.x + 0.5) * 1.431 + 111 + floor(Seed+0.5) * 37.1;
-    float4 hash4 = hash42(rand);
-    hash4 =  GetGain(hash4, clamp(Bias, 0.001, 0.999)) * 2 -1;
+    int pointId = i.x;
+    float f = pointId / (float)pointCount;
+    float phase = Seed + 133.1123 * f;
+    int phaseId = (int)phase; 
+    float4 normalizedScatter = lerp(hash41u(pointId * 12341 + phaseId),
+                                    hash41u(pointId * 12341 + phaseId + 1),
+                                    smoothstep(0, 1,
+                                               phase - phaseId));
+
+
+    float4 hashRot = lerp(hash41u(pointId * 2723 + phaseId),
+                                    hash41u(pointId * 2723 + phaseId + 1),
+                                    smoothstep(0, 1,
+                                               phase - phaseId)) * 2 - 1;
+
+    //float rand = (i.x + 0.5) * 1.431 + 111 + floor(Seed+0.5) * 37.1;
+    //float4 hash4 = hash42(rand);
+    float4 hash4 =  GetGain(normalizedScatter, clamp(Bias, 0.001, 0.999)) * 2 -1;
     
-    float4 hashRot = hash42( float2(rand, 23.1));
+    //float4 hashRot = hash42( float2(rand, 23.1));
 
     float4 rot = SourcePoints[i.x].rotation;
 
     float amount = Amount * (UseWAsSelection > 0.5 ? SourcePoints[i.x].w : 1);
-
+ 
     float3 offset = hash4.xyz * RandomizePosition * amount;
 
     if(UseLocalSpace < 0.5)

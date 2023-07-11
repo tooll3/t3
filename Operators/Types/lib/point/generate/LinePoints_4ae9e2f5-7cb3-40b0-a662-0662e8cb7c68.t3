@@ -40,10 +40,6 @@
       "DefaultValue": 0.0
     },
     {
-      "Id": "208b724d-c5d7-4eaa-94a1-e1f045f14969"/*OrientationAngle*/,
-      "DefaultValue": -90.0
-    },
-    {
       "Id": "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f"/*Twist*/,
       "DefaultValue": 0.0
     },
@@ -58,6 +54,10 @@
         "Y": 1.0,
         "Z": 0.0
       }
+    },
+    {
+      "Id": "208b724d-c5d7-4eaa-94a1-e1f045f14969"/*OrientationAngle*/,
+      "DefaultValue": -90.0
     },
     {
       "Id": "ddc2ea6a-d356-46c9-b333-4cce69c02570"/*AddSeparator*/,

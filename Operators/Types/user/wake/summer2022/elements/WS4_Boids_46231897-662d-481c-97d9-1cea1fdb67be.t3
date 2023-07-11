@@ -120,12 +120,7 @@
           "Value": true
         }
       ],
-      "Outputs": [
-        {
-          "Id": "73ebf863-ba71-421c-bee7-312f13c5eff0"/*DrawLines*/,
-          "IsDisabled": true
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "89ec0a3e-2ba1-4a53-ab29-4f5a4c4094df"/*Execute*/,
@@ -164,7 +159,7 @@
         {
           "Id": "79080698-1097-4178-b7da-7d10fd86be28"/*MixOriginal*/,
           "Type": "System.Single",
-          "Value": 0.02
+          "Value": 0.007999999
         },
         {
           "Id": "0954b214-dd1f-40fd-bebe-29f74a8f5585"/*Reset*/,
@@ -431,17 +426,17 @@
         {
           "Id": "cc98bda7-34a5-4c18-9b9e-fabe51b02d71"/*Amount*/,
           "Type": "System.Single",
-          "Value": 0.04
+          "Value": 0.05
         },
         {
           "Id": "757c259a-118c-4438-bc09-cdc5708af2bc"/*Frequency*/,
           "Type": "System.Single",
-          "Value": 1.95
+          "Value": 0.23
         },
         {
           "Id": "41ee0e65-e2dc-4bf7-af40-bc90517c6c23"/*RotLookupDistance*/,
           "Type": "System.Single",
-          "Value": 0.53
+          "Value": 0.03
         }
       ],
       "Outputs": []
@@ -494,18 +489,18 @@
           "Id": "313596cc-3854-436b-89da-5fd40164ce76"/*Position*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": -2.56035E-08,
-            "Y": -0.07421292,
-            "Z": 0.48923177
+            "X": -0.11671771,
+            "Y": -0.026655888,
+            "Z": 0.5256776
           }
         },
         {
           "Id": "a7acb25c-d60c-43a6-b1df-2cd5c6e183f3"/*Target*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": -2.56035E-08,
-            "Y": -0.07421292,
-            "Z": -1.9267678
+            "X": -0.0041494872,
+            "Y": 0.15374213,
+            "Z": -1.8809555
           }
         }
       ],
@@ -934,12 +929,12 @@
         {
           "Id": "f3d7c7fd-4280-4fb4-9f9a-c39b28d1a72b"/*WindowCenter*/,
           "Type": "System.Single",
-          "Value": 0.049999997
+          "Value": 0.019999998
         },
         {
           "Id": "02f71a92-d5c8-4dd7-af5f-da12330f60eb"/*Threshold*/,
           "Type": "System.Single",
-          "Value": 1.0
+          "Value": 0.41000003
         }
       ],
       "Outputs": []
@@ -1181,7 +1176,7 @@
         {
           "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
           "Type": "System.Single",
-          "Value": 0.3
+          "Value": 0.66
         }
       ],
       "Outputs": []
@@ -1316,7 +1311,7 @@
         {
           "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
           "Type": "System.Single",
-          "Value": 0.03
+          "Value": 0.5
         }
       ],
       "Outputs": []
@@ -1418,7 +1413,12 @@
           "Value": 2020.0
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "324f8114-dae9-4cc8-aa88-021d84dbaf79"/*DrawRibbons*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "a8d5147d-48b3-4c4c-b1bd-7fc7c708d045"/*CylinderMesh*/,

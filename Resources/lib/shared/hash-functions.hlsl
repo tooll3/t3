@@ -164,8 +164,6 @@ float4 hash44(float4 p4)
 
 
 
-
-
 uint pcg(in uint v)
 {
     const uint state = v * 747796405u + 2891336453u;

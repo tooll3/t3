@@ -588,11 +588,6 @@
           "Value": 3.1999998
         },
         {
-          "Id": "208b724d-c5d7-4eaa-94a1-e1f045f14969"/*OrientationAngle*/,
-          "Type": "System.Single",
-          "Value": -90.0
-        },
-        {
           "Id": "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f"/*Twist*/,
           "Type": "System.Single",
           "Value": 0.0
@@ -610,6 +605,11 @@
             "Y": 0.0,
             "Z": 1.0
           }
+        },
+        {
+          "Id": "208b724d-c5d7-4eaa-94a1-e1f045f14969"/*OrientationAngle*/,
+          "Type": "System.Single",
+          "Value": -90.0
         }
       ],
       "Outputs": []

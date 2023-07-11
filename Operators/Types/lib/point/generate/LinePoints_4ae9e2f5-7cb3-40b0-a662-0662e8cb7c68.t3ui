@@ -52,13 +52,6 @@
       }
     },
     {
-      "InputId": "208b724d-c5d7-4eaa-94a1-e1f045f14969"/*OrientationAngle*/,
-      "Position": {
-        "X": -366.65778,
-        "Y": 1089.8347
-      }
-    },
-    {
       "InputId": "8f7206d1-5f78-4a9c-bba9-1ef8277b6d5f"/*Twist*/,
       "Position": {
         "X": -366.65778,
@@ -80,10 +73,20 @@
       }
     },
     {
+      "InputId": "208b724d-c5d7-4eaa-94a1-e1f045f14969"/*OrientationAngle*/,
+      "Position": {
+        "X": -371.41788,
+        "Y": 1325.4214
+      },
+      "Min": -90.0,
+      "Max": 90.0,
+      "Format": "{0:0.00º}"
+    },
+    {
       "InputId": "ddc2ea6a-d356-46c9-b333-4cce69c02570"/*AddSeparator*/,
       "Position": {
-        "X": -373.5915,
-        "Y": 1349.9778
+        "X": -371.45142,
+        "Y": 1432.7272
       }
     }
   ],
@@ -180,8 +183,8 @@
     {
       "ChildId": "cc3e2a65-be3b-4dde-b341-2f5e44b553f6"/*BoolToFloats*/,
       "Position": {
-        "X": -119.05444,
-        "Y": 1347.7341
+        "X": -221.45142,
+        "Y": 1432.7272
       }
     },
     {

@@ -17,7 +17,7 @@
     },
     {
       "Id": "46dbd416-53ab-4efc-bfe0-5e82e98db3b6"/*Rotate*/,
-      "DefaultValue": 720.0
+      "DefaultValue": 0.0
     },
     {
       "Id": "5ece59ea-9e0d-48bc-a19b-c8b33cbbaa47"/*Push*/,

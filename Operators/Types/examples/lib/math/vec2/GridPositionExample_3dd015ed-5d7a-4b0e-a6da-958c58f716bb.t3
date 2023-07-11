@@ -188,11 +188,6 @@
           "Value": 0.5
         },
         {
-          "Id": "208b724d-c5d7-4eaa-94a1-e1f045f14969"/*OrientationAngle*/,
-          "Type": "System.Single",
-          "Value": 129.0
-        },
-        {
           "Id": "83986e05-af3e-469f-a656-9956d37d12ba"/*Orientation*/,
           "Type": "System.Int32",
           "Value": 1
@@ -205,6 +200,11 @@
             "Y": 0.0,
             "Z": 1.0
           }
+        },
+        {
+          "Id": "208b724d-c5d7-4eaa-94a1-e1f045f14969"/*OrientationAngle*/,
+          "Type": "System.Single",
+          "Value": 129.0
         },
         {
           "Id": "ddc2ea6a-d356-46c9-b333-4cce69c02570"/*AddSeparator*/,
