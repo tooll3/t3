@@ -19,6 +19,7 @@ cbuffer Params : register(b0)
     float OffsetU;
     float UseWForWidth;
     float UseWForU;
+    float UvScale;
 };
 
 
@@ -136,6 +137,7 @@ psInput vsMain(uint id: SV_VertexID)
         output.texCoord = float2(strokeFactor, cornerFactors.y /2 +0.5);
     }
 
+    output.texCoord.x *= UvScale;
     output.texCoord.x += OffsetU;
     
 
@@ -166,12 +168,8 @@ float4 psMain(psInput input) : SV_TARGET
     float4 imgColor = texture2.Sample(texSampler, input.texCoord);
 
     float dFromLineCenter= abs(input.texCoord.y -0.5)*2;
-    //float a= 1;//smoothstep(1,0.95,dFromLineCenter) ;
 
     float4 col = input.color * imgColor;
     col.rgb = lerp(col.rgb, FogColor.rgb, input.fog);
     return clamp(col, float4(0,0,0,0), float4(1000,1000,1000,1));
-
-    // float4 color = lerp(input.color * imgColor, FogColor, input.fog); // * input.color;
-    // return clamp(float4(color.rgb, color.a * a), 0, float4(100,100,100,1));
 }

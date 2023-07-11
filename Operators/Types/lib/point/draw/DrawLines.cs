@@ -45,6 +45,12 @@ namespace T3.Operators.Types.Id_836f211f_b387_417c_8316_658e0dc6e117
 
         [Input(Guid = "d90ff4e6-7d70-441f-a064-b40401025c36", MappedType = typeof(SharedEnums.BlendModes))]
         public readonly InputSlot<int> BlendMod = new InputSlot<int>();
+
+        [Input(Guid = "e797d93b-3847-4324-898e-09018267ea82")]
+        public readonly InputSlot<float> UvScale = new InputSlot<float>();
+
+        [Input(Guid = "ba83a66f-5a4c-4355-abb2-d4b7cd55d542")]
+        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> AddressU = new InputSlot<SharpDX.Direct3D11.TextureAddressMode>();
     }
 }
 
