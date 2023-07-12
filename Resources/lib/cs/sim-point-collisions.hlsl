@@ -48,7 +48,7 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
 
     float4 rot;
     float v = q_separate_v(p.rotation, rot);
-    float3 orgV = rotate_vector(float3(0,0,-1), rot) * v;
+    float3 orgV = rotate_vector(float3(0,0,1), rot) * v;
 
     float3 forceSum =0;
 
@@ -79,11 +79,11 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
 
                 float wA = p.w;
                 float wB = points[pointIndex].w;
-                //float massRatio = (wB * wB) / (wA * wA);
-                float massRatio = (wB) / (wA);
+                float massRatio = (wB * wB) / (wA * wA);
+                //float massRatio = (wB) / (wA);
             
                 float gapDistance = distance - wA - wB;
-                float f = gapDistance < 0 ?  smoothstep(0,1, -gapDistance * 20)
+                float f = gapDistance < 0 ?  -gapDistance*100
                                           :   -clamp(1 * smoothstep(0,1, gapDistance * 1) / (1+ gapDistance * 10), -1, 1);
                 
                 forceSum += direction * f * massRatio;
@@ -94,17 +94,15 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
 
     if(count > 0) 
     {
-        forceSum *= 0.1;
+        forceSum *= 0.1 / p.w;
         forceSum += orgV;
 
-        float forceMag = length(forceSum);
-    
+        float forceMag =  clamp(length(forceSum),0, 10);
         float3 forceDirection =  forceSum / (forceMag + 0.0001);
-        float angle = atan2(forceSum.x, forceSum.z);
-        float4 lookAt = q_slerp( rot, rotate_angle_axis(angle, float3(0,1,0)), 0.6);
-
-
-        points[DTid.x].rotation = q_encode_v(lookAt, forceMag);
+        float angle = atan2(forceSum.x, forceSum.y);
+        float4 newRot = rotate_angle_axis(angle, -float3(0,0,1));
+        newRot = qmul(newRot, rotate_angle_axis(-PI/2, float3(1,0,0)));
+        points[DTid.x].rotation = q_encode_v(newRot, forceMag);
         return;
     }
 } 

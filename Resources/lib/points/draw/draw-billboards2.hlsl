@@ -142,6 +142,8 @@ psInput vsMain(uint id
     float3 cornerFactors = Corners[quadIndex];
 
     Point p = Points[particleId]; 
+
+    float4 pRotation = normalize(p.rotation); 
     float f = particleId / (float)particleCount;
 
     float phase = RandomPhase + 133.1123 * f;
@@ -172,12 +174,12 @@ psInput vsMain(uint id
 
     float4 posInObject = float4(p.position, 1);
 
-    float3 randomOffset = rotate_vector((normalizedScatter.xyz - 0.5) * 2 * RandomPosition * Randomize, p.rotation);
+    float3 randomOffset = rotate_vector((normalizedScatter.xyz - 0.5) * 2 * RandomPosition * Randomize, pRotation);
     posInObject.xyz += randomOffset;
 
     if (OrientationMode <= 1.5)
     {
-            posInObject.xyz += rotate_vector(float3(0,0,Offset.z), p.rotation);
+            posInObject.xyz += rotate_vector(float3(0,0,Offset.z), pRotation);
     }
 
     // float3 axis = rotate_vector(p.position, rotation) * Size * scaleFromCurve;
@@ -190,7 +192,7 @@ psInput vsMain(uint id
 
     output.fog = pow(saturate(-posInCamera.z / FogDistance), FogBias);
 
-    float4 colorFromPoint = (UseRotationAsRgba > 0.5) ? p.rotation : 1;
+    float4 colorFromPoint = (UseRotationAsRgba > 0.5) ? pRotation : 1;
 
     float colorFxU = GetUFromMode(ColorVariationMode, particleId, f, normalizedScatter, p.w, output.fog);
     output.color = Color * ColorOverW.SampleLevel(texSampler, float2(colorFxU, 0), 0) * colorFromPoint;
@@ -232,7 +234,7 @@ psInput vsMain(uint id
 
         if ((int)OrientationMode == 1)
         {
-            float3 yRotated = rotate_vector(float3(0, 1, 0), p.rotation);
+            float3 yRotated = rotate_vector(float3(0, 1, 0), pRotation);
             float4 yRotatedInCam = mul(float4(yRotated, 1), ObjectToCamera);
             float a = atan2(yRotatedInCam.x, yRotatedInCam.y);
             float4 xx = rotate_angle_axis(-a, float3(0, 0, 1));
@@ -246,7 +248,7 @@ psInput vsMain(uint id
     else
     {
         float3 axis = ( cornerFactors + Offset) * 0.010 * float3(Stretch * textureAspect,1);
-        float4 rotation = qmul(normalize(p.rotation), rotate_angle_axis((adjustedRotate + 180 + RandomRotate * scatterForScale.x) / 180 * PI, RotationAxis));
+        float4 rotation = qmul(normalize(pRotation), rotate_angle_axis((adjustedRotate + 180 + RandomRotate * scatterForScale.x) / 180 * PI, RotationAxis));
         axis = rotate_vector(axis, rotation) * computedScale;
         // float3 pInObject = p.position + axis;
         output.position = mul(posInObject + float4(axis, 0), ObjectToClipSpace);
