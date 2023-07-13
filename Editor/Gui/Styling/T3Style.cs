@@ -28,8 +28,10 @@ public static class T3Style
         style.Colors[(int)ImGuiCol.Border] = UiColors.BackgroundFull.Fade(0.9f);
         style.Colors[(int)ImGuiCol.BorderShadow] = UiColors.BackgroundFull;
         style.Colors[(int)ImGuiCol.FrameBg] = UiColors.BackgroundInputField;//new Vector4(0.13f, 0.13f, 0.13f, 0.80f);
+        
         style.Colors[(int)ImGuiCol.FrameBgHovered] = UiColors.BackgroundInputFieldHover;
         style.Colors[(int)ImGuiCol.FrameBgActive] = UiColors.BackgroundInputFieldActive;
+        
         style.Colors[(int)ImGuiCol.ScrollbarBg] = new Vector4(0.12f, 0.12f, 0.12f, 0.53f);
         style.Colors[(int)ImGuiCol.ScrollbarGrab] = new Vector4(0.31f, 0.31f, 0.31f, 0.33f);
         style.Colors[(int)ImGuiCol.ResizeGrip] = UiColors.WindowResizeHandle;

@@ -23,6 +23,7 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Templates;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.UiHelpers.Wiki;
@@ -63,6 +64,7 @@ public class T3Ui
 
     public void ProcessFrame()
     {
+        FormInputs.ResetIndent();
         //InitializeAfterAppWindowReady();
             
         // Prepare the current frame 

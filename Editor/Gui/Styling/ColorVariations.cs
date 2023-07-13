@@ -12,17 +12,17 @@ namespace T3.Editor.Gui.Styling
     /// </summary>
     public static class ColorVariations
     {
-        public static readonly Variation Highlight = new Variation("Highlight", 1.2f, 1.2f, 1);
-        public static readonly Variation Muted = new Variation("Muted", 0.7f, 0.50f, 0.6f);
-        public static readonly Variation ConnectionLines = new Variation("Connection Lines", 1, 0.8f, 0.8f);
-        public static readonly Variation Operator = new Variation("Operator", 0.7f, 0.5f, 1);
-        public static readonly Variation OperatorIdle = new Variation("Operator", 1f, 0.5f, 1);
-        public static readonly Variation OperatorHover = new Variation("Operator Hover", 1, 0.75f, 1);
+        public static readonly Variation Highlight = new("Highlight", 1.2f, 1.2f, 1);
+        public static readonly Variation Muted = new("Muted", 0.7f, 0.50f, 0.6f);
+        public static readonly Variation ConnectionLines = new("Connection Lines", 1, 0.8f, 0.8f);
+        public static readonly Variation Operator = new("Operator", 0.7f, 0.5f, 1);
+        public static readonly Variation OperatorIdle = new("Operator", 1f, 0.5f, 1);
+        public static readonly Variation OperatorHover = new("Operator Hover", 1, 0.75f, 1);
         
-        public static readonly Variation OutputNodes = new Variation("Output Nodes", 0.7f, 0.35f, 0.4f);
+        public static readonly Variation OutputNodes = new("Output Nodes", 0.7f, 0.35f, 0.4f);
         
-        public static readonly Variation OperatorInputZone = new Variation("Operator Input Zone", 0.7f, 0.15f, 0.7f);
-        public static readonly Variation OperatorLabel = new Variation("Operator Label", 0.4f, 1.3f, 1);
+        public static readonly Variation OperatorInputZone = new("Operator Input Zone", 0.7f, 0.15f, 0.7f);
+        public static readonly Variation OperatorLabel = new("Operator Label", 0.4f, 1.3f, 1);
 
         public static void DrawSettingsUi()
         {
@@ -33,7 +33,7 @@ namespace T3.Editor.Gui.Styling
                     var color = pair.Value.Color;
                     if (ImGui.ColorEdit4(pair.Key.Name, ref color.Rgba))
                     {
-                        pair.Value.Color = color;
+                        //pair.Value.Color = color;
                     }
                 }
                 ImGui.TreePop();
@@ -102,16 +102,16 @@ namespace T3.Editor.Gui.Styling
         }
 
         private static Color _sampleColor = Color.Green;
-        private static List<Variation> _colorVariations = new List<Variation>()
-        {
-            ConnectionLines,
-            Operator,
-            OperatorHover,
-            OutputNodes,
-            Highlight,
-            Muted,
-            OperatorInputZone,
-            OperatorLabel,
-        };
+        private static readonly List<Variation> _colorVariations = new()
+                                                                       {
+                                                                           ConnectionLines,
+                                                                           Operator,
+                                                                           OperatorHover,
+                                                                           OutputNodes,
+                                                                           Highlight,
+                                                                           Muted,
+                                                                           OperatorInputZone,
+                                                                           OperatorLabel,
+                                                                       };
     }
 }

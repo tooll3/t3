@@ -77,7 +77,7 @@ namespace T3.Editor.Gui.UiHelpers
             
             dl.AddPolyline(ref _graphPoints[0], 
                            _sampleCount - 1, 
-                           UiColors.BackgroundFull, 
+                           UiColors.Text.Fade(0.3f), 
                            ImDrawFlags.None, 
                            1);
             dl.AddCircleFilled(_graphPoints[_sampleCount - 1], 3, UiColors.Gray);

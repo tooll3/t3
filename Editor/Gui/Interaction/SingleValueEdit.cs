@@ -81,9 +81,9 @@ namespace T3.Editor.Gui.Interaction
                 switch (_state)
                 {
                     case InputStates.Dialing:
-                        ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundFull.Rgba);
-                        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundFull.Rgba);
-                        ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundFull.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundActive.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundActive.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundActive.Rgba);
                         DrawButtonWithDynamicLabel(FormatValueForButton(ref _editValue), ref size);
                         DrawValueRangeIndicator(value, min, max);
                         ImGui.PopStyleColor(3);

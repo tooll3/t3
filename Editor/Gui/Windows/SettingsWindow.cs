@@ -121,6 +121,7 @@ namespace T3.Editor.Gui.Windows
             if (ImGui.TreeNode("Colors"))
             {
                 ColorThemeEditor.DrawEditor();
+                ColorVariations.DrawSettingsUi();
                 ImGui.Dummy(new Vector2(20,20));
                 ImGui.TreePop();
             }

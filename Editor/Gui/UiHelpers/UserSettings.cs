@@ -93,7 +93,9 @@ namespace T3.Editor.Gui.UiHelpers
             public List<GraphBookmarkNavigation.Bookmark> Bookmarks = new();
             public List<Gradient> GradientPresets = new();
 
-            
+            public string ColorThemeName;
+
+
         }
         
         public static bool IsUserNameDefined()

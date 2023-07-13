@@ -4,6 +4,6 @@ namespace T3.Editor.Gui.InputUi
 {
     public interface ITypeUiProperties
     {
-        Color Color { get; set; }
+        Color Color { get;  }
     }
 }

@@ -1,7 +1,5 @@
 ﻿// ReSharper disable RedundantArgumentDefaultValue
 
-using System.ComponentModel;
-
 namespace T3.Editor.Gui.Styling;
 
 public static class UiColors
@@ -23,8 +21,8 @@ public static class UiColors
     public static Color BackgroundFull = new(0f, 0f, 0f, 1f);
     
     [T3Style.Hint(Description = "Buttons and form inputs.")]
-    public static Color BackgroundButton = Color.FromString("#CC282828");
-    public static Color BackgroundHover = new(43, 65, 80, 255);
+    public static Color BackgroundButton = new(0.16f,0.16f,0.16f,0.8f);
+    public static Color BackgroundHover = new(0.26f,0.26f,0.26f,0.8f);
     
     [T3Style.Hint(Description = "Highlight color for pressed for activated ui elements.")]
     public static Color BackgroundActive = Color.FromString("#4592FF");
@@ -34,9 +32,9 @@ public static class UiColors
     
     public static Color BackgroundTabActive = Color.FromString("#3A3A3A");
     public static Color BackgroundTabInActive = Color.FromString("#CC282828");
-    public static Color BackgroundInputField = new(0, 0, 0, 0f);
-    public static Color BackgroundInputFieldHover = new(0.1f, 0.1f, 0.1f, 0f);
-    public static Color BackgroundInputFieldActive = new(0, 0, 0, 0f);
+    public static Color BackgroundInputField = Color.FromString("#222222");
+    public static Color BackgroundInputFieldHover = new(0.1f, 0.1f, 0.1f, 1f);
+    public static Color BackgroundInputFieldActive = new(0f, 0f, 0f, 1f);
     
     public static Color Gray = new(0.6f, 0.6f, 0.6f, 1);
     public static Color WindowResizeHandle = new (0.00f, 0.00f, 0.00f, 0.25f);
@@ -66,4 +64,11 @@ public static class UiColors
 
 
     public static Color MiniMapItems = new(1f, 1f, 1f, 1f);
+    
+    public static Color ColorForValues = new(0.525f, 0.550f, 0.554f, 1.000f);
+    public static Color ColorForString = new(0.468f, 0.586f, 0.320f, 1.000f);
+    public static Color ColorForTextures = new (0.625f, 0, 0.43f, 1.000f);
+    public static Color ColorForDX11 = new(0.853f, 0.313f, 0.855f, 1.000f);
+    public static Color ColorForCommands = new(0.132f, 0.722f, 0.762f, 1.000f);
+    public static Color ColorForGpuData = new Color(0.681f, 0.034f, 0.283f, 1.000f);
 }
