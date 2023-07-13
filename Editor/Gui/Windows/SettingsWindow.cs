@@ -118,6 +118,13 @@ namespace T3.Editor.Gui.Windows
                 ImGui.TreePop();
             }
 
+            if (ImGui.TreeNode("Colors"))
+            {
+                ColorThemeEditor.DrawEditor();
+                ImGui.Dummy(new Vector2(20,20));
+                ImGui.TreePop();
+            }
+
             if (ImGui.TreeNode("Project settings"))
             {
                 var projectSettingsChanged = false;

@@ -80,10 +80,10 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                     {
                         ImGui.PushFont(Fonts.FontSmall);
                         var connectionSource = sourceOp.ReadableName + "." + output.OutputDefinition.Name;
-                        ImGui.TextColored(Color.Gray, connectionSource);
+                        ImGui.TextColored(UiColors.Gray, connectionSource);
 
                         var connectionTarget = "->" + targetOp.ReadableName + "." + input.InputDefinition.Name;
-                        ImGui.TextColored(Color.Gray, connectionTarget);
+                        ImGui.TextColored(UiColors.Gray, connectionTarget);
                         ImGui.PopFont();
 
                         var width = 160f;

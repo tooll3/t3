@@ -81,9 +81,9 @@ namespace T3.Editor.Gui.Interaction
                 switch (_state)
                 {
                     case InputStates.Dialing:
-                        ImGui.PushStyleColor(ImGuiCol.Button, Color.Black.Rgba);
-                        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Black.Rgba);
-                        ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Black.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundFull.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundFull.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundFull.Rgba);
                         DrawButtonWithDynamicLabel(FormatValueForButton(ref _editValue), ref size);
                         DrawValueRangeIndicator(value, min, max);
                         ImGui.PopStyleColor(3);
@@ -136,8 +136,8 @@ namespace T3.Editor.Gui.Interaction
 
                     case InputStates.TextInput:
                         ImGui.PushStyleColor(ImGuiCol.Text, double.IsNaN(_editValue)
-                                                                ? Color.Red.Rgba
-                                                                : Color.White);
+                                                                ? UiColors.StatusError.Rgba
+                                                                : UiColors.ForegroundFull);
                         ImGui.SetNextItemWidth(size.X);
                         ImGui.InputText("##dialInput" + _editInteractionCounter, ref _jogDialText, 20);
 
@@ -218,7 +218,7 @@ namespace T3.Editor.Gui.Interaction
                             T3Ui.MouseWheelFieldHovered = true;
                             ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
                             var dl = ImGui.GetForegroundDrawList();
-                            dl.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.Gray);
+                            dl.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), UiColors.Gray);
 
                             var wheel = io.MouseWheel;
                             if (wheel == 0)

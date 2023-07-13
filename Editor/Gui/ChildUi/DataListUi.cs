@@ -19,7 +19,7 @@ namespace T3.Editor.Gui.ChildUi
             if (innerRect.GetHeight() < 1)
                 return DefaultResult;
 
-            drawList.AddRectFilled(innerRect.Min, innerRect.Max, Color.DarkGray);
+            drawList.AddRectFilled(innerRect.Min, innerRect.Max, UiColors.Gray);
             
             var list = dataList.InputList.Value;
             if (list == null)

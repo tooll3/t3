@@ -134,7 +134,7 @@ namespace T3.Editor.Gui.Windows
 
             if (!string.IsNullOrEmpty(symbolUi.Description))
             {
-                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Rgba);
                 ImGui.TextWrapped(symbolUi.Description);
                 ImGui.PopStyleColor();
             }
@@ -318,7 +318,7 @@ namespace T3.Editor.Gui.Windows
                 // Fake placeholder text
                 if (string.IsNullOrEmpty(nameForEdit))
                     ImGui.GetWindowDrawList().AddText(ImGui.GetItemRectMin() + new Vector2(5, 5),
-                                                      T3Style.Colors.TextMuted,
+                                                      UiColors.TextMuted,
                                                       "Untitled instance");
 
             }
@@ -329,8 +329,8 @@ namespace T3.Editor.Gui.Windows
                 ImGui.PushFont(Fonts.FontBold);
                 if (symbolChildUi.IsDisabled)
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Button, T3Style.Colors.Warning.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, Color.White.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Button, UiColors.StatusAttention.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
                     if (ImGui.Button("DISABLED", new Vector2(90, 0)))
                     {
                         UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, false));
@@ -339,7 +339,7 @@ namespace T3.Editor.Gui.Windows
                 }
                 else
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                     if (ImGui.Button("ENABLED", new Vector2(90, 0)))
                     {
                         UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, true));
@@ -358,8 +358,8 @@ namespace T3.Editor.Gui.Windows
                 ImGui.PushFont(Fonts.FontBold);
                 if (symbolChildUi.SymbolChild.IsBypassed)
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Button, T3Style.Colors.Warning.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, Color.White.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Button, UiColors.StatusAttention.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
                     
                     // TODO: check if bypassable
                     if (ImGui.Button("BYPASSED", new Vector2(90, 0)))
@@ -370,7 +370,7 @@ namespace T3.Editor.Gui.Windows
                 }
                 else
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                     if (ImGui.Button("BYPASS", new Vector2(90, 0)))
                     {
                         UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, true));

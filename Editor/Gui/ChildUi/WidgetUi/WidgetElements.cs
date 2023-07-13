@@ -24,12 +24,12 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
                                : Fonts.FontNormal;
         
             ImGui.PushFont(font);
-            var fadingColor = T3Style.Colors.TextWidgetTitle
-                                     .Fade(MathUtils.NormalizeAndClamp
-                                               (
-                                                canvasScale,
-                                                ScaleFactors.SmallerScale,
-                                                ScaleFactors.SmallScale));
+            var fadingColor = UiColors.WidgetTitle
+                                    .Fade(MathUtils.NormalizeAndClamp
+                                              (
+                                               canvasScale,
+                                               ScaleFactors.SmallerScale,
+                                               ScaleFactors.SmallScale));
         
             //var labelSize = ImGui.CalcTextSize(formattedValue);
             drawList.AddText(new Vector2
@@ -48,12 +48,12 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
 
             ImGui.PushFont(font);
 
-            var fadingColor = T3Style.Colors.TextWidgetTitle
-                                     .Fade(MathUtils.NormalizeAndClamp
-                                               (
-                                                canvasScale,
-                                                ScaleFactors.NormalScale,
-                                                ScaleFactors.BigScale));
+            var fadingColor = UiColors.WidgetTitle
+                                    .Fade(MathUtils.NormalizeAndClamp
+                                              (
+                                               canvasScale,
+                                               ScaleFactors.NormalScale,
+                                               ScaleFactors.BigScale));
             drawList.AddText(widgetRect.Min + new Vector2(5, 2),
                              fadingColor,
                              title);
@@ -71,12 +71,12 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
                                : Fonts.FontNormal;
 
             ImGui.PushFont(font);
-            var fadingColor = T3Style.Colors.TextWidgetTitle
-                                     .Fade(MathUtils.NormalizeAndClamp
-                                               (
-                                                canvasScale,
-                                                ScaleFactors.SmallerScale,
-                                                ScaleFactors.SmallScale));
+            var fadingColor = UiColors.WidgetTitle
+                                    .Fade(MathUtils.NormalizeAndClamp
+                                              (
+                                               canvasScale,
+                                               ScaleFactors.SmallerScale,
+                                               ScaleFactors.SmallScale));
 
             var labelSize = ImGui.CalcTextSize(formattedValue);
             drawList.AddText(new Vector2
@@ -96,12 +96,12 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
         
             ImGui.PushFont(font);
         
-            var fadingColor = T3Style.Colors.TextWidgetTitle
-                                     .Fade(MathUtils.NormalizeAndClamp
-                                               (
-                                                canvasScale,
-                                                ScaleFactors.NormalScale,
-                                                ScaleFactors.BigScale));
+            var fadingColor = UiColors.WidgetTitle
+                                    .Fade(MathUtils.NormalizeAndClamp
+                                              (
+                                               canvasScale,
+                                               ScaleFactors.NormalScale,
+                                               ScaleFactors.BigScale));
             var labelSize = ImGui.CalcTextSize(title);
             drawList.AddText(new Vector2
                                  (widgetRect.Min.X + 5,

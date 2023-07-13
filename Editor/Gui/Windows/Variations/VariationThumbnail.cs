@@ -59,12 +59,12 @@ namespace T3.Editor.Gui.Windows.Variations
                               uvRect.Max, Color.White.Fade(focusOpacity)
                              );
 
-            drawList.AddRect(pMin, pMax, Color.Gray.Fade(0.2f * focusOpacity));
+            drawList.AddRect(pMin, pMax, UiColors.Gray.Fade(0.2f * focusOpacity));
 
             variation.IsSelected = Selection.IsNodeSelected(variation);
             if (variation.IsSelected)
             {
-                drawList.AddRect(pMin - Vector2.One, pMax + Vector2.One, Color.White);
+                drawList.AddRect(pMin - Vector2.One, pMax + Vector2.One, UiColors.Selection);
             }
 
             const int bottomPadding = 15;
@@ -91,7 +91,7 @@ namespace T3.Editor.Gui.Windows.Variations
 
             if (variation.State == Variation.States.Active)
             {
-                drawList.AddCircleFilled(pMax - Vector2.One * 4, 2, T3Style.Colors.GraphActiveLine);
+                drawList.AddCircleFilled(pMax - Vector2.One * 4, 2, UiColors.WidgetActiveLine);
             }
             
             ImGui.SetCursorScreenPos(pMin);
@@ -172,7 +172,7 @@ namespace T3.Editor.Gui.Windows.Variations
             ImGui.PushFont(Fonts.FontLarge);
             var label = $"{blend * 100:0}%";
             var labelSize = ImGui.CalcTextSize(label);
-            drawList.AddText(areaOnScreen.GetCenter() - labelSize / 2, Color.White, label);
+            drawList.AddText(areaOnScreen.GetCenter() - labelSize / 2, UiColors.ForegroundFull, label);
             ImGui.PopFont();
         }
 

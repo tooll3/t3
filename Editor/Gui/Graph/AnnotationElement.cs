@@ -90,7 +90,7 @@ namespace T3.Editor.Gui.Graph
             }
 
             var borderColor = annotation.IsSelected
-                                  ? Color.White
+                                  ? UiColors.Selection
                                   : annotation.Color.Fade(isHeaderHovered ? headerHoverAlpha : backgroundAlpha);
 
             const float thickness = 1;

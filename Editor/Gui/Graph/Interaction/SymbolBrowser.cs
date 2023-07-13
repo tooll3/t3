@@ -151,7 +151,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.InputText("##symbolbrowserfilter", ref _filter.SearchString, 10);
 
             // Search input outline
-            _drawList.AddRect(posInScreen, posInScreen + size, Color.Gray);
+            _drawList.AddRect(posInScreen, posInScreen + size, UiColors.Gray);
 
             if (ImGui.IsKeyPressed((ImGuiKey)Key.Return))
             {
@@ -263,7 +263,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                         var color = symbolUi.Symbol.OutputDefinitions.Count > 0
                                         ? TypeUiRegistry.GetPropertiesForType(symbolUi.Symbol.OutputDefinitions[0]?.ValueType).Color
-                                        : Color.Gray;
+                                        : UiColors.Gray;
 
                         if (!isRelevantNamespace)
                         {
@@ -440,7 +440,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             {
                 if (!string.IsNullOrEmpty(_selectedSymbolUi.Description))
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Rgba);
                     ImGui.TextWrapped(_selectedSymbolUi.Description);
                     ImGui.PopStyleColor();
                 }
@@ -498,7 +498,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             var symbolUi = SymbolUiRegistry.Entries[exampleId];
             var color = symbolUi.Symbol.OutputDefinitions.Count > 0
                             ? TypeUiRegistry.GetPropertiesForType(symbolUi.Symbol.OutputDefinitions[0]?.ValueType).Color
-                            : Color.Gray;
+                            : UiColors.Gray;
 
             ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(color).Rgba);
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ColorVariations.OperatorHover.Apply(color).Rgba);

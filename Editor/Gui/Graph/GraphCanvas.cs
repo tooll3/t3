@@ -44,7 +44,6 @@ namespace T3.Editor.Gui.Graph
             _initialCompositionPath = idPath;
         }
 
-        private bool _initializedCompositionAfterLayoutReady;
 
         public void SetComposition(List<Guid> childIdPath, ICanvas.Transition transition)
         {
@@ -688,7 +687,7 @@ namespace T3.Editor.Gui.Graph
                             : $"{selectedChildUis.Count} selected items...";
 
             ImGui.PushFont(Fonts.FontSmall);
-            ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Rgba);
             ImGui.TextUnformatted(label);
             ImGui.PopStyleColor();
             ImGui.PopFont();
@@ -930,7 +929,7 @@ namespace T3.Editor.Gui.Graph
                                  {
                                      Id = Guid.NewGuid(),
                                      Title = "Untitled Annotation",
-                                     Color = Color.Gray,
+                                     Color = UiColors.Gray,
                                      PosOnCanvas = area.Min,
                                      Size = area.GetSize()
                                  };
@@ -1156,16 +1155,14 @@ namespace T3.Editor.Gui.Graph
             for (var x = (-Scroll.X * Scale.X) % gridSize; x < WindowSize.X; x += gridSize)
             {
                 DrawList.AddLine(new Vector2(x, 0.0f) + WindowPos,
-                                 new Vector2(x, WindowSize.Y) + WindowPos,
-                                 _gridColor);
+                                 new Vector2(x, WindowSize.Y) + WindowPos, UiColors.CanvasGrid);
             }
 
             for (var y = (-Scroll.Y * Scale.Y) % gridSize; y < WindowSize.Y; y += gridSize)
             {
                 DrawList.AddLine(
                                  new Vector2(0.0f, y) + WindowPos,
-                                 new Vector2(WindowSize.X, y) + WindowPos,
-                                 _gridColor);
+                                 new Vector2(WindowSize.X, y) + WindowPos, UiColors.CanvasGrid);
             }
         }
 
@@ -1208,8 +1205,6 @@ namespace T3.Editor.Gui.Graph
         public readonly EditNodeOutputDialog EditNodeOutputDialog = new();
         public static readonly LibWarningDialog LibWarningDialog = new();
 
-        //public override SelectionHandler SelectionHandler { get; } = new SelectionHandler();
-        private static readonly Color _gridColor = new(0, 0, 0, 0.15f);
         private List<SymbolChildUi> ChildUis { get; set; }
         public readonly SymbolBrowser SymbolBrowser = new SymbolBrowser();
         private string _symbolNameForDialogEdits = "";
@@ -1218,6 +1213,7 @@ namespace T3.Editor.Gui.Graph
         private readonly GraphWindow _window;
         private static Vector2 _dampedScrollVelocity = Vector2.Zero;
         private readonly List<Guid> _initialCompositionPath;
+        private bool _initializedCompositionAfterLayoutReady;
 
         public enum HoverModes
         {

@@ -498,20 +498,20 @@ namespace T3.Editor.Gui.Interaction
 
             var focusOnScreen = TransformPosition(focusCenterOnCanvas);
             dl.AddCircle(focusOnScreen, 30, Color.Green);
-            dl.AddText(focusOnScreen + new Vector2(0, 0), Color.Orange, $"{focusCenterOnCanvas.X:0.0} {focusCenterOnCanvas.Y:0.0} ");
+            dl.AddText(focusOnScreen + new Vector2(0, 0), UiColors.StatusAnimated, $"{focusCenterOnCanvas.X:0.0} {focusCenterOnCanvas.Y:0.0} ");
 
             var wp = ImGui.GetWindowPos();
-            dl.AddRectFilled(wp, wp + new Vector2(200, 100), Color.Black.Fade(0.4f));
-            dl.AddText(wp + new Vector2(0, 0), Color.Orange, $"SCAL: {ScaleTarget.X:0.0} {ScaleTarget.Y:0.0} ");
-            dl.AddText(wp + new Vector2(0, 16), Color.Orange, $"SCRL: {ScrollTarget.X:0.0} {ScrollTarget.Y:0.0} ");
-            dl.AddText(wp + new Vector2(0, 32), Color.Orange, $"CNVS: {focusCenterOnCanvas.X:0.0} {focusCenterOnCanvas.Y:0.0} ");
+            dl.AddRectFilled(wp, wp + new Vector2(200, 100), UiColors.Background.Fade(0.4f));
+            dl.AddText(wp + new Vector2(0, 0), UiColors.StatusAnimated, $"SCAL: {ScaleTarget.X:0.0} {ScaleTarget.Y:0.0} ");
+            dl.AddText(wp + new Vector2(0, 16), UiColors.StatusAnimated, $"SCRL: {ScrollTarget.X:0.0} {ScrollTarget.Y:0.0} ");
+            dl.AddText(wp + new Vector2(0, 32), UiColors.StatusAnimated, $"CNVS: {focusCenterOnCanvas.X:0.0} {focusCenterOnCanvas.Y:0.0} ");
             var hovered = ImGui.IsWindowHovered() ? "hovered" : "";
             var hoveredChild = ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) ? "hoveredChildWindows" : "";
-            dl.AddText(wp + new Vector2(0, 48), Color.Orange, $"{hovered} {hoveredChild}");
+            dl.AddText(wp + new Vector2(0, 48), UiColors.StatusAnimated, $"{hovered} {hoveredChild}");
             
             var focused = ImGui.IsWindowFocused() ? "focused" : "";
             var focusedChild = ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows) ? "focusedChildWindows" : "";
-            dl.AddText(wp + new Vector2(0, 64), Color.Orange, $"{focused} {focusedChild}");
+            dl.AddText(wp + new Vector2(0, 64), UiColors.StatusAnimated, $"{focused} {focusedChild}");
         }
 
         protected bool IsCurveCanvas => Scale.Y < 0;

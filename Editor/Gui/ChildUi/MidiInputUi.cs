@@ -31,7 +31,7 @@ namespace T3.Editor.Gui.ChildUi
             var flashProgress = (float)(Playback.RunTimeInSecs - midiInput.LastMessageTime).Clamp(0,flashDuration)/flashDuration;
             if (flashProgress < 1)
             {
-                drawList.AddRectFilled(screenRect.Min, screenRect.Max, Color.Mix(Color.Orange.Fade(0.4f), Color.Transparent, flashProgress*flashProgress));
+                drawList.AddRectFilled(screenRect.Min, screenRect.Max, Color.Mix(UiColors.StatusAnimated.Fade(0.4f), Color.Transparent, flashProgress*flashProgress));
             }
             
 
@@ -53,7 +53,7 @@ namespace T3.Editor.Gui.ChildUi
 
             var normalizedFadeOut = ((Playback.RunTimeInSecs - midiInput.LastMessageTime) / 5).Clamp(0, 1);
             var fadeOut = (float)MathUtils.RemapAndClamp(normalizedFadeOut, 0, 1, 1, 0.5f);
-            var fadeColor = Color.White.Fade(fadeOut);
+            var fadeColor = UiColors.ForegroundFull.Fade(fadeOut);
             ImGui.TextColored(fadeColor, $"{midiInput.Result.Value:0.00}");
 
             ImGui.PopClipRect();
@@ -72,7 +72,7 @@ namespace T3.Editor.Gui.ChildUi
 
                 var xPos = MathUtils.RemapAndClamp((double)currentValue, minRange, maxRange, graphRect.Min.X, graphRect.Max.X);
                 var topLeftPos = new Vector2((float)xPos, graphRect.Min.Y);
-                drawList.AddRectFilled(topLeftPos, topLeftPos + new Vector2(1, graphRect.GetHeight()), Color.Orange);
+                drawList.AddRectFilled(topLeftPos, topLeftPos + new Vector2(1, graphRect.GetHeight()), UiColors.StatusAnimated);
             }
 
             ImGui.PopFont();

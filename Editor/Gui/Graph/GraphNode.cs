@@ -77,8 +77,8 @@ namespace T3.Editor.Gui.Graph
                         {
                             ImGui.SetCursorScreenPos(_usableScreenRect.Min - new Vector2(10, 10) * T3Ui.UiScaleFactor);
                             ImGui.InvisibleButton("#warning", new Vector2(15, 15));
-                            Icons.DrawIconOnLastItem(Icon.Warning, T3Style.Colors.Warning);
-                            CustomComponents.TooltipForLastItem( T3Style.Colors.Warning, statusLevel.ToString(), statusProvider.GetStatusMessage(), false);
+                            Icons.DrawIconOnLastItem(Icon.Warning, UiColors.StatusWarning);
+                            CustomComponents.TooltipForLastItem( UiColors.StatusWarning, statusLevel.ToString(), statusProvider.GetStatusMessage(), false);
                         }
                     }
                     
@@ -102,7 +102,7 @@ namespace T3.Editor.Gui.Graph
 
                     var typeColor = (childUi.SymbolChild.Symbol.OutputDefinitions.Count > 0
                                         ? TypeUiRegistry.GetPropertiesForType(childUi.SymbolChild.Symbol.OutputDefinitions[0].ValueType).Color
-                                        : Color.Gray).Fade(Graph.GraphOpacity);
+                                        : UiColors.Gray).Fade(Graph.GraphOpacity);
 
                     var backgroundColor = typeColor;
 
@@ -291,7 +291,7 @@ namespace T3.Editor.Gui.Graph
                     {
                         drawList.AddRect(_selectableScreenRect.Min - Vector2.One  * 2,
                                          _selectableScreenRect.Max + Vector2.One * 3 ,
-                                         T3Style.Colors.ButtonActive,
+                                         UiColors.BackgroundActive,
                                          rounding: 0,
                                          ImDrawFlags.None);
                     }
@@ -302,20 +302,20 @@ namespace T3.Editor.Gui.Graph
                     var isInstanceAnimated = compositionOp.Symbol.Animator.IsInstanceAnimated(instance);
                     if (isInstanceAnimated)
                     {
-                        DrawIndicator(Color.Orange, ref indicatorCount);
+                        DrawIndicator(UiColors.StatusAnimated, ref indicatorCount);
                     }
 
                     // Pinned indicator
                     if (FrameStats.Last.RenderedIds.Contains(instance.SymbolChildId))
                     {
-                        DrawIndicator(Color.White, ref indicatorCount);
+                        DrawIndicator(UiColors.Selection, ref indicatorCount);
                     }
 
                     // Snapshot indicator
                     {
                         if (childUi.SnapshotGroupIndex > 0)
                         {
-                            DrawIndicator(Color.Blue, ref indicatorCount);
+                            DrawIndicator(UiColors.StatusAutomated, ref indicatorCount);
                         }
                     }
 
@@ -349,8 +349,10 @@ namespace T3.Editor.Gui.Graph
 
                     if (childUi.IsSelected)
                     {
-                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One , _selectableScreenRect.Max + Vector2.One * 2, Color.Black.Fade(Graph.GraphOpacity));
-                        drawList.AddRect(_selectableScreenRect.Min , _selectableScreenRect.Max + Vector2.One * 1, Color.White.Fade(Graph.GraphOpacity));
+                        drawList.AddRect(_selectableScreenRect.Min - Vector2.One , _selectableScreenRect.Max + Vector2.One * 2, 
+                                         UiColors.BackgroundFull.Fade(Graph.GraphOpacity));
+                        drawList.AddRect(_selectableScreenRect.Min , _selectableScreenRect.Max + Vector2.One * 1, 
+                                         UiColors.ForegroundFull.Fade(Graph.GraphOpacity));
                     }
                 }
             }
@@ -623,7 +625,7 @@ namespace T3.Editor.Gui.Graph
             var size = _usableScreenRect.GetSize() - padding * 2;
             drawList.AddLine(_usableScreenRect.Min + p1 * size + padding,
                              _usableScreenRect.Min + p2 * size + padding,
-                             T3Style.Colors.Warning.Fade(Graph.GraphOpacity), 3);
+                             UiColors.StatusWarning.Fade(Graph.GraphOpacity), 3);
 
         }
 
@@ -636,7 +638,9 @@ namespace T3.Editor.Gui.Graph
                                    (_usableScreenRect.Max.Y - 2 - s).Clamp(_usableScreenRect.Min.Y + 2, _usableScreenRect.Max.Y));
             var pMax = new Vector2(_usableScreenRect.Max.X - 2 - dx, _usableScreenRect.Max.Y - 2);
             _drawList.AddRectFilled(pMin, pMax, color * Graph.GraphOpacity);
-            _drawList.AddRect(pMin-Vector2.One, pMax+Vector2.One, Color.Black.Fade(0.4f * Graph.GraphOpacity));
+            _drawList.AddRect(pMin-Vector2.One, 
+                              pMax+Vector2.One, 
+                              UiColors.Background.Fade(0.4f * Graph.GraphOpacity));
             indicatorCount++;
         }
 
@@ -808,7 +812,11 @@ namespace T3.Editor.Gui.Graph
             if (_previewTextureView == null)
                 return;
 
-            global::T3.Editor.Gui.Graph.Graph.DrawList.AddImage((IntPtr)_previewTextureView, _previewArea.Min, _previewArea.Max,  Vector2.Zero, Vector2.One, Color.White.Fade(Graph.GraphOpacity));
+            global::T3.Editor.Gui.Graph.Graph.DrawList.AddImage((IntPtr)_previewTextureView, _previewArea.Min, 
+                                                                _previewArea.Max,
+                                                                Vector2.Zero,
+                                                                Vector2.One,
+                                                                Color.White.Fade(Graph.GraphOpacity));
         }
 
         private static Vector2 ComputeNodeSize(SymbolChildUi childUi, List<IInputUi> visibleInputUis)
@@ -875,7 +883,7 @@ namespace T3.Editor.Gui.Graph
                         ImGui.BeginTooltip();
                         ImGui.TextUnformatted($".{outputDef.Name}");
                         ImGui.PushFont(Fonts.FontSmall);
-                        ImGui.TextColored(Color.Gray, $"<{TypeNameRegistry.Entries[outputDef.ValueType]}>\n{output.DirtyFlag.NumUpdatesWithinFrame} Updates\n({output.DirtyFlag.Trigger})");
+                        ImGui.TextColored(UiColors.Gray, $"<{TypeNameRegistry.Entries[outputDef.ValueType]}>\n{output.DirtyFlag.NumUpdatesWithinFrame} Updates\n({output.DirtyFlag.Trigger})");
                         ImGui.PopFont();
                         ImGui.EndTooltip();
                         ImGui.PopStyleVar();
@@ -1008,7 +1016,7 @@ namespace T3.Editor.Gui.Graph
 
                         ImGui.TextUnformatted($".{inputDef.Name}");
                         ImGui.PushFont(Fonts.FontSmall);
-                        ImGui.TextColored(Color.Gray, $"<{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
+                        ImGui.TextColored(UiColors.Gray, $"<{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
                         ImGui.PopFont();
                     }
                     ImGui.EndTooltip();
@@ -1079,7 +1087,7 @@ namespace T3.Editor.Gui.Graph
             ImGui.PushFont(Fonts.FontSmall);
             foreach (var source in sources)
             {
-                ImGui.TextColored(Color.Gray, source);
+                ImGui.TextColored(UiColors.Gray, source);
             }
 
             ImGui.PopFont();
@@ -1253,7 +1261,7 @@ namespace T3.Editor.Gui.Graph
 
                         ImGui.TextUnformatted($".{inputDef.Name}");
                         ImGui.PushFont(Fonts.FontSmall);
-                        ImGui.TextColored(Color.Gray, $"<{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
+                        ImGui.TextColored(UiColors.Gray, $"<{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
                         ImGui.PopFont();
                         //ImGui.PopStyleVar();
                     }

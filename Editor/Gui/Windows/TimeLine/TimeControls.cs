@@ -86,7 +86,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             ImGui.SameLine();
 
             // Time Mode with context menu
-            ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
             if (ImGui.Button(UserSettings.Config.TimeDisplayMode.ToString(), ControlSize))
             {
                 UserSettings.Config.TimeDisplayMode =
@@ -103,7 +103,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             // Continue Beat indicator
             {
                 ImGui.PushStyleColor(ImGuiCol.Text, UserSettings.Config.EnableIdleMotion
-                                                        ? T3Style.Colors.TextDisabled
+                                                        ? UiColors.TextDisabled
                                                         : new Vector4(0, 0, 0, 0.5f));
 
                 if (CustomComponents.IconButton(Icon.BeatGrid, ControlSize))
@@ -131,7 +131,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     var drawList = ImGui.GetWindowDrawList();
                     var min = center - new Vector2(7, 7) + new Vector2(beat * gridSize, bar * gridSize);
 
-                    drawList.AddRectFilled(min, min + new Vector2(gridSize - 1, gridSize - 1), Color.Mix(Color.Orange, Color.DarkGray, (float)beatPulse));
+                    drawList.AddRectFilled(min, min + new Vector2(gridSize - 1, gridSize - 1), 
+                                           Color.Mix(UiColors.StatusAnimated, 
+                                                     UiColors.Gray, 
+                                                     (float)beatPulse));
                 }
 
                 ImGui.PopStyleColor();
@@ -153,7 +156,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 //var volume = BeatTiming.SyncPrecision;
                 ImGui.GetWindowDrawList().AddRectFilled(new Vector2(min.X, max.Y), new Vector2(min.X + 3, max.Y - height * (max.Y - min.Y)),
-                                                        Color.Orange.Fade(bar));
+                                                        UiColors.StatusAnimated.Fade(bar));
 
                 ImGui.SameLine();
 
@@ -398,7 +401,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 // Curve Mode
                 var hasKeyframes = FrameStats.Current.HasKeyframesAfterCurrentTime || FrameStats.Current.HasKeyframesAfterCurrentTime;
-                ImGui.PushStyleColor(ImGuiCol.Text, hasKeyframes ? T3Style.Colors.Text.Rgba : T3Style.Colors.TextMuted);
+                ImGui.PushStyleColor(ImGuiCol.Text, hasKeyframes ? UiColors.Text.Rgba : UiColors.TextMuted);
                 if (ImGui.Button(timeLineCanvas.Mode.ToString(), ControlSize))
                 {
                     timeLineCanvas.Mode = (TimeLineCanvas.Modes)(((int)timeLineCanvas.Mode + 1) % Enum.GetNames(typeof(TimeLineCanvas.Modes)).Length);

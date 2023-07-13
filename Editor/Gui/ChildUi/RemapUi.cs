@@ -62,17 +62,17 @@ namespace T3.Editor.Gui.ChildUi
             // Horizontal line
             var lhMin = graphRect.Min + Vector2.UnitY * h / 2;
             var lhMax = new Vector2(graphRect.Max.X, lhMin.Y + 1);
-            drawList.AddRectFilled(lhMin, lhMax, T3Style.Colors.GraphAxis);
+            drawList.AddRectFilled(lhMin, lhMax, UiColors.WidgetAxis);
 
             // Vertical start line
             var lv1Min = graphRect.Min + Vector2.UnitX * (int)(graphRect.GetWidth() * GraphRangePadding);
             var lv1Max = new Vector2(lv1Min.X + 1, graphRect.Max.Y);
-            drawList.AddRectFilled(lv1Min, lv1Max, T3Style.Colors.GraphAxis);
+            drawList.AddRectFilled(lv1Min, lv1Max, UiColors.WidgetAxis);
 
             // Vertical end line
             var lv2Min = graphRect.Min + Vector2.UnitX * (int)(graphRect.GetWidth() * (1 - GraphRangePadding));
             var lv2Max = new Vector2(lv2Min.X + 1, graphRect.Max.Y);
-            drawList.AddRectFilled(lv2Min, lv2Max, T3Style.Colors.GraphAxis);
+            drawList.AddRectFilled(lv2Min, lv2Max, UiColors.WidgetAxis);
 
             var inputX = MathUtils.Lerp(lv1Min.X, lv2Min.X, inFragment);
             GraphLinePoints[0].X = inputX;
@@ -88,13 +88,13 @@ namespace T3.Editor.Gui.ChildUi
             GraphLinePoints[3].X = outputX;
             GraphLinePoints[3].Y = graphRect.Max.Y;
 
-            drawList.AddPolyline(ref GraphLinePoints[0], 4, Color.Orange, ImDrawFlags.None, 1);
+            drawList.AddPolyline(ref GraphLinePoints[0], 4, UiColors.StatusAnimated, ImDrawFlags.None, 1);
 
             var triangleSize = TriangleSize;
             drawList.AddTriangleFilled(GraphLinePoints[3],
                                        GraphLinePoints[3] + new Vector2(-triangleSize / 2, -triangleSize),
                                        GraphLinePoints[3] + new Vector2(+triangleSize / 2, -triangleSize),
-                                       Color.Orange
+                                       UiColors.StatusAnimated
                                       );
             drawList.PopClipRect();
 

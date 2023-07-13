@@ -110,16 +110,17 @@ namespace T3.Editor.Gui.Windows
                                           WindowPos.Y + WindowSize.Y - 16);
 
                 var drawList = ImGui.GetWindowDrawList();
-                drawList.AddText(textPos + new Vector2(1,0), ShadowColor, description );
-                drawList.AddText(textPos + new Vector2(-1,0), ShadowColor, description );
-                drawList.AddText(textPos + new Vector2(0,1), ShadowColor, description );
-                drawList.AddText(textPos + new Vector2(0,-1), ShadowColor, description );
-                drawList.AddText(textPos, Color.White, description );
+                var shadowColor = UiColors.BackgroundFull.Fade(0.5f);
+                drawList.AddText(textPos + new Vector2(1,0), shadowColor, description );
+                drawList.AddText(textPos + new Vector2(-1,0), shadowColor, description );
+                drawList.AddText(textPos + new Vector2(0,1), shadowColor, description );
+                drawList.AddText(textPos + new Vector2(0,-1), shadowColor, description );
+                drawList.AddText(textPos, UiColors.ForegroundFull, description );
                 ImGui.PopFont();
             }
         }
         
-        private static readonly Color ShadowColor = new Color(0.0f, 0.0f, 0.0f, 0.6f);
+        //private static readonly Color ShadowColor = new Color(0.0f, 0.0f, 0.0f, 0.6f);
 
 
         public void SetViewMode(Modes newMode)

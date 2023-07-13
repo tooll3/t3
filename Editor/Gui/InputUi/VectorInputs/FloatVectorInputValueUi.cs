@@ -66,7 +66,7 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
         
         protected override void DrawReadOnlyControl(string name, ref T float2Value)
         {
-            ImGui.PushStyleColor(ImGuiCol.Text, Color.Blue.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusAutomated.Rgba);
             DrawEditControl(name, null, ref float2Value, true);
             ImGui.PopStyleColor();
         }

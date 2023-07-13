@@ -86,7 +86,9 @@ namespace T3.Editor.Gui.Graph
 
             if (imageOpacity < 1)
             {
-                ImGui.GetWindowDrawList().AddRectFilled(Vector2.Zero, Vector2.One * 10000, T3Style.Colors.Background.Fade(1 - imageOpacity));
+                ImGui.GetWindowDrawList().AddRectFilled(Vector2.Zero, 
+                                                        Vector2.One * 10000, 
+                                                        UiColors.Background.Fade(1 - imageOpacity));
             }
         }
 

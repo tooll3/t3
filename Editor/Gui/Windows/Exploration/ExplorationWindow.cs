@@ -88,7 +88,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                 ImGui.PushFont(Fonts.FontBold);
                 ImGui.Selectable(symbolChildUi.SymbolChild.ReadableName);
                 ImGui.PopFont();
-                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Rgba);
                 ImGui.PushID(symbolChildUi.Id.GetHashCode());
                 
                 var keepX = ImGui.GetCursorPosX();
@@ -232,7 +232,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                 foreach (var variation in savedForComposition)
                 {
                     var isMatching = CheckFavoriteMatchesNodeSelection(variation);
-                    ImGui.PushStyleColor(ImGuiCol.Text, isMatching ? Color.Gray.Rgba : NonMatchingVarationsColor);
+                    ImGui.PushStyleColor(ImGuiCol.Text, isMatching ? UiColors.Gray.Rgba : NonMatchingVarationsColor);
                     ImGui.PushID(variation.GetHashCode());
                     {
                         var isSelected = _blendedVariations.Contains(variation);

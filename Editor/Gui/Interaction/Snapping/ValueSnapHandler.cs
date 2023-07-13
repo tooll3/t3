@@ -135,7 +135,7 @@ namespace T3.Editor.Gui.Interaction.Snapping
                 return;
 
             var opacity = (1 - ((float)(ImGui.GetTime() - _lastSnapTime) / SnapIndicatorDuration).Clamp(0, 1)) * 0.4f;
-            var color = Color.Orange;
+            var color = UiColors.StatusAnimated;
             color.Rgba.W = opacity;
 
             switch (mode)

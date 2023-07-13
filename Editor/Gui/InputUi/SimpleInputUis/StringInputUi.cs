@@ -84,7 +84,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                               };
 
             if (warning != string.Empty)
-                ImGui.PushStyleColor(ImGuiCol.Text, Color.Orange.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusAnimated.Rgba);
             
             var inputEditStateFlags = DrawDefaultTextEdit(ref value);
             

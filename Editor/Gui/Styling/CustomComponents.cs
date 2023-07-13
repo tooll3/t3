@@ -23,7 +23,7 @@ namespace T3.Editor.Gui.Styling
             {
                 var center = (ImGui.GetItemRectMin() + ImGui.GetItemRectMax()) * 0.5f;
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-                ImGui.GetForegroundDrawList().AddCircle(center, 100, Color.Gray, 50);
+                ImGui.GetForegroundDrawList().AddCircle(center, 100, UiColors.Gray, 50);
                 isActive = true;
 
                 var pLast = io.MousePos - io.MouseDelta - center;
@@ -96,10 +96,10 @@ namespace T3.Editor.Gui.Styling
             var clicked = false;
             if (isSelected)
             {
-                ImGui.PushStyleColor(ImGuiCol.Button, T3Style.Colors.Text.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, T3Style.Colors.Text.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.ButtonActive, T3Style.Colors.Text.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.Background.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Button, UiColors.Text.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Text.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.Text.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Background.Rgba);
             }
 
             if (ImGui.Button(label, size) || trigger)
@@ -120,10 +120,10 @@ namespace T3.Editor.Gui.Styling
         {
             var clicked = false;
 
-            var stateColor = isSelected
-                                 ? Color.White.Rgba
-                                 : T3Style.Colors.DarkGray.Rgba;
-            ImGui.PushStyleColor(ImGuiCol.Text, stateColor);
+            var stateTextColor = isSelected
+                                 ? UiColors.ForegroundFull.Rgba
+                                 : UiColors.Background.Rgba;
+            ImGui.PushStyleColor(ImGuiCol.Text, stateTextColor);
 
             var padding = string.IsNullOrEmpty(label) ? new Vector2(0.1f, 0.5f) : new Vector2(0.5f, 0.5f);
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, padding);
@@ -164,20 +164,20 @@ namespace T3.Editor.Gui.Styling
             {
                 Color c;
                 if (state == ButtonStates.Dimmed)
-                    c = T3Style.Colors.TextMuted;
+                    c = UiColors.TextMuted;
                 else if (state == ButtonStates.Disabled)
-                    c = T3Style.Colors.TextDisabled;
+                    c = UiColors.TextDisabled;
                 else if (state == ButtonStates.Activated)
-                    c = T3Style.Colors.Background;
+                    c = UiColors.Background;
                 else
-                    c = T3Style.Colors.Text;
+                    c = UiColors.Text;
 
                 ImGui.PushStyleColor(ImGuiCol.Text, c.Rgba);
                 if (state == ButtonStates.Activated)
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Button, T3Style.Colors.TextMuted.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Button, UiColors.TextMuted.Rgba);
                     //ImGui.PushStyleColor(ImGuiCol.ButtonActive, T3Style.Colors.Text.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.White.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Text.Rgba);
                 }
             }
 
@@ -211,7 +211,7 @@ namespace T3.Editor.Gui.Styling
                 if (title != null)
                 {
                     ImGui.PushFont(Fonts.FontSmall);
-                    ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Rgba);
                     ImGui.TextUnformatted(title);
                     ImGui.PopStyleColor();
                     ImGui.PopFont();
@@ -287,7 +287,7 @@ namespace T3.Editor.Gui.Styling
         public static void HelpText(string text)
         {
             ImGui.PushFont(Fonts.FontSmall);
-            ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Rgba);
             ImGui.TextUnformatted(text);
             ImGui.PopStyleColor();
             ImGui.PopFont();
@@ -299,7 +299,7 @@ namespace T3.Editor.Gui.Styling
         public static void HintLabel(string label)
         {
             ImGui.PushFont(Fonts.FontSmall);
-            ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Rgba);
             ImGui.TextUnformatted(label);
             ImGui.PopStyleColor();
             ImGui.PopFont();
@@ -398,7 +398,7 @@ namespace T3.Editor.Gui.Styling
 
         public static void TooltipForLastItem(string message, string additionalNotes = null, bool useHoverDelay = true)
         {
-            TooltipForLastItem(Color.Gray, message, additionalNotes, useHoverDelay);
+            TooltipForLastItem(UiColors.Gray, message, additionalNotes, useHoverDelay);
         }
 
         private static double _hoverStartTime;
@@ -415,8 +415,8 @@ namespace T3.Editor.Gui.Styling
                 ImGui.SameLine(0);
                 ImGui.PushFont(isActive ? Fonts.FontBold : Fonts.FontNormal);
                 ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.White.Fade(0.1f).Rgba);
-                ImGui.PushStyleColor(ImGuiCol.Text, isActive ? Color.White : Color.White.Fade(0.5f).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.ForegroundFull.Fade(0.1f).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, isActive ? UiColors.ForegroundFull : UiColors.ForegroundFull.Fade(0.5f).Rgba);
 
                 if (ImGui.Button(option))
                 {
@@ -473,7 +473,7 @@ namespace T3.Editor.Gui.Styling
         public static bool DrawIconToggle(string name, Icon icon, ref bool isSelected)
         {
             var clicked = ImGui.InvisibleButton(name, new Vector2(17, 17));
-            Icons.DrawIconOnLastItem(icon, isSelected ? T3Style.Colors.ButtonActive : T3Style.Colors.TextMuted);
+            Icons.DrawIconOnLastItem(icon, isSelected ? UiColors.BackgroundActive : UiColors.TextMuted);
             if (clicked)
                 isSelected = !isSelected;
             return clicked;
@@ -505,7 +505,7 @@ namespace T3.Editor.Gui.Styling
                 var minPos = ImGui.GetItemRectMin();
                 var maxPos = ImGui.GetItemRectMax();
                 drawList.PushClipRect(minPos, maxPos);
-                drawList.AddText(minPos + new Vector2(8, 5), Color.White.Fade(0.25f), placeHolderLabel);
+                drawList.AddText(minPos + new Vector2(8, 5), UiColors.ForegroundFull.Fade(0.25f), placeHolderLabel);
                 drawList.PopClipRect();
             }
 
@@ -522,7 +522,7 @@ namespace T3.Editor.Gui.Styling
                 return;
             
             var min = ImGui.GetWindowPos() + new Vector2(1,1);
-            ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(-2,-1) , Color.White.Fade(0.1f));
+            ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(-2,-1) , UiColors.ForegroundFull.Fade(0.1f));
         }
     }
 }

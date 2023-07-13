@@ -33,7 +33,9 @@ namespace T3.Editor.Gui.Templates
                 ImGui.BeginChild("templates", new Vector2(200, -1));
                 {
                     var windowMin = ImGui.GetWindowPos();
-                    ImGui.GetWindowDrawList().AddRectFilled(windowMin, windowMin + ImGui.GetContentRegionAvail(), T3Style.Colors.DarkGray);
+                    ImGui.GetWindowDrawList().AddRectFilled(windowMin,
+                                                            windowMin + ImGui.GetContentRegionAvail(), 
+                                                            UiColors.BackgroundButton);
                     FormInputs.ResetIndent();
                     
                     //ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(10,10));
@@ -59,7 +61,7 @@ namespace T3.Editor.Gui.Templates
                         var keepCursor = ImGui.GetCursorScreenPos();
 
                         // Background
-                        ImGui.GetWindowDrawList().AddRectFilled(itemRectMin, itemRectMax, isSelected ? T3Style.Colors.ButtonActive : T3Style.Colors.Button);
+                        ImGui.GetWindowDrawList().AddRectFilled(itemRectMin, itemRectMax, isSelected ? UiColors.BackgroundActive : UiColors.BackgroundButton);
                         
                         // Title
                         ImGui.SetCursorScreenPos(itemRectMin + new Vector2(10, 5));
@@ -68,7 +70,7 @@ namespace T3.Editor.Gui.Templates
                         // summary
                         ImGui.SetCursorScreenPos(itemRectMin + new Vector2(10, 25));
                         ImGui.PushFont(Fonts.FontSmall);
-                        ImGui.PushStyleColor(ImGuiCol.Text, Color.White.Fade(0.4f).Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                         ImGui.TextWrapped(template.Summary);
                         ImGui.PopStyleColor();
                         ImGui.PopFont();
@@ -97,7 +99,7 @@ namespace T3.Editor.Gui.Templates
                     ImGui.TextUnformatted($"Create {_selectedTemplate?.Title}");
                     ImGui.PopFont();
                     
-                    ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                     ImGui.TextWrapped(_selectedTemplate?.Documentation);
                     ImGui.PopStyleColor();
                     ImGui.Dummy(new Vector2(10,10));

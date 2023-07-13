@@ -260,7 +260,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 var level = settings.AudioGainFactor * WasapiAudioInput.DecayingAudioLevel * 0.03f;
 
-                dl.AddRectFilled(min, new Vector2(min.X + level, max.Y), T3Style.Colors.ButtonHover);
+                dl.AddRectFilled(min, new Vector2(min.X + level, max.Y), UiColors.BackgroundHover);
 
                 FormInputs.DrawInputLabel("Input Device");
                 ImGui.BeginGroup();
@@ -309,7 +309,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 if (!string.IsNullOrEmpty(settings.AudioInputDeviceName)
                     &&settings.AudioInputDeviceName != WasapiAudioInput.ActiveInputDeviceName)
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.Warning.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusWarning.Rgba);
                     ImGui.TextUnformatted(settings.AudioInputDeviceName + " (NOT FOUND)");
                     ImGui.PopStyleColor();
                 }

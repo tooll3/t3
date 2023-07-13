@@ -286,7 +286,7 @@ namespace T3.Editor.Gui.Windows.Exploration
                 posInCell.Y -= halfSize.Y;
             }
 
-            ImGui.GetWindowDrawList().AddRect(region.Min, region.Max, Color.Orange);
+            ImGui.GetWindowDrawList().AddRect(region.Min, region.Max, UiColors.StatusAnimated);
 
             var clamp = cellSize / 2f * HoverEdgeBlendFactor;
             var xWeight = posInCell.X.Clamp(-clamp.X, clamp.X) / clamp.X / 2 + 0.5f;

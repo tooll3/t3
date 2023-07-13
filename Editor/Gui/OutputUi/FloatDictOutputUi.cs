@@ -127,10 +127,10 @@ namespace T3.Editor.Gui.OutputUi
                     ImGui.SameLine();
                     ImGui.TextUnformatted($"{valueEnum.Current:0.000}");
 
-                    var textColor = new Vector4(T3Style.Colors.TextMuted.R,
-                                                T3Style.Colors.TextMuted.G,
-                                                T3Style.Colors.TextMuted.B,
-                                                T3Style.Colors.TextMuted.A);
+                    var textColor = new Vector4(UiColors.TextMuted.R,
+                                                UiColors.TextMuted.G,
+                                                UiColors.TextMuted.B,
+                                                UiColors.TextMuted.A);
                     ImGui.PushStyleColor(ImGuiCol.Text, textColor);
 
                     if (_autoFit && _previousChannelValues[channelIndex].Count > 0)

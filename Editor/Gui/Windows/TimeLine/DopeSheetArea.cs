@@ -90,7 +90,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var min = ImGui.GetCursorScreenPos();
             var max = min + new Vector2(ImGui.GetContentRegionAvail().X, LayerHeight );
             _drawList.AddRectFilled(new Vector2(min.X, max.Y),
-                                    new Vector2(max.X, max.Y + 1), Color.Black);
+                                    new Vector2(max.X, max.Y + 1), UiColors.BackgroundFull);
             
             var mousePos = ImGui.GetMousePos();
             var mouseTime = TimeLineCanvas.InverseTransformX(mousePos.X);
@@ -101,7 +101,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             if(FrameStats.Last.HoveredIds.Contains(parameter.Input.Parent.SymbolChildId) || isCurrentSelected || layerHovered )
             {
                 _drawList.AddRectFilled(new Vector2(min.X, min.Y),
-                                        new Vector2(max.X, max.Y), Color.White.Fade(0.04f));
+                                        new Vector2(max.X, max.Y), UiColors.ForegroundFull.Fade(0.04f));
             }
 
             if (layerHovered)
@@ -151,15 +151,15 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 }
 
                 var lastPos = ImGui.GetItemRectMin();
-                var iconColor = isPinned? Color.Orange : Color.Gray;
+                var iconColor = isPinned? UiColors.StatusAnimated : UiColors.Gray;
                 iconColor = iconColor.Fade(ImGui.IsItemHovered() ? 1 : 0.8f);
                 
                 Icons.DrawIconAtScreenPosition(Icon.Pin, lastPos, _drawList, iconColor);
                 var labelColor = layerHovered
-                                     ? Color.White
+                                     ? UiColors.ForegroundFull
                                      : isPinned
-                                         ? Color.Orange
-                                         : Color.Gray;
+                                         ? UiColors.StatusAnimated
+                                         : UiColors.TextMuted;
                 _drawList.AddText( lastPos+ new Vector2(20,0), labelColor, label);
                 ImGui.PopID();
             }
@@ -408,7 +408,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     var labelPos = new Vector2(posOnScreen.X + KeyframeIconWidth / 2 + 1,
                                                layerArea.Min.Y + 5);
 
-                    var color = Color.Orange.Fade(MathUtils.RemapAndClamp(availableSpace, 30, 50, 0, 1).Clamp(0, 1));
+                    var color = UiColors.StatusAnimated.Fade(MathUtils.RemapAndClamp(availableSpace, 30, 50, 0, 1).Clamp(0, 1));
                     ImGui.PushFont(Fonts.FontSmall);
                     _drawList.AddText(labelPos, color, $"{vDef.Value:G3}");
                     ImGui.PopFont();

@@ -65,7 +65,7 @@ namespace T3.Editor.Gui.Graph
 
                 if (outputUi.IsSelected)
                 {
-                    drawList.AddRect(LastScreenRect.Min - Vector2.One, LastScreenRect.Max + Vector2.One, Color.White, 1);
+                    drawList.AddRect(LastScreenRect.Min - Vector2.One, LastScreenRect.Max + Vector2.One, UiColors.Selection, 1);
                 }
 
                 // Draw slot 
@@ -106,7 +106,7 @@ namespace T3.Editor.Gui.Graph
                         }
                         else
                         {
-                            drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, Color.White);
+                            drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, UiColors.Selection);
                             if (ImGui.IsItemClicked(0))
                             {
                                 ConnectionMaker.StartFromOutputNode(GraphCanvas.Current.CompositionOp.Symbol, outputDef);
@@ -115,7 +115,7 @@ namespace T3.Editor.Gui.Graph
                     }
                     else
                     {
-                        var colorWithMatching = ConnectionMaker.IsMatchingInputType(outputDef.ValueType) ? Color.White : color;
+                        var colorWithMatching = ConnectionMaker.IsMatchingInputType(outputDef.ValueType) ? UiColors.Selection : color;
                         drawList.AddRectFilled(new Vector2(usableSlotArea.Max.X - GraphNode.InputSlotMargin- GraphNode.InputSlotThickness,
                                                            usableSlotArea.Min.Y), 
                                                new Vector2(

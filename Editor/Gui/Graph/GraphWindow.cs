@@ -311,8 +311,8 @@ namespace T3.Editor.Gui.Graph
             {
                 var dl = ImGui.GetWindowDrawList();
 
-                dl.AddRectFilled(widgetPos, widgetPos + widgetSize, T3Style.Colors.Background.Fade(0.8f));
-                dl.AddRect(widgetPos, widgetPos + widgetSize, Color.Black.Fade(0.9f));
+                dl.AddRectFilled(widgetPos, widgetPos + widgetSize, UiColors.BackgroundFull.Fade(0.8f));
+                dl.AddRect(widgetPos, widgetPos + widgetSize, UiColors.BackgroundFull.Fade(0.9f));
 
                 if (SymbolUiRegistry.Entries.TryGetValue(compositionOp.Symbol.Id, out var symbolUi))
                 {
@@ -372,7 +372,7 @@ namespace T3.Editor.Gui.Graph
                             var min = (rect.Min - boundsMin) / boundsSize * mapSize + mapMin;
                             var max = (rect.Max - boundsMin) / boundsSize * mapSize + mapMin;
 
-                            var fadedColor = Color.White.Fade(0.5f * opacity);
+                            var fadedColor = UiColors.MiniMapItems.Fade(0.5f * opacity);
                             dl.AddRectFilled(min, max, fadedColor);
                         }
 
@@ -383,7 +383,7 @@ namespace T3.Editor.Gui.Graph
                         var min2 = (viewMinInCanvas - boundsMin) / boundsSize * mapSize + mapMin;
                         var max2 = (viewMaxInCanvas - boundsMin) / boundsSize * mapSize + mapMin;
 
-                        dl.AddRect(min2, max2, Color.White.Fade(opacity));
+                        dl.AddRect(min2, max2, UiColors.MiniMapItems.Fade(opacity));
 
                         var mousePos = ImGui.GetMousePos();
                         var normalizedMousePos = (mousePos - widgetPos - Vector2.One * padding) / mapSize;
@@ -514,7 +514,7 @@ namespace T3.Editor.Gui.Graph
                     var desc = symbolUi.Description;
                     ImGui.PushFont(Fonts.FontSmall);
                     ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Rgba);
                     {
                         var sizeMatchingDescription = ImGui.CalcTextSize(desc) + new Vector2(20, 40);
                         sizeMatchingDescription.X = Math.Max(300, sizeMatchingDescription.X);
@@ -526,7 +526,7 @@ namespace T3.Editor.Gui.Graph
                 }
 
                 ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
 
                 ImGui.PushFont(Fonts.FontSmall);
                 if (ImGui.Button("Edit description..."))

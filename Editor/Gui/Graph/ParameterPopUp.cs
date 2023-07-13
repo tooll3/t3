@@ -84,7 +84,9 @@ internal static class ParameterPopUp
             {
                 Close();
             }
-            ImGui.GetWindowDrawList().AddRectFilled(ImGui.GetWindowPos(), ImGui.GetWindowPos() + ImGui.GetWindowSize(), T3Style.Colors.Background);
+            ImGui.GetWindowDrawList().AddRectFilled(ImGui.GetWindowPos(), 
+                                                    ImGui.GetWindowPos() + ImGui.GetWindowSize(), 
+                                                    UiColors.BackgroundFull);
 
             FormInputs.SetIndent(20);
 

@@ -67,7 +67,7 @@ namespace T3.Editor.Gui.Styling
                 {
                     _lastTypeAheadResults.Clear();
                     int index = 0;
-                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Gray.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Gray.Rgba);
                     foreach (var word in items)
                     {
                         if (word != null && word != text && word.Contains(text))

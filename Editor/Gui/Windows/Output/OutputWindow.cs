@@ -116,7 +116,10 @@ namespace T3.Editor.Gui.Windows.Output
             ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin());
             Pinning.DrawPinning();
 
-            ImGui.PushStyleColor(ImGuiCol.Text, Math.Abs(_imageCanvas.Scale.X - 1f) < 0.001f ? Color.Black.Rgba : Color.White);
+            // TODO: Replace with toggle button
+            ImGui.PushStyleColor(ImGuiCol.Text, Math.Abs(_imageCanvas.Scale.X - 1f) < 0.001f 
+                                                    ? UiColors.BackgroundFull.Rgba 
+                                                    : UiColors.ForegroundFull);
             if (ImGui.Button("1:1"))
             {
                 _imageCanvas.SetScaleToMatchPixels();
@@ -127,7 +130,9 @@ namespace T3.Editor.Gui.Windows.Output
 
             ImGui.SameLine();
 
-            ImGui.PushStyleColor(ImGuiCol.Text, _imageCanvas.ViewMode == ImageOutputCanvas.Modes.Fitted ? Color.Black.Rgba : Color.White);
+            ImGui.PushStyleColor(ImGuiCol.Text, _imageCanvas.ViewMode == ImageOutputCanvas.Modes.Fitted 
+                                                    ? UiColors.BackgroundFull.Rgba 
+                                                    : UiColors.ForegroundFull);
             if (ImGui.Button("Fit") || KeyboardBinding.Triggered(UserActions.FocusSelection))
             {
                 var showingImage = GetCurrentTexture() != null;

@@ -39,11 +39,11 @@ namespace T3.Editor.Gui.ChildUi
                 var w = (int)area.GetWidth() * f;
                 drawList.AddRectFilled(area.Min, 
                                        new Vector2(area.Min.X + w, area.Max.Y),
-                                       T3Style.Colors.WidgetSlider);
+                                       UiColors.WidgetSlider);
                 
                 drawList.AddRectFilled(new Vector2(area.Min.X + w, area.Min.Y), 
                                        new Vector2(area.Min.X + w + 1, area.Max.Y),
-                                       T3Style.Colors.GraphActiveLine);
+                                       UiColors.WidgetActiveLine);
             }
             
             // // Slider Range
@@ -65,7 +65,7 @@ namespace T3.Editor.Gui.ChildUi
                     {
                         _jogDialCenter = ImGui.GetIO().MousePos;
                         _activeJogDialInputSlot = inputSlot;
-                        drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.White);
+                        drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), UiColors.WidgetHighlight);
                     }
                     
                     if (_activeJogDialInputSlot == inputSlot)

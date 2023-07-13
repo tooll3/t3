@@ -294,7 +294,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                         _standardRaster.Draw(this);
                         _horizontalRaster.Draw(this);
                         curve.UpdateTangents();
-                        TimelineCurveEditArea.DrawCurveLine(curve, this, Color.Gray);
+                        TimelineCurveEditArea.DrawCurveLine(curve, this, UiColors.Gray);
 
                         foreach (var keyframe in interaction.GetAllKeyframes().ToArray())
                         {

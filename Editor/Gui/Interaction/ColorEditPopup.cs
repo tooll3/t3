@@ -83,11 +83,11 @@ namespace T3.Editor.Gui.Interaction
                 var pos = ImGui.GetMousePos();
 
                 pos += Vector2.One * 25;
-                dl.AddRectFilled(pos, pos + new Vector2(40, 38), T3Style.Colors.DarkGray);
+                dl.AddRectFilled(pos, pos + new Vector2(40, 38), UiColors.BackgroundFull);
                 ImGui.PushFont(Fonts.FontSmall);
-                dl.AddText(pos + new Vector2(5, 2 + 0), Color.White, $"{cColor.R:0.000}");
-                dl.AddText(pos + new Vector2(5, 2 + 10), Color.White, $"{cColor.G:0.000}");
-                dl.AddText(pos + new Vector2(5, 2 + 20), Color.White, $"{cColor.B:0.000}");
+                dl.AddText(pos + new Vector2(5, 2 + 0), UiColors.ForegroundFull, $"{cColor.R:0.000}");
+                dl.AddText(pos + new Vector2(5, 2 + 10), UiColors.ForegroundFull, $"{cColor.G:0.000}");
+                dl.AddText(pos + new Vector2(5, 2 + 20), UiColors.ForegroundFull, $"{cColor.B:0.000}");
                 ImGui.PopFont();
             }
 
@@ -141,13 +141,13 @@ namespace T3.Editor.Gui.Interaction
                 var pHueAngle = (compareHueNormalized + 0.25f) * 2 * MathF.PI;
                 var pWarpedSaturation = MathF.Pow(compareSaturation, 1 / saturationWarp);
                 var pPickedColorPos = new Vector2(MathF.Sin(pHueAngle), MathF.Cos(pHueAngle)) * size / 2 * pWarpedSaturation + size / 2;
-                drawList.AddCircle(windowPos + pPickedColorPos, 3, Color.Black.Fade(0.7f));
-                drawList.AddCircle(windowPos + pPickedColorPos, 2, Color.White.Fade(0.7f));
+                drawList.AddCircle(windowPos + pPickedColorPos, 3, UiColors.BackgroundFull.Fade(0.7f));
+                drawList.AddCircle(windowPos + pPickedColorPos, 2, UiColors.ForegroundFull.Fade(0.7f));
             }
 
             {
-                drawList.AddCircle(windowPos + pickedColorPos, 5, Color.Black);
-                drawList.AddCircle(windowPos + pickedColorPos, 4, Color.White);
+                drawList.AddCircle(windowPos + pickedColorPos, 5, UiColors.BackgroundFull);
+                drawList.AddCircle(windowPos + pickedColorPos, 4, UiColors.ForegroundFull);
             }
 
             ImGui.SetCursorPosX(10);
@@ -207,14 +207,14 @@ namespace T3.Editor.Gui.Interaction
                 // Draw compare value
                 {
                     var handlePos = new Vector2(0, barHeight * (1 - compareValue)) + pMin;
-                    drawList.AddRectFilled(handlePos, handlePos + new Vector2(barWidth + 2, 2), Color.White.Fade(0.5f));
+                    drawList.AddRectFilled(handlePos, handlePos + new Vector2(barWidth + 2, 2), UiColors.ForegroundFull.Fade(0.5f));
                 }
 
                 // Draw indicator
                 {
                     var handlePos = new Vector2(0, barHeight * (1 - cColor.V)) + pMin;
-                    drawList.AddRectFilled(handlePos - Vector2.One, handlePos + new Vector2(barWidth + 2, 3), Color.Black);
-                    drawList.AddRectFilled(handlePos, handlePos + new Vector2(barWidth + 2, 2), Color.White);
+                    drawList.AddRectFilled(handlePos - Vector2.One, handlePos + new Vector2(barWidth + 2, 3), UiColors.BackgroundFull);
+                    drawList.AddRectFilled(handlePos, handlePos + new Vector2(barWidth + 2, 2), UiColors.ForegroundFull);
                 }
                 ImGui.SetCursorScreenPos(pMin - new Vector2(10, 0));
                 ImGui.InvisibleButton("intensitySlider", new Vector2(visibleBarSize.X * 4, visibleBarSize.Y));
@@ -266,16 +266,16 @@ namespace T3.Editor.Gui.Interaction
                 {
                     var handlePos = new Vector2(barWidth * compareColor.W, 0) + pMin;
                     drawList.AddRectFilled(handlePos,
-                                           handlePos + new Vector2(2, barHeight + 2), Color.White.Fade(0.5f));
+                                           handlePos + new Vector2(2, barHeight + 2), UiColors.ForegroundFull.Fade(0.5f));
                 }
                 
                 // Draw handle
                 {
                     var handlePos = new Vector2(barWidth * cColor.A, 0) + pMin;
                     drawList.AddRectFilled(handlePos - Vector2.One,
-                                           handlePos + new Vector2(3, barHeight + 2), Color.Black);
+                                           handlePos + new Vector2(3, barHeight + 2), UiColors.BackgroundFull);
                     drawList.AddRectFilled(handlePos,
-                                           handlePos + new Vector2(2, barHeight + 2), Color.White);
+                                           handlePos + new Vector2(2, barHeight + 2), UiColors.ForegroundFull);
                 }
 
                 ImGui.SetCursorScreenPos(pMin - new Vector2(0, 10));
@@ -318,7 +318,7 @@ namespace T3.Editor.Gui.Interaction
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(2, 1));
             var inputSize = new Vector2(inputWidth, ImGui.GetFrameHeight());
 
-            ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
             ImGui.AlignTextToFramePadding();
 
             {
@@ -531,7 +531,7 @@ namespace T3.Editor.Gui.Interaction
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.Zero);
             FormInputs.AddVerticalSpace();
             ImGui.Indent(7);
-            ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
             ImGui.TextUnformatted("Used colors...");
             ImGui.PopStyleColor();
             FormInputs.AddVerticalSpace(2);
@@ -623,13 +623,13 @@ namespace T3.Editor.Gui.Interaction
                         wdl.AddTriangleFilled(new Vector2(min.X, max.Y),
                                               new Vector2(min.X, max.Y - 4),
                                               new Vector2(min.X + 4, max.Y),
-                                              Color.Gray);
+                                              UiColors.Gray);
                     }
 
                     if (usedColor == activeRoundedColor)
                     {
-                        wdl.AddRect(min - Vector2.One, max + Vector2.One, Color.White, 1);
-                        wdl.AddRect(min, max, Color.Black, 1);
+                        wdl.AddRect(min - Vector2.One, max + Vector2.One, UiColors.ForegroundFull, 1);
+                        wdl.AddRect(min, max, UiColors.BackgroundFull, 1);
                     }
                 }
                 index++;

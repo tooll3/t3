@@ -41,7 +41,7 @@ namespace T3.Editor.Gui.ChildUi
             var x = gradientSlider.SamplePos.Value.Clamp(0, 1) * innerRect.GetWidth();
             var pMin = new Vector2(innerRect.Min.X + x, innerRect.Min.Y);
             var pMax = new Vector2(innerRect.Min.X + x + 2, innerRect.Max.Y);
-            drawList.AddRectFilled(pMin, pMax, Color.Orange);
+            drawList.AddRectFilled(pMin, pMax, UiColors.StatusAnimated);
 
             return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels | SymbolChildUi.CustomUiResult.PreventOpenSubGraph | SymbolChildUi.CustomUiResult.PreventTooltip | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
         }

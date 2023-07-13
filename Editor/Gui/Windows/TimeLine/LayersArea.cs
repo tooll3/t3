@@ -229,24 +229,24 @@ namespace T3.Editor.Gui.Windows.TimeLine
             {
                 _drawList.AddRectFilled(position + new Vector2(0, clipSize.Y - 2), 
                                         position + new Vector2(clipSize.X - 1, clipSize.Y), 
-                                        Color.Red);
+                                        UiColors.StatusAttention);
             }
             else if (timeRemapped)
             {
                 _drawList.AddRectFilled(position + new Vector2(0, clipSize.Y - 1), 
                                         position + new Vector2(clipSize.X - 1, clipSize.Y), 
-                                        Color.Orange);
+                                        UiColors.StatusAnimated);
             }
 
             if (isSelected)
-                _drawList.AddRect(position - Vector2.One, itemRectMax + Vector2.One, Color.White);
+                _drawList.AddRect(position - Vector2.One, itemRectMax + Vector2.One, UiColors.Selection);
 
             ImGui.PushClipRect(position, itemRectMax, true);
             var label = timeStretched
                             ? symbolChildUi.SymbolChild.ReadableName + $" ({GetSpeed(timeClip)}%)"
                             : symbolChildUi.SymbolChild.ReadableName;
             ImGui.PushFont(Fonts.FontSmall);
-            _drawList.AddText(position + new Vector2(4, 1), isSelected ? Color.White : Color.Black, label);
+            _drawList.AddText(position + new Vector2(4, 1), isSelected ? UiColors.Selection : UiColors.BackgroundFull, label);
             ImGui.PopFont();
             ImGui.PopClipRect();
 
@@ -341,8 +341,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var aHandleClicked = ImGui.InvisibleButton("startHandle", handleSize);
             if (ImGui.IsItemHovered() || ImGui.IsItemActive())
             {
-                _drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax() - new Vector2(0,2), Color.White.Fade(0.5f));
-                _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax() - new Vector2(0,2), Color.Black);
+                _drawList.AddRectFilled(ImGui.GetItemRectMin(),
+                                        ImGui.GetItemRectMax() - new Vector2(0,2), UiColors.ForegroundFull.Fade(0.5f));
+                _drawList.AddRect(ImGui.GetItemRectMin(),
+                                  ImGui.GetItemRectMax() - new Vector2(0,2), UiColors.BackgroundFull);
             }
 
             HandleDragging(timeClip, isSelected, false, HandleDragMode.Start, position);
@@ -351,8 +353,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
             aHandleClicked |= ImGui.InvisibleButton("endHandle", handleSize);
             if (ImGui.IsItemHovered() || ImGui.IsItemActive())
             {
-                _drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax() - new Vector2(0,2), Color.White.Fade(0.5f));
-                _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax() - new Vector2(0,2), Color.Black);
+                _drawList.AddRectFilled(ImGui.GetItemRectMin(), ImGui.GetItemRectMax() - new Vector2(0,2), UiColors.ForegroundFull.Fade(0.5f));
+                _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax() - new Vector2(0,2), UiColors.BackgroundFull);
             }
             
             HandleDragging(timeClip, isSelected, false, HandleDragMode.End, position);
@@ -674,7 +676,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
         private Instance _compositionOp;
         private readonly ValueSnapHandler _snapHandler;
         private Playback _playback;
-        private readonly Color _timeRemappingColor = Color.Orange.Fade(0.5f);
+        private readonly Color _timeRemappingColor = UiColors.StatusAnimated.Fade(0.5f);
 
         /// <summary>
         /// Maps selection of <see cref="ITimeClip"/>s

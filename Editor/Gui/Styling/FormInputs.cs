@@ -24,7 +24,7 @@ namespace T3.Editor.Gui.Styling
             AddVerticalSpace(5);
             
             //ImGui.PushFont(Fonts.FontBold);
-            ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
 
             var id = ImGui.GetID(label);
             if (shouldBeOpenByDefault && !_openedGroups.Contains(id))
@@ -183,9 +183,9 @@ namespace T3.Editor.Gui.Styling
         
         private static bool DrawSelectButton(string name, bool isSelected)
         {
-            ImGui.PushStyleColor(ImGuiCol.Button, isSelected ? T3Style.Colors.ButtonActive.Rgba : T3Style.Colors.ButtonHover.Rgba);
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, isSelected ? T3Style.Colors.ButtonActive.Rgba : T3Style.Colors.ButtonHover.Rgba);
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, T3Style.Colors.ButtonActive.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Button, isSelected ? UiColors.BackgroundActive.Rgba : UiColors.BackgroundHover.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, isSelected ? UiColors.BackgroundActive.Rgba : UiColors.BackgroundHover.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundActive.Rgba);
 
             var clicked = ImGui.Button(name);
             ImGui.PopStyleColor(3);
@@ -231,7 +231,7 @@ namespace T3.Editor.Gui.Styling
                 var minPos = ImGui.GetItemRectMin();
                 var maxPos = ImGui.GetItemRectMax();
                 drawList.PushClipRect(minPos, maxPos);
-                drawList.AddText(minPos + new Vector2(8, 3), Color.White.Fade(0.25f), placeHolder);
+                drawList.AddText(minPos + new Vector2(8, 3), UiColors.ForegroundFull.Fade(0.25f), placeHolder);
                 drawList.PopClipRect();
             }
             
@@ -282,7 +282,7 @@ namespace T3.Editor.Gui.Styling
                 var minPos = ImGui.GetItemRectMin();
                 var maxPos = ImGui.GetItemRectMax();
                 drawList.PushClipRect(minPos, maxPos);
-                drawList.AddText(minPos + new Vector2(8, 3), Color.White.Fade(0.25f), placeHolder);
+                drawList.AddText(minPos + new Vector2(8, 3), UiColors.ForegroundFull.Fade(0.25f), placeHolder);
                 drawList.PopClipRect();
             }
 
@@ -399,7 +399,7 @@ namespace T3.Editor.Gui.Styling
 
             ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 10);
             ImGui.PushFont(Fonts.FontSmall);
-            ImGui.PushStyleColor(ImGuiCol.Text, Color.Red.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusError.Rgba);
             ImGui.TextUnformatted(warning);
             ImGui.PopStyleColor();
             ImGui.PopFont();
@@ -445,8 +445,9 @@ namespace T3.Editor.Gui.Styling
             if (!ImGui.IsItemHovered())
                 return;
             
+            // Tooltip
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
-            ImGui.PushStyleColor(ImGuiCol.PopupBg, Color.Black.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.PopupBg, UiColors.BackgroundFull.Rgba);
             ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 1);
             ImGui.BeginTooltip();
             ImGui.PushTextWrapPos(300);

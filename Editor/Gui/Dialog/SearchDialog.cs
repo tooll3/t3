@@ -150,7 +150,7 @@ namespace T3.Editor.Gui.Dialog
 
                 var color = instance.Symbol.OutputDefinitions.Count > 0
                                 ? TypeUiRegistry.GetPropertiesForType(instance.Symbol.OutputDefinitions[0]?.ValueType).Color
-                                : Color.Gray;
+                                : UiColors.Gray;
 
                 if (!isRelevantNamespace)
                 {
@@ -192,7 +192,7 @@ namespace T3.Editor.Gui.Dialog
                 ImGui.TextUnformatted(instance.Symbol.Name);
                 ImGui.SameLine(0, 10);
 
-                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Fade(0.5f).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Fade(0.5f).Rgba);
                 ImGui.TextUnformatted(readablePath);
                 ImGui.PopStyleColor();
                 

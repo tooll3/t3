@@ -95,7 +95,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                             _usedPositions[x] = t + offset;
 
                             var p1 = new Vector2(posX + _canvas.WindowPos.X, bottom - 3);
-                            drawList.AddRectFilled(p1, p1 + new Vector2(1, 3), Color.White);
+                            drawList.AddRectFilled(p1, p1 + new Vector2(1, 3), UiColors.ForegroundFull);
                             //var pen = new Pen(GetTransparentBrush(linedef.LineOpacity * 0.3) , 1);
                             //pen.Freeze();
                             //dc.DrawLine(pen, new Point(posX,0 ), new Point(posX, ActualHeight));
@@ -130,7 +130,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                 var s = ImGui.CalcTextSize(output);
                                 var p2 = new Vector2(posX + _canvas.WindowPos.X - s.X * 0.5f, bottom - 16);
                                 //drawList.AddRectFilled(p1, p1 + new Vector2(1, 3), Color.White);
-                                drawList.AddText(p2, Color.Gray, output);
+                                drawList.AddText(p2, UiColors.Gray, output);
                             }
                         }
                         t += linedef.Spacing;

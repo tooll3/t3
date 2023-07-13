@@ -55,7 +55,7 @@ namespace T3.Editor.Gui.Graph
                     const float thickness = 1;
                     drawList.AddRect(_lastScreenRect.Min - Vector2.One * thickness,
                                      _lastScreenRect.Max + Vector2.One * thickness ,
-                                     Color.White, 0f, 0, thickness);
+                                     UiColors.Selection, 0f, 0, thickness);
                 }
                 
                 // Label
@@ -117,7 +117,7 @@ namespace T3.Editor.Gui.Graph
                         }
                         else
                         {
-                            drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, Color.White);
+                            drawList.AddRectFilled(usableSlotArea.Min, usableSlotArea.Max, UiColors.Selection);
                             if (ImGui.IsItemClicked(0))
                             {
                                 ConnectionMaker.StartFromInputNode(inputDef);

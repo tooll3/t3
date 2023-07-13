@@ -57,7 +57,7 @@ namespace T3.Editor.Gui.Windows.Variations
             {
                 ImGui.PushFont(Fonts.FontLarge);
                 ImGui.SetCursorPos(new Vector2(10, 35));
-                ImGui.PushStyleColor(ImGuiCol.Text, Color.Gray.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Rgba);
                 ImGui.TextUnformatted(GetTitle());
                 ImGui.PopStyleColor();
                 ImGui.PopFont();
@@ -136,14 +136,14 @@ namespace T3.Editor.Gui.Windows.Variations
                 {
                     foreach (var p in _blendPoints)
                     {
-                        drawList.AddCircleFilled(p, 5, Color.Black.Fade(0.5f));
-                        drawList.AddCircleFilled(p, 3, Color.White);
+                        drawList.AddCircleFilled(p, 5, UiColors.BackgroundFull.Fade(0.5f));
+                        drawList.AddCircleFilled(p, 3, UiColors.ForegroundFull);
                     }
 
-                    drawList.AddLine(_blendPoints[0], _blendPoints[1], Color.White, 2);
+                    drawList.AddLine(_blendPoints[0], _blendPoints[1], UiColors.ForegroundFull, 2);
                     var blendPosition = _blendPoints[0] * _blendWeights[0] + _blendPoints[1] * _blendWeights[1];
 
-                    drawList.AddCircleFilled(blendPosition, 5, Color.White);
+                    drawList.AddCircleFilled(blendPosition, 5, UiColors.ForegroundFull);
 
                     PoolForBlendOperations.BeginWeightedBlend(_instanceForBlending, _blendVariations, _blendWeights);
 
@@ -154,15 +154,15 @@ namespace T3.Editor.Gui.Windows.Variations
                 }
                 else if (_blendPoints.Count == 3)
                 {
-                    drawList.AddTriangleFilled(_blendPoints[0], _blendPoints[1], _blendPoints[2], Color.Black.Fade(0.3f));
+                    drawList.AddTriangleFilled(_blendPoints[0], _blendPoints[1], _blendPoints[2], UiColors.BackgroundFull.Fade(0.3f));
                     foreach (var p in _blendPoints)
                     {
-                        drawList.AddCircleFilled(p, 5, Color.Black.Fade(0.5f));
-                        drawList.AddLine(mousePos, p, Color.White, 2);
-                        drawList.AddCircleFilled(p, 3, Color.White);
+                        drawList.AddCircleFilled(p, 5, UiColors.BackgroundFull.Fade(0.5f));
+                        drawList.AddLine(mousePos, p, UiColors.ForegroundFull, 2);
+                        drawList.AddCircleFilled(p, 3, UiColors.ForegroundFull);
                     }
 
-                    drawList.AddCircleFilled(mousePos, 5, Color.White);
+                    drawList.AddCircleFilled(mousePos, 5, UiColors.ForegroundFull);
                     PoolForBlendOperations.BeginWeightedBlend(_instanceForBlending, _blendVariations, _blendWeights);
 
                     if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))

@@ -245,7 +245,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         private static bool DrawPinButton(bool isParamComponentPinned, string componentName)
         {
-            var buttonColor = isParamComponentPinned ? Color.Orange : Color.Gray;
+            var buttonColor = isParamComponentPinned ? UiColors.StatusAnimated : UiColors.Gray;
             ImGui.PushStyleColor(ImGuiCol.Text, buttonColor.Rgba);
             var result = ImGui.Button(componentName);
             ImGui.PopStyleColor();

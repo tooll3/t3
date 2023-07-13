@@ -6,15 +6,6 @@ using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Editor.Gui.Styling
 {
-    //static class TColors
-    //{
-    //    public readonly static Vector4 White = new Vector4(1, 1, 1, 1);
-    //    public readonly static Vector4 Black = new Vector4(0, 0, 0, 1);
-    //    public readonly static TColor White2 = new TColor();
-    //    public static uint ToUint(float r, float g, float b, float a = 1) { return ImGui.GetColorU32(new Vector4(r, g, b, a)); }
-    //    public static uint ToUint(int r, int g, int b, int a = 255) { var sc = 1 / 255f; return ImGui.GetColorU32(new Vector4(r * sc, g * sc, b * sc, a * sc)); }
-    //}
-
     /// <summary>
     /// A helpers class that mirrors <see cref="ImColor"/> implementation for C# without
     /// having to deal with points. It also implements some automatic conversions into uint and Vector4.
@@ -23,17 +14,16 @@ namespace T3.Editor.Gui.Styling
     public struct Color
     {
         public Vector4 Rgba;
-        
+        /// <remark>
+        /// Avoid using these colors because they don't support theming.
+        /// </remark>
         public static readonly Color Transparent = new Color(1f, 1f, 1f, 0f);
         public static readonly Color TransparentBlack = new Color(0f, 0f, 0f, 0f);
-        public static readonly  Color White = new Color(1f, 1f, 1f, 1f);
-        public static readonly Color Gray = new Color(0.6f, 0.6f, 0.6f, 1);
-        public static readonly Color DarkGray = new Color(0.3f, 0.3f, 0.3f, 1);
+        public static readonly Color White = new Color(1f, 1f, 1f, 1f);
         public static readonly Color Black = new Color(0, 0, 0, 1f);
         public static readonly Color Red = new Color(1f, 0.2f, 0.2f, 1f);
         public static readonly Color Green = new Color(0.2f, 0.9f, 0.2f, 1f);
         public static readonly Color Blue = new Color(0.4f, 0.5f, 1f, 1);
-        public static readonly Color Orange = new Color(1f, 0.46f, 0f, 1f);
 
         /// <summary>
         /// Creates white transparent color

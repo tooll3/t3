@@ -210,7 +210,7 @@ namespace T3.Editor.Gui.TableView
                 var grayedOut = (Math.Abs(f) < 0.0001f);
                 if (grayedOut)
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Text, Color.DarkGray.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.BackgroundFull.Rgba);
                 }
 
                 var fieldModified = ImGui.DragFloat("##sdf", ref f, 0.01f);

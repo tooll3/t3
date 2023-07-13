@@ -237,8 +237,8 @@ namespace T3.Editor.Gui.UiHelpers
                                  };
                 drawList.AddConvexPolyFilled(ref points[0], 3, new Color(0.15f, 0.15f, 0.15f, 1));
                 drawList.AddRectFilled(handleArea.Min, handleArea.Max, ImGui.ColorConvertFloat4ToU32(step.Color));
-                drawList.AddRect(handleArea.Min, handleArea.Max, Color.Black);
-                drawList.AddRect(handleArea.Min + Vector2.One, handleArea.Max - Vector2.One, Color.White);
+                drawList.AddRect(handleArea.Min, handleArea.Max, UiColors.BackgroundFull);
+                drawList.AddRect(handleArea.Min + Vector2.One, handleArea.Max - Vector2.One, UiColors.ForegroundFull);
 
                 if (ImGui.IsItemHovered()
                     && ImGui.IsMouseReleased(0)

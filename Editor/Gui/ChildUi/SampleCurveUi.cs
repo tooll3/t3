@@ -86,7 +86,7 @@ namespace T3.Editor.Gui.ChildUi
                 
                 var pMin = new Vector2(x, innerRect.Min.Y);
                 var pMax = new Vector2(x + 1, innerRect.Max.Y);
-                drawList.AddRectFilled(pMin, pMax, Color.Orange);
+                drawList.AddRectFilled(pMin, pMax, UiColors.StatusAnimated);
             }
         }
     }

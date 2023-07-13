@@ -61,7 +61,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
 
             _drawList.AddRectFilled(leftTangentCenter - _tangentSizeHalf, leftTangentCenter + _tangentSize,
-                                    isHovered ? Color.Red : Color.White);
+                                    isHovered ? UiColors.ForegroundFull : UiColors.Text);
             _drawList.AddLine(pCenter, leftTangentCenter, _tangentHandleColor);
 
             // Dragging
@@ -97,7 +97,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
 
             _drawList.AddRectFilled(rightTangentCenter - _tangentSizeHalf, rightTangentCenter + _tangentSize,
-                                    isHovered ? Color.Red : Color.White);
+                                    isHovered ? UiColors.ForegroundFull : UiColors.Text);
             _drawList.AddLine(pCenter, rightTangentCenter, _tangentHandleColor);
 
             // Dragging

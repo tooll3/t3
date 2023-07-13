@@ -385,7 +385,7 @@ namespace T3.Editor.Gui.Graph
                                 : ColorVariations.ConnectionLines.Apply(ColorForType);
 
                 if (IsAboutToBeReplaced)
-                    color = Color.Mix(color, Color.Red, (float)Math.Sin(ImGui.GetTime() * 10) / 2 + 0.5f);
+                    color = Color.Mix(color, UiColors.StatusAttention, (float)Math.Sin(ImGui.GetTime() * 10) / 2 + 0.5f);
 
                 if (!IsSelected)
                     color = color.Fade(0.6f);

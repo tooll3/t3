@@ -168,7 +168,7 @@ namespace T3.Editor.Gui.InputUi
                             // var sourceUi = compositionUi.GetSelectables()
                             //                             .First(ui => ui.Id == connection.SourceParentOrChildId || ui.Id == connection.SourceSlotId);
                         }
-                        Icons.DrawIconOnLastItem(Icon.ConnectedParameter, Color.White);
+                        Icons.DrawIconOnLastItem(Icon.ConnectedParameter, UiColors.Text);
 
 
                         ImGui.PopStyleColor();
@@ -181,7 +181,7 @@ namespace T3.Editor.Gui.InputUi
                         ImGui.SameLine();
 
                         ImGui.SetNextItemWidth(-1);
-                        ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.ConnectedParameter.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusAutomated.Rgba);
                         var slot = allInputs[multiInputIndex];
                         DrawReadOnlyControl("##multiInputParam", ref slot.Value);
                         ImGui.PopStyleColor();
@@ -211,7 +211,7 @@ namespace T3.Editor.Gui.InputUi
                             FitViewToSelectionHandling.FitViewToSelection();
                         }
                     }
-                    Icons.DrawIconOnLastItem(Icon.ConnectedParameter, Color.White);
+                    Icons.DrawIconOnLastItem(Icon.ConnectedParameter, UiColors.Text);
 
                     ImGui.PopStyleColor();
                     ImGui.SameLine();
@@ -232,7 +232,9 @@ namespace T3.Editor.Gui.InputUi
 
                     //// Draw name
                     ImGui.PushItemWidth(200.0f);
-                    ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? Color.Gray.Rgba : Color.White.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, 
+                                         input.IsDefault 
+                                             ? UiColors.TextMuted.Rgba : UiColors.ForegroundFull.Rgba);
                     ImGui.SetNextItemWidth(-1);
 
                     DrawReadOnlyControl(name, ref typedInputSlot.Value);
@@ -324,8 +326,8 @@ namespace T3.Editor.Gui.InputUi
                 ImGui.SameLine();
 
                 ImGui.PushItemWidth(200.0f);
-                ImGui.PushStyleColor(ImGuiCol.Text, Color.Orange.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.FrameBgActive, Color.Black.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusAnimated.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.FrameBgActive, UiColors.BackgroundFull.Rgba);
 
                 ImGui.SetNextItemWidth(-1);
 
@@ -339,10 +341,7 @@ namespace T3.Editor.Gui.InputUi
             InputEditStateFlags DrawNormalParameter()
             {
                 ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
-
-                
-                ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.DarkGray.Rgba);
-
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
 
                 var inputOperation = InputOperations.None;
 
@@ -402,7 +401,7 @@ namespace T3.Editor.Gui.InputUi
                                };
 
 
-                Icons.DrawIconOnLastItem(icon, T3Style.Colors.TextMuted.Fade(0.3f));
+                Icons.DrawIconOnLastItem(icon, UiColors.TextMuted.Fade(0.3f));
                 
 
                 // Draw out input
@@ -440,8 +439,8 @@ namespace T3.Editor.Gui.InputUi
 
                 if (input.IsDefault)
                 {
-                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, T3Style.Colors.Button.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundButton.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                     ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
                     ImGui.PopStyleColor(2);
                     ImGui.SameLine();
@@ -495,7 +494,7 @@ namespace T3.Editor.Gui.InputUi
 
                 // Draw control
                 ImGui.PushItemWidth(200.0f);
-                ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? Color.Gray.Rgba : Color.White.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, input.IsDefault ? UiColors.TextMuted.Rgba : UiColors.ForegroundFull.Rgba);
                 if (input.IsDefault)
                 {
                     input.Value.Assign(input.DefaultValue);

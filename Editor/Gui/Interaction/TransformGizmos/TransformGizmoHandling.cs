@@ -10,6 +10,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using Color = T3.Editor.Gui.Styling.Color;
@@ -320,7 +321,7 @@ namespace T3.Editor.Gui.Interaction.TransformGizmos
 
             if (_renderGizmo)
             {
-                var color2 = Color.Orange;
+                var color2 = UiColors.StatusAnimated;
                 color2.Rgba.W = isHovering ? 0.8f : 0.3f;
                 _drawList.AddRectFilled(screenSquaredMin, screenSquaredMax, color2);
             }

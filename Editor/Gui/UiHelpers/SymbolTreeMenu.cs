@@ -64,7 +64,7 @@ namespace T3.Editor.Gui.UiHelpers
             {
                 var color = symbol.OutputDefinitions.Count > 0
                                 ? TypeUiRegistry.GetPropertiesForType(symbol.OutputDefinitions[0]?.ValueType).Color
-                                : Color.Gray;
+                                : UiColors.Gray;
 
                 ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(color).Rgba);
                 ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ColorVariations.OperatorHover.Apply(color).Rgba);
@@ -86,7 +86,7 @@ namespace T3.Editor.Gui.UiHelpers
 
                 if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(symbol.Id, out var info))
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Text, T3Style.Colors.TextMuted.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                     ListSymbolSetWithTooltip("  (needs {0}/", "  (", info.RequiredSymbolIds);
                     if (ListSymbolSetWithTooltip("used by {0})  ", "NOT USED)  ", info.DependingSymbolIds))
                     {

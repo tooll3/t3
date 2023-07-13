@@ -109,13 +109,13 @@ namespace T3.Editor.Gui.Interaction
                 var bMin = new Vector2(-RangeWidth, yMin) + center;
                 var bMax = new Vector2(RangeWidth, yMax) + center;
                 foreground.AddRectFilled(bMin, bMax, centerColor);
-                foreground.AddRect(bMin, bMax, Color.Black);
+                foreground.AddRect(bMin, bMax, UiColors.BackgroundFull);
 
                 var labelSize = ImGui.CalcTextSize(range.Label);
                 var pText = (bMin + bMax) / 2 - labelSize / 2;
 
                 foreground.AddText(pText,
-                                   isActiveRange ? Color.Black : Color.White,
+                                   isActiveRange ? UiColors.BackgroundFull : UiColors.ForegroundFull,
                                    range.Label);
             }
 
@@ -129,7 +129,7 @@ namespace T3.Editor.Gui.Interaction
                 if (io.KeyAlt)
                 {
                     ImGui.PushFont(Fonts.FontSmall);
-                    foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), Color.Gray, "x0.01");
+                    foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), UiColors.Gray, "x0.01");
                     ImGui.PopFont();
 
                     scale *= 0.01f;
@@ -137,7 +137,7 @@ namespace T3.Editor.Gui.Interaction
                 else if (io.KeyShift)
                 {
                     ImGui.PushFont(Fonts.FontSmall);
-                    foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), Color.Gray, "x10");
+                    foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), UiColors.Gray, "x10");
                     ImGui.PopFont();
 
                     scale *= 10f;

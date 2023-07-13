@@ -10,7 +10,7 @@ namespace T3.Editor.Gui.Interaction
 {
     public static class ColorEditButton
     {
-        public static InputEditStateFlags Draw(ref Vector4 color, Vector2 size)
+        public static InputEditStateFlags Draw(ref Vector4 color, Vector2 size, bool triggerOpen = false)
         {
             var edited = InputEditStateFlags.Nothing;
             
@@ -18,7 +18,7 @@ namespace T3.Editor.Gui.Interaction
             ImGui.ColorButton("##thumbnail", color, ImGuiColorEditFlags.AlphaPreviewHalf, size);
             
             // Don't you ImGui.IsItemActivated() to allow quick switching between color thumbnails
-            if (ImGui.IsItemHovered( ImGuiHoveredFlags.AllowWhenBlockedByPopup)
+            if (triggerOpen || ImGui.IsItemHovered( ImGuiHoveredFlags.AllowWhenBlockedByPopup)
                 && ImGui.IsMouseReleased(0)
                 && ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length() < UserSettings.Config.ClickThreshold
                 && !ImGui.IsPopupOpen("##colorEdit")
@@ -26,6 +26,7 @@ namespace T3.Editor.Gui.Interaction
             {
                 _modifiedSlider = false;
                 ImGui.OpenPopup("##colorEdit");
+                ImGui.SetNextWindowPos(ImGui.GetItemRectMax() + new Vector2(4,10));
             }
             
             edited |= HandleQuickSliders(ref color, buttonPosition);
@@ -133,7 +134,7 @@ namespace T3.Editor.Gui.Interaction
                                              ImGui.ColorConvertFloat4ToU32(opaqueColor),
                                              ImGui.ColorConvertFloat4ToU32(opaqueColor));
 
-            drawList.AddRectFilled(pCenter, pCenter + new Vector2(barWidth + 15, 1), Color.Black);
+            drawList.AddRectFilled(pCenter, pCenter + new Vector2(barWidth + 15, 1), UiColors.BackgroundFull);
         }
         
 

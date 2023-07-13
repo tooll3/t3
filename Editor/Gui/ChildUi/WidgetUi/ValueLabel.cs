@@ -39,7 +39,7 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
                     {
                         _jogDailCenter = ImGui.GetIO().MousePos;
                         _jogDialValue = inputSlot;
-                        drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), Color.White);
+                        drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), UiColors.WidgetHighlight);
                     }
                     
                     if (ImGui.IsItemActive() || !ImGui.IsAnyItemActive())
@@ -78,7 +78,7 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
                 var labelSize = ImGui.CalcTextSize(valueText);
                 var space = screenRect.GetSize() - labelSize;
                 var position = screenRect.Min + space * alignment;
-                drawList.AddText(MathUtils.Floor(position), highlight ? T3Style.Colors.ValueLabelHover : T3Style.Colors.ValueLabel, valueText);
+                drawList.AddText(MathUtils.Floor(position), highlight ? UiColors.WidgetValueTextHover : UiColors.WidgetValueText, valueText);
                 ImGui.PopFont();
             }            
             ImGui.PopID();

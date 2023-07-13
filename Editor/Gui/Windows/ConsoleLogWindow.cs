@@ -120,7 +120,7 @@ namespace T3.Editor.Gui.Windows
                         }
                     }
 
-                    ImGui.TextColored(Color.Gray, "---"); // Indicator for end
+                    ImGui.TextColored(UiColors.Gray, "---"); // Indicator for end
                     if (_shouldScrollToBottom)
                     {
                         ImGui.SetScrollY(ImGui.GetScrollMaxY() + ImGui.GetFrameHeight());
@@ -154,7 +154,7 @@ namespace T3.Editor.Gui.Windows
                 fade = MathUtils.RemapAndClamp(frameFraction, 0, 1, 0.2f, 0.8f);
             }
 
-            var timeColor = T3Style.Colors.Text.Fade(fade);
+            var timeColor = UiColors.Text.Fade(fade);
             var timeLabel = $" {time:0.000}";
             var timeLabelSize = ImGui.CalcTextSize(timeLabel);
             ImGui.SetCursorPosX(80 - timeLabelSize.X);
@@ -193,12 +193,12 @@ namespace T3.Editor.Gui.Windows
                         }
                         else
                         {
-                            ImGui.TextColored(T3Style.Colors.TextMuted, "from ");
+                            ImGui.TextColored(UiColors.TextMuted, "from ");
 
                             foreach (var p in Structure.GetReadableInstancePath(childIdPath))
                             {
                                 ImGui.SameLine();
-                                ImGui.TextColored(T3Style.Colors.TextMuted, " / ");
+                                ImGui.TextColored(UiColors.TextMuted, " / ");
 
                                 ImGui.SameLine();
                                 ImGui.Text(p);
@@ -223,7 +223,7 @@ namespace T3.Editor.Gui.Windows
         {
             return _colorForLogLevel.TryGetValue(entryLevel, out var color)
                        ? color
-                       : T3Style.Colors.TextMuted;
+                       : UiColors.TextMuted;
         }
 
         public override List<Window> GetInstances()
@@ -242,16 +242,14 @@ namespace T3.Editor.Gui.Windows
             return lineRect.Contains(ImGui.GetMousePos());
         }
 
-        private static readonly Dictionary<ILogEntry.EntryLevel, Color> _colorForLogLevel = new Dictionary<ILogEntry.EntryLevel, Color>()
-                                                                                               {
-                                                                                                   { ILogEntry.EntryLevel.Debug, new Color(1, 1, 1, 0.6f) },
-                                                                                                   { ILogEntry.EntryLevel.Info, new Color(1, 1, 1, 0.6f) },
-                                                                                                   {
-                                                                                                       ILogEntry.EntryLevel.Warning,
-                                                                                                       new Color(1, 0.5f, 0.5f, 0.9f)
-                                                                                                   },
-                                                                                                   { ILogEntry.EntryLevel.Error, new Color(1, 0.2f, 0.2f, 1f) },
-                                                                                               };
+        private static readonly Dictionary<ILogEntry.EntryLevel, Color> _colorForLogLevel
+            = new()
+                  {
+                      { ILogEntry.EntryLevel.Debug, UiColors.TextMuted },
+                      { ILogEntry.EntryLevel.Info, UiColors.TextMuted },
+                      { ILogEntry.EntryLevel.Warning, UiColors.StatusWarning },
+                      { ILogEntry.EntryLevel.Error, UiColors.StatusError},
+                  };
 
         public void ProcessEntry(ILogEntry entry)
         {
