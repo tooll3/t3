@@ -73,8 +73,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 ImGui.BeginChild(ImGuiTitle, new Vector2(0, -30), true,
                                  //ImGuiWindowFlags.NoScrollbar | 
-                                 ImGuiWindowFlags.NoMove | 
-                                 ImGuiWindowFlags.NoScrollWithMouse);
+                                 ImGuiWindowFlags.NoMove 
+                                 |ImGuiWindowFlags.NoBackground
+                                 |ImGuiWindowFlags.NoScrollWithMouse);
 
                 {
                     if (KeyboardBinding.Triggered(UserActions.DeleteSelection))

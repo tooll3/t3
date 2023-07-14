@@ -58,10 +58,10 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
                 double t = -scroll % raster.Spacing;
 
                 var lineAlpha = raster.FadeLines ? fadeFactor : 1;
-                var lineColor = new Color(0, 0, 0, lineAlpha * 0.9f);
+                var lineColor = UiColors.GridLines.Fade(lineAlpha);
 
                 var textAlpha = raster.FadeLabels ? fadeFactor : 1;
-                var textColor = new Color(textAlpha);
+                var textColor = UiColors.Text.Fade(textAlpha);
 
                 while (t / invertedScale < width)
                 {

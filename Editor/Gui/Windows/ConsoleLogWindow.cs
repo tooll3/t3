@@ -33,7 +33,7 @@ namespace T3.Editor.Gui.Windows
 
         protected override void DrawContent()
         {
-            if (FrameStats.Last.UiColorsNeedUpdate)
+            if (FrameStats.Last.UiColorsChanged)
                 _colorForLogLevel= UpdateLogLevelColors();
             
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
@@ -167,7 +167,7 @@ namespace T3.Editor.Gui.Windows
             ImGui.SameLine(90);
 
             var color = GetColorForLogLevel(entryLevel)
-               .Fade(FrameStats.Last.HoveredIds.Contains(entry.SourceId) ? 1 : 0.6f);
+               .Fade(FrameStats.Last.HoveredIds.Contains(entry.SourceId) ? 1 : 0.8f);
             
             var lineBreak = entry.Message.IndexOf('\n');
             var hasMessageWithLineBreaks = lineBreak != -1;
@@ -251,10 +251,10 @@ namespace T3.Editor.Gui.Windows
         {
             return new()
                        {
-                           { ILogEntry.EntryLevel.Debug, UiColors.TextMuted },
-                           { ILogEntry.EntryLevel.Info, UiColors.TextMuted },
+                           { ILogEntry.EntryLevel.Debug, UiColors.Text },
+                           { ILogEntry.EntryLevel.Info, UiColors.Text },
                            { ILogEntry.EntryLevel.Warning, UiColors.StatusWarning },
-                           { ILogEntry.EntryLevel.Error, UiColors.StatusError},
+                           { ILogEntry.EntryLevel.Error, UiColors.Text},
                        };
         }
 

@@ -153,8 +153,35 @@ namespace T3.Editor.Gui.Styling
             Activated,
         }
 
+        public static bool FloatingIconButton(Icon icon, Vector2 size)
+        {
+            if (size == Vector2.Zero)
+            {
+                var h = ImGui.GetFrameHeight();
+                size = new Vector2(h,h);
+            }
+            ImGui.PushFont(Icons.IconFont);
+            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.5f));
+            ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
+            ImGui.PushStyleColor(ImGuiCol.Button, Color.Transparent.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, Color.Transparent.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Color.Transparent.Rgba);
+            
+            var clicked = ImGui.Button( ((char)icon).ToString(), size);
+            
+            ImGui.PopStyleColor(3);
+            ImGui.PopStyleVar(2);
+            ImGui.PopFont();
+            return clicked;
+        }
+
         public static bool IconButton(Icon icon, Vector2 size, ButtonStates state = ButtonStates.Normal, bool triggered =false)
         {
+            if (size == Vector2.Zero)
+            {
+                var h = ImGui.GetFrameHeight();
+                size = new Vector2(h,h);
+            }
             ImGui.PushFont(Icons.IconFont);
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.5f));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
@@ -176,7 +203,6 @@ namespace T3.Editor.Gui.Styling
                 if (state == ButtonStates.Activated)
                 {
                     ImGui.PushStyleColor(ImGuiCol.Button, UiColors.TextMuted.Rgba);
-                    //ImGui.PushStyleColor(ImGuiCol.ButtonActive, T3Style.Colors.Text.Rgba);
                     ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Text.Rgba);
                 }
             }
@@ -340,7 +366,7 @@ namespace T3.Editor.Gui.Styling
             var y = center.Y - lineCount * textLineHeight / 2;
             var drawList = ImGui.GetWindowDrawList();
 
-            var emptyMessageColor = new Color(0.3f);
+            var emptyMessageColor = UiColors.TextMuted;
 
             foreach (var line in lines)
             {
@@ -398,7 +424,7 @@ namespace T3.Editor.Gui.Styling
 
         public static void TooltipForLastItem(string message, string additionalNotes = null, bool useHoverDelay = true)
         {
-            TooltipForLastItem(UiColors.Gray, message, additionalNotes, useHoverDelay);
+            TooltipForLastItem(UiColors.Text, message, additionalNotes, useHoverDelay);
         }
 
         private static double _hoverStartTime;

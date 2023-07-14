@@ -194,6 +194,7 @@ namespace T3.Editor.Gui.InputUi
                 {
                     // Connected single inputs
                     ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Highlight.Apply(typeColor).Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Rgba);
                     if (ImGui.Button(String.Empty, new Vector2(ConnectionAreaWidth, 0.0f)))
                     {
                         // TODO: implement with proper selectionManager
@@ -211,9 +212,9 @@ namespace T3.Editor.Gui.InputUi
                             FitViewToSelectionHandling.FitViewToSelection();
                         }
                     }
-                    Icons.DrawIconOnLastItem(Icon.ConnectedParameter, UiColors.Text);
+                    Icons.DrawIconOnLastItem(Icon.ConnectedParameter, UiColors.BackgroundFull);
 
-                    ImGui.PopStyleColor();
+                    ImGui.PopStyleColor(2);
                     ImGui.SameLine();
 
                     // Draw Name
@@ -340,8 +341,8 @@ namespace T3.Editor.Gui.InputUi
 
             InputEditStateFlags DrawNormalParameter()
             {
-                ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(typeColor).Rgba);
-                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.OperatorBackground.Apply(typeColor).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Rgba);
 
                 var inputOperation = InputOperations.None;
 

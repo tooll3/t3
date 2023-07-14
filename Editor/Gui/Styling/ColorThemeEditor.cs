@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
@@ -20,16 +21,20 @@ public static class ColorThemeEditor
     {
         if (_currentTheme == null)
         {
-            _currentTheme = ThemeHandling._factoryTheme.Clone();
-            _currentThemeWithoutChanges = ThemeHandling._factoryTheme.Clone();
+            _currentTheme = ThemeHandling.FactoryTheme.Clone();
+            _currentThemeWithoutChanges = ThemeHandling.FactoryTheme.Clone();
         }
         
-        var fields = typeof(UiColors).GetFields();
+        var colorFields = typeof(UiColors).GetFields();
+        var colorVariationFields = typeof(ColorVariations).GetFields();
         
         if (ImGui.BeginCombo("##SelectTheme", UserSettings.Config.ColorThemeName, ImGuiComboFlags.HeightLarge))
         {
             foreach (var theme in ThemeHandling.Themes)
             {
+                if (theme == null)
+                    continue;
+                
                 var isSelected = theme.Name == UserSettings.Config.ColorThemeName;
                 if (!ImGui.Selectable($"{theme.Name}", isSelected, ImGuiSelectableFlags.DontClosePopups))
                     continue;
@@ -41,7 +46,8 @@ public static class ColorThemeEditor
             }
             ImGui.EndCombo();
         }
-
+        
+        FormInputs.AddVerticalSpace();
         FormInputs.AddStringInput("Name", ref _currentTheme.Name);
         FormInputs.AddStringInput("Author", ref _currentTheme.Author);
 
@@ -49,7 +55,7 @@ public static class ColorThemeEditor
         {
             ThemeHandling.SaveTheme(_currentTheme);
             UserSettings.Config.ColorThemeName = _currentTheme.Name;
-            var currentFromName = ThemeHandling.Themes.FirstOrDefault(t => t.Name == UserSettings.Config.ColorThemeName);
+            var currentFromName = ThemeHandling.Themes.FirstOrDefault(t => t != null && t.Name == UserSettings.Config.ColorThemeName);
             if (currentFromName == null)
             {
                 Log.Error("Saving theme failed");
@@ -64,13 +70,17 @@ public static class ColorThemeEditor
         if (ImGui.Button("Delete"))
         {
             ThemeHandling.DeleteTheme(_currentTheme);
-            _currentTheme = ThemeHandling._factoryTheme.Clone();
-            _currentThemeWithoutChanges = ThemeHandling._factoryTheme.Clone();
-
+            _currentTheme = ThemeHandling.FactoryTheme.Clone();
+            _currentThemeWithoutChanges = ThemeHandling.FactoryTheme.Clone();
         }
-        
         _somethingChanged = false;
-        foreach (var f in fields)
+        DrawColorEdits(colorFields);
+        DrawVariationEdits(colorVariationFields);
+    }
+
+    private static void DrawColorEdits(IEnumerable<FieldInfo> colorFields)
+    {
+        foreach (var f in colorFields)
         {
             var isChanged = false;
             ImGui.PushID(f.Name);
@@ -108,7 +118,7 @@ public static class ColorThemeEditor
             {
                 SetColor(f, vec4Color);
                 T3Style.Apply();
-                FrameStats.Current.UiColorsNeedUpdate = true;
+                FrameStats.Current.UiColorsChanged = true;
             }
 
             ImGui.SameLine(0, 10);
@@ -127,20 +137,104 @@ public static class ColorThemeEditor
             if (isChanged)
             {
                 ImGui.SameLine();
-                if (CustomComponents.IconButton(Icon.Revert, new Vector2(16, 16)))
+                if (CustomComponents.FloatingIconButton(Icon.Revert, Vector2.Zero))
                 {
                     SetColor(f, defaultColor);
                 }
             }
+            ImGui.PopStyleColor();
 
             ImGui.PopID();
         }
     }
+    
+    private static void DrawVariationEdits(IEnumerable<FieldInfo> variationFields)
+    {
 
+        foreach (var f in variationFields)
+        {
+            var isChanged = false;
+            ImGui.PushID(f.Name);
+            if (f.GetValue(_currentTheme) is not ColorVariation variation)
+                continue;
+
+            ImGui.AlignTextToFramePadding();
+
+            if (!_currentThemeWithoutChanges.Variations.TryGetValue(f.Name, out var defaultVariation))
+            {
+                defaultVariation = variation;
+                isChanged = true;
+            }
+            else
+            {
+                if (variation != defaultVariation)
+                    isChanged = true;
+            }
+
+            _somethingChanged |= isChanged;
+
+            string hint = null;
+            foreach (var ca in f.GetCustomAttributes(true))
+            {
+                if (ca is not T3Style.HintAttribute hintAttribute)
+                    continue;
+
+                hint = hintAttribute.Description;
+            }
+
+            var brightSaturationAlpha = new Vector3(variation.Brightness, variation.Saturation, variation.Opacity);
+            
+            ImGui.PushStyleColor(ImGuiCol.Text, isChanged ? UiColors.Text.Rgba : UiColors.TextMuted);
+            
+            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X -150);
+            if(ImGui.DragFloat3(f.Name, ref brightSaturationAlpha, 0.01f))
+            {
+                variation.Brightness = brightSaturationAlpha.X;
+                variation.Saturation = brightSaturationAlpha.Y;
+                variation.Opacity = brightSaturationAlpha.Z;
+
+                SetVariation(f, variation);
+                T3Style.Apply();
+                FrameStats.Current.UiColorsChanged = true;
+            }
+
+            //ImGui.SameLine(0, 10);
+            // ImGui.Text(Regex.Replace(f.Name, "(\\B[A-Z])", " $1"));
+            // if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+            // {
+            //     SetVariation(f, defaultVariation.Clone());
+            //     T3Style.Apply();
+            // }
+
+            if (!string.IsNullOrEmpty(hint) && ImGui.IsItemHovered())
+            {
+                ImGui.SetTooltip(hint);
+            }
+
+            if (isChanged)
+            {
+                ImGui.SameLine();
+                if (CustomComponents.FloatingIconButton(Icon.Revert, Vector2.Zero))
+                {
+                    SetVariation(f, defaultVariation.Clone());
+                }
+            }
+            
+            ImGui.PopStyleColor();
+            ImGui.PopID();
+        }
+    }
+    
     private static void SetColor(FieldInfo f, Vector4 vec4Color)
     {
         f.SetValue(Dummy, new Color(vec4Color));
         _currentTheme.Colors[f.Name] = vec4Color;
+    }
+    
+    private static void SetVariation(FieldInfo f, ColorVariation variation)
+    {
+        _currentTheme.Variations[f.Name] = variation;
+        f.SetValue(Dummy, variation.Clone());
     }
     
     private static class DevHelpers
@@ -184,7 +278,7 @@ public static class ColorThemeEditor
             }
 
             T3Style.Apply();
-            FrameStats.Current.UiColorsNeedUpdate = true;
+            FrameStats.Current.UiColorsChanged = true;
         }
 
         private static bool _animatedAllColors;

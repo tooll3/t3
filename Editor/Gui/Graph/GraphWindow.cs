@@ -204,6 +204,7 @@ namespace T3.Editor.Gui.Graph
                              | ImGuiWindowFlags.NoScrollWithMouse
                              | ImGuiWindowFlags.NoDecoration
                              | ImGuiWindowFlags.NoTitleBar
+                             | ImGuiWindowFlags.NoBackground
                              | ImGuiWindowFlags.ChildWindow);
             {
                 if (_focusOnNextFrame)
@@ -278,6 +279,7 @@ namespace T3.Editor.Gui.Graph
 
                     ImGui.BeginChild("##timeline", Vector2.Zero, false,
                                      ImGuiWindowFlags.NoResize
+                                     | ImGuiWindowFlags.NoBackground
                                     );
                     {
                         _timeLineCanvas.Draw(GraphCanvas.CompositionOp, Playback.Current);
@@ -424,7 +426,7 @@ namespace T3.Editor.Gui.Graph
                                            ImGui.GetWindowContentRegionMin().X,
                                            ImGui.GetWindowContentRegionMax().Y - TimeControls.ControlSize.Y));
 
-            ImGui.BeginChild("TimeControls", Vector2.Zero, false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
+            ImGui.BeginChild("TimeControls", Vector2.Zero, false, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoBackground);
             {
                 if (CustomComponents.IconButton(UsingCustomTimelineHeight ? Icon.ChevronDown : Icon.ChevronUp, TimeControls.ControlSize))
                 {

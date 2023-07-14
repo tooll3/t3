@@ -134,7 +134,7 @@ namespace T3.Editor.Gui.Windows
 
             if (!string.IsNullOrEmpty(symbolUi.Description))
             {
-                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                 ImGui.TextWrapped(symbolUi.Description);
                 ImGui.PopStyleColor();
             }
@@ -271,7 +271,7 @@ namespace T3.Editor.Gui.Windows
                 ImGui.PopFont();
                 
                 ImGui.SameLine();
-                ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.5f).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                 ImGui.TextUnformatted(" in ");
                 ImGui.PopStyleColor();
                 ImGui.SameLine();

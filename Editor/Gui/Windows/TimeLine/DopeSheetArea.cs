@@ -418,6 +418,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var keyHash = vDef.GetHashCode();
             ImGui.PushID(keyHash);
             {
+                ImGui.PushStyleColor(ImGuiCol.Text, Color.White.Rgba);
                 var isSelected = SelectedKeyframes.Contains(vDef);
                 if (vDef.OutEditMode == VDefinition.EditMode.Constant)
                 {
@@ -439,6 +440,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 {
                     Icons.Draw(isSelected ? Icon.DopeSheetKeyframeLinearSelected : Icon.DopeSheetKeyframeLinear, posOnScreen);
                 }
+                ImGui.PopStyleColor();
 
                 ImGui.SetCursorScreenPos(posOnScreen);
 

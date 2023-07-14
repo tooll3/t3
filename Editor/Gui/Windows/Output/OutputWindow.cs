@@ -112,7 +112,8 @@ namespace T3.Editor.Gui.Windows.Output
 
         private void DrawToolbar(Type drawnType)
         {
-            ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.6f).Rgba);
+            //ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.6f).Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
             ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin());
             Pinning.DrawPinning();
 

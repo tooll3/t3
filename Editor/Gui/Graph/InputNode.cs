@@ -44,7 +44,7 @@ namespace T3.Editor.Gui.Graph
                 var drawList = GraphCanvas.Current.DrawList;
                 drawList.AddRectFilled(_lastScreenRect.Min, _lastScreenRect.Max,
                                        hovered
-                                           ? ColorVariations.OperatorHover.Apply(typeColor)
+                                           ? ColorVariations.OperatorBackgroundHover.Apply(typeColor)
                                            : ColorVariations.ConnectionLines.Apply(typeColor));
 
                 var inputUiIsSelected = inputUi.IsSelected;

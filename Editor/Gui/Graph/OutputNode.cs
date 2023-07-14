@@ -42,7 +42,7 @@ namespace T3.Editor.Gui.Graph
                 var drawList = GraphCanvas.Current.DrawList;
                 drawList.AddRectFilled(LastScreenRect.Min, LastScreenRect.Max,
                                  hovered
-                                     ? ColorVariations.OperatorHover.Apply(typeColor)
+                                     ? ColorVariations.OperatorBackgroundHover.Apply(typeColor)
                                      : ColorVariations.OutputNodes.Apply(typeColor));
 
                 drawList.AddRectFilled(new Vector2(LastScreenRect.Min.X, LastScreenRect.Max.Y),

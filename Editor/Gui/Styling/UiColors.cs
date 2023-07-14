@@ -32,6 +32,8 @@ public static class UiColors
     [T3Style.Hint(Description = "The overlay grid on for the graph canvas.")]
     public static  Color CanvasGrid = new(0, 0, 0, 0.15f);
     
+    public static  Color GridLines = new(1, 1, 1, 0.5f);
+    
     public static Color BackgroundTabActive = Color.FromString("#3A3A3A");
     public static Color BackgroundTabInActive = Color.FromString("#CC282828");
     public static Color BackgroundInputField = Color.FromString("#222222");

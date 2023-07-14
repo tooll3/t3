@@ -7,7 +7,6 @@ using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-using T3.Editor.Gui.Windows.TimeLine;
 
 namespace T3.Editor.Gui.Windows
 {
@@ -123,7 +122,7 @@ namespace T3.Editor.Gui.Windows
             if (ImGui.TreeNode("Colors"))
             {
                 ColorThemeEditor.DrawEditor();
-                ColorVariations.DrawSettingsUi();
+                // ColorVariations.DrawSettingsUi();
                 ImGui.Dummy(new Vector2(20,20));
                 ImGui.TreePop();
             }

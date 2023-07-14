@@ -35,7 +35,9 @@ namespace T3.Editor.Gui.Styling
                 }
             }
             
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
             var wasChanged = ImGui.InputText(id, ref text, 256);
+            ImGui.PopStyleColor();
 
             if (ImGui.IsItemActivated())
             {
@@ -73,7 +75,9 @@ namespace T3.Editor.Gui.Styling
                         if (word != null && word != text && word.Contains(text))
                         {
                             var isSelected = index == _selectedResultIndex;
+                            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
                             ImGui.Selectable(word, isSelected);
+                            ImGui.PopStyleColor();
                             
                             if (ImGui.IsItemClicked() || (isSelected && ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
                             {

@@ -157,9 +157,9 @@ namespace T3.Editor.Gui.Dialog
                     color = color.Fade(0.4f);
                 }
 
-                ImGui.PushStyleColor(ImGuiCol.Header, ColorVariations.Operator.Apply(color).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Header, ColorVariations.OperatorBackground.Apply(color).Rgba);
 
-                var hoverColor = ColorVariations.OperatorHover.Apply(color).Rgba;
+                var hoverColor = ColorVariations.OperatorBackgroundHover.Apply(color).Rgba;
                 hoverColor.W = 0.1f;
                 ImGui.PushStyleColor(ImGuiCol.HeaderHovered, hoverColor);
                 ImGui.PushStyleColor(ImGuiCol.HeaderActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);

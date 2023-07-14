@@ -270,9 +270,9 @@ namespace T3.Editor.Gui.Graph.Interaction
                             color = color.Fade(0.4f);
                         }
 
-                        ImGui.PushStyleColor(ImGuiCol.Header, ColorVariations.Operator.Apply(color).Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Header, ColorVariations.OperatorBackground.Apply(color).Rgba);
 
-                        var hoverColor = ColorVariations.OperatorHover.Apply(color).Rgba;
+                        var hoverColor = ColorVariations.OperatorBackgroundHover.Apply(color).Rgba;
                         hoverColor.W = 0.1f;
                         ImGui.PushStyleColor(ImGuiCol.HeaderHovered, hoverColor);
                         ImGui.PushStyleColor(ImGuiCol.HeaderActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
@@ -309,7 +309,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                         if (!string.IsNullOrEmpty(symbolNamespace))
                         {
-                            ImGui.PushStyleColor(ImGuiCol.Text, _namespaceColor);
+                            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Fade(0.5f).Rgba);
                             ImGui.Text(symbolNamespace);
                             ImGui.PopStyleColor();
                             ImGui.SameLine();
@@ -440,7 +440,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             {
                 if (!string.IsNullOrEmpty(_selectedSymbolUi.Description))
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                     ImGui.TextWrapped(_selectedSymbolUi.Description);
                     ImGui.PopStyleColor();
                 }
@@ -500,8 +500,8 @@ namespace T3.Editor.Gui.Graph.Interaction
                             ? TypeUiRegistry.GetPropertiesForType(symbolUi.Symbol.OutputDefinitions[0]?.ValueType).Color
                             : UiColors.Gray;
 
-            ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.Operator.Apply(color).Rgba);
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ColorVariations.OperatorHover.Apply(color).Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.OperatorBackground.Apply(color).Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ColorVariations.OperatorBackgroundHover.Apply(color).Rgba);
             ImGui.PushStyleColor(ImGuiCol.ButtonActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
             ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
 

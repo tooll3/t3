@@ -111,13 +111,13 @@ namespace T3.Editor.Gui.Graph
                     if (framesSinceLastUpdate > 2)
                     {
                         var fadeFactor = MathUtils.RemapAndClamp(framesSinceLastUpdate, 0f, 60f, 0f, 1.0f);
-                        var mutedColor = ColorVariations.OperatorIdle.Apply(backgroundColor).Fade(Graph.GraphOpacity);
+                        var mutedColor = ColorVariations.OperatorBackgroundIdle.Apply(backgroundColor).Fade(Graph.GraphOpacity);
                         backgroundColor = Color.Mix(backgroundColor, mutedColor, fadeFactor);
                     }
 
                     var backgroundColorWithHover = isHighlighted
-                                                       ? ColorVariations.OperatorHover.Apply(backgroundColor)
-                                                       : ColorVariations.Operator.Apply(backgroundColor);
+                                                       ? ColorVariations.OperatorBackgroundHover.Apply(backgroundColor)
+                                                       : ColorVariations.OperatorBackground.Apply(backgroundColor);
 
                     drawList.AddRectFilled(_usableScreenRect.Min, _usableScreenRect.Max,
                                            backgroundColorWithHover.Fade(Graph.GraphOpacity));
@@ -283,7 +283,7 @@ namespace T3.Editor.Gui.Graph
                     // Outline shadow
                     drawList.AddRect(_selectableScreenRect.Min,
                                      _selectableScreenRect.Max + Vector2.One,
-                                     new Color(0.03f, 0.03f, 0.03f, 0.8f).Fade(Graph.GraphOpacity),
+                                     ColorVariations.OperatorOutline.Apply(typeColor),
                                      rounding: 0,
                                      ImDrawFlags.None);
 
@@ -352,7 +352,7 @@ namespace T3.Editor.Gui.Graph
                         drawList.AddRect(_selectableScreenRect.Min - Vector2.One , _selectableScreenRect.Max + Vector2.One * 2, 
                                          UiColors.BackgroundFull.Fade(Graph.GraphOpacity));
                         drawList.AddRect(_selectableScreenRect.Min , _selectableScreenRect.Max + Vector2.One * 1, 
-                                         UiColors.ForegroundFull.Fade(Graph.GraphOpacity));
+                                         UiColors.Selection.Fade(Graph.GraphOpacity));
                     }
                 }
             }
@@ -749,7 +749,7 @@ namespace T3.Editor.Gui.Graph
         {
             var style = direction == SocketDirections.Input
                             ? ColorVariations.ConnectionLines
-                            : ColorVariations.Operator;
+                            : ColorVariations.OperatorBackground;
             if (ConnectionMaker.TempConnections.Count > 0)
             {
                 if (direction == SocketDirections.Input
@@ -762,7 +762,7 @@ namespace T3.Editor.Gui.Graph
                 }
                 else
                 {
-                    style = ColorVariations.Muted;
+                    style = ColorVariations.OperatorBackgroundIdle;
                 }
             }
 
@@ -862,7 +862,7 @@ namespace T3.Editor.Gui.Graph
                 if (ConnectionMaker.IsMatchingOutputType(outputDef.ValueType))
                 {
                     _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
-                                            ColorVariations.OperatorHover.Apply(colorForType));
+                                            ColorVariations.OperatorBackgroundHover.Apply(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
                     {
@@ -874,7 +874,7 @@ namespace T3.Editor.Gui.Graph
                     if (_isVisible)
                     {
                         _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
-                                                ColorVariations.OperatorHover.Apply(colorForType));
+                                                ColorVariations.OperatorBackgroundHover.Apply(colorForType));
 
                         var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
                         var output = instance.Outputs.Single(output2 => output2.Id == outputDef.Id);
@@ -976,7 +976,7 @@ namespace T3.Editor.Gui.Graph
                 if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
                     _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
-                                            ColorVariations.OperatorHover.Apply(colorForType));
+                                            ColorVariations.OperatorBackgroundHover.Apply(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
                     {
@@ -988,7 +988,7 @@ namespace T3.Editor.Gui.Graph
                     _drawList.AddRectFilled(
                                             usableArea.Min,
                                             usableArea.Max,
-                                            ColorVariations.OperatorHover.Apply(colorForType)
+                                            ColorVariations.OperatorBackgroundHover.Apply(colorForType)
                                            );
 
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
@@ -1215,7 +1215,7 @@ namespace T3.Editor.Gui.Graph
                 if (ConnectionMaker.IsMatchingInputType(inputDef.DefaultValue.ValueType))
                 {
                     _drawList.AddRectFilled(usableArea.Min, usableArea.Max,
-                                            ColorVariations.OperatorHover.Apply(colorForType));
+                                            ColorVariations.OperatorBackgroundHover.Apply(colorForType));
 
                     if (ImGui.IsMouseReleased(0))
                     {
@@ -1227,7 +1227,7 @@ namespace T3.Editor.Gui.Graph
                     _drawList.AddRectFilled(
                                             usableArea.Min,
                                             usableArea.Max,
-                                            ColorVariations.OperatorHover.Apply(colorForType)
+                                            ColorVariations.OperatorBackgroundHover.Apply(colorForType)
                                            );
 
                     ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
