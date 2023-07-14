@@ -6,6 +6,7 @@ using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.UiHelpers;
+using T3.Serialization;
 
 namespace T3.Editor.Gui.Styling;
 
@@ -97,7 +98,7 @@ public static class ThemeHandling
 
         var combine = GetThemeFilepath(theme);
         var filepath = combine;
-        Utilities.SaveJson(theme, filepath);
+        JsonUtils.SaveJson(theme, filepath);
         LoadThemes();
     }
 
@@ -131,7 +132,7 @@ public static class ThemeHandling
         {
             try
             {
-                var t = Utilities.TryLoadingJson<ColorTheme>(filepath);
+                var t = JsonUtils.TryLoadingJson<ColorTheme>(filepath);
                 if (t == null)
                 {
                     Log.Debug($"Failed to load theme {filepath}");
