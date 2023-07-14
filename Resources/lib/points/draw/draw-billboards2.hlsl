@@ -138,19 +138,19 @@ psInput vsMain(uint id
     psInput output;
 
     uint quadIndex = id % 6;
-    uint particleId = id / 6;
+    uint pointId = id / 6;
     float3 cornerFactors = Corners[quadIndex];
 
-    Point p = Points[particleId]; 
+    Point p = Points[pointId]; 
 
     float4 pRotation = normalize(p.rotation); 
-    float f = particleId / (float)particleCount;
+    float f = pointId / (float)particleCount;
 
     float phase = RandomPhase + 133.1123 * f;
     int phaseId = (int)phase; 
 
-    float4 normalizedScatter = lerp(hash41u(particleId * 12341 + phaseId),
-                                    hash41u(particleId * 12341 + phaseId + 1),
+    float4 normalizedScatter = lerp(hash41u(pointId * 12341 + phaseId),
+                                    hash41u(pointId * 12341 + phaseId + 1),
                                     smoothstep(0, 1,
                                                phase - phaseId));
 
@@ -161,9 +161,9 @@ psInput vsMain(uint id
     int2 altasSize = (int2)AtlasSize;
 
 
-    float textureUx = GetUFromMode(TextureAtlasMode, particleId, f, normalizedScatter, p.w, output.fog);
-    float textureUy = GetUFromMode(TextureAtlasMode, particleId, f, normalizedScatter.wxyz, p.w, output.fog); 
-    //int cellIndex = textureU * altasSize.x * altasSize.y;// particleId;
+    float textureUx = GetUFromMode(TextureAtlasMode, pointId, f, normalizedScatter, p.w, output.fog);
+    float textureUy = GetUFromMode(TextureAtlasMode, pointId, f, normalizedScatter.wxyz, p.w, output.fog); 
+    //int cellIndex = textureU * altasSize.x * altasSize.y;// pointId;
     
     int textureCelX =  textureUx * altasSize.x;
     int textureCelY =  textureUy * altasSize.y;
@@ -194,7 +194,7 @@ psInput vsMain(uint id
 
     float4 colorFromPoint = (UseRotationAsRgba > 0.5) ? pRotation : 1;
 
-    float colorFxU = GetUFromMode(ColorVariationMode, particleId, f, normalizedScatter, p.w, output.fog);
+    float colorFxU = GetUFromMode(ColorVariationMode, pointId, f, normalizedScatter, p.w, output.fog);
     output.color = Color * ColorOverW.SampleLevel(texSampler, float2(colorFxU, 0), 0) * colorFromPoint;
 
     float adjustedRotate = Rotate;
@@ -219,7 +219,8 @@ psInput vsMain(uint id
         }
     }
 
-    float scaleFxU = GetUFromMode(ScaleDistribution, particleId, f, normalizedScatter, p.w, output.fog);
+    // Scale and stretch
+    float scaleFxU = GetUFromMode(ScaleDistribution, pointId, f, normalizedScatter, p.w, output.fog);
     float scaleFromCurve = SizeOverW.SampleLevel(texSampler, float2(scaleFxU, 0), 0).r;
     float hideUndefinedPoints = isnan(p.w) ? 0 : (UseWFoScale > 0.5 ? p.w : 1 );
     float computedScale = adjustedScale * (RandomScale * scatterForScale.y *adjustedRandomize + 1) * tooCloseFactor * scaleFromCurve * hideUndefinedPoints;
