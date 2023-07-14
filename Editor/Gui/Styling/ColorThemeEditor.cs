@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.Logging;
-using T3.Core.Utils;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
@@ -19,36 +16,16 @@ namespace T3.Editor.Gui.Styling;
 /// </summary>
 public static class ColorThemeEditor
 {
-    
-    private static void InitializeDefault()
-    {
-        if (_defaultTheme != null)
-            return;
-
-        _defaultTheme = new ThemeHandling.ColorTheme();
-
-        var fields = typeof(UiColors).GetFields();
-        foreach (var f in fields)
-        {
-            if (f.GetValue(Dummy) is not Color color)
-                continue;
-
-            _defaultTheme.Colors[f.Name] = color;
-        }
-
-        T3Style.Apply();
-    }
-
-
     public static void DrawEditor()
     {
-        InitializeDefault();
-        _currentTheme ??= _defaultTheme.Clone();
+        if (_currentTheme == null)
+        {
+            _currentTheme = ThemeHandling._factoryTheme.Clone();
+            _currentThemeWithoutChanges = ThemeHandling._factoryTheme.Clone();
+        }
+        
         var fields = typeof(UiColors).GetFields();
-
-        DevHelpers.Draw(fields);
-
-        //bool found;
+        
         if (ImGui.BeginCombo("##SelectTheme", UserSettings.Config.ColorThemeName, ImGuiComboFlags.HeightLarge))
         {
             foreach (var theme in ThemeHandling.Themes)
@@ -56,13 +33,11 @@ public static class ColorThemeEditor
                 var isSelected = theme.Name == UserSettings.Config.ColorThemeName;
                 if (!ImGui.Selectable($"{theme.Name}", isSelected, ImGuiSelectableFlags.DontClosePopups))
                     continue;
-                
-                UserSettings.Config.ColorThemeName = theme.Name;
-                UserSettings.Save();
-                ThemeHandling.ApplyTheme(theme);
+
+                ThemeHandling.SetThemeAsUserTheme(theme);
                 _currentTheme = theme;
-                _defaultTheme = _currentTheme.Clone();
-                T3Style.Apply();
+                _currentThemeWithoutChanges = _currentTheme.Clone();
+                ImGui.CloseCurrentPopup();
             }
             ImGui.EndCombo();
         }
@@ -82,7 +57,16 @@ public static class ColorThemeEditor
             }
             
             _currentTheme = currentFromName;
-            _defaultTheme = currentFromName.Clone();
+            _currentThemeWithoutChanges = currentFromName.Clone();
+        }
+        
+        ImGui.SameLine();
+        if (ImGui.Button("Delete"))
+        {
+            ThemeHandling.DeleteTheme(_currentTheme);
+            _currentTheme = ThemeHandling._factoryTheme.Clone();
+            _currentThemeWithoutChanges = ThemeHandling._factoryTheme.Clone();
+
         }
         
         _somethingChanged = false;
@@ -95,7 +79,7 @@ public static class ColorThemeEditor
 
             ImGui.AlignTextToFramePadding();
 
-            if (!_defaultTheme.Colors.TryGetValue(f.Name, out var defaultColor))
+            if (!_currentThemeWithoutChanges.Colors.TryGetValue(f.Name, out var defaultColor))
             {
                 defaultColor = color;
                 isChanged = true;
@@ -124,6 +108,7 @@ public static class ColorThemeEditor
             {
                 SetColor(f, vec4Color);
                 T3Style.Apply();
+                FrameStats.Current.UiColorsNeedUpdate = true;
             }
 
             ImGui.SameLine(0, 10);
@@ -158,7 +143,6 @@ public static class ColorThemeEditor
         _currentTheme.Colors[f.Name] = vec4Color;
     }
     
-
     private static class DevHelpers
     {
         public static void Draw(FieldInfo[] fields)
@@ -168,7 +152,7 @@ public static class ColorThemeEditor
             {
                 if (!_animatedAllColors)
                 {
-                    _currentTheme ??= _defaultTheme.Clone();
+                    _currentTheme ??= _currentThemeWithoutChanges.Clone();
                     ApplyBlinkToAll(fields, 0);
                 }
             }
@@ -191,7 +175,7 @@ public static class ColorThemeEditor
         {
             foreach (var f in fields)
             {
-                if (!_defaultTheme.Colors.TryGetValue(f.Name, out var defaultColorValues))
+                if (!_currentThemeWithoutChanges.Colors.TryGetValue(f.Name, out var defaultColorValues))
                     continue;
 
                 var blinkingColor = Color.Mix(new Color(defaultColorValues),
@@ -200,6 +184,7 @@ public static class ColorThemeEditor
             }
 
             T3Style.Apply();
+            FrameStats.Current.UiColorsNeedUpdate = true;
         }
 
         private static bool _animatedAllColors;
@@ -209,91 +194,6 @@ public static class ColorThemeEditor
     
     private static bool _somethingChanged;
     private static ThemeHandling.ColorTheme _currentTheme;
-    private static ThemeHandling.ColorTheme _defaultTheme;
+    private static ThemeHandling.ColorTheme _currentThemeWithoutChanges;
     public static readonly object Dummy = new();
-
-}
-
-
-public static class ThemeHandling
-{
-    
-    /// <summary>
-    /// Applies the colors to T3StyleColors
-    /// </summary>
-    /// <param name="theme"></param>
-    public static void ApplyTheme(ColorTheme theme)
-    {
-        var fields = typeof(UiColors).GetFields();
-        foreach (var f in fields)
-        {
-            if (f.GetValue(ColorThemeEditor.Dummy) is not Color)
-                continue;
-
-            if (!theme.Colors.TryGetValue(f.Name, out var colorValue))
-                continue;
-            
-            f.SetValue(ColorThemeEditor.Dummy,  new Color(colorValue));
-        }
-
-        T3Style.Apply();
-    }
-
-    public static void SaveTheme(ColorTheme theme)
-    {
-        if (!Directory.Exists(ThemeFolder))
-            Directory.CreateDirectory(ThemeFolder);
-            
-        theme.Name = theme.Name.Trim();
-        if (string.IsNullOrEmpty(theme.Name))
-        {
-            theme.Name = "untitled";
-        }
-        
-        var filepath = Path.Combine(ThemeFolder, theme.Name + ".json");
-        Utilities.SaveJson(theme, filepath);
-        ScanAndLoadThemes();
-    }
-
-    public static void ScanAndLoadThemes()
-    {
-        Themes.Clear();
-        if (!Directory.Exists(ThemeFolder))
-            return;
-        
-        foreach (var x in Directory.GetFiles(ThemeFolder))
-        {
-            try
-            {
-                var t = Utilities.TryLoadingJson<ColorTheme>(x);
-                Themes.Add(t);
-                    
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Failed to load {x} : {e.Message}");
-            }
-        }
-    }
-
-    public class ColorTheme
-    {
-        public string Name = "untitled";
-        public string Author = "unknown";
-        public Dictionary<string, Vector4> Colors = new();
-
-        public ColorTheme Clone()
-        {
-            return new ColorTheme()
-                       {
-                           Name = Name,
-                           Author = Author,
-                           Colors = Colors.ToDictionary(entry => entry.Key,
-                                                        entry => entry.Value),
-                       };
-        }
-    }
-    
-    public static List<ThemeHandling.ColorTheme> Themes = new();
-    private const string ThemeFolder = @".t3\Themes\";
 }

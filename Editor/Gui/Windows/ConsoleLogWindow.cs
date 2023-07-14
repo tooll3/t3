@@ -33,6 +33,9 @@ namespace T3.Editor.Gui.Windows
 
         protected override void DrawContent()
         {
+            if (FrameStats.Last.UiColorsNeedUpdate)
+                _colorForLogLevel= UpdateLogLevelColors();
+            
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
             {
                 CustomComponents.ToggleButton("Scroll", ref _shouldScrollToBottom, Vector2.Zero);
@@ -154,6 +157,7 @@ namespace T3.Editor.Gui.Windows
                 fade = MathUtils.RemapAndClamp(frameFraction, 0, 1, 0.2f, 0.8f);
             }
 
+            // Timestamp
             var timeColor = UiColors.Text.Fade(fade);
             var timeLabel = $" {time:0.000}";
             var timeLabelSize = ImGui.CalcTextSize(timeLabel);
@@ -164,15 +168,11 @@ namespace T3.Editor.Gui.Windows
 
             var color = GetColorForLogLevel(entryLevel)
                .Fade(FrameStats.Last.HoveredIds.Contains(entry.SourceId) ? 1 : 0.6f);
-
-            //var lines = entry.Message.Split('\n').First();
-            //using var reader = new StringReader(entry.Message);
-            //ImGui.TextUnformatted(reader.ReadLine());
+            
             var lineBreak = entry.Message.IndexOf('\n');
             var hasMessageWithLineBreaks = lineBreak != -1;
             var firstLine = hasMessageWithLineBreaks ? entry.Message.Substring(0, lineBreak) : entry.Message;
 
-            //ImGui.TextUnformatted(firstLine);
             ImGui.TextColored(color, firstLine);
 
             var hasInstancePath = entry.SourceIdPath?.Length > 1;
@@ -241,15 +241,22 @@ namespace T3.Editor.Gui.Windows
             var lineRect = new ImRect(min, min + size);
             return lineRect.Contains(ImGui.GetMousePos());
         }
+        
+                
 
-        private static readonly Dictionary<ILogEntry.EntryLevel, Color> _colorForLogLevel
-            = new()
-                  {
-                      { ILogEntry.EntryLevel.Debug, UiColors.TextMuted },
-                      { ILogEntry.EntryLevel.Info, UiColors.TextMuted },
-                      { ILogEntry.EntryLevel.Warning, UiColors.StatusWarning },
-                      { ILogEntry.EntryLevel.Error, UiColors.StatusError},
-                  };
+        private static Dictionary<ILogEntry.EntryLevel, Color> _colorForLogLevel
+            = UpdateLogLevelColors();
+
+        private static Dictionary<ILogEntry.EntryLevel, Color> UpdateLogLevelColors()
+        {
+            return new()
+                       {
+                           { ILogEntry.EntryLevel.Debug, UiColors.TextMuted },
+                           { ILogEntry.EntryLevel.Info, UiColors.TextMuted },
+                           { ILogEntry.EntryLevel.Warning, UiColors.StatusWarning },
+                           { ILogEntry.EntryLevel.Error, UiColors.StatusError},
+                       };
+        }
 
         public void ProcessEntry(ILogEntry entry)
         {

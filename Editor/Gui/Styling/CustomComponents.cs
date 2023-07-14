@@ -99,7 +99,7 @@ namespace T3.Editor.Gui.Styling
                 ImGui.PushStyleColor(ImGuiCol.Button, UiColors.Text.Rgba);
                 ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Text.Rgba);
                 ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.Text.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Background.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ChildBackground.Rgba);
             }
 
             if (ImGui.Button(label, size) || trigger)
@@ -122,7 +122,7 @@ namespace T3.Editor.Gui.Styling
 
             var stateTextColor = isSelected
                                  ? UiColors.ForegroundFull.Rgba
-                                 : UiColors.Background.Rgba;
+                                 : UiColors.ChildBackground.Rgba;
             ImGui.PushStyleColor(ImGuiCol.Text, stateTextColor);
 
             var padding = string.IsNullOrEmpty(label) ? new Vector2(0.1f, 0.5f) : new Vector2(0.5f, 0.5f);
@@ -168,7 +168,7 @@ namespace T3.Editor.Gui.Styling
                 else if (state == ButtonStates.Disabled)
                     c = UiColors.TextDisabled;
                 else if (state == ButtonStates.Activated)
-                    c = UiColors.Background;
+                    c = UiColors.ChildBackground;
                 else
                     c = UiColors.Text;
 

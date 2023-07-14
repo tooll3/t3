@@ -502,7 +502,7 @@ namespace T3.Editor.Gui.Graph
                 ImGui.TextUnformatted(compositionOp.Symbol.Name);
                 ImGui.SameLine();
 
-                ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.3f).Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Fade(0.3f).Rgba);
                 ImGui.TextUnformatted("  - " + compositionOp.Symbol.Namespace);
                 ImGui.PopFont();
                 ImGui.PopStyleColor();
@@ -514,7 +514,7 @@ namespace T3.Editor.Gui.Graph
                     var desc = symbolUi.Description;
                     ImGui.PushFont(Fonts.FontSmall);
                     ImGui.PushStyleColor(ImGuiCol.FrameBg, Color.Transparent.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                     {
                         var sizeMatchingDescription = ImGui.CalcTextSize(desc) + new Vector2(20, 40);
                         sizeMatchingDescription.X = Math.Max(300, sizeMatchingDescription.X);

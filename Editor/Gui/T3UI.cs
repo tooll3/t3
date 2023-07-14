@@ -47,6 +47,7 @@ public class T3Ui
         VariationHandling.Init();
 
         Playback.Current = DefaultTimelinePlayback;
+        ThemeHandling.Initialize();
     }
 
     public static readonly Playback DefaultTimelinePlayback = new();
@@ -56,7 +57,8 @@ public class T3Ui
     {
         if (_initialed || ImGui.GetWindowSize() == Vector2.Zero)
             return;
-            
+        
+        
         _initialed = true;
     }
 
@@ -64,8 +66,11 @@ public class T3Ui
 
     public void ProcessFrame()
     {
+        
+        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
+
         FormInputs.ResetIndent();
-        //InitializeAfterAppWindowReady();
+        InitializeAfterAppWindowReady();
             
         // Prepare the current frame 
         RenderStatsCollector.StartNewFrame();

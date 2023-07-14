@@ -85,34 +85,34 @@ namespace T3.Editor.Gui.Windows
 
             // Draw Ui Render Duration
             var uiTimeWidth = (float)Math.Ceiling(_uiRenderDurationMs * frameTimingScaleFactor);
-            drawList.AddRectFilled(screenPosition, screenPosition + new Vector2(uiTimeWidth, barHeight), _colorForUiBar);
+            drawList.AddRectFilled(screenPosition, screenPosition + new Vector2(uiTimeWidth, barHeight), ColorForUiBar);
 
             // Draw Frame Render Duration
             var deltaTimeWidth = deltaTimeMs * frameTimingScaleFactor - uiTimeWidth;
             var renderBarPos = screenPosition + new Vector2(uiTimeWidth, 0);
-            drawList.AddRectFilled(renderBarPos, renderBarPos + new Vector2(deltaTimeWidth, barHeight), _colorForFramerateBar);
+            drawList.AddRectFilled(renderBarPos, renderBarPos + new Vector2(deltaTimeWidth, barHeight), ColorForFramerateBar);
 
             // Draw Peak UI Duration
             var peakUiTimePos = screenPosition + new Vector2((int)(_peakUiRenderDurationMs * frameTimingScaleFactor), 0);
-            drawList.AddRectFilled(peakUiTimePos, peakUiTimePos + new Vector2(2, barHeight), _colorForUiBar);
+            drawList.AddRectFilled(peakUiTimePos, peakUiTimePos + new Vector2(2, barHeight), ColorForUiBar);
 
 
             // Draw Peak Render Duration
             var peakDeltaTimePos = screenPosition + new Vector2((int)(_peakDeltaTimeMs * frameTimingScaleFactor), 0);
-            drawList.AddRectFilled(peakDeltaTimePos, peakDeltaTimePos + new Vector2(2, barHeight), _colorForFramerateBar);
+            drawList.AddRectFilled(peakDeltaTimePos, peakDeltaTimePos + new Vector2(2, barHeight), ColorForFramerateBar);
             
             // Draw 60fps mark
             var normalFramerateMarkerPos = screenPosition + new Vector2(ExpectedFrameDurationMs * frameTimingScaleFactor, 0);
-            drawList.AddRectFilled(normalFramerateMarkerPos, normalFramerateMarkerPos + new Vector2(1, barHeight + 3), _colorForFramerateBar);
+            drawList.AddRectFilled(normalFramerateMarkerPos, normalFramerateMarkerPos + new Vector2(1, barHeight + 3), ColorForFramerateBar);
             
             ImGui.PushFont(Fonts.FontSmall);
-            drawList.AddText(screenPosition + new Vector2(0, 4), _colorForFramerateBar, $"{deltaTimeMs:0.0}ms");
+            drawList.AddText(screenPosition + new Vector2(0, 4), ColorForFramerateBar, $"{deltaTimeMs:0.0}ms");
             ImGui.PopFont();
         }
         
 
-        private static readonly Color _colorForUiBar = new Color(0.6f);
-        private static readonly Color _colorForFramerateBar = new Color(0.3f);
+        private static  Color ColorForUiBar => UiColors.ForegroundFull.Fade(0.6f);
+        private static  Color ColorForFramerateBar => UiColors.ForegroundFull.Fade(0.3f);
         private const float ExpectedFramerate = 60;
         private const float ExpectedFrameDurationMs = 1 / ExpectedFramerate * 1000;
 

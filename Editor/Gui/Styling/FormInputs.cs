@@ -183,12 +183,13 @@ namespace T3.Editor.Gui.Styling
         
         private static bool DrawSelectButton(string name, bool isSelected)
         {
-            ImGui.PushStyleColor(ImGuiCol.Button, isSelected ? UiColors.BackgroundActive.Rgba : UiColors.BackgroundHover.Rgba);
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, isSelected ? UiColors.BackgroundActive.Rgba : UiColors.BackgroundHover.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Button, isSelected ? UiColors.BackgroundActive.Rgba : UiColors.BackgroundButton.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, isSelected ? UiColors.BackgroundActive.Rgba : UiColors.BackgroundButton.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, isSelected ? UiColors.BackgroundFull.Rgba : UiColors.ForegroundFull.Rgba);
             ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundActive.Rgba);
 
             var clicked = ImGui.Button(name);
-            ImGui.PopStyleColor(3);
+            ImGui.PopStyleColor(4);
             return clicked;
         }
 

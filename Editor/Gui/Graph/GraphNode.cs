@@ -640,7 +640,7 @@ namespace T3.Editor.Gui.Graph
             _drawList.AddRectFilled(pMin, pMax, color * Graph.GraphOpacity);
             _drawList.AddRect(pMin-Vector2.One, 
                               pMax+Vector2.One, 
-                              UiColors.Background.Fade(0.4f * Graph.GraphOpacity));
+                              UiColors.ChildBackground.Fade(0.4f * Graph.GraphOpacity));
             indicatorCount++;
         }
 

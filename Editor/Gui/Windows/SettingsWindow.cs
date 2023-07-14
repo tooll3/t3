@@ -20,6 +20,8 @@ namespace T3.Editor.Gui.Windows
 
         protected override void DrawContent()
         {
+            
+            ImGui.PushStyleVar(ImGuiStyleVar.Alpha,1);
             var changed = false;
             ImGui.NewLine();
             if (ImGui.TreeNode("User Interface"))
@@ -238,6 +240,8 @@ namespace T3.Editor.Gui.Windows
 
                 ImGui.TreePop();
             }
+            
+            ImGui.PopStyleVar();
         }
 
         public override List<Window> GetInstances()

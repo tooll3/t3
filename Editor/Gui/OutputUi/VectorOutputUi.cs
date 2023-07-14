@@ -16,19 +16,19 @@ namespace T3.Editor.Gui.OutputUi
                        };
             // TODO: check if curve should be cloned too
         }
-        
+
         protected override void DrawTypedValue(ISlot slot)
         {
             if (slot is Slot<T> typedSlot)
             {
                 var value = typedSlot.Value;
-                
+
                 if (slot != _lastSlot)
                 {
                     _lastSlot = slot;
                     _curve2.Reset(default);
                 }
-                
+
                 _curve2.Draw(value);
             }
             else
@@ -36,9 +36,9 @@ namespace T3.Editor.Gui.OutputUi
                 Debug.Assert(false);
             }
         }
-        
+
         private ISlot _lastSlot;
-        
+
         private readonly VectorCurvePlotCanvas<T> _curve2 = new(resolution: 500);
     }
 }

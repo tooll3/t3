@@ -1,5 +1,7 @@
 ﻿// ReSharper disable RedundantArgumentDefaultValue
 
+using System.Numerics;
+
 namespace T3.Editor.Gui.Styling;
 
 public static class UiColors
@@ -15,7 +17,7 @@ public static class UiColors
 
     // Backgrounds
     [T3Style.Hint(Description = "This is the primary background used for canvases and windows.")]
-    public static Color Background = new(0.1f, 0.1f, 0.1f, 1);
+    public static Color ChildBackground = new(0.1f, 0.1f, 0.1f, 1);
     
     [T3Style.Hint(Description = "The opaque background. It's faded to with alpha.")]
     public static Color BackgroundFull = new(0f, 0f, 0f, 1f);
@@ -71,4 +73,15 @@ public static class UiColors
     public static Color ColorForDX11 = new(0.853f, 0.313f, 0.855f, 1.000f);
     public static Color ColorForCommands = new(0.132f, 0.722f, 0.762f, 1.000f);
     public static Color ColorForGpuData = new Color(0.681f, 0.034f, 0.283f, 1.000f);
+    public static Color ScrollbarBackground =  new Color(0.12f, 0.12f, 0.12f, 0.53f);
+    public static Color ScrollbarHandle =  new Color(0.31f, 0.31f, 0.31f, 0.33f);
+    public static Color WindowBackground = new Color(0.1f, 0.1f, 0.1f, 0.98f);
+    public static Color BackgroundPopup = new Color(0.1f, 0.1f, 0.1f, 0.98f);
+    public static Color ModalWindowDimBg = new Color(0.1f, 0.1f, 0.1f, 0.1f);
+    
+    [T3Style.Hint(Description = "Background for menu, gaps and separators")]
+    public static Color BackgroundGaps = new Color(0.1f, 0.1f, 0.1f, 0.1f);
+
+    public static Color WindowBorder = new Color(0, 0, 0, 1f);
+
 }
