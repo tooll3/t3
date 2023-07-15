@@ -103,7 +103,7 @@
       "Outputs": []
     },
     {
-      "Id": "dd3a65c5-cb37-42e7-be69-332b9406b41f"/*StructuredBuffer2*/,
+      "Id": "dd3a65c5-cb37-42e7-be69-332b9406b41f"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {
@@ -114,7 +114,7 @@
       ],
       "Outputs": [
         {
-          "Id": "c997268d-6709-49de-980e-64d7a47504f7"/*StructuredBuffer2*/,
+          "Id": "c997268d-6709-49de-980e-64d7a47504f7"/*StructuredBufferWithViews*/,
           "DirtyFlagTrigger": "Animated"
         }
       ]
@@ -163,7 +163,7 @@
       "Outputs": []
     },
     {
-      "Id": "3999c0fd-3758-4881-8950-177b8b2805cf"/*StructuredBuffer2*/,
+      "Id": "3999c0fd-3758-4881-8950-177b8b2805cf"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {
@@ -179,7 +179,7 @@
       ],
       "Outputs": [
         {
-          "Id": "c997268d-6709-49de-980e-64d7a47504f7"/*StructuredBuffer2*/,
+          "Id": "c997268d-6709-49de-980e-64d7a47504f7"/*StructuredBufferWithViews*/,
           "DirtyFlagTrigger": "Animated"
         }
       ]

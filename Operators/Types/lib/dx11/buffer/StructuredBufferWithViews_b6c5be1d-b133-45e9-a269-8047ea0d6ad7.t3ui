@@ -1,16 +1,16 @@
 {
-  "Id": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7"/*StructuredBuffer2*/,
+  "Id": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7"/*StructuredBufferWithViews*/,
   "Description": "Generates a GPU buffer with optional shader resource view and unordered access view.\nThis \"BufferWithView\" types makes it easier to use this buffer without generating new shader resource views.\n\nYou can access the views with [GetBufferComponents].",
   "InputUis": [
     {
-      "InputId": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
+      "InputId": "16f98211-fe97-4235-b33a-ddbbd2b5997f"/*Count*/,
       "Position": {
         "X": 28.028454,
         "Y": 63.88211
       }
     },
     {
-      "InputId": "16f98211-fe97-4235-b33a-ddbbd2b5997f"/*Count*/,
+      "InputId": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
       "Position": {
         "X": 28.028454,
         "Y": 63.88211

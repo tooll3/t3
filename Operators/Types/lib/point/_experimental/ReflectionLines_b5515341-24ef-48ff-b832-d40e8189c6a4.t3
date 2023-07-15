@@ -98,7 +98,7 @@
       "Outputs": []
     },
     {
-      "Id": "eaf89cc6-bb5b-474d-9260-c95f939b1b6d"/*StructuredBuffer2*/,
+      "Id": "eaf89cc6-bb5b-474d-9260-c95f939b1b6d"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {

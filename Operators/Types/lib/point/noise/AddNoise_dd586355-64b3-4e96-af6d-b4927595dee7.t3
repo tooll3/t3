@@ -120,7 +120,7 @@
       "Outputs": []
     },
     {
-      "Id": "caf7bcc5-d4ce-4b71-ba5f-9658c35db481"/*StructuredBuffer2*/,
+      "Id": "caf7bcc5-d4ce-4b71-ba5f-9658c35db481"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {

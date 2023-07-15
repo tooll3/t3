@@ -75,18 +75,18 @@
       "Outputs": []
     },
     {
-      "Id": "628ab010-0b38-46c4-8123-7128d352fa85"/*StructuredBuffer2*/,
+      "Id": "628ab010-0b38-46c4-8123-7128d352fa85"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
-        {
-          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
-          "Type": "System.Int32",
-          "Value": 8
-        },
         {
           "Id": "16f98211-fe97-4235-b33a-ddbbd2b5997f"/*Count*/,
           "Type": "System.Int32",
           "Value": 11581
+        },
+        {
+          "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
+          "Type": "System.Int32",
+          "Value": 8
         }
       ],
       "Outputs": []
@@ -146,7 +146,7 @@
       "Outputs": []
     },
     {
-      "Id": "37c16acc-8a78-4811-8580-809623f685be"/*StructuredBuffer2*/,
+      "Id": "37c16acc-8a78-4811-8580-809623f685be"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {
@@ -192,7 +192,7 @@
       "Outputs": []
     },
     {
-      "Id": "4bfceede-eda2-4463-b3e3-d21155b288ee"/*StructuredBuffer2*/,
+      "Id": "4bfceede-eda2-4463-b3e3-d21155b288ee"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {

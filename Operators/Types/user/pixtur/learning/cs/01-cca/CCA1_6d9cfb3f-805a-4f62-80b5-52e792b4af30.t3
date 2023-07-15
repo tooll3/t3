@@ -98,7 +98,7 @@
       "Outputs": []
     },
     {
-      "Id": "00405dc7-9884-4e4b-b8ee-815bb3e10b71"/*StructuredBuffer2*/,
+      "Id": "00405dc7-9884-4e4b-b8ee-815bb3e10b71"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {
@@ -372,7 +372,7 @@
       "Outputs": []
     },
     {
-      "Id": "f294f356-07a4-4af5-b7a1-e52e7d762ea6"/*StructuredBuffer2*/,
+      "Id": "f294f356-07a4-4af5-b7a1-e52e7d762ea6"/*StructuredBufferWithViews*/,
       "SymbolId": "b6c5be1d-b133-45e9-a269-8047ea0d6ad7",
       "InputValues": [
         {

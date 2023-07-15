@@ -18,6 +18,9 @@ namespace T3.Operators.Types.Id_aaf19aea_06f6_4c5b_8765_9910f8ed7ad0
         [Input(Guid = "69795161-4890-495b-9298-3ef6c0a1cd81")]
         public readonly InputSlot<bool> RandomTriggerB = new InputSlot<bool>();
 
+        [Input(Guid = "f59234de-a3a7-43b7-9fce-05716515e278")]
+        public readonly InputSlot<int> MaxLength = new InputSlot<int>();
+
 
     }
 }

@@ -35,11 +35,6 @@ namespace T3.Operators.Types.Id_7ad3a38a_9f04_43ba_a16f_6982b87dd2d4
 
         private void Update(EvaluationContext context)
         {
-            // TotalSize.DirtyFlag.Clear();
-            // StartPositionForSelected.DirtyFlag.Clear();
-            // BufferCount.DirtyFlag.Clear();
-            // SelectedBuffer.DirtyFlag.Clear();
-            
             var connections = Input.GetCollectedTypedInputs();
             var selectedIndex = Index.GetValue(context).Clamp(0, connections.Count-1);
 
@@ -52,7 +47,6 @@ namespace T3.Operators.Types.Id_7ad3a38a_9f04_43ba_a16f_6982b87dd2d4
             }
 
             var totalSize = 0;
-            
             var startPosition = 0;
             BufferWithViews selectedBuffer = null;
             for (var connectionIndex = 0; connectionIndex < connections.Count; connectionIndex++)

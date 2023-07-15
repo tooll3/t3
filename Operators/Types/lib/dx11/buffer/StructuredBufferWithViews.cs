@@ -8,13 +8,13 @@ using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_b6c5be1d_b133_45e9_a269_8047ea0d6ad7
 {
-    public class StructuredBuffer2 : Instance<StructuredBuffer2>
+    public class StructuredBufferWithViews : Instance<StructuredBufferWithViews>
     {
 
         [Output(Guid = "c997268d-6709-49de-980e-64d7a47504f7")]
         public readonly Slot<T3.Core.DataTypes.BufferWithViews> BufferWithViews = new Slot<T3.Core.DataTypes.BufferWithViews>();
 
-        public StructuredBuffer2()
+        public StructuredBufferWithViews()
         {
             BufferWithViews.UpdateAction = UpdateBuffer;
         }
@@ -40,12 +40,13 @@ namespace T3.Operators.Types.Id_b6c5be1d_b133_45e9_a269_8047ea0d6ad7
             if (createUav)
                 ResourceManager.CreateStructuredBufferUav(BufferWithViews.Value.Buffer, uavBufferFlags, ref BufferWithViews.Value.Uav);
         }
+        
+        [Input(Guid = "16f98211-fe97-4235-b33a-ddbbd2b5997f")]
+        public readonly InputSlot<int> Count = new();
 
         [Input(Guid = "0016dd87-8756-4a97-a0da-096e1a879c05")]
         public readonly InputSlot<int> Stride = new();
 
-        [Input(Guid = "16f98211-fe97-4235-b33a-ddbbd2b5997f")]
-        public readonly InputSlot<int> Count = new();
 
         [Input(Guid = "bb5fa9b9-1155-47f5-9ed5-7832826f3df2")]
         public readonly InputSlot<bool> CreateSrv = new();

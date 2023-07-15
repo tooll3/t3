@@ -63,7 +63,7 @@
       }
     },
     {
-      "ChildId": "6875ab1c-6d80-46ad-a436-e4f075e021d8"/*StructuredBuffer2*/,
+      "ChildId": "6875ab1c-6d80-46ad-a436-e4f075e021d8"/*StructuredBufferWithViews*/,
       "Position": {
         "X": -103.46431,
         "Y": 776.13965
@@ -161,7 +161,7 @@
       }
     },
     {
-      "ChildId": "fa666161-c5ea-49c9-b42a-704a49190a5a"/*StructuredBuffer2*/,
+      "ChildId": "fa666161-c5ea-49c9-b42a-704a49190a5a"/*StructuredBufferWithViews*/,
       "Position": {
         "X": -108.20718,
         "Y": 934.9634

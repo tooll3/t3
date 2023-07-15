@@ -33,7 +33,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "28a3a1cb-9971-4262-ac3a-60ddc82467df"/*StructuredBuffer2*/,
+      "ChildId": "28a3a1cb-9971-4262-ac3a-60ddc82467df"/*StructuredBufferWithViews*/,
       "Position": {
         "X": 429.56693,
         "Y": 631.73627
@@ -59,7 +59,7 @@
       }
     },
     {
-      "ChildId": "f8b04cc2-b91d-4318-8084-eba7ce171a7e"/*StructuredBuffer2*/,
+      "ChildId": "f8b04cc2-b91d-4318-8084-eba7ce171a7e"/*StructuredBufferWithViews*/,
       "Position": {
         "X": 579.602,
         "Y": 546.96124

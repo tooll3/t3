@@ -265,7 +265,7 @@
       }
     },
     {
-      "ChildId": "674bf842-9ed2-48c6-8d94-f0600f6bc90e"/*StructuredBuffer2*/,
+      "ChildId": "674bf842-9ed2-48c6-8d94-f0600f6bc90e"/*StructuredBufferWithViews*/,
       "Position": {
         "X": -399.60132,
         "Y": 1929.7733

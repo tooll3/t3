@@ -1,7 +1,7 @@
 #include "lib/shared/point.hlsl"
 cbuffer Params : register(b0)
 {
-    float startIndex;    
+    int startIndex;    
 }
 
 StructuredBuffer<Point> Points : t0;            // input

@@ -228,8 +228,8 @@
     {
       "ChildId": "5903e105-daec-4e71-b8b9-fea2780cedae"/*RandomizePoints*/,
       "Position": {
-        "X": 705.24585,
-        "Y": 792.1563
+        "X": 742.3821,
+        "Y": 746.1781
       }
     },
     {
@@ -242,15 +242,15 @@
     {
       "ChildId": "acacc9f5-ec1a-4095-8457-574deccd2f37"/*PointSimulation*/,
       "Position": {
-        "X": 1634.6707,
-        "Y": 449.558
+        "X": 1639.6663,
+        "Y": 404.6365
       }
     },
     {
       "ChildId": "3ea460d4-313b-4252-a355-151ea0ae0959"/*SimNoise*/,
       "Position": {
-        "X": 1460.5001,
-        "Y": 457.852
+        "X": 1503.6661,
+        "Y": 322.84836
       }
     },
     {
@@ -377,6 +377,13 @@
       "Position": {
         "X": 1289.898,
         "Y": 613.4886
+      }
+    },
+    {
+      "ChildId": "86d8dd4c-5d1f-4def-acc8-aabce17cd276"/*PointSimulation*/,
+      "Position": {
+        "X": 1484.4468,
+        "Y": 457.5356
       }
     }
   ],
