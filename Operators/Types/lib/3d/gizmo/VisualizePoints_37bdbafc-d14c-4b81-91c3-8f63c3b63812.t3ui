@@ -107,6 +107,13 @@
         "X": -1305.5302,
         "Y": 1125.1823
       }
+    },
+    {
+      "InputId": "7b2054d4-e6b5-43e3-9cbe-1d2073ae35aa"/*ShowXyRadius*/,
+      "Position": {
+        "X": -1305.5302,
+        "Y": 1170.1823
+      }
     }
   ],
   "SymbolChildUis": [
@@ -477,6 +484,41 @@
       "Position": {
         "X": 555.24817,
         "Y": 2148.3042
+      }
+    },
+    {
+      "ChildId": "2ed5ac55-25ec-4355-bae5-4226ce0a22e3"/*RadialPoints*/,
+      "Position": {
+        "X": -113.824524,
+        "Y": 2517.9226
+      }
+    },
+    {
+      "ChildId": "1617d7ad-dd24-479b-922a-645a39842bf5"/*DrawLines*/,
+      "Position": {
+        "X": 186.17548,
+        "Y": 2461.9226
+      }
+    },
+    {
+      "ChildId": "03dbedbb-afc6-4d65-8fe5-2520bfb6c3fe"/*RepeatAtGPoints*/,
+      "Position": {
+        "X": 36.17549,
+        "Y": 2461.9226
+      }
+    },
+    {
+      "ChildId": "d10506db-9e2c-478f-a453-79238bf996b2"/*TransformPoints*/,
+      "Position": {
+        "X": -365.89804,
+        "Y": 2392.071
+      }
+    },
+    {
+      "ChildId": "e7fe7502-9cfe-4680-a82e-6b53f7c7805c"/*Execute*/,
+      "Position": {
+        "X": 336.17548,
+        "Y": 2461.9226
       }
     }
   ],

@@ -51,6 +51,9 @@ namespace T3.Operators.Types.Id_37bdbafc_d14c_4b81_91c3_8f63c3b63812
         [Input(Guid = "08174efd-78e5-4552-b559-5aa7b1b8c33e")]
         public readonly InputSlot<bool> ShowSpritePlane = new InputSlot<bool>();
 
+        [Input(Guid = "7b2054d4-e6b5-43e3-9cbe-1d2073ae35aa")]
+        public readonly InputSlot<bool> ShowXyRadius = new InputSlot<bool>();
+
     }
 }
 
