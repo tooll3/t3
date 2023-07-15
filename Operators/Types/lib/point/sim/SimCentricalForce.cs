@@ -28,6 +28,14 @@ namespace T3.Operators.Types.Id_87915d7b_f2aa_45da_80f9_bd1f6033d387
 
         [Input(Guid = "ac4bf799-f2e8-4bb8-ab57-e1260ba0421e")]
         public readonly InputSlot<float> ApplyMovement = new InputSlot<float>();
+
+        [Input(Guid = "c399f493-9df4-4fb8-9840-a749c3fe33a6", MappedType = typeof(Modes))]
+        public readonly InputSlot<int> Mode = new InputSlot<int>();
+        
+        private enum Modes {
+            Legacy,
+            EncodeInRotation,
+        }
     }
 }
 

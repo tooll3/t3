@@ -93,7 +93,7 @@ psInput vsMain(uint id
 
     float resize = (UseWForSize ? Points[instanceIndex].w : 1);
     posInObject.xyz *= max(0, resize) * Size;
-    float4x4 orientationMatrix = transpose(quaternion_to_matrix(Points[instanceIndex].rotation));
+    float4x4 orientationMatrix = transpose(quaternion_to_matrix(normalize(Points[instanceIndex].rotation)));
     posInObject = mul(float4(posInObject.xyz, 1), orientationMatrix);
 
     posInObject += float4(Points[instanceIndex].position, 0);

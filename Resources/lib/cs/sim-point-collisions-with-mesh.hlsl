@@ -4,9 +4,11 @@ RWStructuredBuffer<Point> points :register(u0);
 
 cbuffer Params : register(b0)
 {
+    float Threshold;
+    float Dispersion;
     float CellSize;
-    float Bounciness;
-    float Attraction;
+    float ClampAccelleration;
+    float Time;
 }
 
 #include "lib/points/spatial-hash-map/spatial-hash-map-lookup.hlsl"
@@ -81,8 +83,8 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
                 //float massRatio = (wB) / (wA);
             
                 float gapDistance = distance - wA - wB;
-                float f = gapDistance < 0 ?  -gapDistance*100*Bounciness 
-                                          :   -clamp( Attraction * smoothstep(0,1, gapDistance * 1) / (1+ gapDistance), -1, 1);
+                float f = gapDistance < 0 ?  -gapDistance*100
+                                          :   -clamp(1 * smoothstep(0,1, gapDistance * 1) / (1+ gapDistance * 10), -1, 1);
                 
                 forceSum += direction * f * massRatio;
                 count++;

@@ -25,6 +25,15 @@ namespace T3.Operators.Types.Id_7a08d73e_1aea_479f_8d36_ecb119d75c3a
 
         [Input(Guid = "9c8c1407-bf6a-47c0-8c6c-2cd9f303151d")]
         public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
+
+        [Input(Guid = "1f561bbd-a272-4c06-bd56-a580a2022bc6", MappedType = typeof(Modes))]
+        public readonly InputSlot<int> Mode = new InputSlot<int>();
+        
+        
+        private enum Modes {
+            Legacy,
+            EncodeInRotation,
+        }
     }
 }
 

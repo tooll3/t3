@@ -10,25 +10,10 @@
       }
     },
     {
-      "InputId": "cb2b3cb9-798c-4875-acd7-dd830e110201"/*Threshold*/,
-      "Position": {
-        "X": 2167.7478,
-        "Y": 262.65985
-      }
-    },
-    {
-      "InputId": "64996b47-cf36-46c4-96cc-424547714bd7"/*Dispersion*/,
-      "Position": {
-        "X": 2167.7478,
-        "Y": 307.65985
-      },
-      "Scale": 0.001
-    },
-    {
       "InputId": "0724bf0c-8f97-44de-bf42-6a89b89f1632"/*CellSize*/,
       "Position": {
-        "X": 2167.7478,
-        "Y": 352.65985
+        "X": 2172.9885,
+        "Y": 271.944
       },
       "Min": 0.001,
       "Max": 100.0,
@@ -36,18 +21,24 @@
       "Clamp": true
     },
     {
-      "InputId": "9defe179-7ea3-4f67-a951-a83b0b173a18"/*ClampAccelleration*/,
+      "InputId": "d0036a34-d7e4-4542-b231-5d1b687b0028"/*Bounciness*/,
       "Position": {
-        "X": 2167.7478,
-        "Y": 397.65985
-      },
-      "Scale": 0.001
+        "X": 2172.9885,
+        "Y": 316.94403
+      }
+    },
+    {
+      "InputId": "91966b2c-342a-420a-bad1-cbcf4d6af1ae"/*Attraction*/,
+      "Position": {
+        "X": 2172.9885,
+        "Y": 361.94397
+      }
     },
     {
       "InputId": "78566405-8dee-4661-9cb7-489c8d322f64"/*IsEnabled*/,
       "Position": {
-        "X": 2167.7478,
-        "Y": 442.65985
+        "X": 2166.3313,
+        "Y": 540.386
       }
     }
   ],
@@ -89,14 +80,14 @@
       "ChildId": "595b25a0-599a-4730-92c6-d8785a0773f2"/*ComputeShaderStage*/,
       "Position": {
         "X": 2840.1619,
-        "Y": 63.1315
+        "Y": 86.500824
       }
     },
     {
       "ChildId": "814d264e-1181-4569-a12a-a984f1b45f45"/*CalcDispatchCount*/,
       "Position": {
         "X": 2690.1619,
-        "Y": 106.1315
+        "Y": 125.25183
       }
     },
     {
@@ -110,14 +101,7 @@
       "ChildId": "d57e0521-90eb-4b76-8277-061ea359145b"/*Execute*/,
       "Position": {
         "X": 2990.1619,
-        "Y": -5.8684998
-      }
-    },
-    {
-      "ChildId": "15e1e52b-c055-4641-9e26-580df17cfbd4"/*Time*/,
-      "Position": {
-        "X": 2335.392,
-        "Y": 581.6067
+        "Y": 17.500824
       }
     }
   ],

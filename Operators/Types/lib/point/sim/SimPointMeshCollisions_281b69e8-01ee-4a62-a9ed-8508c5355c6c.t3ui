@@ -1,0 +1,136 @@
+{
+  "Id": "281b69e8-01ee-4a62-a9ed-8508c5355c6c"/*SimPointMeshCollisions*/,
+  "Description": "Simulates collisions with meshs.\n\nNot: this is VERY expensive with large meshes (I.e. with more than 100 faces).\n",
+  "InputUis": [
+    {
+      "InputId": "8f2d6bb8-5242-4f21-b356-7785b6b0ff4e"/*PointsA_*/,
+      "Position": {
+        "X": 2163.5981,
+        "Y": 34.010452
+      }
+    },
+    {
+      "InputId": "61c55a9d-a2b9-4d60-84f4-ffd639d0d724"/*Bouncyness*/,
+      "Position": {
+        "X": 2170.603,
+        "Y": 154.42017
+      }
+    },
+    {
+      "InputId": "7bc189be-25c6-44f2-b787-9e06d3dfa0b8"/*ClampAccelleration*/,
+      "Position": {
+        "X": 2170.603,
+        "Y": 199.42017
+      },
+      "Scale": 0.001
+    },
+    {
+      "InputId": "d164bae5-b843-4378-ace6-d28ea04a3020"/*Damping*/,
+      "Position": {
+        "X": 2165.5044,
+        "Y": 269.91394
+      }
+    },
+    {
+      "InputId": "7a42dc58-f1fc-4473-abc3-5772817cb4b6"/*IsEnabled*/,
+      "Position": {
+        "X": 2166.524,
+        "Y": 348.43475
+      }
+    },
+    {
+      "InputId": "a4f2c0e6-1011-4793-933b-b9f0a332bbba"/*Mesh*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 2166.524,
+        "Y": 393.43475
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "8170fd79-6dcd-4688-b120-b8207e4ae282"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 109.896416,
+        "Y": 86.29051
+      },
+      "Position": {
+        "X": 2687.5815,
+        "Y": 195.07346
+      }
+    },
+    {
+      "ChildId": "780ab989-d360-4da1-b364-e5cd25632111"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 3140.1619,
+        "Y": -30.34253
+      }
+    },
+    {
+      "ChildId": "320e2f0e-668d-4b04-8e06-575c86620ffb"/*GetBufferComponents*/,
+      "Position": {
+        "X": 2540.1619,
+        "Y": 103.1315
+      }
+    },
+    {
+      "ChildId": "134175e5-b173-408f-8cb1-bac85067414f"/*ComputeShader*/,
+      "Position": {
+        "X": 2540.1619,
+        "Y": 60.1315
+      }
+    },
+    {
+      "ChildId": "e7783e2a-3a8a-457c-8f0b-1813cac6954d"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 2840.1619,
+        "Y": 63.1315
+      }
+    },
+    {
+      "ChildId": "2700979d-b701-48d9-9682-7a9779e01c71"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 2689.4536,
+        "Y": 81.543686
+      }
+    },
+    {
+      "ChildId": "9ae8cef2-2b1a-444c-a15f-12f957ed1502"/*Execute*/,
+      "Position": {
+        "X": 2990.1619,
+        "Y": -30.34253
+      }
+    },
+    {
+      "ChildId": "9932b8d6-c9b3-4bb8-a218-2a1c8aff0628"/*_MeshBufferComponents*/,
+      "Position": {
+        "X": 2459.3904,
+        "Y": 483.44092
+      }
+    },
+    {
+      "ChildId": "d4b5ec72-3d12-4e22-b6b4-3cc929e80cd4"/*GetBufferComponents*/,
+      "Position": {
+        "X": 2671.9128,
+        "Y": 458.49738
+      }
+    },
+    {
+      "ChildId": "33ccb8b3-2b9b-4a84-b473-abc070ad7e0a"/*GetBufferComponents*/,
+      "Position": {
+        "X": 2670.2134,
+        "Y": 522.2319
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "e6e49b7a-1510-47e8-a51a-7b684b4d1c1c"/*OutBuffer*/,
+      "Position": {
+        "X": 3333.6555,
+        "Y": -30.294434
+      }
+    }
+  ]
+}
