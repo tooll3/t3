@@ -62,6 +62,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     var position = selectedChildUis.First().PosOnCanvas + new Vector2(0, 100);
                     
                     Duplicate.DuplicateAsNewType(compositionSymbolUi, selectedChildUis.First().SymbolChild.Symbol.Id, newTypeName, nameSpace, description, position);
+                    T3Ui.SaveModified();
                     ImGui.CloseCurrentPopup();
                 }
 
