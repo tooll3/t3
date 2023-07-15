@@ -256,18 +256,33 @@ namespace T3.Core.Resource
 
         public static void SetupStructuredBuffer(int sizeInBytes, int stride, ref Buffer buffer)
         {
-            if (buffer == null || buffer.Description.SizeInBytes != sizeInBytes)
+            try
             {
-                buffer?.Dispose();
-                var bufferDesc = new BufferDescription
-                                 {
-                                     Usage = ResourceUsage.Default,
-                                     BindFlags = BindFlags.UnorderedAccess | BindFlags.ShaderResource,
-                                     SizeInBytes = sizeInBytes,
-                                     OptionFlags = ResourceOptionFlags.BufferStructured,
-                                     StructureByteStride = stride
-                                 };
-                buffer = new Buffer(Device, bufferDesc);
+
+                if (buffer == null || buffer.Description.SizeInBytes != sizeInBytes)
+                {
+                    buffer?.Dispose();
+                    var bufferDesc = new BufferDescription
+                                         {
+                                             Usage = ResourceUsage.Default,
+                                             BindFlags = BindFlags.UnorderedAccess | BindFlags.ShaderResource,
+                                             SizeInBytes = sizeInBytes,
+                                             OptionFlags = ResourceOptionFlags.BufferStructured,
+                                             StructureByteStride = stride
+                                         };
+                    try
+                    {
+                        buffer = new Buffer(Device, bufferDesc);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error($"Failed to setup structured buffer (stride:{stride} {sizeInBytes}b):" + e.Message);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Debug("Failed to create Structured buffer " + e.Message);
             }
         }
 
@@ -276,24 +291,31 @@ namespace T3.Core.Resource
             if (buffer == null)
                 return;
 
-            if ((buffer.Description.OptionFlags & ResourceOptionFlags.BufferStructured) == 0)
+            try
             {
-                // Log.Warning($"{nameof(SrvFromStructuredBuffer)} - input buffer is not structured, skipping SRV creation.");
-                return;
-            }
+                if ((buffer.Description.OptionFlags & ResourceOptionFlags.BufferStructured) == 0)
+                {
+                    // Log.Warning($"{nameof(SrvFromStructuredBuffer)} - input buffer is not structured, skipping SRV creation.");
+                    return;
+                }
 
-            srv?.Dispose();
-            var srvDesc = new ShaderResourceViewDescription()
-                          {
-                              Dimension = ShaderResourceViewDimension.ExtendedBuffer,
-                              Format = Format.Unknown,
-                              BufferEx = new ShaderResourceViewDescription.ExtendedBufferResource
-                                         {
-                                             FirstElement = 0,
-                                             ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride
-                                         }
-                          };
-            srv = new ShaderResourceView(Device, buffer, srvDesc);
+                srv?.Dispose();
+                var srvDesc = new ShaderResourceViewDescription()
+                                  {
+                                      Dimension = ShaderResourceViewDimension.ExtendedBuffer,
+                                      Format = Format.Unknown,
+                                      BufferEx = new ShaderResourceViewDescription.ExtendedBufferResource
+                                                     {
+                                                         FirstElement = 0,
+                                                         ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride
+                                                     }
+                                  };
+                srv = new ShaderResourceView(Device, buffer, srvDesc);
+            }
+            catch (Exception e)
+            {
+                Log.Warning("Failed to create SRV:"+e.Message);
+            }
         }
 
         public static void CreateStructuredBufferUav(Buffer buffer, UnorderedAccessViewBufferFlags bufferFlags, ref UnorderedAccessView uav)
@@ -301,25 +323,33 @@ namespace T3.Core.Resource
             if (buffer == null)
                 return;
 
-            if ((buffer.Description.OptionFlags & ResourceOptionFlags.BufferStructured) == 0)
+            try
             {
-                // Log.Warning($"{nameof(SrvFromStructuredBuffer)} - input buffer is not structured, skipping SRV creation.");
-                return;
-            }
 
-            uav?.Dispose();
-            var uavDesc = new UnorderedAccessViewDescription()
-                          {
-                              Dimension = UnorderedAccessViewDimension.Buffer,
-                              Format = Format.Unknown,
-                              Buffer = new UnorderedAccessViewDescription.BufferResource
-                                       {
-                                           FirstElement = 0,
-                                           ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride,
-                                           Flags = bufferFlags
-                                       }
-                          };
-            uav = new UnorderedAccessView(Device, buffer, uavDesc);
+                if ((buffer.Description.OptionFlags & ResourceOptionFlags.BufferStructured) == 0)
+                {
+                    // Log.Warning($"{nameof(SrvFromStructuredBuffer)} - input buffer is not structured, skipping SRV creation.");
+                    return;
+                }
+
+                uav?.Dispose();
+                var uavDesc = new UnorderedAccessViewDescription()
+                                  {
+                                      Dimension = UnorderedAccessViewDimension.Buffer,
+                                      Format = Format.Unknown,
+                                      Buffer = new UnorderedAccessViewDescription.BufferResource
+                                                   {
+                                                       FirstElement = 0,
+                                                       ElementCount = buffer.Description.SizeInBytes / buffer.Description.StructureByteStride,
+                                                       Flags = bufferFlags
+                                                   }
+                                  };
+                uav = new UnorderedAccessView(Device, buffer, uavDesc);
+            }
+            catch (Exception e)
+            {
+                Log.Warning("Failed to create UAV " +e.Message);
+            }
         }
 
         private class IncludeHandler : SharpDX.D3DCompiler.Include
