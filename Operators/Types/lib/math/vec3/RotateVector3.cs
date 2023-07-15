@@ -25,7 +25,7 @@ namespace T3.Operators.Types.Id_ce7c2103_3669_4c7a_ba61_a10428b9d467
             var angle = Angle.GetValue(context) / 180 * MathF.PI;
             
             Matrix m = Matrix.RotationAxis(axis.ToSharpDxVector3(), angle);
-            Result.Value = SharpDX.Vector3.TransformNormal(vec.ToSharpDx(), m).ToNumerics() * Scale.GetValue(context);
+            Result.Value = Vector3.TransformNormal(vec.ToSharpDx(), m).ToNumerics() * Scale.GetValue(context);
         }
         
         [Input(Guid = "56229f73-cbe2-4279-a659-d70d32e0df59")]

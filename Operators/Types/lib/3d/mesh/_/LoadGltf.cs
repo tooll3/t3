@@ -14,6 +14,10 @@ using T3.Core.Rendering;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using Vector3 = System.Numerics.Vector3;
+using Vector2 = System.Numerics.Vector2;
+using Vector4 = System.Numerics.Vector4;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
 {
@@ -99,9 +103,9 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
                                         newData.VertexBufferData[vertexIndex] = new PbrVertex
                                                                                     {
                                                                                         Position = new Vector3(position.X, position.Y, position.Z),
-                                                                                        Normal = normals == null ? Vector3.Up : normals[vertexIndex].ToSharpDx(),
-                                                                                        Tangent = Vector3.Right,
-                                                                                        Bitangent = Vector3.ForwardLH,
+                                                                                        Normal = normals == null ? VectorT3.Up : normals[vertexIndex],
+                                                                                        Tangent = VectorT3.Right,
+                                                                                        Bitangent = VectorT3.ForwardLH,
                                                                                         Texcoord = texCoords == null ? Vector2.Zero : new Vector2(texCoords[vertexIndex].X,texCoords[vertexIndex].Y) ,
                                                                                         Selection = 1,
                                                                                     };

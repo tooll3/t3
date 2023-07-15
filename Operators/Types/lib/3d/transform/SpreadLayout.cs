@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using SharpDX;
 using T3.Core;
 using T3.Core.DataTypes;
@@ -9,6 +10,8 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using Quaternion = System.Numerics.Quaternion;
+using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Operators.Types.Id_e07550cf_033a_443d_b6f3_73eb71c72d9d
@@ -68,12 +71,12 @@ namespace T3.Operators.Types.Id_e07550cf_033a_443d_b6f3_73eb71c72d9d
 
                     // Build and set transform matrix
                     var objectToParentObject
-                        = Matrix.Transformation(scalingCenter: Vector3.Zero,
+                        = Math3DUtils.CreateTransformationMatrix(scalingCenter: Vector3.Zero,
                                                 scalingRotation: Quaternion.Identity,
-                                                scaling: s.ToSharpDx(),
+                                                scaling: s,
                                                 rotationCenter: Vector3.Zero,
-                                                rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll),
-                                                translation: tSpreaded.ToSharpDx());
+                                                rotation: Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll),
+                                                translation: tSpreaded);
 
                     var forceColorUpdate = ForceColorUpdate.GetValue(context);
                     var color = Color.GetValue(context);
@@ -81,7 +84,7 @@ namespace T3.Operators.Types.Id_e07550cf_033a_443d_b6f3_73eb71c72d9d
                     //color.W *= previousColor.W;     // TODO: this should be probably be controlled by an input parameter
                     context.ForegroundColor *= color;
 
-                    context.ObjectToWorld = Matrix.Multiply(objectToParentObject, originalObjectToWorld);
+                    context.ObjectToWorld = Matrix4x4.Multiply(objectToParentObject, originalObjectToWorld);
 
                     // Do preparation if needed
                     t1.Value?.PrepareAction?.Invoke(context);

@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using SharpDX;
 using T3.Core;
 using T3.Core.Logging;
@@ -33,7 +34,7 @@ namespace T3.Operators.Types.Id_1cfe41c7_972e_4243_9ae4_a510ac038191
 
         private void Update(EvaluationContext context)
         {
-            var worldToClipSpace = Matrix.Multiply(context.WorldToCamera, context.CameraToClipSpace);
+            var worldToClipSpace = Matrix4x4.Multiply(context.WorldToCamera, context.CameraToClipSpace);
             var color = Color.GetValue(context);
             var randomizeColor = RandomizeColor.GetValue(context);
             var size = Size.GetValue(context);
@@ -53,9 +54,9 @@ namespace T3.Operators.Types.Id_1cfe41c7_972e_4243_9ae4_a510ac038191
             var fxZoneMode = (ZoneFxModes)FxZoneMode.GetValue(context);
 
             var pointLight = context.PointLights.GetPointLight(referencedLightIndex);
-            var lightPosDx = pointLight.Position.ToSharpDxVector4(1);
+            var lightPos = pointLight.Position.ToVector4(1);
 
-            var posInViewDx = SharpDX.Vector4.Transform(lightPosDx, worldToClipSpace);
+            var posInViewDx = Vector4.Transform(lightPos, worldToClipSpace);
             posInViewDx /= posInViewDx.W;
 
             

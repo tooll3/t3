@@ -1,5 +1,5 @@
 using System;
-using SharpDX;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -44,11 +44,11 @@ namespace T3.Operators.Types.Id_eff2ffff_dc39_4b90_9b1c_3c0a9a0108c6
                     cameraToWorld.Invert();
                     
                     var posInClip =  (lastPosition - new Vector2(0.5f, 0.5f)) * new Vector2(2, -2);
-                    var posInWorld = Vector3.TransformCoordinate(new Vector3(posInClip.X, posInClip.Y, 0f), clipSpaceToWorld);
-                    var targetInWorld = Vector3.TransformCoordinate(new Vector3(posInClip.X, posInClip.Y, 1f), clipSpaceToWorld);
-                    var ray = new SharpDX.Ray(posInWorld, targetInWorld - posInWorld);
-                    var xyPlane = new Plane(SharpDX.Vector3.Zero, SharpDX.Vector3.UnitZ);
-                    if (xyPlane.Intersects(ref ray, out SharpDX.Vector3 p))
+                    var posInWorld = Vector3.Transform(new Vector3(posInClip.X, posInClip.Y, 0f), clipSpaceToWorld);
+                    var targetInWorld = Vector3.Transform(new Vector3(posInClip.X, posInClip.Y, 1f), clipSpaceToWorld);
+                    var ray = new Ray(posInWorld, targetInWorld - posInWorld);
+                    var xyPlane = PlaneExtensions.PlaneFromPointAndNormal(Vector3.Zero, Vector3.UnitZ);
+                    if (xyPlane.Intersects(in ray, out Vector3 p))
                     {
                         Position.Value = new Vector2(p.X, p.Y) ;
                     }
@@ -60,7 +60,7 @@ namespace T3.Operators.Types.Id_eff2ffff_dc39_4b90_9b1c_3c0a9a0108c6
             IsLeftButtonDown.Value = Core.IO.MouseInput.IsLeftButtonDown;
         }
 
-        private static Matrix ComposeClipSpaceToWorld(EvaluationContext context)
+        private static Matrix4x4 ComposeClipSpaceToWorld(EvaluationContext context)
         {
             var clipSpaceToCamera = context.CameraToClipSpace;
             clipSpaceToCamera.Invert();
@@ -68,7 +68,7 @@ namespace T3.Operators.Types.Id_eff2ffff_dc39_4b90_9b1c_3c0a9a0108c6
             cameraToWorld.Invert();
             var worldToObject = context.ObjectToWorld;
             worldToObject.Invert();
-            var clipSpaceToWorld = Matrix.Multiply(clipSpaceToCamera, cameraToWorld);
+            var clipSpaceToWorld = Matrix4x4.Multiply(clipSpaceToCamera, cameraToWorld);
             return clipSpaceToWorld;
         }
 

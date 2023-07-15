@@ -11,6 +11,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Operators.Types.Id_afcd4aad_8c8d_4e59_8e8e_a8c12d312200
 {
@@ -96,7 +97,7 @@ namespace T3.Operators.Types.Id_afcd4aad_8c8d_4e59_8e8e_a8c12d312200
                     _data = new float[width * height];
                     _xDist = new short[width * height];
                     _yDist = new short[width * height];
-                    _gradients = new SharpDX.Vector2[width * height];
+                    _gradients = new Vector2[width * height];
                 }
 
                 DataStream sourceStream;
@@ -224,7 +225,7 @@ namespace T3.Operators.Types.Id_afcd4aad_8c8d_4e59_8e8e_a8c12d312200
             }
         }
 
-        private float EdgeDf(SharpDX.Vector2 g, float a)
+        private float EdgeDf(Vector2 g, float a)
         {
             float df;
 
@@ -280,7 +281,7 @@ namespace T3.Operators.Types.Id_afcd4aad_8c8d_4e59_8e8e_a8c12d312200
             if (a == 0.0f)
                 return 1000000.0f; // Not an object pixel, return "very far" ("don't know yet")
 
-            var dx = new SharpDX.Vector2(xi, yi);
+            var dx = new Vector2(xi, yi);
             float di = dx.Length(); // Length of integer vector, like a traditional EDT
             float df;
             if (di == 0.0f)
@@ -472,7 +473,7 @@ namespace T3.Operators.Types.Id_afcd4aad_8c8d_4e59_8e8e_a8c12d312200
         Texture2D _distanceFieldImage;
         private short[] _xDist;
         private short[] _yDist;
-        private SharpDX.Vector2[] _gradients;
+        private Vector2[] _gradients;
         private float[] _data;
 
         private void UpdateOld(EvaluationContext context)

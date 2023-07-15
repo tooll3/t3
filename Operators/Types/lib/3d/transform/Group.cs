@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using SharpDX;
 using T3.Core;
 using T3.Core.DataTypes;
@@ -8,6 +9,9 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Core.Utils;
+using Quaternion = System.Numerics.Quaternion;
+using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
@@ -39,8 +43,8 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
             var pitch = MathUtil.DegreesToRadians(r.X);
             var roll = MathUtil.DegreesToRadians(r.Z);
             var t = Translation.GetValue(context);
-            var objectToParentObject = Matrix.Transformation(scalingCenter: Vector3.Zero, scalingRotation: Quaternion.Identity, scaling: new Vector3(s.X, s.Y, s.Z), rotationCenter: Vector3.Zero,
-                                                             rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll), translation: new Vector3(t.X, t.Y, t.Z));
+            var objectToParentObject = Math3DUtils.CreateTransformationMatrix(scalingCenter: Vector3.Zero, scalingRotation: Quaternion.Identity, scaling: new Vector3(s.X, s.Y, s.Z), rotationCenter: Vector3.Zero,
+                                                             rotation: Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll), translation: new Vector3(t.X, t.Y, t.Z));
 
             var forceColorUpdate = ForceColorUpdate.GetValue(context);
             var previousColor = context.ForegroundColor;
@@ -50,7 +54,7 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
             context.ForegroundColor *= color;
             
             var previousWorldTobject = context.ObjectToWorld;
-            context.ObjectToWorld = Matrix.Multiply(objectToParentObject, context.ObjectToWorld);
+            context.ObjectToWorld = Matrix4x4.Multiply(objectToParentObject, context.ObjectToWorld);
             
             var commands = Commands.CollectedInputs;
             if (IsEnabled.GetValue(context))

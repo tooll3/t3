@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using SharpDX;
 using T3.Core;
@@ -28,7 +29,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
 
         private void Update(EvaluationContext context)
         {
-            var worldToClipSpace = Matrix.Multiply(context.WorldToCamera, context.CameraToClipSpace);
+            var worldToClipSpace = Matrix4x4.Multiply(context.WorldToCamera, context.CameraToClipSpace);
             //Matrix worldToView = context.WorldToCamera * context.CameraProjection;
             //var worldToClipSpace = context.WorldToCamera
             //var viewToWorld = Matrix.Invert(worldToClipSpace);
@@ -85,9 +86,9 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
                 for (int lightIndex = startLightIndex; lightIndex < endLightIndex; lightIndex++)
                 {
                     var pointLight = context.PointLights.GetPointLight(lightIndex);
-                    var lightPosDx = pointLight.Position.ToSharpDxVector4(1);
+                    var lightPosDx = pointLight.Position.ToVector4(1);
 
-                    var posInViewDx = SharpDX.Vector4.Transform(lightPosDx, worldToClipSpace);
+                    var posInViewDx = Vector4.Transform(lightPosDx, worldToClipSpace);
                     posInViewDx /= posInViewDx.W;
 
                     // Ignore light sources behind

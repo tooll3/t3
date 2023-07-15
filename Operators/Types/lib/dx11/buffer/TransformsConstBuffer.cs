@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Numerics;
+using System.Runtime.InteropServices;
 using SharpDX;
 using T3.Core;
 using T3.Core.Logging;
@@ -6,6 +7,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Core.Utils;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Operators.Types.Id_a60adc26_d7c6_4615_af78_8d2d6da46b79
@@ -31,25 +33,25 @@ namespace T3.Operators.Types.Id_a60adc26_d7c6_4615_af78_8d2d6da46b79
         [StructLayout(LayoutKind.Explicit, Size = 4*4*4*10)]
         public struct TransformBufferLayout
         {
-            public TransformBufferLayout(Matrix cameraToClipSpace, Matrix worldToCamera, Matrix objectToWorld)
+            public TransformBufferLayout(Matrix4x4 cameraToClipSpace, Matrix4x4 worldToCamera, Matrix4x4 objectToWorld)
             {
-                Matrix clipSpaceToCamera = cameraToClipSpace;
+                Matrix4x4 clipSpaceToCamera = cameraToClipSpace;
                 clipSpaceToCamera.Invert();
-                Matrix cameraToWorld = worldToCamera;
+                Matrix4x4 cameraToWorld = worldToCamera;
                 cameraToWorld.Invert();
-                Matrix worldToObject = objectToWorld;
+                Matrix4x4 worldToObject = objectToWorld;
                 worldToObject.Invert();
                 
                 CameraToClipSpace = cameraToClipSpace;
                 ClipSpaceToCamera = clipSpaceToCamera;
                 WorldToCamera = worldToCamera;
                 CameraToWorld = cameraToWorld;
-                WorldToClipSpace = Matrix.Multiply(worldToCamera, cameraToClipSpace);
-                ClipSpaceToWorld = Matrix.Multiply(clipSpaceToCamera, cameraToWorld);
+                WorldToClipSpace = Matrix4x4.Multiply(worldToCamera, cameraToClipSpace);
+                ClipSpaceToWorld = Matrix4x4.Multiply(clipSpaceToCamera, cameraToWorld);
                 ObjectToWorld = objectToWorld;
                 WorldToObject = worldToObject;
-                ObjectToCamera = Matrix.Multiply(objectToWorld, worldToCamera);
-                ObjectToClipSpace = Matrix.Multiply(ObjectToCamera, cameraToClipSpace);
+                ObjectToCamera = Matrix4x4.Multiply(objectToWorld, worldToCamera);
+                ObjectToClipSpace = Matrix4x4.Multiply(ObjectToCamera, cameraToClipSpace);
 
                 // transpose all as mem layout in hlsl constant buffer is row based
                 CameraToClipSpace.Transpose();
@@ -65,25 +67,25 @@ namespace T3.Operators.Types.Id_a60adc26_d7c6_4615_af78_8d2d6da46b79
             }
 
             [FieldOffset(0)]
-            public Matrix CameraToClipSpace;
+            public Matrix4x4 CameraToClipSpace;
             [FieldOffset(64)]
-            public Matrix ClipSpaceToCamera;
+            public Matrix4x4 ClipSpaceToCamera;
             [FieldOffset(128)]
-            public Matrix WorldToCamera;
+            public Matrix4x4 WorldToCamera;
             [FieldOffset(192)]
-            public Matrix CameraToWorld;
+            public Matrix4x4 CameraToWorld;
             [FieldOffset(256)]
-            public Matrix WorldToClipSpace;
+            public Matrix4x4 WorldToClipSpace;
             [FieldOffset(320)]
-            public Matrix ClipSpaceToWorld;
+            public Matrix4x4 ClipSpaceToWorld;
             [FieldOffset(384)]
-            public Matrix ObjectToWorld;
+            public Matrix4x4 ObjectToWorld;
             [FieldOffset(448)]
-            public Matrix WorldToObject;
+            public Matrix4x4 WorldToObject;
             [FieldOffset(512)]
-            public Matrix ObjectToCamera;
+            public Matrix4x4 ObjectToCamera;
             [FieldOffset(576)]
-            public Matrix ObjectToClipSpace;
+            public Matrix4x4 ObjectToClipSpace;
         }
     }
 }

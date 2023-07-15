@@ -1,4 +1,5 @@
-﻿using SharpDX;
+﻿using System.Numerics;
+using T3.Core.Utils;
 
 namespace T3.Core.Rendering
 {

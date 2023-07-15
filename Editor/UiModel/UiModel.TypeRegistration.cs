@@ -17,6 +17,7 @@ using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.OutputUi;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Editor.UiModel;
 
@@ -203,8 +204,8 @@ public partial class UiSymbolData
                        () => new ValueOutputUi<RawViewportF>());
         RegisterUiType(typeof(SharpDX.Mathematics.Interop.RawRectangle), new ShaderUiProperties(), () => new FallbackInputUi<RawRectangle>(),
                        () => new ValueOutputUi<RawRectangle>());
-        RegisterUiType(typeof(SharpDX.Vector4[]), new PointListUiProperties(), () => new FallbackInputUi<SharpDX.Vector4[]>(),
-                       () => new ValueOutputUi<SharpDX.Vector4[]>());
+        RegisterUiType(typeof(Vector4[]), new PointListUiProperties(), () => new FallbackInputUi<Vector4[]>(),
+                       () => new ValueOutputUi<Vector4[]>());
         RegisterUiType(typeof(Dict<float>), new ValueUiProperties(),
                        () => new FloatDictInputUi(), () => new FloatDictOutputUi());
     }

@@ -1,5 +1,4 @@
-﻿using SharpDX;
-using Vector3 = System.Numerics.Vector3;
+﻿using System.Numerics;
 
 namespace T3.Core.Operator.Interfaces
 {
@@ -9,8 +8,8 @@ namespace T3.Core.Operator.Interfaces
         Vector3 CameraTarget { get; set; }
         float CameraRoll { get; set; }
         
-        SharpDX.Matrix WorldToCamera { get;  }
-        SharpDX.Matrix CameraToClipSpace { get;  }
+        Matrix4x4 WorldToCamera { get;  }
+        Matrix4x4 CameraToClipSpace { get;  }
     }
     
     // Mock view internal fallback camera (if no operator selected)
@@ -20,7 +19,7 @@ namespace T3.Core.Operator.Interfaces
         public Vector3 CameraPosition { get; set; } = new Vector3(0, 0, 2.416f);
         public Vector3 CameraTarget { get; set; }
         public float CameraRoll { get; set; }
-        public Matrix WorldToCamera { get; }
-        public Matrix CameraToClipSpace { get; }
+        public Matrix4x4 WorldToCamera { get; }
+        public Matrix4x4 CameraToClipSpace { get; }
     }
 }

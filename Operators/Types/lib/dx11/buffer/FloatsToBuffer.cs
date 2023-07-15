@@ -6,6 +6,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Utilities = T3.Core.Utils.Utilities;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Operators.Types.Id_724da755_2d0c_42ab_8335_8c88ec5fb078
 {
@@ -41,10 +42,10 @@ namespace T3.Operators.Types.Id_724da755_2d0c_42ab_8335_8c88ec5fb078
                 for (var vec4Index = 0; vec4Index < vec4ArrayLength; vec4Index++)
                 {
                     var vec4 = vec4params[vec4Index];
-                    array[vec4Index * 4 + 0] = vec4[0];
-                    array[vec4Index * 4 + 1] = vec4[1];
-                    array[vec4Index * 4 + 2] = vec4[2];
-                    array[vec4Index * 4 + 3] = vec4[3];
+                    array[vec4Index * 4 + 0] = vec4.X;
+                    array[vec4Index * 4 + 1] = vec4.Y;
+                    array[vec4Index * 4 + 2] = vec4.Z;
+                    array[vec4Index * 4 + 3] = vec4.W;
                 }
             }
 
@@ -86,7 +87,7 @@ namespace T3.Operators.Types.Id_724da755_2d0c_42ab_8335_8c88ec5fb078
         }
         
         [Input(Guid = "914EA6E8-ABC6-4294-B895-8BFBE5AFEA0E")]
-        public readonly InputSlot<SharpDX.Vector4[]> Vec4Params = new();
+        public readonly InputSlot<Vector4[]> Vec4Params = new();
 
         [Input(Guid = "49556D12-4CD1-4341-B9D8-C356668D296C")]
         public readonly MultiInputSlot<float> Params = new MultiInputSlot<float>();

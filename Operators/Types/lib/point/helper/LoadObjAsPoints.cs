@@ -57,7 +57,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
             {
                 var sortAxisIndex = _sortAxisAndDirections[sorting][0];
                 var sortDirection = _sortAxisAndDirections[sorting][1];
-                sortedVertexIndices.Sort((v1, v2) => mesh.Positions[v1][sortAxisIndex].CompareTo(mesh.Positions[v2][sortAxisIndex]) * sortDirection);
+                sortedVertexIndices.Sort((v1, v2) => mesh.Positions[v1].Axis(sortAxisIndex).CompareTo(mesh.Positions[v2].Axis(sortAxisIndex)) * sortDirection);
             }
 
             // Export
@@ -92,7 +92,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                         {
                             var sortedVertexIndex = sortedVertexIndices[vertexIndex];
                             var c = (sortedVertexIndex >= mesh.Colors.Count)
-                                        ? SharpDX.Vector4.One
+                                        ? Vector4.One
                                         : mesh.Colors[sortedVertexIndex];
 
                             if (exportMode == Modes.Vertices_GrayscaleAsW)
@@ -276,10 +276,10 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
             
             // Skip if opposite right angle
 
-            var eA = SharpDX.Vector3.Normalize(mesh.Positions[vertexIndexA] - mesh.Positions[oppositeVertexIndex]);  
-            var eB = SharpDX.Vector3.Normalize(mesh.Positions[vertexIndexB] - mesh.Positions[oppositeVertexIndex]);
+            var eA = Vector3.Normalize(mesh.Positions[vertexIndexA] - mesh.Positions[oppositeVertexIndex]);  
+            var eB = Vector3.Normalize(mesh.Positions[vertexIndexB] - mesh.Positions[oppositeVertexIndex]);
             
-            var dot = SharpDX.Vector3.Dot(eA, eB);
+            var dot = Vector3.Dot(eA, eB);
             if (MathF.Abs(dot) < 0.05)
             {
                 //Log.Debug($"Skipping triangulation line {hashForward}", this);

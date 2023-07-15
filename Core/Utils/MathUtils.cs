@@ -336,6 +336,12 @@ namespace T3.Core.Utils
             return new SharpDX.Vector3(source.X, source.Y, source.Z);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SharpDX.Vector2 ToSharpDxVector2(this Vector2 source)
+        {
+            return new SharpDX.Vector2(source.X, source.Y);
+        }
+
         /// <summary>
         /// Return true if a boolean changed from false to true
         /// </summary>

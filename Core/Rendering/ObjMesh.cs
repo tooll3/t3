@@ -5,6 +5,9 @@ using System.IO;
 using System.Linq;
 using SharpDX;
 using T3.Core.Logging;
+using Vector2 = System.Numerics.Vector2;
+using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 // ReSharper disable RedundantNameQualifier
 
@@ -12,11 +15,11 @@ namespace T3.Core.Rendering
 {
     public class ObjMesh
     {
-        public readonly List<SharpDX.Vector3> Positions = new();
-        public readonly List<SharpDX.Vector4> Colors = new();
+        public readonly List<Vector3> Positions = new();
+        public readonly List<Vector4> Colors = new();
 
-        public readonly List<SharpDX.Vector3> Normals = new();
-        public readonly List<SharpDX.Vector2> TexCoords = new();
+        public readonly List<Vector3> Normals = new();
+        public readonly List<Vector2> TexCoords = new();
         public readonly List<Face> Faces = new();
         public readonly List<Line> Lines = new();
 
@@ -395,8 +398,8 @@ namespace T3.Core.Rendering
         }
 
         private List<Vertex> _distinctVertices;
-        public readonly List<SharpDX.Vector3> VertexTangents = new();
-        public readonly List<SharpDX.Vector3> VertexBinormals = new();
+        public readonly List<Vector3> VertexTangents = new();
+        public readonly List<Vector3> VertexBinormals = new();
         public List<int> SortedVertexIndices;
         private readonly Dictionary<long, int> _vertexIndicesByHash = new();
         #endregion

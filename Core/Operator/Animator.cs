@@ -446,13 +446,13 @@ namespace T3.Core.Operator
             {
                 var curves = animator.GetCurvesForInput(inputSlot).ToArray();
                 double time = Playback.Current.TimeInBars;
-                SharpDX.Vector3 newValue = new SharpDX.Vector3(value.X, value.Y, value.Z);
+                Vector3 newValue = new Vector3(value.X, value.Y, value.Z);
                 for (int i = 0; i < 3; i++)
                 {
                     var key = curves[i].GetV(time);
                     if (key == null)
                         key = new VDefinition() { U = time };
-                    key.Value = newValue[i];
+                    key.Value = newValue.Axis(i);
                     curves[i].AddOrUpdateV(time, key);
                 }
             }

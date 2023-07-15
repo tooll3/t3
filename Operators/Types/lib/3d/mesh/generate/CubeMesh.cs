@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Direct3D11;
@@ -35,22 +36,20 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
 
                 var scale = Scale.GetValue(context);
                 var stretch = Stretch.GetValue(context);
-                var stretchDX = new SharpDX.Vector3(stretch.X, stretch.Y, stretch.Z);
                 var pivot = Pivot.GetValue(context);
-                var pivotDX = new SharpDX.Vector3(pivot.X, pivot.Y, pivot.Z);
                 var rotation = Rotation.GetValue(context);
-                var cubeRotationMatrix = Matrix.RotationYawPitchRoll(MathUtil.DegreesToRadians(rotation.Y),
-                                                                     MathUtil.DegreesToRadians(rotation.X),
-                                                                     MathUtil.DegreesToRadians(rotation.Z));
+                var cubeRotationMatrix = Matrix4x4.CreateFromYawPitchRoll(rotation.Y.ToRadians(),
+                                                                     rotation.X.ToRadians(),
+                                                                     rotation.Z.ToRadians());
 
                 var center = Center.GetValue(context);
-                // var offset = new SharpDX.Vector3(stretch.X * scale * (pivot.X - 0.5f),
+                // var offset = new Vector3(stretch.X * scale * (pivot.X - 0.5f),
                 //                                  stretch.Y * scale * (pivot.Y - 0.5f),
                 //                                  stretch.Z * scale * (pivot.Z - 0.5f));
 
-                var offset = -SharpDX.Vector3.One * 0.5f;
+                var offset = -Vector3.One * 0.5f;
 
-                var center2 = new SharpDX.Vector3(center.X, center.Y, center.Z);
+                var center2 = new Vector3(center.X, center.Y, center.Z);
 
                 var segments = Segments.GetValue(context);
                 _xSegments = segments.X.Clamp(1, 10000) + 1;
@@ -77,11 +76,11 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                 {
                     var side = _sides[sideIndex];
 
-                    var sideRotationMatrix = Matrix.RotationYawPitchRoll(side.SideRotation.Y,
+                    var sideRotationMatrix = Matrix4x4.CreateFromYawPitchRoll(side.SideRotation.Y,
                                                                          side.SideRotation.X,
                                                                          side.SideRotation.Z);
 
-                    var rotationMatrix = Matrix.Multiply(sideRotationMatrix, cubeRotationMatrix);
+                    var rotationMatrix = Matrix4x4.Multiply(sideRotationMatrix, cubeRotationMatrix);
 
                     var columnCount = GetSegmentCountForAxis(side.ColumnAxis);
                     var rowCount = GetSegmentCountForAxis(side.RowAxis);
@@ -93,9 +92,9 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                     double rowStep = 1.0 / (rowCount - 1);
                     float depthScale = 1f;
 
-                    var normal = SharpDX.Vector3.TransformNormal(SharpDX.Vector3.ForwardLH, rotationMatrix);
-                    var tangent = SharpDX.Vector3.TransformNormal(SharpDX.Vector3.Right, rotationMatrix);
-                    var binormal = SharpDX.Vector3.TransformNormal(SharpDX.Vector3.Up, rotationMatrix);
+                    var normal = Vector3.TransformNormal(VectorT3.ForwardLH, rotationMatrix);
+                    var tangent = Vector3.TransformNormal(VectorT3.Right, rotationMatrix);
+                    var binormal = Vector3.TransformNormal(VectorT3.Up, rotationMatrix);
 
                     // Initialize
                     for (int columnIndex = 0; columnIndex < columnCount; ++columnIndex)
@@ -110,14 +109,14 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                             var vertexIndex = rowIndex + columnIndex * rowCount + sideVertexIndex;
                             var faceIndex = 2 * (rowIndex + columnIndex * (rowCount - 1)) + sideFaceIndex;
 
-                            var p = new SharpDX.Vector3(columnFragment,
+                            var p = new Vector3(columnFragment,
                                                         rowFragment,
                                                         depthScale);
 
                             var v0 = (rowIndex) / ((float)rowCount - 1);
-                            var uv0 = new SharpDX.Vector2(u0, v0);
-                            var position = (SharpDX.Vector3.TransformNormal(p + offset, sideRotationMatrix) + pivotDX) * stretchDX * scale;
-                            position = SharpDX.Vector3.TransformNormal(position, cubeRotationMatrix);
+                            var uv0 = new Vector2(u0, v0);
+                            var position = (Vector3.TransformNormal(p + offset, sideRotationMatrix) + pivot) * stretch * scale;
+                            position = Vector3.TransformNormal(position, cubeRotationMatrix);
 
                             _vertexBufferData[vertexIndex + 0] = new PbrVertex
                                                                      {
@@ -197,15 +196,15 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
 
         private struct Side
         {
-            public SharpDX.Vector3 Normal;
-            public SharpDX.Vector3 Tangent;
-            public SharpDX.Vector3 Binormal;
+            public Vector3 Normal;
+            public Vector3 Tangent;
+            public Vector3 Binormal;
             public Vector2 UvScale;
             public Vector2 UvOffset;
             public SegmentAxis ColumnAxis;
             public SegmentAxis RowAxis;
             public SegmentAxis DepthAxis;
-            public SharpDX.Vector3 SideRotation;
+            public Vector3 SideRotation;
         }
 
         static private Side[] _sides =
@@ -213,15 +212,15 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                 // Front
                 new Side
                     {
-                        Normal = SharpDX.Vector3.ForwardLH,
-                        Tangent = SharpDX.Vector3.Right,
-                        Binormal = SharpDX.Vector3.Up,
+                        Normal = VectorT3.ForwardLH,
+                        Tangent = VectorT3.Right,
+                        Binormal = VectorT3.Up,
                         UvScale = Vector2.One,
                         UvOffset = Vector2.Zero,
                         ColumnAxis = SegmentAxis.X,
                         RowAxis = SegmentAxis.Y,
                         DepthAxis = SegmentAxis.Z,
-                        SideRotation = new SharpDX.Vector3(0, 0, 0),
+                        SideRotation = Vector3.Zero,
                     },
                 // Right
                 new Side
@@ -234,20 +233,20 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                         ColumnAxis = SegmentAxis.Z,
                         RowAxis = SegmentAxis.Y,
                         DepthAxis = SegmentAxis.X,
-                        SideRotation = new SharpDX.Vector3(0, (float)(Math.PI * 0.5), 0),
+                        SideRotation = new Vector3(0, (float)(Math.PI * 0.5), 0),
                     },
                 // Back
                 new Side
                     {
-                        Normal = -SharpDX.Vector3.ForwardLH,
-                        Tangent = -SharpDX.Vector3.Right,
-                        Binormal = -SharpDX.Vector3.Up,
+                        Normal = -VectorT3.ForwardLH,
+                        Tangent = -VectorT3.Right,
+                        Binormal = -VectorT3.Up,
                         UvScale = default,
                         UvOffset = default,
                         ColumnAxis = SegmentAxis.X,
                         RowAxis = SegmentAxis.Y,
                         DepthAxis = SegmentAxis.Z,
-                        SideRotation = new SharpDX.Vector3(0, (float)Math.PI, 0),
+                        SideRotation = new Vector3(0, (float)Math.PI, 0),
                     },
                 // Left
                 new Side
@@ -260,7 +259,7 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                         ColumnAxis = SegmentAxis.Z,
                         RowAxis = SegmentAxis.Y,
                         DepthAxis = SegmentAxis.X,
-                        SideRotation = new SharpDX.Vector3(0, (float)(Math.PI * 1.5), 0),
+                        SideRotation = new Vector3(0, (float)(Math.PI * 1.5), 0),
                     },
                 // Top
                 new Side
@@ -273,7 +272,7 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                         ColumnAxis = SegmentAxis.X,
                         RowAxis = SegmentAxis.Z,
                         DepthAxis = SegmentAxis.Y,
-                        SideRotation = new SharpDX.Vector3((float)(Math.PI * 0.5), 0, 0),
+                        SideRotation = new Vector3((float)(Math.PI * 0.5), 0, 0),
                     },
                 // Bottom
                 new Side
@@ -286,7 +285,7 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                         ColumnAxis = SegmentAxis.X,
                         RowAxis = SegmentAxis.Z,
                         DepthAxis = SegmentAxis.Y,
-                        SideRotation = new SharpDX.Vector3((float)(Math.PI * 1.5), 0, 0),
+                        SideRotation = new Vector3((float)(Math.PI * 1.5), 0, 0),
                     },
             };
 

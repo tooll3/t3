@@ -1,19 +1,18 @@
 using System;
 using System.Collections.Generic;
-using SharpDX;
+using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
-using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Operators.Types.Id_b3f34926_e536_439b_b47b_2ab89a0bc94d
 {
     public class EarthNavigationTest : Instance<EarthNavigationTest>
     {
         [Output(Guid = "cab5c207-a997-4934-8c53-5a9f740284e0")]
-        public readonly Slot<SharpDX.Vector4[]> Result = new();
+        public readonly Slot<Vector4[]> Result = new();
 
         [Output(Guid = "8DBFC03F-7DCF-42EB-A8B1-301C0085BF40")]
         public readonly Slot<Vector3> P1 = new();
@@ -49,14 +48,14 @@ namespace T3.Operators.Types.Id_b3f34926_e536_439b_b47b_2ab89a0bc94d
             var latitude =  MathUtils.Fmod(Latitude.GetValue(context), 360 );
             var longitude =   Longitude.GetValue(context) ;
 
-            var m = Matrix.Identity;
+            var m = Matrix4x4.Identity;
             
             //m *= Matrix.RotationY(-latitude / 180 * MathF.PI);
             //m *= Matrix.RotationX(longitude / 180 * MathF.PI);
-            m *= Matrix.RotationZ(orientation / 180 * MathF.PI);
+            m *= Matrix4x4.CreateRotationZ(orientation / 180 * MathF.PI);
 
             var mRot1 = m;
-            m *= Matrix.Translation(0, 0, -height - radius);
+            m *= Matrix4x4.CreateTranslation(0, 0, -height - radius);
 
 
             var sign = orientation < 0 ? -1 : 1;
@@ -68,11 +67,11 @@ namespace T3.Operators.Types.Id_b3f34926_e536_439b_b47b_2ab89a0bc94d
             var pOnSurface = Vector3.Zero;
             var forwardOnSurface = Vector3.UnitX * 0.01f;
             
-            // var pOnSurface = SharpDX.Vector4.Transform(new SharpDX.Vector4(0.0f,0,0,1), earthToSurface);
+            // var pOnSurface = Vector4.Transform(new Vector4(0.0f,0,0,1), earthToSurface);
             // var p1 = new Vector3(pOnSurface.X, pOnSurface.Y, pOnSurface.Z);
             P1.Value =  T(pOnSurface, surfaceToWorld);
             
-            // var pOnSurface2 = SharpDX.Vector4.Transform(new SharpDX.Vector4(0.2f,0,0,1), earthToSurface);
+            // var pOnSurface2 = Vector4.Transform(new Vector4(0.2f,0,0,1), earthToSurface);
             // var p2 = new Vector3(pOnSurface2.X, pOnSurface2.Y, pOnSurface2.Z);
             // P2.Value = p2;
             var forwardInWorld = T(Vector3.Zero + forwardOnSurface, surfaceToWorld);
@@ -90,15 +89,15 @@ namespace T3.Operators.Types.Id_b3f34926_e536_439b_b47b_2ab89a0bc94d
             Log.Debug($"Long: {long2:0.0}, Lat:{lat2:0.0} + AdjL:{adjustment:0.00}", this);
             P2.Value =  T(Vector3.Zero + forwardOnSurface * 10, surfaceToWorld);
             
-            // var pOnSurfaceForward = SharpDX.Vector3.TransformNormal(new SharpDX.Vector3(0,0,1), objectToSurface);             
+            // var pOnSurfaceForward = Vector3.TransformNormal(new Vector3(0,0,1), objectToSurface);             
             // P2.Value = pOnSurface.ToNumerics() * radius - Vector3.UnitZ *(height + radius) ;
 
 
-            // var p1 = SharpDX.Vector3.TransformNormal(new SharpDX.Vector3(0,0,1), mRot1);
+            // var p1 = Vector3.TransformNormal(new Vector3(0,0,1), mRot1);
             // P1.Value = p1.ToNumerics() * radius - Vector3.UnitZ *(height + radius);
             //
             // var mRot2 = mRot1 * Matrix.RotationX(forward / 180 * MathF.PI);
-            // var p2 = SharpDX.Vector3.TransformNormal(new SharpDX.Vector3(0,0,1), mRot2);
+            // var p2 = Vector3.TransformNormal(new Vector3(0,0,1), mRot2);
             // P2.Value = p2.ToNumerics() * radius - Vector3.UnitZ *(height + radius);
             
             //P1.Value = p1.ToNumerics() * radius - Vector3.UnitZ *(height + radius);
@@ -140,28 +139,28 @@ namespace T3.Operators.Types.Id_b3f34926_e536_439b_b47b_2ab89a0bc94d
             // transpose all as mem layout in hlsl constant buffer is row based
             m.Transpose();
 
-            _matrix[0] = m.Row1;
-            _matrix[1] = m.Row2;
-            _matrix[2] = m.Row3;
-            _matrix[3] = m.Row4;
+            _matrix[0] = m.Row1();
+            _matrix[1] = m.Row2();
+            _matrix[2] = m.Row3();
+            _matrix[3] = m.Row4();
             Result.Value = _matrix;
         }
 
-        private static Matrix GetSurfaceToWorldMatrix(float orientation, float radius, float longitude, float latitude)
+        private static Matrix4x4 GetSurfaceToWorldMatrix(float orientation, float radius, float longitude, float latitude)
         {
-            var surfaceToWorld = Matrix.Identity;
-            surfaceToWorld *= Matrix.RotationZ(orientation / 180 * MathF.PI);
-            surfaceToWorld *= Matrix.Translation(new SharpDX.Vector3(0, 0, radius));
-            surfaceToWorld *= Matrix.RotationX(-longitude / 180 * MathF.PI);
-            surfaceToWorld *= Matrix.RotationY(-latitude / 180 * MathF.PI);
+            var surfaceToWorld = Matrix4x4.Identity;
+            surfaceToWorld *= Matrix4x4.CreateRotationZ(orientation / 180 * MathF.PI);
+            surfaceToWorld *= Matrix4x4.CreateTranslation(new Vector3(0, 0, radius));
+            surfaceToWorld *= Matrix4x4.CreateRotationX(-longitude / 180 * MathF.PI);
+            surfaceToWorld *= Matrix4x4.CreateRotationY(-latitude / 180 * MathF.PI);
             return surfaceToWorld;
         }
 
-        private SharpDX.Vector4[] _matrix = new SharpDX.Vector4[4];
+        private Vector4[] _matrix = new Vector4[4];
 
-        private Vector3 T(Vector3 p, Matrix m)
+        private Vector3 T(Vector3 p, Matrix4x4 m)
         {
-            var pt = SharpDX.Vector4.Transform(new SharpDX.Vector4(p.X,p.Y,p.Z,1), m);
+            var pt = Vector4.Transform(new Vector4(p.X,p.Y,p.Z,1), m);
             return new Vector3(pt.X, pt.Y, pt.Z) / pt.W;
         }
         

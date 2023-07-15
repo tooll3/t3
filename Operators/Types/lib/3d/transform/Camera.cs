@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using SharpDX;
 using T3.Core;
 using T3.Core.DataTypes;
@@ -10,6 +11,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Operators.Utils;
+using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
 {
@@ -41,7 +43,7 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
             
             System.Numerics.Vector2 clip = NearFarClip.GetValue(context);
             var viewPortShift = ViewportShift.GetValue(context);
-            var m = Matrix.PerspectiveFovRH(fov, aspectRatio, clip.X, clip.Y);
+            var m = Math3DUtils.PerspectiveFovRH(fov, aspectRatio, clip.X, clip.Y);
             m.M31 = viewPortShift.X;
             m.M32 = viewPortShift.Y;
             CameraToClipSpace = m;
@@ -51,20 +53,20 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
             var positionValue = Position.GetValue(context);
             var eye = new Vector3(positionValue.X, positionValue.Y, positionValue.Z);
             if (!offsetAffectsTarget)
-                eye += pOffset.ToSharpDx();
+                eye += pOffset;
             
             var targetValue = Target.GetValue(context);
             var target = new Vector3(targetValue.X, targetValue.Y, targetValue.Z);
             var upValue = Up.GetValue(context);
             var up = new Vector3(upValue.X, upValue.Y, upValue.Z);
-            var worldToCameraRoot = Matrix.LookAtRH(eye, target, up);
+            var worldToCameraRoot = Math3DUtils.LookAtRH(eye, target, up);
 
-            var rollRotation = Matrix.RotationAxis(new Vector3(0, 0, 1), -(float)Roll.GetValue(context));
+            var rollRotation = Matrix4x4.CreateFromAxisAngle(new Vector3(0, 0, 1), -(float)Roll.GetValue(context));
             
-            var additionalTranslation = offsetAffectsTarget ?  Matrix.Translation(pOffset.X, pOffset.Y, pOffset.Z) : Matrix.Identity;
+            var additionalTranslation = offsetAffectsTarget ?  Matrix4x4.CreateTranslation(pOffset.X, pOffset.Y, pOffset.Z) : Matrix4x4.Identity;
 
             var rOffset = RotationOffset.GetValue(context);
-            var additionalRotation = Matrix.RotationYawPitchRoll(MathUtil.DegreesToRadians(rOffset.Y),
+            var additionalRotation = Matrix4x4.CreateFromYawPitchRoll(MathUtil.DegreesToRadians(rOffset.Y),
                                                                  MathUtil.DegreesToRadians(rOffset.X),
                                                                  MathUtil.DegreesToRadians(rOffset.Z));
             
@@ -90,9 +92,9 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
             context.WorldToCamera = prevWorldToCamera;
         }
 
-        public Matrix CameraToClipSpace { get; set; }
-        public Matrix WorldToCamera { get; set; }
-        public Matrix LastObjectToWorld { get; set; }
+        public Matrix4x4 CameraToClipSpace { get; set; }
+        public Matrix4x4 WorldToCamera { get; set; }
+        public Matrix4x4 LastObjectToWorld { get; set; }
 
         // Implement ICamera 
         public System.Numerics.Vector3 CameraPosition

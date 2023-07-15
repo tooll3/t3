@@ -10,8 +10,6 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 
-//using Quaternion = SharpDX.Quaternion;
-//using Vector4 = SharpDX.Vector4;
 
 namespace T3.Operators.Types.Id_796a5efb_2ccf_4cae_b01c_d3f20a070181
 {

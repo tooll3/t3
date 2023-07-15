@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using SharpDX;
 using T3.Core;
 using T3.Core.DataTypes;
@@ -12,6 +13,7 @@ using T3.Core.Utils;
 using T3.Operators.Utils;
 using Unsplasharp.Models;
 using Vector2 = System.Numerics.Vector2;
+using Vector3 = System.Numerics.Vector3;
 
 // ReSharper disable SuggestVarOrType_SimpleTypes
 
@@ -46,7 +48,7 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             }
             System.Numerics.Vector2 clip = NearFarClip.GetValue(context);
             
-            CameraToClipSpace = Matrix.PerspectiveFovRH(fov, aspectRatio, clip.X, clip.Y);
+            CameraToClipSpace = Math3DUtils.PerspectiveFovRH(fov, aspectRatio, clip.X, clip.Y);
 
             Vector3 p = new Vector3(0,0, Radius.GetValue(context));
             var seed = Seed.GetValue(context);
@@ -59,7 +61,7 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             System.Numerics.Vector3 t = Center.GetValue(context);
             Vector3 target = new Vector3(t.X, t.Y, t.Z);
             
-            var rot = Matrix.RotationYawPitchRoll(
+            var rot = Matrix4x4.CreateFromYawPitchRoll(
                                                   ComputeAngle(SpinAngleAndWobble,1) 
                                                   + MathUtil.DegreesToRadians((float)((SpinRate.GetValue(context) * context.LocalFxTime) * 360+ SpinOffset.GetValue(context)  
                                                                                       + MathUtils.PerlinNoise(0, 1, 6, seed) * 360 ) ), 
@@ -71,7 +73,7 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             // View rotation
             var viewDirection = target - eye;
             
-            var rotateAim = Matrix.RotationYawPitchRoll(
+            var rotateAim = Matrix4x4.CreateFromYawPitchRoll(
                                                   ComputeAngle(AimYawAngleAndWobble,3) + rotOffset.X * MathUtils.ToRad,
                                                   ComputeAngle(AimPitchAngleAndWobble,4) + rotOffset.Y * MathUtils.ToRad,
                                                   0);
@@ -86,11 +88,11 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             Vector3 up = new Vector3(u.X, u.Y, u.Z);
 
             var roll = ComputeAngle(AimRollAngleAndWobble, 5);
-            var rotateAroundViewDirection = Matrix.RotationAxis(adjustedViewDirection, (roll + rotOffset.Z) * MathUtils.ToRad);
+            var rotateAroundViewDirection = Matrix4x4.CreateFromAxisAngle(adjustedViewDirection, (roll + rotOffset.Z) * MathUtils.ToRad);
             up = Vector3.TransformNormal(up, rotateAroundViewDirection);
             up.Normalize();
 
-            WorldToCamera = Matrix.LookAtRH(eye, target, up);
+            WorldToCamera = Math3DUtils.LookAtRH(eye, target, up);
                         
             if (context.BypassCameras)
             {
@@ -105,8 +107,8 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             context.CameraToClipSpace = CameraToClipSpace;
             context.WorldToCamera = WorldToCamera;
 
-            CameraPosition = eye.ToNumerics();
-            CameraTarget = (eye + adjustedViewDirection).ToNumerics();
+            CameraPosition = eye;
+            CameraTarget = (eye + adjustedViewDirection);
             
             Command.GetValue(context);
             
@@ -128,12 +130,12 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             }
         }
 
-        public Matrix CameraToClipSpace { get; set; }
+        public Matrix4x4 CameraToClipSpace { get; set; }
         public System.Numerics.Vector3 CameraPosition { get; set; }
         public System.Numerics.Vector3 CameraTarget { get; set; }
         public float CameraRoll { get; set; }
-        public Matrix WorldToCamera { get; set; }
-        public Matrix LastObjectToWorld { get; set; }
+        public Matrix4x4 WorldToCamera { get; set; }
+        public Matrix4x4 LastObjectToWorld { get; set; }
         
         
         [Input(Guid = "33752356-8348-4938-8f73-6257e6bb1c1f")]
