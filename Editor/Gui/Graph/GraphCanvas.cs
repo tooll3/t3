@@ -452,8 +452,8 @@ namespace T3.Editor.Gui.Graph
                         var connectionDroppedOnBackground = ConnectionMaker.TempConnections[0].GetStatus() != ConnectionMaker.TempConnection.Status.TargetIsDraftNode;
                         if (connectionDroppedOnBackground)
                         {
-                            Log.Warning("Skipping complete operation on background drop?");
-                            //ConnectionMaker.CompleteOperation();
+                            //Log.Warning("Skipping complete operation on background drop?");
+                            //  ConnectionMaker.CompleteOperation();
                         }
                     }
                 }

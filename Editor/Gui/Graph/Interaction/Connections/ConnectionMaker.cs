@@ -180,9 +180,10 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 Log.Warning($"Inconsistent TempConnection count of {TempConnections.Count}. Last operation incomplete?");
             }
 
+            // This can happen when recompiling operators
             if (_inProgressCommand != null)
             {
-                Log.Warning($"Incomplete command {_inProgressCommand.Name}");
+                //Log.Warning($"Incomplete command {_inProgressCommand.Name}");
                 _inProgressCommand = null;
             }
 
