@@ -95,7 +95,7 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
         forceSum *= 0.1 / p.w;
         forceSum += orgV;
 
-        float forceMag =  clamp(length(forceSum),0, 10);
+        float forceMag =  clamp(length(forceSum),0, 1000);
         float3 forceDirection =  forceSum / (forceMag + 0.0001);
         float angle = atan2(forceSum.x, forceSum.y);
         float4 newRot = rotate_angle_axis(angle, -float3(0,0,1));
