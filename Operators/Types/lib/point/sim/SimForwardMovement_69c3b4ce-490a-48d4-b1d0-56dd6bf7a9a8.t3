@@ -13,7 +13,7 @@
     },
     {
       "Id": "697b7aa9-2b6c-423c-8f84-dbdbae721609"/*Speed*/,
-      "DefaultValue": 5.0
+      "DefaultValue": 1.0
     },
     {
       "Id": "e733cd17-e854-4c23-99cb-9a03d4ae5eb5"/*IsEnabled*/,
