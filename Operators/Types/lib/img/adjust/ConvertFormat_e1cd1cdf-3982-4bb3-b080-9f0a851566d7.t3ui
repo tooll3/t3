@@ -23,6 +23,13 @@
         "X": 236.08261,
         "Y": 597.3333
       }
+    },
+    {
+      "InputId": "8686d1c3-c5a5-4b4a-b30f-95a1cfd0dc90"/*Enable*/,
+      "Position": {
+        "X": 236.08261,
+        "Y": 642.3333
+      }
     }
   ],
   "SymbolChildUis": [

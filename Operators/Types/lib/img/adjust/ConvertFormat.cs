@@ -20,5 +20,8 @@ namespace T3.Operators.Types.Id_e1cd1cdf_3982_4bb3_b080_9f0a851566d7
         [Input(Guid = "88623684-a5e4-4415-8458-648761e834e1")]
         public readonly InputSlot<bool> GenerateMipMaps = new InputSlot<bool>();
 
+        [Input(Guid = "8686d1c3-c5a5-4b4a-b30f-95a1cfd0dc90")]
+        public readonly InputSlot<bool> Enable = new InputSlot<bool>();
+
     }
 }

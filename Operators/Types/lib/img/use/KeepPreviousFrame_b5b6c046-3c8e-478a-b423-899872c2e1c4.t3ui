@@ -1,0 +1,80 @@
+{
+  "Id": "b5b6c046-3c8e-478a-b423-899872c2e1c4"/*KeepPreviousFrame*/,
+  "Description": "Implements a double buffer to keep the previous image.\nThis can be useful for effects that rely on image change comparision, like motion estimation.",
+  "InputUis": [
+    {
+      "InputId": "216dca25-9ba2-4cbb-b05a-e74befafaf37"/*Image*/,
+      "Position": {
+        "X": -14.452103,
+        "Y": 35.973602
+      }
+    },
+    {
+      "InputId": "b25d483f-1fdf-4d76-974c-8e781a405914"/*Enable*/,
+      "Position": {
+        "X": -11.612076,
+        "Y": 154.81412
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "561b5bdf-b288-490b-a518-592ccc610415"/*CountInt*/,
+      "Position": {
+        "X": 150.0,
+        "Y": 158.79541
+      }
+    },
+    {
+      "ChildId": "5bf7014b-4351-4754-b670-48a32669d905"/*CompareInt*/,
+      "Position": {
+        "X": 340.8113,
+        "Y": 81.41388
+      }
+    },
+    {
+      "ChildId": "1dcdb1af-deaf-4054-b086-1cded8169084"/*CompareInt*/,
+      "Position": {
+        "X": 351.9634,
+        "Y": 188.83936
+      }
+    },
+    {
+      "ChildId": "52a67f36-0c14-49be-80ee-f741484f1a47"/*SwapTextures*/,
+      "Position": {
+        "X": 670.06555,
+        "Y": 20.021484
+      }
+    },
+    {
+      "ChildId": "5a270e2c-8dfc-40e4-b967-5dd787424592"/*ConvertFormat*/,
+      "Position": {
+        "X": 520.06555,
+        "Y": 20.021484
+      }
+    },
+    {
+      "ChildId": "8ba05263-5311-4aaf-8d7b-bb01badc1935"/*ConvertFormat*/,
+      "Position": {
+        "X": 522.32837,
+        "Y": 162.81787
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "4cf4e43b-0f1f-41f7-9ba3-acab3b1160cb"/*TextureA*/,
+      "Position": {
+        "X": 820.06555,
+        "Y": 20.021484
+      }
+    },
+    {
+      "OutputId": "edc79491-f0c1-47c6-bc70-8014ebdb1a7a"/*TextureB*/,
+      "Position": {
+        "X": 820.06555,
+        "Y": 70.021484
+      }
+    }
+  ]
+}
