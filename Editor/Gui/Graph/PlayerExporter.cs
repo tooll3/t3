@@ -66,12 +66,12 @@ namespace T3.Editor.Gui.Graph
                 // Copy player and dependent assemblies to export dir
                 var currentDir = Directory.GetCurrentDirectory();
 
-                var playerBuildPath = currentDir + @"\Player\bin\Release\net6.0-windows\publish\";
-                //var operatorDependenciesPath = @"T3\bin\Release\net6.0-windows\publish\";
+                var playerPublishPath = currentDir + @"\Player\bin\Release\net6.0-windows\publish\";
+                var playerBuildPath = currentDir + @"\Player\bin\Release\net6.0-windows\";
 
                 if (!File.Exists(currentDir + @"\Player\bin\Release\net6.0-windows\publish\Player.exe"))
                 {
-                    Log.Error($"Can't find valid build in player release folder: (${playerBuildPath})");
+                    Log.Error($"Can't find valid build in player release folder: (${playerPublishPath})");
                     Log.Error("Please use your IDE to rebuild solution in release mode.");
                     return;
                 }
@@ -79,37 +79,17 @@ namespace T3.Editor.Gui.Graph
                 Log.Debug("Copy player resources...");
                 CopyFiles(new[]
                               {
-                                  playerBuildPath + "bass.dll",
+                                  playerPublishPath + "Svg.dll",
+                                  playerPublishPath + "Player.exe",
+                                  
+                                  playerBuildPath + "SpoutDX.dll",
+                                  playerBuildPath + "Spout.dll",
+                                  playerBuildPath + "Processing.NDI.Lib.x64.dll",
                                   playerBuildPath + "basswasapi.dll",
-                                  playerBuildPath + "Svg.dll",
-                                  playerBuildPath + "Player.exe",
+                                  playerBuildPath + "bass.dll",
                               },
                           exportDir);
-
-                // NOTE: This is fallback because the Operators.dll compiled for stand alone runner
-                // does not contain all assembly references. So we add these here manually
-                // if (Program.IsStandAlone)
-                // {
-                //     Log.Debug("Copy operator dependencies");
-                //     CopyFiles(new[]
-                //                   {
-                //                       operatorDependenciesPath + "Svg.dll",
-                //                       operatorDependenciesPath + "bass.dll",
-                //                       operatorDependenciesPath + "basswasapi.dll",
-                //                       
-                //                       // unsure if all of the below needed but they allow compilation of Spout capable demos
-                //                       // operatorDependenciesPath + @"runtimes\win-x64\native\Std-symbols.dll",
-                //                       // operatorDependenciesPath + @"runtimes\win-x64\native\CppSharp.CppParser.dll",
-                //                       // operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.AST.dll",
-                //                       // operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.dll",
-                //                       // operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Generator.dll",
-                //                       // operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Parser.CSharp.dll",
-                //                       // operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Parser.dll",
-                //                       // operatorDependenciesPath + @"runtimes\win-x64\lib\netcoreapp3.1\CppSharp.Runtime.dll"
-                //                   },
-                //               exportDir);
-                // }
-
+                
                 Log.Debug("Compiling Operators.dll...");
                 var references = CompileSymbolsFromSource(exportDir, operatorAssemblySources.ToArray());
 

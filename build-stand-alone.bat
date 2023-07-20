@@ -1,8 +1,7 @@
-rem please read 
+rem please read https://github.com/tooll3/t3/wiki/StandAloneBuilds
 
 @RD /S /Q "..\T3-Standalone"
 mkdir "..\T3-Standalone"
-
 
 Xcopy "Resources" "..\T3-Standalone\Resources" /E /H /C /I
 Xcopy ".Variations" "..\T3-Standalone\.Variations" /E /H /C /I
@@ -11,18 +10,12 @@ Xcopy "Operators\Types" "..\T3-Standalone\Operators\Types" /E /H /C /I
 Xcopy "Operators\Utils" "..\T3-Standalone\Operators\Utils" /E /H /C /I
 Xcopy "Editor\bin\Release\net6.0-windows" "..\T3-Standalone\" /E /H /C /I
 Xcopy "StartT3\bin\Release\net6.0-windows" "..\T3-Standalone\" /E /H /C /I
-rem Xcopy "Player\bin\Release\net6.0-windows\publish\Player.exe" "..\T3-Standalone\Player\bin\Release\net6.0-windows" /E /H /C /I
-
+Xcopy "Install\dependencies" "..\T3-Standalone\Player\bin\Release\net6.0-windows\" /E /H /C /I
 
 mkdir "..\T3-Standalone\Player\bin\Release\net6.0-windows\publish"
 copy "Player\bin\Release\net6.0-windows\publish\Player.exe"                    "..\T3-Standalone\Player\bin\Release\net6.0-windows\publish\Player.exe"
 copy "Editor\bin\Release\net6.0-windows\Svg.dll"  "..\T3-Standalone\Player\bin\Release\net6.0-windows\publish\Svg.dll"
-copy "Player\bin\Release\net6.0-windows\bass.dll" "..\T3-Standalone\Player\bin\Release\net6.0-windows\publish\bass.dll"
-copy "Player\bin\Release\net6.0-windows\basswasapi.dll" "..\T3-Standalone\Player\bin\Release\net6.0-windows\publish\basswasapi.dll"
-
 copy "Editor\bin\Release\net6.0-windows\Operators.dll" "..\T3-Standalone\Operators_Reference.dll"
-
-
 
 mkdir "..\T3-Standalone\.t3"
 Xcopy "Install\default-layouts" "..\T3-Standalone\.t3\layouts" /E /H /C /I

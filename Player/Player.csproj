@@ -20,6 +20,7 @@
         <PackageReference Include="SharpDX.Desktop" Version="4.2.0">
 		        <NoWarn>NU1701</NoWarn>
         </PackageReference>
+        <PackageReference Include="Svg" Version="3.3.0" />
     </ItemGroup>
 
     <ItemGroup>
