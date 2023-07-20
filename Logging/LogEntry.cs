@@ -30,12 +30,15 @@ namespace T3.Core.Logging
             TimeStamp = DateTime.Now;
             Level = level;
             Message = message;
-            SourceIdPath = null;
+            SourceIdPath = _emptyPath;
         }
+        
+        
         
         public double SecondsSinceStart => (TimeStamp - _startTime).TotalSeconds;
         public double SecondsAgo => (DateTime.Now - TimeStamp).TotalSeconds;
         public Guid SourceId => SourceIdPath is { Count: > 0 } ? SourceIdPath[^1] : Guid.Empty;
         private static readonly DateTime _startTime = DateTime.Now;
+        private static readonly List<Guid> _emptyPath = new();
     }
 }

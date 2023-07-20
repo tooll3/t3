@@ -10,17 +10,17 @@ public static class JsonUtils
     {
         var dirtyFlagJson = o[name];
         return dirtyFlagJson != null
-                   ? Enum.Parse<T>(dirtyFlagJson.Value<string>())
+                   ? Enum.Parse<T>(dirtyFlagJson.Value<string>() ?? string.Empty)
                    : default;
     }
 
-    public static T ReadToken<T>(JToken o, string name, T defaultValue = default)
+    public static T? ReadToken<T>(JToken o, string name, T? defaultValue = default)
     {
         var jSettingsToken = o[name];
         return jSettingsToken == null ? defaultValue : jSettingsToken.Value<T>();
     }
 
-    public static T TryLoadingJson<T>(string filepath) where T : class, new()
+    public static T? TryLoadingJson<T>(string filepath) where T : class, new()
     {
         if (!File.Exists(filepath))
         {
@@ -75,10 +75,7 @@ public static class JsonUtils
 
     public static void WriteObject(this JsonTextWriter writer, string name, object value)
     {
-        if (value != null)
-        {
-            writer.WritePropertyName(name);
-            writer.WriteValue(value.ToString());
-        }
+        writer.WritePropertyName(name);
+        writer.WriteValue(value.ToString());
     }
 }
