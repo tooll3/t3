@@ -4,16 +4,8 @@
   "Namespace": "lib.io.input",
   "Inputs": [
     {
-      "Id": "9b844a51-d108-426e-a264-d570d30031c6"/*DoUpdate*/,
+      "Id": "9b844a51-d108-426e-a264-d570d30031c6"/*ResetTrigger*/,
       "DefaultValue": false
-    },
-    {
-      "Id": "dd24e9ae-4120-4e90-94db-e379c149995d"/*OutputMode*/,
-      "DefaultValue": 1
-    },
-    {
-      "Id": "366a96a7-1077-43fb-9937-58ba9b73830a"/*Scale*/,
-      "DefaultValue": 1.0
     }
   ],
   "Children": [],

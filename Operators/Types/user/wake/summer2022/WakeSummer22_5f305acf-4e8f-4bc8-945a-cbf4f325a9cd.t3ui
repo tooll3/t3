@@ -289,14 +289,14 @@
       "ChildId": "ef045d34-fdcb-45ad-b9a0-d6a5a5f450ec"/*Layer2d*/,
       "Position": {
         "X": 315.2483,
-        "Y": 1022.6204
+        "Y": 1050.6707
       }
     },
     {
       "ChildId": "523f05fd-724d-42bb-b7fd-d09603e64cae"/*WS4_Patterns*/,
       "Position": {
         "X": 165.24829,
-        "Y": 1022.6204
+        "Y": 1050.6707
       }
     },
     {
@@ -731,6 +731,20 @@
       "Position": {
         "X": 5000.752,
         "Y": -240.74994
+      }
+    },
+    {
+      "ChildId": "6d891151-4b2a-4b5b-9052-d66580aa5ac9"/*MidiRecording*/,
+      "Position": {
+        "X": 2103.7917,
+        "Y": -649.2344
+      }
+    },
+    {
+      "ChildId": "bfe2aa6d-97b0-4ba8-a9ba-61aad7c4d51b"/*MidiInput*/,
+      "Position": {
+        "X": 1890.5048,
+        "Y": -464.87054
       }
     }
   ],
