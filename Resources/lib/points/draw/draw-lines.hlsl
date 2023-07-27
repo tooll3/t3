@@ -145,7 +145,7 @@ psInput vsMain(uint id: SV_VertexID)
                                 : lerp(1, wAtPoint, UseWForWidth) ;
 
     float miter = dot(-meterNormal, normal);
-    pos+= cornerFactors.y * 0.1f * thickness * float4(meterNormal,0) / clamp(miter, -1,-0.3) ;   
+    pos+= cornerFactors.y * 0.1f * thickness * float4(meterNormal,0) / clamp(miter, -1,-0.16) ;   
 
     output.position = pos / aspect;
     
