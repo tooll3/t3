@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using SharpDX;
 using SharpDX.Direct3D;
@@ -26,12 +27,12 @@ public partial class UiSymbolData
         RegisterUiTypes();
         RegisterCustomChildUis();
     }
-    
+
     public static class TypeByNameRegistry
     {
         public static Dictionary<string, Type> Entries { get; } = new();
     }
-    
+
     private static void RegisterCustomChildUis()
     {
         // register custom UIs for symbol children
@@ -71,6 +72,8 @@ public partial class UiSymbolData
     {
         // build-in types
         RegisterUiType(typeof(bool), new ValueUiProperties(), () => new BoolInputUi(), () => new ValueOutputUi<bool>());
+        RegisterUiType(typeof(double), new ValueUiProperties(), () => new FloatInputUi(), () => new FloatOutputUi());
+
         RegisterUiType(typeof(float), new ValueUiProperties(), () => new FloatInputUi(), () => new FloatOutputUi());
         RegisterUiType(typeof(int), new ValueUiProperties(), () => new IntInputUi(), () => new ValueOutputUi<int>());
         RegisterUiType(typeof(string), new StringUiProperties(), () => new StringInputUi(), () => new ValueOutputUi<string>());
@@ -122,6 +125,8 @@ public partial class UiSymbolData
         RegisterUiType(typeof(MeshBuffers), new FallBackUiProperties(), () => new FallbackInputUi<MeshBuffers>(),
                        () => new ValueOutputUi<MeshBuffers>());
 
+        RegisterUiType(typeof(DataSet), new ValueUiProperties(),
+                       () => new FallbackInputUi<DataSet>(), () => new DataSetOutputUi());
         // sharpdx types
         RegisterUiType(typeof(SharpDX.Int3), new ValueUiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
         RegisterUiType(typeof(SharpDX.Size2), new ValueUiProperties(), () => new Size2InputUi(), () => new ValueOutputUi<Size2>());

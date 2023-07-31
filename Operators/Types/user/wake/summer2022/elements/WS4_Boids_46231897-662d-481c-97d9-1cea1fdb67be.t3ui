@@ -126,7 +126,7 @@
       }
     },
     {
-      "ChildId": "9ade6bb5-7dd2-471c-bb4f-a45651520b99"/*Camera*/,
+      "ChildId": "9ade6bb5-7dd2-471c-bb4f-a45651520b99"/*FishCam*/,
       "Position": {
         "X": 1111.7563,
         "Y": 287.98828
@@ -303,8 +303,8 @@
     {
       "ChildId": "813c81ba-a864-42f1-a360-b9aa1a7d6670"/*AudioReaction*/,
       "Position": {
-        "X": -1407.3828,
-        "Y": 664.81555
+        "X": -1652.235,
+        "Y": 674.65894
       }
     },
     {
@@ -510,6 +510,13 @@
       "Position": {
         "X": 1751.9034,
         "Y": 92.00336
+      }
+    },
+    {
+      "ChildId": "cae4363e-9ee8-4fde-8c46-b4e08f74817c"/*Counter*/,
+      "Position": {
+        "X": -843.1515,
+        "Y": 501.29022
       }
     }
   ],

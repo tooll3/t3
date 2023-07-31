@@ -7,8 +7,10 @@ using System.Reflection;
 using System.Threading.Tasks;
 using T3.Editor.Gui.Graph;
 using ImGuiNET;
+using Operators.Utils.Recording;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.DataTypes.DataSet;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -57,8 +59,8 @@ public class T3Ui
     {
         if (_initialed || ImGui.GetWindowSize() == Vector2.Zero)
             return;
-        
-        
+            
+        ActiveMidiRecording.ActiveRecordingSet = MidiDataRecording.DataSet;
         _initialed = true;
     }
 
@@ -76,7 +78,7 @@ public class T3Ui
         RenderStatsCollector.StartNewFrame();
             
         PlaybackUtils.UpdatePlaybackAndSyncing();
-        
+
 
         //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
             
@@ -442,7 +444,10 @@ public class T3Ui
     public static float UiScaleFactor { get; set; } = 1;
     public static float DisplayScaleFactor { get; set; } = 1;
     public static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
-
+    public static readonly MidiDataRecording MidiDataRecording = new();
+        
+    //private static readonly AutoBackup.AutoBackup _autoBackup = new();
+        
     private static readonly CreateFromTemplateDialog _createFromTemplateDialog = new();
     private static readonly UserNameDialog _userNameDialog = new();
     private static readonly SearchDialog _searchDialog = new();
@@ -461,5 +466,5 @@ public class T3Ui
     }
 
     public static bool UseVSync = true;
-    public static bool ItemRegionsVisible = false;
+    public static bool ItemRegionsVisible;
 }

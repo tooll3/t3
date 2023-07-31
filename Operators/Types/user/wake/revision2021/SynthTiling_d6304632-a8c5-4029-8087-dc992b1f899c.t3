@@ -350,7 +350,7 @@
         {
           "Id": "8a5033c2-7d22-44d7-9472-d23677b11388"/*Amplitude*/,
           "Type": "System.Single",
-          "Value": -3.2999997
+          "Value": -3.3
         },
         {
           "Id": "126511e6-771d-4dd0-8a9d-1861c7b45d23"/*Offset*/,
@@ -389,7 +389,7 @@
         {
           "Id": "48e1129c-d6cc-4018-a6ee-5266244edd7f"/*Distort*/,
           "Type": "System.Single",
-          "Value": 0.063
+          "Value": -0.025
         },
         {
           "Id": "e0344f32-479e-48b6-9473-26ef59d22a66"/*DistortOffset*/,
@@ -689,28 +689,6 @@
       "Outputs": []
     },
     {
-      "Id": "ac53a5c7-8db1-4f69-b54b-c81f39af1386"/*_LegacyAudioReaction*/,
-      "SymbolId": "f8aed421-5e0e-4d1f-993c-1801153ebba8",
-      "InputValues": [
-        {
-          "Id": "15f841f5-5153-4383-90b9-f6a4f72d5d6b"/*Band*/,
-          "Type": "System.Int32",
-          "Value": 1
-        },
-        {
-          "Id": "d9069774-188b-4a5e-976a-053d0c893503"/*Mode*/,
-          "Type": "System.Int32",
-          "Value": 5
-        },
-        {
-          "Id": "ec0fe09b-b925-4b14-8186-8c32b65af9bb"/*Amplitude*/,
-          "Type": "System.Single",
-          "Value": 19.8
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "3765e002-9fbb-4394-b1dd-e397b2e0a9e5"/*LinearGradient*/,
       "SymbolId": "2c3d2c26-ac45-42e9-8f13-6ea338333568",
       "InputValues": [
@@ -905,6 +883,50 @@
       "Id": "6af8ee67-1014-453c-a12d-11681bde5c62"/*Grain*/,
       "SymbolId": "b5102fba-f05b-43fc-aa1d-613fe1d68ad2",
       "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "f656df4c-63d7-4626-aea7-8bf580e3b1bd"/*AnimValue*/,
+      "SymbolId": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
+      "InputValues": [
+        {
+          "Id": "48005727-0158-4795-ad70-8410c27fd01d"/*Rate*/,
+          "Type": "System.Single",
+          "Value": 0.125
+        },
+        {
+          "Id": "79917ef7-64ca-4825-9c6a-c9b2a7f6ff86"/*Amplitude*/,
+          "Type": "System.Single",
+          "Value": -3.3
+        },
+        {
+          "Id": "ddd93b06-118e-43e0-85f6-c150faf91d04"/*Offset*/,
+          "Type": "System.Single",
+          "Value": -0.19
+        },
+        {
+          "Id": "738f6cfb-8b71-423c-b897-824c20397e5a"/*AllowSpeedFactor*/,
+          "Type": "System.Int32",
+          "Value": 0
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "dc8ccd61-4952-4544-9762-c1217395c4bd"/*AnimValue*/,
+      "SymbolId": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
+      "InputValues": [
+        {
+          "Id": "48005727-0158-4795-ad70-8410c27fd01d"/*Rate*/,
+          "Type": "System.Single",
+          "Value": 0.25
+        },
+        {
+          "Id": "738f6cfb-8b71-423c-b897-824c20397e5a"/*AllowSpeedFactor*/,
+          "Type": "System.Int32",
+          "Value": 0
+        }
+      ],
       "Outputs": []
     }
   ],
@@ -1108,14 +1130,14 @@
       "TargetSlotId": "6297675f-891c-4c06-8685-de3a1a3ffe9b"
     },
     {
-      "SourceParentOrChildId": "43695ff4-97ad-4dbf-973f-1b18c8a75aa7",
-      "SourceSlotId": "c47e8843-6e8d-4eaf-a554-874b3af9ee63",
+      "SourceParentOrChildId": "dc8ccd61-4952-4544-9762-c1217395c4bd",
+      "SourceSlotId": "ae4addf0-08cf-4b25-9515-4fef9359d183",
       "TargetParentOrChildId": "eebf1c07-99b9-4737-93a0-4a4ba6168e8f",
       "TargetSlotId": "6b9d0106-78f9-4507-a0f6-234c5dfb0f85"
     },
     {
-      "SourceParentOrChildId": "db7473ad-cb26-476d-a733-52375607df8b",
-      "SourceSlotId": "c47e8843-6e8d-4eaf-a554-874b3af9ee63",
+      "SourceParentOrChildId": "f656df4c-63d7-4626-aea7-8bf580e3b1bd",
+      "SourceSlotId": "ae4addf0-08cf-4b25-9515-4fef9359d183",
       "TargetParentOrChildId": "fe76009c-16df-46c5-a348-952e910b8154",
       "TargetSlotId": "627f766e-056c-413e-8530-838d673bd031"
     }

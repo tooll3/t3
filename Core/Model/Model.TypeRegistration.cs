@@ -11,6 +11,7 @@ using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.DataSet;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
@@ -76,6 +77,11 @@ public partial class SymbolData
                      InputDefaultValueCreator<float>,
                      (writer, obj) => writer.WriteValue((float)obj),
                      jsonToken => jsonToken.Value<float>());
+        RegisterType(typeof(double), "double",
+                     InputDefaultValueCreator<double>,
+                     (writer, obj) => writer.WriteValue((double)obj),
+                     jsonToken => jsonToken.Value<double>());
+        
         RegisterType(typeof(string), "string",
                      () => new InputValue<string>(string.Empty),
                      (writer, value) => writer.WriteValue((string)value),
@@ -297,7 +303,10 @@ public partial class SymbolData
                      () => new InputValue<Texture3dWithViews>(new Texture3dWithViews()));
         RegisterType(typeof(MeshBuffers), "MeshBuffers",
                      () => new InputValue<MeshBuffers>(null));
-
+        
+        
+        RegisterType(typeof(DataSet), "DataSet",
+                     () => new InputValue<DataSet>());
         // sharpdx types
         RegisterType(typeof(SharpDX.Direct3D.PrimitiveTopology), "PrimitiveTopology",
                      InputDefaultValueCreator<PrimitiveTopology>,

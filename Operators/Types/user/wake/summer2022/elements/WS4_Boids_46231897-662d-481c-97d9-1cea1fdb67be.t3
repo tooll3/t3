@@ -75,7 +75,7 @@
         {
           "Id": "6a2cb3f0-3b5a-4551-a809-3dc172bb7d79"/*TrailLength*/,
           "Type": "System.Int32",
-          "Value": 50
+          "Value": 70
         },
         {
           "Id": "56eac471-ad48-41ec-b617-cbcb67646c97"/*AddSeperatorThreshold*/,
@@ -120,7 +120,12 @@
           "Value": true
         }
       ],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "73ebf863-ba71-421c-bee7-312f13c5eff0"/*DrawLines*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "89ec0a3e-2ba1-4a53-ab29-4f5a4c4094df"/*Execute*/,
@@ -159,7 +164,7 @@
         {
           "Id": "79080698-1097-4178-b7da-7d10fd86be28"/*MixOriginal*/,
           "Type": "System.Single",
-          "Value": 0.007999999
+          "Value": 0.02
         },
         {
           "Id": "0954b214-dd1f-40fd-bebe-29f74a8f5585"/*Reset*/,
@@ -426,17 +431,17 @@
         {
           "Id": "cc98bda7-34a5-4c18-9b9e-fabe51b02d71"/*Amount*/,
           "Type": "System.Single",
-          "Value": 0.05
+          "Value": 0.04
         },
         {
           "Id": "757c259a-118c-4438-bc09-cdc5708af2bc"/*Frequency*/,
           "Type": "System.Single",
-          "Value": 0.23
+          "Value": 1.95
         },
         {
           "Id": "41ee0e65-e2dc-4bf7-af40-bc90517c6c23"/*RotLookupDistance*/,
           "Type": "System.Single",
-          "Value": 0.03
+          "Value": 0.53
         }
       ],
       "Outputs": []
@@ -482,25 +487,26 @@
       "Outputs": []
     },
     {
-      "Id": "9ade6bb5-7dd2-471c-bb4f-a45651520b99"/*Camera*/,
+      "Id": "9ade6bb5-7dd2-471c-bb4f-a45651520b99"/*FishCam*/,
       "SymbolId": "746d886c-5ab6-44b1-bb15-f3ce2fadf7e6",
+      "Name": "FishCam",
       "InputValues": [
         {
           "Id": "313596cc-3854-436b-89da-5fd40164ce76"/*Position*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": -0.11671771,
-            "Y": -0.026655888,
-            "Z": 0.5256776
+            "X": 0.49574435,
+            "Y": -0.49991918,
+            "Z": -0.30054605
           }
         },
         {
           "Id": "a7acb25c-d60c-43a6-b1df-2cd5c6e183f3"/*Target*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": -0.0041494872,
-            "Y": 0.15374213,
-            "Z": -1.8809555
+            "X": -0.7717656,
+            "Y": 1.139697,
+            "Z": 0.9500748
           }
         }
       ],
@@ -643,7 +649,12 @@
         {
           "Id": "286cbbfb-796d-499f-93d3-d467512110be"/*Rate*/,
           "Type": "System.Single",
-          "Value": 16.0
+          "Value": 1.0
+        },
+        {
+          "Id": "c386b9e0-a987-4d11-9171-2971fa759827"/*AllowSpeedFactor*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -677,7 +688,7 @@
         {
           "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
           "Type": "System.Single",
-          "Value": 32.0
+          "Value": 16.0
         }
       ],
       "Outputs": []
@@ -929,12 +940,12 @@
         {
           "Id": "f3d7c7fd-4280-4fb4-9f9a-c39b28d1a72b"/*WindowCenter*/,
           "Type": "System.Single",
-          "Value": 0.019999998
+          "Value": 0.049999997
         },
         {
           "Id": "02f71a92-d5c8-4dd7-af5f-da12330f60eb"/*Threshold*/,
           "Type": "System.Single",
-          "Value": 0.41000003
+          "Value": 1.0
         }
       ],
       "Outputs": []
@@ -1148,22 +1159,22 @@
         {
           "Id": "044168eb-791c-405f-867f-3d5702924165"/*EventType*/,
           "Type": "System.Int32",
-          "Value": 2
+          "Value": 1
         },
         {
           "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
           "Type": "System.String",
-          "Value": "APC MINI"
+          "Value": "Tom-Midi2"
         },
         {
           "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
           "Type": "System.Int32",
-          "Value": 1
+          "Value": 14
         },
         {
           "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
           "Type": "System.Int32",
-          "Value": 50
+          "Value": 62
         }
       ],
       "Outputs": []
@@ -1176,7 +1187,7 @@
         {
           "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
           "Type": "System.Single",
-          "Value": 0.66
+          "Value": 0.3
         }
       ],
       "Outputs": []
@@ -1264,6 +1275,11 @@
           }
         },
         {
+          "Id": "ca3ce08d-6a19-4ad5-9435-08b050753311"/*Damping*/,
+          "Type": "System.Single",
+          "Value": 0.0
+        },
+        {
           "Id": "7c681ee6-d071-4284-8585-1c3e03a089ea"/*TeachTrigger*/,
           "Type": "System.Boolean",
           "Value": false
@@ -1271,7 +1287,7 @@
         {
           "Id": "044168eb-791c-405f-867f-3d5702924165"/*EventType*/,
           "Type": "System.Int32",
-          "Value": 2
+          "Value": 1
         },
         {
           "Id": "23c34f4c-4ba3-4834-8d51-3e3909751f84"/*Device*/,
@@ -1281,12 +1297,20 @@
         {
           "Id": "9b0d32de-c53c-4df6-8b29-5e68a5a9c5f9"/*Channel*/,
           "Type": "System.Int32",
-          "Value": 1
+          "Value": 9
         },
         {
           "Id": "df81b7b3-f39e-4e5d-8b97-f29dd576a76d"/*Control*/,
           "Type": "System.Int32",
-          "Value": 20
+          "Value": 62
+        },
+        {
+          "Id": "f650985f-00a7-452a-b3e4-69a8e9a78c3f"/*ControlRange*/,
+          "Type": "SharpDX.Size2",
+          "Value": {
+            "Width": 0,
+            "Height": 127
+          }
         }
       ],
       "Outputs": []
@@ -1311,7 +1335,7 @@
         {
           "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
           "Type": "System.Single",
-          "Value": 0.5
+          "Value": 0.2
         }
       ],
       "Outputs": []
@@ -1413,12 +1437,7 @@
           "Value": 2020.0
         }
       ],
-      "Outputs": [
-        {
-          "Id": "324f8114-dae9-4cc8-aa88-021d84dbaf79"/*DrawRibbons*/,
-          "IsDisabled": true
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "a8d5147d-48b3-4c4c-b1bd-7fc7c708d045"/*CylinderMesh*/,
@@ -1594,6 +1613,33 @@
             "Y": 0.14,
             "Z": 0.0
           }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "cae4363e-9ee8-4fde-8c46-b4e08f74817c"/*Counter*/,
+      "SymbolId": "11882635-4757-4cac-a024-70bb4e8b504c",
+      "InputValues": [
+        {
+          "Id": "bca3f7b2-a093-4cb3-89a5-0e2681760607"/*Increment*/,
+          "Type": "System.Single",
+          "Value": 0.05
+        },
+        {
+          "Id": "b04d475b-a898-421b-bf26-ae5cf982a351"/*Blending*/,
+          "Type": "System.Single",
+          "Value": 0.11
+        },
+        {
+          "Id": "e0c386b9-a987-4d11-9171-2971fa759827"/*SmoothBlending*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
+          "Id": "c386b9e0-a987-4d11-9171-2971fa759827"/*AllowSpeedFactor*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -1889,8 +1935,8 @@
       "TargetSlotId": "679d6321-a5d7-41cc-a191-5e6cf353dfc4"
     },
     {
-      "SourceParentOrChildId": "495a4b7a-1385-41e7-9f92-6540d3a4aa77",
-      "SourceSlotId": "5ce9c625-f890-4620-9747-c98eab4b9447",
+      "SourceParentOrChildId": "cae4363e-9ee8-4fde-8c46-b4e08f74817c",
+      "SourceSlotId": "c53e3a03-3a6d-4547-abbf-7901b5045539",
       "TargetParentOrChildId": "8de9a63e-d5a3-4389-8e10-7deb6a8f2693",
       "TargetSlotId": "cb3ae9c7-5146-4bc6-9a87-3d17012fab52"
     },
@@ -2015,6 +2061,12 @@
       "TargetSlotId": "ca84209e-d821-40c6-b23c-38fc4bbd47b0"
     },
     {
+      "SourceParentOrChildId": "b83d8977-13f6-4da4-a800-cd096ff91e88",
+      "SourceSlotId": "4bf74648-207f-4275-83ba-09e1c048c33b",
+      "TargetParentOrChildId": "cae4363e-9ee8-4fde-8c46-b4e08f74817c",
+      "TargetSlotId": "eefdb8ca-68e7-4e39-b302-22eb8930fb8c"
+    },
+    {
       "SourceParentOrChildId": "813c81ba-a864-42f1-a360-b9aa1a7d6670",
       "SourceSlotId": "e1749c60-41f0-4e8f-9317-909ef31eeef1",
       "TargetParentOrChildId": "cda48750-3f12-4000-938c-d2c4e0075d11",
@@ -2074,14 +2126,5 @@
       "TargetParentOrChildId": "fd97142d-dfd6-4c25-ba53-8d32326b40b8",
       "TargetSlotId": "afadb109-37b2-49aa-8c32-627cc35fd574"
     }
-  ],
-  "PlaybackSettings": {
-    "Enabled": true,
-    "Bpm": 120.0,
-    "AudioSource": 1,
-    "Syncing": 0,
-    "AudioDecayFactor": 0.9,
-    "AudioGainFactor": 2.2,
-    "AudioInputDeviceName": "Microphone Builtin (Realtek(R) Audio)"
-  }
+  ]
 }

@@ -2,19 +2,6 @@
   "Id": "eb13f8e8-0fe1-47f0-8e86-45f85cf2f0f6",
   "Variations": [
     {
-      "Id": "9378110a-7e3f-477e-a229-fbc7136c2044",
-      "IsPreset": false,
-      "ActivationIndex": 56,
-      "Title": "untitled",
-      "PosOnCanvas": {
-        "X": 163.0,
-        "Y": 0.0
-      },
-      "ParameterSetsForChildIds": {
-        "539facb3-d4f3-4b32-8f5a-d9bdc9ff45d2": {}
-      }
-    },
-    {
       "Id": "e7e83546-9eb1-47a1-89d6-ef0ce20c858c",
       "IsPreset": false,
       "ActivationIndex": 57,
@@ -26,6 +13,21 @@
       "ParameterSetsForChildIds": {
         "539facb3-d4f3-4b32-8f5a-d9bdc9ff45d2": {
           "20e76577-92ee-443d-9630-ebc41e38bb85": 1
+        }
+      }
+    },
+    {
+      "Id": "a197e293-05ea-4796-a2ec-97235ed8c1f6",
+      "IsPreset": false,
+      "ActivationIndex": 56,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "539facb3-d4f3-4b32-8f5a-d9bdc9ff45d2": {
+          "20e76577-92ee-443d-9630-ebc41e38bb85": 0
         }
       }
     }
