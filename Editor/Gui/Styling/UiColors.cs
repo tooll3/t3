@@ -61,13 +61,13 @@ public static class UiColors
     public static Color WidgetAxis = new(0, 0, 0, 0.3f);
     public static Color WidgetActiveLine = StatusAnimated;
     
-    [T3Style.Hint(Description = "The opposite of text color. Mostly applied faded for shading effects.")]
+    [T3Style.Hint(Description = "The opposite of text color.\nMostly applied faded for shading effects.")]
     public static Color WidgetBackgroundStrong = new(0f, 0f, 0f, 1f);
     public static Color WidgetHighlight = new(1f, 1f, 1f, 1f);
     public static Color WidgetSlider = new(0.15f);
-
-
+    
     public static Color MiniMapItems = new(1f, 1f, 1f, 1f);
+
     
     public static Color ColorForValues = new(0.525f, 0.550f, 0.554f, 1.000f);
     public static Color ColorForString = new(0.468f, 0.586f, 0.320f, 1.000f);
@@ -82,7 +82,7 @@ public static class UiColors
     public static Color ModalWindowDimBg = new Color(0.1f, 0.1f, 0.1f, 0.1f);
     
     [T3Style.Hint(Description = "Background for menu, gaps and separators")]
-    public static Color BackgroundGaps = new Color(0.1f, 0.1f, 0.1f, 0.1f);
+    public static Color BackgroundGaps = new Color(0f, 0f, 0f, 1f);
 
     public static Color WindowBorder = new Color(0, 0, 0, 1f);
 
