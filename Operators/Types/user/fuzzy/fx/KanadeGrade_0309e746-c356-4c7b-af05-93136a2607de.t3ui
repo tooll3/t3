@@ -1,0 +1,52 @@
+{
+  "Id": "0309e746-c356-4c7b-af05-93136a2607de"/*KanadeGrade*/,
+  "Description": "2nd attempt as a flow derivator\n",
+  "InputUis": [
+    {
+      "InputId": "93227e69-35c7-4db6-bc6e-e655f2f8226a"/*Image*/,
+      "Position": {
+        "X": 752.09937,
+        "Y": -334.1912
+      }
+    },
+    {
+      "InputId": "394c0b8a-0d6e-4740-bd33-28c651b1471d"/*Image2*/,
+      "Position": {
+        "X": 752.09937,
+        "Y": -289.1912
+      }
+    },
+    {
+      "InputId": "a1eba7f5-e2f1-46cb-8982-ae9cb1b7531b"/*Lod*/,
+      "Position": {
+        "X": 752.09937,
+        "Y": -244.1912
+      },
+      "Min": 0.0,
+      "Max": 1000.0
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "939f32d2-548c-443f-abaa-d74b5b554052"/*_multiImageFxSetupStatic*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 127.0
+      },
+      "Position": {
+        "X": 1046.2825,
+        "Y": -291.4844
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "4969429f-c7f6-441e-94ab-2a5a12e4cb11"/*TextureOutput*/,
+      "Position": {
+        "X": 1292.4333,
+        "Y": -313.4084
+      }
+    }
+  ]
+}
