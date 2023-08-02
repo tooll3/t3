@@ -27,7 +27,9 @@ namespace T3.Editor.Gui.OutputUi
                         ImGui.Value("", f);
                         break;
                     case string s:
+                        ImGui.BeginChild("scrollable");
                         ImGui.TextUnformatted(s);
+                        ImGui.EndChild();
                         break;
                     default:
                         var t = value?.ToString();
