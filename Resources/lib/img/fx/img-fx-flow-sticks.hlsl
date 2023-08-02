@@ -1,3 +1,4 @@
+// this code implements this shader in hlsl, https://www.shadertoy.com/view/XlBcRV
 sampler texSampler : register(s0);
 Texture2D<float4> inputTextureA : register(t0);
 
@@ -36,12 +37,6 @@ float4 psMain(vsOutput psInput) : SV_TARGET{
     float width, height;
     inputTextureA.GetDimensions(width, height);
     float2 iResolution = float2(width, height).xy;
-    // return float4(1,1,1,1);
-    // float aspect = width / height;
-
-    // float2 uv = psInput.texCoord;
-    // float2 p = uv;
-    // p.x *= aspect;
     float blockSize = 5. + iResolution.y / Scale;
     float2 within_block = mod(psInput.position.xy, blockSize) - float2(.5 * blockSize, .5*blockSize);
     float2 block = psInput.position.xy - within_block;

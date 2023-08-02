@@ -1,3 +1,4 @@
+// this code implements this shader in hlsl, https://www.shadertoy.com/view/XlBcRV
 sampler texSampler : register(s0);
 Texture2D<float4> inputTextureA : register(t0);
 Texture2D<float4> inputTextureB : register(t1);
@@ -73,31 +74,3 @@ float4 psMain(vsOutput psInput) : SV_TARGET{
     float2 flow = mul(AtAinv, Atb);
     return float4(0.5 + .1 * flow, .0, 1.);
 }
-
-// float4 psMain(vsOutput psInput) : SV_TARGET{
-//     float width, height;
-//     inputTextureA.GetDimensions(width, height);
-//     float2 iResolution = float2(width, height).xy;
-//     // return float4(1,1,1,1);
-//     // float aspect = width / height;
-
-//     // float2 uv = psInput.texCoord;
-//     // float2 p = uv;
-//     // p.x *= aspect;
-//     float blockSize = 5. + iResolution.y / 50.;
-//     float2 within_block = float2(mod(psInput.texCoord.x, blockSize) - .5 * blockSize,mod(psInput.texCoord.y, blockSize) - .5*blockSize);
-//     float2 block = psInput.position.xy - within_block;
-//     float2 uv = block.xy / iResolution.xy;
-//     float2 flow = kanade(block.xy, Lod).rg - float2(.5, .5);
-    
-//     float lineness = abs(dot(normalize(flow.yx * float2(-1.,1.)), within_block));
-//     float alongness = (dot(flow, within_block) / blockSize);
-//     float dark = smoothstep(.2 * blockSize, .0, lineness) *
-//         step(alongness, dot(flow, flow)) * step(.0, alongness);
-//     float ballness = smoothstep(3., 1., dot(within_block, within_block));
-//     if (dot(flow, flow) < 1.e-6) {
-//         return float4(ballness.rrr,  1.);
-//     } else {
-//         return float4((dark + ballness).rrr, 1.);
-//     }
-// }
