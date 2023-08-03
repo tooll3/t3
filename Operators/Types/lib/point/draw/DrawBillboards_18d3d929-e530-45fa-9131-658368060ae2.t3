@@ -206,7 +206,7 @@
     },
     {
       "Id": "c676823b-97d0-4e3e-a59e-e2297816ec69"/*AlphaCut*/,
-      "DefaultValue": 0.4
+      "DefaultValue": 0.01
     },
     {
       "Id": "a129bf5c-e549-4f7c-b30b-5199ffd38f8c"/*GPoints*/,

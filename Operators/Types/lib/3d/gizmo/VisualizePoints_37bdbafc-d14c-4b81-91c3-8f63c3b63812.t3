@@ -585,7 +585,7 @@
         {
           "Id": "f21dfa0c-6276-47cc-8965-9060fe9d96d4"/*Scale*/,
           "Type": "System.Single",
-          "Value": 1.0
+          "Value": 2.0
         }
       ],
       "Outputs": []

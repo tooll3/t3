@@ -161,7 +161,7 @@ psInput vsMain(uint id
     int2 altasSize = (int2)AtlasSize;
 
 
-    float textureUx = GetUFromMode(TextureAtlasMode, pointId, f, normalizedScatter, p.w, output.fog);
+    float textureUx = GetUFromMode(TextureAtlasMode, pointId, (f * altasSize.x) % 1, normalizedScatter, p.w, output.fog) % altasSize.x;
     float textureUy = GetUFromMode(TextureAtlasMode, pointId, f, normalizedScatter.wxyz, p.w, output.fog); 
     //int cellIndex = textureU * altasSize.x * altasSize.y;// pointId;
     
