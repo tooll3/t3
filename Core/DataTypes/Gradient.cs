@@ -13,7 +13,7 @@ namespace T3.Core.DataTypes
 {
     public class Gradient : IEditableInputType
     {
-        public virtual void Write(JsonTextWriter writer)
+        public void Write(JsonTextWriter writer)
         {
             writer.WritePropertyName(typeof(Gradient).Name);
             writer.WriteStartObject();

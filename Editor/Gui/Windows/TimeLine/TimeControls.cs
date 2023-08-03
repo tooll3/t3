@@ -2,6 +2,7 @@
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.DataTypes.DataSet;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Audio;
@@ -9,6 +10,7 @@ using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Timing;
+using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using Icon = T3.Editor.Gui.Styling.Icon;
@@ -138,6 +140,25 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 }
 
                 ImGui.PopStyleColor();
+                ImGui.SameLine();
+            }
+            
+            // MidiIndicator
+            {
+                if (CustomComponents.IconButton(Icon.Heart, ControlSize))
+                {
+                    //T3Ui.MidiStreamRecorder.Reset();
+                    T3Ui.MidiDataRecording.DataSet.WriteToFile();
+                }
+
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.BeginTooltip();
+
+                    var dataSet = T3Ui.MidiDataRecording.DataSet;
+                    DataSetOutputUi.DrawDataSet(dataSet);
+                    ImGui.EndTooltip();
+                }
                 ImGui.SameLine();
             }
 
