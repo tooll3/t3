@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Text;
 using SharpDX;
 using SharpDX.Direct3D;
@@ -8,6 +7,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.DataSet;
 using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
