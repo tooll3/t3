@@ -22,31 +22,12 @@ public static class ColorThemeEditor
         FormInputs.SetIndent(100);
         if (_currentTheme == null)
         {
-            _currentTheme = ThemeHandling.FactoryTheme.Clone();
-            _currentThemeWithoutChanges = ThemeHandling.FactoryTheme.Clone();
+            _currentTheme = ThemeHandling.GetUserOrFactoryTheme();
+            _currentThemeWithoutChanges = _currentTheme.Clone();
         }
         
         var colorFields = typeof(UiColors).GetFields();
         var colorVariationFields = typeof(ColorVariations).GetFields();
-        
-        // if (ImGui.BeginCombo("##SelectTheme", UserSettings.Config.ColorThemeName, ImGuiComboFlags.HeightLarge))
-        // {
-        //     foreach (var theme in ThemeHandling.Themes)
-        //     {
-        //         if (theme == null)
-        //             continue;
-        //         
-        //         var isSelected = theme.Name == UserSettings.Config.ColorThemeName;
-        //         if (!ImGui.Selectable($"{theme.Name}", isSelected, ImGuiSelectableFlags.DontClosePopups))
-        //             continue;
-        //
-        //         ThemeHandling.SetThemeAsUserTheme(theme);
-        //         _currentTheme = theme;
-        //         _currentThemeWithoutChanges = _currentTheme.Clone();
-        //         ImGui.CloseCurrentPopup();
-        //     }
-        //     ImGui.EndCombo();
-        // }
 
         if (FormInputs.AddDropdown(ref UserSettings.Config.ColorThemeName, 
                                    ThemeHandling.Themes.Select(t => t.Name), 
@@ -65,7 +46,10 @@ public static class ColorThemeEditor
         FormInputs.AddVerticalSpace();
         FormInputs.AddStringInput("Name", ref _currentTheme.Name);
         FormInputs.AddStringInput("Author", ref _currentTheme.Author);
-
+        _somethingChanged |= _currentTheme.Name != _currentThemeWithoutChanges.Name;
+        _somethingChanged |= _currentTheme.Author != _currentThemeWithoutChanges.Author;
+        
+        
         FormInputs.AddVerticalSpace();
         FormInputs.ApplyIndent();
         if (CustomComponents.DisablableButton("Save", _somethingChanged))
@@ -94,7 +78,6 @@ public static class ColorThemeEditor
         FormInputs.AddVerticalSpace();
         ImGui.Separator();
         FormInputs.AddVerticalSpace();
-        
         
         _somethingChanged = false;
         DrawColorEdits(colorFields);
@@ -170,10 +153,6 @@ public static class ColorThemeEditor
             {
                 CustomComponents.TooltipForLastItem(hint);
             }
-            // if (!string.IsNullOrEmpty(hint) && ImGui.IsItemHovered())
-            // {
-            //     ImGui.SetTooltip(hint);
-            // }
 
             if (isChanged)
             {
@@ -241,15 +220,7 @@ public static class ColorThemeEditor
                 T3Style.Apply();
                 FrameStats.Current.UiColorsChanged = true;
             }
-
-            //ImGui.SameLine(0, 10);
-            // ImGui.Text(Regex.Replace(f.Name, "(\\B[A-Z])", " $1"));
-            // if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-            // {
-            //     SetVariation(f, defaultVariation.Clone());
-            //     T3Style.Apply();
-            // }
-
+            
             if (!string.IsNullOrEmpty(hint) && ImGui.IsItemHovered())
             {
                 ImGui.SetTooltip(hint);

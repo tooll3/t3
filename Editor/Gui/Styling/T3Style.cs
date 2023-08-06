@@ -44,6 +44,7 @@ public static class T3Style
         style.Colors[(int)ImGuiCol.WindowBg] = UiColors.BackgroundGaps; // Only shines through at window edges
         style.Colors[(int)ImGuiCol.ChildBg] = UiColors.WindowBackground; // Graph see through strength
         style.Colors[(int)ImGuiCol.PopupBg] = UiColors.BackgroundPopup;
+        //style.Colors[(int)ImGuiCol.] =  UiColors.BackgroundPopup;
 
         style.Colors[(int)ImGuiCol.CheckMark] = UiColors.CheckMark;
         style.Colors[(int)ImGuiCol.TabActive] = UiColors.BackgroundTabActive;

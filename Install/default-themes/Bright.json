@@ -1,6 +1,6 @@
 {
   "Name": "Bright",
-  "Author": "unknown",
+  "Author": "T3",
   "Colors": {
     "ForegroundFull": {
       "X": 0.0,
@@ -231,9 +231,9 @@
       "W": 1.0
     },
     "ColorForDX11": {
-      "X": 0.853,
-      "Y": 0.313,
-      "Z": 0.855,
+      "X": 0.855,
+      "Y": 0.5018432,
+      "Z": 0.38894585,
       "W": 1.0
     },
     "ColorForCommands": {
@@ -244,8 +244,8 @@
     },
     "ColorForGpuData": {
       "X": 0.681,
-      "Y": 0.034,
-      "Z": 0.283,
+      "Y": 0.21843217,
+      "Z": 0.15247802,
       "W": 1.0
     },
     "WindowBackground": {
@@ -341,14 +341,14 @@
       "Opacity": 1.0
     },
     "ConnectionLines": {
-      "Brightness": 0.87,
+      "Brightness": 1.42,
       "Saturation": 1.0,
       "Opacity": 0.8
     },
     "OperatorBackgroundIdle": {
-      "Brightness": 0.9,
-      "Saturation": 1.0,
-      "Opacity": 0.79
+      "Brightness": 1.25,
+      "Saturation": 0.86,
+      "Opacity": 0.4
     },
     "OutputNodes": {
       "Brightness": 0.44,

@@ -83,8 +83,8 @@ public static class UiColors
     [T3Style.Hint(GroupTitle = "Datatype base colors (adjusted by variations below)",Description = "Fill color for something")]
     public static Color ColorForValues = new(0.525f, 0.550f, 0.554f, 1.000f);
     public static Color ColorForString = new(0.468f, 0.586f, 0.320f, 1.000f);
-    public static Color ColorForTextures = new (0.625f, 0, 0.43f, 1.000f);
-    public static Color ColorForDX11 = new(0.853f, 0.313f, 0.855f, 1.000f);
+    public static Color ColorForTextures = new (0.625f, 0, 0.54f, 1.000f);
+    public static Color ColorForDX11 = new(0.84f, 0.46f, 0.44f, 1.000f);
     public static Color ColorForCommands = new(0.132f, 0.722f, 0.762f, 1.000f);
-    public static Color ColorForGpuData = new(0.681f, 0.034f, 0.283f, 1.000f);
+    public static Color ColorForGpuData = new(0.72f, 0.2f, 0.18f, 1.000f);
 }

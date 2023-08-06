@@ -45,10 +45,10 @@ namespace T3.Editor.Gui.Graph
                                      ? ColorVariations.OperatorBackgroundHover.Apply(typeColor)
                                      : ColorVariations.OutputNodes.Apply(typeColor));
 
-                drawList.AddRectFilled(new Vector2(LastScreenRect.Min.X, LastScreenRect.Max.Y),
-                                 new Vector2(LastScreenRect.Max.X,
-                                             LastScreenRect.Max.Y + GraphNode.InputSlotThickness + GraphNode.InputSlotMargin),
-                                 ColorVariations.OperatorInputZone.Apply(typeColor));
+                // drawList.AddRectFilled(new Vector2(LastScreenRect.Min.X, LastScreenRect.Max.Y),
+                //                  new Vector2(LastScreenRect.Max.X,
+                //                              LastScreenRect.Max.Y + GraphNode.InputSlotThickness + GraphNode.InputSlotMargin),
+                //                  ColorVariations.OperatorInputZone.Apply(typeColor));
 
                 // Label
                 {

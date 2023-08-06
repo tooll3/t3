@@ -227,13 +227,13 @@
     "ColorForTextures": {
       "X": 0.625,
       "Y": 0.0,
-      "Z": 0.43,
+      "Z": 0.53676605,
       "W": 1.0
     },
     "ColorForDX11": {
-      "X": 0.7416268,
-      "Y": 0.15016276,
-      "Z": 0.7375156,
+      "X": 0.83732057,
+      "Y": 0.45515746,
+      "Z": 0.44023654,
       "W": 1.0
     },
     "ColorForCommands": {
@@ -244,8 +244,8 @@
     },
     "ColorForGpuData": {
       "X": 0.71770334,
-      "Y": 0.0,
-      "Z": 0.041389693,
+      "Y": 0.20298919,
+      "Z": 0.1761079,
       "W": 1.0
     },
     "WindowBackground": {
@@ -346,7 +346,7 @@
       "Opacity": 0.32
     },
     "OperatorBackgroundIdle": {
-      "Brightness": 0.9,
+      "Brightness": 0.71,
       "Saturation": 1.0,
       "Opacity": 0.3
     },
@@ -361,14 +361,14 @@
       "Opacity": 0.47
     },
     "ConnectionLines": {
-      "Brightness": 0.87,
+      "Brightness": 1.0,
       "Saturation": 1.0,
       "Opacity": 0.8
     },
     "OperatorInputZone": {
-      "Brightness": -0.7,
-      "Saturation": 0.68,
-      "Opacity": 0.75
+      "Brightness": 6.36,
+      "Saturation": 1.13,
+      "Opacity": 2.37
     }
   }
 }

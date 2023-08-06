@@ -65,6 +65,24 @@ public static class ThemeHandling
         UserSettings.Config.ColorThemeName = null;
     }
 
+    public static ColorTheme GetUserOrFactoryTheme()
+    {
+        var selectedThemeName = UserSettings.Config.ColorThemeName;
+        if (string.IsNullOrWhiteSpace(selectedThemeName))
+        {
+            return FactoryTheme;
+        }
+
+        var userTheme = Themes.FirstOrDefault(t => t.Name == selectedThemeName);
+        if (userTheme == null)
+        {
+            Log.Warning($"Couldn't load {selectedThemeName}");
+            return FactoryTheme;
+        }
+
+        return userTheme;
+    }
+    
     private static void LoadThemes()
     {
         Themes.Clear();
@@ -93,23 +111,12 @@ public static class ThemeHandling
 
     private static void ApplyUserConfigTheme()
     {
-        var selectedThemeName = UserSettings.Config.ColorThemeName;
-        if (string.IsNullOrWhiteSpace(selectedThemeName))
-        {
-            ApplyTheme(FactoryTheme);
-            return;
-        }
-
-        var userTheme = Themes.FirstOrDefault(t => t.Name == selectedThemeName);
-        if (userTheme == null)
-        {
-            Log.Warning($"Couldn't load {selectedThemeName}");
-            ApplyTheme(FactoryTheme);
-            return;
-        }
+        var userTheme = GetUserOrFactoryTheme();
 
         ApplyTheme(userTheme);
     }
+    
+
 
     /// <summary>
     /// Applies the colors to T3StyleColors

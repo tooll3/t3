@@ -151,7 +151,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.InputText("##symbolbrowserfilter", ref _filter.SearchString, 10);
 
             // Search input outline
-            _drawList.AddRect(posInScreen, posInScreen + size, UiColors.Gray);
+            _drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), UiColors.Gray);
 
             if (ImGui.IsKeyPressed((ImGuiKey)Key.Return))
             {
@@ -215,6 +215,8 @@ namespace T3.Editor.Gui.Graph.Interaction
         {
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(5, 5));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(10, 10));
+            
+            ImGui.PushStyleColor(ImGuiCol.FrameBg, UiColors.BackgroundPopup.Rgba);
             //var itemForHelpIsHovered = false;
 
             if (ImGui.BeginChildFrame(999, size))
@@ -275,7 +277,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                         var hoverColor = ColorVariations.OperatorBackgroundHover.Apply(color).Rgba;
                         hoverColor.W = 0.1f;
                         ImGui.PushStyleColor(ImGuiCol.HeaderHovered, hoverColor);
-                        ImGui.PushStyleColor(ImGuiCol.HeaderActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
+                        //ImGui.PushStyleColor(ImGuiCol.HeaderActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
                         ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
 
                         var isSelected = symbolUi == _selectedSymbolUi;
@@ -317,7 +319,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                         ImGui.NewLine();
 
-                        ImGui.PopStyleColor(4);
+                        ImGui.PopStyleColor(3);
                     }
                     ImGui.PopID();
                 }
@@ -325,6 +327,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             ImGui.EndChildFrame();
 
+            ImGui.PopStyleColor();
             ImGui.PopStyleVar(2);
         }
 
@@ -375,6 +378,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (!TryFindValidPanelPosition(ref position, size))
                 return;
 
+            ImGui.PushStyleColor(ImGuiCol.FrameBg, UiColors.BackgroundPopup.Rgba);
             ImGui.SetCursorPos(position);
             if (ImGui.BeginChildFrame(998, size))
             {
@@ -411,10 +415,11 @@ namespace T3.Editor.Gui.Graph.Interaction
                     }
                 }
 
+                ImGui.PopStyleVar();
                 ImGui.EndChildFrame();
             }
-
-            ImGui.PopStyleVar();
+            ImGui.PopStyleColor();
+            
         }
 
         private void DrawDescriptionPanel(Vector2 position, Vector2 size)
@@ -435,6 +440,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             ImGui.SetCursorPos(position);
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, Vector2.One); // Padding between panels
+            ImGui.PushStyleColor(ImGuiCol.FrameBg, UiColors.BackgroundPopup.Rgba);
 
             if (ImGui.BeginChildFrame(998, size))
             {
@@ -454,6 +460,7 @@ namespace T3.Editor.Gui.Graph.Interaction
                 ImGui.EndChildFrame();
             }
 
+            ImGui.PopStyleColor();
             ImGui.PopStyleVar();
         }
 
@@ -502,7 +509,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             ImGui.PushStyleColor(ImGuiCol.Button, ColorVariations.OperatorBackground.Apply(color).Rgba);
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, ColorVariations.OperatorBackgroundHover.Apply(color).Rgba);
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, ColorVariations.OperatorBackgroundHover.Apply(color).Rgba);
             ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
 
             ImGui.SameLine();

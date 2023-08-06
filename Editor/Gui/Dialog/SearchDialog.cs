@@ -162,7 +162,7 @@ namespace T3.Editor.Gui.Dialog
                 var hoverColor = ColorVariations.OperatorBackgroundHover.Apply(color).Rgba;
                 hoverColor.W = 0.1f;
                 ImGui.PushStyleColor(ImGuiCol.HeaderHovered, hoverColor);
-                ImGui.PushStyleColor(ImGuiCol.HeaderActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
+                //ImGui.PushStyleColor(ImGuiCol.HeaderActive, ColorVariations.OperatorInputZone.Apply(color).Rgba);
                 ImGui.PushStyleColor(ImGuiCol.Text, ColorVariations.OperatorLabel.Apply(color).Rgba);
                 ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(2, 4));
 
@@ -197,7 +197,7 @@ namespace T3.Editor.Gui.Dialog
                 ImGui.PopStyleColor();
                 
                 ImGui.PopStyleVar();
-                ImGui.PopStyleColor(4);
+                ImGui.PopStyleColor(3);
             }
             ImGui.PopID();
         }
