@@ -65,18 +65,18 @@ public partial class SymbolData
         InputValue InputDefaultValueCreator<T>() => new InputValue<T>();
 
         // build-in default types
-        RegisterType(typeof(bool), "bool",
-                     InputDefaultValueCreator<bool>,
-                     (writer, obj) => writer.WriteValue((bool)obj),
-                     jsonToken => jsonToken.Value<bool>());
-        RegisterType(typeof(int), "int",
-                     InputDefaultValueCreator<int>,
-                     (writer, obj) => writer.WriteValue((int)obj),
-                     jsonToken => jsonToken.Value<int>());
         RegisterType(typeof(float), "float",
                      InputDefaultValueCreator<float>,
                      (writer, obj) => writer.WriteValue((float)obj),
                      jsonToken => jsonToken.Value<float>());
+        RegisterType(typeof(int), "int",
+                     InputDefaultValueCreator<int>,
+                     (writer, obj) => writer.WriteValue((int)obj),
+                     jsonToken => jsonToken.Value<int>());
+        RegisterType(typeof(bool), "bool",
+                     InputDefaultValueCreator<bool>,
+                     (writer, obj) => writer.WriteValue((bool)obj),
+                     jsonToken => jsonToken.Value<bool>());
         RegisterType(typeof(double), "double",
                      InputDefaultValueCreator<double>,
                      (writer, obj) => writer.WriteValue((double)obj),
@@ -88,65 +88,6 @@ public partial class SymbolData
                      jsonToken => jsonToken.Value<string>());
 
         // system types
-        RegisterType(typeof(System.Collections.Generic.List<float>), "List<float>",
-                     () => new InputValue<List<float>>(new List<float>()),
-                     (writer, obj) =>
-                     {
-                         var list = (List<float>)obj;
-                         writer.WriteStartObject();
-                         writer.WritePropertyName("Values");
-                         writer.WriteStartArray();
-                         list.ForEach(writer.WriteValue);
-                         writer.WriteEndArray();
-                         writer.WriteEndObject();
-                     },
-                     jsonToken =>
-                     {
-                         var entries = jsonToken["Values"];
-                         var list = new List<float>(entries.Count());
-                         list.AddRange(entries.Select(entry => entry.Value<float>()));
-
-                         return list;
-                     });
-        RegisterType(typeof(System.Collections.Generic.List<string>), "List<string>",
-                     () => new InputValue<List<string>>(new List<string>()),
-                     (writer, obj) =>
-                     {
-                         var list = (List<string>)obj;
-                         writer.WriteStartObject();
-                         writer.WritePropertyName("Values");
-                         writer.WriteStartArray();
-                         list.ForEach(writer.WriteValue);
-                         writer.WriteEndArray();
-                         writer.WriteEndObject();
-                     },
-                     jsonToken =>
-                     {
-                         var entries = jsonToken["Values"];
-                         var list = new List<string>(entries.Count());
-                         list.AddRange(entries.Select(entry => entry.Value<string>()));
-                         return list;
-                     });
-        RegisterType(typeof(System.Numerics.Quaternion), "Quaternion",
-                     () => new InputValue<System.Numerics.Quaternion>(System.Numerics.Quaternion.Identity),
-                     (writer, obj) =>
-                     {
-                         var quaternion = (System.Numerics.Quaternion)obj;
-                         writer.WriteStartObject();
-                         writer.WriteValue("X", quaternion.X);
-                         writer.WriteValue("Y", quaternion.Y);
-                         writer.WriteValue("Z", quaternion.Z);
-                         writer.WriteValue("W", quaternion.W);
-                         writer.WriteEndObject();
-                     },
-                     jsonToken =>
-                     {
-                         float x = jsonToken["X"].Value<float>();
-                         float y = jsonToken["Y"].Value<float>();
-                         float z = jsonToken["Z"].Value<float>();
-                         float w = jsonToken["W"].Value<float>();
-                         return new System.Numerics.Quaternion(x, y, z, w);
-                     });
         RegisterType(typeof(System.Numerics.Vector2), "Vector2",
                      InputDefaultValueCreator<System.Numerics.Vector2>,
                      (writer, obj) =>
@@ -201,6 +142,68 @@ public partial class SymbolData
                          float w = jsonToken["W"].Value<float>();
                          return new Vector4(x, y, z, w);
                      });
+        RegisterType(typeof(System.Numerics.Quaternion), "Quaternion",
+                     () => new InputValue<System.Numerics.Quaternion>(System.Numerics.Quaternion.Identity),
+                     (writer, obj) =>
+                     {
+                         var quaternion = (System.Numerics.Quaternion)obj;
+                         writer.WriteStartObject();
+                         writer.WriteValue("X", quaternion.X);
+                         writer.WriteValue("Y", quaternion.Y);
+                         writer.WriteValue("Z", quaternion.Z);
+                         writer.WriteValue("W", quaternion.W);
+                         writer.WriteEndObject();
+                     },
+                     jsonToken =>
+                     {
+                         float x = jsonToken["X"].Value<float>();
+                         float y = jsonToken["Y"].Value<float>();
+                         float z = jsonToken["Z"].Value<float>();
+                         float w = jsonToken["W"].Value<float>();
+                         return new System.Numerics.Quaternion(x, y, z, w);
+                     });        
+        
+        RegisterType(typeof(System.Collections.Generic.List<float>), "List<float>",
+                     () => new InputValue<List<float>>(new List<float>()),
+                     (writer, obj) =>
+                     {
+                         var list = (List<float>)obj;
+                         writer.WriteStartObject();
+                         writer.WritePropertyName("Values");
+                         writer.WriteStartArray();
+                         list.ForEach(writer.WriteValue);
+                         writer.WriteEndArray();
+                         writer.WriteEndObject();
+                     },
+                     jsonToken =>
+                     {
+                         var entries = jsonToken["Values"];
+                         var list = new List<float>(entries.Count());
+                         list.AddRange(entries.Select(entry => entry.Value<float>()));
+
+                         return list;
+                     });
+        RegisterType(typeof(System.Collections.Generic.List<string>), "List<string>",
+                     () => new InputValue<List<string>>(new List<string>()),
+                     (writer, obj) =>
+                     {
+                         var list = (List<string>)obj;
+                         writer.WriteStartObject();
+                         writer.WritePropertyName("Values");
+                         writer.WriteStartArray();
+                         list.ForEach(writer.WriteValue);
+                         writer.WriteEndArray();
+                         writer.WriteEndObject();
+                     },
+                     jsonToken =>
+                     {
+                         var entries = jsonToken["Values"];
+                         var list = new List<string>(entries.Count());
+                         list.AddRange(entries.Select(entry => entry.Value<string>()));
+                         return list;
+                     });
+
+
         RegisterType(typeof(System.Text.StringBuilder), "StringBuilder",
                      () => new InputValue<StringBuilder>(new StringBuilder()));
 
@@ -213,6 +216,7 @@ public partial class SymbolData
 
         RegisterType(typeof(Command), "Command",
                      () => new InputValue<Command>(null));
+        
         RegisterType(typeof(Curve), "Curve",
                      InputDefaultValueCreator<Curve>,
                      (writer, obj) =>
@@ -237,10 +241,8 @@ public partial class SymbolData
 
                          return curve;
                      });
-        RegisterType(typeof(T3.Core.Operator.GizmoVisibility), "GizmoVisibility",
-                     InputDefaultValueCreator<T3.Core.Operator.GizmoVisibility>,
-                     (writer, obj) => writer.WriteValue(obj.ToString()),
-                     JsonToEnumValue<T3.Core.Operator.GizmoVisibility>);
+
+        
         RegisterType(typeof(DataTypes.Gradient), "Gradient",
                      InputDefaultValueCreator<Gradient>,
                      (writer, obj) =>
@@ -266,6 +268,11 @@ public partial class SymbolData
                      });
         RegisterType(typeof(ParticleSystem), "ParticleSystem",
                      () => new InputValue<ParticleSystem>(null));
+        
+        RegisterType(typeof(T3.Core.Operator.GizmoVisibility), "GizmoVisibility",
+                     InputDefaultValueCreator<T3.Core.Operator.GizmoVisibility>,
+                     (writer, obj) => writer.WriteValue(obj.ToString()),
+                     JsonToEnumValue<T3.Core.Operator.GizmoVisibility>);
 
         RegisterType(typeof(Point[]), "Point",
                      () => new InputValue<Point[]>());
@@ -303,7 +310,6 @@ public partial class SymbolData
                      () => new InputValue<Texture3dWithViews>(new Texture3dWithViews()));
         RegisterType(typeof(MeshBuffers), "MeshBuffers",
                      () => new InputValue<MeshBuffers>(null));
-        
         
         RegisterType(typeof(DataSet), "DataSet",
                      () => new InputValue<DataSet>());

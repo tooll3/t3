@@ -200,13 +200,20 @@ internal static class InputsAndOutputs
         var root = syntaxTree.GetRoot();
 
         var inputNodeFinder = new InputsAndOutputs.InputNodeByTypeFinder();
-        root = inputNodeFinder.Visit(root);
+        var blockFinder = new InputsAndOutputs.ClassDeclarationFinder();
+        
         if (inputNodeFinder.LastInputNodeFound == null)
         {
-            Log.Error("Could not add an input as no previous one was found, this case is missing and must be added.");
-            return;
+            blockFinder.Visit(root);
+            if (blockFinder.ClassDeclarationNode == null)
+            {
+                Log.Error("Can't find class declaration.");
+                return;
+            }
         }
-
+        
+        root = inputNodeFinder.Visit(root);
+        
         var @namespace = inputType.Namespace;
         if (@namespace == "System")
             @namespace = String.Empty;
@@ -218,7 +225,23 @@ internal static class InputsAndOutputs
         var inputString = "        public readonly " + slotString + " " + inputName + " = new " + slotString + "();\n";
 
         var inputDeclaration = SyntaxFactory.ParseMemberDeclaration(attributeString + inputString);
-        root = root.InsertNodesAfter(inputNodeFinder.LastInputNodeFound, new[] { inputDeclaration });
+        if (inputNodeFinder.LastInputNodeFound != null)
+        {
+            root = root.InsertNodesAfter(inputNodeFinder.LastInputNodeFound, new[] { inputDeclaration });
+        }
+        else if (blockFinder.ClassDeclarationNode != null)
+        {
+            var node = blockFinder.ClassDeclarationNode;
+            var classDeclaration = node.AddMembers(inputDeclaration);
+            root = SyntaxNodeExtensions.ReplaceNode(root, (SyntaxNode)blockFinder.ClassDeclarationNode, (SyntaxNode)classDeclaration);
+        }
+        else
+        {
+            var theClass = root.DescendantNodes().OfType<ClassDeclarationSyntax>().First();
+            var classDeclarationSyntax = theClass.AddMembers(inputDeclaration);
+            Log.Info($"{classDeclarationSyntax}");
+            return;
+        }
 
         var newSource = root.GetText().ToString();
         Log.Debug(newSource);
@@ -243,6 +266,7 @@ internal static class InputsAndOutputs
 
         var outputNodeFinder = new InputsAndOutputs.OutputNodeByTypeFinder();
         root = outputNodeFinder.Visit(root);
+        
         var blockFinder = new InputsAndOutputs.ClassDeclarationFinder();
         if (outputNodeFinder.LastOutputNodeFound == null)
         {

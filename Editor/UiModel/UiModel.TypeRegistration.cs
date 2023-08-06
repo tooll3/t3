@@ -71,24 +71,28 @@ public partial class UiSymbolData
     private static void RegisterUiTypes()
     {
         // build-in types
-        RegisterUiType(typeof(bool), new ValueUiProperties(), () => new BoolInputUi(), () => new ValueOutputUi<bool>());
-        RegisterUiType(typeof(double), new ValueUiProperties(), () => new FloatInputUi(), () => new FloatOutputUi());
-
         RegisterUiType(typeof(float), new ValueUiProperties(), () => new FloatInputUi(), () => new FloatOutputUi());
         RegisterUiType(typeof(int), new ValueUiProperties(), () => new IntInputUi(), () => new ValueOutputUi<int>());
+        RegisterUiType(typeof(bool), new ValueUiProperties(), () => new BoolInputUi(), () => new ValueOutputUi<bool>());
+        RegisterUiType(typeof(double), new ValueUiProperties(), () => new FloatInputUi(), () => new FloatOutputUi());
         RegisterUiType(typeof(string), new StringUiProperties(), () => new StringInputUi(), () => new ValueOutputUi<string>());
-
+        
         // system types
-        RegisterUiType(typeof(System.Collections.Generic.List<float>), new ValueUiProperties(), () => new FloatListInputUi(),
-                       () => new FloatListOutputUi());
-        RegisterUiType(typeof(System.Collections.Generic.List<string>), new StringUiProperties(), () => new StringListInputUi(),
-                       () => new StringListOutputUi());
         RegisterUiType(typeof(System.Numerics.Vector2), new ValueUiProperties(), () => new Float2InputUi(),
                        () => new VectorOutputUi<System.Numerics.Vector2>());
         RegisterUiType(typeof(System.Numerics.Vector3), new ValueUiProperties(), () => new Float3InputUi(),
                        () => new VectorOutputUi<System.Numerics.Vector3>());
         RegisterUiType(typeof(System.Numerics.Vector4), new ValueUiProperties(), () => new Float4InputUi(),
                        () => new VectorOutputUi<System.Numerics.Vector4>());
+        RegisterUiType(typeof(System.Numerics.Quaternion), new ValueUiProperties(), () => new Float4InputUi(),
+                       () => new VectorOutputUi<System.Numerics.Quaternion>());
+
+        
+        RegisterUiType(typeof(System.Collections.Generic.List<float>), new ValueUiProperties(), () => new FloatListInputUi(),
+                       () => new FloatListOutputUi());
+        RegisterUiType(typeof(System.Collections.Generic.List<string>), new StringUiProperties(), () => new StringListInputUi(),
+                       () => new StringListOutputUi());
+        
         RegisterUiType(typeof(System.Text.StringBuilder), new StringUiProperties(), () => new FallbackInputUi<StringBuilder>(),
                        () => new ValueOutputUi<System.Text.StringBuilder>());
 
@@ -127,6 +131,7 @@ public partial class UiSymbolData
 
         RegisterUiType(typeof(DataSet), new ValueUiProperties(),
                        () => new FallbackInputUi<DataSet>(), () => new DataSetOutputUi());
+        
         // sharpdx types
         RegisterUiType(typeof(SharpDX.Int3), new ValueUiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
         RegisterUiType(typeof(SharpDX.Size2), new ValueUiProperties(), () => new Size2InputUi(), () => new ValueOutputUi<Size2>());

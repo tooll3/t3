@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Windows.Forms.VisualStyles;
 using ImGuiNET;
 
 namespace T3.Editor.Gui.UiHelpers
@@ -53,7 +54,8 @@ namespace T3.Editor.Gui.UiHelpers
             ImGui.SetNextWindowSize(DialogSize, ImGuiCond.FirstUseEver);
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(Padding, Padding));
 
-            if (!ImGui.BeginPopupModal(title))
+            bool isOpen = true;
+            if (!ImGui.BeginPopupModal(title, ref isOpen, ImGuiWindowFlags.Popup | Flags ))
                 return false;
             
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, ItemSpacing);
@@ -82,5 +84,6 @@ namespace T3.Editor.Gui.UiHelpers
         protected Vector2 DialogSize = new(500, 250);
         protected Vector2 ItemSpacing = new Vector2(4, 10);
         protected float Padding = 20;
+        protected ImGuiWindowFlags Flags = ImGuiWindowFlags.None;
     }
 }
