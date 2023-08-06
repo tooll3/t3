@@ -80,10 +80,10 @@ namespace T3.Core.Operator.Slots
         
         public virtual void RestoreUpdateAction()
         {
-            // This will happen when operators are recompiled
+            // This will happen when operators are recompiled and output slots are disconnected
             if (_keepOriginalUpdateAction == null)
             {
-                //Log.Warning("Can't restore undefined update action");
+                UpdateAction = null;
                 return;
             }
             
