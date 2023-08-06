@@ -1,6 +1,6 @@
 {
   "Name": "Default",
-  "Author": "unknown",
+  "Author": "T3",
   "Colors": {
     "ForegroundFull": {
       "X": 1.0,
@@ -27,9 +27,9 @@
       "W": 0.2
     },
     "CheckMark": {
-      "X": 0.0,
-      "Y": 0.0,
-      "Z": 0.0,
+      "X": 0.8947368,
+      "Y": 0.8947368,
+      "Z": 0.8947368,
       "W": 0.8
     },
     "Background": {
@@ -123,15 +123,15 @@
       "W": 1.0
     },
     "StatusWarning": {
-      "X": 0.7960785,
-      "Y": 0.07450981,
-      "Z": 0.4431373,
+      "X": 0.97129184,
+      "Y": 0.29225233,
+      "Z": 0.019259201,
       "W": 1.0
     },
     "StatusError": {
-      "X": 0.7960785,
-      "Y": 0.07450981,
-      "Z": 0.4431373,
+      "X": 0.8660287,
+      "Y": 0.0,
+      "Z": 0.36770144,
       "W": 1.0
     },
     "StatusAnimated": {
@@ -231,9 +231,9 @@
       "W": 1.0
     },
     "ColorForDX11": {
-      "X": 0.853,
-      "Y": 0.313,
-      "Z": 0.855,
+      "X": 0.7416268,
+      "Y": 0.15016276,
+      "Z": 0.7375156,
       "W": 1.0
     },
     "ColorForCommands": {
@@ -243,9 +243,9 @@
       "W": 1.0
     },
     "ColorForGpuData": {
-      "X": 0.681,
-      "Y": 0.034,
-      "Z": 0.283,
+      "X": 0.71770334,
+      "Y": 0.0,
+      "Z": 0.041389693,
       "W": 1.0
     },
     "WindowBackground": {
@@ -295,6 +295,18 @@
       "Y": 0.0,
       "Z": 0.0,
       "W": 1.0
+    },
+    "GridLines": {
+      "X": 0.0,
+      "Y": 0.0,
+      "Z": 0.0,
+      "W": 1.0
+    },
+    "PopupBorder": {
+      "X": 0.0,
+      "Y": 0.0,
+      "Z": 0.0,
+      "W": 1.0
     }
   },
   "Variations": {
@@ -314,7 +326,7 @@
       "Opacity": 1.0
     },
     "OperatorLabel": {
-      "Brightness": 1.17,
+      "Brightness": 1.33,
       "Saturation": 0.53,
       "Opacity": 1.0
     },
@@ -332,6 +344,31 @@
       "Brightness": 0.24,
       "Saturation": 0.36,
       "Opacity": 0.32
+    },
+    "OperatorBackgroundIdle": {
+      "Brightness": 0.9,
+      "Saturation": 1.0,
+      "Opacity": 0.3
+    },
+    "OperatorBackgroundHover": {
+      "Brightness": 0.92,
+      "Saturation": 1.0,
+      "Opacity": 1.0
+    },
+    "OutputNodes": {
+      "Brightness": 0.44,
+      "Saturation": 0.7,
+      "Opacity": 0.47
+    },
+    "ConnectionLines": {
+      "Brightness": 0.87,
+      "Saturation": 1.0,
+      "Opacity": 0.8
+    },
+    "OperatorInputZone": {
+      "Brightness": -0.7,
+      "Saturation": 0.68,
+      "Opacity": 0.75
     }
   }
 }

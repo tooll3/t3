@@ -1,77 +1,77 @@
 {
-  "Name": "Bright",
+  "Name": "DarkContrast",
   "Author": "unknown",
   "Colors": {
     "ForegroundFull": {
-      "X": 0.0,
-      "Y": 0.0,
-      "Z": 0.0,
+      "X": 1.0,
+      "Y": 1.0,
+      "Z": 1.0,
       "W": 1.0
     },
     "Text": {
-      "X": 0.0,
-      "Y": 0.0,
-      "Z": 0.0,
-      "W": 1.0
+      "X": 1.0,
+      "Y": 1.0,
+      "Z": 1.0,
+      "W": 0.9
     },
     "TextMuted": {
-      "X": 0.0,
-      "Y": 0.0,
-      "Z": 0.0,
-      "W": 0.64
+      "X": 1.0,
+      "Y": 1.0,
+      "Z": 1.0,
+      "W": 0.5
     },
     "TextDisabled": {
-      "X": 0.42999998,
-      "Y": 0.42999998,
-      "Z": 0.42999998,
+      "X": 1.0,
+      "Y": 1.0,
+      "Z": 1.0,
       "W": 0.2
     },
     "CheckMark": {
-      "X": 0.25,
-      "Y": 0.25,
-      "Z": 0.25,
+      "X": 0.0,
+      "Y": 0.0,
+      "Z": 0.0,
       "W": 0.8
     },
     "Background": {
-      "X": 0.81,
-      "Y": 0.81,
-      "Z": 0.81,
+      "X": 0.1,
+      "Y": 0.1,
+      "Z": 0.1,
       "W": 1.0
     },
     "BackgroundFull": {
-      "X": 1.0,
-      "Y": 1.0,
-      "Z": 1.0,
+      "X": 0.0,
+      "Y": 0.0,
+      "Z": 0.0,
       "W": 1.0
     },
     "BackgroundButton": {
-      "X": 1.0,
-      "Y": 1.0,
-      "Z": 1.0,
-      "W": 0.46411484
+      "X": 0.16,
+      "Y": 0.16,
+      "Z": 0.16,
+      "W": 0.8
     },
     "BackgroundHover": {
-      "X": 0.6922985,
-      "Y": 0.9783882,
-      "Z": 1.0,
-      "W": 0.45
+      "X": 0.26,
+      "Y": 0.26,
+      "Z": 0.26,
+      "W": 0.8
     },
     "BackgroundActive": {
-      "X": 0.529707,
-      "Y": 0.5290767,
-      "Z": 0.5311005,
+      "X": 0.27058825,
+      "Y": 0.57254905,
+      "Z": 1.0,
       "W": 1.0
     },
     "CanvasGrid": {
       "X": 0.0,
       "Y": 0.0,
       "Z": 0.0,
-      "W": 0.050000004
+      "W": 0.15
     },
     "BackgroundTabActive": {
-      "X": 0.867451,
-      "Y": 0.867451,
-      "Z": 0.867451,
+      "X": 0.227451,
+      "Y": 0.227451,
+      "Z": 0.227451,
       "W": 1.0
     },
     "BackgroundTabInActive": {
@@ -81,21 +81,21 @@
       "W": 0.8000001
     },
     "BackgroundInputField": {
-      "X": 1.0,
-      "Y": 1.0,
-      "Z": 1.0,
-      "W": 0.41148326
+      "X": 0.13333334,
+      "Y": 0.13333334,
+      "Z": 0.13333334,
+      "W": 1.0
     },
     "BackgroundInputFieldHover": {
-      "X": 0.9186603,
-      "Y": 0.9158194,
-      "Z": 0.9151594,
+      "X": 0.1,
+      "Y": 0.1,
+      "Z": 0.1,
       "W": 1.0
     },
     "BackgroundInputFieldActive": {
-      "X": 0.75,
-      "Y": 0.75,
-      "Z": 0.75,
+      "X": 0.0,
+      "Y": 0.0,
+      "Z": 0.0,
       "W": 1.0
     },
     "Gray": {
@@ -111,8 +111,8 @@
       "W": 0.25
     },
     "StatusAutomated": {
-      "X": 0.30362266,
-      "Y": 0.56964743,
+      "X": 0.6,
+      "Y": 0.6,
       "Z": 1.0,
       "W": 1.0
     },
@@ -135,28 +135,28 @@
       "W": 1.0
     },
     "StatusAnimated": {
-      "X": 0.83253586,
-      "Y": 0.34402567,
+      "X": 1.0,
+      "Y": 0.46,
       "Z": 0.0,
       "W": 1.0
     },
     "Selection": {
-      "X": 0.0,
-      "Y": 0.75685143,
+      "X": 1.0,
+      "Y": 1.0,
       "Z": 1.0,
       "W": 1.0
     },
     "WidgetValueText": {
-      "X": 0.0,
-      "Y": 0.0,
-      "Z": 0.0,
+      "X": 1.0,
+      "Y": 1.0,
+      "Z": 1.0,
       "W": 0.5
     },
     "WidgetTitle": {
-      "X": 0.25,
-      "Y": 0.25,
-      "Z": 0.25,
-      "W": 0.98
+      "X": 1.0,
+      "Y": 1.0,
+      "Z": 1.0,
+      "W": 0.65
     },
     "WidgetValueTextHover": {
       "X": 1.0,
@@ -165,10 +165,10 @@
       "W": 1.2
     },
     "WidgetLine": {
-      "X": 0.029999971,
-      "Y": 0.029999971,
-      "Z": 0.029999971,
-      "W": 0.6650718
+      "X": 1.0,
+      "Y": 1.0,
+      "Z": 1.0,
+      "W": 0.3
     },
     "WidgetLineHover": {
       "X": 1.0,
@@ -177,14 +177,14 @@
       "W": 0.7
     },
     "WidgetAxis": {
-      "X": 1.0,
-      "Y": 1.0,
-      "Z": 1.0,
-      "W": 0.4
+      "X": 0.0,
+      "Y": 0.0,
+      "Z": 0.0,
+      "W": 0.3
     },
     "WidgetActiveLine": {
-      "X": 0.8,
-      "Y": 0.36800003,
+      "X": 1.0,
+      "Y": 0.46,
       "Z": 0.0,
       "W": 1.0
     },
@@ -231,9 +231,9 @@
       "W": 1.0
     },
     "ColorForDX11": {
-      "X": 0.853,
-      "Y": 0.313,
-      "Z": 0.855,
+      "X": 0.52400047,
+      "Y": 0.17792541,
+      "Z": 0.53588516,
       "W": 1.0
     },
     "ColorForCommands": {
@@ -244,51 +244,51 @@
     },
     "ColorForGpuData": {
       "X": 0.681,
-      "Y": 0.034,
-      "Z": 0.283,
+      "Y": 0.16790918,
+      "Z": 0.06183958,
       "W": 1.0
     },
     "WindowBackground": {
-      "X": 0.67464113,
-      "Y": 0.67464113,
-      "Z": 0.67464113,
-      "W": 1.0
-    },
-    "ModalWindowDimBg": {
-      "X": 1.0,
-      "Y": 1.0,
-      "Z": 1.0,
-      "W": 0.0
-    },
-    "ScrollbarBackground": {
-      "X": 0.8133971,
-      "Y": 0.8133971,
-      "Z": 0.8133971,
-      "W": 0.53
+      "X": 0.120000005,
+      "Y": 0.120000005,
+      "Z": 0.120000005,
+      "W": 0.98
     },
     "BackgroundPopup": {
-      "X": 0.87081337,
-      "Y": 0.87081337,
-      "Z": 0.87081337,
+      "X": 0.100000024,
+      "Y": 0.100000024,
+      "Z": 0.100000024,
+      "W": 0.98
+    },
+    "ChildBackground": {
+      "X": 0.08133972,
+      "Y": 0.08133972,
+      "Z": 0.08133972,
+      "W": 1.0
+    },
+    "ScrollbarBackground": {
+      "X": 0.1333971,
+      "Y": 0.1333971,
+      "Z": 0.1333971,
+      "W": 0.53
+    },
+    "BackgroundGaps": {
+      "X": 0.0,
+      "Y": 0.0,
+      "Z": 0.0,
       "W": 1.0
     },
     "ScrollbarHandle": {
-      "X": 0.13397127,
-      "Y": 0.13397127,
-      "Z": 0.13397127,
+      "X": 0.3639713,
+      "Y": 0.3639713,
+      "Z": 0.3639713,
       "W": 0.33
     },
-    "ChildBackground": {
-      "X": 0.74552536,
-      "Y": 0.7435671,
-      "Z": 0.74641144,
-      "W": 0.9952153
-    },
-    "BackgroundGaps": {
-      "X": 0.4892823,
-      "Y": 0.4892823,
-      "Z": 0.4892823,
-      "W": 1.0
+    "ModalWindowDimBg": {
+      "X": 1.0,
+      "Y": 0.9535193,
+      "Z": 0.9837248,
+      "W": 0.1
     },
     "WindowBorder": {
       "X": 0.0,
@@ -296,74 +296,73 @@
       "Z": 0.0,
       "W": 1.0
     },
-    "PopupBorder": {
-      "X": 0.0,
-      "Y": 0.0,
-      "Z": 0.0,
-      "W": 1.0
-    },
     "GridLines": {
-      "X": 0.0,
-      "Y": 0.0,
-      "Z": 0.0,
+      "X": 0.17224878,
+      "Y": 0.17224878,
+      "Z": 0.17224878,
       "W": 1.0
     }
   },
   "Variations": {
-    "OperatorLabel": {
-      "Brightness": 0.4,
-      "Saturation": 1.28,
+    "Highlight": {
+      "Brightness": 1.14,
+      "Saturation": 1.2,
       "Opacity": 1.0
     },
-    "Operator": {
-      "Brightness": 0.97,
+    "Muted": {
+      "Brightness": 0.5,
       "Saturation": 0.7,
+      "Opacity": 0.6
+    },
+    "Operator": {
+      "Brightness": 0.4,
+      "Saturation": 0.7,
+      "Opacity": 1.0
+    },
+    "OperatorLabel": {
+      "Brightness": 1.53,
+      "Saturation": 0.53,
       "Opacity": 1.0
     },
     "OperatorIdle": {
       "Brightness": 1.0,
       "Saturation": 1.0,
-      "Opacity": 0.59
-    },
-    "OperatorOutline": {
-      "Brightness": 0.95,
-      "Saturation": 0.36,
-      "Opacity": 1.23
+      "Opacity": 0.2
     },
     "OperatorBackground": {
-      "Brightness": 1.71,
-      "Saturation": 0.68,
+      "Brightness": 0.52,
+      "Saturation": 0.99,
       "Opacity": 1.0
     },
-    "Highlight": {
-      "Brightness": 0.95,
-      "Saturation": 1.06,
-      "Opacity": 1.0
+    "OperatorOutline": {
+      "Brightness": 0.24,
+      "Saturation": 0.36,
+      "Opacity": 0.32
     },
     "ConnectionLines": {
-      "Brightness": 0.87,
+      "Brightness": 0.92,
       "Saturation": 1.0,
       "Opacity": 0.8
     },
     "OperatorBackgroundIdle": {
-      "Brightness": 0.9,
+      "Brightness": 0.5,
       "Saturation": 1.0,
-      "Opacity": 0.79
-    },
-    "OutputNodes": {
-      "Brightness": 0.44,
-      "Saturation": 0.7,
-      "Opacity": 0.47
-    },
-    "OperatorInputZone": {
-      "Brightness": -0.7,
-      "Saturation": 0.68,
-      "Opacity": 0.75
+      "Opacity": 0.56
     },
     "OperatorBackgroundHover": {
-      "Brightness": 0.92,
+      "Brightness": 0.75,
       "Saturation": 1.0,
       "Opacity": 1.0
+    },
+    "OutputNodes": {
+      "Brightness": 0.35,
+      "Saturation": 0.7,
+      "Opacity": 0.4
+    },
+    "OperatorInputZone": {
+      "Brightness": 0.15,
+      "Saturation": 0.7,
+      "Opacity": 0.7
     }
   }
 }

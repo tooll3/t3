@@ -119,7 +119,7 @@ namespace T3.Editor.Gui.Windows
                 ImGui.TreePop();
             }
 
-            if (ImGui.TreeNode("Colors"))
+            if (ImGui.TreeNode("Color Theme"))
             {
                 ColorThemeEditor.DrawEditor();
                 // ColorVariations.DrawSettingsUi();
@@ -184,10 +184,7 @@ namespace T3.Editor.Gui.Windows
                 changed |= FormInputs.AddFloat("Gizmo size",
                                                                ref UserSettings.Config.GizmoSize,
                                                                0.0f, 10f, 0.01f, true);                        
-
-                changed |= FormInputs.AddFloat("Tooltip delay in Seconds",
-                                                               ref UserSettings.Config.TooltipDelay,
-                                                               0.0f, 30f, 0.01f, true);        
+                
                 
                 ImGui.TreePop();
             }

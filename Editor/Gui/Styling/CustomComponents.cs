@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
@@ -13,6 +12,25 @@ namespace T3.Editor.Gui.Styling
 {
     internal static class CustomComponents
     {
+        /// <summary>
+        /// This needs to be called once a frame
+        /// </summary>
+        public static void BeginFrame()
+        {
+            var frameDuration = 1 / ImGui.GetIO().Framerate;
+            if (FrameStats.Last.SomethingWithTooltipHovered)
+            {
+                _toolTipHoverDelay -= frameDuration;
+                _timeSinceTooltipHover = 0;
+            }
+            else
+            {
+                _timeSinceTooltipHover += frameDuration;
+                if(_timeSinceTooltipHover > 0.2)
+                    _toolTipHoverDelay = 0.6f;
+            }
+        }
+        
         public static bool JogDial(string label, ref double delta, Vector2 size)
         {
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1, 0.5f));
@@ -99,7 +117,7 @@ namespace T3.Editor.Gui.Styling
                 ImGui.PushStyleColor(ImGuiCol.Button, UiColors.Text.Rgba);
                 ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Text.Rgba);
                 ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.Text.Rgba);
-                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ChildBackground.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.WindowBackground.Rgba);
             }
 
             if (ImGui.Button(label, size) || trigger)
@@ -122,7 +140,7 @@ namespace T3.Editor.Gui.Styling
 
             var stateTextColor = isSelected
                                  ? UiColors.ForegroundFull.Rgba
-                                 : UiColors.ChildBackground.Rgba;
+                                 : UiColors.WindowBackground.Rgba;
             ImGui.PushStyleColor(ImGuiCol.Text, stateTextColor);
 
             var padding = string.IsNullOrEmpty(label) ? new Vector2(0.1f, 0.5f) : new Vector2(0.5f, 0.5f);
@@ -195,7 +213,7 @@ namespace T3.Editor.Gui.Styling
                 else if (state == ButtonStates.Disabled)
                     c = UiColors.TextDisabled;
                 else if (state == ButtonStates.Activated)
-                    c = UiColors.ChildBackground;
+                    c = UiColors.WindowBackground;
                 else
                     c = UiColors.Text;
 
@@ -313,8 +331,9 @@ namespace T3.Editor.Gui.Styling
         public static void HelpText(string text)
         {
             ImGui.PushFont(Fonts.FontSmall);
-            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Gray.Rgba);
-            ImGui.TextUnformatted(text);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            //ImGui.TextUnformatted(text);
+            ImGui.TextWrapped(text);
             ImGui.PopStyleColor();
             ImGui.PopFont();
         }
@@ -391,22 +410,14 @@ namespace T3.Editor.Gui.Styling
 
         public static void TooltipForLastItem(Color color, string message, string additionalNotes = null, bool useHoverDelay = true)
         {
-            if (!ImGui.IsAnyItemHovered())
-            {
-                _hoverStartTime = -1;
-                return;
-            }
-
             if (!ImGui.IsItemHovered())
                 return;
+            
+            FrameStats.Current.SomethingWithTooltipHovered = true;
 
-            if (_hoverStartTime <= 0)
-                _hoverStartTime = ImGui.GetTime();
-
-            var hoverDuration = ImGui.GetTime() - _hoverStartTime;
-            if (useHoverDelay && !(hoverDuration > UserSettings.Config.TooltipDelay))
+            if (_toolTipHoverDelay > 0)
                 return;
-
+            
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
             ImGui.BeginTooltip();
             ImGui.PushTextWrapPos(300);
@@ -427,7 +438,8 @@ namespace T3.Editor.Gui.Styling
             TooltipForLastItem(UiColors.Text, message, additionalNotes, useHoverDelay);
         }
 
-        private static double _hoverStartTime;
+        private static double _toolTipHoverDelay;
+        private static double _timeSinceTooltipHover;
 
         // TODO: this should be merged with FormInputs.SegmentedEnumButton
         public static bool DrawSegmentedToggle(ref int currentIndex, List<string> options)

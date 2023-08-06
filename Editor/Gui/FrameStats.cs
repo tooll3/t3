@@ -34,6 +34,7 @@ namespace T3.Editor.Gui
             public bool HasAnimatedParameters => HasKeyframesBeforeCurrentTime || HasKeyframesAfterCurrentTime;
             public bool IsItemContextMenuOpen;
             public bool UiColorsChanged;
+            public bool SomethingWithTooltipHovered;
             
             /// <summary>
             /// This is reset on Frame start and can be useful for allow context menu to stay open even if a
@@ -50,6 +51,7 @@ namespace T3.Editor.Gui
                 IsItemContextMenuOpen = false;
                 UiColorsChanged = false;
                 OpenedPopUpName = string.Empty;
+                SomethingWithTooltipHovered = false;
             }
 
         }

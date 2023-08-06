@@ -68,10 +68,10 @@ public class T3Ui
 
     public void ProcessFrame()
     {
-        
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
 
-        FormInputs.ResetIndent();
+        CustomComponents.BeginFrame();
+        FormInputs.BeginFrame();
         InitializeAfterAppWindowReady();
             
         // Prepare the current frame 

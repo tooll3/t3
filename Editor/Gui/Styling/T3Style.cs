@@ -13,6 +13,7 @@ public static class T3Style
 {
     public class HintAttribute : System.Attribute
     {
+        public string GroupTitle;
         public string Description;
     }
 
@@ -25,7 +26,7 @@ public static class T3Style
         style.Colors[(int)ImGuiCol.TextDisabled] = UiColors.TextDisabled;
         style.Colors[(int)ImGuiCol.Button] = UiColors.BackgroundButton;
         style.Colors[(int)ImGuiCol.ButtonHovered] = UiColors.BackgroundHover;
-        style.Colors[(int)ImGuiCol.Border] =  UiColors.WindowBorder;
+        style.Colors[(int)ImGuiCol.Border] =  UiColors.PopupBorder;
         style.Colors[(int)ImGuiCol.BorderShadow] = UiColors.BackgroundGaps;
         style.Colors[(int)ImGuiCol.FrameBg] = UiColors.BackgroundInputField;
         
@@ -35,14 +36,13 @@ public static class T3Style
         style.Colors[(int)ImGuiCol.ScrollbarBg] = UiColors.ScrollbarBackground;
         style.Colors[(int)ImGuiCol.ScrollbarGrab] = UiColors.ScrollbarHandle;
         style.Colors[(int)ImGuiCol.ResizeGrip] = UiColors.WindowResizeHandle;
-        style.Colors[(int)ImGuiCol.WindowBg] = UiColors.WindowBackground;
-        style.Colors[(int)ImGuiCol.ModalWindowDimBg] = UiColors.ModalWindowDimBg;
+        style.Colors[(int)ImGuiCol.ModalWindowDimBg] = Color.Transparent;
         style.Colors[(int)ImGuiCol.MenuBarBg] = UiColors.BackgroundGaps;
         style.Colors[(int)ImGuiCol.Separator] = UiColors.BackgroundGaps;
         style.Colors[(int)ImGuiCol.SeparatorHovered] = UiColors.BackgroundActive;
         style.Colors[(int)ImGuiCol.TabUnfocused] = UiColors.BackgroundTabInActive;
         style.Colors[(int)ImGuiCol.WindowBg] = UiColors.BackgroundGaps; // Only shines through at window edges
-        style.Colors[(int)ImGuiCol.ChildBg] = UiColors.ChildBackground; // Graph see through strength
+        style.Colors[(int)ImGuiCol.ChildBg] = UiColors.WindowBackground; // Graph see through strength
         style.Colors[(int)ImGuiCol.PopupBg] = UiColors.BackgroundPopup;
 
         style.Colors[(int)ImGuiCol.CheckMark] = UiColors.CheckMark;

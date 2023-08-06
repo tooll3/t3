@@ -16,16 +16,6 @@ namespace T3.Editor.Gui.InputUi
     {
         public Color Color => UiColors.ColorForString;
     }
-    //
-    // public class Size2UiProperties : ITypeUiProperties
-    // {
-    //     public Color Color => UiColors.ColorForValues;
-    // }
-    //
-    // public class IntUiProperties : ITypeUiProperties
-    // {
-    //     public Color Color => UiColors.ColorForValues;
-    // }
 
     public class TextureUiProperties : ITypeUiProperties
     {
@@ -39,7 +29,7 @@ namespace T3.Editor.Gui.InputUi
     }
     
     /// <summary>
-    /// Internal implementation things that are below the tech level of normal artists.
+    /// Internal implementation - things that are below the tech level of normal artists.
     /// </summary>
     public class ShaderUiProperties : ITypeUiProperties
     {

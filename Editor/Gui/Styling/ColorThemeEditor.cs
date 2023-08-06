@@ -19,6 +19,7 @@ public static class ColorThemeEditor
 {
     public static void DrawEditor()
     {
+        FormInputs.SetIndent(100);
         if (_currentTheme == null)
         {
             _currentTheme = ThemeHandling.FactoryTheme.Clone();
@@ -28,29 +29,45 @@ public static class ColorThemeEditor
         var colorFields = typeof(UiColors).GetFields();
         var colorVariationFields = typeof(ColorVariations).GetFields();
         
-        if (ImGui.BeginCombo("##SelectTheme", UserSettings.Config.ColorThemeName, ImGuiComboFlags.HeightLarge))
-        {
-            foreach (var theme in ThemeHandling.Themes)
-            {
-                if (theme == null)
-                    continue;
-                
-                var isSelected = theme.Name == UserSettings.Config.ColorThemeName;
-                if (!ImGui.Selectable($"{theme.Name}", isSelected, ImGuiSelectableFlags.DontClosePopups))
-                    continue;
+        // if (ImGui.BeginCombo("##SelectTheme", UserSettings.Config.ColorThemeName, ImGuiComboFlags.HeightLarge))
+        // {
+        //     foreach (var theme in ThemeHandling.Themes)
+        //     {
+        //         if (theme == null)
+        //             continue;
+        //         
+        //         var isSelected = theme.Name == UserSettings.Config.ColorThemeName;
+        //         if (!ImGui.Selectable($"{theme.Name}", isSelected, ImGuiSelectableFlags.DontClosePopups))
+        //             continue;
+        //
+        //         ThemeHandling.SetThemeAsUserTheme(theme);
+        //         _currentTheme = theme;
+        //         _currentThemeWithoutChanges = _currentTheme.Clone();
+        //         ImGui.CloseCurrentPopup();
+        //     }
+        //     ImGui.EndCombo();
+        // }
 
-                ThemeHandling.SetThemeAsUserTheme(theme);
-                _currentTheme = theme;
+        if (FormInputs.AddDropdown(ref UserSettings.Config.ColorThemeName, 
+                                   ThemeHandling.Themes.Select(t => t.Name), 
+                                   "Theme",
+                                   "Choose a color theme for editing, then apply your modifications and save them. You have the option to create new themes by altering the name, and all themes are stored in the .t3/themes folder."))
+        {
+            var selectedTheme = ThemeHandling.Themes.FirstOrDefault(t => t.Name == UserSettings.Config.ColorThemeName);
+            if (selectedTheme != null)
+            {
+                ThemeHandling.SetThemeAsUserTheme(selectedTheme);
+                _currentTheme = selectedTheme;
                 _currentThemeWithoutChanges = _currentTheme.Clone();
-                ImGui.CloseCurrentPopup();
             }
-            ImGui.EndCombo();
         }
         
         FormInputs.AddVerticalSpace();
         FormInputs.AddStringInput("Name", ref _currentTheme.Name);
         FormInputs.AddStringInput("Author", ref _currentTheme.Author);
 
+        FormInputs.AddVerticalSpace();
+        FormInputs.ApplyIndent();
         if (CustomComponents.DisablableButton("Save", _somethingChanged))
         {
             ThemeHandling.SaveTheme(_currentTheme);
@@ -73,13 +90,20 @@ public static class ColorThemeEditor
             _currentTheme = ThemeHandling.FactoryTheme.Clone();
             _currentThemeWithoutChanges = ThemeHandling.FactoryTheme.Clone();
         }
+        
+        FormInputs.AddVerticalSpace();
+        ImGui.Separator();
+        FormInputs.AddVerticalSpace();
+        
+        
         _somethingChanged = false;
         DrawColorEdits(colorFields);
-        DrawVariationEdits(colorVariationFields);
+        DrawVariations(colorVariationFields);
     }
 
     private static void DrawColorEdits(IEnumerable<FieldInfo> colorFields)
     {
+        FormInputs.AddSectionHeader("Colors");
         foreach (var f in colorFields)
         {
             var isChanged = false;
@@ -103,12 +127,24 @@ public static class ColorThemeEditor
             _somethingChanged |= isChanged;
 
             string hint = null;
+            string groupTitle = null;
             foreach (var ca in f.GetCustomAttributes(true))
             {
                 if (ca is not T3Style.HintAttribute hintAttribute)
                     continue;
 
                 hint = hintAttribute.Description;
+                groupTitle = hintAttribute.GroupTitle;
+            }
+            
+            
+            if (!string.IsNullOrWhiteSpace(groupTitle))
+            {
+                ImGui.PushFont(Fonts.FontBold);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                ImGui.TextUnformatted(groupTitle);
+                ImGui.PopStyleColor();
+                ImGui.PopFont();
             }
 
             var vec4Color = color.Rgba;
@@ -116,23 +152,28 @@ public static class ColorThemeEditor
 
             if (ColorEditButton.Draw(ref vec4Color, new Vector2(24, 24)).HasFlag(InputEditStateFlags.Modified))
             {
+                FrameStats.Current.UiColorsChanged = true;
                 SetColor(f, vec4Color);
                 T3Style.Apply();
-                FrameStats.Current.UiColorsChanged = true;
             }
 
             ImGui.SameLine(0, 10);
             ImGui.Text(Regex.Replace(f.Name, "(\\B[A-Z])", " $1"));
             if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
             {
+                FrameStats.Current.UiColorsChanged = true;
                 SetColor(f, defaultColor);
                 T3Style.Apply();
             }
 
-            if (!string.IsNullOrEmpty(hint) && ImGui.IsItemHovered())
+            if (!string.IsNullOrWhiteSpace(hint))
             {
-                ImGui.SetTooltip(hint);
+                CustomComponents.TooltipForLastItem(hint);
             }
+            // if (!string.IsNullOrEmpty(hint) && ImGui.IsItemHovered())
+            // {
+            //     ImGui.SetTooltip(hint);
+            // }
 
             if (isChanged)
             {
@@ -140,6 +181,7 @@ public static class ColorThemeEditor
                 if (CustomComponents.FloatingIconButton(Icon.Revert, Vector2.Zero))
                 {
                     SetColor(f, defaultColor);
+                    T3Style.Apply();
                 }
             }
             ImGui.PopStyleColor();
@@ -148,9 +190,11 @@ public static class ColorThemeEditor
         }
     }
     
-    private static void DrawVariationEdits(IEnumerable<FieldInfo> variationFields)
+    private static void DrawVariations(IEnumerable<FieldInfo> variationFields)
     {
-
+        ImGui.Separator();
+        FormInputs.AddSectionHeader("Data type variations");
+        CustomComponents.HelpText("These factors determine the Brightness, Saturation, and Opacity of each purpose. By applying them to the previously defined base colors, you can achieve a wide range of variety and contrast.");
         foreach (var f in variationFields)
         {
             var isChanged = false;
@@ -186,7 +230,7 @@ public static class ColorThemeEditor
             
             ImGui.PushStyleColor(ImGuiCol.Text, isChanged ? UiColors.Text.Rgba : UiColors.TextMuted);
             
-            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X -150);
+            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X -300);
             if(ImGui.DragFloat3(f.Name, ref brightSaturationAlpha, 0.01f))
             {
                 variation.Brightness = brightSaturationAlpha.X;
@@ -227,8 +271,8 @@ public static class ColorThemeEditor
     
     private static void SetColor(FieldInfo f, Vector4 vec4Color)
     {
-        f.SetValue(Dummy, new Color(vec4Color));
         _currentTheme.Colors[f.Name] = vec4Color;
+        f.SetValue(Dummy, new Color(vec4Color));
     }
     
     private static void SetVariation(FieldInfo f, ColorVariation variation)

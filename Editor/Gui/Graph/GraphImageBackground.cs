@@ -88,7 +88,7 @@ namespace T3.Editor.Gui.Graph
             {
                 ImGui.GetWindowDrawList().AddRectFilled(Vector2.Zero, 
                                                         Vector2.One * 10000, 
-                                                        UiColors.ChildBackground.Fade(1 - imageOpacity));
+                                                        UiColors.WindowBackground.Fade(1 - imageOpacity));
             }
         }
 

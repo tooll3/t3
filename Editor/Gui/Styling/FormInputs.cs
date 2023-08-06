@@ -14,16 +14,24 @@ namespace T3.Editor.Gui.Styling
     /// </summary>
     public static class FormInputs
     {
-        /// <summary>
-        /// 
-        /// </summary>
+        public static void BeginFrame()
+        {
+            ResetIndent();
+        }
+        
+        public static void AddSectionHeader(string label)
+        {
+            AddVerticalSpace(10);
+            ImGui.PushFont(Fonts.FontLarge);
+            ImGui.Text(label);
+            ImGui.PopFont();
+        }
+
         public static bool BeginGroup(string label)
         {
             var shouldBeOpenByDefault = !label.EndsWith("...");
-            
+
             AddVerticalSpace(5);
-            
-            //ImGui.PushFont(Fonts.FontBold);
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
 
             var id = ImGui.GetID(label);
@@ -32,11 +40,10 @@ namespace T3.Editor.Gui.Styling
                 ImGui.SetNextItemOpen(true);
                 _openedGroups.Add(id);
             }
+
             var isOpen = ImGui.TreeNode(label);
             ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 0);
             ImGui.PopStyleColor();
-            //ImGui.PopFont();
-
             return isOpen;
         }
 
@@ -47,7 +54,7 @@ namespace T3.Editor.Gui.Styling
             ImGui.PopStyleVar();
             ImGui.TreePop();
         }
-        
+
         public static bool AddInt(string label,
                                   ref int value,
                                   int min = int.MinValue,
@@ -117,7 +124,6 @@ namespace T3.Editor.Gui.Styling
             var modified = (result & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing;
             return modified;
         }
-        
 
         public static bool AddEnumDropdown<T>(ref T selectedValue, string label, string tooltip = null) where T : struct, Enum, IConvertible, IFormattable
         {
@@ -149,6 +155,38 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
 
+        public static bool AddDropdown(ref string selectedValue, IEnumerable<string> values, string label, string tooltip = null)
+        {
+            DrawInputLabel(label);
+
+            var inputSize = GetAvailableInputSize(tooltip, false, true);
+            ImGui.SetNextItemWidth(inputSize.X);
+
+            var modified = false;
+            if (ImGui.BeginCombo("##SelectTheme", UserSettings.Config.ColorThemeName, ImGuiComboFlags.HeightLarge))
+            {
+                foreach (var value in values)
+                {
+                    if (value == null)
+                        continue;
+
+                    var isSelected = value == selectedValue;
+                    if (!ImGui.Selectable($"{value}", isSelected, ImGuiSelectableFlags.DontClosePopups))
+                        continue;
+
+                    ImGui.CloseCurrentPopup();
+                    selectedValue = value;
+                    modified = true;
+                }
+
+                ImGui.EndCombo();
+            }
+
+            AppendTooltip(tooltip);
+            return modified;
+        }
+        
+        
         public static bool AddSegmentedButton<T>(ref T selectedValue, string label) where T : struct, Enum
         {
             DrawInputLabel(label);
@@ -179,8 +217,6 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
 
-
-        
         private static bool DrawSelectButton(string name, bool isSelected)
         {
             ImGui.PushStyleColor(ImGuiCol.Button, isSelected ? UiColors.BackgroundActive.Rgba : UiColors.BackgroundButton.Rgba);
@@ -194,7 +230,7 @@ namespace T3.Editor.Gui.Styling
         }
 
         private const string NoDefaultString = "_";
-        
+
         /// <summary>
         /// Draws string input or file picker. 
         /// </summary>
@@ -212,7 +248,7 @@ namespace T3.Editor.Gui.Styling
             {
                 ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha);
             }
-            
+
             DrawInputLabel(label);
             var wasNull = value == null;
             if (wasNull)
@@ -235,7 +271,7 @@ namespace T3.Editor.Gui.Styling
                 drawList.AddText(minPos + new Vector2(8, 3), UiColors.ForegroundFull.Fade(0.25f), placeHolder);
                 drawList.PopClipRect();
             }
-            
+
             if (isDefault)
             {
                 ImGui.PopStyleVar();
@@ -249,7 +285,6 @@ namespace T3.Editor.Gui.Styling
 
             DrawWarningBelowField(warning);
 
-            
             return modified;
         }
 
@@ -309,7 +344,7 @@ namespace T3.Editor.Gui.Styling
                 ImGui.PushStyleVar(ImGuiStyleVar.Alpha, DefaultFadeAlpha);
             }
 
-            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 15);
+            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 20);
             var modified = ImGui.Checkbox(label, ref value);
 
             AppendTooltip(tooltip);
@@ -326,6 +361,10 @@ namespace T3.Editor.Gui.Styling
 
             return modified;
         }
+        
+        
+        
+        
 
         public static void AddHint(string label)
         {
@@ -375,12 +414,12 @@ namespace T3.Editor.Gui.Styling
         {
             _widthRatio = 1;
         }
-        
+
         public static void DrawInputLabel(string label)
         {
             if (string.IsNullOrEmpty(label))
                 return;
-            
+
             var labelSize = ImGui.CalcTextSize(label);
             var p = ImGui.GetCursorPos();
             ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding - labelSize.X, 0) + 10);
@@ -445,7 +484,7 @@ namespace T3.Editor.Gui.Styling
             //CustomComponents.TooltipForLastItem(tooltip, null, false);
             if (!ImGui.IsItemHovered())
                 return;
-            
+
             // Tooltip
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
             ImGui.PushStyleColor(ImGuiCol.PopupBg, UiColors.BackgroundFull.Rgba);
@@ -491,5 +530,7 @@ namespace T3.Editor.Gui.Styling
         private static float _widthRatio = 1;
         private static float LeftParameterPadding => _paramIndent * T3Ui.UiScaleFactor;
         public static float ParameterSpacing => 20 * T3Ui.UiScaleFactor;
+
+
     }
 }

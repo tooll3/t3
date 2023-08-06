@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using T3.Core.Logging;
-using T3.Core.Utils;
 using T3.Editor.Gui.UiHelpers;
 using T3.Serialization;
 
@@ -21,8 +20,7 @@ public static class ThemeHandling
         LoadThemes();
         ApplyUserConfigTheme();
     }
-    
-    
+
     public static void SetThemeAsUserTheme(ColorTheme theme)
     {
         UserSettings.Config.ColorThemeName = theme.Name;
@@ -31,8 +29,69 @@ public static class ThemeHandling
 
         T3Style.Apply();
     }
-    
-    public static void ApplyUserConfigTheme()
+
+    public static void SaveTheme(ColorTheme theme)
+    {
+        if (!Directory.Exists(ThemeFolder))
+            Directory.CreateDirectory(ThemeFolder);
+
+        theme.Name = theme.Name.Trim();
+        if (string.IsNullOrEmpty(theme.Name))
+        {
+            theme.Name = "untitled";
+        }
+
+        var combine = GetThemeFilepath(theme);
+        var filepath = combine;
+
+        StoreAllColors(theme);
+
+        JsonUtils.SaveJson(theme, filepath);
+        LoadThemes();
+    }
+
+    public static void DeleteTheme(ColorTheme theme)
+    {
+        var filepath = GetThemeFilepath(theme);
+        if (!File.Exists(filepath))
+        {
+            Log.Warning($"{filepath} does not exist?");
+            return;
+        }
+
+        File.Delete(filepath);
+        ApplyTheme(FactoryTheme);
+        LoadThemes();
+        UserSettings.Config.ColorThemeName = null;
+    }
+
+    private static void LoadThemes()
+    {
+        Themes.Clear();
+        if (!Directory.Exists(ThemeFolder))
+            return;
+
+        foreach (var filepath in Directory.GetFiles(ThemeFolder))
+        {
+            try
+            {
+                var t = JsonUtils.TryLoadingJson<ColorTheme>(filepath);
+                if (t == null)
+                {
+                    Log.Debug($"Failed to load theme {filepath}");
+                    continue;
+                }
+
+                Themes.Add(t);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to load {filepath} : {e.Message}");
+            }
+        }
+    }
+
+    private static void ApplyUserConfigTheme()
     {
         var selectedThemeName = UserSettings.Config.ColorThemeName;
         if (string.IsNullOrWhiteSpace(selectedThemeName))
@@ -48,14 +107,15 @@ public static class ThemeHandling
             ApplyTheme(FactoryTheme);
             return;
         }
+
         ApplyTheme(userTheme);
     }
-    
+
     /// <summary>
     /// Applies the colors to T3StyleColors
     /// </summary>
     /// <param name="theme"></param>
-    public static void ApplyTheme(ColorTheme theme)
+    private static void ApplyTheme(ColorTheme theme)
     {
         var colorFields = typeof(UiColors).GetFields();
         foreach (var colorField in colorFields)
@@ -65,10 +125,10 @@ public static class ThemeHandling
 
             if (!theme.Colors.TryGetValue(colorField.Name, out var colorValue))
                 continue;
-            
-            colorField.SetValue(ColorThemeEditor.Dummy,  new Color(colorValue));
+
+            colorField.SetValue(ColorThemeEditor.Dummy, new Color(colorValue));
         }
-        
+
         var variationFields = typeof(ColorVariations).GetFields();
         foreach (var varField in variationFields)
         {
@@ -77,29 +137,12 @@ public static class ThemeHandling
 
             if (!theme.Variations.TryGetValue(varField.Name, out var variation))
                 continue;
-            
-            varField.SetValue(ColorThemeEditor.Dummy,  variation.Clone());
+
+            varField.SetValue(ColorThemeEditor.Dummy, variation.Clone());
         }
-        
+
         FrameStats.Current.UiColorsChanged = true;
         T3Style.Apply();
-    }
-
-    public static void SaveTheme(ColorTheme theme)
-    {
-        if (!Directory.Exists(ThemeFolder))
-            Directory.CreateDirectory(ThemeFolder);
-            
-        theme.Name = theme.Name.Trim();
-        if (string.IsNullOrEmpty(theme.Name))
-        {
-            theme.Name = "untitled";
-        }
-
-        var combine = GetThemeFilepath(theme);
-        var filepath = combine;
-        JsonUtils.SaveJson(theme, filepath);
-        LoadThemes();
     }
 
     private static string GetThemeFilepath(ColorTheme theme)
@@ -107,46 +150,56 @@ public static class ThemeHandling
         return Path.Combine(ThemeFolder, theme.Name + ".json");
     }
 
-    public static void DeleteTheme(ColorTheme theme)
+    private static void StoreAllColors(ColorTheme theme)
     {
-        var filepath = GetThemeFilepath(theme);
-        if (!File.Exists(filepath))
+        var colorFields = typeof(UiColors).GetFields();
+        foreach (var colorField in colorFields)
         {
-            Log.Warning($"{filepath} does not exist?");
-            return;
+            if (colorField.GetValue(ColorThemeEditor.Dummy) is not Color color)
+                continue;
+
+            theme.Colors[colorField.Name] = color;
         }
-        
-        File.Delete(filepath);
-        ApplyTheme(FactoryTheme);
-        LoadThemes();
-        UserSettings.Config.ColorThemeName = null;
-    }
-    
-    public static void LoadThemes()
-    {
-        Themes.Clear();
-        if (!Directory.Exists(ThemeFolder))
-            return;
-        
-        foreach (var filepath in Directory.GetFiles(ThemeFolder))
+
+        var variationFields = typeof(ColorVariations).GetFields();
+        foreach (var varField in variationFields)
         {
-            try
-            {
-                var t = JsonUtils.TryLoadingJson<ColorTheme>(filepath);
-                if (t == null)
-                {
-                    Log.Debug($"Failed to load theme {filepath}");
-                    continue;
-                }
-                Themes.Add(t);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Failed to load {filepath} : {e.Message}");
-            }
+            if (varField.GetValue(ColorThemeEditor.Dummy) is not ColorVariation variation)
+                continue;
+
+            theme.Variations[varField.Name] = variation;
         }
     }
 
+
+    private static void InitializeFactoryDefault()
+    {
+        FactoryTheme = new ThemeHandling.ColorTheme();
+
+        var colorFields = typeof(UiColors).GetFields();
+        foreach (var f in colorFields)
+        {
+            if (f.GetValue(ColorThemeEditor.Dummy) is not Color color)
+                continue;
+
+            FactoryTheme.Colors[f.Name] = color;
+        }
+
+        var variationFields = typeof(ColorVariations).GetFields();
+        foreach (var v in variationFields)
+        {
+            if (v.GetValue(ColorThemeEditor.Dummy) is not ColorVariation variation)
+                continue;
+
+            FactoryTheme.Variations[v.Name] = variation;
+        }
+    }
+
+    public static readonly List<ColorTheme> Themes = new();
+    private const string ThemeFolder = @".t3\Themes\";
+    public static ColorTheme FactoryTheme;
+    
+    
     public class ColorTheme
     {
         public string Name = "untitled";
@@ -163,37 +216,8 @@ public static class ThemeHandling
                            Colors = Colors.ToDictionary(entry => entry.Key,
                                                         entry => entry.Value),
                            Variations = Variations.ToDictionary(entry => entry.Key,
-                                                            entry => entry.Value),
-                           
+                                                                entry => entry.Value),
                        };
         }
     }
-    
-    public static readonly List<ColorTheme> Themes = new();
-    private const string ThemeFolder = @".t3\Themes\";
-
-    private static void InitializeFactoryDefault()
-    {
-        FactoryTheme = new ThemeHandling.ColorTheme();
-        
-        var colorFields = typeof(UiColors).GetFields();
-        foreach (var f in colorFields)
-        {
-            if (f.GetValue(ColorThemeEditor.Dummy) is not Color color)
-                continue;
-
-            FactoryTheme.Colors[f.Name] = color;
-        }
-        
-        var variationFields = typeof(ColorVariations).GetFields();
-        foreach (var v in variationFields)
-        {
-            if (v.GetValue(ColorThemeEditor.Dummy) is not ColorVariation variation)
-                continue;
-
-            FactoryTheme.Variations[v.Name] = variation;
-        }
-    }
-
-    public static ColorTheme FactoryTheme;
 }

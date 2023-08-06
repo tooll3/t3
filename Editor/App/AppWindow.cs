@@ -71,7 +71,7 @@ namespace T3.Editor.App
             _deviceContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
             _deviceContext.Rasterizer.SetViewport(new Viewport(0, 0, Form.ClientSize.Width, Form.ClientSize.Height, 0.0f, 1.0f));
             _deviceContext.OutputMerger.SetTargets(RenderTargetView);
-            _deviceContext.ClearRenderTargetView(RenderTargetView, UiColors.ChildBackground.AsSharpDx);
+            _deviceContext.ClearRenderTargetView(RenderTargetView, UiColors.WindowBackground.AsSharpDx);
         }
         
         internal void RunRenderLoop(RenderLoop.RenderCallback callback) => RenderLoop.Run(Form, callback);
