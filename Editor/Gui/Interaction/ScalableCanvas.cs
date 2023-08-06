@@ -201,12 +201,13 @@ namespace T3.Editor.Gui.Interaction
             ScaleTarget = scale;
             ScrollTarget = scroll;
         }
-
-        public void SetVisibleVRange(float valueScale, float valueScroll)
+        
+        public void SetVisibleRangeHard(Vector2 scale, Vector2 scroll)
         {
-            ScaleTarget = new Vector2(ScaleTarget.X, valueScale);
-            ScrollTarget = new Vector2(ScrollTarget.X, valueScroll);
+            Scale =ScaleTarget = scale;
+            Scroll= ScrollTarget = scroll;
         }
+
 
         public void SetScaleToMatchPixels()
         {
@@ -456,7 +457,7 @@ namespace T3.Editor.Gui.Interaction
 
             return this is TimeLineCanvas
                        ? new Vector2(scale.X.Clamp(0.01f, 5000), scale.Y.Clamp(0.01f, 5000))
-                       : new Vector2(scale.X.Clamp(0.1f, 11), scale.Y.Clamp(0.1f, 11));
+                       : new Vector2(scale.X.Clamp(0.1f, 40), scale.Y.Clamp(0.1f, 40));
         }
 
         public virtual void ZoomWithMouseWheel(Vector2 focusCenterOnScreen)

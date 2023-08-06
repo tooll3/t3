@@ -79,9 +79,9 @@ namespace T3.Editor.Gui.Styling
             var pos = new Vector2(contentMin.X, contentMin.Y + size.Y - offsetFromBottom - thickness-1);
             ImGui.SetCursorScreenPos(pos);
 
-            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0, 0, 0, 1));
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0, 0, 0, 1));
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0.5f, 0.5f, 0.5f, 1));
+            ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundGaps.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundActive.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundActive.Rgba);
 
             ImGui.Button("##Splitter", new Vector2(-1, thickness));
 

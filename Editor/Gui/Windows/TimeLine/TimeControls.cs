@@ -5,6 +5,7 @@ using T3.Core.Audio;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Utils;
 using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
@@ -145,18 +146,34 @@ namespace T3.Editor.Gui.Windows.TimeLine
             
             // MidiIndicator
             {
-                if (CustomComponents.IconButton(Icon.Heart, ControlSize))
+                var timeSinceLastEvent = Playback.RunTimeInSecs - T3Ui.MidiDataRecording.LastEventTime;
+                var flashFactor = MathF.Pow((float)timeSinceLastEvent.Clamp(0, 1) / 1, 0.5f);
+                var color = Color.Mix(UiColors.StatusAnimated, UiColors.BackgroundFull.Fade(0.3f), flashFactor);
+                ImGui.PushStyleColor(ImGuiCol.Text, color.Rgba);
+                if (CustomComponents.IconButton(Icon.IO, ControlSize))
                 {
                     //T3Ui.MidiStreamRecorder.Reset();
                     T3Ui.MidiDataRecording.DataSet.WriteToFile();
                 }
+                ImGui.PopStyleColor();
 
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.BeginTooltip();
+                    if (timeSinceLastEvent < 10)
+                    {
+                        ImGui.BeginChild("canavs", new Vector2(400, 250));
 
-                    var dataSet = T3Ui.MidiDataRecording.DataSet;
-                    DataSetOutputUi.DrawDataSet(dataSet);
+                        var dataSet = T3Ui.MidiDataRecording.DataSet;
+                        //DataSetOutputUi.DrawDataSet(dataSet);
+                        _dataSetView.Draw(dataSet);
+                        ImGui.EndChild();
+                        
+                    }
+                    else
+                    {
+                        ImGui.Text("Midi input indicator\nClick to open IO window.");
+                    }
                     ImGui.EndTooltip();
                 }
                 ImGui.SameLine();
@@ -505,5 +522,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
         }
 
         public static Vector2 ControlSize => new Vector2(45, 28) * T3Ui.UiScaleFactor;
+        private static readonly DataSetViewCanvas _dataSetView = new()
+                                                                     {
+                                                                         ShowInteraction = false,
+                                                                         MaxTreeLevel =  0,
+                                                                     };
     }
 }

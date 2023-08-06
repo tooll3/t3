@@ -34,7 +34,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
                 return;
 
             var drawList = ImGui.GetWindowDrawList();
-            var topLeft = canvas.WindowPos;
+            var topLeft = canvas.WindowPos + new Vector2(ImGui.GetScrollX(), ImGui.GetScrollY());
             var viewHeight = canvas.WindowSize.Y;
             var width = canvas.WindowSize.X;
 

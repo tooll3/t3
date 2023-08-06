@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
-using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Resource;
@@ -12,6 +11,7 @@ namespace T3.Core.DataTypes.DataSet;
 public class DataSet
 {
     public List<DataChannel> Channels { get; set; } = new();
+
 
     public void Clear()
     {

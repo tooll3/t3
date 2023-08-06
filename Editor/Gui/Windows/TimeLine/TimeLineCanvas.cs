@@ -225,7 +225,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             ImGui.SetCursorPos(new Vector2(0, max.Y - clampedSize.Y));
             var screenPos = ImGui.GetCursorScreenPos();
-            ImGui.GetWindowDrawList().AddRectFilled(screenPos, screenPos + new Vector2(clampedSize.X, clampedSize.Y), new Color(0, 0, 0, 0.1f));
+            ImGui.GetWindowDrawList().AddRectFilled(screenPos, screenPos + new Vector2(clampedSize.X, clampedSize.Y), UiColors.BackgroundFull.Fade(0.1f));
 
             ImGui.InvisibleButton("##TimeDrag", clampedSize);
 

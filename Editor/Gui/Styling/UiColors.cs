@@ -57,7 +57,7 @@ public static class UiColors
 
     
     [T3Style.Hint(GroupTitle = "Status colors")]
-    public static Color StatusAutomated = new(0.6f, 0.6f, 1f, 1f);
+    public static Color StatusAutomated = new(0.08f, 0.48f, 0.7f, 1f);
     public static Color StatusAttention = new(203, 19, 113, 255);
     public static Color StatusWarning = new(203, 19, 113, 255);
     public static Color StatusError = new(203, 19, 113, 255);

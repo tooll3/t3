@@ -17,7 +17,9 @@ namespace Operators.Utils.Recording;
 public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
 {
     public readonly DataSet DataSet = new();
+    public double LastEventTime = 0;
 
+    
     public MidiDataRecording()
     {
         MidiInConnectionManager.RegisterConsumer(this);
@@ -33,6 +35,8 @@ public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
     {
         if (sender is not MidiIn midiIn || msg.MidiEvent == null || TypeNameRegistry.Entries.Values.Count == 0)
             return;
+
+        LastEventTime = Playback.RunTimeInSecs;
 
         var device = MidiInConnectionManager.GetDescriptionForMidiIn(midiIn);
         var deviceName = (device.ProductName
@@ -58,6 +62,8 @@ public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
                         if (lastNote != null && lastNote.IsUnfinished)
                         {
                             lastNote.Finish((float)someTime);
+                            if (midiNoteEvent.Velocity == 0)
+                                break;
                         }
 
                         noteChannel.Events.Add(new DataIntervalEvent()

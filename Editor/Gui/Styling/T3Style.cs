@@ -40,6 +40,8 @@ public static class T3Style
         style.Colors[(int)ImGuiCol.MenuBarBg] = UiColors.BackgroundGaps;
         style.Colors[(int)ImGuiCol.Separator] = UiColors.BackgroundGaps;
         style.Colors[(int)ImGuiCol.SeparatorHovered] = UiColors.BackgroundActive;
+        style.Colors[(int)ImGuiCol.ButtonActive] = UiColors.BackgroundActive;
+        
         style.Colors[(int)ImGuiCol.TabUnfocused] = UiColors.BackgroundTabInActive;
         style.Colors[(int)ImGuiCol.WindowBg] = UiColors.BackgroundGaps; // Only shines through at window edges
         style.Colors[(int)ImGuiCol.ChildBg] = UiColors.WindowBackground; // Graph see through strength
