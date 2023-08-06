@@ -64,6 +64,9 @@ internal static class NavigationHistory
 
     public static Instance GetLastSelectedInstance()
     {
+        if (_previousSelections.Count == 0)
+            return null;
+        
         return _previousSelections.Count < _currentIndex ? null : Structure.GetInstanceFromIdPath(_previousSelections[ _currentIndex]);
     }
 
