@@ -59,6 +59,7 @@ namespace T3.Editor.Gui.Windows.Layouts
                                new RenderVideoWindow(),
                                new UtilitiesWindow(),
                                new ConsoleLogWindow(),
+                               new IoViewWindow(),
                                new SettingsWindow(),
                            };            
 
@@ -130,6 +131,22 @@ namespace T3.Editor.Gui.Windows.Layouts
         public static bool IsAnyInstanceVisible<T>() where T : Window
         {
             return GetAllWindows().OfType<T>().Any(w => w.Config.Visible);
+        }
+        
+        public static void ToggleInstanceVisibility<T>() where T : Window
+        {
+            var foundFirst = false;
+            var newVisibility = false;
+            foreach (var w in GetAllWindows().OfType<T>())
+            {
+                if (!foundFirst)
+                {
+                    newVisibility = !w.Config.Visible;
+                    foundFirst = true;
+                }
+
+                w.Config.Visible = newVisibility;
+            }
         }
         
 

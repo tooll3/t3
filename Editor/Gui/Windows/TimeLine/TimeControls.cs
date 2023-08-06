@@ -14,6 +14,7 @@ using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows.Layouts;
 using Icon = T3.Editor.Gui.Styling.Icon;
 using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
@@ -154,6 +155,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 {
                     //T3Ui.MidiStreamRecorder.Reset();
                     T3Ui.MidiDataRecording.DataSet.WriteToFile();
+                    WindowManager.ToggleInstanceVisibility<IoViewWindow>();
                 }
                 ImGui.PopStyleColor();
 

@@ -27,6 +27,11 @@ public class DataSetViewCanvas
             ImGui.Checkbox("Recent ", ref OnlyRecentEvents);
             ImGui.SameLine();
             ImGui.Checkbox("Scroll ", ref Scroll);
+            ImGui.SameLine();
+            if (ImGui.Button("Save"))
+            {
+                dataSet.WriteToFile();
+            }
         }
             
         _standardRaster.Draw(_canvas);
