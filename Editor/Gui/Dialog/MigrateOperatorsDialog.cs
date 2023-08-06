@@ -22,11 +22,12 @@ namespace T3.Editor.Gui.Dialog
 
         public void Draw()
         {
+            FormInputs.ResetIndent();
             if (BeginDialog("Import Operators from another Tooll installation"))
             {
                 ImGui.BeginChild("options", new Vector2(ImGui.GetContentRegionAvail().X - 400, -1));
                 {
-                    CustomComponents.HelpText("This will help you to import Operators and resources from another Tooll installation.");
+                    FormInputs.AddHint("This will help you to import Operators and resources from another Tooll installation.");
 
                     if (string.IsNullOrEmpty(_userNamespace))
                     {
@@ -34,6 +35,9 @@ namespace T3.Editor.Gui.Dialog
                     }
 
                     var hasChanged = false;
+                    hasChanged |= !_initialized;
+                    _initialized = true;
+                    
                     hasChanged |= FormInputs.AddStringInput("User Namespace", ref _userNamespace);
 
                     var fullPath = (_otherToollDir != null && Directory.Exists(_otherToollDir)) ? Path.GetFullPath(_otherToollDir) : "";
@@ -59,8 +63,9 @@ namespace T3.Editor.Gui.Dialog
                     }
 
                     var isValid = !string.IsNullOrEmpty(_otherToollDir) && !string.IsNullOrEmpty(_userNamespace);
-                    CustomComponents.HelpText(_scanResultSummary);
+                    FormInputs.AddHint(_scanResultSummary);
 
+                    FormInputs.ApplyIndent();
                     if (CustomComponents.DisablableButton("Import and Restart", isValid))
                     {
                         MigrateSelection();
@@ -332,6 +337,7 @@ namespace T3.Editor.Gui.Dialog
             }
         }
 
+        private bool _initialized;
         private string _scanResultSummary;
         private readonly List<ScanItem> _scanResults = new();
         private readonly List<string> _otherResourceFiles = new();

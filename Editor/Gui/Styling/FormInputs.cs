@@ -379,7 +379,7 @@ namespace T3.Editor.Gui.Styling
             AddIcon(Icon.Hint);
 
             ImGui.SameLine();
-            ImGui.TextUnformatted(label);
+            ImGui.TextWrapped(label);
             ImGui.Indent(-13);
             ImGui.PopStyleVar(2);
         }
