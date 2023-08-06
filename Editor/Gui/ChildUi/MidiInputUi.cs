@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
@@ -31,7 +32,10 @@ namespace T3.Editor.Gui.ChildUi
             var flashProgress = (float)(Playback.RunTimeInSecs - midiInput.LastMessageTime).Clamp(0,flashDuration)/flashDuration;
             if (flashProgress < 1)
             {
-                drawList.AddRectFilled(screenRect.Min, screenRect.Max, Color.Mix(UiColors.StatusAnimated.Fade(0.4f), Color.Transparent, flashProgress*flashProgress));
+                drawList.AddRectFilled(screenRect.Min, screenRect.Max, 
+                                       Color.Mix(UiColors.StatusAnimated.Fade(0.8f), 
+                                                 Color.Transparent, 
+                                                 MathF.Pow(flashProgress*flashProgress, 0.5f)));
             }
             
 

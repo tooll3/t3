@@ -133,34 +133,6 @@
       }
     },
     {
-      "ChildId": "1dec54ac-6a13-445c-ac10-2843053f9830"/*sep drive*/,
-      "Position": {
-        "X": -1170.1641,
-        "Y": 1136.596
-      }
-    },
-    {
-      "ChildId": "79beda5a-dc94-415e-b9cf-814da6a54260"/*Remap*/,
-      "Position": {
-        "X": -1274.5647,
-        "Y": 1209.6636
-      }
-    },
-    {
-      "ChildId": "937bda7f-34ff-43ca-b602-eb89174bb9ae"/*Multiply*/,
-      "Position": {
-        "X": -1124.5647,
-        "Y": 1209.6636
-      }
-    },
-    {
-      "ChildId": "d543ae1a-c6bf-4612-bb2c-8558a373bf59"/*MidiInput*/,
-      "Position": {
-        "X": -1274.5647,
-        "Y": 1265.6636
-      }
-    },
-    {
       "ChildId": "c82b13a3-5635-4b42-b072-93b21df69792"/*RadialPoints*/,
       "Position": {
         "X": 211.75635,
@@ -291,13 +263,6 @@
       "Position": {
         "X": 182.32333,
         "Y": 523.9883
-      }
-    },
-    {
-      "ChildId": "cda48750-3f12-4000-938c-d2c4e0075d11"/*Sum*/,
-      "Position": {
-        "X": -1424.565,
-        "Y": 1160.6637
       }
     },
     {

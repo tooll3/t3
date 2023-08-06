@@ -151,6 +151,21 @@
           "4515c98e-05bc-4186-8773-4d2b31a8c323": 1
         }
       }
+    },
+    {
+      "Id": "339b9273-796b-4a05-9b08-056733f5e4b4",
+      "IsPreset": false,
+      "ActivationIndex": 63,
+      "Title": "untitled",
+      "PosOnCanvas": {
+        "X": 472.05322,
+        "Y": 600.08417
+      },
+      "ParameterSetsForChildIds": {
+        "565d07de-4131-4107-8a10-0ee737718750": {
+          "4515c98e-05bc-4186-8773-4d2b31a8c323": 6
+        }
+      }
     }
   ]
 }
