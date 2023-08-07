@@ -11,7 +11,7 @@
       }
     },
     {
-      "ChildId": "8dc4382f-0b34-4912-8c6e-731b80c04136"/*Default*/,
+      "ChildId": "8dc4382f-0b34-4912-8c6e-731b80c04136"/*Title Animation*/,
       "Position": {
         "X": 116.590576,
         "Y": 97.200554
@@ -48,8 +48,8 @@
     {
       "ChildId": "29a75c3e-d1df-4205-b564-cea177c4d10f"/*WS2_Feedback*/,
       "Position": {
-        "X": -923.07605,
-        "Y": 682.2327
+        "X": -1447.9562,
+        "Y": 960.5558
       }
     },
     {
@@ -349,13 +349,6 @@
       }
     },
     {
-      "ChildId": "07a26bab-a0d1-440a-b14f-9c914fccfbdb"/*AudioFrequencies*/,
-      "Position": {
-        "X": 3911.7656,
-        "Y": -230.349
-      }
-    },
-    {
       "ChildId": "1e29fd8c-8bfc-4909-9435-fb37cc0ab453"/*MidiInput*/,
       "Position": {
         "X": 783.26697,
@@ -433,24 +426,10 @@
       }
     },
     {
-      "ChildId": "4345077a-c44e-4e25-889f-f6d3272a572a"/*MidiInput*/,
-      "Position": {
-        "X": 2592.8193,
-        "Y": 2023.948
-      }
-    },
-    {
       "ChildId": "852b2ce8-ab1e-4ba5-88b8-64602b9702d9"/*MidiInput*/,
       "Position": {
         "X": 1471.7498,
         "Y": 696.1124
-      }
-    },
-    {
-      "ChildId": "b809fa44-270a-458e-91f7-401f312898a0"/*AturiaModWheel*/,
-      "Position": {
-        "X": 2130.7478,
-        "Y": 337.72092
       }
     },
     {
@@ -463,8 +442,8 @@
     {
       "ChildId": "3a6d10da-f586-48de-96c0-f653db6189be"/*WakeSplashes*/,
       "Position": {
-        "X": -1606.676,
-        "Y": 1102.0103
+        "X": -1597.9562,
+        "Y": 960.5558
       }
     },
     {
@@ -491,15 +470,15 @@
     {
       "ChildId": "45d5ec05-f25c-4b18-befc-44853c1086bd"/*Layer2d*/,
       "Position": {
-        "X": 2721.1116,
-        "Y": 67.06859
+        "X": 2763.075,
+        "Y": 65.51915
       }
     },
     {
       "ChildId": "a7f151bd-4b58-46eb-82a1-24f7e0d5b0e7"/*LinearGradient*/,
       "Position": {
-        "X": 2644.8164,
-        "Y": -57.14308
+        "X": 2613.075,
+        "Y": 65.51915
       }
     },
     {
@@ -545,41 +524,6 @@
       }
     },
     {
-      "ChildId": "8729aaf2-c2dc-4f06-b225-4d49a7af62d1"/*Execute*/,
-      "Position": {
-        "X": -952.00836,
-        "Y": 783.9615
-      }
-    },
-    {
-      "ChildId": "6895bfa9-279c-4c8f-a880-2b2a9cb7b84d"/*Text*/,
-      "Position": {
-        "X": -1102.0084,
-        "Y": 889.9615
-      }
-    },
-    {
-      "ChildId": "874dcddd-92d5-4c22-b38b-ddb10d68e5e6"/*LinePoints*/,
-      "Position": {
-        "X": -1252.0084,
-        "Y": 826.9615
-      }
-    },
-    {
-      "ChildId": "a99b2151-37ab-4e75-b195-4111a0cf24ba"/*DrawBillboards*/,
-      "Position": {
-        "X": -1102.0084,
-        "Y": 783.9615
-      }
-    },
-    {
-      "ChildId": "8740472d-5423-41df-8d3a-3e5a74390107"/*AnimValue*/,
-      "Position": {
-        "X": -1252.0084,
-        "Y": 783.9615
-      }
-    },
-    {
       "ChildId": "d1def54f-9048-4e6c-8ea7-8e63fce12304"/*SynthTiling*/,
       "Position": {
         "X": 166.3017,
@@ -587,38 +531,17 @@
       }
     },
     {
-      "ChildId": "d7bca069-f812-4f57-b311-64bc627e8eb1"/*MidiInput*/,
-      "Position": {
-        "X": -189.67065,
-        "Y": -576.47723
-      }
-    },
-    {
-      "ChildId": "a02ed719-5988-444d-88aa-f22185b683c5"/*MidiInput*/,
-      "Position": {
-        "X": 561.14685,
-        "Y": -455.7962
-      }
-    },
-    {
-      "ChildId": "6d891151-4b2a-4b5b-9052-d66580aa5ac9"/*MidiRecording*/,
-      "Position": {
-        "X": 2103.7917,
-        "Y": -649.2344
-      }
-    },
-    {
-      "ChildId": "bfe2aa6d-97b0-4ba8-a9ba-61aad7c4d51b"/*MidiInput*/,
-      "Position": {
-        "X": 1890.5048,
-        "Y": -464.87054
-      }
-    },
-    {
       "ChildId": "aa0e4c82-d481-43ab-8c4a-44fbbb86f728"/*WaitingScene*/,
       "Position": {
         "X": 225.96515,
         "Y": 1342.6161
+      }
+    },
+    {
+      "ChildId": "ee973576-bf77-47a2-981a-b1a1276c6519"/*SyncOffset*/,
+      "Position": {
+        "X": 2536.4731,
+        "Y": 779.66113
       }
     }
   ],
@@ -664,8 +587,8 @@
         "Y": 760.0777
       },
       "Size": {
-        "X": 530.0,
-        "Y": 238.0
+        "X": 698.58307,
+        "Y": 423.05344
       }
     }
   ]

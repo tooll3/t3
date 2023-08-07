@@ -449,7 +449,7 @@
         {
           "Id": "940133dd-4e45-4a78-8b13-8831e30f78b8"/*Scale*/,
           "Type": "System.Single",
-          "Value": 0.25
+          "Value": 0.72
         },
         {
           "Id": "9748853e-5f13-45c9-bca6-d07b07185aab"/*SizeMode*/,
@@ -817,7 +817,7 @@
         {
           "Id": "20e76577-92ee-443d-9630-ebc41e38bb85"/*Index*/,
           "Type": "System.Int32",
-          "Value": 1
+          "Value": 0
         }
       ],
       "Outputs": []

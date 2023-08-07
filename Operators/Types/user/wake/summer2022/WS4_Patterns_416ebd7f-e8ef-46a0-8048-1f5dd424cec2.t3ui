@@ -92,13 +92,6 @@
       }
     },
     {
-      "ChildId": "f03df796-aea8-4787-9ded-e62fa8bdd393"/*HasValueChanged*/,
-      "Position": {
-        "X": -831.7268,
-        "Y": -263.06787
-      }
-    },
-    {
       "ChildId": "d45407b9-121d-4d33-a4fe-f60aff309ef5"/*Any*/,
       "Position": {
         "X": -679.388,
@@ -108,8 +101,8 @@
     {
       "ChildId": "0763f6db-16b8-41c3-84e8-f9d43bc56843"/*MidiInput*/,
       "Position": {
-        "X": -985.8963,
-        "Y": -186.71164
+        "X": -983.8116,
+        "Y": -295.6407
       }
     },
     {

@@ -4799,7 +4799,12 @@
       "Id": "195cdbc3-5b65-4a40-8272-7ccb30e50fe9"/*Execute*/,
       "SymbolId": "936e4324-bea2-463a-b196-6064a2d8a6b2",
       "InputValues": [],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1"/*Execute*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "785508d5-ee2e-484d-8f03-1d4269a23af4"/*AnimValue*/,

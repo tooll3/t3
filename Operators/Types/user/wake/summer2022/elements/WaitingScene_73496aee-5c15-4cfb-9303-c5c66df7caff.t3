@@ -293,6 +293,11 @@
           "Id": "ddd93b06-118e-43e0-85f6-c150faf91d04"/*Offset*/,
           "Type": "System.Single",
           "Value": 1.0
+        },
+        {
+          "Id": "738f6cfb-8b71-423c-b897-824c20397e5a"/*AllowSpeedFactor*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []
