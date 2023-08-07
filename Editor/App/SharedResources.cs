@@ -13,8 +13,12 @@ namespace T3.Editor.App
         {
             FullScreenVertexShaderId =
                 resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
-            FullScreenPixelShaderId =
-                resourceManager.CreatePixelShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
+             
+            resourceManager.CreatePixelShaderFromFile(out FullScreenPixelShaderId,
+                                                      @"Resources\lib\dx11\fullscreen-texture.hlsl", 
+                                                      "psMain", 
+                                                      "ps-fullscreen-texture",
+                                                      () => { });
             
             ViewWindowRasterizerState = new RasterizerState(ResourceManager.Device, new RasterizerStateDescription
                                                                                                    {

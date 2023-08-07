@@ -35,7 +35,7 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
         private void Update(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
-
+            bool success;
             if (Source.DirtyFlag.IsDirty || EntryPoint.DirtyFlag.IsDirty || DebugName.DirtyFlag.IsDirty)
             {
                 _sourcePath = Source.GetValue(context);
@@ -45,15 +45,15 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
                 {
                     debugName = new FileInfo(_sourcePath).Name;
                 }
-                _computeShaderResId = resourceManager.CreateComputeShaderFromFile(_sourcePath, entryPoint, debugName,
-                                                                                  () => ComputerShader.DirtyFlag.Invalidate());
+                success= resourceManager.CreateComputeShaderFromFile(out _computeShaderResId, _sourcePath, entryPoint, debugName,
+                                                                           () => ComputerShader.DirtyFlag.Invalidate());
             }
             else
             {
-                ResourceManager.UpdateComputeShaderFromFile(Source.Value, _computeShaderResId, ref ComputerShader.Value);
+                success= ResourceManager.UpdateComputeShaderFromFile(Source.Value, _computeShaderResId, ref ComputerShader.Value);
             }
 
-            if (_computeShaderResId != ResourceManager.NullResource)
+            if (success && _computeShaderResId != ResourceManager.NullResource)
             {
                 ComputerShader.Value = resourceManager.GetComputeShader(_computeShaderResId);
                 var shaderReflection = new ShaderReflection(resourceManager.GetComputeShaderBytecode(_computeShaderResId));

@@ -216,11 +216,9 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                 string entryPoint = "main";
                 string debugName = "resolve-multisampled-depth-buffer";
                 var resourceManager = ResourceManager.Instance();
-                _resolveComputeShaderResourceId = resourceManager.CreateComputeShaderFromFile(sourcePath, entryPoint, debugName, null);
+                resourceManager.CreateComputeShaderFromFile(out  _resolveComputeShaderResourceId, sourcePath, entryPoint, debugName, null);
             }
         }
-       
-        
         
         private void ResolveDepthBuffer()
         {

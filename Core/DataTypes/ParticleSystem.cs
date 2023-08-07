@@ -39,7 +39,7 @@ namespace T3.Core.DataTypes
                 string entryPoint = "main";
                 string debugName = "particle-dead-list-init";
                 var resourceManager = ResourceManager.Instance();
-                _initDeadListShaderResId = resourceManager.CreateComputeShaderFromFile(sourcePath, entryPoint, debugName, null);
+                resourceManager.CreateComputeShaderFromFile(out _initDeadListShaderResId, sourcePath, entryPoint, debugName, null);
             }
 
             InitParticleBufferAndViews();
@@ -51,7 +51,7 @@ namespace T3.Core.DataTypes
 
         private void InitParticleBufferAndViews()
         {
-            var resourceManager = ResourceManager.Instance();
+            ResourceManager.Instance();
             int stride = ParticleSizeInBytes;
             var bufferData = Enumerable.Repeat(-10.0f, MaxCount * (stride / 4)).ToArray(); // init with negative lifetime other values doesn't matter
             ResourceManager.SetupStructuredBuffer(bufferData, stride * MaxCount, stride, ref ParticleBuffer);

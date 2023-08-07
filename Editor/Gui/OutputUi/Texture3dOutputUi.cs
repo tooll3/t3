@@ -18,7 +18,7 @@ namespace T3.Editor.Gui.OutputUi
             string entryPoint = "main";
             string debugName = "render-volume-slice";
             var resourceManager = ResourceManager.Instance();
-            _shaderResourceId = resourceManager.CreateComputeShaderFromFile(sourcePath, entryPoint, debugName, null);
+            var success= resourceManager.CreateComputeShaderFromFile(out _shaderResourceId, sourcePath, entryPoint, debugName, null);
 
             var texDesc = new Texture2DDescription()
                               {

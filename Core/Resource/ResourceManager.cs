@@ -282,7 +282,7 @@ namespace T3.Core.Resource
             }
             catch (Exception e)
             {
-                Log.Debug("Failed to create Structured buffer " + e.Message);
+                Log.Warning("Failed to create Structured buffer " + e.Message);
             }
         }
 
@@ -385,7 +385,7 @@ namespace T3.Core.Resource
 
         public static string LastShaderError;
         
-        internal static void CompileShaderFromFile<TShader>(string srcFile, string entryPoint, string name, string profile, ref TShader shader, ref ShaderBytecode blob)
+        internal static bool CompileShaderFromFile<TShader>(string srcFile, string entryPoint, string name, string profile, ref TShader shader, ref ShaderBytecode blob)
             where TShader : class, IDisposable
         {
             CompilationResult compilationResult;
@@ -402,7 +402,7 @@ namespace T3.Core.Resource
                 var message = ShaderResource.ExtractMeaningfulShaderErrorMessage(ce.Message);
                 LastShaderError = message;
                 Log.Error($"Shader error: {message} '{name}': {ce.Message}\nUsing previous resource state.");
-                return;
+                return false;
             }
 
             blob?.Dispose();
@@ -416,7 +416,7 @@ namespace T3.Core.Resource
             PropertyInfo debugNameInfo = shaderType.GetProperty("DebugName");
             debugNameInfo?.SetValue(shader, name);
             LastShaderError = null;
-            //Log.Info($"Successfully compiled shader '{name}' with profile '{profile}' from '{srcFile}'");
+            return true;
         }
 
         private static void CompileShaderFromSource<TShader>(string shaderSource, string entryPoint, string name, string profile, ref TShader shader, ref ShaderBytecode blob)
@@ -531,13 +531,15 @@ namespace T3.Core.Resource
             return true;
         }        
         
-        public uint CreatePixelShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
+        public bool CreatePixelShaderFromFile(out uint resourceId, string srcFile, string entryPoint, string name, Action fileChangedAction)
         {
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
-                return NullResource;
+            {
+                resourceId= NullResource;
+                return false;
+            }
 
-            bool foundFileEntryForPath = ResourceFileWatcher._resourceFileHooks.TryGetValue(srcFile, out var fileResource);
-            if (foundFileEntryForPath)
+            if (ResourceFileWatcher._resourceFileHooks.TryGetValue(srcFile, out var fileResource))
             {
                 foreach (var id in fileResource.ResourceIds)
                 {
@@ -545,18 +547,19 @@ namespace T3.Core.Resource
                     {
                         fileResource.FileChangeAction -= fileChangedAction;
                         fileResource.FileChangeAction += fileChangedAction;
-                        return id;
+                        resourceId = id;
+                        return true;
                     }
                 }
             }
 
             PixelShader shader = null;
             ShaderBytecode blob = null;
-            CompileShaderFromFile(srcFile, entryPoint, name, "ps_5_0", ref shader, ref blob);
+            var success =CompileShaderFromFile(srcFile, entryPoint, name, "ps_5_0", ref shader, ref blob);
             if (shader == null)
             {
                 Log.Info($"Failed to create pixel shader '{name}'.");
-                return NullResource;
+                success = false;
             }
 
             var resourceEntry = new PixelShaderResource(GetNextResourceId(), name, entryPoint, blob, shader);
@@ -575,7 +578,8 @@ namespace T3.Core.Resource
             fileResource.FileChangeAction -= fileChangedAction;
             fileResource.FileChangeAction += fileChangedAction;
 
-            return resourceEntry.Id;
+            resourceId = resourceEntry.Id; 
+            return success;
         }
 
         
@@ -609,16 +613,19 @@ namespace T3.Core.Resource
             return true;
         }
         
-        public uint CreateComputeShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
+        public bool CreateComputeShaderFromFile(out uint resourceId, string srcFile, string entryPoint, string name, Action fileChangedAction)
         {
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
-                return NullResource;
+            {
+                resourceId = NullResource;
+                return false;
+            }
 
             if (ResourceFileWatcher._resourceFileHooks.TryGetValue(srcFile, out var fileResource))
             {
-                foreach (var resourceId in fileResource.ResourceIds)
+                foreach (var id in fileResource.ResourceIds)
                 {
-                    if (ResourcesById[resourceId] is not ComputeShaderResource csResource)
+                    if (ResourcesById[id] is not ComputeShaderResource csResource)
                         continue;
 
                     if (csResource.EntryPoint != entryPoint)
@@ -626,17 +633,18 @@ namespace T3.Core.Resource
                     
                     fileResource.FileChangeAction -= fileChangedAction;
                     fileResource.FileChangeAction += fileChangedAction;
-                    return resourceId;
+                    resourceId = id;
+                    return true;
                 }
             }
 
             ComputeShader shader = null;
             ShaderBytecode blob = null;
-            CompileShaderFromFile(srcFile, entryPoint, name, "cs_5_0", ref shader, ref blob);
+            var success = CompileShaderFromFile(srcFile, entryPoint, name, "cs_5_0", ref shader, ref blob);
             if (shader == null)
             {
-                Log.Info($"Failed to create compute shader '{name}'.");
-                return NullResource;
+                Log.Warning($"Failed to create compute shader '{name}'.");
+                //return NullResource;
             }
 
             var newResource = new ComputeShaderResource(GetNextResourceId(), name, entryPoint, blob, shader);
@@ -655,7 +663,8 @@ namespace T3.Core.Resource
             fileResource.FileChangeAction -= fileChangedAction;
             fileResource.FileChangeAction += fileChangedAction;
 
-            return newResource.Id;
+            resourceId = newResource.Id;
+            return success;
         }
         
         
@@ -719,14 +728,17 @@ namespace T3.Core.Resource
             }
         }
 
-        public static void UpdatePixelShaderFromFile(string path, uint id, ref PixelShader vertexShader)
+        public static bool UpdatePixelShaderFromFile(string path, uint id, ref PixelShader vertexShader)
         {
             ResourcesById.TryGetValue(id, out var resource);
             if (resource is PixelShaderResource vsResource)
             {
-                vsResource.UpdateFromFile(path);
+                bool success = vsResource.UpdateFromFile(path);
                 vertexShader = vsResource.PixelShader;
+                return success;
             }
+
+            return false;
         }
 
         public static bool UpdateComputeShaderFromFile(string path, uint id, ref ComputeShader computeShader)
@@ -734,9 +746,9 @@ namespace T3.Core.Resource
             ResourcesById.TryGetValue(id, out var resource);
             if (resource is ComputeShaderResource csResource)
             {
-                csResource.UpdateFromFile(path);
+                var success =csResource.UpdateFromFile(path);
                 computeShader = csResource.ComputeShader;
-                return true;
+                return success;
             }
 
             return false;

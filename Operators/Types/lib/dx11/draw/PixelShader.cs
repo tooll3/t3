@@ -25,7 +25,7 @@ namespace T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985
         private void Update(EvaluationContext context)
         {
             var resourceManager = ResourceManager.Instance();
-
+            var success = true;
             if (Source.DirtyFlag.IsDirty || EntryPoint.DirtyFlag.IsDirty || DebugName.DirtyFlag.IsDirty)
             {
                 _sourcePath = Source.GetValue(context);
@@ -43,18 +43,18 @@ namespace T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985
                         return;
                     }
                 }
-                _pixelShaderResId = resourceManager.CreatePixelShaderFromFile(_sourcePath, entryPoint, debugName,
+                success= resourceManager.CreatePixelShaderFromFile(out _pixelShaderResId, _sourcePath, entryPoint, debugName,
                                                                               () => Shader.DirtyFlag.Invalidate());
             }
             else
             {
                 _warningMessage = ResourceManager.LastShaderError;
-                ResourceManager.UpdatePixelShaderFromFile(Source.Value, _pixelShaderResId, ref Shader.Value);
+                success = ResourceManager.UpdatePixelShaderFromFile(Source.Value, _pixelShaderResId, ref Shader.Value);
             }
 
-            if (_pixelShaderResId == ResourceManager.NullResource)
+            if (!success || _pixelShaderResId == ResourceManager.NullResource)
             {
-                Log.Debug("Some error");
+                Log.Debug("Compiling pixel shader failed");
                 if (string.IsNullOrEmpty(_sourcePath) || !File.Exists(_sourcePath))
                 {
                     _warningMessage = $"Can't read file {_sourcePath}";

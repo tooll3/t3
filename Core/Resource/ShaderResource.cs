@@ -72,13 +72,14 @@ public class PixelShaderResource : ShaderResource
 
     public PixelShader PixelShader;
 
-    public virtual void UpdateFromFile(string path)
+    public virtual bool UpdateFromFile(string path)
     {
         if (UpToDate)
-            return;
+            return true;
 
-        ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "ps_5_0", ref PixelShader, ref _blob);
+        var success = ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "ps_5_0", ref PixelShader, ref _blob);
         UpToDate = true;
+        return success;
     }
 }
 
@@ -92,13 +93,14 @@ public class ComputeShaderResource : ShaderResource
 
     public ComputeShader ComputeShader;
 
-    public void UpdateFromFile(string path)
+    public bool UpdateFromFile(string path)
     {
         if (UpToDate)
-            return;
+            return true;
 
-        ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref _blob);
+        var success =ResourceManager.CompileShaderFromFile(path, EntryPoint, Name, "cs_5_0", ref ComputeShader, ref _blob);
         UpToDate = true;
+        return success;
     }
 
     // public void UpdateFromSourceString(string source)

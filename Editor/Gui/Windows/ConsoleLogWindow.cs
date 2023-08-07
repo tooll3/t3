@@ -8,8 +8,6 @@ using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
@@ -254,7 +252,7 @@ namespace T3.Editor.Gui.Windows
                            { ILogEntry.EntryLevel.Debug, UiColors.Text },
                            { ILogEntry.EntryLevel.Info, UiColors.Text },
                            { ILogEntry.EntryLevel.Warning, UiColors.StatusWarning },
-                           { ILogEntry.EntryLevel.Error, UiColors.Text},
+                           { ILogEntry.EntryLevel.Error, UiColors.StatusError},
                        };
         }
 

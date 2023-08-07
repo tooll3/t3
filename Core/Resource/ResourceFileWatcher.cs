@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using SharpDX.Direct3D11;
 using T3.Core.Logging;
@@ -107,8 +108,10 @@ namespace T3.Core.Resource
             // hack: in order to prevent editors like vs-code still having the file locked after writing to it, this gives these editors 
             //       some time to release the lock. With a locked file Shader.ReadFromFile(...) function will throw an exception, because
             //       it cannot read the file. 
-            Thread.Sleep(15);
-            Log.Info($"File '{fileSystemEventArgs.FullPath}' changed due to {fileSystemEventArgs.ChangeType}");
+            
+            Thread.Sleep(32);
+            var ids = string.Join(",", fileHook.ResourceIds);
+            Log.Info($"Updating '{fileSystemEventArgs.FullPath}' ({ids} {fileSystemEventArgs.ChangeType})");
             foreach (var id in fileHook.ResourceIds)
             {
                 // Update all resources that depend from this file

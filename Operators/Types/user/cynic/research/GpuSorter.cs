@@ -159,7 +159,7 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
                 string sourcePath = @"Resources\proj-partial\particle\bitonic-sort.hlsl";
                 string entryPoint = "bitonicSort";
                 string debugName = "bitonic-sort";
-                _sortShaderId = resourceManager.CreateComputeShaderFromFile(sourcePath, entryPoint, debugName, null);
+                resourceManager.CreateComputeShaderFromFile(out _sortShaderId,sourcePath, entryPoint, debugName, null);
             }
 
             if (_transposeShaderId == ResourceManager.NullResource)
@@ -167,7 +167,7 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
                 string sourcePath = @"Resources\proj-partial\particle\bitonic-transpose.hlsl";
                 string entryPoint = "transpose";
                 string debugName = "bitonic-transpose";
-                _transposeShaderId = resourceManager.CreateComputeShaderFromFile(sourcePath, entryPoint, debugName, null);
+                resourceManager.CreateComputeShaderFromFile(out _transposeShaderId,sourcePath, entryPoint, debugName, null);
             }
 
             InitConstBuffer();

@@ -164,10 +164,13 @@ namespace T3.Player
 
                 ResourceManager.Init(device);
                 ResourceManager resourceManager = ResourceManager.Instance();
-                FullScreenVertexShaderId =
+                _fullScreenVertexShaderId =
                     resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
-                FullScreenPixelShaderId =
-                    resourceManager.CreatePixelShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "psMain", "ps-fullscreen-texture", () => { });
+                resourceManager.CreatePixelShaderFromFile(out _fullScreenPixelShaderId, 
+                                                          @"Resources\lib\dx11\fullscreen-texture.hlsl", 
+                                                          "psMain", 
+                                                          "ps-fullscreen-texture", 
+                                                          () => { });
 
                 Assembly operatorsAssembly;
                 try
@@ -316,9 +319,9 @@ namespace T3.Player
                                              if (tex != null)
                                              {
                                                  context.Rasterizer.State = rasterizerState;
-                                                 if (ResourceManager.ResourcesById[FullScreenVertexShaderId] is VertexShaderResource vsr)
+                                                 if (ResourceManager.ResourcesById[_fullScreenVertexShaderId] is VertexShaderResource vsr)
                                                      context.VertexShader.Set(vsr.VertexShader);
-                                                 if (ResourceManager.ResourcesById[FullScreenPixelShaderId] is PixelShaderResource psr)
+                                                 if (ResourceManager.ResourcesById[_fullScreenPixelShaderId] is PixelShaderResource psr)
                                                      context.PixelShader.Set(psr.PixelShader);
                                                  var srv = new ShaderResourceView(device, tex);
                                                  context.PixelShader.SetShaderResource(0, srv);
@@ -430,7 +433,7 @@ namespace T3.Player
         private static EvaluationContext _evalContext;
         private static Playback _playback;
         private static AudioClip _soundtrack;
-        private static uint FullScreenVertexShaderId { get; set; }
-        private static uint FullScreenPixelShaderId { get; set; }
+        private static uint _fullScreenVertexShaderId;
+        private static uint _fullScreenPixelShaderId;
     }
 }
