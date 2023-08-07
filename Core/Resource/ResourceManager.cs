@@ -369,10 +369,21 @@ namespace T3.Core.Resource
                 {
                     _streamReader = new StreamReader(Path.Combine(ResourcesFolder, fileName));
                 }
-                catch(DirectoryNotFoundException e )
+                catch (DirectoryNotFoundException rs_e)
                 {
-                    Log.Error($"Can't open file {ResourcesFolder}/{fileName}  {e.Message}");
-                    return null;
+                    try
+                    {
+                        _streamReader = new StreamReader(Path.Combine(
+                            new FileInfo(((System.IO.FileStream)parentStream).Name).DirectoryName.ToString(),
+                            fileName
+                        ));
+                    }
+                    catch (DirectoryNotFoundException in_e)
+                    {
+                        Log.Error($"Included file {fileName} wasn't found in {ResourcesFolder} or its parent folder " +
+                            $"({rs_e.Message}, {in_e.Message})");
+                        return null;
+                    }
                 }
                 return _streamReader.BaseStream;
             }
