@@ -558,7 +558,7 @@ namespace T3.Core.Resource
             var success =CompileShaderFromFile(srcFile, entryPoint, name, "ps_5_0", ref shader, ref blob);
             if (shader == null)
             {
-                Log.Info($"Failed to create pixel shader '{name}'.");
+                Log.Warning($"Failed to create pixel shader '{name}'.");
                 success = false;
             }
 

@@ -54,7 +54,7 @@ namespace T3.Operators.Types.Id_f7c625da_fede_4993_976c_e259e0ee4985
 
             if (!success || _pixelShaderResId == ResourceManager.NullResource)
             {
-                Log.Debug("Compiling pixel shader failed");
+                //Log.Debug("Compiling pixel shader failed");
                 if (string.IsNullOrEmpty(_sourcePath) || !File.Exists(_sourcePath))
                 {
                     _warningMessage = $"Can't read file {_sourcePath}";
