@@ -36,6 +36,9 @@ public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
         if (sender is not MidiIn midiIn || msg.MidiEvent == null || TypeNameRegistry.Entries.Values.Count == 0)
             return;
 
+        if(msg.MidiEvent.CommandCode == MidiCommandCode.AutoSensing)
+            return;
+        
         LastEventTime = Playback.RunTimeInSecs;
 
         var device = MidiInConnectionManager.GetDescriptionForMidiIn(midiIn);
