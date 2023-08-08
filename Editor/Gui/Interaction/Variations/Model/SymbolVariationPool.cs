@@ -156,13 +156,19 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             var command = variation.IsPreset
                               ? CreateApplyPresetCommand(instance, variation)
                               : CreateApplyVariationCommand(instance, variation);
+            UpdateActiveStateForVariation(variation.ActivationIndex);
+
+            UndoRedoStack.AddAndExecute(command);
+        }
+
+        public void UpdateActiveStateForVariation(int variationIndex)
+        {
             foreach (var v in Variations)
             {
-                v.State = Variation.States.InActive;
+                v.State = v.ActivationIndex == variationIndex ? Variation.States.Active : Variation.States.InActive;
             }
-            variation.State = Variation.States.Active;
-            
-            UndoRedoStack.AddAndExecute(command);
+
+            //variation.State = Variation.States.Active;
         }
 
         public void BeginHover(Instance instance, Variation variation)
@@ -189,6 +195,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
 
             _activeBlendCommand = CreateBlendTowardsVariationCommand(instance, variation, blend);
             _activeBlendCommand.Do();
+            UpdateActiveStateForVariation(variation.ActivationIndex);
         }
         
 

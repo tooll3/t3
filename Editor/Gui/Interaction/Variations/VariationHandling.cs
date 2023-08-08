@@ -150,6 +150,7 @@ namespace T3.Editor.Gui.Interaction.Variations
             } 
             
             CreateOrUpdateSnapshotVariation(activationIndex);
+            ActivePoolForSnapshots.UpdateActiveStateForVariation(activationIndex);
         }
 
         public static void SaveSnapshotAtIndex(int activationIndex)
@@ -161,6 +162,7 @@ namespace T3.Editor.Gui.Interaction.Variations
             }
 
             CreateOrUpdateSnapshotVariation(activationIndex);
+            ActivePoolForSnapshots.UpdateActiveStateForVariation(activationIndex);
         }
 
         public static void RemoveSnapshotAtIndex(int activationIndex)
@@ -181,7 +183,7 @@ namespace T3.Editor.Gui.Interaction.Variations
 
         public static void StartBlendingSnapshots(int[] indices)
         {
-            Log.Warning($"StartBlendingSnapshots {indices} not implemented");
+            Log.Warning($"StartBlendingSnapshots {indices.Length} not implemented");
         }
 
         public static void StartBlendingTowardsSnapshot(int index)

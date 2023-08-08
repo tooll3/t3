@@ -458,7 +458,7 @@
       }
     },
     {
-      "ChildId": "5dfc79a6-201f-4f50-8eb2-c91d7baad889"/*PanicBass*/,
+      "ChildId": "5dfc79a6-201f-4f50-8eb2-c91d7baad889"/*Arps*/,
       "Position": {
         "X": -1819.4275,
         "Y": 380.08636
@@ -737,8 +737,8 @@
     {
       "ChildId": "d372e7be-e234-493e-b55b-adcfb544bbb0"/*Time*/,
       "Position": {
-        "X": -453.9242,
-        "Y": 615.15704
+        "X": -544.2966,
+        "Y": 571.529
       }
     },
     {
@@ -765,8 +765,8 @@
     {
       "ChildId": "989abde5-b9a6-45be-b216-cbdb3950c748"/*MidiInput*/,
       "Position": {
-        "X": -128.219,
-        "Y": 524.15424
+        "X": -544.2966,
+        "Y": 614.529
       }
     },
     {

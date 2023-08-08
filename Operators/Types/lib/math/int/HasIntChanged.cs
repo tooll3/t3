@@ -8,7 +8,7 @@ namespace T3.Operators.Types.Id_62f7408a_a34a_459a_bd7d_bb349196df9b
 {
     public class HasIntChanged : Instance<HasIntChanged>
     {
-        [Output(Guid = "d8ce2d08-4fd3-4a56-92c3-469d661dab8b")]
+        [Output(Guid = "d8ce2d08-4fd3-4a56-92c3-469d661dab8b", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<bool> HasChanged = new Slot<bool>();
         
 
