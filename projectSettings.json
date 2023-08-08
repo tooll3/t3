@@ -3,5 +3,6 @@
   "MainOperatorName": "WFE_RoughtCut",
   "AudioResyncThreshold": 0.04,
   "EnablePlaybackControlWithKeyboard": false,
+  "WindowedMode": true,
   "LimitMidiDeviceCapture": null
 }

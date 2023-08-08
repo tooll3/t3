@@ -72,8 +72,7 @@ namespace T3.Player
                 _vsync = !options.NoVsync;
                 Log.Debug($"using vsync: {_vsync}, windowed: {options.Windowed}, size: {options.Size}, loop: {options.Loop}, logging: {options.Logging}");
 
-                // Todo: Should use correct title
-                var form = new RenderForm("still::partial")
+                var form = new RenderForm($"{ProjectSettings.Config.MainOperatorName}")
                                {
                                    ClientSize = options.Size,
                                    AllowUserResizing = false,
@@ -112,7 +111,7 @@ namespace T3.Player
                 var factory = _swapChain.GetParent<Factory>();
                 factory.MakeWindowAssociation(form.Handle, WindowAssociationFlags.IgnoreAll);
 
-                bool startedWindowed = options.Windowed;
+                var startedWindowed = options.Windowed;
 
                 form.KeyDown += HandleKeyDown;
                 form.KeyUp += HandleKeyUp;
@@ -409,7 +408,7 @@ namespace T3.Player
                                                   h.AdditionalNewLineAfterOption = false;
 
                                                   // Todo: This should use information from the main operator
-                                                  h.Heading = $"still::{ProjectSettings.Config.MainOperatorName} - v0.1";
+                                                  h.Heading = $"{ProjectSettings.Config.MainOperatorName}";
 
                                                   // Todo: This should use information from the main operator
                                                   h.Copyright = "Author";
@@ -420,6 +419,10 @@ namespace T3.Player
 
             parserResult.WithParsed(o => { parsedOptions = o; })
                         .WithNotParsed(o => { Log.Debug(helpText); });
+            // use windowed status _only_ when explicitly set, the Options struct doesn't know about this
+            if(!args.Any(s => "--windowed".Contains(s))) {
+                parsedOptions.Windowed = ProjectSettings.Config.WindowedMode;
+            }
             return parsedOptions;
         }
 
