@@ -136,6 +136,10 @@ namespace T3.Editor.Gui.Windows
                                                                  ref ProjectSettings.Config.EnablePlaybackControlWithKeyboard,
                                                                  "Users can use cursor left/right to skip through time\nand space key to pause playback\nof exported executable.",
                                                                  ProjectSettings.Defaults.EnablePlaybackControlWithKeyboard);
+                projectSettingsChanged |= FormInputs.AddCheckBox("Windowed player",
+                                                                 ref ProjectSettings.Config.WindowedMode,
+                                                                 "Run the executable in windowed mode by default.",
+                                                                 ProjectSettings.Defaults.WindowedMode);
                 if(projectSettingsChanged)
                     ProjectSettings.Save();
                 
