@@ -1,5 +1,5 @@
 {
-  "Id": "bd0f7059-021d-4dd1-8168-01e1e552fb04"/*FlowKanadeSticks*/,
+  "Id": "bd0f7059-021d-4dd1-8168-01e1e552fb04"/*OpticalFlow2*/,
   "Description": "",
   "InputUis": [
     {
@@ -18,6 +18,7 @@
     },
     {
       "InputId": "e2dfcaa4-6e1f-4eee-9052-f4e036bc39fb"/*Image1*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 90.0
@@ -25,6 +26,7 @@
     },
     {
       "InputId": "7cae97b4-f83e-4862-8be4-6ca7142aeb1f"/*Image2*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 135.0
@@ -33,15 +35,15 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "58c3c991-1cd3-4fec-b970-ef690a4b5b6b"/*KanadeGrade*/,
+      "ChildId": "58c3c991-1cd3-4fec-b970-ef690a4b5b6b"/*OpticalFlow*/,
       "Style": "Expanded",
       "Size": {
         "X": 110.0,
-        "Y": 62.0
+        "Y": 88.0
       },
       "Position": {
-        "X": 365.51126,
-        "Y": -208.73279
+        "X": 339.92276,
+        "Y": 54.66855
       }
     },
     {
@@ -52,15 +54,15 @@
         "Y": 49.0
       },
       "Position": {
-        "X": 601.4968,
-        "Y": -362.8902
+        "X": 543.12933,
+        "Y": -268.58627
       }
     },
     {
       "ChildId": "739a46bc-db7d-46d9-9446-7cedeb10cd9c"/*IntToFloat*/,
       "Position": {
-        "X": 84.997314,
-        "Y": -338.54773
+        "X": 227.10231,
+        "Y": -317.6494
       }
     }
   ],
@@ -68,15 +70,15 @@
     {
       "OutputId": "0dca196f-bd3b-4cc1-ac5f-929f2a6dfdce"/*Output*/,
       "Position": {
-        "X": 842.9877,
-        "Y": -618.9196
+        "X": 698.8812,
+        "Y": -295.65375
       }
     },
     {
       "OutputId": "bec5b37d-b007-4bd7-9f5f-dc545820140a"/*OutputRG*/,
       "Position": {
-        "X": 842.9877,
-        "Y": -518.9196
+        "X": 702.54224,
+        "Y": -2.5978699
       }
     }
   ]

@@ -23,5 +23,8 @@ namespace T3.Operators.Types.Id_e1cd1cdf_3982_4bb3_b080_9f0a851566d7
         [Input(Guid = "8686d1c3-c5a5-4b4a-b30f-95a1cfd0dc90")]
         public readonly InputSlot<bool> Enable = new InputSlot<bool>();
 
+        [Input(Guid = "7e308e6d-fcff-46b2-a6d7-460edb33ef80")]
+        public readonly InputSlot<float> ScaleFactor = new InputSlot<float>();
+
     }
 }

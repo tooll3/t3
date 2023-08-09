@@ -20,6 +20,9 @@ namespace T3.Operators.Types.Id_b5b6c046_3c8e_478a_b423_899872c2e1c4
         [Input(Guid = "b25d483f-1fdf-4d76-974c-8e781a405914")]
         public readonly InputSlot<bool> Enable = new InputSlot<bool>();
 
+        [Input(Guid = "7f255460-3a71-42e7-a372-629d39433ae8")]
+        public readonly InputSlot<bool> HasFrameChanged = new InputSlot<bool>();
+
     }
 }
 

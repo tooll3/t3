@@ -4,7 +4,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_bd0f7059_021d_4dd1_8168_01e1e552fb04
 {
-    public class FlowKanadeSticks : Instance<FlowKanadeSticks>
+    public class OpticalFlow2 : Instance<OpticalFlow2>
     {
 
         [Output(Guid = "0dca196f-bd3b-4cc1-ac5f-929f2a6dfdce")]

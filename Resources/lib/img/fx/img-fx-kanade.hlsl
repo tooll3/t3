@@ -6,6 +6,9 @@ Texture2D<float4> inputTextureB : register(t1);
 cbuffer ParamConstants : register(b0)
 {
     float Lod;
+    float Amount;
+    float2 ClampRange;
+    float OutputMode;
 }
 
 
@@ -43,6 +46,7 @@ float intensity(float2 loc, float time) {
 float4 psMain(vsOutput psInput) : SV_TARGET{
     // lucas-kanade optical flow 
     // https://en.wikipedia.org/wiki/Lucas%E2%80%93Kanade_method
+
     float LodScale = pow(2., Lod);
     float2x2 AtA = float2x2(0.0, 0.0, 0.0, 0.0);
     float2 Atb = float2(0.0, 0.0);
@@ -72,5 +76,20 @@ float4 psMain(vsOutput psInput) : SV_TARGET{
         (AtA[0][0] * AtA[1][1] - AtA[1][0] * AtA[0][1]);
 
     float2 flow = mul(AtAinv, Atb);
-    return float4(0.5 + .1 * flow, .0, 1.);
+    flow *= 0.1;
+
+    if(isnan(flow.r)) flow.r=0;
+    if(isnan(flow.g)) flow.g=0;
+
+
+    float2 isSigned = sign(flow); 
+    flow *= isSigned;                           // only positive values
+    flow = clamp(flow, ClampRange.x, ClampRange.y) - ClampRange.x;   // clamp to positive range
+    flow /= (ClampRange.y - ClampRange.x);      // normalize
+    flow *= isSigned;                           // back to signed
+    float magnitude = length(flow.rg);
+    flow *= Amount;
+
+    flow = OutputMode < 0.5 ? flow : saturate(flow + 0.5);
+    return float4(flow, magnitude, 1);
 }

@@ -1,5 +1,5 @@
 {
-  "Name": "FlowKanadeSticks",
+  "Name": "OpticalFlow2",
   "Id": "bd0f7059-021d-4dd1-8168-01e1e552fb04",
   "Namespace": "user.fuzzy.fx",
   "Inputs": [
@@ -22,13 +22,23 @@
   ],
   "Children": [
     {
-      "Id": "58c3c991-1cd3-4fec-b970-ef690a4b5b6b"/*KanadeGrade*/,
+      "Id": "58c3c991-1cd3-4fec-b970-ef690a4b5b6b"/*OpticalFlow*/,
       "SymbolId": "0309e746-c356-4c7b-af05-93136a2607de",
       "InputValues": [
         {
           "Id": "a1eba7f5-e2f1-46cb-8982-ae9cb1b7531b"/*Lod*/,
           "Type": "System.Single",
           "Value": 2.0
+        },
+        {
+          "Id": "fa54b5d3-5a98-4cc1-b848-6e5b3632af6c"/*VisualizeResult*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
+          "Id": "587e2f2b-fd6a-4382-b1c2-99a5963d41ac"/*VisualizationScale*/,
+          "Type": "System.Single",
+          "Value": 50.0
         }
       ],
       "Outputs": []

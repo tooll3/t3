@@ -33,9 +33,14 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         [Output(Guid = "C89EA3AE-82FF-4791-B755-7B7D9EDDF8A7", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<bool> HasCompleted = new();
 
+        [Output(Guid = "732FC715-A8B5-438F-A607-EE1B8B080C04", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<int> UpdateCount = new();
+
+        
         public PlayVideo()
         {
             Texture.UpdateAction = Update;
+            UpdateCount.UpdateAction = Update;
         }
             
         private void Update(EvaluationContext context)
@@ -122,7 +127,17 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             Duration.Value = _hasUpdatedTexture ? (float)_engine.Duration : -1;
             
             UpdateVideoPlayback();
+            if (_hasUpdatedTexture)
+            {
+                UpdateCount.Value++;
+            }
+            
             Playback.OpNotReady |= !_hasUpdatedTexture || _isSeeking || _seekRequested;
+            Texture.DirtyFlag.Clear();
+            Duration.DirtyFlag.Clear();
+            HasCompleted.DirtyFlag.Clear();
+            UpdateCount.DirtyFlag.Clear();
+            
         }
 
         private void SetupMediaFoundation()
@@ -294,10 +309,13 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                     _engine.Pause();
             }
 
-            
-            
+
+
             if ((ReadyStates)_engine.ReadyState < ReadyStates.HaveCurrentData || !_engine.OnVideoStreamTick(out var presentationTimeTicks))
+            {
+                _hasUpdatedTexture = true;
                 return;
+            }
 
             if (_isSeeking && !_engine.IsSeeking)
             {
@@ -320,15 +338,24 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             if (_texture == null)
             {
                 _errorMessageForStatus = "Failed to setup texture";
+                _hasUpdatedTexture = true;
                 return;
             }
 
+            if (presentationTimeTicks == _lastStreamTick)
+            {
+                _hasUpdatedTexture = false;
+                return;
+            }
+                
             _engine.TransferVideoFrame(
                                        _texture,
                                        ToVideoRect(default),
                                        //new RawRectangle(0, 0, renderTarget.ViewWidth, renderTarget.ViewHeight),
                                        new RawRectangle(0, 0, _textureSize.Width, _textureSize.Height),
                                        ToRawColorBgra(default));
+
+            _lastStreamTick = presentationTimeTicks;
             Texture.Value = _texture;
             _hasUpdatedTexture = true;
 
@@ -403,8 +430,9 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
         {
             return _errorMessageForStatus;
         }
-        
-        
+
+
+        private long _lastStreamTick;
         private bool _initialized;
         private MediaEngine _engine;
         private DXGIDeviceManager _dxgiDeviceManager;
