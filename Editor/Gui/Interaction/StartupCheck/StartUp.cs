@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using T3.Core.Logging;
+using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
 using T3.SystemUi;
 
@@ -50,7 +51,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
             Log.Debug("StartUpProgress lock file exists?");
 
             var timeOfLastBackup = AutoBackup.AutoBackup.GetTimeOfLastBackup();
-            var timeSpan = GetReadableRelativeTime(timeOfLastBackup);
+            var timeSpan = THelpers.GetReadableRelativeTime(timeOfLastBackup);
 
             const string caption = "Oh no! Start up problems...";
             string message = "It looks like last start up was incomplete.\n\n" +
@@ -89,28 +90,6 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                 case PopUpResult.Cancel:
                     break;
             }
-        }
-
-        private static string GetReadableRelativeTime(DateTime? timeOfLastBackup)
-        {
-            if (timeOfLastBackup == null)
-                return "Unknown time";
-
-            var timeSinceLastBack = DateTime.Now - timeOfLastBackup;
-            var minutes = timeSinceLastBack.Value.TotalMinutes;
-            if (minutes < 120)
-            {
-                return $"{minutes:0} minutes ago";
-            }
-
-            var hours = timeSinceLastBack.Value.TotalHours;
-            if (hours < 30)
-            {
-                return $"{hours:0.0} hours ago";
-            }
-
-            var days = timeSinceLastBack.Value.TotalDays;
-            return $"{days:0.0} days ago";
         }
 
         private const string HelpUrl = "https://github.com/still-scene/t3/wiki/installation#setup-and-installation";

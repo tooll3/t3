@@ -1049,41 +1049,12 @@ namespace T3.Editor.Gui.Graph
 
         private void CopySelectedNodesToClipboard()
         {
+            var symbolId = CompositionOp.Symbol.Id;
             var selectedChildren = NodeSelection.GetSelectedNodes<SymbolChildUi>();
             var selectedAnnotations = NodeSelection.GetSelectedNodes<Annotation>().ToList();
+            var resultJsonString = GraphOperations.CopyNodesAsJson(symbolId, selectedChildren, selectedAnnotations);
 
-            var containerOp = new Symbol(typeof(object), Guid.NewGuid());
-            var newContainerUi = new SymbolUi(containerOp);
-            SymbolUiRegistry.Entries.Add(newContainerUi.Symbol.Id, newContainerUi);
-
-            var compositionSymbolUi = SymbolUiRegistry.Entries[CompositionOp.Symbol.Id];
-            var cmd = new CopySymbolChildrenCommand(compositionSymbolUi,
-                                                    selectedChildren,
-                                                    selectedAnnotations,
-                                                    newContainerUi,
-                                                    InverseTransformPositionFloat(ImGui.GetMousePos()));
-            cmd.Do();
-
-            using (var writer = new StringWriter())
-            {
-                var jsonWriter = new JsonTextWriter(writer);
-                jsonWriter.WriteStartArray();
-                SymbolJson.WriteSymbol(containerOp, jsonWriter);
-                SymbolUiJson.WriteSymbolUi(newContainerUi, jsonWriter);
-                jsonWriter.WriteEndArray();
-
-                try
-                {
-                    EditorUi.Instance.SetClipboardText(writer.ToString());
-                    //Log.Info(Clipboard.GetText(TextDataFormat.UnicodeText));
-                }
-                catch (Exception)
-                {
-                    Log.Error("Could not copy elements to clipboard. Perhaps a tool like TeamViewer locks it.");
-                }
-            }
-
-            SymbolUiRegistry.Entries.Remove(newContainerUi.Symbol.Id);
+            EditorUi.Instance.SetClipboardText(resultJsonString);
         }
 
         private void PasteClipboard()

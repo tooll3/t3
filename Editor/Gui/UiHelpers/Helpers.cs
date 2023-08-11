@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Utils;
@@ -73,6 +74,28 @@ namespace T3.Editor.Gui.UiHelpers
                 ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
         }
         private static bool _keepNavEnableKeyboard;
+
+        public static string GetReadableRelativeTime(DateTime? timeOfLastBackup)
+        {
+            if (timeOfLastBackup == null)
+                return "Unknown time";
+
+            var timeSinceLastBack = DateTime.Now - timeOfLastBackup;
+            var minutes = timeSinceLastBack.Value.TotalMinutes;
+            if (minutes < 120)
+            {
+                return $"{minutes:0} minutes ago";
+            }
+
+            var hours = timeSinceLastBack.Value.TotalHours;
+            if (hours < 30)
+            {
+                return $"{hours:0.0} hours ago";
+            }
+
+            var days = timeSinceLastBack.Value.TotalDays;
+            return $"{days:0.0} days ago";
+        }
     }
 
     /// <summary>

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using ImGuiNET;
 using T3.Core.Logging;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -24,10 +26,42 @@ namespace T3.Editor.Gui.Windows
         private float _svgFontDescent = 20f;
         private float _svgAdvanceX = 50f;
         private bool _autoConvertOnParameterChange = true;
+
+        private bool _crashUnlocked;
         
         protected override void DrawContent()
         {
+            
+            
             FormInputs.ResetIndent();
+            FormInputs.ApplyIndent();
+            if (ImGui.Button("Test application crash"))
+            {
+                _crashUnlocked = !_crashUnlocked;
+            }
+
+            if (_crashUnlocked)
+            {
+                ImGui.SameLine();
+                ImGui.PushStyleColor(ImGuiCol.Button, UiColors.StatusWarning.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.StatusWarning.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.StatusWarning.Rgba);
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Rgba);
+                var crashNow = ImGui.Button("Crash now."); 
+                ImGui.PopStyleColor(4);
+                
+                if (crashNow)
+                {
+                    string s = null;
+                    // ReSharper disable once PossibleNullReferenceException
+                    var crashMe = s.Length;
+                    Log.Debug("Crash!" + crashMe);
+                }
+                CustomComponents.TooltipForLastItem("Clicking this button will simulate a crash.\nThis can useful to test the crash reporting dialog.");
+            }
+            FormInputs.AddHint("Yes. This can be useful.");
+            
+            
             var modified = false;
             modified |= FormInputs.AddFilePicker("SvgFile", ref _svgFilePath, "not-a-font.svg", null, FileOperations.FilePickerTypes.File);
             modified |= FormInputs.AddFloat("UnitsPerEm", ref _unitsPerEm, -1000, 2000, 1);
@@ -36,6 +70,7 @@ namespace T3.Editor.Gui.Windows
             modified |= FormInputs.AddFloat("AdvanceX", ref _svgAdvanceX, 0, 2000, 1);
             FormInputs.AddCheckBox("Convert on change", ref _autoConvertOnParameterChange);
             
+            FormInputs.ApplyIndent();
             var autoTriggered = _autoConvertOnParameterChange && modified;
             if (autoTriggered || CustomComponents.DisablableButton("Convert To SvgFont", File.Exists(_svgFilePath)))
             {

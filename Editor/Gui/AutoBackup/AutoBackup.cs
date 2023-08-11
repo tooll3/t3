@@ -17,13 +17,7 @@ namespace T3.Editor.Gui.AutoBackup
         public static int SecondsBetweenSaves { get; set; } = 3 * 60;
 
         public static bool IsEnabled { get; set; }
-
-        // public AutoBackup()
-        // {
-        //     SecondsBetweenSaves = 3 * 60;
-        //     IsEnabled = false;
-        // }
-
+        
         /// <summary>
         /// Should be call after all frame operators are completed
         /// </summary>
@@ -36,8 +30,6 @@ namespace T3.Editor.Gui.AutoBackup
             Task.Run(CreateBackupCallback);
             Stopwatch.Restart();
         }
-
-        private static List<string> _filePaths = new(10000);
 
         private static void CreateBackupCallback()
         {
@@ -184,10 +176,7 @@ namespace T3.Editor.Gui.AutoBackup
             return Directory.Exists(BackupDirectory)
                        ? Directory.GetFiles(BackupDirectory, "*.zip", SearchOption.TopDirectoryOnly).Reverse().FirstOrDefault()
                        : null;
-
-            //var backupDirectory = new DirectoryInfo(BackupDirectory);
-
-            // return backupDirectory.GetFiles().OrderByDescending(f => f.LastWriteTime).FirstOrDefault();
+            
         }
 
         /*
@@ -299,8 +288,6 @@ namespace T3.Editor.Gui.AutoBackup
 
         private static readonly Stopwatch Stopwatch = Stopwatch.StartNew();
         private static bool _isSaving;
-
-        private const string TempDirectory = @".t3\temp\";
         private const string BackupDirectory = @".t3\backup";
 
         private static readonly string[] _sourcePaths =

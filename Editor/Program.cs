@@ -4,8 +4,11 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Sentry;
+using T3.Core.Animation;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -15,6 +18,9 @@ using T3.Core.Resource;
 using T3.Editor.App;
 using T3.Editor.Compilation;
 using T3.Editor.Gui;
+using T3.Editor.Gui.AutoBackup;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction.Camera;
@@ -35,13 +41,28 @@ namespace T3.Editor
         public static Device Device { get; private set; }
 
         public static readonly bool IsStandAlone = File.Exists("StartT3.exe");
-        public const string Version = "v3.6.1";
+        public const string Version = "3.6.1";
+
+        /// <summary>
+        /// Generate a release string with 
+        /// </summary>
+        private static string GetReleaseVersion()
+        {
+            var isDebug = "";
+            #if DEBUG
+            isDebug = "debug";
+            #endif
+
+            return "v" + Version + " " + isDebug;
+        }
 
         [STAThread]
         private static void Main(string[] args)
         {
+            InitializeCrashReporting();
+
             EditorUi.Instance = new MsFormsEditor();
-            
+
             if (!IsStandAlone)
                 StartupValidation.CheckInstallation();
 
@@ -52,7 +73,7 @@ namespace T3.Editor
             EditorUi.Instance.EnableDpiAwareScaling();
 
             ISplashScreen splashScreen = new SplashScreen.SplashScreen();
-            
+
             splashScreen.Show("Resources/t3-editor/images/t3-SplashScreen.png");
             Log.AddWriter(splashScreen);
 
@@ -73,7 +94,6 @@ namespace T3.Editor
 
             _t3RenderForm = new T3RenderForm();
             _t3RenderForm.Initialize(device, ProgramWindows.Main.Width, ProgramWindows.Main.Height);
-
 
             var spaceMouse = new SpaceMouse(ProgramWindows.Main.HwndHandle);
             CameraInteraction.ManipulationDevices = new ICameraManipulator[] { spaceMouse };
@@ -254,6 +274,71 @@ namespace T3.Editor
             }
 
             Log.Debug("Shutdown complete");
+        }
+
+        private static void InitializeCrashReporting()
+        {
+            SentrySdk.Init(o =>
+                           {
+                               // Tells which project in Sentry to send events to:
+                               o.Dsn = "https://52e37e10dc9cebcc2328cc63fab57211@o4505681078059008.ingest.sentry.io/4505681082384384";
+                               o.Debug = false;
+                               o.TracesSampleRate = 0.0;
+                               o.IsGlobalModeEnabled = true;
+                               o.SendClientReports = false;
+                               o.AutoSessionTracking = false;
+                               o.SendDefaultPii = false;
+                               o.Release = GetReleaseVersion();
+                               o.SetBeforeSend(CrashHandler);
+                           });
+
+            SentrySdk.ConfigureScope(scope => { scope.SetTag("IsStandAlone", IsStandAlone ? "Yes" : "No"); });
+
+            // Configure WinForms to throw exceptions so Sentry can capture them.
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
+        }
+
+        private static SentryEvent CrashHandler(SentryEvent sentryEvent, Hint hint)
+        {
+            var timeOfLastBackup = AutoBackup.GetTimeOfLastBackup();
+            var timeSpan = THelpers.GetReadableRelativeTime(timeOfLastBackup);
+
+            var result = MessageBox.Show(string.Join("\n",
+                                                     "Oh noooo, how embarrassing! T3 just crashed.",
+                                                     $"Last backup was saved {timeSpan} to .t3/backups/",
+                                                     "We copied the current operator to your clipboard.",
+                                                     "Check the FAQ on what to do next.",
+                                                     "",
+                                                     "Click Yes to send a crash report to tooll.sentry.io.",
+                                                     "This will hopefully help us to fix this issue."
+                                                    ),
+                                         "☠🙈 Damn!",
+                                         MessageBoxButtons.YesNo);
+
+            SentrySdk.ConfigureScope(scope => { scope.SetTag("IsStandAlone", IsStandAlone ? "Yes" : "No"); });
+            sentryEvent.SetExtra("UndoStack", UndoRedoStack.GetUndoStackAsString());
+            sentryEvent.SetExtra("Selection", string.Join("\n", NodeSelection.Selection));
+            sentryEvent.SetExtra("Runtime", Playback.RunTimeInSecs);
+
+            try
+            {
+                var primaryComposition = GraphWindow.GetMainComposition();
+                if (primaryComposition != null)
+                {
+                    var compositionUi = SymbolUiRegistry.Entries[primaryComposition.Symbol.Id];
+                    var json = GraphOperations.CopyNodesAsJson(
+                                                               primaryComposition.Symbol.Id,
+                                                               compositionUi.ChildUis, 
+                                                               compositionUi.Annotations.Values.ToList());
+                    EditorUi.Instance.SetClipboardText(json);
+                }
+            }
+            catch(Exception e)
+            {
+                sentryEvent.SetExtra("CurrentOpExportFailed", e.Message);
+            }
+
+            return result == DialogResult.Yes ? sentryEvent : null;
         }
 
         private static void GenerateFontsWithScaleFactor(float scaleFactor)
