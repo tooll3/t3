@@ -5,10 +5,11 @@ using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
 namespace T3.Core.Operator
 {
-    public abstract class Instance : IDisposable
+    public abstract class Instance : IDisposable, IGuidPathContainer
     {
         public abstract Type Type { get; }
         public Guid SymbolChildId { get; set; }
@@ -140,6 +141,8 @@ namespace T3.Core.Operator
             
             return gotTargetSlot;
         }
+
+        public IList<Guid> InstancePath => OperatorUtils.BuildIdPathForInstance(this).ToArray();
     }
 
     public class Instance<T> : Instance where T : Instance

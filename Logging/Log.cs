@@ -67,7 +67,7 @@ namespace T3.Core.Logging
             {
                 case { Length: 1 } when args[0] is IGuidPathContainer instance:
                 {
-                    DoLog(new LogEntry(level, message, instance.Path));
+                    DoLog(new LogEntry(level, message, instance.InstancePath));
                     break;
                 }
                 
