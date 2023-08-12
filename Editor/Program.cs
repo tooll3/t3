@@ -46,14 +46,18 @@ namespace T3.Editor
         /// <summary>
         /// Generate a release string with 
         /// </summary>
-        private static string GetReleaseVersion()
+        public static string GetReleaseVersion(bool indicateDebugBuild= true)
         {
             var isDebug = "";
             #if DEBUG
-            isDebug = "debug";
+            if (indicateDebugBuild)
+            {
+                isDebug = "Debug";
+            }
             #endif
 
-            return "v" + Version + " " + isDebug;
+            var dev = IsStandAlone ? string.Empty : "Dev";
+            return $"v{Version} {dev} {isDebug}";
         }
 
         [STAThread]
@@ -88,7 +92,7 @@ namespace T3.Editor
             new UserSettings(saveOnQuit: true);
             new ProjectSettings(saveOnQuit: true);
 
-            ProgramWindows.InitializeMainWindow(Version, out var device);
+            ProgramWindows.InitializeMainWindow(GetReleaseVersion(), out var device);
 
             Device = device;
 
@@ -288,11 +292,18 @@ namespace T3.Editor
                                o.SendClientReports = false;
                                o.AutoSessionTracking = false;
                                o.SendDefaultPii = false;
-                               o.Release = GetReleaseVersion();
+                               o.Release = GetReleaseVersion(indicateDebugBuild:false);
                                o.SetBeforeSend(CrashHandler);
                            });
 
             SentrySdk.ConfigureScope(scope => { scope.SetTag("IsStandAlone", IsStandAlone ? "Yes" : "No"); });
+            
+            var configuration = "Release";
+            #if DEBUG
+                configuration = "Debug";
+            #endif
+            
+            SentrySdk.ConfigureScope(scope => { scope.SetTag("Configuration", configuration); });
 
             // Configure WinForms to throw exceptions so Sentry can capture them.
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException);
@@ -328,12 +339,12 @@ namespace T3.Editor
                     var compositionUi = SymbolUiRegistry.Entries[primaryComposition.Symbol.Id];
                     var json = GraphOperations.CopyNodesAsJson(
                                                                primaryComposition.Symbol.Id,
-                                                               compositionUi.ChildUis, 
+                                                               compositionUi.ChildUis,
                                                                compositionUi.Annotations.Values.ToList());
                     EditorUi.Instance.SetClipboardText(json);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 sentryEvent.SetExtra("CurrentOpExportFailed", e.Message);
             }

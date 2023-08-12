@@ -31,8 +31,6 @@ namespace T3.Editor.Gui.Windows
         
         protected override void DrawContent()
         {
-            
-            
             FormInputs.ResetIndent();
             FormInputs.ApplyIndent();
             if (ImGui.Button("Test application crash"))
@@ -52,10 +50,7 @@ namespace T3.Editor.Gui.Windows
                 
                 if (crashNow)
                 {
-                    string s = null;
-                    // ReSharper disable once PossibleNullReferenceException
-                    var crashMe = s.Length;
-                    Log.Debug("Crash!" + crashMe);
+                    SimulateCrash();
                 }
                 CustomComponents.TooltipForLastItem("Clicking this button will simulate a crash.\nThis can useful to test the crash reporting dialog.");
             }
@@ -77,7 +72,15 @@ namespace T3.Editor.Gui.Windows
                 ConvertSvgToSvgFont(_svgFilePath);
             }
         }
-        
+
+        private static void SimulateCrash()
+        {
+            string s = null;
+            // ReSharper disable once PossibleNullReferenceException
+            var crashMe = s.Length;
+            Log.Debug("Crash!" + crashMe);
+        }
+
         private void ConvertSvgToSvgFont(string filePath)
         {
             Log.Debug($"Converting {filePath} to SvgFont");

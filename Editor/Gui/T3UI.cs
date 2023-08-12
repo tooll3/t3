@@ -132,7 +132,7 @@ public class T3Ui
             
         if ( UserSettings.Config.ShowMainMenu || ImGui.GetMousePos().Y < 20)
         {
-            DrawAppMenu();
+            DrawAppMenuBar();
         }
             
         _userNameDialog.Draw();
@@ -177,7 +177,7 @@ public class T3Ui
             
     }
         
-    private void DrawAppMenu()
+    private void DrawAppMenuBar()
     {
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6) * T3Ui.UiScaleFactor);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6, 6) * T3Ui.UiScaleFactor);
@@ -279,8 +279,7 @@ public class T3Ui
             if (ImGui.BeginMenu("View"))
             {
                 UserSettings.Config.ShowMainMenu = true;
-                    
-
+                
                 ImGui.Separator();
                 ImGui.MenuItem("Show Main Menu", "", ref UserSettings.Config.ShowMainMenu);
                 ImGui.MenuItem("Show Title", "", ref UserSettings.Config.ShowTitleAndDescription);
@@ -303,8 +302,20 @@ public class T3Ui
                 ImGui.EndMenu();
             }
 
-
+            
+            if (UserSettings.Config.FullScreen)
+            {
+                ImGui.Dummy(new Vector2(10,10));
+                ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 1);
+                
+                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Fade(0.2f).Rgba);
+                ImGui.TextUnformatted(Program.GetReleaseVersion());
+                ImGui.PopStyleColor();
+            }
+            
             T3Metrics.DrawRenderPerformanceGraph();
+            
+            
             _statusErrorLine.Draw();
 
             ImGui.EndMainMenuBar();
