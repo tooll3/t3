@@ -224,13 +224,19 @@ namespace T3.Editor.Gui.Graph
 
                 if (c.IsConnectedToSymbolInput)
                 {
-                    var inputNode = _inputUisById[c.SourceSlotId];
-
+                    if (!_inputUisById.TryGetValue(c.SourceSlotId, out var inputNode))
+                        return;
+                    
                     if (!_linesFromInputNodes.ContainsKey(inputNode))
                         _linesFromInputNodes.Add(inputNode, new List<ConnectionLineUi>());
 
                     _linesFromInputNodes[inputNode].Add(newLine);
-                    newLine.ColorForType = TypeUiRegistry.Entries[inputNode.Type].Color;
+
+                    var color = UiColors.Gray;
+                    if (TypeUiRegistry.Entries.TryGetValue(inputNode.Type, out var typeUiProperties))
+                        color = typeUiProperties.Color;
+                    
+                    newLine.ColorForType = color;
                 }
                 else if (c.SourceParentOrChildId != ConnectionMaker.NotConnectedId
                          && c.SourceParentOrChildId != ConnectionMaker.UseDraftChildId)
