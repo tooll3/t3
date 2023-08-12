@@ -817,7 +817,7 @@
         {
           "Id": "20e76577-92ee-443d-9630-ebc41e38bb85"/*Index*/,
           "Type": "System.Int32",
-          "Value": 0
+          "Value": 1
         }
       ],
       "Outputs": []
@@ -1890,7 +1890,7 @@
           "Id": "aad1e576-f144-423f-83b5-5694b1119c23"/*OutputRange*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.31,
+            "X": 2.0,
             "Y": 0.0
           }
         },

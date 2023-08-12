@@ -789,6 +789,34 @@
         "X": 1011.7667,
         "Y": 1843.2911
       }
+    },
+    {
+      "ChildId": "042aedcd-ae45-461b-87eb-31df1bdaff5a"/*AString*/,
+      "Position": {
+        "X": -72.4707,
+        "Y": -1250.0436
+      }
+    },
+    {
+      "ChildId": "17208593-6b88-4c5d-918f-de394eb144cc"/*Text*/,
+      "Position": {
+        "X": 77.5293,
+        "Y": -1250.0436
+      }
+    },
+    {
+      "ChildId": "4fbafc4e-ab94-4ff6-b218-1087811960f8"/*AnimValue*/,
+      "Position": {
+        "X": -72.69623,
+        "Y": -1180.3118
+      }
+    },
+    {
+      "ChildId": "9dfc9e58-db74-441a-b20a-ff9159d0628d"/*AdvancedFeedback*/,
+      "Position": {
+        "X": 227.5293,
+        "Y": -1250.0436
+      }
     }
   ],
   "OutputUis": [

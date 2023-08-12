@@ -41,6 +41,11 @@
       "SymbolId": "b3de7a93-e921-4e43-8a56-6c84b2d18b74",
       "InputValues": [
         {
+          "Id": "ce9c0841-a1f3-4f5d-9cd8-636390112ece"/*BrightnessFactor*/,
+          "Type": "System.Single",
+          "Value": 4.2
+        },
+        {
           "Id": "f5f424a1-42a4-4429-8d99-47a7c6176400"/*Red*/,
           "Type": "System.Int32",
           "Value": 4
@@ -48,12 +53,12 @@
         {
           "Id": "1531e949-fe17-4718-9ac6-4dc3884c23fc"/*RedFactor*/,
           "Type": "System.Single",
-          "Value": 0.0
+          "Value": 10.1
         },
         {
           "Id": "022f5d7d-b9fc-4c4f-8b7e-84aaedbfdd29"/*RedOffset*/,
           "Type": "System.Single",
-          "Value": 0.0
+          "Value": 1.3
         },
         {
           "Id": "d87c9071-2636-4136-b488-410591be47c6"/*Green*/,
@@ -175,8 +180,8 @@
           "Id": "1a9e522a-38fb-478f-9f45-d3846cf401c2"/*Stretch*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 7.5,
-            "Y": 1.0
+            "X": 6.3999996,
+            "Y": 3.4
           }
         },
         {
@@ -816,7 +821,13 @@
     {
       "Id": "6af8ee67-1014-453c-a12d-11681bde5c62"/*Grain*/,
       "SymbolId": "b5102fba-f05b-43fc-aa1d-613fe1d68ad2",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "195da7e0-5279-4900-80cd-5635e96ab454"/*Amount*/,
+          "Type": "System.Single",
+          "Value": 0.11
+        }
+      ],
       "Outputs": []
     },
     {
@@ -1456,7 +1467,27 @@
             "InEditMode": "Linear",
             "OutEditMode": "Linear",
             "InTangentAngle": -0.10348723688448591,
-            "OutTangentAngle": -3.245079890474279
+            "OutTangentAngle": 3.177326110606901
+          },
+          {
+            "Time": 184.6462,
+            "Value": 4.059999942779541,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": 0.03573345701710773,
+            "OutTangentAngle": 4.411103761501666
+          },
+          {
+            "Time": 186.5231,
+            "Value": 10.100000381469727,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": 1.2695111079118728,
+            "OutTangentAngle": -1.8720815456779203
           }
         ]
       }
@@ -1736,7 +1767,17 @@
             "InEditMode": "Linear",
             "OutEditMode": "Linear",
             "InTangentAngle": 0.1341887185863735,
-            "OutTangentAngle": -3.0074039350034196
+            "OutTangentAngle": 3.1581467784256247
+          },
+          {
+            "Time": 186.5231,
+            "Value": 1.2999999523162842,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": 0.01655412483583163,
+            "OutTangentAngle": -3.1250385287539615
           }
         ]
       }
@@ -3146,7 +3187,17 @@
             "InEditMode": "Linear",
             "OutEditMode": "Linear",
             "InTangentAngle": -0.09309625801285204,
-            "OutTangentAngle": -3.234688911602645
+            "OutTangentAngle": 3.2091132640089093
+          },
+          {
+            "Time": 186.5231,
+            "Value": 6.399999618530273,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": 0.06752061041911617,
+            "OutTangentAngle": -3.074072043170677
           }
         ]
       }
@@ -4867,7 +4918,17 @@
             "InEditMode": "Linear",
             "OutEditMode": "Linear",
             "InTangentAngle": -0.10998740093882309,
-            "OutTangentAngle": -3.251580054528616
+            "OutTangentAngle": 3.1721473970343466
+          },
+          {
+            "Time": 186.5231,
+            "Value": 3.4000000953674316,
+            "InType": "Linear",
+            "OutType": "Linear",
+            "InEditMode": "Linear",
+            "OutEditMode": "Linear",
+            "InTangentAngle": 0.030554743444553223,
+            "OutTangentAngle": -3.1110379101452397
           }
         ]
       }
