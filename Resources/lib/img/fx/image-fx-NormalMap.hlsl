@@ -82,7 +82,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     if(Mode < Gray_ToAngleAndMagnitude)
     {
-        float4(mod(-angle, 2*3.141592), len * Impact, 0,1);
+        return float4(mod(-angle, 2*3.141592), len * Impact, 0,1);
     }
 
     return float4( float2(len * direction * Impact) +0.5, uvImage.ba);
