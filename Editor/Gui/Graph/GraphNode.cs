@@ -291,7 +291,7 @@ namespace T3.Editor.Gui.Graph
                     {
                         drawList.AddRect(_selectableScreenRect.Min - Vector2.One  * 2,
                                          _selectableScreenRect.Max + Vector2.One * 3 ,
-                                         UiColors.BackgroundActive,
+                                         UiColors.ForegroundFull.Fade(0.6f),
                                          rounding: 0,
                                          ImDrawFlags.None);
                     }
