@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.DataTypes;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
@@ -674,12 +675,20 @@ namespace T3.Editor.Gui.Interaction
             var y = (int)pos.Y;
 
             var bounds = new Rectangle(x, y, 1, 1);
-            using (var g = Graphics.FromImage(_bmp))
-                g.CopyFromScreen(bounds.Location, Point.Empty, bounds.Size);
+            try
+            {
+                using (var g = Graphics.FromImage(_bmp))
+                    g.CopyFromScreen(bounds.Location, Point.Empty, bounds.Size);
 
-            var c = _bmp.GetPixel(0, 0);
+                var c = _bmp.GetPixel(0, 0);
 
-            return new Color(c.R, c.G, c.B, c.A);
+                return new Color(c.R, c.G, c.B, c.A);
+            }
+            catch(Exception e)
+            {
+                Log.Warning("Failed to pick color: " + e.Message);
+            }
+            return Color.Transparent;
         }
 
         private static Color _hoveredColor;
