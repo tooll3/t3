@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,11 @@ using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Windows
 {
+    internal class SimulatedCrashException : Exception
+    {
+        
+    }
+    
     public class UtilitiesWindow : Window
     {
         public UtilitiesWindow()
@@ -73,12 +79,11 @@ namespace T3.Editor.Gui.Windows
             }
         }
 
+        
+        
         private static void SimulateCrash()
         {
-            string s = null;
-            // ReSharper disable once PossibleNullReferenceException
-            var crashMe = s.Length;
-            Log.Debug("Crash!" + crashMe);
+            throw new SimulatedCrashException();
         }
 
         private void ConvertSvgToSvgFont(string filePath)
