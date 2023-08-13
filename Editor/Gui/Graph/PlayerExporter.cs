@@ -122,7 +122,7 @@ namespace T3.Editor.Gui.Graph
                 }
 
                 // Copy referenced resources
-                Traverse(instance.Outputs.First(), exportInfo);
+                RecursivelyCollectExportData(instance.Outputs.First(), exportInfo);
                 exportInfo.PrintInfo();
                 var resourcePaths = exportInfo.UniqueResourcePaths;
 
@@ -276,13 +276,13 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private static void Traverse(ISlot slot, ExportInfo exportInfo)
+        private static void RecursivelyCollectExportData(ISlot slot, ExportInfo exportInfo)
         {
             if (slot is IInputSlot)
             {
                 if (slot.IsConnected)
                 {
-                    Traverse(slot.GetConnection(0), exportInfo);
+                    RecursivelyCollectExportData(slot.GetConnection(0), exportInfo);
                 }
 
                 CheckInputForResourcePath(slot, exportInfo);
@@ -290,7 +290,7 @@ namespace T3.Editor.Gui.Graph
             else if (slot.IsConnected)
             {
                 // slot is an output of an composition op
-                Traverse(slot.GetConnection(0), exportInfo);
+                RecursivelyCollectExportData(slot.GetConnection(0), exportInfo);
                 exportInfo.AddInstance(slot.Parent);
             }
             else
@@ -304,20 +304,20 @@ namespace T3.Editor.Gui.Graph
                 {
                     CheckInputForResourcePath(input, exportInfo);
 
-                    if (input.IsConnected)
+                    if (!input.IsConnected)
+                        continue;
+                    
+                    if (input.IsMultiInput)
                     {
-                        if (input.IsMultiInput)
+                        var multiInput = (IMultiInputSlot)input;
+                        foreach (var entry in multiInput.GetCollectedInputs())
                         {
-                            var multiInput = (IMultiInputSlot)input;
-                            foreach (var entry in multiInput.GetCollectedInputs())
-                            {
-                                Traverse(entry, exportInfo);
-                            }
+                            RecursivelyCollectExportData(entry, exportInfo);
                         }
-                        else
-                        {
-                            Traverse(input.GetConnection(0), exportInfo);
-                        }
+                    }
+                    else
+                    {
+                        RecursivelyCollectExportData(input.GetConnection(0), exportInfo);
                     }
                 }
             }
@@ -339,26 +339,40 @@ namespace T3.Editor.Gui.Graph
             if (value is not InputValue<string> stringValue)
                 return;
 
-            if (stringInputUi.Usage == StringInputUi.UsageType.FilePath)
+            switch (stringInputUi.Usage)
             {
-                var resourcePath = stringValue.Value;
-                exportInfo.AddResourcePath(resourcePath);
+                case StringInputUi.UsageType.FilePath:
+                {
+                    var resourcePath = stringValue.Value;
+                    exportInfo.AddResourcePath(resourcePath);
 
-                // Copy related font textures
-                if (resourcePath.EndsWith(".fnt"))
-                {
-                    exportInfo.AddResourcePath(resourcePath.Replace(".fnt", ".png"));
+                    // Copy related font textures
+                    if (resourcePath.EndsWith(".fnt"))
+                    {
+                        exportInfo.AddResourcePath(resourcePath.Replace(".fnt", ".png"));
+                    }
+
+                    break;
                 }
-            }
-            else if (stringInputUi.Usage == StringInputUi.UsageType.DirectoryPath)
-            {
-                var resourceDirectory = stringValue.Value;
-                if (Directory.Exists(resourceDirectory))
+                case StringInputUi.UsageType.DirectoryPath:
                 {
+                    var resourceDirectory = stringValue.Value;
+                    if (!Directory.Exists(resourceDirectory))
+                        break;
+                    
+                    if (!resourceDirectory.StartsWith("Resources"))
+                    {
+                        Log.Debug($"skipping folder {resourceDirectory} because not in Resources/ folder...");
+                        break;
+                    }
+                    
+                    Log.Debug($"Export all entries folder {resourceDirectory}...");
                     foreach (var resourcePath in Directory.GetFiles(resourceDirectory))
                     {
                         exportInfo.AddResourcePath(resourcePath);
                     }
+
+                    break;
                 }
             }
         }
