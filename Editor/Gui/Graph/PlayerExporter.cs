@@ -15,10 +15,11 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
+// ReSharper disable StringLiteralTypo
 
 namespace T3.Editor.Gui.Graph
 {
-    public class PlayerExporter
+    public static class PlayerExporter
     {
         public static void ExportInstance(GraphCanvas graphCanvas, SymbolChildUi childUi)
         {
@@ -37,7 +38,7 @@ namespace T3.Editor.Gui.Graph
                 var exportInfo = new ExportInfo();
                 CollectChildSymbols(instance.Symbol, exportInfo);
 
-                string exportDir = "Export";
+                const string exportDir = "Export";
                 try
                 {
                     Directory.Delete(exportDir, true);
@@ -50,13 +51,23 @@ namespace T3.Editor.Gui.Graph
                 Directory.CreateDirectory(exportDir);
 
                 // Generate Operators assembly
-                var operatorAssemblySources = exportInfo.UniqueSymbols.Select(symbol =>
-                                                                              {
-                                                                                  var source =
-                                                                                      File.ReadAllText(SymbolData.BuildFilepathForSymbol(symbol,
-                                                                                                           SymbolData.SourceExtension));
-                                                                                  return source;
-                                                                              }).ToList();
+                var operatorAssemblySources
+                    = exportInfo
+                     .UniqueSymbols
+                     .Select(symbol =>
+                             {
+                                 var filePathForSymbol = SymbolData.BuildFilepathForSymbol(symbol,
+                                                                                           SymbolData.SourceExtension);
+
+                                 if (!File.Exists(filePathForSymbol))
+                                 {
+                                     Log.Warning($"Can't find source file {filePathForSymbol}");
+                                     return string.Empty;
+                                 }
+
+                                 var source = File.ReadAllText(filePathForSymbol);
+                                 return source;
+                             }).ToList();
 
                 foreach (var file in Directory.GetFiles(@"Operators\Utils\", "*.cs", SearchOption.AllDirectories))
                 {
@@ -81,7 +92,7 @@ namespace T3.Editor.Gui.Graph
                               {
                                   playerPublishPath + "Svg.dll",
                                   playerPublishPath + "Player.exe",
-                                  
+
                                   playerBuildPath + "SpoutDX.dll",
                                   playerBuildPath + "Spout.dll",
                                   playerBuildPath + "Processing.NDI.Lib.x64.dll",
@@ -89,14 +100,14 @@ namespace T3.Editor.Gui.Graph
                                   playerBuildPath + "bass.dll",
                               },
                           exportDir);
-                
+
                 Log.Debug("Compiling Operators.dll...");
                 var references = CompileSymbolsFromSource(exportDir, operatorAssemblySources.ToArray());
 
                 if (!Program.IsStandAlone)
                 {
                     Log.Debug("Copy dependencies referenced in Operators.dll...");
-                    var referencedAssemblies = references.Where(r => r.Display.Contains(currentDir))
+                    var referencedAssemblies = references.Where(assembly => assembly.Display != null && assembly.Display.Contains(currentDir))
                                                          .Select(r => r.Display)
                                                          .Distinct()
                                                          .ToArray();
@@ -113,12 +124,11 @@ namespace T3.Editor.Gui.Graph
                 Directory.CreateDirectory(symbolExportDir);
                 foreach (var symbol in exportInfo.UniqueSymbols)
                 {
-                    using (var sw = new StreamWriter(symbolExportDir + symbol.Name + "_" + symbol.Id + ".t3"))
-                    using (var writer = new JsonTextWriter(sw))
-                    {
-                        writer.Formatting = Formatting.Indented;
-                        SymbolJson.WriteSymbol(symbol, writer);
-                    }
+                    using var sw = new StreamWriter(symbolExportDir + symbol.Name + "_" + symbol.Id + ".t3");
+                    using var writer = new JsonTextWriter(sw);
+                    
+                    writer.Formatting = Formatting.Indented;
+                    SymbolJson.WriteSymbol(symbol, writer);
                 }
 
                 // Copy referenced resources
@@ -128,7 +138,7 @@ namespace T3.Editor.Gui.Graph
 
                 {
                     var symbolPlaybackSettings = childUi.SymbolChild.Symbol.PlaybackSettings;
-                    
+
                     var soundtrack = symbolPlaybackSettings?.AudioClips.SingleOrDefault(ac => ac.IsSoundtrack);
                     if (soundtrack == null)
                     {
@@ -151,7 +161,7 @@ namespace T3.Editor.Gui.Graph
 
                 resourcePaths.Add(@"projectSettings.json");
 
-                resourcePaths.UnionWith(Directory.GetFiles(@"Resources\lib\shared\") );
+                resourcePaths.UnionWith(Directory.GetFiles(@"Resources\lib\shared\"));
 
                 resourcePaths.Add(@"Resources\lib\points\spatial-hash-map\hash-map-settings.hlsl");
 
@@ -175,7 +185,14 @@ namespace T3.Editor.Gui.Graph
 
                         var targetPath = exportDir + Path.DirectorySeparatorChar + resourcePath;
 
-                        var targetDir = new DirectoryInfo(targetPath).Parent.FullName;
+                        var targetDirectoryInfo = new DirectoryInfo(targetPath);
+                        if (targetDirectoryInfo.Parent == null)
+                        {
+                            Log.Warning($"Can't access parent of {targetPath}");
+                            continue;
+                        }
+                        
+                        var targetDir = targetDirectoryInfo.Parent.FullName;
                         if (!Directory.Exists(targetDir))
                             Directory.CreateDirectory(targetDir);
 
@@ -306,7 +323,7 @@ namespace T3.Editor.Gui.Graph
 
                     if (!input.IsConnected)
                         continue;
-                    
+
                     if (input.IsMultiInput)
                     {
                         var multiInput = (IMultiInputSlot)input;
@@ -359,13 +376,13 @@ namespace T3.Editor.Gui.Graph
                     var resourceDirectory = stringValue.Value;
                     if (!Directory.Exists(resourceDirectory))
                         break;
-                    
+
                     if (!resourceDirectory.StartsWith("Resources"))
                     {
                         Log.Debug($"skipping folder {resourceDirectory} because not in Resources/ folder...");
                         break;
                     }
-                    
+
                     Log.Debug($"Export all entries folder {resourceDirectory}...");
                     foreach (var resourcePath in Directory.GetFiles(resourceDirectory))
                     {
@@ -384,14 +401,13 @@ namespace T3.Editor.Gui.Graph
             var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
             var coreAssembly = typeof(ResourceManager).Assembly;
             referencedAssemblies.Add(MetadataReference.CreateFromFile(coreAssembly.Location));
-            // referencedAssemblies.Add(MetadataReference.CreateFromFile(operatorsAssembly.Location));
             foreach (var asmName in referencedAssembliesNames)
             {
                 var asm = Assembly.Load(asmName);
                 referencedAssemblies.Add(MetadataReference.CreateFromFile(asm.Location));
                 Log.Debug($"Loaded from {asm} {asm.Location}");
 
-                // in order to get dependencies of the used assemblies that are not part of T3 references itself
+                // In order to get dependencies of the used assemblies that are not part of T3 references itself
                 var subAsmNames = asm.GetReferencedAssemblies();
                 foreach (var subAsmName in subAsmNames)
                 {
