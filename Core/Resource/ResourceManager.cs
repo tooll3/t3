@@ -457,7 +457,7 @@ namespace T3.Core.Resource
         
         public uint CreateVertexShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
         {
-            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
+            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint) || !File.Exists(srcFile))
                 return NullResource;
 
             if (ResourceFileWatcher._resourceFileHooks.TryGetValue(srcFile, out var fileResource))
@@ -533,7 +533,7 @@ namespace T3.Core.Resource
         
         public bool CreatePixelShaderFromFile(out uint resourceId, string srcFile, string entryPoint, string name, Action fileChangedAction)
         {
-            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
+            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint) || !File.Exists(srcFile))
             {
                 resourceId= NullResource;
                 return false;
@@ -615,7 +615,7 @@ namespace T3.Core.Resource
         
         public bool CreateComputeShaderFromFile(out uint resourceId, string srcFile, string entryPoint, string name, Action fileChangedAction)
         {
-            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
+            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint) || !File.Exists(srcFile))
             {
                 resourceId = NullResource;
                 return false;
@@ -670,7 +670,7 @@ namespace T3.Core.Resource
         
         public uint CreateGeometryShaderFromFile(string srcFile, string entryPoint, string name, Action fileChangedAction)
         {
-            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint))
+            if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint) || !File.Exists(srcFile))
                 return NullResource;
 
             bool foundFileEntryForPath = ResourceFileWatcher._resourceFileHooks.TryGetValue(srcFile, out var fileResource);

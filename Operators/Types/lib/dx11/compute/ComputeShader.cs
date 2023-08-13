@@ -56,15 +56,25 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
             if (success && _computeShaderResId != ResourceManager.NullResource)
             {
                 ComputerShader.Value = resourceManager.GetComputeShader(_computeShaderResId);
-                var shaderReflection = new ShaderReflection(resourceManager.GetComputeShaderBytecode(_computeShaderResId));
-                shaderReflection.GetThreadGroupSize(out int x, out int y, out int z);
-                ThreadCount.Value = new Int3(x, y, z);
-                _statusWarning = null;
+                var computeShaderBytecode = resourceManager.GetComputeShaderBytecode(_computeShaderResId);
+                if (computeShaderBytecode != null)
+                {
+                    var shaderReflection = new ShaderReflection(computeShaderBytecode);
+                    shaderReflection.GetThreadGroupSize(out int x, out int y, out int z);
+                    ThreadCount.Value = new Int3(x, y, z);
+                    _statusWarning = null;
+                }
+                else
+                {
+                    _statusWarning = "Failed to access shader bytecode";
+                    Log.Warning(_statusWarning, this);
+                    ComputerShader.Value = null;
+                }
             }
             else
             {
                 _statusWarning = !File.Exists(_sourcePath) 
-                                     ? "Source file not found" 
+                                     ? $"Source file not found {_sourcePath}" 
                                      : "Compiling not successful\n" + ResourceManager.LastShaderError;
             }
             ComputerShader.DirtyFlag.Clear();
