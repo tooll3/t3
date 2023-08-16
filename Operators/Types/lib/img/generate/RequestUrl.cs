@@ -6,12 +6,13 @@ using T3.Core.Operator.Slots;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_5cc6cc51_75ab_474d_b0b8_aaa03ea77326
+namespace T3.Operators.Types.Id_6535edc3_a4ed_46c7_ae71_d3974612b448
 {
     public class RequestUrl : Instance<RequestUrl>
     {
-        [Output(Guid = "D6DACC5B-726E-48C4-A6CD-76C0581DB809")]
+        [Output(Guid = "664c217c-8c7e-4bc8-870e-409f6f67ad33")]
         public readonly Slot<string> Result = new();
 
         public RequestUrl()
@@ -21,26 +22,32 @@ namespace T3.Operators.Types.Id_5cc6cc51_75ab_474d_b0b8_aaa03ea77326
 
         private void Update(EvaluationContext context)
         {
-            Download2();
+            var wasTriggered = MathUtils.WasTriggered( TriggerRequest.GetValue(context), ref _triggered);
+            var isUrlDirty = Url.DirtyFlag.IsDirty;
+            var url = Url.GetValue(context);
+
+            if(wasTriggered || isUrlDirty)
+                Download2(url);
         }
 
-        private async void Download2()
+        private bool _triggered;
+        
+        private async void Download2(string url)
         {
             try
             {
                 var client = new HttpClient(new HttpClientHandler() { UseDefaultCredentials = true });
                 var request = new HttpRequestMessage
                                   {
-                                      RequestUri = new Uri("https://oyjobypyozkufrbrmqnt.supabase.co/rest/v1/scores?select=data"),
+                                      RequestUri = new Uri(url),
                                       Method = HttpMethod.Get,
                                   };
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                request.Headers.Add("apikey",
-                                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95am9ieXB5b3prdWZyYnJtcW50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODAwMDA4MTUsImV4cCI6MTk5NTU3NjgxNX0.9Km2SmPnOQre_obeKr_DSr2l33PECtMWIF1VuxE1zck");
-                request.Headers.Add("Authorization",
-                                    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95am9ieXB5b3prdWZyYnJtcW50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODAwMDA4MTUsImV4cCI6MTk5NTU3NjgxNX0.9Km2SmPnOQre_obeKr_DSr2l33PECtMWIF1VuxE1zck");
+                //request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                // request.Headers.Add("apikey",
+                //                     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95am9ieXB5b3prdWZyYnJtcW50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODAwMDA4MTUsImV4cCI6MTk5NTU3NjgxNX0.9Km2SmPnOQre_obeKr_DSr2l33PECtMWIF1VuxE1zck");
+                // request.Headers.Add("Authorization",
+                //                     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95am9ieXB5b3prdWZyYnJtcW50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODAwMDA4MTUsImV4cCI6MTk5NTU3NjgxNX0.9Km2SmPnOQre_obeKr_DSr2l33PECtMWIF1VuxE1zck");
                 var httpResponseTask = await client.SendAsync(request);
-                
                 Result.Value =await httpResponseTask.Content.ReadAsStringAsync();;
                 Result.DirtyFlag.Invalidate();
             }
@@ -50,7 +57,10 @@ namespace T3.Operators.Types.Id_5cc6cc51_75ab_474d_b0b8_aaa03ea77326
             }
         }
         
-        [Input(Guid = "103d0f2c-343d-488a-baf8-5ffab97d0b42")]
+        [Input(Guid = "8c7a6493-af56-4a03-a41f-796e30902cfd")]
         public readonly InputSlot<string> Url = new();
+        
+        [Input(Guid = "4DC9DEF5-958B-4A9C-8755-827BF4E5EAA6")]
+        public readonly InputSlot<bool> TriggerRequest = new();
     }
 }
