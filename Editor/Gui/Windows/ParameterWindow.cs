@@ -138,8 +138,12 @@ namespace T3.Editor.Gui.Windows
                 ImGui.TextWrapped(symbolUi.Description);
                 ImGui.PopStyleColor();
             }
+            else
+            {
+                FormInputs.AddHint("No description yet.");
+            }
 
-            if (ImGui.Button("Edit description..."))
+            if (ImGui.Button("Edit description... "))
                 _editDescriptionDialog.ShowNextFrame();
 
             SymbolBrowser.ListExampleOperators(symbolUi);
