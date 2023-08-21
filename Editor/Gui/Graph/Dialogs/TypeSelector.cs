@@ -83,8 +83,9 @@ public static class TypeSelector
                                                                              { "Texture2d", new[] { "Image", } },
                                                                              { "Vector4", new[] { "Color", "Quaternion" } },
                                                                          };
-    private static Type SelectedType => _typeList[_selectedTypeIndex].Key;
-    private static string SelectedTypeName => _typeList[_selectedTypeIndex].Value;
+    private static Type SelectedType => IsSelectedTypeIndexValid ? _typeList[_selectedTypeIndex].Key : null;
+    private static string SelectedTypeName => IsSelectedTypeIndexValid ? _typeList[_selectedTypeIndex].Value : "Unknown";
+    private static bool IsSelectedTypeIndexValid => _selectedTypeIndex >= 0 && _selectedTypeIndex < _typeList.Length;
 
     private static KeyValuePair<Type, string>[] _typeList;
     private static bool _initialized;

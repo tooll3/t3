@@ -36,13 +36,6 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 if (CustomComponents.DisablableButton("Add", isValid))
                 {
                     InputsAndOutputs.AddInputToSymbol(_parameterName, _multiInput, _selectedType, symbol);
-                    var symbolUi = SymbolUiRegistry.Entries[symbol.Id];
-                    var inputUi = symbolUi.InputUis.Values.SingleOrDefault(i => i.InputDefinition.Name == _parameterName);
-                    if (inputUi is FloatInputUi floatInputUi)
-                    {
-                        floatInputUi.Min = -1;
-                        floatInputUi.Max = 42;
-                    }
                 }
 
                 ImGui.SameLine();
@@ -59,7 +52,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
         private string _parameterName = string.Empty;
         private bool _multiInput;
-        private Type _selectedType;
+        private Type _selectedType = typeof(float);
 
     }
 }
