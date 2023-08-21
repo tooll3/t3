@@ -6,7 +6,7 @@ using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Windows.Output
 {
-    public class ResolutionHandling
+    public static class ResolutionHandling
     {
         public static void DrawSelector(ref Resolution selectedResolution, EditResolutionDialog resolutionDialog)
         {
@@ -22,7 +22,7 @@ namespace T3.Editor.Gui.Windows.Output
                     {
                         selectedResolution = resolution;
                     }
-                    
+
                     CustomComponents.ContextMenuForItem(() =>
                                                         {
                                                             if (ImGui.MenuItem("Remove"))
@@ -34,37 +34,39 @@ namespace T3.Editor.Gui.Windows.Output
                     ImGui.PopID();
                 }
 
-                // if (ImGui.Selectable("+ Add"))
-                // {
-                //     _resolutionForEdit =  new Resolution("untitled", 1,1);
-                //     Resolutions.Add(_resolutionForEdit);
-                //     resolutionDialog.ShowNextFrame();
-                // }
+                if (ImGui.Selectable("+ Add"))
+                {
+                    _resolutionForEdit = new Resolution("untitled", 256, 256);
+                    Resolutions.Add(_resolutionForEdit);
+                    resolutionDialog?.ShowNextFrame();
+                    selectedResolution = _resolutionForEdit;
+                }
+
                 ImGui.EndCombo();
             }
         }
-        
 
-        public static readonly List<Resolution> Resolutions = new List<Resolution>()
-                                                               {
-                                                                   new Resolution("Fill", 0, 0, useAsAspectRatio: true),
-                                                                   new Resolution("1:1", 1, 1, useAsAspectRatio: true),
-                                                                   new Resolution("16:9", 16, 9, useAsAspectRatio: true),
-                                                                   new Resolution("4:3", 4, 3, useAsAspectRatio: true),
-                                                                   new Resolution("480p",  850, 480),
-                                                                   new Resolution("720p",  1280, 720),
-                                                                   new Resolution("1080p",  1920, 1080),
-                                                                   new Resolution("4k", 1920*2, 1080*2),
-                                                                   new Resolution("8k", 1920*4, 1080*4),
-                                                                   new Resolution("4k Portrait", 1080*2, 1920*2),
-                                                               };
+
+        public static readonly List<Resolution> Resolutions = new()
+                                                                  {
+                                                                      new("Fill", 0, 0, useAsAspectRatio: true),
+                                                                      new("1:1", 1, 1, useAsAspectRatio: true),
+                                                                      new("16:9", 16, 9, useAsAspectRatio: true),
+                                                                      new("4:3", 4, 3, useAsAspectRatio: true),
+                                                                      new("480p", 850, 480),
+                                                                      new("720p", 1280, 720),
+                                                                      new("1080p", 1920, 1080),
+                                                                      new("4k", 1920 * 2, 1080 * 2),
+                                                                      new("8k", 1920 * 4, 1080 * 4),
+                                                                      new("4k Portrait", 1080 * 2, 1920 * 2),
+                                                                  };
 
         public static readonly Resolution DefaultResolution = Resolutions[0];
-        private static readonly Resolution _resolutionForEdit = new Resolution("untitled", 255,255);
-        
+        private static Resolution _resolutionForEdit = new("untitled", 255, 255);
+
         public class Resolution
         {
-            public Resolution(string title,  int width, int height,bool useAsAspectRatio=false)
+            public Resolution(string title, int width, int height, bool useAsAspectRatio = false)
             {
                 Title = title;
                 Size.Width = width;
@@ -79,16 +81,16 @@ namespace T3.Editor.Gui.Windows.Output
             public Size2 ComputeResolution()
             {
                 if (!UseAsAspectRatio)
-                    return Size; 
+                    return Size;
 
                 var windowSize = ImGui.GetWindowContentRegionMax() - ImGui.GetWindowContentRegionMin();
                 if (Size.Width <= 0 || Size.Height <= 0)
                 {
                     var borderSize = (int)ImGui.GetStyle().WindowBorderSize;
-                    return new Size2((int)windowSize.X - 2 * borderSize, 
-                                     (int)windowSize.Y - 2 * borderSize); 
+                    return new Size2((int)windowSize.X - 2 * borderSize,
+                                     (int)windowSize.Y - 2 * borderSize);
                 }
-                
+
                 var windowAspectRatio = windowSize.X / windowSize.Y;
                 var requestedAspectRatio = (float)Size.Width / Size.Height;
 
@@ -102,9 +104,9 @@ namespace T3.Editor.Gui.Windows.Output
                 get
                 {
                     return !string.IsNullOrEmpty(Title)
-                                   && !Resolutions.Any(res => res != this && res.Title == Title)
-                                   && Size.Width > 0 && Size.Width < 16384
-                                   && Size.Height > 0 && Size.Height < 16384;
+                           && !Resolutions.Any(res => res != this && res.Title == Title)
+                           && Size.Width > 0 && Size.Width < 16384
+                           && Size.Height > 0 && Size.Height < 16384;
                 }
             }
         }
