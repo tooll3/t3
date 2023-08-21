@@ -187,7 +187,7 @@ namespace T3.Editor.Gui.UiHelpers
                 ImGui.InvisibleButton("gradientStep", new Vector2(StepHandleSize.X, areaOnScreen.GetHeight()));
 
                 // Stub for ColorEditButton that allows quick sliders. Sadly this doesn't work with right mouse button drag.
-                //handleModified |= ColorEditButton.Draw(ref step.Color, new Vector2(StepHandleSize.X, areaOnScreen.GetHeight()));
+                //stepModified |= ColorEditButton.Draw(ref step.Color, new Vector2(StepHandleSize.X, areaOnScreen.GetHeight()));
 
                 if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup))
                 {
@@ -212,6 +212,13 @@ namespace T3.Editor.Gui.UiHelpers
                     }
 
                     isDraggedOutside = ImGui.GetMousePos().Y > areaOnScreen.Max.Y + RemoveThreshold;
+                    
+                    // Draw Remove indicator...
+                    var centerX = (int)areaOnScreen.GetCenter().X;
+                    var y = areaOnScreen.Max.Y + RemoveThreshold;
+                    
+                    drawList.AddRectFilled(new Vector2(areaOnScreen.Min.X, y), new Vector2(areaOnScreen.Max.X, y-1), UiColors.ForegroundFull.Fade(0.1f));
+                    Icons.DrawIconAtScreenPosition(Icon.Trash, new Vector2(centerX, y+10), drawList, isDraggedOutside ? UiColors.StatusAttention: UiColors.ForegroundFull.Fade(0.2f));
                     stepModified = true;
                 }
 
