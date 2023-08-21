@@ -487,40 +487,48 @@ namespace T3.Editor.Gui
             io.Fonts.SetTexID(fontAtlasId);
             var box = new DataBox(atlasPixels, atlasWidth * 4, 0);
 
-            // Upload texture to graphics system
-            var textureDesc = new Texture2DDescription()
-                                  {
-                                      Width = atlasWidth,
-                                      Height = atlasHeight,
-                                      MipLevels = 1,
-                                      ArraySize = 1,
-                                      Format = Format.R8G8B8A8_UNorm,
-                                      SampleDescription = new SampleDescription() { Count = 1, Quality = 0 },
-                                      Usage = ResourceUsage.Default,
-                                      BindFlags = BindFlags.ShaderResource,
-                                      CpuAccessFlags = CpuAccessFlags.None
-                                  };
-            Texture2D texture = new Texture2D(_device, textureDesc, new[] { box });
-            texture.DebugName = "FImgui Font Atlas";
+            try
+            {
 
-            _fontTextureView = new ShaderResourceView(_device, texture);
-            texture.Dispose();
+                // Upload texture to graphics system
+                var textureDesc = new Texture2DDescription()
+                                      {
+                                          Width = atlasWidth,
+                                          Height = atlasHeight,
+                                          MipLevels = 1,
+                                          ArraySize = 1,
+                                          Format = Format.R8G8B8A8_UNorm,
+                                          SampleDescription = new SampleDescription() { Count = 1, Quality = 0 },
+                                          Usage = ResourceUsage.Default,
+                                          BindFlags = BindFlags.ShaderResource,
+                                          CpuAccessFlags = CpuAccessFlags.None
+                                      };
+                Texture2D texture = new Texture2D(_device, textureDesc, new[] { box });
+                texture.DebugName = "FImgui Font Atlas";
 
-            // Store our identifier
-            io.Fonts.TexID = (IntPtr)_fontTextureView;
+                _fontTextureView = new ShaderResourceView(_device, texture);
+                texture.Dispose();
 
-            var samplerDesc = new SamplerStateDescription()
-                                  {
-                                      Filter = Filter.MinMagMipLinear,
-                                      AddressU = TextureAddressMode.Wrap,
-                                      AddressV = TextureAddressMode.Wrap,
-                                      AddressW = TextureAddressMode.Wrap,
-                                      MipLodBias = 0.0f,
-                                      ComparisonFunction = Comparison.Always,
-                                      MinimumLod = 0.0f,
-                                      MaximumLod = 0.0f
-                                  };
-            _fontSampler = new SamplerState(_device, samplerDesc);
+                // Store our identifier
+                io.Fonts.TexID = (IntPtr)_fontTextureView;
+
+                var samplerDesc = new SamplerStateDescription()
+                                      {
+                                          Filter = Filter.MinMagMipLinear,
+                                          AddressU = TextureAddressMode.Wrap,
+                                          AddressV = TextureAddressMode.Wrap,
+                                          AddressW = TextureAddressMode.Wrap,
+                                          MipLodBias = 0.0f,
+                                          ComparisonFunction = Comparison.Always,
+                                          MinimumLod = 0.0f,
+                                          MaximumLod = 0.0f
+                                      };
+                _fontSampler = new SamplerState(_device, samplerDesc);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Failed to create fonts texture: " + e.Message);
+            }
         }
 
         public void Dispose()
