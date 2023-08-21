@@ -113,10 +113,10 @@ namespace T3.Editor.Gui.UiHelpers
                                                     {
                                                         var foregroundDrawList = ImGui.GetForegroundDrawList();
 
-                                                        for (var index = 0; index < UserSettings.Config.GradientPresets.Count; index++)
+                                                        for (var index = 0; index < GradientPresets.Presets.Count; index++)
                                                         {
                                                             ImGui.PushID(index);
-                                                            var preset = UserSettings.Config.GradientPresets[index];
+                                                            var preset = GradientPresets.Presets[index];
 
                                                             if (ImGui.InvisibleButton("" + index, new Vector2(100, ImGui.GetFrameHeight())))
                                                             {
@@ -133,8 +133,8 @@ namespace T3.Editor.Gui.UiHelpers
                                                             if (CustomComponents.IconButton(Icon.Trash,
                                                                                             Vector2.One * ImGui.GetFrameHeight()))
                                                             {
-                                                                UserSettings.Config.GradientPresets.Remove(preset);
-                                                                UserSettings.Save();
+                                                                GradientPresets.Presets.Remove(preset);
+                                                                GradientPresets.Save();
                                                                 ImGui.PopID();
                                                                 break;
                                                             }
@@ -144,8 +144,8 @@ namespace T3.Editor.Gui.UiHelpers
 
                                                         if (ImGui.MenuItem("Save"))
                                                         {
-                                                            UserSettings.Config.GradientPresets.Add(gradientForEditing.TypedClone());
-                                                            UserSettings.Save();
+                                                            GradientPresets.Presets.Add(gradientForEditing.TypedClone());
+                                                            GradientPresets.Save();
                                                         }
 
                                                         ImGui.EndMenu();
@@ -203,7 +203,6 @@ namespace T3.Editor.Gui.UiHelpers
                         ColorEditButton.VerticalColorSlider(step.Color, handleArea.GetCenter(), step.Color.W);
                         var mouseDragDelta = ImGui.GetMouseDragDelta().Y / 100;
                         ImGui.ResetMouseDragDelta();
-                        //Log.Debug("drag delta = " + mouseDragDelta);
                         step.Color.W = (previousColor.W - mouseDragDelta).Clamp(0, 1);
                     }
                     else
@@ -383,6 +382,6 @@ namespace T3.Editor.Gui.UiHelpers
         private const float RemoveThreshold = 35;
         private const float RequiredHeightForHandles = 20;
         private const int MinInsertHeight = 20;
-        public static readonly Vector2 StepHandleSize = new Vector2(14, 24);
+        public static readonly Vector2 StepHandleSize = new(14, 24);
     }
 }
