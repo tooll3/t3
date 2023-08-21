@@ -13,6 +13,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Snapping;
+using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Interaction.WithCurves;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;

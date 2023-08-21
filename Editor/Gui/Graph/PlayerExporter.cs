@@ -15,6 +15,8 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
+using T3.Editor.Gui.Interaction.Timing;
+
 // ReSharper disable StringLiteralTypo
 
 namespace T3.Editor.Gui.Graph
