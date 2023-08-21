@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
@@ -10,6 +11,8 @@ using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Editor.Gui;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.SystemUi;
+using T3.SystemUi;
 using Device = SharpDX.Direct3D11.Device;
 
 namespace T3.Editor.App;
@@ -64,24 +67,33 @@ internal static class ProgramWindows
     internal static void InitializeMainWindow(string version, out Device device)
     {
         Main = new("T3 " + version, disableClose: false);
+        device = null;
 
-        // Create Device and SwapChain
-        Device.CreateWithSwapChain(DriverType.Hardware,
-                                   DeviceCreationFlags.Debug,
-                                   Main.SwapChainDescription,
-                                   out device,
-                                   out var swapchain);
+        try
+        {
+            // Create Device and SwapChain
+            Device.CreateWithSwapChain(DriverType.Hardware,
+                                       DeviceCreationFlags.Debug,
+                                       Main.SwapChainDescription,
+                                       out device,
+                                       out var swapchain);
 
-        _device = device;
-        _deviceContext = device.ImmediateContext;
-        _factory = swapchain.GetParent<Factory>();
+            _device = device;
+            _deviceContext = device.ImmediateContext;
+            _factory = swapchain.GetParent<Factory>();
 
-        Main.SetDevice(device, _deviceContext, swapchain);
+            Main.SetDevice(device, _deviceContext, swapchain);
 
-        Main.InitializeWindow(FormWindowState.Maximized, HandleKeyDown, HandleKeyUp, OnCloseMainWindow);
+            Main.InitializeWindow(FormWindowState.Maximized, HandleKeyDown, HandleKeyUp, OnCloseMainWindow);
 
-        // Ignore all windows events
-        _factory.MakeWindowAssociation(Main.HwndHandle, WindowAssociationFlags.IgnoreAll);
+            // Ignore all windows events
+            _factory.MakeWindowAssociation(Main.HwndHandle, WindowAssociationFlags.IgnoreAll);
+        }
+        catch (Exception e)
+        {
+            EditorUi.Instance.ShowMessageBox("We are sorry but your graphics hardware might not be capable of running Tooll2\n\n" +e.Message, "Oh noooo", PopUpButtons.Ok);
+            Environment.Exit(0);
+        }
     }
 
     internal static void InitializeSecondaryViewerWindow(string name, int width, int height)
