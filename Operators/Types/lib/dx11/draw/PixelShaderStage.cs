@@ -1,4 +1,4 @@
-﻿using SharpDX.Direct3D11;
+using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
@@ -67,13 +67,16 @@ namespace T3.Operators.Types.Id_75306997_4329_44e9_a17a_050dae532182
         private ShaderResourceView[] _prevShaderResourceViews;
         private SamplerState[] _prevSamplerStates = new SamplerState[0];
 
+        [Input(Guid = "C4E91BC6-1691-4EB4-AED5-DD4CAE528149")]
+        public readonly MultiInputSlot<SharpDX.Direct3D11.SamplerState> SamplerStates = new MultiInputSlot<SharpDX.Direct3D11.SamplerState>();
+
+        [Input(Guid = "BE02A84B-A666-4119-BB6E-FEE1A3DF0981")]
+        public readonly MultiInputSlot<SharpDX.Direct3D11.Buffer> ConstantBuffers = new MultiInputSlot<SharpDX.Direct3D11.Buffer>();
+
         [Input(Guid = "1B9BE6EB-96C8-4B1C-B854-99B64EAF5618")]
         public readonly InputSlot<SharpDX.Direct3D11.PixelShader> PixelShader = new InputSlot<SharpDX.Direct3D11.PixelShader>();
-        [Input(Guid = "BE02A84B-A666-4119-BB6E-FEE1A3DF0981")]
-        public readonly MultiInputSlot<Buffer> ConstantBuffers = new MultiInputSlot<Buffer>();
+
         [Input(Guid = "50052906-4691-4A84-A69D-A109044B5300")]
-        public readonly MultiInputSlot<ShaderResourceView> ShaderResources = new MultiInputSlot<ShaderResourceView>();
-        [Input(Guid = "C4E91BC6-1691-4EB4-AED5-DD4CAE528149")]
-        public readonly MultiInputSlot<SamplerState> SamplerStates = new MultiInputSlot<SamplerState>();
+        public readonly MultiInputSlot<SharpDX.Direct3D11.ShaderResourceView> ShaderResources = new MultiInputSlot<SharpDX.Direct3D11.ShaderResourceView>();
     }
 }

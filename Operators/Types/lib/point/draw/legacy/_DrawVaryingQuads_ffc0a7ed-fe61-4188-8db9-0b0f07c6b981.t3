@@ -132,6 +132,10 @@
       "DefaultValue": 0.0
     },
     {
+      "Id": "4c4dc1b7-2fb0-4c18-8bee-441a7ad3cc7a"/*Sdfgh*/,
+      "DefaultValue": 0.0
+    },
+    {
       "Id": "cb4b567b-2a1e-4548-82ce-6683ba3c39de"/*ApplyFog*/,
       "DefaultValue": false
     }

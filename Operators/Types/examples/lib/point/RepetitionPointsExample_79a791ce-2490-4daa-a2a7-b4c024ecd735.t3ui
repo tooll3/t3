@@ -135,6 +135,27 @@
         "X": 0.0,
         "Y": 232.0
       }
+    },
+    {
+      "ChildId": "8cca687f-a0b8-401a-815c-313a236a41c7"/*MidiInput*/,
+      "Position": {
+        "X": 383.33115,
+        "Y": 400.06885
+      }
+    },
+    {
+      "ChildId": "08d429b3-a4ef-49bf-942f-a13ee7f98a1a"/*TriggerAnim*/,
+      "Position": {
+        "X": 442.91574,
+        "Y": 452.63315
+      }
+    },
+    {
+      "ChildId": "77c6c42c-2202-4a9b-8c03-aa932ac4b382"/*Blob*/,
+      "Position": {
+        "X": 592.91583,
+        "Y": 452.63315
+      }
     }
   ],
   "OutputUis": [

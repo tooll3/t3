@@ -591,6 +591,27 @@
         "X": -2294.7603,
         "Y": 1662.6672
       }
+    },
+    {
+      "ChildId": "21372124-9efb-4fb6-a705-fb418a4ea5e5"/*LinearGradient*/,
+      "Position": {
+        "X": -750.8821,
+        "Y": 2635.7166
+      }
+    },
+    {
+      "ChildId": "c5a37a0e-2b91-443e-9513-1390eaa53d23"/*CCCampTable*/,
+      "Position": {
+        "X": -892.55206,
+        "Y": 2638.94
+      }
+    },
+    {
+      "ChildId": "e52d81e4-5ff6-4e10-b390-cfbbb846930a"/*AudioReaction*/,
+      "Position": {
+        "X": -872.39996,
+        "Y": 2753.796
+      }
     }
   ],
   "OutputUis": [

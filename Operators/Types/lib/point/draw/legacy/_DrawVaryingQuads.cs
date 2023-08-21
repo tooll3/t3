@@ -58,6 +58,9 @@ namespace T3.Operators.Types.Id_ffc0a7ed_fe61_4188_8db9_0b0f07c6b981
         [Input(Guid = "7d021815-20a0-475d-91e0-1514173bf5d5")]
         public readonly InputSlot<float> AlphaCutOff = new InputSlot<float>();
 
+        [Input(Guid = "4c4dc1b7-2fb0-4c18-8bee-441a7ad3cc7a")]
+        public readonly InputSlot<float> Sdfgh = new InputSlot<float>();
+
         [Input(Guid = "cb4b567b-2a1e-4548-82ce-6683ba3c39de")]
         public readonly InputSlot<bool> ApplyFog = new InputSlot<bool>();
 

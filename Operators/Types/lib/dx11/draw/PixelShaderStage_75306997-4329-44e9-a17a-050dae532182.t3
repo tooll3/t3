@@ -4,7 +4,7 @@
   "Namespace": "lib.dx11.draw",
   "Inputs": [
     {
-      "Id": "1b9be6eb-96c8-4b1c-b854-99b64eaf5618"/*PixelShader*/,
+      "Id": "c4e91bc6-1691-4eb4-aed5-dd4cae528149"/*SamplerStates*/,
       "DefaultValue": null
     },
     {
@@ -12,11 +12,11 @@
       "DefaultValue": null
     },
     {
-      "Id": "50052906-4691-4a84-a69d-a109044b5300"/*ShaderResources*/,
+      "Id": "1b9be6eb-96c8-4b1c-b854-99b64eaf5618"/*PixelShader*/,
       "DefaultValue": null
     },
     {
-      "Id": "c4e91bc6-1691-4eb4-aed5-dd4cae528149"/*SamplerStates*/,
+      "Id": "50052906-4691-4a84-a69d-a109044b5300"/*ShaderResources*/,
       "DefaultValue": null
     }
   ],
