@@ -378,6 +378,12 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
         private static void UpdateBpmFromSoundtrackConfig(AudioClip audioClip)
         {
+            if (audioClip == null || string.IsNullOrEmpty(audioClip.FilePath))
+            {
+                Log.Error("Can't detected BPM-rate from empty undefined audio-clip filename");
+                return;
+            }
+            
             var matchBpmPattern = new Regex(@"(\d+\.?\d*)bpm");
             var result = matchBpmPattern.Match(audioClip.FilePath);
             if (!result.Success)
