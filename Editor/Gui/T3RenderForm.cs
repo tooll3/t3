@@ -14,6 +14,7 @@ using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
 using T3.Core.Logging;
 using T3.Editor.Gui.Styling;
+using T3.Editor.SystemUi;
 using T3.SystemUi;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
@@ -52,6 +53,12 @@ namespace T3.Editor.Gui
 
         public void Initialize(Device device, int width, int height)
         {
+            if (device == null)
+            {
+                Log.Error("Can't initialize window without device.");
+                EditorUi.Instance.ShowMessageBox("Can't initialize rendering device.","Graphics error");
+                EditorUi.Instance.ExitApplication();
+            }
             _device = device;
             _deviceContext = device.ImmediateContext;
             _windowWidth = width;
