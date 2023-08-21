@@ -75,8 +75,18 @@ namespace T3.Editor.Gui.Windows
                 _editDescriptionDialog.Draw(instance.Symbol);
                 
                 var parentUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
-                var symbolChildUi = parentUi.ChildUis.Single(childUi => childUi.Id == instance.SymbolChildId);
-                var symbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+                var symbolChildUi = parentUi.ChildUis.SingleOrDefault(childUi => childUi.Id == instance.SymbolChildId);
+                if (symbolChildUi == null)
+                {
+                    Log.Warning("Can't find UI definition for symbol " + instance.SymbolChildId);
+                    return;
+                }
+                
+                if(!SymbolUiRegistry.Entries.TryGetValue(instance.Symbol.Id, out var symbolUi))
+                {
+                    Log.Warning("Can't find UI definition for symbol " + instance.SymbolChildId);
+                    return;
+                }
 
                 if (DrawSelectedSymbolHeader(instance, symbolChildUi))
                 {
