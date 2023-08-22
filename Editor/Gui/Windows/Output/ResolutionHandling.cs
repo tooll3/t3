@@ -3,6 +3,7 @@ using System.Linq;
 using ImGuiNET;
 using SharpDX;
 using T3.Editor.Gui.Styling;
+using T3.Serialization;
 
 namespace T3.Editor.Gui.Windows.Output
 {
@@ -10,7 +11,10 @@ namespace T3.Editor.Gui.Windows.Output
     {
         public static void DrawSelector(ref Resolution selectedResolution, EditResolutionDialog resolutionDialog)
         {
-            resolutionDialog?.Draw(_resolutionForEdit);
+            if (resolutionDialog != null && resolutionDialog.Draw(_resolutionForEdit))
+            {
+                Save();
+            }
 
             ImGui.SetNextItemWidth(100);
             if (ImGui.BeginCombo("##ResolutionSelection", selectedResolution.Title, ImGuiComboFlags.HeightLargest))
@@ -27,42 +31,51 @@ namespace T3.Editor.Gui.Windows.Output
                                                         {
                                                             if (ImGui.MenuItem("Remove"))
                                                             {
-                                                                Resolutions.Remove(resolution);
+                                                                _resolutions.Remove(resolution);
+                                                                Save();
                                                             }
                                                         },
-                                                        "#bla");
+                                                        "##bla");
                     ImGui.PopID();
                 }
 
                 if (ImGui.Selectable("+ Add"))
                 {
                     _resolutionForEdit = new Resolution("untitled", 256, 256);
-                    Resolutions.Add(_resolutionForEdit);
+                    _resolutions.Add(_resolutionForEdit);
                     resolutionDialog?.ShowNextFrame();
-                    selectedResolution = _resolutionForEdit;
                 }
 
                 ImGui.EndCombo();
             }
         }
-
-
-        public static readonly List<Resolution> Resolutions = new()
-                                                                  {
-                                                                      new("Fill", 0, 0, useAsAspectRatio: true),
-                                                                      new("1:1", 1, 1, useAsAspectRatio: true),
-                                                                      new("16:9", 16, 9, useAsAspectRatio: true),
-                                                                      new("4:3", 4, 3, useAsAspectRatio: true),
-                                                                      new("480p", 850, 480),
-                                                                      new("720p", 1280, 720),
-                                                                      new("1080p", 1920, 1080),
-                                                                      new("4k", 1920 * 2, 1080 * 2),
-                                                                      new("8k", 1920 * 4, 1080 * 4),
-                                                                      new("4k Portrait", 1080 * 2, 1920 * 2),
-                                                                  };
+        
+        public static void Save()
+        {
+            JsonUtils.SaveJson(_resolutions, FilePath);    
+        }
+        
+        public static List<Resolution> Resolutions => _resolutions
+                                                          ??= JsonUtils.TryLoadingJson<List<Resolution>>(FilePath)
+                                                              ??  new()
+                                                                      {
+                                                                          new("Fill", 0, 0, useAsAspectRatio: true),
+                                                                          new("1:1", 1, 1, useAsAspectRatio: true),
+                                                                          new("16:9", 16, 9, useAsAspectRatio: true),
+                                                                          new("4:3", 4, 3, useAsAspectRatio: true),
+                                                                          new("480p", 850, 480),
+                                                                          new("720p", 1280, 720),
+                                                                          new("1080p", 1920, 1080),
+                                                                          new("4k", 1920 * 2, 1080 * 2),
+                                                                          new("8k", 1920 * 4, 1080 * 4),
+                                                                          new("4k Portrait", 1080 * 2, 1920 * 2),
+                                                                      };
+        private static List<Resolution> _resolutions;
+        
+        private const string FilePath = ".t3/resolutions.json";
 
         public static readonly Resolution DefaultResolution = Resolutions[0];
-        private static Resolution _resolutionForEdit = new("untitled", 255, 255);
+        private static Resolution _resolutionForEdit = new("untitled", 256, 256);
 
         public class Resolution
         {
@@ -109,6 +122,7 @@ namespace T3.Editor.Gui.Windows.Output
                            && Size.Height > 0 && Size.Height < 16384;
                 }
             }
+
         }
     }
 }

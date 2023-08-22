@@ -6,8 +6,9 @@ namespace T3.Editor.Gui.Windows.Output
 {
     public class EditResolutionDialog : ModalDialog
     {
-        public void Draw(ResolutionHandling.Resolution resolution)
+        public bool Draw(ResolutionHandling.Resolution resolution)
         {
+            var success = false;
             if (BeginDialog("Edit output resolution"))
             {
                 ImGui.SetNextItemWidth(120);
@@ -35,6 +36,7 @@ namespace T3.Editor.Gui.Windows.Output
                 if (CustomComponents.DisablableButton("Add", resolution.IsValid))
                 {
                     ImGui.CloseCurrentPopup();
+                    success = true;
                 }
 
                 ImGui.SameLine();
@@ -51,6 +53,7 @@ namespace T3.Editor.Gui.Windows.Output
             }
 
             EndDialog();
+            return success;
         }
     }
 }
