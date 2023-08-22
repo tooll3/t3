@@ -39,6 +39,7 @@ namespace T3.Editor.Gui.UiHelpers
             public bool ShowToolbar = true;
             public bool ShowTimeline = true;
             public bool ShowMiniMap = false;
+            public bool ShowInteractionOverlay = false;
             
             // UI-State
             public float UiScaleFactor = 1;

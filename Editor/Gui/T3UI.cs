@@ -144,12 +144,17 @@ public class T3Ui
         {
             UserSettings.Config.UserName = Environment.UserName;
             _userNameDialog.ShowNextFrame();
-        }            
+        }
+
+        KeyboardAndMouseOverlay.Draw();
         
         Playback.OpNotReady = false;
         AutoBackup.AutoBackup.CheckForSave();
     }
-        
+
+
+    private Dictionary<ImGuiKey, double> _keyReleaseTimes = new();
+
 
 
     private void TriggerGlobalActionsFromKeyBindings()
@@ -286,6 +291,7 @@ public class T3Ui
                 ImGui.MenuItem("Show Timeline", "", ref UserSettings.Config.ShowTimeline);
                 ImGui.MenuItem("Show Minimap", "", ref UserSettings.Config.ShowMiniMap);
                 ImGui.MenuItem("Show Toolbar", "", ref UserSettings.Config.ShowToolbar);
+                ImGui.MenuItem("Show Interaction Overlay", "", ref UserSettings.Config.ShowInteractionOverlay);
                 if(ImGui.MenuItem("Toggle All UI Elements", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), false, !IsCurrentlySaving))
                 {
                     ToggleFocusMode();

@@ -41,6 +41,7 @@ namespace T3.Editor.App
         private const int WM_SETCURSOR = 0x0020;
 
         private const int WM_SETFOCUS = 0x0007;
+        private const int WM_ACTIVATEAPP = 0x001C;
         #endregion
 
         #region VK constants
@@ -64,6 +65,7 @@ namespace T3.Editor.App
             ImGuiIOPtr io = ImGui.GetIO();
             switch (m.Msg)
             {
+                
                 case WM_LBUTTONDOWN:
                 case WM_LBUTTONDBLCLK:
                 case WM_RBUTTONDOWN:
@@ -119,6 +121,8 @@ namespace T3.Editor.App
                             break;
                         case VK_ALT:
                             io.KeyAlt = true;
+                            io.KeysDown[(int)Key.Alt] = true;
+                            KeyHandler.PressedKeys[(int)Key.Alt] = true;
                             break;
                         default:
                         {
@@ -143,6 +147,8 @@ namespace T3.Editor.App
                             break;
                         case VK_ALT:
                             io.KeyAlt = false;
+                            io.KeysDown[(int)Key.Alt] = false;
+                            KeyHandler.PressedKeys[(int)Key.Alt] = false;
                             break;
                         default:
                         {
@@ -168,6 +174,15 @@ namespace T3.Editor.App
                     io.KeyShift = false;
                     io.KeyCtrl = false;
                     io.KeyAlt = false;
+                    break;
+                
+                case WM_ACTIVATEAPP:
+                    if (m.WParam.ToInt64() == 0) /* Being deactivated */
+                    {
+                        io.KeysDown[(int)Key.Alt] = false;
+                        KeyHandler.PressedKeys[(int)Key.Alt] = false;
+                    }
+
                     break;
             }
         }

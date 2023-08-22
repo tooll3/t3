@@ -163,8 +163,6 @@ namespace T3.Editor.Gui.Styling
             public readonly char Char;
         }
         
-        
-
         public static readonly IconSource[] CustomIcons =
             {
                 new (Icon.DopeSheetKeyframeLinearSelected, 0, new Vector2(15, 25)),
@@ -247,6 +245,7 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.AddOpToInput, 73),
                 new (Icon.ExtractInput, 74),
                 new (Icon.IO, 75),
+                new (Icon.None, 75),
             };
 
         public const string IconAtlasPath = @"Resources\t3-editor\images\t3-icons.png";
@@ -254,6 +253,7 @@ namespace T3.Editor.Gui.Styling
 
     public enum Icon
     {
+        None=0,
         DopeSheetKeyframeLinearSelected = 64,
         DopeSheetKeyframeLinear,
         LastKeyframe,
@@ -329,5 +329,6 @@ namespace T3.Editor.Gui.Styling
         AddOpToInput,
         ExtractInput,
         IO,
+        
     }
 }
