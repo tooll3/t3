@@ -10,6 +10,9 @@ namespace T3.Operators.Types.Id_14939a8d_8c42_4bd4_8271_8a083cfa4024
         [Output(Guid = "02a88c21-0472-439a-8a1e-ec1aa027115a")]
         public readonly Slot<Texture2D> ColorBuffer = new Slot<Texture2D>();
 
+        [Input(Guid = "ea3281aa-06f1-42c4-a832-2faffdf58e48")]
+        public readonly InputSlot<int> SourceImage = new InputSlot<int>();
+
 
     }
 }
