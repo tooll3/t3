@@ -9,19 +9,37 @@ namespace T3.Editor.SplashScreen;
 
 internal class SplashScreen : ISplashScreen
 {
+    private class SplashForm : Form
+    {
+        public SplashForm()
+        {
+
+        }
+
+        public void PreventFlickering()
+        {
+            SetStyle(ControlStyles.DoubleBuffer
+                     | ControlStyles.UserPaint 
+                     | ControlStyles.AllPaintingInWmPaint, true);
+            this.UpdateStyles();
+        }
+    }
+    
     public void Show(string imagePath)
     {
         var backgroundImage = Image.FromFile(imagePath);
         var imageSize = GetScaledSize(backgroundImage);
 
-        _splashForm = new Form
+        _splashForm = new SplashForm
                           {
                               FormBorderStyle = FormBorderStyle.None,
                               StartPosition = FormStartPosition.CenterScreen,
                               BackgroundImage = backgroundImage,
                               BackgroundImageLayout = ImageLayout.Stretch,
-                              Size = imageSize
+                              Size = imageSize,
                           };
+        _splashForm.PreventFlickering();
+        
         
         var tableLayoutPanel = new TableLayoutPanel
                                    {
@@ -31,6 +49,7 @@ internal class SplashScreen : ISplashScreen
                                        CellBorderStyle = TableLayoutPanelCellBorderStyle.None,
                                        BackColor = Color.Transparent,
                                    };
+        
         tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
         tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
 
@@ -45,6 +64,7 @@ internal class SplashScreen : ISplashScreen
                                               UseMnemonic = false,
                                               Font = new Font("Arial", 8),
                                               Anchor = AnchorStyles.Bottom | AnchorStyles.Left,
+                                              
                                           }, 0, 0);
         
         _logMessageLabel = new Label
@@ -116,7 +136,7 @@ internal class SplashScreen : ISplashScreen
         {
             _logMessageLabel.Text = text;
             _logMessageLabel.Refresh();
-            _splashForm.Refresh();
+            //_splashForm.Refresh();
             _invoked = false;
             
         }
@@ -138,7 +158,7 @@ internal class SplashScreen : ISplashScreen
     #endregion
     
     private static readonly Size _baseDpi = new(96, 96);
-    private Form _splashForm;
+    private SplashForm _splashForm;
     private Label _logMessageLabel;
 
 }
