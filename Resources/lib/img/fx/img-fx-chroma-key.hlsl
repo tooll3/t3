@@ -4,7 +4,7 @@ sampler texSampler : register(s0);
 
 cbuffer ParamConstants : register(b0)
 {
-    float4 Colorize;
+    float4 KeyColor;
     float4 Background;
     float Exposure;
 
@@ -12,6 +12,7 @@ cbuffer ParamConstants : register(b0)
     float WeightSaturation;
     float WeightBrightness;
     float Amplify;
+    float Mode;
 }
 
 
@@ -52,10 +53,12 @@ float3 rgb2hsb(float3 c)
 
     float d = q.x - min(q.w, q.y);
     float e = 1.0e-10;
+
+    
     return float3(
         abs(q.z + (q.w - q.y) / (6.0 * d + e)), 
         d / (q.x + e), 
-        q.x*0.5);  
+        q.x*0.5); 
 }
 static float PI = 3.141578;
 
@@ -79,12 +82,13 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     //return float4(hsb.yyy,1);
 
-    float3 keyColor = rgb2hsb(Colorize.rgb);
+    float3 keyColor = rgb2hsb(KeyColor.rgb);
     float3 weights = float3(WeightHue, WeightSaturation, WeightBrightness);
     float distance = saturate(length(hsb * weights - keyColor * weights) * Exposure - Amplify );
     //return float4(distance.xxx,1);
     //float k = Exposure- distance;
-    
-    return float4(c.rgb, c.a * distance);
+    float f = saturate(c.a * distance);
+    return Mode < 0.5 ? float4(c.rgb, distance * c.a)
+                      : lerp( (Mode>1.5 ? 1:  KeyColor), Background, distance);
 
 }

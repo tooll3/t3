@@ -15,7 +15,7 @@ namespace T3.Operators.Types.Id_2ab1bbef_8322_4638_8b1d_7e31aaa6a457
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture2d = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
         [Input(Guid = "8d07d9ad-fe83-4b40-bebd-21c563d6d6ac")]
-        public readonly InputSlot<System.Numerics.Vector4> Colorize = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<System.Numerics.Vector4> Key = new InputSlot<System.Numerics.Vector4>();
 
         [Input(Guid = "abadeee0-5ebb-4e5a-ae92-fcafb20f52a1")]
         public readonly InputSlot<System.Numerics.Vector4> Background = new InputSlot<System.Numerics.Vector4>();
@@ -35,5 +35,14 @@ namespace T3.Operators.Types.Id_2ab1bbef_8322_4638_8b1d_7e31aaa6a457
         [Input(Guid = "91e604d7-aed0-4fb9-9690-ab60a74c4df5")]
         public readonly InputSlot<float> Amplify = new InputSlot<float>();
 
+        [Input(Guid = "e32268a7-8527-4d0d-b9ba-11c23cb07dd2", MappedType = typeof(Modes))]
+        public readonly InputSlot<int> Mode = new InputSlot<int>();
+
+        private enum Modes
+        {
+            RemoveKeyed,
+            KeepKeyed,
+            KeyedWhiteOnBackground
+        }
     }
 }

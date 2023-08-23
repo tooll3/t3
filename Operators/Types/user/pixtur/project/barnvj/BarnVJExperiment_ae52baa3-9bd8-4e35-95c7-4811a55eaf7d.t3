@@ -2280,7 +2280,7 @@
       "SymbolId": "2ab1bbef-8322-4638-8b1d-7e31aaa6a457",
       "InputValues": [
         {
-          "Id": "8d07d9ad-fe83-4b40-bebd-21c563d6d6ac"/*Colorize*/,
+          "Id": "8d07d9ad-fe83-4b40-bebd-21c563d6d6ac"/*Key*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 1.0,

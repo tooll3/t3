@@ -11,7 +11,7 @@
       }
     },
     {
-      "InputId": "8d07d9ad-fe83-4b40-bebd-21c563d6d6ac"/*Colorize*/,
+      "InputId": "8d07d9ad-fe83-4b40-bebd-21c563d6d6ac"/*Key*/,
       "Position": {
         "X": -39.329453,
         "Y": 623.59656
@@ -61,6 +61,13 @@
         "X": -41.019333,
         "Y": 993.51697
       }
+    },
+    {
+      "InputId": "e32268a7-8527-4d0d-b9ba-11c23cb07dd2"/*Mode*/,
+      "Position": {
+        "X": -41.019333,
+        "Y": 1038.517
+      }
     }
   ],
   "SymbolChildUis": [
@@ -88,6 +95,13 @@
       "Position": {
         "X": 261.9446,
         "Y": 633.09564
+      }
+    },
+    {
+      "ChildId": "99fd4d48-60be-4716-aac1-73b5d2141535"/*IntToFloat*/,
+      "Position": {
+        "X": 171.73366,
+        "Y": 1046.5469
       }
     }
   ],
