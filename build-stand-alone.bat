@@ -19,6 +19,8 @@ copy "Editor\bin\Release\net6.0-windows\Operators.dll" "..\T3-Standalone\Operato
 
 mkdir "..\T3-Standalone\.t3"
 Xcopy "Install\default-layouts" "..\T3-Standalone\.t3\layouts" /E /H /C /I
+Xcopy "Install\default-themes" "..\T3-Standalone\.t3\Themes" /E /H /C /I
+copy "Install\gradients.json" "..\T3-Standalone\.t3\gradients.json"
 
 @RD /S /Q "..\T3-Standalone\cs"
 @RD /S /Q "..\T3-Standalone\de"
