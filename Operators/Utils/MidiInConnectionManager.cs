@@ -52,7 +52,8 @@ namespace Operators.Utils
         }
 
         public static void Rescan()
-        { CloseMidiDevices();
+        { 
+            CloseMidiDevices();
             ScanAndRegisterToMidiDevices(logInformation: true);
         }
         
