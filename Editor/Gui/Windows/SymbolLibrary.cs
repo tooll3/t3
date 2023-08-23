@@ -30,7 +30,6 @@ namespace T3.Editor.Gui.Windows
         {
             _renameNamespaceDialog.Draw(_subtreeNodeToRename);
             
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
             ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 10);
 
             if (_listUsagesFilter != null)
@@ -63,7 +62,7 @@ namespace T3.Editor.Gui.Windows
                 DrawSymbolTree();
             }
             
-            ImGui.PopStyleVar(2);
+            ImGui.PopStyleVar(1);
 
             if (ImGui.IsMouseReleased(0))
             {

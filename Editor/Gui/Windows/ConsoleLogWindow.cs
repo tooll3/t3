@@ -34,7 +34,6 @@ namespace T3.Editor.Gui.Windows
             if (FrameStats.Last.UiColorsChanged)
                 _colorForLogLevel= UpdateLogLevelColors();
             
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
             {
                 CustomComponents.ToggleButton("Scroll", ref _shouldScrollToBottom, Vector2.Zero);
                 ImGui.SameLine();
@@ -135,8 +134,6 @@ namespace T3.Editor.Gui.Windows
 
                 ImGui.EndChild();
             }
-
-            ImGui.PopStyleVar();
         }
 
         private static double _lastLimeTime;

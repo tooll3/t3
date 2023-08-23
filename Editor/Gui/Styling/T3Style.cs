@@ -18,6 +18,7 @@ public static class T3Style
     }
 
     public const float ToolBarHeight = 25;
+    public static readonly Vector2 WindowChildPadding = new Vector2(5,5);
 
     public static void Apply()
     {

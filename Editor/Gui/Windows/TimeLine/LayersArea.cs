@@ -62,7 +62,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
             if (!_contextMenuIsOpen && rightMouseDragDelta > 3)
                 return;
 
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             if (ImGui.BeginPopupContextWindow("context_menu"))
             {
                 _contextMenuIsOpen = true;
@@ -148,8 +147,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
             {
                 _contextMenuIsOpen = false;
             }
-
-            ImGui.PopStyleVar();
         }
 
         private int _minLayerIndex = int.MaxValue;

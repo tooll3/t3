@@ -93,11 +93,9 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
 
             if (ImGui.IsItemHovered() && ImGui.CalcTextSize(value).X > ImGui.GetItemRectSize().X)
             {
-                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.One * 5);
                 ImGui.BeginTooltip();
                 ImGui.TextUnformatted(warning + value);
                 ImGui.EndTooltip();
-                ImGui.PopStyleVar();
             }
 
             ImGui.SameLine();

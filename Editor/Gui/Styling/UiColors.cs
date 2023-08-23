@@ -27,6 +27,7 @@ public static class UiColors
     
     [T3Style.Hint(Description = "Buttons and form inputs.")]
     public static Color BackgroundButton = new(0.16f,0.16f,0.16f,0.8f);
+    public static Color BackgroundButtonActivated = new(0.10f,0.10f,0.10f,0.8f);
     public static Color BackgroundHover = new(0.26f,0.26f,0.26f,0.8f);
     
     [T3Style.Hint(Description = "Highlight color for pressed for activated ui elements.")]
@@ -57,6 +58,7 @@ public static class UiColors
 
     
     [T3Style.Hint(GroupTitle = "Status colors")]
+    public static Color StatusActivated = Color.FromString("#4592FF");
     public static Color StatusAutomated = new(0.08f, 0.48f, 0.7f, 1f);
     public static Color StatusAttention = new(203, 19, 113, 255);
     public static Color StatusWarning = new(203, 19, 113, 255);

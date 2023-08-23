@@ -22,11 +22,9 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 // drawList.AddRect(_bestMatchLastFrame.Area.Min, _bestMatchLastFrame.Area.Max, Color.Orange);
                 var textSize = ImGui.CalcTextSize(BestMatchLastFrame.Name);
                 ImGui.SetNextWindowPos(_mousePosition + new Vector2(-textSize.X - 20, -textSize.Y / 2));
-                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
                 ImGui.BeginTooltip();
                 ImGui.TextUnformatted(BestMatchLastFrame.Name);
                 ImGui.EndTooltip();
-                ImGui.PopStyleVar();
             }
 
             _bestMatchYetForCurrentFrame = null;

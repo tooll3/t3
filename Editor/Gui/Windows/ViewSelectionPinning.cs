@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
@@ -33,7 +34,7 @@ namespace T3.Editor.Gui.Windows
             if (CustomComponents.IconButton(Icon.Pin, 
                                                    
                                                   new Vector2(T3Style.ToolBarHeight, T3Style.ToolBarHeight) * T3Ui.UiScaleFactor,
-                                            _isPinned ? CustomComponents.ButtonStates.Activated : CustomComponents.ButtonStates.Normal
+                                            _isPinned ? CustomComponents.ButtonStates.Activated : CustomComponents.ButtonStates.Dimmed
                                                   ))
             {
                 
@@ -68,9 +69,10 @@ namespace T3.Editor.Gui.Windows
                 suffix += " -> " + pinnedEvaluationInstance.Symbol.Name + " (Final)";
             }
 
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            
             if (ImGui.BeginCombo("##pinning", pinnedOrSelectedInstance.Symbol.Name + suffix))
             {
-                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6, 6));
                 ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
                 if (_isPinned)
                 {
@@ -82,34 +84,11 @@ namespace T3.Editor.Gui.Windows
                     var instanceSelectedInGraph = NodeSelection.GetFirstSelectedInstance();
                     if (instanceSelectedInGraph != pinnedOrSelectedInstance)
                     {
-                        // var selectionIsPartOfTree = instanceSelectedInGraph.Outputs[0].DirtyFlag.FramesSinceLastUpdate < 2;
-                        // if (selectionIsPartOfTree)
-                        // {
-                        //     if (instanceSelectedInGraph == GetPinnedEvaluationInstance())
-                        //     {
-                        //         if (ImGui.MenuItem("Unpin Selected Rendering Step"))
-                        //         {
-                        //             //PinEvaluationToSelection();
-                        //         }
-                        //     }
-                        //     else
-                        //     {
-                        //         if (ImGui.MenuItem("Pin Selected Rendering Step"))
-                        //         {
-                        //             PinSelectionToView();
-                        //             PinSelectionAsEvaluationStart(pinnedOrSelectedInstance);
-                        //         }
-                        //     }
-                        // }
-                        // else
-                        // {
                         if (ImGui.MenuItem("Pin Selection to View"))
                         {
                             _isPinned = true;
                             PinSelectionToView();
                         }
-
-                        // }
                     }
                 }
                 else
@@ -163,10 +142,11 @@ namespace T3.Editor.Gui.Windows
 
                 ImGui.Separator();
                 ImGui.MenuItem("Show hovered outputs", false);
-                ImGui.PopStyleVar(2);
+                ImGui.PopStyleVar();
                 ImGui.EndCombo();
             }
 
+            ImGui.PopStyleColor();
             ImGui.SameLine();
         }
 

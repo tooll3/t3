@@ -879,14 +879,12 @@ namespace T3.Editor.Gui.Graph
                         var instance = GraphCanvas.Current.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
                         var output = instance.Outputs.Single(output2 => output2.Id == outputDef.Id);
 
-                        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                         ImGui.BeginTooltip();
                         ImGui.TextUnformatted($".{outputDef.Name}");
                         ImGui.PushFont(Fonts.FontSmall);
                         ImGui.TextColored(UiColors.Gray, $"<{TypeNameRegistry.Entries[outputDef.ValueType]}>\n{output.DirtyFlag.NumUpdatesWithinFrame} Updates\n({output.DirtyFlag.Trigger})");
                         ImGui.PopFont();
                         ImGui.EndTooltip();
-                        ImGui.PopStyleVar();
 
                         if(ImGui.IsMouseClicked(ImGuiMouseButton.Left))
                         {
@@ -991,7 +989,6 @@ namespace T3.Editor.Gui.Graph
                                             ColorVariations.OperatorBackgroundHover.Apply(colorForType)
                                            );
 
-                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                     Symbol.Connection connection;
                     SymbolChild sourceOp = null;
                     SymbolChild.Output output = null;
@@ -1020,7 +1017,6 @@ namespace T3.Editor.Gui.Graph
                         ImGui.PopFont();
                     }
                     ImGui.EndTooltip();
-                    ImGui.PopStyleVar();
 
                     if (ImGui.IsItemClicked(0))
                     {
@@ -1230,7 +1226,6 @@ namespace T3.Editor.Gui.Graph
                                             ColorVariations.OperatorBackgroundHover.Apply(colorForType)
                                            );
 
-                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                     ImGui.BeginTooltip();
                     {
                         DrawInputSources(targetUi, inputDef, multiInputIndex);
@@ -1266,7 +1261,6 @@ namespace T3.Editor.Gui.Graph
                         //ImGui.PopStyleVar();
                     }
                     ImGui.EndTooltip();
-                    ImGui.PopStyleVar();
                     //ImGui.SetTooltip($"-> .{inputDef.Name}[{multiInputIndex}] <{TypeNameRegistry.Entries[inputDef.DefaultValue.ValueType]}>");
                     if (ImGui.IsItemClicked(0))
                     {

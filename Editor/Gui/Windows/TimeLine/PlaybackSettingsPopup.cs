@@ -22,12 +22,11 @@ namespace T3.Editor.Gui.Windows.TimeLine
     {
         public static void DrawPlaybackSettings()
         {
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(2, 2));
             ImGui.SetNextWindowSize(new Vector2(600, 500));
             if (!ImGui.BeginPopupContextItem(PlaybackSettingsPopupId))
             {
-                ImGui.PopStyleVar(2);
+                ImGui.PopStyleVar(1);
                 return;
             }
 
@@ -43,7 +42,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             {
                 CustomComponents.EmptyWindowMessage("no composition active");
                 ImGui.EndPopup();
-                ImGui.PopStyleVar(2);
+                ImGui.PopStyleVar(1);
 
                 return;
             }
@@ -98,7 +97,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             {
                 CustomComponents.EmptyWindowMessage("No settings");
                 ImGui.EndPopup();
-                ImGui.PopStyleVar(2);
+                ImGui.PopStyleVar(1);
                 FormInputs.ResetIndent();
                 return;
             }
@@ -318,28 +317,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 ImGui.EndGroup();
             }
 
-            // if (ImGui.BeginTabItem("OSC"))
-            // {
-            //     CustomComponents.HelpText("Use OSC to send events to /beatTimer on every beat.");
-            //     //var isInitialized = playback is BeatTimingPlayback;
-            //     if (OscBeatTiming.Initialized)
-            //     {
-            //         ImGui.TextUnformatted($"Last received beat {OscBeatTiming.BeatCounter}");
-            //     }
-            //     else
-            //     {
-            //         if (ImGui.Button("Initialize"))
-            //         {
-            //             OscBeatTiming.Init();
-            //             playback = new BeatTimingPlayback();
-            //         }
-            //     }
-            //
-            //     ImGui.EndTabItem();
-            // }
-
             ImGui.EndPopup();
-            ImGui.PopStyleVar(2);
+            ImGui.PopStyleVar(1);
         }
 
         private static void UpdatePlaybackAndTimeline(PlaybackSettings settings)

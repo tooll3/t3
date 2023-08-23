@@ -2,6 +2,7 @@
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Logging;
+using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Windows
 {
@@ -64,6 +65,7 @@ namespace T3.Editor.Gui.Windows
 
         public void DrawOneInstance()
         {
+
             UpdateBeforeDraw();
 
             if (!Config.Visible)
@@ -81,12 +83,13 @@ namespace T3.Editor.Gui.Windows
 
             if (ImGui.Begin(Config.Title, ref Config.Visible, WindowFlags))
             {
+                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowChildPadding);
                 // Prevent window header from becoming invisible 
                 var windowPos = ImGui.GetWindowPos();
                 if (windowPos.X <= 0) windowPos.X = 0;
                 if (windowPos.Y <= 0) windowPos.Y = 0;
                 ImGui.SetWindowPos(windowPos);
-
+                
                 var preventMouseScrolling = T3Ui.MouseWheelFieldWasHoveredLastFrame ? ImGuiWindowFlags.NoScrollWithMouse : ImGuiWindowFlags.None;
                 if (PreventWindowDragging)
                     ImGui.BeginChild("inner", ImGui.GetWindowContentRegionMax()- ImGui.GetWindowContentRegionMin(), false, ImGuiWindowFlags.NoMove| preventMouseScrolling | WindowFlags);
@@ -102,6 +105,7 @@ namespace T3.Editor.Gui.Windows
                 if (PreventWindowDragging)
                     ImGui.EndChild();
 
+                ImGui.PopStyleVar(); // innerWindowPadding
                 ImGui.End();
             }
 
@@ -135,8 +139,7 @@ namespace T3.Editor.Gui.Windows
 
         public WindowConfig Config = new();
 
-        public string MenuTitle;
-
+        protected string MenuTitle;
         private bool _wasVisible;
     }
 }

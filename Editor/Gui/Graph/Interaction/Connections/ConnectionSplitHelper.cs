@@ -47,7 +47,6 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                                                                      posOnScreen);
                 }
 
-                ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(10, 2));
                 ImGui.BeginTooltip();
                 {
                     var connection = _bestMatchYetForCurrentFrame.Connection;
@@ -120,7 +119,6 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                     }
                 }
                 ImGui.EndTooltip();
-                ImGui.PopStyleVar();
             }
             else
             {

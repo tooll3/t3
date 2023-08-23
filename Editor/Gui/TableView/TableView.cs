@@ -25,7 +25,6 @@ namespace T3.Editor.Gui.TableView
 
         public static bool Draw(StructuredList list, Vector2 size)
         {
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(3, 3));
             ImGui.BeginChild("child", size);
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(2, 2));
             const float valueColumnWidth = 50;
@@ -199,7 +198,6 @@ namespace T3.Editor.Gui.TableView
             ImGui.PopFont();
             ImGui.PopStyleVar(); // FramePadding
             ImGui.EndChild();
-            ImGui.PopStyleVar(); // WindowPadding
             
             return listModified;
 

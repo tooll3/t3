@@ -426,11 +426,9 @@ namespace T3.Editor.Gui.InputUi
                     {
                         tooltip += "\nHold CTRL to extract";
                     }
-                    ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding,new Vector2(5,5));
                     ImGui.PushFont(Fonts.FontSmall);
                     ImGui.SetTooltip(tooltip);
                     ImGui.PopFont();
-                    ImGui.PopStyleVar();
                 }
 
                 ImGui.SameLine();

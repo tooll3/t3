@@ -88,7 +88,6 @@ public static class SearchableDropDown
         ImGui.SetNextWindowPos(new Vector2(ImGui.GetItemRectMin().X, ImGui.GetItemRectMax().Y));
         ImGui.SetNextWindowSize(new Vector2(ImGui.GetItemRectSize().X, 320));
 
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(7, 7));
         if (ImGui.Begin("##typeAheadSearchPopup", ref isSearchResultWindowOpen,
                         ImGuiWindowFlags.NoTitleBar
                         | ImGuiWindowFlags.NoMove
@@ -156,7 +155,6 @@ public static class SearchableDropDown
         }
 
         ImGui.End();
-        ImGui.PopStyleVar();
 
         if (lostFocus)
         {

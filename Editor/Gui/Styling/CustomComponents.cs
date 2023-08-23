@@ -139,8 +139,8 @@ namespace T3.Editor.Gui.Styling
             var clicked = false;
 
             var stateTextColor = isSelected
-                                 ? UiColors.ForegroundFull.Rgba
-                                 : UiColors.WindowBackground.Rgba;
+                                 ? UiColors.StatusActivated.Rgba
+                                 : UiColors.TextDisabled.Rgba;
             ImGui.PushStyleColor(ImGuiCol.Text, stateTextColor);
 
             var padding = string.IsNullOrEmpty(label) ? new Vector2(0.1f, 0.5f) : new Vector2(0.5f, 0.5f);
@@ -193,6 +193,48 @@ namespace T3.Editor.Gui.Styling
             return clicked;
         }
 
+        public static bool StateButton(string label, ButtonStates state = ButtonStates.Normal)
+        {
+            //ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.5f));
+            //ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
+            
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundButtonActivated.Rgba);
+            
+            if (state != ButtonStates.Normal)
+            {
+                Color c;
+                if (state == ButtonStates.Dimmed)
+                    c = UiColors.TextMuted;
+                else if (state == ButtonStates.Disabled)
+                    c = UiColors.TextDisabled;
+                else if (state == ButtonStates.Activated)
+                    c = UiColors.StatusActivated;
+                else
+                    c = UiColors.Text;
+
+                ImGui.PushStyleColor(ImGuiCol.Text, c.Rgba);
+                if (state == ButtonStates.Activated)
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundButtonActivated.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundButtonActivated.Fade(0.8f).Rgba);
+
+                }
+            }
+
+            ImGui.AlignTextToFramePadding();
+            var clicked = ImGui.Button(label);
+
+            if (state != ButtonStates.Normal)
+                ImGui.PopStyleColor();
+            
+            if (state == ButtonStates.Activated)
+                ImGui.PopStyleColor(2);
+
+            ImGui.PopStyleColor(1);
+            //ImGui.PopStyleVar(1);
+            return clicked;
+        }
+        
         public static bool IconButton(Icon icon, Vector2 size, ButtonStates state = ButtonStates.Normal, bool triggered =false)
         {
             if (size == Vector2.Zero)
@@ -203,7 +245,8 @@ namespace T3.Editor.Gui.Styling
             ImGui.PushFont(Icons.IconFont);
             ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(0.5f, 0.5f));
             ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, Vector2.Zero);
-
+            
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundButtonActivated.Rgba);
             
             if (state != ButtonStates.Normal)
             {
@@ -213,15 +256,16 @@ namespace T3.Editor.Gui.Styling
                 else if (state == ButtonStates.Disabled)
                     c = UiColors.TextDisabled;
                 else if (state == ButtonStates.Activated)
-                    c = UiColors.WindowBackground;
+                    c = UiColors.StatusActivated;
                 else
                     c = UiColors.Text;
 
                 ImGui.PushStyleColor(ImGuiCol.Text, c.Rgba);
                 if (state == ButtonStates.Activated)
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Button, UiColors.TextMuted.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Text.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.Button, UiColors.BackgroundButtonActivated.Rgba);
+                    ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.BackgroundButtonActivated.Fade(0.8f).Rgba);
+
                 }
             }
 
@@ -233,6 +277,7 @@ namespace T3.Editor.Gui.Styling
             if (state == ButtonStates.Activated)
                 ImGui.PopStyleColor(2);
 
+            ImGui.PopStyleColor(1);
             ImGui.PopStyleVar(2);
             ImGui.PopFont();
             return clicked;
@@ -243,7 +288,6 @@ namespace T3.Editor.Gui.Styling
         {
             var wasAlreadyOpen = ImGui.IsPopupOpen(id);
             
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
 
             if (ImGui.BeginPopupContextItem(id, flags))
@@ -265,7 +309,7 @@ namespace T3.Editor.Gui.Styling
                 ImGui.EndPopup();
             }
 
-            ImGui.PopStyleVar(2);
+            ImGui.PopStyleVar(1);
         }
 
         public static void DrawContextMenuForScrollCanvas(Action drawMenuContent, ref bool contextMenuIsOpen)
@@ -283,7 +327,6 @@ namespace T3.Editor.Gui.Styling
                     return;
             }
 
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(8, 8));
             ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6));
 
 
@@ -300,7 +343,7 @@ namespace T3.Editor.Gui.Styling
                 contextMenuIsOpen = false;
             }
 
-            ImGui.PopStyleVar(2);
+            ImGui.PopStyleVar(1);
         }
 
         public static bool DisablableButton(string label, bool isEnabled, bool enableTriggerWithReturn = false)
@@ -418,7 +461,6 @@ namespace T3.Editor.Gui.Styling
             if (_toolTipHoverDelay > 0)
                 return;
             
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(5, 5));
             ImGui.BeginTooltip();
             ImGui.PushTextWrapPos(300);
             ImGui.TextColored(color, message);
@@ -430,7 +472,6 @@ namespace T3.Editor.Gui.Styling
             ImGui.PopTextWrapPos();
 
             ImGui.EndTooltip();
-            ImGui.PopStyleVar();
         }
 
         public static void TooltipForLastItem(string message, string additionalNotes = null, bool useHoverDelay = true)

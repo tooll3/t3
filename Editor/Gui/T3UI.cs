@@ -69,7 +69,8 @@ public class T3Ui
     public void ProcessFrame()
     {
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
-
+        
+        
         CustomComponents.BeginFrame();
         FormInputs.BeginFrame();
         InitializeAfterAppWindowReady();
@@ -94,7 +95,7 @@ public class T3Ui
         SrvManager.FreeUnusedTextures();
         KeyboardBinding.InitFrame();
         ConnectionSnapEndHelper.PrepareNewFrame();
-            
+
         // Set selected id so operator can check if they are selected or not  
         var selectedInstance = NodeSelection.GetSelectedInstance();
         MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
@@ -121,6 +122,7 @@ public class T3Ui
             
         // Draw everything!
         ImGui.DockSpaceOverViewport();
+
         WindowManager.Draw();
             
         // Complete frame
@@ -185,7 +187,7 @@ public class T3Ui
     private void DrawAppMenuBar()
     {
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6) * T3Ui.UiScaleFactor);
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(6, 6) * T3Ui.UiScaleFactor);
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowChildPadding * T3Ui.UiScaleFactor);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
             
         if (ImGui.BeginMainMenuBar())

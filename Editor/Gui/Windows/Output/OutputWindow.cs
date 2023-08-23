@@ -5,6 +5,7 @@ using System.Linq;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
@@ -85,10 +86,11 @@ namespace T3.Editor.Gui.Windows.Output
 
         protected override void DrawContent()
         {
-            
+
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false,
                              ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
+
                 // Draw output
                 _imageCanvas.SetAsCurrent();
 
@@ -112,31 +114,28 @@ namespace T3.Editor.Gui.Windows.Output
 
         private void DrawToolbar(Type drawnType)
         {
-            //ImGui.PushStyleColor(ImGuiCol.Text, new Color(0.6f).Rgba);
+
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
             ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin());
             Pinning.DrawPinning();
 
-            // TODO: Replace with toggle button
-            ImGui.PushStyleColor(ImGuiCol.Text, Math.Abs(_imageCanvas.Scale.X - 1f) < 0.001f 
-                                                    ? UiColors.BackgroundFull.Rgba 
-                                                    : UiColors.ForegroundFull);
-            if (ImGui.Button("1:1"))
+            if (CustomComponents.StateButton("1:1",
+                                             Math.Abs(_imageCanvas.Scale.X - 1f) < 0.001f
+                                                 ? CustomComponents.ButtonStates.Disabled
+                                                 : CustomComponents.ButtonStates.Normal))
             {
                 _imageCanvas.SetScaleToMatchPixels();
                 _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Pixel);
             }
-
-            ImGui.PopStyleColor();
-
+            
             ImGui.SameLine();
-
-            ImGui.PushStyleColor(ImGuiCol.Text, _imageCanvas.ViewMode == ImageOutputCanvas.Modes.Fitted 
-                                                    ? UiColors.BackgroundFull.Rgba 
-                                                    : UiColors.ForegroundFull);
-            if (ImGui.Button("Fit") || KeyboardBinding.Triggered(UserActions.FocusSelection))
+            
+            if (CustomComponents.StateButton("Fit",
+                                             _imageCanvas.ViewMode == ImageOutputCanvas.Modes.Fitted
+                                                 ? CustomComponents.ButtonStates.Disabled
+                                                 : CustomComponents.ButtonStates.Normal)
+                || KeyboardBinding.Triggered(UserActions.FocusSelection))
             {
-                var showingImage = GetCurrentTexture() != null;
                 if (drawnType == typeof(Texture2D))
                 {
                     _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Fitted);
@@ -146,9 +145,6 @@ namespace T3.Editor.Gui.Windows.Output
                     _camSelectionHandling.ResetView();
                 }
             }
-
-            ImGui.PopStyleColor();
-
             ImGui.SameLine();
 
             var showGizmos = _evaluationContext.ShowGizmos != GizmoVisibility.Off;
