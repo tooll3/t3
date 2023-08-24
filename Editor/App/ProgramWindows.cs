@@ -47,15 +47,9 @@ internal static class ProgramWindows
 
         if (UserSettings.Config.FullScreen)
         {
-            var screenCount = Screen.AllScreens.Length;
-            var hasSecondScreen = screenCount > 1;
-            var secondScreenIndex = hasSecondScreen ? 1 : 0;
-
-            var screenIndexForMainScreen = UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen ? secondScreenIndex : 0;
-            var screenIndexForSecondScreen = UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen ? 0 : secondScreenIndex;
-
-            Main.SetFullScreen(screenIndexForMainScreen);
-            Viewer.SetFullScreen(screenIndexForSecondScreen);
+            var ScreenCount = Screen.AllScreens.Length;
+            Main.SetFullScreen(UserSettings.Config.FullScreenIndexMain < ScreenCount ? UserSettings.Config.FullScreenIndexMain : 0);
+            Viewer.SetFullScreen(UserSettings.Config.FullScreenIndexViewer < ScreenCount ? UserSettings.Config.FullScreenIndexViewer : 0);
         }
         else
         {
