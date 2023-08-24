@@ -318,6 +318,34 @@ public class T3Ui
                 {
                     LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
                 }
+                if (ImGui.BeginMenu("Main Window Fullscreen Destination"))
+                {
+                    for (var index = 0; index < EditorUi.AllScreens.Length; index++)
+                    {
+                        var screen = EditorUi.AllScreens.ElementAt(index);
+                        var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
+                            $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
+                        if(ImGui.MenuItem(label, "", index ==  UserSettings.Config.FullScreenIndexMain)) 
+                        {
+                            UserSettings.Config.FullScreenIndexMain = index;
+                        }
+                    }
+                    ImGui.EndMenu();
+                }
+                if(ImGui.BeginMenu("Viewer Window Fullscreen Destination"))
+                {
+                    for (var index = 0; index < EditorUi.AllScreens.Length; index++)
+                    {
+                        var screen = EditorUi.AllScreens.ElementAt(index);
+                        var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
+                            $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
+                        if(ImGui.MenuItem(label, "", index ==  UserSettings.Config.FullScreenIndexViewer)) 
+                        {
+                            UserSettings.Config.FullScreenIndexViewer = index;
+                        }
+                    }
+                    ImGui.EndMenu();
+                }
                 ImGui.EndMenu();
             }
                 

@@ -60,11 +60,6 @@ namespace T3.Editor.Gui.Windows
                                                                   "An experimental features that will drag neighbouring snapped operators.",
                                                                   UserSettings.Defaults.SmartGroupDragging);
                 
-                changed |= FormInputs.AddCheckBox("Fullscreen Window Swap",
-                                                                  ref UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen,
-                                                                  "Swap main and second windows when fullscreen",
-                                                                  UserSettings.Defaults.SwapMainAnd2ndWindowsWhenFullscreen);
-                
                 changed |= FormInputs.AddCheckBox("Mousewheel adjust flight speed",
                                                   ref UserSettings.Config.AdjustCameraSpeedWithMouseWheel,
                                                   "If enabled, scrolling the mouse wheel while holding left of right mouse button will control navigation speed with WASD keys. This is similar to Unity and Unreal.",
