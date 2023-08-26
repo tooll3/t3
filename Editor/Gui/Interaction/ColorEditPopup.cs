@@ -94,7 +94,7 @@ namespace T3.Editor.Gui.Interaction
 
             if (ImGui.IsKeyReleased(ImGuiKey.ModAlt))
             {
-                if (!Program.IsCursorInsideAppWindow)
+                if (!UiContentUpdate.IsCursorInsideAppWindow)
                 {
                     edited |= InputEditStateFlags.ModifiedAndFinished;
                 }
@@ -670,7 +670,7 @@ namespace T3.Editor.Gui.Interaction
 
         private static Color GetColorAtMousePosition()
         {
-            var pos = Program.CursorPosOnScreen;
+            var pos = UiContentUpdate.CursorPosOnScreen;
             var x = (int)pos.X;
             var y = (int)pos.Y;
 
