@@ -2376,19 +2376,19 @@
           }
         },
         {
-          "Id": "37da22d0-56ca-444a-9c9d-27a70283b7c0"/*Stretch*/,
-          "Type": "System.Numerics.Vector2",
-          "Value": {
-            "X": 1.0,
-            "Y": 0.02
-          }
-        },
-        {
           "Id": "7daacb43-54de-47d2-afcd-694f6afce59d"/*Position*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": -0.033,
             "Y": 0.0
+          }
+        },
+        {
+          "Id": "37da22d0-56ca-444a-9c9d-27a70283b7c0"/*Stretch*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 1.0,
+            "Y": 0.02
           }
         },
         {

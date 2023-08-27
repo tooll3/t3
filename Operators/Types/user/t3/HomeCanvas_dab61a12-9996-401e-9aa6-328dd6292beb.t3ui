@@ -5,10 +5,6 @@
   "SymbolChildUis": [
     {
       "ChildId": "d31691f2-3f93-474e-9327-b28281c057f3"/*FluidFeedback*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": -1652.9976,
         "Y": -4889.9697
@@ -16,10 +12,6 @@
     },
     {
       "ChildId": "64fe5405-7f98-4303-b2a5-f53db065740c"/*TorusMesh*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -2102.9978,
         "Y": -4826.9697
@@ -27,10 +19,6 @@
     },
     {
       "ChildId": "dda89242-8a90-4442-b3df-ed2d855e32a4"/*DrawMesh*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 49.0
-      },
       "Position": {
         "X": -1952.9976,
         "Y": -4889.9697
@@ -38,32 +26,13 @@
     },
     {
       "ChildId": "2fe00e23-ee4a-4234-a0dc-213b9a6ca9fe"/*OrbitCamera*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -1802.9976,
         "Y": -4889.9697
       }
     },
     {
-      "ChildId": "bc999d1e-4b76-43f1-9e3d-8f51b9d22871"/*_AnimValueOld*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
-      "Position": {
-        "X": -2252.9978,
-        "Y": -4889.9697
-      }
-    },
-    {
       "ChildId": "018e0408-fac8-42f0-a17c-b9c0bb5ab5b7"/*SampleGradient*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 36.0
-      },
       "Position": {
         "X": -2102.9978,
         "Y": -4889.9697
@@ -71,10 +40,6 @@
     },
     {
       "ChildId": "13005c71-2ea0-4088-986b-ba8fbc91783b"/*Synchotron*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -2086.003,
         "Y": -4395.7686
@@ -82,10 +47,6 @@
     },
     {
       "ChildId": "ecaa1d12-625b-46c0-9148-454dfc40b576"/*HowToUseTooll*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -2101.4788,
         "Y": -5021.86
@@ -93,10 +54,6 @@
     },
     {
       "ChildId": "665d7961-58a9-4181-94f1-eb40af17cdc7"/*HowToAnimate*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -2231.4658,
         "Y": -4604.3564
@@ -104,10 +61,6 @@
     },
     {
       "ChildId": "73956a9d-0756-4d9c-a11b-ca59b3ee16fb"/*HowToDrawThings*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -2081.4658,
         "Y": -4604.3564
@@ -115,10 +68,6 @@
     },
     {
       "ChildId": "acbc034c-3c0d-4f7e-ac09-39cfd702f601"/*HowToUseImageEffects*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -1933.4803,
         "Y": -4603.2993
@@ -126,10 +75,6 @@
     },
     {
       "ChildId": "91dc79a2-ed7a-41dc-8245-2d3011f4aebe"/*HowToUseOperators*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -1783.4803,
         "Y": -4603.2993
@@ -137,10 +82,6 @@
     },
     {
       "ChildId": "91042db3-81d6-4a17-8cef-423811aabb17"/*HowToUsePoints*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -1633.4803,
         "Y": -4603.2993
@@ -148,13 +89,16 @@
     },
     {
       "ChildId": "a981389f-6577-4ecd-95f7-d69e5cf8bee3"/*WorksForEverybody*/,
-      "Size": {
-        "X": 110.0,
-        "Y": 23.0
-      },
       "Position": {
         "X": -2236.003,
         "Y": -4395.7686
+      }
+    },
+    {
+      "ChildId": "a777a09a-c830-46af-a2b1-3dcd3c48b169"/*AnimValue*/,
+      "Position": {
+        "X": -2252.9978,
+        "Y": -4889.9697
       }
     }
   ],
