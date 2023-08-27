@@ -76,6 +76,15 @@ public class WindowsUiContentDrawer : IUiContentDrawer<Device, ImDrawDataPtr>
         io.KeyMap[(int)ImGuiKey.Backspace] = (int)Keys.Back;
         io.KeyMap[(int)ImGuiKey.Enter] = (int)Keys.Enter;
         io.KeyMap[(int)ImGuiKey.Escape] = (int)Keys.Escape;
+        
+        // These shortcuts are relevant for imgui's implementation of copy/paste interactions
+        // within edit controls.
+        io.KeyMap[(int)ImGuiKey.A] = (int)Keys.A;
+        io.KeyMap[(int)ImGuiKey.C] = (int)Keys.C;
+        io.KeyMap[(int)ImGuiKey.V] = (int)Keys.V;
+        io.KeyMap[(int)ImGuiKey.X] = (int)Keys.X;
+        io.KeyMap[(int)ImGuiKey.Y] = (int)Keys.Y;
+        io.KeyMap[(int)ImGuiKey.Z] = (int)Keys.Z;
     }
     
     private void PrepareData(ImDrawDataPtr drawData)
