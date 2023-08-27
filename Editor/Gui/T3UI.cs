@@ -303,7 +303,7 @@ public class T3Ui
                 }
                     
                 ImGui.Separator();
-                ImGui.MenuItem("FullScreen", "", ref UserSettings.Config.FullScreen);
+                ImGui.MenuItem("FullScreen", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFullscreen, false), ref UserSettings.Config.FullScreen);
                 ImGui.EndMenu();
             }
                 
