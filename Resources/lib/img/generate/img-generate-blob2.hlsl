@@ -1,3 +1,5 @@
+#include "lib/shared/blend-functions.hlsl"
+
 cbuffer ParamConstants : register(b0)
 {
     float4 Fill;
@@ -8,15 +10,9 @@ cbuffer ParamConstants : register(b0)
     float Feather;
     float GradientBias;
     float Rotate;
+    float BlendMode;
+    float IsTextureValid;
 }
-
-// cbuffer TimeConstants : register(b1)
-// {
-//     float globalTime;
-//     float time;
-//     float runTime;
-//     float beatTime;
-// }
 
 cbuffer Resolution : register(b1)
 {
@@ -58,25 +54,14 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float sina = sin(-imageRotationRad - 3.141578/2);
     float cosa = cos(-imageRotationRad - 3.141578/2);
 
-    //p.x *=aspectRatio;
-
     p = float2(
         cosa * p.x - sina * p.y,
         cosa * p.y + sina * p.x 
     );
     float2 pRotated = p;
     p /= Size;
-
-
-    p-=Position * float2(1,-1);
-    
-    //float d = sdBox(p, Size/2);
-    float d= length(p);
-    
-    //float edge = (atan2(pRotated.x, pRotated.y) / 3.141578 /2);
-    //float edge = atan2(pRotated.x, );
-    //float edge =0;
-    //float f = Feather/4 * (1-abs(edge));
+    p-=Position * float2(1,-1);    
+    float d= length(p);    
     float f=Feather/4;
 
     d = smoothstep(Round/2 - f, Round/2 + f, d);
@@ -86,14 +71,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         : 1-pow( clamp(1-d,0,10), -GradientBias+1);
 
     float4 c= lerp(Fill, Background,  dBiased);
-
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
-    //orgColor = float4(1,1,1,0);
     float a = clamp(orgColor.a + c.a - orgColor.a*c.a, 0,1);
 
-    // FIXME: blend
-    //float mixA = a;
-    //float3 rgb = lerp(orgColor.rgb, c.rgb,  mixA);    
-    float3 rgb = (1.0 - c.a)*orgColor.rgb + c.a*c.rgb;   
-    return float4(rgb,a);
+    return (IsTextureValid < 0.5) ? c : BlendColors(orgColor, c, (int)BlendMode);
 }

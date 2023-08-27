@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -43,6 +44,9 @@ namespace T3.Operators.Types.Id_27b0e1af_cb2e_4603_83f9_5c9b042d87e6
 
         [Input(Guid = "89ca8093-8d13-471d-bfb4-613b13bc084d")]
         public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
+
+        [Input(Guid = "a9d505ce-2cb1-4911-acc3-c509e1eebc2b", MappedType = typeof(SharedEnums.RgbBlendModes))]
+        public readonly InputSlot<int> BlendMode = new InputSlot<int>();
     }
 }
 
