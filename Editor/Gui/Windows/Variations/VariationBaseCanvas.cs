@@ -595,7 +595,7 @@ namespace T3.Editor.Gui.Windows.Variations
             // var areaOnScreen = TransformRect(area); 
             // ImGui.GetForegroundDrawList().AddRect(areaOnScreen.Min, areaOnScreen.Max, Color.Blue);
 
-            const int columns = 4;
+            const int columns = 3;
             var columnIndex = 0;
 
             var stepWidth = VariationThumbnail.ThumbnailSize.X + VariationThumbnail.SnapPadding.X;
