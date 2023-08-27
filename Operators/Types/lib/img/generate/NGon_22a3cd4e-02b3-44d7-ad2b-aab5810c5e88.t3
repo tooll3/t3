@@ -68,7 +68,7 @@
     },
     {
       "Id": "c6c3d50e-9731-42cc-a0fc-ee8d15ac6cca"/*Radius*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.25
     },
     {
       "Id": "7428e03f-1f6f-4be4-adb9-accef49b64a6"/*Curvature*/,

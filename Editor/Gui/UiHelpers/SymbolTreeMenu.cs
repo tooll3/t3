@@ -5,9 +5,13 @@ using System.Runtime.InteropServices;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows;
 
@@ -201,7 +205,15 @@ namespace T3.Editor.Gui.UiHelpers
 
             return false;
         }
-        
+
+
+        private static void InsertSymbol(Symbol symbol)
+        {
+            if (NodeSelection.GetSelectedChildUis().Count() == 1)
+            {
+                ConnectionMaker.InsertSymbolInstance(symbol);
+            }
+        }
         
         
         public static void HandleDragAndDropForSymbolItem(Symbol symbol)
@@ -209,7 +221,7 @@ namespace T3.Editor.Gui.UiHelpers
 
             if (ImGui.IsItemActivated())
             {
-                Log.Debug("Can't insert that symbol because it would create a cycle.");
+                InsertSymbol(symbol);
                 return;
             }
             

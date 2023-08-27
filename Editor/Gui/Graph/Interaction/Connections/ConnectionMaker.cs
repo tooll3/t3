@@ -560,6 +560,126 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             InsertSymbolBrowser(symbolBrowser, childUi, instance, primaryOutput);
         }
 
+        public static void InsertSymbolInstance(Symbol symbol)
+        {
+            var instance = NodeSelection.GetSelectedInstance();
+            if (instance == null)
+            {
+                return;
+            }
+
+
+            var parentUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
+            var symbolChildUi = parentUi.ChildUis.FirstOrDefault(c => c.Id == instance.SymbolChildId);
+
+            if (symbolChildUi == null)
+            {
+                return;
+            }
+            
+            
+            if (instance.Outputs.Count < 1)
+                return;
+            
+            var posOnCanvas = symbolChildUi.PosOnCanvas;
+            
+            var primaryOutput = instance.Outputs[0];
+            StartOperation("Insert Operator");
+            var connections = instance.Parent.Symbol.Connections.FindAll(connection => connection.SourceParentOrChildId == instance.SymbolChildId
+                                                                                       && connection.SourceSlotId == primaryOutput.Id);
+
+            TempConnections.Add(new TempConnection(sourceParentOrChildId: instance.SymbolChildId,
+                                                   sourceSlotId: primaryOutput.Id,
+                                                   targetParentOrChildId: UseDraftChildId,
+                                                   targetSlotId: NotConnectedId,
+                                                   primaryOutput.ValueType));
+
+            if (connections.Count > 0)
+            {
+                AdjustGraphLayoutForNewNode(instance.Parent.Symbol, connections[0]);
+                foreach (var oldConnection in connections)
+                {
+                    var multiInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(oldConnection);
+                    _inProgressCommand.AddAndExecCommand(new DeleteConnectionCommand(instance.Parent.Symbol, oldConnection, multiInputIndex));
+                    TempConnections.Add(new TempConnection(sourceParentOrChildId: UseDraftChildId,
+                                                           sourceSlotId: NotConnectedId,
+                                                           targetParentOrChildId: oldConnection.TargetParentOrChildId,
+                                                           targetSlotId: oldConnection.TargetSlotId,
+                                                           primaryOutput.ValueType,
+                                                           multiInputIndex));
+                }
+            }
+            else
+            {
+                posOnCanvas.X += SymbolChildUi.DefaultOpSize.X +  SelectableNodeMovement.SnapPadding.X;
+            }
+            
+            var commandsForUndo = new List<ICommand>();
+            var parentSymbol = instance.Parent.Symbol;
+
+            var addSymbolChildCommand = new AddSymbolChildCommand(parentSymbol, symbol.Id) { PosOnCanvas = posOnCanvas };
+            commandsForUndo.Add(addSymbolChildCommand);
+            addSymbolChildCommand.Do();
+            var newSymbolChild = parentSymbol.Children.Single(entry => entry.Id == addSymbolChildCommand.AddedChildId);
+
+            // Select new node
+            var symbolUi = SymbolUiRegistry.Entries[parentSymbol.Id];
+            var newChildUi = symbolUi.ChildUis.Find(s => s.Id == newSymbolChild.Id);
+            if (newChildUi == null)
+            {
+                Log.Warning("Unable to create new operator");
+                return;
+            }
+            
+            var newInstance = instance.Parent.Children.Single(child => child.SymbolChildId == newChildUi.Id);
+
+            NodeSelection.SetSelectionToChildUi(newChildUi, newInstance);
+            
+            foreach (var c in ConnectionMaker.TempConnections)
+            {
+                switch (c.GetStatus())
+                {
+                    case ConnectionMaker.TempConnection.Status.SourceIsDraftNode:
+                        var outputDef = newSymbolChild.Symbol.GetOutputMatchingType(c.ConnectionType);
+                        if (outputDef == null)
+                        {
+                            Log.Error("Failed to find matching output connection type " + c.ConnectionType);
+                            continue;
+                        }
+                        
+
+                        var newConnectionToSource = new Symbol.Connection(sourceParentOrChildId: newSymbolChild.Id,
+                                                                          sourceSlotId: outputDef.Id,
+                                                                          targetParentOrChildId: c.TargetParentOrChildId,
+                                                                          targetSlotId: c.TargetSlotId);
+                        var addConnectionCommand = new AddConnectionCommand(parentSymbol, newConnectionToSource, c.MultiInputIndex);
+                        addConnectionCommand.Do();
+                        commandsForUndo.Add(addConnectionCommand);
+                        break;
+
+                    case ConnectionMaker.TempConnection.Status.TargetIsDraftNode:
+                        var inputDef = newSymbolChild.Symbol.GetInputMatchingType(c.ConnectionType);
+                        if (inputDef == null)
+                        {
+                            Log.Warning("Failed to complete node creation");
+                            continue;
+                        }
+
+                        var newConnectionToInput = new Symbol.Connection(sourceParentOrChildId: c.SourceParentOrChildId,
+                                                                         sourceSlotId: c.SourceSlotId,
+                                                                         targetParentOrChildId: newSymbolChild.Id,
+                                                                         targetSlotId: inputDef.Id);
+                        var connectionCommand = new AddConnectionCommand(parentSymbol, newConnectionToInput, c.MultiInputIndex);
+                        connectionCommand.Do();
+                        commandsForUndo.Add(connectionCommand);
+                        break;
+                }
+            }
+
+            CompleteOperation(commandsForUndo, "Insert Op " + newChildUi.SymbolChild.ReadableName);
+            ParameterPopUp.NodeIdRequestedForParameterWindowActivation = newSymbolChild.Id;
+        }
+        
         public static void OpenBrowserWithSingleSelection(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance)
         {
             if (instance.Outputs.Count < 1)
