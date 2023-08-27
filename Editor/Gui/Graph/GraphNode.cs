@@ -937,6 +937,9 @@ namespace T3.Editor.Gui.Graph
         private static Guid _draggedOutputOpId;
         private static Guid _draggedOutputDefId;
 
+        private static Guid _draggedInputOpId;
+        private static Guid _draggedInputDefId;
+
         private static ImRect GetUsableOutputSlotArea(SymbolChildUi targetUi, int outputIndex)
         {
             var thickness = (int)MathUtils.RemapAndClamp(GraphCanvas.Current.Scale.X, 0.5f, 1.2f, (int)(UsableSlotThickness * 0.5f), UsableSlotThickness);
@@ -1018,7 +1021,7 @@ namespace T3.Editor.Gui.Graph
                     }
                     ImGui.EndTooltip();
 
-                    if (ImGui.IsItemClicked(0))
+                    if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                     {
                         var createCopy = ImGui.GetIO().KeyCtrl && connection != null;
                         if (createCopy)
@@ -1043,11 +1046,40 @@ namespace T3.Editor.Gui.Graph
                         }
                         else
                         {
-                            ConnectionMaker.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
+                            _draggedInputOpId = targetUi.Id;
+                            _draggedInputDefId = inputDef.Id;
+                        }
+                    }
+                    else
+                    {
+                        if (ImGui.IsMouseReleased(ImGuiMouseButton.Left))
+                        {
+                            _draggedInputOpId = Guid.Empty;
+                            _draggedInputDefId = Guid.Empty;
+                            if (ImGui.GetMouseDragDelta().Length() < UserSettings.Config.ClickThreshold)
+                            {
+                                ConnectionMaker.StartFromInputSlot(targetUi.SymbolChild.Parent, targetUi, inputDef);
+                                var freePosition = NodeGraphLayouting.FindPositionForNodeConnectedToInput(targetUi.SymbolChild.Parent, targetUi, inputDef);
+                                ConnectionMaker.InitSymbolBrowserOnPrimaryGraphWindow(freePosition);
+                            }
+                            else if (ImGui.IsMouseReleased(ImGuiMouseButton.Right) && ImGui.GetIO().KeyCtrl)
+                            {
+                                ConnectionMaker.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
+                            }
                         }
                     }
                 }
             }
+            else if (_draggedInputOpId == targetUi.Id && _draggedInputDefId == inputDef.Id)
+            {
+                if (ImGui.IsMouseDragging(ImGuiMouseButton.Left)
+                    && ImGui.GetMouseDragDelta().Length() > UserSettings.Config.ClickThreshold)
+                {
+                    _draggedInputOpId = Guid.Empty;
+                    _draggedInputDefId = Guid.Empty;
+                    ConnectionMaker.StartFromInputSlot(GraphCanvas.Current.CompositionOp.Symbol, targetUi, inputDef);
+                }
+            }            
             else
             {
                 var connectionColor = GetReactiveSlotColor(inputDef.DefaultValue.ValueType, colorForType, SocketDirections.Input);
