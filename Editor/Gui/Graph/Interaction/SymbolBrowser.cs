@@ -12,6 +12,7 @@ using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Styling;
@@ -29,7 +30,25 @@ namespace T3.Editor.Gui.Graph.Interaction
         #region public API ------------------------------------------------------------------------
         public void OpenAt(Vector2 positionOnCanvas, Type filterInputType, Type filterOutputType, bool onlyMultiInputs)
         {
-            //_prepareCommand = prepareCommand;
+            // Scroll canvas to avoid symbol-browser close too edge
+            var canvas = GraphWindow.GetPrimaryGraphWindow().GraphCanvas;
+            if (canvas != null)
+            {
+                var screenPos = canvas.TransformPosition(positionOnCanvas);
+                var screenRect = ImRect.RectWithSize(screenPos, SymbolChildUi.DefaultOpSize);
+                screenRect.Expand(200 *canvas.Scale.X);
+                var windowRect = ImRect.RectWithSize(ImGui.GetWindowPos(), ImGui.GetWindowSize());
+                var tooCloseToEdge = !windowRect.Contains(screenRect);
+                        
+                var canvasPosition = canvas.InverseTransformPositionFloat(screenPos);
+                if (tooCloseToEdge)
+                {
+                    var canvasRect = ImRect.RectWithSize(canvasPosition, SymbolChildUi.DefaultOpSize);
+                    canvasRect.Expand(400);
+                    canvas.FitAreaOnCanvas(canvasRect);
+                }
+            }   
+
             IsOpen = true;
             PosOnCanvas = positionOnCanvas;
             _focusInputNextTime = true;
@@ -60,7 +79,12 @@ namespace T3.Editor.Gui.Graph.Interaction
                 if (NodeSelection.GetSelectedChildUis().Count() != 1)
                 {
                     ConnectionMaker.StartOperation("Add operator");
-                    OpenAt(GraphCanvas.Current.InverseTransformPositionFloat(ImGui.GetIO().MousePos + new Vector2(-4, -20)), null, null, false);
+                    
+                    var screenPos = ImGui.GetIO().MousePos + new Vector2(-4, -20);
+                    var canvasPosition = GraphCanvas.Current.InverseTransformPositionFloat(screenPos);
+                    
+                    OpenAt(canvasPosition, null, null, false);
+                    
                     return;
                 }
 
@@ -71,6 +95,20 @@ namespace T3.Editor.Gui.Graph.Interaction
                     {
                         NodeSelection.Clear();
                         return;
+                    }
+                    
+                    var screenPos = GraphCanvas.Current.TransformPosition(childUi.PosOnCanvas);
+                    var screenRect = ImRect.RectWithSize(screenPos, SymbolChildUi.DefaultOpSize);
+                    screenRect.Expand(200 *GraphCanvas.Current.Scale.X);
+                    var windowRect = ImRect.RectWithSize(ImGui.GetWindowPos(), ImGui.GetWindowSize());
+                    var tooCloseToEdge = !windowRect.Contains(screenRect);
+                    
+                    var canvasPosition = GraphCanvas.Current.InverseTransformPositionFloat(screenPos);
+                    if (tooCloseToEdge)
+                    {
+                        var canvasRect = ImRect.RectWithSize(canvasPosition, SymbolChildUi.DefaultOpSize);
+                        canvasRect.Expand(400);
+                        GraphCanvas.Current.FitAreaOnCanvas(canvasRect);
                     }
                     
                     ConnectionMaker.OpenBrowserWithSingleSelection(this, childUi, instance);
