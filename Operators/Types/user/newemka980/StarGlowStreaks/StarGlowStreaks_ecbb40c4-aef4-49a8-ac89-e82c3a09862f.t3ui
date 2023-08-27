@@ -1,0 +1,92 @@
+{
+  "Id": "ecbb40c4-aef4-49a8-ac89-e82c3a09862f"/*StarGlowStreaks*/,
+  "InputUis": [
+    {
+      "InputId": "afcba3d4-b7db-40bd-919a-d4f49b1bf7fc"/*Image*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": 132.69783,
+        "Y": -105.62421
+      }
+    },
+    {
+      "InputId": "87148268-6d28-4d71-a2b5-b1ec0fb66685"/*Color*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": -60.624207
+      }
+    },
+    {
+      "InputId": "c643292c-5612-408a-9fd6-ce31e4de3f56"/*Range*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": -15.624207
+      }
+    },
+    {
+      "InputId": "68e16fd7-fabf-446e-9553-a737422c026b"/*Brightness*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 29.375793
+      }
+    },
+    {
+      "InputId": "8c1d41ff-02e8-481b-a21a-56d1c519d920"/*Thresold*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 74.37579
+      }
+    },
+    {
+      "InputId": "0c5e1ddc-0ad9-46a2-a992-cc10dba332d3"/*MixOriginal*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 119.37579
+      }
+    },
+    {
+      "InputId": "5568d1bd-984a-48ed-b05c-3baaf10a0778"/*Composite*/,
+      "Position": {
+        "X": 132.69783,
+        "Y": 164.3758
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "8b86e66b-7245-492d-a137-e6a273ad04ec"/*_ImageFxShaderSetupStatic*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 94.37823,
+        "Y": 258.05994
+      },
+      "Position": {
+        "X": 511.94125,
+        "Y": -102.45227
+      }
+    },
+    {
+      "ChildId": "082b3f61-9776-4f4c-88b6-48a1115bfd2f"/*Vector4ToFloat4*/,
+      "Position": {
+        "X": 282.6978,
+        "Y": -60.624207
+      }
+    },
+    {
+      "ChildId": "34e597e3-d292-438f-a952-344a596e4635"/*BoolToFloats*/,
+      "Position": {
+        "X": 294.24777,
+        "Y": 145.95168
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "a256b06b-1500-4189-9820-906addbf387e"/*TextureOutput*/,
+      "Position": {
+        "X": 672.35223,
+        "Y": -44.245617
+      }
+    }
+  ]
+}
