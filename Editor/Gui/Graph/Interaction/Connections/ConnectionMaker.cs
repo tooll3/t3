@@ -512,42 +512,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                 AbortOperation();
             }
         }
-
-        // public static void CompleteConnectsToBuiltNode(Symbol parent, SymbolChild newSymbolChild)
-        // {
-        //     foreach (var c in TempConnections)
-        //     {
-        //         switch (c.GetStatus())
-        //         {
-        //             case TempConnection.Status.SourceIsDraftNode:
-        //                 var outputDef = newSymbolChild.Symbol.GetOutputMatchingType(c.ConnectionType);
-        //                 var newConnectionToSource = new Symbol.Connection(sourceParentOrChildId: newSymbolChild.Id,
-        //                                                                   sourceSlotId: outputDef.Id,
-        //                                                                   targetParentOrChildId: c.TargetParentOrChildId,
-        //                                                                   targetSlotId: c.TargetSlotId);
-        //                 UndoRedoStack.AddAndExecute(new AddConnectionCommand(parent, newConnectionToSource, 0));
-        //                 break;
-        //
-        //             case TempConnection.Status.TargetIsDraftNode:
-        //                 var inputDef = newSymbolChild.Symbol.GetInputMatchingType(c.ConnectionType);
-        //                 if (inputDef == null)
-        //                 {
-        //                     Log.Warning("Failed to complete node creation");
-        //                     Reset();
-        //                     return;
-        //                 }
-        //
-        //                 var newConnectionToInput = new Symbol.Connection(sourceParentOrChildId: c.SourceParentOrChildId,
-        //                                                                  sourceSlotId: c.SourceSlotId,
-        //                                                                  targetParentOrChildId: newSymbolChild.Id,
-        //                                                                  targetSlotId: inputDef.Id);
-        //                 UndoRedoStack.AddAndExecute(new AddConnectionCommand(parent, newConnectionToInput, 0));
-        //                 break;
-        //         }
-        //     }
-        //
-        //     Reset();
-        // }
+        
 
         public static void OpenSymbolBrowserAtOutput(SymbolBrowser symbolBrowser, SymbolChildUi childUi, Instance instance,
                                                      Guid outputId)
