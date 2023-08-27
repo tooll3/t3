@@ -76,6 +76,7 @@ namespace T3.Editor.Gui.Interaction
         // Layout and window management
         ToggleFocusMode,
         ToggleVariationsWindow,
+        ToggleFullscreen,
         
         LoadLayout0,
         LoadLayout1,
@@ -283,6 +284,7 @@ namespace T3.Editor.Gui.Interaction
                             
                             // Layout and window management
                             new KeyboardBinding(UserActions.ToggleFocusMode, new KeyCombination(Key.Esc, shift: true)),
+                            new KeyboardBinding(UserActions.ToggleFullscreen, new KeyCombination(Key.F11)),
 
                             new KeyboardBinding(UserActions.LoadBookmark1, new KeyCombination(Key.D1, ctrl: true)),
                             new KeyboardBinding(UserActions.LoadBookmark2, new KeyCombination(Key.D2, ctrl: true)),

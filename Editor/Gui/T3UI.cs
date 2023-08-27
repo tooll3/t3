@@ -181,7 +181,10 @@ public class T3Ui
         {
             _searchDialog.ShowNextFrame();
         }
-            
+        else if (KeyboardBinding.Triggered(UserActions.ToggleFullscreen))
+        {
+            UserSettings.Config.FullScreen = !UserSettings.Config.FullScreen;
+        }
     }
         
     private void DrawAppMenuBar()
