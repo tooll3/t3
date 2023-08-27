@@ -450,7 +450,9 @@ namespace T3.Editor.Gui.InputUi
                     ImGui.SameLine();
                     if (!input.IsDefault)
                     {
-                        Icons.DrawIconAtScreenPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6, 2));
+                        if(ImGui.IsItemHovered())
+                            Icons.DrawIconAtScreenPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6, 4));
+                        
                         if (isClicked)
                         {
                             UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id, input));
