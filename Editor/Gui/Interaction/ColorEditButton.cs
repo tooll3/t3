@@ -24,6 +24,7 @@ namespace T3.Editor.Gui.Interaction
                 && !ImGui.IsPopupOpen("##colorEdit")
                 )
             {
+                _previousColor = color;
                 _modifiedSlider = false;
                 ImGui.OpenPopup("##colorEdit");
                 ImGui.SetNextWindowPos(ImGui.GetItemRectMax() + new Vector2(4,10));
@@ -31,8 +32,6 @@ namespace T3.Editor.Gui.Interaction
             
             edited |= HandleQuickSliders(ref color, buttonPosition);
             edited |= ColorEditPopup.DrawPopup(ref color, _previousColor);
-            if (edited == InputEditStateFlags.ModifiedAndFinished)
-                _previousColor = color;
             return edited;
         }
 
