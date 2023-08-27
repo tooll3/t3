@@ -42,8 +42,10 @@ namespace T3.Editor.Gui.Styling
             }
 
             var isOpen = ImGui.TreeNode(label);
-            ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 0);
             ImGui.PopStyleColor();
+            if(isOpen)
+                ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 0);
+            
             return isOpen;
         }
 

@@ -215,7 +215,7 @@ namespace T3.Editor.Gui.Windows
                 
                 if(inputUi.AddPadding) 
                     FormInputs.AddVerticalSpace(4);
-
+            
                 if (!string.IsNullOrEmpty(inputUi.GroupTitle))
                 {
                     if(groupState == GroupState.InsideOpened)
@@ -228,7 +228,7 @@ namespace T3.Editor.Gui.Windows
                 ImGui.PushID(inputSlot.Id.GetHashCode());
                 var skipIfDefault = groupState == GroupState.InsideClosed;
                 var editState = inputUi.DrawParameterEdit(inputSlot, compositionSymbolUi, symbolChildUi, hideNonEssentials:hideNonEssentials, skipIfDefault);
-
+                
                 if ((editState & InputEditStateFlags.Started) != InputEditStateFlags.Nothing)
                 {
                     _inputSlotForActiveCommand = inputSlot;
@@ -252,13 +252,9 @@ namespace T3.Editor.Gui.Windows
                     {
                         UndoRedoStack.Add(_inputValueCommandInFlight);
                     }
-                    else
-                    {
-                        //Log.Debug($"finished but wrong inputSlot {inputSlot.Input.Name}");
-                    }
                     _inputValueCommandInFlight = null;
                 }
-
+                
                 if (editState == InputEditStateFlags.ShowOptions)
                 {
                     NodeSelection.SetSelection(inputUi);
