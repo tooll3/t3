@@ -1,5 +1,5 @@
 {
-  "Name": "Blob",
+  "Name": "_BlobOld",
   "Id": "c8590f8f-cca1-434a-a880-67bb91920e1a",
   "Namespace": "lib.img.generate",
   "Inputs": [
@@ -109,7 +109,7 @@
         {
           "Id": "1e4e274b-60b2-4fe8-b275-ebef80d520a7"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\generate\\img-generate-blob.hlsl"
+          "Value": "Resources\\lib\\img\\generate\\img-generate-blobOld.hlsl"
         },
         {
           "Id": "ff7cb999-aa3a-4e11-b9c8-d027bdb55ff6"/*OutputFormat*/,

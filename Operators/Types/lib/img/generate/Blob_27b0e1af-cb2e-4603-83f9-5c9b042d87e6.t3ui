@@ -1,6 +1,6 @@
 {
-  "Id": "27b0e1af-cb2e-4603-83f9-5c9b042d87e6"/*Blob2*/,
-  "Description": "An updated version of Blob with easier to control parameters.",
+  "Id": "27b0e1af-cb2e-4603-83f9-5c9b042d87e6"/*Blob*/,
+  "Description": "A very versatile generator for rectangles, circles, blobs, vignets and many other things.\nDifferent to [_BlobOld] it is using an eliptical shape and easier to control parameters.\n\nAlso consider using [RoundedRect] and [RadialGradient].\n",
   "InputUis": [
     {
       "InputId": "8cc15ea0-074f-40ed-813d-b93f48681094"/*Image*/,
@@ -24,15 +24,6 @@
       }
     },
     {
-      "InputId": "37da22d0-56ca-444a-9c9d-27a70283b7c0"/*Size*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.00002
-      },
-      "Min": -1.0,
-      "Max": 1.0
-    },
-    {
       "InputId": "7daacb43-54de-47d2-afcd-694f6afce59d"/*Position*/,
       "Position": {
         "X": -200.0,
@@ -42,7 +33,16 @@
       "Max": 1.0
     },
     {
-      "InputId": "33f31c62-b0ea-42f9-a226-d0f5154731ee"/*Round*/,
+      "InputId": "37da22d0-56ca-444a-9c9d-27a70283b7c0"/*Stretch*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.00002
+      },
+      "Min": -1.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "33f31c62-b0ea-42f9-a226-d0f5154731ee"/*Scale*/,
       "Position": {
         "X": -200.0,
         "Y": 224.99998
@@ -56,6 +56,7 @@
         "X": -200.0,
         "Y": 270.0
       },
+      "AddPadding": "True",
       "Min": -1.0,
       "Max": 1.0
     },

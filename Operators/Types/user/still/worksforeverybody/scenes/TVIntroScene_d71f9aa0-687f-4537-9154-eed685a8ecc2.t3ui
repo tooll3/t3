@@ -166,7 +166,7 @@
       }
     },
     {
-      "ChildId": "8b598843-2c4f-4835-9b66-c25cae0bcbfa"/*Blob*/,
+      "ChildId": "8b598843-2c4f-4835-9b66-c25cae0bcbfa"/*_BlobOld*/,
       "Position": {
         "X": 164.68909,
         "Y": 1879.5374
@@ -705,7 +705,7 @@
       }
     },
     {
-      "ChildId": "c5d2f351-2420-4b92-a658-c5a4ecf8a88e"/*Blob*/,
+      "ChildId": "c5d2f351-2420-4b92-a658-c5a4ecf8a88e"/*_BlobOld*/,
       "Position": {
         "X": 3004.701,
         "Y": 738.68774

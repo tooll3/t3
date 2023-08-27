@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "539a307c-618e-454c-97bd-85e9e5bcfde6"/*Blob*/,
+      "ChildId": "539a307c-618e-454c-97bd-85e9e5bcfde6"/*_BlobOld*/,
       "Position": {
         "X": 213.32617,
         "Y": -17.421875
@@ -312,7 +312,7 @@
       }
     },
     {
-      "ChildId": "a447d9e0-cb98-4def-be7b-fd93dac6fbee"/*Blob*/,
+      "ChildId": "a447d9e0-cb98-4def-be7b-fd93dac6fbee"/*_BlobOld*/,
       "Position": {
         "X": 782.9332,
         "Y": 494.40787

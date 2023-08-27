@@ -109,7 +109,7 @@
       }
     },
     {
-      "ChildId": "8b90e87c-7738-42c8-9834-7ced80eeff71"/*Blob*/,
+      "ChildId": "8b90e87c-7738-42c8-9834-7ced80eeff71"/*_BlobOld*/,
       "Position": {
         "X": 835.15424,
         "Y": 198.56506
@@ -123,7 +123,7 @@
       }
     },
     {
-      "ChildId": "59da51d0-77d7-49f3-a680-fc503311cda1"/*Blob*/,
+      "ChildId": "59da51d0-77d7-49f3-a680-fc503311cda1"/*_BlobOld*/,
       "Position": {
         "X": 985.15424,
         "Y": 198.56506
@@ -151,7 +151,7 @@
       }
     },
     {
-      "ChildId": "77c6c42c-2202-4a9b-8c03-aa932ac4b382"/*Blob*/,
+      "ChildId": "77c6c42c-2202-4a9b-8c03-aa932ac4b382"/*_BlobOld*/,
       "Position": {
         "X": 592.91583,
         "Y": 452.63315
