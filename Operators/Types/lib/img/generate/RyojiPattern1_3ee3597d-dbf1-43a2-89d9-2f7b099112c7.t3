@@ -35,6 +35,10 @@
       }
     },
     {
+      "Id": "19a0d33c-4c0e-40ce-8344-5ae17cf081e5"/*Iterations*/,
+      "DefaultValue": 7.0
+    },
+    {
       "Id": "c4891643-ed6a-4af6-9a2f-02917cf26f24"/*Splits*/,
       "DefaultValue": {
         "X": 4.0,
@@ -72,10 +76,6 @@
     {
       "Id": "1a4ced0e-f38e-4360-adb5-a62ffa0344e1"/*Contrast*/,
       "DefaultValue": 0.75
-    },
-    {
-      "Id": "19a0d33c-4c0e-40ce-8344-5ae17cf081e5"/*Iterations*/,
-      "DefaultValue": 7.0
     },
     {
       "Id": "f628c5b7-0278-4d60-80ad-6670cd284cf3"/*Seed*/,
