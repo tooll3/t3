@@ -102,8 +102,8 @@ namespace Operators.Utils
             
             for (var index = 0; index < MidiIn.NumberOfDevices; index++)
             {
-                var deviceInfo = MidiIn.DeviceInfo(index);
-                var deviceInfoProductName = deviceInfo.ProductName;
+                var deviceInputInfo = MidiIn.DeviceInfo(index);
+                var deviceInfoProductName = deviceInputInfo.ProductName;
 
                 if (!IsMidiDeviceCaptureEnabled(deviceInfoProductName))
                 {
@@ -126,21 +126,51 @@ namespace Operators.Utils
                                   : $" > {e.Message} {deviceInfoProductName}");
                     continue;
                 }
-
-                foreach (var midiConsumer in _midiConsumers)
-                {
-                    newMidiIn.MessageReceived += midiConsumer.MessageReceivedHandler;
-                    newMidiIn.ErrorReceived += midiConsumer.ErrorReceivedHandler;
-                }
-
                 newMidiIn.Start();
-                _midiInsWithDevices[newMidiIn] = deviceInfo;
+                
+                _midiInsWithDevices[newMidiIn] = deviceInputInfo;
                 _midiInsByDeviceIdHash[deviceInfoProductName.GetHashCode()] = newMidiIn;
+                
             }
+
+            for (var index = 0; index < MidiOut.NumberOfDevices; index++)
+            {
+                var deviceOutputInfo = MidiOut.DeviceInfo(index);
+                var deviceInfoProductName = deviceOutputInfo.ProductName;
+
+                if (!IsMidiDeviceCaptureEnabled(deviceInfoProductName))
+                {
+                    Log.Debug($" skipping '{deviceInfoProductName}' (disabled in setting)");
+                    continue;
+                }
+                
+                MidiOut newMidiOut;
+                try {
+                    newMidiOut = new MidiOut(index);
+                }
+                catch (NAudio.MmException e)
+                {
+                    Log.Error(e.Message == "MemoryAllocationError"
+                                  ? " > The device is already being used by an application."
+                                  : $" > {e.Message} {deviceInfoProductName}");
+                    continue;
+                }
+                
+                // foreach (var midiConsumer in _midiConsumers)
+                // {
+                //     newMidiIn.MessageReceived += midiConsumer.MessageReceivedHandler;
+                //     newMidiIn.ErrorReceived += midiConsumer.ErrorReceivedHandler;
+                // }
+                
+                _midiOutsWithDevices[newMidiOut] = deviceOutputInfo;
+                _midiOutsByDeviceIdHash[deviceInfoProductName.GetHashCode()] = newMidiOut;
+            }
+            
         }
 
         private static void CloseMidiDevices()
         {
+            // Midi Ins
             foreach (var midiInputDevice in _midiInsWithDevices.Keys)
             {
                 foreach (var midiConsumer in _midiConsumers)
@@ -163,11 +193,38 @@ namespace Operators.Utils
 
             _midiInsWithDevices.Clear();
             _midiInsByDeviceIdHash.Clear();
+            
+            
+            // Midi outs
+            foreach (var midiOutputDevice in _midiOutsWithDevices.Keys)
+            {
+                // foreach (var midiConsumer in _midiConsumers)
+                // {
+                //     midiInputDevice.MessageReceived -= midiConsumer.MessageReceivedHandler;
+                //     midiInputDevice.ErrorReceived -= midiConsumer.ErrorReceivedHandler;
+                // }
+
+                try
+                {
+                    midiOutputDevice.Close();
+                    midiOutputDevice.Dispose();
+                }
+                catch (Exception e)
+                {
+                    Log.Debug("exception: " + e);
+                }
+            }
+
+            _midiOutsWithDevices.Clear();
+            _midiOutsByDeviceIdHash.Clear();
         }
         
         private static readonly List<IMidiConsumer> _midiConsumers = new();
         private static readonly Dictionary<MidiIn, MidiInCapabilities> _midiInsWithDevices = new();
         private static readonly Dictionary<int, MidiIn> _midiInsByDeviceIdHash = new();
+        
+        public static readonly Dictionary<MidiOut, MidiOutCapabilities> _midiOutsWithDevices = new();
+        public static readonly Dictionary<int, MidiOut> _midiOutsByDeviceIdHash = new();
         private static bool _initialized;
     }
 }

@@ -1,0 +1,29 @@
+{
+  "Name": "_MidiOutput",
+  "Id": "f9f4281b-92ee-430d-a930-6b588a5cb9a9",
+  "Namespace": "lib.io.midi",
+  "Inputs": [
+    {
+      "Id": "53b4de88-59e9-456e-be2c-d1825e2ffd6f"/*Value*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "55aaed23-e2b9-4f17-86e2-ea8ffb347c0a"/*ModuloValue*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "a7e1eac2-5602-4c40-8519-19ca53763c76"/*Channel*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "0fff2ce2-defa-442c-a089-4b12e7d71620"/*Controller*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "3ecf2fcf-0f26-4593-804e-a5ef99057d9e"/*Velocity*/,
+      "DefaultValue": 0
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
