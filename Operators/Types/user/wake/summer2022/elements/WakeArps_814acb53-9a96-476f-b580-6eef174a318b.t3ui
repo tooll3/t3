@@ -817,6 +817,104 @@
         "X": 227.5293,
         "Y": -1250.0436
       }
+    },
+    {
+      "ChildId": "b0d0cb98-6f8d-47be-9add-685f8bf70689"/*DrawBillboards*/,
+      "Position": {
+        "X": -310.29617,
+        "Y": -529.53156
+      }
+    },
+    {
+      "ChildId": "585151ba-a5b8-4b85-872f-9645d5cc5946"/*GridPoints*/,
+      "Position": {
+        "X": -1060.2961,
+        "Y": -698.53156
+      }
+    },
+    {
+      "ChildId": "61d0b96c-e9f1-437e-ab04-bda58c503287"/*RadialPoints*/,
+      "Position": {
+        "X": -1060.2961,
+        "Y": -579.53156
+      }
+    },
+    {
+      "ChildId": "18bb6af4-6ade-434e-bd81-f460067032c7"/*RepeatAtGPoints*/,
+      "Position": {
+        "X": -760.29614,
+        "Y": -698.53156
+      }
+    },
+    {
+      "ChildId": "81861391-6d89-4c0d-af7d-792fb8516239"/*LinePoints*/,
+      "Position": {
+        "X": -1234.3688,
+        "Y": -488.55203
+      }
+    },
+    {
+      "ChildId": "96b1b5a0-23cc-4aea-bbea-f08992e81d89"/*RepeatAtGPoints*/,
+      "Position": {
+        "X": -910.29614,
+        "Y": -635.53156
+      }
+    },
+    {
+      "ChildId": "3bba083c-aa87-444e-af4a-edb54b62c784"/*RandomizePoints*/,
+      "Position": {
+        "X": -910.29614,
+        "Y": -698.53156
+      }
+    },
+    {
+      "ChildId": "e8d06863-622a-4530-9bec-3fa9b9e23dbf"/*Execute*/,
+      "Position": {
+        "X": -160.29617,
+        "Y": -738.53156
+      }
+    },
+    {
+      "ChildId": "598f70a2-56b0-4537-a614-34e5bebf15e6"/*DrawLines*/,
+      "Position": {
+        "X": -310.29617,
+        "Y": -738.53156
+      }
+    },
+    {
+      "ChildId": "a4d6b010-ba63-44d2-a66e-2baa9c9f0cc2"/*SubdivideLinePoints*/,
+      "Position": {
+        "X": -610.29614,
+        "Y": -486.53156
+      }
+    },
+    {
+      "ChildId": "621e3fb5-1076-4a27-97aa-e6a62370b971"/*LoadImage*/,
+      "Position": {
+        "X": -460.29617,
+        "Y": -529.53156
+      }
+    },
+    {
+      "ChildId": "70bc65b5-9877-41d5-8ffc-aa4c3e41ee89"/*FilterPoints*/,
+      "Position": {
+        "X": -460.29617,
+        "Y": -486.53156
+      }
+    },
+    {
+      "ChildId": "487a7859-dadd-435f-87f2-fb289e4bccca"/*AnimValue*/,
+      "Position": {
+        "X": -1384.3688,
+        "Y": -488.55203
+      }
+    },
+    {
+      "ChildId": "0b0d3fb7-d228-4819-8bac-cc5547270bc0"/*DrawLines*/,
+      "Position": {
+        "X": -1047.963,
+        "Y": -427.7923
+      }
     }
   ],
   "OutputUis": [
