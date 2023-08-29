@@ -59,11 +59,17 @@ namespace T3.Editor.Gui.Styling
 
                 ImGui.SetNextWindowPos(new Vector2(ImGui.GetItemRectMin().X, ImGui.GetItemRectMax().Y));
                 ImGui.SetNextWindowSize(new Vector2(ImGui.GetItemRectSize().X, 320));
+                if (ImGui.IsItemFocused() && ImGui.IsKeyPressed((ImGuiKey)Key.Return))
+                {
+                    wasChanged = true;
+                    _activeInputId = 0;
+                }
                 
                 if (ImGui.Begin("##typeAheadSearchPopup", ref isSearchResultWindowOpen,
                                 ImGuiWindowFlags.NoTitleBar 
                                 | ImGuiWindowFlags.NoMove 
-                                | ImGuiWindowFlags.Popup 
+                                | ImGuiWindowFlags.Tooltip 
+                                | ImGuiWindowFlags.NoFocusOnAppearing 
                                 | ImGuiWindowFlags.ChildWindow
                                ))
                 {

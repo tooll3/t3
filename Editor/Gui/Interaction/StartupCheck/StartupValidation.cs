@@ -18,6 +18,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
     {
         public static void CheckInstallation()
         {
+            
             var checks = new Check[]
                              {
                                  new()
@@ -115,7 +116,8 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                 
                 var sb = new StringBuilder();
 
-                sb.Append($"Startup folder is:\n{EditorUi.Instance.StartupPath}\n\n");
+                var startupPath = Path.GetFullPath(".");
+                sb.Append($"Startup folder is:\n{startupPath}\n\n");
                 
                 sb.Append($"We can't find the following files...\n\n  {string.Join("\n  ", missingPaths)}");
                 sb.Append("\n\n");
