@@ -52,6 +52,10 @@ namespace T3.Editor
         [STAThread]
         private static void Main()
         {
+            // Not calling this first will cause exceptions...
+            EditorUi.Instance = new MsFormsEditor();
+            EditorUi.Instance.EnableDpiAwareScaling();
+            
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
             
@@ -66,8 +70,6 @@ namespace T3.Editor
             Log.AddWriter(ConsoleLogWindow);
             Log.Debug($"Starting {Version}");
 
-            EditorUi.Instance = new MsFormsEditor();
-            EditorUi.Instance.EnableDpiAwareScaling();
 
             if (!IsStandAlone)
                 StartupValidation.CheckInstallation();
