@@ -7,9 +7,20 @@ using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Styling
 {
+    /// <summary>
+    /// Draws a type ahead input 
+    /// </summary>
+    /// <remarks>
+    /// Sadly, the implementation of this component is a single horrible hack.
+    /// It's probably the single most ugly peace of ImGui code in the whole codebase.
+    /// also see:
+    /// https://github.com/ocornut/imgui/issues/718
+    /// https://github.com/ocornut/imgui/issues/3725
+    ///
+    /// It should work for now, but it's likely to break with future versions of ImGui.
+    /// </remarks>
     public static class InputWithTypeAheadSearch
     {
-        
         
         public static bool Draw(string label, ref string filter, IEnumerable<string> items)
         {
@@ -68,7 +79,7 @@ namespace T3.Editor.Gui.Styling
                 if (ImGui.Begin("##typeAheadSearchPopup", ref isSearchResultWindowOpen,
                                 ImGuiWindowFlags.NoTitleBar 
                                 | ImGuiWindowFlags.NoMove 
-                                | ImGuiWindowFlags.Tooltip 
+                                | ImGuiWindowFlags.Tooltip // ugly as f**k. Sadly .PopUp will lead to random crashes.
                                 | ImGuiWindowFlags.NoFocusOnAppearing 
                                 | ImGuiWindowFlags.ChildWindow
                                ))
@@ -76,12 +87,6 @@ namespace T3.Editor.Gui.Styling
                     _lastTypeAheadResults.Clear();
                     var index = 0;
                     ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.Gray.Rgba);
-
-                    if (ImGui.IsMouseClicked(ImGuiMouseButton.Left) && !ImGui.IsWindowHovered(ImGuiHoveredFlags.RectOnly))
-                    {
-                        _activeInputId = 0;
-                        ImGui.CloseCurrentPopup();
-                    }
                         
                     foreach (var word in items)
                     {
@@ -89,11 +94,16 @@ namespace T3.Editor.Gui.Styling
                             continue;
                         
                         var isSelected = index == _selectedResultIndex;
+                        
+                        // We can't use IsItemHovered because we need to use Tooltip hack 
                         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
                         ImGui.Selectable(word, isSelected);
                         ImGui.PopStyleColor();
+
+                        var isItemHovered = new ImRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax()).Contains( ImGui.GetMousePos());
                             
-                        if (ImGui.IsItemClicked() || (isSelected && ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
+                        if ((ImGui.IsMouseClicked(ImGuiMouseButton.Left) && isItemHovered) 
+                            || (isSelected && ImGui.IsKeyPressed((ImGuiKey)Key.Return)))
                         {
                             filter = word;
                             wasChanged = true;
@@ -103,6 +113,13 @@ namespace T3.Editor.Gui.Styling
                         _lastTypeAheadResults.Add(word);
                         if (++index > 100)
                             break;
+                    }
+
+                    var isPopupHovered = new ImRect(ImGui.GetWindowContentRegionMin(), ImGui.GetWindowContentRegionMax()).Contains(ImGui.GetMousePos());
+                    
+                    if (!isPopupHovered && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                    {
+                        _activeInputId = 0;
                     }
                     ImGui.PopStyleColor();
                 }
