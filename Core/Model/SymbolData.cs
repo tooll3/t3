@@ -28,7 +28,7 @@ public partial class SymbolData
 
     public virtual void Load(bool enableLog)
     {
-        Console.WriteLine("Loading symbols...");
+        Log.Debug("Loading symbols...");
         var symbolFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolExtension}", SearchOption.AllDirectories);
 
         var symbolsRead = symbolFiles.AsParallel()
@@ -38,7 +38,7 @@ public partial class SymbolData
                                      .ToList(); // Execute and bring back to main thread
 
             
-        Console.WriteLine("Registering loaded symbols...");
+        Log.Debug("Registering loaded symbols...");
         // Check if there are symbols without a file, if yes add these
         var instanceTypesWithoutFile = OperatorsAssembly.ExportedTypes.AsParallel()
                                                         .Where(type => type.IsSubclassOf(typeof(Instance)))
@@ -48,7 +48,13 @@ public partial class SymbolData
         foreach (var readSymbolResult in symbolsRead)
         {
             var symbol = readSymbolResult.Symbol;
-            SymbolRegistry.Entries.Add(symbol.Id, symbol);
+            if (!SymbolRegistry.Entries.TryAdd(symbol.Id, symbol))
+            {
+                var existingSymbol = SymbolRegistry.Entries[symbol.Id];
+                Log.Error($"Symbol {existingSymbol.Name} exists multiple times in database.");
+                continue;
+            }
+            
             instanceTypesWithoutFile.Remove(symbol.InstanceType);
         }
 
@@ -57,7 +63,7 @@ public partial class SymbolData
             RegisterTypeWithoutFile(newType);
         }
 
-        Console.WriteLine("Applying symbol children...");
+        Log.Debug("Applying symbol children...");
         Parallel.ForEach(symbolsRead, ReadAndApplyChildren);
 
         void ReadAndApplyChildren(SymbolJson.SymbolReadResult readSymbolResult)

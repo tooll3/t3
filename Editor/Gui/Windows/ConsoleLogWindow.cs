@@ -22,118 +22,115 @@ namespace T3.Editor.Gui.Windows
     {
         public ConsoleLogWindow()
         {
-            Log.AddWriter(this);
             Config.Title = "Console";
             Config.Visible = true;
         }
 
         private readonly List<ILogEntry> _filteredEntries = new(1000);
-
+        
         protected override void DrawContent()
         {
             if (FrameStats.Last.UiColorsChanged)
                 _colorForLogLevel= UpdateLogLevelColors();
-            
+
+            CustomComponents.ToggleButton("Scroll", ref _shouldScrollToBottom, Vector2.Zero);
+            ImGui.SameLine();
+
+            //ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
+            if (ImGui.Button("Clear"))
             {
-                CustomComponents.ToggleButton("Scroll", ref _shouldScrollToBottom, Vector2.Zero);
-                ImGui.SameLine();
-
-                //ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
-                if (ImGui.Button("Clear"))
+                lock (_logEntries)
                 {
-                    lock (_logEntries)
-                    {
-                        _logEntries.Clear();
-                    }
+                    _logEntries.Clear();
                 }
+            }
 
-                ImGui.SameLine();
+            ImGui.SameLine();
 
-                if (ImGui.Button("Copy"))
+            if (ImGui.Button("Copy"))
+            {
+                lock (_logEntries)
                 {
-                    lock (_logEntries)
+                    var sb = new StringBuilder();
+                    foreach (var entry in _logEntries)
                     {
-                        var sb = new StringBuilder();
-                        foreach (var entry in _logEntries)
+                        sb.Append($"{(entry.TimeStamp - _startTime).Ticks / 10000000f:  0.000}");
+                        sb.Append('\t');
+                        sb.Append(entry.Level);
+                        sb.Append('\t');
+                        sb.Append(entry.Message);
+                        sb.Append('\n');
+                    }
+
+                    EditorUi.Instance.SetClipboardText(sb.ToString());
+                }
+            }
+
+            ImGui.SameLine();
+            CustomComponents.DrawSearchField("Filter", ref _filterString);
+
+            ImGui.Separator();
+            ImGui.BeginChild("scrolling");
+            {
+                if (_logEntries == null)
+                    return;
+
+                lock (_logEntries)
+                {
+                    var items = _logEntries;
+                    if (FilterIsActive)
+                    {
+                        _filteredEntries.Clear();
+                        foreach (var e in _logEntries)
                         {
-                            sb.Append($"{(entry.TimeStamp - _startTime).Ticks / 10000000f:  0.000}");
-                            sb.Append('\t');
-                            sb.Append(entry.Level);
-                            sb.Append('\t');
-                            sb.Append(entry.Message);
-                            sb.Append('\n');
+                            if (!e.Message.Contains(_filterString))
+                                continue;
+
+                            _filteredEntries.Add(e);
                         }
 
-                        EditorUi.Instance.SetClipboardText(sb.ToString());
+                        items = _filteredEntries;
                     }
-                }
 
-                ImGui.SameLine();
-                CustomComponents.DrawSearchField("Filter", ref _filterString);
-
-                ImGui.Separator();
-                ImGui.BeginChild("scrolling");
-                {
-                    if (_logEntries == null)
-                        return;
-
-                    lock (_logEntries)
+                    if (ImGui.IsWindowHovered() && ImGui.GetIO().MouseWheel != 0)
                     {
-                        var items = _logEntries;
-                        if (FilterIsActive)
+                        _shouldScrollToBottom = false;
+                    }
+
+                    unsafe
+                    {
+                        var clipperData = new ImGuiListClipper();
+                        var listClipperPtr = new ImGuiListClipperPtr(&clipperData);
+
+                        listClipperPtr.Begin(items.Count, ImGui.GetTextLineHeightWithSpacing());
+                        while (listClipperPtr.Step())
                         {
-                            _filteredEntries.Clear();
-                            foreach (var e in _logEntries)
+                            for (var i = listClipperPtr.DisplayStart; i < listClipperPtr.DisplayEnd; ++i)
                             {
-                                if (!e.Message.Contains(_filterString))
+                                if (i < 0 || i >= items.Count)
                                     continue;
 
-                                _filteredEntries.Add(e);
+                                DrawEntry(items[i]);
                             }
-
-                            items = _filteredEntries;
                         }
 
-                        if (ImGui.IsWindowHovered() && ImGui.GetIO().MouseWheel != 0)
-                        {
-                            _shouldScrollToBottom = false;
-                        }
-
-                        unsafe
-                        {
-                            var clipperData = new ImGuiListClipper();
-                            var listClipperPtr = new ImGuiListClipperPtr(&clipperData);
-
-                            listClipperPtr.Begin(items.Count, ImGui.GetTextLineHeightWithSpacing());
-                            while (listClipperPtr.Step())
-                            {
-                                for (var i = listClipperPtr.DisplayStart; i < listClipperPtr.DisplayEnd; ++i)
-                                {
-                                    if (i < 0 || i >= items.Count)
-                                        continue;
-
-                                    DrawEntry(items[i]);
-                                }
-                            }
-
-                            listClipperPtr.End();
-                        }
-                    }
-
-                    ImGui.TextColored(UiColors.Gray, "---"); // Indicator for end
-                    if (_shouldScrollToBottom)
-                    {
-                        ImGui.SetScrollY(ImGui.GetScrollMaxY() + ImGui.GetFrameHeight());
-                        _isAtBottom = true;
-                    }
-                    else
-                    {
-                        _isAtBottom = ImGui.GetScrollY() >= ImGui.GetScrollMaxY() - ImGui.GetWindowHeight();
+                        listClipperPtr.End();
                     }
                 }
 
-                ImGui.EndChild();
+                ImGui.TextColored(UiColors.Gray, "---"); // Indicator for end
+                if (_shouldScrollToBottom)
+                {
+                    ImGui.SetScrollY(ImGui.GetScrollMaxY() + ImGui.GetFrameHeight());
+                    _isAtBottom = true;
+                }
+                else
+                {
+                    _isAtBottom = ImGui.GetScrollY() >= ImGui.GetScrollMaxY() - ImGui.GetWindowHeight();
+                }
             }
+
+            ImGui.EndChild();
         }
 
         private static double _lastLimeTime;

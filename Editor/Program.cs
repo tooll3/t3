@@ -17,6 +17,7 @@ using T3.Editor.Gui.Interaction.Camera;
 using T3.Editor.Gui.Interaction.StartupCheck;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows;
 using T3.Editor.SystemUi;
 using T3.MsForms;
 using T3.SystemUi;
@@ -56,20 +57,21 @@ namespace T3.Editor
             
             CrashReporting.InitializeCrashReporting();
 
+            ISplashScreen splashScreen = new SplashScreen.SplashScreen();
+            splashScreen.Show("Resources/t3-editor/images/t3-SplashScreen.png");
+            Log.AddWriter(splashScreen);
+            Log.AddWriter(new ConsoleWriter());
+            Log.AddWriter(FileWriter.CreateDefault());
+            Log.AddWriter(StatusErrorLine);
+            Log.AddWriter(ConsoleLogWindow);
+            Log.Debug($"Starting {Version}");
+
             EditorUi.Instance = new MsFormsEditor();
             EditorUi.Instance.EnableDpiAwareScaling();
 
             if (!IsStandAlone)
                 StartupValidation.CheckInstallation();
             
-            ISplashScreen splashScreen = new SplashScreen.SplashScreen();
-            splashScreen.Show("Resources/t3-editor/images/t3-SplashScreen.png");
-            Log.AddWriter(splashScreen);
-
-            Log.AddWriter(new ConsoleWriter());
-            Log.AddWriter(FileWriter.CreateDefault());
-            
-            Log.Debug($"Starting {Version}");
 
             StartUp.FlagBeginStartupSequence();
 
@@ -172,6 +174,8 @@ namespace T3.Editor
 
         // Main loop
 
+        public static readonly StatusErrorLine StatusErrorLine = new();
+        public static readonly ConsoleLogWindow ConsoleLogWindow = new();
         public static T3Ui T3Ui;
         public static string RequestImGuiLayoutUpdate;
     }

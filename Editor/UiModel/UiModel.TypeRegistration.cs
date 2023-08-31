@@ -129,7 +129,7 @@ public partial class UiSymbolData
         RegisterUiType(typeof(MeshBuffers), new FallBackUiProperties(), () => new FallbackInputUi<MeshBuffers>(),
                        () => new ValueOutputUi<MeshBuffers>());
 
-        RegisterUiType(typeof(DataSet), new ValueUiProperties(),
+        RegisterUiType(typeof(DataSet), new FallBackUiProperties(),
                        () => new FallbackInputUi<DataSet>(), () => new DataSetOutputUi());
         
         // sharpdx types

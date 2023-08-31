@@ -58,7 +58,7 @@ namespace T3.Editor.Gui.Windows.Layouts
                                new RenderSequenceWindow(),
                                new RenderVideoWindow(),
                                new UtilitiesWindow(),
-                               new ConsoleLogWindow(),
+                               Program.ConsoleLogWindow,
                                new IoViewWindow(),
                                new SettingsWindow(),
                            };            

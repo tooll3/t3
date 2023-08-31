@@ -15,7 +15,6 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
-using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Interaction;
@@ -64,7 +63,7 @@ public class T3Ui
         _initialed = true;
     }
 
-    private bool _initialed = false;
+    private bool _initialed;
 
     public void ProcessFrame()
     {
@@ -326,8 +325,7 @@ public class T3Ui
             
             T3Metrics.DrawRenderPerformanceGraph();
             
-            
-            _statusErrorLine.Draw();
+            Program.StatusErrorLine.Draw();
 
             ImGui.EndMainMenuBar();
         }
@@ -452,10 +450,8 @@ public class T3Ui
         }
     }
 
-    private readonly StatusErrorLine _statusErrorLine = new();
     public static readonly UiSymbolData UiSymbolData;
-
-
+    
     public static IntPtr NotDroppingPointer = new IntPtr(0);
     public static bool DraggingIsInProgress = false;
     public static bool MouseWheelFieldHovered { private get; set; }
