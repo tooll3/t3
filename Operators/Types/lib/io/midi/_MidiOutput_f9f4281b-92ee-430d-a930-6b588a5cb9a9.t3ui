@@ -41,6 +41,14 @@
         "X": 197.0,
         "Y": 463.0
       }
+    },
+    {
+      "InputId": "adea6968-35ef-436a-bc2d-d9433b623df6"/*Device*/,
+      "Position": {
+        "X": 197.0,
+        "Y": 508.0
+      },
+      "Usage": "CustomDropdown"
     }
   ],
   "SymbolChildUis": [],

@@ -21,7 +21,11 @@
     },
     {
       "Id": "3ecf2fcf-0f26-4593-804e-a5ef99057d9e"/*Velocity*/,
-      "DefaultValue": 0
+      "DefaultValue": 121
+    },
+    {
+      "Id": "adea6968-35ef-436a-bc2d-d9433b623df6"/*Device*/,
+      "DefaultValue": ""
     }
   ],
   "Children": [],

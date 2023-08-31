@@ -53,6 +53,7 @@ namespace T3.Core.Operator.Slots
         {
             Input.IsDefault = false;
             TypedInputValue.Value = newValue;
+            Value = newValue;
             DirtyFlag.Invalidate();
         }
 
