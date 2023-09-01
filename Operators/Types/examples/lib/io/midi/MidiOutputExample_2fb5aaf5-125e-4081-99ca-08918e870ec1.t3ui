@@ -4,7 +4,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "dfe39623-2743-487b-b8a8-e76f7a4a0e49"/*_MidiOutput*/,
+      "ChildId": "dfe39623-2743-487b-b8a8-e76f7a4a0e49"/*MidiOutput*/,
       "Position": {
         "X": 755.6784,
         "Y": 71.11206
