@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NAudio.Midi;
 using Operators.Utils;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -14,8 +15,8 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
     public class MidiOutput : Instance<MidiOutput>
 ,ICustomDropdownHolder,IStatusProvider
     {
-        [Output(Guid = "8ccaa82b-5acf-4556-b2e4-2bd1c13ce929")]
-        public readonly Slot<float> Result = new Slot<float>();
+        [Output(Guid = "670C784C-DE53-46F4-B93A-A1F07AA8F18E")]
+        public readonly Slot<Command> Result = new();
 
         public MidiOutput()
         {

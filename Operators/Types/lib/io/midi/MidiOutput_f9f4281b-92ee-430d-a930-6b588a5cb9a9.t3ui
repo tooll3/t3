@@ -63,10 +63,10 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "8ccaa82b-5acf-4556-b2e4-2bd1c13ce929"/*Result*/,
+      "OutputId": "670c784c-de53-46f4-b93a-a1f07aa8f18e"/*Result*/,
       "Position": {
-        "X": 133.0,
-        "Y": 38.0
+        "X": 300.0,
+        "Y": 200.0
       }
     }
   ]
