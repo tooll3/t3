@@ -32,7 +32,7 @@ internal static class ChangeSymbol
         UndoRedoStack.AddAndExecute(moveCmd);
 
         // create new SymbolChild at original position
-        var addSymbolChildCommand = new AddSymbolChildCommand(symbolChild.Parent, newSymbol.Id) { PosOnCanvas = orgPos };
+        var addSymbolChildCommand = new AddSymbolChildCommand(symbolChild.Parent, newSymbol.Id) { PosOnCanvas = orgPos, ChildName = symbolChild.Name };
         UndoRedoStack.AddAndExecute(addSymbolChildCommand);
         var newSymbolChild = symbolChild.Parent.Children.Single(entry => entry.Id == addSymbolChildCommand.AddedChildId);
 
