@@ -828,6 +828,30 @@ namespace T3.Editor.Gui.Graph
             }
 
             ImGui.Separator();
+
+            if (ImGui.MenuItem("Change Symbol", someOpsSelected))
+            {
+                var startingSearchString = selectedChildUis[0].SymbolChild.Symbol.Name;
+                var position = selectedChildUis.Count == 1 ? selectedChildUis[0].PosOnCanvas : InverseTransformPositionFloat(ImGui.GetMousePos());
+                SymbolBrowser.OpenAt(position, null, null, false, startingSearchString, symbol =>
+                    {
+                        var nextSelection = new List<SymbolChild>();
+                        foreach (var sel in selectedChildUis)
+                        {
+                            var result = ChangeSymbol.ChangeOperatorSymbol(sel, symbol);
+                            if (result != null)
+                                nextSelection.Add(result);
+                        }
+                        NodeSelection.Clear();
+                        nextSelection.ForEach(symbolChild => {
+                                var childUi = SymbolUiRegistry.Entries[symbolChild.Parent.Id].ChildUis.SingleOrDefault(ui => ui.SymbolChild == symbolChild); // need better map?
+                                var instance = CompositionOp.Children.Single(c2 => c2.SymbolChildId == symbolChild.Id);
+                                if(childUi != null && instance != null)
+                                    NodeSelection.AddSymbolChildToSelection(childUi, instance); 
+                            });
+                    });
+            }
+
             if (ImGui.BeginMenu("Symbol definition..."))
             {
                 if (ImGui.MenuItem("Rename Symbol", oneOpSelected))

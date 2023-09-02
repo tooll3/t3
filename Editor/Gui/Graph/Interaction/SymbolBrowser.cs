@@ -28,7 +28,8 @@ namespace T3.Editor.Gui.Graph.Interaction
     public class SymbolBrowser
     {
         #region public API ------------------------------------------------------------------------
-        public void OpenAt(Vector2 positionOnCanvas, Type filterInputType, Type filterOutputType, bool onlyMultiInputs)
+
+        public void OpenAt(Vector2 positionOnCanvas, Type filterInputType, Type filterOutputType, bool onlyMultiInputs, string startingSearchString = "", System.Action<Symbol> overrideCreate = null)
         {
             // Scroll canvas to avoid symbol-browser close too edge
             var canvas = GraphWindow.GetPrimaryGraphWindow().GraphCanvas;
@@ -49,12 +50,14 @@ namespace T3.Editor.Gui.Graph.Interaction
                 }
             }   
 
+            //_prepareCommand = prepareCommand;
+            _overrideCreate = overrideCreate;
             IsOpen = true;
             PosOnCanvas = positionOnCanvas;
             _focusInputNextTime = true;
             _filter.FilterInputType = filterInputType;
             _filter.FilterOutputType = filterOutputType;
-            _filter.SearchString = "";
+            _filter.SearchString = startingSearchString;
             _selectedSymbolUi = null;
             _filter.OnlyMultiInputs = onlyMultiInputs;
             _filter.UpdateIfNecessary(forceUpdate: true);
@@ -168,6 +171,8 @@ namespace T3.Editor.Gui.Graph.Interaction
             ImGui.PopID();
         }
         #endregion
+
+        private System.Action<Symbol> _overrideCreate = null;
 
         //private bool IsSearchingPresets => _filter.MatchingPresets.Count > 0;
 
@@ -568,6 +573,13 @@ namespace T3.Editor.Gui.Graph.Interaction
 
         private void CreateInstance(Symbol symbol)
         {
+            if(_overrideCreate != null)
+            {
+                Close();
+                _overrideCreate(symbol);
+                return;
+            }
+
             var commandsForUndo = new List<ICommand>();
             var parent = GraphCanvas.Current.CompositionOp.Symbol;
 
