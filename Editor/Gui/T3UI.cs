@@ -174,7 +174,7 @@ public class T3Ui
         }
         else if (KeyboardBinding.Triggered(UserActions.ToggleAllUiElements))
         {
-            ToggleFocusMode();
+            ToggleAllUiElements();
         }
         else if (KeyboardBinding.Triggered(UserActions.SearchGraph))
         {
@@ -183,6 +183,15 @@ public class T3Ui
         else if (KeyboardBinding.Triggered(UserActions.ToggleFullscreen))
         {
             UserSettings.Config.FullScreen = !UserSettings.Config.FullScreen;
+        }
+        else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode))
+        {
+            UserSettings.Config.FocusMode = !UserSettings.Config.FocusMode;
+            
+            UserSettings.Config.ShowToolbar = UserSettings.Config.FocusMode;
+            ToggleAllUiElements();
+            
+            LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
         }
     }
         
@@ -298,11 +307,16 @@ public class T3Ui
                 ImGui.MenuItem("Show Interaction Overlay", "", ref UserSettings.Config.ShowInteractionOverlay);
                 if(ImGui.MenuItem("Toggle All UI Elements", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleAllUiElements, false), false, !IsCurrentlySaving))
                 {
-                    ToggleFocusMode();
+                    ToggleAllUiElements();
                 }
                     
                 ImGui.Separator();
-                ImGui.MenuItem("FullScreen", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFullscreen, false), ref UserSettings.Config.FullScreen);
+                ImGui.MenuItem("Full screen", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFullscreen, false), ref UserSettings.Config.FullScreen);
+
+                if (ImGui.MenuItem("Focus Mode", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), ref UserSettings.Config.FocusMode))
+                {
+                    LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
+                }
                 ImGui.EndMenu();
             }
                 
@@ -334,7 +348,7 @@ public class T3Ui
     }
 
 
-    private void ToggleFocusMode()
+    private void ToggleAllUiElements()
     {
         //T3Ui.MaximalView = !T3Ui.MaximalView;
         if (UserSettings.Config.ShowToolbar)

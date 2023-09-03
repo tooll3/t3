@@ -44,6 +44,7 @@ namespace T3.Editor.Gui.UiHelpers
             // UI-State
             public float UiScaleFactor = 1;
             public bool FullScreen = false;
+            public bool FocusMode = false;
             public int WindowLayoutIndex = 0;
             public bool EnableIdleMotion = true;
             

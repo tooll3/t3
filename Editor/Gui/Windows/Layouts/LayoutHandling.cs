@@ -29,7 +29,7 @@ namespace T3.Editor.Gui.Windows.Layouts
                     SaveLayout(i);
 
                 if (KeyboardBinding.Triggered(_loadLayoutActions[i]))
-                    LoadAndApplyLayout(i);
+                    LoadAndApplyLayoutOrFocusMode(i);
             }
         }
 
@@ -41,7 +41,7 @@ namespace T3.Editor.Gui.Windows.Layouts
                 {
                     if (ImGui.MenuItem("Layout " + (i + 1), "F" + (i + 1), false, enabled: DoesLayoutExists(i)))
                     {
-                        LoadAndApplyLayout(i);
+                        LoadAndApplyLayoutOrFocusMode(i);
                     }
                 }
 
@@ -156,8 +156,13 @@ namespace T3.Editor.Gui.Windows.Layouts
             UserSettings.Config.WindowLayoutIndex = index;
         }        
         
-        public static void LoadAndApplyLayout(int index)
+        public static void LoadAndApplyLayoutOrFocusMode(int index)
         {
+            if (UserSettings.Config.FocusMode)
+            {
+                index = 11;
+            }
+            
             var filename = GetLayoutFilename(index);
             if (!File.Exists(filename))
             {
@@ -178,7 +183,10 @@ namespace T3.Editor.Gui.Windows.Layouts
             WindowManager.SetGraphWindowToNormal();
 
             ApplyLayout(layout);
-            UserSettings.Config.WindowLayoutIndex = index;
+            if (!UserSettings.Config.FocusMode)
+            {
+                UserSettings.Config.WindowLayoutIndex = index;
+            }
         }
         
         private static string GetLayoutFilename(int index)

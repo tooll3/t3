@@ -63,7 +63,7 @@ namespace T3.Editor.Gui.Windows.Layouts
                                new SettingsWindow(),
                            };            
 
-            LayoutHandling.LoadAndApplyLayout(UserSettings.Config.WindowLayoutIndex);
+            LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
 
             _appWindowSize = ImGui.GetIO().DisplaySize;
             _hasBeenInitialized = true;
