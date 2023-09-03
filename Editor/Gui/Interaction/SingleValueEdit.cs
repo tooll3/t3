@@ -218,7 +218,7 @@ namespace T3.Editor.Gui.Interaction
                             T3Ui.MouseWheelFieldHovered = true;
                             ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
                             var dl = ImGui.GetForegroundDrawList();
-                            dl.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), UiColors.Gray);
+                            dl.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), UiColors.StatusActivated);
 
                             var wheel = io.MouseWheel;
                             if (wheel == 0)

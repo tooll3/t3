@@ -283,7 +283,7 @@ namespace T3.Editor.Gui.InputUi
 
                 // Draw Name
                 ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, new Vector2(1.0f, 0.5f));
-                ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
+                var isClicked = ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
                 CustomComponents.ContextMenuForItem(() =>
                                                     {
                                                         if (ImGui.MenuItem("Jump To Previous Keyframe", hasKeyframeBefore))
@@ -324,6 +324,20 @@ namespace T3.Editor.Gui.InputUi
                                                             editState = InputEditStateFlags.ShowOptions;
                                                     });
                 ImGui.PopStyleVar();
+
+                if(ImGui.IsItemHovered())
+                    Icons.DrawIconAtScreenPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6, 4) * T3Ui.UiScaleFactor);
+                    
+                if (isClicked)
+                {
+                    var commands = new List<ICommand>();
+                    commands.Add(new RemoveAnimationsCommand(animator, new[] { inputSlot }));
+                    commands.Add(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id, input));
+                    var marcoCommand = new MacroCommand("Reset animated " + input.Name, commands );
+                    UndoRedoStack.AddAndExecute(marcoCommand);
+                }                
+                
+                
                 ImGui.SameLine();
 
                 ImGui.PushItemWidth(200.0f);
@@ -448,15 +462,12 @@ namespace T3.Editor.Gui.InputUi
                 {
                     var isClicked = ImGui.Button(input.Name + "##ParamName", new Vector2(ParameterNameWidth, 0.0f));
                     ImGui.SameLine();
-                    if (!input.IsDefault)
+                    if(ImGui.IsItemHovered())
+                        Icons.DrawIconAtScreenPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6, 4));
+                    
+                    if (isClicked)
                     {
-                        if(ImGui.IsItemHovered())
-                            Icons.DrawIconAtScreenPosition(Icon.Revert, ImGui.GetItemRectMin() + new Vector2(6, 4));
-                        
-                        if (isClicked)
-                        {
-                            UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id, input));
-                        }
+                        UndoRedoStack.AddAndExecute(new ResetInputToDefault(compositionSymbol, symbolChildUi.Id, input));
                     }
                 }
 
