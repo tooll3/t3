@@ -172,7 +172,7 @@ public class T3Ui
         {
             SaveInBackground(saveAll:true);
         }
-        else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode))
+        else if (KeyboardBinding.Triggered(UserActions.ToggleAllUiElements))
         {
             ToggleFocusMode();
         }
@@ -296,7 +296,7 @@ public class T3Ui
                 ImGui.MenuItem("Show Minimap", "", ref UserSettings.Config.ShowMiniMap);
                 ImGui.MenuItem("Show Toolbar", "", ref UserSettings.Config.ShowToolbar);
                 ImGui.MenuItem("Show Interaction Overlay", "", ref UserSettings.Config.ShowInteractionOverlay);
-                if(ImGui.MenuItem("Toggle All UI Elements", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), false, !IsCurrentlySaving))
+                if(ImGui.MenuItem("Toggle All UI Elements", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleAllUiElements, false), false, !IsCurrentlySaving))
                 {
                     ToggleFocusMode();
                 }
