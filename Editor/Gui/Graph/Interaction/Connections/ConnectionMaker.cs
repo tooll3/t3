@@ -669,21 +669,39 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                                                    targetSlotId: NotConnectedId,
                                                    primaryOutput.ValueType));
 
+            
             Type filterOutputType = null;
             if (connections.Count > 0)
             {
-                AdjustGraphLayoutForNewNode(instance.Parent.Symbol, connections[0]);
-                foreach (var oldConnection in connections)
+                var mainConnection = connections[0];
+                if (mainConnection.IsConnectedToSymbolOutput)
                 {
-                    var multiInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(oldConnection);
-                    _inProgressCommand.AddAndExecCommand(new DeleteConnectionCommand(instance.Parent.Symbol, oldConnection, multiInputIndex));
-                    TempConnections.Add(new TempConnection(sourceParentOrChildId: UseDraftChildId,
-                                                           sourceSlotId: NotConnectedId,
-                                                           targetParentOrChildId: oldConnection.TargetParentOrChildId,
-                                                           targetSlotId: oldConnection.TargetSlotId,
-                                                           primaryOutput.ValueType,
-                                                           multiInputIndex));
-                    filterOutputType = primaryOutput.ValueType;
+                    var compId = instance.Parent.Symbol.Id;
+                    var compUi = SymbolUiRegistry.Entries[compId];
+                    
+                    if(compUi.OutputUis.TryGetValue(mainConnection.TargetSlotId, out var outputUi))
+                    {
+                        var moveCommand = new ModifyCanvasElementsCommand(compId, new List<ISelectableCanvasObject>() {outputUi});
+                        outputUi.PosOnCanvas += new Vector2(SymbolChildUi.DefaultOpSize.X, 0);
+                        moveCommand.StoreCurrentValues();
+                        _inProgressCommand.AddAndExecCommand(moveCommand);
+                    }                    
+                }
+                else
+                {
+                    AdjustGraphLayoutForNewNode(instance.Parent.Symbol, mainConnection);
+                    foreach (var oldConnection in connections)
+                    {
+                        var multiInputIndex = instance.Parent.Symbol.GetMultiInputIndexFor(oldConnection);
+                        _inProgressCommand.AddAndExecCommand(new DeleteConnectionCommand(instance.Parent.Symbol, oldConnection, multiInputIndex));
+                        TempConnections.Add(new TempConnection(sourceParentOrChildId: UseDraftChildId,
+                                                               sourceSlotId: NotConnectedId,
+                                                               targetParentOrChildId: oldConnection.TargetParentOrChildId,
+                                                               targetSlotId: oldConnection.TargetSlotId,
+                                                               primaryOutput.ValueType,
+                                                               multiInputIndex));
+                        filterOutputType = primaryOutput.ValueType;
+                    }
                 }
             }
 

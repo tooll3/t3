@@ -184,7 +184,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             if (settings.Syncing == PlaybackSettings.SyncModes.Tapping)
             {
                 var bpm = BeatTiming.Bpm;
-                if (SingleValueEdit.Draw(ref bpm, new Vector2(100, ControlSize.Y), 1, 360, true, 0.01f, "{0:0.00 BPM}") == InputEditStateFlags.Modified)
+                if (SingleValueEdit.Draw(ref bpm, new Vector2(100, ControlSize.Y) * T3Ui.UiScaleFactor, 1, 360, true, 0.01f, "{0:0.00 BPM}") == InputEditStateFlags.Modified)
                 {
                     BeatTiming.SetBpmRate(bpm);
                 }
