@@ -553,8 +553,13 @@ namespace T3.Editor.Gui.Windows.TimeLine
             }
 
             if (!ImGui.IsItemActive() || !ImGui.IsMouseDragging(0, 1f))
+            {
+                _draggedKeyframe = null;
                 return;
+            }
 
+            _draggedKeyframe = vDef;
+            
             if (UpdateSelectionOnClickOrDrag(vDef, isSelected))
                 return;
 
@@ -566,7 +571,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
             var newDragTime = TimeLineCanvas.Current.InverseTransformX(ImGui.GetIO().MousePos.X);
 
             if (!ImGui.GetIO().KeyShift)
+            {
+                //var ignored= new List<IValueSnapAttractor>() { vDef };
                 _snapHandler.CheckForSnapping(ref newDragTime, TimeLineCanvas.Current.Scale.X);
+            }
 
             TimeLineCanvas.Current.UpdateDragCommand(newDragTime - vDef.U, 0);
         }
@@ -711,8 +719,11 @@ namespace T3.Editor.Gui.Windows.TimeLine
             SnapResult best = null;
             foreach (var vDefinition in GetAllKeyframes())
             {
-                // if (SelectedKeyframes.Contains(vDefinition))
-                //     continue;
+                if (SelectedKeyframes.Contains(vDefinition))
+                    continue;
+                
+                if(_draggedKeyframe == vDefinition)
+                    continue;
 
                 ValueSnapHandler.CheckForBetterSnapping(targetTime, vDefinition.U, canvasScale, ref best);
             }
@@ -720,6 +731,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             return best;
         }
 
+        private VDefinition _draggedKeyframe;   // ignore snapping to self
         private const float KeyframeIconWidth = 10;
         private Vector2 _minScreenPos;
         private static ChangeKeyframesCommand _changeKeyframesCommand;
