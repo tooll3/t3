@@ -519,7 +519,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     }
                 }
             }
-
+            CustomComponents.TooltipForLastItem("Keep animated parameters visible", "This can be useful when align animations between multiple operators. Toggle again to clear the visible animations.");
             ImGui.SameLine();
         }
 
