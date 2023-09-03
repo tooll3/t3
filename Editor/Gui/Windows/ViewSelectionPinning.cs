@@ -56,7 +56,7 @@ namespace T3.Editor.Gui.Windows
                 if (_isPinned)
                     PinSelectionToView();
             }
-
+            CustomComponents.TooltipForLastItem("Pin output to active operator.");
             
             
             ImGui.SameLine();

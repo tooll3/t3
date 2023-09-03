@@ -291,7 +291,7 @@ namespace T3.Editor.Gui.Windows.Output
                         if (symbolChild == null)
                             continue;
                         
-                        if(ImGui.Selectable(symbolChild.ReadableName, cameraInstance.SymbolChildId == _pickedCameraId))
+                        if(ImGui.Selectable("Operator: " + symbolChild.ReadableName, cameraInstance.SymbolChildId == _pickedCameraId))
                         {
                             _lastControlMode = _controlMode;
                             _controlMode = ControlModes.PickedACamera;
@@ -307,6 +307,11 @@ namespace T3.Editor.Gui.Windows.Output
                 }
 
                 ImGui.EndCombo();
+            }
+            else
+            {
+                CustomComponents.TooltipForLastItem("Camera control mode", "This affects which camera will be manipulated by the view controls. Please also review to the tooltips of the dropdown options.");
+
             }
 
             ImGui.SameLine();
