@@ -186,12 +186,13 @@ public class T3Ui
         }
         else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode))
         {
-            UserSettings.Config.FocusMode = !UserSettings.Config.FocusMode;
+            var shouldBeFocusMode = !UserSettings.Config.FocusMode;
+            UserSettings.Config.FocusMode = shouldBeFocusMode;
             
-            UserSettings.Config.ShowToolbar = UserSettings.Config.FocusMode;
+            UserSettings.Config.ShowToolbar = shouldBeFocusMode;
             ToggleAllUiElements();
             
-            LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
+            LayoutHandling.LoadAndApplyLayoutOrFocusMode(shouldBeFocusMode ? 11 : UserSettings.Config.WindowLayoutIndex);
         }
     }
         

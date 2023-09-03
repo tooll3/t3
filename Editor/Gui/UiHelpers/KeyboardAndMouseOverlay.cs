@@ -85,6 +85,11 @@ public static class KeyboardAndMouseOverlay
             }
 
             _dampedWheelSpin = DampFunctions.DampenFloat(_wheelSpin, _dampedWheelSpin, 0.001f, ref _dampedWheelSpinVelocity, DampFunctions.Methods.DampedSpring);
+            if (double.IsInfinity(_dampedWheelSpin) || double.IsNaN(_dampedWheelSpin))
+            {
+                _dampedWheelSpin = 0;
+            }
+            
             const int lineCount = 5;
             const float height = 34;
             var size = new Vector2(9, 1);

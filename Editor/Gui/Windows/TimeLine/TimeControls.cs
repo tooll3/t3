@@ -104,7 +104,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             ImGui.SameLine();
 
-            // Continue Beat indicator
+            // Idle motion 
             {
                 ImGui.PushStyleColor(ImGuiCol.Text, UserSettings.Config.EnableIdleMotion
                                                         ? UiColors.TextDisabled
@@ -133,7 +133,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                     const int gridSize = 4;
                     var drawList = ImGui.GetWindowDrawList();
-                    var min = center - new Vector2(7, 7) + new Vector2(beat * gridSize, bar * gridSize);
+                    var min = center - new Vector2(7, 7) * T3Ui.UiScaleFactor + new Vector2(beat * gridSize, bar * gridSize) * T3Ui.UiScaleFactor;
 
                     drawList.AddRectFilled(min, min + new Vector2(gridSize - 1, gridSize - 1), 
                                            Color.Mix(UiColors.StatusAnimated, 
@@ -195,20 +195,23 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 var height = 1;
 
                 //var volume = BeatTiming.SyncPrecision;
-                ImGui.GetWindowDrawList().AddRectFilled(new Vector2(min.X, max.Y), new Vector2(min.X + 3, max.Y - height * (max.Y - min.Y)),
-                                                        UiColors.StatusAnimated.Fade(bar));
+                // ImGui.GetWindowDrawList().AddRectFilled(new Vector2(min.X, max.Y), new Vector2(min.X + 3, max.Y - height * (max.Y - min.Y)),
+                //                                         UiColors.StatusAnimated.Fade(bar));
 
                 ImGui.SameLine();
 
                 ImGui.Button("Sync", ControlSize);
-                if (ImGui.IsItemActivated())
+                if (ImGui.IsItemHovered())
                 {
-                    BeatTiming.TriggerSyncTap();
-                }
-                else if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
-                {
-                    //Log.Debug("Resync!");
-                    BeatTiming.TriggerResyncMeasure();
+                    if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                    {
+                        BeatTiming.TriggerSyncTap();
+                    }
+                    else if (ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+                    {
+                        //Log.Debug("Resync!");
+                        BeatTiming.TriggerResyncMeasure();
+                    }
                 }
 
                 CustomComponents.TooltipForLastItem("Click on beat to sync. Tap later once to refine. Click right to sync measure.");

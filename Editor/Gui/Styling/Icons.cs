@@ -8,11 +8,11 @@ namespace T3.Editor.Gui.Styling
     /// <summary>
     /// Handles the mapping of custom icons
     /// </summary>
-    static class Icons
+    internal static class Icons
     {
         public static ImFontPtr IconFont { get; set; }
 
-        public static void Draw(Icon icon)
+        private static void Draw(Icon icon)
         {
             ImGui.PushFont(IconFont);
             ImGui.TextUnformatted(((char)(int)icon).ToString());
