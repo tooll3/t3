@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NAudio.Midi;
 using Operators.Utils;
+using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -81,6 +82,23 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
                         case SendModes.ControllerChange:
                             midiEvent = new ControlChangeEvent(0, channel, (MidiController)noteOrControllerIndex, velocity);
                             break;
+                        
+                        case SendModes.StartSequence:
+                            midiEvent = new MidiEvent(0, channel, MidiCommandCode.StartSequence);
+                            break;
+                        
+                        case SendModes.StopSequence:
+                            midiEvent = new MidiEvent(0, channel, MidiCommandCode.StopSequence);
+                            break;
+                        
+                        case SendModes.ContinueSequence:
+                            midiEvent = new MidiEvent(0, channel, MidiCommandCode.ContinueSequence);
+                            break;
+
+                        case SendModes.TempoEvent:
+                            midiEvent = new TempoEvent(GetMicrosecondsPerQuarterNoteFromBpm(Playback.Current.Bpm),0);
+                            break;
+
                     }
                     if(midiEvent != null)
                         m.Send(midiEvent.GetAsShortMessage());
@@ -99,11 +117,22 @@ namespace T3.Operators.Types.Id_f9f4281b_92ee_430d_a930_6b588a5cb9a9
             _lastErrorMessage = !foundDevice ? $"Can't find MidiDevice {deviceName}" : null;
         }
 
+        private static int GetMicrosecondsPerQuarterNoteFromBpm(double bpm)
+        {
+            var ms = 600000 / bpm;
+            return (int)ms;
+        }
+
         private enum SendModes
         {
             Notes_FixedDuration,
             Note_WhileTriggered,
             ControllerChange,
+            
+            StartSequence,
+            StopSequence,
+            ContinueSequence,
+            TempoEvent
         }
         private bool _triggered;
 

@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "9efa1be1-f102-4457-a69b-2aef59f6b845"/*TriggerSend*/,
-      "DefaultValue": false
+      "DefaultValue": true
     },
     {
       "Id": "ec4d83b6-78eb-4cac-826b-cafb0be3f604"/*SendMode*/,
