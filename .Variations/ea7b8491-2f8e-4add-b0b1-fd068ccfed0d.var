@@ -22,8 +22,8 @@
       "ActivationIndex": 2,
       "Title": "Endless",
       "PosOnCanvas": {
-        "X": 326.0,
-        "Y": 0.0
+        "X": 0.0,
+        "Y": 93.0
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {
@@ -37,8 +37,8 @@
       "ActivationIndex": 3,
       "Title": "Wave",
       "PosOnCanvas": {
-        "X": 489.0,
-        "Y": 0.0
+        "X": 163.0,
+        "Y": 93.0
       },
       "ParameterSetsForChildIds": {
         "00000000-0000-0000-0000-000000000000": {

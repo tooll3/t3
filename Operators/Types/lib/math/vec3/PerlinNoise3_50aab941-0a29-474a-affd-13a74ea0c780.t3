@@ -4,6 +4,18 @@
   "Namespace": "lib.math.vec3",
   "Inputs": [
     {
+      "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "c427d83b-1046-4b8d-b44a-e616a64a702a"/*AmplitudeXYZ*/,
+      "DefaultValue": {
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0
+      }
+    },
+    {
       "Id": "deddfbee-386d-4f8f-9339-ec6c01908a11"/*OverrideTime*/,
       "DefaultValue": 0.0
     },
@@ -34,18 +46,6 @@
         "Y": 1.0,
         "Z": 1.0
       }
-    },
-    {
-      "Id": "c427d83b-1046-4b8d-b44a-e616a64a702a"/*ScaleXYZ*/,
-      "DefaultValue": {
-        "X": 1.0,
-        "Y": 1.0,
-        "Z": 1.0
-      }
-    },
-    {
-      "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Scale*/,
-      "DefaultValue": 1.0
     }
   ],
   "Children": [],

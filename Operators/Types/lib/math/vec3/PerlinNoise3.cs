@@ -29,8 +29,8 @@ namespace T3.Operators.Types.Id_50aab941_0a29_474a_affd_13a74ea0c780
             var octaves = Octaves.GetValue(context);
             var rangeMin = RangeMin.GetValue(context);
             var rangeMax = RangeMax.GetValue(context);
-            var scale = Scale.GetValue(context);
-            var scaleXYZ = ScaleXYZ.GetValue(context);
+            var scale = Amplitude.GetValue(context);
+            var scaleXYZ = AmplitudeXYZ.GetValue(context);
 
             Result.Value  = new Vector3(
                                           (MathUtils.PerlinNoise(value, period, octaves, seed) + 1f) * 0.5f * (rangeMax.X - rangeMin.X) + rangeMin.X,
@@ -39,6 +39,12 @@ namespace T3.Operators.Types.Id_50aab941_0a29_474a_affd_13a74ea0c780
         }
 
 
+        [Input(Guid = "E0F4333D-8BEE-4F9E-BB29-9F76BD72E61F")]
+        public readonly InputSlot<float> Amplitude = new InputSlot<float>();
+        
+        [Input(Guid = "C427D83B-1046-4B8D-B44A-E616A64A702A")]
+        public readonly InputSlot<Vector3> AmplitudeXYZ = new InputSlot<Vector3>();
+        
         [Input(Guid = "deddfbee-386d-4f8f-9339-ec6c01908a11")]
         public readonly InputSlot<float> OverrideTime = new InputSlot<float>();
 
@@ -57,11 +63,5 @@ namespace T3.Operators.Types.Id_50aab941_0a29_474a_affd_13a74ea0c780
         [Input(Guid = "5401E715-7A82-43AB-BA16-D0E55A1D83D4")]
         public readonly InputSlot<Vector3> RangeMax = new InputSlot<Vector3>();
 
-        [Input(Guid = "C427D83B-1046-4B8D-B44A-E616A64A702A")]
-        public readonly InputSlot<Vector3> ScaleXYZ = new InputSlot<Vector3>();
-        
-        [Input(Guid = "E0F4333D-8BEE-4F9E-BB29-9F76BD72E61F")]
-        public readonly InputSlot<float> Scale = new InputSlot<float>();
-        
     }
 }

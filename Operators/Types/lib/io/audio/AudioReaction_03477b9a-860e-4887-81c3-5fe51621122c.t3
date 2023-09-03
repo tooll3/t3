@@ -25,7 +25,7 @@
     },
     {
       "Id": "aece14b8-88e0-4817-8204-b79159db8102"/*MinTimeBetweenHits*/,
-      "DefaultValue": 0.1
+      "DefaultValue": 0.05
     },
     {
       "Id": "80294096-ae64-471a-bcf1-622684e06d56"/*Output*/,
