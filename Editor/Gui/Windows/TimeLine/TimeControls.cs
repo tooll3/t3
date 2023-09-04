@@ -189,14 +189,14 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     BeatTiming.SetBpmRate(bpm);
                 }
 
-                var min = ImGui.GetItemRectMin();
-                var max = ImGui.GetItemRectMax();
-                var bar = (float)Math.Pow(1 - BeatTiming.BeatTime % 1, 4);
-                var height = 1;
-
-                //var volume = BeatTiming.SyncPrecision;
-                // ImGui.GetWindowDrawList().AddRectFilled(new Vector2(min.X, max.Y), new Vector2(min.X + 3, max.Y - height * (max.Y - min.Y)),
-                //                                         UiColors.StatusAnimated.Fade(bar));
+                // var min = ImGui.GetItemRectMin();
+                // var max = ImGui.GetItemRectMax();
+                // var bar = (float)Math.Pow(1 - BeatTiming.BeatTime % 1, 4);
+                // var height = 1;
+                //
+                // //var volume = BeatTiming.SyncPrecision;
+                // // ImGui.GetWindowDrawList().AddRectFilled(new Vector2(min.X, max.Y), new Vector2(min.X + 3, max.Y - height * (max.Y - min.Y)),
+                // //                                         UiColors.StatusAnimated.Fade(bar));
 
                 ImGui.SameLine();
 
