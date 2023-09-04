@@ -1,10 +1,14 @@
+#include "lib/shared/blend-functions.hlsl"
+
 cbuffer ParamConstants : register(b0)
 {
     float4 Color;
     float Range;
     float Brightness;
     float Threshold; // Color key threshold (0-1)
-    float Composite;
+    float BlendMode;
+
+    float4 OriginalColor;
 }
 
 cbuffer Resolution : register(b1)
@@ -33,8 +37,9 @@ float4 psMain(vsOutput input) : SV_TARGET
     const float range = 0.3; // Length of glow streaks
     const float steps = 0.002; // Number of texture samples / 2
 
-    float4 streaksColor = (Composite > 0.5) ? Image.Sample(texSampler, uv )
-                                          : float4(0.0,0.0,0.0,1.0);
+    float4 streaksColor = float4(0.0,0.0,0.0,1.0);
+    // (Composite > 0.5) ? Image.Sample(texSampler, uv )
+    //                                       : float4(0.0,0.0,0.0,1.0);
    
     
     for (float i = -Range; i < Range; i += steps) {
@@ -52,9 +57,12 @@ float4 psMain(vsOutput input) : SV_TARGET
         }
     }
     
-                
 
-    
-    //return lerp(edgeColor, m, MixOriginal);
-    return (streaksColor);
+    //float4 c= lerp(Fill, Background,  dBiased);
+    float4 orgColor = Image.Sample(texSampler, uv) * OriginalColor;
+    //float a = clamp(orgColor.a + streaksColor.a - orgColor.a*streaksColor.a, 0,1);
+
+    return  BlendColors(orgColor, streaksColor * Color, (int)BlendMode);
+
+    //return (streaksColor);
 }
