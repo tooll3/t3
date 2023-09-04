@@ -302,25 +302,25 @@ namespace T3.Editor.Gui.Interaction.Camera
 
             var acc = CameraInteractionParameters.CameraAcceleration * UserSettings.Config.CameraSpeed * _deltaTime * 60;
 
-            if (ImGui.IsKeyDown((ImGuiKey)Key.A) || ImGui.IsKeyDown((ImGuiKey)Key.CursorLeft))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.A))
             {
                 _moveVelocity += _viewAxis.Left * acc;
                 _manipulatedByKeyboard = true;
             }
 
-            if (ImGui.IsKeyDown((ImGuiKey)Key.D) || ImGui.IsKeyDown((ImGuiKey)Key.CursorRight))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.D))
             {
                 _moveVelocity -= _viewAxis.Left * acc;
                 _manipulatedByKeyboard = true;
             }
 
-            if (ImGui.IsKeyDown((ImGuiKey)Key.W) || ImGui.IsKeyDown((ImGuiKey)Key.CursorUp))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.W))
             {
                 _moveVelocity += Vector3.Normalize(_viewAxis.ViewDistance) * acc;
                 _manipulatedByKeyboard = true;
             }
 
-            if (ImGui.IsKeyDown((ImGuiKey)Key.S) || ImGui.IsKeyDown((ImGuiKey)Key.CursorDown))
+            if (ImGui.IsKeyDown((ImGuiKey)Key.S))
             {
                 _moveVelocity -= Vector3.Normalize(_viewAxis.ViewDistance) * acc;
                 _manipulatedByKeyboard = true;
