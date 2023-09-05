@@ -8,13 +8,40 @@ using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.Gui.Graph.Interaction;
 
 
 namespace T3.Editor.Gui.Graph.Modification;
 
 internal static class ChangeSymbol
 {
-    public static SymbolChild ChangeOperatorSymbol(SymbolChildUi symbolChildUi, Symbol newSymbol)
+    public static void ChangeOperatorSymbol(Instance CompositionOp, List<SymbolChildUi> selectedChildUis, Symbol symbol)
+    {
+        var nextSelection = new List<SymbolChild>();
+
+        var executedCommands = new List<ICommand>();
+
+        foreach (var sel in selectedChildUis)
+        {
+            var result = ChangeSymbol.ChangeOperatorSymbol(sel, symbol, executedCommands);
+            if (result != null)
+                nextSelection.Add(result);
+        }
+
+        if(nextSelection.Count > 0)
+            UndoRedoStack.Add(new MacroCommand(nextSelection.Count == 1 ? "Change Symbol" : "Change Symbols ("+ nextSelection.Count + ")", executedCommands));
+
+        NodeSelection.Clear();
+        nextSelection.ForEach(symbolChild => {
+            var childUi = SymbolUiRegistry.Entries[symbolChild.Parent.Id].ChildUis.SingleOrDefault(ui => ui.SymbolChild == symbolChild); // need better map?
+            var instance = CompositionOp.Children.Single(c2 => c2.SymbolChildId == symbolChild.Id);
+            if (childUi != null && instance != null)
+                NodeSelection.AddSymbolChildToSelection(childUi, instance);
+        });
+    }
+
+
+    public static SymbolChild ChangeOperatorSymbol(SymbolChildUi symbolChildUi, Symbol newSymbol, List<ICommand> executedCommands)
     {
         var symbolChild = symbolChildUi.SymbolChild;
         if(symbolChild.Symbol == newSymbol)
@@ -29,11 +56,14 @@ internal static class ChangeSymbol
         var moveCmd = new ModifyCanvasElementsCommand(parentSymbolUi, new List<ISelectableCanvasObject>() { symbolChildUi });
         symbolChildUi.PosOnCanvas = orgPos + new Vector2(0, 100);
         moveCmd.StoreCurrentValues();
-        UndoRedoStack.AddAndExecute(moveCmd);
+        moveCmd.Do();
+        executedCommands.Add(moveCmd);
 
         // create new SymbolChild at original position
         var addSymbolChildCommand = new AddSymbolChildCommand(symbolChild.Parent, newSymbol.Id) { PosOnCanvas = orgPos, ChildName = symbolChild.Name };
-        UndoRedoStack.AddAndExecute(addSymbolChildCommand);
+        addSymbolChildCommand.Do();
+        executedCommands.Add(addSymbolChildCommand);
+
         var newSymbolChild = symbolChild.Parent.Children.Single(entry => entry.Id == addSymbolChildCommand.AddedChildId);
 
         // loop though inputs
@@ -66,7 +96,8 @@ internal static class ChangeSymbol
                         if (!input.Value.IsDefault) 
                         {
                             var changeValCommand = new ChangeInputValueCommand(symbolChild.Parent, newSymbolChild.Id, destInput.Value, input.Value.Value);
-                            UndoRedoStack.AddAndExecute(changeValCommand);
+                            changeValCommand.Do();
+                            executedCommands.Add(changeValCommand);
                         }
 
                         if (connections.Count == 1)
@@ -74,7 +105,8 @@ internal static class ChangeSymbol
                             // remove old connection to symbolChild
 
                             var delCommand = new DeleteConnectionCommand(symbolChild.Parent, connections[0], 0);
-                            UndoRedoStack.AddAndExecute(delCommand);
+                            delCommand.Do();
+                            executedCommands.Add(delCommand);
 
 
                             // add new connection to newSymbolChild
@@ -85,7 +117,8 @@ internal static class ChangeSymbol
                                                     targetParentOrChildId: newSymbolChild.Id,
                                                     targetSlotId: destInput.Key);
                             var addCommand = new AddConnectionCommand(symbolChild.Parent, newConnectionToInput, 0);
-                            UndoRedoStack.AddAndExecute(addCommand);
+                            addCommand.Do();
+                            executedCommands.Add(addCommand);
                         }
                     }
                     else if(inputHasData)
@@ -125,7 +158,9 @@ internal static class ChangeSymbol
 
                         var multiInputIndex = symbolChild.Parent.GetMultiInputIndexFor(connection);
                         var delCommand = new DeleteConnectionCommand(symbolChild.Parent, connection, multiInputIndex);
-                        UndoRedoStack.AddAndExecute(delCommand);
+                        delCommand.Do();
+                        executedCommands.Add(delCommand);
+
 
 
                         // add new connection from newSymbolChild
@@ -136,7 +171,8 @@ internal static class ChangeSymbol
                                              targetParentOrChildId: connection.TargetParentOrChildId,
                                              targetSlotId: connection.TargetSlotId);
                         var addCommand = new AddConnectionCommand(symbolChild.Parent, newConnectionToInput, multiInputIndex);
-                        UndoRedoStack.AddAndExecute(addCommand);
+                        addCommand.Do();
+                        executedCommands.Add(addCommand);
                     }
                     else
                     {
@@ -155,7 +191,8 @@ internal static class ChangeSymbol
         if(!conversionWasLossy)
         {
             var delCommand = new DeleteSymbolChildrenCommand(parentSymbolUi, new List<SymbolChildUi>() { symbolChildUi });
-            UndoRedoStack.AddAndExecute(delCommand);
+            delCommand.Do();
+            executedCommands.Add(delCommand);
         }
         else
         {
