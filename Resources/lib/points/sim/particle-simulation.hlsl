@@ -2,7 +2,7 @@
 
 cbuffer Params : register(b0)
 {
-    float AddNewPoints;
+    float AddNewPoints;    
     float UseAging;
     float AgingRate;
     float MaxAge;
@@ -10,6 +10,13 @@ cbuffer Params : register(b0)
     float ClampAtMaxAge;
     float Reset;
     float DeltaTime;
+    float ApplyMovement;
+
+    float Speed; 
+    float Drag;
+
+    float SetInitialVelocity;
+    float InitialVelocity;
 }
 
 cbuffer IntParams : register(b1)
@@ -39,35 +46,64 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
     }
 
-    //int spawnIndex = (int)CollectCycleIndex % collectedPointCount;
-
     int addIndex = (gi - CollectCycleIndex) % collectedPointCount;
 
     // Insert emit points
-    if(AddNewPoints > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount )
+    if( AddNewPoints > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount )
     {
         CollectedPoints[gi] = NewPoints[addIndex];
-        if(UseAging > 0.5)
+
+        if(UseAging > 0.5) 
+        {
             CollectedPoints[gi].w = 0.0001;
+        }
+
+        if(SetInitialVelocity > 0.5) 
+        {
+            CollectedPoints[gi].rotation = q_encode_v(CollectedPoints[gi].rotation, InitialVelocity);
+        }
     }
+
+
     // Update other points
-    else
+    else if(UseAging > 0.5 || ApplyMovement > 0.5)
     {
-
-        float age = CollectedPoints[gi].w;
-        if(isnan(age) || UseAging < 0.5)
-            return;
-
-        if(age <= 0)
+        if(UseAging > 0.5 ) 
         {
-            CollectedPoints[gi].w = sqrt(-1); // Flag non-initialized points
+            float age = CollectedPoints[gi].w;
+
+            if(!isnan(age)) 
+            {    
+                if(age <= 0)
+                {
+                    CollectedPoints[gi].w = sqrt(-1); // Flag non-initialized points
+                }
+                else if(age < MaxAge)
+                {
+                    CollectedPoints[gi].w = age+  DeltaTime * AgingRate;
+                }
+                else if(ClampAtMaxAge) {
+                    CollectedPoints[gi].w = MaxAge;
+                }
+            }
         }
-        else if(age < MaxAge)
+
+        if(ApplyMovement > 0.5) 
         {
-            CollectedPoints[gi].w = age+  DeltaTime * AgingRate;
-        }
-        else if(ClampAtMaxAge) {
-            CollectedPoints[gi].w = MaxAge;
+            
+            Point p = CollectedPoints[gi];
+            float4 rot;
+            float v = q_separate_v(p.rotation, rot);
+
+            float3 forward =  normalize(rotate_vector(float3(0, 0, 1), rot));
+
+            forward *= v * 0.01 * Speed;
+            p.position += forward;
+
+            v *= (1-Drag);
+            p.rotation = q_encode_v(rot, v);
+
+            CollectedPoints[gi] = p;
         }
     }
 }

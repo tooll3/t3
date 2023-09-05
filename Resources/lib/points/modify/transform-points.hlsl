@@ -33,7 +33,10 @@ static const float WorldSpace = 2;
     float3 pOrg = SourcePoints[i.x].position;
     float3 p = pOrg;
 
-    float4 orgRot = SourcePoints[i.x].rotation;
+    float4 orgRot;
+    float v = q_separate_v(SourcePoints[i.x].rotation, orgRot);
+
+    //float4 orgRot = SourcePoints[i.x].rotation;
     float4 rotation = orgRot;
 
     if (CoordinateSpace < 0.5)
