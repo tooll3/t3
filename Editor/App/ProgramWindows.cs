@@ -11,7 +11,9 @@ using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Editor.Gui;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.SystemUi;
+using T3.Editor.UiModel;
 using T3.SystemUi;
 using Device = SharpDX.Direct3D11.Device;
 
@@ -40,6 +42,12 @@ internal static class ProgramWindows
     public static void SetVertexShader(VertexShaderResource resource) => _deviceContext.VertexShader.Set(resource.VertexShader);
     public static void SetPixelShader(PixelShaderResource resource) => _deviceContext.PixelShader.Set(resource.PixelShader);
 
+    internal static void HandleFocusModeToggle()
+    {
+        UserSettings.Config.ShowToolbar = !UserSettings.Config.FocusMode;
+        UserSettings.Config.ShowTitleAndDescription = !UserSettings.Config.FocusMode;
+        if(!UserSettings.Config.FocusMode) LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
+    }
     internal static void HandleFullscreenToggle()
     {
         if (Main.IsFullScreen == UserSettings.Config.FullScreen)
