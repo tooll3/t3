@@ -186,13 +186,7 @@ public class T3Ui
         }
         else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode))
         {
-            var shouldBeFocusMode = !UserSettings.Config.FocusMode;
-            UserSettings.Config.FocusMode = shouldBeFocusMode;
-            
-            UserSettings.Config.ShowToolbar = shouldBeFocusMode;
-            ToggleAllUiElements();
-            
-            LayoutHandling.LoadAndApplyLayoutOrFocusMode(shouldBeFocusMode ? 11 : UserSettings.Config.WindowLayoutIndex);
+            UserSettings.Config.FocusMode = !UserSettings.Config.FocusMode;
         }
     }
         
@@ -312,12 +306,6 @@ public class T3Ui
                 }
                     
                 ImGui.Separator();
-                ImGui.MenuItem("Full screen", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFullscreen, false), ref UserSettings.Config.FullScreen);
-
-                if (ImGui.MenuItem("Focus Mode", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), ref UserSettings.Config.FocusMode))
-                {
-                    LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
-                }
                 if (ImGui.BeginMenu("Main Window Fullscreen Destination"))
                 {
                     for (var index = 0; index < EditorUi.AllScreens.Length; index++)
@@ -346,6 +334,9 @@ public class T3Ui
                     }
                     ImGui.EndMenu();
                 }
+
+                ImGui.MenuItem("Fullscreen", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFullscreen, false), ref UserSettings.Config.FullScreen);
+                ImGui.MenuItem("Focus Mode", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), ref UserSettings.Config.FocusMode);
                 ImGui.EndMenu();
             }
                 
