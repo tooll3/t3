@@ -38,9 +38,8 @@ public class VerticalStackingCanvas
         var anchorScale = Canvas.TransformDirection(BlockSize);
         var slotSize = 3 * Canvas.Scale.X;
 
-        for (var index = 0; index < Blocks.Count; index++)
+        foreach (var b in Blocks)
         {
-            var b = Blocks[index];
             if (!TypeUiRegistry.Entries.TryGetValue(b.PrimaryType, out var typeUiProperties))
                 continue;
 
@@ -56,15 +55,12 @@ public class VerticalStackingCanvas
             var isDraggedAndSnapped = DragHandling.HandleItemDragging(b, this, out var dragPos);
             if (isDraggedAndSnapped)
             {
-                // Create new connection
-                //if()
-                
             }
             
             var fade = isDraggedAndSnapped ? 0.6f : 1;
             
             drawList.AddRectFilled(pMin, pMax, c.Fade(0.7f * fade), 3);
-            var outlineColor = DragHandling.IsNodeSelected(b)
+            var outlineColor = BlockSelection.IsNodeSelected(b)
                                    ? UiColors.ForegroundFull
                                    : UiColors.BackgroundFull.Fade(0.6f);
             drawList.AddRect(pMin, pMax, outlineColor, 4);
@@ -91,7 +87,7 @@ public class VerticalStackingCanvas
         }
         
         // Draw Connections
-        foreach (var c in _connections)
+        foreach (var c in Connections)
         {
             if (c.IsSnapped)
                 continue;
@@ -108,12 +104,7 @@ public class VerticalStackingCanvas
     }
 
 
-
-    public void Draw(ImDrawListPtr drawList, bool hideHeader = false)
-    {
-        Canvas.UpdateCanvas();
-        HandleFenceSelection();
-    }
+    
 
     private void HandleFenceSelection()
     {
@@ -168,7 +159,7 @@ public class VerticalStackingCanvas
     private void InitializeFromSymbol()
     {
         Blocks.Clear();
-        _connections.Clear();
+        Connections.Clear();
         _groups.Clear();
         _slots.Clear();
 
@@ -194,7 +185,7 @@ public class VerticalStackingCanvas
     {
         Log.Debug("Initialize!");
         Blocks.Clear();
-        _connections.Clear();
+        Connections.Clear();
         _groups.Clear();
         _slots.Clear();
 
@@ -209,18 +200,8 @@ public class VerticalStackingCanvas
         Blocks.Add(c);
         Blocks.Add(d);
 
-        //_movingTestBlock = d;
-
-        _connections.Add(new Connection() { Source = a.Outputs[0], Target = b.Inputs[0] });
-        _connections.Add(new Connection() { Source = b.Outputs[0], Target = c.Inputs[0] });
-
-        // Register connections to blocks
-        foreach (var connection in _connections)
-        {
-            connection.Source?.Block.Outputs[0].Connections.Add(connection);
-            connection.Target?.Block.Inputs[0].Connections.Add(connection);
-        }
-
+        // Connections.Add(new Connection(a.Outputs[0], b.Inputs[0]));
+        // Connections.Add(new Connection(b.Outputs[0], c.Inputs[0]));
         _initialized = true;
     }
 
@@ -229,7 +210,7 @@ public class VerticalStackingCanvas
     public readonly ScalableCanvas Canvas = new();
     
     public readonly List<Block> Blocks = new();
-    private readonly List<Connection> _connections = new();
+    public readonly List<Connection> Connections = new();
     private readonly List<Group> _groups = new();
     private readonly List<Slot> _slots = new();
 }

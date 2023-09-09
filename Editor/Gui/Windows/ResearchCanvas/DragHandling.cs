@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
-using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Selection;
+using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Windows.ResearchCanvas;
@@ -39,7 +39,7 @@ public static class DragHandling
             _dampedDragPosition = node.PosOnCanvas;
             if (node.IsSelected)
             {
-                _draggedNodes = _selectedNodes;
+                _draggedNodes = BlockSelection.SelectedNodes;
             }
             else
             {
@@ -65,8 +65,14 @@ public static class DragHandling
                 var newDragPosInCanvas = mousePosOnCanvas - _dragStartPosInOpOnCanvas;
                 node.PosOnCanvas = newDragPosInCanvas;
                 dragPos = newDragPosInCanvas;
-                isSnapped = SearchForSnapping(node, container.Blocks, out var snapPosition);
-
+                var dragResult = SearchForSnapping(node, container, out var snapPosition);
+                if (dragResult != null)
+                {
+                    isSnapped = dragResult.ResultType ==  DragResult.ResultTypes.SnappedIntoNewConnections;
+                    container.Connections.AddRange(dragResult.NewConnections);
+                    
+                }
+                
                 _dampedDragPosition = isSnapped
                                           ? Vector2.Lerp(_dampedDragPosition, snapPosition, 0.6f)
                                           : newDragPosInCanvas;
@@ -96,23 +102,23 @@ public static class DragHandling
             }
             else
             {
-                if (!IsNodeSelected(node))
+                if (!BlockSelection.IsNodeSelected(node))
                 {
                     var replaceSelection = !ImGui.GetIO().KeyShift;
                     if (replaceSelection)
                     {
-                        SetSelection(node);
+                        BlockSelection.SetSelection(node);
                     }
                     else
                     {
-                        AddSelection(node);
+                        BlockSelection.AddSelection(node);
                     }
                 }
                 else
                 {
                     if (ImGui.GetIO().KeyShift)
                     {
-                        DeselectNode(node);
+                        BlockSelection.DeselectNode(node);
                     }
                 }
             }
@@ -128,90 +134,64 @@ public static class DragHandling
         if (ImGui.IsMouseReleased(ImGuiMouseButton.Right)
             && !wasDraggingRight
             && ImGui.IsItemHovered()
-            && !IsNodeSelected(node))
+            && !BlockSelection.IsNodeSelected(node))
         {
-            SetSelection(node);
+            BlockSelection.SetSelection(node);
         }
 
         return isActiveNode && isSnapped;
     }
 
-    public static void SetSelection(ISelectableCanvasObject selectedObject)
-    {
-        _selectedNodes.Clear();
-        _selectedNodes.Add(selectedObject);
-    }
 
-    public static bool IsNodeSelected(ISelectableCanvasObject node)
-    {
-        return _selectedNodes.Contains(node);
-    }
 
-    public static void AddSelection(IEnumerable<ISelectableCanvasObject> additionalObjects)
-    {
-        _selectedNodes.UnionWith(additionalObjects);
-    }
-
-    public static void AddSelection(ISelectableCanvasObject additionalObject)
-    {
-        _selectedNodes.Add(additionalObject);
-    }
-
-    public static void DeselectNode(ISelectableCanvasObject objectToRemove)
-    {
-        _selectedNodes.Remove(objectToRemove);
-    }
-
-    public class DragResult
-    {
-        private List<Connection> NewConnections;
-        
-        public enum ResultType {
-            Nothing,
-            DraggedWithoutSnapping,
-            SnappedIntoNewConnections,
-            StillSnapped,
-            Detached,
-        }
-    }
-
-    private static bool _isDragging;
-    private static Vector2 _dragStartPosInOpOnCanvas;
-
-    private static readonly HashSet<ISelectableCanvasObject> _selectedNodes = new();
-
-    private static ISelectableCanvasObject _draggedNode;
-    private static HashSet<ISelectableCanvasObject> _draggedNodes = new();
-
-    public static bool SearchForSnapping(ISelectableCanvasObject canvasObject, List<Block> blocks, out Vector2 delta2)
+    private static DragResult SearchForSnapping(ISelectableCanvasObject canvasObject, VerticalStackingCanvas container, out Vector2 delta2)
     {
         delta2 = Vector2.Zero;
         if (canvasObject is not Block movingTestBlock)
         {
-            return false;
+            return null;
         }
             
         var foundSnapPos = false;
         var bestSnapDistance = float.PositiveInfinity;
         var bestSnapPos = Vector2.Zero;
+        var newConnections = new List<Connection>();
+        var bestAlreadyConnected = false;
+        Slot bestSourceSlot = null;
+        Slot bestTargetSlot = null;
+            
+        
         var snapThreshold = 20;
 
+        // connect to outer slots
         foreach (var movingBlockSlot in movingTestBlock.GetSlots())
         {
+            
             var slotPosA = movingBlockSlot.Block.PosOnCanvas + movingBlockSlot.AnchorPos * VerticalStackingCanvas.BlockSize;
             var isSlotHorizontal = Math.Abs(movingBlockSlot.AnchorPos.Y - 0.5f) < 0.001f;
 
-            foreach (var other in blocks)
+            foreach (var other in container.Blocks)
             {
+                
                 if (other == movingTestBlock)
                     continue;
 
                 var otherSlots = movingBlockSlot.IsInput ? other.Outputs : other.Inputs;
                 foreach (var otherSlot in otherSlots)
                 {
+                    var isLinking = false;
+                    if (movingBlockSlot.Connections.Count == 1)
+                    {
+                        //var connection = movingBlockSlot.Connections[0];
+                        isLinking = movingBlockSlot.Connections[0].IsConnecting(movingBlockSlot, otherSlot);
+                        if (!isLinking)
+                            continue;
+                    }                
+                    
                     var isOtherSlotHorizontal = Math.Abs(otherSlot.AnchorPos.Y - 0.5f) < 0.001f;
                     if (isSlotHorizontal != isOtherSlotHorizontal)
                         continue;
+                    
                     
                     var otherSlotPos = other.PosOnCanvas + otherSlot.AnchorPos * VerticalStackingCanvas.BlockSize;
                     var delta = slotPosA - otherSlotPos;
@@ -223,20 +203,56 @@ public static class DragHandling
                     {
                         bestSnapDistance = distance;
                         bestSnapPos = other.PosOnCanvas - (movingBlockSlot.AnchorPos - otherSlot.AnchorPos) * VerticalStackingCanvas.BlockSize;
+                        ImGui.GetForegroundDrawList().AddCircle(container.Canvas.TransformPosition(otherSlot.PosOnCanvas), bestSnapDistance, UiColors.StatusAttention);
+
+                        // Fix me: This could multiple pairs later...
+                        bestSourceSlot = movingBlockSlot.IsInput ? otherSlot : movingBlockSlot;
+                        bestTargetSlot = movingBlockSlot.IsInput ? movingBlockSlot : otherSlot;
                         foundSnapPos = true;
+                        bestAlreadyConnected = isLinking;
                     }
                 }
             }
+            
+            // Split inner connections
+            // ...
         }
 
         if (!foundSnapPos)
-            return false;
+            return null;
+        
+        if(!bestAlreadyConnected)
+            newConnections.Add(new Connection(bestSourceSlot, bestTargetSlot));
         
         delta2 = bestSnapPos;
         _dampedMovePos = Vector2.Lerp(_dampedMovePos, bestSnapPos, 0.5f);
         movingTestBlock.PosOnCanvas = _dampedMovePos;
-        return true;
+        return new DragResult()
+                   {
+                       NewConnections = newConnections,
+                       ResultType = DragResult.ResultTypes.SnappedIntoNewConnections,
+                   };
     }
+    
+    public class DragResult
+    {
+        public List<Connection> NewConnections = new();
+        public ResultTypes ResultType;
+        
+        public enum ResultTypes {
+            Nothing,
+            DraggedWithoutSnapping,
+            SnappedIntoNewConnections,
+            StillSnapped,
+            Detached,
+        }
+    }
+
+    private static bool _isDragging;
+    private static Vector2 _dragStartPosInOpOnCanvas;
+    
+    private static ISelectableCanvasObject _draggedNode;
+    private static HashSet<ISelectableCanvasObject> _draggedNodes = new();
     
     private static Vector2 _dampedMovePos;
     private static Vector2 _dampedDragPosition;

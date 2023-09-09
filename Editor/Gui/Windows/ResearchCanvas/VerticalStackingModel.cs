@@ -84,10 +84,22 @@ public class Slot
     }
 
     public Vector2 PosOnCanvas => Block.PosOnCanvas + AnchorPos * Block.Size;
+    public bool IsConnected => Connections.Count > 0;
 }
 
 public class Connection
 {
+    public Connection(Slot source, Slot target)
+    {
+        // source.Block.Outputs[0].Connections.Add(this);
+        // target.Block.Inputs[0].Connections.Add(this);
+        source.Connections.Add(this);
+        target.Connections.Add(this);
+        
+        Source = source;
+        Target = target;
+    }
+    
     public Slot Source;
     public Slot Target;
 
@@ -102,5 +114,11 @@ public class Connection
             var p2 = Target.Block.PosOnCanvas + Target.AnchorPos * Target.Block.Size;
             return Vector2.Distance(p1, p2) < 1;
         }
+    }
+
+    public bool IsConnecting(Slot slotA, Slot slotB)
+    {
+        return slotA == Source && slotB == Target
+               || slotB == Source && slotA == Target;
     }
 }

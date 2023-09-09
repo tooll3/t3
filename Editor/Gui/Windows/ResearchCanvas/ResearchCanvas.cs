@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
 using ImGuiNET;
 
 namespace T3.Editor.Gui.Windows.ResearchCanvas;
