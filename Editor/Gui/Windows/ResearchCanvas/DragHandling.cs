@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
 using T3.Editor.Gui.Interaction;
@@ -7,18 +8,29 @@ using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.Windows.ResearchCanvas;
 
+/// <summary>
+/// Todos:
+/// - Create new connection when snapping
+/// - Remove connections when unsnapping
+/// - Detach block and collapse connection
+/// - prevent snapping to slots with snapped connections 
+///
+/// Later
+/// - Draw indicator for original block position (on drag start)
+/// </summary>
+
 public static class DragHandling
 {
-    public delegate bool SnapHandler(ISelectableCanvasObject canvasObject, out Vector2 delta2);
-
-    private static Vector2 _dampedDragPosition;
 
     /// <summary>
     /// NOTE: This has to be called for ALL movable elements (ops, inputs, outputs) and directly after ImGui.Item
     /// </summary>
     /// 
-    public static void HandleItemDragging(ISelectableCanvasObject node, ScalableCanvas canvas, SnapHandler snapTest)
+    public static bool HandleItemDragging(ISelectableCanvasObject node, VerticalStackingCanvas container,  out Vector2 dragPos)
     {
+        dragPos = Vector2.Zero;
+        var isSnapped = false;
+        
         var justClicked = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
         var isActiveNode = node == _draggedNode;
         if (justClicked)
@@ -45,15 +57,15 @@ public static class DragHandling
             {
                 if (!_isDragging)
                 {
-                    _dragStartPosInOpOnCanvas = canvas.InverseTransformPositionFloat(ImGui.GetMousePos()) - node.PosOnCanvas;
+                    _dragStartPosInOpOnCanvas = container.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos()) - node.PosOnCanvas;
                     _isDragging = true;
                 }
 
-                var mousePosOnCanvas = canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
+                var mousePosOnCanvas = container.Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
                 var newDragPosInCanvas = mousePosOnCanvas - _dragStartPosInOpOnCanvas;
                 node.PosOnCanvas = newDragPosInCanvas;
-
-                var isSnapped = snapTest(node, out var snapPosition);
+                dragPos = newDragPosInCanvas;
+                isSnapped = SearchForSnapping(node, container.Blocks, out var snapPosition);
 
                 _dampedDragPosition = isSnapped
                                           ? Vector2.Lerp(_dampedDragPosition, snapPosition, 0.6f)
@@ -72,7 +84,7 @@ public static class DragHandling
         else if (isActiveNode && ImGui.IsMouseReleased(0))
         {
             if (_draggedNode != node)
-                return;
+                return false;
 
             _draggedNode = null;
             _draggedNodes.Clear();
@@ -120,6 +132,8 @@ public static class DragHandling
         {
             SetSelection(node);
         }
+
+        return isActiveNode && isSnapped;
     }
 
     public static void SetSelection(ISelectableCanvasObject selectedObject)
@@ -148,6 +162,19 @@ public static class DragHandling
         _selectedNodes.Remove(objectToRemove);
     }
 
+    public class DragResult
+    {
+        private List<Connection> NewConnections;
+        
+        public enum ResultType {
+            Nothing,
+            DraggedWithoutSnapping,
+            SnappedIntoNewConnections,
+            StillSnapped,
+            Detached,
+        }
+    }
+
     private static bool _isDragging;
     private static Vector2 _dragStartPosInOpOnCanvas;
 
@@ -155,4 +182,62 @@ public static class DragHandling
 
     private static ISelectableCanvasObject _draggedNode;
     private static HashSet<ISelectableCanvasObject> _draggedNodes = new();
+
+    public static bool SearchForSnapping(ISelectableCanvasObject canvasObject, List<Block> blocks, out Vector2 delta2)
+    {
+        delta2 = Vector2.Zero;
+        if (canvasObject is not Block movingTestBlock)
+        {
+            return false;
+        }
+            
+        var foundSnapPos = false;
+        var bestSnapDistance = float.PositiveInfinity;
+        var bestSnapPos = Vector2.Zero;
+        var snapThreshold = 20;
+
+        foreach (var movingBlockSlot in movingTestBlock.GetSlots())
+        {
+            var slotPosA = movingBlockSlot.Block.PosOnCanvas + movingBlockSlot.AnchorPos * VerticalStackingCanvas.BlockSize;
+            var isSlotHorizontal = Math.Abs(movingBlockSlot.AnchorPos.Y - 0.5f) < 0.001f;
+
+            foreach (var other in blocks)
+            {
+                if (other == movingTestBlock)
+                    continue;
+
+                var otherSlots = movingBlockSlot.IsInput ? other.Outputs : other.Inputs;
+                foreach (var otherSlot in otherSlots)
+                {
+                    var isOtherSlotHorizontal = Math.Abs(otherSlot.AnchorPos.Y - 0.5f) < 0.001f;
+                    if (isSlotHorizontal != isOtherSlotHorizontal)
+                        continue;
+                    
+                    var otherSlotPos = other.PosOnCanvas + otherSlot.AnchorPos * VerticalStackingCanvas.BlockSize;
+                    var delta = slotPosA - otherSlotPos;
+                    var distance = delta.Length();
+                    if (distance > snapThreshold)
+                        continue;
+
+                    if (distance < bestSnapDistance)
+                    {
+                        bestSnapDistance = distance;
+                        bestSnapPos = other.PosOnCanvas - (movingBlockSlot.AnchorPos - otherSlot.AnchorPos) * VerticalStackingCanvas.BlockSize;
+                        foundSnapPos = true;
+                    }
+                }
+            }
+        }
+
+        if (!foundSnapPos)
+            return false;
+        
+        delta2 = bestSnapPos;
+        _dampedMovePos = Vector2.Lerp(_dampedMovePos, bestSnapPos, 0.5f);
+        movingTestBlock.PosOnCanvas = _dampedMovePos;
+        return true;
+    }
+    
+    private static Vector2 _dampedMovePos;
+    private static Vector2 _dampedDragPosition;
 }

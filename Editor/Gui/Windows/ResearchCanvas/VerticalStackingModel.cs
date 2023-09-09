@@ -16,7 +16,8 @@ public class Block : ISelectableCanvasObject
     {
         Id = Guid.NewGuid();
         Name = name;
-        PosOnCanvas = new Vector2(x, y) * ResearchWindow.BlockSize;
+        Size = VerticalStackingCanvas.BlockSize;
+        PosOnCanvas = new Vector2(x, y) * VerticalStackingCanvas.BlockSize;
         Inputs = new List<Slot>()
                      {
                          new() { Block = this, AnchorPos = new Vector2(0.5f, 0.0f), IsInput = true },
@@ -81,11 +82,25 @@ public class Slot
         ShyButRevealed,
         Shy,
     }
+
+    public Vector2 PosOnCanvas => Block.PosOnCanvas + AnchorPos * Block.Size;
 }
 
 public class Connection
 {
     public Slot Source;
     public Slot Target;
-    public bool IsSnapped;
+
+    public bool IsSnapped
+    {
+        get
+        {
+            if (Source == null || Target == null)
+                return false;
+
+            var p1 = Source.Block.PosOnCanvas + Source.AnchorPos * Source.Block.Size;
+            var p2 = Target.Block.PosOnCanvas + Target.AnchorPos * Target.Block.Size;
+            return Vector2.Distance(p1, p2) < 1;
+        }
+    }
 }
