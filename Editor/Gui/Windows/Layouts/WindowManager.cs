@@ -9,6 +9,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Exploration;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.Gui.Windows.RenderExport;
+using T3.Editor.Gui.Windows.ResearchCanvas;
 using T3.Editor.Gui.Windows.Variations;
 using T3.Editor.SystemUi;
 
@@ -63,6 +64,7 @@ namespace T3.Editor.Gui.Windows.Layouts
                                Program.ConsoleLogWindow,
                                new IoViewWindow(),
                                new SettingsWindow(),
+                               new ResearchWindow(),
                            };            
 
             LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
