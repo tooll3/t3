@@ -1,4 +1,6 @@
+using System;
 using SharpDX.Direct3D11;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -35,16 +37,38 @@ namespace T3.Operators.Types.Id_80dff680_5abf_484a_b9e0_81d72f3b7aa4
                 Buffer.Value = bufferWithViews.Buffer;
                 ShaderResourceView.Value = bufferWithViews.Srv;
                 UnorderedAccessView.Value = bufferWithViews.Uav;
-                Length.Value = ShaderResourceView.Value.Description.Buffer.ElementCount;
+                if (ShaderResourceView?.Value == null)
+                {
+                    Log.Warning("Can't access undefined shader resource view", this);
+                    SetAsInvalid();
+                }
+                else
+                {
+                    try
+                    {
+                        Length.Value = ShaderResourceView.Value.Description.Buffer.ElementCount;
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Warning("Can't access undefined SRV description: " + e.Message, this);
+                        SetAsInvalid();
+                    }
+                    
+                }
             }
             else
             {
-                Buffer.Value = null;
-                ShaderResourceView.Value = null;
-                UnorderedAccessView.Value = null;
-                Length.Value = 0;
+                SetAsInvalid();
             }
             
+        }
+
+        private void SetAsInvalid()
+        {
+            Buffer.Value = null;
+            ShaderResourceView.Value = null;
+            UnorderedAccessView.Value = null;
+            Length.Value = 0;
         }
 
         [Input(Guid = "7a13b834-21e5-4cef-ad5b-23c3770ea763")]
