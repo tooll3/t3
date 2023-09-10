@@ -25,11 +25,11 @@ public class VerticalStackingCanvas
 
         var drawList = ImGui.GetWindowDrawList();
 
-        // move test block
-        var posOnCanvas = Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
-        //_movingTestBlock.PosOnCanvas = posOnCanvas;
-
-        // snap test block
+        // // move test block
+        // var posOnCanvas = Canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
+        // //_movingTestBlock.PosOnCanvas = posOnCanvas;
+        //
+        // // snap test block
 
 
         Canvas.UpdateCanvas();
@@ -68,15 +68,44 @@ public class VerticalStackingCanvas
 
             foreach (var slot in b.GetSlots())
             {
-                var isSnappedAndConnected = slot.Connections.Count > 0 && slot.Connections[0].IsSnapped;
-                if (isSnappedAndConnected)
+                if (slot.IsInput)
                 {
-                    drawList.AddCircleFilled(pMin + anchorScale * slot.AnchorPos, slotSize, c, 3);
+                    if (slot.Connections.Count > 0)
+                    {
+                        slot.Connections[0].GetEndPositions(out _, out var targetPos);
+                        drawList.AddCircleFilled( Canvas.TransformPosition( targetPos), slotSize, c, 3);
+                    }
+                    else
+                    {
+                        drawList.AddCircle(Canvas.TransformPosition(slot.HorizontalPosOnCanvas), slotSize, c, 3);
+                        drawList.AddCircle(Canvas.TransformPosition(slot.VerticalPosOnCanvas), slotSize, c, 3);
+                    }
                 }
                 else
                 {
-                    drawList.AddCircle(pMin + anchorScale * slot.AnchorPos, slotSize, c, 3, 1);
+                    var isSnappedAndConnected = slot.Connections.Count > 0 && slot.Connections[0].IsSnapped;
+                    if (isSnappedAndConnected)
+                    {
+                        //drawList.AddCircleFilled(Canvas.TransformPosition(slot.VerticalPosOnCanvas), slotSize, c, 3);
+                    }
+                    else
+                    {
+                        drawList.AddCircle(Canvas.TransformPosition(slot.VerticalPosOnCanvas), slotSize, c, 3, 1);
+                    }
+                    //drawList.AddCircle(Canvas.TransformPosition(slot.HorizontalPosOnCanvas), slotSize, c, 3);
+                    drawList.AddCircle(Canvas.TransformPosition(slot.HorizontalPosOnCanvas), slotSize, c, 3);
                 }
+
+                //var horizontalConnections = slot.GetConnections(Connection.Orientations.Horizontal);
+                // var isSnappedAndConnected = slot.Connections.Count > 0 && slot.Connections[0].IsSnapped;
+                // if (isSnappedAndConnected)
+                // {
+                //     drawList.AddCircleFilled(pMin + anchorScale * slot.AnchorPos, slotSize, c, 3);
+                // }
+                // else
+                // {
+                //     drawList.AddCircle(pMin + anchorScale * slot.AnchorPos, slotSize, c, 3, 1);
+                // }
             }
 
             if (isDraggedAndSnapped)
@@ -92,38 +121,59 @@ public class VerticalStackingCanvas
             if (c.IsSnapped)
                 continue;
 
-            var pSource = Canvas.TransformPosition(c.Source.PosOnCanvas);
-            var pTarget = Canvas.TransformPosition(c.Target.PosOnCanvas);
-            drawList.AddBezierCubic(pSource, 
-                                    pSource + new Vector2(0, 100),
-                                    pTarget - new Vector2(0, 100),
-                                    pTarget,
-                                    UiColors.ForegroundFull.Fade(0.6f),
-                                    2);
+            c.GetEndPositions(out var sourcePos, out var targetPos);
+            var pSource = Canvas.TransformPosition(sourcePos);
+            var pTarget = Canvas.TransformPosition(targetPos);
+
+            var d = Vector2.Distance(pSource, pTarget) / 2;
+            if (c.GetOrientation() == Connection.Orientations.Vertical)
+            {
+                drawList.AddBezierCubic(pSource, 
+                                        pSource + new Vector2(0, d),
+                                        pTarget - new Vector2(0, d),
+                                        pTarget,
+                                        UiColors.ForegroundFull.Fade(0.6f),
+                                        2);
+            }
+            else
+            {
+                drawList.AddBezierCubic(pSource, 
+                                        pSource + new Vector2(d, 0),
+                                        pTarget - new Vector2(d, 0),
+                                        pTarget,
+                                        UiColors.ForegroundFull.Fade(0.6f),
+                                        2);
+            }
         }
     }
 
-
     
-
     private void HandleFenceSelection()
     {
-        _fenceState = SelectionFence.UpdateAndDraw(_fenceState);
-        switch (_fenceState)
-        {
-            case SelectionFence.States.PressedButNotMoved:
-                if (SelectionFence.SelectMode == SelectionFence.SelectModes.Replace)
-                    _selection.Clear();
-                break;
+        return;
+        // _fenceState = SelectionFence.UpdateAndDraw(_fenceState);
+        // switch (_fenceState)
+        // {
+        //     case SelectionFence.States.PressedButNotMoved:
+        //         if (SelectionFence.SelectMode == SelectionFence.SelectModes.Replace)
+        //             _selection.Clear();
+        //         break;
+        //
+        //     case SelectionFence.States.Updated:
+        //         HandleSelectionFenceUpdate(SelectionFence.BoundsInScreen);
+        //         break;
+        //
+        //     case SelectionFence.States.CompletedAsClick:
+        //         _selection.Clear();
+        //         break;
+        // }
+    }
 
-            case SelectionFence.States.Updated:
-                HandleSelectionFenceUpdate(SelectionFence.BoundsInScreen);
-                break;
-
-            case SelectionFence.States.CompletedAsClick:
-                _selection.Clear();
-                break;
-        }
+    public void RemoveConnection(Connection c)
+    {
+        Connections.Remove(c);
+        c.Source.Connections.Remove(c);
+        c.Target.Connections.Remove(c);
     }
 
     //public delegate bool SnapHandler(ISelectableCanvasObject canvasObject, out Vector2 delta2); 
@@ -136,7 +186,7 @@ public class VerticalStackingCanvas
         //                         where rect.Overlaps(boundsInCanvas)
         //                         select child).ToList();
 
-        _selection.Clear();
+        //_selection.Clear();
         // foreach (var element in elementsToSelect)
         // {
         //     Selection.AddSelection(element);
@@ -153,7 +203,7 @@ public class VerticalStackingCanvas
     }
 
     private SelectionFence.States _fenceState;
-    private readonly CanvasElementSelection _selection = new();
+    //private readonly CanvasElementSelection _selection = new();
 
 
     private void InitializeFromSymbol()
@@ -172,7 +222,7 @@ public class VerticalStackingCanvas
             Blocks.Add(new Block
                            {
                                PosOnCanvas = child.PosOnCanvas,
-                               UnitHeight = 1,
+                               //UnitHeight = 1,
                                Name = child.SymbolChild.ReadableName,
                            });
         }
@@ -200,7 +250,7 @@ public class VerticalStackingCanvas
         Blocks.Add(c);
         Blocks.Add(d);
 
-        // Connections.Add(new Connection(a.Outputs[0], b.Inputs[0]));
+        Connections.Add(new Connection(a.Outputs[0], b.Inputs[0]));
         // Connections.Add(new Connection(b.Outputs[0], c.Inputs[0]));
         _initialized = true;
     }
