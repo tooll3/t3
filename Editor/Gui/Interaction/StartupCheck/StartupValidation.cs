@@ -28,6 +28,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                                                                      @"Resources\",
                                                                      @"Resources\t3-editor\images\t3-icons.png",
                                                                      @"Resources\t3-editor\images\t3.ico",
+                                                                     @"Resources\t3-editor\images\t3-SplashScreen.png",
                                                                      @"Resources\t3-editor\fonts\Roboto-Regular.ttf",
                                                                  },
                                          Message = @"Please make sure to set the correct start up directory.\n ",
@@ -39,6 +40,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                                                                  {
                                                                      LayoutHandling.LayoutPath + "layout1.json",
                                                                      @"Editor\bin\Release\net6.0-windows\bass.dll",
+                                                                     @"Editor\bin\Debug\net6.0-windows\bass.dll",
                                                                  },
                                          Message = "Please run Install/install.bat.",
                                          URL = "https://github.com/still-scene/t3/wiki/installation#setup-and-installation",
