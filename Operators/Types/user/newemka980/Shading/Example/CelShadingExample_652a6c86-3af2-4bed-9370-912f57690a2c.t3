@@ -9,6 +9,21 @@
       "SymbolId": "dcacc281-92c6-4e47-8eea-91fa8954ed86",
       "InputValues": [
         {
+          "Id": "e1e45d58-4aa1-4bf4-8e9d-3b64cf82fd89"/*EdgeColor*/,
+          "Type": "System.Numerics.Vector4",
+          "Value": {
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
+            "W": 1.0
+          }
+        },
+        {
+          "Id": "a9a04304-2af3-49e8-a28e-bcac8361b17e"/*EdgeThresold*/,
+          "Type": "System.Single",
+          "Value": 0.31
+        },
+        {
           "Id": "3d2eaff6-9b02-4bc9-9ebc-76f5888943f6"/*Shading*/,
           "Type": "T3.Core.DataTypes.Gradient",
           "Value": {
@@ -211,9 +226,9 @@
           "Id": "6d10c73c-37b8-443b-94d9-854b04027a3c"/*Color*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 1.0,
-            "Y": 1.0,
-            "Z": 1.0,
+            "X": 0.0,
+            "Y": 0.0,
+            "Z": 0.0,
             "W": 1.0
           }
         },
