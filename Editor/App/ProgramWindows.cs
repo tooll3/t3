@@ -46,6 +46,8 @@ internal static class ProgramWindows
     {
         UserSettings.Config.ShowToolbar = !UserSettings.Config.FocusMode;
         UserSettings.Config.ShowTitleAndDescription = !UserSettings.Config.FocusMode;
+        UserSettings.Config.ShowMainMenu = !UserSettings.Config.FocusMode;
+        UserSettings.Config.ShowTimeline = !UserSettings.Config.FocusMode;
         if(!UserSettings.Config.FocusMode) LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
     }
     internal static void HandleFullscreenToggle()
