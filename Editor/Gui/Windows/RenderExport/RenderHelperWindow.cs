@@ -58,7 +58,7 @@ public abstract class RenderHelperWindow : Window
     }
 
     protected static bool ValidateOrCreateTargetFolder(string targetFile)
-    {
+    {   
         var directory = Path.GetDirectoryName(targetFile);
         if (targetFile != directory && File.Exists(targetFile))
         {

@@ -58,16 +58,23 @@ public static class ScreenshotWriter
 
         if (!_saveQueue[0].IsReady)
             return;
+
+        try
+        {
+            Save(_saveQueue[0]);
+        }
+        catch (Exception e)
+        {
+            Log.Warning("Can't save image:" + e.Message);
+        }
         
-        Save(_saveQueue[0]);
         _saveQueue.RemoveAt(0);
     }
     
     private static void Save(SaveRequest request) 
     {
         var immediateContext = ResourceManager.Device.ImmediateContext;
-
-
+        
         var dataBox = immediateContext.MapSubresource(_readableTexture,
                                                       0,
                                                       0,
@@ -99,9 +106,10 @@ public static class ScreenshotWriter
         var rowStride = PixelFormat.GetStride(formatId, width);
         var outBufferSize = height * rowStride;
         var outDataStream = new DataStream(outBufferSize, true, true);
-
+        
         try
         {
+
             switch (_currentDesc.Format)
             {
                 case Format.R16G16B16A16_Float:
