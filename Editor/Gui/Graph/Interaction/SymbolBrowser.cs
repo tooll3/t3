@@ -31,7 +31,14 @@ namespace T3.Editor.Gui.Graph.Interaction
         public void OpenAt(Vector2 positionOnCanvas, Type filterInputType, Type filterOutputType, bool onlyMultiInputs)
         {
             // Scroll canvas to avoid symbol-browser close too edge
-            var canvas = GraphWindow.GetPrimaryGraphWindow().GraphCanvas;
+            var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
+            if (primaryGraphWindow?.GraphCanvas == null)
+            {
+                Log.Warning("Can't open symbol browser without graph window.");
+                return;
+            }
+            
+            var canvas = primaryGraphWindow.GraphCanvas;
             if (canvas != null)
             {
                 var screenPos = canvas.TransformPosition(positionOnCanvas);
@@ -47,7 +54,8 @@ namespace T3.Editor.Gui.Graph.Interaction
                     canvasRect.Expand(400);
                     canvas.FitAreaOnCanvas(canvasRect);
                 }
-            }   
+            }
+
 
             IsOpen = true;
             PosOnCanvas = positionOnCanvas;
