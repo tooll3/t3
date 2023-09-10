@@ -184,10 +184,15 @@ public class T3Ui
         {
             UserSettings.Config.FullScreen = !UserSettings.Config.FullScreen;
         }
-        else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode))
-        {
-            UserSettings.Config.FocusMode = !UserSettings.Config.FocusMode;
-        }
+        else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode)) ToggleFocusMode();
+    }
+
+    private static void ToggleFocusMode() {
+        var shouldBeFocusMode = !UserSettings.Config.FocusMode;
+        UserSettings.Config.FocusMode = shouldBeFocusMode;
+        UserSettings.Config.ShowToolbar = shouldBeFocusMode;
+        ToggleAllUiElements();
+        LayoutHandling.LoadAndApplyLayoutOrFocusMode(shouldBeFocusMode ? 11 : UserSettings.Config.WindowLayoutIndex);
     }
         
     private void DrawAppMenuBar()
@@ -336,7 +341,10 @@ public class T3Ui
                 }
 
                 ImGui.MenuItem("Fullscreen", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFullscreen, false), ref UserSettings.Config.FullScreen);
-                ImGui.MenuItem("Focus Mode", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), ref UserSettings.Config.FocusMode);
+                if (ImGui.MenuItem("Focus Mode", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), UserSettings.Config.FocusMode))
+                {
+                    ToggleFocusMode();
+                }
                 ImGui.EndMenu();
             }
                 
@@ -346,7 +354,6 @@ public class T3Ui
                 ImGui.EndMenu();
             }
 
-            
             if (UserSettings.Config.FullScreen)
             {
                 ImGui.Dummy(new Vector2(10,10));
@@ -368,7 +375,7 @@ public class T3Ui
     }
 
 
-    private void ToggleAllUiElements()
+    private static void ToggleAllUiElements()
     {
         //T3Ui.MaximalView = !T3Ui.MaximalView;
         if (UserSettings.Config.ShowToolbar)

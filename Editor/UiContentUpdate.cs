@@ -44,8 +44,6 @@ internal static class UiContentUpdate
         ImGui.GetIO().DisplaySize = ProgramWindows.Main.Size;
 
         ProgramWindows.HandleFullscreenToggle();
-        ProgramWindows.HandleFocusModeToggle();
-
         GraphOperations.UpdateChangedOperators();
 
         DirtyFlag.IncrementGlobalTicks();
