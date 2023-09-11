@@ -1,11 +1,13 @@
+using System;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Resource;
+using Buffer = SharpDX.Direct3D11.Buffer;
 using Utilities = T3.Core.Utils.Utilities;
 using Vector4 = System.Numerics.Vector4;
 
@@ -37,40 +39,38 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
                                              };
 
             ResourceManager.SetupConstBuffer(parameterBufferContent, ref _parameterBuffer);
-
-            // Textures
-            var resourceManager = ResourceManager.Instance();
             var device = ResourceManager.Device;
-
-            Utilities.Dispose(ref _baseColorMapSrv);
-            var tex = BaseColorMap.GetValue(context) ?? PbrContextSettings.WhitePixelTexture;
-            _baseColorMapSrv = new ShaderResourceView(device, tex);
-            var prevAlbedoColorMap = context.PbrMaterialTextures.AlbedoColorMap;
             
+            // Albedo
+            var prevAlbedoColorMap = context.PbrMaterialTextures.AlbedoColorMap;
+            Utilities.Dispose(ref _baseColorMapSrv);
+            var baseTex = BaseColorMap.GetValue(context) ?? PbrContextSettings.WhitePixelTexture;
+            _baseColorMapSrv = TryToCreate(device, baseTex, prevAlbedoColorMap, "albedo");
             
             context.PbrMaterialTextures.AlbedoColorMap = _baseColorMapSrv;
 
-            Utilities.Dispose(ref _normalMapSrv);
-            var tex2 = NormalMap.GetValue(context) ?? PbrContextSettings.NormalFallbackTexture;
-            _normalMapSrv = new ShaderResourceView(device, tex2);
+            // Normal
             var prevNormalMap = context.PbrMaterialTextures.NormalMap;
-            
+            Utilities.Dispose(ref _normalMapSrv);
+            var normalTex = NormalMap.GetValue(context) ?? PbrContextSettings.NormalFallbackTexture;
+            _normalMapSrv = TryToCreate(device, normalTex, prevNormalMap, "normal");
             
             context.PbrMaterialTextures.NormalMap = _normalMapSrv;
 
-            Utilities.Dispose(ref _rsmoMapSrv);
-            var tex3 = RoughnessSpecularMetallicOcclusionMap.GetValue(context) ?? PbrContextSettings.RsmoFallbackTexture;
-            _rsmoMapSrv = new ShaderResourceView(device, tex3);
+            // Roughness
             var prevRoughnessSpecularMetallicOcclusionMap = context.PbrMaterialTextures.RoughnessSpecularMetallicOcclusionMap;
-            
-            
+            Utilities.Dispose(ref _rsmoMapSrv);
+            var roughnessTex = RoughnessSpecularMetallicOcclusionMap.GetValue(context) ?? PbrContextSettings.RsmoFallbackTexture;
+            _rsmoMapSrv = TryToCreate(device, roughnessTex, prevRoughnessSpecularMetallicOcclusionMap, "Roughness");
+
             context.PbrMaterialTextures.RoughnessSpecularMetallicOcclusionMap = _rsmoMapSrv;
 
-            Utilities.Dispose(ref _emissiveColorMapSrv);
-            var tex4 = EmissiveColorMap.GetValue(context) ?? PbrContextSettings.WhitePixelTexture;
-            _emissiveColorMapSrv = new ShaderResourceView(device, tex4);
+            // Emissive
             var prevEmissiveColorMap = context.PbrMaterialTextures.EmissiveColorMap;
-            
+            Utilities.Dispose(ref _emissiveColorMapSrv);
+            var emissiveTex = EmissiveColorMap.GetValue(context) ?? PbrContextSettings.WhitePixelTexture;
+            _emissiveColorMapSrv = TryToCreate(device, emissiveTex, prevRoughnessSpecularMetallicOcclusionMap, "Emissive");
+
             context.PbrMaterialTextures.EmissiveColorMap = _emissiveColorMapSrv;
 
             var previousParameters = context.PbrMaterialParams;
@@ -90,6 +90,22 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
         private ShaderResourceView _normalMapSrv;
         private ShaderResourceView _emissiveColorMapSrv;
 
+
+        private ShaderResourceView TryToCreate(Device device, Resource tex, ShaderResourceView previous, string name)
+        {
+            try
+            {
+                var srv = new ShaderResourceView(device, tex);
+                return srv;
+            }
+            catch (Exception e)
+            {
+                Log.Warning($"Failed to create SRV for {name} texture {e.Message}", this);
+                return previous;
+            }
+        }
+        
+        
         [Input(Guid = "2a585a23-b60c-4c8b-8cfa-9ab2a8b04c7a")]
         public readonly InputSlot<Command> SubTree = new InputSlot<Command>();
 

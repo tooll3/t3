@@ -190,8 +190,20 @@ namespace T3.Editor.Gui.Dialog
 
         private void MigrateSelection()
         {
-            var allRemoteT3Files = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3", SearchOption.AllDirectories);
-            var allRemoteT3UiFiles = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3ui", SearchOption.AllDirectories);
+            string[] allRemoteT3Files;
+            string[] allRemoteT3UiFiles;
+
+            try
+            {
+                allRemoteT3Files = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3", SearchOption.AllDirectories);
+                allRemoteT3UiFiles = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3ui", SearchOption.AllDirectories);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Migration failed: " + e.Message);
+                return;
+            }
+            
 
             foreach (var item in _scanResults)
             {

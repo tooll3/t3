@@ -46,12 +46,17 @@ namespace Operators.Utils
                 return receiver;
 
             var newReceiver = new OscReceiver(port);
-            newReceiver.Connect();
+            try
+            {
+                newReceiver.Connect();
+            }
+            catch (Exception e)
+            {
+                Log.Warning("Failed to open OSC connection " + e.Message);
+            }
 
             var newGroup = new PortGroup(newReceiver);
-
             _groupsByPort.Add(port, newGroup);
-
             return newGroup;
         }
 
@@ -64,7 +69,7 @@ namespace Operators.Utils
         private static readonly Dictionary<int, PortGroup> _groupsByPort = new();
 
         public class PortGroup
-        {          
+        {
             private readonly OscReceiver receiver;
             private Thread thread;
             private bool isRunning;
@@ -83,16 +88,15 @@ namespace Operators.Utils
                 this.isRunning = true;
                 this.thread.Start();
             }
-            
+
             private void ThreadProc()
             {
                 while (this.isRunning)
                 {
-                   while (receiver.State != OscSocketState.Closed)           
-                   {
+                    while (receiver.State != OscSocketState.Closed)
+                    {
                         if (receiver.State != OscSocketState.Connected)
                             continue;
-
 
                         try
                         {
@@ -113,11 +117,11 @@ namespace Operators.Utils
                                             ForwardMessage(bundleMessage);
                                         }
                                     }
-                                } 
+                                }
                                 else if (oscPacket is OscMessage)
                                 {
                                     ForwardMessage((OscMessage)oscPacket);
-                                }                               
+                                }
                             }
                             catch (Exception e)
                             {
@@ -159,7 +163,6 @@ namespace Operators.Utils
                 this.isRunning = false;
                 this.receiver.Dispose();
                 this.thread.Join();
-                
             }
         }
     }
