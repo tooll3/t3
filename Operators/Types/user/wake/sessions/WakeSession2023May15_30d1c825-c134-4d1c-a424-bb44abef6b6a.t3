@@ -387,7 +387,7 @@
       ]
     },
     {
-      "Id": "dcb196da-c8d4-4611-89a1-5c19665c48f5"/*SimDirectedForce*/,
+      "Id": "dcb196da-c8d4-4611-89a1-5c19665c48f5"/*DirectionalForce*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {
@@ -968,7 +968,7 @@
       "Outputs": []
     },
     {
-      "Id": "a3c881c9-8876-403c-9919-ccb80defc07c"/*SimCentricalForce*/,
+      "Id": "a3c881c9-8876-403c-9919-ccb80defc07c"/*PointForce*/,
       "SymbolId": "87915d7b-f2aa-45da-80f9-bd1f6033d387",
       "InputValues": [
         {
@@ -1055,7 +1055,7 @@
       "Outputs": []
     },
     {
-      "Id": "dc9ba2d8-b60f-46d3-b899-941f84b41ae8"/*SimCentricalForce*/,
+      "Id": "dc9ba2d8-b60f-46d3-b899-941f84b41ae8"/*PointForce*/,
       "SymbolId": "87915d7b-f2aa-45da-80f9-bd1f6033d387",
       "InputValues": [
         {
@@ -1234,7 +1234,7 @@
       "Outputs": []
     },
     {
-      "Id": "dd4e29e8-62d7-49f5-a67b-54acc8162920"/*SimForwardMovement*/,
+      "Id": "dd4e29e8-62d7-49f5-a67b-54acc8162920"/*_LegacySimForwardMovement*/,
       "SymbolId": "69c3b4ce-490a-48d4-b1d0-56dd6bf7a9a8",
       "InputValues": [
         {

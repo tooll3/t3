@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_69c3b4ce_490a_48d4_b1d0_56dd6bf7a9a8
 {
-    public class SimForwardMovement : Instance<SimForwardMovement>
+    public class _LegacySimForwardMovement : Instance<_LegacySimForwardMovement>
     {
 
         [Output(Guid = "9495dbae-0e49-449c-ab4a-58e267974385")]

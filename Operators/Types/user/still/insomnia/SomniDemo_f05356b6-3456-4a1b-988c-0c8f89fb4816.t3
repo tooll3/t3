@@ -1820,7 +1820,7 @@
       "Outputs": []
     },
     {
-      "Id": "a3d269f2-bb91-4a39-a6f4-bd778ef6e37b"/*SimForwardMovement*/,
+      "Id": "a3d269f2-bb91-4a39-a6f4-bd778ef6e37b"/*_LegacySimForwardMovement*/,
       "SymbolId": "69c3b4ce-490a-48d4-b1d0-56dd6bf7a9a8",
       "InputValues": [
         {
@@ -3106,13 +3106,13 @@
       "Outputs": []
     },
     {
-      "Id": "cf69a1c3-c10a-4a73-91ea-a7c67434e1c7"/*SimForwardMovement*/,
+      "Id": "cf69a1c3-c10a-4a73-91ea-a7c67434e1c7"/*_LegacySimForwardMovement*/,
       "SymbolId": "69c3b4ce-490a-48d4-b1d0-56dd6bf7a9a8",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "9450e34e-bf6e-45e9-9e62-9298e4b3d83a"/*SimDirectedForce*/,
+      "Id": "9450e34e-bf6e-45e9-9e62-9298e4b3d83a"/*DirectionalForce*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {
@@ -4065,7 +4065,7 @@
       "Outputs": []
     },
     {
-      "Id": "46dd55e9-5055-48be-9b73-810a1ba842f7"/*SimDirectedForce*/,
+      "Id": "46dd55e9-5055-48be-9b73-810a1ba842f7"/*DirectionalForce*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {

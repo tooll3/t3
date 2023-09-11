@@ -1,7 +1,7 @@
 {
   "Name": "GrowStrains",
   "Id": "98df563e-fd59-4458-a490-b7b7604ec1f3",
-  "Namespace": "lib.point.sim",
+  "Namespace": "lib.point.sim.experimental",
   "Inputs": [
     {
       "Id": "b5849477-6a5a-47cd-8be2-684e95816559"/*GPoints*/,

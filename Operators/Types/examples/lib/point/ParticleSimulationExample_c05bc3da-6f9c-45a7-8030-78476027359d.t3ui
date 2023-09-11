@@ -1,0 +1,265 @@
+{
+  "Id": "c05bc3da-6f9c-45a7-8030-78476027359d"/*ParticleSimulationExample*/,
+  "Description": "Various examples for force driven particle simulations.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "39f0dfaa-cfb7-4a27-bfe6-3dfe7cbd344f"/*ParticleSimulation*/,
+      "Position": {
+        "X": 147.5763,
+        "Y": 2036.2515
+      }
+    },
+    {
+      "ChildId": "96143097-da96-4b30-b2e5-a773923b1963"/*PointForce*/,
+      "Position": {
+        "X": 297.5763,
+        "Y": 2036.2515
+      }
+    },
+    {
+      "ChildId": "ca53e4a3-92af-4e9e-bbf7-0b13830310de"/*OscillateVec3*/,
+      "Position": {
+        "X": 147.5763,
+        "Y": 2142.2515
+      }
+    },
+    {
+      "ChildId": "a2d5d05c-2dd9-46fb-8df2-1603484de228"/*DirectionalForce*/,
+      "Position": {
+        "X": 447.5763,
+        "Y": 2036.2515
+      }
+    },
+    {
+      "ChildId": "27e38ea6-fc34-464f-a05a-0d930bec8f58"/*SpherePoints*/,
+      "Position": {
+        "X": -2.423706,
+        "Y": 2036.2515
+      }
+    },
+    {
+      "ChildId": "486a4faa-40fe-4088-a4e7-3ef8e6739d3d"/*AnimValue*/,
+      "Position": {
+        "X": -2.423706,
+        "Y": 2079.2515
+      }
+    },
+    {
+      "ChildId": "655ceb0b-6870-4b7b-9e94-233d3f443372"/*SimNoise*/,
+      "Position": {
+        "X": 597.5763,
+        "Y": 2036.2515
+      }
+    },
+    {
+      "ChildId": "3369f966-8055-472e-9d0b-a72b912a8cd8"/*DrawBillboards*/,
+      "Position": {
+        "X": 258.3766,
+        "Y": 1710.876
+      }
+    },
+    {
+      "ChildId": "daeb7ea5-ecdb-4142-9d1b-7cb8ab70a055"/*OrbitCamera*/,
+      "Position": {
+        "X": 477.99173,
+        "Y": 1706.4792
+      }
+    },
+    {
+      "ChildId": "cd79e2b8-4eb7-4d78-aba6-1331f1840c49"/*RenderTarget*/,
+      "Position": {
+        "X": 627.992,
+        "Y": 1706.4792
+      }
+    },
+    {
+      "ChildId": "54b37838-7b16-431d-87d3-a8265ee3fcd6"/*Glow*/,
+      "Position": {
+        "X": 777.992,
+        "Y": 1706.4792
+      }
+    },
+    {
+      "ChildId": "fcd314d8-1a63-4b82-9913-92c830782e12"/*ParticleSimulation*/,
+      "Position": {
+        "X": -613.59814,
+        "Y": 1276.3293
+      }
+    },
+    {
+      "ChildId": "9346ee9e-d632-4ec0-8825-5ae935c12fe9"/*PointForce*/,
+      "Position": {
+        "X": -78.263,
+        "Y": 1263.9916
+      }
+    },
+    {
+      "ChildId": "1747f232-b4b5-4ea3-8c11-e6ca346b2a33"/*OscillateVec3*/,
+      "Position": {
+        "X": -236.81274,
+        "Y": 1336.386
+      }
+    },
+    {
+      "ChildId": "b8fdff8c-ab47-48fa-a4a8-a7e5265262b0"/*SpherePoints*/,
+      "Position": {
+        "X": -763.5982,
+        "Y": 1276.3293
+      }
+    },
+    {
+      "ChildId": "6737ad25-beef-4c81-b0ac-2ae218e94371"/*AnimValue*/,
+      "Position": {
+        "X": -763.5982,
+        "Y": 1319.3293
+      }
+    },
+    {
+      "ChildId": "9b58c3bd-8819-4c30-9e7e-7f384fbf5e1a"/*PickPointList*/,
+      "Position": {
+        "X": 84.19446,
+        "Y": 1702.8153
+      }
+    },
+    {
+      "ChildId": "89bec592-7ecc-4fa8-928b-e2fd2eb7a2aa"/*TurbulenceForce*/,
+      "Position": {
+        "X": -69.82596,
+        "Y": 1397.7108
+      }
+    },
+    {
+      "ChildId": "663af633-a0b4-415e-a3c1-0189a08ed44f"/*Time*/,
+      "Position": {
+        "X": -255.15875,
+        "Y": 1436.3193
+      }
+    },
+    {
+      "ChildId": "0c714749-cd6f-42de-833a-454078f0f765"/*CountInt*/,
+      "Position": {
+        "X": -65.80554,
+        "Y": 1702.8153
+      }
+    },
+    {
+      "ChildId": "917ef9a7-8d01-4d77-910f-a7b6e9344638"/*AnimValue*/,
+      "Position": {
+        "X": -215.80554,
+        "Y": 1702.8153
+      }
+    },
+    {
+      "ChildId": "dac16025-833d-415c-9f61-cf2708d8f303"/*DirectionalForce*/,
+      "Position": {
+        "X": -75.13489,
+        "Y": 1545.5745
+      }
+    },
+    {
+      "ChildId": "e0a832d5-3014-4624-8924-4d67d7d2ce56"/*OscillateVec3*/,
+      "Position": {
+        "X": -225.13489,
+        "Y": 1545.5745
+      }
+    },
+    {
+      "ChildId": "5b58d2cb-da3a-4ef0-b04f-81b3f3829037"/*DrawPoints*/,
+      "Position": {
+        "X": 747.5763,
+        "Y": 2036.2515
+      }
+    },
+    {
+      "ChildId": "092603e3-de6a-4d87-8754-1582e092a4e8"/*AnimValue*/,
+      "Position": {
+        "X": -2.423706,
+        "Y": 2122.2515
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "7ce0c9fc-24c4-4156-8dd3-f90567fefb23"/*ColorBuffer*/,
+      "Position": {
+        "X": 927.992,
+        "Y": 1706.4792
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "913e0cb2-9743-484a-b7ef-f45bfe2b49bb",
+      "Title": "Let's emit some points\nNotice how the Particle Simulation activates aging\nand initial velocity...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -823.5982,
+        "Y": 1216.3293
+      },
+      "Size": {
+        "X": 380.00006,
+        "Y": 186.0
+      }
+    },
+    {
+      "Id": "2ea289c8-d9a3-4a99-bbad-df3a0fffed14",
+      "Title": "Let's apply some forces...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -315.15875,
+        "Y": 1203.9916
+      },
+      "Size": {
+        "X": 415.3328,
+        "Y": 450.5829
+      }
+    },
+    {
+      "Id": "70dda3ed-e760-4d1c-ad6a-f4b5315179d1",
+      "Title": "Let's draw the particles. \nNotice how the w-parameter is used to\ndrive the color over lifetime...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 198.37659,
+        "Y": 1650.876
+      },
+      "Size": {
+        "X": 230.0,
+        "Y": 156.0
+      }
+    },
+    {
+      "Id": "09003d84-a123-4e76-8bba-00155fada3a8",
+      "Title": "Just another funky effect.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -62.423706,
+        "Y": 1976.2515
+      },
+      "Size": {
+        "X": 980.0,
+        "Y": 249.0
+      }
+    }
+  ]
+}

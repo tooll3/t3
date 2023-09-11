@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_9c378944_9a57_4ae4_a88e_36c07244bcf7
 {
-    public class SimForces : Instance<SimForces>
+    public class LegacySimForces : Instance<LegacySimForces>
     {
 
         [Output(Guid = "d41c5cd6-1902-4fb9-9639-6513906cef79")]

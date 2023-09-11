@@ -36,7 +36,9 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
     }
 
-    ResultPoints[i.x].position = Points1[i.x].position +  rotate_vector(Direction * Distance, Points1[i.x].rotation);
+    float4 rot;
+    float v = q_separate_v(Points1[i.x].rotation, rot);
+    ResultPoints[i.x].position = Points1[i.x].position +  rotate_vector(Direction * Distance, rot);
     ResultPoints[i.x].rotation = Points1[i.x].rotation;
     ResultPoints[i.x].w = Points1[i.x].w;
 }

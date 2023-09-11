@@ -114,7 +114,7 @@
       "Outputs": []
     },
     {
-      "Id": "3e3ecc10-dfea-4a3c-bef4-d481c786c168"/*SimDirectedForce*/,
+      "Id": "3e3ecc10-dfea-4a3c-bef4-d481c786c168"/*DirectionalForce*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {
@@ -431,7 +431,7 @@
       "Outputs": []
     },
     {
-      "Id": "a4ca6ca4-faca-4b25-b790-7a1424930cc9"/*SimDirectedForce*/,
+      "Id": "a4ca6ca4-faca-4b25-b790-7a1424930cc9"/*DirectionalForce*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {
@@ -457,7 +457,7 @@
       "Outputs": []
     },
     {
-      "Id": "a9e4b034-9bef-41b0-a43c-be2f68e20ee6"/*SimDirectedForce*/,
+      "Id": "a9e4b034-9bef-41b0-a43c-be2f68e20ee6"/*DirectionalForce*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {

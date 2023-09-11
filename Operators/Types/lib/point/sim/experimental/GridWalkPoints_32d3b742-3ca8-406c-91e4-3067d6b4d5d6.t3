@@ -1,7 +1,7 @@
 {
   "Name": "GridWalkPoints",
   "Id": "32d3b742-3ca8-406c-91e4-3067d6b4d5d6",
-  "Namespace": "lib.point.sim",
+  "Namespace": "lib.point.sim.experimental",
   "Inputs": [
     {
       "Id": "1ac63dff-a6ab-4dab-8c3d-fb1df0b65e0d"/*GPoints*/,

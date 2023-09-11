@@ -1867,7 +1867,7 @@
       "Outputs": []
     },
     {
-      "Id": "8f320e39-f5df-4ad0-a4e4-bc1b9f12017c"/*SimForces*/,
+      "Id": "8f320e39-f5df-4ad0-a4e4-bc1b9f12017c"/*LegacySimForces*/,
       "SymbolId": "9c378944-9a57-4ae4-a88e-36c07244bcf7",
       "InputValues": [
         {
@@ -2409,7 +2409,7 @@
       "Outputs": []
     },
     {
-      "Id": "f224f751-df25-4d21-a28e-fe6bfa4bf753"/*SimForces*/,
+      "Id": "f224f751-df25-4d21-a28e-fe6bfa4bf753"/*LegacySimForces*/,
       "SymbolId": "9c378944-9a57-4ae4-a88e-36c07244bcf7",
       "InputValues": [
         {
@@ -2719,7 +2719,7 @@
       "Outputs": []
     },
     {
-      "Id": "7926b43b-1a67-4e70-9caf-d750c2b1c196"/*SimForces*/,
+      "Id": "7926b43b-1a67-4e70-9caf-d750c2b1c196"/*LegacySimForces*/,
       "SymbolId": "9c378944-9a57-4ae4-a88e-36c07244bcf7",
       "InputValues": [
         {
@@ -2852,7 +2852,7 @@
       "Outputs": []
     },
     {
-      "Id": "bc7cc05a-5c66-44a2-a4c5-32991494d41a"/*SimForces*/,
+      "Id": "bc7cc05a-5c66-44a2-a4c5-32991494d41a"/*LegacySimForces*/,
       "SymbolId": "9c378944-9a57-4ae4-a88e-36c07244bcf7",
       "InputValues": [
         {

@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_87915d7b_f2aa_45da_80f9_bd1f6033d387
 {
-    public class SimCentricalForce : Instance<SimCentricalForce>
+    public class PointForce : Instance<PointForce>
     {
 
         [Output(Guid = "22ac99e2-182d-4a14-b64d-2a27f39be88b")]
@@ -23,14 +23,11 @@ namespace T3.Operators.Types.Id_87915d7b_f2aa_45da_80f9_bd1f6033d387
         [Input(Guid = "02f34a62-bd83-47ac-962a-f1af6a92f0b8")]
         public readonly InputSlot<float> Amount = new InputSlot<float>();
 
-        [Input(Guid = "77aa9e9a-b73c-4cf4-8b00-c5a9860cdeed")]
-        public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
+        [Input(Guid = "93cae017-8bf6-44c8-9b45-8b9a4e64b9bd")]
+        public readonly InputSlot<float> DecayExponent = new InputSlot<float>();
 
-        [Input(Guid = "ac4bf799-f2e8-4bb8-ab57-e1260ba0421e")]
-        public readonly InputSlot<float> ApplyMovement = new InputSlot<float>();
-
-        [Input(Guid = "c399f493-9df4-4fb8-9840-a749c3fe33a6", MappedType = typeof(Modes))]
-        public readonly InputSlot<int> Mode = new InputSlot<int>();
+        [Input(Guid = "894b2978-63f5-4f0f-8e15-03fc21c9532b")]
+        public readonly InputSlot<T3.Core.Operator.GizmoVisibility> ShowGizmo = new InputSlot<T3.Core.Operator.GizmoVisibility>();
         
         private enum Modes {
             Legacy,

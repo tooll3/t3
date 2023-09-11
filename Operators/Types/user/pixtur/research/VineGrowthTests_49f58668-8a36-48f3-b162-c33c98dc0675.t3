@@ -726,7 +726,7 @@
       "Outputs": []
     },
     {
-      "Id": "94fa6096-9a74-4b3a-9f22-0e8a1d7584c0"/*SimDirectedForce*/,
+      "Id": "94fa6096-9a74-4b3a-9f22-0e8a1d7584c0"/*DirectionalForce*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {

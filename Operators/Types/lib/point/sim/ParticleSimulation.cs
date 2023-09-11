@@ -37,6 +37,21 @@ namespace T3.Operators.Types.Id_dc3d1571_ad9f_46aa_bed9_df2f4e1c7040
 
         [Input(Guid = "ae7aa205-faa0-454b-9a82-0067410275a0")]
         public readonly InputSlot<bool> Freeze = new InputSlot<bool>();
+
+        [Input(Guid = "889c7ee2-e996-412c-827f-2632056b6d9a")]
+        public readonly InputSlot<bool> ApplyMovement = new InputSlot<bool>();
+
+        [Input(Guid = "3e6ff5e3-56a8-4be0-a918-ef041828e95f")]
+        public readonly InputSlot<float> Speed = new InputSlot<float>();
+
+        [Input(Guid = "79f17c7d-7ffe-43df-af17-36e97ab3813f")]
+        public readonly InputSlot<float> Drag = new InputSlot<float>();
+
+        [Input(Guid = "998e0875-ddad-49f0-b9cc-1ae5017a4bb6")]
+        public readonly InputSlot<bool> SetInitialVelocity = new InputSlot<bool>();
+
+        [Input(Guid = "22670413-93a6-4743-8ef3-962a975410de")]
+        public readonly InputSlot<float> InitialVelocity = new InputSlot<float>();
     }
 }
 

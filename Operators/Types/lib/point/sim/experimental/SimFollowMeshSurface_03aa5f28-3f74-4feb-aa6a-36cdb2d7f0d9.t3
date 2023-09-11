@@ -1,7 +1,7 @@
 {
   "Name": "SimFollowMeshSurface",
   "Id": "03aa5f28-3f74-4feb-aa6a-36cdb2d7f0d9",
-  "Namespace": "lib.point.sim",
+  "Namespace": "lib.point.sim.experimental",
   "Inputs": [
     {
       "Id": "72906b23-c042-4880-a180-83b8fc414bb2"/*Points*/,
