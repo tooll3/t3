@@ -74,7 +74,7 @@
       }
     },
     {
-      "ChildId": "455c2d7d-1be0-48a9-ad07-b63dabfc9020"/*SimDirectedForce*/,
+      "ChildId": "455c2d7d-1be0-48a9-ad07-b63dabfc9020"/*DirectionalForce*/,
       "Position": {
         "X": 1278.1553,
         "Y": -48.750793

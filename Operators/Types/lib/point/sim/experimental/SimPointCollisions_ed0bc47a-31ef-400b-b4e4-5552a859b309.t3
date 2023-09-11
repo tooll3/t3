@@ -1,7 +1,7 @@
 {
   "Name": "SimPointCollisions",
   "Id": "ed0bc47a-31ef-400b-b4e4-5552a859b309",
-  "Namespace": "lib.point.sim",
+  "Namespace": "lib.point.sim.experimental",
   "Inputs": [
     {
       "Id": "7ec04bd6-80c3-4537-b333-f42f0c016730"/*PointsA_*/,

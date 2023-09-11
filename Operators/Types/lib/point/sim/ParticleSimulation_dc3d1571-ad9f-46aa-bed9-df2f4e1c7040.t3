@@ -45,7 +45,7 @@
     },
     {
       "Id": "3e6ff5e3-56a8-4be0-a918-ef041828e95f"/*Speed*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 1.0
     },
     {
       "Id": "79f17c7d-7ffe-43df-af17-36e97ab3813f"/*Drag*/,
@@ -57,7 +57,7 @@
     },
     {
       "Id": "22670413-93a6-4743-8ef3-962a975410de"/*InitialVelocity*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 1.0
     }
   ],
   "Children": [

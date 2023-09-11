@@ -151,7 +151,7 @@
       }
     },
     {
-      "ChildId": "dcb196da-c8d4-4611-89a1-5c19665c48f5"/*SimDirectedForce*/,
+      "ChildId": "dcb196da-c8d4-4611-89a1-5c19665c48f5"/*DirectionalForce*/,
       "Position": {
         "X": -966.61053,
         "Y": 811.4484
@@ -340,7 +340,7 @@
       }
     },
     {
-      "ChildId": "a3c881c9-8876-403c-9919-ccb80defc07c"/*SimCentricalForce*/,
+      "ChildId": "a3c881c9-8876-403c-9919-ccb80defc07c"/*PointForce*/,
       "Position": {
         "X": -692.07135,
         "Y": 993.9894
@@ -361,7 +361,7 @@
       }
     },
     {
-      "ChildId": "dc9ba2d8-b60f-46d3-b899-941f84b41ae8"/*SimCentricalForce*/,
+      "ChildId": "dc9ba2d8-b60f-46d3-b899-941f84b41ae8"/*PointForce*/,
       "Position": {
         "X": -1089.0991,
         "Y": 1871.6564
@@ -445,7 +445,7 @@
       }
     },
     {
-      "ChildId": "dd4e29e8-62d7-49f5-a67b-54acc8162920"/*SimForwardMovement*/,
+      "ChildId": "dd4e29e8-62d7-49f5-a67b-54acc8162920"/*_LegacySimForwardMovement*/,
       "Position": {
         "X": -1679.5944,
         "Y": 1863.1853

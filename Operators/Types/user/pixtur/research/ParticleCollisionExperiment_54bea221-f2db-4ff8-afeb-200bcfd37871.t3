@@ -114,6 +114,11 @@
           "Value": false
         },
         {
+          "Id": "d2472768-dd40-436f-af1b-7359289b5118"/*ShowIndices*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
           "Id": "621bf2cf-8d49-4b5f-88b9-4460045e8914"/*Size*/,
           "Type": "System.Single",
           "Value": 1.0
@@ -122,11 +127,6 @@
           "Id": "40a04de8-54aa-4f66-acea-80ffc4dab7bd"/*PointSize*/,
           "Type": "System.Single",
           "Value": 1.0
-        },
-        {
-          "Id": "d2472768-dd40-436f-af1b-7359289b5118"/*ShowIndices*/,
-          "Type": "System.Boolean",
-          "Value": false
         },
         {
           "Id": "98fe7249-39ea-4f45-b045-36e07a8f2018"/*ShowVelocity*/,
@@ -224,7 +224,7 @@
       "Outputs": []
     },
     {
-      "Id": "1c7b7c30-de86-445d-9ebd-49a9905da131"/*SimForwardMovement*/,
+      "Id": "1c7b7c30-de86-445d-9ebd-49a9905da131"/*_LegacySimForwardMovement*/,
       "SymbolId": "69c3b4ce-490a-48d4-b1d0-56dd6bf7a9a8",
       "InputValues": [
         {
@@ -621,7 +621,7 @@
       "Outputs": []
     },
     {
-      "Id": "c69d0371-6e5c-4a14-a16c-9d47f0a3d233"/*SimDirectedForce*/,
+      "Id": "c69d0371-6e5c-4a14-a16c-9d47f0a3d233"/*DirectionalForce*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [],
       "Outputs": []
@@ -733,6 +733,11 @@
           "Value": false
         },
         {
+          "Id": "d2472768-dd40-436f-af1b-7359289b5118"/*ShowIndices*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
           "Id": "621bf2cf-8d49-4b5f-88b9-4460045e8914"/*Size*/,
           "Type": "System.Single",
           "Value": 1.0
@@ -741,11 +746,6 @@
           "Id": "40a04de8-54aa-4f66-acea-80ffc4dab7bd"/*PointSize*/,
           "Type": "System.Single",
           "Value": 1.0
-        },
-        {
-          "Id": "d2472768-dd40-436f-af1b-7359289b5118"/*ShowIndices*/,
-          "Type": "System.Boolean",
-          "Value": false
         },
         {
           "Id": "98fe7249-39ea-4f45-b045-36e07a8f2018"/*ShowVelocity*/,
@@ -784,7 +784,7 @@
       "Outputs": []
     },
     {
-      "Id": "64944ca0-e3e3-4d12-b75c-8c5afc73af07"/*SimForwardMovement*/,
+      "Id": "64944ca0-e3e3-4d12-b75c-8c5afc73af07"/*_LegacySimForwardMovement*/,
       "SymbolId": "69c3b4ce-490a-48d4-b1d0-56dd6bf7a9a8",
       "InputValues": [
         {
@@ -831,7 +831,7 @@
       "Outputs": []
     },
     {
-      "Id": "1598cdd2-95ae-429d-bdca-b66fb431cc3a"/*SimDirectedForce*/,
+      "Id": "1598cdd2-95ae-429d-bdca-b66fb431cc3a"/*DirectionalForce*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {
@@ -847,11 +847,6 @@
           "Id": "4f9ab443-3885-4a57-9116-6be5824bd95b"/*Amount*/,
           "Type": "System.Single",
           "Value": 0.16
-        },
-        {
-          "Id": "9c8c1407-bf6a-47c0-8c6c-2cd9f303151d"/*IsEnabled*/,
-          "Type": "System.Boolean",
-          "Value": true
         },
         {
           "Id": "1f561bbd-a272-4c06-bd56-a580a2022bc6"/*Mode*/,
@@ -905,7 +900,7 @@
       "Outputs": []
     },
     {
-      "Id": "b55e19b5-43f0-4723-96b5-a6719115470d"/*SimCentricalForce*/,
+      "Id": "b55e19b5-43f0-4723-96b5-a6719115470d"/*PointForce*/,
       "IsBypassed": true,
       "SymbolId": "87915d7b-f2aa-45da-80f9-bd1f6033d387",
       "InputValues": [
@@ -922,16 +917,6 @@
           "Id": "02f34a62-bd83-47ac-962a-f1af6a92f0b8"/*Amount*/,
           "Type": "System.Single",
           "Value": 0.29999998
-        },
-        {
-          "Id": "77aa9e9a-b73c-4cf4-8b00-c5a9860cdeed"/*IsEnabled*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "c399f493-9df4-4fb8-9840-a749c3fe33a6"/*Mode*/,
-          "Type": "System.Int32",
-          "Value": 1
         }
       ],
       "Outputs": []

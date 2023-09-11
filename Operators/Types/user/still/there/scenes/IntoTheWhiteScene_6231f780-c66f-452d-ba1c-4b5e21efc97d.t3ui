@@ -88,7 +88,7 @@
       }
     },
     {
-      "ChildId": "eca31575-16b8-4929-8400-451f25d9ddc2"/*SimForces*/,
+      "ChildId": "eca31575-16b8-4929-8400-451f25d9ddc2"/*LegacySimForces*/,
       "Position": {
         "X": 729.2001,
         "Y": 56.0

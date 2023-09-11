@@ -1,6 +1,6 @@
 {
-  "Id": "69c3b4ce-490a-48d4-b1d0-56dd6bf7a9a8"/*SimForwardMovement*/,
-  "Description": "Moves point similar to particles into the direction of their Orientation and with W as their current velocity.",
+  "Id": "69c3b4ce-490a-48d4-b1d0-56dd6bf7a9a8"/*_LegacySimForwardMovement*/,
+  "Description": "Moves point similar to particles into the direction of their Orientation and with W as their current velocity.\n\nWith v3.8 the forward movement is done directly in the [ParticleSimulation] operator which makes this operator obsolete.",
   "InputUis": [
     {
       "InputId": "2038b006-b5a3-472d-870b-d1a3623dfc0c"/*GPoints*/,

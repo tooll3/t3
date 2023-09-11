@@ -1,5 +1,5 @@
 {
-  "Id": "87915d7b-f2aa-45da-80f9-bd1f6033d387"/*SimCentricalForce*/,
+  "Id": "87915d7b-f2aa-45da-80f9-bd1f6033d387"/*PointForce*/,
   "Description": "Applies are directed force to points (acceleration stored in W). Use [SimForwardMovement] to move them as agents.\n",
   "InputUis": [
     {
@@ -31,24 +31,17 @@
       }
     },
     {
-      "InputId": "77aa9e9a-b73c-4cf4-8b00-c5a9860cdeed"/*IsEnabled*/,
+      "InputId": "93cae017-8bf6-44c8-9b45-8b9a4e64b9bd"/*DecayExponent*/,
       "Position": {
-        "X": -75.717575,
-        "Y": 648.1459
+        "X": -82.39632,
+        "Y": 728.23267
       }
     },
     {
-      "InputId": "ac4bf799-f2e8-4bb8-ab57-e1260ba0421e"/*ApplyMovement*/,
+      "InputId": "894b2978-63f5-4f0f-8e15-03fc21c9532b"/*ShowGizmo*/,
       "Position": {
-        "X": -75.717575,
-        "Y": 693.1459
-      }
-    },
-    {
-      "InputId": "c399f493-9df4-4fb8-9840-a749c3fe33a6"/*Mode*/,
-      "Position": {
-        "X": -75.717575,
-        "Y": 738.1459
+        "X": -77.99959,
+        "Y": 1026.1786
       }
     }
   ],
@@ -89,8 +82,8 @@
     {
       "ChildId": "d0851e59-408e-4150-a951-ef3d654a62dd"/*ExecuteBufferUpdate*/,
       "Position": {
-        "X": 835.0588,
-        "Y": 341.18228
+        "X": 1861.1218,
+        "Y": 275.85568
       }
     },
     {
@@ -108,13 +101,6 @@
       }
     },
     {
-      "ChildId": "eef35470-852f-40d1-a958-fd83a6b476ce"/*And*/,
-      "Position": {
-        "X": 237.54233,
-        "Y": 883.2104
-      }
-    },
-    {
       "ChildId": "2d4863d3-4509-4dc3-b660-9e685b03d837"/*Vector3ToFloat3*/,
       "Position": {
         "X": 74.282425,
@@ -129,10 +115,87 @@
       }
     },
     {
-      "ChildId": "40ac7edf-a9b8-4d68-a8f8-301faa3d3cfd"/*IntToFloat*/,
+      "ChildId": "8d7202ed-6fce-428c-8b70-101d37c96e48"/*Execute*/,
       "Position": {
-        "X": 74.282425,
-        "Y": 738.1459
+        "X": 1377.8301,
+        "Y": 297.53223
+      }
+    },
+    {
+      "ChildId": "b18d4387-1ebc-4684-b370-78265acd26cc"/*VisibleGizmos*/,
+      "Position": {
+        "X": 1321.4453,
+        "Y": 1076.5105
+      }
+    },
+    {
+      "ChildId": "ee9bbc25-3eae-49c7-acc3-9cfcb535ec62"/*SpherePoints*/,
+      "Position": {
+        "X": 721.4453,
+        "Y": 1076.5105
+      }
+    },
+    {
+      "ChildId": "7bda3901-d1ab-4e29-9127-ffe4a60b9203"/*RepeatAtGPoints*/,
+      "Position": {
+        "X": 871.4453,
+        "Y": 1076.5105
+      }
+    },
+    {
+      "ChildId": "1e4318da-9ad1-4598-8d4e-bf591cf9e784"/*CommonPointSets*/,
+      "Position": {
+        "X": 571.4453,
+        "Y": 1119.5105
+      }
+    },
+    {
+      "ChildId": "c1f9aef4-48ba-4d22-84a2-50db7f48162c"/*DrawLines*/,
+      "Position": {
+        "X": 1021.4453,
+        "Y": 1076.5105
+      }
+    },
+    {
+      "ChildId": "be309398-2081-4d56-a89f-8e250382b9c8"/*TransformPoints*/,
+      "Position": {
+        "X": 721.4453,
+        "Y": 1119.5105
+      }
+    },
+    {
+      "ChildId": "76542a3f-e4ef-49b6-9913-d9cba4fd4e01"/*Float3ToVector3*/,
+      "Position": {
+        "X": 571.4453,
+        "Y": 1162.5105
+      }
+    },
+    {
+      "ChildId": "28772382-bf6f-47f2-8d73-eebf3930caa1"/*Sigmoid*/,
+      "Position": {
+        "X": 121.44531,
+        "Y": 1202.5105
+      }
+    },
+    {
+      "ChildId": "df702b48-83cb-4d19-8c3c-95333de44adf"/*Remap*/,
+      "Position": {
+        "X": 271.4453,
+        "Y": 1202.5105
+      }
+    },
+    {
+      "ChildId": "a892c937-cafd-4f2d-93f9-968861bf5380"/*Abs*/,
+      "Position": {
+        "X": 421.4453,
+        "Y": 1162.5105
+      }
+    },
+    {
+      "ChildId": "43319385-31fd-4d28-a7a6-543e45d2b814"/*Transform*/,
+      "Position": {
+        "X": 1171.4453,
+        "Y": 1076.5105
       }
     }
   ],
@@ -140,8 +203,8 @@
     {
       "OutputId": "22ac99e2-182d-4a14-b64d-2a27f39be88b"/*OutBuffer*/,
       "Position": {
-        "X": 965.0588,
-        "Y": 341.18228
+        "X": 1991.1218,
+        "Y": 275.85568
       }
     }
   ]

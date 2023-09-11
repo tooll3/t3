@@ -88,7 +88,9 @@
       "Position": {
         "X": -944.52905,
         "Y": 1630.3457
-      }
+      },
+      "Min": 0.0,
+      "Max": 0.1
     },
     {
       "InputId": "998e0875-ddad-49f0-b9cc-1ae5017a4bb6"/*SetInitialVelocity*/,

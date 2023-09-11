@@ -1,7 +1,7 @@
 {
   "Name": "SimNoise",
   "Id": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
-  "Namespace": "lib.point.sim",
+  "Namespace": "lib.point.sim._legacy",
   "Inputs": [
     {
       "Id": "679d6321-a5d7-41cc-a191-5e6cf353dfc4"/*GPoints*/,

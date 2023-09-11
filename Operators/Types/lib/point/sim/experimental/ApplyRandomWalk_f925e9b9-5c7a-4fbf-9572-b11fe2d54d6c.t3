@@ -1,7 +1,7 @@
 {
   "Name": "ApplyRandomWalk",
   "Id": "f925e9b9-5c7a-4fbf-9572-b11fe2d54d6c",
-  "Namespace": "lib.point.sim",
+  "Namespace": "lib.point.sim.experimental",
   "Inputs": [
     {
       "Id": "4b3bb61b-a9f6-4c53-9af7-707984f7ff18"/*GPoints*/,

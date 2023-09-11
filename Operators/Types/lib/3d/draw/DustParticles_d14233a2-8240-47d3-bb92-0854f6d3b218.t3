@@ -309,7 +309,7 @@
       "Outputs": []
     },
     {
-      "Id": "68884267-81da-49e0-a135-eee4b3c1c0aa"/*SimForces*/,
+      "Id": "68884267-81da-49e0-a135-eee4b3c1c0aa"/*LegacySimForces*/,
       "SymbolId": "9c378944-9a57-4ae4-a88e-36c07244bcf7",
       "InputValues": [
         {
@@ -610,7 +610,7 @@
       "Outputs": []
     },
     {
-      "Id": "f191a2f8-a555-4537-b0de-1475c0fe93ca"/*SimDirectedForce*/,
+      "Id": "f191a2f8-a555-4537-b0de-1475c0fe93ca"/*DirectionalForce*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [],
       "Outputs": []
