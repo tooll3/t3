@@ -259,6 +259,7 @@ namespace T3.Editor.Gui.Graph
                                 {
                                     var count = Structure.CollectDependingSymbols(instance.Symbol).Count();
                                     LibWarningDialog.DependencyCount = count;
+                                    LibWarningDialog.HandledInstance = instance;
                                     GraphCanvas.LibWarningDialog.ShowNextFrame();
                                     blocked = true;
                                 }
