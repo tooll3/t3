@@ -146,7 +146,7 @@
         {
           "Id": "9df1f57c-a079-49c1-b537-d8eb08f2d0d3"/*Scale*/,
           "Type": "System.Single",
-          "Value": 0.27
+          "Value": 0.14
         }
       ],
       "Outputs": []
@@ -180,7 +180,7 @@
         {
           "Id": "df158fcf-3042-48cf-8383-7bf4c1bcb8a6"/*Size*/,
           "Type": "System.Single",
-          "Value": 0.0117
+          "Value": 0.0176
         }
       ],
       "Outputs": []
@@ -232,12 +232,12 @@
         {
           "Id": "f2baf278-adde-42de-afce-336b6c8d0387"/*RangeOutMin*/,
           "Type": "System.Single",
-          "Value": -3.0
+          "Value": -1.5
         },
         {
           "Id": "252276fb-8de1-42cc-ba41-07d6862015bd"/*RangeOutMax*/,
           "Type": "System.Single",
-          "Value": 3.0
+          "Value": 1.5
         }
       ],
       "Outputs": []
