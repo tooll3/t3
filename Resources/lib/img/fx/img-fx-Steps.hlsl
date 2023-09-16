@@ -34,7 +34,7 @@ float mod(float x, float y)
 
 int modi(int x, int y)
 {
-    return x > 0 ? (x % y)
+    return x >= 0 ? (x % y)
                  : y-(-x % -y);
 }
 
