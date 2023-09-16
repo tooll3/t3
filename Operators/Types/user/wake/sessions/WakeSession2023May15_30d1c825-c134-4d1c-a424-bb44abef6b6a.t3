@@ -398,11 +398,6 @@
             "Y": -0.00039999187,
             "Z": 0.0038000587
           }
-        },
-        {
-          "Id": "9c8c1407-bf6a-47c0-8c6c-2cd9f303151d"/*IsEnabled*/,
-          "Type": "System.Boolean",
-          "Value": true
         }
       ],
       "Outputs": []
@@ -989,11 +984,6 @@
           "Id": "02f34a62-bd83-47ac-962a-f1af6a92f0b8"/*Amount*/,
           "Type": "System.Single",
           "Value": 5.1
-        },
-        {
-          "Id": "77aa9e9a-b73c-4cf4-8b00-c5a9860cdeed"/*IsEnabled*/,
-          "Type": "System.Boolean",
-          "Value": true
         }
       ],
       "Outputs": []
