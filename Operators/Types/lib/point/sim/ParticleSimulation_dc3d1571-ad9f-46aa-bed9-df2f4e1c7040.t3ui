@@ -105,6 +105,14 @@
         "X": -944.52905,
         "Y": 1720.3457
       }
+    },
+    {
+      "InputId": "7bf0b7de-359f-4561-8725-5c3c3407e91b"/*ParticleEffects*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": -944.52905,
+        "Y": 1765.3457
+      }
     }
   ],
   "SymbolChildUis": [
@@ -144,8 +152,8 @@
     {
       "ChildId": "42690fd3-7ad6-40b2-ac8a-6398836df0af"/*ExecuteBufferUpdate*/,
       "Position": {
-        "X": 961.18585,
-        "Y": 198.08888
+        "X": 1029.7305,
+        "Y": 201.35292
       }
     },
     {
@@ -158,8 +166,8 @@
     {
       "ChildId": "826eafb2-932e-4f3b-b9ed-49ec677fce89"/*StructuredBufferWithViews*/,
       "Position": {
-        "X": 43.454315,
-        "Y": 1064.2103
+        "X": 19.267914,
+        "Y": 1075.7277
       }
     },
     {
@@ -263,8 +271,8 @@
     {
       "ChildId": "aef73640-a0a9-4cda-a400-558737c80d47"/*IntsToBuffer*/,
       "Position": {
-        "X": 425.21057,
-        "Y": 1138.215
+        "X": 466.8396,
+        "Y": 1117.4005
       }
     },
     {
@@ -280,14 +288,42 @@
         "X": -348.45117,
         "Y": 1727.3965
       }
+    },
+    {
+      "ChildId": "08ef9b48-86bf-4af9-acee-ba8e55a0f042"/*Execute*/,
+      "Position": {
+        "X": 816.48224,
+        "Y": 302.02975
+      }
+    },
+    {
+      "ChildId": "6f5217e5-4d51-454b-9fcf-a7950ba03db4"/*_SetParticleSystemComponents*/,
+      "Position": {
+        "X": 467.48425,
+        "Y": 1737.3015
+      }
+    },
+    {
+      "ChildId": "c6695168-24e7-4c7b-903c-93fae1649877"/*StructuredBufferWithViews*/,
+      "Position": {
+        "X": 8.211243,
+        "Y": 1184.9379
+      }
+    },
+    {
+      "ChildId": "262afe98-f96a-4b22-9ab3-63a909c81359"/*GetBufferComponents*/,
+      "Position": {
+        "X": 154.28027,
+        "Y": 1142.1926
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "fd2f84af-0925-418e-b3fa-edec6fa19df3"/*OutBuffer*/,
       "Position": {
-        "X": 1187.6602,
-        "Y": 195.9233
+        "X": 1256.2048,
+        "Y": 199.18733
       }
     }
   ]

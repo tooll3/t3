@@ -7,12 +7,11 @@ namespace T3.Operators.Types.Id_7a08d73e_1aea_479f_8d36_ecb119d75c3a
 {
     public class DirectionalForce : Instance<DirectionalForce>
     {
+        [Output(Guid = "de0ec6bf-6c23-46d2-9d8b-6f314037b2c8")]
+        public readonly Slot<T3.Core.DataTypes.ParticleSystem> Particles = new Slot<T3.Core.DataTypes.ParticleSystem>();
 
         [Output(Guid = "3517d466-d084-45e4-885a-8c7f6b16446e")]
         public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new Slot<T3.Core.DataTypes.BufferWithViews>();
-
-        [Input(Guid = "82746dde-ab65-4c49-a22f-cf9a50f4a3e9")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
         [Input(Guid = "1840e5b8-2aee-44d0-b826-d34395325506")]
         public readonly InputSlot<System.Numerics.Vector3> Direction = new InputSlot<System.Numerics.Vector3>();
@@ -28,6 +27,9 @@ namespace T3.Operators.Types.Id_7a08d73e_1aea_479f_8d36_ecb119d75c3a
 
         [Input(Guid = "a6b0a4da-2f6f-4941-b097-ed5e3dd6af0b")]
         public readonly InputSlot<T3.Core.Operator.GizmoVisibility> ShowGizmo = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+
+        [Input(Guid = "82746dde-ab65-4c49-a22f-cf9a50f4a3e9")]
+        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
         
         
         private enum Modes {

@@ -68,6 +68,10 @@ namespace T3.Operators.Types.Id_8bef116d_7d1c_4c1b_b902_25c1d5e925a9
             {
                 csStage.SetUnorderedAccessViews(0, _uavs, new[] { counter, -1, -1 });
             }
+            else if (_uavs.Length == 2)
+            {
+                csStage.SetUnorderedAccessViews(0, _uavs, new[] { -1, -1 });
+            }
             else
             {
                 csStage.SetUnorderedAccessViews(0, _uavs);

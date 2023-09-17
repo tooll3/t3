@@ -52,6 +52,9 @@ namespace T3.Operators.Types.Id_dc3d1571_ad9f_46aa_bed9_df2f4e1c7040
 
         [Input(Guid = "22670413-93a6-4743-8ef3-962a975410de")]
         public readonly InputSlot<float> InitialVelocity = new InputSlot<float>();
+
+        [Input(Guid = "7bf0b7de-359f-4561-8725-5c3c3407e91b")]
+        public readonly MultiInputSlot<T3.Core.DataTypes.ParticleSystem> ParticleEffects = new MultiInputSlot<T3.Core.DataTypes.ParticleSystem>();
     }
 }
 

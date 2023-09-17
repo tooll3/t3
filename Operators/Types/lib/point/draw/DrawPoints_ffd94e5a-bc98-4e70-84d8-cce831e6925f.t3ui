@@ -222,13 +222,6 @@
       }
     },
     {
-      "ChildId": "77e1fdb8-afb8-482c-829c-9a02e9a0e8ea"/*GetSRVProperties*/,
-      "Position": {
-        "X": 1240.2614,
-        "Y": 3853.566
-      }
-    },
-    {
       "ChildId": "c798588d-7e91-4dda-a644-9e012191f177"/*GetBufferComponents*/,
       "Position": {
         "X": 1081.5444,

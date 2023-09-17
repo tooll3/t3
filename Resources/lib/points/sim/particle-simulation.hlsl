@@ -19,6 +19,13 @@ cbuffer Params : register(b0)
     float InitialVelocity;
 }
 
+struct SimPoint
+{
+    float3 Velocity;
+    float w;
+    float4 Test;
+};
+
 cbuffer IntParams : register(b1)
 {
     int CollectCycleIndex;
@@ -26,6 +33,7 @@ cbuffer IntParams : register(b1)
 
 StructuredBuffer<Point> NewPoints : t0;
 RWStructuredBuffer<Point> CollectedPoints : u0;
+RWStructuredBuffer<SimPoint> SimPoints : u1; 
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
@@ -96,6 +104,7 @@ void main(uint3 i : SV_DispatchThreadID)
             float v = q_separate_v(p.rotation, rot);
 
             float3 forward =  normalize(rotate_vector(float3(0, 0, 1), rot));
+            forward+= SimPoints[i.x].Velocity;
 
             forward *= v * 0.01 * Speed;
             p.position += forward;

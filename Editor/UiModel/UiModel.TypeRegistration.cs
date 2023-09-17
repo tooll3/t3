@@ -109,6 +109,8 @@ public partial class UiSymbolData
                        () => new ValueOutputUi<T3.Core.Operator.GizmoVisibility>());
         RegisterUiType(typeof(T3.Core.DataTypes.Gradient), new ValueUiProperties(), () => new GradientInputUi(),
                        () => new ValueOutputUi<T3.Core.DataTypes.Gradient>());
+        RegisterUiType(typeof(T3.Core.DataTypes.LegacyParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<T3.Core.DataTypes.LegacyParticleSystem>(),
+                       () => new ValueOutputUi<T3.Core.DataTypes.LegacyParticleSystem>());
         RegisterUiType(typeof(T3.Core.DataTypes.ParticleSystem), new FallBackUiProperties(), () => new FallbackInputUi<T3.Core.DataTypes.ParticleSystem>(),
                        () => new ValueOutputUi<T3.Core.DataTypes.ParticleSystem>());
         RegisterUiType(typeof(Point[]), new PointListUiProperties(), () => new FallbackInputUi<Point[]>(),
@@ -122,6 +124,7 @@ public partial class UiSymbolData
 
         RegisterUiType(typeof(T3.Core.DataTypes.StructuredList), new ValueUiProperties(), () => new StructuredListInputUi(),
                        () => new StructuredListOutputUi());
+        
         RegisterUiType(typeof(T3.Core.DataTypes.Texture3dWithViews), new FallBackUiProperties(),
                        () => new FallbackInputUi<T3.Core.DataTypes.Texture3dWithViews>(),
                        () => new Texture3dOutputUi());

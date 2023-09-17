@@ -1,0 +1,21 @@
+{
+  "Name": "_SetParticleSystemComponents",
+  "Id": "705df4fe-8f91-4b1e-a7d1-432011ffcb3f",
+  "Namespace": "lib.point._internal",
+  "Inputs": [
+    {
+      "Id": "8b47ec1f-8537-47be-b31b-641bcea3bdfe"/*PointsBuffer*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "13583f72-3f77-4be0-b596-b8dbd27ca19c"/*PointsSimBuffer*/,
+      "DefaultValue": null
+    },
+    {
+      "Id": "73128257-d731-4065-b19a-c8fa21803cd4"/*Effects*/,
+      "DefaultValue": null
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}
