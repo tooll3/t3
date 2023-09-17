@@ -22,5 +22,11 @@ namespace T3.Operators.Types.Id_ed0f5188_8888_453e_8db4_20d87d18e9f4
         
         [Input(Guid = "E7C1F0AF-DA6D-4E33-AC86-7DC96BFE7EB3")]
         public readonly InputSlot<bool> BoolValue = new InputSlot<bool>();
+
+        [Input(Guid = "2c5cf823-1db6-44b0-af48-f202852d6c16")]
+        public readonly InputSlot<string> True = new InputSlot<string>();
+
+        [Input(Guid = "c6c398bc-07d5-48fa-80b9-93a8a246a570")]
+        public readonly InputSlot<string> False = new InputSlot<string>();
     }
 }
