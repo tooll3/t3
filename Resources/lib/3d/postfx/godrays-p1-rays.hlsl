@@ -30,6 +30,7 @@ cbuffer ParamConstants : register(b0)
     float BlurSize;
 
     float BlurOffset;
+    float Decay;
 }
 
 
@@ -103,13 +104,13 @@ float4 psMain(vsOutput input) : SV_TARGET
             float depth2 = Depth.SampleLevel(samLinear, p, 0).r;
             if (depth2 > input.lightPosInCam.z + ShiftDepth/100)
             {                
-                distanceToCenter = Intensity / (length(pos)*10);
-                c += float4(1,1,1,1)*distanceToCenter + Streaks;
+                distanceToCenter =  1 / pow(length(pos),Decay);
+                c += distanceToCenter + Streaks;
             }
         }        
         pos += dir;
     }
-    c /= 100;
+    c *= 0.001 * Intensity * RayColor.a;
     c *= RayColor;
     return c;
 }
