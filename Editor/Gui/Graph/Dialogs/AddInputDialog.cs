@@ -23,15 +23,27 @@ namespace T3.Editor.Gui.Graph.Dialogs
         {
             if (BeginDialog("Add parameter input"))
             {
+                var warning = string.Empty;
+                var isValid = GraphUtils.IsNewSymbolNameValid(_parameterName) && _selectedType != null;
+
+                if (!isValid)
+                {
+                    warning = "parameter must not contain spaces or non-special characters.";
+                }
+                else if(symbol.InputDefinitions.Exists(i => i.Name == _parameterName))
+                {
+                    warning = "Parameter name already exists.";
+                }
+                
                 FormInputs.SetIndent(100);
-                FormInputs.AddStringInput("Name", ref _parameterName);
+                FormInputs.AddStringInput("Name", ref _parameterName, "ParameterName", warning);
                 
                 FormInputs.DrawInputLabel("Type");
                 TypeSelector.Draw(ref _selectedType);
                 
                 FormInputs.AddCheckBox("Multi-Input", ref _multiInput);
 
-                var isValid = GraphUtils.IsNewSymbolNameValid(_parameterName) && _selectedType != null;
+
                 FormInputs.ApplyIndent();
                 if (CustomComponents.DisablableButton("Add", isValid))
                 {
