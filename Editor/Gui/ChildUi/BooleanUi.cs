@@ -41,7 +41,6 @@ namespace T3.Editor.Gui.ChildUi
                             ? refValue ? "True" : "False"
                             : symbolChild.ReadableName;
             ImGui.TextUnformatted(label);
-
             ImGui.PopClipRect();
             ImGui.PopID();
             return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
