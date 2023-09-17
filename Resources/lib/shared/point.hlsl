@@ -13,6 +13,7 @@ struct Point
 #define PI 3.14159265359f
 #endif 
 
+const static float NAN = sqrt(-1);
 
 #ifndef mod
 #define mod(x, y) ((x) - (y) * floor((x) / (y)))

@@ -60,21 +60,13 @@
       "Position": {
         "X": -1006.439,
         "Y": 2296.9104
-      },
-      "GroupTitle": "Volume"
+      }
     },
     {
       "InputId": "8387dc9d-e536-4e0a-a650-46feddbea91b"/*ClampResult*/,
       "Position": {
         "X": -945.5289,
         "Y": 2371.6833
-      }
-    },
-    {
-      "InputId": "5264a72d-679e-4921-a086-42ef5b88469e"/*MaxAcceleration*/,
-      "Position": {
-        "X": -1318.1482,
-        "Y": 2424.6748
       }
     },
     {
@@ -89,13 +81,6 @@
       "Position": {
         "X": -947.6117,
         "Y": 2555.9817
-      }
-    },
-    {
-      "InputId": "48d1a0b2-c468-412c-a798-0b331cf008cb"/*DiscardNonSelected*/,
-      "Position": {
-        "X": -947.6117,
-        "Y": 2600.9817
       }
     },
     {
@@ -125,6 +110,41 @@
       "Position": {
         "X": -961.77155,
         "Y": 3027.815
+      }
+    },
+    {
+      "InputId": "ceb7008d-c536-4d87-b3f8-d5ba9fe29eed"/*Bounciness*/,
+      "Position": {
+        "X": -961.77155,
+        "Y": 3072.815
+      }
+    },
+    {
+      "InputId": "3b975bd9-b8aa-4a41-97fc-ccd3b5e89e63"/*Attraction*/,
+      "Position": {
+        "X": -961.77155,
+        "Y": 3117.815
+      }
+    },
+    {
+      "InputId": "d6bf8d83-542b-44ee-bd35-f631179f8d0c"/*AttractionDecay*/,
+      "Position": {
+        "X": -961.77155,
+        "Y": 3162.815
+      }
+    },
+    {
+      "InputId": "5264a72d-679e-4921-a086-42ef5b88469e"/*MaxAcceleration*/,
+      "Position": {
+        "X": -961.77155,
+        "Y": 3207.815
+      }
+    },
+    {
+      "InputId": "7c6f58e7-27fc-4271-adef-248cffe5a8b7"/*Repulsion*/,
+      "Position": {
+        "X": -974.2911,
+        "Y": 3285.1199
       }
     }
   ],
@@ -216,13 +236,6 @@
       "Position": {
         "X": 1268.3878,
         "Y": 2259.2554
-      }
-    },
-    {
-      "ChildId": "09bec136-db4f-421e-9380-16aa3d245b3f"/*BoolToFloats*/,
-      "Position": {
-        "X": -797.6117,
-        "Y": 2600.9817
       }
     },
     {

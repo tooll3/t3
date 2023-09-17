@@ -4,12 +4,12 @@
   "Namespace": "lib.point.generate",
   "Inputs": [
     {
-      "Id": "6a2cb3f0-3b5a-4551-a809-3dc172bb7d79"/*TrailLength*/,
-      "DefaultValue": 100
-    },
-    {
       "Id": "4389838c-fd1d-4400-b8e5-f373a05adff7"/*GPoints*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "6a2cb3f0-3b5a-4551-a809-3dc172bb7d79"/*TrailLength*/,
+      "DefaultValue": 100
     },
     {
       "Id": "bcb7260e-8a84-4987-83ca-f31981ae94aa"/*IsEnabled*/,

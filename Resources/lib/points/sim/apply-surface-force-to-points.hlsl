@@ -5,23 +5,23 @@
 cbuffer Params : register(b0)
 {
     float4x4 TransformVolume;
+
     float FallOff;
     float Bias;
     float VolumeShape;
     float SelectMode;
+
     float ClampResult;
     float Strength;
     float Phase;
     float Threshold;
-    float DiscardNonSelected;
 
-
-    float3 Center;
+    float Bounciness;
+    float Attraction;
+    float AttractionDecay;
     float MaxAcceleration;
-    float Acceleration;
-    float DecayExponent;
-    // float ApplyMovement;
-    // float Mode;
+
+    float Repulsion;
 }
 
 RWStructuredBuffer<Point> Points : u0; 
@@ -47,17 +47,19 @@ void main(uint3 i : SV_DispatchThreadID)
     if(i.x >= numStructs) 
         return;
 
+    if (isnan(Points[i.x].w))
+        return;
+        
     float3 pos = Points[i.x].position;
     float4 rot = Points[i.x].rotation;
 
-    if (isnan(Points[i.x].w))
-    {
-        return;
-    }
 
-    float3 posInObject = Points[i.x].position;
-
-    float3 posInVolume = mul(float4(posInObject, 1), TransformVolume).xyz;
+    float4 normalizedRot;
+    float v = q_separate_v(rot, normalizedRot);
+    float3 forward = rotate_vector(float3(0,0, v), normalizedRot);
+    float3 posInVolume = mul(float4(pos, 1), TransformVolume).xyz;
+    //v = 1;
+    float3 posInVolumeNext = mul(float4(pos + forward *v * 0.01, 1), TransformVolume).xyz;
 
     float s = 1;
 
@@ -89,25 +91,40 @@ void main(uint3 i : SV_DispatchThreadID)
     //     s = smoothstep(Threshold + FallOff, Threshold, noise);
     // }
 
-    float distance = length(posInVolume)*2  ;
-    s = (smoothstep(1 + FallOff, 1- FallOff, distance) - 0.5)*5;
-    //float accumulate = smoothstep()
+    //float3 force =0;
+    float3 force = float3(0,-0.01,0);
+    float rUnitSphere = 0.5;
+    float distance = length(posInVolume) - rUnitSphere;
+    float distance2 = length(posInVolumeNext) - rUnitSphere;
+    float3 surfaceN = normalize(posInVolume);
+    
+    if(sign( distance * distance2) <0  && distance > 0) 
+    {
+        //Points[i.x].position += float3(1,0,0);
+        forward = reflect(forward, surfaceN) * Bounciness;
 
-    float3 forceToSurface = posInVolume/(distance+0.0001) *s;
+    } 
+    else 
+    {
+        if(distance < 0) {
+            force = surfaceN * Repulsion;
+        }
+        else 
+        {
+            force = -surfaceN * Attraction;
 
+        }
+        forward += force;
+    }   
+    //Points[i.x].w =  distance2 - distance;
 
-
-    // float3 direction = pos-Center;
-    // float distance = length(direction);
-
-    // float force = clamp( Acceleration/ pow(distance, DecayExponent), -MaxAcceleration, MaxAcceleration);
-
-    float4 normalizedRot;
-    float v = q_separate_v(rot, normalizedRot);
-    float3 forward = rotate_vector(float3(0,0, v), normalizedRot);
-    forward += forceToSurface;
+    // s = clamp( (smoothstep(1 + FallOff, 1- FallOff, distance) - 0.5),-10,0) * Bounciness;
+    // float3 force = posInVolume/(distance+0.0001) *s;
 
     float newV = length(forward);
+    // if(newV == 0) {
+    //     forward= float3(0,0,1);
+    // }
     float4 newRotation = q_look_at(normalize(forward), float3(0,0,1));
     Points[i.x].rotation = q_encode_v(newRotation, newV);    
 }

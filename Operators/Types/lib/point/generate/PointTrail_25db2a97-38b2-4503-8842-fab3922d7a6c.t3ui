@@ -2,6 +2,14 @@
   "Id": "25db2a97-38b2-4503-8842-fab3922d7a6c"/*PointTrail*/,
   "InputUis": [
     {
+      "InputId": "4389838c-fd1d-4400-b8e5-f373a05adff7"/*GPoints*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -1214.1729,
+        "Y": -243.8945
+      }
+    },
+    {
       "InputId": "6a2cb3f0-3b5a-4551-a809-3dc172bb7d79"/*TrailLength*/,
       "Position": {
         "X": -1154.5363,
@@ -9,14 +17,6 @@
       },
       "Min": 1,
       "Clamp": true
-    },
-    {
-      "InputId": "4389838c-fd1d-4400-b8e5-f373a05adff7"/*GPoints*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -1162.7197,
-        "Y": 488.0679
-      }
     },
     {
       "InputId": "bcb7260e-8a84-4987-83ca-f31981ae94aa"/*IsEnabled*/,

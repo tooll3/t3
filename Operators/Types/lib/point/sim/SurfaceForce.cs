@@ -49,17 +49,11 @@ namespace T3.Operators.Types.Id_fbe1a703_f372_4236_9f20_5d0b69183843
         [Input(Guid = "8387dc9d-e536-4e0a-a650-46feddbea91b")]
         public readonly InputSlot<bool> ClampResult = new InputSlot<bool>();
 
-        [Input(Guid = "5264a72d-679e-4921-a086-42ef5b88469e")]
-        public readonly InputSlot<float> MaxAcceleration = new InputSlot<float>();
-
         [Input(Guid = "09a5476c-78e3-45dc-a9a3-f3bd170bbf05")]
         public readonly InputSlot<float> Phase = new InputSlot<float>();
 
         [Input(Guid = "f6efb038-fdea-439c-b25c-5cdf76f15b2b")]
         public readonly InputSlot<float> Threshold = new InputSlot<float>();
-
-        [Input(Guid = "48d1a0b2-c468-412c-a798-0b331cf008cb")]
-        public readonly InputSlot<bool> DiscardNonSelected = new InputSlot<bool>();
 
         [Input(Guid = "cf741b95-e3d1-4f43-99e9-15fcdaa6b648")]
         public readonly InputSlot<float> Strength = new InputSlot<float>();
@@ -72,6 +66,21 @@ namespace T3.Operators.Types.Id_fbe1a703_f372_4236_9f20_5d0b69183843
 
         [Input(Guid = "0db5c531-721d-403e-9154-e31f6be20ec6")]
         public readonly InputSlot<T3.Core.Operator.GizmoVisibility> GizmoVisibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+
+        [Input(Guid = "ceb7008d-c536-4d87-b3f8-d5ba9fe29eed")]
+        public readonly InputSlot<float> Bounciness = new InputSlot<float>();
+
+        [Input(Guid = "3b975bd9-b8aa-4a41-97fc-ccd3b5e89e63")]
+        public readonly InputSlot<float> Attraction = new InputSlot<float>();
+
+        [Input(Guid = "d6bf8d83-542b-44ee-bd35-f631179f8d0c")]
+        public readonly InputSlot<float> AttractionDecay = new InputSlot<float>();
+
+        [Input(Guid = "5264a72d-679e-4921-a086-42ef5b88469e")]
+        public readonly InputSlot<float> MaxAcceleration = new InputSlot<float>();
+
+        [Input(Guid = "7c6f58e7-27fc-4271-adef-248cffe5a8b7")]
+        public readonly InputSlot<float> Repulsion = new InputSlot<float>();
 
 
         
