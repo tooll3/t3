@@ -1,31 +1,77 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Numerics;
+using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using T3.Operators.Types.Id_ed0f5188_8888_453e_8db4_20d87d18e9f4;
 using Icon = T3.Editor.Gui.Styling.Icon;
+using String = T3.Operators.Types.Id_ed0f5188_8888_453e_8db4_20d87d18e9f4.Boolean;
+
 
 namespace T3.Editor.Gui.ChildUi
 {
+
+
     public static class BooleanUi
     {
         public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
         {
+
+            //we try to get the State strings
+            if (!(instance is String stringInstance))
+                return SymbolChildUi.CustomUiResult.None;
+
+            var v = stringInstance.True.TypedInputValue.Value;
+            var w = stringInstance.False.TypedInputValue.Value;
+
+            /*if (string.IsNullOrEmpty(v))
+            {
+                //v = "on";
+
+                v = "on";
+              
+            }
+
+            if (string.IsNullOrEmpty(w))
+            {
+                w = "off";
+            }*/
+            // end of getting the strings
+
             if (!(instance is Boolean boolean)
-                || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
+                || !ImGui.IsRectVisible(screenRect.Min+ new Vector2(4,4), screenRect.Max+new Vector2(4, 4)))
                 return SymbolChildUi.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
-
+            screenRect.Expand(-4);
             ImGui.SetCursorScreenPos(screenRect.Min + new Vector2(2, 2));
             var symbolChild = instance.Parent.Symbol.Children.Single(c => c.Id == instance.SymbolChildId);
             ImGui.PushClipRect(screenRect.Min, screenRect.Max, true);
 
-            var refValue = boolean.BoolValue.Value; // we reference here to show correct state when connected
+            var refValue = boolean.BoolValue.Value;
+            var label = string.IsNullOrEmpty(symbolChild.Name)
+                            ? refValue ? "True" : "False"
+                            : symbolChild.ReadableName;// we reference here to show correct state when connected
+            
+            //if (CustomComponents.ToggleIconButton(Icon.Checkmark, "", ref refValue, new Vector2(20, 20)) || CustomComponents.ToggleButton($"{label}", ref refValue, screenRect.GetSize()))
+            //if (CustomComponents.ToggleButton($"{label}{(refValue ? $" {v}" : $" {w}")}", ref refValue, screenRect.GetSize()))
+            if (CustomComponents.ToggleButton($"{label}{(refValue ? $" {v}" : $" {w}")}", ref refValue, new Vector2((screenRect.Max.X - screenRect.Min.X)-30, screenRect.Max.Y - screenRect.Min.Y)))
+            {
+               OnClickBehavior(ref refValue);
+            }
 
-            if (CustomComponents.ToggleIconButton(Icon.Checkmark, "", ref refValue, new Vector2(20, 20)))
+            ImGui.SameLine();
+
+            if (ImGui.Checkbox("", ref refValue))
+            {
+                OnClickBehavior(ref refValue);
+            }
+
+            void OnClickBehavior(ref bool refValue)
             {
                 if (!boolean.BoolValue.IsConnected)
                 {
@@ -36,10 +82,8 @@ namespace T3.Editor.Gui.ChildUi
                 boolean.BoolValue.DirtyFlag.Invalidate();
             }
 
-            ImGui.SameLine();
-            var label = string.IsNullOrEmpty(symbolChild.Name)
-                            ? refValue ? "True" : "False"
-                            : symbolChild.ReadableName;
+            //ImGui.GetStyle().Colors[ImGuiCol.Button] = new Vector4(0.2f, 0.8f, 0.2f, 1.0f); // Green color
+            //ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.2f, 0.8f, 0.2f, 1.0f));
             ImGui.TextUnformatted(label);
             ImGui.PopClipRect();
             ImGui.PopID();
