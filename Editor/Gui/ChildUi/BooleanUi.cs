@@ -65,6 +65,16 @@ namespace T3.Editor.Gui.ChildUi
             }
 
             ImGui.SameLine();
+           
+
+            // Calculate checkbox size and position
+            var checkboxSize = new Vector2(20, 20);
+            var checkboxPos = screenRect.Min + new Vector2((screenRect.Max.X - screenRect.Min.X) - 24, ((screenRect.GetHeight() - checkboxSize.Y) / 2)-2);
+
+            // Draw the checkbox
+            ImGui.SetCursorScreenPos(checkboxPos);
+            
+
 
             if (ImGui.Checkbox("", ref refValue))
             {
