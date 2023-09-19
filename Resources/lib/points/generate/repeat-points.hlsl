@@ -13,7 +13,7 @@ StructuredBuffer<Point> SourcePoints : t0;         // input
 StructuredBuffer<Point> TargetPoints : t1;         // input
 RWStructuredBuffer<Point> ResultPoints : u0;    // output
 
-static const float NAN = sqrt(-1);
+//static const float NAN = sqrt(-1);
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)

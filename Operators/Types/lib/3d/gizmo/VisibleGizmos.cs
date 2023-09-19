@@ -1,5 +1,7 @@
 using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.IO;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -33,12 +35,27 @@ namespace T3.Operators.Types.Id_d61d7192_9ca3_494e_91e2_10a530ee9375
 
                 _updatedOnce = true;
             }
-            
-            
-            if (visibility != T3.Core.Operator.GizmoVisibility.On)
+
+
+            var showIfSelected = false;
+            if (visibility == T3.Core.Operator.GizmoVisibility.IfSelected)
+            {
+                Instance op = this;
+                while (op != null)
+                {
+                    if (MouseInput.SelectedChildId == op.SymbolChildId)
+                    {
+                        showIfSelected = true;
+                        break;
+                    }
+
+                    op = op.Parent;
+                }
+            }
+
+            if (visibility != T3.Core.Operator.GizmoVisibility.On && !showIfSelected)
                 return;
-
-
+            
             
             if (commands.Count == 0)
             {

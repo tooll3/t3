@@ -111,18 +111,6 @@
       }
     },
     {
-      "ChildId": "66749bd3-1a56-4ed3-be17-c08249ba0565"/*_ImageFxShaderSetup2*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 137.52068,
-        "Y": 520.0926
-      },
-      "Position": {
-        "X": 611.80255,
-        "Y": 407.22067
-      }
-    },
-    {
       "ChildId": "25c48790-15e9-4f3c-a509-8dc9efa54ede"/*Vector2ToFloat2*/,
       "Position": {
         "X": 242.25406,

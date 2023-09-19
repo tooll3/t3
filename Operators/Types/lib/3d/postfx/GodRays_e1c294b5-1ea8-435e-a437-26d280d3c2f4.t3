@@ -76,6 +76,10 @@
     {
       "Id": "b64c4ece-8b59-4b32-a5fe-b99006286987"/*CameraReference*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "ea737eeb-e936-48c0-aaa7-8247fea95228"/*Decay*/,
+      "DefaultValue": 1.0
     }
   ],
   "Children": [
@@ -886,6 +890,12 @@
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "SourceSlotId": "5129404e-54c5-4c5a-9736-69361bb3077d",
+      "TargetParentOrChildId": "e0c6c469-895d-4d91-8920-9a545f42ed7a",
+      "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "ea737eeb-e936-48c0-aaa7-8247fea95228",
       "TargetParentOrChildId": "e0c6c469-895d-4d91-8920-9a545f42ed7a",
       "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
     },

@@ -483,7 +483,12 @@
         {
           "Id": "dc99dcb5-481e-4b43-afdf-ad6d318ed24f"/*Count*/,
           "Type": "System.Single",
-          "Value": 6.98
+          "Value": 6.0
+        },
+        {
+          "Id": "85d5e801-f9f2-41d6-9d7b-3fbfda781fca"/*Bias*/,
+          "Type": "System.Single",
+          "Value": 0.57
         },
         {
           "Id": "4ceccd98-d61e-4870-9b57-1c9ca84f3e23"/*Offset*/,
@@ -544,28 +549,33 @@
               "Interpolation": "Linear",
               "Steps": [
                 {
-                  "Id": "073c7335-041a-4e55-8360-051aee062b56",
-                  "NormalizedPosition": 0.10194175,
-                  "Color": {
-                    "R": 0.12546128,
-                    "G": 0.12546003,
-                    "B": 0.12546216,
-                    "A": 0.0
-                  }
-                },
-                {
                   "Id": "1791c77e-7377-4ca9-bd53-101538d020d5",
-                  "NormalizedPosition": 1.0,
+                  "NormalizedPosition": 0.0,
                   "Color": {
                     "R": 0.0,
                     "G": 1.168251E-11,
                     "B": 1E-06,
                     "A": 0.54545456
                   }
+                },
+                {
+                  "Id": "073c7335-041a-4e55-8360-051aee062b56",
+                  "NormalizedPosition": 0.19522777,
+                  "Color": {
+                    "R": 0.12546128,
+                    "G": 0.12546003,
+                    "B": 0.12546216,
+                    "A": 0.0
+                  }
                 }
               ]
             }
           }
+        },
+        {
+          "Id": "eae96c29-6f21-43b2-b17e-eb9e140863ab"/*UseSuperSampling*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
       "Outputs": []

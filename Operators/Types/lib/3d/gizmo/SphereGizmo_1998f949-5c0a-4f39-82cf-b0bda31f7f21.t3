@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "15f73f4f-a4f1-4ff0-aba5-074ea2d328bc"/*Radius*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 1.0
     },
     {
       "Id": "188c2244-e55a-4c55-be93-cccbd6fd4e41"/*Color*/,

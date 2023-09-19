@@ -828,6 +828,17 @@ namespace T3.Editor.Gui.Graph
             }
 
             ImGui.Separator();
+
+            if (ImGui.MenuItem("Change Symbol", someOpsSelected))
+            {
+                var startingSearchString = selectedChildUis[0].SymbolChild.Symbol.Name;
+                var position = selectedChildUis.Count == 1 ? selectedChildUis[0].PosOnCanvas : InverseTransformPositionFloat(ImGui.GetMousePos());
+                SymbolBrowser.OpenAt(position, null, null, false, startingSearchString, symbol =>
+                    {
+                        ChangeSymbol.ChangeOperatorSymbol(CompositionOp, selectedChildUis, symbol);
+                    });
+            }
+
             if (ImGui.BeginMenu("Symbol definition..."))
             {
                 if (ImGui.MenuItem("Rename Symbol", oneOpSelected))

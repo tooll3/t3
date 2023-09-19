@@ -196,14 +196,16 @@ float4 psMain(psInput input) : SV_TARGET
             discard;
         }
 
-        bool isNegative = floatValue < 0;
+        bool isNegative = floatValue < -0.0001;
         
-        if(isNegative)
+        if(isNegative) {
             floatValue *= -1;
+        }
+
 
         const int decimalPosition = 3;
 
-        // Add gap for decimeal point
+        // Add gap for decimal point
         if(decimalIndex.x == decimalPosition) 
         {
             bool bit = characters[pInDigit.y] >> ((10 - 3) * 3 - pInDigit.x-1) & 1;
@@ -221,7 +223,7 @@ float4 psMain(psInput input) : SV_TARGET
 
         if( requiredDigitCount < decimalIndex.x -1 - (needsLeadingZero ? 1:0)  ) 
         {
-            if(isNegative && requiredDigitCount== decimalIndex.x -2) {
+            if(isNegative && requiredDigitCount== decimalIndex.x -2 - ((needsLeadingZero ? 1:0))) {
                 bool bit = characters[pInDigit.y] >> ((10 - MinusCharIndex) * 3 - pInDigit.x-1) & 1;
                 if(bit)
                     return Color;

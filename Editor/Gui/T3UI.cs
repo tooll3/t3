@@ -184,16 +184,15 @@ public class T3Ui
         {
             UserSettings.Config.FullScreen = !UserSettings.Config.FullScreen;
         }
-        else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode))
-        {
-            var shouldBeFocusMode = !UserSettings.Config.FocusMode;
-            UserSettings.Config.FocusMode = shouldBeFocusMode;
-            
-            UserSettings.Config.ShowToolbar = shouldBeFocusMode;
-            ToggleAllUiElements();
-            
-            LayoutHandling.LoadAndApplyLayoutOrFocusMode(shouldBeFocusMode ? 11 : UserSettings.Config.WindowLayoutIndex);
-        }
+        else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode)) ToggleFocusMode();
+    }
+
+    private static void ToggleFocusMode() {
+        var shouldBeFocusMode = !UserSettings.Config.FocusMode;
+        UserSettings.Config.FocusMode = shouldBeFocusMode;
+        UserSettings.Config.ShowToolbar = shouldBeFocusMode;
+        ToggleAllUiElements();
+        LayoutHandling.LoadAndApplyLayoutOrFocusMode(shouldBeFocusMode ? 11 : UserSettings.Config.WindowLayoutIndex);
     }
         
     private void DrawAppMenuBar()
@@ -312,11 +311,39 @@ public class T3Ui
                 }
                     
                 ImGui.Separator();
-                ImGui.MenuItem("Full screen", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFullscreen, false), ref UserSettings.Config.FullScreen);
-
-                if (ImGui.MenuItem("Focus Mode", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), ref UserSettings.Config.FocusMode))
+                if (ImGui.BeginMenu("Main Window Fullscreen Destination"))
                 {
-                    LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
+                    for (var index = 0; index < EditorUi.AllScreens.Length; index++)
+                    {
+                        var screen = EditorUi.AllScreens.ElementAt(index);
+                        var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
+                            $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
+                        if(ImGui.MenuItem(label, "", index ==  UserSettings.Config.FullScreenIndexMain)) 
+                        {
+                            UserSettings.Config.FullScreenIndexMain = index;
+                        }
+                    }
+                    ImGui.EndMenu();
+                }
+                if(ImGui.BeginMenu("Viewer Window Fullscreen Destination"))
+                {
+                    for (var index = 0; index < EditorUi.AllScreens.Length; index++)
+                    {
+                        var screen = EditorUi.AllScreens.ElementAt(index);
+                        var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
+                            $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
+                        if(ImGui.MenuItem(label, "", index ==  UserSettings.Config.FullScreenIndexViewer)) 
+                        {
+                            UserSettings.Config.FullScreenIndexViewer = index;
+                        }
+                    }
+                    ImGui.EndMenu();
+                }
+
+                ImGui.MenuItem("Fullscreen", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFullscreen, false), ref UserSettings.Config.FullScreen);
+                if (ImGui.MenuItem("Focus Mode", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), UserSettings.Config.FocusMode))
+                {
+                    ToggleFocusMode();
                 }
                 ImGui.EndMenu();
             }
@@ -327,7 +354,6 @@ public class T3Ui
                 ImGui.EndMenu();
             }
 
-            
             if (UserSettings.Config.FullScreen)
             {
                 ImGui.Dummy(new Vector2(10,10));
@@ -349,7 +375,7 @@ public class T3Ui
     }
 
 
-    private void ToggleAllUiElements()
+    private static void ToggleAllUiElements()
     {
         //T3Ui.MaximalView = !T3Ui.MaximalView;
         if (UserSettings.Config.ShowToolbar)

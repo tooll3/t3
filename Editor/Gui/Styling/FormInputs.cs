@@ -366,8 +366,6 @@ namespace T3.Editor.Gui.Styling
         
         
         
-        
-
         public static void AddHint(string label)
         {
             if (string.IsNullOrEmpty(label))
@@ -439,7 +437,7 @@ namespace T3.Editor.Gui.Styling
             if (string.IsNullOrEmpty(warning))
                 return;
 
-            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 10);
+            ImGui.SetCursorPosX(MathF.Max(LeftParameterPadding, 0) + 20);
             ImGui.PushFont(Fonts.FontSmall);
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusError.Rgba);
             ImGui.TextUnformatted(warning);

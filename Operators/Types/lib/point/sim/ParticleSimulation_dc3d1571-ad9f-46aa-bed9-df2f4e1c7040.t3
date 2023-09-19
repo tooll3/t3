@@ -144,7 +144,7 @@
         {
           "Id": "2ff3d674-90d7-4c8f-8551-aad9992540db"/*Modulo*/,
           "Type": "System.Int32",
-          "Value": 99999
+          "Value": 0
         }
       ],
       "Outputs": []
