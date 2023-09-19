@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -43,6 +43,7 @@ namespace T3.Editor.Gui.Windows
                 {
                     _logEntries.Clear();
                 }
+                Log.Info("Console cleared!");
             }
 
             ImGui.SameLine();
