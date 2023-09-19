@@ -3,14 +3,6 @@
   "Description": "Repells particles of primitive volumes.",
   "InputUis": [
     {
-      "InputId": "a5931f67-3724-4bfc-bed2-c2f490b23c74"/*Points*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -847.6671,
-        "Y": 1374.1503
-      }
-    },
-    {
       "InputId": "e3485fea-3a75-47f9-9a7d-ea69f4feb5f6"/*VolumeCenter*/,
       "Position": {
         "X": -935.70306,
@@ -176,24 +168,10 @@
       }
     },
     {
-      "ChildId": "dc3dc8a1-1dc4-4f78-8c32-f9a1b7f0fb62"/*ExecuteBufferUpdate*/,
-      "Position": {
-        "X": 1600.4463,
-        "Y": 1473.4531
-      }
-    },
-    {
       "ChildId": "428ef171-5840-490e-acde-fd673ae18985"/*CalcDispatchCount*/,
       "Position": {
         "X": 1078.9253,
         "Y": 1467.5566
-      }
-    },
-    {
-      "ChildId": "c9e8bb76-f6dd-4f0f-996d-e380831be437"/*GetBufferComponents*/,
-      "Position": {
-        "X": 599.21533,
-        "Y": 1541.249
       }
     },
     {
@@ -234,8 +212,8 @@
     {
       "ChildId": "c63e9136-e7e3-430b-b278-30915e4800dd"/*VisibleGizmos*/,
       "Position": {
-        "X": 1268.3878,
-        "Y": 2259.2554
+        "X": 1256.9854,
+        "Y": 2447.397
       }
     },
     {
@@ -279,14 +257,35 @@
         "X": 288.87268,
         "Y": 2393.891
       }
+    },
+    {
+      "ChildId": "5687b828-dadf-474c-80ee-e981a1342bd5"/*_ExecuteParticleUpdate*/,
+      "Position": {
+        "X": 1788.4517,
+        "Y": 1733.6287
+      }
+    },
+    {
+      "ChildId": "97da2ad6-0525-4a68-866f-fd8a9ff55058"/*HasTimeChanged*/,
+      "Position": {
+        "X": 1619.6733,
+        "Y": 1974.8481
+      }
+    },
+    {
+      "ChildId": "c76d94aa-e938-490b-be9b-3068c9c9749c"/*GetParticleComponents*/,
+      "Position": {
+        "X": 742.736,
+        "Y": 1719.2039
+      }
     }
   ],
   "OutputUis": [
     {
-      "OutputId": "467cad1e-d5d4-493e-9003-c450d48ddf6c"/*Result2*/,
+      "OutputId": "13b7dbbc-d418-4bd5-a8a1-182df2071a25"/*ParticleSystem*/,
       "Position": {
-        "X": 2232.3826,
-        "Y": 1504.6046
+        "X": 2228.2778,
+        "Y": 1465.266
       }
     }
   ],

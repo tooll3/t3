@@ -5,6 +5,12 @@ struct Point
     float4 rotation;
 };
 
+struct SimPoint
+{
+    float3 Velocity;
+    float BirthTime;
+    float4 __extra;
+};
 
 
 #define QUATERNION_IDENTITY float4(0, 0, 0, 1)

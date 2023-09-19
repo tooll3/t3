@@ -25,6 +25,7 @@ cbuffer Params : register(b0)
 }
 
 RWStructuredBuffer<Point> Points : u0; 
+RWStructuredBuffer<SimPoint> SimPoints : u1; 
 
 static const int VolumeSphere = 0;
 static const int VolumeBox = 1;
@@ -44,24 +45,24 @@ void main(uint3 i : SV_DispatchThreadID)
 {
     uint numStructs, stride;
     Points.GetDimensions(numStructs, stride);
-    if(i.x >= numStructs) 
-        return;
+    // if(i.x >= numStructs) 
+    //     return;
 
-    if (isnan(Points[i.x].w))
-        return;
+    // if (isnan(Points[i.x].w))
+    //     return;
         
     float3 pos = Points[i.x].position;
     float4 rot = Points[i.x].rotation;
+    float3 velocity = SimPoints[i.x].Velocity;    
 
-
-    float4 normalizedRot;
-    float v = q_separate_v(rot, normalizedRot);
-    float3 forward = rotate_vector(float3(0,0, v), normalizedRot);
+    // float4 normalizedRot;
+    // float v = q_separate_v(rot, normalizedRot);
+    // float3 forward = rotate_vector(float3(0,0, v), normalizedRot);
     float3 posInVolume = mul(float4(pos, 1), TransformVolume).xyz;
     //v = 1;
-    float3 posInVolumeNext = mul(float4(pos + forward *v * 0.01, 1), TransformVolume).xyz;
+    float3 posInVolumeNext = mul(float4(pos + velocity * 0.01, 1), TransformVolume).xyz;
 
-    float s = 1;
+    //float s = 1;
 
     // if (VolumeShape < VolumeSphere)
     // {
@@ -101,7 +102,7 @@ void main(uint3 i : SV_DispatchThreadID)
     if(sign( distance * distance2) <0  && distance > 0) 
     {
         //Points[i.x].position += float3(1,0,0);
-        forward = reflect(forward, surfaceN) * Bounciness;
+        velocity = reflect(velocity, surfaceN) * Bounciness;
 
     } 
     else 
@@ -114,18 +115,27 @@ void main(uint3 i : SV_DispatchThreadID)
             force = -surfaceN * Attraction;
 
         }
-        forward += force;
+        velocity += force;
     }   
     //Points[i.x].w =  distance2 - distance;
 
     // s = clamp( (smoothstep(1 + FallOff, 1- FallOff, distance) - 0.5),-10,0) * Bounciness;
     // float3 force = posInVolume/(distance+0.0001) *s;
 
-    float newV = length(forward);
+    //float newV = length(velocity);
     // if(newV == 0) {
     //     forward= float3(0,0,1);
     // }
-    float4 newRotation = q_look_at(normalize(forward), float3(0,0,1));
-    Points[i.x].rotation = q_encode_v(newRotation, newV);    
+    //float4 newRotation = q_look_at(normalize(velocity), float3(0,0,1));
+    //Points[i.x].rotation = q_encode_v(newRotation, newV);    
+    //velocity = 0.42 * 0.2;
+    //Points[i.x].position += 0.042;
+
+    //Points[i.x].w = velocity.x * 0.12;
+    //Points[i.x].position.y = 1;
+    //Points[i.x].position =0;
+    SimPoints[i.x].Velocity = velocity;
+    //SimPoints[i.x].Velocity.y = 0.2;
+    //Points[i.x].position = SimPoints[i.x].Velocity;
 }
 

@@ -42,8 +42,8 @@
     {
       "InputId": "82746dde-ab65-4c49-a22f-cf9a50f4a3e9"/*GPoints*/,
       "Position": {
-        "X": 542.28876,
-        "Y": 1417.44
+        "X": -416.99283,
+        "Y": 1004.399
       }
     }
   ],
@@ -75,24 +75,10 @@
       }
     },
     {
-      "ChildId": "32a670cf-dd59-4b5f-a436-dc8f935fb706"/*ExecuteBufferUpdate*/,
-      "Position": {
-        "X": 1740.0514,
-        "Y": 777.4652
-      }
-    },
-    {
       "ChildId": "19648c5d-ee05-4219-af5e-6e3782376cd6"/*CalcDispatchCount*/,
       "Position": {
         "X": 963.3025,
         "Y": 347.19037
-      }
-    },
-    {
-      "ChildId": "a8cd9525-e9e5-4408-ab28-c102c630cf11"/*GetBufferComponents*/,
-      "Position": {
-        "X": 782.1455,
-        "Y": 1312.7429
       }
     },
     {
@@ -105,8 +91,8 @@
     {
       "ChildId": "144c10ce-c2f3-4268-b875-02528951e410"/*HasTimeChanged*/,
       "Position": {
-        "X": 1462.7872,
-        "Y": 520.8036
+        "X": 1447.5118,
+        "Y": 440.35428
       }
     },
     {
@@ -168,8 +154,8 @@
     {
       "ChildId": "366ad9f3-6d9b-4d9c-a3de-7743d325b7a1"/*Execute*/,
       "Position": {
-        "X": 1431.6069,
-        "Y": 353.59982
+        "X": 1446.882,
+        "Y": 312.86597
       }
     },
     {
@@ -210,8 +196,8 @@
     {
       "ChildId": "fc01a822-bfb0-49da-a7be-e12a7d793e06"/*_ExecuteParticleUpdate*/,
       "Position": {
-        "X": 1742.1671,
-        "Y": 335.528
+        "X": 1596.882,
+        "Y": 312.86597
       }
     },
     {
@@ -238,17 +224,10 @@
   ],
   "OutputUis": [
     {
-      "OutputId": "3517d466-d084-45e4-885a-8c7f6b16446e"/*OutBuffer*/,
-      "Position": {
-        "X": 1953.3167,
-        "Y": 758.51056
-      }
-    },
-    {
       "OutputId": "de0ec6bf-6c23-46d2-9d8b-6f314037b2c8"/*Particles*/,
       "Position": {
-        "X": 1941.4836,
-        "Y": 337.44632
+        "X": 1746.882,
+        "Y": 312.86597
       }
     }
   ]

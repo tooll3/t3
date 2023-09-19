@@ -12,6 +12,7 @@
     },
     {
       "InputId": "fa9f7267-d138-4219-ab78-ed37546a259c"/*IsEnabled*/,
+      "Relevancy": "Relevant",
       "Position": {
         "X": -200.0,
         "Y": 135.0

@@ -19,12 +19,12 @@ cbuffer Params : register(b0)
     float InitialVelocity;
 }
 
-struct SimPoint
-{
-    float3 Velocity;
-    float w;
-    float4 Test;
-};
+// struct SimPoint
+// {
+//     float3 Velocity;
+//     float w;
+//     float4 Test;
+// };
 
 cbuffer IntParams : register(b1)
 {
@@ -45,12 +45,14 @@ void main(uint3 i : SV_DispatchThreadID)
     CollectedPoints.GetDimensions(collectedPointCount, pointStride2);
 
     uint gi = i.x;
-    if(i.x >= collectedPointCount)
+    if(gi >= collectedPointCount)
         return;
 
     if(Reset > 0.5)
     {
         CollectedPoints[gi].w =  sqrt(-1);
+        CollectedPoints[gi].position =  0;
+        SimPoints[gi].Velocity =  0;
         return;
     }
 
@@ -68,8 +70,9 @@ void main(uint3 i : SV_DispatchThreadID)
 
         if(SetInitialVelocity > 0.5) 
         {
-            CollectedPoints[gi].rotation = q_encode_v(CollectedPoints[gi].rotation, InitialVelocity);
+            //CollectedPoints[gi].rotation = q_encode_v(CollectedPoints[gi].rotation, InitialVelocity);
         }
+        SimPoints[gi].Velocity = float3(0,0.042,0); // Fixme
     }
 
 
@@ -97,21 +100,12 @@ void main(uint3 i : SV_DispatchThreadID)
         }
 
         if(ApplyMovement > 0.5) 
-        {
-            
+        {            
             Point p = CollectedPoints[gi];
-            float4 rot;
-            float v = q_separate_v(p.rotation, rot);
-
-            float3 forward =  normalize(rotate_vector(float3(0, 0, 1), rot));
-            forward+= SimPoints[i.x].Velocity;
-
-            forward *= v * 0.01 * Speed;
-            p.position += forward;
-
-            v *= (1-Drag);
-            p.rotation = q_encode_v(rot, v);
-
+            float3 velocity = SimPoints[gi].Velocity;
+            p.position += velocity * Speed * 0.01;
+            velocity *= (1-Drag);
+            SimPoints[gi].Velocity = velocity;
             CollectedPoints[gi] = p;
         }
     }

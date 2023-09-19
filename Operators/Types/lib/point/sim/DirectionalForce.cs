@@ -10,9 +10,6 @@ namespace T3.Operators.Types.Id_7a08d73e_1aea_479f_8d36_ecb119d75c3a
         [Output(Guid = "de0ec6bf-6c23-46d2-9d8b-6f314037b2c8")]
         public readonly Slot<T3.Core.DataTypes.ParticleSystem> Particles = new Slot<T3.Core.DataTypes.ParticleSystem>();
 
-        [Output(Guid = "3517d466-d084-45e4-885a-8c7f6b16446e")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new Slot<T3.Core.DataTypes.BufferWithViews>();
-
         [Input(Guid = "1840e5b8-2aee-44d0-b826-d34395325506")]
         public readonly InputSlot<System.Numerics.Vector3> Direction = new InputSlot<System.Numerics.Vector3>();
 
