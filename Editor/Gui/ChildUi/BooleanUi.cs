@@ -21,13 +21,14 @@ namespace T3.Editor.Gui.ChildUi
         public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
         {
 
-            //we try to get the State strings
+            //we get the parameters from the operator
             if (!(instance is String stringInstance))
                 return SymbolChildUi.CustomUiResult.None;
 
             var v = stringInstance.True.TypedInputValue.Value;
             var w = stringInstance.False.TypedInputValue.Value;
-
+            var color = stringInstance.RGBA.TypedInputValue.Value;
+           
             /*if (string.IsNullOrEmpty(v))
             {
                 //v = "on";
@@ -59,10 +60,11 @@ namespace T3.Editor.Gui.ChildUi
             
             //if (CustomComponents.ToggleIconButton(Icon.Checkmark, "", ref refValue, new Vector2(20, 20)) || CustomComponents.ToggleButton($"{label}", ref refValue, screenRect.GetSize()))
             //if (CustomComponents.ToggleButton($"{label}{(refValue ? $" {v}" : $" {w}")}", ref refValue, screenRect.GetSize()))
-            if (CustomComponents.ToggleButton($"{label}{(refValue ? $" {v}" : $" {w}")}", ref refValue, new Vector2((screenRect.Max.X - screenRect.Min.X)-30, screenRect.Max.Y - screenRect.Min.Y)))
+            if (CustomComponents.ToggleButtonB($"{label}{(refValue ? $" {v}" : $" {w}")}", ref refValue, new Vector2((screenRect.Max.X - screenRect.Min.X)-30, screenRect.Max.Y - screenRect.Min.Y), color))
             {
                OnClickBehavior(ref refValue);
             }
+            
 
             ImGui.SameLine();
            
