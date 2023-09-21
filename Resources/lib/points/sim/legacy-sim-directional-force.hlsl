@@ -19,9 +19,6 @@ void main(uint3 i : SV_DispatchThreadID)
     uint pointCount, pointStride;
     SimPoints.GetDimensions(pointCount, pointStride);
 
-    // uint collectedPointCount, pointStride2;
-    // CollectedPoints.GetDimensions(collectedPointCount, pointStride2);
-
     uint gi = i.x;
     if(i.x >= pointCount)
         return;

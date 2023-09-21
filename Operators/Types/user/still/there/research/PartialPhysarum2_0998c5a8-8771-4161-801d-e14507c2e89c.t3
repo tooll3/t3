@@ -1554,7 +1554,7 @@
       ]
     },
     {
-      "Id": "63231aec-f065-407b-bff7-1b4a1b53e9c8"/*DirectionalForce*/,
+      "Id": "63231aec-f065-407b-bff7-1b4a1b53e9c8"/*LegacyDirectionalForce*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {

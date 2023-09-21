@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_7a08d73e_1aea_479f_8d36_ecb119d75c3a
 {
-    public class DirectionalForce : Instance<DirectionalForce>
+    public class LegacyDirectionalForce : Instance<LegacyDirectionalForce>
     {
 
         [Output(Guid = "3517d466-d084-45e4-885a-8c7f6b16446e")]

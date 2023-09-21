@@ -328,7 +328,7 @@
       }
     },
     {
-      "ChildId": "f191a2f8-a555-4537-b0de-1475c0fe93ca"/*DirectionalForce*/,
+      "ChildId": "f191a2f8-a555-4537-b0de-1475c0fe93ca"/*LegacyDirectionalForce*/,
       "Position": {
         "X": -46.458603,
         "Y": -164.84517
