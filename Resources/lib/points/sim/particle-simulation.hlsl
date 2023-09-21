@@ -2,36 +2,27 @@
 
 cbuffer Params : register(b0)
 {
-    float AddNewPoints;    
-    float UseAging;
+    float EmitEmitPoints;    
     float AgingRate;
     float MaxAge;
-
-    float ClampAtMaxAge;
     float Reset;
-    float DeltaTime;
-    float ApplyMovement;
 
     float Speed; 
     float Drag;
 
     float SetInitialVelocity;
     float InitialVelocity;
+    float Time;
 }
 
-// struct SimPoint
-// {
-//     float3 Velocity;
-//     float w;
-//     float4 Test;
-// };
 
 cbuffer IntParams : register(b1)
 {
     int CollectCycleIndex;
+    int WMode;
 }
 
-StructuredBuffer<Point> NewPoints : t0;
+StructuredBuffer<Point> EmitPoints : t0;
 RWStructuredBuffer<Point> CollectedPoints : u0;
 RWStructuredBuffer<SimPoint> SimPoints : u1; 
 
@@ -39,7 +30,7 @@ RWStructuredBuffer<SimPoint> SimPoints : u1;
 void main(uint3 i : SV_DispatchThreadID)
 {
     uint newPointCount, pointStride;
-    NewPoints.GetDimensions(newPointCount, pointStride);
+    EmitPoints.GetDimensions(newPointCount, pointStride);
 
     uint collectedPointCount, pointStride2;
     CollectedPoints.GetDimensions(collectedPointCount, pointStride2);
@@ -50,63 +41,69 @@ void main(uint3 i : SV_DispatchThreadID)
 
     if(Reset > 0.5)
     {
-        CollectedPoints[gi].w =  sqrt(-1);
-        CollectedPoints[gi].position =  0;
-        SimPoints[gi].Velocity =  0;
+        CollectedPoints[gi].w = NAN;
+        CollectedPoints[gi].position =  NAN;
         return;
     }
 
-    int addIndex = (gi - CollectCycleIndex) % collectedPointCount;
-
     // Insert emit points
-    if( AddNewPoints > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount )
+    int addIndex = (gi - CollectCycleIndex + collectedPointCount) % collectedPointCount;
+    if( EmitEmitPoints > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount )
     {
-        CollectedPoints[gi] = NewPoints[addIndex];
-
-        if(UseAging > 0.5) 
-        {
-            CollectedPoints[gi].w = 0.0001;
-        }
-
-        if(SetInitialVelocity > 0.5) 
-        {
-            //CollectedPoints[gi].rotation = q_encode_v(CollectedPoints[gi].rotation, InitialVelocity);
-        }
-        SimPoints[gi].Velocity = float3(0,0.042,0); // Fixme
+        CollectedPoints[gi] = EmitPoints[addIndex];
+        SimPoints[gi].BirthTime = Time;
+        SimPoints[gi].Velocity = SetInitialVelocity > 0.5 
+                                ? rotate_vector(float3(0,0,1), normalize(CollectedPoints[gi].rotation)) * InitialVelocity
+                                : 0;
     }
 
+    if(CollectedPoints[gi].w == NAN)
+        return;
+
+
+    // just return original w
+    if(WMode == 0) {
+    
+    }
+
+    // Return age
+    else if(WMode == 1) {
+        CollectedPoints[gi].w = isnan(CollectedPoints[gi].w) ?  NAN: clamp((Time - SimPoints[gi].BirthTime) * AgingRate,0, MaxAge);
+    } 
+
+    // Return speed
+    else if(WMode == 2) {
+        CollectedPoints[gi].w = length(SimPoints[gi].Velocity);
+    }
 
     // Update other points
-    else if(UseAging > 0.5 || ApplyMovement > 0.5)
-    {
-        if(UseAging > 0.5 ) 
-        {
-            float age = CollectedPoints[gi].w;
+    // if(UseAging > 0.5 ) 
+    // {
+    //     float age = CollectedPoints[gi].w;
 
-            if(!isnan(age)) 
-            {    
-                if(age <= 0)
-                {
-                    CollectedPoints[gi].w = sqrt(-1); // Flag non-initialized points
-                }
-                else if(age < MaxAge)
-                {
-                    CollectedPoints[gi].w = age+  DeltaTime * AgingRate;
-                }
-                else if(ClampAtMaxAge) {
-                    CollectedPoints[gi].w = MaxAge;
-                }
-            }
-        }
+    //     if(!isnan(age)) 
+    //     {    
+    //         if(age <= 0)
+    //         {
+    //             CollectedPoints[gi].w = sqrt(-1); // Flag non-initialized points
+    //         }
+    //         else if(age < MaxAge)
+    //         {
+    //             CollectedPoints[gi].w = age+  DeltaTime * AgingRate;
+    //         }
+    //         else if(ClampAtMaxAge) {
+    //             CollectedPoints[gi].w = MaxAge;
+    //         }
+    //     }
+    // }
 
-        if(ApplyMovement > 0.5) 
-        {            
-            Point p = CollectedPoints[gi];
-            float3 velocity = SimPoints[gi].Velocity;
-            p.position += velocity * Speed * 0.01;
-            velocity *= (1-Drag);
-            SimPoints[gi].Velocity = velocity;
-            CollectedPoints[gi] = p;
-        }
-    }
+    
+    //Point p = CollectedPoints[gi];
+
+    float3 velocity = SimPoints[gi].Velocity;
+    float3 pos = CollectedPoints[gi].position;
+    pos += velocity * Speed * 0.01;// * (int)(DeltaTime * 1000*)/(1000.0*6);
+    velocity *= (1-Drag);
+    SimPoints[gi].Velocity = velocity;
+    CollectedPoints[gi].position = pos;
 }
