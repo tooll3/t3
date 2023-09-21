@@ -137,7 +137,7 @@
       }
     },
     {
-      "ChildId": "bd782926-6448-414d-a75b-35edd1b3f7fc"/*ParticleSimulation*/,
+      "ChildId": "bd782926-6448-414d-a75b-35edd1b3f7fc"/*LegacyParticleSimulation*/,
       "Position": {
         "X": 927.4646,
         "Y": 626.49414
@@ -214,7 +214,7 @@
       }
     },
     {
-      "ChildId": "2e582673-851f-479a-b2e7-18145e3b9406"/*ParticleSimulation*/,
+      "ChildId": "2e582673-851f-479a-b2e7-18145e3b9406"/*LegacyParticleSimulation*/,
       "Position": {
         "X": 620.78467,
         "Y": 1308.581

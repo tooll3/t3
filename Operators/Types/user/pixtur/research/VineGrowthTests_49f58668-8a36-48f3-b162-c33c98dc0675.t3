@@ -117,7 +117,7 @@
       "Outputs": []
     },
     {
-      "Id": "149a5839-084e-465f-b9f9-bafe9cd3c8cf"/*ParticleSimulation*/,
+      "Id": "149a5839-084e-465f-b9f9-bafe9cd3c8cf"/*LegacyParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {
@@ -509,7 +509,7 @@
       "Outputs": []
     },
     {
-      "Id": "5dc50498-88f3-49df-ba62-8ff44a55769a"/*ParticleSimulation*/,
+      "Id": "5dc50498-88f3-49df-ba62-8ff44a55769a"/*LegacyParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {

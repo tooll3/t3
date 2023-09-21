@@ -1,0 +1,257 @@
+{
+  "Id": "e44ae9b6-cd56-4224-8a5d-118eda4cd3f4"/*ParticleSimulation2*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "ba08e719-a1d1-4ac6-9c8c-076478a65a81"/*EmitPoints*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -624.07074,
+        "Y": 353.1597
+      }
+    },
+    {
+      "InputId": "7a320c47-14ed-4637-928b-25f87bd32c26"/*Emit*/,
+      "Position": {
+        "X": -624.07074,
+        "Y": 398.15967
+      }
+    },
+    {
+      "InputId": "c6bdbb07-6996-4e5b-a058-37c9cbeca6fe"/*Reset*/,
+      "Position": {
+        "X": -624.07074,
+        "Y": 443.15967
+      }
+    },
+    {
+      "InputId": "1eb32e4c-6785-4649-b0bf-7c70cddee619"/*MaxParticleCount*/,
+      "Position": {
+        "X": -620.57135,
+        "Y": 521.3146
+      }
+    },
+    {
+      "InputId": "3cee4aa6-2ae3-4b4d-89c7-4c60c8f8b10e"/*AgingRate*/,
+      "Position": {
+        "X": -620.57135,
+        "Y": 566.3146
+      }
+    },
+    {
+      "InputId": "85bb7b9f-f763-457c-aa0d-a08b15c31b50"/*MaxAge*/,
+      "Position": {
+        "X": -620.57135,
+        "Y": 611.3146
+      }
+    },
+    {
+      "InputId": "a7350ba8-08be-4afc-92f1-d223ee9bcbeb"/*SetWTo*/,
+      "Position": {
+        "X": -620.57135,
+        "Y": 701.3146
+      }
+    },
+    {
+      "InputId": "9642f5c6-5ad2-4d35-a5ed-a3fde10817ae"/*Speed*/,
+      "Position": {
+        "X": -620.57135,
+        "Y": 746.3146
+      }
+    },
+    {
+      "InputId": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
+      "Position": {
+        "X": -620.57135,
+        "Y": 791.3147
+      },
+      "Min": 0.0,
+      "Max": 0.1
+    },
+    {
+      "InputId": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
+      "Position": {
+        "X": -620.57135,
+        "Y": 836.3147
+      }
+    },
+    {
+      "InputId": "38392c86-4a1b-4b6f-ac32-26920a73e1e2"/*InitialVelocity*/,
+      "Position": {
+        "X": -620.57135,
+        "Y": 881.3147
+      }
+    },
+    {
+      "InputId": "c41d9633-1397-4602-a5f8-7808c3d63108"/*ParticleEffects*/,
+      "Relevancy": "Relevant",
+      "Position": {
+        "X": -620.57135,
+        "Y": 926.3147
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "42ed496e-e5cd-42f3-b000-e6bbdd16678f"/*ComputeShader*/,
+      "Position": {
+        "X": 21.353851,
+        "Y": 99.414505
+      }
+    },
+    {
+      "ChildId": "8bbbde76-3130-457c-9318-3e25a2382897"/*ComputeShaderStage*/,
+      "Position": {
+        "X": 642.9297,
+        "Y": 75.39993
+      }
+    },
+    {
+      "ChildId": "2dbfb5f3-70e4-49e4-9968-906eef514efd"/*FloatsToBuffer*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 163.77017,
+        "Y": 617.0405
+      },
+      "Position": {
+        "X": 399.1821,
+        "Y": 325.72467
+      }
+    },
+    {
+      "ChildId": "af3d5d3d-71a7-4e17-8b5c-819d383f92e9"/*ExecuteBufferUpdate*/,
+      "Position": {
+        "X": 1172.509,
+        "Y": 73.69209
+      }
+    },
+    {
+      "ChildId": "cbc5699a-6a05-4997-b619-5d30489a0388"/*CalcDispatchCount*/,
+      "Position": {
+        "X": 238.88719,
+        "Y": 150.80594
+      }
+    },
+    {
+      "ChildId": "78d0975b-1a25-4437-ba0e-3e9137af87d6"/*Points*/,
+      "Position": {
+        "X": -254.48416,
+        "Y": 1003.93677
+      }
+    },
+    {
+      "ChildId": "c1b1014e-3226-45fe-852b-b45300166682"/*GetBufferComponents*/,
+      "Position": {
+        "X": -70.1207,
+        "Y": 970.3638
+      }
+    },
+    {
+      "ChildId": "49cc1f06-5eda-41e1-95cd-98a85d05a93a"/*GetBufferComponents*/,
+      "Position": {
+        "X": -474.07074,
+        "Y": 353.1597
+      }
+    },
+    {
+      "ChildId": "7ef64581-d672-4cd5-b5c6-0b94bd854822"/*CountInt*/,
+      "Position": {
+        "X": 18.06578,
+        "Y": 204.97968
+      }
+    },
+    {
+      "ChildId": "42d72297-3db1-4c3b-af6d-9bbc2771e8bb"/*ClampInt*/,
+      "Position": {
+        "X": -470.57135,
+        "Y": 521.3146
+      }
+    },
+    {
+      "ChildId": "1fc24197-c07f-4eaa-91aa-0867e9452295"/*BoolToFloats*/,
+      "Position": {
+        "X": 149.54022,
+        "Y": 368.9897
+      }
+    },
+    {
+      "ChildId": "0ca6f7ae-bf6a-4267-9011-f187fa4f6e66"/*BoolToFloats*/,
+      "Position": {
+        "X": 141.3581,
+        "Y": 545.3792
+      }
+    },
+    {
+      "ChildId": "0ea5cd85-6f28-45ba-8c87-634e8ee1148d"/*HasTimeChanged*/,
+      "Position": {
+        "X": 871.14417,
+        "Y": 217.19952
+      }
+    },
+    {
+      "ChildId": "066038e0-ee67-4252-9034-c5d877f9e4a5"/*Any*/,
+      "Position": {
+        "X": 1025.25,
+        "Y": 171.92615
+      }
+    },
+    {
+      "ChildId": "a913c47d-9023-45dc-a28d-4d74264b031b"/*IntsToBuffer*/,
+      "Position": {
+        "X": 376.81885,
+        "Y": 224.4258
+      }
+    },
+    {
+      "ChildId": "25b14d8c-0312-4087-b374-94fbe42b99b9"/*BoolToFloats*/,
+      "Position": {
+        "X": -470.57135,
+        "Y": 836.3147
+      }
+    },
+    {
+      "ChildId": "886dff75-130d-4903-8d11-435d8c673fef"/*Execute*/,
+      "Position": {
+        "X": 792.9297,
+        "Y": 75.39993
+      }
+    },
+    {
+      "ChildId": "11d59891-c071-4700-aa43-e8c8d42b199e"/*_SetParticleSystemComponents*/,
+      "Position": {
+        "X": 126.08734,
+        "Y": 1092.6858
+      }
+    },
+    {
+      "ChildId": "2bbb4e59-acea-4ea8-9025-a4e9e3fed4ca"/*SimPoints*/,
+      "Position": {
+        "X": -278.83887,
+        "Y": 1094.0166
+      }
+    },
+    {
+      "ChildId": "5f8b07fd-9e8f-4a56-be23-4260c67b44ea"/*GetBufferComponents*/,
+      "Position": {
+        "X": -89.60968,
+        "Y": 1051.2714
+      }
+    },
+    {
+      "ChildId": "48723393-26f6-48b1-bed6-28698cf88d56"/*Time*/,
+      "Position": {
+        "X": 123.95868,
+        "Y": 905.937
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "51b9c6bd-b7cc-48a4-979b-3febcac914c2"/*OutBuffer*/,
+      "Position": {
+        "X": 1398.9834,
+        "Y": 71.526505
+      }
+    }
+  ]
+}
