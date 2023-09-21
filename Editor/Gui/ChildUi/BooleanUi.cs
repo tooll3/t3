@@ -44,39 +44,37 @@ namespace T3.Editor.Gui.ChildUi
             // end of getting the strings
 
             if (!(instance is Boolean boolean)
-                || !ImGui.IsRectVisible(screenRect.Min+ new Vector2(4,4), screenRect.Max+new Vector2(4, 4)))
+                || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
                 return SymbolChildUi.CustomUiResult.None;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
             screenRect.Expand(-4);
-            ImGui.SetCursorScreenPos(screenRect.Min + new Vector2(2, 2));
+            ImGui.SetCursorScreenPos(screenRect.Min);
             var symbolChild = instance.Parent.Symbol.Children.Single(c => c.Id == instance.SymbolChildId);
             ImGui.PushClipRect(screenRect.Min, screenRect.Max, true);
 
             var refValue = boolean.BoolValue.Value;
             var label = string.IsNullOrEmpty(symbolChild.Name)
-                            ? refValue ? "True" : "False"
+                            ? refValue ? "" : ""
                             : symbolChild.ReadableName;// we reference here to show correct state when connected
             
-            //if (CustomComponents.ToggleIconButton(Icon.Checkmark, "", ref refValue, new Vector2(20, 20)) || CustomComponents.ToggleButton($"{label}", ref refValue, screenRect.GetSize()))
-            //if (CustomComponents.ToggleButton($"{label}{(refValue ? $" {v}" : $" {w}")}", ref refValue, screenRect.GetSize()))
-            if (CustomComponents.ToggleButtonB($"{label}{(refValue ? $" {v}" : $" {w}")}", ref refValue, new Vector2((screenRect.Max.X - screenRect.Min.X)-30, screenRect.Max.Y - screenRect.Min.Y), color))
+            //we use the 
+            if (CustomComponents.ToggleButtonB($"{label}{(refValue ? $" {v}" : $" {w}")}", ref refValue, new Vector2((screenRect.Max.X - screenRect.Min.X) + 20, screenRect.Max.Y - screenRect.Min.Y), color))
             {
                OnClickBehavior(ref refValue);
             }
             
 
-            ImGui.SameLine();
+           // ImGui.SameLine();
            
 
             // Calculate checkbox size and position
             var checkboxSize = new Vector2(20, 20);
-            var checkboxPos = screenRect.Min + new Vector2((screenRect.Max.X - screenRect.Min.X) - 24, ((screenRect.GetHeight() - checkboxSize.Y) / 2)-2);
+            var checkboxPos = screenRect.Min  + new Vector2(4, ((screenRect.GetHeight() - checkboxSize.Y) / 2)-2);
+            //var checkboxPos =  new Vector2(0,0);
 
             // Draw the checkbox
             ImGui.SetCursorScreenPos(checkboxPos);
-            
-
 
             if (ImGui.Checkbox("", ref refValue))
             {
@@ -94,9 +92,8 @@ namespace T3.Editor.Gui.ChildUi
                 boolean.BoolValue.DirtyFlag.Invalidate();
             }
 
-            //ImGui.GetStyle().Colors[ImGuiCol.Button] = new Vector4(0.2f, 0.8f, 0.2f, 1.0f); // Green color
-            //ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0.2f, 0.8f, 0.2f, 1.0f));
-            ImGui.TextUnformatted(label);
+            
+            //ImGui.TextUnformatted(label);
             ImGui.PopClipRect();
             ImGui.PopID();
             return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;

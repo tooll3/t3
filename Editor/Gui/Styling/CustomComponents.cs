@@ -140,17 +140,13 @@ namespace T3.Editor.Gui.Styling
         {
             var wasSelected = isSelected;
             var clicked = false;
-            var test = new Vector4 (1.0f,.0f,1.0f,1.0f);
-            var colorInactive = color - new Vector4(.5f,.5f,.5f,0);
-            if (isSelected)
-            {
-                ImGui.PushStyleColor(ImGuiCol.Button, color);
-                ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color);
-                ImGui.PushStyleColor(ImGuiCol.ButtonActive, color);
-                ImGui.PushStyleColor(ImGuiCol.Text, UiColors.WindowBackground.Rgba);
-            }
-            
-
+            var colorActive = color;
+            var colorInactive = color - new Vector4(.0f, .0f, .0f, .3f);
+            ImGui.PushFont(Fonts.FontBold);
+            ImGui.PushStyleColor(ImGuiCol.Button, isSelected ? colorActive : colorInactive);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, colorActive); // Adjust this as needed
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, colorActive); // Adjust this as needed
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Selection.Rgba);
 
             if (ImGui.Button(label, size) || trigger)
             {
@@ -158,11 +154,9 @@ namespace T3.Editor.Gui.Styling
                 clicked = true;
             }
 
-            if (wasSelected)
-            {
-                ImGui.PopStyleColor(4);
-            }
-            
+            ImGui.PopStyleColor(4);
+            ImGui.PopFont();
+
             return clicked;
         }
 
