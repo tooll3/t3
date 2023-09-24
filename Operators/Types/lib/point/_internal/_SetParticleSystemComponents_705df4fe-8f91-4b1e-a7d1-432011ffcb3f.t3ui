@@ -28,6 +28,7 @@
     },
     {
       "InputId": "083c9379-fc0a-4d35-b056-1a639f739321"/*SpeedFactor*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -200.0,
         "Y": 45.0

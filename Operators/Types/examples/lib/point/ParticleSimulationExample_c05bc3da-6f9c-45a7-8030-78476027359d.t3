@@ -591,11 +591,6 @@
           "Id": "60eb8c10-93fa-487b-9eda-1767b485bb21"/*VolumeScale*/,
           "Type": "System.Single",
           "Value": 1.56
-        },
-        {
-          "Id": "aa742901-75bd-4d30-b3cf-154dfd4ab9b0"/*FallOff*/,
-          "Type": "System.Single",
-          "Value": 0.35
         }
       ],
       "Outputs": []
@@ -1877,16 +1872,6 @@
           }
         },
         {
-          "Id": "8387dc9d-e536-4e0a-a650-46feddbea91b"/*ClampResult*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "0db5c531-721d-403e-9154-e31f6be20ec6"/*GizmoVisibility*/,
-          "Type": "T3.Core.Operator.GizmoVisibility",
-          "Value": "On"
-        },
-        {
           "Id": "ceb7008d-c536-4d87-b3f8-d5ba9fe29eed"/*Bounciness*/,
           "Type": "System.Single",
           "Value": 0.89
@@ -1900,6 +1885,11 @@
           "Id": "7c6f58e7-27fc-4271-adef-248cffe5a8b7"/*Repulsion*/,
           "Type": "System.Single",
           "Value": 0.61
+        },
+        {
+          "Id": "0db5c531-721d-403e-9154-e31f6be20ec6"/*GizmoVisibility*/,
+          "Type": "T3.Core.Operator.GizmoVisibility",
+          "Value": "On"
         }
       ],
       "Outputs": []
@@ -2153,16 +2143,6 @@
           }
         },
         {
-          "Id": "8387dc9d-e536-4e0a-a650-46feddbea91b"/*ClampResult*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
-          "Id": "0db5c531-721d-403e-9154-e31f6be20ec6"/*GizmoVisibility*/,
-          "Type": "T3.Core.Operator.GizmoVisibility",
-          "Value": "On"
-        },
-        {
           "Id": "ceb7008d-c536-4d87-b3f8-d5ba9fe29eed"/*Bounciness*/,
           "Type": "System.Single",
           "Value": 0.64
@@ -2176,6 +2156,11 @@
           "Id": "7c6f58e7-27fc-4271-adef-248cffe5a8b7"/*Repulsion*/,
           "Type": "System.Single",
           "Value": 0.68
+        },
+        {
+          "Id": "0db5c531-721d-403e-9154-e31f6be20ec6"/*GizmoVisibility*/,
+          "Type": "T3.Core.Operator.GizmoVisibility",
+          "Value": "On"
         }
       ],
       "Outputs": []
@@ -2289,19 +2274,14 @@
           }
         },
         {
-          "Id": "8387dc9d-e536-4e0a-a650-46feddbea91b"/*ClampResult*/,
-          "Type": "System.Boolean",
-          "Value": true
+          "Id": "7c6f58e7-27fc-4271-adef-248cffe5a8b7"/*Repulsion*/,
+          "Type": "System.Single",
+          "Value": 2.8999999
         },
         {
           "Id": "0db5c531-721d-403e-9154-e31f6be20ec6"/*GizmoVisibility*/,
           "Type": "T3.Core.Operator.GizmoVisibility",
           "Value": "On"
-        },
-        {
-          "Id": "7c6f58e7-27fc-4271-adef-248cffe5a8b7"/*Repulsion*/,
-          "Type": "System.Single",
-          "Value": 2.8999999
         }
       ],
       "Outputs": []

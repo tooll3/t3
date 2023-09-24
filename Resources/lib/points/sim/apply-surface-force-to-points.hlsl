@@ -5,23 +5,21 @@
 cbuffer Params : register(b0)
 {
     float4x4 TransformVolume;
+    float4x4 InverseTransformVolume;
 
-    float FallOff;
-    float Bias;
-    float VolumeShape;
-    float SelectMode;
-
-    float ClampResult;
     float Strength;
-    float Phase;
-    float Threshold;
-
     float Bounciness;
     float Attraction;
     float AttractionDecay;
-    float MaxAcceleration;
 
     float Repulsion;
+    float SpeedFactor;
+    float InvertVolumeFactor;
+}
+
+cbuffer Params : register(b1)
+{
+    int VolumeShape;
 }
 
 RWStructuredBuffer<Point> Points : u0; 
@@ -33,109 +31,90 @@ static const int VolumePlane = 2;
 static const int VolumeZebra = 3;
 static const int VolumeNoise = 4;
 
-inline float Bias2(float x, float bias)
-{
-    return bias < 0
-               ? pow(x, clamp(bias + 1, 0.005, 1))
-               : 1 - pow(1 - x, clamp(1 - bias, 0.005, 1));
-}
-
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
     uint numStructs, stride;
     Points.GetDimensions(numStructs, stride);
-    // if(i.x >= numStructs) 
-    //     return;
+    if(i.x >= numStructs) 
+        return;
 
-    // if (isnan(Points[i.x].w))
-    //     return;
+    if (isnan(Points[i.x].w))
+        return;
         
     float3 pos = Points[i.x].position;
     float4 rot = Points[i.x].rotation;
     float3 velocity = SimPoints[i.x].Velocity;    
 
-    // float4 normalizedRot;
-    // float v = q_separate_v(rot, normalizedRot);
-    // float3 forward = rotate_vector(float3(0,0, v), normalizedRot);
     float3 posInVolume = mul(float4(pos, 1), TransformVolume).xyz;
-    //v = 1;
-    float3 posInVolumeNext = mul(float4(pos + velocity * 0.01, 1), TransformVolume).xyz;
+    float3 posInVolumeNext = mul(float4(pos + velocity * SpeedFactor * 0.01 * 2, 1), TransformVolume).xyz;
 
     //float s = 1;
-
-    // if (VolumeShape < VolumeSphere)
-    // {
-    //     float distance = length(posInVolume);
-    //     s = smoothstep(1 + FallOff, 1, distance);
-    // }
-    // else if (VolumeShape < VolumeBox)
-    // {
-    //     float3 t = abs(posInVolume);
-    //     float distance = max(max(t.x, t.y), t.z) + Phase;
-    //     s = smoothstep(1 + FallOff, 1, distance);
-    // }
-    // else if (VolumeShape < VolumePlane)
-    // {
-    //     float distance = posInVolume.y;
-    //     s = smoothstep(FallOff, 0, distance);
-    // }
-    // else if (VolumeShape < VolumeZebra)
-    // {
-    //     float distance = 1 - abs(mod(posInVolume.y * 1 + Phase, 2) - 1);
-    //     s = smoothstep(Threshold + 0.5 + FallOff, Threshold + 0.5, distance);
-    // }
-    // else if (VolumeShape < VolumeNoise)
-    // {
-    //     float3 noiseLookup = (posInVolume * 0.91 + Phase);
-    //     float noise = snoise(noiseLookup);
-    //     s = smoothstep(Threshold + FallOff, Threshold, noise);
-    // }
-
-    //float3 force =0;
-    float3 force = float3(0,-0.01,0);
-    float rUnitSphere = 0.5;
-    float distance = length(posInVolume) - rUnitSphere;
-    float distance2 = length(posInVolumeNext) - rUnitSphere;
-    float3 surfaceN = normalize(posInVolume);
-    
-    if(sign( distance * distance2) < 0  && distance > 0) 
+    float distance = 0;
+    float distanceNext =0;
+    float3 surfaceN =0;
+    if (VolumeShape == VolumeSphere)
     {
-        //Points[i.x].position += float3(1,0,0);
-        velocity = reflect(velocity, surfaceN) * Bounciness;
+        float rUnitSphere = 0.5;
+        distance = length(posInVolume) - rUnitSphere;
+        distanceNext = length(posInVolumeNext) - rUnitSphere;
+        surfaceN = normalize(posInVolume);
+        // s = smoothstep(1 + FallOff, 1, distance);
+    }
+    else if (VolumeShape == VolumeBox)
+    {
+        float rUnitSphere = 0.5;
+        float3 t1 = abs(posInVolume);
+        distance = max(max(t1.x, t1.y), t1.z) - rUnitSphere;
 
+        float3 t2 = abs(posInVolumeNext);
+        distanceNext = max(max(t2.x, t2.y), t2.z) - rUnitSphere;
+
+        surfaceN = t1.x > t1.y ? (t1.x > t1.z ? float3(sign(posInVolume.x),0,0) : float3(0,0,sign(posInVolume.z)))  
+                               : (t1.y > t1.z ? float3(0,sign(posInVolume.y),0) : float3(0,0,sign(posInVolume.z)));
+
+        //Points[i.x].w = distance;
+        // s = smoothstep(1 + FallOff, 1, distance);
+    }
+    else if (VolumeShape == VolumePlane)
+    {
+        float distance = posInVolume.y;
+        // s = smoothstep(FallOff, 0, distance);
+    }
+    else if (VolumeShape == VolumeZebra)
+    {
+        //float distance = 1 - abs(mod(posInVolume.y * 1 + Phase, 2) - 1);
+        // s = smoothstep(Threshold + 0.5 + FallOff, Threshold + 0.5, distance);
+    }
+    else if (VolumeShape == VolumeNoise)
+    {
+        //float3 noiseLookup = (posInVolume * 0.91 + Phase);
+        //float noise = snoise(noiseLookup);
+        // s = smoothstep(Threshold + FallOff, Threshold, noise);
+    }
+
+    float3 force =0;
+
+    surfaceN *= InvertVolumeFactor;
+    float3 surfaceInWorld = normalize(mul(float4(surfaceN, 1), InverseTransformVolume).xyz);
+
+    if(sign( distance * distanceNext) < 0  && distance * InvertVolumeFactor > 0) 
+    {
+        velocity = reflect(velocity, surfaceInWorld) * Bounciness;
     } 
     else 
     {
-        if(distance < 0) {
-            force = surfaceN * Repulsion;
+        if(distance * InvertVolumeFactor < 0) {
+            force = surfaceInWorld * Repulsion;
         }
         else 
         {
-            force = -surfaceN * Attraction;
+            force = -surfaceInWorld * Attraction ;
 
         }
         velocity += force;
     }   
-    //Points[i.x].w =  distance2 - distance;
 
-    // s = clamp( (smoothstep(1 + FallOff, 1- FallOff, distance) - 0.5),-10,0) * Bounciness;
-    // float3 force = posInVolume/(distance+0.0001) *s;
-
-    //float newV = length(velocity);
-    // if(newV == 0) {
-    //     forward= float3(0,0,1);
-    // }
-    //float4 newRotation = q_look_at(normalize(velocity), float3(0,0,1));
-    //Points[i.x].rotation = q_encode_v(newRotation, newV);    
-    //velocity = 0.42 * 0.2;
-    //Points[i.x].position += 0.042;
-
-    //Points[i.x].w = velocity.x * 0.12;
-    //Points[i.x].position.y = 1;
-    //Points[i.x].position =0;
     SimPoints[i.x].Velocity = velocity;
-    //SimPoints[i.x].Velocity.y = 0.2;
-    //Points[i.x].position = SimPoints[i.x].Velocity;
 }
 
