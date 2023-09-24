@@ -44,7 +44,7 @@ namespace T3.Operators.Types.Id_8bef116d_7d1c_4c1b_b902_25c1d5e925a9
             ShaderResources.GetValues(ref _shaderResourceViews, context);
             SamplerStates.GetValues(ref _samplerStates, context);
             Uavs.GetValues(ref _uavs, context);
-            int counter = UavBufferCount.GetValue(context);
+            int counter = UavBufferCounter.GetValue(context);
 
             if (_uavs.Length == 0 || _uavs[0] == null || _cs == null)
                 return;
@@ -52,6 +52,7 @@ namespace T3.Operators.Types.Id_8bef116d_7d1c_4c1b_b902_25c1d5e925a9
             csStage.Set(_cs);
             csStage.SetConstantBuffers(0, _constantBuffers.Length, _constantBuffers);
             csStage.SetShaderResources(0, _shaderResourceViews.Length, _shaderResourceViews);
+            
             csStage.SetSamplers(0, _samplerStates);
             if (_uavs.Length == 4)
             {
@@ -64,13 +65,13 @@ namespace T3.Operators.Types.Id_8bef116d_7d1c_4c1b_b902_25c1d5e925a9
                 else
                     csStage.SetUnorderedAccessViews(0, _uavs, new[] { counter });
             }
+            else if (_uavs.Length == 2)
+            {
+                csStage.SetUnorderedAccessViews(0, _uavs, new[] { 0, 0 });
+            }
             else if (_uavs.Length == 3)
             {
                 csStage.SetUnorderedAccessViews(0, _uavs, new[] { counter, -1, -1 });
-            }
-            else if (_uavs.Length == 2)
-            {
-                csStage.SetUnorderedAccessViews(0, _uavs, new[] { -1, -1 });
             }
             else
             {
@@ -138,7 +139,7 @@ namespace T3.Operators.Types.Id_8bef116d_7d1c_4c1b_b902_25c1d5e925a9
         public readonly MultiInputSlot<SharpDX.Direct3D11.UnorderedAccessView> Uavs = new MultiInputSlot<SharpDX.Direct3D11.UnorderedAccessView>();
 
         [Input(Guid = "0105aca4-5fd5-40c8-82a5-e919bb7dd507")]
-        public readonly InputSlot<int> UavBufferCount = new InputSlot<int>();
+        public readonly InputSlot<int> UavBufferCounter = new InputSlot<int>();
         
         [Input(Guid = "1495157D-601F-4054-84E2-29EBEBB461D8")]
         public readonly InputSlot<int> DispatchCallCount = new InputSlot<int>();

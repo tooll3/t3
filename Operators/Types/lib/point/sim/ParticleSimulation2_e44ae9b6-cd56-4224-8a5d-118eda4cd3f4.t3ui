@@ -89,6 +89,13 @@
         "X": -620.57135,
         "Y": 926.3147
       }
+    },
+    {
+      "InputId": "4b0ccec5-b72e-4834-80d4-77225f30d2a9"/*OrientTowardsVelocity*/,
+      "Position": {
+        "X": -620.57135,
+        "Y": 971.3147
+      }
     }
   ],
   "SymbolChildUis": [
@@ -243,6 +250,20 @@
         "X": 123.95868,
         "Y": 905.937
       }
+    },
+    {
+      "ChildId": "650753f3-c023-492d-9b41-6586450cc817"/*HasIntChanged*/,
+      "Position": {
+        "X": -178.90228,
+        "Y": 472.89914
+      }
+    },
+    {
+      "ChildId": "0dc49394-c5eb-4217-93cd-37d1eade95e8"/*Any*/,
+      "Position": {
+        "X": -233.45587,
+        "Y": 239.9316
+      }
     }
   ],
   "OutputUis": [
@@ -251,6 +272,13 @@
       "Position": {
         "X": 1398.9834,
         "Y": 71.526505
+      }
+    },
+    {
+      "OutputId": "3af47bd1-e47b-4c12-8660-d6264ea234a7"/*SimPoints*/,
+      "Position": {
+        "X": 1398.9834,
+        "Y": 171.5265
       }
     }
   ]

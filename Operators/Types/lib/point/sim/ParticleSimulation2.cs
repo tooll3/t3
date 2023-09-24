@@ -11,6 +11,9 @@ namespace T3.Operators.Types.Id_e44ae9b6_cd56_4224_8a5d_118eda4cd3f4
         [Output(Guid = "51b9c6bd-b7cc-48a4-979b-3febcac914c2")]
         public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new Slot<T3.Core.DataTypes.BufferWithViews>();
 
+        [Output(Guid = "3af47bd1-e47b-4c12-8660-d6264ea234a7")]
+        public readonly Slot<T3.Core.DataTypes.BufferWithViews> SimPoints = new Slot<T3.Core.DataTypes.BufferWithViews>();
+
         [Input(Guid = "ba08e719-a1d1-4ac6-9c8c-076478a65a81")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> EmitPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
@@ -29,7 +32,7 @@ namespace T3.Operators.Types.Id_e44ae9b6_cd56_4224_8a5d_118eda4cd3f4
         [Input(Guid = "85bb7b9f-f763-457c-aa0d-a08b15c31b50")]
         public readonly InputSlot<float> MaxAge = new InputSlot<float>();
 
-        [Input(Guid = "a7350ba8-08be-4afc-92f1-d223ee9bcbeb")]
+        [Input(Guid = "a7350ba8-08be-4afc-92f1-d223ee9bcbeb", MappedType = typeof(SetWModes))]
         public readonly InputSlot<int> SetWTo = new InputSlot<int>();
 
         [Input(Guid = "9642f5c6-5ad2-4d35-a5ed-a3fde10817ae")]
@@ -46,6 +49,9 @@ namespace T3.Operators.Types.Id_e44ae9b6_cd56_4224_8a5d_118eda4cd3f4
 
         [Input(Guid = "c41d9633-1397-4602-a5f8-7808c3d63108")]
         public readonly MultiInputSlot<T3.Core.DataTypes.ParticleSystem> ParticleEffects = new MultiInputSlot<T3.Core.DataTypes.ParticleSystem>();
+
+        [Input(Guid = "4b0ccec5-b72e-4834-80d4-77225f30d2a9")]
+        public readonly InputSlot<float> OrientTowardsVelocity = new InputSlot<float>();
         
         private enum SetWModes {
             KeepOriginal,

@@ -9,10 +9,11 @@ cbuffer Params : register(b0)
 
     float Speed; 
     float Drag;
-
     float SetInitialVelocity;
     float InitialVelocity;
+
     float Time;
+    float OrientTowardsVelocity;
 }
 
 
@@ -61,6 +62,12 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
 
 
+
+    float3 velocity = SimPoints[gi].Velocity;
+    velocity *= (1-Drag);
+    SimPoints[gi].Velocity = velocity;
+    float speed = length(velocity);
+
     // just return original w
     if(WMode == 0) {
     
@@ -73,37 +80,19 @@ void main(uint3 i : SV_DispatchThreadID)
 
     // Return speed
     else if(WMode == 2) {
-        CollectedPoints[gi].w = length(SimPoints[gi].Velocity);
+        //CollectedPoints[gi].w = speed;
+        CollectedPoints[gi].w = SimPoints[gi].Velocity.y * 10 ;
     }
 
-    // Update other points
-    // if(UseAging > 0.5 ) 
-    // {
-    //     float age = CollectedPoints[gi].w;
 
-    //     if(!isnan(age)) 
-    //     {    
-    //         if(age <= 0)
-    //         {
-    //             CollectedPoints[gi].w = sqrt(-1); // Flag non-initialized points
-    //         }
-    //         else if(age < MaxAge)
-    //         {
-    //             CollectedPoints[gi].w = age+  DeltaTime * AgingRate;
-    //         }
-    //         else if(ClampAtMaxAge) {
-    //             CollectedPoints[gi].w = MaxAge;
-    //         }
-    //     }
-    // }
-
-    
-    //Point p = CollectedPoints[gi];
-
-    float3 velocity = SimPoints[gi].Velocity;
     float3 pos = CollectedPoints[gi].position;
-    pos += velocity * Speed * 0.01;// * (int)(DeltaTime * 1000*)/(1000.0*6);
-    velocity *= (1-Drag);
-    SimPoints[gi].Velocity = velocity;
+    pos += velocity * Speed * 0.01;
     CollectedPoints[gi].position = pos;
+
+    if(speed > 0.0001) 
+    {
+    
+        float f = saturate(speed * OrientTowardsVelocity);
+        CollectedPoints[gi].rotation =  q_slerp(CollectedPoints[gi].rotation,q_look_at(velocity / speed, float3(0,1,0)),  f ) ;
+    }
 }

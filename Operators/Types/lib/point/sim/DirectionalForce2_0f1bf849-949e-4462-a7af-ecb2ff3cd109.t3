@@ -36,7 +36,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\sim\\legacy-sim-directional-force.hlsl"
+          "Value": "Resources\\lib\\points\\sim\\sim-directional-force.hlsl"
         }
       ],
       "Outputs": []
@@ -53,6 +53,11 @@
             "Y": 1,
             "Z": 1
           }
+        },
+        {
+          "Id": "0105aca4-5fd5-40c8-82a5-e919bb7dd507"/*UavBufferCounter*/,
+          "Type": "System.Int32",
+          "Value": 2
         }
       ],
       "Outputs": []
