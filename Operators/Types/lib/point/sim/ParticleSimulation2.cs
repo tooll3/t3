@@ -11,9 +11,6 @@ namespace T3.Operators.Types.Id_e44ae9b6_cd56_4224_8a5d_118eda4cd3f4
         [Output(Guid = "51b9c6bd-b7cc-48a4-979b-3febcac914c2")]
         public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new Slot<T3.Core.DataTypes.BufferWithViews>();
 
-        [Output(Guid = "3af47bd1-e47b-4c12-8660-d6264ea234a7")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> SimPoints = new Slot<T3.Core.DataTypes.BufferWithViews>();
-
         [Input(Guid = "ba08e719-a1d1-4ac6-9c8c-076478a65a81")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> EmitPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 

@@ -14,6 +14,14 @@
     {
       "Id": "73128257-d731-4065-b19a-c8fa21803cd4"/*Effects*/,
       "DefaultValue": null
+    },
+    {
+      "Id": "083c9379-fc0a-4d35-b056-1a639f739321"/*SpeedFactor*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "f3ab1099-3a0d-409e-aa18-89219e85e01f"/*InitializeVelocityFactor*/,
+      "DefaultValue": 0.0
     }
   ],
   "Children": [],

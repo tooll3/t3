@@ -21,16 +21,18 @@ namespace T3.Operators.Types.Id_705df4fe_8f91_4b1e_a7d1_432011ffcb3f
         {
             _particleSystem.PointBuffer = PointsBuffer.GetValue(context);
             _particleSystem.PointSimBuffer = PointsSimBuffer.GetValue(context);
+            _particleSystem.SpeedFactor = SpeedFactor.GetValue(context);
+            _particleSystem.InitializeVelocityFactor = InitializeVelocityFactor.GetValue(context);
             
             var effects = Effects.CollectedInputs;
             var keep = context.ParticleSystem;
             if (effects != null)
             {
                 context.ParticleSystem = _particleSystem;
+                
                 // execute commands
                 for (int i = 0; i < effects.Count; i++)
                 {
-                    //Log.Debug("Updating effect " + i);
                     effects[i].GetValue(context);
                 }
             }
@@ -47,6 +49,12 @@ namespace T3.Operators.Types.Id_705df4fe_8f91_4b1e_a7d1_432011ffcb3f
 
         [Input(Guid = "13583F72-3F77-4BE0-B596-B8DBD27CA19C")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> PointsSimBuffer = new();
+        
+        [Input(Guid = "083C9379-FC0A-4D35-B056-1A639F739321")]
+        public readonly InputSlot<float> SpeedFactor = new();
+        
+        [Input(Guid = "F3AB1099-3A0D-409E-AA18-89219E85E01F")]
+        public readonly InputSlot<float> InitializeVelocityFactor = new();
         
         [Input(Guid = "73128257-D731-4065-B19A-C8FA21803CD4")]
         public readonly MultiInputSlot<ParticleSystem> Effects = new();

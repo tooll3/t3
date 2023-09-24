@@ -18,6 +18,9 @@ namespace T3.Operators.Types.Id_e62c1fa0_6fcd_49f5_9cf8_d3081c8a5917
         [Output(Guid = "2814600a-c45e-4bf8-ab24-b9d3c40d8077", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<int> Length = new();
 
+        [Output(Guid = "641ECE29-7845-43E5-85CA-F33912A1989F", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<float> SpeedFactor = new();
+        
         public GetParticleComponents()
         {
             PointsUav.UpdateAction = Update;
@@ -44,17 +47,16 @@ namespace T3.Operators.Types.Id_e62c1fa0_6fcd_49f5_9cf8_d3081c8a5917
             
             PointsUav.Value = context.ParticleSystem.PointBuffer.Uav;
             SimPointsUav.Value = context.ParticleSystem.PointSimBuffer.Uav;
+            SpeedFactor.Value = context.ParticleSystem.SpeedFactor;
             
             Length.Value = context.ParticleSystem.PointBuffer.Srv.Description.Buffer.ElementCount;
             
             PointsUav.DirtyFlag.Clear();
             SimPointsUav.DirtyFlag.Clear();
             Length.DirtyFlag.Clear();
+            SpeedFactor.DirtyFlag.Clear();
         }
         
-        // [Input(Guid = "0c642f03-a9e8-403d-9cc5-1d8294454b01")]
-        // public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> BufferWithViews = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
-
         public IStatusProvider.StatusLevel GetStatusLevel()
         {
             return string.IsNullOrEmpty(_lastErrorMessage) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Error;

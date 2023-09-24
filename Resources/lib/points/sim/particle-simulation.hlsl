@@ -91,8 +91,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     if(speed > 0.0001) 
     {
-    
         float f = saturate(speed * OrientTowardsVelocity);
-        CollectedPoints[gi].rotation =  q_slerp(CollectedPoints[gi].rotation,q_look_at(velocity / speed, float3(0,1,0)),  f ) ;
+        CollectedPoints[gi].rotation =  q_slerp(CollectedPoints[gi].rotation, q_look_at(velocity / speed, float3(0,1,0)),  f ) ;
     }
 }

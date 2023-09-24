@@ -250,12 +250,6 @@
   ],
   "Connections": [
     {
-      "SourceParentOrChildId": "2bbb4e59-acea-4ea8-9025-a4e9e3fed4ca",
-      "SourceSlotId": "c997268d-6709-49de-980e-64d7a47504f7",
-      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "TargetSlotId": "3af47bd1-e47b-4c12-8660-d6264ea234a7"
-    },
-    {
       "SourceParentOrChildId": "af3d5d3d-71a7-4e17-8b5c-819d383f92e9",
       "SourceSlotId": "9a66687e-a834-452c-a652-ba1fc70c2c7b",
       "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",

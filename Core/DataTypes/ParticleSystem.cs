@@ -10,6 +10,8 @@ namespace T3.Core.DataTypes
     {
         public BufferWithViews PointBuffer;
         public BufferWithViews PointSimBuffer;
+        public float SpeedFactor;
+        public float InitializeVelocityFactor;
     }
     
     /// <summary>

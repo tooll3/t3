@@ -99,7 +99,7 @@ void main(uint3 i : SV_DispatchThreadID)
     float distance2 = length(posInVolumeNext) - rUnitSphere;
     float3 surfaceN = normalize(posInVolume);
     
-    if(sign( distance * distance2) <0  && distance > 0) 
+    if(sign( distance * distance2) < 0  && distance > 0) 
     {
         //Points[i.x].position += float3(1,0,0);
         velocity = reflect(velocity, surfaceN) * Bounciness;
