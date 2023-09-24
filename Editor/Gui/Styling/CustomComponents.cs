@@ -145,7 +145,7 @@ namespace T3.Editor.Gui.Styling
             ImGui.PushFont(Fonts.FontBold);
             ImGui.PushStyleColor(ImGuiCol.Button, isSelected ? colorActive : colorInactive);
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, colorActive); // Adjust this as needed
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, colorActive); // Adjust this as needed
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, colorInactive); // Adjust this as needed
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Selection.Rgba);
 
             if (ImGui.Button(label, size) || trigger)
