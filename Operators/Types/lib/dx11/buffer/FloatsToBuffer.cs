@@ -25,10 +25,8 @@ namespace T3.Operators.Types.Id_724da755_2d0c_42ab_8335_8c88ec5fb078
         {
             try
             {
-
-
-                var floatParams = Params.GetCollectedTypedInputs();
                 var matrixParams = Vec4Params.GetCollectedTypedInputs();
+                var floatParams = Params.GetCollectedTypedInputs();
 
                 var floatParamCount = floatParams.Count;
                 var vec4ArrayLength = matrixParams.Count;
@@ -62,6 +60,7 @@ namespace T3.Operators.Types.Id_724da755_2d0c_42ab_8335_8c88ec5fb078
                 }
 
                 Params.DirtyFlag.Clear();
+                Vec4Params.DirtyFlag.Clear();
 
                 var device = ResourceManager.Device;
 
@@ -99,7 +98,7 @@ namespace T3.Operators.Types.Id_724da755_2d0c_42ab_8335_8c88ec5fb078
         public readonly MultiInputSlot<SharpDX.Vector4[]> Vec4Params = new();
 
         [Input(Guid = "49556D12-4CD1-4341-B9D8-C356668D296C")]
-        public readonly MultiInputSlot<float> Params = new MultiInputSlot<float>();
+        public readonly MultiInputSlot<float> Params = new();
 
     }
 }
