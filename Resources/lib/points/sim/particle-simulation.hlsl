@@ -4,7 +4,7 @@ cbuffer Params : register(b0)
 {
     float EmitEmitPoints;    
     float AgingRate;
-    float MaxAge;
+    float MaxAge; 
     float Reset;
 
     float Speed; 
@@ -21,11 +21,12 @@ cbuffer IntParams : register(b1)
 {
     int CollectCycleIndex;
     int WMode;
-}
+} 
 
 StructuredBuffer<Point> EmitPoints : t0;
-RWStructuredBuffer<Point> CollectedPoints : u0;
-RWStructuredBuffer<SimPoint> SimPoints : u1; 
+RWStructuredBuffer<Particle> Particles : u0;
+RWStructuredBuffer<Point> ResultPoints : u1;
+
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
@@ -33,64 +34,60 @@ void main(uint3 i : SV_DispatchThreadID)
     uint newPointCount, pointStride;
     EmitPoints.GetDimensions(newPointCount, pointStride);
 
-    uint collectedPointCount, pointStride2;
-    CollectedPoints.GetDimensions(collectedPointCount, pointStride2);
+    uint maxParticleCount, pointStride2;
+    Particles.GetDimensions(maxParticleCount, pointStride2);
 
     uint gi = i.x;
-    if(gi >= collectedPointCount)
+    if(gi >= maxParticleCount)
         return;
 
     if(Reset > 0.5)
     {
-        CollectedPoints[gi].w = NAN;
-        CollectedPoints[gi].position =  NAN;
+        Particles[gi].birthTime = NAN;
+        Particles[gi].p.position =  NAN;
         return;
     }
 
     // Insert emit points
-    int addIndex = (gi - CollectCycleIndex + collectedPointCount) % collectedPointCount;
+    int addIndex = (gi - CollectCycleIndex + maxParticleCount) % maxParticleCount;
     if( EmitEmitPoints > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount )
     {
-        CollectedPoints[gi] = EmitPoints[addIndex];
-        SimPoints[gi].BirthTime = Time;
-        SimPoints[gi].Velocity = SetInitialVelocity > 0.5 
-                                ? rotate_vector(float3(0,0,1), normalize(CollectedPoints[gi].rotation)) * InitialVelocity
+        Particles[gi].p = EmitPoints[addIndex];
+        Particles[gi].birthTime = Time;
+        Particles[gi].velocity = SetInitialVelocity > 0.5 
+                                ? rotate_vector(float3(0,0,1), normalize(Particles[gi].p.rotation)) * InitialVelocity
                                 : 0;
     }
 
-    if(CollectedPoints[gi].w == NAN)
+    if(Particles[gi].birthTime == NAN)
         return;
 
-
-
-    float3 velocity = SimPoints[gi].Velocity;
+    float3 velocity = Particles[gi].velocity;
     velocity *= (1-Drag);
-    SimPoints[gi].Velocity = velocity;
+    Particles[gi].velocity = velocity;
     float speed = length(velocity);
 
-    // just return original w
-    if(WMode == 0) {
-    
-    }
-
-    // Return age
-    else if(WMode == 1) {
-        CollectedPoints[gi].w = isnan(CollectedPoints[gi].w) ?  NAN: clamp((Time - SimPoints[gi].BirthTime) * AgingRate,0, MaxAge);
-    } 
-
-    // Return speed
-    else if(WMode == 2) {
-        CollectedPoints[gi].w = speed;
-    }
-
-
-    float3 pos = CollectedPoints[gi].position;
+    float3 pos = Particles[gi].p.position;
     pos += velocity * Speed * 0.01;
-    CollectedPoints[gi].position = pos;
+    Particles[gi].p.position = pos;
 
     if(speed > 0.0001) 
     {
         float f = saturate(speed * OrientTowardsVelocity);
-        CollectedPoints[gi].rotation =  q_slerp(CollectedPoints[gi].rotation, q_look_at(velocity / speed, float3(0,1,0)),  f );
+        Particles[gi].p.rotation =  q_slerp(Particles[gi].p.rotation, q_look_at(velocity / speed, float3(0,1,0)),  f );
+    }
+
+    // Copy result
+    ResultPoints[gi] = Particles[gi].p;
+    
+    if(WMode == 1) 
+    {
+        ResultPoints[gi].w = isnan(Particles[gi].birthTime) 
+                                ?  NAN
+                                : clamp((Time - Particles[gi].birthTime) * AgingRate,0, MaxAge);
+    } 
+    else if(WMode == 2) 
+    {
+        ResultPoints[gi].w = speed;
     }
 }

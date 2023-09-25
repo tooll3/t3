@@ -5,13 +5,6 @@
   "SymbolChildUis": [],
   "OutputUis": [
     {
-      "OutputId": "32280e1a-792b-481e-8a5d-5070f684aab8"/*PointsUav*/,
-      "Position": {
-        "X": -13.550136,
-        "Y": 63.14363
-      }
-    },
-    {
       "OutputId": "2814600a-c45e-4bf8-ab24-b9d3c40d8077"/*Length*/,
       "Position": {
         "X": -7.0460706,
@@ -19,7 +12,7 @@
       }
     },
     {
-      "OutputId": "231feefd-b07d-4fcd-9bd1-b74d0cd765b5"/*SimPointsUav*/,
+      "OutputId": "231feefd-b07d-4fcd-9bd1-b74d0cd765b5"/*ParticlesUav*/,
       "Position": {
         "X": -7.0460706,
         "Y": 306.77505

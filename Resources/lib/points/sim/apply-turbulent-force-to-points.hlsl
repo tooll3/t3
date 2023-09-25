@@ -12,26 +12,23 @@ cbuffer Params : register(b0)
     float UseCurlNoise;
 }
 
-RWStructuredBuffer<Point> Points : u0; 
-RWStructuredBuffer<SimPoint> SimPoints : u1; 
+RWStructuredBuffer<Particle> Particles : u0; 
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
-    uint pointCount, _;
-    Points.GetDimensions(pointCount, _);
-    if(i.x >= pointCount) {
+    uint maxParticleCount, _;
+    Particles.GetDimensions(maxParticleCount, _);
+    if(i.x >= maxParticleCount) {
         return;
     }
 
     float3 variationOffset = hash41u(i.x).xyz * Variation;    
-    float3 pos = Points[i.x].position*0.9; // avoid simplex noice glitch at -1,0,0 
+    float3 pos = Particles[i.x].p.position*0.9; // avoid simplex noice glitch at -1,0,0 
     float3 noiseLookup = (pos + variationOffset + Phase* float3(1,-1,0)  ) * Frequency;
 
-    SimPoints[i.x].Velocity += UseCurlNoise < 0.5 
+    Particles[i.x].velocity += UseCurlNoise < 0.5 
         ? snoiseVec3(noiseLookup) * Amount/100 * AmountDistribution
         : curlNoise(noiseLookup) * Amount/100 * AmountDistribution;
-
-
 }
 

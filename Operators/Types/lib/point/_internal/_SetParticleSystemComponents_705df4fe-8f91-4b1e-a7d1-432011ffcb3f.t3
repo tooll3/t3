@@ -4,10 +4,6 @@
   "Namespace": "lib.point._internal",
   "Inputs": [
     {
-      "Id": "8b47ec1f-8537-47be-b31b-641bcea3bdfe"/*PointsBuffer*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "13583f72-3f77-4be0-b596-b8dbd27ca19c"/*PointsSimBuffer*/,
       "DefaultValue": null
     },

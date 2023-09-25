@@ -11,13 +11,13 @@ cbuffer Params : register(b0)
 
 
 RWStructuredBuffer<Point> Points : u0; 
-RWStructuredBuffer<SimPoint> SimPoints : u1; 
+RWStructuredBuffer<Particle> Particles : u1; 
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
     uint pointCount, pointStride;
-    SimPoints.GetDimensions(pointCount, pointStride);
+    Particles.GetDimensions(pointCount, pointStride);
 
     uint gi = i.x;
     if(i.x >= pointCount)
@@ -25,6 +25,6 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float3 offset = Direction * Amount * (1 + hash11(i.x) * RandomAmount);
 
-    SimPoints[i.x].Velocity += offset * 0.01;
+    Particles[i.x].Velocity += offset * 0.01;
 }
 

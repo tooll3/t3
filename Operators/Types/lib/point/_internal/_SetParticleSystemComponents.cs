@@ -19,8 +19,8 @@ namespace T3.Operators.Types.Id_705df4fe_8f91_4b1e_a7d1_432011ffcb3f
         
         private void Update(EvaluationContext context)
         {
-            _particleSystem.PointBuffer = PointsBuffer.GetValue(context);
-            _particleSystem.PointSimBuffer = PointsSimBuffer.GetValue(context);
+            //_particleSystem.PointBuffer = PointsBuffer.GetValue(context);
+            _particleSystem.ParticleBuffer = PointsSimBuffer.GetValue(context);
             _particleSystem.SpeedFactor = SpeedFactor.GetValue(context);
             _particleSystem.InitializeVelocityFactor = InitializeVelocityFactor.GetValue(context);
             
@@ -44,8 +44,8 @@ namespace T3.Operators.Types.Id_705df4fe_8f91_4b1e_a7d1_432011ffcb3f
 
         private readonly ParticleSystem _particleSystem = new();
         
-        [Input(Guid = "8B47EC1F-8537-47BE-B31B-641BCEA3BDFE")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> PointsBuffer = new();
+        // [Input(Guid = "8B47EC1F-8537-47BE-B31B-641BCEA3BDFE")]
+        // public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> PointsBuffer = new();
 
         [Input(Guid = "13583F72-3F77-4BE0-B596-B8DBD27CA19C")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> PointsSimBuffer = new();

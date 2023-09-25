@@ -21,9 +21,6 @@ namespace T3.Operators.Types.Id_0f1bf849_949e_4462_a7af_ecb2ff3cd109
 
         [Input(Guid = "d69efb70-71d7-4628-bd27-249f43f34676")]
         public readonly InputSlot<T3.Core.Operator.GizmoVisibility> ShowGizmo = new InputSlot<T3.Core.Operator.GizmoVisibility>();
-
-        [Input(Guid = "68e3e271-5f5f-452d-8371-b88a2b34baed")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
         
         
         private enum Modes {

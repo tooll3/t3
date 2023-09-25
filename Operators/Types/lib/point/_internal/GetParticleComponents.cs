@@ -9,11 +9,8 @@ namespace T3.Operators.Types.Id_e62c1fa0_6fcd_49f5_9cf8_d3081c8a5917
 {
     public class GetParticleComponents : Instance<GetParticleComponents>, IStatusProvider
     {
-        [Output(Guid = "32280e1a-792b-481e-8a5d-5070f684aab8", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<UnorderedAccessView> PointsUav = new();
-
         [Output(Guid = "231FEEFD-B07D-4FCD-9BD1-B74D0CD765B5", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<UnorderedAccessView> SimPointsUav = new();
+        public readonly Slot<UnorderedAccessView> ParticlesUav = new();
 
         [Output(Guid = "2814600a-c45e-4bf8-ab24-b9d3c40d8077", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<int> Length = new();
@@ -23,8 +20,7 @@ namespace T3.Operators.Types.Id_e62c1fa0_6fcd_49f5_9cf8_d3081c8a5917
         
         public GetParticleComponents()
         {
-            PointsUav.UpdateAction = Update;
-            SimPointsUav.UpdateAction = Update;
+            ParticlesUav.UpdateAction = Update;
             Length.UpdateAction = Update;
         }
 
@@ -36,8 +32,7 @@ namespace T3.Operators.Types.Id_e62c1fa0_6fcd_49f5_9cf8_d3081c8a5917
                 return;
             }
             
-            if (context.ParticleSystem?.PointBuffer?.Uav == null
-                || context.ParticleSystem?.PointSimBuffer?.Uav == null)
+            if (context.ParticleSystem?.ParticleBuffer?.Uav == null)
             {
                 _lastErrorMessage = "Particle system buffers not valid.";
                 return;
@@ -45,14 +40,12 @@ namespace T3.Operators.Types.Id_e62c1fa0_6fcd_49f5_9cf8_d3081c8a5917
             
             _lastErrorMessage = null;
             
-            PointsUav.Value = context.ParticleSystem.PointBuffer.Uav;
-            SimPointsUav.Value = context.ParticleSystem.PointSimBuffer.Uav;
+            ParticlesUav.Value = context.ParticleSystem.ParticleBuffer.Uav;
             SpeedFactor.Value = context.ParticleSystem.SpeedFactor;
             
-            Length.Value = context.ParticleSystem.PointBuffer.Srv.Description.Buffer.ElementCount;
+            Length.Value = context.ParticleSystem.ParticleBuffer.Srv.Description.Buffer.ElementCount;
             
-            PointsUav.DirtyFlag.Clear();
-            SimPointsUav.DirtyFlag.Clear();
+            ParticlesUav.DirtyFlag.Clear();
             Length.DirtyFlag.Clear();
             SpeedFactor.DirtyFlag.Clear();
         }
@@ -67,6 +60,6 @@ namespace T3.Operators.Types.Id_e62c1fa0_6fcd_49f5_9cf8_d3081c8a5917
             return _lastErrorMessage;
         }
 
-        public string _lastErrorMessage;
+        private string _lastErrorMessage;
     }
 }

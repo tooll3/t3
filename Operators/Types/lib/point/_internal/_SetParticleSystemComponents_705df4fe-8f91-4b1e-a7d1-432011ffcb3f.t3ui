@@ -3,14 +3,6 @@
   "Description": "Adds information about the current particle system to the context,\nis it can be access by particle effects operators.",
   "InputUis": [
     {
-      "InputId": "8b47ec1f-8537-47be-b31b-641bcea3bdfe"/*PointsBuffer*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
       "InputId": "13583f72-3f77-4be0-b596-b8dbd27ca19c"/*PointsSimBuffer*/,
       "Relevancy": "Required",
       "Position": {

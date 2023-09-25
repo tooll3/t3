@@ -20,10 +20,10 @@ cbuffer Params : register(b0)
 cbuffer Params : register(b1)
 {
     int VolumeShape;
-}
+} 
 
-RWStructuredBuffer<Point> Points : u0; 
-RWStructuredBuffer<SimPoint> SimPoints : u1; 
+
+RWStructuredBuffer<Particle> Particles : u0; 
 
 static const int VolumeSphere = 0;
 static const int VolumeBox = 1;
@@ -34,17 +34,18 @@ static const int VolumeNoise = 4;
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
-    uint numStructs, stride;
-    Points.GetDimensions(numStructs, stride);
-    if(i.x >= numStructs) 
+    uint maxParticleCount, _;
+    Particles.GetDimensions(maxParticleCount, _);
+    int gi=i.x;
+    if(gi >= maxParticleCount) 
         return;
 
-    if (isnan(Points[i.x].w))
+    if (isnan(Particles[gi].birthTime))
         return;
         
-    float3 pos = Points[i.x].position;
-    float4 rot = Points[i.x].rotation;
-    float3 velocity = SimPoints[i.x].Velocity;    
+    float3 pos = Particles[gi].p.position;
+    float4 rot = Particles[gi].p.rotation;
+    float3 velocity = Particles[gi].velocity;    
 
     float3 posInVolume = mul(float4(pos, 1), TransformVolume).xyz;
     float3 posInVolumeNext = mul(float4(pos + velocity * SpeedFactor * 0.01 * 2, 1), TransformVolume).xyz;
@@ -73,7 +74,7 @@ void main(uint3 i : SV_DispatchThreadID)
         surfaceN = t1.x > t1.y ? (t1.x > t1.z ? float3(sign(posInVolume.x),0,0) : float3(0,0,sign(posInVolume.z)))  
                                : (t1.y > t1.z ? float3(0,sign(posInVolume.y),0) : float3(0,0,sign(posInVolume.z)));
 
-        //Points[i.x].w = distance;
+        //Particles[gi].w = distance;
         // s = smoothstep(1 + FallOff, 1, distance);
     }
     else if (VolumeShape == VolumePlane)
@@ -115,6 +116,6 @@ void main(uint3 i : SV_DispatchThreadID)
         velocity += force;
     }   
 
-    SimPoints[i.x].Velocity = velocity;
+    Particles[gi].velocity = velocity;
 }
 
