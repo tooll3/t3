@@ -73,6 +73,10 @@
     {
       "Id": "270f9603-1d9b-412b-9c76-330eafc8a958"/*Method*/,
       "DefaultValue": 0
+    },
+    {
+      "Id": "0512491d-3022-48c2-b79d-4688ff18fd0e"/*GenerateMips*/,
+      "DefaultValue": false
     }
   ],
   "Children": [
@@ -108,6 +112,11 @@
           "Id": "1e4e274b-60b2-4fe8-b275-ebef80d520a7"/*Source*/,
           "Type": "System.String",
           "Value": "Resources\\lib\\img\\generate\\noiseLab.hlsl"
+        },
+        {
+          "Id": "480d6c19-a33c-48b3-b9fa-aaf8bd31e6d9"/*GenerateMips*/,
+          "Type": "System.Boolean",
+          "Value": false
         }
       ],
       "Outputs": []
@@ -149,6 +158,12 @@
       "SourceSlotId": "270f9603-1d9b-412b-9c76-330eafc8a958",
       "TargetParentOrChildId": "3e087c62-4789-4777-8136-5d26200b08e6",
       "TargetSlotId": "01809b63-4b4a-47be-9588-98d5998ddb0c"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "0512491d-3022-48c2-b79d-4688ff18fd0e",
+      "TargetParentOrChildId": "5704272b-42c8-403c-b5c7-5786c1d8c31a",
+      "TargetSlotId": "480d6c19-a33c-48b3-b9fa-aaf8bd31e6d9"
     },
     {
       "SourceParentOrChildId": "e90d74e9-55f0-4370-994f-63e373cd2af9",
