@@ -23,7 +23,10 @@ void main(uint3 i : SV_DispatchThreadID)
     Particles.GetDimensions(maxParticleCount, stride);
     if(gi >= maxParticleCount) 
         return;
-    
+
+    if(isnan(TransformVolume._11) || TransformVolume._11 == 0)
+       return;
+
     TargetPoints.GetDimensions(targetPointCount, stride);
     uint targetPointIndex= gi % targetPointCount;
 
@@ -38,7 +41,7 @@ void main(uint3 i : SV_DispatchThreadID)
     float t= (d + r*(FallOff -1)) / (2 * r * FallOff);
     float blendFactor = smoothstep(1,0, t) * Strength; 
 
-    Particles[gi].p.w = blendFactor;
+    //Particles[gi].p.w = blendFactor;
     Particles[gi].p.position = lerp(pos, TargetPoints[targetPointIndex].position, blendFactor);
     Particles[gi].p.rotation = q_slerp(rot, TargetPoints[targetPointIndex].rotation, blendFactor);
     Particles[gi].velocity = lerp(velocity, 0, blendFactor);    

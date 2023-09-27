@@ -42,6 +42,11 @@ void main(uint3 i : SV_DispatchThreadID)
 
     if (isnan(Particles[gi].birthTime))
         return;
+    
+    // return;
+    if(isnan(TransformVolume._11) || TransformVolume._11 == 0) {
+        return;
+    }
         
     float3 pos = Particles[gi].p.position;
     float4 rot = Particles[gi].p.rotation;

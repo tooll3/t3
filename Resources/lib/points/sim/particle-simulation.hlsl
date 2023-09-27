@@ -2,7 +2,7 @@
 
 cbuffer Params : register(b0)
 {
-    float EmitEmitPoints;    
+    float TriggerEmit;    
     float AgingRate;
     float MaxAge; 
     float Reset;
@@ -45,12 +45,11 @@ void main(uint3 i : SV_DispatchThreadID)
     {
         Particles[gi].birthTime = NAN;
         Particles[gi].p.position =  NAN;
-        return;
     }
 
     // Insert emit points
     int addIndex = (gi - CollectCycleIndex + maxParticleCount) % maxParticleCount;
-    if( EmitEmitPoints > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount )
+    if( TriggerEmit > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount )
     {
         Particles[gi].p = EmitPoints[addIndex];
         Particles[gi].birthTime = Time;
