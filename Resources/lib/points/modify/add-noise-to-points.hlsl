@@ -2,21 +2,21 @@
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
 
-cbuffer Transforms : register(b0)
-{
-    float4x4 CameraToClipSpace;
-    float4x4 ClipSpaceToCamera;
-    float4x4 WorldToCamera;
-    float4x4 CameraToWorld;
-    float4x4 WorldToClipSpace;
-    float4x4 ClipSpaceToWorld;
-    float4x4 ObjectToWorld;
-    float4x4 WorldToObject;
-    float4x4 ObjectToCamera;
-    float4x4 ObjectToClipSpace;
-};
+// cbuffer Transforms : register(b0)
+// {
+//     float4x4 CameraToClipSpace;
+//     float4x4 ClipSpaceToCamera;
+//     float4x4 WorldToCamera;
+//     float4x4 CameraToWorld;
+//     float4x4 WorldToClipSpace;
+//     float4x4 ClipSpaceToWorld;
+//     float4x4 ObjectToWorld;
+//     float4x4 WorldToObject;
+//     float4x4 ObjectToCamera;
+//     float4x4 ObjectToClipSpace;
+// };
   
-cbuffer Params : register(b1)
+cbuffer Params : register(b0)
 {
     float Amount;
     float Frequency;
@@ -89,8 +89,8 @@ void main(uint3 i : SV_DispatchThreadID)
     float3 offset;;
     float4 newRotation = p.rotation;
 
-    float4 posInWorld = mul(float4(p.position ,1), ObjectToWorld);
-    GetTranslationAndRotation(weight , posInWorld.xyz + variationOffset, p.rotation, offset, newRotation);
+    //float4 posInWorld = mul(float4(p.position ,1), ObjectToWorld);
+    GetTranslationAndRotation(weight , p.position + variationOffset, p.rotation, offset, newRotation);
 
     ResultPoints[i.x].position = p.position + offset ;
     ResultPoints[i.x].rotation = newRotation;
