@@ -31,6 +31,9 @@ namespace T3.Operators.Types.Id_3f8376f2_b89a_4ab4_b6dc_a3e8bf88c0a5
 
         [Input(Guid = "d1ebfcaa-ce47-4064-9169-7afa64f942f5")]
         public readonly InputSlot<T3.Core.Operator.GizmoVisibility> ShowGizmo = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+
+        [Input(Guid = "671a04f9-0f40-45ea-a2df-4f06c08d9647")]
+        public readonly InputSlot<float> AmountFromVelocity = new InputSlot<float>();
     }
 }
 

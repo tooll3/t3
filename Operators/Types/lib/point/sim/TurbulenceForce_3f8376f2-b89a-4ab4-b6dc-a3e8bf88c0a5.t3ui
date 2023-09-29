@@ -50,14 +50,21 @@
         "X": -1348.7484,
         "Y": 513.4038
       }
+    },
+    {
+      "InputId": "671a04f9-0f40-45ea-a2df-4f06c08d9647"/*AmountFromVelocity*/,
+      "Position": {
+        "X": -1348.7484,
+        "Y": 558.4038
+      }
     }
   ],
   "SymbolChildUis": [
     {
       "ChildId": "c1310b7e-5ad8-42ac-a283-ce67f2318210"/*ComputeShader*/,
       "Position": {
-        "X": -560.48334,
-        "Y": 577.1526
+        "X": -564.9549,
+        "Y": 632.30273
       }
     },
     {
