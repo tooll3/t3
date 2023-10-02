@@ -1,8 +1,8 @@
 {
   "TimeClipSuspending": true,
-  "MainOperatorName": "WFE_RoughtCut",
+  "MainOperatorName": "MakeMain1",
   "AudioResyncThreshold": 0.04,
-  "EnablePlaybackControlWithKeyboard": false,
-  "WindowedMode": true,
+  "EnablePlaybackControlWithKeyboard": true,
+  "WindowedMode": false,
   "LimitMidiDeviceCapture": null
 }

@@ -380,7 +380,7 @@ namespace T3.Editor.Gui.Styling
 
             ImGui.SameLine();
             ImGui.TextWrapped(label);
-            ImGui.Indent(-13);
+            //ImGui.Indent(-13);
             ImGui.PopStyleVar(2);
         }
 
