@@ -25,12 +25,15 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
         public OrbitCamera()
         {
             Output.UpdateAction = Update;
-            //Reference.UpdateAction = Update;
+            Reference.UpdateAction = Update;
             Reference.Value = this;
         }
 
         private void Update(EvaluationContext context)
         {
+            Reference.DirtyFlag.Clear();
+            Output.DirtyFlag.Clear();
+            
             LastObjectToWorld = context.ObjectToWorld;
             var damping = Damping.GetValue(context).Clamp(0,1);
 
@@ -92,9 +95,17 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
 
             _dampedEye = Vector3.Lerp(eye, _dampedEye, damping);
             _dampedTarget = Vector3.Lerp(target, _dampedTarget, damping);
+
+            _cameraDefinition.Target = _dampedTarget.ToNumerics();
+            _cameraDefinition.Position = _dampedEye.ToNumerics();
+            _cameraDefinition.Roll = roll;
+            _cameraDefinition.Up = up.ToNumerics();
+            _cameraDefinition.AspectRatio = aspectRatio;
+            
             
             WorldToCamera = Matrix.LookAtRH(_dampedEye, _dampedTarget, up);
-                        
+            
+                
             if (context.BypassCameras)
             {
                 Command.GetValue(context);
@@ -143,6 +154,8 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
 
         private Vector3 _dampedTarget;
         private Vector3 _dampedEye;
+        private CameraDefinition _cameraDefinition;
+        public CameraDefinition CameraDefinition => _cameraDefinition;
         
         
         [Input(Guid = "33752356-8348-4938-8f73-6257e6bb1c1f")]

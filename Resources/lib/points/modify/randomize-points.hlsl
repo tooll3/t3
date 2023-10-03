@@ -49,10 +49,12 @@ void main(uint3 i : SV_DispatchThreadID)
     float f = pointId / (float)pointCount;
     float phase = Seed + 133.1123 * f;
     int phaseId = (int)phase; 
+    float clampedBias = clamp(Bias, 0.001, 0.999);
     float4 normalizedScatter = lerp(hash41u(pointId * 12341 + phaseId),
                                     hash41u(pointId * 12341 + phaseId + 1),
                                     smoothstep(0, 1,
                                                phase - phaseId));
+
 
 
     float4 hashRot = lerp(hash41u(pointId * 2723 + phaseId),
@@ -62,7 +64,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     //float rand = (i.x + 0.5) * 1.431 + 111 + floor(Seed+0.5) * 37.1;
     //float4 hash4 = hash42(rand);
-    float4 hash4 =  GetGain(normalizedScatter, clamp(Bias, 0.001, 0.999)) * 2 -1;
+    float4 hash4 =  GetGain(normalizedScatter, clampedBias) * 2 -1;
     
     //float4 hashRot = hash42( float2(rand, 23.1));
 
@@ -79,7 +81,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     ResultPoints[i.x].position = SourcePoints[i.x].position + offset;
 
-    float3 randomRotate = (hashRot.xyz - 0.5) * (RandomizeRotation / 180 * PI) * amount;
+    float3 randomRotate = (hashRot.xyz - 0.5) * (RandomizeRotation / 180 * PI) * amount * clampedBias;
 
     rot = normalize(qmul(rot, rotate_angle_axis(randomRotate.x * Offset, float3(1,0,0))));
     rot = normalize(qmul(rot, rotate_angle_axis(randomRotate.y * Offset, float3(0,1,0))));

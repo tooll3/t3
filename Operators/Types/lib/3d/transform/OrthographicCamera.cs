@@ -89,6 +89,8 @@ namespace T3.Operators.Types.Id_954af16f_b37b_4e64_a965_4bec02b9179e
             set { Animator.UpdateFloatInputValue(Roll, value); }
 
         }
+
+        public CameraDefinition CameraDefinition => new();  // Not implemented
         
         public Matrix WorldToCamera { get; set; }
         public Matrix LastObjectToWorld { get; set; }

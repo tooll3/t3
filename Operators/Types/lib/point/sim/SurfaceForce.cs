@@ -9,21 +9,18 @@ namespace T3.Operators.Types.Id_fbe1a703_f372_4236_9f20_5d0b69183843
     public class SurfaceForce : Instance<SurfaceForce>
 ,ITransformable
     {
-        [Output(Guid = "467cad1e-d5d4-493e-9003-c450d48ddf6c")]
-        public readonly TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews> Result2 = new TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews>();
+        [Output(Guid = "13B7DBBC-D418-4BD5-A8A1-182DF2071A25")]
+        public readonly Slot<T3.Core.DataTypes.ParticleSystem> ParticleSystem = new();
 
-        public SurfaceForce()
-        {
-            Result2.TransformableOp = this;
-        }
+        // public SurfaceForce()
+        // {
+        //     ParticleSystem.TransformableOp = this;
+        // }
 
         IInputSlot ITransformable.TranslationInput => VolumeCenter;
         IInputSlot ITransformable.RotationInput => VolumeRotate;
         IInputSlot ITransformable.ScaleInput => VolumeScale;
         public Action<Instance, EvaluationContext> TransformCallback { get; set; }
-
-        [Input(Guid = "a5931f67-3724-4bfc-bed2-c2f490b23c74")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> Points = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
         [Input(Guid = "e3485fea-3a75-47f9-9a7d-ea69f4feb5f6")]
         public readonly InputSlot<System.Numerics.Vector3> VolumeCenter = new InputSlot<System.Numerics.Vector3>();
@@ -37,35 +34,11 @@ namespace T3.Operators.Types.Id_fbe1a703_f372_4236_9f20_5d0b69183843
         [Input(Guid = "721c500b-ae7c-4249-a374-1bcf6ae13abd")]
         public readonly InputSlot<System.Numerics.Vector3> VolumeRotate = new InputSlot<System.Numerics.Vector3>();
 
-        [Input(Guid = "aa742901-75bd-4d30-b3cf-154dfd4ab9b0")]
-        public readonly InputSlot<float> FallOff = new InputSlot<float>();
-
-        [Input(Guid = "3f449bf0-7136-4b57-af51-0928b025c697")]
-        public readonly InputSlot<float> Bias = new InputSlot<float>();
-
         [Input(Guid = "86c81e40-79e8-4699-a7fe-581f0b09d266")]
         public readonly InputSlot<int> VolumeShape = new InputSlot<int>();
 
-        [Input(Guid = "8387dc9d-e536-4e0a-a650-46feddbea91b")]
-        public readonly InputSlot<bool> ClampResult = new InputSlot<bool>();
-
-        [Input(Guid = "09a5476c-78e3-45dc-a9a3-f3bd170bbf05")]
-        public readonly InputSlot<float> Phase = new InputSlot<float>();
-
-        [Input(Guid = "f6efb038-fdea-439c-b25c-5cdf76f15b2b")]
-        public readonly InputSlot<float> Threshold = new InputSlot<float>();
-
         [Input(Guid = "cf741b95-e3d1-4f43-99e9-15fcdaa6b648")]
         public readonly InputSlot<float> Strength = new InputSlot<float>();
-
-        [Input(Guid = "eb33f5a6-df40-47fd-aab9-c1eb03b49bbd")]
-        public readonly InputSlot<int> Mode = new InputSlot<int>();
-
-        [Input(Guid = "f7266e64-172c-42c2-8ca3-5a8112852245")]
-        public readonly InputSlot<float> SoftEdge = new InputSlot<float>();
-
-        [Input(Guid = "0db5c531-721d-403e-9154-e31f6be20ec6")]
-        public readonly InputSlot<T3.Core.Operator.GizmoVisibility> GizmoVisibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
 
         [Input(Guid = "ceb7008d-c536-4d87-b3f8-d5ba9fe29eed")]
         public readonly InputSlot<float> Bounciness = new InputSlot<float>();
@@ -76,11 +49,14 @@ namespace T3.Operators.Types.Id_fbe1a703_f372_4236_9f20_5d0b69183843
         [Input(Guid = "d6bf8d83-542b-44ee-bd35-f631179f8d0c")]
         public readonly InputSlot<float> AttractionDecay = new InputSlot<float>();
 
-        [Input(Guid = "5264a72d-679e-4921-a086-42ef5b88469e")]
-        public readonly InputSlot<float> MaxAcceleration = new InputSlot<float>();
-
         [Input(Guid = "7c6f58e7-27fc-4271-adef-248cffe5a8b7")]
         public readonly InputSlot<float> Repulsion = new InputSlot<float>();
+
+        [Input(Guid = "0db5c531-721d-403e-9154-e31f6be20ec6")]
+        public readonly InputSlot<T3.Core.Operator.GizmoVisibility> GizmoVisibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+
+        [Input(Guid = "2ab85ac3-819d-4e3e-891a-7f27af627fdf")]
+        public readonly InputSlot<bool> InvertVolume = new InputSlot<bool>();
 
 
         
@@ -101,6 +77,7 @@ namespace T3.Operators.Types.Id_fbe1a703_f372_4236_9f20_5d0b69183843
             Multiply,
             Invert,
         }
+
     }
 }
 

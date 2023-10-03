@@ -66,7 +66,7 @@
       "Outputs": []
     },
     {
-      "Id": "db32fcca-421e-4bde-b87b-8b299bdb2d3d"/*ParticleSimulation*/,
+      "Id": "db32fcca-421e-4bde-b87b-8b299bdb2d3d"/*LegacyParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {

@@ -414,7 +414,7 @@
       "Outputs": []
     },
     {
-      "Id": "bd782926-6448-414d-a75b-35edd1b3f7fc"/*ParticleSimulation*/,
+      "Id": "bd782926-6448-414d-a75b-35edd1b3f7fc"/*LegacyParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {
@@ -651,7 +651,7 @@
       "Outputs": []
     },
     {
-      "Id": "2e582673-851f-479a-b2e7-18145e3b9406"/*ParticleSimulation*/,
+      "Id": "2e582673-851f-479a-b2e7-18145e3b9406"/*LegacyParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {
@@ -709,7 +709,7 @@
       "Outputs": []
     },
     {
-      "Id": "c1a103d3-98df-4032-90b9-8075f37b2714"/*DirectionalForce*/,
+      "Id": "c1a103d3-98df-4032-90b9-8075f37b2714"/*LegacyDirectionalForce*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {

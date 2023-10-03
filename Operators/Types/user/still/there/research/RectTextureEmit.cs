@@ -20,7 +20,7 @@ namespace T3.Operators.Types.Id_c6911113_9411_4706_ad16_9e7bf58ad6c6
         public readonly InputSlot<int> EmitCountPerFrame = new InputSlot<int>();
 
         [Input(Guid = "765b2330-777c-4b7d-bfa0-15f4701bedae")]
-        public readonly InputSlot<T3.Core.DataTypes.ParticleSystem> ParticleSystem = new InputSlot<T3.Core.DataTypes.ParticleSystem>();
+        public readonly InputSlot<T3.Core.DataTypes.LegacyParticleSystem> ParticleSystem = new InputSlot<T3.Core.DataTypes.LegacyParticleSystem>();
 
         [Input(Guid = "ddac1768-0073-4158-9929-9c309d902429")]
         public readonly InputSlot<System.Numerics.Vector2> LifeTime = new InputSlot<System.Numerics.Vector2>();

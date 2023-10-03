@@ -2,108 +2,91 @@
 
 cbuffer Params : register(b0)
 {
-    float AddNewPoints;    
-    float UseAging;
+    float TriggerEmit;    
     float AgingRate;
-    float MaxAge;
-
-    float ClampAtMaxAge;
+    float MaxAge; 
     float Reset;
-    float DeltaTime;
-    float ApplyMovement;
 
     float Speed; 
     float Drag;
-
     float SetInitialVelocity;
     float InitialVelocity;
+
+    float Time;
+    float OrientTowardsVelocity;
 }
+
 
 cbuffer IntParams : register(b1)
 {
     int CollectCycleIndex;
-}
+    int WMode;
+} 
 
-StructuredBuffer<Point> NewPoints : t0;
-RWStructuredBuffer<Point> CollectedPoints : u0;
+StructuredBuffer<Point> EmitPoints : t0;
+RWStructuredBuffer<Particle> Particles : u0;
+RWStructuredBuffer<Point> ResultPoints : u1;
+
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
     uint newPointCount, pointStride;
-    NewPoints.GetDimensions(newPointCount, pointStride);
+    EmitPoints.GetDimensions(newPointCount, pointStride);
 
-    uint collectedPointCount, pointStride2;
-    CollectedPoints.GetDimensions(collectedPointCount, pointStride2);
+    uint maxParticleCount, pointStride2;
+    Particles.GetDimensions(maxParticleCount, pointStride2);
 
     uint gi = i.x;
-    if(i.x >= collectedPointCount)
+    if(gi >= maxParticleCount)
         return;
 
     if(Reset > 0.5)
     {
-        CollectedPoints[gi].w =  sqrt(-1);
-        return;
+        Particles[gi].birthTime = NAN;
+        Particles[gi].p.position =  NAN;
     }
-
-    int addIndex = (gi - CollectCycleIndex) % collectedPointCount;
 
     // Insert emit points
-    if( AddNewPoints > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount )
+    int addIndex = (gi - CollectCycleIndex + maxParticleCount) % maxParticleCount;
+    if( TriggerEmit > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount )
     {
-        CollectedPoints[gi] = NewPoints[addIndex];
-
-        if(UseAging > 0.5) 
-        {
-            CollectedPoints[gi].w = 0.0001;
-        }
-
-        if(SetInitialVelocity > 0.5) 
-        {
-            CollectedPoints[gi].rotation = q_encode_v(CollectedPoints[gi].rotation, InitialVelocity);
-        }
+        Particles[gi].p = EmitPoints[addIndex];
+        Particles[gi].birthTime = Time;
+        Particles[gi].velocity = SetInitialVelocity > 0.5 
+                                ? rotate_vector(float3(0,0,1), normalize(Particles[gi].p.rotation)) * InitialVelocity
+                                : 0;
     }
 
+    if(Particles[gi].birthTime == NAN)
+        return;
 
-    // Update other points
-    else if(UseAging > 0.5 || ApplyMovement > 0.5)
+    float3 velocity = Particles[gi].velocity;
+    velocity *= (1-Drag);
+    Particles[gi].velocity = velocity;
+    float speed = length(velocity);
+
+    float3 pos = Particles[gi].p.position;
+    pos += velocity * Speed * 0.01;
+    Particles[gi].p.position = pos;
+
+    if(speed > 0.0001) 
     {
-        if(UseAging > 0.5 ) 
-        {
-            float age = CollectedPoints[gi].w;
+        float f = saturate(speed * OrientTowardsVelocity);
+        Particles[gi].p.rotation =  q_slerp(Particles[gi].p.rotation, q_look_at(velocity / speed, float3(0,1,0)),  f );
+    }
 
-            if(!isnan(age)) 
-            {    
-                if(age <= 0)
-                {
-                    CollectedPoints[gi].w = sqrt(-1); // Flag non-initialized points
-                }
-                else if(age < MaxAge)
-                {
-                    CollectedPoints[gi].w = age+  DeltaTime * AgingRate;
-                }
-                else if(ClampAtMaxAge) {
-                    CollectedPoints[gi].w = MaxAge;
-                }
-            }
-        }
-
-        if(ApplyMovement > 0.5) 
-        {
-            
-            Point p = CollectedPoints[gi];
-            float4 rot;
-            float v = q_separate_v(p.rotation, rot);
-
-            float3 forward =  normalize(rotate_vector(float3(0, 0, 1), rot));
-
-            forward *= v * 0.01 * Speed;
-            p.position += forward;
-
-            v *= (1-Drag);
-            p.rotation = q_encode_v(rot, v);
-
-            CollectedPoints[gi] = p;
-        }
+    // Copy result
+    ResultPoints[gi] = Particles[gi].p;
+    
+    if(WMode == 1) 
+    {
+        ResultPoints[gi].w = isnan(Particles[gi].birthTime) 
+                                ?  NAN
+                                : clamp((Time - Particles[gi].birthTime) * AgingRate,0, MaxAge);
+    } 
+    else if(WMode == 2) 
+    {
+        ResultPoints[gi].w = speed;
     }
 }

@@ -36,6 +36,7 @@ sampler texSampler : register(s0);
 
 StructuredBuffer<PbrVertex> PbrVertices : t0;
 StructuredBuffer<int3> FaceIndices : t1;
+
 Texture2D<float4> BaseColorMap2 : register(t2);
 TextureCube<float4> CubeMap : register(t3);
 
@@ -64,6 +65,7 @@ psInput vsMain(uint id: SV_VertexID)
 float4 psMain(psInput pin) : SV_TARGET
 {
     if(UseCubeMap > 0.5) {
+        
         uint width, height, levels;
         CubeMap.GetDimensions(0, width, height, levels);
 
@@ -92,9 +94,6 @@ float4 psMain(psInput pin) : SV_TARGET
         else {
             albedo = BaseColorMap2.Sample(texSampler, pin.texCoord);
         }
-
-        //float4 albedo = BaseColorMap2.Sample(texSampler, pin.texCoord);
-        //return float4(albedo.rgb,1);
 
         if(AlphaCutOff > 0 && albedo.a * Color.a < AlphaCutOff) {
             discard;

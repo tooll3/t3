@@ -910,7 +910,7 @@
       }
     },
     {
-      "ChildId": "9450e34e-bf6e-45e9-9e62-9298e4b3d83a"/*DirectionalForce*/,
+      "ChildId": "9450e34e-bf6e-45e9-9e62-9298e4b3d83a"/*LegacyDirectionalForce*/,
       "Position": {
         "X": 375.0401,
         "Y": 4494.7896
@@ -1251,7 +1251,7 @@
       }
     },
     {
-      "ChildId": "46dd55e9-5055-48be-9b73-810a1ba842f7"/*DirectionalForce*/,
+      "ChildId": "46dd55e9-5055-48be-9b73-810a1ba842f7"/*LegacyDirectionalForce*/,
       "Position": {
         "X": 2218.1914,
         "Y": 4777.239
@@ -1748,7 +1748,7 @@
       }
     },
     {
-      "ChildId": "30b1920d-65bc-42a3-a1ed-f7596a338134"/*ParticleSimulation*/,
+      "ChildId": "30b1920d-65bc-42a3-a1ed-f7596a338134"/*LegacyParticleSimulation*/,
       "Position": {
         "X": -2282.5923,
         "Y": -365.01562

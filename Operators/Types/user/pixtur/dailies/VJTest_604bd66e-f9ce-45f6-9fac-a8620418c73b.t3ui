@@ -151,7 +151,7 @@
       }
     },
     {
-      "ChildId": "711c8d24-b6d2-4f0a-bb39-f43937d77f1b"/*DirectionalForce*/,
+      "ChildId": "711c8d24-b6d2-4f0a-bb39-f43937d77f1b"/*LegacyDirectionalForce*/,
       "Position": {
         "X": 188.76947,
         "Y": 3.3256683
@@ -172,7 +172,7 @@
       }
     },
     {
-      "ChildId": "c8ac6ce8-d23e-442e-bfdb-034c038264c3"/*ParticleSimulation*/,
+      "ChildId": "c8ac6ce8-d23e-442e-bfdb-034c038264c3"/*LegacyParticleSimulation*/,
       "Position": {
         "X": -306.7699,
         "Y": 54.181274
@@ -186,7 +186,7 @@
       }
     },
     {
-      "ChildId": "8071fd14-aad8-49fd-b4fd-0efc25e3738e"/*ParticleSimulation*/,
+      "ChildId": "8071fd14-aad8-49fd-b4fd-0efc25e3738e"/*LegacyParticleSimulation*/,
       "Position": {
         "X": -337.93515,
         "Y": -440.86652
@@ -200,7 +200,7 @@
       }
     },
     {
-      "ChildId": "0844efdb-a52a-49fd-aaec-eb2781105512"/*DirectionalForce*/,
+      "ChildId": "0844efdb-a52a-49fd-aaec-eb2781105512"/*LegacyDirectionalForce*/,
       "Position": {
         "X": -187.93515,
         "Y": -440.86652

@@ -14,7 +14,7 @@ namespace T3.Operators.Types.Id_73a55607_c892_4a85_946b_e37354c4c0e4
 
 
         [Input(Guid = "7fb7da7e-50e1-4221-b001-df6a5a2c58a1")]
-        public readonly InputSlot<ParticleSystem> ParticleSystem = new InputSlot<ParticleSystem>();
+        public readonly InputSlot<LegacyParticleSystem> ParticleSystem = new InputSlot<LegacyParticleSystem>();
 
         [Input(Guid = "0a4f49d0-8b4b-47f1-a2cf-134ebb62cb74")]
         public readonly InputSlot<float> Size = new InputSlot<float>();
