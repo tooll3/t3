@@ -1,5 +1,5 @@
 {
-  "Name": "DisplaceMesh",
+  "Name": "_LegacyDisplaceMesh",
   "Id": "b5709297-c714-4019-9d0b-6982590b5590",
   "Namespace": "lib.3d.mesh.modify",
   "Inputs": [
@@ -76,7 +76,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\mesh\\noise-displace-mesh.hlsl"
+          "Value": "Resources\\lib\\3d\\mesh\\legacy-noise-displace-mesh.hlsl"
         }
       ],
       "Outputs": []
@@ -182,7 +182,7 @@
       "Outputs": []
     },
     {
-      "Id": "2e62c3a2-90f5-4402-98c2-706c6dde1de9"/*BoolToFloats*/,
+      "Id": "2e62c3a2-90f5-4402-98c2-706c6dde1de9"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

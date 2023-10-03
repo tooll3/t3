@@ -572,8 +572,8 @@
           "Id": "e6d32fee-30d9-4ccf-b48b-88906f841ff8"/*LabelOffset*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": -14.0,
-            "Y": -25.0
+            "X": -35.02,
+            "Y": -25.02
           }
         },
         {

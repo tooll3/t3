@@ -74,7 +74,7 @@
       }
     },
     {
-      "ChildId": "00d242a3-728e-4732-b356-5214d7bd5828"/*DisplaceMesh*/,
+      "ChildId": "00d242a3-728e-4732-b356-5214d7bd5828"/*_LegacyDisplaceMesh*/,
       "Position": {
         "X": 425.76465,
         "Y": 126.55176
@@ -728,7 +728,7 @@
       }
     },
     {
-      "ChildId": "3d45138e-fa1a-4e12-b07f-6612afe86e36"/*DisplaceMesh*/,
+      "ChildId": "3d45138e-fa1a-4e12-b07f-6612afe86e36"/*_LegacyDisplaceMesh*/,
       "Position": {
         "X": 675.203,
         "Y": 3291.5525

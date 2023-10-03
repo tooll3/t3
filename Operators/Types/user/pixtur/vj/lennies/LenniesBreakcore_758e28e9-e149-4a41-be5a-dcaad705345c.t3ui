@@ -403,7 +403,7 @@
       }
     },
     {
-      "ChildId": "f580e902-52e1-4ed6-8ea0-8266d848656e"/*DisplaceMesh*/,
+      "ChildId": "f580e902-52e1-4ed6-8ea0-8266d848656e"/*_LegacyDisplaceMesh*/,
       "Position": {
         "X": 777.4636,
         "Y": 188.49396

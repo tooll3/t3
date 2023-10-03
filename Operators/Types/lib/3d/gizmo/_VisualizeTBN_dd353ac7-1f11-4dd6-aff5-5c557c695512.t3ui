@@ -1,5 +1,5 @@
 {
-  "Id": "dd353ac7-1f11-4dd6-aff5-5c557c695512"/*VisualizeTBN*/,
+  "Id": "dd353ac7-1f11-4dd6-aff5-5c557c695512"/*_VisualizeTBN*/,
   "Description": "Draws mesh normals, tangents and bitangents as lines for analysis. \nThis can be useful to verify that TBN space is spatially consitent.",
   "InputUis": [
     {
@@ -14,13 +14,6 @@
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
-    },
-    {
-      "InputId": "20ad2bbd-955a-44c0-af90-d3efd21ac07f"/*SelectionSize*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 135.0
       }
     },
     {
@@ -100,20 +93,6 @@
       "Position": {
         "X": 552.9238,
         "Y": 273.8413
-      }
-    },
-    {
-      "ChildId": "a4653699-23ed-42db-9c52-c01d4d88206f"/*DrawPoints*/,
-      "Position": {
-        "X": 531.8144,
-        "Y": -26.5252
-      }
-    },
-    {
-      "ChildId": "57b02970-337d-4a9f-b360-f0c364a34711"/*Multiply*/,
-      "Position": {
-        "X": 265.51007,
-        "Y": -121.38127
       }
     },
     {

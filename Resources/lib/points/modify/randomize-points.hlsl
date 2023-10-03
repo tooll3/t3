@@ -45,11 +45,12 @@ void main(uint3 i : SV_DispatchThreadID)
     //     return;
     // }
 
+    float clampedBias = clamp(Bias, 0.001, 0.999);
+
     int pointId = i.x;
     float f = pointId / (float)pointCount;
     float phase = Seed + 133.1123 * f;
     int phaseId = (int)phase; 
-    float clampedBias = clamp(Bias, 0.001, 0.999);
     float4 normalizedScatter = lerp(hash41u(pointId * 12341 + phaseId),
                                     hash41u(pointId * 12341 + phaseId + 1),
                                     smoothstep(0, 1,

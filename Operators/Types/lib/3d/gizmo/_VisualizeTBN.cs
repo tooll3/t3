@@ -7,7 +7,7 @@ using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_dd353ac7_1f11_4dd6_aff5_5c557c695512
 {
-    public class VisualizeTBN : Instance<VisualizeTBN>
+    public class _VisualizeTBN : Instance<_VisualizeTBN>
     {
         [Output(Guid = "82fc9f76-6a6d-4464-a94d-e28a06d82205")]
         public readonly Slot<Command> Output = new Slot<Command>();
@@ -17,9 +17,6 @@ namespace T3.Operators.Types.Id_dd353ac7_1f11_4dd6_aff5_5c557c695512
 
         [Input(Guid = "d9287fce-b451-4d5e-83d8-fc8c9d39b9a8")]
         public readonly InputSlot<float> Length = new InputSlot<float>();
-
-        [Input(Guid = "20ad2bbd-955a-44c0-af90-d3efd21ac07f")]
-        public readonly InputSlot<float> SelectionSize = new InputSlot<float>();
 
         [Input(Guid = "d1cfa06d-a4bd-4975-90d4-5aa1ca39dc39")]
         public readonly InputSlot<T3.Core.Operator.GizmoVisibility> Visibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
