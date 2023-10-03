@@ -227,17 +227,8 @@ internal abstract class MfVideoWriter : IDisposable
 
                         // An attempt to speed up encoding by copying larger ranges. Sadly this froze the execution
                         //inputStream.CopyTo(outputStream, dataBox.RowPitch);
-                        
-                        var range = inputStream.ReadRange<byte>(dataBox.RowPitch);
-                        // byte g = (byte)inputStream.ReadByte();
-                        // byte b = (byte)inputStream.ReadByte();
-                        // byte a = (byte)inputStream.ReadByte();
-                        outputStream.WriteRange(range);
 
-                        // outputStream.WriteByte(b);
-                        // outputStream.WriteByte(g);
-                        // outputStream.WriteByte(r);
-                        // outputStream.WriteByte(a);
+                        outputStream.WriteRange(inputStream.ReadRange<byte>(dataBox.RowPitch));
                     }
 
                     break;

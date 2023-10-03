@@ -1808,6 +1808,11 @@
             "Y": -0.5,
             "Z": 0.5
           }
+        },
+        {
+          "Id": "9748853e-5f13-45c9-bca6-d07b07185aab"/*SizeMode*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -1885,6 +1890,11 @@
             "Y": -0.5,
             "Z": 0.5
           }
+        },
+        {
+          "Id": "9748853e-5f13-45c9-bca6-d07b07185aab"/*SizeMode*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -3469,12 +3479,6 @@
       "SourceSlotId": "cf976e9a-ea57-44f7-aeb9-f57f2e712b41",
       "TargetParentOrChildId": "9588f9fb-e601-4089-86a1-adc29af59513",
       "TargetSlotId": "82746dde-ab65-4c49-a22f-cf9a50f4a3e9"
-    },
-    {
-      "SourceParentOrChildId": "b6a01f3a-b978-49f7-a9b8-53ce51fcdc22",
-      "SourceSlotId": "97a91f72-1e40-412c-911e-70b142e16925",
-      "TargetParentOrChildId": "9588f9fb-e601-4089-86a1-adc29af59513",
-      "TargetSlotId": "9c8c1407-bf6a-47c0-8c6c-2cd9f303151d"
     },
     {
       "SourceParentOrChildId": "82c699b6-582a-4e7e-9a0c-3c58aec41493",
