@@ -119,9 +119,9 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
                         _vertexBufferData[vertexIndex] = new PbrVertex
                                                              {
                                                                  Position = p + center,
-                                                                 Normal =  (isFlipped ? normal0 * -1 : normal0),
-                                                                                           Tangent = tangent0,
-                                                                                           Bitangent = isFlipped ? binormal0 * -1 : binormal0,
+                                                                 Normal =  SharpDX.Vector3.TransformNormal((isFlipped ? normal0 * -1 : normal0), rotationMatrix),
+                                                                                           Tangent = SharpDX.Vector3.TransformNormal(tangent0,rotationMatrix),
+                                                                                           Bitangent = SharpDX.Vector3.TransformNormal(isFlipped ? binormal0 * -1 : binormal0, rotationMatrix),
                                                                                            Texcoord = uv0,
                                                                                            Selection = 1
                                                              };
