@@ -214,7 +214,7 @@
       }
     },
     {
-      "ChildId": "19024b14-2573-4acf-8b0b-821964f0b0af"/*BoolToFloats*/,
+      "ChildId": "19024b14-2573-4acf-8b0b-821964f0b0af"/*BoolToFloat*/,
       "Position": {
         "X": -337.71606,
         "Y": 2166.2249

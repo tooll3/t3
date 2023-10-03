@@ -158,7 +158,7 @@
       "Outputs": []
     },
     {
-      "Id": "cfda7827-4494-4bec-b530-e897980fa398"/*BoolToFloats*/,
+      "Id": "cfda7827-4494-4bec-b530-e897980fa398"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

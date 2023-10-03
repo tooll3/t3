@@ -6,12 +6,12 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_9db2fcbf_54b9_4222_878b_80d1a0dc6edf
 {
-    public class BoolToFloats : Instance<BoolToFloats>
+    public class BoolToFloat : Instance<BoolToFloat>
     {
         [Output(Guid = "F0321A54-E844-482F-A161-7F137ABC54B0")]
         public readonly Slot<float> Result = new Slot<float>();
         
-        public BoolToFloats()
+        public BoolToFloat()
         {
             Result.UpdateAction = Update;
         }

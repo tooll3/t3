@@ -209,7 +209,7 @@
       }
     },
     {
-      "ChildId": "0565fbcc-bead-4089-800c-28ab6f2ea730"/*BoolToFloats*/,
+      "ChildId": "0565fbcc-bead-4089-800c-28ab6f2ea730"/*BoolToFloat*/,
       "Position": {
         "X": -420.4781,
         "Y": 2020.8527

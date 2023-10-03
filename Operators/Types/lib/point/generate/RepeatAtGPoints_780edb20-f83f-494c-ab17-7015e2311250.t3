@@ -146,19 +146,19 @@
       "Outputs": []
     },
     {
-      "Id": "30e928ad-fe2a-40ef-9c00-87b18e5b5dbc"/*BoolToFloats*/,
+      "Id": "30e928ad-fe2a-40ef-9c00-87b18e5b5dbc"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "64d078d1-2a31-40bb-855b-4eeef6d07f3e"/*BoolToFloats*/,
+      "Id": "64d078d1-2a31-40bb-855b-4eeef6d07f3e"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "e77f4341-2aa2-484b-81dc-07a3a6ed0ae3"/*BoolToFloats*/,
+      "Id": "e77f4341-2aa2-484b-81dc-07a3a6ed0ae3"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
