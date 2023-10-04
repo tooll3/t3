@@ -1,5 +1,5 @@
 {
-  "Id": "e44ae9b6-cd56-4224-8a5d-118eda4cd3f4"/*ParticleSimulation2*/,
+  "Id": "e44ae9b6-cd56-4224-8a5d-118eda4cd3f4"/*ParticleSystem*/,
   "Description": "",
   "InputUis": [
     {
@@ -27,74 +27,76 @@
     {
       "InputId": "1eb32e4c-6785-4649-b0bf-7c70cddee619"/*MaxParticleCount*/,
       "Position": {
-        "X": -712.97986,
-        "Y": 520.2991
+        "X": -716.465,
+        "Y": 478.59314
       }
-    },
-    {
-      "InputId": "3cee4aa6-2ae3-4b4d-89c7-4c60c8f8b10e"/*AgingRate*/,
-      "Position": {
-        "X": -712.97986,
-        "Y": 565.2991
-      }
-    },
-    {
-      "InputId": "85bb7b9f-f763-457c-aa0d-a08b15c31b50"/*MaxAge*/,
-      "Position": {
-        "X": -712.97986,
-        "Y": 610.2991
-      }
-    },
-    {
-      "InputId": "a7350ba8-08be-4afc-92f1-d223ee9bcbeb"/*SetWTo*/,
-      "Position": {
-        "X": -712.97986,
-        "Y": 700.2991
-      }
-    },
-    {
-      "InputId": "9642f5c6-5ad2-4d35-a5ed-a3fde10817ae"/*Speed*/,
-      "Position": {
-        "X": -712.97986,
-        "Y": 745.2991
-      }
-    },
-    {
-      "InputId": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
-      "Position": {
-        "X": -712.97986,
-        "Y": 790.2992
-      },
-      "Min": 0.0,
-      "Max": 0.1
     },
     {
       "InputId": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
       "Position": {
-        "X": -712.97986,
-        "Y": 835.2992
+        "X": -716.465,
+        "Y": 523.59314
       }
     },
     {
       "InputId": "38392c86-4a1b-4b6f-ac32-26920a73e1e2"/*InitialVelocity*/,
       "Position": {
-        "X": -712.97986,
-        "Y": 880.2992
+        "X": -716.465,
+        "Y": 568.59314
+      }
+    },
+    {
+      "InputId": "9642f5c6-5ad2-4d35-a5ed-a3fde10817ae"/*Speed*/,
+      "Position": {
+        "X": -721.4438,
+        "Y": 615.2026
+      },
+      "GroupTitle": "Movement"
+    },
+    {
+      "InputId": "4b0ccec5-b72e-4834-80d4-77225f30d2a9"/*OrientTowardsVelocity*/,
+      "Position": {
+        "X": -719.95013,
+        "Y": 653.5391
+      }
+    },
+    {
+      "InputId": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
+      "Position": {
+        "X": -719.95013,
+        "Y": 743.5391
+      },
+      "Min": 0.0,
+      "Max": 0.1
+    },
+    {
+      "InputId": "3cee4aa6-2ae3-4b4d-89c7-4c60c8f8b10e"/*AgingRate*/,
+      "Position": {
+        "X": -718.4565,
+        "Y": 777.3948
+      },
+      "GroupTitle": "Age"
+    },
+    {
+      "InputId": "85bb7b9f-f763-457c-aa0d-a08b15c31b50"/*MaxAge*/,
+      "Position": {
+        "X": -718.4565,
+        "Y": 822.3948
+      }
+    },
+    {
+      "InputId": "a7350ba8-08be-4afc-92f1-d223ee9bcbeb"/*SetWTo*/,
+      "Position": {
+        "X": -719.36926,
+        "Y": 877.95825
       }
     },
     {
       "InputId": "c41d9633-1397-4602-a5f8-7808c3d63108"/*ParticleEffects*/,
       "Relevancy": "Relevant",
       "Position": {
-        "X": -712.97986,
-        "Y": 925.2992
-      }
-    },
-    {
-      "InputId": "4b0ccec5-b72e-4834-80d4-77225f30d2a9"/*OrientTowardsVelocity*/,
-      "Position": {
-        "X": -712.97986,
-        "Y": 970.2992
+        "X": -699.0393,
+        "Y": 1011.9298
       }
     }
   ],
@@ -170,8 +172,8 @@
     {
       "ChildId": "42d72297-3db1-4c3b-af6d-9bbc2771e8bb"/*ClampInt*/,
       "Position": {
-        "X": -562.97986,
-        "Y": 520.2991
+        "X": -566.465,
+        "Y": 568.59314
       }
     },
     {
@@ -212,8 +214,8 @@
     {
       "ChildId": "25b14d8c-0312-4087-b374-94fbe42b99b9"/*BoolToFloat*/,
       "Position": {
-        "X": -562.97986,
-        "Y": 835.2992
+        "X": -549.0393,
+        "Y": 921.9298
       }
     },
     {

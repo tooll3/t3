@@ -1,5 +1,5 @@
 {
-  "Name": "ParticleSimulation2",
+  "Name": "ParticleSystem",
   "Id": "e44ae9b6-cd56-4224-8a5d-118eda4cd3f4",
   "Namespace": "lib.point.sim",
   "Inputs": [
@@ -20,6 +20,26 @@
       "DefaultValue": 100000
     },
     {
+      "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
+      "DefaultValue": false
+    },
+    {
+      "Id": "38392c86-4a1b-4b6f-ac32-26920a73e1e2"/*InitialVelocity*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "9642f5c6-5ad2-4d35-a5ed-a3fde10817ae"/*Speed*/,
+      "DefaultValue": 1.0
+    },
+    {
+      "Id": "4b0ccec5-b72e-4834-80d4-77225f30d2a9"/*OrientTowardsVelocity*/,
+      "DefaultValue": 0.05
+    },
+    {
+      "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
+      "DefaultValue": 0.005
+    },
+    {
       "Id": "3cee4aa6-2ae3-4b4d-89c7-4c60c8f8b10e"/*AgingRate*/,
       "DefaultValue": 1.0
     },
@@ -32,28 +52,8 @@
       "DefaultValue": 0
     },
     {
-      "Id": "9642f5c6-5ad2-4d35-a5ed-a3fde10817ae"/*Speed*/,
-      "DefaultValue": 1.0
-    },
-    {
-      "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
-      "DefaultValue": 0.0
-    },
-    {
-      "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-      "DefaultValue": false
-    },
-    {
-      "Id": "38392c86-4a1b-4b6f-ac32-26920a73e1e2"/*InitialVelocity*/,
-      "DefaultValue": 1.0
-    },
-    {
       "Id": "c41d9633-1397-4602-a5f8-7808c3d63108"/*ParticleEffects*/,
       "DefaultValue": null
-    },
-    {
-      "Id": "4b0ccec5-b72e-4834-80d4-77225f30d2a9"/*OrientTowardsVelocity*/,
-      "DefaultValue": 0.05
     }
   ],
   "Children": [

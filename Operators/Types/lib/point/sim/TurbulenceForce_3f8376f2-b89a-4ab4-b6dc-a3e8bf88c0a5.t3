@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "e27a97ce-3d0f-41a9-93c3-a1691f4029aa"/*Amount*/,
-      "DefaultValue": 0.2
+      "DefaultValue": 1.0
     },
     {
       "Id": "f0345217-29f4-48f8-babd-8aed134cb0d5"/*Frequency*/,

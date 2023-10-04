@@ -13,7 +13,7 @@
     },
     {
       "Id": "bcfe965f-27bd-4568-b25b-6987a26b5d6e"/*Amount*/,
-      "DefaultValue": 1.0
+      "DefaultValue": -0.007
     },
     {
       "Id": "fc7131da-a2d1-49c2-bcf7-ebc409347cb6"/*RandomAmount*/,

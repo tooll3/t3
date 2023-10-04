@@ -32,8 +32,17 @@ namespace T3.Operators.Types.Id_2cc44046_2702_40d5_ab42_8b36ff3d6ca7
         [Input(Guid = "f5e93296-efe1-42e0-add8-f8b6298fe183")]
         public readonly InputSlot<System.Numerics.Vector3> StrengthDistribution = new InputSlot<System.Numerics.Vector3>();
 
+        [Input(Guid = "ab591dbc-b521-4ef0-b1e2-d03ff27b959e", MappedType = typeof(Spaces))]
+        public readonly InputSlot<int> AxisSpace = new InputSlot<int>();
+
         [Input(Guid = "f6e3e1df-6f72-4c5f-a10e-771e5d7c9fa0")]
         public readonly InputSlot<int> Seed = new InputSlot<int>();
+
+        private enum Spaces
+        {
+            ObjectSpace,
+            RotationSpace,
+        }
     }
 }
 

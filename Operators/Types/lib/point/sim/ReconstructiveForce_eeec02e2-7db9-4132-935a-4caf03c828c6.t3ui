@@ -63,6 +63,7 @@
     },
     {
       "InputId": "2a8f498f-b91e-41ad-a7d2-8082d5e72f39"/*TargetPoints*/,
+      "Relevancy": "Required",
       "Position": {
         "X": -940.84717,
         "Y": 2279.169

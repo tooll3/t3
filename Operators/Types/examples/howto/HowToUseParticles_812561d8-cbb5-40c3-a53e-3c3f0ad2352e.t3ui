@@ -1,0 +1,266 @@
+{
+  "Id": "812561d8-cbb5-40c3-a53e-3c3f0ad2352e"/*HowToUseParticles*/,
+  "Description": "This interactive tutorial explains how Tooll's [ParticleSystem] works and how you can use it.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "6d2e61ef-c03e-492c-a591-7ffc6d24d8a5"/*ParticleSystem*/,
+      "Position": {
+        "X": 219.12234,
+        "Y": -286.1513
+      }
+    },
+    {
+      "ChildId": "3727ea90-2f55-4634-aaf3-7369b369135e"/*TurbulenceForce*/,
+      "Position": {
+        "X": -80.877655,
+        "Y": -200.1513
+      }
+    },
+    {
+      "ChildId": "e5eeee16-5e4f-45ce-a0d0-21fd21fac3ee"/*AxisStepForce*/,
+      "Position": {
+        "X": -80.877655,
+        "Y": -31.151306
+      }
+    },
+    {
+      "ChildId": "14b777ef-21b9-4520-becb-d05a5d3d64df"/*RenderTarget*/,
+      "Position": {
+        "X": 1858.874,
+        "Y": -117.67749
+      }
+    },
+    {
+      "ChildId": "f6642b2a-10d2-49f9-86f5-807a7f15d2b4"/*one point*/,
+      "Position": {
+        "X": 69.122345,
+        "Y": -286.1513
+      }
+    },
+    {
+      "ChildId": "9502243e-7360-4c55-807f-4361a5914813"/*PickParticleForce*/,
+      "Position": {
+        "X": 69.122345,
+        "Y": -200.1513
+      }
+    },
+    {
+      "ChildId": "42de9f29-5869-4ab8-84b9-fc9d7105a20e"/*CountInt*/,
+      "Position": {
+        "X": -80.877655,
+        "Y": 11.848694
+      }
+    },
+    {
+      "ChildId": "1b0352d2-3307-4e13-970a-b4e3ca7da0e9"/*AnimValue*/,
+      "Position": {
+        "X": -230.87766,
+        "Y": 11.848694
+      }
+    },
+    {
+      "ChildId": "b8729c32-9439-4651-abcd-1a7675d8baff"/*SurfaceForce*/,
+      "Position": {
+        "X": -80.877655,
+        "Y": -94.151306
+      }
+    },
+    {
+      "ChildId": "b15f986a-9222-4b8a-b8ef-7a6dbe336441"/*DirectionalForce2*/,
+      "Position": {
+        "X": 69.122345,
+        "Y": -243.1513
+      }
+    },
+    {
+      "ChildId": "5c9cb59d-7436-4d2f-b06e-36e6d53be0a8"/*AnimVec3*/,
+      "Position": {
+        "X": -230.87766,
+        "Y": -94.151306
+      }
+    },
+    {
+      "ChildId": "ce57c1de-b755-4b5d-b31a-50bd9156892f"/*SurfaceForce*/,
+      "Position": {
+        "X": -80.877655,
+        "Y": -137.1513
+      }
+    },
+    {
+      "ChildId": "3f86cfb6-8b00-46aa-8a38-49e93255608a"/*Time*/,
+      "Position": {
+        "X": -230.87766,
+        "Y": -200.1513
+      }
+    },
+    {
+      "ChildId": "163e6056-b3bd-400a-949b-7ee78368ce43"/*VisualizePoints*/,
+      "Position": {
+        "X": 369.12234,
+        "Y": -286.1513
+      }
+    },
+    {
+      "ChildId": "b9e1d0dd-8ff4-4767-bf9a-b47ec5f394ab"/*one point*/,
+      "Position": {
+        "X": -239.1597,
+        "Y": -761.0511
+      }
+    },
+    {
+      "ChildId": "7f3a6c54-887b-4d80-b32b-30a62f325235"/*ParticleSystem*/,
+      "Position": {
+        "X": 37.04315,
+        "Y": -689.29865
+      }
+    },
+    {
+      "ChildId": "94fe821b-bf80-4a3c-8968-f2960c217bca"/*VisualizePoints*/,
+      "Position": {
+        "X": 252.11533,
+        "Y": -690.0625
+      }
+    },
+    {
+      "ChildId": "566cd5ab-e564-4b49-b16d-6dd8252f869f"/*DirectionalForce2*/,
+      "Position": {
+        "X": -246.9761,
+        "Y": -549.0818
+      }
+    },
+    {
+      "ChildId": "a1cb2404-7e0d-446b-b900-2037cc2cd71f"/*SurfaceForce*/,
+      "Position": {
+        "X": -246.9761,
+        "Y": -506.0818
+      }
+    },
+    {
+      "ChildId": "91b2b8d8-f49c-40aa-8408-e753bff6b2e8"/*AnimValue*/,
+      "Position": {
+        "X": -234.27441,
+        "Y": -655.15326
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "b2563344-f6f6-42f6-8922-bc74848651a0"/*Output2*/,
+      "Position": {
+        "X": 2008.874,
+        "Y": -117.67749
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "e458c89f-6239-4306-b90b-311446a1f617",
+      "Title": "There are many forces to pick from.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -290.87766,
+        "Y": -346.1513
+      },
+      "Size": {
+        "X": 830.0,
+        "Y": 454.0
+      }
+    },
+    {
+      "Id": "35f2d883-63f6-49b9-809d-cd9b9b19e94b",
+      "Title": "A ParticleSystem....",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -286.88495,
+        "Y": -838.6223
+      },
+      "Size": {
+        "X": 726.95404,
+        "Y": 383.7477
+      }
+    },
+    {
+      "Id": "e8eaa7a4-561b-4bfa-9b05-2cba36dbb1f1",
+      "Title": "A set of point to emit (this can be tens of thousands)",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -265.32825,
+        "Y": -793.7258
+      },
+      "Size": {
+        "X": 197.02441,
+        "Y": 74.60619
+      }
+    },
+    {
+      "Id": "f54b5960-a465-499f-aea0-d8164447939f",
+      "Title": "If not every frame, a message when to emit.\n",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -271.435,
+        "Y": -692.96716
+      },
+      "Size": {
+        "X": 211.0696,
+        "Y": 95.36861
+      }
+    },
+    {
+      "Id": "3aa41853-402e-4ed6-aba6-982e98434d06",
+      "Title": "One or more forces that are \napplied to the emitted particles.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -270.8697,
+        "Y": -593.5983
+      },
+      "Size": {
+        "X": 209.84833,
+        "Y": 123.83499
+      }
+    },
+    {
+      "Id": "3ca7df36-ea96-40c1-81ad-dabbeeb37b8b",
+      "Title": "It generates points that can be used \nfor rendering or other effects.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 192.11533,
+        "Y": -750.0625
+      },
+      "Size": {
+        "X": 230.0,
+        "Y": 156.0
+      }
+    }
+  ]
+}

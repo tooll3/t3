@@ -55,38 +55,53 @@
       }
     },
     {
-      "InputId": "3b975bd9-b8aa-4a41-97fc-ccd3b5e89e63"/*Attraction*/,
+      "InputId": "1097b588-db96-49c1-b6e6-78b5cb0f5f73"/*RandomizeBounce*/,
       "Position": {
         "X": -301.69586,
-        "Y": 1905.7078
+        "Y": 1905.7086
       }
+    },
+    {
+      "InputId": "685cd07f-d2ae-4e07-a495-caeefb4c6064"/*RandomizeReflection*/,
+      "Position": {
+        "X": -301.69586,
+        "Y": 1950.7086
+      }
+    },
+    {
+      "InputId": "3b975bd9-b8aa-4a41-97fc-ccd3b5e89e63"/*Attraction*/,
+      "Position": {
+        "X": -289.84814,
+        "Y": 2067.019
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "d6bf8d83-542b-44ee-bd35-f631179f8d0c"/*AttractionDecay*/,
       "Position": {
-        "X": -301.69586,
-        "Y": 1950.708
+        "X": -289.84814,
+        "Y": 2112.0193
       }
     },
     {
       "InputId": "7c6f58e7-27fc-4271-adef-248cffe5a8b7"/*Repulsion*/,
       "Position": {
-        "X": -301.69586,
-        "Y": 1995.7087
+        "X": -289.84814,
+        "Y": 2157.02
       }
     },
     {
       "InputId": "0db5c531-721d-403e-9154-e31f6be20ec6"/*GizmoVisibility*/,
       "Position": {
-        "X": -301.69586,
-        "Y": 2040.7087
+        "X": -289.84814,
+        "Y": 2202.0205
       }
     },
     {
       "InputId": "2ab85ac3-819d-4e3e-891a-7f27af627fdf"/*InvertVolume*/,
       "Position": {
-        "X": -301.69586,
-        "Y": 2085.7087
+        "X": -289.84814,
+        "Y": 2247.0205
       }
     }
   ],

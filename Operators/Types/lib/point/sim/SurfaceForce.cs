@@ -43,6 +43,12 @@ namespace T3.Operators.Types.Id_fbe1a703_f372_4236_9f20_5d0b69183843
         [Input(Guid = "ceb7008d-c536-4d87-b3f8-d5ba9fe29eed")]
         public readonly InputSlot<float> Bounciness = new InputSlot<float>();
 
+        [Input(Guid = "1097b588-db96-49c1-b6e6-78b5cb0f5f73")]
+        public readonly InputSlot<float> RandomizeBounce = new InputSlot<float>();
+
+        [Input(Guid = "685cd07f-d2ae-4e07-a495-caeefb4c6064")]
+        public readonly InputSlot<float> RandomizeReflection = new InputSlot<float>();
+
         [Input(Guid = "3b975bd9-b8aa-4a41-97fc-ccd3b5e89e63")]
         public readonly InputSlot<float> Attraction = new InputSlot<float>();
 

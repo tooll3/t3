@@ -78,6 +78,13 @@
       "Clamp": true
     },
     {
+      "InputId": "f6942098-3f69-41fb-9228-96bd2ffb1cbf"/*UseWForSize*/,
+      "Position": {
+        "X": -1071.3235,
+        "Y": 726.8895
+      }
+    },
+    {
       "InputId": "bbc26907-416d-4168-9e89-72ee1c6a530e"/*ShowAttributeList*/,
       "Position": {
         "X": -1312.5815,
@@ -203,7 +210,7 @@
       "ChildId": "7b044eb6-cb71-4fad-a1d9-d6d2024ed6d2"/*DrawPoints*/,
       "Position": {
         "X": 619.94775,
-        "Y": 64.31381
+        "Y": 77.31381
       }
     },
     {
@@ -428,20 +435,6 @@
       "Position": {
         "X": -377.4685,
         "Y": 1865.3286
-      }
-    },
-    {
-      "ChildId": "dc011883-ecf7-4933-8d48-ce97f445a914"/*TransformPoints*/,
-      "Position": {
-        "X": -227.4685,
-        "Y": 1865.3286
-      }
-    },
-    {
-      "ChildId": "225986d3-498c-448b-a15b-cd813f05c231"/*CustomPointShader*/,
-      "Position": {
-        "X": -227.4685,
-        "Y": 1809.3287
       }
     },
     {

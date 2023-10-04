@@ -13,6 +13,8 @@ cbuffer Params : register(b0)
 
     float3 StrengthDistribution;
     float Seed;
+
+    float AxisSpace;
 }
 
 RWStructuredBuffer<Particle> Particles : u0;
@@ -27,16 +29,25 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
     }
 
-    float4 random = hash41u(gi + (uint)Seed * 1103515245U);
+    float4 randForPos = hash41u(gi + (uint)Seed * 1103515245U);
+    float4 randForEffects = hash41u(gi + (uint)Seed * 1103515245U+ 83339);
 
-    float selected = random.x < SelectRatio ? 1 : 0;
-    float f =  selected* Strength *  (1+ RandomizeStrength * (random.z - 0.5));
+    float selected = randForPos.w < SelectRatio ? 1 : 0;
+    float f =  selected* Strength *  (1+ RandomizeStrength * (randForEffects.r - 0.5));
 
-    float3 axis = abs(random.zyx * AxisDistribution);
+    float3 axis = abs(randForPos.zyx * AxisDistribution);
     float3 direction = axis.x > axis.y ? (axis.x > axis.z ? float3(1,0,0) : float3(0,0,1))
                                        : (axis.y > axis.z ? float3(0,1,0) : float3(0,0,1));
     
-    direction *=  (random.w < 0.5 ? 1 : -1) * StrengthDistribution * f; 
+    direction *=  (randForEffects.g < 0.5 ? 1 : -1) * StrengthDistribution * f; 
+
+    if(AxisSpace < 0.5) {
+
+    }
+    else if(AxisSpace < 1.5) 
+    {
+        direction = rotate_vector(direction, Particles[gi].p.rotation);
+    }
 
     float3 origVelocity = Particles[gi].velocity;
     Particles[gi].velocity = lerp( origVelocity,

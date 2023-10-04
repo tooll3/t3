@@ -9,11 +9,14 @@ cbuffer Params : register(b0)
 
     float Strength;
     float Bounciness;
+    float RandomizeBounce;
+    float RandomizeReflection;
+
     float Attraction;
     float AttractionDecay;
-
     float Repulsion;
     float SpeedFactor;
+    
     float InvertVolumeFactor;
 }
 
@@ -79,6 +82,7 @@ void main(uint3 i : SV_DispatchThreadID)
         surfaceN = t1.x > t1.y ? (t1.x > t1.z ? float3(sign(posInVolume.x),0,0) : float3(0,0,sign(posInVolume.z)))  
                                : (t1.y > t1.z ? float3(0,sign(posInVolume.y),0) : float3(0,0,sign(posInVolume.z)));
 
+        //surfaceN = normalize(surfaceN);
         //Particles[gi].w = distance;
         // s = smoothstep(1 + FallOff, 1, distance);
     }
@@ -102,11 +106,14 @@ void main(uint3 i : SV_DispatchThreadID)
     float3 force =0;
 
     surfaceN *= InvertVolumeFactor;
-    float3 surfaceInWorld = normalize(mul(float4(surfaceN, 1), InverseTransformVolume).xyz);
+    float3 surfaceInWorld = normalize(mul(float4(surfaceN, 0), InverseTransformVolume).xyz);
+    //float3 surfaceInWorld = surfaceN;
 
     if(sign( distance * distanceNext) < 0  && distance * InvertVolumeFactor > 0) 
     {
-        velocity = reflect(velocity, surfaceInWorld) * Bounciness;
+        float4 rand = hash41u(gi);
+        velocity = reflect(velocity, surfaceInWorld + (RandomizeReflection * (rand.xyz -0.5) )) 
+        * Bounciness * (RandomizeBounce * (rand.z - 0.5) + 1);
     } 
     else 
     {
