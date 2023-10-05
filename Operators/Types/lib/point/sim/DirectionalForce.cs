@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_0f1bf849_949e_4462_a7af_ecb2ff3cd109
 {
-    public class DirectionalForce2 : Instance<DirectionalForce2>
+    public class DirectionalForce : Instance<DirectionalForce>
     {
         [Output(Guid = "3039b9df-2f48-47b7-98cf-2ca088c590a9")]
         public readonly Slot<T3.Core.DataTypes.ParticleSystem> Particles = new Slot<T3.Core.DataTypes.ParticleSystem>();

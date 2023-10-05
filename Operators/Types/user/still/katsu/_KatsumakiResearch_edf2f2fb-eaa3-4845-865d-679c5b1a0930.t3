@@ -1292,11 +1292,6 @@
           "Value": 20000
         },
         {
-          "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
-          "Type": "System.Single",
-          "Value": 0.005
-        },
-        {
           "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
           "Type": "System.Boolean",
           "Value": false
@@ -1310,6 +1305,11 @@
           "Id": "4b0ccec5-b72e-4834-80d4-77225f30d2a9"/*OrientTowardsVelocity*/,
           "Type": "System.Single",
           "Value": 0.37
+        },
+        {
+          "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
+          "Type": "System.Single",
+          "Value": 0.005
         }
       ],
       "Outputs": []
@@ -1683,7 +1683,7 @@
       ]
     },
     {
-      "Id": "97b744bf-a442-44dc-b957-49ca17d4febf"/*DirectionalForce2*/,
+      "Id": "97b744bf-a442-44dc-b957-49ca17d4febf"/*DirectionalForce*/,
       "SymbolId": "0f1bf849-949e-4462-a7af-ecb2ff3cd109",
       "InputValues": [
         {
@@ -1694,7 +1694,7 @@
       ],
       "Outputs": [
         {
-          "Id": "3039b9df-2f48-47b7-98cf-2ca088c590a9"/*DirectionalForce2*/,
+          "Id": "3039b9df-2f48-47b7-98cf-2ca088c590a9"/*DirectionalForce*/,
           "IsDisabled": true
         }
       ]
@@ -2578,11 +2578,6 @@
           "Value": 20000
         },
         {
-          "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
-          "Type": "System.Single",
-          "Value": 0.005
-        },
-        {
           "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
           "Type": "System.Boolean",
           "Value": false
@@ -2596,6 +2591,11 @@
           "Id": "4b0ccec5-b72e-4834-80d4-77225f30d2a9"/*OrientTowardsVelocity*/,
           "Type": "System.Single",
           "Value": 0.06
+        },
+        {
+          "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
+          "Type": "System.Single",
+          "Value": 0.005
         }
       ],
       "Outputs": []
@@ -2834,7 +2834,7 @@
       "Outputs": []
     },
     {
-      "Id": "63e6b484-6fd5-4b83-8770-2a87b23e8751"/*DirectionalForce2*/,
+      "Id": "63e6b484-6fd5-4b83-8770-2a87b23e8751"/*DirectionalForce*/,
       "SymbolId": "0f1bf849-949e-4462-a7af-ecb2ff3cd109",
       "InputValues": [
         {
@@ -2845,7 +2845,7 @@
       ],
       "Outputs": [
         {
-          "Id": "3039b9df-2f48-47b7-98cf-2ca088c590a9"/*DirectionalForce2*/,
+          "Id": "3039b9df-2f48-47b7-98cf-2ca088c590a9"/*DirectionalForce*/,
           "IsDisabled": true
         }
       ]
@@ -3805,9 +3805,9 @@
           "Value": 10000
         },
         {
-          "Id": "a7350ba8-08be-4afc-92f1-d223ee9bcbeb"/*SetWTo*/,
-          "Type": "System.Int32",
-          "Value": 0
+          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
+          "Type": "System.Boolean",
+          "Value": false
         },
         {
           "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
@@ -3815,9 +3815,9 @@
           "Value": 0.0062
         },
         {
-          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-          "Type": "System.Boolean",
-          "Value": false
+          "Id": "a7350ba8-08be-4afc-92f1-d223ee9bcbeb"/*SetWTo*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -4554,7 +4554,7 @@
       "Outputs": []
     },
     {
-      "Id": "1d427b25-46cd-4291-ae0d-39328fb61f06"/*DirectionalForce2*/,
+      "Id": "1d427b25-46cd-4291-ae0d-39328fb61f06"/*DirectionalForce*/,
       "SymbolId": "0f1bf849-949e-4462-a7af-ecb2ff3cd109",
       "InputValues": [
         {
@@ -4632,9 +4632,9 @@
           "Value": 10000
         },
         {
-          "Id": "a7350ba8-08be-4afc-92f1-d223ee9bcbeb"/*SetWTo*/,
-          "Type": "System.Int32",
-          "Value": 0
+          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
+          "Type": "System.Boolean",
+          "Value": false
         },
         {
           "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
@@ -4642,9 +4642,9 @@
           "Value": 0.0062
         },
         {
-          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-          "Type": "System.Boolean",
-          "Value": false
+          "Id": "a7350ba8-08be-4afc-92f1-d223ee9bcbeb"/*SetWTo*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -4862,7 +4862,7 @@
       "Outputs": []
     },
     {
-      "Id": "04e4c58e-2f96-4028-8936-1020c516776a"/*DirectionalForce2*/,
+      "Id": "04e4c58e-2f96-4028-8936-1020c516776a"/*DirectionalForce*/,
       "SymbolId": "0f1bf849-949e-4462-a7af-ecb2ff3cd109",
       "InputValues": [
         {
@@ -4873,7 +4873,7 @@
       ],
       "Outputs": [
         {
-          "Id": "3039b9df-2f48-47b7-98cf-2ca088c590a9"/*DirectionalForce2*/,
+          "Id": "3039b9df-2f48-47b7-98cf-2ca088c590a9"/*DirectionalForce*/,
           "IsDisabled": true
         }
       ]
@@ -4955,9 +4955,9 @@
           "Value": 10000
         },
         {
-          "Id": "a7350ba8-08be-4afc-92f1-d223ee9bcbeb"/*SetWTo*/,
-          "Type": "System.Int32",
-          "Value": 0
+          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
+          "Type": "System.Boolean",
+          "Value": true
         },
         {
           "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
@@ -4965,9 +4965,9 @@
           "Value": 0.0039999997
         },
         {
-          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-          "Type": "System.Boolean",
-          "Value": true
+          "Id": "a7350ba8-08be-4afc-92f1-d223ee9bcbeb"/*SetWTo*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -5027,7 +5027,7 @@
       "Outputs": []
     },
     {
-      "Id": "7d8c8b2a-2783-42ef-a27f-1ff17f85942a"/*DirectionalForce2*/,
+      "Id": "7d8c8b2a-2783-42ef-a27f-1ff17f85942a"/*DirectionalForce*/,
       "SymbolId": "0f1bf849-949e-4462-a7af-ecb2ff3cd109",
       "InputValues": [
         {

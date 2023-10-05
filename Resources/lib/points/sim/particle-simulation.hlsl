@@ -87,6 +87,6 @@ void main(uint3 i : SV_DispatchThreadID)
     } 
     else if(WMode == 2) 
     {
-        ResultPoints[gi].w = speed;
+        ResultPoints[gi].w = speed * AgingRate;
     }
 }

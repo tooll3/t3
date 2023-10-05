@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "7a0aaade-2cf4-45f8-85aa-1133278899ad"/*ApplyTrigger*/,
-      "DefaultValue": false
+      "DefaultValue": true
     },
     {
       "Id": "a28e97a1-8bcf-4701-a8bb-97d69f91bc4b"/*Strength*/,

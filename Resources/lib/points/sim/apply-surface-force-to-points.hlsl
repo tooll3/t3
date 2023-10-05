@@ -7,13 +7,11 @@ cbuffer Params : register(b0)
     float4x4 TransformVolume;
     float4x4 InverseTransformVolume;
 
-    float Strength;
     float Bounciness;
     float RandomizeBounce;
     float RandomizeReflection;
 
     float Attraction;
-    float AttractionDecay;
     float Repulsion;
     float SpeedFactor;
     

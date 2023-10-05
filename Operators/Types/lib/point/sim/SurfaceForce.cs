@@ -34,11 +34,8 @@ namespace T3.Operators.Types.Id_fbe1a703_f372_4236_9f20_5d0b69183843
         [Input(Guid = "721c500b-ae7c-4249-a374-1bcf6ae13abd")]
         public readonly InputSlot<System.Numerics.Vector3> VolumeRotate = new InputSlot<System.Numerics.Vector3>();
 
-        [Input(Guid = "86c81e40-79e8-4699-a7fe-581f0b09d266")]
+        [Input(Guid = "86c81e40-79e8-4699-a7fe-581f0b09d266", MappedType = typeof(VolumeShapes))]
         public readonly InputSlot<int> VolumeShape = new InputSlot<int>();
-
-        [Input(Guid = "cf741b95-e3d1-4f43-99e9-15fcdaa6b648")]
-        public readonly InputSlot<float> Strength = new InputSlot<float>();
 
         [Input(Guid = "ceb7008d-c536-4d87-b3f8-d5ba9fe29eed")]
         public readonly InputSlot<float> Bounciness = new InputSlot<float>();
@@ -52,9 +49,6 @@ namespace T3.Operators.Types.Id_fbe1a703_f372_4236_9f20_5d0b69183843
         [Input(Guid = "3b975bd9-b8aa-4a41-97fc-ccd3b5e89e63")]
         public readonly InputSlot<float> Attraction = new InputSlot<float>();
 
-        [Input(Guid = "d6bf8d83-542b-44ee-bd35-f631179f8d0c")]
-        public readonly InputSlot<float> AttractionDecay = new InputSlot<float>();
-
         [Input(Guid = "7c6f58e7-27fc-4271-adef-248cffe5a8b7")]
         public readonly InputSlot<float> Repulsion = new InputSlot<float>();
 
@@ -66,24 +60,12 @@ namespace T3.Operators.Types.Id_fbe1a703_f372_4236_9f20_5d0b69183843
 
 
         
-        private enum Shapes
+        private enum VolumeShapes
         {
             Sphere,
             Box,
             Plane,
-            Zebra,
-            Noise,
         }
-        
-        private enum Modes
-        {
-            Override,
-            Add,
-            Sub,
-            Multiply,
-            Invert,
-        }
-
     }
 }
 

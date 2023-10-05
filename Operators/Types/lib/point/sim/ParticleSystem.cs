@@ -52,8 +52,8 @@ namespace T3.Operators.Types.Id_e44ae9b6_cd56_4224_8a5d_118eda4cd3f4
         
         private enum SetWModes {
             KeepOriginal,
-            Age,
-            Speed,
+            ParticleAge,
+            ParticleSpeed,
         }
     }
 }
