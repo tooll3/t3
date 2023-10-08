@@ -49,6 +49,7 @@ namespace T3.Operators.Types.Id_7ad3a38a_9f04_43ba_a16f_6982b87dd2d4
             var totalSize = 0;
             var startPosition = 0;
             BufferWithViews selectedBuffer = null;
+            var hadErrors = false;
             for (var connectionIndex = 0; connectionIndex < connections.Count; connectionIndex++)
             {
                 var input = connections[connectionIndex];
@@ -67,8 +68,18 @@ namespace T3.Operators.Types.Id_7ad3a38a_9f04_43ba_a16f_6982b87dd2d4
                 }
                 else
                 {
+                    hadErrors = true;
+                    if (_complainedOnces)
+                        continue;
+                    
                     Log.Warning($"Undefined BufferWithViews at index {connectionIndex}", this);
+                    _complainedOnces = true;
                 }
+            }
+
+            if (!hadErrors)
+            {
+                _complainedOnces = false;
             }
 
             SelectedBuffer.Value = selectedBuffer;
@@ -76,6 +87,8 @@ namespace T3.Operators.Types.Id_7ad3a38a_9f04_43ba_a16f_6982b87dd2d4
             BufferCount.Value = connections.Count; 
             TotalSize.Value = totalSize;
         }
+
+        private bool _complainedOnces;
         
         [Input(Guid = "c8a5769e-2536-4caa-8380-22fbeed1ef12")]
         public readonly MultiInputSlot<BufferWithViews> Input = new();

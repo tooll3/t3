@@ -30,8 +30,9 @@ namespace T3.Editor.Gui.OutputUi
 
             ImGui.TextUnformatted(type.Name);
 
-            if (slot is not Slot<BufferWithViews> bufferSlot
-                || bufferSlot.Value.Buffer == null || bufferSlot.Value.Srv == null)
+            if (slot is not Slot<BufferWithViews> bufferSlot 
+                || bufferSlot.Value?.Buffer == null || bufferSlot.Value.Srv == null)
+                
             {
                 ImGui.TextUnformatted("Undefined");
                 return;
