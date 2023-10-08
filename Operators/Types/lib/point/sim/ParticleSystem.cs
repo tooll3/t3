@@ -23,9 +23,6 @@ namespace T3.Operators.Types.Id_e44ae9b6_cd56_4224_8a5d_118eda4cd3f4
         [Input(Guid = "1eb32e4c-6785-4649-b0bf-7c70cddee619")]
         public readonly InputSlot<int> MaxParticleCount = new InputSlot<int>();
 
-        [Input(Guid = "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9")]
-        public readonly InputSlot<bool> SetInitialVelocity = new InputSlot<bool>();
-
         [Input(Guid = "38392c86-4a1b-4b6f-ac32-26920a73e1e2")]
         public readonly InputSlot<float> InitialVelocity = new InputSlot<float>();
 

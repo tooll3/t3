@@ -14,11 +14,6 @@
           "Value": 200
         },
         {
-          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
-        {
           "Id": "38392c86-4a1b-4b6f-ac32-26920a73e1e2"/*InitialVelocity*/,
           "Type": "System.Single",
           "Value": 0.18
@@ -44,11 +39,6 @@
           "Id": "f0345217-29f4-48f8-babd-8aed134cb0d5"/*Frequency*/,
           "Type": "System.Single",
           "Value": 2.0
-        },
-        {
-          "Id": "ebf8276f-2df8-4e70-ba57-30288fb184d1"/*UseCurlNoise*/,
-          "Type": "System.Boolean",
-          "Value": true
         }
       ],
       "Outputs": []
@@ -306,13 +296,7 @@
     {
       "Id": "7f3a6c54-887b-4d80-b32b-30a62f325235"/*ParticleSystem*/,
       "SymbolId": "e44ae9b6-cd56-4224-8a5d-118eda4cd3f4",
-      "InputValues": [
-        {
-          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-          "Type": "System.Boolean",
-          "Value": true
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -360,11 +344,6 @@
           "Id": "1eb32e4c-6785-4649-b0bf-7c70cddee619"/*MaxParticleCount*/,
           "Type": "System.Int32",
           "Value": 20
-        },
-        {
-          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-          "Type": "System.Boolean",
-          "Value": true
         },
         {
           "Id": "38392c86-4a1b-4b6f-ac32-26920a73e1e2"/*InitialVelocity*/,
@@ -572,11 +551,6 @@
           "Id": "1eb32e4c-6785-4649-b0bf-7c70cddee619"/*MaxParticleCount*/,
           "Type": "System.Int32",
           "Value": 500000
-        },
-        {
-          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-          "Type": "System.Boolean",
-          "Value": true
         }
       ],
       "Outputs": []
@@ -851,13 +825,7 @@
     {
       "Id": "02b27e48-c3bf-475d-9838-bc20a0a8f2c1"/*ParticleSystem*/,
       "SymbolId": "e44ae9b6-cd56-4224-8a5d-118eda4cd3f4",
-      "InputValues": [
-        {
-          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-          "Type": "System.Boolean",
-          "Value": true
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {
@@ -1110,11 +1078,6 @@
       "Id": "6228a4bd-c9c1-4844-b980-20a94dedc951"/*ParticleSystem*/,
       "SymbolId": "e44ae9b6-cd56-4224-8a5d-118eda4cd3f4",
       "InputValues": [
-        {
-          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-          "Type": "System.Boolean",
-          "Value": true
-        },
         {
           "Id": "4b0ccec5-b72e-4834-80d4-77225f30d2a9"/*OrientTowardsVelocity*/,
           "Type": "System.Single",
@@ -1491,11 +1454,6 @@
       "Id": "f2118302-4441-41c3-8190-0c3158dbedf4"/*ParticleSystem*/,
       "SymbolId": "e44ae9b6-cd56-4224-8a5d-118eda4cd3f4",
       "InputValues": [
-        {
-          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
         {
           "Id": "38392c86-4a1b-4b6f-ac32-26920a73e1e2"/*InitialVelocity*/,
           "Type": "System.Single",

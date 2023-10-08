@@ -6,100 +6,104 @@
     {
       "ChildId": "6d2e61ef-c03e-492c-a591-7ffc6d24d8a5"/*ParticleSystem*/,
       "Position": {
-        "X": 219.12234,
-        "Y": -286.1513
+        "X": 185.41391,
+        "Y": -553.1865
       }
     },
     {
       "ChildId": "3727ea90-2f55-4634-aaf3-7369b369135e"/*TurbulenceForce*/,
+      "Comment": "This is a very simple particle force. \nWe animate its force with the current time.",
       "Position": {
-        "X": -80.877655,
-        "Y": -200.1513
+        "X": -114.58609,
+        "Y": -467.18652
       }
     },
     {
       "ChildId": "e5eeee16-5e4f-45ce-a0d0-21fd21fac3ee"/*AxisStepForce*/,
       "Position": {
-        "X": -80.877655,
-        "Y": -31.151306
+        "X": -114.58609,
+        "Y": -298.18652
       }
     },
     {
       "ChildId": "f6642b2a-10d2-49f9-86f5-807a7f15d2b4"/*one point*/,
       "Position": {
-        "X": 69.122345,
-        "Y": -286.1513
+        "X": 35.41391,
+        "Y": -553.1865
       }
     },
     {
       "ChildId": "9502243e-7360-4c55-807f-4361a5914813"/*PickParticleForce*/,
+      "Comment": "Here we only pick a single force. But particle system can be connected to many.",
       "Position": {
-        "X": 69.122345,
-        "Y": -200.1513
+        "X": 35.41391,
+        "Y": -467.18652
       }
     },
     {
       "ChildId": "42de9f29-5869-4ab8-84b9-fc9d7105a20e"/*CountInt*/,
+      "Comment": "This counter is incremeted once every bar add switches between different forces.",
       "Position": {
-        "X": -80.877655,
-        "Y": 11.848694
+        "X": -114.58609,
+        "Y": -255.18652
       }
     },
     {
       "ChildId": "1b0352d2-3307-4e13-970a-b4e3ca7da0e9"/*AnimValue*/,
       "Position": {
-        "X": -230.87766,
-        "Y": 11.848694
+        "X": -264.5861,
+        "Y": -255.18652
       }
     },
     {
       "ChildId": "b8729c32-9439-4651-abcd-1a7675d8baff"/*SurfaceForce*/,
+      "Comment": "This is also nice.",
       "Position": {
-        "X": -80.877655,
-        "Y": -94.151306
+        "X": -114.58609,
+        "Y": -361.18652
       }
     },
     {
       "ChildId": "b15f986a-9222-4b8a-b8ef-7a6dbe336441"/*DirectionalForce*/,
       "Position": {
-        "X": 69.122345,
-        "Y": -243.1513
+        "X": 35.41391,
+        "Y": -510.18652
       }
     },
     {
       "ChildId": "5c9cb59d-7436-4d2f-b06e-36e6d53be0a8"/*AnimVec3*/,
       "Position": {
-        "X": -230.87766,
-        "Y": -94.151306
+        "X": -264.5861,
+        "Y": -361.18652
       }
     },
     {
       "ChildId": "ce57c1de-b755-4b5d-b31a-50bd9156892f"/*SurfaceForce*/,
+      "Comment": "The [SurfaceForce] can be used an attractor, a container or a reflective surface.\nAlso see the examples further blow.",
       "Position": {
-        "X": -80.877655,
-        "Y": -137.1513
+        "X": -114.58609,
+        "Y": -404.18652
       }
     },
     {
       "ChildId": "3f86cfb6-8b00-46aa-8a38-49e93255608a"/*Time*/,
       "Position": {
-        "X": -230.87766,
-        "Y": -200.1513
+        "X": -264.5861,
+        "Y": -467.18652
       }
     },
     {
       "ChildId": "163e6056-b3bd-400a-949b-7ee78368ce43"/*VisualizePoints*/,
       "Position": {
-        "X": 369.12234,
-        "Y": -286.1513
+        "X": 335.4139,
+        "Y": -553.1865
       }
     },
     {
       "ChildId": "7f3a6c54-887b-4d80-b32b-30a62f325235"/*ParticleSystem*/,
-      "Comment": "We activate \"SetInitialVelocity\" for an initial accelleration along the emit-point's z-axis.",
       "Position": {
-        "X": -8.05867,
-        "Y": -729.71564
+        "X": -11.660477,
+        "Y": -752.87067
       }
     },
     {
@@ -147,15 +151,15 @@
     {
       "ChildId": "c1d21d4e-48d6-4384-95f3-3cf3a783ec81"/*DrawPoints*/,
       "Position": {
-        "X": 151.82123,
-        "Y": -730.1096
+        "X": 138.33952,
+        "Y": -752.87067
       }
     },
     {
       "ChildId": "d1c36ea3-7e86-4b3d-8adf-fae436108a9e"/*DirectionalForce*/,
       "Position": {
-        "X": -160.13362,
-        "Y": -622.84454
+        "X": -163.73543,
+        "Y": -645.9996
       }
     },
     {
@@ -708,8 +712,8 @@
       "ChildId": "6c70d237-9e63-4bba-9f46-8a7387ed7afa"/*RadialPoints*/,
       "Comment": "We adjusted its parameters to it creats 4 points in a on the Y-axis.\n\nNotices how we also adjusted the OrientationAxis to X and adjusted the orientation angle to adjust the points's z (forward) direction.\n\nWe also disable the CloseCircleLine to prevent overlapping points at start and end.",
       "Position": {
-        "X": -158.05867,
-        "Y": -729.71564
+        "X": -161.66048,
+        "Y": -752.87067
       }
     }
   ],
@@ -725,17 +729,17 @@
         "W": 1.0
       },
       "Position": {
-        "X": -290.87766,
-        "Y": -346.1513
+        "X": -285.2021,
+        "Y": -565.308
       },
       "Size": {
-        "X": 830.0,
-        "Y": 454.0
+        "X": 771.28546,
+        "Y": 381.9414
       }
     },
     {
       "Id": "35f2d883-63f6-49b9-809d-cd9b9b19e94b",
-      "Title": "A ParticleSystem....",
+      "Title": "This is a most simple example of a particle system...",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -747,8 +751,8 @@
         "Y": -838.6223
       },
       "Size": {
-        "X": 724.5114,
-        "Y": 341.00168
+        "X": 718.71954,
+        "Y": 247.14935
       }
     },
     {
@@ -761,8 +765,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -275.69897,
-        "Y": -790.38916
+        "X": -279.30078,
+        "Y": -813.5442
       },
       "Size": {
         "X": 248.4091,
@@ -779,12 +783,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": -275.6592,
-        "Y": -672.0346
+        "X": -279.26102,
+        "Y": -695.18964
       },
       "Size": {
         "X": 249.32332,
-        "Y": 109.03577
+        "Y": 94.20886
       }
     },
     {
@@ -797,12 +801,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": 128.19244,
-        "Y": -793.3161
+        "X": 124.59064,
+        "Y": -816.4711
       },
       "Size": {
-        "X": 230.0,
-        "Y": 156.0
+        "X": 217.6657,
+        "Y": 122.21472
       }
     },
     {

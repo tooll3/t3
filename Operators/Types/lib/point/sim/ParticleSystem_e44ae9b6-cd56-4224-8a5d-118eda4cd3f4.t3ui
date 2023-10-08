@@ -32,13 +32,6 @@
       }
     },
     {
-      "InputId": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-      "Position": {
-        "X": -716.465,
-        "Y": 523.59314
-      }
-    },
-    {
       "InputId": "38392c86-4a1b-4b6f-ac32-26920a73e1e2"/*InitialVelocity*/,
       "Position": {
         "X": -716.465,
@@ -209,13 +202,6 @@
       "Position": {
         "X": 376.81885,
         "Y": 224.4258
-      }
-    },
-    {
-      "ChildId": "25b14d8c-0312-4087-b374-94fbe42b99b9"/*BoolToFloat*/,
-      "Position": {
-        "X": -549.0393,
-        "Y": 921.9298
       }
     },
     {
