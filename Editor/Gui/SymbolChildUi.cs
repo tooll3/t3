@@ -44,6 +44,7 @@ namespace T3.Editor.Gui
         public bool IsSelected => NodeSelection.IsNodeSelected(this);
         public int SnapshotGroupIndex { get; set; }
         public Styles Style { get; set; }
+        public string Comment { get; set; }
 
         public bool IsDisabled {
             get => SymbolChild.Outputs.FirstOrDefault().Value?.IsDisabled ?? false;

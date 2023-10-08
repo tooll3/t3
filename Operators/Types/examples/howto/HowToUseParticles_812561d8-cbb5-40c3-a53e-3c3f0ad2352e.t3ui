@@ -96,9 +96,10 @@
     },
     {
       "ChildId": "7f3a6c54-887b-4d80-b32b-30a62f325235"/*ParticleSystem*/,
+      "Comment": "We activate \"SetInitialVelocity\" for an initial accelleration along the emit-point's z-axis.",
       "Position": {
-        "X": 54.09192,
-        "Y": -743.0599
+        "X": -8.05867,
+        "Y": -729.71564
       }
     },
     {
@@ -146,190 +147,169 @@
     {
       "ChildId": "c1d21d4e-48d6-4384-95f3-3cf3a783ec81"/*DrawPoints*/,
       "Position": {
-        "X": 213.24008,
-        "Y": -739.6064
-      }
-    },
-    {
-      "ChildId": "6c70d237-9e63-4bba-9f46-8a7387ed7afa"/*RadialPoints*/,
-      "Position": {
-        "X": -245.90808,
-        "Y": -743.0599
+        "X": 151.82123,
+        "Y": -730.1096
       }
     },
     {
       "ChildId": "d1c36ea3-7e86-4b3d-8adf-fae436108a9e"/*DirectionalForce*/,
       "Position": {
-        "X": -138.11676,
-        "Y": -582.18854
-      }
-    },
-    {
-      "ChildId": "b93fe1c6-4af0-40d2-877e-9a536080f51f"/*RandomizePoints*/,
-      "Position": {
-        "X": -95.90808,
-        "Y": -743.0599
-      }
-    },
-    {
-      "ChildId": "d9f7e934-f246-4eae-86cd-613ea37f2c06"/*Time*/,
-      "Position": {
-        "X": -245.90808,
-        "Y": -700.0599
+        "X": -160.13362,
+        "Y": -622.84454
       }
     },
     {
       "ChildId": "b8f5d737-73a1-4db9-97cc-0476cd36d7ce"/*RadialPoints*/,
       "Position": {
-        "X": 1127.7351,
-        "Y": -502.1463
+        "X": 1045.6243,
+        "Y": -391.04175
       }
     },
     {
       "ChildId": "40b444be-88b7-43c5-941b-5e9ca7020745"/*Time*/,
       "Position": {
-        "X": 1127.7351,
-        "Y": -459.1463
+        "X": 1045.6243,
+        "Y": -348.04175
       }
     },
     {
       "ChildId": "edfc232d-0bcb-4d68-8cc1-8b3b4137422e"/*RandomizePoints*/,
       "Position": {
-        "X": 1277.7351,
-        "Y": -502.1463
+        "X": 1195.6243,
+        "Y": -391.04175
       }
     },
     {
       "ChildId": "4a3bfcd5-bab6-492c-818e-8b5ea327c90f"/*DirectionalForce*/,
       "Position": {
-        "X": 1482.2546,
-        "Y": -530.1463
+        "X": 1400.1438,
+        "Y": -419.04175
       }
     },
     {
       "ChildId": "6a7d4d78-cf03-4e0e-8bd6-308aed31939b"/*ParticleSystem*/,
       "Position": {
-        "X": 1632.2546,
-        "Y": -677.1463
+        "X": 1550.1438,
+        "Y": -566.04175
       }
     },
     {
       "ChildId": "5c4c4fdc-a15a-4a9d-bfee-2590bbd59a88"/*PickPointList*/,
       "Position": {
-        "X": 1482.2546,
-        "Y": -677.1463
+        "X": 1400.1438,
+        "Y": -566.04175
       }
     },
     {
       "ChildId": "84d998fe-77f6-4c6e-9daf-5a4f80c3ab8e"/*CountInt*/,
       "Position": {
-        "X": 1277.7351,
-        "Y": -82.1463
+        "X": 1195.6243,
+        "Y": 28.958252
       }
     },
     {
       "ChildId": "fdf33fe8-c3c7-47c5-9dc8-add26f3ff675"/*AnimValue*/,
       "Position": {
-        "X": 1127.7351,
-        "Y": -82.1463
+        "X": 1045.6243,
+        "Y": 28.958252
       }
     },
     {
       "ChildId": "cc6f1e99-1a0f-4e35-b82f-6b2d5391f5f1"/*DrawPointsShaded*/,
       "Position": {
-        "X": 1782.2546,
-        "Y": -677.1463
+        "X": 1700.1438,
+        "Y": -566.04175
       }
     },
     {
       "ChildId": "1a6a19f3-79ba-4c4c-81b2-480826283391"/*LoadObj*/,
       "Position": {
-        "X": 977.73517,
-        "Y": -416.1463
+        "X": 895.6254,
+        "Y": -305.04175
       }
     },
     {
       "ChildId": "6fa6a070-4415-45e0-ace9-7d63bd5849c8"/*SetFog*/,
       "Position": {
-        "X": 2079.7942,
-        "Y": -770.6885
+        "X": 1997.6833,
+        "Y": -659.5839
       }
     },
     {
       "ChildId": "33c4ad16-4e20-46d8-9065-0c9bf18f17d8"/*PointsOnMesh*/,
       "Position": {
-        "X": 1127.7351,
-        "Y": -416.1463
+        "X": 1045.6243,
+        "Y": -305.04175
       }
     },
     {
       "ChildId": "d01bd631-7d67-40b8-80fe-a6196434a16e"/*APoint*/,
       "Position": {
-        "X": 1127.7351,
-        "Y": -677.1463
+        "X": 1045.6243,
+        "Y": -566.04175
       }
     },
     {
       "ChildId": "f2cbfa53-d71a-412e-bd17-54e83703cecf"/*ListToBuffer*/,
       "Position": {
-        "X": 1277.7351,
-        "Y": -677.1463
+        "X": 1195.6243,
+        "Y": -566.04175
       }
     },
     {
       "ChildId": "5998e214-8825-427e-b009-7e628725a5cd"/*TransformPoints*/,
       "Position": {
-        "X": 1277.7351,
-        "Y": -416.1463
+        "X": 1195.6243,
+        "Y": -281.04175
       }
     },
     {
       "ChildId": "b6b7bbbd-c81c-4b78-b96f-725e31a61c7e"/*PerlinNoise3*/,
       "Position": {
-        "X": 1131.3992,
-        "Y": -334.62448
+        "X": 1049.2883,
+        "Y": -223.51993
       }
     },
     {
       "ChildId": "e72c9fac-628b-471d-8c2c-72f255d6b81a"/*RenderTarget*/,
       "Position": {
-        "X": 1129.2007,
-        "Y": -215.70886
+        "X": 1047.0898,
+        "Y": -104.60431
       }
     },
     {
       "ChildId": "772d2d86-561e-4267-b405-b736a2010dcc"/*PointsOnImage*/,
       "Position": {
-        "X": 1279.2007,
-        "Y": -215.70886
+        "X": 1197.0898,
+        "Y": -104.60431
       }
     },
     {
       "ChildId": "1ca7f5dc-da64-4db1-8f38-10c7f0cee469"/*Text*/,
       "Position": {
-        "X": 979.2006,
-        "Y": -215.70886
+        "X": 897.0909,
+        "Y": -104.60431
       }
     },
     {
       "ChildId": "f7b9071a-93ae-4d92-9d9f-e6349415d629"/*LinePoints*/,
       "Position": {
-        "X": 1127.7351,
-        "Y": -608.1463
+        "X": 1045.6243,
+        "Y": -497.04175
       }
     },
     {
       "ChildId": "b214aa0c-42ca-4c23-b860-68931c334cbe"/*FilterPoints*/,
       "Position": {
-        "X": 1277.7351,
-        "Y": -608.1463
+        "X": 1195.6243,
+        "Y": -497.04175
       }
     },
     {
       "ChildId": "e87164ef-d1de-4a61-b1dc-c4f753d5acb2"/*CountInt*/,
       "Position": {
-        "X": 1127.7351,
-        "Y": -565.1463
+        "X": 1045.6243,
+        "Y": -454.04175
       }
     },
     {
@@ -385,7 +365,7 @@
       "ChildId": "67045d2a-cee3-4d5a-ae90-738e7efc7570"/*CountInt*/,
       "Position": {
         "X": 1528.365,
-        "Y": 553.0128
+        "Y": 564.0128
       }
     },
     {
@@ -448,7 +428,7 @@
       "ChildId": "c984bc5b-7380-4038-836b-d00834de3003"/*DrawPoints*/,
       "Position": {
         "X": 1528.365,
-        "Y": 441.01282
+        "Y": 452.01282
       }
     },
     {
@@ -462,7 +442,7 @@
       "ChildId": "6ffd458e-e272-475d-a972-e40529eeb06b"/*DrawPoints*/,
       "Position": {
         "X": 1528.365,
-        "Y": 497.01282
+        "Y": 508.01282
       }
     },
     {
@@ -713,15 +693,23 @@
     {
       "ChildId": "72174cd2-fad8-4937-bd31-fef054611b64"/*VisualizePoints*/,
       "Position": {
-        "X": 1779.7942,
-        "Y": -770.6885
+        "X": 1697.6833,
+        "Y": -659.5839
       }
     },
     {
       "ChildId": "cf1d0e88-7880-458e-8593-f2a3a2997fd9"/*Group*/,
       "Position": {
-        "X": 1929.7942,
-        "Y": -770.6885
+        "X": 1847.6833,
+        "Y": -659.5839
+      }
+    },
+    {
+      "ChildId": "6c70d237-9e63-4bba-9f46-8a7387ed7afa"/*RadialPoints*/,
+      "Comment": "We adjusted its parameters to it creats 4 points in a on the Y-axis.\n\nNotices how we also adjusted the OrientationAxis to X and adjusted the orientation angle to adjust the points's z (forward) direction.\n\nWe also disable the CloseCircleLine to prevent overlapping points at start and end.",
+      "Position": {
+        "X": -158.05867,
+        "Y": -729.71564
       }
     }
   ],
@@ -765,7 +753,7 @@
     },
     {
       "Id": "e8eaa7a4-561b-4bfa-9b05-2cba36dbb1f1",
-      "Title": "A set of point to emit (this can be tens of thousands)",
+      "Title": "A set of point to emit \n(this can be tens of thousands)",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -777,8 +765,8 @@
         "Y": -790.38916
       },
       "Size": {
-        "X": 307.34607,
-        "Y": 127.95145
+        "X": 248.4091,
+        "Y": 100.15102
       }
     },
     {
@@ -791,12 +779,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": -276.9203,
-        "Y": -631.00726
+        "X": -275.6592,
+        "Y": -672.0346
       },
       "Size": {
-        "X": 278.2358,
-        "Y": 122.379944
+        "X": 249.32332,
+        "Y": 109.03577
       }
     },
     {
@@ -809,8 +797,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": 189.6113,
-        "Y": -802.81287
+        "X": 128.19244,
+        "Y": -793.3161
       },
       "Size": {
         "X": 230.0,
@@ -917,12 +905,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": 867.96497,
-        "Y": -848.9624
+        "X": 871.7684,
+        "Y": -694.69214
       },
       "Size": {
-        "X": 1322.0665,
-        "Y": 913.77045
+        "X": 1339.7388,
+        "Y": 802.91345
       }
     },
     {

@@ -88,6 +88,11 @@ namespace T3.Editor.Gui
                             Vector2ToJson(writer, childUi.Size);
                         }
                     }
+
+                    if (!string.IsNullOrEmpty(childUi.Comment))
+                    {
+                        writer.WriteObject(JsonKeys.Comment, childUi.Comment);
+                    }
                     
                     writer.WritePropertyName(JsonKeys.Position);
                     Vector2ToJson(writer, childUi.PosOnCanvas);
@@ -241,6 +246,11 @@ namespace T3.Editor.Gui
                     Log.Warning($"Skipping UI child definition in {symbol.Name} {symbolId} for undefined child {childId}");
                     continue;
                 }
+                
+                if (childEntry[JsonKeys.Comment] != null)
+                {
+                    childUi.Comment = childEntry[JsonKeys.Comment].Value<string>();
+                }
 
                 JToken positionToken = childEntry[JsonKeys.Position];
                 childUi.PosOnCanvas = (Vector2)JsonToVector2(positionToken);
@@ -359,6 +369,7 @@ namespace T3.Editor.Gui
             public const string ChildId = "ChildId";
             public const string Position = "Position";
             public const string Annotations = "Annotations";
+            public const string Comment = "Comment";
             public const string Id = "Id";
             public const string Title = "Title";
             public const string Color = "Color";

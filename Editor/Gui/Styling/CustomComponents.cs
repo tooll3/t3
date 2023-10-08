@@ -457,6 +457,8 @@ namespace T3.Editor.Gui.Styling
                 return;
             
             FrameStats.Current.SomethingWithTooltipHovered = true;
+            if (!useHoverDelay)
+                _toolTipHoverDelay = 0;
 
             if (_toolTipHoverDelay > 0)
                 return;
