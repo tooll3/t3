@@ -10,6 +10,7 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Editor.Gui;
+using T3.Editor.Gui.Interaction.StartupCheck;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
 using T3.SystemUi;
@@ -85,7 +86,18 @@ internal static class ProgramWindows
         }
         catch (Exception e)
         {
-            EditorUi.Instance.ShowMessageBox("We are sorry but your graphics hardware might not be capable of running Tooll2\n\n" +e.Message, "Oh noooo", PopUpButtons.Ok);
+            if (e.Message.Contains("DXGI_ERROR_SDK_COMPONENT_MISSING"))
+            {
+                var result = EditorUi.Instance.ShowMessageBox("You need to install Windows Graphics diagnostics tools.\n\nClick Ok to download this Windows component directly from Microsoft.", "Windows component missing", PopUpButtons.OkCancel);
+                if (result == PopUpResult.Ok)
+                {
+                    StartupValidation.OpenUrl("https://learn.microsoft.com/en-us/windows/uwp/gaming/use-the-directx-runtime-and-visual-studio-graphics-diagnostic-features");
+                }
+            }
+            else
+            {
+                EditorUi.Instance.ShowMessageBox("We are sorry but your graphics hardware might not be capable of running Tooll2\n\n" +e.Message, "Oh noooo", PopUpButtons.Ok);
+            }
             Environment.Exit(0);
         }
     }
