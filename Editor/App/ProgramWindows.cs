@@ -183,9 +183,17 @@ internal static class ProgramWindows
 
     public static void Present(bool useVSync, bool showSecondaryRenderWindow)
     {
-        Main.SwapChain.Present(useVSync ? 1 : 0, PresentFlags.None);
+        try
+        {
+            Main.SwapChain.Present(useVSync ? 1 : 0, PresentFlags.None);
 
-        if (showSecondaryRenderWindow)
-            Viewer.SwapChain.Present(useVSync ? 1 : 0, PresentFlags.None);
+            if (showSecondaryRenderWindow)
+                Viewer.SwapChain.Present(useVSync ? 1 : 0, PresentFlags.None);
+        }
+        catch (SharpDX.SharpDXException e)
+        {
+            var suspendReason = _device.DeviceRemovedReason.ToString();
+            throw (new ApplicationException($"Graphics card suspended ({suspendReason})"));
+        }
     }
 }
