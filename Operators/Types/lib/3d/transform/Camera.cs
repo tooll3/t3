@@ -5,6 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
+using T3.Core.Rendering;
 using T3.Core.Utils;
 using T3.Operators.Utils;
 using Vector2 = System.Numerics.Vector2;
@@ -18,7 +19,7 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
 
         [Output(Guid = "761245E2-AC0B-435A-841E-7C9EDC804606")]
         public readonly Slot<Object> Reference = new();
-
+ 
         public Camera()
         {
             Output.UpdateAction = Update;

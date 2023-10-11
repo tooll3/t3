@@ -1,6 +1,6 @@
 ﻿using SharpDX;
 
-namespace T3.Operators.Utils
+namespace T3.Core.Rendering
 {
     public interface ICameraPropertiesProvider
     {

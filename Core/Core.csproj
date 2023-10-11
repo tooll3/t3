@@ -25,4 +25,8 @@
       <ProjectReference Include="..\SystemUi\SystemUi.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="OperatorIO\" />
+    </ItemGroup>
+
 </Project>
