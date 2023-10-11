@@ -119,7 +119,8 @@ namespace T3.Editor.Gui.Interaction
 
                         if (UserSettings.Config.UseJogDialControl)
                         {
-                            JogDialOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
+                            //JogDialOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
+                            FreeDialOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
                         }
                         else
                         {
