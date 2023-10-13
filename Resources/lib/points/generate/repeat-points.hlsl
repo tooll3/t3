@@ -7,6 +7,7 @@ cbuffer Params : register(b0)
     float ApplyTargetScaleW;
     float MultiplyTargetW;
     float Scale;
+    float AddSeperators;
 }
 
 StructuredBuffer<Point> SourcePoints : t0;         // input
@@ -30,12 +31,13 @@ void main(uint3 i : SV_DispatchThreadID)
 
     if(ConnectPointsMode < 0.5) 
     {
-        uint sourceLength = sourcePointCount + 1;
+        bool addSeperators = AddSeperators > 0.5;
+        uint sourceLength = sourcePointCount + addSeperators;
 
         uint sourceIndex = i.x % (sourceLength);
         uint targetIndex = (i.x / sourceLength )  % targetPointCount;
         
-        if(sourceIndex == sourcePointCount) {
+        if(!addSeperators && sourceIndex == sourcePointCount) {
             ResultPoints[i.x].position =  0;
             ResultPoints[i.x].w = NAN;            
         }
