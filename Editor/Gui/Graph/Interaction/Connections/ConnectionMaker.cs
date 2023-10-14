@@ -74,8 +74,8 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             var selectedSymbolChildUis = NodeSelection.GetSelectedChildUis().OrderBy(c => c.PosOnCanvas.Y * 100 + c.PosOnCanvas.X).ToList();
             selectedSymbolChildUis.Reverse();
 
-            //if (selectedSymbolChildUis.Count > 1 && selectedSymbolChildUis.Any(c => c.Id == sourceUi.Id))
-            if (selectedSymbolChildUis.Count > 1)
+            if (selectedSymbolChildUis.Count > 1 && (selectedSymbolChildUis.Any(c => c.Id == sourceUi.Id)))
+            //if (selectedSymbolChildUis.Count > 1)
             {
                 selectedSymbolChildUis.Reverse();
                 
