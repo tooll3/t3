@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Operator.Slots;
@@ -163,6 +164,15 @@ namespace T3.Core.Operator
             if(mainInput.DefaultValue.ValueType == typeof(float))
                 return true;
 
+            if(mainInput.DefaultValue.ValueType == typeof(Vector2))
+                return true;
+            
+            if(mainInput.DefaultValue.ValueType == typeof(Vector3))
+                return true;
+            
+            if(mainInput.DefaultValue.ValueType == typeof(string))
+                return true;
+            
             return false;
         }
 
@@ -241,6 +251,38 @@ namespace T3.Core.Operator
                             floatOutput.RestoreUpdateAction();
                         }
                         break;
+                    
+                    case Slot<Vector2> vec2Output when mainInputSlot is Slot<Vector2> vec2Input:
+                        if (shouldBypass)
+                        {
+                            wasByPassed= vec2Output.TrySetBypassToInput(vec2Input);
+                        }
+                        else
+                        {
+                            vec2Output.RestoreUpdateAction();
+                        }
+                        break;
+                    case Slot<Vector3> vec3Output when mainInputSlot is Slot<Vector3> vec3Input:
+                        if (shouldBypass)
+                        {
+                            wasByPassed= vec3Output.TrySetBypassToInput(vec3Input);
+                        }
+                        else
+                        {
+                            vec3Output.RestoreUpdateAction();
+                        }
+                        break;
+                    case Slot<string> stringOutput when mainInputSlot is Slot<string> stringInput:
+                        if (shouldBypass)
+                        {
+                            wasByPassed= stringOutput.TrySetBypassToInput(stringInput);
+                        }
+                        else
+                        {
+                            stringOutput.RestoreUpdateAction();
+                        }
+                        break;
+
                 }
 
                 _isBypassed = wasByPassed;
