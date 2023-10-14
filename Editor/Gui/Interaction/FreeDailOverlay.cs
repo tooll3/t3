@@ -24,136 +24,107 @@ namespace T3.Editor.Gui.Interaction
             if (restarted)
             {
                 _baseLog10Speed = (int)(Math.Log10(scale)+3.5f);
-                _min = min;
-                _max = max;
-                _clamp = clamp;
-                
+                _value = value;
                 _mousePositions.Clear();
-                _dampedRadius = 0;
+                _center = _io.MousePos;
+                _dampedRadius = 50;
             }
 
-            var moveDelta = _mousePositions.Count == 0 ? 999 : (_io.MousePos- _mousePositions[^1]).Length();
-            var hasMoved = moveDelta > 1.4f;
-            if (hasMoved)
-            {
-                _mousePositions.Add(_io.MousePos);
-            }
-
-            const int smoothOffset = 2;
+            _mousePositions.Add(_io.MousePos);
 
             if (_mousePositions.Count > 100)
             {
                 _mousePositions.RemoveAt(0);
             }
 
-
-            if (_mousePositions.Count > smoothOffset)
+            if (_mousePositions.Count > 1)
             {
-                var list2 = new List<Vector2>(100);
-                var smoothP = _mousePositions[0];
+                // Terminology
+                // range - normalized angle from -0.5 ... 0.5 with 0 at current value
+                // valueRange - delta value for complete revolution of current dial
+                // tickInterval = Log10 delta vale between ticks.
                 
-                foreach (var p in _mousePositions)
+                var p1 = _mousePositions[^1];
+                var p2 = _mousePositions[^2];
+                var radius = Vector2.Distance(_center, p1);
+                
+                _dampedRadius = MathUtils.Lerp(_dampedRadius, radius.Clamp(40,1000), 0.03f);
+                _drawList.AddCircle(_center, _dampedRadius+25,  UiColors.BackgroundFull.Fade(0.1f), 128, 50);
+                
+                var valueRange = 2.5 * Math.Pow((_dampedRadius/500).Clamp(0.1f,2), 3) * 100 * scale * GetKeyboardScaleFactor();
+                var tickInterval =  Math.Pow(10, (int)Math.Log10(valueRange * 3000 / _dampedRadius) - 2);
+                
+                var dir = p1 - _center;
+                var valueAngle = MathF.Atan2(dir.X, dir.Y);
+                
+                var dirLast = p2 - _center;
+                var valueAngleLast = MathF.Atan2(dirLast.X, dirLast.Y);
+
+                var deltaAngle = DeltaAngle(valueAngle, valueAngleLast);
+                
+                _value += deltaAngle / (Math.PI * 2) * valueRange;
+                value = Math.Round(_value / (tickInterval/10)) * tickInterval/10;
+                
+                var numberOfTicks = valueRange / tickInterval;
+                
+                var anglePerTick = 2*Math.PI / numberOfTicks;
+                
+                var valueTickOffsetFactor =  MathUtils.Fmod(_value, tickInterval) / tickInterval;
+                var tickRatioAlignmentAngle = anglePerTick * valueTickOffsetFactor ;
+                
+                
+                for (int tickIndex = -(int)numberOfTicks/2; tickIndex < numberOfTicks/2; tickIndex++)
                 {
-                    smoothP = MathUtils.Lerp(smoothP, p, 0.2f);
-                    list2.Add(smoothP);
-                }
-                
-                Vector2 sumIntersections = Vector2.Zero;
-                float count = 0;
-                
-                Vector2 nLast = Vector2.Zero;
-                Vector2 pLast2 = Vector2.Zero;
-                Vector2 lastIntersection = Vector2.Zero;
-                
-                for (var index = smoothOffset; index < list2.Count - smoothOffset ; index++)
-                {
-                    var pLast = list2[index-smoothOffset];
-                    var p = list2[index];
-                    var pNext = list2[index+smoothOffset];
+                    var f = MathF.Abs(tickIndex / ((float)numberOfTicks/2));
+                    var negF = 1 - f;
+                    var tickAngle = tickIndex * anglePerTick - valueAngle - tickRatioAlignmentAngle ;
+                    var offset1 = new Vector2(MathF.Sin(-(float)tickAngle), MathF.Cos(-(float)tickAngle));
+                    var valueAtTick = _value + (tickIndex * anglePerTick - tickRatioAlignmentAngle) / (2 * Math.PI) * valueRange;
+                    var isPrimary =   Math.Abs(MathUtils.Fmod(valueAtTick + tickInterval * 5, tickInterval * 10) - tickInterval * 5) < tickInterval / 10;
                     
-                    var d1 = pLast - p;
-                    var d2 = pNext - p;
-
-                    
-                    var n1 = Vector2.Normalize( new Vector2(d1.X, d1.Y));
-                    var n2 = Vector2.Normalize( new Vector2(d2.X, d2.Y));
-                    var n = Vector2.Normalize(n1 + n2) * 1500;
-
-                    var isCurvature = !float.IsNaN(n.X);
-                    // _drawList.AddCircle(p, 3,  isCurvature ? Color.Green : Color.Red);
-                    //_drawList.AddLine(p,p +n, Color.White.Fade(0.1f));
-
-                    if (isCurvature)
+                    _drawList.AddLine(offset1 * _dampedRadius + _center,
+                    offset1 * (_dampedRadius + (isPrimary ? 10 : 5f)) + _center,
+                        UiColors.ForegroundFull.Fade(negF * (isPrimary ? 1 : 0.5f)),
+                        1
+                    );
+                                        
+                    if (isPrimary)
                     {
-                        if (CalculateIntersection(p, p+ n, pLast2, p+ nLast, out var intersection))
-                        {
-                            var dToLastIntersection = Vector2.Distance(intersection, lastIntersection);
-                            var w1 = 1;// MathUtils.SmootherStep( 300,200, dToLastIntersection);
-                            
-                            
-                            var dToPoint = Vector2.Distance(intersection, p);
-                            var w2 = MathUtils.SmootherStep(10, 20, dToPoint) * MathUtils.SmootherStep(500,300, dToPoint);
-                            
-                            var weight = w1 * w2* (float)index / list2.Count;
-                            sumIntersections += intersection * weight;
-                            count+= weight;
-                            if(weight * 10 > 1)
-                                _drawList.AddCircle(intersection, weight * 10,  Color.Blue);
-                            
-                            _drawList.AddLine(lastIntersection, intersection, Color.White.Fade(0.1f));
-                            lastIntersection = intersection;
-                        }
-
-                        nLast = n;
-                        pLast2 = p;
+                        _drawList.AddText(Fonts.FontSmall, 
+                                          Fonts.FontSmall.FontSize, 
+                                          offset1 * (_dampedRadius + 30) + _center + new Vector2(-10,-Fonts.FontSmall.FontSize/2), 
+                                          UiColors.ForegroundFull.Fade(negF), 
+                                          $"{valueAtTick:0.0}");
                     }
                 }
-
-                
-                if (count > 0)
-                {
-                    var averageCenter = sumIntersections/count;
-                    var p1 = list2[^1];
-                    var p2 = list2[^2];
-                    var d = PointSideToLine(averageCenter, p1, p2 - p1);
-                    
-                    var radius = Vector2.Distance(averageCenter, pLast2);
-                    
-                    _dampedRadius = MathUtils.Lerp(_dampedRadius, radius, 0.1f);
-                    var finalRadius = _dampedRadius.Clamp(30, 500);
-                    _drawList.AddCircle(averageCenter, finalRadius,  d > 0 ? Color.Blue : Color.Red);
-
-                    if (hasMoved && d != 0)
-                    {
-                        var speedDelta = Math.Pow(10,(finalRadius -30) / 500 - 2.5) * _baseLog10Speed;
-                        value += speedDelta * moveDelta * d;
-
-                        var log10 = (int)(Math.Log10(speedDelta) );
-                        var roundFactor = Math.Pow(10, log10);
-                        value = Math.Round(value / roundFactor) * roundFactor;
-                        if (clamp)
-                        {
-                            value = value.Clamp(min, max);
-                        }
-                    }
-                }
+                _drawList.AddText(_io.MousePos + new Vector2(100,100), Color.White, 
+                                  $"da:{deltaAngle:0.00}\n" 
+                                  + $"dTick:{tickInterval:0.00}\n"
+                                  + $"valueAngle: {valueAngle: 0.00}");
             }
-            
-            // for (int ringIndex = 0; ringIndex < RingCount; ringIndex++)
-            // {
-            //     modified |= DialRing.Draw(ringIndex);
-            // }
-            //
-            // if (modified)
-            // {
-            //     value = ClampedValue;
-            // }
-            
 
             return true;
         }
 
         private static float _dampedRadius = 0;
+        private static Vector2 _center = Vector2.Zero;
+
+        private static double DeltaAngle(double angle1, double angle2)
+        {
+            angle1 = (angle1 + Math.PI) % (2 * Math.PI) - Math.PI;
+            angle2 = (angle2 + Math.PI) % (2 * Math.PI) - Math.PI;
+
+            var delta = angle2 - angle1;
+            return delta switch
+                       {
+                           > Math.PI  => delta - 2 * Math.PI,
+                           < -Math.PI => delta + 2 * Math.PI,
+                           _          => delta
+                       };
+        }
+        
+        /** The precise value before rounding. This used for all internal calculations. */
+        private static double _value; 
 
         private static bool CalculateIntersection(Vector2 p1A, Vector2 p1B, Vector2 p2A, Vector2 p2B, out Vector2 intersection)
         {
@@ -178,53 +149,26 @@ namespace T3.Editor.Gui.Interaction
             intersection = new Vector2((float)x, (float)y);
             return true;
         }
-
-        private static int PointSideToLine(Vector2 p, Vector2 linePoint, Vector2 direction)
-        {
-            var v1 = p - linePoint;
-
-            double crossProduct = (v1.X * direction.Y) - (v1.Y * direction.X);
         
-            if (Math.Abs(crossProduct) < 1e-6) // Point is on the line
-            {
-                return 0;
-            }
-
-            if (crossProduct < 0) // Point is on the left side
-            {
-                return -1;
-            }
-
-            // Point is on the right side
-            return 1;
-        }
-
         private static readonly List<Vector2> _mousePositions = new(100);
         
         private static float _baseLog10Speed = 1;
 
-        private static float AdjustedBaseLog10Scale
+        private static double GetKeyboardScaleFactor()
         {
-            get
+            if (_io.KeyAlt)
             {
-                if (_io.KeyAlt)
-                {
-                    return _baseLog10Speed+1;
-                }
-
-                if (_io.KeyShift)
-                {
-                    return _baseLog10Speed-1;
-                }
-
-                return _baseLog10Speed;
+                return 10;
             }
+
+            if (_io.KeyShift)
+            {
+                return 0.1;
+            }
+
+            return 1;
         }
-
-        private static double _min;
-        private static double _max;
-        private static bool _clamp;
-
+        
 
         private static ImDrawListPtr _drawList;
         private static ImGuiIOPtr _io;
