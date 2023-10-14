@@ -54,7 +54,8 @@ namespace T3.Editor.Gui.UiHelpers
             public bool ShowExplicitTextureFormatInOutputWindow = false;
             public bool UseArcConnections = true;
             public float SnapStrength = 5;
-            public bool UseJogDialControl = true;
+            //public bool UseJogDialControl = true;
+            public ValueEditGizmos ValueEditGizmo;
             public float ScrollSmoothing = 0.1f;
 
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
@@ -97,8 +98,13 @@ namespace T3.Editor.Gui.UiHelpers
             public List<Gradient> GradientPresets = new();
 
             public string ColorThemeName;
+        }
 
-
+        public enum ValueEditGizmos
+        {
+            RadialFlex,
+            JogDial,
+            ValueLadder,
         }
         
         public static bool IsUserNameDefined()

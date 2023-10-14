@@ -138,8 +138,19 @@ namespace T3.Core.Utils
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Lerp(float a, float b, float t)
         {
-            return (float)(a + (b - a) * t);
+            return a + (b - a) * t;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float LerpAngle(float from, float to, float t)
+        {
+            var delta = Fmod((from - to), 2* MathF.PI);
+            if (delta > MathF.PI)
+                delta -= 2* MathF.PI;
+            
+            return from - delta * t;
+        }
+
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Fmod(float v, float mod)
