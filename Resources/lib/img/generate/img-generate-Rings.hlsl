@@ -81,7 +81,10 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float normalizedDistance = (d2 - Radius.x) / (Radius.y - Radius.x);
 
-    normalizedDistance = pow(normalizedDistance, Distort);
+    float isInsideRadius = normalizedDistance < 0 ? 0 : 1;
+
+    //return float4((isnan(normalizedDistance) ? 1 : 0.5).xxx ,1);
+    normalizedDistance =  pow(max(normalizedDistance,0), Distort);
 
     float c = smoothstep(0 - 0.01, 0, normalizedDistance);
     c *= smoothstep(1 + 0.01, 1, normalizedDistance);
@@ -93,7 +96,6 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 ringHash = hash22(float2((ringIndex + 1) * 124.34 + 1.12, (Seed + 0.5) % 312.113));
 
     float segments = _Segments.x + (ringHash.x - 0.5) * _Segments.y;
-
     float ringCenter = abs(ringV - 0.5);
 
     float angle = (atan2(p.x, p.y) / 2 / 3.141578 + 0.5) + Rotate / 180 / 3.141578;
@@ -102,6 +104,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float ringIndexFromCenter = (ringIndex - Offset) % RingCount;
     float ringAngle2 = mod((ringAngle + ringRotate.x * ringIndexFromCenter / RingCount), 1) * segments;
+
+
 
     // return float4(ringAngle2, 0,0,1);
     float segmentV = ringAngle2 % 1;
@@ -122,18 +126,13 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     // Segment
     c *= smoothstep(segmentRatio + f, segmentRatio - f, abs(segmentAngle - 0.5));
-
     c *= segmentHash.x > _FillRatio ? 0 : 1;
 
-    float4 color = lerp(Background, Fill, c * brightness);
+    float4 color = lerp(Background, Fill, c * brightness * isInsideRadius);
 
     float highlightHash = hash11(seed + HighlightSeed);
-
-    float4 colorOut = highlightHash >= _HighlightRatio ? color : Highlight * c;
-
-    // return colorOut;
+    float4 colorOut = highlightHash >= _HighlightRatio ? color : Highlight * c * isInsideRadius;
 
     float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
-
     return (IsTextureValid < 0.5) ? colorOut : BlendColors(orgColor, colorOut, (int)BlendMode);
 }
