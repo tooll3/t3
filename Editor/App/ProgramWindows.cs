@@ -190,7 +190,7 @@ internal static class ProgramWindows
             if (showSecondaryRenderWindow)
                 Viewer.SwapChain.Present(useVSync ? 1 : 0, PresentFlags.None);
         }
-        catch (SharpDX.SharpDXException e)
+        catch (SharpDX.SharpDXException)
         {
             var suspendReason = _device.DeviceRemovedReason.ToString();
             throw (new ApplicationException($"Graphics card suspended ({suspendReason})"));

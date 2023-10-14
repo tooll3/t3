@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 
@@ -11,13 +10,12 @@ namespace T3.Editor.Gui.Interaction
     /// <summary>
     /// Draws a circular dial to manipulate values with various speeds
     /// </summary>
-    public static class FreeDialOverlay
+    public static class RadialFlexEditOverlay
     {
         public static bool Draw(ref double roundedValue, bool restarted, Vector2 center, double min = double.NegativeInfinity,
                                 double max = double.PositiveInfinity,
                                 float scale = 0.1f, bool clamp = false)
         {
-            var modified = false;
             _drawList = ImGui.GetForegroundDrawList();
             _io = ImGui.GetIO();
             
@@ -55,9 +53,9 @@ namespace T3.Editor.Gui.Interaction
                 
                 // Update angle...
                 var dir = p1 - _center;
-                var valueAngle = MathF.Atan2(dir.X, dir.Y);
-                var deltaAngle = DeltaAngle(valueAngle, _lastValueAngle);
-                _lastValueAngle = valueAngle;
+                var mouseAngle = MathF.Atan2(dir.X, dir.Y);
+                var deltaAngle = DeltaAngle(mouseAngle, _lastValueAngle);
+                _lastValueAngle = mouseAngle;
 
                 var hasMoved = Math.Abs(deltaAngle) > 0.015f;
                 if (hasMoved)
@@ -83,7 +81,7 @@ namespace T3.Editor.Gui.Interaction
 
                 _dampedModifierScaleFactor = MathUtils.Lerp(_dampedModifierScaleFactor, GetKeyboardScaleFactor(), 0.1f);
                 
-                var normalizedClampedRadius = ( _dampedRadius/1000).Clamp(0.07f, 1);
+                var normalizedClampedRadius = ( _dampedRadius/1000).Clamp(0.0f, 1);
                 var valueRange = (Math.Pow(4 * (normalizedClampedRadius ), 3)) * 50 * scale * _dampedModifierScaleFactor;
                 
                 var tickInterval =  Math.Pow(10, (int)Math.Log10(valueRange * 250 / _dampedRadius) - 2) ;
@@ -104,7 +102,7 @@ namespace T3.Editor.Gui.Interaction
                 {
                     var f = MathF.Pow(MathF.Abs(tickIndex / ((float)numberOfTicks/2)), 0.5f);
                     var negF = 1 - f;
-                    var tickAngle = tickIndex * anglePerTick - valueAngle - tickRatioAlignmentAngle ;
+                    var tickAngle = tickIndex * anglePerTick - mouseAngle - tickRatioAlignmentAngle ;
                     var direction = new Vector2(MathF.Sin(-(float)tickAngle), MathF.Cos(-(float)tickAngle));
                     var valueAtTick = _value + (tickIndex * anglePerTick - tickRatioAlignmentAngle) / (2 * Math.PI) * valueRange;
                     var isPrimary =   Math.Abs(MathUtils.Fmod(valueAtTick + tickInterval * 5, tickInterval * 10) - tickInterval * 5) < tickInterval / 10;
@@ -133,11 +131,67 @@ namespace T3.Editor.Gui.Interaction
                                           label);
                     }
                 }
+                
+                // Draw previous value
+                {
+                    var visible = IsValueVisible(_originalValue, valueRange);
+                    if (visible)
+                    {
+                        var originalValueAngle= ComputeAngleForValue(_originalValue, valueRange, mouseAngle);
+                        var direction = new Vector2(MathF.Sin(originalValueAngle), MathF.Cos(originalValueAngle));
+                        _drawList.AddLine(direction * _dampedRadius + _center,
+                                          direction * (_dampedRadius - 10) + _center,
+                                          UiColors.StatusActivated.Fade(0.8f),
+                                          2
+                                         );
+                    }
+                }
+                
+                // Draw Value value
+                {
+                    var rangeMin = _value - valueRange * 0.45f;
+                    var rangeMax = _value + valueRange * 0.45f;
+                    if (!(min < rangeMin && max < rangeMin || (min > rangeMax && max > rangeMax)))
+                    {
+                        const float innerOffset = 4;
+                        var minAngle= ComputeAngleForValue(Math.Max(min, rangeMin), valueRange, mouseAngle);
+                        var maxAngle= ComputeAngleForValue(Math.Min(max, rangeMax), valueRange, mouseAngle);
+                        
+                        _drawList.PathClear();
+                        var minVisible = GetDirectionForValueIfVisible(min, valueRange, mouseAngle, out var dirForMinIndicator);
+                        if (minVisible)
+                        {
+                            _drawList.PathLineTo(_center + dirForMinIndicator * (_dampedRadius - 10));
+                        }
+                        
+                        _drawList.PathArcTo(_center, _dampedRadius-innerOffset, -minAngle + MathF.PI/2 , -maxAngle + MathF.PI/2, 90);
+
+                        var maxVisible = GetDirectionForValueIfVisible(max, valueRange, mouseAngle, out var dirForMaxIndicator);
+                        if (maxVisible)
+                        {
+                            _drawList.PathLineTo(_center + dirForMaxIndicator * (_dampedRadius - 10));
+                        }
+                        _drawList.PathStroke(UiColors.ForegroundFull.Fade(0.4f), ImDrawFlags.None, 2);
+
+                        if (!minVisible)
+                        {
+                            _drawList.PathClear();
+                            _drawList.PathArcTo(_center, _dampedRadius -innerOffset , -minAngle + MathF.PI/2 -  5 * MathUtils.ToRad , -minAngle + MathF.PI/2, 90);
+                            _drawList.PathStroke(UiColors.ForegroundFull.Fade(0.3f), ImDrawFlags.None, 2);
+                        }
+                        if (!maxVisible)
+                        {
+                            _drawList.PathClear();
+                            _drawList.PathArcTo(_center, _dampedRadius - innerOffset, -maxAngle + MathF.PI/2 +  5 * MathUtils.ToRad , -maxAngle + MathF.PI/2, 90);
+                            _drawList.PathStroke(UiColors.ForegroundFull.Fade(0.2f), ImDrawFlags.None, 2);
+                        }
+                    }
+                }
 
                 // Current value at mouse
                 {
                     var dialFade = MathUtils.SmootherStep(60, 160, _dampedRadius);
-                    var dialAngle= (float)( (_value - roundedValue) * (2 * Math.PI) / valueRange + valueAngle);
+                    var dialAngle= (float)( (_value - roundedValue) * (2 * Math.PI) / valueRange + mouseAngle);
                     _dampedDialValueAngle = MathUtils.LerpAngle(_dampedDialValueAngle, dialAngle, 0.4f);
                     var direction = new Vector2(MathF.Sin(_dampedDialValueAngle), MathF.Cos(_dampedDialValueAngle));
                     _drawList.AddLine(direction * _dampedRadius + _center,
@@ -155,26 +209,34 @@ namespace T3.Editor.Gui.Interaction
                                       );
                 }
                 
-                // Draw previous value
-                {
-                    var visible = Math.Abs(_value - _originalValue) < valueRange / 3;
-                    if (visible)
-                    {
-                        var originalValueAngle= (float)( (_value - _originalValue) * (2 * Math.PI) / valueRange + valueAngle);
-                        var direction = new Vector2(MathF.Sin(originalValueAngle), MathF.Cos(originalValueAngle));
-                        _drawList.AddLine(direction * _dampedRadius + _center,
-                                          direction * (_dampedRadius - 10) + _center,
-                                          UiColors.StatusActivated.Fade(0.8f),
-                                          2
-                                         );
-                    }
-                }
             }
 
             return true;
         }
 
-        private static float _dampedRadius = 0;
+        private static bool IsValueVisible(double value, double valueRange)
+        {
+            return Math.Abs(_value - value) < valueRange * 0.45f;
+        }
+
+        private static float ComputeAngleForValue(double value, double valueRange, float mouseAngle)
+        {
+            return (float)( (_value - value) * (2 * Math.PI) / valueRange + mouseAngle);
+        }
+
+        private static bool GetDirectionForValueIfVisible(double value, double valueRange, float mouseAngle, out Vector2 direction)
+        {
+            direction = Vector2.Zero;
+            
+            if(!IsValueVisible(value, valueRange))
+                return false;
+
+            var angle = ComputeAngleForValue(value, valueRange, mouseAngle);
+            direction = new Vector2(MathF.Sin(angle), MathF.Cos(angle));
+            return true;
+        }
+
+        private static float _dampedRadius;
         private static Vector2 _center = Vector2.Zero;
         private static float _dampedAngleVelocity;
         private static double _lastValueAngle;
