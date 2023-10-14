@@ -31,6 +31,7 @@ namespace T3.Editor.Gui.Interaction
                 _dampedAngleVelocity = 0;
                 _dampedModifierScaleFactor = 1;
                 _lastValueAngle = 0;
+                _framesSinceLastMove = 120;
                 _originalValue = roundedValue;
             }
 
@@ -50,6 +51,7 @@ namespace T3.Editor.Gui.Interaction
                 // tickInterval = Log10 delta vale between ticks.
                 
                 var p1 = _mousePositions[^1];
+                var mousePosRadius = Vector2.Distance(_center, p1);
                 
                 // Update angle...
                 var dir = p1 - _center;
@@ -60,21 +62,21 @@ namespace T3.Editor.Gui.Interaction
                 var hasMoved = Math.Abs(deltaAngle) > 0.015f;
                 if (hasMoved)
                 {
+                    
                     _framesSinceLastMove = 0;
                 }
                 else
                 {
-                    _framesSinceLastMove++;
+                    if(Math.Abs(mousePosRadius - _dampedRadius) > 40)
+                        _framesSinceLastMove++;
                 }
                 
                 _dampedAngleVelocity = MathUtils.Lerp(_dampedAngleVelocity, (float)deltaAngle, 0.06f);
                 
                 // Update radius and value range
-                var mousePosRadius = Vector2.Distance(_center, p1);
 
                 const float maxRadius = 2500;
-                //var angleDamping = MathUtils.SmootherStep(0.05f, 0.006f, Math.Abs(_dampedAngleVelocity)) * 0.02f;
-                var angleDamping = MathF.Pow(MathUtils.SmootherStep(2, 30, _framesSinceLastMove),2) * 0.1f;
+                var angleDamping = MathF.Pow(MathUtils.SmootherStep(1, 15, _framesSinceLastMove),2) * 0.1f;
                 _dampedRadius = MathUtils.Lerp(_dampedRadius, mousePosRadius.Clamp(40f,maxRadius), angleDamping);
                 
                 _drawList.AddCircle(_center, _dampedRadius+25,  UiColors.BackgroundFull.Fade(0.1f), 128, 50);
@@ -82,7 +84,7 @@ namespace T3.Editor.Gui.Interaction
                 _dampedModifierScaleFactor = MathUtils.Lerp(_dampedModifierScaleFactor, GetKeyboardScaleFactor(), 0.1f);
                 
                 var normalizedClampedRadius = ( _dampedRadius/1000).Clamp(0.07f, 1);
-                var valueRange = (Math.Pow(4 * (normalizedClampedRadius ), 3)) * 25 * scale * _dampedModifierScaleFactor;
+                var valueRange = (Math.Pow(4 * (normalizedClampedRadius ), 3)) * 50 * scale * _dampedModifierScaleFactor;
                 
                 var tickInterval =  Math.Pow(10, (int)Math.Log10(valueRange * 250 / _dampedRadius) - 2) ;
                 
@@ -117,11 +119,18 @@ namespace T3.Editor.Gui.Interaction
                     if (isPrimary)
                     {
                         var font = isPrimary2 ? Fonts.FontBold : Fonts.FontSmall;
+                        var v = Math.Abs(valueAtTick) < 0.0001 ? 0 : valueAtTick;
+                        var label = $"{v:G5}";
+                        
+                        ImGui.PushFont(font);
+                        var size = ImGui.CalcTextSize(label);
+                        ImGui.PopFont();
+                        
                         _drawList.AddText(font, 
                                           font.FontSize, 
-                                          direction * (_dampedRadius + 30) + _center + new Vector2(-10,-font.FontSize/2), 
+                                          direction * (_dampedRadius + 30) + _center - size/2, 
                                           UiColors.ForegroundFull.Fade(negF * (isPrimary2 ? 1 : 0.5f)), 
-                                          $"{valueAtTick:0.0}");
+                                          label);
                     }
                 }
 
@@ -155,7 +164,7 @@ namespace T3.Editor.Gui.Interaction
                         var direction = new Vector2(MathF.Sin(originalValueAngle), MathF.Cos(originalValueAngle));
                         _drawList.AddLine(direction * _dampedRadius + _center,
                                           direction * (_dampedRadius - 10) + _center,
-                                          UiColors.StatusActivated.Fade(0.5f),
+                                          UiColors.StatusActivated.Fade(0.8f),
                                           2
                                          );
                     }
