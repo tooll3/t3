@@ -6,6 +6,7 @@ cbuffer Params : register(b0)
     float ApplyTargetOrientation;
     float ApplyTargetScaleW;
     float MultiplyTargetW;
+
     float Scale;
     float AddSeperators;
 }
@@ -37,7 +38,7 @@ void main(uint3 i : SV_DispatchThreadID)
         uint sourceIndex = i.x % (sourceLength);
         uint targetIndex = (i.x / sourceLength )  % targetPointCount;
         
-        if(!addSeperators && sourceIndex == sourcePointCount) {
+        if(addSeperators && sourceIndex == sourcePointCount) {
             ResultPoints[i.x].position =  0;
             ResultPoints[i.x].w = NAN;            
         }
