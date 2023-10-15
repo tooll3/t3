@@ -25,7 +25,7 @@ namespace T3.Editor.Gui.Interaction
                                                int min = int.MinValue,
                                                int max = int.MaxValue,
                                                bool clamp = false,
-                                               float scale = 0.5f,
+                                               float scale = 1f,
                                                string format = "{0:0}")
         {
             double doubleValue = value;
