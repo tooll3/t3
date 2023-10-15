@@ -48,9 +48,9 @@ internal static class ProgramWindows
 
         if (UserSettings.Config.FullScreen)
         {
-            var ScreenCount = Screen.AllScreens.Length;
-            Main.SetFullScreen(UserSettings.Config.FullScreenIndexMain < ScreenCount ? UserSettings.Config.FullScreenIndexMain : 0);
-            Viewer.SetFullScreen(UserSettings.Config.FullScreenIndexViewer < ScreenCount ? UserSettings.Config.FullScreenIndexViewer : 0);
+            var screenCount = Screen.AllScreens.Length;
+            Main.SetFullScreen(UserSettings.Config.FullScreenIndexMain < screenCount ? UserSettings.Config.FullScreenIndexMain : 0);
+            Viewer.SetFullScreen(UserSettings.Config.FullScreenIndexViewer < screenCount ? UserSettings.Config.FullScreenIndexViewer : 0);
         }
         else
         {
