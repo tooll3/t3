@@ -36,7 +36,7 @@
       "Outputs": []
     },
     {
-      "Id": "2e4c5ed0-459d-4ea5-acec-255c8860c5a4"/*GetCamProperties*/,
+      "Id": "2e4c5ed0-459d-4ea5-acec-255c8860c5a4"/*GetCamTransformBuffer*/,
       "SymbolId": "843c9378-6836-4f39-b676-06fd2828af3e",
       "InputValues": [],
       "Outputs": []

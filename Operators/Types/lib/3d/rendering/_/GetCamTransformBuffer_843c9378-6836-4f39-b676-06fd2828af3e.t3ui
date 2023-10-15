@@ -1,5 +1,5 @@
 {
-  "Id": "843c9378-6836-4f39-b676-06fd2828af3e"/*GetCamProperties*/,
+  "Id": "843c9378-6836-4f39-b676-06fd2828af3e"/*GetCamTransformBuffer*/,
   "Description": "Gets properties of a camera operator further down (further left) in the render graph. This can be useful for effects like motion blur.",
   "InputUis": [
     {

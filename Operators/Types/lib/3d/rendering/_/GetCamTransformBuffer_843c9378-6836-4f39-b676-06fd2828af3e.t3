@@ -1,5 +1,5 @@
 {
-  "Name": "GetCamProperties",
+  "Name": "GetCamTransformBuffer",
   "Id": "843c9378-6836-4f39-b676-06fd2828af3e",
   "Namespace": "lib.3d.rendering._",
   "Inputs": [
