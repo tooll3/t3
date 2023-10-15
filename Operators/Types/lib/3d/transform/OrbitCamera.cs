@@ -7,7 +7,6 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Utils;
-using T3.Operators.Utils;
 using Vector2 = System.Numerics.Vector2;
 
 // ReSharper disable SuggestVarOrType_SimpleTypes
@@ -25,15 +24,38 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
         
         public OrbitCamera()
         {
-            Output.UpdateAction = Update;
-            Reference.UpdateAction = Update;
+            Output.UpdateAction = UpdateOutputWithSubtree;
+            Reference.UpdateAction = UpdateCameraDefinition;
             Reference.Value = this;
         }
 
-        private void Update(EvaluationContext context)
+        private void UpdateOutputWithSubtree(EvaluationContext context)
+        {
+            if(Reference.DirtyFlag.IsDirty)
+                UpdateCameraDefinition(context);            
+            
+            if (context.BypassCameras)
+            {
+                Command.GetValue(context);
+                return;
+            }
+            
+            // Set properties and evaluate sub tree
+            var prevCameraToClipSpace = context.CameraToClipSpace;
+            var prevWorldToCamera = context.WorldToCamera;
+            
+            context.CameraToClipSpace = CameraToClipSpace;
+            context.WorldToCamera = WorldToCamera;
+            
+            Command.GetValue(context);
+            
+            context.CameraToClipSpace = prevCameraToClipSpace;
+            context.WorldToCamera = prevWorldToCamera;
+        }
+
+        private void UpdateCameraDefinition(EvaluationContext context)
         {
             Reference.DirtyFlag.Clear();
-            Output.DirtyFlag.Clear();
             
             LastObjectToWorld = context.ObjectToWorld;
             var damping = Damping.GetValue(context).Clamp(0,1);
@@ -51,7 +73,7 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             Vector3 p = new Vector3(0,0, Radius.GetValue(context));
             var seed = Seed.GetValue(context);
             var wobbleSpeed = WobbleSpeed.GetValue(context);
-            var wobbleComplexity = (int)MathUtils.Clamp(WobbleComplexity.GetValue(context),1,8);
+            var wobbleComplexity = (int)WobbleComplexity.GetValue(context).Clamp(1,8);
 
             var rotOffset =  RotationOffset.GetValue(context);
 
@@ -106,29 +128,8 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             
             WorldToCamera = Matrix.LookAtRH(_dampedEye, _dampedTarget, up);
             
-                
-            if (context.BypassCameras)
-            {
-                Command.GetValue(context);
-                return;
-            }
-            
-            // Set properties and evaluate sub tree
-            var prevCameraToClipSpace = context.CameraToClipSpace;
-            var prevWorldToCamera = context.WorldToCamera;
-            
-            context.CameraToClipSpace = CameraToClipSpace;
-            context.WorldToCamera = WorldToCamera;
-
             CameraPosition = eye.ToNumerics();
             CameraTarget = (eye + adjustedViewDirection).ToNumerics();
-            
-            Command.GetValue(context);
-            
-            context.CameraToClipSpace = prevCameraToClipSpace;
-            context.WorldToCamera = prevWorldToCamera;
-            
-
             
             float ComputeAngle(Slot<Vector2> angleAndWobbleInput, int seedIndex)
             {

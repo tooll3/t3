@@ -6,9 +6,6 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
-using T3.Core.Utils;
-using T3.Operators.Utils;
-using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
 {
@@ -22,15 +19,38 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
  
         public Camera()
         {
-            Output.UpdateAction = Update;
-            Reference.UpdateAction = Update;
+            Output.UpdateAction = UpdateOutputWithSubtree;
+            Reference.UpdateAction = UpdateCameraDefinition;
             Reference.Value = this;
         }
 
-        private void Update(EvaluationContext context)
+        private void UpdateOutputWithSubtree(EvaluationContext context)
+        {
+            if(Reference.DirtyFlag.IsDirty)
+                UpdateCameraDefinition(context);
+            
+            if (context.BypassCameras)
+            {
+                Command.GetValue(context);
+                return;
+            }
+
+            // Set properties and evaluate sub tree
+            var prevWorldToCamera = context.WorldToCamera;
+            var prevCameraToClipSpace = context.CameraToClipSpace;
+
+            context.WorldToCamera = WorldToCamera;
+            context.CameraToClipSpace = CameraToClipSpace;
+
+            Command.GetValue(context);
+
+            context.CameraToClipSpace = prevCameraToClipSpace;
+            context.WorldToCamera = prevWorldToCamera;
+        }
+
+        private void UpdateCameraDefinition(EvaluationContext context)
         {
             Reference.DirtyFlag.Clear();
-            Output.DirtyFlag.Clear();
             
             LastObjectToWorld = context.ObjectToWorld;
 
@@ -61,47 +81,31 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
             CameraToClipSpace = camToClipSpace;
             WorldToCamera = worldToCamera;
             
-            if (context.BypassCameras)
-            {
-                Command.GetValue(context);
-                return;
-            }
 
-            // Set properties and evaluate sub tree
-            var prevWorldToCamera = context.WorldToCamera;
-            var prevCameraToClipSpace = context.CameraToClipSpace;
-
-            context.WorldToCamera = WorldToCamera;
-            context.CameraToClipSpace = CameraToClipSpace;
-
-            Command.GetValue(context);
-
-            context.CameraToClipSpace = prevCameraToClipSpace;
-            context.WorldToCamera = prevWorldToCamera;
         }
 
-        public static void BuildProjectionMatrices(System.Numerics.Vector3 position, System.Numerics.Vector3 target, System.Numerics.Vector3 positionOffset, System.Numerics.Vector3 rotationOffset, float aspectRatio,
-                                                    Vector2 nearFarClip, Vector2 viewPortShift, bool offsetAffectsTarget, float fov, float roll, System.Numerics.Vector3 up,
-                                                    out Matrix camToClipSpace, out Matrix worldToCamera)
-        {
-            camToClipSpace = Matrix.PerspectiveFovRH(fov, aspectRatio, nearFarClip.X, nearFarClip.Y);
-            camToClipSpace.M31 = viewPortShift.X;
-            camToClipSpace.M32 = viewPortShift.Y;
-
-            var eye = new Vector3(position.X, position.Y, position.Z);
-            if (!offsetAffectsTarget)
-                eye += positionOffset.ToSharpDx();
-
-            var worldToCameraRoot = Matrix.LookAtRH(eye, target.ToSharpDx(), up.ToSharpDx());
-            var rollRotation = Matrix.RotationAxis(new Vector3(0, 0, 1), -(float)roll);
-            var additionalTranslation = offsetAffectsTarget ? Matrix.Translation(positionOffset.X, positionOffset.Y, positionOffset.Z) : Matrix.Identity;
-
-            var additionalRotation = Matrix.RotationYawPitchRoll(MathUtil.DegreesToRadians(rotationOffset.Y),
-                                                                 MathUtil.DegreesToRadians(rotationOffset.X),
-                                                                 MathUtil.DegreesToRadians(rotationOffset.Z));
-
-            worldToCamera = worldToCameraRoot * rollRotation * additionalRotation * additionalTranslation;
-        }
+        // public static void BuildProjectionMatrices(System.Numerics.Vector3 position, System.Numerics.Vector3 target, System.Numerics.Vector3 positionOffset, System.Numerics.Vector3 rotationOffset, float aspectRatio,
+        //                                             Vector2 nearFarClip, Vector2 viewPortShift, bool offsetAffectsTarget, float fov, float roll, System.Numerics.Vector3 up,
+        //                                             out Matrix camToClipSpace, out Matrix worldToCamera)
+        // {
+        //     camToClipSpace = Matrix.PerspectiveFovRH(fov, aspectRatio, nearFarClip.X, nearFarClip.Y);
+        //     camToClipSpace.M31 = viewPortShift.X;
+        //     camToClipSpace.M32 = viewPortShift.Y;
+        //
+        //     var eye = new Vector3(position.X, position.Y, position.Z);
+        //     if (!offsetAffectsTarget)
+        //         eye += positionOffset.ToSharpDx();
+        //
+        //     var worldToCameraRoot = Matrix.LookAtRH(eye, target.ToSharpDx(), up.ToSharpDx());
+        //     var rollRotation = Matrix.RotationAxis(new Vector3(0, 0, 1), -(float)roll);
+        //     var additionalTranslation = offsetAffectsTarget ? Matrix.Translation(positionOffset.X, positionOffset.Y, positionOffset.Z) : Matrix.Identity;
+        //
+        //     var additionalRotation = Matrix.RotationYawPitchRoll(MathUtil.DegreesToRadians(rotationOffset.Y),
+        //                                                          MathUtil.DegreesToRadians(rotationOffset.X),
+        //                                                          MathUtil.DegreesToRadians(rotationOffset.Z));
+        //
+        //     worldToCamera = worldToCameraRoot * rollRotation * additionalRotation * additionalTranslation;
+        // }
         
 
         public  CameraDefinition CameraDefinition => _cameraDefinition;

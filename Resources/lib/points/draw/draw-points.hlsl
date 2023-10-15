@@ -43,11 +43,6 @@ cbuffer FogParams : register(b3)
     float FogBias;
 }
 
-cbuffer PointLights : register(b4)
-{
-    PointLight Lights[8];
-    int ActiveLightCount;
-}
 
 struct psInput
 {
