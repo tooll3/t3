@@ -47,9 +47,6 @@ namespace T3.Operators.Types.Id_4ae9e2f5_7cb3_40b0_a662_0662e8cb7c68
         [Input(Guid = "ddc2ea6a-d356-46c9-b333-4cce69c02570")]
         public readonly InputSlot<bool> AddSeparator = new InputSlot<bool>();
 
-        [Input(Guid = "52bfa523-8fb0-458f-beb0-bdf406fd48bc")]
-        public readonly InputSlot<float> Velocity = new InputSlot<float>();
-
 
         private enum OrientationModes
         {

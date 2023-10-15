@@ -224,7 +224,7 @@ psInput vsMain(uint id : SV_VertexID)
     // Scale and stretch
     float scaleFxU = GetUFromMode(ScaleDistribution, pointId, f, normalizedScatter, pW, output.fog);
     float scaleFromCurve = SizeOverW.SampleLevel(texSampler, float2(scaleFxU, 0), 0).r;
-    float hideUndefinedPoints = isnan(pW) ? 0 : (UseWFoScale > 0.5 ? pW : 1 );
+    float hideUndefinedPoints = isnan(pW) ? 0 : (UseWFoScale > 0.5 ? max(pW, 0) : 1 );
     
     float r= (RandomScale * scatterForScale.y *adjustedRandomize + 1);
     r = LimitScale(r);
@@ -234,15 +234,14 @@ psInput vsMain(uint id : SV_VertexID)
 
     float4 vInObject = float4(vertex.Position, 1);
 
-    float resize = (UseWFoScale ? pW : 1);
-    vInObject.xyz *= max(0, resize) * computedScale * Scale * Stretch * LimitScale(RandomStretch * scatterForScale + 1);
+    vInObject.xyz *=   computedScale * Scale * Stretch * LimitScale(RandomStretch * scatterForScale + 1);
 
     float3 randomOffset = rotate_vector((normalizedScatter.xyz - 0.5) * 2 * RandomPosition * Randomize, pRotation);
     vInObject.xyz += randomOffset;
     vInObject.xyz += Offset;
 
 
-    float4x4 orientationMatrix = transpose(quaternion_to_matrix(pRotation));
+    float4x4 orientationMatrix = transpose(quaternion_to_matrix(normalize(pRotation)));
     
     vInObject = mul(float4(vInObject.xyz, 1), orientationMatrix);
     vInObject += float4(pPosition.xyz, 0);

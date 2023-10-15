@@ -75,6 +75,11 @@ void main(uint3 i : SV_DispatchThreadID)
 
     // Copy result
     ResultPoints[gi] = Particles[gi].p;
+
+    // Attempt with lerping to smooth position updates
+    // ResultPoints[gi].position = lerp(Particles[gi].p.position, ResultPoints[gi].position, 0);
+    // ResultPoints[gi].rotation = Particles[gi].p.rotation;
+    // ResultPoints[gi].w = Particles[gi].p.w;
     
     if(WMode == 1) 
     {

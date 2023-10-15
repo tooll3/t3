@@ -18,7 +18,7 @@
     },
     {
       "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
-      "DefaultValue": 0.2
+      "DefaultValue": 0.1
     },
     {
       "Id": "850e3a32-11ba-4ad2-a2b1-6164f077ddd6"/*Texture_*/,

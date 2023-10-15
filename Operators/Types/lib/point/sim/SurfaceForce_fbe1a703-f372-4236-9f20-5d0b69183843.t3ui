@@ -264,6 +264,48 @@
         "X": 1000.0761,
         "Y": 1581.2717
       }
+    },
+    {
+      "ChildId": "b27fa0e3-f6c9-478b-af0f-c49b336c805b"/*CommonPointSets*/,
+      "Position": {
+        "X": -357.42047,
+        "Y": 2536.5667
+      }
+    },
+    {
+      "ChildId": "106b2ad4-5745-4636-8c11-c5a7248b88de"/*DrawLines*/,
+      "Position": {
+        "X": 204.78314,
+        "Y": 2519.5059
+      }
+    },
+    {
+      "ChildId": "a59168ba-9ddd-4b10-930f-a01a9ee50095"/*TransformPoints*/,
+      "Position": {
+        "X": -191.8412,
+        "Y": 2541.6182
+      }
+    },
+    {
+      "ChildId": "127a0e39-9eee-4631-8671-1c88dc2d1b5e"/*CombineBuffers*/,
+      "Position": {
+        "X": -41.8412,
+        "Y": 2541.6182
+      }
+    },
+    {
+      "ChildId": "ae96f5b4-50ac-446a-be07-e6fc0ea34ca0"/*CommonPointSets*/,
+      "Position": {
+        "X": -362.74548,
+        "Y": 2679.8044
+      }
+    },
+    {
+      "ChildId": "a78d92bb-6aa2-448b-a410-6f3e782e2500"/*TransformPoints*/,
+      "Position": {
+        "X": -192.42447,
+        "Y": 2672.184
+      }
     }
   ],
   "OutputUis": [

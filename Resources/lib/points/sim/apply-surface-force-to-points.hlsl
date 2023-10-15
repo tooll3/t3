@@ -51,10 +51,14 @@ void main(uint3 i : SV_DispatchThreadID)
         
     float3 pos = Particles[gi].p.position;
     float4 rot = Particles[gi].p.rotation;
-    float3 velocity = Particles[gi].velocity;    
+    float3 velocity = Particles[gi].velocity;
+    float r = Particles[gi].p.w;    
 
     float3 posInVolume = mul(float4(pos, 1), TransformVolume).xyz;
     float3 posInVolumeNext = mul(float4(pos + velocity * SpeedFactor * 0.01 * 2, 1), TransformVolume).xyz;
+
+    float unitLength = 1 * r/2;
+    float3 rInVolume = length(mul(float4(unitLength.xxx, 0), TransformVolume));
 
     //float s = 1;
     float distance = 0;
@@ -70,36 +74,38 @@ void main(uint3 i : SV_DispatchThreadID)
     }
     else if (VolumeShape == VolumeBox)
     {
-        float rUnitSphere = 0.5;
         float3 t1 = abs(posInVolume);
-        distance = max(max(t1.x, t1.y), t1.z) - rUnitSphere;
-
-        float3 t2 = abs(posInVolumeNext);
-        distanceNext = max(max(t2.x, t2.y), t2.z) - rUnitSphere;
-
         surfaceN = t1.x > t1.y ? (t1.x > t1.z ? float3(sign(posInVolume.x),0,0) : float3(0,0,sign(posInVolume.z)))  
                                : (t1.y > t1.z ? float3(0,sign(posInVolume.y),0) : float3(0,0,sign(posInVolume.z)));
+        
+        float r1 = length(abs(rInVolume * surfaceN)) * InvertVolumeFactor;
 
-        //surfaceN = normalize(surfaceN);
-        //Particles[gi].w = distance;
-        // s = smoothstep(1 + FallOff, 1, distance);
+        float rUnitSphere = 0.5;
+        distance = max(max(t1.x, t1.y), t1.z) - rUnitSphere - r1;
+
+        float3 t2 = abs(posInVolumeNext);
+        distanceNext = max(max(t2.x, t2.y), t2.z) - rUnitSphere - r1;
+
+
     }
     else if (VolumeShape == VolumePlane)
     {
-        float distance = posInVolume.y;
+        distance = posInVolume.y - r * InvertVolumeFactor;
+        distanceNext = posInVolumeNext.y - r * InvertVolumeFactor;
+        surfaceN = float3(0,1,0);
         // s = smoothstep(FallOff, 0, distance);
     }
-    else if (VolumeShape == VolumeZebra)
-    {
-        //float distance = 1 - abs(mod(posInVolume.y * 1 + Phase, 2) - 1);
-        // s = smoothstep(Threshold + 0.5 + FallOff, Threshold + 0.5, distance);
-    }
-    else if (VolumeShape == VolumeNoise)
-    {
-        //float3 noiseLookup = (posInVolume * 0.91 + Phase);
-        //float noise = snoise(noiseLookup);
-        // s = smoothstep(Threshold + FallOff, Threshold, noise);
-    }
+    // else if (VolumeShape == VolumeZebra)
+    // {
+    //     //float distance = 1 - abs(mod(posInVolume.y * 1 + Phase, 2) - 1);
+    //     // s = smoothstep(Threshold + 0.5 + FallOff, Threshold + 0.5, distance);
+    // }
+    // else if (VolumeShape == VolumeNoise)
+    // {
+    //     //float3 noiseLookup = (posInVolume * 0.91 + Phase);
+    //     //float noise = snoise(noiseLookup);
+    //     // s = smoothstep(Threshold + FallOff, Threshold, noise);
+    // }
 
     float3 force =0;
 

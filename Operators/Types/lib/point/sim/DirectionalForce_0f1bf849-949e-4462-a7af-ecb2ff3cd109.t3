@@ -102,6 +102,11 @@
           "Id": "9df1f57c-a079-49c1-b537-d8eb08f2d0d3"/*Scale*/,
           "Type": "System.Single",
           "Value": 0.12
+        },
+        {
+          "Id": "6026d26d-b958-4508-b543-92fbdf8950d6"/*AddSeperators*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
       "Outputs": []
