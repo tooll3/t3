@@ -55,8 +55,6 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
 
         private void UpdateCameraDefinition(EvaluationContext context)
         {
-            Reference.DirtyFlag.Clear();
-            
             LastObjectToWorld = context.ObjectToWorld;
             var damping = Damping.GetValue(context).Clamp(0,1);
 
