@@ -1,6 +1,7 @@
 ﻿using System;
 using SharpDX;
 using T3.Core.DataTypes;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
@@ -26,11 +27,10 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
 
         private void UpdateOutputWithSubtree(EvaluationContext context)
         {
-            if(Reference.DirtyFlag.IsDirty) 
+            if(!Reference.IsConnected || Reference.DirtyFlag.IsDirty) 
                 UpdateCameraDefinition(context);
             
             Reference.DirtyFlag.Clear();
-            
             
             if (context.BypassCameras)
             {
@@ -50,7 +50,7 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
             context.CameraToClipSpace = prevCameraToClipSpace;
             context.WorldToCamera = prevWorldToCamera;
         }
-
+        
         private void UpdateCameraDefinition(EvaluationContext context)
         {
             LastObjectToWorld = context.ObjectToWorld;
