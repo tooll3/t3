@@ -105,6 +105,7 @@ namespace T3.Editor.Gui.UiHelpers
             RadialFlex,
             JogDial,
             ValueLadder,
+            LinearFlex
         }
         
         public static bool IsUserNameDefined()
