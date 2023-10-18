@@ -174,7 +174,7 @@ namespace T3.Editor.Gui.Windows.Output
             {
                 ImGui.SameLine();
 
-                if (CustomComponents.IconButton(Icon.Camera, new Vector2(ImGui.GetFrameHeight(), ImGui.GetFrameHeight())))
+                if (CustomComponents.IconButton(Icon.Snapshot, new Vector2(ImGui.GetFrameHeight(), ImGui.GetFrameHeight())))
                 {
                     var folder = @"Screenshots/";
                     if (!Directory.Exists(folder))
