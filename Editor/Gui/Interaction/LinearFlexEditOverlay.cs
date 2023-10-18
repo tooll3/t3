@@ -92,13 +92,35 @@ namespace T3.Editor.Gui.Interaction
             var rSize = new Vector2(Width, 40);
             var rCenter = new Vector2(mousePosX, _io.MousePos.Y - rSize.Y);
             var rect = new ImRect(rCenter - rSize / 2, rCenter + rSize / 2);
-            drawList.AddRectFilled(rCenter - rSize / 2, rCenter + rSize / 2, UiColors.BackgroundFull.Fade(0.6f), 8);
             
             var numberOfTicks = valueRange / tickValueInterval;
             
             var valueTickRemainder = MathUtils.Fmod(_value, tickValueInterval) ;
+
+            // Draw scale range indicates
+            {
+                for (var yIndex = -2; yIndex < 4; yIndex++)
+                {
+                    var centerPoint = new Vector2(mousePosX, _center.Y - log10yDistance * yIndex);
+                    var v = Math.Pow(10,yIndex);
+                    var label = $"× {v:G5}";
+                    var size = ImGui.CalcTextSize(label);
+
+                    var fade = ( MathF.Abs(centerPoint.Y - rCenter.Y) / 50).Clamp(0,1);
+                    
+                    var boxSize = new Vector2(80, 100);
+                    var labelCenter = centerPoint + new Vector2(10);
+                    drawList.AddRectFilled(centerPoint - boxSize/2,centerPoint + boxSize/2 + new Vector2(0,-1), UiColors.BackgroundFull.Fade(0.3f * fade), 3);
+                    drawList.AddText(
+                                     labelCenter - new Vector2(size.X/2+10,18),
+                                     UiColors.ForegroundFull.Fade(fade * 0.6f), 
+                                     label);
+                    
+                }
+            }
             
             // Draw ticks with labels
+            drawList.AddRectFilled(rCenter - rSize / 2, rCenter + rSize / 2, UiColors.BackgroundFull.Fade(0.8f), 8);
             for (var tickIndex = -(int)numberOfTicks/2; tickIndex < numberOfTicks/2; tickIndex++)
             {
                 var f = MathF.Pow(MathF.Abs(tickIndex / ((float)numberOfTicks/2)), 2f);
@@ -116,50 +138,38 @@ namespace T3.Editor.Gui.Interaction
                                  1
                                 );
             
-                var font = isPrimary2 ? Fonts.FontBold : Fonts.FontSmall;
+                var font = isPrimary2 ? Fonts.FontBold : Fonts.FontNormal;
                 var v = Math.Abs(valueAtTick) < 0.0001 ? 0 : valueAtTick;
                 var label = $"{v:G5}";
                         
-                ImGui.PushFont(font);
-                var size = ImGui.CalcTextSize(label);
-                ImGui.PopFont();
                         
                 var ff = (1-(float)logRemainder*2);
                 if (isPrimary2 || ff < 1)
                 {
+                    ImGui.PushFont(font);
+                    var size = ImGui.CalcTextSize(label);
+                    ImGui.PopFont();
+                    
                     drawList.AddText(font, 
                                      font.FontSize, 
-                                     new Vector2(tickX-1, rect.Max.Y - 30),
+                                     new Vector2(tickX-1 - size.X/2, rect.Max.Y - 30),
                                      UiColors.BackgroundFull.Fade(negF*ff), 
                                      label);
                     
                     drawList.AddText(font, 
                                      font.FontSize, 
-                                     new Vector2(tickX+1, rect.Max.Y - 30),
+                                     new Vector2(tickX - size.X/2+1, rect.Max.Y - 30),
                                      UiColors.BackgroundFull.Fade(negF*ff), 
                                      label);
                     
                     var fadeOut = (isPrimary ? 1 :ff)  * 0.7f;
                     drawList.AddText(font, 
                                      font.FontSize, 
-                                     new Vector2(tickX, rect.Max.Y - 30),
+                                     new Vector2(tickX - size.X/2, rect.Max.Y - 30),
                                      UiColors.ForegroundFull.Fade(negF * (isPrimary2 ? 1 : fadeOut)), 
                                      label);
 
-                    if (isPrimary)
-                    {
-                        // for (var yIndex = 1; yIndex < 5; yIndex++)
-                        // {
-                        //     var centerPoint = new Vector2(tickX, rect.GetCenter().Y - log10yDistance * (yIndex - (float)logRemainder));
-                        //     drawList.AddCircleFilled(centerPoint, 4, UiColors.ForegroundFull);
-                        //     drawList.AddText(font, 
-                        //                      font.FontSize, 
-                        //                      centerPoint + new Vector2(10,0),
-                        //                      UiColors.ForegroundFull, 
-                        //                      $"{v * Math.Pow(10,yIndex):G5}");
-                        //     
-                        // }
-                    }
+
                 }
             }
                 
@@ -203,6 +213,7 @@ namespace T3.Editor.Gui.Interaction
                 if (!GetXForValueIfVisible(roundedValue, valueRange, mousePosX, Width, out var screenX))
                     return;
                 
+                ImGui.PushFont(Fonts.FontLarge);
                 var label = $"{roundedValue:0.00}\n";
                 var labelSize = ImGui.CalcTextSize(label);
                 drawList.AddRectFilled(
@@ -216,12 +227,11 @@ namespace T3.Editor.Gui.Interaction
                                  UiColors.StatusActivated.Fade(0.7f),
                                  2
                                 );
-                drawList.AddText(Fonts.FontBold,
-                                 Fonts.FontBold.FontSize,
-                                 new Vector2(screenX - labelSize.X/2, rect.Max.Y+3), 
+                drawList.AddText(new Vector2(screenX - labelSize.X/2, rect.Max.Y+3), 
                                  Color.White.Fade(1), 
                                  label 
                                 );
+                ImGui.PopFont();
             }
         }
 
