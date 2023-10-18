@@ -57,7 +57,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
         protected override void ViewAllOrSelectedKeys(bool alsoChangeTimeRange = false)
         {
             var bounds = GetBoundsOnCanvas(GetSelectedOrAllPoints());
-            TimeLineCanvas.Current.SetScopeToCanvasArea(bounds, flipY:true, null, 300, 1000);
+            TimeLineCanvas.Current.SetScopeToCanvasArea(bounds, flipY:true, null, 300, 100);
         }
 
         protected List<TimeLineCanvas.AnimationParameter> AnimationParameters;

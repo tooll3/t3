@@ -32,8 +32,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
             // _curveEditBox = new CurveEditBox(timeLineCanvas, snapHandlerForU);
         }
 
-        private StringBuilder _stringBuilder = new StringBuilder(100);
-        private List<VDefinition> _visibleKeyframes = new(1000);
+        private readonly StringBuilder _stringBuilder = new StringBuilder(100);
+        private readonly List<VDefinition> _visibleKeyframes = new(1000);
 
         public void Draw(Instance compositionOp, List<TimeLineCanvas.AnimationParameter> animationParameters, bool fitCurvesVertically = false)
         {
@@ -70,7 +70,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                     _stringBuilder.Clear();
                     _stringBuilder.Append(param.Instance.Symbol.Name);
-                    _stringBuilder.Append(".");
+                    _stringBuilder.Append('.');
                     _stringBuilder.Append(param.Input.Input.Name);
                     var paramName = _stringBuilder.ToString(); // param.Instance.Symbol.Name + "." + param.Input.Input.Name;
 
@@ -184,7 +184,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 }
 
                 DrawContextMenu();
-                // _curveEditBox.Draw(SelectedKeyframes, _compositionOp);
             }
             ImGui.EndGroup();
 
