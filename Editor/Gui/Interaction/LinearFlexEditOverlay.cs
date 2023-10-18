@@ -70,14 +70,18 @@ namespace T3.Editor.Gui.Interaction
 
             // Update radius and value range
             _dampedDistance = mouseYDistance;
-            var normalizedLogDistanceForLog10 = _dampedDistance / 100; // ( _dampedDistance/1000).Clamp(0.0f, 1);
+            var log10yDistance = 100;
+            var normalizedLogDistanceForLog10 = _dampedDistance / log10yDistance;
 
             // Value range and tick interval 
             _dampedModifierScaleFactor = MathUtils.Lerp(_dampedModifierScaleFactor, GetKeyboardScaleFactor(), 0.1f);
 
             var valueRange = (Math.Pow(10, normalizedLogDistanceForLog10)) * scale * _dampedModifierScaleFactor * 600;
 
-            var tickValueInterval = Math.Pow(10, (int)Math.Log10(valueRange) - 1);
+            var log10 = Math.Log10(valueRange);
+            var iLog10 = (int)log10;
+            var logRemainder = log10 - iLog10;
+            var tickValueInterval = Math.Pow(10, iLog10 - 1);
 
             float Width = 750;
 
@@ -92,28 +96,26 @@ namespace T3.Editor.Gui.Interaction
             
             var numberOfTicks = valueRange / tickValueInterval;
             
-            var valueTickOffsetFactor = MathUtils.Fmod(_value, tickValueInterval) ;
+            var valueTickRemainder = MathUtils.Fmod(_value, tickValueInterval) ;
             
             // Draw ticks with labels
             for (var tickIndex = -(int)numberOfTicks/2; tickIndex < numberOfTicks/2; tickIndex++)
             {
                 var f = MathF.Pow(MathF.Abs(tickIndex / ((float)numberOfTicks/2)), 2f);
                 var negF = 1 - f;
-                var valueAtTick = tickIndex * tickValueInterval + _value - valueTickOffsetFactor;
+                var valueAtTick = tickIndex * tickValueInterval + _value - valueTickRemainder;
                 GetXForValueIfVisible(valueAtTick, valueRange, mousePosX, Width,out var tickX);
                 var isPrimary =   Math.Abs(MathUtils.Fmod(valueAtTick + tickValueInterval * 5, tickValueInterval * 10) - tickValueInterval * 5) < tickValueInterval / 10;
                 var isPrimary2 =   Math.Abs(MathUtils.Fmod(valueAtTick + tickValueInterval * 50, tickValueInterval * 100) - tickValueInterval * 50) < tickValueInterval / 100;
                     
+                var fff = MathUtils.SmootherStep((float)1,0.8f, (float)logRemainder);
                 drawList.AddLine(
                                  new Vector2(tickX, rect.Max.Y),
                                  new Vector2(tickX, rect.Max.Y-10),
-                                 UiColors.ForegroundFull.Fade(negF * (isPrimary ? 1 : 0.5f)),
+                                 UiColors.ForegroundFull.Fade(negF * (isPrimary ? 1 : 0.5f * fff)),
                                  1
                                 );
             
-                if (!isPrimary)
-                    continue;
-                
                 var font = isPrimary2 ? Fonts.FontBold : Fonts.FontSmall;
                 var v = Math.Abs(valueAtTick) < 0.0001 ? 0 : valueAtTick;
                 var label = $"{v:G5}";
@@ -122,23 +124,43 @@ namespace T3.Editor.Gui.Interaction
                 var size = ImGui.CalcTextSize(label);
                 ImGui.PopFont();
                         
-                drawList.AddText(font, 
-                                 font.FontSize, 
-                                 new Vector2(tickX-1, rect.Max.Y - 30),
-                                 UiColors.BackgroundFull.Fade(negF), 
-                                 label);
-                
-                drawList.AddText(font, 
-                                 font.FontSize, 
-                                 new Vector2(tickX+1, rect.Max.Y - 30),
-                                 UiColors.BackgroundFull.Fade(negF), 
-                                 label);
-                
-                drawList.AddText(font, 
-                                 font.FontSize, 
-                                 new Vector2(tickX, rect.Max.Y - 30),
-                                 UiColors.ForegroundFull.Fade(negF * (isPrimary2 ? 1 : 0.7f)), 
-                                 label);
+                var ff = (1-(float)logRemainder*2);
+                if (isPrimary2 || ff < 1)
+                {
+                    drawList.AddText(font, 
+                                     font.FontSize, 
+                                     new Vector2(tickX-1, rect.Max.Y - 30),
+                                     UiColors.BackgroundFull.Fade(negF*ff), 
+                                     label);
+                    
+                    drawList.AddText(font, 
+                                     font.FontSize, 
+                                     new Vector2(tickX+1, rect.Max.Y - 30),
+                                     UiColors.BackgroundFull.Fade(negF*ff), 
+                                     label);
+                    
+                    var fadeOut = (isPrimary ? 1 :ff)  * 0.7f;
+                    drawList.AddText(font, 
+                                     font.FontSize, 
+                                     new Vector2(tickX, rect.Max.Y - 30),
+                                     UiColors.ForegroundFull.Fade(negF * (isPrimary2 ? 1 : fadeOut)), 
+                                     label);
+
+                    if (isPrimary)
+                    {
+                        // for (var yIndex = 1; yIndex < 5; yIndex++)
+                        // {
+                        //     var centerPoint = new Vector2(tickX, rect.GetCenter().Y - log10yDistance * (yIndex - (float)logRemainder));
+                        //     drawList.AddCircleFilled(centerPoint, 4, UiColors.ForegroundFull);
+                        //     drawList.AddText(font, 
+                        //                      font.FontSize, 
+                        //                      centerPoint + new Vector2(10,0),
+                        //                      UiColors.ForegroundFull, 
+                        //                      $"{v * Math.Pow(10,yIndex):G5}");
+                        //     
+                        // }
+                    }
+                }
             }
                 
             // Draw previous value
