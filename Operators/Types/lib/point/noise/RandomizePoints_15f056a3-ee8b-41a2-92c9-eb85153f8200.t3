@@ -41,7 +41,7 @@
     },
     {
       "Id": "07c73fd8-6126-4e03-8f10-05d28a3c7ef4"/*Gain*/,
-      "DefaultValue": 0.5
+      "DefaultValue": 0.66
     },
     {
       "Id": "36e69f1c-412b-4a5c-8b17-d0f5d909f1cb"/*Offset*/,
@@ -158,7 +158,7 @@
       "Outputs": []
     },
     {
-      "Id": "ec09fa04-0107-4c64-8f70-5480819c6407"/*BoolToFloats*/,
+      "Id": "ec09fa04-0107-4c64-8f70-5480819c6407"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

@@ -70,10 +70,23 @@ namespace T3.Editor
             Log.AddWriter(ConsoleLogWindow);
             Log.Debug($"Starting {Version}");
 
-
-            if (!IsStandAlone)
+            if (IsStandAlone)
+            {
+                // Validate that operators.dll has been updated to warn users if they started "T3Editor.exe"
+                var fiveMinutes = new TimeSpan(0, 2, 0);
+                const string operatorFilePath = "Operators.dll";
+                if (!File.Exists(operatorFilePath) || (DateTime.Now - File.GetLastWriteTime(operatorFilePath)) > fiveMinutes)
+                {
+                    EditorUi.Instance
+                            .ShowMessageBox($"Operators.dll is outdated.\nPlease use StartT3.exe to run Tooll.",
+                                            @"Error", PopUpButtons.Ok);
+                    EditorUi.Instance.ExitApplication();
+                }
+            }
+            else
+            {
                 StartupValidation.CheckInstallation();
-            
+            }
 
             StartUp.FlagBeginStartupSequence();
 

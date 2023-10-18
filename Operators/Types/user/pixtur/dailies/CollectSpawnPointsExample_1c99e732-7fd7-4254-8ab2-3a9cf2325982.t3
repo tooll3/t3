@@ -102,7 +102,7 @@
       "Outputs": []
     },
     {
-      "Id": "1a86cb0a-8ce5-4167-ba86-b92e70d24d76"/*ParticleSimulation*/,
+      "Id": "1a86cb0a-8ce5-4167-ba86-b92e70d24d76"/*LegacyParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {
@@ -122,11 +122,6 @@
         },
         {
           "Id": "267b6cae-2c3d-4874-9532-ca3da138fde6"/*Reset*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
-          "Id": "ae7aa205-faa0-454b-9a82-0067410275a0"/*Freeze*/,
           "Type": "System.Boolean",
           "Value": false
         }

@@ -350,6 +350,11 @@ namespace T3.Editor.Gui.Graph
                         NodeNavigation.SelectBelow();
                     }
                     
+                    if (KeyboardBinding.Triggered(UserActions.AddComment))
+                    {
+                        EditCommentDialog.ShowNextFrame();
+                    }
+                    
                     if (KeyboardBinding.Triggered(UserActions.SelectToLeft))
                     {
                         NodeNavigation.SelectLeft();
@@ -469,6 +474,7 @@ namespace T3.Editor.Gui.Graph
                                             ref _symbolNameForDialogEdits,
                                             ref _symbolDescriptionForDialog);
                 _renameSymbolDialog.Draw(GetSelectedChildUis(), ref _symbolNameForDialogEdits);
+                EditCommentDialog.Draw();
                 _addInputDialog.Draw(CompositionOp.Symbol);
                 _addOutputDialog.Draw(CompositionOp.Symbol);
                 LibWarningDialog.Draw();
@@ -714,6 +720,14 @@ namespace T3.Editor.Gui.Graph
             if (ImGui.MenuItem("Rename", oneOpSelected))
             {
                 RenameInstanceOverlay.OpenForSymbolChildUi(selectedChildUis[0]);
+            }
+            
+            if (ImGui.MenuItem("Add Comment",
+                               KeyboardBinding.ListKeyboardShortcuts(UserActions.AddComment, false),
+                               selected: false,
+                               enabled: oneOpSelected))
+            {
+                EditCommentDialog.ShowNextFrame();
             }
 
             if (ImGui.MenuItem("Arrange sub graph",
@@ -1185,6 +1199,7 @@ namespace T3.Editor.Gui.Graph
         private readonly DuplicateSymbolDialog _duplicateSymbolDialog = new();
         private readonly RenameSymbolDialog _renameSymbolDialog = new();
         public readonly EditNodeOutputDialog EditNodeOutputDialog = new();
+        public static  readonly EditCommentDialog EditCommentDialog = new();
         public static readonly LibWarningDialog LibWarningDialog = new();
 
         private List<SymbolChildUi> ChildUis { get; set; }

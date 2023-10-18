@@ -51,7 +51,8 @@ internal abstract class MfVideoWriter : IDisposable
 
             if (currentDesc.Format != SharpDX.DXGI.Format.R8G8B8A8_UNorm &&
                 currentDesc.Format != SharpDX.DXGI.Format.R16G16B16A16_UNorm &&
-                currentDesc.Format != SharpDX.DXGI.Format.R16G16B16A16_Float)
+                currentDesc.Format != SharpDX.DXGI.Format.R16G16B16A16_Float && 
+                currentDesc.Format != SharpDX.DXGI.Format.B8G8R8A8_UNorm)
             {
                 throw new InvalidOperationException($"Unknown format: {currentDesc.Format.ToString()}. " +
                                                     "Only R8G8B8A8_UNorm, R16G16B16A16_UNorm and R16G16B16A16_Float " +
@@ -216,6 +217,22 @@ internal abstract class MfVideoWriter : IDisposable
 
                     break;
 
+                case SharpDX.DXGI.Format.B8G8R8A8_UNorm:
+                    for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
+                    {
+                        if (!FlipY)
+                            inputStream.Position = (long)(loopY) * dataBox.RowPitch;
+                        else
+                            inputStream.Position = (long)(_videoPixelSize.Height - 1 - loopY) * dataBox.RowPitch;
+
+                        // An attempt to speed up encoding by copying larger ranges. Sadly this froze the execution
+                        //inputStream.CopyTo(outputStream, dataBox.RowPitch);
+
+                        outputStream.WriteRange(inputStream.ReadRange<byte>(dataBox.RowPitch));
+                    }
+
+                    break;
+                
                 case SharpDX.DXGI.Format.R16G16B16A16_UNorm:
                     for (int loopY = 0; loopY < _videoPixelSize.Height; loopY++)
                     {

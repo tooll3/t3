@@ -57,7 +57,7 @@
       }
     },
     {
-      "ChildId": "2e4c5ed0-459d-4ea5-acec-255c8860c5a4"/*GetCamProperties*/,
+      "ChildId": "2e4c5ed0-459d-4ea5-acec-255c8860c5a4"/*GetCamTransformBuffer*/,
       "Position": {
         "X": -88.85836,
         "Y": 681.6719

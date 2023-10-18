@@ -8,11 +8,8 @@ namespace T3.Operators.Types.Id_3f8376f2_b89a_4ab4_b6dc_a3e8bf88c0a5
     public class TurbulenceForce : Instance<TurbulenceForce>
     {
 
-        [Output(Guid = "6fbbeeb4-f9dc-4202-a2c6-2d688b81dff2")]
-        public readonly Slot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new Slot<T3.Core.DataTypes.BufferWithViews>();
-
-        [Input(Guid = "f92939bc-e1f6-4c0e-bdd6-935b97231bb9")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+        [Output(Guid = "e5bbe22e-e3f6-4f1f-9db0-fc7632c10639")]
+        public readonly Slot<T3.Core.DataTypes.ParticleSystem> Particles = new Slot<T3.Core.DataTypes.ParticleSystem>();
 
         [Input(Guid = "e27a97ce-3d0f-41a9-93c3-a1691f4029aa")]
         public readonly InputSlot<float> Amount = new InputSlot<float>();
@@ -34,6 +31,9 @@ namespace T3.Operators.Types.Id_3f8376f2_b89a_4ab4_b6dc_a3e8bf88c0a5
 
         [Input(Guid = "d1ebfcaa-ce47-4064-9169-7afa64f942f5")]
         public readonly InputSlot<T3.Core.Operator.GizmoVisibility> ShowGizmo = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+
+        [Input(Guid = "671a04f9-0f40-45ea-a2df-4f06c08d9647")]
+        public readonly InputSlot<float> AmountFromVelocity = new InputSlot<float>();
     }
 }
 

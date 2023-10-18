@@ -53,6 +53,7 @@ public enum UserActions
     ToggleDisabled,
     ToggleBypassed,
     AddAnnotation,
+    AddComment,
 
     ToggleSnapshotControl,
 
@@ -300,6 +301,7 @@ public class KeyboardBinding
                   new KeyboardBinding(UserActions.LayoutSelection, new KeyCombination(Key.G)),
 
                   new KeyboardBinding(UserActions.AddAnnotation, new KeyCombination(Key.A, shift: true)) { _needsWindowFocus = true },
+                  new KeyboardBinding(UserActions.AddComment, new KeyCombination(Key.C, shift: true, ctrl:true)) { _needsWindowFocus = true },
                   new KeyboardBinding(UserActions.ToggleVariationsWindow, new KeyCombination(Key.V, alt: true)) { _needsWindowFocus = false },
                   new KeyboardBinding(UserActions.SearchGraph, new KeyCombination(Key.F, ctrl: true)) { _needsWindowFocus = false },
 

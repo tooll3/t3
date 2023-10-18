@@ -266,9 +266,12 @@ public partial class SymbolData
 
                          return gradient;
                      });
+        RegisterType(typeof(LegacyParticleSystem), "LegacyParticleSystem",
+                     () => new InputValue<LegacyParticleSystem>(null));
+
         RegisterType(typeof(ParticleSystem), "ParticleSystem",
                      () => new InputValue<ParticleSystem>(null));
-        
+
         RegisterType(typeof(T3.Core.Operator.GizmoVisibility), "GizmoVisibility",
                      InputDefaultValueCreator<T3.Core.Operator.GizmoVisibility>,
                      (writer, obj) => writer.WriteValue(obj.ToString()),

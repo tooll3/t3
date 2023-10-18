@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using ImGuiNET;
 using T3.Core.Operator.Slots;
+using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.OutputUi
 {
@@ -32,8 +33,16 @@ namespace T3.Editor.Gui.OutputUi
                         ImGui.EndChild();
                         break;
                     default:
-                        var t = value?.ToString();
-                        ImGui.TextUnformatted(t ?? typeof(T).ToString());
+                        var type = typeof(T);
+                        ImGui.PushFont(Fonts.FontSmall);
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                        ImGui.TextUnformatted(type.Namespace);
+                        ImGui.PopStyleColor();
+                        ImGui.PopFont();
+                        ImGui.TextUnformatted(type.Name);
+
+                        var valueAsString = value == null ? "undefined" : value.ToString();
+                        ImGui.TextUnformatted(valueAsString);
                         break;
                 }
             }

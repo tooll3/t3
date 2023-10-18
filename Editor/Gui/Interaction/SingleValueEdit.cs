@@ -25,7 +25,7 @@ namespace T3.Editor.Gui.Interaction
                                                int min = int.MinValue,
                                                int max = int.MaxValue,
                                                bool clamp = false,
-                                               float scale = 0.1f,
+                                               float scale = 1f,
                                                string format = "{0:0}")
         {
             double doubleValue = value;
@@ -117,13 +117,21 @@ namespace T3.Editor.Gui.Interaction
                             break;
                         }
 
-                        if (UserSettings.Config.UseJogDialControl)
+                        switch (UserSettings.Config.ValueEditGizmo)
                         {
-                            JogDialOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
-                        }
-                        else
-                        {
-                            SliderLadder.Draw(ref _editValue, io, min, max, scale, (float)(ImGui.GetTime() - _timeOpened), clamp, _center);
+                            case UserSettings.ValueEditGizmos.RadialFlex:
+                                RadialFlexEditOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
+                                break;
+                            case UserSettings.ValueEditGizmos.LinearFlex:
+                                LinearFlexEditOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
+                                break;
+                            case UserSettings.ValueEditGizmos.JogDial:
+                                JogDialOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
+                                break;
+                            case UserSettings.ValueEditGizmos.ValueLadder:
+                            default:
+                                SliderLadder.Draw(ref _editValue, io, min, max, scale, (float)(ImGui.GetTime() - _timeOpened), clamp, _center);
+                                break;
                         }
 
                         break;

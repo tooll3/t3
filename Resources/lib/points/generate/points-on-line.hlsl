@@ -19,7 +19,6 @@ cbuffer Params : register(b0)
     float OrientationMode;
     
     float AddSeparator;
-    float Velocity;
 }
 
 RWStructuredBuffer<Point> ResultPoints : u0;    // output
@@ -60,7 +59,7 @@ void main(uint3 i : SV_DispatchThreadID)
     
 
     ResultPoints[index].position = lerp(Center, Center + Direction * LengthFactor, f);
-    ResultPoints[index].w = W + WOffset * f;
+    ResultPoints[index].w = W + WOffset * (float)(index)/steps;
 
     float4 rot2 = 0;
     if(OrientationMode < 0.5) 
@@ -77,13 +76,13 @@ void main(uint3 i : SV_DispatchThreadID)
         float4 lookAt = q_look_at(normalize(Direction), upVector);
         
         //rot2 = normalize(qmul(rotate, lookAt));            
-        rot2 = q_encode_v(normalize(qmul(rotate, lookAt)), Velocity);
+        rot2 = normalize(qmul(rotate, lookAt));
     }
     else 
     {
         // FIXME: this rotation is hard to control and feels awkward. 
         // I didn't come up with another method, though
-        rot2 = q_encode_v(normalize(rotate_angle_axis((OrientationAngle + Twist * f) / 180 * 3.141578, ManualOrientationAxis)), Velocity);
+        rot2 = normalize(rotate_angle_axis((OrientationAngle + Twist * f) / 180 * 3.141578, ManualOrientationAxis));
     }
 
     ResultPoints[index].rotation = rot2;

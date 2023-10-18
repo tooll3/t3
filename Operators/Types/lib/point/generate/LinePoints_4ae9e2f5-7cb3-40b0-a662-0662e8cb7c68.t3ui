@@ -88,13 +88,6 @@
         "X": -371.45142,
         "Y": 1432.7272
       }
-    },
-    {
-      "InputId": "52bfa523-8fb0-458f-beb0-bdf406fd48bc"/*Velocity*/,
-      "Position": {
-        "X": -371.45142,
-        "Y": 1477.7272
-      }
     }
   ],
   "SymbolChildUis": [
@@ -188,7 +181,7 @@
       }
     },
     {
-      "ChildId": "cc3e2a65-be3b-4dde-b341-2f5e44b553f6"/*BoolToFloats*/,
+      "ChildId": "cc3e2a65-be3b-4dde-b341-2f5e44b553f6"/*BoolToFloat*/,
       "Position": {
         "X": -221.45142,
         "Y": 1432.7272

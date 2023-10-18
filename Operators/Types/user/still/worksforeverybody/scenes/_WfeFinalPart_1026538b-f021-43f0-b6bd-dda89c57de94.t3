@@ -2113,7 +2113,7 @@
       "Outputs": []
     },
     {
-      "Id": "e59c138b-c996-423b-9219-df7a30cae8f8"/*DisplaceMesh*/,
+      "Id": "e59c138b-c996-423b-9219-df7a30cae8f8"/*_LegacyDisplaceMesh*/,
       "SymbolId": "b5709297-c714-4019-9d0b-6982590b5590",
       "InputValues": [
         {
@@ -3527,7 +3527,7 @@
       "Outputs": []
     },
     {
-      "Id": "1c9b3f42-97a2-4400-8531-aac392f3afed"/*BoolToFloats*/,
+      "Id": "1c9b3f42-97a2-4400-8531-aac392f3afed"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
@@ -4708,7 +4708,7 @@
       "Outputs": []
     },
     {
-      "Id": "b3f0004b-3a4b-4f32-8354-b0485a540cae"/*BoolToFloats*/,
+      "Id": "b3f0004b-3a4b-4f32-8354-b0485a540cae"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

@@ -187,7 +187,7 @@
       "Outputs": []
     },
     {
-      "Id": "fadf444e-7fa3-4a8f-b8f9-826dcc887a54"/*DisplaceMesh*/,
+      "Id": "fadf444e-7fa3-4a8f-b8f9-826dcc887a54"/*_LegacyDisplaceMesh*/,
       "SymbolId": "b5709297-c714-4019-9d0b-6982590b5590",
       "InputValues": [
         {
@@ -863,18 +863,13 @@
       "Outputs": []
     },
     {
-      "Id": "e7b67aef-ad0e-4830-95a9-61bea7e9228e"/*VisualizeTBN*/,
+      "Id": "e7b67aef-ad0e-4830-95a9-61bea7e9228e"/*_VisualizeTBN*/,
       "SymbolId": "dd353ac7-1f11-4dd6-aff5-5c557c695512",
       "InputValues": [
         {
           "Id": "d9287fce-b451-4d5e-83d8-fc8c9d39b9a8"/*Length*/,
           "Type": "System.Single",
           "Value": 0.03
-        },
-        {
-          "Id": "20ad2bbd-955a-44c0-af90-d3efd21ac07f"/*SelectionSize*/,
-          "Type": "System.Single",
-          "Value": 0.67
         },
         {
           "Id": "d1cfa06d-a4bd-4975-90d4-5aa1ca39dc39"/*Visibility*/,

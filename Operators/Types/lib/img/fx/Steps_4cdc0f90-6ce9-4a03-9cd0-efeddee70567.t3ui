@@ -268,14 +268,14 @@
       }
     },
     {
-      "ChildId": "bb52dc73-9f53-490b-a1fa-fa2862f700ac"/*BoolToFloats*/,
+      "ChildId": "bb52dc73-9f53-490b-a1fa-fa2862f700ac"/*BoolToFloat*/,
       "Position": {
         "X": -69.793884,
         "Y": 634.2136
       }
     },
     {
-      "ChildId": "c0ff1f7f-399f-47c6-9d92-a8d27187d69b"/*BoolToFloats*/,
+      "ChildId": "c0ff1f7f-399f-47c6-9d92-a8d27187d69b"/*BoolToFloat*/,
       "Position": {
         "X": -98.959656,
         "Y": 715.7848

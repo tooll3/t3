@@ -1,5 +1,7 @@
+using System;
 using SharpDX;
 using SharpDX.Direct3D11;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -21,75 +23,82 @@ namespace T3.Operators.Types.Id_724da755_2d0c_42ab_8335_8c88ec5fb078
 
         private void Update(EvaluationContext context)
         {
-            var param = Params.GetCollectedTypedInputs();
-            var vec4params = Vec4Params.GetValue(context);
-
-            var floatParamCount = param.Count;
-            var vec4ArrayLength = vec4params?.Length ?? 0;
-
-            var totalFloatCount = floatParamCount + vec4ArrayLength * 4;
-
-            int arraySize = (totalFloatCount / 4 + (totalFloatCount % 4 == 0 ? 0 : 1)) * 4; // always 16byte slices for alignment
-            var array = new float[arraySize];
-
-            if (array.Length == 0)
-                return;
-
-            // Add Vec4 Arrays first
-            if (vec4params != null)
+            try
             {
-                for (var vec4Index = 0; vec4Index < vec4ArrayLength; vec4Index++)
-                {
-                    var vec4 = vec4params[vec4Index];
-                    array[vec4Index * 4 + 0] = vec4[0];
-                    array[vec4Index * 4 + 1] = vec4[1];
-                    array[vec4Index * 4 + 2] = vec4[2];
-                    array[vec4Index * 4 + 3] = vec4[3];
-                }
-            }
+                var matrixParams = Vec4Params.GetCollectedTypedInputs();
+                var floatParams = Params.GetCollectedTypedInputs();
 
-            // Add Floats
-            for (var floatIndex = 0; floatIndex < floatParamCount; floatIndex++)
+                var floatParamCount = floatParams.Count;
+                var vec4ArrayLength = matrixParams.Count;
+
+                var totalFloatCount = floatParamCount + vec4ArrayLength * 4 * 4;
+
+                var arraySize = (totalFloatCount / 4 + (totalFloatCount % 4 == 0 ? 0 : 1)) * 4; // always 16byte slices for alignment
+                var array = new float[arraySize];
+
+                if (array.Length == 0)
+                    return;
+
+                var totalFloatIndex = 0;
+                
+                foreach (var aInput in matrixParams)
+                {
+                    var aaa = aInput.GetValue(context);
+                    foreach (var vec4 in aaa)
+                    {
+                        array[totalFloatIndex++] = vec4[0];
+                        array[totalFloatIndex++] = vec4[1];
+                        array[totalFloatIndex++] = vec4[2];
+                        array[totalFloatIndex++] = vec4[3];
+                    }
+                }
+
+                // Add Floats
+                for (var floatIndex = 0; floatIndex < floatParamCount; floatIndex++)
+                {
+                    array[totalFloatIndex++] = floatParams[floatIndex].GetValue(context);
+                }
+
+                Params.DirtyFlag.Clear();
+                Vec4Params.DirtyFlag.Clear();
+
+                var device = ResourceManager.Device;
+
+                var size = sizeof(float) * array.Length;
+                using (var data = new DataStream(size, true, true))
+                {
+                    data.WriteRange(array);
+                    data.Position = 0;
+
+                    if (Buffer.Value == null || Buffer.Value.Description.SizeInBytes != size)
+                    {
+                        Utilities.Dispose(ref Buffer.Value);
+                        var bufferDesc = new BufferDescription
+                                             {
+                                                 Usage = ResourceUsage.Default,
+                                                 SizeInBytes = size,
+                                                 BindFlags = BindFlags.ConstantBuffer
+                                             };
+                        Buffer.Value = new Buffer(device, data, bufferDesc);
+                    }
+                    else
+                    {
+                        device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), Buffer.Value, 0);
+                    }
+                }
+                Buffer.Value.DebugName = nameof(FloatsToBuffer);
+            }
+            catch (Exception e)
             {
-                array[floatIndex + vec4ArrayLength * 4] = param[floatIndex].GetValue(context);
+                Log.Warning("Failed to setup shader parameters:" + e.Message);
             }
-
-            Params.DirtyFlag.Clear();
-
-            var resourceManager = ResourceManager.Instance();
-            var device = ResourceManager.Device;
-
-            var size = sizeof(float) * array.Length;
-            using (var data = new DataStream(size, true, true))
-            {
-                data.WriteRange(array);
-                data.Position = 0;
-
-                if (Buffer.Value == null || Buffer.Value.Description.SizeInBytes != size)
-                {
-                    Utilities.Dispose(ref Buffer.Value);
-                    var bufferDesc = new BufferDescription
-                                         {
-                                             Usage = ResourceUsage.Default,
-                                             SizeInBytes = size,
-                                             BindFlags = BindFlags.ConstantBuffer
-                                         };
-                    Buffer.Value = new Buffer(device, data, bufferDesc);
-                }
-                else
-                {
-                    device.ImmediateContext.UpdateSubresource(new DataBox(data.DataPointer, 0, 0), Buffer.Value, 0);
-                }
-            }
-
-            Buffer.Value.DebugName = nameof(FloatsToBuffer);
         }
         
         [Input(Guid = "914EA6E8-ABC6-4294-B895-8BFBE5AFEA0E")]
-        public readonly InputSlot<SharpDX.Vector4[]> Vec4Params = new();
+        public readonly MultiInputSlot<SharpDX.Vector4[]> Vec4Params = new();
 
         [Input(Guid = "49556D12-4CD1-4341-B9D8-C356668D296C")]
-        public readonly MultiInputSlot<float> Params = new MultiInputSlot<float>();
+        public readonly MultiInputSlot<float> Params = new();
 
     }
 }

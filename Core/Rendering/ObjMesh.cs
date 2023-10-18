@@ -277,6 +277,12 @@ namespace T3.Core.Rendering
             _distinctVertices = new List<Vertex>();
             for (var faceIndex = 0; faceIndex < Faces.Count; faceIndex++)
             {
+                if (faceIndex >= Faces.Count)
+                {
+                    Log.Warning($"Skipping out of range {faceIndex} >= {Faces.Count} face index");
+                    faceIndex = 0;
+                }
+                    
                 var face = Faces[faceIndex];
 
                 SortInMergedVertex(0, face.V0, face.V0n, face.V0t, faceIndex);

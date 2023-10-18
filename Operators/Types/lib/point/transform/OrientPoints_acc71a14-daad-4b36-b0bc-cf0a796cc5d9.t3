@@ -125,7 +125,7 @@
       "Outputs": []
     },
     {
-      "Id": "f8ddd97f-2f64-4dcc-9ad1-9ea646ebe8b6"/*BoolToFloats*/,
+      "Id": "f8ddd97f-2f64-4dcc-9ad1-9ea646ebe8b6"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
@@ -143,7 +143,7 @@
       "Outputs": []
     },
     {
-      "Id": "19c25faf-2ace-4202-af8e-b10beb686a37"/*BoolToFloats*/,
+      "Id": "19c25faf-2ace-4202-af8e-b10beb686a37"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

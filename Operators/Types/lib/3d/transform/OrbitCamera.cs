@@ -5,8 +5,8 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
+using T3.Core.Rendering;
 using T3.Core.Utils;
-using T3.Operators.Utils;
 using Vector2 = System.Numerics.Vector2;
 
 // ReSharper disable SuggestVarOrType_SimpleTypes
@@ -24,12 +24,36 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
         
         public OrbitCamera()
         {
-            Output.UpdateAction = Update;
-            //Reference.UpdateAction = Update;
+            Output.UpdateAction = UpdateOutputWithSubtree;
+            Reference.UpdateAction = UpdateCameraDefinition;
             Reference.Value = this;
         }
 
-        private void Update(EvaluationContext context)
+        private void UpdateOutputWithSubtree(EvaluationContext context)
+        {
+            if(!Reference.IsConnected || Reference.DirtyFlag.IsDirty)
+                UpdateCameraDefinition(context);            
+            
+            if (context.BypassCameras)
+            {
+                Command.GetValue(context);
+                return;
+            }
+            
+            // Set properties and evaluate sub tree
+            var prevCameraToClipSpace = context.CameraToClipSpace;
+            var prevWorldToCamera = context.WorldToCamera;
+            
+            context.CameraToClipSpace = CameraToClipSpace;
+            context.WorldToCamera = WorldToCamera;
+            
+            Command.GetValue(context);
+            
+            context.CameraToClipSpace = prevCameraToClipSpace;
+            context.WorldToCamera = prevWorldToCamera;
+        }
+
+        private void UpdateCameraDefinition(EvaluationContext context)
         {
             LastObjectToWorld = context.ObjectToWorld;
             var damping = Damping.GetValue(context).Clamp(0,1);
@@ -47,7 +71,7 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             Vector3 p = new Vector3(0,0, Radius.GetValue(context));
             var seed = Seed.GetValue(context);
             var wobbleSpeed = WobbleSpeed.GetValue(context);
-            var wobbleComplexity = (int)MathUtils.Clamp(WobbleComplexity.GetValue(context),1,8);
+            var wobbleComplexity = (int)WobbleComplexity.GetValue(context).Clamp(1,8);
 
             var rotOffset =  RotationOffset.GetValue(context);
 
@@ -92,31 +116,18 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
 
             _dampedEye = Vector3.Lerp(eye, _dampedEye, damping);
             _dampedTarget = Vector3.Lerp(target, _dampedTarget, damping);
+
+            _cameraDefinition.Target = _dampedTarget.ToNumerics();
+            _cameraDefinition.Position = _dampedEye.ToNumerics();
+            _cameraDefinition.Roll = roll;
+            _cameraDefinition.Up = up.ToNumerics();
+            _cameraDefinition.AspectRatio = aspectRatio;
+            
             
             WorldToCamera = Matrix.LookAtRH(_dampedEye, _dampedTarget, up);
-                        
-            if (context.BypassCameras)
-            {
-                Command.GetValue(context);
-                return;
-            }
             
-            // Set properties and evaluate sub tree
-            var prevCameraToClipSpace = context.CameraToClipSpace;
-            var prevWorldToCamera = context.WorldToCamera;
-            
-            context.CameraToClipSpace = CameraToClipSpace;
-            context.WorldToCamera = WorldToCamera;
-
             CameraPosition = eye.ToNumerics();
             CameraTarget = (eye + adjustedViewDirection).ToNumerics();
-            
-            Command.GetValue(context);
-            
-            context.CameraToClipSpace = prevCameraToClipSpace;
-            context.WorldToCamera = prevWorldToCamera;
-            
-
             
             float ComputeAngle(Slot<Vector2> angleAndWobbleInput, int seedIndex)
             {
@@ -143,6 +154,8 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
 
         private Vector3 _dampedTarget;
         private Vector3 _dampedEye;
+        private CameraDefinition _cameraDefinition;
+        public CameraDefinition CameraDefinition => _cameraDefinition;
         
         
         [Input(Guid = "33752356-8348-4938-8f73-6257e6bb1c1f")]

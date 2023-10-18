@@ -660,7 +660,7 @@
       }
     },
     {
-      "ChildId": "7ed27a08-4515-4508-8658-0879b6fcbbbb"/*BoolToFloats*/,
+      "ChildId": "7ed27a08-4515-4508-8658-0879b6fcbbbb"/*BoolToFloat*/,
       "Position": {
         "X": -2645.075,
         "Y": 3570.6094
@@ -1157,7 +1157,7 @@
       }
     },
     {
-      "ChildId": "320049f3-cea3-4b81-ae94-9479edaea11d"/*DirectionalForce*/,
+      "ChildId": "320049f3-cea3-4b81-ae94-9479edaea11d"/*LegacyDirectionalForce*/,
       "Position": {
         "X": -1944.1028,
         "Y": -143.45624

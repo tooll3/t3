@@ -43,11 +43,6 @@ cbuffer FogParams : register(b3)
     float FogBias;
 }
 
-cbuffer PointLights : register(b4)
-{
-    PointLight Lights[8];
-    int ActiveLightCount;
-}
 
 struct psInput
 {
@@ -86,7 +81,7 @@ psInput vsMain(uint id
 
     float sizeFactor = UseWForSize > 0.5 ? pointDef.w : 1;
 
-    quadPosInCamera.xy += quadPos.xy * 0.050 * sizeFactor * Size;
+    quadPosInCamera.xy += quadPos.xy * 0.10 * sizeFactor * Size;
     output.position = mul(quadPosInCamera, CameraToClipSpace);
     float4 posInWorld = mul(posInObject, ObjectToWorld);
 

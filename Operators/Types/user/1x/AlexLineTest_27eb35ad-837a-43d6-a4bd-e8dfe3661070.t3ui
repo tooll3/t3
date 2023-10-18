@@ -214,7 +214,7 @@
       }
     },
     {
-      "ChildId": "61be4edc-0573-445b-9125-c0b8f38320e7"/*ParticleSimulation*/,
+      "ChildId": "61be4edc-0573-445b-9125-c0b8f38320e7"/*LegacyParticleSimulation*/,
       "Position": {
         "X": 0.0,
         "Y": 1388.9164
@@ -816,7 +816,7 @@
       }
     },
     {
-      "ChildId": "b19e49a3-d4a3-4243-a84c-5556a3e205c9"/*DisplaceMesh*/,
+      "ChildId": "b19e49a3-d4a3-4243-a84c-5556a3e205c9"/*_LegacyDisplaceMesh*/,
       "Position": {
         "X": 3042.5374,
         "Y": 205.70837

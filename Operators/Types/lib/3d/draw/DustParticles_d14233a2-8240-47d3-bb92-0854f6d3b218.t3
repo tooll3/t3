@@ -610,7 +610,7 @@
       "Outputs": []
     },
     {
-      "Id": "f191a2f8-a555-4537-b0de-1475c0fe93ca"/*DirectionalForce*/,
+      "Id": "f191a2f8-a555-4537-b0de-1475c0fe93ca"/*LegacyDirectionalForce*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [],
       "Outputs": []
@@ -714,8 +714,8 @@
       "TargetSlotId": "1d054b2e-1e1b-4899-a003-0d6e000d2d8d"
     },
     {
-      "SourceParentOrChildId": "f191a2f8-a555-4537-b0de-1475c0fe93ca",
-      "SourceSlotId": "3517d466-d084-45e4-885a-8c7f6b16446e",
+      "SourceParentOrChildId": "68884267-81da-49e0-a135-eee4b3c1c0aa",
+      "SourceSlotId": "d41c5cd6-1902-4fb9-9639-6513906cef79",
       "TargetParentOrChildId": "319cc86f-7019-4997-af02-f3a08555a75f",
       "TargetSlotId": "dbe72c8b-6cc2-454b-83db-712f0cd4211c"
     },

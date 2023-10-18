@@ -186,7 +186,7 @@
       }
     },
     {
-      "ChildId": "0d80696e-e59a-4182-abaf-bae2a198d76c"/*DisplaceMesh*/,
+      "ChildId": "0d80696e-e59a-4182-abaf-bae2a198d76c"/*_LegacyDisplaceMesh*/,
       "Position": {
         "X": 633.0598,
         "Y": 648.69165

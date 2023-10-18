@@ -5,6 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
+using T3.Core.Rendering;
 using T3.Operators.Utils;
 
 namespace T3.Operators.Types.Id_954af16f_b37b_4e64_a965_4bec02b9179e
@@ -89,6 +90,8 @@ namespace T3.Operators.Types.Id_954af16f_b37b_4e64_a965_4bec02b9179e
             set { Animator.UpdateFloatInputValue(Roll, value); }
 
         }
+
+        public CameraDefinition CameraDefinition => new();  // Not implemented
         
         public Matrix WorldToCamera { get; set; }
         public Matrix LastObjectToWorld { get; set; }

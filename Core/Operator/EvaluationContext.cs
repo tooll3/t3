@@ -118,9 +118,7 @@ namespace T3.Core.Operator
         public int IteratedListIndex { get; set; }
         public bool BypassCameras { get; set; }
 
+        public LegacyParticleSystem LegacyParticleSystem;
         public ParticleSystem ParticleSystem;
-        
-        
     }
-
 }

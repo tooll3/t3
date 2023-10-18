@@ -65,7 +65,7 @@
       }
     },
     {
-      "ChildId": "9ad3caf3-2a9f-4f3b-88ca-bc7e3dd2bc9b"/*ParticleSimulation*/,
+      "ChildId": "9ad3caf3-2a9f-4f3b-88ca-bc7e3dd2bc9b"/*LegacyParticleSimulation*/,
       "Position": {
         "X": 799.41284,
         "Y": 164.96082

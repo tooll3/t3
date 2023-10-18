@@ -222,13 +222,6 @@
       }
     },
     {
-      "ChildId": "77e1fdb8-afb8-482c-829c-9a02e9a0e8ea"/*GetSRVProperties*/,
-      "Position": {
-        "X": 1240.2614,
-        "Y": 3853.566
-      }
-    },
-    {
       "ChildId": "c798588d-7e91-4dda-a644-9e012191f177"/*GetBufferComponents*/,
       "Position": {
         "X": 1081.5444,
@@ -250,7 +243,7 @@
       }
     },
     {
-      "ChildId": "02cb87a0-3250-45dd-bc1e-0f1bd902be9c"/*BoolToFloats*/,
+      "ChildId": "02cb87a0-3250-45dd-bc1e-0f1bd902be9c"/*BoolToFloat*/,
       "Position": {
         "X": 1468.5548,
         "Y": 4296.544
@@ -271,7 +264,7 @@
       }
     },
     {
-      "ChildId": "5d12754c-546c-4d1e-bcbb-3f1dd9a8fd2a"/*BoolToFloats*/,
+      "ChildId": "5d12754c-546c-4d1e-bcbb-3f1dd9a8fd2a"/*BoolToFloat*/,
       "Position": {
         "X": 1252.2148,
         "Y": 4791.9507

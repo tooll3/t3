@@ -104,15 +104,24 @@ namespace T3.Editor.Gui.Graph
             // Label
             {
                 var isScaledDown = GraphCanvas.Current.Scale.X < 1 * T3Ui.UiScaleFactor;
-                ImGui.PushFont(isScaledDown ? Fonts.FontSmall : Fonts.FontNormal);
+                //var font = isScaledDown ? Fonts.FontSmall : Fonts.FontNormal;
+                var font = Fonts.FontBold;
+                //ImGui.PushFont(font);
 
                 drawList.PushClipRect(_screenArea.Min, _screenArea.Max, true);
                 var labelPos = _screenArea.Min + new Vector2(4, 4);
 
-                drawList.AddText(labelPos,
+                float fontSize = GraphCanvas.Current.Scale.X > 1 
+                                     ? font.FontSize
+                                     : GraphCanvas.Current.Scale.X >  Fonts.FontSmall.Scale / Fonts.FontNormal.Scale
+                                         ? font.FontSize
+                                         : font.FontSize * GraphCanvas.Current.Scale.X;
+                drawList.AddText(font,
+                                 fontSize,
+                                 labelPos,
                                  ColorVariations.OperatorLabel.Apply(annotation.Color),
                                  annotation.Title);
-                ImGui.PopFont();
+                //ImGui.PopFont();
                 drawList.PopClipRect();
             }
 

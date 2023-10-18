@@ -32,7 +32,7 @@
       "DefaultValue": null
     },
     {
-      "Id": "0105aca4-5fd5-40c8-82a5-e919bb7dd507"/*UavBufferCount*/,
+      "Id": "0105aca4-5fd5-40c8-82a5-e919bb7dd507"/*UavBufferCounter*/,
       "DefaultValue": -1
     },
     {

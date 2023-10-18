@@ -23,20 +23,44 @@ public class RenderVideoWindow : RenderHelperWindow
     {
         DrawTimeSetup();
 
+        var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
+        if (mainTexture == null)
+        {
+            CustomComponents.HelpText("You have selected an operator that does not render. " +
+                                      "Hint: Use a [ConvertFormat] with format R8G8B8A8_UNorm for fast exports.");
+            return;
+        }
+
+        SharpDX.Size2 size = default;
+        try
+        {
+            var currentDesc = mainTexture.Description;
+            size.Width = currentDesc.Width;
+            size.Height = currentDesc.Height;
+        }
+        catch
+        {
+            CustomComponents.HelpText("You have selected an operator that does not render. " +
+                                      "Hint: Use a [ConvertFormat] with format R8G8B8A8_UNorm for fast exports.");
+        }
+        
+
         // custom parameters for this renderer
         FormInputs.AddInt("Bitrate", ref _bitrate, 0, 25000000, 1000);
+        {
+            var duration = FrameCount / Fps;
+            double bitsPerPixelSecond = _bitrate / (size.Width * size.Height * Fps);
+            var q = GetQualityLevelFromRate((float)bitsPerPixelSecond);
+            FormInputs.AddHint($"{q.Title} quality ({_bitrate * duration / 1024 / 1024 / 8:0} MB for {duration/60:0}:{duration%60:00}s at {size.Width}×{size.Height})");
+            CustomComponents.TooltipForLastItem(q.Description);
+        }
+        
         FormInputs.AddStringInput("File", ref _targetFile);
         ImGui.SameLine();
         FileOperations.DrawFileSelector(FileOperations.FilePickerTypes.File, ref _targetFile);
         ImGui.Separator();
 
-        var mainTexture = OutputWindow.GetPrimaryOutputWindow()?.GetCurrentTexture();
-        if (mainTexture == null)
-        {
-            CustomComponents.HelpText("You have selected an operator that does not render. " +
-                                      "Hint: Use a [RenderTarget] with format R8G8B8A8_UNorm for fast exports.");
-            return;
-        }
+
 
         if (!_isExporting)
         {
@@ -51,13 +75,10 @@ public class RenderVideoWindow : RenderHelperWindow
 
                     if (_videoWriter == null)
                     {
-                        var currentDesc = mainTexture.Description;
-                        SharpDX.Size2 size;
-                        size.Width = currentDesc.Width;
-                        size.Height = currentDesc.Height;
-
                         _videoWriter = new Mp4VideoWriter(_targetFile, size);
                         _videoWriter.Bitrate = _bitrate;
+
+                        
                         // FIXME: Allow floating point FPS in a future version
                         _videoWriter.Framerate = (int)Fps;
                     }
@@ -88,7 +109,7 @@ public class RenderVideoWindow : RenderHelperWindow
             {
                 var estimatedTimeLeft = durationSoFar /  Progress - durationSoFar;
                 _lastHelpString = $"Saved {_videoWriter.FilePath} frame {FrameIndex}/{FrameCount}  ";
-                _lastHelpString += $"{Progress * 100.0:0}%  {estimatedTimeLeft:0.0}s left";
+                _lastHelpString += $"{Progress * 100.0:0}%%  {HumanReadableDurationFromSeconds(estimatedTimeLeft)} left";
             }
 
             if (!_isExporting)
@@ -97,8 +118,23 @@ public class RenderVideoWindow : RenderHelperWindow
                 _videoWriter = null;
             }
         }
-
+        
         CustomComponents.HelpText(_lastHelpString);
+    }
+
+    private string HumanReadableDurationFromSeconds(double seconds)
+    {
+        if (seconds < 60)
+        {
+            return $"{seconds:0.0}s";
+        }
+
+        if (seconds < 60 * 60)
+        {
+            return $"{(int)(seconds/60):0}:{(int)(seconds%60):00}s";
+        }
+
+        return $"{(int)(seconds / 60 / 60):0}h {seconds/60%60:0}:{seconds%60:00}s";
     }
 
     private static int GetRealFrame()
@@ -133,8 +169,47 @@ public class RenderVideoWindow : RenderHelperWindow
         return true;
     }
 
+    private QualityLevel GetQualityLevelFromRate(float bitsPerPixelSecond)
+    {
+        QualityLevel q = default;
+        for (var index = QualityLevels.Length - 1; index >= 0; index--)
+        {
+            q = QualityLevels[index];
+            if (q.MinBitsPerPixelSecond < bitsPerPixelSecond)
+                break;
+        }
+
+        return q;
+
+    }
+
     private static double _exportStartedTime;
+
+    private struct QualityLevel
+    {
+        public QualityLevel(double bits, string title, string description)
+        {
+            MinBitsPerPixelSecond = bits;
+            Title = title;
+            Description = description;
+        }
         
+        public double MinBitsPerPixelSecond;
+        public string Title;
+        public string Description;
+    }
+
+    private QualityLevel[] QualityLevels = new[]
+                                               {
+                                                   new QualityLevel(0.01, "Poor", "Very low quality. Consider lower resolution."),
+                                                   new QualityLevel(0.02, "Low", "Probable strong artifacts"),
+                                                   new QualityLevel(0.05, "Medium", "Will exhibit artifacts in noisy regions"),
+                                                   new QualityLevel(0.08, "Okay", "Compromise between filesize and quality"),
+                                                   new QualityLevel(0.12, "Good", "Good quality. Probably sufficient for YouTube."),
+                                                   new QualityLevel(0.5, "Very good", "Excellent quality, but large."),
+                                                   new QualityLevel(1, "Reference", "Indistinguishable. Very large files."),
+                                               };
+    
     private static int _bitrate = 15000000;
     private static string _targetFile = "./Render/output.mp4";
 

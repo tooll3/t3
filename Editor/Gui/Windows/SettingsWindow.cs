@@ -44,12 +44,6 @@ namespace T3.Editor.Gui.Windows
                                                                   "Affects the shape of the connections between your Operators",
                                                                   UserSettings.Defaults.UseArcConnections);
                 
-
-                changed |= FormInputs.AddCheckBox("Use Jog Dial Control",
-                                                                  ref UserSettings.Config.UseJogDialControl,
-                                                                  "Affects the shape of the connections between your Operators",
-                                                                  UserSettings.Defaults.UseJogDialControl);
-
                 changed |= FormInputs.AddCheckBox("Show Graph thumbnails",
                                                                   ref UserSettings.Config.ShowThumbnails,
                                                    null,
@@ -73,7 +67,11 @@ namespace T3.Editor.Gui.Windows
                 FormInputs.ResetIndent();
                 FormInputs.AddVerticalSpace();
                 //ImGui.Dummy(new Vector2(20,20));
-                
+                changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.ValueEditGizmo,
+                                                      "Value edit control", 
+                                                      "This controls the gizmo that pops up when dragging an float value"
+                                                     );
+    
 
                 changed |= FormInputs.AddFloat("UI Scale",
                                                                ref UserSettings.Config.UiScaleFactor,

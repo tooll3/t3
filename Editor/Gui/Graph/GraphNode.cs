@@ -75,11 +75,23 @@ namespace T3.Editor.Gui.Graph
                         var statusLevel = statusProvider.GetStatusLevel();
                         if (statusLevel == IStatusProvider.StatusLevel.Warning || statusLevel ==IStatusProvider.StatusLevel.Error)
                         {
-                            ImGui.SetCursorScreenPos(_usableScreenRect.Min - new Vector2(10, 10) * T3Ui.UiScaleFactor);
+                            ImGui.SetCursorScreenPos(_usableScreenRect.Min - new Vector2(10, 12) * T3Ui.UiScaleFactor);
                             ImGui.InvisibleButton("#warning", new Vector2(15, 15));
                             Icons.DrawIconOnLastItem(Icon.Warning, UiColors.StatusWarning);
                             CustomComponents.TooltipForLastItem( UiColors.StatusWarning, statusLevel.ToString(), statusProvider.GetStatusMessage(), false);
                         }
+                    }
+
+                    if (!string.IsNullOrEmpty(childUi.Comment))
+                    {
+                        ImGui.SetCursorScreenPos(new Vector2(_usableScreenRect.Max.X,  _usableScreenRect.Min.Y) -  new Vector2(10, 12) * T3Ui.UiScaleFactor * T3Ui.UiScaleFactor);
+                        if (ImGui.InvisibleButton("#comment", new Vector2(15, 15)))
+                        {
+                            NodeSelection.SetSelectionToChildUi(childUi,instance);
+                            GraphCanvas.EditCommentDialog.ShowNextFrame();
+                        }
+                        Icons.DrawIconOnLastItem(Icon.Comment, UiColors.ForegroundFull);
+                        CustomComponents.TooltipForLastItem( UiColors.Text, childUi.Comment, null, false);
                     }
                     
                     // Resize indicator
@@ -211,24 +223,29 @@ namespace T3.Editor.Gui.Graph
                             && !ImGui.IsMouseDragging(ImGuiMouseButton.Left)
                             && !RenameInstanceOverlay.IsOpen)
                         {
-                            ImGui.SetNextWindowSizeConstraints(new Vector2(200, 120), new Vector2(200, 120));
                             ImGui.BeginTooltip();
                             {
-                                TransformGizmoHandling.SetDrawList(drawList);
-                                _imageCanvasForTooltips.Update();
-                                _imageCanvasForTooltips.SetAsCurrent();
-                                if (instance.Outputs.Count > 0)
+                                ImGui.SetNextWindowSizeConstraints(new Vector2(200, 200*9/16f), new Vector2(200, 200*9/16f));
+                                ImGui.BeginChild("##innerTooltip");
                                 {
-                                    var firstOutput = instance.Outputs[0];
-                                    IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
-                                    _evaluationContext.Reset();
-                                    _evaluationContext.RequestedResolution = new Size2(1280 / 2, 720 / 2);
-                                    outputUi.DrawValue(firstOutput, _evaluationContext,
-                                                       recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
+                                    TransformGizmoHandling.SetDrawList(drawList);
+                                    _imageCanvasForTooltips.Update();
+                                    _imageCanvasForTooltips.SetAsCurrent();
+                                    if (instance.Outputs.Count > 0)
+                                    {
+                                        var firstOutput = instance.Outputs[0];
+                                        IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
+                                        _evaluationContext.Reset();
+                                        _evaluationContext.RequestedResolution = new Size2(1280 / 2, 720 / 2);
+                                        outputUi.DrawValue(firstOutput, _evaluationContext,
+                                                           recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
+                                        
+                                    }
+                                    _imageCanvasForTooltips.Deactivate();
+                                    TransformGizmoHandling.RestoreDrawList();
                                 }
+                                ImGui.EndChild();
 
-                                _imageCanvasForTooltips.Deactivate();
-                                TransformGizmoHandling.RestoreDrawList();
                             }
                             ImGui.EndTooltip();
                         }

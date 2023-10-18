@@ -25,7 +25,7 @@
       }
     },
     {
-      "ChildId": "b340c538-1822-45dd-8569-8cc95eb2236f"/*DisplaceMesh*/,
+      "ChildId": "b340c538-1822-45dd-8569-8cc95eb2236f"/*_LegacyDisplaceMesh*/,
       "Position": {
         "X": 300.0,
         "Y": 685.75305
@@ -151,7 +151,7 @@
       }
     },
     {
-      "ChildId": "bc3bc148-38fa-487e-8a90-2bc729ba29be"/*DisplaceMesh*/,
+      "ChildId": "bc3bc148-38fa-487e-8a90-2bc729ba29be"/*_LegacyDisplaceMesh*/,
       "Position": {
         "X": 600.0,
         "Y": 685.75305
@@ -200,7 +200,7 @@
       }
     },
     {
-      "ChildId": "4e7794e3-021c-4abf-bfd5-acc2f008f5c6"/*DirectionalForce*/,
+      "ChildId": "4e7794e3-021c-4abf-bfd5-acc2f008f5c6"/*LegacyDirectionalForce*/,
       "Position": {
         "X": 2064.804,
         "Y": 409.43518

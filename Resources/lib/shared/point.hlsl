@@ -5,6 +5,16 @@ struct Point
     float4 rotation;
 };
 
+struct Particle
+{
+    Point p;
+
+    float3 velocity;
+    float birthTime;
+
+    float radius;
+    float3 __extra;
+};
 
 
 #define QUATERNION_IDENTITY float4(0, 0, 0, 1)
@@ -33,7 +43,7 @@ inline float4 q_encode_v(float4 q, float v )
 
 
 float4 qmul(float4 q1, float4 q2)
-{
+{ 
     return float4(
         q2.xyz * q1.w + q1.xyz * q2.w + cross(q1.xyz, q2.xyz),
         q1.w * q2.w - dot(q1.xyz, q2.xyz)

@@ -31,6 +31,9 @@ namespace T3.Operators.Types.Id_780edb20_f83f_494c_ab17_7015e2311250
 
         [Input(Guid = "796d3d55-32b3-436e-a4c3-f15e1585a914")]
         public readonly InputSlot<int> ConnectLines = new InputSlot<int>();
+
+        [Input(Guid = "6026d26d-b958-4508-b543-92fbdf8950d6")]
+        public readonly InputSlot<bool> AddSeperators = new InputSlot<bool>();
     }
 }
 

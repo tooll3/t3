@@ -59,7 +59,7 @@
       "Outputs": []
     },
     {
-      "Id": "b340c538-1822-45dd-8569-8cc95eb2236f"/*DisplaceMesh*/,
+      "Id": "b340c538-1822-45dd-8569-8cc95eb2236f"/*_LegacyDisplaceMesh*/,
       "SymbolId": "b5709297-c714-4019-9d0b-6982590b5590",
       "InputValues": [
         {
@@ -407,7 +407,7 @@
       "Outputs": []
     },
     {
-      "Id": "bc3bc148-38fa-487e-8a90-2bc729ba29be"/*DisplaceMesh*/,
+      "Id": "bc3bc148-38fa-487e-8a90-2bc729ba29be"/*_LegacyDisplaceMesh*/,
       "SymbolId": "b5709297-c714-4019-9d0b-6982590b5590",
       "InputValues": [
         {
@@ -657,7 +657,7 @@
       "Outputs": []
     },
     {
-      "Id": "4e7794e3-021c-4abf-bfd5-acc2f008f5c6"/*DirectionalForce*/,
+      "Id": "4e7794e3-021c-4abf-bfd5-acc2f008f5c6"/*LegacyDirectionalForce*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {

@@ -309,8 +309,8 @@
     {
       "ChildId": "f4995f4c-0b06-466f-bd71-ed060556a4d3"/*_BlobOld*/,
       "Position": {
-        "X": 609.82227,
-        "Y": -299.31302
+        "X": 558.25903,
+        "Y": -228.4136
       }
     },
     {
@@ -328,7 +328,7 @@
       }
     },
     {
-      "ChildId": "f191a2f8-a555-4537-b0de-1475c0fe93ca"/*DirectionalForce*/,
+      "ChildId": "f191a2f8-a555-4537-b0de-1475c0fe93ca"/*LegacyDirectionalForce*/,
       "Position": {
         "X": -46.458603,
         "Y": -164.84517
@@ -365,8 +365,8 @@
     {
       "ChildId": "43cec989-3d32-4d44-b4c5-904718e71a0e"/*FirstValidTexture*/,
       "Position": {
-        "X": 759.82227,
-        "Y": -299.31302
+        "X": 708.25903,
+        "Y": -228.4136
       }
     }
   ],

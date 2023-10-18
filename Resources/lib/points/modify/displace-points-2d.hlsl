@@ -40,7 +40,6 @@ cbuffer Params : register(b1)
 //StructuredBuffer<Point> Points : t0;
 RWStructuredBuffer<Point> Points : u0;    // output
 
-
 Texture2D<float4> DisplaceMap : register(t1);
 sampler texSampler : register(s0);
 

@@ -45,6 +45,9 @@ namespace T3.Operators.Types.Id_97eb35ec_2825_4f63_8fdf_3fe38fa9e652
         [Input(Guid = "270f9603-1d9b-412b-9c76-330eafc8a958", MappedType = typeof(Methods))]
         public readonly InputSlot<int> Method = new InputSlot<int>();
 
+        [Input(Guid = "0512491d-3022-48c2-b79d-4688ff18fd0e")]
+        public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
+
 
         private enum Methods
         {

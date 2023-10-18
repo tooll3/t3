@@ -92,6 +92,13 @@
         "X": -164.5605,
         "Y": 591.6141
       }
+    },
+    {
+      "InputId": "0512491d-3022-48c2-b79d-4688ff18fd0e"/*GenerateMips*/,
+      "Position": {
+        "X": -164.5605,
+        "Y": 636.6141
+      }
     }
   ],
   "SymbolChildUis": [
@@ -106,14 +113,14 @@
       "ChildId": "8cd65317-0fa1-4032-857c-9ccca1367b06"/*Vector4ToFloat4*/,
       "Position": {
         "X": -25.082056,
-        "Y": 74.952194
+        "Y": 85.952194
       }
     },
     {
       "ChildId": "85049eae-97e0-49b2-938e-03e6f3717bfb"/*Vector2ToFloat2*/,
       "Position": {
         "X": -30.598248,
-        "Y": 192.01015
+        "Y": 203.01015
       }
     },
     {

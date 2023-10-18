@@ -245,7 +245,9 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.AddOpToInput, 73),
                 new (Icon.ExtractInput, 74),
                 new (Icon.IO, 75),
-                new (Icon.None, 75),
+                new (Icon.Flame, 76),
+                new (Icon.Comment, 77),
+                new (Icon.None, 77),
             };
 
         public const string IconAtlasPath = @"Resources\t3-editor\images\t3-icons.png";
@@ -328,7 +330,8 @@ namespace T3.Editor.Gui.Styling
         AddKeyframe,
         AddOpToInput,
         ExtractInput,
+        Flame,
         IO,
-        
+        Comment
     }
 }
