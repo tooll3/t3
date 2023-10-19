@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
 using Operators.Utils;
@@ -63,6 +63,11 @@ namespace T3.Editor.Gui.Windows
                                                   ref UserSettings.Config.MouseWheelEditsNeedCtrlKey,
                                                   "In parameter window you can edit numeric values by using the mouse wheel. This setting will prevent accidental modifications while scrolling because by using ctrl key for activation.",
                                                   UserSettings.Defaults.MouseWheelEditsNeedCtrlKey);
+
+                changed |= FormInputs.AddCheckBox("Lock Output canvas",
+                                                  ref UserSettings.Config.LockOutputCanvas,
+                                                  "In output window you can scroll and scale the canvas. This setting will disable this feature.",
+                                                  UserSettings.Defaults.LockOutputCanvas);
 
                 FormInputs.ResetIndent();
                 FormInputs.AddVerticalSpace();

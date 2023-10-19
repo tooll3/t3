@@ -15,9 +15,15 @@ namespace T3.Editor.Gui.Windows
     {
         public void Update()
         {
-            
-            UpdateCanvas();
-            UpdateViewMode();
+            if (!UserSettings.Config.LockOutputCanvas)
+            {
+                UpdateCanvas();
+                UpdateViewMode();
+            }
+            else
+            {
+                UpdateCanvas();
+            } 
             
         }
 

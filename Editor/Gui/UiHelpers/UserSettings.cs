@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -63,7 +63,9 @@ namespace T3.Editor.Gui.UiHelpers
             public float CameraSpeed = 1;
 
             public TimeLineCanvas.FrameStepAmount FrameStepAmount = TimeLineCanvas.FrameStepAmount.FrameAt30Fps;
-            
+
+            public bool LockOutputCanvas = false;
+
             public bool MouseWheelEditsNeedCtrlKey = true;
             public bool AutoPinAllAnimations = false;
 
