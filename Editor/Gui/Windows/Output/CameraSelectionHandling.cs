@@ -100,12 +100,13 @@ namespace T3.Editor.Gui.Windows.Output
                     _controlMode = _lastControlMode;
                 }
             }
-            
+
+            _drawnTypeIsCommand = drawnType == typeof(Command);
             switch (_controlMode)
             {
                 case ControlModes.SceneViewerFollowing:
                 {
-                    if (drawnType != typeof(Command))
+                    if (!_drawnTypeIsCommand)
                     {
                         PreventCameraInteraction = true;
                     }
@@ -148,7 +149,6 @@ namespace T3.Editor.Gui.Windows.Output
                         }
                         else
                         {
-                            //PreventCameraInteraction = true;
                             PreventImageCanvasInteraction = true;
                             cameraForManipulation = _firstCamInGraph;    
                         }
@@ -166,7 +166,12 @@ namespace T3.Editor.Gui.Windows.Output
 
             if (_controlMode != ControlModes.PickedACamera)
             {
+                
                 CameraForRendering = cameraForManipulation;
+            }
+            else
+            {
+                PreventImageCanvasInteraction = true;
             }
 
             if (CameraForRendering == null)
@@ -280,7 +285,10 @@ namespace T3.Editor.Gui.Windows.Output
                 if (ImGui.IsItemHovered() && _firstCamInGraph is Instance camInstance)
                     FrameStats.AddHoveredId(camInstance.SymbolChildId);
 
-                if (ImGui.MenuItem("Viewer","", _controlMode == ControlModes.UseViewer, true ))
+                if (ImGui.MenuItem("Viewer",
+                                   "", 
+                                   _controlMode == ControlModes.UseViewer, 
+                                   _drawnTypeIsCommand ))
                 {
                     _controlMode = ControlModes.UseViewer;
                     _pickedCameraId = Guid.Empty;
@@ -290,7 +298,7 @@ namespace T3.Editor.Gui.Windows.Output
                 if (ImGui.MenuItem("Viewer (Following)",
                                    "", 
                                    _controlMode == ControlModes.SceneViewerFollowing,
-                                   true
+                                   _drawnTypeIsCommand
                                    ))
                 {
                     _controlMode = ControlModes.SceneViewerFollowing;
@@ -354,7 +362,7 @@ namespace T3.Editor.Gui.Windows.Output
             _cameraInteraction.ResetView();
         }
 
-
+        private bool _drawnTypeIsCommand;
         private ControlModes _controlMode = ControlModes.AutoUseFirstCam;
         private readonly ViewCamera _outputWindowViewCamera = new();
         private readonly CameraInteraction _cameraInteraction = new();
