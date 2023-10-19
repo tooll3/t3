@@ -102,10 +102,10 @@ namespace T3.Editor.Gui.UiHelpers
 
         public enum ValueEditGizmos
         {
+            LinearFlex,
             RadialFlex,
             JogDial,
             ValueLadder,
-            LinearFlex
         }
         
         public static bool IsUserNameDefined()
