@@ -24,6 +24,16 @@
         "Y": 90.0
       },
       "Usage": "Default"
+    },
+    {
+      "InputId": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*RGBA*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 135.0
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [],
