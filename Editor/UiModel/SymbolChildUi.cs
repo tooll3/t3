@@ -11,7 +11,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.UiHelpers;
 
-namespace T3.Editor.Gui
+namespace T3.Editor.UiModel
 {
     /// <summary>
     /// Properties needed for visual representation of an instance. Should later be moved to gui component.

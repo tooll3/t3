@@ -13,6 +13,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.UiHelpers.DelaunayVoronoi;
 using T3.Editor.Gui.Windows.Exploration;
 using T3.Editor.Gui.Windows.Output;
+using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.Variations

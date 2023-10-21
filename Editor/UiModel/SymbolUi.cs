@@ -5,6 +5,7 @@ using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
+using T3.Editor.Gui;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
@@ -12,7 +13,7 @@ using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
 using Truncon.Collections;
 
-namespace T3.Editor.Gui
+namespace T3.Editor.UiModel
 {
     public class SymbolUi : ISelectionContainer
     {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Modification;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Interaction
 {

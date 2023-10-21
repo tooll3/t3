@@ -14,6 +14,7 @@ using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.UiHelpers
 {

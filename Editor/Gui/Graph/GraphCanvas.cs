@@ -30,6 +30,7 @@ using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.Gui.Windows.TimeLine;
 using T3.Editor.SystemUi;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph
 {

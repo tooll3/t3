@@ -8,6 +8,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_5880cbc3_a541_4484_a06a_0e6f77cdbe8e;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using T3.Operators.Types.Id_8211249d_7a26_4ad0_8d84_56da72a5c536;

@@ -13,6 +13,7 @@ using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Modification;
 

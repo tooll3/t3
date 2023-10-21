@@ -12,6 +12,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.Gui.Windows.Variations;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph;
 

@@ -2,6 +2,7 @@
 using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_bfe540ef_f8ad_45a2_b557_cd419d9c8e44;
 
 namespace T3.Editor.Gui.ChildUi

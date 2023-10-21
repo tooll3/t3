@@ -8,6 +8,7 @@ using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Interaction.Variations.Model;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Windows.Variations
 {

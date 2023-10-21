@@ -16,6 +16,7 @@ using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using Color = T3.Editor.Gui.Styling.Color;
 using Point = System.Drawing.Point;
 

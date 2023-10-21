@@ -4,6 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_8211249d_7a26_4ad0_8d84_56da72a5c536;
 
 namespace T3.Editor.Gui.ChildUi

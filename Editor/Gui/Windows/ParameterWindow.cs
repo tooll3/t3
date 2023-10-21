@@ -14,6 +14,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Layouts;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Windows
 {

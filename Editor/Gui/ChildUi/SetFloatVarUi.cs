@@ -3,6 +3,7 @@ using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_2a0c932a_eb81_4a7d_aeac_836a23b0b789;
 
 namespace T3.Editor.Gui.ChildUi

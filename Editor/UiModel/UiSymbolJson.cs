@@ -16,14 +16,11 @@ using Truncon.Collections;
 
 // ReSharper disable AssignNullToNotNullAttribute
 
-namespace T3.Editor.Gui
+namespace T3.Editor.UiModel
 {
     public static class SymbolUiJson
     {
-        private static readonly Func<JToken, object> JsonToVector2 = JsonToTypeValueConverters.Entries[typeof(Vector2)];
-        private static readonly Func<JToken, object> JsonToVector4 = JsonToTypeValueConverters.Entries[typeof(Vector4)];
-        private static readonly Action<JsonTextWriter, object> Vector2ToJson = TypeValueToJsonConverters.Entries[typeof(Vector2)];
-        private static readonly Action<JsonTextWriter, object> Vector4ToJson = TypeValueToJsonConverters.Entries[typeof(Vector4)];
+
         
         public static void WriteSymbolUi(SymbolUi symbolUi, JsonTextWriter writer)
         {
@@ -85,7 +82,7 @@ namespace T3.Editor.Gui
                         if (childUi.Size != SymbolChildUi.DefaultOpSize)
                         {
                             writer.WritePropertyName(JsonKeys.Size);
-                            Vector2ToJson(writer, childUi.Size);
+                            _vector2ToJson(writer, childUi.Size);
                         }
                     }
 
@@ -95,7 +92,7 @@ namespace T3.Editor.Gui
                     }
                     
                     writer.WritePropertyName(JsonKeys.Position);
-                    Vector2ToJson(writer, childUi.PosOnCanvas);
+                    _vector2ToJson(writer, childUi.PosOnCanvas);
 
                     if(childUi.SnapshotGroupIndex > 0)
                         writer.WriteObject(nameof(SymbolChildUi.SnapshotGroupIndex), childUi.SnapshotGroupIndex);
@@ -134,7 +131,7 @@ namespace T3.Editor.Gui
                 writer.WriteComment(outputName);
                 var outputUi = outputEntry.Value;
                 writer.WritePropertyName(JsonKeys.Position);
-                Vector2ToJson(writer, outputUi.PosOnCanvas);
+                _vector2ToJson(writer, outputUi.PosOnCanvas);
 
                 writer.WriteEndObject();
             }
@@ -156,13 +153,13 @@ namespace T3.Editor.Gui
                 writer.WriteObject(JsonKeys.Title, annotation.Title);
 
                 writer.WritePropertyName(JsonKeys.Color);
-                Vector4ToJson(writer, annotation.Color.Rgba);
+                _vector4ToJson(writer, annotation.Color.Rgba);
 
                 writer.WritePropertyName(JsonKeys.Position);
-                Vector2ToJson(writer, annotation.PosOnCanvas);
+                _vector2ToJson(writer, annotation.PosOnCanvas);
 
                 writer.WritePropertyName(JsonKeys.Size);
-                Vector2ToJson(writer, annotation.Size);
+                _vector2ToJson(writer, annotation.Size);
                 writer.WriteEndObject();
             }
 
@@ -253,12 +250,12 @@ namespace T3.Editor.Gui
                 }
 
                 JToken positionToken = childEntry[JsonKeys.Position];
-                childUi.PosOnCanvas = (Vector2)JsonToVector2(positionToken);
+                childUi.PosOnCanvas = (Vector2)_jsonToVector2(positionToken);
 
                 if (childEntry[JsonKeys.Size] != null)
                 {
                     JToken sizeToken = childEntry[JsonKeys.Size];
-                    childUi.Size = (Vector2)JsonToVector2(sizeToken);
+                    childUi.Size = (Vector2)_jsonToVector2(sizeToken);
                 }
                 
                 if (childEntry[nameof(SymbolChildUi.SnapshotGroupIndex)] != null)
@@ -318,7 +315,7 @@ namespace T3.Editor.Gui
                     outputUi.OutputDefinition = symbol.OutputDefinitions.First(def => def.Id == outputId);
 
                     JToken positionToken = uiOutputEntry[JsonKeys.Position];
-                    outputUi.PosOnCanvas = (Vector2)JsonToVector2(positionToken);
+                    outputUi.PosOnCanvas = (Vector2)_jsonToVector2(positionToken);
 
                     outputDict.Add(outputId, outputUi);
                 }
@@ -338,16 +335,16 @@ namespace T3.Editor.Gui
                                          {
                                              Id = Guid.Parse(annotationEntry[JsonKeys.Id].Value<string>()),
                                              Title = annotationEntry[JsonKeys.Title].Value<string>(),
-                                             PosOnCanvas = (Vector2)JsonToVector2(annotationEntry[JsonKeys.Position])
+                                             PosOnCanvas = (Vector2)_jsonToVector2(annotationEntry[JsonKeys.Position])
                                          };
 
                     var colorEntry = annotationEntry[JsonKeys.Color];
                     if (colorEntry != null)
                     {
-                        annotation.Color = new Color((Vector4)JsonToVector4(colorEntry));
+                        annotation.Color = new Color((Vector4)_jsonToVector4(colorEntry));
                     }
 
-                    annotation.Size = (Vector2)JsonToVector2(annotationEntry[JsonKeys.Size]);
+                    annotation.Size = (Vector2)_jsonToVector2(annotationEntry[JsonKeys.Size]);
                     annotationDict[annotation.Id] = annotation;
                 }
             }
@@ -378,5 +375,10 @@ namespace T3.Editor.Gui
             public const string Style = "Style";
             public const string ConnectionStyleOverrides = "ConnectionStyleOverrides";
         }
+        
+        private static readonly Func<JToken, object> _jsonToVector2 = JsonToTypeValueConverters.Entries[typeof(Vector2)];
+        private static readonly Func<JToken, object> _jsonToVector4 = JsonToTypeValueConverters.Entries[typeof(Vector4)];
+        private static readonly Action<JsonTextWriter, object> _vector2ToJson = TypeValueToJsonConverters.Entries[typeof(Vector2)];
+        private static readonly Action<JsonTextWriter, object> _vector4ToJson = TypeValueToJsonConverters.Entries[typeof(Vector4)];
     }
 }

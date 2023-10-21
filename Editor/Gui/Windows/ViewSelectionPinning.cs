@@ -13,6 +13,7 @@ using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Output;
+using T3.Editor.UiModel;
 using Icon = T3.Editor.Gui.Styling.Icon;
 
 namespace T3.Editor.Gui.Windows

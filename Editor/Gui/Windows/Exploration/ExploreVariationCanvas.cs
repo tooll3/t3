@@ -9,6 +9,7 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
+using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
 

@@ -6,6 +6,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_ea7b8491_2f8e_4add_b0b1_fd068ccfed0d;
 
 namespace T3.Editor.Gui.ChildUi
