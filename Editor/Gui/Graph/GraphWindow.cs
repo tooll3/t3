@@ -378,6 +378,32 @@ namespace T3.Editor.Gui.Graph
                             dl.AddRectFilled(min, max, fadedColor);
                         }
 
+                        foreach (var output in symbolUi.OutputUis)
+                        {
+                            var rect = ImRect.RectWithSize(output.Value.PosOnCanvas, output.Value.Size);
+                            var min = (rect.Min - boundsMin) / boundsSize * mapSize + mapMin;
+                            var max = (rect.Max - boundsMin) / boundsSize * mapSize + mapMin;
+
+                            var fadedColor = UiColors.MiniMapItems.Fade(0.6f * opacity);
+                            // give it a pinkish shade
+                            fadedColor.G -= 0.3f;
+                            fadedColor.B -= 0.3f;
+                            dl.AddRectFilled(min, max, fadedColor);
+                        }
+
+                        foreach (var input in symbolUi.InputUis)
+                        {
+                            var rect = ImRect.RectWithSize(input.Value.PosOnCanvas, input.Value.Size);
+                            var min = (rect.Min - boundsMin) / boundsSize * mapSize + mapMin;
+                            var max = (rect.Max - boundsMin) / boundsSize * mapSize + mapMin;
+
+                            var fadedColor = UiColors.MiniMapItems.Fade(0.6f * opacity);
+                            // give it a greenish shade
+                            fadedColor.R -= 0.3f;
+                            fadedColor.B -= 0.3f;
+                            dl.AddRectFilled(min, max, fadedColor);
+                        }
+
                         // Draw View Area
                         var viewMinInCanvas = canvas.InverseTransformPositionFloat(Vector2.Zero);
                         var viewMaxInCanvas = canvas.InverseTransformPositionFloat(canvas.WindowSize);
