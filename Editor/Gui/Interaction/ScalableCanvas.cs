@@ -245,8 +245,12 @@ namespace T3.Editor.Gui.Interaction
                 Scale = Vector2.One;
             }
 
-            ScaleTarget = (WindowSize - new Vector2(paddingX, paddingY)) / areaSize;
-
+            ScaleTarget = (WindowSize - new Vector2(paddingX, paddingY));
+            ScaleTarget.X = MathF.Max(ScaleTarget.X, 30);
+            ScaleTarget.Y = MathF.Max(ScaleTarget.Y, 30);
+            
+            ScaleTarget /= areaSize;
+            
             if (flipY)
             {
                 ScaleTarget.Y *= -1;

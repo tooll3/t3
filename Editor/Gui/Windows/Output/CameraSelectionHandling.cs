@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
@@ -99,12 +100,13 @@ namespace T3.Editor.Gui.Windows.Output
                     _controlMode = _lastControlMode;
                 }
             }
-            
+
+            _drawnTypeIsCommand = drawnType == typeof(Command);
             switch (_controlMode)
             {
                 case ControlModes.SceneViewerFollowing:
                 {
-                    if (drawnType != typeof(Command))
+                    if (!_drawnTypeIsCommand)
                     {
                         PreventCameraInteraction = true;
                     }
@@ -147,7 +149,6 @@ namespace T3.Editor.Gui.Windows.Output
                         }
                         else
                         {
-                            //PreventCameraInteraction = true;
                             PreventImageCanvasInteraction = true;
                             cameraForManipulation = _firstCamInGraph;    
                         }
@@ -165,7 +166,12 @@ namespace T3.Editor.Gui.Windows.Output
 
             if (_controlMode != ControlModes.PickedACamera)
             {
+                
                 CameraForRendering = cameraForManipulation;
+            }
+            else
+            {
+                PreventImageCanvasInteraction = true;
             }
 
             if (CameraForRendering == null)
@@ -218,38 +224,59 @@ namespace T3.Editor.Gui.Windows.Output
             }
         }
 
-        const string SceneViewerFollowingLabel = "Viewer (Following)";
-        const string SceneViewerModeLabel = "Viewer";
-        const string CameraModeLabel = "Camera";
-
         public void DrawCameraControlSelection()
         {
-            ImGui.SetNextItemWidth(115);
+            ImGui.SetNextItemWidth(145);
 
             var label = String.Empty;
             
             switch (_controlMode)
             {
+                case ControlModes.AutoUseFirstCam:
+                    label = "Auto";
+                    break;
+                
                 case ControlModes.SceneViewerFollowing:
-                    label = SceneViewerFollowingLabel;
+                    label = "Follow";
                     break;
                 
                 case ControlModes.UseViewer:
-                    label = SceneViewerModeLabel;
-                    break;
-                
-                case ControlModes.AutoUseFirstCam:
-                    label = CameraModeLabel;
+                    label = "Viewer";
                     break;
                 
                 case ControlModes.PickedACamera:
-                    label = "Locked to Cam";
+                    label = "Locked to Op";
                     break;
             }
 
-            if (ImGui.BeginCombo("##CameraSelection", label))
+            var isAuto = _controlMode == ControlModes.AutoUseFirstCam;
+
+            
+            //var min = ImGui.GetCursorScreenPos();
+            // var isOpen = ImGui.BeginCombo("##CameraSelection", label);
+
+            var width = ImGui.GetFrameHeight() * 5;
+            ImGui.PushStyleVar(ImGuiStyleVar.ButtonTextAlign, Vector2.Zero);
+            var labelColor = isAuto ? UiColors.TextMuted : UiColors.ForegroundFull;
+            ImGui.PushStyleColor(ImGuiCol.Text, labelColor.Rgba);
+            var isClicked = ImGui.Button($"     {label}##CameraMode", new Vector2(width, ImGui.GetFrameHeight()));
+            ImGui.PopStyleColor();
+            ImGui.PopStyleVar();
+            var min = ImGui.GetItemRectMin();
+            var max = ImGui.GetItemRectMax();
+            if (isClicked)
             {
-                if (ImGui.Selectable(CameraModeLabel, _controlMode == ControlModes.AutoUseFirstCam))
+                ImGui.OpenPopup("cameraPopup");
+                ImGui.SetNextWindowPos(new Vector2(min.X,max.Y));
+                
+            }
+            Icons.DrawIconAtScreenPosition(Icon.Camera,min + new Vector2(4,7), ImGui.GetWindowDrawList(), labelColor);
+            
+            //ImGui.SetNextWindowSize(new Vector2(width,-1));
+            if(ImGui.BeginPopup("cameraPopup", ImGuiWindowFlags.None))
+            {
+                ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6) * T3Ui.UiScaleFactor);
+                if (ImGui.MenuItem("Auto", "", _controlMode == ControlModes.AutoUseFirstCam, true ))
                 {
                     _controlMode = ControlModes.AutoUseFirstCam;
                     _pickedCameraId = Guid.Empty;
@@ -258,14 +285,21 @@ namespace T3.Editor.Gui.Windows.Output
                 if (ImGui.IsItemHovered() && _firstCamInGraph is Instance camInstance)
                     FrameStats.AddHoveredId(camInstance.SymbolChildId);
 
-                if (ImGui.Selectable(SceneViewerModeLabel, _controlMode == ControlModes.UseViewer))
+                if (ImGui.MenuItem("Viewer",
+                                   "", 
+                                   _controlMode == ControlModes.UseViewer, 
+                                   _drawnTypeIsCommand ))
                 {
                     _controlMode = ControlModes.UseViewer;
                     _pickedCameraId = Guid.Empty;
                 }
                 CustomComponents.TooltipForLastItem("Ignores scene cameras. This can be useful in combination with [ShowCamGizmos].");
                 
-                if (ImGui.Selectable(SceneViewerFollowingLabel, _controlMode == ControlModes.SceneViewerFollowing))
+                if (ImGui.MenuItem("Viewer (Following)",
+                                   "", 
+                                   _controlMode == ControlModes.SceneViewerFollowing,
+                                   _drawnTypeIsCommand
+                                   ))
                 {
                     _controlMode = ControlModes.SceneViewerFollowing;
                     _pickedCameraId = Guid.Empty;
@@ -274,8 +308,12 @@ namespace T3.Editor.Gui.Windows.Output
                     FrameStats.AddHoveredId(camInstance2.SymbolChildId);
                 
                 CustomComponents.TooltipForLastItem("During playback the scene viewer is following the scene camera. Otherwise it can be independently manipulated without affecting the scene camera.");
-                
-                ImGui.Separator();
+
+                if (_recentlyUsedCameras.Count > 0)
+                {
+                    ImGui.Separator();
+                    CustomComponents.HintLabel("Active Cameras...");
+                }
                 
                 foreach (var cam in _recentlyUsedCameras)
                 {
@@ -291,11 +329,12 @@ namespace T3.Editor.Gui.Windows.Output
                         if (symbolChild == null)
                             continue;
                         
-                        if(ImGui.Selectable("Operator: " + symbolChild.ReadableName, cameraInstance.SymbolChildId == _pickedCameraId))
+                        if(ImGui.MenuItem(symbolChild.ReadableName, "",cameraInstance.SymbolChildId == _pickedCameraId, true))
                         {
                             _lastControlMode = _controlMode;
                             _controlMode = ControlModes.PickedACamera;
                             _pickedCameraId = cameraInstance.SymbolChildId;
+                            T3Ui.SelectAndCenterChildIdInView(symbolChild.Id);
                         }
 
                         if (ImGui.IsItemHovered())
@@ -306,7 +345,8 @@ namespace T3.Editor.Gui.Windows.Output
                     ImGui.PopID();
                 }
 
-                ImGui.EndCombo();
+                ImGui.PopStyleVar();
+                ImGui.EndPopup();
             }
             else
             {
@@ -322,7 +362,7 @@ namespace T3.Editor.Gui.Windows.Output
             _cameraInteraction.ResetView();
         }
 
-
+        private bool _drawnTypeIsCommand;
         private ControlModes _controlMode = ControlModes.AutoUseFirstCam;
         private readonly ViewCamera _outputWindowViewCamera = new();
         private readonly CameraInteraction _cameraInteraction = new();

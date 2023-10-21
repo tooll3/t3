@@ -165,6 +165,7 @@ namespace T3.Editor.Gui.Styling
         
         public static readonly IconSource[] CustomIcons =
             {
+                new (Icon.None, 0),                
                 new (Icon.DopeSheetKeyframeLinearSelected, 0, new Vector2(15, 25)),
                 new (Icon.DopeSheetKeyframeLinear, 1, new Vector2(15, 25)),
                 new (Icon.LastKeyframe, 2, new Vector2(15, 25)),
@@ -226,7 +227,7 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.Plus,  54),
                 new (Icon.HoverScrub,  55),
                 new (Icon.AutoRefresh,  56),
-                new (Icon.Camera,  57),
+                new (Icon.Snapshot,  57),
                 new (Icon.Move, 58),
                 new (Icon.Scale, 59),
                 new (Icon.Rotate, 60),
@@ -247,7 +248,7 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.IO, 75),
                 new (Icon.Flame, 76),
                 new (Icon.Comment, 77),
-                new (Icon.None, 77),
+                new (Icon.Camera, 78),
             };
 
         public const string IconAtlasPath = @"Resources\t3-editor\images\t3-icons.png";
@@ -312,7 +313,7 @@ namespace T3.Editor.Gui.Styling
         Plus,
         HoverScrub,
         AutoRefresh,
-        Camera,
+        Snapshot,
         Move,
         Scale,
         Rotate,
@@ -332,6 +333,8 @@ namespace T3.Editor.Gui.Styling
         ExtractInput,
         Flame,
         IO,
-        Comment
+        Comment,
+        Camera,
+        
     }
 }

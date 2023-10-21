@@ -60,7 +60,7 @@ namespace T3.Editor.Gui.Windows
             
             
             ImGui.SameLine();
-            ImGui.SetNextItemWidth(300);
+            ImGui.SetNextItemWidth(200);
             var suffix = _isPinned ? " (pinned)" : " (selected)";
 
             var pinnedEvaluationInstance = GetPinnedEvaluationInstance();

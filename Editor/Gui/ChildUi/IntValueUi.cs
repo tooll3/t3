@@ -33,7 +33,13 @@ namespace T3.Editor.Gui.ChildUi
                 ImGui.TextUnformatted(symbolChild.Name);
             }
 
-            ImGui.TextUnformatted($"{intValueInstance.Int.TypedInputValue.Value:0}");
+            var isAnimated = instance.Parent?.Symbol.Animator.IsInputSlotAnimated(intValueInstance.Int)??false;
+
+            var value = (isAnimated || intValueInstance.Int.IsConnected) 
+                            ? intValueInstance.Int.Value 
+                            : intValueInstance.Int.TypedInputValue.Value;
+            
+            ImGui.TextUnformatted($"{value:0}");
             ImGui.EndGroup();
             ImGui.PopFont();
             
