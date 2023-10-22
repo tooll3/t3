@@ -16,6 +16,7 @@ cbuffer Params : register(b0)
     float SpeedFactor;
     
     float InvertVolumeFactor;
+    float AttractionDecay;
 }
 
 cbuffer Params : register(b1)
@@ -126,7 +127,7 @@ void main(uint3 i : SV_DispatchThreadID)
         }
         else 
         {
-            force = -surfaceInWorld * Attraction ;
+            force = -surfaceInWorld * Attraction / (1+ distance * AttractionDecay) ;
 
         }
         velocity += force;

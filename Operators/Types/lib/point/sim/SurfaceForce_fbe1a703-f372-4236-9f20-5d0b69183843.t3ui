@@ -89,6 +89,16 @@
         "X": -289.84814,
         "Y": 2247.0205
       }
+    },
+    {
+      "InputId": "b7a82887-9b8a-4999-8970-515fe199724a"/*AttractionDecay*/,
+      "Position": {
+        "X": -289.84814,
+        "Y": 2292.0205
+      },
+      "Min": 0.0,
+      "Max": 10.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [

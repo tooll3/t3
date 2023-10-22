@@ -58,6 +58,9 @@ namespace T3.Operators.Types.Id_fbe1a703_f372_4236_9f20_5d0b69183843
         [Input(Guid = "2ab85ac3-819d-4e3e-891a-7f27af627fdf")]
         public readonly InputSlot<bool> InvertVolume = new InputSlot<bool>();
 
+        [Input(Guid = "b7a82887-9b8a-4999-8970-515fe199724a")]
+        public readonly InputSlot<float> AttractionDecay = new InputSlot<float>();
+
 
         
         private enum VolumeShapes

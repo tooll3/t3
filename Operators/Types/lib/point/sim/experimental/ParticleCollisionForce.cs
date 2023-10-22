@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_ed0bc47a_31ef_400b_b4e4_5552a859b309
 {
-    public class SimPointCollisions : Instance<SimPointCollisions>
+    public class ParticleCollisionForce : Instance<ParticleCollisionForce>
     {
 
         [Output(Guid = "8c9461b8-9152-4389-938e-2ff67a6451ed")]

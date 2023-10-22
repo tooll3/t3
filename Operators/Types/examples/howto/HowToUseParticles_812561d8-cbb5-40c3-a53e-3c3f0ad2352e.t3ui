@@ -740,10 +740,17 @@
       }
     },
     {
-      "ChildId": "8b4daadc-5cf6-4a95-b2e3-10d516a7439f"/*ParticleCollisionExperiment*/,
+      "ChildId": "8b4daadc-5cf6-4a95-b2e3-10d516a7439f"/*ParticleCollisionForceExample*/,
       "Position": {
         "X": 357.74347,
         "Y": 1083.1224
+      }
+    },
+    {
+      "ChildId": "56542c20-d7b4-4e9d-a7d0-a299fa1f4b54"/*ParticleCollisionForceExample*/,
+      "Position": {
+        "X": 409.51367,
+        "Y": 1221.4408
       }
     }
   ],

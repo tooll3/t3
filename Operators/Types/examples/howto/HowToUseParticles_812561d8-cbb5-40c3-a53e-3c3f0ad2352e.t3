@@ -1989,7 +1989,13 @@
       "Outputs": []
     },
     {
-      "Id": "8b4daadc-5cf6-4a95-b2e3-10d516a7439f"/*ParticleCollisionExperiment*/,
+      "Id": "8b4daadc-5cf6-4a95-b2e3-10d516a7439f"/*ParticleCollisionForceExample*/,
+      "SymbolId": "54bea221-f2db-4ff8-afeb-200bcfd37871",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "56542c20-d7b4-4e9d-a7d0-a299fa1f4b54"/*ParticleCollisionForceExample*/,
       "SymbolId": "54bea221-f2db-4ff8-afeb-200bcfd37871",
       "InputValues": [],
       "Outputs": []
