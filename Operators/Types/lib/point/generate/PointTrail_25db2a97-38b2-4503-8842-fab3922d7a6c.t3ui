@@ -1,5 +1,6 @@
 {
   "Id": "25db2a97-38b2-4503-8842-fab3922d7a6c"/*PointTrail*/,
+  "Description": "Keeps previous copies of points in a cycling buffer that can be used to draw trails and other effects.",
   "InputUis": [
     {
       "InputId": "4389838c-fd1d-4400-b8e5-f373a05adff7"/*GPoints*/,
@@ -242,6 +243,15 @@
         "X": 1116.917,
         "Y": 316.54135
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "b4f950e2-7584-44f2-a499-3986df5470ec",
+      "Title": "Tutorial Video",
+      "Description": "",
+      "LinkUrl": "https://youtu.be/ElW_0uaeiNA?feature=shared",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

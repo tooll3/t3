@@ -20,5 +20,14 @@
         "Y": 0.0
       }
     }
+  ],
+  "Links": [
+    {
+      "Id": "b858a946-0dc6-4891-adec-df42b1e28826",
+      "Title": "Animating Strings",
+      "Description": "A quick tutorial how to combine different string operators.",
+      "LinkUrl": "https://www.youtube.com/watch?v=854OSxXzMDM",
+      "LinkType": "TutorialVideo"
+    }
   ]
 }

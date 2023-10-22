@@ -1,6 +1,6 @@
 {
   "Id": "ab496711-8b99-4463-aac9-b41fdf46608d"/*RepeatMeshAtPoints*/,
-  "Description": "Creates a new mesh that repeats the incoming mesh at each point.\nNote: With large meshes or point sets this can quickly result in excessively large meshes.",
+  "Description": "Creates a new mesh that repeats the incoming mesh at each point.\nNote: With large meshes or point sets this can quickly result in excessively large meshes.\n\nAlso see: [DrawMeshAtPoints]",
   "InputUis": [
     {
       "InputId": "f8fb6e15-00dd-485e-a7fe-fa75c77182c2"/*InputMesh*/,
@@ -296,6 +296,15 @@
         "X": 2010.3448,
         "Y": 1378.0693
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "2b63fa61-ac86-4ebf-8ce9-1c1376c529a6",
+      "Title": "Tutorial Video",
+      "Description": "Examplains difference to DrawMeshAtPoints.",
+      "LinkUrl": "https://youtu.be/LjmnVL7azYw",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

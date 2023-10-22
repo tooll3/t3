@@ -337,11 +337,6 @@
           "Value": 10000
         },
         {
-          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
           "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
           "Type": "System.Single",
           "Value": 0.0062
@@ -2703,11 +2698,6 @@
           "Value": 20000
         },
         {
-          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
           "Id": "38392c86-4a1b-4b6f-ac32-26920a73e1e2"/*InitialVelocity*/,
           "Type": "System.Single",
           "Value": 0.38
@@ -4010,11 +4000,6 @@
           "Value": 10000
         },
         {
-          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-          "Type": "System.Boolean",
-          "Value": false
-        },
-        {
           "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,
           "Type": "System.Single",
           "Value": 0.0062
@@ -4241,11 +4226,6 @@
           "Id": "1eb32e4c-6785-4649-b0bf-7c70cddee619"/*MaxParticleCount*/,
           "Type": "System.Int32",
           "Value": 50000
-        },
-        {
-          "Id": "e9f068dd-9bd9-4b1c-9122-f78df0ec18b9"/*SetInitialVelocity*/,
-          "Type": "System.Boolean",
-          "Value": true
         },
         {
           "Id": "5a61994e-42c7-47e7-b0a5-5beb48f4a34b"/*Drag*/,

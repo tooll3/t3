@@ -1,5 +1,6 @@
 {
   "Id": "5f846187-e109-45d1-97e0-ae95e3e7d9ba"/*SimNoise*/,
+  "Description": "Adds perlin curl noise to a point buffer. \n\nNote: Different to [AddNoise] this effect modifies the original buffer and is therefore not deterministic.",
   "InputUis": [
     {
       "InputId": "679d6321-a5d7-41cc-a191-5e6cf353dfc4"/*GPoints*/,
@@ -157,6 +158,15 @@
         "X": 965.0588,
         "Y": 341.18228
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "da6cd2cc-117e-48ab-9e6b-dd4a2ddd3d5f",
+      "Title": "Tutorial Video",
+      "Description": "",
+      "LinkUrl": "https://youtu.be/ElW_0uaeiNA?feature=shared",
+      "LinkType": "TutorialVideo"
     }
   ]
 }
