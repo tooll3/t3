@@ -134,6 +134,15 @@ namespace T3.Editor.Gui.Styling
             var inputSize = GetAvailableInputSize(tooltip, false, true);
             ImGui.SetNextItemWidth(inputSize.X);
 
+            var modified = DrawEnumDropdown(ref selectedValue, label);
+
+            AppendTooltip(tooltip);
+
+            return modified;
+        }
+
+        public static bool DrawEnumDropdown<T>(ref T selectedValue, string label) where T : struct, Enum, IConvertible, IFormattable
+        {
             var names = Enum.GetNames<T>();
             var index = 0;
             var selectedIndex = 0;
@@ -151,8 +160,6 @@ namespace T3.Editor.Gui.Styling
             {
                 selectedValue = Enum.GetValues<T>()[selectedIndex];
             }
-
-            AppendTooltip(tooltip);
 
             return modified;
         }

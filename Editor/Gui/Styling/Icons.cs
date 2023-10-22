@@ -80,12 +80,12 @@ namespace T3.Editor.Gui.Styling
                               color);
         }
 
-        public static void DrawIconOnLastItem(Icon icon, Color color)
+        public static void DrawIconOnLastItem(Icon icon, Color color, float alignment= 0.5f)
         {
             var pos = ImGui.GetItemRectMin();
             var size = ImGui.GetItemRectMax() - pos;
             GetGlyphDefinition(icon, out var uvRange, out var iconSize);
-            var centerOffset = MathUtils.Floor((size - iconSize)/2);
+            var centerOffset = MathUtils.Floor( (size - iconSize) * new Vector2( alignment, 0.5f));
             var alignedPos = pos + centerOffset;
             ImGui.GetWindowDrawList().AddImage(ImGui.GetIO().Fonts.TexID,
                                                alignedPos,

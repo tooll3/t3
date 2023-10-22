@@ -67,7 +67,7 @@ namespace T3.Editor.Gui.Windows
             }
 
             ImGui.SameLine();
-            CustomComponents.DrawSearchField("Filter", ref _filterString);
+            CustomComponents.DrawInputFieldWithPlaceholder("Filter", ref _filterString);
 
             ImGui.Separator();
             ImGui.BeginChild("scrolling");

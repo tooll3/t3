@@ -560,21 +560,22 @@ namespace T3.Editor.Gui.Styling
             return clicked;
         }
 
-        public static bool DrawSearchField(string placeHolderLabel, ref string value, float width = 0)
+        public static bool DrawInputFieldWithPlaceholder(string placeHolderLabel, ref string value, float width = 0)
         {
+            var notEmpty = !string.IsNullOrEmpty(value);
             var wasNull = value == null;
             if (wasNull)
                 value = string.Empty;
 
-            ImGui.SetNextItemWidth(width - FormInputs.ParameterSpacing);
+            ImGui.SetNextItemWidth(width - FormInputs.ParameterSpacing - (notEmpty ? ImGui.GetFrameHeight():0));
             var modified = ImGui.InputText("##" + placeHolderLabel, ref value, 1000);
             if (!modified && wasNull)
                 value = null;
 
-            if (!string.IsNullOrEmpty(value))
+            if (notEmpty)
             {
-                ImGui.SameLine();
-                if (ImGui.Button("×"))
+                ImGui.SameLine(0,0);
+                if (ImGui.Button("×" + "##" + placeHolderLabel))
                 {
                     value = null;
                     modified = true;

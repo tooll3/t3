@@ -5,7 +5,6 @@ using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
-using T3.Editor.Gui;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
@@ -25,18 +24,19 @@ namespace T3.Editor.UiModel
             UpdateConsistencyWithSymbol(); // this sets up all missing elements
         }
 
-        public SymbolUi(Symbol symbol, 
-                        List<SymbolChildUi> childUis, 
-                        OrderedDictionary<Guid, IInputUi> inputs, 
+        public SymbolUi(Symbol symbol,
+                        List<SymbolChildUi> childUis,
+                        OrderedDictionary<Guid, IInputUi> inputs,
                         OrderedDictionary<Guid, IOutputUi> outputs,
-                        OrderedDictionary<Guid, Annotation> annotations
-            )
+                        OrderedDictionary<Guid, Annotation> annotations, 
+                        OrderedDictionary<Guid, ExternalLink> links)
         {
             Symbol = symbol;
             ChildUis = childUis;
             InputUis = inputs;
             OutputUis = outputs;
             Annotations = annotations;
+            Links = links;
             UpdateConsistencyWithSymbol();
         }
 
@@ -72,15 +72,21 @@ namespace T3.Editor.UiModel
                 outputUis.Add(clonedOutputUi.Id, clonedOutputUi);
             }
 
-            var annotations = new OrderedDictionary<Guid, Annotation>(OutputUis.Count);
+            var annotations = new OrderedDictionary<Guid, Annotation>(Annotations.Count);
             foreach (var (_, annotation) in Annotations)
             {
                 var clonedAnnotation = annotation.Clone();
-                //Guid newAnnotationId = oldToNewIds[clonedAnnotation];
                 annotations.Add(clonedAnnotation.Id, clonedAnnotation);
             }
             
-            return new SymbolUi(newSymbol, childUis, inputUis, outputUis, annotations);
+            var links = new OrderedDictionary<Guid, ExternalLink>(Links.Count);
+            foreach (var (_, link) in Links)
+            {
+                var clonedLink = link.Clone();
+                links.Add(clonedLink.Id, clonedLink);
+            }
+            
+            return new SymbolUi(newSymbol, childUis, inputUis, outputUis, annotations, links);
         }
         
 
@@ -277,9 +283,6 @@ namespace T3.Editor.UiModel
             ChildUis.Remove(childToRemove);
         }
 
-        public string Description { get; set; }
-
-        public bool HasBeenModified { get; private set; }
 
         public void FlagAsModified()
         {
@@ -291,15 +294,18 @@ namespace T3.Editor.UiModel
             HasBeenModified = false;
         }
         
-        // public Styles DefaultStyleForInstances { get; set; }  // TODO: Implement inheritance for display styles? 
-        public List<SymbolChildUi> ChildUis = new List<SymbolChildUi>();    // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
-        public OrderedDictionary<Guid, IInputUi> InputUis { get; } = new OrderedDictionary<Guid, IInputUi>();
-        public OrderedDictionary<Guid, IOutputUi> OutputUis { get; }= new OrderedDictionary<Guid, IOutputUi>();
-        public OrderedDictionary<Guid, Annotation> Annotations { get; }= new OrderedDictionary<Guid, Annotation>();
+        public string Description { get; set; }
+        public OrderedDictionary<Guid, ExternalLink> Links { get; } = new();
+        
+        public bool HasBeenModified { get; private set; }
+        public readonly List<SymbolChildUi> ChildUis = new();    // TODO: having this as dictionary with instanceIds would simplify drawing the graph 
+        public OrderedDictionary<Guid, IInputUi> InputUis { get; } = new();
+        public OrderedDictionary<Guid, IOutputUi> OutputUis { get; }= new();
+        public OrderedDictionary<Guid, Annotation> Annotations { get; }= new();
     }
 
     public static class SymbolUiRegistry
     {
-        public static Dictionary<Guid, SymbolUi> Entries { get; } = new Dictionary<Guid, SymbolUi>(20);
+        public static Dictionary<Guid, SymbolUi> Entries { get; } = new(20);
     }
 }

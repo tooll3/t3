@@ -35,6 +35,7 @@ namespace T3.Editor.UiModel
             WriteChildUis(symbolUi, writer);
             WriteOutputUis(symbolUi, writer);
             WriteAnnotations(symbolUi, writer);
+            WriteLinks(symbolUi, writer);
 
             writer.WriteEndObject();
         }
@@ -165,6 +166,29 @@ namespace T3.Editor.UiModel
 
             writer.WriteEndArray();
         }
+        
+        private static void WriteLinks(SymbolUi symbolUi, JsonTextWriter writer)
+        {
+            if (symbolUi.Links.Count == 0)
+                return;
+            
+            writer.WritePropertyName(JsonKeys.Links);
+            writer.WriteStartArray();
+
+            foreach (var link in symbolUi.Links.Values)
+            {
+                writer.WriteStartObject();
+                writer.WriteObject(JsonKeys.Id, link.Id);
+                writer.WriteObject(JsonKeys.Title, link.Title);
+                writer.WriteObject(JsonKeys.Description, link.Description);
+                writer.WriteObject(JsonKeys.LinkUrl, link.Url);
+                writer.WriteObject(JsonKeys.LinkType, link.Type);
+                writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+        }
+        
         
         internal static bool TryReadSymbolUi(JToken mainObject, out SymbolUi symbolUi)
         {
@@ -325,55 +349,92 @@ namespace T3.Editor.UiModel
                 }
             }
 
-            var annotationDict = new OrderedDictionary<Guid, Annotation>();
-            var annotationsArray = (JArray)mainObject[JsonKeys.Annotations];
-            if (annotationsArray != null)
-            {
-                foreach (var annotationEntry in annotationsArray)
-                {
-                    var annotation = new Annotation
-                                         {
-                                             Id = Guid.Parse(annotationEntry[JsonKeys.Id].Value<string>()),
-                                             Title = annotationEntry[JsonKeys.Title].Value<string>(),
-                                             PosOnCanvas = (Vector2)_jsonToVector2(annotationEntry[JsonKeys.Position])
-                                         };
+            var annotationDict = ReadAnnotations(mainObject);
+            var linksDict = ReadLinks(mainObject);
 
-                    var colorEntry = annotationEntry[JsonKeys.Color];
-                    if (colorEntry != null)
-                    {
-                        annotation.Color = new Color((Vector4)_jsonToVector4(colorEntry));
-                    }
 
-                    annotation.Size = (Vector2)_jsonToVector2(annotationEntry[JsonKeys.Size]);
-                    annotationDict[annotation.Id] = annotation;
-                }
-            }
-
-            symbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict, annotationDict)
-                                  {
-                                      Description = mainObject[JsonKeys.Description]?.Value<string>()
-                                  };
+            symbolUi = new SymbolUi(symbol, symbolChildUis, inputDict, outputDict, annotationDict, linksDict)
+                           {
+                               Description = mainObject[JsonKeys.Description]?.Value<string>()
+                           };
             return true;
         }
 
+        private static OrderedDictionary<Guid, Annotation> ReadAnnotations(JToken token)
+        {
+            var annotationDict = new OrderedDictionary<Guid, Annotation>();
+            var annotationsArray = (JArray)token[JsonKeys.Annotations];
+            if (annotationsArray == null)
+                return annotationDict;
+            
+            foreach (var annotationEntry in annotationsArray)
+            {
+                var annotation = new Annotation
+                                     {
+                                         Id = Guid.Parse(annotationEntry[JsonKeys.Id].Value<string>()),
+                                         Title = annotationEntry[JsonKeys.Title].Value<string>(),
+                                         PosOnCanvas = (Vector2)_jsonToVector2(annotationEntry[JsonKeys.Position])
+                                     };
+
+                var colorEntry = annotationEntry[JsonKeys.Color];
+                if (colorEntry != null)
+                {
+                    annotation.Color = new Color((Vector4)_jsonToVector4(colorEntry));
+                }
+
+                annotation.Size = (Vector2)_jsonToVector2(annotationEntry[JsonKeys.Size]);
+                annotationDict[annotation.Id] = annotation;
+            }
+
+            return annotationDict;
+        }
+        
+        private static OrderedDictionary<Guid, ExternalLink> ReadLinks(JToken token)
+        {
+            var linkDict = new OrderedDictionary<Guid, ExternalLink>();
+            var linksArray = (JArray)token[JsonKeys.Links];
+            if (linksArray == null)
+                return linkDict;
+            
+            foreach (var linkEntry in linksArray)
+            {
+                var link = new ExternalLink()
+                               {
+                                   Id = Guid.Parse(linkEntry[JsonKeys.Id].Value<string>()),
+                                   Title = linkEntry[JsonKeys.Title].Value<string>(),
+                                   Description = linkEntry[JsonKeys.Description].Value<string>(),
+                                   Url = linkEntry[JsonKeys.LinkUrl].Value<string>(),
+                                   Type = (ExternalLink.LinkTypes)Enum.Parse(typeof(ExternalLink.LinkTypes), linkEntry[JsonKeys.LinkType].Value<string>())
+                                   //Type = linkEntry[JsonKeys.LinkType].Value<ExternalLink.LinkTypes>(),
+                               };
+
+                linkDict[link.Id] = link;
+            }
+            return linkDict;
+        }
+        
+
         private readonly struct JsonKeys
         {
-            public const string InputUis = "InputUis";
-            public const string InputId = "InputId";
-            public const string OutputUis = "OutputUis";
-            public const string OutputId = "OutputId";
-            public const string SymbolChildUis = "SymbolChildUis";
-            public const string ChildId = "ChildId";
-            public const string Position = "Position";
-            public const string Annotations = "Annotations";
-            public const string Comment = "Comment";
-            public const string Id = "Id";
-            public const string Title = "Title";
-            public const string Color = "Color";
-            public const string Size = "Size";
-            public const string Description = "Description";
-            public const string Style = "Style";
-            public const string ConnectionStyleOverrides = "ConnectionStyleOverrides";
+            public const string InputUis = nameof(InputUis);
+            public const string InputId = nameof(InputId);
+            public const string OutputUis = nameof(OutputUis);
+            public const string OutputId = nameof(OutputId);
+            public const string SymbolChildUis = nameof(SymbolChildUis);
+            public const string ChildId = nameof(ChildId);
+            public const string Position = nameof(Position);
+            public const string Annotations = nameof(Annotations);
+            public const string Links = nameof(Links);
+            public const string Comment = nameof(Comment);
+            public const string Id = nameof(Id);
+            public const string Title = nameof(Title);
+            public const string Color = nameof(Color);
+            public const string Size = nameof(Size);
+            public const string Description = nameof(Description);
+            public const string Style = nameof(Style);
+            public const string ConnectionStyleOverrides = nameof(ConnectionStyleOverrides);
+            public const string LinkType = nameof(LinkType);
+            public const string LinkUrl = nameof(LinkUrl);
         }
         
         private static readonly Func<JToken, object> _jsonToVector2 = JsonToTypeValueConverters.Entries[typeof(Vector2)];
