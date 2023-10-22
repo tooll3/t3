@@ -53,6 +53,7 @@ namespace T3.Editor.Gui.UiHelpers
             public bool SmartGroupDragging = false;
             public bool ShowExplicitTextureFormatInOutputWindow = false;
             public bool UseArcConnections = true;
+            public bool ResetTimeAfterPlayback;
             public float SnapStrength = 5;
             //public bool UseJogDialControl = true;
             public ValueEditGizmos ValueEditGizmo;

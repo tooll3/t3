@@ -377,6 +377,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 {
                     if (playback.PlaybackSpeed <= 0)
                     {
+                        _lastPlaybackStartTime = playback.TimeInBars;
                         playback.PlaybackSpeed = 1;
                     }
                     else if (playback.PlaybackSpeed < 16) // Bass can't play much faster anyways
@@ -397,11 +398,23 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 if (KeyboardBinding.Triggered(UserActions.PlaybackStop))
                 {
                     playback.PlaybackSpeed = 0;
+                    if (UserSettings.Config.ResetTimeAfterPlayback)
+                        playback.TimeInBars = _lastPlaybackStartTime;
                 }
 
                 if (KeyboardBinding.Triggered(UserActions.PlaybackToggle))
                 {
-                    playback.PlaybackSpeed = playback.PlaybackSpeed == 0 ? 1 : 0;
+                    if (playback.PlaybackSpeed == 0)
+                    {
+                        playback.PlaybackSpeed = 1;
+                        _lastPlaybackStartTime = playback.TimeInBars;
+                    }
+                    else
+                    {
+                        playback.PlaybackSpeed = 0;
+                        if (UserSettings.Config.ResetTimeAfterPlayback)
+                            playback.TimeInBars = _lastPlaybackStartTime;
+                    }
                 }
 
                 ImGui.SameLine();
@@ -525,6 +538,8 @@ namespace T3.Editor.Gui.Windows.TimeLine
             CustomComponents.TooltipForLastItem("Keep animated parameters visible", "This can be useful when align animations between multiple operators. Toggle again to clear the visible animations.");
             ImGui.SameLine();
         }
+
+        public static double _lastPlaybackStartTime;
 
         public static Vector2 ControlSize => new Vector2(45, 28) * T3Ui.UiScaleFactor;
         private static readonly DataSetViewCanvas _dataSetView = new()

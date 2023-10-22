@@ -43,7 +43,11 @@ namespace T3.Editor.Gui.Windows
                                                                   ref UserSettings.Config.UseArcConnections,
                                                                   "Affects the shape of the connections between your Operators",
                                                                   UserSettings.Defaults.UseArcConnections);
-                
+                changed |= FormInputs.AddCheckBox("Reset time after playback",
+                                                  ref UserSettings.Config.ResetTimeAfterPlayback,
+                                                  "After the playback is halted, the time will reset to the moment when the playback began. This feature proves beneficial for iteratively reviewing animations without requiring manual rewinding.",
+                                                  UserSettings.Defaults.ResetTimeAfterPlayback);
+
                 changed |= FormInputs.AddCheckBox("Show Graph thumbnails",
                                                                   ref UserSettings.Config.ShowThumbnails,
                                                    null,
