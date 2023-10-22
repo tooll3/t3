@@ -103,6 +103,13 @@
         "X": -945.5289,
         "Y": 2236.6829
       }
+    },
+    {
+      "InputId": "62119baf-5e02-4d2e-82bb-f82a149ccfb7"/*Visibility*/,
+      "Position": {
+        "X": -945.5289,
+        "Y": 2281.6829
+      }
     }
   ],
   "SymbolChildUis": [
