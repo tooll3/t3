@@ -57,7 +57,8 @@
         "Y": -180.11075
       },
       "Min": 0.0,
-      "Max": 100.0
+      "Max": 100.0,
+      "Scale": 0.01
     },
     {
       "InputId": "fc112417-fb8d-44af-a4b8-fced5d8ef71d"/*Feather*/,

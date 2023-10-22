@@ -398,14 +398,16 @@ namespace T3.Editor.UiModel
             
             foreach (var linkEntry in linksArray)
             {
-                var link = new ExternalLink()
+                if (!Enum.TryParse<ExternalLink.LinkTypes>(linkEntry[JsonKeys.LinkType]?.Value<string>(), out var type))
+                    type = ExternalLink.LinkTypes.Other;
+                
+                var link = new ExternalLink
                                {
                                    Id = Guid.Parse(linkEntry[JsonKeys.Id].Value<string>()),
-                                   Title = linkEntry[JsonKeys.Title].Value<string>(),
-                                   Description = linkEntry[JsonKeys.Description].Value<string>(),
-                                   Url = linkEntry[JsonKeys.LinkUrl].Value<string>(),
-                                   Type = (ExternalLink.LinkTypes)Enum.Parse(typeof(ExternalLink.LinkTypes), linkEntry[JsonKeys.LinkType].Value<string>())
-                                   //Type = linkEntry[JsonKeys.LinkType].Value<ExternalLink.LinkTypes>(),
+                                   Title = linkEntry[JsonKeys.Title]?.Value<string>(),
+                                   Description = linkEntry[JsonKeys.Description]?.Value<string>(),
+                                   Url = linkEntry[JsonKeys.LinkUrl]?.Value<string>(),
+                                   Type =  type,
                                };
 
                 linkDict[link.Id] = link;
