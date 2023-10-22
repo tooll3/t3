@@ -110,7 +110,7 @@ namespace T3.Operators.Types.Id_6415ed0e_3692_45e2_8e70_fe0cf4d29ebc
             Vector3 up = new Vector3(u.X, u.Y, u.Z);
 
             var roll = ComputeAngle(AimRollAngleAndWobble, 5);
-            var rotateAroundViewDirection = Matrix.RotationAxis(adjustedViewDirection, (roll + rotOffset.Z) * MathUtils.ToRad);
+            var rotateAroundViewDirection = Matrix.RotationAxis(adjustedViewDirection, (roll + rotOffset.Z* MathUtils.ToRad) );
             up = Vector3.TransformNormal(up, rotateAroundViewDirection);
             up.Normalize();
 
