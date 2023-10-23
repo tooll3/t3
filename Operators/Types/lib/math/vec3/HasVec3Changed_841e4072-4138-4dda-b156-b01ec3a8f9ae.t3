@@ -1,0 +1,33 @@
+{
+  "Name": "HasVec3Changed",
+  "Id": "841e4072-4138-4dda-b156-b01ec3a8f9ae",
+  "Namespace": "lib.math.vec3",
+  "Inputs": [
+    {
+      "Id": "1d19da45-54e4-4ee9-a1a8-a04d9ffc5cac"/*Value*/,
+      "DefaultValue": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      }
+    },
+    {
+      "Id": "a5b87ffd-0710-4dc6-8eb7-f40a92fae0ef"/*Threshold*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "7db5d745-7c61-41cc-af9a-b752540d4842"/*Mode*/,
+      "DefaultValue": 0
+    },
+    {
+      "Id": "b6d0899b-9c65-4622-af80-43a9a34110f2"/*MinTimeBetweenHits*/,
+      "DefaultValue": 0.0
+    },
+    {
+      "Id": "56a9a9df-6e45-4124-b9fe-a157fef8f40a"/*PreventContinuedChanges*/,
+      "DefaultValue": false
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

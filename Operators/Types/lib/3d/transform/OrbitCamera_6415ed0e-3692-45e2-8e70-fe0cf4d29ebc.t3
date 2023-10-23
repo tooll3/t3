@@ -76,7 +76,7 @@
     },
     {
       "Id": "0ad10e15-06ef-4dde-8eb3-ed7fe989c88e"/*WobbleComplexity*/,
-      "DefaultValue": 0
+      "DefaultValue": 2
     },
     {
       "Id": "dd81b2aa-3252-4130-8def-a5b399d3e283"/*Seed*/,
