@@ -58,7 +58,7 @@ namespace T3.Core.Rendering
             context.PbrMaterialParams = _defaultParameterBuffer;
             context.PbrMaterialTextures.AlbedoColorMap = _baseColorMapSrv;
             context.PbrMaterialTextures.NormalMap = _normalMapSrv;
-            context.PbrMaterialTextures.RoughnessSpecularMetallicOcclusionMap = _rsmoMapSrv;
+            context.PbrMaterialTextures.RoughnessMetallicOcclusionMap = _rsmoMapSrv;
             context.PbrMaterialTextures.EmissiveColorMap = _emissiveColorMapSrv;
             context.PbrMaterialTextures.BrdfLookUpMap = _pbrLookUpTexture;
             context.ContextTextures["PrefilteredSpecular"] = _prefilteredBrdfTexture;
@@ -83,13 +83,13 @@ namespace T3.Core.Rendering
             _baseColorMapSrv = new ShaderResourceView(device, WhitePixelTexture);
             _emissiveColorMapSrv = new ShaderResourceView(device, WhitePixelTexture);
 
-            RsmoFallbackTexture = CreateFallBackTexture(new Vector4(0, 1, 0, 0));
+            RsmoFallbackTexture = CreateFallBackTexture(new Vector4(1, 0, 1, 0));
             _rsmoMapSrv = new ShaderResourceView(device, RsmoFallbackTexture);
 
             NormalFallbackTexture = CreateFallBackTexture(new Vector4(0.5f, 0.5f, 1, 0));
             _normalMapSrv = new ShaderResourceView(device, NormalFallbackTexture);
             
-            _pbrLookUpTexture = LoadTextureAsSRV(@"Resources\common\images\BRDF-LookUp.png");
+            _pbrLookUpTexture = LoadTextureAsSRV(@"Resources\common\images\BRDF-LookUp.dds");
             _prefilteredBrdfTexture = LoadTexture(@"Resources\common\HDRI\studio_small_08-prefiltered.dds");
             
             _wasInitialized = true;
@@ -176,7 +176,7 @@ namespace T3.Core.Rendering
     {
         public ShaderResourceView AlbedoColorMap;
         public ShaderResourceView EmissiveColorMap;
-        public ShaderResourceView RoughnessSpecularMetallicOcclusionMap;
+        public ShaderResourceView RoughnessMetallicOcclusionMap;
         public ShaderResourceView NormalMap;
         public ShaderResourceView BrdfLookUpMap;
     }

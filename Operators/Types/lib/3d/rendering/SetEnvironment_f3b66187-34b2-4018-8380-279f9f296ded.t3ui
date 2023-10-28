@@ -45,7 +45,10 @@
       "Position": {
         "X": 114.808914,
         "Y": 1246.7096
-      }
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     },
     {
       "InputId": "650aa9a6-4aa6-4928-be76-3f1f825aa773"/*BackgroundColor*/,

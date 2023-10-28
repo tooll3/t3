@@ -98,14 +98,14 @@
       "ChildId": "eddca9ff-0408-4623-b5a4-7ff8e9c5917c"/*Rasterizer*/,
       "Position": {
         "X": 2139.7566,
-        "Y": 4073.9434
+        "Y": 4099.9434
       }
     },
     {
       "ChildId": "089ed4f1-067e-46a9-9439-04d45b17c6cd"/*PixelShaderStage*/,
       "Position": {
         "X": 2139.7566,
-        "Y": 4129.9434
+        "Y": 4155.9434
       }
     },
     {
@@ -264,7 +264,7 @@
       }
     },
     {
-      "ChildId": "6483c4a0-43f8-46c3-83b7-62cc38db958c"/*SamplerStateOp*/,
+      "ChildId": "6483c4a0-43f8-46c3-83b7-62cc38db958c"/*Clamped*/,
       "Position": {
         "X": 1865.4974,
         "Y": 4315.4326
@@ -282,6 +282,20 @@
       "Position": {
         "X": 935.7473,
         "Y": 4150.6133
+      }
+    },
+    {
+      "ChildId": "b68f8f03-e3df-4a7a-a8b0-f7e24f04c6ab"/*BiasedSampler*/,
+      "Position": {
+        "X": 1874.4563,
+        "Y": 4388.224
+      }
+    },
+    {
+      "ChildId": "eb2598e2-4f7d-4b5a-8c76-2a9009145120"/*AnimValue*/,
+      "Position": {
+        "X": 1368.2123,
+        "Y": 3969.2588
       }
     }
   ],

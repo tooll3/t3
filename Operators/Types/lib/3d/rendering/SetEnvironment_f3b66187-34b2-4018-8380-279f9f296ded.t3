@@ -38,7 +38,7 @@
     },
     {
       "Id": "0299761d-7397-4a2f-b591-81fadb404a92"/*BackgroundDistance*/,
-      "DefaultValue": 100.0
+      "DefaultValue": 900.0
     }
   ],
   "Children": [

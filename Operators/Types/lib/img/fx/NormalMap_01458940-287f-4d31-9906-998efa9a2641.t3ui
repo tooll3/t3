@@ -15,7 +15,8 @@
         "X": -235.75668,
         "Y": 261.74847
       },
-      "Scale": 0.1
+      "Min": -1.0,
+      "Max": 1.0
     },
     {
       "InputId": "3e9bce35-7de1-42de-80e5-8eec29e92422"/*SampleRadius*/,

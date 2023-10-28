@@ -122,24 +122,15 @@ float4 psMain(psInput pin) : SV_TARGET
     float roughness = saturate(roughnessMetallicOcclusion.x + Roughness);
     float metalness = saturate(roughnessMetallicOcclusion.y + Metal);
     float occlusion = roughnessMetallicOcclusion.z;
-    float normalStrength = 0.3;//Debug;// 0.5;//roughnessMetallicOcclusion.y;
-    //return float4(0,0,roughness,1);
-    // return float4(pin.texCoord,0,1);
-    //return float4(roughnessMetallicOcclusion.rgb,1);
 
     // Outgoing light direction (vector from world-space fragment position to the "eye").
-    float3 eyePosition = mul(float4(0, 0, 0, 1), CameraToWorld).xyz;
-    float3 Lo = normalize(eyePosition - pin.worldPosition);
+    float4 eyePosition = mul(float4(0, 0, 0, 1), CameraToWorld);
+    float3 Lo = normalize(eyePosition.xyz - pin.worldPosition);
 
     // Get current fragment's normal and transform to world space.
     float4 normalMap = NormalMap.Sample(biasedSampler, pin.texCoord);
     
-    float3 N = lerp(float3(0, 0, 1), 
-    //normalMap.rgb,
-    normalize(2.0 * normalMap.rgb - 1.0) * float3(1,-1,1), 
-    normalStrength);
-    // return float4(N,1);
-
+    float3 N = normalize(2.0 * normalMap.rgb - 1.0);
     N = normalize(mul(N, pin.tbnToWorld));
 
     // Angle between surface normal and outgoing light direction.
@@ -147,11 +138,9 @@ float4 psMain(psInput pin) : SV_TARGET
 
     // Specular reflection vector.
     float3 Lr = 2.0 * cosLo * N - Lo;
-    //return float4(Lr,1);
 
     // Fresnel reflectance at normal incidence (for metals use albedo color).
     float3 F0 = lerp(Fdielectric, albedo, metalness);
-    //return float4(F0,1);
 
     // Direct lighting calculation for analytical lights.
     float3 directLighting = 0.0;
@@ -202,7 +191,7 @@ float4 psMain(psInput pin) : SV_TARGET
         // float3 irradiance = 0;// irradianceTexture.Sample(texSampler, N).rgb;
         uint width, height, levels;
         PrefilteredSpecular.GetDimensions(0, width, height, levels);
-        float3 irradiance = PrefilteredSpecular.SampleLevel(texSampler, Lr.xyz, 0.8 * levels).rgb;
+        float3 irradiance = PrefilteredSpecular.SampleLevel(texSampler, N, 0.6 * levels).rgb;
 
         // Calculate Fresnel term for ambient lighting.
         // Since we use pre-filtered cubemap(s) and irradiance is coming from many directions
@@ -215,33 +204,15 @@ float4 psMain(psInput pin) : SV_TARGET
 
         // Irradiance map contains exitant radiance assuming Lambertian BRDF, no need to scale by 1/PI here either.
         float3 diffuseIBL = kd * albedo.rgb * irradiance;
-        //return float4(metalness.xxx, 1);
 
-        // Sample pre-filtered specular reflection environment at correct mipmap level.
-        // uint specularTextureLevels = querySpecularTextureLevels(BaseColorMap);
+		// Sample pre-filtered specular reflection environment at correct mipmap level.
+		float3 specularIrradiance = PrefilteredSpecular.SampleLevel(texSampler, Lr, roughness * levels).rgb;
 
-        float3 specularIrradiance = PrefilteredSpecular.SampleLevel(texSampler, Lr.xyz, roughness * levels).rgb;
-        // float3 specularIrradiance = 0;
-
-        // return float4(specularIrradiance * 1, 1);
-
-        // Split-sum approximation factors for Cook-Torrance specular BRDF.
-
-        // float2 test = BRDFLookup.Sample(clampedSampler, pin.texCoord ).rg;
-        // return float4(test,0,1);
-
-        float2 specularBRDF = BRDFLookup.Sample(clampedSampler, float2(cosLo, roughness)).rg;
-        // return lerp(
-        //     float4(cosLo.xxx,1),
-        //     float4(0,0,roughness,1),
-        //     Debug)
-        //     ;
-        //return float4(F0,1);
-
-        // Total specular IBL contribution.
-        float3 specularIBL = (F0 * specularBRDF.x  + specularBRDF.y) * specularIrradiance;
-
-        // Total ambient lighting contribution.
+		// Split-sum approximation factors for Cook-Torrance specular BRDF.
+		float2 specularBRDF = BRDFLookup.SampleLevel(clampedSampler, float2(cosLo, roughness),0).rg;
+        
+		// Total specular IBL contribution.
+		float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
         ambientLighting = (diffuseIBL + specularIBL) * occlusion;
     }
 

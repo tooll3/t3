@@ -134,17 +134,17 @@ float4 psMain(psInput pin) : SV_TARGET
     if (AlphaCutOff > 0 && albedo.a < AlphaCutOff)
         discard;
 
-    float4 roughnessSpecularMetallic = RSMOMap.Sample(texSampler, pin.texCoord);
-    float metalness = roughnessSpecularMetallic.z + Metal;
-    float normalStrength = roughnessSpecularMetallic.y;
-    float roughness = roughnessSpecularMetallic.x + Roughness;
+    float4 roughnessMetallicOcclusion = RSMOMap.Sample(texSampler, pin.texCoord);
+    float roughness = saturate(roughnessMetallicOcclusion.x + Roughness);
+    float metalness = saturate(roughnessMetallicOcclusion.y + Metal);
+    float occlusion = roughnessMetallicOcclusion.z;
 
     // Outgoing light direction (vector from world-space fragment position to the "eye").
     float3 eyePosition = mul(float4(0, 0, 0, 1), CameraToWorld);
     float3 Lo = normalize(eyePosition - pin.worldPosition);
 
     // Get current fragment's normal and transform to world space.
-    float3 N = lerp(float3(0, 0, 1), normalize(2.0 * NormalMap.Sample(texSampler, pin.texCoord).rgb - 1.0), normalStrength);
+    float3 N = normalize(2.0 * NormalMap.Sample(texSampler, pin.texCoord).rgb - 1.0);
 
     // return float4(pin.tbnToWorld[0],1);
     N = normalize(mul(N, pin.tbnToWorld));
@@ -205,7 +205,6 @@ float4 psMain(psInput pin) : SV_TARGET
     float3 ambientLighting = 0;
     {
         // Sample diffuse irradiance at normal direction.
-        // float3 irradiance = 0;// irradianceTexture.Sample(texSampler, N).rgb;
         uint width, height, levels;
         PrefilteredSpecular.GetDimensions(0, width, height, levels);
         float3 irradiance = PrefilteredSpecular.SampleLevel(texSampler, Lr.xyz, 0.8 * levels).rgb;
@@ -223,16 +222,10 @@ float4 psMain(psInput pin) : SV_TARGET
         float3 diffuseIBL = kd * albedo.rgb * irradiance;
 
         // Sample pre-filtered specular reflection environment at correct mipmap level.
-        // uint specularTextureLevels = querySpecularTextureLevels(BaseColorMap);
-
         float3 specularIrradiance = PrefilteredSpecular.SampleLevel(texSampler, Lr.xyz, roughness * levels).rgb;
-        // float3 specularIrradiance = 0;
-
-        // return float4(specularIrradiance * 1, 1);
 
         // Split-sum approximation factors for Cook-Torrance specular BRDF.
-        float2 specularBRDF = BRDFLookup.Sample(clampedSampler, float2(cosLo, roughness)).rg;
-        // return float4(cosLo, roughness,0,1);
+        float2 specularBRDF = BRDFLookup.SampleLevel(clampedSampler, float2(cosLo, roughness),0).rg;
 
         // Total specular IBL contribution.
         float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;

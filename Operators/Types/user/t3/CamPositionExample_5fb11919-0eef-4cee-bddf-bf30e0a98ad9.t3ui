@@ -292,7 +292,7 @@
       "ChildId": "b7539ffa-5826-4883-af1a-2b11b4dda080"/*RadialPoints*/,
       "Position": {
         "X": 1993.55,
-        "Y": 911.95105
+        "Y": 935.95105
       }
     },
     {
@@ -350,7 +350,7 @@
       "ChildId": "ee78fa0c-28bc-43cc-bf1f-4617cd9e51e5"/*DrawLines*/,
       "Position": {
         "X": 2285.8647,
-        "Y": 341.04242
+        "Y": 352.04242
       }
     }
   ],
