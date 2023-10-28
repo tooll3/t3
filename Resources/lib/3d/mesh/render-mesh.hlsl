@@ -20,6 +20,7 @@ cbuffer Params : register(b1)
 {
     float4 Color;
     float AlphaCutOff;
+    float Debug;
 };
 
 cbuffer FogParams : register(b2)
@@ -55,9 +56,10 @@ struct psInput
 
 sampler texSampler : register(s0);
 sampler clampedSampler : register(s1);
+sampler biasedSampler : register(s2);
 
-StructuredBuffer<PbrVertex> PbrVertices : t0;
-StructuredBuffer<int3> FaceIndices : t1;
+StructuredBuffer<PbrVertex> PbrVertices : register(t0);
+StructuredBuffer<int3> FaceIndices : register(t1);
 
 Texture2D<float4> BaseColorMap : register(t2);
 Texture2D<float4> EmissiveColorMap : register(t3);
@@ -67,8 +69,7 @@ Texture2D<float4> NormalMap : register(t5);
 TextureCube<float4> PrefilteredSpecular : register(t6);
 Texture2D<float4> BRDFLookup : register(t7);
 
-psInput vsMain(uint id
-               : SV_VertexID)
+psInput vsMain(uint id: SV_VertexID)
 {
     psInput output;
 
@@ -94,7 +95,7 @@ psInput vsMain(uint id
         normalize(TBN._m10_m11_m12),
         normalize(TBN._m20_m21_m22));
 
-    output.worldPosition = mul(posInObject, ObjectToWorld);
+    output.worldPosition = mul(posInObject, ObjectToWorld).xyz;
 
     // Fog
     if (FogDistance > 0)
@@ -117,19 +118,28 @@ float4 psMain(psInput pin) : SV_TARGET
         discard;
     }
 
-    float4 roughnessSpecularMetallic = RSMOMap.Sample(texSampler, pin.texCoord);
-    float metalness = roughnessSpecularMetallic.z + Metal;
-    float normalStrength = roughnessSpecularMetallic.y;
-    float roughness = roughnessSpecularMetallic.x + Roughness;
+    float4 roughnessMetallicOcclusion = RSMOMap.Sample(biasedSampler, pin.texCoord);
+    float roughness = saturate(roughnessMetallicOcclusion.x + Roughness);
+    float metalness = saturate(roughnessMetallicOcclusion.y + Metal);
+    float occlusion = roughnessMetallicOcclusion.z;
+    float normalStrength = 0.3;//Debug;// 0.5;//roughnessMetallicOcclusion.y;
+    //return float4(0,0,roughness,1);
+    // return float4(pin.texCoord,0,1);
+    //return float4(roughnessMetallicOcclusion.rgb,1);
 
     // Outgoing light direction (vector from world-space fragment position to the "eye").
-    float3 eyePosition = mul(float4(0, 0, 0, 1), CameraToWorld);
+    float3 eyePosition = mul(float4(0, 0, 0, 1), CameraToWorld).xyz;
     float3 Lo = normalize(eyePosition - pin.worldPosition);
 
     // Get current fragment's normal and transform to world space.
-    float3 N = lerp(float3(0, 0, 1), normalize(2.0 * NormalMap.Sample(texSampler, pin.texCoord).rgb - 1.0), normalStrength);
+    float4 normalMap = NormalMap.Sample(biasedSampler, pin.texCoord);
+    
+    float3 N = lerp(float3(0, 0, 1), 
+    //normalMap.rgb,
+    normalize(2.0 * normalMap.rgb - 1.0) * float3(1,-1,1), 
+    normalStrength);
+    // return float4(N,1);
 
-    // return float4(pin.tbnToWorld[0],1);
     N = normalize(mul(N, pin.tbnToWorld));
 
     // Angle between surface normal and outgoing light direction.
@@ -137,9 +147,11 @@ float4 psMain(psInput pin) : SV_TARGET
 
     // Specular reflection vector.
     float3 Lr = 2.0 * cosLo * N - Lo;
+    //return float4(Lr,1);
 
     // Fresnel reflectance at normal incidence (for metals use albedo color).
     float3 F0 = lerp(Fdielectric, albedo, metalness);
+    //return float4(F0,1);
 
     // Direct lighting calculation for analytical lights.
     float3 directLighting = 0.0;
@@ -203,6 +215,7 @@ float4 psMain(psInput pin) : SV_TARGET
 
         // Irradiance map contains exitant radiance assuming Lambertian BRDF, no need to scale by 1/PI here either.
         float3 diffuseIBL = kd * albedo.rgb * irradiance;
+        //return float4(metalness.xxx, 1);
 
         // Sample pre-filtered specular reflection environment at correct mipmap level.
         // uint specularTextureLevels = querySpecularTextureLevels(BaseColorMap);
@@ -213,14 +226,23 @@ float4 psMain(psInput pin) : SV_TARGET
         // return float4(specularIrradiance * 1, 1);
 
         // Split-sum approximation factors for Cook-Torrance specular BRDF.
+
+        // float2 test = BRDFLookup.Sample(clampedSampler, pin.texCoord ).rg;
+        // return float4(test,0,1);
+
         float2 specularBRDF = BRDFLookup.Sample(clampedSampler, float2(cosLo, roughness)).rg;
-        // return float4(cosLo, roughness,0,1);
+        // return lerp(
+        //     float4(cosLo.xxx,1),
+        //     float4(0,0,roughness,1),
+        //     Debug)
+        //     ;
+        //return float4(F0,1);
 
         // Total specular IBL contribution.
-        float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
+        float3 specularIBL = (F0 * specularBRDF.x  + specularBRDF.y) * specularIrradiance;
 
         // Total ambient lighting contribution.
-        ambientLighting = diffuseIBL + specularIBL;
+        ambientLighting = (diffuseIBL + specularIBL) * occlusion;
     }
 
     // Final fragment color.

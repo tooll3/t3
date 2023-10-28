@@ -58,7 +58,7 @@ namespace T3.Core.Operator.Interfaces
                 eye += PositionOffset;
 
             var worldToCameraRoot = Matrix.LookAtRH(eye.ToSharpDx(), Target.ToSharpDx(), Up.ToSharpDx());
-            var rollRotation = Matrix.RotationAxis(new SharpDX.Vector3(0, 0, 1), -(float)Roll);
+            var rollRotation = Matrix.RotationAxis(new SharpDX.Vector3(0, 0, 1), -Roll * MathUtils.ToRad);
             var additionalTranslation = OffsetAffectsTarget ? Matrix.Translation(PositionOffset.X, PositionOffset.Y, PositionOffset.Z) : Matrix.Identity;
 
             var additionalRotation = Matrix.RotationYawPitchRoll(MathUtil.DegreesToRadians(RotationOffset.Y),
