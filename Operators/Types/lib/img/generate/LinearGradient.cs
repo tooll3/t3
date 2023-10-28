@@ -11,6 +11,9 @@ namespace T3.Operators.Types.Id_2c3d2c26_ac45_42e9_8f13_6ea338333568
         [Output(Guid = "d140f068-d71e-4af5-a563-ab599dae5dbf")]
         public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureOutput = new Slot<SharpDX.Direct3D11.Texture2D>();
 
+        [Input(Guid = "d6e157fb-5300-4a9a-aea8-8b0ea0104ea3")]
+        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+
         [Input(Guid = "e47e9e63-9c94-4c29-9555-2452fa498d57")]
         public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();
 
@@ -46,9 +49,6 @@ namespace T3.Operators.Types.Id_2c3d2c26_ac45_42e9_8f13_6ea338333568
 
         [Input(Guid = "a3999108-9915-43cc-a18e-6ad2c203439f")]
         public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
-
-        [Input(Guid = "d6e157fb-5300-4a9a-aea8-8b0ea0104ea3")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
         [Input(Guid = "1d0cf561-858d-4510-95c4-f3ad9148355d", MappedType = typeof(SharedEnums.RgbBlendModes))]
         public readonly InputSlot<int> BlendMode = new InputSlot<int>();

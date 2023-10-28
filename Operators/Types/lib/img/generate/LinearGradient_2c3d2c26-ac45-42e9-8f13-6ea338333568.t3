@@ -4,6 +4,10 @@
   "Namespace": "lib.img.generate",
   "Inputs": [
     {
+      "Id": "d6e157fb-5300-4a9a-aea8-8b0ea0104ea3"/*Image*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "e47e9e63-9c94-4c29-9555-2452fa498d57"/*Gradient*/,
       "DefaultValue": {
         "Gradient": {
@@ -82,10 +86,6 @@
     {
       "Id": "a3999108-9915-43cc-a18e-6ad2c203439f"/*GenerateMips*/,
       "DefaultValue": false
-    },
-    {
-      "Id": "d6e157fb-5300-4a9a-aea8-8b0ea0104ea3"/*Image*/,
-      "DefaultValue": null
     },
     {
       "Id": "1d0cf561-858d-4510-95c4-f3ad9148355d"/*BlendMode*/,

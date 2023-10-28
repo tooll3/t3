@@ -3,6 +3,13 @@
   "Description": "Renders a linear color ramp defined by a gradient. Can be very useful in combination with [Steps].",
   "InputUis": [
     {
+      "InputId": "d6e157fb-5300-4a9a-aea8-8b0ea0104ea3"/*Image*/,
+      "Position": {
+        "X": -302.90216,
+        "Y": -81.20439
+      }
+    },
+    {
       "InputId": "e47e9e63-9c94-4c29-9555-2452fa498d57"/*Gradient*/,
       "Position": {
         "X": -302.90216,
@@ -95,13 +102,6 @@
       "Position": {
         "X": -301.23572,
         "Y": 794.9146
-      }
-    },
-    {
-      "InputId": "d6e157fb-5300-4a9a-aea8-8b0ea0104ea3"/*Image*/,
-      "Position": {
-        "X": -300.60208,
-        "Y": 934.9955
       }
     },
     {
