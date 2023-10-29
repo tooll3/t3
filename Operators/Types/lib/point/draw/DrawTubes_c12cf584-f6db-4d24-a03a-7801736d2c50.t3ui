@@ -1,6 +1,6 @@
 {
   "Id": "c12cf584-f6db-4d24-a03a-7801736d2c50"/*DrawTubes*/,
-  "Description": "Draws a shaded 3d mesh for connected lines points",
+  "Description": "Draws a shaded 3D mesh for connected lines points.",
   "InputUis": [
     {
       "InputId": "0a6a91d1-be44-459a-94cd-49b48d755377"/*GPoints*/,

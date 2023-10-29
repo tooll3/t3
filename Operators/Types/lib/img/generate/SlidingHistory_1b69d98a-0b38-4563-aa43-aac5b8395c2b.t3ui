@@ -1,6 +1,6 @@
 {
   "Id": "1b69d98a-0b38-4563-aa43-aac5b8395c2b"/*SlidingHistory*/,
-  "Description": "Generates a wave form image by feeding in a horizontal texture line at the bottom of the texture.",
+  "Description": "Generates a waveform image by feeding in a horizontal texture line at the bottom of the texture.",
   "InputUis": [
     {
       "InputId": "48699e66-a59b-4cbb-b131-171ce9fcade3"/*Texture2d*/,

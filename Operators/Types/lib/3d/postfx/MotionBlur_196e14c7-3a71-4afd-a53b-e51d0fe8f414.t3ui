@@ -1,6 +1,6 @@
 {
   "Id": "196e14c7-3a71-4afd-a53b-e51d0fe8f414"/*MotionBlur*/,
-  "Description": "Applies a post processing motion blur to a RenderTaget texture and its DepthBuffer.",
+  "Description": "Applies a post processing motion blur to a RenderTarget texture and its DepthBuffer.",
   "InputUis": [
     {
       "InputId": "619c2684-8495-4c19-a5b2-673728feaa00"/*Image*/,

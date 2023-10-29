@@ -1,6 +1,6 @@
 {
   "Id": "3d255f3e-d2e2-4f61-a03d-5af7043fabfc"/*PolarTransformPoints*/,
-  "Description": "Reprojects points from a rectangular space to radial coordinate system\n",
+  "Description": "Reprojects points from a rectangular space to a radial coordinate system.",
   "InputUis": [
     {
       "InputId": "83d00528-423a-43f9-8750-97d7a4909c49"/*Points*/,

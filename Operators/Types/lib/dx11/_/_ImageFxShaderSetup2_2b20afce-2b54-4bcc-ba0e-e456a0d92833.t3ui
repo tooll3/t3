@@ -1,6 +1,6 @@
 {
   "Id": "2b20afce-2b54-4bcc-ba0e-e456a0d92833"/*_ImageFxShaderSetup2*/,
-  "Description": "This is new version the uses a Fragment shaders instead of ComputeShader as in [_ImageFxShaderSetup]\n",
+  "Description": "This is a new version that uses Fragment shaders instead of ComputeShader as in [_ImageFxShaderSetup].",
   "InputUis": [
     {
       "InputId": "36abde68-0d79-4fb6-b8ce-ac8a27b66850"/*Texture*/,

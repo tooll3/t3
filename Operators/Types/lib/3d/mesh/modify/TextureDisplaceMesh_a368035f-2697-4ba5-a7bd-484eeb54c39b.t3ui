@@ -1,6 +1,6 @@
 {
   "Id": "a368035f-2697-4ba5-a7bd-484eeb54c39b"/*TextureDisplaceMesh*/,
-  "Description": "Uses a projected texture with a normal map to dispace the mesh. \n\nThis similar to [SamplePointAttributes].",
+  "Description": "Uses a projected texture with a normal map to displace the mesh. \n\nThis is similar to [SamplePointAttributes].",
   "InputUis": [
     {
       "InputId": "c4363e87-16fc-499b-8dcd-51dde1f079f6"/*Center*/,

@@ -1,6 +1,6 @@
 {
   "Id": "ffc0a7ed-fe61-4188-8db9-0b0f07c6b981"/*_DrawVaryingQuads*/,
-  "Description": "Draws instances at Point-positions with the W-attribute driving properties like Color, Size and Offset; This can be especially useful in compbination with [CollectSpawnPoints].\n\nNote: This operator has been deprecated. Please consider using [DrawBillboards].",
+  "Description": "Draws instances at Point-positions with the W-attribute driving properties like Color, Size and Offset; This can be especially useful in combination with [CollectSpawnPoints].\n\nNote: This operator has been deprecated. Please consider using [DrawBillboards].",
   "InputUis": [
     {
       "InputId": "82230324-b1cd-41ba-8d03-933c939001ad"/*Color*/,

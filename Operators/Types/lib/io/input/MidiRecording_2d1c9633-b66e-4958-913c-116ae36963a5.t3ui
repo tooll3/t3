@@ -1,6 +1,6 @@
 {
   "Id": "2d1c9633-b66e-4958-913c-116ae36963a5"/*MidiRecording*/,
-  "Description": "An experimental implementation to record midi input signals.",
+  "Description": "An experimental implementation to record MIDI input signals.",
   "InputUis": [
     {
       "InputId": "9b844a51-d108-426e-a264-d570d30031c6"/*ResetTrigger*/,

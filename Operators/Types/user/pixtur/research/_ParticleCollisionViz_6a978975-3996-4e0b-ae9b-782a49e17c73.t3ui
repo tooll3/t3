@@ -1,6 +1,6 @@
 {
   "Id": "6a978975-3996-4e0b-ae9b-782a49e17c73"/*_ParticleCollisionViz*/,
-  "Description": "A helper that visualizes particle in the 2d collision simulation.",
+  "Description": "A helper that visualizes particles in the 2D collision simulation.",
   "InputUis": [
     {
       "InputId": "5b0c0dac-41ff-4765-933c-0c48e0bbd6bd"/*Points*/,

@@ -1,6 +1,6 @@
 {
   "Id": "c6cf23b5-3085-4488-9e9e-5e09aa88a9fa"/*ParameterViz*/,
-  "Description": "Shows a pair of parameters as arc",
+  "Description": "Shows a pair of parameters as an arc",
   "InputUis": [
     {
       "InputId": "d77c2bb3-6964-4ac7-94be-793e93f5a710"/*Name*/,

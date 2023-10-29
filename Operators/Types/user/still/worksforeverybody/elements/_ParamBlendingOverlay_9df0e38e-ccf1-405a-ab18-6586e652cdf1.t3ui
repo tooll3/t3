@@ -1,6 +1,6 @@
 {
   "Id": "9df0e38e-ccf1-405a-ab18-6586e652cdf1"/*_ParamBlendingOverlay*/,
-  "Description": "A internal scene that visualizes when playback has been slown down",
+  "Description": "An internal scene that visualizes when playback has been slowed down",
   "InputUis": [
     {
       "InputId": "d19f4570-225e-4de5-b86e-3499011dd4e1"/*IsEnabled*/,
@@ -682,7 +682,7 @@
   "Annotations": [
     {
       "Id": "0f831f5f-f9af-49d1-82a5-de7917c4f0a7",
-      "Title": "Availibilty Indicator",
+      "Title": "Availability Indicator",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -700,7 +700,7 @@
     },
     {
       "Id": "58d471af-dc34-4f46-8282-43a1cc9df793",
-      "Title": "Other pointers",
+      "Title": "Other Pointers",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

@@ -752,7 +752,7 @@
     },
     {
       "Id": "84e31cee-df94-4f80-8fa6-d6f8d8f81b33",
-      "Title": "And a W-Attribute:\nWhich is used for various effects like...\n- selection\n- representing line width\n- scale factores\n- particle age.",
+      "Title": "And a W-Attribute:\nWhich is used for various effects like...\n- selection\n- representing line width\n- scale factors\n- particle age.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

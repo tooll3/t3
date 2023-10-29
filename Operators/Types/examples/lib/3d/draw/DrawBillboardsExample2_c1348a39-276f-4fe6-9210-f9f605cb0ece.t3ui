@@ -1,6 +1,6 @@
 {
   "Id": "c1348a39-276f-4fe6-9210-f9f605cb0ece"/*DrawBillboardsExample2*/,
-  "Description": "Uses Draw Billboards to generate an oldschool movie effect",
+  "Description": "Uses Draw Billboards to generate an old-school movie effect",
   "InputUis": [
     {
       "InputId": "384dfff2-bcb0-4e8d-aa83-ba1fe4ddc04e"/*ImageInput*/,

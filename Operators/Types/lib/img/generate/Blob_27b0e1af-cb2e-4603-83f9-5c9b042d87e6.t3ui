@@ -1,6 +1,6 @@
 {
   "Id": "27b0e1af-cb2e-4603-83f9-5c9b042d87e6"/*Blob*/,
-  "Description": "A very versatile generator for rectangles, circles, blobs, vignets and many other things.\nDifferent to [_BlobOld] it is using an eliptical shape and easier to control parameters.\n\nAlso consider using [RoundedRect] and [RadialGradient].\n",
+  "Description": "A very versatile generator for rectangles, circles, blobs, vignettes, and many other shapes. Unlike [_BlobOld], it uses an elliptical shape and has easier-to-control parameters.\n\nAlso consider using [RoundedRect] and [RadialGradient].",
   "InputUis": [
     {
       "InputId": "8cc15ea0-074f-40ed-813d-b93f48681094"/*Image*/,

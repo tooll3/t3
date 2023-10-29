@@ -1,6 +1,6 @@
 {
   "Id": "55411442-d538-48bf-ab78-b8c24c85aa46"/*AdjustColors*/,
-  "Description": "Adjusts various color properties of the incoming image and adds a slight vignette.\n\nAlso consider using [ColorGrade]",
+  "Description": "Adjusts various color properties of the incoming image and adds a slight vignette.\n\nAlso consider using [ColorGrade].",
   "InputUis": [
     {
       "InputId": "c325d01a-5232-4696-9b58-e24f72779597"/*Texture2d*/,

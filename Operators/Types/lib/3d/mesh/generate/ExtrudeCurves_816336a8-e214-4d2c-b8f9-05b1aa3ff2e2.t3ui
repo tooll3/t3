@@ -1,6 +1,6 @@
 {
   "Id": "816336a8-e214-4d2c-b8f9-05b1aa3ff2e2"/*ExtrudeCurves*/,
-  "Description": "Generates a mesh by extrudes a set of points along a set of other points.",
+  "Description": "Generates a mesh by extruding a set of points along a set of other points.",
   "InputUis": [
     {
       "InputId": "4d31be7a-3011-4fdf-9c63-425387b9bbfc"/*RailPoints*/,

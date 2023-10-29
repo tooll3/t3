@@ -1,6 +1,6 @@
 {
   "Id": "40757a26-1cd8-477c-a774-7463aadd6f0f"/*HowToDrawThings*/,
-  "Description": "An interactive tutorial how to render content with Tooll's rendering pipeline.",
+  "Description": "An interactive tutorial on how to render content with Tooll's rendering pipeline.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -37,7 +37,7 @@
     },
     {
       "ChildId": "83cfdd8a-5ad0-4963-933a-3350c723da68"/*Raster*/,
-      "Comment": "... and finally we can apply a post effect.\n\nPlease select this operator (and pin it in the output window) to see the result.\n\nAlso check the video tutorial for the Raster effect linked in the description of this operator.",
+      "Comment": "... and finally, we can apply a post-effect.\n\nPlease select this operator (and pin it in the output window) to see the result.\n\nAlso, check the video tutorial for the Raster effect linked in the description of this operator.",
       "Position": {
         "X": -1416.8398,
         "Y": -1049.8147
@@ -53,7 +53,7 @@
     },
     {
       "ChildId": "fadf444e-7fa3-4a8f-b8f9-826dcc887a54"/*DisplaceMeshNoise*/,
-      "Comment": "... we add a displacement effect and animate its phase over time ...\n\nYou can Select this operator and press Shift-B to bypass this effect.",
+      "Comment": "... we add a displacement effect and animate its phase over time ...\n\nYou can select this operator and press Shift-B to bypass this effect.",
       "Position": {
         "X": -1840.873,
         "Y": -567.2674
@@ -144,7 +144,7 @@
     },
     {
       "ChildId": "f4cab9da-00e0-48d5-b6c0-2bdfdb2e30ac"/*Glow*/,
-      "Comment": "Apply glow to HDR colors in the emissive texture and  environment.\n",
+      "Comment": "Apply glow to HDR colors in the emissive texture and environment.\n",
       "Position": {
         "X": 40.18573,
         "Y": -358.55017
@@ -166,7 +166,7 @@
     },
     {
       "ChildId": "e13af1a0-015d-4c9e-93c8-27c39bdcb076"/*LenseFlareSetup*/,
-      "Comment": "A lense flare setup that follows the point light position.",
+      "Comment": "A lens flare setup that follows the point light position.",
       "Position": {
         "X": -1240.873,
         "Y": -610.2674
@@ -189,7 +189,7 @@
     },
     {
       "ChildId": "35b60bb9-6e7e-4077-9862-926a35be6116"/*ColorGrade*/,
-      "Comment": "Finally we apply some color grading and vignette.",
+      "Comment": "Finally, we apply some color grading and a vignette.",
       "Position": {
         "X": 190.18573,
         "Y": -358.55017
@@ -476,7 +476,7 @@
     },
     {
       "Id": "d8d8b8bf-155c-442f-8803-33d1adb4f4fa",
-      "Title": "Here is a typical setup of the basics steps.\n\nFor each of these steps there are many operators to achive different effects.\nPlease check out the [HowToUseOperators] for more details.",
+      "Title": "Here is a typical setup of the basic steps.\n\nFor each of these steps, there are many operators to achieve different effects.\nPlease check out the [HowToUseOperators] for more details.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -530,7 +530,7 @@
     },
     {
       "Id": "297fac84-de17-4b6c-87b2-08935862abaf",
-      "Title": "Many draw operators allow to set specific drawstyles.\nHere are some examples for the results you can achieve \nby adjusting the parameters of [DrawMesh]...",
+      "Title": "Many draw operators allow setting specific draw styles.\nHere are some examples of the results you can achieve \nby adjusting the parameters of [DrawMesh]...",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -548,7 +548,7 @@
     },
     {
       "Id": "ad01e43b-9c5d-4b80-944e-34349b66ea9c",
-      "Title": "Here is an example for loading and setting up PBR Assets with complex textures.\nThe awesome \"Cerberus\" gun is made by Andrew Maximov (see link in description)",
+      "Title": "Here is an example of loading and setting up PBR Assets with complex textures.\nThe awesome \"Cerberus\" gun is made by Andrew Maximov (see link in the description).",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -566,7 +566,7 @@
     },
     {
       "Id": "f54d92fe-a9ba-4a15-847f-235451f65431",
-      "Title": "Some tips:\n- Select and pin the final operator operators on the right to the output window so see the results.\n- Enable Idle-Motion on the timeline toolbar, to see some animations.\n- hover over the comment-icons to learn more.",
+      "Title": "Some tips:\n- Select and pin the final operator on the right to the output window to see the results.\n- Enable Idle-Motion on the timeline toolbar to see some animations.\n- Hover over the comment-icons to learn more.",
       "Color": {
         "X": 0.6205674,
         "Y": 0.6205674,

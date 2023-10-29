@@ -1,6 +1,6 @@
 {
   "Id": "cbbb011c-f2bc-460e-86d0-48e49ed377fd"/*SortPixelGlitch*/,
-  "Description": "veAn interesting image glitch effect",
+  "Description": "An interesting image glitch effect.",
   "InputUis": [
     {
       "InputId": "c1be39f5-9516-4a25-a57d-20aa56d68fa7"/*Texture2d*/,

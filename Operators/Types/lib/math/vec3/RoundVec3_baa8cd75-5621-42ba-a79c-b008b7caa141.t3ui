@@ -1,6 +1,6 @@
 {
   "Id": "baa8cd75-5621-42ba-a79c-b008b7caa141"/*RoundVec3*/,
-  "Description": "Round the incoming Vec3 value by the given precision and method. This can be useful for snapping positions onto a grid.",
+  "Description": "Rounds the incoming Vec3 value by the given precision and method. This can be useful for snapping positions onto a grid.",
   "InputUis": [
     {
       "InputId": "158ff4f8-7470-4402-b16e-54a3a252fe7a"/*Value*/,

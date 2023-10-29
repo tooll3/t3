@@ -1,6 +1,6 @@
 {
   "Id": "3849f1f8-7d5e-4c15-9e25-6761817b5038"/*__SurfaceForce*/,
-  "Description": "Repells particles of primitive volumes.",
+  "Description": "Repels particles from primitive volumes.",
   "InputUis": [
     {
       "InputId": "263fd506-1528-403d-991e-84aaf4c9d938"/*GPoints*/,

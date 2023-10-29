@@ -1,6 +1,6 @@
 {
   "Id": "085b7841-9502-4b49-896e-3b1fa023f1bf"/*CombineMaterialChannels*/,
-  "Description": "Combines roughness metallic and ambient occlusion texture maps into a single texture for [SetMaterial].",
+  "Description": "Combines roughness, metallic, and ambient occlusion texture maps into a single texture for [SetMaterial].",
   "InputUis": [
     {
       "InputId": "c697d838-f9a3-4ee7-af3d-713494f0ae93"/*Roughness*/,

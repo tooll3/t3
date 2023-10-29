@@ -1,6 +1,6 @@
 {
   "Id": "e4e608e7-1248-4d73-910c-e8bfbb34251b"/*SimpleLiquid*/,
-  "Description": "A port of \" simple detailed fluid\" https://www.shadertoy.com/view/sl3Szs by lomateron",
+  "Description": "A port of 'simple detailed fluid' from 'https://www.shadertoy.com/view/sl3Szs' by Lomateron.",
   "InputUis": [
     {
       "InputId": "5c42604f-bbc1-4e65-8f21-8d8e79179e5a"/*ShouldReset*/,

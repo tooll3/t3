@@ -1,6 +1,6 @@
 {
   "Id": "74ddc8f9-831e-4a82-945d-a9f5c53c040c"/*WS4_Physarum*/,
-  "Description": "A cleaned up physarum simulation scene that come with set of Snapshots.",
+  "Description": "A cleaned up Physarum simulation scene that comes with a set of snapshots.",
   "InputUis": [],
   "SymbolChildUis": [
     {

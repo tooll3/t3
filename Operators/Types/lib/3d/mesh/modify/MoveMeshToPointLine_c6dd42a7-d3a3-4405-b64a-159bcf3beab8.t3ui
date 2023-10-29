@@ -1,6 +1,6 @@
 {
   "Id": "c6dd42a7-d3a3-4405-b64a-159bcf3beab8"/*MoveMeshToPointLine*/,
-  "Description": "Deforms a mesh in world space origin along a line define by points.\n\nIt maps the geometry to the complete range of all points. Use the range parameter to squeeze the geometry to the correct ration.\nUse the Offset parameter to shift the object along the line.\nThe Scale parameter can help to adjust the overall scale of the geometry.\n",
+  "Description": "Deforms a mesh in world space origin along a line defined by points.\n\nIt maps the geometry to the complete range of all points. Use the range parameter to squeeze the geometry to the correct ratio.\nUse the Offset parameter to shift the object along the line.\nThe Scale parameter can help adjust the overall scale of the geometry.\n",
   "InputUis": [
     {
       "InputId": "2d550543-d102-454e-b9f3-ff7d7832bba9"/*InputMesh*/,

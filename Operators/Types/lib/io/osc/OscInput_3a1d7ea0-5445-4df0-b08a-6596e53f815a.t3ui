@@ -1,6 +1,6 @@
 {
   "Id": "3a1d7ea0-5445-4df0-b08a-6596e53f815a"/*OscInput*/,
-  "Description": "Receives OSC input from an connected server.",
+  "Description": "Receives OSC input from a connected server.",
   "InputUis": [
     {
       "InputId": "87efd3c4-f2df-4996-924f-12c631bad8d8"/*Port*/,

@@ -1,6 +1,6 @@
 {
   "Id": "daec568f-f7b4-4d81-a401-34d62462daab"/*GetTextureSize*/,
-  "Description": "Returns the dimension (resolution) of the connected texture in pixels.\n\nIt can also check if the texture is valid or undefined (I.e. Null). ",
+  "Description": "Returns the dimensions (resolution) of the connected texture in pixels.\n\nIt can also check if the texture is valid or undefined (i.e., Null).",
   "InputUis": [
     {
       "InputId": "8b15d8e1-10c7-41e1-84db-a85e31e0c909"/*Texture*/,

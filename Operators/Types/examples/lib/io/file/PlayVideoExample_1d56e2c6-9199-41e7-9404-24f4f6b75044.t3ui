@@ -1,6 +1,6 @@
 {
   "Id": "1d56e2c6-9199-41e7-9404-24f4f6b75044"/*PlayVideoExample*/,
-  "Description": "Shows how to playback muliple video files in a directory.\nSkip by clicking left/right.\n\nNote: this op needs timeline playback to run.",
+  "Description": "Shows how to playback multiple video files in a directory.\nSkip by clicking left/right.\n\nNote: this op needs timeline playback to run.",
   "InputUis": [
     {
       "InputId": "d4d111e2-01f2-4a71-b2f1-927557a13a6f"/*FolderWithVideos*/,

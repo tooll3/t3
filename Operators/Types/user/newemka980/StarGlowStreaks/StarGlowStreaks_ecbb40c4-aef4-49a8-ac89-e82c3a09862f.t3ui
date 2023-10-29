@@ -1,6 +1,6 @@
 {
   "Id": "ecbb40c4-aef4-49a8-ac89-e82c3a09862f"/*StarGlowStreaks*/,
-  "Description": "Renders streaks onto the incoming image. You can use the threshold to limit the range that are used for streaks.\n\nAlso check out the presets.",
+  "Description": "Renders streaks onto the incoming image. You can use the threshold to limit the range that is used for streaks. Also, check out the presets.",
   "InputUis": [
     {
       "InputId": "afcba3d4-b7db-40bd-919a-d4f49b1bf7fc"/*Image*/,

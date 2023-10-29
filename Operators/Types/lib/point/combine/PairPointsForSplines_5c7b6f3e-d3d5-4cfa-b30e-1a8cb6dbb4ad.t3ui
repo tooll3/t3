@@ -1,6 +1,6 @@
 {
   "Id": "5c7b6f3e-d3d5-4cfa-b30e-1a8cb6dbb4ad"/*PairPointsForSplines*/,
-  "Description": "Combines two lists of points into a buffer for rendering them as splines.\n",
+  "Description": "Combines two lists of points into a buffer for rendering them as splines.",
   "InputUis": [
     {
       "InputId": "d1a8aa7c-673a-4505-b614-b02742ea812f"/*GPoints*/,

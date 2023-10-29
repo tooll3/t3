@@ -281,6 +281,15 @@ public class T3Ui
                     {
                         ExportWikiDocumentation.ExportWiki();
                     }
+                    if (ImGui.MenuItem("Export Documentation to JSON"))
+                    {
+                        ExportDocumentationStrings.ExportDocumentationAsJson();
+                    }
+                    if (ImGui.MenuItem("Import documentation from JSON"))
+                    {
+                        ExportDocumentationStrings.ImportDocumentationAsJson();
+                    }
+                    
                     ImGui.EndMenu();
                 }
                     

@@ -127,7 +127,7 @@
     },
     {
       "Id": "1058504f-053c-4b01-833c-4c5d8d5ea64a",
-      "Title": "Creating new operators is easy:\n1. select [DetectEdges] and...\n2. press TAB on your keyboard.\n3. Type \"Color...\" and select \n  [ColorGrade] by pressing return.",
+      "Title": "Creating new operators is easy:\n1. select [DetectEdges] and...\n2. press TAB on your keyboard.\n3. Type \"Color...\" and select \n [ColorGrade] by pressing return.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -199,7 +199,7 @@
     },
     {
       "Id": "f5ee65c5-76e7-4242-bdb2-6e6c8ab1cc2a",
-      "Title": "You can...\n\n1. Drag values horizontally to change them.\n2. Click a value to type, e.g. values like \"2.1\" or fomulas like \"1.4/3\"\n3. Hover over a value to use mouse wheel. Try holding Shift (for finer) \n   or ALT (for faster) changes.\n\n",
+      "Title": "You can...\n\n1. Drag values horizontally to change them.\n2. Click a value to type, e.g. values like \"2.1\" or formulas like \"1.4/3\"\n3. Hover over a value to use mouse wheel. Try holding Shift (for finer) \n  or ALT (for faster) changes.\n\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

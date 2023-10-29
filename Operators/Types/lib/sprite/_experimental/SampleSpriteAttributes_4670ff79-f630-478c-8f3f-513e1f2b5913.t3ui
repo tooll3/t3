@@ -1,6 +1,6 @@
 {
   "Id": "4670ff79-f630-478c-8f3f-513e1f2b5913"/*SampleSpriteAttributes*/,
-  "Description": "Sets Sprite definition from a texture. \nThis can be used to colorize sprites.",
+  "Description": "Sets Sprite definition from a texture. This can be used to colorize sprites.",
   "InputUis": [
     {
       "InputId": "df943375-bba4-4f90-a3e2-5226aaf4069d"/*GPoints*/,

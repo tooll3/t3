@@ -1,6 +1,6 @@
 {
   "Id": "007b7ad9-e8f2-4830-be0f-d3f5f3444683"/*ChromeBleed*/,
-  "Description": "A feedback effect that is seeded by Gemeotry like texts, etc.",
+  "Description": "A feedback effect that is seeded by geometry like texts, etc.",
   "InputUis": [
     {
       "InputId": "7504facd-2800-4d23-a86a-7b97ccc54529"/*Command*/,

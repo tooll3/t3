@@ -1,6 +1,6 @@
 {
   "Id": "796a66ff-93e7-4bf7-81c0-0fee903262b8"/*Physarum02*/,
-  "Description": "A very complex experimental setup that renders a parameter spread of physarum agent parameters as grid.\n\nIn its current state, this operator is pure research but it might be a valuable resource to see how to setup the required compute shaders.",
+  "Description": "A very complex experimental setup that renders a parameter spread of Physarum agent parameters as a grid.\n\nIn its current state, this operator is pure research, but it might be a valuable resource to see how to set up the required compute shaders.",
   "InputUis": [],
   "SymbolChildUis": [
     {

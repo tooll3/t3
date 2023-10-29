@@ -1,6 +1,6 @@
 {
   "Id": "84a93ea9-98fb-4088-a1e9-87454f7292f1"/*DrawPointsShaded*/,
-  "Description": "Draws a point buffer as PBR shaded balls using the attributes defined by [SetMaterial].\n\nNote: This operator was previously called \"DrawMeshAsSpheres\".",
+  "Description": "Draws a point buffer as PBR-shaded spheres using the attributes defined by [SetMaterial].\n\nNote: This operator was previously called \"DrawMeshAsSpheres\".",
   "InputUis": [
     {
       "InputId": "92e069cf-d136-4a13-8bcd-243731f77a54"/*GPoints*/,

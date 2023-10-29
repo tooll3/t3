@@ -1,6 +1,6 @@
 {
   "Id": "ff5b93e3-d29f-489f-8cca-cb12cd1af65d"/*_DrawPointInfo*/,
-  "Description": "Draws additional informations like index or position on points.",
+  "Description": "Draws additional information like index or position on points.",
   "InputUis": [
     {
       "InputId": "44e119a8-2aa5-47b1-808c-2b207d74a0b4"/*Points*/,

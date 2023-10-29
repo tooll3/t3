@@ -1,6 +1,6 @@
 {
   "Id": "592a2b6f-d4e3-43e0-9e73-034cca3b3900"/*ImageLevels*/,
-  "Description": "Visualize the image brightness distribution of an an image.",
+  "Description": "Visualizes the image brightness distribution of an image.",
   "InputUis": [
     {
       "InputId": "f434bac8-b7d8-4787-adf2-1782d6588da8"/*Texture2d*/,

@@ -1,6 +1,6 @@
 {
   "Id": "8e9a45db-a631-4c92-aea9-c252ea6e9708"/*MaxSize2*/,
-  "Description": "Finds the max extend of the connected size2 operators.",
+  "Description": "Finds the max extent of the connected size2 operators.",
   "InputUis": [
     {
       "InputId": "3fe2016d-c4bc-42e1-a3d8-f8bc34cfcf32"/*Sizes*/,

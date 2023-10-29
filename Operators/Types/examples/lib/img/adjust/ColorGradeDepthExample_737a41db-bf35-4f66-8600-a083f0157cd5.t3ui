@@ -1,6 +1,6 @@
 {
   "Id": "737a41db-bf35-4f66-8600-a083f0157cd5"/*ColorGradeDepthExample*/,
-  "Description": "Illustratoes how to use ColorGradeDepth to colorize points by distances to the camera.",
+  "Description": "Illustrates how to use ColorGradeDepth to colorize points by distances to the camera.",
   "InputUis": [],
   "SymbolChildUis": [
     {

@@ -142,7 +142,7 @@
     },
     {
       "Id": "3abc855f-23b7-4e19-b575-d7afc764b9ca",
-      "Title": "You can...\n- zoom with mouse wheel\n- pan with the right mouse button\n- or press [F] to adjust to the view to show all \n  content.",
+      "Title": "You can...\n- zoom with mouse wheel\n- pan with the right mouse button\n- or press [F] to adjust to the view to show all \n content.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -160,7 +160,7 @@
     },
     {
       "Id": "589f0a56-7537-4b0e-9305-ec21b76ae7fa",
-      "Title": "This is an Operator.\n\nIf you select it, you will see its output in the Output-Window.\n\nTry to double-click it, for an interactive tutorial that will guide you\nthrough Tooll's user interface.\n\n\n\n\n\n\n       Double click ------>",
+      "Title": "This is an Operator.\n\nIf you select it, you will see its output in the Output-Window.\n\nTry to double-click it, for an interactive tutorial that will guide you\nthrough Tooll's user interface.\n\n\n\n\n\n\n      Double click ------>",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

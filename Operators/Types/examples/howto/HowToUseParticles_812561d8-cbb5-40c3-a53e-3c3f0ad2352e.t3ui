@@ -12,7 +12,7 @@
     },
     {
       "ChildId": "3727ea90-2f55-4634-aaf3-7369b369135e"/*TurbulenceForce*/,
-      "Comment": "This is a very simple particle force. \nWe animate its force with the current time.",
+      "Comment": "This is a very simple particle force. We animate its force with the current time.",
       "Position": {
         "X": -114.58609,
         "Y": -467.18652
@@ -34,7 +34,7 @@
     },
     {
       "ChildId": "9502243e-7360-4c55-807f-4361a5914813"/*PickParticleForce*/,
-      "Comment": "Here we only pick a single force. But particle system can be connected to many.",
+      "Comment": "Here we only pick a single force. But the particle system can be connected to many.",
       "Position": {
         "X": 35.41391,
         "Y": -467.18652
@@ -42,7 +42,7 @@
     },
     {
       "ChildId": "42de9f29-5869-4ab8-84b9-fc9d7105a20e"/*CountInt*/,
-      "Comment": "This counter is incremeted once every bar add switches between different forces.",
+      "Comment": "This counter is incremented once every bar and switches between different forces.",
       "Position": {
         "X": -114.58609,
         "Y": -255.18652
@@ -79,7 +79,7 @@
     },
     {
       "ChildId": "ce57c1de-b755-4b5d-b31a-50bd9156892f"/*SurfaceForce*/,
-      "Comment": "The [SurfaceForce] can be used an attractor, a container or a reflective surface.\nAlso see the examples further blow.",
+      "Comment": "The [SurfaceForce] can be used as an attractor, a container, or a reflective surface. Also, see the examples further below.",
       "Position": {
         "X": -114.58609,
         "Y": -404.18652
@@ -115,7 +115,7 @@
     },
     {
       "ChildId": "ca8a57cc-6b07-49f4-b652-d29b79f0d891"/*ParticleSystem*/,
-      "Comment": "Note how we set \"SetWTo\" to ParticleSpeed. This can then be used by the [VisualizePoints] operator to show can the length of the velocity indicator.",
+      "Comment": "Note how we set \"SetWTo\" to ParticleSpeed. This can then be used by the [VisualizePoints] operator to show the length of the velocity indicator.",
       "Position": {
         "X": 27.356873,
         "Y": -88.07947
@@ -246,7 +246,7 @@
     },
     {
       "ChildId": "33c4ad16-4e20-46d8-9065-0c9bf18f17d8"/*PointsOnMesh*/,
-      "Comment": "This operator computes the size of each face to produce a uniform random distribution of of points on the mesh surface.\n\nNotes how these points are oriented with their normal pointing towards to mesh normal.",
+      "Comment": "This operator computes the size of each face to produce a uniform random distribution of points on the mesh surface. Notes how these points are oriented with their normal pointing towards the mesh normal.",
       "Position": {
         "X": 1045.6243,
         "Y": -281.04175
@@ -269,7 +269,7 @@
     },
     {
       "ChildId": "5998e214-8825-427e-b009-7e628725a5cd"/*TransformPoints*/,
-      "Comment": "We randomly rotate the points.\nNotice how we change the transformation space to \"Point\" to rotate around each point's center instead of the object center.",
+      "Comment": "We randomly rotate the points. Notice how we change the transformation space to \"Point\" to rotate around each point's center instead of the object center.",
       "Position": {
         "X": 1195.6243,
         "Y": -281.04175
@@ -292,7 +292,7 @@
     },
     {
       "ChildId": "772d2d86-561e-4267-b405-b736a2010dcc"/*PointsOnImage*/,
-      "Comment": "Similar to [PointsOnMesh] this generates random points depending on an image's brightness.\n\nThis operation is VERY slow for large image resolution. Unless the image is animated the result of this computation is cached though.",
+      "Comment": "Similar to [PointsOnMesh], this generates random points depending on an image's brightness. This operation is VERY slow for large image resolutions. Unless the image is animated, the result of this computation is cached though.",
       "Position": {
         "X": 1197.0898,
         "Y": -104.60431
@@ -314,7 +314,7 @@
     },
     {
       "ChildId": "b214aa0c-42ca-4c23-b860-68931c334cbe"/*FilterPoints*/,
-      "Comment": "We utilize this operator to pick only one of the [LinePoints] for emitting.\nThe index is incremented every frame.",
+      "Comment": "We utilize this operator to pick only one of the [LinePoints] for emitting. The index is incremented every frame.",
       "Position": {
         "X": 1195.6243,
         "Y": -497.04175
@@ -604,7 +604,7 @@
     },
     {
       "ChildId": "c8ad57b5-2fa7-498e-a958-86fdb801f5ef"/*GridPoints*/,
-      "Comment": "We constantly emit this one point in center, leaving to a gradual increase in complexity.\n\nTip: Try using a [RadialPoint] op instead.",
+      "Comment": "We constantly emit this one point in center, leading to a gradual increase in complexity.\n\nTip: Try using a [RadialPoint] op instead.",
       "Position": {
         "X": 1079.6001,
         "Y": 1305.3083
@@ -620,7 +620,7 @@
     },
     {
       "ChildId": "d8dd2bde-47f7-4f09-8a6a-cfcdab775007"/*PointTrail*/,
-      "Comment": "These are very long trails leading to roughly 10 million points connected by particles.\n\nNotice how we also insert seperators if the distance between source points is too large.",
+      "Comment": "These are very long trails leading to roughly 10 million points connected by particles.\n\nNotice how we also insert separators if the distance between source points is too large.",
       "Position": {
         "X": 1378.814,
         "Y": 1373.1975
@@ -636,7 +636,7 @@
     },
     {
       "ChildId": "03041eed-99b6-47f2-8b55-5d5471202045"/*AxisStepForce*/,
-      "Comment": "...40% of the particles are accellerated along the x,y, or z-axis.\n\nNotice the y-axis: \n- it's chosen only 5% of the time, but then with 4x the velocity.",
+      "Comment": "...40% of the particles are accelerated along the x,y, or z-axis.\n\nNotice the y-axis: \n- it's chosen only 5% of the time, but then with 4x the velocity.",
       "Position": {
         "X": 1079.6001,
         "Y": 1431.3083
@@ -659,7 +659,7 @@
     },
     {
       "ChildId": "3147c1a0-dff7-4068-a5fc-3c0ad1124fa2"/*DrawBillboards*/,
-      "Comment": "Uses draw the W attributes to highlight fast particles.\n\nThe Gradient uses HDRD colors, that spread nicely with [Glow].",
+      "Comment": "Uses draw the W attributes to highlight fast particles.\n\nThe Gradient uses HDR colors, that spread nicely with [Glow].",
       "Position": {
         "X": 1528.814,
         "Y": 1317.1975
@@ -688,7 +688,7 @@
     },
     {
       "ChildId": "a872a7e0-6182-4e05-8eb0-a7d91f07f5fe"/*Glow*/,
-      "Comment": "Everythings looks better with glow.",
+      "Comment": "Everything looks better with glow.",
       "Position": {
         "X": 2278.814,
         "Y": 1317.1975
@@ -718,7 +718,7 @@
     },
     {
       "ChildId": "6c70d237-9e63-4bba-9f46-8a7387ed7afa"/*RadialPoints*/,
-      "Comment": "We adjusted its parameters to it creats 4 points in a on the Y-axis.\n\nNotices how we also adjusted the OrientationAxis to X and adjusted the orientation angle to adjust the points's z (forward) direction.\n\nWe also disable the CloseCircleLine to prevent overlapping points at start and end.",
+      "Comment": "We adjusted its parameters to it creates 4 points in a on the Y-axis.\n\nNotice how we also adjusted the OrientationAxis to X and adjusted the orientation angle to adjust the point's z (forward) direction.\n\nWe also disable the CloseCircleLine to prevent overlapping points at the start and end.",
       "Position": {
         "X": -161.66048,
         "Y": -752.87067
@@ -766,7 +766,7 @@
   "Annotations": [
     {
       "Id": "e458c89f-6239-4306-b90b-311446a1f617",
-      "Title": "There are many forces to pick from. \nHere are some examples.\n\nTIP: Please enable idle motion and select \nthe final output to see the effect.",
+      "Title": "There are many forces to pick from. Here are some examples. TIP: Please enable idle motion and select the final output to see the effect.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -784,7 +784,7 @@
     },
     {
       "Id": "35f2d883-63f6-49b9-809d-cd9b9b19e94b",
-      "Title": "This is a most simple example of a particle system...",
+      "Title": "This is the most simple example of a particle system...",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -802,7 +802,7 @@
     },
     {
       "Id": "e8eaa7a4-561b-4bfa-9b05-2cba36dbb1f1",
-      "Title": "A set of point to emit \n(this can be tens of thousands)",
+      "Title": "A set of points to emit (this can be tens of thousands)",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -820,7 +820,7 @@
     },
     {
       "Id": "3aa41853-402e-4ed6-aba6-982e98434d06",
-      "Title": "One or more forces that are \napplied to the emitted particles.",
+      "Title": "One or more forces that are applied to the emitted particles.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -838,7 +838,7 @@
     },
     {
       "Id": "3ca7df36-ea96-40c1-81ad-dabbeeb37b8b",
-      "Title": "It generates points that can be used \nfor rendering or other effects.",
+      "Title": "It generates points that can be used for rendering or other effects.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -856,7 +856,7 @@
     },
     {
       "Id": "7f56c6ab-a59a-452c-a4e4-f40dda99b2f3",
-      "Title": "The [SurfaceForce] simulates collision of the primitive sphere, cube or plane.",
+      "Title": "The [SurfaceForce] simulates the collision of the primitive sphere, cube, or plane.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -892,7 +892,7 @@
     },
     {
       "Id": "1ca566cf-83ad-41fa-90b7-7c34ba1debe1",
-      "Title": "These points are repelled out of the sphere and then attracted towards it.\n",
+      "Title": "These points are repelled out of the sphere and then attracted towards it.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -910,7 +910,7 @@
     },
     {
       "Id": "9380ea3e-c8c2-4f91-a995-46dfd61104a7",
-      "Title": "The VisualizePoints operator can be used\nto show the particle's velocity.",
+      "Title": "The VisualizePoints operator can be used to show the particle's velocity.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -928,7 +928,7 @@
     },
     {
       "Id": "aa50be31-ac57-4994-b957-de79ecdfdc6e",
-      "Title": "Here are some examples for different emitters with\na very simple [DirectionalForce] as gravity.\n\nNotice how we enable initial velocity for the [ParticleSystem].",
+      "Title": "Here are some examples for different emitters with a very simple [DirectionalForce] as gravity.\n\nNotice how we enable initial velocity for the [ParticleSystem].",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -946,7 +946,7 @@
     },
     {
       "Id": "5bdf284b-854d-4ca4-abb6-5cfb763f132b",
-      "Title": "Here are some examples how to chosing different methods \nof drawing the particles can lead to a wide variety of results.\n",
+      "Title": "Here are some examples of how choosing different methods of drawing the particles can lead to a wide variety of results.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -982,7 +982,7 @@
     },
     {
       "Id": "f39ea71c-cb55-41d9-b75e-f823572ed031",
-      "Title": "A simple fire like effect.",
+      "Title": "A simple fire-like effect.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -1000,7 +1000,7 @@
     },
     {
       "Id": "a8e9c5d5-dd2f-47bd-b2e2-f62b1898f57e",
-      "Title": "This slightly more advanced example highlights the [StepAxisForce].\nOn every beat some of the particles are accellerated towards an axis.\nBecause they leave a [PointTrail] behind, this evalually results into a grid-like structure.",
+      "Title": "This slightly more advanced example highlights the [StepAxisForce]. On every beat, some of the particles are accelerated towards an axis. Because they leave a [PointTrail] behind, this eventually results in a grid-like structure.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

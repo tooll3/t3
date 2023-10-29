@@ -80,7 +80,7 @@
     },
     {
       "ChildId": "dac7434c-fdaf-4aac-aaba-c4429e286c9b"/*OrbitCamera*/,
-      "Comment": "Pleaes note how we set the second \"wobble\" component of some parameters to create a more complex camera animation.",
+      "Comment": "Please note how we set the second \"wobble\" component of some parameters to create a more complex camera animation.",
       "Position": {
         "X": 2762.5854,
         "Y": 3.920044
@@ -402,7 +402,7 @@
     },
     {
       "Id": "1ae65319-3191-4a09-8496-d0da1886214a",
-      "Title": "Take the camera position and move it slightly\naway along the view direction. Then add some perlin noise.",
+      "Title": "Take the camera position and move it slightly\naway along the view direction. Then add some Perlin noise.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

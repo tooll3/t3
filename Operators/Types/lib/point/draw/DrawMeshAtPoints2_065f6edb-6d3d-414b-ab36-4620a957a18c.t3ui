@@ -1,6 +1,6 @@
 {
   "Id": "065f6edb-6d3d-414b-ab36-4620a957a18c"/*DrawMeshAtPoints2*/,
-  "Description": "Similar to [DrawBillboards] this operator draws meshes instead of images.\n",
+  "Description": "Similar to [DrawBillboards], this operator draws meshes instead of images.",
   "InputUis": [
     {
       "InputId": "074ab4f7-8fab-4a98-b8d1-44c333648bf3"/*Scale*/,

@@ -1,6 +1,6 @@
 {
   "Id": "4f89b41b-1643-442b-bec8-9f9ef2173baa"/*Raster*/,
-  "Description": "Generates a wide range of different raster patterns.\n\nYou can also connect input texture to drive vaious aspects of the pattern.",
+  "Description": "Generates a wide range of different raster patterns. You can also connect an input texture to drive various aspects of the pattern.",
   "InputUis": [
     {
       "InputId": "cce27287-9774-436c-9e90-1becb42d8f95"/*Image*/,

@@ -1,6 +1,6 @@
 {
   "Id": "90b20942-810b-480c-a19e-a41296cac9e6"/*WS1_Searching*/,
-  "Description": "Intro part with some deplacement effects blended by snapshots.",
+  "Description": "Intro part with some displacement effects blended by snapshots.",
   "InputUis": [
     {
       "InputId": "e75b329f-26ae-4070-91bc-450c30d7453d"/*WrapMode*/,

@@ -1,6 +1,6 @@
 {
   "Id": "b5102fba-f05b-43fc-aa1d-613fe1d68ad2"/*Grain*/,
-  "Description": "Adds animated grain or (I.e. pixel noise) to an image.",
+  "Description": "Adds animated grain, or pixel noise, to an image.",
   "InputUis": [
     {
       "InputId": "4525c76c-cdcf-47f3-aa96-335cfc5b5c1b"/*Image*/,

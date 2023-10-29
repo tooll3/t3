@@ -1,6 +1,6 @@
 {
   "Id": "5e3648c0-3446-4f8f-b7ce-32d4a54b39de"/*__OBSOLETEFollowMeshSurface*/,
-  "Description": "Move grid-points towards and along a mesh surface",
+  "Description": "Move grid-points towards and along a mesh surface.",
   "InputUis": [
     {
       "InputId": "715051f4-e326-46c4-a5a3-8265c69c12dd"/*Points*/,

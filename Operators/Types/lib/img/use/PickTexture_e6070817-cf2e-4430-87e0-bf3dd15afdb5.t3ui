@@ -1,6 +1,6 @@
 {
   "Id": "e6070817-cf2e-4430-87e0-bf3dd15afdb5"/*PickTexture*/,
-  "Description": "Picks one of the connected textures.\n\nOnly the selected connection will be updated.",
+  "Description": "Picks one of the connected textures. Only the selected connection will be updated.",
   "InputUis": [
     {
       "InputId": "6c935163-1729-4df0-a981-610b4aa7c6a3"/*Input*/,

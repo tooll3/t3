@@ -306,7 +306,7 @@
   "Annotations": [
     {
       "Id": "faa2e40b-86eb-48bd-b33b-d0e17c9050e6",
-      "Title": "A work around to pass a 4x4 matrix into a shader.",
+      "Title": "A workaround to pass a 4x4 matrix into a shader.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

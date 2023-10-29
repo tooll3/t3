@@ -1,6 +1,6 @@
 {
   "Id": "6f9126f8-fed5-4088-905a-7be8e800b968"/*SlotMachine*/,
-  "Description": "Lets get inspired",
+  "Description": "Let's get inspired",
   "InputUis": [
     {
       "InputId": "aff18f50-3338-43fa-9e4f-4f2fbe73285d"/*BoolValue*/,

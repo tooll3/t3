@@ -1,6 +1,6 @@
 {
   "Id": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8"/*SetPointsW*/,
-  "Description": "Sets the W attribute of points from a curve.\n\nDifferent modes allow to...\n- distribute the curve range along all points\n- or use different mapping ranges.\n\nYou can also connect a texture to provide override the curve.",
+  "Description": "Sets the W attribute of points from a curve.\n\nDifferent modes allow you to...\n- distribute the curve range along all points\n- or use different mapping ranges.\n\nYou can also connect a texture to provide an override for the curve.",
   "InputUis": [
     {
       "InputId": "d5a5862b-d3a2-4e6e-ad54-32cff7ced0fd"/*Amount*/,

@@ -1,6 +1,6 @@
 {
   "Id": "3f8376f2-b89a-4ab4-b6dc-a3e8bf88c0a5"/*TurbulenceForce*/,
-  "Description": "Add a turbulence force to a ParticleSimulation",
+  "Description": "Adds a turbulence force to a Particle Simulation.",
   "InputUis": [
     {
       "InputId": "e27a97ce-3d0f-41a9-93c3-a1691f4029aa"/*Amount*/,

@@ -1,6 +1,6 @@
 {
   "Id": "32325c5b-53f7-4414-b4dd-a436e45528b0"/*SetCommandTime*/,
-  "Description": "Overrides the animation time of a sub command graph.",
+  "Description": "Overrides the animation time of a sub-command graph.",
   "InputUis": [
     {
       "InputId": "01f2eef1-e3c1-49a5-b532-9c12da8caac5"/*SubTree*/,

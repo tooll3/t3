@@ -1,6 +1,6 @@
 {
   "Id": "9f43f769-d32a-4f49-92ac-e0be3ba250cf"/*Blend*/,
-  "Description": "Blends two images.\n",
+  "Description": "Blends two images.",
   "InputUis": [
     {
       "InputId": "abaa52e9-7d3d-4ae5-89d2-5251f61e5392"/*ImageA*/,

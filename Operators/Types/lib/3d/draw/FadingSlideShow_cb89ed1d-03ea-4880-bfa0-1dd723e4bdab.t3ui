@@ -1,6 +1,6 @@
 {
   "Id": "cb89ed1d-03ea-4880-bfa0-1dd723e4bdab"/*FadingSlideShow*/,
-  "Description": "Blends smoothly between image files read from a directory.\nBlendspeed  controls the speed of the transition.",
+  "Description": "Blends smoothly between image files read from a directory.\nBlendSpeed controls the speed of the transition.",
   "InputUis": [
     {
       "InputId": "61469462-04ef-4f75-bd58-2bd42b8da15a"/*IndexAndFraction*/,

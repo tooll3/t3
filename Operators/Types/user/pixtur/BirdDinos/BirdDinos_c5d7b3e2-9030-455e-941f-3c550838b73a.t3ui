@@ -1,6 +1,6 @@
 {
   "Id": "c5d7b3e2-9030-455e-941f-3c550838b73a"/*BirdDinos*/,
-  "Description": "A quick experiment with midi controllers",
+  "Description": "A quick experiment with MIDI controllers",
   "InputUis": [],
   "SymbolChildUis": [
     {

@@ -1,6 +1,6 @@
 {
   "Id": "281b69e8-01ee-4a62-a9ed-8508c5355c6c"/*SimPointMeshCollisions*/,
-  "Description": "Simulates collisions with meshs.\n\nNot: this is VERY expensive with large meshes (I.e. with more than 100 faces).\n",
+  "Description": "Simulates collisions with meshes.\n\nNote: this is VERY expensive with large meshes (i.e., with more than 100 faces).\n",
   "InputUis": [
     {
       "InputId": "8f2d6bb8-5242-4f21-b356-7785b6b0ff4e"/*PointsA_*/,

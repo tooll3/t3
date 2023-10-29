@@ -1,6 +1,6 @@
 {
   "Id": "f9f4281b-92ee-430d-a930-6b588a5cb9a9"/*MidiOutput*/,
-  "Description": "Send notes or controller change events to selected device.\nThis operator is experimental.\n\nThe velocity of given as normalized float value between 0 ... 1.\n ",
+  "Description": "Send notes or controller change events to the selected device. This operator is experimental. The velocity is given as a normalized float value between 0 and 1.",
   "InputUis": [
     {
       "InputId": "9efa1be1-f102-4457-a69b-2aef59f6b845"/*TriggerSend*/,

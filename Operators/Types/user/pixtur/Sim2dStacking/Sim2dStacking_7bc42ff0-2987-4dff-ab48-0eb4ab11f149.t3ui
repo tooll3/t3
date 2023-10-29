@@ -88,7 +88,7 @@
   "Annotations": [
     {
       "Id": "e1ce4442-518c-4b67-8272-b033afc8b5fe",
-      "Title": "Convert input parameters to into a buffer \nfor the shader.",
+      "Title": "Convert input parameters into a buffer for the shader.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -106,7 +106,7 @@
     },
     {
       "Id": "f2b30f56-fc20-4445-ae0a-9890f4b2eb6b",
-      "Title": "Setup the compute shader and calculate\nthe number of dispatches ThreadGroups\nand buffer length.",
+      "Title": "Setup the compute shader and calculate the number of dispatches ThreadGroups and buffer length.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -124,7 +124,7 @@
     },
     {
       "Id": "6af48460-08ee-4fbe-8c73-1107230a7d27",
-      "Title": "This is the shader you want to edit.\nSelect it, then click [Edit] in \nParameter Window...",
+      "Title": "This is the shader you want to edit. Select it, then click [Edit] in Parameter Window...",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

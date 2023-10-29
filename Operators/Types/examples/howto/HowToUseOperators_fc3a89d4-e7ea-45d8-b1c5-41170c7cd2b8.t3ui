@@ -1,6 +1,6 @@
 {
   "Id": "fc3a89d4-e7ea-45d8-b1c5-41170c7cd2b8"/*HowToUseOperators*/,
-  "Description": "This example gives a playful interactive introduction to Tooll's operators and how they work.",
+  "Description": "This example gives a playful, interactive introduction to Tooll's operators and how they work.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -457,7 +457,7 @@
   "Annotations": [
     {
       "Id": "f2ae8a9c-8d73-4698-9e04-e8fab0ac2797",
-      "Title": "Everything in T3 is made out of operators.\nThese operators can be structured into the following categories.",
+      "Title": "Everything in T3 is made out of operators. These operators can be structured into the following categories.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -601,7 +601,7 @@
     },
     {
       "Id": "5bdcc582-0109-4388-bdf5-4d580fa2a967",
-      "Title": "You can quickly distinguish the catories by their respective output type: Float-Number, Buffer, Command, Image, etc.\nThere are many more types but understanding these foundations will get you far...",
+      "Title": "You can quickly distinguish the categories by their respective output types: Float-Number, Buffer, Command, Image, etc. There are many more types, but understanding these foundations will get you far...",
       "Color": {
         "X": 0.4787234,
         "Y": 0.4787234,
@@ -619,7 +619,7 @@
     },
     {
       "Id": "d07b68ba-775d-44e2-9299-f9963d881164",
-      "Title": "Although the data is flowing from left to right, the graph is actually \"evaluated\" from right to left!\n\nLet's look at the following example.\nPlease click on the [RenderTarget]...\n\n\n",
+      "Title": "Although the data is flowing from left to right, the graph is actually \"evaluated\" from right to left! Let's look at the following example. Please click on the [RenderTarget]...",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -637,7 +637,7 @@
     },
     {
       "Id": "b03d9382-caa3-47b9-ad9c-5db277583562",
-      "Title": "1. If this RenderTarget\nis selected, it \"requests\"\nits input command.",
+      "Title": "1. If this RenderTarget is selected, it \"requests\" its input command.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -655,7 +655,7 @@
     },
     {
       "Id": "38cdb32d-2357-45fe-9774-6681b00b93fd",
-      "Title": "2. This connected operator\nsets a camera perspective\nand also requests its connected \ncommand.",
+      "Title": "2. This connected operator sets a camera perspective and also requests its connected command.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -673,7 +673,7 @@
     },
     {
       "Id": "c585a017-bbda-4ce7-b26a-159a9f4eb27a",
-      "Title": "3. This operator finally wants\nto \"draw\" something,\nbut it needs some\ncontent, so, ...",
+      "Title": "3. This operator finally wants to \"draw\" something, but it needs some content, so...",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -691,7 +691,7 @@
     },
     {
       "Id": "2fca86b0-adbd-45af-a8e1-f8bf5711cb07",
-      "Title": "4.  ... finally this operator\nprovides the actually data\nin form of faces and vertices.",
+      "Title": "4. ... finally, this operator provides the actual data in the form of faces and vertices.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -709,7 +709,7 @@
     },
     {
       "Id": "54cb1d11-87a9-4a3e-9be8-bb675fffd24f",
-      "Title": "This example show that graphs can form complex networks (but not loops).",
+      "Title": "This example shows that graphs can form complex networks (but not loops).",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -727,7 +727,7 @@
     },
     {
       "Id": "d4dc659e-f088-44da-87a4-962d9faa2984",
-      "Title": "While the graph is being evaluated (remember: from right to left), parameters\nfor where and how to draw things are collected.\n\n",
+      "Title": "While the graph is being evaluated (remember: from right to left), parameters for where and how to draw things are collected.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -745,7 +745,7 @@
     },
     {
       "Id": "9201860c-0aad-40bc-9693-f280da49c181",
-      "Title": "Transformations like Offset, Scale and Rotation\nare accumulated.",
+      "Title": "Transformations like Offset, Scale, and Rotation are accumulated.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -763,7 +763,7 @@
     },
     {
       "Id": "7dd94d2a-7335-4106-a707-09402a2a3d00",
-      "Title": "Settings for Material, Time and resolution \nare overwritten. The last one (on the left) wins.\n",
+      "Title": "Settings for Material, Time, and resolution are overwritten. The last one (on the left) wins.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -781,7 +781,7 @@
     },
     {
       "Id": "ac34d967-98a9-43f4-aa93-0c3d1c28c700",
-      "Title": "Switch and Pick operators both help you to build complex\nsetups that respond to inputs like time, audio or sensor data.",
+      "Title": "Switch and Pick operators both help you to build complex setups that respond to inputs like time, audio, or sensor data.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

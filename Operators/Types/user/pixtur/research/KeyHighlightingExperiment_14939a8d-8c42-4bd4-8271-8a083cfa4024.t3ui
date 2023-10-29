@@ -1,6 +1,6 @@
 {
   "Id": "14939a8d-8c42-4bd4-8271-8a083cfa4024"/*KeyHighlightingExperiment*/,
-  "Description": "A quick prototype how to highlight image regions with keying.",
+  "Description": "A quick prototype of how to highlight image regions with keying.",
   "InputUis": [
     {
       "InputId": "ea3281aa-06f1-42c4-a832-2faffdf58e48"/*SourceImage*/,
@@ -341,7 +341,7 @@
     },
     {
       "Id": "f28ba862-fe57-4c48-a526-17b9b0ddcf49",
-      "Title": "A fallback image with generated mask",
+      "Title": "A fallback image with a generated mask",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

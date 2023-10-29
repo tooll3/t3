@@ -1,6 +1,6 @@
 {
   "Id": "9d6dbf28-9983-4584-abba-6281ce51d583"/*QuadMesh*/,
-  "Description": "Generates are tesselated mesh.\n\nAlso known as: Plane, Quad",
+  "Description": "Generates a tessellated mesh.\n\nAlso known as: Plane, Quad",
   "InputUis": [
     {
       "InputId": "18a5f3be-92a7-438c-b32b-e0da7c7a5736"/*Segments*/,

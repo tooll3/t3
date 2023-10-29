@@ -1,6 +1,6 @@
 {
   "Id": "9b1a1ff1-2935-4d9a-880f-897a7f8885ad"/*HowToAnimate*/,
-  "Description": "An interactive playground that illustrates various method to animate things in Tooll.\n\n[Value]",
+  "Description": "An interactive playground that illustrates various methods to animate things in Tooll.\n\n[Value]",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -543,7 +543,7 @@
   "Annotations": [
     {
       "Id": "1e8fabb8-c4ff-42e8-bf8a-a8063a46a54b",
-      "Title": "Tooll is all about animation. So there are endless possibilities for it. This playground shows some examples. \nTry to select the operators at the end of each graph and play with them.\n\n(please activate the Idle Motion mode in the time controls)",
+      "Title": "Tooll is all about animation, so there are endless possibilities for it. This playground shows some examples. \nTry to select the operators at the end of each graph and play with them.\n\n(please activate the Idle Motion mode in the time controls)",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -579,7 +579,7 @@
     },
     {
       "Id": "d1a48210-aa37-4a47-bc5b-ecb4974738b2",
-      "Title": "Math is your friend (even if you didn't love it in school).\nUnderstanding these 3 functions will be a game changer for your work.",
+      "Title": "Math is your friend (even if you didn't love it in school).\nUnderstanding these 3 functions will be a game-changer for your work.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -633,7 +633,7 @@
     },
     {
       "Id": "5f9df0dd-39ec-49e9-894b-e820413fdb70",
-      "Title": "There are operators that are animated without a connection to [Time]*\nThese operators are such powerful tools that we should explain them in detail:\n\n\n\n",
+      "Title": "There are operators that are animated without a connection to [Time].\nThese operators are such powerful tools that we should explain them in detail:",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -669,7 +669,7 @@
     },
     {
       "Id": "7333c3c1-a0f0-41c9-9fd8-518804226909",
-      "Title": "Mucians might know [AnimValue] operator as\n\"LFO\" (Low frequency operator).\n\nYou can adjust its main parameters directly by holding \nthe CTRL key.\n- Drag Up/Down on the left adjusts the rate in steps /4x4\n- Drag the graph to adjust ratio and Bias",
+      "Title": "Musicians might know the [AnimValue] operator as\n\"LFO\" (Low-frequency operator).\n\nYou can adjust its main parameters directly by holding \nthe CTRL key.\n- Drag Up/Down on the left adjusts the rate in steps /4x4\n- Drag the graph to adjust ratio and Bias",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -687,7 +687,7 @@
     },
     {
       "Id": "d5214db2-60b4-42b3-9a43-3297dd325454",
-      "Title": "[SequenceAnim] is to generate repetitive patterns.\nYou can adjust the steps by dragging with CTRL.\nCheck out the modes. It's very flexible.\n",
+      "Title": "[SequenceAnim] is used to generate repetitive patterns.\nYou can adjust the steps by dragging with CTRL.\nCheck out the modes. It's very flexible.\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -759,7 +759,7 @@
     },
     {
       "Id": "e068acab-3f1f-4c4a-936a-2d5a631b18d1",
-      "Title": "Reactions to audio input or the current project soundtrack is an advanced topic.\nIt's probably easier to check out one of the tutorial videos for that.\n\nHere's a short example of what you could do with that.\nPress play to activate the soundtrack.",
+      "Title": "Reactions to audio input or the current project soundtrack are an advanced topic.\nIt's probably easier to check out one of the tutorial videos for that.\n\nHere's a short example of what you could do with that.\nPress play to activate the soundtrack.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -795,7 +795,7 @@
     },
     {
       "Id": "ed0d2b3a-8791-4b08-a04b-408338187908",
-      "Title": "If you click on \"Dope\" / \"Curve\" in the Time Control Bar\nyou can toggle between Dopesheet and Curve mode.\nDragging keyframes holding the Shift-key toggles\nsnapping.",
+      "Title": "If you click on \"Dope\" / \"Curve\" in the Time Control Bar,\nyou can toggle between Dopesheet and Curve mode.\nDragging keyframes while holding the Shift-key toggles\nsnapping.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -813,7 +813,7 @@
     },
     {
       "Id": "6e01257e-ea2a-426e-95f1-57706f756c0c",
-      "Title": "Another powerful option for procedual animation is [TriggerAnim].\nTake a look at the following example:\n\nA different version of effects are triggered if any of the events on the left occur.",
+      "Title": "Another powerful option for procedural animation is [TriggerAnim].\nTake a look at the following example:\n\nA different version of effects is triggered if any of the events on the left occur.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -831,7 +831,7 @@
     },
     {
       "Id": "d0729712-35f1-4955-81db-6c74338387da",
-      "Title": "Here is a more elaborate example on how to use an animation event...",
+      "Title": "Here is a more elaborate example of how to use an animation event...",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -849,7 +849,7 @@
     },
     {
       "Id": "95812bb4-d98b-4bbe-b7e7-577c881298ca",
-      "Title": "We create a new clear color for our render target, by cycling through a gradient. \nNotice how [Counter] uses a modulo to repeat the cycle.",
+      "Title": "We create a new clear color for our render target by cycling through a gradient. \nNotice how [Counter] uses a modulo to repeat the cycle.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

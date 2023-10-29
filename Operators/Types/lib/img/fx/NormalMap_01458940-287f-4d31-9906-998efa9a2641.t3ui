@@ -1,6 +1,6 @@
 {
   "Id": "01458940-287f-4d31-9906-998efa9a2641"/*NormalMap*/,
-  "Description": "Converts a brightnes of an image into normal map that can be use with [SetMaterial].",
+  "Description": "Converts the brightness of an image into a normal map that can be used with [SetMaterial].",
   "InputUis": [
     {
       "InputId": "3b04296a-14e5-40e0-91a2-eda0314b0490"/*LightMap*/,

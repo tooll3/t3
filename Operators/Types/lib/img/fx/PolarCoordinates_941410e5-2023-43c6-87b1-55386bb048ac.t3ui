@@ -1,6 +1,6 @@
 {
   "Id": "941410e5-2023-43c6-87b1-55386bb048ac"/*PolarCoordinates*/,
-  "Description": "Applies a polar coordiante transformation that converts between circular and rectangluar coordinates. \nI.e. It (un)wraps round images.",
+  "Description": "Applies a polar coordinate transformation that converts between circular and rectangular coordinates. In other words, it wraps and unwraps round images.",
   "InputUis": [
     {
       "InputId": "dfa1d71d-2964-41c2-bb04-86a39c36ce6e"/*Image*/,

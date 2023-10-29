@@ -1,6 +1,6 @@
 {
   "Id": "7934f11d-c95c-41ae-b282-6e568b9c5f30"/*SubInts*/,
-  "Description": "Substracts int B from int A.",
+  "Description": "Subtracts int B from int A.",
   "InputUis": [
     {
       "InputId": "944152fb-3786-4474-90ea-c292b5dde801"/*Input1*/,

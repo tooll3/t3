@@ -1,6 +1,6 @@
 {
   "Id": "ec1ba1fb-ceb7-4d4f-86b4-389589c7e6f0"/*FlipFlop*/,
-  "Description": "Hold the \"activated\" state of a boolean.\n\nAlso check [DelayTrigger]",
+  "Description": "Holds the \"activated\" state of a boolean. Also check [DelayTrigger].",
   "InputUis": [
     {
       "InputId": "44678eb5-8320-4ac9-b757-e0f6f94f5274"/*Trigger*/,

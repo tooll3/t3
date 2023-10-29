@@ -1,6 +1,6 @@
 {
   "Id": "3b0eb327-6ad8-424f-bca7-ccbfa2c9a986"/*_Jitter*/,
-  "Description": "Generate a random motion. This operator has been deprecated.\nPlease consider using [AnimValue] with PerlinNoise shape.",
+  "Description": "Generates random motion. This operator has been deprecated.\nPlease consider using [AnimValue] with a PerlinNoise shape.",
   "InputUis": [
     {
       "InputId": "7484b865-a74f-4b13-9520-bd42f289cb9a"/*Value*/,
