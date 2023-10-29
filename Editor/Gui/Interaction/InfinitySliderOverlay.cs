@@ -2,7 +2,6 @@
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -14,7 +13,7 @@ namespace T3.Editor.Gui.Interaction
     /// valueRange - delta value for complete revolution of current dial
     /// tickInterval = Log10 delta vale between ticks.
     /// </remarks>
-    public static class LinearFlexEditOverlay
+    public static class InfinitySliderOverlay
     {
         public static void Draw(ref double roundedValue, bool restarted, Vector2 center, double min = double.NegativeInfinity,
                                 double max = double.PositiveInfinity,
@@ -52,7 +51,7 @@ namespace T3.Editor.Gui.Interaction
             // Value range and tick interval 
             _dampedModifierScaleFactor = MathUtils.Lerp(_dampedModifierScaleFactor, GetKeyboardScaleFactor(), 0.1f);
 
-            var valueRange = (Math.Pow(10, normalizedLogDistanceForLog10)) * scale * _dampedModifierScaleFactor * 600;
+            var valueRange = (Math.Pow(10, normalizedLogDistanceForLog10)) * scale *0.25f * _dampedModifierScaleFactor * 600;
 
             var log10 = Math.Log10(valueRange);
             var iLog10 = Math.Floor(log10);

@@ -103,8 +103,8 @@ namespace T3.Editor.Gui.UiHelpers
 
         public enum ValueEditGizmos
         {
-            LinearFlex,
-            RadialFlex,
+            InfinitySlider,
+            RadialSlider,
             JogDial,
             ValueLadder,
         }

@@ -19,7 +19,7 @@ namespace T3.Editor.Gui.Interaction
     /// valueRange - delta value for complete revolution of current dial
     /// tickInterval = Log10 delta vale between ticks.
     /// </remarks>
-    public static class RadialFlexEditOverlay
+    public static class RadialSliderOverlay
     {
         public static void Draw(ref double roundedValue, bool restarted, Vector2 center, double min = double.NegativeInfinity,
                                 double max = double.PositiveInfinity,

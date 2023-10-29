@@ -119,11 +119,11 @@ namespace T3.Editor.Gui.Interaction
 
                         switch (UserSettings.Config.ValueEditGizmo)
                         {
-                            case UserSettings.ValueEditGizmos.RadialFlex:
-                                RadialFlexEditOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
+                            case UserSettings.ValueEditGizmos.InfinitySlider:
+                                InfinitySliderOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
                                 break;
-                            case UserSettings.ValueEditGizmos.LinearFlex:
-                                LinearFlexEditOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
+                            case UserSettings.ValueEditGizmos.RadialSlider:
+                                RadialSliderOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
                                 break;
                             case UserSettings.ValueEditGizmos.JogDial:
                                 JogDialOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
