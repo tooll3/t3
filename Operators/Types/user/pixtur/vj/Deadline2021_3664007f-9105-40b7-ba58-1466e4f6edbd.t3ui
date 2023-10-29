@@ -228,7 +228,7 @@
       }
     },
     {
-      "ChildId": "cc0a6663-35f2-4675-8745-7f9a89298fac"/*_LegacyDisplaceMesh*/,
+      "ChildId": "cc0a6663-35f2-4675-8745-7f9a89298fac"/*DisplaceMeshNoise*/,
       "Position": {
         "X": 437.4801,
         "Y": -154.32637
@@ -725,7 +725,7 @@
       }
     },
     {
-      "ChildId": "cceda377-7994-4630-91f6-e190baa7bf54"/*_LegacyDisplaceMesh*/,
+      "ChildId": "cceda377-7994-4630-91f6-e190baa7bf54"/*DisplaceMeshNoise*/,
       "Position": {
         "X": 1083.1794,
         "Y": -1455.9807
@@ -1675,7 +1675,7 @@
       }
     },
     {
-      "ChildId": "da1d3b76-8ef7-492f-bb11-3c8d683a18ba"/*_LegacyDisplaceMesh*/,
+      "ChildId": "da1d3b76-8ef7-492f-bb11-3c8d683a18ba"/*DisplaceMeshNoise*/,
       "Position": {
         "X": 3974.5874,
         "Y": 308.33038

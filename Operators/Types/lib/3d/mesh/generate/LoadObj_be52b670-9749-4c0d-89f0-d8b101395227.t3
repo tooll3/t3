@@ -17,7 +17,7 @@
     },
     {
       "Id": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,
-      "DefaultValue": 0
+      "DefaultValue": 6
     },
     {
       "Id": "c39a61b3-fb6b-4611-8f13-273f13c9c491"/*ScaleFactor*/,

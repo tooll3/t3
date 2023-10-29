@@ -1,5 +1,5 @@
 {
-  "Name": "_LegacyDisplaceMesh",
+  "Name": "DisplaceMeshNoise",
   "Id": "b5709297-c714-4019-9d0b-6982590b5590",
   "Namespace": "lib.3d.mesh.modify",
   "Inputs": [

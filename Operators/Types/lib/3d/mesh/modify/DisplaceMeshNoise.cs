@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_b5709297_c714_4019_9d0b_6982590b5590
 {
-    public class _LegacyDisplaceMesh : Instance<_LegacyDisplaceMesh>
+    public class DisplaceMeshNoise : Instance<DisplaceMeshNoise>
     {
 
         [Output(Guid = "b91689eb-4274-4534-9f95-515a93c57ebe")]
