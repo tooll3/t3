@@ -249,6 +249,7 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.Flame, 76),
                 new (Icon.Comment, 77),
                 new (Icon.Camera, 78),
+                new (Icon.PopUp, slotIndex:79),
             };
 
         public const string IconAtlasPath = @"Resources\t3-editor\images\t3-icons.png";
@@ -335,6 +336,6 @@ namespace T3.Editor.Gui.Styling
         IO,
         Comment,
         Camera,
-        
+        PopUp
     }
 }

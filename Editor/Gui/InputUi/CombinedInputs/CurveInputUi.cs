@@ -2,6 +2,8 @@
 using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
+using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.InputUi.CombinedInputs
 {
@@ -30,8 +32,16 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
             
             ImGui.Dummy(Vector2.One);    // Add Line Break
 
+            var keepPositionForIcon = ImGui.GetCursorPos();
+            
             var cloneIfModified = input.IsDefault;
             var modified= CurveInputEditing.DrawCanvasForCurve(ref curve, input, cloneIfModified, T3Ui.EditingFlags.PreventZoomWithMouseWheel);
+
+            if (CurveEditPopup.DrawPopupIndicator(input, ref curve, keepPositionForIcon, cloneIfModified, out var popupResult))
+            {
+                modified = popupResult;
+            }
+
             if (cloneIfModified && (modified & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
             {
                 input.IsDefault = false;

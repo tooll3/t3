@@ -246,8 +246,8 @@ namespace T3.Editor.Gui.Interaction
             }
 
             ScaleTarget = (WindowSize - new Vector2(paddingX, paddingY));
-            ScaleTarget.X = MathF.Max(ScaleTarget.X, 30);
-            ScaleTarget.Y = MathF.Max(ScaleTarget.Y, 30);
+            ScaleTarget.X = MathF.Max(ScaleTarget.X, 20);
+            ScaleTarget.Y = MathF.Max(ScaleTarget.Y, 20);
             
             ScaleTarget /= areaSize;
             

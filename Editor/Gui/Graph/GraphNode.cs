@@ -85,7 +85,7 @@ namespace T3.Editor.Gui.Graph
 
                     if (!string.IsNullOrEmpty(childUi.Comment))
                     {
-                        ImGui.SetCursorScreenPos(new Vector2(_usableScreenRect.Max.X,  _usableScreenRect.Min.Y) -  new Vector2(10, 12) * T3Ui.UiScaleFactor * T3Ui.UiScaleFactor);
+                        ImGui.SetCursorScreenPos(new Vector2(_usableScreenRect.Max.X,  _usableScreenRect.Min.Y) -  new Vector2(3, 12) * T3Ui.UiScaleFactor * T3Ui.UiScaleFactor);
                         if (ImGui.InvisibleButton("#comment", new Vector2(15, 15)))
                         {
                             NodeSelection.SetSelectionToChildUi(childUi,instance);

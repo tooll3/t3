@@ -3,6 +3,7 @@ using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
+using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
@@ -47,6 +48,7 @@ namespace T3.Editor.Gui.ChildUi
                                                           ? T3Ui.EditingFlags.None
                                                           : T3Ui.EditingFlags.PreventMouseInteractions;
 
+                var keepPositionForIcon = ImGui.GetCursorPos();
                 var modified2 = CurveInputEditing.DrawCanvasForCurve(ref curve, 
                                                                      sampleCurve.Curve.Input,
                                                      cloneIfModified,
@@ -54,6 +56,12 @@ namespace T3.Editor.Gui.ChildUi
                                                      | preventEditingUnlessCtrlPressed
                                                      | T3Ui.EditingFlags.PreventZoomWithMouseWheel);
 
+                var showPopupIcon = innerRect.GetHeight()> ImGui.GetFrameHeight()* T3Ui.UiScaleFactor * 2;
+                if (showPopupIcon && CurveEditPopup.DrawPopupIndicator(sampleCurve.Curve.Input, ref curve, keepPositionForIcon, cloneIfModified, out var popupResult))
+                {
+                    modified2 = popupResult;
+                }
+                
                 if ((modified2 & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
                 {
                     if (cloneIfModified)

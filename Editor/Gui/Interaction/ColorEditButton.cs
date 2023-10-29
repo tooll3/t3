@@ -21,7 +21,7 @@ namespace T3.Editor.Gui.Interaction
             if (triggerOpen || ImGui.IsItemHovered( ImGuiHoveredFlags.AllowWhenBlockedByPopup)
                 && ImGui.IsMouseReleased(0)
                 && ImGui.GetIO().MouseDragMaxDistanceAbs[0].Length() < UserSettings.Config.ClickThreshold
-                && !ImGui.IsPopupOpen("##colorEdit")
+                && !ImGui.IsPopupOpen(ColorEditPopup.PopupId)
                 )
             {
                 _previousColor = color;

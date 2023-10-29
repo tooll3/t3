@@ -357,7 +357,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             if (selectMode == SelectionFence.SelectModes.Replace)
                 SelectedKeyframes.Clear();
 
-            THelpers.DebugRect(screenArea.Min, screenArea.Max);
+            //THelpers.DebugRect(screenArea.Min, screenArea.Max);
             var canvasArea = TimeLineCanvas.Current.InverseTransformRect(screenArea).MakePositive();
             var matchingItems = new List<VDefinition>();
 

@@ -32,7 +32,7 @@ namespace T3.Editor.Gui.Interaction
             var dontCloseIfColorPicking = ImGui.GetIO().KeyAlt ? ImGuiWindowFlags.Modal : ImGuiWindowFlags.None;
 
             var id = ImGui.GetID("colorPicker");
-            if (ImGui.BeginPopup("##colorEdit", dontCloseIfColorPicking))
+            if (ImGui.BeginPopup(PopupId, dontCloseIfColorPicking))
             {
                 if (_openedId != id)
                 {
@@ -737,6 +737,7 @@ namespace T3.Editor.Gui.Interaction
         private static Color _hoveredColor;
         private static bool _isHoveringColor;
         private static readonly Bitmap _bmp = new(1, 1);
+        public  const string PopupId =  "##colorEdit";
     }
 
     public static class ColorUsage

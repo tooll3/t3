@@ -61,7 +61,6 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                 curveInteraction.Curves.Add(curveForEditing);
             }
             
-
             curveInteraction.EditState = InputEditStateFlags.Nothing;
             curveInteraction.Draw();
 
@@ -72,6 +71,8 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                 curveRef = curveForEditing;
                 _clonedDefaultCurves.Remove(input.DefaultValue);
             }
+           
+            
             
             return curveInteraction.EditState;
         }
@@ -85,10 +86,10 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
         /// <summary>
         /// Implement interaction of manipulating the individual keyframes
         /// </summary>
-        private class CurveInteraction : CurveEditing
+        public class CurveInteraction : CurveEditing
         {
-            public List<Curve> Curves = new List<Curve>();
-            private readonly SingleCurveEditCanvas _singleCurveCanvas = new SingleCurveEditCanvas() { ImGuiTitle = "canvas" + _interactionForCurve.Count };
+            public List<Curve> Curves = new();
+            private readonly SingleCurveEditCanvas _singleCurveCanvas = new() { ImGuiTitle = "canvas" + _interactionForCurve.Count };
 
             //public ScalableCanvas Canvas => _canvas;
 
@@ -98,6 +99,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
             {
                 _singleCurveCanvas.Draw(Curves[0], this);
             }
+
 
             #region implement editing ---------------------------------------------------------------
             protected override IEnumerable<Curve> GetAllCurves()
@@ -147,7 +149,8 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                         }
                         else
                         {
-                            Log.Error("Deactivated keyframe dragging without valid command?");
+                            // This happens when clicking on keyframes for selection...
+                            //Log.Error("Deactivated keyframe dragging without valid command?");
                         }
                     }
 
@@ -259,7 +262,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
             /// <summary>
             /// Implement canvas for showing and manipulating curve
             /// </summary>
-            private class SingleCurveEditCanvas : CurveEditCanvas
+            internal class SingleCurveEditCanvas : CurveEditCanvas
             {
                 public SingleCurveEditCanvas()
                 {
@@ -269,7 +272,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
 
                 public void Draw(Curve curve, CurveInteraction interaction)
                 {
-                    var height = (_interactionFlags & T3Ui.EditingFlags.ExpandVertically) == T3Ui.EditingFlags.ExpandVertically
+                    var height = _interactionFlags.HasFlag(T3Ui.EditingFlags.ExpandVertically)
                                      ? ImGui.GetContentRegionAvail().Y
                                      : DefaultCurveParameterHeight;
 
@@ -322,7 +325,7 @@ namespace T3.Editor.Gui.InputUi.CombinedInputs
                         if (NeedToAdjustScopeAfterFirstRendering)
                         {
                             var bounds = GetBoundsOnCanvas(interaction.GetAllKeyframes());
-                            SetScopeToCanvasArea(bounds, flipY: true, GraphCanvas.Current, 100, 100);
+                            SetScopeToCanvasArea(bounds, flipY: true, GraphCanvas.Current, 30, 15);
                             NeedToAdjustScopeAfterFirstRendering = false;
                         }
                     }
