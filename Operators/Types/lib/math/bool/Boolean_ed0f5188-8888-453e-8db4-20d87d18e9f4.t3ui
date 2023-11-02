@@ -10,23 +10,7 @@
       }
     },
     {
-      "InputId": "2c5cf823-1db6-44b0-af48-f202852d6c16"/*True*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      },
-      "Usage": "Default"
-    },
-    {
-      "InputId": "c6c398bc-07d5-48fa-80b9-93a8a246a570"/*False*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 90.0
-      },
-      "Usage": "Default"
-    },
-    {
-      "InputId": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*Color*/,
+      "InputId": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*ColorInGraph*/,
       "Position": {
         "X": -200.0,
         "Y": 135.0

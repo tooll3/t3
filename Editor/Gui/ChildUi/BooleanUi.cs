@@ -1,52 +1,33 @@
+using System;
 using System.Linq;
 using System.Numerics;
-using System.Windows.Forms;
 using ImGuiNET;
 using T3.Core.Operator;
-using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.ChildUi.WidgetUi;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
-using T3.Operators.Types.Id_ed0f5188_8888_453e_8db4_20d87d18e9f4;
-using Icon = T3.Editor.Gui.Styling.Icon;
-using String = T3.Operators.Types.Id_ed0f5188_8888_453e_8db4_20d87d18e9f4.Boolean;
-
+using Boolean = T3.Operators.Types.Id_ed0f5188_8888_453e_8db4_20d87d18e9f4.Boolean;
 
 namespace T3.Editor.Gui.ChildUi
 {
-
-
     public static class BooleanUi
     {
         public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect screenRect)
         {
-
-            //we get the parameters from the operator
-            if (!(instance is String stringInstance))
+            if (instance is not Boolean boolean)
                 return SymbolChildUi.CustomUiResult.None;
 
-            var v = stringInstance.True.TypedInputValue.Value;
-            var w = stringInstance.False.TypedInputValue.Value;
-            var color = stringInstance.Color.TypedInputValue.Value;
-
-            /*if (string.IsNullOrEmpty(v))
-            {
-                //v = "on";
-
-                v = "on";
-              
-            }
-
-            if (string.IsNullOrEmpty(w))
-            {
-                w = "off";
-            }*/
-            // end of getting the strings
-
-            if (!(instance is Boolean boolean)
-                || !ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
+            if (!ImGui.IsRectVisible(screenRect.Min, screenRect.Max))
                 return SymbolChildUi.CustomUiResult.None;
+
+            var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList);
+            var colorAsVec4 = boolean.ColorInGraph.TypedInputValue.Value;
+            var color = new Color(colorAsVec4);
+
+            var activeRect = screenRect;
+            activeRect.Min.X += dragWidth;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
             screenRect.Expand(-4);
@@ -56,48 +37,97 @@ namespace T3.Editor.Gui.ChildUi
 
             var refValue = boolean.BoolValue.Value;
             var label = string.IsNullOrEmpty(symbolChild.Name)
-                            ? refValue ? "" : ""
-                            : symbolChild.ReadableName;// we reference here to show correct state when connected
+                            ? (refValue ? "True" : "False")
+                            : symbolChild.ReadableName;
 
-            //we use the 
-            if (CustomComponents.ToggleButtonB($"{label}{(refValue ? $" {v}" : $" {w}")}", ref refValue, new Vector2((screenRect.Max.X - screenRect.Min.X) + 20, screenRect.Max.Y - screenRect.Min.Y), color))
+            drawList.AddRectFilled(activeRect.Min, activeRect.Max, color.Fade(refValue ? 0.5f : 0.1f));
+            var canvasScale = GraphCanvas.Current.Scale.Y;
+
+            var font = WidgetElements.GetPrimaryLabelFont(canvasScale);
+            var labelColor = WidgetElements.GetPrimaryLabelColor(canvasScale);
+
+            ImGui.PushFont(font);
+            var labelSize = ImGui.CalcTextSize(label);
+
+            var labelPos = new Vector2(activeRect.Min.X + 18 * canvasScale,
+                                       (activeRect.Min.Y + activeRect.Max.Y) / 2 - labelSize.Y / 2);
+            drawList.AddText(font, font.FontSize, labelPos, labelColor, label);
+            ImGui.PopFont();
+
+            var checkCenter = new Vector2(labelPos.X - 10f * canvasScale,
+                                          (activeRect.Min.Y + activeRect.Max.Y) / 2 + 1.5f * canvasScale
+                                         );
+            var checkSize = MathF.Min(100, 2.5f * canvasScale);
+            var points = new[]
+                             {
+                                 checkCenter + new Vector2(-2, -1) * checkSize,
+                                 checkCenter + new Vector2(0, 1) * checkSize,
+                                 checkCenter + new Vector2(3, -2) * checkSize,
+                             };
+            drawList.AddPolyline(ref points[0], 3,
+                                 refValue ? UiColors.WidgetTitle : UiColors.BackgroundFull.Fade(0.2f),
+                                 ImDrawFlags.None,
+                                 MathF.Max(1.4f, 0.5f * canvasScale));
+
+            if (!boolean.BoolValue.IsConnected)
             {
-                OnClickBehavior(ref refValue);
-            }
-
-
-            // ImGui.SameLine();
-
-
-            // Calculate checkbox size and position
-            var checkboxSize = new Vector2(20, 20);
-            var checkboxPos = screenRect.Min + new Vector2(4, ((screenRect.GetHeight() - checkboxSize.Y) / 2) - 2);
-            //var checkboxPos =  new Vector2(0,0);
-
-            // Draw the checkbox
-            ImGui.SetCursorScreenPos(checkboxPos);
-
-            if (ImGui.Checkbox("", ref refValue))
-            {
-                OnClickBehavior(ref refValue);
-            }
-
-            void OnClickBehavior(ref bool refValue)
-            {
-                if (!boolean.BoolValue.IsConnected)
+                var isHoveredOrActive = boolean.SymbolChildId == activeInputId ||
+                                        ImGui.IsWindowHovered() && activeRect.Contains(ImGui.GetMousePos());
+                if (isHoveredOrActive)
                 {
-                    boolean.BoolValue.TypedInputValue.Value = !boolean.BoolValue.TypedInputValue.Value;
+                    if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                    {
+                        activeInputId = boolean.SymbolChildId;
+                    }
+                    else if (ImGui.IsMouseReleased(ImGuiMouseButton.Left) && ImGui.GetMouseDragDelta().LengthSquared() < UserSettings.Config.ClickThreshold)
+                    {
+                        activeInputId = Guid.Empty;
+                        var newValue = !boolean.BoolValue.TypedInputValue.Value;
+                        boolean.BoolValue.SetTypedInputValue(newValue);
+                    }
                 }
-
-                boolean.BoolValue.Input.IsDefault = false;
-                boolean.BoolValue.DirtyFlag.Invalidate();
             }
 
-
-            //ImGui.TextUnformatted(label);
             ImGui.PopClipRect();
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolChildUi.CustomUiResult.Rendered
+                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph
+                   | SymbolChildUi.CustomUiResult.PreventTooltip
+                   | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp
+                   | SymbolChildUi.CustomUiResult.PreventInputLabels;
         }
+
+        /// <summary>
+        /// toggle button for boolean math op 
+        /// </summary>
+        private static bool ToggleButtonB(string label, ref bool isSelected, Vector2 size, Vector4 color, bool trigger = false)
+        {
+            var clicked = false;
+            var colorInactive = color - new Vector4(.0f, .0f, .0f, .3f);
+
+            ImGui.PushFont(GraphCanvas.Current.Scale.X < 2
+                               ? Fonts.FontSmall
+                               : GraphCanvas.Current.Scale.X < 4
+                                   ? Fonts.FontNormal
+                                   : Fonts.FontLarge);
+
+            ImGui.PushStyleColor(ImGuiCol.Button, isSelected ? color : colorInactive);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color); // Adjust this as needed 
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, colorInactive); // Adjust this as needed 
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Selection.Rgba);
+
+            if (ImGui.Button(label, size) || trigger)
+            {
+                isSelected = !isSelected;
+                clicked = true;
+            }
+
+            ImGui.PopStyleColor(4);
+            ImGui.PopFont();
+
+            return clicked;
+        }
+
+        private static Guid activeInputId;
     }
 }

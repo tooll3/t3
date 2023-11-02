@@ -134,40 +134,6 @@ namespace T3.Editor.Gui.Styling
             return clicked;
         }
 
-        // toggle button for boolean math op 
-        public static bool ToggleButtonB(string label, ref bool isSelected, Vector2 size, Vector4 color, bool trigger = false)
-        {
-            var wasSelected = isSelected;
-            var clicked = false;
-            var colorActive = color;
-            var colorInactive = color - new Vector4(.0f, .0f, .0f, .3f);
-
-
-
-            ImGui.PushFont(GraphCanvas.Current.Scale.X < 2
-                              ? Fonts.FontSmall
-                              : GraphCanvas.Current.Scale.X < 4
-                                  ? Fonts.FontNormal
-                                  : Fonts.FontLarge);
-
-
-            ImGui.PushStyleColor(ImGuiCol.Button, isSelected ? colorActive : colorInactive);
-            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, colorActive); // Adjust this as needed 
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, colorInactive); // Adjust this as needed 
-            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Selection.Rgba);
-
-            if (ImGui.Button(label, size) || trigger)
-            {
-                isSelected = !isSelected;
-                clicked = true;
-            }
-
-            ImGui.PopStyleColor(4);
-            ImGui.PopFont();
-
-            return clicked;
-        }
-
         public static bool ToggleIconButton(Icon icon, string label, ref bool isSelected, Vector2 size, bool trigger = false)
         {
             var clicked = false;
