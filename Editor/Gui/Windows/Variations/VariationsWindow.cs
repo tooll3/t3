@@ -128,7 +128,7 @@ namespace T3.Editor.Gui.Windows.Variations
                            .EmptyWindowMessage("No Snapshots yet.\n\nWith shapshots you can switch or blend\nbetween parameter sets in your composition.\n\n"
                                                + additionalHint, "Learn More"))
                         {
-                            var url = "https://github.com/still-scene/t3/wiki/PresetsAndSnapshots";
+                            var url = "https://github.com/tooll3/t3/wiki/PresetsAndSnapshots";
                             Process.Start("explorer", url);
                         }
                     }

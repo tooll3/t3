@@ -92,7 +92,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
             }
         }
 
-        private const string HelpUrl = "https://github.com/still-scene/t3/wiki/installation#setup-and-installation";
+        private const string HelpUrl = "https://github.com/tooll3/t3/wiki/installation#setup-and-installation";
         private const string StartUpLockFilePath = @".t3\startingUp";
     }
 }

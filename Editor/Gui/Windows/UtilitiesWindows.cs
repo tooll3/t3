@@ -133,7 +133,7 @@ public class UtilitiesWindow : Window
         if (fontGroups?.Count() != 1)
         {
             Log.Warning($"Can't convert {filePath} to SvgFont. It requires 1 block with a '-Font' suffix.");
-            Log.Warning($" Please read more: https://github.com/still-scene/t3/wiki/SvgLineFonts");
+            Log.Warning($" Please read more: https://github.com/tooll3/t3/wiki/SvgLineFonts");
         }
 
         var fontFace = new XElement(_ns + "font-face");
