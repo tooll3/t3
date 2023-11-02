@@ -50,7 +50,7 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
 
             var animMode = AnimMode.GetEnumValue<AnimModes>(context);//   (AnimModes)AnimMode.GetValue(context).Clamp(0, Enum.GetNames(typeof(AnimModes)).Length -1);
 
-            
+
             
             var triggered = Trigger.GetValue(context);
             if (triggered != _trigger)
@@ -91,46 +91,59 @@ namespace T3.Operators.Types.Id_95d586a2_ee14_4ff5_a5bb_40c497efde95
             if (animMode == AnimModes.ForwardAndBackwards)
             {
                 var dp = (float)((currentTime - _triggerTime) / _duration);
-                if (_currentDirection == Directions.Forward)
+                switch (_currentDirection)
                 {
-                    LastFraction = _startProgress + dp;
-                    if (LastFraction >= 1)
+                    case Directions.Forward:
                     {
-                        HasCompleted.Value = true;
-                        LastFraction = 1;
-                        _currentDirection = Directions.None;
+                        LastFraction = _startProgress + dp;
+                        if (LastFraction >= 1)
+                        {
+                            HasCompleted.Value = true;
+                            LastFraction = 1;
+                            _currentDirection = Directions.None;
+                        }
+
+                        break;
                     }
-                }
-                else if (_currentDirection == Directions.Backwards)
-                {
-                    LastFraction = _startProgress - dp;
-                    if (LastFraction <= 0)
+                    case Directions.Backwards:
                     {
-                        LastFraction = 0;
-                        _currentDirection = Directions.None;
+                        LastFraction = _startProgress - dp;
+                        if (LastFraction <= 0)
+                        {
+                            LastFraction = 0;
+                            _currentDirection = Directions.None;
+                        }
+
+                        break;
                     }
                 }
             }
             else
             {
-                if (_currentDirection == Directions.Forward)
+                switch (_currentDirection)
                 {
-                    LastFraction = (currentTime - _triggerTime)/_duration;
-                    if(LastFraction >= 1)
+                    case Directions.Forward:
                     {
-                        LastFraction = 1;
-                        HasCompleted.Value = true;
-                        _currentDirection = Directions.None;
-                    }
-                }
-                else if  (_currentDirection == Directions.Backwards)
-                {
-                    LastFraction =   ( _triggerTime- currentTime )/_duration;
+                        LastFraction = (currentTime - _triggerTime + 0.00001f)/_duration;
+                        if(LastFraction >= 1)
+                        {
+                            LastFraction = 1;
+                            HasCompleted.Value = true;
+                            _currentDirection = Directions.None;
+                        }
 
-                    if (LastFraction <= 0)
+                        break;
+                    }
+                    case Directions.Backwards:
                     {
-                        LastFraction = 0;
-                        _currentDirection = Directions.None;
+                        LastFraction =   1+( _triggerTime- currentTime )/_duration;
+                        if (LastFraction < 0)
+                        {
+                            LastFraction = 0;
+                            _currentDirection = Directions.None;
+                        }
+
+                        break;
                     }
                 }
             }
