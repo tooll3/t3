@@ -8,12 +8,13 @@
       "DefaultValue": false
     },
     {
-      "Id": "2c5cf823-1db6-44b0-af48-f202852d6c16"/*True*/,
-      "DefaultValue": ""
-    },
-    {
-      "Id": "c6c398bc-07d5-48fa-80b9-93a8a246a570"/*False*/,
-      "DefaultValue": ""
+      "Id": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*ColorInGraph*/,
+      "DefaultValue": {
+        "X": 0.15294118,
+        "Y": 0.15294118,
+        "Z": 0.15294118,
+        "W": 1.0
+      }
     }
   ],
   "Children": [],
