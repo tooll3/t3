@@ -47,6 +47,7 @@ namespace T3.Editor.Gui.UiHelpers
             public bool FocusMode = false;
             public int WindowLayoutIndex = 0;
             public bool EnableIdleMotion = true;
+            public bool SuspendRenderingWhenHidden = true;
             
             // Interaction
             public bool WarnBeforeLibEdit = true;
@@ -55,7 +56,6 @@ namespace T3.Editor.Gui.UiHelpers
             public bool UseArcConnections = true;
             public bool ResetTimeAfterPlayback;
             public float SnapStrength = 5;
-            //public bool UseJogDialControl = true;
             public ValueEditGizmos ValueEditGizmo;
             public float ScrollSmoothing = 0.1f;
 

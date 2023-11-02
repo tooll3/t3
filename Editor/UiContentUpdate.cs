@@ -31,7 +31,7 @@ internal static class UiContentUpdate
             _lastUiScale = UserSettings.Config.UiScaleFactor;
         }
 
-        if (ProgramWindows.Main.IsMinimized)
+        if (ProgramWindows.Main.IsMinimized && UserSettings.Config.SuspendRenderingWhenHidden)
         {
             Thread.Sleep(100);
             return;

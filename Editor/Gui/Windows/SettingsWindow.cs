@@ -67,6 +67,12 @@ namespace T3.Editor.Gui.Windows
                                                   ref UserSettings.Config.MouseWheelEditsNeedCtrlKey,
                                                   "In parameter window you can edit numeric values by using the mouse wheel. This setting will prevent accidental modifications while scrolling because by using ctrl key for activation.",
                                                   UserSettings.Defaults.MouseWheelEditsNeedCtrlKey);
+                
+                changed |= FormInputs.AddCheckBox("Suspend rendering when hidden",
+                                                  ref UserSettings.Config.SuspendRenderingWhenHidden,
+                                                  "Suspend rendering and update when Tooll's editor window is minimized. This will reduce energy consumption significantly.",
+                                                  UserSettings.Defaults.SuspendRenderingWhenHidden);
+                
 
                 FormInputs.ResetIndent();
                 FormInputs.AddVerticalSpace();
