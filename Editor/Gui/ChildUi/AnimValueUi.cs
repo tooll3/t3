@@ -99,6 +99,12 @@ namespace T3.Editor.Gui.ChildUi
             var graphWidth = graphRect.GetWidth();
             var h = graphRect.GetHeight();
             
+            var shapeIndex = (animValue.Shape.IsConnected) // Todo check for animated 
+                            ? animValue.Shape.Value 
+                            :animValue.Shape.TypedInputValue.Value;
+
+            var shape = (AnimMath.Shapes)shapeIndex.Clamp(0, Enum.GetNames(typeof(AnimMath.Shapes)).Length);
+            
             // Draw Graph
             {
                 const float previousCycleFragment = 0.25f; 
@@ -133,7 +139,7 @@ namespace T3.Editor.Gui.ChildUi
                     var f = (float)i / GraphListSteps;
                     var fragment = f * (1 + previousCycleFragment) - previousCycleFragment + Math.Floor(animValue._normalizedTime);
 
-                    var v = AnimMath.CalcValueForNormalizedTime(animValue._shape,
+                    var v = AnimMath.CalcValueForNormalizedTime(shape,
                                                                 fragment,
                                                                 0,
                                                                 animValue.Bias.TypedInputValue.Value,
