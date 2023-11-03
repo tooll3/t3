@@ -445,7 +445,9 @@ namespace T3.Editor.Gui.Graph
                             _drawList.PushClipRect(_usableScreenRect.Min, _usableScreenRect.Max, true);
                         }
                 
-                        _drawList.AddText(screenCursor, valueColor, valueAsString);
+                        if(!string.IsNullOrEmpty(valueAsString))
+                            _drawList.AddText(screenCursor, valueColor, valueAsString);
+                        
                         if (needClipping)
                             _drawList.PopClipRect();
                 
