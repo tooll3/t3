@@ -30,6 +30,9 @@ namespace T3.Editor.Gui.UiHelpers
         /// </summary>
         public static void DebugRect(Vector2 screenMin, Vector2 screenMax, string label = "")
         {
+            if (string.IsNullOrEmpty(label))
+                return;
+            
             var overlayDrawlist = ImGui.GetForegroundDrawList();
             overlayDrawlist.AddRect(screenMin, screenMax, Color.Green);
             overlayDrawlist.AddText(new Vector2(screenMin.X, screenMax.Y), Color.Green, label);

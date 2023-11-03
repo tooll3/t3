@@ -17,6 +17,9 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
     {
         public static void DrawPrimaryTitle(ImDrawListPtr drawList, ImRect widgetRect, string formattedValue)
         {
+            if (string.IsNullOrEmpty(formattedValue))
+                return;
+            
             var canvasScale = GraphCanvas.Current.Scale.Y;
             var font = canvasScale < ScaleFactors.NormalScale
                            ? Fonts.FontSmall
@@ -42,6 +45,9 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
 
         public static void DrawSmallTitle(ImDrawListPtr drawList, ImRect widgetRect, string title)
         {
+            if (string.IsNullOrEmpty(title))
+                return;
+            
             var canvasScale = GraphCanvas.Current.Scale.Y / T3Ui.UiScaleFactor;
             var font = canvasScale > ScaleFactors.LargerScale
                            ? Fonts.FontNormal
@@ -86,6 +92,9 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
 
         public static void DrawPrimaryValue(ImDrawListPtr drawList, ImRect widgetRect, string formattedValue)
         {
+            if (string.IsNullOrEmpty(formattedValue))
+                return;
+            
             var canvasScale = GraphCanvas.Current.Scale.Y;
             
             ImGui.PushFont(GetPrimaryLabelFont(canvasScale));
@@ -101,6 +110,9 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
 
         public static void DrawSmallValue(ImDrawListPtr drawList, ImRect widgetRect, string title)
         {
+            if (string.IsNullOrEmpty(title))
+                return;
+            
             var canvasScale = GraphCanvas.Current.Scale.Y / T3Ui.UiScaleFactor;
             var font = canvasScale > ScaleFactors.LargerScale
                            ? Fonts.FontNormal

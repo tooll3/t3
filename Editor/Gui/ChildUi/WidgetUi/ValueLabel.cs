@@ -69,7 +69,7 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
             }
             
             // Draw aligned label
-            {
+            if(!string.IsNullOrEmpty(valueText)){
                 ImGui.PushFont(Fonts.FontSmall);
                 var labelSize = ImGui.CalcTextSize(valueText);
                 var space = screenRect.GetSize() - labelSize;

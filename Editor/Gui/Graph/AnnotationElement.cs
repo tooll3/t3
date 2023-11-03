@@ -104,7 +104,7 @@ namespace T3.Editor.Gui.Graph
                              thickness);
 
             // Label
-            {
+            if(!string.IsNullOrEmpty(annotation.Title)) {
                 var canvasScale = GraphCanvas.Current.Scale.X;
                 var font = annotation.Title.StartsWith("# ") ? Fonts.FontLarge: Fonts.FontNormal;
                 var fade = MathUtils.SmootherStep(0.25f, 0.6f, canvasScale);
