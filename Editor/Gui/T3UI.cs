@@ -122,6 +122,8 @@ public class T3Ui
         // Draw everything!
         ImGui.DockSpaceOverViewport();
 
+        WindowManager.Draw();
+            
         // Complete frame
         SingleValueEdit.StartNextFrame();
         SelectableNodeMovement.CompleteFrame();
