@@ -560,7 +560,7 @@ namespace T3.Editor.Gui.Styling
             return clicked;
         }
 
-        public static bool DrawInputFieldWithPlaceholder(string placeHolderLabel, ref string value, float width = 0)
+        public static bool DrawInputFieldWithPlaceholder(string placeHolderLabel, ref string value, float width = 0, bool showClear= true,  ImGuiInputTextFlags inputFlags= ImGuiInputTextFlags.None)
         {
             var notEmpty = !string.IsNullOrEmpty(value);
             var wasNull = value == null;
@@ -568,17 +568,20 @@ namespace T3.Editor.Gui.Styling
                 value = string.Empty;
 
             ImGui.SetNextItemWidth(width - FormInputs.ParameterSpacing - (notEmpty ? ImGui.GetFrameHeight():0));
-            var modified = ImGui.InputText("##" + placeHolderLabel, ref value, 1000);
+            var modified = ImGui.InputText("##" + placeHolderLabel, ref value, 1000, inputFlags);
             if (!modified && wasNull)
                 value = null;
 
             if (notEmpty)
             {
-                ImGui.SameLine(0,0);
-                if (ImGui.Button("×" + "##" + placeHolderLabel))
+                if (showClear)
                 {
-                    value = null;
-                    modified = true;
+                    ImGui.SameLine(0,0);
+                    if (ImGui.Button("×" + "##" + placeHolderLabel))
+                    {
+                        value = null;
+                        modified = true;
+                    }
                 }
             }
             else
