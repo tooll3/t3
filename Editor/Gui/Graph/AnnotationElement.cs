@@ -5,6 +5,7 @@ using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Operator;
+using T3.Core.Utils;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Annotations;
 using T3.Editor.Gui.Commands.Graph;
@@ -50,7 +51,7 @@ namespace T3.Editor.Gui.Graph
             // Resize indicator
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeNWSE);
-                ImGui.SetCursorScreenPos(_screenArea.Max - new Vector2(10, 10));
+                ImGui.SetCursorScreenPos(_screenArea.Max - new Vector2(10, 10) * T3Ui.UiScaleFactor);
                 ImGui.Button("##resize", new Vector2(10, 10) * T3Ui.UiScaleFactor);
                 if (ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                 {
@@ -62,10 +63,10 @@ namespace T3.Editor.Gui.Graph
             }
 
             // Background
-            const float backgroundAlpha = 0.1f;
-            const float headerHoverAlpha = 0.2f;
+            const float backgroundAlpha = 0.2f;
+            const float headerHoverAlpha = 0.3f;
 
-            drawList.AddRectFilled(_screenArea.Min, _screenArea.Max, annotation.Color.Fade(backgroundAlpha));
+            drawList.AddRectFilled(_screenArea.Min, _screenArea.Max, UiColors.BackgroundFull.Fade(backgroundAlpha));
 
             // Interaction
             ImGui.SetCursorScreenPos(clickableArea.Min);
@@ -92,7 +93,7 @@ namespace T3.Editor.Gui.Graph
 
             var borderColor = annotation.IsSelected
                                   ? UiColors.Selection
-                                  : annotation.Color.Fade(isHeaderHovered ? headerHoverAlpha : backgroundAlpha);
+                                  : UiColors.BackgroundFull.Fade(isHeaderHovered ? headerHoverAlpha : backgroundAlpha);
 
             const float thickness = 1;
             drawList.AddRect(_screenArea.Min - Vector2.One * thickness,
@@ -104,25 +105,22 @@ namespace T3.Editor.Gui.Graph
 
             // Label
             {
-                var isScaledDown = GraphCanvas.Current.Scale.X < 1 * T3Ui.UiScaleFactor;
-                //var font = isScaledDown ? Fonts.FontSmall : Fonts.FontNormal;
-                var font = Fonts.FontBold;
-                //ImGui.PushFont(font);
-
+                var canvasScale = GraphCanvas.Current.Scale.X;
+                var font = annotation.Title.StartsWith("# ") ? Fonts.FontLarge: Fonts.FontNormal;
+                var fade = MathUtils.SmootherStep(0.25f, 0.6f, canvasScale);
                 drawList.PushClipRect(_screenArea.Min, _screenArea.Max, true);
-                var labelPos = _screenArea.Min + new Vector2(4, 4);
+                var labelPos = _screenArea.Min + new Vector2(8, 6) * T3Ui.DisplayScaleFactor;
 
-                float fontSize = GraphCanvas.Current.Scale.X > 1 
-                                     ? font.FontSize
-                                     : GraphCanvas.Current.Scale.X >  Fonts.FontSmall.Scale / Fonts.FontNormal.Scale
-                                         ? font.FontSize
-                                         : font.FontSize * GraphCanvas.Current.Scale.X;
+                var fontSize = canvasScale > 1 
+                                   ? font.FontSize
+                                   : canvasScale >  Fonts.FontSmall.Scale / Fonts.FontNormal.Scale
+                                       ? font.FontSize
+                                       : font.FontSize * canvasScale;
                 drawList.AddText(font,
                                  fontSize,
                                  labelPos,
-                                 ColorVariations.OperatorLabel.Apply(annotation.Color),
+                                 ColorVariations.OperatorLabel.Apply(annotation.Color.Fade(fade)),
                                  annotation.Title);
-                //ImGui.PopFont();
                 drawList.PopClipRect();
             }
 

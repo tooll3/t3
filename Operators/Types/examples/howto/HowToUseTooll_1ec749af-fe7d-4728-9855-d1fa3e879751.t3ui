@@ -21,29 +21,15 @@
     {
       "ChildId": "710e4b8a-f5c7-4d6c-82a7-df509ed708ce"/*AsciiRender*/,
       "Position": {
-        "X": 354.61865,
-        "Y": 895.9207
-      }
-    },
-    {
-      "ChildId": "c3d20f3a-3699-43f8-9b21-9d251cee24ed"/*LoadImage*/,
-      "Position": {
-        "X": 54.61859,
-        "Y": 895.9207
+        "X": 463.84412,
+        "Y": 833.6876
       }
     },
     {
       "ChildId": "cfcb9a91-54a9-4b04-a972-30fbb65f9ee2"/*Blur*/,
       "Position": {
-        "X": 204.61859,
-        "Y": 895.9207
-      }
-    },
-    {
-      "ChildId": "501a0448-99e5-42d8-9075-d1c4c77eb767"/*OscillateVec2*/,
-      "Position": {
-        "X": 204.61859,
-        "Y": 951.9207
+        "X": 313.84412,
+        "Y": 833.6876
       }
     },
     {
@@ -52,14 +38,42 @@
         "X": 544.6786,
         "Y": 505.31738
       }
+    },
+    {
+      "ChildId": "8e521fb6-e59d-403c-80cc-9e9b38df0b23"/*Text*/,
+      "Position": {
+        "X": 13.844116,
+        "Y": 833.6876
+      }
+    },
+    {
+      "ChildId": "b35105be-26e1-4847-bfb5-4686fb304d1b"/*RenderTarget*/,
+      "Position": {
+        "X": 163.84412,
+        "Y": 833.6876
+      }
+    },
+    {
+      "ChildId": "ebfeac4e-0baf-4d89-9572-311831b8e631"/*AnimValue*/,
+      "Position": {
+        "X": 313.84412,
+        "Y": 959.6876
+      }
+    },
+    {
+      "ChildId": "f8b7be5b-bd28-40f3-9c30-880575a764f8"/*AnimVec2*/,
+      "Position": {
+        "X": 313.84412,
+        "Y": 916.6876
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "c301380c-8fe6-4e3d-af10-9cebd230b0e9"/*TextureOutput*/,
       "Position": {
-        "X": 504.6187,
-        "Y": 895.9207
+        "X": 613.8442,
+        "Y": 833.6876
       }
     }
   ],

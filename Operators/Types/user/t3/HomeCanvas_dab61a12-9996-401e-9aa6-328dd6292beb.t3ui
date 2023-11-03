@@ -1,104 +1,107 @@
 {
   "Id": "dab61a12-9996-401e-9aa6-328dd6292beb"/*HomeCanvas*/,
-  "Description": "Your personal Workspace.",
+  "Description": "This is your personal Workspace. \n\nIt comes prefilled with a short introduction and references to useful examples. \nAlso consider watching the tutorial videos and documentation linked below.\n\nIf you're already familiar with the user interface you can savely remove these Ops on your home canvas.",
   "InputUis": [],
   "SymbolChildUis": [
     {
       "ChildId": "d31691f2-3f93-474e-9327-b28281c057f3"/*FluidFeedback*/,
+      "Comment": "A simple feedback effect. \n\nNote that generating live preset thumbnails with feedbacks is not supported.",
       "Position": {
-        "X": -1652.9976,
-        "Y": -4889.9697
+        "X": -1609.6702,
+        "Y": -5016.688
       }
     },
     {
       "ChildId": "64fe5405-7f98-4303-b2a5-f53db065740c"/*TorusMesh*/,
       "Position": {
-        "X": -2102.9978,
-        "Y": -4826.9697
+        "X": -2059.6711,
+        "Y": -4953.688
       }
     },
     {
       "ChildId": "dda89242-8a90-4442-b3df-ed2d855e32a4"/*DrawMesh*/,
+      "Comment": "We use the color sampled from the gradient to draw a torus mesh.",
       "Position": {
-        "X": -1952.9976,
-        "Y": -4889.9697
+        "X": -1909.6702,
+        "Y": -5016.688
       }
     },
     {
       "ChildId": "2fe00e23-ee4a-4234-a0dc-213b9a6ca9fe"/*OrbitCamera*/,
       "Position": {
-        "X": -1802.9976,
-        "Y": -4889.9697
+        "X": -1759.6702,
+        "Y": -5016.688
       }
     },
     {
       "ChildId": "018e0408-fac8-42f0-a17c-b9c0bb5ab5b7"/*SampleGradient*/,
+      "Comment": "Here we sample a gradient with that value.\n\nYou can use the upper area for dragging the operator and the lower area for adjust the gradients.\nAlso try to right-click the lower area to open the context menu with presets and further options.\n\nTip: You can remove a step from the gradient by dragging it down until the remove icon appears.",
       "Position": {
-        "X": -2102.9978,
-        "Y": -4889.9697
-      }
-    },
-    {
-      "ChildId": "13005c71-2ea0-4088-986b-ba8fbc91783b"/*Synchotron*/,
-      "Position": {
-        "X": -2086.003,
-        "Y": -4395.7686
+        "X": -2059.6707,
+        "Y": -5016.688
       }
     },
     {
       "ChildId": "ecaa1d12-625b-46c0-9148-454dfc40b576"/*HowToUseTooll*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 176.34798,
+        "Y": 61.01957
+      },
+      "Comment": "Double click this operator to open an quick interactive tutorials.",
       "Position": {
-        "X": -2101.4788,
-        "Y": -5021.86
+        "X": -1824.6055,
+        "Y": -5229.15
       }
     },
     {
       "ChildId": "665d7961-58a9-4181-94f1-eb40af17cdc7"/*HowToAnimate*/,
       "Position": {
-        "X": -2231.4658,
-        "Y": -4604.3564
+        "X": -2250.3818,
+        "Y": -4741.101
       }
     },
     {
       "ChildId": "73956a9d-0756-4d9c-a11b-ca59b3ee16fb"/*HowToDrawThings*/,
       "Position": {
-        "X": -2081.4658,
-        "Y": -4604.3564
+        "X": -1950.3818,
+        "Y": -4741.101
       }
     },
     {
       "ChildId": "acbc034c-3c0d-4f7e-ac09-39cfd702f601"/*HowToUseImageEffects*/,
       "Position": {
-        "X": -1933.4803,
-        "Y": -4603.2993
+        "X": -2100.3818,
+        "Y": -4741.101
       }
     },
     {
       "ChildId": "91dc79a2-ed7a-41dc-8245-2d3011f4aebe"/*HowToUseOperators*/,
       "Position": {
-        "X": -1783.4803,
-        "Y": -4603.2993
+        "X": -1800.3818,
+        "Y": -4741.101
       }
     },
     {
       "ChildId": "91042db3-81d6-4a17-8cef-423811aabb17"/*HowToUsePoints*/,
       "Position": {
-        "X": -1633.4803,
-        "Y": -4603.2993
-      }
-    },
-    {
-      "ChildId": "a981389f-6577-4ecd-95f7-d69e5cf8bee3"/*WorksForEverybody*/,
-      "Position": {
-        "X": -2236.003,
-        "Y": -4395.7686
+        "X": -1650.3818,
+        "Y": -4741.101
       }
     },
     {
       "ChildId": "a777a09a-c830-46af-a2b1-3dcd3c48b169"/*AnimValue*/,
+      "Comment": "This will generate an LFO-like value animation.\n\nTry to hold down CTRL and drag the curve or the speed multiplier...",
       "Position": {
-        "X": -2252.9978,
-        "Y": -4889.9697
+        "X": -2209.6711,
+        "Y": -5016.688
+      }
+    },
+    {
+      "ChildId": "9a40eb4f-cda2-4772-8a02-8f85ff4f13c2"/*HowToUseParticles*/,
+      "Position": {
+        "X": -1500.3818,
+        "Y": -4741.101
       }
     }
   ],
@@ -106,11 +109,11 @@
   "Annotations": [
     {
       "Id": "b81c6d34-6ca0-4cf8-aeb5-49e6bdeae95a",
-      "Title": "Welcome to Tooll3\n\nThis short tutorial will guide you through the first steps.\n",
+      "Title": "# Welcome to Tooll3 v3.8\n",
       "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
+        "X": 0.78723407,
+        "Y": 0.60785824,
+        "Z": 0.36570093,
         "W": 1.0
       },
       "Position": {
@@ -118,117 +121,86 @@
         "Y": -5383.488
       },
       "Size": {
-        "X": 813.0497,
-        "Y": 614.5786
-      }
-    },
-    {
-      "Id": "1bb9e84d-84fb-4bc0-a070-ba1d76092369",
-      "Title": "This is the Graph Window.\n\nIn the top right corner, you see,  that it's \ncurrently showing your [Dashboard].",
-      "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
-        "W": 1.0
-      },
-      "Position": {
-        "X": -2267.1064,
-        "Y": -5322.4688
-      },
-      "Size": {
-        "X": 406.215,
-        "Y": 99.29809
-      }
-    },
-    {
-      "Id": "3abc855f-23b7-4e19-b575-d7afc764b9ca",
-      "Title": "You can...\n- zoom with mouse wheel\n- pan with the right mouse button\n- or press [F] to adjust to the view to show all \n content.",
-      "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
-        "W": 1.0
-      },
-      "Position": {
-        "X": -1854.5667,
-        "Y": -5322.4688
-      },
-      "Size": {
-        "X": 379.77603,
-        "Y": 100.455734
+        "X": 935.97754,
+        "Y": 721.02435
       }
     },
     {
       "Id": "589f0a56-7537-4b0e-9305-ec21b76ae7fa",
-      "Title": "This is an Operator.\n\nIf you select it, you will see its output in the Output-Window.\n\nTry to double-click it, for an interactive tutorial that will guide you\nthrough Tooll's user interface.\n\n\n\n\n\n\n      Double click ------>",
+      "Title": "This short tutorial will guide you through the first steps.\n\n1. Select the operator.\n2. You will see its output in the Output-Window.\n3. Double-click it, for an interactive tutorial \nthat will guide you through Tooll's user interface.",
       "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
+        "X": 0.53900707,
+        "Y": 0.53900707,
+        "Z": 0.53900707,
         "W": 1.0
       },
       "Position": {
-        "X": -2266.507,
-        "Y": -5218.758
+        "X": -2268.859,
+        "Y": -5326.587
       },
       "Size": {
-        "X": 791.0501,
-        "Y": 233.90132
+        "X": 421.03372,
+        "Y": 160.59941
       }
     },
     {
       "Id": "7a6d050e-f043-49ca-9f1f-23caca7914d3",
-      "Title": "This is a simple Graph. Select the [FluidFeedback] operator to see it's output.",
+      "Title": "This is a simple Graph. \nSelect the [FluidFeedback] operator to see its output\nand hover over the comment icons to learn more...\n\nTip: You might also need to enable Idle Motion in the \nplayback toolbar and re-pin the output window.",
       "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
         "W": 1.0
       },
       "Position": {
-        "X": -2267.399,
-        "Y": -4976.9624
+        "X": -2269.227,
+        "Y": -5141.452
       },
       "Size": {
-        "X": 792.98834,
-        "Y": 185.8118
-      }
-    },
-    {
-      "Id": "0c4f5f08-a8f1-4791-8764-f3a49aa77871",
-      "Title": "Some more complex projects.",
-      "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
-        "W": 1.0
-      },
-      "Position": {
-        "X": -2275.9617,
-        "Y": -4532.795
-      },
-      "Size": {
-        "X": 815.3256,
-        "Y": 174.20337
+        "X": 911.1803,
+        "Y": 223.185
       }
     },
     {
       "Id": "b4fc7f16-73ac-48ea-93d2-6253527680e3",
-      "Title": "These interactive playgrounds give you a first introduction on how to use different Operators.\nThere is also the \"Tip of the Day\"-playlist on YouTube.",
+      "Title": "These interactive playgrounds give you a first introduction on how to use different Operators.\nAlso consider watching the intro-tutorial video linked in the description in Parameter Window.",
       "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
+        "X": 1.0,
+        "Y": 1.0,
+        "Z": 1.0,
         "W": 1.0
       },
       "Position": {
-        "X": -2275.9617,
-        "Y": -4757.4165
+        "X": -2268.359,
+        "Y": -4908.7925
       },
       "Size": {
-        "X": 813.3638,
-        "Y": 210.12221
+        "X": 909.0123,
+        "Y": 203.57906
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "fa46757f-62c7-4121-ab5c-c148b1da656f",
+      "Title": "15min Introduction",
+      "Description": "A short video tutorial that will guide you through the user interface.",
+      "LinkUrl": "https://tooll.io",
+      "LinkType": "TutorialVideo"
+    },
+    {
+      "Id": "f6ab2a6b-4627-48bc-95ae-3906563435a6",
+      "Title": "Documentation",
+      "Description": "A documentation on Toolls homepage.",
+      "LinkUrl": "https://tooll.io",
+      "LinkType": "Documentation"
+    },
+    {
+      "Id": "9a34d3da-4b02-4e28-8b84-9f4525514ef3",
+      "Title": "Discord",
+      "Description": "You can always visit our discord channel.",
+      "LinkUrl": "https://tooll.io",
+      "LinkType": "Other"
     }
   ]
 }
