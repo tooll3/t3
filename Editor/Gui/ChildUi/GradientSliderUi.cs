@@ -14,37 +14,40 @@ namespace T3.Editor.Gui.ChildUi
     {
         public static SymbolChildUi.CustomUiResult DrawChildUi(Instance instance, ImDrawListPtr drawList, ImRect selectableScreenRect)
         {
-            if (!(instance is SampleGradient gradientSlider)
+            if (instance is not SampleGradient gradientInstance
                 || !ImGui.IsRectVisible(selectableScreenRect.Min, selectableScreenRect.Max))
                 return SymbolChildUi.CustomUiResult.None;
 
             var dragWidth = WidgetElements.DrawDragIndicator(selectableScreenRect, drawList);
             var innerRect = selectableScreenRect;
             innerRect.Min.X += dragWidth;
-
-            var gradient = gradientSlider.Gradient.Value;
-            if (gradient == null)
+            
+            var gradient = (gradientInstance.Gradient.IsConnected) 
+                               ? gradientInstance.Gradient.Value 
+                               :gradientInstance.Gradient.TypedInputValue.Value;
+            
+            if (gradient != null)
             {
                 //Log.Warning("Can't draw undefined gradient");
-                return SymbolChildUi.CustomUiResult.None;
-            }
-
-            var cloneIfModified = gradientSlider.Gradient.Input.IsDefault;
-            
-            if (GradientEditor.Draw(ref gradient, drawList, innerRect, cloneIfModified))
-            {
-                if (cloneIfModified)
+                var cloneIfModified = gradientInstance.Gradient.Input.IsDefault;
+                
+                if (GradientEditor.Draw(ref gradient, drawList, innerRect, cloneIfModified))
                 {
-                    gradientSlider.Gradient.SetTypedInputValue(gradient);
+                    if (cloneIfModified)
+                    {
+                        gradientInstance.Gradient.SetTypedInputValue(gradient);
+                    }
+                    gradientInstance.Color.DirtyFlag.Invalidate();
+                    gradientInstance.OutGradient.DirtyFlag.Invalidate();
                 }
-                gradientSlider.Color.DirtyFlag.Invalidate();
-                gradientSlider.OutGradient.DirtyFlag.Invalidate();
+
+                var x = gradientInstance.SamplePos.Value.Clamp(0, 1) * innerRect.GetWidth();
+                var pMin = new Vector2(innerRect.Min.X + x, innerRect.Min.Y);
+                var pMax = new Vector2(innerRect.Min.X + x + 2, innerRect.Max.Y);
+                drawList.AddRectFilled(pMin, pMax, UiColors.StatusAnimated);
+                //return SymbolChildUi.CustomUiResult.None;
             }
 
-            var x = gradientSlider.SamplePos.Value.Clamp(0, 1) * innerRect.GetWidth();
-            var pMin = new Vector2(innerRect.Min.X + x, innerRect.Min.Y);
-            var pMax = new Vector2(innerRect.Min.X + x + 2, innerRect.Max.Y);
-            drawList.AddRectFilled(pMin, pMax, UiColors.StatusAnimated);
 
             return SymbolChildUi.CustomUiResult.Rendered 
                    | SymbolChildUi.CustomUiResult.PreventInputLabels 

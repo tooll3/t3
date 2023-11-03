@@ -30,8 +30,11 @@ namespace T3.Editor.Gui.ChildUi
                        | SymbolChildUi.CustomUiResult.PreventInputLabels
                        | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
             
+            var curve = (sampleCurve.Curve.IsConnected) 
+                            ? sampleCurve.Curve.Value 
+                            :sampleCurve.Curve.TypedInputValue.Value;
 
-            var curve = sampleCurve.Curve.Value;
+            //var curve = sampleCurve.Curve.Value;
             if (curve == null)
             {
                 //Log.Warning("Can't draw undefined gradient");
