@@ -432,9 +432,12 @@ namespace T3.Editor.Gui.Styling
 
             foreach (var line in lines)
             {
-                var textSize = ImGui.CalcTextSize(line);
-                var position = new Vector2(center.X - textSize.X / 2, y);
-                drawList.AddText(position, emptyMessageColor, line);
+                if (!string.IsNullOrEmpty(line))
+                {
+                    var textSize = ImGui.CalcTextSize(line);
+                    var position = new Vector2(center.X - textSize.X / 2, y);
+                    drawList.AddText(position, emptyMessageColor, line);
+                }
                 y += textLineHeight;
             }
 

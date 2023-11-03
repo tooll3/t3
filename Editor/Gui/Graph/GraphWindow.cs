@@ -47,11 +47,11 @@ namespace T3.Editor.Gui.Graph
 
         public static bool CanOpenAnotherWindow()
         {
-            if (_instanceCounter > 0)
-            {
-                //Log.Error("only one graph window supported for now");
-                return false;
-            }
+            // if (_instanceCounter > 0)
+            // {
+            //     //Log.Error("only one graph window supported for now");
+            //     return false;
+            // }
 
             return true;
         }

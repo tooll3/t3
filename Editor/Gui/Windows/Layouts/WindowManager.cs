@@ -44,7 +44,7 @@ namespace T3.Editor.Gui.Windows.Layouts
         public static void TryToInitialize()
         {
             // Wait first frame for ImGUI to initialize
-            if (ImGui.GetTime() > 1 && _hasBeenInitialized)
+            if (ImGui.GetTime() > 0.2f && _hasBeenInitialized)
                 return;
             
             _windows = new List<Window>()

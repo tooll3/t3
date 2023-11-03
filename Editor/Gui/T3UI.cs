@@ -43,7 +43,7 @@ public class T3Ui
         var operatorsAssembly = Assembly.GetAssembly(typeof(Value));
         UiSymbolData = new UiSymbolData(operatorsAssembly, enableLog: false);
 
-        WindowManager.TryToInitialize();
+        //WindowManager.TryToInitialize();
         ExampleSymbolLinking.UpdateExampleLinks();
         VariationHandling.Init();
 
@@ -122,8 +122,6 @@ public class T3Ui
         // Draw everything!
         ImGui.DockSpaceOverViewport();
 
-        WindowManager.Draw();
-            
         // Complete frame
         SingleValueEdit.StartNextFrame();
         SelectableNodeMovement.CompleteFrame();
