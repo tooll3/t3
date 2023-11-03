@@ -130,7 +130,7 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
 
             var currentRateIndex = SpeedRate.FindClosestRateIndex(rate);
             var formattedValue = currentRateIndex == -1
-                                     ? $"{rate:0.0}"
+                                     ? $"{rate:0.0}×"
                                      : SpeedRate.RelevantRates[currentRateIndex].Label;
             DrawPrimaryValue(drawList, selectableScreenRect, formattedValue);
 
@@ -184,7 +184,7 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
         public static float DrawDragIndicator(ImRect visibleScreenRect, ImDrawListPtr drawList)
         {
             var canvasScale = GraphCanvas.Current.Scale.Y / T3Ui.UiScaleFactor;
-            var width = Math.Min(20 * T3Ui.UiScaleFactor, (int)(7 * canvasScale));
+            var width = Math.Max(10 * T3Ui.UiScaleFactor, (int)(7 * canvasScale));
 
             if (width < 3)
                 return 0;
