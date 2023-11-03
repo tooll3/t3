@@ -71,23 +71,24 @@ namespace T3.Editor.Gui.Windows
             var instance = NodeSelection.GetFirstSelectedInstance();
             if (instance != null)
             {
-                if (instance.Parent == null)
-                    return;
-
-                _editDescriptionDialog.Draw(instance.Symbol);
-
-                var parentUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
-                var symbolChildUi = parentUi.ChildUis.SingleOrDefault(childUi => childUi.Id == instance.SymbolChildId);
-                if (symbolChildUi == null)
+                if (!SymbolUiRegistry.Entries.TryGetValue(instance.Symbol.Id, out var symbolUi))
                 {
                     Log.Warning("Can't find UI definition for symbol " + instance.SymbolChildId);
                     return;
                 }
 
-                if (!SymbolUiRegistry.Entries.TryGetValue(instance.Symbol.Id, out var symbolUi))
+                _editDescriptionDialog.Draw(instance.Symbol);
+
+                SymbolChildUi symbolChildUi = null;
+                if (instance.Parent != null)
                 {
-                    Log.Warning("Can't find UI definition for symbol " + instance.SymbolChildId);
-                    return;
+                    var parentUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
+                    symbolChildUi = parentUi.ChildUis.SingleOrDefault(childUi => childUi.Id == instance.SymbolChildId);
+                    if (symbolChildUi == null)
+                    {
+                        Log.Warning("Can't find UI definition for symbol " + instance.SymbolChildId);
+                        return;
+                    }
                 }
 
                 if (DrawSelectedSymbolHeader(instance, symbolChildUi))
@@ -95,12 +96,15 @@ namespace T3.Editor.Gui.Windows
                     symbolUi.FlagAsModified();
                 }
 
-                var compositionSymbolUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
-                var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+                if (instance.Parent != null)
+                {
+                    var selectedChildSymbolUi = SymbolUiRegistry.Entries[instance.Symbol.Id];
+                    var compositionSymbolUi = SymbolUiRegistry.Entries[instance.Parent.Symbol.Id];
 
-                // Draw parameters
-                DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false);
-                FormInputs.AddVerticalSpace(15);
+                    // Draw parameters
+                    DrawParameters(instance, selectedChildSymbolUi, symbolChildUi, compositionSymbolUi, false);
+                    FormInputs.AddVerticalSpace(15);
+                }
 
                 DrawDescription(symbolUi);
                 return;
@@ -226,7 +230,7 @@ namespace T3.Editor.Gui.Windows
                     SymbolBrowser.DrawExampleOperator(guid, label);
                 }
             }
-            
+
             if (!string.IsNullOrEmpty(symbolUi.Description))
             {
                 var alreadyListedSymbolNames = new HashSet<string>();
@@ -234,9 +238,9 @@ namespace T3.Editor.Gui.Windows
                 var matches = _itemRegex.Matches(symbolUi.Description);
                 if (matches.Count > 0)
                 {
-                    if(!groupLabelShown)
+                    if (!groupLabelShown)
                         DrawGroupLabel(groupLabel);
-                    
+
                     foreach (Match match in matches)
                     {
                         var referencedName = match.Groups[1].Value;
@@ -389,6 +393,7 @@ namespace T3.Editor.Gui.Windows
             }
 
             // SymbolChild Name
+            if (symbolChildUi != null)
             {
                 ImGui.SetCursorPos(ImGui.GetCursorPos() + Vector2.One * 5);
                 ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X - 205);
@@ -417,66 +422,66 @@ namespace T3.Editor.Gui.Windows
                     ImGui.GetWindowDrawList().AddText(ImGui.GetItemRectMin() + new Vector2(5, 5),
                                                       UiColors.TextMuted,
                                                       "Untitled instance");
-            }
 
-            // Disabled toggle
-            {
-                ImGui.SameLine();
-                ImGui.PushFont(Fonts.FontBold);
-                if (symbolChildUi.IsDisabled)
+                // Disabled toggle
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Button, UiColors.StatusAttention.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
-                    if (ImGui.Button("DISABLED", new Vector2(90, 0)))
+                    ImGui.SameLine();
+                    ImGui.PushFont(Fonts.FontBold);
+                    if (symbolChildUi.IsDisabled)
                     {
-                        UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, false));
+                        ImGui.PushStyleColor(ImGuiCol.Button, UiColors.StatusAttention.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
+                        if (ImGui.Button("DISABLED", new Vector2(90, 0)))
+                        {
+                            UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, false));
+                        }
+
+                        ImGui.PopStyleColor(2);
+                    }
+                    else
+                    {
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                        if (ImGui.Button("ENABLED", new Vector2(90, 0)))
+                        {
+                            UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, true));
+                        }
+
+                        ImGui.PopStyleColor();
                     }
 
-                    ImGui.PopStyleColor(2);
+                    ImGui.PopFont();
                 }
-                else
+
+                // Bypass
                 {
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-                    if (ImGui.Button("ENABLED", new Vector2(90, 0)))
+                    ImGui.SameLine();
+                    ImGui.PushFont(Fonts.FontBold);
+                    if (symbolChildUi.SymbolChild.IsBypassed)
                     {
-                        UndoRedoStack.AddAndExecute(new ChangeInstanceIsDisabledCommand(symbolChildUi, true));
+                        ImGui.PushStyleColor(ImGuiCol.Button, UiColors.StatusAttention.Rgba);
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
+
+                        // TODO: check if bypassable
+                        if (ImGui.Button("BYPASSED", new Vector2(90, 0)))
+                        {
+                            UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, false));
+                        }
+
+                        ImGui.PopStyleColor(2);
+                    }
+                    else
+                    {
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                        if (ImGui.Button("BYPASS", new Vector2(90, 0)))
+                        {
+                            UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, true));
+                        }
+
+                        ImGui.PopStyleColor();
                     }
 
-                    ImGui.PopStyleColor();
+                    ImGui.PopFont();
                 }
-
-                ImGui.PopFont();
-            }
-
-            // Bypass
-            {
-                ImGui.SameLine();
-                ImGui.PushFont(Fonts.FontBold);
-                if (symbolChildUi.SymbolChild.IsBypassed)
-                {
-                    ImGui.PushStyleColor(ImGuiCol.Button, UiColors.StatusAttention.Rgba);
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
-
-                    // TODO: check if bypassable
-                    if (ImGui.Button("BYPASSED", new Vector2(90, 0)))
-                    {
-                        UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, false));
-                    }
-
-                    ImGui.PopStyleColor(2);
-                }
-                else
-                {
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-                    if (ImGui.Button("BYPASS", new Vector2(90, 0)))
-                    {
-                        UndoRedoStack.AddAndExecute(new ChangeInstanceBypassedCommand(symbolChildUi.SymbolChild, true));
-                    }
-
-                    ImGui.PopStyleColor();
-                }
-
-                ImGui.PopFont();
             }
 
             ImGui.Dummy(new Vector2(0.0f, 5.0f));
