@@ -56,7 +56,9 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 p1 = p;
     float2 gridSize = float2( 1/divisions.x, 1/divisions.y);
     float2 pInCell = mod(p1, gridSize);
-    float2 cellTiles = (p1 - pInCell + 0.5) - fixOffset;
+    float2 cellIds = (p1 - pInCell + 0.5);
+    float2 cellTiles = cellIds - fixOffset;
+
 
     pInCell *= divisions;
 
@@ -68,8 +70,11 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         : 1-pow( clamp(1-grayScale,0,10), -Bias+1);    
 
 
-    float randomOffset = hash12(cellTiles * 123.12 );
+    //float cellId = 
+    float randomOffset = hash11u((uint)(cellIds.x * TargetWidth) + (uint)(cellIds.y  * TargetHeight) * 73939133 );
+    //return float4(cellIds,randomOffset,1);
     dBiased += randomOffset * Scatter;
+    dBiased = clamp(dBiased,0.0001, 0.999); // Prevent spilling from white to black
 
     float4 letter = FontSortingOrder.SampleLevel(texSamplerPoint, float2( dBiased ,0.4),0);
     //return float4(letter.x * 1, 0,0,1);
