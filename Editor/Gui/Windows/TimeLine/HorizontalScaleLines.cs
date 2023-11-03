@@ -101,9 +101,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
                             //dc.DrawLine(pen, new Point(posX,0 ), new Point(posX, ActualHeight));
 
 
-                            if (linedef.Label != "")
+                            if (!string.IsNullOrEmpty(linedef.Label))
                             {
-                                String output = "";
+                                string output = "";
                                 foreach (char c in linedef.Label)
                                 {
                                     if (c == 'N')

@@ -42,6 +42,9 @@ namespace T3.Editor.Gui.UiHelpers
         {
             var overlayDrawlist = ImGui.GetForegroundDrawList();
             overlayDrawlist.AddRect(screenMin, screenMax, color);
+            if (string.IsNullOrEmpty(label))
+                return;
+            
             overlayDrawlist.AddText(new Vector2(screenMin.X, screenMax.Y), color, label);
         }
 

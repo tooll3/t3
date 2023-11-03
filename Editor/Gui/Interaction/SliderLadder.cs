@@ -130,7 +130,7 @@ namespace T3.Editor.Gui.Interaction
                 if (io.KeyAlt)
                 {
                     ImGui.PushFont(Fonts.FontSmall);
-                    foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), UiColors.Gray, "x0.01");
+                    foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), UiColors.Gray, "×0.01");
                     ImGui.PopFont();
 
                     scale *= 0.01f;
@@ -138,7 +138,7 @@ namespace T3.Editor.Gui.Interaction
                 else if (io.KeyShift)
                 {
                     ImGui.PushFont(Fonts.FontSmall);
-                    foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), UiColors.Gray, "x10");
+                    foreground.AddText(ImGui.GetMousePos() + new Vector2(10, 10), UiColors.Gray, "×10");
                     ImGui.PopFont();
 
                     scale *= 10f;

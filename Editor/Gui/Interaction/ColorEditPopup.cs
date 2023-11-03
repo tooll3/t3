@@ -216,7 +216,7 @@ namespace T3.Editor.Gui.Interaction
 
                 if (cColor.V > 1)
                 {
-                    var label = $"x {cColor.V:0.00}";
+                    var label = $"× {cColor.V:0.00}";
                     var labelWidth = ImGui.CalcTextSize(label);
                     drawList.AddText(pMin - new Vector2(labelWidth.X+10, +20), UiColors.Text, label);
                 }

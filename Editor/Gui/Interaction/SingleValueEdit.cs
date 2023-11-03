@@ -350,6 +350,9 @@ namespace T3.Editor.Gui.Interaction
             var color1 = Color.GetStyleColor(ImGuiCol.Text).Fade(ImGui.GetStyle().Alpha);
             var keepPos = ImGui.GetCursorScreenPos();
             ImGui.Button("##dial", size);
+            if (string.IsNullOrEmpty(label))
+                return;
+            
             ImGui.GetWindowDrawList().AddText(keepPos + new Vector2(4, 4), color1, label);
         }
 
