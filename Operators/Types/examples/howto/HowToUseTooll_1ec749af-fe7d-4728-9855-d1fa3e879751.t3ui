@@ -6,22 +6,51 @@
     {
       "ChildId": "3ca68ae8-02bd-432b-94a4-be80b6eb5d1a"/*LoadImage*/,
       "Position": {
-        "X": 5.9398956,
-        "Y": 242.6807
+        "X": 20.162567,
+        "Y": 269.22614
       }
     },
     {
       "ChildId": "73ef00c1-942d-4464-9390-b9632fef8468"/*DetectEdges*/,
+      "Comment": "You discovered a comment! \nIn many examples we will use these to explain the purpose of certain operators in a graph or point out noteworthy parameter settings.",
       "Position": {
-        "X": 242.08734,
-        "Y": 233.85025
+        "X": 272.81885,
+        "Y": 265.47058
       }
     },
     {
-      "ChildId": "e841cd12-d601-4bde-94f3-85e9dd02a60a"/*_BlobOld*/,
+      "ChildId": "710e4b8a-f5c7-4d6c-82a7-df509ed708ce"/*AsciiRender*/,
       "Position": {
-        "X": 522.53015,
-        "Y": 455.3374
+        "X": 354.61865,
+        "Y": 895.9207
+      }
+    },
+    {
+      "ChildId": "c3d20f3a-3699-43f8-9b21-9d251cee24ed"/*LoadImage*/,
+      "Position": {
+        "X": 54.61859,
+        "Y": 895.9207
+      }
+    },
+    {
+      "ChildId": "cfcb9a91-54a9-4b04-a972-30fbb65f9ee2"/*Blur*/,
+      "Position": {
+        "X": 204.61859,
+        "Y": 895.9207
+      }
+    },
+    {
+      "ChildId": "501a0448-99e5-42d8-9075-d1c4c77eb767"/*OscillateVec2*/,
+      "Position": {
+        "X": 204.61859,
+        "Y": 951.9207
+      }
+    },
+    {
+      "ChildId": "d7df48f3-9989-4b99-ad68-a266ed2b9760"/*Blob*/,
+      "Position": {
+        "X": 544.6786,
+        "Y": 505.31738
       }
     }
   ],
@@ -29,8 +58,8 @@
     {
       "OutputId": "c301380c-8fe6-4e3d-af10-9cebd230b0e9"/*TextureOutput*/,
       "Position": {
-        "X": 802.181,
-        "Y": 33.94391
+        "X": 504.6187,
+        "Y": 895.9207
       }
     }
   ],
@@ -45,12 +74,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": -0.46199036,
-        "Y": 75.4285
+        "X": -0.5046997,
+        "Y": 75.63788
       },
       "Size": {
-        "X": 207.19086,
-        "Y": 203.31879
+        "X": 223.6509,
+        "Y": 235.14153
       }
     },
     {
@@ -63,30 +92,30 @@
         "W": 1.0
       },
       "Position": {
-        "X": 212.37201,
-        "Y": 75.84024
+        "X": 226.6435,
+        "Y": 75.63788
       },
       "Size": {
         "X": 232.78459,
-        "Y": 204.1452
+        "Y": 234.8706
       }
     },
     {
       "Id": "df329cf7-1e0e-496a-b91e-592a30ccbbd5",
-      "Title": "Tutorial 1 ",
+      "Title": "Tutorial 1 - Basic user interface\n\nYou might also want to have a look at the Tutorial Video shown in the description in the Parameter Window. \nIt will give you a nice overview of the user interface.",
       "Color": {
-        "X": 0.6,
-        "Y": 0.6,
-        "Z": 0.6,
+        "X": 0.46909162,
+        "Y": 0.7340425,
+        "Z": 0.46333182,
         "W": 1.0
       },
       "Position": {
-        "X": -7.5577393,
-        "Y": -227.20099
+        "X": -11.772705,
+        "Y": -214.91737
       },
       "Size": {
-        "X": 706.22015,
-        "Y": 247.09737
+        "X": 729.9956,
+        "Y": 248.01181
       }
     },
     {
@@ -99,12 +128,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": 0.38581848,
-        "Y": -183.61429
+        "X": -4.627075,
+        "Y": -124.16031
       },
       "Size": {
-        "X": 684.8874,
-        "Y": 124.82738
+        "X": 686.71625,
+        "Y": 84.591774
       }
     },
     {
@@ -117,12 +146,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": 0.57229614,
-        "Y": -54.9292
+        "X": -4.627075,
+        "Y": -33.081573
       },
       "Size": {
         "X": 686.1906,
-        "Y": 61.76239
+        "Y": 48.96016
       }
     },
     {
@@ -135,12 +164,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": 449.16254,
-        "Y": 75.84024
+        "X": 464.765,
+        "Y": 75.63788
       },
       "Size": {
-        "X": 240.53334,
-        "Y": 205.16872
+        "X": 238.52156,
+        "Y": 234.24812
       }
     },
     {
@@ -157,8 +186,8 @@
         "Y": 39.85852
       },
       "Size": {
-        "X": 713.23517,
-        "Y": 252.88
+        "X": 729.69507,
+        "Y": 285.7998
       }
     },
     {
@@ -171,17 +200,17 @@
         "W": 1.0
       },
       "Position": {
-        "X": -14.8268585,
-        "Y": 311.7361
+        "X": -9.894287,
+        "Y": 337.159
       },
       "Size": {
-        "X": 717.45825,
+        "X": 730.626,
         "Y": 366.3865
       }
     },
     {
       "Id": "86ddce6c-2d27-451c-acde-7edffdb45820",
-      "Title": "1. Select the [Blob]...\n2. Notice how the parameter window shows the things you can do with it..\n",
+      "Title": "1. Select the [Blob]...\n2. Notice how the Parameter Window now shows the parameters you adjust for the blob...\n",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -189,11 +218,11 @@
         "W": 1.0
       },
       "Position": {
-        "X": -11.354202,
-        "Y": 344.83862
+        "X": -6.421631,
+        "Y": 370.2615
       },
       "Size": {
-        "X": 431.6754,
+        "X": 493.12595,
         "Y": 51.022743
       }
     },
@@ -207,11 +236,11 @@
         "W": 1.0
       },
       "Position": {
-        "X": -11.354202,
-        "Y": 398.77423
+        "X": -6.421631,
+        "Y": 424.1971
       },
       "Size": {
-        "X": 432.43518,
+        "X": 493.88586,
         "Y": 128.77069
       }
     },
@@ -225,12 +254,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": -11.354202,
-        "Y": 588.8645
+        "X": -7.4015045,
+        "Y": 617.11487
       },
       "Size": {
-        "X": 434.3328,
-        "Y": 68.902565
+        "X": 495.7834,
+        "Y": 71.09724
       }
     },
     {
@@ -243,13 +272,40 @@
         "W": 1.0
       },
       "Position": {
-        "X": -11.354202,
-        "Y": 530.3246
+        "X": -6.421631,
+        "Y": 555.74744
       },
       "Size": {
-        "X": 434.0783,
-        "Y": 56.181232
+        "X": 495.52887,
+        "Y": 58.375904
       }
+    },
+    {
+      "Id": "14288e8d-d885-4a09-a83d-2849fea72054",
+      "Title": "This is just another simple example that is connected to the operator output.",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": -6.821739,
+        "Y": 712.0084
+      },
+      "Size": {
+        "X": 728.15894,
+        "Y": 294.46783
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "6e2b005a-8909-4e19-82aa-6727bc6d8556",
+      "Title": "T3-Introduction",
+      "Description": "A short video tutorial that will guide you through the user interface.",
+      "LinkUrl": "https://tooll.io",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

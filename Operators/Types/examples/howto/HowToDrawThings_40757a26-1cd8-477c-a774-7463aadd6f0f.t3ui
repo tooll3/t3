@@ -48,7 +48,7 @@
       "Comment": "Load and distort a mesh...",
       "Position": {
         "X": -1990.8727,
-        "Y": -567.2674
+        "Y": -610.2674
       }
     },
     {
@@ -56,7 +56,7 @@
       "Comment": "... we add a displacement effect and animate its phase over time ...\n\nYou can select this operator and press Shift-B to bypass this effect.",
       "Position": {
         "X": -1840.873,
-        "Y": -567.2674
+        "Y": -610.2674
       }
     },
     {
@@ -64,7 +64,7 @@
       "Comment": "Now we draw the mesh. ",
       "Position": {
         "X": -1540.873,
-        "Y": -567.2674
+        "Y": -610.2674
       }
     },
     {
@@ -72,7 +72,7 @@
       "Comment": "A bit of colored fog for depth.",
       "Position": {
         "X": -1240.873,
-        "Y": -567.2674
+        "Y": -610.2674
       }
     },
     {
@@ -116,14 +116,14 @@
       "Comment": "Setting the material with a generative texture for the emissive color.\n\nNotice how the pattern highlight color is brighter than 1 so it glows nicely.\n",
       "Position": {
         "X": -1390.873,
-        "Y": -567.2674
+        "Y": -610.2674
       }
     },
     {
       "ChildId": "4eb05d75-64e7-436b-a35b-59646e69627d"/*Time*/,
       "Position": {
         "X": -1990.8727,
-        "Y": -524.2674
+        "Y": -567.2674
       }
     },
     {
@@ -139,7 +139,7 @@
       "Comment": "Split vertices for flat shading.",
       "Position": {
         "X": -1690.873,
-        "Y": -567.2674
+        "Y": -610.2674
       }
     },
     {
@@ -169,7 +169,7 @@
       "Comment": "A lens flare setup that follows the point light position.",
       "Position": {
         "X": -1240.873,
-        "Y": -610.2674
+        "Y": -511.2674
       }
     },
     {
@@ -177,14 +177,14 @@
       "Comment": "Some dust particles that wiggle around.",
       "Position": {
         "X": -1240.873,
-        "Y": -511.2674
+        "Y": -554.2674
       }
     },
     {
       "ChildId": "ae38c453-6d05-4548-b6a8-f346081eac14"/*RyojiPattern2*/,
       "Position": {
         "X": -1540.873,
-        "Y": -311.2674
+        "Y": -354.2674
       }
     },
     {
