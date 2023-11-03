@@ -613,11 +613,11 @@ namespace T3.Editor.Gui.Graph
                             var center = new Vector2(usableArea.Max.X + 2*r, usableArea.GetCenter().Y - 3*r);
                             if (output.DirtyFlag.Trigger == DirtyFlagTrigger.Always)
                             {
-                                _drawList.AddCircle(center, r, colorForType);
+                                _drawList.AddCircle(center, r, colorForType,3);
                             }
                             else if (output.DirtyFlag.Trigger == DirtyFlagTrigger.Animated)
                             {
-                                _drawList.AddCircleFilled(center, r, colorForType);
+                                _drawList.AddCircleFilled(center, r, colorForType, 3);
                             }
                         }
                         
