@@ -15,17 +15,7 @@
           "Value": true
         },
         {
-          "Id": "2c5cf823-1db6-44b0-af48-f202852d6c16"/*True*/,
-          "Type": "System.String",
-          "Value": "Click to make it small"
-        },
-        {
-          "Id": "c6c398bc-07d5-48fa-80b9-93a8a246a570"/*False*/,
-          "Type": "System.String",
-          "Value": "Click to make it big"
-        },
-        {
-          "Id": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*Color*/,
+          "Id": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*ColorInGraph*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.54066986,
@@ -147,17 +137,7 @@
           "Value": true
         },
         {
-          "Id": "2c5cf823-1db6-44b0-af48-f202852d6c16"/*True*/,
-          "Type": "System.String",
-          "Value": "1.5 -> click to make it small"
-        },
-        {
-          "Id": "c6c398bc-07d5-48fa-80b9-93a8a246a570"/*False*/,
-          "Type": "System.String",
-          "Value": "0.5 -> Click to make it big"
-        },
-        {
-          "Id": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*Color*/,
+          "Id": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*ColorInGraph*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.0,
@@ -348,17 +328,7 @@
           "Value": true
         },
         {
-          "Id": "2c5cf823-1db6-44b0-af48-f202852d6c16"/*True*/,
-          "Type": "System.String",
-          "Value": "ON"
-        },
-        {
-          "Id": "c6c398bc-07d5-48fa-80b9-93a8a246a570"/*False*/,
-          "Type": "System.String",
-          "Value": "OFF"
-        },
-        {
-          "Id": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*Color*/,
+          "Id": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*ColorInGraph*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.0,
@@ -381,17 +351,7 @@
           "Value": true
         },
         {
-          "Id": "2c5cf823-1db6-44b0-af48-f202852d6c16"/*True*/,
-          "Type": "System.String",
-          "Value": "ON"
-        },
-        {
-          "Id": "c6c398bc-07d5-48fa-80b9-93a8a246a570"/*False*/,
-          "Type": "System.String",
-          "Value": "OFF"
-        },
-        {
-          "Id": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*Color*/,
+          "Id": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*ColorInGraph*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.0,
@@ -414,17 +374,7 @@
           "Value": true
         },
         {
-          "Id": "2c5cf823-1db6-44b0-af48-f202852d6c16"/*True*/,
-          "Type": "System.String",
-          "Value": "ON"
-        },
-        {
-          "Id": "c6c398bc-07d5-48fa-80b9-93a8a246a570"/*False*/,
-          "Type": "System.String",
-          "Value": "OFF"
-        },
-        {
-          "Id": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*Color*/,
+          "Id": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*ColorInGraph*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.54066986,
@@ -579,17 +529,7 @@
           "Value": true
         },
         {
-          "Id": "2c5cf823-1db6-44b0-af48-f202852d6c16"/*True*/,
-          "Type": "System.String",
-          "Value": "Backward"
-        },
-        {
-          "Id": "c6c398bc-07d5-48fa-80b9-93a8a246a570"/*False*/,
-          "Type": "System.String",
-          "Value": "Forward"
-        },
-        {
-          "Id": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*Color*/,
+          "Id": "49b3fa80-4027-4297-82cd-10a36882ed9d"/*ColorInGraph*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
             "X": 0.0,
