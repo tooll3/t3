@@ -2,6 +2,7 @@
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
@@ -31,7 +32,9 @@ namespace T3.Editor.Gui.ChildUi
             if (stringInstance.InputString.IsConnected)
                 return SymbolChildUi.CustomUiResult.None;
 
+            var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList);
             var usableArea = screenRect;
+            usableArea.Min.X += dragWidth;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
 

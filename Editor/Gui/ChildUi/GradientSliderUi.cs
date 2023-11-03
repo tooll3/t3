@@ -2,6 +2,7 @@
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Core.Utils;
+using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
@@ -17,8 +18,9 @@ namespace T3.Editor.Gui.ChildUi
                 || !ImGui.IsRectVisible(selectableScreenRect.Min, selectableScreenRect.Max))
                 return SymbolChildUi.CustomUiResult.None;
 
+            var dragWidth = WidgetElements.DrawDragIndicator(selectableScreenRect, drawList);
             var innerRect = selectableScreenRect;
-            innerRect.Expand(-7);
+            innerRect.Min.X += dragWidth;
 
             var gradient = gradientSlider.Gradient.Value;
             if (gradient == null)
@@ -44,7 +46,11 @@ namespace T3.Editor.Gui.ChildUi
             var pMax = new Vector2(innerRect.Min.X + x + 2, innerRect.Max.Y);
             drawList.AddRectFilled(pMin, pMax, UiColors.StatusAnimated);
 
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels | SymbolChildUi.CustomUiResult.PreventOpenSubGraph | SymbolChildUi.CustomUiResult.PreventTooltip | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
+            return SymbolChildUi.CustomUiResult.Rendered 
+                   | SymbolChildUi.CustomUiResult.PreventInputLabels 
+                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolChildUi.CustomUiResult.PreventTooltip 
+                   | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
         }
     }
 }

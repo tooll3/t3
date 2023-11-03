@@ -40,8 +40,9 @@ namespace T3.Editor.Gui.Interaction
 
         private const float LockDistance = 100;
 
-        public static void Draw(ref double editValue, ImGuiIOPtr io, double min, double max, float scale, float timeSinceVisible, bool clamp, Vector2 center)
+        public static void Draw(ref double editValue, double min, double max, float scale, float timeSinceVisible, bool clamp, Vector2 center)
         {
+            var io = ImGui.GetIO();
             var foreground = ImGui.GetForegroundDrawList();
             const double initialDelay = 0.2;
 

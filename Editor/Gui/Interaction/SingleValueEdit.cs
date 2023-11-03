@@ -116,23 +116,8 @@ namespace T3.Editor.Gui.Interaction
                             SetState(InputStates.Inactive);
                             break;
                         }
-
-                        switch (UserSettings.Config.ValueEditGizmo)
-                        {
-                            case UserSettings.ValueEditGizmos.InfinitySlider:
-                                InfinitySliderOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
-                                break;
-                            case UserSettings.ValueEditGizmos.RadialSlider:
-                                RadialSliderOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
-                                break;
-                            case UserSettings.ValueEditGizmos.JogDial:
-                                JogDialOverlay.Draw(ref _editValue, (float)(ImGui.GetTime() - _timeOpened) < 0.1f, _center, min, max, scale, clamp);
-                                break;
-                            case UserSettings.ValueEditGizmos.ValueLadder:
-                            default:
-                                SliderLadder.Draw(ref _editValue, io, min, max, scale, (float)(ImGui.GetTime() - _timeOpened), clamp, _center);
-                                break;
-                        }
+                        var restarted = (float)(ImGui.GetTime() - _timeOpened) < 0.1f;
+                        DrawValueEditGizmo(ref _editValue, restarted,_center, min, max, clamp, scale);
 
                         break;
 
@@ -243,12 +228,12 @@ namespace T3.Editor.Gui.Interaction
                             }
 
                             value += wheel * scale * 10  * factor;
-                            _hovereddComponentModifiedByWheel = true;
+                            _hoveredComponentModifiedByWheel = true;
                             return InputEditStateFlags.Modified;
                         }
 
-                        var didModify = _hovereddComponentModifiedByWheel;
-                        _hovereddComponentModifiedByWheel = false;
+                        var didModify = _hoveredComponentModifiedByWheel;
+                        _hoveredComponentModifiedByWheel = false;
 
                         return didModify
                                    ? InputEditStateFlags.ModifiedAndFinished
@@ -258,7 +243,7 @@ namespace T3.Editor.Gui.Interaction
                     if (isHovered)
                     {
                         T3Ui.MouseWheelFieldHovered = true;
-                        _hovereddComponentModifiedByWheel = false;
+                        _hoveredComponentModifiedByWheel = false;
                         _activeHoverComponentId = componentId;
                         return InputEditStateFlags.Started;
                     }
@@ -268,7 +253,27 @@ namespace T3.Editor.Gui.Interaction
             return InputEditStateFlags.Nothing;
         }
 
-        private static bool _hovereddComponentModifiedByWheel;
+        public static void DrawValueEditGizmo(ref double editValue, bool restarted, Vector2 center, double min, double max, bool clamp, float scale)
+        {
+            switch (UserSettings.Config.ValueEditGizmo)
+            {
+                case UserSettings.ValueEditGizmos.InfinitySlider:
+                    InfinitySliderOverlay.Draw(ref editValue, restarted, center, min, max, scale, clamp);
+                    break;
+                case UserSettings.ValueEditGizmos.RadialSlider:
+                    RadialSliderOverlay.Draw(ref editValue, restarted, center, min, max, scale, clamp);
+                    break;
+                case UserSettings.ValueEditGizmos.JogDial:
+                    JogDialOverlay.Draw(ref editValue, restarted, center, min, max, scale, clamp);
+                    break;
+                case UserSettings.ValueEditGizmos.ValueLadder:
+                default:
+                    SliderLadder.Draw(ref editValue, min, max, scale, (float)(ImGui.GetTime() - _timeOpened), clamp, center);
+                    break;
+            }
+        }
+
+        private static bool _hoveredComponentModifiedByWheel;
 
         private static void SetState(InputStates newState)
         {

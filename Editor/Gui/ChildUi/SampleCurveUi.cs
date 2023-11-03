@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
 using T3.Editor.Gui.Interaction;
@@ -17,10 +18,12 @@ namespace T3.Editor.Gui.ChildUi
         {
             if (!(instance is SampleCurve sampleCurve))
                 return SymbolChildUi.CustomUiResult.None;
-
+            
+            var dragWidth = WidgetElements.DrawDragIndicator(selectableScreenRect, drawList);
             var innerRect = selectableScreenRect;
-            innerRect.Expand(-7);
-
+            innerRect.Min.X += dragWidth;
+            innerRect.Min.Y += 1;
+            
             if (innerRect.GetHeight() < 0)
                 return SymbolChildUi.CustomUiResult.PreventTooltip
                        | SymbolChildUi.CustomUiResult.PreventOpenSubGraph
@@ -39,8 +42,8 @@ namespace T3.Editor.Gui.ChildUi
             }
 
             ImGui.PushClipRect(innerRect.Min, innerRect.Max, true);
-            ImGui.SetCursorScreenPos(innerRect.Min);
-            ImGui.BeginChild("curve" + instance.SymbolChildId.GetHashCode(), innerRect.GetSize());
+            ImGui.SetCursorScreenPos(innerRect.Min) ;
+            ImGui.BeginChild("curve" + instance.SymbolChildId.GetHashCode(), innerRect.GetSize(), false, ImGuiWindowFlags.NoScrollbar);
             {
                 var cloneIfModified = sampleCurve.Curve.Input.IsDefault;
                 
@@ -48,7 +51,7 @@ namespace T3.Editor.Gui.ChildUi
                                                           ? T3Ui.EditingFlags.None
                                                           : T3Ui.EditingFlags.PreventMouseInteractions;
 
-                var keepPositionForIcon = ImGui.GetCursorPos();
+                var keepPositionForIcon = ImGui.GetCursorPos() + Vector2.One;
                 var modified2 = CurveInputEditing.DrawCanvasForCurve(ref curve, 
                                                                      sampleCurve.Curve.Input,
                                                      cloneIfModified,
