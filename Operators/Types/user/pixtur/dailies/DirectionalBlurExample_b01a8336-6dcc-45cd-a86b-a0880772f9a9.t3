@@ -1,5 +1,5 @@
 {
-  "Name": "Daily_2023_11_06",
+  "Name": "DirectionalBlurExample",
   "Id": "b01a8336-6dcc-45cd-a86b-a0880772f9a9",
   "Namespace": "user.pixtur.dailies",
   "Inputs": [],
@@ -73,7 +73,7 @@
         {
           "Id": "e94e2b7e-6f0a-42b5-bf5e-abdffe728273"/*Size*/,
           "Type": "System.Single",
-          "Value": 0.13
+          "Value": 0.04
         },
         {
           "Id": "11cb8f1e-fac5-4623-b61c-d6482633e505"/*Samples*/,
@@ -134,33 +134,6 @@
           "Id": "270f9603-1d9b-412b-9c76-330eafc8a958"/*Method*/,
           "Type": "System.Int32",
           "Value": 1
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "e8171c8c-94e7-4e17-812c-33315860cccf"/*AudioReaction*/,
-      "SymbolId": "03477b9a-860e-4887-81c3-5fe51621122c",
-      "InputValues": [
-        {
-          "Id": "02f71a92-d5c8-4dd7-af5f-da12330f60eb"/*Threshold*/,
-          "Type": "System.Single",
-          "Value": 0.35
-        },
-        {
-          "Id": "80294096-ae64-471a-bcf1-622684e06d56"/*Output*/,
-          "Type": "System.Int32",
-          "Value": 4
-        },
-        {
-          "Id": "b1c43d3b-f425-4d62-9d48-07ccb5d08707"/*Amplitude*/,
-          "Type": "System.Single",
-          "Value": 5.1
-        },
-        {
-          "Id": "1139b245-76b4-4f51-a263-ee1a1371073f"/*Bias*/,
-          "Type": "System.Single",
-          "Value": 1.28
         }
       ],
       "Outputs": []
@@ -490,84 +463,6 @@
       "Outputs": []
     },
     {
-      "Id": "12c251c6-8661-432f-8fe3-13312946391b"/*GridPoints*/,
-      "SymbolId": "3ee8f66d-68df-43c1-b0eb-407259bf7e86",
-      "InputValues": [
-        {
-          "Id": "940133dd-4e45-4a78-8b13-8831e30f78b8"/*Scale*/,
-          "Type": "System.Single",
-          "Value": 2.76
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "1d18a39d-189b-4e4f-81d4-f1d45467562f"/*DrawPoints*/,
-      "SymbolId": "ffd94e5a-bc98-4e70-84d8-cce831e6925f",
-      "InputValues": [
-        {
-          "Id": "cc442161-e9ca-40ea-be3b-f87189d4e155"/*Color*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 30.08162,
-            "Y": 30.08162,
-            "Z": 30.08162,
-            "W": 1.0
-          }
-        },
-        {
-          "Id": "414c8045-5086-4449-9d9a-03f28c3966b3"/*Size*/,
-          "Type": "System.Single",
-          "Value": 0.156
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "ad111e56-bcea-4868-b748-0b35428812fc"/*Glow*/,
-      "SymbolId": "d392d4af-4c78-4f4a-bc3f-4c54c8c73538",
-      "InputValues": [
-        {
-          "Id": "57968725-0a45-44f9-a9a2-f74c10b728e8"/*BlurRadius*/,
-          "Type": "System.Single",
-          "Value": 3.3
-        },
-        {
-          "Id": "4927a3fc-87ff-44e7-88c0-499e3efcca55"/*GlowAmount*/,
-          "Type": "System.Single",
-          "Value": 0.64
-        },
-        {
-          "Id": "4c9b9135-f27b-414e-bed7-f9e5640dc526"/*Offset*/,
-          "Type": "System.Single",
-          "Value": -0.02
-        },
-        {
-          "Id": "7f6dba80-bf4e-4e55-bd9a-ac1e2a077898"/*Color*/,
-          "Type": "System.Numerics.Vector4",
-          "Value": {
-            "X": 0.7503633,
-            "Y": 1.0,
-            "Z": 0.92693853,
-            "W": 0.37
-          }
-        }
-      ],
-      "Outputs": []
-    },
-    {
-      "Id": "358b4c4f-8b05-498b-93c0-b42ea3e8dd28"/*RadialPoints*/,
-      "SymbolId": "3352d3a1-ab04-4d0a-bb43-da69095b73fd",
-      "InputValues": [
-        {
-          "Id": "acce4779-56d6-47c4-9c52-874fca91a3a1"/*Radius*/,
-          "Type": "System.Single",
-          "Value": 0.29
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "dd09a402-ddf6-4b1e-8725-b1b0c6a9d090"/*Damp*/,
       "SymbolId": "af9c5db8-7144-4164-b605-b287aaf71bf6",
       "InputValues": [
@@ -580,13 +475,40 @@
       "Outputs": []
     },
     {
-      "Id": "5de8380e-b22d-4ea3-82c9-6bc16ea171db"/*HowToAnimate*/,
-      "SymbolId": "9b1a1ff1-2935-4d9a-880f-897a7f8885ad",
-      "InputValues": [],
+      "Id": "8ff5dba3-d8f7-4eac-900e-fe3e8878991e"/*AnimValue*/,
+      "SymbolId": "ea7b8491-2f8e-4add-b0b1-fd068ccfed0d",
+      "InputValues": [
+        {
+          "Id": "4cf5d20b-7335-4584-b246-c260ac5cdf4f"/*Shape*/,
+          "Type": "System.Int32",
+          "Value": 6
+        },
+        {
+          "Id": "48005727-0158-4795-ad70-8410c27fd01d"/*Rate*/,
+          "Type": "System.Single",
+          "Value": 0.125
+        },
+        {
+          "Id": "79917ef7-64ca-4825-9c6a-c9b2a7f6ff86"/*Amplitude*/,
+          "Type": "System.Single",
+          "Value": 0.18
+        },
+        {
+          "Id": "ddd93b06-118e-43e0-85f6-c150faf91d04"/*Offset*/,
+          "Type": "System.Single",
+          "Value": 0.001
+        }
+      ],
       "Outputs": []
     }
   ],
   "Connections": [
+    {
+      "SourceParentOrChildId": "0fbcb004-06a2-4a6a-9431-d0390d9c4a41",
+      "SourceSlotId": "536fae14-b814-498c-a6b4-07775de36991",
+      "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "TargetSlotId": "623bd104-bf6f-416b-b9c0-d8022e87845e"
+    },
     {
       "SourceParentOrChildId": "6a75406f-c07d-4b86-ad1c-028bb54ce96b",
       "SourceSlotId": "c57e38ab-a802-498c-b0f7-cad86e6426a3",
@@ -672,6 +594,12 @@
       "TargetSlotId": "ab3206bf-9413-4f31-9c3d-0c1fe7477862"
     },
     {
+      "SourceParentOrChildId": "8ff5dba3-d8f7-4eac-900e-fe3e8878991e",
+      "SourceSlotId": "ae4addf0-08cf-4b25-9515-4fef9359d183",
+      "TargetParentOrChildId": "6a75406f-c07d-4b86-ad1c-028bb54ce96b",
+      "TargetSlotId": "e94e2b7e-6f0a-42b5-bf5e-abdffe728273"
+    },
+    {
       "SourceParentOrChildId": "16c18939-7a6b-4749-9fde-4be12cebb842",
       "SourceSlotId": "b882de23-5b94-4791-af13-e195211cffb3",
       "TargetParentOrChildId": "6a75406f-c07d-4b86-ad1c-028bb54ce96b",
@@ -722,9 +650,9 @@
   ],
   "PlaybackSettings": {
     "Enabled": true,
-    "Bpm": 120.0,
+    "Bpm": 130.0141,
     "AudioSource": 1,
-    "Syncing": 0,
+    "Syncing": 1,
     "AudioDecayFactor": 0.9,
     "AudioGainFactor": 1.0,
     "AudioInputDeviceName": "Speakers (Realtek(R) Audio)"
