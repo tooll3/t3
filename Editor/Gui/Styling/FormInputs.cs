@@ -169,30 +169,6 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
         
-        public static bool DrawEnumList<T>(ref T selectedValue) where T : struct, Enum, IConvertible, IFormattable
-        {
-            var names = Enum.GetNames<T>();
-            var index = 0;
-            var modified = false;
-            
-            foreach (var n in names)
-            {
-                var isActive = n == selectedValue.ToString();
-
-                if (ImGui.Selectable(n, isActive))
-                {
-                    modified = true;
-                    selectedValue = Enum.GetValues<T>()[index];
-                }
-                
-
-                index++;
-            }
-
-            return modified;
-        }
-        
-        
 
         public static bool AddDropdown(ref string selectedValue, IEnumerable<string> values, string label, string tooltip = null)
         {
@@ -233,9 +209,10 @@ namespace T3.Editor.Gui.Styling
             var modified = false;
             var selectedValueString = selectedValue.ToString();
             var isFirst = true;
+            
             foreach (var value in Enum.GetValues<T>())
             {
-                var name = Enum.GetName(value);
+                var name = CustomComponents.HumanReadablePascalCase(Enum.GetName(value));
                 if (!isFirst && columnWidth <=0)
                 {
                     ImGui.SameLine();

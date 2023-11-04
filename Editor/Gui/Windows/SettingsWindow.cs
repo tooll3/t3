@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
 using Operators.Utils;
 using T3.Core.IO;
+using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -22,6 +24,7 @@ namespace T3.Editor.Gui.Windows
             Project,
             Midi,
             SpaceMouse,
+            Keyboard,
         }
 
         private Categories _activeCategory;
@@ -42,7 +45,6 @@ namespace T3.Editor.Gui.Windows
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(20, 5));
             ImGui.BeginChild("content", new Vector2(-1, -1), true);
             {
-                
                 FormInputs.SetIndentToParameters();
                 switch (_activeCategory)
                 {
@@ -167,9 +169,8 @@ namespace T3.Editor.Gui.Windows
                                                                          ProjectSettings.Defaults.WindowedMode);
                         if (projectSettingsChanged)
                             ProjectSettings.Save();
-                        
-                        FormInputs.SetIndentToParameters();
 
+                        FormInputs.SetIndentToParameters();
 
                         break;
                     }
@@ -185,22 +186,20 @@ namespace T3.Editor.Gui.Windows
                                                    ? string.Empty
                                                    : ProjectSettings.Config.LimitMidiDeviceCapture;
 
-                        
-                        
                         if (ImGui.InputTextMultiline("##Limit MidiDevices", ref limitMidiDevices, 2000, new Vector2(-1, 100)))
                         {
                             changed = true;
                             ProjectSettings.Config.LimitMidiDeviceCapture = string.IsNullOrEmpty(limitMidiDevices) ? null : limitMidiDevices;
                             MidiInConnectionManager.Rescan();
                         }
-                        
+
                         FormInputs.AddVerticalSpace();
                         FormInputs.SetIndentToLeft();
                         changed |= FormInputs.AddCheckBox("Enable Midi snapshot LEDs",
                                                           ref ProjectSettings.Config.EnableMidiSnapshotIndication,
                                                           "With selected midi controllers like APC Mini and APC40, Tooll will highlight LEDs for available and active snapshots. This requires an active MIDI out channel which will interfere with the [MidiOut] operator.\nChanging this requires a restart.",
                                                           ProjectSettings.Defaults.EnableMidiSnapshotIndication);
-                        
+
                         FormInputs.SetIndentToParameters();
                         break;
                     }
@@ -221,6 +220,39 @@ namespace T3.Editor.Gui.Windows
                         changed |= FormInputs.AddFloat("Rotation Speed",
                                                        ref UserSettings.Config.SpaceMouseRotationSpeedFactor,
                                                        0.0f, 10f, 0.01f, true);
+                        break;
+
+                    case Categories.Keyboard:
+                        FormInputs.AddSectionHeader("Keyboard Shortcuts");
+                        CustomComponents.HelpText("The keyboard layout can't be edited yet.");
+
+                        if (ImGui.BeginTable("Shortcuts", 2,
+                                             ImGuiTableFlags.BordersInnerH))
+                        {
+                            foreach (var value in Enum.GetValues<UserActions>())
+                            {
+                                ImGui.TableNextRow();
+                                ImGui.TableSetColumnIndex(0);
+                                var actionName = CustomComponents.HumanReadablePascalCase(Enum.GetName(value));
+                                var shortcuts = KeyboardBinding.ListKeyboardShortcuts(value, false);
+                                var hasShortcut = !string.IsNullOrEmpty(shortcuts);
+                                ImGui.PushStyleColor(ImGuiCol.Text, hasShortcut ? UiColors.Text : UiColors.TextMuted.Rgba);
+                                ImGui.TextUnformatted(actionName);
+
+                                ImGui.TableSetColumnIndex(1);
+
+                                if (hasShortcut)
+                                {
+                                    ImGui.PushFont(Fonts.FontBold);
+                                    ImGui.TextUnformatted(shortcuts);
+                                    ImGui.PopFont();
+                                    ImGui.PopStyleColor();
+                                }
+                            }
+
+                            ImGui.EndTable();
+                        }
+
                         break;
                 }
 

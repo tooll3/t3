@@ -141,7 +141,7 @@ public static class ColorThemeEditor
             }
 
             ImGui.SameLine(0, 10);
-            ImGui.Text(HumanReadablePascalCase(f));
+            ImGui.Text(CustomComponents.HumanReadablePascalCase(f.Name));
             if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
             {
                 FrameStats.Current.UiColorsChanged = true;
@@ -167,11 +167,6 @@ public static class ColorThemeEditor
 
             ImGui.PopID();
         }
-    }
-
-    public static string HumanReadablePascalCase(FieldInfo f)
-    {
-        return Regex.Replace(f.Name, "(\\B[A-Z])", " $1");
     }
 
     private static void DrawVariations(IEnumerable<FieldInfo> variationFields)

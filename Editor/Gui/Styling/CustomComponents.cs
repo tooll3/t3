@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Utils;
@@ -612,6 +614,11 @@ namespace T3.Editor.Gui.Styling
             
             var min = ImGui.GetWindowPos() + new Vector2(1,1);
             ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(-2,-1) , UiColors.ForegroundFull.Fade(0.1f));
+        }
+
+        public static string HumanReadablePascalCase(string f)
+        {
+            return Regex.Replace(f, "(\\B[A-Z])", " $1");
         }
     }
 }
