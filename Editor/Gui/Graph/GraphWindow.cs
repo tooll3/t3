@@ -419,6 +419,7 @@ namespace T3.Editor.Gui.Graph
 
         private void DrawControlsAtBottom()
         {
+            TimeControls.HandleTimeControlActions();
             if (!UserSettings.Config.ShowToolbar)
                 return;
 

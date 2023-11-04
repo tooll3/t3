@@ -41,6 +41,8 @@ public enum UserActions
     SetEndTime,
     InsertKeyframe,
     InsertKeyframeWithIncrement,
+    TapBeatSync,
+    TapBeatSyncMeasure,
 
     ToggleAnimationPinning,
 
@@ -292,6 +294,9 @@ public class KeyboardBinding
                   new KeyboardBinding(UserActions.InsertKeyframeWithIncrement, new KeyCombination(Key.C, shift: true)),
                   new KeyboardBinding(UserActions.ToggleAnimationPinning, new KeyCombination(Key.K, shift: true)),
 
+                  new KeyboardBinding(UserActions.TapBeatSync, new KeyCombination(Key.Z)),
+                  new KeyboardBinding(UserActions.TapBeatSyncMeasure, new KeyCombination(Key.X)),
+                  
                   // Graph window
                   new KeyboardBinding(UserActions.ToggleDisabled, new KeyCombination(Key.D, shift: true)) { _needsWindowFocus = true },
                   new KeyboardBinding(UserActions.ToggleBypassed, new KeyCombination(Key.B, shift: true)) { _needsWindowFocus = true },
