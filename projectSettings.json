@@ -4,5 +4,6 @@
   "AudioResyncThreshold": 0.04,
   "EnablePlaybackControlWithKeyboard": true,
   "WindowedMode": false,
-  "LimitMidiDeviceCapture": null
+  "LimitMidiDeviceCapture": null,
+  "EnableMidiSnapshotIndication": false
 }

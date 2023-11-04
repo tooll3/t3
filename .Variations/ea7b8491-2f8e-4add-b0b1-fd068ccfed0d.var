@@ -76,6 +76,21 @@
           "79917ef7-64ca-4825-9c6a-c9b2a7f6ff86": 15.0
         }
       }
+    },
+    {
+      "Id": "c12d9d4d-713c-4075-a653-76d5a25187f9",
+      "IsPreset": true,
+      "ActivationIndex": 6,
+      "Title": "Sine",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "4cf5d20b-7335-4584-b246-c260ac5cdf4f": 7
+        }
+      }
     }
   ]
 }
