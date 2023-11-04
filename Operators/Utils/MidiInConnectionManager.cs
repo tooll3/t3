@@ -133,39 +133,44 @@ namespace Operators.Utils
                 
             }
 
-            for (var index = 0; index < MidiOut.NumberOfDevices; index++)
+            if (ProjectSettings.Config.EnableMidiSnapshotIndication)
             {
-                var deviceOutputInfo = MidiOut.DeviceInfo(index);
-                var deviceInfoProductName = deviceOutputInfo.ProductName;
 
-                if (!IsMidiDeviceCaptureEnabled(deviceInfoProductName))
+                for (var index = 0; index < MidiOut.NumberOfDevices; index++)
                 {
-                    Log.Debug($" skipping '{deviceInfoProductName}' (disabled in setting)");
-                    continue;
+                    var deviceOutputInfo = MidiOut.DeviceInfo(index);
+                    var deviceInfoProductName = deviceOutputInfo.ProductName;
+
+                    if (!IsMidiDeviceCaptureEnabled(deviceInfoProductName))
+                    {
+                        Log.Debug($" skipping '{deviceInfoProductName}' (disabled in setting)");
+                        continue;
+                    }
+
+                    MidiOut newMidiOut;
+                    try
+                    {
+                        newMidiOut = new MidiOut(index);
+                    }
+                    catch (NAudio.MmException e)
+                    {
+                        Log.Error(e.Message == "MemoryAllocationError"
+                                      ? " > The device is already being used by an application."
+                                      : $" > {e.Message} {deviceInfoProductName}");
+                        continue;
+                    }
+
+                    // foreach (var midiConsumer in _midiConsumers)
+                    // {
+                    //     newMidiIn.MessageReceived += midiConsumer.MessageReceivedHandler;
+                    //     newMidiIn.ErrorReceived += midiConsumer.ErrorReceivedHandler;
+                    // }
+
+                    _midiOutsWithDevices[newMidiOut] = deviceOutputInfo;
+                    _midiOutsByDeviceIdHash[deviceInfoProductName.GetHashCode()] = newMidiOut;
                 }
-                
-                MidiOut newMidiOut;
-                try {
-                    newMidiOut = new MidiOut(index);
-                }
-                catch (NAudio.MmException e)
-                {
-                    Log.Error(e.Message == "MemoryAllocationError"
-                                  ? " > The device is already being used by an application."
-                                  : $" > {e.Message} {deviceInfoProductName}");
-                    continue;
-                }
-                
-                // foreach (var midiConsumer in _midiConsumers)
-                // {
-                //     newMidiIn.MessageReceived += midiConsumer.MessageReceivedHandler;
-                //     newMidiIn.ErrorReceived += midiConsumer.ErrorReceivedHandler;
-                // }
-                
-                _midiOutsWithDevices[newMidiOut] = deviceOutputInfo;
-                _midiOutsByDeviceIdHash[deviceInfoProductName.GetHashCode()] = newMidiOut;
             }
-            
+
         }
 
         private static void CloseMidiDevices()

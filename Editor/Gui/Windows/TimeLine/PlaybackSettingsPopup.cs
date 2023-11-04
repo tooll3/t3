@@ -47,7 +47,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 return;
             }
 
-            FormInputs.SetIndent(0);
+            FormInputs.SetIndentToLeft();
 
             PlaybackUtils.FindPlaybackSettingsForInstance(composition, out var compositionWithSettings, out var settings);
             //var compositionSettings = compWithSoundtrack == composition ? composition.Symbol.PlaybackSettings : null;
@@ -98,11 +98,11 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 CustomComponents.EmptyWindowMessage("No settings");
                 ImGui.EndPopup();
                 ImGui.PopStyleVar(1);
-                FormInputs.ResetIndent();
+                FormInputs.SetIndentToParameters();
                 return;
             }
 
-            FormInputs.ResetIndent();
+            FormInputs.SetIndentToParameters();
 
 
             if (FormInputs.AddSegmentedButton(ref settings.AudioSource, "Audio Source"))
@@ -213,7 +213,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                 if (settings.Syncing == PlaybackSettings.SyncModes.Tapping)
                 {
-                    FormInputs.ResetIndent();
+                    FormInputs.SetIndentToParameters();
                     FormInputs.AddHint("Tab the [Sync] button on every beat.\nThe right click on measure to resync and refine.");
                 }
                 

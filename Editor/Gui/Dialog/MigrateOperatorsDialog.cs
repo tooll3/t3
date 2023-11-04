@@ -22,7 +22,7 @@ namespace T3.Editor.Gui.Dialog
 
         public void Draw()
         {
-            FormInputs.ResetIndent();
+            FormInputs.SetIndentToParameters();
             if (BeginDialog("Import Operators from another Tooll installation"))
             {
                 ImGui.BeginChild("options", new Vector2(ImGui.GetContentRegionAvail().X - 400, -1));

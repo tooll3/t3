@@ -16,15 +16,17 @@ namespace T3.Editor.Gui.Styling
     {
         public static void BeginFrame()
         {
-            ResetIndent();
+            SetIndentToParameters();
         }
         
         public static void AddSectionHeader(string label)
         {
-            AddVerticalSpace(10);
+            AddVerticalSpace(1);
             ImGui.PushFont(Fonts.FontLarge);
             ImGui.Text(label);
             ImGui.PopFont();
+            //AddVerticalSpace(20);
+
         }
 
         public static bool BeginGroup(string label)
@@ -150,7 +152,10 @@ namespace T3.Editor.Gui.Styling
             foreach (var n in names)
             {
                 if (n == selectedValue.ToString())
+                {
                     selectedIndex = index;
+                    break;
+                }
 
                 index++;
             }
@@ -163,6 +168,31 @@ namespace T3.Editor.Gui.Styling
 
             return modified;
         }
+        
+        public static bool DrawEnumList<T>(ref T selectedValue) where T : struct, Enum, IConvertible, IFormattable
+        {
+            var names = Enum.GetNames<T>();
+            var index = 0;
+            var modified = false;
+            
+            foreach (var n in names)
+            {
+                var isActive = n == selectedValue.ToString();
+
+                if (ImGui.Selectable(n, isActive))
+                {
+                    modified = true;
+                    selectedValue = Enum.GetValues<T>()[index];
+                }
+                
+
+                index++;
+            }
+
+            return modified;
+        }
+        
+        
 
         public static bool AddDropdown(ref string selectedValue, IEnumerable<string> values, string label, string tooltip = null)
         {
@@ -196,7 +226,7 @@ namespace T3.Editor.Gui.Styling
         }
         
         
-        public static bool AddSegmentedButton<T>(ref T selectedValue, string label) where T : struct, Enum
+        public static bool AddSegmentedButton<T>(ref T selectedValue, string label, float columnWidth=0) where T : struct, Enum
         {
             DrawInputLabel(label);
 
@@ -206,13 +236,13 @@ namespace T3.Editor.Gui.Styling
             foreach (var value in Enum.GetValues<T>())
             {
                 var name = Enum.GetName(value);
-                if (!isFirst)
+                if (!isFirst && columnWidth <=0)
                 {
                     ImGui.SameLine();
                 }
 
                 var isSelected = selectedValueString == value.ToString();
-                var clicked = DrawSelectButton(name, isSelected);
+                var clicked = DrawSelectButton(name, isSelected, columnWidth);
 
                 if (clicked)
                 {
@@ -226,14 +256,14 @@ namespace T3.Editor.Gui.Styling
             return modified;
         }
 
-        private static bool DrawSelectButton(string name, bool isSelected)
+        private static bool DrawSelectButton(string name, bool isSelected, float width = 0)
         {
             ImGui.PushStyleColor(ImGuiCol.Button, isSelected ? UiColors.BackgroundActive.Rgba : UiColors.BackgroundButton.Rgba);
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, isSelected ? UiColors.BackgroundActive.Rgba : UiColors.BackgroundButton.Rgba);
-            ImGui.PushStyleColor(ImGuiCol.Text, isSelected ? UiColors.BackgroundFull.Rgba : UiColors.ForegroundFull.Rgba);
-            ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundActive.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Rgba);
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.BackgroundActive.Fade(0.7f).Rgba);
 
-            var clicked = ImGui.Button(name);
+            var clicked = ImGui.Button(name, new Vector2(width,0));
             ImGui.PopStyleColor(4);
             return clicked;
         }
@@ -391,7 +421,7 @@ namespace T3.Editor.Gui.Styling
             ImGui.PopStyleVar(2);
         }
 
-        public static void AddVerticalSpace(float size = 10)
+        public static void AddVerticalSpace(float size = 20)
         {
             ImGui.Dummy(new Vector2(1, size * T3Ui.UiScaleFactor));
         }
@@ -402,7 +432,13 @@ namespace T3.Editor.Gui.Styling
             _paramIndent = newIndent;
         }
 
-        public static void ResetIndent()
+        public static void SetIndentToLeft()
+        {
+            _paramIndent = 0;
+        }
+
+        
+        public static void SetIndentToParameters()
         {
             _paramIndent = DefaultParameterIndent;
         }

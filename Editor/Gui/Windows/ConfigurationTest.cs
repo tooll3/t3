@@ -17,7 +17,7 @@ internal static class ConfigurationTest
     #region user interface
     public static void Draw()
     {
-        FormInputs.ResetIndent();
+        FormInputs.SetIndentToParameters();
         ImGui.Indent(20);
         FormInputs.AddSectionHeader("Category test");
 

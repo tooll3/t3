@@ -18,6 +18,7 @@
             public bool WindowedMode = false;
             
             public string LimitMidiDeviceCapture = null; 
+            public bool EnableMidiSnapshotIndication = false;
         }
     }
 }

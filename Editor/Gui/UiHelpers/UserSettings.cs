@@ -83,6 +83,7 @@ namespace T3.Editor.Gui.UiHelpers
             public int FullScreenIndexMain = 0;
             public int FullScreenIndexViewer = 0;
 
+
             // Timeline
             public float TimeRasterDensity = 1f;
 

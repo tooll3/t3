@@ -36,7 +36,7 @@ namespace T3.Editor.Gui.Templates
                     ImGui.GetWindowDrawList().AddRectFilled(windowMin,
                                                             windowMin + ImGui.GetContentRegionAvail(), 
                                                             UiColors.BackgroundButton);
-                    FormInputs.ResetIndent();
+                    FormInputs.SetIndentToParameters();
                     
                     //ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(10,10));
                     //ImGui.PushStyleVar(ImGuiStyleVar.ItemInnerSpacing, new Vector2(4, 4));

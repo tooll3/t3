@@ -379,6 +379,7 @@ namespace T3.Editor.Gui.Styling
             ImGui.TextWrapped(text);
             ImGui.PopStyleColor();
             ImGui.PopFont();
+            ImGui.Dummy(new Vector2(0,4 * T3Ui.DisplayScaleFactor));
         }
 
         /// <summary>

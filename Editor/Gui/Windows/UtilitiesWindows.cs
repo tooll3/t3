@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using ImGuiNET;
 using T3.Core.Logging;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -16,9 +19,8 @@ namespace T3.Editor.Gui.Windows;
 
 internal class SimulatedCrashException : Exception
 {
-        
 }
-    
+
 public class UtilitiesWindow : Window
 {
     public UtilitiesWindow()
@@ -33,13 +35,12 @@ public class UtilitiesWindow : Window
     private bool _autoConvertOnParameterChange = true;
 
     private bool _crashUnlocked;
-        
+
     protected override void DrawContent()
     {
-        
         if (ImGui.TreeNode("Crash Reporting"))
         {
-            FormInputs.ResetIndent();
+            FormInputs.SetIndentToParameters();
             FormInputs.ApplyIndent();
             if (ImGui.Button("Test application crash"))
             {
@@ -53,17 +54,64 @@ public class UtilitiesWindow : Window
                 ImGui.PushStyleColor(ImGuiCol.ButtonActive, UiColors.StatusWarning.Rgba);
                 ImGui.PushStyleColor(ImGuiCol.ButtonHovered, UiColors.StatusWarning.Rgba);
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Rgba);
-                var crashNow = ImGui.Button("Crash now."); 
+                var crashNow = ImGui.Button("Crash now.");
                 ImGui.PopStyleColor(4);
-                    
+
                 if (crashNow)
                 {
                     SimulateCrash();
                 }
+
                 CustomComponents.TooltipForLastItem("Clicking this button will simulate a crash.\nThis can useful to test the crash reporting dialog.");
             }
+
             FormInputs.AddHint("Yes. This can be useful.");
-            ImGui.TreePop();            
+            ImGui.TreePop();
+        }
+
+        if (ImGui.TreeNode("Debug information"))
+        {
+            if (ImGui.TreeNode("Undo history"))
+            {
+                int index = 0;
+                foreach (var c in UndoRedoStack.UndoStack)
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.5f / (index + 1) + 0.5f));
+                    ImGui.PushFont(index == 0 ? Fonts.FontBold : Fonts.FontNormal);
+                    if (c is MacroCommand macroCommand)
+                    {
+                        ImGui.Selectable($"{c.Name} ({macroCommand.Count})");
+                    }
+                    else
+                    {
+                        ImGui.Selectable(c.Name);
+                    }
+
+                    ImGui.PopFont();
+                    ImGui.PopStyleColor();
+                    index++;
+                }
+
+                ImGui.TreePop();
+            }
+
+            if (ImGui.TreeNode("Navigation history"))
+            {
+                int index = 0;
+                foreach (var c in NavigationHistory.GetPreviouslySelectedInstances())
+                {
+                    ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0.5f / (index + 1) + 0.5f));
+                    ImGui.PushFont(index == 0 ? Fonts.FontBold : Fonts.FontNormal);
+                    ImGui.Selectable($" {c})");
+                    ImGui.PopFont();
+                    ImGui.PopStyleColor();
+                    index++;
+                }
+
+                ImGui.TreePop();
+            }
+
+            ImGui.TreePop();
         }
 
         if (ImGui.TreeNode("Svg Conversion"))
@@ -75,21 +123,20 @@ public class UtilitiesWindow : Window
             modified |= FormInputs.AddFloat("Descent", ref _svgFontDescent, 0, 2000, 1);
             modified |= FormInputs.AddFloat("AdvanceX", ref _svgAdvanceX, 0, 2000, 1);
             FormInputs.AddCheckBox("Convert on change", ref _autoConvertOnParameterChange);
-                
+
             FormInputs.ApplyIndent();
             var autoTriggered = _autoConvertOnParameterChange && modified;
             if (autoTriggered || CustomComponents.DisablableButton("Convert To SvgFont", File.Exists(_svgFilePath)))
             {
                 ConvertSvgToSvgFont(_svgFilePath);
             }
+
             ImGui.TreePop();
         }
-        
+
         ConfigurationTest.Draw();
     }
 
-        
-        
     private static void SimulateCrash()
     {
         throw new SimulatedCrashException();
@@ -106,26 +153,26 @@ public class UtilitiesWindow : Window
         var svg = GetSingleElement(xDoc, _ns + "svg");
         if (svg == null)
             return;
-            
+
         // Ignore and remove original def blocks
-        foreach(var def in svg.Elements(_ns + "defs"))
+        foreach (var def in svg.Elements(_ns + "defs"))
         {
             def.Remove();
         }
-            
+
         // Ignore and remove original rect blocks
-        foreach(var rect in svg.Elements(_ns + "rect"))
+        foreach (var rect in svg.Elements(_ns + "rect"))
         {
             rect.Remove();
-        }            
+        }
 
         var newDefs = new XElement(_ns + "defs");
         svg.Add(newDefs);
 
         var fontDef = new XElement(_ns + "font");
-        fontDef.SetAttributeValue("horiz-adv-x", 50);   // TODO: set correctly
+        fontDef.SetAttributeValue("horiz-adv-x", 50); // TODO: set correctly
         newDefs.Add(fontDef);
-            
+
         var fontGroups = svg
                         .Elements(_ns + "g")?
                         .Where(c => AttrEndsWith(c, "-Font"));
@@ -144,10 +191,10 @@ public class UtilitiesWindow : Window
         fontFace.SetAttributeValue("cap-height", "500");
         fontFace.SetAttributeValue("x-height", "300");
         fontDef.Add(fontFace);
-            
+
         var glyphGroups = fontGroups
            .Elements(_ns + "g");
-            
+
         foreach (var g in glyphGroups)
         {
             var frameRect = GetSingleElement(g, _ns + "rect");
@@ -166,7 +213,7 @@ public class UtilitiesWindow : Window
             }
 
             var d = _stringBuilder.ToString();
-                
+
             // if (path == null)
             //     continue;
 
@@ -174,25 +221,23 @@ public class UtilitiesWindow : Window
             var width = GetFloatAttribute(frameRect, "width");
             var height = GetFloatAttribute(frameRect, "height");
 
-                
-
             var id = g.Attribute("id")?.Value;
-                
+
             if (string.IsNullOrEmpty(id))
             {
                 Log.Warning("Skipping svg glyph with missing id");
                 continue;
             }
-                
+
             // If the name is not a single character it might be encoded as something like &#00901;
             if (id.Length > 1)
             {
                 // Replace double encoded &
                 id = id.Replace("&#38;", "&");
-                    
+
                 // Try to replace encoded unicode characters
-                id = System.Net.WebUtility.HtmlDecode(id); 
-                    
+                id = System.Net.WebUtility.HtmlDecode(id);
+
                 // Some special characters are saved with a strange encoding by Figma.
                 // We try to decode them from Latin1 into UTF8 characters
                 if (id.Length > 1)
@@ -203,12 +248,12 @@ public class UtilitiesWindow : Window
                     id = converted;
                 }
             }
-                
+
             if (id.Length != 1)
             {
                 Log.Debug($"Found group with incorrect Id '{id}'");
             }
-                
+
             var newGlyph = new XElement(_ns + "glyph");
             newGlyph.SetAttributeValue("horiz-adv-x", width);
             newGlyph.SetAttributeValue("vert-origin-x", xTransform);
@@ -226,6 +271,7 @@ public class UtilitiesWindow : Window
             Log.Debug($"Can't extract folder from {filePath}");
             return;
         }
+
         var newFileName = Path.GetFileNameWithoutExtension(filePath) + "_font.svg";
         var newFilePath = Path.Combine(folder, newFileName);
 
@@ -233,6 +279,7 @@ public class UtilitiesWindow : Window
         {
             group.Remove();
         }
+
         xDoc.Save(newFilePath);
 
         Log.Debug($"  Saving {newFileName} with {fontDef.Elements().Count()} glyphs.");
@@ -246,8 +293,6 @@ public class UtilitiesWindow : Window
                    : null;
     }
 
-
-        
     private static float GetTranslateOrDefault(XElement frameRect, float @default = 0)
     {
         var transformString = (string)frameRect.Attribute("transform");
@@ -276,12 +321,12 @@ public class UtilitiesWindow : Window
         var attr = c.Attribute("id");
         return attr?.Value != null && attr.Value.EndsWith(suffix);
     }
-        
+
     public override List<Window> GetInstances()
     {
         return new List<Window>();
     }
-        
+
     private static readonly XNamespace _ns = "http://www.w3.org/2000/svg";
     readonly StringBuilder _stringBuilder = new StringBuilder();
     private static string _svgFilePath;
