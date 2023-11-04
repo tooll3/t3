@@ -35,10 +35,10 @@ float4 psMain(vsOutput input) : SV_TARGET
     float aspectRatio = TargetWidth/TargetHeight;
 	
     float4 fx = FxTexture.Sample(samLinear, uv);
-    float angle = (Angle + FxAngleFactor * fx.r * 360)* 3.141578/180;
+    float angle = (Angle +  FxAngleFactor * fx.r * 360)* 3.141578/180;
 
     float2 dir = float2(cos(angle), sin(angle) );
-    float strength = Size + FxSizeFactor * fx.g;
+    float strength = Size * (1 + FxSizeFactor * fx.g);
     dir *= strength / NumberOfSamples;
     dir.y *= aspectRatio;
 

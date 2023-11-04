@@ -36,6 +36,15 @@ namespace T3.Operators.Types.Id_1192ae86_b174_4b58_9cc6_38afb666ce35
 
         [Input(Guid = "fd99fc97-43a8-4a04-8e17-95c2abc289fc")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> FxTextures = new InputSlot<SharpDX.Direct3D11.Texture2D>();
+
+        [Input(Guid = "b295586d-2339-4d69-868a-c17468e77998")]
+        public readonly InputSlot<bool> RefinementPass = new InputSlot<bool>();
+
+        [Input(Guid = "a3af8d20-8c09-4250-b5bd-806c12ad7c05")]
+        public readonly InputSlot<int> RefinementSamples = new InputSlot<int>();
+
+        [Input(Guid = "ea812b8d-f275-4a91-bfae-cd3308c04362")]
+        public readonly InputSlot<float> RefineSizeFactor = new InputSlot<float>();
     }
 }
 
