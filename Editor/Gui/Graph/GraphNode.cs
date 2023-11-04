@@ -355,14 +355,18 @@ namespace T3.Editor.Gui.Graph
                         && _selectableScreenRect.GetHeight() > 8)
                     {
                         drawList.PushClipRect(_usableScreenRect.Min, _usableScreenRect.Max, true);
-                        ImGui.PushFont(GraphCanvas.Current.Scale.X < 1 * T3Ui.UiScaleFactor ? Fonts.FontSmall : Fonts.FontBold);
+                        var useSmallFont = GraphCanvas.Current.Scale.X < 1 * T3Ui.UiScaleFactor;
+                        var font = useSmallFont ? Fonts.FontSmall : Fonts.FontBold;
+                        
                         var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
-
-
-                        drawList.AddText(_usableScreenRect.Min + LabelPos,
-                                         ColorVariations.OperatorLabel.Apply(typeColor),
-                                         isRenamed ? $"\"{childUi.SymbolChild.ReadableName}\"" : childUi.SymbolChild.ReadableName);
-                        ImGui.PopFont();
+                        var fade = MathUtils.SmootherStep(0.2f, 0.6f, GraphCanvas.Current.Scale.X);
+                        
+                        drawList.AddText(font,
+                                         font.FontSize * ( useSmallFont ?  GraphCanvas.Current.Scale.X : 1) * T3Ui.UiScaleFactor,
+                                                        _usableScreenRect.Min + LabelPos,
+                                                        ColorVariations.OperatorLabel.Apply(typeColor).Fade(fade),
+                                                        isRenamed ? $"\"{childUi.SymbolChild.ReadableName}\"" : childUi.SymbolChild.ReadableName);
+                        
                         drawList.PopClipRect();
                     }
 

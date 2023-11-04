@@ -78,17 +78,13 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
 
                     if (outputSlot != null && output != null && input != null)
                     {
-                        ImGui.PushFont(Fonts.FontSmall);
-                        var connectionSource = sourceOp.ReadableName + "." + output.OutputDefinition.Name;
-                        ImGui.TextColored(UiColors.Gray, connectionSource);
-
-                        var connectionTarget = "->" + targetOp.ReadableName + "." + input.InputDefinition.Name;
-                        ImGui.TextColored(UiColors.Gray, connectionTarget);
-                        ImGui.PopFont();
 
                         var width = 160f;
+                        ImGui.SetNextWindowSizeConstraints(new Vector2(200, 200*9/16f), new Vector2(200, 200*9/16f));
+
                         ImGui.BeginChild("thumbnail", new Vector2(width, width * 9 / 16f));
                         {
+                            
                             TransformGizmoHandling.SetDrawList(drawList);
                             ImageCanvasForTooltips.Update();
                             ImageCanvasForTooltips.SetAsCurrent();
@@ -100,20 +96,30 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                             EvaluationContext.RequestedResolution = new Size2(1280 / 2, 720 / 2);
                             outputUi.DrawValue(outputSlot, EvaluationContext, recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
 
-                            if (!string.IsNullOrEmpty(sourceOpUi.Description))
-                            {
-                                ImGui.Spacing();
-                                ImGui.PushFont(Fonts.FontSmall);
-                                ImGui.PushStyleColor(ImGuiCol.Text, new Color(1, 1, 1, 0.5f).Rgba);
-                                ImGui.TextWrapped(sourceOpUi.Description);
-                                ImGui.PopStyleColor();
-                                ImGui.PopFont();
-                            }
+                            // if (!string.IsNullOrEmpty(sourceOpUi.Description))
+                            // {
+                            //     ImGui.Spacing();
+                            //     ImGui.PushFont(Fonts.FontSmall);
+                            //     ImGui.PushStyleColor(ImGuiCol.Text, new Color(1, 1, 1, 0.5f).Rgba);
+                            //     ImGui.TextWrapped(sourceOpUi.Description);
+                            //     ImGui.PopStyleColor();
+                            //     ImGui.PopFont();
+                            // }
 
                             ImageCanvasForTooltips.Deactivate();
                             TransformGizmoHandling.RestoreDrawList();
                         }
                         ImGui.EndChild();
+                            ImGui.PushFont(Fonts.FontSmall);
+                            var type = output.OutputDefinition.ValueType;
+                            var connectionSource = sourceOp.ReadableName + "." + output.OutputDefinition.Name;
+                            ImGui.TextColored(UiColors.TextMuted, connectionSource);
+                            
+                            ImGui.TextUnformatted(type.Name);
+                            ImGui.SameLine();
+                            var connectionTarget = "--> " + targetOp.ReadableName + "." + input.InputDefinition.Name;
+                            ImGui.TextColored(UiColors.TextMuted, connectionTarget);
+                            ImGui.PopFont();
 
                         FrameStats.AddHoveredId(targetOp.Id);
                         FrameStats.AddHoveredId(sourceOp.Id);
@@ -152,7 +158,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
             _bestMatchDistance = distance;
         }
 
-        private static readonly ImageOutputCanvas ImageCanvasForTooltips = new ImageOutputCanvas();
+        private static readonly ImageOutputCanvas ImageCanvasForTooltips = new() { DisableDamping = true };
         private static readonly EvaluationContext EvaluationContext = new EvaluationContext();
 
         public static PotentialConnectionSplit BestMatchLastFrame;

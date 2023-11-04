@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Styling;
@@ -35,11 +36,17 @@ namespace T3.Editor.Gui.OutputUi
                     default:
                         var type = typeof(T);
                         ImGui.PushFont(Fonts.FontSmall);
-                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+                        
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Fade(0.6f).Rgba);
                         ImGui.TextUnformatted(type.Namespace);
                         ImGui.PopStyleColor();
-                        ImGui.PopFont();
+                        
+                        ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
                         ImGui.TextUnformatted(type.Name);
+                        ImGui.PopStyleColor();
+                        ImGui.PopFont();
+                        
+                        ImGui.Dummy(new Vector2(0,2 * T3Ui.UiScaleFactor));
 
                         var valueAsString = value == null ? "undefined" : value.ToString();
                         ImGui.TextUnformatted(valueAsString);

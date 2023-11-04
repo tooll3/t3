@@ -162,6 +162,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                                                      targetParentOrChildId: NotConnectedId,
                                                      targetSlotId: NotConnectedId,
                                                      outputDef.ValueType));
+                _isDisconnectingFromInput = true;
             }
             else
             {
@@ -170,6 +171,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
                                                      targetParentOrChildId: UseSymbolContainerId,
                                                      targetSlotId: outputDef.Id,
                                                      outputDef.ValueType));
+                _isDisconnectingFromInput = false;
             }
         }
         
