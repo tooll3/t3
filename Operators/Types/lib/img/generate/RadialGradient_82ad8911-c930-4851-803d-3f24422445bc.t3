@@ -156,7 +156,7 @@
         {
           "Id": "f6269be3-3331-43a6-91ec-138b47199f3e"/*ShaderPath*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\generate\\img-generate-radial-gradient-hlsl.hlsl"
+          "Value": "Resources\\lib\\img\\generate\\RadialGradient.hlsl"
         },
         {
           "Id": "e31b78eb-940b-41df-93fa-d0c1c9f864f4"/*GenerateMips*/,

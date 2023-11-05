@@ -243,6 +243,27 @@
         "X": -865.79565,
         "Y": -4774.6504
       }
+    },
+    {
+      "ChildId": "79ef497c-66e0-4e4d-848d-3279f2ca5e80"/*Blob*/,
+      "Position": {
+        "X": -842.9861,
+        "Y": -4622.296
+      }
+    },
+    {
+      "ChildId": "68728bed-c5e8-47df-9a28-3db7e2f43e3d"/*AdjustColors*/,
+      "Position": {
+        "X": -688.61743,
+        "Y": -4609.277
+      }
+    },
+    {
+      "ChildId": "d721e280-d721-4010-ac0e-4d915085c010"/*DoyleSpiralPoints2*/,
+      "Position": {
+        "X": -928.5398,
+        "Y": -4342.386
+      }
     }
   ],
   "OutputUis": [],
