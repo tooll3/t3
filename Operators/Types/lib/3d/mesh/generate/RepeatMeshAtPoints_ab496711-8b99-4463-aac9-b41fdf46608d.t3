@@ -42,7 +42,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\mesh\\repeat-mesh-vertices-at-points.hlsl"
+          "Value": "Resources\\lib\\3d\\mesh\\mesh-RepeatVerticesAtPoints.hlsl"
         }
       ],
       "Outputs": []
@@ -203,7 +203,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\mesh\\repeat-mesh-indices-at-points.hlsl"
+          "Value": "Resources\\lib\\3d\\mesh\\mesh-RepeatIndicesAtPoints.hlsl"
         }
       ],
       "Outputs": []

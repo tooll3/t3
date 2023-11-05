@@ -140,13 +140,6 @@
       }
     },
     {
-      "ChildId": "8be32d72-7a1c-44ce-8863-60782ff0ed53"/*__SurfaceForce*/,
-      "Position": {
-        "X": -1995.2946,
-        "Y": -3708.111
-      }
-    },
-    {
       "ChildId": "49a61171-6ec8-459a-8e96-6a2ebc1ed14b"/*PointSimulation*/,
       "Position": {
         "X": -1942.2338,
@@ -200,6 +193,48 @@
       "Position": {
         "X": -2500.6929,
         "Y": -3486.1294
+      }
+    },
+    {
+      "ChildId": "ea3e9f91-38be-4a3f-8bee-d122e928439a"/*TorusMesh*/,
+      "Position": {
+        "X": -1394.515,
+        "Y": -4432.4526
+      }
+    },
+    {
+      "ChildId": "34918379-1f06-4829-8369-c6256c6299c8"/*CubeMesh*/,
+      "Position": {
+        "X": -1394.515,
+        "Y": -4389.4526
+      }
+    },
+    {
+      "ChildId": "a7234388-7346-4120-b46b-829e6579aa17"/*CombineMeshes*/,
+      "Position": {
+        "X": -1244.515,
+        "Y": -4432.4526
+      }
+    },
+    {
+      "ChildId": "c3867702-18ac-4166-a5d6-7dbb7a736182"/*DisplaceMesh*/,
+      "Position": {
+        "X": -1094.515,
+        "Y": -4432.4526
+      }
+    },
+    {
+      "ChildId": "aea72a9a-a7ff-4808-8aff-22d8ce34caad"/*DrawMeshUnlit*/,
+      "Position": {
+        "X": -944.515,
+        "Y": -4432.4526
+      }
+    },
+    {
+      "ChildId": "cb4d6bfa-0ce6-4b36-a08d-498ecbe1e218"/*FractalNoise*/,
+      "Position": {
+        "X": -1263.2303,
+        "Y": -4210.493
       }
     }
   ],

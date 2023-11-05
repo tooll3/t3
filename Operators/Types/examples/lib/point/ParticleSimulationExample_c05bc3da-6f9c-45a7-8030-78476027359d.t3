@@ -569,12 +569,6 @@
       "Outputs": []
     },
     {
-      "Id": "222dd04c-2c6e-4d18-bada-02622ff04aa7"/*__SurfaceForce*/,
-      "SymbolId": "3849f1f8-7d5e-4c15-9e25-6761817b5038",
-      "InputValues": [],
-      "Outputs": []
-    },
-    {
       "Id": "719dcb82-c9f3-47f2-902e-22021b0bd812"/*SurfaceForce*/,
       "SymbolId": "fbe1a703-f372-4236-9f20-5d0b69183843",
       "InputValues": [
