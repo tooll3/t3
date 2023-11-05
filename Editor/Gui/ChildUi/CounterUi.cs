@@ -41,7 +41,10 @@ namespace T3.Editor.Gui.ChildUi
             }
 
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered |  SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolChildUi.CustomUiResult.Rendered 
+                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolChildUi.CustomUiResult.PreventInputLabels
+                   | SymbolChildUi.CustomUiResult.PreventTooltip;
         }
     }
 }

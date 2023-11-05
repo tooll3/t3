@@ -90,7 +90,10 @@ namespace T3.Editor.Gui.ChildUi
             DrawCurve(drawList, graphRect, animValue, highlightEditable);
             
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventOpenSubGraph | SymbolChildUi.CustomUiResult.PreventTooltip | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
+            return SymbolChildUi.CustomUiResult.Rendered 
+                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolChildUi.CustomUiResult.PreventInputLabels
+                   | SymbolChildUi.CustomUiResult.PreventTooltip;
 
         }
 
