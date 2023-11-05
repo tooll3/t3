@@ -18,7 +18,7 @@
       }
     },
     {
-      "ChildId": "1e8ce33d-f4b5-4366-9379-c5468de9e7c3"/*LegacySimForces*/,
+      "ChildId": "1e8ce33d-f4b5-4366-9379-c5468de9e7c3"/*SimForceOffset*/,
       "Position": {
         "X": 493.85938,
         "Y": 60.25244

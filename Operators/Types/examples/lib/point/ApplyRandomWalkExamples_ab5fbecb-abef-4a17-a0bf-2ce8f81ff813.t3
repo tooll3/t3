@@ -114,7 +114,7 @@
       "Outputs": []
     },
     {
-      "Id": "3e3ecc10-dfea-4a3c-bef4-d481c786c168"/*LegacyDirectionalForce*/,
+      "Id": "3e3ecc10-dfea-4a3c-bef4-d481c786c168"/*SimDirectionalOffset*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {
@@ -252,7 +252,7 @@
       "Outputs": []
     },
     {
-      "Id": "846e1bbf-059a-4005-b427-fb1ab4c81308"/*SimNoise*/,
+      "Id": "846e1bbf-059a-4005-b427-fb1ab4c81308"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -282,7 +282,7 @@
       ],
       "Outputs": [
         {
-          "Id": "cf976e9a-ea57-44f7-aeb9-f57f2e712b41"/*SimNoise*/,
+          "Id": "cf976e9a-ea57-44f7-aeb9-f57f2e712b41"/*SimNoiseOffset*/,
           "IsDisabled": true
         }
       ]
@@ -451,7 +451,7 @@
       "Outputs": []
     },
     {
-      "Id": "a4ca6ca4-faca-4b25-b790-7a1424930cc9"/*LegacyDirectionalForce*/,
+      "Id": "a4ca6ca4-faca-4b25-b790-7a1424930cc9"/*SimDirectionalOffset*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {
@@ -472,7 +472,7 @@
       "Outputs": []
     },
     {
-      "Id": "a9e4b034-9bef-41b0-a43c-be2f68e20ee6"/*LegacyDirectionalForce*/,
+      "Id": "a9e4b034-9bef-41b0-a43c-be2f68e20ee6"/*SimDirectionalOffset*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {

@@ -249,7 +249,7 @@
       }
     },
     {
-      "ChildId": "c1a103d3-98df-4032-90b9-8075f37b2714"/*LegacyDirectionalForce*/,
+      "ChildId": "c1a103d3-98df-4032-90b9-8075f37b2714"/*SimDirectionalOffset*/,
       "Position": {
         "X": 770.78467,
         "Y": 1308.581
@@ -501,7 +501,7 @@
       }
     },
     {
-      "ChildId": "893bfaf2-b220-4137-9fcb-0d3f07e19b8b"/*SimNoise*/,
+      "ChildId": "893bfaf2-b220-4137-9fcb-0d3f07e19b8b"/*SimNoiseOffset*/,
       "Position": {
         "X": 920.78467,
         "Y": 1308.581

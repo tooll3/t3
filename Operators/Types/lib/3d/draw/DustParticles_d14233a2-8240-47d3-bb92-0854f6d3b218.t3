@@ -141,7 +141,7 @@
       "Outputs": []
     },
     {
-      "Id": "48546943-8316-4b1a-8784-769423edd162"/*SimNoise*/,
+      "Id": "48546943-8316-4b1a-8784-769423edd162"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -309,7 +309,7 @@
       "Outputs": []
     },
     {
-      "Id": "68884267-81da-49e0-a135-eee4b3c1c0aa"/*LegacySimForces*/,
+      "Id": "68884267-81da-49e0-a135-eee4b3c1c0aa"/*SimForceOffset*/,
       "SymbolId": "9c378944-9a57-4ae4-a88e-36c07244bcf7",
       "InputValues": [
         {
@@ -610,7 +610,7 @@
       "Outputs": []
     },
     {
-      "Id": "f191a2f8-a555-4537-b0de-1475c0fe93ca"/*LegacyDirectionalForce*/,
+      "Id": "f191a2f8-a555-4537-b0de-1475c0fe93ca"/*SimDirectionalOffset*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [],
       "Outputs": []

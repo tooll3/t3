@@ -32,7 +32,7 @@
       }
     },
     {
-      "ChildId": "49155205-46f4-48c8-b55a-e71902938914"/*SimNoise*/,
+      "ChildId": "49155205-46f4-48c8-b55a-e71902938914"/*SimNoiseOffset*/,
       "Position": {
         "X": 750.0,
         "Y": 0.0

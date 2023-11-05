@@ -218,6 +218,60 @@
       "SymbolId": "af0a4265-44aa-49d9-b674-5b7c1937c99a",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "8be32d72-7a1c-44ce-8863-60782ff0ed53"/*__SurfaceForce*/,
+      "SymbolId": "3849f1f8-7d5e-4c15-9e25-6761817b5038",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "49a61171-6ec8-459a-8e96-6a2ebc1ed14b"/*PointSimulation*/,
+      "SymbolId": "10507c42-1240-47cc-9569-5e3f1c733e99",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "31fcf52d-8188-4014-a4c0-b9e1f3cbe024"/*LegacyParticleSimulation*/,
+      "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "391b189a-11eb-4fbc-81bb-91d8ad50a680"/*SimDirectionalOffset*/,
+      "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "e8fbd1fb-e47c-4c6b-a0fa-1639022fdda4"/*SimNoiseOffset*/,
+      "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "aa57c694-1388-444d-9571-892a15f7bea0"/*SimForceOffset*/,
+      "SymbolId": "9c378944-9a57-4ae4-a88e-36c07244bcf7",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "71b38f19-3c9b-4825-9fd6-17ebad2fcb47"/*SimCentricalOffset*/,
+      "SymbolId": "87915d7b-f2aa-45da-80f9-bd1f6033d387",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "21e424cd-c4f1-4c8a-a8c3-e6606608c8ef"/*SimBlendTo*/,
+      "SymbolId": "4ba8019b-f265-4e41-8722-4ee0c2c64ba9",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "aa29cd94-1883-44c5-81d1-19a432554584"/*LoadImage*/,
+      "SymbolId": "0b3436db-e283-436e-ba85-2f3a1de76a9d",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [

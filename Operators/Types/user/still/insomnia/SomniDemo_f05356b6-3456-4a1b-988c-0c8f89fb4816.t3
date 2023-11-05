@@ -1791,7 +1791,7 @@
       "Outputs": []
     },
     {
-      "Id": "b60f4a0a-e25a-4e36-aa66-ebb4014a2d3f"/*SimNoise*/,
+      "Id": "b60f4a0a-e25a-4e36-aa66-ebb4014a2d3f"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -3112,7 +3112,7 @@
       "Outputs": []
     },
     {
-      "Id": "9450e34e-bf6e-45e9-9e62-9298e4b3d83a"/*LegacyDirectionalForce*/,
+      "Id": "9450e34e-bf6e-45e9-9e62-9298e4b3d83a"/*SimDirectionalOffset*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {
@@ -3935,7 +3935,7 @@
       "Outputs": []
     },
     {
-      "Id": "7711c5f1-3d78-432c-8038-ca4a43b3b6b7"/*SimNoise*/,
+      "Id": "7711c5f1-3d78-432c-8038-ca4a43b3b6b7"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -4065,7 +4065,7 @@
       "Outputs": []
     },
     {
-      "Id": "46dd55e9-5055-48be-9b73-810a1ba842f7"/*LegacyDirectionalForce*/,
+      "Id": "46dd55e9-5055-48be-9b73-810a1ba842f7"/*SimDirectionalOffset*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {
@@ -5019,7 +5019,7 @@
       "Outputs": []
     },
     {
-      "Id": "62ed4a51-a60b-41d3-a5f0-5be0ad29879f"/*SimNoise*/,
+      "Id": "62ed4a51-a60b-41d3-a5f0-5be0ad29879f"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {

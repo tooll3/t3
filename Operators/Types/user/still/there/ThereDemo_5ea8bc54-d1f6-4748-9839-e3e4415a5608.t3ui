@@ -469,7 +469,7 @@
       }
     },
     {
-      "ChildId": "0b210fe0-b102-4328-b285-b0c6608905b5"/*SimNoise*/,
+      "ChildId": "0b210fe0-b102-4328-b285-b0c6608905b5"/*SimNoiseOffset*/,
       "Position": {
         "X": -2072.3892,
         "Y": -555.5615
@@ -518,7 +518,7 @@
       }
     },
     {
-      "ChildId": "24687271-cace-4b26-8004-57fcc223cf01"/*LegacyDirectionalForce*/,
+      "ChildId": "24687271-cace-4b26-8004-57fcc223cf01"/*SimDirectionalOffset*/,
       "Position": {
         "X": -1674.5133,
         "Y": -447.66772

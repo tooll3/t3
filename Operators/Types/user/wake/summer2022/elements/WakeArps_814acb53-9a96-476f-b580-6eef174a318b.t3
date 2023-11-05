@@ -647,7 +647,7 @@
       "Outputs": []
     },
     {
-      "Id": "088a3b2c-d8cb-454e-93f8-e290b215d207"/*LegacyDirectionalForce*/,
+      "Id": "088a3b2c-d8cb-454e-93f8-e290b215d207"/*SimDirectionalOffset*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {
@@ -719,7 +719,7 @@
       "Outputs": []
     },
     {
-      "Id": "2d92cf0d-56ce-4bb7-a3d3-926fb65dee33"/*PointForce*/,
+      "Id": "2d92cf0d-56ce-4bb7-a3d3-926fb65dee33"/*SimCentricalOffset*/,
       "SymbolId": "87915d7b-f2aa-45da-80f9-bd1f6033d387",
       "InputValues": [
         {
@@ -2448,7 +2448,7 @@
       "Outputs": []
     },
     {
-      "Id": "053e0c66-09e5-47a4-bbd6-543c394916da"/*SimNoise*/,
+      "Id": "053e0c66-09e5-47a4-bbd6-543c394916da"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {

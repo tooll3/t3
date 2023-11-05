@@ -60,7 +60,7 @@
       }
     },
     {
-      "ChildId": "3e3ecc10-dfea-4a3c-bef4-d481c786c168"/*LegacyDirectionalForce*/,
+      "ChildId": "3e3ecc10-dfea-4a3c-bef4-d481c786c168"/*SimDirectionalOffset*/,
       "Position": {
         "X": 1095.0837,
         "Y": 324.82837
@@ -102,7 +102,7 @@
       }
     },
     {
-      "ChildId": "846e1bbf-059a-4005-b427-fb1ab4c81308"/*SimNoise*/,
+      "ChildId": "846e1bbf-059a-4005-b427-fb1ab4c81308"/*SimNoiseOffset*/,
       "Position": {
         "X": 1084.3082,
         "Y": 489.64392
@@ -172,14 +172,14 @@
       }
     },
     {
-      "ChildId": "a4ca6ca4-faca-4b25-b790-7a1424930cc9"/*LegacyDirectionalForce*/,
+      "ChildId": "a4ca6ca4-faca-4b25-b790-7a1424930cc9"/*SimDirectionalOffset*/,
       "Position": {
         "X": 1398.1975,
         "Y": 405.40295
       }
     },
     {
-      "ChildId": "a9e4b034-9bef-41b0-a43c-be2f68e20ee6"/*LegacyDirectionalForce*/,
+      "ChildId": "a9e4b034-9bef-41b0-a43c-be2f68e20ee6"/*SimDirectionalOffset*/,
       "Position": {
         "X": 1547.1538,
         "Y": 403.97754

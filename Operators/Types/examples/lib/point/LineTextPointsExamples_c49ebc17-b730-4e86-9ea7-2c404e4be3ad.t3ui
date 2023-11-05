@@ -235,7 +235,7 @@
       }
     },
     {
-      "ChildId": "11d26421-ca7c-4888-84c8-2c747212ff49"/*SimNoise*/,
+      "ChildId": "11d26421-ca7c-4888-84c8-2c747212ff49"/*SimNoiseOffset*/,
       "Position": {
         "X": 1789.8673,
         "Y": 848.0394

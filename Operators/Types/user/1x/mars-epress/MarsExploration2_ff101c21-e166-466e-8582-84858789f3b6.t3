@@ -657,7 +657,7 @@
       "Outputs": []
     },
     {
-      "Id": "4e7794e3-021c-4abf-bfd5-acc2f008f5c6"/*LegacyDirectionalForce*/,
+      "Id": "4e7794e3-021c-4abf-bfd5-acc2f008f5c6"/*SimDirectionalOffset*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {
@@ -850,7 +850,7 @@
       "Outputs": []
     },
     {
-      "Id": "5eddaf94-75bf-49c9-a3e0-dd053e868a6b"/*SimNoise*/,
+      "Id": "5eddaf94-75bf-49c9-a3e0-dd053e868a6b"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
