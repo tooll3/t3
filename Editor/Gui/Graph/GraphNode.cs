@@ -356,7 +356,7 @@ namespace T3.Editor.Gui.Graph
                     {
                         drawList.PushClipRect(_usableScreenRect.Min, _usableScreenRect.Max, true);
                         var useSmallFont = GraphCanvas.Current.Scale.X < 1 * T3Ui.UiScaleFactor;
-                        var font = useSmallFont ? Fonts.FontSmall : Fonts.FontBold;
+                        var font = Fonts.FontBold;
                         
                         var isRenamed = !string.IsNullOrEmpty(childUi.SymbolChild.Name);
                         var fade = MathUtils.SmootherStep(0.2f, 0.6f, GraphCanvas.Current.Scale.X);
