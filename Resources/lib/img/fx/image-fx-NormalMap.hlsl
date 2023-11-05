@@ -77,7 +77,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     }
 
     if(Mode < Gray_ToRGBNeg) {
-        return float4( normalize(float3(len * direction * Impact, 1)) /2, 1);
+        return float4( normalize(float3(len * direction * Impact, 1)) , 1);
     }
 
     if(Mode < Gray_ToAngleAndMagnitude)

@@ -576,22 +576,27 @@
         {
           "Id": "e94e2b7e-6f0a-42b5-bf5e-abdffe728273"/*Size*/,
           "Type": "System.Single",
-          "Value": 0.1
-        },
-        {
-          "Id": "11cb8f1e-fac5-4623-b61c-d6482633e505"/*Samples*/,
-          "Type": "System.Single",
-          "Value": 32.0
+          "Value": 0.132
         },
         {
           "Id": "815975d2-5613-4ca8-b208-f09ac07b0518"/*FxAngleFactor*/,
           "Type": "System.Single",
-          "Value": 0.21333334
+          "Value": 0.23
         },
         {
           "Id": "dfa5e772-0cb4-440f-8483-dcc89b40107d"/*FxSizeFactor*/,
           "Type": "System.Single",
-          "Value": 0.06666666
+          "Value": 0.4
+        },
+        {
+          "Id": "b295586d-2339-4d69-868a-c17468e77998"/*RefinementPass*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
+          "Id": "ea812b8d-f275-4a91-bfae-cd3308c04362"/*RefineSizeFactor*/,
+          "Type": "System.Single",
+          "Value": 4.5
         }
       ],
       "Outputs": []

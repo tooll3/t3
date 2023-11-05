@@ -99,7 +99,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     else
     {
         float4 rgba = DisplaceMap.Sample(texSampler, uv + DisplaceMapOffset) * padding;
-        d = (rgba.rg - 0.5) * 0.01;
+        d = DisplaceMode < 0.5 ? (rgba.rg - 0.5) * 0.01
+        : rgba.rg * 0.01;
         len = length(d) + 0.000001;
 
         float rRad = Twist / 180 * 3.14158;
@@ -113,6 +114,8 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
         direction = d / len;
     }
+
+
     // float len = length(d);
 
     float2 p2 = direction * (-DisplaceAmount * len * 10 + DisplaceOffset); // * float2(height/ height, 1);

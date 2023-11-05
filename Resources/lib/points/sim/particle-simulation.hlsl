@@ -20,6 +20,7 @@ cbuffer IntParams : register(b1)
 {
     int CollectCycleIndex;
     int WMode;
+    int EmitMode;
 } 
 
 StructuredBuffer<Point> EmitPoints : t0;
@@ -47,9 +48,24 @@ void main(uint3 i : SV_DispatchThreadID)
     }
 
     // Insert emit points
-    int addIndex = (gi - CollectCycleIndex + maxParticleCount) % maxParticleCount;
+    int addIndex = 0;
+    if(EmitMode == 0) {
+        addIndex = (gi + CollectCycleIndex + maxParticleCount) % maxParticleCount;
+    } 
+    else {
+        int t = (gi + CollectCycleIndex / newPointCount) % maxParticleCount;
+        int blockSize = maxParticleCount / newPointCount;
+        int particleBlock = t / blockSize;
+        int t2 = t - (particleBlock * blockSize);
+        addIndex =  t2 > 0 ?  -1 : particleBlock;
+    }
+
     if( TriggerEmit > 0.5 && addIndex >= 0 && addIndex < (int)newPointCount )
     {
+        if(EmitMode != 0) {
+            Particles[(gi-1) % maxParticleCount].birthTime = NAN;
+            Particles[(gi-1) % maxParticleCount].p.w = NAN;
+        }
         Particles[gi].p = EmitPoints[addIndex];
         Particles[gi].birthTime = Time;
         Particles[gi].velocity = rotate_vector(float3(0,0,1), normalize(Particles[gi].p.rotation)) * InitialVelocity;

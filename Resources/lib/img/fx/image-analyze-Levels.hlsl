@@ -69,25 +69,30 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     // Curves...
     float4 curveColor = float4(0,0,0,0);
     float lineThickness = 0.015 * width/max(width,height);
-    float3 curveShapeRGB = smoothstep(normalizedDistance +lineThickness, normalizedDistance +lineThickness * 1.5 ,colorOnLine.rgb);
-    float curveShapeA = smoothstep(normalizedDistance +lineThickness, normalizedDistance +lineThickness * 1.5 ,colorOnLine.a) * 0.2;
+    // float3 curveShapeRGB = smoothstep(normalizedDistance +lineThickness, normalizedDistance +lineThickness * 1.5 ,colorOnLine.rgb);
+    // float curveShapeA = smoothstep(normalizedDistance +lineThickness, normalizedDistance +lineThickness * 1.5 ,colorOnLine.a) * 0.2;
+    float4 curveShape = smoothstep(normalizedDistance +lineThickness, normalizedDistance +lineThickness * 1.5 ,colorOnLine.rgba) * float4(1,1,1, 0.2);
 
     float4 curveLines =smoothstep(normalizedDistance + lineThickness, normalizedDistance,colorOnLine.rgba)
                     *smoothstep(normalizedDistance - lineThickness, normalizedDistance,colorOnLine.rgba) * float4(1,1,1,0.0);
     curveLines.a += length(curveLines.rgb) * 0.3;
     curveLines.rgb+= curveLines.a * 0.2;
-    curveColor.rgba = curveLines + float4(curveShapeRGB, curveShapeA);
+    if(normalizedDistance < 0) {
+        curveShape = float4(1,1,1,0.2)  - curveShape;
+    }
+    curveColor.rgba = curveLines + curveShape;
+
     if(normalizedDistance < 0)
-        curveColor.rgba =0;
+        curveColor.a =0;
     
     // Zebra pattern for highlight clamping
-    float3 clamping = colorOnLine.rgb > 1 ? float3(1,1,1) :float3(0,0,0);
+    float3 clamping = (colorOnLine.rgb > 1 || colorOnLine.rgb < 0) ? float3(1,1,1) :float3(0,0,0);
     float2 pixelposition = uv * float2(width,height);
     float pattern = (pixelposition.x  + pixelposition.y + 0.5 + beatTime * 100)  % 8 < 2 ? 1: -1;
 
-    float3 clampedAreaRGB = clamping * curveShapeRGB * (normalizedDistance > 1 ? 1:0);
+    float3 clampedAreaRGB = clamping * curveShape.rgb * ((normalizedDistance > 1 || normalizedDistance <0) ? 1:0);
     float4 clampedArea = float4(clampedAreaRGB, length(clampedAreaRGB) * pattern * 0.2);
-    float heighlightExcessiveAlpha = (normalizedDistance > 1  && colorOnLine.a > normalizedDistance) ? 1: 0;
+    float heighlightExcessiveAlpha = ((normalizedDistance > 1 || normalizedDistance < 0)  && colorOnLine.a > normalizedDistance) ? 1: 0;
 
     bool isBetweenCurveRange = normalizedDistance >= 0 && normalizedDistance <= 1;
 

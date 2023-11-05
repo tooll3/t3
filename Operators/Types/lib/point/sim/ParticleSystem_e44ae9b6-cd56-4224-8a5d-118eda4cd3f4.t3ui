@@ -91,6 +91,13 @@
         "X": -699.0393,
         "Y": 1011.9298
       }
+    },
+    {
+      "InputId": "21c666bb-a28f-498c-a834-a2ba4aca78a7"/*EmitMode*/,
+      "Position": {
+        "X": -699.0393,
+        "Y": 1056.9298
+      }
     }
   ],
   "SymbolChildUis": [

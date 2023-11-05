@@ -30,7 +30,9 @@
       "Position": {
         "X": -200.38397,
         "Y": 225.0
-      }
+      },
+      "Min": -1.0,
+      "Max": 1.0
     },
     {
       "InputId": "8c4dab88-68cb-40cc-b576-ca3f3ea8461f"/*SpinOffset*/,
