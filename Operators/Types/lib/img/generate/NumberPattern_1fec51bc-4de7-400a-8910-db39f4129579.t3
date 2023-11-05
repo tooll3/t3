@@ -116,7 +116,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\images\\numbers-4x6px.png"
+          "Value": "Resources\\common\\images\\numbers-4x6px.png"
         }
       ],
       "Outputs": []

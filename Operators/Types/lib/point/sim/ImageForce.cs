@@ -17,7 +17,7 @@ namespace T3.Operators.Types.Id_4f5999c9_8ade_4e31_8379_afb7db56e170
         public readonly InputSlot<System.Numerics.Vector2> AmountXY = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "0de3d1e6-63d4-4dbf-a426-cbd4e6019c45")]
-        public readonly InputSlot<float> ViewConfinment = new InputSlot<float>();
+        public readonly InputSlot<float> ViewConfinement = new InputSlot<float>();
 
         [Input(Guid = "87264af4-0939-4aad-9a15-b79d067b9fcb")]
         public readonly InputSlot<float> DepthConcentration = new InputSlot<float>();

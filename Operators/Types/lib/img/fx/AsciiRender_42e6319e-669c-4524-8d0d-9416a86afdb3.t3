@@ -56,7 +56,7 @@
     },
     {
       "Id": "7f35bc61-a27f-4a36-9ecc-b5944791f6f0"/*FontFilePath*/,
-      "DefaultValue": "Resources\\images\\font-6x6px.png"
+      "DefaultValue": "Resources\\common\\images\\font-6x6px.png"
     },
     {
       "Id": "4a300626-b562-4a5e-bfc5-9ffcd99dc0d5"/*FilterCharacters*/,
@@ -350,7 +350,7 @@
         {
           "Id": "dab66e97-0b79-41ce-b6c7-9b01a123746e"/*Filepath*/,
           "Type": "System.String",
-          "Value": "Resources\\images\\font-6x6px.png"
+          "Value": "Resources\\common\\images\\font-6x6px.png"
         },
         {
           "Id": "936f7d5e-8eab-4a9d-abef-b941086b027d"/*FilterCharacters*/,
@@ -406,7 +406,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\images\\font-6x6px.png"
+          "Value": "Resources\\common\\images\\font-6x6px.png"
         }
       ],
       "Outputs": []
