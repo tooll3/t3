@@ -97,7 +97,7 @@ public class UtilitiesWindow : Window
                 
                 case Categories.Assets:
                     FormInputs.AddSectionHeader("File Assets");
-                    DrawFileAssetHelper();
+                    FileAssetsHelper.Draw();
                     break;
 
                 case Categories.CrashReporting:
@@ -145,11 +145,6 @@ public class UtilitiesWindow : Window
     private static void SimulateCrash()
     {
         throw new SimulatedCrashException();
-    }
-
-    private void DrawFileAssetHelper()
-    {
-        ImGui.TextUnformatted("Hello");
     }
 
     public override List<Window> GetInstances()
