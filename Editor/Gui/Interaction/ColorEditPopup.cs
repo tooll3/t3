@@ -29,6 +29,7 @@ namespace T3.Editor.Gui.Interaction
             var edited = InputEditStateFlags.Nothing;
             var cColor = new Color(color);
             ImGui.SetNextWindowSize(new Vector2(257, 360));
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
             var dontCloseIfColorPicking = ImGui.GetIO().KeyAlt ? ImGuiWindowFlags.Modal : ImGuiWindowFlags.None;
 
             var id = ImGui.GetID("colorPicker");
@@ -64,6 +65,7 @@ namespace T3.Editor.Gui.Interaction
             }
 
             color = cColor.Rgba;
+                ImGui.PopStyleVar();
             return edited;
         }
 
