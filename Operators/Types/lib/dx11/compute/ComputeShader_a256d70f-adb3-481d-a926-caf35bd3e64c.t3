@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-      "DefaultValue": "Resources\\lib\\img\\compute-shader.hlsl"
+      "DefaultValue": "Resources\\lib\\img\\Default-cs.hlsl"
     },
     {
       "Id": "8ad9e58d-a767-4a5f-bfbf-d082b80901d6"/*EntryPoint*/,

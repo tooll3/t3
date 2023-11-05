@@ -63,7 +63,7 @@
         {
           "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\img-fx-directional-blur.hlsl"
+          "Value": "Resources\\lib\\img\\fx\\DirectionalBlur.hlsl"
         },
         {
           "Id": "fe1695b3-54db-4b53-8987-3216bcf59da9"/*ClearColor*/,
@@ -121,7 +121,7 @@
         {
           "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\img-fx-directional-blur.hlsl"
+          "Value": "Resources\\lib\\img\\fx\\DirectionalBlur.hlsl"
         },
         {
           "Id": "fe1695b3-54db-4b53-8987-3216bcf59da9"/*ClearColor*/,

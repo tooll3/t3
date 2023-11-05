@@ -308,6 +308,12 @@
       "SymbolId": "97eb35ec-2825-4f63-8fdf-3fe38fa9e652",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "844bd3b3-be1c-4fc3-8515-0835368930f1"/*WorksForEverybody*/,
+      "SymbolId": "00485ce8-d342-4c97-aac3-1af8a7f03897",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [

@@ -87,7 +87,7 @@
         {
           "Id": "1e4e274b-60b2-4fe8-b275-ebef80d520a7"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\img-fx-AdjustColors.hlsl"
+          "Value": "Resources\\lib\\img\\fx\\AdjustColors.hlsl"
         }
       ],
       "Outputs": []

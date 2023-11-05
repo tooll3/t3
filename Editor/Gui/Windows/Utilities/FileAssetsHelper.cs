@@ -36,24 +36,12 @@ public static class FileAssetsHelper
             ImGui.PushID(path);
             ImGui.AlignTextToFramePadding();
 
-            ImGui.TextUnformatted($"{r.InputUsages.Count}");
+            ImGui.TextUnformatted($"{r.InputUsages.Count + r.DefaultValueUsages.Count}");
             if (ImGui.IsItemHovered())
             {
                 ImGui.BeginTooltip();
-                foreach (var i in r.InputUsages)
-                {
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-                    ImGui.TextUnformatted($"{i.SymbolUi.Symbol.Name} / ");
-                    ImGui.PopStyleColor();
-                    
-                    ImGui.SameLine();
-                    ImGui.TextUnformatted($"{i.StringInputUi.Parent.Symbol.Name}");
-                    
-                    ImGui.SameLine();
-                    ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
-                    ImGui.TextUnformatted($".{i.StringInputUi.InputDefinition.Name}");
-                    ImGui.PopStyleColor();
-                }
+                ListUsages(r.DefaultValueUsages, "Default Values...");
+                ListUsages(r.InputUsages, "Inputs...");
                 ImGui.EndTooltip();
             }
 
@@ -125,6 +113,28 @@ public static class FileAssetsHelper
         }
 
         ImGui.PopStyleVar();
+    }
+
+    private static void ListUsages(List<InputUsage> rDefaultValueUsages, string label)
+    {
+        if (rDefaultValueUsages.Count <= 0)
+            return;
+        
+        CustomComponents.HelpText(label);
+        foreach (var inputUsage in rDefaultValueUsages)
+        {
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            ImGui.TextUnformatted($"{inputUsage.SymbolUi.Symbol.Name} / ");
+            ImGui.PopStyleColor();
+
+            ImGui.SameLine();
+            ImGui.TextUnformatted($"{inputUsage.StringInputUi.Parent.Symbol.Name}");
+
+            ImGui.SameLine();
+            ImGui.PushStyleColor(ImGuiCol.Text, UiColors.TextMuted.Rgba);
+            ImGui.TextUnformatted($".{inputUsage.StringInputUi.InputDefinition.Name}");
+            ImGui.PopStyleColor();
+        }
     }
 
     private static string _filter = "";

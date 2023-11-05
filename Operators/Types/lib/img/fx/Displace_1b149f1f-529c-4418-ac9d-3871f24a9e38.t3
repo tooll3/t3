@@ -71,7 +71,7 @@
         {
           "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\image-fx-displace.hlsl"
+          "Value": "Resources\\lib\\img\\fx\\Displace.hlsl"
         },
         {
           "Id": "bcc7fb78-1ac3-46f7-be46-885233420e80"/*FloatParams*/,
