@@ -163,7 +163,7 @@
   "Annotations": [
     {
       "Id": "69053100-817b-499a-afff-6d21b6476021",
-      "Title": "Build new vertex buffer.",
+      "Title": "Build a new vertex buffer.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

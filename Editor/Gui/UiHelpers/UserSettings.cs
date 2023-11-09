@@ -44,16 +44,19 @@ namespace T3.Editor.Gui.UiHelpers
             // UI-State
             public float UiScaleFactor = 1;
             public bool FullScreen = false;
+            public bool FocusMode = false;
             public int WindowLayoutIndex = 0;
             public bool EnableIdleMotion = true;
+            public bool SuspendRenderingWhenHidden = true;
             
             // Interaction
             public bool WarnBeforeLibEdit = true;
             public bool SmartGroupDragging = false;
             public bool ShowExplicitTextureFormatInOutputWindow = false;
             public bool UseArcConnections = true;
+            public bool ResetTimeAfterPlayback;
             public float SnapStrength = 5;
-            public bool UseJogDialControl = true;
+            public ValueEditGizmos ValueEditGizmo;
             public float ScrollSmoothing = 0.1f;
 
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
@@ -77,7 +80,9 @@ namespace T3.Editor.Gui.UiHelpers
 
             // Other settings
             public float GizmoSize = 100;
-            public bool SwapMainAnd2ndWindowsWhenFullscreen = false;
+            public int FullScreenIndexMain = 0;
+            public int FullScreenIndexViewer = 0;
+
 
             // Timeline
             public float TimeRasterDensity = 1f;
@@ -95,8 +100,14 @@ namespace T3.Editor.Gui.UiHelpers
             public List<Gradient> GradientPresets = new();
 
             public string ColorThemeName;
+        }
 
-
+        public enum ValueEditGizmos
+        {
+            InfinitySlider,
+            RadialSlider,
+            JogDial,
+            ValueLadder,
         }
         
         public static bool IsUserNameDefined()

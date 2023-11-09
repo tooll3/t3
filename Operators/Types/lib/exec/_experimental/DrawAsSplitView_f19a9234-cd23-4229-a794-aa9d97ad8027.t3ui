@@ -1,6 +1,6 @@
 {
   "Id": "f19a9234-cd23-4229-a794-aa9d97ad8027"/*DrawAsSplitView*/,
-  "Description": "Renders the connect inputs draw commands as vertical ViewRect slices with optional labels.\n\nThis can be a quite interesting as an effect or for examples purposes to show multiple variations.",
+  "Description": "Renders the connected draw commands as vertical ViewRect slices with optional labels.\n\nThis can be quite interesting as an effect or for example purposes to show multiple variations.",
   "InputUis": [
     {
       "InputId": "a3929303-170b-496a-b8e0-fc5f604a0ec7"/*Commands*/,
@@ -36,6 +36,7 @@
   "SymbolChildUis": [
     {
       "ChildId": "62819993-7f9a-436a-8fc6-4b2e6c49ce7a"/*Switch*/,
+      "Comment": "This is 'magic': We route the multiple connections from outside into the [Switch] command here. So, it's not a single input, but as many as are connected on the outside.\nWe then use the total count for looping of each connected element.",
       "Position": {
         "X": 12.61911,
         "Y": 51.160156
@@ -43,6 +44,7 @@
     },
     {
       "ChildId": "764f39e4-f3ff-4afa-8705-54328aafdee9"/*Loop*/,
+      "Comment": "Also, check out the example in the operator's description.",
       "Position": {
         "X": 1505.5924,
         "Y": 1.8659058
@@ -78,6 +80,7 @@
     },
     {
       "ChildId": "114a2a4b-cd0c-4ab0-9ec9-43d26e023d64"/*SliceViewPort*/,
+      "Comment": "This operator will slice the viewport. Check out its example in the description.",
       "Position": {
         "X": 1152.8862,
         "Y": -47.617584
@@ -86,12 +89,13 @@
     {
       "ChildId": "b9325542-79fb-4760-8968-99668b22172b"/*Int2ToSize2*/,
       "Position": {
-        "X": 701.5571,
-        "Y": 142.20413
+        "X": 702.44324,
+        "Y": 128.91287
       }
     },
     {
       "ChildId": "0d67c292-49fb-41c4-bc2d-5b96b98045c6"/*SliceViewPort*/,
+      "Comment": "Sadly, we can't reuse the other [SliceViewPort] because we want to override the camera so the labels are facing the camera.",
       "Position": {
         "X": 1007.59717,
         "Y": 239.72012
@@ -146,6 +150,26 @@
       "Position": {
         "X": 1655.5924,
         "Y": 1.8659058
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "34f78e9d-ee63-4b4f-a598-cf90d9d06f4d",
+      "Title": "Draw labels...",
+      "Color": {
+        "X": 0.6,
+        "Y": 0.6,
+        "Z": 0.6,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 154.98865,
+        "Y": 177.53506
+      },
+      "Size": {
+        "X": 1172.6085,
+        "Y": 238.0
       }
     }
   ]

@@ -248,7 +248,8 @@ namespace T3.Core.Resource
                 var isDisabledJson = outputJson[JsonKeys.IsDisabled];
                 if (isDisabledJson != null)
                 {
-                    child.Outputs[outputId].IsDisabled = isDisabledJson.Value<bool>();
+                    if(child.Outputs.TryGetValue(outputId, out var output))
+                        output.IsDisabled = isDisabledJson.Value<bool>();
                 }
             }
 

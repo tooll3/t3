@@ -92,7 +92,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\modify\\transform-some-points.hlsl"
+          "Value": "Resources\\lib\\points\\modify\\TransformSomePoints.hlsl"
         }
       ],
       "Outputs": []
@@ -216,7 +216,7 @@
       "Outputs": []
     },
     {
-      "Id": "eb27eec9-e42e-4798-b1c2-1f0802a2f14d"/*BoolToFloats*/,
+      "Id": "eb27eec9-e42e-4798-b1c2-1f0802a2f14d"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
@@ -228,7 +228,7 @@
       "Outputs": []
     },
     {
-      "Id": "045fccbe-586e-46ac-af66-3ce8bd00f636"/*BoolToFloats*/,
+      "Id": "045fccbe-586e-46ac-af66-3ce8bd00f636"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
@@ -317,7 +317,7 @@
       "Outputs": []
     },
     {
-      "Id": "2e6f71c7-358c-47ed-85af-bc84faaa1ac1"/*BoolToFloats*/,
+      "Id": "2e6f71c7-358c-47ed-85af-bc84faaa1ac1"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

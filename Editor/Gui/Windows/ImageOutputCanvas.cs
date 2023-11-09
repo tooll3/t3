@@ -74,33 +74,34 @@ namespace T3.Editor.Gui.Windows
                 T3.Core.IO.MouseInput.Set(relativePosition, ImGui.IsMouseDown(ImGuiMouseButton.Left));
             }
             
-            string format = "";
-            if (srv == null)
-            {
-                format = "null?";
-            } 
-            else if (UserSettings.Config.ShowExplicitTextureFormatInOutputWindow)
-            {
-                format = srv.Description.Format.ToString();
-            }
-            else
-            {
-                switch (srv.Description.Format)
-                {
-                    case Format.R16G16B16A16_Float:
-                        format = "RGBA:16";
-                        break;
-                    case Format.R8G8B8A8_SNorm:
-                        format = "RGBA:8";
-                        break;
-                    default:
-                        format = srv.Description.Format.ToString();
-                        break;
-                }
-            }
 
             if (UserSettings.Config.ShowToolbar)
             {
+                var format = "";
+                if (srv == null)
+                {
+                    format = "null?";
+                } 
+                else if (UserSettings.Config.ShowExplicitTextureFormatInOutputWindow)
+                {
+                    format = srv.Description.Format.ToString();
+                }
+                else
+                {
+                    switch (srv.Description.Format)
+                    {
+                        case Format.R16G16B16A16_Float:
+                            format = "RGBA:16";
+                            break;
+                        case Format.R8G8B8A8_SNorm:
+                            format = "RGBA:8";
+                            break;
+                        default:
+                            format = srv.Description.Format.ToString();
+                            break;
+                    }
+                }
+                
                 ImGui.PushFont(Fonts.FontSmall);
                 var zoom = Math.Abs(Scale.X) < 0.001f ? "" : $" ×{Scale.X:G2}";
                 var description = $"{size.X}x{size.Y}  {format} {zoom}";

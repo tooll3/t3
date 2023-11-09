@@ -22,6 +22,9 @@ namespace T3.Operators.Types.Id_3ee3597d_dbf1_43a2_89d9_2f7b099112c7
         [Input(Guid = "974fa2c6-c29b-4878-a80c-959ad329cf81")]
         public readonly InputSlot<System.Numerics.Vector4> Highlight = new InputSlot<System.Numerics.Vector4>();
 
+        [Input(Guid = "19a0d33c-4c0e-40ce-8344-5ae17cf081e5")]
+        public readonly InputSlot<float> Iterations = new InputSlot<float>();
+
         [Input(Guid = "c4891643-ed6a-4af6-9a2f-02917cf26f24")]
         public readonly InputSlot<System.Numerics.Vector2> Splits = new InputSlot<System.Numerics.Vector2>();
 
@@ -39,9 +42,6 @@ namespace T3.Operators.Types.Id_3ee3597d_dbf1_43a2_89d9_2f7b099112c7
 
         [Input(Guid = "1a4ced0e-f38e-4360-adb5-a62ffa0344e1")]
         public readonly InputSlot<float> Contrast = new InputSlot<float>();
-
-        [Input(Guid = "19a0d33c-4c0e-40ce-8344-5ae17cf081e5")]
-        public readonly InputSlot<float> Iterations = new InputSlot<float>();
 
         [Input(Guid = "f628c5b7-0278-4d60-80ad-6670cd284cf3")]
         public readonly InputSlot<float> Seed = new InputSlot<float>();

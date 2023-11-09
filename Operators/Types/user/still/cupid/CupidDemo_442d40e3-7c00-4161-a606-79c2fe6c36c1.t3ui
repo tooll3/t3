@@ -1,6 +1,6 @@
 {
   "Id": "442d40e3-7c00-4161-a606-79c2fe6c36c1"/*CupidDemo*/,
-  "Description": "A fast exploration in anaglyph (red cyan 3d) rendering demo for Deadline 2022.",
+  "Description": "A fast exploration in anaglyph (red cyan 3D) rendering demo for Deadline 2022.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -60,7 +60,7 @@
       }
     },
     {
-      "ChildId": "bb05c31c-a7c2-4139-88f6-6e90217dcd40"/*Blob*/,
+      "ChildId": "bb05c31c-a7c2-4139-88f6-6e90217dcd40"/*_BlobOld*/,
       "Position": {
         "X": -565.9592,
         "Y": 523.8952
@@ -277,7 +277,7 @@
       }
     },
     {
-      "ChildId": "f227a680-0d65-43a4-a8e5-ea2f645959c0"/*SimNoise*/,
+      "ChildId": "f227a680-0d65-43a4-a8e5-ea2f645959c0"/*SimNoiseOffset*/,
       "Position": {
         "X": -1941.5352,
         "Y": 1519.8861
@@ -298,7 +298,7 @@
       }
     },
     {
-      "ChildId": "7a725597-7e61-48c2-9bf3-57fb055e21b3"/*SimDirectedForce*/,
+      "ChildId": "7a725597-7e61-48c2-9bf3-57fb055e21b3"/*SimDirectionalOffset*/,
       "Position": {
         "X": -1791.5352,
         "Y": 1519.8861

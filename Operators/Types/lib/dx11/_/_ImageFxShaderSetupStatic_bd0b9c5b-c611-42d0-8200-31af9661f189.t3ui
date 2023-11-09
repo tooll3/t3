@@ -1,6 +1,6 @@
 {
   "Id": "bd0b9c5b-c611-42d0-8200-31af9661f189"/*_ImageFxShaderSetupStatic*/,
-  "Description": "A version that has not time dependency with improved caching performance.",
+  "Description": "A version that has no time dependency with improved caching performance.",
   "InputUis": [
     {
       "InputId": "b55312c4-6441-473f-a107-df50de60c72e"/*Texture*/,
@@ -190,19 +190,19 @@
     {
       "ChildId": "66065af5-2777-4378-87f3-62236ef57103"/*BlendStateOp*/,
       "Position": {
-        "X": 702.86804,
-        "Y": 1596.1725
+        "X": 705.54004,
+        "Y": 1453.6656
       }
     },
     {
       "ChildId": "16d35738-fa2d-4080-b14d-a0c1a055818d"/*RenderTargetBlendDesc*/,
       "Position": {
-        "X": 552.86804,
-        "Y": 1596.1725
+        "X": 555.54004,
+        "Y": 1453.6656
       }
     },
     {
-      "ChildId": "1e4ba1ab-7b71-4607-83f8-600ef31c2f0c"/*BoolToFloats*/,
+      "ChildId": "1e4ba1ab-7b71-4607-83f8-600ef31c2f0c"/*BoolToFloat*/,
       "Position": {
         "X": 448.7841,
         "Y": 817.4185

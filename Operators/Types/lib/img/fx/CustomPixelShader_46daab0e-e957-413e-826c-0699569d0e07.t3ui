@@ -1,6 +1,6 @@
 {
   "Id": "46daab0e-e957-413e-826c-0699569d0e07"/*CustomPixelShader*/,
-  "Description": "Creates custom shader from a source parameter. This can be useful for prototyping.",
+  "Description": "Creates a custom shader from a source parameter. This can be useful for prototyping.",
   "InputUis": [
     {
       "InputId": "8c3ffefe-8721-4dde-b252-22eb8be02d3f"/*ShaderCode*/,

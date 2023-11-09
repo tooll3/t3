@@ -1,6 +1,7 @@
 using System;
 using T3.Core.Animation;
 using T3.Core.IO;
+using T3.Core.Logging;
 
 namespace T3.Core.Operator.Slots
 {
@@ -44,7 +45,14 @@ namespace T3.Core.Operator.Slots
             double factor = (context.LocalTime - TimeClip.TimeRange.Start) / (TimeClip.TimeRange.End - TimeClip.TimeRange.Start);
             context.LocalTime = factor * (TimeClip.SourceRange.End - TimeClip.SourceRange.Start) + TimeClip.SourceRange.Start;
 
-            _baseUpdateAction(context);
+            if (_baseUpdateAction == null)
+            {
+                Log.Warning("Ignoring invalid time clip update action", Parent);
+            }
+            else
+            {
+                _baseUpdateAction(context);
+            }
 
             context.LocalTime = prevTime;
             LastUpdateStatus = UpdateStates.Active;

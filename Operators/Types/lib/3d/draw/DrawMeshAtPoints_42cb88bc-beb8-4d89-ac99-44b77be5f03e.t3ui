@@ -1,6 +1,6 @@
 {
   "Id": "42cb88bc-beb8-4d89-ac99-44b77be5f03e"/*DrawMeshAtPoints*/,
-  "Description": "Draws PBR shaded instances of a mesh defined by the connected point buffer. It uses the current settings for material, point lights, fog and environment. It can use the point's W attribute to control the size of the instances.\n\nCheckout the [HowToDrawThings] on how to set these up.\n\nAlso checkout [DrawMesh].",
+  "Description": "Draws PBR shaded instances of a mesh defined by the connected point buffer. It uses the current settings for material, point lights, fog and environment. It can use the point's W attribute to control the size of the instances.\n\nCheckout the [HowToDrawThings] on how to set these up.\n\nAlso checkout [DrawMesh] and [RepeatMeshAtPoints].",
   "InputUis": [
     {
       "InputId": "408ae7c7-9aa8-4537-8c55-b5689f8f9b56"/*GPoints*/,
@@ -335,7 +335,7 @@
       }
     },
     {
-      "ChildId": "24af1c8c-95c5-45e6-b152-41ddfca79ee9"/*BoolToFloats*/,
+      "ChildId": "24af1c8c-95c5-45e6-b152-41ddfca79ee9"/*BoolToFloat*/,
       "Position": {
         "X": 1132.7236,
         "Y": 4967.8027
@@ -370,6 +370,22 @@
         "X": 2828.1584,
         "Y": 4169.9424
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "08f1947e-a74d-4f4b-a2ce-1c8b4c45ae0c",
+      "Title": "Example video",
+      "Description": "",
+      "LinkUrl": "https://youtu.be/tZ1Uz6DmL_c?feature=shared",
+      "LinkType": "TutorialVideo"
+    },
+    {
+      "Id": "3c3810b0-7e8c-4a3a-b4ec-d2ddf0d180e7",
+      "Title": "Tutorial",
+      "Description": "Explains the difference to RepeatMeshAtPoints.",
+      "LinkUrl": "https://youtu.be/LjmnVL7azYw",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "Id": "2872d93c-882e-42ee-8bcf-747c24f9b042"/*FadingFaces*/,
-  "Description": "A example how to use the unsplash API and combine it with feed back effects.",
+  "Description": "An example of how to use the Unsplash API and combine it with feedback effects.",
   "InputUis": [],
   "SymbolChildUis": [
     {

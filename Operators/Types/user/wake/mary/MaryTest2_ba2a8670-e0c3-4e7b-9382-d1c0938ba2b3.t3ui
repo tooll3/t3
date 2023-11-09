@@ -1,6 +1,6 @@
 {
   "Id": "ba2a8670-e0c3-4e7b-9382-d1c0938ba2b3"/*MaryTest2*/,
-  "Description": "An art animation project. Requires corect meshes and soundtrack.",
+  "Description": "An art animation project. Requires correct meshes and soundtrack.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -66,7 +66,7 @@
       }
     },
     {
-      "ChildId": "36f7e937-8b49-4f3d-baf6-18774df2a283"/*DisplaceMesh*/,
+      "ChildId": "36f7e937-8b49-4f3d-baf6-18774df2a283"/*DisplaceMeshNoise*/,
       "Position": {
         "X": -1994.7665,
         "Y": -1120.5447
@@ -134,7 +134,7 @@
       }
     },
     {
-      "ChildId": "8a8be32e-83cf-419d-b088-6946a72e6e46"/*DisplaceMesh*/,
+      "ChildId": "8a8be32e-83cf-419d-b088-6946a72e6e46"/*DisplaceMeshNoise*/,
       "Position": {
         "X": -2367.8494,
         "Y": -995.99146
@@ -776,14 +776,14 @@
       }
     },
     {
-      "ChildId": "379fb9bd-089d-4c32-bbde-9f15cc1fa8ef"/*Blob*/,
+      "ChildId": "379fb9bd-089d-4c32-bbde-9f15cc1fa8ef"/*_BlobOld*/,
       "Position": {
         "X": -1863.5972,
         "Y": 12.92627
       }
     },
     {
-      "ChildId": "07c23814-d172-4e18-ba7e-bdb9a206d7d7"/*Blob*/,
+      "ChildId": "07c23814-d172-4e18-ba7e-bdb9a206d7d7"/*_BlobOld*/,
       "Position": {
         "X": -1713.5972,
         "Y": 12.92627
@@ -902,21 +902,21 @@
       }
     },
     {
-      "ChildId": "4ed00b12-9ced-4970-a21e-743725ea9345"/*Blob*/,
+      "ChildId": "4ed00b12-9ced-4970-a21e-743725ea9345"/*_BlobOld*/,
       "Position": {
         "X": -1749.1912,
         "Y": 565.6647
       }
     },
     {
-      "ChildId": "74bf3a89-7b7a-47a9-9ffc-d8cf4cf8c199"/*Blob*/,
+      "ChildId": "74bf3a89-7b7a-47a9-9ffc-d8cf4cf8c199"/*_BlobOld*/,
       "Position": {
         "X": -1599.1912,
         "Y": 565.6647
       }
     },
     {
-      "ChildId": "44a53980-30a6-424a-9461-c16b32686c68"/*Blob*/,
+      "ChildId": "44a53980-30a6-424a-9461-c16b32686c68"/*_BlobOld*/,
       "Position": {
         "X": -1449.1912,
         "Y": 565.6647

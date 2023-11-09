@@ -244,7 +244,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\mesh\\texture-displace-mesh.hlsl"
+          "Value": "Resources\\lib\\3d\\mesh\\mesh-TextureDisplace.hlsl"
         }
       ],
       "Outputs": []
@@ -338,7 +338,7 @@
       "Outputs": []
     },
     {
-      "Id": "fbd7a1b5-59eb-44d1-8ce0-233336b13c3e"/*BoolToFloats*/,
+      "Id": "fbd7a1b5-59eb-44d1-8ce0-233336b13c3e"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

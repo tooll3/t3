@@ -1,6 +1,6 @@
 {
   "Id": "8228a543-f725-41d9-8629-f6d85f9e858e"/*NearestNeighboughTest*/,
-  "Description": "Using a hash table algorithm to look for nearest neighbours and experiment with point to point interaction.",
+  "Description": "Using a hash table algorithm to look for nearest neighbors and experiment with point-to-point interaction.",
   "InputUis": [
     {
       "InputId": "8e35d7a7-433d-478f-b202-bd757f4d5d72"/*PointsA_*/,

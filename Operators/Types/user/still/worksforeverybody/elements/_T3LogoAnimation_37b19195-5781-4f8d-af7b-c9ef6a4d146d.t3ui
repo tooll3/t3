@@ -338,7 +338,7 @@
   "Annotations": [
     {
       "Id": "1bb0d613-03a5-46fc-aca8-a6ca850c11fa",
-      "Title": "This effect is really expensive. Let's only reuse it for the lines.\n",
+      "Title": "This effect is really expensive. Let's only reuse it for the lines.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

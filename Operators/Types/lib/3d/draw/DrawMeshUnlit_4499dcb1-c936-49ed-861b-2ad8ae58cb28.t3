@@ -63,7 +63,7 @@
         {
           "Id": "78fb7501-74d9-4a27-8db2-596f25482c87"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\mesh\\draw-mesh-unlit.hlsl"
+          "Value": "Resources\\lib\\3d\\mesh\\mesh-DrawUnlit.hlsl"
         },
         {
           "Id": "9a8b500e-c3b1-4be1-8270-202ef3f90793"/*EntryPoint*/,
@@ -102,7 +102,7 @@
         {
           "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\3d\\mesh\\draw-mesh-unlit.hlsl"
+          "Value": "Resources\\lib\\3d\\mesh\\mesh-DrawUnlit.hlsl"
         },
         {
           "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
@@ -271,7 +271,7 @@
       "Outputs": []
     },
     {
-      "Id": "9efbf92d-55cb-463d-8009-7af49dd9f712"/*BoolToFloats*/,
+      "Id": "9efbf92d-55cb-463d-8009-7af49dd9f712"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
@@ -289,7 +289,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\images\\white.png"
+          "Value": "Resources\\common\\images\\white.png"
         }
       ],
       "Outputs": []
@@ -563,6 +563,12 @@
     {
       "SourceParentOrChildId": "a1f667a2-74f7-424f-8660-8de125d80ea4",
       "SourceSlotId": "1368ab8e-d75e-429f-8ecd-0944f3ede9ab",
+      "TargetParentOrChildId": "c66f4fe5-aa4b-41bd-b299-af722d8002fb",
+      "TargetSlotId": "3a0bea89-bd93-4594-b1b6-3e25689c67e6"
+    },
+    {
+      "SourceParentOrChildId": "531baace-c8ad-4095-ad0c-af6bf2e93627",
+      "SourceSlotId": "dc71f39f-3fba-4fc6-b8ef-ce57c82bf78e",
       "TargetParentOrChildId": "c66f4fe5-aa4b-41bd-b299-af722d8002fb",
       "TargetSlotId": "3a0bea89-bd93-4594-b1b6-3e25689c67e6"
     },

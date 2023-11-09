@@ -11,8 +11,8 @@
       "Id": "f5b4e08b-a49a-47ac-838d-577b621005b2"/*Color*/,
       "DefaultValue": {
         "X": 1.0,
-        "Y": 0.99999,
-        "Z": 0.99999,
+        "Y": 1.0,
+        "Z": 1.0,
         "W": 1.0
       }
     },
@@ -59,7 +59,7 @@
         {
           "Id": "78fb7501-74d9-4a27-8db2-596f25482c87"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\draw\\draw-points-shaded.hlsl"
+          "Value": "Resources\\lib\\points\\draw\\DrawPointsShaded.hlsl"
         },
         {
           "Id": "9a8b500e-c3b1-4be1-8270-202ef3f90793"/*EntryPoint*/,
@@ -98,7 +98,7 @@
         {
           "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\draw\\draw-points-shaded.hlsl"
+          "Value": "Resources\\lib\\points\\draw\\DrawPointsShaded.hlsl"
         },
         {
           "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
@@ -250,7 +250,7 @@
       "Outputs": []
     },
     {
-      "Id": "3b298804-e6d7-44a2-9059-341e1a396c37"/*BoolToFloats*/,
+      "Id": "3b298804-e6d7-44a2-9059-341e1a396c37"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [
         {
@@ -273,7 +273,7 @@
       "Outputs": []
     },
     {
-      "Id": "42fb731e-6ae4-4472-9966-2cf8b167986e"/*BoolToFloats*/,
+      "Id": "42fb731e-6ae4-4472-9966-2cf8b167986e"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

@@ -10,7 +10,6 @@ using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
 using T3.Editor.Compilation;
-using T3.Editor.Gui;
 using T3.Editor.Gui.ChildUi;
 
 // ReSharper disable RedundantNameQualifier

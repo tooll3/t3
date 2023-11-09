@@ -94,15 +94,23 @@ namespace T3.Editor.Compilation
             }
             else
             {
-                Log.Info($"Compilation of '{symbolName}' successful.");
-                var newAssembly = Assembly.Load(dllStream.GetBuffer());
-                if (newAssembly.ExportedTypes.Any())
+                try
                 {
-                    return newAssembly;
+                    var newAssembly = Assembly.Load(dllStream.GetBuffer());
+                    if (newAssembly.ExportedTypes.Any())
+                    {
+                        Log.Info($"Compilation of '{symbolName}' successful.");
+                        return newAssembly;
+                    }
+                    else
+                    {
+                        Log.Error("New compiled assembly had no exported type.");
+                        return null;
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    Log.Error("New compiled assembly had no exported type.");
+                    Log.Error("Failed to load compiled type: " + e.Message);
                     return null;
                 }
             }

@@ -5,11 +5,16 @@ using System.Runtime.InteropServices;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Editor.Gui.Commands;
+using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.Interaction.Variations;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.UiHelpers
 {
@@ -80,7 +85,7 @@ namespace T3.Editor.Gui.UiHelpers
                 {
                     ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
                 }
-                
+
                 ImGui.PopStyleColor(4);
                 HandleDragAndDropForSymbolItem(symbol);
 
@@ -92,9 +97,9 @@ namespace T3.Editor.Gui.UiHelpers
                     {
                         SymbolLibrary._listUsagesFilter = symbol;
                     }
+
                     ImGui.PopStyleColor();
                 }
-
 
                 if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var symbolUi))
                 {
@@ -128,7 +133,6 @@ namespace T3.Editor.Gui.UiHelpers
                     ImGui.PopStyleVar();
                     ImGui.PopFont();
                 }
-
             }
             ImGui.PopID();
         }
@@ -138,7 +142,7 @@ namespace T3.Editor.Gui.UiHelpers
             var activated = false;
             ImGui.PushID(setTitleFormat);
             ImGui.SameLine();
-            
+
             if (symbolIdSet.Count == 0)
             {
                 ImGui.TextUnformatted(emptySetTitle);
@@ -158,7 +162,7 @@ namespace T3.Editor.Gui.UiHelpers
                     activated = true;
                 }
             }
-            
+
             ImGui.PopID();
             return activated;
         }
@@ -175,7 +179,6 @@ namespace T3.Editor.Gui.UiHelpers
                 ImGui.TextUnformatted(required);
             }
         }
-
 
         private static bool IsSymbolCurrentCompositionOrAParent(Symbol symbol)
         {
@@ -195,30 +198,22 @@ namespace T3.Editor.Gui.UiHelpers
             {
                 if (instance.Symbol == symbol)
                     return true;
-                
+
                 instance = instance.Parent;
             }
 
             return false;
         }
-        
-        
-        
+
         public static void HandleDragAndDropForSymbolItem(Symbol symbol)
         {
-
-            if (ImGui.IsItemActivated())
-            {
-                Log.Debug("Can't insert that symbol because it would create a cycle.");
-                return;
-            }
-            
             if (ImGui.IsItemActive())
             {
                 if (IsSymbolCurrentCompositionOrAParent(symbol))
                 {
                     return;
                 }
+
                 if (ImGui.BeginDragDropSource())
                 {
                     if (_dropData == new IntPtr(0))
@@ -236,6 +231,14 @@ namespace T3.Editor.Gui.UiHelpers
             }
             else if (ImGui.IsItemDeactivated())
             {
+                if (ImGui.GetMouseDragDelta().Length() < 4)
+                {
+                    if (NodeSelection.GetSelectedChildUis().Count() == 1)
+                    {
+                        ConnectionMaker.InsertSymbolInstance(symbol);
+                    }
+                }
+
                 _dropData = new IntPtr(0);
             }
         }

@@ -112,7 +112,7 @@
       "Outputs": []
     },
     {
-      "Id": "77d37c0c-2731-4f17-943b-6a3d8db908df"/*BoolToFloats*/,
+      "Id": "77d37c0c-2731-4f17-943b-6a3d8db908df"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
@@ -124,7 +124,7 @@
         {
           "Id": "1e4e274b-60b2-4fe8-b275-ebef80d520a7"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\img-fx-TransformImage.hlsl"
+          "Value": "Resources\\lib\\img\\fx\\TransformImage.hlsl"
         },
         {
           "Id": "3fe1b650-ce34-4155-9b61-0425e39f7690"/*Wrap*/,

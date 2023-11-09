@@ -1,6 +1,6 @@
 {
   "Id": "8e6ed99c-a3e0-42c0-9f81-a89b1e340757"/*Sketch*/,
-  "Description": "Allows to add sketches as annoations or storyboards.\n\nYou create multiple pages and switch between them by selecting or animating the PageIndex.\nUse the ShowAs parameter to toggle between showing the sketches as a single frame (e.g. as a comment), until the next frame (e.g. as a story board or animation), or with onion skinning.\n\nYou can also use the following keyboard short-cuts:\n\n[P] -  Draw mode\n[E] - Erase mode\n[0-9] - Select brush size",
+  "Description": "Allows adding sketches as annotations or storyboards. You can create multiple pages and switch between them by selecting or animating the PageIndex. Use the ShowAs parameter to toggle between showing the sketches as a single frame (e.g., as a comment), until the next frame (e.g., as a storyboard or animation), or with onion skinning. You can also use the following keyboard shortcuts:\n\n[P] - Draw mode\n[E] - Erase mode\n[0-9] - Select brush size",
   "InputUis": [
     {
       "InputId": "1c5d0d86-c000-449e-903a-3212d19d8e1d"/*StrokeSize*/,

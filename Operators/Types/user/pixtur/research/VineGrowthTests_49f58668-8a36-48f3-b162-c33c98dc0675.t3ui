@@ -60,7 +60,7 @@
       }
     },
     {
-      "ChildId": "149a5839-084e-465f-b9f9-bafe9cd3c8cf"/*ParticleSimulation*/,
+      "ChildId": "149a5839-084e-465f-b9f9-bafe9cd3c8cf"/*LegacyParticleSimulation*/,
       "Position": {
         "X": 1776.8579,
         "Y": 610.10205
@@ -242,7 +242,7 @@
       }
     },
     {
-      "ChildId": "5dc50498-88f3-49df-ba62-8ff44a55769a"/*ParticleSimulation*/,
+      "ChildId": "5dc50498-88f3-49df-ba62-8ff44a55769a"/*LegacyParticleSimulation*/,
       "Position": {
         "X": 2172.8696,
         "Y": 775.105
@@ -284,7 +284,7 @@
       }
     },
     {
-      "ChildId": "94fa6096-9a74-4b3a-9f22-0e8a1d7584c0"/*SimDirectedForce*/,
+      "ChildId": "94fa6096-9a74-4b3a-9f22-0e8a1d7584c0"/*SimDirectionalOffset*/,
       "Position": {
         "X": 2234.7917,
         "Y": 630.96313

@@ -1,5 +1,6 @@
 {
   "Id": "d002bd90-5921-48b0-a940-a8d0c779f674"/*Rings*/,
+  "Description": "Generates a procedural rings texture that can produce a wide variety of radial patterns. Please try the presets.",
   "InputUis": [
     {
       "InputId": "a22945ec-c576-491a-83d0-ffea9dd0cdc4"/*Image*/,
@@ -56,7 +57,8 @@
         "Y": -180.11075
       },
       "Min": 0.0,
-      "Max": 100.0
+      "Max": 100.0,
+      "Scale": 0.01
     },
     {
       "InputId": "fc112417-fb8d-44af-a4b8-fced5d8ef71d"/*Feather*/,
@@ -302,6 +304,15 @@
         "X": -118.444824,
         "Y": -45.68744
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "baebc988-a0e0-48c0-9fa9-eba8b6f43b8d",
+      "Title": "Tutorial",
+      "Description": "A quick overview of all parameters.",
+      "LinkUrl": "https://youtu.be/Zp0kDW1vikQ",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

@@ -22,7 +22,7 @@ namespace T3.Editor.Gui.Dialog
 
         public void Draw()
         {
-            FormInputs.ResetIndent();
+            FormInputs.SetIndentToParameters();
             if (BeginDialog("Import Operators from another Tooll installation"))
             {
                 ImGui.BeginChild("options", new Vector2(ImGui.GetContentRegionAvail().X - 400, -1));
@@ -190,8 +190,20 @@ namespace T3.Editor.Gui.Dialog
 
         private void MigrateSelection()
         {
-            var allRemoteT3Files = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3", SearchOption.AllDirectories);
-            var allRemoteT3UiFiles = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3ui", SearchOption.AllDirectories);
+            string[] allRemoteT3Files;
+            string[] allRemoteT3UiFiles;
+
+            try
+            {
+                allRemoteT3Files = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3", SearchOption.AllDirectories);
+                allRemoteT3UiFiles = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3ui", SearchOption.AllDirectories);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Migration failed: " + e.Message);
+                return;
+            }
+            
 
             foreach (var item in _scanResults)
             {

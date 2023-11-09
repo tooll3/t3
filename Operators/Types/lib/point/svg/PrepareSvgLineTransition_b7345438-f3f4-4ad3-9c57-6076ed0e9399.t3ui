@@ -1,6 +1,6 @@
 {
   "Id": "b7345438-f3f4-4ad3-9c57-6076ed0e9399"/*PrepareSvgLineTransition*/,
-  "Description": "This will iterate over the length all line segments and compute offsets into W. \nDrawLines can then use this offset for animation effects.\n\nSpread: \n0 - ",
+  "Description": "This will iterate over the length of all line segments and compute offsets into W.\nDrawLines can then use this offset for animation effects.\n\nSpread:\n0 - ",
   "InputUis": [
     {
       "InputId": "5fd5eea5-b7ab-406f-8c10-8435d59297b5"/*Spread*/,

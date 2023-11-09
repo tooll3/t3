@@ -15,6 +15,7 @@ namespace T3.Core.Operator
         Inherit = -1,
         Off = 0,
         On = 1,
+        IfSelected = 2,
     }
 
     public class EvaluationContext
@@ -117,9 +118,7 @@ namespace T3.Core.Operator
         public int IteratedListIndex { get; set; }
         public bool BypassCameras { get; set; }
 
+        public LegacyParticleSystem LegacyParticleSystem;
         public ParticleSystem ParticleSystem;
-        
-        
     }
-
 }

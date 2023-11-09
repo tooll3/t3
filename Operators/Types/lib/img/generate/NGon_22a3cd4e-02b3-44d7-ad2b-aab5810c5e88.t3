@@ -68,7 +68,7 @@
     },
     {
       "Id": "c6c3d50e-9731-42cc-a0fc-ee8d15ac6cca"/*Radius*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.25
     },
     {
       "Id": "7428e03f-1f6f-4be4-adb9-accef49b64a6"/*Curvature*/,
@@ -117,7 +117,7 @@
         {
           "Id": "1e4e274b-60b2-4fe8-b275-ebef80d520a7"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\generate\\img-generate-ngon.hlsl"
+          "Value": "Resources\\lib\\img\\generate\\NGon.hlsl"
         },
         {
           "Id": "ff7cb999-aa3a-4e11-b9c8-d027bdb55ff6"/*OutputFormat*/,

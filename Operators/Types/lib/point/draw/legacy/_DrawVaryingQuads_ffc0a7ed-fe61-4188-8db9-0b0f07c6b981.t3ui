@@ -1,6 +1,6 @@
 {
   "Id": "ffc0a7ed-fe61-4188-8db9-0b0f07c6b981"/*_DrawVaryingQuads*/,
-  "Description": "Draws instances at Point-positions with the W-attribute driving properties like Color, Size and Offset; This can be especially useful in compbination with [CollectSpawnPoints].\n\nNote: This operator has been deprecated. Please consider using [DrawBillboards].",
+  "Description": "Draws instances at Point-positions with the W-attribute driving properties like Color, Size and Offset; This can be especially useful in combination with [CollectSpawnPoints].\n\nNote: This operator has been deprecated. Please consider using [DrawBillboards].",
   "InputUis": [
     {
       "InputId": "82230324-b1cd-41ba-8d03-933c939001ad"/*Color*/,
@@ -364,7 +364,7 @@
       }
     },
     {
-      "ChildId": "83f8be6c-0815-4ca8-be19-9faadcb452a0"/*BoolToFloats*/,
+      "ChildId": "83f8be6c-0815-4ca8-be19-9faadcb452a0"/*BoolToFloat*/,
       "Position": {
         "X": 15.373596,
         "Y": 775.92566
@@ -392,7 +392,7 @@
       }
     },
     {
-      "ChildId": "fe897bcc-0363-4268-80f0-ffe4b089a063"/*BoolToFloats*/,
+      "ChildId": "fe897bcc-0363-4268-80f0-ffe4b089a063"/*BoolToFloat*/,
       "Position": {
         "X": -353.2436,
         "Y": 1434.0703
@@ -406,6 +406,15 @@
         "X": 1693.3767,
         "Y": 109.5778
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "d3381d50-e299-4af2-b224-17c3052ec4ae",
+      "Title": "Tutorial Video",
+      "Description": "",
+      "LinkUrl": "https://youtu.be/J2Rqx3szSus?feature=shared",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

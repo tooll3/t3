@@ -5,6 +5,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_f0acd1a4_7a98_43ab_a807_6d1bd3e92169;
 using Vector2 = System.Numerics.Vector2;
 
@@ -98,7 +99,7 @@ namespace T3.Editor.Gui.ChildUi
                                       );
             drawList.PopClipRect();
 
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels | SymbolChildUi.CustomUiResult.PreventOpenSubGraph;
+            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels | SymbolChildUi.CustomUiResult.PreventOpenSubGraph | SymbolChildUi.CustomUiResult.PreventTooltip;
         }
 
         private const float TriangleSize = 4;

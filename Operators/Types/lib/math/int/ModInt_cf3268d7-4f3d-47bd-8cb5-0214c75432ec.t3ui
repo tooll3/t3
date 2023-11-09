@@ -1,6 +1,6 @@
 {
   "Id": "cf3268d7-4f3d-47bd-8cb5-0214c75432ec"/*ModInt*/,
-  "Description": "Modulo for integers",
+  "Description": "Modulo for integers.",
   "InputUis": [
     {
       "InputId": "3528f4d3-3529-4551-9dc1-e1dafe6b0669"/*Value*/,

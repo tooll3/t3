@@ -1,6 +1,6 @@
 {
   "Id": "6d9cfb3f-805a-4f62-80b5-52e792b4af30"/*CCA1*/,
-  "Description": "lCyclic cellular automata v01",
+  "Description": "Cyclic cellular automata v01",
   "InputUis": [
     {
       "InputId": "78b6c005-2ab5-48e3-af81-2daa0d75c00f"/*Texture2d*/,
@@ -212,7 +212,7 @@
       }
     },
     {
-      "ChildId": "119fedfc-ce15-4d15-9ddd-c4d8663dd6fc"/*BoolToFloats*/,
+      "ChildId": "119fedfc-ce15-4d15-9ddd-c4d8663dd6fc"/*BoolToFloat*/,
       "Position": {
         "X": 273.17297,
         "Y": 1451.5372
@@ -240,7 +240,7 @@
       }
     },
     {
-      "ChildId": "4d4119f7-a7ad-4958-a6c3-d591b6d9fddc"/*BoolToFloats*/,
+      "ChildId": "4d4119f7-a7ad-4958-a6c3-d591b6d9fddc"/*BoolToFloat*/,
       "Position": {
         "X": 123.17297,
         "Y": 1375.5372

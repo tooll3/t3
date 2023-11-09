@@ -298,6 +298,11 @@
           }
         },
         {
+          "Id": "af75835a-04c9-4721-8c7a-a31ef8012f06"/*Pivot*/,
+          "Type": "System.Single",
+          "Value": -0.0
+        },
+        {
           "Id": "ddc2ea6a-d356-46c9-b333-4cce69c02570"/*AddSeparator*/,
           "Type": "System.Boolean",
           "Value": true

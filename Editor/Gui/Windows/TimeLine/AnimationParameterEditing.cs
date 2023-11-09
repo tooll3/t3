@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Editor.Gui.Interaction.WithCurves;
@@ -14,7 +13,19 @@ namespace T3.Editor.Gui.Windows.TimeLine
     {
         protected override IEnumerable<Curve> GetAllCurves()
         {
-            return AnimationParameters.SelectMany(param => param.Curves);
+            foreach (TimeLineCanvas.AnimationParameter param in AnimationParameters)
+            {
+                if (param.Curves == null)
+                    continue;
+                
+                foreach (var curve in param.Curves)
+                {
+                    if (curve == null)
+                        continue;
+                    
+                    yield return curve;
+                }
+            }
         }
 
         protected override void DeleteSelectedKeyframes()
@@ -46,7 +57,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
         protected override void ViewAllOrSelectedKeys(bool alsoChangeTimeRange = false)
         {
             var bounds = GetBoundsOnCanvas(GetSelectedOrAllPoints());
-            TimeLineCanvas.Current.SetScopeToCanvasArea(bounds, flipY:true, null, 300, 1000);
+            TimeLineCanvas.Current.SetScopeToCanvasArea(bounds, flipY:true, null, 300, 100);
         }
 
         protected List<TimeLineCanvas.AnimationParameter> AnimationParameters;

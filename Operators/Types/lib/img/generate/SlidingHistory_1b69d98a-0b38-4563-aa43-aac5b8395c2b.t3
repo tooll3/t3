@@ -60,7 +60,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\generate\\img-generate-sliding-history.hlsl"
+          "Value": "Resources\\lib\\img\\generate\\SlidingHistory.hlsl"
         }
       ],
       "Outputs": []
@@ -127,7 +127,7 @@
       "Outputs": []
     },
     {
-      "Id": "8acb18e3-2d94-4061-84a3-31bdbbde4a9d"/*BoolToFloats*/,
+      "Id": "8acb18e3-2d94-4061-84a3-31bdbbde4a9d"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

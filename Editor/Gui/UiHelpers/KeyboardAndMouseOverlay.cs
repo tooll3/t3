@@ -68,9 +68,43 @@ public static class KeyboardAndMouseOverlay
             var color = ImGui.IsMouseDown(ImGuiMouseButton.Middle) ? UiColors.ForegroundFull.Fade(_widgetFade) : UiColors.ForegroundFull.Fade(0.1f * _widgetFade);
             
             center.X -= 1;
-            var width = new Vector2(14, 24);
-            var min = center- width * 0.5f + new Vector2(0,6);
-            dl.AddRectFilled(min, min + width, color, 10);
+            var size = new Vector2(14, 24);
+            var min = center- size * 0.5f + new Vector2(0,6);
+            dl.AddRectFilled(min, min + size, color, 10);
+        }
+        
+        // mouse wheel
+        {
+            var fadeFromTime = 1-(float)((Playback.RunTimeInSecs - _lastMouseWheelInteractionTime) / FadeoutDuration).Clamp(0, 1);
+            var mouseDelta = ImGui.GetIO().MouseWheel;
+            if (mouseDelta != 0)
+            {
+                _lastMouseWheelInteractionTime = Playback.RunTimeInSecs;
+                _lastInteractionTime = Playback.RunTimeInSecs;
+                _wheelSpin -= mouseDelta;
+            }
+
+            _dampedWheelSpin = DampFunctions.DampenFloat(_wheelSpin, _dampedWheelSpin, 0.001f, ref _dampedWheelSpinVelocity, DampFunctions.Methods.DampedSpring);
+            if (double.IsInfinity(_dampedWheelSpin) || double.IsNaN(_dampedWheelSpin))
+            {
+                _dampedWheelSpin = 0;
+            }
+            
+            const int lineCount = 5;
+            const float height = 34;
+            var size = new Vector2(9, 1);
+            var min = center- size * 0.5f + new Vector2(0,-10);
+            float step = height / (lineCount + 1);
+            
+            for (int i = 0; i < lineCount; i++)
+            {
+                var f = (float)i / lineCount;
+                var fadeEdge =1- MathF.Abs((f - 0.5f) * 2).Clamp(0, 1);
+                var offset = new Vector2(0, step * i + step * MathUtils.Fmod(_dampedWheelSpin + 0.5f,  1));
+                
+                var color = UiColors.ForegroundFull.Fade(fadeFromTime * fadeEdge);
+                dl.AddRectFilled(min + offset, min + size + offset, color, 10);
+            }
         }
     }
 
@@ -132,6 +166,7 @@ public static class KeyboardAndMouseOverlay
     private static readonly List<KeyStatus> _previousKeys = new();
     private static double _lastInteractionTime = double.NegativeInfinity;
     private static float _widgetFade = 0;
+    private static double _lastMouseWheelInteractionTime;
     
     private class KeyStatus
     {
@@ -164,9 +199,12 @@ public static class KeyboardAndMouseOverlay
         
 
     }
-    private const float FadeoutDuration = 2;
     
+    private const float FadeoutDuration = 2;
     private const int KeyLookupCount = 512;
+    private static float _wheelSpin;
+    private static float _dampedWheelSpin;
+    private static float _dampedWheelSpinVelocity;
     
     private static readonly KeyStatus[] _keyStates = new KeyStatus[KeyLookupCount];
     

@@ -1,6 +1,6 @@
 {
   "Id": "3a1d7ea0-5445-4df0-b08a-6596e53f815a"/*OscInput*/,
-  "Description": "",
+  "Description": "Receives OSC input from a connected server.",
   "InputUis": [
     {
       "InputId": "87efd3c4-f2df-4996-924f-12c631bad8d8"/*Port*/,
@@ -61,6 +61,15 @@
         "X": 133.0,
         "Y": 238.0
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "a3d23b48-e04d-4d53-80cc-d671a3a5428a",
+      "Title": "Video Tutorial",
+      "Description": "This example illustrates how to build a quick drawing application with OSC input.",
+      "LinkUrl": "https://youtu.be/4xxhQ1JX-ls?si=MGq4M5VoxY7D6_l8",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

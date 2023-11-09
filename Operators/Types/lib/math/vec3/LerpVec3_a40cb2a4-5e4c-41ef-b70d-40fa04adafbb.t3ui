@@ -1,6 +1,6 @@
 {
   "Id": "a40cb2a4-5e4c-41ef-b70d-40fa04adafbb"/*LerpVec3*/,
-  "Description": "Blends between two values (Lerp). \n\nAlso see...\n- [BlendVector3] to blend between more vector3s",
+  "Description": "Blends between two values (Lerp).\n\nAlso see:\n- [BlendVector3] to blend between more Vector3s.",
   "InputUis": [
     {
       "InputId": "a7fe900a-958d-4f79-9df7-d30b31bfb71b"/*A*/,

@@ -14,14 +14,19 @@
       "Position": {
         "X": -200.0,
         "Y": 45.0
-      }
+      },
+      "Min": 0.0,
+      "Max": 100.0,
+      "Scale": 0.1
     },
     {
       "InputId": "53479387-1c04-4fbc-b093-043075495e10"/*Bias*/,
       "Position": {
         "X": -200.0,
         "Y": 90.0
-      }
+      },
+      "Min": 0.0,
+      "Max": 10.0
     },
     {
       "InputId": "ef8c86ee-16c0-446e-9ce0-c6342adbf32a"/*Color*/,

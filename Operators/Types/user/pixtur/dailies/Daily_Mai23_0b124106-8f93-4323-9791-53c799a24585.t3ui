@@ -3,7 +3,7 @@
   "InputUis": [],
   "SymbolChildUis": [
     {
-      "ChildId": "73693eb0-58a2-4961-83e7-51cb9543429b"/*Blob*/,
+      "ChildId": "73693eb0-58a2-4961-83e7-51cb9543429b"/*_BlobOld*/,
       "Position": {
         "X": -165.65913,
         "Y": -232.46104
@@ -164,7 +164,7 @@
       }
     },
     {
-      "ChildId": "a5a33cc5-feff-4d27-add7-833669eb4bc1"/*Blob*/,
+      "ChildId": "a5a33cc5-feff-4d27-add7-833669eb4bc1"/*_BlobOld*/,
       "Position": {
         "X": 522.01996,
         "Y": 853.5797
@@ -199,7 +199,7 @@
       }
     },
     {
-      "ChildId": "a8f13765-dc1e-4368-9c3f-0b780838fe68"/*Blob*/,
+      "ChildId": "a8f13765-dc1e-4368-9c3f-0b780838fe68"/*_BlobOld*/,
       "Position": {
         "X": -35.659073,
         "Y": -232.46104
@@ -451,7 +451,7 @@
       }
     },
     {
-      "ChildId": "55790309-90de-4d21-bdec-4e0a3522bd91"/*Blob*/,
+      "ChildId": "55790309-90de-4d21-bdec-4e0a3522bd91"/*_BlobOld*/,
       "Position": {
         "X": 504.6966,
         "Y": 1307.5579

@@ -39,13 +39,6 @@
       }
     },
     {
-      "ChildId": "678dd2b5-25bb-42d7-8a29-b9da21e943a5"/*_AnimValueOld*/,
-      "Position": {
-        "X": -793.96643,
-        "Y": 121.25729
-      }
-    },
-    {
       "ChildId": "edf1c3d0-01ae-4fe1-ba26-14dfc963b68d"/*KochKaleidoskope*/,
       "Position": {
         "X": -489.78333,
@@ -96,16 +89,17 @@
     },
     {
       "ChildId": "293cb7d1-08f5-4437-aa94-502ddde4eb60"/*Blend*/,
+      "Comment": "Note:\n\n1. Image B is rendered on top.\n2. We multiply the color from the gradient so adjust its color and opacity.\n3. The effect uses the \"auto resolution\" [0,0] which here uses the resolution Image A.\n4. Image B gets \"stretched\". If you want to avoid that, see the [Layer2d] example below.",
       "Position": {
-        "X": 782.6072,
-        "Y": 1412.4475
+        "X": 755.9698,
+        "Y": 1389.9012
       }
     },
     {
       "ChildId": "c17b5d0d-69cb-4d2e-8a25-7223b63ab61e"/*BlendWithMask*/,
       "Position": {
-        "X": 970.9174,
-        "Y": 1887.9846
+        "X": 933.7207,
+        "Y": 1870.238
       }
     },
     {
@@ -125,22 +119,22 @@
     {
       "ChildId": "9ff355e1-f077-4ba0-ad2e-d365912197bf"/*FakeLight*/,
       "Position": {
-        "X": 120.13037,
-        "Y": 1411.5441
+        "X": 121.12561,
+        "Y": 1401.5914
       }
     },
     {
       "ChildId": "668d6a32-5f84-4fb9-a5f5-82b65f2682f3"/*GlitchDisplace*/,
       "Position": {
-        "X": 1603.6519,
-        "Y": 1603.7269
+        "X": 1570.8221,
+        "Y": 1512.1493
       }
     },
     {
       "ChildId": "dc62ad42-2aa6-4b7d-af87-f41068544c52"/*SortPixelGlitch*/,
       "Position": {
-        "X": 1600.4597,
-        "Y": 1409.1532
+        "X": 1567.63,
+        "Y": 1317.5756
       }
     },
     {
@@ -153,22 +147,15 @@
     {
       "ChildId": "5cdc3815-8326-47b5-868f-72f2ddec00ef"/*LoadImage*/,
       "Position": {
-        "X": -747.04724,
-        "Y": 1436.7756
+        "X": -746.052,
+        "Y": 1426.823
       }
     },
     {
       "ChildId": "e43c6694-7a42-48c3-b533-1443f9a2a263"/*DirectionalBlur*/,
       "Position": {
-        "X": -578.4103,
-        "Y": 1434.8289
-      }
-    },
-    {
-      "ChildId": "f1adb0e6-6d6c-4f1d-b479-8b9087b18939"/*_AnimValueOld*/,
-      "Position": {
-        "X": -747.04724,
-        "Y": 1479.7754
+        "X": -577.41504,
+        "Y": 1424.8762
       }
     },
     {
@@ -182,13 +169,6 @@
       "ChildId": "d5c0027d-2a90-4539-a0e5-bbbfcb9f468a"/*FractalNoise*/,
       "Position": {
         "X": -616.5144,
-        "Y": 1894.6548
-      }
-    },
-    {
-      "ChildId": "da1518d7-a525-46fb-bb96-418a50fec6c7"/*_AnimValueOld*/,
-      "Position": {
-        "X": -766.5144,
         "Y": 1894.6548
       }
     },
@@ -214,150 +194,137 @@
       }
     },
     {
-      "ChildId": "14296236-7e27-4042-b7a1-79d753d96db9"/*_AnimValueOld*/,
-      "Position": {
-        "X": -176.74243,
-        "Y": 1864.7
-      }
-    },
-    {
       "ChildId": "b3b270aa-d2a8-493c-ab8d-9509ebbf9238"/*LoadImage*/,
       "Position": {
-        "X": -29.869629,
-        "Y": 1411.5441
+        "X": -28.87439,
+        "Y": 1401.5914
       }
     },
     {
-      "ChildId": "9f37d3d3-ae06-42c4-98b8-9a89244ead5a"/*Blob*/,
+      "ChildId": "9f37d3d3-ae06-42c4-98b8-9a89244ead5a"/*_BlobOld*/,
       "Position": {
-        "X": -29.869629,
-        "Y": 1564.5431
+        "X": -28.87439,
+        "Y": 1554.5905
       }
     },
     {
       "ChildId": "780c9435-f59f-4247-9201-37b152fcee3b"/*OscillateVec2*/,
       "Position": {
-        "X": -179.86963,
-        "Y": 1564.5431
+        "X": -178.87439,
+        "Y": 1554.5905
       }
     },
     {
       "ChildId": "6ce44056-bf52-46a6-833d-59e69e7d50b3"/*LoadImage*/,
       "Position": {
-        "X": 604.32324,
-        "Y": 1421.7762
+        "X": 567.1265,
+        "Y": 1404.0297
       }
     },
     {
       "ChildId": "2afd07a3-4a23-4900-92ff-96185ac2e52e"/*LoadImage*/,
       "Position": {
-        "X": 604.32324,
-        "Y": 1574.7762
+        "X": 567.1265,
+        "Y": 1557.0297
       }
     },
     {
       "ChildId": "d9ecd28e-d8d7-4adb-8ee1-d2c8c8ea1313"/*_AnimValueOld*/,
       "Position": {
-        "X": 454.32327,
-        "Y": 1617.7762
+        "X": 417.12656,
+        "Y": 1600.0297
       }
     },
     {
       "ChildId": "990c72bf-1eac-47ca-aa79-e4d233491c80"/*SampleGradient*/,
       "Position": {
-        "X": 604.32324,
-        "Y": 1617.7762
+        "X": 567.1265,
+        "Y": 1600.0297
       }
     },
     {
       "ChildId": "8e5148ef-7d15-4b98-acd2-9860cedc6d15"/*Layer2d*/,
       "Position": {
-        "X": 807.30164,
-        "Y": 1583.4005
+        "X": 770.1049,
+        "Y": 1565.6539
       }
     },
     {
       "ChildId": "c15501c2-1756-44f3-a47a-3929fbe5d591"/*Execute*/,
       "Position": {
-        "X": 957.30164,
-        "Y": 1583.4005
+        "X": 920.1049,
+        "Y": 1565.6539
       }
     },
     {
       "ChildId": "34135c50-1c3a-4999-9653-1cb04bb1b567"/*Layer2d*/,
+      "Comment": "Note:\n\n1. The ScaleMode parameter is set to \"FitHeight\". Feel free to experiment with the other modes.",
       "Position": {
-        "X": 807.30164,
-        "Y": 1639.4005
+        "X": 770.1049,
+        "Y": 1621.6539
       }
     },
     {
       "ChildId": "cffbb39b-8be7-4ccd-a37b-4cd5814fb6c9"/*RenderTarget*/,
       "Position": {
-        "X": 1107.3014,
-        "Y": 1583.4005
+        "X": 1070.1042,
+        "Y": 1565.6539
       }
     },
     {
       "ChildId": "582bdcd1-f69d-428c-8f59-579553ff633d"/*OscillateVec2*/,
       "Position": {
-        "X": -727.6654,
-        "Y": 679.23584
-      }
-    },
-    {
-      "ChildId": "f90f131d-143a-464c-8690-daa8539cb74f"/*_AnimValueOld*/,
-      "Position": {
-        "X": -793.96643,
-        "Y": 164.2573
+        "X": -767.07764,
+        "Y": 829.7191
       }
     },
     {
       "ChildId": "f48e49cc-bda9-43b8-baa6-fc1a713ded65"/*LoadImage*/,
       "Position": {
-        "X": 1450.4597,
-        "Y": 1409.1532
+        "X": 1417.63,
+        "Y": 1317.5756
       }
     },
     {
       "ChildId": "7d77d004-92e5-4f7f-81e3-f276b3662600"/*_AnimValueOld*/,
       "Position": {
-        "X": 1450.4597,
-        "Y": 1452.1532
+        "X": 1417.63,
+        "Y": 1360.5756
       }
     },
     {
       "ChildId": "fded24d6-fd46-4d1b-90bd-16e035752a8f"/*LoadImage*/,
       "Position": {
-        "X": 1453.6517,
-        "Y": 1603.7269
+        "X": 1420.822,
+        "Y": 1512.1493
       }
     },
     {
       "ChildId": "9c3c7271-27fc-4add-b1c4-753791f75e7e"/*LoadImage*/,
       "Position": {
-        "X": 820.9174,
-        "Y": 1887.9846
+        "X": 783.7207,
+        "Y": 1870.238
       }
     },
     {
       "ChildId": "bd644acc-63c2-4e3e-9b4c-a8f651f94a93"/*LoadImage*/,
       "Position": {
-        "X": 820.9174,
-        "Y": 2040.9851
+        "X": 783.7207,
+        "Y": 2023.2385
       }
     },
     {
       "ChildId": "f506c6d3-4095-4acf-82dd-d847515f6f1c"/*LinearGradient*/,
       "Position": {
-        "X": 822.2536,
-        "Y": 2151.2808
+        "X": 785.0569,
+        "Y": 2133.5337
       }
     },
     {
       "ChildId": "2777e6c3-c78c-42c4-9b7e-d2a9bd562ac7"/*_AnimValueOld*/,
       "Position": {
-        "X": 672.2536,
-        "Y": 2151.2808
+        "X": 635.0569,
+        "Y": 2133.5337
       }
     },
     {
@@ -382,10 +349,52 @@
       }
     },
     {
-      "ChildId": "5bcd74ed-838d-4724-88c5-db78fb002e12"/*_AnimValueOld*/,
+      "ChildId": "45cfc38a-cf19-458f-97e9-8cd2585c21ae"/*Rotate*/,
+      "Position": {
+        "X": -781.48834,
+        "Y": 123.58789
+      }
+    },
+    {
+      "ChildId": "fd56af0c-52a3-4ea0-ab12-db8f8cc87294"/*AnimValue*/,
+      "Position": {
+        "X": -781.48834,
+        "Y": 166.58789
+      }
+    },
+    {
+      "ChildId": "77288e81-392a-4425-be2e-6484063c6de2"/*Rotate*/,
+      "Position": {
+        "X": -746.052,
+        "Y": 1469.823
+      }
+    },
+    {
+      "ChildId": "3d53d881-5422-4ffb-a19d-fa2531266fc9"/*AnimValue*/,
+      "Position": {
+        "X": -766.5144,
+        "Y": 1894.6548
+      }
+    },
+    {
+      "ChildId": "a9396aa0-98d4-44a4-97c2-3b84cdc894b3"/*Rotate*/,
+      "Position": {
+        "X": -176.74231,
+        "Y": 1864.7
+      }
+    },
+    {
+      "ChildId": "e190ea1b-a8a5-476f-a38b-f84a71031a97"/*Rotate*/,
       "Position": {
         "X": -723.9602,
         "Y": 2199.3953
+      }
+    },
+    {
+      "ChildId": "d9431484-08a6-41d3-8479-d880b5178165"/*AnimValue*/,
+      "Position": {
+        "X": 1421.9293,
+        "Y": 1577.1632
       }
     }
   ],
@@ -499,8 +508,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": 425.07257,
-        "Y": 1269.6843
+        "X": 387.87585,
+        "Y": 1251.9377
       },
       "Size": {
         "X": 833.9123,
@@ -517,8 +526,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": 793.65015,
-        "Y": 1495.1372
+        "X": 756.4534,
+        "Y": 1477.3906
       },
       "Size": {
         "X": 448.5168,
@@ -527,7 +536,7 @@
     },
     {
       "Id": "50b5afd1-0769-411f-b2e0-5bc37a2e664c",
-      "Title": "This is nice example of \nthe kind of effects that\ncan be achieved with compute\nshaders. ",
+      "Title": "This is nice example of the kind of effects that \ncan be achieved with compute shaders. ",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -553,8 +562,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": 423.49408,
-        "Y": 1735.7686
+        "X": 386.29736,
+        "Y": 1718.022
       },
       "Size": {
         "X": 832.5994,

@@ -6,6 +6,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_7814fd81_b8d0_4edf_b828_5165f5657344;
 
 namespace T3.Editor.Gui.ChildUi
@@ -82,7 +83,10 @@ namespace T3.Editor.Gui.ChildUi
             DrawCurve(drawList, graphRect, animVec2, highlightEditable);
             
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolChildUi.CustomUiResult.Rendered 
+                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolChildUi.CustomUiResult.PreventInputLabels
+                   | SymbolChildUi.CustomUiResult.PreventTooltip;
         }
 
         private static void DrawCurve(ImDrawListPtr drawList, ImRect graphRect, AnimVec3 animValue, bool highlightEditable)

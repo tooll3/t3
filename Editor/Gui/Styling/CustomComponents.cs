@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Utils;
@@ -379,6 +381,7 @@ namespace T3.Editor.Gui.Styling
             ImGui.TextWrapped(text);
             ImGui.PopStyleColor();
             ImGui.PopFont();
+            ImGui.Dummy(new Vector2(0,4 * T3Ui.DisplayScaleFactor));
         }
 
         /// <summary>
@@ -432,9 +435,12 @@ namespace T3.Editor.Gui.Styling
 
             foreach (var line in lines)
             {
-                var textSize = ImGui.CalcTextSize(line);
-                var position = new Vector2(center.X - textSize.X / 2, y);
-                drawList.AddText(position, emptyMessageColor, line);
+                if (!string.IsNullOrEmpty(line))
+                {
+                    var textSize = ImGui.CalcTextSize(line);
+                    var position = new Vector2(center.X - textSize.X / 2, y);
+                    drawList.AddText(position, emptyMessageColor, line);
+                }
                 y += textLineHeight;
             }
 
@@ -457,6 +463,8 @@ namespace T3.Editor.Gui.Styling
                 return;
             
             FrameStats.Current.SomethingWithTooltipHovered = true;
+            if (!useHoverDelay)
+                _toolTipHoverDelay = 0;
 
             if (_toolTipHoverDelay > 0)
                 return;
@@ -558,24 +566,28 @@ namespace T3.Editor.Gui.Styling
             return clicked;
         }
 
-        public static bool DrawSearchField(string placeHolderLabel, ref string value, float width = 0)
+        public static bool DrawInputFieldWithPlaceholder(string placeHolderLabel, ref string value, float width = 0, bool showClear= true,  ImGuiInputTextFlags inputFlags= ImGuiInputTextFlags.None)
         {
+            var notEmpty = !string.IsNullOrEmpty(value);
             var wasNull = value == null;
             if (wasNull)
                 value = string.Empty;
 
-            ImGui.SetNextItemWidth(width - FormInputs.ParameterSpacing);
-            var modified = ImGui.InputText("##" + placeHolderLabel, ref value, 1000);
+            ImGui.SetNextItemWidth(width - FormInputs.ParameterSpacing - (notEmpty ? ImGui.GetFrameHeight():0));
+            var modified = ImGui.InputText("##" + placeHolderLabel, ref value, 1000, inputFlags);
             if (!modified && wasNull)
                 value = null;
 
-            if (!string.IsNullOrEmpty(value))
+            if (notEmpty)
             {
-                ImGui.SameLine();
-                if (ImGui.Button("×"))
+                if (showClear)
                 {
-                    value = null;
-                    modified = true;
+                    ImGui.SameLine(0,0);
+                    if (ImGui.Button("×" + "##" + placeHolderLabel))
+                    {
+                        value = null;
+                        modified = true;
+                    }
                 }
             }
             else
@@ -602,6 +614,11 @@ namespace T3.Editor.Gui.Styling
             
             var min = ImGui.GetWindowPos() + new Vector2(1,1);
             ImGui.GetWindowDrawList().AddRect(min, min+ImGui.GetWindowSize() + new Vector2(-2,-1) , UiColors.ForegroundFull.Fade(0.1f));
+        }
+
+        public static string HumanReadablePascalCase(string f)
+        {
+            return Regex.Replace(f, "(\\B[A-Z])", " $1");
         }
     }
 }

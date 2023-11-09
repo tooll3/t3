@@ -47,7 +47,7 @@
       "Outputs": []
     },
     {
-      "Id": "33ef78c9-3e6b-45c4-9d70-7226b75cfaa2"/*SimNoise*/,
+      "Id": "33ef78c9-3e6b-45c4-9d70-7226b75cfaa2"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -140,7 +140,7 @@
       "Outputs": []
     },
     {
-      "Id": "eca31575-16b8-4929-8400-451f25d9ddc2"/*SimForces*/,
+      "Id": "eca31575-16b8-4929-8400-451f25d9ddc2"/*SimForceOffset*/,
       "SymbolId": "9c378944-9a57-4ae4-a88e-36c07244bcf7",
       "InputValues": [
         {

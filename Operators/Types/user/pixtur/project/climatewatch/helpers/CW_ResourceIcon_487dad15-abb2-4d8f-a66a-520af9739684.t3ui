@@ -1,6 +1,6 @@
 {
   "Id": "487dad15-abb2-4d8f-a66a-520af9739684"/*CW_ResourceIcon*/,
-  "Description": "Shows an resource distribution icon",
+  "Description": "Shows a resource distribution icon",
   "InputUis": [
     {
       "InputId": "56bc4d62-4938-4173-86d5-1f1bd3ea6a43"/*ImagePath*/,

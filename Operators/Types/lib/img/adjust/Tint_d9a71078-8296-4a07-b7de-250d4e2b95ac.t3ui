@@ -1,6 +1,6 @@
 {
   "Id": "d9a71078-8296-4a07-b7de-250d4e2b95ac"/*Tint*/,
-  "Description": "Tints the bright and dark colors of an image.\nThis can be an easy method of subtle color corrections or drastic effects.\n\nAlso see  [RemapColors] for a similar operator.",
+  "Description": "Tints the bright and dark colors of an image. This can be an easy method for subtle color corrections or to create drastic effects.\n\nAlso, see [RemapColors] for a similar operator.",
   "InputUis": [
     {
       "InputId": "3f1d8fa3-73bd-475c-a65b-c5352bf6ea85"/*Texture2d*/,

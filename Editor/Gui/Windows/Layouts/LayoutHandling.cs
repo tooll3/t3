@@ -29,7 +29,7 @@ namespace T3.Editor.Gui.Windows.Layouts
                     SaveLayout(i);
 
                 if (KeyboardBinding.Triggered(_loadLayoutActions[i]))
-                    LoadAndApplyLayout(i);
+                    LoadAndApplyLayoutOrFocusMode(i);
             }
         }
 
@@ -41,7 +41,7 @@ namespace T3.Editor.Gui.Windows.Layouts
                 {
                     if (ImGui.MenuItem("Layout " + (i + 1), "F" + (i + 1), false, enabled: DoesLayoutExists(i)))
                     {
-                        LoadAndApplyLayout(i);
+                        LoadAndApplyLayoutOrFocusMode(i);
                     }
                 }
 
@@ -60,9 +60,9 @@ namespace T3.Editor.Gui.Windows.Layouts
 
                 ImGui.EndMenu();
             }
-            
+
             if (ImGui.MenuItem("Save current layout", ""))
-                SaveLayout(0);            
+                SaveLayout(0);
         }
 
         public static void UpdateAfterResize(Vector2 newSize)
@@ -74,14 +74,12 @@ namespace T3.Editor.Gui.Windows.Layouts
                             {
                                 WindowConfigs = WindowManager.GetAllWindows().Select(window => window.Config).ToList()
                             });
-        }        
-        
-
+        }
 
         private static void ApplyLayout(Layout layout)
         {
             layout.WindowConfigs ??= new List<Window.WindowConfig>();
-            
+
             // First update windows settings
             foreach (var config in layout.WindowConfigs)
             {
@@ -112,7 +110,7 @@ namespace T3.Editor.Gui.Windows.Layouts
                     matchingWindow.Config = config;
                 }
             }
-            
+
             // Close Windows without configurations
             foreach (var w in WindowManager.GetAllWindows())
             {
@@ -122,21 +120,21 @@ namespace T3.Editor.Gui.Windows.Layouts
                     w.Config.Visible = false;
                 }
             }
-            
+
             // apply ImGui settings
             if (!string.IsNullOrEmpty(layout.ImGuiSettings))
             {
                 Program.RequestImGuiLayoutUpdate = layout.ImGuiSettings;
             }
-                //ImGui.LoadIniSettingsFromMemory(layout.ImGuiSettings);
+            //ImGui.LoadIniSettingsFromMemory(layout.ImGuiSettings);
 
             // Than apply size and positions
             // foreach (var window1 in WindowManager.GetAllWindows())
             // {
             //     window1.ApplySizeAndPosition();
             // }
-        }        
-        
+        }
+
         private static void SaveLayout(int index)
         {
             if (!Directory.Exists(LayoutPath))
@@ -151,13 +149,15 @@ namespace T3.Editor.Gui.Windows.Layouts
                                  WindowConfigs = WindowManager.GetAllWindows().Select(window => window.Config).ToList(),
                                  ImGuiSettings = ImGui.SaveIniSettingsToMemory(),
                              };
-            
+
             serializer.Serialize(file, layout);
             UserSettings.Config.WindowLayoutIndex = index;
-        }        
-        
-        public static void LoadAndApplyLayout(int index)
+        }
+
+        public static void LoadAndApplyLayoutOrFocusMode(int index)
         {
+            var isFocusMode = index == 11;
+
             var filename = GetLayoutFilename(index);
             if (!File.Exists(filename))
             {
@@ -178,9 +178,14 @@ namespace T3.Editor.Gui.Windows.Layouts
             WindowManager.SetGraphWindowToNormal();
 
             ApplyLayout(layout);
-            UserSettings.Config.WindowLayoutIndex = index;
+            if (!isFocusMode)
+            {
+                UserSettings.Config.WindowLayoutIndex = index;
+            }
+
+            UserSettings.Config.FocusMode = isFocusMode;
         }
-        
+
         private static string GetLayoutFilename(int index)
         {
             return Path.Combine(LayoutPath, string.Format(LayoutFileNameFormat, index));

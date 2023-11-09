@@ -2,11 +2,9 @@
 using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.Audio;
-using T3.Core.DataTypes.DataSet;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
-using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
@@ -25,6 +23,128 @@ namespace T3.Editor.Gui.Windows.TimeLine
 {
     internal static class TimeControls
     {
+        internal static void HandleTimeControlActions()
+        {
+            var playback = Playback.Current; // TODO, this should be non-static eventually
+
+            if (KeyboardBinding.Triggered(UserActions.TapBeatSync))
+                BeatTiming.TriggerSyncTap();
+
+            if (KeyboardBinding.Triggered(UserActions.TapBeatSyncMeasure))
+                BeatTiming.TriggerResyncMeasure();
+
+            if (KeyboardBinding.Triggered(UserActions.PlaybackJumpToPreviousKeyframe))
+                UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
+
+            if (KeyboardBinding.Triggered(UserActions.PlaybackJumpToStartTime))
+                playback.TimeInBars = playback.IsLooping ? playback.LoopRange.Start : 0;
+
+            if (KeyboardBinding.Triggered(UserActions.PlaybackJumpToPreviousKeyframe))
+                UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
+
+            
+            {
+                //const float editFrameRate = 30;
+
+                var frameDuration = UserSettings.Config.FrameStepAmount switch
+                                        {
+                                            TimeLineCanvas.FrameStepAmount.FrameAt60Fps => 1 / 60f,
+                                            TimeLineCanvas.FrameStepAmount.FrameAt30Fps => 1 / 30f,
+                                            TimeLineCanvas.FrameStepAmount.FrameAt15Fps => 1 / 15f,
+                                            TimeLineCanvas.FrameStepAmount.Bar          => (float)playback.SecondsFromBars(1),
+                                            TimeLineCanvas.FrameStepAmount.Beat         => (float)playback.SecondsFromBars(1 / 4f),
+                                            TimeLineCanvas.FrameStepAmount.Tick         => (float)playback.SecondsFromBars(1 / 16f),
+                                            _                                           => 1
+                                        };
+
+                var editFrameRate = 1 / frameDuration;
+
+                // Step to previous frame
+                if (KeyboardBinding.Triggered(UserActions.PlaybackPreviousFrame))
+                {
+                    var rounded = Math.Round(playback.TimeInSecs * editFrameRate) / editFrameRate;
+                    playback.TimeInSecs = rounded - frameDuration;
+                }
+
+                if (KeyboardBinding.Triggered(UserActions.PlaybackJumpBack))
+                {
+                    playback.TimeInBars -= 1;
+                }
+
+                // Step to next frame
+                if (KeyboardBinding.Triggered(UserActions.PlaybackNextFrame))
+                {
+                    var rounded = Math.Round(playback.TimeInSecs * editFrameRate) / editFrameRate;
+                    playback.TimeInSecs = rounded + frameDuration;
+                }
+            }
+
+            // Play backwards with increasing speed
+            if (KeyboardBinding.Triggered(UserActions.PlaybackBackwards))
+            {
+                Log.Debug("Backwards triggered with speed " + playback.PlaybackSpeed);
+                if (playback.PlaybackSpeed >= 0)
+                {
+                    playback.PlaybackSpeed = -1;
+                }
+                else if (playback.PlaybackSpeed > -16)
+                {
+                    playback.PlaybackSpeed *= 2;
+                }
+            }
+
+            // Play forward with increasing speed
+            if (KeyboardBinding.Triggered(UserActions.PlaybackForward))
+            {
+                if (playback.PlaybackSpeed <= 0)
+                {
+                    _lastPlaybackStartTime = playback.TimeInBars;
+                    playback.PlaybackSpeed = 1;
+                }
+                else if (playback.PlaybackSpeed < 16) // Bass can't play much faster anyways
+                {
+                    playback.PlaybackSpeed *= 2;
+                }
+            }
+
+            if (KeyboardBinding.Triggered(UserActions.PlaybackForwardHalfSpeed))
+            {
+                if (playback.PlaybackSpeed > 0 && playback.PlaybackSpeed < 1f)
+                    playback.PlaybackSpeed *= 0.5f;
+                else
+                    playback.PlaybackSpeed = 0.5f;
+            }
+
+            // Stop as separate keyboard action 
+            if (KeyboardBinding.Triggered(UserActions.PlaybackStop))
+            {
+                playback.PlaybackSpeed = 0;
+                if (UserSettings.Config.ResetTimeAfterPlayback)
+                    playback.TimeInBars = _lastPlaybackStartTime;
+            }
+
+            if (KeyboardBinding.Triggered(UserActions.PlaybackToggle))
+            {
+                if (playback.PlaybackSpeed == 0)
+                {
+                    playback.PlaybackSpeed = 1;
+                    _lastPlaybackStartTime = playback.TimeInBars;
+                }
+                else
+                {
+                    playback.PlaybackSpeed = 0;
+                    if (UserSettings.Config.ResetTimeAfterPlayback)
+                        playback.TimeInBars = _lastPlaybackStartTime;
+                }
+            }
+
+            if (KeyboardBinding.Triggered(UserActions.PlaybackJumpToNextKeyframe))
+                UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToNextKeyframe);
+
+            if (KeyboardBinding.Triggered(UserActions.PlaybackJumpToPreviousKeyframe))
+                UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
+        }
+
         internal static void DrawTimeControls(TimeLineCanvas timeLineCanvas)
         {
             var playback = Playback.Current; // TODO, this should be non-static eventually
@@ -104,7 +224,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             ImGui.SameLine();
 
-            // Continue Beat indicator
+            // Idle motion 
             {
                 ImGui.PushStyleColor(ImGuiCol.Text, UserSettings.Config.EnableIdleMotion
                                                         ? UiColors.TextDisabled
@@ -133,18 +253,18 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
                     const int gridSize = 4;
                     var drawList = ImGui.GetWindowDrawList();
-                    var min = center - new Vector2(7, 7) + new Vector2(beat * gridSize, bar * gridSize);
+                    var min = center - new Vector2(7, 7) * T3Ui.UiScaleFactor + new Vector2(beat * gridSize, bar * gridSize) * T3Ui.UiScaleFactor;
 
-                    drawList.AddRectFilled(min, min + new Vector2(gridSize - 1, gridSize - 1), 
-                                           Color.Mix(UiColors.StatusAnimated, 
-                                                     UiColors.Gray, 
+                    drawList.AddRectFilled(min, min + new Vector2(gridSize - 1, gridSize - 1),
+                                           Color.Mix(UiColors.StatusAnimated,
+                                                     UiColors.Gray,
                                                      (float)beatPulse));
                 }
 
                 ImGui.PopStyleColor();
                 ImGui.SameLine();
             }
-            
+
             // MidiIndicator
             {
                 var timeSinceLastEvent = Playback.RunTimeInSecs - T3Ui.MidiDataRecording.LastEventTime;
@@ -157,6 +277,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     T3Ui.MidiDataRecording.DataSet.WriteToFile();
                     WindowManager.ToggleInstanceVisibility<IoViewWindow>();
                 }
+
                 ImGui.PopStyleColor();
 
                 if (ImGui.IsItemHovered())
@@ -170,45 +291,40 @@ namespace T3.Editor.Gui.Windows.TimeLine
                         //DataSetOutputUi.DrawDataSet(dataSet);
                         _dataSetView.Draw(dataSet);
                         ImGui.EndChild();
-                        
                     }
                     else
                     {
                         ImGui.Text("Midi input indicator\nClick to open IO window.");
                     }
+
                     ImGui.EndTooltip();
                 }
+
                 ImGui.SameLine();
             }
 
             if (settings.Syncing == PlaybackSettings.SyncModes.Tapping)
             {
                 var bpm = BeatTiming.Bpm;
-                if (SingleValueEdit.Draw(ref bpm, new Vector2(100, ControlSize.Y), 1, 360, true, 0.01f, "{0:0.00 BPM}") == InputEditStateFlags.Modified)
+                if (SingleValueEdit.Draw(ref bpm, new Vector2(100, ControlSize.Y) * T3Ui.UiScaleFactor, 1, 360, true, 0.01f, "{0:0.00 BPM}") ==
+                    InputEditStateFlags.Modified)
                 {
                     BeatTiming.SetBpmRate(bpm);
                 }
 
-                var min = ImGui.GetItemRectMin();
-                var max = ImGui.GetItemRectMax();
-                var bar = (float)Math.Pow(1 - BeatTiming.BeatTime % 1, 4);
-                var height = 1;
-
-                //var volume = BeatTiming.SyncPrecision;
-                ImGui.GetWindowDrawList().AddRectFilled(new Vector2(min.X, max.Y), new Vector2(min.X + 3, max.Y - height * (max.Y - min.Y)),
-                                                        UiColors.StatusAnimated.Fade(bar));
-
                 ImGui.SameLine();
 
                 ImGui.Button("Sync", ControlSize);
-                if (ImGui.IsItemActivated())
+                if (ImGui.IsItemHovered())
                 {
-                    BeatTiming.TriggerSyncTap();
-                }
-                else if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Right))
-                {
-                    //Log.Debug("Resync!");
-                    BeatTiming.TriggerResyncMeasure();
+                    if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
+                    {
+                        BeatTiming.TriggerSyncTap();
+                    }
+                    else if (ImGui.IsMouseClicked(ImGuiMouseButton.Right))
+                    {
+                        BeatTiming.TriggerResyncMeasure();
+                    }
                 }
 
                 CustomComponents.TooltipForLastItem("Click on beat to sync. Tap later once to refine. Click right to sync measure.");
@@ -259,7 +375,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                                 FrameStats.Last.HasKeyframesBeforeCurrentTime
                                                     ? CustomComponents.ButtonStates.Dimmed
                                                     : CustomComponents.ButtonStates.Disabled)
-                    || KeyboardBinding.Triggered(UserActions.PlaybackJumpToPreviousKeyframe))
+                   )
                 {
                     UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToPreviousKeyframe);
                 }
@@ -319,88 +435,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackForwardHalfSpeed, false) +
                                                     "\n Next frame:" + KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackNextFrame, false));
 
-                {
-                    //const float editFrameRate = 30;
-
-                    var frameDuration = UserSettings.Config.FrameStepAmount switch
-                                            {
-                                                TimeLineCanvas.FrameStepAmount.FrameAt60Fps => 1 / 60f,
-                                                TimeLineCanvas.FrameStepAmount.FrameAt30Fps => 1 / 30f,
-                                                TimeLineCanvas.FrameStepAmount.FrameAt15Fps => 1 / 15f,
-                                                TimeLineCanvas.FrameStepAmount.Bar          => (float)playback.SecondsFromBars(1),
-                                                TimeLineCanvas.FrameStepAmount.Beat         => (float)playback.SecondsFromBars(1 / 4f),
-                                                TimeLineCanvas.FrameStepAmount.Tick         => (float)playback.SecondsFromBars(1 / 16f),
-                                                _                                           => 1
-                                            };
-
-                    var editFrameRate = 1 / frameDuration;
-
-                    // Step to previous frame
-                    if (KeyboardBinding.Triggered(UserActions.PlaybackPreviousFrame))
-                    {
-                        var rounded = Math.Round(playback.TimeInSecs * editFrameRate) / editFrameRate;
-                        playback.TimeInSecs = rounded - frameDuration;
-                    }
-
-                    if (KeyboardBinding.Triggered(UserActions.PlaybackJumpBack))
-                    {
-                        playback.TimeInBars -= 1;
-                    }
-
-                    // Step to next frame
-                    if (KeyboardBinding.Triggered(UserActions.PlaybackNextFrame))
-                    {
-                        var rounded = Math.Round(playback.TimeInSecs * editFrameRate) / editFrameRate;
-                        playback.TimeInSecs = rounded + frameDuration;
-                    }
-                }
-
-                // Play backwards with increasing speed
-                if (KeyboardBinding.Triggered(UserActions.PlaybackBackwards))
-                {
-                    Log.Debug("Backwards triggered with speed " + playback.PlaybackSpeed);
-                    if (playback.PlaybackSpeed >= 0)
-                    {
-                        playback.PlaybackSpeed = -1;
-                    }
-                    else if (playback.PlaybackSpeed > -16)
-                    {
-                        playback.PlaybackSpeed *= 2;
-                    }
-                }
-
-                // Play forward with increasing speed
-                if (KeyboardBinding.Triggered(UserActions.PlaybackForward))
-                {
-                    if (playback.PlaybackSpeed <= 0)
-                    {
-                        playback.PlaybackSpeed = 1;
-                    }
-                    else if (playback.PlaybackSpeed < 16) // Bass can't play much faster anyways
-                    {
-                        playback.PlaybackSpeed *= 2;
-                    }
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.PlaybackForwardHalfSpeed))
-                {
-                    if (playback.PlaybackSpeed > 0 && playback.PlaybackSpeed < 1f)
-                        playback.PlaybackSpeed *= 0.5f;
-                    else
-                        playback.PlaybackSpeed = 0.5f;
-                }
-
-                // Stop as separate keyboard action 
-                if (KeyboardBinding.Triggered(UserActions.PlaybackStop))
-                {
-                    playback.PlaybackSpeed = 0;
-                }
-
-                if (KeyboardBinding.Triggered(UserActions.PlaybackToggle))
-                {
-                    playback.PlaybackSpeed = playback.PlaybackSpeed == 0 ? 1 : 0;
-                }
-
                 ImGui.SameLine();
 
                 // Next Keyframe
@@ -409,7 +443,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
                                                 FrameStats.Last.HasKeyframesAfterCurrentTime
                                                     ? CustomComponents.ButtonStates.Dimmed
                                                     : CustomComponents.ButtonStates.Disabled)
-                    || KeyboardBinding.Triggered(UserActions.PlaybackJumpToNextKeyframe))
+                   )
                 {
                     UserActionRegistry.DeferredActions.Add(UserActions.PlaybackJumpToNextKeyframe);
                 }
@@ -520,14 +554,19 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 }
             }
 
+            CustomComponents.TooltipForLastItem("Keep animated parameters visible",
+                                                "This can be useful when align animations between multiple operators. Toggle again to clear the visible animations.");
             ImGui.SameLine();
         }
 
+        public static double _lastPlaybackStartTime;
+
         public static Vector2 ControlSize => new Vector2(45, 28) * T3Ui.UiScaleFactor;
+
         private static readonly DataSetViewCanvas _dataSetView = new()
                                                                      {
                                                                          ShowInteraction = false,
-                                                                         MaxTreeLevel =  0,
+                                                                         MaxTreeLevel = 0,
                                                                      };
     }
 }

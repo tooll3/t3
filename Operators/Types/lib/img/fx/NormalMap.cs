@@ -32,7 +32,7 @@ namespace T3.Operators.Types.Id_01458940_287f_4d31_9906_998efa9a2641
         private enum Modes
         {
             Gray_ToNormalizedRGB,
-            Gray_ToNormalizedRGBNeg,
+            Gray_ToNormalizedRGBSigned,
             Gray_ToAngleAndMagnitude,
             Red_ToRG_KeepBA,
         }

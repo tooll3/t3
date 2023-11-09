@@ -13,6 +13,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Output;
+using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Graph
@@ -73,7 +74,7 @@ namespace T3.Editor.Gui.Graph
                 return;
 
             _imageCanvas.SetAsCurrent();
-            _evaluationContext.ShowGizmos = ShowGizmos;
+            _evaluationContext.ShowGizmos = _showGizmos;
             _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
             _evaluationContext.SetDefaultCamera();
             if (_camSelectionHandling.CameraForRendering != null)
@@ -81,7 +82,11 @@ namespace T3.Editor.Gui.Graph
                 _evaluationContext.SetViewFromCamera(_camSelectionHandling.CameraForRendering);
             }
 
+            var hackToHideResolution = UserSettings.Config.ShowToolbar;
+            UserSettings.Config.ShowToolbar = false;
             viewOutputUi.DrawValue(viewOutput, _evaluationContext, recompute: true);
+            UserSettings.Config.ShowToolbar = hackToHideResolution;
+            
             _imageCanvas.Deactivate();
 
             if (imageOpacity < 1)
@@ -107,10 +112,10 @@ namespace T3.Editor.Gui.Graph
             DrawResolutionSelector();
             ImGui.SameLine();
 
-            var showGizmos = ShowGizmos != T3.Core.Operator.GizmoVisibility.Off;
-            if (CustomComponents.ToggleIconButton(Icon.Grid, "##gizmos", ref showGizmos, Vector2.One * ImGui.GetFrameHeight()))
+            var showGizmos = _showGizmos != T3.Core.Operator.GizmoVisibility.Off;
+            if (CustomComponents.ToggleIconButton(Icon.Grid, "##gizmos", ref showGizmos, Vector2.One * ImGui.GetFrameHeight() * T3Ui.UiScaleFactor))
             {
-                ShowGizmos = showGizmos
+                _showGizmos = showGizmos
                                  ? T3.Core.Operator.GizmoVisibility.On
                                  : T3.Core.Operator.GizmoVisibility.Off;
             }
@@ -119,8 +124,6 @@ namespace T3.Editor.Gui.Graph
 
             _camSelectionHandling.DrawCameraControlSelection();
             ImGui.SameLine();
-
-            ImGui.Checkbox("ControlBackground", ref HasInteractionFocus);
         }
 
         public void ClearBackground()
@@ -129,7 +132,7 @@ namespace T3.Editor.Gui.Graph
             HasInteractionFocus = false;
         }
 
-        public GizmoVisibility ShowGizmos;
+        private GizmoVisibility _showGizmos;
 
         private readonly ImageOutputCanvas _imageCanvas = new();
         private readonly CameraSelectionHandling _camSelectionHandling = new();

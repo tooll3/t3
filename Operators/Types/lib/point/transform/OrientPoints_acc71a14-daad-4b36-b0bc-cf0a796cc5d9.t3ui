@@ -1,6 +1,6 @@
 {
   "Id": "acc71a14-daad-4b36-b0bc-cf0a796cc5d9"/*OrientPoints*/,
-  "Description": "Orients the rotation of points so that Z points towards a center. \n",
+  "Description": "Orients the rotation of points so that Z points towards a center.",
   "InputUis": [
     {
       "InputId": "865ad090-0fdd-4683-ba93-b6be92b55cb3"/*Points*/,
@@ -116,7 +116,7 @@
       }
     },
     {
-      "ChildId": "f8ddd97f-2f64-4dcc-9ad1-9ea646ebe8b6"/*BoolToFloats*/,
+      "ChildId": "f8ddd97f-2f64-4dcc-9ad1-9ea646ebe8b6"/*BoolToFloat*/,
       "Position": {
         "X": -312.2176,
         "Y": 1046.6432
@@ -137,7 +137,7 @@
       }
     },
     {
-      "ChildId": "19c25faf-2ace-4202-af8e-b10beb686a37"/*BoolToFloats*/,
+      "ChildId": "19c25faf-2ace-4202-af8e-b10beb686a37"/*BoolToFloat*/,
       "Position": {
         "X": -312.2176,
         "Y": 1102.6432

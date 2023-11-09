@@ -103,6 +103,13 @@
         "X": -945.5289,
         "Y": 2236.6829
       }
+    },
+    {
+      "InputId": "62119baf-5e02-4d2e-82bb-f82a149ccfb7"/*Visibility*/,
+      "Position": {
+        "X": -945.5289,
+        "Y": 2281.6829
+      }
     }
   ],
   "SymbolChildUis": [
@@ -238,7 +245,7 @@
       }
     },
     {
-      "ChildId": "bc7ca7d1-4783-4454-865b-0ccff41c19c8"/*BoolToFloats*/,
+      "ChildId": "bc7ca7d1-4783-4454-865b-0ccff41c19c8"/*BoolToFloat*/,
       "Position": {
         "X": -795.5289,
         "Y": 2393.6829
@@ -280,7 +287,7 @@
       }
     },
     {
-      "ChildId": "e136bbc9-4379-4ba5-bba7-2c9acb30d1bf"/*BoolToFloats*/,
+      "ChildId": "e136bbc9-4379-4ba5-bba7-2c9acb30d1bf"/*BoolToFloat*/,
       "Position": {
         "X": -797.6117,
         "Y": 2600.9817
@@ -299,7 +306,7 @@
   "Annotations": [
     {
       "Id": "faa2e40b-86eb-48bd-b33b-d0e17c9050e6",
-      "Title": "A work around to pass a 4x4 matrix into a shader.",
+      "Title": "A workaround to pass a 4x4 matrix into a shader.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

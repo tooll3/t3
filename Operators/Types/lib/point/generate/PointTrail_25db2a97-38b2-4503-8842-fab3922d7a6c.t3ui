@@ -1,6 +1,15 @@
 {
   "Id": "25db2a97-38b2-4503-8842-fab3922d7a6c"/*PointTrail*/,
+  "Description": "Keeps previous copies of points in a cycling buffer that can be used to draw trails and other effects.",
   "InputUis": [
+    {
+      "InputId": "4389838c-fd1d-4400-b8e5-f373a05adff7"/*GPoints*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -1214.1729,
+        "Y": -243.8945
+      }
+    },
     {
       "InputId": "6a2cb3f0-3b5a-4551-a809-3dc172bb7d79"/*TrailLength*/,
       "Position": {
@@ -9,14 +18,6 @@
       },
       "Min": 1,
       "Clamp": true
-    },
-    {
-      "InputId": "4389838c-fd1d-4400-b8e5-f373a05adff7"/*GPoints*/,
-      "Relevancy": "Required",
-      "Position": {
-        "X": -1162.7197,
-        "Y": 488.0679
-      }
     },
     {
       "InputId": "bcb7260e-8a84-4987-83ca-f31981ae94aa"/*IsEnabled*/,
@@ -63,13 +64,6 @@
       }
     },
     {
-      "ChildId": "d034136a-61f3-4d93-a0a6-1aa135210d9f"/*GetSRVProperties*/,
-      "Position": {
-        "X": -783.6004,
-        "Y": 246.75826
-      }
-    },
-    {
       "ChildId": "c93bb7cc-79f4-4aa4-b857-49e8f73a2eac"/*ExecuteBufferUpdate*/,
       "Position": {
         "X": 1211.2576,
@@ -85,9 +79,14 @@
     },
     {
       "ChildId": "b00a56e7-cdb5-44c4-ae06-d047f320bd6f"/*AddInts*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 49.0
+      },
       "Position": {
-        "X": -783.6004,
-        "Y": 190.75826
+        "X": -774.9458,
+        "Y": 262.17688
       }
     },
     {
@@ -121,8 +120,8 @@
     {
       "ChildId": "d52520c4-cab7-4dc1-97d0-aa00f943d221"/*GetBufferComponents*/,
       "Position": {
-        "X": -1032.7197,
-        "Y": 488.0679
+        "X": -907.89,
+        "Y": 325.23538
       }
     },
     {
@@ -156,8 +155,8 @@
     {
       "ChildId": "bc378a28-7ae4-43e5-9b66-15114b7c163e"/*CalcDispatchCount*/,
       "Position": {
-        "X": -157.89545,
-        "Y": -153.43925
+        "X": -111.25142,
+        "Y": -170.90097
       }
     },
     {
@@ -244,6 +243,15 @@
         "X": 1116.917,
         "Y": 316.54135
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "b4f950e2-7584-44f2-a499-3986df5470ec",
+      "Title": "Tutorial Video",
+      "Description": "",
+      "LinkUrl": "https://youtu.be/ElW_0uaeiNA?feature=shared",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

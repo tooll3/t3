@@ -8,6 +8,7 @@ using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction.Variations.Model;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Interaction
 {

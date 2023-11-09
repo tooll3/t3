@@ -1,6 +1,6 @@
 {
   "Id": "4238439e-a6b4-4390-9984-e6ebf19c3a69"/*ReprojectToUV*/,
-  "Description": "Uses a camera projection and the UV layout of the incoming mesh to reproject an image onto a geometry.\n\nThis can useful for uses like projection mapping or imersive media installations.\n\nNote:\n\nFor the setup to work correctly make sure that...\n- the FOV of the viewer camera is wide enough.\n- the aspect ratio of the viewer camera matches the texture resolution\n\nSee [ReprojectToUvExample].",
+  "Description": "Uses a camera projection and the UV layout of the incoming mesh to reproject an image onto a geometry.\n\nThis can useful for uses like projection mapping or immersive media installations.\n\nNote:\n\nFor the setup to work correctly make sure that...\n- the FOV of the viewer camera is wide enough.\n- the aspect ratio of the viewer camera matches the texture resolution\n\nSee [ReprojectToUvExample].",
   "InputUis": [
     {
       "InputId": "eb4da1b0-f9c6-480d-a1a3-ac875cbf1037"/*Color*/,
@@ -241,7 +241,7 @@
       }
     },
     {
-      "ChildId": "905560db-45c8-443d-a923-405a0d65b0e8"/*GetCamProperties*/,
+      "ChildId": "905560db-45c8-443d-a923-405a0d65b0e8"/*GetCamTransformBuffer*/,
       "Position": {
         "X": 1681.6351,
         "Y": 3980.3723

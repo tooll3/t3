@@ -9,6 +9,7 @@ using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 
 namespace T3.Editor.Gui.ChildUi
@@ -20,6 +21,12 @@ namespace T3.Editor.Gui.ChildUi
             if (!(instance is Value valueInstance))
                 return SymbolChildUi.CustomUiResult.None;
 
+            var dragWidth = WidgetElements.DrawDragIndicator(area, drawList);
+            var usableArea = area;
+            area.Min.X += dragWidth;
+
+            drawList.AddRectFilled(area.Min, area.Max, UiColors.BackgroundFull.Fade(0.1f));
+            
             var symbolChild = valueInstance.Parent.Symbol.Children.Single(c => c.Id == valueInstance.SymbolChildId);
             drawList.PushClipRect(area.Min, area.Max, true);
             
@@ -70,16 +77,11 @@ namespace T3.Editor.Gui.ChildUi
                     
                     if (_activeJogDialInputSlot == inputSlot)
                     {
+                        var restarted = ImGui.IsItemActivated();
                         if (ImGui.IsItemActive())
                         {
-                            var modified = JogDialOverlay.Draw(ref value, ImGui.IsItemActivated(), _jogDialCenter, double.NegativeInfinity, double.PositiveInfinity,
-                                                           0.01f);
-                            if (modified)
-                            {
-                                inputSlot.TypedInputValue.Value = (float)value;
-                                inputSlot.Input.IsDefault = false;
-                                inputSlot.DirtyFlag.Invalidate();
-                            }
+                            SingleValueEdit.DrawValueEditGizmo(ref value,  restarted, _jogDialCenter,double.NegativeInfinity, double.PositiveInfinity, false, 0.025f);
+                            inputSlot.SetTypedInputValue((float)value);
                         }
                         else
                         {
@@ -101,7 +103,10 @@ namespace T3.Editor.Gui.ChildUi
             }
             
             drawList.PopClipRect();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels | SymbolChildUi.CustomUiResult.PreventOpenSubGraph;
+            return SymbolChildUi.CustomUiResult.Rendered 
+                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolChildUi.CustomUiResult.PreventInputLabels
+                   | SymbolChildUi.CustomUiResult.PreventTooltip;
         }
 
         private static Vector2 _jogDialCenter;

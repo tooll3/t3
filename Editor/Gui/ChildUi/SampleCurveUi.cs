@@ -1,10 +1,13 @@
 ﻿using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
+using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_b724ea74_d5d7_4928_9cd1_7a7850e4e179;
 
 namespace T3.Editor.Gui.ChildUi
@@ -15,18 +18,23 @@ namespace T3.Editor.Gui.ChildUi
         {
             if (!(instance is SampleCurve sampleCurve))
                 return SymbolChildUi.CustomUiResult.None;
-
+            
+            var dragWidth = WidgetElements.DrawDragIndicator(selectableScreenRect, drawList);
             var innerRect = selectableScreenRect;
-            innerRect.Expand(-7);
-
+            innerRect.Min.X += dragWidth;
+            innerRect.Min.Y += 1;
+            
             if (innerRect.GetHeight() < 0)
                 return SymbolChildUi.CustomUiResult.PreventTooltip
                        | SymbolChildUi.CustomUiResult.PreventOpenSubGraph
                        | SymbolChildUi.CustomUiResult.PreventInputLabels
                        | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
             
+            var curve = (sampleCurve.Curve.IsConnected) 
+                            ? sampleCurve.Curve.Value 
+                            :sampleCurve.Curve.TypedInputValue.Value;
 
-            var curve = sampleCurve.Curve.Value;
+            //var curve = sampleCurve.Curve.Value;
             if (curve == null)
             {
                 //Log.Warning("Can't draw undefined gradient");
@@ -37,8 +45,8 @@ namespace T3.Editor.Gui.ChildUi
             }
 
             ImGui.PushClipRect(innerRect.Min, innerRect.Max, true);
-            ImGui.SetCursorScreenPos(innerRect.Min);
-            ImGui.BeginChild("curve" + instance.SymbolChildId.GetHashCode(), innerRect.GetSize());
+            ImGui.SetCursorScreenPos(innerRect.Min) ;
+            ImGui.BeginChild("curve" + instance.SymbolChildId.GetHashCode(), innerRect.GetSize(), false, ImGuiWindowFlags.NoScrollbar);
             {
                 var cloneIfModified = sampleCurve.Curve.Input.IsDefault;
                 
@@ -46,6 +54,7 @@ namespace T3.Editor.Gui.ChildUi
                                                           ? T3Ui.EditingFlags.None
                                                           : T3Ui.EditingFlags.PreventMouseInteractions;
 
+                var keepPositionForIcon = ImGui.GetCursorPos() + Vector2.One;
                 var modified2 = CurveInputEditing.DrawCanvasForCurve(ref curve, 
                                                                      sampleCurve.Curve.Input,
                                                      cloneIfModified,
@@ -53,6 +62,12 @@ namespace T3.Editor.Gui.ChildUi
                                                      | preventEditingUnlessCtrlPressed
                                                      | T3Ui.EditingFlags.PreventZoomWithMouseWheel);
 
+                var showPopupIcon = innerRect.GetHeight()> ImGui.GetFrameHeight()* T3Ui.UiScaleFactor * 2;
+                if (showPopupIcon && CurveEditPopup.DrawPopupIndicator(sampleCurve.Curve.Input, ref curve, keepPositionForIcon, cloneIfModified, out var popupResult))
+                {
+                    modified2 = popupResult;
+                }
+                
                 if ((modified2 & InputEditStateFlags.Modified) != InputEditStateFlags.Nothing)
                 {
                     if (cloneIfModified)

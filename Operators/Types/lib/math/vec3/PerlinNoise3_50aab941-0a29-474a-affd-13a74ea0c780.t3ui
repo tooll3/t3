@@ -2,6 +2,20 @@
   "Id": "50aab941-0a29-474a-affd-13a74ea0c780"/*PerlinNoise3*/,
   "InputUis": [
     {
+      "InputId": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": 125.44479
+      }
+    },
+    {
+      "InputId": "c427d83b-1046-4b8d-b44a-e616a64a702a"/*AmplitudeXYZ*/,
+      "Position": {
+        "X": -2.7436478,
+        "Y": 125.44479
+      }
+    },
+    {
       "InputId": "deddfbee-386d-4f8f-9339-ec6c01908a11"/*OverrideTime*/,
       "Position": {
         "X": -2.7436478,
@@ -41,20 +55,6 @@
       "Position": {
         "X": -2.7436478,
         "Y": 80.44479
-      }
-    },
-    {
-      "InputId": "c427d83b-1046-4b8d-b44a-e616a64a702a"/*ScaleXYZ*/,
-      "Position": {
-        "X": -2.7436478,
-        "Y": 125.44479
-      }
-    },
-    {
-      "InputId": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Scale*/,
-      "Position": {
-        "X": -2.7436478,
-        "Y": 125.44479
       }
     }
   ],

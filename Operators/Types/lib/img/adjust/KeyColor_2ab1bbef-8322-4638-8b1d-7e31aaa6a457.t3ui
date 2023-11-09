@@ -1,6 +1,6 @@
 {
   "Id": "2ab1bbef-8322-4638-8b1d-7e31aaa6a457"/*KeyColor*/,
-  "Description": "A simple color keyer",
+  "Description": "A simple color keyer.",
   "InputUis": [
     {
       "InputId": "645e7d14-d4f8-46db-a5bc-b47136a00af5"/*Texture2d*/,

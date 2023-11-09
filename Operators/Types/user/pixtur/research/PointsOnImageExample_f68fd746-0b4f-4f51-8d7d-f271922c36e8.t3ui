@@ -39,7 +39,7 @@
       }
     },
     {
-      "ChildId": "a5cd52b9-eaff-4ae3-aaa7-1c655b4a4997"/*SimNoise*/,
+      "ChildId": "a5cd52b9-eaff-4ae3-aaa7-1c655b4a4997"/*SimNoiseOffset*/,
       "Position": {
         "X": 1128.1553,
         "Y": -48.750793
@@ -67,14 +67,14 @@
       }
     },
     {
-      "ChildId": "6449f997-e3b0-4e79-9178-c42c063e55d6"/*ParticleSimulation*/,
+      "ChildId": "6449f997-e3b0-4e79-9178-c42c063e55d6"/*LegacyParticleSimulation*/,
       "Position": {
         "X": 978.1553,
         "Y": -48.750793
       }
     },
     {
-      "ChildId": "455c2d7d-1be0-48a9-ad07-b63dabfc9020"/*SimDirectedForce*/,
+      "ChildId": "455c2d7d-1be0-48a9-ad07-b63dabfc9020"/*SimDirectionalOffset*/,
       "Position": {
         "X": 1278.1553,
         "Y": -48.750793

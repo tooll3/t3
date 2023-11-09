@@ -109,13 +109,6 @@
       }
     },
     {
-      "ChildId": "a5b66781-32d4-41cd-b87c-63d5493c2453"/*BlendStateOp*/,
-      "Position": {
-        "X": 164.86272,
-        "Y": 862.0713
-      }
-    },
-    {
       "ChildId": "52727e8d-1644-40aa-b735-80f98cb6c17e"/*Rasterizer*/,
       "Position": {
         "X": 621.089,
@@ -141,13 +134,6 @@
       "Position": {
         "X": 621.089,
         "Y": 257.85498
-      }
-    },
-    {
-      "ChildId": "d0c4ee7a-20b8-4cf7-8b78-583a113c41da"/*OutputMergerStage*/,
-      "Position": {
-        "X": 515.0852,
-        "Y": 898.75714
       }
     },
     {
@@ -207,21 +193,7 @@
       }
     },
     {
-      "ChildId": "f8d35b53-f7fe-4a07-9c56-88abbc4231b0"/*RenderTargetBlendDesc*/,
-      "Position": {
-        "X": 14.862717,
-        "Y": 862.0713
-      }
-    },
-    {
-      "ChildId": "e55b7850-8cd8-48b8-8136-8c6b9cb334dc"/*PickBlendMode*/,
-      "Position": {
-        "X": 365.08517,
-        "Y": 898.75714
-      }
-    },
-    {
-      "ChildId": "41d4f9a7-72f4-4373-8efc-441c1d21f7fb"/*BoolToFloats*/,
+      "ChildId": "41d4f9a7-72f4-4373-8efc-441c1d21f7fb"/*BoolToFloat*/,
       "Position": {
         "X": 93.91699,
         "Y": 119.381134

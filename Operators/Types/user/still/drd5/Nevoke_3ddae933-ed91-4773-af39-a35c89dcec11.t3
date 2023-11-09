@@ -893,7 +893,7 @@
       "Outputs": []
     },
     {
-      "Id": "718566d0-64ac-418e-819c-d066da50cdda"/*Blob*/,
+      "Id": "718566d0-64ac-418e-819c-d066da50cdda"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -2442,7 +2442,7 @@
       "Outputs": []
     },
     {
-      "Id": "4d18d142-78f7-40f6-9ae9-bec80678a13f"/*SimNoise*/,
+      "Id": "4d18d142-78f7-40f6-9ae9-bec80678a13f"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -4404,7 +4404,7 @@
       ]
     },
     {
-      "Id": "83f40718-0ed2-49d6-aa60-45462a8dda69"/*Blob*/,
+      "Id": "83f40718-0ed2-49d6-aa60-45462a8dda69"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -4543,7 +4543,7 @@
       "Outputs": []
     },
     {
-      "Id": "f7e175a3-651b-46ae-9f4e-4b1edc647990"/*SimNoise*/,
+      "Id": "f7e175a3-651b-46ae-9f4e-4b1edc647990"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -5758,7 +5758,7 @@
       "Outputs": []
     },
     {
-      "Id": "e4d6c700-8a76-4853-96bb-defd387fef46"/*SimNoise*/,
+      "Id": "e4d6c700-8a76-4853-96bb-defd387fef46"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -5792,7 +5792,7 @@
       "Outputs": []
     },
     {
-      "Id": "d84b8967-d536-4734-ade5-d7300ef033dd"/*DisplaceMesh*/,
+      "Id": "d84b8967-d536-4734-ade5-d7300ef033dd"/*DisplaceMeshNoise*/,
       "SymbolId": "b5709297-c714-4019-9d0b-6982590b5590",
       "InputValues": [
         {
@@ -6157,7 +6157,7 @@
       "SymbolId": "50aab941-0a29-474a-affd-13a74ea0c780",
       "InputValues": [
         {
-          "Id": "c427d83b-1046-4b8d-b44a-e616a64a702a"/*ScaleXYZ*/,
+          "Id": "c427d83b-1046-4b8d-b44a-e616a64a702a"/*AmplitudeXYZ*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.46,
@@ -6346,7 +6346,7 @@
       "Outputs": []
     },
     {
-      "Id": "6c42456d-3e50-457c-a424-3d74726d2d89"/*Blob*/,
+      "Id": "6c42456d-3e50-457c-a424-3d74726d2d89"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {

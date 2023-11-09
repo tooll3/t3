@@ -6,6 +6,7 @@ using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_ea7b8491_2f8e_4add_b0b1_fd068ccfed0d;
 
 namespace T3.Editor.Gui.ChildUi
@@ -89,13 +90,23 @@ namespace T3.Editor.Gui.ChildUi
             DrawCurve(drawList, graphRect, animValue, highlightEditable);
             
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered | SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolChildUi.CustomUiResult.Rendered 
+                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolChildUi.CustomUiResult.PreventInputLabels
+                   | SymbolChildUi.CustomUiResult.PreventTooltip;
+
         }
 
         private static void DrawCurve(ImDrawListPtr drawList, ImRect graphRect, AnimValue animValue, bool highlightEditable)
         {
             var graphWidth = graphRect.GetWidth();
             var h = graphRect.GetHeight();
+            
+            var shapeIndex = (animValue.Shape.IsConnected) // Todo check for animated 
+                            ? animValue.Shape.Value 
+                            :animValue.Shape.TypedInputValue.Value;
+
+            var shape = (AnimMath.Shapes)shapeIndex.Clamp(0, Enum.GetNames(typeof(AnimMath.Shapes)).Length);
             
             // Draw Graph
             {
@@ -131,7 +142,7 @@ namespace T3.Editor.Gui.ChildUi
                     var f = (float)i / GraphListSteps;
                     var fragment = f * (1 + previousCycleFragment) - previousCycleFragment + Math.Floor(animValue._normalizedTime);
 
-                    var v = AnimMath.CalcValueForNormalizedTime(animValue._shape,
+                    var v = AnimMath.CalcValueForNormalizedTime(shape,
                                                                 fragment,
                                                                 0,
                                                                 animValue.Bias.TypedInputValue.Value,

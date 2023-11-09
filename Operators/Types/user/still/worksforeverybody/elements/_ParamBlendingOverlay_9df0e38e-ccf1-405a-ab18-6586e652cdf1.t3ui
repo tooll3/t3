@@ -1,6 +1,6 @@
 {
   "Id": "9df0e38e-ccf1-405a-ab18-6586e652cdf1"/*_ParamBlendingOverlay*/,
-  "Description": "A internal scene that visualizes when playback has been slown down",
+  "Description": "An internal scene that visualizes when playback has been slowed down",
   "InputUis": [
     {
       "InputId": "d19f4570-225e-4de5-b86e-3499011dd4e1"/*IsEnabled*/,
@@ -54,7 +54,7 @@
       }
     },
     {
-      "ChildId": "ee71ac89-4319-448e-bee4-d8dfd31854d6"/*BoolToFloats*/,
+      "ChildId": "ee71ac89-4319-448e-bee4-d8dfd31854d6"/*BoolToFloat*/,
       "Position": {
         "X": -507.13947,
         "Y": 343.10266
@@ -236,7 +236,7 @@
       }
     },
     {
-      "ChildId": "3ee7e371-139c-492b-8090-1356268073ac"/*Blob*/,
+      "ChildId": "3ee7e371-139c-492b-8090-1356268073ac"/*_BlobOld*/,
       "Position": {
         "X": 1043.1829,
         "Y": -940.2804
@@ -572,7 +572,7 @@
       }
     },
     {
-      "ChildId": "344bb8eb-667c-402d-96dc-85c6c0ef5489"/*BoolToFloats*/,
+      "ChildId": "344bb8eb-667c-402d-96dc-85c6c0ef5489"/*BoolToFloat*/,
       "Position": {
         "X": -481.7901,
         "Y": 1138.8286
@@ -614,14 +614,14 @@
       }
     },
     {
-      "ChildId": "a32b3c8c-ccbc-4d26-af9f-bbaab03e06b8"/*BoolToFloats*/,
+      "ChildId": "a32b3c8c-ccbc-4d26-af9f-bbaab03e06b8"/*BoolToFloat*/,
       "Position": {
         "X": -258.49023,
         "Y": 1304.0166
       }
     },
     {
-      "ChildId": "34170228-e4ff-4032-beaf-55ee802ae061"/*BoolToFloats*/,
+      "ChildId": "34170228-e4ff-4032-beaf-55ee802ae061"/*BoolToFloat*/,
       "Position": {
         "X": -258.49023,
         "Y": 1360.0166
@@ -682,7 +682,7 @@
   "Annotations": [
     {
       "Id": "0f831f5f-f9af-49d1-82a5-de7917c4f0a7",
-      "Title": "Availibilty Indicator",
+      "Title": "Availability Indicator",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -700,7 +700,7 @@
     },
     {
       "Id": "58d471af-dc34-4f46-8282-43a1cc9df793",
-      "Title": "Other pointers",
+      "Title": "Other Pointers",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

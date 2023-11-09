@@ -1,3 +1,4 @@
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -25,6 +26,8 @@ namespace T3.Operators.Types.Id_0bec016a_5e1b_467a_8273_368d4d6b9935
 
             var needsRefreshNextFrame = onlyOnDown && wasHit;
             Result.DirtyFlag.Trigger = needsRefreshNextFrame ? DirtyFlagTrigger.Animated : DirtyFlagTrigger.None;
+            
+            ColorInGraph.DirtyFlag.Clear();
         }
 
         private bool _isSet;
@@ -47,5 +50,8 @@ namespace T3.Operators.Types.Id_0bec016a_5e1b_467a_8273_368d4d6b9935
         
         [Input(Guid = "6AD61E57-1073-483E-A0DD-96A9033AA39B")]
         public readonly InputSlot<bool> OnlyOnDown = new();
+        
+        [Input(Guid = "FA14AC1D-3247-4D36-BC96-14FF7356720A")]
+        public readonly InputSlot<Vector4> ColorInGraph = new();
     }
 }

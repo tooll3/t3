@@ -1,4 +1,5 @@
 using Microsoft.VisualBasic.ApplicationServices;
+using System.Windows.Forms;
 using T3.SystemUi;
 
 namespace T3.Editor.SystemUi;
@@ -16,5 +17,8 @@ internal static class EditorUi
             
             _instance = value;
         }
+    }
+    public static Screen[] AllScreens {
+        get => Screen.AllScreens;
     }
 }

@@ -1,6 +1,6 @@
 {
   "Id": "1fec51bc-4de7-400a-8910-db39f4129579"/*NumberPattern*/,
-  "Description": "Renders columns for values numbers that can be driven be an input texture. \nThis can be a nice effect overlay.",
+  "Description": "Renders columns for values that can be driven by an input texture. This can create a nice effect as an overlay.",
   "InputUis": [
     {
       "InputId": "8a3681fa-4820-4855-9a12-c3740772f4d8"/*Texture*/,

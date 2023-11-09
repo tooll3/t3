@@ -54,6 +54,9 @@ namespace T3.Operators.Types.Id_e1c294b5_1ea8_435e_a437_26d280d3c2f4
 
         [Input(Guid = "b64c4ece-8b59-4b32-a5fe-b99006286987")]
         public readonly InputSlot<Object> CameraReference = new InputSlot<Object>();
+
+        [Input(Guid = "ea737eeb-e936-48c0-aaa7-8247fea95228")]
+        public readonly InputSlot<float> Decay = new InputSlot<float>();
     }
 }
 

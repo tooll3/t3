@@ -1,6 +1,6 @@
 {
   "Id": "33424f7f-ea2d-4753-bbc3-8df00830c4b5"/*AdvancedFeedback*/,
-  "Description": "An advanced version of the [FluidFeedback] effect which much more versatile but harder to control.\nIt also utilizes [DetectEdges] and stabilizes the feedbackback buffer to a meaningful value range and thus avoiding black or overly bright values.",
+  "Description": "An advanced version of the [FluidFeedback] effect is much more versatile but harder to control. It also utilizes [DetectEdges] and stabilizes the feedback buffer to a meaningful value range, thus avoiding black or overly bright values.",
   "InputUis": [
     {
       "InputId": "0f29ca23-b5fb-484e-8ae6-8ed70d67d623"/*Command*/,
@@ -310,7 +310,7 @@
   "Annotations": [
     {
       "Id": "bb61c901-78de-4d49-b181-bf0f9cffb061",
-      "Title": "Reset Buffer when backwards",
+      "Title": "Resets the buffer when going backwards.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -325,6 +325,22 @@
         "X": 380.0,
         "Y": 212.0
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "1b600a25-ed50-4ec8-bdc3-81187fe32b52",
+      "Title": "Overview",
+      "Description": "This 10 min video gives an overview of how this effect works.",
+      "LinkUrl": "https://youtu.be/M7eOmqiUOZM",
+      "LinkType": "TutorialVideo"
+    },
+    {
+      "Id": "2c1a8f78-f23c-4d91-8f23-8ae236f815bc",
+      "Title": "Example for blending",
+      "Description": "A quick illustration how blending presets and fake lighting can be applied to achive various effects.",
+      "LinkUrl": "https://www.youtube.com/watch?v=iIxSKv_WKoM",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

@@ -66,7 +66,7 @@
       "Outputs": []
     },
     {
-      "Id": "db32fcca-421e-4bde-b87b-8b299bdb2d3d"/*ParticleSimulation*/,
+      "Id": "db32fcca-421e-4bde-b87b-8b299bdb2d3d"/*LegacyParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {
@@ -102,7 +102,7 @@
       "Outputs": []
     },
     {
-      "Id": "a7ff893b-f2f0-4517-9158-927a4644c8d1"/*SimNoise*/,
+      "Id": "a7ff893b-f2f0-4517-9158-927a4644c8d1"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [],
       "Outputs": []
@@ -276,7 +276,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\images\\white.png"
+          "Value": "Resources\\common\\images\\white.png"
         }
       ],
       "Outputs": []

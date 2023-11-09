@@ -48,6 +48,10 @@ namespace T3.Editor.Gui.Windows.Output
 
                 ImGui.EndCombo();
             }
+            else
+            {
+                CustomComponents.TooltipForLastItem("Adjust requested output resolution", "This can either be an aspect ratio or a fixed resolution. This is be used by all Image operators if their resolution is set to 0 or -1. Please read documentation for more details.");
+            }
         }
         
         public static void Save()

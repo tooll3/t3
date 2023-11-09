@@ -35,11 +35,12 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
                     ImGui.InvisibleButton("button", labelSize);
                     
                     double value2 = inputSlot.TypedInputValue.Value;
+                    var restarted = false;
                     if (ImGui.IsItemActivated() && ImGui.GetIO().KeyCtrl)
                     {
                         _jogDailCenter = ImGui.GetIO().MousePos;
                         _jogDialValue = inputSlot;
-                        drawList.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), UiColors.WidgetHighlight);
+                        restarted = true;
                     }
                     
                     if (ImGui.IsItemActive() || !ImGui.IsAnyItemActive())
@@ -55,14 +56,9 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
                     {
                         if (ImGui.IsItemActive())
                         {
-                            modified = JogDialOverlay.Draw(ref value, ImGui.IsItemActivated(), _jogDailCenter, double.NegativeInfinity, double.PositiveInfinity,
-                                                           0.01f);
-                            if (modified)
-                            {
-                                inputSlot.TypedInputValue.Value = (float)value;
-                                inputSlot.Input.IsDefault = false;
-                                inputSlot.DirtyFlag.Invalidate();
-                            }
+                            SingleValueEdit.DrawValueEditGizmo(ref value,  restarted, _jogDailCenter,double.NegativeInfinity, double.PositiveInfinity, false, 0.025f);
+                            inputSlot.SetTypedInputValue((float)value);
+                            modified = true;
                         }
                         else
                         {
@@ -73,7 +69,7 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
             }
             
             // Draw aligned label
-            {
+            if(!string.IsNullOrEmpty(valueText)){
                 ImGui.PushFont(Fonts.FontSmall);
                 var labelSize = ImGui.CalcTextSize(valueText);
                 var space = screenRect.GetSize() - labelSize;

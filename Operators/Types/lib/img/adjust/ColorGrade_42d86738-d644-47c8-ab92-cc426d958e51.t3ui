@@ -1,6 +1,6 @@
 {
   "Id": "42d86738-d644-47c8-ab92-cc426d958e51"/*ColorGrade*/,
-  "Description": "Adjusts the color grading of the incoming image for the Gain (highlights), Gamma (mid tones), Lift (Shadows).\n\nGray values are neutral. Alpha can be used to amplify the effect. \nVignette color, size and possition can be used for additional effects.\n\nTry...\n- ...blending by by hovering presets while holding the ALT key.\n- ...dragging the parameter color swatches vertically with the left and right mouse button to quickly adjust brightness and alpha.\n- ...adding a [WaveForm2] operator to visualize the image properties.\n\nAlso consider using [AdjustColors]\n",
+  "Description": "Adjusts the color grading of the incoming image for the Gain (highlights), Gamma (mid-tones), and Lift (shadows).\n\nGray values are neutral. Alpha can be used to amplify the effect. Vignette color, size, and position can be used for additional effects.\n\nTry:\n- blending by hovering over presets while holding the ALT key.\n- dragging the parameter color swatches vertically with the left and right mouse button to quickly adjust brightness and alpha.\n- adding a [WaveForm2] operator to visualize the image properties.\n\nAlso consider using [AdjustColors].",
   "InputUis": [
     {
       "InputId": "777b2c27-a3c8-40d0-a196-80a08af51296"/*Texture2d*/,
@@ -157,6 +157,22 @@
         "X": 939.8677,
         "Y": 642.9786
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "4b7072b5-d25d-40c4-a835-6724c8b59b50",
+      "Title": "Overview",
+      "Description": "Gives a quick overview on how to use this operator",
+      "LinkUrl": "https://youtu.be/_P4-VKhJXhE",
+      "LinkType": "TutorialVideo"
+    },
+    {
+      "Id": "eec4ba0d-e146-49b0-8e26-4db169cdb588",
+      "Title": "Combing with Presets",
+      "Description": "A quick showcase how using presets can have to refine a color grade.",
+      "LinkUrl": "https://www.youtube.com/watch?v=tk6RY-F7uGU",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

@@ -51,12 +51,12 @@ namespace T3.Editor.Gui.Graph
                 //                  ColorVariations.OperatorInputZone.Apply(typeColor));
 
                 // Label
-                {
+                if(!string.IsNullOrEmpty(outputDef.Name)){
                     var isScaledDown = GraphCanvas.Current.Scale.X < 1;
                     drawList.PushClipRect(LastScreenRect.Min, LastScreenRect.Max, true);
                     ImGui.PushFont(isScaledDown ? Fonts.FontSmall : Fonts.FontBold);
 
-                    var label = string.Format($"{outputDef.Name}");
+                    var label = outputDef.Name;
                     drawList.AddText(LastScreenRect.Min, ColorVariations.OperatorLabel.Apply(typeColor), label);
                     
                     ImGui.PopFont();

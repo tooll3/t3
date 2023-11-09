@@ -1,7 +1,14 @@
 {
   "Id": "2c3d2c26-ac45-42e9-8f13-6ea338333568"/*LinearGradient*/,
-  "Description": "Renders a linear color ramp defined by a gradient. Can be very useful in combination with [Steps].",
+  "Description": "Renders a linear color ramp defined by a gradient. This can be very useful in combination with [Steps].",
   "InputUis": [
+    {
+      "InputId": "d6e157fb-5300-4a9a-aea8-8b0ea0104ea3"/*Image*/,
+      "Position": {
+        "X": -302.90216,
+        "Y": -81.20439
+      }
+    },
     {
       "InputId": "e47e9e63-9c94-4c29-9555-2452fa498d57"/*Gradient*/,
       "Position": {
@@ -98,13 +105,6 @@
       }
     },
     {
-      "InputId": "d6e157fb-5300-4a9a-aea8-8b0ea0104ea3"/*Image*/,
-      "Position": {
-        "X": -300.60208,
-        "Y": 934.9955
-      }
-    },
-    {
       "InputId": "1d0cf561-858d-4510-95c4-f3ad9148355d"/*BlendMode*/,
       "Position": {
         "X": -300.60208,
@@ -128,14 +128,14 @@
       }
     },
     {
-      "ChildId": "693baad7-d351-44de-af5c-cd0212003e35"/*BoolToFloats*/,
+      "ChildId": "693baad7-d351-44de-af5c-cd0212003e35"/*BoolToFloat*/,
       "Position": {
         "X": -3.5769958,
         "Y": 266.08337
       }
     },
     {
-      "ChildId": "67faeb1c-65dc-4b2c-9a33-2c99f979dfc3"/*BoolToFloats*/,
+      "ChildId": "67faeb1c-65dc-4b2c-9a33-2c99f979dfc3"/*BoolToFloat*/,
       "Position": {
         "X": -3.5769958,
         "Y": 322.08337

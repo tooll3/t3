@@ -12,23 +12,18 @@
     },
     {
       "ChildId": "264e9fd5-ce72-470a-9d2c-8bfe31a60a17"/*TorusMesh*/,
+      "Comment": "We slightly adjust the radius and width...",
       "Position": {
-        "X": -42.6709,
-        "Y": 130.24854
+        "X": 97.478424,
+        "Y": 159.47754
       }
     },
     {
       "ChildId": "e5315f37-a88a-479a-88c3-f00f1e32affd"/*RadialPoints*/,
+      "Comment": "Notice how we disabled CloseCircleLine. Since we don't draw lines we don't need to repeat the start and end points.\n\nWe also adjust the orientation angle with a random axis and adjust the orientation angle so that the Torus are aligned at the z-axis.",
       "Position": {
         "X": 107.3291,
         "Y": 67.248535
-      }
-    },
-    {
-      "ChildId": "6a98b9c4-e2f0-46a4-9640-35e95e56a603"/*TransformMesh*/,
-      "Position": {
-        "X": 107.3291,
-        "Y": 130.24854
       }
     },
     {
@@ -47,6 +42,7 @@
     },
     {
       "ChildId": "aacdecb6-5db8-434c-8a1a-cf02e728b129"/*VisualizePoints*/,
+      "Comment": "Notice how the Tori are aligned towards the blue z-axis of each point.",
       "Position": {
         "X": 257.3291,
         "Y": -1.7514648
@@ -74,6 +70,13 @@
         "X": 870.6748,
         "Y": 42.02365
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "246cfab4-14d9-4d6a-935a-65757f86b365",
+      "Description": "",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

@@ -26,7 +26,7 @@
       }
     },
     {
-      "OutputId": "b48f674b-2b5a-4501-992e-26e07a247ddf"/*RoughnessSpecularMetallicOcclusionMap*/,
+      "OutputId": "b48f674b-2b5a-4501-992e-26e07a247ddf"/*RoughnessMetallicOcclusionMap*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0

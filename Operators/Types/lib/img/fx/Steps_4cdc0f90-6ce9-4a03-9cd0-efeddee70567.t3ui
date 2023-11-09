@@ -1,14 +1,7 @@
 {
   "Id": "4cdc0f90-6ce9-4a03-9cd0-efeddee70567"/*Steps*/,
-  "Description": "A versatile effect that uses the value of the input image to draw \"steps\". These can be shaded and animated.",
+  "Description": "A versatile effect that uses the value of the input image to draw 'steps'. These can be shaded and animated.",
   "InputUis": [
-    {
-      "InputId": "3fa998ee-becf-4a32-948f-5c5be67d7728"/*Resolution*/,
-      "Position": {
-        "X": -198.16037,
-        "Y": -57.877563
-      }
-    },
     {
       "InputId": "c5c7888a-294d-4a51-a68d-446cc7f1444c"/*Image*/,
       "Relevancy": "Required",
@@ -18,17 +11,17 @@
       }
     },
     {
-      "InputId": "dc99dcb5-481e-4b43-afdf-ad6d318ed24f"/*Count*/,
+      "InputId": "3fa998ee-becf-4a32-948f-5c5be67d7728"/*Resolution*/,
       "Position": {
-        "X": -266.496,
-        "Y": 93.80644
+        "X": -198.16037,
+        "Y": 32.122437
       }
     },
     {
-      "InputId": "8508a689-e4bd-45a7-9b3b-947bc34f4051"/*Repeats*/,
+      "InputId": "dc99dcb5-481e-4b43-afdf-ad6d318ed24f"/*Count*/,
       "Position": {
-        "X": -244.44461,
-        "Y": 146.2508
+        "X": -234.65692,
+        "Y": 121.563614
       }
     },
     {
@@ -78,6 +71,20 @@
       "Position": {
         "X": -242.91684,
         "Y": 540.4894
+      }
+    },
+    {
+      "InputId": "bea7eaac-91f0-4001-864f-2ddda0330cbd"/*Repeat*/,
+      "Position": {
+        "X": -242.91684,
+        "Y": 585.4894
+      }
+    },
+    {
+      "InputId": "eae96c29-6f21-43b2-b17e-eb9e140863ab"/*UseSuperSampling*/,
+      "Position": {
+        "X": -242.91684,
+        "Y": 630.4894
       }
     }
   ],
@@ -249,15 +256,29 @@
     {
       "ChildId": "928e184f-42ba-4a33-97b3-0bcfc55a3b95"/*Vector4ToFloat4*/,
       "Position": {
-        "X": -47.77715,
-        "Y": 381.71548
+        "X": -49.818134,
+        "Y": 396.00226
       }
     },
     {
       "ChildId": "3a7c697a-f03a-4d28-b1c0-a9d2d82556a6"/*IntToFloat*/,
       "Position": {
-        "X": -47.77715,
-        "Y": 437.71548
+        "X": -69.54747,
+        "Y": 292.1265
+      }
+    },
+    {
+      "ChildId": "bb52dc73-9f53-490b-a1fa-fa2862f700ac"/*BoolToFloat*/,
+      "Position": {
+        "X": -69.793884,
+        "Y": 634.2136
+      }
+    },
+    {
+      "ChildId": "c0ff1f7f-399f-47c6-9d92-a8d27187d69b"/*BoolToFloat*/,
+      "Position": {
+        "X": -98.959656,
+        "Y": 715.7848
       }
     }
   ],
@@ -265,9 +286,18 @@
     {
       "OutputId": "b2c389a0-6f8c-4e64-b3d5-09b549ae32c1"/*TextureOutput*/,
       "Position": {
-        "X": 1559.2941,
-        "Y": 381.17535
+        "X": 1645.63,
+        "Y": 364.24677
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "885345c6-c81d-4420-98d3-9f8226829bf0",
+      "Title": "Tutorial",
+      "Description": "A quick overview of the effect and its parameters.",
+      "LinkUrl": "https://youtu.be/DTIl2QmkumE",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

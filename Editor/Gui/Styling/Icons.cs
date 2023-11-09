@@ -8,11 +8,11 @@ namespace T3.Editor.Gui.Styling
     /// <summary>
     /// Handles the mapping of custom icons
     /// </summary>
-    static class Icons
+    internal static class Icons
     {
         public static ImFontPtr IconFont { get; set; }
 
-        public static void Draw(Icon icon)
+        private static void Draw(Icon icon)
         {
             ImGui.PushFont(IconFont);
             ImGui.TextUnformatted(((char)(int)icon).ToString());
@@ -80,12 +80,12 @@ namespace T3.Editor.Gui.Styling
                               color);
         }
 
-        public static void DrawIconOnLastItem(Icon icon, Color color)
+        public static void DrawIconOnLastItem(Icon icon, Color color, float alignment= 0.5f)
         {
             var pos = ImGui.GetItemRectMin();
             var size = ImGui.GetItemRectMax() - pos;
             GetGlyphDefinition(icon, out var uvRange, out var iconSize);
-            var centerOffset = MathUtils.Floor((size - iconSize)/2);
+            var centerOffset = MathUtils.Floor( (size - iconSize) * new Vector2( alignment, 0.5f));
             var alignedPos = pos + centerOffset;
             ImGui.GetWindowDrawList().AddImage(ImGui.GetIO().Fonts.TexID,
                                                alignedPos,
@@ -165,6 +165,7 @@ namespace T3.Editor.Gui.Styling
         
         public static readonly IconSource[] CustomIcons =
             {
+                new (Icon.None, 0),                
                 new (Icon.DopeSheetKeyframeLinearSelected, 0, new Vector2(15, 25)),
                 new (Icon.DopeSheetKeyframeLinear, 1, new Vector2(15, 25)),
                 new (Icon.LastKeyframe, 2, new Vector2(15, 25)),
@@ -226,7 +227,7 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.Plus,  54),
                 new (Icon.HoverScrub,  55),
                 new (Icon.AutoRefresh,  56),
-                new (Icon.Camera,  57),
+                new (Icon.Snapshot,  57),
                 new (Icon.Move, 58),
                 new (Icon.Scale, 59),
                 new (Icon.Rotate, 60),
@@ -245,7 +246,10 @@ namespace T3.Editor.Gui.Styling
                 new (Icon.AddOpToInput, 73),
                 new (Icon.ExtractInput, 74),
                 new (Icon.IO, 75),
-                new (Icon.None, 75),
+                new (Icon.Flame, 76),
+                new (Icon.Comment, 77),
+                new (Icon.Camera, 78),
+                new (Icon.PopUp, slotIndex:79),
             };
 
         public const string IconAtlasPath = @"Resources\t3-editor\images\t3-icons.png";
@@ -310,7 +314,7 @@ namespace T3.Editor.Gui.Styling
         Plus,
         HoverScrub,
         AutoRefresh,
-        Camera,
+        Snapshot,
         Move,
         Scale,
         Rotate,
@@ -328,7 +332,10 @@ namespace T3.Editor.Gui.Styling
         AddKeyframe,
         AddOpToInput,
         ExtractInput,
+        Flame,
         IO,
-        
+        Comment,
+        Camera,
+        PopUp
     }
 }

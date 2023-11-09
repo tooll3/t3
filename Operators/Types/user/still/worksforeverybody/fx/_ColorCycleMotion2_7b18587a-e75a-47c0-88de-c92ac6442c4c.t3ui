@@ -1,6 +1,6 @@
 {
   "Id": "7b18587a-e75a-47c0-88de-c92ac6442c4c"/*_ColorCycleMotion2*/,
-  "Description": "A new implementation with loop interation count.",
+  "Description": "A new implementation with loop iteration count.",
   "InputUis": [
     {
       "InputId": "71c3818f-bd7a-4979-bf83-56b56ccea6b0"/*CameraReference*/,
@@ -384,7 +384,7 @@
   "Annotations": [
     {
       "Id": "fa9a1042-d480-4e0c-b646-06400f160ff6",
-      "Title": "Sadly including the camera shift offset into the op didn't work.\nI still need to figure our what's breaking the update for this method.",
+      "Title": "Sadly, including the camera shift offset into the op didn't work. I still need to figure out what's breaking the update for this method.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

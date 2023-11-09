@@ -1,6 +1,6 @@
 {
   "Id": "0ed2bee3-641f-4b08-8685-df1506e9af3c"/*SetMaterial*/,
-  "Description": "Sets the phyical base rendering (PBR) material for the current RenderTarget which is then used by [DrawMesh] and other PBR rendering operators. Each of the material properties can be controlled by a color or by connecting a texture input.\n\nPlease note that color parameter is multiplied to the texture: so to for an emissive texture to be visible, you have to first set the Emissive Color to one.\n\nThe base (albedo) color can also be adjusted by the Draw operators.\n\nFor the roughness rendering the draw operators need an IBL texture set by [SetEnviroment] . We uses a default IBL map as a default.\n\n\nAlso see: [HowToDrawThings]",
+  "Description": "Sets the physical base rendering (PBR) material for the current RenderTarget which is then used by [DrawMesh] and other PBR rendering operators. Each of the material properties can be controlled by a color or by connecting a texture input.\n\nPlease note that color parameter is multiplied to the texture: so to for an emissive texture to be visible, you have to first set the Emissive Color to one.\n\nThe base (albedo) color can also be adjusted by the Draw operators.\nPlease use [CombineMaterialChannels] to combine Roughness, Metallic and Occlusion textures into a single texture that can be connected to the .RoughnessMetallicOcclusion parameter.\nFor the roughness rendering the draw operators need an IBL texture set by [SetEnvironment] . We uses a default IBL map as a default.\n\n\nAlso see: [HowToDrawThings]",
   "InputUis": [
     {
       "InputId": "2a585a23-b60c-4c8b-8cfa-9ab2a8b04c7a"/*SubTree*/,
@@ -32,6 +32,13 @@
       }
     },
     {
+      "InputId": "6d859756-0243-42c5-973d-6de2dcdc5609"/*EmissiveColorMap*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 405.0
+      }
+    },
+    {
       "InputId": "9d5ca726-28b0-4f3d-a5aa-f0ae3e2043a9"/*Specular*/,
       "Position": {
         "X": -200.0,
@@ -44,7 +51,7 @@
         "X": -200.0,
         "Y": 225.0
       },
-      "Min": 0.0,
+      "Min": -1.0,
       "Max": 1.0,
       "Clamp": true
     },
@@ -63,17 +70,10 @@
       }
     },
     {
-      "InputId": "c8003fbd-c6ce-440c-9f1f-6b15b5ee5274"/*RoughnessSpecularMetallicOcclusionMap*/,
+      "InputId": "c8003fbd-c6ce-440c-9f1f-6b15b5ee5274"/*RoughnessMetallicOcclusionMap*/,
       "Position": {
         "X": -200.0,
         "Y": 360.0
-      }
-    },
-    {
-      "InputId": "6d859756-0243-42c5-973d-6de2dcdc5609"/*EmissiveColorMap*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 405.0
       }
     }
   ],

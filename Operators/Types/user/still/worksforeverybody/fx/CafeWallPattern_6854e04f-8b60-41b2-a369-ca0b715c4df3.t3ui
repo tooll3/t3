@@ -1,6 +1,6 @@
 {
   "Id": "6854e04f-8b60-41b2-a369-ca0b715c4df3"/*CafeWallPattern*/,
-  "Description": "A simple shader der creates a Cafe Wall optical illusion pattern.",
+  "Description": "A simple shader that creates a Cafe Wall optical illusion pattern.",
   "InputUis": [
     {
       "InputId": "2ac6c8b8-ebf5-4653-b390-da008c4be0e6"/*Image*/,

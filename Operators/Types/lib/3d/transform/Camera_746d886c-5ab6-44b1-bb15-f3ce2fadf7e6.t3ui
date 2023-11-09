@@ -52,14 +52,19 @@
       "Position": {
         "X": 0.0,
         "Y": 0.0
-      }
+      },
+      "Min": 0.0,
+      "Max": 180.0,
+      "Clamp": true
     },
     {
       "InputId": "764ca304-fc86-48a9-9c82-a04fac7eadb2"/*Roll*/,
       "Position": {
         "X": 0.0,
         "Y": 0.0
-      }
+      },
+      "Min": -90.0,
+      "Max": 90.0
     },
     {
       "InputId": "fee19916-846f-491a-a2ee-1e7b1ac8e533"/*PositionOffset*/,

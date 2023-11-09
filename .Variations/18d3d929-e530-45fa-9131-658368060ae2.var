@@ -188,6 +188,33 @@
           }
         }
       }
+    },
+    {
+      "Id": "5f90ebe0-c5c9-4806-8469-f993ee139664",
+      "IsPreset": true,
+      "ActivationIndex": 10,
+      "Title": "Particle-Streaks",
+      "PosOnCanvas": {
+        "X": 326.0,
+        "Y": 186.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "7df44a8d-af20-400f-b8a7-4b2200f55ec1": {
+            "X": 0.2,
+            "Y": 2.0
+          },
+          "3247ff54-e470-466a-a70c-cdba1e264f6b": false,
+          "909bdbcd-620c-479e-b150-cb7adfbfffe8": 2,
+          "14e0d722-9441-4bc0-b164-e0b8cae990e3": 100.0,
+          "f9c698ae-3b59-4f1d-8497-c668f5037795": {
+            "X": 1.0,
+            "Y": 0.0,
+            "Z": 0.0
+          },
+          "6ac9265b-c6ae-47dc-a605-993d685edf90": 3
+        }
+      }
     }
   ]
 }

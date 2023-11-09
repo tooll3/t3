@@ -1,6 +1,6 @@
 {
   "Id": "fc3a89d4-e7ea-45d8-b1c5-41170c7cd2b8"/*HowToUseOperators*/,
-  "Description": "This example gives a playful interactive introduction to Tooll's operators and how they work.",
+  "Description": "This example gives a playful, interactive introduction to Tooll's operators and how they work.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -272,14 +272,14 @@
     {
       "ChildId": "3be42ef4-a02c-488d-a637-31b7219b7da0"/*CubeMesh*/,
       "Position": {
-        "X": -1919.7144,
+        "X": -1920.0626,
         "Y": 518.6839
       }
     },
     {
       "ChildId": "31b653bd-4407-4693-baf9-d01a953ef0a3"/*DrawMesh*/,
       "Position": {
-        "X": -1769.7144,
+        "X": -1770.0626,
         "Y": 518.6839
       }
     },
@@ -300,134 +300,129 @@
     {
       "ChildId": "66d47c3f-ba6a-4c70-b0a1-0cd0335e39f1"/*Transform*/,
       "Position": {
-        "X": -1471.8904,
-        "Y": 1033.7155
+        "X": -1472.847,
+        "Y": 1001.2727
       }
     },
     {
       "ChildId": "ec8df3df-7aa2-4026-aff3-9af75710c513"/*Transform*/,
       "Position": {
-        "X": -1621.8904,
-        "Y": 1033.7155
+        "X": -1622.847,
+        "Y": 1001.2727
       }
     },
     {
       "ChildId": "5ee5ff9f-fdd3-44c5-82b9-bb901c5b1761"/*RenderTarget*/,
       "Position": {
-        "X": -1298.4149,
-        "Y": 1032.3405
+        "X": -1299.3716,
+        "Y": 999.8977
       }
     },
     {
       "ChildId": "c892e811-9fb5-4531-9a12-e12ee808eb27"/*PerlinNoise3*/,
       "Position": {
-        "X": -1621.8904,
-        "Y": 1102.7155
+        "X": -1622.847,
+        "Y": 1070.2727
       }
     },
     {
       "ChildId": "66068d44-0d2b-49e7-b68c-98b156c23e61"/*PerlinNoise3*/,
       "Position": {
-        "X": -1771.8904,
-        "Y": 1102.7155
+        "X": -1772.847,
+        "Y": 1070.2727
       }
     },
     {
       "ChildId": "cecc4ad0-ec7b-48c7-880c-6515f485e1aa"/*CubeMesh*/,
       "Position": {
-        "X": -1754.1608,
-        "Y": 804.9958
+        "X": -1755.1174,
+        "Y": 772.55304
       }
     },
     {
       "ChildId": "851c8ad1-83e0-4614-abe5-4196e948e0ed"/*DrawMesh*/,
       "Position": {
-        "X": -1604.1606,
-        "Y": 804.9958
+        "X": -1605.1173,
+        "Y": 772.55304
       }
     },
     {
       "ChildId": "5204f449-14b7-4ae8-b7b9-691311864af1"/*Red Material*/,
       "Position": {
-        "X": -1566.1118,
-        "Y": 905.12445
+        "X": -1567.0685,
+        "Y": 872.6817
       }
     },
     {
       "ChildId": "32315db2-0a54-4955-939e-396166be9a3f"/*Blue Material*/,
       "Position": {
-        "X": -1716.1118,
-        "Y": 905.12445
+        "X": -1717.0685,
+        "Y": 872.6817
       }
     },
     {
       "ChildId": "f2d85f4d-e920-4ac7-93fd-66ee79174877"/*RenderTarget*/,
       "Position": {
-        "X": -1322.3734,
-        "Y": 1335.4336
+        "X": -1342.9971,
+        "Y": 1276.2559
       }
     },
     {
       "ChildId": "fa34d2db-546e-4e0b-8727-f7940e87c0a1"/*Switch*/,
+      "Comment": "We use the connected index to pick which of the connected sub graphs should be evaluate.\n\nThere are a number interesting things here:\n\n1. If the index is positve wraps around (I.e. uses a modulo with the count of connections)\n2. If parts of the subgraph are no longer evaluated, they fade out.\n\nTip:\n\nYou can use negative indices to show none or all children.",
       "Position": {
-        "X": -1492.9773,
-        "Y": 1364.2485
+        "X": -1492.9971,
+        "Y": 1276.2559
       }
     },
     {
       "ChildId": "7bc3a385-b225-49ad-bded-781c9e549a47"/*CountInt*/,
       "Position": {
-        "X": -1642.9773,
-        "Y": 1487.2485
+        "X": -1642.9971,
+        "Y": 1388.2559
       }
     },
     {
       "ChildId": "408ef106-ec9b-4661-85be-99f940c2873b"/*Counter*/,
+      "Comment": "We use the second \"was triggered\" output to count up an integer intex.\n\nThat's a workaround because we can't directly connect the output float value to the integer index.\n\nAn alternative solution would be to use [FloatToInt].",
       "Position": {
-        "X": -1792.9773,
-        "Y": 1476.2485
+        "X": -1792.9971,
+        "Y": 1388.2559
       }
     },
     {
       "ChildId": "3ca0ec7b-492a-48be-8ad8-0a5801760ff8"/*DrawMesh*/,
       "Position": {
-        "X": -1642.9773,
-        "Y": 1364.2485
-      }
-    },
-    {
-      "ChildId": "cce29d86-6dbd-4200-b588-7a92fc42e2a7"/*_AnimValueOld*/,
-      "Position": {
-        "X": -1945.4811,
-        "Y": 1339.1603
+        "X": -1642.9971,
+        "Y": 1276.2559
       }
     },
     {
       "ChildId": "b03a2d15-c2f5-4568-ad65-6df84bb90eb0"/*SampleGradient*/,
       "Position": {
-        "X": -1795.4811,
-        "Y": 1339.1603
+        "X": -1795.5009,
+        "Y": 1251.1676
       }
     },
     {
       "ChildId": "e24e7679-a5c5-483f-8dfe-7e177ef63875"/*TorusMesh*/,
       "Position": {
-        "X": -1945.4811,
-        "Y": 1382.1603
+        "X": -1945.5009,
+        "Y": 1294.1676
       }
     },
     {
       "ChildId": "c0cdfc66-21e1-4fff-b791-f812e1daeb52"/*DrawMesh*/,
       "Position": {
-        "X": -1792.9773,
-        "Y": 1420.2485
+        "X": -1792.9971,
+        "Y": 1332.2559
       }
     },
     {
       "ChildId": "246ebb95-a615-44b8-bb27-5a759acac9f7"/*OrbitCamera*/,
       "Position": {
-        "X": -1642.9773,
-        "Y": 1420.2485
+        "X": -1642.9971,
+        "Y": 1332.2559
       }
     },
     {
@@ -443,21 +438,35 @@
         "X": -1320.0626,
         "Y": 515.98047
       }
+    },
+    {
+      "ChildId": "763490c0-ea9e-4f35-8ea8-ddda568da24c"/*SetMaterial*/,
+      "Position": {
+        "X": -1614.9738,
+        "Y": 523.80347
+      }
+    },
+    {
+      "ChildId": "76bda61a-c169-4db1-b2c8-85fbbae7242d"/*AnimValue*/,
+      "Position": {
+        "X": -1945.5009,
+        "Y": 1251.1676
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "2621700c-8798-40ea-9dc8-a3f5ed1d0f41"/*Texture*/,
       "Position": {
-        "X": -935.7718,
-        "Y": 382.09998
+        "X": -934.16095,
+        "Y": 523.8529
       }
     }
   ],
   "Annotations": [
     {
       "Id": "f2ae8a9c-8d73-4698-9e04-e8fab0ac2797",
-      "Title": "Everything in T3 is made out of operators.\nThese operators can be structured into the following categories.",
+      "Title": "Everything in T3 is made out of operators. These operators can be structured into the following categories.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -601,11 +610,11 @@
     },
     {
       "Id": "5bdcc582-0109-4388-bdf5-4d580fa2a967",
-      "Title": "You can quickly distinguish the catories by their respective output type: Float-Number, Buffer, Command, Image, etc.\nThere are many more types but understanding these foundations will get you far...",
+      "Title": "You can quickly distinguish the categories by their respective output types: \n\nFloat-Number, Buffer, Command, Image, etc. \nThere are many more types, but understanding these foundations will get you far...",
       "Color": {
-        "X": 0.4787234,
-        "Y": 0.4787234,
-        "Z": 0.4787234,
+        "X": 0.56961846,
+        "Y": 0.64893615,
+        "Z": 0.4004074,
         "W": 1.0
       },
       "Position": {
@@ -614,12 +623,12 @@
       },
       "Size": {
         "X": 1331.7814,
-        "Y": 71.779
+        "Y": 78.30433
       }
     },
     {
       "Id": "d07b68ba-775d-44e2-9299-f9963d881164",
-      "Title": "Although the data is flowing from left to right, the graph is actually \"evaluated\" from right to left!\n\nLet's look at the following example.\nPlease click on the [RenderTarget]...\n\n\n",
+      "Title": "Although the data is flowing from left to right, \nthe graph is actually \"evaluated\" from right to left! \nLet's look at the following example. Please click on the [RenderTarget]...",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -631,13 +640,13 @@
         "Y": 120.11609
       },
       "Size": {
-        "X": 816.1749,
-        "Y": 308.19562
+        "X": 993.3662,
+        "Y": 309.80643
       }
     },
     {
       "Id": "b03d9382-caa3-47b9-ad9c-5db277583562",
-      "Title": "1. If this RenderTarget\nis selected, it \"requests\"\nits input command.",
+      "Title": "1. If this RenderTarget \nis selected, it \"requests\" \nits input command.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -655,7 +664,7 @@
     },
     {
       "Id": "38cdb32d-2357-45fe-9774-6681b00b93fd",
-      "Title": "2. This connected operator\nsets a camera perspective\nand also requests its connected \ncommand.",
+      "Title": "2. This connected operator \nsets a camera perspective \nand also requests its \nconnected command.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -673,7 +682,7 @@
     },
     {
       "Id": "c585a017-bbda-4ce7-b26a-159a9f4eb27a",
-      "Title": "3. This operator finally wants\nto \"draw\" something,\nbut it needs some\ncontent, so, ...",
+      "Title": "3. This operator finally \nwants to \"draw\" something, \nbut it needs some content, \nso...",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -691,7 +700,7 @@
     },
     {
       "Id": "2fca86b0-adbd-45af-a8e1-f8bf5711cb07",
-      "Title": "4.  ... finally this operator\nprovides the actually data\nin form of faces and vertices.",
+      "Title": "4. ... finally, this operator \nprovides the actual data \nin the form of faces and \nvertices.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -709,7 +718,7 @@
     },
     {
       "Id": "54cb1d11-87a9-4a3e-9be8-bb675fffd24f",
-      "Title": "This example show that graphs can form complex networks (but not loops).",
+      "Title": "This example shows that graphs can form complex networks (but not cycles).",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -722,12 +731,12 @@
       },
       "Size": {
         "X": 993.81464,
-        "Y": 294.198
+        "Y": 269.58813
       }
     },
     {
       "Id": "d4dc659e-f088-44da-87a4-962d9faa2984",
-      "Title": "While the graph is being evaluated (remember: from right to left), parameters\nfor where and how to draw things are collected.\n\n",
+      "Title": "While the graph is being evaluated (remember: from right to left), \nparameters for where and how to draw things are collected.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -735,17 +744,17 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1963.1359,
-        "Y": 751.264
+        "X": -1964.0925,
+        "Y": 718.8212
       },
       "Size": {
-        "X": 826.9337,
-        "Y": 475.43073
+        "X": 997.8161,
+        "Y": 429.83533
       }
     },
     {
       "Id": "9201860c-0aad-40bc-9693-f280da49c181",
-      "Title": "Transformations like Offset, Scale and Rotation\nare accumulated.",
+      "Title": "Transformations like Offset, Scale, and Rotation are accumulated.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -753,8 +762,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1809.9393,
-        "Y": 970.5456
+        "X": -1810.896,
+        "Y": 938.10284
       },
       "Size": {
         "X": 476.09747,
@@ -763,7 +772,7 @@
     },
     {
       "Id": "7dd94d2a-7335-4106-a707-09402a2a3d00",
-      "Title": "Settings for Material, Time and resolution \nare overwritten. The last one (on the left) wins.\n",
+      "Title": "Settings for Material, Time, and resolution are overwritten. \nThe last one (on the left) wins.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -771,8 +780,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1808.4231,
-        "Y": 857.0627
+        "X": -1809.3798,
+        "Y": 824.61993
       },
       "Size": {
         "X": 475.12213,
@@ -781,7 +790,7 @@
     },
     {
       "Id": "ac34d967-98a9-43f4-aa93-0c3d1c28c700",
-      "Title": "Switch and Pick operators both help you to build complex\nsetups that respond to inputs like time, audio or sensor data.",
+      "Title": "Switch and Pick operators both help you to build complex setups \nthat respond to inputs like time, audio, or sensor data.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -789,12 +798,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": -1961.8347,
-        "Y": 1245.3174
+        "X": -1961.8545,
+        "Y": 1157.3247
       },
       "Size": {
-        "X": 827.9349,
-        "Y": 299.2043
+        "X": 994.79694,
+        "Y": 288.01804
       }
     }
   ]

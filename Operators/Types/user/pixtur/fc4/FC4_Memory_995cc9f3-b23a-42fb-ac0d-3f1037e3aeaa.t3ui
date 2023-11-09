@@ -1,6 +1,6 @@
 {
   "Id": "995cc9f3-b23a-42fb-ac0d-3f1037e3aeaa"/*FC4_Memory*/,
-  "Description": "A very fast fast challenge",
+  "Description": "A very fast challenge",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -431,7 +431,7 @@
       }
     },
     {
-      "ChildId": "12b00357-90da-4de9-9a82-25fe0e3d06e8"/*SimForwardMovement*/,
+      "ChildId": "12b00357-90da-4de9-9a82-25fe0e3d06e8"/*_LegacySimForwardMovement*/,
       "Position": {
         "X": 791.6805,
         "Y": 402.19293

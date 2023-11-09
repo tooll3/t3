@@ -1,6 +1,6 @@
 {
   "Id": "1cd2f5b1-bc54-4405-8ee6-d1acf59ebe14"/*PickVector2*/,
-  "Description": "Select one Vector2 of many, like a switch.",
+  "Description": "Selects one Vector2 of many, like a switch.",
   "InputUis": [
     {
       "InputId": "f210558a-4f9e-4e94-bbd4-ef73da498614"/*Input*/,

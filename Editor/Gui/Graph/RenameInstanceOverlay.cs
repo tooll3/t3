@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Editor.Gui.Graph.Interaction;
+using T3.Editor.Gui.Styling;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph
 {
@@ -67,11 +70,12 @@ namespace T3.Editor.Gui.Graph
 
             var positionInScreen = GraphCanvas.Current.TransformPosition(symbolChildUi.PosOnCanvas);
 
-            ImGui.SetCursorScreenPos(positionInScreen);
+            ImGui.SetCursorScreenPos(positionInScreen + Vector2.One);
             
             var text = symbolChild.Name;
-            ImGui.SetNextItemWidth(150);
-            ImGui.InputText("##input", ref text, 256, ImGuiInputTextFlags.AutoSelectAll);
+            //ImGui.SetNextItemWidth(160);
+            CustomComponents.DrawInputFieldWithPlaceholder("Untitled", ref text, 200, false, ImGuiInputTextFlags.AutoSelectAll);
+            //ImGui.InputText("##input", ref text, 256, ImGuiInputTextFlags.AutoSelectAll);
             symbolChild.Name = text;
             
             if (!justOpened && (ImGui.IsItemDeactivated() || ImGui.IsKeyPressed((ImGuiKey)Key.Return)))

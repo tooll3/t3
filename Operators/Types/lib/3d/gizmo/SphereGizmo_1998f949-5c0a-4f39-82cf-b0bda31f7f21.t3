@@ -5,7 +5,7 @@
   "Inputs": [
     {
       "Id": "15f73f4f-a4f1-4ff0-aba5-074ea2d328bc"/*Radius*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 1.0
     },
     {
       "Id": "188c2244-e55a-4c55-be93-cccbd6fd4e41"/*Color*/,
@@ -272,8 +272,8 @@
   ],
   "Connections": [
     {
-      "SourceParentOrChildId": "9c6603cf-724b-43ac-9324-92b520d71150",
-      "SourceSlotId": "6c29ce06-0512-4815-bc83-ab2e095c0455",
+      "SourceParentOrChildId": "40cd90cb-39c3-4b04-8c84-f537f0e2d0b4",
+      "SourceSlotId": "2d329133-29b9-4f56-b5a6-5ff7d83638fa",
       "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "TargetSlotId": "0b43d459-2c94-4d5e-a75a-61d38d93118b"
     },

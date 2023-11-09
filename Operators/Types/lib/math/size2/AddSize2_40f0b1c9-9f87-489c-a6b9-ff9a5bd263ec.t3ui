@@ -1,6 +1,6 @@
 {
   "Id": "40f0b1c9-9f87-489c-a6b9-ff9a5bd263ec"/*AddSize2*/,
-  "Description": "Adds two Int2 vectors.\n\nNote: Size2 is just another name for an Int2 where its dimensions are given in Height and Width.\n",
+  "Description": "Adds two Int2 vectors.\nNote: Size2 is just another name for an Int2 where its dimensions are given in Height and Width.",
   "InputUis": [
     {
       "InputId": "c14e4756-c8cc-42fc-af70-3473d9c6c861"/*Input1*/,

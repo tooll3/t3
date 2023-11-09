@@ -141,7 +141,7 @@ public static class ColorThemeEditor
             }
 
             ImGui.SameLine(0, 10);
-            ImGui.Text(Regex.Replace(f.Name, "(\\B[A-Z])", " $1"));
+            ImGui.Text(CustomComponents.HumanReadablePascalCase(f.Name));
             if (ImGui.IsItemHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Left))
             {
                 FrameStats.Current.UiColorsChanged = true;
@@ -168,7 +168,7 @@ public static class ColorThemeEditor
             ImGui.PopID();
         }
     }
-    
+
     private static void DrawVariations(IEnumerable<FieldInfo> variationFields)
     {
         ImGui.Separator();

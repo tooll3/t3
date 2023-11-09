@@ -175,18 +175,18 @@
       "SymbolId": "50aab941-0a29-474a-affd-13a74ea0c780",
       "InputValues": [
         {
-          "Id": "c427d83b-1046-4b8d-b44a-e616a64a702a"/*ScaleXYZ*/,
+          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
+          "Type": "System.Single",
+          "Value": 7.21
+        },
+        {
+          "Id": "c427d83b-1046-4b8d-b44a-e616a64a702a"/*AmplitudeXYZ*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 0.93,
             "Y": 0.74,
             "Z": 1.24
           }
-        },
-        {
-          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Scale*/,
-          "Type": "System.Single",
-          "Value": 7.21
         }
       ],
       "Outputs": []
@@ -276,7 +276,7 @@
       "Outputs": []
     },
     {
-      "Id": "82b3fd4b-386f-48ca-a915-d7325a5c11eb"/*Blob*/,
+      "Id": "82b3fd4b-386f-48ca-a915-d7325a5c11eb"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -329,7 +329,7 @@
       "Outputs": []
     },
     {
-      "Id": "0d2c97e8-0e74-4b1b-8c2a-8f8f9b720c15"/*Blob*/,
+      "Id": "0d2c97e8-0e74-4b1b-8c2a-8f8f9b720c15"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -387,7 +387,7 @@
       "Outputs": []
     },
     {
-      "Id": "543f24b8-b9d0-4794-9fc7-faf8812c3f40"/*Blob*/,
+      "Id": "543f24b8-b9d0-4794-9fc7-faf8812c3f40"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -1439,7 +1439,7 @@
       "Outputs": []
     },
     {
-      "Id": "0b210fe0-b102-4328-b285-b0c6608905b5"/*SimNoise*/,
+      "Id": "0b210fe0-b102-4328-b285-b0c6608905b5"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -1604,7 +1604,7 @@
       "Outputs": []
     },
     {
-      "Id": "24687271-cace-4b26-8004-57fcc223cf01"/*SimDirectedForce*/,
+      "Id": "24687271-cace-4b26-8004-57fcc223cf01"/*SimDirectionalOffset*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {

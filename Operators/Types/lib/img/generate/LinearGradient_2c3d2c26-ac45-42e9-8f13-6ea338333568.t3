@@ -4,6 +4,10 @@
   "Namespace": "lib.img.generate",
   "Inputs": [
     {
+      "Id": "d6e157fb-5300-4a9a-aea8-8b0ea0104ea3"/*Image*/,
+      "DefaultValue": null
+    },
+    {
       "Id": "e47e9e63-9c94-4c29-9555-2452fa498d57"/*Gradient*/,
       "DefaultValue": {
         "Gradient": {
@@ -84,10 +88,6 @@
       "DefaultValue": false
     },
     {
-      "Id": "d6e157fb-5300-4a9a-aea8-8b0ea0104ea3"/*Image*/,
-      "DefaultValue": null
-    },
-    {
       "Id": "1d0cf561-858d-4510-95c4-f3ad9148355d"/*BlendMode*/,
       "DefaultValue": 0
     }
@@ -143,7 +143,7 @@
       "Outputs": []
     },
     {
-      "Id": "693baad7-d351-44de-af5c-cd0212003e35"/*BoolToFloats*/,
+      "Id": "693baad7-d351-44de-af5c-cd0212003e35"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [
         {
@@ -155,7 +155,7 @@
       "Outputs": []
     },
     {
-      "Id": "67faeb1c-65dc-4b2c-9a33-2c99f979dfc3"/*BoolToFloats*/,
+      "Id": "67faeb1c-65dc-4b2c-9a33-2c99f979dfc3"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
@@ -173,7 +173,7 @@
         {
           "Id": "f6269be3-3331-43a6-91ec-138b47199f3e"/*ShaderPath*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\generate\\img-generate-linear-ramp.hlsl"
+          "Value": "Resources\\lib\\img\\generate\\LinearGradient.hlsl"
         },
         {
           "Id": "6022a4b0-c6fc-49a3-811a-179dcceb8b44"/*WrapMode*/,

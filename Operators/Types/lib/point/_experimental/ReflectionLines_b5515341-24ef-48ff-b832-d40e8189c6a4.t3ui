@@ -1,6 +1,6 @@
 {
   "Id": "b5515341-24ef-48ff-b832-d40e8189c6a4"/*ReflectionLines*/,
-  "Description": "Intersecs rays from a list of oriented points with geometry. This operation is slow!",
+  "Description": "Intersects rays from a list of oriented points with geometry. This operation is slow!",
   "InputUis": [
     {
       "InputId": "57917b87-9aa4-416b-8417-fc2ac9e849b0"/*GPoints*/,

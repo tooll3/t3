@@ -69,7 +69,7 @@
         {
           "Id": "16dce9bc-02d9-48f8-b07e-94a9af48d27b"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\img-fx-VoronoiCells.hlsl"
+          "Value": "Resources\\lib\\img\\fx\\VoronoiCells.hlsl"
         },
         {
           "Id": "c80d3700-ceb6-43d0-9ffd-f4854e67a41d"/*Wrap*/,
@@ -80,7 +80,7 @@
       "Outputs": []
     },
     {
-      "Id": "558e8dd4-f524-4798-817b-743837996458"/*BoolToFloats*/,
+      "Id": "558e8dd4-f524-4798-817b-743837996458"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

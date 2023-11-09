@@ -420,7 +420,7 @@
       "Outputs": []
     },
     {
-      "Id": "8de9a63e-d5a3-4389-8e10-7deb6a8f2693"/*SimNoise*/,
+      "Id": "8de9a63e-d5a3-4389-8e10-7deb6a8f2693"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -816,7 +816,7 @@
       "Outputs": []
     },
     {
-      "Id": "bb1d9f59-858c-4021-8d81-2b84a67d0c0a"/*Blob*/,
+      "Id": "bb1d9f59-858c-4021-8d81-2b84a67d0c0a"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -883,7 +883,7 @@
       "Outputs": []
     },
     {
-      "Id": "03eb916d-ca85-4b4b-b307-951896b8fe62"/*Blob*/,
+      "Id": "03eb916d-ca85-4b4b-b307-951896b8fe62"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -972,7 +972,7 @@
       "Outputs": []
     },
     {
-      "Id": "b0e181a6-89ed-49b7-8c16-5a49edb47ca3"/*Blob*/,
+      "Id": "b0e181a6-89ed-49b7-8c16-5a49edb47ca3"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -1038,7 +1038,7 @@
       "Outputs": []
     },
     {
-      "Id": "46547323-5392-49cf-a051-89fb00d1823a"/*SimNoise*/,
+      "Id": "46547323-5392-49cf-a051-89fb00d1823a"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -1296,17 +1296,12 @@
       "SymbolId": "50aab941-0a29-474a-affd-13a74ea0c780",
       "InputValues": [
         {
-          "Id": "03df41a8-3d72-47b1-b854-81e6e59e7cb4"/*Frequency*/,
+          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
           "Type": "System.Single",
-          "Value": 0.5
+          "Value": 3.4
         },
         {
-          "Id": "2693cb7d-33b3-4a0c-929f-e6911d2d4a0c"/*Octaves*/,
-          "Type": "System.Int32",
-          "Value": 2
-        },
-        {
-          "Id": "c427d83b-1046-4b8d-b44a-e616a64a702a"/*ScaleXYZ*/,
+          "Id": "c427d83b-1046-4b8d-b44a-e616a64a702a"/*AmplitudeXYZ*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
             "X": 1.0,
@@ -1315,9 +1310,14 @@
           }
         },
         {
-          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Scale*/,
+          "Id": "03df41a8-3d72-47b1-b854-81e6e59e7cb4"/*Frequency*/,
           "Type": "System.Single",
-          "Value": 3.4
+          "Value": 0.5
+        },
+        {
+          "Id": "2693cb7d-33b3-4a0c-929f-e6911d2d4a0c"/*Octaves*/,
+          "Type": "System.Int32",
+          "Value": 2
         }
       ],
       "Outputs": []

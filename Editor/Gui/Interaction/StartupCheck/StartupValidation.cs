@@ -18,6 +18,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
     {
         public static void CheckInstallation()
         {
+            
             var checks = new Check[]
                              {
                                  new()
@@ -27,10 +28,11 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                                                                      @"Resources\",
                                                                      @"Resources\t3-editor\images\t3-icons.png",
                                                                      @"Resources\t3-editor\images\t3.ico",
+                                                                     @"Resources\t3-editor\images\t3-SplashScreen.png",
                                                                      @"Resources\t3-editor\fonts\Roboto-Regular.ttf",
                                                                  },
                                          Message = @"Please make sure to set the correct start up directory.\n ",
-                                         URL = "https://github.com/still-scene/t3/wiki/installation#setting-the-startup-directory-in-visual-studio",
+                                         URL = "https://github.com/tooll3/t3/wiki/installation#setting-the-startup-directory-in-visual-studio",
                                      },
                                  new()
                                      {
@@ -38,9 +40,10 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                                                                  {
                                                                      LayoutHandling.LayoutPath + "layout1.json",
                                                                      @"Editor\bin\Release\net6.0-windows\bass.dll",
+                                                                     @"Editor\bin\Debug\net6.0-windows\bass.dll",
                                                                  },
                                          Message = "Please run Install/install.bat.",
-                                         URL = "https://github.com/still-scene/t3/wiki/installation#setup-and-installation",
+                                         URL = "https://github.com/tooll3/t3/wiki/installation#setup-and-installation",
                                      },
                                  new()
                                      {
@@ -49,7 +52,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                                                                      @"Player\bin\Release\net6.0-windows\Player.exe",
                                                                  },
                                          Message = "This will prevent you from exporting as executable.\nPlease rebuild your solution.",
-                                         URL = "https://github.com/still-scene/t3/wiki/installation#setup-and-installation",
+                                         URL = "https://github.com/tooll3/t3/wiki/installation#setup-and-installation",
                                      }
                              };
             var _ = checks.Any(check => !check.Do());
@@ -115,7 +118,8 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                 
                 var sb = new StringBuilder();
 
-                sb.Append($"Startup folder is:\n{EditorUi.Instance.StartupPath}\n\n");
+                var startupPath = Path.GetFullPath(".");
+                sb.Append($"Startup folder is:\n{startupPath}\n\n");
                 
                 sb.Append($"We can't find the following files...\n\n  {string.Join("\n  ", missingPaths)}");
                 sb.Append("\n\n");

@@ -21,7 +21,7 @@ public abstract class RenderHelperWindow : Window
 
     protected static void DrawTimeSetup()
     {
-        FormInputs.ResetIndent();
+        FormInputs.SetIndentToParameters();
         // convert times if reference time selection changed
         var oldTimeReference = _timeReference;
             
@@ -58,7 +58,7 @@ public abstract class RenderHelperWindow : Window
     }
 
     protected static bool ValidateOrCreateTargetFolder(string targetFile)
-    {
+    {   
         var directory = Path.GetDirectoryName(targetFile);
         if (targetFile != directory && File.Exists(targetFile))
         {

@@ -1,6 +1,6 @@
 {
   "Id": "722e79cc-47bc-42cc-8fce-2e06f36f8caa"/*PointsOnImage*/,
-  "Description": "Uses the image brightness to emit points",
+  "Description": "Uses the image brightness to emit points.\n\nWARNING: this is extremely slow for high resolution. We recommend setting fixed resolutions like 512x512px.",
   "InputUis": [
     {
       "InputId": "5c7e5e27-2eb8-4933-97cb-fc49d576d625"/*Count*/,

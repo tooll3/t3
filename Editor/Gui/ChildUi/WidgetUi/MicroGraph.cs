@@ -119,7 +119,7 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
             drawList.AddPolyline(ref GraphLinePoints[0], 4, curveLineColor, ImDrawFlags.None, 1);
 
             // Draw offset label
-            if (h > 14)
+            if (!string.IsNullOrEmpty(valueText) && h > 14)
             {
                 ImGui.PushFont(Fonts.FontSmall);
 

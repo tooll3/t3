@@ -1,6 +1,6 @@
 {
   "Id": "310e174e-ea52-4c54-90e6-72dc8320118a"/*GridPosition*/,
-  "Description": "Converts an index to a grid raster position and sizes that can be used to draw a [Layer2d].\nThis can be helpful for procedural graphical designs. \n\nPlease check the example below:\n",
+  "Description": "Converts an index to a grid raster position and sizes that can be used to draw a [Layer2d].\nThis can be helpful for procedural graphical designs.\nPlease check the example below.",
   "InputUis": [
     {
       "InputId": "854731fb-bbc9-48e7-9bcb-45bc53340945"/*A*/,

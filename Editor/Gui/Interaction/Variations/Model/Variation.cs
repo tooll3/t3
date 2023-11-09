@@ -95,7 +95,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
                 {
                     var inputId = Guid.Parse(inputIdString);
                     var input = symbolForChanges.InputDefinitions.SingleOrDefault(i => i.Id == inputId);
-                    if (input == null)
+                    if (input == null && inputId != Guid.Empty)
                     {
                         Log.Warning($"Can't find symbol input {symbolChildIdString}/{inputId} for preset changes");
                         continue;

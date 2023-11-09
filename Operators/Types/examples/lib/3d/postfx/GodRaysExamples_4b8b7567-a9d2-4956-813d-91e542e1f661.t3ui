@@ -1,6 +1,6 @@
 {
   "Id": "4b8b7567-a9d2-4956-813d-91e542e1f661"/*GodRaysExamples*/,
-  "Description": "Shows a simple setup for using the godrays post render effect.",
+  "Description": "Shows a simple setup for using the god-rays post-render effect.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -81,7 +81,7 @@
       }
     },
     {
-      "ChildId": "3e9ee5b6-fc27-470f-b664-04f927fd5a45"/*Blob*/,
+      "ChildId": "3e9ee5b6-fc27-470f-b664-04f927fd5a45"/*_BlobOld*/,
       "Position": {
         "X": 743.67993,
         "Y": 1182.7524

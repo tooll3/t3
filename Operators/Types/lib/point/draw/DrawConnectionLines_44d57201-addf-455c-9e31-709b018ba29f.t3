@@ -71,8 +71,8 @@
       "Id": "df2076a1-1d25-4112-b0e6-2987541786d9"/*Color*/,
       "DefaultValue": {
         "X": 1.0,
-        "Y": 0.99999,
-        "Z": 0.99999,
+        "Y": 1.0,
+        "Z": 1.0,
         "W": 1.0
       }
     },
@@ -262,7 +262,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\cs\\connect-nearest-points.hlsl"
+          "Value": "Resources\\lib\\cs\\draw-ConnectLines.hlsl"
         },
         {
           "Id": "8ad9e58d-a767-4a5f-bfbf-d082b80901d6"/*EntryPoint*/,
@@ -308,7 +308,7 @@
         {
           "Id": "78fb7501-74d9-4a27-8db2-596f25482c87"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\draw\\draw-connection-lines.hlsl"
+          "Value": "Resources\\lib\\points\\draw\\DrawConnectionLines.hlsl"
         },
         {
           "Id": "9a8b500e-c3b1-4be1-8270-202ef3f90793"/*EntryPoint*/,
@@ -367,7 +367,7 @@
         {
           "Id": "24646f06-1509-43ce-94c6-eeb608ad97cd"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\draw\\draw-connection-lines.hlsl"
+          "Value": "Resources\\lib\\points\\draw\\DrawConnectionLines.hlsl"
         },
         {
           "Id": "501338b3-f432-49a5-bdbd-bcf209671305"/*EntryPoint*/,
@@ -529,7 +529,7 @@
         {
           "Id": "76cc3811-4ae0-48b2-a119-890db5a4eeb2"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\images\\white.png"
+          "Value": "Resources\\common\\images\\white.png"
         }
       ],
       "Outputs": []
@@ -657,7 +657,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\cs\\connect-nearest-points.hlsl"
+          "Value": "Resources\\lib\\cs\\draw-ConnectLines.hlsl"
         },
         {
           "Id": "8ad9e58d-a767-4a5f-bfbf-d082b80901d6"/*EntryPoint*/,

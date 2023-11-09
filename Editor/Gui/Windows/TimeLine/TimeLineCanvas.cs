@@ -19,6 +19,7 @@ using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.TimeLine.Raster;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Windows.TimeLine
 {
@@ -30,7 +31,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
     {
         public TimeLineCanvas()
         {
-            //Playback = Playback.Current;
             DopeSheetArea = new DopeSheetArea(SnapHandlerForU, this);
             _timelineCurveEditArea = new TimelineCurveEditArea(this, SnapHandlerForU, SnapHandlerForV);
             _timeSelectionRange = new TimeSelectionRange(this, SnapHandlerForU);
@@ -41,7 +41,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
             SnapHandlerForU.AddSnapAttractor(_loopRange);
             SnapHandlerForU.AddSnapAttractor(_timeRasterSwitcher);
             SnapHandlerForU.AddSnapAttractor(_currentTimeMarker);
-            //SnapHandlerForU.AddSnapAttractor(_timeSelectionRange);
             SnapHandlerForU.AddSnapAttractor(LayersArea);
         }
 
@@ -73,7 +72,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 HandleDeferredActions();
 
                 ImGui.BeginChild(ImGuiTitle, new Vector2(0, -30), true,
-                                 //ImGuiWindowFlags.NoScrollbar | 
                                  ImGuiWindowFlags.NoMove 
                                  |ImGuiWindowFlags.NoBackground
                                  |ImGuiWindowFlags.NoScrollWithMouse);
@@ -111,8 +109,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
                 _currentTimeMarker.Draw(Playback);
                 _timeSelectionRange.Draw(Drawlist);
                 DrawDragTimeArea();
-                //ImGui.SetCursorPosY(0);
-                
 
                 if (FenceState == SelectionFence.States.CompletedAsClick)
                 {

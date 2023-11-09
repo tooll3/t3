@@ -39,7 +39,7 @@ namespace T3.Editor.Gui.OutputUi
             var device = ResourceManager.Device;
 
             Size2 size = context.RequestedResolution;
-            var wasRebuild = UpdateTextures(device, size, Format.R16G16B16A16_UNorm);
+            var wasRebuild = UpdateTextures(device, size, Format.R16G16B16A16_Float);
             var deviceContext = device.ImmediateContext;
             var prevViewports = deviceContext.Rasterizer.GetViewports<RawViewportF>();
             var prevTargets = deviceContext.OutputMerger.GetRenderTargets(1);

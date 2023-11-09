@@ -4,8 +4,11 @@ using System.Numerics;
 using ImGuiNET;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
@@ -21,6 +24,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             FilePath,
             DirectoryPath,
             Multiline,
+            CustomDropdown,
         }
 
         public UsageType Usage { get; private set; } = UsageType.Default;
@@ -64,6 +68,9 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                 case UsageType.DirectoryPath:
                     inputEditStateFlags = DrawEditWithSelectors(FileOperations.FilePickerTypes.Folder, ref value);
                     break;
+                case UsageType.CustomDropdown:
+                    inputEditStateFlags = DrawCustomDropdown(input, ref value);
+                    break;
             }
 
             inputEditStateFlags |= ImGui.IsItemClicked() ? InputEditStateFlags.Started : InputEditStateFlags.Nothing;
@@ -85,10 +92,10 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
 
             if (warning != string.Empty)
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.StatusAnimated.Rgba);
-            
+
             var inputEditStateFlags = DrawDefaultTextEdit(ref value);
-            
-            if(warning !=string.Empty) 
+
+            if (warning != string.Empty)
                 ImGui.PopStyleColor();
 
             if (ImGui.IsItemHovered() && ImGui.CalcTextSize(value).X > ImGui.GetItemRectSize().X)
@@ -121,6 +128,42 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
         }
 
+        private static InputEditStateFlags DrawCustomDropdown(SymbolChild.Input input, ref string value)
+        {
+            var instance = NodeSelection.GetSelectedInstance();
+            if (instance is ICustomDropdownHolder customValueHoder)
+            {
+                var changed = false;
+
+                var currentValue = customValueHoder.GetValueForInput(input.InputDefinition.Id);
+                if (ImGui.BeginCombo("##customDropdown", currentValue, ImGuiComboFlags.HeightLarge))
+                {
+                    foreach (var value2 in customValueHoder.GetOptionsForInput(input.InputDefinition.Id))
+                    {
+                        if (value2 == null)
+                            continue;
+
+                        var isSelected = value2 == currentValue;
+                        if (!ImGui.Selectable($"{value2}", isSelected, ImGuiSelectableFlags.DontClosePopups))
+                            continue;
+
+                        ImGui.CloseCurrentPopup();
+                        customValueHoder.HandleResultForInput(input.InputDefinition.Id, value2);
+                        changed = true;
+                    }
+
+                    ImGui.EndCombo();
+                }
+
+                return changed ? InputEditStateFlags.Modified : InputEditStateFlags.Nothing;
+            }
+            else
+            {
+                Log.Warning($"{instance} doesn't support custom inputs");
+                return InputEditStateFlags.Nothing;
+            }
+        }
+
         protected override void DrawReadOnlyControl(string name, ref string value)
         {
             if (value != null)
@@ -143,10 +186,9 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
                 var tmpForRef = Usage;
                 if (FormInputs.AddEnumDropdown(ref tmpForRef, "Usage"))
                     Usage = tmpForRef;
-
             }
-            
-            if (Usage == UsageType.FilePath) 
+
+            if (Usage == UsageType.FilePath)
             {
                 var tmp = FileFilter;
                 var warning = !string.IsNullOrEmpty(tmp) && !tmp.Contains('|')
@@ -166,8 +208,8 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
             base.Write(writer);
 
             writer.WriteObject(nameof(Usage), Usage.ToString());
-            
-            if(!string.IsNullOrEmpty(FileFilter))
+
+            if (!string.IsNullOrEmpty(FileFilter))
                 writer.WriteObject(nameof(FileFilter), FileFilter);
         }
 
@@ -175,7 +217,7 @@ namespace T3.Editor.Gui.InputUi.SimpleInputUis
         {
             if (inputToken == null)
                 return;
-            
+
             base.Read(inputToken);
 
             if (Enum.TryParse<UsageType>(inputToken[nameof(Usage)].Value<string>(), out var enumValue))

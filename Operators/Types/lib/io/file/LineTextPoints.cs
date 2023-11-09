@@ -24,7 +24,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
 {
     /**
      * This operator is a compromise: Please also review the additional documentation
-     * on the wiki: https://github.com/still-scene/t3/wiki/SvgLineFonts
+     * on the wiki: https://github.com/tooll3/t3/wiki/SvgLineFonts
      */
     public class LineTextPoints : Instance<LineTextPoints>
     {

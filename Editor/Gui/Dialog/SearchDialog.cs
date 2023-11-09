@@ -46,7 +46,7 @@ namespace T3.Editor.Gui.Dialog
                 }
 
                 var needsUpdate = _justOpened;
-                FormInputs.SetIndent(0);
+                FormInputs.SetIndentToLeft();
                 
                 FormInputs.SetWidth(0.7f);
                 needsUpdate |= FormInputs.AddStringInput("", ref _searchString, "Search", null, null, string.Empty);

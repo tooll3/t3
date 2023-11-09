@@ -1,6 +1,6 @@
 {
   "Id": "ff101c21-e166-466e-8582-84858789f3b6"/*MarsExploration2*/,
-  "Description": "A quick experiment with feedback effect",
+  "Description": "A quick experiment with feedback effect.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -25,7 +25,7 @@
       }
     },
     {
-      "ChildId": "b340c538-1822-45dd-8569-8cc95eb2236f"/*DisplaceMesh*/,
+      "ChildId": "b340c538-1822-45dd-8569-8cc95eb2236f"/*DisplaceMeshNoise*/,
       "Position": {
         "X": 300.0,
         "Y": 685.75305
@@ -116,7 +116,7 @@
       }
     },
     {
-      "ChildId": "e138f232-3821-4e17-aab3-ee661f2fceef"/*Blob*/,
+      "ChildId": "e138f232-3821-4e17-aab3-ee661f2fceef"/*_BlobOld*/,
       "Position": {
         "X": 2798.7356,
         "Y": 242.0
@@ -151,7 +151,7 @@
       }
     },
     {
-      "ChildId": "bc3bc148-38fa-487e-8a90-2bc729ba29be"/*DisplaceMesh*/,
+      "ChildId": "bc3bc148-38fa-487e-8a90-2bc729ba29be"/*DisplaceMeshNoise*/,
       "Position": {
         "X": 600.0,
         "Y": 685.75305
@@ -200,7 +200,7 @@
       }
     },
     {
-      "ChildId": "4e7794e3-021c-4abf-bfd5-acc2f008f5c6"/*SimDirectedForce*/,
+      "ChildId": "4e7794e3-021c-4abf-bfd5-acc2f008f5c6"/*SimDirectionalOffset*/,
       "Position": {
         "X": 2064.804,
         "Y": 409.43518
@@ -270,7 +270,7 @@
       }
     },
     {
-      "ChildId": "5eddaf94-75bf-49c9-a3e0-dd053e868a6b"/*SimNoise*/,
+      "ChildId": "5eddaf94-75bf-49c9-a3e0-dd053e868a6b"/*SimNoiseOffset*/,
       "Position": {
         "X": 1914.804,
         "Y": 409.43518

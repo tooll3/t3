@@ -1,6 +1,6 @@
 {
   "Id": "ffd94e5a-bc98-4e70-84d8-cce831e6925f"/*DrawPoints*/,
-  "Description": "Draws a point buffer with the set camera, transform and fog. The points are drawn as camera-facing billboards, ignoring the point orientation. The W attribute of the points is used for scaling. This can be controlled with the UseWForSize parameter.\n\nYou can connect a texture to override the round shape.\n\nThere are many Operators allowing you to create and manipulate point buffers in countless ways. Please have a look at the examples listed below.\n\nFor additional effects you can experiment with different blend modes or disable depth testing. Note however that the points are drawn in the order they are defined in the buffer and not sorted by distance to camera. This can introduce unwanted artifacts with transparent blending.\n\nAlthough drawing points is fast, drawing very large points can lead to high fill rates and can drastically impact render performance.\n\nAlso see: [HowToDrawThings], [HowToUsePoints]",
+  "Description": "Draws a point buffer with the set camera, transform, and fog. The points are drawn as camera-facing billboards, ignoring the point orientation. The W attribute of the points is used for scaling. This can be controlled with the UseWForSize parameter.\n\nYou can connect a texture to override the round shape.\n\nThere are many Operators allowing you to create and manipulate point buffers in countless ways. Please have a look at the examples listed below.\n\nFor additional effects, you can experiment with different blend modes or disable depth testing. Note, however, that the points are drawn in the order they are defined in the buffer and not sorted by distance to the camera. This can introduce unwanted artifacts with transparent blending.\n\nAlthough drawing points is fast, drawing very large points can lead to high fill rates and can drastically impact render performance.\n\nAlso see: [HowToDrawThings], [HowToUsePoints]",
   "InputUis": [
     {
       "InputId": "5df18658-ef86-4c0f-8bb4-4ac3fbbf9a33"/*GPoints*/,
@@ -22,7 +22,9 @@
       "Position": {
         "X": 606.7909,
         "Y": 4209.768
-      }
+      },
+      "Min": 0.0,
+      "Max": 0.5
     },
     {
       "InputId": "850e3a32-11ba-4ad2-a2b1-6164f077ddd6"/*Texture_*/,
@@ -222,13 +224,6 @@
       }
     },
     {
-      "ChildId": "77e1fdb8-afb8-482c-829c-9a02e9a0e8ea"/*GetSRVProperties*/,
-      "Position": {
-        "X": 1240.2614,
-        "Y": 3853.566
-      }
-    },
-    {
       "ChildId": "c798588d-7e91-4dda-a644-9e012191f177"/*GetBufferComponents*/,
       "Position": {
         "X": 1081.5444,
@@ -250,7 +245,7 @@
       }
     },
     {
-      "ChildId": "02cb87a0-3250-45dd-bc1e-0f1bd902be9c"/*BoolToFloats*/,
+      "ChildId": "02cb87a0-3250-45dd-bc1e-0f1bd902be9c"/*BoolToFloat*/,
       "Position": {
         "X": 1468.5548,
         "Y": 4296.544
@@ -271,7 +266,7 @@
       }
     },
     {
-      "ChildId": "5d12754c-546c-4d1e-bcbb-3f1dd9a8fd2a"/*BoolToFloats*/,
+      "ChildId": "5d12754c-546c-4d1e-bcbb-3f1dd9a8fd2a"/*BoolToFloat*/,
       "Position": {
         "X": 1252.2148,
         "Y": 4791.9507

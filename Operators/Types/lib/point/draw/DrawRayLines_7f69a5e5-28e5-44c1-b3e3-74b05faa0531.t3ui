@@ -1,6 +1,6 @@
 {
   "Id": "7f69a5e5-28e5-44c1-b3e3-74b05faa0531"/*DrawRayLines*/,
-  "Description": "A special line renderer that draws camera facing 3d geometry lines without corner metering that can intersect the near plane.",
+  "Description": "A special line renderer that draws camera-facing 3D geometry lines without corner metering that can intersect the near plane.",
   "InputUis": [
     {
       "InputId": "fd05097a-2842-464a-b8d4-1479adb7785d"/*GPoints*/,
@@ -274,7 +274,7 @@
       }
     },
     {
-      "ChildId": "756b12bf-461c-48a9-b019-c7ffb7b5cd8f"/*BoolToFloats*/,
+      "ChildId": "756b12bf-461c-48a9-b019-c7ffb7b5cd8f"/*BoolToFloat*/,
       "Position": {
         "X": -167.12115,
         "Y": 595.0335

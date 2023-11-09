@@ -48,50 +48,6 @@ float3 hash33(float3 p3)
     return -1.0 + 2.0 * frac(float3((p3.x + p3.y) * p3.z, (p3.x + p3.z) * p3.y, (p3.y + p3.z) * p3.x));
 }
 
-// Keeping iq's the periodic fbm HLSL for reference
-//
-// // random hash
-// float hash(in int2 q)
-// {
-//     // You SHOULD replace this by something better. Again, Do Not Use in production.
-//     int n = q.x * 131 + q.y * 57;
-//     n = (n << 13) ^ n;
-//     n = n * (n * n * 15731 + 789221) + 1376312589;
-//     return float((n >> 8) & 0x007fffff) / float(0x007fffff);
-// }
-
-// // basic value noise
-// float periodicNoise(in float2 x, in int p)
-// {
-//     int2 i = int2(floor(x));
-//     float2 f = frac(x);
-
-//     f = f * f * (3.0 - 2.0 * f);
-
-//     return lerp(lerp(hash((i + int2(0, 0)) & (p - 1)),
-//                      hash((i + int2(1, 0)) & (p - 1)), f.x),
-//                 lerp(hash((i + int2(0, 1)) & (p - 1)),
-//                      hash((i + int2(1, 1)) & (p - 1)), f.x),
-//                 f.y);
-// }
-
-// // from: https://www.shadertoy.com/view/3d2GRh  iQ
-// // fractal periodicNoise
-// float periodicFbm(in float2 x, in int p)
-// {
-//     float f = 0.0;
-//     float s = 0.5;
-//     int maxI = clamp(Iterations, 1, 8);
-//     for (int i = 0; i < Iterations; i++)
-//     {
-//         f += s * periodicNoise(x, p);
-//         s *= 0.5;
-//         x *= 2.0;
-//         p *= 2;
-//     }
-//     return f;
-// }
-
 float simplex_noise(float3 p)
 {
     const float K1 = 0.333333333;
@@ -308,7 +264,6 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     else
     {
         float4 c = bccNoiseDerivatives_XYBeforeZ(float3(uv * 10, Evolution));
-        float l = c.a / 2 + 0.5;
         return float4((c.rgb / 4 + 0.5), 1);
     }
 

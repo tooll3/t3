@@ -10,6 +10,7 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Editor.Gui;
+using T3.Editor.Gui.Interaction.StartupCheck;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
 using T3.SystemUi;
@@ -48,14 +49,8 @@ internal static class ProgramWindows
         if (UserSettings.Config.FullScreen)
         {
             var screenCount = Screen.AllScreens.Length;
-            var hasSecondScreen = screenCount > 1;
-            var secondScreenIndex = hasSecondScreen ? 1 : 0;
-
-            var screenIndexForMainScreen = UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen ? secondScreenIndex : 0;
-            var screenIndexForSecondScreen = UserSettings.Config.SwapMainAnd2ndWindowsWhenFullscreen ? 0 : secondScreenIndex;
-
-            Main.SetFullScreen(screenIndexForMainScreen);
-            Viewer.SetFullScreen(screenIndexForSecondScreen);
+            Main.SetFullScreen(UserSettings.Config.FullScreenIndexMain < screenCount ? UserSettings.Config.FullScreenIndexMain : 0);
+            Viewer.SetFullScreen(UserSettings.Config.FullScreenIndexViewer < screenCount ? UserSettings.Config.FullScreenIndexViewer : 0);
         }
         else
         {
@@ -91,7 +86,18 @@ internal static class ProgramWindows
         }
         catch (Exception e)
         {
-            EditorUi.Instance.ShowMessageBox("We are sorry but your graphics hardware might not be capable of running Tooll2\n\n" +e.Message, "Oh noooo", PopUpButtons.Ok);
+            if (e.Message.Contains("DXGI_ERROR_SDK_COMPONENT_MISSING"))
+            {
+                var result = EditorUi.Instance.ShowMessageBox("You need to install Windows Graphics diagnostics tools.\n\nClick Ok to download this Windows component directly from Microsoft.", "Windows component missing", PopUpButtons.OkCancel);
+                if (result == PopUpResult.Ok)
+                {
+                    StartupValidation.OpenUrl("https://learn.microsoft.com/en-us/windows/uwp/gaming/use-the-directx-runtime-and-visual-studio-graphics-diagnostic-features");
+                }
+            }
+            else
+            {
+                EditorUi.Instance.ShowMessageBox("We are sorry but your graphics hardware might not be capable of running Tooll2\n\n" +e.Message, "Oh noooo", PopUpButtons.Ok);
+            }
             Environment.Exit(0);
         }
     }
@@ -177,9 +183,17 @@ internal static class ProgramWindows
 
     public static void Present(bool useVSync, bool showSecondaryRenderWindow)
     {
-        Main.SwapChain.Present(useVSync ? 1 : 0, PresentFlags.None);
+        try
+        {
+            Main.SwapChain.Present(useVSync ? 1 : 0, PresentFlags.None);
 
-        if (showSecondaryRenderWindow)
-            Viewer.SwapChain.Present(useVSync ? 1 : 0, PresentFlags.None);
+            if (showSecondaryRenderWindow)
+                Viewer.SwapChain.Present(useVSync ? 1 : 0, PresentFlags.None);
+        }
+        catch (SharpDX.SharpDXException)
+        {
+            var suspendReason = _device.DeviceRemovedReason.ToString();
+            throw (new ApplicationException($"Graphics card suspended ({suspendReason})"));
+        }
     }
 }

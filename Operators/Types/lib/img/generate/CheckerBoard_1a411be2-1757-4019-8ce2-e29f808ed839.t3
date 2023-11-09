@@ -71,7 +71,7 @@
         {
           "Id": "16dce9bc-02d9-48f8-b07e-94a9af48d27b"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\generate\\img-generate-checkerboard.hlsl"
+          "Value": "Resources\\lib\\img\\generate\\CheckerBoard.hlsl"
         },
         {
           "Id": "3ca67d25-72ec-487b-91b3-ece912b76462"/*GenerateMipmaps*/,
@@ -88,7 +88,7 @@
       "Outputs": []
     },
     {
-      "Id": "b56327c6-5f17-4577-8087-3ed033d79482"/*BoolToFloats*/,
+      "Id": "b56327c6-5f17-4577-8087-3ed033d79482"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

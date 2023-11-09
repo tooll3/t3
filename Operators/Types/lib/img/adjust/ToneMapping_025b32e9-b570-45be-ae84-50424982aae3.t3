@@ -24,7 +24,7 @@
         {
           "Id": "16dce9bc-02d9-48f8-b07e-94a9af48d27b"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\img-fx-ToneMap.hlsl"
+          "Value": "Resources\\lib\\img\\fx\\ToneMap.hlsl"
         },
         {
           "Id": "c80d3700-ceb6-43d0-9ffd-f4854e67a41d"/*Wrap*/,
@@ -41,7 +41,7 @@
       "Outputs": []
     },
     {
-      "Id": "b5befc31-b387-40f0-8866-1804e4565e92"/*BoolToFloats*/,
+      "Id": "b5befc31-b387-40f0-8866-1804e4565e92"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

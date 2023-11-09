@@ -30,7 +30,9 @@
       "Position": {
         "X": -200.38397,
         "Y": 225.0
-      }
+      },
+      "Min": -1.0,
+      "Max": 1.0
     },
     {
       "InputId": "8c4dab88-68cb-40cc-b576-ca3f3ea8461f"/*SpinOffset*/,
@@ -134,6 +136,13 @@
         "X": -200.38397,
         "Y": 0.0
       }
+    },
+    {
+      "InputId": "fb113fd1-3edf-4db6-9dfb-800c62070d69"/*Damping*/,
+      "Position": {
+        "X": -200.38397,
+        "Y": 45.0
+      }
     }
   ],
   "SymbolChildUis": [],
@@ -151,6 +160,15 @@
         "X": 0.0,
         "Y": 100.0
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "90f2d53b-3bab-43be-a14d-8262ec56a126",
+      "Title": "Tutorial Video",
+      "Description": "Although the video explains the \"RandomCamera\". The operators has been renamed since.",
+      "LinkUrl": "https://youtu.be/DJKb0wDr0Zs",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

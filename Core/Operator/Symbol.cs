@@ -823,6 +823,11 @@ namespace T3.Core.Operator
         {
             var childId = inputSlot.Parent.SymbolChildId;
             var inputId = inputSlot.Id;
+            InvalidateInputInAllChildInstances(inputId, childId);
+        }
+
+        public void InvalidateInputInAllChildInstances(Guid inputId, Guid childId)
+        {
             foreach (var symbolInstance in InstancesOfSymbol)
             {
                 var childInstance = symbolInstance.Children.Single(c => c.SymbolChildId == childId);
@@ -830,6 +835,7 @@ namespace T3.Core.Operator
                 slot.DirtyFlag.Invalidate();
             }
         }
+
         
         /// <summary>
         /// Invalidates all instances of a symbol input (e.g. if that input's default was modified)

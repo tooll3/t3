@@ -13,6 +13,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.UiHelpers.DelaunayVoronoi;
 using T3.Editor.Gui.Windows.Exploration;
 using T3.Editor.Gui.Windows.Output;
+using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.Variations
@@ -595,7 +596,7 @@ namespace T3.Editor.Gui.Windows.Variations
             // var areaOnScreen = TransformRect(area); 
             // ImGui.GetForegroundDrawList().AddRect(areaOnScreen.Min, areaOnScreen.Max, Color.Blue);
 
-            const int columns = 4;
+            const int columns = 3;
             var columnIndex = 0;
 
             var stepWidth = VariationThumbnail.ThumbnailSize.X + VariationThumbnail.SnapPadding.X;

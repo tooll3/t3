@@ -16,6 +16,7 @@ using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using Color = T3.Editor.Gui.Styling.Color;
 using Point = System.Drawing.Point;
 
@@ -28,10 +29,11 @@ namespace T3.Editor.Gui.Interaction
             var edited = InputEditStateFlags.Nothing;
             var cColor = new Color(color);
             ImGui.SetNextWindowSize(new Vector2(257, 360));
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
             var dontCloseIfColorPicking = ImGui.GetIO().KeyAlt ? ImGuiWindowFlags.Modal : ImGuiWindowFlags.None;
 
             var id = ImGui.GetID("colorPicker");
-            if (ImGui.BeginPopup("##colorEdit", dontCloseIfColorPicking))
+            if (ImGui.BeginPopup(PopupId, dontCloseIfColorPicking))
             {
                 if (_openedId != id)
                 {
@@ -63,6 +65,7 @@ namespace T3.Editor.Gui.Interaction
             }
 
             color = cColor.Rgba;
+                ImGui.PopStyleVar();
             return edited;
         }
 
@@ -70,40 +73,38 @@ namespace T3.Editor.Gui.Interaction
         {
             InputEditStateFlags edited = InputEditStateFlags.Nothing;
 
+            Color pickedColor;
             // Pick colors
             var altKeyPressed = ImGui.GetIO().KeyAlt;
-            if (altKeyPressed)
+            if (!altKeyPressed)
+                return edited;
+            
+            pickedColor = GetColorAtMousePosition();
+            if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
             {
-                cColor = GetColorAtMousePosition();
-                if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
-                {
-                    edited |= InputEditStateFlags.ModifiedAndFinished;
-                }
-
-                var dl = ImGui.GetForegroundDrawList();
-                var pos = ImGui.GetMousePos();
-
-                pos += Vector2.One * 25;
-                dl.AddRectFilled(pos, pos + new Vector2(40, 38), UiColors.BackgroundFull);
-                ImGui.PushFont(Fonts.FontSmall);
-                dl.AddText(pos + new Vector2(5, 2 + 0), UiColors.ForegroundFull, $"{cColor.R:0.000}");
-                dl.AddText(pos + new Vector2(5, 2 + 10), UiColors.ForegroundFull, $"{cColor.G:0.000}");
-                dl.AddText(pos + new Vector2(5, 2 + 20), UiColors.ForegroundFull, $"{cColor.B:0.000}");
-                ImGui.PopFont();
+                edited |= InputEditStateFlags.ModifiedAndFinished;
+                cColor = pickedColor;
             }
 
-            if (ImGui.IsKeyReleased(ImGuiKey.ModAlt))
-            {
-                if (!Program.IsCursorInsideAppWindow)
-                {
-                    edited |= InputEditStateFlags.ModifiedAndFinished;
-                }
-                else
-                {
-                    cColor.Rgba = previousColor;
-                    edited = InputEditStateFlags.Nothing;
-                }
-            }
+            var dl = ImGui.GetForegroundDrawList();
+            var pos = ImGui.GetMousePos();
+
+            pos += Vector2.One * 25;
+            var padding = new Vector2(5, 5);
+            dl.AddRectFilled(pos, pos + new Vector2(80, 38), UiColors.BackgroundFull);
+            ImGui.PushFont(Fonts.FontSmall);
+            dl.AddText(pos + new Vector2(15, 2 + 0), UiColors.ForegroundFull, $"{pickedColor.R:0.000}");
+            dl.AddText(pos + new Vector2(15, 2 + 10), UiColors.ForegroundFull, $"{pickedColor.G:0.000}");
+            dl.AddText(pos + new Vector2(15, 2 + 20), UiColors.ForegroundFull, $"{pickedColor.B:0.000}");
+            
+            dl.AddText(pos + new Vector2(55, 2 + 0), UiColors.ForegroundFull, $"{(pickedColor.R * 255):0}");
+            dl.AddText(pos + new Vector2(55, 2 + 10), UiColors.ForegroundFull, $"{(pickedColor.G * 255):0}");
+            dl.AddText(pos + new Vector2(55, 2 + 20), UiColors.ForegroundFull, $"{(pickedColor.B * 255):0}");
+            
+            var swatchSize = new Vector2(3, 32);
+            var swatchPos = pos + new Vector2(3, 3);
+            dl.AddRectFilled(swatchPos, swatchPos+ swatchSize, pickedColor );
+            ImGui.PopFont();
 
             return edited;
         }
@@ -193,12 +194,39 @@ namespace T3.Editor.Gui.Interaction
                 var pMin = windowPos + new Vector2(size.X + 10, 0);
                 var visibleBarSize = new Vector2(barWidth, barHeight);
                 var pMax = pMin + visibleBarSize;
-                drawList.AddRectFilled(pMin - Vector2.One, pMax + Vector2.One, Color.Black);
+
+                var hrdEditEnabled = ImGui.GetIO().KeyCtrl;
+                if (hrdEditEnabled)
+                {
+                    var hdrOffset = new Vector2(0, -300);
+                    drawList.AddRectFilled(pMin - Vector2.One + hdrOffset, pMax + Vector2.One, Color.Black);
+                }
+                else
+                {
+                    drawList.AddRectFilled(pMin - Vector2.One, pMax + Vector2.One, Color.Black);
+                    if (cColor.V > 1)
+                    {
+                        var offset = new Vector2(4,-5);
+                        drawList.AddTriangleFilled(
+                                                   pMin + new Vector2(-6,0) + offset,
+                                                   pMin + new Vector2(0,-10) + offset,
+                                                   pMin + new Vector2(6,0) + offset,
+                                                   UiColors.ForegroundFull
+                                                  );
+                    }
+                }
+
+                if (cColor.V > 1)
+                {
+                    var label = $"× {cColor.V:0.00}";
+                    var labelWidth = ImGui.CalcTextSize(label);
+                    drawList.AddText(pMin - new Vector2(labelWidth.X+10, +20), UiColors.Text, label);
+                }
 
                 var brightColor = cColor;
                 brightColor.V = 1;
                 brightColor.A = 1;
-
+                
                 drawList.AddRectFilledMultiColor(pMin, pMax,
                                                  ImGui.ColorConvertFloat4ToU32(brightColor),
                                                  ImGui.ColorConvertFloat4ToU32(brightColor),
@@ -206,14 +234,19 @@ namespace T3.Editor.Gui.Interaction
                                                  ImGui.ColorConvertFloat4ToU32(transparentColor));
 
                 // Draw compare value
+                if(compareValue <= 1 || hrdEditEnabled) 
                 {
-                    var handlePos = new Vector2(0, barHeight * (1 - compareValue)) + pMin;
+                    var mappedHdrValue = GetYFromHdr(compareValue);
+                    var handlePos = new Vector2(0, barHeight * (1 - mappedHdrValue)) + pMin;
                     drawList.AddRectFilled(handlePos, handlePos + new Vector2(barWidth + 2, 2), UiColors.ForegroundFull.Fade(0.5f));
                 }
 
                 // Draw indicator
+                if(cColor.V <= 1 || hrdEditEnabled) 
                 {
-                    var handlePos = new Vector2(0, barHeight * (1 - cColor.V)) + pMin;
+                    var mappedHdrValue = GetYFromHdr(cColor.V);
+
+                    var handlePos = new Vector2(0, barHeight * (1 - mappedHdrValue)) + pMin;
                     drawList.AddRectFilled(handlePos - Vector2.One, handlePos + new Vector2(barWidth + 2, 3), UiColors.BackgroundFull);
                     drawList.AddRectFilled(handlePos, handlePos + new Vector2(barWidth + 2, 2), UiColors.ForegroundFull);
                 }
@@ -221,12 +254,13 @@ namespace T3.Editor.Gui.Interaction
                 ImGui.InvisibleButton("intensitySlider", new Vector2(visibleBarSize.X * 4, visibleBarSize.Y));
                 if (ImGui.IsItemActive())
                 {
-                    var clampUpperValue = ImGui.GetIO().KeyCtrl ? 100 : 1;
+                    var clampUpperValue = hrdEditEnabled ? 100 : 1;
                     var normalizedValue = (1 - (ImGui.GetMousePos() - pMin).Y / barHeight).Clamp(0, clampUpperValue);
-                    if (normalizedValue > 1)
-                    {
-                        normalizedValue = MathF.Pow(normalizedValue, 3);
-                    }
+                    normalizedValue = GetHdrYValue(normalizedValue);
+                    // if (normalizedValue > 1)
+                    // {
+                    //     normalizedValue = MathF.Pow(normalizedValue, 3);
+                    // }
 
                     cColor.V = normalizedValue;
 
@@ -301,6 +335,16 @@ namespace T3.Editor.Gui.Interaction
             return edited;
         }
 
+        private static float GetYFromHdr(float value)
+        {
+            return  value < 1 ? value : MathF.Pow((value).Clamp(0,1000), 1/3f);
+        }
+        
+        private static float GetHdrYValue(float value)
+        {
+            return  value < 1 ? value : MathF.Pow((value).Clamp(0,1000), 3f);
+        }
+
         private enum ColorInputModes
         {
             Hsl,
@@ -328,6 +372,7 @@ namespace T3.Editor.Gui.Interaction
                 {
                     _inputMode = (ColorInputModes)((int)(_inputMode + 1) % Enum.GetNames(typeof(ColorInputModes)).Length);
                 }
+                CustomComponents.TooltipForLastItem("Click to toggle between HSL, RGBA, integers and Hex input");
 
                 ImGui.PopStyleColor();
             }
@@ -596,7 +641,7 @@ namespace T3.Editor.Gui.Interaction
 
                     var min = ImGui.GetItemRectMin();
                     var max = ImGui.GetItemRectMax() - Vector2.One;
-                    wdl.AddText(Icons.IconFont, 14, min, new Color(0.1f), "" + (char)T3.Editor.Gui.Styling.Icon.Stripe4PxPattern);
+                    wdl.AddText(Icons.IconFont, 13, min, new Color(0.1f), "" + (char)T3.Editor.Gui.Styling.Icon.Stripe4PxPattern);
 
                     var opaqueColor = new Color(
                                                 usedColor.X,
@@ -670,7 +715,7 @@ namespace T3.Editor.Gui.Interaction
 
         private static Color GetColorAtMousePosition()
         {
-            var pos = Program.CursorPosOnScreen;
+            var pos = UiContentUpdate.CursorPosOnScreen;
             var x = (int)pos.X;
             var y = (int)pos.Y;
 
@@ -694,6 +739,7 @@ namespace T3.Editor.Gui.Interaction
         private static Color _hoveredColor;
         private static bool _isHoveringColor;
         private static readonly Bitmap _bmp = new(1, 1);
+        public  const string PopupId =  "##colorEdit";
     }
 
     public static class ColorUsage

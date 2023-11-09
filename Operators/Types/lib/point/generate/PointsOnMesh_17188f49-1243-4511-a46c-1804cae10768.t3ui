@@ -1,6 +1,6 @@
 {
   "Id": "17188f49-1243-4511-a46c-1804cae10768"/*PointsOnMesh*/,
-  "Description": "Get evenly distributed points on mesh. Note that the initial evaluation of the Mesh is extremely slow and should not be done on every frame.",
+  "Description": "Get evenly distributed points on a mesh. Note that the initial evaluation of the mesh is extremely slow and should not be done on every frame.",
   "InputUis": [
     {
       "InputId": "d737860b-2864-472d-ad46-4061b63a12d4"/*Seed*/,
@@ -221,7 +221,7 @@
       }
     },
     {
-      "ChildId": "3dcba1ac-cd74-466e-aff2-02aaf5d28abd"/*BoolToFloats*/,
+      "ChildId": "3dcba1ac-cd74-466e-aff2-02aaf5d28abd"/*BoolToFloat*/,
       "Position": {
         "X": -156.21463,
         "Y": 1396.0405

@@ -175,14 +175,14 @@
       "SymbolId": "50aab941-0a29-474a-affd-13a74ea0c780",
       "InputValues": [
         {
+          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
+          "Type": "System.Single",
+          "Value": 360.0
+        },
+        {
           "Id": "03df41a8-3d72-47b1-b854-81e6e59e7cb4"/*Frequency*/,
           "Type": "System.Single",
           "Value": 0.0315
-        },
-        {
-          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Scale*/,
-          "Type": "System.Single",
-          "Value": 360.0
         }
       ],
       "Outputs": []
@@ -388,7 +388,7 @@
       "Outputs": []
     },
     {
-      "Id": "5cfb0329-3f3a-45be-8b87-bf50c33ed43b"/*Blob*/,
+      "Id": "5cfb0329-3f3a-45be-8b87-bf50c33ed43b"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -639,7 +639,7 @@
       "Outputs": []
     },
     {
-      "Id": "a87fa0c6-7cd0-4f44-b226-409779856bf2"/*SimNoise*/,
+      "Id": "a87fa0c6-7cd0-4f44-b226-409779856bf2"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -1032,6 +1032,11 @@
       "SymbolId": "50aab941-0a29-474a-affd-13a74ea0c780",
       "InputValues": [
         {
+          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
+          "Type": "System.Single",
+          "Value": 0.39999998
+        },
+        {
           "Id": "03df41a8-3d72-47b1-b854-81e6e59e7cb4"/*Frequency*/,
           "Type": "System.Single",
           "Value": 0.125
@@ -1053,11 +1058,6 @@
             "Y": 1.0,
             "Z": 1.0
           }
-        },
-        {
-          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Scale*/,
-          "Type": "System.Single",
-          "Value": 0.39999998
         }
       ],
       "Outputs": []
@@ -1115,7 +1115,7 @@
       "Outputs": []
     },
     {
-      "Id": "cef24d12-f4a7-4821-98ab-85b77af406c0"/*Blob*/,
+      "Id": "cef24d12-f4a7-4821-98ab-85b77af406c0"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {

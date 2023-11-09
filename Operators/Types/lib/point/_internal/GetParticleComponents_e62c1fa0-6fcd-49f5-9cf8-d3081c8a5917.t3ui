@@ -1,0 +1,29 @@
+{
+  "Id": "e62c1fa0-6fcd-49f5-9cf8-d3081c8a5917"/*GetParticleComponents*/,
+  "Description": "Get the particle system components from the context.\nThis is an internal component that is only required for developing new particle simulation effects.",
+  "InputUis": [],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "2814600a-c45e-4bf8-ab24-b9d3c40d8077"/*Length*/,
+      "Position": {
+        "X": -7.0460706,
+        "Y": 206.77505
+      }
+    },
+    {
+      "OutputId": "231feefd-b07d-4fcd-9bd1-b74d0cd765b5"/*ParticlesUav*/,
+      "Position": {
+        "X": -7.0460706,
+        "Y": 306.77505
+      }
+    },
+    {
+      "OutputId": "641ece29-7845-43e5-85ca-f33912a1989f"/*SpeedFactor*/,
+      "Position": {
+        "X": -7.0460706,
+        "Y": 406.77505
+      }
+    }
+  ]
+}

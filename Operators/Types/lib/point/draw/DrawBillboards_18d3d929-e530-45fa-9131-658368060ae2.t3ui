@@ -1,6 +1,6 @@
 {
   "Id": "18d3d929-e530-45fa-9131-658368060ae2"/*DrawBillboards*/,
-  "Description": "Draws points and billboard or quads. This a operators is very flexible and allows for a large spectrum of effects.\n\nIts parameters are grouped into different section for various aspects of variations.\n",
+  "Description": "Draws points and billboards or quads. This operator is very flexible and allows for a wide spectrum of effects.\n\nIts parameters are grouped into different sections for various aspects of variations.",
   "InputUis": [
     {
       "InputId": "8f203c5f-6eb8-42a1-bfea-9ca52a49e132"/*Scale*/,
@@ -172,7 +172,6 @@
     },
     {
       "InputId": "aff03303-8f28-4efb-a035-d0784790ee42"/*Texture_*/,
-      "Relevancy": "Relevant",
       "Position": {
         "X": -793.17444,
         "Y": 1624.0233
@@ -560,14 +559,14 @@
       }
     },
     {
-      "ChildId": "d91761b2-119c-46a5-9ee3-376c825d4901"/*BoolToFloats*/,
+      "ChildId": "d91761b2-119c-46a5-9ee3-376c825d4901"/*BoolToFloat*/,
       "Position": {
         "X": -591.99115,
         "Y": 1510.8385
       }
     },
     {
-      "ChildId": "ffd5be9b-c8c0-4385-ba4e-c8bd179302cb"/*BoolToFloats*/,
+      "ChildId": "ffd5be9b-c8c0-4385-ba4e-c8bd179302cb"/*BoolToFloat*/,
       "Position": {
         "X": -591.99115,
         "Y": 1566.8385
@@ -588,7 +587,7 @@
       }
     },
     {
-      "ChildId": "6c4ef8ab-8259-4622-93d0-f777b034b6e9"/*BoolToFloats*/,
+      "ChildId": "6c4ef8ab-8259-4622-93d0-f777b034b6e9"/*BoolToFloat*/,
       "Position": {
         "X": -333.76385,
         "Y": 2464.821
@@ -602,7 +601,7 @@
       }
     },
     {
-      "ChildId": "72173a73-b26a-4121-b57f-c8e9505c42d1"/*BoolToFloats*/,
+      "ChildId": "72173a73-b26a-4121-b57f-c8e9505c42d1"/*BoolToFloat*/,
       "Position": {
         "X": -619.6018,
         "Y": 1251.2158
@@ -630,7 +629,7 @@
       }
     },
     {
-      "ChildId": "be1ffb03-0efc-44f1-b126-f9c61d2aafb4"/*BoolToFloats*/,
+      "ChildId": "be1ffb03-0efc-44f1-b126-f9c61d2aafb4"/*BoolToFloat*/,
       "Position": {
         "X": -658.26874,
         "Y": 2594.0193

@@ -369,10 +369,21 @@ namespace T3.Core.Resource
                 {
                     _streamReader = new StreamReader(Path.Combine(ResourcesFolder, fileName));
                 }
-                catch(DirectoryNotFoundException e )
+                catch (DirectoryNotFoundException rs_e)
                 {
-                    Log.Error($"Can't open file {ResourcesFolder}/{fileName}  {e.Message}");
-                    return null;
+                    try
+                    {
+                        _streamReader = new StreamReader(Path.Combine(
+                            new FileInfo(((System.IO.FileStream)parentStream).Name).DirectoryName.ToString(),
+                            fileName
+                        ));
+                    }
+                    catch (DirectoryNotFoundException in_e)
+                    {
+                        Log.Error($"Included file {fileName} wasn't found in {ResourcesFolder} or its parent folder " +
+                            $"({rs_e.Message}, {in_e.Message})");
+                        return null;
+                    }
                 }
                 return _streamReader.BaseStream;
             }
@@ -405,18 +416,26 @@ namespace T3.Core.Resource
                 return false;
             }
 
-            blob?.Dispose();
-            blob = compilationResult.Bytecode;
+            try
+            {
+                blob?.Dispose();
+                blob = compilationResult.Bytecode;
 
-            shader?.Dispose();
+                shader?.Dispose();
 
-            // As shader type is generic we've to use Activator and PropertyInfo to create/set the shader object
-            Type shaderType = typeof(TShader);
-            shader = (TShader)Activator.CreateInstance(shaderType, Device, blob.Data, null);
-            PropertyInfo debugNameInfo = shaderType.GetProperty("DebugName");
-            debugNameInfo?.SetValue(shader, name);
-            LastShaderError = null;
-            return true;
+                // As shader type is generic we've to use Activator and PropertyInfo to create/set the shader object
+                Type shaderType = typeof(TShader);
+                shader = (TShader)Activator.CreateInstance(shaderType, Device, blob.Data, null);
+                PropertyInfo debugNameInfo = shaderType.GetProperty("DebugName");
+                debugNameInfo?.SetValue(shader, name);
+                LastShaderError = null;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Shader error: Failed to apply shader byte code after compilation: " + e.Message);
+                return false;
+            }
         }
 
         private static void CompileShaderFromSource<TShader>(string shaderSource, string entryPoint, string name, string profile, ref TShader shader, ref ShaderBytecode blob)

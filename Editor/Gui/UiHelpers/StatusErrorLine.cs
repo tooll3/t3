@@ -14,11 +14,6 @@ namespace T3.Editor.Gui.UiHelpers
     /// </summary>
     public class StatusErrorLine : ILogWriter
     {
-        public StatusErrorLine()
-        {
-            Log.AddWriter(this);
-        }
-
         public void Draw()
         {
             lock (_logEntries)

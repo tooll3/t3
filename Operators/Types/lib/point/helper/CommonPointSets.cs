@@ -188,11 +188,32 @@ namespace T3.Operators.Types.Id_353f63fc_e613_43ca_b037_02d7b9f4e935
                 new() { Position = new Vector3(-S, 0, 0), W = 1 },
                 new() { Position = new Vector3(+S, 0, 0), W = 1 },
                 new() { W = float.NaN },
-                new() { Position = new Vector3(S/2, -S/2, 0), W = 1 },
+                new() { Position = new Vector3(S/1.5f, -S/4, 0), W = 1 },
                 new() { Position = new Vector3(+S, 0, 0), W = 1 },
-                new() { Position = new Vector3(S/2, S/2, 0), W = 1 },
+                new() { Position = new Vector3(S/1.5f, S/4, 0), W = 1 },
                 new() { W = float.NaN },
-            };        
+            };       
+        private static readonly Point[] ArrowYPoints =
+            {
+                new() { Position = new Vector3(0, -S, 0), W = 1 },
+                new() { Position = new Vector3(0,+S,  0), W = 1 },
+                new() { W = float.NaN },
+                new() { Position = new Vector3(-S/4, S/1.5f, 0), W = 1 },
+                new() { Position = new Vector3(0, +S, 0), W = 1 },
+                new() { Position = new Vector3(S/4,S/1.5f,  0), W = 1 },
+                new() { W = float.NaN },
+            };   
+
+        private static readonly Point[] ArrowZPoints =
+            {
+                new() { Position = new Vector3(0, 0, -S), W = 1 },
+                new() { Position = new Vector3(0, 0, +S), W = 1 },
+                new() { W = float.NaN },
+                new() { Position = new Vector3(-S/4,0 , S/1.5f), W = 1 },
+                new() { Position = new Vector3(0, 0, +S), W = 1 },
+                new() { Position = new Vector3(S/4,0,  S/1.5f), W = 1 },
+                new() { W = float.NaN },
+            };   
 
         
         private enum Shapes
@@ -201,7 +222,9 @@ namespace T3.Operators.Types.Id_353f63fc_e613_43ca_b037_02d7b9f4e935
             CrossXY,
             Cube,
             Quad,
-            ArrowX
+            ArrowX,
+            ArrowY,
+            ArrowZ,
         }
 
         private static readonly List<Point[]> Definitions = new()
@@ -211,6 +234,8 @@ namespace T3.Operators.Types.Id_353f63fc_e613_43ca_b037_02d7b9f4e935
                                                                     CubePoints,
                                                                     QuadPoints,
                                                                     ArrowXPoints,
+                                                                    ArrowYPoints,
+                                                                    ArrowZPoints,
                                                                 };
     }
 }

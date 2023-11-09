@@ -1,6 +1,6 @@
 {
   "Id": "13be1e3f-861d-4350-a94e-e083637b3e55"/*SpoutOutput*/,
-  "Description": "Spout live video output.\n\nWe recommend to use the R8G8B8A8_UNorm texture format for output. You adjust the render form by using a [RenderTarget] like in this example:\n\n[TorusMesh]->[DrawMesh]->[RenderTarget]->[SpoutOutput].\n",
+  "Description": "Spout live video output. We recommend using the R8G8B8A8_UNorm texture format for output. You can adjust the render format by using a [RenderTarget] like in this example: [TorusMesh]->[DrawMesh]->[RenderTarget]->[SpoutOutput].",
   "InputUis": [
     {
       "InputId": "d4b5c642-9cb9-4f41-8739-edbb9c6c4857"/*Texture*/,

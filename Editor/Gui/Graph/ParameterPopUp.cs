@@ -12,6 +12,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.Gui.Windows.Variations;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph;
 
@@ -78,14 +79,20 @@ internal static class ParameterPopUp
         ImGui.SetNextWindowPos(screenPos);
 
         var preventTabbingIntoUnfocusedStringInputs = ImGui.IsAnyItemActive() ? ImGuiWindowFlags.None : ImGuiWindowFlags.NoNavInputs;
-        if (ImGui.BeginChild("Popup", new Vector2(280, height), true, preventTabbingIntoUnfocusedStringInputs))
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, Vector2.Zero);
+        if (ImGui.BeginChild("Popup",
+                             new Vector2(280, height),
+                             true,
+                             preventTabbingIntoUnfocusedStringInputs
+                             | ImGuiWindowFlags.NoScrollbar))
         {
             if (ImGui.IsKeyDown(ImGuiKey.Escape))
             {
                 Close();
             }
-            ImGui.GetWindowDrawList().AddRectFilled(ImGui.GetWindowPos(), 
-                                                    ImGui.GetWindowPos() + ImGui.GetWindowSize(), 
+
+            ImGui.GetWindowDrawList().AddRectFilled(ImGui.GetWindowPos(),
+                                                    ImGui.GetWindowPos() + ImGui.GetWindowSize(),
                                                     UiColors.BackgroundFull);
 
             FormInputs.SetIndent(20);
@@ -95,21 +102,28 @@ internal static class ParameterPopUp
                 ImGui.SetWindowFocus();
                 _focusDelayCount--;
             }
-            
             else if (!ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows))
             {
                 Close();
             }
-            CustomComponents.AddSegmentedIconButton(ref _viewMode, _modeIcons);
-            ImGui.SameLine(0, 20);
 
-            var isPinned = _selectedInstance == graphWindow.GraphImageBackground.OutputInstance;
-            if (CustomComponents.DrawIconToggle("enabled", Icon.PlayOutput, ref isPinned))
+            // Toolbar
             {
-                if (isPinned)
-                    graphWindow.SetBackgroundOutput(_selectedInstance);
+                ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(4,4) * T3Ui.UiScaleFactor);
+                ImGui.SetCursorPos( new Vector2(5,5));
+                CustomComponents.AddSegmentedIconButton(ref _viewMode, _modeIcons);
+                ImGui.SameLine(0, 20);
+
+                var isPinned = _selectedInstance == graphWindow.GraphImageBackground.OutputInstance;
+                if (CustomComponents.DrawIconToggle("enabled", Icon.PlayOutput, ref isPinned))
+                {
+                    if (isPinned)
+                        graphWindow.SetBackgroundOutput(_selectedInstance);
+                }
+                ImGui.PopStyleVar();
             }
 
+            // Content
             switch (_viewMode)
             {
                 case ViewModes.Parameters:
@@ -145,10 +159,10 @@ internal static class ParameterPopUp
             }
 
             _lastRequiredHeight = ImGui.GetCursorPosY();
-
         }
 
         ImGui.EndChild();
+        ImGui.PopStyleVar();
     }
 
     private static void Close()
@@ -176,7 +190,7 @@ internal static class ParameterPopUp
 
     private static bool _isOpen;
     private static int _focusDelayCount;
-    
+
     private static GraphCanvas _graphCanvas;
     private static ViewModes _viewMode = ViewModes.Parameters;
     private static Instance _selectedInstance;

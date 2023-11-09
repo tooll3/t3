@@ -123,7 +123,7 @@
       "Outputs": []
     },
     {
-      "Id": "c6f18d20-450c-4096-9c8f-3fb3bace9976"/*ParticleSimulation*/,
+      "Id": "c6f18d20-450c-4096-9c8f-3fb3bace9976"/*LegacyParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {
@@ -321,7 +321,7 @@
       "Outputs": []
     },
     {
-      "Id": "1b68a430-6fa4-4d30-9752-98b5bc1ca3b1"/*SimForces*/,
+      "Id": "1b68a430-6fa4-4d30-9752-98b5bc1ca3b1"/*SimForceOffset*/,
       "SymbolId": "9c378944-9a57-4ae4-a88e-36c07244bcf7",
       "InputValues": [
         {
@@ -372,7 +372,7 @@
       "SymbolId": "50aab941-0a29-474a-affd-13a74ea0c780",
       "InputValues": [
         {
-          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Scale*/,
+          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
           "Type": "System.Single",
           "Value": 16.3
         }

@@ -1,6 +1,6 @@
 {
   "Id": "ab6ab34f-4c6e-41ef-af69-48bb9393651b"/*PairPointsForLines*/,
-  "Description": "Combines to point buffers so they can be drawn with connection lines between points.",
+  "Description": "Combines two point buffers so they can be drawn with connection lines between points.",
   "InputUis": [
     {
       "InputId": "b571a5e9-abec-47df-ac07-a7d1e60163d9"/*GPoints*/,
@@ -145,7 +145,7 @@
       }
     },
     {
-      "ChildId": "e570e928-c031-453f-8904-dd379f149c72"/*BoolToFloats*/,
+      "ChildId": "e570e928-c031-453f-8904-dd379f149c72"/*BoolToFloat*/,
       "Position": {
         "X": -818.6349,
         "Y": 828.354

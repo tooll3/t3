@@ -1,6 +1,6 @@
 {
   "Id": "5fb3dafe-aed4-4fff-a5b9-c144ea023d35"/*SphereMesh*/,
-  "Description": "Generate a UV sphere mesh with the given tesselation.\n",
+  "Description": "Generate a UV sphere mesh with the given tessellation.\n",
   "InputUis": [
     {
       "InputId": "24a1e643-3e52-4a8b-97b6-7c6f1706d14c"/*Radius*/,

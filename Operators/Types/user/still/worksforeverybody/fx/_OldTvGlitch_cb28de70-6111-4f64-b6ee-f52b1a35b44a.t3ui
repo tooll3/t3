@@ -1,6 +1,6 @@
 {
   "Id": "cb28de70-6111-4f64-b6ee-f52b1a35b44a"/*_OldTvGlitch*/,
-  "Description": "A very slow prototype. Needs to be redone with proper paramters.",
+  "Description": "A very slow prototype. Needs to be redone with proper parameters.",
   "InputUis": [
     {
       "InputId": "a9b30734-f128-493e-a35e-175b4f109e6e"/*Image*/,

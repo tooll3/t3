@@ -134,7 +134,9 @@ public class DataSetViewCanvas
             var color = Color.Mix(UiColors.StatusAnimated, UiColors.TextMuted, (float)timeSinceEvent);
 
             var pathString = string.Join(" / ", channel.Path);
-            dl.AddText(layerMin + new Vector2(10,0),  color, pathString);
+            if(!string.IsNullOrEmpty(pathString))
+                dl.AddText(layerMin + new Vector2(10,0),  color, pathString);
+            
             dl.AddLine(new Vector2(layerMin.X, layerMax.Y), layerMax, UiColors.GridLines.Fade(0.4f));
 
             layerMin.Y += layerHeight;

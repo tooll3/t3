@@ -1,6 +1,6 @@
 {
   "Id": "32e18957-3812-4f64-8663-18454518d005"/*TransformImage*/,
-  "Description": "Rotates, Offsets and scales the incoming image",
+  "Description": "Rotates, offsets, and scales the incoming image.",
   "InputUis": [
     {
       "InputId": "3aab9b12-1e02-4d7a-83b6-da1500a6bcbf"/*Image*/,
@@ -92,7 +92,7 @@
       }
     },
     {
-      "ChildId": "77d37c0c-2731-4f17-943b-6a3d8db908df"/*BoolToFloats*/,
+      "ChildId": "77d37c0c-2731-4f17-943b-6a3d8db908df"/*BoolToFloat*/,
       "Position": {
         "X": -64.98917,
         "Y": 453.7878

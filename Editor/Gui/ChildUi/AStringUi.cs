@@ -2,10 +2,12 @@
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using String = T3.Operators.Types.Id_5880cbc3_a541_4484_a06a_0e6f77cdbe8e.AString;
 
 namespace T3.Editor.Gui.ChildUi
@@ -30,7 +32,9 @@ namespace T3.Editor.Gui.ChildUi
             if (stringInstance.InputString.IsConnected)
                 return SymbolChildUi.CustomUiResult.None;
 
+            var dragWidth = WidgetElements.DrawDragIndicator(screenRect, drawList);
             var usableArea = screenRect;
+            usableArea.Min.X += dragWidth;
 
             ImGui.PushID(instance.SymbolChildId.GetHashCode());
 

@@ -1,6 +1,6 @@
 {
   "Id": "a835ab86-29c1-438e-a7f7-2e297108bfd5"/*TorusMesh*/,
-  "Description": "",
+  "Description": "Generates a torus mesh with the given size and tessellation.\n\nYou can use [TransformMesh] to rotate or translate the geometry. \nPlease also check out the presets.",
   "InputUis": [
     {
       "InputId": "608de038-6c7a-43fc-ba89-374c7b1a318e"/*Radius*/,

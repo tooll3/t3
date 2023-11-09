@@ -5,7 +5,7 @@
   "Inputs": [],
   "Children": [
     {
-      "Id": "bbd9c132-8e7e-4983-a22b-5a0db3022840"/*ParticleSimulation*/,
+      "Id": "bbd9c132-8e7e-4983-a22b-5a0db3022840"/*LegacyParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {
@@ -152,7 +152,7 @@
       "Outputs": []
     },
     {
-      "Id": "7168062d-466d-43f9-9e1e-3f1d6957fc91"/*ParticleSimulation*/,
+      "Id": "7168062d-466d-43f9-9e1e-3f1d6957fc91"/*LegacyParticleSimulation*/,
       "SymbolId": "dc3d1571-ad9f-46aa-bed9-df2f4e1c7040",
       "InputValues": [
         {
@@ -223,7 +223,7 @@
       "Outputs": []
     },
     {
-      "Id": "94949479-ca9e-4d25-ba8b-f142a60527a3"/*SimNoise*/,
+      "Id": "94949479-ca9e-4d25-ba8b-f142a60527a3"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -347,7 +347,7 @@
       "Outputs": []
     },
     {
-      "Id": "093b5ea5-29ce-4687-958b-ce7e9a6e0725"/*SimNoise*/,
+      "Id": "093b5ea5-29ce-4687-958b-ce7e9a6e0725"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {

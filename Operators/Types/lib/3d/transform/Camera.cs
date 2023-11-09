@@ -1,15 +1,12 @@
 ﻿using System;
 using SharpDX;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-using T3.Core.Utils;
-using T3.Operators.Utils;
+using T3.Core.Rendering;
 
 namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
 {
@@ -20,60 +17,24 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
 
         [Output(Guid = "761245E2-AC0B-435A-841E-7C9EDC804606")]
         public readonly Slot<Object> Reference = new();
-
+ 
         public Camera()
         {
-            Output.UpdateAction = Update;
+            Output.UpdateAction = UpdateOutputWithSubtree;
+            Reference.UpdateAction = UpdateCameraDefinition;
             Reference.Value = this;
         }
 
-        private void Update(EvaluationContext context)
+        private void UpdateOutputWithSubtree(EvaluationContext context)
         {
+            if(!Reference.IsConnected || Reference.DirtyFlag.IsDirty) 
+                UpdateCameraDefinition(context);
+            
             Reference.DirtyFlag.Clear();
-            LastObjectToWorld = context.ObjectToWorld;
-
-            var fov = MathUtil.DegreesToRadians(Fov.GetValue(context));
-            var aspectRatio = AspectRatio.GetValue(context);
-            if (aspectRatio < 0.0001f)
-            {
-                aspectRatio = (float)context.RequestedResolution.Width / context.RequestedResolution.Height;
-            }
             
-            System.Numerics.Vector2 clip = NearFarClip.GetValue(context);
-            var viewPortShift = ViewportShift.GetValue(context);
-            var m = Matrix.PerspectiveFovRH(fov, aspectRatio, clip.X, clip.Y);
-            m.M31 = viewPortShift.X;
-            m.M32 = viewPortShift.Y;
-            CameraToClipSpace = m;
-            var pOffset = PositionOffset.GetValue(context);
-            var offsetAffectsTarget = OffsetAffectsTarget.GetValue(context);
-
-            var positionValue = Position.GetValue(context);
-            var eye = new Vector3(positionValue.X, positionValue.Y, positionValue.Z);
-            if (!offsetAffectsTarget)
-                eye += pOffset.ToSharpDx();
-            
-            var targetValue = Target.GetValue(context);
-            var target = new Vector3(targetValue.X, targetValue.Y, targetValue.Z);
-            var upValue = Up.GetValue(context);
-            var up = new Vector3(upValue.X, upValue.Y, upValue.Z);
-            var worldToCameraRoot = Matrix.LookAtRH(eye, target, up);
-
-            var rollRotation = Matrix.RotationAxis(new Vector3(0, 0, 1), -(float)Roll.GetValue(context));
-            
-            var additionalTranslation = offsetAffectsTarget ?  Matrix.Translation(pOffset.X, pOffset.Y, pOffset.Z) : Matrix.Identity;
-
-            var rOffset = RotationOffset.GetValue(context);
-            var additionalRotation = Matrix.RotationYawPitchRoll(MathUtil.DegreesToRadians(rOffset.Y),
-                                                                 MathUtil.DegreesToRadians(rOffset.X),
-                                                                 MathUtil.DegreesToRadians(rOffset.Z));
-            
-            WorldToCamera = worldToCameraRoot * rollRotation * additionalRotation * additionalTranslation;
-
             if (context.BypassCameras)
             {
                 Command.GetValue(context);
-                //Log.Debug($"Bypassing {SymbolChildId}", this);
                 return;
             }
 
@@ -89,7 +50,68 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
             context.CameraToClipSpace = prevCameraToClipSpace;
             context.WorldToCamera = prevWorldToCamera;
         }
+        
+        private void UpdateCameraDefinition(EvaluationContext context)
+        {
+            LastObjectToWorld = context.ObjectToWorld;
 
+            var aspectRatio = AspectRatio.GetValue(context);
+            if (aspectRatio < 0.0001f)
+            {
+                aspectRatio = (float)context.RequestedResolution.Width / context.RequestedResolution.Height;
+            }
+
+            _cameraDefinition = new CameraDefinition
+                                    {
+                                        NearFarClip = NearFarClip.GetValue(context),
+                                        ViewPortShift = ViewportShift.GetValue(context),
+                                        PositionOffset = PositionOffset.GetValue(context),
+                                        Position = Position.GetValue(context),
+                                        Target = Target.GetValue(context),
+                                        Up = Up.GetValue(context),
+                                        AspectRatio = aspectRatio,
+                                        Fov = MathUtil.DegreesToRadians(Fov.GetValue(context)),
+                                        Roll = Roll.GetValue(context),
+                                        RotationOffset = RotationOffset.GetValue(context),
+                                        OffsetAffectsTarget = OffsetAffectsTarget.GetValue(context)
+                                    };
+
+            
+            _cameraDefinition.BuildProjectionMatrices(out var camToClipSpace, out var worldToCamera);
+
+            CameraToClipSpace = camToClipSpace;
+            WorldToCamera = worldToCamera;
+            
+
+        }
+
+        // public static void BuildProjectionMatrices(System.Numerics.Vector3 position, System.Numerics.Vector3 target, System.Numerics.Vector3 positionOffset, System.Numerics.Vector3 rotationOffset, float aspectRatio,
+        //                                             Vector2 nearFarClip, Vector2 viewPortShift, bool offsetAffectsTarget, float fov, float roll, System.Numerics.Vector3 up,
+        //                                             out Matrix camToClipSpace, out Matrix worldToCamera)
+        // {
+        //     camToClipSpace = Matrix.PerspectiveFovRH(fov, aspectRatio, nearFarClip.X, nearFarClip.Y);
+        //     camToClipSpace.M31 = viewPortShift.X;
+        //     camToClipSpace.M32 = viewPortShift.Y;
+        //
+        //     var eye = new Vector3(position.X, position.Y, position.Z);
+        //     if (!offsetAffectsTarget)
+        //         eye += positionOffset.ToSharpDx();
+        //
+        //     var worldToCameraRoot = Matrix.LookAtRH(eye, target.ToSharpDx(), up.ToSharpDx());
+        //     var rollRotation = Matrix.RotationAxis(new Vector3(0, 0, 1), -(float)roll);
+        //     var additionalTranslation = offsetAffectsTarget ? Matrix.Translation(positionOffset.X, positionOffset.Y, positionOffset.Z) : Matrix.Identity;
+        //
+        //     var additionalRotation = Matrix.RotationYawPitchRoll(MathUtil.DegreesToRadians(rotationOffset.Y),
+        //                                                          MathUtil.DegreesToRadians(rotationOffset.X),
+        //                                                          MathUtil.DegreesToRadians(rotationOffset.Z));
+        //
+        //     worldToCamera = worldToCameraRoot * rollRotation * additionalRotation * additionalTranslation;
+        // }
+        
+
+        public  CameraDefinition CameraDefinition => _cameraDefinition;
+        private CameraDefinition _cameraDefinition;
+        
         public Matrix CameraToClipSpace { get; set; }
         public Matrix WorldToCamera { get; set; }
         public Matrix LastObjectToWorld { get; set; }

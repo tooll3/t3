@@ -1,6 +1,6 @@
 {
   "Id": "fcd32cac-6544-42a3-8a14-203b8ca3559e"/*SetPlaybackSpeed*/,
-  "Description": "An advanced option that allows to slowdown the playback (including audio). \n\nThis might be useful in some situations, though some details might not work as expected.",
+  "Description": "An advanced option that allows you to slow down the playback (including audio). This might be useful in some situations, though some details might not work as expected.",
   "InputUis": [
     {
       "InputId": "4fdef030-d1d1-403a-b16c-a414f63fc913"/*SubGraph*/,

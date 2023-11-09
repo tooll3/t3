@@ -14,7 +14,9 @@
       "Position": {
         "X": -308.4377,
         "Y": 103.11561
-      }
+      },
+      "Min": 0.0,
+      "Max": 20.0
     },
     {
       "InputId": "3c8b43be-430f-4afe-8244-5282be49bfbc"/*Samples*/,

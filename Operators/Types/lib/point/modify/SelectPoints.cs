@@ -64,6 +64,9 @@ namespace T3.Operators.Types.Id_371d72b8_69d4_4ced_beda_271386ad2fd6
         [Input(Guid = "bdfbbc26-6815-4c5e-b67f-fbe0bbf1f58b")]
         public readonly InputSlot<float> Bias = new InputSlot<float>();
 
+        [Input(Guid = "62119baf-5e02-4d2e-82bb-f82a149ccfb7")]
+        public readonly InputSlot<T3.Core.Operator.GizmoVisibility> Visibility = new InputSlot<T3.Core.Operator.GizmoVisibility>();
+
 
         
         private enum Shapes

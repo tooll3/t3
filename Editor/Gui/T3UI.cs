@@ -15,7 +15,6 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
-using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Interaction;
@@ -44,7 +43,7 @@ public class T3Ui
         var operatorsAssembly = Assembly.GetAssembly(typeof(Value));
         UiSymbolData = new UiSymbolData(operatorsAssembly, enableLog: false);
 
-        WindowManager.TryToInitialize();
+        //WindowManager.TryToInitialize();
         ExampleSymbolLinking.UpdateExampleLinks();
         VariationHandling.Init();
 
@@ -64,7 +63,7 @@ public class T3Ui
         _initialed = true;
     }
 
-    private bool _initialed = false;
+    private bool _initialed;
 
     public void ProcessFrame()
     {
@@ -173,15 +172,27 @@ public class T3Ui
         {
             SaveInBackground(saveAll:true);
         }
-        else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode))
+        else if (KeyboardBinding.Triggered(UserActions.ToggleAllUiElements))
         {
-            ToggleFocusMode();
+            ToggleAllUiElements();
         }
         else if (KeyboardBinding.Triggered(UserActions.SearchGraph))
         {
             _searchDialog.ShowNextFrame();
         }
-            
+        else if (KeyboardBinding.Triggered(UserActions.ToggleFullscreen))
+        {
+            UserSettings.Config.FullScreen = !UserSettings.Config.FullScreen;
+        }
+        else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode)) ToggleFocusMode();
+    }
+
+    private static void ToggleFocusMode() {
+        var shouldBeFocusMode = !UserSettings.Config.FocusMode;
+        UserSettings.Config.FocusMode = shouldBeFocusMode;
+        UserSettings.Config.ShowToolbar = shouldBeFocusMode;
+        ToggleAllUiElements();
+        LayoutHandling.LoadAndApplyLayoutOrFocusMode(shouldBeFocusMode ? 11 : UserSettings.Config.WindowLayoutIndex);
     }
         
     private void DrawAppMenuBar()
@@ -270,6 +281,15 @@ public class T3Ui
                     {
                         ExportWikiDocumentation.ExportWiki();
                     }
+                    if (ImGui.MenuItem("Export Documentation to JSON"))
+                    {
+                        ExportDocumentationStrings.ExportDocumentationAsJson();
+                    }
+                    if (ImGui.MenuItem("Import documentation from JSON"))
+                    {
+                        ExportDocumentationStrings.ImportDocumentationAsJson();
+                    }
+                    
                     ImGui.EndMenu();
                 }
                     
@@ -294,13 +314,46 @@ public class T3Ui
                 ImGui.MenuItem("Show Minimap", "", ref UserSettings.Config.ShowMiniMap);
                 ImGui.MenuItem("Show Toolbar", "", ref UserSettings.Config.ShowToolbar);
                 ImGui.MenuItem("Show Interaction Overlay", "", ref UserSettings.Config.ShowInteractionOverlay);
-                if(ImGui.MenuItem("Toggle All UI Elements", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), false, !IsCurrentlySaving))
+                if(ImGui.MenuItem("Toggle All UI Elements", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleAllUiElements, false), false, !IsCurrentlySaving))
                 {
-                    ToggleFocusMode();
+                    ToggleAllUiElements();
                 }
                     
                 ImGui.Separator();
-                ImGui.MenuItem("FullScreen", "", ref UserSettings.Config.FullScreen);
+                if (ImGui.BeginMenu("Main Window Fullscreen Destination"))
+                {
+                    for (var index = 0; index < EditorUi.AllScreens.Length; index++)
+                    {
+                        var screen = EditorUi.AllScreens.ElementAt(index);
+                        var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
+                            $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
+                        if(ImGui.MenuItem(label, "", index ==  UserSettings.Config.FullScreenIndexMain)) 
+                        {
+                            UserSettings.Config.FullScreenIndexMain = index;
+                        }
+                    }
+                    ImGui.EndMenu();
+                }
+                if(ImGui.BeginMenu("Viewer Window Fullscreen Destination"))
+                {
+                    for (var index = 0; index < EditorUi.AllScreens.Length; index++)
+                    {
+                        var screen = EditorUi.AllScreens.ElementAt(index);
+                        var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
+                            $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
+                        if(ImGui.MenuItem(label, "", index ==  UserSettings.Config.FullScreenIndexViewer)) 
+                        {
+                            UserSettings.Config.FullScreenIndexViewer = index;
+                        }
+                    }
+                    ImGui.EndMenu();
+                }
+
+                ImGui.MenuItem("Fullscreen", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFullscreen, false), ref UserSettings.Config.FullScreen);
+                if (ImGui.MenuItem("Focus Mode", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), UserSettings.Config.FocusMode))
+                {
+                    ToggleFocusMode();
+                }
                 ImGui.EndMenu();
             }
                 
@@ -310,7 +363,6 @@ public class T3Ui
                 ImGui.EndMenu();
             }
 
-            
             if (UserSettings.Config.FullScreen)
             {
                 ImGui.Dummy(new Vector2(10,10));
@@ -323,8 +375,7 @@ public class T3Ui
             
             T3Metrics.DrawRenderPerformanceGraph();
             
-            
-            _statusErrorLine.Draw();
+            Program.StatusErrorLine.Draw();
 
             ImGui.EndMainMenuBar();
         }
@@ -333,7 +384,7 @@ public class T3Ui
     }
 
 
-    private void ToggleFocusMode()
+    private static void ToggleAllUiElements()
     {
         //T3Ui.MaximalView = !T3Ui.MaximalView;
         if (UserSettings.Config.ShowToolbar)
@@ -449,10 +500,8 @@ public class T3Ui
         }
     }
 
-    private readonly StatusErrorLine _statusErrorLine = new();
     public static readonly UiSymbolData UiSymbolData;
-
-
+    
     public static IntPtr NotDroppingPointer = new IntPtr(0);
     public static bool DraggingIsInProgress = false;
     public static bool MouseWheelFieldHovered { private get; set; }

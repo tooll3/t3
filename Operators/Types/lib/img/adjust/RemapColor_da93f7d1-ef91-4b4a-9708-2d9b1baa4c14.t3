@@ -61,7 +61,7 @@
         {
           "Id": "7f14d0e3-1159-434d-b038-74644948937c"/*ShaderPath*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\img-fx-color-remap.hlsl"
+          "Value": "Resources\\lib\\img\\fx\\ColorRemap.hlsl"
         },
         {
           "Id": "a5cb5bda-0fb2-4863-bd8d-9ac09135fc30"/*WrapMode*/,
@@ -120,7 +120,7 @@
       "Outputs": []
     },
     {
-      "Id": "0ea5f0cd-02af-4872-8d07-3fc4ce0c4330"/*BoolToFloats*/,
+      "Id": "0ea5f0cd-02af-4872-8d07-3fc4ce0c4330"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
@@ -138,7 +138,7 @@
         {
           "Id": "f6269be3-3331-43a6-91ec-138b47199f3e"/*ShaderPath*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fx\\img-fx-color-remap.hlsl"
+          "Value": "Resources\\lib\\img\\fx\\ColorRemap.hlsl"
         },
         {
           "Id": "6022a4b0-c6fc-49a3-811a-179dcceb8b44"/*WrapMode*/,

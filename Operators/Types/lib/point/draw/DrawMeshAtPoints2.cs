@@ -55,7 +55,7 @@ namespace T3.Operators.Types.Id_065f6edb_6d3d_414b_ab36_4620a957a18c
         [Input(Guid = "69caec2f-28b4-43be-8b96-06de813b25e1")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
 
-        [Input(Guid = "1a87a03d-9f8f-479f-8681-f2a047b08f3b")]
+        [Input(Guid = "1a87a03d-9f8f-479f-8681-f2a047b08f3b", MappedType = typeof(DistributionModes))]
         public readonly InputSlot<int> ColorVariationMode = new InputSlot<int>();
 
         [Input(Guid = "01288f85-aa38-4b63-b862-d40beacaeea2")]
@@ -64,7 +64,7 @@ namespace T3.Operators.Types.Id_065f6edb_6d3d_414b_ab36_4620a957a18c
         [Input(Guid = "6c322352-2c2e-47c0-972c-561a4b4e2067")]
         public readonly InputSlot<bool> UseRotationAsRgba = new InputSlot<bool>();
 
-        [Input(Guid = "44aa4ef1-15fd-4ab5-95e9-41a4ce6b42bf")]
+        [Input(Guid = "44aa4ef1-15fd-4ab5-95e9-41a4ce6b42bf", MappedType = typeof(DistributionModes))]
         public readonly InputSlot<int> ScaleDistribution = new InputSlot<int>();
 
         [Input(Guid = "da61b784-0d00-40fb-882f-a0c2a8558fce")]

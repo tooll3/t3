@@ -1,6 +1,6 @@
 {
   "Id": "c7f87607-dea2-4250-bd51-65fb6e12872d"/*DrawQuadsExample*/,
-  "Description": "A quick test reproducing an image from the internetz.",
+  "Description": "A quick test reproducing an image from the internet.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -228,7 +228,7 @@
       }
     },
     {
-      "ChildId": "e1ea7779-dff3-47b9-8f3a-323b32be5555"/*Blob*/,
+      "ChildId": "e1ea7779-dff3-47b9-8f3a-323b32be5555"/*_BlobOld*/,
       "Position": {
         "X": 1218.5679,
         "Y": 2477.039

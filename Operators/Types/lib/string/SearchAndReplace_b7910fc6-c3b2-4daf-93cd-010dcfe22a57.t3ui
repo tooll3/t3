@@ -1,6 +1,6 @@
 {
   "Id": "b7910fc6-c3b2-4daf-93cd-010dcfe22a57"/*SearchAndReplace*/,
-  "Description": "Looks for an characters or strings in within another string and returns are new string with the matches replaced.",
+  "Description": "Looks for characters or strings within another string and returns a new string with the matches replaced.",
   "InputUis": [
     {
       "InputId": "3ca66cbd-a16a-479c-b858-84732e5023ad"/*OriginalString*/,

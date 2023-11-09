@@ -13,7 +13,7 @@ namespace T3.Operators.Types.Id_b1ffe4dd_d734_4392_a644_7c587979066e
         public readonly Slot<Command> Output = new Slot<Command>();
 
         [Input(Guid = "11e59dd7-1197-433c-a0aa-cf2acad6d33a")]
-        public readonly InputSlot<T3.Core.DataTypes.ParticleSystem> ParticleSystem = new InputSlot<T3.Core.DataTypes.ParticleSystem>();
+        public readonly InputSlot<T3.Core.DataTypes.LegacyParticleSystem> ParticleSystem = new InputSlot<T3.Core.DataTypes.LegacyParticleSystem>();
 
         [Input(Guid = "77f344db-32c0-4f86-b56e-7db51a68723b")]
         public readonly InputSlot<float> Size = new InputSlot<float>();

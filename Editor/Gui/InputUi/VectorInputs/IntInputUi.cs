@@ -5,7 +5,9 @@ using ImGuiNET;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 using T3.Editor.Gui.Interaction;
+using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
 namespace T3.Editor.Gui.InputUi.VectorInputs
@@ -120,7 +122,27 @@ namespace T3.Editor.Gui.InputUi.VectorInputs
                     editStateFlags |= InputEditStateFlags.ModifiedAndFinished;
                 }
 
-                if (ImGui.IsItemClicked())
+                if (!ImGui.IsItemActive())
+                {
+                    var io = ImGui.GetIO();
+                    if (ImGui.IsItemHovered() && io.KeyCtrl)
+                    {
+                        T3Ui.MouseWheelFieldHovered = true;
+                        ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeEW);
+                        var dl = ImGui.GetForegroundDrawList();
+                        dl.AddRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), UiColors.StatusActivated);
+
+                        var wheel = io.MouseWheel;
+                        if (wheel == 0)
+                            return InputEditStateFlags.Nothing;
+
+                        var delta = wheel > 0 ? -1 : 1;
+                        value= (value + delta).Clamp(0, enumInfo.ValueNames.Length-1);
+                    
+                        return InputEditStateFlags.Modified;
+                    }
+                }
+                else if (ImGui.IsItemClicked())
                 {
                     editStateFlags |= InputEditStateFlags.Started;
                 }

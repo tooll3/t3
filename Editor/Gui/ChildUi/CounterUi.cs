@@ -2,6 +2,7 @@
 using T3.Core.Operator;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 using T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c;
 
 namespace T3.Editor.Gui.ChildUi
@@ -40,7 +41,10 @@ namespace T3.Editor.Gui.ChildUi
             }
 
             ImGui.PopID();
-            return SymbolChildUi.CustomUiResult.Rendered |  SymbolChildUi.CustomUiResult.PreventInputLabels;
+            return SymbolChildUi.CustomUiResult.Rendered 
+                   | SymbolChildUi.CustomUiResult.PreventOpenSubGraph 
+                   | SymbolChildUi.CustomUiResult.PreventInputLabels
+                   | SymbolChildUi.CustomUiResult.PreventTooltip;
         }
     }
 }

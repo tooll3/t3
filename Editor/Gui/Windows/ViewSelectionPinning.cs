@@ -13,6 +13,7 @@ using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Output;
+using T3.Editor.UiModel;
 using Icon = T3.Editor.Gui.Styling.Icon;
 
 namespace T3.Editor.Gui.Windows
@@ -56,11 +57,11 @@ namespace T3.Editor.Gui.Windows
                 if (_isPinned)
                     PinSelectionToView();
             }
-
+            CustomComponents.TooltipForLastItem("Pin output to active operator.");
             
             
             ImGui.SameLine();
-            ImGui.SetNextItemWidth(300);
+            ImGui.SetNextItemWidth(200);
             var suffix = _isPinned ? " (pinned)" : " (selected)";
 
             var pinnedEvaluationInstance = GetPinnedEvaluationInstance();

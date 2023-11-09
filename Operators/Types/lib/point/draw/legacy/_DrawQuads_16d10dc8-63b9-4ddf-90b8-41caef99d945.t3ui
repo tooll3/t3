@@ -1,6 +1,6 @@
 {
   "Id": "16d10dc8-63b9-4ddf-90b8-41caef99d945"/*_DrawQuads*/,
-  "Description": "Draws 3d rotated quads at point positions.\n\nThis can be useful for drawing oriented sprite like shapes.\nPlease note that the oriention is not aligned towards the camera. \n\nNote: This operator has been deprecated. Consider using [DrawBillboards] with the rotation mode set seto point rotation.",
+  "Description": "Draws 3D rotated quads at point positions.\n\nThis can be useful for drawing oriented sprite-like shapes.\nPlease note that the orientation is not aligned toward the camera. \n\nNote: This operator has been deprecated. Consider using [DrawBillboards] with the rotation mode set to point rotation.",
   "InputUis": [
     {
       "InputId": "ad6b28be-ba14-4063-baf9-cfaf0096f1ea"/*GPoints*/,
@@ -377,6 +377,15 @@
         "X": 1693.3767,
         "Y": 109.5778
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "5350947d-c8d7-42ea-a094-79d785136de4",
+      "Title": "Example with Invert Blendmode",
+      "Description": "A quick tip how to use invert blendmode to create nice abstract patterns. ",
+      "LinkUrl": "https://youtu.be/o-Ojg_LOi4k?feature=shared",
+      "LinkType": "TutorialVideo"
     }
   ]
 }

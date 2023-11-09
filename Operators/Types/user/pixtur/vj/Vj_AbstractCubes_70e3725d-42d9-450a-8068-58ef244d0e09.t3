@@ -272,7 +272,7 @@
       "Outputs": []
     },
     {
-      "Id": "00d242a3-728e-4732-b356-5214d7bd5828"/*DisplaceMesh*/,
+      "Id": "00d242a3-728e-4732-b356-5214d7bd5828"/*DisplaceMeshNoise*/,
       "SymbolId": "b5709297-c714-4019-9d0b-6982590b5590",
       "InputValues": [
         {
@@ -455,7 +455,7 @@
       "Outputs": []
     },
     {
-      "Id": "43d36757-accb-4d14-93ca-2afb4531e1a8"/*Blob*/,
+      "Id": "43d36757-accb-4d14-93ca-2afb4531e1a8"/*_BlobOld*/,
       "SymbolId": "c8590f8f-cca1-434a-a880-67bb91920e1a",
       "InputValues": [
         {
@@ -648,7 +648,7 @@
       "SymbolId": "50aab941-0a29-474a-affd-13a74ea0c780",
       "InputValues": [
         {
-          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Scale*/,
+          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
           "Type": "System.Single",
           "Value": 1.0
         }
@@ -932,7 +932,7 @@
       "Outputs": []
     },
     {
-      "Id": "b6116c41-9797-4e81-8fa0-799dc84bd197"/*SimNoise*/,
+      "Id": "b6116c41-9797-4e81-8fa0-799dc84bd197"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -944,7 +944,7 @@
       "Outputs": []
     },
     {
-      "Id": "a1dd8a8c-83da-4d3d-8ecd-d997ff2a3d0e"/*SimDirectedForce*/,
+      "Id": "a1dd8a8c-83da-4d3d-8ecd-d997ff2a3d0e"/*SimDirectionalOffset*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {
@@ -2178,7 +2178,7 @@
       "Outputs": []
     },
     {
-      "Id": "3d45138e-fa1a-4e12-b07f-6612afe86e36"/*DisplaceMesh*/,
+      "Id": "3d45138e-fa1a-4e12-b07f-6612afe86e36"/*DisplaceMeshNoise*/,
       "SymbolId": "b5709297-c714-4019-9d0b-6982590b5590",
       "InputValues": [
         {
@@ -2524,7 +2524,7 @@
       "SymbolId": "50aab941-0a29-474a-affd-13a74ea0c780",
       "InputValues": [
         {
-          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Scale*/,
+          "Id": "e0f4333d-8bee-4f9e-bb29-9f76bd72e61f"/*Amplitude*/,
           "Type": "System.Single",
           "Value": 30.0
         }
@@ -2698,7 +2698,7 @@
       "Outputs": []
     },
     {
-      "Id": "870cac25-104c-4f83-be6c-2a06dd60c952"/*SimNoise*/,
+      "Id": "870cac25-104c-4f83-be6c-2a06dd60c952"/*SimNoiseOffset*/,
       "SymbolId": "5f846187-e109-45d1-97e0-ae95e3e7d9ba",
       "InputValues": [
         {
@@ -2710,7 +2710,7 @@
       "Outputs": []
     },
     {
-      "Id": "1b3cf07b-6e5d-49a9-822f-e6b6c79e9530"/*SimDirectedForce*/,
+      "Id": "1b3cf07b-6e5d-49a9-822f-e6b6c79e9530"/*SimDirectionalOffset*/,
       "SymbolId": "7a08d73e-1aea-479f-8d36-ecb119d75c3a",
       "InputValues": [
         {

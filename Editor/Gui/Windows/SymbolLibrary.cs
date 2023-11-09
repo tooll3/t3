@@ -74,7 +74,7 @@ namespace T3.Editor.Gui.Windows
         {
             //ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
 
-            CustomComponents.DrawSearchField("Search symbols...", ref _filter.SearchString, -60);
+            CustomComponents.DrawInputFieldWithPlaceholder("Search symbols...", ref _filter.SearchString, -60);
 
             ImGui.SameLine();
             if (ImGui.Button("Rescan"))

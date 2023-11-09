@@ -12,6 +12,7 @@ using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.RenderExport;
+using T3.Editor.UiModel;
 using Color = T3.Editor.Gui.Styling.Color;
 using Vector2 = System.Numerics.Vector2;
 
@@ -32,7 +33,7 @@ namespace T3.Editor.Gui.Windows.Output
             _instanceCounter++;
             OutputWindowInstances.Add(this);
         }
-        
+
         public static IEnumerable<OutputWindow> GetVisibleInstances()
         {
             foreach (var i in OutputWindowInstances)
@@ -46,18 +47,17 @@ namespace T3.Editor.Gui.Windows.Output
                 yield return graphWindow;
             }
         }
-        
+
         public static OutputWindow GetPrimaryOutputWindow()
         {
             return GetVisibleInstances().FirstOrDefault();
         }
 
-
         public Texture2D GetCurrentTexture()
         {
             return _imageCanvas?.LastTexture;
-        } 
-        
+        }
+
         protected override void DrawAllInstances()
         {
             // Convert to array to enable removable of members during iteration
@@ -86,19 +86,16 @@ namespace T3.Editor.Gui.Windows.Output
 
         protected override void DrawContent()
         {
-
             ImGui.BeginChild("##content", new Vector2(0, ImGui.GetWindowHeight()), false,
                              ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoScrollWithMouse);
             {
-
                 // Draw output
                 _imageCanvas.SetAsCurrent();
 
                 // Move down to avoid overlapping with toolbar
                 ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin() + new Vector2(0, 40));
                 var drawnInstance = Pinning.GetPinnedOrSelectedInstance();
-                
-                
+
                 var drawnType = UpdateAndDrawOutput(drawnInstance, Pinning.GetPinnedEvaluationInstance());
                 _imageCanvas.Deactivate();
 
@@ -111,10 +108,8 @@ namespace T3.Editor.Gui.Windows.Output
             ImGui.EndChild();
         }
 
-
         private void DrawToolbar(Type drawnType)
         {
-
             ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
             ImGui.SetCursorPos(ImGui.GetWindowContentRegionMin());
             Pinning.DrawPinning();
@@ -127,24 +122,31 @@ namespace T3.Editor.Gui.Windows.Output
                 _imageCanvas.SetScaleToMatchPixels();
                 _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Pixel);
             }
-            
+
             ImGui.SameLine();
-            
-            if (CustomComponents.StateButton("Fit",
-                                             _imageCanvas.ViewMode == ImageOutputCanvas.Modes.Fitted
-                                                 ? CustomComponents.ButtonStates.Disabled
-                                                 : CustomComponents.ButtonStates.Normal)
-                || KeyboardBinding.Triggered(UserActions.FocusSelection))
+
             {
-                if (drawnType == typeof(Texture2D))
+                if (CustomComponents.StateButton("Fit",
+                                                 _imageCanvas.ViewMode == ImageOutputCanvas.Modes.Fitted
+                                                     ? CustomComponents.ButtonStates.Disabled
+                                                     : CustomComponents.ButtonStates.Normal)
+                    || KeyboardBinding.Triggered(UserActions.FocusSelection))
                 {
-                    _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Fitted);
+                    if (drawnType == typeof(Texture2D))
+                    {
+                        _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Fitted);
+                    }
+                    else if (drawnType == typeof(Command))
+                    {
+                        _camSelectionHandling.ResetView();
+                    }
                 }
-                else if (drawnType == typeof(Command))
-                {
-                    _camSelectionHandling.ResetView();
-                }
+
+                var label = drawnType == typeof(Texture2D) ? "Fit image to view" : "Reset view or camera position";
+                var shortCut = KeyboardBinding.ListKeyboardShortcuts(UserActions.FocusSelection);
+                CustomComponents.TooltipForLastItem(label, shortCut);
             }
+
             ImGui.SameLine();
 
             var showGizmos = _evaluationContext.ShowGizmos != GizmoVisibility.Off;
@@ -155,40 +157,45 @@ namespace T3.Editor.Gui.Windows.Output
                                                     : GizmoVisibility.Off;
             }
 
+            CustomComponents.TooltipForLastItem("Toggle gizmos and floor grid.",
+                                                "Gizmos are available for selected transform operators and can be dragged to adjust their position.");
             ImGui.SameLine();
 
             _camSelectionHandling.DrawCameraControlSelection();
-            ResolutionHandling.DrawSelector(ref _selectedResolution, _resolutionDialog);
             
+            ResolutionHandling.DrawSelector(ref _selectedResolution, _resolutionDialog);
+
             ImGui.SameLine();
             ColorEditButton.Draw(ref _backgroundColor, new Vector2(ImGui.GetFrameHeight(), ImGui.GetFrameHeight()));
+            CustomComponents.TooltipForLastItem("Adjust background color of view");
             ImGui.PopStyleColor();
-            
+
             var texture = GetCurrentTexture();
             if (texture != null)
             {
                 ImGui.SameLine();
 
-                if (CustomComponents.IconButton(Icon.Camera, new Vector2(ImGui.GetFrameHeight(), ImGui.GetFrameHeight())))
+                if (CustomComponents.IconButton(Icon.Snapshot, new Vector2(ImGui.GetFrameHeight(), ImGui.GetFrameHeight())))
                 {
                     var folder = @"Screenshots/";
                     if (!Directory.Exists(folder))
                     {
                         Directory.CreateDirectory(folder);
                     }
-                    
+
                     var filename = Path.Join(folder, $"{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.png");
                     ScreenshotWriter.StartSavingToFile(texture, filename, ScreenshotWriter.FileFormats.Png);
                 }
 
                 CustomComponents.TooltipForLastItem("Save screenshot");
-                if(!RenderHelperWindow.IsExporting)
+                if (!RenderHelperWindow.IsExporting)
                     ScreenshotWriter.UpdateSaving();
             }
-            
+
             ImGui.SameLine();
             ImGui.PushID("CamSpeed");
-            var result = SingleValueEdit.Draw(ref UserSettings.Config.CameraSpeed,  new Vector2(ImGui.GetFrameHeight() * 2, ImGui.GetFrameHeight()), 0.001f, 100, true, 0.01f, "{0:G3}");
+            var result = SingleValueEdit.Draw(ref UserSettings.Config.CameraSpeed, new Vector2(ImGui.GetFrameHeight() * 2, ImGui.GetFrameHeight()), 0.001f, 100,
+                                              true, 0.01f, "{0:G3}");
             CustomComponents.TooltipForLastItem("Camera speed when flying with ASDW keys.", "TIP: Use mouse wheel while flying to adjust on the fly.");
             ImGui.PopID();
         }
@@ -211,17 +218,17 @@ namespace T3.Editor.Gui.Windows.Output
             if (!evaluatedSymbolUi.OutputUis.TryGetValue(evalOutput.Id, out IOutputUi evaluatedOutputUi))
                 return null;
 
-            if (_imageCanvas.ViewMode !=  ImageOutputCanvas.Modes.Fitted 
+            if (_imageCanvas.ViewMode != ImageOutputCanvas.Modes.Fitted
                 && evaluatedOutputUi is CommandOutputUi)
             {
                 _imageCanvas.SetViewMode(ImageOutputCanvas.Modes.Fitted);
             }
-            
+
             // Prepare context
             _evaluationContext.Reset();
             _evaluationContext.BypassCameras = _camSelectionHandling.BypassCamera;
             _evaluationContext.RequestedResolution = _selectedResolution.ComputeResolution();
-            
+
             // Set camera
             if (_camSelectionHandling.CameraForRendering != null)
             {
@@ -247,7 +254,7 @@ namespace T3.Editor.Gui.Windows.Output
             // Ugly hack to hide final target
             if (instanceForOutput != instanceForEvaluation)
             {
-                ImGui.BeginChild("hidden", Vector2.One );
+                ImGui.BeginChild("hidden", Vector2.One);
                 {
                     evaluatedOutputUi.DrawValue(evalOutput, _evaluationContext);
                 }
@@ -272,11 +279,11 @@ namespace T3.Editor.Gui.Windows.Output
                 return evalOutput.ValueType;
             }
         }
-        
+
         public Instance ShownInstance => Pinning.GetPinnedOrSelectedInstance();
         public static readonly List<Window> OutputWindowInstances = new();
         public ViewSelectionPinning Pinning { get; } = new();
-        
+
         private System.Numerics.Vector4 _backgroundColor = new(0.1f, 0.1f, 0.1f, 1.0f);
         private readonly EvaluationContext _evaluationContext = new();
         private readonly ImageOutputCanvas _imageCanvas = new();

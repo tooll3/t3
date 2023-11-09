@@ -1,6 +1,6 @@
 {
   "Id": "1cdedb32-f23b-4649-b4d3-9e158ef9be40"/*TVIntroSceneSetup*/,
-  "Description": "A setup that allow to animate the TV scene setup with exposed parameters.",
+  "Description": "A setup that allows animating the TV scene setup with exposed parameters.",
   "InputUis": [
     {
       "InputId": "4c5c6be2-05d0-4a70-8705-1c0aad83fa2d"/*TvImage*/,

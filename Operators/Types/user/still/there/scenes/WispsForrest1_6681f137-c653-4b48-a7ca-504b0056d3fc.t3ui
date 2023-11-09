@@ -1,6 +1,6 @@
 {
   "Id": "6681f137-c653-4b48-a7ca-504b0056d3fc"/*WispsForrest1*/,
-  "Description": "TestScene with stuff growing",
+  "Description": "Test scene with stuff growing",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -53,7 +53,7 @@
       }
     },
     {
-      "ChildId": "8d3c739c-7c78-4fc9-80a8-a2bb1088bc8b"/*ParticleSimulation*/,
+      "ChildId": "8d3c739c-7c78-4fc9-80a8-a2bb1088bc8b"/*LegacyParticleSimulation*/,
       "Position": {
         "X": 1108.5801,
         "Y": 488.01288
@@ -81,7 +81,7 @@
       }
     },
     {
-      "ChildId": "83e49c2a-8d09-4e98-89c1-e527e3302853"/*Blob*/,
+      "ChildId": "83e49c2a-8d09-4e98-89c1-e527e3302853"/*_BlobOld*/,
       "Position": {
         "X": 1350.8569,
         "Y": 716.7726

@@ -1,6 +1,6 @@
 {
   "Id": "55411442-d538-48bf-ab78-b8c24c85aa46"/*AdjustColors*/,
-  "Description": "Adjusts various color properties of the incoming image and adds a slight vignette.\n\nAlso consider using [ColorGrade]",
+  "Description": "Adjusts various color properties of the incoming image and adds a slight vignette.\n\nAlso consider using [ColorGrade].",
   "InputUis": [
     {
       "InputId": "c325d01a-5232-4696-9b58-e24f72779597"/*Texture2d*/,
@@ -108,18 +108,6 @@
       "Position": {
         "X": 261.9446,
         "Y": 577.09564
-      }
-    },
-    {
-      "ChildId": "66749bd3-1a56-4ed3-be17-c08249ba0565"/*_ImageFxShaderSetup2*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 137.52068,
-        "Y": 520.0926
-      },
-      "Position": {
-        "X": 611.80255,
-        "Y": 407.22067
       }
     },
     {

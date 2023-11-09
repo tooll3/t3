@@ -16,6 +16,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.TimeLine;
+using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Graph
@@ -46,11 +47,11 @@ namespace T3.Editor.Gui.Graph
 
         public static bool CanOpenAnotherWindow()
         {
-            if (_instanceCounter > 0)
-            {
-                //Log.Error("only one graph window supported for now");
-                return false;
-            }
+            // if (_instanceCounter > 0)
+            // {
+            //     //Log.Error("only one graph window supported for now");
+            //     return false;
+            // }
 
             return true;
         }
@@ -418,6 +419,7 @@ namespace T3.Editor.Gui.Graph
 
         private void DrawControlsAtBottom()
         {
+            TimeControls.HandleTimeControlActions();
             if (!UserSettings.Config.ShowToolbar)
                 return;
 

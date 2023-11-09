@@ -1,6 +1,6 @@
 {
   "Id": "2bd99e05-9a54-4466-a220-0289939406bd"/*ReprojectToUvExample*/,
-  "Description": "Illustrates an potential setup for camera / media reprojection.\n\nIn compbination with [Spout] this could be used to render content matching the visual perspective of an audience.",
+  "Description": "Illustrates a potential setup for camera/media reprojection.\n\nIn combination with [Spout], this could be used to render content matching the visual perspective of an audience.",
   "InputUis": [],
   "SymbolChildUis": [
     {
@@ -184,7 +184,7 @@
       }
     },
     {
-      "ChildId": "d925a895-012d-4ae0-837c-9e256fb78251"/*SimNoise*/,
+      "ChildId": "d925a895-012d-4ae0-837c-9e256fb78251"/*SimNoiseOffset*/,
       "Position": {
         "X": -143.36658,
         "Y": 849.75525
@@ -226,7 +226,7 @@
       }
     },
     {
-      "ChildId": "bd69a0ab-ab5f-4f41-87c6-d53f930744d0"/*SimDirectedForce*/,
+      "ChildId": "bd69a0ab-ab5f-4f41-87c6-d53f930744d0"/*SimDirectionalOffset*/,
       "Position": {
         "X": 6.633423,
         "Y": 849.75525
@@ -354,7 +354,7 @@
     },
     {
       "Id": "5ab6ae28-26f5-4b5c-b044-a35bfbcd3740",
-      "Title": "Render example scene \nin overview context.",
+      "Title": "Render example scene\nin overview context.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,
@@ -372,7 +372,7 @@
     },
     {
       "Id": "33963fa4-5bc2-4706-99c8-02a547ba925d",
-      "Title": "This is just an example persective.\nYou should use the group and viewer camera.",
+      "Title": "This is just an example perspective.\nYou should use the group and viewer camera.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

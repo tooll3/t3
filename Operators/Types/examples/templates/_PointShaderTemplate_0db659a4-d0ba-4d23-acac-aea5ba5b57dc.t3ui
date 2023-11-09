@@ -145,7 +145,7 @@
     },
     {
       "Id": "dc8affb1-d3ea-44eb-bc8d-12a8fd5ade4a",
-      "Title": "Setup a new structured buffer with the \nrequired dimenstion (stride) and length.",
+      "Title": "Setup a new structured buffer with the \nrequired dimension (stride) and length.",
       "Color": {
         "X": 0.6,
         "Y": 0.6,

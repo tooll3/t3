@@ -89,7 +89,7 @@
       "Outputs": []
     },
     {
-      "Id": "e11d6cbf-31ce-42b5-b535-1ef5bd458211"/*BoolToFloats*/,
+      "Id": "e11d6cbf-31ce-42b5-b535-1ef5bd458211"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
@@ -167,7 +167,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fluid-fx\\img-fluid-fx2-cs.hlsl"
+          "Value": "Resources\\lib\\img\\fluid-fx\\fx-SimpleLiquid2-cs.hlsl"
         },
         {
           "Id": "8ad9e58d-a767-4a5f-bfbf-d082b80901d6"/*EntryPoint*/,
@@ -241,7 +241,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\img\\fluid-fx\\img-fluid-fx2-cs.hlsl"
+          "Value": "Resources\\lib\\img\\fluid-fx\\fx-SimpleLiquid2-cs.hlsl"
         },
         {
           "Id": "8ad9e58d-a767-4a5f-bfbf-d082b80901d6"/*EntryPoint*/,
@@ -408,7 +408,7 @@
       "Outputs": []
     },
     {
-      "Id": "9bf64f78-605d-4aba-81ae-a65a5d27a93f"/*BoolToFloats*/,
+      "Id": "9bf64f78-605d-4aba-81ae-a65a5d27a93f"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []

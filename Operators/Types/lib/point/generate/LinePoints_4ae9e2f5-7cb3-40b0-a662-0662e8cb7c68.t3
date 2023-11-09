@@ -29,7 +29,7 @@
     },
     {
       "Id": "af75835a-04c9-4721-8c7a-a31ef8012f06"/*Pivot*/,
-      "DefaultValue": 0.0
+      "DefaultValue": 0.5
     },
     {
       "Id": "d120d8f7-aff6-4e30-b0d2-c45e3e477fde"/*W*/,
@@ -51,13 +51,13 @@
       "Id": "a8dfe0e7-ad33-47cf-ab78-726385e38434"/*OrientationAxis*/,
       "DefaultValue": {
         "X": 0.0,
-        "Y": 1.0,
-        "Z": 0.0
+        "Y": 0.0,
+        "Z": 1.0
       }
     },
     {
       "Id": "208b724d-c5d7-4eaa-94a1-e1f045f14969"/*OrientationAngle*/,
-      "DefaultValue": -90.0
+      "DefaultValue": 0.0
     },
     {
       "Id": "ddc2ea6a-d356-46c9-b333-4cce69c02570"/*AddSeparator*/,
@@ -72,7 +72,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\generate\\points-on-line.hlsl"
+          "Value": "Resources\\lib\\points\\generate\\LinePoints.hlsl"
         }
       ],
       "Outputs": []
@@ -166,7 +166,7 @@
       "Outputs": []
     },
     {
-      "Id": "cc3e2a65-be3b-4dde-b341-2f5e44b553f6"/*BoolToFloats*/,
+      "Id": "cc3e2a65-be3b-4dde-b341-2f5e44b553f6"/*BoolToFloat*/,
       "SymbolId": "9db2fcbf-54b9-4222-878b-80d1a0dc6edf",
       "InputValues": [],
       "Outputs": []
