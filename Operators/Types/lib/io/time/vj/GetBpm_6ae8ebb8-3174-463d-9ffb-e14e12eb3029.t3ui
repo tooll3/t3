@@ -1,0 +1,38 @@
+{
+  "Id": "6ae8ebb8-3174-463d-9ffb-e14e12eb3029"/*GetBpm*/,
+  "Description": "Returns the current BPM rate",
+  "InputUis": [
+    {
+      "InputId": "0e439a48-9197-4091-b082-975b5381c33a"/*SubGraph*/,
+      "Relevancy": "Required",
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    },
+    {
+      "InputId": "99ef630b-8825-462b-a29e-a02e04d8fa59"/*BpmRate*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "8fe0461c-4693-4ed2-aa35-42675b9e240b"/*TriggerUpdate*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "fee43ad0-0c4c-4d95-a4e1-e3fa9d0a2f0b"/*Commands*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 300.0
+      }
+    }
+  ]
+}
