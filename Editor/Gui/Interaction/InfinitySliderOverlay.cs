@@ -33,10 +33,10 @@ namespace T3.Editor.Gui.Interaction
                 _originalValue = roundedValue;
             }
 
-            var mouseYDistance = _center.Y - _io.MousePos.Y; // Vector2.Distance(_center, p1);
+            var mouseYDistance = _center.Y - _io.MousePos.Y;
 
             // Update angle...
-            var mousePosX = _io.MousePos.X;
+            var mousePosX = (int)(_io.MousePos.X * 2)/2;
             var xOffset = mousePosX - _center.X;
             var deltaX = xOffset - _lastXOffset;
             _lastXOffset = xOffset;
