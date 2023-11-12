@@ -10,6 +10,7 @@ using SharpDX.Windows;
 using T3.Editor.Gui.Styling;
 using Device = SharpDX.Direct3D11.Device;
 using Icon = System.Drawing.Icon;
+using Rectangle = System.Drawing.Rectangle;
 using Resource = SharpDX.Direct3D11.Resource;
 
 namespace T3.Editor.App
@@ -38,11 +39,22 @@ namespace T3.Editor.App
             CreateRenderForm(windowTitle, disableClose);
         }
 
-        public void SetVisible(bool isVisible) => Form.Visible = isVisible;
+        public void SetVisible(bool isVisible)
+        {
+            Form.Visible = isVisible;
+        }
 
-        public void SetSizeable() => Form.FormBorderStyle = FormBorderStyle.Sizable;
+        public void SetSizeable()
+        {
+            Form.FormBorderStyle = FormBorderStyle.Sizable;
+            if (_boundsBeforeFullscreen.Height != 0 && _boundsBeforeFullscreen.Width != 0)
+            {
+                Form.Bounds = _boundsBeforeFullscreen;
+            }
+        }
 
         public void Show() => Form.Show();
+        
 
         public Vector2 GetDpi()
         {
@@ -53,6 +65,7 @@ namespace T3.Editor.App
 
         internal void SetFullScreen(int screenIndex)
         {
+            _boundsBeforeFullscreen = Form.Bounds;
             Form.FormBorderStyle = FormBorderStyle.Sizable;
             Form.WindowState = FormWindowState.Normal;
             Form.FormBorderStyle = FormBorderStyle.None;
@@ -204,5 +217,6 @@ namespace T3.Editor.App
         private RenderTargetView _renderTargetView;
         private Texture2D _backBufferTexture;
         private bool _isResizingRightNow;
+        private Rectangle _boundsBeforeFullscreen;
     }
 }
