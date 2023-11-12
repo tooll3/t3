@@ -265,8 +265,9 @@ namespace T3.Editor.UiModel
             var newChildUi = sourceChildUi.Clone();
             
 
-            newChildUi.SymbolChild = newChild;// Symbol.Children.Find(entry => entry.Id == newChildId);
+            newChildUi.SymbolChild = newChild;
             newChildUi.PosOnCanvas = posInCanvas;
+            newChildUi.Comment = sourceChildUi.Comment;
             
             ChildUis.Add(newChildUi);
             return newChild;
