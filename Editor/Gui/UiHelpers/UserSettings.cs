@@ -28,7 +28,7 @@ namespace T3.Editor.Gui.UiHelpers
             public readonly Dictionary<string, Guid> LastOpsForWindows = new Dictionary<string, Guid>();
 
             [JsonConverter(typeof(StringEnumConverter))]
-            public GraphCanvas.HoverModes HoverMode = GraphCanvas.HoverModes.Live;
+            public GraphCanvas.HoverModes HoverMode = GraphCanvas.HoverModes.LastValue;
 
             public bool AudioMuted;
             
