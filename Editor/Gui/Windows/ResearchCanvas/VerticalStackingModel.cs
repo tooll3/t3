@@ -5,14 +5,61 @@ using T3.Editor.Gui.Selection;
 
 namespace T3.Editor.Gui.Windows.ResearchCanvas;
 
+
+public class OutSocket
+{
+    
+}
+
+public class InSocket
+{
+    
+}
+
+
+/// <summary>
+/// Generate considerations:
+/// - The layout model is a temporary data that is completely be generated from the t3ui data.
+/// - Its computation is expensive and should only be done if required.
+/// - This might be especially complicated if the state cannot be stored in the layout model, because it
+///   relies on a temp. property like expanding a parameter type group.
+/// </summary>
+public class SnappedGroup
+{
+    public List<OutSocket> FreeOutSockets = new();
+    public List<InSocket> FreeInSockets = new();
+
+    public List<Block> SnappedBlocks = new();
+
+    public List<Connection> SnappedConnections = new();
+
+    /// <summary>
+    /// This will move collect relevant snapped blocks and attempt to adjust the layout.
+    /// Returns false.
+    /// Note:
+    /// - This change should result in a command that actually applies the changes to the operator positions
+    /// - After being applied, the SnapGroup(s) should be recalculated.
+    /// 
+    /// </summary>
+    public bool ApplyVerticalLayoutChange(Vector2 canvasPos, float delta)
+    {
+        return true;
+    }
+}
+
+
 public class Block : ISelectableCanvasObject
 {
     public Block()
     {
     }
 
-    public Block(int x, int y, string name)
+    public Block(int x, int y, string name, Type type= null)
     {
+        if (type != null)
+        {
+            PrimaryType = type;
+        }
         Id = Guid.NewGuid();
         Name = name;
         Size = VerticalStackingCanvas.BlockSize;
@@ -75,7 +122,7 @@ public class Block : ISelectableCanvasObject
     }
 }
 
-public class Group
+public class SnapGroup
 {
     public List<Block> Blocks;
 }

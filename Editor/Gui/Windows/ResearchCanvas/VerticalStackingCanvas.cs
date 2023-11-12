@@ -2,14 +2,49 @@
 using System.Linq;
 using System.Numerics;
 using ImGuiNET;
+using SharpDX.Direct3D11;
+using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Windows.ResearchCanvas;
+
+
+
+/**
+ * Steps for implementation:
+ * The general concepts seems to be working. The biggest questions are:
+ * - Connection to secondary-parameters:
+ *  - Temporarily expanding operators:
+ *    - Adjusting layout of snapped ops
+ *    - highlighting matching inputs
+ *    - highlighting potentially matching inputs while collapes
+ *    - damping positions and sizes
+ *  - selecting and dragging multiple ops
+ *    - only enable snapping with single snapped group
+ *    - Select complete group with some kind shortcut (e.g. Shift + Double click?)
+ *  - popup operator from snapped groups
+ *  - rearrange sorting order without snapped group
+ *
+ *
+ * Mode:
+ * - Is dragging multiple ops
+ *   - DraggedOps
+ *   - IsSingle snapped group
+ *   - dragged ops main outputs
+ *
+ * Apply block-layout change:
+ *  - change height: Insert
+ *  - Flood fill snapped ops to bottom right quadrant
+ *
+ *  Toggle expand parameters of op (just to check layout change)
+ * 
+ */
 
 public class VerticalStackingCanvas
 {
@@ -36,7 +71,8 @@ public class VerticalStackingCanvas
         HandleFenceSelection();
 
         var anchorScale = Canvas.TransformDirection(BlockSize);
-        var slotSize = 3 * Canvas.Scale.X;
+        var canvasScale = Canvas.Scale.X;
+        var slotSize = 3 * canvasScale;
 
         foreach (var b in Blocks)
         {
@@ -47,7 +83,7 @@ public class VerticalStackingCanvas
             var cLabel = ColorVariations.OperatorLabel.Apply(c);
 
             var pMin = Canvas.TransformPosition(b.PosOnCanvas);
-            var pMax = Canvas.TransformPosition(b.PosOnCanvas + BlockSize);
+            var pMax = Canvas.TransformPosition(b.PosOnCanvas + BlockSize) ;
 
             ImGui.SetCursorScreenPos(pMin);
             ImGui.InvisibleButton(b.Id.ToString(), anchorScale);
@@ -56,17 +92,29 @@ public class VerticalStackingCanvas
             if (isDraggedAndSnapped)
             {
             }
+
+            var slots = b.GetSlots().ToList();
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.BeginTooltip();
+                foreach (var s in slots)
+                {
+                    ImGui.Text("connected:" +s.IsConnected);
+                }
+                ImGui.EndTooltip();
+            }
             
             var fade = isDraggedAndSnapped ? 0.6f : 1;
             
-            drawList.AddRectFilled(pMin, pMax, c.Fade(0.7f * fade), 3);
+            drawList.AddRectFilled(pMin, pMax,  ColorVariations.OperatorBackground.Apply(c).Fade(0.7f * fade), 3 );
             var outlineColor = BlockSelection.IsNodeSelected(b)
                                    ? UiColors.ForegroundFull
-                                   : UiColors.BackgroundFull.Fade(0.6f);
-            drawList.AddRect(pMin, pMax, outlineColor, 4);
-            drawList.AddText(Fonts.FontNormal,16 * Canvas.Scale.X,pMin + new Vector2(6, 3), cLabel, b.Name);
+                                   : UiColors.BackgroundFull.Fade(0.3f);
+            drawList.AddRect(pMin, pMax, outlineColor, 3 );
+            drawList.AddText(Fonts.FontNormal,13 * canvasScale,pMin + new Vector2(4, 3) * canvasScale, cLabel, b.Name);
 
-            foreach (var slot in b.GetSlots())
+            // Draw Slots
+            foreach (var slot in slots)
             {
                 if (slot.IsInput)
                 {
@@ -83,17 +131,18 @@ public class VerticalStackingCanvas
                 }
                 else
                 {
-                    var isSnappedAndConnected = slot.Connections.Count > 0 && slot.Connections[0].IsSnapped;
-                    if (isSnappedAndConnected)
+                    // Outputs
+                    var isFirstSnappedAndConnected = slot.Connections.Count > 0 && slot.Connections[0].IsSnapped;
+                    if (isFirstSnappedAndConnected)
                     {
-                        //drawList.AddCircleFilled(Canvas.TransformPosition(slot.VerticalPosOnCanvas), slotSize, c, 3);
+                        drawList.AddCircleFilled(Canvas.TransformPosition(slot.VerticalPosOnCanvas), slotSize, c, 3);
                     }
                     else
                     {
                         drawList.AddCircle(Canvas.TransformPosition(slot.VerticalPosOnCanvas), slotSize, c, 3, 1);
                     }
-                    //drawList.AddCircle(Canvas.TransformPosition(slot.HorizontalPosOnCanvas), slotSize, c, 3);
                     drawList.AddCircle(Canvas.TransformPosition(slot.HorizontalPosOnCanvas), slotSize, c, 3);
+                    //drawList.AddCircle(Canvas.TransformPosition(slot.HorizontalPosOnCanvas), slotSize, UiColors.StatusWarning, 3);
                 }
 
                 //var horizontalConnections = slot.GetConnections(Connection.Orientations.Horizontal);
@@ -115,7 +164,7 @@ public class VerticalStackingCanvas
             }
         }
         
-        // Draw Connections
+        // Draw Connection lines
         foreach (var c in Connections)
         {
             if (c.IsSnapped)
@@ -239,18 +288,19 @@ public class VerticalStackingCanvas
         _groups.Clear();
         _slots.Clear();
 
-        var a = new Block(0, 1, "a");
-        var b = new Block(0, 2, "b");
-        var c = new Block(0, 3, "c");
+        Blocks.Add(new Block(0, 2, "CubeMesh", typeof(MeshBuffers)));
+        Blocks.Add(new Block(0, 3, "TransformMesh", typeof(MeshBuffers)));
+        Blocks.Add(new Block(0, 5, "Blur", typeof(Texture2D)));
+        Blocks.Add(new Block(0, 7, "RenderTarget", typeof(Texture2D)));
+        Blocks.Add(new Block(2, 8, "Group", typeof(Command)));
+        Blocks.Add(new Block(5, 8, "Value", typeof(float)));
+        Blocks.Add(new Block(5, 8, "Add", typeof(float)));
+        Blocks.Add(new Block(5, 8, "Value2", typeof(float)));
+        Blocks.Add(new Block(5, 8, "AnimValue", typeof(float)));
+        
+        Blocks.Add(new Block(3, 5, "DrawMesh", typeof(Command)));
 
-        var d = new Block(2, 6, "d");
-
-        Blocks.Add(a);
-        Blocks.Add(b);
-        Blocks.Add(c);
-        Blocks.Add(d);
-
-        Connections.Add(new Connection(a.Outputs[0], b.Inputs[0]));
+        //Connections.Add(new Connection(a.Outputs[0], b.Inputs[0]));
         // Connections.Add(new Connection(b.Outputs[0], c.Inputs[0]));
         _initialized = true;
     }
@@ -261,6 +311,6 @@ public class VerticalStackingCanvas
     
     public readonly List<Block> Blocks = new();
     public readonly List<Connection> Connections = new();
-    private readonly List<Group> _groups = new();
+    private readonly List<SnapGroup> _groups = new();
     private readonly List<Slot> _slots = new();
 }

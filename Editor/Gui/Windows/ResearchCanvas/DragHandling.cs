@@ -176,7 +176,7 @@ public static class DragHandling
         Slot bestSourceSlot = null;
         Slot bestTargetSlot = null;
 
-        const int snapThreshold = 20;
+        const int snapThreshold = 8;
         
         // Test moving block will all other blocks
         foreach (var other in container.Blocks)
