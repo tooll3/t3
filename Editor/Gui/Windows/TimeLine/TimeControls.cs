@@ -403,6 +403,12 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     }
                 }
 
+                if (playback.PlaybackSpeed < -1)
+                {
+                    ImGui.GetWindowDrawList().AddText( ImGui.GetItemRectMin() + new Vector2(20,4), UiColors.ForegroundFull, $"×{-playback.PlaybackSpeed:0}");
+                }
+
+                
                 CustomComponents.TooltipForLastItem("Play backwards",
                                                     "Play backwards (and faster): " +
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackBackwards, false) +
@@ -426,6 +432,11 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     {
                         playback.PlaybackSpeed = 1;
                     }
+                }
+
+                if (playback.PlaybackSpeed > 1)
+                {
+                    ImGui.GetWindowDrawList().AddText( ImGui.GetItemRectMin() + new Vector2(20,4), UiColors.ForegroundFull, $"×{playback.PlaybackSpeed:0}");
                 }
 
                 CustomComponents.TooltipForLastItem("Start playback",
