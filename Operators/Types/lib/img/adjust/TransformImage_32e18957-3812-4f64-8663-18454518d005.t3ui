@@ -1,6 +1,6 @@
 {
   "Id": "32e18957-3812-4f64-8663-18454518d005"/*TransformImage*/,
-  "Description": "Rotates, offsets, and scales the incoming image.",
+  "Description": "Rotates, offsets, and scales the incoming image.\n\nAn alternative version is available: [TransformImage2] \nSee the difference: [TransformImage2Example]",
   "InputUis": [
     {
       "InputId": "3aab9b12-1e02-4d7a-83b6-da1500a6bcbf"/*Image*/,

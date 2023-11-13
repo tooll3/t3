@@ -1,0 +1,207 @@
+{
+  "Id": "99f1799b-089b-43e2-8655-7c6037647c3d"/*TransformImage2Example*/,
+  "Description": "Here we showcase the difference between TransformImage and its new version TransformImage2. \n",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "f802d993-03f3-450a-acb9-f33f16c8f7e6"/*FractalNoise*/,
+      "Position": {
+        "X": 179.72095,
+        "Y": 339.64462
+      }
+    },
+    {
+      "ChildId": "8d1506b8-01e7-4675-bac0-da23d976758e"/*Text*/,
+      "Position": {
+        "X": 181.10403,
+        "Y": 602.8348
+      }
+    },
+    {
+      "ChildId": "d85d60d6-d382-4b6e-9513-5d0d76c23c63"/*RenderTarget*/,
+      "Position": {
+        "X": 333.17105,
+        "Y": 497.6205
+      }
+    },
+    {
+      "ChildId": "3e79b8f9-35a9-4f59-a1a9-08b79dd8eb08"/*Blend*/,
+      "Position": {
+        "X": 479.72095,
+        "Y": 339.64462
+      }
+    },
+    {
+      "ChildId": "6190631b-6897-4b37-b2c9-decc558ab81e"/*RemapColor*/,
+      "Position": {
+        "X": 329.72095,
+        "Y": 339.64462
+      }
+    },
+    {
+      "ChildId": "d88a7408-c5ff-4825-8366-fa4447f305ee"/*TransformImage*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 140.0
+      },
+      "Comment": "This transform image has only two wrapping mode\nClamp and Mirror",
+      "Position": {
+        "X": 817.1433,
+        "Y": 105.115234
+      }
+    },
+    {
+      "ChildId": "3dd75da8-d991-4358-a83d-a76ca1758a8c"/*OscillateVec2*/,
+      "Position": {
+        "X": 627.3111,
+        "Y": 283.92596
+      }
+    },
+    {
+      "ChildId": "55a10472-ace5-44db-b90a-a784271bc849"/*TransformImage2*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 153.0
+      },
+      "Comment": "Here we have more wrapping modes.\nTry them all to see what they're doing.\n",
+      "Position": {
+        "X": 815.8745,
+        "Y": 372.89795
+      }
+    },
+    {
+      "ChildId": "2f56022a-25a8-4290-b778-11e3443862ca"/*Mirror*/,
+      "Position": {
+        "X": 631.90674,
+        "Y": 0.0
+      }
+    },
+    {
+      "ChildId": "f7a4b6b9-ae7d-4966-8619-4700ba5be734"/*Scale*/,
+      "Position": {
+        "X": 631.90674,
+        "Y": 43.0
+      }
+    },
+    {
+      "ChildId": "c2cae3ae-9416-45df-8e67-acc60c68f395"/*Layer2d*/,
+      "Position": {
+        "X": 967.1433,
+        "Y": 105.116455
+      }
+    },
+    {
+      "ChildId": "fa196301-fd1e-4953-a183-d55fd75f0d68"/*Layer2d*/,
+      "Position": {
+        "X": 965.8745,
+        "Y": 316.89795
+      }
+    },
+    {
+      "ChildId": "13755b3e-c642-420b-b904-ffe30372f9e0"/*Execute*/,
+      "Position": {
+        "X": 1111.9885,
+        "Y": 198.4414
+      }
+    },
+    {
+      "ChildId": "a9e58c10-e53f-478a-820d-8a2e7fbaa212"/*RenderTarget*/,
+      "Position": {
+        "X": 1261.9885,
+        "Y": 198.4414
+      }
+    },
+    {
+      "ChildId": "879229ab-acdd-467e-8e97-f930b8631753"/*Text*/,
+      "Position": {
+        "X": 181.10403,
+        "Y": 559.8348
+      }
+    },
+    {
+      "ChildId": "a74a6fff-fd7c-47ad-8a84-3152180aeda9"/*Execute*/,
+      "Position": {
+        "X": 333.17105,
+        "Y": 553.62054
+      }
+    },
+    {
+      "ChildId": "8fc6cd06-7fbc-4cb1-afb1-4a4e5910c863"/*Text*/,
+      "Position": {
+        "X": 967.1433,
+        "Y": 161.11646
+      }
+    },
+    {
+      "ChildId": "2d545da6-56cb-4bfa-badf-9422c189b35a"/*Text*/,
+      "Position": {
+        "X": 965.8745,
+        "Y": 372.89795
+      }
+    },
+    {
+      "ChildId": "e57abb66-c181-4442-b0af-ccc8771316b2"/*LoadImage*/,
+      "Position": {
+        "X": 474.74762,
+        "Y": 130.21765
+      }
+    },
+    {
+      "ChildId": "e923cde1-c7b1-4354-bb85-b16a78da50cc"/*PickTexture*/,
+      "Position": {
+        "X": 631.27045,
+        "Y": 197.6242
+      }
+    },
+    {
+      "ChildId": "e8aa3c67-b998-413b-9d1f-2b5ee91a4d0a"/*Switch Textures*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 161.78165,
+        "Y": 22.13697
+      },
+      "Position": {
+        "X": 265.75323,
+        "Y": 7.1936417
+      }
+    },
+    {
+      "ChildId": "06372786-54ac-46af-bfce-3a1bb77fa408"/*BoolToInt*/,
+      "Position": {
+        "X": 474.74762,
+        "Y": 173.21765
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "a3048d14-fa38-4a5b-9294-369cd306216b"/*ColorBuffer*/,
+      "Position": {
+        "X": 1261.9885,
+        "Y": 254.4414
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "3f6fd0d8-29cd-4853-a7f6-438669bb1721",
+      "Title": "# Wrap modes --->",
+      "Color": {
+        "X": 0.9574468,
+        "Y": 1.0,
+        "Z": 0.0,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 606.42566,
+        "Y": 493.80856
+      },
+      "Size": {
+        "X": 203.90593,
+        "Y": 51.031
+      }
+    }
+  ]
+}
