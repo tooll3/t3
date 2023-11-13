@@ -111,6 +111,11 @@
           "Value": 10000
         },
         {
+          "Id": "ec99463b-c3e9-4eef-9321-3840d5d323b6"/*UseAging*/,
+          "Type": "System.Boolean",
+          "Value": true
+        },
+        {
           "Id": "a03ffef9-11e3-41f9-9f13-71f107b484df"/*AgingRate*/,
           "Type": "System.Single",
           "Value": 0.17
@@ -200,6 +205,11 @@
           "Id": "7d576017-89bd-4813-bc9b-70214efe6a27"/*Path*/,
           "Type": "System.String",
           "Value": "Resources\\user\\still\\proj-there\\meshes\\statue-river-13k.obj"
+        },
+        {
+          "Id": "aa19e71d-329c-448b-901c-565bf8c0da4f"/*SortVertices*/,
+          "Type": "System.Int32",
+          "Value": 0
         }
       ],
       "Outputs": []
@@ -294,6 +304,11 @@
           "Id": "d41169ee-4e53-4198-b56a-b4b771cc3dfd"/*Width*/,
           "Type": "System.Single",
           "Value": 0.02
+        },
+        {
+          "Id": "31791971-8c6e-4f8f-8b04-a3abf02ad69b"/*UseWAsWeight*/,
+          "Type": "System.Boolean",
+          "Value": true
         }
       ],
       "Outputs": []
@@ -325,17 +340,12 @@
         {
           "Id": "9d5ca726-28b0-4f3d-a5aa-f0ae3e2043a9"/*Specular*/,
           "Type": "System.Single",
-          "Value": 16.1
+          "Value": 23.6
         },
         {
           "Id": "e14dcc43-7c18-4ed7-ad39-dfeab10e3d33"/*Roughness*/,
           "Type": "System.Single",
-          "Value": 1.0
-        },
-        {
-          "Id": "108ff533-f205-4989-b894-acf48e3cc1db"/*Metal*/,
-          "Type": "System.Single",
-          "Value": 0.04
+          "Value": -0.2
         }
       ],
       "Outputs": []
@@ -452,9 +462,9 @@
           "Id": "9ff5ade2-cfa7-4616-ad89-356f3248e04f"/*BaseColor*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.41464263,
+            "X": 0.115757346,
             "Y": 0.72925764,
-            "Z": 0.015922666,
+            "Z": 0.40833747,
             "W": 1.0
           }
         },
@@ -540,8 +550,8 @@
   ],
   "Connections": [
     {
-      "SourceParentOrChildId": "9722c903-cb5a-4e89-b115-81af0004a0de",
-      "SourceSlotId": "7a4c4feb-be2f-463e-96c6-cd9a6bad77a2",
+      "SourceParentOrChildId": "eb1892ad-d28a-4bf5-b837-7a04795b272c",
+      "SourceSlotId": "9be415b6-b7f0-4b8f-8d93-c147ef8d0d44",
       "TargetParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "TargetSlotId": "eb14540d-5d13-4b83-a2ed-32535a399815"
     },
