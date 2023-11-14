@@ -49,7 +49,7 @@ namespace T3.Core.Resource
                 AddWatcher(ResourceManager.ResourcesFolder, pattern);
             }
 
-            if (_resourceFileHooks.TryGetValue(filepath, out var hook))
+            if (ResourceFileHooks.TryGetValue(filepath, out var hook))
             {
                 hook.FileChangeAction -= action;
                 hook.FileChangeAction += action;
@@ -60,7 +60,7 @@ namespace T3.Core.Resource
                                   {
                                       FileChangeAction = action
                                   };
-                _resourceFileHooks.Add(filepath,newHook);
+                ResourceFileHooks.Add(filepath,newHook);
             }
         }
         
@@ -93,7 +93,7 @@ namespace T3.Core.Resource
         private static void FileChangedHandler(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
             // Log.Info($"change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
-            if (!_resourceFileHooks.TryGetValue(fileSystemEventArgs.FullPath, out var fileHook))
+            if (!ResourceFileHooks.TryGetValue(fileSystemEventArgs.FullPath, out var fileHook))
             {
                 //Log.Warning("Invalid FileResource?");
                 return;
@@ -140,7 +140,7 @@ namespace T3.Core.Resource
         }
         
         private static FileSystemWatcher _csFileWatcher;
-        public static readonly Dictionary<string, ResourceFileHook> _resourceFileHooks = new();
+        public static readonly Dictionary<string, ResourceFileHook> ResourceFileHooks = new();
     }
     
     /// <summary>

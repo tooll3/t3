@@ -49,6 +49,13 @@ namespace T3.Core.Operator.Slots
             }
         }
 
+        public T GetCurrentValue()
+        {
+            return IsConnected
+                       ? Value
+                       : TypedInputValue.Value;
+        }
+
         public void SetTypedInputValue(T newValue)
         {
             Input.IsDefault = false;

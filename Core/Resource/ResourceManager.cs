@@ -79,7 +79,7 @@ namespace T3.Core.Resource
         
         public OperatorResource GetOperatorFileResource(string path)
         {
-            bool foundFileEntryForPath = ResourceFileWatcher._resourceFileHooks.TryGetValue(path, out var fileResource);
+            bool foundFileEntryForPath = ResourceFileWatcher.ResourceFileHooks.TryGetValue(path, out var fileResource);
             if (foundFileEntryForPath)
             {
                 foreach (var id in fileResource.ResourceIds)
@@ -101,12 +101,12 @@ namespace T3.Core.Resource
                 return;
             }
 
-            if (ResourceFileWatcher._resourceFileHooks.TryGetValue(oldPath, out var fileResource))
+            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(oldPath, out var fileResource))
             {
                 Log.Info($"renamed file resource from '{oldPath}' to '{newPath}'");
                 fileResource.Path = newPath;
-                ResourceFileWatcher._resourceFileHooks.Remove(oldPath);
-                ResourceFileWatcher._resourceFileHooks.Add(newPath, fileResource);
+                ResourceFileWatcher.ResourceFileHooks.Remove(oldPath);
+                ResourceFileWatcher.ResourceFileHooks.Add(newPath, fileResource);
             }
         }
 
@@ -479,7 +479,7 @@ namespace T3.Core.Resource
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint) || !File.Exists(srcFile))
                 return NullResource;
 
-            if (ResourceFileWatcher._resourceFileHooks.TryGetValue(srcFile, out var fileResource))
+            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(srcFile, out var fileResource))
             {
                 foreach (var id in fileResource.ResourceIds)
                 {
@@ -506,7 +506,7 @@ namespace T3.Core.Resource
             if (fileResource == null)
             {
                 fileResource = new ResourceFileHook(srcFile, new[] { newShaderResource.Id });
-                ResourceFileWatcher._resourceFileHooks.Add(srcFile, fileResource);
+                ResourceFileWatcher.ResourceFileHooks.Add(srcFile, fileResource);
             }
             else
             {
@@ -558,7 +558,7 @@ namespace T3.Core.Resource
                 return false;
             }
 
-            if (ResourceFileWatcher._resourceFileHooks.TryGetValue(srcFile, out var fileResource))
+            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(srcFile, out var fileResource))
             {
                 foreach (var id in fileResource.ResourceIds)
                 {
@@ -586,7 +586,7 @@ namespace T3.Core.Resource
             if (fileResource == null)
             {
                 fileResource = new ResourceFileHook(srcFile, new[] { resourceEntry.Id });
-                ResourceFileWatcher._resourceFileHooks.Add(srcFile, fileResource);
+                ResourceFileWatcher.ResourceFileHooks.Add(srcFile, fileResource);
             }
             else
             {
@@ -640,7 +640,7 @@ namespace T3.Core.Resource
                 return false;
             }
 
-            if (ResourceFileWatcher._resourceFileHooks.TryGetValue(srcFile, out var fileResource))
+            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(srcFile, out var fileResource))
             {
                 foreach (var id in fileResource.ResourceIds)
                 {
@@ -671,7 +671,7 @@ namespace T3.Core.Resource
             if (fileResource == null)
             {
                 fileResource = new ResourceFileHook(srcFile, new[] { newResource.Id });
-                ResourceFileWatcher._resourceFileHooks.Add(srcFile, fileResource);
+                ResourceFileWatcher.ResourceFileHooks.Add(srcFile, fileResource);
             }
             else
             {
@@ -692,7 +692,7 @@ namespace T3.Core.Resource
             if (string.IsNullOrEmpty(srcFile) || string.IsNullOrEmpty(entryPoint) || !File.Exists(srcFile))
                 return NullResource;
 
-            bool foundFileEntryForPath = ResourceFileWatcher._resourceFileHooks.TryGetValue(srcFile, out var fileResource);
+            bool foundFileEntryForPath = ResourceFileWatcher.ResourceFileHooks.TryGetValue(srcFile, out var fileResource);
             if (foundFileEntryForPath)
             {
                 foreach (var id in fileResource.ResourceIds)
@@ -723,7 +723,7 @@ namespace T3.Core.Resource
             if (fileResource == null)
             {
                 fileResource = new ResourceFileHook(srcFile, new[] { resourceEntry.Id });
-                ResourceFileWatcher._resourceFileHooks.Add(srcFile, fileResource);
+                ResourceFileWatcher.ResourceFileHooks.Add(srcFile, fileResource);
             }
             else
             {
@@ -786,7 +786,7 @@ namespace T3.Core.Resource
         public uint CreateOperatorEntry(string sourceFilePath, string name, OperatorResource.UpdateDelegate updateHandler)
         {
             // todo: code below is redundant with all file resources -> refactor
-            if (ResourceFileWatcher._resourceFileHooks.TryGetValue(sourceFilePath, out var fileResource))
+            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(sourceFilePath, out var fileResource))
             {
                 foreach (var id in fileResource.ResourceIds)
                 {
@@ -805,7 +805,7 @@ namespace T3.Core.Resource
                 try
                 {
                     fileResource = new ResourceFileHook(sourceFilePath, new[] { resourceEntry.Id });
-                    ResourceFileWatcher._resourceFileHooks.Add(sourceFilePath, fileResource);
+                    ResourceFileWatcher.ResourceFileHooks.Add(sourceFilePath, fileResource);
                 }
                 catch (Exception e)
                 {
@@ -1021,7 +1021,7 @@ namespace T3.Core.Resource
                 return (NullResource, NullResource);
             }
 
-            if (ResourceFileWatcher._resourceFileHooks.TryGetValue(filename, out var existingFileResource))
+            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(filename, out var existingFileResource))
             {
                 uint textureId = existingFileResource.ResourceIds.First();
                 existingFileResource.FileChangeAction += fileChangeAction;
@@ -1063,7 +1063,7 @@ namespace T3.Core.Resource
 
             var fileResource = new ResourceFileHook(filename, new[] { textureResourceEntry.Id, srvResourceId });
             fileResource.FileChangeAction += fileChangeAction;
-            ResourceFileWatcher._resourceFileHooks.Add(filename, fileResource);
+            ResourceFileWatcher.ResourceFileHooks.Add(filename, fileResource);
 
             return (textureResourceEntry.Id, srvResourceId);
         }
