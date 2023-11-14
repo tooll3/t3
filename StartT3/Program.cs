@@ -11,6 +11,9 @@ using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Resource;
+using T3.Editor.Gui.Interaction.StartupCheck;
+using T3.Editor.SystemUi;
+using T3.MsForms;
 
 namespace T3.StartEditor
 {
@@ -21,6 +24,11 @@ namespace T3.StartEditor
     {
         private static void Main(string[] args)
         {
+            // Not calling this first will cause exceptions...
+            EditorUi.Instance = new MsFormsEditor();
+            
+            StartupValidation.ValidateNotRunningFromSystemFolder();
+
             Log.AddWriter(new ConsoleWriter());
             Log.AddWriter(FileWriter.CreateDefault());
 

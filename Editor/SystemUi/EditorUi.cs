@@ -4,7 +4,7 @@ using T3.SystemUi;
 
 namespace T3.Editor.SystemUi;
 
-internal static class EditorUi
+public static class EditorUi
 {
     private static IEditorSystemUiService _instance;
     public static IEditorSystemUiService Instance
