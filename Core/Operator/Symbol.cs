@@ -80,6 +80,8 @@ namespace T3.Core.Operator
 
             // input identified by base interface
             Type inputSlotType = typeof(IInputSlot);
+
+
             var inputInfos = instanceType.GetFields().Where(f => inputSlotType.IsAssignableFrom(f.FieldType));
             var inputDefs = new List<InputDefinition>();
             foreach (var inputInfo in inputInfos)
@@ -89,6 +91,12 @@ namespace T3.Core.Operator
                 var attribute = (InputAttribute)customAttributes[0];
                 var isMultiInput = inputInfo.FieldType.GetGenericTypeDefinition() == typeof(MultiInputSlot<>);
                 var valueType = inputInfo.FieldType.GetGenericArguments()[0];
+                
+                if (!TypeNameRegistry.Entries.ContainsKey(valueType))
+                {
+                    Log.Error($"Skipping input {Name}.{inputInfo.Name} with undefined type {valueType}...");
+                    continue;
+                }
                 var inputDef = CreateInputDefinition(attribute.Id, inputInfo.Name, isMultiInput, valueType);
                 inputDefs.Add(inputDef);
             }
@@ -99,6 +107,7 @@ namespace T3.Core.Operator
                 foreach (Guid id in orderedInputIds)
                 {
                     var inputDefinition = inputDefs.Find(inputDef => inputDef != null && inputDef.Id == id);
+                    
                     if (inputDefinition != null)
                     {
                         InputDefinitions.Add(inputDefinition);
@@ -120,6 +129,12 @@ namespace T3.Core.Operator
                 var valueType = output.FieldType.GenericTypeArguments[0];
                 var attribute = (OutputAttribute)attributes.First();
                 var outputDataType = GetOutputDataType(output);
+                
+                if (!TypeNameRegistry.Entries.ContainsKey(valueType))
+                {
+                    Log.Error($"Skipping output {Name}.{output.Name} with undefined type {valueType}...");
+                    continue;
+                }
 
                 OutputDefinitions.Add(new OutputDefinition
                                           {
