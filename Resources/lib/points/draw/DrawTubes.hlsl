@@ -123,9 +123,9 @@ psInput vsMain(uint id: SV_VertexID)
     float3 radiusOffset = rotate_vector(side, pointRotation) * Width * WidthFactor;
 
     float3 pInObject = p.position + radiusOffset;
-    float3 normalTwisted =  float3(0, cos(spinRad + 3.141578/2), sin(spinRad + 3.141578/2));
-    float3 normal = normalize(rotate_vector(normalTwisted, pointRotation));
-    float4 normalInScreen = mul(float4(normal,0), ObjectToClipSpace);
+    //float3 normalTwisted =  float3(0, cos(spinRad + 3.141578/2), sin(spinRad + 3.141578/2));
+    //float3 normal = normalize(rotate_vector(normalTwisted, pointRotation));
+    //float4 normalInScreen = mul(float4(normal,0), ObjectToClipSpace);
 
 
     output.texCoord = float2( f * (TextureRange.y - TextureRange.x) + TextureRange.x,  
@@ -134,11 +134,11 @@ psInput vsMain(uint id: SV_VertexID)
 
     // Pass tangent space basis vectors (for normal mapping).
     float3x3 TBN = float3x3(
+        normalize(radiusOffset), //  vertex.Bitangent, 
         normalize(rotate_vector(float3(1,0,0), pointRotation)), //  vertex.Bitangent, 
-        side, 
-        normal
+        normalize(rotate_vector(float3(1,0,0), pointRotation)) //  vertex.Bitangent, 
         );
-    TBN = mul(TBN, (float3x3)ObjectToWorld);
+    //TBN = mul(TBN, (float3x3)ObjectToWorld);
     output.tbnToWorld = TBN;
 
     output.worldPosition =  mul(float4(pInObject,0), ObjectToWorld); 
@@ -146,7 +146,7 @@ psInput vsMain(uint id: SV_VertexID)
     float4 pInScreen  = mul(float4(pInObject,1), ObjectToClipSpace);
 
     float3 lightDirection = float3(1.2, 1, -0.1);
-    float phong = pow(  abs(dot(normal,lightDirection )),1);
+    //float phong = pow(  abs(dot(normal,lightDirection )),1);
     
     output.pixelPosition = pInScreen;
 
@@ -176,6 +176,8 @@ float4 psMain(psInput pin) : SV_TARGET
 
     //return float4(pin.tbnToWorld[0],1);
     N = normalize(mul(N,pin.tbnToWorld));
+    return float4(N.xyz,1);
+
 
     float isFrontSide = dot(N, Lo)/10;
     if( isFrontSide < -0.1)

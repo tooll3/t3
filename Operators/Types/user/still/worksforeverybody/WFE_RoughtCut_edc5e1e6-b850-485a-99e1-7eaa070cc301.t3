@@ -643,7 +643,12 @@
       "SymbolId": "a3f64d34-1fab-4230-86b3-1c3deba3f90b",
       "Name": "Interactions",
       "InputValues": [],
-      "Outputs": []
+      "Outputs": [
+        {
+          "Id": "977ca2f4-cddb-4b9a-82b2-ff66453bbf9b"/*Interactions*/,
+          "IsDisabled": true
+        }
+      ]
     },
     {
       "Id": "7132a5f4-1ee7-4c39-902f-8847d40c144d"/*_WFE_MainPart1*/,
