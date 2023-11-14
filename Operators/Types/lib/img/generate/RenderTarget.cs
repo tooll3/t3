@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
@@ -175,7 +176,14 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
                 
                 if (generateMips)
                 {
-                    deviceContext.GenerateMips(DownSamplingRequired ? _resolvedColorBufferSrv : _multiSampledColorBufferSrv);
+                    try
+                    {
+                        deviceContext.GenerateMips(DownSamplingRequired ? _resolvedColorBufferSrv : _multiSampledColorBufferSrv);
+                    }
+                    catch (SEHException e)
+                    {
+                        Log.Warning("Failed to generate mipmaps: " + e.Message);
+                    }
                 }
 
                 // Clean up ref counts for RTVs
