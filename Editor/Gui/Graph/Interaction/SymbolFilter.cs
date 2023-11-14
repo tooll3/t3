@@ -130,13 +130,21 @@ namespace T3.Editor.Gui.Graph.Interaction
             MatchingSymbolUis.Clear();
             foreach (var symbolUi in SymbolUiRegistry.Entries.Values)
             {
+                var symbolUiSymbol = symbolUi.Symbol;
+                
+                if (symbolUiSymbol == null)
+                {
+                    Log.Warning($"Skipping SymbolUi definition with inconsistent symbol...");
+                    continue;
+                }
+                
                 // Prevent graph cycles
-                if (parentSymbolIds.Contains(symbolUi.Symbol.Id))
+                if (parentSymbolIds.Contains(symbolUiSymbol.Id))
                     continue;
 
                 if (_inputType != null)
                 {
-                    var matchingInputDef = symbolUi.Symbol.GetInputMatchingType(FilterInputType);
+                    var matchingInputDef = symbolUiSymbol.GetInputMatchingType(FilterInputType);
                     if (matchingInputDef == null)
                         continue;
 
@@ -146,13 +154,13 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                 if (_outputType != null)
                 {
-                    var matchingOutputDef = symbolUi.Symbol.GetOutputMatchingType(FilterOutputType);
+                    var matchingOutputDef = symbolUiSymbol.GetOutputMatchingType(FilterOutputType);
                     if (matchingOutputDef == null)
                         continue;
                 }
 
-                if (!(_currentRegex.IsMatch(symbolUi.Symbol.Name)
-                      || symbolUi.Symbol.Namespace.Contains(_symbolFilterString, StringComparison.InvariantCultureIgnoreCase)
+                if (!(_currentRegex.IsMatch(symbolUiSymbol.Name)
+                      || symbolUiSymbol.Namespace.Contains(_symbolFilterString, StringComparison.InvariantCultureIgnoreCase)
                       || (!string.IsNullOrEmpty(symbolUi.Description)
                           && symbolUi.Description.Contains(_symbolFilterString, StringComparison.InvariantCultureIgnoreCase))))
                     continue;
