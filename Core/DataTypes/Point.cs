@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace T3.Core.DataTypes
 {
-    [StructLayout(LayoutKind.Explicit, Size = 2 * 16)]
+    [StructLayout(LayoutKind.Explicit, Size = Stride)]
     public struct Point
     {
         [FieldOffset(0)]
@@ -22,8 +22,10 @@ namespace T3.Core.DataTypes
                        {
                            Position = Vector3.Zero,
                            W = Single.NaN,
-                           Orientation = Quaternion.Identity
+                           Orientation = Quaternion.Identity,
                        };
         }
+
+        public const int Stride = 2 * 16;
     }
 }
