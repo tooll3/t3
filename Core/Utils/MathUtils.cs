@@ -39,7 +39,7 @@ namespace T3.Core.Utils
             n = (n << 13) ^ n;
             return (float)(1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
         }
-
+        
         public static uint XxHash(uint p)
         {
             const uint PRIME32_2 = 2246822519U, PRIME32_3 = 3266489917U;
@@ -51,6 +51,15 @@ namespace T3.Core.Utils
             h32 = PRIME32_3 * (h32 ^ (h32 >> 13));
 
             return h32 ^ (h32 >> 16);
+        }
+        
+        public static float Hash01( uint x )
+        {
+            const uint k = 1103515245U;  // GLIB C
+            x = ((x>>8)^x)*k;
+            x = ((x>>8)^x)*k;
+    
+            return (float)( (x & 0x7fffffff) / 2147483648.0);;
         }
 
         private static float Fade(float t)
