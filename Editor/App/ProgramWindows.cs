@@ -88,16 +88,22 @@ internal static class ProgramWindows
         {
             if (e.Message.Contains("DXGI_ERROR_SDK_COMPONENT_MISSING"))
             {
-                var result = EditorUi.Instance.ShowMessageBox("You need to install Windows Graphics diagnostics tools.\n\nClick Ok to download this Windows component directly from Microsoft.", "Windows component missing", PopUpButtons.OkCancel);
+                var result =
+                    EditorUi.Instance
+                            .ShowMessageBox("You need to install Windows Graphics diagnostics tools.\n\nClick Ok to download this Windows component directly from Microsoft.",
+                                            "Windows component missing", PopUpButtons.OkCancel);
                 if (result == PopUpResult.Ok)
                 {
-                    StartupValidation.OpenUrl("https://learn.microsoft.com/en-us/windows/uwp/gaming/use-the-directx-runtime-and-visual-studio-graphics-diagnostic-features");
+                    StartupValidation
+                       .OpenUrl("https://learn.microsoft.com/en-us/windows/uwp/gaming/use-the-directx-runtime-and-visual-studio-graphics-diagnostic-features");
                 }
             }
             else
             {
-                EditorUi.Instance.ShowMessageBox("We are sorry but your graphics hardware might not be capable of running Tooll2\n\n" +e.Message, "Oh noooo", PopUpButtons.Ok);
+                EditorUi.Instance.ShowMessageBox("We are sorry but your graphics hardware might not be capable of running Tooll2\n\n" + e.Message, "Oh noooo",
+                                                 PopUpButtons.Ok);
             }
+
             Environment.Exit(0);
         }
     }
@@ -190,10 +196,69 @@ internal static class ProgramWindows
             if (showSecondaryRenderWindow)
                 Viewer.SwapChain.Present(useVSync ? 1 : 0, PresentFlags.None);
         }
-        catch (SharpDX.SharpDXException)
+        catch (SharpDX.SharpDXException e)
         {
-            var suspendReason = _device.DeviceRemovedReason.ToString();
-            throw (new ApplicationException($"Graphics card suspended ({suspendReason})"));
+            string description;
+            var result = _device.DeviceRemovedReason;
+            if (result == Result.Abort)
+            {
+                description = Result.Abort.Description;
+            }
+            else if (result == Result.AccessDenied)
+            {
+                description = Result.AccessDenied.Description;
+            }
+            else if (result == Result.Fail)
+            {
+                description = Result.Fail.Description;
+            }
+            else if (result == Result.Handle)
+            {
+                description = Result.Handle.Description;
+            }
+            else if (result == Result.InvalidArg)
+            {
+                description = Result.InvalidArg.Description;
+            }
+            else if (result == Result.NoInterface)
+            {
+                description = Result.NoInterface.Description;
+            }
+            else if (result == Result.NotImplemented)
+            {
+                description = Result.NotImplemented.Description;
+            }
+            else if (result == Result.OutOfMemory)
+            {
+                description = Result.OutOfMemory.Description;
+            }
+            else if (result == Result.InvalidPointer)
+            {
+                description = Result.InvalidPointer.Description;
+            }
+            else if (result == Result.UnexpectedFailure)
+            {
+                description = Result.UnexpectedFailure.Description;
+            }
+            else if (result == Result.WaitAbandoned)
+            {
+                description = Result.WaitAbandoned.Description;
+            }
+            else if (result == Result.WaitTimeout)
+            {
+                description = Result.WaitTimeout.Description;
+            }
+            else if (result == Result.Pending)
+            {
+                description = Result.Pending.Description;
+            }
+            else
+            {
+                description = "unknown reason";
+            }
+
+            var resultCode = result.ToString();
+            throw (new ApplicationException($"Graphics card suspended ({resultCode}: {description}): {e.Message}"));
         }
     }
 }
