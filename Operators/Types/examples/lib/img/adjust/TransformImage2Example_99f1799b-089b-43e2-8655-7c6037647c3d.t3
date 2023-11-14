@@ -225,6 +225,11 @@
       "SymbolId": "a2ecf256-ac9f-4f99-92af-7ae749a3e3d9",
       "InputValues": [
         {
+          "Id": "1f028ccb-1436-4cb8-a1d7-ec7a03bc05f8"/*Rotation*/,
+          "Type": "System.Single",
+          "Value": 0.0
+        },
+        {
           "Id": "4127e547-9c6f-4aee-aefb-e1d6cd472b7f"/*WrapMode*/,
           "Type": "SharpDX.Direct3D11.TextureAddressMode",
           "Value": "MirrorOnce"
