@@ -657,7 +657,7 @@ namespace T3.Editor.Gui.Windows.Variations
         /// </summary>
         public IEnumerable<ISelectableCanvasObject> GetSelectables()
         {
-            return PoolForBlendOperations.Variations;
+            return PoolForBlendOperations?.Variations;
         }
 
         public bool IsBlendingActive { get; private set; }
