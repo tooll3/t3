@@ -1,0 +1,15 @@
+{
+  "Id": "6ae8ebb8-3174-463d-9ffb-e14e12eb3029"/*GetBpm*/,
+  "Description": "Returns the current BPM rate",
+  "InputUis": [],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "551ebff2-2044-4f28-a6ba-2384a74c8919"/*Result*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

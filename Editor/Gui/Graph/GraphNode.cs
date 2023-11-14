@@ -437,7 +437,11 @@ namespace T3.Editor.Gui.Graph
                         var inputSlot = instance.GetInput(inputDefinition.Id);
                         //var valueAsString = inputUi.GetSlotValue(inputSlot);
                         var valueAsString = GetValueString(inputSlot);
-                
+                        // if (inputSlot is InputSlot<float> f)
+                        // {
+                        //     var xxx = f.TypedInputValue.Value;
+                        // } 
+
                         var valueColor = labelColor;
                         valueColor.Rgba.W *= 0.6f;
                 
@@ -1217,7 +1221,7 @@ namespace T3.Editor.Gui.Graph
         {
             return inputValue switch
                        {
-                           InputValue<float> f    => $"{f.Value:0.00}",
+                           InputValue<float> f    => $"{f.Value:0.000}",
                            InputValue<int> i      => $"{i.Value:G3}",
                            InputValue<Int3> i     => $"{i.Value:G3}",
                            InputValue<bool> b     => $"{b.Value}",
@@ -1225,6 +1229,22 @@ namespace T3.Editor.Gui.Graph
                            InputValue<Vector2> v2 => $"{v2.Value:0.0}",
                            InputValue<string> s   => Truncate(s.Value),
                            _                      => ""
+                       };
+        }
+        
+        private static string GetValueString(IInputSlot outputSlot)
+        {
+            
+            return outputSlot switch
+                       {
+                           InputSlot<float> f    => $"{f.TypedInputValue.Value:0.000}",
+                           InputSlot<int> i      => $"{i.TypedInputValue.Value:G3}",
+                           InputSlot<Int3> i     => $"{i.TypedInputValue.Value:G3}",
+                           InputSlot<bool> b     => $"{b.TypedInputValue.Value}",
+                           InputSlot<Vector3> v3 => $"{v3.TypedInputValue.Value:0.0}",
+                           InputSlot<Vector2> v2 => $"{v2.TypedInputValue.Value:0.0}",
+                           InputSlot<string> s   => Truncate(s.TypedInputValue.Value),
+                           _                     => ""
                        };
         }
 

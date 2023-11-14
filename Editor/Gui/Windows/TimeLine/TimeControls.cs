@@ -403,10 +403,16 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     }
                 }
 
+                if (playback.PlaybackSpeed < -1)
+                {
+                    ImGui.GetWindowDrawList().AddText( ImGui.GetItemRectMin() + new Vector2(20,4), UiColors.ForegroundFull, $"×{-playback.PlaybackSpeed:0}");
+                }
+
+                
                 CustomComponents.TooltipForLastItem("Play backwards",
                                                     "Play backwards (and faster): " +
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackBackwards, false) +
-                                                    "\n Previous frame:" + KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackPreviousFrame, false));
+                                                    "\nPrevious frame:" + KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackPreviousFrame, false));
 
                 ImGui.SameLine();
 
@@ -428,12 +434,17 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     }
                 }
 
+                if (playback.PlaybackSpeed > 1)
+                {
+                    ImGui.GetWindowDrawList().AddText( ImGui.GetItemRectMin() + new Vector2(20,4), UiColors.ForegroundFull, $"×{playback.PlaybackSpeed:0}");
+                }
+
                 CustomComponents.TooltipForLastItem("Start playback",
                                                     "Play forward (and faster): " +
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackForward, false) +
-                                                    "\n Play half speed (and slower): " +
+                                                    "\nPlay half speed (and slower): " +
                                                     KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackForwardHalfSpeed, false) +
-                                                    "\n Next frame:" + KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackNextFrame, false));
+                                                    "\nNext frame:" + KeyboardBinding.ListKeyboardShortcuts(UserActions.PlaybackNextFrame, false));
 
                 ImGui.SameLine();
 

@@ -30,6 +30,7 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.UiHelpers.Wiki;
 using T3.Editor.Gui.Windows;
 using T3.Editor.Gui.Windows.Layouts;
+using T3.Editor.Gui.Windows.Output;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
@@ -189,10 +190,26 @@ public class T3Ui
 
     private static void ToggleFocusMode() {
         var shouldBeFocusMode = !UserSettings.Config.FocusMode;
+        
+        var outputWindow = OutputWindow.GetPrimaryOutputWindow();
+        var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
+        
+        if (shouldBeFocusMode && outputWindow != null && primaryGraphWindow != null)
+        {
+            primaryGraphWindow.GraphImageBackground.OutputInstance = outputWindow.Pinning.GetPinnedOrSelectedInstance();
+        }
+        
         UserSettings.Config.FocusMode = shouldBeFocusMode;
         UserSettings.Config.ShowToolbar = shouldBeFocusMode;
         ToggleAllUiElements();
         LayoutHandling.LoadAndApplyLayoutOrFocusMode(shouldBeFocusMode ? 11 : UserSettings.Config.WindowLayoutIndex);
+
+        outputWindow = OutputWindow.GetPrimaryOutputWindow();
+        if (!shouldBeFocusMode && outputWindow != null && primaryGraphWindow != null)
+        {
+            outputWindow.Pinning.PinInstance(primaryGraphWindow.GraphImageBackground.OutputInstance);
+            primaryGraphWindow.GraphImageBackground.ClearBackground();
+        }
     }
         
     private void DrawAppMenuBar()

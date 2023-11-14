@@ -37,6 +37,9 @@ namespace T3.Operators.Types.Id_5c7b6f3e_d3d5_4cfa_b30e_1a8cb6dbb4ad
 
         [Input(Guid = "b286781b-e808-40c3-8193-fbcc8215d534")]
         public readonly InputSlot<float> TangentB_WFactor = new InputSlot<float>();
+
+        [Input(Guid = "b59c4f08-b0e8-4ba5-bbb5-eb5c04278943")]
+        public readonly InputSlot<float> Debug = new InputSlot<float>();
     }
 }
 

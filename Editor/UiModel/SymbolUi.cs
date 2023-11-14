@@ -166,7 +166,13 @@ namespace T3.Editor.UiModel
                 {
                     Log.Debug($"Found no output ui for '{output.Name}' in {Symbol.Name}  - creating a new one");
                     OutputUis.Remove(output.Id); // if type has changed remove the old entry
-                    var outputUiCreator = outputUiFactory[output.ValueType];
+
+                    if (!outputUiFactory.TryGetValue(output.ValueType, out var outputUiCreator))
+                    {
+                        Log.Error($"Ignored {Symbol.Name}.{output.Name} with unknown type {output.ValueType}");
+                        continue;
+                    }
+                    
                     var newOutputUi = outputUiCreator();
                     newOutputUi.OutputDefinition = output;
                     newOutputUi.PosOnCanvas = ComputeNewOutputUiPositionOnCanvas(ChildUis, OutputUis);
@@ -265,8 +271,9 @@ namespace T3.Editor.UiModel
             var newChildUi = sourceChildUi.Clone();
             
 
-            newChildUi.SymbolChild = newChild;// Symbol.Children.Find(entry => entry.Id == newChildId);
+            newChildUi.SymbolChild = newChild;
             newChildUi.PosOnCanvas = posInCanvas;
+            newChildUi.Comment = sourceChildUi.Comment;
             
             ChildUis.Add(newChildUi);
             return newChild;

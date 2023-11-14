@@ -1972,7 +1972,7 @@
           "Id": "2d59d002-838e-4150-ae8f-ff97bb19bd78"/*Translation*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": 0.0,
+            "X": -0.6,
             "Y": 0.0,
             "Z": 0.0
           }

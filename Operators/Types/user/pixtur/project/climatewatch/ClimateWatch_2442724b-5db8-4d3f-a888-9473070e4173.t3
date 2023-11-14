@@ -616,7 +616,7 @@
           "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.32006526,
+            "X": 0.3161594,
             "Y": 0.81425893
           }
         },
@@ -633,7 +633,7 @@
         {
           "Id": "835d7f17-9de4-4612-a2f0-01c1346cdf1a"/*Spacing*/,
           "Type": "System.Single",
-          "Value": 16.5
+          "Value": 35.7
         }
       ],
       "Outputs": []
@@ -659,8 +659,8 @@
           "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.43544492,
-            "Y": -0.7084849
+            "X": 0.4159153,
+            "Y": -0.706528
           }
         },
         {
@@ -676,7 +676,7 @@
         {
           "Id": "835d7f17-9de4-4612-a2f0-01c1346cdf1a"/*Spacing*/,
           "Type": "System.Single",
-          "Value": 6.8
+          "Value": 11.9
         }
       ],
       "Outputs": []
@@ -713,8 +713,8 @@
           "Id": "b4a8c16d-5a0f-4867-ae03-92a675abe709"/*Translation*/,
           "Type": "System.Numerics.Vector3",
           "Value": {
-            "X": -0.031379327,
-            "Y": -0.16474184,
+            "X": -0.011849761,
+            "Y": -0.17255384,
             "Z": 0.0
           }
         }
@@ -1238,7 +1238,7 @@
         {
           "Id": "5af4a05f-72dc-4c0d-a728-309bf3a1b1b9"/*Format*/,
           "Type": "System.String",
-          "Value": "dd.MM.yyyy"
+          "Value": "dd MM yyyy"
         }
       ],
       "Outputs": []
@@ -2512,7 +2512,7 @@
           "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": -0.180296,
+            "X": -0.21154323,
             "Y": -0.7081214
           }
         },
@@ -2565,8 +2565,8 @@
           "Id": "de0fed7d-d2af-4424-baf3-81606e26559f"/*Position*/,
           "Type": "System.Numerics.Vector2",
           "Value": {
-            "X": 0.10709182,
-            "Y": -0.7081214
+            "X": 0.07779786,
+            "Y": -0.7061692
           }
         },
         {
@@ -2582,7 +2582,7 @@
         {
           "Id": "835d7f17-9de4-4612-a2f0-01c1346cdf1a"/*Spacing*/,
           "Type": "System.Single",
-          "Value": 10.6
+          "Value": 18.4
         }
       ],
       "Outputs": []
@@ -2599,7 +2599,7 @@
         {
           "Id": "9cb908ad-0800-4b88-b256-c6cc2b84ab6c"/*FragmentStart*/,
           "Type": "System.Int32",
-          "Value": -8
+          "Value": -4
         },
         {
           "Id": "7520db6d-7855-40e1-bb81-ead290815435"/*FragmentCount*/,

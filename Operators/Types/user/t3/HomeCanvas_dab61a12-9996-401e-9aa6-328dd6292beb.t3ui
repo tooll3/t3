@@ -185,21 +185,21 @@
       "Id": "fa46757f-62c7-4121-ab5c-c148b1da656f",
       "Title": "15min Introduction",
       "Description": "A short video tutorial that will guide you through the user interface.",
-      "LinkUrl": "https://tooll.io",
+      "LinkUrl": "https://youtu.be/_zvzX0fZ8sc?feature=shared",
       "LinkType": "TutorialVideo"
     },
     {
       "Id": "f6ab2a6b-4627-48bc-95ae-3906563435a6",
       "Title": "Documentation",
       "Description": "A documentation on Toolls homepage.",
-      "LinkUrl": "https://tooll.io",
+      "LinkUrl": "https://github.com/tooll3/t3/wiki",
       "LinkType": "Documentation"
     },
     {
       "Id": "9a34d3da-4b02-4e28-8b84-9f4525514ef3",
       "Title": "Discord",
       "Description": "You can always visit our discord channel.",
-      "LinkUrl": "https://tooll.io",
+      "LinkUrl": "https://discord.gg/YmSyQdeH3S",
       "LinkType": "Other"
     }
   ]

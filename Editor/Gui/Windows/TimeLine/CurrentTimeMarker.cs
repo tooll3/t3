@@ -16,8 +16,10 @@ namespace T3.Editor.Gui.Windows.TimeLine
 
             var p = new Vector2(TimeLineCanvas.Current.TransformX((float)playback.TimeInBars), 0);
             var drawList = ImGui.GetWindowDrawList();
-            drawList.AddRectFilled(p + new Vector2(-1,0), p + new Vector2(2, 2000), UiColors.BackgroundFull.Fade(0.2f));
-            drawList.AddRectFilled(p, p + new Vector2(1, 2000), UiColors.StatusAnimated);
+            var y = ImGui.GetWindowPos().Y;
+            var windowHeight = ImGui.GetWindowHeight() +1;
+            drawList.AddRectFilled(p + new Vector2(-1,y), p + new Vector2(2, windowHeight), UiColors.BackgroundFull.Fade(0.2f));
+            drawList.AddRectFilled(p, p + new Vector2(1, y+ windowHeight), UiColors.StatusAnimated);
         }
 
         private static readonly Color _shadowColor = new Color(0, 0, 0, 0.4f);

@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Linq;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Modification;
-using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
-
+using T3.Operators.Types.Id_dab61a12_9996_401e_9aa6_328dd6292beb;
 
 namespace T3.Editor.Gui.Graph.Dialogs
 {
@@ -33,6 +31,12 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 else if(symbol.InputDefinitions.Exists(i => i.Name == _parameterName))
                 {
                     warning = "Parameter name already exists.";
+                    isValid = false;
+                }
+                else if (symbol.InstanceType == typeof(HomeCanvas))
+                {
+                    warning = "You can't add parameters to the home canvas.";
+                    isValid = false;
                 }
                 
                 FormInputs.SetIndent(100);
@@ -48,6 +52,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 if (CustomComponents.DisablableButton("Add", isValid))
                 {
                     InputsAndOutputs.AddInputToSymbol(_parameterName, _multiInput, _selectedType, symbol);
+                    _parameterName = string.Empty;
                 }
 
                 ImGui.SameLine();
