@@ -802,8 +802,15 @@ namespace T3.Core.Resource
             
             if (fileResource == null)
             {
-                fileResource = new ResourceFileHook(sourceFilePath, new[] { resourceEntry.Id });
-                ResourceFileWatcher._resourceFileHooks.Add(sourceFilePath, fileResource);
+                try
+                {
+                    fileResource = new ResourceFileHook(sourceFilePath, new[] { resourceEntry.Id });
+                    ResourceFileWatcher._resourceFileHooks.Add(sourceFilePath, fileResource);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Can't set file resource hook to '{sourceFilePath}': {e.Message}");
+                }
             }
             else
             {

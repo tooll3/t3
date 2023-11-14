@@ -11,7 +11,7 @@ namespace Operators.Utils
     {
         public static BmFontDescription InitializeFromFile(string filepath)
         {
-            if (filepath == null)
+            if (_fontDescriptionForFilePaths == null || filepath == null)
                 return null;
 
             if (_fontDescriptionForFilePaths.TryGetValue(filepath, out var font))

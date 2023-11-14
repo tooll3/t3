@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using T3.Core.Logging;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.SystemUi;
 using T3.SystemUi;
@@ -71,7 +72,14 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     url = url.Replace("&", "^&");
-                    Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                    try
+                    {
+                        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Warning($"Failed to open URL {url}");
+                    }
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
