@@ -5,10 +5,13 @@ cbuffer Params : register(b0)
     float Amount;
 }
 
+static const int IndicesCount = 15;
+
 struct FaceCount {
     int Count;
-    int Indices[7];
+    int Indices[IndicesCount];
 };
+
 
 StructuredBuffer<PbrVertex> SourceVertices : register(t0);        
 StructuredBuffer<int3> SourceFaces : register(t1);        
@@ -21,7 +24,7 @@ void clear(uint3 i : SV_DispatchThreadID)
 {
     uint gi = i.x;
     VertexFaces[gi].Count = 0;
-    for(int index=0; index < 7; ++index) 
+    for(int index=0; index < IndicesCount; ++index) 
     {
         VertexFaces[gi].Indices[index] = 0;
     } 
@@ -44,7 +47,7 @@ void registerFaceVertices(uint3 i : SV_DispatchThreadID)
         int vIndex = verticeIndices[side];
         int orgValue = VertexFaces[vIndex].Count;
         InterlockedAdd( VertexFaces[vIndex].Count, 1, orgValue);
-        if(orgValue > 7)
+        if(orgValue > IndicesCount)
             return;
 
         VertexFaces[vIndex].Indices[orgValue]= faceIndex;
@@ -70,7 +73,7 @@ void computeNormal(uint3 i : SV_DispatchThreadID)
 
     float3 sidePositions[2];
 
-    for(int face=0; face < faceCount && face <= 7; ++face) 
+    for(int face=0; face < faceCount && face <= IndicesCount; ++face) 
     {
         uint faceIndex = VertexFaces[gi].Indices[face];
         uint3 faceVertexIndices = SourceFaces[faceIndex];
