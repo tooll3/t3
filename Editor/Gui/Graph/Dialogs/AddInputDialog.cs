@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
 using ImGuiNET;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Modification;
-using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Operators.Types.Id_dab61a12_9996_401e_9aa6_328dd6292beb;
