@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
@@ -32,12 +33,12 @@ namespace T3.Editor.Gui.Windows
             
             ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 10);
 
-            if (_listUsagesFilter != null)
+            if (_symbolUsageReference != null)
             {
-                ImGui.Text("Usages of " + _listUsagesFilter.Name + ":");
+                ImGui.Text("Usages of " + _symbolUsageReference.Name + ":");
                 if (ImGui.Button("Clear"))
                 {
-                    _listUsagesFilter = null;
+                    _symbolUsageReference = null;
                 }
                 else
                 {
@@ -45,7 +46,7 @@ namespace T3.Editor.Gui.Windows
 
                     ImGui.BeginChild("scrolling");
                     {
-                        if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(_listUsagesFilter.Id, out var info))
+                        if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(_symbolUsageReference.Id, out var info))
                         {
                             foreach (var s in info.DependingSymbolIds)
                             {
@@ -59,7 +60,7 @@ namespace T3.Editor.Gui.Windows
             }
             else
             {
-                DrawSymbolTree();
+                DrawSymbols();
             }
             
             ImGui.PopStyleVar(1);
@@ -70,7 +71,7 @@ namespace T3.Editor.Gui.Windows
             }
         }
 
-        private void DrawSymbolTree()
+        private void DrawSymbols()
         {
             //ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
 
@@ -90,9 +91,14 @@ namespace T3.Editor.Gui.Windows
 
             ImGui.BeginChild("scrolling");
             {
-                if (string.IsNullOrEmpty(_filter.SearchString))
+                var completeTree = string.IsNullOrEmpty(_filter.SearchString);
+                if (completeTree)
                 {
                     DrawNode(_treeNode);
+                }
+                else if(_filter.SearchString.Contains("?"))
+                {
+                    DrawRandomPromptList();
                 }
                 else
                 {
@@ -108,6 +114,48 @@ namespace T3.Editor.Gui.Windows
             foreach (var symbolUi in _filter.MatchingSymbolUis)
             {
                 SymbolTreeMenu.DrawSymbolItem(symbolUi.Symbol);
+            }
+        }
+
+        private int _randomSeed;
+        private List<Symbol> _libSymbols;
+        
+        private void DrawRandomPromptList()
+        {
+            var keep = _filter.SearchString;
+            _filter.SearchString = "lib.";
+            _filter.UpdateIfNecessary();
+            _filter.SearchString = keep;
+
+            if (_libSymbols == null)
+            {
+                _libSymbols = new List<Symbol>();
+                foreach (var s in SymbolRegistry.Entries.Values)
+                {
+                    if(s.Namespace.StartsWith("lib.") && !s.Name.StartsWith("_"))
+                        _libSymbols.Add(s);
+                }
+            }
+            
+            ImGui.Indent();
+            FormInputs.AddSectionHeader("Random Prompts");
+            
+            ImGui.AlignTextToFramePadding();
+            ImGui.InputInt("## seed", ref _randomSeed);
+
+            FormInputs.AddVerticalSpace();
+            if (_randomSeed == 0)
+            {
+                _randomSeed = (int)(ImGui.GetFrameCount() * 374761393U & 1023U);
+            }
+            
+            var count = _filter.SearchString.Count(c => c == '?');
+            var libOperatorCount = _libSymbols.Count;
+            for (uint i = 0; i < count; i++)
+            {
+                var f = MathUtils.Hash01((uint)((i + 42 * _randomSeed * 668265263U) & 0x7fffffff ));
+                var randomIndex = (int)(f * libOperatorCount).Clamp(0, libOperatorCount-1);
+                SymbolTreeMenu.DrawSymbolItem(_libSymbols[randomIndex]);
             }
         }
 
@@ -232,6 +280,6 @@ namespace T3.Editor.Gui.Windows
         private readonly NamespaceTreeNode _treeNode = new(NamespaceTreeNode.RootNodeId);
         private readonly SymbolFilter _filter = new();
         private static readonly RenameNamespaceDialog _renameNamespaceDialog = new();
-        public static Symbol _listUsagesFilter;
+        public static Symbol _symbolUsageReference;
     }
 }
