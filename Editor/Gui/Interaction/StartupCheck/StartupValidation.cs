@@ -78,7 +78,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                     }
                     catch (Exception e)
                     {
-                        Log.Warning($"Failed to open URL {url}");
+                        Log.Warning($"Failed to open URL {url} " + e.Message);
                     }
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
