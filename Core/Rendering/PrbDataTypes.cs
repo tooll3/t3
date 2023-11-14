@@ -83,8 +83,8 @@ namespace T3.Core.Rendering
             _baseColorMapSrv = new ShaderResourceView(device, WhitePixelTexture);
             _emissiveColorMapSrv = new ShaderResourceView(device, WhitePixelTexture);
 
-            RsmoFallbackTexture = CreateFallBackTexture(new Vector4(1, 0, 1, 0));
-            _rsmoMapSrv = new ShaderResourceView(device, RsmoFallbackTexture);
+            RmoFallbackTexture = CreateFallBackTexture(new Vector4(0f, 0, 1, 0));
+            _rsmoMapSrv = new ShaderResourceView(device, RmoFallbackTexture);
 
             NormalFallbackTexture = CreateFallBackTexture(new Vector4(0.5f, 0.5f, 1, 0));
             _normalMapSrv = new ShaderResourceView(device, NormalFallbackTexture);
@@ -167,7 +167,7 @@ namespace T3.Core.Rendering
         private static Buffer _defaultParameterBuffer = null;
         
         public static Texture2D WhitePixelTexture;
-        public static Texture2D RsmoFallbackTexture;
+        public static Texture2D RmoFallbackTexture;
         public static Texture2D NormalFallbackTexture;
         private static bool _wasInitialized;
     }

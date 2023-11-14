@@ -60,7 +60,7 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
             // Roughness
             var prevRoughnessMetallicOcclusionMap = context.PbrMaterialTextures.RoughnessMetallicOcclusionMap;
             Utilities.Dispose(ref _rsmoMapSrv);
-            var roughnessTex = RoughnessMetallicOcclusionMap.GetValue(context) ?? PbrContextSettings.RsmoFallbackTexture;
+            var roughnessTex = RoughnessMetallicOcclusionMap.GetValue(context) ?? PbrContextSettings.RmoFallbackTexture;
             _rsmoMapSrv = TryToCreate(device, roughnessTex, prevRoughnessMetallicOcclusionMap, "Roughness");
 
             context.PbrMaterialTextures.RoughnessMetallicOcclusionMap = _rsmoMapSrv;
