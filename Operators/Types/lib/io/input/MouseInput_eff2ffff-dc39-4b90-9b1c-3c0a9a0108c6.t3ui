@@ -39,6 +39,13 @@
         "X": 0.0,
         "Y": 0.0
       }
+    },
+    {
+      "OutputId": "be90eed3-26bf-4dc3-9771-073c04d359bc"/*Position3d*/,
+      "Position": {
+        "X": 0.0,
+        "Y": 100.0
+      }
     }
   ]
 }
