@@ -40,7 +40,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         //public List<Variation> MatchingPresets { get; } = new();
         public SymbolVariationPool PresetPool { get; private set; }
         
-        public void UpdateIfNecessary(bool forceUpdate = false)
+        public void UpdateIfNecessary(bool forceUpdate = false, int limit=30)
         {
             _needsUpdate |= forceUpdate;
             _needsUpdate |= UpdateFilters(SearchString, 
@@ -52,7 +52,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (_needsUpdate)
             {
                 //UpdateConnectSlotHashes();
-                UpdateMatchingSymbols();
+                UpdateMatchingSymbols(limit);
 
             }
 
@@ -120,7 +120,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         }
 
         
-        private void UpdateMatchingSymbols()
+        private void UpdateMatchingSymbols(int limit)
         {
             var composition = NodeSelection.GetSelectedComposition();
             var parentSymbolIds = composition != null
@@ -170,7 +170,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _symbolFilterString, ""))
                                                  .Reverse()
-                                                 .Take(30)
+                                                 .Take(limit)
                                                  .ToList();
         }
 
