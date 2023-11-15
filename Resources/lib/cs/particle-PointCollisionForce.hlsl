@@ -9,6 +9,7 @@ cbuffer Params : register(b0)
     float Attraction;
     float SpeedFactor;
     float AttractionDecay;
+    float CollisionResolve;
 }
 
 #include "lib/points/spatial-hash-map/spatial-hash-map-lookup.hlsl"
@@ -58,13 +59,13 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
     float3 pos = particles[gi].p.position;
     float3 velocity = particles[gi].velocity;
     float3 posNext = pos + velocity * SpeedFactor * 0.01;
-    float r = particles[gi].p.w;
+    float r = particles[gi].radius;
 
     for(int cellOffsetIndex =0; cellOffsetIndex < 8; cellOffsetIndex++) 
     {
         float3 cellOffset = CellOffsets[cellOffsetIndex] * CellSize;
 
-        if(GridFind(position + cellOffset, startIndex, endIndex)) 
+        if(GridFind(position + cellOffset, startIndex, endIndex))   
         {
             const uint particleCount = endIndex - startIndex;
             float3 sumForces = 0;
@@ -79,7 +80,7 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
                     continue;
 
                 float3 otherPos = particles[otherIndex].p.position;
-                float r2 = particles[otherIndex].p.w;
+                float r2 = particles[otherIndex].radius;
 
                 float3 pToO = pos - otherPos;
                 float centerDistance = length(pToO);
@@ -116,8 +117,8 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
                     // already inside...
                     if(gap < 0) 
                     {
-                        particles[gi].p.position -= direction * gap * 1;
-                        //particles[gi].velocity -= direction * gap * 10;
+                        particles[gi].p.position -= direction * gap * CollisionResolve;
+                        //particles[gi].velocity -= direction * gap * 10;   
                         //return;
                         //particles[gi].p.w = 1;
                         //force = surfaceInWorld * Repulsion;

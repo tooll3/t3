@@ -24,6 +24,10 @@
       "DefaultValue": 1.0
     },
     {
+      "Id": "b2c8f7cf-fdf5-4819-98ec-2c70ee9e8bc6"/*RadiusFromW*/,
+      "DefaultValue": 0.01
+    },
+    {
       "Id": "9642f5c6-5ad2-4d35-a5ed-a3fde10817ae"/*Speed*/,
       "DefaultValue": 1.0
     },
@@ -360,6 +364,12 @@
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
       "SourceSlotId": "4b0ccec5-b72e-4834-80d4-77225f30d2a9",
+      "TargetParentOrChildId": "2dbfb5f3-70e4-49e4-9968-906eef514efd",
+      "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "b2c8f7cf-fdf5-4819-98ec-2c70ee9e8bc6",
       "TargetParentOrChildId": "2dbfb5f3-70e4-49e4-9968-906eef514efd",
       "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
     },
