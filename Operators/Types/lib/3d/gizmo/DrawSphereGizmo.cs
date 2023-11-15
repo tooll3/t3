@@ -7,7 +7,7 @@ using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_1998f949_5c0a_4f39_82cf_b0bda31f7f21
 {
-    public class SphereGizmo : Instance<SphereGizmo>
+    public class DrawSphereGizmo : Instance<DrawSphereGizmo>
     {
         [Output(Guid = "0b43d459-2c94-4d5e-a75a-61d38d93118b")]
         public readonly Slot<Command> Output = new Slot<Command>();

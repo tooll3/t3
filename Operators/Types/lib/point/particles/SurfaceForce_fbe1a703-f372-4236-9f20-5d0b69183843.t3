@@ -180,7 +180,7 @@
       "Outputs": []
     },
     {
-      "Id": "4e052c9e-6a24-416d-8e29-f397e60ff6ca"/*SphereGizmo*/,
+      "Id": "4e052c9e-6a24-416d-8e29-f397e60ff6ca"/*DrawSphereGizmo*/,
       "SymbolId": "1998f949-5c0a-4f39-82cf-b0bda31f7f21",
       "InputValues": [
         {

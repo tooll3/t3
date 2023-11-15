@@ -1,7 +1,7 @@
 {
   "Name": "_OutputWindowGrid",
   "Id": "e5588101-5686-4b02-ab7d-e58199ba552e",
-  "Namespace": "lib.3d.gizmo",
+  "Namespace": "lib.3d.gizmo._",
   "Inputs": [],
   "Children": [
     {

@@ -230,7 +230,7 @@
       }
     },
     {
-      "ChildId": "481c0c70-55bb-4236-a890-bb4ddb22df0a"/*BoundingBox*/,
+      "ChildId": "481c0c70-55bb-4236-a890-bb4ddb22df0a"/*DrawBoxGizmo*/,
       "Position": {
         "X": 760.97595,
         "Y": 2370.868

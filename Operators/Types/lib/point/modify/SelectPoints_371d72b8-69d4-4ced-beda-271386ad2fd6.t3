@@ -256,7 +256,7 @@
       "Outputs": []
     },
     {
-      "Id": "dddecb5b-0355-4058-8690-04d4cd26623b"/*BoundingBox*/,
+      "Id": "dddecb5b-0355-4058-8690-04d4cd26623b"/*DrawBoxGizmo*/,
       "SymbolId": "9123651a-5df8-4f85-9e14-2068f33e2ff1",
       "InputValues": [
         {
@@ -303,7 +303,7 @@
       "Outputs": []
     },
     {
-      "Id": "dfb513d5-31f9-45df-85e2-157e13369d65"/*SphereGizmo*/,
+      "Id": "dfb513d5-31f9-45df-85e2-157e13369d65"/*DrawSphereGizmo*/,
       "SymbolId": "1998f949-5c0a-4f39-82cf-b0bda31f7f21",
       "InputValues": [
         {

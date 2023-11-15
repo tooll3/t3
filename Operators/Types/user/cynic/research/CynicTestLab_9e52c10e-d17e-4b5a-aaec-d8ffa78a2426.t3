@@ -300,7 +300,7 @@
       "Outputs": []
     },
     {
-      "Id": "4d78fe58-f16f-4921-bfc2-67138ae5fd47"/*BoundingBox*/,
+      "Id": "4d78fe58-f16f-4921-bfc2-67138ae5fd47"/*DrawBoxGizmo*/,
       "SymbolId": "9123651a-5df8-4f85-9e14-2068f33e2ff1",
       "InputValues": [
         {
@@ -884,7 +884,7 @@
       "Outputs": []
     },
     {
-      "Id": "8633b628-195b-4bd9-80de-1a439799eae2"/*BoundingBox*/,
+      "Id": "8633b628-195b-4bd9-80de-1a439799eae2"/*DrawBoxGizmo*/,
       "SymbolId": "9123651a-5df8-4f85-9e14-2068f33e2ff1",
       "InputValues": [],
       "Outputs": []

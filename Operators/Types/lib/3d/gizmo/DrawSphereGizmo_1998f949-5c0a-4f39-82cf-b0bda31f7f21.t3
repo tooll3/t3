@@ -1,5 +1,5 @@
 {
-  "Name": "SphereGizmo",
+  "Name": "DrawSphereGizmo",
   "Id": "1998f949-5c0a-4f39-82cf-b0bda31f7f21",
   "Namespace": "lib.3d.gizmo",
   "Inputs": [

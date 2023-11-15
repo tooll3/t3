@@ -611,7 +611,7 @@
       }
     },
     {
-      "ChildId": "d0d755c7-df4d-4a3f-8e02-c6d590b46fb9"/*BoundingBox*/,
+      "ChildId": "d0d755c7-df4d-4a3f-8e02-c6d590b46fb9"/*DrawBoxGizmo*/,
       "Position": {
         "X": -354.58554,
         "Y": 2437.5205
