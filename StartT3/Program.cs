@@ -14,6 +14,7 @@ using T3.Core.Resource;
 using T3.Editor.Gui.Interaction.StartupCheck;
 using T3.Editor.SystemUi;
 using T3.MsForms;
+using T3.SystemUi;
 
 namespace T3.StartEditor
 {
@@ -112,36 +113,39 @@ namespace T3.StartEditor
                                                           .WithOptimizationLevel(OptimizationLevel.Release)
                                                           .WithAllowUnsafe(true));
 
-            using (var dllStream = new FileStream(FinalOperatorAssemblyFilepath, FileMode.Create))
-                // using (var pdbStream = new FileStream(exportPath + Path.DirectorySeparatorChar + "Operators.pdb", FileMode.Create))
-            using (var pdbStream = new MemoryStream())
+            
+            
+            
+            using var dllStream = new FileStream(FinalOperatorAssemblyFilepath, FileMode.Create);
+            Log.Debug($" emitting compilation: {compilation}");
+            try
             {
-                Log.Debug($" emitting compilation: {compilation}");
-                try
+
+                var emitResult = compilation.Emit(dllStream);
+
+                Log.Debug($"compilation results of 'export':");
+
+                if (!emitResult.Success)
                 {
-                    var emitResult = compilation.Emit(dllStream);
-
-                    Log.Debug($"compilation results of 'export':");
-
-                    if (!emitResult.Success)
+                    foreach (var entry in emitResult.Diagnostics)
                     {
-                        foreach (var entry in emitResult.Diagnostics)
-                        {
-                            if (entry.WarningLevel == 0)
-                                Log.Debug("ERROR:" + entry.GetMessage());
-                            else
-                                Log.Debug(entry.GetMessage());
-                        }
-                    }
-                    else
-                    {
-                        Log.Debug($"Compilation of 'export' successful.");
+                        if (entry.WarningLevel == 0)
+                            Log.Debug("ERROR:" + entry.GetMessage());
+                        else
+                            Log.Debug(entry.GetMessage());
                     }
                 }
-                catch (Exception e)
+                else
                 {
-                    Log.Debug("emit Failed: " + e.Message);
+                    Log.Debug($"Compilation of 'export' successful.");
                 }
+            }
+            catch (Exception e)
+            {
+                EditorUi.Instance
+                        .ShowMessageBox($"Can't compile operators: {e.Message}\nIs there another instance of Tooll running?",
+                                        @"Startup failed", PopUpButtons.Ok);
+                EditorUi.Instance.ExitApplication();
             }
 
             return referencedAssemblies;
