@@ -1,6 +1,6 @@
 {
   "Id": "32e18957-3812-4f64-8663-18454518d005"/*TransformImage*/,
-  "Description": "Rotates, offsets, and scales the incoming image.\n\nAn alternative version is available: [TransformImage2] \nSee the difference: [TransformImage2Example]",
+  "Description": "Rotates, offsets, and scales the incoming image.\nIt includes texture wrapping modes: Repeat, Mirror, Clamp, Border...\nIt's a powerful and versatile operator with many use cases such as tiling textures, patterns, decals...",
   "InputUis": [
     {
       "InputId": "3aab9b12-1e02-4d7a-83b6-da1500a6bcbf"/*Image*/,
@@ -48,13 +48,6 @@
       }
     },
     {
-      "InputId": "b3edcd1e-e0ce-43a7-98e9-1568e2329ed5"/*Mirror*/,
-      "Position": {
-        "X": -214.98917,
-        "Y": 453.7878
-      }
-    },
-    {
       "InputId": "c31a95a9-2cfb-4eea-8006-97f883d11847"/*GenerateMips*/,
       "Position": {
         "X": -214.98917,
@@ -67,6 +60,13 @@
         "X": -214.98917,
         "Y": 588.78784
       }
+    },
+    {
+      "InputId": "997c6675-faed-4843-a323-4826c70860e1"/*WrapMode*/,
+      "Position": {
+        "X": -214.98917,
+        "Y": 633.78784
+      }
     }
   ],
   "SymbolChildUis": [
@@ -78,13 +78,6 @@
       }
     },
     {
-      "ChildId": "a4c413bc-4dba-40b2-a625-b530d8c473a1"/*CurvesToTexture*/,
-      "Position": {
-        "X": 118.98644,
-        "Y": 1047.3958
-      }
-    },
-    {
       "ChildId": "25acd8a3-db12-457a-98a9-f70e51be66d5"/*Vector2ToFloat2*/,
       "Position": {
         "X": -64.98916,
@@ -92,17 +85,52 @@
       }
     },
     {
-      "ChildId": "77d37c0c-2731-4f17-943b-6a3d8db908df"/*BoolToFloat*/,
+      "ChildId": "31adbf53-34ea-4f3a-981b-cf1757e60933"/*Wrap*/,
       "Position": {
-        "X": -64.98917,
-        "Y": 453.7878
+        "X": 464.82666,
+        "Y": 145.95316
       }
     },
     {
-      "ChildId": "31adbf53-34ea-4f3a-981b-cf1757e60933"/*_ImageFxShaderSetupStatic*/,
+      "ChildId": "2ce90831-c595-4cb7-b846-ecfbde9931bb"/*Mirror*/,
       "Position": {
-        "X": 434.53156,
-        "Y": 352.5105
+        "X": 464.5031,
+        "Y": 515.0355
+      }
+    },
+    {
+      "ChildId": "564539d6-f4a2-4a56-89b3-cd39078102f5"/*PickTexture*/,
+      "Position": {
+        "X": 1491.2595,
+        "Y": 652.3646
+      }
+    },
+    {
+      "ChildId": "5c8465db-304f-4cac-9645-3c01f901c2b3"/*Clamp*/,
+      "Position": {
+        "X": 460.8178,
+        "Y": 826.4881
+      }
+    },
+    {
+      "ChildId": "6f4813a9-696b-4581-9274-16626c9fb976"/*_ImageFxShaderSetupStatic*/,
+      "Position": {
+        "X": 461.49423,
+        "Y": 1114.8914
+      }
+    },
+    {
+      "ChildId": "3f924dda-c307-4f4b-83ca-023dd6d2e384"/*_ImageFxShaderSetupStatic*/,
+      "Position": {
+        "X": 465.94022,
+        "Y": 1412.5088
+      }
+    },
+    {
+      "ChildId": "0fb38ccc-8b72-49a2-a230-aff0783f4bfa"/*IntToFloat*/,
+      "Position": {
+        "X": 276.26935,
+        "Y": 1475.1824
       }
     }
   ],
@@ -110,8 +138,8 @@
     {
       "OutputId": "54831ac3-d747-4cdf-9520-3cfd651158bf"/*TextureOutput*/,
       "Position": {
-        "X": 1044.0496,
-        "Y": 673.822
+        "X": 1687.9594,
+        "Y": 679.16565
       }
     }
   ]

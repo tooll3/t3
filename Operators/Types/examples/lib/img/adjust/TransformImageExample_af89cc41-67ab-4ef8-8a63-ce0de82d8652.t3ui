@@ -1,0 +1,176 @@
+{
+  "Id": "af89cc41-67ab-4ef8-8a63-ce0de82d8652"/*TransformImageExample*/,
+  "Description": "",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "8c66c73e-542f-40b3-8a76-6407b06096c7"/*Text*/,
+      "Position": {
+        "X": 85.8241,
+        "Y": 179.7359
+      }
+    },
+    {
+      "ChildId": "be2c4f34-1609-4b81-a1ef-8e19034b0969"/*RenderTarget*/,
+      "Position": {
+        "X": 385.1513,
+        "Y": 46.78247
+      }
+    },
+    {
+      "ChildId": "6bc7c7e5-5f59-4161-9eb7-b97e09fbdc85"/*TransformImage*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 140.0
+      },
+      "Comment": "Once the scaling is below 1, pay attention how the different wrapping modes are behaving.",
+      "Position": {
+        "X": 720.8681,
+        "Y": -86.693726
+      }
+    },
+    {
+      "ChildId": "532a2fbc-b86e-4eae-88b5-1383225d40f5"/*Counter*/,
+      "Position": {
+        "X": 390.88812,
+        "Y": 308.18536
+      }
+    },
+    {
+      "ChildId": "cd2df730-c2a6-4b3f-9a8f-31d852726de5"/*Wrapping Mode*/,
+      "Position": {
+        "X": 549.74243,
+        "Y": 81.778015
+      }
+    },
+    {
+      "ChildId": "ac462d6c-1cf5-4811-9c64-db770f2dec4f"/*Position*/,
+      "Position": {
+        "X": 549.74243,
+        "Y": -60.221985
+      }
+    },
+    {
+      "ChildId": "2d64302b-3f82-43d9-a437-8f7a8ede0bf3"/*LinearGradient*/,
+      "Position": {
+        "X": 390.88812,
+        "Y": 265.18536
+      }
+    },
+    {
+      "ChildId": "ab54a3ff-f820-4dba-a624-55fd0c91634a"/*Image*/,
+      "Position": {
+        "X": 549.74243,
+        "Y": -142.22198
+      }
+    },
+    {
+      "ChildId": "e9943752-6e05-4d83-90a9-cf894e9ceaa4"/*Layer2d*/,
+      "Position": {
+        "X": 90.41443,
+        "Y": -26.362488
+      }
+    },
+    {
+      "ChildId": "0777184c-9732-4477-b523-010d9b111f9b"/*Execute*/,
+      "Position": {
+        "X": 238.48352,
+        "Y": 17.744644
+      }
+    },
+    {
+      "ChildId": "4e3b0c70-d407-4f3c-a206-1a699b9350d6"/*CutOut*/,
+      "Comment": "Not directly related to this example but notice how the blend mode allows to cut out first layer2D\n",
+      "Position": {
+        "X": 90.41443,
+        "Y": 29.637512
+      }
+    },
+    {
+      "ChildId": "87989179-2788-428b-98da-19bd5adcf0fa"/*Rotation*/,
+      "Position": {
+        "X": 549.74243,
+        "Y": 25.778015
+      }
+    },
+    {
+      "ChildId": "cf410ce7-ab60-4f59-b9af-ad1931a42b4c"/*RgbaToColor*/,
+      "Position": {
+        "X": 385.1513,
+        "Y": 102.78247
+      }
+    },
+    {
+      "ChildId": "159c4e5e-5a0d-4168-96c6-abc3f07acd2c"/*AnimValue*/,
+      "Position": {
+        "X": 235.8241,
+        "Y": 136.7359
+      }
+    },
+    {
+      "ChildId": "e945ad01-6810-4314-a2ca-c186837bdfbc"/*Layer2d*/,
+      "Position": {
+        "X": 90.41443,
+        "Y": 85.63751
+      }
+    },
+    {
+      "ChildId": "84be8023-4f14-4a0d-966e-7a24bb13a2ae"/*Scale*/,
+      "Position": {
+        "X": 549.74243,
+        "Y": -17.221985
+      }
+    },
+    {
+      "ChildId": "e0fedf9d-5479-474a-9a28-6493aa6853fd"/*Text Shadow*/,
+      "Position": {
+        "X": 86.31439,
+        "Y": 149.87915
+      }
+    },
+    {
+      "ChildId": "d636003d-9b9b-4c11-b39d-c28fcb38b878"/*LinearGradient*/,
+      "Position": {
+        "X": -64.1759,
+        "Y": 222.7359
+      }
+    },
+    {
+      "ChildId": "f825b7c4-bd23-4b38-b63f-d44f1318ec77"/*Layer2d*/,
+      "Position": {
+        "X": 85.8241,
+        "Y": 222.7359
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "d7ba385e-4168-4c1e-bde2-18343e0a9d1e"/*Output*/,
+      "Position": {
+        "X": 899.27625,
+        "Y": -33.831635
+      }
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "cca49c9b-3f2f-46a9-87ef-2c3f3800168d",
+      "Title": "# Transform Image Example\n",
+      "Color": {
+        "X": 1.0,
+        "Y": 0.7234042,
+        "Z": 0.0,
+        "W": 1.0
+      },
+      "Position": {
+        "X": 527.4156,
+        "Y": -329.06824
+      },
+      "Size": {
+        "X": 324.92682,
+        "Y": 460.81467
+      }
+    }
+  ]
+}
