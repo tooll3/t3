@@ -10,6 +10,7 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.Gui.Windows.ResearchCanvas.Model;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Windows.ResearchCanvas;
@@ -46,7 +47,7 @@ namespace T3.Editor.Gui.Windows.ResearchCanvas;
  * 
  */
 
-public class VerticalStackingCanvas
+public class VerticalStackingUi
 {
     private bool _initialized;
 
@@ -268,7 +269,7 @@ public class VerticalStackingCanvas
 
         foreach (var child in symbol.ChildUis)
         {
-            Blocks.Add(new Block
+            Blocks.Add(new Block_Attempt1
                            {
                                PosOnCanvas = child.PosOnCanvas,
                                //UnitHeight = 1,
@@ -288,17 +289,17 @@ public class VerticalStackingCanvas
         _groups.Clear();
         _slots.Clear();
 
-        Blocks.Add(new Block(0, 2, "CubeMesh", typeof(MeshBuffers)));
-        Blocks.Add(new Block(0, 3, "TransformMesh", typeof(MeshBuffers)));
-        Blocks.Add(new Block(0, 5, "Blur", typeof(Texture2D)));
-        Blocks.Add(new Block(0, 7, "RenderTarget", typeof(Texture2D)));
-        Blocks.Add(new Block(2, 8, "Group", typeof(Command)));
-        Blocks.Add(new Block(5, 8, "Value", typeof(float)));
-        Blocks.Add(new Block(5, 8, "Add", typeof(float)));
-        Blocks.Add(new Block(5, 8, "Value2", typeof(float)));
-        Blocks.Add(new Block(5, 8, "AnimValue", typeof(float)));
+        Blocks.Add(new Block_Attempt1(0, 2, "CubeMesh", typeof(MeshBuffers)));
+        Blocks.Add(new Block_Attempt1(0, 3, "TransformMesh", typeof(MeshBuffers)));
+        Blocks.Add(new Block_Attempt1(0, 5, "Blur", typeof(Texture2D)));
+        Blocks.Add(new Block_Attempt1(0, 7, "RenderTarget", typeof(Texture2D)));
+        Blocks.Add(new Block_Attempt1(2, 8, "Group", typeof(Command)));
+        Blocks.Add(new Block_Attempt1(5, 8, "Value", typeof(float)));
+        Blocks.Add(new Block_Attempt1(5, 8, "Add", typeof(float)));
+        Blocks.Add(new Block_Attempt1(5, 8, "Value2", typeof(float)));
+        Blocks.Add(new Block_Attempt1(5, 8, "AnimValue", typeof(float)));
         
-        Blocks.Add(new Block(3, 5, "DrawMesh", typeof(Command)));
+        Blocks.Add(new Block_Attempt1(3, 5, "DrawMesh", typeof(Command)));
 
         //Connections.Add(new Connection(a.Outputs[0], b.Inputs[0]));
         // Connections.Add(new Connection(b.Outputs[0], c.Inputs[0]));
@@ -309,7 +310,7 @@ public class VerticalStackingCanvas
     public static readonly Vector2 BlockSize = new(100, 20);
     public readonly ScalableCanvas Canvas = new();
     
-    public readonly List<Block> Blocks = new();
+    public readonly List<Block_Attempt1> Blocks = new();
     public readonly List<Connection> Connections = new();
     private readonly List<SnapGroup> _groups = new();
     private readonly List<Slot> _slots = new();

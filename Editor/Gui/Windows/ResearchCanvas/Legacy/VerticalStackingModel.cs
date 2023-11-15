@@ -3,72 +3,33 @@ using System.Collections.Generic;
 using System.Numerics;
 using T3.Editor.Gui.Selection;
 
+// ReSharper disable UseWithExpressionToCopyStruct
+// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+
 namespace T3.Editor.Gui.Windows.ResearchCanvas;
 
-
-public class OutSocket
+public class Block_Attempt1 : ISelectableCanvasObject
 {
-    
-}
-
-public class InSocket
-{
-    
-}
-
-
-/// <summary>
-/// Generate considerations:
-/// - The layout model is a temporary data that is completely be generated from the t3ui data.
-/// - Its computation is expensive and should only be done if required.
-/// - This might be especially complicated if the state cannot be stored in the layout model, because it
-///   relies on a temp. property like expanding a parameter type group.
-/// </summary>
-public class SnappedGroup
-{
-    public List<OutSocket> FreeOutSockets = new();
-    public List<InSocket> FreeInSockets = new();
-
-    public List<Block> SnappedBlocks = new();
-
-    public List<Connection> SnappedConnections = new();
-
-    /// <summary>
-    /// This will move collect relevant snapped blocks and attempt to adjust the layout.
-    /// Returns false.
-    /// Note:
-    /// - This change should result in a command that actually applies the changes to the operator positions
-    /// - After being applied, the SnapGroup(s) should be recalculated.
-    /// 
-    /// </summary>
-    public bool ApplyVerticalLayoutChange(Vector2 canvasPos, float delta)
-    {
-        return true;
-    }
-}
-
-
-public class Block : ISelectableCanvasObject
-{
-    public Block()
+    public Block_Attempt1()
     {
     }
 
-    public Block(int x, int y, string name, Type type= null)
+    public Block_Attempt1(int x, int y, string name, Type type = null)
     {
         if (type != null)
         {
             PrimaryType = type;
         }
+
         Id = Guid.NewGuid();
         Name = name;
-        Size = VerticalStackingCanvas.BlockSize;
-        PosOnCanvas = new Vector2(x, y) * VerticalStackingCanvas.BlockSize;
+        Size = VerticalStackingUi.BlockSize;
+        PosOnCanvas = new Vector2(x, y) * VerticalStackingUi.BlockSize;
         Inputs = new List<Slot>()
                      {
                          new()
                              {
-                                 Block = this,
+                                 BlockAttempt1 = this,
                                  AnchorPositions = new Vector2[]
                                                        {
                                                            new(0.5f, 0.0f),
@@ -82,7 +43,7 @@ public class Block : ISelectableCanvasObject
                       {
                           new()
                               {
-                                  Block = this,
+                                  BlockAttempt1 = this,
                                   AnchorPositions = new Vector2[]
                                                         {
                                                             new(0.5f, 1.0f),
@@ -122,14 +83,9 @@ public class Block : ISelectableCanvasObject
     }
 }
 
-public class SnapGroup
-{
-    public List<Block> Blocks;
-}
-
 public class Slot
 {
-    public Block Block;
+    public Block_Attempt1 BlockAttempt1;
     public Type Type = typeof(float);
     public Vector2[] AnchorPositions;
     public bool IsInput;
@@ -145,8 +101,8 @@ public class Slot
     //     Shy,
     // }
 
-    public Vector2 VerticalPosOnCanvas => Block.PosOnCanvas + AnchorPositions[0] * Block.Size;
-    public Vector2 HorizontalPosOnCanvas => Block.PosOnCanvas + AnchorPositions[1] * Block.Size;
+    public Vector2 VerticalPosOnCanvas => BlockAttempt1.PosOnCanvas + AnchorPositions[0] * BlockAttempt1.Size;
+    public Vector2 HorizontalPosOnCanvas => BlockAttempt1.PosOnCanvas + AnchorPositions[1] * BlockAttempt1.Size;
     public bool IsConnected => Connections.Count > 0;
 
     public IEnumerable<Connection> GetConnections(Connection.Orientations orientation)
@@ -200,11 +156,11 @@ public class Connection
         if (Source == null || Target == null)
             return Orientations.Undefined;
 
-        var delta=
-        Source.Block.PosOnCanvas-
-        Target.Block.PosOnCanvas;
+        var delta =
+            Source.BlockAttempt1.PosOnCanvas -
+            Target.BlockAttempt1.PosOnCanvas;
 
-        return (delta.X  < delta.Y)
+        return (delta.X < delta.Y)
                    ? Orientations.Horizontal
                    : Orientations.Vertical;
     }
@@ -217,14 +173,14 @@ public class Connection
                 return false;
 
             {
-                var p1 = Source.Block.PosOnCanvas + Source.AnchorPositions[0] * Source.Block.Size;
-                var p2 = Target.Block.PosOnCanvas + Target.AnchorPositions[0] * Target.Block.Size;
+                var p1 = Source.BlockAttempt1.PosOnCanvas + Source.AnchorPositions[0] * Source.BlockAttempt1.Size;
+                var p2 = Target.BlockAttempt1.PosOnCanvas + Target.AnchorPositions[0] * Target.BlockAttempt1.Size;
                 if (Vector2.Distance(p1, p2) < 1)
                     return true;
             }
             {
-                var p1 = Source.Block.PosOnCanvas + Source.AnchorPositions[1] * Source.Block.Size;
-                var p2 = Target.Block.PosOnCanvas + Target.AnchorPositions[1] * Target.Block.Size;
+                var p1 = Source.BlockAttempt1.PosOnCanvas + Source.AnchorPositions[1] * Source.BlockAttempt1.Size;
+                var p2 = Target.BlockAttempt1.PosOnCanvas + Target.AnchorPositions[1] * Target.BlockAttempt1.Size;
                 if (Vector2.Distance(p1, p2) < 1)
                     return true;
             }

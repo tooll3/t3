@@ -14,7 +14,7 @@ public class ResearchWindow : Window
 
     protected override void DrawContent()
     {
-        _verticalStackingCanvas.Draw();
+        _snapGraph.Draw();
     }
     
     public override List<Window> GetInstances()
@@ -22,5 +22,5 @@ public class ResearchWindow : Window
         return new List<Window>();
     }
 
-    private readonly VerticalStackingCanvas _verticalStackingCanvas = new();
+    private readonly SnapGraph _snapGraph = new();
 }

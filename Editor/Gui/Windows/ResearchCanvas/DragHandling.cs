@@ -25,7 +25,7 @@ public static class DragHandling
     /// NOTE: This has to be called for ALL movable elements (ops, inputs, outputs) and directly after ImGui.Item
     /// </summary>
     /// 
-    public static bool HandleItemDragging(ISelectableCanvasObject node, VerticalStackingCanvas container, out Vector2 dragPos)
+    public static bool HandleItemDragging(ISelectableCanvasObject node, VerticalStackingUi container, out Vector2 dragPos)
     {
         dragPos = Vector2.Zero;
         var isSnapped = false;
@@ -52,7 +52,7 @@ public static class DragHandling
             _notSnappedConnectionsOnDragStart.Clear();
             foreach (var n in _draggedNodes)
             {
-                if (n is not Block block)
+                if (n is not Block_Attempt1 block)
                     continue;
 
                 foreach (var slot in block.GetSlots())
@@ -160,10 +160,10 @@ public static class DragHandling
         return isActiveNode && isSnapped;
     }
 
-    private static DragResult SearchForSnapping(ISelectableCanvasObject canvasObject, VerticalStackingCanvas container, out Vector2 delta2)
+    private static DragResult SearchForSnapping(ISelectableCanvasObject canvasObject, VerticalStackingUi container, out Vector2 delta2)
     {
         delta2 = Vector2.Zero;
-        if (canvasObject is not Block draggedBlock)
+        if (canvasObject is not Block_Attempt1 draggedBlock)
         {
             return null;
         }
@@ -370,7 +370,7 @@ public static class DragHandling
                    };
 
 
-        void BestSnapDistance(Slot sourceSlot, Slot targetSlot, Vector2 sourcePos, Vector2 targetPos, Block other, int anchorDirectionIndex,
+        void BestSnapDistance(Slot sourceSlot, Slot targetSlot, Vector2 sourcePos, Vector2 targetPos, Block_Attempt1 other, int anchorDirectionIndex,
                               bool alreadyConnected, bool draggedIsInput)
         {
             var delta = sourcePos - targetPos;
@@ -386,7 +386,7 @@ public static class DragHandling
                              ? (targetSlot.AnchorPositions[anchorDirectionIndex] - sourceSlot.AnchorPositions[anchorDirectionIndex])
                              : (sourceSlot.AnchorPositions[anchorDirectionIndex] - targetSlot.AnchorPositions[anchorDirectionIndex]);
             bestSnapPos = other.PosOnCanvas - offset *
-                          VerticalStackingCanvas.BlockSize;
+                          VerticalStackingUi.BlockSize;
 
             var fixedSlot = draggedIsInput ?  sourceSlot : targetSlot;
             var pos = anchorDirectionIndex == 0 ? fixedSlot.VerticalPosOnCanvas : fixedSlot.HorizontalPosOnCanvas;
