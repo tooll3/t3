@@ -119,7 +119,6 @@ namespace T3.Editor.Gui.Windows
 
         private int _randomSeed;
         private List<Symbol> _allLibSymbols;
-        private List<Symbol> _relevantSymbols;
         private float _promptComplexity= 0.25f;
         
         private void DrawRandomPromptList()
