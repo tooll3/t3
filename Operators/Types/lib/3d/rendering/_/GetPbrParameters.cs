@@ -67,8 +67,9 @@ namespace T3.Operators.Types.Id_ca4fe8c4_cf61_4196_84e4_d69dc8869a25
         
         private void UpdatePrefilteredSpecularMap(EvaluationContext context)
         {
-            PrefilteredSpecularMap.Value = context.PrbPrefilteredSpecular;
+            // Todo move constant to shared constants
+            context.ContextTextures.TryGetValue("PrefilteredSpecular", out var texture);
+            PrefilteredSpecularMap.Value = texture;
         }
-        
     }
 }
