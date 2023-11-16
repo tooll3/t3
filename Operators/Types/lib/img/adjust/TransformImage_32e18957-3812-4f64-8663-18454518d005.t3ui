@@ -92,17 +92,22 @@
       }
     },
     {
-      "ChildId": "a4d78db8-f0a6-4ed3-b4f8-39eae5c464b3"/*PickWrapMode*/,
+      "ChildId": "a4d78db8-f0a6-4ed3-b4f8-39eae5c464b3"/*IntToWrapmode*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
       "Position": {
-        "X": 85.01083,
-        "Y": 498.7878
+        "X": 203.40295,
+        "Y": 489.62747
       }
     },
     {
-      "ChildId": "4e412adf-d580-427c-adbd-b66eed006d93"/*ModInt*/,
+      "ChildId": "401e51a0-e6cc-4132-9b19-a593e406c1a0"/*AddInts*/,
       "Position": {
-        "X": -64.98917,
-        "Y": 498.7878
+        "X": -22.272385,
+        "Y": 510.22302
       }
     }
   ],

@@ -6,15 +6,15 @@
     {
       "ChildId": "8c66c73e-542f-40b3-8a76-6407b06096c7"/*Text*/,
       "Position": {
-        "X": 85.8241,
-        "Y": 179.7359
+        "X": -47.348938,
+        "Y": 77.83435
       }
     },
     {
       "ChildId": "be2c4f34-1609-4b81-a1ef-8e19034b0969"/*RenderTarget*/,
       "Position": {
-        "X": 385.1513,
-        "Y": 46.78247
+        "X": 251.97827,
+        "Y": -55.11908
       }
     },
     {
@@ -26,121 +26,114 @@
       },
       "Comment": "With a scale value below 1, pay attention how the different wrapping modes are behaving.",
       "Position": {
-        "X": 716.43787,
-        "Y": -70.94681
+        "X": 593.8805,
+        "Y": -48.914032
       }
     },
     {
       "ChildId": "532a2fbc-b86e-4eae-88b5-1383225d40f5"/*Counter*/,
       "Position": {
-        "X": 390.88812,
-        "Y": 308.18536
+        "X": 439.8303,
+        "Y": 136.39247
       }
     },
     {
       "ChildId": "ac462d6c-1cf5-4811-9c64-db770f2dec4f"/*Position*/,
       "Position": {
-        "X": 545.3122,
-        "Y": -44.475067
+        "X": 443.81128,
+        "Y": -14.180023
       }
     },
     {
       "ChildId": "2d64302b-3f82-43d9-a437-8f7a8ede0bf3"/*LinearGradient*/,
       "Position": {
-        "X": 390.88812,
-        "Y": 265.18536
+        "X": 257.7151,
+        "Y": 163.28381
       }
     },
     {
       "ChildId": "ab54a3ff-f820-4dba-a624-55fd0c91634a"/*Image*/,
       "Position": {
-        "X": 545.3122,
-        "Y": -126.47507
+        "X": 443.81128,
+        "Y": -96.18002
       }
     },
     {
       "ChildId": "e9943752-6e05-4d83-90a9-cf894e9ceaa4"/*Layer2d*/,
       "Position": {
-        "X": 90.41443,
-        "Y": -26.362488
+        "X": -42.758606,
+        "Y": -128.26404
       }
     },
     {
       "ChildId": "0777184c-9732-4477-b523-010d9b111f9b"/*Execute*/,
       "Position": {
-        "X": 238.48352,
-        "Y": 17.744644
+        "X": 105.310486,
+        "Y": -84.156906
       }
     },
     {
       "ChildId": "4e3b0c70-d407-4f3c-a206-1a699b9350d6"/*CutOut*/,
       "Comment": "Not directly related to this example but notice how the blend mode allows to cut out first layer2D\n",
       "Position": {
-        "X": 90.41443,
-        "Y": 29.637512
-      }
-    },
-    {
-      "ChildId": "87989179-2788-428b-98da-19bd5adcf0fa"/*Rotation*/,
-      "Position": {
-        "X": 545.3122,
-        "Y": 41.524933
+        "X": -42.758606,
+        "Y": -72.26404
       }
     },
     {
       "ChildId": "cf410ce7-ab60-4f59-b9af-ad1931a42b4c"/*RgbaToColor*/,
       "Position": {
-        "X": 385.1513,
-        "Y": 102.78247
+        "X": 251.97827,
+        "Y": 0.8809204
       }
     },
     {
       "ChildId": "159c4e5e-5a0d-4168-96c6-abc3f07acd2c"/*AnimValue*/,
       "Position": {
-        "X": 235.8241,
-        "Y": 136.7359
+        "X": 102.65106,
+        "Y": 34.83435
       }
     },
     {
       "ChildId": "e945ad01-6810-4314-a2ca-c186837bdfbc"/*Layer2d*/,
       "Position": {
-        "X": 90.41443,
-        "Y": 85.63751
-      }
-    },
-    {
-      "ChildId": "84be8023-4f14-4a0d-966e-7a24bb13a2ae"/*Scale*/,
-      "Position": {
-        "X": 545.3122,
-        "Y": -1.4750671
+        "X": -42.758606,
+        "Y": -16.264038
       }
     },
     {
       "ChildId": "e0fedf9d-5479-474a-9a28-6493aa6853fd"/*Text Shadow*/,
       "Position": {
-        "X": 86.31439,
-        "Y": 149.87915
+        "X": -46.858643,
+        "Y": 47.9776
       }
     },
     {
       "ChildId": "d636003d-9b9b-4c11-b39d-c28fcb38b878"/*LinearGradient*/,
       "Position": {
-        "X": -64.1759,
-        "Y": 222.7359
+        "X": -197.34894,
+        "Y": 120.83435
       }
     },
     {
       "ChildId": "f825b7c4-bd23-4b38-b63f-d44f1318ec77"/*Layer2d*/,
       "Position": {
-        "X": 85.8241,
-        "Y": 222.7359
+        "X": -47.348938,
+        "Y": 120.83435
       }
     },
     {
-      "ChildId": "25044c68-a70b-47ae-94ea-f2e67bcd85f2"/*FloatToInt*/,
+      "ChildId": "fa527a1e-6d93-4661-9535-9d12a39fc5ae"/*CountInt*/,
       "Position": {
-        "X": 545.3122,
-        "Y": 97.52493
+        "X": 460.60773,
+        "Y": 67.094925
+      }
+    },
+    {
+      "ChildId": "c23c06f9-f8df-489c-a8e7-2a53539bd88e"/*AnimValue*/,
+      "Position": {
+        "X": 443.81128,
+        "Y": 28.819977
       }
     }
   ],
@@ -148,8 +141,8 @@
     {
       "OutputId": "d7ba385e-4168-4c1e-bde2-18343e0a9d1e"/*Output*/,
       "Position": {
-        "X": 864.0646,
-        "Y": -30.897308
+        "X": 741.5072,
+        "Y": -8.864532
       }
     }
   ],
@@ -164,8 +157,8 @@
         "W": 1.0
       },
       "Position": {
-        "X": 530.3322,
-        "Y": -293.46176
+        "X": 407.77484,
+        "Y": -271.429
       },
       "Size": {
         "X": 310.8383,
