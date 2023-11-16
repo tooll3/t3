@@ -35,8 +35,10 @@ public class SnapGraphLayout
             checkSum += i.GetHashCode();
         }
 
-        if (checkSum != _hash)
+        if (true || checkSum != _hash)
         {
+            _hash = checkSum;
+
             Items = new Dictionary<Guid, SnapGraphItem>(parentSymbolUi.ChildUis.Count);
             foreach (var childInstance in instance.Children)
             {
@@ -55,20 +57,26 @@ public class SnapGraphLayout
             }
         }
         
-
         SnapGroups.Clear();
+        
         // Collect visible inputs to compute height for operator sockets
         // Todo: Implement connected multi-inputs
         foreach (var (childId, item) in Items)
         {
-            foreach (var input in item.Instance.Inputs)
+            item.VisibleInputSockets.Clear();
+
+            for (var inputIndex = 0; inputIndex < item.Instance.Inputs.Count; inputIndex++)
             {
+                var input = item.Instance.Inputs[inputIndex];
                 if (!item.SymbolUi.InputUis.TryGetValue(input.Id, out var inputUi)) //TODO: Log error?
                     continue;
 
                 // Todo: Add temp expanded inputs (e.g. while dragging + hovered)
-                if (!input.IsConnected
-                    && inputUi.Relevancy is not (Relevancy.Relevant or Relevancy.Required))
+                
+                if ( inputIndex > 0 &&
+                           !input.IsConnected
+                           && inputUi.Relevancy is not (Relevancy.Relevant or Relevancy.Required)
+                           )
                     continue;
 
                 item.VisibleInputSockets.Add(new SnapGraphItem.InSocket
@@ -78,17 +86,38 @@ public class SnapGraphLayout
                                                  });
             }
 
-            _hash = checkSum;
+            item.VisibleOutputSockets.Clear();
+
+            for (var outputIndex = 0; outputIndex < item.Instance.Outputs.Count; outputIndex++)
+            {
+                var output = item.Instance.Outputs[outputIndex];
+                if (!item.SymbolUi.OutputUis.TryGetValue(output.Id, out var outputUi)) //TODO: Log error?
+                    continue;
+
+                if (outputIndex > 0)
+                {
+                    item.VisibleOutputSockets.Add(new SnapGraphItem.OutSocket
+                                                      {
+                                                          Output = output,
+                                                          OutputUi = outputUi,
+                                                      });
+                }
+            }
+
+            var count = Math.Max(1, item.VisibleInputSockets.Count + item.VisibleOutputSockets.Count);
+            item.Size = new Vector2(SnapGraphItem.GridSize.X, SnapGraphItem.GridSize.Y * count);
         }
         
+        
+        
         // Resolve connection styles and snap groups
-        var connectionUis = new SnapGraphConnection[parentSymbol.Connections.Count];
+        SnapConnections = new SnapGraphConnection[parentSymbol.Connections.Count];
         
         for (var index = 0; index < parentSymbol.Connections.Count; index++)
         {
             var connection = parentSymbol.Connections[index];
             var snapConnection = ComputeConnectionProperties(connection);
-            connectionUis[index] = snapConnection;
+            SnapConnections[index] = snapConnection;
 
             if (snapConnection.Style == SnapGraphConnection.ConnectionStyles.Unknown)
                 continue;
@@ -153,6 +182,7 @@ public class SnapGraphLayout
 
         r.SourceItem = sourceItem;
         r.TargetItem = targetItem;
+        
 
         // Find connected index
         var inputIndex = 0;
@@ -165,7 +195,7 @@ public class SnapGraphLayout
         }
 
         var outputIndex = 0;
-        foreach (var output in targetItem.VisibleOutputSockets)
+        foreach (var output in sourceItem.VisibleOutputSockets)
         {
             if (output.Output.Id == c.SourceSlotId)
                 break;
@@ -174,10 +204,10 @@ public class SnapGraphLayout
         }
 
         var sourceMin = sourceItem.PosOnCanvas;
-        var sourceMax = sourceMin + SnapGraphItem.GridSize * new Vector2(1, sourceItem.UnitHeight);
+        var sourceMax = sourceMin + sourceItem.Size;
 
         var targetMin = targetItem.PosOnCanvas;
-        var targetMax = targetMin + SnapGraphItem.GridSize * new Vector2(1, sourceItem.UnitHeight);
+        var targetMax = targetMin + targetItem.Size;
 
         // Snapped horizontally
         if (inputIndex == 0
@@ -245,8 +275,9 @@ public class SnapGraphLayout
         else 
         {
             var usedOutputUnit = outputIndex == 0 ? 0 : (1 + outputIndex+ sourceItem.VisibleOutputSockets.Count);
-            r.SourcePos = new Vector2(sourceMax.X, sourceMax.Y + (usedOutputUnit + 0.5f) * SnapGraphItem.GridSize.Y );
-            r.TargetPos = new Vector2(targetMin.X, targetMin.Y + (inputIndex + 1.5f) * SnapGraphItem.GridSize.Y );
+            
+            r.SourcePos = new Vector2(sourceMax.X, sourceMin.Y + (usedOutputUnit + 0.5f) * SnapGraphItem.GridSize.Y );
+            r.TargetPos = new Vector2(targetMin.X, targetMin.Y + (inputIndex + 0.5f) * SnapGraphItem.GridSize.Y );
 
             r.Style = SnapGraphConnection.ConnectionStyles.RightToLeft;
         }
@@ -256,4 +287,5 @@ public class SnapGraphLayout
     
     public readonly List<SnapGroup> SnapGroups = new();
     public Dictionary<Guid, SnapGraphItem> Items = new();
+    public SnapGraphConnection[] SnapConnections = {};
 }

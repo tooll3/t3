@@ -63,7 +63,7 @@ public class SnapGraphItem : ISelectableCanvasObject
 
     public struct OutSocket
     {
-        public IOutputSlot Output;
+        public ISlot Output;
         public IOutputUi OutputUi;
     }
 

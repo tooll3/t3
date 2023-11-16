@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Editor.Gui.Graph;
@@ -15,8 +16,9 @@ public class SnapGraph
 {
     public void Draw(bool hideHeader = false)
     {
-        if(_keepUpdating)
+        if (_keepUpdating)
             InitializeFromDefinition();
+
         if (ImGui.Button("Center"))
         {
             CenterView();
@@ -31,35 +33,34 @@ public class SnapGraph
         // //_movingTestBlock.PosOnCanvas = posOnCanvas;
         //
         // // snap test block
-        
+
         _canvas.UpdateCanvas();
-        
-        
+
         // HandleFenceSelection();
 
         var anchorScale = _canvas.TransformDirection(SnapGraphItem.GridSize);
         var canvasScale = _canvas.Scale.X;
         var slotSize = 3 * canvasScale;
-        
-        foreach (var b in _snapGraphLayout.Items.Values)
+
+        foreach (var item in _snapGraphLayout.Items.Values)
         {
-            if (!TypeUiRegistry.Entries.TryGetValue(b.PrimaryType, out var typeUiProperties))
+            if (!TypeUiRegistry.Entries.TryGetValue(item.PrimaryType, out var typeUiProperties))
                 continue;
-        
+
             var c = typeUiProperties.Color;
             var cLabel = ColorVariations.OperatorLabel.Apply(c);
-        
-            var pMin = _canvas.TransformPosition(b.PosOnCanvas);
-            var pMax = _canvas.TransformPosition(b.PosOnCanvas + SnapGraphItem.GridSize) ;
-        
+
+            var pMin = _canvas.TransformPosition(item.PosOnCanvas);
+            var pMax = _canvas.TransformPosition(item.PosOnCanvas + item.Size);
+
             ImGui.SetCursorScreenPos(pMin);
-            ImGui.InvisibleButton(b.Id.ToString(), anchorScale);
-            
+            ImGui.InvisibleButton(item.Id.ToString(), anchorScale);
+
             // var isDraggedAndSnapped = DragHandling.HandleItemDragging(b, this, out var dragPos);
             // if (isDraggedAndSnapped)
             // {
             // }
-        
+
             // var slots = b.GetSlots().ToList();
             // if (ImGui.IsItemHovered())
             // {
@@ -70,15 +71,25 @@ public class SnapGraph
             //     }
             //     ImGui.EndTooltip();
             // }
-            
+
             // var fade = isDraggedAndSnapped ? 0.6f : 1;
-            
-            drawList.AddRectFilled(pMin, pMax,  ColorVariations.OperatorBackground.Apply(c).Fade(0.7f ), 3 );
-            var outlineColor = BlockSelection.IsNodeSelected(b)
+
+            drawList.AddRectFilled(pMin, pMax, ColorVariations.OperatorBackground.Apply(c).Fade(0.7f), 3);
+            var outlineColor = BlockSelection.IsNodeSelected(item)
                                    ? UiColors.ForegroundFull
                                    : UiColors.BackgroundFull.Fade(0.3f);
-            drawList.AddRect(pMin, pMax, outlineColor, 3 );
-            drawList.AddText(Fonts.FontNormal,13 * canvasScale,pMin + new Vector2(4, 3) * canvasScale, cLabel, b.SymbolChild.ReadableName);
+            drawList.AddRect(pMin, pMax, outlineColor, 3);
+            drawList.AddText(Fonts.FontNormal, 13 * canvasScale, pMin + new Vector2(4, 3) * canvasScale, cLabel, item.SymbolChild.ReadableName);
+
+            for (var inputIndex = 1; inputIndex < item.VisibleInputSockets.Count; inputIndex++)
+            {
+                var input = item.VisibleInputSockets[inputIndex];
+                drawList.AddText(Fonts.FontSmall, 11 * canvasScale,
+                                 pMin + new Vector2(4, 3) * canvasScale + new Vector2(0, anchorScale.Y * (inputIndex)),
+                                 cLabel,
+                                 input.Input.Input.Name);
+            }
+
             //
             // // Draw Slots
             // foreach (var slot in slots)
@@ -130,6 +141,72 @@ public class SnapGraph
             //     drawList.AddRect(dragPosOnScreen, dragPosOnScreen + anchorScale, UiColors.ForegroundFull.Fade(0.5f),4);
             // }
         }
+
+        foreach (var connection in _snapGraphLayout.SnapConnections)
+        {
+            if (connection.Style == SnapGraphConnection.ConnectionStyles.Unknown)
+                continue;
+            
+            if ( !TypeUiRegistry.Entries.TryGetValue(connection.TargetItem.PrimaryType, out var typeUiProperties))
+                continue;
+
+            var c = typeUiProperties.Color;
+            var sourcePosOnScreen = _canvas.TransformPosition(connection.SourcePos);
+            var targetPosOnScreen = _canvas.TransformPosition(connection.TargetPos);
+
+            var d = Vector2.Distance(sourcePosOnScreen, targetPosOnScreen) / 2;
+            switch (connection.Style)
+            {
+                case SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
+                    drawList.AddCircleFilled(sourcePosOnScreen, slotSize, c, 3);
+                    break;
+                case SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
+                    drawList.AddTriangleFilled(
+                                               sourcePosOnScreen + new Vector2(-1, -1) * canvasScale * 4,
+                                               sourcePosOnScreen + new Vector2(1, -1) * canvasScale * 4,
+                                               sourcePosOnScreen + new Vector2(0, 1) * canvasScale * 4,
+                                               c);
+                    break;
+                case SnapGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal:
+                    break;
+                case SnapGraphConnection.ConnectionStyles.AdditionalOutToMainInputSnappedVertical:
+                    break;
+                case SnapGraphConnection.ConnectionStyles.BottomToTop:
+                    drawList.AddBezierCubic(sourcePosOnScreen,
+                                            sourcePosOnScreen + new Vector2(0, d),
+                                            targetPosOnScreen - new Vector2(0, d),
+                                            targetPosOnScreen,
+                                            UiColors.ForegroundFull.Fade(0.6f),
+                                            2);
+                    break;
+                case SnapGraphConnection.ConnectionStyles.BottomToLeft:
+                    drawList.AddBezierCubic(sourcePosOnScreen,
+                                            sourcePosOnScreen + new Vector2(0, d),
+                                            targetPosOnScreen - new Vector2(d, 0),
+                                            targetPosOnScreen,
+                                            UiColors.ForegroundFull.Fade(0.6f),
+                                            2);
+                    break;
+                case SnapGraphConnection.ConnectionStyles.RightToTop:
+                    drawList.AddBezierCubic(sourcePosOnScreen,
+                                            sourcePosOnScreen + new Vector2(d, 0),
+                                            targetPosOnScreen - new Vector2(0, d),
+                                            targetPosOnScreen,
+                                            UiColors.ForegroundFull.Fade(0.6f),
+                                            2);
+                    break;
+                case SnapGraphConnection.ConnectionStyles.RightToLeft:
+                    drawList.AddBezierCubic(sourcePosOnScreen,
+                                            sourcePosOnScreen + new Vector2(d, 0),
+                                            targetPosOnScreen - new Vector2(d, 0),
+                                            targetPosOnScreen,
+                                            UiColors.ForegroundFull.Fade(0.6f),
+                                            2);
+                    break;
+                case SnapGraphConnection.ConnectionStyles.Unknown:
+                    break;
+            }
+        }
         //
         // // Draw Connection lines
         // foreach (var c in Connections)
@@ -164,7 +241,7 @@ public class SnapGraph
     }
 
     private bool _keepUpdating;
-    
+
     private void InitializeFromDefinition()
     {
         // Log.Debug("Initialize!");
@@ -174,6 +251,7 @@ public class SnapGraph
         {
             _snapGraphLayout.CollectSnappingGroupsFromSymbolUi(instance);
         }
+
         _initialized = true;
     }
 
@@ -184,6 +262,7 @@ public class SnapGraph
         {
             visibleArea.Add(item.PosOnCanvas);
         }
+
         _canvas.FitAreaOnCanvas(visibleArea);
     }
 
