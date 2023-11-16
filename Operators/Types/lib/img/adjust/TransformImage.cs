@@ -43,7 +43,7 @@ namespace T3.Operators.Types.Id_32e18957_3812_4f64_8663_18454518d005
         [Input(Guid = "64e5cdf2-19b0-461c-b936-ea46ee58028f")]
         public readonly InputSlot<SharpDX.Direct3D11.Filter> Filter = new InputSlot<SharpDX.Direct3D11.Filter>();
 
-        [Input(Guid = "997c6675-faed-4843-a323-4826c70860e1", MappedType = typeof(WrapModes))]
+        [Input(Guid = "43eb4d4e-2bb5-4c97-a5dd-91539b8258cd", MappedType = typeof(WrapModes))]
         public readonly InputSlot<int> WrapMode = new InputSlot<int>();
     }
 }

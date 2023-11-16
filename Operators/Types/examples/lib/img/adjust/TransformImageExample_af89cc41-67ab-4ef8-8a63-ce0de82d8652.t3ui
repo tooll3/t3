@@ -24,10 +24,10 @@
         "X": 110.0,
         "Y": 140.0
       },
-      "Comment": "Once the scaling is below 1, pay attention how the different wrapping modes are behaving.",
+      "Comment": "With a scale value below 1, pay attention how the different wrapping modes are behaving.",
       "Position": {
-        "X": 720.8681,
-        "Y": -86.693726
+        "X": 716.43787,
+        "Y": -70.94681
       }
     },
     {
@@ -38,17 +38,10 @@
       }
     },
     {
-      "ChildId": "cd2df730-c2a6-4b3f-9a8f-31d852726de5"/*Wrapping Mode*/,
-      "Position": {
-        "X": 549.74243,
-        "Y": 81.778015
-      }
-    },
-    {
       "ChildId": "ac462d6c-1cf5-4811-9c64-db770f2dec4f"/*Position*/,
       "Position": {
-        "X": 549.74243,
-        "Y": -60.221985
+        "X": 545.3122,
+        "Y": -44.475067
       }
     },
     {
@@ -61,8 +54,8 @@
     {
       "ChildId": "ab54a3ff-f820-4dba-a624-55fd0c91634a"/*Image*/,
       "Position": {
-        "X": 549.74243,
-        "Y": -142.22198
+        "X": 545.3122,
+        "Y": -126.47507
       }
     },
     {
@@ -90,8 +83,8 @@
     {
       "ChildId": "87989179-2788-428b-98da-19bd5adcf0fa"/*Rotation*/,
       "Position": {
-        "X": 549.74243,
-        "Y": 25.778015
+        "X": 545.3122,
+        "Y": 41.524933
       }
     },
     {
@@ -118,8 +111,8 @@
     {
       "ChildId": "84be8023-4f14-4a0d-966e-7a24bb13a2ae"/*Scale*/,
       "Position": {
-        "X": 549.74243,
-        "Y": -17.221985
+        "X": 545.3122,
+        "Y": -1.4750671
       }
     },
     {
@@ -142,14 +135,21 @@
         "X": 85.8241,
         "Y": 222.7359
       }
+    },
+    {
+      "ChildId": "25044c68-a70b-47ae-94ea-f2e67bcd85f2"/*FloatToInt*/,
+      "Position": {
+        "X": 545.3122,
+        "Y": 97.52493
+      }
     }
   ],
   "OutputUis": [
     {
       "OutputId": "d7ba385e-4168-4c1e-bde2-18343e0a9d1e"/*Output*/,
       "Position": {
-        "X": 899.27625,
-        "Y": -33.831635
+        "X": 864.0646,
+        "Y": -30.897308
       }
     }
   ],
@@ -164,12 +164,12 @@
         "W": 1.0
       },
       "Position": {
-        "X": 527.4156,
-        "Y": -329.06824
+        "X": 530.3322,
+        "Y": -293.46176
       },
       "Size": {
-        "X": 324.92682,
-        "Y": 460.81467
+        "X": 310.8383,
+        "Y": 445.82025
       }
     }
   ]

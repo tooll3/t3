@@ -51,21 +51,21 @@
       "InputId": "c31a95a9-2cfb-4eea-8006-97f883d11847"/*GenerateMips*/,
       "Position": {
         "X": -214.98917,
-        "Y": 543.78784
+        "Y": 408.7878
       }
     },
     {
       "InputId": "64e5cdf2-19b0-461c-b936-ea46ee58028f"/*Filter*/,
       "Position": {
         "X": -214.98917,
-        "Y": 588.78784
+        "Y": 453.7878
       }
     },
     {
-      "InputId": "997c6675-faed-4843-a323-4826c70860e1"/*WrapMode*/,
+      "InputId": "43eb4d4e-2bb5-4c97-a5dd-91539b8258cd"/*WrapMode*/,
       "Position": {
         "X": -214.98917,
-        "Y": 633.78784
+        "Y": 498.7878
       }
     }
   ],
@@ -92,45 +92,17 @@
       }
     },
     {
-      "ChildId": "2ce90831-c595-4cb7-b846-ecfbde9931bb"/*Mirror*/,
+      "ChildId": "a4d78db8-f0a6-4ed3-b4f8-39eae5c464b3"/*PickWrapMode*/,
       "Position": {
-        "X": 464.5031,
-        "Y": 515.0355
+        "X": 85.01083,
+        "Y": 498.7878
       }
     },
     {
-      "ChildId": "564539d6-f4a2-4a56-89b3-cd39078102f5"/*PickTexture*/,
+      "ChildId": "4e412adf-d580-427c-adbd-b66eed006d93"/*ModInt*/,
       "Position": {
-        "X": 726.41455,
-        "Y": 654.1771
-      }
-    },
-    {
-      "ChildId": "5c8465db-304f-4cac-9645-3c01f901c2b3"/*Clamp*/,
-      "Position": {
-        "X": 460.8178,
-        "Y": 826.4881
-      }
-    },
-    {
-      "ChildId": "6f4813a9-696b-4581-9274-16626c9fb976"/*_ImageFxShaderSetupStatic*/,
-      "Position": {
-        "X": 461.49423,
-        "Y": 1114.8914
-      }
-    },
-    {
-      "ChildId": "3f924dda-c307-4f4b-83ca-023dd6d2e384"/*_ImageFxShaderSetupStatic*/,
-      "Position": {
-        "X": 465.94022,
-        "Y": 1412.5088
-      }
-    },
-    {
-      "ChildId": "0fb38ccc-8b72-49a2-a230-aff0783f4bfa"/*IntToFloat*/,
-      "Position": {
-        "X": 276.26935,
-        "Y": 1475.1824
+        "X": -64.98917,
+        "Y": 498.7878
       }
     }
   ],
@@ -138,8 +110,8 @@
     {
       "OutputId": "54831ac3-d747-4cdf-9520-3cfd651158bf"/*TextureOutput*/,
       "Position": {
-        "X": 964.8003,
-        "Y": 708.16455
+        "X": 647.9629,
+        "Y": 225.78851
       }
     }
   ]
