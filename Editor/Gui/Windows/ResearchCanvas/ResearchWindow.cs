@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ImGuiNET;
+using T3.Editor.Gui.Windows.ResearchCanvas.SnapGraph;
 
 namespace T3.Editor.Gui.Windows.ResearchCanvas;
 
@@ -14,7 +15,7 @@ public class ResearchWindow : Window
 
     protected override void DrawContent()
     {
-        _snapGraph.Draw();
+        _snapGraphCanvas.Draw();
     }
     
     public override List<Window> GetInstances()
@@ -22,5 +23,5 @@ public class ResearchWindow : Window
         return new List<Window>();
     }
 
-    private readonly SnapGraph _snapGraph = new();
+    private readonly SnapGraphCanvas _snapGraphCanvas = new();
 }

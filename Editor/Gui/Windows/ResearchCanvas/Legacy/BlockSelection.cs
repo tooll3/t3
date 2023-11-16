@@ -2,7 +2,7 @@
 using System.Linq;
 using T3.Editor.Gui.Selection;
 
-namespace T3.Editor.Gui.Windows.ResearchCanvas;
+namespace T3.Editor.Gui.Windows.ResearchCanvas.Legacy;
 
 public static class BlockSelection
 {

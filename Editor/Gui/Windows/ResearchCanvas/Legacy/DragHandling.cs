@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 
-namespace T3.Editor.Gui.Windows.ResearchCanvas;
+namespace T3.Editor.Gui.Windows.ResearchCanvas.Legacy;
 
 /// <summary>
 /// Todos:

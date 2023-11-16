@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.InputUi;
-using T3.Editor.Gui.Windows.ResearchCanvas.Model;
 using T3.Editor.UiModel;
 
-namespace T3.Editor.Gui.Windows.ResearchCanvas;
+namespace T3.Editor.Gui.Windows.ResearchCanvas.SnapGraph;
 
 /// <summary>
 /// Generate considerations:
@@ -19,7 +17,7 @@ namespace T3.Editor.Gui.Windows.ResearchCanvas;
 /// </summary>
 public class SnapGraphLayout
 {
-    private Instance _lastInstance;
+    //private Instance _lastInstance;
     private int _hash;
     
     public void CollectSnappingGroupsFromSymbolUi(Instance instance)
@@ -219,7 +217,7 @@ public class SnapGraphLayout
             var p = new Vector2(sourceMax.X, sourceMin.Y + 0.5f * SnapGraphItem.GridSize.Y);
             r.SourcePos = p;
             r.TargetPos = p;
-            Log.Debug($"Snap horizontally {r.SourceItem} -> {r.TargetItem}");
+            // Log.Debug($"Snap horizontally {r.SourceItem} -> {r.TargetItem}");
             return r;
         }
 
@@ -233,7 +231,7 @@ public class SnapGraphLayout
             var p = new Vector2(sourceMin.X + SnapGraphItem.GridSize.X /2, targetMin.Y);
             r.SourcePos = p;
             r.TargetPos = p;
-            Log.Debug($"Snap vertically {r.SourceItem} -> {r.TargetItem}");
+            // Log.Debug($"Snap vertically {r.SourceItem} -> {r.TargetItem}");
             return r;
         }
 

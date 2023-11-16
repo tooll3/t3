@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace T3.Editor.Gui.Windows.ResearchCanvas.Model;
+namespace T3.Editor.Gui.Windows.ResearchCanvas.SnapGraph;
 
 public struct SnapGraphConnection
 {

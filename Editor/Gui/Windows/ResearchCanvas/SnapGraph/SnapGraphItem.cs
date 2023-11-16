@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
+using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Selection;
 using T3.Editor.UiModel;
 
-namespace T3.Editor.Gui.Windows.ResearchCanvas.Model;
+namespace T3.Editor.Gui.Windows.ResearchCanvas.SnapGraph;
 
 public class SnapGraphItem : ISelectableCanvasObject
 {
@@ -16,7 +17,7 @@ public class SnapGraphItem : ISelectableCanvasObject
     public readonly Type PrimaryType = typeof(float);
     public Vector2 PosOnCanvas { get; set; }
     public Vector2 Size { get; set; }
-    public bool IsSelected { get; }
+    public bool IsSelected => NodeSelection.IsNodeSelected(SymbolChildUi);
     public SnapGroup SnapGroup;
     public float UnitHeight => VisibleInputSockets.Count + VisibleOutputSockets.Count + 1;
 
@@ -25,7 +26,6 @@ public class SnapGraphItem : ISelectableCanvasObject
         return SymbolChild.ReadableName;
     }
 
-    // Caching definition references
     public SymbolUi SymbolUi;
     public SymbolChild SymbolChild;
     public SymbolChildUi SymbolChildUi;
@@ -33,28 +33,7 @@ public class SnapGraphItem : ISelectableCanvasObject
 
     public readonly List<InSocket> VisibleInputSockets = new(4);
     public readonly List<OutSocket> VisibleOutputSockets = new(1);
-
-    // public Vector2 GetConnectionTargetPosition(Symbol.Connection connection)
-    // {
-    //     // Todo: Check zero index for primary inputs
-    //     for (var index = 0; index < VisibleInputSockets.Count; index++)
-    //     {
-    //         var input = VisibleInputSockets[index];
-    //         if(input.Input.Id == connection.TargetSlotId)
-    //             return SymbolChildUi.PosOnCanvas + new Vector2(0, index * GridSize.Y);
-    //             
-    //     }
-    //
-    //     Debug.Assert(false, "Target input should have been visible?");
-    //     return Vector2.Zero;
-    // }
-    //
-    // public Vector2 GetConnectionSourcePosition(Symbol.Connection connection)
-    // {
-    //     // TODO: implement
-    //     return Vector2.Zero;
-    // }
-
+    
     public struct InSocket
     {
         public IInputSlot Input;

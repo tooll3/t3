@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace T3.Editor.Gui.Windows.ResearchCanvas.Model;
+namespace T3.Editor.Gui.Windows.ResearchCanvas.SnapGraph;
 
 public class SnapGroup
 {
