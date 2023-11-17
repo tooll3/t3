@@ -6,7 +6,6 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
-// using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.Graph.Modification;
@@ -25,14 +24,21 @@ namespace T3.Editor.Gui.Windows.ResearchCanvas.SnapGraph;
 /// makes this class unnecessarily complex.
 /// </remarks>
 
-public static class SnapItemMovement
+public class SnapItemMovement
 {
+    public SnapItemMovement(SnapGraphCanvas snapGraphCanvas, SnapGraphLayout layout)
+    {
+        _canvas = snapGraphCanvas;
+        _layout = layout;
+    }
+
+    
     /// <summary>
     /// Reset to avoid accidental dragging of previous elements 
     /// </summary>
     public static void Reset()
     {
-        _moveCommand = null;
+        _modifyCommand = null;
         _draggedNodes.Clear();
     }
 
@@ -42,7 +48,7 @@ public static class SnapItemMovement
     /// </summary>
     public static void CompleteFrame()
     {
-        if (ImGui.IsMouseReleased(0) && _moveCommand != null)
+        if (ImGui.IsMouseReleased(0) && _modifyCommand != null)
         {
             Reset();    
         }
@@ -51,7 +57,7 @@ public static class SnapItemMovement
     /// <summary>
     /// NOTE: This has to be called for ALL movable elements (ops, inputs, outputs) and directly after ImGui.Item
     /// </summary>
-    public static void Handle(SnapGraphItem item, ScalableCanvas canvas)
+    public void Handle(SnapGraphItem item, SnapGraphCanvas canvas)
     {
         var justClicked = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
         var composition = item.Instance.Parent;
@@ -69,15 +75,17 @@ public static class SnapItemMovement
                 _draggedNodes = new List<ISelectableCanvasObject> { item.SymbolChildUi };
             }
 
-            _moveCommand = new ModifyCanvasElementsCommand(compositionSymbolId, _draggedNodes);
+            StartDragging(_draggedNodes);
+            
+            _modifyCommand = new ModifyCanvasElementsCommand(compositionSymbolId, _draggedNodes);
             //ShakeDetector.ResetShaking();
         }
-        else if (isActiveNode && ImGui.IsMouseDown(ImGuiMouseButton.Left) && _moveCommand != null)
+        else if (isActiveNode && ImGui.IsMouseDown(ImGuiMouseButton.Left) && _modifyCommand != null)
         {
             // TODO: Implement shake disconnect later
             HandleNodeDragging(item, canvas);
         }
-        else if (isActiveNode && ImGui.IsMouseReleased(0) && _moveCommand != null)
+        else if (isActiveNode && ImGui.IsMouseReleased(0) && _modifyCommand != null)
         {
             if (_draggedNodeId != item.Id)
                 return;
@@ -89,7 +97,7 @@ public static class SnapItemMovement
             var wasDragging = ImGui.GetMouseDragDelta(ImGuiMouseButton.Left).LengthSquared() > UserSettings.Config.ClickThreshold;
             if (wasDragging)
             {
-                _moveCommand.StoreCurrentValues();
+                _modifyCommand.StoreCurrentValues();
 
                 if (singleDraggedNode != null && ConnectionSplitHelper.BestMatchLastFrame != null && singleDraggedNode is SymbolChildUi childUi)
                 {
@@ -97,12 +105,12 @@ public static class SnapItemMovement
                     ConnectionMaker.SplitConnectionWithDraggedNode(childUi, 
                                                                    ConnectionSplitHelper.BestMatchLastFrame.Connection, 
                                                                    instanceForSymbolChildUi,
-                                                                   _moveCommand);
-                    _moveCommand = null;
+                                                                   _modifyCommand);
+                    _modifyCommand = null;
                 }
                 else
                 {
-                    UndoRedoStack.Add(_moveCommand);
+                    UndoRedoStack.Add(_modifyCommand);
                 }
 
                 // Reorder inputs nodes if dragged
@@ -144,9 +152,9 @@ public static class SnapItemMovement
                 }
             }
 
-            _moveCommand = null;
+            _modifyCommand = null;
         }
-        else if (ImGui.IsMouseReleased(0) && _moveCommand == null)
+        else if (ImGui.IsMouseReleased(0) && _modifyCommand == null)
         {
             // This happens after shake
             _draggedNodes.Clear();
@@ -162,7 +170,17 @@ public static class SnapItemMovement
             NodeSelection.SetSelectionToChildUi(item.SymbolChildUi, item.Instance);
         }
     }
-    
+
+    private static void StartDragging(List<ISelectableCanvasObject> draggedNodes)
+    {
+        foreach (var t in draggedNodes)
+        {
+            
+        }
+        
+        
+    }
+
     private static void HandleNodeDragging(ISelectableCanvasObject draggedNode, ScalableCanvas canvas)
     {
             
@@ -224,7 +242,6 @@ public static class SnapItemMovement
         //                             : newDragPosInCanvas - draggedNode.PosOnCanvas;
 
         var moveDeltaOnCanvas = newDragPosInCanvas - draggedNode.PosOnCanvas;
-Log.Debug(" delta:" + moveDeltaOnCanvas);
         
         // Drag selection
         foreach (var e in _draggedNodes)
@@ -233,12 +250,123 @@ Log.Debug(" delta:" + moveDeltaOnCanvas);
         }
     }
     
+    private void DragStart(HashSet<SnapGraphItem> draggedItems)
+    {
+        UpdateDragConnectionOnStart(draggedItems);
+    }
 
+    
+    private void UpdateDragConnectionOnStart(HashSet<SnapGraphItem> draggedItems)
+    {
+        _bridgeConnectionsOnStart.Clear();
+        foreach (var c in _layout.SnapConnections)
+        {
+            var targetDragged = draggedItems.Contains(c.TargetItem);
+            var sourceDragged = draggedItems.Contains(c.TargetItem);
+            if (targetDragged != sourceDragged)
+            {
+                _bridgeConnectionsOnStart.Add(c);
+            }
+        }
+    }
+
+    private void DuringDrag(ICanvas canvas)
+    {
+        List<SnapGraphItem> draggedItems = new();
+
+        var dragExtend = SnapGraphItem.GetGroupBoundingBox(draggedItems);
+        dragExtend.Expand(SnapThreshold * canvas.Scale.X);
+
+        var overlappingItems = new List<SnapGraphItem>();
+        foreach (var otherItem in _layout.Items.Values)
+        {
+            if (otherItem.IsDragged || !dragExtend.Overlaps(otherItem.Area))
+                continue;
+
+            overlappingItems.Add(otherItem);
+        }
+
+        var bestSnapDistance = float.PositiveInfinity;
+        Vector2 bestSnapDelta = default;
+
+        // New possible ConnectionsOptions
+        List<Symbol.Connection> newPossibleConnections = new();
+
+        // Yes, that code looks weird.
+        foreach (var otherItem in overlappingItems)
+        {
+            foreach (var draggedItem in draggedItems)
+            {
+                foreach (var draggedInAnchor in draggedItem.InputAnchors)
+                {
+                    foreach (var otherOutAnchor in otherItem.OutputAnchors)
+                    {
+                        var d = otherOutAnchor.GetSnapDistance(draggedInAnchor);
+                        if (d > bestSnapDistance)
+                            continue;
+
+                        if (d < bestSnapDistance)
+                            newPossibleConnections.Clear();
+
+                        if (!otherOutAnchor.IsConnected)
+                            newPossibleConnections.Add(new Symbol.Connection(
+                                                                             sourceParentOrChildId: otherItem.Id,
+                                                                             sourceSlotId: otherOutAnchor.SlotId,
+                                                                             targetParentOrChildId: draggedItem.Id,
+                                                                             targetSlotId: draggedInAnchor.SlotId)
+                                                      );
+
+                        bestSnapDelta = otherOutAnchor.PositionOnCanvas - draggedInAnchor.PositionOnCanvas;
+                        bestSnapDistance = d;
+                    }
+                }
+
+                foreach (var draggedOutAnchor in draggedItem.OutputAnchors)
+                {
+                    foreach (var otherInAnchor in otherItem.InputAnchors)
+                    {
+                        var d = otherInAnchor.GetSnapDistance(draggedOutAnchor);
+                        if (d > bestSnapDistance)
+                            continue;
+
+                        if (d < bestSnapDistance)
+                            newPossibleConnections.Clear();
+
+                        if (!otherInAnchor.IsConnected)
+                            newPossibleConnections.Add(new Symbol.Connection(
+                                                                             sourceParentOrChildId: draggedItem.Id,
+                                                                             sourceSlotId: draggedOutAnchor.SlotId,
+                                                                             targetParentOrChildId: otherItem.Id,
+                                                                             targetSlotId: otherInAnchor.SlotId));
+
+                        bestSnapDelta = otherInAnchor.PositionOnCanvas - draggedOutAnchor.PositionOnCanvas;
+                        bestSnapDistance = d;
+                    }
+                }
+            }
+        }
+
+        // Snapped
+        if (bestSnapDistance < SnapThreshold * canvas.Scale.X)
+        {
+            Log.Debug("Snapped by " + bestSnapDelta);
+            foreach (var c in newPossibleConnections)
+            {
+                Log.Debug("new possible connection:" + c);
+            }
+        }
+    }
+
+    private const float SnapThreshold = 10;
+    private readonly List<SnapGraphConnection> _bridgeConnectionsOnStart = new();
+    
     private static bool _isDragging;
     private static Vector2 _dragStartPosInOpOnCanvas;
 
-    private static ModifyCanvasElementsCommand _moveCommand;
+    private static ModifyCanvasElementsCommand _modifyCommand;
 
     private static Guid _draggedNodeId = Guid.Empty;
     private static List<ISelectableCanvasObject> _draggedNodes = new();
+    private readonly SnapGraphCanvas _canvas;
+    private readonly SnapGraphLayout _layout;
 }

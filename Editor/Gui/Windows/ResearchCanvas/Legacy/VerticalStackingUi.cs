@@ -253,7 +253,7 @@ public class VerticalStackingUi
         return new List<ISelectableCanvasObject>();
     }
 
-    private SelectionFence.States _fenceState;
+    //private SelectionFence.States _fenceState;
     //private readonly CanvasElementSelection _selection = new();
 
 

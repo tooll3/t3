@@ -419,6 +419,6 @@ public static class DragHandling
     private static ISelectableCanvasObject _draggedNode;
     private static HashSet<ISelectableCanvasObject> _draggedNodes = new();
 
-    private static Vector2 _dampedMovePos;
+    // private static Vector2 _dampedMovePos;
     private static Vector2 _dampedDragPosition;
 }

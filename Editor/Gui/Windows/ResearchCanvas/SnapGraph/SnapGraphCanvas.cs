@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Numerics;
 using ImGuiNET;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
@@ -16,16 +15,18 @@ namespace T3.Editor.Gui.Windows.ResearchCanvas.SnapGraph;
 
 public class SnapGraphCanvas:ScalableCanvas
 {
-    public void Draw(bool hideHeader = false)
+    public SnapGraphCanvas()
     {
-        if (_forceUpdating)
-        {
-            _compositionOp = GraphWindow.GetMainComposition();
-            if (_compositionOp == null)
-                return;
+        _itemMovement = new SnapItemMovement(this, _snapGraphLayout);
+    }
+    
+    public void Draw()
+    {
+        _compositionOp = GraphWindow.GetMainComposition();
+        if (_compositionOp == null)
+            return;
 
-            _snapGraphLayout.CollectSnappingGroupsFromSymbolUi(_compositionOp);
-        }
+        _snapGraphLayout.ComputeLayout(_compositionOp);
 
         if (ImGui.Button("Center"))
         {
@@ -46,6 +47,7 @@ public class SnapGraphCanvas:ScalableCanvas
         var slotSize = 3 * canvasScale;
         var gridSizeOnScreen = TransformDirection(SnapGraphItem.GridSize);
 
+        // Draw Nodes
         foreach (var item in _snapGraphLayout.Items.Values)
         {
             if (!TypeUiRegistry.Entries.TryGetValue(item.PrimaryType, out var typeUiProperties))
@@ -60,7 +62,7 @@ public class SnapGraphCanvas:ScalableCanvas
 
             ImGui.SetCursorScreenPos(pMin);
             ImGui.InvisibleButton(item.Id.ToString(), pMax-pMin);
-            SnapItemMovement.Handle(item, this);
+            _itemMovement.Handle(item, this);
 
             drawList.AddRectFilled(pMin, pMax, ColorVariations.OperatorBackground.Apply(typeColor).Fade(0.7f), 3);
             
@@ -71,9 +73,9 @@ public class SnapGraphCanvas:ScalableCanvas
             drawList.AddRect(pMin, pMax, outlineColor, 3);
             drawList.AddText(Fonts.FontNormal, 13 * canvasScale, pMin + new Vector2(4, 3) * canvasScale, labelColor, item.SymbolChild.ReadableName);
 
-            for (var inputIndex = 1; inputIndex < item.VisibleInputSockets.Count; inputIndex++)
+            for (var inputIndex = 1; inputIndex < item.InputLines.Count; inputIndex++)
             {
-                var input = item.VisibleInputSockets[inputIndex];
+                var input = item.InputLines[inputIndex];
                 drawList.AddText(Fonts.FontSmall, 11 * canvasScale,
                                  pMin + new Vector2(4, 3) * canvasScale + new Vector2(0, gridSizeOnScreen.Y * (inputIndex)),
                                  labelColor,
@@ -264,7 +266,8 @@ public class SnapGraphCanvas:ScalableCanvas
 
         FitAreaOnCanvas(visibleArea);
     }
-
+    
+    private readonly SnapItemMovement _itemMovement;
     private readonly SnapGraphLayout _snapGraphLayout = new();
     private bool _forceUpdating;
     private Instance _compositionOp;
