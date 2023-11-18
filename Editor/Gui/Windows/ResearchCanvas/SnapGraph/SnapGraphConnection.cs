@@ -8,10 +8,16 @@ public class SnapGraphConnection
     public ConnectionStyles Style;
     public Vector2 SourcePos;
     public Vector2 TargetPos;
+    
     public SnapGraphItem SourceItem;
     public SnapGraphItem TargetItem;
     public ISlot SourceOutput;
+    
     public IInputSlot TargetInput;
+    public int InputLineIndex;
+    public int OutputLineIndex;
+    public int VisibleOutputIndex; // Do we need that?
+    public int ConnectionHash;
 
     public bool IsSnapped => Style < ConnectionStyles.BottomToTop;
 

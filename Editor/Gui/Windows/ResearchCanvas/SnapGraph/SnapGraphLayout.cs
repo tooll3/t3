@@ -31,11 +31,11 @@ public class SnapGraphLayout
         if (HasCompositionDataChanged(parentSymbol, ref _compositionModelHash))
         {
              CollectItemReferences(composition, parentSymbolUi);
-             CollectConnectionReferences(composition);
              UpdateVisibleItemLines();
+             CollectConnectionReferences(composition);
         }
 
-        UpdateConnectionLayout();
+        UpdateLayout();
     }
 
     /// <remarks>
@@ -65,9 +65,85 @@ public class SnapGraphLayout
         }
     }
 
+
+    
+    
+    private void UpdateVisibleItemLines()
+    {
+        var inputLines = new List<SnapGraphItem.InputLine>(); 
+        var outputLines = new List<SnapGraphItem.OutputLine>(); 
+        
+        // Todo: Implement connected multi-inputs
+        foreach (var item in Items.Values)
+        {
+            inputLines.Clear();
+            outputLines.Clear();
+            
+            var visibleIndex = 0;
+
+            for (var inputIndex = 0; inputIndex < item.Instance.Inputs.Count; inputIndex++)
+            {
+                var input = item.Instance.Inputs[inputIndex];
+                if (!item.SymbolUi.InputUis.TryGetValue(input.Id, out var inputUi)) //TODO: Log error?
+                    continue;
+
+                // Todo: Add temp expanded inputs (e.g. while dragging + hovered)
+
+                if (inputIndex > 0 
+                    &&( !input.IsConnected
+                    && inputUi.Relevancy is not (Relevancy.Relevant or Relevancy.Required))
+                   )
+                    continue;
+
+
+                inputLines.Add(new SnapGraphItem.InputLine
+                                   {
+                                       Input = input,
+                                       InputUi = inputUi,
+                                       IsPrimary = inputIndex == 0,
+                                       VisibleIndex = visibleIndex,
+                                   });
+                visibleIndex++;
+            }
+
+
+            for (var outputIndex = 0; outputIndex < item.Instance.Outputs.Count; outputIndex++)
+            {
+                var output = item.Instance.Outputs[outputIndex];
+                if (!item.SymbolUi.OutputUis.TryGetValue(output.Id, out var outputUi)) //TODO: Log error?
+                    continue;
+
+                outputLines.Add(new SnapGraphItem.OutputLine
+                                    {
+                                        Output = output,
+                                        OutputUi = outputUi,
+                                        IsPrimary = outputIndex == 0,
+                                        OutputIndex = outputIndex,
+                                        VisibleIndex = outputIndex ==0? 0:visibleIndex,
+                                        Connections = new List<SnapGraphConnection>(),
+                                    });
+                if (outputIndex == 0)
+                {
+                    item.PrimaryType = output.ValueType;
+                }
+                else
+                {
+                    visibleIndex++;
+                }
+            }
+
+            item.InputLines = inputLines.ToArray();
+            item.OutputLines = outputLines.ToArray();
+
+            //var count = Math.Max(1, item.InputLines.Count + item.OutputLines.Count -2);
+            item.Size = new Vector2(SnapGraphItem.Width, SnapGraphItem.LineHeight * (visibleIndex));
+        }
+    }
+    
     private void CollectConnectionReferences(Instance composition)
     {
         SnapConnections.Clear();
+        //SnapConnections.Capacity = composition.Symbol.Connections.Count;
         foreach (var c in composition.Symbol.Connections)
         {
             // Skip connection to symbol inputs and outputs for now
@@ -78,169 +154,126 @@ public class SnapGraphLayout
                )
                 continue;
 
-            var output = targetItem.Instance.Outputs.FirstOrDefault(o => o.Id == c.SourceSlotId);
+            var output = sourceItem.Instance.Outputs.FirstOrDefault(o => o.Id == c.SourceSlotId);
             var input = targetItem.Instance.Inputs.FirstOrDefault(i => i.Input.InputDefinition.Id == c.TargetSlotId);
-
-            SnapConnections.Add(new SnapGraphConnection
-                                    {
-                                        Style = SnapGraphConnection.ConnectionStyles.Unknown,
-                                        SourceItem = sourceItem,
-                                        SourceOutput = output,
-                                        TargetItem = targetItem,
-                                        TargetInput = input,
-                                    });
-        }
-    }
-
-    private void UpdateVisibleItemLines()
-    {
-        // Todo: Implement connected multi-inputs
-        foreach (var item in Items.Values)
-        {
-            item.InputLines.Clear();
-
-            for (var inputIndex = 0; inputIndex < item.Instance.Inputs.Count; inputIndex++)
-            {
-                var input = item.Instance.Inputs[inputIndex];
-                if (!item.SymbolUi.InputUis.TryGetValue(input.Id, out var inputUi)) //TODO: Log error?
-                    continue;
-
-                // Todo: Add temp expanded inputs (e.g. while dragging + hovered)
-
-                if (!input.IsConnected
-                    && inputUi.Relevancy is not (Relevancy.Relevant or Relevancy.Required)
-                   )
-                    continue;
-
-                item.InputLines.Add(new SnapGraphItem.InputLine
-                                        {
-                                            Input = input,
-                                            InputUi = inputUi,
-                                            IsPrimary = inputIndex == 0,
-                                        });
-            }
-
-            item.OutputLines.Clear();
-
-            for (var outputIndex = 0; outputIndex < item.Instance.Outputs.Count; outputIndex++)
-            {
-                var output = item.Instance.Outputs[outputIndex];
-                if (!item.SymbolUi.OutputUis.TryGetValue(output.Id, out var outputUi)) //TODO: Log error?
-                    continue;
-
-                item.OutputLines.Add(new SnapGraphItem.OutputLine
-                                         {
-                                             Output = output,
-                                             OutputUi = outputUi,
-                                             IsPrimary = outputIndex == 0,
-                                         });
-            }
-
-            var count = Math.Max(1, item.InputLines.Count + item.OutputLines.Count);
-            item.Size = new Vector2(SnapGraphItem.GridSize.X, SnapGraphItem.GridSize.Y * count);
-        }
-    }
-
-    private void UpdateConnectionLayout()
-    {
-        foreach (var r in SnapConnections)
-        {
-            var targetItem = r.TargetItem;
-            var sourceItem = r.SourceItem;
 
             // Find connected index
             var inputIndex = 0;
             foreach (var inputLine in targetItem.InputLines)
             {
-                if (inputLine.Input == r.TargetInput)
+                if (inputLine.Input == input)
+                {
                     break;
+                }
 
                 inputIndex++;
             }
 
             var outputIndex = 0;
-            foreach (var output in sourceItem.OutputLines)
+            foreach (var outLine in sourceItem.OutputLines)
             {
-                if (output.Output == r.SourceOutput)
-                    break;
-
-                outputIndex++;
+                if (outLine.Output != output)
+                    continue;
+                
+                outputIndex = outLine.OutputIndex;
+                break;
             }
 
-            var sourceMin = sourceItem.PosOnCanvas;
-            var sourceMax = sourceMin + sourceItem.Size;
+            var snapGraphConnection = new SnapGraphConnection
+                                          {
+                                              Style = SnapGraphConnection.ConnectionStyles.Unknown,
+                                              SourceItem = sourceItem,
+                                              SourceOutput = output,
+                                              TargetItem = targetItem,
+                                              TargetInput = input,
+                                              InputLineIndex = inputIndex,
+                                              OutputLineIndex = outputIndex,
+                                              ConnectionHash = c.GetHashCode(),
+                                          };
+            targetItem.InputLines[inputIndex].Connection = snapGraphConnection;
+            sourceItem.OutputLines[outputIndex].Connections.Add(snapGraphConnection);
+            SnapConnections.Add(snapGraphConnection);
+        }
+    }
+    
+    private void UpdateLayout()
+    {
+        foreach (var sc in SnapConnections)
+        {
+            var sourceMin = sc.SourceItem.PosOnCanvas;
+            var sourceMax = sourceMin + sc.SourceItem.Size;
 
-            var targetMin = targetItem.PosOnCanvas;
-            var targetMax = targetMin + targetItem.Size;
+            var targetMin = sc.TargetItem.PosOnCanvas;
+            //var targetMax = targetMin + sc.TargetItem.Size;
 
+            
             // Snapped horizontally
-            if (inputIndex == 0
-                && outputIndex == 0
+            if (sc.InputLineIndex == 0
+                && sc.OutputLineIndex == 0
                 && MathF.Abs(sourceMax.X - targetMin.X) < 1
                 && MathF.Abs(sourceMin.Y - targetMin.Y) < 1)
             {
-                r.Style = SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal;
+                sc.Style = SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal;
                 var p = new Vector2(sourceMax.X, sourceMin.Y + 0.5f * SnapGraphItem.GridSize.Y);
-                r.SourcePos = p;
-                r.TargetPos = p;
+                sc.SourcePos = p;
+                sc.TargetPos = p;
                 continue;
                 // Log.Debug($"Snap horizontally {r.SourceItem} -> {r.TargetItem}");
             }
 
-            if (inputIndex == 0
-                && outputIndex == 0
+            if (sc.InputLineIndex == 0
+                && sc.OutputLineIndex == 0
                 && MathF.Abs(sourceMin.X - targetMin.X) < 1
                 && MathF.Abs(sourceMax.Y - targetMin.Y) < 1)
             {
-                r.Style = SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical;
+                sc.Style = SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical;
                 var p = new Vector2(sourceMin.X + SnapGraphItem.GridSize.X / 2, targetMin.Y);
-                r.SourcePos = p;
-                r.TargetPos = p;
+                sc.SourcePos = p;
+                sc.TargetPos = p;
                 continue;
                 // Log.Debug($"Snap vertically {r.SourceItem} -> {r.TargetItem}");
             }
 
-            if (outputIndex == 0
-                && inputIndex > 0
-                && MathF.Abs(sourceMax.X - targetMin.Y) < 1
-                && MathF.Abs(sourceMin.Y - targetMin.Y + (inputIndex + 1) * SnapGraphItem.GridSize.Y) < 1)
+            if (sc.OutputLineIndex == 0
+                && sc.InputLineIndex > 0
+                && MathF.Abs(sourceMax.X - targetMin.X) < 1
+                && MathF.Abs(sourceMin.Y - (targetMin.Y + sc.VisibleOutputIndex * SnapGraphItem.GridSize.Y)) < 1
+                )
             {
-                r.Style = SnapGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal;
-                var p = new Vector2(sourceMax.X, targetMin.Y + (1.5f + inputIndex) * SnapGraphItem.GridSize.Y);
-                r.SourcePos = p;
-                r.TargetPos = p;
+                sc.Style = SnapGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal;
+                var p = new Vector2(sourceMax.X, targetMin.Y + (0.5f + sc.InputLineIndex) * SnapGraphItem.GridSize.Y);
+                sc.SourcePos = p;
+                sc.TargetPos = p;
                 continue;
             }
 
-            if (outputIndex > 0
-                && inputIndex == 0
+            if (sc.OutputLineIndex > 0
+                && sc.InputLineIndex == 0
                 && MathF.Abs(sourceMax.X - targetMin.Y) < 1
-                && MathF.Abs(sourceMax.Y + (1 + sourceItem.OutputLines.Count + outputIndex) * SnapGraphItem.GridSize.Y) < 1)
+                && MathF.Abs(sourceMax.Y + (1 + sc.SourceItem.OutputLines.Length + sc.VisibleOutputIndex) * SnapGraphItem.GridSize.Y) < 1)
             {
-                r.Style = SnapGraphConnection.ConnectionStyles.AdditionalOutToMainInputSnappedVertical;
+                sc.Style = SnapGraphConnection.ConnectionStyles.AdditionalOutToMainInputSnappedVertical;
                 var p = new Vector2(sourceMax.X, targetMin.Y + 0.5f * SnapGraphItem.GridSize.Y);
-                r.SourcePos = p;
-                r.TargetPos = p;
+                sc.SourcePos = p;
+                sc.TargetPos = p;
                 continue;
             }
 
-            if (outputIndex == 0
-                && inputIndex == 0
+            if (sc.OutputLineIndex == 0
+                && sc.InputLineIndex == 0
                 && sourceMax.Y < targetMin.Y
                 && MathF.Abs(sourceMin.X - targetMin.X) < SnapGraphItem.GridSize.X / 2)
             {
-                r.SourcePos = new Vector2(sourceMin.X + SnapGraphItem.GridSize.X / 2, sourceMax.Y);
-                r.TargetPos = new Vector2(targetMin.X + SnapGraphItem.GridSize.X / 2, targetMin.Y);
-                r.Style = SnapGraphConnection.ConnectionStyles.BottomToTop;
+                sc.SourcePos = new Vector2(sourceMin.X + SnapGraphItem.GridSize.X / 2, sourceMax.Y);
+                sc.TargetPos = new Vector2(targetMin.X + SnapGraphItem.GridSize.X / 2, targetMin.Y);
+                sc.Style = SnapGraphConnection.ConnectionStyles.BottomToTop;
                 continue;
             }
 
-            var usedOutputUnit = outputIndex == 0 ? 0 : (1 + outputIndex + sourceItem.OutputLines.Count);
+            sc.SourcePos = new Vector2(sourceMax.X, sourceMin.Y + (sc.VisibleOutputIndex + 0.5f) * SnapGraphItem.GridSize.Y);
+            sc.TargetPos = new Vector2(targetMin.X, targetMin.Y + (sc.InputLineIndex + 0.5f) * SnapGraphItem.GridSize.Y);
 
-            r.SourcePos = new Vector2(sourceMax.X, sourceMin.Y + (usedOutputUnit + 0.5f) * SnapGraphItem.GridSize.Y);
-            r.TargetPos = new Vector2(targetMin.X, targetMin.Y + (inputIndex + 0.5f) * SnapGraphItem.GridSize.Y);
-
-            r.Style = SnapGraphConnection.ConnectionStyles.RightToLeft;
+            sc.Style = SnapGraphConnection.ConnectionStyles.RightToLeft;
 
             //TODO: Snapped from output
             //TODO: Snapped to input
