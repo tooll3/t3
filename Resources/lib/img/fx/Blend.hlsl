@@ -7,13 +7,6 @@ cbuffer ParamConstants : register(b0)
     float UseNormalForUpperHalf;
 }
 
-cbuffer TimeConstants : register(b1)
-{
-    float globalTime;
-    float time;
-    float runTime;
-    float beatTime;
-}
 
 struct vsOutput
 {
@@ -131,15 +124,17 @@ float4 psMain(vsOutput psInput) : SV_TARGET
         rgb = tB.rgb;
         break;
 
-    case 8:
+    case 7:
         rgb = max(tA.rgb, tB.rgb);
+        break;
+    case 8:
+        rgb = tA.rgb - tB.rgb;
         break;
     }
 
     if (UseNormalForUpperHalf > 0.5)
         rgb = lerp(rgb, rgbNormalBlended, normalRatio);
 
-    // rgb = lerp(tA.rgb, rgb, tB.a);
 
     return float4(rgb, a);
 }

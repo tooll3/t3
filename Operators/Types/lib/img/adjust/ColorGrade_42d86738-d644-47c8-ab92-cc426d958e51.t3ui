@@ -85,6 +85,13 @@
         "X": -8.08049,
         "Y": 707.35626
       }
+    },
+    {
+      "InputId": "c73bc2e6-338b-40f9-bfd6-32b6472ff250"/*ClampResult*/,
+      "Position": {
+        "X": -8.08049,
+        "Y": 752.35626
+      }
     }
   ],
   "SymbolChildUis": [
@@ -147,6 +154,13 @@
       "Position": {
         "X": 831.70105,
         "Y": 192.5587
+      }
+    },
+    {
+      "ChildId": "fa31315c-4a7e-4b2b-bad2-15dfaddbbd5f"/*BoolToFloat*/,
+      "Position": {
+        "X": 381.1678,
+        "Y": 759.02155
       }
     }
   ],

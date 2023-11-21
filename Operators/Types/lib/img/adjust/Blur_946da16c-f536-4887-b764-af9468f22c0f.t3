@@ -32,7 +32,7 @@
     },
     {
       "Id": "9c944546-1363-4e3b-b706-31a4b750db2c"/*Wrap*/,
-      "DefaultValue": "Clamp"
+      "DefaultValue": "MirrorOnce"
     }
   ],
   "Children": [
