@@ -51,14 +51,14 @@ float3 OklabToRgb(float3 c) {
 // }
 
 inline float3 RgbToLCh(float3 col) {
-    col = mul(invB, col);
-    col= mul(invA, (sign(col) * pow(abs(col), 0.3333333333333)));    
+    col = mul(col, invB);
+    col= mul((sign(col) * pow(abs(col), 0.3333333333333)), invA);    
 
     float3 polar = 0;
     polar.x = col.x;
     polar.y = sqrt(col.y * col.y + col.z * col.z);
     polar.z = atan2(col.z, col.y);
-    return polar;
+    return polar; 
 }
 
 
@@ -68,8 +68,8 @@ inline float3 LChToRgb(float3 polar) {
     col.y = polar.y * cos(polar.z);
     col.z = polar.y * sin(polar.z);
 
-    float3 lms = mul(fwdA, col);
-    return mul( fwdB , (lms * lms * lms));   
+    float3 lms = mul(col, fwdA);
+    return mul( (lms * lms * lms), fwdB);   
 }
 
 

@@ -55,17 +55,20 @@ namespace T3.Operators.Types.Id_a2ea3af5_d78b_46b4_84db_09d31f042798
         [Input(Guid = "c027bc94-4ef8-4828-8df5-d30abbd31cbc")]
         public readonly InputSlot<float> AmplifyEdges = new InputSlot<float>();
 
-        [Input(Guid = "500cd58b-f6bb-4ade-ba65-a7370012f042")]
-        public readonly InputSlot<float> LimitBrights = new InputSlot<float>();
-
-        [Input(Guid = "bc652cec-9c96-481d-98ad-0af927da2ec9")]
-        public readonly InputSlot<float> SampleRadius = new InputSlot<float>();
-
         [Input(Guid = "e294f6ac-04c4-489b-8d26-615c8971ce11")]
         public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
 
         [Input(Guid = "5264cbf8-13f6-4dfe-a82d-4f0904973488")]
         public readonly InputSlot<bool> Reset = new InputSlot<bool>();
+
+        [Input(Guid = "4232af30-de5f-4fd6-af92-d704e26f6850")]
+        public readonly InputSlot<System.Numerics.Vector2> LuminosityRange = new InputSlot<System.Numerics.Vector2>();
+
+        [Input(Guid = "0eeae01b-80d6-4267-bdf5-a6df2533ffe9")]
+        public readonly InputSlot<System.Numerics.Vector2> ChromaRange = new InputSlot<System.Numerics.Vector2>();
+
+        [Input(Guid = "c7f25ad5-1907-4851-8057-7c73f82da1be")]
+        public readonly InputSlot<float> RangeClamping = new InputSlot<float>();
 
     }
 }
