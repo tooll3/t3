@@ -29,6 +29,36 @@
           }
         }
       }
+    },
+    {
+      "Id": "f1cde690-68aa-4c00-bab7-23d8c6f1f66d",
+      "IsPreset": true,
+      "ActivationIndex": 2,
+      "Title": "Anotherone",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 0.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "73ba7691-784f-4706-8a88-9305f723c4cc": 6.1,
+          "ffcdb058-5131-4146-8deb-a3102349e1c3": -0.12,
+          "c364b443-300e-4323-b0cc-f615649995a5": 1.1,
+          "4ed2a94d-ea7b-4fc5-8b3b-2ced9542b763": -70.0,
+          "c0174be3-4a8c-4b06-a75d-e8c686b072af": 0.0,
+          "c027bc94-4ef8-4828-8df5-d30abbd31cbc": 0.0,
+          "5264cbf8-13f6-4dfe-a82d-4f0904973488": false,
+          "4232af30-de5f-4fd6-af92-d704e26f6850": {
+            "X": 0.7,
+            "Y": 0.56
+          },
+          "0eeae01b-80d6-4267-bdf5-a6df2533ffe9": {
+            "X": 0.06,
+            "Y": 0.19
+          },
+          "c7f25ad5-1907-4851-8057-7c73f82da1be": 0.73
+        }
+      }
     }
   ]
 }

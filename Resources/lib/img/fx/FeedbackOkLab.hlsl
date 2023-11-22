@@ -35,6 +35,7 @@ struct vsOutput
 
 Texture2D<float4> Image : register(t0);
 Texture2D<float4> DisplaceMap : register(t1);
+Texture2D<float4> FractalNoise : register(t2);
 sampler texSampler : register(s0);
 
 static const float3x3 fwdA = {1.0, 1.0, 1.0,
@@ -76,6 +77,9 @@ inline float3 LChToRgb(float3 polar) {
     return mul( (lms * lms * lms), fwdB);   
 }
 
+inline float LuminocityFromRgb(float3 c) {
+    return (c.r + c.g + c.b) /3;
+}
 
 float4 psMain(vsOutput input) : SV_TARGET
 {        
@@ -121,24 +125,35 @@ float4 psMain(vsOutput input) : SV_TARGET
     float sx = SampleRadius / width * sourceAspectRatio;
     float sy = SampleRadius / height;
     float padding =1;
-    float3 cx1 = RgbToLCh(DisplaceMap.Sample(texSampler, float2(uv.x + sx, uv.y)).rgb);
-    float3 cx2 = RgbToLCh(DisplaceMap.Sample(texSampler, float2(uv.x - sx, uv.y)).rgb);
-    float3 cc = RgbToLCh(DisplaceMap.Sample(texSampler, float2(uv.x, uv.y)).rgb);
-    float3 cy1 = RgbToLCh(DisplaceMap.Sample(texSampler, float2(uv.x, uv.y + sy)).rgb);
-    float3 cy2 = RgbToLCh(DisplaceMap.Sample(texSampler, float2(uv.x, uv.y - sy)).rgb);
+    // float3 cx1 = RgbToLCh(DisplaceMap.Sample(texSampler, float2(uv.x + sx, uv.y)).rgb);
+    // float3 cx2 = RgbToLCh(DisplaceMap.Sample(texSampler, float2(uv.x - sx, uv.y)).rgb);
+    // float3 cc = RgbToLCh(DisplaceMap.Sample(texSampler, float2(uv.x, uv.y)).rgb);
+    // float3 cy1 = RgbToLCh(DisplaceMap.Sample(texSampler, float2(uv.x, uv.y + sy)).rgb);
+    // float3 cy2 = RgbToLCh(DisplaceMap.Sample(texSampler, float2(uv.x, uv.y - sy)).rgb);
+
+    float3 cx1 = DisplaceMap.Sample(texSampler, float2(uv.x + sx, uv.y));
+    float3 cx2 = DisplaceMap.Sample(texSampler, float2(uv.x - sx, uv.y));
+    //float3 cc = DisplaceMap.Sample(texSampler, float2(uv.x, uv.y)).rgb);
+    float3 cy1 = DisplaceMap.Sample(texSampler, float2(uv.x, uv.y + sy));
+    float3 cy2 = DisplaceMap.Sample(texSampler, float2(uv.x, uv.y - sy));
+
 
     //return float4( LChToRgb(cc),1);
 
     
-    float3 lchImpact= float3(0.1,0.4,0);
+    //float3 lchImpact= float3(0.1,0.4,0);
 
-    float x1 = cx1.x * lchImpact.x + cx1.y * lchImpact.y;
-    float x2 = cx2.x * lchImpact.x + cx2.y * lchImpact.y;
-    float y1 = cy1.x * lchImpact.x + cy1.y * lchImpact.y;
-    float y2 = cy2.x * lchImpact.x + cy2.y * lchImpact.y;
+    // float x1 = cx1.x * lchImpact.x + cx1.y * lchImpact.y;
+    // float x2 = cx2.x * lchImpact.x + cx2.y * lchImpact.y;
+    // float y1 = cy1.x * lchImpact.x + cy1.y * lchImpact.y;
+    // float y2 = cy2.x * lchImpact.x + cy2.y * lchImpact.y;
 
     
-    float2 d = float2((x1 - x2), (y1 - y2));
+
+    float2 d = float2(    
+        LuminocityFromRgb(cx1.rgb) - LuminocityFromRgb(cx2.rgb), 
+        LuminocityFromRgb(cy1.rgb) - LuminocityFromRgb(cy2.rgb));
+
     d.x /= sourceAspectRatio;
 
     //return float4(abs( d.xy) * 100,0,1);
@@ -149,7 +164,8 @@ float4 psMain(vsOutput input) : SV_TARGET
 
     float a = (d.x == 0 && d.y == 0) ? 0 : atan2(d.x, d.y) + Twist / 180 * 3.14158;
 
-    //a+= input.texCoord.x * 4;
+    float angleDelta = FractalNoise.Sample(texSampler, input.texCoord);
+    a-= (angleDelta - 0.5) * -5;
 
     float2 direction = float2(sin(a), cos(a));
     float len = length(d);
@@ -162,31 +178,51 @@ float4 psMain(vsOutput input) : SV_TARGET
 
     float4 c= Image.Sample(texSampler, uv);
 
-    float3 lch = RgbToLCh(c.rgb);
 
-    lch.x += ShiftBrightness;
-    lch.y += ShiftSaturation;
-    lch.z += ShiftHue;
+    // LCH flow
+    // float3 lch = RgbToLCh(c.rgb);
+    // lch.x += ShiftBrightness;
+    // lch.y += ShiftSaturation;
+    // lch.z += ShiftHue;
+    // lch.x += d * AmplifyEdge;
 
-    //lch.x -=cc.x * 0.0001;
+    // // Limit Range    
+    // float3 lchWindowCenter = lch - float3(LuminosityRange.y, ChromaRange.y,0.5) + 0.5;
+    // float3 s = sign(lchWindowCenter-0.5);
 
-    float3 edge = abs(cx1-cx2) + abs(cy1-cy2);
-    lch.x += ((edge.x * 0.1) + (edge.y * 0.01) + (edge.z * 0.00)) * AmplifyEdge;
+    // float3 window= max(0, abs(lchWindowCenter-.5) - float3(LuminosityRange.x,ChromaRange.x,2) * 0.5) ;
 
-
-    // Limit Range
+    // float3 windowLimiter = smoothstep(0,1, min(1,window)) * s;
+    // lch-= windowLimiter * RangeClamping ;
     
-    float3 lchWindowCenter = lch - float3(LuminosityRange.y, ChromaRange.y,0.5) + 0.5;
+    // lch.x = clamp(lch.x,0,100);
+    // lch.y = clamp(lch.y,0,1);
+    // c.rgb = LChToRgb(lch);
+
+
+    // float3 lch = RgbToLCh(c.rgb);
+    // lch.x += ShiftBrightness;
+    // lch.y += ShiftSaturation;
+    // lch.z += ShiftHue;
+    // lch.x += d * AmplifyEdge;
+
+    // Limit Range    
+    c.rgb += len.xxx * AmplifyEdge;
+
+    float3 lchWindowCenter = c.rgb - LuminosityRange.yyy + 0.5;
     float3 s = sign(lchWindowCenter-0.5);
 
-    float3 window= max(0, abs(lchWindowCenter-.5) - float3(LuminosityRange.x,ChromaRange.x,2) * 0.5) ;
+    float3 window= max(0, abs(lchWindowCenter-.5) - LuminosityRange.xxx * 0.5) ;
 
-    float3 windowLimiter = smoothstep(0,1, min(1,window)) * s * RangeClamping;
-    lch-= windowLimiter;
-    lch.x = clamp(lch.x,0,100);
-    lch.y = clamp(lch.y,0,1);
+    float3 windowLimiter = smoothstep(0,1, min(1,window)) * s;
+    c.rgb-= windowLimiter * RangeClamping ;
+    
+    // lch.x = clamp(lch.x,0,100);
+    // lch.y = clamp(lch.y,0,1);
+    // c.rgb = LChToRgb(lch);
 
-    c.rgb = LChToRgb(lch);
+
+
     return c;
     
 }
