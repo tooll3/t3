@@ -25,9 +25,6 @@ namespace T3.Operators.Types.Id_a2ea3af5_d78b_46b4_84db_09d31f042798
         [Input(Guid = "1e6d0245-b5d4-45a5-8dac-6d905837060d")]
         public readonly InputSlot<float> SampleDistance = new InputSlot<float>();
 
-        [Input(Guid = "09dda975-44e1-4b54-9381-93f2b0e219d2")]
-        public readonly InputSlot<float> Shade = new InputSlot<float>();
-
         [Input(Guid = "c364b443-300e-4323-b0cc-f615649995a5")]
         public readonly InputSlot<float> BlurRadius = new InputSlot<float>();
 
@@ -69,6 +66,18 @@ namespace T3.Operators.Types.Id_a2ea3af5_d78b_46b4_84db_09d31f042798
 
         [Input(Guid = "c7f25ad5-1907-4851-8057-7c73f82da1be")]
         public readonly InputSlot<float> RangeClamping = new InputSlot<float>();
+
+        [Input(Guid = "e05425c3-21fd-4621-b9ac-dbc972e26431")]
+        public readonly InputSlot<float> TwirlNoise = new InputSlot<float>();
+
+        [Input(Guid = "b481a27b-3715-4b0e-869e-a2b5093138b6")]
+        public readonly InputSlot<float> TwirlNoiseScale = new InputSlot<float>();
+
+        [Input(Guid = "f5fa4652-4292-4000-a29d-854d3a6f17fe")]
+        public readonly InputSlot<float> TwirlNoiseSpeed = new InputSlot<float>();
+
+        [Input(Guid = "3c93af8c-5658-4466-8301-95799b650e2b")]
+        public readonly MultiInputSlot<float> AddBlurred = new MultiInputSlot<float>();
 
     }
 }
