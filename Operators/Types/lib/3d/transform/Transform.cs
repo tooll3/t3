@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using SharpDX;
 using T3.Core;
 using T3.Core.DataTypes;
@@ -8,6 +9,8 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
+using Quaternion = System.Numerics.Quaternion;
 
 namespace T3.Operators.Types.Id_284d2183_197d_47fd_b130_873cced78b1c
 {
@@ -34,20 +37,20 @@ namespace T3.Operators.Types.Id_284d2183_197d_47fd_b130_873cced78b1c
             var pivot = Pivot.GetValue(context);
             var s = Scale.GetValue(context) * UniformScale.GetValue(context);
             var r = Rotation.GetValue(context);
-            float yaw = MathUtil.DegreesToRadians(r.Y);
-            float pitch = MathUtil.DegreesToRadians(r.X);
-            float roll = MathUtil.DegreesToRadians(r.Z);
+            float yaw = r.Y.ToRadians();
+            float pitch = r.X.ToRadians();
+            float roll = r.Z.ToRadians();
             var t = Translation.GetValue(context);
-            var objectToParentObject = Matrix.Transformation(
-                                                             scalingCenter: pivot.ToSharpDx(), 
+            var objectToParentObject = GraphicsMath.CreateTransformationMatrix(
+                                                             scalingCenter: pivot, 
                                                              scalingRotation: Quaternion.Identity, 
-                                                             scaling: s.ToSharpDx(), 
-                                                             rotationCenter: pivot.ToSharpDx(),
-                                                             rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll), 
-                                                             translation: t.ToSharpDx());
+                                                             scaling: s,
+                                                             rotationCenter: pivot,
+                                                             rotation: Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll), 
+                                                             translation: t);
             
             var previousWorldTobject = context.ObjectToWorld;
-            context.ObjectToWorld = Matrix.Multiply(objectToParentObject, context.ObjectToWorld);
+            context.ObjectToWorld = Matrix4x4.Multiply(objectToParentObject, context.ObjectToWorld);
             Command.GetValue(context);
             context.ObjectToWorld = previousWorldTobject;
         }

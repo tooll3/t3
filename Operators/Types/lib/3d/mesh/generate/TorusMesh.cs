@@ -87,25 +87,25 @@ namespace T3.Operators.Types.Id_a835ab86_29c1_438e_a7f7_2e297108bfd5
 
                         var radiusAngle = radiusIndex * radiusAngleFraction + radiusSpin;
 
-                        var p = new SharpDX.Vector3((float)(Math.Sin(radiusAngle) * (tubePosition1X + majorRadius)),
+                        var p = new Vector3((float)(Math.Sin(radiusAngle) * (tubePosition1X + majorRadius)),
                                                     (float)(Math.Cos(radiusAngle) * (tubePosition1X + majorRadius)), 
                                                     (float)tubePosition1Y);
                         
-                        var p1 = new SharpDX.Vector3((float)(Math.Sin(radiusAngle + radiusAngleFraction) * (tubePosition1X + majorRadius)),
+                        var p1 = new Vector3((float)(Math.Sin(radiusAngle + radiusAngleFraction) * (tubePosition1X + majorRadius)),
                                                      (float)(Math.Cos(radiusAngle + radiusAngleFraction) * (tubePosition1X + majorRadius)), 
                                                      (float)tubePosition1Y);
                         
-                        var p2 = new SharpDX.Vector3((float)(Math.Sin(radiusAngle) * (tubePosition2X + majorRadius)),
+                        var p2 = new Vector3((float)(Math.Sin(radiusAngle) * (tubePosition2X + majorRadius)),
                                                      (float)(Math.Cos(radiusAngle) * (tubePosition2X + majorRadius)), 
                                                      (float)tubePosition2Y);
                         
-                        var uv0 = new SharpDX.Vector2(u0, v1);
-                        var uv1 = new SharpDX.Vector2(u1, v1);
-                        var uv2 = new SharpDX.Vector2(u1, v0);
+                        var uv0 = new Vector2(u0, v1);
+                        var uv1 = new Vector2(u1, v1);
+                        var uv2 = new Vector2(u1, v0);
 
-                        var tubeCenter1 = new SharpDX.Vector3((float)Math.Sin(radiusAngle), (float)Math.Cos(radiusAngle), 0.0f) * majorRadius;
-                        var normal0 = SharpDX.Vector3.Normalize(useFlatShading 
-                                                                    ? SharpDX.Vector3.Cross(p - p1, p - p2) 
+                        var tubeCenter1 = new Vector3((float)Math.Sin(radiusAngle), (float)Math.Cos(radiusAngle), 0.0f) * majorRadius;
+                        var normal0 = Vector3.Normalize(useFlatShading 
+                                                                    ? Vector3.Cross(p - p1, p - p2) 
                                                                     : p - tubeCenter1);
                         
                         MeshUtils.CalcTBNSpace(p, uv0, p1, uv1, p2, uv2, normal0, out var tangent0, out var binormal0);

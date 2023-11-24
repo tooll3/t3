@@ -207,8 +207,8 @@ public partial class UiSymbolData
                        () => new ValueOutputUi<RawViewportF>());
         RegisterUiType(typeof(SharpDX.Mathematics.Interop.RawRectangle), new ShaderUiProperties(), () => new FallbackInputUi<RawRectangle>(),
                        () => new ValueOutputUi<RawRectangle>());
-        RegisterUiType(typeof(SharpDX.Vector4[]), new PointListUiProperties(), () => new FallbackInputUi<SharpDX.Vector4[]>(),
-                       () => new ValueOutputUi<SharpDX.Vector4[]>());
+        RegisterUiType(typeof(System.Numerics.Vector4[]), new PointListUiProperties(), () => new FallbackInputUi<System.Numerics.Vector4[]>(),
+                       () => new ValueOutputUi<System.Numerics.Vector4[]>());
         RegisterUiType(typeof(Dict<float>), new ValueUiProperties(),
                        () => new FloatDictInputUi(), () => new FloatDictOutputUi());
     }

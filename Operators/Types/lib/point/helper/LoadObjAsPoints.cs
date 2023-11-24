@@ -10,6 +10,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
 
 namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
 {
@@ -53,11 +54,17 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
             // Prepare sorting
             var sortedVertexIndices = Enumerable.Range(0, mesh.Positions.Count).ToList();
             var sorting = Sorting.GetValue(context);
+
             if (sorting != (int)ObjMesh.SortDirections.Ignore)
             {
                 var sortAxisIndex = _sortAxisAndDirections[sorting][0];
                 var sortDirection = _sortAxisAndDirections[sorting][1];
-                sortedVertexIndices.Sort((v1, v2) => mesh.Positions[v1][sortAxisIndex].CompareTo(mesh.Positions[v2][sortAxisIndex]) * sortDirection);
+                sortedVertexIndices.Sort((v1, v2) =>
+                                         {
+                                             var axisValue1 = mesh.Positions[v1].GetValueUnsafe(sortAxisIndex);
+                                             var axisValue2 = mesh.Positions[v2].GetValueUnsafe(sortAxisIndex);
+                                             return axisValue1.CompareTo(axisValue2) * sortDirection;
+                                         });
             }
 
             // Export
@@ -70,7 +77,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                     Log.Warning("Object mode not implemented", this);
                     break;
                 }
-                case Modes.Vertices_ColorInOrientation: 
+                case Modes.Vertices_ColorInOrientation:
                 case Modes.Vertices_GrayscaleInOrientation:
                 case Modes.Vertices_GrayscaleAsW:
                 {
@@ -92,7 +99,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                         {
                             var sortedVertexIndex = sortedVertexIndices[vertexIndex];
                             var c = (sortedVertexIndex >= mesh.Colors.Count)
-                                        ? SharpDX.Vector4.One
+                                        ? Vector4.One
                                         : mesh.Colors[sortedVertexIndex];
 
                             if (exportMode == Modes.Vertices_GrayscaleAsW)
@@ -119,7 +126,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                                                                              Orientation = new Quaternion(gray, gray, gray, 1),
                                                                              W = 1,
                                                                          };
-                            }                            
+                            }
                             else
                             {
                                 _points.TypedElements[vertexIndex] = new Point()
@@ -198,7 +205,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
 
                             lastVertexIndex = line.V2;
                         }
-                        
+
                         _points.TypedElements[pointIndex++] = new Point()
                                                                   {
                                                                       Position = new Vector3(
@@ -207,7 +214,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                                                                                              mesh.Positions[sortedVertexIndices[lastVertexIndex]].Z),
                                                                       W = 1
                                                                   };
-                        
+
                         _points.TypedElements[pointIndex] = Point.Separator();
                         Log.Debug($"loaded {path} with {segmentCount} segments and {vertexCount} points", this);
                     }
@@ -218,7 +225,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
 
                     break;
                 }
-                
+
                 case Modes.WireframeLines:
                 {
                     try
@@ -237,7 +244,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                             Log.Warning("No points found", this);
                             break;
                         }
-                        
+
                         _points = new StructuredList<Point>(points.Count);
 
                         for (var index = 0; index < points.Count; index++)
@@ -253,7 +260,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                     }
 
                     break;
-                }                
+                }
             }
 
             Points.Value = _points;
@@ -265,7 +272,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
             {
                 (vertexIndexB, vertexIndexA) = (vertexIndexA, vertexIndexB);
             }
-            
+
             
             var hashForward = Utilities.Hash(vertexIndexA, vertexIndexB);
             if (!collectedPool.Add(hashForward))
@@ -273,19 +280,19 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                 //Log.Debug($"Skipping hash {hashForward}", this);
                 return;
             }
-            
+
             // Skip if opposite right angle
 
-            var eA = SharpDX.Vector3.Normalize(mesh.Positions[vertexIndexA] - mesh.Positions[oppositeVertexIndex]);  
-            var eB = SharpDX.Vector3.Normalize(mesh.Positions[vertexIndexB] - mesh.Positions[oppositeVertexIndex]);
-            
-            var dot = SharpDX.Vector3.Dot(eA, eB);
+            var eA = Vector3.Normalize(mesh.Positions[vertexIndexA] - mesh.Positions[oppositeVertexIndex]);
+            var eB = Vector3.Normalize(mesh.Positions[vertexIndexB] - mesh.Positions[oppositeVertexIndex]);
+
+            var dot = Vector3.Dot(eA, eB);
             if (MathF.Abs(dot) < 0.05)
             {
                 //Log.Debug($"Skipping triangulation line {hashForward}", this);
                 return;
             }
-            
+
             points.Add(new Point()
                            {
                                Position = new Vector3(
@@ -294,7 +301,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                                                       mesh.Positions[vertexIndexA].Z),
                                W = 1
                            });
-            
+
             points.Add(new Point()
                            {
                                Position = new Vector3(
@@ -303,15 +310,15 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
                                                       mesh.Positions[vertexIndexB].Z),
                                W = 1
                            });
-            
+
             points.Add(new Point()
                            {
                                W = float.NaN
-                           });            
+                           });
 
             
         }
-        
+
 
         private StructuredList<Point> _points = new StructuredList<Point>(0);
 
@@ -322,7 +329,7 @@ namespace T3.Operators.Types.Id_ad651447_75e7_4491_a56a_f737d70c0522
             Vertices_ColorInOrientation,
             Vertices_GrayscaleInOrientation,
             Vertices_GrayscaleAsW,
-            WireframeLines,  
+            WireframeLines,
         }
 
         [Input(Guid = "895dab2c-e3be-4e73-9c96-0f6101cea113")]

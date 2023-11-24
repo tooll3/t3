@@ -10,6 +10,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
@@ -63,8 +64,8 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
 
                     if (isTop || isBottom)
                     {
-                        var normalPol0 = radius > 0 ? SharpDX.Vector3.Up : SharpDX.Vector3.Down;
-                        var normalPol1 = radius > 0 ?SharpDX.Vector3.Down : SharpDX.Vector3.Up;
+                        var normalPol0 = radius > 0 ? VectorT3.Up : VectorT3.Down;
+                        var normalPol1 = radius > 0 ? VectorT3.Down : VectorT3.Up;
 
                         for (int uIndex = 0; uIndex < uSegments; ++uIndex)
                         {
@@ -72,18 +73,18 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
                             var uAngle = uIndex * uAngleFraction;
 
                             // top
-                            var tangentPol0 = SharpDX.Vector3.Normalize(new SharpDX.Vector3(MathF.Sin((float)uAngle),
+                            var tangentPol0 = Vector3.Normalize(new Vector3(MathF.Sin((float)uAngle),
                                                                                             0,
                                                                                             MathF.Cos((float)uAngle)));
-                            var binormalPol0 = SharpDX.Vector3.Normalize(new SharpDX.Vector3(MathF.Sin((float)uAngle + MathF.PI / 2),
+                            var binormalPol0 = Vector3.Normalize(new Vector3(MathF.Sin((float)uAngle + MathF.PI / 2),
                                                                                              0,
                                                                                              MathF.Cos((float)uAngle + MathF.PI / 2)));
 
-                            var pPol0 = new SharpDX.Vector3(0,
+                            var pPol0 = new Vector3(0,
                                                             radius,
                                                             0);
 
-                            var uv0 = new SharpDX.Vector2(u0, 1);
+                            var uv0 = new Vector2(u0, 1);
 
                             _vertexBufferData[0 + uIndex] = new PbrVertex
                                                                 {
@@ -97,18 +98,18 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
 
                             
                             // bottom
-                            var tangentPol1 = SharpDX.Vector3.Normalize(new SharpDX.Vector3(MathF.Sin((float)uAngle +  MathF.PI / 2),
+                            var tangentPol1 = Vector3.Normalize(new Vector3(MathF.Sin((float)uAngle +  MathF.PI / 2),
                                                                                             0,
                                                                                             MathF.Cos((float)uAngle + MathF.PI / 2)));
-                            var binormalPol1 = SharpDX.Vector3.Normalize(new SharpDX.Vector3(MathF.Sin((float)uAngle),
+                            var binormalPol1 = Vector3.Normalize(new Vector3(MathF.Sin((float)uAngle),
                                                                                              0,
                                                                                              MathF.Cos((float)uAngle )));
 
-                            var pPol1 = new SharpDX.Vector3(0,
+                            var pPol1 = new Vector3(0,
                                                             -radius,
                                                             0);
 
-                            var uv1 = new SharpDX.Vector2(u0, 0);
+                            var uv1 = new Vector2(u0, 0);
 
                             _vertexBufferData[ (vSegments - 1) * uSegments + uIndex] = new PbrVertex
                                                                 {
@@ -144,16 +145,16 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
                             var u0 = (uIndex) / (float)(uSegments - 1);
                             var uAngle = uIndex * uAngleFraction;
 
-                            var p = new SharpDX.Vector3((float)(Math.Sin(uAngle) * radius1),
+                            var p = new Vector3((float)(Math.Sin(uAngle) * radius1),
                                                         (float)tubePosition1Y,
                                                         (float)(Math.Cos(uAngle) * radius1)
                                                        );
 
-                            var uv0 = new SharpDX.Vector2(u0, v0);
+                            var uv0 = new Vector2(u0, v0);
 
-                            var normal0 = SharpDX.Vector3.Normalize(p);
-                            var tangent0 = SharpDX.Vector3.Normalize(new SharpDX.Vector3(normal0.Z, 0, -normal0.X));
-                            var binormal0 = SharpDX.Vector3.Cross(normal0, tangent0);
+                            var normal0 = Vector3.Normalize(p);
+                            var tangent0 = Vector3.Normalize(new Vector3(normal0.Z, 0, -normal0.X));
+                            var binormal0 = Vector3.Cross(normal0, tangent0);
 
                             _vertexBufferData[vVertexIndex + uIndex] = new PbrVertex
                                                                            {

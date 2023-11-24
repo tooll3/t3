@@ -1,4 +1,4 @@
-﻿using SharpDX;
+﻿using System.Numerics;
 
 namespace T3.Core.Rendering
 {
@@ -19,9 +19,9 @@ namespace T3.Core.Rendering
             //var bt = new Vector3(-q1.X*s2 + q2.X*s1, -q1.Y*s2 + q2.Y*s1, -q1.Z*s2 + q2.Z*s1)*1.0f/(s1*t2 - s2*t1);
 
             bitangent = Vector3.Cross(normal, t);
-            bitangent.Normalize();
+            bitangent = Vector3.Normalize(bitangent);
             tangent = Vector3.Cross(bitangent, normal);
-            tangent.Normalize();
+            tangent = Vector3.Normalize(tangent);
         }
     }
 }

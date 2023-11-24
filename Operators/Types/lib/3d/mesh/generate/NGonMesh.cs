@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core;
@@ -10,6 +11,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
@@ -43,17 +45,17 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
                 var stretch = Stretch.GetValue(context);
                 var rotation = Rotation.GetValue(context);
 
-                var yaw = MathUtil.DegreesToRadians(rotation.Y);
-                var pitch = MathUtil.DegreesToRadians(rotation.X);
-                var roll = MathUtil.DegreesToRadians(rotation.Z);
+                var yaw = rotation.Y.ToRadians();
+                var pitch = rotation.X.ToRadians();
+                var roll = rotation.Z.ToRadians();
 
                 var textureMode = (TextureModes)(int)TextureMode.GetValue(context).Clamp(0, Enum.GetValues(typeof(TextureModes)).Length);
 
-                var rotationMatrix = Matrix.RotationYawPitchRoll(yaw, pitch, roll);
+                var rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(yaw, pitch, roll);
 
                 var center = Center.GetValue(context);
 
-                var center2 = new SharpDX.Vector3(center.X, center.Y, center.Z);
+                var center2 = new Vector3(center.X, center.Y, center.Z);
                 var segments = Segments.GetValue(context).Clamp(1, 10000);
                 var verticesCount = segments + 1; // +1 for center
 
@@ -64,9 +66,9 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
                 if (_indexBufferData.Length != segments)
                     _indexBufferData = new SharpDX.Int3[segments];
 
-                var normal = SharpDX.Vector3.TransformNormal(SharpDX.Vector3.ForwardLH, rotationMatrix);
-                var tangent = SharpDX.Vector3.TransformNormal(SharpDX.Vector3.Right, rotationMatrix);
-                var binormal = SharpDX.Vector3.TransformNormal(SharpDX.Vector3.Up, rotationMatrix);
+                var normal = Vector3.TransformNormal(VectorT3.ForwardLH, rotationMatrix);
+                var tangent = Vector3.TransformNormal(VectorT3.Right, rotationMatrix);
+                var binormal = Vector3.TransformNormal(VectorT3.Up, rotationMatrix);
 
                 // center
                 {
@@ -87,7 +89,7 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
                                                    Normal = normal,
                                                    Tangent = tangent,
                                                    Bitangent = binormal,
-                                                   Texcoord = new SharpDX.Vector2(uCenter, vCenter),
+                                                   Texcoord = new Vector2(uCenter, vCenter),
                                                    Selection = 1,
                                                };
                 }
@@ -96,7 +98,7 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
                 for (var segmentIndex = 0; segmentIndex < segments; ++segmentIndex)
                 {
                     var phi = 2 * MathF.PI * segmentIndex / segments;
-                    var p = new SharpDX.Vector3(radius * MathF.Sin(phi) * stretch.X, // starts at top
+                    var p = new Vector3(radius * MathF.Sin(phi) * stretch.X, // starts at top
                                                 radius * MathF.Cos(phi) * stretch.Y,
                                                 0);
                     float u0 = 0f, v0 = 0f;
@@ -117,8 +119,8 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
                             break;
                     }
 
-                    var uv0 = new SharpDX.Vector2(u0, v0);
-                    var posRotated = SharpDX.Vector3.TransformNormal(p, rotationMatrix);
+                    var uv0 = new Vector2(u0, v0);
+                    var posRotated = Vector3.TransformNormal(p, rotationMatrix);
                     _vertexBufferData[segmentIndex + 1] = new PbrVertex
                                                               {
                                                                   Position = posRotated + center2,

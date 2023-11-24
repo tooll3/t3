@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
@@ -118,7 +119,7 @@ namespace T3.Operators.Types.Id_8b888408_e472_4bf9_be25_17a3dd8b90fd
         public readonly InputSlot<int> Mode = new ();
         
         private RasterizerState _prevRasterizerState;
-        private Matrix _prevCameraToClipSpace;
+        private Matrix4x4 _prevCameraToClipSpace;
 
         private enum ViewModes
         {

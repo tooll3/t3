@@ -3,6 +3,7 @@ using SharpDX;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_c3a18346_930c_4242_9e42_aa9b3a439395 
 {
@@ -21,7 +22,7 @@ namespace T3.Operators.Types.Id_c3a18346_930c_4242_9e42_aa9b3a439395
             var v = Value.GetValue(context);
             var min = Min.GetValue(context);
             var max = Max.GetValue(context);
-            Result.Value = MathUtil.Clamp(v, min, max);
+            Result.Value = MathUtils.Clamp(v, min, max);
         }
         
         [Input(Guid = "eb002b5d-b938-4b03-b2ea-26252ae051cd")]

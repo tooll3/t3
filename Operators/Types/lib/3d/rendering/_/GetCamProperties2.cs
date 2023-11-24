@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -8,6 +9,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
 using T3.Operators.Utils;
 using Vector3 = System.Numerics.Vector3;
 
@@ -19,10 +21,10 @@ namespace T3.Operators.Types.Id_5b538cf5_e3b6_4674_b23e_ab55fc59ada6
         public readonly Slot<Vector3> Position = new();
 
         [Output(Guid = "F9A31409-323C-43C8-B850-624050EA229E")]
-        public readonly Slot<SharpDX.Vector4[]> CamToWorldRows = new();
+        public readonly Slot<Vector4[]> CamToWorldRows = new();
 
         [Output(Guid = "40BD0840-10AD-46CD-B8E7-0BAD72222C32")]
-        public readonly Slot<SharpDX.Vector4[]> WorldToClipSpaceRows = new();
+        public readonly Slot<Vector4[]> WorldToClipSpaceRows = new();
 
         [Output(Guid = "0FDF4500-9582-49A5-B383-6ECAE14D8DD5")]
         public readonly Slot<int> CameraCount = new();
@@ -74,25 +76,24 @@ namespace T3.Operators.Types.Id_5b538cf5_e3b6_4674_b23e_ab55fc59ada6
                 return;
             }
 
-            var camToWorld = cam.WorldToCamera;
-            camToWorld.Invert();
+            Matrix4x4.Invert(cam.WorldToCamera, out var camToWorld);
 
             var pos = new Vector3(camToWorld.M41, camToWorld.M42, camToWorld.M43);
             Position.Value = pos;
 
             CamToWorldRows.Value = new[]
                                        {
-                                           camToWorld.Row1,
-                                           camToWorld.Row2,
-                                           camToWorld.Row3,
-                                           camToWorld.Row4,
+                                           camToWorld.Row1(),
+                                           camToWorld.Row2(),
+                                           camToWorld.Row3(),
+                                           camToWorld.Row4(),
                                        };
             WorldToClipSpaceRows.Value = new[]
                                              {
-                                                 cam.CameraToClipSpace.Row1,
-                                                 cam.CameraToClipSpace.Row2,
-                                                 cam.CameraToClipSpace.Row3,
-                                                 cam.CameraToClipSpace.Row4,
+                                                 cam.CameraToClipSpace.Row1(),
+                                                 cam.CameraToClipSpace.Row2(),
+                                                 cam.CameraToClipSpace.Row3(),
+                                                 cam.CameraToClipSpace.Row4(),
                                              };
 
             // Prevent double evaluation when accessing multiple outputs

@@ -5,6 +5,7 @@ using ManagedBass;
 using Newtonsoft.Json;
 using SharpDX;
 using T3.Core.Logging;
+using T3.Core.Utils;
 
 namespace T3.Editor.Gui.Audio
 {
@@ -151,8 +152,8 @@ namespace T3.Editor.Gui.Audio
             {
                 var level = 0f;
 
-                var startIndex = (int)MathUtil.Lerp(0, SpectrumLength, MathUtil.Clamp(this.LowerLimit, 0, 1));
-                var endIndex = (int)MathUtil.Lerp(0, SpectrumLength, MathUtil.Lerp(this.UpperLimit, 0, 1));
+                var startIndex = (int)MathUtils.Lerp(0, SpectrumLength, MathUtils.Clamp(this.LowerLimit, 0, 1));
+                var endIndex = (int)MathUtils.Lerp(0, SpectrumLength, MathUtils.Lerp(this.UpperLimit, 0, 1));
 
                 for (int i = startIndex; i < endIndex; i++)
                 {

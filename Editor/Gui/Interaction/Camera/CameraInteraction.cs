@@ -1,8 +1,10 @@
 using System;
+using System.Drawing;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Utils;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.UiHelpers;
 
@@ -215,8 +217,8 @@ namespace T3.Editor.Gui.Interaction.Camera
             var dragDelta = ImGui.GetIO().MouseDelta;
             var factorX = -dragDelta.X * CameraInteractionParameters.RotateMouseSensitivity * 1.5f;
             var factorY = dragDelta.Y * CameraInteractionParameters.RotateMouseSensitivity * 1.5f;
-            var rotAroundX = Matrix4x4.CreateFromAxisAngle(_viewAxis.Left, factorY);
             var rotAroundY = Matrix4x4.CreateFromAxisAngle(_viewAxis.Up, factorX);
+            var rotAroundX = Matrix4x4.CreateFromAxisAngle(_viewAxis.Left, factorY);
             var rot = Matrix4x4.Multiply(rotAroundX, rotAroundY);
 
             var viewDir2 = new Vector4(_intendedSetup.Target - _intendedSetup.Position, 1);

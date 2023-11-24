@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using SharpDX;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
@@ -7,6 +8,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
 {
@@ -70,7 +72,7 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
                                         Target = Target.GetValue(context),
                                         Up = Up.GetValue(context),
                                         AspectRatio = aspectRatio,
-                                        Fov = MathUtil.DegreesToRadians(Fov.GetValue(context)),
+                                        Fov = Fov.GetValue(context).ToRadians(),
                                         Roll = Roll.GetValue(context),
                                         RotationOffset = RotationOffset.GetValue(context),
                                         OffsetAffectsTarget = OffsetAffectsTarget.GetValue(context)
@@ -112,9 +114,9 @@ namespace T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6
         public  CameraDefinition CameraDefinition => _cameraDefinition;
         private CameraDefinition _cameraDefinition;
         
-        public Matrix CameraToClipSpace { get; set; }
-        public Matrix WorldToCamera { get; set; }
-        public Matrix LastObjectToWorld { get; set; }
+        public Matrix4x4 CameraToClipSpace { get; set; }
+        public Matrix4x4 WorldToCamera { get; set; }
+        public Matrix4x4 LastObjectToWorld { get; set; }
 
         // Implement ICamera 
         public System.Numerics.Vector3 CameraPosition
