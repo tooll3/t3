@@ -65,13 +65,11 @@ public class SnapGraphLayout
         }
     }
 
-
-    
     
     private void UpdateVisibleItemLines()
     {
-        var inputLines = new List<SnapGraphItem.InputLine>(); 
-        var outputLines = new List<SnapGraphItem.OutputLine>(); 
+        var inputLines = new List<SnapGraphItem.InputLine>(8); 
+        var outputLines = new List<SnapGraphItem.OutputLine>(4); 
         
         // Todo: Implement connected multi-inputs
         foreach (var item in Items.Values)
@@ -80,7 +78,8 @@ public class SnapGraphLayout
             outputLines.Clear();
             
             var visibleIndex = 0;
-
+            
+            // Collect inputs
             for (var inputIndex = 0; inputIndex < item.Instance.Inputs.Count; inputIndex++)
             {
                 var input = item.Instance.Inputs[inputIndex];
@@ -106,11 +105,16 @@ public class SnapGraphLayout
                 visibleIndex++;
             }
 
-
+            // Collect outputs
             for (var outputIndex = 0; outputIndex < item.Instance.Outputs.Count; outputIndex++)
             {
                 var output = item.Instance.Outputs[outputIndex];
                 if (!item.SymbolUi.OutputUis.TryGetValue(output.Id, out var outputUi)) //TODO: Log error?
+                    continue;
+                
+                if (outputIndex > 0 
+                    &&( !output.IsConnected)
+                   )
                     continue;
 
                 outputLines.Add(new SnapGraphItem.OutputLine
@@ -143,7 +147,7 @@ public class SnapGraphLayout
     private void CollectConnectionReferences(Instance composition)
     {
         SnapConnections.Clear();
-        //SnapConnections.Capacity = composition.Symbol.Connections.Count;
+        SnapConnections.Capacity = composition.Symbol.Connections.Count;
         foreach (var c in composition.Symbol.Connections)
         {
             // Skip connection to symbol inputs and outputs for now

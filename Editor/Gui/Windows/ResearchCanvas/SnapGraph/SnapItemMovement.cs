@@ -232,6 +232,7 @@ public class SnapItemMovement
 
         var bestSnapDistance = float.PositiveInfinity;
         Vector2 bestSnapDelta = default;
+        var bestSnapPosition = Vector2.Zero;
 
         // New possible ConnectionsOptions
         List<Symbol.Connection> newPossibleConnections = new();
@@ -266,6 +267,7 @@ public class SnapItemMovement
                         if (d < bestSnapDistance)
                             newPossibleConnections.Clear();
 
+
                         if (!otherOutAnchor.IsConnected)
                             newPossibleConnections.Add(new Symbol.Connection(
                                                                              sourceParentOrChildId: otherItem.Id,
@@ -274,6 +276,7 @@ public class SnapItemMovement
                                                                              targetSlotId: draggedInAnchor.SlotId)
                                                       );
 
+                        bestSnapPosition = otherOutAnchor.PositionOnCanvas;
                         bestSnapDelta = otherOutAnchor.PositionOnCanvas - draggedInAnchor.PositionOnCanvas;
                         bestSnapDistance = d;
                     }
@@ -302,6 +305,7 @@ public class SnapItemMovement
                                                                              targetParentOrChildId: otherItem.Id,
                                                                              targetSlotId: otherInAnchor.SlotId));
 
+                        bestSnapPosition = otherInAnchor.PositionOnCanvas;
                         bestSnapDelta = otherInAnchor.PositionOnCanvas - draggedOutAnchor.PositionOnCanvas;
                         bestSnapDistance = d;
                     }
@@ -316,12 +320,23 @@ public class SnapItemMovement
                        canvas.TransformPosition(mousePosOnCanvas) + _canvas.TransformDirection(bestSnapDelta),
                        Color.White);
 
+            if (Vector2.Distance(bestSnapPosition, LastSnapPositionOnCanvas) > 2)
+            {
+                LastSnapTime = ImGui.GetTime();
+                LastSnapPositionOnCanvas = bestSnapPosition;
+            }
+
             foreach (var n in _draggedNodes)
             {
                 n.PosOnCanvas += bestSnapDelta;
             }
 
             _lastAppliedOffset += bestSnapDelta;
+        }
+        else
+        {
+            LastSnapPositionOnCanvas = Vector2.Zero;
+            LastSnapTime = double.NegativeInfinity;
         }
     }
 
@@ -338,6 +353,9 @@ public class SnapItemMovement
             }
         }
     }
+    
+    public double LastSnapTime = double.NegativeInfinity;
+    public Vector2 LastSnapPositionOnCanvas;
 
     private Vector2 _currentAppliedSnapOffset;
     private Vector2 _lastAppliedOffset;

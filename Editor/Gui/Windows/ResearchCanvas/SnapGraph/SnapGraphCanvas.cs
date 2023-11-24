@@ -3,6 +3,7 @@ using System.Linq;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.Operator;
+using T3.Core.Utils;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Graph.Interaction.Connections;
@@ -34,7 +35,7 @@ public class SnapGraphCanvas : ScalableCanvas
             CenterView();
         }
 
-        FormInputs.AddCheckBox("Update", ref _forceUpdating);
+        // FormInputs.AddCheckBox("Update", ref _forceUpdating);
 
         var drawList = ImGui.GetWindowDrawList();
 
@@ -48,6 +49,8 @@ public class SnapGraphCanvas : ScalableCanvas
         var slotSize = 3 * canvasScale;
         var gridSizeOnScreen = TransformDirection(SnapGraphItem.GridSize);
         var showDebug = ImGui.GetIO().KeyCtrl;
+
+
 
         // Draw Nodes
         foreach (var item in _snapGraphLayout.Items.Values)
@@ -68,22 +71,29 @@ public class SnapGraphCanvas : ScalableCanvas
             _itemMovement.Handle(item, this);
             ImGui.PopID();
 
-            drawList.AddRectFilled(pMin, pMax, ColorVariations.OperatorBackground.Apply(typeColor).Fade(0.7f), 3);
+            drawList.AddRectFilled(pMin, pMax, ColorVariations.OperatorBackground.Apply(typeColor).Fade(0.7f), 0);
 
             var isSelected = NodeSelection.IsNodeSelected(item.SymbolChildUi);
             var outlineColor = isSelected
                                    ? UiColors.ForegroundFull
                                    : UiColors.BackgroundFull.Fade(0.3f);
-            drawList.AddRect(pMin, pMax, outlineColor, 3);
-            drawList.AddText(Fonts.FontBold, Fonts.FontBold.FontSize * canvasScale * 0.7f, pMin + new Vector2(4, 3) * canvasScale, labelColor,
+            drawList.AddRect(pMin, pMax, outlineColor, 0);
+            
+            ImGui.PushFont(Fonts.FontBold);
+            var labelSize = ImGui.CalcTextSize(item.SymbolChild.ReadableName);
+            ImGui.PopFont();
+            var downScale = MathF.Min(1, SnapGraphItem.Width / labelSize.X / 0.8f);
+            
+            drawList.AddText(Fonts.FontBold, Fonts.FontBold.FontSize *downScale * canvasScale * 0.7f, pMin + new Vector2(4, 3) * canvasScale, labelColor,
                              item.SymbolChild.ReadableName);
 
+            // Draw input labels
             for (var inputIndex = 1; inputIndex < item.InputLines.Length; inputIndex++)
             {
                 var input = item.InputLines[inputIndex];
                 drawList.AddText(Fonts.FontSmall, 10 * canvasScale,
                                  pMin + new Vector2(4, 3) * canvasScale + new Vector2(0, gridSizeOnScreen.Y * (inputIndex)),
-                                 labelColor,
+                                 labelColor.Fade(0.7f),
                                  input.Input.Input.Name);
             }
 
@@ -93,7 +103,23 @@ public class SnapGraphCanvas : ScalableCanvas
                 if (!TypeUiRegistry.Entries.TryGetValue(i.ConnectionType, out var type2UiProperties))
                     continue;
 
-                drawList.AddCircle(TransformPosition(i.PositionOnCanvas), 3, type2UiProperties.Color, 4);
+                var p = TransformPosition(i.PositionOnCanvas);
+                if (i.Direction == SnapGraphItem.Directions.Vertical)
+                {
+                    drawList.AddTriangleFilled(p + new Vector2(-1.5f, 0) * canvasScale * 1.5f,
+                                               p + new Vector2(1.5f, 0) * canvasScale * 1.5f,
+                                               p + new Vector2(0, 2) * canvasScale * 1.5f,
+                                                ColorVariations.OperatorOutline.Apply(typeColor));
+                }
+                else
+                {
+                    drawList.AddTriangleFilled(p + new Vector2(1,0) + new Vector2(-0, -1.5f) * canvasScale * 1.5f,
+                                               p + new Vector2(1,0) + new Vector2(0, 1.5f) * canvasScale * 1.5f,
+                                               p + new Vector2(1,0) + new Vector2(2, 0) * canvasScale * 1.5f,
+                                               ColorVariations.OperatorOutline.Apply(typeColor));
+                }
+                
+                
                 if (showDebug)
                 {
                     ImGui.SetCursorScreenPos(TransformPosition(i.PositionOnCanvas));
@@ -103,72 +129,39 @@ public class SnapGraphCanvas : ScalableCanvas
                 }
             }
 
-            foreach (var i in item.GetOutputAnchors())
+            foreach (var oa in item.GetOutputAnchors())
             {
-                if (!TypeUiRegistry.Entries.TryGetValue(i.ConnectionType, out var type2UiProperties))
+                if (!TypeUiRegistry.Entries.TryGetValue(oa.ConnectionType, out var type2UiProperties))
                     continue;
 
+                var p = TransformPosition(oa.PositionOnCanvas);
+                var color = ColorVariations.OperatorBackground.Apply(typeColor).Fade(0.7f);
+                if (oa.Direction == SnapGraphItem.Directions.Vertical)
+                {
+                    drawList.AddTriangleFilled(p + new Vector2(0,-1) + new Vector2(-1.5f, 0) * canvasScale * 1.5f,
+                                               p + new Vector2(0,-1) + new Vector2(1.5f, 0) * canvasScale * 1.5f,
+                                               p + new Vector2(0,-1) + new Vector2(0, 2) * canvasScale * 1.5f,
+                                               color);
+                }
+                else
+                {
+                    drawList.AddTriangleFilled(p + new Vector2(0,0) + new Vector2(-0, -1.5f) * canvasScale * 1.5f,
+                                               p + new Vector2(0,0) + new Vector2(0, 1.5f) * canvasScale * 1.5f,
+                                               p + new Vector2(0,0) + new Vector2(2, 0) * canvasScale * 1.5f,
+                                               color);
+                }
+
+                
                 if (showDebug)
                 {
-                    ImGui.SetCursorScreenPos(TransformPosition(i.PositionOnCanvas));
-                    ImGui.Button("##" + i.GetHashCode());
+                    ImGui.SetCursorScreenPos(TransformPosition(oa.PositionOnCanvas));
+                    ImGui.Button("##" + oa.GetHashCode());
                     if (ImGui.IsItemHovered())
-                        ImGui.SetTooltip("hash:" + i.ConnectionHash);
+                        ImGui.SetTooltip("hash:" + oa.ConnectionHash);
 
                 }
-                drawList.AddCircle(TransformPosition(i.PositionOnCanvas), 3, type2UiProperties.Color, 4);
+                //drawList.AddCircle(TransformPosition(i.PositionOnCanvas), 3, type2UiProperties.Color, 4);
             }
-
-            //
-            // // Draw Slots
-            // foreach (var slot in slots)
-            // {
-            //     if (slot.IsInput)
-            //     {
-            //         if (slot.Connections.Count > 0)
-            //         {
-            //             slot.Connections[0].GetEndPositions(out _, out var targetPos);
-            //             drawList.AddCircleFilled( _canvas.TransformPosition( targetPos), slotSize, c, 3);
-            //         }
-            //         else
-            //         {
-            //             drawList.AddCircle(_canvas.TransformPosition(slot.HorizontalPosOnCanvas), slotSize, c, 3);
-            //             drawList.AddCircle(_canvas.TransformPosition(slot.VerticalPosOnCanvas), slotSize, c, 3);
-            //         }
-            //     }
-            //     else
-            //     {
-            //         // Outputs
-            //         var isFirstSnappedAndConnected = slot.Connections.Count > 0 && slot.Connections[0].IsSnapped;
-            //         if (isFirstSnappedAndConnected)
-            //         {
-            //             drawList.AddCircleFilled(_canvas.TransformPosition(slot.VerticalPosOnCanvas), slotSize, c, 3);
-            //         }
-            //         else
-            //         {
-            //             drawList.AddCircle(_canvas.TransformPosition(slot.VerticalPosOnCanvas), slotSize, c, 3, 1);
-            //         }
-            //         drawList.AddCircle(_canvas.TransformPosition(slot.HorizontalPosOnCanvas), slotSize, c, 3);
-            //         //drawList.AddCircle(Canvas.TransformPosition(slot.HorizontalPosOnCanvas), slotSize, UiColors.StatusWarning, 3);
-            //     }
-            //
-            //     //var horizontalConnections = slot.GetConnections(Connection.Orientations.Horizontal);
-            //     // var isSnappedAndConnected = slot.Connections.Count > 0 && slot.Connections[0].IsSnapped;
-            //     // if (isSnappedAndConnected)
-            //     // {
-            //     //     drawList.AddCircleFilled(pMin + anchorScale * slot.AnchorPos, slotSize, c, 3);
-            //     // }
-            //     // else
-            //     // {
-            //     //     drawList.AddCircle(pMin + anchorScale * slot.AnchorPos, slotSize, c, 3, 1);
-            //     // }
-            // }
-            //
-            // if (isDraggedAndSnapped)
-            // {
-            //     var dragPosOnScreen = _canvas.TransformPosition(dragPos);
-            //     drawList.AddRect(dragPosOnScreen, dragPosOnScreen + anchorScale, UiColors.ForegroundFull.Fade(0.5f),4);
-            // }
         }
 
         // Draw connections
@@ -191,6 +184,7 @@ public class SnapGraphCanvas : ScalableCanvas
                     drawList.AddCircleFilled(sourcePosOnScreen, slotSize * 1.6f, typeColor, 3);
                     break;
                 case SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
+                    // DrawSlot(drawList, sourcePosOnScreen, canvasScale, SnapGraphItem.Directions.Horizontal, typeColor );
                     drawList.AddTriangleFilled(
                                                sourcePosOnScreen + new Vector2(-1, -1) * canvasScale * 4,
                                                sourcePosOnScreen + new Vector2(1, -1) * canvasScale * 4,
@@ -239,7 +233,27 @@ public class SnapGraphCanvas : ScalableCanvas
                     break;
             }
         }
+        // Draw Snap indicator
+        {
+            var timeSinceSnap = ImGui.GetTime() - _itemMovement.LastSnapTime;
+            var progress = MathUtils.RemapAndClamp((float)timeSinceSnap, 0, 0.4f, 1, 0);
+            if (progress < 1)
+            {
+                drawList.AddCircle(TransformPosition(_itemMovement.LastSnapPositionOnCanvas), 
+                                   progress * 50,
+                                   UiColors.ForegroundFull.Fade(progress*0.2f));
+            }
+        }
     }
+
+    // private void DrawSlot(ImDrawListPtr drawList, Vector2 sourcePosOnScreen, float scale, SnapGraphItem.Directions horizontal, Color typeColor)
+    // {
+    //     drawList.AddTriangleFilled(
+    //                                sourcePosOnScreen + new Vector2(-1, -1) * scale,
+    //                                sourcePosOnScreen + new Vector2(1, -1) * scale,
+    //                                sourcePosOnScreen + new Vector2(0, 1) * scale,
+    //                                typeColor);
+    // }
 
     private void HandleFenceSelection()
     {
@@ -267,6 +281,8 @@ public class SnapGraphCanvas : ScalableCanvas
     }
 
     private SelectionFence.States _fenceState = SelectionFence.States.Inactive;
+
+    
 
     // TODO: Support non graph items like annotations.
     private void HandleSelectionFenceUpdate(ImRect boundsInScreen)
