@@ -1,0 +1,34 @@
+using System.Collections.Generic;
+using T3.Core.Operator;
+using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Slots;
+using T3.Core.Utils;
+using SharpDX.Direct3D11;
+using System.Drawing.Drawing2D;
+using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
+using System.Reflection.Metadata.Ecma335;
+
+namespace T3.Operators.Types.Id_54ba8673_ff58_48d1_ae2e_ee2b83bc6860
+{
+    public class IntToWrapmode : Instance<IntToWrapmode>
+    {
+        [Output(Guid = "D3E48911-F6A6-439F-B34A-84FE9D75B388")]
+        public readonly Slot<SharpDX.Direct3D11.TextureAddressMode> Selected = new();
+
+        public IntToWrapmode()
+        {
+            Selected.UpdateAction = Update;
+        }
+
+        private void Update(EvaluationContext context)
+        {
+            var index = ModeIndex.GetValue(context)
+                       .Clamp((int)SharpDX.Direct3D11.TextureAddressMode.Wrap,
+                              (int)SharpDX.Direct3D11.TextureAddressMode.MirrorOnce);
+            Selected.Value = CastTo<SharpDX.Direct3D11.TextureAddressMode>.From(index);
+        }
+
+        [Input(Guid = "F50C736B-DC80-424B-8517-AF0CA4168666", MappedType = typeof(SharpDX.Direct3D11.TextureAddressMode))]
+        public readonly InputSlot<int> ModeIndex = new(0);
+    }
+}

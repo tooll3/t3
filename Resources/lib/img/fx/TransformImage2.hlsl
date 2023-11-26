@@ -6,7 +6,7 @@ cbuffer ParamConstants : register(b0)
     float Scale;    // 4
     float Rotation; // 5
 
-    float RepeatMode; // 6
+    //float RepeatMode; // 6
 }
 
 cbuffer Resolution : register(b1)
@@ -24,7 +24,7 @@ struct vsOutput
 Texture2D<float4> ImageA : register(t0);
 sampler texSampler : register(s0);
 
-float mod(float x, float y)
+/* float mod(float x, float y)
 {
     return (x - y * floor(x / y));
 }
@@ -32,7 +32,7 @@ float mod(float x, float y)
 float2 mod(float2 x, float2 y)
 {
     return (x - y * floor(x / y));
-}
+} */
 
 float4 psMain(vsOutput psInput) : SV_TARGET
 {
@@ -64,10 +64,9 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     p.x *= aspect2 / sourceAspectRatio;
     p *= divisions;
 
-   // float2 samplePos = (RepeatMode > 3.5) ? p
+   // float2 samplePos = (RepeatMode > 0.5) ? abs(mod(p - 0.5, 2) - 1)
    //                                       : p + 0.5;
     float2 samplePos = p + 0.5;
-    
 
     float4 imgColorForCel = ImageA.Sample(texSampler, samplePos);
     return imgColorForCel;

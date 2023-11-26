@@ -3,6 +3,15 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
+enum WrapModes
+{
+    Wrap,
+    Mirror,
+    Clamp,
+    Border,
+    MirrorOnce,
+}
+
 namespace T3.Operators.Types.Id_32e18957_3812_4f64_8663_18454518d005
 {
     public class TransformImage : Instance<TransformImage>
@@ -28,14 +37,14 @@ namespace T3.Operators.Types.Id_32e18957_3812_4f64_8663_18454518d005
         [Input(Guid = "5c76dc8d-3a28-4b93-b3a0-e008c1ff14e9")]
         public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
 
-        [Input(Guid = "b3edcd1e-e0ce-43a7-98e9-1568e2329ed5")]
-        public readonly InputSlot<bool> Mirror = new InputSlot<bool>();
-
         [Input(Guid = "c31a95a9-2cfb-4eea-8006-97f883d11847")]
         public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
 
         [Input(Guid = "64e5cdf2-19b0-461c-b936-ea46ee58028f")]
         public readonly InputSlot<SharpDX.Direct3D11.Filter> Filter = new InputSlot<SharpDX.Direct3D11.Filter>();
+
+        [Input(Guid = "43eb4d4e-2bb5-4c97-a5dd-91539b8258cd", MappedType = typeof(WrapModes))]
+        public readonly InputSlot<int> WrapMode = new InputSlot<int>();
     }
 }
 
