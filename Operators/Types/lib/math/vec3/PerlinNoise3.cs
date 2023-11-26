@@ -38,6 +38,8 @@ namespace T3.Operators.Types.Id_50aab941_0a29_474a_affd_13a74ea0c780
                                           (MathUtils.PerlinNoise(value, period, octaves, seed+234) + 1f) * 0.5f * (rangeMax.Z - rangeMin.Z) + rangeMin.Z) * scaleXYZ  * scale;
         }
 
+        [Input(Guid = "deddfbee-386d-4f8f-9339-ec6c01908a11")]
+        public readonly InputSlot<float> OverrideTime = new InputSlot<float>();
 
         [Input(Guid = "E0F4333D-8BEE-4F9E-BB29-9F76BD72E61F")]
         public readonly InputSlot<float> Amplitude = new InputSlot<float>();
@@ -45,8 +47,6 @@ namespace T3.Operators.Types.Id_50aab941_0a29_474a_affd_13a74ea0c780
         [Input(Guid = "C427D83B-1046-4B8D-B44A-E616A64A702A")]
         public readonly InputSlot<Vector3> AmplitudeXYZ = new InputSlot<Vector3>();
         
-        [Input(Guid = "deddfbee-386d-4f8f-9339-ec6c01908a11")]
-        public readonly InputSlot<float> OverrideTime = new InputSlot<float>();
 
         [Input(Guid = "1cd2174e-aeb2-4258-8395-a9cc16f276b5")]
         public readonly InputSlot<int> Seed = new InputSlot<int>();
