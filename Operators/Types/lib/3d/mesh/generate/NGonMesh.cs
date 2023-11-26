@@ -1,6 +1,5 @@
 using System;
 using System.Numerics;
-using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.DataTypes;
@@ -15,6 +14,7 @@ using T3.Core.Utils.Geometry;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
+using Int3 = T3.Core.DataTypes.Vector.Int3;
 
 namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
 {
@@ -64,7 +64,7 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
                     _vertexBufferData = new PbrVertex[verticesCount];
 
                 if (_indexBufferData.Length != segments)
-                    _indexBufferData = new SharpDX.Int3[segments];
+                    _indexBufferData = new Int3[segments];
 
                 var normal = Vector3.TransformNormal(VectorT3.ForwardLH, rotationMatrix);
                 var tangent = Vector3.TransformNormal(VectorT3.Right, rotationMatrix);
@@ -130,7 +130,7 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
                                                                   Texcoord = uv0,
                                                                   Selection = 1,
                                                               };
-                    _indexBufferData[segmentIndex] = new SharpDX.Int3(0,
+                    _indexBufferData[segmentIndex] = new Int3(0,
                                                                       (segmentIndex + 2) > segments ? 1 : segmentIndex + 2,
                                                                       segmentIndex + 1);
                 }
@@ -163,7 +163,7 @@ namespace T3.Operators.Types.Id_1b9977be_70cf_4dbd_8af1_1459596b6527
         private readonly BufferWithViews _vertexBufferWithViews = new();
 
         private Buffer _indexBuffer;
-        private SharpDX.Int3[] _indexBufferData = new SharpDX.Int3[0];
+        private Int3[] _indexBufferData = new Int3[0];
         private readonly BufferWithViews _indexBufferWithViews = new();
 
         private readonly MeshBuffers _data = new();

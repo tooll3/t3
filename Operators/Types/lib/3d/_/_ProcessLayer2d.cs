@@ -2,6 +2,7 @@ using System;
 using System.Numerics;
 using SharpDX;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -30,12 +31,12 @@ namespace T3.Operators.Types.Id_d8699da1_13aa_42f7_816a_88abb1d0ba06
         private void Update(EvaluationContext context)
         {
             var imageTexture = ImageTexture.GetValue(context);
-            var imageSize = new Size2(1,1);
+            var imageSize = new Int2(1,1);
             if (imageTexture != null)
             {
                 try
                 {
-                    imageSize = new Size2(imageTexture.Description.Width, imageTexture.Description.Height);
+                    imageSize = new Int2(imageTexture.Description.Width, imageTexture.Description.Height);
                 }
                 catch (Exception e)
                 {

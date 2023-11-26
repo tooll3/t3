@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -32,7 +33,7 @@ namespace T3.Operators.Types.Id_941410e5_2023_43c6_87b1_55386bb048ac
         public readonly InputSlot<System.Numerics.Vector2> Stretch = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "caa14f08-f004-4af8-a448-116e21106d5b")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "bfcb7f48-517a-4791-96fa-4aa26862839b", MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new InputSlot<int>();

@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
-using SharpDX;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
@@ -24,7 +24,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
-using Color = T3.Editor.Gui.Styling.Color;
+using Color = T3.Core.DataTypes.Vector.Color;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 
@@ -237,7 +237,7 @@ namespace T3.Editor.Gui.Graph
                                         var firstOutput = instance.Outputs[0];
                                         IOutputUi outputUi = symbolUi.OutputUis[firstOutput.Id];
                                         _evaluationContext.Reset();
-                                        _evaluationContext.RequestedResolution = new Size2(1280 / 2, 720 / 2);
+                                        _evaluationContext.RequestedResolution = new Int2(1280 / 2, 720 / 2);
                                         outputUi.DrawValue(firstOutput, _evaluationContext,
                                                            recompute: UserSettings.Config.HoverMode == GraphCanvas.HoverModes.Live);
                                         
@@ -666,7 +666,7 @@ namespace T3.Editor.Gui.Graph
             var pMin = new Vector2(_usableScreenRect.Max.X - 2 - s - dx,
                                    (_usableScreenRect.Max.Y - 2 - s).Clamp(_usableScreenRect.Min.Y + 2, _usableScreenRect.Max.Y));
             var pMax = new Vector2(_usableScreenRect.Max.X - 2 - dx, _usableScreenRect.Max.Y - 2);
-            _drawList.AddRectFilled(pMin, pMax, color * Graph.GraphOpacity);
+            _drawList.AddRectFilled(pMin, pMax, color.Fade(Graph.GraphOpacity));
             _drawList.AddRect(pMin-Vector2.One, 
                               pMax+Vector2.One, 
                               UiColors.WindowBackground.Fade(0.4f * Graph.GraphOpacity));

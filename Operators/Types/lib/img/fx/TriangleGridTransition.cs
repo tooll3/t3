@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -44,7 +45,7 @@ namespace T3.Operators.Types.Id_da8ebc61_87cf_44ff_888e_994c8628ddb7
         public readonly InputSlot<System.Numerics.Vector2> EffectCenter = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "5baee095-f7fe-4a07-a01d-cbb2f3c2f3bc")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "d99d5c03-2563-41e6-9bfe-bd61a7fed37d")]
         public readonly InputSlot<float> Scatter = new InputSlot<float>();

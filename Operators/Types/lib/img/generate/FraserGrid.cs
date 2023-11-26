@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -62,7 +63,7 @@ namespace T3.Operators.Types.Id_b882a5d0_f5ae_40a4_8c42_5b25e5775def
         public readonly InputSlot<float> BAffects_LineRatio = new InputSlot<float>();
 
         [Input(Guid = "75c859fa-9dad-4da3-994c-7232811d5ede")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
     }
 }
 

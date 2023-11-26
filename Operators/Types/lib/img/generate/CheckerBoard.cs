@@ -1,3 +1,4 @@
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -28,7 +29,7 @@ namespace T3.Operators.Types.Id_1a411be2_1757_4019_8ce2_e29f808ed839
         public readonly InputSlot<System.Numerics.Vector2> Offset = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "63ebb6c9-e8a5-43e4-97a4-3a34ad585474")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
     }
 }
 

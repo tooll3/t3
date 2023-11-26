@@ -1,0 +1,16 @@
+{
+  "Name": "MaxInt2",
+  "Id": "8e9a45db-a631-4c92-aea9-c252ea6e9708",
+  "Namespace": "lib.math.int2",
+  "Inputs": [
+    {
+      "Id": "3fe2016d-c4bc-42e1-a3d8-f8bc34cfcf32"/*Sizes*/,
+      "DefaultValue": {
+        "X": 0,
+        "Y": 0
+      }
+    }
+  ],
+  "Children": [],
+  "Connections": []
+}

@@ -1,9 +1,9 @@
 using System;
 using System.Numerics;
-using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -73,7 +73,7 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
                     _vertexBufferData = new PbrVertex[totalVertexCount];
 
                 if (_indexBufferData.Length != totalTriangleCount)
-                    _indexBufferData = new SharpDX.Int3[totalTriangleCount];
+                    _indexBufferData = new Int3[totalTriangleCount];
 
                 // Initialize
                 var radiusAngleFraction = fillRatio / (vertexHullColumns - 1) * 2.0 * Math.PI;
@@ -132,15 +132,15 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
                         {
                             if (isFlipped)
                             {
-                                _indexBufferData[faceIndex + 0] = new SharpDX.Int3(vertexIndex + vertexHullColumns, vertexIndex + 1, vertexIndex + 0);
+                                _indexBufferData[faceIndex + 0] = new Int3(vertexIndex + vertexHullColumns, vertexIndex + 1, vertexIndex + 0);
                                 _indexBufferData[faceIndex + 1] =
-                                    new SharpDX.Int3(vertexIndex + vertexHullColumns + 1, vertexIndex + 1, vertexIndex + vertexHullColumns);
+                                    new Int3(vertexIndex + vertexHullColumns + 1, vertexIndex + 1, vertexIndex + vertexHullColumns);
                             }
                             else
                             {
-                                _indexBufferData[faceIndex + 0] = new SharpDX.Int3(vertexIndex + 0, vertexIndex + 1, vertexIndex + vertexHullColumns);
+                                _indexBufferData[faceIndex + 0] = new Int3(vertexIndex + 0, vertexIndex + 1, vertexIndex + vertexHullColumns);
                                 _indexBufferData[faceIndex + 1] =
-                                    new SharpDX.Int3(vertexIndex + vertexHullColumns, vertexIndex + 1, vertexIndex + vertexHullColumns + 1);
+                                    new Int3(vertexIndex + vertexHullColumns, vertexIndex + 1, vertexIndex + vertexHullColumns + 1);
                             }
                         }
                     }
@@ -229,8 +229,8 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
                                                         + hullTriangleCount + (capsTriangleCount / 2) * capIndex;
 
                                         var f1 = isReverse
-                                                     ? new SharpDX.Int3(vertexIndex + 1, vertexIndex, centerVertexIndex)
-                                                     : new SharpDX.Int3(centerVertexIndex, vertexIndex, vertexIndex + 1);
+                                                     ? new Int3(vertexIndex + 1, vertexIndex, centerVertexIndex)
+                                                     : new Int3(centerVertexIndex, vertexIndex, vertexIndex + 1);
                                         _indexBufferData[faceIndex] = f1;
                                     }
                                     else
@@ -241,13 +241,13 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
 
                                         _indexBufferData[faceIndex]
                                             = isReverse
-                                                  ? new SharpDX.Int3(vertexIndex + vertexHullColumns, vertexIndex + 1, vertexIndex)
-                                                  : new SharpDX.Int3(vertexIndex, vertexIndex + 1, vertexIndex + vertexHullColumns);
+                                                  ? new Int3(vertexIndex + vertexHullColumns, vertexIndex + 1, vertexIndex)
+                                                  : new Int3(vertexIndex, vertexIndex + 1, vertexIndex + vertexHullColumns);
 
                                         _indexBufferData[faceIndex + 1]
                                             = isReverse
-                                                  ? new SharpDX.Int3(vertexIndex + vertexHullColumns, vertexIndex + vertexHullColumns + 1, vertexIndex + 1)
-                                                  : new SharpDX.Int3(vertexIndex + 1, vertexIndex + vertexHullColumns + 1, vertexIndex + vertexHullColumns);
+                                                  ? new Int3(vertexIndex + vertexHullColumns, vertexIndex + vertexHullColumns + 1, vertexIndex + 1)
+                                                  : new Int3(vertexIndex + 1, vertexIndex + vertexHullColumns + 1, vertexIndex + vertexHullColumns);
                                     }
                                 }
                             }
@@ -283,7 +283,7 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
         private readonly BufferWithViews _vertexBufferWithViews = new BufferWithViews();
 
         private Buffer _indexBuffer;
-        private SharpDX.Int3[] _indexBufferData = new SharpDX.Int3[0];
+        private Int3[] _indexBufferData = new Int3[0];
         private readonly BufferWithViews _indexBufferWithViews = new BufferWithViews();
 
         private readonly MeshBuffers _data = new MeshBuffers();

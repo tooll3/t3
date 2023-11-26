@@ -13,7 +13,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.RenderExport;
 using T3.Editor.UiModel;
-using Color = T3.Editor.Gui.Styling.Color;
+using Color = T3.Core.DataTypes.Vector.Color;
 using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Editor.Gui.Windows.Output

@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -36,7 +37,7 @@ namespace T3.Operators.Types.Id_22a3cd4e_02b3_44d7_ad2b_aab5810c5e88
         public readonly InputSlot<float> FeatherBias = new InputSlot<float>();
 
         [Input(Guid = "276431d2-e689-41f9-9f73-5544f9368a53")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "7613bc20-d400-440d-b6a5-5f60ce61a33c")]
         public readonly InputSlot<float> Rotate = new InputSlot<float>();

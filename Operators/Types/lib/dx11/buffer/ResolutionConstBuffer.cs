@@ -1,9 +1,9 @@
-using SharpDX;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using System.Runtime.InteropServices;
 using T3.Core;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_38e88910_6063_41d1_840b_8aeeb0eeccc0
@@ -28,7 +28,7 @@ namespace T3.Operators.Types.Id_38e88910_6063_41d1_840b_8aeeb0eeccc0
         [StructLayout(LayoutKind.Explicit, Size = 16)]
         public struct ResolutionBufferLayout
         {
-            public ResolutionBufferLayout(Size2 resolution)
+            public ResolutionBufferLayout(Int2 resolution)
             {
                 Width = resolution.Width;
                 Height = resolution.Height;
@@ -43,7 +43,7 @@ namespace T3.Operators.Types.Id_38e88910_6063_41d1_840b_8aeeb0eeccc0
         }
         
         [Input(Guid = "3BBA98BD-2713-4E5B-B082-20B39392EF9B")]
-        public readonly InputSlot<Size2> Resolution = new InputSlot<Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
     }
 }
         

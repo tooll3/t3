@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -35,7 +36,7 @@ namespace T3.Operators.Types.Id_32e18957_3812_4f64_8663_18454518d005
         public readonly InputSlot<float> Rotation = new InputSlot<float>();
 
         [Input(Guid = "5c76dc8d-3a28-4b93-b3a0-e008c1ff14e9")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "c31a95a9-2cfb-4eea-8006-97f883d11847")]
         public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();

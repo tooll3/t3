@@ -1,5 +1,6 @@
 using System;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -82,7 +83,7 @@ namespace T3.Operators.Types.Id_c454abd8_62a8_4413_a463_668013a6a5bd
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
         [Input(Guid = "3522be02-01e2-4ac4-8e73-bf81eeb71cf0")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
     }
 }
 

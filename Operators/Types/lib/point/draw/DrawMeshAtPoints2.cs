@@ -1,5 +1,6 @@
 using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -89,7 +90,7 @@ namespace T3.Operators.Types.Id_065f6edb_6d3d_414b_ab36_4620a957a18c
         public readonly InputSlot<int> AtlasMode = new InputSlot<int>();
 
         [Input(Guid = "4ee7bfd5-2f4d-4fcd-9bfd-026cfb0bfc38")]
-        public readonly InputSlot<SharpDX.Size2> AtlasSize = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> AtlasSize = new InputSlot<Int2>();
 
         [Input(Guid = "e71d2391-3ca3-4f04-b8d9-caefcb069285")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> FxTexture = new InputSlot<SharpDX.Direct3D11.Texture2D>();

@@ -1,8 +1,8 @@
 using System;
-using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -58,7 +58,7 @@ namespace T3.Operators.Types.Id_a835ab86_29c1_438e_a7f7_2e297108bfd5
                     _vertexBufferData = new PbrVertex[verticesCount];
                 
                 if (_indexBufferData.Length != faceCount)
-                    _indexBufferData = new SharpDX.Int3[faceCount];
+                    _indexBufferData = new Int3[faceCount];
 
 
                 // Initialize
@@ -123,8 +123,8 @@ namespace T3.Operators.Types.Id_a835ab86_29c1_438e_a7f7_2e297108bfd5
                         if (tubeIndex >= tubeSegments - 1 || radiusIndex >= radiusSegments - 1)
                             continue;
                         
-                        _indexBufferData[faceIndex + 0] = new SharpDX.Int3(vertexIndex + 0, vertexIndex + 1, vertexIndex + radiusSegments);
-                        _indexBufferData[faceIndex + 1] = new SharpDX.Int3(vertexIndex + radiusSegments , vertexIndex + 1, vertexIndex + radiusSegments+1);
+                        _indexBufferData[faceIndex + 0] = new Int3(vertexIndex + 0, vertexIndex + 1, vertexIndex + radiusSegments);
+                        _indexBufferData[faceIndex + 1] = new Int3(vertexIndex + radiusSegments , vertexIndex + 1, vertexIndex + radiusSegments+1);
                     }
                 }
                 
@@ -156,7 +156,7 @@ namespace T3.Operators.Types.Id_a835ab86_29c1_438e_a7f7_2e297108bfd5
         private readonly BufferWithViews _vertexBufferWithViews = new BufferWithViews();
 
         private Buffer _indexBuffer;
-        private SharpDX.Int3[] _indexBufferData = new SharpDX.Int3[0];
+        private Int3[] _indexBufferData = new Int3[0];
         private readonly BufferWithViews _indexBufferWithViews = new BufferWithViews();
 
         private readonly MeshBuffers _data = new MeshBuffers();
@@ -168,7 +168,7 @@ namespace T3.Operators.Types.Id_a835ab86_29c1_438e_a7f7_2e297108bfd5
         public readonly InputSlot<float> Thickness = new InputSlot<float>();
 
         [Input(Guid = "99F5D952-8490-4930-B8AB-9D8E968183C6")]
-        public readonly InputSlot<Size2> Segments = new InputSlot<Size2>();
+        public readonly InputSlot<Int2> Segments = new InputSlot<Int2>();
 
         [Input(Guid = "770A164B-10E7-4145-B1C9-DAD1F564EC6B")]
         public readonly InputSlot<Vector2> Spin = new InputSlot<Vector2>();

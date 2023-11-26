@@ -1,5 +1,6 @@
 using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -19,7 +20,7 @@ namespace T3.Operators.Types.Id_ad28819d_be62_4ed7_932a_fc861562983d
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> DisplaceTexture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
         [Input(Guid = "a5b86357-0d11-4034-b19a-5c2d617bb261")]
-        public readonly InputSlot<SharpDX.Size2> GridSize = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> GridSize = new InputSlot<Int2>();
 
         [Input(Guid = "3ab49a26-3168-486a-be7e-35883659e0ef")]
         public readonly InputSlot<System.Numerics.Vector2> CellSize = new InputSlot<System.Numerics.Vector2>();

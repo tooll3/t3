@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using SharpDX;
 using SharpDX.D3DCompiler;
 using T3.Core;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -17,7 +17,7 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
         public readonly Slot<SharpDX.Direct3D11.ComputeShader> ComputerShader = new Slot<SharpDX.Direct3D11.ComputeShader>();
         
         [Output(Guid = "a6fe06e0-b6a9-463c-9e62-930c58b0a0a1")]
-        public readonly Slot<SharpDX.Int3> ThreadCount = new Slot<SharpDX.Int3>();
+        public readonly Slot<Int3> ThreadCount = new Slot<Int3>();
 
         private uint _computeShaderResId;
         public ComputeShader()

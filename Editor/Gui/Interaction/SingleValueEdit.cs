@@ -2,6 +2,7 @@
 using System.Data;
 using System.Globalization;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Utils;
@@ -347,7 +348,7 @@ namespace T3.Editor.Gui.Interaction
         /// </summary>
         private static void DrawButtonWithDynamicLabel(string label, ref Vector2 size)
         {
-            var color1 = Color.GetStyleColor(ImGuiCol.Text).Fade(ImGui.GetStyle().Alpha);
+            var color1 = ImGuiCol.Text.GetStyleColor().Fade(ImGui.GetStyle().Alpha);
             var keepPos = ImGui.GetCursorScreenPos();
             ImGui.Button("##dial", size);
             if (string.IsNullOrEmpty(label))

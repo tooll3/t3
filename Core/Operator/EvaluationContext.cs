@@ -4,6 +4,7 @@ using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Rendering;
 using T3.Core.Utils;
@@ -85,7 +86,7 @@ namespace T3.Core.Operator
         
         #endregion
         
-        public Size2 RequestedResolution { get; set; }
+        public Int2 RequestedResolution { get; set; }
 
         public Matrix4x4 CameraToClipSpace { get; set; } = Matrix4x4.Identity;
         public Matrix4x4 WorldToCamera { get; set; } = Matrix4x4.Identity;

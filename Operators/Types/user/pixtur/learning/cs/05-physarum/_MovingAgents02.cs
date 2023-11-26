@@ -1,4 +1,5 @@
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -20,7 +21,7 @@ namespace T3.Operators.Types.Id_4edc34ed_36f4_4f24_837f_4cc5696b2baa
         public readonly InputSlot<bool> ShowAgents = new InputSlot<bool>();
 
         [Input(Guid = "693957bc-5364-404d-84cd-0248fc609eca")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "351eb848-829d-48cb-96c3-16c00366d34f")]
         public readonly InputSlot<int> AgentCount = new InputSlot<int>();
@@ -38,7 +39,7 @@ namespace T3.Operators.Types.Id_4edc34ed_36f4_4f24_837f_4cc5696b2baa
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> EffectTexture = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
         [Input(Guid = "ad6beaae-4d4b-4f3b-ad7b-7d6389789610")]
-        public readonly InputSlot<SharpDX.Size2> BlockCount = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> BlockCount = new InputSlot<Int2>();
 
         [Input(Guid = "fccbc208-b0ca-4eae-851d-fc5982a55616")]
         public readonly InputSlot<float> AngleLockSteps = new InputSlot<float>();

@@ -8,6 +8,7 @@ using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.DataSet;
+using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.InputUi.CombinedInputs;
@@ -16,6 +17,7 @@ using T3.Editor.Gui.InputUi.SingleControl;
 using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.OutputUi;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using Int3 = T3.Core.DataTypes.Vector.Int3;
 using Point = T3.Core.DataTypes.Point;
 
 namespace T3.Editor.UiModel;
@@ -78,13 +80,13 @@ public partial class UiSymbolData
         RegisterUiType(typeof(string), new StringUiProperties(), () => new StringInputUi(), () => new ValueOutputUi<string>());
         
         // system types
-        RegisterUiType(typeof(System.Numerics.Vector2), new ValueUiProperties(), () => new Float2InputUi(),
+        RegisterUiType(typeof(System.Numerics.Vector2), new ValueUiProperties(), () => new Vector2InputUi(),
                        () => new VectorOutputUi<System.Numerics.Vector2>());
-        RegisterUiType(typeof(System.Numerics.Vector3), new ValueUiProperties(), () => new Float3InputUi(),
+        RegisterUiType(typeof(System.Numerics.Vector3), new ValueUiProperties(), () => new Vector3InputUi(),
                        () => new VectorOutputUi<System.Numerics.Vector3>());
-        RegisterUiType(typeof(System.Numerics.Vector4), new ValueUiProperties(), () => new Float4InputUi(),
+        RegisterUiType(typeof(System.Numerics.Vector4), new ValueUiProperties(), () => new Vector4InputUi(),
                        () => new VectorOutputUi<System.Numerics.Vector4>());
-        RegisterUiType(typeof(System.Numerics.Quaternion), new ValueUiProperties(), () => new Float4InputUi(),
+        RegisterUiType(typeof(System.Numerics.Quaternion), new ValueUiProperties(), () => new Vector4InputUi(),
                        () => new VectorOutputUi<System.Numerics.Quaternion>());
 
         
@@ -137,8 +139,8 @@ public partial class UiSymbolData
                        () => new FallbackInputUi<DataSet>(), () => new DataSetOutputUi());
         
         // sharpdx types
-        RegisterUiType(typeof(SharpDX.Int3), new ValueUiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
-        RegisterUiType(typeof(SharpDX.Size2), new ValueUiProperties(), () => new Size2InputUi(), () => new ValueOutputUi<Size2>());
+        RegisterUiType(typeof(Int3), new ValueUiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
+        RegisterUiType(typeof(Int2), new ValueUiProperties(), () => new Int2InputUi(), () => new ValueOutputUi<Int2>());
         RegisterUiType(typeof(SharpDX.Direct3D.PrimitiveTopology), new FallBackUiProperties(), () => new EnumInputUi<PrimitiveTopology>(),
                        () => new ValueOutputUi<PrimitiveTopology>());
         RegisterUiType(typeof(SharpDX.Direct3D11.BindFlags), new ShaderUiProperties(), () => new EnumInputUi<BindFlags>(),

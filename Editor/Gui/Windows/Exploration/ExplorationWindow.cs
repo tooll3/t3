@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Helpers;
@@ -167,19 +168,19 @@ namespace T3.Editor.Gui.Windows.Exploration
                                         max = floatInputUi.Max;
                                         clamp = floatInputUi.Clamp;
                                         break;
-                                    case Float2InputUi float2InputUi:
+                                    case Vector2InputUi float2InputUi:
                                         scale = float2InputUi.Scale;
                                         min = float2InputUi.Min;
                                         max = float2InputUi.Max;
                                         clamp = float2InputUi.Clamp;
                                         break;
-                                    case Float3InputUi float3InputUi:
+                                    case Vector3InputUi float3InputUi:
                                         scale = float3InputUi.Scale;
                                         min = float3InputUi.Min;
                                         max = float3InputUi.Max;
                                         clamp = float3InputUi.Clamp;
                                         break;
-                                    case Float4InputUi float4InputUi:
+                                    case Vector4InputUi float4InputUi:
                                         scale = 0.02f; // Reasonable default for color variations
                                         break;
                                 }

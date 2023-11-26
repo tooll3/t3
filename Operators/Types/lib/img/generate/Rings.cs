@@ -1,5 +1,6 @@
 using System;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -69,7 +70,7 @@ namespace T3.Operators.Types.Id_d002bd90_5921_48b0_a940_a8d0c779f674
         public readonly InputSlot<float> Constrast = new InputSlot<float>();
 
         [Input(Guid = "67cdd8b3-8ee6-47a8-8b43-8b6ff1dc8b4b")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "a46daf9d-ebb3-478f-8462-c183ea2ef15e")]
         public readonly InputSlot<int> Seed = new InputSlot<int>();

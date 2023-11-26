@@ -1,5 +1,6 @@
 using System;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -39,7 +40,7 @@ namespace T3.Operators.Types.Id_2c3d2c26_ac45_42e9_8f13_6ea338333568
         public readonly InputSlot<float> Bias = new InputSlot<float>();
 
         [Input(Guid = "53afc8d9-f417-4628-9a97-220bec62919f")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "e4739314-4075-4d14-a80d-79e149081dac", MappedType = typeof(Modes))]
         public readonly InputSlot<int> SizeMode = new InputSlot<int>();

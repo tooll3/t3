@@ -14,6 +14,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.MediaFoundation;
 using SharpDX.WIC;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using MF = SharpDX.MediaFoundation;
@@ -28,7 +29,7 @@ internal abstract class MfVideoWriter : IDisposable
 
     public string FilePath { get; }
     
-    protected MfVideoWriter(string filePath, Size2 videoPixelSize)
+    protected MfVideoWriter(string filePath, Int2 videoPixelSize)
         : this(filePath, videoPixelSize, _videoInputFormatId)
     {
     }
@@ -367,7 +368,7 @@ internal abstract class MfVideoWriter : IDisposable
         _currentUsageIndex = -SkipImages;
     }
 
-    private MfVideoWriter(string filePath, Size2 videoPixelSize, Guid videoInputFormat, bool supportAudio = false)
+    private MfVideoWriter(string filePath, Int2 videoPixelSize, Guid videoInputFormat, bool supportAudio = false)
     {
         if (!_mfInitialized)
         {
@@ -459,7 +460,7 @@ internal abstract class MfVideoWriter : IDisposable
     /// <param name="sinkWriter">The previously created SinkWriter.</param>
     /// <param name="videoPixelSize">The pixel size of the video.</param>
     /// <param name="streamIndex">The stream index for the new target.</param>
-    protected abstract void CreateMediaTarget(MF.SinkWriter sinkWriter, SharpDX.Size2 videoPixelSize, out int streamIndex);
+    protected abstract void CreateMediaTarget(MF.SinkWriter sinkWriter, Int2 videoPixelSize, out int streamIndex);
 
     /// <summary>
     /// Internal use: FlipY during rendering?
@@ -510,7 +511,7 @@ internal abstract class MfVideoWriter : IDisposable
 
     #region Resources for MediaFoundation video rendering
     // private MF.ByteStream outStream;
-    private readonly SharpDX.Size2 _videoPixelSize;
+    private readonly Int2 _videoPixelSize;
     private int _frameIndex;
     private int _streamIndex;
 
@@ -537,12 +538,12 @@ internal class Mp4VideoWriter : MfVideoWriter
 {
     private static readonly Guid _h264EncodingFormatId = MF.VideoFormatGuids.H264;
 
-    public Mp4VideoWriter(string filePath, Size2 videoPixelSize)
+    public Mp4VideoWriter(string filePath, Int2 videoPixelSize)
         : base(filePath, videoPixelSize)
     {
     }
 
-    protected override void CreateMediaTarget(SinkWriter sinkWriter, Size2 videoPixelSize, out int streamIndex)
+    protected override void CreateMediaTarget(SinkWriter sinkWriter, Int2 videoPixelSize, out int streamIndex)
     {
         using var mediaTypeOut = new MF.MediaType();
         mediaTypeOut.Set(MF.MediaTypeAttributeKeys.MajorType, MF.MediaTypeGuids.Video);

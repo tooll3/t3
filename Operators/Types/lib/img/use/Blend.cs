@@ -1,3 +1,4 @@
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -34,7 +35,7 @@ namespace T3.Operators.Types.Id_9f43f769_d32a_4f49_92ac_e0be3ba250cf
         public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
 
         [Input(Guid = "93e63b73-e572-4bb2-bbbd-11bbffad89e7")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         private enum RgbBlendModes
         {

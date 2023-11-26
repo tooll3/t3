@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -29,7 +30,7 @@ namespace T3.Operators.Types.Id_ca3f3c1b_6f22_4bf3_b06b_d2b0d85a8881
         public readonly InputSlot<float> Bias = new InputSlot<float>();
 
         [Input(Guid = "412055dc-88f7-4def-ac8e-76f7f424f905")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "0ce5b753-bcc0-4102-b011-64e603a50567")]
         public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();

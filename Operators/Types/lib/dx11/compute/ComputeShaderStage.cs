@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -124,7 +124,7 @@ namespace T3.Operators.Types.Id_8bef116d_7d1c_4c1b_b902_25c1d5e925a9
         public readonly InputSlot<SharpDX.Direct3D11.ComputeShader> ComputeShader = new InputSlot<SharpDX.Direct3D11.ComputeShader>();
 
         [Input(Guid = "180cae35-10e3-47f3-8191-f6ecea7d321c")]
-        public readonly InputSlot<SharpDX.Int3> Dispatch = new InputSlot<SharpDX.Int3>();
+        public readonly InputSlot<Int3> Dispatch = new InputSlot<Int3>();
 
         [Input(Guid = "34cf06fe-8f63-4f14-9c59-35a2c021b817")]
         public readonly MultiInputSlot<SharpDX.Direct3D11.Buffer> ConstantBuffers = new MultiInputSlot<SharpDX.Direct3D11.Buffer>();

@@ -1,0 +1,29 @@
+{
+  "Id": "c6d50423-54ea-4c9d-b547-eb78cc2c950c"/*ScaleSize*/,
+  "InputUis": [
+    {
+      "InputId": "ddceb7df-1c6f-4545-9669-b1b4a80e75e8"/*InputSize*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "InputId": "133bbc5a-bdbf-4993-bd1a-878ec93ee04f"/*Factor*/,
+      "Position": {
+        "X": -200.0,
+        "Y": 45.0
+      }
+    }
+  ],
+  "SymbolChildUis": [],
+  "OutputUis": [
+    {
+      "OutputId": "c2c27def-70f2-4f07-9796-11b62e5329e2"/*Result*/,
+      "Position": {
+        "X": 300.0,
+        "Y": 200.0
+      }
+    }
+  ]
+}

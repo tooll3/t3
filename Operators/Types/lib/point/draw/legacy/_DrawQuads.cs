@@ -1,5 +1,6 @@
 using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -41,7 +42,7 @@ namespace T3.Operators.Types.Id_16d10dc8_63b9_4ddf_90b8_41caef99d945
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Texture_ = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
         [Input(Guid = "fc19ad98-65ea-46f2-896d-6b9279a9eaa4")]
-        public readonly InputSlot<SharpDX.Size2> TextureCells = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> TextureCells = new InputSlot<Int2>();
 
         [Input(Guid = "285eedd2-50d1-43ff-ae18-7a9475ba8e89")]
         public readonly InputSlot<int> AltasMode = new InputSlot<int>();

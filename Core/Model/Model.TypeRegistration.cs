@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -12,9 +11,11 @@ using SharpDX.Mathematics.Interop;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.DataSet;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using Int3 = T3.Core.DataTypes.Vector.Int3;
 using Point = T3.Core.DataTypes.Point;
 using Vector4 = System.Numerics.Vector4;
 
@@ -411,7 +412,7 @@ public partial class SymbolData
                      InputDefaultValueCreator<Format>,
                      (writer, obj) => writer.WriteValue(obj.ToString()),
                      JsonToEnumValue<Format>);
-        RegisterType(typeof(SharpDX.Int3), "Int3",
+        RegisterType(typeof(Int3), "Int3",
                      InputDefaultValueCreator<Int3>,
                      (writer, obj) =>
                      {
@@ -434,21 +435,23 @@ public partial class SymbolData
         RegisterType(typeof(SharpDX.Mathematics.Interop.RawViewportF), "RawViewportF",
                      () => new InputValue<RawViewportF>(new RawViewportF
                                                             { X = 0.0f, Y = 0.0f, Width = 100.0f, Height = 100.0f, MinDepth = 0.0f, MaxDepth = 10000.0f }));
-        RegisterType(typeof(SharpDX.Size2), "Size2",
-                     InputDefaultValueCreator<Size2>,
+        RegisterType(typeof(Int2), nameof(Int2),
+                     InputDefaultValueCreator<Int2>,
                      (writer, obj) =>
                      {
-                         Size2 vec = (Size2)obj;
+                         Int2 vec = (Int2)obj;
                          writer.WriteStartObject();
-                         writer.WriteValue("Width", vec.Width);
-                         writer.WriteValue("Height", vec.Height);
+                         writer.WriteValue("X", vec.X);
+                         writer.WriteValue("Y", vec.Y);
                          writer.WriteEndObject();
                      },
                      jsonToken =>
                      {
-                         int width = jsonToken["Width"].Value<int>();
-                         int height = jsonToken["Height"].Value<int>();
-                         return new Size2(width, height);
+                         var widthJson = jsonToken["Width"] ?? jsonToken["X"];
+                         var heightJson = jsonToken["Height"] ?? jsonToken["Y"];
+                         int width = widthJson.Value<int>();
+                         int height = heightJson.Value<int>();
+                         return new Int2(width, height);
                      });
         RegisterType(typeof(Vector4[]), "Vector4[]",
                      () => new InputValue<Vector4[]>(Array.Empty<Vector4>()));

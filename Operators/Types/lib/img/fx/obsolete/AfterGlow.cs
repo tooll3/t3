@@ -1,5 +1,6 @@
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -31,7 +32,7 @@ namespace T3.Operators.Types.Id_d75de240_28a1_48cc_9b8f_388272188023
         public readonly InputSlot<float> ContrastOffset2 = new InputSlot<float>();
 
         [Input(Guid = "9af9f8af-f7f6-465d-a35b-7b0d952a7db6")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "949dc09e-9782-4876-b4d3-d2ffa3a87a0a")]
         public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();

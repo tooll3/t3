@@ -5,6 +5,7 @@ using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
 using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -110,7 +111,7 @@ namespace T3.Operators.Types.Id_8b888408_e472_4bf9_be25_17a3dd8b90fd
         public readonly InputSlot<int> CellIndex = new ();
         
         [Input(Guid = "4D4DB9AD-B3A3-4DA6-8716-23D21C5FFC4A")]
-        public readonly InputSlot<SharpDX.Size2> CellCounts = new ();
+        public readonly InputSlot<Int2> CellCounts = new ();
 
         [Input(Guid = "AA060596-BA04-4862-B123-E328F1EF58E1")]
         public readonly InputSlot<Vector2> Stretch = new ();

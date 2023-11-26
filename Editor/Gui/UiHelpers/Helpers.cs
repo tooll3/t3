@@ -1,6 +1,7 @@
 using System;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
 
@@ -54,7 +55,7 @@ namespace T3.Editor.Gui.UiHelpers
         public static void DebugItemRect(string label = "", uint color = 0xff20ff80)
         {
             if (T3Ui.ItemRegionsVisible)
-                DebugRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), color, label);
+                DebugRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax(), new Color(color), label);
         }
         
 

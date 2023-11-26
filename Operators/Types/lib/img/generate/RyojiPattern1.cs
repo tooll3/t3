@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -59,7 +60,7 @@ namespace T3.Operators.Types.Id_3ee3597d_dbf1_43a2_89d9_2f7b099112c7
         public readonly InputSlot<float> HighlightSeed = new InputSlot<float>();
 
         [Input(Guid = "dc471f4a-167c-4283-b4fc-55a2e453316e")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "9c7227b6-e13e-4895-bbd3-8b92463cdecf")]
         public readonly InputSlot<bool> GenerateMipmaps = new InputSlot<bool>();

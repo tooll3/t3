@@ -1,3 +1,4 @@
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -22,7 +23,7 @@ namespace T3.Operators.Types.Id_42e6319e_669c_4524_8d0d_9416a86afdb3
         public readonly InputSlot<System.Numerics.Vector2> Offset = new InputSlot<System.Numerics.Vector2>();
 
         [Input(Guid = "c7502cc9-bfe4-40d1-9b85-c6f59a15e675")]
-        public readonly InputSlot<SharpDX.Size2> FontCharSize = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> FontCharSize = new InputSlot<Int2>();
 
         [Input(Guid = "4623488a-cef2-4aaa-bfea-54e39e0b5653")]
         public readonly InputSlot<float> ScaleFactor = new InputSlot<float>();
@@ -31,7 +32,7 @@ namespace T3.Operators.Types.Id_42e6319e_669c_4524_8d0d_9416a86afdb3
         public readonly InputSlot<float> Bias = new InputSlot<float>();
 
         [Input(Guid = "86bb9127-10fb-47cb-9aee-45be01567810")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "7f35bc61-a27f-4a36-9ecc-b5944791f6f0")]
         public readonly InputSlot<string> FontFilePath = new InputSlot<string>();

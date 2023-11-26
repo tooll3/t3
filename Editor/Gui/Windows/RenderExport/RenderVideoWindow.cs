@@ -2,6 +2,7 @@ using System;
 using ImGuiNET;
 using SharpDX.Direct3D11;
 using T3.Core.Animation;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -31,7 +32,7 @@ public class RenderVideoWindow : RenderHelperWindow
             return;
         }
 
-        SharpDX.Size2 size = default;
+        Int2 size = default;
         try
         {
             var currentDesc = mainTexture.Description;

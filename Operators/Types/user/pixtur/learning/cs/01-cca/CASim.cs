@@ -1,5 +1,6 @@
 using System.Numerics;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -12,7 +13,7 @@ namespace T3.Operators.Types.Id_2b6981f8_f66c_4132_9f37_6536d477ed65
         public readonly Slot<Texture2D> Output = new Slot<Texture2D>();
 
         [Input(Guid = "755664f5-1ba5-4a83-9511-c54b5a407217")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "e5355afa-0af0-4249-8309-a5ee1eb6dfdf")]
         public readonly InputSlot<int> States = new InputSlot<int>();

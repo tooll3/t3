@@ -2,6 +2,7 @@
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.Mathematics.Interop;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
@@ -28,7 +29,7 @@ namespace T3.Editor.Gui.Windows.Exploration
 
             EvaluationContext = new EvaluationContext()
                                     {
-                                        RequestedResolution = new Size2((int)thumbnailSize.X, (int)thumbnailSize.Y)
+                                        RequestedResolution = new Int2((int)thumbnailSize.X, (int)thumbnailSize.Y)
                                     };
 
             var description = new Texture2DDescription()
