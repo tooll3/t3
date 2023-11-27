@@ -51,7 +51,7 @@ public partial class SymbolData
             if (!SymbolRegistry.Entries.TryAdd(symbol.Id, symbol))
             {
                 var existingSymbol = SymbolRegistry.Entries[symbol.Id];
-                Log.Error($"Symbol {existingSymbol.Name} exists multiple times in database.");
+                Log.Error($"Symbol {existingSymbol.Name} {symbol.Id} exists multiple times in database.");
                 continue;
             }
             

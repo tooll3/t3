@@ -5098,11 +5098,6 @@
             "X": 0.63,
             "Y": 1.0
           }
-        },
-        {
-          "Id": "b3edcd1e-e0ce-43a7-98e9-1568e2329ed5"/*Mirror*/,
-          "Type": "System.Boolean",
-          "Value": false
         }
       ],
       "Outputs": []
