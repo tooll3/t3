@@ -16,7 +16,7 @@
     <PackageReference Include="Rug.Osc" Version="1.2.5">
       <NoWarn>NU1701</NoWarn>
     </PackageReference>
-    <PackageReference Include="Sentry" Version="3.35.0" />
+    <PackageReference Include="Sentry" Version="3.41.2" />
     <PackageReference Include="SharpDX.Desktop" Version="4.2.0">
       <NoWarn>NU1701</NoWarn>
     </PackageReference>

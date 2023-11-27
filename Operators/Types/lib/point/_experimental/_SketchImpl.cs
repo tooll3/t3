@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Newtonsoft.Json;
 using SharpDX;
 using T3.Core.Animation;
@@ -15,6 +16,7 @@ using Point = T3.Core.DataTypes.Point;
 using Utilities = T3.Core.Utils.Utilities;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 // ReSharper disable RedundantNameQualifier
 
@@ -250,18 +252,16 @@ namespace T3.Operators.Types.Id_b238b288_6e9b_4b91_bac9_3d7566416028
         private static Vector3 CalcPosInWorld(EvaluationContext context, Vector2 mousePos)
         {
             const float offsetFromCamPlane = 0.99f;
-            var posInClipSpace = new SharpDX.Vector4((mousePos.X - 0.5f) * 2, (-mousePos.Y + 0.5f) * 2, offsetFromCamPlane, 1);
-            Matrix clipSpaceToCamera = context.CameraToClipSpace;
-            clipSpaceToCamera.Invert();
-            Matrix cameraToWorld = context.WorldToCamera;
-            cameraToWorld.Invert();
-            Matrix worldToObject = context.ObjectToWorld;
-            worldToObject.Invert();
+            var posInClipSpace = new Vector4((mousePos.X - 0.5f) * 2, (-mousePos.Y + 0.5f) * 2, offsetFromCamPlane, 1);
+            Matrix4x4.Invert(context.CameraToClipSpace, out var clipSpaceToCamera);
+            Matrix4x4.Invert(context.WorldToCamera, out var cameraToWorld);
+            Matrix4x4.Invert(context.ObjectToWorld, out var worldToObject);
 
-            var clipSpaceToWorld = Matrix.Multiply(clipSpaceToCamera, cameraToWorld);
-            var m = Matrix.Multiply(cameraToWorld, clipSpaceToCamera);
-            m.Invert();
-            var p = SharpDX.Vector4.Transform(posInClipSpace, clipSpaceToWorld);
+            var clipSpaceToWorld = Matrix4x4.Multiply(clipSpaceToCamera, cameraToWorld);
+            var m = Matrix4x4.Multiply(cameraToWorld, clipSpaceToCamera);
+            Matrix4x4.Invert(m, out m);
+            
+            var p = Vector4.Transform(posInClipSpace, clipSpaceToWorld);
             return new Vector3(p.X, p.Y, p.Z) / p.W;
         }
 

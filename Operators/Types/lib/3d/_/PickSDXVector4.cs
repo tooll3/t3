@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -40,12 +41,12 @@ namespace T3.Operators.Types.Id_a83f2e4f_cb4d_4a6f_9f7a_2ea7fdfab54b
             if (index < 0)
                 index = -index;
 
-            SharpDX.Vector4 v= list[index % list.Length];
+            Vector4 v= list[index % list.Length];
 
-            Value1.Value = v[0];
-            Value2.Value = v[1];
-            Value3.Value = v[2];
-            Value4.Value = v[3];
+            Value1.Value = v.X;
+            Value2.Value = v.Y;
+            Value3.Value = v.Z;
+            Value4.Value = v.W;
 
             Value1.DirtyFlag.Clear();
             Value2.DirtyFlag.Clear();
@@ -54,7 +55,7 @@ namespace T3.Operators.Types.Id_a83f2e4f_cb4d_4a6f_9f7a_2ea7fdfab54b
         }
 
         [Input(Guid = "0f9eebb0-6f13-4751-abac-15a467ad56c2")]
-        public readonly InputSlot<SharpDX.Vector4[]> Input = new InputSlot<SharpDX.Vector4[]>();
+        public readonly InputSlot<Vector4[]> Input = new InputSlot<Vector4[]>();
 
         [Input(Guid = "dbc92e88-cae2-44a8-b291-1a6168624244")]
         public readonly InputSlot<int> Index = new InputSlot<int>(0);

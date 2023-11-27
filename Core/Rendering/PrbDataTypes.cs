@@ -8,6 +8,8 @@ using T3.Core.Operator;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector4 = System.Numerics.Vector4;
+using Vector3 = System.Numerics.Vector3;
+using Vector2 = System.Numerics.Vector2;
 
 namespace T3.Core.Rendering
 {
@@ -15,19 +17,19 @@ namespace T3.Core.Rendering
     public struct PbrVertex
     {
         [FieldOffset(0)]
-        public SharpDX.Vector3 Position;
+        public Vector3 Position;
 
         [FieldOffset(3 * 4)]
-        public SharpDX.Vector3 Normal;
+        public Vector3 Normal;
 
         [FieldOffset(6 * 4)]
-        public SharpDX.Vector3 Tangent;
+        public Vector3 Tangent;
 
         [FieldOffset(9 * 4)]
-        public SharpDX.Vector3 Bitangent;
+        public Vector3 Bitangent;
 
         [FieldOffset(12 * 4)]
-        public SharpDX.Vector2 Texcoord;
+        public Vector2 Texcoord;
 
         [FieldOffset(14 * 4)]
         public float Selection; 

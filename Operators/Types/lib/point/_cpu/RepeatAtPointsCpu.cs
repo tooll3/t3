@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Resources;
 using Microsoft.Win32;
-using SharpDX;
 using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
@@ -11,7 +10,6 @@ using T3.Core.Operator.Slots;
 using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
-using Vector4 = SharpDX.Vector4;
 
 namespace T3.Operators.Types.Id_478522e1_5683_4db1_a7dc_db59838eca2a
 {

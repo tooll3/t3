@@ -450,8 +450,8 @@ public partial class SymbolData
                          int height = jsonToken["Height"].Value<int>();
                          return new Size2(width, height);
                      });
-        RegisterType(typeof(SharpDX.Vector4[]), "Vector4[]",
-                     () => new InputValue<SharpDX.Vector4[]>(Array.Empty<SharpDX.Vector4>()));
+        RegisterType(typeof(Vector4[]), "Vector4[]",
+                     () => new InputValue<Vector4[]>(Array.Empty<Vector4>()));
         RegisterType(typeof(Dict<float>), "Dict<float>",
                      () => new InputValue<Dict<float>>());
     }

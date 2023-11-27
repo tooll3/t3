@@ -1,10 +1,12 @@
 using System;
-using SharpDX;
+using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
 using Vector2 = System.Numerics.Vector2;
+using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Operators.Types.Id_eff2ffff_dc39_4b90_9b1c_3c0a9a0108c6
 {
@@ -18,7 +20,7 @@ namespace T3.Operators.Types.Id_eff2ffff_dc39_4b90_9b1c_3c0a9a0108c6
 
         [Output(Guid = "BE90EED3-26BF-4DC3-9771-073C04D359BC", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<System.Numerics.Vector3> Position3d = new();
-        
+
         public MouseInput()
         {
             Position.UpdateAction = Update;
@@ -33,37 +35,37 @@ namespace T3.Operators.Types.Id_eff2ffff_dc39_4b90_9b1c_3c0a9a0108c6
             var aspectRatio = (float)context.RequestedResolution.Width / context.RequestedResolution.Height;
 
             var lastPosition = Core.IO.MouseInput.LastPosition;
-            
+
             switch (mode)
             {
                 case OutputModes.Normalized:
                     Position.Value = lastPosition;
-                    Position3d.Value = new Vector3(lastPosition.X, lastPosition.Y, 0).ToNumerics();
+                    Position3d.Value = new Vector3(lastPosition.X, lastPosition.Y, 0);
                     break;
                 case OutputModes.SignedPosition:
                     Position.Value = (lastPosition - new Vector2(0.5f, 0.5f)) * new Vector2(aspectRatio, -1) * scale;
-                    Position3d.Value = new Vector3(lastPosition.X, lastPosition.Y, 0).ToNumerics();
+                    Position3d.Value = new Vector3(lastPosition.X, lastPosition.Y, 0);
                     break;
                 case OutputModes.OnWorldXYPlane:
                 case OutputModes.OnWorldFloorPlane:
                 {
-                    
-                    var clipSpaceToWorld = ComposeClipSpaceToWorld(context);
-                    var cameraToWorld = context.WorldToCamera;
-                    cameraToWorld.Invert();
-                    
-                    var posInClip =  (lastPosition - new Vector2(0.5f, 0.5f)) * new Vector2(2, -2);
-                    var posInWorld = Vector3.TransformCoordinate(new Vector3(posInClip.X, posInClip.Y, 0f), clipSpaceToWorld);
-                    var targetInWorld = Vector3.TransformCoordinate(new Vector3(posInClip.X, posInClip.Y, 1f), clipSpaceToWorld);
-                    var ray = new SharpDX.Ray(posInWorld, targetInWorld - posInWorld);
+                    Matrix4x4.Invert(context.CameraToClipSpace, out var clipSpaceToCamera);
+                    Matrix4x4.Invert(context.WorldToCamera, out var cameraToWorld);
+                    var clipSpaceToWorld = clipSpaceToCamera * cameraToWorld;
 
-                    var xyPlaneName = mode == OutputModes.OnWorldXYPlane ? SharpDX.Vector3.UnitZ : SharpDX.Vector3.UnitY;
-                    var xyPlane = new Plane(SharpDX.Vector3.Zero, xyPlaneName);
-                    if (xyPlane.Intersects(ref ray, out SharpDX.Vector3 p))
+                    var posInClip = (lastPosition - new Vector2(0.5f, 0.5f)) * new Vector2(2, -2);
+                    var posInWorld = GraphicsMath.TransformCoordinate(new Vector3(posInClip, 0f), clipSpaceToWorld);
+                    var targetInWorld = GraphicsMath.TransformCoordinate(new Vector3(posInClip, 1f), clipSpaceToWorld);
+                    var ray = new Ray(posInWorld, targetInWorld - posInWorld);
+
+                    var planeNormal = mode == OutputModes.OnWorldXYPlane ? Vector3.UnitZ : Vector3.UnitY;
+                    var xyPlane = PlaneExtensions.CreateFromPointAndNormal(Vector3.Zero, planeNormal);
+                    if (xyPlane.Intersects(ray, out Vector3 intersectionPoint))
                     {
-                        Position.Value = new Vector2(p.X, p.Y) ;
-                        Position3d.Value = p.ToNumerics();
+                        Position.Value = new Vector2(intersectionPoint.X, intersectionPoint.Y);
+                        Position3d.Value = intersectionPoint;
                     }
+
                     break;
                 }
                 default:
@@ -74,18 +76,6 @@ namespace T3.Operators.Types.Id_eff2ffff_dc39_4b90_9b1c_3c0a9a0108c6
             Position3d.DirtyFlag.Clear();
             Position.DirtyFlag.Clear();
             IsLeftButtonDown.DirtyFlag.Clear();
-        }
-
-        private static Matrix ComposeClipSpaceToWorld(EvaluationContext context)
-        {
-            var clipSpaceToCamera = context.CameraToClipSpace;
-            clipSpaceToCamera.Invert();
-            var cameraToWorld = context.WorldToCamera;
-            cameraToWorld.Invert();
-            var worldToObject = context.ObjectToWorld;
-            worldToObject.Invert();
-            var clipSpaceToWorld = Matrix.Multiply(clipSpaceToCamera, cameraToWorld);
-            return clipSpaceToWorld;
         }
 
         [Input(Guid = "49775CC2-35B7-4C9F-A502-59FE8FBBE2A7")]

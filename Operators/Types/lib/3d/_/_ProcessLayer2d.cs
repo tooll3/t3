@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.Logging;
@@ -6,15 +7,19 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
+using Quaternion = System.Numerics.Quaternion;
 using Utilities = T3.Core.Utils.Utilities;
 using Vector2 = System.Numerics.Vector2;
+using Vector3 = System.Numerics.Vector3;
+using Vector4 = System.Numerics.Vector4;
 
 namespace T3.Operators.Types.Id_d8699da1_13aa_42f7_816a_88abb1d0ba06 
 {
     public class _ProcessLayer2d : Instance<_ProcessLayer2d>
     {
         [Output(Guid = "D81A2DB8-D72D-48B1-9201-0EE87822097E", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<SharpDX.Vector4[]> Result = new Slot<SharpDX.Vector4[]>();
+        public readonly Slot<Vector4[]> Result = new Slot<Vector4[]>();
         
         public _ProcessLayer2d()
         {
@@ -49,7 +54,7 @@ namespace T3.Operators.Types.Id_d8699da1_13aa_42f7_816a_88abb1d0ba06
             var rz = RotationZ.GetValue(context);
             var yaw = 0;
             var pitch = 0;
-            var roll = MathUtil.DegreesToRadians(rz);
+            var roll = rz.ToRadians();
             var posXy = PositionXy.GetValue(context);
             var posZ = PositionZ.GetValue(context);
             
@@ -111,20 +116,20 @@ namespace T3.Operators.Types.Id_d8699da1_13aa_42f7_816a_88abb1d0ba06
 
 
             var t = new Vector3(posXy.X, posXy.Y, posZ);
-            var objectToParentObject = Matrix.Transformation(scalingCenter: Vector3.Zero, scalingRotation: Quaternion.Identity, scaling: new Vector3(scale.X, scale.Y, 1), rotationCenter: Vector3.Zero,
-                                                             rotation: Quaternion.RotationYawPitchRoll(yaw, pitch, roll), translation: new Vector3(t.X, t.Y, t.Z));
+            var objectToParentObject = GraphicsMath.CreateTransformationMatrix(scalingCenter: Vector3.Zero, scalingRotation: Quaternion.Identity, scaling: new Vector3(scale.X, scale.Y, 1), rotationCenter: Vector3.Zero,
+                                                             rotation: Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll), translation: new Vector3(t.X, t.Y, t.Z));
             
             // Transpose all as mem layout in hlsl constant buffer is row based
             objectToParentObject.Transpose();
             
-            _matrix[0] = objectToParentObject.Row1;
-            _matrix[1] = objectToParentObject.Row2;
-            _matrix[2] = objectToParentObject.Row3;
-            _matrix[3] = objectToParentObject.Row4;
+            _matrix[0] = objectToParentObject.Row1();
+            _matrix[1] = objectToParentObject.Row2();
+            _matrix[2] = objectToParentObject.Row3();
+            _matrix[3] = objectToParentObject.Row4();
             Result.Value = _matrix;
         }
 
-        private readonly SharpDX.Vector4[] _matrix = new SharpDX.Vector4[4];
+        private readonly Vector4[] _matrix = new Vector4[4];
         
         
         [Input(Guid = "674E048E-5A6C-4D3E-B1E0-E44603775E02")]

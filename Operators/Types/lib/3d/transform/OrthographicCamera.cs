@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using SharpDX;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
@@ -6,7 +7,10 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
+using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
 using T3.Operators.Utils;
+using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Operators.Types.Id_954af16f_b37b_4e64_a965_4bec02b9179e
 {
@@ -28,7 +32,7 @@ namespace T3.Operators.Types.Id_954af16f_b37b_4e64_a965_4bec02b9179e
         {
             System.Numerics.Vector2 size = Size.GetValue(context);
             System.Numerics.Vector2 clip = NearFarClip.GetValue(context);
-            CameraToClipSpace = Matrix.OrthoRH(size.X, size.Y, clip.X, clip.Y);
+            CameraToClipSpace = Matrix4x4.CreateOrthographic(size.X, size.Y, clip.X, clip.Y);
             LastObjectToWorld = context.ObjectToWorld;
             
             var pos = Position.GetValue(context);
@@ -37,7 +41,7 @@ namespace T3.Operators.Types.Id_954af16f_b37b_4e64_a965_4bec02b9179e
             Vector3 target = new Vector3(t.X, t.Y, t.Z);
             var u = Up.GetValue(context);
             Vector3 up = new Vector3(u.X, u.Y, u.Z);
-            WorldToCamera = Matrix.LookAtRH(eye, target, up);
+            WorldToCamera = GraphicsMath.LookAtRH(eye, target, up);
 
             var prevCameraToClipSpace = context.CameraToClipSpace;
             context.CameraToClipSpace = CameraToClipSpace;
@@ -93,8 +97,8 @@ namespace T3.Operators.Types.Id_954af16f_b37b_4e64_a965_4bec02b9179e
 
         public CameraDefinition CameraDefinition => new();  // Not implemented
         
-        public Matrix WorldToCamera { get; set; }
-        public Matrix LastObjectToWorld { get; set; }
-        public Matrix CameraToClipSpace { get; set; }
+        public Matrix4x4 WorldToCamera { get; set; }
+        public Matrix4x4 LastObjectToWorld { get; set; }
+        public Matrix4x4 CameraToClipSpace { get; set; }
     }
 }

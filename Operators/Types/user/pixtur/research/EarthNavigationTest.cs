@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
-using SharpDX;
+using System.Numerics;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
 using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Operators.Types.Id_b3f34926_e536_439b_b47b_2ab89a0bc94d
@@ -13,7 +14,7 @@ namespace T3.Operators.Types.Id_b3f34926_e536_439b_b47b_2ab89a0bc94d
     public class EarthNavigationTest : Instance<EarthNavigationTest>
     {
         [Output(Guid = "cab5c207-a997-4934-8c53-5a9f740284e0")]
-        public readonly Slot<SharpDX.Vector4[]> Result = new();
+        public readonly Slot<Vector4[]> Result = new();
 
         [Output(Guid = "8DBFC03F-7DCF-42EB-A8B1-301C0085BF40")]
         public readonly Slot<Vector3> P1 = new();
@@ -49,14 +50,14 @@ namespace T3.Operators.Types.Id_b3f34926_e536_439b_b47b_2ab89a0bc94d
             var latitude =  MathUtils.Fmod(Latitude.GetValue(context), 360 );
             var longitude =   Longitude.GetValue(context) ;
 
-            var m = Matrix.Identity;
+            var m = Matrix4x4.Identity;
             
             //m *= Matrix.RotationY(-latitude / 180 * MathF.PI);
             //m *= Matrix.RotationX(longitude / 180 * MathF.PI);
-            m *= Matrix.RotationZ(orientation / 180 * MathF.PI);
+            m *= Matrix4x4.CreateRotationZ(orientation / 180 * MathF.PI);
 
             var mRot1 = m;
-            m *= Matrix.Translation(0, 0, -height - radius);
+            m *= Matrix4x4.CreateTranslation(0, 0, -height - radius);
 
 
             var sign = orientation < 0 ? -1 : 1;
@@ -140,28 +141,28 @@ namespace T3.Operators.Types.Id_b3f34926_e536_439b_b47b_2ab89a0bc94d
             // transpose all as mem layout in hlsl constant buffer is row based
             m.Transpose();
 
-            _matrix[0] = m.Row1;
-            _matrix[1] = m.Row2;
-            _matrix[2] = m.Row3;
-            _matrix[3] = m.Row4;
+            _matrix[0] = m.Row1();
+            _matrix[1] = m.Row2();
+            _matrix[2] = m.Row3();
+            _matrix[3] = m.Row4();
             Result.Value = _matrix;
         }
 
-        private static Matrix GetSurfaceToWorldMatrix(float orientation, float radius, float longitude, float latitude)
+        private static Matrix4x4 GetSurfaceToWorldMatrix(float orientation, float radius, float longitude, float latitude)
         {
-            var surfaceToWorld = Matrix.Identity;
-            surfaceToWorld *= Matrix.RotationZ(orientation / 180 * MathF.PI);
-            surfaceToWorld *= Matrix.Translation(new SharpDX.Vector3(0, 0, radius));
-            surfaceToWorld *= Matrix.RotationX(-longitude / 180 * MathF.PI);
-            surfaceToWorld *= Matrix.RotationY(-latitude / 180 * MathF.PI);
+            var surfaceToWorld = Matrix4x4.Identity;
+            surfaceToWorld *= Matrix4x4.CreateRotationZ(orientation / 180 * MathF.PI);
+            surfaceToWorld *= Matrix4x4.CreateTranslation(new Vector3(0, 0, radius));
+            surfaceToWorld *= Matrix4x4.CreateRotationX(-longitude / 180 * MathF.PI);
+            surfaceToWorld *= Matrix4x4.CreateRotationY(-latitude / 180 * MathF.PI);
             return surfaceToWorld;
         }
 
-        private SharpDX.Vector4[] _matrix = new SharpDX.Vector4[4];
+        private Vector4[] _matrix = new Vector4[4];
 
-        private Vector3 T(Vector3 p, Matrix m)
+        private Vector3 T(Vector3 p, Matrix4x4 m)
         {
-            var pt = SharpDX.Vector4.Transform(new SharpDX.Vector4(p.X,p.Y,p.Z,1), m);
+            var pt = Vector4.Transform(new Vector4(p.X,p.Y,p.Z,1), m);
             return new Vector3(pt.X, pt.Y, pt.Z) / pt.W;
         }
         

@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using SharpDX;
 using T3.Core;
 using T3.Core.DataTypes;
@@ -25,14 +26,14 @@ namespace T3.Operators.Types.Id_c3d35057_2544_4b82_b2de_b70fe205662b
         {
             var shearing = Translation.GetValue(context);
             
-            Matrix m = Matrix.Identity;
+            Matrix4x4 m = Matrix4x4.Identity;
             
             m.M12=shearing.Y; 
             m.M21=shearing.X; 
             m.M14=shearing.Z; 
 
             var previousWorldTobject = context.ObjectToWorld;
-            context.ObjectToWorld = Matrix.Multiply(m, context.ObjectToWorld);
+            context.ObjectToWorld = Matrix4x4.Multiply(m, context.ObjectToWorld);
             Command.GetValue(context);
             context.ObjectToWorld = previousWorldTobject;
         }

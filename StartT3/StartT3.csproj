@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Editor\Editor.csproj" />
+    <ProjectReference Include="..\MsForms\MsForms.csproj" />
   </ItemGroup>
 
   <ItemGroup>

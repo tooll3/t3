@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core;
@@ -10,6 +11,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
@@ -37,21 +39,21 @@ namespace T3.Operators.Types.Id_9d6dbf28_9983_4584_abba_6281ce51d583
                 var pivot = Pivot.GetValue(context);
                 var rotation = Rotation.GetValue(context);
                 
-                float yaw = MathUtil.DegreesToRadians(rotation.Y);
-                float pitch = MathUtil.DegreesToRadians(rotation.X);
-                float roll = MathUtil.DegreesToRadians(rotation.Z);
+                float yaw = rotation.Y.ToRadians();
+                float pitch = rotation.X.ToRadians();
+                float roll = rotation.Z.ToRadians();
 
-                var rotationMatrix = Matrix.RotationYawPitchRoll(yaw, pitch, roll);
+                var rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(yaw, pitch, roll);
                 
                 //var offset = 
                 
                 var center = Center.GetValue(context);
                 //var centerRotated = SharpDX.Vector3.Transform(new SharpDX.Vector3(center.X, center.Y, center.Z), rotationMatrix);
-                var offset = new SharpDX.Vector3(stretch.X * scale * (pivot.X - 0.5f),
+                var offset = new Vector3(stretch.X * scale * (pivot.X - 0.5f),
                                                  stretch.Y * scale * (pivot.Y - 0.5f),
                                                  0);
 
-                var center2 = new SharpDX.Vector3(center.X, center.Y, center.Z);
+                var center2 = new Vector3(center.X, center.Y, center.Z);
 
                 var segments = Segments.GetValue(context);
                 var columns = segments.Width.Clamp(1, 10000) + 1;
@@ -74,9 +76,9 @@ namespace T3.Operators.Types.Id_9d6dbf28_9983_4584_abba_6281ce51d583
                 // var tangent = SharpDX.Vector3.Right;
                 // var binormal = SharpDX.Vector3.Up;
 
-                var normal = SharpDX.Vector3.TransformNormal(SharpDX.Vector3.ForwardLH, rotationMatrix);
-                var tangent = SharpDX.Vector3.TransformNormal(SharpDX.Vector3.Right, rotationMatrix);
-                var binormal = SharpDX.Vector3.TransformNormal(SharpDX.Vector3.Up, rotationMatrix);
+                var normal = Vector3.TransformNormal(VectorT3.ForwardLH, rotationMatrix);
+                var tangent = Vector3.TransformNormal(VectorT3.Right, rotationMatrix);
+                var binormal = Vector3.TransformNormal(VectorT3.Up, rotationMatrix);
 
                 // Initialize
                 for (int columnIndex = 0; columnIndex < columns; ++columnIndex)
@@ -95,15 +97,15 @@ namespace T3.Operators.Types.Id_9d6dbf28_9983_4584_abba_6281ce51d583
                         var faceIndex =  2 * (rowIndex + columnIndex * (rows-1));
                         
                         
-                        var p = new SharpDX.Vector3(columnFragment,
+                        var p = new Vector3(columnFragment,
                                                     rowFragment, 
                                                     0);
                         
                         var v0 = (rowIndex ) / ((float)rows-1);
-                        var uv0 = new SharpDX.Vector2(u0, v0);
+                        var uv0 = new Vector2(u0, v0);
                         _vertexBufferData[vertexIndex + 0] = new PbrVertex
                                                                  {
-                                                                     Position = SharpDX.Vector3.TransformNormal(p + offset, rotationMatrix) + center2,
+                                                                     Position = Vector3.TransformNormal(p + offset, rotationMatrix) + center2,
                                                                      Normal = normal,
                                                                      Tangent = tangent,
                                                                      Bitangent = binormal,
