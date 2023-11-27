@@ -62,7 +62,6 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 {
     float2 uv = psInput.texCoord;
     float4 c = inputTexture.SampleLevel(texSampler, uv, 0.0);
-    return c;
 
     float a = saturate(c.a);
     c.rgb = clamp(c.rgb, 0.000001, 1000);
