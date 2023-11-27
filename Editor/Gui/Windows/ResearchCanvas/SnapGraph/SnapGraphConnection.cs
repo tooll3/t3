@@ -18,6 +18,7 @@ public class SnapGraphConnection
     public int OutputLineIndex;
     public int VisibleOutputIndex; // Do we need that?
     public int ConnectionHash;
+    public int MultiInputIndex;
 
     public bool IsSnapped => Style < ConnectionStyles.BottomToTop;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using T3.Core.Operator;
+using T3.Core.Operator.Slots;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.UiModel;
 
@@ -80,29 +81,48 @@ public class SnapGraphLayout
             var visibleIndex = 0;
             
             // Collect inputs
-            for (var inputIndex = 0; inputIndex < item.Instance.Inputs.Count; inputIndex++)
+            for (var inputLineIndex = 0; inputLineIndex < item.Instance.Inputs.Count; inputLineIndex++)
             {
-                var input = item.Instance.Inputs[inputIndex];
+                var input = item.Instance.Inputs[inputLineIndex];
                 if (!item.SymbolUi.InputUis.TryGetValue(input.Id, out var inputUi)) //TODO: Log error?
                     continue;
-
-                // Todo: Add temp expanded inputs (e.g. while dragging + hovered)
-
-                if (inputIndex > 0 
+                
+                if (inputLineIndex > 0 
                     &&( !input.IsConnected
                     && inputUi.Relevancy is not (Relevancy.Relevant or Relevancy.Required))
                    )
                     continue;
 
 
-                inputLines.Add(new SnapGraphItem.InputLine
-                                   {
-                                       Input = input,
-                                       InputUi = inputUi,
-                                       IsPrimary = inputIndex == 0,
-                                       VisibleIndex = visibleIndex,
-                                   });
-                visibleIndex++;
+                if (input.IsMultiInput && input is IMultiInputSlot multiInputSlot)
+                {
+                    int multiInputIndex = 0;
+                    foreach (var i in multiInputSlot.GetCollectedInputs())
+                    {
+                        inputLines.Add(new SnapGraphItem.InputLine
+                                           {
+                                               Input = input,
+                                               InputUi = inputUi,
+                                               IsPrimary = inputLineIndex == 0,
+                                               VisibleIndex = visibleIndex,
+                                               MultiInputIndex =  multiInputIndex++,
+                                           });
+                        visibleIndex++;
+                    }
+                }
+                else
+                {
+                    inputLines.Add(new SnapGraphItem.InputLine
+                                       {
+                                           Input = input,
+                                           InputUi = inputUi,
+                                           IsPrimary = inputLineIndex == 0,
+                                           VisibleIndex = visibleIndex,
+                                       });
+                    visibleIndex++;
+                    
+                }
+                
             }
 
             // Collect outputs
@@ -163,10 +183,17 @@ public class SnapGraphLayout
 
             // Find connected index
             var inputIndex = 0;
-            foreach (var inputLine in targetItem.InputLines)
+            int multiInputIndex = 0;
+            for (var index = 0; index < targetItem.InputLines.Length; index++)
             {
-                if (inputLine.Input == input)
+                if (targetItem.InputLines[index].Input == input)
                 {
+                    while (targetItem.InputLines[index].Connection != null && index < targetItem.InputLines.Length)
+                    {
+                        index++;
+                        inputIndex++;
+                        multiInputIndex++;
+                    } 
                     break;
                 }
 
@@ -193,7 +220,9 @@ public class SnapGraphLayout
                                               InputLineIndex = inputIndex,
                                               OutputLineIndex = outputIndex,
                                               ConnectionHash = c.GetHashCode(),
+                                              MultiInputIndex = multiInputIndex,
                                           };
+            
             targetItem.InputLines[inputIndex].Connection = snapGraphConnection;
             sourceItem.OutputLines[outputIndex].Connections.Add(snapGraphConnection);
             SnapConnections.Add(snapGraphConnection);

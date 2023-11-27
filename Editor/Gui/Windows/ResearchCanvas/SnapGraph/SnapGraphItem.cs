@@ -45,6 +45,7 @@ public class SnapGraphItem : ISelectableCanvasObject
         public bool IsPrimary;
         public int VisibleIndex;
         public SnapGraphConnection Connection;
+        public int MultiInputIndex;
     }
 
     public struct OutputLine
