@@ -1160,6 +1160,17 @@ namespace T3.Editor.Gui.Graph
 
             while (true)
             {
+                if (sources.Count > 100)
+                {
+                    Log.Warning("Collecting input sources seems to have a cycle:");
+                    for (var index = 0; index < sources.Count; index++)
+                    {
+                        var s = sources[index];
+                        Log.Warning($"{index} : {s}");
+                    }
+
+                    break;
+                }
                 Symbol.Connection connection = null;
                 if (inputDef.IsMultiInput)
                 {

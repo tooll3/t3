@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.InputUi;
@@ -129,12 +130,13 @@ public class SnapGraphLayout
             for (var outputIndex = 0; outputIndex < item.Instance.Outputs.Count; outputIndex++)
             {
                 var output = item.Instance.Outputs[outputIndex];
-                if (!item.SymbolUi.OutputUis.TryGetValue(output.Id, out var outputUi)) //TODO: Log error?
+                if (!item.SymbolUi.OutputUis.TryGetValue(output.Id, out var outputUi))
+                {
+                    Log.Warning("Can't find outputUi:" + output.Id);
                     continue;
+                }
                 
-                if (outputIndex > 0 
-                    &&( !output.IsConnected)
-                   )
+                if (outputIndex > 0 && !output.IsConnected)
                     continue;
 
                 outputLines.Add(new SnapGraphItem.OutputLine

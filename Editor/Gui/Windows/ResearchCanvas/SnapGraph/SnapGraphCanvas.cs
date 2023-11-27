@@ -88,13 +88,32 @@ public class SnapGraphCanvas : ScalableCanvas
                              item.SymbolChild.ReadableName);
 
             // Draw input labels
-            for (var inputIndex = 1; inputIndex < item.InputLines.Length; inputIndex++)
+            int inputIndex;
+            for (inputIndex = 1; inputIndex < item.InputLines.Length; inputIndex++)
             {
                 var input = item.InputLines[inputIndex];
                 drawList.AddText(Fonts.FontSmall, 10 * canvasScale,
                                  pMin + new Vector2(4, 3) * canvasScale + new Vector2(0, gridSizeOnScreen.Y * (inputIndex)),
                                  labelColor.Fade(0.7f),
                                  input.Input.Input.Name);
+            }
+            
+            for (var outputIndex = 1; outputIndex < item.OutputLines.Length; outputIndex++)
+            {
+                var outputLine = item.OutputLines[outputIndex];
+                
+                ImGui.PushFont(Fonts.FontSmall);
+                var outputDefinitionName = outputLine.OutputUi.OutputDefinition.Name;
+                var outputLabelSize = ImGui.CalcTextSize(outputDefinitionName);
+                ImGui.PopFont();
+
+                drawList.AddText(Fonts.FontSmall, 10 * canvasScale,
+                                 pMin 
+                                 + new Vector2(-4, 3) * canvasScale 
+                                 + new Vector2(0, gridSizeOnScreen.Y * (outputIndex + inputIndex -1)) 
+                                 + new Vector2(SnapGraphItem.Width * canvasScale - outputLabelSize.X * 10f/Fonts.FontSmall.FontSize * canvasScale ,0),
+                                 labelColor.Fade(0.7f),
+                                 outputDefinitionName);
             }
 
             // Draw sockets
