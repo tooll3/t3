@@ -198,7 +198,7 @@
       }
     },
     {
-      "ChildId": "4d78fe58-f16f-4921-bfc2-67138ae5fd47"/*BoundingBox*/,
+      "ChildId": "4d78fe58-f16f-4921-bfc2-67138ae5fd47"/*DrawBoxGizmo*/,
       "Position": {
         "X": 3166.2754,
         "Y": 0.66803193
@@ -582,7 +582,7 @@
       }
     },
     {
-      "ChildId": "8633b628-195b-4bd9-80de-1a439799eae2"/*BoundingBox*/,
+      "ChildId": "8633b628-195b-4bd9-80de-1a439799eae2"/*DrawBoxGizmo*/,
       "Position": {
         "X": 913.65356,
         "Y": 1500.171

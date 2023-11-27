@@ -13,6 +13,7 @@ cbuffer Params : register(b0)
     float Time;
 
     float OrientTowardsVelocity;
+    float RadiusFromW;
 }
 
 
@@ -69,6 +70,7 @@ void main(uint3 i : SV_DispatchThreadID)
         Particles[gi].p = EmitPoints[addIndex];
         Particles[gi].birthTime = Time;
         Particles[gi].velocity = rotate_vector(float3(0,0,1), normalize(Particles[gi].p.rotation)) * InitialVelocity;
+        Particles[gi].radius = Particles[gi].p.w * RadiusFromW;
     }
 
     if(Particles[gi].birthTime == NAN)

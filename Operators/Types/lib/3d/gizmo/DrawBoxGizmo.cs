@@ -6,7 +6,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_9123651a_5df8_4f85_9e14_2068f33e2ff1
 {
-    public class BoundingBox : Instance<BoundingBox>
+    public class DrawBoxGizmo : Instance<DrawBoxGizmo>
     {
         [Output(Guid = "9e1e233f-bd4a-461b-983d-90a4d88ef286")]
         public readonly Slot<Command> Output = new Slot<Command>();

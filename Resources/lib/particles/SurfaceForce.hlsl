@@ -53,7 +53,7 @@ void main(uint3 i : SV_DispatchThreadID)
     float3 pos = Particles[gi].p.position;
     float4 rot = Particles[gi].p.rotation;
     float3 velocity = Particles[gi].velocity;
-    float r = Particles[gi].p.w;    
+    float r = Particles[gi].radius;    
 
     float3 posInVolume = mul(float4(pos, 1), TransformVolume).xyz;
     float3 posInVolumeNext = mul(float4(pos + velocity * SpeedFactor * 0.01 * 2, 1), TransformVolume).xyz;

@@ -1,8 +1,10 @@
 using System;
 using System.Numerics;
 using ImGuiNET;
+using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
+using T3.Core.Resource;
 using T3.Editor.Gui.Graph.Rendering;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.OutputUi;
@@ -65,6 +67,7 @@ namespace T3.Editor.Gui.Windows
             ImGui.SetCursorScreenPos(topLeftOnScreen);
 
             var sizeOnScreen = ImageOutputCanvas.Current.TransformDirection(size);
+
             var srv = SrvManager.GetSrvForTexture(texture);
             ImGui.Image((IntPtr)srv, sizeOnScreen);
 
@@ -74,7 +77,6 @@ namespace T3.Editor.Gui.Windows
                 T3.Core.IO.MouseInput.Set(relativePosition, ImGui.IsMouseDown(ImGuiMouseButton.Left));
             }
             
-
             if (UserSettings.Config.ShowToolbar)
             {
                 var format = "";

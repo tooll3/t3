@@ -24,7 +24,7 @@ namespace T3.Editor.Gui.Templates
             }
 
             var defaultComposition = GraphWindow.GetMainComposition();
-            if (!SymbolUiRegistry.Entries.TryGetValue(defaultComposition.Symbol.Id, out var compositionSymbolUi))
+            if (defaultComposition == null || !SymbolUiRegistry.Entries.TryGetValue(defaultComposition.Symbol.Id, out var compositionSymbolUi))
             {
                 Log.Warning("Can't find default op");
                 return;

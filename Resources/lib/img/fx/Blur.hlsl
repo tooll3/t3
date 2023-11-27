@@ -69,7 +69,7 @@ float4 psMain(vsOutput input) : SV_TARGET
     c.rgb = c/totalWeight*Glow2 + Offset;
     c.a = clamp(c.a/totalWeight, 0,1);
     //c.ra=1;
-    return clamp(c,0,1000);
+    return  c;//clamp(c,0,1000);
 }
 
 

@@ -244,7 +244,7 @@
       }
     },
     {
-      "ChildId": "95bfe2b5-0e1d-4d82-85a2-bc86324b693c"/*BoundingBox*/,
+      "ChildId": "95bfe2b5-0e1d-4d82-85a2-bc86324b693c"/*DrawBoxGizmo*/,
       "Position": {
         "X": 512.9405,
         "Y": 1420.083
@@ -293,7 +293,7 @@
       }
     },
     {
-      "ChildId": "fa1e7350-b2e0-410d-9fc4-b3a5d1468828"/*BoundingBox*/,
+      "ChildId": "fa1e7350-b2e0-410d-9fc4-b3a5d1468828"/*DrawBoxGizmo*/,
       "Position": {
         "X": 415.18497,
         "Y": 1765.167
@@ -321,20 +321,6 @@
       }
     },
     {
-      "ChildId": "c95a1f76-bc14-4634-ac9f-93d24bf4dd0d"/*BoundingSphere*/,
-      "Position": {
-        "X": 415.18497,
-        "Y": 1722.167
-      }
-    },
-    {
-      "ChildId": "c7a2c84f-a7be-4d28-a1bb-d7437567d23a"/*BoundingSphere*/,
-      "Position": {
-        "X": 512.9405,
-        "Y": 1463.083
-      }
-    },
-    {
       "ChildId": "b4f6b32b-aaeb-4626-8432-0c3b040a2744"/*TransformMatrix*/,
       "Position": {
         "X": -450.23468,
@@ -353,6 +339,20 @@
       "Position": {
         "X": -343.41327,
         "Y": 2076.866
+      }
+    },
+    {
+      "ChildId": "fa96f122-8ae8-44a7-ad9b-8396131c03a1"/*DrawSphereGizmo*/,
+      "Position": {
+        "X": 519.003,
+        "Y": 1523.6938
+      }
+    },
+    {
+      "ChildId": "5759825d-d2de-4bfd-89dd-2a3eba5b0a33"/*DrawSphereGizmo*/,
+      "Position": {
+        "X": 466.9438,
+        "Y": 1621.1049
       }
     }
   ],

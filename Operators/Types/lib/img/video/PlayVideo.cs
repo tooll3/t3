@@ -347,13 +347,23 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 _hasUpdatedTexture = false;
                 return;
             }
-                
-            _engine.TransferVideoFrame(
-                                       _texture,
-                                       ToVideoRect(default),
-                                       //new RawRectangle(0, 0, renderTarget.ViewWidth, renderTarget.ViewHeight),
-                                       new RawRectangle(0, 0, _textureSize.Width, _textureSize.Height),
-                                       ToRawColorBgra(default));
+
+            try
+            {
+
+                _engine.TransferVideoFrame(
+                                           _texture,
+                                           ToVideoRect(default),
+                                           //new RawRectangle(0, 0, renderTarget.ViewWidth, renderTarget.ViewHeight),
+                                           new RawRectangle(0, 0, _textureSize.Width, _textureSize.Height),
+                                           ToRawColorBgra(default));
+            }
+            catch (Exception e)
+            {
+                Log.Warning("Using video texture image failed: " + e.Message, SymbolChildId);
+                _hasUpdatedTexture = false;
+                return;
+            }
 
             _lastStreamTick = presentationTimeTicks;
             Texture.Value = _texture;

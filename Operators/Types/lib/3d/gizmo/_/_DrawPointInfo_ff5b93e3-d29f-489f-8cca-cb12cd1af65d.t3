@@ -1,7 +1,7 @@
 {
   "Name": "_DrawPointInfo",
   "Id": "ff5b93e3-d29f-489f-8cca-cb12cd1af65d",
-  "Namespace": "lib.3d.gizmo",
+  "Namespace": "lib.3d.gizmo._",
   "Inputs": [
     {
       "Id": "44e119a8-2aa5-47b1-808c-2b207d74a0b4"/*Points*/,

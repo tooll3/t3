@@ -140,7 +140,7 @@
       }
     },
     {
-      "ChildId": "08378a64-3e07-4f19-8929-14d5ed461c8a"/*SphereGizmo*/,
+      "ChildId": "08378a64-3e07-4f19-8929-14d5ed461c8a"/*DrawSphereGizmo*/,
       "Position": {
         "X": 168.69423,
         "Y": 2441.2007
@@ -182,7 +182,7 @@
       }
     },
     {
-      "ChildId": "9547d368-1746-423d-bb7d-f3506581e58a"/*SphereGizmo*/,
+      "ChildId": "9547d368-1746-423d-bb7d-f3506581e58a"/*DrawSphereGizmo*/,
       "Position": {
         "X": 168.69423,
         "Y": 2484.2007
@@ -208,7 +208,7 @@
       }
     },
     {
-      "ChildId": "37c0f65e-4d64-44c2-acff-3cfa618facc8"/*SphereGizmo*/,
+      "ChildId": "37c0f65e-4d64-44c2-acff-3cfa618facc8"/*DrawSphereGizmo*/,
       "Position": {
         "X": 166.15686,
         "Y": 2561.4072

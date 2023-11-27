@@ -266,7 +266,7 @@
       }
     },
     {
-      "ChildId": "dddecb5b-0355-4058-8690-04d4cd26623b"/*BoundingBox*/,
+      "ChildId": "dddecb5b-0355-4058-8690-04d4cd26623b"/*DrawBoxGizmo*/,
       "Position": {
         "X": 557.28064,
         "Y": 2534.5527
@@ -301,7 +301,7 @@
       }
     },
     {
-      "ChildId": "dfb513d5-31f9-45df-85e2-157e13369d65"/*SphereGizmo*/,
+      "ChildId": "dfb513d5-31f9-45df-85e2-157e13369d65"/*DrawSphereGizmo*/,
       "Position": {
         "X": 557.28064,
         "Y": 2478.5527

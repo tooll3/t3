@@ -327,7 +327,7 @@
       "Outputs": []
     },
     {
-      "Id": "05b77a09-0fb2-4f24-bec9-5050c41e1448"/*BoundingBox*/,
+      "Id": "05b77a09-0fb2-4f24-bec9-5050c41e1448"/*DrawBoxGizmo*/,
       "SymbolId": "9123651a-5df8-4f85-9e14-2068f33e2ff1",
       "InputValues": [],
       "Outputs": []

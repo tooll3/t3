@@ -17,13 +17,21 @@ namespace T3.Editor.Gui.Audio
 
         public string GenerateSoundSpectrumAndVolume()
         {
-            if (String.IsNullOrEmpty(_soundFilePath) || !File.Exists(_soundFilePath))
-                return null;
-
-            if (File.Exists(ImageFilePath))
+            try
             {
-                Log.Debug($"Reusing sound image file: {ImageFilePath}");
-                return ImageFilePath;
+                if (string.IsNullOrEmpty(_soundFilePath) || !File.Exists(_soundFilePath))
+                    return null;
+
+                if (File.Exists(ImageFilePath))
+                {
+                    Log.Debug($"Reusing sound image file: {ImageFilePath}");
+                    return ImageFilePath;
+                }
+            }
+            catch(Exception e)
+            {
+                Log.Warning($"Failed to generated image for soundtrack {_soundFilePath}: " + e.Message);
+                return null;
             }
 
             Log.Debug($"Generating {ImageFilePath}...");

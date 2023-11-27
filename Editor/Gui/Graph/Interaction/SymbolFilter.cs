@@ -40,7 +40,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         //public List<Variation> MatchingPresets { get; } = new();
         public SymbolVariationPool PresetPool { get; private set; }
         
-        public void UpdateIfNecessary(bool forceUpdate = false)
+        public void UpdateIfNecessary(bool forceUpdate = false, int limit=30)
         {
             _needsUpdate |= forceUpdate;
             _needsUpdate |= UpdateFilters(SearchString, 
@@ -52,7 +52,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             if (_needsUpdate)
             {
                 //UpdateConnectSlotHashes();
-                UpdateMatchingSymbols();
+                UpdateMatchingSymbols(limit);
 
             }
 
@@ -120,7 +120,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         }
 
         
-        private void UpdateMatchingSymbols()
+        private void UpdateMatchingSymbols(int limit)
         {
             var composition = NodeSelection.GetSelectedComposition();
             var parentSymbolIds = composition != null
@@ -130,13 +130,21 @@ namespace T3.Editor.Gui.Graph.Interaction
             MatchingSymbolUis.Clear();
             foreach (var symbolUi in SymbolUiRegistry.Entries.Values)
             {
+                var symbolUiSymbol = symbolUi.Symbol;
+                
+                if (symbolUiSymbol == null)
+                {
+                    Log.Warning($"Skipping SymbolUi definition with inconsistent symbol...");
+                    continue;
+                }
+                
                 // Prevent graph cycles
-                if (parentSymbolIds.Contains(symbolUi.Symbol.Id))
+                if (parentSymbolIds.Contains(symbolUiSymbol.Id))
                     continue;
 
                 if (_inputType != null)
                 {
-                    var matchingInputDef = symbolUi.Symbol.GetInputMatchingType(FilterInputType);
+                    var matchingInputDef = symbolUiSymbol.GetInputMatchingType(FilterInputType);
                     if (matchingInputDef == null)
                         continue;
 
@@ -146,13 +154,13 @@ namespace T3.Editor.Gui.Graph.Interaction
 
                 if (_outputType != null)
                 {
-                    var matchingOutputDef = symbolUi.Symbol.GetOutputMatchingType(FilterOutputType);
+                    var matchingOutputDef = symbolUiSymbol.GetOutputMatchingType(FilterOutputType);
                     if (matchingOutputDef == null)
                         continue;
                 }
 
-                if (!(_currentRegex.IsMatch(symbolUi.Symbol.Name)
-                      || symbolUi.Symbol.Namespace.Contains(_symbolFilterString, StringComparison.InvariantCultureIgnoreCase)
+                if (!(_currentRegex.IsMatch(symbolUiSymbol.Name)
+                      || symbolUiSymbol.Namespace.Contains(_symbolFilterString, StringComparison.InvariantCultureIgnoreCase)
                       || (!string.IsNullOrEmpty(symbolUi.Description)
                           && symbolUi.Description.Contains(_symbolFilterString, StringComparison.InvariantCultureIgnoreCase))))
                     continue;
@@ -162,7 +170,7 @@ namespace T3.Editor.Gui.Graph.Interaction
 
             MatchingSymbolUis = MatchingSymbolUis.OrderBy(s => ComputeRelevancy(s, _symbolFilterString, ""))
                                                  .Reverse()
-                                                 .Take(30)
+                                                 .Take(limit)
                                                  .ToList();
         }
 

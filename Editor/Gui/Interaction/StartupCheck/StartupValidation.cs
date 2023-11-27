@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using T3.Core.Logging;
 using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.SystemUi;
 using T3.SystemUi;
@@ -70,7 +72,14 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     url = url.Replace("&", "^&");
-                    Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                    try
+                    {
+                        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Warning($"Failed to open URL {url} " + e.Message);
+                    }
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
@@ -141,6 +150,56 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                 EditorUi.Instance.ExitThread();
                 return false;
             }
+        }
+
+        public static void ValidateNotRunningFromSystemFolder()
+        {
+            var currentDir = Directory.GetCurrentDirectory();
+            var specialFolders = new[]
+                                     {
+                                         Environment.SpecialFolder.ProgramFilesX86,
+                                         Environment.SpecialFolder.ProgramFiles,
+                                         Environment.SpecialFolder.System,
+                                         Environment.SpecialFolder.Windows,
+                                     };
+            
+            foreach (var p in specialFolders)
+            {
+                var folderPath = Environment.GetFolderPath(p);
+                if (currentDir.IndexOf(folderPath, StringComparison.OrdinalIgnoreCase) < 0)
+                    continue;
+
+                EditorUi.Instance
+                        .ShowMessageBox($"Tooll can't be started from {folderPath}",
+                                        @"Error", PopUpButtons.Ok);
+                EditorUi.Instance.ExitApplication();
+            }
+            
+            // Not writeable
+            var directoryInfo = new DirectoryInfo(currentDir);
+            if (!directoryInfo.Attributes.HasFlag(FileAttributes.ReadOnly))
+                return;
+            
+            EditorUi.Instance
+                    .ShowMessageBox($"Can't write to current working directory: {currentDir}.",
+                                    @"Error", PopUpButtons.Ok);
+            EditorUi.Instance.ExitApplication();
+        }
+
+        /// <summary>
+        /// Validate that operators.dll has been updated to warn users if they started "T3Editor.exe"
+        /// </summary>
+        public static void ValidateCurrentStandAloneExecutable()
+        {
+            var fiveMinutes = new TimeSpan(0, 2, 0);
+            const string operatorFilePath = "Operators.dll";
+            if (File.Exists(operatorFilePath) && (DateTime.Now - File.GetLastWriteTime(operatorFilePath)) <= fiveMinutes)
+                return;
+            
+            EditorUi.Instance
+                    .ShowMessageBox($"Operators.dll is outdated.\nPlease use StartT3.exe to run Tooll.",
+                                    @"Error", PopUpButtons.Ok);
+            EditorUi.Instance.ExitApplication();
         }
     }
 }

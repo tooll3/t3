@@ -1237,13 +1237,13 @@ namespace T3.Editor.Gui.Graph
             
             return outputSlot switch
                        {
-                           InputSlot<float> f    => $"{f.TypedInputValue.Value:0.000}",
-                           InputSlot<int> i      => $"{i.TypedInputValue.Value:G3}",
-                           InputSlot<Int3> i     => $"{i.TypedInputValue.Value:G3}",
-                           InputSlot<bool> b     => $"{b.TypedInputValue.Value}",
-                           InputSlot<Vector3> v3 => $"{v3.TypedInputValue.Value:0.0}",
-                           InputSlot<Vector2> v2 => $"{v2.TypedInputValue.Value:0.0}",
-                           InputSlot<string> s   => Truncate(s.TypedInputValue.Value),
+                           InputSlot<float> f    => $"{f.GetCurrentValue():0.000}",
+                           InputSlot<int> i      => $"{i.GetCurrentValue():G3}",
+                           InputSlot<Int3> i     => $"{i.GetCurrentValue():G3}",
+                           InputSlot<bool> b     => $"{b.GetCurrentValue()}",
+                           InputSlot<Vector3> v3 => $"{v3.GetCurrentValue():0.0}",
+                           InputSlot<Vector2> v2 => $"{v2.GetCurrentValue():0.0}",
+                           InputSlot<string> s   => Truncate(s.GetCurrentValue()),
                            _                     => ""
                        };
         }

@@ -115,13 +115,13 @@ float4 hash41u( uint x )
     return float4(i4)*(1.0/float(0xffffffffU));
 }
 
-float4 hash11u( uint x )
+float hash11u( uint x )
 {
     const uint k = 1103515245U;  // GLIB C
     x = ((x>>8U)^x)*k;
     x = ((x>>8U)^x)*k;
     
-    return float1(x)*(1.0/float(0xffffffffU));
+    return float(x)*(1.0/float(0xffffffffU));
 }
 
 //----------------------------------------------------------------------------------------

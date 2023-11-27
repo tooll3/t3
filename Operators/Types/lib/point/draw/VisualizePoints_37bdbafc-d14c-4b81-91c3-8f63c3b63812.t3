@@ -1,7 +1,7 @@
 {
   "Name": "VisualizePoints",
   "Id": "37bdbafc-d14c-4b81-91c3-8f63c3b63812",
-  "Namespace": "lib.3d.gizmo",
+  "Namespace": "lib.point.draw",
   "Inputs": [
     {
       "Id": "54fc4cd7-dfc3-4690-9fd1-2b555f7656d4"/*Points*/,

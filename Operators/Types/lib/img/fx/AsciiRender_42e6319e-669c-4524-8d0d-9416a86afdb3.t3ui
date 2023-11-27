@@ -88,6 +88,13 @@
         "X": -51.309982,
         "Y": 1282.891
       }
+    },
+    {
+      "InputId": "03d335bb-e4c6-4154-a53b-ab1af64e301f"/*GenerateMips*/,
+      "Position": {
+        "X": -51.309982,
+        "Y": 1327.891
+      }
     }
   ],
   "SymbolChildUis": [

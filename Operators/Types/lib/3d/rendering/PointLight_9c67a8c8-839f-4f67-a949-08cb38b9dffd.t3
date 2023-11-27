@@ -106,7 +106,7 @@
       "Outputs": []
     },
     {
-      "Id": "2ab03a47-57e2-44be-88f5-70ee7b3f3df0"/*SphereGizmo*/,
+      "Id": "2ab03a47-57e2-44be-88f5-70ee7b3f3df0"/*DrawSphereGizmo*/,
       "SymbolId": "1998f949-5c0a-4f39-82cf-b0bda31f7f21",
       "InputValues": [
         {

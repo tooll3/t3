@@ -220,7 +220,7 @@ namespace T3.Editor.UiModel
 
                 return new Vector2(maxX + 100, (maxY + minY) / 2);
             }
-            Log.Warning("Assuming default output position");
+            //Log.Warning("Assuming default output position");
             return new Vector2(300, 200);
         }
 
@@ -235,8 +235,8 @@ namespace T3.Editor.UiModel
 
             foreach (var inputDef in symbolUi.Symbol.InputDefinitions)
             {
-                if (symbolUi.InputUis.ContainsKey(inputDef.Id))
-                    lastInputUi = symbolUi.InputUis[inputDef.Id];
+                if (symbolUi.InputUis.TryGetValue(inputDef.Id, out var ui))
+                    lastInputUi = ui;
             }
 
             if (lastInputUi == null)

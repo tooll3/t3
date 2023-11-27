@@ -3,12 +3,14 @@ using System.Linq;
 using System.Numerics;
 using T3.Editor.Gui.Graph;
 using ImGuiNET;
+using T3.Core.Logging;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Exploration;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.Gui.Windows.RenderExport;
 using T3.Editor.Gui.Windows.Variations;
+using T3.Editor.SystemUi;
 
 namespace T3.Editor.Gui.Windows.Layouts
 {
@@ -71,9 +73,50 @@ namespace T3.Editor.Gui.Windows.Layouts
 
         public static void DrawWindowMenuContent()
         {
+            if (_windows == null)
+            {
+                Log.Warning("Can't draw window list before initialization");
+                return;
+            }
+            
             foreach (var window in _windows)
             {
                 window.DrawMenuItemToggle();
+            }
+
+            ImGui.Separator();
+            
+            if (ImGui.MenuItem("2nd Render Window", "", ShowSecondaryRenderWindow))
+                ShowSecondaryRenderWindow = !ShowSecondaryRenderWindow;
+            
+            if(ImGui.BeginMenu("2nd Render Window Fullscreen On"))
+            {
+                for (var index = 0; index < EditorUi.AllScreens.Length; index++)
+                {
+                    var screen = EditorUi.AllScreens.ElementAt(index);
+                    var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
+                                $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
+                    if(ImGui.MenuItem(label, "", index ==  UserSettings.Config.FullScreenIndexViewer)) 
+                    {
+                        UserSettings.Config.FullScreenIndexViewer = index;
+                    }
+                }
+                ImGui.EndMenu();
+            }
+            
+            if (ImGui.BeginMenu("Editor Window Fullscreen On"))
+            {
+                for (var index = 0; index < EditorUi.AllScreens.Length; index++)
+                {
+                    var screen = EditorUi.AllScreens.ElementAt(index);
+                    var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
+                                $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
+                    if(ImGui.MenuItem(label, "", index ==  UserSettings.Config.FullScreenIndexMain)) 
+                    {
+                        UserSettings.Config.FullScreenIndexMain = index;
+                    }
+                }
+                ImGui.EndMenu();
             }
             ImGui.Separator();
             
@@ -87,14 +130,6 @@ namespace T3.Editor.Gui.Windows.Layouts
                 
                 ImGui.EndMenu();
             }
-            //ImGui.EndMenu();
-            
-            ImGui.Separator();
-            
-            
-            if (ImGui.MenuItem("2nd Render Window", "", ShowSecondaryRenderWindow))
-                ShowSecondaryRenderWindow = !ShowSecondaryRenderWindow;
-            
             ImGui.Separator();
 
             LayoutHandling.DrawMainMenuItems();

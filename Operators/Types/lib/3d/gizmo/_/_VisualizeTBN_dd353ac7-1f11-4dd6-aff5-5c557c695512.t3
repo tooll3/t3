@@ -1,7 +1,7 @@
 {
   "Name": "_VisualizeTBN",
   "Id": "dd353ac7-1f11-4dd6-aff5-5c557c695512",
-  "Namespace": "lib.3d.gizmo",
+  "Namespace": "lib.3d.gizmo._",
   "Inputs": [
     {
       "Id": "c1f85fa0-c66c-4c7b-b58f-3f9c6375fa3f"/*Mesh*/,

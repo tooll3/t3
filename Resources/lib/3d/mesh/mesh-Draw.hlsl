@@ -56,7 +56,7 @@ struct psInput
 
 sampler texSampler : register(s0);
 sampler clampedSampler : register(s1);
-sampler biasedSampler : register(s2);
+
 
 StructuredBuffer<PbrVertex> PbrVertices : register(t0);
 StructuredBuffer<int3> FaceIndices : register(t1);
@@ -118,7 +118,7 @@ float4 psMain(psInput pin) : SV_TARGET
         discard;
     }
 
-    float4 roughnessMetallicOcclusion = RSMOMap.Sample(biasedSampler, pin.texCoord);
+    float4 roughnessMetallicOcclusion = RSMOMap.Sample(texSampler, pin.texCoord);
     float roughness = saturate(roughnessMetallicOcclusion.x + Roughness);
     float metalness = saturate(roughnessMetallicOcclusion.y + Metal);
     float occlusion = roughnessMetallicOcclusion.z;
@@ -128,16 +128,18 @@ float4 psMain(psInput pin) : SV_TARGET
     float3 Lo = normalize(eyePosition.xyz - pin.worldPosition);
 
     // Get current fragment's normal and transform to world space.
-    float4 normalMap = NormalMap.Sample(biasedSampler, pin.texCoord);
+    float4 normalMap = NormalMap.Sample(texSampler, pin.texCoord);
     
     float3 N = normalize(2.0 * normalMap.rgb - 1.0);
     N = normalize(mul(N, pin.tbnToWorld));
 
+
     // Angle between surface normal and outgoing light direction.
-    float cosLo = max(0.0, dot(N, Lo));
+    float cosLo = abs( dot(N, Lo));
 
     // Specular reflection vector.
     float3 Lr = 2.0 * cosLo * N - Lo;
+    //return float4(Lr.xyz,1);
 
     // Fresnel reflectance at normal incidence (for metals use albedo color).
     float3 F0 = lerp(Fdielectric, albedo, metalness);

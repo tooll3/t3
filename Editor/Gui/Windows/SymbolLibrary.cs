@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
+using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Styling;
@@ -32,12 +33,12 @@ namespace T3.Editor.Gui.Windows
             
             ImGui.PushStyleVar(ImGuiStyleVar.IndentSpacing, 10);
 
-            if (_listUsagesFilter != null)
+            if (_symbolUsageReference != null)
             {
-                ImGui.Text("Usages of " + _listUsagesFilter.Name + ":");
+                ImGui.Text("Usages of " + _symbolUsageReference.Name + ":");
                 if (ImGui.Button("Clear"))
                 {
-                    _listUsagesFilter = null;
+                    _symbolUsageReference = null;
                 }
                 else
                 {
@@ -45,7 +46,7 @@ namespace T3.Editor.Gui.Windows
 
                     ImGui.BeginChild("scrolling");
                     {
-                        if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(_listUsagesFilter.Id, out var info))
+                        if (SymbolAnalysis.DetailsInitialized && SymbolAnalysis.InformationForSymbolIds.TryGetValue(_symbolUsageReference.Id, out var info))
                         {
                             foreach (var s in info.DependingSymbolIds)
                             {
@@ -59,7 +60,7 @@ namespace T3.Editor.Gui.Windows
             }
             else
             {
-                DrawSymbolTree();
+                DrawSymbols();
             }
             
             ImGui.PopStyleVar(1);
@@ -70,7 +71,7 @@ namespace T3.Editor.Gui.Windows
             }
         }
 
-        private void DrawSymbolTree()
+        private void DrawSymbols()
         {
             //ImGui.SetNextWindowSize(new Vector2(500, 400), ImGuiCond.FirstUseEver);
 
@@ -90,9 +91,14 @@ namespace T3.Editor.Gui.Windows
 
             ImGui.BeginChild("scrolling");
             {
-                if (string.IsNullOrEmpty(_filter.SearchString))
+                var completeTree = string.IsNullOrEmpty(_filter.SearchString);
+                if (completeTree)
                 {
                     DrawNode(_treeNode);
+                }
+                else if(_filter.SearchString.Contains("?"))
+                {
+                    DrawRandomPromptList();
                 }
                 else
                 {
@@ -108,6 +114,65 @@ namespace T3.Editor.Gui.Windows
             foreach (var symbolUi in _filter.MatchingSymbolUis)
             {
                 SymbolTreeMenu.DrawSymbolItem(symbolUi.Symbol);
+            }
+        }
+
+        private int _randomSeed;
+        private List<Symbol> _allLibSymbols;
+        private float _promptComplexity= 0.25f;
+        
+        private void DrawRandomPromptList()
+        {
+            
+            ImGui.Indent();
+            FormInputs.AddSectionHeader("Random Prompts");
+
+            var listNeedsUpdate = _allLibSymbols == null;
+            
+            //ImGui.AlignTextToFramePadding();f
+            FormInputs.SetIndent(80 * T3Ui.UiScaleFactor);
+            //listNeedsUpdate |= ImGui.InputInt("## seed", ref _randomSeed);
+            FormInputs.AddInt("Seed", ref _randomSeed);
+            listNeedsUpdate |= FormInputs.AddFloat("Complexity", ref _promptComplexity, 0, 1,0.02f,true);
+            FormInputs.SetIndentToLeft();
+            
+            FormInputs.AddVerticalSpace();
+            
+            // Rebuild list if necessary
+            if (listNeedsUpdate)
+            {
+                // Count all lib ops
+                if (_allLibSymbols == null)
+                {
+                    _allLibSymbols = new List<Symbol>();
+                    foreach (var s in SymbolRegistry.Entries.Values)
+                    {
+                        if(s.Namespace.StartsWith("lib.") && !s.Name.StartsWith("_"))
+                            _allLibSymbols.Add(s);
+                    }
+                }
+                
+                // Filter 
+                var limit = (int)(_allLibSymbols.Count * _promptComplexity).Clamp(1, _allLibSymbols.Count-1);
+                var keep = _filter.SearchString;
+                _filter.SearchString = "lib.";
+                _filter.UpdateIfNecessary(true, limit);
+                _filter.SearchString = keep;
+            }
+            
+            var relevantCount = _filter.MatchingSymbolUis.Count;
+            
+            if (_randomSeed == 0)
+            {
+                _randomSeed = (int)(ImGui.GetFrameCount() * 374761393U & 1023U);
+            }
+            
+            var promptCount = _filter.SearchString.Count(c => c == '?');
+            for (uint i = 0; i < promptCount; i++)
+            {
+                var f = MathUtils.Hash01((uint)((i + 42 * _randomSeed * 668265263U) & 0x7fffffff ));
+                var randomIndex = (int)(f * relevantCount).Clamp(0, relevantCount-1);
+                SymbolTreeMenu.DrawSymbolItem(_filter.MatchingSymbolUis[randomIndex].Symbol);
             }
         }
 
@@ -232,6 +297,6 @@ namespace T3.Editor.Gui.Windows
         private readonly NamespaceTreeNode _treeNode = new(NamespaceTreeNode.RootNodeId);
         private readonly SymbolFilter _filter = new();
         private static readonly RenameNamespaceDialog _renameNamespaceDialog = new();
-        public static Symbol _listUsagesFilter;
+        public static Symbol _symbolUsageReference;
     }
 }

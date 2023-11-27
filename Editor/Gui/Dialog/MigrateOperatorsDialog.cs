@@ -234,7 +234,7 @@ namespace T3.Editor.Gui.Dialog
                 foreach (var fileList in new[] { allRemoteT3Files, allRemoteT3UiFiles })
                 {
                     var otherFile =
-                        fileList.SingleOrDefault(f =>
+                        fileList.FirstOrDefault(f =>
                                                      Regex.IsMatch(f,
                                                                    item.Title +
                                                                    @"_[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\."));

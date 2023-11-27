@@ -95,7 +95,7 @@ namespace T3.Editor.Gui.UiHelpers
                     ListSymbolSetWithTooltip("  (needs {0}/", "  (", info.RequiredSymbolIds);
                     if (ListSymbolSetWithTooltip("used by {0})  ", "NOT USED)  ", info.DependingSymbolIds))
                     {
-                        SymbolLibrary._listUsagesFilter = symbol;
+                        SymbolLibrary._symbolUsageReference = symbol;
                     }
 
                     ImGui.PopStyleColor();

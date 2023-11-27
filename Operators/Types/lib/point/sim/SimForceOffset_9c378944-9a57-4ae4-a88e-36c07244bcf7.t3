@@ -124,7 +124,7 @@
       "Outputs": []
     },
     {
-      "Id": "62af7013-2150-4f11-b4b8-0d667125dcf9"/*SphereGizmo*/,
+      "Id": "62af7013-2150-4f11-b4b8-0d667125dcf9"/*DrawSphereGizmo*/,
       "SymbolId": "1998f949-5c0a-4f39-82cf-b0bda31f7f21",
       "InputValues": [
         {

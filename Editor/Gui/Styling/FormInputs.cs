@@ -473,7 +473,8 @@ namespace T3.Editor.Gui.Styling
             var sizeForResetToDefault = hasReset ? toolWidth : 0;
             var sizeForTooltip = !string.IsNullOrEmpty(tooltip) ? toolWidth : 0;
 
-            var availableWidth = fillWidth ? ImGui.GetContentRegionAvail().X * _widthRatio : 200;
+            var requestedWidth = fillWidth ? ImGui.GetContentRegionAvail().X * _widthRatio : 200;
+            var availableWidth = MathF.Min(requestedWidth, ImGui.GetContentRegionAvail().X + 20);
 
             var vector2 = new Vector2(availableWidth
                                       - 20

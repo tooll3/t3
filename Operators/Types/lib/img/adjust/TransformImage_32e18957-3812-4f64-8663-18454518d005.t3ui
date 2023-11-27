@@ -1,6 +1,6 @@
 {
   "Id": "32e18957-3812-4f64-8663-18454518d005"/*TransformImage*/,
-  "Description": "Rotates, offsets, and scales the incoming image.",
+  "Description": "Rotates, offsets, and scales the incoming image.\nIt includes texture wrapping modes: Repeat, Mirror, Clamp, Border...\nIt's a powerful and versatile operator with many use cases such as tiling textures, patterns, decals...",
   "InputUis": [
     {
       "InputId": "3aab9b12-1e02-4d7a-83b6-da1500a6bcbf"/*Image*/,
@@ -48,24 +48,24 @@
       }
     },
     {
-      "InputId": "b3edcd1e-e0ce-43a7-98e9-1568e2329ed5"/*Mirror*/,
-      "Position": {
-        "X": -214.98917,
-        "Y": 453.7878
-      }
-    },
-    {
       "InputId": "c31a95a9-2cfb-4eea-8006-97f883d11847"/*GenerateMips*/,
       "Position": {
         "X": -214.98917,
-        "Y": 543.78784
+        "Y": 408.7878
       }
     },
     {
       "InputId": "64e5cdf2-19b0-461c-b936-ea46ee58028f"/*Filter*/,
       "Position": {
         "X": -214.98917,
-        "Y": 588.78784
+        "Y": 453.7878
+      }
+    },
+    {
+      "InputId": "43eb4d4e-2bb5-4c97-a5dd-91539b8258cd"/*WrapMode*/,
+      "Position": {
+        "X": -214.98917,
+        "Y": 498.7878
       }
     }
   ],
@@ -78,13 +78,6 @@
       }
     },
     {
-      "ChildId": "a4c413bc-4dba-40b2-a625-b530d8c473a1"/*CurvesToTexture*/,
-      "Position": {
-        "X": 118.98644,
-        "Y": 1047.3958
-      }
-    },
-    {
       "ChildId": "25acd8a3-db12-457a-98a9-f70e51be66d5"/*Vector2ToFloat2*/,
       "Position": {
         "X": -64.98916,
@@ -92,17 +85,29 @@
       }
     },
     {
-      "ChildId": "77d37c0c-2731-4f17-943b-6a3d8db908df"/*BoolToFloat*/,
+      "ChildId": "31adbf53-34ea-4f3a-981b-cf1757e60933"/*Wrap*/,
       "Position": {
-        "X": -64.98917,
-        "Y": 453.7878
+        "X": 464.82666,
+        "Y": 145.95316
       }
     },
     {
-      "ChildId": "31adbf53-34ea-4f3a-981b-cf1757e60933"/*_ImageFxShaderSetupStatic*/,
+      "ChildId": "a4d78db8-f0a6-4ed3-b4f8-39eae5c464b3"/*IntToWrapmode*/,
+      "Style": "Expanded",
+      "Size": {
+        "X": 110.0,
+        "Y": 36.0
+      },
       "Position": {
-        "X": 434.53156,
-        "Y": 352.5105
+        "X": 203.40295,
+        "Y": 489.62747
+      }
+    },
+    {
+      "ChildId": "401e51a0-e6cc-4132-9b19-a593e406c1a0"/*AddInts*/,
+      "Position": {
+        "X": -22.272385,
+        "Y": 510.22302
       }
     }
   ],
@@ -110,8 +115,8 @@
     {
       "OutputId": "54831ac3-d747-4cdf-9520-3cfd651158bf"/*TextureOutput*/,
       "Position": {
-        "X": 1044.0496,
-        "Y": 673.822
+        "X": 647.9629,
+        "Y": 225.78851
       }
     }
   ]

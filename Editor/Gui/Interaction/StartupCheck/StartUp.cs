@@ -16,7 +16,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
         {
             if (File.Exists(StartUpLockFilePath))
             {
-                ShowMessageBox();
+                ShowLastStartupFailedMessageBox();
             }
 
             File.WriteAllText(StartUpLockFilePath, "Startup " + DateTime.Now);
@@ -34,7 +34,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
             }
         }
 
-        private static void ShowMessageBox()
+        private static void ShowLastStartupFailedMessageBox()
         {
             var isThereABackup = !string.IsNullOrEmpty(AutoBackup.AutoBackup.GetLatestArchiveFilePath());
             if (!isThereABackup)

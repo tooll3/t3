@@ -1,6 +1,6 @@
 {
   "Id": "ed0bc47a-31ef-400b-b4e4-5552a859b309"/*ParticleCollisionForce*/,
-  "Description": "",
+  "Description": "A simple similation of sphere collision between points. The radius of the points is the defined on emit by the [ParticleSystem]'s PointRadiusW factor.\n\nSome recommendation:\n1. Try to increase the radius (either by increasing the emit points W attribute or the radius factor) and adjust the [DrawPoints] radius accordingly.\n2. Try to increase [ParticleSystem] damping.\n",
   "InputUis": [
     {
       "InputId": "0724bf0c-8f97-44de-bf42-6a89b89f1632"/*CellSize*/,
@@ -40,6 +40,13 @@
         "X": 2047.7776,
         "Y": 578.6934
       }
+    },
+    {
+      "InputId": "91459607-22c1-4536-a384-8b1f1d8ecb64"/*CollistionResolve*/,
+      "Position": {
+        "X": 2047.7776,
+        "Y": 623.6934
+      }
     }
   ],
   "SymbolChildUis": [
@@ -53,13 +60,6 @@
       "Position": {
         "X": 2688.8054,
         "Y": 289.29855
-      }
-    },
-    {
-      "ChildId": "6e634bb3-bd15-4ed2-ab6a-e263dfacd66f"/*GetBufferComponents*/,
-      "Position": {
-        "X": 2493.9958,
-        "Y": 171.04636
       }
     },
     {

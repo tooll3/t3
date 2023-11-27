@@ -1,6 +1,6 @@
 {
   "Id": "fbe1a703-f372-4236-9f20-5d0b69183843"/*SurfaceForce*/,
-  "Description": "Repels particles from primitive volumes.",
+  "Description": "Repels particles from primitive volumes.\n\nThis force uses the particle's radius in world units as defined on emit by [ParticleSystem]. Please check the documentation on that operator.\n",
   "InputUis": [
     {
       "InputId": "e3485fea-3a75-47f9-9a7d-ea69f4feb5f6"/*VolumeCenter*/,
@@ -185,7 +185,7 @@
       }
     },
     {
-      "ChildId": "4e052c9e-6a24-416d-8e29-f397e60ff6ca"/*SphereGizmo*/,
+      "ChildId": "4e052c9e-6a24-416d-8e29-f397e60ff6ca"/*DrawSphereGizmo*/,
       "Position": {
         "X": 237.32556,
         "Y": 2297.283

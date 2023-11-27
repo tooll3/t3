@@ -25,6 +25,9 @@ namespace T3.Operators.Types.Id_ed0bc47a_31ef_400b_b4e4_5552a859b309
 
         [Input(Guid = "5b3fcf3c-7155-401f-b3ac-3a4ac9d921df")]
         public readonly InputSlot<float> AttractionDecay = new InputSlot<float>();
+
+        [Input(Guid = "91459607-22c1-4536-a384-8b1f1d8ecb64")]
+        public readonly InputSlot<float> CollistionResolve = new InputSlot<float>();
     }
 }
 

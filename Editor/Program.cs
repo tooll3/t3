@@ -30,7 +30,7 @@ namespace T3.Editor
         public static Device Device { get; private set; }
 
         public static readonly bool IsStandAlone = File.Exists("StartT3.exe");
-        public const string Version = "3.8.1";
+        public const string Version = "3.8.2";
 
         /// <summary>
         /// Generate a release string with 
@@ -54,11 +54,14 @@ namespace T3.Editor
         {
             // Not calling this first will cause exceptions...
             EditorUi.Instance = new MsFormsEditor();
-            EditorUi.Instance.EnableDpiAwareScaling();
             
+            StartupValidation.ValidateNotRunningFromSystemFolder();
+            
+            EditorUi.Instance.EnableDpiAwareScaling();
+
             var startupStopWatch = new Stopwatch();
             startupStopWatch.Start();
-            
+
             CrashReporting.InitializeCrashReporting();
 
             ISplashScreen splashScreen = new SplashScreen.SplashScreen();
@@ -72,16 +75,7 @@ namespace T3.Editor
 
             if (IsStandAlone)
             {
-                // Validate that operators.dll has been updated to warn users if they started "T3Editor.exe"
-                var fiveMinutes = new TimeSpan(0, 2, 0);
-                const string operatorFilePath = "Operators.dll";
-                if (!File.Exists(operatorFilePath) || (DateTime.Now - File.GetLastWriteTime(operatorFilePath)) > fiveMinutes)
-                {
-                    EditorUi.Instance
-                            .ShowMessageBox($"Operators.dll is outdated.\nPlease use StartT3.exe to run Tooll.",
-                                            @"Error", PopUpButtons.Ok);
-                    EditorUi.Instance.ExitApplication();
-                }
+                StartupValidation.ValidateCurrentStandAloneExecutable();
             }
             else
             {
@@ -160,7 +154,7 @@ namespace T3.Editor
             Log.Debug($"Startup took {startupStopWatch.ElapsedMilliseconds}ms.");
 
             UiContentUpdate.StartMeasureFrame();
-            
+
             T3Style.Apply();
 
             ProgramWindows.Main.RunRenderLoop(UiContentUpdate.RenderCallback);

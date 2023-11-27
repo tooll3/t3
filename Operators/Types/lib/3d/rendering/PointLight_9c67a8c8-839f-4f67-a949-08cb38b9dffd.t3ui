@@ -104,7 +104,7 @@
       }
     },
     {
-      "ChildId": "2ab03a47-57e2-44be-88f5-70ee7b3f3df0"/*SphereGizmo*/,
+      "ChildId": "2ab03a47-57e2-44be-88f5-70ee7b3f3df0"/*DrawSphereGizmo*/,
       "Position": {
         "X": 369.7154,
         "Y": 223.74861

@@ -162,7 +162,8 @@ public partial class SymbolData
             var symbol = SymbolRegistry.Entries.Values.SingleOrDefault(s => s.Name == classname);
             if (symbol == null)
             {
-                Log.Warning($"Skipping unregistered source file {sourceFilePath}");
+                // This happens when renaming symbols.
+                Log.Debug($"Skipping unregistered source file {sourceFilePath}");
                 continue;
             }
 

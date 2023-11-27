@@ -98,7 +98,7 @@ namespace T3.Editor.Gui.Graph
         public static Instance GetMainComposition()
         {
             var mainGraphWindow = GetPrimaryGraphWindow();
-            return mainGraphWindow?.GraphCanvas.CompositionOp;
+            return mainGraphWindow?.GraphCanvas?.CompositionOp;
         }
 
         public override List<Window> GetInstances()

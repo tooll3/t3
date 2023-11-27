@@ -41,5 +41,8 @@ namespace T3.Operators.Types.Id_42d86738_d644_47c8_ab92_cc426d958e51
         [Input(Guid = "b3e7d147-5f9a-480f-a5da-ea611e5b4805")]
         public readonly InputSlot<bool> GenerateMipmaps = new InputSlot<bool>();
 
+        [Input(Guid = "c73bc2e6-338b-40f9-bfd6-32b6472ff250")]
+        public readonly InputSlot<bool> ClampResult = new InputSlot<bool>();
+
     }
 }

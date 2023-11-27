@@ -45,6 +45,9 @@ namespace T3.Operators.Types.Id_42e6319e_669c_4524_8d0d_9416a86afdb3
         [Input(Guid = "011db3c0-4b2b-4040-934a-c52f671b40fd")]
         public readonly InputSlot<float> Randomize = new InputSlot<float>();
 
+        [Input(Guid = "03d335bb-e4c6-4154-a53b-ab1af64e301f")]
+        public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
+
     }
 }
 

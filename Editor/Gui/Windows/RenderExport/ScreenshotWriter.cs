@@ -180,7 +180,10 @@ public static class ScreenshotWriter
                     break;
 
                 default:
-                    throw new InvalidOperationException($"Can't export unknown texture format {_currentDesc.Format}");
+                {
+                    Log.Error($"Screenshot can't export unknown texture format {_currentDesc.Format}");
+                    return;
+                }
             }
 
             // Copy the pixels from the buffer to the Wic Bitmap Frame encoder
@@ -192,7 +195,8 @@ public static class ScreenshotWriter
         }
         catch (Exception e)
         {
-            throw new InvalidOperationException("Internal image copy failed : " + e);
+            Log.Error($"Screenshot internal image copy failed : {e.Message}");
+            return;
         }
         finally
         {

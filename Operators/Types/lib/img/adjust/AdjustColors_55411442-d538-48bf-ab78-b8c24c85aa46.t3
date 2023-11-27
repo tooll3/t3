@@ -35,7 +35,7 @@
     {
       "Id": "008b025e-64eb-44c3-8959-dc8ac5dc2cbb"/*PreventClamping*/,
       "DefaultValue": {
-        "X": 0.15,
+        "X": 0.0,
         "Y": 5.0
       }
     },
@@ -49,7 +49,7 @@
     },
     {
       "Id": "090c56b2-bbed-447e-baa1-5993b4e12ddc"/*Vignette*/,
-      "DefaultValue": 0.1
+      "DefaultValue": 0.0
     },
     {
       "Id": "689fdfbe-e78d-42f8-af0b-ae8159dec216"/*Background*/,

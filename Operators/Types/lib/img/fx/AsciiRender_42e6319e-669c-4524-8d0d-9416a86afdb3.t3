@@ -69,6 +69,10 @@
     {
       "Id": "011db3c0-4b2b-4040-934a-c52f671b40fd"/*Randomize*/,
       "DefaultValue": 0.0
+    },
+    {
+      "Id": "03d335bb-e4c6-4154-a53b-ab1af64e301f"/*GenerateMips*/,
+      "DefaultValue": false
     }
   ],
   "Children": [
@@ -299,7 +303,18 @@
     {
       "Id": "481088b2-d9fc-4cc0-86df-21860c0b8b89"/*RenderTarget*/,
       "SymbolId": "f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1",
-      "InputValues": [],
+      "InputValues": [
+        {
+          "Id": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
+          "Type": "System.Boolean",
+          "Value": false
+        },
+        {
+          "Id": "aacafc4d-f47f-4893-9a6e-98db306a8901"/*Clear*/,
+          "Type": "System.Boolean",
+          "Value": false
+        }
+      ],
       "Outputs": []
     },
     {
@@ -586,6 +601,12 @@
       "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
       "TargetParentOrChildId": "481088b2-d9fc-4cc0-86df-21860c0b8b89",
       "TargetSlotId": "4da253b7-4953-439a-b03f-1d515a78bddf"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "03d335bb-e4c6-4154-a53b-ab1af64e301f",
+      "TargetParentOrChildId": "481088b2-d9fc-4cc0-86df-21860c0b8b89",
+      "TargetSlotId": "f0cf3325-4967-4419-9beb-036cd6dbfd6a"
     },
     {
       "SourceParentOrChildId": "ea2a049a-9a83-484f-83e2-056dc94dbe05",

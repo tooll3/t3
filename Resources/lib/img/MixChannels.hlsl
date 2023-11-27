@@ -9,6 +9,7 @@ cbuffer ParamConstants : register(b0)
     float4 MultiplyB;
     float4 MultiplyA;
     float4 Add;
+    float ClampResult;
     
 }
 
@@ -38,5 +39,5 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float g = dot(col, float4(MultiplyR.g, MultiplyG.g, MultiplyB.g, MultiplyA.g)) + Add.g;
     float b = dot(col, float4(MultiplyR.b, MultiplyG.b, MultiplyB.b, MultiplyA.b)) + Add.b;
     float a = dot(col, float4(MultiplyR.a, MultiplyG.a, MultiplyB.a, MultiplyA.a)) + Add.a;
-    return float4(clamp(float3(r,g,b),0,10000), clamp(a,0.0001,1));   
+    return ClampResult > 0.5 ? float4(clamp(float3(r,g,b),0,10000), clamp(a,0.0001,1)) : float4(r,g,b,a);    
 }

@@ -1,0 +1,174 @@
+{
+  "Id": "56238f0c-bb4c-4883-ab13-80a64887ccd2"/*ImageMosaicExample*/,
+  "Description": "A example for a complex shader setup. Please read the full tutorial linked in the description.",
+  "InputUis": [
+    {
+      "InputId": "4d3108c8-9b64-41e8-9550-880d59f411f9"/*FolderPath*/,
+      "Position": {
+        "X": -107.823944,
+        "Y": -108.63611
+      },
+      "Usage": "DirectoryPath"
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "ea1ca69d-4e7f-453d-bd52-6de0d895bddd"/*TorusMesh*/,
+      "Position": {
+        "X": -405.6454,
+        "Y": 472.12427
+      }
+    },
+    {
+      "ChildId": "b5e5bf7f-59a7-433d-babe-9111514cdc4d"/*DrawMesh*/,
+      "Position": {
+        "X": -255.64539,
+        "Y": 472.12427
+      }
+    },
+    {
+      "ChildId": "44709175-a1e4-4929-bd52-211f915d4ea4"/*OrbitCamera*/,
+      "Position": {
+        "X": -105.645386,
+        "Y": 472.12427
+      }
+    },
+    {
+      "ChildId": "d4af6c47-739c-4ae6-860c-625ea27c7cf3"/*RenderTarget*/,
+      "Position": {
+        "X": 194.35461,
+        "Y": 472.12427
+      }
+    },
+    {
+      "ChildId": "b221be4c-3e9b-4ee0-a977-4a0987dce587"/*GridPoints*/,
+      "Position": {
+        "X": 529.8303,
+        "Y": -10.869263
+      }
+    },
+    {
+      "ChildId": "cb166dd7-1e3f-444c-87d3-86afebee8d54"/*SetMaterial*/,
+      "Position": {
+        "X": 44.354614,
+        "Y": 472.12427
+      }
+    },
+    {
+      "ChildId": "be27a741-19a9-4fc2-8267-7e8529b0a408"/*ColorGrade*/,
+      "Position": {
+        "X": 344.3546,
+        "Y": 472.12427
+      }
+    },
+    {
+      "ChildId": "657f82ef-e999-4847-952e-5637e0efbbec"/*size*/,
+      "Position": {
+        "X": 679.8303,
+        "Y": -66.86926
+      }
+    },
+    {
+      "ChildId": "349de833-67c3-4236-962f-34f6d9e0668e"/*Blur*/,
+      "Position": {
+        "X": 494.3546,
+        "Y": 472.12427
+      }
+    },
+    {
+      "ChildId": "2b618079-6384-4df8-ad17-fa8c72ec565c"/*LoadImage*/,
+      "Position": {
+        "X": 494.3546,
+        "Y": 745.12427
+      }
+    },
+    {
+      "ChildId": "e833b7a3-4a6a-4514-a5cc-1e47c32f28e8"/*PickTexture*/,
+      "Position": {
+        "X": 644.3546,
+        "Y": 279.12415
+      }
+    },
+    {
+      "ChildId": "801e21ab-6f4d-476f-986a-939686f0f6c2"/*AnimValue*/,
+      "Position": {
+        "X": 379.83032,
+        "Y": -10.869263
+      }
+    },
+    {
+      "ChildId": "9d5106d4-1f3e-41b8-8660-f3c44c230ae8"/*Multiply*/,
+      "Position": {
+        "X": 529.8303,
+        "Y": -66.86926
+      }
+    },
+    {
+      "ChildId": "0bb06d3d-8fd1-480f-ba28-d33416a670ed"/*LinearGradient*/,
+      "Position": {
+        "X": 194.35461,
+        "Y": 279.12415
+      }
+    },
+    {
+      "ChildId": "2a8a82bb-db16-4f65-b4ff-b39c510cb1d3"/*LinearGradient*/,
+      "Position": {
+        "X": 344.3546,
+        "Y": 279.12415
+      }
+    },
+    {
+      "ChildId": "57b30966-6671-4606-95c9-517703b1cd67"/*Grain*/,
+      "Position": {
+        "X": 494.3546,
+        "Y": 279.12415
+      }
+    },
+    {
+      "ChildId": "41c17716-6eb6-47d3-ba89-bc09cb4b2f9e"/*DrawImageMosaic*/,
+      "Position": {
+        "X": 834.2197,
+        "Y": -120.63861
+      }
+    },
+    {
+      "ChildId": "a8e691fc-3e55-4709-acd4-f37dbbc4489a"/*CountInt*/,
+      "Position": {
+        "X": 494.3546,
+        "Y": 788.12427
+      }
+    },
+    {
+      "ChildId": "b9241c5f-1118-437c-adfa-add484c8da43"/*AnimValue*/,
+      "Position": {
+        "X": 344.3546,
+        "Y": 788.12427
+      }
+    },
+    {
+      "ChildId": "06234946-d401-4fbf-8f91-9a5bf4030bf7"/*RenderTarget*/,
+      "Position": {
+        "X": 984.2197,
+        "Y": -120.63861
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "d2ad8648-a738-4fed-a439-fbfbf18f0293"/*Output*/,
+      "Position": {
+        "X": 1134.2197,
+        "Y": -120.63861
+      }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "2aa7bf1b-bfad-4b34-9a95-5eae049dfb60",
+      "Title": "Tutorial",
+      "Description": "A very extensive tutorial the will walk you through all the details.",
+      "LinkUrl": "https://github.com/tooll3/t3/wiki/HowTo_MosaicEffect",
+      "LinkType": "Documentation"
+    }
+  ]
+}
