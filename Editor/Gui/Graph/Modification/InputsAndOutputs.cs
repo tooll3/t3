@@ -84,17 +84,18 @@ internal static class InputsAndOutputs
 
         public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
         {
-            var attrList = node.AttributeLists[0];
-            var searchedNodes = (from attribute in attrList.Attributes
-                                 from id in _ids
-                                 where attribute.ToString().ToLower().Contains(id.ToString().ToLower())
-                                 select attribute).ToArray();
+            if (node.AttributeLists.Count > 0) {
+                var attrList = node.AttributeLists[0];
+                var searchedNodes = (from attribute in attrList.Attributes
+                                    from id in _ids
+                                    where attribute.ToString().ToLower().Contains(id.ToString().ToLower())
+                                    select attribute).ToArray();
 
-            if (searchedNodes.Length > 0)
-            {
-                NodesToRemove.Add(node);
+                if (searchedNodes.Length > 0)
+                {
+                    NodesToRemove.Add(node);
+                }
             }
-
             return node;
         }
 
