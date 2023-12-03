@@ -49,9 +49,7 @@ public class SnapGraphCanvas : ScalableCanvas
         var slotSize = 3 * canvasScale;
         var gridSizeOnScreen = TransformDirection(SnapGraphItem.GridSize);
         var showDebug = ImGui.GetIO().KeyCtrl;
-
-
-
+        
         // Draw Nodes
         foreach (var item in _snapGraphLayout.Items.Values)
         {
@@ -64,6 +62,37 @@ public class SnapGraphCanvas : ScalableCanvas
 
             var pMin = TransformPosition(item.PosOnCanvas);
             var pMax = TransformPosition(item.PosOnCanvas + item.Size);
+
+            {
+                var isSnappedVertically = false;
+                var isSnappedHorizontally = false;
+                for (var index = 0; index < 1; index++)
+                {
+                    ref var ol = ref item.OutputLines[index];
+                    foreach (var c in ol.Connections)
+                    {
+                        if (c.IsSnapped && c.SourceItem == item)
+                        {
+                            switch (c.Style)
+                            {
+                                case SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
+                                    isSnappedVertically = true;
+                                    break;
+                                case SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
+                                    isSnappedHorizontally = true;
+                                    break;
+                            }
+                        }
+                    }
+                }
+
+                if (!isSnappedVertically)
+                    pMax.Y -= 3;
+
+                if (!isSnappedHorizontally)
+                    pMax.X -= 3;
+
+            }
 
             ImGui.SetCursorScreenPos(pMin);
             ImGui.PushID(item.Id.GetHashCode());
@@ -128,14 +157,14 @@ public class SnapGraphCanvas : ScalableCanvas
                     drawList.AddTriangleFilled(p + new Vector2(-1.5f, 0) * canvasScale * 1.5f,
                                                p + new Vector2(1.5f, 0) * canvasScale * 1.5f,
                                                p + new Vector2(0, 2) * canvasScale * 1.5f,
-                                                ColorVariations.OperatorOutline.Apply(typeColor));
+                                                ColorVariations.OperatorOutline.Apply(type2UiProperties.Color));
                 }
                 else
                 {
                     drawList.AddTriangleFilled(p + new Vector2(1,0) + new Vector2(-0, -1.5f) * canvasScale * 1.5f,
                                                p + new Vector2(1,0) + new Vector2(0, 1.5f) * canvasScale * 1.5f,
                                                p + new Vector2(1,0) + new Vector2(2, 0) * canvasScale * 1.5f,
-                                               ColorVariations.OperatorOutline.Apply(typeColor));
+                                               ColorVariations.OperatorOutline.Apply(type2UiProperties.Color));
                 }
                 
                 
@@ -154,7 +183,7 @@ public class SnapGraphCanvas : ScalableCanvas
                     continue;
 
                 var p = TransformPosition(oa.PositionOnCanvas);
-                var color = ColorVariations.OperatorBackground.Apply(typeColor).Fade(0.7f);
+                var color = ColorVariations.OperatorBackground.Apply(type2UiProperties.Color).Fade(0.7f);
                 if (oa.Direction == SnapGraphItem.Directions.Vertical)
                 {
                     drawList.AddTriangleFilled(p + new Vector2(0,-1) + new Vector2(-1.5f, 0) * canvasScale * 1.5f,

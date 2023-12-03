@@ -164,7 +164,7 @@ public class SnapGraphLayout
                 //return  c.SourceParentOrChildId.GetHashCode() << 32 + c.SourceSlotId.GetHashCode();
                 long outputHash = item.Id.GetHashCode() << 32 + output.Id.GetHashCode();
                 var isConnected = ConnectedOuputs.Contains(outputHash);
-                Log.Debug($"is connected  {isConnected}: {outputHash}");
+                //Log.Debug($"is connected  {isConnected}: {outputHash}");
                 if (outputIndex > 0 && !isConnected)
                     continue;
 
