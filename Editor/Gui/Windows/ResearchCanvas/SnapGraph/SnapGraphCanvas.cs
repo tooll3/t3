@@ -12,6 +12,7 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Selection;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Operators.Types.Id_c8590f8f_cca1_434a_a880_67bb91920e1a;
 
 namespace T3.Editor.Gui.Windows.ResearchCanvas.SnapGraph;
 
@@ -66,7 +67,7 @@ public class SnapGraphCanvas : ScalableCanvas
             {
                 var isSnappedVertically = false;
                 var isSnappedHorizontally = false;
-                for (var index = 0; index < 1; index++)
+                for (var index = 0; index < 1 && index < item.OutputLines.Length; index++)
                 {
                     ref var ol = ref item.OutputLines[index];
                     foreach (var c in ol.Connections)
@@ -102,19 +103,22 @@ public class SnapGraphCanvas : ScalableCanvas
 
             drawList.AddRectFilled(pMin, pMax, ColorVariations.OperatorBackground.Apply(typeColor).Fade(0.7f), 0);
 
-            var isSelected = NodeSelection.IsNodeSelected(item.SymbolChildUi);
+            var isSelected = NodeSelection.IsNodeSelected(item);
             var outlineColor = isSelected
                                    ? UiColors.ForegroundFull
                                    : UiColors.BackgroundFull.Fade(0.3f);
             drawList.AddRect(pMin, pMax, outlineColor, 0);
             
             ImGui.PushFont(Fonts.FontBold);
-            var labelSize = ImGui.CalcTextSize(item.SymbolChild.ReadableName);
+            var labelSize = ImGui.CalcTextSize(item.ReadableName);
             ImGui.PopFont();
             var downScale = MathF.Min(1, SnapGraphItem.Width / labelSize.X / 0.8f);
             
-            drawList.AddText(Fonts.FontBold, Fonts.FontBold.FontSize *downScale * canvasScale * 0.7f, pMin + new Vector2(4, 3) * canvasScale, labelColor,
-                             item.SymbolChild.ReadableName);
+            drawList.AddText(Fonts.FontBold, 
+                             Fonts.FontBold.FontSize *downScale * canvasScale * 0.7f, 
+                             pMin + new Vector2(4, 3) * canvasScale, 
+                             labelColor,
+                             item.ReadableName);
 
             // Draw input labels
             int inputIndex;
@@ -225,60 +229,92 @@ public class SnapGraphCanvas : ScalableCanvas
             var sourcePosOnScreen = TransformPosition(connection.SourcePos);
             var targetPosOnScreen = TransformPosition(connection.TargetPos);
 
-            var d = Vector2.Distance(sourcePosOnScreen, targetPosOnScreen) / 2;
-            switch (connection.Style)
+
+            if (connection.IsSnapped)
             {
-                case SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
-                    drawList.AddCircleFilled(sourcePosOnScreen, slotSize * 1.6f, typeColor, 3);
-                    break;
-                case SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
-                    // DrawSlot(drawList, sourcePosOnScreen, canvasScale, SnapGraphItem.Directions.Horizontal, typeColor );
-                    drawList.AddTriangleFilled(
-                                               sourcePosOnScreen + new Vector2(-1, -1) * canvasScale * 4,
-                                               sourcePosOnScreen + new Vector2(1, -1) * canvasScale * 4,
-                                               sourcePosOnScreen + new Vector2(0, 1) * canvasScale * 4,
-                                               typeColor);
-                    break;
-                case SnapGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal:
-                    drawList.AddCircleFilled(sourcePosOnScreen, slotSize * 1.6f, typeColor, 3);
-                    break;
-                case SnapGraphConnection.ConnectionStyles.AdditionalOutToMainInputSnappedVertical:
-                    drawList.AddCircleFilled(sourcePosOnScreen, slotSize * 1.6f, Color.Red, 3);
-                    break;
-                case SnapGraphConnection.ConnectionStyles.BottomToTop:
-                    drawList.AddBezierCubic(sourcePosOnScreen,
-                                            sourcePosOnScreen + new Vector2(0, d),
-                                            targetPosOnScreen - new Vector2(0, d),
-                                            targetPosOnScreen,
-                                            typeColor.Fade(0.6f),
-                                            2);
-                    break;
-                case SnapGraphConnection.ConnectionStyles.BottomToLeft:
-                    drawList.AddBezierCubic(sourcePosOnScreen,
-                                            sourcePosOnScreen + new Vector2(0, d),
-                                            targetPosOnScreen - new Vector2(d, 0),
-                                            targetPosOnScreen,
-                                            typeColor.Fade(0.6f),
-                                            2);
-                    break;
-                case SnapGraphConnection.ConnectionStyles.RightToTop:
-                    drawList.AddBezierCubic(sourcePosOnScreen,
-                                            sourcePosOnScreen + new Vector2(d, 0),
-                                            targetPosOnScreen - new Vector2(0, d),
-                                            targetPosOnScreen,
-                                            typeColor.Fade(0.6f),
-                                            2);
-                    break;
-                case SnapGraphConnection.ConnectionStyles.RightToLeft:
-                    drawList.AddBezierCubic(sourcePosOnScreen,
-                                            sourcePosOnScreen + new Vector2(d, 0),
-                                            targetPosOnScreen - new Vector2(d, 0),
-                                            targetPosOnScreen,
-                                            typeColor.Fade(0.6f),
-                                            2);
-                    break;
-                case SnapGraphConnection.ConnectionStyles.Unknown:
-                    break;
+                switch (connection.Style)
+                {
+                    case SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal:
+                        drawList.AddCircleFilled(sourcePosOnScreen, slotSize * 1.6f, typeColor, 3);
+                        break;
+                    case SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedVertical:
+                        // DrawSlot(drawList, sourcePosOnScreen, canvasScale, SnapGraphItem.Directions.Horizontal, typeColor );
+                        drawList.AddTriangleFilled(
+                                                   sourcePosOnScreen + new Vector2(-1, -1) * canvasScale * 4,
+                                                   sourcePosOnScreen + new Vector2(1, -1) * canvasScale * 4,
+                                                   sourcePosOnScreen + new Vector2(0, 1) * canvasScale * 4,
+                                                   typeColor);
+                        break;
+                    case SnapGraphConnection.ConnectionStyles.MainOutToInputSnappedHorizontal:
+                        drawList.AddCircleFilled(sourcePosOnScreen, slotSize * 1.6f, typeColor, 3);
+                        break;
+                    case SnapGraphConnection.ConnectionStyles.AdditionalOutToMainInputSnappedVertical:
+                        drawList.AddCircleFilled(sourcePosOnScreen, slotSize * 1.6f, Color.Red, 3);
+                        break;
+                }
+            }
+            else
+            {
+                var d = Vector2.Distance(sourcePosOnScreen, targetPosOnScreen) / 2;
+                
+                switch (connection.Style)
+                {
+                    case SnapGraphConnection.ConnectionStyles.BottomToTop:
+                        drawList.AddBezierCubic(sourcePosOnScreen,
+                                                sourcePosOnScreen + new Vector2(0, d),
+                                                targetPosOnScreen - new Vector2(0, d),
+                                                targetPosOnScreen,
+                                                typeColor.Fade(0.6f),
+                                                2);
+                        break;
+                    case SnapGraphConnection.ConnectionStyles.BottomToLeft:
+                        drawList.AddBezierCubic(sourcePosOnScreen,
+                                                sourcePosOnScreen + new Vector2(0, d),
+                                                targetPosOnScreen - new Vector2(d, 0),
+                                                targetPosOnScreen,
+                                                typeColor.Fade(0.6f),
+                                                2);
+                        break;
+                    case SnapGraphConnection.ConnectionStyles.RightToTop:
+                        drawList.AddBezierCubic(sourcePosOnScreen,
+                                                sourcePosOnScreen + new Vector2(d, 0),
+                                                targetPosOnScreen - new Vector2(0, d),
+                                                targetPosOnScreen,
+                                                typeColor.Fade(0.6f),
+                                                2);
+                        break;
+                    case SnapGraphConnection.ConnectionStyles.RightToLeft:
+                        var hoverPositionOnLine = Vector2.Zero;
+                        var isHovering = ArcConnection.Draw(new ImRect(sourcePosOnScreen, sourcePosOnScreen + new Vector2(10, 10)),
+                                                            sourcePosOnScreen,
+                                                            ImRect.RectWithSize(
+                                                                                TransformPosition(connection.TargetItem.PosOnCanvas), 
+                                                                                TransformDirection(connection.TargetItem.Size)),
+                                                            targetPosOnScreen,
+                                                            typeColor,
+                                                            canvasScale,
+                                                            2,
+                                                            ref hoverPositionOnLine);
+
+                        // const float minDistanceToTargetSocket = 10;
+                        // if (isHovering && Vector2.Distance(hoverPositionOnLine, TargetPosition) > minDistanceToTargetSocket
+                        //                && Vector2.Distance(hoverPositionOnLine, SourcePosition) > minDistanceToTargetSocket)
+                        // {
+                        //     ConnectionSplitHelper.RegisterAsPotentialSplit(Connection, ColorForType, hoverPositionOnLine);
+                        // }                        
+                        
+                        // drawList.AddBezierCubic(sourcePosOnScreen,
+                        //                         sourcePosOnScreen + new Vector2(d, 0),
+                        //                         targetPosOnScreen - new Vector2(d, 0),
+                        //                         targetPosOnScreen,
+                        //                         typeColor.Fade(0.6f),
+                        //                         2);
+                        break;
+                    case SnapGraphConnection.ConnectionStyles.Unknown:
+                        break;
+                }
+
+
             }
         }
         // Draw Snap indicator
@@ -354,7 +390,11 @@ public class SnapGraphCanvas : ScalableCanvas
             }
             else
             {
-                NodeSelection.AddSymbolChildToSelection(item.SymbolChildUi, item.Instance);
+                if (item.Category == SnapGraphItem.Categories.Operator)
+                {
+                    NodeSelection.AddSymbolChildToSelection(item.SymbolChildUi, item.Instance);
+                }
+                // FIXME: Add inputs and outputs
             }
         }
     }

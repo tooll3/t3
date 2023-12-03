@@ -58,14 +58,33 @@ public class SnapGraphLayout
 
             Items.Add(childId, new()
                                    {
+                                       Category = SnapGraphItem.Categories.Operator,
                                        Id = childId,
                                        Instance = childInstance,
+                                       Selectable = symbolChildUi,
                                        SymbolUi = SymbolUiRegistry.Entries[childInstance.Symbol.Id],
                                        SymbolChild = composition.Symbol.Children.SingleOrDefault(cc => cc.Id == childId),
                                        SymbolChildUi = symbolChildUi,
                                        PosOnCanvas = symbolChildUi.PosOnCanvas,
                                        Size = SnapGraphItem.GridSize,
                                    });
+        }
+
+        foreach (var input in composition.Inputs)
+        {
+            var inputUi = parentSymbolUi.InputUis[input.Id];
+            Items.Add(input.Id, new()
+                                    {
+                                        Category = SnapGraphItem.Categories.Input,
+                                        Id = input.Id,
+                                        Instance = composition,
+                                        Selectable = inputUi,
+                                        SymbolUi = null,
+                                        SymbolChild = null,
+                                        SymbolChildUi = null,
+                                        PosOnCanvas = inputUi.PosOnCanvas,
+                                        Size = SnapGraphItem.GridSize,
+                                    });
         }
     }
 
@@ -107,23 +126,37 @@ public class SnapGraphLayout
             var visibleIndex = 0;
             
             // Collect inputs
-            for (var inputLineIndex = 0; inputLineIndex < item.Instance.Inputs.Count; inputLineIndex++)
+            if (item.Category == SnapGraphItem.Categories.Operator)
             {
-                var input = item.Instance.Inputs[inputLineIndex];
-                if (!item.SymbolUi.InputUis.TryGetValue(input.Id, out var inputUi)) //TODO: Log error?
-                    continue;
-                
-                if (inputLineIndex > 0 
-                    &&( !input.HasInputConnections
-                    && inputUi.Relevancy is not (Relevancy.Relevant or Relevancy.Required))
-                   )
-                    continue;
-
-
-                if (input.IsMultiInput && input is IMultiInputSlot multiInputSlot)
+                for (var inputLineIndex = 0; inputLineIndex < item.Instance.Inputs.Count; inputLineIndex++)
                 {
-                    int multiInputIndex = 0;
-                    foreach (var i in multiInputSlot.GetCollectedInputs())
+                    var input = item.Instance.Inputs[inputLineIndex];
+                    if (!item.SymbolUi.InputUis.TryGetValue(input.Id, out var inputUi)) //TODO: Log error?
+                        continue;
+
+                    if (inputLineIndex > 0
+                        && (!input.HasInputConnections
+                            && inputUi.Relevancy is not (Relevancy.Relevant or Relevancy.Required))
+                       )
+                        continue;
+
+                    if (input.IsMultiInput && input is IMultiInputSlot multiInputSlot)
+                    {
+                        int multiInputIndex = 0;
+                        foreach (var i in multiInputSlot.GetCollectedInputs())
+                        {
+                            inputLines.Add(new SnapGraphItem.InputLine
+                                               {
+                                                   Input = input,
+                                                   InputUi = inputUi,
+                                                   IsPrimary = inputLineIndex == 0,
+                                                   VisibleIndex = visibleIndex,
+                                                   MultiInputIndex = multiInputIndex++,
+                                               });
+                            visibleIndex++;
+                        }
+                    }
+                    else
                     {
                         inputLines.Add(new SnapGraphItem.InputLine
                                            {
@@ -131,60 +164,62 @@ public class SnapGraphLayout
                                                InputUi = inputUi,
                                                IsPrimary = inputLineIndex == 0,
                                                VisibleIndex = visibleIndex,
-                                               MultiInputIndex =  multiInputIndex++,
                                            });
                         visibleIndex++;
                     }
                 }
-                else
+
+                // Collect outputs
+                for (var outputIndex = 0; outputIndex < item.Instance.Outputs.Count; outputIndex++)
                 {
-                    inputLines.Add(new SnapGraphItem.InputLine
-                                       {
-                                           Input = input,
-                                           InputUi = inputUi,
-                                           IsPrimary = inputLineIndex == 0,
-                                           VisibleIndex = visibleIndex,
-                                       });
-                    visibleIndex++;
-                    
+                    var output = item.Instance.Outputs[outputIndex];
+                    if (!item.SymbolUi.OutputUis.TryGetValue(output.Id, out var outputUi))
+                    {
+                        Log.Warning("Can't find outputUi:" + output.Id);
+                        continue;
+                    }
+
+                    //return  c.SourceParentOrChildId.GetHashCode() << 32 + c.SourceSlotId.GetHashCode();
+                    long outputHash = item.Id.GetHashCode() << 32 + output.Id.GetHashCode();
+                    var isConnected = ConnectedOuputs.Contains(outputHash);
+                    //Log.Debug($"is connected  {isConnected}: {outputHash}");
+                    if (outputIndex > 0 && !isConnected)
+                        continue;
+
+                    outputLines.Add(new SnapGraphItem.OutputLine
+                                        {
+                                            Output = output,
+                                            OutputUi = outputUi,
+                                            IsPrimary = outputIndex == 0,
+                                            OutputIndex = outputIndex,
+                                            VisibleIndex = outputIndex == 0 ? 0 : visibleIndex,
+                                            Connections = new List<SnapGraphConnection>(),
+                                        });
+                    if (outputIndex == 0)
+                    {
+                        item.PrimaryType = output.ValueType;
+                    }
+                    else
+                    {
+                        visibleIndex++;
+                    }
                 }
-                
             }
-
-            // Collect outputs
-            for (var outputIndex = 0; outputIndex < item.Instance.Outputs.Count; outputIndex++)
+            else if (item.Category == SnapGraphItem.Categories.Input)
             {
-                var output = item.Instance.Outputs[outputIndex];
-                if (!item.SymbolUi.OutputUis.TryGetValue(output.Id, out var outputUi))
-                {
-                    Log.Warning("Can't find outputUi:" + output.Id);
-                    continue;
-                }
-                
-                //return  c.SourceParentOrChildId.GetHashCode() << 32 + c.SourceSlotId.GetHashCode();
-                long outputHash = item.Id.GetHashCode() << 32 + output.Id.GetHashCode();
-                var isConnected = ConnectedOuputs.Contains(outputHash);
-                //Log.Debug($"is connected  {isConnected}: {outputHash}");
-                if (outputIndex > 0 && !isConnected)
-                    continue;
-
-                outputLines.Add(new SnapGraphItem.OutputLine
-                                    {
-                                        Output = output,
-                                        OutputUi = outputUi,
-                                        IsPrimary = outputIndex == 0,
-                                        OutputIndex = outputIndex,
-                                        VisibleIndex = outputIndex ==0? 0:visibleIndex,
-                                        Connections = new List<SnapGraphConnection>(),
-                                    });
-                if (outputIndex == 0)
-                {
-                    item.PrimaryType = output.ValueType;
-                }
-                else
-                {
-                    visibleIndex++;
-                }
+                // outputLines.Add(new SnapGraphItem.OutputLine
+                //                     {
+                //                         Output = null,
+                //                         OutputUi = null,
+                //                         IsPrimary =true,
+                //                         OutputIndex = 0,
+                //                         VisibleIndex = 0,
+                //                         Connections = new List<SnapGraphConnection>(),
+                //                     });
+            }
+            else if (item.Category == SnapGraphItem.Categories.Output)
+            {
+                // TODO
             }
 
             item.InputLines = inputLines.ToArray();

@@ -16,23 +16,34 @@ namespace T3.Editor.Gui.Windows.ResearchCanvas.SnapGraph;
 
 public class SnapGraphItem : ISelectableCanvasObject
 {
+    public enum Categories
+    {
+        Operator,
+        Input,
+        Output,
+    }
+    
     public Guid Id { get; init; }
+    public Categories Category;
     public Type PrimaryType = typeof(float);
-    public Vector2 PosOnCanvas { get => SymbolChildUi.PosOnCanvas; set => SymbolChildUi.PosOnCanvas = value; }
+    public ISelectableCanvasObject Selectable;
+    public Vector2 PosOnCanvas { get => Selectable.PosOnCanvas; set => Selectable.PosOnCanvas = value; }
     public Vector2 Size { get; set; }
-    public bool IsSelected => NodeSelection.IsNodeSelected(SymbolChildUi);
+    public bool IsSelected => NodeSelection.IsNodeSelected(this);
     public SnapGroup SnapGroup;
     public float UnitHeight => InputLines.Length + OutputLines.Length + 1;
 
     public override string ToString()
     {
-        return SymbolChild.ReadableName;
+        return ReadableName;
     }
 
     public SymbolUi SymbolUi;
     public SymbolChild SymbolChild;
     public SymbolChildUi SymbolChildUi;
     public Instance Instance;
+    
+    public string ReadableName => SymbolChild != null ? SymbolChild.ReadableName : "???";
 
     public InputLine[] InputLines;
     public OutputLine[] OutputLines;
@@ -261,6 +272,21 @@ public class SnapGraphItem : ISelectableCanvasObject
     //     }
     // }
 
+    public void Select()
+    {
+        if (Category == SnapGraphItem.Categories.Operator)
+        {
+            NodeSelection.SetSelectionToChildUi(SymbolChildUi, Instance);
+        }
+        else
+        {
+            NodeSelection.SetSelection(Selectable);
+        }
+    }
 
-
+    public void AddToSelection()
+    {
+        
+    }
+    
 }

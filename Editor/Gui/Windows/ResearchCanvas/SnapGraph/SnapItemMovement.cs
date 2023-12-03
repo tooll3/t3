@@ -149,10 +149,11 @@ public class SnapItemMovement
                     && singleDraggedNode is SnapGraphItem graphItem)
                 {
                     //var instanceForSymbolChildUi = composition.Children.SingleOrDefault(child => child.SymbolChildId == graphItem.SymbolChildUi.Id);
-                    ConnectionMaker.SplitConnectionWithDraggedNode(graphItem.SymbolChildUi,
-                                                                   ConnectionSplitHelper.BestMatchLastFrame.Connection,
-                                                                   graphItem.Instance,
-                                                                   _modifyCommand);
+                    // TODO: Implement later
+                    // ConnectionMaker.SplitConnectionWithDraggedNode(graphItem.SymbolChildUi,
+                    //                                                ConnectionSplitHelper.BestMatchLastFrame.Connection,
+                    //                                                graphItem.Instance,
+                    //                                                _modifyCommand);
                     _modifyCommand = null;
                 }
                 else
@@ -183,11 +184,27 @@ public class SnapItemMovement
                     var replaceSelection = !ImGui.GetIO().KeyShift;
                     if (replaceSelection)
                     {
-                        NodeSelection.SetSelectionToChildUi(item.SymbolChildUi, item.Instance);
+                        item.Select();
+                        // if (item.Category == SnapGraphItem.Categories.Operator)
+                        // {
+                        //     NodeSelection.SetSelectionToChildUi(item.SymbolChildUi, item.Instance);
+                        // }
+                        // else
+                        // {
+                        //     NodeSelection.SetSelection(item.Selectable);
+                        // }
                     }
                     else
                     {
-                        NodeSelection.AddSymbolChildToSelection(item.SymbolChildUi, item.Instance);
+                        item.AddToSelection();
+                        // if (item.Category == SnapGraphItem.Categories.Operator)
+                        // {
+                        //     NodeSelection.AddSymbolChildToSelection(item.SymbolChildUi, item.Instance);
+                        // }
+                        // else
+                        // {
+                        //     NodeSelection.AddSelection(item.Selectable);
+                        // }
                     }
                 }
                 else
@@ -213,7 +230,7 @@ public class SnapItemMovement
             && ImGui.IsItemHovered()
             && !NodeSelection.IsNodeSelected(item))
         {
-            NodeSelection.SetSelectionToChildUi(item.SymbolChildUi, item.Instance);
+            item.Select();
         }
     }
 
@@ -242,7 +259,7 @@ public class SnapItemMovement
                 }
                 else if (longTapProgress > 1)
                 {
-                    NodeSelection.SetSelectionToChildUi(_tappedItem.SymbolChildUi, _tappedItem.Instance);
+                    _tappedItem.Select();
                     _draggedNodes.Clear();
                     _draggedNodes.Add(_tappedItem);
                     var snapGraphItems = _draggedNodes.Select(i => i as ISelectableCanvasObject).ToList();
