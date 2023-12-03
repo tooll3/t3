@@ -241,6 +241,12 @@ public class SnapGraphLayout
                 break;
             }
 
+            if (outputIndex >= sourceItem.OutputLines.Length)
+            {
+                Log.Warning($"OutputIndex {outputIndex} exceeds number of outputlines {sourceItem.OutputLines.Length} in {sourceItem}");
+                outputIndex = sourceItem.OutputLines.Length - 1;
+            }
+
             var snapGraphConnection = new SnapGraphConnection
                                           {
                                               Style = SnapGraphConnection.ConnectionStyles.Unknown,
