@@ -102,7 +102,7 @@ namespace T3.Editor.Gui.ChildUi
             var graphWidth = graphRect.GetWidth();
             var h = graphRect.GetHeight();
             
-            var shapeIndex = (animValue.Shape.IsConnected) // Todo check for animated 
+            var shapeIndex = (animValue.Shape.HasInputConnections) // Todo check for animated 
                             ? animValue.Shape.Value 
                             :animValue.Shape.TypedInputValue.Value;
 

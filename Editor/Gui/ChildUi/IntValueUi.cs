@@ -36,7 +36,7 @@ namespace T3.Editor.Gui.ChildUi
 
             var isAnimated = instance.Parent?.Symbol.Animator.IsInputSlotAnimated(intValueInstance.Int)??false;
 
-            var value = (isAnimated || intValueInstance.Int.IsConnected) 
+            var value = (isAnimated || intValueInstance.Int.HasInputConnections) 
                             ? intValueInstance.Int.Value 
                             : intValueInstance.Int.TypedInputValue.Value;
             

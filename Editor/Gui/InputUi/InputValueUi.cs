@@ -100,7 +100,7 @@ namespace T3.Editor.Gui.InputUi
                                                      bool skipIfDefault)
         {
             var editState = InputEditStateFlags.Nothing;
-            if ((inputSlot.IsConnected || inputSlot.IsMultiInput) && hideNonEssentials)
+            if ((inputSlot.HasInputConnections || inputSlot.IsMultiInput) && hideNonEssentials)
                 return editState;
             
             var name = inputSlot.Input.Name;
@@ -122,7 +122,7 @@ namespace T3.Editor.Gui.InputUi
             if (input.IsDefault && skipIfDefault)
                 return InputEditStateFlags.Nothing;
 
-            if (inputSlot.IsConnected)
+            if (inputSlot.HasInputConnections)
             {
                 editState = DrawConnectedParameter();
             }

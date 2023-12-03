@@ -13,7 +13,7 @@ namespace T3.Core.Operator.Slots
         bool IsDisabled { get; set; }
         void AddConnection(ISlot source, int index = 0);
         void RemoveConnection(int index = 0);
-        bool IsConnected { get; }
+        bool HasInputConnections { get; }
         ISlot GetConnection(int index);
 
         Action<EvaluationContext> GetUpdateAction();

@@ -51,7 +51,7 @@ namespace T3.Core.Operator.Slots
 
         public T GetCurrentValue()
         {
-            return IsConnected
+            return HasInputConnections
                        ? Value
                        : TypedInputValue.Value;
         }

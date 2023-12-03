@@ -193,7 +193,7 @@ public class SnapGraphItem : ISelectableCanvasObject
                      PositionOnCanvas = new Vector2(WidthHalf, Size.Y) + PosOnCanvas,
                      Direction = Directions.Vertical,
                      ConnectionType = OutputLines[0].Output.ValueType,
-                     ConnectionHash = OutputLines[0].Output.IsConnected
+                     ConnectionHash = OutputLines[0].Output.HasInputConnections
                                           ? OutputLines[0].Output.GetConnection(0).GetHashCode()
                                           : 0,
                      SlotId = OutputLines[0].Output.Id,
@@ -206,7 +206,7 @@ public class SnapGraphItem : ISelectableCanvasObject
                          PositionOnCanvas = new Vector2(Width, (0.5f + il.VisibleIndex) * LineHeight) + PosOnCanvas,
                          Direction = Directions.Horizontal,
                          ConnectionType = il.Output.ValueType,
-                         ConnectionHash = il.Output.IsConnected
+                         ConnectionHash = il.Output.HasInputConnections
                                               ? OutputLines[0].Output.GetConnection(0).GetHashCode()
                                               : 0,
                          SlotId = il.Output.Id,

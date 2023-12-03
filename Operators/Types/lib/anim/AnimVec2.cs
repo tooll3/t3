@@ -29,7 +29,7 @@ namespace T3.Operators.Types.Id_af79ee8c_d08d_4dca_b478_b4542ed69ad8
             var offsets = Offsets.GetValue(context);
             var bias = Bias.GetValue(context);
             var ratio = Ratio.GetValue(context);
-            var time = OverrideTime.IsConnected
+            var time = OverrideTime.HasInputConnections
                            ? OverrideTime.GetValue(context)
                            : context.LocalFxTime;
 

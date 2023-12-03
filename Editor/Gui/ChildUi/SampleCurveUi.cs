@@ -30,7 +30,7 @@ namespace T3.Editor.Gui.ChildUi
                        | SymbolChildUi.CustomUiResult.PreventInputLabels
                        | SymbolChildUi.CustomUiResult.PreventOpenParameterPopUp;
             
-            var curve = (sampleCurve.Curve.IsConnected) 
+            var curve = (sampleCurve.Curve.HasInputConnections) 
                             ? sampleCurve.Curve.Value 
                             :sampleCurve.Curve.TypedInputValue.Value;
 

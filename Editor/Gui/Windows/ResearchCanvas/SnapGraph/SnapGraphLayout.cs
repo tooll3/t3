@@ -89,7 +89,7 @@ public class SnapGraphLayout
                     continue;
                 
                 if (inputLineIndex > 0 
-                    &&( !input.IsConnected
+                    &&( !input.HasInputConnections
                     && inputUi.Relevancy is not (Relevancy.Relevant or Relevancy.Required))
                    )
                     continue;
@@ -136,7 +136,7 @@ public class SnapGraphLayout
                     continue;
                 }
                 
-                if (outputIndex > 0 && !output.IsConnected)
+                if (outputIndex > 0 && !output.HasInputConnections)
                     continue;
 
                 outputLines.Add(new SnapGraphItem.OutputLine

@@ -33,7 +33,7 @@ namespace T3.Operators.Types.Id_38b85057_fbcb_4ab1_9b40_cfb090750150
 
         private int Invalidate(ISlot slot)
         {
-            if (slot.IsConnected)
+            if (slot.HasInputConnections)
             {
                 // slot is an output of an composition op
                 slot.DirtyFlag.Target = Invalidate(slot.GetConnection(0));
@@ -44,7 +44,7 @@ namespace T3.Operators.Types.Id_38b85057_fbcb_4ab1_9b40_cfb090750150
 
                 foreach (var input in parent.Inputs)
                 {
-                    if (input.IsConnected)
+                    if (input.HasInputConnections)
                     {
                         if (input.IsMultiInput)
                         {

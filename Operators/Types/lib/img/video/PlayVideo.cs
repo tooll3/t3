@@ -64,7 +64,7 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
             }
             
             
-            var requestedTime = OverrideTimeInSecs.IsConnected
+            var requestedTime = OverrideTimeInSecs.HasInputConnections
                                          ? OverrideTimeInSecs.GetValue(context)
                                          : context.Playback.SecondsFromBars(context.LocalTime);
             
