@@ -58,7 +58,7 @@ public class SnapGraphItem : ISelectableCanvasObject
         public int OutputIndex;
         public List<SnapGraphConnection> Connections;
     }
-
+    
     public struct AnchorPoint
     {
         public Vector2 PositionOnCanvas;
@@ -67,18 +67,35 @@ public class SnapGraphItem : ISelectableCanvasObject
         public int ConnectionHash;
         public Guid SlotId;
 
-        public bool IsConnected => ConnectionHash != 0;
+        // public bool IsConnected => ConnectionHash != FreeAnchor;
 
-        public float GetSnapDistance(AnchorPoint other)
-        {
-            if (other.ConnectionType != ConnectionType 
-                || other.Direction != Direction 
-                || other.ConnectionHash != ConnectionHash // FIXME
-                )
-                return float.PositiveInfinity;
-
-            return Vector2.Distance(other.PositionOnCanvas, PositionOnCanvas);
-        }
+        
+        // public float GetSnapDistanceFromOutput(AnchorPoint outputAnchor)
+        // {
+        //     if (outputAnchor.ConnectionType != ConnectionType
+        //         || outputAnchor.Direction != Direction)
+        //         return float.PositiveInfinity;
+        //
+        //     if(outputAnchor.ConnectionHash != FreeAnchor && outputAnchor.ConnectionHash != ConnectionHash)
+        //         return float.PositiveInfinity;
+        //     
+        //     return Vector2.Distance(outputAnchor.PositionOnCanvas, PositionOnCanvas);
+        // }        
+        //
+        // public float GetSnapDistanceToInput(AnchorPoint inputAnchor)
+        // {
+        //     if (inputAnchor.ConnectionType != ConnectionType || inputAnchor.Direction != Direction)
+        //         return float.PositiveInfinity;
+        //
+        //     var isInputConnected = inputAnchor.ConnectionHash != FreeAnchor;
+        //     if (isInputConnected && inputAnchor.ConnectionHash != ConnectionHash)
+        //         return float.PositiveInfinity;
+        //     
+        //     if(ConnectionHash != FreeAnchor && ConnectionHash != inputAnchor.ConnectionHash)
+        //         return float.PositiveInfinity;
+        //     
+        //     return Vector2.Distance(inputAnchor.PositionOnCanvas, PositionOnCanvas);
+        // }
     }
 
     public enum Directions
@@ -88,9 +105,9 @@ public class SnapGraphItem : ISelectableCanvasObject
     }
 
     public const float Width = 80;
-    public const float WidthHalf = Width/2;
+    public const float WidthHalf = Width / 2;
     public const float LineHeight = 20;
-    public const float LineHeightHalf = LineHeight/2;
+    public const float LineHeightHalf = LineHeight / 2;
     public static readonly Vector2 GridSize = new Vector2(Width, LineHeight);
 
     public bool IsDragged; // FIXME: Implement
@@ -118,6 +135,49 @@ public class SnapGraphItem : ISelectableCanvasObject
         return extend;
     }
 
+    
+    /// <summary>
+    /// input anchor taken if
+    /// - connected
+    ///
+    /// output anchor is taken if...
+    /// - 
+    /// </summary>
+    public IEnumerable<AnchorPoint> GetOutputAnchors()
+    {
+        if (OutputLines.Length == 0)
+            yield break;
+
+        // vertical output...
+        {
+            yield return new AnchorPoint
+                             {
+                                 PositionOnCanvas = new Vector2(WidthHalf, Size.Y) + PosOnCanvas,
+                                 Direction = Directions.Vertical,
+                                 ConnectionType = OutputLines[0].Output.ValueType,
+                                 ConnectionHash = GetSnappedConnectionHash(OutputLines[0].Connections),
+                                 SlotId = OutputLines[0].Output.Id,
+                             };
+        }
+
+        // Horizontal outputs
+        {
+            foreach (var outputLine in OutputLines)
+            {
+                yield return new AnchorPoint
+                                 {
+                                     PositionOnCanvas = new Vector2(Width, (0.5f + outputLine.VisibleIndex) * LineHeight) + PosOnCanvas,
+                                     Direction = Directions.Horizontal,
+                                     ConnectionType = outputLine.Output.ValueType,
+                                     ConnectionHash = GetSnappedConnectionHash(outputLine.Connections),
+                                     SlotId = outputLine.Output.Id,
+                                 };
+            }
+        }
+    }
+
+
+
     /// <summary>
     /// Get input anchors with current position and orientation.
     /// </summary>
@@ -130,15 +190,16 @@ public class SnapGraphItem : ISelectableCanvasObject
         if (InputLines.Length == 0)
             yield break;
 
+        // Top input
         yield return new AnchorPoint
                          {
                              PositionOnCanvas = new Vector2(WidthHalf, 0) + PosOnCanvas,
                              Direction = Directions.Vertical,
                              ConnectionType = InputLines[0].Input.ValueType,
-                             ConnectionHash = InputLines[0].Connection?.ConnectionHash ?? 0,
+                             ConnectionHash = InputLines[0].Connection?.ConnectionHash ?? FreeAnchor,
                              SlotId = InputLines[0].Input.Id,
                          };
-
+        // Side inputs
         foreach (var il in InputLines)
         {
             yield return new AnchorPoint
@@ -146,71 +207,60 @@ public class SnapGraphItem : ISelectableCanvasObject
                                  PositionOnCanvas = new Vector2(0, (0.5f + il.VisibleIndex) * LineHeight) + PosOnCanvas,
                                  Direction = Directions.Horizontal,
                                  ConnectionType = il.Input.ValueType,
-                                 ConnectionHash = il.Connection?.ConnectionHash ?? 0,
+                                 ConnectionHash = il.Connection?.ConnectionHash ?? FreeAnchor,
                                  SlotId = il.Input.Id,
                              };
         }
     }
-
-    public IEnumerable<AnchorPoint> GetOutputAnchors()
+    
+    /** Assume as free (I.e. not connected) unless on connection is snapped, then return this connection has hash. */
+    private static int GetSnappedConnectionHash(List<SnapGraphConnection> snapGraphConnections)
     {
-        if (OutputLines.Length == 0)
-            yield break;
-
-        yield return new AnchorPoint
-                         {
-                             PositionOnCanvas = new Vector2(WidthHalf, Size.Y) + PosOnCanvas,
-                             Direction = Directions.Vertical,
-                             ConnectionType = OutputLines[0].Output.ValueType,
-                             ConnectionHash = OutputLines[0].Connections.Count > 0 //OutputLines[0].Output.IsConnected
-                                                  ? OutputLines[0].Connections[0].ConnectionHash    // FIXME: Use all connections
-                                                  : 0,
-                             SlotId = OutputLines[0].Output.Id,
-                         };
-
-        foreach (var il in OutputLines)
+        foreach (var sc in snapGraphConnections)
         {
-            yield return new AnchorPoint
-                             {
-                                 PositionOnCanvas = new Vector2(Width, (0.5f + il.VisibleIndex) * LineHeight) + PosOnCanvas,
-                                 Direction = Directions.Horizontal,
-                                 ConnectionType = il.Output.ValueType,
-                                 ConnectionHash = il.Connections.Count > 0 //il.Output.IsConnected
-                                                      ? il.Connections[0].ConnectionHash // FIXME: Use all connections
-                                                      : 0,
-                                 SlotId = il.Output.Id,
-                             };
+            if (!sc.IsSnapped)
+                continue;
+
+            return sc.ConnectionHash;
         }
+
+        return FreeAnchor;
     }
 
-    public void ForOutputAnchors(Action<AnchorPoint> call)
-    {
-        if (OutputLines.Length == 0)
-            return;
+    private const int FreeAnchor =0;    
+    
+    //
+    // public void ForOutputAnchors(Action<AnchorPoint> call)
+    // {
+    //     if (OutputLines.Length == 0)
+    //         return;
+    //
+    //     call(new AnchorPoint
+    //              {
+    //                  PositionOnCanvas = new Vector2(WidthHalf, Size.Y) + PosOnCanvas,
+    //                  Direction = Directions.Vertical,
+    //                  ConnectionType = OutputLines[0].Output.ValueType,
+    //                  ConnectionHash = OutputLines[0].Output.HasInputConnections
+    //                                       ? OutputLines[0].Output.GetConnection(0).GetHashCode()
+    //                                       : 0,
+    //                  SlotId = OutputLines[0].Output.Id,
+    //              });
+    //
+    //     foreach (var il in OutputLines)
+    //     {
+    //         call(new AnchorPoint
+    //                  {
+    //                      PositionOnCanvas = new Vector2(Width, (0.5f + il.VisibleIndex) * LineHeight) + PosOnCanvas,
+    //                      Direction = Directions.Horizontal,
+    //                      ConnectionType = il.Output.ValueType,
+    //                      ConnectionHash = il.Output.HasInputConnections
+    //                                           ? OutputLines[0].Output.GetConnection(0).GetHashCode()
+    //                                           : 0,
+    //                      SlotId = il.Output.Id,
+    //                  });
+    //     }
+    // }
 
-        call(new AnchorPoint
-                 {
-                     PositionOnCanvas = new Vector2(WidthHalf, Size.Y) + PosOnCanvas,
-                     Direction = Directions.Vertical,
-                     ConnectionType = OutputLines[0].Output.ValueType,
-                     ConnectionHash = OutputLines[0].Output.HasInputConnections
-                                          ? OutputLines[0].Output.GetConnection(0).GetHashCode()
-                                          : 0,
-                     SlotId = OutputLines[0].Output.Id,
-                 });
 
-        foreach (var il in OutputLines)
-        {
-            call(new AnchorPoint
-                     {
-                         PositionOnCanvas = new Vector2(Width, (0.5f + il.VisibleIndex) * LineHeight) + PosOnCanvas,
-                         Direction = Directions.Horizontal,
-                         ConnectionType = il.Output.ValueType,
-                         ConnectionHash = il.Output.HasInputConnections
-                                              ? OutputLines[0].Output.GetConnection(0).GetHashCode()
-                                              : 0,
-                         SlotId = il.Output.Id,
-                     });
-        }
-    }
+
 }

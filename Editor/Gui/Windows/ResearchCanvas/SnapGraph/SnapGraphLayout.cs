@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
@@ -33,7 +34,8 @@ public class SnapGraphLayout
         if (HasCompositionDataChanged(parentSymbol, ref _compositionModelHash))
         {
              CollectItemReferences(composition, parentSymbolUi);
-             UpdateVisibleItemLines();
+             UpdateConnectionSources(composition);
+             UpdateVisibleItemLines(composition);
              CollectConnectionReferences(composition);
         }
 
@@ -67,8 +69,31 @@ public class SnapGraphLayout
         }
     }
 
+    private HashSet<long> ConnectedOuputs = new(100);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static long GetConnectionSourceHash(Symbol.Connection c)
+    {
+        return  c.SourceParentOrChildId.GetHashCode() << 32 + c.SourceSlotId.GetHashCode();
+    }
+
+    /// <summary>
+    /// Sadly there is no easy method to store if an output has a connection 
+    /// </summary>
+    private void UpdateConnectionSources(Instance composition)
+    {
+        ConnectedOuputs.Clear();
+
+        foreach (var c in composition.Symbol.Connections)
+        {
+            if (c.IsConnectedToSymbolInput)
+                continue;
+
+            ConnectedOuputs.Add(GetConnectionSourceHash(c));
+        }
+    }
     
-    private void UpdateVisibleItemLines()
+    private void UpdateVisibleItemLines(Instance composition)
     {
         var inputLines = new List<SnapGraphItem.InputLine>(8); 
         var outputLines = new List<SnapGraphItem.OutputLine>(4); 
@@ -136,7 +161,11 @@ public class SnapGraphLayout
                     continue;
                 }
                 
-                if (outputIndex > 0 && !output.HasInputConnections)
+                //return  c.SourceParentOrChildId.GetHashCode() << 32 + c.SourceSlotId.GetHashCode();
+                long outputHash = item.Id.GetHashCode() << 32 + output.Id.GetHashCode();
+                var isConnected = ConnectedOuputs.Contains(outputHash);
+                Log.Debug($"is connected  {isConnected}: {outputHash}");
+                if (outputIndex > 0 && !isConnected)
                     continue;
 
                 outputLines.Add(new SnapGraphItem.OutputLine
@@ -162,7 +191,7 @@ public class SnapGraphLayout
             item.OutputLines = outputLines.ToArray();
 
             //var count = Math.Max(1, item.InputLines.Count + item.OutputLines.Count -2);
-            item.Size = new Vector2(SnapGraphItem.Width, SnapGraphItem.LineHeight * (visibleIndex));
+            item.Size = new Vector2(SnapGraphItem.Width, SnapGraphItem.LineHeight * (Math.Max(1, visibleIndex)));
         }
     }
     
@@ -223,6 +252,7 @@ public class SnapGraphLayout
                                               OutputLineIndex = outputIndex,
                                               ConnectionHash = c.GetHashCode(),
                                               MultiInputIndex = multiInputIndex,
+                                              VisibleOutputIndex = sourceItem.OutputLines[outputIndex].VisibleIndex,
                                           };
             
             targetItem.InputLines[inputIndex].Connection = snapGraphConnection;
@@ -243,13 +273,15 @@ public class SnapGraphLayout
 
             
             // Snapped horizontally
-            if (sc.InputLineIndex == 0
-                && sc.OutputLineIndex == 0
-                && MathF.Abs(sourceMax.X - targetMin.X) < 1
-                && MathF.Abs(sourceMin.Y - targetMin.Y) < 1)
+            if (
+                //sc.InputLineIndex == 0
+                //&& sc.OutputLineIndex == 0
+                MathF.Abs(sourceMax.X - targetMin.X) < 1
+                && MathF.Abs((sourceMin.Y + sc.VisibleOutputIndex* SnapGraphItem.GridSize.Y) 
+                             - (targetMin.Y + sc.InputLineIndex* SnapGraphItem.GridSize.Y)) < 1)
             {
                 sc.Style = SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal;
-                var p = new Vector2(sourceMax.X, sourceMin.Y + 0.5f * SnapGraphItem.GridSize.Y);
+                var p = new Vector2(sourceMax.X, sourceMin.Y + ( + sc.VisibleOutputIndex + 0.5f) * SnapGraphItem.GridSize.Y);
                 sc.SourcePos = p;
                 sc.TargetPos = p;
                 continue;
@@ -304,6 +336,22 @@ public class SnapGraphLayout
                 sc.Style = SnapGraphConnection.ConnectionStyles.BottomToTop;
                 continue;
             }
+            
+            // Snapped horizontally 2
+            // if (sc.OutputLineIndex > 0
+            //     && sc.InputLineIndex > 0
+            //     && MathF.Abs(sourceMax.X - targetMin.X) < 1
+            //     // && MathF.Abs((sourceMin.Y + sc.VisibleOutputIndex * SnapGraphItem.GridSize.Y) 
+            //     //              - (targetMin.Y + sc.InputLineIndex * SnapGraphItem.GridSize.Y)) < 1
+            //     )
+            // {
+            //     sc.Style = SnapGraphConnection.ConnectionStyles.MainOutToMainInSnappedHorizontal;
+            //     var p = new Vector2(sourceMax.X, sourceMin.Y + 0.5f * SnapGraphItem.GridSize.Y);
+            //     sc.SourcePos = p;
+            //     sc.TargetPos = p;
+            //     continue;
+            // }
+
 
             sc.SourcePos = new Vector2(sourceMax.X, sourceMin.Y + (sc.VisibleOutputIndex + 0.5f) * SnapGraphItem.GridSize.Y);
             sc.TargetPos = new Vector2(targetMin.X, targetMin.Y + (sc.InputLineIndex + 0.5f) * SnapGraphItem.GridSize.Y);

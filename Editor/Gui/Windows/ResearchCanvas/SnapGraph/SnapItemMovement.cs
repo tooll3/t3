@@ -17,6 +17,8 @@ using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;
 
+// ReSharper disable UseWithExpressionToCopyStruct
+
 namespace T3.Editor.Gui.Windows.ResearchCanvas.SnapGraph;
 
 /// <remarks>
@@ -187,6 +189,108 @@ public class SnapItemMovement
         UpdateDragConnectionOnStart(draggedNodes);
     }
 
+    public struct SnapResult
+    {
+        public float BestDistance;
+        public SnapGraphItem BestA;
+        public SnapGraphItem BestB;
+        public SnapGraphItem.Directions Direction;
+        public int InputLineIndex;
+        public int MultiInputIndex;
+        public int OutLineIndex;
+        public Vector2 OutAnchorPos;
+        public Vector2 InputAnchorPos;
+        public bool Reverse;
+
+        public bool TestAndKeepPositionsForSnapping(Vector2 outPos, Vector2 inputPos)
+        {
+            var d = Vector2.Distance(outPos, inputPos);
+            if (d >= BestDistance)
+                return false;
+
+            BestDistance = d;
+            OutAnchorPos = outPos;
+            InputAnchorPos = inputPos;
+            return true;
+        }
+
+        public void TestForSnap(SnapGraphItem a, SnapGraphItem b, bool revert)
+        {
+            MultiInputIndex = 0;
+            for (var bInputLineIndex = 0; bInputLineIndex < b.InputLines.Length; bInputLineIndex++)
+            {
+                ref var bInputLine = ref b.InputLines[bInputLineIndex];
+                var inConnection = bInputLine.Connection;
+
+                for (var aOutLineIndex = 0; aOutLineIndex < a.OutputLines.Length; aOutLineIndex++)
+                {
+                    ref var ol = ref a.OutputLines[aOutLineIndex];
+                    
+                    // A -> B vertical
+                    if (aOutLineIndex == 0 && bInputLineIndex == 0)
+                    {
+                        // If input is connected the only valid output is the one with the connection line
+
+                        var outPos = new Vector2(a.Area.Min.X + SnapGraphItem.WidthHalf, a.Area.Max.Y);
+                        var inPos = new Vector2(b.Area.Min.X + SnapGraphItem.WidthHalf, b.Area.Min.Y);
+
+                        if (inConnection != null)
+                        {
+                            foreach (var c in ol.Connections)
+                            {
+                                if (c != inConnection)
+                                    continue;
+
+                                if (TestAndKeepPositionsForSnapping(outPos, inPos))
+                                {
+                                    Direction = SnapGraphItem.Directions.Vertical;
+                                    OutLineIndex = aOutLineIndex;
+                                    InputLineIndex = bInputLineIndex;
+                                    MultiInputIndex = 0;
+                                    BestA = a;
+                                    BestB = b;
+                                    Reverse = revert;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (TestAndKeepPositionsForSnapping(outPos, inPos))
+                            {
+                                Direction = SnapGraphItem.Directions.Vertical;
+                                OutLineIndex = aOutLineIndex;
+                                InputLineIndex = bInputLineIndex;
+                                MultiInputIndex = 0;
+                                BestA = a;
+                                BestB = b;
+                                Reverse = revert;
+                            }
+                        }
+                    }
+
+                    // // A -> B horizontally
+                    {
+                        var outPos = new Vector2(a.Area.Max.X, a.Area.Min.Y + (0.5f + ol.VisibleIndex) * SnapGraphItem.LineHeight);
+                        var inPos = new Vector2(b.Area.Min.X, b.Area.Min.Y + (0.5f + bInputLine.VisibleIndex) * SnapGraphItem.LineHeight);
+                        
+                        if (TestAndKeepPositionsForSnapping(outPos, inPos))
+                        {
+                            Direction = SnapGraphItem.Directions.Horizontal;
+                            OutLineIndex = aOutLineIndex;
+                            InputLineIndex = bInputLineIndex;
+                            MultiInputIndex = bInputLine.MultiInputIndex;
+                            BestA = a;
+                            BestB = b;
+                            Reverse = revert;
+                        }
+                    }
+                }
+            }
+
+            Direction = SnapGraphItem.Directions.Horizontal;
+        }
+    }
+
     private void HandleNodeDragging(ISelectableCanvasObject draggedNode, ScalableCanvas canvas)
     {
         if (!ImGui.IsMouseDragging(ImGuiMouseButton.Left))
@@ -202,7 +306,7 @@ public class SnapItemMovement
         }
 
         var dl = ImGui.GetWindowDrawList();
-        var showDebug = ImGui.GetIO().KeyCtrl;
+        var showDebug = true; //ImGui.GetIO().KeyCtrl;
         var mousePosOnCanvas = canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
         var requestedDeltaOnCanvas = mousePosOnCanvas - _dragStartPosInOpOnCanvas;
 
@@ -229,11 +333,7 @@ public class SnapItemMovement
 
             overlappingItems.Add(otherItem);
         }
-
-        var bestSnapDistance = float.PositiveInfinity;
-        Vector2 bestSnapDelta = default;
-        var bestSnapPosition = Vector2.Zero;
-
+        
         // New possible ConnectionsOptions
         List<Symbol.Connection> newPossibleConnections = new();
 
@@ -246,84 +346,32 @@ public class SnapItemMovement
 
         _lastAppliedOffset = requestedDeltaOnCanvas;
 
-        // Yes, that code looks weird.
+        var snapResult = new SnapResult() { BestDistance = float.PositiveInfinity };
+
         foreach (var otherItem in overlappingItems)
         {
             foreach (var draggedItem in _draggedNodes)
             {
-                foreach (var draggedInAnchor in draggedItem.GetInputAnchors())
-                {
-                    foreach (var otherOutAnchor in otherItem.GetOutputAnchors())
-                    {
-                        var d = otherOutAnchor.GetSnapDistance(draggedInAnchor);
-                        if (showDebug)
-                            dl.AddLine(_canvas.TransformPosition(otherOutAnchor.PositionOnCanvas),
-                                       _canvas.TransformPosition(draggedInAnchor.PositionOnCanvas),
-                                       Color.Red.Fade(d > 10000 ? 0.1f : 1));
-
-                        if (d > bestSnapDistance)
-                            continue;
-
-                        if (d < bestSnapDistance)
-                            newPossibleConnections.Clear();
-
-
-                        if (!otherOutAnchor.IsConnected)
-                            newPossibleConnections.Add(new Symbol.Connection(
-                                                                             sourceParentOrChildId: otherItem.Id,
-                                                                             sourceSlotId: otherOutAnchor.SlotId,
-                                                                             targetParentOrChildId: draggedItem.Id,
-                                                                             targetSlotId: draggedInAnchor.SlotId)
-                                                      );
-
-                        bestSnapPosition = otherOutAnchor.PositionOnCanvas;
-                        bestSnapDelta = otherOutAnchor.PositionOnCanvas - draggedInAnchor.PositionOnCanvas;
-                        bestSnapDistance = d;
-                    }
-                }
-
-                foreach (var draggedOutAnchor in draggedItem.GetOutputAnchors())
-                {
-                    foreach (var otherInAnchor in otherItem.GetInputAnchors())
-                    {
-                        var d = otherInAnchor.GetSnapDistance(draggedOutAnchor);
-                        if (showDebug)
-                            dl.AddLine(_canvas.TransformPosition(draggedOutAnchor.PositionOnCanvas),
-                                       _canvas.TransformPosition(otherInAnchor.PositionOnCanvas),
-                                       Color.Green.Fade(d > 10000 ? 0.1f : 1));
-
-                        if (d > bestSnapDistance)
-                            continue;
-
-                        if (d < bestSnapDistance)
-                            newPossibleConnections.Clear();
-
-                        if (!otherInAnchor.IsConnected)
-                            newPossibleConnections.Add(new Symbol.Connection(
-                                                                             sourceParentOrChildId: draggedItem.Id,
-                                                                             sourceSlotId: draggedOutAnchor.SlotId,
-                                                                             targetParentOrChildId: otherItem.Id,
-                                                                             targetSlotId: otherInAnchor.SlotId));
-
-                        bestSnapPosition = otherInAnchor.PositionOnCanvas;
-                        bestSnapDelta = otherInAnchor.PositionOnCanvas - draggedOutAnchor.PositionOnCanvas;
-                        bestSnapDistance = d;
-                    }
-                }
+                snapResult.TestForSnap(otherItem, draggedItem, false);
+                snapResult.TestForSnap(draggedItem, otherItem , true);
             }
         }
 
         // Snapped
-        if (bestSnapDistance < SnapGraphItem.LineHeight * 0.5f)
+        if (snapResult.BestDistance < SnapGraphItem.LineHeight * 0.5f)
         {
+            var bestSnapDelta = !snapResult.Reverse
+                                    ? snapResult.OutAnchorPos - snapResult.InputAnchorPos
+                                    : snapResult.InputAnchorPos - snapResult.OutAnchorPos;
+
             dl.AddLine(_canvas.TransformPosition(mousePosOnCanvas),
                        canvas.TransformPosition(mousePosOnCanvas) + _canvas.TransformDirection(bestSnapDelta),
                        Color.White);
 
-            if (Vector2.Distance(bestSnapPosition, LastSnapPositionOnCanvas) > 2)
+            if (Vector2.Distance(snapResult.InputAnchorPos, LastSnapPositionOnCanvas) > 2)
             {
                 LastSnapTime = ImGui.GetTime();
-                LastSnapPositionOnCanvas = bestSnapPosition;
+                LastSnapPositionOnCanvas = snapResult.InputAnchorPos;
             }
 
             foreach (var n in _draggedNodes)
@@ -353,7 +401,7 @@ public class SnapItemMovement
             }
         }
     }
-    
+
     public double LastSnapTime = double.NegativeInfinity;
     public Vector2 LastSnapPositionOnCanvas;
 
