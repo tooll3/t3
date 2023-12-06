@@ -359,6 +359,34 @@
         "X": 358.52405,
         "Y": -654.19824
       }
+    },
+    {
+      "ChildId": "1129346e-fbca-42d0-836f-75ba74e360a4"/*FractalNoise*/,
+      "Position": {
+        "X": 957.96515,
+        "Y": 676.8058
+      }
+    },
+    {
+      "ChildId": "dedbb8a3-9d59-439c-87ef-67056b1975ca"/*Time*/,
+      "Position": {
+        "X": 807.96515,
+        "Y": 676.8058
+      }
+    },
+    {
+      "ChildId": "f83870bc-8705-4135-99c4-b044c2b3dfad"/*ImageLevels*/,
+      "Position": {
+        "X": 1107.9651,
+        "Y": 676.8058
+      }
+    },
+    {
+      "ChildId": "7d3c78f7-9738-4d30-839c-7a47c30f64f2"/*CustomPixelShader*/,
+      "Position": {
+        "X": 1190.2861,
+        "Y": -806.9096
+      }
     }
   ],
   "OutputUis": [

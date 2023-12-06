@@ -50,16 +50,9 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     DisplaceMap.GetDimensions(displaceMapWidth, displaceMapHeight);
     displaceMapWidth = TargetWidth;
     displaceMapHeight = TargetHeight;
-    float2 texel = 1 / float2(displaceMapWidth, displaceMapHeight);
-    //float p = (uv.x / texel.x % 2) <= 1 ? 1 :0;
-    //return float4(p.xxx,1);
 
-    //texel = 1.0/512.0;
-    float2 sampleOffset = texel * SampleRadius;
-    float2 subHashX = hash22(psInput.texCoord * 100 + (beatTime * 10.1 % 10.1)); 
-    // float subHashY = hash12(psInput.texCoord * 101 + (beatTime * 101.013 % 12.1)); 
-    //uv += subHashX * texel*2;
-    //uv += texel*10;
+    float2 sampleOffset = SampleRadius / float2(displaceMapWidth, displaceMapHeight);
+
     float4 cx1= DisplaceMap.Sample(texSampler,  float2(uv.x + sampleOffset.x, uv.y));
     float4 cx2= DisplaceMap.Sample(texSampler,  float2(uv.x - sampleOffset.x, uv.y)); 
     float4 cy1= DisplaceMap.Sample(texSampler, float2(uv.x,       uv.y + sampleOffset.y));
@@ -81,8 +74,6 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     float2 uv2 = 0.5 -direction * len * 10* Specularity;
     float4 cc= Image.Sample(texSampler,  uv2);
     cc.rgb = lerp(uvImage.rgb,  cc.rgb, Shade * Amount );
-    //return cc;
-
     cc.a *= uvImage.a;
     return float4( clamp(cc, float4(0,0,0,0) , float4(100,100,100,1)));
 }

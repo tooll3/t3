@@ -14,7 +14,7 @@ namespace T3.Operators.Types.Id_a2ea3af5_d78b_46b4_84db_09d31f042798
         public readonly Slot<Texture2D> ColorBuffer = new Slot<Texture2D>();
 
         [Input(Guid = "36e16cc0-3c9e-4615-9ac0-2d2f07150deb")]
-        public readonly MultiInputSlot<Command> Command = new MultiInputSlot<Command>();
+        public readonly MultiInputSlot<T3.Core.DataTypes.Command> Command = new MultiInputSlot<T3.Core.DataTypes.Command>();
 
         [Input(Guid = "73ba7691-784f-4706-8a88-9305f723c4cc")]
         public readonly InputSlot<float> Displacement = new InputSlot<float>();
@@ -52,9 +52,6 @@ namespace T3.Operators.Types.Id_a2ea3af5_d78b_46b4_84db_09d31f042798
         [Input(Guid = "c027bc94-4ef8-4828-8df5-d30abbd31cbc")]
         public readonly InputSlot<float> AmplifyEdges = new InputSlot<float>();
 
-        [Input(Guid = "e294f6ac-04c4-489b-8d26-615c8971ce11")]
-        public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
-
         [Input(Guid = "5264cbf8-13f6-4dfe-a82d-4f0904973488")]
         public readonly InputSlot<bool> Reset = new InputSlot<bool>();
 
@@ -78,6 +75,9 @@ namespace T3.Operators.Types.Id_a2ea3af5_d78b_46b4_84db_09d31f042798
 
         [Input(Guid = "3c93af8c-5658-4466-8301-95799b650e2b")]
         public readonly MultiInputSlot<float> AddBlurred = new MultiInputSlot<float>();
+
+        [Input(Guid = "e294f6ac-04c4-489b-8d26-615c8971ce11")]
+        public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
 
     }
 }
