@@ -167,6 +167,23 @@
           "d2e12b96-7be3-4b31-bcdd-c882543a6ca6": -0.100999996
         }
       }
+    },
+    {
+      "Id": "b0942fb4-3df3-4b35-91a5-3ee0ed4109e4",
+      "IsPreset": true,
+      "ActivationIndex": 7,
+      "Title": "Snowflake",
+      "PosOnCanvas": {
+        "X": 163.0,
+        "Y": 93.0
+      },
+      "ParameterSetsForChildIds": {
+        "00000000-0000-0000-0000-000000000000": {
+          "79c84135-5390-455b-bf60-53d4002d0606": 1.5,
+          "a1b3ae23-cb29-4e3e-93b6-fd4f1efadbf1": 90.0,
+          "c355fa5c-c1f5-4e80-b1b1-d2d233dea3fc": 3
+        }
+      }
     }
   ]
 }

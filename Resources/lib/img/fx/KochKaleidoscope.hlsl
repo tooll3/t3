@@ -80,7 +80,7 @@ float4 KochKaleidoscope(float2 uv)
     n = GetDirection(Angle*(2./3.)*3.1415/90);
     uv.x += .5;
 
-    for(int i=0; i<Steps; i++) {
+    for(int i=1; i<Steps; i++) {
         uv *= 3.;
         scale *= 3.;
         uv.x -= 1.5;
@@ -105,6 +105,12 @@ float4 KochKaleidoscope(float2 uv)
     return c;    
 }
 
+cbuffer Resolution : register(b2)
+{
+    float TargetWidth;
+    float TargetHeight;
+}
+
 float4 psMain(vsOutput input) : SV_TARGET
 {
     uint width, height;
@@ -112,7 +118,8 @@ float4 psMain(vsOutput input) : SV_TARGET
     //aspect = float(width)/height;
     //aspect = destination.GetDimenstions(width,height);
     //float r1 = texture.Width / texture.Height; 
-    aspect =1.77;
+    //aspect =1.77;
+    aspect = TargetWidth/TargetHeight;
     //return float4(width/4000.,0, 0,1);
 
     float2 uv = input.texCoord;
