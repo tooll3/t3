@@ -54,6 +54,7 @@ public class SnapGraphCanvas : ScalableCanvas
         // Draw Nodes
         foreach (var item in _snapGraphLayout.Items.Values)
         {
+            
             if (!TypeUiRegistry.Entries.TryGetValue(item.PrimaryType, out var typeUiProperties))
                 continue;
 

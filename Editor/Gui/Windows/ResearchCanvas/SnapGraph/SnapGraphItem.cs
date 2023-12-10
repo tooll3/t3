@@ -77,36 +77,6 @@ public class SnapGraphItem : ISelectableCanvasObject
         public Type ConnectionType;
         public int ConnectionHash;
         public Guid SlotId;
-
-        // public bool IsConnected => ConnectionHash != FreeAnchor;
-
-        
-        // public float GetSnapDistanceFromOutput(AnchorPoint outputAnchor)
-        // {
-        //     if (outputAnchor.ConnectionType != ConnectionType
-        //         || outputAnchor.Direction != Direction)
-        //         return float.PositiveInfinity;
-        //
-        //     if(outputAnchor.ConnectionHash != FreeAnchor && outputAnchor.ConnectionHash != ConnectionHash)
-        //         return float.PositiveInfinity;
-        //     
-        //     return Vector2.Distance(outputAnchor.PositionOnCanvas, PositionOnCanvas);
-        // }        
-        //
-        // public float GetSnapDistanceToInput(AnchorPoint inputAnchor)
-        // {
-        //     if (inputAnchor.ConnectionType != ConnectionType || inputAnchor.Direction != Direction)
-        //         return float.PositiveInfinity;
-        //
-        //     var isInputConnected = inputAnchor.ConnectionHash != FreeAnchor;
-        //     if (isInputConnected && inputAnchor.ConnectionHash != ConnectionHash)
-        //         return float.PositiveInfinity;
-        //     
-        //     if(ConnectionHash != FreeAnchor && ConnectionHash != inputAnchor.ConnectionHash)
-        //         return float.PositiveInfinity;
-        //     
-        //     return Vector2.Distance(inputAnchor.PositionOnCanvas, PositionOnCanvas);
-        // }
     }
 
     public enum Directions
@@ -120,8 +90,6 @@ public class SnapGraphItem : ISelectableCanvasObject
     public const float LineHeight = 20;
     public const float LineHeightHalf = LineHeight / 2;
     public static readonly Vector2 GridSize = new Vector2(Width, LineHeight);
-
-    public bool IsDragged; // FIXME: Implement
 
     public ImRect Area => ImRect.RectWithSize(PosOnCanvas, Size);
 
@@ -196,6 +164,7 @@ public class SnapGraphItem : ISelectableCanvasObject
     /// Using an Enumerable interface here is bad, because it creates a lot of allocations.
     /// In the long term, this should be cached.
     /// </remarks>
+    // TODO: Inline to draw anchors
     public IEnumerable<AnchorPoint> GetInputAnchors()
     {
         if (InputLines.Length == 0)
