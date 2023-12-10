@@ -62,24 +62,26 @@ public class SnapGraphItem : ISelectableCanvasObject
 
     public struct InputLine
     {
-        public SnapGraphItem TargetItem;
-        public IInputSlot Input;
+        public Type Type;
+        public Guid Id;
+        //public SnapGraphItem TargetItem;
+        public ISlot Input;
         public IInputUi InputUi;
-        public bool IsPrimary;
+        //public bool IsPrimary;
         public int VisibleIndex;
-        public SnapGraphConnection Connection;
+        public SnapGraphConnection ConnectionIn;
         public int MultiInputIndex;
     }
 
     public struct OutputLine
     {
-        public SnapGraphItem SourceItem;
+        //public SnapGraphItem SourceItem;
         public ISlot Output;
         public IOutputUi OutputUi;
-        public bool IsPrimary;
+        //public bool IsPrimary;
         public int VisibleIndex;
         public int OutputIndex;
-        public List<SnapGraphConnection> Connections;
+        public List<SnapGraphConnection> ConnectionsOut;
     }
 
     public struct AnchorPoint
@@ -145,7 +147,7 @@ public class SnapGraphItem : ISelectableCanvasObject
                                  PositionOnCanvas = new Vector2(WidthHalf, Size.Y) + PosOnCanvas,
                                  Direction = Directions.Vertical,
                                  ConnectionType =  OutputLines[0].Output.ValueType,
-                                 ConnectionHash = GetSnappedConnectionHash(OutputLines[0].Connections),
+                                 ConnectionHash = GetSnappedConnectionHash(OutputLines[0].ConnectionsOut),
                                  SlotId = OutputLines[0].Output.Id,
                              };
         }
@@ -159,7 +161,7 @@ public class SnapGraphItem : ISelectableCanvasObject
                                      PositionOnCanvas = new Vector2(Width, (0.5f + outputLine.VisibleIndex) * LineHeight) + PosOnCanvas,
                                      Direction = Directions.Horizontal,
                                      ConnectionType = outputLine.Output.ValueType,
-                                     ConnectionHash = GetSnappedConnectionHash(outputLine.Connections),
+                                     ConnectionHash = GetSnappedConnectionHash(outputLine.ConnectionsOut),
                                      SlotId = outputLine.Output.Id,
                                  };
             }
@@ -184,9 +186,9 @@ public class SnapGraphItem : ISelectableCanvasObject
                          {
                              PositionOnCanvas = new Vector2(WidthHalf, 0) + PosOnCanvas,
                              Direction = Directions.Vertical,
-                             ConnectionType = InputLines[0].Input.ValueType,
-                             ConnectionHash = InputLines[0].Connection?.ConnectionHash ?? FreeAnchor,
-                             SlotId = InputLines[0].Input.Id,
+                             ConnectionType = InputLines[0].Type,
+                             ConnectionHash = InputLines[0].ConnectionIn?.ConnectionHash ?? FreeAnchor,
+                             SlotId = InputLines[0].Id,
                          };
         // Side inputs
         foreach (var il in InputLines)
@@ -195,9 +197,9 @@ public class SnapGraphItem : ISelectableCanvasObject
                              {
                                  PositionOnCanvas = new Vector2(0, (0.5f + il.VisibleIndex) * LineHeight) + PosOnCanvas,
                                  Direction = Directions.Horizontal,
-                                 ConnectionType = il.Input.ValueType,
-                                 ConnectionHash = il.Connection?.ConnectionHash ?? FreeAnchor,
-                                 SlotId = il.Input.Id,
+                                 ConnectionType = il.Type,
+                                 ConnectionHash = il.ConnectionIn?.ConnectionHash ?? FreeAnchor,
+                                 SlotId = il.Id,
                              };
         }
     }

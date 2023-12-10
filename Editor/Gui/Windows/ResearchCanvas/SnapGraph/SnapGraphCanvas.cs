@@ -83,7 +83,7 @@ public class SnapGraphCanvas : ScalableCanvas
             for (var index = 0; index < 1 && index < item.OutputLines.Length; index++)
             {
                 ref var ol = ref item.OutputLines[index];
-                foreach (var c in ol.Connections)
+                foreach (var c in ol.ConnectionsOut)
                 {
                     if (c.IsSnapped && c.SourceItem == item)
                     {
@@ -124,7 +124,7 @@ public class SnapGraphCanvas : ScalableCanvas
         ImGui.PushFont(Fonts.FontBold);
         var labelSize = ImGui.CalcTextSize(item.ReadableName);
         ImGui.PopFont();
-        var downScale = MathF.Min(1, SnapGraphItem.Width / labelSize.X );
+        var downScale = MathF.Min(1, SnapGraphItem.Width * 0.9f / labelSize.X );
 
         drawList.AddText(Fonts.FontBold,
                          Fonts.FontBold.FontSize * downScale * CanvasScale ,
@@ -136,11 +136,12 @@ public class SnapGraphCanvas : ScalableCanvas
         int inputIndex;
         for (inputIndex = 1; inputIndex < item.InputLines.Length; inputIndex++)
         {
-            var input = item.InputLines[inputIndex];
+            var inputLine = item.InputLines[inputIndex];
             drawList.AddText(Fonts.FontSmall, Fonts.FontSmall.FontSize * CanvasScale,
                              pMin + new Vector2(8, 9) * CanvasScale + new Vector2(0, GridSizeOnScreen.Y * (inputIndex)),
                              labelColor.Fade(0.7f),
-                             input.Input.Input.Name);
+                             inputLine.InputUi?.InputDefinition.Name ?? "?"
+                             );
         }
 
         // Draw output labels
@@ -157,7 +158,7 @@ public class SnapGraphCanvas : ScalableCanvas
                              pMin
                              + new Vector2(-8, 9) * CanvasScale
                              + new Vector2(0, GridSizeOnScreen.Y * (outputIndex + inputIndex - 1))
-                             + new Vector2(SnapGraphItem.Width * CanvasScale - outputLabelSize.X * 10f / Fonts.FontSmall.FontSize * CanvasScale, 0),
+                             + new Vector2(SnapGraphItem.Width * CanvasScale - outputLabelSize.X  * CanvasScale, 0),
                              labelColor.Fade(0.7f),
                              outputDefinitionName);
         }
@@ -231,7 +232,8 @@ public class SnapGraphCanvas : ScalableCanvas
         if (connection.Style == SnapGraphConnection.ConnectionStyles.Unknown)
             return;
 
-        if (!TypeUiRegistry.Entries.TryGetValue(connection.TargetInput.ValueType, out var typeUiProperties))
+        var type = connection.TargetItem.InputLines[connection.InputLineIndex].Type;
+        if (!TypeUiRegistry.Entries.TryGetValue(type, out var typeUiProperties))
             return;
 
         var anchorSize = 3 * CanvasScale;

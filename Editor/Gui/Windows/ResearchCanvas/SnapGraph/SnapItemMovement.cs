@@ -63,7 +63,7 @@ public class SnapItemMovement
         _draggedNodes.Add(item);
         for (var index = 0; index < item.InputLines.Length; index++)
         {
-            var c= item.InputLines[index].Connection;
+            var c= item.InputLines[index].ConnectionIn;
             if (c == null)
                 continue;
 
@@ -73,7 +73,7 @@ public class SnapItemMovement
 
         for (var index = 0; index < item.OutputLines.Length; index++)
         {
-            var connections= item.OutputLines[index].Connections;
+            var connections= item.OutputLines[index].ConnectionsOut;
             foreach (var c in connections)
             {
                 if(c.IsSnapped)
@@ -394,7 +394,7 @@ public class SnapItemMovement
             for (var bInputLineIndex = 0; bInputLineIndex < b.InputLines.Length; bInputLineIndex++)
             {
                 ref var bInputLine = ref b.InputLines[bInputLineIndex];
-                var inConnection = bInputLine.Connection;
+                var inConnection = bInputLine.ConnectionIn;
 
                 for (var aOutLineIndex = 0; aOutLineIndex < a.OutputLines.Length; aOutLineIndex++)
                 {
@@ -410,7 +410,7 @@ public class SnapItemMovement
 
                         if (inConnection != null)
                         {
-                            foreach (var c in ol.Connections)
+                            foreach (var c in ol.ConnectionsOut)
                             {
                                 if (c != inConnection)
                                     continue;

@@ -13,7 +13,7 @@ public class SnapGraphConnection
     public SnapGraphItem TargetItem;
     public ISlot SourceOutput;
     
-    public IInputSlot TargetInput;
+    //public IInputSlot TargetInput;
     public int InputLineIndex;
     public int OutputLineIndex;
     public int VisibleOutputIndex; // Do we need that?
