@@ -124,11 +124,11 @@ public class SnapGraphCanvas : ScalableCanvas
         ImGui.PushFont(Fonts.FontBold);
         var labelSize = ImGui.CalcTextSize(item.ReadableName);
         ImGui.PopFont();
-        var downScale = MathF.Min(1, SnapGraphItem.Width / labelSize.X / 0.8f);
+        var downScale = MathF.Min(1, SnapGraphItem.Width / labelSize.X );
 
         drawList.AddText(Fonts.FontBold,
-                         Fonts.FontBold.FontSize * downScale * CanvasScale * 0.7f,
-                         pMin + new Vector2(4, 3) * CanvasScale,
+                         Fonts.FontBold.FontSize * downScale * CanvasScale ,
+                         pMin + new Vector2(8, 9) * CanvasScale,
                          labelColor,
                          item.ReadableName);
 
@@ -137,12 +137,13 @@ public class SnapGraphCanvas : ScalableCanvas
         for (inputIndex = 1; inputIndex < item.InputLines.Length; inputIndex++)
         {
             var input = item.InputLines[inputIndex];
-            drawList.AddText(Fonts.FontSmall, 10 * CanvasScale,
-                             pMin + new Vector2(4, 3) * CanvasScale + new Vector2(0, GridSizeOnScreen.Y * (inputIndex)),
+            drawList.AddText(Fonts.FontSmall, Fonts.FontSmall.FontSize * CanvasScale,
+                             pMin + new Vector2(8, 9) * CanvasScale + new Vector2(0, GridSizeOnScreen.Y * (inputIndex)),
                              labelColor.Fade(0.7f),
                              input.Input.Input.Name);
         }
 
+        // Draw output labels
         for (var outputIndex = 1; outputIndex < item.OutputLines.Length; outputIndex++)
         {
             var outputLine = item.OutputLines[outputIndex];
@@ -152,9 +153,9 @@ public class SnapGraphCanvas : ScalableCanvas
             var outputLabelSize = ImGui.CalcTextSize(outputDefinitionName);
             ImGui.PopFont();
 
-            drawList.AddText(Fonts.FontSmall, 10 * CanvasScale,
+            drawList.AddText(Fonts.FontSmall, Fonts.FontSmall.FontSize * CanvasScale,
                              pMin
-                             + new Vector2(-4, 3) * CanvasScale
+                             + new Vector2(-8, 9) * CanvasScale
                              + new Vector2(0, GridSizeOnScreen.Y * (outputIndex + inputIndex - 1))
                              + new Vector2(SnapGraphItem.Width * CanvasScale - outputLabelSize.X * 10f / Fonts.FontSmall.FontSize * CanvasScale, 0),
                              labelColor.Fade(0.7f),
@@ -385,7 +386,10 @@ public class SnapGraphCanvas : ScalableCanvas
                 {
                     NodeSelection.AddSymbolChildToSelection(item, item.Instance);
                 }
-                // FIXME: Add inputs and outputs
+                else
+                {
+                    NodeSelection.AddSelection(item);
+                }
             }
         }
     }
