@@ -5,6 +5,7 @@ using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
+using T3.Core.Utils.Geometry;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.UiHelpers;
 
@@ -258,7 +259,7 @@ namespace T3.Editor.Gui.Interaction.Camera
                 var newViewVector = newViewDir * viewDirLength;
                 _intendedSetup.Position = _intendedSetup.Target - newViewVector;
 
-                _intendedSetup.Target = _intendedSetup.Position + newViewDir * UserSettings.Config.CameraSpeed * DefaultCameraDistance;
+                _intendedSetup.Target = _intendedSetup.Position + newViewDir * UserSettings.Config.CameraSpeed * GraphicsMath.DefaultCameraDistance;
             }
             else
             {
@@ -277,8 +278,7 @@ namespace T3.Editor.Gui.Interaction.Camera
             }
         }
 
-        private const float DefaultCamFovDegrees = 45;
-        public readonly float DefaultCameraDistance = 1f / MathF.Tan(DefaultCamFovDegrees * MathF.PI / 360f);
+
 
         private void Pan()
         {
@@ -376,7 +376,7 @@ namespace T3.Editor.Gui.Interaction.Camera
 
         public void ResetCamera(ICamera cam)
         {
-            cam.CameraPosition = new Vector3(0, 0, CameraInteractionParameters.DefaultCameraPositionZ);
+            cam.CameraPosition = new Vector3(0, 0, GraphicsMath.DefaultCameraDistance);
             cam.CameraTarget = Vector3.Zero;
             cam.CameraRoll = 0;
         }

@@ -321,7 +321,7 @@
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
           "Type": "SharpDX.Size2",
           "Value": {
-            "Width": 256,
+            "Width": 512,
             "Height": 256
           }
         }
@@ -336,9 +336,9 @@
           "Id": "bbda1c8c-fa81-43ef-b773-f7ecfb8968e1"/*Fill*/,
           "Type": "System.Numerics.Vector4",
           "Value": {
-            "X": 0.46292108,
-            "Y": 0.48471618,
-            "Z": 0.44661623,
+            "X": 0.9550351,
+            "Y": 1.0,
+            "Z": 0.9213973,
             "W": 0.48
           }
         },
@@ -357,7 +357,7 @@
           "Type": "System.Numerics.Vector2",
           "Value": {
             "X": 0.03,
-            "Y": 0.0
+            "Y": 0.02
           }
         },
         {
@@ -371,17 +371,17 @@
         {
           "Id": "41f4065a-0b65-4dda-9cd3-ef7802ed170b"/*Round*/,
           "Type": "System.Single",
-          "Value": 0.11
+          "Value": 0.23
         },
         {
           "Id": "8846aa50-e4d0-433c-9e5b-013a93f17f79"/*Feather*/,
           "Type": "System.Single",
-          "Value": -0.00999999
+          "Value": 0.54
         },
         {
           "Id": "2d3a7e9a-9efe-486a-8c33-10a5a16dc17b"/*FeatherBias*/,
           "Type": "System.Single",
-          "Value": 0.39999998
+          "Value": -1.2
         }
       ],
       "Outputs": []
@@ -409,6 +409,19 @@
             "Z": 0.0,
             "W": 1.0
           }
+        },
+        {
+          "Id": "8a908810-2482-4088-8b21-a7ee15531e64"/*Size*/,
+          "Type": "System.Numerics.Vector2",
+          "Value": {
+            "X": 0.27,
+            "Y": 0.0
+          }
+        },
+        {
+          "Id": "8846aa50-e4d0-433c-9e5b-013a93f17f79"/*Feather*/,
+          "Type": "System.Single",
+          "Value": 2.76
         }
       ],
       "Outputs": []

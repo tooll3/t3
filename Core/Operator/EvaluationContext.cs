@@ -41,7 +41,7 @@ namespace T3.Core.Operator
 
         public void SetViewFromCamera(ICamera camera)
         {
-            var fov = MathUtils.ToRadians(45);
+            var fov = GraphicsMath.DefaultCamFovDegrees.ToRadians();
             var aspectRatio = (float)RequestedResolution.Width / RequestedResolution.Height;
             CameraToClipSpace = GraphicsMath.PerspectiveFovRH(fov, aspectRatio, 0.01f, 1000);
 
@@ -56,8 +56,8 @@ namespace T3.Core.Operator
         public void SetDefaultCamera()
         {
             ObjectToWorld = Matrix4x4.Identity;
-            WorldToCamera = GraphicsMath.LookAtRH(new Vector3(0, 0, 2.4141f), Vector3.Zero, VectorT3.Up);
-            var fov = MathUtils.ToRadians(45);
+            WorldToCamera = GraphicsMath.LookAtRH(new Vector3(0, 0, GraphicsMath.DefaultCameraDistance), Vector3.Zero, VectorT3.Up);
+            var fov =  GraphicsMath.DefaultCamFovDegrees.ToRadians();
             float aspectRatio = (float)RequestedResolution.Width / RequestedResolution.Height;
             CameraToClipSpace = GraphicsMath.PerspectiveFovRH(fov, aspectRatio, 0.01f, 1000);
         }
