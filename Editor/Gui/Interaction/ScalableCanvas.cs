@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -59,25 +60,23 @@ namespace T3.Editor.Gui.Interaction
         /// <summary>
         /// Convert canvas position (e.g. of an Operator) into screen position  
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual Vector2 TransformPositionFloat(Vector2 posOnCanvas)
         {
             return (posOnCanvas - Scroll) * Scale + WindowPos;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 TransformPosition(Vector2 posOnCanvas)
         {
             var v = TransformPositionFloat(posOnCanvas);
             return new Vector2((int)v.X, (int)v.Y);
         }
-
-        public Vector2 TransformPositionFloored(Vector2 posOnCanvas)
-        {
-            return MathUtils.Floor(TransformPositionFloat(posOnCanvas));
-        }
-
+        
         /// <summary>
         /// Convert canvas position (e.g. of an Operator) to screen position  
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float TransformX(float xOnCanvas)
         {
             return TransformPosition(new Vector2(xOnCanvas, 0)).X;
@@ -86,6 +85,7 @@ namespace T3.Editor.Gui.Interaction
         /// <summary>
         ///  Convert canvas position (e.g. of an Operator) to screen position 
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float TransformY(float yOnCanvas)
         {
             return TransformPositionFloat(new Vector2(0, yOnCanvas)).Y;
@@ -94,6 +94,7 @@ namespace T3.Editor.Gui.Interaction
         /// <summary>
         /// Convert a screen space position (e.g. from mouse) to canvas coordinates  
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual Vector2 InverseTransformPositionFloat(Vector2 screenPos)
         {
             return (screenPos - WindowPos) / Scale + Scroll;
@@ -110,6 +111,7 @@ namespace T3.Editor.Gui.Interaction
         /// <summary>
         /// Convert screen position to canvas position
         /// </summary>
+
         public float InverseTransformY(float yOnScreen)
         {
             return InverseTransformPositionFloat(new Vector2(0, yOnScreen)).Y;
@@ -118,12 +120,14 @@ namespace T3.Editor.Gui.Interaction
         /// <summary>
         /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 TransformDirection(Vector2 vectorInCanvas)
         {
             return TransformPositionFloat(vectorInCanvas) -
                    TransformPositionFloat(new Vector2(0, 0));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 TransformDirectionFloored(Vector2 vectorInCanvas)
         {
             var s = TransformDirection(vectorInCanvas);
@@ -133,6 +137,7 @@ namespace T3.Editor.Gui.Interaction
         /// <summary>
         /// Convert a direction (e.g. MouseDelta) from ScreenSpace to Canvas
         /// </summary>
+        /// [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector2 InverseTransformDirection(Vector2 vectorInScreen)
         {
             return vectorInScreen / Scale;

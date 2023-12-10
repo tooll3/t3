@@ -16,20 +16,9 @@ namespace T3.Editor.Gui.UiHelpers
     public interface ICanvas
     {
         /// <summary>
-        /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
-        /// </summary>
-        Vector2 TransformPositionFloat(Vector2 posOnCanvas);
-
-        /// <summary>
         /// Get integer-aligned screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
         /// </summary>
         Vector2 TransformPosition(Vector2 posOnCanvas);
-
-        /// <summary>
-        /// Get a pixel aligned screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 
-        /// </summary>
-        Vector2 TransformPositionFloored(Vector2 posOnCanvas);
-
         
         /// <summary>
         /// Get screen position applying canvas zoom and scrolling to graph position (e.g. of an Operator) 

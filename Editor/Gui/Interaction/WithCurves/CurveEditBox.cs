@@ -99,7 +99,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
                 */
 
             var combined = (MoveRingInnerRadius + MoveRingOuterRadius);
-            var center = _canvas.TransformPositionFloored(_bounds.GetCenter());
+            var center = _canvas.TransformPosition(_bounds.GetCenter());
 
             MoveHandle(
                 "<##moveLeft", Direction.Horizontal,
