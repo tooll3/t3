@@ -7,6 +7,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Editor.Gui.InputUi;
+using T3.Editor.Gui.OutputUi;
 using T3.Editor.UiModel;
 
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
@@ -83,6 +84,23 @@ public class SnapGraphLayout
                                         SymbolChild = null,
                                         SymbolChildUi = null,
                                         PosOnCanvas = inputUi.PosOnCanvas,
+                                        Size = SnapGraphItem.GridSize,
+                                    });
+        }
+        
+        foreach (var output in composition.Outputs)
+        {
+            var outputUi = parentSymbolUi.OutputUis[output.Id];
+            Items.Add(output.Id, new()
+                                    {
+                                        Category = SnapGraphItem.Categories.Output,
+                                        Id = output.Id,
+                                        Instance = composition,
+                                        Selectable = outputUi,
+                                        SymbolUi = null,
+                                        SymbolChild = null,
+                                        SymbolChildUi = null,
+                                        PosOnCanvas = outputUi.PosOnCanvas,
                                         Size = SnapGraphItem.GridSize,
                                     });
         }
@@ -207,19 +225,34 @@ public class SnapGraphLayout
             }
             else if (item.Category == SnapGraphItem.Categories.Input)
             {
-                // outputLines.Add(new SnapGraphItem.OutputLine
-                //                     {
-                //                         Output = null,
-                //                         OutputUi = null,
-                //                         IsPrimary =true,
-                //                         OutputIndex = 0,
-                //                         VisibleIndex = 0,
-                //                         Connections = new List<SnapGraphConnection>(),
-                //                     });
+                if (item.Selectable is IInputUi inputUi)
+                {
+                    var input = item.Instance.Inputs.FirstOrDefault(i => i.Id == item.Id);
+                    outputLines.Add(new SnapGraphItem.OutputLine
+                                        {
+                                            Output = input, // This looks confusing but is correct
+                                            OutputUi = null,
+                                            IsPrimary =true,
+                                            OutputIndex = 0,
+                                            VisibleIndex = 0,
+                                            Connections = new List<SnapGraphConnection>(),
+                                        });
+                    
+                }
             }
             else if (item.Category == SnapGraphItem.Categories.Output)
             {
-                // TODO
+                // if (item.Selectable is IOutputUi outputUi)
+                // {
+                //     inputLines.Add(new SnapGraphItem.InputLine()
+                //                         {
+                //                             Input = null,
+                //                             InputUi = null,
+                //                             IsPrimary =true,
+                //                             MultiInputIndex = 0,
+                //                             VisibleIndex = 0,
+                //                         });
+                // }
             }
 
             item.InputLines = inputLines.ToArray();
@@ -234,37 +267,53 @@ public class SnapGraphLayout
     {
         SnapConnections.Clear();
         SnapConnections.Capacity = composition.Symbol.Connections.Count;
+        
         foreach (var c in composition.Symbol.Connections)
         {
+            if (c.IsConnectedToSymbolInput)
+            {
+                if (!Items.TryGetValue(c.TargetParentOrChildId, out var targetItem2)
+                    ||!Items.TryGetValue(c.SourceSlotId, out var symbolInputItem))
+                    continue;
+                
+                //var output = sourceItem.Instance.Outputs.FirstOrDefault(o => o.Id == c.SourceSlotId);
+                var symbolInput = composition.Inputs.FirstOrDefault((i => i.Id == c.SourceSlotId));
+                var targetInput = targetItem2.Instance.Inputs.FirstOrDefault(i => i.Input.InputDefinition.Id == c.TargetSlotId);
+                GetVisibleInputIndex(targetItem2, targetInput, out var targetInputIndex, out var targetMultiInputIndex);
+                
+                var connectionFromSymbolInput = new SnapGraphConnection
+                                              {
+                                                  Style = SnapGraphConnection.ConnectionStyles.Unknown,
+                                                  SourceItem = symbolInputItem,
+                                                  SourceOutput = symbolInput,
+                                                  TargetItem = targetItem2,
+                                                  TargetInput = targetInput,
+                                                  InputLineIndex = targetInputIndex,
+                                                  OutputLineIndex = 0,
+                                                  ConnectionHash = c.GetHashCode(),
+                                                  MultiInputIndex = targetMultiInputIndex,
+                                                  VisibleOutputIndex = 0,
+                                              };
+            
+                symbolInputItem.OutputLines[0].Connections.Add(connectionFromSymbolInput);
+                targetItem2.InputLines[targetInputIndex].Connection = connectionFromSymbolInput;
+                SnapConnections.Add(connectionFromSymbolInput);
+                continue;
+            }
+            
             // Skip connection to symbol inputs and outputs for now
-            if (c.IsConnectedToSymbolInput
-                || c.IsConnectedToSymbolOutput
+            if (c.IsConnectedToSymbolOutput
                 || !Items.TryGetValue(c.SourceParentOrChildId, out var sourceItem)
                 || !Items.TryGetValue(c.TargetParentOrChildId, out var targetItem)
                )
                 continue;
 
+            
+            // Connections between nodes
             var output = sourceItem.Instance.Outputs.FirstOrDefault(o => o.Id == c.SourceSlotId);
             var input = targetItem.Instance.Inputs.FirstOrDefault(i => i.Input.InputDefinition.Id == c.TargetSlotId);
 
-            // Find connected index
-            var inputIndex = 0;
-            int multiInputIndex = 0;
-            for (var index = 0; index < targetItem.InputLines.Length; index++)
-            {
-                if (targetItem.InputLines[index].Input == input)
-                {
-                    while (targetItem.InputLines[index].Connection != null && index < targetItem.InputLines.Length)
-                    {
-                        index++;
-                        inputIndex++;
-                        multiInputIndex++;
-                    } 
-                    break;
-                }
-
-                inputIndex++;
-            }
+            GetVisibleInputIndex(targetItem, input, out var inputIndex, out var multiInputIndex2);
 
             var outputIndex = 0;
             foreach (var outLine in sourceItem.OutputLines)
@@ -292,7 +341,7 @@ public class SnapGraphLayout
                                               InputLineIndex = inputIndex,
                                               OutputLineIndex = outputIndex,
                                               ConnectionHash = c.GetHashCode(),
-                                              MultiInputIndex = multiInputIndex,
+                                              MultiInputIndex = multiInputIndex2,
                                               VisibleOutputIndex = sourceItem.OutputLines[outputIndex].VisibleIndex,
                                           };
             
@@ -301,7 +350,30 @@ public class SnapGraphLayout
             SnapConnections.Add(snapGraphConnection);
         }
     }
-    
+
+    private static void GetVisibleInputIndex(SnapGraphItem targetItem, IInputSlot input, out int inputIndex, out int multiInputIndex)
+    {
+        // Find connected index
+        inputIndex = 0;
+        multiInputIndex = 0;
+        for (var index = 0; index < targetItem.InputLines.Length; index++)
+        {
+            if (targetItem.InputLines[index].Input == input)
+            {
+                while (targetItem.InputLines[index].Connection != null && index < targetItem.InputLines.Length)
+                {
+                    index++;
+                    inputIndex++;
+                    multiInputIndex++;
+                }
+
+                break;
+            }
+
+            inputIndex++;
+        }
+    }
+
     private void UpdateLayout()
     {
         foreach (var sc in SnapConnections)
