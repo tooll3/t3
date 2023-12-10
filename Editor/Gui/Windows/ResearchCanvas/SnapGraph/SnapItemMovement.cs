@@ -111,7 +111,7 @@ public class SnapItemMovement
             }
             else
             {
-                Log.Debug("Collecting snapped");
+                //Log.Debug("Collecting snapped");
                 _draggedNodes.Clear();
                 AddSnappedItemsToHashSet(item);
                 //_draggedNodes = new HashSet<SnapGraphItem> { item };
@@ -250,7 +250,7 @@ public class SnapItemMovement
         {
             {
                 var timeSincePress = ImGui.GetTime() - _mousePressedTime;
-                Log.Debug(""+timeSincePress);
+                //Log.Debug(""+timeSincePress);
                 var longTapDuration = 0.3f;
                 var longTapProgress = (float)(timeSincePress / longTapDuration);
                 if (longTapProgress < 1)
@@ -274,7 +274,7 @@ public class SnapItemMovement
 
         if (!_isDragging)
         {
-            Log.Debug("Dragging has begun");
+            //Log.Debug("Dragging has begun");
             _dragStartPosInOpOnCanvas = canvas.InverseTransformPositionFloat(ImGui.GetMousePos());
             _isDragging = true;
         }

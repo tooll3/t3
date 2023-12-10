@@ -14,7 +14,6 @@ using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
-using T3.Editor.UiModel;
 using Color = T3.Editor.Gui.Styling.Color;
 using GraphicsMath = T3.Core.Utils.Geometry.GraphicsMath;
 using Plane = System.Numerics.Plane;
@@ -35,7 +34,7 @@ namespace T3.Editor.Gui.Interaction.TransformGizmos
     {
         public static bool IsDragging => _draggedGizmoPart != GizmoParts.None;
 
-        public static void RegisterSelectedTransformable(SymbolChildUi node, ITransformable transformable)
+        public static void RegisterSelectedTransformable(ITransformable transformable)
         {
             if (_selectedTransformables.Contains(transformable))
                 return;

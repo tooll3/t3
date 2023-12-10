@@ -245,11 +245,11 @@ public class SnapGraphItem : ISelectableCanvasObject
     {
         if (Category == SnapGraphItem.Categories.Operator)
         {
-            NodeSelection.SetSelectionToChildUi(SymbolChildUi, Instance);
+            NodeSelection.SetSelectionToChildUi(this, Instance);
         }
         else
         {
-            NodeSelection.SetSelection(Selectable);
+            NodeSelection.SetSelection(this);
         }
     }
 
