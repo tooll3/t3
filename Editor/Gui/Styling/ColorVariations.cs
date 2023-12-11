@@ -1,4 +1,5 @@
 ﻿using System;
+using T3.Core.DataTypes.Vector;
 
 namespace T3.Editor.Gui.Styling;
 

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -116,12 +117,12 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
                                 var indices = child.Mesh.Primitives[0].GetTriangleIndices().ToList();
                                 faceCount = indices.Count;
                                 if (newData.IndexBufferData.Length != faceCount)
-                                    newData.IndexBufferData = new SharpDX.Int3[faceCount];
+                                    newData.IndexBufferData = new Int3[faceCount];
 
                                 var faceIndex = 0;
                                 foreach (var (a, b, c) in indices)
                                 {
-                                    newData.IndexBufferData[faceIndex] = new SharpDX.Int3(a, b, c);
+                                    newData.IndexBufferData[faceIndex] = new Int3(a, b, c);
                                     
                                     // Calc TBN space
                                     var aPos = newData.VertexBufferData[a].Position;
@@ -204,7 +205,7 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
             public readonly BufferWithViews VertexBufferWithViews = new BufferWithViews();
 
             public Buffer IndexBuffer;
-            public SharpDX.Int3[] IndexBufferData = new SharpDX.Int3[0];
+            public Int3[] IndexBufferData = new Int3[0];
             public readonly BufferWithViews IndexBufferWithViews = new BufferWithViews();
         }
 

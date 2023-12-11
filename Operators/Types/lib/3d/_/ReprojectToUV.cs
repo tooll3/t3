@@ -1,4 +1,5 @@
 using T3.Core;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -25,7 +26,7 @@ namespace T3.Operators.Types.Id_4238439e_a6b4_4390_9984_e6ebf19c3a69
         public readonly InputSlot<object> CameraReference = new InputSlot<object>();
 
         [Input(Guid = "6ff4c0bd-f47c-48f2-a2bc-ba13f7cff3ce")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "c4fff7ca-02d3-4337-b4e8-9c3074f98eb5")]
         public readonly InputSlot<System.Numerics.Vector4> ClearColor = new InputSlot<System.Numerics.Vector4>();

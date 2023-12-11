@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -14,7 +15,7 @@ namespace T3.Operators.Types.Id_da93f7d1_ef91_4b4a_9708_2d9b1baa4c14
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Image = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
         [Input(Guid = "cb52ff49-17de-4e36-b918-5de6973a234a")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "c45d487b-3221-44c7-bf9e-b982a65280f6")]
         public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();

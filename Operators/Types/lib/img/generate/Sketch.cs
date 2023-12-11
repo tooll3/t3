@@ -1,5 +1,6 @@
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -39,7 +40,7 @@ namespace T3.Operators.Types.Id_8e6ed99c_a3e0_42c0_9f81_a89b1e340757
         public readonly InputSlot<int> OverridePageIndex = new InputSlot<int>();
 
         [Input(Guid = "5cdb04d5-9bef-4789-8082-ea04e56b3ca7")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         private enum ShowModes
         {

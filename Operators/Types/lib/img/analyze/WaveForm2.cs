@@ -1,4 +1,5 @@
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -26,7 +27,7 @@ namespace T3.Operators.Types.Id_92e28e50_bd40_4f93_ba92_8f69cded6ec1
         public readonly InputSlot<float> ColorIntensity = new InputSlot<float>();
 
         [Input(Guid = "3a226812-98bf-4fe9-b435-f84b154a41e8")]
-        public readonly InputSlot<SharpDX.Size2> OverrideSize = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> OverrideSize = new InputSlot<Int2>();
 
         [Input(Guid = "5ce4b7d6-ecaf-44d9-aa67-74892339cb06")]
         public readonly InputSlot<float> EnlargeVectorScopeCenter = new InputSlot<float>();

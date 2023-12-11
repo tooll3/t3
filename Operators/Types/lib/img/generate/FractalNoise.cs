@@ -1,3 +1,4 @@
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -34,7 +35,7 @@ namespace T3.Operators.Types.Id_97eb35ec_2825_4f63_8fdf_3fe38fa9e652
         public readonly InputSlot<float> Bias = new InputSlot<float>();
 
         [Input(Guid = "37b24ceb-2d25-43e8-a31c-7caf62c2b7ee")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "120f0ce7-8560-477d-8e71-5bcbeae932c0")]
         public readonly InputSlot<System.Numerics.Vector3> WarpOffset = new InputSlot<System.Numerics.Vector3>();

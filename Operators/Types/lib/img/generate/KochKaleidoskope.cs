@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -38,7 +39,7 @@ namespace T3.Operators.Types.Id_f7366bdc_86b2_4951_8788_3826126ed8c2
         public readonly InputSlot<float> ShadeFolds = new InputSlot<float>();
 
         [Input(Guid = "8866edf5-9f58-4da5-abd1-b4e25607bedc")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
     }
 }
 

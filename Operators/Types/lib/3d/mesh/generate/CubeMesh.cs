@@ -1,9 +1,9 @@
 using System;
 using System.Numerics;
-using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -67,7 +67,7 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                     _vertexBufferData = new PbrVertex[verticesCount];
 
                 if (_indexBufferData.Length != faceCount)
-                    _indexBufferData = new SharpDX.Int3[faceCount];
+                    _indexBufferData = new Int3[faceCount];
 
                 int sideFaceIndex = 0;
                 int sideVertexIndex = 0;
@@ -131,8 +131,8 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
                             if (columnIndex >= columnCount - 1 || rowIndex >= rowCount - 1)
                                 continue;
 
-                            _indexBufferData[faceIndex + 0] = new SharpDX.Int3(vertexIndex, vertexIndex + rowCount, vertexIndex + 1);
-                            _indexBufferData[faceIndex + 1] = new SharpDX.Int3(vertexIndex + rowCount, vertexIndex + rowCount + 1, vertexIndex + 1);
+                            _indexBufferData[faceIndex + 0] = new Int3(vertexIndex, vertexIndex + rowCount, vertexIndex + 1);
+                            _indexBufferData[faceIndex + 1] = new Int3(vertexIndex + rowCount, vertexIndex + rowCount + 1, vertexIndex + 1);
                         }
                     }
 
@@ -294,7 +294,7 @@ namespace T3.Operators.Types.Id_c47ab830_aae7_4f8f_b67c_9119bcbaf7df
         private readonly BufferWithViews _vertexBufferWithViews = new BufferWithViews();
 
         private Buffer _indexBuffer;
-        private SharpDX.Int3[] _indexBufferData = new SharpDX.Int3[0];
+        private Int3[] _indexBufferData = new Int3[0];
         private readonly BufferWithViews _indexBufferWithViews = new BufferWithViews();
 
         private readonly MeshBuffers _data = new MeshBuffers();

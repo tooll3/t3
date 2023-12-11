@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -20,7 +21,7 @@ namespace T3.Operators.Types.Id_bd0b9c5b_c611_42d0_8200_31af9661f189
         public readonly MultiInputSlot<float> Params = new MultiInputSlot<float>();
 
         [Input(Guid = "9695b557-433c-474b-bf34-219cbc134bee")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "3fe1b650-ce34-4155-9b61-0425e39f7690")]
         public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> Wrap = new InputSlot<SharpDX.Direct3D11.TextureAddressMode>();

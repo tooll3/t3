@@ -5,6 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
@@ -91,8 +92,8 @@ namespace T3.Operators.Types.Id_42703423_1414_489e_aac2_21a3d7204262
                         // Position to the wanted pixel. 4 of bytes per pixel
                         sourceStream.Seek(row * sourceDataBox.RowPitch + 4 * column, System.IO.SeekOrigin.Begin);
 
-                        var dxColor = new SharpDX.Color4(sourceStream.Read<Int32>()); 
-                        color = new Vector4(dxColor.Red, dxColor.Green, dxColor.Blue, dxColor.Alpha);
+                        var colorBytes = new Byte4(sourceStream.Read<Int32>());
+                        color = new Color(colorBytes);
                     }
                         break;
 

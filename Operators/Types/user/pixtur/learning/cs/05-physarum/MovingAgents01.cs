@@ -1,4 +1,5 @@
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -44,7 +45,7 @@ namespace T3.Operators.Types.Id_0eff6d8b_0fca_420d_839c_3e90dff76cb8
         public readonly InputSlot<bool> ShowAgents = new InputSlot<bool>();
 
         [Input(Guid = "e07183fd-9813-4f98-bc7a-5e82775a880b")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "1cc5ba51-e2a6-4743-805c-163237a9f4f1")]
         public readonly InputSlot<int> AgentCount = new InputSlot<int>();

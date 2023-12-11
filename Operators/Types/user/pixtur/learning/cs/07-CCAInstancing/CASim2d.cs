@@ -1,5 +1,6 @@
 using System.Numerics;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -13,7 +14,7 @@ namespace T3.Operators.Types.Id_63090462_3237_465e_a12c_25c8bbfaaa8c
         public readonly Slot<SharpDX.Direct3D11.Texture2D> CABuffer2 = new Slot<SharpDX.Direct3D11.Texture2D>();
 
         [Input(Guid = "69b5c584-f365-469c-bf08-b1a125f7d757")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "0f5159f9-7577-4e02-85f2-73f7566b897d")]
         public readonly InputSlot<int> States = new InputSlot<int>();

@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -26,7 +27,7 @@ namespace T3.Operators.Types.Id_ba059fe1_3397_4950_9ddd_e328f0c2e0bd
         public readonly InputSlot<float> Scale = new InputSlot<float>();
 
         [Input(Guid = "485ea866-3764-402b-8bb5-ade85efde0c1")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "55c3fe18-be3c-479b-b9cf-4473c4696f2e")]
         public readonly InputSlot<float> Radius = new InputSlot<float>();

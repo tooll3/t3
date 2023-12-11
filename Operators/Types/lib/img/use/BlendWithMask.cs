@@ -1,3 +1,4 @@
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -25,7 +26,7 @@ namespace T3.Operators.Types.Id_7da55d23_0bd1_457b_a036_9b6b51d2e34b
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> Mask = new InputSlot<SharpDX.Direct3D11.Texture2D>();
 
         [Input(Guid = "ff0e3f81-1340-40e7-9c95-b88938d63901")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
     }
 }

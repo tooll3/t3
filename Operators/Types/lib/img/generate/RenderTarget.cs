@@ -9,12 +9,14 @@ using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using Color = SharpDX.Color;
 using Device = SharpDX.Direct3D11.Device;
 using Utilities = T3.Core.Utils.Utilities;
 using Vector4 = System.Numerics.Vector4;
@@ -54,7 +56,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
         {
             var device = ResourceManager.Device;
             
-            Size2 size = Resolution.GetValue(context);
+            Int2 size = Resolution.GetValue(context);
             bool generateMips = GenerateMips.GetValue(context);
             var withDepthBuffer = WithDepthBuffer.GetValue(context);
             var clear = Clear.GetValue(context);
@@ -255,7 +257,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
         }
         
         
-        private bool UpdateTextures(Device device, Size2 size, Format colorFormat, Format depthFormat, bool generateMips)
+        private bool UpdateTextures(Device device, Int2 size, Format colorFormat, Format depthFormat, bool generateMips)
         {
             int w = Math.Max(size.Width, size.Height);
             int mipLevels = generateMips ? (int)MathUtils.Log2(w) + 1 : 1;
@@ -498,7 +500,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
         public readonly InputSlot<Command> Command = new InputSlot<Command>();
 
         [Input(Guid = "03749b41-cc3c-4f38-aea6-d7cea19fc073")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f")]
         public readonly InputSlot<System.Numerics.Vector4> ClearColor = new InputSlot<System.Numerics.Vector4>();

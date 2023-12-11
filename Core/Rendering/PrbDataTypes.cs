@@ -10,6 +10,8 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector4 = System.Numerics.Vector4;
 using Vector3 = System.Numerics.Vector3;
 using Vector2 = System.Numerics.Vector2;
+using T3.Core.DataTypes;
+using Int3 = T3.Core.DataTypes.Vector.Int3;
 
 namespace T3.Core.Rendering
 {
@@ -44,7 +46,7 @@ namespace T3.Core.Rendering
     public struct PbrFace
     {
         [FieldOffset(0)]
-        public SharpDX.Int3 VertexIndices;
+        public Int3 VertexIndices;
 
         [FieldOffset(3 * 4)]
         private readonly float __padding;

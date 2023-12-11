@@ -1,9 +1,9 @@
 using System;
 using System.Numerics;
-using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -67,7 +67,7 @@ namespace T3.Operators.Types.Id_9d6dbf28_9983_4584_abba_6281ce51d583
                     _vertexBufferData = new PbrVertex[verticesCount];
                 
                 if (_indexBufferData.Length != faceCount)
-                    _indexBufferData = new SharpDX.Int3[faceCount];
+                    _indexBufferData = new Int3[faceCount];
 
                 double columnStep = (scale * stretch.X) / (columns-1);  
                 double rowStep = (scale * stretch.Y) / (rows-1);
@@ -116,8 +116,8 @@ namespace T3.Operators.Types.Id_9d6dbf28_9983_4584_abba_6281ce51d583
                         if (columnIndex >= columns - 1 || rowIndex >= rows - 1)
                             continue;
                         
-                        _indexBufferData[faceIndex + 0] = new SharpDX.Int3(vertexIndex, vertexIndex + rows, vertexIndex + 1);
-                        _indexBufferData[faceIndex + 1] = new SharpDX.Int3(vertexIndex + rows, vertexIndex + rows+1, vertexIndex + 1);
+                        _indexBufferData[faceIndex + 0] = new Int3(vertexIndex, vertexIndex + rows, vertexIndex + 1);
+                        _indexBufferData[faceIndex + 1] = new Int3(vertexIndex + rows, vertexIndex + rows+1, vertexIndex + 1);
                     }
                 }
                 
@@ -149,13 +149,13 @@ namespace T3.Operators.Types.Id_9d6dbf28_9983_4584_abba_6281ce51d583
         private readonly BufferWithViews _vertexBufferWithViews = new BufferWithViews();
 
         private Buffer _indexBuffer;
-        private SharpDX.Int3[] _indexBufferData = new SharpDX.Int3[0];
+        private Int3[] _indexBufferData = new Int3[0];
         private readonly BufferWithViews _indexBufferWithViews = new BufferWithViews();
 
         private readonly MeshBuffers _data = new MeshBuffers();
 
         [Input(Guid = "18a5f3be-92a7-438c-b32b-e0da7c7a5736")]
-        public readonly InputSlot<Size2> Segments = new InputSlot<Size2>();
+        public readonly InputSlot<Int2> Segments = new InputSlot<Int2>();
         
         [Input(Guid = "0295DD65-95B4-4E02-8D61-4622F59D4FC4")]
         public readonly InputSlot<Vector2> Stretch = new InputSlot<Vector2>();

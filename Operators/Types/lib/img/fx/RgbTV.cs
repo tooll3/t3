@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -86,7 +87,7 @@ namespace T3.Operators.Types.Id_5972a57b_73cd_49b2_8b24_96636a4c294b
         public readonly InputSlot<float> Vignette = new InputSlot<float>();
 
         [Input(Guid = "e3f06019-97a4-44b3-b9b4-36d07cbd53ac")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
     }
 }
 

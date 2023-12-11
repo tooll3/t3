@@ -3,6 +3,7 @@ using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -25,7 +26,7 @@ namespace T3.Operators.Types.Id_f52db9a4_fde9_49ca_9ef7_131825c34e65
 
         private void UpdateTexture(EvaluationContext context)
         {
-            Size2 size = Size.GetValue(context);
+            var size = Size.GetValue(context);
             if (size.Height <= 0 || size.Width <= 0)
             {
                 Log.Warning($"Requested invalid texture resolution: {size}", this);
@@ -63,7 +64,7 @@ namespace T3.Operators.Types.Id_f52db9a4_fde9_49ca_9ef7_131825c34e65
         }
 
         [Input(Guid = "{B77088A9-2676-4CAA-809A-5E0F120D25D7}")]
-        public readonly InputSlot<Size2> Size = new InputSlot<Size2>();
+        public readonly InputSlot<Int2> Size = new InputSlot<Int2>();
 
         [Input(Guid = "{58FF26E7-6BEB-44CB-910B-FE467402CEE9}")]
         public readonly InputSlot<int> MipLevels = new InputSlot<int>();

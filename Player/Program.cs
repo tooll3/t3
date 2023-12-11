@@ -16,6 +16,7 @@ using SharpDX.DXGI;
 using SharpDX.Windows;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.DataTypes.Vector;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -249,7 +250,7 @@ namespace T3.Player
                         context.OutputMerger.SetTargets(_renderView);
 
                         _evalContext.Reset();
-                        _evalContext.RequestedResolution = new Size2(options.Width, options.Height);
+                        _evalContext.RequestedResolution = new Int2(options.Width, options.Height);
 
                         if (_project.Outputs[0] is Slot<Texture2D> textureOutput)
                         {
@@ -309,7 +310,7 @@ namespace T3.Player
                                          context.OutputMerger.SetTargets(_renderView);
 
                                          _evalContext.Reset();
-                                         _evalContext.RequestedResolution = new Size2(options.Width, options.Height);
+                                         _evalContext.RequestedResolution = new Int2(options.Width, options.Height);
 
                                          if (_project.Outputs[0] is Slot<Texture2D> textureOutput)
                                          {

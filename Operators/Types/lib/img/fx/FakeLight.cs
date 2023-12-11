@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -44,7 +45,7 @@ namespace T3.Operators.Types.Id_6820b166_1782_43b9_bc5c_6b4f63b16f86
         public readonly InputSlot<float> SampleRadius = new InputSlot<float>();
 
         [Input(Guid = "3c615aa0-61b7-43c5-bea3-8d1110b4f5cd")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
     }
 }

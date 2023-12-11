@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -56,7 +57,7 @@ namespace T3.Operators.Types.Id_6854e04f_8b60_41b2_a369_ca0b715c4df3
         public readonly InputSlot<float> BAffects_RowShift = new InputSlot<float>();
 
         [Input(Guid = "d3827fcf-ccee-471e-8cbd-1ffd2155be40")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "9bc1afbb-d9e5-4bc8-afa9-2cbba0215a5a")]
         public readonly InputSlot<float> AmplifyIllusion = new InputSlot<float>();

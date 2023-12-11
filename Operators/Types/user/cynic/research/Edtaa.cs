@@ -4,12 +4,14 @@ using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using Color = T3.Core.DataTypes.Vector.Color;
 using Utilities = T3.Core.Utils.Utilities;
 using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
@@ -115,8 +117,8 @@ namespace T3.Operators.Types.Id_afcd4aad_8c8d_4e59_8e8e_a8c12d312200
                     {
                         for (int x = 0; x < width; ++x)
                         {
-                            var color = new Color4(sourceStream.Read<Int32>());
-                            float v = color.Red;
+                            var color = new Color(new Byte4(sourceStream.Read<Int32>()));
+                            float v = color.R;
                             _data[y * width + x] = v;
                             if (v > maxValue)
                                 maxValue = v;
@@ -157,13 +159,10 @@ namespace T3.Operators.Types.Id_afcd4aad_8c8d_4e59_8e8e_a8c12d312200
                             {
                                 int i = y * width + x;
                                 // distmap = outside - inside; % Bipolar distance field
-                                var color = new Color4(sourceStream.Read<Int32>());
+                                _ = sourceStream.Read<Int32>();
                                 outside[i] = MathUtils.Clamp(128.0f + (outside[i] - inside[i]) * 16.0f, 0.0f, 255.0f);
                                 //color.Alpha = (255 - (byte) outside[i])/255.0f;
                                 float f = (255 - (byte)outside[i]) / 255.0f;
-                                color.Red = f;
-                                color.Blue = f;
-                                color.Green = f;
                                 float alpha = 1 - _data[i];
                                 {
                                     // do alpha dilatation
@@ -181,9 +180,9 @@ namespace T3.Operators.Types.Id_afcd4aad_8c8d_4e59_8e8e_a8c12d312200
                                     }
                                 }
 
-                                color.Alpha = alpha;// * 0.8f; // > 0.0f ? 0.5f : 0;
+                                var color = new Color(f, f, f, alpha);
 
-                                destinationStream.Write(color.ToRgba());
+                                destinationStream.Write(color.ToByte4());
                             }
 
                             destinationStream.Position += destinationDataBox.RowPitch - width * 4;

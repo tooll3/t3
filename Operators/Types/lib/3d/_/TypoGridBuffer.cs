@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Numerics;
 using System.Runtime.InteropServices;
-using SharpDX;
-using SharpDX.Direct3D11;
 using T3.Core;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -114,7 +114,7 @@ namespace T3.Operators.Types.Id_fa45d013_5a1c_45a0_9b05_a4a4edfb06f9
         public readonly InputSlot<float> Height = new InputSlot<float>();
 
         [Input(Guid = "00B52213-7D87-457A-8A17-F33D471CDAFE")]
-        public readonly InputSlot<Size2> BufferSize = new InputSlot<Size2>();
+        public readonly InputSlot<Int2> BufferSize = new InputSlot<Int2>();
         
         [Input(Guid = "E4AA7336-3D09-470E-B09C-352EFBC706F3")]
         public readonly InputSlot<System.Numerics.Vector2> CellSize = new InputSlot<System.Numerics.Vector2>();

@@ -15,7 +15,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
-using Color = T3.Editor.Gui.Styling.Color;
+using Color = T3.Core.DataTypes.Vector.Color;
 using GraphicsMath = T3.Core.Utils.Geometry.GraphicsMath;
 using Plane = System.Numerics.Plane;
 using Quaternion = System.Numerics.Quaternion;

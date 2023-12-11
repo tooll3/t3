@@ -1,5 +1,5 @@
 using System;
-using SharpDX;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -20,11 +20,11 @@ namespace T3.Operators.Types.Id_d1a66374_f0e8_4ef5_adf4_2871ec549d2a
         private void Update(EvaluationContext context)
         {
             var s = Int2.GetValue(context);
-            Result.Value = new System.Numerics.Vector2(s.Width, s.Height);;
+            Result.Value = s;
         }
         
         [Input(Guid = "5C493D16-CC75-4CD5-96D9-ECA3ADEACCD9")]
-        public readonly InputSlot<Size2> Int2 = new InputSlot<Size2>();
+        public readonly InputSlot<Int2> Int2 = new InputSlot<Int2>();
         
         
     }

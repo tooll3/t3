@@ -1,4 +1,5 @@
 using System;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -62,7 +63,7 @@ namespace T3.Operators.Types.Id_cb28a67e_80cb_460a_8130_00e3cd85b7c2
         public readonly InputSlot<float> ScrollOffset = new InputSlot<float>();
 
         [Input(Guid = "b7571823-89a5-4a93-8828-eadf631438c9")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "99703d55-754e-4bce-aa90-1fe385d2af8e")]
         public readonly InputSlot<int> HighlightSeed = new InputSlot<int>();

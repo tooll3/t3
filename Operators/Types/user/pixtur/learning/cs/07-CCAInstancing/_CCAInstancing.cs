@@ -1,5 +1,6 @@
 using System.Numerics;
 using SharpDX.Direct3D11;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -36,7 +37,7 @@ namespace T3.Operators.Types.Id_7f40b06a_d5f9_490a_9acc_24eff78e3b40
         public readonly InputSlot<bool> UseMooreRegion = new InputSlot<bool>();
 
         [Input(Guid = "d010338b-9685-4256-bbc0-afeb16cb4363")]
-        public readonly InputSlot<SharpDX.Size2> PointGridRez = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> PointGridRez = new InputSlot<Int2>();
 
     }
 }

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Numerics;
 using ImGuiNET;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Styling;
@@ -111,8 +112,8 @@ namespace T3.Editor.Gui.Windows
         }
         
 
-        private static  Color ColorForUiBar => UiColors.ForegroundFull.Fade(0.6f);
-        private static  Color ColorForFramerateBar => UiColors.ForegroundFull.Fade(0.3f);
+        private static uint ColorForUiBar => UiColors.ForegroundFull.Fade(0.6f);
+        private static uint ColorForFramerateBar => UiColors.ForegroundFull.Fade(0.3f);
         private const float ExpectedFramerate = 60;
         private const float ExpectedFrameDurationMs = 1 / ExpectedFramerate * 1000;
 
