@@ -279,7 +279,7 @@
       "Outputs": []
     },
     {
-      "Id": "7c9d27e7-4305-48b3-8d85-13eee559d3dd"/*Vector2ToFloat2*/,
+      "Id": "7c9d27e7-4305-48b3-8d85-13eee559d3dd"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -569,7 +569,7 @@
       "Outputs": []
     },
     {
-      "Id": "af6838bb-db12-4a0a-b4a7-a9080f7ef1a4"/*Float2ToVector2*/,
+      "Id": "af6838bb-db12-4a0a-b4a7-a9080f7ef1a4"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
@@ -604,7 +604,7 @@
       "Outputs": []
     },
     {
-      "Id": "7a005408-0d2b-4f10-a5e8-b9921707673a"/*Float3ToVector3*/,
+      "Id": "7a005408-0d2b-4f10-a5e8-b9921707673a"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []

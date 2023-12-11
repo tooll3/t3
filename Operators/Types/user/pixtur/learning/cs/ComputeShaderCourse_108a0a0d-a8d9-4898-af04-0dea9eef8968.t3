@@ -293,10 +293,10 @@
         },
         {
           "Id": "3c615aa0-61b7-43c5-bea3-8d1110b4f5cd"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": -1,
-            "Height": 0
+            "X": -1,
+            "Y": 0
           }
         }
       ],
@@ -359,10 +359,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 256,
-            "Height": 256
+            "X": 256,
+            "Y": 256
           }
         }
       ],
@@ -496,10 +496,10 @@
       "InputValues": [
         {
           "Id": "69b5c584-f365-469c-bf08-b1a125f7d757"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 256,
-            "Height": 128
+            "X": 256,
+            "Y": 128
           }
         },
         {
@@ -569,10 +569,10 @@
       "InputValues": [
         {
           "Id": "69b5c584-f365-469c-bf08-b1a125f7d757"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 256,
-            "Height": 128
+            "X": 256,
+            "Y": 128
           }
         },
         {
@@ -624,10 +624,10 @@
       "InputValues": [
         {
           "Id": "69b5c584-f365-469c-bf08-b1a125f7d757"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 256,
-            "Height": 128
+            "X": 256,
+            "Y": 128
           }
         },
         {
@@ -685,10 +685,10 @@
       "InputValues": [
         {
           "Id": "4d4db9ad-b3a3-4da6-8716-23d21c5ffc4a"/*CellCounts*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 3,
-            "Height": 2
+            "X": 3,
+            "Y": 2
           }
         }
       ],
@@ -749,10 +749,10 @@
       "InputValues": [
         {
           "Id": "69b5c584-f365-469c-bf08-b1a125f7d757"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 256,
-            "Height": 128
+            "X": 256,
+            "Y": 128
           }
         },
         {
@@ -804,10 +804,10 @@
       "InputValues": [
         {
           "Id": "69b5c584-f365-469c-bf08-b1a125f7d757"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 256,
-            "Height": 128
+            "X": 256,
+            "Y": 128
           }
         },
         {
@@ -859,10 +859,10 @@
       "InputValues": [
         {
           "Id": "69b5c584-f365-469c-bf08-b1a125f7d757"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 256,
-            "Height": 128
+            "X": 256,
+            "Y": 128
           }
         },
         {
@@ -1086,7 +1086,7 @@
       "Outputs": []
     },
     {
-      "Id": "0c13c7a9-0d23-456f-b3e9-353fbaa40b38"/*Int2ToSize2*/,
+      "Id": "0c13c7a9-0d23-456f-b3e9-353fbaa40b38"/*Int2*/,
       "SymbolId": "f1218934-f874-4f70-a077-0ebe7d12104d",
       "InputValues": [
         {
@@ -1137,10 +1137,10 @@
       "InputValues": [
         {
           "Id": "69b5c584-f365-469c-bf08-b1a125f7d757"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 311,
-            "Height": 156
+            "X": 311,
+            "Y": 156
           }
         },
         {
@@ -1192,7 +1192,7 @@
       "Outputs": []
     },
     {
-      "Id": "e24f3e86-e2d0-4952-bce8-afe7c4fe7b90"/*Int2ToSize2*/,
+      "Id": "e24f3e86-e2d0-4952-bce8-afe7c4fe7b90"/*Int2*/,
       "SymbolId": "f1218934-f874-4f70-a077-0ebe7d12104d",
       "InputValues": [
         {

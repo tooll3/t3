@@ -634,10 +634,10 @@
         },
         {
           "Id": "b7571823-89a5-4a93-8828-eadf631438c9"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 1024,
-            "Height": 1024
+            "X": 1024,
+            "Y": 1024
           }
         }
       ],
@@ -2510,10 +2510,10 @@
         },
         {
           "Id": "b7571823-89a5-4a93-8828-eadf631438c9"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 1024,
-            "Height": 1024
+            "X": 1024,
+            "Y": 1024
           }
         }
       ],

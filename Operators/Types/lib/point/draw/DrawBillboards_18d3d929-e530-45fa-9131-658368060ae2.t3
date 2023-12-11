@@ -175,8 +175,8 @@
     {
       "Id": "261faf50-c63e-4d4a-a496-648bbb3ea2c5"/*AtlasSize*/,
       "DefaultValue": {
-        "Width": 1,
-        "Height": 1
+        "X": 1,
+        "Y": 1
       }
     },
     {
@@ -365,7 +365,7 @@
       "Outputs": []
     },
     {
-      "Id": "06b8cbb9-bf57-4047-80b2-a9b7fc6cfd21"/*Vector4ToFloat4*/,
+      "Id": "06b8cbb9-bf57-4047-80b2-a9b7fc6cfd21"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [
         {
@@ -459,7 +459,7 @@
       "Outputs": []
     },
     {
-      "Id": "a5b3e932-785e-4d2e-bafc-1a12a7b52e8d"/*Vector2ToFloat2*/,
+      "Id": "a5b3e932-785e-4d2e-bafc-1a12a7b52e8d"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -601,7 +601,7 @@
       "Outputs": []
     },
     {
-      "Id": "44c9b9eb-a198-4f62-9b68-020003ef4aab"/*Vector3ToFloat3*/,
+      "Id": "44c9b9eb-a198-4f62-9b68-020003ef4aab"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
@@ -631,7 +631,7 @@
       "Outputs": []
     },
     {
-      "Id": "1d60e4d1-95a0-4911-a2b5-451714b22d36"/*Vector2ToFloat2*/,
+      "Id": "1d60e4d1-95a0-4911-a2b5-451714b22d36"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -655,7 +655,7 @@
       "Outputs": []
     },
     {
-      "Id": "e6fa4f39-b15e-4629-9712-c32b1afaf58c"/*Vector4ToFloat4*/,
+      "Id": "e6fa4f39-b15e-4629-9712-c32b1afaf58c"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
@@ -734,7 +734,7 @@
       "Outputs": []
     },
     {
-      "Id": "8f8f63ab-0270-48a9-bbdb-2b15e5bb3a32"/*Vector3ToFloat3*/,
+      "Id": "8f8f63ab-0270-48a9-bbdb-2b15e5bb3a32"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
@@ -747,7 +747,7 @@
       "Outputs": []
     },
     {
-      "Id": "1eb8fe8b-6e84-4733-a6b3-1546d17db38f"/*Vector3ToFloat3*/,
+      "Id": "1eb8fe8b-6e84-4733-a6b3-1546d17db38f"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []

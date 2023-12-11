@@ -89,7 +89,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "9f880085-efe7-412e-95bc-0c4fd35d8c94"/*Vector2ToFloat2*/,
+      "ChildId": "9f880085-efe7-412e-95bc-0c4fd35d8c94"/*Vector2Components*/,
       "Position": {
         "X": -33.307365,
         "Y": 66.955154

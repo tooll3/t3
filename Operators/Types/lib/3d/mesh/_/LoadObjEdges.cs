@@ -32,16 +32,16 @@ namespace T3.Operators.Types.Id_dd3d7e16_f33e_4fb0_89c6_4d8cbc9d702f
                     return;
                 }
                 
-                var hashSet = new HashSet<int>();
+                var hashSet = new HashSet<uint>();
 
                 foreach (var f in mesh.Faces)
                 {
-                    InsertVertexPair(f.V0, f.V1);
-                    InsertVertexPair(f.V1, f.V2);
-                    InsertVertexPair(f.V2, f.V0);
+                    InsertVertexPair((uint)f.V0, (uint)f.V1);
+                    InsertVertexPair((uint)f.V1, (uint)f.V2);
+                    InsertVertexPair((uint)f.V2, (uint)f.V0);
                 }
 
-                void InsertVertexPair(int from, int to)
+                void InsertVertexPair(uint from, uint to)
                 {
                     if (from < to)
                     {
@@ -62,7 +62,14 @@ namespace T3.Operators.Types.Id_dd3d7e16_f33e_4fb0_89c6_4d8cbc9d702f
                     var fromIndex = pair & 0xffff;
                     var toIndex = pair >> 16;
 
-                    var pFrom = mesh.Positions[fromIndex];
+                    if (fromIndex < 0 || fromIndex > _pointList.TypedElements.Length - 1
+                                      || toIndex < 0 || toIndex > _pointList.TypedElements.Length - 1)
+                    {
+                        Log.Warning($"Skipping invalid line indices {fromIndex} / {toIndex}");
+                        continue;
+                    }
+                    
+                    var pFrom = mesh.Positions[(int)fromIndex];
                     _pointList.TypedElements[index] = new Point()
                                                           {
                                                               Position = new Vector3(pFrom.X, pFrom.Y, pFrom.Z),
@@ -71,7 +78,7 @@ namespace T3.Operators.Types.Id_dd3d7e16_f33e_4fb0_89c6_4d8cbc9d702f
                                                           };
                     index++;
 
-                    var pTo = mesh.Positions[toIndex];
+                    var pTo = mesh.Positions[(int)toIndex];
                     _pointList.TypedElements[index] = new Point()
                                                           {
                                                               Position = new Vector3(pTo.X, pTo.Y, pTo.Z),

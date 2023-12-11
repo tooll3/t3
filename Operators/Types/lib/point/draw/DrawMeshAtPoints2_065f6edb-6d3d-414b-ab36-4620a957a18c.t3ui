@@ -263,7 +263,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "79083086-e0b7-4094-9322-f432e08fd2ea"/*Vector4ToFloat4*/,
+      "ChildId": "79083086-e0b7-4094-9322-f432e08fd2ea"/*Vector4Components*/,
       "Style": "Resizable",
       "Size": {
         "X": 111.079544,
@@ -287,7 +287,7 @@
       }
     },
     {
-      "ChildId": "bd1471c1-9218-409f-84b7-e683d7bb3a70"/*Vector2ToFloat2*/,
+      "ChildId": "bd1471c1-9218-409f-84b7-e683d7bb3a70"/*Vector2Components*/,
       "Position": {
         "X": -637.0436,
         "Y": 256.53806
@@ -329,7 +329,7 @@
       }
     },
     {
-      "ChildId": "17ccf451-f2d8-44e0-b160-33cb8218bcd7"/*Vector3ToFloat3*/,
+      "ChildId": "17ccf451-f2d8-44e0-b160-33cb8218bcd7"/*Vector3Components*/,
       "Position": {
         "X": -640.9402,
         "Y": 723.8462
@@ -364,7 +364,7 @@
       }
     },
     {
-      "ChildId": "b2169f1a-11f8-47f6-8740-c8305b5194c0"/*Vector2ToFloat2*/,
+      "ChildId": "b2169f1a-11f8-47f6-8740-c8305b5194c0"/*Vector2Components*/,
       "Position": {
         "X": -442.93713,
         "Y": 1733.2015
@@ -392,7 +392,7 @@
       }
     },
     {
-      "ChildId": "12e3a215-9428-457a-aaa3-588ab22e6297"/*Vector4ToFloat4*/,
+      "ChildId": "12e3a215-9428-457a-aaa3-588ab22e6297"/*Vector4Components*/,
       "Position": {
         "X": -582.9687,
         "Y": 2010.269
@@ -441,14 +441,14 @@
       }
     },
     {
-      "ChildId": "add82835-2247-4535-93d3-7917aac5fb0b"/*Vector3ToFloat3*/,
+      "ChildId": "add82835-2247-4535-93d3-7917aac5fb0b"/*Vector3Components*/,
       "Position": {
         "X": -625.75745,
         "Y": 368.69336
       }
     },
     {
-      "ChildId": "8c672498-2ae6-47c1-b25d-3f511dfed6c8"/*Vector3ToFloat3*/,
+      "ChildId": "8c672498-2ae6-47c1-b25d-3f511dfed6c8"/*Vector3Components*/,
       "Position": {
         "X": -634.04156,
         "Y": 526.17535
@@ -689,14 +689,14 @@
       }
     },
     {
-      "ChildId": "63b21fc7-b08b-496c-89af-26acc48847f9"/*Vector3ToFloat3*/,
+      "ChildId": "63b21fc7-b08b-496c-89af-26acc48847f9"/*Vector3Components*/,
       "Position": {
         "X": -637.0436,
         "Y": 200.53806
       }
     },
     {
-      "ChildId": "73d67f50-e8e0-4f3d-94b8-b3579b954284"/*Vector3ToFloat3*/,
+      "ChildId": "73d67f50-e8e0-4f3d-94b8-b3579b954284"/*Vector3Components*/,
       "Position": {
         "X": -602.67456,
         "Y": 894.2333

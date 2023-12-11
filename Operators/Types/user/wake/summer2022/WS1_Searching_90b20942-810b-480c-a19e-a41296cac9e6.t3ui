@@ -115,7 +115,7 @@
       "SnapshotGroupIndex": "1"
     },
     {
-      "ChildId": "86fe026d-939d-44e7-a2b4-2cdcfc982482"/*Float2ToVector2*/,
+      "ChildId": "86fe026d-939d-44e7-a2b4-2cdcfc982482"/*Vector2*/,
       "Position": {
         "X": 632.0228,
         "Y": 231.3164

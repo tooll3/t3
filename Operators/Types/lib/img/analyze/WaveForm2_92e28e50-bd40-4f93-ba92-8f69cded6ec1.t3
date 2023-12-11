@@ -26,8 +26,8 @@
     {
       "Id": "3a226812-98bf-4fe9-b435-f84b154a41e8"/*OverrideSize*/,
       "DefaultValue": {
-        "Width": -1,
-        "Height": 0
+        "X": -1,
+        "Y": 0
       }
     },
     {
@@ -54,7 +54,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 128,
             "Y": 128,
@@ -102,10 +102,10 @@
       "InputValues": [
         {
           "Id": "b77088a9-2676-4caa-809a-5e0f120d25d7"/*Size*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 256,
-            "Height": 256
+            "X": 256,
+            "Y": 256
           }
         },
         {
@@ -213,13 +213,13 @@
       "Outputs": []
     },
     {
-      "Id": "6aea5171-1cbf-44e0-baf1-6d63eef79ab7"/*Size2Components*/,
+      "Id": "6aea5171-1cbf-44e0-baf1-6d63eef79ab7"/*Int2Components*/,
       "SymbolId": "f86358e0-2573-4acd-9a90-e95108e8a4da",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "7666ac5c-dd21-4340-988e-a08a4a554e5f"/*Int2ToSize2*/,
+      "Id": "7666ac5c-dd21-4340-988e-a08a4a554e5f"/*Int2*/,
       "SymbolId": "f1218934-f874-4f70-a077-0ebe7d12104d",
       "InputValues": [
         {
@@ -320,7 +320,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -589,10 +589,10 @@
         },
         {
           "Id": "cf2e1698-f996-4b83-8b59-3150e75d59c6"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 32,
-            "Height": 32
+            "X": 32,
+            "Y": 32
           }
         }
       ],
@@ -1009,7 +1009,7 @@
       "Outputs": []
     },
     {
-      "Id": "a9939fc3-c75f-4834-acc9-38e660f748f7"/*CalcSize2DispatchCount*/,
+      "Id": "a9939fc3-c75f-4834-acc9-38e660f748f7"/*CalcInt2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []

@@ -268,16 +268,7 @@
     {
       "Id": "6f4b4830-ab0a-4b8f-ad1b-634a137121d1"/*_ImageMosaicInitialize*/,
       "SymbolId": "0c30ce21-0c02-4676-a636-63d744bfa788",
-      "InputValues": [
-        {
-          "Id": "a16ccad1-00b7-4779-8346-52b03b81249f"/*Resolution*/,
-          "Type": "SharpDX.Size2",
-          "Value": {
-            "Width": 128,
-            "Height": 128
-          }
-        }
-      ],
+      "InputValues": [],
       "Outputs": []
     },
     {

@@ -333,7 +333,7 @@
       "Outputs": []
     },
     {
-      "Id": "632cefb5-8b6e-4bd7-90be-91f0299fb260"/*Float4ToVector4*/,
+      "Id": "632cefb5-8b6e-4bd7-90be-91f0299fb260"/*Vector4*/,
       "SymbolId": "f2e323bd-f881-41a8-81e2-e8f2ac1984dc",
       "InputValues": [
         {

@@ -204,10 +204,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 1024,
-            "Height": 512
+            "X": 1024,
+            "Y": 512
           }
         }
       ],
@@ -283,10 +283,10 @@
         },
         {
           "Id": "fd22eaf6-ed3c-4e63-985c-3a3756ecaef2"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 1024,
-            "Height": 1024
+            "X": 1024,
+            "Y": 1024
           }
         }
       ],
@@ -1285,7 +1285,7 @@
       "Outputs": []
     },
     {
-      "Id": "dc003c44-8c9f-4ec1-bb19-7425f1b18826"/*Float3ToVector3*/,
+      "Id": "dc003c44-8c9f-4ec1-bb19-7425f1b18826"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []
@@ -1364,7 +1364,7 @@
       "Outputs": []
     },
     {
-      "Id": "d50432c0-053f-4626-a7ee-9bca28b4958f"/*Float3ToVector3*/,
+      "Id": "d50432c0-053f-4626-a7ee-9bca28b4958f"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [
         {
@@ -1424,7 +1424,7 @@
       "Outputs": []
     },
     {
-      "Id": "84d076c7-869b-4603-98e0-95cbf6dd9f69"/*Float2ToVector2*/,
+      "Id": "84d076c7-869b-4603-98e0-95cbf6dd9f69"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
@@ -1461,7 +1461,7 @@
       "Outputs": []
     },
     {
-      "Id": "ea7c27a1-124b-49aa-8f47-624699821233"/*Vector2ToFloat2*/,
+      "Id": "ea7c27a1-124b-49aa-8f47-624699821233"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -1805,7 +1805,7 @@
       "Outputs": []
     },
     {
-      "Id": "3d33f068-2e0b-4944-b5f6-68ee0a4276a8"/*Float2ToVector2*/,
+      "Id": "3d33f068-2e0b-4944-b5f6-68ee0a4276a8"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []

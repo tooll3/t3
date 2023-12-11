@@ -712,7 +712,7 @@
       "Outputs": []
     },
     {
-      "Id": "be52f2f5-ab79-4e87-bfaa-18f2b4d48da9"/*Float3ToVector3*/,
+      "Id": "be52f2f5-ab79-4e87-bfaa-18f2b4d48da9"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []
@@ -819,10 +819,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 512,
-            "Height": 512
+            "X": 512,
+            "Y": 512
           }
         }
       ],
@@ -1071,10 +1071,10 @@
         },
         {
           "Id": "99f5d952-8490-4930-b8ab-9d8e968183c6"/*Segments*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 32,
-            "Height": 32
+            "X": 32,
+            "Y": 32
           }
         }
       ],
@@ -1203,7 +1203,7 @@
       "Outputs": []
     },
     {
-      "Id": "8e21d17c-b271-4763-b41c-60d89fd2c479"/*Float3ToVector3*/,
+      "Id": "8e21d17c-b271-4763-b41c-60d89fd2c479"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []
@@ -2288,10 +2288,10 @@
         },
         {
           "Id": "fc19ad98-65ea-46f2-896d-6b9279a9eaa4"/*TextureCells*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 4,
-            "Height": 4
+            "X": 4,
+            "Y": 4
           }
         },
         {
@@ -2479,10 +2479,10 @@
         },
         {
           "Id": "61bb0df6-6c8a-4f3a-b7f4-9d979377cab8"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 512,
-            "Height": 64
+            "X": 512,
+            "Y": 64
           }
         }
       ],
@@ -2686,10 +2686,10 @@
         },
         {
           "Id": "fc19ad98-65ea-46f2-896d-6b9279a9eaa4"/*TextureCells*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 4,
-            "Height": 4
+            "X": 4,
+            "Y": 4
           }
         },
         {
@@ -3530,10 +3530,10 @@
       "InputValues": [
         {
           "Id": "18a5f3be-92a7-438c-b32b-e0da7c7a5736"/*Segments*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 364,
-            "Height": 32
+            "X": 364,
+            "Y": 32
           }
         },
         {

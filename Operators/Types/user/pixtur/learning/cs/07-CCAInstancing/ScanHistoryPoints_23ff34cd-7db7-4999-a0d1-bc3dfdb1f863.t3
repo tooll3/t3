@@ -49,7 +49,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 30,
             "Y": 30,
@@ -201,7 +201,7 @@
       "Outputs": []
     },
     {
-      "Id": "72ad5397-1a02-4f41-a7f7-ee4c74954087"/*CalcSize2DispatchCount*/,
+      "Id": "72ad5397-1a02-4f41-a7f7-ee4c74954087"/*CalcInt2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []

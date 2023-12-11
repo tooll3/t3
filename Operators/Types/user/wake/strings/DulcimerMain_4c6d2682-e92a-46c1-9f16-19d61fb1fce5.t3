@@ -701,12 +701,12 @@
       "Outputs": []
     },
     {
-      "Id": "74238a1c-fe72-4a93-8aea-9fd9c57e61ed"/*Float3ToVector3*/,
+      "Id": "74238a1c-fe72-4a93-8aea-9fd9c57e61ed"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": [
         {
-          "Id": "aedaead8-ccf0-43f0-9188-a79af8d45250"/*Float3ToVector3*/,
+          "Id": "aedaead8-ccf0-43f0-9188-a79af8d45250"/*Vector3*/,
           "IsDisabled": true
         }
       ]
@@ -1544,10 +1544,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 256,
-            "Height": 256
+            "X": 256,
+            "Y": 256
           }
         }
       ],
@@ -3635,7 +3635,7 @@
       "Outputs": []
     },
     {
-      "Id": "c00d57e5-05bc-4a92-918e-34f44ce2a575"/*Float3ToVector3*/,
+      "Id": "c00d57e5-05bc-4a92-918e-34f44ce2a575"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []
@@ -4240,7 +4240,7 @@
       "Outputs": []
     },
     {
-      "Id": "74058a64-09d0-459a-b436-602bd8285062"/*Float3ToVector3*/,
+      "Id": "74058a64-09d0-459a-b436-602bd8285062"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []
@@ -4403,10 +4403,10 @@
         },
         {
           "Id": "f650985f-00a7-452a-b3e4-69a8e9a78c3f"/*ControlRange*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 0,
-            "Height": 180
+            "X": 0,
+            "Y": 180
           }
         }
       ],
@@ -4733,10 +4733,10 @@
         },
         {
           "Id": "f650985f-00a7-452a-b3e4-69a8e9a78c3f"/*ControlRange*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 0,
-            "Height": 180
+            "X": 0,
+            "Y": 180
           }
         }
       ],

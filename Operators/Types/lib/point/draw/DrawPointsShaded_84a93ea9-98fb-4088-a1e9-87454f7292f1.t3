@@ -161,7 +161,7 @@
       "Outputs": []
     },
     {
-      "Id": "b6a0b951-c889-4ca4-9c9e-3fd16627ff50"/*Vector4ToFloat4*/,
+      "Id": "b6a0b951-c889-4ca4-9c9e-3fd16627ff50"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [
         {

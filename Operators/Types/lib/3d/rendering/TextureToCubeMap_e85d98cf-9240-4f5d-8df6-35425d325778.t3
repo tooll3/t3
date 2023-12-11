@@ -178,10 +178,10 @@
       "InputValues": [
         {
           "Id": "b77088a9-2676-4caa-809a-5e0f120d25d7"/*Size*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 512,
-            "Height": 512
+            "X": 512,
+            "Y": 512
           }
         },
         {
@@ -277,7 +277,7 @@
       "Outputs": []
     },
     {
-      "Id": "ec3fd5a9-3a49-478f-8df7-df76f8ac9e8f"/*Int2ToSize2*/,
+      "Id": "ec3fd5a9-3a49-478f-8df7-df76f8ac9e8f"/*Int2*/,
       "SymbolId": "f1218934-f874-4f70-a077-0ebe7d12104d",
       "InputValues": [],
       "Outputs": []

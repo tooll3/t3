@@ -156,15 +156,15 @@
       "Outputs": []
     },
     {
-      "Id": "552dd0c2-3176-4ce8-b830-2275bd52d858"/*AddSize2*/,
+      "Id": "552dd0c2-3176-4ce8-b830-2275bd52d858"/*AddInt2*/,
       "SymbolId": "40f0b1c9-9f87-489c-a6b9-ff9a5bd263ec",
       "InputValues": [
         {
           "Id": "9b56ca60-d55c-44ff-bbbb-726d4beb60a8"/*Input2*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 2,
-            "Height": 1
+            "X": 2,
+            "Y": 1
           }
         }
       ],
@@ -194,7 +194,7 @@
       "Outputs": []
     },
     {
-      "Id": "fb33518f-504b-4728-b0eb-417cda8b6ba3"/*CalcSize2DispatchCount*/,
+      "Id": "fb33518f-504b-4728-b0eb-417cda8b6ba3"/*CalcInt2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []
@@ -205,7 +205,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 2,
             "Y": 1,
@@ -244,7 +244,7 @@
       "Outputs": []
     },
     {
-      "Id": "e85b298a-5610-472a-b775-de46719ee752"/*CalcSize2DispatchCount*/,
+      "Id": "e85b298a-5610-472a-b775-de46719ee752"/*CalcInt2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []
@@ -255,7 +255,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 2,
             "Y": 1,
@@ -288,15 +288,15 @@
       "Outputs": []
     },
     {
-      "Id": "7a8487c8-df61-410d-b35b-613b16a24dac"/*CalcSize2DispatchCount*/,
+      "Id": "7a8487c8-df61-410d-b35b-613b16a24dac"/*CalcInt2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [
         {
           "Id": "714e7c0d-0137-4bc6-9e5b-93386b2efe13"/*Size*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 1,
-            "Height": 1
+            "X": 1,
+            "Y": 1
           }
         }
       ],
@@ -308,7 +308,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 2,
             "Y": 1,

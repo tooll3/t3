@@ -77,7 +77,7 @@
       "Outputs": []
     },
     {
-      "Id": "6430eba4-ccdf-43a4-a33d-e6a51c0e936a"/*Vector2ToFloat2*/,
+      "Id": "6430eba4-ccdf-43a4-a33d-e6a51c0e936a"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []

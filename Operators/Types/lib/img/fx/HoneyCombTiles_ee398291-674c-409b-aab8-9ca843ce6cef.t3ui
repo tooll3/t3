@@ -70,21 +70,21 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "32770d0f-2315-43c6-a27b-912776f591d5"/*Vector4ToFloat4*/,
+      "ChildId": "32770d0f-2315-43c6-a27b-912776f591d5"/*Vector4Components*/,
       "Position": {
         "X": -25.082056,
         "Y": 29.952059
       }
     },
     {
-      "ChildId": "88d47200-0bc0-4a4b-a815-871b743404cb"/*Vector4ToFloat4*/,
+      "ChildId": "88d47200-0bc0-4a4b-a815-871b743404cb"/*Vector4Components*/,
       "Position": {
         "X": -25.082056,
         "Y": 74.952194
       }
     },
     {
-      "ChildId": "24484531-b3a5-4dd3-96bb-16fd467672b4"/*Vector2ToFloat2*/,
+      "ChildId": "24484531-b3a5-4dd3-96bb-16fd467672b4"/*Vector2Components*/,
       "Position": {
         "X": -25.082056,
         "Y": 130.9522

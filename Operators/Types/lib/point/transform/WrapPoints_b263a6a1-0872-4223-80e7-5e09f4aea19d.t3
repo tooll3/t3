@@ -43,7 +43,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -78,7 +78,7 @@
       "Outputs": []
     },
     {
-      "Id": "b4a6625b-fd81-4e8c-9aa4-4229e4888c80"/*Vector3ToFloat3*/,
+      "Id": "b4a6625b-fd81-4e8c-9aa4-4229e4888c80"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
@@ -114,7 +114,7 @@
       "Outputs": []
     },
     {
-      "Id": "8e87d8a6-3c4a-4123-ac54-aa7c661af828"/*Vector3ToFloat3*/,
+      "Id": "8e87d8a6-3c4a-4123-ac54-aa7c661af828"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []

@@ -263,10 +263,10 @@
       "InputValues": [
         {
           "Id": "99f5d952-8490-4930-b8ab-9d8e968183c6"/*Segments*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 5,
-            "Height": 5
+            "X": 5,
+            "Y": 5
           }
         }
       ],
@@ -606,7 +606,7 @@
       "Outputs": []
     },
     {
-      "Id": "b3916919-94b0-4017-ab7b-aa066e5f734a"/*Vector4ToFloat4*/,
+      "Id": "b3916919-94b0-4017-ab7b-aa066e5f734a"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
@@ -850,10 +850,10 @@
         },
         {
           "Id": "99f5d952-8490-4930-b8ab-9d8e968183c6"/*Segments*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 36,
-            "Height": 36
+            "X": 36,
+            "Y": 36
           }
         }
       ],
@@ -1211,10 +1211,10 @@
       "InputValues": [
         {
           "Id": "99f5d952-8490-4930-b8ab-9d8e968183c6"/*Segments*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 12,
-            "Height": 5
+            "X": 12,
+            "Y": 5
           }
         }
       ],
@@ -1615,10 +1615,10 @@
       "InputValues": [
         {
           "Id": "18a5f3be-92a7-438c-b32b-e0da7c7a5736"/*Segments*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 50,
-            "Height": 1000
+            "X": 50,
+            "Y": 1000
           }
         },
         {
@@ -2060,10 +2060,10 @@
         },
         {
           "Id": "9786d2b3-2cff-40fb-8ab7-d96f3ac3dd76"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 512,
-            "Height": 512
+            "X": 512,
+            "Y": 512
           }
         }
       ],

@@ -131,7 +131,7 @@
       }
     },
     {
-      "ChildId": "a47b4883-e0be-494c-87f7-17581cd96e0e"/*Float2ToVector2*/,
+      "ChildId": "a47b4883-e0be-494c-87f7-17581cd96e0e"/*Vector2*/,
       "Position": {
         "X": 947.99536,
         "Y": 319.79102

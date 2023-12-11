@@ -403,7 +403,7 @@
       "Outputs": []
     },
     {
-      "Id": "5fa1d6e3-b165-4129-bee1-40723913928f"/*Vector2ToFloat2*/,
+      "Id": "5fa1d6e3-b165-4129-bee1-40723913928f"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -490,13 +490,13 @@
       "Outputs": []
     },
     {
-      "Id": "a4104c2d-b7a8-488d-a97e-fe1c22e69bfa"/*Vector2ToFloat2*/,
+      "Id": "a4104c2d-b7a8-488d-a97e-fe1c22e69bfa"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "851eec7e-4ee4-48a3-aecc-445c4095fa27"/*Vector2ToFloat2*/,
+      "Id": "851eec7e-4ee4-48a3-aecc-445c4095fa27"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -525,10 +525,10 @@
         },
         {
           "Id": "37b24ceb-2d25-43e8-a31c-7caf62c2b7ee"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 1024,
-            "Height": 600
+            "X": 1024,
+            "Y": 600
           }
         },
         {

@@ -163,7 +163,7 @@
       ]
     },
     {
-      "Id": "e5fdbf7a-d677-41b5-a390-2f8e015d8502"/*Float3ToVector3*/,
+      "Id": "e5fdbf7a-d677-41b5-a390-2f8e015d8502"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []

@@ -72,7 +72,7 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "3b090021-f6b7-44e7-8519-2dd0e20a5d62"/*Vector4ToFloat4*/,
+      "ChildId": "3b090021-f6b7-44e7-8519-2dd0e20a5d62"/*Vector4Components*/,
       "Position": {
         "X": 261.9446,
         "Y": 577.09564
@@ -91,7 +91,7 @@
       }
     },
     {
-      "ChildId": "c0354bce-5eb8-4a4f-ad53-bae7d42bce68"/*Vector4ToFloat4*/,
+      "ChildId": "c0354bce-5eb8-4a4f-ad53-bae7d42bce68"/*Vector4Components*/,
       "Position": {
         "X": 261.9446,
         "Y": 633.09564

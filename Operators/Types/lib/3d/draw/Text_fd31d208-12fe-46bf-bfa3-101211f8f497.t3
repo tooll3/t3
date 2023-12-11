@@ -226,7 +226,7 @@
       "Outputs": []
     },
     {
-      "Id": "0618fcf2-ff9e-41bc-93e2-f4059b0d1eff"/*Vector4ToFloat4*/,
+      "Id": "0618fcf2-ff9e-41bc-93e2-f4059b0d1eff"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [
         {
@@ -342,7 +342,7 @@
       "Outputs": []
     },
     {
-      "Id": "6e95b73b-978b-4fb0-962a-080f4e54845a"/*Vector4ToFloat4*/,
+      "Id": "6e95b73b-978b-4fb0-962a-080f4e54845a"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [
         {

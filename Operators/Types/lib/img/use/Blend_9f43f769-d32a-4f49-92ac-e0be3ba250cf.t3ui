@@ -70,14 +70,14 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "46965dc5-8929-4d8f-82ff-29cebdce3b8d"/*Vector4ToFloat4*/,
+      "ChildId": "46965dc5-8929-4d8f-82ff-29cebdce3b8d"/*Vector4Components*/,
       "Position": {
         "X": 122.33575,
         "Y": 98.58719
       }
     },
     {
-      "ChildId": "42f85198-b793-4609-aba8-8a7e2db62bbf"/*Vector4ToFloat4*/,
+      "ChildId": "42f85198-b793-4609-aba8-8a7e2db62bbf"/*Vector4Components*/,
       "Position": {
         "X": 122.33575,
         "Y": 154.58716

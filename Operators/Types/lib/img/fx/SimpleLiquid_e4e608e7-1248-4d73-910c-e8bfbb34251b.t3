@@ -66,7 +66,7 @@
       "Outputs": []
     },
     {
-      "Id": "9ae241b2-6064-41d8-a298-1a9f3b326d71"/*Vector2ToFloat2*/,
+      "Id": "9ae241b2-6064-41d8-a298-1a9f3b326d71"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -106,7 +106,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 30,
             "Y": 30,
@@ -207,7 +207,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 30,
             "Y": 30,
@@ -371,7 +371,7 @@
       "Outputs": []
     },
     {
-      "Id": "2075ef6d-a6a0-4f8e-ab2c-cea593fec2cc"/*Vector2ToFloat2*/,
+      "Id": "2075ef6d-a6a0-4f8e-ab2c-cea593fec2cc"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
@@ -383,19 +383,19 @@
       "Outputs": []
     },
     {
-      "Id": "58c81572-2fd1-4482-8d87-39a6477cfc37"/*Vector4ToFloat4*/,
+      "Id": "58c81572-2fd1-4482-8d87-39a6477cfc37"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "8db96810-749b-46f7-98dd-3156804a22aa"/*CalcSize2DispatchCount*/,
+      "Id": "8db96810-749b-46f7-98dd-3156804a22aa"/*CalcInt2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "2b556db3-2723-45bd-9ed0-6cdd55d55224"/*CalcSize2DispatchCount*/,
+      "Id": "2b556db3-2723-45bd-9ed0-6cdd55d55224"/*CalcInt2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []

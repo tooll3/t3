@@ -14,8 +14,8 @@
     {
       "Id": "4d4db9ad-b3a3-4da6-8716-23d21c5ffc4a"/*CellCounts*/,
       "DefaultValue": {
-        "Width": 1,
-        "Height": 1
+        "X": 1,
+        "Y": 1
       }
     },
     {

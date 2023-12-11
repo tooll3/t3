@@ -683,7 +683,7 @@
       "Outputs": []
     },
     {
-      "Id": "f8a550ea-5a96-4119-bd95-75228b774b10"/*Float2ToVector2*/,
+      "Id": "f8a550ea-5a96-4119-bd95-75228b774b10"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [
         {

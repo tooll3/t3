@@ -10,15 +10,15 @@
     {
       "Id": "eff02108-2335-46b5-95ba-4235b9a26349"/*LeftRight*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     },
     {
       "Id": "db4c2d41-c369-4182-83fd-cb04aa04ec76"/*TopBottom*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     },
     {
@@ -33,7 +33,7 @@
   ],
   "Children": [
     {
-      "Id": "755fc866-b58c-4234-9133-1314c099e4e1"/*Vector4ToFloat4*/,
+      "Id": "755fc866-b58c-4234-9133-1314c099e4e1"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
@@ -51,7 +51,7 @@
       "Outputs": []
     },
     {
-      "Id": "44ee84ff-eeb0-42b6-9237-1130d8153783"/*Size2Components*/,
+      "Id": "44ee84ff-eeb0-42b6-9237-1130d8153783"/*Int2Components*/,
       "SymbolId": "f86358e0-2573-4acd-9a90-e95108e8a4da",
       "InputValues": [],
       "Outputs": []
@@ -69,7 +69,7 @@
       "Outputs": []
     },
     {
-      "Id": "f8f0e632-ece0-474a-bd5a-e83bf0020061"/*Size2Components*/,
+      "Id": "f8f0e632-ece0-474a-bd5a-e83bf0020061"/*Int2Components*/,
       "SymbolId": "f86358e0-2573-4acd-9a90-e95108e8a4da",
       "InputValues": [],
       "Outputs": []
@@ -93,7 +93,7 @@
       "Outputs": []
     },
     {
-      "Id": "425a5d1c-055c-4906-8f23-ed8f5bcfa784"/*Size2Components*/,
+      "Id": "425a5d1c-055c-4906-8f23-ed8f5bcfa784"/*Int2Components*/,
       "SymbolId": "f86358e0-2573-4acd-9a90-e95108e8a4da",
       "InputValues": [],
       "Outputs": []
@@ -157,7 +157,7 @@
       "Outputs": []
     },
     {
-      "Id": "f5de8d33-8762-49b4-a6ac-bcb9a3e2a727"/*Int2ToSize2*/,
+      "Id": "f5de8d33-8762-49b4-a6ac-bcb9a3e2a727"/*Int2*/,
       "SymbolId": "f1218934-f874-4f70-a077-0ebe7d12104d",
       "InputValues": [],
       "Outputs": []
@@ -180,7 +180,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -236,7 +236,7 @@
       "Outputs": []
     },
     {
-      "Id": "428f1a43-14d1-43b0-8adf-aa55b1ba5005"/*CalcSize2DispatchCount*/,
+      "Id": "428f1a43-14d1-43b0-8adf-aa55b1ba5005"/*CalcInt2DispatchCount*/,
       "SymbolId": "cc11774e-82dd-409f-97fb-5be3f2746f9d",
       "InputValues": [],
       "Outputs": []

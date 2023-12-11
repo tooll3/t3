@@ -149,10 +149,10 @@
         },
         {
           "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 512,
-            "Height": 512
+            "X": 512,
+            "Y": 512
           }
         },
         {
@@ -871,10 +871,10 @@
         },
         {
           "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 512,
-            "Height": 512
+            "X": 512,
+            "Y": 512
           }
         },
         {
@@ -1138,10 +1138,10 @@
         },
         {
           "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 512,
-            "Height": 512
+            "X": 512,
+            "Y": 512
           }
         },
         {

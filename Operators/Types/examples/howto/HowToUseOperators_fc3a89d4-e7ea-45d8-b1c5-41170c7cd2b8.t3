@@ -163,13 +163,13 @@
       "Outputs": []
     },
     {
-      "Id": "b3cbb0e7-2ddd-41a5-b8d2-28c393f0cad2"/*Float2ToVector2*/,
+      "Id": "b3cbb0e7-2ddd-41a5-b8d2-28c393f0cad2"/*Vector2*/,
       "SymbolId": "926ab3fd-fbaf-4c4b-91bc-af277000dcb8",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "25cb45d4-6540-49fc-ad2a-20a71ae048da"/*Float3ToVector3*/,
+      "Id": "25cb45d4-6540-49fc-ad2a-20a71ae048da"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []

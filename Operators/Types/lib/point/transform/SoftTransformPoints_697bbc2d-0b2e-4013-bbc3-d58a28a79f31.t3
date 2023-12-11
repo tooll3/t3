@@ -107,7 +107,7 @@
       "InputValues": [
         {
           "Id": "180cae35-10e3-47f3-8191-f6ecea7d321c"/*Dispatch*/,
-          "Type": "SharpDX.Int3",
+          "Type": "T3.Core.DataTypes.Vector.Int3",
           "Value": {
             "X": 64,
             "Y": 1,
@@ -166,19 +166,19 @@
       "Outputs": []
     },
     {
-      "Id": "2d7582aa-f446-4d26-87c0-91a61e0c66d5"/*Vector3ToFloat3*/,
+      "Id": "2d7582aa-f446-4d26-87c0-91a61e0c66d5"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "02aa66b0-6543-4750-8d9a-e1f28255a27e"/*Vector3ToFloat3*/,
+      "Id": "02aa66b0-6543-4750-8d9a-e1f28255a27e"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "f046a91c-3a58-4c6b-a33d-8c560f3b0a31"/*Vector3ToFloat3*/,
+      "Id": "f046a91c-3a58-4c6b-a33d-8c560f3b0a31"/*Vector3Components*/,
       "SymbolId": "a8083b41-951e-41f2-bb8a-9b511da26102",
       "InputValues": [],
       "Outputs": []
@@ -308,7 +308,7 @@
       "Outputs": []
     },
     {
-      "Id": "6f7e0c78-84b2-46d6-8f5a-970ffc5a8272"/*Float3ToVector3*/,
+      "Id": "6f7e0c78-84b2-46d6-8f5a-970ffc5a8272"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []

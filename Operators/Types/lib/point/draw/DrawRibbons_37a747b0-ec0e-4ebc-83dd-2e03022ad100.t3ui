@@ -165,7 +165,7 @@
       }
     },
     {
-      "ChildId": "22214435-b987-49ae-9c04-081638c53b4e"/*Vector4ToFloat4*/,
+      "ChildId": "22214435-b987-49ae-9c04-081638c53b4e"/*Vector4Components*/,
       "Style": "Resizable",
       "Size": {
         "X": 111.079544,
@@ -266,7 +266,7 @@
       }
     },
     {
-      "ChildId": "0317bcf9-f534-4fb6-ba7b-73e29cacc268"/*Vector2ToFloat2*/,
+      "ChildId": "0317bcf9-f534-4fb6-ba7b-73e29cacc268"/*Vector2Components*/,
       "Position": {
         "X": -94.65464,
         "Y": 464.20538

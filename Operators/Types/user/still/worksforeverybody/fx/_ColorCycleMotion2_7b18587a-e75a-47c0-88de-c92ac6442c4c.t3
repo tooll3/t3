@@ -219,7 +219,7 @@
       "Outputs": []
     },
     {
-      "Id": "c3948175-68b3-4a8f-a930-7880faed2857"/*Float3ToVector3*/,
+      "Id": "c3948175-68b3-4a8f-a930-7880faed2857"/*Vector3*/,
       "SymbolId": "94a5de3b-ee6a-43d3-8d21-7b8fe94b042b",
       "InputValues": [],
       "Outputs": []

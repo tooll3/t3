@@ -45,19 +45,19 @@
   ],
   "Children": [
     {
-      "Id": "34dd7d25-b6f3-4620-a145-5c951476bacc"/*Vector4ToFloat4*/,
+      "Id": "34dd7d25-b6f3-4620-a145-5c951476bacc"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "ccb3e20b-56b1-4274-90df-b7dea7818be0"/*Vector4ToFloat4*/,
+      "Id": "ccb3e20b-56b1-4274-90df-b7dea7818be0"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "aad3edc0-5e4f-40c9-9ddc-42e53a345717"/*Vector4ToFloat4*/,
+      "Id": "aad3edc0-5e4f-40c9-9ddc-42e53a345717"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []

@@ -221,7 +221,7 @@
       }
     },
     {
-      "ChildId": "be52f2f5-ab79-4e87-bfaa-18f2b4d48da9"/*Float3ToVector3*/,
+      "ChildId": "be52f2f5-ab79-4e87-bfaa-18f2b4d48da9"/*Vector3*/,
       "Position": {
         "X": -774.333,
         "Y": 937.33496
@@ -457,7 +457,7 @@
       }
     },
     {
-      "ChildId": "8e21d17c-b271-4763-b41c-60d89fd2c479"/*Float3ToVector3*/,
+      "ChildId": "8e21d17c-b271-4763-b41c-60d89fd2c479"/*Vector3*/,
       "Position": {
         "X": -624.333,
         "Y": 1123.335

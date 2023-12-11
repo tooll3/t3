@@ -54,8 +54,8 @@
     {
       "Id": "276431d2-e689-41f9-9f73-5544f9368a53"/*Resolution*/,
       "DefaultValue": {
-        "Width": 0,
-        "Height": 0
+        "X": 0,
+        "Y": 0
       }
     },
     {
@@ -81,31 +81,31 @@
   ],
   "Children": [
     {
-      "Id": "7340c478-5188-43a6-ac5d-d925998eecb2"/*Vector4ToFloat4*/,
+      "Id": "7340c478-5188-43a6-ac5d-d925998eecb2"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "a1cdbebf-1edf-434b-be41-5137ac6f9cdb"/*Vector4ToFloat4*/,
+      "Id": "a1cdbebf-1edf-434b-be41-5137ac6f9cdb"/*Vector4Components*/,
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "651a75f6-8ca3-4b88-aa43-ef08152b9bbd"/*Vector2ToFloat2*/,
+      "Id": "651a75f6-8ca3-4b88-aa43-ef08152b9bbd"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "f4e274bb-564f-4147-b081-213b84bfccbf"/*Vector2ToFloat2*/,
+      "Id": "f4e274bb-564f-4147-b081-213b84bfccbf"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "ac43f0fa-28d3-46e4-96c7-2e3ad76147a3"/*Vector2ToFloat2*/,
+      "Id": "ac43f0fa-28d3-46e4-96c7-2e3ad76147a3"/*Vector2Components*/,
       "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
       "InputValues": [],
       "Outputs": []

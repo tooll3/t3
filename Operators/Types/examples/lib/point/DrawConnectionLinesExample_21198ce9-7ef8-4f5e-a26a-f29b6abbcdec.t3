@@ -182,10 +182,10 @@
       "InputValues": [
         {
           "Id": "4d4db9ad-b3a3-4da6-8716-23d21c5ffc4a"/*CellCounts*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 2,
-            "Height": 1
+            "X": 2,
+            "Y": 1
           }
         },
         {
@@ -221,10 +221,10 @@
         },
         {
           "Id": "4d4db9ad-b3a3-4da6-8716-23d21c5ffc4a"/*CellCounts*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 2,
-            "Height": 1
+            "X": 2,
+            "Y": 1
           }
         },
         {

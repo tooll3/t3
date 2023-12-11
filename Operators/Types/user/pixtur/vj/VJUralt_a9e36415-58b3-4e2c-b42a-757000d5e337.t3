@@ -887,10 +887,10 @@
         },
         {
           "Id": "61bb0df6-6c8a-4f3a-b7f4-9d979377cab8"/*Resolution*/,
-          "Type": "SharpDX.Size2",
+          "Type": "T3.Core.DataTypes.Vector.Int2",
           "Value": {
-            "Width": 1280,
-            "Height": 720
+            "X": 1280,
+            "Y": 720
           }
         }
       ],
