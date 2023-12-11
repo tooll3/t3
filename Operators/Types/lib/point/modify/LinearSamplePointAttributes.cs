@@ -14,7 +14,7 @@ namespace T3.Operators.Types.Id_bb4803d2_0c23_470a_94a8_c477e4f7dd8c
         [Input(Guid = "36ca4c5d-5178-4b0c-9fdd-8752e819ff5b")]
         public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> GPoints = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
 
-        [Input(Guid = "5363156c-b07c-4726-adb6-c14200713366")]
+        [Input(Guid = "5363156c-b07c-4726-adb6-c14200713366", MappedType = typeof(Attributes))]
         public readonly InputSlot<int> Brightness = new InputSlot<int>();
 
         [Input(Guid = "9eef587c-9fce-480e-8a2f-ade488411616")]
@@ -23,7 +23,7 @@ namespace T3.Operators.Types.Id_bb4803d2_0c23_470a_94a8_c477e4f7dd8c
         [Input(Guid = "ee96fcc4-974c-47f3-8e07-01d3c29992d0")]
         public readonly InputSlot<float> BrightnessOffset = new InputSlot<float>();
 
-        [Input(Guid = "e88125ba-0f5f-4853-848b-829575f684e9")]
+        [Input(Guid = "e88125ba-0f5f-4853-848b-829575f684e9", MappedType = typeof(Attributes))]
         public readonly InputSlot<int> Red = new InputSlot<int>();
 
         [Input(Guid = "159bf880-b6b7-413b-afc9-acdc1b87a9e4")]
@@ -32,7 +32,7 @@ namespace T3.Operators.Types.Id_bb4803d2_0c23_470a_94a8_c477e4f7dd8c
         [Input(Guid = "4b95d0f7-6806-48aa-b85e-b25b9ea2c926")]
         public readonly InputSlot<float> RedOffset = new InputSlot<float>();
 
-        [Input(Guid = "2914dafc-1222-4067-b3bd-e80c4f7df6e4")]
+        [Input(Guid = "2914dafc-1222-4067-b3bd-e80c4f7df6e4", MappedType = typeof(Attributes))]
         public readonly InputSlot<int> Green = new InputSlot<int>();
 
         [Input(Guid = "38484dbf-76b7-4eb9-a72e-2dd6a0d657fa")]
@@ -41,7 +41,7 @@ namespace T3.Operators.Types.Id_bb4803d2_0c23_470a_94a8_c477e4f7dd8c
         [Input(Guid = "20b1a7dd-d35d-4404-ac3d-0deca21296fc")]
         public readonly InputSlot<float> GreenOffset = new InputSlot<float>();
 
-        [Input(Guid = "ebddd155-ce56-4c40-8257-8b58f529c20b")]
+        [Input(Guid = "ebddd155-ce56-4c40-8257-8b58f529c20b", MappedType = typeof(Attributes))]
         public readonly InputSlot<int> Blue = new InputSlot<int>();
 
         [Input(Guid = "3deba352-f501-4d62-969d-826e5adbfa59")]
@@ -51,13 +51,13 @@ namespace T3.Operators.Types.Id_bb4803d2_0c23_470a_94a8_c477e4f7dd8c
         public readonly InputSlot<float> BlueOffset = new InputSlot<float>();
         
         
-        [Input(Guid = "a1c9f878-9b72-43e5-8df6-e1f592b4bf57")]
+        [Input(Guid = "a1c9f878-9b72-43e5-8df6-e1f592b4bf57", MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new InputSlot<int>();
 
-        [Input(Guid = "eee2abdd-56ec-47f2-8510-03f73722c3af")]
+        [Input(Guid = "eee2abdd-56ec-47f2-8510-03f73722c3af", MappedType = typeof(Spaces))]
         public readonly InputSlot<int> TranslationSpace = new InputSlot<int>();
 
-        [Input(Guid = "01d6866f-b212-4c65-b761-33803f4f790e")]
+        [Input(Guid = "01d6866f-b212-4c65-b761-33803f4f790e", MappedType = typeof(Spaces))]
         public readonly InputSlot<int> RotationSpace = new InputSlot<int>();
 
         
