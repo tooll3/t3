@@ -10,7 +10,6 @@ using T3.Core.Audio;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
-using T3.Editor.Gui.Audio;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Styling;

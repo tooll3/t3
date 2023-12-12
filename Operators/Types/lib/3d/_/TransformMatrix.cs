@@ -1,7 +1,4 @@
-using System;
 using System.Numerics;
-using SharpDX;
-using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;

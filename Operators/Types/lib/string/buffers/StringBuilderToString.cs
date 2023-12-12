@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;

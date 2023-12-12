@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Security.Policy;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;

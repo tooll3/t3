@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
-using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
-using T3.Operators.Utils;
 using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Operators.Types.Id_5b538cf5_e3b6_4674_b23e_ab55fc59ada6

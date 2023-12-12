@@ -1,12 +1,10 @@
 using System;
 using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using System.IO;
-using System.Net;
 using SharpDX.WIC;
 using System.Net.Http;
 using System.Threading.Tasks;

@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;

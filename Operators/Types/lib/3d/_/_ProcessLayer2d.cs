@@ -1,6 +1,4 @@
 using System;
-using System.Numerics;
-using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
@@ -10,7 +8,6 @@ using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Quaternion = System.Numerics.Quaternion;
-using Utilities = T3.Core.Utils.Utilities;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;

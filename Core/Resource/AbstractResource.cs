@@ -1,7 +1,4 @@
-﻿using SharpDX.D3DCompiler;
-using SharpDX.Direct3D11;
-
-namespace T3.Core.Resource
+﻿namespace T3.Core.Resource
 {
     public abstract class AbstractResource
     {

@@ -11,7 +11,6 @@ using T3.Core.Operator.Slots;
 using Svg;
 using Svg.Pathing;
 using Svg.Transforms;
-using T3.Core;
 using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.Utils;

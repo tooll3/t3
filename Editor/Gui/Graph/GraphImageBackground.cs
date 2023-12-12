@@ -6,7 +6,6 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction.Camera;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;

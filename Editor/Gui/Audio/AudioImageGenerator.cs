@@ -3,7 +3,6 @@ using System.Drawing;
 using System.IO;
 using ManagedBass;
 using Newtonsoft.Json;
-using SharpDX;
 using T3.Core.Logging;
 using T3.Core.Utils;
 

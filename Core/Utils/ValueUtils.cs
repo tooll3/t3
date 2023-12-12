@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using SharpDX;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator.Slots;
 using Int3 = T3.Core.DataTypes.Vector.Int3;

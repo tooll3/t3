@@ -1,10 +1,8 @@
 using System;
-using System.Drawing;
 using System.Numerics;
 using ImGuiNET;
 using T3.Core.IO;
 using T3.Core.Operator.Interfaces;
-using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.UiHelpers;

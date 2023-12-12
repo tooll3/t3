@@ -6,8 +6,6 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
-using T3.Core.Utils;
 using Point = T3.Core.DataTypes.Point;
 
 namespace T3.Operators.Types.Id_d5607e3b_15e8_402c_8d54_b29e40415ab0

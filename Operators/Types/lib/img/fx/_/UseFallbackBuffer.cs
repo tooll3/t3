@@ -1,13 +1,7 @@
-using SharpDX;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-using SharpDX.Mathematics.Interop;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using Device = SharpDX.Direct3D11.Device;
 
 namespace T3.Operators.Types.Id_49549c3e_b09e_4633_86c6_1ac075f56b69
 {

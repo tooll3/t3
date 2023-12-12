@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;

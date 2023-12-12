@@ -1,7 +1,3 @@
-using SharpDX;
-using SharpDX.Direct3D11;
-using SharpDX.DXGI;
-using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;

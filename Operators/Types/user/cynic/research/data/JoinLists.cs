@@ -1,14 +1,8 @@
-using System;
 using System.Linq;
-using SharpDX;
-using SharpDX.Direct3D11;
-using T3.Core;
 using T3.Core.DataTypes;
-using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Operators.Types.Id_0b99ab8b_5d61_49da_9851_9ad723cad3ae
 {

@@ -4,7 +4,6 @@ using NAudio.Midi;
 using T3.Core.Animation;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.Model;
-using T3.Core.Resource;
 
 namespace Operators.Utils.Recording;
 
