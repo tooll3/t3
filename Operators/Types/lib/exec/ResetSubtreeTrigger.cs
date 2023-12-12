@@ -1,11 +1,7 @@
-﻿using System;
-using SharpDX;
-using T3.Core;
-using T3.Core.DataTypes;
+﻿using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_38b85057_fbcb_4ab1_9b40_cfb090750150
 {

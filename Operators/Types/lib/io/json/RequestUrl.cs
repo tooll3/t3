@@ -4,8 +4,6 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_6535edc3_a4ed_46c7_ae71_d3974612b448

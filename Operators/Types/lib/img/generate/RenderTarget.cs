@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using SharpDX;
-using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;

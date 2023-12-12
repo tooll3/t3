@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Windows;

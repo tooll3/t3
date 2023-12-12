@@ -1,5 +1,4 @@
 ﻿using T3.Core.DataTypes.Vector;
-using T3.Editor.Gui.Styling;
 
 static internal class uico
 {

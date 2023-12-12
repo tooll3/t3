@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Numerics;
 using System.Windows.Forms;
-using T3.Core.Utils;
 using T3.Editor.App;
 using T3.Editor.Gui.UiHelpers;
 

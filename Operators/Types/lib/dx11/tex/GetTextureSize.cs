@@ -1,5 +1,4 @@
 using System;
-using SharpDX;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;

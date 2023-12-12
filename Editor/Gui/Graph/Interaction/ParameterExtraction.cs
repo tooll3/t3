@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -12,8 +11,6 @@ using T3.Editor.UiModel;
 using T3.Operators.Types.Id_5880cbc3_a541_4484_a06a_0e6f77cdbe8e;
 using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 using T3.Operators.Types.Id_8211249d_7a26_4ad0_8d84_56da72a5c536;
-using T3.Operators.Types.Id_926ab3fd_fbaf_4c4b_91bc_af277000dcb8;
-using T3.Operators.Types.Id_94a5de3b_ee6a_43d3_8d21_7b8fe94b042b;
 using T3.Operators.Types.Id_cc07b314_4582_4c2c_84b8_bb32f59fc09b;
 using Vector2 = T3.Operators.Types.Id_926ab3fd_fbaf_4c4b_91bc_af277000dcb8.Vector2;
 using Vector3 = T3.Operators.Types.Id_94a5de3b_ee6a_43d3_8d21_7b8fe94b042b.Vector3;

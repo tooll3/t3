@@ -7,7 +7,6 @@ using T3.Core.Logging;
 using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.InputUi.VectorInputs;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;

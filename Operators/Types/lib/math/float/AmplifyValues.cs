@@ -2,11 +2,7 @@ using System.Collections.Generic;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using System;
 using System.Linq;
-using T3.Core;
-using T3.Core.Logging;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_4def850e_3627_46d8_ae2b_58b513843885

@@ -1,8 +1,6 @@
-using System;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_46daab0e_e957_413e_826c_0699569d0e07

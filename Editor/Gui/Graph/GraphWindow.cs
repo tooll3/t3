@@ -9,7 +9,6 @@ using T3.Core.Utils;
 using T3.Editor.Gui.Graph.Dialogs;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Interaction;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.Selection;

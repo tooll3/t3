@@ -7,7 +7,6 @@ using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.Gui.Graph.Helpers;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Selection;
 using T3.Editor.UiModel;
 using Vector2 = System.Numerics.Vector2;

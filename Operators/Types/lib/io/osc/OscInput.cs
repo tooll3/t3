@@ -4,13 +4,11 @@ using System.Collections.Generic;
 //using System.Windows.Forms;
 using Operators.Utils;
 using Rug.Osc;
-using T3.Core;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_3a1d7ea0_5445_4df0_b08a_6596e53f815a 

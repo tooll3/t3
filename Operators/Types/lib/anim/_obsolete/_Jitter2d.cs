@@ -1,10 +1,8 @@
 using System;
 using System.Numerics;
-using T3.Core;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_23794a1f_372d_484b_ac31_9470d0e77819

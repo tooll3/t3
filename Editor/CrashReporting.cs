@@ -3,7 +3,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Sentry;
 using T3.Core.Animation;
-using T3.Editor.Gui;
 using T3.Editor.Gui.AutoBackup;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Graph;

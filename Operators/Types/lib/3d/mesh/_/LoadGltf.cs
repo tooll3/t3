@@ -13,7 +13,6 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Resource;
-using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Buffer = SharpDX.Direct3D11.Buffer;
 

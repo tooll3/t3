@@ -1,11 +1,8 @@
 using System.Numerics;
-using SharpDX;
-using T3.Core;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 

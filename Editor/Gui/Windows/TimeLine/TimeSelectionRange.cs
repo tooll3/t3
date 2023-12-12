@@ -4,7 +4,6 @@ using ImGuiNET;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
 using T3.Editor.Gui.Interaction.Snapping;
-using T3.Editor.Gui.Styling;
 
 namespace T3.Editor.Gui.Windows.TimeLine
 {

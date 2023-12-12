@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using SharpDX.D3DCompiler;
-using T3.Core;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;

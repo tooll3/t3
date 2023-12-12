@@ -1,15 +1,12 @@
 using System;
 using System.Numerics;
-using SharpDX;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
-using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
-using T3.Operators.Utils;
 using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Operators.Types.Id_954af16f_b37b_4e64_a965_4bec02b9179e

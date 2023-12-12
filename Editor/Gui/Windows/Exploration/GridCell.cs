@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SharpDX;
 using T3.Core.DataTypes.Vector;
 
 namespace T3.Editor.Gui.Windows.Exploration

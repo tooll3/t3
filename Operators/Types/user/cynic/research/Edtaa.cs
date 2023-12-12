@@ -1,9 +1,7 @@
 using System;
-using System.Net.Mime;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using T3.Core;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -14,8 +12,6 @@ using T3.Core.Utils;
 using Color = T3.Core.DataTypes.Vector.Color;
 using Utilities = T3.Core.Utils.Utilities;
 using Vector2 = System.Numerics.Vector2;
-using Vector4 = System.Numerics.Vector4;
-using Vector3 = System.Numerics.Vector3;
 
 namespace T3.Operators.Types.Id_afcd4aad_8c8d_4e59_8e8e_a8c12d312200
 {

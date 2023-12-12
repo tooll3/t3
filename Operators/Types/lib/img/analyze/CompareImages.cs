@@ -1,11 +1,9 @@
 using System;
-using System.Numerics;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
-using Unsplasharp.Models;
 
 namespace T3.Operators.Types.Id_0e13e34f_c07b_4ada_8c87_6b89f4ed8b41
 {

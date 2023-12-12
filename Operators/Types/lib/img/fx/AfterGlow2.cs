@@ -3,7 +3,6 @@ using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using T3.Core.Resource;
 
 namespace T3.Operators.Types.Id_04ac6a30_a2ad_4e43_8954_94dc852b0602
 {
