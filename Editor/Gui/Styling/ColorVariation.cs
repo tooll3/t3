@@ -29,12 +29,7 @@ public struct ColorVariation : IEquatable<ColorVariation>
 
     public Color Apply(Color originalColor)
     {
-        ImGui.ColorConvertRGBtoHSV(
-                                   originalColor.Rgba.X,
-                                   originalColor.Rgba.Y,
-                                   originalColor.Rgba.Z,
-                                   out var h, out var s, out var v);
-
+        originalColor.GetHSV(out var h, out var s, out var v);
         return Color.FromHSV(
                              h,
                              s * Saturation,
