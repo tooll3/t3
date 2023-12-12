@@ -337,11 +337,14 @@ public struct Color
         // manually convert hsv to rgb - inputs and outputs are all in the range 0-1
         float r = 0, g = 0, b = 0;
 
+        h %= 1f;
+        v = v.Clamp(0, 1);
+
         int i = (int)(h * 6);
         float f = h * 6 - i;
-        float p = v * (1 - s);
-        float q = v * (1 - f * s);
-        float t = v * (1 - (1 - f) * s);
+        float p = v * Math.Max((1 - s), 0);
+        float q = v * Math.Max((1 - f * s), 0);
+        float t = v * Math.Max((1 - (1 - f) * s), 0);
 
         switch (i % 6)
         {
@@ -377,7 +380,7 @@ public struct Color
                 break;
         }
 
-        return new Color(r, g, b, a);
+        return new Color(r, g, b, a.Clamp(0, 1));
     }
 
     /// <summary>
@@ -385,24 +388,27 @@ public struct Color
     /// </summary>
     public void GetHSV(out float h, out float s, out float v)
     {
-        float min = Math.Min(Math.Min(R, G), B);
-        float max = Math.Max(Math.Max(R, G), B);
+        // Should this be normalized? what if the colors are out of bounds?
+        float r = R, g = G, b = B;
+        
+        float min = Math.Min(Math.Min(r, g), b);
+        float max = Math.Max(Math.Max(r, g), b);
         float delta = max - min;
 
         float hueShift;
         const float threshold = 0.00001f;
 
-        if (max - R <= threshold)
+        if (max - r <= threshold)
         {
-            hueShift = (G - B) / delta;
+            hueShift = (g - b) / delta;
         }
-        else if (max - G <= threshold)
+        else if (max - g <= threshold)
         {
-            hueShift = 2f + (B - R) / delta;
+            hueShift = 2f + (b - r) / delta;
         }
         else // max == B
         {
-            hueShift = 4f + (R - G) / delta;
+            hueShift = 4f + (r - g) / delta;
         }
 
         hueShift = hueShift.NanToZero();
