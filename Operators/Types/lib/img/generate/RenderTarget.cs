@@ -213,17 +213,22 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             
         }
         
-        private uint _resolveComputeShaderResourceId = ResourceManager.NullResource;
-
         private void SetupShaderResources()
         {
-            if (_resolveComputeShaderResourceId == ResourceManager.NullResource)
+            if (_resolveComputeShaderResource == null)
             {
                 string sourcePath = @"Resources\lib\img\internal\resolve-multisampled-depth-buffer-cs.hlsl";
                 string entryPoint = "main";
                 string debugName = "resolve-multisampled-depth-buffer";
                 var resourceManager = ResourceManager.Instance();
-                resourceManager.CreateComputeShaderFromFile(out  _resolveComputeShaderResourceId, sourcePath, entryPoint, debugName, null);
+                var success = resourceManager.TryCreateShaderResource(out _resolveComputeShaderResource, 
+                                                                      fileName: sourcePath, 
+                                                                      entryPoint: entryPoint, 
+                                                                      name: debugName,
+                                                                      errorMessage: out var errorMessage);
+                
+                if(!string.IsNullOrWhiteSpace(errorMessage))
+                    Log.Error($"{nameof(RenderTarget)}: {errorMessage}");
             }
         }
         
@@ -236,8 +241,8 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
             var prevShader = csStage.Get();
             var prevUavs = csStage.GetUnorderedAccessViews(0, 1);
             var prevSrvs = csStage.GetShaderResources(0, 1);
-            
-            ComputeShader resolveShader = resourceManager.GetComputeShader(_resolveComputeShaderResourceId);
+
+            ComputeShader resolveShader = _resolveComputeShaderResource.Shader;
             csStage.Set(resolveShader);
 
             const int threadNumX = 16, threadNumY = 16;
@@ -546,5 +551,7 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
         private static int _statsCountWithMsaa;
         private static int _statsCountPixels;
         private static bool _registeredStats;
+
+        private ShaderResource<SharpDX.Direct3D11.ComputeShader> _resolveComputeShaderResource;
     }
 }

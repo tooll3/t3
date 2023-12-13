@@ -71,9 +71,9 @@ namespace T3.Editor.Gui.Windows.Exploration
                                                                0.0f, 1.0f));
             deviceContext.OutputMerger.SetTargets(_canvasTextureRtv);
 
-            var vertexShader = resourceManager.GetVertexShader(SharedResources.FullScreenVertexShaderId);
+            var vertexShader = SharedResources.FullScreenVertexShaderResource.Shader;
             deviceContext.VertexShader.Set(vertexShader);
-            var pixelShader = resourceManager.GetPixelShader(SharedResources.FullScreenPixelShaderId);
+            var pixelShader = SharedResources.FullScreenPixelShaderResource.Shader;
             deviceContext.PixelShader.Set(pixelShader);
             deviceContext.PixelShader.SetShaderResource(0, previewTextureSrv);
 

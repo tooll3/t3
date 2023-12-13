@@ -1,5 +1,6 @@
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
+using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
@@ -15,7 +16,7 @@ namespace T3.Operators.Types.Id_0c30ce21_0c02_4676_a636_63d744bfa788
         public readonly InputSlot<bool> TriggerUpdate = new InputSlot<bool>();
 
         [Input(Guid = "a16ccad1-00b7-4779-8346-52b03b81249f")]
-        public readonly InputSlot<SharpDX.Size2> Resolution = new InputSlot<SharpDX.Size2>();
+        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
 
         [Input(Guid = "6d9eb435-595b-421f-9852-6e923a532aed")]
         public readonly InputSlot<string> Folder = new InputSlot<string>();

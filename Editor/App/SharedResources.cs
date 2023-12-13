@@ -11,14 +11,34 @@ namespace T3.Editor.App
     {
         public static void Initialize(ResourceManager resourceManager)
         {
-            FullScreenVertexShaderId =
-                resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
-             
-            resourceManager.CreatePixelShaderFromFile(out FullScreenPixelShaderId,
-                                                      @"Resources\lib\dx11\fullscreen-texture.hlsl", 
-                                                      "psMain", 
-                                                      "ps-fullscreen-texture",
-                                                      () => { });
+            const string errorHeader = $"{nameof(SharedResources)} error: ";
+            
+            var gotFullscreenVertexShader = resourceManager.TryCreateShaderResource<VertexShader>(
+                 fileName: @"Resources\lib\dx11\fullscreen-texture.hlsl",
+                 entryPoint: "vsMain",
+                 name: "vs-fullscreen-texture",
+                 fileChangedAction: () => { },
+                 resource: out FullScreenVertexShaderResource,
+                 errorMessage: out var errorMessage);
+
+            if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                Log.Error(errorHeader + errorMessage);
+            }
+            
+            var gotFullscreenPixelShader = resourceManager.TryCreateShaderResource<PixelShader>(
+                fileName: @"Resources\lib\dx11\fullscreen-texture.hlsl",
+                entryPoint: "psMain",
+                name: "ps-fullscreen-texture",
+                fileChangedAction: () => { },
+                resource: out FullScreenPixelShaderResource,
+                errorMessage: out errorMessage);
+            
+
+            if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                Log.Error(errorHeader + errorMessage);
+            }
             
             ViewWindowRasterizerState = new RasterizerState(ResourceManager.Device, new RasterizerStateDescription
                                                                                                    {
@@ -49,10 +69,10 @@ namespace T3.Editor.App
             }
         }
         
-        public static uint FullScreenVertexShaderId;
-        public static uint FullScreenPixelShaderId;
         public static RasterizerState ViewWindowRasterizerState;
         public static uint ViewWindowDefaultSrvId;
         public static ShaderResourceView ColorPickerImageSrv;
+        public static ShaderResource<VertexShader> FullScreenVertexShaderResource;
+        public static ShaderResource<PixelShader> FullScreenPixelShaderResource;
     }
 }

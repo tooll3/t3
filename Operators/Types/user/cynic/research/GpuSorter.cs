@@ -43,8 +43,8 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
 
             var prevShader = csStage.Get();
             var prevConstBuffer = csStage.GetConstantBuffers(0, 1)[0];
-            ComputeShader sortShader = resourceManager.GetComputeShader(_sortShaderId);
-            ComputeShader transposeShader = resourceManager.GetComputeShader(_transposeShaderId);
+            ComputeShader sortShader = _sortShaderResource.Shader;
+            ComputeShader transposeShader = _transposeShaderResource.Shader;
             csStage.Set(sortShader);
             csStage.SetConstantBuffer(0, _parameterConstBuffer);
             csStage.SetUnorderedAccessView(0, uav1);
@@ -154,20 +154,28 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
         {
             var resourceManager = ResourceManager.Instance();
 
-            if (_sortShaderId == ResourceManager.NullResource)
+            if (_sortShaderResource == null)
             {
                 string sourcePath = @"Resources\proj-partial\particle\bitonic-sort.hlsl";
                 string entryPoint = "bitonicSort";
                 string debugName = "bitonic-sort";
-                resourceManager.CreateComputeShaderFromFile(out _sortShaderId,sourcePath, entryPoint, debugName, null);
+                resourceManager.TryCreateShaderResource(resource: out _sortShaderResource, 
+                                                        fileName: sourcePath, 
+                                                        errorMessage: out var errorMessage, 
+                                                        name: debugName, 
+                                                        entryPoint: entryPoint);
             }
 
-            if (_transposeShaderId == ResourceManager.NullResource)
+            if (_transposeShaderResource == null)
             {
                 string sourcePath = @"Resources\proj-partial\particle\bitonic-transpose.hlsl";
                 string entryPoint = "transpose";
                 string debugName = "bitonic-transpose";
-                resourceManager.CreateComputeShaderFromFile(out _transposeShaderId,sourcePath, entryPoint, debugName, null);
+                resourceManager.TryCreateShaderResource(resource: out _transposeShaderResource, 
+                                                        fileName: sourcePath, 
+                                                        errorMessage: out var errorMessage, 
+                                                        name: debugName, 
+                                                        entryPoint: entryPoint);
             }
 
             InitConstBuffer();
@@ -180,8 +188,8 @@ namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
         }
 
         private Buffer _parameterConstBuffer;
-        private uint _sortShaderId;
-        private uint _transposeShaderId;
+        private ShaderResource<ComputeShader> _sortShaderResource;
+        private ShaderResource<ComputeShader> _transposeShaderResource;
 
         [Input(Guid = "37dddd93-2b54-4598-aaca-40710ed06417")]
         public readonly InputSlot<SharpDX.Direct3D11.UnorderedAccessView> BufferUav = new InputSlot<SharpDX.Direct3D11.UnorderedAccessView>();

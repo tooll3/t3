@@ -54,6 +54,7 @@ namespace T3.Editor
         {
             // Not calling this first will cause exceptions...
             EditorUi.Instance = new MsFormsEditor();
+            ShaderCompiler.Instance = new DX11ShaderCompiler();
             
             StartupValidation.ValidateNotRunningFromSystemFolder();
             
@@ -92,6 +93,11 @@ namespace T3.Editor
             ProgramWindows.InitializeMainWindow(GetReleaseVersion(), out var device);
 
             Device = device;
+            
+            if(ShaderCompiler.Instance is not DX11ShaderCompiler shaderCompiler)
+                throw new Exception("ShaderCompiler is not DX11ShaderCompiler");
+            
+            shaderCompiler.Device = device;
 
             UiContentContentDrawer = new WindowsUiContentDrawer();
             UiContentContentDrawer.Initialize(device, ProgramWindows.Main.Width, ProgramWindows.Main.Height);
