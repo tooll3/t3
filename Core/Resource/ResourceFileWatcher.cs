@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using SharpDX.Direct3D11;
 using T3.Core.Logging;
 
 namespace T3.Core.Resource
@@ -118,7 +117,6 @@ namespace T3.Core.Resource
                 {
                     var updateable = resource as IUpdateable;
                     updateable?.Update(fileHook.Path);
-                    resource.UpToDate = false;
                 }
                 else
                 {
@@ -145,7 +143,7 @@ namespace T3.Core.Resource
     /// <summary>
     /// Used by some <see cref="AbstractResource"/>s to link to a file.
     /// Note that multiple resources likes <see cref="VertexShader"/> and <see cref="PixelShader"/> can
-    /// depend on the some source file. 
+    /// depend on the same source file. 
     /// </summary>
     public class ResourceFileHook
     {

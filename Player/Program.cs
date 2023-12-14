@@ -162,15 +162,31 @@ namespace T3.Player
                 _backBuffer = Texture2D.FromSwapChain<Texture2D>(_swapChain, 0);
                 _renderView = new RenderTargetView(device, _backBuffer);
 
+                var shaderCompiler = new DX11ShaderCompiler
+                                         {
+                                             Device = device
+                                         };
+                ShaderCompiler.Instance = shaderCompiler;
                 ResourceManager.Init(device);
                 ResourceManager resourceManager = ResourceManager.Instance();
-                _fullScreenVertexShaderId =
-                    resourceManager.CreateVertexShaderFromFile(@"Resources\lib\dx11\fullscreen-texture.hlsl", "vsMain", "vs-fullscreen-texture", () => { });
-                resourceManager.CreatePixelShaderFromFile(out _fullScreenPixelShaderId, 
-                                                          @"Resources\lib\dx11\fullscreen-texture.hlsl", 
-                                                          "psMain", 
-                                                          "ps-fullscreen-texture", 
-                                                          () => { });
+                var gotVertexShader = resourceManager.TryCreateShaderResource(out ShaderResource<VertexShader> fullScreenVertexShaderResource,
+                                                                              fileName: @"lib\dx11\fullscreen-texture.hlsl",
+                                                                              entryPoint: "vsMain",
+                                                                              name: "vs-fullscreen-texture",
+                                                                              errorMessage: out var errorMessage);
+                
+                if(!string.IsNullOrWhiteSpace(errorMessage))
+                    Log.Error($"Failed to load vertex shader: {errorMessage}");
+                    
+                
+                var gotPixelShader = resourceManager.TryCreateShaderResource(out ShaderResource<PixelShader> fullScreenPixelShaderResource,
+                                                                             fileName: @"lib\dx11\fullscreen-texture.hlsl",
+                                                                             entryPoint: "psMain",
+                                                                             name: "ps-fullscreen-texture",
+                                                                             errorMessage: out errorMessage);
+                
+                if(!string.IsNullOrWhiteSpace(errorMessage))
+                    Log.Error($"Failed to load pixel shader: {errorMessage}");
 
                 Assembly operatorsAssembly;
                 try
@@ -319,10 +335,10 @@ namespace T3.Player
                                              if (tex != null)
                                              {
                                                  context.Rasterizer.State = rasterizerState;
-                                                 if (ResourceManager.ResourcesById[_fullScreenVertexShaderId] is VertexShaderResource vsr)
-                                                     context.VertexShader.Set(vsr.VertexShader);
-                                                 if (ResourceManager.ResourcesById[_fullScreenPixelShaderId] is PixelShaderResource psr)
-                                                     context.PixelShader.Set(psr.PixelShader);
+                                                 if (fullScreenVertexShaderResource?.Shader != null)
+                                                     context.VertexShader.Set(fullScreenVertexShaderResource.Shader);
+                                                 if (fullScreenPixelShaderResource?.Shader != null)
+                                                     context.PixelShader.Set(fullScreenPixelShaderResource.Shader);
                                                  var srv = new ShaderResourceView(device, tex);
                                                  context.PixelShader.SetShaderResource(0, srv);
 
@@ -437,7 +453,5 @@ namespace T3.Player
         private static EvaluationContext _evalContext;
         private static Playback _playback;
         private static AudioClip _soundtrack;
-        private static uint _fullScreenVertexShaderId;
-        private static uint _fullScreenPixelShaderId;
     }
 }
