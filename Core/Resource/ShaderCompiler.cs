@@ -56,7 +56,7 @@ public abstract class ShaderCompiler
 
                 if (success)
                 {
-                    Log.Info($"Compiled shader '{name}'({hash}).");
+                    Log.Debug($"Compiled shader '{name}'({hash}).");
                     if (blob != null)
                     {
                         if (_shaderBytecodeHashes.Remove(blob, out var oldHash))
