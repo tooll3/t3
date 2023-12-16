@@ -36,7 +36,8 @@
       "Position": {
         "X": -1562.4236,
         "Y": 601.2689
-      },"AddPadding": "True"
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "159bf880-b6b7-413b-afc9-acdc1b87a9e4"/*RedFactor*/,
@@ -57,7 +58,8 @@
       "Position": {
         "X": -1562.4236,
         "Y": 736.2689
-      },"AddPadding": "True"
+      },
+      "AddPadding": "True"
     },
     {
       "InputId": "38484dbf-76b7-4eb9-a72e-2dd6a0d657fa"/*GreenFactor*/,
