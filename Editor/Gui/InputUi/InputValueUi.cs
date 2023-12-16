@@ -251,8 +251,8 @@ namespace T3.Editor.Gui.InputUi
             InputEditStateFlags DrawAnimatedParameter()
             {
                 var hasKeyframeAtCurrentTime = animationCurve.HasVAt(Playback.Current.TimeInBars);
-                var hasKeyframeBefore = animationCurve.ExistVBefore(Playback.Current.TimeInBars);
-                var hasKeyframeAfter = animationCurve.ExistVAfter(Playback.Current.TimeInBars);
+                var hasKeyframeBefore = animationCurve.HasKeyBefore(Playback.Current.TimeInBars);
+                var hasKeyframeAfter = animationCurve.HasKeyAfter(Playback.Current.TimeInBars);
 
                 var iconIndex = 0;
                 const int leftBit = 1 << 0;

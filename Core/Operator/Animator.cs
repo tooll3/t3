@@ -309,18 +309,16 @@ namespace T3.Core.Operator
  
         public bool IsInstanceAnimated(Instance instance)
         {
-            using (var e = _animatedInputCurves.Keys.GetEnumerator())
+            using var e = _animatedInputCurves.Keys.GetEnumerator();
+            while (e.MoveNext())
             {
-                while (e.MoveNext())
+                if (e.Current.SymbolChildId == instance.SymbolChildId)
                 {
-                    if (e.Current.SymbolChildId == instance.SymbolChildId)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
-
-                return false;
             }
+
+            return false;
 
             // code above generates way less allocations than the line below:
             // return _animatedInputCurves.Any(c => c.Key.InstanceId == instance.Id);

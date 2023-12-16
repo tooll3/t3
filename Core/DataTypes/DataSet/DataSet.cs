@@ -7,7 +7,9 @@ using T3.Core.Model;
 using T3.Core.Resource;
 
 namespace T3.Core.DataTypes.DataSet;
-
+/// <summary>
+/// Defines a set of event channels. 
+/// </summary>
 public class DataSet
 {
     public List<DataChannel> Channels { get; set; } = new();
@@ -54,7 +56,7 @@ public class DataChannel
 
     public List<string> Path { get; set; }
     public string Name { get; set; }
-    public List<DataEvent> Events { get; set; } = new();
+    public List<DataEvent> Events { get; set; } = new(100);
     private readonly Type _type;
     private readonly string _typeName;
 

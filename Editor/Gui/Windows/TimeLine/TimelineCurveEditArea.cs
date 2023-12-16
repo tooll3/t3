@@ -228,16 +228,15 @@ namespace T3.Editor.Gui.Windows.TimeLine
         private static AddKeyframesCommand InsertNewKeyframe(Curve curve, float u)
         {
             var value = curve.GetSampledValue(u);
-            var previousU = curve.GetPreviousU(u);
 
-            var key = (previousU != null)
-                          ? curve.GetV(previousU.Value).Clone()
-                          : new VDefinition();
+            var newKey = curve.TryGetPreviousKey(u, out var previousKey)
+                             ? previousKey.Clone()
+                             : new VDefinition();
 
-            key.Value = value;
-            key.U = u;
+            newKey.Value = value;
+            newKey.U = u;
 
-            var command = new AddKeyframesCommand(curve, key);
+            var command = new AddKeyframesCommand(curve, newKey);
             return command;
         }
 

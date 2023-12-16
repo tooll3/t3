@@ -19,19 +19,19 @@ namespace T3.Editor.Gui.Interaction.Animation
             foreach (var curve in curves)
             {
                 var value = curve.GetSampledValue(time);
-                var previousU = curve.GetPreviousU(time);
 
-                var key = (previousU != null)
-                              ? curve.GetV(previousU.Value).Clone()
-                              : new VDefinition();
+                var newKey =  curve.TryGetPreviousKey(time, out var foundKey) 
+                                  ? foundKey.Clone() 
+                                  : new VDefinition();
 
-                key.Value = value + increment;
-                key.U = time;
 
-                var command = new AddKeyframesCommand(curve, key);
+                newKey.Value = value + increment;
+                newKey.U = time;
+
+                var command = new AddKeyframesCommand(curve, newKey);
                 command.Do();
                 commands.Add(command);
-                newKeyframes.Add(key);
+                newKeyframes.Add(newKey);
             }
             
             var marcoCommand = new MacroCommand("Insert Keyframe", commands);
