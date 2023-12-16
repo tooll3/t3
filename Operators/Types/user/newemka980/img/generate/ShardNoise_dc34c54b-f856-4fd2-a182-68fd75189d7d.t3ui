@@ -1,0 +1,161 @@
+{
+  "Id": "dc34c54b-f856-4fd2-a182-68fd75189d7d"/*ShardNoise*/,
+  "Description": "",
+  "InputUis": [
+    {
+      "InputId": "2c6a429d-5a38-4457-94d5-8994e7d1242d"/*ColorA*/,
+      "Position": {
+        "X": -158.08987,
+        "Y": -80.33527
+      }
+    },
+    {
+      "InputId": "5d02399d-dcfa-41c0-bc6b-59833389b580"/*ColorB*/,
+      "Position": {
+        "X": -158.08987,
+        "Y": -35.335403
+      }
+    },
+    {
+      "InputId": "3abec2c0-a46b-439a-8b00-21e3e9a36933"/*Offset*/,
+      "Position": {
+        "X": -158.08987,
+        "Y": 31.664597
+      },
+      "Min": -0.5,
+      "Max": 0.5
+    },
+    {
+      "InputId": "3949fce5-e285-4787-9db6-0ef2e533b15e"/*Stretch*/,
+      "Position": {
+        "X": -158.08998,
+        "Y": 76.6646
+      },
+      "Min": 0.0,
+      "Max": 10.0
+    },
+    {
+      "InputId": "f5233be8-dfdf-463b-af49-029f3459bbeb"/*Scale*/,
+      "Position": {
+        "X": -158.08998,
+        "Y": 121.6646
+      }
+    },
+    {
+      "InputId": "58ff3aee-7ced-4634-ac4a-871d67d96b57"/*Sharpen*/,
+      "Position": {
+        "X": -158.08998,
+        "Y": 166.6646
+      }
+    },
+    {
+      "InputId": "12d39fbe-cea2-44af-acf7-901df793e0c4"/*Phase*/,
+      "Position": {
+        "X": -158.08998,
+        "Y": 256.6646
+      }
+    },
+    {
+      "InputId": "fe0bda00-1c88-45d6-88a7-bc955ef5db61"/*Bias*/,
+      "Position": {
+        "X": -158.08998,
+        "Y": 211.6646
+      },
+      "Min": -1.0,
+      "Max": 1.0
+    },
+    {
+      "InputId": "d2e58300-b054-4df5-b3e8-5d7fb36d1ebc"/*Resolution*/,
+      "Position": {
+        "X": -164.5605,
+        "Y": 366.61407
+      }
+    },
+    {
+      "InputId": "abbc8df8-3430-4402-8748-18274ad56f0c"/*WarpOffset*/,
+      "Position": {
+        "X": -164.5605,
+        "Y": 411.61407
+      }
+    },
+    {
+      "InputId": "a2a5bf86-a3f5-42a7-b7ce-19b34f7ee5c3"/*Iterations*/,
+      "Position": {
+        "X": -164.5605,
+        "Y": 501.61407
+      }
+    },
+    {
+      "InputId": "35852bd6-be0a-4dae-b078-b6db734ca772"/*Method*/,
+      "Position": {
+        "X": -164.5605,
+        "Y": 591.6141
+      }
+    },
+    {
+      "InputId": "1583d95b-da27-4d12-9937-8cd99a61bb18"/*GenerateMips*/,
+      "Position": {
+        "X": -164.5605,
+        "Y": 636.6141
+      }
+    }
+  ],
+  "SymbolChildUis": [
+    {
+      "ChildId": "8e211e82-ac46-4689-b6b9-2a7ef1e7b204"/*Vector4Components*/,
+      "Position": {
+        "X": -28.089867,
+        "Y": -80.3354
+      }
+    },
+    {
+      "ChildId": "6c6382bf-7114-4b30-b3bc-953c6bc82273"/*Vector4Components*/,
+      "Position": {
+        "X": -28.089867,
+        "Y": -24.335403
+      }
+    },
+    {
+      "ChildId": "e4f5138c-b10a-438b-b1ee-ee27f30c5ff4"/*Vector2Components*/,
+      "Position": {
+        "X": -28.089867,
+        "Y": 87.6646
+      }
+    },
+    {
+      "ChildId": "9e20de28-68d3-4df3-8773-44d36641383f"/*Vector2Components*/,
+      "Position": {
+        "X": -28.089867,
+        "Y": 31.664597
+      }
+    },
+    {
+      "ChildId": "1cca6b5a-664d-4ef4-9bac-ecec46a02acb"/*_ImageFxShaderSetupStatic*/,
+      "Style": "Resizable",
+      "Size": {
+        "X": 110.47982,
+        "Y": 1030.8274
+      },
+      "Position": {
+        "X": 534.65594,
+        "Y": -296.42657
+      }
+    },
+    {
+      "ChildId": "019c9e77-6863-4beb-87e4-45c7336e0ed6"/*IntToFloat*/,
+      "Position": {
+        "X": -4.2940354,
+        "Y": 503.6467
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "7aa58fd2-2bf4-41a3-8eea-269a082c93a8"/*TextureOutput*/,
+      "Position": {
+        "X": 780.3438,
+        "Y": -14.077842
+      }
+    }
+  ]
+}
