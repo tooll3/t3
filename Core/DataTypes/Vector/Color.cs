@@ -521,7 +521,7 @@ public struct Color
         }
     }
 
-    public readonly Color Fade(float f) => new(Rgba.X, Rgba.Y, Rgba.Z, Rgba.W * f);
+    public readonly Color Fade(float f) => new(Rgba.X, Rgba.Y, Rgba.Z, (Rgba.W * f).Clamp(0,1));
 
     public override string ToString()
     {
