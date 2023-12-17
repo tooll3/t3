@@ -758,8 +758,10 @@ namespace T3.Core.Resource
                 var fileInfo = new FileInfo(fileName);
                 name = fileInfo.Name;
             }
+            
+            var resourceKey = $"{path}_{entryPoint}";
 
-            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(path, out var fileResource))
+            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(resourceKey, out var fileResource))
             {
                 foreach (var id in fileResource.ResourceIds)
                 {
@@ -796,10 +798,10 @@ namespace T3.Core.Resource
 
             ResourcesById.Add(resource.Id, resource);
 
-            if (!ResourceFileWatcher.ResourceFileHooks.TryGetValue(path, out var fileHook))
+            if (!ResourceFileWatcher.ResourceFileHooks.TryGetValue(resourceKey, out var fileHook))
             {
                 fileHook = new ResourceFileHook(path, new[] { resourceId });
-                ResourceFileWatcher.ResourceFileHooks.Add(path, fileHook);
+                ResourceFileWatcher.ResourceFileHooks.Add(resourceKey, fileHook);
             }
             
             fileHook.FileChangeAction -= fileChangedAction;
