@@ -1,6 +1,6 @@
 {
   "Id": "dc34c54b-f856-4fd2-a182-68fd75189d7d"/*ShardNoise*/,
-  "Description": "",
+  "Description": "A port of @ENDESGA's SHARD NOISE shader\nIt can be used clouds/fog/metal/crystal textures and more \nCheck the link below. ",
   "InputUis": [
     {
       "InputId": "2c6a429d-5a38-4457-94d5-8994e7d1242d"/*ColorA*/,
@@ -17,7 +17,7 @@
       }
     },
     {
-      "InputId": "3abec2c0-a46b-439a-8b00-21e3e9a36933"/*Offset*/,
+      "InputId": "3abec2c0-a46b-439a-8b00-21e3e9a36933"/*Direction*/,
       "Position": {
         "X": -158.08987,
         "Y": 31.664597
@@ -49,13 +49,6 @@
       }
     },
     {
-      "InputId": "12d39fbe-cea2-44af-acf7-901df793e0c4"/*Phase*/,
-      "Position": {
-        "X": -158.08998,
-        "Y": 256.6646
-      }
-    },
-    {
       "InputId": "fe0bda00-1c88-45d6-88a7-bc955ef5db61"/*Bias*/,
       "Position": {
         "X": -158.08998,
@@ -65,31 +58,31 @@
       "Max": 1.0
     },
     {
-      "InputId": "d2e58300-b054-4df5-b3e8-5d7fb36d1ebc"/*Resolution*/,
+      "InputId": "12d39fbe-cea2-44af-acf7-901df793e0c4"/*Phase*/,
       "Position": {
-        "X": -164.5605,
-        "Y": 366.61407
+        "X": -158.08998,
+        "Y": 256.6646
       }
     },
     {
-      "InputId": "abbc8df8-3430-4402-8748-18274ad56f0c"/*WarpOffset*/,
+      "InputId": "0b76c7f3-32b0-4aa0-a17d-16cb8bde5f80"/*Rate*/,
       "Position": {
-        "X": -164.5605,
-        "Y": 411.61407
-      }
-    },
-    {
-      "InputId": "a2a5bf86-a3f5-42a7-b7ce-19b34f7ee5c3"/*Iterations*/,
-      "Position": {
-        "X": -164.5605,
-        "Y": 501.61407
+        "X": -158.08998,
+        "Y": 301.6646
       }
     },
     {
       "InputId": "35852bd6-be0a-4dae-b078-b6db734ca772"/*Method*/,
       "Position": {
-        "X": -164.5605,
-        "Y": 591.6141
+        "X": -158.08998,
+        "Y": 346.6646
+      }
+    },
+    {
+      "InputId": "d2e58300-b054-4df5-b3e8-5d7fb36d1ebc"/*Resolution*/,
+      "Position": {
+        "X": -158.08998,
+        "Y": 391.6646
       }
     },
     {
@@ -142,10 +135,10 @@
       }
     },
     {
-      "ChildId": "019c9e77-6863-4beb-87e4-45c7336e0ed6"/*IntToFloat*/,
+      "ChildId": "13702d11-e23f-4a8c-a21e-61851e731d65"/*IntToFloat*/,
       "Position": {
-        "X": -4.2940354,
-        "Y": 503.6467
+        "X": 55.774033,
+        "Y": 306.26
       }
     }
   ],
@@ -156,6 +149,15 @@
         "X": 780.3438,
         "Y": -14.077842
       }
+    }
+  ],
+  "Links": [
+    {
+      "Id": "986e659e-a491-4ccb-8d8b-b6a8ca35b202",
+      "Title": "Original shader",
+      "Description": "@ENDESGA ",
+      "LinkUrl": "https://www.shadertoy.com/view/dlKyWw",
+      "LinkType": "Reference"
     }
   ]
 }

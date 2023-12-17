@@ -1,18 +1,19 @@
-// This shader is based on Shard Noise by ENDESGA: https://www.shadertoy.com/view/dlKyWw
-// Ported to tooll3 by Newemka
+// This shader is based on Shard Noise by @ENDESGA https://www.shadertoy.com/view/dlKyWw
+// Ported with love to Tooll3 by Newemka
 
 
 cbuffer ParamConstants : register(b0)
 {
     float4 ColorA;
     float4 ColorB;
-    float2 Position;
+    float2 Direction;
     float2 Stretch;
     float Scale;
-    float Fade;
+    float Sharpness;
     float GradientBias;
     float Phase;
-    float BlendMode;
+    float Rate;
+    float Method;
     float IsTextureValid;
 }
 
@@ -37,6 +38,7 @@ float3 hash(float3 p)
     p = frac(sin(p) * 43758.5453123);
     return p;
 }
+
 #define tau 6.283185307179586
 
 float shard_noise(in float3 p, in float sharpness) {
@@ -71,44 +73,52 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float2 p = psInput.texCoord;
     //p.x -= 0.5;
-    p -= 0.5;
+    p -= 0.5; // do we really need this? 
     p.x *= aspectRatio;
     p /= Stretch;
-
-  //float2 p = F/R.y;
-    float3 uv = float3( p + Position, Phase * .1 );
+    
+    float2 _direction = Direction * float2(-1,1); // UX improvement: flipping x so the horizontal flow matches the mouse movement 
+  
+    float3 uv = float3( p + _direction * Phase, Phase * .05 * Rate ); //controls the direction and animation
    
-    float fade = Fade*128; //Fade *128;
-    float fade2 = 4;
-    //float fade =  pow(p.x,2.) * 30.;
+    float _sharpness = Sharpness*128; 
+   
     float4 c = float4(0,0,0,1);
 
     //Shard Noise
-    float3 sn = float(shard_noise(Scale * uv, fade)*GradientBias);
+    float3 sn = float(shard_noise(Scale * uv, _sharpness)*GradientBias); //Maybe Bias is not the right term as it doesn't react like FractalNoise's Bias
 
-    //Octave-blend
-    float3 o = float(
-            (shard_noise(64.0*uv,fade2) * .03125) +
-            (shard_noise(32.0*uv,fade2) * .0625) +
-            (shard_noise(16.0*uv,fade2) * .125) +
-            (shard_noise(8.0*uv,fade2) * .25) +
-            (shard_noise(4.0*uv,fade2) * .5)
-        ); // octave-blend 
-    /* if(p.y<0.5 ) 
-    {
-        c = float4(float3(
-            (shard_noise(64.0*uv,fade) * .03125) +
-            (shard_noise(32.0*uv,fade) * .0625) +
-            (shard_noise(16.0*uv,fade) * .125) +
-            (shard_noise(8.0*uv,fade) * .25) +
-            (shard_noise(4.0*uv,fade) * .5)
-        ),1.);
-    }
-    else{
-    c = float4( float3(shard_noise(16.0*uv,fade)), 1. );}
-    if((p.y > .875 || p.y < .125)) c = round(c); */
-    //c = float4(sn,1);
-    c = float4(saturate(sn),1);
+    // repetition in the methods is an attempt of optimisation because octaves are exenpsive
     
-    return lerp(ColorA,ColorB,c) ;
+    switch (Method){
+        
+        case 0: 
+            // Cubism
+        c = float4(saturate(sn),1);
+        break;
+        case 1:
+            // Cubism * octaves
+            float3 o = float(
+                (shard_noise(64.0*uv,4) * .03125) +
+                (shard_noise(32.0*uv,4) * .0625) +
+                (shard_noise(16.0*uv,4) * .125) +
+                (shard_noise(8.0*uv,4) * .25) +
+                (shard_noise(4.0*uv,4) * .5)
+            ); 
+        c = float4(saturate(sn*o),1); //ShardNoise multiplied by octaves
+        break;
+        case 2: 
+            // Octaves
+            float3 oc = float(
+                (shard_noise(64.0*uv,4) * .03125) +
+                (shard_noise(32.0*uv,4) * .0625) +
+                (shard_noise(16.0*uv,4) * .125) +
+                (shard_noise(8.0*uv,4) * .25) +
+                (shard_noise(4.0*uv,4) * .5)
+            ); 
+        c = float4(saturate(oc),1);
+        break;
+    }
+    
+    return lerp(ColorA,ColorB,c) ; // maybe this can be improved in case we want to use the Colors' alpha channel 
 }
