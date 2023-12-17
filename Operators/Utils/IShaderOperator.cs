@@ -38,7 +38,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
             return false;
         }
 
-        Log.Debug($"Attempting to update shader \"{debugName}\" ({GetType().Name})");
+        Log.Debug($"Attempting to update shader \"{debugName}\" ({GetType().Name}) with entry point \"{entryPoint}\".");
         if (SourceIsSourceCode)
         {
             var needsNewResource = ShaderResource == null;
@@ -54,14 +54,10 @@ public interface IShaderOperator<T> where T : class, IDisposable
                           : ShaderResource.UpdateFromFile(source, entryPoint, out message);
         }
 
-        if (updated)
+        if (updated && ShaderResource != null)
         {
-            ShaderResource!.UpdateDebugName(debugName);
-
-            if (ShaderResource != null)
-            {
-                Shader.Value = ShaderResource.Shader;
-            }
+            ShaderResource.UpdateDebugName(debugName);
+            Shader.Value = ShaderResource.Shader;
         }
         else
         {
@@ -82,7 +78,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
             {
                 try
                 {
-                    debugName = Path.GetFileNameWithoutExtension(source);
+                    debugName = Path.GetFileNameWithoutExtension(source) + " - " + entryPoint;
                 }
                 catch (Exception e)
                 {
