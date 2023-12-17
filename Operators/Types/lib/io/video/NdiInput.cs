@@ -16,7 +16,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using Resource = SharpDX.Direct3D11.Resource;
 using PixelFormat = SharpDX.WIC.PixelFormat;
-
+using System.Diagnostics;
 
 namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
 {
@@ -25,11 +25,15 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
         [Output(Guid = "85F1AF38-074E-475D-94F5-F48079979509", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
         public readonly Slot<Texture2D> Texture = new();
 
+        [Output(Guid = "85F1AF38-074E-475D-94F5-F48079979545", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
+        public readonly Slot<float> UploadTime = new();
+
         public NdiInput()
         {
             InitializeNdi();
             _findInstance = new Finder(true);
             Texture.UpdateAction = Update;
+            UploadTime.UpdateAction = Update;
             SourceNumber.DirtyFlag.Clear();
         }
         ~NdiInput()
@@ -378,25 +382,15 @@ namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
                             // map resource manually using our stride...
                             int mipSize;
                             DataBox dataBox = immediateContext.MapSubresource((Resource)writableImage, 0, 0, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out mipSize);
-                            DataStream outputStream = new DataStream(dataBox.DataPointer, mipSize * outputStride, canRead: true, canWrite: true);
 
-                            // copy our BGRA frame to the texture
-                            for (int loopY = 0; loopY < yres; loopY++)
-                            {
-                                int index = loopY * stride;
-                                outputStream.Position = loopY * outputStride;
-                                for (int loopX = xres; loopX > 0; --loopX)
-                                {
-                                    // convet bgr to rgb
-                                    int value = Marshal.ReadInt32(videoFrame.p_data, index);
-                                    outputStream.Write(value);
-                                    index += 4;
-                                }
-                            }
+                            Stopwatch sw = Stopwatch.StartNew();
+
+                            T3.Core.Utils.Utilities.CopyImageMemory(videoFrame.p_data, dataBox.DataPointer, yres, videoFrame.line_stride_in_bytes, dataBox.RowPitch);
 
                             // release our resources
                             immediateContext.UnmapSubresource(writableImage, 0);
                             Texture.Value = writableImage;
+                            UploadTime.Value = (float)sw.Elapsed.TotalMilliseconds;
 
                             // free frames that were received after use
                             NDIlib.recv_free_video_v2(_recvInstancePtr, ref videoFrame);

@@ -80,6 +80,26 @@ namespace T3.Core.Utils
                 return hash;
             }
         }
+
+        public static void CopyImageMemory(IntPtr srcData,  IntPtr dstData, int height, int srcStride, int dstStride)
+        {
+            // Fast path, both strides arer the same
+            if (srcStride == dstStride)
+            {
+                SharpDX.Utilities.CopyMemory(dstData, srcData, height * srcStride);
+            }
+            else
+            {
+                //We could pass rowwidth as argument, bu the smallest of each stride is enough here
+                int rowWidth = Math.Min(srcStride, dstStride);
+                for (int i = 0; i < height; i++)
+                {
+                    SharpDX.Utilities.CopyMemory(dstData, srcData, rowWidth);
+                    srcData += srcStride;
+                    dstData += dstStride;   
+                }
+            }
+        }
     }
 
     public static class CastTo<TTarget>
