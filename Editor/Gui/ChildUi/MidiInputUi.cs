@@ -46,7 +46,11 @@ namespace T3.Editor.Gui.ChildUi
             var deviceAndChannel = "Midi Device?";
             if (!string.IsNullOrEmpty(midiInput.Device.TypedInputValue.Value))
             {
-                deviceAndChannel = $"{midiInput.Device.TypedInputValue.Value} CH{midiInput.Channel.TypedInputValue.Value}:{midiInput.Control.TypedInputValue.Value}";
+                var displayControlValue = midiInput.Control.TypedInputValue.Value;
+                if (midiInput.Control.Value != 0) {
+                    displayControlValue = midiInput.Control.Value;
+                }
+                deviceAndChannel = $"{midiInput.Device.TypedInputValue.Value} CH{midiInput.Channel.TypedInputValue.Value}:{displayControlValue}";
             }
 
             ImGui.TextUnformatted(deviceAndChannel);
