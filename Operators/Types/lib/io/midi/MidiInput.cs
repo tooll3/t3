@@ -122,6 +122,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
 
                     if (hasValueChanged && signal.ControllerValue > 0)
                     {
+                        Control.Value = _currentControllerId;
                         wasHit = true;
                     }
                     
