@@ -22,6 +22,7 @@ cbuffer IntParams : register(b1)
     int CollectCycleIndex;
     int WMode;
     int EmitMode;
+    int KillAfterMaxAge;
 } 
 
 StructuredBuffer<Point> EmitPoints : t0;
@@ -101,12 +102,18 @@ void main(uint3 i : SV_DispatchThreadID)
     
     if(WMode == 1) 
     {
-        ResultPoints[gi].w = isnan(Particles[gi].birthTime) 
+        float w = isnan(Particles[gi].birthTime) 
                                 ?  NAN
                                 : clamp((Time - Particles[gi].birthTime) * AgingRate,0, MaxAge);
+
+        if(KillAfterMaxAge == 1 && w >= MaxAge) 
+            w = NAN;
+
+        ResultPoints[gi].w = w;
     } 
     else if(WMode == 2) 
     {
         ResultPoints[gi].w = speed * AgingRate;
     }
+
 }
