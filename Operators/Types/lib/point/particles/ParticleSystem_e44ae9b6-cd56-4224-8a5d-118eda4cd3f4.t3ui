@@ -92,13 +92,6 @@
       }
     },
     {
-      "InputId": "f0e7df46-1136-44b4-98fe-7a7c358a16fc"/*KillAfterMaxAge*/,
-      "Position": {
-        "X": -726.1163,
-        "Y": 973.56067
-      }
-    },
-    {
       "InputId": "c41d9633-1397-4602-a5f8-7808c3d63108"/*ParticleEffects*/,
       "Relevancy": "Relevant",
       "Position": {
@@ -275,10 +268,10 @@
       }
     },
     {
-      "ChildId": "b6977782-9fc6-4b30-b827-1cc2a7539fbe"/*BoolToInt*/,
+      "ChildId": "174bd467-28fd-426f-b32b-d44f1b281a0c"/*ComputeShader*/,
       "Position": {
-        "X": -103.352356,
-        "Y": 989.5184
+        "X": 44.82202,
+        "Y": 36.604126
       }
     }
   ],

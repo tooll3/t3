@@ -46,9 +46,6 @@ namespace T3.Operators.Types.Id_e44ae9b6_cd56_4224_8a5d_118eda4cd3f4
         [Input(Guid = "a7350ba8-08be-4afc-92f1-d223ee9bcbeb", MappedType = typeof(SetWModes))]
         public readonly InputSlot<int> SetWTo = new InputSlot<int>();
 
-        [Input(Guid = "f0e7df46-1136-44b4-98fe-7a7c358a16fc")]
-        public readonly InputSlot<bool> KillAfterMaxAge = new InputSlot<bool>();
-
         [Input(Guid = "c41d9633-1397-4602-a5f8-7808c3d63108")]
         public readonly MultiInputSlot<T3.Core.DataTypes.ParticleSystem> ParticleEffects = new MultiInputSlot<T3.Core.DataTypes.ParticleSystem>();
 
