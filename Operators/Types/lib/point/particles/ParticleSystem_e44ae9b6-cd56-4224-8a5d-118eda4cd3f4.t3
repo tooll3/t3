@@ -52,7 +52,7 @@
       "DefaultValue": 0
     },
     {
-      "Id": "53a9c13f-555e-4c88-9baf-d08715064de4"/*KillAfterMaxAge*/,
+      "Id": "f0e7df46-1136-44b4-98fe-7a7c358a16fc"/*KillAfterMaxAge*/,
       "DefaultValue": false
     },
     {
@@ -529,7 +529,7 @@
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
-      "SourceSlotId": "53a9c13f-555e-4c88-9baf-d08715064de4",
+      "SourceSlotId": "f0e7df46-1136-44b4-98fe-7a7c358a16fc",
       "TargetParentOrChildId": "b6977782-9fc6-4b30-b827-1cc2a7539fbe",
       "TargetSlotId": "c644165f-3901-4dbf-8091-05f958e668e5"
     },
