@@ -65,7 +65,7 @@ internal static class CrashReporting
         SentrySdk.ConfigureScope(scope => { scope.SetTag("IsStandAlone", Program.IsStandAlone ? "Yes" : "No"); });
         sentryEvent.SetExtra("UndoStack", UndoRedoStack.GetUndoStackAsString());
         sentryEvent.SetExtra("Selection", string.Join("\n", NodeSelection.Selection));
-        sentryEvent.SetExtra("Nickname", UserSettings.Config.UserName);
+        sentryEvent.SetExtra("Nickname", UserSettings.Config?.UserName);
         sentryEvent.SetExtra("Runtime", Playback.RunTimeInSecs);
 
         try

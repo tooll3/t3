@@ -110,7 +110,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
                                                                   fileName: source,
                                                                   entryPoint: entryPoint,
                                                                   name: debugName,
-                                                                  fileChangedAction: () => shaderOperator.Shader.DirtyFlag.Invalidate(),
+                                                                  fileChangedAction: () => shaderOperator.Source.DirtyFlag.Invalidate(),
                                                                   errorMessage: out errorMessage);
             }
 

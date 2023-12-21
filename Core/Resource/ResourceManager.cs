@@ -44,7 +44,7 @@ namespace T3.Core.Resource
 
         public OperatorResource GetOperatorFileResource(string path)
         {
-            bool foundFileEntryForPath = ResourceFileWatcher.ResourceFileHooks.TryGetValue(path, out var fileResource);
+            bool foundFileEntryForPath = ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(path, out var fileResource);
             if (foundFileEntryForPath)
             {
                 foreach (var id in fileResource.ResourceIds)
@@ -66,12 +66,12 @@ namespace T3.Core.Resource
                 return;
             }
 
-            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(oldPath, out var fileResource))
+            if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(oldPath, out var fileResource))
             {
                 Log.Info($"renamed file resource from '{oldPath}' to '{newPath}'");
                 fileResource.Path = newPath;
-                ResourceFileWatcher.ResourceFileHooks.Remove(oldPath);
-                ResourceFileWatcher.ResourceFileHooks.Add(newPath, fileResource);
+                ResourceFileWatcher.HooksForResourceFilepaths.Remove(oldPath);
+                ResourceFileWatcher.HooksForResourceFilepaths.Add(newPath, fileResource);
             }
         }
 
@@ -316,7 +316,7 @@ namespace T3.Core.Resource
         public uint CreateOperatorEntry(string sourceFilePath, string name, OperatorResource.UpdateDelegate updateHandler)
         {
             // todo: code below is redundant with all file resources -> refactor
-            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(sourceFilePath, out var fileResource))
+            if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(sourceFilePath, out var fileResource))
             {
                 foreach (var id in fileResource.ResourceIds)
                 {
@@ -335,7 +335,7 @@ namespace T3.Core.Resource
                 try
                 {
                     fileResource = new ResourceFileHook(sourceFilePath, new[] { resourceEntry.Id });
-                    ResourceFileWatcher.ResourceFileHooks.Add(sourceFilePath, fileResource);
+                    ResourceFileWatcher.HooksForResourceFilepaths.Add(sourceFilePath, fileResource);
                 }
                 catch (Exception e)
                 {
@@ -546,7 +546,7 @@ namespace T3.Core.Resource
                 return (NullResource, NullResource);
             }
 
-            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(filename, out var existingFileResource))
+            if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(filename, out var existingFileResource))
             {
                 uint textureId = existingFileResource.ResourceIds.First();
                 existingFileResource.FileChangeAction += fileChangeAction;
@@ -588,7 +588,7 @@ namespace T3.Core.Resource
 
             var fileResource = new ResourceFileHook(filename, new[] { textureResourceEntry.Id, srvResourceId });
             fileResource.FileChangeAction += fileChangeAction;
-            ResourceFileWatcher.ResourceFileHooks.Add(filename, fileResource);
+            ResourceFileWatcher.HooksForResourceFilepaths.Add(filename, fileResource);
 
             return (textureResourceEntry.Id, srvResourceId);
         }
@@ -759,9 +759,9 @@ namespace T3.Core.Resource
                 name = fileInfo.Name;
             }
             
-            var resourceKey = $"{path}_{entryPoint}";
+            var resourceKey = path;
 
-            if (ResourceFileWatcher.ResourceFileHooks.TryGetValue(resourceKey, out var fileResource))
+            if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(resourceKey, out var fileResource))
             {
                 foreach (var id in fileResource.ResourceIds)
                 {
@@ -798,10 +798,10 @@ namespace T3.Core.Resource
 
             ResourcesById.Add(resource.Id, resource);
 
-            if (!ResourceFileWatcher.ResourceFileHooks.TryGetValue(resourceKey, out var fileHook))
+            if (!ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(resourceKey, out var fileHook))
             {
                 fileHook = new ResourceFileHook(path, new[] { resourceId });
-                ResourceFileWatcher.ResourceFileHooks.Add(resourceKey, fileHook);
+                ResourceFileWatcher.HooksForResourceFilepaths.Add(resourceKey, fileHook);
             }
             
             fileHook.FileChangeAction -= fileChangedAction;
