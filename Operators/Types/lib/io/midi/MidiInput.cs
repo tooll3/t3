@@ -90,17 +90,26 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                 {
                     if (_teachingActive)
                     {
-                        Device.SetTypedInputValue(_lastMessageDevice.ProductName);
-                        _trainedDeviceName = _lastMessageDevice.ProductName;
+                        // The teaching mode shouldn't override the connected nodes
+                        if (!Device.IsConnected) {
+                            Device.SetTypedInputValue(_lastMessageDevice.ProductName);
+                            _trainedDeviceName = _lastMessageDevice.ProductName;
+                        }
 
-                        Channel.SetTypedInputValue(signal.Channel);
-                        _trainedChannel = signal.Channel;
+                        if (!Channel.IsConnected) {
+                            Channel.SetTypedInputValue(signal.Channel);
+                            _trainedChannel = signal.Channel;
+                        }
 
-                        Control.SetTypedInputValue(signal.ControllerId);
-                        _trainedControllerId = signal.ControllerId;
+                        if (!Control.IsConnected) {
+                            Control.SetTypedInputValue(signal.ControllerId);
+                            _trainedControllerId = signal.ControllerId;
+                        }
 
-                        EventType.SetTypedInputValue((int)signal.EventType);
-                        _trainedEventType = signal.EventType;
+                        if (!EventType.IsConnected) {
+                            EventType.SetTypedInputValue((int)signal.EventType);
+                            _trainedEventType = signal.EventType;
+                        }
 
                         TeachTrigger.SetTypedInputValue(false);
                         _teachingActive = false;
@@ -120,7 +129,7 @@ namespace T3.Operators.Types.Id_59a0458e_2f3a_4856_96cd_32936f783cc5
                         _valuesForControlRange[index] = signal.ControllerValue;
                     }
 
-                    if (hasValueChanged && signal.ControllerValue > 0)
+                    if (hasValueChanged && signal.ControllerValue > 0 && !Control.IsConnected)
                     {
                         Control.Value = _currentControllerId;
                         wasHit = true;
