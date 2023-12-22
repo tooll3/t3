@@ -756,18 +756,18 @@ namespace T3.Core.Resource
             
             if(string.IsNullOrWhiteSpace(name))
                 name = fileInfo.Name;
-            
-            if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(path, out var fileResource))
+
+            if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(path, out var fileHook))
             {
-                foreach (var id in fileResource.ResourceIds)
+                foreach (var id in fileHook.ResourceIds)
                 {
                     var resourceById = ResourcesById[id];
                     if (resourceById is ShaderResource<TShader> shaderResource && shaderResource.EntryPoint == entryPoint)
                     {
                         if (fileChangedAction != null)
                         {
-                            fileResource.FileChangeAction -= fileChangedAction;
-                            fileResource.FileChangeAction += fileChangedAction;
+                            fileHook.FileChangeAction -= fileChangedAction;
+                            fileHook.FileChangeAction += fileChangedAction;
                         }
 
                         resource = shaderResource;
@@ -794,7 +794,8 @@ namespace T3.Core.Resource
 
             ResourcesById.Add(resource.Id, resource);
 
-            if (!ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(path, out var fileHook))
+            // Warning: this may not play nice in a multi-threaded environment
+            if (fileHook == null)
             {
                 fileHook = new ResourceFileHook(path, new[] { resourceId });
                 ResourceFileWatcher.HooksForResourceFilepaths.Add(path, fileHook);
