@@ -328,7 +328,9 @@ namespace T3.Editor.Gui.Windows.TimeLine
                     }
                 }
 
-                CustomComponents.TooltipForLastItem("Click on beat to sync. Tap later once to refine. Click right to sync measure.");
+                CustomComponents.TooltipForLastItem("Click on beat to sync. Tap later once to refine. Click right to sync measure.",
+                                                    $"Tap: {KeyboardBinding.ListKeyboardShortcuts(UserActions.TapBeatSync)}\n"
+                                                    + $"Resync: {KeyboardBinding.ListKeyboardShortcuts(UserActions.TapBeatSyncMeasure)}");
 
                 ImGui.SameLine();
 
