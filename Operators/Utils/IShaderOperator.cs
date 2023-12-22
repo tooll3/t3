@@ -18,9 +18,13 @@ public interface IShaderOperator<T> where T : class, IDisposable
 
     internal bool TryUpdateShader(EvaluationContext context, ref string cachedSource, out string message)
     {
-        bool updated;
-
-        var shouldUpdate = !SourceIsSourceCode || Source.DirtyFlag.IsDirty || EntryPoint.DirtyFlag.IsDirty || DebugName.DirtyFlag.IsDirty;
+        // cache interface values to avoid additional virtual method calls
+        bool isSourceCode = SourceIsSourceCode;
+        var sourceSlot = Source;
+        var entryPointSlot = EntryPoint;
+        var debugNameSlot = DebugName;
+        
+        var shouldUpdate = !isSourceCode || sourceSlot.DirtyFlag.IsDirty || entryPointSlot.DirtyFlag.IsDirty || debugNameSlot.DirtyFlag.IsDirty;
 
         if (!shouldUpdate)
         {
@@ -28,36 +32,44 @@ public interface IShaderOperator<T> where T : class, IDisposable
             return false;
         }
 
-        var source = Source.GetValue(context);
-        var entryPoint = EntryPoint.GetValue(context);
-        var debugName = DebugName.GetValue(context);
+        var source = sourceSlot.GetValue(context);
+        var entryPoint = entryPointSlot.GetValue(context);
+        var debugName = debugNameSlot.GetValue(context);
+        
+        var type = GetType();
 
-        if (!TryGetDebugName(out message))
+        if (!TryGetDebugName(out message, ref debugName))
         {
             Log.Error($"Failed to update shader \"{debugName}\":\n{message}");
             return false;
         }
 
         Log.Debug($"Attempting to update shader \"{debugName}\" ({GetType().Name}) with entry point \"{entryPoint}\".");
-        if (SourceIsSourceCode)
+        
+        // cache ShaderResource to avoid additional virtual method calls
+        var shaderResource = ShaderResource;
+        var needsNewResource = shaderResource == null;
+
+        if (!isSourceCode)
+            needsNewResource = needsNewResource || cachedSource != source;
+
+        bool updated;
+
+        if (needsNewResource)
         {
-            var needsNewResource = ShaderResource == null;
-            updated = needsNewResource
-                          ? TryCreateResource(source, entryPoint, debugName, this, out message)
-                          : ShaderResource.TryUpdateFromSource(source, entryPoint, out message);
+            updated = TryCreateResource(source, entryPoint, debugName, isSourceCode, sourceSlot, out message, out shaderResource);
+            if(updated)
+                ShaderResource = shaderResource;
         }
         else
         {
-            var needsNewResource = ShaderResource == null || cachedSource != source;
-            updated = needsNewResource
-                          ? TryCreateResource(source, entryPoint, debugName, this, out message)
-                          : ShaderResource.UpdateFromFile(source, entryPoint, out message);
+            updated = TryUpdateShaderResource(source, entryPoint, isSourceCode, shaderResource, out message);
         }
 
-        if (updated && ShaderResource != null)
+        if (updated && shaderResource != null)
         {
-            ShaderResource.UpdateDebugName(debugName);
-            Shader.Value = ShaderResource.Shader;
+            shaderResource.UpdateDebugName(debugName);
+            Shader.Value = shaderResource.Shader;
         }
         else
         {
@@ -67,36 +79,52 @@ public interface IShaderOperator<T> where T : class, IDisposable
         cachedSource = source;
         return updated;
 
-        bool TryGetDebugName(out string dbgMessage)
+        bool TryGetDebugName(out string dbgMessage, ref string dbgName)
         {
             dbgMessage = string.Empty;
 
-            if (SourceIsSourceCode && string.IsNullOrWhiteSpace(debugName))
-                debugName = $"{GetType().Name} - {Source.Id}";
+            if (!string.IsNullOrWhiteSpace(dbgName))
+                return true;
 
-            if (!SourceIsSourceCode && string.IsNullOrEmpty(debugName) && !string.IsNullOrEmpty(source))
+            if (isSourceCode)
             {
-                try
-                {
-                    debugName = Path.GetFileNameWithoutExtension(source) + " - " + entryPoint;
-                }
-                catch (Exception e)
-                {
-                    dbgMessage = $"Invalid source path for shader: {source}:\n" + e.Message;
-                    return false;
-                }
+                dbgName = $"{type.Name}({entryPoint}) - {sourceSlot.Id}";
+                return true;
             }
 
-            return true;
+            if (string.IsNullOrWhiteSpace(source))
+            {
+                dbgMessage = "Source path is empty.";
+                return false;
+            }
+
+            try
+            {
+                dbgName = Path.GetFileNameWithoutExtension(source) + " - " + entryPoint;
+                return true;
+            }
+            catch (Exception e)
+            {
+                dbgMessage = $"Invalid source path for shader: {source}:\n" + e.Message;
+                return false;
+            }
+        }
+        
+        static bool TryUpdateShaderResource(string source, string entryPoint, bool srcIsSourceCode, ShaderResource<T> resource, out string errorMessage)
+        {
+            var success = srcIsSourceCode 
+                              ? resource.TryUpdateFromSource(source, entryPoint, out errorMessage) 
+                              : resource.TryUpdateFromFile(source, entryPoint, out errorMessage);
+
+            return success;
         }
 
-        static bool TryCreateResource(string source, string entryPoint, string debugName, IShaderOperator<T> shaderOperator, out string errorMessage)
+        static bool TryCreateResource(string source, string entryPoint, string debugName, bool isSourceCode, InputSlot<string> sourceSlot, out string errorMessage, out ShaderResource<T> shaderResource)
         {
             bool updated;
             var resourceManager = ResourceManager.Instance();
-            ShaderResource<T> shaderResource;
 
-            if (shaderOperator.SourceIsSourceCode)
+            if (isSourceCode)
             {
                 updated = resourceManager.TryCreateShaderResourceFromSource(out shaderResource,
                                                                             shaderSource: source,
@@ -110,11 +138,10 @@ public interface IShaderOperator<T> where T : class, IDisposable
                                                                   fileName: source,
                                                                   entryPoint: entryPoint,
                                                                   name: debugName,
-                                                                  fileChangedAction: () => shaderOperator.Source.DirtyFlag.Invalidate(),
+                                                                  fileChangedAction: () => sourceSlot.DirtyFlag.Invalidate(),
                                                                   errorMessage: out errorMessage);
             }
 
-            shaderOperator.ShaderResource = shaderResource;
             return updated;
         }
     }
