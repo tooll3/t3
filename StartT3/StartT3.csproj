@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
-    <ProjectReference Include="..\Editor\Editor.csproj" />
     <ProjectReference Include="..\MsForms\MsForms.csproj" />
   </ItemGroup>
 
@@ -21,7 +20,7 @@
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="NAudio.Midi" Version="2.1.0" />
     <PackageReference Include="OpenGL.Net" Version="0.8.4">
-        <NoWarn>NU1701</NoWarn>
+      <NoWarn>NU1701</NoWarn>
     </PackageReference>
     <PackageReference Include="Rug.Osc" Version="1.2.5">
       <NoWarn>NU1701</NoWarn>
