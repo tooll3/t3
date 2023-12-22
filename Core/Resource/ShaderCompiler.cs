@@ -35,9 +35,9 @@ public abstract class ShaderCompiler
                                                     out string errorMessage)
         where TShader : class, IDisposable
     {
-        if(string.IsNullOrWhiteSpace(entryPoint))
+        if (string.IsNullOrWhiteSpace(entryPoint))
             entryPoint = "main";
-        
+
         int hash = HashCode.Combine(shaderSource.GetHashCode(), entryPoint.GetHashCode());
         bool success;
         ShaderBytecode latestBlob;
@@ -80,7 +80,7 @@ public abstract class ShaderCompiler
 
         if (!success)
             return false;
-        
+
         blob = latestBlob;
 
         if (shader is IDisposable oldDisposableShader)
@@ -125,7 +125,8 @@ public abstract class ShaderCompiler
                            Id = resourceId,
                            Name = name,
                            Blob = blob,
-                           Shader = shader
+                           Shader = shader,
+                           EntryPoint = entryPoint
                        };
 
         return true;
@@ -149,7 +150,8 @@ public abstract class ShaderCompiler
                            Id = resourceId,
                            Name = name,
                            Blob = blob,
-                           Shader = shader
+                           Shader = shader,
+                           EntryPoint = entryPoint
                        };
         return true;
     }

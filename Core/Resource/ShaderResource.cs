@@ -38,17 +38,26 @@ public class ShaderResource<T> : ShaderResource where T : class, IDisposable
 
     private ShaderBytecode _blob;
     public ShaderBytecode Blob {get => _blob; init => _blob = value; }
+    
+    private string _entryPoint;
+    public string EntryPoint { get => _entryPoint; init => _entryPoint = value; }
 
     public void UpdateDebugName(string newDebugName) => UpdateName(newDebugName);
 
-    public bool UpdateFromFile(string path, string entryPoint, out string errorMessage)
+    public bool TryUpdateFromFile(string path, string entryPoint, out string errorMessage)
     {
-        return ShaderCompiler.Instance.TryCompileShaderFromFile(path, entryPoint, Name, ref _shader, ref _blob, out errorMessage);
+        var success = ShaderCompiler.Instance.TryCompileShaderFromFile(path, entryPoint, Name, ref _shader, ref _blob, out errorMessage);
+        if(success)
+            _entryPoint = entryPoint;
+        return success;
     }
     
     public bool TryUpdateFromSource(string source, string entryPoint, out string errorMessage)
     {
-        return ShaderCompiler.Instance.TryCompileShaderFromSource(source, entryPoint, Name, ref _shader, ref _blob, out errorMessage);
+        var success = ShaderCompiler.Instance.TryCompileShaderFromSource(source, entryPoint, Name, ref _shader, ref _blob, out errorMessage);
+        if(success)
+            _entryPoint = entryPoint;
+        return success;
     }
 }
 

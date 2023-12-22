@@ -687,7 +687,7 @@ namespace T3.Core.Resource
             var resourceId = GetNextResourceId();
             if (string.IsNullOrWhiteSpace(name))
             {
-                name = $"{nameof(TShader)}_{resourceId}";
+                name = $"{typeof(TShader).Name}_{resourceId}";
             }
             
             var compiled = ShaderCompiler.Instance.TryCreateShaderResourceFromSource<TShader>(shaderSource: shaderSource, 
@@ -738,7 +738,7 @@ namespace T3.Core.Resource
                                                      string name = "", string entryPoint = "main", Action fileChangedAction = null)
             where TShader : class, IDisposable
         {
-            if (string.IsNullOrWhiteSpace(fileName) || string.IsNullOrWhiteSpace(fileName))
+            if (string.IsNullOrWhiteSpace(fileName))
             {
                 resource = null;
                 errorMessage = "Empty file name";
@@ -746,27 +746,23 @@ namespace T3.Core.Resource
             }
             
             var path = ConstructShaderPath(fileName);
-            if(!File.Exists(path))
+            var fileInfo = new FileInfo(path);
+            if(!fileInfo.Exists)
             {
                 resource = null;
                 errorMessage = $"File '{path}' doesn't exist";
                 return false;
             }
-
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                var fileInfo = new FileInfo(fileName);
-                name = fileInfo.Name;
-            }
             
-            var resourceKey = path;
-
-            if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(resourceKey, out var fileResource))
+            if(string.IsNullOrWhiteSpace(name))
+                name = fileInfo.Name;
+            
+            if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(path, out var fileResource))
             {
                 foreach (var id in fileResource.ResourceIds)
                 {
                     var resourceById = ResourcesById[id];
-                    if (resourceById is ShaderResource<TShader> shaderResource)
+                    if (resourceById is ShaderResource<TShader> shaderResource && shaderResource.EntryPoint == entryPoint)
                     {
                         if (fileChangedAction != null)
                         {
@@ -798,10 +794,10 @@ namespace T3.Core.Resource
 
             ResourcesById.Add(resource.Id, resource);
 
-            if (!ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(resourceKey, out var fileHook))
+            if (!ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(path, out var fileHook))
             {
                 fileHook = new ResourceFileHook(path, new[] { resourceId });
-                ResourceFileWatcher.HooksForResourceFilepaths.Add(resourceKey, fileHook);
+                ResourceFileWatcher.HooksForResourceFilepaths.Add(path, fileHook);
             }
             
             fileHook.FileChangeAction -= fileChangedAction;
