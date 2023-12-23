@@ -466,7 +466,6 @@
     },
     {
       "Id": "4b009aed-33b8-4435-82e3-b15a91f78b2b"/*Blur*/,
-      "IsBypassed": true,
       "SymbolId": "946da16c-f536-4887-b764-af9468f22c0f",
       "InputValues": [
         {

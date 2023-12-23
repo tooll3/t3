@@ -3,8 +3,12 @@
 cbuffer Params : register(b0)
 {
     float TrailLength;
-    float CycleIndex;
     float AddSeparatorThreshold;
+}
+
+cbuffer Params2 : register(b1)
+{
+    int CycleIndex;
 }
 
 StructuredBuffer<Point> SourcePoints : t0;         // input
@@ -24,7 +28,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     uint trailLength = (uint)(TrailLength + 0.5);
     uint bufferLength = (uint)(pointCount + 0.5) * trailLength;
-    uint cycleIndex = (uint)(CycleIndex + 0.5);
+    uint cycleIndex = (uint)CycleIndex;
     uint targetIndex = (cycleIndex + sourceIndex * trailLength) % bufferLength;
 
     TrailPoints[targetIndex] = SourcePoints[sourceIndex];
