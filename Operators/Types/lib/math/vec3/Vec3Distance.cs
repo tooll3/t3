@@ -5,12 +5,12 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_4af1080c_3133_4070_a440_4cf2f4cc10a1
 {
-    public class Vec3Distances : Instance<Vec3Distances>
+    public class Vec3Distance : Instance<Vec3Distance>
     {
         [Output(Guid = "14D4FD70-153B-4AD2-B068-71A29427FBF4")]
         public readonly Slot<float> Result = new();
 
-        public Vec3Distances()
+        public Vec3Distance()
         {
             Result.UpdateAction = Update;
         }

@@ -1,10 +1,10 @@
 {
-  "Name": "Vec3Distances",
-  "Id": "4af1080c-3133-4070-a440-4cf2f4cc10a1",
+  "Name": "SubVec3",
+  "Id": "3021300c-7f56-49c1-bcaf-92447b716dad",
   "Namespace": "lib.math.vec3",
   "Inputs": [
     {
-      "Id": "eecb6054-ecb8-4b22-a685-6740ed1cfe5c"/*Input1*/,
+      "Id": "b1fe7da6-169a-4c09-839d-0d494606d527"/*Input1*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,
@@ -12,7 +12,7 @@
       }
     },
     {
-      "Id": "c4094f11-d93d-4497-b1ce-1faa8bc1d1b0"/*Input2*/,
+      "Id": "1c78d0e2-88b1-46d3-a575-ec088b293450"/*Input2*/,
       "DefaultValue": {
         "X": 0.0,
         "Y": 0.0,
