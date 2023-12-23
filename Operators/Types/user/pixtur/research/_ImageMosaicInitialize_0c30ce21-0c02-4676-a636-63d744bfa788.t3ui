@@ -16,6 +16,13 @@
         "Y": 725.23517
       },
       "Usage": "Default"
+    },
+    {
+      "InputId": "a16ccad1-00b7-4779-8346-52b03b81249f"/*Resolution*/,
+      "Position": {
+        "X": -242.05714,
+        "Y": 770.23517
+      }
     }
   ],
   "SymbolChildUis": [

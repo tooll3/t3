@@ -26,6 +26,9 @@ namespace T3.Operators.Types.Id_299e9912_2a6a_40ea_aa31_4c357bbec125
 
         [Input(Guid = "9364f41d-0700-4c43-ad16-569081f510cf")]
         public readonly InputSlot<int> Method = new InputSlot<int>();
+
+        [Input(Guid = "41d59091-a974-43ed-b45b-0849fb91f6d1")]
+        public readonly InputSlot<float> Scale = new InputSlot<float>();
     }
 }
 

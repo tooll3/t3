@@ -10,6 +10,13 @@
     {
       "Id": "6d9eb435-595b-421f-9852-6e923a532aed"/*Folder*/,
       "DefaultValue": "Resources\\user\\pixtur\\research\\1000Images\\images"
+    },
+    {
+      "Id": "a16ccad1-00b7-4779-8346-52b03b81249f"/*Resolution*/,
+      "DefaultValue": {
+        "X": 0,
+        "Y": 0
+      }
     }
   ],
   "Children": [

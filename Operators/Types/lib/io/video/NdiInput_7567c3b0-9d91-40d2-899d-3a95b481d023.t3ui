@@ -3,13 +3,6 @@
   "Description": "NDI live video input",
   "InputUis": [
     {
-      "InputId": "306668f7-881d-4aeb-9aa0-0460013a05cb"/*Command*/,
-      "Position": {
-        "X": -200.0,
-        "Y": 45.0
-      }
-    },
-    {
       "InputId": "fd1fca6b-a3be-440b-86ba-6b7b1bbd2a8c"/*SourceName*/,
       "Position": {
         "X": -200.0,
