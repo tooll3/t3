@@ -57,7 +57,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
 
         if (needsNewResource)
         {
-            updated = TryCreateResource(source, entryPoint, debugName, isSourceCode, sourceSlot, out message, out shaderResource);
+            updated = TryCreateResource(source, entryPoint, debugName, isSourceCode, Shader, out message, out shaderResource);
             if(updated)
                 ShaderResource = shaderResource;
         }
@@ -70,6 +70,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
         {
             shaderResource.UpdateDebugName(debugName);
             Shader.Value = shaderResource.Shader;
+            Shader.DirtyFlag.Invalidate();
         }
         else
         {
@@ -119,7 +120,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
             return success;
         }
 
-        static bool TryCreateResource(string source, string entryPoint, string debugName, bool isSourceCode, InputSlot<string> sourceSlot, out string errorMessage, out ShaderResource<T> shaderResource)
+        static bool TryCreateResource(string source, string entryPoint, string debugName, bool isSourceCode, Slot<T> shaderSlot, out string errorMessage, out ShaderResource<T> shaderResource)
         {
             bool updated;
             var resourceManager = ResourceManager.Instance();
@@ -138,7 +139,12 @@ public interface IShaderOperator<T> where T : class, IDisposable
                                                                   fileName: source,
                                                                   entryPoint: entryPoint,
                                                                   name: debugName,
-                                                                  fileChangedAction: () => sourceSlot.DirtyFlag.Invalidate(),
+                                                                  fileChangedAction: () =>
+                                                                                     {
+                                                                                         //sourceSlot.DirtyFlag.Invalidate();
+                                                                                         shaderSlot.DirtyFlag.Invalidate();
+                                                                                         //Log.Debug($"Invalidated {sourceSlot}   isDirty: {sourceSlot.DirtyFlag.IsDirty}", sourceSlot.Parent);
+                                                                                     },
                                                                   errorMessage: out errorMessage);
             }
 
