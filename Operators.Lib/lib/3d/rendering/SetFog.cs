@@ -7,6 +7,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Resource;
 using T3.Core.Utils;
+using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace T3.Operators.Types.Id_74cbfce0_f8b8_46a1_b5d6_38477d4eec99
 {

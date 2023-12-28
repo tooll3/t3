@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Core\Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CppSharp" Version="1.0.1" />
+      <PackageReference Include="NAudio.Midi" Version="2.2.1" />
+      <PackageReference Include="NDILibDotNet6" Version="1.0.11" />
+      <PackageReference Include="OpenGL.Net" Version="0.8.4" />
+      <PackageReference Include="Rug.Osc" Version="1.2.5" />
+      <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0030" />
+      <PackageReference Include="Svg" Version="3.3.0" />
+      <PackageReference Include="unsplasharp.api" Version="0.7.0" />
+    </ItemGroup>
+
+</Project>

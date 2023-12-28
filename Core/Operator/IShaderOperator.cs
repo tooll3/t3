@@ -16,7 +16,7 @@ public interface IShaderOperator<T> where T : class, IDisposable
     bool SourceIsSourceCode { get; }
     protected internal ShaderResource<T> ShaderResource { get; set; }
 
-    internal bool TryUpdateShader(EvaluationContext context, ref string cachedSource, out string message)
+    public bool TryUpdateShader(EvaluationContext context, ref string cachedSource, out string message)
     {
         // cache interface values to avoid additional virtual method calls
         bool isSourceCode = SourceIsSourceCode;

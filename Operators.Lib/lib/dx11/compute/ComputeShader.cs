@@ -34,7 +34,7 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
 
             if (updated)
             {
-                if (ShaderOperatorImpl.ShaderResource.TryGetThreadGroups(out var threadCount))
+                if (ShaderOperatorImpl.TryGetThreadGroups(out var threadCount))
                     ThreadCount.Value = threadCount;
             }
 

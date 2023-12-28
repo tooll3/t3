@@ -19,7 +19,7 @@ namespace T3.Operators.Types.Id_c676b9c7_06d7_4ee0_8ffc_9bee96c5dc18
 
         private void Update(EvaluationContext context)
         {
-            Buffer buffer = Buffer.GetValue(context);
+            var buffer = Buffer.GetValue(context);
             if (buffer == null)
                 return;
             
@@ -30,7 +30,7 @@ namespace T3.Operators.Types.Id_c676b9c7_06d7_4ee0_8ffc_9bee96c5dc18
         }
 
         [Input(Guid = "6C87816C-DA1D-4429-A1F6-61233AA3D7B1")]
-        public readonly InputSlot<SharpDX.Direct3D11.Buffer> Buffer = new InputSlot<Buffer>();
+        public readonly InputSlot<SharpDX.Direct3D11.Buffer> Buffer = new ();
         [Input(Guid = "BC874135-45F2-45E2-8005-244B9123ED20")]
         public readonly InputSlot<int> AlignedByteOffsetForArgs = new InputSlot<int>();
     }

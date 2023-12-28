@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Operators.Utils;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes.Vector;
@@ -63,6 +64,16 @@ public class ShaderResource<T> : ShaderResource where T : class, IDisposable
 
 public static class Extensions
 {
+    public static bool TryGetThreadGroups(this IShaderOperator<ComputeShader> shaderOperator, out Int3 threadGroups)
+    {
+        threadGroups = default;
+        var shaderResource = shaderOperator.ShaderResource;
+        if (shaderResource == null)
+            return false;
+
+        return shaderResource.TryGetThreadGroups(out threadGroups);
+    }
+    
     public static bool TryGetThreadGroups(this ShaderResource<ComputeShader> computeShader, out Int3 threadGroups)
     {
         

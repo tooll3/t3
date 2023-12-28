@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serialization", "Serializat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{420772CC-2B45-431D-8B25-C5F1F28E0AFD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.Lib", "Operators.Lib\Operators.Lib.csproj", "{D5565A7D-882B-45C9-B145-63FFFA3705DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{420772CC-2B45-431D-8B25-C5F1F28E0AFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{420772CC-2B45-431D-8B25-C5F1F28E0AFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{420772CC-2B45-431D-8B25-C5F1F28E0AFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5565A7D-882B-45C9-B145-63FFFA3705DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5565A7D-882B-45C9-B145-63FFFA3705DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5565A7D-882B-45C9-B145-63FFFA3705DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5565A7D-882B-45C9-B145-63FFFA3705DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
