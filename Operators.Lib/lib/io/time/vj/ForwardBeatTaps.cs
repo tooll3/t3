@@ -1,3 +1,4 @@
+using Operators.Lib.Utils;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -18,15 +19,15 @@ namespace T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d
         
         private void Update(EvaluationContext context)
         {
-            BeatTapTriggered = MathUtils.WasTriggered(TriggerBeatTap.GetValue(context), ref _wasBeatTriggered);
-            ResyncTriggered = MathUtils.WasTriggered(TriggerResync.GetValue(context), ref _wasResyncTriggered);
+            _tapProvider.BeatTapTriggered = MathUtils.WasTriggered(TriggerBeatTap.GetValue(context), ref _wasBeatTriggered);
+            _tapProvider.ResyncTriggered = MathUtils.WasTriggered(TriggerResync.GetValue(context), ref _wasResyncTriggered);
             
             
             var offset = SlideSyncTimeOffset.GetValue(context);
             if (!float.IsNaN(offset))
             {
                 //Log.Debug($"Set Slide time {offset}", this);
-                SlideSyncTime = offset; 
+                _tapProvider.SlideSyncTime = offset; 
             }
             
             // Evaluate subtree
@@ -38,9 +39,6 @@ namespace T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d
         
         
         // These will be process every frame by the editor
-        public static bool BeatTapTriggered { get; private set; }
-        public static bool ResyncTriggered { get; private set; }
-        public static float SlideSyncTime { get; private set; }
         
         
         [Input(Guid = "89576f05-3f3d-48d1-ab63-f3c16c85db63")]
@@ -55,5 +53,6 @@ namespace T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d
         [Input(Guid = "2E18AE65-044E-443D-9288-7A9BB6864514")]
         public readonly InputSlot<float> SlideSyncTimeOffset = new();
 
+        private readonly TapProvider _tapProvider = TapProvider.Instance;
     }
 }

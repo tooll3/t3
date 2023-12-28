@@ -5,13 +5,14 @@ using T3.Core.Operator;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
-using T3.Operators.Types.Id_79db48d8_38d3_47ca_9c9b_85dde2fa660d;
-using T3.Operators.Types.Id_f5158500_39e4_481e_aa4f_f7dbe8cbe0fa;
 
 namespace T3.Editor.Gui.Interaction.Timing
 {
     public static class PlaybackUtils
     {
+        public static IBpmProvider BpmProvider;
+        public static ITapProvider TapProvider;
+        
         public static void UpdatePlaybackAndSyncing()
         {
             var settings = FindPlaybackSettings();
@@ -26,6 +27,8 @@ namespace T3.Editor.Gui.Interaction.Timing
                 }
             }
 
+            bool hasBpmProvider = BpmProvider != null;
+
             if (settings.AudioSource == PlaybackSettings.AudioSources.ExternalDevice
                 && settings.Syncing == PlaybackSettings.SyncModes.Tapping)
             {
@@ -33,16 +36,20 @@ namespace T3.Editor.Gui.Interaction.Timing
                 
                 if (Playback.Current.Settings is { Syncing: PlaybackSettings.SyncModes.Tapping })
                 {
-                    if (ForwardBeatTaps.BeatTapTriggered)
-                        BeatTiming.TriggerSyncTap();
+                    if (TapProvider != null)
+                    {
+                        if(TapProvider.BeatTapTriggered)
+                            BeatTiming.TriggerSyncTap();
+                        
+                        if (TapProvider.ResyncTriggered)
+                            BeatTiming.TriggerResyncMeasure();
+                        
+                        BeatTiming.SlideSyncTime = TapProvider.SlideSyncTime;
+                    }
 
-                    if (ForwardBeatTaps.ResyncTriggered)
-                        BeatTiming.TriggerResyncMeasure();
-
-                    BeatTiming.SlideSyncTime = ForwardBeatTaps.SlideSyncTime;
                     Playback.Current.Settings.Bpm = (float)Playback.Current.Bpm;
                     
-                    if (SetBpm.TryGetNewBpmRate(out var newBpmRate2))
+                    if (hasBpmProvider && BpmProvider.TryGetNewBpmRate(out var newBpmRate2))
                     {
                         Log.Warning("SetBpm in BeatTapping mode has effect.");
                         // settings.Bpm = newBpmRate2;
@@ -57,7 +64,7 @@ namespace T3.Editor.Gui.Interaction.Timing
             }
             
             // Process callback from [SetBpm] operator
-            if (SetBpm.TryGetNewBpmRate(out var newBpmRate))
+            if (hasBpmProvider && BpmProvider.TryGetNewBpmRate(out var newBpmRate))
             {
                 settings.Bpm = newBpmRate;
             }

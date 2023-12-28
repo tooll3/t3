@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.Lib", "Operators.Lib\Operators.Lib.csproj", "{D5565A7D-882B-45C9-B145-63FFFA3705DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.Lib.Editor", "Operators.Lib.Editor\Operators.Lib.Editor.csproj", "{CA1AA662-E0A5-4DA6-9070-1A42CEBF79FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{D5565A7D-882B-45C9-B145-63FFFA3705DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5565A7D-882B-45C9-B145-63FFFA3705DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5565A7D-882B-45C9-B145-63FFFA3705DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA1AA662-E0A5-4DA6-9070-1A42CEBF79FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA1AA662-E0A5-4DA6-9070-1A42CEBF79FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA1AA662-E0A5-4DA6-9070-1A42CEBF79FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA1AA662-E0A5-4DA6-9070-1A42CEBF79FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

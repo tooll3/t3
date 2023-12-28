@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NAudio.Midi;
 using Operators.Utils;
+using T3.Core.IO;
 using T3.Editor.Gui.Interaction.Variations.Midi.CommandProcessing;
 using T3.Editor.Gui.Interaction.Variations.Model;
 
@@ -14,7 +15,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
         int GetProductNameHash();
     }
 
-    public abstract class AbstractMidiDevice : IControllerInputDevice, MidiInConnectionManager.IMidiConsumer
+    public abstract class AbstractMidiDevice : IControllerInputDevice, IMidiConsumer
     {
         protected AbstractMidiDevice()
         {

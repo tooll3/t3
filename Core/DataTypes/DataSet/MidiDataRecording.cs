@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NAudio.Midi;
 using T3.Core.Animation;
 using T3.Core.DataTypes.DataSet;
+using T3.Core.IO;
 using T3.Core.Model;
 
 namespace Operators.Utils.Recording;
@@ -13,7 +14,7 @@ namespace Operators.Utils.Recording;
 ///   - MidiInput and MidiStream recorder would need to share the same MidiEvent definition (maybe different from NAudio.MidiEvent)
 ///   - Handle MidiEvent should not rely on the MidiIn class to avoid double lookup of device description.
 /// </summary>
-public class MidiDataRecording : MidiInConnectionManager.IMidiConsumer
+public class MidiDataRecording : IMidiConsumer
 {
     public readonly DataSet DataSet = new();
     public double LastEventTime = 0;

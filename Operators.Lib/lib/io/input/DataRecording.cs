@@ -22,14 +22,15 @@ namespace T3.Operators.Types.Id_4023bcbf_74a6_4e50_a12e_4c22be5dbbdf
 
         private void Update(EvaluationContext context)
         {
-            if (DataSetsById.Count == 0)
+            var dataSetsById = DataRecordingBucket.DataSetsById;
+            if (dataSetsById.Count == 0)
             {
                 _lastErrorMessage = "No active datasets to chose from";
                 return;
             }
 
             var id = ActiveDataSetId.GetValue(context);
-            if (!DataSetsById.TryGetValue(id, out var activeDataSet))
+            if (!dataSetsById.TryGetValue(id, out var activeDataSet))
             {
                 _lastErrorMessage = $"Can't find dataset {id}";
                 return;
@@ -41,7 +42,6 @@ namespace T3.Operators.Types.Id_4023bcbf_74a6_4e50_a12e_4c22be5dbbdf
 
         private string _lastErrorMessage;
         
-        public static readonly Dictionary<string, DataSet> DataSetsById = new();
         public IStatusProvider.StatusLevel GetStatusLevel()
         {
             return string.IsNullOrEmpty(_lastErrorMessage) ? IStatusProvider.StatusLevel.Success : IStatusProvider.StatusLevel.Warning;
@@ -71,8 +71,9 @@ namespace T3.Operators.Types.Id_4023bcbf_74a6_4e50_a12e_4c22be5dbbdf
                 yield return "undefined";
                 yield break;
             }
-        
-            foreach (var s in DataSetsById.Keys)
+       
+            var dataSetsById = DataRecordingBucket.DataSetsById;
+            foreach (var s in dataSetsById.Keys)
             {
                 yield return s;
             }

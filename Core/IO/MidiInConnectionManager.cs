@@ -56,14 +56,7 @@ namespace Operators.Utils
             CloseMidiDevices();
             ScanAndRegisterToMidiDevices(logInformation: true);
         }
-        
-        
-        public interface IMidiConsumer
-        {
-            void MessageReceivedHandler(object sender, MidiInMessageEventArgs msg);
-            void ErrorReceivedHandler(object sender, MidiInMessageEventArgs msg);
-        }
-        
+
         public static MidiInCapabilities GetDescriptionForMidiIn(MidiIn midiIn)
         {
             _midiInsWithDevices.TryGetValue(midiIn,  out  var description);

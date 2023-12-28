@@ -39,10 +39,9 @@ namespace T3.Editor.Gui;
 
 public class T3Ui
 {
-    static T3Ui()
+    public static void Initialize(Assembly operatorAssembly)
     {
-        var operatorsAssembly = Assembly.GetAssembly(typeof(Value));
-        UiSymbolData = new UiSymbolData(operatorsAssembly, enableLog: false);
+        UiSymbolData = new UiSymbolData(operatorAssembly, enableLog: false);
 
         //WindowManager.TryToInitialize();
         ExampleSymbolLinking.UpdateExampleLinks();
@@ -489,7 +488,7 @@ public class T3Ui
         }
     }
 
-    public static readonly UiSymbolData UiSymbolData;
+    public static UiSymbolData UiSymbolData { get; private set; }
     
     public static IntPtr NotDroppingPointer = new IntPtr(0);
     public static bool DraggingIsInProgress = false;
@@ -509,7 +508,6 @@ public class T3Ui
     private static readonly UserNameDialog _userNameDialog = new();
     private static readonly SearchDialog _searchDialog = new();
     private static readonly MigrateOperatorsDialog _importDialog = new();
-    public static readonly BpmDetection _bpmDetection = new ();
 
     [Flags]
     public enum EditingFlags

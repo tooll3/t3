@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -134,7 +135,9 @@ namespace T3.Editor
             UiContentUpdate.GenerateFontsWithScaleFactor(UserSettings.Config.UiScaleFactor);
 
             // Setup file watching the operator source
-            resourceManager.OperatorsAssembly = T3Ui.UiSymbolData.OperatorsAssembly;
+            resourceManager.OperatorsAssembly = Assembly.GetAssembly(typeof(Value));
+            T3Ui.Initialize(resourceManager.OperatorsAssembly);
+            
             foreach (var (_, symbol) in SymbolRegistry.Entries)
             {
                 var sourceFilePath = SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);

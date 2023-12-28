@@ -22,4 +22,8 @@
       <PackageReference Include="unsplasharp.api" Version="0.7.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Utils\Midi\" />
+    </ItemGroup>
+
 </Project>

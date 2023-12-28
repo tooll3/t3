@@ -11,7 +11,6 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Camera;
 using T3.Editor.Gui.Interaction.TransformGizmos;
 using T3.Editor.Gui.Styling;
-using T3.Operators.Types.Id_746d886c_5ab6_44b1_bb15_f3ce2fadf7e6;
 
 namespace T3.Editor.Gui.Windows.Output
 {
@@ -213,7 +212,7 @@ namespace T3.Editor.Gui.Windows.Output
             }
 
             var selectedInstance = NodeSelection.GetSelectedInstance();
-            if (selectedInstance is Camera selectedCamera
+            if (selectedInstance is ICamera selectedCamera
                 && !_recentlyUsedCameras.Contains(selectedCamera))
             {
                 if (_recentlyUsedCameras.Count == 0)
