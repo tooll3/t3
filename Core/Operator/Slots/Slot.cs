@@ -11,7 +11,7 @@ namespace T3.Core.Operator.Slots
         public Guid Id { get; set; }
         public Type ValueType { get; }
         public Instance Parent { get; set; }
-        public DirtyFlag DirtyFlag { get; set; } = new DirtyFlag();
+        public DirtyFlag DirtyFlag { get; set; } = new();
         
         public T Value; // { get; set; }
         public bool IsMultiInput { get; protected set; } = false;
@@ -212,7 +212,7 @@ namespace T3.Core.Operator.Slots
             return InputConnection[index];
         }
 
-        private List<Slot<T>> _inputConnection = new List<Slot<T>>();
+        private List<Slot<T>> _inputConnection = new();
 
         public List<Slot<T>> InputConnection => _inputConnection;
 

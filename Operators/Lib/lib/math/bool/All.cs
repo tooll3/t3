@@ -7,7 +7,7 @@ namespace T3.Operators.Types.Id_3a6fd508_0272_4c18_96b8_bc2387d3b2fd
     public class All : Instance<All>
     {
         [Output(Guid = "734bc5bc-caca-4367-abf5-a7ac94ed13d6")]
-        public readonly Slot<bool> Result = new Slot<bool>();
+        public readonly Slot<bool> Result = new();
 
         public All()
         {
@@ -29,6 +29,6 @@ namespace T3.Operators.Types.Id_3a6fd508_0272_4c18_96b8_bc2387d3b2fd
         }
 
         [Input(Guid = "cf59ae3e-d111-479f-a42b-c5c014e65b32")]
-        public readonly MultiInputSlot<bool> Input = new MultiInputSlot<bool>();
+        public readonly MultiInputSlot<bool> Input = new();
     }
 }

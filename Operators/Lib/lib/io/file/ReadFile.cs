@@ -11,7 +11,7 @@ namespace T3.Operators.Types.Id_5f71d2f8_98c8_4502_8f40_2ea4a1e18cca
     public class ReadFile : Instance<ReadFile>
     {
         [Output(Guid = "d792d3b4-b800-41f1-9d69-6ee55751ad37")]
-        public readonly Slot<string> Result = new Slot<string>();
+        public readonly Slot<string> Result = new();
 
         public ReadFile()
         {

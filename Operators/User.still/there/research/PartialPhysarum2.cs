@@ -9,7 +9,7 @@ namespace T3.Operators.Types.Id_0998c5a8_8771_4161_801d_e14507c2e89c
     {
 
         [Output(Guid = "7fa2fb31-dd11-48b1-b580-db5aa14aa7fb")]
-        public readonly TimeClipSlot<Command> Output2 = new TimeClipSlot<Command>();
+        public readonly TimeClipSlot<Command> Output2 = new();
 
 
     }

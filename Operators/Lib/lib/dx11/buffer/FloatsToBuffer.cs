@@ -15,7 +15,7 @@ namespace T3.Operators.Types.Id_724da755_2d0c_42ab_8335_8c88ec5fb078
     public class FloatsToBuffer : Instance<FloatsToBuffer>
     {
         [Output(Guid = "f5531ffb-dbde-45d3-af2a-bd90bcbf3710")]
-        public readonly Slot<Buffer> Buffer = new Slot<Buffer>();
+        public readonly Slot<Buffer> Buffer = new();
 
         public FloatsToBuffer()
         {

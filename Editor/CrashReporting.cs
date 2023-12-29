@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Management;
 using System.Windows.Forms;
+using ImGuiNET;
 using Sentry;
 using T3.Core.Animation;
 using T3.Editor.Gui.AutoBackup;
@@ -62,12 +64,18 @@ internal static class CrashReporting
                                      @"☠🙈 Damn!",
                                      MessageBoxButtons.YesNo);
 
-        SentrySdk.ConfigureScope(scope => { scope.SetTag("IsStandAlone", Program.IsStandAlone ? "Yes" : "No"); });
-        sentryEvent.SetExtra("UndoStack", UndoRedoStack.GetUndoStackAsString());
-        sentryEvent.SetExtra("Selection", string.Join("\n", NodeSelection.Selection));
-        sentryEvent.SetExtra("Nickname", UserSettings.Config?.UserName);
-        sentryEvent.SetExtra("Runtime", Playback.RunTimeInSecs);
 
+        sentryEvent.SetTag("Nickname", UserSettings.Config?.UserName ?? "anonymous");
+        sentryEvent.Contexts["tooll3"]= new
+                                            {
+                                                UndoStack = UndoRedoStack.GetUndoStackAsString(),
+                                                Selection = string.Join("\n", NodeSelection.Selection),
+                                                Nickname = UserSettings.Config?.UserName ?? "",
+                                                RuntimeSeconds = Playback.RunTimeInSecs,
+                                                RuntimeFrames = ImGui.GetFrameCount(),
+                                                UndoActions = UndoRedoStack.UndoStack.Count,
+                                            };
+        
         try
         {
             var primaryComposition = GraphWindow.GetMainComposition();
@@ -88,4 +96,22 @@ internal static class CrashReporting
 
         return result == DialogResult.Yes ? sentryEvent : null;
     }
+
+    private static void GetGraphicsCardAdapter()
+    {
+        ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController");
+        foreach (ManagementObject mo in searcher.Get())
+        {
+            PropertyData currentBitsPerPixel = mo.Properties["CurrentBitsPerPixel"];
+            PropertyData description = mo.Properties["Description"];
+            if (currentBitsPerPixel != null && description != null)
+            {
+                if (currentBitsPerPixel.Value != null)
+                    System.Console.WriteLine(description.Value);
+            }
+        }
+        //IDirect3D9::GetAdapterIdentifier
+
+    }
+    
 }

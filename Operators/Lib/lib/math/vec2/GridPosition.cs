@@ -41,7 +41,7 @@ namespace T3.Operators.Types.Id_310e174e_ea52_4c54_90e6_72dc8320118a
         }
         
         [Input(Guid = "854731fb-bbc9-48e7-9bcb-45bc53340945")]
-        public readonly InputSlot<System.Numerics.Vector2> A = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> A = new();
 
         [Input(Guid = "2FA305B7-42FC-44FA-BFCF-219916F93EEF")]
         public readonly InputSlot<Int2> RasterSize = new();

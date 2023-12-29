@@ -182,8 +182,8 @@ namespace T3.Editor.Gui.Interaction
         public Vector2 Scale { get; protected set; } = Vector2.One;
         protected Vector2 ScaleTarget = Vector2.One;
 
-        public Vector2 Scroll { get; protected set; } = new Vector2(0.0f, 0.0f);
-        protected Vector2 ScrollTarget = new Vector2(0.0f, 0.0f);
+        public Vector2 Scroll { get; protected set; } = new(0.0f, 0.0f);
+        protected Vector2 ScrollTarget = new(0.0f, 0.0f);
         #endregion
 
         public Scope GetTargetScope()

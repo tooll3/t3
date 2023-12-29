@@ -316,7 +316,7 @@
         {
           "Id": "54ecb0e0-6fc0-4441-b26b-b820e95475a0"/*ShiftBrightness*/,
           "Type": "System.Single",
-          "Value": -0.0011
+          "Value": 0.0001
         },
         {
           "Id": "c027bc94-4ef8-4828-8df5-d30abbd31cbc"/*AmplifyEdges*/,
@@ -718,12 +718,12 @@
         {
           "Id": "79917ef7-64ca-4825-9c6a-c9b2a7f6ff86"/*Amplitude*/,
           "Type": "System.Single",
-          "Value": 0.005
+          "Value": 0.001
         },
         {
           "Id": "ddd93b06-118e-43e0-85f6-c150faf91d04"/*Offset*/,
           "Type": "System.Single",
-          "Value": -0.03
+          "Value": -0.017
         }
       ],
       "Outputs": []
@@ -1016,9 +1016,14 @@
       "SymbolId": "f0acd1a4-7a98-43ab-a807-6d1bd3e92169",
       "InputValues": [
         {
+          "Id": "f2baf278-adde-42de-afce-336b6c8d0387"/*RangeOutMin*/,
+          "Type": "System.Single",
+          "Value": -0.003
+        },
+        {
           "Id": "252276fb-8de1-42cc-ba41-07d6862015bd"/*RangeOutMax*/,
           "Type": "System.Single",
-          "Value": 0.14
+          "Value": 0.05
         }
       ],
       "Outputs": []
@@ -1367,6 +1372,12 @@
       "TargetSlotId": "36e16cc0-3c9e-4615-9ac0-2d2f07150deb"
     },
     {
+      "SourceParentOrChildId": "1350468e-4b25-4d4c-a4db-161b29387811",
+      "SourceSlotId": "5ce9c625-f890-4620-9747-c98eab4b9447",
+      "TargetParentOrChildId": "9c4f740d-9d27-460a-a906-923e41501053",
+      "TargetSlotId": "54ecb0e0-6fc0-4441-b26b-b820e95475a0"
+    },
+    {
       "SourceParentOrChildId": "42593986-86ab-4859-92e2-1c9cc72a2749",
       "SourceSlotId": "d140f068-d71e-4af5-a563-ab599dae5dbf",
       "TargetParentOrChildId": "9e1d2ae5-37e9-4db5-8e85-ef1b900e5dc7",
@@ -1489,7 +1500,7 @@
   ],
   "PlaybackSettings": {
     "Enabled": true,
-    "Bpm": 170.41345,
+    "Bpm": 60.0,
     "AudioSource": 1,
     "Syncing": 1,
     "AudioDecayFactor": 0.9,

@@ -241,7 +241,7 @@ namespace T3.Editor.Gui.UiHelpers
 
         private static readonly NamespaceTreeNode _treeNode = new(NamespaceTreeNode.RootNodeId);
 
-        private static IntPtr _dropData = new IntPtr(0);
+        private static IntPtr _dropData = new(0);
         private static string _guidSting;
     }
 }

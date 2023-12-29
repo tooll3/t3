@@ -79,6 +79,12 @@ internal static class ProgramWindows
             _deviceContext = device.ImmediateContext;
             _factory = swapchain.GetParent<Factory>();
 
+            foreach (var a in _factory.Adapters)
+            {
+                Log.Debug($"using {a.Description.Description}");
+                break;
+            }
+
             Main.SetDevice(device, _deviceContext, swapchain);
 
             Main.InitializeWindow(FormWindowState.Maximized, HandleKeyDown, HandleKeyUp, OnCloseMainWindow);

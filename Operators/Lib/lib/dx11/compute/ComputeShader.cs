@@ -43,13 +43,13 @@ namespace T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c
         }
 
         [Input(Guid = "{AFB69C81-5063-4CB9-9D42-841B994B5EC0}")]
-        public readonly InputSlot<string> Source = new InputSlot<string>();
+        public readonly InputSlot<string> Source = new();
 
         [Input(Guid = "{8AD9E58D-A767-4A5F-BFBF-D082B80901D6}")]
-        public readonly InputSlot<string> EntryPoint = new InputSlot<string>();
+        public readonly InputSlot<string> EntryPoint = new();
 
         [Input(Guid = "{C0701D0B-D37F-4570-9E9A-EC2E88B919D1}")]
-        public readonly InputSlot<string> DebugName = new InputSlot<string>();
+        public readonly InputSlot<string> DebugName = new();
 
         public IStatusProvider.StatusLevel GetStatusLevel()
         {

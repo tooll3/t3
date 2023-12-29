@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_9757618d_e72a_4507_8352_6f824b56cc58
     public class DampAngle : Instance<DampAngle>
     {
         [Output(Guid = "bdc667e1-2557-4f66-aeb3-d9deccb888f9")]
-        public readonly Slot<float> Result = new Slot<float>();
+        public readonly Slot<float> Result = new();
 
         private const float MinTimeElapsedBeforeEvaluation = 1 / 1000f;
 

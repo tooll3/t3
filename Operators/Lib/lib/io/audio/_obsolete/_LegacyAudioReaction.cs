@@ -9,13 +9,13 @@ namespace T3.Operators.Types.Id_f8aed421_5e0e_4d1f_993c_1801153ebba8
     public class _LegacyAudioReaction : Instance<_LegacyAudioReaction>
     {
         [Output(Guid = "2aa4d0cb-c49d-41ce-aa74-794cc8682590", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> Level = new Slot<float>();
+        public readonly Slot<float> Level = new();
 
         [Output(Guid = "E1D7D3AF-FFD7-460F-B861-F0A11EE287B0", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<int> PeakCount = new Slot<int>();
+        public readonly Slot<int> PeakCount = new();
 
         [Output(Guid = "0CD3D908-C7C4-41D3-BEF2-C48A29B9842A", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<bool> PeakDetected = new Slot<bool>();
+        public readonly Slot<bool> PeakDetected = new();
 
         public _LegacyAudioReaction()
         {
@@ -142,21 +142,21 @@ namespace T3.Operators.Types.Id_f8aed421_5e0e_4d1f_993c_1801153ebba8
 
         private int _lastPeakCount;
         private double _movingSum = 0;
-        private Random _random = new Random();
+        private Random _random = new();
 
         [Input(Guid = "15F841F5-5153-4383-90B9-F6A4F72D5D6B", MappedType = typeof(FrequencyBands))]
-        public readonly InputSlot<int> Band = new InputSlot<int>();
+        public readonly InputSlot<int> Band = new();
 
         [Input(Guid = "D9069774-188B-4A5E-976A-053D0C893503", MappedType = typeof(Modes))]
-        public readonly InputSlot<int> Mode = new InputSlot<int>();
+        public readonly InputSlot<int> Mode = new();
 
         [Input(Guid = "EC0FE09B-B925-4B14-8186-8C32B65AF9BB")]
-        public readonly InputSlot<float> Amplitude = new InputSlot<float>();
+        public readonly InputSlot<float> Amplitude = new();
 
         [Input(Guid = "E7FAC507-AD85-48F4-89D3-76600FF519EC")]
-        public readonly InputSlot<float> Decay = new InputSlot<float>();
+        public readonly InputSlot<float> Decay = new();
 
         [Input(Guid = "0E04D1F8-3BBD-46B1-BDE6-46BCDFDBE3AA")]
-        public readonly InputSlot<int> UseModulo = new InputSlot<int>();
+        public readonly InputSlot<int> UseModulo = new();
     }
 }

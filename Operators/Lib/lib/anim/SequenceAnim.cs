@@ -212,8 +212,7 @@ namespace T3.Operators.Types.Id_94a392e6_3e03_4ccf_a114_e6fafa263b4f
             }
             else
             {
-                var index = CurrentSequenceIndex.Clamp(0, _sequences.Count - 1);
-                CurrentSequence = _sequences[index];
+                CurrentSequence = _sequences[CurrentSequenceIndex.Mod(_sequences.Count)];
             }
         }
         

@@ -74,7 +74,7 @@ namespace T3.Editor.Gui.Graph
         }
 
         private static int _instanceCounter;
-        public static readonly List<Window> GraphWindowInstances = new List<Window>();
+        public static readonly List<Window> GraphWindowInstances = new();
 
         public static IEnumerable<GraphWindow> GetVisibleInstances()
         {

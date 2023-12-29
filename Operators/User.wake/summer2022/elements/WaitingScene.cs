@@ -8,7 +8,7 @@ namespace T3.Operators.Types.Id_73496aee_5c15_4cfb_9303_c5c66df7caff
     public class WaitingScene : Instance<WaitingScene>
     {
         [Output(Guid = "ea9f83ca-e351-4c5f-8c5c-ed9509435719")]
-        public readonly Slot<Command> Output = new Slot<Command>();
+        public readonly Slot<Command> Output = new();
 
 
     }

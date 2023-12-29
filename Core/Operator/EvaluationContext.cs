@@ -95,7 +95,7 @@ namespace T3.Core.Operator
         // Render settings
         public Buffer FogParameters { get; set; } = FogSettings.DefaultSettingsBuffer;
         public Buffer PbrMaterialParams { get; set; }
-        public PbrMaterialTextures PbrMaterialTextures { get; set; } = new PbrMaterialTextures();
+        public PbrMaterialTextures PbrMaterialTextures { get; set; } = new();
         
         /// <summary>
         /// A structure that is used by SetTexture  

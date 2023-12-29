@@ -8,7 +8,7 @@ namespace T3.Operators.Types.Id_58351c8f_4a73_448e_b7bb_69412e71bd76
     public class ExecuteBufferUpdate : Instance<ExecuteBufferUpdate>
     {
         [Output(Guid = "9A66687E-A834-452C-A652-BA1FC70C2C7B")]
-        public readonly Slot<BufferWithViews> Output2 = new Slot<BufferWithViews>();
+        public readonly Slot<BufferWithViews> Output2 = new();
 
         
         public ExecuteBufferUpdate()
@@ -32,13 +32,13 @@ namespace T3.Operators.Types.Id_58351c8f_4a73_448e_b7bb_69412e71bd76
         }
 
         [Input(Guid = "51110D89-083E-42B8-B566-87B144DFBED9")]
-        public readonly InputSlot<Command> UpdateCommand = new InputSlot<Command>();
+        public readonly InputSlot<Command> UpdateCommand = new();
         
         [Input(Guid = "72CFE742-88FB-41CD-B6CF-D96730B24B23")]
-        public readonly InputSlot<BufferWithViews> BufferWithViews = new InputSlot<BufferWithViews>();
+        public readonly InputSlot<BufferWithViews> BufferWithViews = new();
         
         [Input(Guid = "6887F319-CF3F-4E87-9A8C-A7C912DBF5AD")]
-        public readonly InputSlot<bool> IsEnabled = new InputSlot<bool>();
+        public readonly InputSlot<bool> IsEnabled = new();
         
     }
 }

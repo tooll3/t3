@@ -4,12 +4,13 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
+using System.Windows.Forms;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
+using T3.Core.SystemUi;
 using T3.Editor.App;
 using T3.Editor.Compilation;
 using T3.Editor.Gui;
@@ -67,7 +68,17 @@ namespace T3.Editor
             CrashReporting.InitializeCrashReporting();
 
             ISplashScreen splashScreen = new SplashScreen.SplashScreen();
-            splashScreen.Show("Resources/t3-editor/images/t3-SplashScreen.png");
+
+            try
+            {
+                splashScreen.Show("Resources/t3-editor/images/t3-SplashScreen.png");
+            }
+            catch (System.IO.FileNotFoundException e)
+            {
+                // Catching this exception will the validation check dialog allow to be shown later
+                Log.Error("Failed to create splash screen. Please make sure to run from the correct working directory: " + e.Message);
+            }
+            
             Log.AddWriter(splashScreen);
             Log.AddWriter(new ConsoleWriter());
             Log.AddWriter(FileWriter.CreateDefault());
@@ -189,8 +200,8 @@ namespace T3.Editor
             Log.Debug("Shutdown complete");
         }
 
-        // Main loop
 
+        // Main loop
         public static readonly StatusErrorLine StatusErrorLine = new();
         public static readonly ConsoleLogWindow ConsoleLogWindow = new();
         public static T3Ui T3Ui;

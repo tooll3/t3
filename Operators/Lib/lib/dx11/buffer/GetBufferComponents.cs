@@ -72,6 +72,6 @@ namespace T3.Operators.Types.Id_80dff680_5abf_484a_b9e0_81d72f3b7aa4
         }
 
         [Input(Guid = "7a13b834-21e5-4cef-ad5b-23c3770ea763")]
-        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> BufferWithViews = new InputSlot<T3.Core.DataTypes.BufferWithViews>();
+        public readonly InputSlot<T3.Core.DataTypes.BufferWithViews> BufferWithViews = new();
     }
 }

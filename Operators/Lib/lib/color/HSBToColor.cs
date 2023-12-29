@@ -8,7 +8,7 @@ namespace T3.Operators.Types.Id_1677fd74_6e54_479a_b478_c2ac77288f9c
     public class HSBToColor : Instance<HSBToColor>
     {
         [Output(Guid = "A73DC8D3-ECC5-454A-999A-1C79442FF2E2")]
-        public readonly Slot<Vector4> Color = new Slot<Vector4>();
+        public readonly Slot<Vector4> Color = new();
 
         public HSBToColor()
         {
@@ -74,15 +74,15 @@ namespace T3.Operators.Types.Id_1677fd74_6e54_479a_b478_c2ac77288f9c
         }
 
         [Input(Guid = "2c1adb2b-36bd-4ca0-8fbb-e7571163a98d")]
-        public readonly InputSlot<float> Hue = new InputSlot<float>();
+        public readonly InputSlot<float> Hue = new();
 
         [Input(Guid = "9ee22450-f03f-40dd-8090-ce24d9bd04ed")]
-        public readonly InputSlot<float> Saturation = new InputSlot<float>();
+        public readonly InputSlot<float> Saturation = new();
 
         [Input(Guid = "115E3D92-2E91-447D-BA81-18A508D3D36A")]
-        public readonly InputSlot<float> Brightness = new InputSlot<float>();
+        public readonly InputSlot<float> Brightness = new();
         
         [Input(Guid = "FB8C2263-804D-4204-80AA-BA21BBEFDD8E")]
-        public readonly InputSlot<float> Alpha = new InputSlot<float>(1f);
+        public readonly InputSlot<float> Alpha = new(1f);
     }
 }

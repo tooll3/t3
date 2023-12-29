@@ -499,6 +499,6 @@ namespace T3.Editor.Gui.Windows
         private static ChangeInputValueCommand _inputValueCommandInFlight;
         private static IInputSlot _inputSlotForActiveCommand;
         private static int _instanceCounter;
-        private static readonly Regex _itemRegex = new Regex(@"\[([A-Za-z\d_]+)\]", RegexOptions.Compiled);
+        private static readonly Regex _itemRegex = new(@"\[([A-Za-z\d_]+)\]", RegexOptions.Compiled);
     }
 }

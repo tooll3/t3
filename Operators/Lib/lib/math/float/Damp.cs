@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_af9c5db8_7144_4164_b605_b287aaf71bf6
     public class Damp : Instance<Damp>
     {
         [Output(Guid = "aacea92a-c166-46dc-b775-d28baf9820f5", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<float> Result = new Slot<float>();
+        public readonly Slot<float> Result = new();
 
         private const float MinTimeElapsedBeforeEvaluation = 1 / 1000f;
 

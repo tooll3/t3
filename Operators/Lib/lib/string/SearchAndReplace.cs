@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_b7910fc6_c3b2_4daf_93cd_010dcfe22a57
     public class SearchAndReplace : Instance<SearchAndReplace>
     {
         [Output(Guid = "15672e8f-c483-432e-8ced-f2bd18c1be67")]
-        public readonly Slot<string> Result = new Slot<string>();
+        public readonly Slot<string> Result = new();
 
         public SearchAndReplace()
         {
@@ -41,12 +41,12 @@ namespace T3.Operators.Types.Id_b7910fc6_c3b2_4daf_93cd_010dcfe22a57
         }
         
         [Input(Guid = "3ca66cbd-a16a-479c-b858-84732e5023ad")]
-        public readonly InputSlot<string> OriginalString = new InputSlot<string>();
+        public readonly InputSlot<string> OriginalString = new();
         
         [Input(Guid = "4FE3F641-1C36-4970-BE71-DAFB5632FB53")]
-        public readonly InputSlot<string> SearchPattern = new InputSlot<string>();
+        public readonly InputSlot<string> SearchPattern = new();
         
         [Input(Guid = "DE8297AE-C7D8-414A-8825-D0FF9C2E3D78")]
-        public readonly InputSlot<string> Replace = new InputSlot<string>();
+        public readonly InputSlot<string> Replace = new();
     }
 }

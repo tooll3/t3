@@ -23,13 +23,13 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
     public class RenderTarget : Instance<RenderTarget>, IRenderStatsProvider
     {
         [Output(Guid = "7A4C4FEB-BE2F-463E-96C6-CD9A6BAD77A2")]
-        public readonly Slot<Texture2D> ColorBuffer = new Slot<Texture2D>();
+        public readonly Slot<Texture2D> ColorBuffer = new();
 
         [Output(Guid = "8bb0b18f-4fad-4348-a4fa-95b40c4167a4")]
-        public readonly Slot<Texture2D> DepthBuffer = new Slot<Texture2D>();
+        public readonly Slot<Texture2D> DepthBuffer = new();
 
         [Output(Guid = "152312A6-729B-49CB-9AC5-A63105694A6B")]
-        public readonly Slot<Texture2D> VelocityBuffer = new Slot<Texture2D>();
+        public readonly Slot<Texture2D> VelocityBuffer = new();
 
         public RenderTarget()
         {
@@ -499,34 +499,34 @@ namespace T3.Operators.Types.Id_f9fe78c5_43a6_48ae_8e8c_6cdbbc330dd1
         private int _sampleCount;
 
         [Input(Guid = "4da253b7-4953-439a-b03f-1d515a78bddf")]
-        public readonly InputSlot<Command> Command = new InputSlot<Command>();
+        public readonly InputSlot<Command> Command = new();
 
         [Input(Guid = "03749b41-cc3c-4f38-aea6-d7cea19fc073")]
-        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
+        public readonly InputSlot<Int2> Resolution = new();
 
         [Input(Guid = "8bb4a4e5-0c88-4d99-a5b2-2c9e22bd301f")]
-        public readonly InputSlot<System.Numerics.Vector4> ClearColor = new InputSlot<System.Numerics.Vector4>();
+        public readonly InputSlot<System.Numerics.Vector4> ClearColor = new();
 
         [Input(Guid = "ec46bef4-8dce-4eb4-bfe8-e35a5ac416ec")]
-        public readonly InputSlot<SharpDX.DXGI.Format> TextureFormat = new InputSlot<SharpDX.DXGI.Format>();
+        public readonly InputSlot<SharpDX.DXGI.Format> TextureFormat = new();
 
         // [Input(Guid = "2d54adbb-04c7-4f92-babd-9822953aa4cd")]
         // public readonly InputSlot<SharpDX.DXGI.Format> DepthFormat = new InputSlot<SharpDX.DXGI.Format>();
         
         [Input(Guid = "6EA4F801-FF52-4266-A41F-B9EF02C68510")]
-        public readonly InputSlot<bool> WithDepthBuffer = new InputSlot<bool>();
+        public readonly InputSlot<bool> WithDepthBuffer = new();
         
         [Input(Guid = "aacafc4d-f47f-4893-9a6e-98db306a8901")]
-        public readonly InputSlot<bool> Clear = new InputSlot<bool>();
+        public readonly InputSlot<bool> Clear = new();
 
         [Input(Guid = "f0cf3325-4967-4419-9beb-036cd6dbfd6a")]
-        public readonly InputSlot<bool> GenerateMips = new InputSlot<bool>();
+        public readonly InputSlot<bool> GenerateMips = new();
 
         [Input(Guid = "07AD28AD-FF5F-4CA9-B7BB-F7F8B16A6434")]
-        public readonly InputSlot<RenderTargetReference> TextureReference = new InputSlot<RenderTargetReference>();
+        public readonly InputSlot<RenderTargetReference> TextureReference = new();
 
         [Input(Guid = "E882E0F0-03F9-46E6-AC7A-709E6FA66613", MappedType = typeof(Samples))]
-        public readonly InputSlot<int> Multisampling = new InputSlot<int>();
+        public readonly InputSlot<int> Multisampling = new();
         
         [Input(Guid = "ABEBB02B-BCAA-42C7-8EB8-DA3C1B2FC840", MappedType = typeof(Samples))]
         public readonly InputSlot<bool> EnableUpdate = new();

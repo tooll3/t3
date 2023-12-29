@@ -65,7 +65,7 @@ namespace T3.Operators.Types.Id_5b538cf5_e3b6_4674_b23e_ab55fc59ada6
                 return;
             }
 
-            var cam = _cameraInstances[index % _cameraInstances.Count];
+            var cam = _cameraInstances[index.Mod(_cameraInstances.Count)];
 
             if (cam is not ICameraPropertiesProvider camInstance)
             {

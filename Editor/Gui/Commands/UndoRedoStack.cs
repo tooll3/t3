@@ -88,8 +88,8 @@ namespace T3.Editor.Gui.Commands
             return sb.ToString();
         }
 
-        private static readonly Stack<ICommand> _undoStack = new Stack<ICommand>();
-        private static readonly Stack<ICommand> _redoStack = new Stack<ICommand>();
+        private static readonly Stack<ICommand> _undoStack = new();
+        private static readonly Stack<ICommand> _redoStack = new();
 
         public static Stack<ICommand> UndoStack => _undoStack;
         public static Stack<ICommand> RedoStack => _redoStack;

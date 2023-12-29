@@ -192,9 +192,9 @@ internal static class Duplicate
             return node;
         }
 
-        private readonly Regex _guidRegex = new Regex(@"(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}",
-                                                      RegexOptions.IgnoreCase);
+        private readonly Regex _guidRegex = new(@"(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}",
+                                                RegexOptions.IgnoreCase);
 
-        public Dictionary<Guid, Guid> OldToNewGuidDict { get; } = new Dictionary<Guid, Guid>(10);
+        public Dictionary<Guid, Guid> OldToNewGuidDict { get; } = new(10);
     }
 }

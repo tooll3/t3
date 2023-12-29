@@ -214,7 +214,7 @@ namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95am9ieXB5b3prdWZyYnJtcW50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODAwMDA4MTUsImV4cCI6MTk5NTU3NjgxNX0.9Km2SmPnOQre_obeKr_DSr2l33PECtMWIF1VuxE1zck";
 
         private bool _triggerSaveParameters;
-        private readonly StructuredList<Point> _emptyList = new StructuredList<Point>(1);
+        private readonly StructuredList<Point> _emptyList = new(1);
         private readonly StructuredList<Point>[] _parameterPoints = new StructuredList<Point>[MaxSceneCount];
         private readonly List<ParameterSet> _parameterSets = new();
 

@@ -78,6 +78,6 @@ namespace T3.Operators.Types.Id_0b3436db_e283_436e_ba85_2f3a1de76a9d
         }
 
         [Input(Guid = "{76CC3811-4AE0-48B2-A119-890DB5A4EEB2}")]
-        public readonly InputSlot<string> Path = new InputSlot<string>();        
+        public readonly InputSlot<string> Path = new();        
     }
 }

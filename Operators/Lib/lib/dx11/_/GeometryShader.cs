@@ -23,13 +23,13 @@ namespace T3.Operators.Types.Id_a908cc64_e8cb_490c_ae45_c2c5fbfcedfb
         }
 
         [Input(Guid = "258c53e6-7708-49b7-88e2-1e40d2a4f88d")]
-        public readonly InputSlot<string> Source = new InputSlot<string>();
+        public readonly InputSlot<string> Source = new();
 
         [Input(Guid = "9675eb2e-ae6a-4826-a53e-07bed7d5b8a0")]
-        public readonly InputSlot<string> EntryPoint = new InputSlot<string>();
+        public readonly InputSlot<string> EntryPoint = new();
 
         [Input(Guid = "08789371-8193-49af-9ef4-97b12d9e6981")]
-        public readonly InputSlot<string> DebugName = new InputSlot<string>();
+        public readonly InputSlot<string> DebugName = new();
 
         private string _cachedSource, _warning;
         

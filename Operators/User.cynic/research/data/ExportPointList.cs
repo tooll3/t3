@@ -13,7 +13,7 @@ namespace T3.Operators.Types.Id_d5607e3b_15e8_402c_8d54_b29e40415ab0
     public class ExportPointList : Instance<ExportPointList>
     {
         [Output(Guid = "ba3d861e-3e22-4cea-9070-b7f53059cf87")]
-        public readonly Slot<StructuredList> Result = new Slot<StructuredList>();
+        public readonly Slot<StructuredList> Result = new();
 
         
         public ExportPointList()

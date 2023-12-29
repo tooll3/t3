@@ -8,7 +8,7 @@ namespace T3.Operators.Types.Id_c05bc3da_6f9c_45a7_8030_78476027359d
     public class ParticleSimulationExample : Instance<ParticleSimulationExample>
     {
         [Output(Guid = "7ce0c9fc-24c4-4156-8dd3-f90567fefb23")]
-        public readonly Slot<Texture2D> ColorBuffer = new Slot<Texture2D>();
+        public readonly Slot<Texture2D> ColorBuffer = new();
 
 
     }

@@ -287,11 +287,11 @@ namespace T3.Editor.Gui.Interaction.WithCurves
 
         // Styling
         private const float DragHandleSize = 10;
-        private static readonly Vector2 VerticalHandleOffset = new Vector2(0, DragHandleSize);
-        private static readonly Vector2 HorizontalHandleOffset = new Vector2(DragHandleSize, 0);
+        private static readonly Vector2 VerticalHandleOffset = new(0, DragHandleSize);
+        private static readonly Vector2 HorizontalHandleOffset = new(DragHandleSize, 0);
 
-        private static readonly Color SelectBoxBorderColor = new Color(1, 1, 1, 0.2f);
-        private static readonly Color SelectBoxBorderFill = new Color(1, 1, 1, 0.05f);
+        private static readonly Color SelectBoxBorderColor = new(1, 1, 1, 0.2f);
+        private static readonly Color SelectBoxBorderFill = new(1, 1, 1, 0.05f);
         private Instance _compositionOp;
         private readonly ValueSnapHandler _snapHandler;
     }

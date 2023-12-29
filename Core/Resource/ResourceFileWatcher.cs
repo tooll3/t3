@@ -58,6 +58,11 @@ namespace T3.Core.Resource
             }
             else
             {
+                if (!File.Exists(filepath))
+                {
+                    Log.Warning($"Can't access filepath: {filepath}");
+                    return;
+                }
                 var newHook = new ResourceFileHook(filepath, Array.Empty<uint>())
                                   {
                                       FileChangeAction = action

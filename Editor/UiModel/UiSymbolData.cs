@@ -56,13 +56,12 @@ public partial class UiSymbolData : SymbolData
     }
 
     internal static readonly Guid HomeSymbolId = Guid.Parse("dab61a12-9996-401e-9aa6-328dd6292beb");
-        
+
     public override void Load(bool enableLog)
     {
         // first load core data
         base.Load(enableLog);
 
-            
         Console.WriteLine(@"Loading Symbol UIs...");
         var symbolUiFiles = Directory.GetFiles(Folder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);
         var symbolUiJsons = symbolUiFiles.AsParallel()
@@ -91,8 +90,8 @@ public partial class UiSymbolData : SymbolData
                 Log.Error($"Can't load UI for [{symbolUi.Symbol.Name}] Registry already contains id {symbolUi.Symbol.Id}.");
                 continue;
             }
-                
-            if(enableLog)
+
+            if (enableLog)
                 Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
         }
     }
@@ -135,17 +134,24 @@ public partial class UiSymbolData : SymbolData
     /// </summary>
     public void SaveModifiedSymbols()
     {
-        var modifiedSymbolUis = GetModifiedSymbolUis().ToList();
-        Log.Debug($"Saving {modifiedSymbolUis.Count} modified symbols...");
+    	MarkAsSaving();
+        try
+        {
+            var modifiedSymbolUis = GetModifiedSymbolUis().ToList();
+            Log.Debug($"Saving {modifiedSymbolUis.Count} modified symbols...");
 
-        MarkAsSaving();
-        ResourceFileWatcher.DisableOperatorFileWatcher(Folder); // Don't update ops if file is written during save
-            
-        var modifiedSymbols = modifiedSymbolUis.Select(symbolUi => symbolUi.Symbol).ToList();
-        SaveSymbolDefinitionAndSourceFiles(modifiedSymbols);
-        WriteSymbolUis(modifiedSymbolUis);
-            
-        ResourceFileWatcher.EnableOperatorFileWatcher(Folder);
+            ResourceFileWatcher.DisableOperatorFileWatcher(); // Don't update ops if file is written during save
+
+            var modifiedSymbols = modifiedSymbolUis.Select(symbolUi => symbolUi.Symbol).ToList();
+            SaveSymbolDefinitionAndSourceFiles(modifiedSymbols);
+            WriteSymbolUis(modifiedSymbolUis);
+        }
+        catch (System.InvalidOperationException e)
+        {
+            Log.Warning($"Saving failed. Please try to save manually ({e.Message})");
+        }
+
+        ResourceFileWatcher.EnableOperatorFileWatcher();
         UnmarkAsSaving();
     }
 

@@ -7,7 +7,7 @@ namespace T3.Editor.Gui.UiHelpers
 {
     public class EnumCache
     {
-        public static EnumCache Instance { get; } = new EnumCache();
+        public static EnumCache Instance { get; } = new();
 
         public TypedEntry<T> GetTypedEnumEntry<T>() where T : Enum
         {
@@ -75,6 +75,6 @@ namespace T3.Editor.Gui.UiHelpers
             public bool[] SetFlags { get; }
         }
 
-        private readonly Dictionary<Type, Entry> _entries = new Dictionary<Type, Entry>();
+        private readonly Dictionary<Type, Entry> _entries = new();
     }
 }

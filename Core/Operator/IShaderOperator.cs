@@ -44,9 +44,9 @@ public interface IShaderOperator<T> where T : class, IDisposable
             return false;
         }
 
-        Log.Debug($"Attempting to update shader \"{debugName}\" ({GetType().Name}) with entry point \"{entryPoint}\".");
+        //Log.Debug($"Attempting to update shader \"{debugName}\" ({GetType().Name}) with entry point \"{entryPoint}\".");
         
-        // cache ShaderResource to avoid additional virtual method calls
+        // Cache ShaderResource to avoid additional virtual method calls
         var shaderResource = ShaderResource;
         var needsNewResource = shaderResource == null;
 

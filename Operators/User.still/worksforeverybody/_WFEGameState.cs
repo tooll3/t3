@@ -121,7 +121,7 @@ namespace T3.Operators.Types.Id_1dfc9f6d_effa_407b_8f8d_5adf62504205
             TotalScore.Value = _score;
         }
 
-        private HashSet<int> _scoredSceneIndices = new HashSet<int>();
+        private HashSet<int> _scoredSceneIndices = new();
         private bool _wasPressed;
         private int _score;
         

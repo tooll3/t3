@@ -220,8 +220,8 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
         private static readonly int[] CacheControllerColors = Enumerable.Repeat(-1, 256).ToArray();
         #endregion
 
-        private readonly Dictionary<int, ButtonSignal> _combinedButtonSignals = new Dictionary<int, ButtonSignal>();
-        private readonly List<ButtonSignal> _buttonSignalsSinceLastUpdate = new List<ButtonSignal>();
-        private readonly List<ControlChangeSignal> _controlSignalsSinceLastUpdate = new List<ControlChangeSignal>();
+        private readonly Dictionary<int, ButtonSignal> _combinedButtonSignals = new();
+        private readonly List<ButtonSignal> _buttonSignalsSinceLastUpdate = new();
+        private readonly List<ControlChangeSignal> _controlSignalsSinceLastUpdate = new();
     }
 }

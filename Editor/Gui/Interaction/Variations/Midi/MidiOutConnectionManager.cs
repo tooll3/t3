@@ -71,7 +71,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi
             MidiOutsByDeviceIdHash.Clear();
         }
 
-        private static readonly Dictionary<int, MidiOut> MidiOutsByDeviceIdHash = new Dictionary<int, MidiOut>();
+        private static readonly Dictionary<int, MidiOut> MidiOutsByDeviceIdHash = new();
         private static bool _initialized;
     }
 }

@@ -11,7 +11,7 @@ namespace T3.Operators.Types.Id_32a6a351_6d22_4915_aa0e_e0483b7f4e76
     public class GenerateMips : Instance<GenerateMips>
     {
         [Output(Guid = "ac14864f-3288-4cab-87a0-636cee626a2b")]
-        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureWithMips = new Slot<SharpDX.Direct3D11.Texture2D>();
+        public readonly Slot<SharpDX.Direct3D11.Texture2D> TextureWithMips = new();
 
         public GenerateMips()
         {
@@ -54,6 +54,6 @@ namespace T3.Operators.Types.Id_32a6a351_6d22_4915_aa0e_e0483b7f4e76
         private ShaderResourceView _srv = null;
 
         [Input(Guid = "a4e3001c-0663-48ec-8f56-b11ff0b40850")]
-        public readonly InputSlot<Texture2D> Texture = new InputSlot<Texture2D>();
+        public readonly InputSlot<Texture2D> Texture = new();
     }
 }

@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_e4a38f3c_bd4c_406a_9979_bb683d79b39b
     public class CountDown : Instance<CountDown>
     {
         [Output(Guid = "511af1e0-9ada-46a2-8c14-0e18db506f95", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<string> Output = new Slot<string>();
+        public readonly Slot<string> Output = new();
 
         public CountDown()
         {
@@ -51,9 +51,9 @@ namespace T3.Operators.Types.Id_e4a38f3c_bd4c_406a_9979_bb683d79b39b
         }
 
         [Input(Guid = "61E5281B-B772-4BBD-B52F-E6B6310D259A")]
-        public readonly InputSlot<string> LaunchTime = new InputSlot<string>();
+        public readonly InputSlot<string> LaunchTime = new();
 
         [Input(Guid = "d404e744-fa84-4bc8-8aa3-e6e972d9a5a7")]
-        public readonly InputSlot<string> Format = new InputSlot<string>();
+        public readonly InputSlot<string> Format = new();
     }
 }

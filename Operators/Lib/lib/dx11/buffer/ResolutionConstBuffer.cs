@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_38e88910_6063_41d1_840b_8aeeb0eeccc0
     public class ResolutionConstBuffer : Instance<ResolutionConstBuffer>
     {
         [Output(Guid = "{FE020A5C-91E1-441F-BE0D-AB5900D150EB}")]
-        public readonly Slot<SharpDX.Direct3D11.Buffer> Buffer = new Slot<SharpDX.Direct3D11.Buffer>();
+        public readonly Slot<SharpDX.Direct3D11.Buffer> Buffer = new();
 
         public ResolutionConstBuffer()
         {
@@ -42,7 +42,7 @@ namespace T3.Operators.Types.Id_38e88910_6063_41d1_840b_8aeeb0eeccc0
         }
         
         [Input(Guid = "3BBA98BD-2713-4E5B-B082-20B39392EF9B")]
-        public readonly InputSlot<Int2> Resolution = new InputSlot<Int2>();
+        public readonly InputSlot<Int2> Resolution = new();
     }
 }
         

@@ -127,7 +127,7 @@ public enum UserActions
 
 public static class UserActionRegistry
 {
-    public static readonly HashSet<UserActions> DeferredActions = new HashSet<UserActions>();
+    public static readonly HashSet<UserActions> DeferredActions = new();
 
     public static bool WasActionQueued(UserActions action)
     {
