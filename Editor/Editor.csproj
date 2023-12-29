@@ -26,7 +26,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Logging\Logging.csproj" />
-    <ProjectReference Include="..\Operators\Operators.csproj" />
     <ProjectReference Include="..\MsForms\MsForms.csproj" />
   </ItemGroup>
 

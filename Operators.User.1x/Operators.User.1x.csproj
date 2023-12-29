@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0-windows</TargetFramework>
+        <RootNamespace>Operators.User._1x</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
