@@ -71,7 +71,7 @@ namespace T3.Editor.Gui.Graph.Modification
                 return false;
 
             //string path = @"Operators\Types\" + symbol.Name + ".cs";
-            var sourcePath = SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
+            var sourcePath = symbol.SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
 
             var operatorResource = ResourceManager.Instance().GetOperatorFileResource(sourcePath);
             if (operatorResource != null)

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
+using T3.Core.Compilation;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -21,6 +22,7 @@ using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;
 using T3.Editor.SystemUi;
+using T3.Editor.UiModel;
 using T3.MsForms;
 using T3.SystemUi;
 
@@ -148,10 +150,15 @@ namespace T3.Editor
             // Setup file watching the operator source
             T3Ui.Initialize();
             
-            foreach (var (_, symbol) in SymbolRegistry.Entries)
+            foreach (var symbolData in T3Ui.UiSymbolDatas)
             {
-                var sourceFilePath = SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
-                ResourceManager.Instance().CreateOperatorEntry(sourceFilePath, symbol.Id.ToString(), OperatorUpdating.ResourceUpdateHandler);
+                
+                foreach(var symbolUi in symbolData.SymbolUis)
+                {
+                    var symbol = symbolUi.Symbol;
+                    var sourceFilePath = symbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
+                    ResourceManager.Instance().CreateOperatorEntry(sourceFilePath, symbol.Id.ToString(), OperatorUpdating.ResourceUpdateHandler);
+                }
             }
 
             unsafe

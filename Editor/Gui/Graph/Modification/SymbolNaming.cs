@@ -56,7 +56,7 @@ internal static class SymbolNaming
         var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newName);
         if (newAssembly != null)
         {
-            var originalSourcePath = SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
+            var originalSourcePath = symbol.SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
             var operatorResource = ResourceManager.Instance().GetOperatorFileResource(originalSourcePath);
             if (operatorResource != null)
             {

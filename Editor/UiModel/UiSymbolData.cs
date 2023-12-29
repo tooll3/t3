@@ -38,7 +38,7 @@ public partial class UiSymbolData : SymbolData
 
         Load(enableLog);
 
-        Console.WriteLine(@"Updating UI entries...");
+        Console.WriteLine($@"Updating UI entries for {OperatorsAssembly.GetName().Name}...");
         var symbols = SymbolRegistry.Entries;
         foreach (var symbolEntry in symbols)
         {
@@ -84,16 +84,21 @@ public partial class UiSymbolData : SymbolData
         Console.WriteLine(@"Registering Symbol UIs...");
         foreach (var symbolUiJson in symbolUiJsons)
         {
-            var symbolUi = symbolUiJson.Object;
-            if (!SymbolUiRegistry.Entries.TryAdd(symbolUi.Symbol.Id, symbolUi))
-            {
-                Log.Error($"Can't load UI for [{symbolUi.Symbol.Name}] Registry already contains id {symbolUi.Symbol.Id}.");
-                continue;
-            }
-
-            if (enableLog)
-                Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
+            TryAddToRegistry(symbolUiJson.Object, enableLog);
         }
+    }
+
+    private void TryAddToRegistry(SymbolUi symbolUi, bool enableLog = false)
+    {
+        if (!SymbolUiRegistry.Entries.TryAdd(symbolUi.Symbol.Id, symbolUi))
+        {
+            Log.Error($"Can't load UI for [{symbolUi.Symbol.Name}] Registry already contains id {symbolUi.Symbol.Id}.");
+            return;
+        }
+
+        _symbolUis.Add(symbolUi);
+        if (enableLog)
+            Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
     }
 
     public override void SaveAll()
@@ -124,10 +129,7 @@ public partial class UiSymbolData : SymbolData
         UnmarkAsSaving();
     }
 
-    public static IEnumerable<SymbolUi> GetModifiedSymbolUis()
-    {
-     //   return SymbolUiRegistry.Entries.Values.Where(symbolUi => symbolUi.HasBeenModified);
-    }
+    private IEnumerable<SymbolUi> GetModifiedSymbolUis() => _symbolUis.Where(symbolUi => symbolUi.HasBeenModified);
 
     /// <summary>
     /// Note: This does NOT clean up 
@@ -155,7 +157,7 @@ public partial class UiSymbolData : SymbolData
         UnmarkAsSaving();
     }
 
-    private static void WriteSymbolUis(IEnumerable<SymbolUi> symbolUis)
+    private void WriteSymbolUis(IEnumerable<SymbolUi> symbolUis)
     {
         var resourceManager = ResourceManager.Instance();
 
@@ -170,6 +172,13 @@ public partial class UiSymbolData : SymbolData
                 writer.Formatting = Formatting.Indented;
                 SymbolUiJson.WriteSymbolUi(symbolUi, writer);
             }
+            
+            var symbolUiResource = resourceManager.GetOperatorFileResource(filepath);
+            if (symbolUiResource == null)
+            {
+                // If the source wasn't registered before do this now
+                resourceManager.CreateOperatorEntry(filepath, symbol.Id.ToString(), OperatorUpdating.ResourceUpdateHandler);
+            }
 
             var symbolSourceFilepath = BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
             var opResource = resourceManager.GetOperatorFileResource(symbolSourceFilepath);
@@ -183,7 +192,7 @@ public partial class UiSymbolData : SymbolData
         }
     }
 
-    public static void UpdateUiEntriesForSymbol(Symbol symbol)
+    public void UpdateUiEntriesForSymbol(Symbol symbol)
     {
         if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var symbolUi))
         {
@@ -191,10 +200,13 @@ public partial class UiSymbolData : SymbolData
         }
         else
         {
-            var newSymbolUi = new SymbolUi(symbol);
-            SymbolUiRegistry.Entries.Add(symbol.Id, newSymbolUi);
+            symbolUi = new SymbolUi(symbol);
+            SymbolUiRegistry.Entries.Add(symbol.Id, symbolUi);
+            _symbolUis.Add(symbolUi);
         }
     }
 
     public static Instance RootInstance { get; private set; }
+    public IReadOnlyList<SymbolUi> SymbolUis => _symbolUis;
+    private readonly List<SymbolUi> _symbolUis = new();
 }
