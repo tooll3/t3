@@ -2,6 +2,8 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using T3.Core.Logging;
+using T3.Core.SystemUi;
 using T3.SystemUi;
 using T3.SystemUi.Logging;
 
@@ -13,18 +15,17 @@ internal class SplashScreen : ISplashScreen
     {
         public SplashForm()
         {
-
         }
 
         public void PreventFlickering()
         {
             SetStyle(ControlStyles.DoubleBuffer
-                     | ControlStyles.UserPaint 
+                     | ControlStyles.UserPaint
                      | ControlStyles.AllPaintingInWmPaint, true);
             this.UpdateStyles();
         }
     }
-    
+
     public void Show(string imagePath)
     {
         var backgroundImage = Image.FromFile(imagePath);
@@ -39,8 +40,7 @@ internal class SplashScreen : ISplashScreen
                               Size = imageSize,
                           };
         _splashForm.PreventFlickering();
-        
-        
+
         var tableLayoutPanel = new TableLayoutPanel
                                    {
                                        Dock = DockStyle.Fill,
@@ -49,7 +49,7 @@ internal class SplashScreen : ISplashScreen
                                        CellBorderStyle = TableLayoutPanelCellBorderStyle.None,
                                        BackColor = Color.Transparent,
                                    };
-        
+
         tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
         tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
 
@@ -64,9 +64,8 @@ internal class SplashScreen : ISplashScreen
                                               UseMnemonic = false,
                                               Font = new Font("Arial", 8),
                                               Anchor = AnchorStyles.Bottom | AnchorStyles.Left,
-                                              
                                           }, 0, 0);
-        
+
         _logMessageLabel = new Label
                                {
                                    Dock = DockStyle.Bottom,
@@ -80,12 +79,11 @@ internal class SplashScreen : ISplashScreen
                                    Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
                                    Size = new Size(400, 20)
                                };
-        
+
         tableLayoutPanel.Controls.Add(_logMessageLabel, 1, 0);
-        
 
         _splashForm.Controls.Add(tableLayoutPanel);
-        
+
         _splashForm.Show();
         _splashForm.Refresh();
         _splashForm.TopMost = true;
@@ -110,27 +108,25 @@ internal class SplashScreen : ISplashScreen
         return new Size(width, height);
     }
 
-
     public void Dispose()
     {
-
     }
 
     /// <summary>
     /// Defer the setting the form UI element on the main Thread.
     /// </summary>
     private delegate void SafeCallDelegate(string text);
+
     private void WriteTextSafe(string text)
     {
         if (_logMessageLabel.InvokeRequired)
         {
             if (!_invoked)
                 return;
-            
+
             var d = new SafeCallDelegate(WriteTextSafe);
             _logMessageLabel.Invoke(d, text);
             _invoked = true;
-
         }
         else
         {
@@ -138,7 +134,6 @@ internal class SplashScreen : ISplashScreen
             _logMessageLabel.Refresh();
             //_splashForm.Refresh();
             _invoked = false;
-            
         }
     }
 
@@ -156,9 +151,8 @@ internal class SplashScreen : ISplashScreen
         WriteTextSafe(firstLine[..Math.Min(60, firstLine.Length)]);
     }
     #endregion
-    
+
     private static readonly Size _baseDpi = new(96, 96);
     private SplashForm _splashForm;
     private Label _logMessageLabel;
-
 }
