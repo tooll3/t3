@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Operator.User.cynic.Editor</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Editor\Editor.csproj" />
+      <ProjectReference Include="..\Operators.User.cynic\Operators.User.cynic.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -33,7 +33,6 @@ using T3.Editor.Gui.Windows.Layouts;
 using T3.Editor.Gui.Windows.Output;
 using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
-using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
 
 namespace T3.Editor.Gui;
 

@@ -26,19 +26,11 @@ public partial class UiSymbolData
     static UiSymbolData()
     {
         RegisterUiTypes();
-        RegisterCustomChildUis();
     }
 
     public static class TypeByNameRegistry
     {
         public static Dictionary<string, Type> Entries { get; } = new();
-    }
-
-    private static void RegisterCustomChildUis()
-    {
-        // register custom UIs for symbol children
-        CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_000e08d0_669f_48df_9083_7aa0a43bbc05.GpuMeasure), GpuMeasureUi.DrawChildUi);
-        CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_bfe540ef_f8ad_45a2_b557_cd419d9c8e44.DataList), DataListUi.DrawChildUi);
     }
 
     private static void RegisterUiTypes()

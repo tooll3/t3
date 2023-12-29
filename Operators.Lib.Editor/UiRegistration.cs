@@ -1,18 +1,16 @@
-using System.ComponentModel;
 using Operators.Lib.Editor.CustomUi;
 using Operators.Lib.Utils;
-using Operators.Utils.Recording;
-using T3.Core.DataTypes.DataSet;
+using T3.Editor.Compilation;
 using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.Gui.Templates;
-using T3.Operators.Types.Id_2d1c9633_b66e_4958_913c_116ae36963a5;
 
 namespace Operators.Lib.Editor;
 
-public static class UiRegistration
+public class UiRegistration : OperatorUIAssemblyInitializer
 {
-    static UiRegistration()
+
+    public override void Initialize()
     {
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c.Counter), CounterUi.DrawChildUi);
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_8211249d_7a26_4ad0_8d84_56da72a5c536.SampleGradient), GradientSliderUi.DrawChildUi);
@@ -45,8 +43,8 @@ public static class UiRegistration
 
         PlaybackUtils.BpmProvider = BpmProvider.Instance;
         PlaybackUtils.TapProvider = TapProvider.Instance;
-        
-        foreach(var templateDefinition in TemplateDefinitions.Templates)
+
+        foreach (var templateDefinition in TemplateDefinitions.Templates)
         {
             TemplateDefinition.AddTemplateDefinition(templateDefinition);
         }
