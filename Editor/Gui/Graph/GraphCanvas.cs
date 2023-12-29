@@ -597,7 +597,7 @@ namespace T3.Editor.Gui.Graph
 
         private void DrawDropHandler()
         {
-            if (!T3Ui.DraggingIsInProgress)
+            if (!T3Ui.DraggingIsInProgress || CompositionOp == null)
                 return;
 
             ImGui.SetCursorPos(Vector2.Zero);
