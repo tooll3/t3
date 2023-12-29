@@ -19,31 +19,31 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serialization", "Serializat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{420772CC-2B45-431D-8B25-C5F1F28E0AFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.Lib", "Operators\Operators.Lib\Operators.Lib.csproj", "{D5565A7D-882B-45C9-B145-63FFFA3705DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseLibrary", "Operators\BaseLibrary\BaseLibrary.csproj", "{D5565A7D-882B-45C9-B145-63FFFA3705DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.Lib.Editor", "Operators\Operators.Lib.Editor\Operators.Lib.Editor.csproj", "{CA1AA662-E0A5-4DA6-9070-1A42CEBF79FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseLibrary.Editor", "Operators\BaseLibrary.Editor\BaseLibrary.Editor.csproj", "{CA1AA662-E0A5-4DA6-9070-1A42CEBF79FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.User.cynic", "Operators\Operators.User.cynic\Operators.User.cynic.csproj", "{35975279-597A-410D-BD2D-1FABA791F74C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.cynic", "Operators\User.cynic\User.cynic.csproj", "{35975279-597A-410D-BD2D-1FABA791F74C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.Examples", "Operators\Operators.Examples\Operators.Examples.csproj", "{C1A78F9B-C658-4512-BA04-8CC1C9F076EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseLibrary.Examples", "Operators\BaseLibrary.Examples\BaseLibrary.Examples.csproj", "{C1A78F9B-C658-4512-BA04-8CC1C9F076EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.User.cynic.Editor", "Operators\Operators.User.cynic.Editor\Operators.User.cynic.Editor.csproj", "{6913D1F1-808D-48A3-893C-B094BDD57D0D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.cynic.Editor", "Operators\User.cynic.Editor\User.cynic.Editor.csproj", "{6913D1F1-808D-48A3-893C-B094BDD57D0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.User.1x", "Operators\Operators.User.1x\Operators.User.1x.csproj", "{B61418D1-4351-4262-BDBF-B335D4B9B6D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.1x", "Operators\User.1x\User.1x.csproj", "{B61418D1-4351-4262-BDBF-B335D4B9B6D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.User.ff", "Operators\Operators.User.ff\Operators.User.ff.csproj", "{FD510612-0760-42CF-8073-DF8AB57C0970}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.ff", "Operators\User.ff\User.ff.csproj", "{FD510612-0760-42CF-8073-DF8AB57C0970}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.User.fuzzy", "Operators\Operators.User.fuzzy\Operators.User.fuzzy.csproj", "{8849310E-D3C3-429B-B65B-1807000B0896}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.fuzzy", "Operators\User.fuzzy\User.fuzzy.csproj", "{8849310E-D3C3-429B-B65B-1807000B0896}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.User.lucid", "Operators\Operators.User.lucid\Operators.User.lucid.csproj", "{295C42F3-0DA5-478A-9904-1D8DD4825E19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.lucid", "Operators\User.lucid\User.lucid.csproj", "{295C42F3-0DA5-478A-9904-1D8DD4825E19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.User.pixtur", "Operators\Operators.User.pixtur\Operators.User.pixtur.csproj", "{35987688-4F0E-4A6A-B001-B2373D1CABD4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.pixtur", "Operators\User.pixtur\User.pixtur.csproj", "{35987688-4F0E-4A6A-B001-B2373D1CABD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.User.still", "Operators\Operators.User.still\Operators.User.still.csproj", "{8B8E8496-2916-4FB8-9678-C292BCAE2EE9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.still", "Operators\User.still\User.still.csproj", "{8B8E8496-2916-4FB8-9678-C292BCAE2EE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.User.wake", "Operators\Operators.User.wake\Operators.User.wake.csproj", "{A2094B48-BF33-4ED4-9E3A-DCAE8487C658}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.wake", "Operators\User.wake\User.wake.csproj", "{A2094B48-BF33-4ED4-9E3A-DCAE8487C658}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operators.User.newemka980", "Operators\Operators.User.newemka980\Operators.User.newemka980.csproj", "{DDB8A7E0-71D6-4E53-8278-DC7F02CFF68E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.newemka980", "Operators\User.newemka980\User.newemka980.csproj", "{DDB8A7E0-71D6-4E53-8278-DC7F02CFF68E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

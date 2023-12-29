@@ -4,11 +4,11 @@
         <TargetFramework>net6.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>Operators.User.wake</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Editor\Editor.csproj" />
-      <ProjectReference Include="..\Operators.Lib\Operators.Lib.csproj" />
+      <ProjectReference Include="..\..\Core\Core.csproj" />
     </ItemGroup>
 
 </Project>

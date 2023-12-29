@@ -9,7 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Editor\Editor.csproj" />
-      <ProjectReference Include="..\Operators.User.cynic\Operators.User.cynic.csproj" />
+      <ProjectReference Include="..\User.cynic\User.cynic.csproj" />
     </ItemGroup>
 
 </Project>

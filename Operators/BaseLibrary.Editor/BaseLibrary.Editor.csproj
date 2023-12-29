@@ -4,10 +4,12 @@
         <TargetFramework>net6.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>Operators.Lib.Editor</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Core\Core.csproj" />
+      <ProjectReference Include="..\..\Editor\Editor.csproj" />
+      <ProjectReference Include="..\BaseLibrary\BaseLibrary.csproj" />
     </ItemGroup>
 
 </Project>
