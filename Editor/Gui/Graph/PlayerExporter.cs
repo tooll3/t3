@@ -126,7 +126,7 @@ namespace T3.Editor.Gui.Graph
                 Directory.CreateDirectory(symbolExportDir);
                 foreach (var symbol in exportInfo.UniqueSymbols)
                 {
-                    using var sw = new StreamWriter(symbolExportDir + symbol.Name + "_" + symbol.Id + ".t3");
+                    using var sw = new StreamWriter(symbolExportDir + symbol.Name + "_" + symbol.Id + SymbolData.SymbolExtension);
                     using var writer = new JsonTextWriter(sw);
                     
                     writer.Formatting = Formatting.Indented;

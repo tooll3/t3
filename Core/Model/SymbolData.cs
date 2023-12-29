@@ -87,6 +87,9 @@ public partial class SymbolData
         Log.Debug("Applying symbol children...");
         Parallel.ForEach(symbolsRead, ReadAndApplyChildren);
 
+
+        return;
+
         void ReadAndApplyChildren(SymbolJson.SymbolReadResult readSymbolResult)
         {
             var gotSymbolChildren = SymbolJson.TryReadAndApplySymbolChildren(readSymbolResult);
@@ -167,6 +170,9 @@ public partial class SymbolData
         ResourceFileWatcher.EnableOperatorFileWatcher(Folder);
     }
 
+    protected void MarkAsSaving() => Interlocked.Increment(ref _savingCount);
+    protected void UnmarkAsSaving() => Interlocked.Decrement(ref _savingCount);
+
     protected void SaveSymbolDefinitionAndSourceFiles(IEnumerable<Symbol> symbols)
     {
         foreach (var symbol in symbols)
@@ -235,49 +241,6 @@ public partial class SymbolData
         }
     }
 
-    // public void SaveModifiedSymbol(Symbol symbol)
-    // {
-    //     RemoveObsoleteSymbolFiles(symbol);
-    //
-    //     var symbolJson = new SymbolJson();
-    //     
-    //     var filepath = BuildFilepathForSymbol(symbol, SymbolExtension);
-    //
-    //     using (var sw = new StreamWriter(filepath))
-    //     using (var writer = new JsonTextWriter(sw))
-    //     {
-    //         symbolJson.Writer = writer;
-    //         symbolJson.Writer.Formatting = Formatting.Indented;
-    //         symbolJson.WriteSymbol(symbol);
-    //     }
-    //
-    //     if (!string.IsNullOrEmpty(symbol.PendingSource))
-    //     {
-    //         WriteSymbolSourceToFile(symbol);
-    //     }
-    // }
-
-    private static void RemoveDeprecatedSymbolFiles(Symbol symbol)
-    {
-        if (string.IsNullOrEmpty(symbol.DeprecatedSourcePath))
-            return;
-
-        foreach (var fileExtension in OperatorFileExtensions)
-        {
-            var sourceFilepath = Path.Combine(OperatorDirectoryName, symbol.DeprecatedSourcePath + "_" + symbol.Id + fileExtension);
-            try
-            {
-                File.Delete(sourceFilepath);
-            }
-            catch (Exception e)
-            {
-                Log.Warning("Failed to deleted file '" + sourceFilepath + "': " + e);
-            }
-        }
-
-        symbol.DeprecatedSourcePath = String.Empty;
-    }
-
     private void WriteSymbolSourceToFile(Symbol symbol)
     {
         var sourcePath = BuildFilepathForSymbol(symbol, SourceExtension);
@@ -329,23 +292,14 @@ public partial class SymbolData
     private static readonly OpUpdateCounter _updateCounter;
 
     public const string SourceExtension = ".cs";
-    private const string SymbolExtension = ".t3";
-    protected const string SymbolUiExtension = ".t3ui";
+    public const string SymbolExtension = ".t3";
+    public const string SymbolUiExtension = ".t3ui";
     public const string OperatorDirectoryName = "Operators";
-    public readonly string Folder;
+    protected readonly string Folder;
 
     public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0;
 
-    protected void MarkAsSaving() => Interlocked.Increment(ref _savingCount);
-    protected void UnmarkAsSaving() => Interlocked.Decrement(ref _savingCount);
     private static long _savingCount;
 
     private readonly Dictionary<Guid, Symbol> _symbols = new();
-
-    private static readonly List<string> OperatorFileExtensions = new()
-                                                                      {
-                                                                          SymbolExtension,
-                                                                          SymbolUiExtension,
-                                                                          SourceExtension,
-                                                                      };
 }

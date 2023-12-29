@@ -11,6 +11,7 @@ public static class CoreAssembly
     
     public static Assembly[] GetLoadedOperatorAssemblies()
     {
+        // todo - need to cull out the assemblies that are not operator assemblies (editor-related assemblies)
         return AppDomain.CurrentDomain.GetAssemblies()
                         .Where(x => x.Location.Contains(SymbolData.OperatorDirectoryName))
                         .ToArray();

@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
@@ -195,8 +196,10 @@ namespace T3.Editor.Gui.Dialog
 
             try
             {
-                allRemoteT3Files = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3", SearchOption.AllDirectories);
-                allRemoteT3UiFiles = Directory.GetFiles(_otherOperatorNamespaceDirectory, "*.t3ui", SearchOption.AllDirectories);
+                const string t3FilePattern = $"*{SymbolData.SymbolExtension}";
+                const string t3UiFilePattern = $"*{SymbolData.SymbolUiExtension}";
+                allRemoteT3Files = Directory.GetFiles(_otherOperatorNamespaceDirectory, t3FilePattern, SearchOption.AllDirectories);
+                allRemoteT3UiFiles = Directory.GetFiles(_otherOperatorNamespaceDirectory, t3UiFilePattern, SearchOption.AllDirectories);
             }
             catch (Exception e)
             {

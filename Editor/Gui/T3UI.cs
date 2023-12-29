@@ -42,7 +42,7 @@ public class T3Ui
     static T3Ui()
     {
         var assemblies = CoreAssembly.GetLoadedOperatorAssemblies();
-        UiSymbolData = assemblies
+        UiSymbolDatas = assemblies
                       .Select(a => new UiSymbolData(a, enableLog: false))
                       .ToArray();
     }
@@ -425,7 +425,7 @@ public class T3Ui
             _saveStopwatch.Restart();
 
             // Todo - parallelize? 
-            foreach (var data in UiSymbolData)
+            foreach (var data in UiSymbolDatas)
             {
                 data.SaveModifiedSymbols();    
             }
@@ -448,7 +448,7 @@ public class T3Ui
             _saveStopwatch.Restart();
             
             // Todo - parallelize?
-            foreach (var data in UiSymbolData)
+            foreach (var data in UiSymbolDatas)
             {
                 data.SaveAll();
             }
@@ -506,7 +506,7 @@ public class T3Ui
         }
     }
 
-    public static readonly IReadOnlyList<UiSymbolData> UiSymbolData;
+    public static readonly IReadOnlyList<UiSymbolData> UiSymbolDatas;
     
     public static IntPtr NotDroppingPointer = new(0);
     public static bool DraggingIsInProgress = false;
