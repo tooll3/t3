@@ -34,14 +34,14 @@ public partial class SymbolData
     {
         OperatorsAssembly = operatorAssembly;
         var assemblyFullName = operatorAssembly.FullName;
-        if(assemblyFullName == null)
+        if (assemblyFullName == null)
             throw new ArgumentException("Assembly full name is null", nameof(operatorAssembly));
-        
+
         var assemblyName = new AssemblyName(assemblyFullName);
         var assemblyNameString = assemblyName.Name;
         if (assemblyNameString == null)
             throw new ArgumentException("Assembly name is null", nameof(operatorAssembly));
-        
+
         Folder = Path.Combine(OperatorDirectoryName, assemblyNameString);
 
         ResourceFileWatcher.AddCodeWatcher(Folder);
@@ -68,14 +68,15 @@ public partial class SymbolData
         foreach (var readSymbolResult in symbolsRead)
         {
             var symbol = readSymbolResult.Symbol;
-            if (!SymbolRegistry.Entries.TryAdd(symbol.Id, symbol))
-            {
-                var existingSymbol = SymbolRegistry.Entries[symbol.Id];
-                Log.Error($"Symbol {existingSymbol.Name} {symbol.Id} exists multiple times in database.");
+
+            if (!TryAddSymbolTo(_symbols, symbol))
                 continue;
-            }
+
+            if (!TryAddSymbolTo(SymbolRegistry.Entries, symbol))
+                continue;
 
             instanceTypesWithoutFile.Remove(symbol.InstanceType);
+            symbol.SymbolData = this;
         }
 
         foreach (var newType in instanceTypesWithoutFile)
@@ -133,6 +134,18 @@ public partial class SymbolData
             if (enableLog)
                 Log.Debug($"new added symbol: {newType}");
         }
+
+        static bool TryAddSymbolTo(Dictionary<Guid, Symbol> collection, Symbol symbol)
+        {
+            var added = collection.TryAdd(symbol.Id, symbol);
+            if (!added)
+            {
+                var existingSymbol = collection[symbol.Id];
+                Log.Error($"Symbol {existingSymbol.Name} {symbol.Id} exists multiple times in database.");
+            }
+
+            return added;
+        }
     }
 
     private readonly Regex _innerNamespace = new Regex(@".Id_(\{){0,1}[0-9a-fA-F]{8}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{12}(\}){0,1}",
@@ -148,7 +161,7 @@ public partial class SymbolData
         MarkAsSaving();
         RemoveAllSymbolFiles();
         SortAllSymbolSourceFiles();
-        SaveSymbolDefinitionAndSourceFiles(_symbols);
+        SaveSymbolDefinitionAndSourceFiles(_symbols.Values);
         UnmarkAsSaving();
 
         ResourceFileWatcher.EnableOperatorFileWatcher(Folder);
@@ -327,7 +340,7 @@ public partial class SymbolData
     protected void UnmarkAsSaving() => Interlocked.Decrement(ref _savingCount);
     private static long _savingCount;
 
-    private readonly List<Symbol> _symbols = new();
+    private readonly Dictionary<Guid, Symbol> _symbols = new();
 
     private static readonly List<string> OperatorFileExtensions = new()
                                                                       {
