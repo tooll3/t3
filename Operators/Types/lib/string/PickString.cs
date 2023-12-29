@@ -1,6 +1,7 @@
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_a9784e5e_7696_49a0_bb77_2302587ede59
 {
@@ -17,15 +18,11 @@ namespace T3.Operators.Types.Id_a9784e5e_7696_49a0_bb77_2302587ede59
         private void Update(EvaluationContext context)
         {
             var connections = Input.GetCollectedTypedInputs();
-            var index = Index.GetValue(context);
             Input.DirtyFlag.Clear();
             if (connections == null || connections.Count == 0)
                 return;
 
-            if (index < 0)
-                index = -index;
-
-            index %= connections.Count;
+            var index = Index.GetValue(context).Mod(connections.Count);
             Selected.Value = connections[index].GetValue(context);
             
             // Clear dirty flag

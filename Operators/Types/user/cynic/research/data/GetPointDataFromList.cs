@@ -4,6 +4,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_1de7b1be_cab6_4beb_a837_4c817562efb2
 {
@@ -41,7 +42,7 @@ namespace T3.Operators.Types.Id_1de7b1be_cab6_4beb_a837_4c817562efb2
                 return;
             }
 
-            var point = pointList.TypedElements[index % pointList.NumElements];
+            var point = pointList.TypedElements[index.Mod(pointList.NumElements)];
             Position.Value = point.Position;
             W.Value = point.W;
             Orientation.Value = new Vector4(point.Orientation.X, point.Orientation.Y, point.Orientation.Z, point.Orientation.W);

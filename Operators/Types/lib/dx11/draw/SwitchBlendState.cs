@@ -2,6 +2,7 @@ using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_179093f6_d3ef_43bc_a5af_1df2379ec081
 {
@@ -27,13 +28,7 @@ namespace T3.Operators.Types.Id_179093f6_d3ef_43bc_a5af_1df2379ec081
                 return;
             }
             
-            index %= _blendStates.Length;
-            if (index < 0)
-            {
-                index += _blendStates.Length;
-            }
-
-            Output.Value = _blendStates[index];
+            Output.Value = _blendStates[index.Mod(_blendStates.Length)];
         }
 
         [Input(Guid = "A737BB60-D98B-4405-914C-7DF91A58D8BC")]

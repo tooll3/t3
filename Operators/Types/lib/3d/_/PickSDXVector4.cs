@@ -2,6 +2,7 @@ using System.Numerics;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_a83f2e4f_cb4d_4a6f_9f7a_2ea7fdfab54b
 {
@@ -37,10 +38,8 @@ namespace T3.Operators.Types.Id_a83f2e4f_cb4d_4a6f_9f7a_2ea7fdfab54b
             }
 
             var index = Index.GetValue(context);
-            if (index < 0)
-                index = -index;
 
-            Vector4 v= list[index % list.Length];
+            var v= list[index.Mod(list.Length)];
 
             Value1.Value = v.X;
             Value2.Value = v.Y;
