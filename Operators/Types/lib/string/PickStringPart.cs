@@ -126,16 +126,16 @@ namespace T3.Operators.Types.Id_7baaa83d_5c09_42a0_b7bc_35dbcfa5156d
         private string _delimiter;
         
         [Input(Guid = "05d7962b-a02e-4ab5-9927-865375348ccd")]
-        public readonly InputSlot<string> InputText = new InputSlot<string>("Line\nLine");
+        public readonly InputSlot<string> InputText = new("Line\nLine");
 
         [Input(Guid = "5D7184F6-CF46-4CB0-B29F-B3C52B34B634", MappedType = typeof(EntityTypes))]
-        public readonly InputSlot<int> SplitInto = new InputSlot<int>();
+        public readonly InputSlot<int> SplitInto = new();
 
 
         [Input(Guid = "9CB908AD-0800-4B88-B256-C6CC2B84AB6C")]
-        public readonly InputSlot<int> FragmentStart = new InputSlot<int>();
+        public readonly InputSlot<int> FragmentStart = new();
 
         [Input(Guid = "7520DB6D-7855-40E1-BB81-EAD290815435")]
-        public readonly InputSlot<int> FragmentCount = new InputSlot<int>();
+        public readonly InputSlot<int> FragmentCount = new();
     }
 }

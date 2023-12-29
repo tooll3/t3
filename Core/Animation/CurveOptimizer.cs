@@ -203,7 +203,7 @@ namespace T3.Core.Animation
         private List<Curve> _curves;
         private int _maxPositionCount;
 
-        private List<PositionWithImpact> _positionsWithImpact = new List<PositionWithImpact>();
+        private List<PositionWithImpact> _positionsWithImpact = new();
         const double SAMPLE_RATE = 1 / 60.0;
         private double[,] _samplesForCurves;
 

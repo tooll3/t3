@@ -41,13 +41,13 @@ namespace T3.Operators.Types.Id_646f5988_0a76_4996_a538_ba48054fd0ad
         private string _warningMessage, _cachedSource;
 
         [Input(Guid = "78FB7501-74D9-4A27-8DB2-596F25482C87")]
-        public readonly InputSlot<string> Source = new InputSlot<string>();
+        public readonly InputSlot<string> Source = new();
 
         [Input(Guid = "9A8B500E-C3B1-4BE1-8270-202EF3F90793")]
-        public readonly InputSlot<string> EntryPoint = new InputSlot<string>();
+        public readonly InputSlot<string> EntryPoint = new();
 
         [Input(Guid = "C8A59CF8-6612-4D57-BCFD-3AEEA351BA50")]
-        public readonly InputSlot<string> DebugName = new InputSlot<string>();
+        public readonly InputSlot<string> DebugName = new();
 
         #region IShaderOperator implementation
         private IShaderOperator<VertexShaderD3D> ShaderOperatorImpl => this;

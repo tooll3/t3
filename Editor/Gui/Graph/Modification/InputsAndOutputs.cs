@@ -99,7 +99,7 @@ internal static class InputsAndOutputs
         }
 
         private readonly Guid[] _ids;
-        public List<SyntaxNode> NodesToRemove { get; } = new List<SyntaxNode>();
+        public List<SyntaxNode> NodesToRemove { get; } = new();
     }
 
     private class InputNodeByTypeFinder : CSharpSyntaxRewriter
@@ -166,7 +166,7 @@ internal static class InputsAndOutputs
             return node;
         }
 
-        public List<(string, SyntaxNode)> InputNodesFound { get; } = new List<(string, SyntaxNode)>();
+        public List<(string, SyntaxNode)> InputNodesFound { get; } = new();
     }
 
     private class AllInputNodesReplacer : CSharpSyntaxRewriter

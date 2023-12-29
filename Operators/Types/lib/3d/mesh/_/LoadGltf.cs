@@ -22,7 +22,7 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
                           , IDescriptiveFilename
     {
         [Output(Guid = "47588d3a-28fe-4417-9ffc-2e79e59d2540")]
-        public readonly Slot<MeshBuffers> Data = new Slot<MeshBuffers>();
+        public readonly Slot<MeshBuffers> Data = new();
 
         public LoadGltf()
         {
@@ -193,22 +193,22 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
         
 
         private string _lastFilePath;
-        private DataSet _data = new DataSet();
+        private DataSet _data = new();
 
         private class DataSet
         {
-            public readonly MeshBuffers DataBuffers = new MeshBuffers();
+            public readonly MeshBuffers DataBuffers = new();
 
             public Buffer VertexBuffer;
             public PbrVertex[] VertexBufferData = new PbrVertex[0];
-            public readonly BufferWithViews VertexBufferWithViews = new BufferWithViews();
+            public readonly BufferWithViews VertexBufferWithViews = new();
 
             public Buffer IndexBuffer;
             public Int3[] IndexBufferData = new Int3[0];
-            public readonly BufferWithViews IndexBufferWithViews = new BufferWithViews();
+            public readonly BufferWithViews IndexBufferWithViews = new();
         }
 
-        private static readonly Dictionary<string, DataSet> MeshBufferCache = new Dictionary<string, DataSet>();
+        private static readonly Dictionary<string, DataSet> MeshBufferCache = new();
 
         [Input(Guid = "6e0fa62a-a8e1-4d0b-a5b1-80876ff636c0")]
         public readonly InputSlot<string> Path = new();

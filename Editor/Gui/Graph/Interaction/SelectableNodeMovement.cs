@@ -455,7 +455,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             SnappedToLeft,
         }
 
-        public static readonly Vector2 SnapPadding = new Vector2(40, 20);
+        public static readonly Vector2 SnapPadding = new(40, 20);
         public static readonly Vector2 PaddedDefaultOpSize = SymbolChildUi.DefaultOpSize + SnapPadding;
 
         private static readonly Vector2[] _snapOffsetsInCanvas =

@@ -16,7 +16,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
     public class _LenseFlareSprites : Instance<_LenseFlareSprites>
     {
         [Output(Guid = "B26730FF-B1FF-40A7-91AF-B10026ED4C32", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<StructuredList> OutBuffer = new Slot<StructuredList>();
+        public readonly Slot<StructuredList> OutBuffer = new();
 
         public _LenseFlareSprites()
         {
@@ -224,7 +224,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             return d;
         }
 
-        private List<Sprite> _tempList = new List<Sprite>(100);
+        private List<Sprite> _tempList = new(100);
 
         [StructLayout(LayoutKind.Explicit, Size = SizeInBytes)]
         public struct Sprite
@@ -253,7 +253,7 @@ namespace T3.Operators.Types.Id_947ad81e_47da_46c3_9b1d_8e578174d876
             private const int SizeInBytes = 16 * 4;
         }
 
-        private StructuredList<Sprite> _sprites = new StructuredList<Sprite>(10);
+        private StructuredList<Sprite> _sprites = new(10);
 
         // private enum ColorSources
         // {

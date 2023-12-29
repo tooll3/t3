@@ -159,7 +159,7 @@ namespace T3.Editor.Gui.Graph.Interaction.Connections
         }
 
         private static readonly ImageOutputCanvas ImageCanvasForTooltips = new() { DisableDamping = true };
-        private static readonly EvaluationContext EvaluationContext = new EvaluationContext();
+        private static readonly EvaluationContext EvaluationContext = new();
 
         public static PotentialConnectionSplit BestMatchLastFrame;
         private static PotentialConnectionSplit _bestMatchYetForCurrentFrame;

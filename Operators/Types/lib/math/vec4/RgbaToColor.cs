@@ -7,7 +7,7 @@ namespace T3.Operators.Types.Id_82a5f040_926b_4970_9da2_aa36de94b436
     public class RgbaToColor : Instance<RgbaToColor>
     {
         [Output(Guid = "ce1c3293-99ed-4309-b040-92931ee706d1")]
-        public readonly Slot<System.Numerics.Vector4> Result = new Slot<System.Numerics.Vector4>();
+        public readonly Slot<System.Numerics.Vector4> Result = new();
 
         public RgbaToColor()
         {

@@ -48,7 +48,7 @@ namespace T3.Editor.Gui.Windows.Exploration
 
 
         public int GridIndex => Y * VariationGridSize + X;
-        public static GridCell Center = new GridCell(VariationGridSize / 2, VariationGridSize / 2);
+        public static GridCell Center = new(VariationGridSize / 2, VariationGridSize / 2);
         public const int VariationGridSize = 100;
     }
 }

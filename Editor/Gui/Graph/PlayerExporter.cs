@@ -225,9 +225,9 @@ namespace T3.Editor.Gui.Graph
 
         private class ExportInfo
         {
-            private HashSet<Instance> CollectedInstances { get; } = new HashSet<Instance>();
-            public HashSet<Symbol> UniqueSymbols { get; } = new HashSet<Symbol>();
-            public HashSet<string> UniqueResourcePaths { get; } = new HashSet<string>();
+            private HashSet<Instance> CollectedInstances { get; } = new();
+            public HashSet<Symbol> UniqueSymbols { get; } = new();
+            public HashSet<string> UniqueResourcePaths { get; } = new();
 
             public bool AddInstance(Instance instance)
             {

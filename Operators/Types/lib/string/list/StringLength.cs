@@ -7,7 +7,7 @@ namespace T3.Operators.Types.Id_4c496e8d_2a83_4493_a7a4_fdad29ef3f7d
     public class StringLength : Instance<StringLength>
     {
         [Output(Guid = "{C2FA7C57-6A0C-4D33-A70D-5130F3D52798}")]
-        public readonly Slot<int> Length = new Slot<int>();
+        public readonly Slot<int> Length = new();
 
         public StringLength()
         {
@@ -20,6 +20,6 @@ namespace T3.Operators.Types.Id_4c496e8d_2a83_4493_a7a4_fdad29ef3f7d
         }
 
         [Input(Guid = "{5794D63A-3EF7-42C5-B726-E814EA9093E3}")]
-        public readonly InputSlot<string> InputString = new InputSlot<string>();
+        public readonly InputSlot<string> InputString = new();
     }
 }

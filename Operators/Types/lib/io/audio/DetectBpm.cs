@@ -13,10 +13,10 @@ namespace T3.Operators.Types.Id_e712e801_863d_45c5_9ef8_fbe90dcb8375
     public class DetectBpm : Instance<DetectBpm>
     {
         [Output(Guid = "E907A286-BD65-44B5-ACBB-B880CD192348")]
-        public readonly Slot<List<float>> Measurements = new Slot<List<float>>();
+        public readonly Slot<List<float>> Measurements = new();
 
         [Output(Guid = "8f3fae32-e216-4596-9067-c56234fb51e6")]
-        public readonly Slot<float> DetectedBpm = new Slot<float>();
+        public readonly Slot<float> DetectedBpm = new();
 
         public DetectBpm()
         {
@@ -109,7 +109,7 @@ namespace T3.Operators.Types.Id_e712e801_863d_45c5_9ef8_fbe90dcb8375
         private  int _bpmRangeMin = 65;
         private  int _bpmRangeMax = 150;
         //private  int _bpmRangeSteps = bpmRangeMax - bpmRangeMin;
-        private List<float> _bpmEnergies = new List<float>(128);
+        private List<float> _bpmEnergies = new(128);
         private float _lockInFactor = 0;
         
         private float _currentBpm = 122;
@@ -187,29 +187,29 @@ namespace T3.Operators.Types.Id_e712e801_863d_45c5_9ef8_fbe90dcb8375
             return sum;
         }
 
-        private List<float> _buffer = new List<float>(60*60);
+        private List<float> _buffer = new(60*60);
 
         [Input(Guid = "3d2d523e-6578-488c-92fa-9e2a3a773e11")]
-        public readonly InputSlot<int> LowerLimit = new InputSlot<int>(0);
+        public readonly InputSlot<int> LowerLimit = new(0);
 
         [Input(Guid = "25920975-44fd-4959-be50-b895dd3a6493")]
-        public readonly InputSlot<int> UpperLimit = new InputSlot<int>(0);
+        public readonly InputSlot<int> UpperLimit = new(0);
 
         [Input(Guid = "A4763489-0977-4C7E-BACB-89C010D4A12D")]
-        public readonly InputSlot<float> BufferDurationSec = new InputSlot<float>(0);
+        public readonly InputSlot<float> BufferDurationSec = new(0);
 
         [Input(Guid = "D68C056D-7E66-4FE7-8260-7BA43F272DC6")]
-        public readonly InputSlot<int> LowestBpm = new InputSlot<int>(0);
+        public readonly InputSlot<int> LowestBpm = new(0);
 
         [Input(Guid = "17208FFF-AB9A-46AA-AB1C-A1AE426CA5DF")]
-        public readonly InputSlot<int> HighestBpm = new InputSlot<int>(0);
+        public readonly InputSlot<int> HighestBpm = new(0);
 
         [Input(Guid = "F50CD488-9914-491D-9861-621A9C93019D")]
-        public readonly InputSlot<float> LockItFactor = new InputSlot<float>(0);
+        public readonly InputSlot<float> LockItFactor = new(0);
 
         
         [Input(Guid = "7ba20a6a-13f9-47a2-9d46-b8ac59210f08")]
-        public readonly InputSlot<List<float>> FftInput = new InputSlot<List<float>>(new List<float>(20));
+        public readonly InputSlot<List<float>> FftInput = new(new List<float>(20));
 
         private int _bufferLength;
     }

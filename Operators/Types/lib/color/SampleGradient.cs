@@ -10,11 +10,11 @@ namespace T3.Operators.Types.Id_8211249d_7a26_4ad0_8d84_56da72a5c536
     {
         
         [Output(Guid = "963611E7-F55E-4C94-96E6-34E195558A2B")]
-        public readonly Slot<Vector4> Color = new Slot<Vector4>();
+        public readonly Slot<Vector4> Color = new();
 
         
         [Output(Guid = "9F3D0701-86E8-436E-8652-918BA23B2CEF")]
-        public readonly Slot<Gradient> OutGradient = new Slot<Gradient>();
+        public readonly Slot<Gradient> OutGradient = new();
 
 
         public SampleGradient()

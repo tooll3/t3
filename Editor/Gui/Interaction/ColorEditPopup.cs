@@ -864,7 +864,7 @@ namespace T3.Editor.Gui.Interaction
         /// <summary>
         /// Using color swatches doesn't make sense for these operators.
         /// </summary>
-        private static readonly List<string> _ignoredSymbols = new List<string>()
+        private static readonly List<string> _ignoredSymbols = new()
                                                                    {
                                                                        "ColorGrade",
                                                                        "ChannelMixer",

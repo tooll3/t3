@@ -13,7 +13,7 @@ namespace T3.Editor.Gui.Interaction.Camera
     /// clearer but is too long.</remarks>
     public class CameraSetup
     {
-        public Vector3 Position = new Vector3(0, 0, GraphicsMath.DefaultCameraDistance);
+        public Vector3 Position = new(0, 0, GraphicsMath.DefaultCameraDistance);
         public Vector3 Target;
 
         public void Reset()

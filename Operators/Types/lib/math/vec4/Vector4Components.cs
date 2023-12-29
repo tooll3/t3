@@ -8,13 +8,13 @@ namespace T3.Operators.Types.Id_b15e4950_5c72_4655_84bc_c00647319030
     public class Vector4Components : Instance<Vector4Components>
     {
         [Output(Guid = "CFB58526-0053-4BCA-AA85-D83823EFBA96")]
-        public readonly Slot<float> X = new Slot<float>();
+        public readonly Slot<float> X = new();
         [Output(Guid = "2F8E90DD-BA03-43DC-82A2-8D817DF45CC7")]
-        public readonly Slot<float> Y = new Slot<float>();
+        public readonly Slot<float> Y = new();
         [Output(Guid = "162BB4FE-3C59-45C2-97CC-ECBA85C1B275")]
-        public readonly Slot<float> Z = new Slot<float>();
+        public readonly Slot<float> Z = new();
         [Output(Guid = "E1DEDE5F-6963-4BCC-AA12-ABEB819BB5DA")]
-        public readonly Slot<float> W = new Slot<float>();
+        public readonly Slot<float> W = new();
 
         public Vector4Components()
         {
@@ -34,6 +34,6 @@ namespace T3.Operators.Types.Id_b15e4950_5c72_4655_84bc_c00647319030
         }
         
         [Input(Guid = "980EF785-6AE2-44D1-803E-FEBFC75791C5")]
-        public readonly InputSlot<System.Numerics.Vector4> Value = new InputSlot<Vector4>();
+        public readonly InputSlot<System.Numerics.Vector4> Value = new();
     }
 }

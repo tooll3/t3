@@ -84,7 +84,7 @@ namespace T3.Operators.Types.Id_4023bcbf_74a6_4e50_a12e_4c22be5dbbdf
         }
         
         [Input(Guid = "48e9dd6c-87d2-4701-96ab-3971f3150ff1")]
-        public readonly InputSlot<bool> ResetTrigger = new InputSlot<bool>();
+        public readonly InputSlot<bool> ResetTrigger = new();
 
         [Input(Guid = "88D15473-BD02-48CC-A1AF-B822485AB58F")]
         public readonly InputSlot<string> ActiveDataSetId = new();

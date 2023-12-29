@@ -414,7 +414,7 @@ namespace T3.Editor.Gui.Interaction
             }
         }
 
-        private static readonly Color _valueIndicatorColor = new Color(1, 1, 1, 0.06f);
+        private static readonly Color _valueIndicatorColor = new(1, 1, 1, 0.06f);
 
         private enum InputStates
         {

@@ -13,16 +13,16 @@ namespace T3.Operators.Types.Id_a9e77500_ccb5_45b9_9f17_0d9bf9b58fb5
     public class SoundTrackLevels : Instance<SoundTrackLevels>
     {
         [Output(Guid = "CFAD7CDE-8E78-4983-924A-0A50F15EF747", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<float> Level = new Slot<float>();
+        public readonly Slot<float> Level = new();
 
         [Output(Guid = "39EA5257-D6F3-4CCF-B03E-17D98C1E192F", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<float> BeatIndex = new Slot<float>();
+        public readonly Slot<float> BeatIndex = new();
 
         [Output(Guid = "49F89288-3066-4282-8E8D-0828D814A599", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<float> BeatTime = new Slot<float>();
+        public readonly Slot<float> BeatTime = new();
 
         [Output(Guid = "409D628F-2CBE-4BB1-9937-B78203E68489", DirtyFlagTrigger = DirtyFlagTrigger.Always)]
-        public readonly Slot<float> Loudness = new Slot<float>();
+        public readonly Slot<float> Loudness = new();
 
         public SoundTrackLevels()
         {
@@ -289,25 +289,25 @@ namespace T3.Operators.Types.Id_a9e77500_ccb5_45b9_9f17_0d9bf9b58fb5
 
         //>>> _params
         [Input(Guid = "839BAB2B-440F-40E9-A670-723F2A684AA9")]
-        public readonly InputSlot<string> FilePath = new InputSlot<string>(".");
+        public readonly InputSlot<string> FilePath = new(".");
 
         // [Input(Guid = "FE2812F5-1C3F-4560-B6E7-55F0E895AEB2")]
         // public readonly InputSlot<float> Time = new InputSlot<float>();
 
         [Input(Guid = "4EF9500A-DAA4-4979-A03C-306E8E56C2F1")]
-        public readonly InputSlot<float> Threshold = new InputSlot<float>();
+        public readonly InputSlot<float> Threshold = new();
 
         [Input(Guid = "CA11288E-E040-4ED6-BCF4-402B7214861A")]
-        public readonly InputSlot<float> Smooth = new InputSlot<float>();
+        public readonly InputSlot<float> Smooth = new();
 
         [Input(Guid = "B51EF02F-C91B-4FA4-B8A1-2B660CEF5F5E")]
-        public readonly InputSlot<int> BeatTimeMode = new InputSlot<int>();
+        public readonly InputSlot<int> BeatTimeMode = new();
 
         [Input(Guid = "9B510876-F2A4-49F1-ACD2-8CEFB5662A2A")]
-        public readonly InputSlot<float> FlashDecay = new InputSlot<float>();
+        public readonly InputSlot<float> FlashDecay = new();
 
         [Input(Guid = "AE5D1534-7A35-4148-88BD-DB2E353D5FC1")]
-        public readonly InputSlot<float> MinTimeBetweenPeaks = new InputSlot<float>();
+        public readonly InputSlot<float> MinTimeBetweenPeaks = new();
 
     }
 }

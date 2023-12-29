@@ -223,24 +223,19 @@ namespace T3.Operators.Types.Id_b3f34926_e536_439b_b47b_2ab89a0bc94d
         public readonly InputSlot<float> EarthRadius = new();
 
         [Input(Guid = "c0dbc42d-bf79-417b-af75-840611eba4c5")]
-        public readonly InputSlot<System.Numerics.Vector3> Translation =
-            new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<System.Numerics.Vector3> Translation = new();
 
         [Input(Guid = "e6c462ce-52d1-4680-867d-6b1e52bb52cf")]
-        public readonly InputSlot<System.Numerics.Vector3> Rotation =
-            new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<System.Numerics.Vector3> Rotation = new();
 
         [Input(Guid = "97c5c461-c3ee-4385-8057-1f4ec575d52b")]
-        public readonly InputSlot<System.Numerics.Vector3> Scale =
-            new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<System.Numerics.Vector3> Scale = new();
 
         [Input(Guid = "d33bcd6a-b25f-4381-b342-93eb6da6eb68")]
-        public readonly InputSlot<float> UniformScale =
-            new InputSlot<float>();
+        public readonly InputSlot<float> UniformScale = new();
 
         [Input(Guid = "5f6d286d-8583-48ba-a9d2-4cc3af79052d")]
-        public readonly InputSlot<bool> ActivateControl =
-            new InputSlot<bool>();
+        public readonly InputSlot<bool> ActivateControl = new();
     }
     
     // public static class NumericExtensions

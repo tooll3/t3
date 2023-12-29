@@ -82,7 +82,7 @@ namespace T3.Editor.Gui.Windows.Exploration
 
         public static ExplorationVariation Mix(IEnumerable<VariationParameter> variationParameters,
                                     IReadOnlyCollection<Tuple<ExplorationVariation, float>> neighboursAndWeights, float scatter,
-                                    GridCell cell = new GridCell())
+                                    GridCell cell = new())
         {
             // Collect neighbours
             var valuesForParameters = new Dictionary<VariationParameter, InputValue>();
@@ -229,7 +229,7 @@ namespace T3.Editor.Gui.Windows.Exploration
 
         public class VariationParameter
         {
-            public List<Guid> InstanceIdPath = new List<Guid>();
+            public List<Guid> InstanceIdPath = new();
             public Instance Instance => Structure.GetInstanceFromIdPath(InstanceIdPath);
             public SymbolChildUi SymbolChildUi;
             public IInputSlot InputSlot { get; set; }
@@ -246,7 +246,7 @@ namespace T3.Editor.Gui.Windows.Exploration
 
         public readonly Dictionary<VariationParameter, InputValue> ValuesForParameters;
 
-        private static readonly Random Random = new Random();
+        private static readonly Random Random = new();
         private ICommand _changeCommand;
     }
 }

@@ -254,7 +254,7 @@ namespace T3.Editor.Gui.Interaction.Timing
 
         private static double MeasureDuration => _lastBeatDuration * BeatsPerBar * BarsPerMeasure;
         private const int MaxTapsCount = 16;
-        private static readonly List<double> _tapTimes = new List<double>(MaxTapsCount + 1);
+        private static readonly List<double> _tapTimes = new(MaxTapsCount + 1);
         private static int BarsPerMeasure { get; set; } = 4;
         private static int BeatsPerBar { get; set; } = 4;
 

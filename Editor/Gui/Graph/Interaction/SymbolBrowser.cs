@@ -667,14 +667,14 @@ namespace T3.Editor.Gui.Graph.Interaction
             Close();
         }
 
-        private readonly SymbolFilter _filter = new SymbolFilter();
+        private readonly SymbolFilter _filter = new();
 
         public Vector2 PosOnCanvas { get; private set; }
         public Vector2 OutputPositionOnScreen => _posInScreen + _size;
         public bool IsOpen;
 
         private readonly Vector2 _size = SymbolChildUi.DefaultOpSize;
-        private static Vector2 BrowserPositionOffset => new Vector2(0, 40);
+        private static Vector2 BrowserPositionOffset => new(0, 40);
 
         private bool _focusInputNextTime;
         private Vector2 _posInScreen;

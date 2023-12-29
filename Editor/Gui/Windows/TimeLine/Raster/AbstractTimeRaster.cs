@@ -102,7 +102,7 @@ namespace T3.Editor.Gui.Windows.TimeLine.Raster
         }
         #endregion
 
-        private readonly Dictionary<int, double> _usedPositions = new Dictionary<int, double>();
+        private readonly Dictionary<int, double> _usedPositions = new();
         protected List<ScaleRange> ScaleRanges;
         private const double Epsilon = 0.00001f;
 

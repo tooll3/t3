@@ -158,7 +158,7 @@ namespace T3.Editor.Gui.Templates
         }
         
         private TemplateDefinition _selectedTemplate = TemplateDefinition.TemplateDefinitions[0];
-        private static readonly Regex _validResourceFolderPattern = new Regex(@"^Resources\\([A-Za-z_][A-Za-z_\-\d]*)(\\([A-Za-z_][A-Za-z\-_\d]*))*\\?$");
+        private static readonly Regex _validResourceFolderPattern = new(@"^Resources\\([A-Za-z_][A-Za-z_\-\d]*)(\\([A-Za-z_][A-Za-z\-_\d]*))*\\?$");
         
         private string NameSpace => string.IsNullOrEmpty(_newNameSpace) ? $"user.{UserSettings.Config.UserName}.{_newSymbolName}" : _newNameSpace;
         private string ResourceDirectory => string.IsNullOrEmpty(_resourceFolder) ? $"Resources\\user\\{UserSettings.Config.UserName}\\{_newSymbolName}\\" : _resourceFolder;

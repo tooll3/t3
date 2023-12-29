@@ -379,9 +379,9 @@ namespace T3.Editor.Gui.Interaction.Camera
             cam.CameraRoll = 0;
         }
 
-        private static ViewAxis _viewAxis = new ViewAxis();
-        private readonly CameraSetup _smoothedSetup = new CameraSetup();
-        private readonly CameraSetup _intendedSetup = new CameraSetup();
+        private static ViewAxis _viewAxis = new();
+        private readonly CameraSetup _smoothedSetup = new();
+        private readonly CameraSetup _intendedSetup = new();
 
         private static float FrameDurationFactor => (ImGui.GetIO().DeltaTime);
         private bool _manipulatedByMouseWheel;

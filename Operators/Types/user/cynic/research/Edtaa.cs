@@ -18,7 +18,7 @@ namespace T3.Operators.Types.Id_afcd4aad_8c8d_4e59_8e8e_a8c12d312200
     public class Edtaa : Instance<Edtaa>
     {
         [Output(Guid = "aa16dd79-5311-4d97-a939-9a8ea82f5996")]
-        public readonly Slot<Texture2D> Output = new Slot<Texture2D>();
+        public readonly Slot<Texture2D> Output = new();
 
 
         public Edtaa()
@@ -517,9 +517,9 @@ namespace T3.Operators.Types.Id_afcd4aad_8c8d_4e59_8e8e_a8c12d312200
         }
 
         [Input(Guid = "7b091198-57c7-40b3-8b96-2ab8018c9f6f")]
-        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> InputImage = new InputSlot<Texture2D>();
+        public readonly InputSlot<SharpDX.Direct3D11.Texture2D> InputImage = new();
 
         [Input(Guid = "1b3b0049-1ba2-4341-ae4e-cfdd4ddc7d20")]
-        public readonly InputSlot<SharpDX.Direct3D11.ShaderResourceView> InputImageSrv = new InputSlot<SharpDX.Direct3D11.ShaderResourceView>();
+        public readonly InputSlot<SharpDX.Direct3D11.ShaderResourceView> InputImageSrv = new();
     }
 }

@@ -8,7 +8,7 @@ namespace T3.Operators.Types.Id_61c70843_08ea_4249_ba90_9971493e45d1
     public class Cos : Instance<Cos>
     {
         [Output(Guid = "4480F970-9E51-456A-8D66-D501FCA2C15B")]
-        public readonly Slot<float> Result = new Slot<float>();
+        public readonly Slot<float> Result = new();
 
         public Cos()
         {
@@ -21,6 +21,6 @@ namespace T3.Operators.Types.Id_61c70843_08ea_4249_ba90_9971493e45d1
         }
         
         [Input(Guid = "9764EFB1-57A8-48DA-B82E-4DCC2C3CB10A")]
-        public readonly InputSlot<float> Input = new InputSlot<float>();
+        public readonly InputSlot<float> Input = new();
     }
 }

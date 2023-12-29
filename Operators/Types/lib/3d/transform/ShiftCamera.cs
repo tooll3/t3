@@ -8,7 +8,7 @@ namespace T3.Operators.Types.Id_1a8d2a8d_d189_472f_bab3_d645a63c7aff
     public class ShiftCamera : Instance<ShiftCamera>
     {
         [Output(Guid = "4525b575-31ee-4e6a-9f9b-4b0e3127e493")]
-        public readonly Slot<Command> Output = new Slot<Command>();
+        public readonly Slot<Command> Output = new();
         
         public ShiftCamera()
         {

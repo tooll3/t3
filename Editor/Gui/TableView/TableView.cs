@@ -15,7 +15,7 @@ namespace T3.Editor.Gui.TableView
             return Draw(list, Vector2.Zero);
         }
 
-        public static Dictionary<Type, string[]> TypeComponents = new Dictionary<Type, string[]>()
+        public static Dictionary<Type, string[]> TypeComponents = new()
                                                                       {
                                                                           { typeof(Vector2), new[] { ".x", ".y" } },
                                                                           { typeof(Vector3), new[] { ".x", ".y", ".z" } },

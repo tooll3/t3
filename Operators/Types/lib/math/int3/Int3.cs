@@ -20,12 +20,12 @@ namespace T3.Operators.Types.Id_0c2dcf1f_48ff_45aa_a28b_c5900279ce6e
         }
         
         [Input(Guid = "A1B1EA49-4234-4317-A83C-5537273EEC4E")]
-        public readonly InputSlot<int> X = new InputSlot<int>();
+        public readonly InputSlot<int> X = new();
 
         [Input(Guid = "5775E14F-7DF4-4F2E-8712-D2A6E3C10ECF")]
-        public readonly InputSlot<int> Y = new InputSlot<int>();
+        public readonly InputSlot<int> Y = new();
         
         [Input(Guid = "0564CF1C-40A3-40FC-92DD-2E2632EEC37C")]
-        public readonly InputSlot<int> Z = new InputSlot<int>();
+        public readonly InputSlot<int> Z = new();
     }
 }

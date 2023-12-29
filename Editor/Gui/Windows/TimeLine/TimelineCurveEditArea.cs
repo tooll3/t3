@@ -33,7 +33,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             // _curveEditBox = new CurveEditBox(timeLineCanvas, snapHandlerForU);
         }
 
-        private readonly StringBuilder _stringBuilder = new StringBuilder(100);
+        private readonly StringBuilder _stringBuilder = new(100);
         private readonly List<VDefinition> _visibleKeyframes = new(1000);
 
         public void Draw(Instance compositionOp, List<TimeLineCanvas.AnimationParameter> animationParameters, bool fitCurvesVertically = false)
@@ -493,6 +493,6 @@ namespace T3.Editor.Gui.Windows.TimeLine
         private Instance _compositionOp;
         private readonly ValueSnapHandler _snapHandlerU;
         private readonly ValueSnapHandler _snapHandlerV;
-        private readonly Dictionary<int, int> _pinnedParameterComponents = new Dictionary<int, int>();
+        private readonly Dictionary<int, int> _pinnedParameterComponents = new();
     }
 }

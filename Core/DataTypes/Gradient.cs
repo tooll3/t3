@@ -49,7 +49,7 @@ namespace T3.Core.DataTypes
             writer.WriteEndObject();
         }
 
-        public List<Step> Steps { get; set; } = new List<Step>();
+        public List<Step> Steps { get; set; } = new();
         public Interpolations Interpolation { get; set; }
 
         public virtual void Read(JToken inputToken)
@@ -172,13 +172,13 @@ namespace T3.Core.DataTypes
         {
             return new List<Step>
                        {
-                           new Step
+                           new()
                                {
                                    NormalizedPosition = 0,
                                    Color = new Vector4(1, 0, 1, 1),
                                    Id = Guid.NewGuid(),
                                },
-                           new Step
+                           new()
                                {
                                    NormalizedPosition = 1,
                                    Color = new Vector4(0, 0, 1, 1),

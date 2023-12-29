@@ -16,7 +16,7 @@ namespace T3.Operators.Types.Id_a3f64d34_1fab_4230_86b3_1c3deba3f90b
 ,ITransformable
     {
         [Output(Guid = "977ca2f4-cddb-4b9a-82b2-ff66453bbf9b")]
-        public readonly Slot<Command> Output = new Slot<Command>();
+        public readonly Slot<Command> Output = new();
         
         IInputSlot ITransformable.TranslationInput => Translation;
         IInputSlot ITransformable.RotationInput => Rotation;

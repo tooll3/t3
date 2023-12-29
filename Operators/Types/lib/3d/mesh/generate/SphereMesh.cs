@@ -19,7 +19,7 @@ namespace T3.Operators.Types.Id_5fb3dafe_aed4_4fff_a5b9_c144ea023d35
     public class SphereMesh : Instance<SphereMesh>
     {
         [Output(Guid = "322717ef-3a76-4e23-845f-a12a03d73969")]
-        public readonly Slot<MeshBuffers> Data = new Slot<MeshBuffers>();
+        public readonly Slot<MeshBuffers> Data = new();
 
         public SphereMesh()
         {

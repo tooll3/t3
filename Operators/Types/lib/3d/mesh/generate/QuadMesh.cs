@@ -20,7 +20,7 @@ namespace T3.Operators.Types.Id_9d6dbf28_9983_4584_abba_6281ce51d583
     public class QuadMesh : Instance<QuadMesh>
     {
         [Output(Guid = "9c86f704-a28f-4d2a-b7c0-15648f982462")]
-        public readonly Slot<MeshBuffers> Data = new Slot<MeshBuffers>();
+        public readonly Slot<MeshBuffers> Data = new();
 
         public QuadMesh()
         {
@@ -145,31 +145,31 @@ namespace T3.Operators.Types.Id_9d6dbf28_9983_4584_abba_6281ce51d583
 
         private Buffer _vertexBuffer;
         private PbrVertex[] _vertexBufferData = new PbrVertex[0];
-        private readonly BufferWithViews _vertexBufferWithViews = new BufferWithViews();
+        private readonly BufferWithViews _vertexBufferWithViews = new();
 
         private Buffer _indexBuffer;
         private Int3[] _indexBufferData = new Int3[0];
-        private readonly BufferWithViews _indexBufferWithViews = new BufferWithViews();
+        private readonly BufferWithViews _indexBufferWithViews = new();
 
-        private readonly MeshBuffers _data = new MeshBuffers();
+        private readonly MeshBuffers _data = new();
 
         [Input(Guid = "18a5f3be-92a7-438c-b32b-e0da7c7a5736")]
-        public readonly InputSlot<Int2> Segments = new InputSlot<Int2>();
+        public readonly InputSlot<Int2> Segments = new();
         
         [Input(Guid = "0295DD65-95B4-4E02-8D61-4622F59D4FC4")]
-        public readonly InputSlot<Vector2> Stretch = new InputSlot<Vector2>();
+        public readonly InputSlot<Vector2> Stretch = new();
         
         [Input(Guid = "44fc1e7b-b1d1-4199-b373-8b7c4cc060d2")]
-        public readonly InputSlot<float> Scale = new InputSlot<float>();
+        public readonly InputSlot<float> Scale = new();
         
         [Input(Guid = "7F01D9B9-C612-4A2D-A52F-B56C54FB62AF")]
-        public readonly InputSlot<Vector2> Pivot = new InputSlot<Vector2>();
+        public readonly InputSlot<Vector2> Pivot = new();
         
         [Input(Guid = "B2A1C96A-4AEF-412A-B006-2EF285DD2479")]
-        public readonly InputSlot<Vector3> Center = new InputSlot<Vector3>();
+        public readonly InputSlot<Vector3> Center = new();
         
         [Input(Guid = "A89E41BF-5395-41F0-9804-A782ED4C0F30")]
-        public readonly InputSlot<Vector3> Rotation = new InputSlot<System.Numerics.Vector3>();
+        public readonly InputSlot<Vector3> Rotation = new();
         
     }
 }

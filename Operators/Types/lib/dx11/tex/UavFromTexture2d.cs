@@ -11,7 +11,7 @@ namespace T3.Operators.Types.Id_84e02044_3011_4a5e_b76a_c904d9b4557f
     public class UavFromTexture2d : Instance<UavFromTexture2d>
     {
         [Output(Guid = "{83D2DCFD-3850-45D8-BB1B-93FE9C9F4334}")]
-        public readonly Slot<UnorderedAccessView> UnorderedAccessView = new Slot<UnorderedAccessView>();
+        public readonly Slot<UnorderedAccessView> UnorderedAccessView = new();
 
         public UavFromTexture2d()
         {
@@ -48,6 +48,6 @@ namespace T3.Operators.Types.Id_84e02044_3011_4a5e_b76a_c904d9b4557f
         }
 
         [Input(Guid = "{4A4F6830-1809-42C9-91EB-D4DBD0290043}")]
-        public readonly InputSlot<Texture2D> Texture = new InputSlot<Texture2D>();
+        public readonly InputSlot<Texture2D> Texture = new();
     }
 }
