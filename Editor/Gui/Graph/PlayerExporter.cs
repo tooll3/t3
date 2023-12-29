@@ -231,11 +231,7 @@ namespace T3.Editor.Gui.Graph
 
             public bool AddInstance(Instance instance)
             {
-                if (CollectedInstances.Contains(instance))
-                    return false;
-
-                CollectedInstances.Add(instance);
-                return true;
+                return CollectedInstances.Add(instance);
             }
 
             public void AddResourcePath(string path)
@@ -243,13 +239,9 @@ namespace T3.Editor.Gui.Graph
                 UniqueResourcePaths.Add(path);
             }
 
-            public bool AddSymbol(Symbol symbol)
+            public bool TryAddSymbol(Symbol symbol)
             {
-                if (UniqueSymbols.Contains(symbol))
-                    return false;
-
-                UniqueSymbols.Add(symbol);
-                return true;
+                return UniqueSymbols.Add(symbol);
             }
 
             public void PrintInfo()
@@ -286,7 +278,7 @@ namespace T3.Editor.Gui.Graph
 
         private static void CollectChildSymbols(Symbol symbol, ExportInfo exportInfo)
         {
-            if (!exportInfo.AddSymbol(symbol))
+            if (!exportInfo.TryAddSymbol(symbol))
                 return; // already visited
 
             foreach (var symbolChild in symbol.Children)
