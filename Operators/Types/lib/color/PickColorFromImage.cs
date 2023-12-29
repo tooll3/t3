@@ -5,6 +5,7 @@ using T3.Core.Operator.Slots;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
@@ -124,7 +125,9 @@ namespace T3.Operators.Types.Id_42703423_1414_489e_aac2_21a3d7204262
                         break;
 
                     default:
-                        throw new InvalidOperationException($"Can't export unknown texture format {inputImage.Description.Format}");
+                        Log.Warning($"Can't access unknown texture format {inputImage.Description.Format}", this);
+                        color = Color.White;
+                        break;
                 }
 
                 Output.Value = color;
