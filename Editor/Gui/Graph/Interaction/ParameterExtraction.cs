@@ -8,12 +8,6 @@ using T3.Core.Operator.Slots;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Commands.Graph;
 using T3.Editor.UiModel;
-using T3.Operators.Types.Id_5880cbc3_a541_4484_a06a_0e6f77cdbe8e;
-using T3.Operators.Types.Id_5d7d61ae_0a41_4ffa_a51d_93bab665e7fe;
-using T3.Operators.Types.Id_8211249d_7a26_4ad0_8d84_56da72a5c536;
-using T3.Operators.Types.Id_cc07b314_4582_4c2c_84b8_bb32f59fc09b;
-using Vector2 = T3.Operators.Types.Id_926ab3fd_fbaf_4c4b_91bc_af277000dcb8.Vector2;
-using Vector3 = T3.Operators.Types.Id_94a5de3b_ee6a_43d3_8d21_7b8fe94b042b.Vector3;
 
 namespace T3.Editor.Gui.Graph.Interaction;
 
@@ -79,52 +73,30 @@ internal static class ParameterExtraction
 
         // Set type
         var newInstance = composition.Children.Single(child => child.SymbolChildId == newChildUi.Id);
-        var inputsAndValues = new Dictionary<SymbolChild.Input, InputValue>();
 
-        switch (newInstance)
+        if(newInstance is not IExtractable extractable)
         {
-            case Value valueInstance when inputSlot is InputSlot<float> floatInput:
-            {
-                inputsAndValues[valueInstance.Float.Input] = floatInput.TypedInputValue;
-                break;
-            }
-            case IntValue intValueInstance when inputSlot is InputSlot<int> intInput:
-            {
-                inputsAndValues[intValueInstance.Int.Input] = intInput.TypedInputValue;
-                break;
-            }
-
-            case AString stringInstance when inputSlot is InputSlot<string> stringInput:
-            {
-                inputsAndValues[stringInstance.InputString.Input] = stringInput.TypedInputValue;
-                break;
-            }
-
-            case SampleGradient gradientInstance when inputSlot is InputSlot<Gradient> gradientInput:
-            {
-                inputsAndValues[gradientInstance.Gradient.Input] = gradientInput.TypedInputValue;
-                break;
-            }
-                
-            case Vector2 float2ToVector2 when inputSlot is InputSlot<System.Numerics.Vector2> vec2:
-            {
-                inputsAndValues[float2ToVector2.X.Input] = new InputValue<float>(vec2.TypedInputValue.Value.X);
-                inputsAndValues[float2ToVector2.Y.Input] = new InputValue<float>(vec2.TypedInputValue.Value.Y);
-                break;
-            }
-                
-            case Vector3 float3ToVector3 when inputSlot is InputSlot<System.Numerics.Vector3> vec3:
-            {
-                inputsAndValues[float3ToVector3.X.Input] = new InputValue<float>(vec3.TypedInputValue.Value.X);
-                inputsAndValues[float3ToVector3.Y.Input] = new InputValue<float>(vec3.TypedInputValue.Value.Y);
-                inputsAndValues[float3ToVector3.Z.Input] = new InputValue<float>(vec3.TypedInputValue.Value.Z);
-                break;
-            }
+            Log.Warning("Can't extract this parameter type");
+            return;
+        }
+        
+        var inputsAndValues = new Dictionary<SymbolChild.Input, InputValue>();
+        
+        var success = extractable.TryExtractInputsFor(inputSlot, out var extractedInputs);
+        
+        if (!success)
+        {
+            Log.Warning("Failed to find matching types");
+            return;
+        }
+        
+        foreach (var extractedInput in extractedInputs)
+        {
+            inputsAndValues[extractedInput.InstanceInput] = extractedInput.InputValue;
         }
 
         if (inputsAndValues.Count == 0)
         {
-            Log.Warning("Failed to find matching types");
             return;
         }
 
@@ -148,6 +120,7 @@ internal static class ParameterExtraction
         UndoRedoStack.Add(new MacroCommand("Extract as operator", commands));
     }
 
+    // Todo: this should be defined where the types are defined
     private static readonly Dictionary<Type, Guid> _symbolIdsForTypes = new()
                                                                             {
                                                                                 { typeof(float), Guid.Parse("5d7d61ae-0a41-4ffa-a51d-93bab665e7fe") },
