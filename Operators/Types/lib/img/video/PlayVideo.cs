@@ -190,23 +190,31 @@ namespace T3.Operators.Types.Id_914fb032_d7eb_414b_9e09_2bdd7049e049
                 return;
 
             _texture?.Dispose();
-            
+
             var device = ResourceManager.Device;
-            _texture = new Texture2D(device,
-                                     new Texture2DDescription
-                                         {
-                                             ArraySize = 1,
-                                             BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource | BindFlags.UnorderedAccess,
-                                             CpuAccessFlags = CpuAccessFlags.None,
-                                             Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
-                                             Width = size.Width,
-                                             Height = size.Height,
-                                             MipLevels = 0,
-                                             OptionFlags = ResourceOptionFlags.None,
-                                             SampleDescription = new SampleDescription(1, 0),
-                                             Usage = ResourceUsage.Default
-                                         });
-            _textureSize = size;
+            try
+            {
+                _texture = new Texture2D(device,
+                                         new Texture2DDescription
+                                             {
+                                                 ArraySize = 1,
+                                                 BindFlags = BindFlags.RenderTarget | BindFlags.ShaderResource | BindFlags.UnorderedAccess,
+                                                 CpuAccessFlags = CpuAccessFlags.None,
+                                                 Format = SharpDX.DXGI.Format.B8G8R8A8_UNorm,
+                                                 Width = size.Width,
+                                                 Height = size.Height,
+                                                 MipLevels = 0,
+                                                 OptionFlags = ResourceOptionFlags.None,
+                                                 SampleDescription = new SampleDescription(1, 0),
+                                                 Usage = ResourceUsage.Default
+                                             });
+                _textureSize = size;
+            }
+            catch (Exception e)
+            {
+                _errorMessageForStatus = $"Failed to create texture for {size}: {e.Message}";
+                _texture = null;
+            }
         }
 
         private void EnginePlaybackEventHandler(MediaEngineEvent mediaEvent, long param1, int param2)
