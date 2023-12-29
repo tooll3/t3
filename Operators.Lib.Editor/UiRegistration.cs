@@ -5,6 +5,7 @@ using Operators.Utils.Recording;
 using T3.Core.DataTypes.DataSet;
 using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.Interaction.Timing;
+using T3.Editor.Gui.Templates;
 using T3.Operators.Types.Id_2d1c9633_b66e_4958_913c_116ae36963a5;
 
 namespace Operators.Lib.Editor;
@@ -44,5 +45,10 @@ public static class UiRegistration
 
         PlaybackUtils.BpmProvider = BpmProvider.Instance;
         PlaybackUtils.TapProvider = TapProvider.Instance;
+        
+        foreach(var templateDefinition in TemplateDefinitions.Templates)
+        {
+            TemplateDefinition.AddTemplateDefinition(templateDefinition);
+        }
     }
 }
