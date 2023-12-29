@@ -140,7 +140,7 @@ public partial class UiSymbolData : SymbolData
             var modifiedSymbolUis = GetModifiedSymbolUis().ToList();
             Log.Debug($"Saving {modifiedSymbolUis.Count} modified symbols...");
 
-            ResourceFileWatcher.DisableOperatorFileWatcher(); // Don't update ops if file is written during save
+            ResourceFileWatcher.DisableOperatorFileWatcher(Folder); // Don't update ops if file is written during save
 
             var modifiedSymbols = modifiedSymbolUis.Select(symbolUi => symbolUi.Symbol).ToList();
             SaveSymbolDefinitionAndSourceFiles(modifiedSymbols);
@@ -151,7 +151,7 @@ public partial class UiSymbolData : SymbolData
             Log.Warning($"Saving failed. Please try to save manually ({e.Message})");
         }
 
-        ResourceFileWatcher.EnableOperatorFileWatcher();
+        ResourceFileWatcher.EnableOperatorFileWatcher(Folder);
         UnmarkAsSaving();
     }
 
