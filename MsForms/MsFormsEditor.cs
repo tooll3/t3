@@ -16,7 +16,7 @@ public class MsFormsEditor : MsForms, IEditorSystemUiService
         {
             Clipboard.SetText(text, TextDataFormat.UnicodeText);
         }
-        catch (System.Runtime.InteropServices.ExternalException e)
+        catch (System.Runtime.InteropServices.ExternalException)
         {
             // TODO: should log this 
         }
