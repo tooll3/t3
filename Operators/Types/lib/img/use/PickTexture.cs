@@ -2,6 +2,8 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using SharpDX.Direct3D11;
+using T3.Core.Logging;
+using T3.Core.Utils;
 
 namespace T3.Operators.Types.Id_e6070817_cf2e_4430_87e0_bf3dd15afdb5
 {
@@ -21,11 +23,7 @@ namespace T3.Operators.Types.Id_e6070817_cf2e_4430_87e0_bf3dd15afdb5
             if (connections == null || connections.Count == 0)
                 return;
 
-            var index = Index.GetValue(context);
-            if (index < 0)
-                index = -index;
-
-            index %= connections.Count;
+            var index = Index.GetValue(context).Mod(connections.Count);
             Selected.Value = connections[index].GetValue(context);
         }
 

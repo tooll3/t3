@@ -127,6 +127,16 @@ namespace T3.Core.Utils
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Mod(this int val, int repeat)
+        {
+            var x = val % repeat;
+            if (x < 0)
+                x = repeat + x;
+            
+            return x;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float[] ToArray(this Vector2 vec2)
         {
             return new[] { vec2.X, vec2.Y };
