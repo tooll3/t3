@@ -45,7 +45,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.wake", "Operators\User
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.newemka980", "Operators\User.newemka980\User.newemka980.csproj", "{DDB8A7E0-71D6-4E53-8278-DC7F02CFF68E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User", "User\User.csproj", "{5F2955AA-0602-4CFC-8CA9-887BC369EF20}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserTemplate", "UserTemplate\UserTemplate.csproj", "{5F2955AA-0602-4CFC-8CA9-887BC369EF20}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
