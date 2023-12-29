@@ -25,27 +25,16 @@ namespace T3.Operators.Types.Id_9cb4d49e_135b_400b_a035_2b02c5ea6a72
         {
             var contextLocalTime = (float)context.LocalTime;
             var contextLocalFxTime = (float)context.LocalFxTime;
-            
-            float time = 0;
 
-            switch ((Modes)Mode.GetValue(context).Clamp(0,Enum.GetValues(typeof(Modes)).Length))
-            {
-                case Modes.LocalFxTimeInBars:
-                    time = contextLocalFxTime;
-                    break;
-                case Modes.LocalTimeInBars:
-                    time = contextLocalTime;
-                    break;
-                case Modes.LocalTimeInSecs:
-                    time = contextLocalTime * 240 / (float)context.Playback.Bpm;
-                    break;
-                case Modes.PlaybackTimeInBars:
-                    time = (float)context.Playback.TimeInBars;
-                    break;                
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-            
+            var time = Mode.GetEnumValue<Modes>(context) switch
+                           {
+                               Modes.LocalFxTimeInBars  => contextLocalFxTime,
+                               Modes.LocalTimeInBars    => contextLocalTime,
+                               Modes.LocalTimeInSecs    => contextLocalTime * 240 / (float)context.Playback.Bpm,
+                               Modes.PlaybackTimeInBars => (float)context.Playback.TimeInBars,
+                               _                        => throw new ArgumentOutOfRangeException()
+                           };
+
             TimeInBars.Value = time * SpeedFactor.GetValue(context);
             TimeInSecs.Value = (float)context.Playback.TimeInSecs * SpeedFactor.GetValue(context);
         }
