@@ -44,7 +44,8 @@ namespace T3.Editor.Gui.Graph.Modification
             var modifiedSymbols = OperatorResource.UpdateChangedOperatorTypes();
             foreach (var symbol in modifiedSymbols)
             {
-                UiSymbolData.UpdateUiEntriesForSymbol(symbol);
+                var uiSymbolData = (UiSymbolData)symbol.SymbolData;
+                uiSymbolData.UpdateUiEntriesForSymbol(symbol);
                 symbol.CreateAnimationUpdateActionsForSymbolInstances();
             }
         }

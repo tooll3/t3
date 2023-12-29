@@ -12,6 +12,7 @@
       <PackageReference Include="JeremyAnsel.Media.Dds" Version="2.0.4" />
       <PackageReference Include="ManagedBass" Version="3.1.1" />
       <PackageReference Include="ManagedBass.Wasapi" Version="3.1.1" />
+      <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.7.0-1.final" />
       <PackageReference Include="NAudio.Midi" Version="2.2.1" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="SharpDX.D3DCompiler" Version="4.2.0" />

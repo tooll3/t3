@@ -58,7 +58,7 @@ namespace T3.Editor.Gui.Graph
                      .UniqueSymbols
                      .Select(symbol =>
                              {
-                                 var filePathForSymbol = SymbolData.BuildFilepathForSymbol(symbol,
+                                 var filePathForSymbol = symbol.SymbolData.BuildFilepathForSymbol(symbol,
                                                                                            SymbolData.SourceExtension);
 
                                  if (!File.Exists(filePathForSymbol))
