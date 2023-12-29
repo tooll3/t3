@@ -21,7 +21,7 @@ namespace T3.Operators.Types.Id_e8d94dd7_eb54_42fe_a7b1_b43543dd457e
     public class LoadSvg : Instance<LoadSvg>
     {
         [Output(Guid = "e21e3843-7d63-4db2-9234-77664e872a0f")]
-        public readonly Slot<StructuredList> ResultList = new Slot<StructuredList>();
+        public readonly Slot<StructuredList> ResultList = new();
 
         public LoadSvg()
         {

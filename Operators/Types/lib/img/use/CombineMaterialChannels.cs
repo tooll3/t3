@@ -26,7 +26,7 @@ namespace T3.Operators.Types.Id_085b7841_9502_4b49_896e_3b1fa023f1bf
         public readonly InputSlot<bool> GenerateMips = new();
 
         [Input(Guid = "099eae25-7cca-4da2-956f-c1a5bd67e764")]
-        public readonly InputSlot<T3.Core.DataTypes.Curve> RemapRoughness = new InputSlot<T3.Core.DataTypes.Curve>();
+        public readonly InputSlot<T3.Core.DataTypes.Curve> RemapRoughness = new();
     }
 }
 

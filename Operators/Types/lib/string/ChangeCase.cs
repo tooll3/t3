@@ -8,7 +8,7 @@ namespace T3.Operators.Types.Id_acdd78b1_4e66_4fd0_a36b_5318670fefd4
     public class ChangeCase : Instance<ChangeCase>
     {
         [Output(Guid = "ecf66a1e-45e5-4e0c-ac9e-a784a9339153")]
-        public readonly Slot<string> Result = new Slot<string>();
+        public readonly Slot<string> Result = new();
 
         public ChangeCase()
         {
@@ -31,7 +31,7 @@ namespace T3.Operators.Types.Id_acdd78b1_4e66_4fd0_a36b_5318670fefd4
         }
 
         [Input(Guid = "041C98B6-4450-46D7-9DAE-C9030C88B9E6")]
-        public readonly InputSlot<string> InputText = new InputSlot<string>();
+        public readonly InputSlot<string> InputText = new();
 
         [Input(Guid = "8BD38031-DE22-40A8-9B6D-A241B2FCD7F2", MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new ();

@@ -24,8 +24,8 @@ namespace T3.Editor.Gui.UiHelpers
         
         public class ConfigData
         {
-            public readonly Dictionary<Guid, ScalableCanvas.Scope> OperatorViewSettings = new Dictionary<Guid, ScalableCanvas.Scope>();
-            public readonly Dictionary<string, Guid> LastOpsForWindows = new Dictionary<string, Guid>();
+            public readonly Dictionary<Guid, ScalableCanvas.Scope> OperatorViewSettings = new();
+            public readonly Dictionary<string, Guid> LastOpsForWindows = new();
 
             [JsonConverter(typeof(StringEnumConverter))]
             public GraphCanvas.HoverModes HoverMode = GraphCanvas.HoverModes.LastValue;

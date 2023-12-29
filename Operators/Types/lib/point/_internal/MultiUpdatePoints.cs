@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_62c89469_7194_486a_87cd_c3e6bc0cf5d2
     public class MultiUpdatePoints : Instance<MultiUpdatePoints>
     {
         [Output(Guid = "5556392D-8884-4922-B5AD-AFA474E36C02")]
-        public readonly Slot<BufferWithViews> Result = new Slot<BufferWithViews>();
+        public readonly Slot<BufferWithViews> Result = new();
         
         
         public MultiUpdatePoints()
@@ -45,6 +45,6 @@ namespace T3.Operators.Types.Id_62c89469_7194_486a_87cd_c3e6bc0cf5d2
 
 
         [Input(Guid = "7CAA2F8C-64E1-4941-BD1C-8BDC89584BA7")]
-        public readonly MultiInputSlot<BufferWithViews> PointBuffers = new MultiInputSlot<BufferWithViews>();
+        public readonly MultiInputSlot<BufferWithViews> PointBuffers = new();
     }
 }

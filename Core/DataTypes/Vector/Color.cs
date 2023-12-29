@@ -146,14 +146,14 @@ public struct Color
     /// <remark>
     /// Avoid using these colors because they don't support theming.
     /// </remark>
-    public static readonly Color Transparent = new Color(1f, 1f, 1f, 0f);
+    public static readonly Color Transparent = new(1f, 1f, 1f, 0f);
 
-    public static readonly Color TransparentBlack = new Color(0f, 0f, 0f, 0f);
-    public static readonly Color White = new Color(1f, 1f, 1f, 1f);
-    public static readonly Color Black = new Color(0, 0, 0, 1f);
-    public static readonly Color Red = new Color(1f, 0.2f, 0.2f, 1f);
-    public static readonly Color Green = new Color(0.2f, 0.9f, 0.2f, 1f);
-    public static readonly Color Blue = new Color(0.4f, 0.5f, 1f, 1);
+    public static readonly Color TransparentBlack = new(0f, 0f, 0f, 0f);
+    public static readonly Color White = new(1f, 1f, 1f, 1f);
+    public static readonly Color Black = new(0, 0, 0, 1f);
+    public static readonly Color Red = new(1f, 0.2f, 0.2f, 1f);
+    public static readonly Color Green = new(0.2f, 0.9f, 0.2f, 1f);
+    public static readonly Color Blue = new(0.4f, 0.5f, 1f, 1);
     public static readonly Color Orange = new(1, 0.5f, 0);
     public static readonly Color Yellow = new(1, 1, 0);
     public static readonly Color Cyan = new(0, 1, 1);

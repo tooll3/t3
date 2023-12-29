@@ -19,7 +19,7 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
     public class LoadObj : Instance<LoadObj>, IDescriptiveFilename, IStatusProvider
     {
         [Output(Guid = "1F4E7CAC-1F62-4633-B0F3-A3017A026753")]
-        public readonly Slot<MeshBuffers> Data = new Slot<MeshBuffers>();
+        public readonly Slot<MeshBuffers> Data = new();
 
         public LoadObj()
         {
@@ -157,7 +157,7 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
         private bool _sourceFileChanged;
         private string _lastFilePath;
         private ObjMesh.SortDirections _lastSorting;
-        private MeshDataSet _meshData = new MeshDataSet();
+        private MeshDataSet _meshData = new();
 
         private class MeshDataSet
         {

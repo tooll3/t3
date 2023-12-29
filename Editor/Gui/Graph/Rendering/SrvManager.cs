@@ -66,6 +66,6 @@ namespace T3.Editor.Gui.Graph.Rendering
         /// <summary>
         /// Todo: optimize this by disposing obsolete SRVs
         /// </summary>
-        private static Dictionary<Texture2D, ShaderResourceView> _srvForTextures = new Dictionary<Texture2D, ShaderResourceView>();
+        private static Dictionary<Texture2D, ShaderResourceView> _srvForTextures = new();
     }
 }

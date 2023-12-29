@@ -262,7 +262,7 @@ namespace T3.Operators.Types.Id_04c1a6dc_3042_48a8_81d2_0a5a162016dc
 
         private MediaEngine _engine;
         private DXGIDeviceManager _dxgiDeviceManager;
-        private Int2 _size = new Int2(0, 0);
+        private Int2 _size = new(0, 0);
 
         private string _url;
         private Texture2D _texture;

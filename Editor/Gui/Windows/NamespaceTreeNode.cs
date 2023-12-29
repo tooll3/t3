@@ -11,7 +11,7 @@ namespace T3.Editor.Gui.Windows
     public class NamespaceTreeNode
     {
         public string Name { get; private set; }
-        public List<NamespaceTreeNode> Children { get; } = new List<NamespaceTreeNode>();
+        public List<NamespaceTreeNode> Children { get; } = new();
         private NamespaceTreeNode Parent { get; }
 
         public NamespaceTreeNode(string name, NamespaceTreeNode parent = null)

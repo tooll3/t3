@@ -49,9 +49,9 @@ namespace T3.Operators.Types.Id_1de7b1be_cab6_4beb_a837_4c817562efb2
         }
         
         [Input(Guid = "e35d2024-704e-42b4-8835-a53fa439a2bc")]
-        public readonly InputSlot<int> ItemIndex = new InputSlot<int>();
+        public readonly InputSlot<int> ItemIndex = new();
 
         [Input(Guid = "b478510f-eb33-4cf0-be0c-80ecea34e40d")]
-        public readonly InputSlot<StructuredList> DataList = new InputSlot<StructuredList>();
+        public readonly InputSlot<StructuredList> DataList = new();
     }
 }

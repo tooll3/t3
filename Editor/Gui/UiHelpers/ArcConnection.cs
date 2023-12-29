@@ -10,7 +10,7 @@ namespace T3.Editor.Gui.UiHelpers
 {
     static class ArcConnection
     {
-        private static readonly Color OutlineColor = new Color(0.1f, 0.1f, 0.1f, 0.6f);
+        private static readonly Color OutlineColor = new(0.1f, 0.1f, 0.1f, 0.6f);
 
         /// <summary>
         /// Draws an arc connection line.

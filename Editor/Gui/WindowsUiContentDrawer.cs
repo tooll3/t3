@@ -548,7 +548,7 @@ public class WindowsUiContentDrawer : IUiContentDrawer<Device, ImDrawDataPtr>
     private BlendState _blendState;
     private DepthStencilState _depthStencilState;
     private int _vertexBufferSize = 5000, _indexBufferSize = 1000;
-    private readonly Dictionary<IntPtr, ShaderResourceView> _srvCache = new Dictionary<IntPtr, ShaderResourceView>();
+    private readonly Dictionary<IntPtr, ShaderResourceView> _srvCache = new();
 
     private int _windowWidth;
     private int _windowHeight;

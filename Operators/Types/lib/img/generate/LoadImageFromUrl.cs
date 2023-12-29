@@ -16,10 +16,10 @@ namespace T3.Operators.Types.Id_61ec6355_bd7d_4abb_aa44_b01b7d658e23
     public class LoadImageFromUrl : Instance<LoadImageFromUrl>
     {
         [Output(Guid = "316fe874-5178-4068-a233-6c6ecf70c49e")]
-        public readonly Slot<Texture2D> Texture = new Slot<Texture2D>();
+        public readonly Slot<Texture2D> Texture = new();
 
         [Output(Guid = "a843ab64-0b99-4c4f-9644-cc9bb771981d")]
-        public readonly Slot<ShaderResourceView> ShaderResourceView = new Slot<ShaderResourceView>();
+        public readonly Slot<ShaderResourceView> ShaderResourceView = new();
 
         public LoadImageFromUrl()
         {

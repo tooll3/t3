@@ -146,7 +146,7 @@ namespace Truncon.Collections
         /// <summary>
         /// Gets the keys in the dictionary in the order they were added.
         /// </summary>
-        public KeyCollection Keys => new KeyCollection(this.dictionary);
+        public KeyCollection Keys => new(this.dictionary);
 
         /// <summary>
         /// Removes the key/value pair with the given key from the dictionary.
@@ -205,7 +205,7 @@ namespace Truncon.Collections
         /// <summary>
         /// Gets the values in the dictionary.
         /// </summary>
-        public ValueCollection Values => new ValueCollection(values);
+        public ValueCollection Values => new(values);
 
         /// <summary>
         /// Gets or sets the value at the given index.

@@ -223,7 +223,7 @@ namespace T3.Core.DataTypes
             _state.Read(inputToken);
         }
 
-        private CurveState _state = new CurveState();
+        private CurveState _state = new();
 
         public static void UpdateCurveBoolValue(Curve curves, double time, bool value)
         {

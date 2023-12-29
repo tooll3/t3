@@ -20,7 +20,7 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
     public class CylinderMesh : Instance<CylinderMesh>
     {
         [Output(Guid = "b4bed6e3-bef5-4601-99bd-f85bf1a956f5")]
-        public readonly Slot<MeshBuffers> Data = new Slot<MeshBuffers>();
+        public readonly Slot<MeshBuffers> Data = new();
 
         public CylinderMesh()
         {
@@ -279,46 +279,46 @@ namespace T3.Operators.Types.Id_5777a005_bbae_48d6_b633_5e998ca76c91
 
         private Buffer _vertexBuffer;
         private PbrVertex[] _vertexBufferData = new PbrVertex[0];
-        private readonly BufferWithViews _vertexBufferWithViews = new BufferWithViews();
+        private readonly BufferWithViews _vertexBufferWithViews = new();
 
         private Buffer _indexBuffer;
         private Int3[] _indexBufferData = new Int3[0];
-        private readonly BufferWithViews _indexBufferWithViews = new BufferWithViews();
+        private readonly BufferWithViews _indexBufferWithViews = new();
 
-        private readonly MeshBuffers _data = new MeshBuffers();
+        private readonly MeshBuffers _data = new();
 
         [Input(Guid = "66332A91-E0C2-442A-99F6-347DEDAED72E")]
-        public readonly InputSlot<Vector3> Center = new InputSlot<Vector3>();
+        public readonly InputSlot<Vector3> Center = new();
 
         [Input(Guid = "8d290afb-2574-4afa-a545-a0d3588f89f6")]
-        public readonly InputSlot<float> Radius = new InputSlot<float>();
+        public readonly InputSlot<float> Radius = new();
 
         [Input(Guid = "4C91B66C-670D-45FF-94CC-01D1A68CD040")]
-        public readonly InputSlot<float> RadiusOffset = new InputSlot<float>();
+        public readonly InputSlot<float> RadiusOffset = new();
 
         [Input(Guid = "57f3310c-6ed2-4a52-af72-43e083f73360")]
-        public readonly InputSlot<float> Height = new InputSlot<float>();
+        public readonly InputSlot<float> Height = new();
 
         [Input(Guid = "4DD4C4F0-C6B7-4EE8-92E2-CB8DF6131E0A")]
-        public readonly InputSlot<int> Rows = new InputSlot<int>();
+        public readonly InputSlot<int> Rows = new();
 
         [Input(Guid = "321693A5-4E2C-47A0-A42E-95CBDC6EBF80")]
-        public readonly InputSlot<int> Columns = new InputSlot<int>();
+        public readonly InputSlot<int> Columns = new();
 
         [Input(Guid = "C29B5881-85BC-4D29-BC72-6DD36730FA8F")]
-        public readonly InputSlot<float> Spin = new InputSlot<float>();
+        public readonly InputSlot<float> Spin = new();
 
         [Input(Guid = "1D1CE8C4-FD3C-4D69-BE0E-679247A811C9")]
-        public readonly InputSlot<float> Twist = new InputSlot<float>();
+        public readonly InputSlot<float> Twist = new();
 
         [Input(Guid = "91FD4FBF-1CEC-4D89-8014-CEED0021A5EE")]
-        public readonly InputSlot<float> Fill = new InputSlot<float>();
+        public readonly InputSlot<float> Fill = new();
 
         [Input(Guid = "6DDF5966-9140-4BEA-A56B-20690F9F436F")]
-        public readonly InputSlot<float> BasePivot = new InputSlot<float>();
+        public readonly InputSlot<float> BasePivot = new();
 
         [Input(Guid = "DB5E3C51-5765-44D8-A61B-A7B552FCE5B3")]
-        public readonly InputSlot<int> CapSegments = new InputSlot<int>();
+        public readonly InputSlot<int> CapSegments = new();
         
         [Input(Guid = "4C7E0F67-A35B-4A23-B640-B0375C1A3259")]
         public readonly InputSlot<Vector3> Rotation = new();

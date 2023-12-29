@@ -14,7 +14,7 @@ namespace T3.Operators.Types.Id_c2078514_cf1d_439c_a732_0d7b31b5084a
     public class SrvFromTexture2d : Instance<SrvFromTexture2d>
     {
         [Output(Guid = "{DC71F39F-3FBA-4FC6-B8EF-CE57C82BF78E}")]
-        public readonly Slot<ShaderResourceView> ShaderResourceView = new Slot<ShaderResourceView>();
+        public readonly Slot<ShaderResourceView> ShaderResourceView = new();
 
         public SrvFromTexture2d()
         {
@@ -69,6 +69,6 @@ namespace T3.Operators.Types.Id_c2078514_cf1d_439c_a732_0d7b31b5084a
         private bool _complainedOnce = false;
 
         [Input(Guid = "{D5AFA102-2F88-431E-9CD4-AF91E41F88F6}")]
-        public readonly InputSlot<Texture2D> Texture = new InputSlot<Texture2D>();
+        public readonly InputSlot<Texture2D> Texture = new();
     }
 }

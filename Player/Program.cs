@@ -42,7 +42,7 @@ namespace T3.Player
             [Option(Default = 1080, Required = false, HelpText = "Defines the height")]
             public int Height { get; set; }
 
-            public Size Size => new Size(Width, Height);
+            public Size Size => new(Width, Height);
 
             [Option(Default = false, Required = false, HelpText = "Run in windowed mode")]
             public bool Windowed { get; set; }

@@ -1178,7 +1178,7 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private readonly List<ISelectableCanvasObject> _selectableItems = new List<ISelectableCanvasObject>();
+        private readonly List<ISelectableCanvasObject> _selectableItems = new();
         #endregion
 
         #region public API
@@ -1204,7 +1204,7 @@ namespace T3.Editor.Gui.Graph
         public static readonly LibWarningDialog LibWarningDialog = new();
 
         private List<SymbolChildUi> ChildUis { get; set; }
-        public readonly SymbolBrowser SymbolBrowser = new SymbolBrowser();
+        public readonly SymbolBrowser SymbolBrowser = new();
         private string _symbolNameForDialogEdits = "";
         private string _symbolDescriptionForDialog = "";
         private string _nameSpaceForDialogEdits = "";

@@ -82,7 +82,7 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
             return modified;
         }
 
-        private static readonly Color _hoverRegionColor = new Color(0, 0, 0, 0.2f);
+        private static readonly Color _hoverRegionColor = new(0, 0, 0, 0.2f);
         private static Vector2 _jogDailCenter;
         private static InputSlot<float> _jogDialValue;        
     }

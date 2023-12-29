@@ -186,7 +186,7 @@ namespace T3.Editor.Gui.Windows
         }
 
         private bool _isPinned;
-        private List<Guid> _pinnedInstancePath = new List<Guid>();
-        private List<Guid> _pinnedEvaluationInstancePath = new List<Guid>();
+        private List<Guid> _pinnedInstancePath = new();
+        private List<Guid> _pinnedEvaluationInstancePath = new();
     }
 }

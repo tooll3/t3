@@ -171,7 +171,7 @@ namespace T3.Editor.Gui.Windows.TimeLine
             public float LabelOpacity { get; set; }
         }
 
-        readonly Dictionary<int, double> _usedPositions = new Dictionary<int, double>();
+        readonly Dictionary<int, double> _usedPositions = new();
         //private List<DrawingVisual> m_Children = new List<DrawingVisual>();
         //private DrawingVisual m_DrawingVisual;
         public SnapResult CheckForSnap(double value, float canvasScale) {

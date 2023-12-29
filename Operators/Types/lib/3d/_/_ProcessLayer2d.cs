@@ -17,7 +17,7 @@ namespace T3.Operators.Types.Id_d8699da1_13aa_42f7_816a_88abb1d0ba06
     public class _ProcessLayer2d : Instance<_ProcessLayer2d>
     {
         [Output(Guid = "D81A2DB8-D72D-48B1-9201-0EE87822097E", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<Vector4[]> Result = new Slot<Vector4[]>();
+        public readonly Slot<Vector4[]> Result = new();
         
         public _ProcessLayer2d()
         {

@@ -8,7 +8,7 @@ namespace T3.Operators.Types.Id_c6d50423_54ea_4c9d_b547_eb78cc2c950c
     public class ScaleSize : Instance<ScaleSize>
     {
         [Output(Guid = "c2c27def-70f2-4f07-9796-11b62e5329e2")]
-        public readonly Slot<Int2> Result = new Slot<Int2>();
+        public readonly Slot<Int2> Result = new();
         
         
         public ScaleSize()
@@ -25,10 +25,10 @@ namespace T3.Operators.Types.Id_c6d50423_54ea_4c9d_b547_eb78cc2c950c
         }
         
         [Input(Guid = "DDCEB7DF-1C6F-4545-9669-B1B4A80E75E8")]
-        public readonly InputSlot<Int2> InputSize = new InputSlot<Int2>();
+        public readonly InputSlot<Int2> InputSize = new();
         
         [Input(Guid = "133BBC5A-BDBF-4993-BD1A-878EC93EE04F")]
-        public readonly InputSlot<float> Factor = new InputSlot<float>();
+        public readonly InputSlot<float> Factor = new();
         
     }
 }

@@ -32,7 +32,7 @@ namespace T3.Editor.App
         internal RenderTargetView RenderTargetView { get => _renderTargetView; private set => _renderTargetView = value; }
         internal ImGuiDx11RenderForm Form { get; private set; }
 
-        internal SwapChainDescription SwapChainDescription => new SwapChainDescription()
+        internal SwapChainDescription SwapChainDescription => new()
                                                                                        {
                                                                                            BufferCount = 3,
                                                                                            ModeDescription = new ModeDescription(Width,

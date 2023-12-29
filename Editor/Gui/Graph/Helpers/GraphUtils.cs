@@ -47,7 +47,7 @@ internal static class GraphUtils
                && !SymbolRegistry.Entries.Values.Any(value => string.Equals(value.Name, newSymbolName, StringComparison.OrdinalIgnoreCase));
     }
 
-    private static readonly Regex _validTypeNamePattern = new Regex("^[A-Za-z_]+[A-Za-z0-9_]*$");
+    private static readonly Regex _validTypeNamePattern = new("^[A-Za-z_]+[A-Za-z0-9_]*$");
 
     public static bool IsNameSpaceValid(string nameSpaceString)
     {
@@ -55,12 +55,12 @@ internal static class GraphUtils
                && _validTypeNameSpacePattern.IsMatch(nameSpaceString);
     }
 
-    private static readonly Regex _validTypeNameSpacePattern = new Regex(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$");
+    private static readonly Regex _validTypeNameSpacePattern = new(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$");
 
     public static bool IsValidUserName(string userName)
     {
         return _validUserNamePattern.IsMatch(userName);
     }
 
-    private static readonly Regex _validUserNamePattern = new Regex("^[A-Za-z0-9_]+$");
+    private static readonly Regex _validUserNamePattern = new("^[A-Za-z0-9_]+$");
 }

@@ -193,9 +193,9 @@ namespace T3.Editor.Gui.Windows
         {
             // Fixme: Deserialization doesn't work and results into new (incorrect) random Ids
             //[JsonConverter(typeof(List<Guid>))]
-            public List<Guid> IdPath = new List<Guid>();
+            public List<Guid> IdPath = new();
             public ScalableCanvas.Scope ViewScope;
-            public List<Guid> SelectedChildIds = new List<Guid>();
+            public List<Guid> SelectedChildIds = new();
         }
 
 

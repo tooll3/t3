@@ -53,7 +53,7 @@ public class T3Ui
     }
 
     public static readonly Playback DefaultTimelinePlayback = new();
-    public static readonly BeatTimingPlayback DefaultBeatTimingPlayback = new BeatTimingPlayback();
+    public static readonly BeatTimingPlayback DefaultBeatTimingPlayback = new();
         
     private void InitializeAfterAppWindowReady()
     {
@@ -393,8 +393,8 @@ public class T3Ui
             
     }
         
-    private static readonly object _saveLocker = new object();
-    private static readonly Stopwatch _saveStopwatch = new Stopwatch();
+    private static readonly object _saveLocker = new();
+    private static readonly Stopwatch _saveStopwatch = new();
 
     private static void SaveInBackground(bool saveAll)
     {
@@ -491,7 +491,7 @@ public class T3Ui
 
     public static readonly UiSymbolData UiSymbolData;
     
-    public static IntPtr NotDroppingPointer = new IntPtr(0);
+    public static IntPtr NotDroppingPointer = new(0);
     public static bool DraggingIsInProgress = false;
     public static bool MouseWheelFieldHovered { private get; set; }
     public static bool MouseWheelFieldWasHoveredLastFrame { get; private set; }

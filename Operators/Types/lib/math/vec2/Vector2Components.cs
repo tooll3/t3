@@ -7,9 +7,9 @@ namespace T3.Operators.Types.Id_0946c48b_85d8_4072_8f21_11d17cc6f6cf
     public class Vector2Components : Instance<Vector2Components>
     {
         [Output(Guid = "1cee5adb-8c3c-4575-bdd6-5669c04d55ce")]
-        public readonly Slot<float> X = new Slot<float>();
+        public readonly Slot<float> X = new();
         [Output(Guid = "305d321d-3334-476a-9fa3-4847912a4c58")]
-        public readonly Slot<float> Y = new Slot<float>();
+        public readonly Slot<float> Y = new();
 
         public Vector2Components()
         {
@@ -25,7 +25,7 @@ namespace T3.Operators.Types.Id_0946c48b_85d8_4072_8f21_11d17cc6f6cf
         }
 
         [Input(Guid = "36F14238-5BB8-4521-9533-F4D1E8FB802B")]
-        public readonly InputSlot<System.Numerics.Vector2> Value = new InputSlot<System.Numerics.Vector2>();
+        public readonly InputSlot<System.Numerics.Vector2> Value = new();
 
     }
 }

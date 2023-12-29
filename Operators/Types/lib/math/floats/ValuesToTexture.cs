@@ -16,7 +16,7 @@ namespace T3.Operators.Types.Id_55cc0f79_96c9_482e_9794_934dc0f87708
     public class ValuesToTexture : Instance<ValuesToTexture>
     {
         [Output(Guid = "f01099a0-a196-4689-9900-edac07908714")]
-        public readonly Slot<Texture2D> CurveTexture = new Slot<Texture2D>();
+        public readonly Slot<Texture2D> CurveTexture = new();
 
         public ValuesToTexture()
         {

@@ -22,9 +22,9 @@ namespace T3.Operators.Types.Id_4af1080c_3133_4070_a440_4cf2f4cc10a1
 
 
         [Input(Guid = "eecb6054-ecb8-4b22-a685-6740ed1cfe5c")]
-        public readonly InputSlot<Vector3> Input1 = new InputSlot<Vector3>();
+        public readonly InputSlot<Vector3> Input1 = new();
 
         [Input(Guid = "c4094f11-d93d-4497-b1ce-1faa8bc1d1b0")]
-        public readonly InputSlot<Vector3> Input2 = new InputSlot<Vector3>();
+        public readonly InputSlot<Vector3> Input2 = new();
     }
 }

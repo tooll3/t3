@@ -9,7 +9,7 @@ namespace T3.Operators.Types.Id_04d0d6d7_8c40_4d18_aa44_6806c51fe139
     public class StringRepeat : Instance<StringRepeat>
     {
         [Output(Guid = "568d04ca-3b13-4ed3-93f9-f0fbf804d96e")]
-        public readonly Slot<string> Result = new Slot<string>();
+        public readonly Slot<string> Result = new();
 
         public StringRepeat()
         {
@@ -31,11 +31,11 @@ namespace T3.Operators.Types.Id_04d0d6d7_8c40_4d18_aa44_6806c51fe139
         }
         
         [Input(Guid = "3804f72d-7541-4877-a417-d029a20035d8")]
-        public readonly InputSlot<string> Fragment = new InputSlot<string>();
+        public readonly InputSlot<string> Fragment = new();
         
         
         [Input(Guid = "DA681B55-9537-4D86-B31A-38223CC0BC71")]
-        public readonly InputSlot<int> Count = new InputSlot<int>();
+        public readonly InputSlot<int> Count = new();
         
     }
 }

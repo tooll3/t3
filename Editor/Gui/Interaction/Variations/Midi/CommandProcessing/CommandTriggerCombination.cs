@@ -197,10 +197,10 @@ namespace T3.Editor.Gui.Interaction.Variations.Midi.CommandProcessing
         }
 
         // ReSharper disable InconsistentNaming
-        private static readonly List<int> _activatedIndices = new List<int>(10);
-        private static readonly List<int> _releasedIndices = new List<int>(10);
-        private static readonly List<int> _justPressedIndices = new List<int>(10);
-        private static readonly List<int> _holdIndices = new List<int>(10);
+        private static readonly List<int> _activatedIndices = new(10);
+        private static readonly List<int> _releasedIndices = new(10);
+        private static readonly List<int> _justPressedIndices = new(10);
+        private static readonly List<int> _holdIndices = new(10);
 
         private readonly ButtonRange[] _keyRanges;
         private readonly AbstractMidiDevice.InputModes _requiredInputMode;

@@ -129,7 +129,7 @@ namespace T3.Editor.Gui.Interaction.WithCurves
         }
 
         private MacroCommand _macro;
-        private readonly List<ICommand> _commands = new List<ICommand>();
+        private readonly List<ICommand> _commands = new();
         
         public ICommand StartDragCommand()
         {
@@ -209,13 +209,13 @@ namespace T3.Editor.Gui.Interaction.WithCurves
             }
         }
 
-        protected readonly List<ITimeObjectManipulation> TimeObjectManipulators = new List<ITimeObjectManipulation>();
+        protected readonly List<ITimeObjectManipulation> TimeObjectManipulators = new();
         #endregion
         
         protected SelectionFence.States FenceState;
         
-        public readonly ValueSnapHandler SnapHandlerForU = new ValueSnapHandler();
-        public readonly ValueSnapHandler SnapHandlerForV = new ValueSnapHandler();
+        public readonly ValueSnapHandler SnapHandlerForU = new();
+        public readonly ValueSnapHandler SnapHandlerForV = new();
         protected ImDrawListPtr Drawlist;
     }
 }

@@ -45,6 +45,6 @@ namespace T3.Editor.Gui.ChildUi
             return SymbolChildUi.CustomUiResult.Rendered;
         }
 
-        private static Color _color = new Color(0.8f, 0.6f, 0.2f, 0.2f);
+        private static Color _color = new(0.8f, 0.6f, 0.2f, 0.2f);
     }
 }

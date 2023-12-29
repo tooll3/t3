@@ -18,7 +18,7 @@ namespace T3.Operators.Types.Id_a835ab86_29c1_438e_a7f7_2e297108bfd5
     public class TorusMesh : Instance<TorusMesh>
     {
         [Output(Guid = "f8f17f87-56f2-4411-b9bf-b9193b9aa90d")]
-        public readonly Slot<MeshBuffers> Data = new Slot<MeshBuffers>();
+        public readonly Slot<MeshBuffers> Data = new();
 
         public TorusMesh()
         {
@@ -152,33 +152,33 @@ namespace T3.Operators.Types.Id_a835ab86_29c1_438e_a7f7_2e297108bfd5
 
         private Buffer _vertexBuffer;
         private PbrVertex[] _vertexBufferData = new PbrVertex[0];
-        private readonly BufferWithViews _vertexBufferWithViews = new BufferWithViews();
+        private readonly BufferWithViews _vertexBufferWithViews = new();
 
         private Buffer _indexBuffer;
         private Int3[] _indexBufferData = new Int3[0];
-        private readonly BufferWithViews _indexBufferWithViews = new BufferWithViews();
+        private readonly BufferWithViews _indexBufferWithViews = new();
 
-        private readonly MeshBuffers _data = new MeshBuffers();
+        private readonly MeshBuffers _data = new();
 
         [Input(Guid = "608DE038-6C7A-43FC-BA89-374C7B1A318E")]
-        public readonly InputSlot<float> Radius = new InputSlot<float>();
+        public readonly InputSlot<float> Radius = new();
 
         [Input(Guid = "FDBAD44A-2504-453B-BFAE-976828372CC0")]
-        public readonly InputSlot<float> Thickness = new InputSlot<float>();
+        public readonly InputSlot<float> Thickness = new();
 
         [Input(Guid = "99F5D952-8490-4930-B8AB-9D8E968183C6")]
-        public readonly InputSlot<Int2> Segments = new InputSlot<Int2>();
+        public readonly InputSlot<Int2> Segments = new();
 
         [Input(Guid = "770A164B-10E7-4145-B1C9-DAD1F564EC6B")]
-        public readonly InputSlot<Vector2> Spin = new InputSlot<Vector2>();
+        public readonly InputSlot<Vector2> Spin = new();
 
         [Input(Guid = "F3E7341C-0C81-42AF-BA48-B43D345188C1")]
-        public readonly InputSlot<Vector2> Fill = new InputSlot<Vector2>();
+        public readonly InputSlot<Vector2> Fill = new();
 
         // [Input(Guid = "1457EDC2-5F9B-4F72-9CB2-4CA40066F177")]
         // public readonly InputSlot<System.Numerics.Vector4> Color = new InputSlot<System.Numerics.Vector4>();
 
         [Input(Guid = "2D083DC4-1576-4A44-8744-E0896424A6A9")]
-        public readonly InputSlot<float> SmoothAngle = new InputSlot<float>();
+        public readonly InputSlot<float> SmoothAngle = new();
     }
 }

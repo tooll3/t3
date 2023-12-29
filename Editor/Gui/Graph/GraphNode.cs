@@ -1391,7 +1391,7 @@ namespace T3.Editor.Gui.Graph
         }
 
         #region style variables
-        public static Vector2 LabelPos = new Vector2(4, 2);
+        public static Vector2 LabelPos = new(4, 2);
         public static float UsableSlotThickness = 10;
         public static float InputSlotThickness = 3;
         public static float InputSlotMargin = 1;

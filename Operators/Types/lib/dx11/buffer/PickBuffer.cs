@@ -42,10 +42,10 @@ namespace T3.Operators.Types.Id_e6bbbeef_08d8_4105_b84d_39edadb549c0
         }        
         
         [Input(Guid = "04776dc8-7b84-41f5-973c-22cadbf44f02")]
-        public readonly InputSlot<int> Index = new InputSlot<int>();
+        public readonly InputSlot<int> Index = new();
 
         [Input(Guid = "6B1C6232-819A-4021-82A9-994F8928BE13")]
-        public readonly MultiInputSlot<BufferWithViews> Input = new MultiInputSlot<BufferWithViews>();
+        public readonly MultiInputSlot<BufferWithViews> Input = new();
     }
 }
 

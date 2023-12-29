@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_de8bc97a_8ef0_4d4a_9ffa_88046a2daf40
     public class TimeConstBuffer : Instance<TimeConstBuffer>
     {
         [Output(Guid = "{6C118567-8827-4422-86CC-4D4D00762D87}", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]
-        public readonly Slot<SharpDX.Direct3D11.Buffer> Buffer = new Slot<SharpDX.Direct3D11.Buffer>();
+        public readonly Slot<SharpDX.Direct3D11.Buffer> Buffer = new();
 
         public TimeConstBuffer()
         {

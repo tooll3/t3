@@ -297,7 +297,7 @@ public static class ColorThemeEditor
         }
 
         private static bool _animatedAllColors;
-        private static Color _flashColor = new Color(1, 1, 1, 0f);
+        private static Color _flashColor = new(1, 1, 1, 0f);
     }
     
     

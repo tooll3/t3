@@ -10,7 +10,7 @@ namespace T3.Operators.Types.Id_32325c5b_53f7_4414_b4dd_a436e45528b0
     {
        
         [Output(Guid = "FE01C3B6-72E2-494E-8511-6D50C527463F")]
-        public readonly Slot<Command> Result = new Slot<Command>();
+        public readonly Slot<Command> Result = new();
 
         
         public SetCommandTime()
