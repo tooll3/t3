@@ -9,7 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Editor\Editor.csproj" />
-      <ProjectReference Include="..\BaseLibrary\BaseLibrary.csproj" />
+      <ProjectReference Include="..\Lib\Lib.csproj" />
     </ItemGroup>
 
 </Project>
