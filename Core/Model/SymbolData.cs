@@ -5,8 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SharpDX.Direct2D1;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Resource;
@@ -20,16 +22,35 @@ public partial class SymbolData
 {
     public Assembly OperatorsAssembly { get; }
 
+    public static EventHandler<Assembly> AssemblyAdded;
+
+    static SymbolData()
+    {
+        _updateCounter = new OpUpdateCounter();
+        RegisterTypes();
+    }
+
     public SymbolData(Assembly operatorAssembly)
     {
         OperatorsAssembly = operatorAssembly;
-        _updateCounter = new OpUpdateCounter();
+        var assemblyFullName = operatorAssembly.FullName;
+        if(assemblyFullName == null)
+            throw new ArgumentException("Assembly full name is null", nameof(operatorAssembly));
+        
+        var assemblyName = new AssemblyName(assemblyFullName);
+        var assemblyNameString = assemblyName.Name;
+        if (assemblyNameString == null)
+            throw new ArgumentException("Assembly name is null", nameof(operatorAssembly));
+        
+        Folder = Path.Combine(OperatorDirectoryName, assemblyNameString);
+
+        ResourceFileWatcher.AddCodeWatcher(Folder);
     }
 
     public virtual void Load(bool enableLog)
     {
         Log.Debug("Loading symbols...");
-        var symbolFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolExtension}", SearchOption.AllDirectories);
+        var symbolFiles = Directory.GetFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
 
         var symbolsRead = symbolFiles.AsParallel()
                                      .Select(JsonFileResult<Symbol>.ReadAndCreate)
@@ -37,7 +58,6 @@ public partial class SymbolData
                                      .Where(symbolReadResult => symbolReadResult.Symbol is not null)
                                      .ToList(); // Execute and bring back to main thread
 
-            
         Log.Debug("Registering loaded symbols...");
         // Check if there are symbols without a file, if yes add these
         var instanceTypesWithoutFile = OperatorsAssembly.ExportedTypes.AsParallel()
@@ -54,7 +74,7 @@ public partial class SymbolData
                 Log.Error($"Symbol {existingSymbol.Name} {symbol.Id} exists multiple times in database.");
                 continue;
             }
-            
+
             instanceTypesWithoutFile.Remove(symbol.InstanceType);
         }
 
@@ -123,19 +143,20 @@ public partial class SymbolData
 
     public virtual void SaveAll()
     {
-        ResourceFileWatcher.DisableOperatorFileWatcher(); // don't update ops if file is written during save
-            
-        // Todo: this sounds like a dangerous step. we should overwrite these files by default and can check which files are not overwritten to delete others?
-        RemoveAllSymbolFiles(); 
-        SortAllSymbolSourceFiles();
-        SaveSymbolDefinitionAndSourceFiles(SymbolRegistry.Entries.Values);
+        ResourceFileWatcher.DisableOperatorFileWatcher(Folder); // don't update ops if file is written during save
 
-        ResourceFileWatcher.EnableOperatorFileWatcher();
+        MarkAsSaving();
+        RemoveAllSymbolFiles();
+        SortAllSymbolSourceFiles();
+        SaveSymbolDefinitionAndSourceFiles(_symbols);
+        UnmarkAsSaving();
+
+        ResourceFileWatcher.EnableOperatorFileWatcher(Folder);
     }
 
-    protected static void SaveSymbolDefinitionAndSourceFiles(IEnumerable<Symbol> valueCollection)
+    protected void SaveSymbolDefinitionAndSourceFiles(IEnumerable<Symbol> symbols)
     {
-        foreach (var symbol in valueCollection)
+        foreach (var symbol in symbols)
         {
             var filepath = BuildFilepathForSymbol(symbol, SymbolExtension);
 
@@ -152,10 +173,10 @@ public partial class SymbolData
         }
     }
 
-    private static void SortAllSymbolSourceFiles()
+    private void SortAllSymbolSourceFiles()
     {
         // Move existing source files to correct namespace folder
-        var sourceFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SourceExtension}", SearchOption.AllDirectories);
+        var sourceFiles = Directory.GetFiles(Folder, $"*{SourceExtension}", SearchOption.AllDirectories);
         foreach (var sourceFilePath in sourceFiles)
         {
             var classname = Path.GetFileNameWithoutExtension(sourceFilePath);
@@ -183,10 +204,11 @@ public partial class SymbolData
         }
     }
 
-    private static void RemoveAllSymbolFiles()
+    // Todo: this sounds like a dangerous step. we should overwrite these files by default and can check which files are not overwritten to delete others?
+    private void RemoveAllSymbolFiles()
     {
         // Remove all old t3 files before storing to get rid off invalid ones
-        var symbolFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolExtension}", SearchOption.AllDirectories);
+        var symbolFiles = Directory.GetFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
         foreach (var symbolFilePath in symbolFiles)
         {
             try
@@ -229,7 +251,7 @@ public partial class SymbolData
 
         foreach (var fileExtension in OperatorFileExtensions)
         {
-            var sourceFilepath = Path.Combine(OperatorTypesFolder, symbol.DeprecatedSourcePath + "_" + symbol.Id + fileExtension);
+            var sourceFilepath = Path.Combine(OperatorDirectoryName, symbol.DeprecatedSourcePath + "_" + symbol.Id + fileExtension);
             try
             {
                 File.Delete(sourceFilepath);
@@ -243,8 +265,7 @@ public partial class SymbolData
         symbol.DeprecatedSourcePath = String.Empty;
     }
 
-
-    private static void WriteSymbolSourceToFile(Symbol symbol)
+    private void WriteSymbolSourceToFile(Symbol symbol)
     {
         var sourcePath = BuildFilepathForSymbol(symbol, SourceExtension);
         using (var sw = new StreamWriter(sourcePath))
@@ -255,12 +276,13 @@ public partial class SymbolData
         // Remove old source file and its entry in project
         if (!string.IsNullOrEmpty(symbol.DeprecatedSourcePath))
         {
-            if (symbol.DeprecatedSourcePath == SymbolData.BuildFilepathForSymbol(symbol, SourceExtension))
+            if (symbol.DeprecatedSourcePath == sourcePath)
             {
                 Log.Warning($"Attempted to deprecated valid source file: {symbol.DeprecatedSourcePath}");
                 symbol.DeprecatedSourcePath = string.Empty;
                 return;
             }
+
             File.Delete(symbol.DeprecatedSourcePath);
 
             // Adjust path of file resource
@@ -268,42 +290,44 @@ public partial class SymbolData
 
             symbol.DeprecatedSourcePath = string.Empty;
         }
+
         symbol.PendingSource = null;
     }
 
     #region File path handling
-    private static string GetSubDirectoryFromNamespace(string symbolNamespace)
+    public string BuildFilepathForSymbol(Symbol symbol, string extension)
     {
-        var trimmed = symbolNamespace.Trim().Replace(".", "\\");
-        return trimmed;
-    }
-        
-    private static string BuildAndCreateFolderFromNamespace(string symbolNamespace)
-    {
-        var directory = Path.Combine(OperatorTypesFolder, GetSubDirectoryFromNamespace(symbolNamespace));
-        if (!Directory.Exists(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
-
-        return directory;
-    }
-
-    public static string BuildFilepathForSymbol(Symbol symbol, string extension)
-    {
-        var dir = BuildAndCreateFolderFromNamespace(symbol.Namespace);
+        var dir = BuildAndCreateFolderFromNamespace(symbol.Namespace, Folder);
         return extension == SourceExtension
                    ? Path.Combine(dir, symbol.Name + extension)
                    : Path.Combine(dir, symbol.Name + "_" + symbol.Id + extension);
+
+        static string BuildAndCreateFolderFromNamespace(string symbolNamespace, string rootFolder)
+        {
+            var subdirectory = symbolNamespace.Trim().Replace('.', Path.DirectorySeparatorChar);
+            var directory = Path.Combine(rootFolder, subdirectory);
+            Directory.CreateDirectory(directory);
+
+            return directory;
+        }
     }
     #endregion
 
-    private static OpUpdateCounter _updateCounter;
-        
+    private static readonly OpUpdateCounter _updateCounter;
+
     public const string SourceExtension = ".cs";
     private const string SymbolExtension = ".t3";
     protected const string SymbolUiExtension = ".t3ui";
-    public const string OperatorTypesFolder = @"Operators\Types\";
+    public const string OperatorDirectoryName = "Operators";
+    public readonly string Folder;
+
+    public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0;
+
+    protected void MarkAsSaving() => Interlocked.Increment(ref _savingCount);
+    protected void UnmarkAsSaving() => Interlocked.Decrement(ref _savingCount);
+    private static long _savingCount;
+
+    private readonly List<Symbol> _symbols = new();
 
     private static readonly List<string> OperatorFileExtensions = new()
                                                                       {

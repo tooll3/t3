@@ -19,11 +19,15 @@ namespace T3.Core.Resource
             AddWatcher(ResourceManager.ResourcesFolder, "*.jpg");
             AddWatcher(ResourceManager.ResourcesFolder, "*.dds");
             AddWatcher(ResourceManager.ResourcesFolder, "*.tiff");
-
-            _csFileWatcher = AddWatcher(Core.Model.SymbolData.OperatorTypesFolder,"*.cs");
-            _csFileWatcher.Renamed += CsFileRenamedHandler;
-            _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
-
+        }
+        
+        public static void AddCodeWatcher(string folder)
+        {
+            Directory.CreateDirectory(folder);
+            var csWatcher = AddWatcher(folder, "*.cs");
+            csWatcher.Renamed += CsFileRenamedHandler;
+            csWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
+            CSFileWatchers.Add(folder, csWatcher);
         }
         
         public static void AddFileHook(string filepath, Action action)
@@ -78,14 +82,16 @@ namespace T3.Core.Resource
 
         private static Dictionary<string, FileSystemWatcher> _fileWatchers = new();
 
-        public static void DisableOperatorFileWatcher()
+        public static void DisableOperatorFileWatcher(string folder)
         {
-            _csFileWatcher.EnableRaisingEvents = false;
+            var fileWatcher = CSFileWatchers[folder];
+            fileWatcher.EnableRaisingEvents = false;
         }
 
-        public static void EnableOperatorFileWatcher()
+        public static void EnableOperatorFileWatcher(string folder)
         {
-            _csFileWatcher.EnableRaisingEvents = true;
+            var fileWatcher = CSFileWatchers[folder];
+            fileWatcher.EnableRaisingEvents = true;
         }
 
         private static void FileChangedHandler(object sender, FileSystemEventArgs fileSystemEventArgs)
@@ -135,8 +141,8 @@ namespace T3.Core.Resource
         {
             ResourceManager.RenameOperatorResource(renamedEventArgs.OldFullPath, renamedEventArgs.FullPath);
         }
-        
-        private static FileSystemWatcher _csFileWatcher;
+
+        private static readonly Dictionary<string, FileSystemWatcher> CSFileWatchers = new();
         public static readonly Dictionary<string, ResourceFileHook> HooksForResourceFilepaths = new();
     }
     

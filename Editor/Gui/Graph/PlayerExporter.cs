@@ -398,7 +398,7 @@ namespace T3.Editor.Gui.Graph
 
         private static List<MetadataReference> CompileSymbolsFromSource(string exportPath, params string[] sources)
         {
-            var operatorsAssembly = ResourceManager.Instance().OperatorsAssembly;
+            Assembly operatorsAssembly = ResourceManager.Instance().OperatorsAssembly;
             var referencedAssembliesNames = operatorsAssembly.GetReferencedAssemblies(); // todo: ugly
             var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
             var coreAssembly = typeof(ResourceManager).Assembly;

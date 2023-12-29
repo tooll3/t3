@@ -30,8 +30,6 @@ namespace T3.Core.Resource
 
     public class ResourceManager
     {
-        public Assembly OperatorsAssembly { get; set; }
-
         public static ResourceManager Instance()
         {
             return _instance;

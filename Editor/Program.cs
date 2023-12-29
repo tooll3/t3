@@ -135,8 +135,7 @@ namespace T3.Editor
             UiContentUpdate.GenerateFontsWithScaleFactor(UserSettings.Config.UiScaleFactor);
 
             // Setup file watching the operator source
-            resourceManager.OperatorsAssembly = Assembly.GetAssembly(typeof(Value));
-            T3Ui.Initialize(resourceManager.OperatorsAssembly);
+            T3Ui.Initialize();
             
             foreach (var (_, symbol) in SymbolRegistry.Entries)
             {

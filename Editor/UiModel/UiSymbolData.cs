@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -24,7 +25,7 @@ public partial class UiSymbolData : SymbolData
         Init(enableLog);
     }
 
-    private void Init(bool enableLog)
+    private void Init(bool enableLog, bool containsHome)
     {
         foreach (var symbolEntry in SymbolRegistry.Entries)
         {
@@ -45,10 +46,13 @@ public partial class UiSymbolData : SymbolData
         }
 
         // Create instance of project op, all children are created automatically
-        Console.WriteLine(@"Creating home...");
-        var homeSymbol = symbols[HomeSymbolId];
-        var homeInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
-        RootInstance = homeSymbol.CreateInstance(homeInstanceId);
+        if (containsHome)
+        {
+            Console.WriteLine(@"Creating home...");
+            var homeSymbol = symbols[HomeSymbolId];
+            var homeInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
+            RootInstance = homeSymbol.CreateInstance(homeInstanceId);
+        }
     }
 
     internal static readonly Guid HomeSymbolId = Guid.Parse("dab61a12-9996-401e-9aa6-328dd6292beb");
@@ -60,7 +64,7 @@ public partial class UiSymbolData : SymbolData
 
             
         Console.WriteLine(@"Loading Symbol UIs...");
-        var symbolUiFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);
+        var symbolUiFiles = Directory.GetFiles(Folder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);
         var symbolUiJsons = symbolUiFiles.AsParallel()
                                          .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
                                          .Select(symbolUiJson =>
@@ -96,14 +100,14 @@ public partial class UiSymbolData : SymbolData
     public override void SaveAll()
     {
         Log.Debug("Saving...");
-        IsSaving = true;
+        MarkAsSaving();
 
         // Save all t3 and source files
         base.SaveAll();
 
         // Remove all old ui files before storing to get rid off invalid ones
         // TODO: this also seems dangerous, similar to how the Symbol SaveAll works
-        var symbolUiFiles = Directory.GetFiles(OperatorTypesFolder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);            
+        var symbolUiFiles = Directory.GetFiles(Folder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);            
         foreach (var filepath in symbolUiFiles)
         {
             try
@@ -118,12 +122,12 @@ public partial class UiSymbolData : SymbolData
 
         WriteSymbolUis(SymbolUiRegistry.Entries.Values);
 
-        IsSaving = false;
+        UnmarkAsSaving();
     }
 
     public static IEnumerable<SymbolUi> GetModifiedSymbolUis()
     {
-        return SymbolUiRegistry.Entries.Values.Where(symbolUi => symbolUi.HasBeenModified);
+     //   return SymbolUiRegistry.Entries.Values.Where(symbolUi => symbolUi.HasBeenModified);
     }
 
     /// <summary>
@@ -134,15 +138,15 @@ public partial class UiSymbolData : SymbolData
         var modifiedSymbolUis = GetModifiedSymbolUis().ToList();
         Log.Debug($"Saving {modifiedSymbolUis.Count} modified symbols...");
 
-        IsSaving = true;
-        ResourceFileWatcher.DisableOperatorFileWatcher(); // Don't update ops if file is written during save
+        MarkAsSaving();
+        ResourceFileWatcher.DisableOperatorFileWatcher(Folder); // Don't update ops if file is written during save
             
         var modifiedSymbols = modifiedSymbolUis.Select(symbolUi => symbolUi.Symbol).ToList();
         SaveSymbolDefinitionAndSourceFiles(modifiedSymbols);
         WriteSymbolUis(modifiedSymbolUis);
             
-        ResourceFileWatcher.EnableOperatorFileWatcher();
-        IsSaving = false;
+        ResourceFileWatcher.EnableOperatorFileWatcher(Folder);
+        UnmarkAsSaving();
     }
 
     private static void WriteSymbolUis(IEnumerable<SymbolUi> symbolUis)
@@ -173,8 +177,6 @@ public partial class UiSymbolData : SymbolData
         }
     }
 
-    public bool IsSaving { get; private set; }
-
     public static void UpdateUiEntriesForSymbol(Symbol symbol)
     {
         if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var symbolUi))
@@ -188,5 +190,5 @@ public partial class UiSymbolData : SymbolData
         }
     }
 
-    public Instance RootInstance { get; private set; }
+    public static Instance RootInstance { get; private set; }
 }

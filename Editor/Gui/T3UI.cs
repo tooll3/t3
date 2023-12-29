@@ -10,6 +10,7 @@ using ImGuiNET;
 using Operators.Utils.Recording;
 using T3.Core.Animation;
 using T3.Core.Audio;
+using T3.Core.Compilation;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.IO;
 using T3.Core.Logging;
@@ -38,10 +39,16 @@ namespace T3.Editor.Gui;
 
 public class T3Ui
 {
-    public static void Initialize(Assembly operatorAssembly)
+    static T3Ui()
     {
-        UiSymbolData = new UiSymbolData(operatorAssembly, enableLog: false);
-
+        var assemblies = CoreAssembly.GetLoadedOperatorAssemblies();
+        UiSymbolData = assemblies
+                      .Select(a => new UiSymbolData(a, enableLog: false))
+                      .ToArray();
+    }
+    
+    public static void Initialize()
+    {
         //WindowManager.TryToInitialize();
         ExampleSymbolLinking.UpdateExampleLinks();
         VariationHandling.Init();
@@ -416,7 +423,13 @@ public class T3Ui
                 return;
             }                
             _saveStopwatch.Restart();
-            UiSymbolData.SaveModifiedSymbols();
+
+            // Todo - parallelize? 
+            foreach (var data in UiSymbolData)
+            {
+                data.SaveModifiedSymbols();    
+            }
+            
             _saveStopwatch.Stop();
             Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
         }
@@ -433,7 +446,13 @@ public class T3Ui
             }
                 
             _saveStopwatch.Restart();
-            UiSymbolData.SaveAll();
+            
+            // Todo - parallelize?
+            foreach (var data in UiSymbolData)
+            {
+                data.SaveAll();
+            }
+            
             _saveStopwatch.Stop();
             Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
         }
@@ -487,7 +506,7 @@ public class T3Ui
         }
     }
 
-    public static UiSymbolData UiSymbolData { get; private set; }
+    public static readonly IReadOnlyList<UiSymbolData> UiSymbolData;
     
     public static IntPtr NotDroppingPointer = new IntPtr(0);
     public static bool DraggingIsInProgress = false;

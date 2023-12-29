@@ -43,10 +43,6 @@ public static class TypeNameRegistry
 
 public partial class SymbolData
 {
-    static SymbolData()
-    {
-        RegisterTypes();
-    }
     
     private static void RegisterTypes()
     {

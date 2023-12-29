@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Resource;
 
@@ -41,7 +42,7 @@ namespace T3.Editor.Compilation
                 return;
             }
 
-            var newAssembly = CompileSymbolFromSource(source, path);
+            var newAssembly = CompileSymbolFromSource(source, path, resource.OperatorAssembly);
             if (newAssembly == null)
                 return;
 
@@ -49,12 +50,12 @@ namespace T3.Editor.Compilation
             resource.Updated = true;
         }
 
-        public static Assembly CompileSymbolFromSource(string source, string symbolName)
+        public static Assembly CompileSymbolFromSource(string source, string symbolName, Assembly existingAssembly)
         {
-            var operatorsAssembly = ResourceManager.Instance().OperatorsAssembly;
+            Assembly operatorsAssembly = existingAssembly;
             var referencedAssembliesNames = operatorsAssembly.GetReferencedAssemblies(); // todo: ugly
             var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
-            var coreAssembly = typeof(ResourceManager).Assembly;
+            var coreAssembly = CoreAssembly.Assembly;
             referencedAssemblies.Add(MetadataReference.CreateFromFile(coreAssembly.Location));
             referencedAssemblies.Add(MetadataReference.CreateFromFile(operatorsAssembly.Location));
             foreach (var asmName in referencedAssembliesNames)

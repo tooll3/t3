@@ -14,7 +14,7 @@ internal static class Structure
 {
     public static Instance GetInstanceFromIdPath(List<Guid> compositionPath)
     {
-        return OperatorUtils.GetInstanceFromIdPath(T3Ui.UiSymbolData.RootInstance, compositionPath);
+        return OperatorUtils.GetInstanceFromIdPath(UiSymbolData.RootInstance, compositionPath);
     }
 
     public static List<string> GetReadableInstancePath(List<Guid> path, bool includeLeave= true)

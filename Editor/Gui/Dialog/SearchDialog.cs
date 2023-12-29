@@ -13,6 +13,7 @@ using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Dialog
 {
@@ -227,7 +228,7 @@ namespace T3.Editor.Gui.Dialog
             
             var composition = _searchMode switch
                                       {
-                                          SearchModes.Global             => T3Ui.UiSymbolData.RootInstance,
+                                          SearchModes.Global             => UiSymbolData.RootInstance,
                                           SearchModes.Local              => GraphWindow.GetMainComposition(),
                                           SearchModes.LocalAndInChildren => GraphWindow.GetMainComposition(),
                                           _                              => throw new ArgumentOutOfRangeException()

@@ -8,11 +8,13 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Resource;
 using T3.Editor.Gui;
 using T3.Editor.Gui.Interaction.StartupCheck;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
+using T3.Editor.UiModel;
 using T3.SystemUi;
 using Device = SharpDX.Direct3D11.Device;
 
@@ -121,7 +123,7 @@ internal static class ProgramWindows
 
     private static void OnCloseMainWindow(object sender, CancelEventArgs args)
     {
-        if (T3Ui.UiSymbolData.IsSaving)
+        if (SymbolData.IsSaving)
         {
             args.Cancel = true;
             Log.Debug($"Cancel closing because save-operation is in progress.");
