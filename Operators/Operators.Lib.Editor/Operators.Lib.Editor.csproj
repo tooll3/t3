@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Editor\Editor.csproj" />
+      <ProjectReference Include="..\..\Editor\Editor.csproj" />
       <ProjectReference Include="..\Operators.Lib\Operators.Lib.csproj" />
     </ItemGroup>
 

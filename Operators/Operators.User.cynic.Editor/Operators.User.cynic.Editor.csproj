@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Editor\Editor.csproj" />
+      <ProjectReference Include="..\..\Editor\Editor.csproj" />
       <ProjectReference Include="..\Operators.User.cynic\Operators.User.cynic.csproj" />
     </ItemGroup>
 
