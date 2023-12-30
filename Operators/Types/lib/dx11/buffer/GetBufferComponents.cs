@@ -41,7 +41,6 @@ namespace T3.Operators.Types.Id_80dff680_5abf_484a_b9e0_81d72f3b7aa4
                 Buffer.Value = bufferWithViews.Buffer;
                 ShaderResourceView.Value = bufferWithViews.Srv;
                 UnorderedAccessView.Value = bufferWithViews.Uav;
-                
                 if (ShaderResourceView?.Value == null)
                 {
                     Log.Warning("Can't access undefined shader resource view", this);
@@ -52,24 +51,29 @@ namespace T3.Operators.Types.Id_80dff680_5abf_484a_b9e0_81d72f3b7aa4
                     try
                     {
                         Length.Value = ShaderResourceView.Value.Description.Buffer.ElementCount;
-                        Stride.Value = bufferWithViews.Buffer.Description.StructureByteStride;
+                        // Buffer.DirtyFlag.Clear();
+                        // ShaderResourceView.DirtyFlag.Clear();
+                        // UnorderedAccessView.DirtyFlag.Clear();
+                        // Length.DirtyFlag.Clear();
+                        // Stride.DirtyFlag.Clear();
                     }
                     catch (Exception e)
                     {
                         Log.Warning("Can't access undefined SRV description: " + e.Message, this);
                         SetAsInvalid();
                     }
+                    
                 }
             }
             else
             {
                 SetAsInvalid();
             }
-            Buffer.DirtyFlag.Clear();
-            ShaderResourceView.DirtyFlag.Clear();
-            UnorderedAccessView.DirtyFlag.Clear();
-            Length.DirtyFlag.Clear();
-            Stride.DirtyFlag.Clear();
+            // Buffer.DirtyFlag.Clear();
+            // ShaderResourceView.DirtyFlag.Clear();
+            // UnorderedAccessView.DirtyFlag.Clear();
+            // Length.DirtyFlag.Clear();
+            // Stride.DirtyFlag.Clear();
         }
 
         private void SetAsInvalid()
