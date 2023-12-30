@@ -39,7 +39,7 @@ RWStructuredBuffer<float4> ResultColors : u1;
 [numthreads(160,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
-    uint pointCount, faceCount, stride;
+    uint pointCount, faceCount, stride; 
 
     ResultPoints.GetDimensions(pointCount, stride);
     FaceIndices.GetDimensions(faceCount, stride);
@@ -89,6 +89,9 @@ void main(uint3 i : SV_DispatchThreadID)
 
     // Compute barycentric coordinates
     Point p;
+
+    p.Selected = 1;
+    p.Extend = 0;
     float xi1Sqrt = sqrt(xi1);
     float u = 1.0 - xi1Sqrt;
     float v = xi2 * xi1Sqrt; 
@@ -96,7 +99,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     p.Position = Vertices[fIndices[0]].Position * u
                + Vertices[fIndices[1]].Position * v
-               + Vertices[fIndices[2]].Position * w;
+               + Vertices[fIndices[2]].Position * w; 
 
     float3 normal = normalize(Vertices[fIndices[0]].Normal * u 
                   + Vertices[fIndices[1]].Normal * v
@@ -115,7 +118,7 @@ void main(uint3 i : SV_DispatchThreadID)
     p.Rotation = normalize(qFromMatrix3Precise(transpose(orientationDest)));
     p.W = 1;
 
-    ResultPoints[i.x] = p;
+
 
     float2 uv = Vertices[fIndices[0]].TexCoord * u 
             + Vertices[fIndices[1]].TexCoord * v
@@ -123,5 +126,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float4 color = ColorMap.SampleLevel(texSampler, uv* float2(1, -1), 0);
     ResultColors[i.x] = color;
+    p.Color = color;
+    ResultPoints[i.x] = p;
 }
 

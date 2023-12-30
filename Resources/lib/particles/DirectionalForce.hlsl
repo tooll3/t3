@@ -23,5 +23,5 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
 
     float3 offset = Direction * Amount * (1 + hash11(i.x) * RandomAmount);
-    Particles[i.x].velocity += offset;
+    Particles[i.x].Velocity += offset;
 }

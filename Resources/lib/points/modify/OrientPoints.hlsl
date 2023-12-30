@@ -48,10 +48,5 @@ void main(uint3 i : SV_DispatchThreadID)
     newRot = qMul(alignment, newRot);
 
     ResultPoints[i.x].Rotation = normalize(qSlerp(normalize(p.Rotation), normalize(newRot), weight));
-    
-
-    return;
-
-
 }
 

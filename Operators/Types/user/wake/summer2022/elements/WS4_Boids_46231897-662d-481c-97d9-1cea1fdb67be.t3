@@ -426,12 +426,12 @@
         {
           "Id": "cc98bda7-34a5-4c18-9b9e-fabe51b02d71"/*Amount*/,
           "Type": "System.Single",
-          "Value": 0.81
+          "Value": 0.24
         },
         {
           "Id": "757c259a-118c-4438-bc09-cdc5708af2bc"/*Frequency*/,
           "Type": "System.Single",
-          "Value": 0.65
+          "Value": 1.01
         },
         {
           "Id": "41ee0e65-e2dc-4bf7-af40-bc90517c6c23"/*RotLookupDistance*/,
@@ -1119,7 +1119,7 @@
         {
           "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
           "Type": "System.Single",
-          "Value": 0.13
+          "Value": 0.74
         }
       ],
       "Outputs": []
@@ -1262,7 +1262,7 @@
         {
           "Id": "7773837e-104a-4b3d-a41f-cadbd9249af2"/*Float*/,
           "Type": "System.Single",
-          "Value": 0.26
+          "Value": 1.9
         }
       ],
       "Outputs": []
@@ -1677,7 +1677,7 @@
         {
           "Id": "00fd2794-567a-4f9b-a900-c2ebf9760764"/*Index*/,
           "Type": "System.Int32",
-          "Value": 1
+          "Value": 0
         }
       ],
       "Outputs": []

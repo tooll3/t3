@@ -47,11 +47,11 @@ void main(uint3 i : SV_DispatchThreadID)
     }
     else if(AxisSpace < 1.5) 
     {
-        direction = qRotateVec3(direction, Particles[gi].p.rotation);
+        direction = qRotateVec3(direction, Particles[gi].Rotation);
     }
 
-    float3 origVelocity = Particles[gi].velocity;
-    Particles[gi].velocity = lerp( origVelocity,
+    float3 origVelocity = Particles[gi].Velocity;
+    Particles[gi].Velocity = lerp( origVelocity,
                                    origVelocity* AddOriginalVelocity + direction * f,
                                 ApplyTrigger * selected);
 }

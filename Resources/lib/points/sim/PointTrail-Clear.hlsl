@@ -17,5 +17,5 @@ void main(uint3 i : SV_DispatchThreadID)
     uint pointCount, stride;
     TrailPoints.GetDimensions(pointCount, stride);
 
-    TrailPoints[i.x].w = sqrt(-1);
+    TrailPoints[i.x].W = sqrt(-1);
 }

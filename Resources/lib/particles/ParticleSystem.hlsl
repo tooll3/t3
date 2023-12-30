@@ -74,6 +74,11 @@ void main(uint3 i : SV_DispatchThreadID)
         Particles[gi].BirthTime = Time;
         Particles[gi].Velocity = qRotateVec3(float3(0,0,1), normalize(Particles[gi].Rotation)) * InitialVelocity;
         Particles[gi].Radius = EmitPoints[gi].W * RadiusFromW;
+
+        // These will not change over lifetime...
+        Particles[gi].Color = EmitPoints[addIndex].Color;
+        //ResultPoints[gi].Color = 1;//EmitPoints[addIndex].Color;
+        //Particles[gi].Selected = EmitPoints[addIndex].Selected;
     }
 
     if(Particles[gi].BirthTime == NAN)
@@ -95,6 +100,7 @@ void main(uint3 i : SV_DispatchThreadID)
     }
 
     // Copy result
+    // Todo: This could by optimized by not copying color 
     ResultPoints[gi] = Particles[gi];
 
     // Attempt with lerping to smooth position updates
@@ -117,4 +123,11 @@ void main(uint3 i : SV_DispatchThreadID)
     {
         ResultPoints[gi].W = tooOld ? NAN : speed * AgingRate;
     }
+
+    ResultPoints[gi].W = 1;
+    //ResultPoints[gi].Color = 1;
+    //ResultPoints[gi].Rotation = QUATERNION_IDENTITY;
+
+    //ResultPoints[gi].Position = 1;
+
 }
