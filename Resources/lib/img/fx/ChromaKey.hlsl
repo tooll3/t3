@@ -100,7 +100,12 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     {
         return lerp(1, Background, distance);
     }
+    
 
-    return float4(c.rgb, saturate(1- distance * c.a));
+    return lerp(
+        float4(c.rgb, saturate(1- distance * c.a)),
+        lerp(Background, c, saturate(1-distance * c.a)),
+        Background.a); 
+    
 
 }

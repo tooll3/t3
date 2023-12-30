@@ -334,11 +334,14 @@ public struct Color
 
     public static Color FromHSV(float h, float s, float v, float a = 1.0f)
     {
-        // manually convert hsv to rgb - inputs and outputs are all in the range 0-1
+        if (s == 0.0f)
+        {
+            return new Color(v,v,v,a); // gray
+        }        
+        
         float r = 0, g = 0, b = 0;
 
         h %= 1f;
-        v = v.Clamp(0, 1);
 
         int i = (int)(h * 6);
         float f = h * 6 - i;
@@ -380,7 +383,7 @@ public struct Color
                 break;
         }
 
-        return new Color(r, g, b, a.Clamp(0, 1));
+        return new Color(r, g, b, a);
     }
 
     /// <summary>
