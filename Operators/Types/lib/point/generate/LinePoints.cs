@@ -52,6 +52,9 @@ namespace T3.Operators.Types.Id_4ae9e2f5_7cb3_40b0_a662_0662e8cb7c68
         [Input(Guid = "4d45a633-ac00-4cbe-83a3-43c419c3da97")]
         public readonly InputSlot<System.Numerics.Vector4> ColorB = new InputSlot<System.Numerics.Vector4>();
 
+        [Input(Guid = "28081e5f-da01-46dc-81ad-699df29a49a4")]
+        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
+
 
         private enum OrientationModes
         {

@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
 #include "lib/shared/quat-functions.hlsl"
+#include "lib/shared/bias-functions.hlsl"
 
 
 cbuffer Params : register(b0)
@@ -23,6 +24,7 @@ cbuffer Params : register(b0)
     float4 ColorB;
 
     float AddSeparator;
+    float2 BiasGain;
 }
 
 RWStructuredBuffer<Point> ResultPoints : u0;    // output
@@ -42,27 +44,27 @@ float3 RotatePointAroundAxis(float3 In, float3 Axis, float Rotation)
     return mul(rot_mat,  In);
 }
 
+
 [numthreads(256,4,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
     uint index = i.x; 
 
-    uint pointCount, stride;
-    ResultPoints.GetDimensions(pointCount, stride);
-    if(index > pointCount)
+    uint pointCount, stride; 
+    ResultPoints.GetDimensions(pointCount, stride); 
+    if(index > pointCount)  
         return;
 
     if(AddSeparator > 0.5 && index == pointCount -1) {
-        ResultPoints[index].W = sqrt(-1);
+        ResultPoints[index].W = sqrt(-1); 
         return;
     }
 
     int seperatorOffset = AddSeparator > 0.5 ? 1 :0;
     int steps = (pointCount - 1 - seperatorOffset);
-    float f1 = (steps > 0 ? (float)(index)/steps : 0.5);
+    float f1 = GetBiasGain(steps > 0 ? (float)(index)/steps : 0.5, BiasGain.x, BiasGain.y);
     float f =  f1 - Pivot;
     
-
     ResultPoints[index].Position = lerp(Center, Center + Direction * LengthFactor, f);
     ResultPoints[index].W = W + WOffset * (float)(index)/steps;
 

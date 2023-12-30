@@ -1,4 +1,4 @@
-#include "lib/shared/bias.hlsl"
+#include "lib/shared/bias-functions.hlsl"
 
 cbuffer ParamConstants : register(b0)
 {
@@ -25,7 +25,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 {
     //float2 uv = psInput.texCoord + float2(Offset,0);
     float4 orgColor = ImageA.Sample(linearSampler, psInput.texCoord);
-    orgColor = GetGain(orgColor, Bias);  
+    orgColor = GetSchlickBias(orgColor, Bias);  
 
     float4 gradient = 0;
     if (Mode < 0.5)

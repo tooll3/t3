@@ -109,10 +109,9 @@ void main(uint3 i : SV_DispatchThreadID)
             + Factors[(uint)clamp(G, 0, 5.1)] * (c.g * GFactor + GOffset)
             + Factors[(uint)clamp(B, 0, 5.1)] * (c.b * BFactor + BOffset);
 
-    ResultPoints[index].Position = P.Position + float3(ff.xyz);
-    ResultPoints[index].W = clamp(P.W + ff.w,0, 10000);
+    P.Position += float3(ff.xyz);
+    P.W = clamp(P.W + ff.w,0, 10000);
     
-
     
     float4 rot = P.Rotation;
     ResultPoints[index].Rotation = P.Rotation;
@@ -135,5 +134,7 @@ void main(uint3 i : SV_DispatchThreadID)
     if(rotXFactor != 0) { rot = qMul(rot, qFromAngleAxis(rotXFactor, float3(1,0,0))); }
     if(rotYFactor != 0) { rot = qMul(rot, qFromAngleAxis(rotYFactor, float3(0,1,0))); }
     if(rotZFactor != 0) { rot = qMul(rot, qFromAngleAxis(rotZFactor, float3(0,0,1))); }
-    ResultPoints[index].Rotation = normalize(rot);
+    P.Rotation = normalize(rot);
+
+    ResultPoints[i.x] = P;
 }

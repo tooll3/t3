@@ -39,6 +39,8 @@ void main(uint3 i : SV_DispatchThreadID)
 
     ResultPoints[i.x].Position = Points1[i.x].Position +  qRotateVec3(Direction * Distance, Points1[i.x].Rotation);
     ResultPoints[i.x].Rotation = Points1[i.x].Rotation;
+    ResultPoints[i.x].Color = Points1[i.x].Color;
+    ResultPoints[i.x].Selected = Points1[i.x].Selected;
     ResultPoints[i.x].W = Points1[i.x].W;
 }
 

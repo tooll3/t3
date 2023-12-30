@@ -1,5 +1,5 @@
 {
-  "Name": "SetPointsAttributes",
+  "Name": "SpreadPointAttributes",
   "Id": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
   "Namespace": "lib.point.modify",
   "Inputs": [
@@ -40,13 +40,13 @@
           "Keys": [
             {
               "Time": 0.0,
-              "Value": 0.0,
+              "Value": 1.0,
               "InType": "Linear",
               "OutType": "Linear",
               "InEditMode": "Linear",
               "OutEditMode": "Linear",
-              "InTangentAngle": 0.7853981633974483,
-              "OutTangentAngle": 3.9269908169872414
+              "InTangentAngle": 0.0,
+              "OutTangentAngle": 3.141592653589793
             },
             {
               "Time": 1.0,
@@ -55,8 +55,8 @@
               "OutType": "Linear",
               "InEditMode": "Linear",
               "OutEditMode": "Linear",
-              "InTangentAngle": 0.7853981633974483,
-              "OutTangentAngle": -2.356194490192345
+              "InTangentAngle": 0.0,
+              "OutTangentAngle": -3.141592653589793
             }
           ]
         }
@@ -64,7 +64,33 @@
     },
     {
       "Id": "7c944690-d5b2-4894-a178-97593ecd797a"/*Gradient*/,
-      "DefaultValue": {}
+      "DefaultValue": {
+        "Gradient": {
+          "Interpolation": "Linear",
+          "Steps": [
+            {
+              "Id": "44f4ba2c-6b9f-4d11-9710-c3334591c14e",
+              "NormalizedPosition": 0.0,
+              "Color": {
+                "R": 1.0,
+                "G": 1.0,
+                "B": 1.0,
+                "A": 1.0
+              }
+            },
+            {
+              "Id": "3cd925dc-64dd-4420-bbf2-de5ecd25d990",
+              "NormalizedPosition": 1.0,
+              "Color": {
+                "R": 1.0,
+                "G": 1.0,
+                "B": 1.0,
+                "A": 1.0
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "Children": [
@@ -75,7 +101,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\modify\\SetPointAttributes.hlsl"
+          "Value": "Resources\\lib\\points\\modify\\SpreadPointAttributes.hlsl"
         }
       ],
       "Outputs": []

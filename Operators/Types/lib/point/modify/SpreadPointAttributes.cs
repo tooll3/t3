@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_191e5057_4da4_447e_b7cf_e9e0ed8c5dd8
 {
-    public class SetPointsAttributes : Instance<SetPointsAttributes>
+    public class SpreadPointAttributes : Instance<SpreadPointAttributes>
     {
 
         [Output(Guid = "39c62e1e-7c63-4a88-9923-3f7f5fffbfbf")]

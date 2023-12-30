@@ -80,6 +80,13 @@
         "Z": 1.0,
         "W": 1.0
       }
+    },
+    {
+      "Id": "28081e5f-da01-46dc-81ad-699df29a49a4"/*BiasAndGain*/,
+      "DefaultValue": {
+        "X": 0.5,
+        "Y": 0.5
+      }
     }
   ],
   "Children": [
@@ -206,6 +213,12 @@
       "SymbolId": "b15e4950-5c72-4655-84bc-c00647319030",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "4baef9e1-7ed5-4685-9faa-8643c4f1c1e5"/*Vector2Components*/,
+      "SymbolId": "0946c48b-85d8-4072-8f21-11d17cc6f6cf",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -250,6 +263,12 @@
       "SourceSlotId": "83986e05-af3e-469f-a656-9956d37d12ba",
       "TargetParentOrChildId": "2c4f19d5-056f-4eb1-b4ed-b6b0e8d82d03",
       "TargetSlotId": "01809b63-4b4a-47be-9588-98d5998ddb0c"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "28081e5f-da01-46dc-81ad-699df29a49a4",
+      "TargetParentOrChildId": "4baef9e1-7ed5-4685-9faa-8643c4f1c1e5",
+      "TargetSlotId": "36f14238-5bb8-4521-9533-f4d1e8fb802b"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
@@ -476,6 +495,18 @@
     {
       "SourceParentOrChildId": "cc3e2a65-be3b-4dde-b341-2f5e44b553f6",
       "SourceSlotId": "f0321a54-e844-482f-a161-7f137abc54b0",
+      "TargetParentOrChildId": "e5173624-d565-4cd4-875c-70d76871c900",
+      "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
+    },
+    {
+      "SourceParentOrChildId": "4baef9e1-7ed5-4685-9faa-8643c4f1c1e5",
+      "SourceSlotId": "1cee5adb-8c3c-4575-bdd6-5669c04d55ce",
+      "TargetParentOrChildId": "e5173624-d565-4cd4-875c-70d76871c900",
+      "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
+    },
+    {
+      "SourceParentOrChildId": "4baef9e1-7ed5-4685-9faa-8643c4f1c1e5",
+      "SourceSlotId": "305d321d-3334-476a-9fa3-4847912a4c58",
       "TargetParentOrChildId": "e5173624-d565-4cd4-875c-70d76871c900",
       "TargetSlotId": "49556d12-4cd1-4341-b9d8-c356668d296c"
     },

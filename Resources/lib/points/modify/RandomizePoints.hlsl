@@ -1,7 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
 #include "lib/shared/quat-functions.hlsl"
-#include "lib/shared/bias.hlsl"
+#include "lib/shared/bias-functions.hlsl"
 
 
 cbuffer Params : register(b0)
@@ -29,7 +29,7 @@ RWStructuredBuffer<Point> ResultPoints : u0;
 //     return x / ((1 / bias - 2) * (1 - x) + 1);
 // }
 
-// inline float4 GetGain(float4 x, float gain)
+// inline float4 GetSchlickBias(float4 x, float gain)
 // {
 //     return x < 0.5 ? GetBias(x * 2, gain) / 2
 //                 : GetBias(x * 2 - 1, 1 - gain) / 2 + 0.5;
@@ -66,7 +66,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     //float rand = (i.x + 0.5) * 1.431 + 111 + floor(Seed+0.5) * 37.1;
     //float4 hash4 = hash42(rand);
-    float4 hash4 =  GetGain(normalizedScatter, Bias) * 2 -1;
+    float4 hash4 =  GetSchlickBias(normalizedScatter, Bias) * 2 -1;
     
     //float4 hashRot = hash42( float2(rand, 23.1));
 

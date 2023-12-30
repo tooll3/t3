@@ -108,6 +108,16 @@
       "Min": 0.0,
       "Max": 1.0,
       "Clamp": true
+    },
+    {
+      "InputId": "28081e5f-da01-46dc-81ad-699df29a49a4"/*BiasAndGain*/,
+      "Position": {
+        "X": -371.45142,
+        "Y": 1612.7272
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
     }
   ],
   "SymbolChildUis": [
@@ -226,6 +236,13 @@
       "Position": {
         "X": -221.45142,
         "Y": 1544.7272
+      }
+    },
+    {
+      "ChildId": "4baef9e1-7ed5-4685-9faa-8643c4f1c1e5"/*Vector2Components*/,
+      "Position": {
+        "X": -182.9237,
+        "Y": 1628.3008
       }
     }
   ],

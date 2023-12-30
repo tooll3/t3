@@ -106,7 +106,7 @@ int ScanRange(int2 pos, int2 direction, float threshold)
 }
 
 
-float SchlickBias(float x, float bias) {
+float GetSchlickBias(float x, float bias) {
     return x / ((1 / bias - 2) * (1 - x) + 1);
 }
     
@@ -209,8 +209,8 @@ void main(uint3 i : SV_DispatchThreadID)
                 //averageColor = lerp(averageColor, _minColor, 1);
                 
                 float4 streakColor = f < 0.5 
-                    ? lerp(_minColor, averageColor, SchlickBias(f * 2, abs(GradientBias)) )
-                    : lerp(_maxColor, averageColor, SchlickBias(1- (f -0.5) * 2, abs(GradientBias)));
+                    ? lerp(_minColor, averageColor, GetSchlickBias(f * 2, abs(GradientBias)) )
+                    : lerp(_maxColor, averageColor, GetSchlickBias(1- (f -0.5) * 2, abs(GradientBias)));
                 streakColor.rgb *= StreakColor.rgb;
 
                 int2 rangePos = rowDirection * rowIndex + lineDirection * rangeStepIndex; 

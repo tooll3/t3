@@ -30,14 +30,14 @@ static const float WorldSpace = 2;
         return;
     }
 
-    float w = SourcePoints[i.x].w;
-    float3 pOrg = SourcePoints[i.x].position;
+    float w = SourcePoints[i.x].W;
+    float3 pOrg = SourcePoints[i.x].Position;
     float3 p = pOrg;
 
-    float4 orgRot;
-    float v = q_separate_v(SourcePoints[i.x].rotation, orgRot);
+    //float4 orgRot;
+    //float v = q_separate_v(SourcePoints[i.x].rotation, orgRot);
 
-    //float4 orgRot = SourcePoints[i.x].rotation;
+    float4 orgRot = SourcePoints[i.x].Rotation;
     float4 rotation = orgRot;
 
     if (CoordinateSpace < 0.5)
@@ -95,6 +95,8 @@ static const float WorldSpace = 2;
 
     ResultPoints[i.x].Position = p.xyz;
     ResultPoints[i.x].Rotation = newRotation;
+    ResultPoints[i.x].Color = SourcePoints[i.x].Color;
+    ResultPoints[i.x].Selected = SourcePoints[i.x].Selected;
 
     float orgW = SourcePoints[i.x].W;
     ResultPoints[i.x].W = lerp(orgW, orgW * ScaleW + OffsetW, weight);
