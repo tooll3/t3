@@ -40,8 +40,9 @@ namespace T3.Operators.Types.Id_2ab1bbef_8322_4638_8b1d_7e31aaa6a457
         private enum Modes
         {
             RemoveKeyed,
-            KeepKeyed,
-            KeyedWhiteOnBackground
+            FillKeyed,
+            KeyedWhiteOnBackground,
+            ReturnKeyed,
         }
     }
 }

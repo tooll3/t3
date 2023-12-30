@@ -1,22 +1,13 @@
+#include "lib/shared/bias.hlsl"
+
 cbuffer ParamConstants : register(b0)
 {
     float DontColorAlpha;
     float Mode;
+    float Bias;
+    float Offset;
 }
 
-cbuffer TimeConstants : register(b1)
-{
-    float globalTime;
-    float time;
-    float runTime;
-    float beatTime;
-}
-
-cbuffer Resolution : register(b2)
-{
-    float TargetWidth;
-    float TargetHeight;
-}
 
 struct vsOutput
 {
@@ -26,39 +17,32 @@ struct vsOutput
 
 Texture2D<float4> ImageA : register(t0);
 Texture2D<float4> Gradient : register(t1);
-sampler texSampler : register(s0);
+sampler linearSampler : register(s0);
+sampler clampedSampler : register(s1);
 
-float fmod(float x, float y)
-{
-    return (x - y * floor(x / y));
-}
 
 float4 psMain(vsOutput psInput) : SV_TARGET
 {
-    float2 uv = psInput.texCoord;
-    float4 orgColor = ImageA.Sample(texSampler, psInput.texCoord);
+    //float2 uv = psInput.texCoord + float2(Offset,0);
+    float4 orgColor = ImageA.Sample(linearSampler, psInput.texCoord);
+    orgColor = GetGain(orgColor, Bias);  
 
     float4 gradient = 0;
     if (Mode < 0.5)
     {
         float gray = (orgColor.r + orgColor.g + orgColor.b) / 3;
-        gradient = Gradient.Sample(texSampler, float2(gray, 0));
+        gradient = Gradient.Sample(linearSampler, float2(gray + Offset, 0));
     }
     else
     {
-
+    
         gradient = float4(
-            Gradient.Sample(texSampler, float2(orgColor.r, 0)).r,
-            Gradient.Sample(texSampler, float2(orgColor.g, 0)).g,
-            Gradient.Sample(texSampler, float2(orgColor.b, 0)).b,
-            Gradient.Sample(texSampler, float2(orgColor.a, 0)).a);
+            Gradient.Sample(linearSampler, float2(orgColor.r + Offset, 0)).r,
+            Gradient.Sample(linearSampler, float2(orgColor.g + Offset, 0)).g,
+            Gradient.Sample(linearSampler, float2(orgColor.b + Offset, 0)).b,
+            Gradient.Sample(linearSampler, float2(orgColor.a + Offset, 0)).a);
     }
 
-    float a = DontColorAlpha < 0.5 ? orgColor.a : gradient.a;
-    //   ? gradient.a * orgColor.a
-    //   : (orgColor.a + gradient.a - orgColor.a * gradient.a);
-
-    // float3 rgb = (1.0 - gradient.a) * orgColor.rgb + gradient.a * gradient.rgb;
-    // return float4(rgb, a);
+    gradient.a = DontColorAlpha > 0.5 ? orgColor.a : gradient.a;
     return gradient;
 }

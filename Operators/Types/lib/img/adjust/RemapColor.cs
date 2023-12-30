@@ -25,6 +25,15 @@ namespace T3.Operators.Types.Id_da93f7d1_ef91_4b4a_9708_2d9b1baa4c14
         [Input(Guid = "e3363c0e-819a-45e2-8202-439bcce64d69",MappedType = typeof(Modes))]
         public readonly InputSlot<int> Mode = new();
 
+        [Input(Guid = "8dda3b42-a5de-47b6-aded-159eb896f65a")]
+        public readonly InputSlot<float> Bias = new InputSlot<float>();
+
+        [Input(Guid = "b1763a8b-aa98-4e00-a47c-a5d0d750ae6e")]
+        public readonly InputSlot<float> Cycle = new InputSlot<float>();
+
+        [Input(Guid = "eb070a0b-703d-43cc-a877-cf9e371ebd05")]
+        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> WrapMode = new InputSlot<SharpDX.Direct3D11.TextureAddressMode>();
+
 
         private enum Modes
         {

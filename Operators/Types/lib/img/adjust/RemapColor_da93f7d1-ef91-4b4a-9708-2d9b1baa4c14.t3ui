@@ -5,8 +5,8 @@
     {
       "InputId": "876f6f64-7cb4-4060-8571-e0b78b437d41"/*Image*/,
       "Position": {
-        "X": -274.2086,
-        "Y": -216.70993
+        "X": -298.18713,
+        "Y": 344.4582
       }
     },
     {
@@ -36,33 +36,45 @@
         "X": -314.36774,
         "Y": 615.138
       }
+    },
+    {
+      "InputId": "8dda3b42-a5de-47b6-aded-159eb896f65a"/*Bias*/,
+      "Position": {
+        "X": -314.36774,
+        "Y": 660.138
+      },
+      "Min": 0.0,
+      "Max": 1.0,
+      "Clamp": true
+    },
+    {
+      "InputId": "b1763a8b-aa98-4e00-a47c-a5d0d750ae6e"/*Cycle*/,
+      "Position": {
+        "X": -314.36774,
+        "Y": 705.138
+      }
+    },
+    {
+      "InputId": "eb070a0b-703d-43cc-a877-cf9e371ebd05"/*WrapMode*/,
+      "Position": {
+        "X": -314.36774,
+        "Y": 795.138
+      }
     }
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "d51fa2bf-5b33-403d-bb05-4eb858a83c53"/*_multiImageFxSetup*/,
-      "Style": "Resizable",
-      "Size": {
-        "X": 193.62566,
-        "Y": 863.8263
-      },
-      "Position": {
-        "X": 288.54022,
-        "Y": -277.3032
-      }
-    },
-    {
       "ChildId": "fdffba0b-5f7e-4a97-af75-21dfe98a569d"/*GradientsToTexture*/,
       "Position": {
-        "X": 14.83253,
-        "Y": -17.902258
+        "X": -24.259338,
+        "Y": 481.31345
       }
     },
     {
       "ChildId": "0ea5f0cd-02af-4872-8d07-3fc4ce0c4330"/*BoolToFloat*/,
       "Position": {
-        "X": -31.77472,
-        "Y": 560.756
+        "X": -24.259338,
+        "Y": 550.3135
       }
     },
     {
@@ -75,8 +87,8 @@
     {
       "ChildId": "9c2895b1-8571-4326-a744-0f65ed4b5420"/*_multiImageFxSetupStatic*/,
       "Position": {
-        "X": 853.66644,
-        "Y": 46.401245
+        "X": 247.56537,
+        "Y": 431.1441
       }
     }
   ],
@@ -84,8 +96,8 @@
     {
       "OutputId": "16e37306-05e1-4de6-babd-80a8d1472a2f"/*TextureOutput*/,
       "Position": {
-        "X": 1125.3413,
-        "Y": -46.14464
+        "X": 471.04095,
+        "Y": 338.5982
       }
     }
   ]

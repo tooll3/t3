@@ -80,15 +80,27 @@ float4 psMain(vsOutput psInput) : SV_TARGET
 
     float3 hsb = rgb2hsb(c.rgb);
 
-    //return float4(hsb.yyy,1);
-
     float3 keyColor = rgb2hsb(KeyColor.rgb);
     float3 weights = float3(WeightHue, WeightSaturation, WeightBrightness);
     float distance = saturate(length(hsb * weights - keyColor * weights) * Exposure - Amplify );
-    //return float4(distance.xxx,1);
-    //float k = Exposure- distance;
+
     float f = saturate(c.a * distance);
-    return Mode < 0.5 ? float4(c.rgb, distance * c.a)
-                      : lerp( (Mode>1.5 ? 1:  KeyColor), Background, distance);
+
+    if(Mode < 0.5) 
+    {
+        return float4(c.rgb, saturate(distance * c.a));
+    }
+
+    if(Mode < 1.5) 
+    {
+        return lerp(KeyColor, Background, distance);
+    }
+
+    if(Mode < 2.5) 
+    {
+        return lerp(1, Background, distance);
+    }
+
+    return float4(c.rgb, saturate(1- distance * c.a));
 
 }
