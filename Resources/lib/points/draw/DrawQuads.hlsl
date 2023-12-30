@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/hash-functions.hlsl"
 
 static const float3 Corners[] =
@@ -72,11 +73,11 @@ psInput vsMain(uint id
     // axis.xy = (axis.xy + Offset) * Stretch;
     // axis.z = 0;
 
-    float4 rotation = qmul(normalize(p.rotation), rotate_angle_axis((Rotate + 180) / 180 * PI, RotateAxis));
+    float4 rotation = qMul(normalize(p.Rotation), qFromAngleAxis((Rotate + 180) / 180 * PI, RotateAxis));
 
     float3 axis = float3((cornerFactors.xy + Offset) * Stretch, 0);
-    axis = rotate_vector(axis, rotation) * Size * lerp(1, p.w, UseWForSize);
-    float3 pInObject = p.position + axis;
+    axis = qRotateVec3(axis, rotation) * Size * lerp(1, p.W, UseWForSize);
+    float3 pInObject = p.Position + axis;
     output.position = mul(float4(pInObject, 1), ObjectToClipSpace);
 
     output.texCoord = cornerFactors.xy / 2 + 0.5;

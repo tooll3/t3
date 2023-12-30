@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -108,14 +109,14 @@ void main(uint3 i : SV_DispatchThreadID)
             TransformMatrix._m20_m21_m22);
 
 
-        newRotation = normalize(quaternion_from_matrix_precise(transpose(orientationDest)));        
+        newRotation = normalize(qFromMatrix3Precise(transpose(orientationDest)));        
 
         // Adjust rotation in point space
         if(CoordinateSpace  < 0.5) {
-            newRotation = qmul(orgRot, newRotation);
+            newRotation = qMul(orgRot, newRotation);
         }
         else {
-            newRotation = qmul(newRotation, orgRot);
+            newRotation = qMul(newRotation, orgRot);
         }
     }
 
@@ -123,16 +124,16 @@ void main(uint3 i : SV_DispatchThreadID)
         float3 weightedOffset = (p - pLocal) * w;
         p = pLocal + weightedOffset;
 
-        newRotation = q_slerp(orgRot, newRotation, w);
+        newRotation = qSlerp(orgRot, newRotation, w);
     }
 
     if(CoordinateSpace < 0.5) {     
-        p.xyz = rotate_vector(p.xyz, orgRot).xyz;
+        p.xyz = qRotateVec3(p.xyz, orgRot).xyz;
         p += pOrg;
     } 
 
-    ResultPoints[resultIndex].position = p.xyz;
-    ResultPoints[resultIndex].rotation = newRotation;
-    ResultPoints[resultIndex].w = w * ScaleW + OffsetW;    
+    ResultPoints[resultIndex].Position = p.xyz;
+    ResultPoints[resultIndex].Rotation = newRotation;
+    ResultPoints[resultIndex].W = w * ScaleW + OffsetW;    
 }
 

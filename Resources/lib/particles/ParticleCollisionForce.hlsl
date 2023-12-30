@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 RWStructuredBuffer<Particle> Particles : register(u0);
 RWStructuredBuffer<Point> ResultPoints : register(u1);

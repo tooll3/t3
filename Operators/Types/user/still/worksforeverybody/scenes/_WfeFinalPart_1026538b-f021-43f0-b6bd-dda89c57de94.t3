@@ -2550,7 +2550,7 @@
       "Outputs": []
     },
     {
-      "Id": "535e34fd-2e4a-4cfa-9eae-2c603843de03"/*SetPointsW*/,
+      "Id": "535e34fd-2e4a-4cfa-9eae-2c603843de03"/*SetPointsAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {

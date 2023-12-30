@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_191e5057_4da4_447e_b7cf_e9e0ed8c5dd8
 {
-    public class SetPointsW : Instance<SetPointsW>
+    public class SetPointsAttributes : Instance<SetPointsAttributes>
     {
 
         [Output(Guid = "39c62e1e-7c63-4a88-9923-3f7f5fffbfbf")]
@@ -34,6 +34,9 @@ namespace T3.Operators.Types.Id_191e5057_4da4_447e_b7cf_e9e0ed8c5dd8
 
         [Input(Guid = "27bf737b-966e-4203-b8fd-2d9c7b19dcad")]
         public readonly InputSlot<T3.Core.DataTypes.Curve> WCurve = new InputSlot<T3.Core.DataTypes.Curve>();
+
+        [Input(Guid = "7c944690-d5b2-4894-a178-97593ecd797a")]
+        public readonly InputSlot<T3.Core.DataTypes.Gradient> Gradient = new InputSlot<T3.Core.DataTypes.Gradient>();
 
 
         private enum MappingModes

@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/hash-functions.hlsl"
 
@@ -37,11 +38,11 @@ void GetTranslationAndRotation(float weight, float3 pointPos, float4 rotation,
 {    
     offset = GetNoise(pointPos) * weight;
 
-    float3 xDir = rotate_vector(float3(RotationLookupDistance,0,0), rotation);
+    float3 xDir = qRotateVec3(float3(RotationLookupDistance,0,0), rotation);
     float3 offsetAtPosXDir = GetNoise(pointPos + xDir) * weight;
     float3 rotatedXDir = (pointPos + xDir + offsetAtPosXDir) - (pointPos + offset);
 
-    float3 yDir = rotate_vector(float3(0, RotationLookupDistance,0), rotation);
+    float3 yDir = qRotateVec3(float3(0, RotationLookupDistance,0), rotation);
     float3 offsetAtPosYDir = GetNoise(pointPos + yDir) * weight;
     float3 rotatedYDir = (pointPos + yDir + offsetAtPosYDir) - (pointPos + offset);
 
@@ -54,7 +55,7 @@ void GetTranslationAndRotation(float weight, float3 pointPos, float4 rotation,
         cross(crossXY, rotatedXDirNormalized), 
         crossXY );
 
-    newRotation = normalize(q_from_matrix(transpose(orientationDest)));
+    newRotation = normalize(qFromMatrix3(transpose(orientationDest)));
 }
 
 
@@ -74,7 +75,7 @@ void main(uint3 i : SV_DispatchThreadID)
     
     if(sourceIndex == sourceCount-1) 
     {
-        ResultPoints[i.x].w = sqrt(-1);
+        ResultPoints[i.x].W = sqrt(-1);
     }
     else 
     {
@@ -85,17 +86,17 @@ void main(uint3 i : SV_DispatchThreadID)
         //ResultPoints[i.x] = A;
         //return;
 
-        float3  pLocal = rotate_vector(A.position, B.rotation);
+        float3  pLocal = qRotateVec3(A.Position, B.Rotation);
 
-        float age = B.w;
-        float w = A.w;
+        float age = B.W;
+        float w = A.W;
 
         float4 attributes = GrowthMap.SampleLevel(texSampler, float2(age,1-w), 0);
         float d = saturate(attributes.r - 0.05);
         if(d < 0.001)
             d = sqrt(-1);
 
-        float4 rotation = qmul(A.rotation, B.rotation);
+        float4 rotation = qMul(A.Rotation, B.Rotation);
 
         float noiseWeight = attributes.g;
         float3 offset;
@@ -104,9 +105,9 @@ void main(uint3 i : SV_DispatchThreadID)
 
         GetTranslationAndRotation(noiseWeight, pLocal * NoiseDensity + variationOffset, rotation, offset, newRotation);
 
-        ResultPoints[i.x].position = pLocal * Length + B.position + offset;
+        ResultPoints[i.x].Position = pLocal * Length + B.Position + offset;
 
-        ResultPoints[i.x].w = d * Width;
-        ResultPoints[i.x].rotation = newRotation;
+        ResultPoints[i.x].W = d * Width;
+        ResultPoints[i.x].Rotation = newRotation;
     }
 }

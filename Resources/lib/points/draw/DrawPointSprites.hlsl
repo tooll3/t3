@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/SpriteDef.hlsl"
 
 static const float3 Quad[] =
@@ -76,9 +77,9 @@ psInput vsMain(uint id: SV_VertexID)
     float3 quadCorners = Quad[vertexIndex];
     float3 posInObject =  (-float3(sprite.Pivot, 0) + quadCorners * float3(sprite.Size,0)) * Size * p.w;
 
-    float4x4 orientationMatrix = transpose(quaternion_to_matrix(p.rotation));
+    float4x4 orientationMatrix = transpose(qToMatrix(p.Rotation));
     posInObject = mul( float4(posInObject.xyz, 1), orientationMatrix);
-    posInObject += p.position;
+    posInObject += p.Position;
 
     float4 quadPosInWorld = mul(float4(posInObject.xyz,1), ObjectToWorld);
     float4 quadPosInCamera = mul(quadPosInWorld, WorldToCamera);

@@ -70,7 +70,7 @@
       "Outputs": []
     },
     {
-      "Id": "9acb8fd0-2b08-4326-87f7-610ecb875508"/*SetPointsW*/,
+      "Id": "9acb8fd0-2b08-4326-87f7-610ecb875508"/*SetPointsAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {

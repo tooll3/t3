@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
  
 RWStructuredBuffer<Point> points :register(u0);
 
@@ -23,7 +24,7 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
     if(DTid.x >= pointCount)
         return; // out of bounds
 
-    float3 position = points[DTid.x].position;
+    float3 position = points[DTid.x].Position;
     //float3 jitter = (hash33u( uint3(DTid.x, DTid.x + 134775813U, DTid.x + 1664525U) + Time % 123.12 ) -0.5f)  * CellSize * 1;
     float3 jitter = (hash33u( uint3(DTid.x, DTid.x + 134775813U, DTid.x + 1664525U + (int)(Time * 123.12)) ) -0.5f)  * CellSize * 2;
     //float3 jitter = (hash31( Time * 1234.37) - 0.5f) * CellSize * 1;
@@ -45,7 +46,7 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
             if( pointIndex == DTid.x)
                 continue;
 
-            float3 otherPos = points[pointIndex].position;
+            float3 otherPos = points[pointIndex].Position;
             float3 direction = position - otherPos;
             float distance = length(direction);
             if(distance <= 0.0001) {
@@ -69,7 +70,7 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
             
 
             //sumForces /= count;
-            points[DTid.x].position += direction * (Dispersion * 0.01) * clamp(acceleration, 0, ClampAccelleration);
+            points[DTid.x].Position += direction * (Dispersion * 0.01) * clamp(acceleration, 0, ClampAccelleration);
             //points[DTid.x].w = min(count,3) * 1;
         }
     }

@@ -1094,7 +1094,7 @@
       "Outputs": []
     },
     {
-      "Id": "d086d8f5-d0fc-4751-b743-98f5d174adc7"/*SetPointsW*/,
+      "Id": "d086d8f5-d0fc-4751-b743-98f5d174adc7"/*SetPointsAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {

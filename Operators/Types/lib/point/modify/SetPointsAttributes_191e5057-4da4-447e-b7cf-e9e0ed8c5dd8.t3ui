@@ -1,5 +1,5 @@
 {
-  "Id": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8"/*SetPointsW*/,
+  "Id": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8"/*SetPointsAttributes*/,
   "Description": "Sets the W attribute of points from a curve.\n\nDifferent modes allow you to...\n- distribute the curve range along all points\n- or use different mapping ranges.\n\nYou can also connect a texture to provide an override for the curve.",
   "InputUis": [
     {
@@ -59,6 +59,13 @@
       "Position": {
         "X": -456.88803,
         "Y": 1012.6467
+      }
+    },
+    {
+      "InputId": "7c944690-d5b2-4894-a178-97593ecd797a"/*Gradient*/,
+      "Position": {
+        "X": -456.88803,
+        "Y": 1057.6467
       }
     }
   ],
@@ -157,6 +164,20 @@
       "Position": {
         "X": -102.957855,
         "Y": 958.3457
+      }
+    },
+    {
+      "ChildId": "e6858bcc-16ce-45dc-a878-0ebe319e7872"/*GradientsToTexture*/,
+      "Position": {
+        "X": -249.10107,
+        "Y": 1083.9326
+      }
+    },
+    {
+      "ChildId": "a727cbe7-3609-41c1-a2ab-af348b583d3e"/*SrvFromTexture2d*/,
+      "Position": {
+        "X": -7.6514893,
+        "Y": 1096.4443
       }
     }
   ],

@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/point-light.hlsl"
 #include "lib/shared/pbr.hlsl"
 #include "lib/shared/hash-functions.hlsl"
@@ -162,9 +163,9 @@ psInput vsMain(uint id : SV_VertexID)
 
     Point _p = Points[pointId];
 
-    float4 pRotation = normalize(_p.rotation); 
-    float4 pPosition = float4(_p.position,1);
-    float pW = _p.w;
+    float4 pRotation = normalize(_p.Rotation); 
+    float4 pPosition = float4(_p.Position,1);
+    float pW = _p.W;
 
     // SETUP SEEDS ----------------------------------------------------------
 
@@ -236,12 +237,12 @@ psInput vsMain(uint id : SV_VertexID)
 
     vInObject.xyz *=   computedScale * Scale * Stretch * LimitScale(RandomStretch * scatterForScale + 1);
 
-    float3 randomOffset = rotate_vector((normalizedScatter.xyz - 0.5) * 2 * RandomPosition * Randomize, pRotation);
+    float3 randomOffset = qRotateVec3((normalizedScatter.xyz - 0.5) * 2 * RandomPosition * Randomize, pRotation);
     vInObject.xyz += randomOffset;
     vInObject.xyz += Offset;
 
 
-    float4x4 orientationMatrix = transpose(quaternion_to_matrix(normalize(pRotation)));
+    float4x4 orientationMatrix = transpose(qToMatrix(normalize(pRotation)));
     
     vInObject = mul(float4(vInObject.xyz, 1), orientationMatrix);
     vInObject += float4(pPosition.xyz, 0);

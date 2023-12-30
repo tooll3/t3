@@ -1,5 +1,6 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/bias.hlsl"
 
 
@@ -69,27 +70,27 @@ void main(uint3 i : SV_DispatchThreadID)
     
     //float4 hashRot = hash42( float2(rand, 23.1));
 
-    float4 rot = SourcePoints[i.x].rotation;
+    float4 rot = SourcePoints[i.x].Rotation;
 
-    float amount = Amount * (UseWAsSelection > 0.5 ? SourcePoints[i.x].w : 1);
+    float amount = Amount * (UseWAsSelection > 0.5 ? SourcePoints[i.x].W : 1);
  
     float3 offset = hash4.xyz * RandomizePosition * amount;
 
     if(UseLocalSpace < 0.5)
     {
-        offset = rotate_vector2(offset, rot);
+        offset = qRotateVec3(offset, rot);
     }
 
-    ResultPoints[i.x].position = SourcePoints[i.x].position + offset;
+    ResultPoints[i.x].Position = SourcePoints[i.x].Position + offset;
 
     float3 randomRotate = (hashRot.xyz - 0.5) * (RandomizeRotation / 180 * PI) * amount * hash4.xyz;
 
-    rot = normalize(qmul(rot, rotate_angle_axis(randomRotate.x * Offset, float3(1,0,0))));
-    rot = normalize(qmul(rot, rotate_angle_axis(randomRotate.y * Offset, float3(0,1,0))));
-    rot = normalize(qmul(rot, rotate_angle_axis(randomRotate.z * Offset, float3(0,0,1))));
+    rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.x * Offset, float3(1,0,0))));
+    rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.y * Offset, float3(0,1,0))));
+    rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.z * Offset, float3(0,0,1))));
 
-    ResultPoints[i.x].rotation = rot;
+    ResultPoints[i.x].Rotation = rot;
 
-    ResultPoints[i.x].w =  SourcePoints[i.x].w + hash4.w *RandomizeW * amount;
+    ResultPoints[i.x].W =  SourcePoints[i.x].W + hash4.w *RandomizeW * amount;
 }
 

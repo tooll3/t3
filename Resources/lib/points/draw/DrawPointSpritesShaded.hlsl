@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/SpriteDef.hlsl"
 #include "lib/shared/point-light.hlsl"
 #include "lib/shared/pbr.hlsl"
@@ -108,18 +109,18 @@ psInput vsMain(uint id: SV_VertexID)
     Point p = Points[entryIndex];
 
     float3 quadCorners = Corners[vertexIndex];
-    float3 posInObject =  (-float3(sprite.Pivot, 0) + quadCorners * float3(sprite.Size,0)) * Size * p.w;
+    float3 posInObject =  (-float3(sprite.Pivot, 0) + quadCorners * float3(sprite.Size,0)) * Size * p.W;
 
-    float4x4 orientationMatrix = transpose(quaternion_to_matrix(p.rotation));
+    float4x4 orientationMatrix = transpose(qToMatrix(p.Rotation));
     posInObject = mul( float4(posInObject.xyz, 1), orientationMatrix);
-    posInObject += p.position;
+    posInObject += p.Position;
 
-    float3 normal = normalize(rotate_vector(float3(0,0,1), p.rotation));
+    float3 normal = normalize(qRotateVec3(float3(0,0,1), p.Rotation));
 
     // Pass tangent space basis vectors (for normal mapping).
     float3x3 TBN = float3x3(
-        normalize(rotate_vector(float3(1,0,0), p.rotation)), 
-        normalize(rotate_vector(float3(0,1,0), p.rotation)), 
+        normalize(qRotateVec3(float3(1,0,0), p.Rotation)), 
+        normalize(qRotateVec3(float3(0,1,0), p.Rotation)), 
         normal 
         );
 

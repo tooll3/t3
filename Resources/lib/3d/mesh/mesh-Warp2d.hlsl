@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/pbr.hlsl"
 
 cbuffer Params : register(b0)
@@ -77,17 +78,17 @@ void main(uint3 i : SV_DispatchThreadID)
     PbrVertex v = SourceVertices[vertexIndex];
 
     float3 vp = v.Position;
-    float2 p0= SourcePoints[0].position.xy;
-    float2 p1= SourcePoints[1].position.xy;
-    float2 p2= SourcePoints[2].position.xy;
-    float2 p3= SourcePoints[3].position.xy;
+    float2 p0= SourcePoints[0].Position.xy;
+    float2 p1= SourcePoints[1].Position.xy;
+    float2 p2= SourcePoints[2].Position.xy;
+    float2 p3= SourcePoints[3].Position.xy;
 
     float2 uv = saturate(invBilinear(vp.xy, p0, p1, p2, p3));
 
-    float3 pt0= TargetPoints[0].position;
-    float3 pt1= TargetPoints[1].position;
-    float3 pt2= TargetPoints[2].position;
-    float3 pt3= TargetPoints[3].position;
+    float3 pt0= TargetPoints[0].Position;
+    float3 pt1= TargetPoints[1].Position;
+    float3 pt2= TargetPoints[2].Position;
+    float3 pt3= TargetPoints[3].Position;
 
     float2 targetPos = 
     lerp(

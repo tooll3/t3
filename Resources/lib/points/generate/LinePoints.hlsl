@@ -1,5 +1,6 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 
 cbuffer Params : register(b0)
@@ -18,6 +19,9 @@ cbuffer Params : register(b0)
     float3 ManualOrientationAxis;
     float OrientationMode;
     
+    float4 ColorA;
+    float4 ColorB;
+
     float AddSeparator;
 }
 
@@ -49,42 +53,45 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
 
     if(AddSeparator > 0.5 && index == pointCount -1) {
-        ResultPoints[index].w = sqrt(-1);
+        ResultPoints[index].W = sqrt(-1);
         return;
     }
 
     int seperatorOffset = AddSeparator > 0.5 ? 1 :0;
     int steps = (pointCount - 1 - seperatorOffset);
-    float f =  (steps > 0 ? (float)(index)/steps : 0.5) - Pivot;
+    float f1 = (steps > 0 ? (float)(index)/steps : 0.5);
+    float f =  f1 - Pivot;
     
 
-    ResultPoints[index].position = lerp(Center, Center + Direction * LengthFactor, f);
-    ResultPoints[index].w = W + WOffset * (float)(index)/steps;
+    ResultPoints[index].Position = lerp(Center, Center + Direction * LengthFactor, f);
+    ResultPoints[index].W = W + WOffset * (float)(index)/steps;
 
     float4 rot2 = 0;
     if(OrientationMode < 0.5) 
     {
-        float4 rotate = rotate_angle_axis(3.141578/2 * 1, float3(0,0,1));
+        float4 rotate = qFromAngleAxis(3.141578/2 * 1, float3(0,0,1));
 
-        rotate = qmul( rotate, rotate_angle_axis( (OrientationAngle + Twist * f) / 180 * 3.141578, float3(0,1,0)));
+        rotate = qMul( rotate, qFromAngleAxis( (OrientationAngle + Twist * f) / 180 * 3.141578, float3(0,1,0)));
 
         float3 upVector = float3(0,0,1);
         float t = abs(dot( normalize(Direction), normalize(upVector)));
         if(t > 0.999) {
             upVector = float3(0,1,0);
         }
-        float4 lookAt = q_look_at(normalize(Direction), upVector);
+        float4 lookAt = qLookAt(normalize(Direction), upVector);
         
-        //rot2 = normalize(qmul(rotate, lookAt));            
-        rot2 = normalize(qmul(rotate, lookAt));
+        //rot2 = normalize(qMul(rotate, lookAt));            
+        rot2 = normalize(qMul(rotate, lookAt));
     }
     else 
     {
         // FIXME: this rotation is hard to control and feels awkward. 
         // I didn't come up with another method, though
-        rot2 = normalize(rotate_angle_axis((OrientationAngle + Twist * f) / 180 * 3.141578, ManualOrientationAxis));
+        rot2 = normalize(qFromAngleAxis((OrientationAngle + Twist * f) / 180 * 3.141578, ManualOrientationAxis));
     }
 
-    ResultPoints[index].rotation = rot2;
+    ResultPoints[index].Rotation = rot2;
+    ResultPoints[index].Color = lerp(ColorA, ColorB, f1);
+    ResultPoints[index].Selected = 1;
 }
 

@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -35,10 +36,10 @@ RWStructuredBuffer<Point> ResultPoints : u0;
 
     Point p = SourcePoints[i.x];
 
-    float4 pInClipSpace = mul(float4(p.position,1), CameraToWorld);
+    float4 pInClipSpace = mul(float4(p.Position,1), CameraToWorld);
     pInClipSpace.xyz /= pInClipSpace.w;
     pInClipSpace.w =1;
-    p.position = pInClipSpace;
+    p.Position = pInClipSpace;
 
 
     // Transform rotation is kind of tricky. There might be more efficient ways to do this.
@@ -47,9 +48,9 @@ RWStructuredBuffer<Point> ResultPoints : u0;
         CameraToWorld._m10_m11_m12,
         CameraToWorld._m20_m21_m22);
 
-    float4 newRotation = normalize(quaternion_from_matrix_precise(transpose(orientationDest)));
-    newRotation = qmul(newRotation, p.rotation);
-    p.rotation = newRotation;
+    float4 newRotation = normalize(qFromMatrix3Precise(transpose(orientationDest)));
+    newRotation = qMul(newRotation, p.Rotation);
+    p.Rotation = newRotation;
 
     ResultPoints[i.x] = p; 
 }

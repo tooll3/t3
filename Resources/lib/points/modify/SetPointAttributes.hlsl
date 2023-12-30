@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -9,11 +10,11 @@ cbuffer Params : register(b0)
     float Mode;
     float Range;
     float Phase;
-
 }
 
 StructuredBuffer<Point> SourcePoints : t0;        
 Texture2D<float4> CurveImage : register(t1);
+Texture2D<float4> GradientImage : register(t2);
 
 RWStructuredBuffer<Point> ResultPoints : u0;
 sampler texSampler : register(s0);
@@ -62,27 +63,30 @@ void main(uint3 i : SV_DispatchThreadID)
     }
     else {
         // original w 
-        f = p.w;
+        f = p.W;
     }
 
     float curveValue =  CurveImage.SampleLevel(texSampler, float2(f,0.5) ,0).r;
+    float4 gradientColor = GradientImage.SampleLevel(texSampler, float2(f,0.5) ,0).r;
     
     float w = 0;
 
     if(Mode < 0.5) {
-        w= !isnan(p.w) ? curveValue : p.w;
+        w= !isnan(p.W) ? curveValue : p.W;
     }
     else if(Mode < 1.5) {
-        w= p.w * curveValue;
+        w= p.W * curveValue;
     }
         else if(Mode < 2.5) {
-        w= p.w + curveValue;
+        w= p.W + curveValue;
     }
 
-    w = lerp(p.w, w, Amount);
+    w = lerp(p.W, w, Amount);
 
-    ResultPoints[index].w = w;
-    ResultPoints[index].position = p.position;
-    ResultPoints[index].rotation = p.rotation;
+    ResultPoints[index].W = w;
+    ResultPoints[index].Position = p.Position;
+    ResultPoints[index].Rotation = p.Rotation;
+    ResultPoints[index].Color = p.Color * gradientColor;
+    ResultPoints[index].Selected = p.Selected;
 }
 

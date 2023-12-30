@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -33,20 +34,20 @@ void main(uint3 i : SV_DispatchThreadID)
 
     TrailPoints[targetIndex] = SourcePoints[sourceIndex];
 
-    float3 lastPos = TrailPoints[(targetIndex-1) % bufferLength ].position;
-    float3 pos = SourcePoints[sourceIndex].position;
+    float3 lastPos = TrailPoints[(targetIndex-1) % bufferLength ].Position;
+    float3 pos = SourcePoints[sourceIndex].Position;
     if(AddSeparatorThreshold > 0) {
         if( length(lastPos - pos) > 0.5) 
-            TrailPoints[targetIndex].w = sqrt(-1);
+            TrailPoints[targetIndex].W = sqrt(-1);
     }
 
-    //TrailPoints[targetIndex].rotation = normalize(q_look_at(SourcePoints[sourceIndex].position, lastPos));
+    //TrailPoints[targetIndex].rotation = normalize(qLookAt(SourcePoints[sourceIndex].position, lastPos));
 
     //Point p = SourcePoints[i.x];
     //TrailPoints[targetIndex].w = 0.4;
 
     // Flag follow position W as NaN line seperator
-    TrailPoints[(targetIndex + 1) % bufferLength].w = sqrt(-1);
+    TrailPoints[(targetIndex + 1) % bufferLength].W = sqrt(-1);
 
     // // Flag too small w as separator
     // if(TrailPoints[targetIndex].w < 0.001 ) 

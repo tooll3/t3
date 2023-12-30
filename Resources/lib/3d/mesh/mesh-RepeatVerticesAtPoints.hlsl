@@ -1,5 +1,6 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/pbr.hlsl"
 
 cbuffer Params : register(b0)
@@ -38,7 +39,7 @@ void main(uint3 i : SV_DispatchThreadID)
     // Apply point transform
     float4 posInObject = float4( v.Position,1);
 
-    float4x4 orientationMatrix = transpose(quaternion_to_matrix(p.rotation));
+    float4x4 orientationMatrix = transpose(qToMatrix(p.rotation));
 
     posInObject.xyz *= Size;
     posInObject.xyz *= UseWForSize ? (lerp(Size, Size + p.w,  Stretch) ) :1;
@@ -48,9 +49,9 @@ void main(uint3 i : SV_DispatchThreadID)
     posInObject += float4(p.position, 0); 
 
     v.Position = posInObject; 
-    v.Normal = rotate_vector(v.Normal, p.rotation);
-    v.Tangent = rotate_vector(v.Tangent, p.rotation);
-    v.Bitangent = rotate_vector(v.Bitangent, p.rotation);
+    v.Normal = qRotateVec3(v.Normal, p.rotation);
+    v.Tangent = qRotateVec3(v.Tangent, p.rotation);
+    v.Bitangent = qRotateVec3(v.Bitangent, p.rotation);
     ResultVertices[targetVertexIndex] = v; 
 }
 

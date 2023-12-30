@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 static const float3 Corners[] =
     {
@@ -116,8 +117,8 @@ psInput vsMain(uint id
     int2 oddBit = targetSize & 1; 
  
 
-    float3 pos = overridePositionCount > 0 ? OverridePositionPoints[drawIndex].position 
-                                        : DataPoints[drawIndex + StartIndex].position;
+    float3 pos = overridePositionCount > 0 ? OverridePositionPoints[drawIndex].Position 
+                                        : DataPoints[drawIndex + StartIndex].Position;
 
     float4 posInObject = float4(pos, 1);
     float4 posInClipSpace = mul(posInObject, ObjectToClipSpace);
@@ -138,7 +139,7 @@ psInput vsMain(uint id
     output.uv = (float2(0, 1) + (quadPos.xy * 0.5 + 0.5) * float2(1, -1));//* float2(DigitCount,1);
     output.id = drawIndex;
 
-    float w= DataPoints[drawIndex + StartIndex].w;
+    float w= DataPoints[drawIndex + StartIndex].W;
     output.attributeValue =   isnan(w) ? NanPlaceholder: w;
     return output;
 }

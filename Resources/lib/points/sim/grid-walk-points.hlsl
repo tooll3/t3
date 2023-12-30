@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -33,20 +34,20 @@ void main(uint3 i : SV_DispatchThreadID)
     uint numStructs, stride;
     ResultPoints.GetDimensions(numStructs, stride);
     if(i.x >= numStructs) {
-        ResultPoints[i.x].w = 0 ;
+        ResultPoints[i.x].W = 0 ;
         return;
     }
 
     Point p = ResultPoints[i.x];
     float3 forward = float3(0,0,-1);
-    float3 velocity = rotate_vector(forward, normalize(p.rotation)) * Speed;
+    float3 velocity = qRotateVec3(forward, normalize(p.Rotation)) * Speed;
 
     float3 localVelocity = velocity;
 
-    float3 localPosition = mod(p.position - GridOffset, GridSize);
+    float3 localPosition = mod(p.Position - GridOffset, GridSize);
     float3 newLocalPosition = localPosition + localVelocity;
 
-    float hash = hash11((Seed + i.x + p.position.x + p.position.y + p.position.z) * 421 % 1231);
+    float hash = hash11((Seed + i.x + p.Position.x + p.Position.y + p.Position.z) * 421 % 1231);
     if( newLocalPosition.x <= 0 || newLocalPosition.x >= GridSize.x 
      || newLocalPosition.y <= 0 || newLocalPosition.y >= GridSize.y 
      || newLocalPosition.z <= 0 || newLocalPosition.z >= GridSize.z
@@ -59,8 +60,8 @@ void main(uint3 i : SV_DispatchThreadID)
                                   : r == 1 ? float3(0,-1,0)
                                                 : float3(0,0,-1);
         float4 axisAndAngle = axisAngles[(int)(hash * 6) % 6];
-        ResultPoints[i.x].rotation = rotate_angle_axis(axisAndAngle.w * PI/1.5, axisAndAngle.xyz);
+        ResultPoints[i.x].Rotation = qFromAngleAxis(axisAndAngle.w * PI/1.5, axisAndAngle.xyz);
     }
-    ResultPoints[i.x].position += velocity;
+    ResultPoints[i.x].Position += velocity;
 }
 

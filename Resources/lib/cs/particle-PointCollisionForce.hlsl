@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
  
 RWStructuredBuffer<Particle> particles :register(u0);
 
@@ -38,28 +39,22 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
     if(gi >= pointCount)
         return; // out of bounds
     
-    Point p = particles[gi].p;
+    Particle p = particles[gi];
 
-    float3 position = p.position;
-    //float3 searchPos = position; 
-
+    float3 position = p.Position;
     uint startIndex, endIndex;
 
     int closestIndex = -1;
     float3 closestDirection = 0;
     float closestDistance = 9999999; 
 
-    // float4 rot;
-    // float v = q_separate_v(p.rotation, rot);
-    // float3 orgV = rotate_vector(float3(0,0,1), rot) * v;
-
     float3 forceSum =0;
     int count = 0;
 
-    float3 pos = particles[gi].p.position;
-    float3 velocity = particles[gi].velocity;
+    float3 pos = particles[gi].Position;
+    float3 velocity = particles[gi].Velocity;
     float3 posNext = pos + velocity * SpeedFactor * 0.01;
-    float r = particles[gi].radius;
+    float r = particles[gi].Radius;
 
     for(int cellOffsetIndex =0; cellOffsetIndex < 8; cellOffsetIndex++) 
     {
@@ -79,8 +74,8 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
                 if( otherIndex == gi)
                     continue;
 
-                float3 otherPos = particles[otherIndex].p.position;
-                float r2 = particles[otherIndex].radius;
+                float3 otherPos = particles[otherIndex].Position;
+                float r2 = particles[otherIndex].Radius;
 
                 float3 pToO = pos - otherPos;
                 float centerDistance = length(pToO);
@@ -98,20 +93,20 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
                 if(sign( gap * gapNext) < 0  && gap > 0) 
                 {
                     velocity = reflect(velocity, direction );
-                    particles[gi].velocity = velocity * Bounciness;
+                    particles[gi].Velocity = velocity * Bounciness;
                 }  
                 else 
                 {
                     // Already inside...
                     if(gap < 0) 
                     {
-                        particles[gi].p.position -= direction * gap * CollisionResolve;
+                        particles[gi].Position -= direction * gap * CollisionResolve;
 
                     }
                     // Attraction?
                     else 
                     {           
-                        particles[gi].velocity -= (direction * Attraction  / massRatio) * (1/( pow(centerDistance, AttractionDecay))) ;
+                        particles[gi].Velocity -= (direction * Attraction  / massRatio) * (1/( pow(centerDistance, AttractionDecay))) ;
                     }
                 }   
 

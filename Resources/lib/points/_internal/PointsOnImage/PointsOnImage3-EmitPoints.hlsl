@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/hash-functions.hlsl"
 
 cbuffer EmitParameter : register(b0)
@@ -124,8 +125,8 @@ void GeneratePoints(uint3 threadID : SV_DispatchThreadID)
     
     //ResultPoints[threadID.x].position = float3(samplePosInUV * float2(2, 2/ aspectRatio) + float2(0,-0.5) - 2 ,0);
     float2 uv = (samplePosInUV -0.5) * 2 * float2(1/aspectRatio,1);
-    ResultPoints[threadID.x].position = float3(uv ,0);
-    ResultPoints[threadID.x].w = 1;
-    ResultPoints[threadID.x].rotation = float4(0,0,0,1);
+    ResultPoints[threadID.x].Position = float3(uv ,0);
+    ResultPoints[threadID.x].W = 1;
+    ResultPoints[threadID.x].Rotation = float4(0,0,0,1);
 
 }

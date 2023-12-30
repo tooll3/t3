@@ -46,6 +46,12 @@ namespace T3.Operators.Types.Id_4ae9e2f5_7cb3_40b0_a662_0662e8cb7c68
         [Input(Guid = "ddc2ea6a-d356-46c9-b333-4cce69c02570")]
         public readonly InputSlot<bool> AddSeparator = new();
 
+        [Input(Guid = "6f46bd61-422f-4715-9219-3d2e1dff1d90")]
+        public readonly InputSlot<System.Numerics.Vector4> ColorA = new InputSlot<System.Numerics.Vector4>();
+
+        [Input(Guid = "4d45a633-ac00-4cbe-83a3-43c419c3da97")]
+        public readonly InputSlot<System.Numerics.Vector4> ColorB = new InputSlot<System.Numerics.Vector4>();
+
 
         private enum OrientationModes
         {

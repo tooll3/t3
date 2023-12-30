@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 static const float4 Factors[] = 
 {
@@ -43,9 +44,9 @@ sampler texSampler : register(s0);
 [numthreads(256,4,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
-    ResultPoints[i.x].rotation = SourcePoints[i.x].rotation;
-    float3 pos = SourcePoints[i.x].position;
-    ResultPoints[i.x].position = pos;
+    ResultPoints[i.x].Rotation = SourcePoints[i.x].Rotation;
+    float3 pos = SourcePoints[i.x].Position;
+    ResultPoints[i.x].Position = pos;
 
 
     float4 distanceFromCamera = mul(float4(pos, 1), ObjectToCamera);
@@ -54,5 +55,5 @@ void main(uint3 i : SV_DispatchThreadID)
     float normalized = (-d - NearRange) / (FarRange-NearRange);
     float4 t = inputTexture.SampleLevel(texSampler, float2(normalized, 0.5), 0); 
 
-    ResultPoints[i.x].w = SourcePoints[i.x].w * t.r * 1;
+    ResultPoints[i.x].W = SourcePoints[i.x].W * t.r * 1;
 }

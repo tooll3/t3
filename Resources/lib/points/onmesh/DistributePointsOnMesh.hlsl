@@ -2,6 +2,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 
 cbuffer EmitParameter : register(b0)
@@ -93,7 +94,7 @@ void main(uint3 i : SV_DispatchThreadID)
     float v = xi2 * xi1Sqrt; 
     float w = 1.0 - u - v;
 
-    p.position = Vertices[fIndices[0]].Position * u
+    p.Position = Vertices[fIndices[0]].Position * u
                + Vertices[fIndices[1]].Position * v
                + Vertices[fIndices[2]].Position * w;
 
@@ -111,8 +112,8 @@ void main(uint3 i : SV_DispatchThreadID)
     
     float3x3 orientationDest= float3x3( tangent,binormal, normal );
 
-    p.rotation = normalize(quaternion_from_matrix_precise(transpose(orientationDest)));
-    p.w = 1;
+    p.Rotation = normalize(qFromMatrix3Precise(transpose(orientationDest)));
+    p.W = 1;
 
     ResultPoints[i.x] = p;
 

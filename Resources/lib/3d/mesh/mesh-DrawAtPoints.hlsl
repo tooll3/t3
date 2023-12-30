@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/point-light.hlsl"
 #include "lib/shared/pbr.hlsl"
 
@@ -91,12 +92,12 @@ psInput vsMain(uint id
     PbrVertex vertex = PbrVertices[FaceIndices[faceIndex][faceVertexIndex]];
     float4 posInObject = float4(vertex.Position, 1);
 
-    float resize = (UseWForSize ? Points[instanceIndex].w : 1);
+    float resize = (UseWForSize ? Points[instanceIndex].W : 1);
     posInObject.xyz *= max(0, resize) * Size;
-    float4x4 orientationMatrix = transpose(quaternion_to_matrix(normalize(Points[instanceIndex].rotation)));
+    float4x4 orientationMatrix = transpose(qToMatrix(normalize(Points[instanceIndex].Rotation)));
     posInObject = mul(float4(posInObject.xyz, 1), orientationMatrix);
 
-    posInObject += float4(Points[instanceIndex].position, 0);
+    posInObject += float4(Points[instanceIndex].Position, 0);
 
     float4 posInClipSpace = mul(posInObject, ObjectToClipSpace);
     output.pixelPosition = posInClipSpace;

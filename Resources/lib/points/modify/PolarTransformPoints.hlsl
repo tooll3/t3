@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -25,14 +26,14 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
     }
 
-    float w = SourcePoints[i.x].w;
-    float3 p = SourcePoints[i.x].position;
-    float4 rot = SourcePoints[i.x].rotation;
+    float w = SourcePoints[i.x].W;
+    float3 p = SourcePoints[i.x].Position;
+    float4 rot = SourcePoints[i.x].Rotation;
 
     p = mul(float4(p,1), TransformMatrix).xyz;
 
-    float4 rotYAxis = rotate_angle_axis(p.x, float3(0,1,0));
-    float4 rotXAxis = rotate_angle_axis(-p.y, float3(1,0,0));
+    float4 rotYAxis = qFromAngleAxis(p.x, float3(0,1,0));
+    float4 rotXAxis = qFromAngleAxis(-p.y, float3(1,0,0));
 
     if(Mode > 0.5) 
     {
@@ -52,12 +53,12 @@ void main(uint3 i : SV_DispatchThreadID)
 
     if(Mode > 0.5) 
     {
-        rot = normalize(qmul(rotXAxis, rot));
+        rot = normalize(qMul(rotXAxis, rot));
     }
-    rot = normalize(qmul(rotYAxis, rot));
+    rot = normalize(qMul(rotYAxis, rot));
 
-    ResultPoints[i.x].position = p;
-    ResultPoints[i.x].rotation = rot;
-    ResultPoints[i.x].w = w;
+    ResultPoints[i.x].Position = p;
+    ResultPoints[i.x].Rotation = rot;
+    ResultPoints[i.x].W = w;
 }
 

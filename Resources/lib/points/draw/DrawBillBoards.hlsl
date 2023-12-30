@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/hash-functions.hlsl"
 
 static const float3 Corners[] =
@@ -143,7 +144,7 @@ psInput vsMain(uint id
 
     Point p = Points[pointId]; 
 
-    float4 pRotation = normalize(p.rotation); 
+    float4 pRotation = normalize(p.Rotation); 
     float f = pointId / (float)particleCount;
 
     float phase = RandomPhase + 133.1123 * f;
@@ -161,8 +162,8 @@ psInput vsMain(uint id
     int2 altasSize = (int2)AtlasSize;
 
 
-    float textureUx = GetUFromMode(TextureAtlasMode, pointId, (f * altasSize.x) % 1, normalizedScatter, p.w, output.fog) % altasSize.x;
-    float textureUy = GetUFromMode(TextureAtlasMode, pointId, f, normalizedScatter.wxyz, p.w, output.fog); 
+    float textureUx = GetUFromMode(TextureAtlasMode, pointId, (f * altasSize.x) % 1, normalizedScatter, p.W, output.fog) % altasSize.x;
+    float textureUy = GetUFromMode(TextureAtlasMode, pointId, f, normalizedScatter.wxyz, p.W, output.fog); 
     //int cellIndex = textureU * altasSize.x * altasSize.y;// pointId;
     
     int textureCelX =  textureUx * altasSize.x;
@@ -172,17 +173,17 @@ psInput vsMain(uint id
     output.texCoord /= altasSize;
     output.texCoord += float2(textureCelX, textureCelY) / altasSize;
 
-    float4 posInObject = float4(p.position, 1);
+    float4 posInObject = float4(p.Position, 1);
 
-    float3 randomOffset = rotate_vector((normalizedScatter.xyz - 0.5) * 2 * RandomPosition * Randomize, pRotation);
+    float3 randomOffset = qRotateVec3((normalizedScatter.xyz - 0.5) * 2 * RandomPosition * Randomize, pRotation);
     posInObject.xyz += randomOffset;
 
     if (OrientationMode <= 1.5)
     {
-            posInObject.xyz += rotate_vector(float3(0,0,Offset.z), pRotation);
+            posInObject.xyz += qRotateVec3(float3(0,0,Offset.z), pRotation);
     }
 
-    // float3 axis = rotate_vector(p.position, rotation) * Size * scaleFromCurve;
+    // float3 axis = qRotateVec3(p.position, rotation) * Size * scaleFromCurve;
 
     float4 quadPosInCamera = mul(posInObject, ObjectToCamera);
 
@@ -194,7 +195,7 @@ psInput vsMain(uint id
 
     float4 colorFromPoint = (UseRotationAsRgba > 0.5) ? pRotation : 1;
 
-    float colorFxU = GetUFromMode(ColorVariationMode, pointId, f, normalizedScatter, p.w, output.fog);
+    float colorFxU = GetUFromMode(ColorVariationMode, pointId, f, normalizedScatter, p.W, output.fog);
     output.color = Color * ColorOverW.SampleLevel(texSampler, float2(colorFxU, 0), 0) * colorFromPoint;
 
     float adjustedRotate = Rotate;
@@ -220,9 +221,9 @@ psInput vsMain(uint id
     }
 
     // Scale and stretch
-    float scaleFxU = GetUFromMode(ScaleDistribution, pointId, f, normalizedScatter, p.w, output.fog);
+    float scaleFxU = GetUFromMode(ScaleDistribution, pointId, f, normalizedScatter, p.W, output.fog);
     float scaleFromCurve = SizeOverW.SampleLevel(texSampler, float2(scaleFxU, 0), 0).r;
-    float hideUndefinedPoints = isnan(p.w) ? 0 : (UseWFoScale > 0.5 ? p.w : 1 );
+    float hideUndefinedPoints = isnan(p.W) ? 0 : (UseWFoScale > 0.5 ? p.W : 1 );
     float computedScale = adjustedScale * (RandomScale * scatterForScale.y *adjustedRandomize + 1) * tooCloseFactor * scaleFromCurve * hideUndefinedPoints;
 
     output.position = 0;
@@ -231,26 +232,26 @@ psInput vsMain(uint id
     {
         float2 corner = float2((cornerFactors.xy + Offset.xy) * 0.010 * Stretch * textureAspect) * float2(-1, -1);
 
-        float4 rot = rotate_angle_axis((adjustedRotate + RandomRotate * scatterForScale.x * adjustedRandomize) * 3.141578 / 180, RotationAxis);
+        float4 rot = qFromAngleAxis((adjustedRotate + RandomRotate * scatterForScale.x * adjustedRandomize) * 3.141578 / 180, RotationAxis);
 
         if ((int)OrientationMode == 1)
         {
-            float3 yRotated = rotate_vector(float3(0, 1, 0), pRotation);
+            float3 yRotated = qRotateVec3(float3(0, 1, 0), pRotation);
             float4 yRotatedInCam = mul(float4(yRotated, 1), ObjectToCamera);
             float a = atan2(yRotatedInCam.x, yRotatedInCam.y);
-            float4 xx = rotate_angle_axis(-a, float3(0, 0, 1));
-            rot = qmul(xx, rot);
+            float4 xx = qFromAngleAxis(-a, float3(0, 0, 1));
+            rot = qMul(xx, rot);
         }
 
-        corner = rotate_vector(float3(corner, 0), rot).xy;
+        corner = qRotateVec3(float3(corner, 0), rot).xy;
         // quadPosInCamera.xy += corner * computedScale;
         output.position = mul(quadPosInCamera + float4(corner * computedScale, 0, 0), CameraToClipSpace);
     }
     else
     {
         float3 axis = ( cornerFactors + Offset) * 0.010 * float3(Stretch * textureAspect,1);
-        float4 rotation = qmul(normalize(pRotation), rotate_angle_axis((adjustedRotate + 180 + RandomRotate * scatterForScale.x) / 180 * PI, RotationAxis));
-        axis = rotate_vector(axis, rotation) * computedScale;
+        float4 rotation = qMul(normalize(pRotation), qFromAngleAxis((adjustedRotate + 180 + RandomRotate * scatterForScale.x) / 180 * PI, RotationAxis));
+        axis = qRotateVec3(axis, rotation) * computedScale;
         // float3 pInObject = p.position + axis;
         output.position = mul(posInObject + float4(axis, 0), ObjectToClipSpace);
     }

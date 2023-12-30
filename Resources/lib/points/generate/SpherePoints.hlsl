@@ -1,5 +1,6 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 
 cbuffer Params : register(b0)
@@ -19,8 +20,8 @@ static float modPi = 2*PI * precision;
 static float toRad = PI/180;
 
 // Fix orientation so z aligns with sphere normal
-static float4 rot4 = rotate_angle_axis( -PI/2 , float3(1,0,0));    
-static float4 rot5 = qmul(rot4,  rotate_angle_axis( PI/2 , float3(0,0,1)));    
+static float4 rot4 = qFromAngleAxis( -PI/2 , float3(1,0,0));    
+static float4 rot5 = qMul(rot4,  qFromAngleAxis( PI/2 , float3(0,0,1)));    
 
 [numthreads(256,4,1)]
 void main(uint3 dtID : SV_DispatchThreadID)
@@ -52,9 +53,9 @@ void main(uint3 dtID : SV_DispatchThreadID)
     ResultPoints[dtID.x].w = 1;
 
 
-    float4 rot = rotate_angle_axis( theta, float3(0,-1,0));
+    float4 rot = qFromAngleAxis( theta, float3(0,-1,0));
     float angle4 = atan2( y, radius)  - PI/2;
-    float4 rot2 = rotate_angle_axis( angle4 , float3(0,0,1));    
-    ResultPoints[dtID.x].rotation = qmul( qmul(rot,rot2) , rot5);
+    float4 rot2 = qFromAngleAxis( angle4 , float3(0,0,1));    
+    ResultPoints[dtID.x].rotation = qMul( qMul(rot,rot2) , rot5);
 }
 

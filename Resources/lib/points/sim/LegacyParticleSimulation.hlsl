@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -95,7 +96,7 @@ void main(uint3 i : SV_DispatchThreadID)
             float4 rot;
             float v = q_separate_v(p.rotation, rot);
 
-            float3 forward =  normalize(rotate_vector(float3(0, 0, 1), rot));
+            float3 forward =  normalize(qRotateVec3(float3(0, 0, 1), rot));
 
             forward *= v * 0.01 * Speed;
             p.position += forward;
