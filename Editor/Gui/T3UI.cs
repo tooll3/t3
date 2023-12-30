@@ -42,7 +42,14 @@ public class T3Ui
     static T3Ui()
     {
         var operatorsAssembly = Assembly.GetAssembly(typeof(Value));
-        UiSymbolData = new UiSymbolData(operatorsAssembly, enableLog: false);
+
+        #if DEBUG
+        var log = true;
+        #else
+        var log = false;
+        #endif
+        
+        UiSymbolData = new UiSymbolData(operatorsAssembly, enableLog: log);
 
         //WindowManager.TryToInitialize();
         ExampleSymbolLinking.UpdateExampleLinks();
