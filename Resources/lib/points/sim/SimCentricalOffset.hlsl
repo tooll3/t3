@@ -55,4 +55,3 @@ void main(uint3 i : SV_DispatchThreadID)
     float4 newRotation = q_look_at(normalize(forward), float3(0,0,1));
     Points[i.x].rotation = q_encode_v(newRotation, newV);    
 }
-

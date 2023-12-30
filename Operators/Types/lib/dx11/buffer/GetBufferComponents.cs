@@ -20,6 +20,9 @@ namespace T3.Operators.Types.Id_80dff680_5abf_484a_b9e0_81d72f3b7aa4
 
         [Output(Guid = "D7918FD8-906E-424D-8C5C-9631941CFC9D")]
         public readonly Slot<int> Length = new();
+        
+        [Output(Guid = "6D7A9493-6210-462A-B9C2-525B925DE6C8")]
+        public readonly Slot<int> Stride = new();
 
         public GetBufferComponents()
         {
@@ -27,6 +30,7 @@ namespace T3.Operators.Types.Id_80dff680_5abf_484a_b9e0_81d72f3b7aa4
             ShaderResourceView.UpdateAction = Update;
             UnorderedAccessView.UpdateAction = Update;
             Length.UpdateAction = Update;
+            Stride.UpdateAction = Update;
         }
 
         private void Update(EvaluationContext context)
@@ -37,6 +41,7 @@ namespace T3.Operators.Types.Id_80dff680_5abf_484a_b9e0_81d72f3b7aa4
                 Buffer.Value = bufferWithViews.Buffer;
                 ShaderResourceView.Value = bufferWithViews.Srv;
                 UnorderedAccessView.Value = bufferWithViews.Uav;
+                
                 if (ShaderResourceView?.Value == null)
                 {
                     Log.Warning("Can't access undefined shader resource view", this);
@@ -47,20 +52,24 @@ namespace T3.Operators.Types.Id_80dff680_5abf_484a_b9e0_81d72f3b7aa4
                     try
                     {
                         Length.Value = ShaderResourceView.Value.Description.Buffer.ElementCount;
+                        Stride.Value = bufferWithViews.Buffer.Description.StructureByteStride;
                     }
                     catch (Exception e)
                     {
                         Log.Warning("Can't access undefined SRV description: " + e.Message, this);
                         SetAsInvalid();
                     }
-                    
                 }
             }
             else
             {
                 SetAsInvalid();
             }
-            
+            Buffer.DirtyFlag.Clear();
+            ShaderResourceView.DirtyFlag.Clear();
+            UnorderedAccessView.DirtyFlag.Clear();
+            Length.DirtyFlag.Clear();
+            Stride.DirtyFlag.Clear();
         }
 
         private void SetAsInvalid()

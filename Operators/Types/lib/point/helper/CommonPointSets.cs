@@ -70,13 +70,13 @@ namespace T3.Operators.Types.Id_353f63fc_e613_43ca_b037_02d7b9f4e935
                 {
                     _gpuBuffersWithViews[bufferIndex] = new BufferWithViews();
                     
-                    const int strideOfPointStructure = 2 * 16;
+                    //const int strideOfPointStructure = 2 * 16;
                     
                     var pointBuffer = _cpuPointBuffers[bufferIndex];
                     
                     ResourceManager.SetupStructuredBuffer(pointBuffer.TypedElements, 
-                                                          strideOfPointStructure * pointBuffer.NumElements, 
-                                                          strideOfPointStructure, 
+                                                          Point.Stride * pointBuffer.NumElements, 
+                                                          Point.Stride, 
                                                           ref _gpuBuffers[bufferIndex]);
                     
                     

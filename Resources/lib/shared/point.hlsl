@@ -3,18 +3,21 @@ struct Point
     float3 position;
     float w;
     float4 rotation;
-};
-
-struct Particle
-{
-    Point p;
-
+    float4 color;
     float3 velocity;
-    float birthTime;
-
-    float radius;
-    float3 __extra;
+    float extra;
 };
+
+// struct Particle
+// {
+//     Point p;
+
+//     float3 velocity;
+//     float birthTime;
+
+//     float radius;
+//     float3 __extra;
+// };
 
 
 #define QUATERNION_IDENTITY float4(0, 0, 0, 1)

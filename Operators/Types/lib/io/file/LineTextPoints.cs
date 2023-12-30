@@ -427,7 +427,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
             var pathElements = GraphicsPathEntry.CreateFromSvgElements(svgElements, true);
 
             // Flatten and sum total point count including separators 
-            Point newPoint;
+            
 
             _tempPoints.Clear();
             foreach (var pathElement in pathElements)
@@ -448,7 +448,7 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
                 var pathPointCount = path.PathPoints.Length;
 
                 var loopStartIndex = _tempPoints.Count;
-                Vector3 lastPos = new Vector3(-9999f, 0f, 0f);
+                var lastPos = new Vector3(-9999f, 0f, 0f);
 
                 for (var pathPointIndex = 0; pathPointIndex < pathPointCount; pathPointIndex++)
                 {
@@ -463,10 +463,12 @@ namespace T3.Operators.Types.Id_3d862455_6a7b_4bf6_a159_e4f7cdba6062
                         continue;
                     }
 
-                    newPoint.Position = position;
-                    newPoint.W = 1;
-                    newPoint.Orientation = Quaternion.Identity;
-                    _tempPoints.Add(newPoint);
+                    _tempPoints.Add(new Point
+                                        {
+                                            Position = position,
+                                            W = 1,
+                                            Orientation = Quaternion.Identity
+                                        });
                 }
 
                 // Close loop?
