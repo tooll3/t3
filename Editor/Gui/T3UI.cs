@@ -41,7 +41,7 @@ public class T3Ui
 {
     static T3Ui()
     {
-        var assemblies = CoreAssembly.GetAllOperatorAssemblies();
+        var assemblies = EditorAssemblyInfo.GetAllOperatorAssemblies();
         UiSymbolDatas = assemblies
                       .Select(a => new UiSymbolData(a, enableLog: false))
                       .ToArray();

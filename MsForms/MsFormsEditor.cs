@@ -1,4 +1,5 @@
 using T3.SystemUi;
+
 namespace T3.MsForms;
 
 public class MsFormsEditor : MsForms, IEditorSystemUiService
@@ -28,19 +29,41 @@ public class MsFormsEditor : MsForms, IEditorSystemUiService
     }
 
     public string StartupPath => Application.StartupPath;
+
     IFilePicker IEditorSystemUiService.CreateFilePicker()
     {
         return new OpenFileDialogWrapper();
     }
 
+    public IReadOnlyList<IScreen> AllScreens => Screen.AllScreens
+                                                      .Select(x => new ScreenWrapper(x))
+                                                      .ToArray();
+
+    class ScreenWrapper : IScreen
+    {
+        Screen _screen;
+
+        public ScreenWrapper(Screen screen)
+        {
+            _screen = screen;
+        }
+
+        public int BitsPerPixel => _screen.BitsPerPixel;
+        public Rectangle Bounds => _screen.Bounds;
+        public Rectangle WorkingArea => _screen.WorkingArea;
+        public string DeviceName => _screen.DeviceName;
+        public bool Primary => _screen.Primary;
+    }
+
     private sealed class OpenFileDialogWrapper : IFilePicker
     {
         private readonly OpenFileDialog _dialog;
+
         internal OpenFileDialogWrapper()
         {
             _dialog = new();
         }
-        
+
         public void Dispose()
         {
             _dialog.Dispose();
@@ -55,6 +78,7 @@ public class MsFormsEditor : MsForms, IEditorSystemUiService
         public bool ShowReadOnly { get => _dialog.ShowReadOnly; set => _dialog.ShowReadOnly = value; }
         public string Title { get => _dialog.Title; set => _dialog.Title = value; }
         public bool ValidateNames { get => _dialog.ValidateNames; set => _dialog.ValidateNames = value; }
+
         public PopUpResult ShowDialog()
         {
             var result = _dialog.ShowDialog();

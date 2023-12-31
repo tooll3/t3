@@ -6,12 +6,14 @@ using SharpDX.Direct2D1;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
+using T3.Core.Resource;
 
 namespace T3.Core.Compilation;
 
-public static class CoreAssembly
+public static class EditorAssemblyInfo
 {
-    public static readonly Assembly Assembly = typeof(CoreAssembly).Assembly;
+    public static readonly Assembly Core = typeof(ResourceManager).Assembly;
+    public static readonly Assembly CoreEditor = typeof(EditorAssemblyInfo).Assembly;
     private static readonly string BinaryDirectory = Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar;
     private static Assembly[] _operatorAssemblies;
 
@@ -26,23 +28,39 @@ public static class CoreAssembly
     private static Assembly[] LoadOperatorAssemblies()
     {
         var currentAssemblyFullNames = AppDomain.CurrentDomain.GetAssemblies().Select(x => x.GetName().FullName).ToList();
-        var coreAssemblyName = Assembly.GetName();
-        
+        var coreAssemblyName = Core.GetName();
+        var editorAssemblyName = CoreEditor.GetName();
+
         var absolutePath = Path.GetFullPath(SymbolData.OperatorDirectoryName);
+        var workingDirectory = Directory.GetCurrentDirectory();
 
         try
         {
-            var assemblies = Directory.GetFiles(absolutePath, "*.dll", SearchOption.AllDirectories)
-                                      .Where(path => path.Contains(BinaryDirectory) && path.Contains("net6.0-windows"))
-                                      .Select(path => new AssemblyNameAndPath()
-                                                          {
-                                                              AssemblyName = AssemblyName.GetAssemblyName(path),
-                                                              Path = path
-                                                          })
+            var assemblies = Directory.GetFiles(workingDirectory, "*.dll", SearchOption.AllDirectories)
+                                      //.Where(path => path.Contains(BinaryDirectory))
+                                      .Select(path =>
+                                              {
+                                                  AssemblyName assemblyName = null;
+                                                  try
+                                                  {
+                                                      assemblyName = AssemblyName.GetAssemblyName(path);
+                                                  }
+                                                  catch (Exception e)
+                                                  {
+                                                      Log.Debug($"Failed to get assembly name for {path}\n{e.Message}\n{e.StackTrace}");
+                                                  }
+
+                                                  return new AssemblyNameAndPath()
+                                                             {
+                                                                 AssemblyName = assemblyName,
+                                                                 Path = path
+                                                             };
+                                              })
                                       .Where(nameAndPath =>
                                              {
                                                  var assemblyName = nameAndPath.AssemblyName;
-                                                 return assemblyName.ProcessorArchitecture == coreAssemblyName.ProcessorArchitecture
+                                                 return assemblyName != null
+                                                        && assemblyName.ProcessorArchitecture == coreAssemblyName.ProcessorArchitecture
                                                         && !currentAssemblyFullNames.Contains(assemblyName.FullName);
                                              })
                                       .Select(name =>
@@ -64,10 +82,22 @@ public static class CoreAssembly
                                       .Where(assembly =>
                                              {
                                                  // this should be unnecessary, but it's a safeguard?
-                                                 return assembly != null && !assembly.GetReferencedAssemblies()
-                                                                                     .Any(name => name.FullName.Contains("T3.Editor"));
+                                                 return assembly != null
+                                                        && assembly.GetReferencedAssemblies()
+                                                                   .All(asmName => asmName.FullName != editorAssemblyName.FullName);
                                              })
-                                      .Where(assembly => assembly.DefinedTypes.Any(type => type.IsSubclassOf(typeof(Instance<>))))
+                                      .Where(assembly =>
+                                             {
+                                                 try
+                                                 {
+                                                     return assembly.DefinedTypes.Any(type => type.IsSubclassOf(typeof(Instance<>)));
+                                                 }
+                                                 catch (Exception e)
+                                                 {
+                                                     Log.Error($"Failed to get defined types for {assembly.FullName}\n{e.Message}\n{e.StackTrace}");
+                                                     return false;
+                                                 }
+                                             })
                                       .ToArray();
 
             return assemblies;
@@ -78,7 +108,7 @@ public static class CoreAssembly
             return Array.Empty<Assembly>();
         }
     }
-    
+
     private struct AssemblyNameAndPath
     {
         public AssemblyName AssemblyName;

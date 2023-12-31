@@ -89,11 +89,12 @@ namespace T3.Editor.Gui.Windows.Layouts
             if (ImGui.MenuItem("2nd Render Window", "", ShowSecondaryRenderWindow))
                 ShowSecondaryRenderWindow = !ShowSecondaryRenderWindow;
             
+            var screens = EditorUi.Instance.AllScreens;
             if(ImGui.BeginMenu("2nd Render Window Fullscreen On"))
             {
-                for (var index = 0; index < EditorUi.AllScreens.Length; index++)
+                for (var index = 0; index < screens.Count; index++)
                 {
-                    var screen = EditorUi.AllScreens.ElementAt(index);
+                    var screen = screens.ElementAt(index);
                     var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
                                 $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
                     if(ImGui.MenuItem(label, "", index ==  UserSettings.Config.FullScreenIndexViewer)) 
@@ -106,9 +107,9 @@ namespace T3.Editor.Gui.Windows.Layouts
             
             if (ImGui.BeginMenu("Editor Window Fullscreen On"))
             {
-                for (var index = 0; index < EditorUi.AllScreens.Length; index++)
+                for (var index = 0; index < screens.Count; index++)
                 {
-                    var screen = EditorUi.AllScreens.ElementAt(index);
+                    var screen = screens.ElementAt(index);
                     var label = $"{screen.DeviceName.Trim(new char[] { '\\', '.' })}" +
                                 $" ({screen.Bounds.Width}x{screen.Bounds.Height})";
                     if(ImGui.MenuItem(label, "", index ==  UserSettings.Config.FullScreenIndexMain)) 

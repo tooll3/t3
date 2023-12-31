@@ -1,3 +1,5 @@
+using System.Drawing;
+
 namespace T3.SystemUi
 {
     public interface IEditorSystemUiService : ICoreSystemUiService
@@ -7,6 +9,17 @@ namespace T3.SystemUi
         public string GetClipboardText();
         public string StartupPath { get; }
         public IFilePicker CreateFilePicker();
+        public IReadOnlyList<IScreen> AllScreens { get; }
+    }
+    
+    // mimics System.Windows.Forms.Screen
+    public interface IScreen 
+    {
+        public int BitsPerPixel { get; }
+        public Rectangle Bounds { get; }
+        public Rectangle WorkingArea { get; }
+        public string DeviceName { get; }
+        public bool Primary { get; }
     }
 
     public interface IFilePicker : IDisposable
