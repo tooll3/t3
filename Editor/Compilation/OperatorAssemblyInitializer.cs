@@ -27,6 +27,7 @@ public static class EditorAssemblyInfo
 
     private static Assembly[] LoadOperatorAssemblies()
     {
+        Log.Debug($"Attempting to load operator assemblies...");
         var currentAssemblyFullNames = AppDomain.CurrentDomain.GetAssemblies().Select(x => x.GetName().FullName).ToList();
         var coreAssemblyName = Core.GetName();
         var editorAssemblyName = CoreEditor.GetName();
@@ -37,7 +38,8 @@ public static class EditorAssemblyInfo
         try
         {
             var assemblies = Directory.GetFiles(workingDirectory, "*.dll", SearchOption.AllDirectories)
-                                      //.Where(path => path.Contains(BinaryDirectory))
+                                       //.Where(path => path.Contains(BinaryDirectory))
+                                      .Where(path => !path.Contains("NDI") && !path.Contains("Spout"))
                                       .Select(path =>
                                               {
                                                   AssemblyName assemblyName = null;
@@ -85,22 +87,25 @@ public static class EditorAssemblyInfo
                                                  return assembly != null
                                                         && assembly.GetReferencedAssemblies()
                                                                    .All(asmName => asmName.FullName != editorAssemblyName.FullName);
-                                             })
-                                      .Where(assembly =>
-                                             {
-                                                 try
-                                                 {
-                                                     return assembly.DefinedTypes.Any(type => type.IsSubclassOf(typeof(Instance<>)));
-                                                 }
-                                                 catch (Exception e)
-                                                 {
-                                                     Log.Error($"Failed to get defined types for {assembly.FullName}\n{e.Message}\n{e.StackTrace}");
-                                                     return false;
-                                                 }
-                                             })
-                                      .ToArray();
-
-            return assemblies;
+                                             }).ToArray();
+            
+            Log.Debug($"Loaded operator assemblies: {assemblies.Length}");
+            var opAssemblies = assemblies.Where(assembly =>
+                                          {
+                                              try
+                                              {
+                                                  return assembly.DefinedTypes.Any(type => type.IsAssignableTo(typeof(Instance)));
+                                              }
+                                              catch (Exception e)
+                                              {
+                                                  Log.Error($"Failed to get defined types for {assembly.FullName}\n{e.Message}\n{e.StackTrace}");
+                                                  return false;
+                                              }
+                                          })
+                                   .ToArray();
+            
+            Log.Debug($"Loaded operator assemblies: {opAssemblies.Length}");
+            return opAssemblies;
         }
         catch (Exception e)
         {

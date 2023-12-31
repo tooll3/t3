@@ -283,7 +283,6 @@ public partial class SymbolData
         if (!SymbolDatas.TryGetValue(oldAssembly, out var symbolData))
         {
             throw new Exception($"Can't find symbol data for assembly {oldAssembly}");
-            return;
         }
 
         symbolData.OperatorsAssembly = newAssembly;

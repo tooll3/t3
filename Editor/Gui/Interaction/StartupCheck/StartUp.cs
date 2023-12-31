@@ -42,6 +42,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                 var result2 = EditorUi.Instance.ShowMessageBox("It looks like the last startup failed.\nSadly there is no backup yet.", "Startup Failed", PopUpButtons.RetryCancel);
                 if (result2 != PopUpResult.Retry)
                 {
+                    Log.Info("User cancelled startup.");
                     EditorUi.Instance.ExitApplication();
                 }
 

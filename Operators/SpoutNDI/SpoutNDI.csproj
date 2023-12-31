@@ -5,7 +5,6 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <RootNamespace>Operators.Lib</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,10 +12,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="NAudio.Midi" Version="2.2.1"/>
-        <PackageReference Include="Rug.Osc" Version="1.2.5"/>
-        <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0030"/>
-        <PackageReference Include="Svg" Version="3.3.0"/>
+        <PackageReference Include="CppSharp" Version="1.0.1" />
+        <PackageReference Include="NDILibDotNet6" Version="1.0.11"/>
+        <PackageReference Include="OpenGL.Net" Version="0.8.4"/>
     </ItemGroup>
 
 </Project>

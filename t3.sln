@@ -45,6 +45,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.newemka980", "Operator
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserTemplate", "UserTemplate\UserTemplate.csproj", "{5F2955AA-0602-4CFC-8CA9-887BC369EF20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpoutNDI", "Operators\SpoutNDI\SpoutNDI.csproj", "{A96B1FDA-8072-44D4-80FB-726F9462D3E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnsplashLoader", "UnsplashLoader\UnsplashLoader.csproj", "{42908EB6-BCF6-4458-8D41-EE69C83B6A6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +139,14 @@ Global
 		{5F2955AA-0602-4CFC-8CA9-887BC369EF20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F2955AA-0602-4CFC-8CA9-887BC369EF20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F2955AA-0602-4CFC-8CA9-887BC369EF20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A96B1FDA-8072-44D4-80FB-726F9462D3E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A96B1FDA-8072-44D4-80FB-726F9462D3E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A96B1FDA-8072-44D4-80FB-726F9462D3E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A96B1FDA-8072-44D4-80FB-726F9462D3E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42908EB6-BCF6-4458-8D41-EE69C83B6A6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42908EB6-BCF6-4458-8D41-EE69C83B6A6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42908EB6-BCF6-4458-8D41-EE69C83B6A6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42908EB6-BCF6-4458-8D41-EE69C83B6A6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

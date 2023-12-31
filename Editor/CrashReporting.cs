@@ -34,7 +34,7 @@ internal static class CrashReporting
                            o.SetBeforeSend((Func<SentryEvent, Hint, SentryEvent>)CrashHandler);
                        });
 
-        SentrySdk.ConfigureScope(scope => { scope.SetTag("IsStandAlone", Program.IsStandAlone ? "Yes" : "No"); });
+        //SentrySdk.ConfigureScope(scope => { scope.SetTag("IsStandAlone", Program.IsStandAlone ? "Yes" : "No"); });
 
         var configuration = "Release";
         #if DEBUG

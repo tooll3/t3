@@ -207,7 +207,7 @@ public partial class UiSymbolData : SymbolData
         }
     }
 
-    private static bool TryFindMatchingCSProj(Assembly assembly, out FileInfo? csprojFile)
+    private static bool TryFindMatchingCSProj(Assembly assembly, out FileInfo csprojFile)
     {
         var assemblyName = assembly.GetName();
         var assemblyNameString = assemblyName.Name;

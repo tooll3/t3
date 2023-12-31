@@ -112,7 +112,10 @@ namespace T3.Editor.Gui.Graph
                 Log.Debug("Compiling Operators.dll...");
                 var references = CompileSymbolsFromSource(exportDir, parentAssemblies, operatorAssemblySources.ToArray());
 
-                if (!Program.IsStandAlone)
+                Log.Error($"Not implemented");
+                return;
+
+               // if (!Program.IsStandAlone)
                 {
                     Log.Debug("Copy dependencies referenced in Operators.dll...");
                     var referencedAssemblies = references.Where(assembly => assembly.Display != null && assembly.Display.Contains(currentDir))

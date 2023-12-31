@@ -26,7 +26,6 @@ namespace T3.Editor
         public static IUiContentDrawer<SharpDX.Direct3D11.Device, ImDrawDataPtr> UiContentContentDrawer;
         public static Device Device { get; private set; }
 
-        public static readonly bool IsStandAlone = File.Exists("StartT3.exe");
         public const string Version = "3.8.2";
 
         /// <summary>
@@ -38,12 +37,11 @@ namespace T3.Editor
             #if DEBUG
             if (indicateDebugBuild)
             {
-                isDebug = "Debug";
+                isDebug = " Debug";
             }
             #endif
 
-            var dev = IsStandAlone ? string.Empty : "Dev";
-            return $"v{Version} {dev} {isDebug}";
+            return $"v{Version}{isDebug}";
         }
 
         [STAThread]
@@ -81,13 +79,13 @@ namespace T3.Editor
             Log.AddWriter(ConsoleLogWindow);
             Log.Debug($"Starting {Version}");
 
-            if (IsStandAlone)
+            //if (IsStandAlone)
             {
-                StartupValidation.ValidateCurrentStandAloneExecutable();
+                //StartupValidation.ValidateCurrentStandAloneExecutable();
             }
-            else
+            //else
             {
-                StartupValidation.CheckInstallation();
+                //StartupValidation.CheckInstallation();
             }
 
             StartUp.FlagBeginStartupSequence();
@@ -97,6 +95,7 @@ namespace T3.Editor
             var userSettings = new UserSettings(saveOnQuit: true);
             var projectSettings = new ProjectSettings(saveOnQuit: true);
 
+            Log.Debug($"About to initialize ProgramWindows");
             ProgramWindows.InitializeMainWindow(GetReleaseVersion(), out var device);
 
             Device = device;
@@ -106,16 +105,21 @@ namespace T3.Editor
             
             shaderCompiler.Device = device;
 
+            Log.Debug($"About to initialize UiContentContentDrawer");
             UiContentContentDrawer = new WindowsUiContentDrawer();
             UiContentContentDrawer.Initialize(device, ProgramWindows.Main.Width, ProgramWindows.Main.Height);
 
+            Log.Debug($"About to initialize Camera Interaction");
             var spaceMouse = new SpaceMouse(ProgramWindows.Main.HwndHandle);
             CameraInteraction.ManipulationDevices = new ICameraManipulator[] { spaceMouse };
             ProgramWindows.SetInteractionDevices(spaceMouse);
 
+            Log.Debug($"About to initialize Resource Manager");
             ResourceManager.Init(device);
             ResourceManager resourceManager = ResourceManager.Instance();
             SharedResources.Initialize(resourceManager);
+            
+            Log.Debug($"About to initialize T3 UI");
 
             // Initialize UI and load complete symbol model
             try
