@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -19,7 +20,7 @@ namespace T3.Core.Model;
 
 public partial class SymbolData
 {
-    public Assembly OperatorsAssembly { get; private set; }
+    public Assembly Assembly { get; private set; }
 
     public static EventHandler<Assembly> AssemblyAdded;
 
@@ -29,11 +30,11 @@ public partial class SymbolData
         RegisterTypes();
     }
 
-    public SymbolData(Assembly operatorAssembly)
+    public SymbolData(Assembly assembly)
     {
-        OperatorsAssembly = operatorAssembly;
-        Folder = OperatorDirectoryName;
-        SymbolDatas.Add(operatorAssembly, this);
+        Assembly = assembly;
+        Folder = OperatorDirectoryName + Path.DirectorySeparatorChar + assembly.GetName().Name;
+        SymbolDatas.Add(assembly, this);
     }
 
     public virtual void Load(bool enableLog)
@@ -49,7 +50,7 @@ public partial class SymbolData
 
         Log.Debug("Registering loaded symbols...");
         // Check if there are symbols without a file, if yes add these
-        var instanceTypesWithoutFile = OperatorsAssembly.ExportedTypes.AsParallel()
+        var instanceTypesWithoutFile = Assembly.ExportedTypes.AsParallel()
                                                         .Where(type => type.IsSubclassOf(typeof(Instance)))
                                                         .Where(type => !type.IsGenericType)
                                                         .ToHashSet();
@@ -63,6 +64,11 @@ public partial class SymbolData
 
             if (!TryAddSymbolTo(SymbolRegistry.Entries, symbol))
                 continue;
+            
+            if (!SymbolOwnersEditable.TryAdd(symbol.Id, this))
+            {
+                Log.Error($"Duplicate symbol id {symbol.Id}");
+            }
 
             instanceTypesWithoutFile.Remove(symbol.InstanceType);
             symbol.SymbolData = this;
@@ -90,7 +96,7 @@ public partial class SymbolData
 
         SymbolJson.SymbolReadResult ReadSymbolFromJsonFileResult(JsonFileResult<Symbol> jsonInfo)
         {
-            var result = SymbolJson.ReadSymbolRoot(jsonInfo.Guid, jsonInfo.JToken, allowNonOperatorInstanceType: false);
+            var result = SymbolJson.ReadSymbolRoot(jsonInfo.Guid, jsonInfo.JToken, allowNonOperatorInstanceType: false, Assembly);
             jsonInfo.Object = result.Symbol;
             return result;
         }
@@ -285,7 +291,7 @@ public partial class SymbolData
             throw new Exception($"Can't find symbol data for assembly {oldAssembly}");
         }
 
-        symbolData.OperatorsAssembly = newAssembly;
+        symbolData.Assembly = newAssembly;
         SymbolDatas.Remove(oldAssembly);
         SymbolDatas.Add(newAssembly, symbolData);
     }
@@ -307,6 +313,10 @@ public partial class SymbolData
     public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0;
 
     private static long _savingCount;
+    
+    private static readonly ConcurrentDictionary<Guid, SymbolData> SymbolOwnersEditable = new();
+    public static IReadOnlyDictionary<Guid, SymbolData> SymbolOwners => SymbolOwnersEditable;
+    
 
     private readonly Dictionary<Guid, Symbol> _symbols = new();
     private static readonly Dictionary<Assembly, SymbolData> SymbolDatas = new();

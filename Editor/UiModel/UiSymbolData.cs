@@ -20,26 +20,26 @@ namespace T3.Editor.UiModel;
 
 public partial class UiSymbolData : SymbolData
 {
-    public UiSymbolData(Assembly operatorAssembly, bool enableLog)
-        : base(operatorAssembly)
+    public UiSymbolData(Assembly assembly, bool enableLog)
+        : base(assembly)
     {
         Init(enableLog);
 
-        var gotProject = TryFindMatchingCSProj(operatorAssembly, out var csprojFile);
+        var gotProject = TryFindMatchingCSProj(assembly, out var csprojFile);
         if (!gotProject)
-            throw new ArgumentException("Could not find matching csproj file", nameof(operatorAssembly));
+            throw new ArgumentException("Could not find matching csproj file", nameof(assembly));
 
         Folder = Path.GetDirectoryName(csprojFile!.FullName);
         ResourceFileWatcher.AddCodeWatcher(Folder);
         
-        SymbolDataByAssemblyLocationEditable.Add(operatorAssembly.Location, this);
+        SymbolDataByAssemblyLocationEditable.Add(assembly.Location, this);
     }
 
     private void Init(bool enableLog)
     {
         Load(enableLog);
 
-        Console.WriteLine($@"Updating UI entries for {OperatorsAssembly.GetName().Name}...");
+        Console.WriteLine($@"Updating UI entries for {Assembly.GetName().Name}...");
 
         Console.WriteLine(@"Registering Symbol UIs...");
 
@@ -178,7 +178,7 @@ public partial class UiSymbolData : SymbolData
             if (symbolUiResource == null)
             {
                 // If the source wasn't registered before do this now
-                resourceManager.CreateOperatorEntry(filepath, symbol.Id.ToString(), OperatorsAssembly, OperatorUpdating.ResourceUpdateHandler);
+                resourceManager.CreateOperatorEntry(filepath, symbol.Id.ToString(), Assembly, OperatorUpdating.ResourceUpdateHandler);
             }
 
             var symbolSourceFilepath = BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
@@ -186,7 +186,7 @@ public partial class UiSymbolData : SymbolData
             if (opResource == null)
             {
                 // If the source wasn't registered before do this now
-                resourceManager.CreateOperatorEntry(symbolSourceFilepath, symbol.Id.ToString(), OperatorsAssembly, OperatorUpdating.ResourceUpdateHandler);
+                resourceManager.CreateOperatorEntry(symbolSourceFilepath, symbol.Id.ToString(), Assembly, OperatorUpdating.ResourceUpdateHandler);
             }
 
             symbolUi.ClearModifiedFlag();

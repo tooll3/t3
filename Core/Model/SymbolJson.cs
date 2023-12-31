@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.SystemUi;
@@ -320,7 +323,8 @@ namespace T3.Core.Resource
             if (hasSymbol)
                 return true;
             
-            var jsonResult = ReadSymbolRoot(guid, jToken, allowNonOperatorInstanceType: true);
+            var symbolData = SymbolData.SymbolOwners[guid];
+            var jsonResult = ReadSymbolRoot(guid, jToken, allowNonOperatorInstanceType: true, symbolData.Assembly);
             
             if (jsonResult.Symbol is null)
                 return false;
@@ -335,7 +339,7 @@ namespace T3.Core.Resource
             return false;
         }
 
-        internal static SymbolReadResult ReadSymbolRoot(in Guid id, JToken jToken, bool allowNonOperatorInstanceType)
+        internal static SymbolReadResult ReadSymbolRoot(in Guid id, JToken jToken, bool allowNonOperatorInstanceType, Assembly owningAssembly)
         {
             // Read symbol with Id - dictionary of Guid-JToken?
             var name = jToken[JsonKeys.Name].Value<string>();
@@ -369,7 +373,9 @@ namespace T3.Core.Resource
             }
 
             var namespaceId = CreateGuidNamespaceString(id);
-            var instanceTypeName = $"T3.Operators.Types.Id_{namespaceId}.{name}, Operators, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null";
+            
+            var instanceTypeName = FormInstanceTypeName(owningAssembly, name, namespaceId);
+
             var instanceType = !allowNonOperatorInstanceType ? GetOperatorInstanceType(instanceTypeName) : GetAnyInstanceType(instanceTypeName);
 
             var @namespace = jToken[JsonKeys.Namespace]?.Value<string>() ?? string.Empty;
@@ -396,7 +402,27 @@ namespace T3.Core.Resource
             var animatorData = (JArray)jToken[JsonKeys.Animator];
             return new SymbolReadResult(symbol, childrenJsons, animatorData);
         }
-        
+
+        private static string FormInstanceTypeName(Assembly owningAssembly, string name, string namespaceId)
+        {
+            const string typeFormat = "{0}, {1}, Version={2}, Culture={3}, PublicKeyToken={4}";
+            
+            var owningAssemblyName = owningAssembly.GetName();
+            string publicKeyToken = owningAssemblyName.FullName.Split('=')[^1];
+
+            var assemblyCulture = owningAssemblyName.CultureInfo?.Name;
+
+            if (string.IsNullOrEmpty(assemblyCulture))
+            {
+                assemblyCulture = "neutral";
+            }
+            
+            string fullyQualifiedName = $"T3.Operators.Types.Id_{namespaceId}.{name}";
+
+            var instanceTypeName = string.Format(typeFormat, fullyQualifiedName, owningAssemblyName.Name, owningAssemblyName.Version, assemblyCulture, publicKeyToken);
+            return instanceTypeName;
+        }
+
         // returns an id with valid C# namespace characters ('_' instead of '-') and all-lowercase
         static string CreateGuidNamespaceString(Guid guid)
         {
@@ -416,12 +442,20 @@ namespace T3.Core.Resource
         // Method for when allowNonOpInstanceType = true
         static Type GetOperatorInstanceType(string typeName)
         {
-            var thisType = Type.GetType(typeName);
-                
+            Type thisType;
+            try
+            {
+                thisType = Type.GetType(typeName);
+            }
+            catch
+            {
+                thisType = null;
+                Log.Error($"Definition '{typeName}' is incorrect.\nExample definition: \"{typeof(SymbolJson).AssemblyQualifiedName}\"");
+            }
+
             if (thisType is not null)
                 return thisType;
             
-            // TODO: this cause Null reference exceptions because CoreUi.Instance has not been initialized
             CoreUi.Instance.ShowMessageBox($"Definition '{typeName}' is missing in Operator.dll.\nPlease try to rebuild your solution.");
             CoreUi.Instance.ExitApplication();
             CoreUi.Instance.ExitThread();

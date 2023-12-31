@@ -7,6 +7,7 @@ using System.IO;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Resource;
+using T3.Core.SystemUi;
 using T3.Editor.App;
 using T3.Editor.Gui;
 using T3.Editor.Gui.Graph.Interaction;
@@ -49,6 +50,8 @@ namespace T3.Editor
         {
             // Not calling this first will cause exceptions...
             EditorUi.Instance = new MsFormsEditor();
+            CoreUi.Instance = EditorUi.Instance;
+            
             ShaderCompiler.Instance = new DX11ShaderCompiler();
             
             StartupValidation.ValidateNotRunningFromSystemFolder();

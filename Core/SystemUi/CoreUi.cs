@@ -3,10 +3,10 @@ using T3.SystemUi;
 
 namespace T3.Core.SystemUi;
 
-internal static class CoreUi
+public static class CoreUi
 {
     private static ICoreSystemUiService _instance;
-    internal static ICoreSystemUiService Instance
+    public static ICoreSystemUiService Instance
     {
         get => _instance;
         set
