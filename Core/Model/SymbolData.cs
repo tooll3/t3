@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using SharpDX.Direct2D1;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Resource;
@@ -20,7 +19,7 @@ namespace T3.Core.Model;
 
 public partial class SymbolData
 {
-    public Assembly OperatorsAssembly { get; }
+    public Assembly OperatorsAssembly { get; private set; }
 
     public static EventHandler<Assembly> AssemblyAdded;
 
@@ -33,18 +32,8 @@ public partial class SymbolData
     public SymbolData(Assembly operatorAssembly)
     {
         OperatorsAssembly = operatorAssembly;
-        var assemblyFullName = operatorAssembly.FullName;
-        if (assemblyFullName == null)
-            throw new ArgumentException("Assembly full name is null", nameof(operatorAssembly));
-
-        var assemblyName = new AssemblyName(assemblyFullName);
-        var assemblyNameString = assemblyName.Name;
-        if (assemblyNameString == null)
-            throw new ArgumentException("Assembly name is null", nameof(operatorAssembly));
-
-        Folder = Path.Combine(OperatorDirectoryName, assemblyNameString);
-
-        ResourceFileWatcher.AddCodeWatcher(Folder);
+        Folder = OperatorDirectoryName;
+        SymbolDatas.Add(operatorAssembly, this);
     }
 
     public virtual void Load(bool enableLog)
@@ -288,6 +277,19 @@ public partial class SymbolData
         }
     }
     #endregion
+    
+    public static void ReplaceAssembly(Assembly oldAssembly, Assembly newAssembly)
+    {
+        if (!SymbolDatas.TryGetValue(oldAssembly, out var symbolData))
+        {
+            throw new Exception($"Can't find symbol data for assembly {oldAssembly}");
+            return;
+        }
+
+        symbolData.OperatorsAssembly = newAssembly;
+        SymbolDatas.Remove(oldAssembly);
+        SymbolDatas.Add(newAssembly, symbolData);
+    }
 
     private static readonly OpUpdateCounter _updateCounter;
 
@@ -295,11 +297,12 @@ public partial class SymbolData
     public const string SymbolExtension = ".t3";
     public const string SymbolUiExtension = ".t3ui";
     public const string OperatorDirectoryName = "Operators";
-    protected readonly string Folder;
+    protected string Folder { get; init; }
 
     public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0;
 
     private static long _savingCount;
 
     private readonly Dictionary<Guid, Symbol> _symbols = new();
+    private static readonly Dictionary<Assembly, SymbolData> SymbolDatas = new();
 }

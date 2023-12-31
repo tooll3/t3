@@ -53,25 +53,25 @@ internal static class SymbolNaming
 
         var newSource = root.GetText().ToString();
 
-        var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newName);
-        if (newAssembly != null)
+        var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newName, symbol.ParentAssembly);
+        if (newAssembly == null)
         {
-            var originalSourcePath = symbol.SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
-            var operatorResource = ResourceManager.Instance().GetOperatorFileResource(originalSourcePath);
-            if (operatorResource != null)
-            {
-                operatorResource.OperatorAssembly = newAssembly;
-                operatorResource.Updated = true;
-                symbol.PendingSource = newSource;
-                symbol.DeprecatedSourcePath = originalSourcePath;
-
-                GraphOperations.UpdateChangedOperators();
-                T3Ui.SaveAll();
-                return;
-            }
+            Log.Error($"Could not update symbol '{symbol.Name}' because its file resource couldn't be found.");
+            return;
         }
 
-        Log.Error($"Could not update symbol '{symbol.Name}' because its file resource couldn't be found.");
+        var originalSourcePath = symbol.SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
+        var operatorResource = ResourceManager.Instance().GetOperatorFileResource(originalSourcePath);
+        if (operatorResource == null)
+            return;
+        
+        operatorResource.OperatorAssembly = newAssembly;
+        operatorResource.Updated = true;
+        symbol.PendingSource = newSource;
+        symbol.DeprecatedSourcePath = originalSourcePath;
+
+        GraphOperations.UpdateChangedOperators();
+        T3Ui.SaveAll();
     }
 }
 
@@ -91,13 +91,18 @@ internal class ClassRenameRewriter : CSharpSyntaxRewriter
                                                               null, node.ConstraintClauses, node.OpenBraceToken, node.Members, node.CloseBraceToken,
                                                               node.SemicolonToken);
         var genericName = SyntaxFactory.GenericName(SyntaxFactory.Identifier("Instance"))
-                                       .WithTypeArgumentList(SyntaxFactory.TypeArgumentList(SyntaxFactory.SingletonSeparatedList<TypeSyntax>(SyntaxFactory.IdentifierName(_newSymbolName)))
-                                                                          .WithGreaterThanToken(SyntaxFactory.Token(SyntaxFactory.TriviaList(), SyntaxKind.GreaterThanToken, SyntaxFactory.TriviaList(SyntaxFactory.LineFeed))));
+                                       .WithTypeArgumentList(SyntaxFactory
+                                                            .TypeArgumentList(SyntaxFactory
+                                                                                 .SingletonSeparatedList<
+                                                                                      TypeSyntax>(SyntaxFactory.IdentifierName(_newSymbolName)))
+                                                            .WithGreaterThanToken(SyntaxFactory.Token(SyntaxFactory.TriviaList(), SyntaxKind.GreaterThanToken,
+                                                                                                      SyntaxFactory.TriviaList(SyntaxFactory.LineFeed))));
 
         var baseInterfaces = node.BaseList?.Types.RemoveAt(0).Select((e) => e).ToArray();
         var baseList = SyntaxFactory.BaseList(SyntaxFactory.SingletonSeparatedList<BaseTypeSyntax>(SyntaxFactory.SimpleBaseType(genericName)));
         baseList = baseList.AddTypes(baseInterfaces);
-        baseList = baseList.WithColonToken(SyntaxFactory.Token(SyntaxFactory.TriviaList(), SyntaxKind.ColonToken, SyntaxFactory.TriviaList(SyntaxFactory.Space)));
+        baseList =
+            baseList.WithColonToken(SyntaxFactory.Token(SyntaxFactory.TriviaList(), SyntaxKind.ColonToken, SyntaxFactory.TriviaList(SyntaxFactory.Space)));
         classDeclaration = classDeclaration.WithBaseList(baseList);
         return classDeclaration;
     }

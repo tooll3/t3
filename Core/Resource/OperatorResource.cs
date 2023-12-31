@@ -11,14 +11,16 @@ namespace T3.Core.Resource
     public class OperatorResource : AbstractResource, IUpdateable
     {
         public Assembly OperatorAssembly { get; set; }
+        public Assembly ParentAssembly { get; }
         public bool Updated { get; set; }
         private Guid SymbolId { get; }
 
-        public OperatorResource(uint id, string nameWithId, Assembly operatorAssembly, UpdateDelegate updateHandler)
+        public OperatorResource(uint id, string nameWithId, Assembly operatorAssembly, Assembly parentAssembly, UpdateDelegate updateHandler)
             : base(id, nameWithId)
         {
             _updateHandler = updateHandler;
             OperatorAssembly = operatorAssembly;
+            ParentAssembly = parentAssembly;
             SymbolId = Guid.Parse(nameWithId);  
             _operators.Add(this);
         }

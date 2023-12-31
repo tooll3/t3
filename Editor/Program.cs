@@ -157,7 +157,6 @@ namespace T3.Editor
                 {
                     var symbol = symbolUi.Symbol;
                     var sourceFilePath = symbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
-                    ResourceManager.Instance().CreateOperatorEntry(sourceFilePath, symbol.Id.ToString(), OperatorUpdating.ResourceUpdateHandler);
                 }
             }
 

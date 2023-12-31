@@ -65,29 +65,6 @@ namespace T3.Editor.Gui.Graph.Modification
             }
         }
 
-        public static bool UpdateSymbolWithNewSource(Symbol symbol, string newSource)
-        {
-            var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, symbol.Name);
-            if (newAssembly == null)
-                return false;
-
-            //string path = @"Operators\Types\" + symbol.Name + ".cs";
-            var sourcePath = symbol.SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
-
-            var operatorResource = ResourceManager.Instance().GetOperatorFileResource(sourcePath);
-            if (operatorResource != null)
-            {
-                operatorResource.OperatorAssembly = newAssembly;
-                operatorResource.Updated = true;
-                symbol.PendingSource = newSource;
-                return true;
-            }
-
-            Log.Error($"Could not update symbol '{symbol.Name}' because its file resource couldn't be found.");
-
-            return false;
-        }
-
         public static string CopyNodesAsJson(Guid symbolId, 
                                              IEnumerable<SymbolChildUi> selectedChildren, 
                                              List<Annotation> selectedAnnotations)

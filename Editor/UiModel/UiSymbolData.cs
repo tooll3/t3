@@ -1,9 +1,10 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
+using System.Reflection.Metadata;
 using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -12,6 +13,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.ChildUi;
+using T3.Editor.Gui.InputUi;
 
 // ReSharper disable RedundantNameQualifier
 
@@ -23,6 +25,16 @@ public partial class UiSymbolData : SymbolData
         : base(operatorAssembly)
     {
         Init(enableLog);
+        Name = operatorAssembly.GetName().Name ?? throw new Exception("Assembly name is null");
+
+        var gotProject = TryFindMatchingCSProj(operatorAssembly, out var csprojFile);
+        if (!gotProject)
+            throw new ArgumentException("Could not find matching csproj file", nameof(operatorAssembly));
+
+        Folder = Path.GetDirectoryName(csprojFile!.FullName);
+        ResourceFileWatcher.AddCodeWatcher(Folder);
+        
+        SymbolDataByAssemblyLocationEditable.Add(operatorAssembly.Location, this);
     }
 
     private void Init(bool enableLog)
@@ -37,6 +49,7 @@ public partial class UiSymbolData : SymbolData
         {
             var symbol = symbolUi.Symbol;
             var valueInstanceType = symbol.InstanceType;
+
             if (typeof(IDescriptiveFilename).IsAssignableFrom(valueInstanceType))
             {
                 CustomChildUiRegistry.Entries.Add(valueInstanceType, DescriptiveUi.DrawChildUi);
@@ -52,6 +65,8 @@ public partial class UiSymbolData : SymbolData
                 symbolUi.UpdateConsistencyWithSymbol();
                 if (enableLog)
                     Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
+                
+                ResourceManager.Instance().CreateOperatorEntry(sourceFilePath, symbol.Id.ToString(), OperatorUpdating.ResourceUpdateHandler);
             }
         }
 
@@ -175,7 +190,7 @@ public partial class UiSymbolData : SymbolData
             if (symbolUiResource == null)
             {
                 // If the source wasn't registered before do this now
-                resourceManager.CreateOperatorEntry(filepath, symbol.Id.ToString(), OperatorUpdating.ResourceUpdateHandler);
+                resourceManager.CreateOperatorEntry(filepath, symbol.Id.ToString(), OperatorsAssembly, OperatorUpdating.ResourceUpdateHandler);
             }
 
             var symbolSourceFilepath = BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
@@ -183,7 +198,7 @@ public partial class UiSymbolData : SymbolData
             if (opResource == null)
             {
                 // If the source wasn't registered before do this now
-                resourceManager.CreateOperatorEntry(symbolSourceFilepath, symbol.Id.ToString(), OperatorUpdating.ResourceUpdateHandler);
+                resourceManager.CreateOperatorEntry(symbolSourceFilepath, symbol.Id.ToString(), OperatorsAssembly, OperatorUpdating.ResourceUpdateHandler);
             }
 
             symbolUi.ClearModifiedFlag();
@@ -204,7 +219,29 @@ public partial class UiSymbolData : SymbolData
         }
     }
 
+    private static bool TryFindMatchingCSProj(Assembly assembly, out FileInfo? csprojFile)
+    {
+        var assemblyName = assembly.GetName();
+        var assemblyNameString = assemblyName.Name;
+        if (assemblyNameString == null)
+            throw new ArgumentException("Assembly name is null", nameof(assembly));
+
+        csprojFile = Directory.GetFiles(OperatorDirectoryName, "*.csproj", SearchOption.AllDirectories)
+                              .Select(path => new FileInfo(path))
+                              .FirstOrDefault(file =>
+                                              {
+                                                  var name = Path.GetFileNameWithoutExtension(file.Name);
+                                                  return name == assemblyNameString;
+                                              });
+
+        return csprojFile != null;
+    }
+
     public static Instance RootInstance { get; private set; }
     public IReadOnlyList<SymbolUi> SymbolUis => _symbolUis;
     private readonly List<SymbolUi> _symbolUis = new();
+    public readonly string Name;
+    
+    public static IReadOnlyDictionary<string, UiSymbolData> SymbolDataByAssemblyLocation => SymbolDataByAssemblyLocationEditable;
+    private static readonly Dictionary<string, UiSymbolData> SymbolDataByAssemblyLocationEditable = new();
 }

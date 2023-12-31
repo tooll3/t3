@@ -314,6 +314,7 @@ namespace T3.Editor.UiModel
 
     public static class SymbolUiRegistry
     {
+        // todo - symbol Ui can be lazily created?
         public static Dictionary<Guid, SymbolUi> Entries { get; } = new(20);
     }
 }

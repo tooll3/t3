@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
+using T3.Editor.Compilation;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.UiModel;
 
@@ -28,7 +29,7 @@ internal static class InputsAndOutputs
         var newSource = newRoot.GetText().ToString();
         Log.Debug(newSource);
 
-        bool success = GraphOperations.UpdateSymbolWithNewSource(symbol, newSource);
+        bool success = OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource);
         if (!success)
         {
             Log.Error("Compilation after removing inputs failed, aborting the remove.");
@@ -58,7 +59,7 @@ internal static class InputsAndOutputs
         var newSource = newRoot.GetText().ToString();
         Log.Debug(newSource);
 
-        var successful = GraphOperations.UpdateSymbolWithNewSource(symbol, newSource);
+        bool successful = OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource);
         if (!successful)
         {
             Log.Error("Compilation after removing outputs failed, aborting the remove.");
@@ -247,7 +248,7 @@ internal static class InputsAndOutputs
         var newSource = root.GetText().ToString();
         Log.Debug(newSource);
 
-        var success = GraphOperations.UpdateSymbolWithNewSource(symbol, newSource);
+        var success = OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource);
         if (!success)
         {
             Log.Error("Compilation after adding input failed, aborting the add.");
@@ -311,7 +312,7 @@ internal static class InputsAndOutputs
         var newSource = root.GetText().ToString();
         Log.Debug(newSource);
 
-        var success = GraphOperations.UpdateSymbolWithNewSource(symbol, newSource);
+        var success = OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource);
         if (!success)
         {
             Log.Error("Compilation after adding output failed, aborting the add.");
@@ -389,7 +390,7 @@ internal static class InputsAndOutputs
         var newSource = root.GetText().ToString();
         Log.Debug(newSource);
 
-        var success = GraphOperations.UpdateSymbolWithNewSource(symbol, newSource);
+        var success = OperatorUpdating.UpdateSymbolWithNewSource(symbol, newSource);
         if (!success)
         {
             Log.Error("Compilation after reordering inputs failed, aborting the add.");

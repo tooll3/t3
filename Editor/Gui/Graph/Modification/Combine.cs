@@ -138,24 +138,11 @@ internal static class Combine
         Log.Debug(newSource);
 
         // compile new instance type
-        var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newSymbolName);
-        if (newAssembly == null)
-        {
-            Log.Error("Error compiling combining type, aborting combine.");
+        var assembly = parentCompositionSymbol.ParentAssembly;
+        var success = OperatorUpdating.TryCreateSymbolFromSource(newSource, newSymbolName, newSymbolId, nameSpace, assembly, out var newSymbol);
+        if (!success)
             return;
-        }
-
-        var type = newAssembly.ExportedTypes.FirstOrDefault();
-        if (type == null)
-        {
-            Log.Error("Error, new symbol has no compiled instance type");
-            return;
-        }
-
-        // Create new symbol and its UI
-        var newSymbol = new Symbol(type, newSymbolId);
-        newSymbol.PendingSource = newSource;
-        SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
+        
         var newSymbolUi = new SymbolUi(newSymbol)
                               {
                                   Description = description
@@ -163,7 +150,6 @@ internal static class Combine
         newSymbolUi.FlagAsModified();
 
         SymbolUiRegistry.Entries.Add(newSymbol.Id, newSymbolUi);
-        newSymbol.Namespace = nameSpace;
 
         // Apply content to new symbol
         var copyCmd = new CopySymbolChildrenCommand(parentCompositionSymbolUi, selectedChildUis, selectedAnnotations, newSymbolUi, Vector2.Zero);

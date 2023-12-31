@@ -46,36 +46,22 @@ internal static class Duplicate
         var newSource = root.GetText().ToString();
 
         var newSymbolId = Guid.NewGuid();
-        // patch the symbol id in namespace
+        // patch the symbol id in namespace // todo: get rid of this part? namespace should just be overwritten to user?
         var oldSymbolNamespace = sourceSymbol.Id.ToString().ToLower().Replace('-', '_');
         var newSymbolNamespace = newSymbolId.ToString().ToLower().Replace('-', '_');
         newSource = newSource.Replace(oldSymbolNamespace, newSymbolNamespace);
         Log.Debug(newSource);
 
-        var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newTypeName);
-        if (newAssembly == null)
-        {
-            Log.Error("Error compiling duplicated type, aborting duplication.");
+        var assembly = compositionUi.Symbol.ParentAssembly;
+        var success = OperatorUpdating.TryCreateSymbolFromSource(newSource, newTypeName, newSymbolId, nameSpace, assembly, out var newSymbol);
+        if (!success)
             return null;
-        }
-
-        var type = newAssembly.ExportedTypes.FirstOrDefault();
-        if (type == null)
-        {
-            Log.Error("Error, new symbol has no compiled instance type");
-            return null;
-        }
-
-        // Create and register the new symbol
-        var newSymbol = new Symbol(type, newSymbolId);
-        newSymbol.PendingSource = newSource;
-        SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
+        
         var sourceSymbolUi = SymbolUiRegistry.Entries[sourceSymbol.Id];
         var newSymbolUi = sourceSymbolUi.CloneForNewSymbol(newSymbol, oldToNewIdMap);
         newSymbolUi.Description = description;
 
         SymbolUiRegistry.Entries.Add(newSymbol.Id, newSymbolUi);
-        newSymbol.Namespace = nameSpace;
 
         // Apply content to new symbol
         var cmd = new CopySymbolChildrenCommand(sourceSymbolUi,
@@ -129,7 +115,7 @@ internal static class Duplicate
         // Create instance
         var addCommand = new AddSymbolChildCommand(compositionUi.Symbol, newSymbol.Id) { PosOnCanvas = posOnCanvas };
         UndoRedoStack.AddAndExecute(addCommand);
-        
+
         // Update the positions
         var sourceSelectables = sourceSymbolUi.GetSelectables().ToArray();
         var newSelectables = newSymbolUi.GetSelectables().ToArray();
@@ -138,7 +124,7 @@ internal static class Duplicate
         {
             newSelectables[i].PosOnCanvas = sourceSelectables[i].PosOnCanvas; // todo: check if this is enough or if id check needed
         }
-        
+
         return newSymbol;
     }
 

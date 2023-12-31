@@ -7,7 +7,10 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using T3.Core.Compilation;
 using T3.Core.Logging;
+using T3.Core.Model;
+using T3.Core.Operator;
 using T3.Core.Resource;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Compilation
 {
@@ -36,13 +39,13 @@ namespace T3.Editor.Compilation
                 return;
             }
 
-            if (string.IsNullOrEmpty(source))
+            if (string.IsNullOrWhiteSpace(source))
             {
                 Log.Info("Source was empty, skip compilation.");
                 return;
             }
 
-            var newAssembly = CompileSymbolFromSource(source, path, resource.OperatorAssembly);
+            var newAssembly = CompileSymbolFromSource(source, path, resource.ParentAssembly);
             if (newAssembly == null)
                 return;
 
@@ -50,18 +53,46 @@ namespace T3.Editor.Compilation
             resource.Updated = true;
         }
 
-        public static Assembly CompileSymbolFromSource(string source, string symbolName, Assembly existingAssembly)
+        public static bool TryCreateSymbolFromSource(string sourceCode, string newSymbolName, Guid newSymbolId, string @namespace, Assembly assembly, out Symbol newSymbol)
         {
-            Assembly operatorsAssembly = existingAssembly;
-            var referencedAssembliesNames = operatorsAssembly.GetReferencedAssemblies(); // todo: ugly
-            var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
+            var newAssembly = CompileSymbolFromSource(sourceCode, newSymbolName, assembly);
+            if (newAssembly == null)
+            {
+                Log.Error("Error compiling duplicated type, aborting duplication.");
+                newSymbol = null;
+                return false;
+            }
+
+            var type = newAssembly.ExportedTypes.FirstOrDefault(); // todo: is this correct?
+            if (type == null)
+            {
+                Log.Error("Error, new symbol has no compiled instance type");
+                newSymbol= null;
+                return false;
+            }
+
+            newSymbol = new Symbol(type, newSymbolId);
+            newSymbol.PendingSource = sourceCode;
+            SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
+            newSymbol.Namespace = @namespace;
+            return true;
+        }
+
+        internal static Assembly CompileSymbolFromSource(string source, string symbolName, Assembly parentAssembly)
+        {
             var coreAssembly = CoreAssembly.Assembly;
-            referencedAssemblies.Add(MetadataReference.CreateFromFile(coreAssembly.Location));
-            referencedAssemblies.Add(MetadataReference.CreateFromFile(operatorsAssembly.Location));
+            var referencedAssembliesNames = parentAssembly.GetReferencedAssemblies(); // todo: ugly (why is this ugly?)
+            var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length + 2) // +2 for core and operators
+                                           {
+                                                  MetadataReference.CreateFromFile(coreAssembly.Location),
+                                                  MetadataReference.CreateFromFile(parentAssembly.Location)
+                                             };
+
             foreach (var asmName in referencedAssembliesNames)
             {
                 var asm = Assembly.Load(asmName);
-                referencedAssemblies.Add(MetadataReference.CreateFromFile(asm.Location));
+                var metadataReference = MetadataReference.CreateFromFile(asm.Location);
+                referencedAssemblies.Add(metadataReference);
 
                 // in order to get dependencies of the used assemblies that are not part of T3 references itself
                 var subAsmNames = asm.GetReferencedAssemblies();
@@ -72,15 +103,17 @@ namespace T3.Editor.Compilation
                 }
             }
 
+            var opAssemblyName = symbolName;
+
             var syntaxTree = CSharpSyntaxTree.ParseText(source);
-            var compilation = CSharpCompilation.Create("Operators",
+            var compilation = CSharpCompilation.Create(opAssemblyName,
                                                        new[] { syntaxTree },
-                                                       referencedAssemblies.ToArray(),
-                                                       new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+                                                       referencedAssemblies,
+                                                       CompilationOptions);
 
             using var dllStream = new MemoryStream();
             using var pdbStream = new MemoryStream();
-            
+
             var emitResult = compilation.Emit(dllStream, pdbStream);
             //Log.Info($"Compilation results of '{symbolName}':");
             if (!emitResult.Success)
@@ -92,31 +125,54 @@ namespace T3.Editor.Compilation
                     else
                         Log.Warning(entry.GetMessage());
                 }
+
+                return null;
             }
-            else
+
+            try
             {
-                try
+                var newAssembly = Assembly.Load(dllStream.GetBuffer());
+                if (newAssembly.ExportedTypes.Any())
                 {
-                    var newAssembly = Assembly.Load(dllStream.GetBuffer());
-                    if (newAssembly.ExportedTypes.Any())
-                    {
-                        Log.Info($"Compilation of '{symbolName}' successful.");
-                        return newAssembly;
-                    }
-                    else
-                    {
-                        Log.Error("New compiled assembly had no exported type.");
-                        return null;
-                    }
+                    Log.Info($"Compilation of '{symbolName}' successful.");
+                    return newAssembly;
                 }
-                catch (Exception e)
+                else
                 {
-                    Log.Error("Failed to load compiled type: " + e.Message);
+                    Log.Error("New compiled assembly had no exported type.");
                     return null;
                 }
             }
-
-            return null;
+            catch (Exception e)
+            {
+                Log.Error("Failed to load compiled type: " + e.Message);
+                return null;
+            }
         }
+
+        public static bool UpdateSymbolWithNewSource(Symbol symbol, string newSource)
+        {
+            var newAssembly = CompileSymbolFromSource(newSource, symbol.Name, symbol.ParentAssembly);
+            if (newAssembly == null)
+                return false;
+
+            //string path = @"Operators\Types\" + symbol.Name + ".cs";
+            var sourcePath = symbol.SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
+
+            var operatorResource = ResourceManager.Instance().GetOperatorFileResource(sourcePath);
+            if (operatorResource != null)
+            {
+                operatorResource.OperatorAssembly = newAssembly;
+                operatorResource.Updated = true;
+                symbol.PendingSource = newSource;
+                return true;
+            }
+
+            Log.Error($"Could not update symbol '{symbol.Name}' because its file resource couldn't be found.");
+
+            return false;
+        }
+
+        private static readonly CSharpCompilationOptions CompilationOptions = new(OutputKind.DynamicallyLinkedLibrary);
     }
 }

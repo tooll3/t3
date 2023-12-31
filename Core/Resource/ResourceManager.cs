@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D;
@@ -309,7 +310,7 @@ namespace T3.Core.Resource
             }
         }
 
-        public uint CreateOperatorEntry(string sourceFilePath, string name, OperatorResource.UpdateDelegate updateHandler)
+        public uint CreateOperatorEntry(string sourceFilePath, string name, Assembly parentAssembly, OperatorResource.UpdateDelegate updateHandler)
         {
             // todo: code below is redundant with all file resources -> refactor
             if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(sourceFilePath, out var fileResource))
@@ -323,7 +324,7 @@ namespace T3.Core.Resource
                 }
             }
 
-            var resourceEntry = new OperatorResource(GetNextResourceId(), name, null, updateHandler);
+            var resourceEntry = new OperatorResource(GetNextResourceId(), name, null, parentAssembly, updateHandler);
             ResourcesById.Add(resourceEntry.Id, resourceEntry);
 
             if (fileResource == null)
