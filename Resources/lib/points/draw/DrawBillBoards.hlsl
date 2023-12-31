@@ -196,7 +196,7 @@ psInput vsMain(uint id
     float4 colorFromPoint = (UseRotationAsRgba > 0.5) ? pRotation : 1;
 
     float colorFxU = GetUFromMode(ColorVariationMode, pointId, f, normalizedScatter, p.W, output.fog);
-    output.color = Color * ColorOverW.SampleLevel(texSampler, float2(colorFxU, 0), 0) * colorFromPoint;
+    output.color = p.Color * Color * ColorOverW.SampleLevel(texSampler, float2(colorFxU, 0), 0) * colorFromPoint;
 
     float adjustedRotate = Rotate;
     float adjustedScale = Scale;

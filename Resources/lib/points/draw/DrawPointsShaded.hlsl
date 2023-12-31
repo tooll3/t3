@@ -105,7 +105,7 @@ psInput vsMain(uint id: SV_VertexID)
     Colors.GetDimensions(colorCount, stride);
     uint colorIndex = (float)particleId/SegmentCount * colorCount;
     float4 dynaColor = colorCount > 0 ? Colors[colorIndex] : 1;
-    output.color = Color * dynaColor;
+    output.color = pointDef.Color * Color * dynaColor;
 
     output.posInWorld = mul(quadPosInCamera, CameraToWorld).xyz;
 

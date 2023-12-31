@@ -52,6 +52,7 @@ struct psInput
 {
     float2 texCoord : TEXCOORD;
     float4 pixelPosition : SV_POSITION;
+    float4 color : COLOR;
     float3 worldPosition : POSITION;
     float3x3 tbnToWorld : TBASIS;
     float fog : VPOS;
@@ -98,6 +99,7 @@ psInput vsMain(uint id
     posInObject = mul(float4(posInObject.xyz, 1), orientationMatrix);
 
     posInObject += float4(Points[instanceIndex].Position, 0);
+    output.color = Points[instanceIndex].Color;
 
     float4 posInClipSpace = mul(posInObject, ObjectToClipSpace);
     output.pixelPosition = posInClipSpace;
@@ -131,7 +133,7 @@ psInput vsMain(uint id
 float4 psMain(psInput pin) : SV_TARGET
 {
     // Sample input textures to get shading model params.
-    float4 albedo = BaseColorMap.Sample(texSampler, pin.texCoord);
+    float4 albedo = BaseColorMap.Sample(texSampler, pin.texCoord) * pin.color;
     if (AlphaCutOff > 0 && albedo.a < AlphaCutOff)
         discard;
 

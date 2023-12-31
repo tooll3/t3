@@ -97,6 +97,7 @@ static const float WorldSpace = 2;
     ResultPoints[i.x].Rotation = newRotation;
     ResultPoints[i.x].Color = SourcePoints[i.x].Color;
     ResultPoints[i.x].Selected = SourcePoints[i.x].Selected;
+    ResultPoints[i.x].Extend = SourcePoints[i.x].Extend;
 
     float orgW = SourcePoints[i.x].W;
     ResultPoints[i.x].W = lerp(orgW, orgW * ScaleW + OffsetW, weight);

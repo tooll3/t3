@@ -30,8 +30,9 @@ void main(uint3 i : SV_DispatchThreadID)
     }
 
     Point p = SourcePoints[i.x];
-    ResultPoints[i.x].Position = p.Position;
-    ResultPoints[i.x].W = p.W;
+
+    p.Position = p.Position;
+    p.W = p.W;
 
     float weight = UseWAsWeight > 0.5   
          ? p.W
@@ -46,7 +47,8 @@ void main(uint3 i : SV_DispatchThreadID)
     float3 forward = qRotateVec3(float3(0,0,1), newRot);
     float4 alignment= qFromAngleAxis(3.141578, forward);
     newRot = qMul(alignment, newRot);
+    p.Rotation = normalize(qSlerp(normalize(p.Rotation), normalize(newRot), weight));
 
-    ResultPoints[i.x].Rotation = normalize(qSlerp(normalize(p.Rotation), normalize(newRot), weight));
+    ResultPoints[i.x] = p;
 }
 
