@@ -24,17 +24,6 @@ cbuffer Params : register(b0)
 StructuredBuffer<Point> SourcePoints : t0;        
 RWStructuredBuffer<Point> ResultPoints : u0;   
 
-// inline float4 GetBias(float4 x, float bias)
-// {
-//     return x / ((1 / bias - 2) * (1 - x) + 1);
-// }
-
-// inline float4 GetSchlickBias(float4 x, float gain)
-// {
-//     return x < 0.5 ? GetBias(x * 2, gain) / 2
-//                 : GetBias(x * 2 - 1, 1 - gain) / 2 + 0.5;
-// }
-
 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
@@ -45,7 +34,8 @@ void main(uint3 i : SV_DispatchThreadID)
     //     ResultPoints[i.x].w = 0 ;
     //     return;
     // }
-
+    
+    Point p = SourcePoints[i.x];
 
 
     int pointId = i.x;
@@ -64,15 +54,13 @@ void main(uint3 i : SV_DispatchThreadID)
                                     smoothstep(0, 1,
                                                phase - phaseId)) * 2 - 1;
 
-    //float rand = (i.x + 0.5) * 1.431 + 111 + floor(Seed+0.5) * 37.1;
-    //float4 hash4 = hash42(rand);
+
     float4 hash4 =  GetSchlickBias(normalizedScatter, Bias) * 2 -1;
-    
-    //float4 hashRot = hash42( float2(rand, 23.1));
 
-    float4 rot = SourcePoints[i.x].Rotation;
 
-    float amount = Amount * (UseWAsSelection > 0.5 ? SourcePoints[i.x].W : 1);
+    float4 rot = p.Rotation;
+
+    float amount = Amount * (UseWAsSelection > 0.5 ? p.W : 1);
  
     float3 offset = hash4.xyz * RandomizePosition * amount;
 
@@ -81,7 +69,7 @@ void main(uint3 i : SV_DispatchThreadID)
         offset = qRotateVec3(offset, rot);
     }
 
-    ResultPoints[i.x].Position = SourcePoints[i.x].Position + offset;
+    p.Position += offset;
 
     float3 randomRotate = (hashRot.xyz - 0.5) * (RandomizeRotation / 180 * PI) * amount * hash4.xyz;
 
@@ -89,8 +77,9 @@ void main(uint3 i : SV_DispatchThreadID)
     rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.y * Offset, float3(0,1,0))));
     rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.z * Offset, float3(0,0,1))));
 
-    ResultPoints[i.x].Rotation = rot;
+    p.Rotation = rot;
 
-    ResultPoints[i.x].W =  SourcePoints[i.x].W + hash4.w *RandomizeW * amount;
+    p.W += hash4.w *RandomizeW * amount;
+    ResultPoints[i.x] = p;
 }
 

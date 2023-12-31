@@ -52,11 +52,18 @@ sampler texSampler : register(s0);
 [numthreads(256, 4, 1)] void main(uint3 i
                                   : SV_DispatchThreadID)
 {
+    uint pointCount, stride;
+    ResultPoints.GetDimensions(pointCount, stride);
+    if(i.x >= pointCount) {
+        return;
+    }
+
     uint index = i.x;
+    
 
-    Point P = Points[index];
+    Point p = Points[index];
 
-    float3 pos = P.Position;
+    float3 pos = p.Position;
     pos -= Center;
 
     float3 posInObject = mul(float4(pos.xyz, 0), transformSampleSpace).xyz;
@@ -64,9 +71,9 @@ sampler texSampler : register(s0);
     float gray = (c.r + c.g + c.b) / 3;
 
     // Rotation
-    ResultPoints[index].Rotation = P.Rotation;
+    //ResultPoints[index].Rotation = p.Rotation;
 
-    float4 rot = P.Rotation;
+    float4 rot = p.Rotation;
     float rotXFactor = (R == 5 ? (c.r * RFactor + ROffset) : 0) +
                        (G == 5 ? (c.g * GFactor + GOffset) : 0) +
                        (B == 5 ? (c.b * BFactor + BOffset) : 0) +
@@ -100,8 +107,7 @@ sampler texSampler : register(s0);
     }
 
     rot2 = normalize(rot2);
-
-    ResultPoints[index].Rotation = qMul(rot, rot2);
+    p.Rotation = qMul(rot, rot2);
 
     // Position
     float4 ff = Factors[(uint)clamp(L, 0, 5.1)] * (gray * LFactor + LOffset) +
@@ -110,21 +116,20 @@ sampler texSampler : register(s0);
                 Factors[(uint)clamp(B, 0, 5.1)] * (c.b * BFactor + BOffset);
 
     float3 offset = Mode < 0.5 ? float3(ff.xyz)
-                               : float3(ff.xyz) * P.Position;
+                               : float3(ff.xyz) * p.Position;
 
     if (TranslationSpace > 0.5)
     {
-        offset = qRotateVec3(offset, P.Rotation);
+        offset = qRotateVec3(offset, p.Rotation);
     }
 
-    float3 newPos = P.Position + offset;
+    float3 newPos = p.Position + offset;
 
     if (RotationSpace < 0.5)
     {
         newPos = qRotateVec3(newPos, rot2);
     }
-    ResultPoints[index].Position = newPos;
-
-    ResultPoints[index].W = Mode < 0.5 ? (P.W + ff.w)
-                                       : (P.W * (1 + ff.w));
+    p.Position = newPos;
+    p.W = Mode < 0.5 ? (p.W + ff.w) : (p.W * (1 + ff.w));
+    ResultPoints[index] = p;
 }

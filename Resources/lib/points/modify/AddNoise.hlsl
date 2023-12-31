@@ -80,7 +80,8 @@ void main(uint3 i : SV_DispatchThreadID)
     }
 
 
-    float3 variationOffset = hash31((float)(i.x%1234)/0.123 ) * Variation;
+    //float3 variationOffset = hash31((float)(i.x%1234)/0.123 ) * Variation;
+    float3 variationOffset = hash41u(i.x).xyz * Variation;
 
     Point p = SourcePoints[i.x];
 
@@ -93,9 +94,9 @@ void main(uint3 i : SV_DispatchThreadID)
     //float4 posInWorld = mul(float4(p.position ,1), ObjectToWorld);
     GetTranslationAndRotation(weight , p.Position + variationOffset, p.Rotation, offset, newRotation);
 
-    ResultPoints[i.x].Position = p.Position + offset ;
-    ResultPoints[i.x].Rotation = newRotation;
+    p.Position += offset;
+    p.Rotation = newRotation;
 
-    ResultPoints[i.x].W =  SourcePoints[i.x].W;
+    ResultPoints[i.x]= p;
 }
 

@@ -512,6 +512,7 @@
     },
     {
       "ChildId": "e491a157-975d-4477-99cc-34f2fb51275d"/*AddNoise*/,
+      "Comment": "Note how UseWAsWeight is -1 so that with increasing age the noise amount is reduced to zero.",
       "Position": {
         "X": -1622.3105,
         "Y": -3127.8184
@@ -994,8 +995,8 @@
     {
       "ChildId": "94d30dc0-a9a6-4eba-86c6-a37ddeed3d50"/*GridPoints*/,
       "Position": {
-        "X": -1567.7595,
-        "Y": -2365.045
+        "X": -1558.0236,
+        "Y": -2427.3013
       }
     },
     {
@@ -1008,8 +1009,8 @@
     {
       "ChildId": "ee3561f2-e9ed-4516-97aa-d17976fa503f"/*TransformPoints*/,
       "Position": {
-        "X": -2674.9067,
-        "Y": -3431.0444
+        "X": -2628.694,
+        "Y": -3441.3552
       }
     },
     {
@@ -1993,15 +1994,64 @@
     {
       "ChildId": "6320ed04-18e5-492f-84d9-f0baa8f0e55f"/*Execute*/,
       "Position": {
-        "X": -1176.5542,
-        "Y": -2421.898
+        "X": -835.2595,
+        "Y": -2491.8867
       }
     },
     {
-      "ChildId": "d51c1fcf-1e4d-48dd-9c46-ff9efc2f37b3"/*DrawPoints*/,
+      "ChildId": "167d3b6d-7919-444a-9bb0-4ff90bb5c412"/*VisualizePoints*/,
       "Position": {
-        "X": -1380.1174,
-        "Y": -2345.1416
+        "X": -1381.1235,
+        "Y": -3405.4146
+      }
+    },
+    {
+      "ChildId": "73aad582-5a44-44a7-933c-cf8e1877e522"/*DrawPoints*/,
+      "Position": {
+        "X": -2006.0234,
+        "Y": -3323.5034
+      }
+    },
+    {
+      "ChildId": "8ef6814c-4d3e-4d88-a37c-9c4d3e7d8027"/*PointsToCPU*/,
+      "Position": {
+        "X": -1589.1082,
+        "Y": -3559.5774
+      }
+    },
+    {
+      "ChildId": "0540bf84-cef4-460c-9437-721ec4ebde6f"/*GridPoints*/,
+      "Position": {
+        "X": -2262.6577,
+        "Y": -3674.3596
+      }
+    },
+    {
+      "ChildId": "4bbc26ee-0194-4616-a9e9-9402c912df4c"/*FilterPoints*/,
+      "Position": {
+        "X": -2059.4346,
+        "Y": -3627.931
+      }
+    },
+    {
+      "ChildId": "b97c5274-88dc-4c65-9421-ba96cf5aa9da"/*AddNoise*/,
+      "Position": {
+        "X": -1937.6791,
+        "Y": -3716.2046
+      }
+    },
+    {
+      "ChildId": "e07a0379-4520-4cf5-8a38-e1f61ac95d54"/*DrawLines*/,
+      "Position": {
+        "X": -1540.2042,
+        "Y": -3722.9988
+      }
+    },
+    {
+      "ChildId": "ed35b205-f5c6-48c2-88f1-b795022f9451"/*RandomizePoints*/,
+      "Position": {
+        "X": -1716.081,
+        "Y": -3848.1104
       }
     }
   ],

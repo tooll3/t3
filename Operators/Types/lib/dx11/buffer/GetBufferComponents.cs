@@ -51,6 +51,7 @@ namespace T3.Operators.Types.Id_80dff680_5abf_484a_b9e0_81d72f3b7aa4
                     try
                     {
                         Length.Value = ShaderResourceView.Value.Description.Buffer.ElementCount;
+                        Stride.Value = bufferWithViews.Buffer.Description.StructureByteStride;
                         // Buffer.DirtyFlag.Clear();
                         // ShaderResourceView.DirtyFlag.Clear();
                         // UnorderedAccessView.DirtyFlag.Clear();

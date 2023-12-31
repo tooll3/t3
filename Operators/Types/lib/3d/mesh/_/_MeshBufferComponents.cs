@@ -32,8 +32,8 @@ namespace T3.Operators.Types.Id_5b9f1d97_4e10_4f31_ba83_4cbf7be9719b
             Vertices.Value = mesh.VertexBuffer;
             Indices.Value = mesh.IndicesBuffer;
             
-            Vertices.DirtyFlag.Clear();
-            Indices.DirtyFlag.Clear();
+            //Vertices.DirtyFlag.Clear();
+            //Indices.DirtyFlag.Clear();
         }
 
         [Input(Guid = "1B0B7587-DE86-4FC4-BE78-A21392E8AA9B")]

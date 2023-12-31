@@ -561,8 +561,8 @@
     {
       "ChildId": "56af3c1a-2a0a-4567-9230-5e52cd38fcf9"/*GridPoints*/,
       "Position": {
-        "X": 1694.0547,
-        "Y": -1184.6785
+        "X": 1544.0548,
+        "Y": -1130.3807
       }
     },
     {
@@ -577,6 +577,97 @@
       "Position": {
         "X": 1994.0548,
         "Y": -1184.6785
+      }
+    },
+    {
+      "ChildId": "4400509b-e66e-4568-b514-ad70c2067edb"/*ThereDemo*/,
+      "Position": {
+        "X": 1969.9524,
+        "Y": -1782.5607
+      }
+    },
+    {
+      "ChildId": "b15d7937-0942-40e9-adeb-b03de5ffd627"/*ThereDemo*/,
+      "Position": {
+        "X": 2130.298,
+        "Y": -1766.7875
+      }
+    },
+    {
+      "ChildId": "295bfd27-af10-44c8-b909-642b3250df3d"/*SamplePointAttributes*/,
+      "Position": {
+        "X": 1694.0548,
+        "Y": -1130.3807
+      }
+    },
+    {
+      "ChildId": "c219cff3-f92a-4b90-b054-415252aef81d"/*LoadImage*/,
+      "Position": {
+        "X": 1568.4459,
+        "Y": -1033.2855
+      }
+    },
+    {
+      "ChildId": "fda219b4-b585-430a-9b33-873dd2bbfcbb"/*GridPoints*/,
+      "Position": {
+        "X": 1650.9379,
+        "Y": -820.7001
+      }
+    },
+    {
+      "ChildId": "487263cf-84c7-44a7-af1b-399c4138b3a8"/*DrawPoints*/,
+      "Position": {
+        "X": 1950.9379,
+        "Y": -874.9978
+      }
+    },
+    {
+      "ChildId": "07148614-d69a-405f-a297-51392192c123"/*SamplePointAttributes*/,
+      "Position": {
+        "X": 1800.9379,
+        "Y": -820.7001
+      }
+    },
+    {
+      "ChildId": "75cbdb48-3464-480e-a945-2812e80a07b1"/*LoadImage*/,
+      "Position": {
+        "X": 1675.329,
+        "Y": -723.60486
+      }
+    },
+    {
+      "ChildId": "8407273d-0936-4be7-a8c4-bb7402cc5f2a"/*GridPoints*/,
+      "Position": {
+        "X": 1998.5732,
+        "Y": -613.3205
+      }
+    },
+    {
+      "ChildId": "735797c1-f520-4104-9616-168d78e21356"/*DrawPoints*/,
+      "Position": {
+        "X": 2298.5732,
+        "Y": -667.6182
+      }
+    },
+    {
+      "ChildId": "43463b53-4fd8-4534-85b4-b0598092f464"/*SamplePointAttributes*/,
+      "Position": {
+        "X": 2148.5732,
+        "Y": -613.3205
+      }
+    },
+    {
+      "ChildId": "77230bfe-87ea-43b3-8642-bb2a1e995a59"/*LoadImage*/,
+      "Position": {
+        "X": 2022.9644,
+        "Y": -516.2253
+      }
+    },
+    {
+      "ChildId": "04d83a5a-2e71-45c5-a2a5-90fd033e2488"/*WorksForEverybody*/,
+      "Position": {
+        "X": 2056.7432,
+        "Y": -1603.6721
       }
     }
   ],

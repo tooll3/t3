@@ -24,10 +24,9 @@ RWStructuredBuffer<Point> ResultPoints : u0;
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
-    uint numStructs, stride;
-    ResultPoints.GetDimensions(numStructs, stride);
-    if(i.x >= numStructs) {
-        ResultPoints[i.x].W = 0 ;
+    uint pointCount, stride;
+    ResultPoints.GetDimensions(pointCount, stride);
+    if(i.x >= pointCount) {
         return;
     }
 
