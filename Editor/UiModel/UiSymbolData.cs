@@ -55,7 +55,6 @@ public partial class UiSymbolData : SymbolData
             }
             else
             {
-                _symbolUis.Add(symbolUi);
                 symbolUi.UpdateConsistencyWithSymbol();
                 if (enableLog)
                     Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
@@ -84,7 +83,7 @@ public partial class UiSymbolData : SymbolData
         // first load core data
         base.Load(enableLog);
 
-        Console.WriteLine(@"Loading Symbol UIs...");
+        Console.WriteLine($"Loading Symbol UIs from \"{Folder}\"");
         var symbolUiFiles = Directory.GetFiles(Folder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);
         _symbolUis = symbolUiFiles.AsParallel()
                                          .Select(JsonFileResult<SymbolUi>.ReadAndCreate)

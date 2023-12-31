@@ -149,16 +149,6 @@ namespace T3.Editor
 
             // Setup file watching the operator source
             T3Ui.Initialize();
-            
-            foreach (var symbolData in T3Ui.UiSymbolDatas)
-            {
-                
-                foreach(var symbolUi in symbolData.SymbolUis)
-                {
-                    var symbol = symbolUi.Symbol;
-                    var sourceFilePath = symbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
-                }
-            }
 
             unsafe
             {

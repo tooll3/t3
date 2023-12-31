@@ -41,9 +41,12 @@ public class T3Ui
 {
     static T3Ui()
     {
-        UiSymbolDatas = CoreAssembly.GetLoadedOperatorAssemblies()
+        var assemblies = CoreAssembly.GetAllOperatorAssemblies();
+        UiSymbolDatas = assemblies
                       .Select(a => new UiSymbolData(a, enableLog: false))
                       .ToArray();
+        
+        Log.Debug($"Loaded {UiSymbolDatas.Count} operator assemblies.");
     }
     
     public static void Initialize()
