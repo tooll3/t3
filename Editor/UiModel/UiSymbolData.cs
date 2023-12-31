@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
 using Newtonsoft.Json;
+using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
@@ -12,7 +13,6 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.ChildUi;
-using T3.Editor.Gui.InputUi;
 
 // ReSharper disable RedundantNameQualifier
 
@@ -20,7 +20,7 @@ namespace T3.Editor.UiModel;
 
 public partial class UiSymbolData : SymbolData
 {
-    public UiSymbolData(Assembly assembly, bool enableLog)
+    public UiSymbolData(AssemblyInformation assembly, bool enableLog)
         : base(assembly)
     {
         Init(enableLog);
@@ -32,14 +32,14 @@ public partial class UiSymbolData : SymbolData
         Folder = Path.GetDirectoryName(csprojFile!.FullName);
         ResourceFileWatcher.AddCodeWatcher(Folder);
         
-        SymbolDataByAssemblyLocationEditable.Add(assembly.Location, this);
+        SymbolDataByAssemblyLocationEditable.Add(assembly.Path, this);
     }
 
     private void Init(bool enableLog)
     {
         Load(enableLog);
 
-        Console.WriteLine($@"Updating UI entries for {Assembly.GetName().Name}...");
+        Console.WriteLine($@"Updating UI entries for {AssemblyInformation.Name}...");
 
         Console.WriteLine(@"Registering Symbol UIs...");
 
@@ -178,7 +178,7 @@ public partial class UiSymbolData : SymbolData
             if (symbolUiResource == null)
             {
                 // If the source wasn't registered before do this now
-                resourceManager.CreateOperatorEntry(filepath, symbol.Id.ToString(), Assembly, OperatorUpdating.ResourceUpdateHandler);
+                resourceManager.CreateOperatorEntry(filepath, symbol.Id.ToString(), AssemblyInformation, OperatorUpdating.ResourceUpdateHandler);
             }
 
             var symbolSourceFilepath = BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
@@ -186,7 +186,7 @@ public partial class UiSymbolData : SymbolData
             if (opResource == null)
             {
                 // If the source wasn't registered before do this now
-                resourceManager.CreateOperatorEntry(symbolSourceFilepath, symbol.Id.ToString(), Assembly, OperatorUpdating.ResourceUpdateHandler);
+                resourceManager.CreateOperatorEntry(symbolSourceFilepath, symbol.Id.ToString(), AssemblyInformation, OperatorUpdating.ResourceUpdateHandler);
             }
 
             symbolUi.ClearModifiedFlag();
@@ -207,10 +207,9 @@ public partial class UiSymbolData : SymbolData
         }
     }
 
-    private static bool TryFindMatchingCSProj(Assembly assembly, out FileInfo csprojFile)
+    private static bool TryFindMatchingCSProj(AssemblyInformation assembly, out FileInfo csprojFile)
     {
-        var assemblyName = assembly.GetName();
-        var assemblyNameString = assemblyName.Name;
+        var assemblyNameString = assembly.Name;
         if (assemblyNameString == null)
             throw new ArgumentException("Assembly name is null", nameof(assembly));
 

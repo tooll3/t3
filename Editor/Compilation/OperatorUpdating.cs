@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
@@ -45,7 +44,7 @@ namespace T3.Editor.Compilation
                 return;
             }
 
-            var newAssembly = CompileSymbolFromSource(source, path, resource.ParentAssembly);
+            var newAssembly = CompileSymbolFromSource(source, path, resource.ParentAssembly.Assembly);
             if (newAssembly == null)
                 return;
 

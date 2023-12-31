@@ -27,7 +27,7 @@ namespace T3.Core.Operator
         public string PendingSource { get; set; }
         public string DeprecatedSourcePath { get; set; }
         public SymbolData SymbolData { get; internal set; }
-        public Assembly ParentAssembly => SymbolData.Assembly;
+        public Assembly ParentAssembly => SymbolData.AssemblyInformation.Assembly;
 
         public readonly List<Instance> InstancesOfSymbol = new();
         public readonly List<SymbolChild> Children = new();

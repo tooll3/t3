@@ -10,6 +10,7 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
+using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Resource.Dds;
 using Buffer = SharpDX.Direct3D11.Buffer;
@@ -310,7 +311,7 @@ namespace T3.Core.Resource
             }
         }
 
-        public uint CreateOperatorEntry(string sourceFilePath, string name, Assembly parentAssembly, OperatorResource.UpdateDelegate updateHandler)
+        public uint CreateOperatorEntry(string sourceFilePath, string name, AssemblyInformation parentAssembly, OperatorResource.UpdateDelegate updateHandler)
         {
             // todo: code below is redundant with all file resources -> refactor
             if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(sourceFilePath, out var fileResource))

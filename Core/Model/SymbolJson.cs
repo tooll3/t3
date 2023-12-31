@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
@@ -32,7 +34,7 @@ namespace T3.Core.Resource
             }
         }
     }
-    
+
     public static class SymbolJson
     {
         #region writing
@@ -71,7 +73,6 @@ namespace T3.Core.Resource
             writer.WriteEndArray();
         }
 
-
         private static void WriteConnections(List<Symbol.Connection> connections, JsonTextWriter writer)
         {
             writer.WritePropertyName(JsonKeys.Connections);
@@ -102,6 +103,7 @@ namespace T3.Core.Resource
                 {
                     writer.WriteValue(JsonKeys.IsBypassed, child.IsBypassed);
                 }
+
                 writer.WriteValue(JsonKeys.SymbolId, child.Symbol.Id);
                 if (!string.IsNullOrEmpty(child.Name))
                 {
@@ -170,17 +172,16 @@ namespace T3.Core.Resource
         #endregion
 
         #region reading
-
         internal static bool TryReadAndApplySymbolChildren(SymbolReadResult symbolReadResult)
         {
             var childrenJson = symbolReadResult.ChildrenJsonArray;
-            
+
             if (childrenJson.Length == 0)
                 return true;
-            
+
             var parent = symbolReadResult.Symbol;
             var success = true;
-            
+
             List<SymbolChild> children = new(childrenJson.Length); // todo: ordered dictionary
             foreach (var childJson in childrenJson)
             {
@@ -189,20 +190,20 @@ namespace T3.Core.Resource
 
                 if (!gotChild)
                     continue;
-                
+
                 children.Add(symbolChild);
                 symbolChild.Parent = parent;
             }
-            
+
             parent.SetChildren(children, setChildrensParent: false);
-            
-            if(symbolReadResult.AnimatorJsonData != null)
+
+            if (symbolReadResult.AnimatorJsonData != null)
                 parent.Animator.Read(symbolReadResult.AnimatorJsonData, parent);
-            
+
             return success;
         }
-        
-        private static bool TryReadSymbolChild(in JsonChildResult childJsonResult,  out SymbolChild child)
+
+        private static bool TryReadSymbolChild(in JsonChildResult childJsonResult, out SymbolChild child)
         {
             // If the used symbol hasn't been loaded so far ensure it's loaded now
             var haveChildSymbolDefinition = SymbolRegistry.Entries.TryGetValue(childJsonResult.SymbolId, out var symbol);
@@ -251,7 +252,7 @@ namespace T3.Core.Resource
                 var isDisabledJson = outputJson[JsonKeys.IsDisabled];
                 if (isDisabledJson != null)
                 {
-                    if(child.Outputs.TryGetValue(outputId, out var output))
+                    if (child.Outputs.TryGetValue(outputId, out var output))
                         output.IsDisabled = isDisabledJson.Value<bool>();
                 }
             }
@@ -295,12 +296,13 @@ namespace T3.Core.Resource
         {
             if (json[JsonKeys.Type] == null)
                 return;
-            
+
             if (!symbolChild.Outputs.TryGetValue(outputId, out var output))
             {
                 Log.Warning("Skipping definition of obsolete output " + outputId);
                 return;
             }
+
             output.OutputData.ReadFromJson(json);
         }
 
@@ -322,10 +324,10 @@ namespace T3.Core.Resource
             // everything below can be skipped, unless "allowNonOperatorInstanceType" actually matters
             if (hasSymbol)
                 return true;
-            
+
             var symbolData = SymbolData.SymbolOwners[guid];
-            var jsonResult = ReadSymbolRoot(guid, jToken, allowNonOperatorInstanceType: true, symbolData.Assembly);
-            
+            var jsonResult = ReadSymbolRoot(guid, jToken, allowNonOperatorInstanceType: true, symbolData.AssemblyInformation);
+
             if (jsonResult.Symbol is null)
                 return false;
 
@@ -339,7 +341,7 @@ namespace T3.Core.Resource
             return false;
         }
 
-        internal static SymbolReadResult ReadSymbolRoot(in Guid id, JToken jToken, bool allowNonOperatorInstanceType, Assembly owningAssembly)
+        internal static SymbolReadResult ReadSymbolRoot(in Guid id, JToken jToken, bool allowNonOperatorInstanceType, AssemblyInformation owningAssembly)
         {
             // Read symbol with Id - dictionary of Guid-JToken?
             var name = jToken[JsonKeys.Name].Value<string>();
@@ -364,7 +366,7 @@ namespace T3.Core.Resource
                                .Select(ReadSymbolInputDefaults).ToArray();
 
             var orderedInputIds = inputDefaults
-               .Select(idAndValue => idAndValue.Item1).ToArray();
+                                 .Select(idAndValue => idAndValue.Item1).ToArray();
 
             var inputDefaultValues = new Dictionary<Guid, JToken>();
             foreach (var idAndValue in inputDefaults)
@@ -373,19 +375,27 @@ namespace T3.Core.Resource
             }
 
             var namespaceId = CreateGuidNamespaceString(id);
-            
-            var instanceTypeName = FormInstanceTypeName(owningAssembly, name, namespaceId);
 
-            var instanceType = !allowNonOperatorInstanceType ? GetOperatorInstanceType(instanceTypeName) : GetAnyInstanceType(instanceTypeName);
+
+            Type instanceType;
+            if (!allowNonOperatorInstanceType)
+            {
+                instanceType = GetOperatorInstanceType(owningAssembly, name, namespaceId);
+            }
+            else
+            {
+                var instanceTypeName = FormAssemblyQualifiedName(owningAssembly.AssemblyName, name, namespaceId);
+                instanceType = GetAnyInstanceType(instanceTypeName);
+            }
 
             var @namespace = jToken[JsonKeys.Namespace]?.Value<string>() ?? string.Empty;
             var symbol = new Symbol(instanceType, id, orderedInputIds)
-                         {
-                             Name = name,
-                             Namespace = @namespace,
-                         };
-            
-            if(hasConnections)
+                             {
+                                 Name = name,
+                                 Namespace = @namespace,
+                             };
+
+            if (hasConnections)
                 symbol.Connections.AddRange(connections);
 
             foreach (var input in symbol.InputDefinitions)
@@ -403,11 +413,11 @@ namespace T3.Core.Resource
             return new SymbolReadResult(symbol, childrenJsons, animatorData);
         }
 
-        private static string FormInstanceTypeName(Assembly owningAssembly, string name, string namespaceId)
+        private static string FormAssemblyQualifiedName(AssemblyName owningAssemblyName, string name, string namespaceId)
         {
             const string typeFormat = "{0}, {1}, Version={2}, Culture={3}, PublicKeyToken={4}";
-            
-            var owningAssemblyName = owningAssembly.GetName();
+
+            Log.Debug("Owning assembly name: " + owningAssemblyName.FullName);
             string publicKeyToken = owningAssemblyName.FullName.Split('=')[^1];
 
             var assemblyCulture = owningAssemblyName.CultureInfo?.Name;
@@ -416,10 +426,11 @@ namespace T3.Core.Resource
             {
                 assemblyCulture = "neutral";
             }
-            
+
             string fullyQualifiedName = $"T3.Operators.Types.Id_{namespaceId}.{name}";
 
-            var instanceTypeName = string.Format(typeFormat, fullyQualifiedName, owningAssemblyName.Name, owningAssemblyName.Version, assemblyCulture, publicKeyToken);
+            var instanceTypeName = string.Format(typeFormat, fullyQualifiedName, owningAssemblyName.Name, owningAssemblyName.Version, assemblyCulture,
+                                                 publicKeyToken);
             return instanceTypeName;
         }
 
@@ -440,32 +451,27 @@ namespace T3.Core.Resource
         }
 
         // Method for when allowNonOpInstanceType = true
-        static Type GetOperatorInstanceType(string typeName)
+        static Type GetOperatorInstanceType(AssemblyInformation assemblyInformation, string typeName, string nameSpaceId)
         {
-            Type thisType;
-            try
-            {
-                thisType = Type.GetType(typeName);
-            }
-            catch
-            {
-                thisType = null;
-                Log.Error($"Definition '{typeName}' is incorrect.\nExample definition: \"{typeof(SymbolJson).AssemblyQualifiedName}\"");
-            }
+            string fullName = "T3.Operators.Types.Id_" + nameSpaceId + "." + typeName;
+            var gotType = assemblyInformation.TryGetType(fullName, out var thisType);
 
-            if (thisType is not null)
+            if (gotType)
                 return thisType;
-            
-            CoreUi.Instance.ShowMessageBox($"Definition '{typeName}' is missing in Operator.dll.\nPlease try to rebuild your solution.");
+
+            var existingTypes = string.Join(",\n", assemblyInformation.Types.Select(x => x.FullName));
+
+            CoreUi.Instance.ShowMessageBox($"Definition '{typeName}' is missing.\nPlease try to rebuild your solution.\n\n" +
+                                           $"Existing types in {assemblyInformation.Name}:\n{existingTypes}\n\n");
             CoreUi.Instance.ExitApplication();
             CoreUi.Instance.ExitThread();
 
             return null;
         }
-        
+
         // Method for when allowNonOpInstanceType = false
         static Type GetAnyInstanceType(string typeName) => Type.GetType(typeName) ?? typeof(object);
-        
+
         private static void ObtainConnections(JArray connectionsJson, List<Symbol.Connection> connections)
         {
             foreach (var c in connectionsJson)
@@ -474,9 +480,8 @@ namespace T3.Core.Resource
                 connections.Add(connection);
             }
         }
-
         #endregion
-        
+
         internal readonly struct JsonKeys
         {
             public const string Connections = "Connections";
@@ -501,7 +506,7 @@ namespace T3.Core.Resource
             public const string Outputs = "Outputs";
             public const string Animator = "Animator";
         }
-        
+
         internal readonly struct SymbolReadResult
         {
             public readonly Symbol Symbol;
@@ -523,14 +528,14 @@ namespace T3.Core.Resource
             public readonly JToken Json;
 
             public JsonChildResult(JToken json)
-            { 
+            {
                 // todo: handle failure
                 var symbolIdString = json[JsonKeys.SymbolId].Value<string>();
                 _ = Guid.TryParse(symbolIdString, out SymbolId);
-                
+
                 var childIdString = json[JsonKeys.Id].Value<string>();
                 _ = Guid.TryParse(childIdString, out ChildId);
-                
+
                 Json = json;
             }
         }

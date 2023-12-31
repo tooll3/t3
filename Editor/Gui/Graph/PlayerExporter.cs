@@ -7,7 +7,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Newtonsoft.Json;
 using SharpDX.Direct3D11;
-using T3.Core.Compilation;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Model;

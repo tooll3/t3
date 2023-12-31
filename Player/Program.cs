@@ -199,7 +199,7 @@ namespace T3.Player
                     return;
                 }
 
-                _symbolData = new SymbolData(operatorsAssembly);
+                //_symbolData = new SymbolData(operatorsAssembly);
                 _symbolData.Load(enableLog: false);
 
                 var symbols = SymbolRegistry.Entries;

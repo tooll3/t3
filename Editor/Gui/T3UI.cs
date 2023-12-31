@@ -16,6 +16,7 @@ using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Interaction;
@@ -41,8 +42,8 @@ public class T3Ui
 {
     static T3Ui()
     {
-        var assemblies = EditorAssemblyInfo.GetAllOperatorAssemblies();
-        UiSymbolDatas = assemblies
+        var operatorAssemblies = RuntimeAssemblies.OperatorAssemblies;
+        UiSymbolDatas = operatorAssemblies
                       .Select(a => new UiSymbolData(a, enableLog: false))
                       .ToArray();
         

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 
@@ -11,11 +12,11 @@ namespace T3.Core.Resource
     public class OperatorResource : AbstractResource, IUpdateable
     {
         public Assembly OperatorAssembly { get; set; }
-        public Assembly ParentAssembly { get; }
+        public AssemblyInformation ParentAssembly { get; }
         public bool Updated { get; set; }
         private Guid SymbolId { get; }
 
-        public OperatorResource(uint id, string nameWithId, Assembly operatorAssembly, Assembly parentAssembly, UpdateDelegate updateHandler)
+        public OperatorResource(uint id, string nameWithId, Assembly operatorAssembly, AssemblyInformation parentAssembly, UpdateDelegate updateHandler)
             : base(id, nameWithId)
         {
             _updateHandler = updateHandler;
