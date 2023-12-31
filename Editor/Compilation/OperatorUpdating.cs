@@ -75,7 +75,7 @@ namespace T3.Editor.Compilation
             newSymbol.PendingSource = sourceCode;
             newSymbol.Namespace = @namespace;
             SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
-            var symbolData = UiSymbolData.SymbolDataByAssemblyLocation[parentAssembly.Location];
+            var symbolData = UiSymbolData.SymbolDataByAssembly[parentAssembly];
             symbolData.AddSymbol(newSymbol);
             return true;
         }

@@ -21,10 +21,12 @@ namespace T3.Core.Resource
             AddWatcher(ResourceManager.ResourcesFolder, "*.tiff");
         }
         
-        public static void AddCodeWatcher(string folder)
+        public static void AddCodeWatcher(string folder, Action<string> onFileChanged)
         {
             Directory.CreateDirectory(folder);
-            var csWatcher = AddWatcher(folder, "*.cs");
+            var csWatcher = new FileSystemWatcher(folder, "*.cs");
+            if(onFileChanged != null)
+                csWatcher.Changed += (sender, args) => onFileChanged(args.FullPath);
             csWatcher.Renamed += CsFileRenamedHandler;
             csWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
             CSFileWatchers.Add(folder, csWatcher);

@@ -14,6 +14,7 @@ using T3.Core.Compilation;
 using T3.Core.DataTypes.DataSet;
 using T3.Core.IO;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Editor.Compilation;
@@ -43,13 +44,16 @@ public class T3Ui
     static T3Ui()
     {
         var operatorAssemblies = RuntimeAssemblies.OperatorAssemblies;
+        SymbolData.CountLoading = operatorAssemblies.Count;
+        UiSymbolData.CountLoadingUi = operatorAssemblies.Count;
         UiSymbolDatas = operatorAssemblies
-                      .Select(a => new UiSymbolData(a, enableLog: false))
-                      .ToArray();
-        
+                       .AsParallel()
+                       .Select(a => new UiSymbolData(a, enableLog: false))
+                       .ToArray();
+
         Log.Debug($"Loaded {UiSymbolDatas.Count} operator assemblies.");
     }
-    
+
     public static void Initialize()
     {
         //WindowManager.TryToInitialize();
@@ -62,12 +66,12 @@ public class T3Ui
 
     public static readonly Playback DefaultTimelinePlayback = new();
     public static readonly BeatTimingPlayback DefaultBeatTimingPlayback = new();
-        
+
     private void InitializeAfterAppWindowReady()
     {
         if (_initialed || ImGui.GetWindowSize() == Vector2.Zero)
             return;
-            
+
         ActiveMidiRecording.ActiveRecordingSet = MidiDataRecording.DataSet;
         _initialed = true;
     }
@@ -77,22 +81,20 @@ public class T3Ui
     public void ProcessFrame()
     {
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
-        
-        
+
         CustomComponents.BeginFrame();
         FormInputs.BeginFrame();
         InitializeAfterAppWindowReady();
-            
+
         // Prepare the current frame 
         RenderStatsCollector.StartNewFrame();
-            
+
         PlaybackUtils.UpdatePlaybackAndSyncing();
 
-
         //_bpmDetection.AddFftSample(AudioAnalysis.FftGainBuffer);
-            
-        AudioEngine.CompleteFrame(Playback.Current);    // Update
-            
+
+        AudioEngine.CompleteFrame(Playback.Current); // Update
+
         AutoBackup.AutoBackup.IsEnabled = UserSettings.Config.EnableAutoBackup;
 
         VariationHandling.Update();
@@ -107,13 +109,13 @@ public class T3Ui
         // Set selected id so operator can check if they are selected or not  
         var selectedInstance = NodeSelection.GetSelectedInstance();
         MouseInput.SelectedChildId = selectedInstance?.SymbolChildId ?? Guid.Empty;
-            
+
         // Keep invalidating selected op to enforce rendering of Transform gizmo  
         foreach (var si in NodeSelection.GetSelectedInstances().ToList())
         {
             if (si is not ITransformable transformable)
                 continue;
-                
+
             foreach (var i in si.Inputs)
             {
                 // Skip string inputs to prevent potential interference with resource file paths hooks
@@ -122,50 +124,46 @@ public class T3Ui
                 {
                     continue;
                 }
+
                 i.DirtyFlag.Invalidate();
             }
         }
-            
-            
-            
+
         // Draw everything!
         ImGui.DockSpaceOverViewport();
 
         WindowManager.Draw();
-            
+
         // Complete frame
         SingleValueEdit.StartNextFrame();
         SelectableNodeMovement.CompleteFrame();
 
         FrameStats.CompleteFrame();
         TriggerGlobalActionsFromKeyBindings();
-            
-        if ( UserSettings.Config.ShowMainMenu || ImGui.GetMousePos().Y < 20)
+
+        if (UserSettings.Config.ShowMainMenu || ImGui.GetMousePos().Y < 20)
         {
             DrawAppMenuBar();
         }
-            
+
         _userNameDialog.Draw();
         _searchDialog.Draw();
         _importDialog.Draw();
         _createFromTemplateDialog.Draw();
-            
-        if (!UserSettings.IsUserNameDefined() )
+
+        if (!UserSettings.IsUserNameDefined())
         {
             UserSettings.Config.UserName = Environment.UserName;
             _userNameDialog.ShowNextFrame();
         }
 
         KeyboardAndMouseOverlay.Draw();
-        
+
         Playback.OpNotReady = false;
         AutoBackup.AutoBackup.CheckForSave();
     }
 
-
     private Dictionary<ImGuiKey, double> _keyReleaseTimes = new();
-
-
 
     private void TriggerGlobalActionsFromKeyBindings()
     {
@@ -179,7 +177,7 @@ public class T3Ui
         }
         else if (KeyboardBinding.Triggered(UserActions.Save))
         {
-            SaveInBackground(saveAll:true);
+            SaveInBackground(saveAll: true);
         }
         else if (KeyboardBinding.Triggered(UserActions.ToggleAllUiElements))
         {
@@ -196,17 +194,18 @@ public class T3Ui
         else if (KeyboardBinding.Triggered(UserActions.ToggleFocusMode)) ToggleFocusMode();
     }
 
-    private static void ToggleFocusMode() {
+    private static void ToggleFocusMode()
+    {
         var shouldBeFocusMode = !UserSettings.Config.FocusMode;
-        
+
         var outputWindow = OutputWindow.GetPrimaryOutputWindow();
         var primaryGraphWindow = GraphWindow.GetPrimaryGraphWindow();
-        
+
         if (shouldBeFocusMode && outputWindow != null && primaryGraphWindow != null)
         {
             primaryGraphWindow.GraphImageBackground.OutputInstance = outputWindow.Pinning.GetPinnedOrSelectedInstance();
         }
-        
+
         UserSettings.Config.FocusMode = shouldBeFocusMode;
         UserSettings.Config.ShowToolbar = shouldBeFocusMode;
         ToggleAllUiElements();
@@ -219,22 +218,22 @@ public class T3Ui
             primaryGraphWindow.GraphImageBackground.ClearBackground();
         }
     }
-        
+
     private void DrawAppMenuBar()
     {
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6) * T3Ui.UiScaleFactor);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowChildPadding * T3Ui.UiScaleFactor);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0);
-            
+
         if (ImGui.BeginMainMenuBar())
         {
             if (ImGui.IsMouseClicked(ImGuiMouseButton.Left))
             {
                 UserSettings.Config.ShowMainMenu = true;
             }
-            
-            ImGui.SetCursorPos(new Vector2(0,-1)); // Shift to make menu items selected when hitting top of screen
-                
+
+            ImGui.SetCursorPos(new Vector2(0, -1)); // Shift to make menu items selected when hitting top of screen
+
             if (ImGui.BeginMenu("Project"))
             {
                 UserSettings.Config.ShowMainMenu = true;
@@ -243,22 +242,22 @@ public class T3Ui
                 {
                     _createFromTemplateDialog.ShowNextFrame();
                 }
-                    
+
                 if (ImGui.MenuItem("Import Operators", null, false, !IsCurrentlySaving))
                 {
                     _importDialog.ShowNextFrame();
                 }
-                    
+
                 if (ImGui.MenuItem("Fix File references", ""))
                 {
                     FileReferenceOperations.FixOperatorFilepathsCommand_Executed();
                 }
-                    
+
                 ImGui.Separator();
 
                 if (ImGui.MenuItem("Save", KeyboardBinding.ListKeyboardShortcuts(UserActions.Save, false), false, !IsCurrentlySaving))
                 {
-                    SaveInBackground(saveAll:true);
+                    SaveInBackground(saveAll: true);
                 }
 
                 if (ImGui.MenuItem("Quit", !IsCurrentlySaving))
@@ -270,9 +269,6 @@ public class T3Ui
                 {
                     ImGui.SetTooltip("Can't exit while saving is in progress");
                 }
-                    
-
-                    
 
                 ImGui.EndMenu();
             }
@@ -292,8 +288,6 @@ public class T3Ui
 
                 ImGui.Separator();
 
-
-
                 if (ImGui.BeginMenu("Bookmarks"))
                 {
                     GraphBookmarkNavigation.DrawBookmarksMenu();
@@ -306,18 +300,20 @@ public class T3Ui
                     {
                         ExportWikiDocumentation.ExportWiki();
                     }
+
                     if (ImGui.MenuItem("Export Documentation to JSON"))
                     {
                         ExportDocumentationStrings.ExportDocumentationAsJson();
                     }
+
                     if (ImGui.MenuItem("Import documentation from JSON"))
                     {
                         ExportDocumentationStrings.ImportDocumentationAsJson();
                     }
-                    
+
                     ImGui.EndMenu();
                 }
-                    
+
                 ImGui.EndMenu();
             }
 
@@ -331,7 +327,7 @@ public class T3Ui
             if (ImGui.BeginMenu("View"))
             {
                 UserSettings.Config.ShowMainMenu = true;
-                
+
                 ImGui.Separator();
                 ImGui.MenuItem("Show Main Menu", "", ref UserSettings.Config.ShowMainMenu);
                 ImGui.MenuItem("Show Title", "", ref UserSettings.Config.ShowTitleAndDescription);
@@ -339,21 +335,21 @@ public class T3Ui
                 ImGui.MenuItem("Show Minimap", "", ref UserSettings.Config.ShowMiniMap);
                 ImGui.MenuItem("Show Toolbar", "", ref UserSettings.Config.ShowToolbar);
                 ImGui.MenuItem("Show Interaction Overlay", "", ref UserSettings.Config.ShowInteractionOverlay);
-                if(ImGui.MenuItem("Toggle All UI Elements", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleAllUiElements, false), false, !IsCurrentlySaving))
+                if (ImGui.MenuItem("Toggle All UI Elements", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleAllUiElements, false), false,
+                                   !IsCurrentlySaving))
                 {
                     ToggleAllUiElements();
                 }
-                    
-
 
                 ImGui.MenuItem("Fullscreen", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFullscreen, false), ref UserSettings.Config.FullScreen);
                 if (ImGui.MenuItem("Focus Mode", KeyboardBinding.ListKeyboardShortcuts(UserActions.ToggleFocusMode, false), UserSettings.Config.FocusMode))
                 {
                     ToggleFocusMode();
                 }
+
                 ImGui.EndMenu();
             }
-                
+
             if (ImGui.BeginMenu("Windows"))
             {
                 WindowManager.DrawWindowMenuContent();
@@ -362,16 +358,16 @@ public class T3Ui
 
             if (UserSettings.Config.FullScreen)
             {
-                ImGui.Dummy(new Vector2(10,10));
+                ImGui.Dummy(new Vector2(10, 10));
                 ImGui.SetCursorPosY(ImGui.GetCursorPosY() + 1);
-                
+
                 ImGui.PushStyleColor(ImGuiCol.Text, UiColors.ForegroundFull.Fade(0.2f).Rgba);
                 ImGui.TextUnformatted(Program.GetReleaseVersion());
                 ImGui.PopStyleColor();
             }
-            
+
             T3Metrics.DrawRenderPerformanceGraph();
-            
+
             Program.StatusErrorLine.Draw();
 
             ImGui.EndMainMenuBar();
@@ -379,7 +375,6 @@ public class T3Ui
 
         ImGui.PopStyleVar(3);
     }
-
 
     private static void ToggleAllUiElements()
     {
@@ -398,9 +393,8 @@ public class T3Ui
             UserSettings.Config.ShowToolbar = true;
             UserSettings.Config.ShowTimeline = true;
         }
-            
     }
-        
+
     private static readonly object _saveLocker = new();
     private static readonly Stopwatch _saveStopwatch = new();
 
@@ -424,15 +418,16 @@ public class T3Ui
             {
                 Log.Debug("Can't save modified while saving is in progress");
                 return;
-            }                
+            }
+
             _saveStopwatch.Restart();
 
             // Todo - parallelize? 
             foreach (var data in UiSymbolDatas)
             {
-                data.SaveModifiedSymbols();    
+                data.SaveModifiedSymbols();
             }
-            
+
             _saveStopwatch.Stop();
             Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
         }
@@ -447,21 +442,19 @@ public class T3Ui
                 Log.Debug("Can't save while saving is in progress");
                 return;
             }
-                
+
             _saveStopwatch.Restart();
-            
+
             // Todo - parallelize?
             foreach (var data in UiSymbolDatas)
             {
                 data.SaveAll();
             }
-            
+
             _saveStopwatch.Stop();
             Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
         }
     }
-
-
 
     public static void SelectAndCenterChildIdInView(Guid symbolChildId)
     {
@@ -486,7 +479,7 @@ public class T3Ui
     //     (RenderedIdsLastFrame, _renderedIdsForNextFrame) = (_renderedIdsForNextFrame, RenderedIdsLastFrame);
     //     _renderedIdsForNextFrame.Clear();            
     // }
-        
+
     /// <summary>
     /// Statistics method for debug purpose
     /// </summary>
@@ -499,18 +492,19 @@ public class T3Ui
             {
                 if (!counts.ContainsKey(child.Symbol))
                     counts[child.Symbol] = 0;
-                    
+
                 counts[child.Symbol]++;
             }
         }
-        foreach(var (s,c) in counts.OrderBy(c => counts[c.Key]).Reverse())
+
+        foreach (var (s, c) in counts.OrderBy(c => counts[c.Key]).Reverse())
         {
             Log.Debug($"{s.Name} - {s.Namespace}  {c}");
         }
     }
 
     public static readonly IReadOnlyList<UiSymbolData> UiSymbolDatas;
-    
+
     public static IntPtr NotDroppingPointer = new(0);
     public static bool DraggingIsInProgress = false;
     public static bool MouseWheelFieldHovered { private get; set; }
@@ -522,9 +516,9 @@ public class T3Ui
     public static float DisplayScaleFactor { get; set; } = 1;
     public static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
     public static readonly MidiDataRecording MidiDataRecording = new();
-        
+
     //private static readonly AutoBackup.AutoBackup _autoBackup = new();
-        
+
     private static readonly CreateFromTemplateDialog _createFromTemplateDialog = new();
     private static readonly UserNameDialog _userNameDialog = new();
     private static readonly SearchDialog _searchDialog = new();

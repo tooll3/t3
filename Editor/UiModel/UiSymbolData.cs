@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Metadata;
+using System.Threading;
 using Newtonsoft.Json;
 using T3.Core.Compilation;
 using T3.Core.Logging;
@@ -20,6 +20,8 @@ namespace T3.Editor.UiModel;
 
 public partial class UiSymbolData : SymbolData
 {
+    internal static int CountLoadingUi;
+    
     public UiSymbolData(AssemblyInformation assembly, bool enableLog)
         : base(assembly)
     {
@@ -30,9 +32,9 @@ public partial class UiSymbolData : SymbolData
             throw new ArgumentException("Could not find matching csproj file", nameof(assembly));
 
         Folder = Path.GetDirectoryName(csprojFile!.FullName);
-        ResourceFileWatcher.AddCodeWatcher(Folder);
+        ResourceFileWatcher.AddCodeWatcher(Folder, null); // can hook to recompile automagically
         
-        SymbolDataByAssemblyLocationEditable.Add(assembly.Path, this);
+        SymbolDataByAssemblyEditable.Add(assembly.Assembly, this);
     }
 
     private void Init(bool enableLog)
@@ -61,11 +63,17 @@ public partial class UiSymbolData : SymbolData
             }
         }
 
+        Interlocked.Decrement(ref CountLoadingUi);
+        Log.Debug($"Finished loading UI for {AssemblyInformation.Name}");
+
         var symbolUisById = SymbolUis.ToDictionary(x => x.Symbol.Id, x => x);
         bool containsHome = symbolUisById.ContainsKey(HomeSymbolId);
         // Create instance of project op, all children are created automatically
         if (containsHome)
         {
+            while(CountLoadingUi > 0)
+                Thread.Sleep(100);
+            
             if (RootInstance != null)
             {
                 throw new Exception("RootInstance already exists");
@@ -246,7 +254,7 @@ public partial class UiSymbolData : SymbolData
     public IReadOnlyList<SymbolUi> SymbolUis => _symbolUis;
     private List<SymbolUi> _symbolUis = new();
     
-    public static IReadOnlyDictionary<string, UiSymbolData> SymbolDataByAssemblyLocation => SymbolDataByAssemblyLocationEditable;
-    private static readonly Dictionary<string, UiSymbolData> SymbolDataByAssemblyLocationEditable = new();
+    public static IReadOnlyDictionary<Assembly, UiSymbolData> SymbolDataByAssembly => SymbolDataByAssemblyEditable;
+    private static readonly Dictionary<Assembly, UiSymbolData> SymbolDataByAssemblyEditable = new();
 
 }

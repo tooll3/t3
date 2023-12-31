@@ -130,4 +130,9 @@ public class AssemblyInformation
         Assembly = assembly;
         _types = assembly.GetExportedTypes().ToDictionary(type => type.FullName, type => type);
     }
+
+    public void UpdateType(Type updated)
+    {
+        _types[updated.FullName!] = updated;
+    }
 }

@@ -22,8 +22,7 @@ namespace T3.Core.Model;
 public partial class SymbolData
 {
     public AssemblyInformation AssemblyInformation { get; }
-
-    public static EventHandler<Assembly> AssemblyAdded;
+    public static int CountLoading;
 
     static SymbolData()
     {
@@ -35,7 +34,7 @@ public partial class SymbolData
     {
         AssemblyInformation = assembly;
         Folder = OperatorDirectoryName + Path.DirectorySeparatorChar + assembly.Name;
-        SymbolDatas.Add(assembly, this);
+        SymbolDatas.TryAdd(assembly, this);
     }
 
     public virtual void Load(bool enableLog)
@@ -81,6 +80,11 @@ public partial class SymbolData
         {
             RegisterTypeWithoutFile(newType);
         }
+
+        Interlocked.Decrement(ref CountLoading);
+        
+        while(CountLoading > 0)
+            Thread.Sleep(100);
 
         Log.Debug("Applying symbol children...");
         Parallel.ForEach(symbolsRead, ReadAndApplyChildren);
@@ -138,7 +142,10 @@ public partial class SymbolData
 
         static bool TryAddSymbolTo(Dictionary<Guid, Symbol> collection, Symbol symbol)
         {
-            var added = collection.TryAdd(symbol.Id, symbol);
+            bool added;
+            lock(collection)
+                added = collection.TryAdd(symbol.Id, symbol);
+            
             if (!added)
             {
                 var existingSymbol = collection[symbol.Id];
@@ -291,6 +298,7 @@ public partial class SymbolData
     {
         SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
         _symbols.Add(newSymbol.Id, newSymbol);
+        AssemblyInformation.UpdateType(newSymbol.InstanceType);
     }
 
     private static readonly OpUpdateCounter _updateCounter;
@@ -309,5 +317,5 @@ public partial class SymbolData
     public static IReadOnlyDictionary<Guid, SymbolData> SymbolOwners => SymbolOwnersEditable;
 
     private readonly Dictionary<Guid, Symbol> _symbols = new();
-    private static readonly Dictionary<AssemblyInformation, SymbolData> SymbolDatas = new();
+    private static readonly ConcurrentDictionary<AssemblyInformation, SymbolData> SymbolDatas = new();
 }
