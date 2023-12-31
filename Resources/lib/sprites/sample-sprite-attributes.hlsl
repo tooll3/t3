@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/SpriteDef.hlsl"
 
 static const float4 Factors[] = 
@@ -75,7 +76,7 @@ void main(uint3 i : SV_DispatchThreadID)
     //    return;
     
     Point P = Points[index];
-    float3 pos = P.position;
+    float3 pos = P.Position;
     pos -= Center;
     pos.x /= aspectRatio;
     pos/= 2;
@@ -91,52 +92,5 @@ void main(uint3 i : SV_DispatchThreadID)
     ResultSprites[i.x].Pivot =0;
     ResultSprites[i.x].UvMin =0;
     ResultSprites[i.x].UvMax =1;
-    // float2 Size;
-    // float4 Color;
-    // float2 UvMin;
-    // float2 UvMax;
-    // float2 Pivot;
-    // uint CharIndex;
-    // uint CharIndexInLine;
-    // uint LineIndex;
-    // uint Extra;
-
-
-    // float gray = (c.r + c.g + c.b)/3;
-    // //float4 gray = float4(g.xxx, 0);
-
-    // float4 ff =
-    //           Factors[(uint)clamp(L, 0, 5.1)] * (gray * LFactor + LOffset) 
-    //         + Factors[(uint)clamp(R, 0, 5.1)] * (c.r * RFactor + ROffset)
-    //         + Factors[(uint)clamp(G, 0, 5.1)] * (c.g * GFactor + GOffset)
-    //         + Factors[(uint)clamp(B, 0, 5.1)] * (c.b * BFactor + BOffset);
-    // //ResultPoints[index] = P;
-
-    // ResultPoints[index].position = P.position + float3(ff.xyz);
-    // ResultPoints[index].w = P.w + ff.w;
     
-
-    
-    // float4 rot = P.rotation;
-    // ResultPoints[index].rotation = P.rotation;
-
-    // float rotXFactor = (R == 5 ? (c.r * RFactor + ROffset) : 0)
-    //                  + (G == 5 ? (c.g * GFactor + GOffset) : 0)
-    //                  + (B == 5 ? (c.b * BFactor + BOffset) : 0)
-    //                  + (L == 5 ? (gray * LFactor + LOffset) : 0);
-
-    // float rotYFactor = (R == 6 ? (c.r * RFactor + ROffset) : 0)
-    //                  + (G == 6 ? (c.g * GFactor + GOffset) : 0)
-    //                  + (B == 6 ? (c.b * BFactor + BOffset) : 0)
-    //                  + (L == 6 ? (gray * LFactor + LOffset) : 0);
-
-    // float rotZFactor = (R == 7 ? (c.r * RFactor + ROffset) : 0)
-    //                  + (G == 7 ? (c.g * GFactor + GOffset) : 0)
-    //                  + (B == 7 ? (c.b * BFactor + BOffset) : 0)
-    //                  + (L == 7 ? (gray * LFactor + LOffset) : 0);
-                     
-    // if(rotXFactor != 0) { rot = qmul(rot, rotate_angle_axis(rotXFactor, float3(1,0,0))); }
-    // if(rotYFactor != 0) { rot = qmul(rot, rotate_angle_axis(rotYFactor, float3(0,1,0))); }
-    // if(rotZFactor != 0) { rot = qmul(rot, rotate_angle_axis(rotZFactor, float3(0,0,1))); }
-    // ResultPoints[index].rotation = normalize(rot);
 }

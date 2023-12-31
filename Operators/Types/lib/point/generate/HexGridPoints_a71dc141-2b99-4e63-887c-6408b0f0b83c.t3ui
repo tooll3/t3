@@ -137,13 +137,6 @@
       }
     },
     {
-      "ChildId": "bae3102f-c4f0-4cd0-b895-434cbfe1d2be"/*Clamp*/,
-      "Position": {
-        "X": 669.15564,
-        "Y": 1535.7432
-      }
-    },
-    {
       "ChildId": "d6435179-fe84-4e87-a440-8e416da11e4d"/*ClampInt*/,
       "Position": {
         "X": -896.97144,

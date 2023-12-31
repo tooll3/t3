@@ -903,7 +903,7 @@
       "Outputs": []
     },
     {
-      "Id": "824ea03e-6531-47e2-aaaf-71ec4a6efe9d"/*SetPointsW*/,
+      "Id": "824ea03e-6531-47e2-aaaf-71ec4a6efe9d"/*SpreadPointAttributes*/,
       "SymbolId": "191e5057-4da4-447e-b7cf-e9e0ed8c5dd8",
       "InputValues": [
         {

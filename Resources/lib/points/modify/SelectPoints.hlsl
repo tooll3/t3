@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Transforms : register(b0)
 {
@@ -64,14 +65,16 @@ float Bias2(float x, float bias)
         return;
     }
 
-    ResultPoints[i.x] = SourcePoints[i.x];
+    Point p = SourcePoints[i.x];
 
-    if (isnan(SourcePoints[i.x].w))
+    //ResultPoints[i.x] = SourcePoints[i.x];
+
+    if (isnan(p.W))
     {
         return;
     }
 
-    float3 posInObject = SourcePoints[i.x].position;
+    float3 posInObject = p.Position;
 
     float3 posInVolume = mul(float4(posInObject, 1), TransformVolume).xyz;
 
@@ -107,7 +110,7 @@ float Bias2(float x, float bias)
 
     s = Bias2(s, Bias);
 
-    float w = SourcePoints[i.x].w;
+    float w = p.W;
     if (SelectMode < ModeOverride)
     {
         s *= Strength;
@@ -135,5 +138,7 @@ float Bias2(float x, float bias)
                      ? saturate(s)
                      : s;
 
-    ResultPoints[i.x].w = newW;
+    p.W = newW;
+
+    ResultPoints[i.x] = p;
 }

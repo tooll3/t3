@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 cbuffer Params : register(b0)
 {
     int startIndex;    

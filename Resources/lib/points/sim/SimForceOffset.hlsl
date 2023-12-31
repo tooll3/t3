@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -28,7 +29,7 @@ void main(uint3 i : SV_DispatchThreadID)
 {
     float3 variationOffset = hash31((float)(i.x%1234)/0.123 ) * Variation;
 
-    float3 pos = ResultPoints[i.x].position;
+    float3 pos = ResultPoints[i.x].Position;
     //float3 noise = snoiseVec3((pos + variationOffset + Phase ) * Frequency)* (Amount/100) * AmountDistribution;
 
     float3 localPos = pos - Center;
@@ -39,7 +40,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     float3 radialForce = direction / clamp( pow(distance, ForceDecayRate) , 0.02,1000) * RadialForce;
 
-    ResultPoints[i.x].position += (Gravity + radialForce) * effect;
-    ResultPoints[i.x].w += 0;
+    ResultPoints[i.x].Position += (Gravity + radialForce) * effect;
+    ResultPoints[i.x].W += 0;
 }
 

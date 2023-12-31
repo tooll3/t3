@@ -128,16 +128,16 @@ namespace T3.Operators.Types.Id_a835ab86_29c1_438e_a7f7_2e297108bfd5
                 }
                 
                 // Write Data
-                _vertexBufferWithViews.Buffer = _vertexBuffer;
                 ResourceManager.SetupStructuredBuffer(_vertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride, ref _vertexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_vertexBuffer, ref _vertexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_vertexBuffer, UnorderedAccessViewBufferFlags.None, ref _vertexBufferWithViews.Uav);
+                _vertexBufferWithViews.Buffer = _vertexBuffer;
                 
-                _indexBufferWithViews.Buffer = _indexBuffer;
                 const int stride = 3 * 4;
                 ResourceManager.SetupStructuredBuffer(_indexBufferData, stride * faceCount, stride, ref _indexBuffer);
                 ResourceManager.CreateStructuredBufferSrv(_indexBuffer, ref _indexBufferWithViews.Srv);
                 ResourceManager.CreateStructuredBufferUav(_indexBuffer, UnorderedAccessViewBufferFlags.None, ref _indexBufferWithViews.Uav);
+                _indexBufferWithViews.Buffer = _indexBuffer;
 
                 _data.VertexBuffer = _vertexBufferWithViews;
                 _data.IndicesBuffer = _indexBufferWithViews;

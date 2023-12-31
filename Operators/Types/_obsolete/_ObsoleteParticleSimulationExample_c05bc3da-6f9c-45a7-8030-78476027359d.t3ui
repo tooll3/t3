@@ -1,5 +1,5 @@
 {
-  "Id": "c05bc3da-6f9c-45a7-8030-78476027359d"/*ParticleSimulationExample*/,
+  "Id": "c05bc3da-6f9c-45a7-8030-78476027359d"/*_ObsoleteParticleSimulationExample*/,
   "Description": "Various examples for force driven particle simulations.",
   "InputUis": [],
   "SymbolChildUis": [

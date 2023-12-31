@@ -1,5 +1,6 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 
 cbuffer Params : register(b0)
@@ -19,10 +20,10 @@ void main(uint3 i : SV_DispatchThreadID)
 {
     Point A = Points1[i.x];
     Point SnapPoint = Points2[i.x];
-    float distance = length(A.position - SnapPoint.position);
+    float distance = length(A.Position - SnapPoint.Position);
     float blendFactor = smoothstep( BlendFactor + Distance, Distance  , distance ) * MaxAmount;
 
-    ResultPoints[i.x].position =  lerp(A.position, SnapPoint.position, blendFactor);
-    ResultPoints[i.x].w = lerp(A.w, SnapPoint.w, BlendFactor);
+    ResultPoints[i.x].Position =  lerp(A.Position, SnapPoint.Position, blendFactor);
+    ResultPoints[i.x].W = lerp(A.W, SnapPoint.W, BlendFactor);
 }
 

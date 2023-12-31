@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 static const float3 Corners[] =
     {
@@ -77,23 +78,23 @@ psInput vsMain(uint id
     axis.xy = (axis.xy + Offset) * Stretch;
     axis.z = 0;
 
-    float4 pRotation = p.rotation;
+    float4 pRotation = p.Rotation;
 
     if (ApplyPointOrientaiton < 0.5)
     {
         float3 cameraPos = float3(CameraToWorld._41, CameraToWorld._42, CameraToWorld._43);
-        pRotation = q_look_at(normalize(cameraPos - p.position), float3(0, 1, 0));
+        pRotation = qLookAt(normalize(cameraPos - p.Position), float3(0, 1, 0));
     }
     // ApplyPointOrientaiton > 0.5 ? p.rotation : ;
 
-    float4 rotation = qmul(pRotation, rotate_angle_axis(Rotate / 180 * PI, RotateAxis));
-    float sizeFromW = isnan(p.w) ? 0 : SizeOverW.SampleLevel(texSampler, float2(p.w * WMappingScale, 0), 0);
+    float4 rotation = qMul(pRotation, qFromAngleAxis(Rotate / 180 * PI, RotateAxis));
+    float sizeFromW = isnan(p.W) ? 0 : SizeOverW.SampleLevel(texSampler, float2(p.W * WMappingScale, 0), 0);
 
-    axis = rotate_vector(axis, rotation) * Size * sizeFromW;
-    float3 pInObject = p.position + axis;
+    axis = qRotateVec3(axis, rotation) * Size * sizeFromW;
+    float3 pInObject = p.Position + axis;
     output.position = mul(float4(pInObject, 1), ObjectToClipSpace);
     output.texCoord = cornerFactors.xy / 2 + 0.5;
-    output.color = Color * ColorOverW.SampleLevel(texSampler, float2(p.w * WMappingScale, 0), 0);
+    output.color = Color * ColorOverW.SampleLevel(texSampler, float2(p.W * WMappingScale, 0), 0);
 
     // Fog
     if (FogDistance > 0)

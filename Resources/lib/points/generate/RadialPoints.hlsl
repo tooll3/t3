@@ -1,5 +1,6 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 
 cbuffer Params : register(b0)
@@ -78,23 +79,26 @@ void main(uint3 i : SV_DispatchThreadID)
     float3 v =  v2 + c;
 
     
-    ResultPoints[index].position = v;
-    ResultPoints[index].w = (closeCircle && index == pointCount -1)
+    ResultPoints[index].Position = v;
+    ResultPoints[index].W = (closeCircle && index == pointCount -1)
                           ? sqrt(-1) // NaN
                           : W + WOffset * f;
 
-    //float4 orientation = normalize(rotate_angle_axis(OrientationAngle * 3.141578/180 , normalize(OrientationAxis)));
-    float4 orientation = rotate_angle_axis(3.141578/2 * 1, normalize(OrientationAxis));
+    //float4 orientation = normalize(qFromAngleAxis(OrientationAngle * 3.141578/180 , normalize(OrientationAxis)));
+    float4 orientation = qFromAngleAxis(3.141578/2 * 1, normalize(OrientationAxis));
 
-    orientation = qmul( orientation, rotate_angle_axis( (OrientationAngle) / 180 * 3.141578, float3(1,0,0)));
+    orientation = qMul( orientation, qFromAngleAxis( (OrientationAngle) / 180 * 3.141578, float3(1,0,0)));
 
-    float4 lookat = q_look_at(Axis, up);
+    float4 lookat = qLookAt(Axis, up);
 
-    float4 quat = qmul(   orientation, rotate_angle_axis(angle, normalize(Axis)));
+    float4 quat = qMul(   orientation, qFromAngleAxis(angle, normalize(Axis)));
 
-    float4 spin = rotate_angle_axis( (OrientationAngle) / 180 * 3.141578, normalize(OrientationAxis));
-    float4 spin2 = rotate_angle_axis( angle, float3(Axis));
+    float4 spin = qFromAngleAxis( (OrientationAngle) / 180 * 3.141578, normalize(OrientationAxis));
+    float4 spin2 = qFromAngleAxis( angle, float3(Axis));
 
-    ResultPoints[index].rotation = qmul(normalize(qmul(spin2, lookat)), spin);
+    ResultPoints[index].Rotation = qMul(normalize(qMul(spin2, lookat)), spin);
+    ResultPoints[index].Color = 1;
+    ResultPoints[index].Selected = 1;
+
 }
 

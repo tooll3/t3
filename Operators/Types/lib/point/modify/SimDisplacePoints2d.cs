@@ -6,13 +6,13 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_9d6cc9a3_980f_46ae_bf79_02fc1f49c480
 {
-    public class DisplacePoints2d : Instance<DisplacePoints2d>
+    public class SimDisplacePoints2d : Instance<SimDisplacePoints2d>
 ,ITransformable
     {
         [Output(Guid = "314a5657-ab4e-4dac-8eeb-a6bb3122af45")]
         public readonly TransformCallbackSlot<T3.Core.DataTypes.BufferWithViews> OutBuffer = new();
 
-        public DisplacePoints2d()
+        public SimDisplacePoints2d()
         {
             OutBuffer.TransformableOp = this;
         }

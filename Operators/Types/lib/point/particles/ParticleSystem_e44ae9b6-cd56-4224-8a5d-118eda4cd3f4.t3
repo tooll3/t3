@@ -62,18 +62,6 @@
   ],
   "Children": [
     {
-      "Id": "42ed496e-e5cd-42f3-b000-e6bbdd16678f"/*ComputeShader*/,
-      "SymbolId": "a256d70f-adb3-481d-a926-caf35bd3e64c",
-      "InputValues": [
-        {
-          "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
-          "Type": "System.String",
-          "Value": "Resources\\lib\\particles\\ParticleSystem.hlsl"
-        }
-      ],
-      "Outputs": []
-    },
-    {
       "Id": "8bbbde76-3130-457c-9318-3e25a2382897"/*ComputeShaderStage*/,
       "SymbolId": "8bef116d-7d1c-4c1b-b902-25c1d5e925a9",
       "InputValues": [
@@ -115,7 +103,7 @@
         {
           "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
           "Type": "System.Int32",
-          "Value": 32
+          "Value": 64
         }
       ],
       "Outputs": []

@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 static const float4 Factors[] =
     {
@@ -51,11 +52,18 @@ sampler texSampler : register(s0);
 [numthreads(256, 4, 1)] void main(uint3 i
                                   : SV_DispatchThreadID)
 {
+    uint pointCount, stride;
+    ResultPoints.GetDimensions(pointCount, stride);
+    if(i.x >= pointCount) {
+        return;
+    }
+
     uint index = i.x;
+    
 
-    Point P = Points[index];
+    Point p = Points[index];
 
-    float3 pos = P.position;
+    float3 pos = p.Position;
     pos -= Center;
 
     float3 posInObject = mul(float4(pos.xyz, 0), transformSampleSpace).xyz;
@@ -63,9 +71,9 @@ sampler texSampler : register(s0);
     float gray = (c.r + c.g + c.b) / 3;
 
     // Rotation
-    ResultPoints[index].rotation = P.rotation;
+    //ResultPoints[index].Rotation = p.Rotation;
 
-    float4 rot = P.rotation;
+    float4 rot = p.Rotation;
     float rotXFactor = (R == 5 ? (c.r * RFactor + ROffset) : 0) +
                        (G == 5 ? (c.g * GFactor + GOffset) : 0) +
                        (B == 5 ? (c.b * BFactor + BOffset) : 0) +
@@ -87,20 +95,19 @@ sampler texSampler : register(s0);
 
     if (rotXFactor != 0)
     {
-        rot2 = qmul(rot2, rotate_angle_axis(rotXFactor * tau, float3(1, 0, 0)));
+        rot2 = qMul(rot2, qFromAngleAxis(rotXFactor * tau, float3(1, 0, 0)));
     }
     if (rotYFactor != 0)
     {
-        rot2 = qmul(rot2, rotate_angle_axis(rotYFactor * tau, float3(0, 1, 0)));
+        rot2 = qMul(rot2, qFromAngleAxis(rotYFactor * tau, float3(0, 1, 0)));
     }
     if (rotZFactor != 0)
     {
-        rot2 = qmul(rot2, rotate_angle_axis(rotZFactor * tau, float3(0, 0, 1)));
+        rot2 = qMul(rot2, qFromAngleAxis(rotZFactor * tau, float3(0, 0, 1)));
     }
 
     rot2 = normalize(rot2);
-
-    ResultPoints[index].rotation = qmul(rot, rot2);
+    p.Rotation = qMul(rot, rot2);
 
     // Position
     float4 ff = Factors[(uint)clamp(L, 0, 5.1)] * (gray * LFactor + LOffset) +
@@ -109,21 +116,20 @@ sampler texSampler : register(s0);
                 Factors[(uint)clamp(B, 0, 5.1)] * (c.b * BFactor + BOffset);
 
     float3 offset = Mode < 0.5 ? float3(ff.xyz)
-                               : float3(ff.xyz) * P.position;
+                               : float3(ff.xyz) * p.Position;
 
     if (TranslationSpace > 0.5)
     {
-        offset = rotate_vector(offset, P.rotation);
+        offset = qRotateVec3(offset, p.Rotation);
     }
 
-    float3 newPos = P.position + offset;
+    float3 newPos = p.Position + offset;
 
     if (RotationSpace < 0.5)
     {
-        newPos = rotate_vector(newPos, rot2);
+        newPos = qRotateVec3(newPos, rot2);
     }
-    ResultPoints[index].position = newPos;
-
-    ResultPoints[index].w = Mode < 0.5 ? (P.w + ff.w)
-                                       : (P.w * (1 + ff.w));
+    p.Position = newPos;
+    p.W = Mode < 0.5 ? (p.W + ff.w) : (p.W * (1 + ff.w));
+    ResultPoints[index] = p;
 }

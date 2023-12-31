@@ -47,12 +47,7 @@
           "Value": "Resources\\lib\\points\\modify\\OrientPoints.hlsl"
         }
       ],
-      "Outputs": [
-        {
-          "Id": "6c118567-8827-4422-86cc-4d4d00762d87"/*ComputeShader*/,
-          "DirtyFlagTrigger": "Always"
-        }
-      ]
+      "Outputs": []
     },
     {
       "Id": "95d9a6d8-2336-4a50-b643-b73789451022"/*ComputeShaderStage*/,
@@ -107,7 +102,7 @@
         {
           "Id": "0016dd87-8756-4a97-a0da-096e1a879c05"/*Stride*/,
           "Type": "System.Int32",
-          "Value": 32
+          "Value": 64
         }
       ],
       "Outputs": []

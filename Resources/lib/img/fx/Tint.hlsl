@@ -25,7 +25,7 @@ struct vsOutput
     float2 texCoord : TEXCOORD;
 };
 
-float SchlickBias(float x, float bias)
+float GetSchlickBias(float x, float bias)
 {
     float x1 = x * 2;
     float x2 = x * 2 - 1;
@@ -46,7 +46,7 @@ float4 psMain(vsOutput psInput) : SV_TARGET
     // t = Bias> 0 
     //     ? pow( t, Bias+1)
     //     : 1-pow( 1-t, -Bias+1);
-    t = SchlickBias(t, clamp(Bias, 0.001, 0.999));
+    t = GetSchlickBias(t, clamp(Bias, 0.001, 0.999));
 
     float4 mapped = lerp(MapBlackTo, MapWhiteTo, t); 
     //return float4(t,0,0,1);

@@ -1,7 +1,8 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
-#include "lib/shared/bias.hlsl"
+#include "lib/shared/quat-functions.hlsl"
+#include "lib/shared/bias-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -57,14 +58,11 @@ static const float VolumeZebra = 3.5;
     uint numStructs, stride;
     SourcePoints.GetDimensions(numStructs, stride);
     if (i.x >= numStructs)
-    {
-        ResultPoints[i.x].w = 0;
         return;
-    }
 
     Point p = SourcePoints[i.x];
 
-    float3 posInObject = p.position;
+    float3 posInObject = p.Position;
     float3 posInVolume = mul(float4(posInObject, 1), TransformVolume).xyz;
 
     float s = 1;
@@ -95,25 +93,26 @@ static const float VolumeZebra = 3.5;
 
     if (UseWAsWeight > 0.50)
     {
-        dBiased *= p.w;
+        dBiased *= p.W;
     }
 
     float3 rot = RotateAxis * PI / 180 * dBiased;
 
-    float4 rotationX = rotate_angle_axis(rot.x, float3(1, 0, 0));
-    float4 rotationY = rotate_angle_axis(rot.y, float3(0, 1, 0));
-    float4 rotationZ = rotate_angle_axis(rot.z, float3(0, 0, 1));
+    float4 rotationX = qFromAngleAxis(rot.x, float3(1, 0, 0));
+    float4 rotationY = qFromAngleAxis(rot.y, float3(0, 1, 0));
+    float4 rotationZ = qFromAngleAxis(rot.z, float3(0, 0, 1));
 
     float3 volumeCenter = TransformVolume._m30_m31_m32_m03.xyz;
     float3 posInVolume2 = posInObject + volumeCenter.xyz;
 
-    posInVolume2 = rotate_vector(posInVolume2, rotationX);
-    posInVolume2 = rotate_vector(posInVolume2, rotationY);
-    posInVolume2 = rotate_vector(posInVolume2, rotationZ);
+    posInVolume2 = qRotateVec3(posInVolume2, rotationX);
+    posInVolume2 = qRotateVec3(posInVolume2, rotationY);
+    posInVolume2 = qRotateVec3(posInVolume2, rotationZ);
 
-    ResultPoints[i.x].position = lerp(p.position, -volumeCenter.xyz + posInVolume2 * Scale * ScaleMagnitude, dBiased) + dBiased * Translate;
-    ResultPoints[i.x].rotation = qmul(p.rotation, rotationX);
+    p.Position = lerp(p.Position, -volumeCenter.xyz + posInVolume2 * Scale * ScaleMagnitude, dBiased) + dBiased * Translate;
+    p.Rotation = qMul(p.Rotation, rotationX);
 
-    float orgW = SourcePoints[i.x].w;
-    ResultPoints[i.x].w = lerp(orgW, orgW * ScaleW + OffsetW, dBiased);
+    float orgW = SourcePoints[i.x].W;
+    p.W = lerp(orgW, orgW * ScaleW + OffsetW, dBiased);
+    ResultPoints[i.x] = p;
 }

@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -61,12 +62,16 @@ static const float ToRad = 3.141578 / 180;
 
     pos *= zeroAdjustedSize;
 
+    ResultPoints[index].Color = 1;
+    ResultPoints[index].Selected = 1;
+    ResultPoints[index].Extend = 0;
+
     if (Tiling < 0.5)
     {
         pos += Center;
-        ResultPoints[index].position = pos;
-        ResultPoints[index].w = W;
-        ResultPoints[index].rotation = rotate_angle_axis(OrientationAngle * PI / 180, normalize(OrientationAxis));
+        ResultPoints[index].Position = pos;
+        ResultPoints[index].W = W;
+        ResultPoints[index].Rotation = qFromAngleAxis(OrientationAngle * PI / 180, normalize(OrientationAxis));
         return;
     }
 
@@ -85,9 +90,9 @@ static const float ToRad = 3.141578 / 180;
         float rotDelta = (180 + offsetAndAngles.y) * ToRad;
 
         pos += Center;
-        ResultPoints[index].position = pos;
-        ResultPoints[index].w = W * (2 / 3.0);
-        ResultPoints[index].rotation = rotate_angle_axis(OrientationAngle * PI / 180 + rotDelta, normalize(OrientationAxis));
+        ResultPoints[index].Position = pos;
+        ResultPoints[index].W = W * (2 / 3.0);
+        ResultPoints[index].Rotation = qFromAngleAxis(OrientationAngle * PI / 180 + rotDelta, normalize(OrientationAxis));
         return;
     }
 
@@ -107,10 +112,10 @@ static const float ToRad = 3.141578 / 180;
         pos.x *= sqrt(3.0) / 2;
         pos.z *= sqrt(3.0) / 2;
         pos += Center;
-        ResultPoints[index].position = pos;
-        ResultPoints[index].w = W;
+        ResultPoints[index].Position = pos;
+        ResultPoints[index].W = W;
 
-        ResultPoints[index].rotation = rotate_angle_axis((OrientationAngle)*PI / 180, normalize(OrientationAxis));
+        ResultPoints[index].Rotation = qFromAngleAxis((OrientationAngle)*PI / 180, normalize(OrientationAxis));
     }
 
     // Diagonal
@@ -129,9 +134,9 @@ static const float ToRad = 3.141578 / 180;
                                   : float3(0, 0.5, 0.5) * zeroAdjustedSize;
         }
 
-        ResultPoints[index].position = pos;
-        ResultPoints[index].w = W;
-        ResultPoints[index].rotation = rotate_angle_axis(OrientationAngle * PI / 180, normalize(OrientationAxis));
+        ResultPoints[index].Position = pos;
+        ResultPoints[index].W = W;
+        ResultPoints[index].Rotation = qFromAngleAxis(OrientationAngle * PI / 180, normalize(OrientationAxis));
         return;
     }
 }

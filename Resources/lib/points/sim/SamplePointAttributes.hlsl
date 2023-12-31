@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 static const float4 Factors[] =
     {
@@ -63,7 +64,7 @@ sampler texSampler : register(s0);
     uint index = i.x;
 
     Point P = ResultPoints[index];
-    float3 pos = P.position;
+    float3 pos = P.Position;
     pos -= Center;
 
     float3 posInObject = mul(float4(pos.xyz, 0), WorldToObject).xyz;
@@ -77,11 +78,11 @@ sampler texSampler : register(s0);
         Factors[(uint)clamp(L, 0, 5.1)] * (gray * LFactor + LOffset) + Factors[(uint)clamp(R, 0, 5.1)] * (c.r * RFactor + ROffset) + Factors[(uint)clamp(G, 0, 5.1)] * (c.g * GFactor + GOffset) + Factors[(uint)clamp(B, 0, 5.1)] * (c.b * BFactor + BOffset);
     // ResultPoints[index] = P;
 
-    ResultPoints[index].position = P.position + float3(ff.xyz);
+    ResultPoints[index].Position = P.Position + float3(ff.xyz);
     ResultPoints[index].w = P.w + ff.w;
 
     float4 rot = P.rotation;
-    ResultPoints[index].rotation = P.rotation;
+    ResultPoints[index].Rotation = P.Rotation;
 
     float rotXFactor = (R == 5 ? (c.r * RFactor + ROffset) : 0) + (G == 5 ? (c.g * GFactor + GOffset) : 0) + (B == 5 ? (c.b * BFactor + BOffset) : 0) + (L == 5 ? (gray * LFactor + LOffset) : 0);
 
@@ -91,15 +92,15 @@ sampler texSampler : register(s0);
 
     if (rotXFactor != 0)
     {
-        rot = qmul(rot, rotate_angle_axis(rotXFactor, float3(1, 0, 0)));
+        rot = qMul(rot, qFromAngleAxis(rotXFactor, float3(1, 0, 0)));
     }
     if (rotYFactor != 0)
     {
-        rot = qmul(rot, rotate_angle_axis(rotYFactor, float3(0, 1, 0)));
+        rot = qMul(rot, qFromAngleAxis(rotYFactor, float3(0, 1, 0)));
     }
     if (rotZFactor != 0)
     {
-        rot = qmul(rot, rotate_angle_axis(rotZFactor, float3(0, 0, 1)));
+        rot = qMul(rot, qFromAngleAxis(rotZFactor, float3(0, 0, 1)));
     }
-    ResultPoints[index].rotation = normalize(rot);
+    ResultPoints[index].Rotation = normalize(rot);
 }

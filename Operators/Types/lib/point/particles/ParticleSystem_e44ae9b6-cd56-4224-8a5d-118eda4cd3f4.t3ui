@@ -109,13 +109,6 @@
   ],
   "SymbolChildUis": [
     {
-      "ChildId": "42ed496e-e5cd-42f3-b000-e6bbdd16678f"/*ComputeShader*/,
-      "Position": {
-        "X": 18.06578,
-        "Y": 122.979675
-      }
-    },
-    {
       "ChildId": "8bbbde76-3130-457c-9318-3e25a2382897"/*ComputeShaderStage*/,
       "Position": {
         "X": 642.9297,
@@ -158,8 +151,8 @@
     {
       "ChildId": "c1b1014e-3226-45fe-852b-b45300166682"/*GetBufferComponents*/,
       "Position": {
-        "X": -104.94342,
-        "Y": 1269.6237
+        "X": -86.24994,
+        "Y": 1268.8109
       }
     },
     {

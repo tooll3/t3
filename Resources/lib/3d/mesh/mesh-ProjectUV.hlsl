@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/pbr.hlsl"
 
 cbuffer Transforms : register(b0)
@@ -43,7 +44,7 @@ void main(uint3 i : SV_DispatchThreadID)
     float3 posInObject = v.Position;
 
 
-    //float4x4 orientationMatrix = transpose(quaternion_to_matrix(p.rotation));
+    //float4x4 orientationMatrix = transpose(qToMatrix(p.rotation));
     //float4x4 t = Transform;
     //t=transpose(t);
 

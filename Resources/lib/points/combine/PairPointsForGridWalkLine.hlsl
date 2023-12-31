@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/hash-functions.hlsl"
 
 cbuffer Params : register(b0)
@@ -72,8 +73,8 @@ void main(uint3 i : SV_DispatchThreadID)
     int3 axisOrder =  AxisOrders[(int)(hash.x*4)]; // int3(2,1,0);
 
     float3 randomOffset = (hash31(lineIndex + 321) * 2 -1) * RandomizeGrid;
-    float3 posA = (A.position + 0.0001) / GridSize + fmod(GridOffset , GridSize);
-    float3 posB = (B.position + 0.0001) / GridSize + fmod(GridOffset , GridSize);
+    float3 posA = (A.Position + 0.0001) / GridSize + fmod(GridOffset , GridSize);
+    float3 posB = (B.Position + 0.0001) / GridSize + fmod(GridOffset , GridSize);
 
     float3 transition[] = {
         posA,
@@ -104,7 +105,7 @@ void main(uint3 i : SV_DispatchThreadID)
         }
 
         stepPositions[step] = float4(p, 
-                                     1-A.w * Speed * StrokeLength + d / StrokeLength  + PhaseOffset);        
+                                     1-A.W * Speed * StrokeLength + d / StrokeLength  + PhaseOffset);        
         previousPos = p;
     }
     
@@ -175,11 +176,11 @@ void main(uint3 i : SV_DispatchThreadID)
     }
 
 
-    ResultPoints[i.x].position = (p - fmod(GridOffset,1)) * GridSize;
+    ResultPoints[i.x].Position = (p - fmod(GridOffset,1)) * GridSize;
     //ResultPoints[i.x].position.z += current.w;
 
-    ResultPoints[i.x].w =  1-d * w;
+    ResultPoints[i.x].W =  1-d * w;
 
     if( lineStepIndex == 10)
-        ResultPoints[i.x].w = NaN; // NaN for divider
+        ResultPoints[i.x].W = NaN; // NaN for divider
 }

@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/hash-functions.hlsl"
 
 static const float4 Corners[] = 

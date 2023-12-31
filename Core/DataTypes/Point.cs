@@ -10,22 +10,34 @@ namespace T3.Core.DataTypes
         [FieldOffset(0)]
         public Vector3 Position;
 
-        [FieldOffset(12)]
+        [FieldOffset(3 * 4)]
         public float W;
 
-        [FieldOffset(16)]
+        [FieldOffset(4 * 4)]
         public Quaternion Orientation;
+
+        [FieldOffset(8 * 4)]
+        public Vector4 Color;
+        
+        [FieldOffset(12 * 4)]
+        public Vector3 Velocity;
+        
+        [FieldOffset(15 * 4)]
+        public float Selected;
 
         public static Point Separator()
         {
             return new Point
                        {
                            Position = Vector3.Zero,
-                           W = Single.NaN,
+                           W = float.NaN,
                            Orientation = Quaternion.Identity,
+                           Color = Vector4.One,
+                           Velocity = Vector3.Zero,
+                           Selected = 0,
                        };
         }
 
-        public const int Stride = 2 * 16;
+        public const int Stride = 16 * 4;
     }
 }

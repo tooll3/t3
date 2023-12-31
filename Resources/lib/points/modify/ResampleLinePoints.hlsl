@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -24,19 +25,19 @@ void SamplePosAtF(float f)
     if(index > sourceCount -2)
         return;
 
-    float w1= SourcePoints[index].w;
+    float w1= SourcePoints[index].W;
     if(isnan(w1)) {
         return;
     }
 
-    float w2= SourcePoints[index+1].w; 
+    float w2= SourcePoints[index+1].W; 
     if(isnan(w2)) {
         return;
     }
 
     float fraction = sourceF - index;    
     sumWeight += lerp(w1, w2, fraction );
-    sumPos += lerp(SourcePoints[index].position, SourcePoints[index+1].position , fraction );
+    sumPos += lerp(SourcePoints[index].Position, SourcePoints[index+1].Position , fraction );
     sampledCount++;
 }
 
@@ -46,7 +47,7 @@ float4 SampleRotationAtF(float f)
     int index = (int)sourceF;
     float fraction = sourceF - index;    
     index = clamp(index,0, sourceCount -1);
-    return q_slerp(SourcePoints[index].rotation, SourcePoints[index+1].rotation, fraction );
+    return qSlerp(SourcePoints[index].Rotation, SourcePoints[index+1].Rotation, fraction );
 }
 
 
@@ -71,7 +72,7 @@ void main(uint3 i : SV_DispatchThreadID)
     float f = SampleRange.x + fNormlized * (SampleRange.y - rightFactor);
 
     if(f <0 || f >= 1) {
-        ResultPoints[i.x].w = sqrt(-1);
+        ResultPoints[i.x].W = sqrt(-1);
         return;
     }
 
@@ -102,10 +103,10 @@ void main(uint3 i : SV_DispatchThreadID)
     if(sampledCount==0)
        sumWeight = sqrt(-1);
 
-    ResultPoints[i.x].position = sumPos;
-    ResultPoints[i.x].w = sumWeight;
+    ResultPoints[i.x].Position = sumPos;
+    ResultPoints[i.x].W = sumWeight;
 
-    ResultPoints[i.x].rotation = SampleRotationAtF(f);// float4(0,0,0,1);//  p.rotation; //qmul(rotationFromDisplace , SourcePoints[i.x].rotation);
+    ResultPoints[i.x].Rotation = SampleRotationAtF(f);// float4(0,0,0,1);//  p.rotation; //qMul(rotationFromDisplace , SourcePoints[i.x].rotation);
     //ResultPoints[i.x].w = 1;//SourcePoints[i.x].w;
 }
 

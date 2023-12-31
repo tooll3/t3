@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer TimeConstants : register(b0)
 {
@@ -48,7 +49,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     //ResultPoints[i.x].position = (int3)(Points1[i.x].position / CellSize) * CellSize;
     float3 gridSize = CellSize * GridStretch;
-    float3 orgPosition = Points1[i.x].position;
+    float3 orgPosition = Points1[i.x].Position;
     float3 pos = orgPosition + gridSize /2 - GridOffset;
 
     float3 snapPosition = f2(pos, gridSize);
@@ -58,14 +59,14 @@ void main(uint3 i : SV_DispatchThreadID)
     
     snapPosition += GridOffset;
     
-    float weight = UseWAsWeight > 0.5 ? Points1[i.x].w : 1;
+    float weight = UseWAsWeight > 0.5 ? Points1[i.x].W : 1;
 
     float fractionFactor = saturate(frac1 / BlendFraction + SnapFraction); 
     weight *= fractionFactor;
     snapPosition = lerp(orgPosition, snapPosition,  weight);
 
-    ResultPoints[i.x].position = snapPosition;
-    ResultPoints[i.x].rotation = Points1[i.x].rotation;
-    ResultPoints[i.x].w = frac1;
+    ResultPoints[i.x].Position = snapPosition;
+    ResultPoints[i.x].Rotation = Points1[i.x].Rotation;
+    ResultPoints[i.x].W = frac1;
 }
 

@@ -99,6 +99,8 @@ namespace T3.Operators.Types.Id_a5f4552f_7e25_43a5_bb14_21ab836fa0b3
                 }
 
                 immediateContext.UnmapSubresource(_bufferWithViewsCpuAccess.Buffer, 0);
+                
+                Output.DirtyFlag.Trigger = updateContinuously ? DirtyFlagTrigger.Animated : DirtyFlagTrigger.None;
             }
             catch (Exception e)
             {

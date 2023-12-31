@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/point-light.hlsl"
 
 static const float3 Corners[] =
@@ -70,16 +71,16 @@ psInput vsMain(uint id
     float3 quadPos = Corners[quadIndex];
     output.texCoord = float2(0, 1) + (quadPos.xy * 0.5 + 0.5) * float2(1, -1);
 
-    float4 posInObject = float4(pointDef.position, 1);
+    float4 posInObject = float4(pointDef.Position, 1);
     float4 quadPosInCamera = mul(posInObject, ObjectToCamera);
-    output.color = Color;
+    output.color = Color * Points[particleId].Color;
 
     // Shrink too close particles
     float4 posInCamera = mul(posInObject, ObjectToCamera);
     float tooCloseFactor = saturate(-posInCamera.z / FadeNearest - 1);
     output.color.a *= tooCloseFactor;
 
-    float sizeFactor = UseWForSize > 0.5 ? pointDef.w : 1;
+    float sizeFactor = UseWForSize > 0.5 ? pointDef.W : 1;
 
     quadPosInCamera.xy += quadPos.xy * 0.10 * sizeFactor * Size;
     output.position = mul(quadPosInCamera, CameraToClipSpace);

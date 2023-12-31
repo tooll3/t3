@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -22,5 +23,5 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
 
     float3 offset = Direction * Amount * (1 + hash11(i.x) * RandomAmount);
-    Particles[i.x].velocity += offset;
+    Particles[i.x].Velocity += offset;
 }

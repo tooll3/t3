@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/point-light.hlsl"
 #include "lib/shared/pbr.hlsl"
 
@@ -97,14 +98,14 @@ psInput vsMain(uint id: SV_VertexID)
     float3 quadPos = Corners[quadIndex];
     output.texCoord = (quadPos.xy * 0.5 + 0.5);
 
-    float4 posInObject = float4(pointDef.position,1);
+    float4 posInObject = float4(pointDef.Position,1);
     float4 quadPosInCamera = mul(posInObject, ObjectToCamera);
 
     uint colorCount, stride;
     Colors.GetDimensions(colorCount, stride);
     uint colorIndex = (float)particleId/SegmentCount * colorCount;
     float4 dynaColor = colorCount > 0 ? Colors[colorIndex] : 1;
-    output.color = Color * dynaColor;
+    output.color = pointDef.Color * Color * dynaColor;
 
     output.posInWorld = mul(quadPosInCamera, CameraToWorld).xyz;
 
@@ -113,7 +114,7 @@ psInput vsMain(uint id: SV_VertexID)
     float tooCloseFactor =  saturate(-posInCamera.z/FadeNearest -1);
     output.color.a *= tooCloseFactor;
 
-    float sizeFactor = UseWForSize > 0.5 ? pointDef.w : 1;
+    float sizeFactor = UseWForSize > 0.5 ? pointDef.W : 1;
 
     quadPosInCamera.xy += quadPos.xy*0.050  * sizeFactor * Size * tooCloseFactor;
     output.position = mul(quadPosInCamera, CameraToClipSpace);

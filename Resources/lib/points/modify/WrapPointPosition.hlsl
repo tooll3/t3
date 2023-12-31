@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -46,15 +47,15 @@ void main(uint3 i : SV_DispatchThreadID)
 
     ResultPoints.GetDimensions(numStructs, stride);
     if(i.x >= numStructs) {
-        ResultPoints[i.x].w = sqrt(-1) ;
+        ResultPoints[i.x].W = sqrt(-1) ;
         return;
     }
 
-    float3 p = ResultPoints[i.x].position - center;
+    float3 p = ResultPoints[i.x].Position - center;
 
     if(isnan( p.x + p.y + p.x)    ) {
-         ResultPoints[i.x].w = 0.010;
-         ResultPoints[i.x].position = center - Size * 0.2; // some not in center
+         ResultPoints[i.x].W = 0.010;
+         ResultPoints[i.x].Position = center - Size * 0.2; // some not in center
          return;
     }    
 
@@ -70,18 +71,18 @@ void main(uint3 i : SV_DispatchThreadID)
     if(abs(p.z) > padded.z ) { offsetFactor.z = p.z < 0 ? 1 : -1; }
     
     float3 wrappedP =  p + Size * offsetFactor;
-    ResultPoints[i.x].position = wrappedP + center;
+    ResultPoints[i.x].Position = wrappedP + center;
 
     // Add line break for all wraps
     if(WriteLineBreaks > 0.5 && abs(offsetFactor.x) +abs(offsetFactor.y) + abs(offsetFactor.z) !=0 ) {
-        ResultPoints[i.x].w = sqrt(-1);
+        ResultPoints[i.x].W = sqrt(-1);
     }
     else 
     {
         float3 distToEdge = halfSize - abs(wrappedP);
         float3 minDist = saturate(distToEdge * 10);
         float minD = minDist.x * minDist.y * minDist.z;
-        ResultPoints[i.x].w = minD;
+        ResultPoints[i.x].W = minD;
     }
 }
 

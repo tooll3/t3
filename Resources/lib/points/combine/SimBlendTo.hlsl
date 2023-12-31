@@ -1,5 +1,6 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -24,12 +25,12 @@ void main(uint3 i : SV_DispatchThreadID)
 {
     //float3 variationOffset = hash31((float)(i.x%1234)/0.123 ) * Variation;
 
-    float3 posA = ResultPoints[i.x].position;
-    float3 posB = PointsB[i.x].position;
-    float wA = ResultPoints[i.x].w;
-    float wB = ResultPoints[i.x].w;
+    float3 posA = ResultPoints[i.x].Position;
+    float3 posB = PointsB[i.x].Position;
+    float wA = ResultPoints[i.x].W;
+    float wB = ResultPoints[i.x].W;
 
-    ResultPoints[i.x].position = lerp(posA, posB, BlendFactor);
-    ResultPoints[i.x].w = lerp(wA, wB, BlendFactor); ;
+    ResultPoints[i.x].Position = lerp(posA, posB, BlendFactor);
+    ResultPoints[i.x].W = lerp(wA, wB, BlendFactor); ;
 }
 

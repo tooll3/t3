@@ -96,11 +96,11 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
                                                                     };
                     }
 
-                    newData.VertexBufferWithViews.Buffer = newData.VertexBuffer;
                     ResourceManager.SetupStructuredBuffer(newData.VertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride,
                                                           ref newData.VertexBuffer);
                     ResourceManager.CreateStructuredBufferSrv(newData.VertexBuffer, ref newData.VertexBufferWithViews.Srv);
                     ResourceManager.CreateStructuredBufferUav(newData.VertexBuffer, UnorderedAccessViewBufferFlags.None, ref newData.VertexBufferWithViews.Uav);
+                    newData.VertexBufferWithViews.Buffer = newData.VertexBuffer;
                 }
 
                 // Create Index buffer
@@ -122,11 +122,11 @@ namespace T3.Operators.Types.Id_be52b670_9749_4c0d_89f0_d8b101395227
                                                reversedLookup[v3Index]);
                     }
 
-                    newData.IndexBufferWithViews.Buffer = newData.IndexBuffer;
                     const int stride = 3 * 4;
                     ResourceManager.SetupStructuredBuffer(newData.IndexBufferData, stride * faceCount, stride, ref newData.IndexBuffer);
                     ResourceManager.CreateStructuredBufferSrv(newData.IndexBuffer, ref newData.IndexBufferWithViews.Srv);
                     ResourceManager.CreateStructuredBufferUav(newData.IndexBuffer, UnorderedAccessViewBufferFlags.None, ref newData.IndexBufferWithViews.Uav);
+                    newData.IndexBufferWithViews.Buffer = newData.IndexBuffer;
                 }
 
                 if (useGpuCaching)

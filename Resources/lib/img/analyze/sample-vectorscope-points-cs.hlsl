@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -92,7 +93,7 @@ void main(uint3 i : SV_DispatchThreadID)
     
 
     float zoom = pow(length((YUV.yz - 0.5) *2), EnlargeCenter);
-    ResultPoints[i.x].position = float3(
+    ResultPoints[i.x].Position = float3(
         (YUV.y-0.5) * radius * zoom,  
         (YUV.z-0.5) * radius * zoom,
         0 );
@@ -109,6 +110,6 @@ void main(uint3 i : SV_DispatchThreadID)
     //     cos(hueAngle) * hsb.y * radius,
     //     0 );
 
-    ResultPoints[i.x].rotation = c;
-    ResultPoints[i.x].w = 1;
+    ResultPoints[i.x].Rotation = c;
+    ResultPoints[i.x].W = 1;
 }

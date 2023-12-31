@@ -1,4 +1,5 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -81,10 +82,10 @@ void main(uint3 i : SV_DispatchThreadID)
 
         float rotZ=  isOdd ? 60 * ToRad : 0;
         pos+= Center;
-        ResultPoints[index].position = pos;
-        ResultPoints[index].w = W;
+        ResultPoints[index].Position = pos;
+        ResultPoints[index].W = W;
 
-        ResultPoints[index].rotation = rotate_angle_axis((OrientationAngle) *PI/180 + rotZ, normalize(OrientationAxis));
+        ResultPoints[index].Rotation = qFromAngleAxis((OrientationAngle) *PI/180 + rotZ, normalize(OrientationAxis));
 
     }
     // Hexa-pattern
@@ -108,18 +109,20 @@ void main(uint3 i : SV_DispatchThreadID)
         float rotDelta = (180 +offsetAndAngles.y ) * ToRad ;
 
         pos+= Center;
-        ResultPoints[index].position = pos;
-        ResultPoints[index].w = W;
-        ResultPoints[index].rotation = rotate_angle_axis(OrientationAngle*PI/180 + rotDelta, normalize(OrientationAxis));
+        ResultPoints[index].Position = pos;
+        ResultPoints[index].W = W;
+        ResultPoints[index].Rotation = qFromAngleAxis(OrientationAngle*PI/180 + rotDelta, normalize(OrientationAxis));
     }                            
     else {
         float3 pos = SizeMode > 0.5 ? zeroAdjustedSize * (cell / clampedCount) - zeroAdjustedSize * (Pivot  + 0.5)
                                     : zeroAdjustedSize * cell - zeroAdjustedSize * clampedCount * (Pivot  + 0.5);
 
         pos+= Center;
-        ResultPoints[index].position = pos;
-        ResultPoints[index].w = W;
-        ResultPoints[index].rotation = rotate_angle_axis(OrientationAngle*PI/180, normalize(OrientationAxis));
+        ResultPoints[index].Position = pos;
+        ResultPoints[index].W = W;
+        ResultPoints[index].Rotation = qFromAngleAxis(OrientationAngle*PI/180, normalize(OrientationAxis));
     }
+    ResultPoints[index].Color = 1;
+    ResultPoints[index].Selected = 1;
 }
 

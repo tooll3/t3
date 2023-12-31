@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
@@ -42,7 +43,7 @@ void main(uint3 i : SV_DispatchThreadID)
     if(gi >= maxParticleCount) 
         return;
 
-    if (isnan(Particles[gi].birthTime))
+    if (isnan(Particles[gi].BirthTime))
         return;
     
     // return;
@@ -50,10 +51,10 @@ void main(uint3 i : SV_DispatchThreadID)
         return;
     }
         
-    float3 pos = Particles[gi].p.position;
-    float4 rot = Particles[gi].p.rotation;
-    float3 velocity = Particles[gi].velocity;
-    float r = Particles[gi].radius;    
+    float3 pos = Particles[gi].Position;
+    float4 rot = Particles[gi].Rotation;
+    float3 velocity = Particles[gi].Velocity;
+    float r = Particles[gi].Radius;    
 
     float3 posInVolume = mul(float4(pos, 1), TransformVolume).xyz;
     float3 posInVolumeNext = mul(float4(pos + velocity * SpeedFactor * 0.01 * 2, 1), TransformVolume).xyz;
@@ -133,6 +134,6 @@ void main(uint3 i : SV_DispatchThreadID)
         velocity += force;
     }   
 
-    Particles[gi].velocity = velocity;
+    Particles[gi].Velocity = velocity;
 }
 

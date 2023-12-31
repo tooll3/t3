@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/noise-functions.hlsl"
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
 
 cbuffer TimeConstants : register(b0)
 {
@@ -32,14 +33,14 @@ void main(uint3 i : SV_DispatchThreadID)
     uint numStructs, stride;
     Points1.GetDimensions(numStructs, stride);
     if(i.x >= numStructs) {
-        ResultPoints[i.x].w = 0 ;
+        ResultPoints[i.x].W = 0 ;
         return;
     }
 
-    float4 rot;
-    float v = q_separate_v(Points1[i.x].rotation, rot);
-    ResultPoints[i.x].position = Points1[i.x].position +  rotate_vector(Direction * Distance, rot);
-    ResultPoints[i.x].rotation = Points1[i.x].rotation;
-    ResultPoints[i.x].w = Points1[i.x].w;
+    ResultPoints[i.x].Position = Points1[i.x].Position +  qRotateVec3(Direction * Distance, Points1[i.x].Rotation);
+    ResultPoints[i.x].Rotation = Points1[i.x].Rotation;
+    ResultPoints[i.x].Color = Points1[i.x].Color;
+    ResultPoints[i.x].Selected = Points1[i.x].Selected;
+    ResultPoints[i.x].W = Points1[i.x].W;
 }
 

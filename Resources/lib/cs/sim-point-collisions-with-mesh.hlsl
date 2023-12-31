@@ -1,6 +1,7 @@
 #include "lib/shared/point.hlsl"
+#include "lib/shared/quat-functions.hlsl"
  
-RWStructuredBuffer<Point> points :register(u0);
+RWStructuredBuffer<Particle> particles :register(u0);
 
 cbuffer Params : register(b0)
 {
@@ -30,14 +31,14 @@ static const float3 CellOffsets[] =
 void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
 {
     uint pointCount, stride;
-    points.GetDimensions(pointCount, stride);
+    particles.GetDimensions(pointCount, stride);
         
     if(DTid.x >= pointCount)
         return; // out of bounds
     
-    Point p = points[DTid.x];
+    Particle p = particles[DTid.x];
 
-    float3 position = p.position;
+    float3 position = p.Position;
     //float3 searchPos = position; 
 
     uint startIndex, endIndex;
@@ -47,8 +48,8 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
     float closestDistance = 9999999; 
 
     float4 rot;
-    float v = q_separate_v(p.rotation, rot);
-    float3 orgV = rotate_vector(float3(0,0,1), rot) * v;
+    //float v = q_separate_v(p.Rotation, rot);
+    float3 orgV = p.Velocity;
 
     float3 forceSum =0;
 
@@ -72,13 +73,13 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
                 if( pointIndex == DTid.x)
                     continue;
 
-                float3 otherPos = points[pointIndex].position;
+                float3 otherPos = particles[pointIndex].Position;
                 float3 direction = position - otherPos;
                 float distance = length(direction);
                 direction /= distance;
 
-                float wA = p.w;
-                float wB = points[pointIndex].w;
+                float wA = p.Radius;
+                float wB = particles[pointIndex].Radius;
                 float massRatio = (wB * wB) / (wA * wA);
                 //float massRatio = (wB) / (wA);
             
@@ -94,15 +95,18 @@ void DispersePoints(uint3 DTid : SV_DispatchThreadID, uint GI: SV_GroupIndex)
 
     if(count > 0) 
     {
-        forceSum *= 0.1 / p.w;
+        forceSum *= 0.1 / p.Radius;
         forceSum += orgV;
 
         float forceMag =  clamp(length(forceSum),0, 10);
         float3 forceDirection =  forceSum / (forceMag + 0.0001);
         float angle = atan2(forceSum.x, forceSum.y);
-        float4 newRot = rotate_angle_axis(angle, -float3(0,0,1));
-        newRot = qmul(newRot, rotate_angle_axis(-PI/2, float3(1,0,0)));
-        points[DTid.x].rotation = q_encode_v(newRot, forceMag);
+        float4 newRot = qFromAngleAxis(angle, -float3(0,0,1));
+        newRot = qMul(newRot, qFromAngleAxis(-PI/2, float3(1,0,0)));
+        particles[DTid.x].Rotation = newRot;
+        particles[DTid.x].Velocity = forceSum; // needs validation...
+
+        //particles[DTid.x].rotation = q_encode_v(newRot, forceMag);
         return;
     }
 } 
