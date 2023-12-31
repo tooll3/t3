@@ -1,4 +1,3 @@
-#nullable enable
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,7 +24,6 @@ public partial class UiSymbolData : SymbolData
         : base(operatorAssembly)
     {
         Init(enableLog);
-        Name = operatorAssembly.GetName().Name ?? throw new Exception("Assembly name is null");
 
         var gotProject = TryFindMatchingCSProj(operatorAssembly, out var csprojFile);
         if (!gotProject)
@@ -48,12 +46,8 @@ public partial class UiSymbolData : SymbolData
         foreach (var symbolUi in SymbolUis)
         {
             var symbol = symbolUi.Symbol;
-            var valueInstanceType = symbol.InstanceType;
 
-            if (typeof(IDescriptiveFilename).IsAssignableFrom(valueInstanceType))
-            {
-                CustomChildUiRegistry.Entries.Add(valueInstanceType, DescriptiveUi.DrawChildUi);
-            }
+            RegisterCustomChildUi(symbol);
 
             if (!SymbolUiRegistry.Entries.TryAdd(symbolUi.Symbol.Id, symbolUi))
             {
@@ -65,8 +59,6 @@ public partial class UiSymbolData : SymbolData
                 symbolUi.UpdateConsistencyWithSymbol();
                 if (enableLog)
                     Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
-                
-                ResourceManager.Instance().CreateOperatorEntry(sourceFilePath, symbol.Id.ToString(), OperatorUpdating.ResourceUpdateHandler);
             }
         }
 
@@ -87,8 +79,6 @@ public partial class UiSymbolData : SymbolData
         }
     }
 
-    internal static readonly Guid HomeSymbolId = Guid.Parse("dab61a12-9996-401e-9aa6-328dd6292beb");
-
     public override void Load(bool enableLog)
     {
         // first load core data
@@ -96,7 +86,7 @@ public partial class UiSymbolData : SymbolData
 
         Console.WriteLine(@"Loading Symbol UIs...");
         var symbolUiFiles = Directory.GetFiles(Folder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);
-        var symbolUiJsons = symbolUiFiles.AsParallel()
+        _symbolUis = symbolUiFiles.AsParallel()
                                          .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
                                          .Select(symbolUiJson =>
                                                  {
@@ -110,7 +100,8 @@ public partial class UiSymbolData : SymbolData
                                                      symbolUiJson.Object = symbolUi;
                                                      return symbolUiJson;
                                                  })
-                                         .Where(x => x.ObjectWasSet)
+                                         .Where(result => result?.Object != null)
+                                         .Select(result => result.Object)
                                          .ToList();
     }
 
@@ -137,12 +128,10 @@ public partial class UiSymbolData : SymbolData
             }
         }
 
-        WriteSymbolUis(SymbolUiRegistry.Entries.Values);
+        WriteSymbolUis(_symbolUis);
 
         UnmarkAsSaving();
     }
-
-    private IEnumerable<SymbolUi> GetModifiedSymbolUis() => _symbolUis.Where(symbolUi => symbolUi.HasBeenModified);
 
     /// <summary>
     /// Note: This does NOT clean up 
@@ -152,7 +141,7 @@ public partial class UiSymbolData : SymbolData
         MarkAsSaving();
         try
         {
-            var modifiedSymbolUis = GetModifiedSymbolUis().ToList();
+            var modifiedSymbolUis = _symbolUis.Where(symbolUi => symbolUi.HasBeenModified).ToList();
             Log.Debug($"Saving {modifiedSymbolUis.Count} modified symbols...");
 
             ResourceFileWatcher.DisableOperatorFileWatcher(Folder); // Don't update ops if file is written during save
@@ -237,11 +226,29 @@ public partial class UiSymbolData : SymbolData
         return csprojFile != null;
     }
 
+    public override void AddSymbol(Symbol newSymbol)
+    {
+        base.AddSymbol(newSymbol);
+        UpdateUiEntriesForSymbol(newSymbol);
+        RegisterCustomChildUi(newSymbol);
+    }
+
+    private static void RegisterCustomChildUi(Symbol symbol)
+    {
+        var valueInstanceType = symbol.InstanceType;
+        if (typeof(IDescriptiveFilename).IsAssignableFrom(valueInstanceType))
+        {
+            CustomChildUiRegistry.Entries.TryAdd(valueInstanceType, DescriptiveUi.DrawChildUi);
+        }
+    }
+
+    internal static readonly Guid HomeSymbolId = Guid.Parse("dab61a12-9996-401e-9aa6-328dd6292beb");
+
     public static Instance RootInstance { get; private set; }
     public IReadOnlyList<SymbolUi> SymbolUis => _symbolUis;
-    private readonly List<SymbolUi> _symbolUis = new();
-    public readonly string Name;
+    private List<SymbolUi> _symbolUis = new();
     
     public static IReadOnlyDictionary<string, UiSymbolData> SymbolDataByAssemblyLocation => SymbolDataByAssemblyLocationEditable;
     private static readonly Dictionary<string, UiSymbolData> SymbolDataByAssemblyLocationEditable = new();
+
 }

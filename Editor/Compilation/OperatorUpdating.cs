@@ -53,9 +53,10 @@ namespace T3.Editor.Compilation
             resource.Updated = true;
         }
 
-        public static bool TryCreateSymbolFromSource(string sourceCode, string newSymbolName, Guid newSymbolId, string @namespace, Assembly assembly, out Symbol newSymbol)
+        public static bool TryCreateSymbolFromSource(string sourceCode, string newSymbolName, Guid newSymbolId, string @namespace, Assembly parentAssembly,
+                                                     out Symbol newSymbol)
         {
-            var newAssembly = CompileSymbolFromSource(sourceCode, newSymbolName, assembly);
+            var newAssembly = CompileSymbolFromSource(sourceCode, newSymbolName, parentAssembly);
             if (newAssembly == null)
             {
                 Log.Error("Error compiling duplicated type, aborting duplication.");
@@ -63,53 +64,34 @@ namespace T3.Editor.Compilation
                 return false;
             }
 
-            var type = newAssembly.ExportedTypes.FirstOrDefault(); // todo: is this correct?
+            var type = newAssembly.ExportedTypes.FirstOrDefault();
             if (type == null)
             {
                 Log.Error("Error, new symbol has no compiled instance type");
-                newSymbol= null;
+                newSymbol = null;
                 return false;
             }
 
             newSymbol = new Symbol(type, newSymbolId);
             newSymbol.PendingSource = sourceCode;
-            SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
             newSymbol.Namespace = @namespace;
+            SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
+            var symbolData = UiSymbolData.SymbolDataByAssemblyLocation[parentAssembly.Location];
+            symbolData.AddSymbol(newSymbol);
             return true;
         }
 
         internal static Assembly CompileSymbolFromSource(string source, string symbolName, Assembly parentAssembly)
         {
-            var coreAssembly = CoreAssembly.Assembly;
-            var referencedAssembliesNames = parentAssembly.GetReferencedAssemblies(); // todo: ugly (why is this ugly?)
-            var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length + 2) // +2 for core and operators
-                                           {
-                                                  MetadataReference.CreateFromFile(coreAssembly.Location),
-                                                  MetadataReference.CreateFromFile(parentAssembly.Location)
-                                             };
+            IEnumerable<MetadataReference> referencedAssemblies = Array.Empty<MetadataReference>();
+            AddAllReferences(parentAssembly, ref referencedAssemblies, true);
 
-            foreach (var asmName in referencedAssembliesNames)
-            {
-                var asm = Assembly.Load(asmName);
-                var metadataReference = MetadataReference.CreateFromFile(asm.Location);
-                referencedAssemblies.Add(metadataReference);
-
-                // in order to get dependencies of the used assemblies that are not part of T3 references itself
-                var subAsmNames = asm.GetReferencedAssemblies();
-                foreach (var subAsmName in subAsmNames)
-                {
-                    var subAsm = Assembly.Load(subAsmName);
-                    referencedAssemblies.Add(MetadataReference.CreateFromFile(subAsm.Location));
-                }
-            }
-
-            var opAssemblyName = symbolName;
-
+            // Todo - I think this can be optimized by reusing the compilation object?
             var syntaxTree = CSharpSyntaxTree.ParseText(source);
-            var compilation = CSharpCompilation.Create(opAssemblyName,
+            var compilation = CSharpCompilation.Create(symbolName,
                                                        new[] { syntaxTree },
                                                        referencedAssemblies,
-                                                       CompilationOptions);
+                                                       RuntimeCompilationOptions);
 
             using var dllStream = new MemoryStream();
             using var pdbStream = new MemoryStream();
@@ -173,6 +155,38 @@ namespace T3.Editor.Compilation
             return false;
         }
 
-        private static readonly CSharpCompilationOptions CompilationOptions = new(OutputKind.DynamicallyLinkedLibrary);
+        internal static void AddAllReferences(Assembly from, ref IEnumerable<MetadataReference> to, bool includeThisAssembly)
+        {
+            var references = CollectReferencedAssemblies(from);
+            if (includeThisAssembly)
+            {
+                var referenceToThisAssembly = MetadataReference.CreateFromFile(from.Location);
+                references = references.Append(referenceToThisAssembly);
+            }
+
+            references = references.DistinctBy(x => x.Display);
+            to = to.Concat(references)
+                   .Where(x => x.Display != null)
+                   .DistinctBy(x => x.Display);
+            
+            return;
+
+            static IEnumerable<MetadataReference> CollectReferencedAssemblies(Assembly parentAssembly)
+            {
+                IEnumerable<MetadataReference> referencedAssemblies = Array.Empty<MetadataReference>();
+                foreach (var asmName in parentAssembly.GetReferencedAssemblies())
+                {
+                    var asm = Assembly.Load(asmName);
+                    Log.Debug($"  Loaded SUB from {asm} {asm.Location}");
+
+                    referencedAssemblies = referencedAssemblies.Concat(CollectReferencedAssemblies(asm))
+                                                               .Append(MetadataReference.CreateFromFile(asm.Location));
+                }
+
+                return referencedAssemblies;
+            }
+        }
+
+        private static readonly CSharpCompilationOptions RuntimeCompilationOptions = new(OutputKind.DynamicallyLinkedLibrary);
     }
 }

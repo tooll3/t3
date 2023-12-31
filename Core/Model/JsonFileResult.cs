@@ -12,26 +12,7 @@ public class JsonFileResult<T>
     public readonly JToken JToken;
     public readonly string FilePath;
 
-    /// <summary>
-    /// Can be used instead of a null check, so long as you are certain
-    /// that you never explicitly set the value to `null`
-    /// </summary>
-    public bool ObjectWasSet { get; private set; }
-
-    private T _object;
-
-    public T Object
-    {
-        get => _object;
-        set
-        {
-            _object = value;
-                
-            if(value is not null)
-                ObjectWasSet = true;
-        }
-    }
-
+    public T Object;
     public Guid Guid { get; }
 
     private JsonFileResult(JToken jToken, string filePath, Guid guid)

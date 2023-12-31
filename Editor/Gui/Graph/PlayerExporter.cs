@@ -7,12 +7,14 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Newtonsoft.Json;
 using SharpDX.Direct3D11;
+using T3.Core.Compilation;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
+using T3.Editor.Compilation;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
 using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.UiModel;
@@ -56,6 +58,7 @@ namespace T3.Editor.Gui.Graph
                 var operatorAssemblySources
                     = exportInfo
                      .UniqueSymbols
+                     .AsParallel()
                      .Select(symbol =>
                              {
                                  var filePathForSymbol = symbol.SymbolData.BuildFilepathForSymbol(symbol,
@@ -70,6 +73,7 @@ namespace T3.Editor.Gui.Graph
                                  var source = File.ReadAllText(filePathForSymbol);
                                  return source;
                              }).ToList();
+                
 
                 foreach (var file in Directory.GetFiles(@"Operators\Utils\", "*.cs", SearchOption.AllDirectories))
                 {
@@ -103,8 +107,10 @@ namespace T3.Editor.Gui.Graph
                               },
                           exportDir);
 
+                var parentAssemblies = exportInfo.UniqueSymbols.Select(x => x.ParentAssembly).Distinct();
+                
                 Log.Debug("Compiling Operators.dll...");
-                var references = CompileSymbolsFromSource(exportDir, operatorAssemblySources.ToArray());
+                var references = CompileSymbolsFromSource(exportDir, parentAssemblies, operatorAssemblySources.ToArray());
 
                 if (!Program.IsStandAlone)
                 {
@@ -119,7 +125,7 @@ namespace T3.Editor.Gui.Graph
 
                 // Generate exported .t3 files
 
-                var symbolExportDir = Path.Combine(exportDir, SymbolData.OperatorTypesFolder);
+                var symbolExportDir = Path.Combine(exportDir, SymbolData.OperatorDirectoryName);
                 if (Directory.Exists(symbolExportDir))
                     Directory.Delete(symbolExportDir, true);
 
@@ -388,34 +394,19 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private static List<MetadataReference> CompileSymbolsFromSource(string exportPath, params string[] sources)
+        private static MetadataReference[] CompileSymbolsFromSource(string exportPath, IEnumerable<Assembly> parentAssemblies, params string[] sources)
         {
-            Assembly operatorsAssembly = ResourceManager.Instance().OperatorsAssembly;
-            var referencedAssembliesNames = operatorsAssembly.GetReferencedAssemblies(); // todo: ugly
-            var referencedAssemblies = new List<MetadataReference>(referencedAssembliesNames.Length);
-            var coreAssembly = typeof(ResourceManager).Assembly;
-            referencedAssemblies.Add(MetadataReference.CreateFromFile(coreAssembly.Location));
-            foreach (var asmName in referencedAssembliesNames)
+            IEnumerable<MetadataReference> referencedAssemblies = Array.Empty<MetadataReference>();
+            foreach(var parentAssembly in parentAssemblies)
             {
-                var asm = Assembly.Load(asmName);
-                referencedAssemblies.Add(MetadataReference.CreateFromFile(asm.Location));
-                Log.Debug($"Loaded from {asm} {asm.Location}");
-
-                // In order to get dependencies of the used assemblies that are not part of T3 references itself
-                var subAsmNames = asm.GetReferencedAssemblies();
-                foreach (var subAsmName in subAsmNames)
-                {
-                    var subAsm = Assembly.Load(subAsmName);
-                    Log.Debug($"  Loaded SUB from {subAsm} {subAsm.Location}");
-
-                    referencedAssemblies.Add(MetadataReference.CreateFromFile(subAsm.Location));
-                }
+                OperatorUpdating.AddAllReferences(parentAssembly, ref referencedAssemblies, true);
             }
-
-            var syntaxTrees = sources.Select(s => CSharpSyntaxTree.ParseText(s));
+            
+            var referencedAssemblyArray = referencedAssemblies.ToArray();
+            var syntaxTrees = sources.AsParallel().Select(s => CSharpSyntaxTree.ParseText(s)).ToArray();
             var compilation = CSharpCompilation.Create("Operators",
                                                        syntaxTrees,
-                                                       referencedAssemblies.ToArray(),
+                                                       referencedAssemblyArray,
                                                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
                                                           .WithOptimizationLevel(OptimizationLevel.Release)
                                                           .WithAllowUnsafe(true));
@@ -451,7 +442,7 @@ namespace T3.Editor.Gui.Graph
                 Log.Info($"Compilation of 'export' successful.");
             }
 
-            return referencedAssemblies;
+            return referencedAssemblyArray;
         }
     }
 }

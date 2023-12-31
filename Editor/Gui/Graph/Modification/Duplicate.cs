@@ -52,8 +52,8 @@ internal static class Duplicate
         newSource = newSource.Replace(oldSymbolNamespace, newSymbolNamespace);
         Log.Debug(newSource);
 
-        var assembly = compositionUi.Symbol.ParentAssembly;
-        var success = OperatorUpdating.TryCreateSymbolFromSource(newSource, newTypeName, newSymbolId, nameSpace, assembly, out var newSymbol);
+        var parentAssembly = compositionUi.Symbol.ParentAssembly;
+        var success = OperatorUpdating.TryCreateSymbolFromSource(newSource, newTypeName, newSymbolId, nameSpace, parentAssembly, out var newSymbol);
         if (!success)
             return null;
         

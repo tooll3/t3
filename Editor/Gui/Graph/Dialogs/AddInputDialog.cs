@@ -5,6 +5,7 @@ using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Dialogs
 {
@@ -32,7 +33,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     warning = "Parameter name already exists.";
                     isValid = false;
                 }
-                else if (symbol.InstanceType == typeof(HomeCanvas))
+                else if (symbol.InstanceType == UiSymbolData.RootInstance.GetType())
                 {
                     warning = "You can't add parameters to the home canvas.";
                     isValid = false;

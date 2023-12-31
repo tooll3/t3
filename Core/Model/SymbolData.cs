@@ -291,6 +291,12 @@ public partial class SymbolData
         SymbolDatas.Add(newAssembly, symbolData);
     }
 
+    public virtual void AddSymbol(Symbol newSymbol)
+    {
+        SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
+        _symbols.Add(newSymbol.Id, newSymbol);
+    }
+
     private static readonly OpUpdateCounter _updateCounter;
 
     public const string SourceExtension = ".cs";
