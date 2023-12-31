@@ -1,5 +1,5 @@
 {
-  "Id": "9d6cc9a3-980f-46ae-bf79-02fc1f49c480"/*DisplacePoints2d*/,
+  "Id": "9d6cc9a3-980f-46ae-bf79-02fc1f49c480"/*SimDisplacePoints2d*/,
   "Description": "Applies a displacement to the currently point position.\nThis operator modifies the incoming buffer and thus can be used for simulations with [KeepPoints].",
   "InputUis": [
     {
@@ -103,31 +103,10 @@
       }
     },
     {
-      "ChildId": "cc137491-ca99-48dc-9ff5-c35de8d617fd"/*StructuredBuffer*/,
-      "Position": {
-        "X": 59.04944,
-        "Y": 484.7909
-      }
-    },
-    {
-      "ChildId": "0e958893-dc0f-4d25-adc9-6344fdbde4af"/*UavFromStructuredBuffer*/,
-      "Position": {
-        "X": 209.04944,
-        "Y": 484.7909
-      }
-    },
-    {
       "ChildId": "682d82ba-e713-45ab-9ba1-7190a37db786"/*ExecuteBufferUpdate*/,
       "Position": {
         "X": 1126.4757,
         "Y": 317.79474
-      }
-    },
-    {
-      "ChildId": "766bd59d-3271-4ea8-9a58-fb2b6db9150a"/*SrvFromStructuredBuffer*/,
-      "Position": {
-        "X": 209.04944,
-        "Y": 540.7909
       }
     },
     {
@@ -259,13 +238,6 @@
       "Position": {
         "X": -448.6005,
         "Y": 238.71063
-      }
-    },
-    {
-      "ChildId": "83af4117-a188-4595-86aa-5a67fe2fe6e3"/*padding*/,
-      "Position": {
-        "X": -489.69745,
-        "Y": 738.7415
       }
     }
   ],

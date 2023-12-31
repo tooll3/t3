@@ -58,10 +58,7 @@ static const float VolumeZebra = 3.5;
     uint numStructs, stride;
     SourcePoints.GetDimensions(numStructs, stride);
     if (i.x >= numStructs)
-    {
-        ResultPoints[i.x].W = 0;
         return;
-    }
 
     Point p = SourcePoints[i.x];
 
@@ -112,9 +109,10 @@ static const float VolumeZebra = 3.5;
     posInVolume2 = qRotateVec3(posInVolume2, rotationY);
     posInVolume2 = qRotateVec3(posInVolume2, rotationZ);
 
-    ResultPoints[i.x].Position = lerp(p.Position, -volumeCenter.xyz + posInVolume2 * Scale * ScaleMagnitude, dBiased) + dBiased * Translate;
-    ResultPoints[i.x].Rotation = qMul(p.Rotation, rotationX);
+    p.Position = lerp(p.Position, -volumeCenter.xyz + posInVolume2 * Scale * ScaleMagnitude, dBiased) + dBiased * Translate;
+    p.Rotation = qMul(p.Rotation, rotationX);
 
     float orgW = SourcePoints[i.x].W;
-    ResultPoints[i.x].W = lerp(orgW, orgW * ScaleW + OffsetW, dBiased);
+    p.W = lerp(orgW, orgW * ScaleW + OffsetW, dBiased);
+    ResultPoints[i.x] = p;
 }

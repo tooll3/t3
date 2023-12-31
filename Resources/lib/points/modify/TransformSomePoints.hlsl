@@ -80,23 +80,25 @@ void main(uint3 i : SV_DispatchThreadID)
             return;
         }
 
-        ResultPoints[resultIndex].w = indexInGroup;
+        ResultPoints[resultIndex].W = indexInGroup;
     }
                     
-    float w = SourcePoints[sourceIndex].w;
-    float3 pOrg = SourcePoints[sourceIndex].position;
-    float3 p = pOrg;
+    Point p = SourcePoints[sourceIndex];
 
-    float4 orgRot = SourcePoints[sourceIndex].rotation;
+    float w = p.W;
+    float3 pOrg = p.Position;
+    float3 pos = pOrg;
+
+    float4 orgRot = p.Rotation;
     float4 rotation = orgRot;
 
     if(CoordinateSpace < 0.5) {
-        p.xyz = 0;
+        pos.xyz = 0;
         rotation = float4(0,0,0,1);
     }
  
-    float3 pLocal = p;
-    p = mul(float4(p,1), TransformMatrix).xyz;
+    float3 pLocal = pos;
+    pos = mul(float4(pos, 1), TransformMatrix).xyz;
 
     float4 newRotation = rotation;
 
@@ -121,19 +123,20 @@ void main(uint3 i : SV_DispatchThreadID)
     }
 
     if(WIsWeight >= 0.5) {
-        float3 weightedOffset = (p - pLocal) * w;
-        p = pLocal + weightedOffset;
+        float3 weightedOffset = (pos - pLocal) * w;
+        pos = pLocal + weightedOffset;
 
         newRotation = qSlerp(orgRot, newRotation, w);
     }
 
     if(CoordinateSpace < 0.5) {     
-        p.xyz = qRotateVec3(p.xyz, orgRot).xyz;
-        p += pOrg;
+        pos.xyz = qRotateVec3(pos.xyz, orgRot).xyz;
+        pos += pOrg;
     } 
 
-    ResultPoints[resultIndex].Position = p.xyz;
-    ResultPoints[resultIndex].Rotation = newRotation;
-    ResultPoints[resultIndex].W = w * ScaleW + OffsetW;    
+    p.Position = pos.xyz;
+    p.Rotation = newRotation;
+    p.W = w * ScaleW + OffsetW;    
+    ResultPoints[resultIndex] = p;
 }
 

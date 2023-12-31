@@ -14,5 +14,5 @@ void main(uint3 i : SV_DispatchThreadID)
     if(gi >= newPointCount)
         return;
 
-    ResultPoints[gi] = Particles[gi].p;
+    ResultPoints[gi] = Particles[gi];
 }

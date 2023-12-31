@@ -28,14 +28,18 @@ void main(uint3 dtID : SV_DispatchThreadID)
 {
     uint count, stride;
     ResultPoints.GetDimensions(count, stride);
+    int i = dtID.x;
+    if(i >= count)
+        return;
 
-    float i = dtID.x;
+
+    //float i = index;
 
     float t = i / float(count - 1);
     float y = 1 - t * 2;            // y goes from 1 to -1
     float radius = sqrt(1 - y * y); // radius at y
 
-    float theta = i*precision;
+    float theta = i * precision;
     theta *= phi;
     theta %= modPi;
     theta /= precision;
@@ -49,13 +53,15 @@ void main(uint3 dtID : SV_DispatchThreadID)
 
 
     float3 position = float3(x,y,z);
-    ResultPoints[dtID.x].position = position * Radius + Center;
-    ResultPoints[dtID.x].w = 1;
+    ResultPoints[i].Position = position * Radius + Center;
+    ResultPoints[i].W = 1;
 
 
     float4 rot = qFromAngleAxis( theta, float3(0,-1,0));
     float angle4 = atan2( y, radius)  - PI/2;
     float4 rot2 = qFromAngleAxis( angle4 , float3(0,0,1));    
-    ResultPoints[dtID.x].rotation = qMul( qMul(rot,rot2) , rot5);
+    ResultPoints[i].Rotation = qMul( qMul(rot,rot2) , rot5);
+    ResultPoints[i].Color = 1;
+    ResultPoints[i].Selected = 1;
 }
 

@@ -122,5 +122,7 @@ void main(uint3 i : SV_DispatchThreadID)
         ResultPoints[index].W = W;
         ResultPoints[index].Rotation = qFromAngleAxis(OrientationAngle*PI/180, normalize(OrientationAxis));
     }
+    ResultPoints[index].Color = 1;
+    ResultPoints[index].Selected = 1;
 }
 

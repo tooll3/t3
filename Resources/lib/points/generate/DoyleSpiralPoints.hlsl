@@ -67,4 +67,7 @@ static const float ToRad = 3.141578 / 180;
     float4 rot = qFromAngleAxis(OrientationAngle * PI / 180, normalize(OrientationAxis));
     rot = qMul(rot, qFromAngleAxis(ang, float3(0, 0, 1)));
     ResultPoints[index].Rotation = rot;
+    ResultPoints[index].Color = 1;
+    ResultPoints[index].Selected = 1;
+
 }

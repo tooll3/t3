@@ -56,15 +56,17 @@ void main(uint3 i : SV_DispatchThreadID)
     float f = (float)segmentPointIndex / subdiv;
 
     if(f <= 0.001)  {
-        ResultPoints[i.x].Position = SourcePoints[segmentIndex].Position;
-        ResultPoints[i.x].W =        SourcePoints[segmentIndex].W;
-        ResultPoints[i.x].Rotation = SourcePoints[segmentIndex].Rotation;   // use qlerp
+        ResultPoints[i.x] = SourcePoints[segmentIndex];
+
     }
     else {
         ResultPoints[i.x].Position = lerp( SourcePoints[segmentIndex].Position,  SourcePoints[segmentIndex + 1].Position, f);
         ResultPoints[i.x].W = lerp( SourcePoints[segmentIndex].W,  SourcePoints[segmentIndex + 1].W, f);
-        ResultPoints[i.x].Rotation = lerp( SourcePoints[segmentIndex].Rotation,  SourcePoints[segmentIndex + 1].Rotation, f);   // use qlerp
+        ResultPoints[i.x].Rotation = qSlerp( SourcePoints[segmentIndex].Rotation,  SourcePoints[segmentIndex + 1].Rotation, f);
 
+        ResultPoints[i.x].Color = lerp( SourcePoints[segmentIndex].Color,  SourcePoints[segmentIndex + 1].Color, f);
+        ResultPoints[i.x].Selected = lerp( SourcePoints[segmentIndex].Selected,  SourcePoints[segmentIndex + 1].Selected, f);
+        ResultPoints[i.x].Extend = lerp( SourcePoints[segmentIndex].Extend,  SourcePoints[segmentIndex + 1].Extend, f);
     }
     
 

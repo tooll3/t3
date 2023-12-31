@@ -57,4 +57,6 @@ void main(uint3 i : SV_DispatchThreadID)
     float3x3 m = float3x3(v.Tangent, v.Bitangent,v.Normal);
     float4 rot = normalize(qFromMatrix3Precise(transpose(m)));
     ResultPoints[index].Rotation = normalize(rot);
+    ResultPoints[index].Color =1;
+    ResultPoints[index].Selected = v.Selected;
 }
