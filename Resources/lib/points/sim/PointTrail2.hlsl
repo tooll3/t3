@@ -35,5 +35,6 @@ void main(uint3 i : SV_DispatchThreadID)
     
     if(fInBuffer == 0)
          fInBuffer = NAN;
-    TrailPoints[pointCount-targetIndex-1].w = fInBuffer;
+         
+    TrailPoints[pointCount-targetIndex-1].W = fInBuffer;
 }
