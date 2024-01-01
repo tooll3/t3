@@ -62,13 +62,13 @@ public partial class SymbolData
             if (!TryAddSymbolTo(_symbols, symbol))
                 continue;
 
-            if (!TryAddSymbolTo(SymbolRegistry.Entries, symbol))
-                continue;
-
             if (!SymbolOwnersEditable.TryAdd(symbol.Id, this))
             {
                 Log.Error($"Duplicate symbol id {symbol.Id}");
             }
+
+            if (!TryAddSymbolTo(SymbolRegistry.Entries, symbol))
+                continue;
 
             instanceTypesWithoutFile.Remove(symbol.InstanceType);
             symbol.SymbolData = this;
@@ -76,7 +76,13 @@ public partial class SymbolData
 
         foreach (var newType in instanceTypesWithoutFile)
         {
-            RegisterTypeWithoutFile(newType);
+            var registered = TryRegisterTypeWithoutFile(newType, out var symbol);
+            if (registered)
+            {
+                TryAddSymbolTo(_symbols, symbol);
+                symbol.SymbolData = this;
+                SymbolOwnersEditable.TryAdd(symbol.Id, this);
+            }
         }
 
         SymbolJson.SymbolReadResult ReadSymbolFromJsonFileResult(JsonFileResult<Symbol> jsonInfo)
@@ -87,13 +93,14 @@ public partial class SymbolData
             return result;
         }
 
-        void RegisterTypeWithoutFile(Type newType)
+        bool TryRegisterTypeWithoutFile(Type newType, out Symbol symbol)
         {
             var typeNamespace = newType.Namespace;
             if (string.IsNullOrWhiteSpace(typeNamespace))
             {
                 Log.Error($"Null or empty namespace of type {newType.Name}");
-                return;
+                symbol = null;
+                return false;
             }
 
             var @namespace = _innerNamespace.Replace(newType.Namespace ?? string.Empty, "").ToLower();
@@ -102,7 +109,7 @@ public partial class SymbolData
                                  .Replace('_', '-');
 
             Debug.Assert(!string.IsNullOrWhiteSpace(idFromNamespace));
-            var symbol = new Symbol(newType, Guid.Parse(idFromNamespace))
+            symbol = new Symbol(newType, Guid.Parse(idFromNamespace))
                              {
                                  Namespace = @namespace,
                                  Name = newType.Name
@@ -112,11 +119,13 @@ public partial class SymbolData
             if (!added)
             {
                 Log.Error($"Ignoring redefinition symbol {symbol.Name}. Please fix multiple definitions in Operators/Types/ folder");
-                return;
+                return false;
             }
 
             if (enableLog)
                 Log.Debug($"new added symbol: {newType}");
+            
+            return true;
         }
 
         static bool TryAddSymbolTo(Dictionary<Guid, Symbol> collection, Symbol symbol)
@@ -295,6 +304,9 @@ public partial class SymbolData
         SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
         _symbols.Add(newSymbol.Id, newSymbol);
         AssemblyInformation.UpdateType(newSymbol.InstanceType);
+        var added = SymbolOwnersEditable.TryAdd(newSymbol.Id, this);
+        if (!added)
+            throw new Exception($"Symbol {newSymbol.Id} already exists in {AssemblyInformation.Name}");
     }
 
     private static readonly OpUpdateCounter _updateCounter;

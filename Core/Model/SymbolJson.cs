@@ -326,8 +326,7 @@ namespace T3.Core.Resource
             if (hasSymbol)
                 return true;
 
-            var symbolData = SymbolData.SymbolOwners[guid];
-            var jsonResult = ReadSymbolRoot(guid, jToken, allowNonOperatorInstanceType: true, symbolData.AssemblyInformation);
+            var jsonResult = ReadSymbolRoot(guid, jToken, allowNonOperatorInstanceType: true, null);
 
             if (jsonResult.Symbol is null)
                 return false;
@@ -376,18 +375,8 @@ namespace T3.Core.Resource
             }
 
             var namespaceId = CreateGuidNamespaceString(id);
-
-
-            Type instanceType;
-            if (!allowNonOperatorInstanceType)
-            {
-                instanceType = GetOperatorInstanceType(owningAssembly, name, namespaceId);
-            }
-            else
-            {
-                var instanceTypeName = FormAssemblyQualifiedName(owningAssembly.AssemblyName, name, namespaceId);
-                instanceType = GetAnyInstanceType(instanceTypeName);
-            }
+            
+            Type instanceType = GetInstanceType();
 
             var @namespace = jToken[JsonKeys.Namespace]?.Value<string>() ?? string.Empty;
             var symbol = new Symbol(instanceType, id, orderedInputIds)
@@ -412,27 +401,28 @@ namespace T3.Core.Resource
 
             var animatorData = (JArray)jToken[JsonKeys.Animator];
             return new SymbolReadResult(symbol, childrenJsons, animatorData);
-        }
 
-        private static string FormAssemblyQualifiedName(AssemblyName owningAssemblyName, string name, string namespaceId)
-        {
-            const string typeFormat = "{0}, {1}, Version={2}, Culture={3}, PublicKeyToken={4}";
-
-            Log.Debug("Owning assembly name: " + owningAssemblyName.FullName);
-            string publicKeyToken = owningAssemblyName.FullName.Split('=')[^1];
-
-            var assemblyCulture = owningAssemblyName.CultureInfo?.Name;
-
-            if (string.IsNullOrEmpty(assemblyCulture))
+            Type GetInstanceType()
             {
-                assemblyCulture = "neutral";
+                if (!allowNonOperatorInstanceType)
+                {
+                    instanceType = GetOperatorInstanceType(owningAssembly, name, namespaceId);
+                }
+                else
+                {
+                    try
+                    {
+                        instanceType = Type.GetType(name) ?? typeof(object);
+                    }
+                    catch (Exception e) 
+                    {
+                        instanceType = typeof(object);
+                        Log.Warning($"Failed to load type {name}: {e}");
+                    }
+                }
+
+                return instanceType;
             }
-
-            string fullyQualifiedName = $"T3.Operators.Types.Id_{namespaceId}.{name}";
-
-            var instanceTypeName = string.Format(typeFormat, fullyQualifiedName, owningAssemblyName.Name, owningAssemblyName.Version, assemblyCulture,
-                                                 publicKeyToken);
-            return instanceTypeName;
         }
 
         // returns an id with valid C# namespace characters ('_' instead of '-') and all-lowercase
@@ -469,9 +459,6 @@ namespace T3.Core.Resource
 
             return null;
         }
-
-        // Method for when allowNonOpInstanceType = false
-        static Type GetAnyInstanceType(string typeName) => Type.GetType(typeName) ?? typeof(object);
 
         private static void ObtainConnections(JArray connectionsJson, List<Symbol.Connection> connections)
         {
