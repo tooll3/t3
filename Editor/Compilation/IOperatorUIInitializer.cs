@@ -1,6 +1,6 @@
 namespace T3.Editor.Compilation;
 
-public abstract class OperatorUIAssemblyInitializer
+public interface IOperatorUIInitializer
 {
     public abstract void Initialize();
 }

@@ -7,10 +7,10 @@ using T3.Editor.Gui.Templates;
 
 namespace Operators.Lib.Editor;
 
-public class UiRegistration : OperatorUIAssemblyInitializer
+public class UiRegistration : IOperatorUIInitializer
 {
 
-    public override void Initialize()
+    public void Initialize()
     {
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_11882635_4757_4cac_a024_70bb4e8b504c.Counter), CounterUi.DrawChildUi);
         CustomChildUiRegistry.Entries.Add(typeof(T3.Operators.Types.Id_8211249d_7a26_4ad0_8d84_56da72a5c536.SampleGradient), GradientSliderUi.DrawChildUi);

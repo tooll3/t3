@@ -68,8 +68,8 @@ namespace T3.Core.Resource
             {
                 Log.Info($"renamed file resource from '{oldPath}' to '{newPath}'");
                 fileResource.Path = newPath;
-                ResourceFileWatcher.HooksForResourceFilepaths.Remove(oldPath);
-                ResourceFileWatcher.HooksForResourceFilepaths.Add(newPath, fileResource);
+                ResourceFileWatcher.HooksForResourceFilepaths.Remove(oldPath, out _);
+                ResourceFileWatcher.HooksForResourceFilepaths.TryAdd(newPath, fileResource);
             }
         }
 
@@ -330,15 +330,11 @@ namespace T3.Core.Resource
 
             if (fileResource == null)
             {
-                try
-                {
-                    fileResource = new ResourceFileHook(sourceFilePath, new[] { resourceEntry.Id });
-                    ResourceFileWatcher.HooksForResourceFilepaths.Add(sourceFilePath, fileResource);
-                }
-                catch (Exception e)
-                {
-                    Log.Error($"Can't set file resource hook to '{sourceFilePath}': {e.Message}");
-                }
+                fileResource = new ResourceFileHook(sourceFilePath, new[] { resourceEntry.Id });
+                var added = ResourceFileWatcher.HooksForResourceFilepaths.TryAdd(sourceFilePath, fileResource);
+
+                if (!added)
+                    Log.Error($"Can't add resource file hook to '{sourceFilePath}': file already exists");
             }
             else
             {
@@ -586,7 +582,7 @@ namespace T3.Core.Resource
 
             var fileResource = new ResourceFileHook(filename, new[] { textureResourceEntry.Id, srvResourceId });
             fileResource.FileChangeAction += fileChangeAction;
-            ResourceFileWatcher.HooksForResourceFilepaths.Add(filename, fileResource);
+            ResourceFileWatcher.HooksForResourceFilepaths.TryAdd(filename, fileResource);
 
             return (textureResourceEntry.Id, srvResourceId);
         }
@@ -796,7 +792,7 @@ namespace T3.Core.Resource
             if (fileHook == null)
             {
                 fileHook = new ResourceFileHook(path, new[] { resourceId });
-                ResourceFileWatcher.HooksForResourceFilepaths.Add(path, fileHook);
+                ResourceFileWatcher.HooksForResourceFilepaths.TryAdd(path, fileHook);
             }
             
             fileHook.FileChangeAction -= fileChangedAction;

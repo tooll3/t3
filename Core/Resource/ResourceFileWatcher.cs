@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using SharpDX.Direct3D11;
 using T3.Core.Logging;
 
 namespace T3.Core.Resource
@@ -29,7 +31,7 @@ namespace T3.Core.Resource
                 csWatcher.Changed += (sender, args) => onFileChanged(args.FullPath);
             csWatcher.Renamed += CsFileRenamedHandler;
             csWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
-            CSFileWatchers.Add(folder, csWatcher);
+            CSFileWatchers.TryAdd(folder, csWatcher);
         }
         
         public static void AddFileHook(string filepath, Action action)
@@ -69,7 +71,7 @@ namespace T3.Core.Resource
                                   {
                                       FileChangeAction = action
                                   };
-                HooksForResourceFilepaths.Add(filepath,newHook);
+                HooksForResourceFilepaths.TryAdd(filepath,newHook);
             }
         }
         
@@ -149,8 +151,8 @@ namespace T3.Core.Resource
             ResourceManager.RenameOperatorResource(renamedEventArgs.OldFullPath, renamedEventArgs.FullPath);
         }
 
-        private static readonly Dictionary<string, FileSystemWatcher> CSFileWatchers = new();
-        public static readonly Dictionary<string, ResourceFileHook> HooksForResourceFilepaths = new();
+        private static readonly ConcurrentDictionary<string, FileSystemWatcher> CSFileWatchers = new();
+        public static readonly ConcurrentDictionary<string, ResourceFileHook> HooksForResourceFilepaths = new();
     }
     
     /// <summary>
