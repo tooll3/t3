@@ -11,7 +11,7 @@
       }
     },
     {
-      "ChildId": "d59d88b3-b1b3-4bae-b09d-69d1bb7df960"/*RandomizePoints*/,
+      "ChildId": "d59d88b3-b1b3-4bae-b09d-69d1bb7df960"/*_RandomizePoints_Legacy1*/,
       "Position": {
         "X": 0.77593994,
         "Y": 0.0

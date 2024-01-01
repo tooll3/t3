@@ -531,7 +531,7 @@
       "Outputs": []
     },
     {
-      "Id": "edfc232d-0bcb-4d68-8cc1-8b3b4137422e"/*RandomizePoints*/,
+      "Id": "edfc232d-0bcb-4d68-8cc1-8b3b4137422e"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -811,7 +811,7 @@
       "Outputs": []
     },
     {
-      "Id": "675c903a-3d04-4556-a180-ea0abc39a080"/*RandomizePoints*/,
+      "Id": "675c903a-3d04-4556-a180-ea0abc39a080"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -1069,7 +1069,7 @@
       "Outputs": []
     },
     {
-      "Id": "17565682-1cb9-4f61-a428-d6c93527f6fe"/*RandomizePoints*/,
+      "Id": "17565682-1cb9-4f61-a428-d6c93527f6fe"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {

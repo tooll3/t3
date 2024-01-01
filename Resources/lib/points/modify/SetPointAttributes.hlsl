@@ -5,7 +5,27 @@
 
 cbuffer Params : register(b0)
 {    
+    float SetPosition;
+    float3 Position;
+
+    float SetRotation;
+    float3 RotationAxis;
+
+    float RotationAngle;
+    float2 __padding;
+    float SetExtend;
+
+    float3 Extend;
+    float SetW;
+
+    float W;
+    float2 Padding;
+    float SetColor;
+
     float4 Color;
+
+    float SetSelected;
+    float Selected;
     float Amount;
 }
 
@@ -25,7 +45,23 @@ void main(uint3 i : SV_DispatchThreadID)
     }
 
     Point p = SourcePoints[index];
-    p.Color = lerp(p.Color, Color, Amount);
+
+    if(SetColor > 0.5)
+        p.Color = lerp(p.Color, Color, Amount);
+
+    if(SetPosition)
+        p.Position = lerp(p.Position, Position, Amount);
+
+    if(SetExtend)
+        p.Extend = lerp(p.Extend, Extend, Amount);
+
+    if(SetW)
+        p.W = lerp(p.W, W, Amount);
+
+    if(SetRotation) 
+    {
+        p.Rotation = qSlerp(p.Rotation, qFromAngleAxis(RotationAngle / 180 * PI, RotationAxis), Amount);
+    }
 
     ResultPoints[index] = p; 
 }

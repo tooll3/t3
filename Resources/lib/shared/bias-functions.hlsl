@@ -35,3 +35,14 @@ float GetBiasGain(float x, float s, float t)
     ? ((t*x)/(x+s*(t-x)+eps)) 
     : (((1-t)*(x-1))/(1-x-s*(t-x)+eps)+1);
 }
+
+float4 GetBiasGain(float4 x, float s, float t) 
+{
+    float eps = 0.0001;
+    float r = 200;
+    s *= 2;
+    s = s < 1 ? (pow(r, 1-s)) : 1 / pow(r, s-1);
+    return x < t 
+    ? ((t*x)/(x+s*(t-x)+eps)) 
+    : (((1-t)*(x-1))/(1-x-s*(t-x)+eps)+1);
+}

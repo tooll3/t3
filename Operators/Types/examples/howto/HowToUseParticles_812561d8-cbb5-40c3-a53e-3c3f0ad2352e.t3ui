@@ -178,7 +178,7 @@
       }
     },
     {
-      "ChildId": "edfc232d-0bcb-4d68-8cc1-8b3b4137422e"/*RandomizePoints*/,
+      "ChildId": "edfc232d-0bcb-4d68-8cc1-8b3b4137422e"/*_RandomizePoints_Legacy1*/,
       "Comment": "We generate a new buffer with slightly randomized point orientations.",
       "Position": {
         "X": 868.1648,
@@ -350,7 +350,7 @@
       }
     },
     {
-      "ChildId": "675c903a-3d04-4556-a180-ea0abc39a080"/*RandomizePoints*/,
+      "ChildId": "675c903a-3d04-4556-a180-ea0abc39a080"/*_RandomizePoints_Legacy1*/,
       "Position": {
         "X": 724.36475,
         "Y": 391.20554
@@ -482,7 +482,7 @@
       }
     },
     {
-      "ChildId": "17565682-1cb9-4f61-a428-d6c93527f6fe"/*RandomizePoints*/,
+      "ChildId": "17565682-1cb9-4f61-a428-d6c93527f6fe"/*_RandomizePoints_Legacy1*/,
       "Position": {
         "X": 752.2478,
         "Y": 969.8798

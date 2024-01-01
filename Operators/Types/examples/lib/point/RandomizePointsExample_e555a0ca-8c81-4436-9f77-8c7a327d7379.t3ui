@@ -1,0 +1,271 @@
+{
+  "Id": "e555a0ca-8c81-4436-9f77-8c7a327d7379"/*RandomizePointsExample*/,
+  "Description": "Illustrates different randomization distributions.",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "d56e1e61-4571-46ed-9ee0-8e60f2e70e52"/*LinePoints*/,
+      "Position": {
+        "X": 243.39044,
+        "Y": -12.781189
+      }
+    },
+    {
+      "ChildId": "9ac0b34b-e39e-42fa-aebf-500a3e8725e1"/*DrawPoints*/,
+      "Position": {
+        "X": 543.3904,
+        "Y": -15.325623
+      }
+    },
+    {
+      "ChildId": "bd0d46c8-ce2d-4181-a658-61c915f0b536"/*RenderTarget*/,
+      "Position": {
+        "X": 693.3904,
+        "Y": -15.325623
+      }
+    },
+    {
+      "ChildId": "dfca676b-3001-4b60-b4dc-20bdb3bd1f69"/*WaveForm*/,
+      "Position": {
+        "X": 993.3904,
+        "Y": -21.754395
+      }
+    },
+    {
+      "ChildId": "97700978-3243-48a1-bef3-caff92bb7e19"/*RandomizePoints*/,
+      "Position": {
+        "X": 393.39044,
+        "Y": -12.781189
+      }
+    },
+    {
+      "ChildId": "0f48bbd0-0d86-4454-8e8a-545b686076e8"/*RadialPoints*/,
+      "Position": {
+        "X": 243.39044,
+        "Y": 30.218811
+      }
+    },
+    {
+      "ChildId": "0b6e5f53-062c-4261-b52e-7db209809096"/*RandomizePoints*/,
+      "Position": {
+        "X": 544.0267,
+        "Y": 457.11218
+      }
+    },
+    {
+      "ChildId": "3243e12d-f610-42a4-b954-90baf48b772b"/*RenderTarget*/,
+      "Position": {
+        "X": 994.0267,
+        "Y": 232.11218
+      }
+    },
+    {
+      "ChildId": "3a811ff1-a192-4e9f-840a-fdff7f7effb5"/*RadialPoints*/,
+      "Comment": "We start with a spiral...",
+      "Position": {
+        "X": -1128.9907,
+        "Y": 678.0498
+      }
+    },
+    {
+      "ChildId": "26570840-9126-4e48-a3a3-7cdc922b12a8"/*RandomizePoints*/,
+      "Comment": "This is doing the actual squiggly lines. ",
+      "Position": {
+        "X": -528.99054,
+        "Y": 678.0498
+      }
+    },
+    {
+      "ChildId": "dc77cecb-fbe7-4447-8954-d12667202dce"/*DrawLines*/,
+      "Position": {
+        "X": 383.67212,
+        "Y": 659.26843
+      }
+    },
+    {
+      "ChildId": "ffa59d51-280e-4d62-8cb7-4f138456b420"/*SpreadPointAttributes*/,
+      "Comment": "We colorize the spiral with a gradient.",
+      "Position": {
+        "X": -828.9907,
+        "Y": 678.0498
+      }
+    },
+    {
+      "ChildId": "c53487fa-f254-46b7-aeeb-06e61e1653b7"/*RenderTarget*/,
+      "Position": {
+        "X": 683.6721,
+        "Y": 659.26843
+      }
+    },
+    {
+      "ChildId": "0a02043d-7069-4603-8e6c-101909316a10"/*ResampleLinePoints*/,
+      "Comment": "We resample the lines to smoothen things out.",
+      "Position": {
+        "X": -378.99054,
+        "Y": 678.0498
+      }
+    },
+    {
+      "ChildId": "8f34fa82-3c3d-4adb-b085-387f8979d70a"/*TransformPoints*/,
+      "Comment": "We rotate all points in the local point space. This will give it a slightly itallic look later.",
+      "Position": {
+        "X": -678.9907,
+        "Y": 678.0498
+      }
+    },
+    {
+      "ChildId": "c263b250-74ac-4237-b176-cfd8abfc1bce"/*FilterPoints*/,
+      "Comment": "We pick a bunch of points...",
+      "Position": {
+        "X": -216.32788,
+        "Y": 715.26843
+      }
+    },
+    {
+      "ChildId": "bb53a634-03f4-4355-8fb7-fcffc76ec650"/*RepeatAtGPoints*/,
+      "Comment": "We add some streaks. Note how we disabled apply target orientation.",
+      "Position": {
+        "X": 83.67212,
+        "Y": 715.26843
+      }
+    },
+    {
+      "ChildId": "9f1a8578-bf51-4c45-8c0c-3fd3047ba182"/*DrawLines*/,
+      "Position": {
+        "X": 383.67212,
+        "Y": 715.26843
+      }
+    },
+    {
+      "ChildId": "8276b88f-15c0-4eaf-939d-cfd97c9ae39e"/*Group*/,
+      "Position": {
+        "X": 533.6721,
+        "Y": 659.26843
+      }
+    },
+    {
+      "ChildId": "903bb9dd-7afe-4a7e-ba2c-9b79ddc530a0"/*LinePoints*/,
+      "Position": {
+        "X": -66.32788,
+        "Y": 804.26843
+      }
+    },
+    {
+      "ChildId": "71eb0887-29f4-4171-a208-86fc73f48739"/*RandomizePoints*/,
+      "Position": {
+        "X": -66.32788,
+        "Y": 715.26843
+      }
+    },
+    {
+      "ChildId": "ad34b7c0-2a4c-421b-ad9b-d6d261dfb5df"/*RandomizePoints*/,
+      "Position": {
+        "X": 233.67212,
+        "Y": 726.26843
+      }
+    },
+    {
+      "ChildId": "db7230bd-58d3-4883-8b63-3b3c80b80a88"/*Grain*/,
+      "Position": {
+        "X": 833.6721,
+        "Y": 659.26843
+      }
+    },
+    {
+      "ChildId": "732b2d9d-7d18-45b5-82ca-b9adce0c699e"/*ColorGrade*/,
+      "Position": {
+        "X": 983.6721,
+        "Y": 659.26843
+      }
+    },
+    {
+      "ChildId": "a2fec380-3bb4-4e7d-ba60-c2bee7a6021b"/*ClearSomePoints*/,
+      "Comment": "We clear away some gaps to make it resample individual words.",
+      "Position": {
+        "X": 233.67212,
+        "Y": 659.26843
+      }
+    },
+    {
+      "ChildId": "03516255-7c1a-485b-9c9d-412d71159540"/*SoftTransformPoints*/,
+      "Comment": "We slightly twist the end.",
+      "Position": {
+        "X": -978.9907,
+        "Y": 678.0498
+      }
+    },
+    {
+      "ChildId": "57857a18-152f-44d0-b2c4-e3848f473291"/*RandomizePoints*/,
+      "Position": {
+        "X": 544.0267,
+        "Y": 331.11218
+      }
+    },
+    {
+      "ChildId": "776d8a90-c3df-4117-b762-6aba970b5e1f"/*GridPoints*/,
+      "Position": {
+        "X": 209.30333,
+        "Y": 471.24573
+      }
+    },
+    {
+      "ChildId": "08f2f3b8-6f6a-43e8-93ba-4ff730665123"/*Time*/,
+      "Position": {
+        "X": 394.02667,
+        "Y": 394.11218
+      }
+    },
+    {
+      "ChildId": "5d861f0b-4b2c-49c8-bc03-36466ba5a355"/*DrawBillboards*/,
+      "Position": {
+        "X": 844.0267,
+        "Y": 232.11218
+      }
+    },
+    {
+      "ChildId": "5e7bbe16-5465-45fb-b767-3d4c95b9ac24"/*Blur*/,
+      "Position": {
+        "X": 847.1735,
+        "Y": -22.136078
+      }
+    },
+    {
+      "ChildId": "55206f8d-8214-4bed-bf1b-59c2b44b123c"/*BlendPoints*/,
+      "Position": {
+        "X": 694.0267,
+        "Y": 288.11218
+      }
+    },
+    {
+      "ChildId": "db158d11-407b-41ec-a5c4-6dbba0c54b79"/*SetPointAttributes*/,
+      "Comment": "Set extend",
+      "Position": {
+        "X": 394.02667,
+        "Y": 331.11218
+      }
+    },
+    {
+      "ChildId": "11faa31d-b5af-41cd-9a02-9de51da9e1aa"/*RenderTarget*/,
+      "Position": {
+        "X": 694.0267,
+        "Y": 232.11218
+      }
+    },
+    {
+      "ChildId": "4b01d57c-8f26-4cc4-80aa-bb308bcc62b4"/*Time*/,
+      "Position": {
+        "X": 544.0267,
+        "Y": 288.11218
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "d078d68a-e19e-48c9-912d-47e2cb906b42"/*ImgOutput*/,
+      "Position": {
+        "X": 1204.2742,
+        "Y": -11.6892395
+      }
+    }
+  ]
+}

@@ -78,7 +78,7 @@
       "Outputs": []
     },
     {
-      "Id": "7b728114-f7de-4993-9d42-52fba4bac33f"/*RandomizePoints*/,
+      "Id": "7b728114-f7de-4993-9d42-52fba4bac33f"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -464,7 +464,7 @@
       "Outputs": []
     },
     {
-      "Id": "86dd0b09-717f-4989-87f1-6e23f301113d"/*RandomizePoints*/,
+      "Id": "86dd0b09-717f-4989-87f1-6e23f301113d"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -2667,7 +2667,7 @@
       "Outputs": []
     },
     {
-      "Id": "3fd5b730-be57-4739-8f5d-18e3af4fbb2f"/*RandomizePoints*/,
+      "Id": "3fd5b730-be57-4739-8f5d-18e3af4fbb2f"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -4515,7 +4515,7 @@
       "Outputs": []
     },
     {
-      "Id": "08dcb962-f087-4422-ae85-9900b0317413"/*RandomizePoints*/,
+      "Id": "08dcb962-f087-4422-ae85-9900b0317413"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -6632,7 +6632,7 @@
       "Outputs": []
     },
     {
-      "Id": "95dfbe73-6f58-4106-acc2-5807a5123050"/*WaveForm2*/,
+      "Id": "95dfbe73-6f58-4106-acc2-5807a5123050"/*WaveForm*/,
       "SymbolId": "92e28e50-bd40-4f93-ba92-8f69cded6ec1",
       "InputValues": [],
       "Outputs": []

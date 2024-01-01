@@ -32,7 +32,7 @@
       }
     },
     {
-      "ChildId": "7b728114-f7de-4993-9d42-52fba4bac33f"/*RandomizePoints*/,
+      "ChildId": "7b728114-f7de-4993-9d42-52fba4bac33f"/*_RandomizePoints_Legacy1*/,
       "Position": {
         "X": -2456.4282,
         "Y": 245.79617
@@ -214,7 +214,7 @@
       }
     },
     {
-      "ChildId": "86dd0b09-717f-4989-87f1-6e23f301113d"/*RandomizePoints*/,
+      "ChildId": "86dd0b09-717f-4989-87f1-6e23f301113d"/*_RandomizePoints_Legacy1*/,
       "Position": {
         "X": -2518.353,
         "Y": 1198.0228
@@ -1127,7 +1127,7 @@
       }
     },
     {
-      "ChildId": "3fd5b730-be57-4739-8f5d-18e3af4fbb2f"/*RandomizePoints*/,
+      "ChildId": "3fd5b730-be57-4739-8f5d-18e3af4fbb2f"/*_RandomizePoints_Legacy1*/,
       "Position": {
         "X": -2541.5127,
         "Y": 3262.346
@@ -1601,7 +1601,7 @@
       }
     },
     {
-      "ChildId": "08dcb962-f087-4422-ae85-9900b0317413"/*RandomizePoints*/,
+      "ChildId": "08dcb962-f087-4422-ae85-9900b0317413"/*_RandomizePoints_Legacy1*/,
       "Position": {
         "X": -3129.69,
         "Y": 9136.866
@@ -2364,7 +2364,7 @@
       }
     },
     {
-      "ChildId": "95dfbe73-6f58-4106-acc2-5807a5123050"/*WaveForm2*/,
+      "ChildId": "95dfbe73-6f58-4106-acc2-5807a5123050"/*WaveForm*/,
       "Position": {
         "X": 7298.4087,
         "Y": -40.303356

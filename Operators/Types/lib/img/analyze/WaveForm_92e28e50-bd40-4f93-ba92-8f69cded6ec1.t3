@@ -1,5 +1,5 @@
 {
-  "Name": "WaveForm2",
+  "Name": "WaveForm",
   "Id": "92e28e50-bd40-4f93-ba92-8f69cded6ec1",
   "Namespace": "lib.img.analyze",
   "Inputs": [
@@ -33,6 +33,10 @@
     {
       "Id": "5ce4b7d6-ecaf-44d9-aa67-74892339cb06"/*EnlargeVectorScopeCenter*/,
       "DefaultValue": 0.5
+    },
+    {
+      "Id": "c3eb1998-3bbf-436c-bde8-9fbbf4f56e54"/*ShowVectorscope*/,
+      "DefaultValue": false
     }
   ],
   "Children": [
@@ -1130,6 +1134,12 @@
       "SourceSlotId": "73ebf863-ba71-421c-bee7-312f13c5eff0",
       "TargetParentOrChildId": "15a1acc6-dcc5-4910-baf3-bd2486d2a076",
       "TargetSlotId": "5d73ebe6-9aa0-471a-ae6b-3f5bfd5a0f9c"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "c3eb1998-3bbf-436c-bde8-9fbbf4f56e54",
+      "TargetParentOrChildId": "15a1acc6-dcc5-4910-baf3-bd2486d2a076",
+      "TargetSlotId": "d68b5569-b43d-4a0d-9524-35289ce08098"
     },
     {
       "SourceParentOrChildId": "d8f2f3a7-88cf-4391-af72-39177b0b64ef",

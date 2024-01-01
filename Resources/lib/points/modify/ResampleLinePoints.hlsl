@@ -17,7 +17,11 @@ RWStructuredBuffer<Point> ResultPoints : u0;    // output
 static uint sourceCount;
 static float3 sumPos =0;
 static float sumWeight=0;
+static float4 sumColor=0;
+static float3 sumExtend=0;
+static float3 sumSelected=0;
 static int sampledCount=0;
+
 void SamplePosAtF(float f) 
 {
     float sourceF = saturate(f) * (sourceCount -1);
@@ -38,10 +42,13 @@ void SamplePosAtF(float f)
     float fraction = sourceF - index;    
     sumWeight += lerp(w1, w2, fraction );
     sumPos += lerp(SourcePoints[index].Position, SourcePoints[index+1].Position , fraction );
+    sumColor += lerp(SourcePoints[index].Color, SourcePoints[index+1].Color , fraction );
+    sumExtend += lerp(SourcePoints[index].Extend, SourcePoints[index+1].Extend , fraction );
+    sumSelected += lerp(SourcePoints[index].Selected, SourcePoints[index+1].Selected , fraction );
     sampledCount++;
 }
 
-float4 SampleRotationAtF(float f) 
+inline float4 SampleRotationAtF(float f) 
 {
     float sourceF = saturate(f) * (sourceCount -1);
     int index = (int)sourceF;
@@ -77,36 +84,31 @@ void main(uint3 i : SV_DispatchThreadID)
     }
 
     int maxSteps = 5;
-    //float sampledWeight;
     sumWeight = 0;
     sampledCount = 0;
-    //float3 sumPoint;
     SamplePosAtF( f);
-    //sumWeight += sampledWeight;
     
     for(int step = 1; step <= maxSteps; step++) 
     {
         float d = step * SmoothDistance / maxSteps / sourceCount;
-        
         SamplePosAtF( f - d);
-        //sumWeight += sampledWeight;
         SamplePosAtF( f + d);
-        //sumWeight += sampledWeight;
     }
 
-    //sumPos /= (maxSteps * 2 + 1);
-    sumPos /= (sampledCount);
+    //sumPos /= (sampledCount);
     
     //sumWeight /=(maxSteps * 2 + 1);
-    sumWeight /= sampledCount;
+    //sumWeight /= sampledCount;
     
     if(sampledCount==0)
        sumWeight = sqrt(-1);
 
-    ResultPoints[i.x].Position = sumPos;
-    ResultPoints[i.x].W = sumWeight;
-
-    ResultPoints[i.x].Rotation = SampleRotationAtF(f);// float4(0,0,0,1);//  p.rotation; //qMul(rotationFromDisplace , SourcePoints[i.x].rotation);
+    ResultPoints[i.x].Position = sumPos / sampledCount;
+    ResultPoints[i.x].W = sumWeight / sampledCount;
+    ResultPoints[i.x].Rotation = SampleRotationAtF(f); // float4(0,0,0,1);//  p.rotation; //qMul(rotationFromDisplace , SourcePoints[i.x].rotation);
+    ResultPoints[i.x].Color = sumColor / sampledCount;
+    ResultPoints[i.x].Extend = sumExtend / sampledCount;
+    ResultPoints[i.x].Selected = sumSelected / sampledCount;
     //ResultPoints[i.x].w = 1;//SourcePoints[i.x].w;
 }
 

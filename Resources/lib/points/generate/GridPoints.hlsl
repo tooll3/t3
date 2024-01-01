@@ -17,6 +17,9 @@ cbuffer Params : register(b0)
 
     float3 Pivot;
     float SizeMode;
+
+    float4 Color;
+
     float Tiling;
 }
 
@@ -62,9 +65,9 @@ static const float ToRad = 3.141578 / 180;
 
     pos *= zeroAdjustedSize;
 
-    ResultPoints[index].Color = 1;
+    ResultPoints[index].Color = Color;
     ResultPoints[index].Selected = 1;
-    ResultPoints[index].Extend = 0;
+    ResultPoints[index].Extend = 1;
 
     if (Tiling < 0.5)
     {

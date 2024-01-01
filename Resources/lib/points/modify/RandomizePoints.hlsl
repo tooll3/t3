@@ -2,84 +2,88 @@
 #include "lib/shared/point.hlsl"
 #include "lib/shared/quat-functions.hlsl"
 #include "lib/shared/bias-functions.hlsl"
-
+#include "lib/shared/color-functions.hlsl"
 
 cbuffer Params : register(b0)
 {
-    float3 RandomizePosition;
     float Amount;
+    float3 RandomizePosition;
 
     float3 RandomizeRotation;
     float RandomizeW;
-    
-    float UseLocalSpace;
-    float Seed;
 
-    float Bias;
-    float Offset;
+    float4 RandomizeColor;
 
-    float UseWAsSelection;
+    float3 RandomizeExtend;
+    float RandomSeed;
+
+
+    float2 BiasAndGain;
+    float UseSelection;
+
+}
+ 
+cbuffer IntParams : register(b1) 
+{
+    uint OffsetMode;
+    uint UsePointSpace;
+    uint Interpolation;
+    int ClampColorsEtc;
+    int Repeat;
 }
 
 StructuredBuffer<Point> SourcePoints : t0;        
-RWStructuredBuffer<Point> ResultPoints : u0;   
-
-
+RWStructuredBuffer<Point> ResultPoints : u0;    
+ 
 [numthreads(64,1,1)]
 void main(uint3 i : SV_DispatchThreadID)
 {
     uint pointCount, stride;
     SourcePoints.GetDimensions(pointCount, stride);
-    // if(i.x >= pointCount) {
-    //     ResultPoints[i.x].w = 0 ;
-    //     return;
-    // }
-    
     Point p = SourcePoints[i.x];
 
+    uint pointId = i.x;
+    uint pointU = pointId * _PRIME0 % (Repeat == 0 ? 999999999 : Repeat) ;
+    float particlePhaseOffset = hash11u(pointU);
 
-    int pointId = i.x;
-    float f = pointId / (float)pointCount;
-    float phase = Seed + 133.1123 * f;
-    int phaseId = (int)phase; 
-    float4 normalizedScatter = lerp(hash41u(pointId * 12341 + phaseId),
-                                    hash41u(pointId * 12341 + phaseId + 1),
-                                    smoothstep(0, 1,
-                                               phase - phaseId));
+    float phase = abs(particlePhaseOffset + RandomSeed);
 
+    int phaseIndex = (uint)phase + pointU; 
 
+    float t = fmod (phase,1);
+    t = Interpolation == 0 ? 0 : (Interpolation == 1 ? t : smoothstep(0,1,t));
+    float4 biasedA = GetBiasGain(lerp(hash41u(phaseIndex ), hash41u(phaseIndex + 1), t), BiasAndGain.x, BiasAndGain.y);
+    float4 biasedB = GetBiasGain(lerp(hash41u(phaseIndex + _PRIME0 ), hash41u(phaseIndex + _PRIME0 + 1), t), BiasAndGain.x, BiasAndGain.y);
 
-    float4 hashRot = lerp(hash41u(pointId * 2723 + phaseId),
-                                    hash41u(pointId * 2723 + phaseId + 1),
-                                    smoothstep(0, 1,
-                                               phase - phaseId)) * 2 - 1;
-
-
-    float4 hash4 =  GetSchlickBias(normalizedScatter, Bias) * 2 -1;
-
-
+    float amount = Amount * p.Selected;
     float4 rot = p.Rotation;
+    
+    biasedA -= OffsetMode * 0.5;
+    biasedB -= OffsetMode * 0.5;
 
-    float amount = Amount * (UseWAsSelection > 0.5 ? p.W : 1);
- 
-    float3 offset = hash4.xyz * RandomizePosition * amount;
+    p.Position += amount * (
+        UsePointSpace == 0 
+            ? qRotateVec3(biasedA.xyz * RandomizePosition, p.Rotation)
+            : biasedA.xyz * RandomizePosition
+        );
 
-    if(UseLocalSpace < 0.5)
-    {
-        offset = qRotateVec3(offset, rot);
-    }
+    
+    float4 LCHa = float4( RgbToLCh(p.Color.rgb), p.Color.a);
+    LCHa += biasedB * RandomizeColor * amount;
+    
+    float4 rgba = float4( LChToRgb(LCHa.xyz), LCHa.a);
+    p.Color = ClampColorsEtc ? saturate(rgba) : rgba;
 
-    p.Position += offset;
+    p.W += biasedA.w * RandomizeW * amount;
+    p.Extend += float3(biasedB.w, biasedA.w, biasedA.z) * RandomizeExtend * amount; // Not ideal... distribution overlap
 
-    float3 randomRotate = (hashRot.xyz - 0.5) * (RandomizeRotation / 180 * PI) * amount * hash4.xyz;
-
-    rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.x * Offset, float3(1,0,0))));
-    rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.y * Offset, float3(0,1,0))));
-    rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.z * Offset, float3(0,0,1))));
-
+    // Rotation
+    float3 randomRotate = (RandomizeRotation / 180 * PI) * amount * biasedA.xyz; 
+    rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.x , float3(1,0,0))));
+    rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.y , float3(0,1,0))));
+    rot = normalize(qMul(rot, qFromAngleAxis(randomRotate.z , float3(0,0,1))));
     p.Rotation = rot;
 
-    p.W += hash4.w *RandomizeW * amount;
     ResultPoints[i.x] = p;
 }
 

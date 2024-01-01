@@ -88,7 +88,7 @@
       }
     },
     {
-      "ChildId": "6c8a90f2-5868-444b-8ee4-d3285bf59d5b"/*RandomizePoints*/,
+      "ChildId": "6c8a90f2-5868-444b-8ee4-d3285bf59d5b"/*_RandomizePoints_Legacy1*/,
       "Position": {
         "X": 1616.3433,
         "Y": 611.81616
@@ -436,7 +436,7 @@
       }
     },
     {
-      "ChildId": "c3b21b67-fccb-4f56-829d-016f499c7746"/*RandomizePoints*/,
+      "ChildId": "c3b21b67-fccb-4f56-829d-016f499c7746"/*_RandomizePoints_Legacy1*/,
       "Position": {
         "X": 786.60406,
         "Y": 2032.8152

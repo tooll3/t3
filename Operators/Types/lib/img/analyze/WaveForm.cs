@@ -6,7 +6,7 @@ using T3.Core.Operator.Slots;
 
 namespace T3.Operators.Types.Id_92e28e50_bd40_4f93_ba92_8f69cded6ec1
 {
-    public class WaveForm2 : Instance<WaveForm2>
+    public class WaveForm : Instance<WaveForm>
     {
         [Output(Guid = "d81d0fd1-3ba0-4576-8fea-d37fb6ec5548")]
         public readonly Slot<Texture2D> ImgOutput = new();
@@ -31,6 +31,9 @@ namespace T3.Operators.Types.Id_92e28e50_bd40_4f93_ba92_8f69cded6ec1
 
         [Input(Guid = "5ce4b7d6-ecaf-44d9-aa67-74892339cb06")]
         public readonly InputSlot<float> EnlargeVectorScopeCenter = new();
+
+        [Input(Guid = "c3eb1998-3bbf-436c-bde8-9fbbf4f56e54")]
+        public readonly InputSlot<bool> ShowVectorscope = new InputSlot<bool>();
 
 
     }

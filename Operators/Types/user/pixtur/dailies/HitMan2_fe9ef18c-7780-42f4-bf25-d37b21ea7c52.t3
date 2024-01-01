@@ -698,13 +698,13 @@
       "Outputs": []
     },
     {
-      "Id": "914110ee-0fea-4223-8632-0d658735ce64"/*WaveForm2*/,
+      "Id": "914110ee-0fea-4223-8632-0d658735ce64"/*WaveForm*/,
       "SymbolId": "92e28e50-bd40-4f93-ba92-8f69cded6ec1",
       "InputValues": [],
       "Outputs": []
     },
     {
-      "Id": "011bfe4c-d8a5-40ce-b67f-8f66828395de"/*WaveForm2*/,
+      "Id": "011bfe4c-d8a5-40ce-b67f-8f66828395de"/*WaveForm*/,
       "SymbolId": "92e28e50-bd40-4f93-ba92-8f69cded6ec1",
       "InputValues": [],
       "Outputs": []

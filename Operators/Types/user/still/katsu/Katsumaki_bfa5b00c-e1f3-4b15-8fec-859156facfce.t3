@@ -895,7 +895,7 @@
       "Outputs": []
     },
     {
-      "Id": "7ffc1cdd-0351-46a6-829a-c00d02fef97d"/*RandomizePoints*/,
+      "Id": "7ffc1cdd-0351-46a6-829a-c00d02fef97d"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -1147,7 +1147,7 @@
       "Outputs": []
     },
     {
-      "Id": "83d7a424-f23a-48ea-a1fe-763731203811"/*RandomizePoints*/,
+      "Id": "83d7a424-f23a-48ea-a1fe-763731203811"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -1217,7 +1217,7 @@
       "Outputs": []
     },
     {
-      "Id": "7816c3af-b8cc-4451-8bdb-a3118710d71a"/*RandomizePoints*/,
+      "Id": "7816c3af-b8cc-4451-8bdb-a3118710d71a"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -1308,7 +1308,7 @@
       "Outputs": []
     },
     {
-      "Id": "882946a2-d40d-4be6-a662-a4105bfa59a1"/*RandomizePoints*/,
+      "Id": "882946a2-d40d-4be6-a662-a4105bfa59a1"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -2282,7 +2282,7 @@
       "Outputs": []
     },
     {
-      "Id": "a3046b81-f35e-4d3d-804a-f42b4d1c1617"/*RandomizePoints*/,
+      "Id": "a3046b81-f35e-4d3d-804a-f42b4d1c1617"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {
@@ -2554,7 +2554,7 @@
       "Outputs": []
     },
     {
-      "Id": "1e99fdf0-de7e-45d3-88da-62677f944273"/*RandomizePoints*/,
+      "Id": "1e99fdf0-de7e-45d3-88da-62677f944273"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {

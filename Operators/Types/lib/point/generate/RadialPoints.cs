@@ -62,6 +62,9 @@ namespace T3.Operators.Types.Id_3352d3a1_ab04_4d0a_bb43_da69095b73fd
 
         [Input(Guid = "cd917c3d-489e-4e4d-b5dc-eacc846d82ef")]
         public readonly InputSlot<float> OrientationAngle = new();
+
+        [Input(Guid = "ef8d1fe2-8470-4113-8d20-40a92d0dab97")]
+        public readonly InputSlot<System.Numerics.Vector2> BiasAndGain = new InputSlot<System.Numerics.Vector2>();
     }
 }
 

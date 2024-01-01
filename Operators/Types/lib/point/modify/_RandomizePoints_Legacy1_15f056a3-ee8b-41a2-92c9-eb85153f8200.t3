@@ -1,5 +1,5 @@
 {
-  "Name": "RandomizePoints",
+  "Name": "_RandomizePoints_Legacy1",
   "Id": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
   "Namespace": "lib.point.modify",
   "Inputs": [
@@ -64,7 +64,7 @@
         {
           "Id": "afb69c81-5063-4cb9-9d42-841b994b5ec0"/*Source*/,
           "Type": "System.String",
-          "Value": "Resources\\lib\\points\\modify\\RandomizePoints.hlsl"
+          "Value": "Resources\\lib\\points\\modify\\RandomizePoints_Legacy1.hlsl"
         }
       ],
       "Outputs": []

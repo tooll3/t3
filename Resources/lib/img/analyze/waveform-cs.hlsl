@@ -24,6 +24,8 @@ void main(uint3 i : SV_DispatchThreadID)
 
     GroupMemoryBarrierWithGroupSync();
 
+    const int steps = 256;
+
     if(i.y == 0) 
     {
         float dashColor = i.x % 8 < 4 ? 1 : 0;
@@ -34,7 +36,7 @@ void main(uint3 i : SV_DispatchThreadID)
         for(int rowIndex= 0; rowIndex < 256; rowIndex++)
         {
             
-            float2 uv = float2(float2( i.x / (float)texWidth, rowIndex / 256.0 ));
+            float2 uv = float2(float2( i.x / (float)texWidth, (float) rowIndex / 256.0 ));
             float4 col = InputTexture.SampleLevel(texSampler, uv,0);
 
             int3 level = 512 - clamp( col.rgb * 256, 0, 511);

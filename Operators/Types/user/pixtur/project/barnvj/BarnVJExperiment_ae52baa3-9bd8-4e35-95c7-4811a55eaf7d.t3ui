@@ -1060,7 +1060,7 @@
       }
     },
     {
-      "ChildId": "a4656c81-bb44-4bef-ae58-109036dcdc0f"/*RandomizePoints*/,
+      "ChildId": "a4656c81-bb44-4bef-ae58-109036dcdc0f"/*_RandomizePoints_Legacy1*/,
       "Position": {
         "X": -3602.389,
         "Y": 4486.8926

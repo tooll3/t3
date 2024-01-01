@@ -257,7 +257,7 @@
       "Outputs": []
     },
     {
-      "Id": "030ae528-0d69-4b68-84d1-88df7f5d8914"/*RandomizePoints*/,
+      "Id": "030ae528-0d69-4b68-84d1-88df7f5d8914"/*_RandomizePoints_Legacy1*/,
       "SymbolId": "15f056a3-ee8b-41a2-92c9-eb85153f8200",
       "InputValues": [
         {

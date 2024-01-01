@@ -57,8 +57,8 @@ inline float3 Interpolate(float t, float3 pA, float3 tA, float3 tB, float3 pB)
     uint indexA = pairIndex % countA;
     uint indexB = pairIndex % countB;
 
-    float3 pA1 = PointsA[indexA].Position;
-    float3 pB1 = PointsB[indexB].Position;
+    float3 posA1 = PointsA[indexA].Position;
+    float3 posB1 = PointsB[indexB].Position;
     float3 forward = TangentDirection;
 
     float paW = PointsA[indexA].W;
@@ -66,15 +66,17 @@ inline float3 Interpolate(float t, float3 pA, float3 tA, float3 tB, float3 pB)
     float3 tA = qRotateVec3(forward, PointsA[indexA].Rotation) * (TangentA + paW * TangentA_WFactor);
     float3 tB = qRotateVec3(forward, PointsB[indexB].Rotation) * (TangentB + pbW * TangentB_WFactor);
 
-    float3 pF = Interpolate(f, pA1, tA, tB, pB1);
+    float3 pF = Interpolate(f, posA1, tA, tB, posB1);
     ResultPoints[i.x].Position = pF;
+    ResultPoints[i.x].Color = lerp(PointsA[indexA].Color, PointsA[indexA].Color, f);
+    ResultPoints[i.x].Extend = lerp(PointsA[indexA].Extend, PointsA[indexA].Extend, f);
 
-    float3 pF2 = Interpolate(f+0.001, pA1, tA, tB, pB1);
+    float3 pF2 = Interpolate(f+0.001, posA1, tA, tB, posB1);
     float3 forward2= normalize(pF-pF2);
     float3 up = float3(0,0,1);
     float fade = 1-abs(dot(up,forward2));
     float3 refUp = lerp(tA, tB, f);
     ResultPoints[i.x].Rotation =  qLookAt(forward2, refUp);
-    float w = isnan(paW) || isnan(paW) ? sqrt(-1) : 1;
+    float w = isnan(paW) || isnan(paW) ? NAN : lerp(PointsA[indexA].W, PointsA[indexA].W, f);;
     ResultPoints[i.x].W = InitWTo01 > 0.5 ? f : w;
 }

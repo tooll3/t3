@@ -1,6 +1,7 @@
 #include "lib/shared/hash-functions.hlsl"
 #include "lib/shared/point.hlsl"
 #include "lib/shared/quat-functions.hlsl"
+#include "lib/shared/bias-functions.hlsl"
 
 
 cbuffer Params : register(b0)
@@ -30,11 +31,11 @@ cbuffer Params : register(b0)
     float3 OrientationAxis;
     float1 OrientationAngle;
 
+    float2 BiasAndGain;
+
 }
 
 
-//StructuredBuffer<Point> Points1 : t0;         // input
-//StructuredBuffer<Point> Points2 : t1;         // input
 RWStructuredBuffer<Point> ResultPoints : u0;    // output
 
 float3 RotatePointAroundAxis(float3 In, float3 Axis, float Rotation)
@@ -54,7 +55,6 @@ float3 RotatePointAroundAxis(float3 In, float3 Axis, float Rotation)
 
 [numthreads(256,4,1)]
 void main(uint3 i : SV_DispatchThreadID)
-//void main(uint i : SV_GroupIndex)
 {
     uint pointCount,stride;
     ResultPoints.GetDimensions(pointCount, stride);
@@ -66,12 +66,13 @@ void main(uint3 i : SV_DispatchThreadID)
     bool closeCircle =  CloseCircle > 0.5;
     float angleStepCount = closeCircle ? (pointCount -2) : pointCount;
 
-    float f = (float)(index)/angleStepCount;
+    float ff = (float)(index)/angleStepCount;
+    float f = GetBiasGain(ff, BiasAndGain.x, BiasAndGain.y);
+
     float l = Radius + RadiusOffset * f;
     float angle = (StartAngle * 3.141578/180 + Cycles * 2 *3.141578 * f);
     float3 up = Axis.y > 0.7 ? float3(0,0,1) :  float3(0,1,0);
     float3 direction = normalize(cross(Axis, up));
-    //float direction = normalize(Axis);
 
     float3 v2 = RotatePointAroundAxis(direction * l , Axis, angle);
 
@@ -81,10 +82,9 @@ void main(uint3 i : SV_DispatchThreadID)
     
     ResultPoints[index].Position = v;
     ResultPoints[index].W = (closeCircle && index == pointCount -1)
-                          ? sqrt(-1) // NaN
+                          ? NAN
                           : W + WOffset * f;
 
-    //float4 orientation = normalize(qFromAngleAxis(OrientationAngle * 3.141578/180 , normalize(OrientationAxis)));
     float4 orientation = qFromAngleAxis(3.141578/2 * 1, normalize(OrientationAxis));
 
     orientation = qMul( orientation, qFromAngleAxis( (OrientationAngle) / 180 * 3.141578, float3(1,0,0)));
@@ -98,6 +98,7 @@ void main(uint3 i : SV_DispatchThreadID)
 
     ResultPoints[index].Rotation = qMul(normalize(qMul(spin2, lookat)), spin);
     ResultPoints[index].Color = 1;
+    ResultPoints[index].Extend = 1;
     ResultPoints[index].Selected = 1;
 
 }
