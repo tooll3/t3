@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -17,6 +18,7 @@ using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
+using T3.Core.Resource;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
@@ -44,14 +46,32 @@ public class T3Ui
     static T3Ui()
     {
         var operatorAssemblies = RuntimeAssemblies.OperatorAssemblies;
-        SymbolData.CountLoading = operatorAssemblies.Count;
-        UiSymbolData.CountLoadingUi = operatorAssemblies.Count;
+        
         UiSymbolDatas = operatorAssemblies
-                       .AsParallel()
-                       .Select(a => new UiSymbolData(a, enableLog: false))
+                       .Select(a => new UiSymbolData(a))
                        .ToArray();
 
-        Log.Debug($"Loaded {UiSymbolDatas.Count} operator assemblies.");
+        ConcurrentDictionary<UiSymbolData, List<SymbolJson.SymbolReadResult>> loadedSymbols = new();
+        UiSymbolDatas.AsParallel().ForAll(uiSymbolData =>
+                                          {
+                                              uiSymbolData.LoadSymbols(false, out var list);
+                                              loadedSymbols.TryAdd(uiSymbolData, list);
+                                          });
+        loadedSymbols.AsParallel().ForAll(pair => pair.Key.ApplySymbolChildren(pair.Value));
+        
+        UiSymbolDatas.AsParallel().ForAll(uiSymbolData => uiSymbolData.LoadUiFiles());
+        
+        foreach(var uiSymbolData in UiSymbolDatas)
+        {
+            uiSymbolData.RegisterUiSymbols(enableLog: false);
+        }
+        
+        foreach(var uiSymbolData in UiSymbolDatas)
+        {
+            uiSymbolData.TryCreateHome();
+        }
+        
+        Log.Debug($"Loaded {UiSymbolDatas.Count} UI datas.");
     }
 
     public static void Initialize()

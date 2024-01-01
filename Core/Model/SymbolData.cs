@@ -22,7 +22,6 @@ namespace T3.Core.Model;
 public partial class SymbolData
 {
     public AssemblyInformation AssemblyInformation { get; }
-    public static int CountLoading;
 
     static SymbolData()
     {
@@ -37,25 +36,24 @@ public partial class SymbolData
         SymbolDatas.TryAdd(assembly, this);
     }
 
-    public virtual void Load(bool enableLog)
+    public void LoadSymbols(bool enableLog, out List<SymbolJson.SymbolReadResult> symbolsRead)
     {
         Log.Debug("Loading symbols...");
         var symbolFiles = Directory.GetFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
 
-        var symbolsRead = symbolFiles.AsParallel()
-                                     .Select(JsonFileResult<Symbol>.ReadAndCreate)
-                                     .Select(ReadSymbolFromJsonFileResult)
-                                     .Where(symbolReadResult => symbolReadResult.Symbol is not null)
-                                     .ToList(); // Execute and bring back to main thread
-
-        Log.Debug("Registering loaded symbols...");
+        symbolsRead = symbolFiles.AsParallel()
+                                 .Select(JsonFileResult<Symbol>.ReadAndCreate)
+                                 .Select(ReadSymbolFromJsonFileResult)
+                                 .Where(symbolReadResult => symbolReadResult.Symbol is not null)
+                                 .ToList(); // Execute and bring back to main thread
 
         // Check if there are symbols without a file, if yes add these
         var instanceTypesWithoutFile = AssemblyInformation.Assembly.ExportedTypes
-                                                          .AsParallel()
                                                           .Where(type => type.IsSubclassOf(typeof(Instance)))
                                                           .Where(type => !type.IsGenericType)
                                                           .ToHashSet();
+
+        Log.Debug("Registering loaded symbols...");
 
         foreach (var readSymbolResult in symbolsRead)
         {
@@ -81,29 +79,10 @@ public partial class SymbolData
             RegisterTypeWithoutFile(newType);
         }
 
-        Interlocked.Decrement(ref CountLoading);
-        
-        while(CountLoading > 0)
-            Thread.Sleep(100);
-
-        Log.Debug("Applying symbol children...");
-        Parallel.ForEach(symbolsRead, ReadAndApplyChildren);
-
-        return;
-
-        void ReadAndApplyChildren(SymbolJson.SymbolReadResult readSymbolResult)
-        {
-            var gotSymbolChildren = SymbolJson.TryReadAndApplySymbolChildren(readSymbolResult);
-            if (!gotSymbolChildren)
-            {
-                Log.Error($"Problem obtaining children of {readSymbolResult.Symbol.Name} ({readSymbolResult.Symbol.Id})");
-            }
-        }
-
         SymbolJson.SymbolReadResult ReadSymbolFromJsonFileResult(JsonFileResult<Symbol> jsonInfo)
         {
             var result = SymbolJson.ReadSymbolRoot(jsonInfo.Guid, jsonInfo.JToken, allowNonOperatorInstanceType: false, AssemblyInformation);
-            
+
             jsonInfo.Object = result.Symbol;
             return result;
         }
@@ -143,9 +122,9 @@ public partial class SymbolData
         static bool TryAddSymbolTo(Dictionary<Guid, Symbol> collection, Symbol symbol)
         {
             bool added;
-            lock(collection)
+            lock (collection)
                 added = collection.TryAdd(symbol.Id, symbol);
-            
+
             if (!added)
             {
                 var existingSymbol = collection[symbol.Id];
@@ -153,6 +132,23 @@ public partial class SymbolData
             }
 
             return added;
+        }
+    }
+
+    public void ApplySymbolChildren(List<SymbolJson.SymbolReadResult> symbolsRead)
+    {
+        Log.Debug($"{AssemblyInformation.Name}: Applying symbol children...");
+        Parallel.ForEach(symbolsRead, ReadAndApplyChildren);
+        Log.Debug($"{AssemblyInformation.Name}: Done applying symbol children.");
+        return;
+
+        void ReadAndApplyChildren(SymbolJson.SymbolReadResult readSymbolResult)
+        {
+            var gotSymbolChildren = SymbolJson.TryReadAndApplySymbolChildren(readSymbolResult);
+            if (!gotSymbolChildren)
+            {
+                Log.Error($"Problem obtaining children of {readSymbolResult.Symbol.Name} ({readSymbolResult.Symbol.Id})");
+            }
         }
     }
 

@@ -508,7 +508,7 @@ namespace T3.Core.Resource
             public const string Animator = "Animator";
         }
 
-        internal readonly struct SymbolReadResult
+        public readonly struct SymbolReadResult
         {
             public readonly Symbol Symbol;
             public readonly JsonChildResult[] ChildrenJsonArray;
@@ -522,7 +522,7 @@ namespace T3.Core.Resource
             }
         }
 
-        internal readonly struct JsonChildResult
+        public readonly struct JsonChildResult
         {
             public readonly Guid SymbolId;
             public readonly Guid ChildId;
