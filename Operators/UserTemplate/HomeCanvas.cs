@@ -1,7 +1,9 @@
-﻿using T3.Core.Operator;
+using System.Runtime.InteropServices;
+using T3.Core.Operator;
 
-namespace T3.Operators.Types.Id_dab61a12_9996_401e_9aa6_328dd6292beb
+namespace User
 {
+	[Guid("dab61a12-9996-401e-9aa6-328dd6292beb")]
     public class HomeCanvas : Instance<HomeCanvas>
     {
     }

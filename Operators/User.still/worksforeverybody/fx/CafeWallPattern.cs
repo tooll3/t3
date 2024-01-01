@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_6854e04f_8b60_41b2_a369_ca0b715c4df3
+namespace Operators.User.still.worksforeverybody.fx
 {
+	[Guid("6854e04f-8b60-41b2-a369-ca0b715c4df3")]
     public class CafeWallPattern : Instance<CafeWallPattern>
     {
         [Output(Guid = "cdf70feb-2cb0-44cd-bf4b-38c7af917029")]

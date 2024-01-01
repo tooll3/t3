@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Compilation;
 using T3.Core.Logging;
-using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.SystemUi;
 
 // ReSharper disable AssignNullToNotNullAttribute
 
-namespace T3.Core.Resource
+namespace T3.Core.Model
 {
     public static class JsonExtensions
     {

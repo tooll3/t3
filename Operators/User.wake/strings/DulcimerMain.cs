@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_4c6d2682_e92a_46c1_9f16_19d61fb1fce5
+namespace Operators.User.wake.strings
 {
+	[Guid("4c6d2682-e92a-46c1-9f16-19d61fb1fce5")]
     public class DulcimerMain : Instance<DulcimerMain>
     {
 

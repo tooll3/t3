@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_cb28de70_6111_4f64_b6ee_f52b1a35b44a
+namespace Operators.User.still.worksforeverybody.fx
 {
+	[Guid("cb28de70-6111-4f64-b6ee-f52b1a35b44a")]
     public class _OldTvGlitch : Instance<_OldTvGlitch>
     {
         [Output(Guid = "0da718da-11a9-4d48-8a39-2097a5a8c2a8")]

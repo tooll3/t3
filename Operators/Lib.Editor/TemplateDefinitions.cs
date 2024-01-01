@@ -1,9 +1,9 @@
 using System.ComponentModel;
 using System.Diagnostics;
+using Operators.Lib.dx11._;
+using Operators.Lib.dx11.compute;
 using T3.Core.Logging;
 using T3.Editor.Gui.Templates;
-using T3.Operators.Types.Id_a256d70f_adb3_481d_a926_caf35bd3e64c;
-using T3.Operators.Types.Id_bd0b9c5b_c611_42d0_8200_31af9661f189;
 
 namespace Operators.Lib.Editor;
 

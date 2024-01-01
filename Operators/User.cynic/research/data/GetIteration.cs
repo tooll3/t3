@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_4c088b67_be47_4599_bd64_5f277abb0113
+namespace Operators.User.cynic.research.data
 {
+	[Guid("4c088b67-be47-4599-bd64-5f277abb0113")]
     public class GetIteration : Instance<GetIteration>
     {
         [Output(Guid = "c3a199dc-993c-4f43-a4aa-f355e6584a64", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

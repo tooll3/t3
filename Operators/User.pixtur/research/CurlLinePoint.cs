@@ -1,11 +1,12 @@
-using System;
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_97ded8ca_bdcf_4cb8_a791_a05ba4393888
+namespace Operators.User.pixtur.research
 {
+	[Guid("97ded8ca-bdcf-4cb8-a791-a05ba4393888")]
     public class CurlLinePoint : Instance<CurlLinePoint>
 ,ITransformable
     {

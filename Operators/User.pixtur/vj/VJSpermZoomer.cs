@@ -1,11 +1,13 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_a9bd30b1_8b58_4b88_8c8e_5f14b425edec
+namespace Operators.User.pixtur.vj
 {
+	[Guid("a9bd30b1-8b58-4b88-8c8e-5f14b425edec")]
     public class VJSpermZoomer : Instance<VJSpermZoomer>
     {
         [Output(Guid = "e747675e-ca85-471c-9661-baae32112caa")]

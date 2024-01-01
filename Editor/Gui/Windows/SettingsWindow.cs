@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Numerics;
 using ImGuiNET;
-using Operators.Utils;
 using T3.Core.IO;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;

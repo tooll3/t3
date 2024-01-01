@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_73a55607_c892_4a85_946b_e37354c4c0e4
+namespace Operators.User.still.there.helpers
 {
+	[Guid("73a55607-c892-4a85-946b-e37354c4c0e4")]
     public class DrawParticles : Instance<DrawParticles>
     {
         [Output(Guid = "29ca47fe-0dbe-4727-a958-55b9c78ca50c", DirtyFlagTrigger = DirtyFlagTrigger.Always)]

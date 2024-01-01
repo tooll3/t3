@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_f56a981c_2080_4617_b9f1_d7a625a44b57
+namespace Operators.User.still.there.scenes
 {
+	[Guid("f56a981c-2080-4617-b9f1-d7a625a44b57")]
     public class WispsParticles : Instance<WispsParticles>
     {
 

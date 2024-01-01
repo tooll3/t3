@@ -1,11 +1,13 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_0eff6d8b_0fca_420d_839c_3e90dff76cb8
+namespace Operators.User.pixtur.learning.cs._05_physarum
 {
+	[Guid("0eff6d8b-0fca-420d-839c-3e90dff76cb8")]
     public class MovingAgents01 : Instance<MovingAgents01>
     {
         [Output(Guid = "93a2479a-e42d-4411-94c4-5280dc8d12fc")]

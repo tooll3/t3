@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_35dd9888_dea5_4ca4_8e1d_b8f0a59ec0ea
+namespace Operators.User.cynic.research
 {
+	[Guid("35dd9888-dea5-4ca4-8e1d-b8f0a59ec0ea")]
     public class ExecuteFloat : Instance<ExecuteFloat>
     {
         [Output(Guid = "30fe17a0-1825-47f3-806d-c3d74a75d691", DirtyFlagTrigger = DirtyFlagTrigger.Always)]

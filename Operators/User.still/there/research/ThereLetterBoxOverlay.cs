@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_2d388f2b_3d07_4cbd_a86a_63c5cb83ed26
+namespace Operators.User.still.there.research
 {
+	[Guid("2d388f2b-3d07-4cbd-a86a-63c5cb83ed26")]
     public class ThereLetterBoxOverlay : Instance<ThereLetterBoxOverlay>
     {
         [Output(Guid = "532edc49-d0db-47e8-8e40-9acb7a32038e")]

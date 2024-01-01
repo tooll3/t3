@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_957961ad_797c_48ac_b9d6_7f2fa2ce17eb
+namespace Operators.User.still.worksforeverybody
 {
+	[Guid("957961ad-797c-48ac-b9d6-7f2fa2ce17eb")]
     public class ParamBlender : Instance<ParamBlender>
     {
 

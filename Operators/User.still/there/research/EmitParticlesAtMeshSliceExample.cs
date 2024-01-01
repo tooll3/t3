@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_ccafae36_6001_4ee8_b0b5_76c1adebcdde
+namespace Operators.User.still.there.research
 {
+	[Guid("ccafae36-6001-4ee8-b0b5-76c1adebcdde")]
     public class EmitParticlesAtMeshSliceExample : Instance<EmitParticlesAtMeshSliceExample>
     {
         [Output(Guid = "c50025cd-95d0-4aa4-b9fe-6088b5c9cda6")]

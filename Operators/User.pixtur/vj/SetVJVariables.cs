@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_e14af8a3_8672_4348_af9e_735714c31c92
+namespace Operators.User.pixtur.vj
 {
+	[Guid("e14af8a3-8672-4348-af9e-735714c31c92")]
     public class SetVJVariables : Instance<SetVJVariables>
     {
 

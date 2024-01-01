@@ -1,11 +1,13 @@
 using System.Reflection;
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_f83bd8ce_ca66_4d31_9f2f_65066f15a3b2
+namespace Operators.User.cynic.research.data
 {
+	[Guid("f83bd8ce-ca66-4d31-9f2f-65066f15a3b2")]
     public class GetIteratedFloat : Instance<GetIteratedFloat>
     {
         [Output(Guid = "1170f76f-b438-4b1d-b329-ee07b950f291", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

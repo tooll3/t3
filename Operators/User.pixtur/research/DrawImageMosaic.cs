@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_816eda66_79c3_430c_9f03_d51b93b17987
+namespace Operators.User.pixtur.research
 {
+	[Guid("816eda66-79c3-430c-9f03-d51b93b17987")]
     public class DrawImageMosaic : Instance<DrawImageMosaic>
     {
         [Output(Guid = "7141e084-d5c6-4bbc-b30c-20f3826bdfd1")]

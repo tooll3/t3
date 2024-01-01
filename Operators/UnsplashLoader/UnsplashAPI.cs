@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 using Unsplasharp;
 using Unsplasharp.Models;
 
-namespace T3.Operators.Types.Id_89162b9f_75f5_4d32_9d28_8259cf47cf58 
+namespace UnsplashLoader 
 {
     public class UnsplashAPI : Instance<UnsplashAPI>
     {

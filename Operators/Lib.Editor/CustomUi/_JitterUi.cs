@@ -1,9 +1,9 @@
 ﻿using ImGuiNET;
+using Operators.Lib.anim._obsolete;
 using T3.Core.Operator;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using T3.Operators.Types.Id_3b0eb327_6ad8_424f_bca7_ccbfa2c9a986;
 
 namespace Operators.Lib.Editor.CustomUi
 {

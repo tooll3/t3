@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_8c370b92_c977_449f_8d35_15abfb3f0e29
+namespace Operators.Examples.lib.img.fx
 {
+	[Guid("8c370b92-c977-449f-8d35-15abfb3f0e29")]
     public class ChromaticDistortionExample : Instance<ChromaticDistortionExample>
     {
         [Output(Guid = "952874af-9138-4944-ba5c-8e53a77c424a")]

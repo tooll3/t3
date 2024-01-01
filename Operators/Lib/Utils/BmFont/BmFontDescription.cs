@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using T3.Core.Logging;
-using T3.Operators.Utils.BmFont;
 
-namespace Operators.Utils
+namespace Operators.Lib.Utils.BmFont
 {
     public class BmFontDescription
     {

@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_ace28a0c_b71a_41eb_bd50_b57da38a23ce
+namespace Operators.User.still.pinky
 {
+	[Guid("ace28a0c-b71a-41eb-bd50-b57da38a23ce")]
     public class PinkyDemo : Instance<PinkyDemo>
     {
 

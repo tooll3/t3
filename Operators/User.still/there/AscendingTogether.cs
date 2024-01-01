@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_44d744da_cf4e_43e5_853a_126cfed6c865
+namespace Operators.User.still.there
 {
+	[Guid("44d744da-cf4e-43e5-853a-126cfed6c865")]
     public class AscendingTogether : Instance<AscendingTogether>
     {
 

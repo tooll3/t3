@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_4895a804_84df_4642_a2d3_db34a268d887
+namespace Operators.User.still.worksforeverybody
 {
+	[Guid("4895a804-84df-4642-a2d3-db34a268d887")]
     public class DoyleSpiralPoints : Instance<DoyleSpiralPoints>
     {
         [Output(Guid = "16e5ed75-fdef-4cea-9c20-0c68e156311b")]

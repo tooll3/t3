@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_0dbc4f3f_8fdb_402b_a7cb_6949cf21a98a
+namespace Operators.User.pixtur.research
 {
+	[Guid("0dbc4f3f-8fdb-402b-a7cb-6949cf21a98a")]
     public class VideoClipLayer : Instance<VideoClipLayer>
     {
         [Output(Guid = "44A513CA-AB20-46DF-BB6B-F28B42DC86E0")]

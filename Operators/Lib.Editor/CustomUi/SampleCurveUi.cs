@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using ImGuiNET;
+using Operators.Lib.math.curve;
 using T3.Core.Operator;
 using T3.Editor.Gui;
 using T3.Editor.Gui.ChildUi.WidgetUi;
@@ -9,7 +10,6 @@ using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using T3.Operators.Types.Id_b724ea74_d5d7_4928_9cd1_7a7850e4e179;
 
 namespace Operators.Lib.Editor.CustomUi
 {

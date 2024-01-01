@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_ee425946_3c6f_4bac_ab25_0e30571e8ca6
+namespace Operators.User.pixtur.vj.lennies
 {
+	[Guid("ee425946-3c6f-4bac-ab25-0e30571e8ca6")]
     public class NothingChanges : Instance<NothingChanges>
     {
 

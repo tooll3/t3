@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
 using Rug.Osc;
 using T3.Core.Logging;
 
-namespace Operators.Utils
+namespace Operators.Lib.Utils
 {
     public static class OscConnectionManager
     {

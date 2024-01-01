@@ -1,12 +1,13 @@
-using System;
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_966b11dd_c9e2_4352_a249_6ca1ac5ad030
+namespace Operators.Examples
 {
+	[Guid("966b11dd-c9e2-4352-a249-6ca1ac5ad030")]
     public class MovingShapes : Instance<MovingShapes>, ITransformable
     {
         public MovingShapes()

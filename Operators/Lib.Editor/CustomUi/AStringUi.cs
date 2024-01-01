@@ -6,7 +6,7 @@ using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using String = T3.Operators.Types.Id_5880cbc3_a541_4484_a06a_0e6f77cdbe8e.AString;
+using String = Operators.Lib.@string.AString;
 
 namespace Operators.Lib.Editor.CustomUi
 {

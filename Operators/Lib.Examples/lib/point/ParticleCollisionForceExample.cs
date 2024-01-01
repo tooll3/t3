@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_54bea221_f2db_4ff8_afeb_200bcfd37871
+namespace Operators.Examples.lib.point
 {
+	[Guid("54bea221-f2db-4ff8-afeb-200bcfd37871")]
     public class ParticleCollisionForceExample : Instance<ParticleCollisionForceExample>
     {
         [Output(Guid = "f8998bf0-e142-4a4a-80c1-a5e0b8df4178")]

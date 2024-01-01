@@ -1,4 +1,4 @@
-namespace T3.Editor.Gui.Interaction.Timing;
+namespace T3.Core.IO;
 
 public interface ITapProvider
 {

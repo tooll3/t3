@@ -1,9 +1,7 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SpoutDX;
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -13,8 +11,9 @@ using T3.Core.Resource;
 using DeviceContext = OpenGL.DeviceContext;
 using Resource = SharpDX.DXGI.Resource;
 
-namespace T3.Operators.Types.Id_25307357_6f6c_45b1_a38d_de635510a845
+namespace SpoutNDI.video
 {
+    [Guid("25307357-6F6C-45B1-A38D-DE635510A845")]
     public class SpoutInput : Instance<SpoutInput>
     {
         [Output(Guid = "10955469-F5C0-476D-8A1B-9CB2803820A9", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

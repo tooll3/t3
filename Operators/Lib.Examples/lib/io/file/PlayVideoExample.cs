@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_1d56e2c6_9199_41e7_9404_24f4f6b75044
+namespace Operators.Examples.lib.io.file
 {
+	[Guid("1d56e2c6-9199-41e7-9404-24f4f6b75044")]
     public class PlayVideoExample : Instance<PlayVideoExample>
     {
         [Output(Guid = "36bf11a1-668d-41f0-8107-d6304b82430f")]

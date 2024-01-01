@@ -1,10 +1,10 @@
 ﻿using System.Numerics;
 using ImGuiNET;
+using Operators.Lib.math.@int;
 using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using T3.Operators.Types.Id_cc07b314_4582_4c2c_84b8_bb32f59fc09b;
 
 namespace Operators.Lib.Editor.CustomUi
 {

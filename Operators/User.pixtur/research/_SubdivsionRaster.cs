@@ -1,11 +1,13 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_f15cc064_1d70_4945_ae60_35d884788c0f
+namespace Operators.User.pixtur.research
 {
+	[Guid("f15cc064-1d70-4945-ae60-35d884788c0f")]
     public class _SubdivsionRaster : Instance<_SubdivsionRaster>
     {
 

@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_c1348a39_276f_4fe6_9210_f9f605cb0ece
+namespace Operators.Examples.lib._3d.draw
 {
+	[Guid("c1348a39-276f-4fe6-9210-f9f605cb0ece")]
     public class DrawBillboardsExample2 : Instance<DrawBillboardsExample2>
     {
         [Output(Guid = "50b6aca4-2bfe-4008-a1cf-aa7065576fb2")]

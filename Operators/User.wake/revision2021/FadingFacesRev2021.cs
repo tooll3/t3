@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_18d9721b_e170_4f4d_b630_30445aba5e20
+namespace Operators.User.wake.revision2021
 {
+	[Guid("18d9721b-e170-4f4d-b630-30445aba5e20")]
     public class FadingFacesRev2021 : Instance<FadingFacesRev2021>
     {
 

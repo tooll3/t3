@@ -1,11 +1,12 @@
-using System.Linq;
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_0b99ab8b_5d61_49da_9851_9ad723cad3ae
+namespace Operators.User.cynic.research.data
 {
+	[Guid("0b99ab8b-5d61-49da-9851-9ad723cad3ae")]
     public class JoinLists : Instance<JoinLists>
     {
         [Output(Guid = "35C71BF9-4636-46CB-BB99-387653755044")]

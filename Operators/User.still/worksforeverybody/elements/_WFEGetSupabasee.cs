@@ -1,13 +1,13 @@
-using System;
+using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
-using System.Net.Http;
-using System.Net.Http.Headers;
 
-namespace T3.Operators.Types.Id_5cc6cc51_75ab_474d_b0b8_aaa03ea77326
+namespace Operators.User.still.worksforeverybody.elements
 {
+	[Guid("5cc6cc51-75ab-474d-b0b8-aaa03ea77326")]
     public class _WFEGetSupabasee : Instance<_WFEGetSupabasee>
     {
         [Output(Guid = "D6DACC5B-726E-48C4-A6CD-76C0581DB809")]

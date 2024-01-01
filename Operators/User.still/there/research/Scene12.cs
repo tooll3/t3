@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_12cbdef0_bcca_4bc7_96f5_d5806ca295af
+namespace Operators.User.still.there.research
 {
+	[Guid("12cbdef0-bcca-4bc7-96f5-d5806ca295af")]
     public class Scene12 : Instance<Scene12>
     {
         [Output(Guid = "b5cbda1b-d44f-4195-9ee4-f743b1591df7")]

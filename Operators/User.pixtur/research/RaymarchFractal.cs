@@ -1,11 +1,13 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_c454abd8_62a8_4413_a463_668013a6a5bd
+namespace Operators.User.pixtur.research
 {
+	[Guid("c454abd8-62a8-4413-a463-668013a6a5bd")]
     public class RaymarchFractal : Instance<RaymarchFractal>
     {
         [Output(Guid = "da8c003a-893f-402e-a8c2-d92b41d4ea00")]

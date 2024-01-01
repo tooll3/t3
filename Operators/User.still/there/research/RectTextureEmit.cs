@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_c6911113_9411_4706_ad16_9e7bf58ad6c6
+namespace Operators.User.still.there.research
 {
+	[Guid("c6911113-9411-4706-ad16-9e7bf58ad6c6")]
     public class RectTextureEmit : Instance<RectTextureEmit>
     {
         [Output(Guid = "4efe1aa1-fc4c-495d-a25d-bcffe6491611")]

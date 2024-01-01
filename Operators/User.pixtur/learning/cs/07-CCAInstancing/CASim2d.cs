@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_63090462_3237_465e_a12c_25c8bbfaaa8c
+namespace Operators.User.pixtur.learning.cs._07_CCAInstancing
 {
+	[Guid("63090462-3237-465e-a12c-25c8bbfaaa8c")]
     public class CASim2d : Instance<CASim2d>
     {
 

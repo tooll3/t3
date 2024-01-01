@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_d7fbe2ed_1aed_4cb3_adb8_ecd0c7b8cda0
+namespace Operators.User.pixtur.research
 {
+	[Guid("d7fbe2ed-1aed-4cb3-adb8-ecd0c7b8cda0")]
     public class TomShadowParticleScene : Instance<TomShadowParticleScene>
     {
 

@@ -1,11 +1,13 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_8b285708_3f20_4957_9eb2_bb40e0d320ee
+namespace Operators.User.cynic.research.data
 {
+	[Guid("8b285708-3f20-4957-9eb2-bb40e0d320ee")]
     public class IterateList : Instance<IterateList>
     {
         [Output(Guid = "6FD6E8AB-7F90-4693-BE5C-391DE9027362")]

@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_fb5e9e3c_6ded_4e62_b456_28c8d5b29a1d
+namespace Operators.User.wake.revision2021
 {
+	[Guid("fb5e9e3c-6ded-4e62-b456-28c8d5b29a1d")]
     public class RevisionEnds : Instance<RevisionEnds>
     {
 

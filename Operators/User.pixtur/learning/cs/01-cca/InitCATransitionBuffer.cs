@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
@@ -10,8 +9,9 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace T3.Operators.Types.Id_8f696d89_a23f_42ae_b382_8670febb546b 
+namespace Operators.User.pixtur.learning.cs._01_cca 
 {
+	[Guid("8f696d89-a23f-42ae-b382-8670febb546b")]
     public class InitCATransitionBuffer : Instance<InitCATransitionBuffer>
     {
         [Output(Guid = "B0F31CB0-3D9F-426F-8E57-AAF94A5C8720", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

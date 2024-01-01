@@ -1,12 +1,14 @@
 using System.Numerics;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_d86e9585_d233_455a_9059_fa93debfed01
+namespace Operators.User.cynic.research.data
 {
+	[Guid("d86e9585-d233-455a-9059-fa93debfed01")]
     public class GetIteratedVec3 : Instance<GetIteratedVec3>
     {
         [Output(Guid = "E9839288-05DB-41E7-8326-3BE4F65F2410", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

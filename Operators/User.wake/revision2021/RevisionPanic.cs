@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_eb13f8e8_0fe1_47f0_8e86_45f85cf2f0f6
+namespace Operators.User.wake.revision2021
 {
+	[Guid("eb13f8e8-0fe1-47f0-8e86-45f85cf2f0f6")]
     public class RevisionPanic : Instance<RevisionPanic>
     {
 

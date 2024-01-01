@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace Truncon.Collections
+namespace T3.Editor.External.Truncon.Collections
 {
     internal class OrderedDictionaryDebugView<TKey, TValue>
     {

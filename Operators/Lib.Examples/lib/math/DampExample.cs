@@ -1,10 +1,12 @@
 using System.Numerics;
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_366b6a6f_9995_48a1_bc0e_5c516ec5170e
+namespace Operators.Examples.lib.math
 {
+	[Guid("366b6a6f-9995-48a1-bc0e-5c516ec5170e")]
     public class DampExample : Instance<DampExample>
     {
         [Output(Guid = "00f191f6-1377-42e3-8494-b9b5235c1a37")]

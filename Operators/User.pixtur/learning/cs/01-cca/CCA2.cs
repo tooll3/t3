@@ -1,11 +1,13 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_2d0cd5e6_361a_43c3_8daa_3be2c301dbc4
+namespace Operators.User.pixtur.learning.cs._01_cca
 {
+	[Guid("2d0cd5e6-361a-43c3-8daa-3be2c301dbc4")]
     public class CCA2 : Instance<CCA2>
     {
         [Output(Guid = "185c9d4c-6d88-46c4-b41b-9cb87bbb71f3")]

@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_1dfc9f6d_effa_407b_8f8d_5adf62504205 
+namespace Operators.User.still.worksforeverybody 
 {
+	[Guid("1dfc9f6d-effa-407b-8f8d-5adf62504205")]
     public class _WFEGameState : Instance<_WFEGameState>
     {
 

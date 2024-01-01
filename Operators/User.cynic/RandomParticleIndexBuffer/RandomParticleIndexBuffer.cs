@@ -1,12 +1,12 @@
-using System;
 using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace T3.Operators.Types.Id_6fae395d_c3a0_4693_a3dc_8959cda5a92b
+namespace Operators.User.cynic.RandomParticleIndexBuffer
 {
+	[Guid("6fae395d-c3a0-4693-a3dc-8959cda5a92b")]
     public class RandomParticleIndexBuffer : Instance<RandomParticleIndexBuffer>
     {
         [Output(Guid = "72f61c86-36bf-49cc-9263-0dcd9d617aa2")]

@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using NAudio.Midi;
 using T3.Core.Animation;
-using T3.Core.DataTypes.DataSet;
 using T3.Core.IO;
 using T3.Core.Model;
 
-namespace Operators.Utils.Recording;
+namespace T3.Core.DataTypes.DataSet;
 
 /// <summary>
 /// This is a stub for an implementation of midi signal recording

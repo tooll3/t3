@@ -1,10 +1,12 @@
-using T3.Core.DataTypes; 
+using System.Runtime.InteropServices;
+using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_6a978975_3996_4e0b_ae9b_782a49e17c73
+namespace Operators.User.pixtur.research
 {
+	[Guid("6a978975-3996-4e0b-ae9b-782a49e17c73")]
     public class _ParticleCollisionViz : Instance<_ParticleCollisionViz>
     {
         [Output(Guid = "63b28d36-719e-4cda-8212-026b707f05b0")]

@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_007b7ad9_e8f2_4830_be0f_d3f5f3444683
+namespace Operators.User.pixtur.fx
 {
+	[Guid("007b7ad9-e8f2-4830-be0f-d3f5f3444683")]
     public class ChromeBleed : Instance<ChromeBleed>
     {
         [Output(Guid = "5ff09d7b-4f78-4230-8ca7-4d3da4606e3f")]

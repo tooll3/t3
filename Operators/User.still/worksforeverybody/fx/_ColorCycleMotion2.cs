@@ -1,11 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
-using System;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_7b18587a_e75a_47c0_88de_c92ac6442c4c
+namespace Operators.User.still.worksforeverybody.fx
 {
+	[Guid("7b18587a-e75a-47c0-88de-c92ac6442c4c")]
     public class _ColorCycleMotion2 : Instance<_ColorCycleMotion2>
     {
         [Output(Guid = "0340f641-d087-42e6-831f-ae6083d834b1")]

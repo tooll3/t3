@@ -1,6 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -9,8 +8,9 @@ using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Vector3 = System.Numerics.Vector3;
 
-namespace T3.Operators.Types.Id_b3f34926_e536_439b_b47b_2ab89a0bc94d
+namespace Operators.User.pixtur.research
 {
+	[Guid("b3f34926-e536-439b-b47b-2ab89a0bc94d")]
     public class EarthNavigationTest : Instance<EarthNavigationTest>
     {
         [Output(Guid = "cab5c207-a997-4934-8c53-5a9f740284e0")]

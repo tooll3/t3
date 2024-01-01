@@ -7,13 +7,14 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Utils;
+using T3.Editor.External.Truncon.Collections;
 using T3.Editor.Gui.Graph.Interaction.Connections;
 using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.OutputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using Truncon.Collections;
+
 // ReSharper disable LoopCanBeConvertedToQuery
 
 namespace T3.Editor.Gui.Graph

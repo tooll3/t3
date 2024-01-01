@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_8228a543_f725_41d9_8629_f6d85f9e858e
+namespace Operators.User.pixtur.project.pillowfight
 {
+	[Guid("8228a543-f725-41d9-8629-f6d85f9e858e")]
     public class NearestNeighboughTest : Instance<NearestNeighboughTest>
     {
 

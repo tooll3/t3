@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_4aaa90f5_b9ea_4654_957d_dace5850c776
+namespace Operators.User.still.worksforeverybody.elements
 {
+	[Guid("4aaa90f5-b9ea-4654-957d-dace5850c776")]
     public class _DoubleArrowLinePoint : Instance<_DoubleArrowLinePoint>
     {
         [Output(Guid = "ad163f27-d9c1-4326-94c8-2bc59e19b903")]

@@ -1,11 +1,13 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_23ff34cd_7db7_4999_a0d1_bc3dfdb1f863
+namespace Operators.User.pixtur.learning.cs._07_CCAInstancing
 {
+	[Guid("23ff34cd-7db7-4999-a0d1-bc3dfdb1f863")]
     public class ScanHistoryPoints : Instance<ScanHistoryPoints>
     {
         [Output(Guid = "6f470a63-d210-430e-b53a-667be5e2c180")]

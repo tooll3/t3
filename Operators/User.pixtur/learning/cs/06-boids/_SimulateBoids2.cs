@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_9c3f142f_76d2_4395_9796_3857413084e2
+namespace Operators.User.pixtur.learning.cs._06_boids
 {
+	[Guid("9c3f142f-76d2-4395-9796-3857413084e2")]
     public class _SimulateBoids2 : Instance<_SimulateBoids2>
     {
 

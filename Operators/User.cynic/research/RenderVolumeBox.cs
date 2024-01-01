@@ -1,11 +1,13 @@
 using System.Numerics;
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_74107b72_28d8_4350_9748_01d001e5f033
+namespace Operators.User.cynic.research
 {
+	[Guid("74107b72-28d8-4350-9748-01d001e5f033")]
     public class RenderVolumeBox : Instance<RenderVolumeBox>
     {
         [Output(Guid = "da0d2f20-f771-4dc9-9734-57f230e073ec")]

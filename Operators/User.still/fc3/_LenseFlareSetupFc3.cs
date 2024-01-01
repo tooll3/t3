@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_6d594c55_a180_4742_8182_20b38929bab5
+namespace Operators.User.still.fc3
 {
+	[Guid("6d594c55-a180-4742-8182-20b38929bab5")]
     public class _LenseFlareSetupFc3 : Instance<_LenseFlareSetupFc3>
     {
         [Output(Guid = "476d24e7-2e66-48fe-bde3-8c6e12a44492")]

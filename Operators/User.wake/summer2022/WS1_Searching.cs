@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_90b20942_810b_480c_a19e_a41296cac9e6
+namespace Operators.User.wake.summer2022
 {
+	[Guid("90b20942-810b-480c-a19e-a41296cac9e6")]
     public class WS1_Searching : Instance<WS1_Searching>
     {
         [Output(Guid = "8902091c-9eee-4a4e-a55e-67768ba3465a")]

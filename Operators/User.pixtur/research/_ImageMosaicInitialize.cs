@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
@@ -5,8 +6,9 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_0c30ce21_0c02_4676_a636_63d744bfa788
+namespace Operators.User.pixtur.research
 {
+	[Guid("0c30ce21-0c02-4676-a636-63d744bfa788")]
     public class _ImageMosaicInitialize : Instance<_ImageMosaicInitialize>
     {
         [Output(Guid = "2edb3376-7daf-4ab7-9633-2890253bd2ee")]

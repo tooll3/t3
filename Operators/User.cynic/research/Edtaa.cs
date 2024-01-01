@@ -1,4 +1,4 @@
-using System;
+using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -13,8 +13,9 @@ using Color = T3.Core.DataTypes.Vector.Color;
 using Utilities = T3.Core.Utils.Utilities;
 using Vector2 = System.Numerics.Vector2;
 
-namespace T3.Operators.Types.Id_afcd4aad_8c8d_4e59_8e8e_a8c12d312200
+namespace Operators.User.cynic.research
 {
+	[Guid("afcd4aad-8c8d-4e59-8e8e-a8c12d312200")]
     public class Edtaa : Instance<Edtaa>
     {
         [Output(Guid = "aa16dd79-5311-4d97-a939-9a8ea82f5996")]

@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -7,8 +6,9 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_b0453fd5_e9c5_481a_aa6b_0040bd5c1318
+namespace Operators.User.pixtur.project.climatewatch
 {
+	[Guid("b0453fd5-e9c5-481a-aa6b-0040bd5c1318")]
     public class CM_StateMachine : Instance<CM_StateMachine>
     {
         [Output(Guid = "78a7a222-ef84-45cb-9732-eb29afc83c3d", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

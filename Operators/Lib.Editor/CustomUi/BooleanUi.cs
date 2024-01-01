@@ -7,7 +7,7 @@ using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using Boolean = T3.Operators.Types.Id_ed0f5188_8888_453e_8db4_20d87d18e9f4.Boolean;
+using Boolean = Operators.Lib.math.@bool.Boolean;
 
 namespace Operators.Lib.Editor.CustomUi
 {

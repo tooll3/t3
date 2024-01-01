@@ -1,11 +1,13 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_7f40b06a_d5f9_490a_9acc_24eff78e3b40
+namespace Operators.User.pixtur.learning.cs._07_CCAInstancing
 {
+	[Guid("7f40b06a-d5f9-490a-9acc-24eff78e3b40")]
     public class _CCAInstancing : Instance<_CCAInstancing>
     {
         [Output(Guid = "f9144007-9d95-459d-8a0e-62489fb76a91")]

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 /*
 Copyright (C) 2019 Antoine Guilbaud (IronPowerTga)
@@ -18,7 +17,7 @@ freely, subject to the following restrictions:
 
 3. This notice may not be removed or altered from any source distribution.
 */
-namespace T3.Operators.Utils.BmFont
+namespace Operators.Lib.Utils.BmFont
 {
     [XmlRoot("font")]
     public class Font

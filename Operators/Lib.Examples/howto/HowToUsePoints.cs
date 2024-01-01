@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_e6a11c29_11f9_49a3_9eff_463a93503420
+namespace Operators.Examples.howto
 {
+	[Guid("e6a11c29-11f9-49a3-9eff-463a93503420")]
     public class HowToUsePoints : Instance<HowToUsePoints>
     {
 

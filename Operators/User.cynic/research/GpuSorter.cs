@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
@@ -7,8 +8,9 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace T3.Operators.Types.Id_94a85a93_7d5c_401c_930c_c3a97a32932f
+namespace Operators.User.cynic.research
 {
+	[Guid("94a85a93-7d5c-401c-930c-c3a97a32932f")]
     public class GpuSorter : Instance<GpuSorter>
     {
         [Output(Guid = "14e52376-e375-495d-a466-74731457b189")]

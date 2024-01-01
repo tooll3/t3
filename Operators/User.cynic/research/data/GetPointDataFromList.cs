@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -6,8 +7,9 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_1de7b1be_cab6_4beb_a837_4c817562efb2
+namespace Operators.User.cynic.research.data
 {
+	[Guid("1de7b1be-cab6-4beb-a837-4c817562efb2")]
     public class GetPointDataFromList : Instance<GetPointDataFromList>
     {
         [Output(Guid = "84FDAB7B-E9DA-4A15-8EA6-D5E9593C924F")]

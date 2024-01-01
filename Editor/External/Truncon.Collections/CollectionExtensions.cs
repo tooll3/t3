@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Truncon.Collections.Extensions
+namespace T3.Editor.External.Truncon.Collections
 {
     /// <summary>
     /// Provides extensions methods for constructing instances of <see cref="OrderedDictionary{TKey, TValue}"/>.

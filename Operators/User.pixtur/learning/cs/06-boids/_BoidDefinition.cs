@@ -4,8 +4,9 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_6b8db50a_383c_486c_8065_3aefe8c85576
+namespace Operators.User.pixtur.learning.cs._06_boids
 {
+	[Guid("6b8db50a-383c-486c-8065-3aefe8c85576")]
     public class _BoidDefinition : Instance<_BoidDefinition>
     {
         [Output(Guid = "bdab6d26-afc1-4432-8069-5dcf1567eeba")]

@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_4e95a5e8_a075_4493_9aaa_48ea181198e2
+namespace Operators.User.pixtur.examples
 {
+	[Guid("4e95a5e8-a075-4493-9aaa-48ea181198e2")]
     public class ShadedRibbonsExample : Instance<ShadedRibbonsExample>
     {
         [Output(Guid = "59996d13-ffca-4817-9514-379ebde296fe")]

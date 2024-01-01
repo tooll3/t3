@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_fd873111_23b6_458a_918a_eefe990c6fa3
+namespace Operators.User.cynic.research
 {
+	[Guid("fd873111-23b6-458a-918a-eefe990c6fa3")]
     
     public class ForEachCodeTest : Instance<ForEachCodeTest>
     {

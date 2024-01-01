@@ -1,11 +1,13 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_2b6981f8_f66c_4132_9f37_6536d477ed65
+namespace Operators.User.pixtur.learning.cs._01_cca
 {
+	[Guid("2b6981f8-f66c-4132-9f37-6536d477ed65")]
     public class CASim : Instance<CASim>
     {
         [Output(Guid = "b55532fe-9582-46cf-b56e-d699b5ecd9d0")]

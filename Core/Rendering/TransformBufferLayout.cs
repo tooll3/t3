@@ -1,6 +1,8 @@
 ﻿using System.Numerics;
 using System.Runtime.InteropServices;
 
+namespace T3.Core.Rendering;
+
 [StructLayout(LayoutKind.Explicit, Size = 4 * 4 * 4 * 10)]
 public struct TransformBufferLayout
 {

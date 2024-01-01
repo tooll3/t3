@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_1cdedb32_f23b_4649_b4d3_9e158ef9be40
+namespace Operators.User.still.worksforeverybody.scenes
 {
+	[Guid("1cdedb32-f23b-4649-b4d3-9e158ef9be40")]
     public class TVIntroSceneSetup : Instance<TVIntroSceneSetup>
     {
         [Output(Guid = "087b8484-23cc-45e8-9290-3a98f07bd87a")]

@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_7b1093bb_33ec_4fa4_a102_9a28002b511c
+namespace Operators.User.still.there.helpers
 {
+	[Guid("7b1093bb-33ec-4fa4-a102-9a28002b511c")]
     public class CreditText : Instance<CreditText>
     {
         private enum HorizontalAligns

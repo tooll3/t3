@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_bfe540ef_f8ad_45a2_b557_cd419d9c8e44
+namespace Operators.User.cynic.research.data
 {
+	[Guid("bfe540ef-f8ad-45a2-b557-cd419d9c8e44")]
     public class DataList : Instance<DataList>
     {
         [Output(Guid = "d117b613-c41b-42ce-889d-502a8c779fff")]

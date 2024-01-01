@@ -1,11 +1,13 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_c0feef61_8cec_4418_8889_4001cbe1a957
+namespace Operators.User.still.there.fx
 {
+	[Guid("c0feef61-8cec-4418-8889-4001cbe1a957")]
     public class _PhysrumAgents2 : Instance<_PhysrumAgents2>
     {
         [Output(Guid = "9dd9d899-c1b2-4c63-b338-b779b2278f86")]

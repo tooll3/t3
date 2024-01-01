@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_7bc42ff0_2987_4dff_ab48_0eb4ab11f149
+namespace Operators.User.pixtur.Sim2dStacking
 {
+	[Guid("7bc42ff0-2987-4dff-ab48-0eb4ab11f149")]
     public class Sim2dStacking : Instance<Sim2dStacking>
     {
 

@@ -1,4 +1,4 @@
-using System;
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
@@ -9,8 +9,9 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace T3.Operators.Types.Id_000e08d0_669f_48df_9083_7aa0a43bbc05
+namespace Operators.User.cynic.research
 {
+	[Guid("000e08d0-669f-48df-9083-7aa0a43bbc05")]
     public class GpuMeasure : Instance<GpuMeasure>
     {
         [Output(Guid = "a506c67c-2e17-49ef-9ac3-990404ce76eb")]

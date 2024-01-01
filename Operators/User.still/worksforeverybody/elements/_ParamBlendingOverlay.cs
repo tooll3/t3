@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_9df0e38e_ccf1_405a_ab18_6586e652cdf1
+namespace Operators.User.still.worksforeverybody.elements
 {
+	[Guid("9df0e38e-ccf1-405a-ab18-6586e652cdf1")]
     public class _ParamBlendingOverlay : Instance<_ParamBlendingOverlay>
     {
         [Output(Guid = "9158ca50-6368-4266-9985-0f60b3e2b560")]

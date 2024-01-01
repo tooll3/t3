@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_791742c6_38e6_42ed_ad2a_d4c89584ac64
+namespace Operators.User.cynic.research
 {
+	[Guid("791742c6-38e6-42ed-ad2a-d4c89584ac64")]
     public class VoxelizeMesh : Instance<VoxelizeMesh>
     {
         [Output(Guid = "2e743321-d4f2-4f5f-a8a0-f11ddde74695")]

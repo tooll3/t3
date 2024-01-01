@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_3f7f8975_a7bb_47e6_96f7_061deb418e18
+namespace Operators.User.still.worksforeverybody
 {
+	[Guid("3f7f8975-a7bb-47e6-96f7-061deb418e18")]
     public class _WFEGameUi : Instance<_WFEGameUi>
     {
         [Output(Guid = "9f6bd5f3-eb31-40de-894a-51d55b4e0fa3")]

@@ -1,4 +1,4 @@
-﻿namespace T3.Core.DataTypes
+﻿namespace T3.Core.Utils
 {
     public class SharedEnums
     {

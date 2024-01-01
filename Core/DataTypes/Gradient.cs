@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Resource;
 using T3.Core.Utils;
 using T3.Core.Utils.CubicSplines;

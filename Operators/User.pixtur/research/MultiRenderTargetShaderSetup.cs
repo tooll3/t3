@@ -1,11 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-
-namespace T3.Operators.Types.Id_15ec2cc2_8c9e_41b7_8b55_0f39532a0882
+namespace Operators.User.pixtur.research
 {
+	[Guid("15ec2cc2-8c9e-41b7-8b55-0f39532a0882")]
     public class MultiRenderTargetShaderSetup : Instance<MultiRenderTargetShaderSetup>
     {
         [Output(Guid = "1cd18000-1e59-4262-929a-61ab9a26afcf")]

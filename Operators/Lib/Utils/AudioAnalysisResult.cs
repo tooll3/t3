@@ -1,4 +1,4 @@
-﻿namespace T3.Operators.Utils
+﻿namespace Operators.Lib.Utils
 {
     public static class AudioAnalysisResult
     {

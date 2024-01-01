@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_4f113e4a_eb27_4e40_8843_d15d54610f33
+namespace Operators.Examples.lib._3d.draw
 {
+	[Guid("4f113e4a-eb27-4e40-8843-d15d54610f33")]
     public class DrawMeshAtPointsExample : Instance<DrawMeshAtPointsExample>
     {
 

@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_6bb3fc41_f1d4_467e_afc6_62b452ec36be
+namespace Operators.User.pixtur.research
 {
+	[Guid("6bb3fc41-f1d4-467e-afc6-62b452ec36be")]
     public class _AnalyseAudioRange : Instance<_AnalyseAudioRange>
     {
         [Output(Guid = "3cdc4645-2094-4e36-b06c-fa0ccf5ac890")]

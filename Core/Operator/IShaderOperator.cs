@@ -1,11 +1,10 @@
 using System;
 using System.IO;
 using T3.Core.Logging;
-using T3.Core.Operator;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.Utils;
+namespace T3.Core.Operator;
 
 public interface IShaderOperator<T> where T : class, IDisposable
 {

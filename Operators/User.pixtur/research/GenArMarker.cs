@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_0bc39951_6eec_493c_b609_9e07a9a1dcee
+namespace Operators.User.pixtur.research
 {
+	[Guid("0bc39951-6eec-493c-b609-9e07a9a1dcee")]
     public class GenArMarker : Instance<GenArMarker>
     {
         [Output(Guid = "457c5d64-9937-46f1-bfde-df3db22240a5")]

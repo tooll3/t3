@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_b0248e6e_a82b_48d1_ac65_ee7b36038478
+namespace Operators.User.pixtur.examples
 {
+	[Guid("b0248e6e-a82b-48d1-ac65-ee7b36038478")]
     public class TutorialTitle : Instance<TutorialTitle>
     {
         [Output(Guid = "ad10e89c-3350-495d-a992-5f7d371defc8")]

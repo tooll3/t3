@@ -1,10 +1,11 @@
-using T3.Core.DataTypes.Vector;
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_dc34c54b_f856_4fd2_a182_68fd75189d7d
+namespace Operators.User.newemka980.img.generate
 {
+	[Guid("dc34c54b-f856-4fd2-a182-68fd75189d7d")]
     public class ShardNoise : Instance<ShardNoise>
     {
         [Output(Guid = "7aa58fd2-2bf4-41a3-8eea-269a082c93a8")]

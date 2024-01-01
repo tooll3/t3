@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using Truncon.Collections.Properties;
+using T3.Editor.External.Truncon.Collections.Properties;
 
-namespace Truncon.Collections
+namespace T3.Editor.External.Truncon.Collections
 {
     /// <summary>
     /// Represents a dictionary that tracks the order that items were added.

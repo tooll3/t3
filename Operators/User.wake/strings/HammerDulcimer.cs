@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_d1432885_5d16_49ec_afb9_845d0f3efcb8
+namespace Operators.User.wake.strings
 {
+	[Guid("d1432885-5d16-49ec-afb9-845d0f3efcb8")]
     public class HammerDulcimer : Instance<HammerDulcimer>
     {
 

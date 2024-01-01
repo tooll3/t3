@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_dcacc281_92c6_4e47_8eea_91fa8954ed86
+namespace Operators.User.newemka980.Shading
 {
+	[Guid("dcacc281-92c6-4e47-8eea-91fa8954ed86")]
     public class DrawMeshCelShading : Instance<DrawMeshCelShading>
     {
         [Output(Guid = "17c56856-5829-4e60-a359-809334a225d1")]

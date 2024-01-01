@@ -8,11 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Truncon.Collections.Properties {
-    using System;
-    using System.Reflection;
+using System.Reflection;
 
-
+namespace T3.Editor.External.Truncon.Collections.Properties {
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>

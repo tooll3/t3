@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_927a77d5_7bf0_477b_b288_4bb48d4980cd
+namespace Operators.User.pixtur.research
 {
+	[Guid("927a77d5-7bf0-477b-b288-4bb48d4980cd")]
     public class ImageSequenceClip : Instance<ImageSequenceClip>
     {
 

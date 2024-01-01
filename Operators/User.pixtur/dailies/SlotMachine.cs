@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_6f9126f8_fed5_4088_905a_7be8e800b968
+namespace Operators.User.pixtur.dailies
 {
+	[Guid("6f9126f8-fed5-4088-905a-7be8e800b968")]
     public class SlotMachine : Instance<SlotMachine>
     {
         [Output(Guid = "f079137c-1c94-49a6-ab95-6f54a7354183")]

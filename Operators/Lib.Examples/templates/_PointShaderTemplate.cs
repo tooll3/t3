@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_0db659a4_d0ba_4d23_acac_aea5ba5b57dc
+namespace Operators.Examples.templates
 {
+	[Guid("0db659a4-d0ba-4d23-acac-aea5ba5b57dc")]
     public class _PointShaderTemplate : Instance<_PointShaderTemplate>
     {
 

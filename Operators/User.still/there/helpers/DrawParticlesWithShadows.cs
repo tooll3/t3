@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_b1ffe4dd_d734_4392_a644_7c587979066e
+namespace Operators.User.still.there.helpers
 {
+	[Guid("b1ffe4dd-d734-4392-a644-7c587979066e")]
     public class DrawParticlesWithShadows : Instance<DrawParticlesWithShadows>
     {
         [Output(Guid = "09cbb463-d3bf-46d8-867f-3fe3dbc3a79b")]

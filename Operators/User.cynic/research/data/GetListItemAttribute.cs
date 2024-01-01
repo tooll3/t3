@@ -1,12 +1,14 @@
 using System.Reflection;
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_37794826_a099_4af3_90f4_1e49092a09e1
+namespace Operators.User.cynic.research.data
 {
+	[Guid("37794826-a099-4af3-90f4-1e49092a09e1")]
     public class GetListItemAttribute : Instance<GetListItemAttribute>
     {
         [Output(Guid = "0C83599F-1E0F-4BBF-B662-56B4CA5099B0", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

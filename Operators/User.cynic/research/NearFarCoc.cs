@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_5b234754_2b45_46db_becb_86f0bb547608
+namespace Operators.User.cynic.research
 {
+	[Guid("5b234754-2b45-46db-becb-86f0bb547608")]
     public class NearFarCoc : Instance<NearFarCoc>
     {
         [Output(Guid = "a0490fe9-eb0a-4fa8-a322-79e61d93e264")]

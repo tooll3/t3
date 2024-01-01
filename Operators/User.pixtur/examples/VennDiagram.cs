@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_a8f108a4_4d0a_4335_a3b5_f723239c25d1
+namespace Operators.User.pixtur.examples
 {
+	[Guid("a8f108a4-4d0a-4335-a3b5-f723239c25d1")]
     public class VennDiagram : Instance<VennDiagram>
     {
         [Output(Guid = "909e27e9-6b36-4f75-88c4-168f62c3a23a")]

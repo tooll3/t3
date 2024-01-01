@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_bd0f7059_021d_4dd1_8168_01e1e552fb04
+namespace Operators.User.fuzzy.fx
 {
+	[Guid("bd0f7059-021d-4dd1-8168-01e1e552fb04")]
     public class OpticalFlow2 : Instance<OpticalFlow2>
     {
 

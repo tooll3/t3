@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_487dad15_abb2_4d8f_a66a_520af9739684
+namespace Operators.User.pixtur.project.climatewatch.helpers
 {
+	[Guid("487dad15-abb2-4d8f-a66a-520af9739684")]
     public class CW_ResourceIcon : Instance<CW_ResourceIcon>
     {
         [Output(Guid = "2a942a7d-3e98-4c15-9736-675095c714c6")]

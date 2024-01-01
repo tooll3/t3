@@ -1,21 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using T3.Core.Logging;
-using T3.Core.Operator;
-using T3.Core.Operator.Attributes;
-using T3.Core.Operator.Slots;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using T3.Core.DataTypes;
+using T3.Core.Logging;
+using T3.Core.Operator;
+using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_3246cf5a_3c9b_4765_89d1_68852a3dd7a1
+namespace Operators.User.still.worksforeverybody.fx
 {
+	[Guid("3246cf5a-3c9b-4765-89d1-68852a3dd7a1")]
     public class SaveParameterSet : Instance<SaveParameterSet>
     {
         [Output(Guid = "90F4D983-685E-499B-B121-0D7F34669490")]

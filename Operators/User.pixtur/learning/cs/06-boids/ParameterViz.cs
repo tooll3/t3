@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_c6cf23b5_3085_4488_9e9e_5e09aa88a9fa
+namespace Operators.User.pixtur.learning.cs._06_boids
 {
+	[Guid("c6cf23b5-3085-4488-9e9e-5e09aa88a9fa")]
     public class ParameterViz : Instance<ParameterViz>
     {
         [Output(Guid = "dcc59129-7db3-454d-8741-7d2ff3fa4cf8")]

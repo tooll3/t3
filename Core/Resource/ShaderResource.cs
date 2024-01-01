@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Operators.Utils;
 using SharpDX.D3DCompiler;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes.Vector;
+using T3.Core.Operator;
 
 namespace T3.Core.Resource;
 

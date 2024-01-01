@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_cea732a4_c4c2_40df_a0ff_f209125e7c99
+namespace Operators.User.still.worksforeverybody.elements
 {
+	[Guid("cea732a4-c4c2-40df-a0ff-f209125e7c99")]
     public class _CreditOverlay : Instance<_CreditOverlay>
     {
         [Output(Guid = "4404e0a7-2470-4c14-8ebc-b61a641c9a6c")]

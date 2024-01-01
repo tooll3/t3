@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_ec9d9b04_9f86_49f9_9463_f5ba04e4ee00
+namespace Operators.User.still.there.scenes
 {
+	[Guid("ec9d9b04-9f86-49f9-9463-f5ba04e4ee00")]
     public class PartialCredits : Instance<PartialCredits>
     {
 

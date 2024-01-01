@@ -1,10 +1,12 @@
+using System.Runtime.InteropServices;
 using SharpDX.Direct3D11;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_efad36a7_0be9_4b72_a5e8_b990a99bc864
+namespace Operators.User.pixtur.learning.cs._06_boids
 {
+	[Guid("efad36a7-0be9-4b72-a5e8-b990a99bc864")]
     public class _SimulateBoids3 : Instance<_SimulateBoids3>
     {
         [Output(Guid = "44bb1234-4614-483b-9e8e-d0f6a96086c8")]

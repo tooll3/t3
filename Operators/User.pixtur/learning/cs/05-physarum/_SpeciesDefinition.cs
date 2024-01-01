@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using T3.Core.DataTypes;
@@ -7,10 +6,11 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace T3.Operators.Types.Id_924b8cc0_5b4b_41d0_a71b_b26465683910
+namespace Operators.User.pixtur.learning.cs._05_physarum
 {
     using BreedList = StructuredList<_SpeciesDefinition.Breed>;
-
+    
+	[Guid("924b8cc0-5b4b-41d0-a71b-b26465683910")]
     public class _SpeciesDefinition : Instance<_SpeciesDefinition>
     {
         [Output(Guid = "55498833-FF69-489F-AFE6-D54150920C56")]

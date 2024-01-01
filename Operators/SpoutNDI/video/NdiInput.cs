@@ -1,24 +1,20 @@
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using NewTek;
 using NewTek.NDI;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Threading;
-using T3.Core.DataTypes;
+using T3.Core.Animation;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
+using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
-using System.Diagnostics;
-using System.Linq;
-using T3.Core.Animation;
-using T3.Core.Operator.Interfaces;
 
-namespace T3.Operators.Types.Id_7567c3b0_9d91_40d2_899d_3a95b481d023
+namespace SpoutNDI.video
 {
+    [Guid("7567c3b0-9d91-40d2-899d-3a95b481d023")]
     public class NdiInput : Instance<NdiInput>,  IStatusProvider, ICustomDropdownHolder
     {
         [Output(Guid = "85F1AF38-074E-475D-94F5-F48079979509", DirtyFlagTrigger = DirtyFlagTrigger.Animated)]

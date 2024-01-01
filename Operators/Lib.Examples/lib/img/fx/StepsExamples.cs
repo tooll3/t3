@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_47ee078b_e24f_4493_a068_864938e2c90b
+namespace Operators.Examples.lib.img.fx
 {
+	[Guid("47ee078b-e24f-4493-a068-864938e2c90b")]
     public class StepsExamples : Instance<StepsExamples>
     {
 

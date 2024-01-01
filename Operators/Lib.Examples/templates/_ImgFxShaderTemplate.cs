@@ -1,9 +1,11 @@
+using System.Runtime.InteropServices;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace T3.Operators.Types.Id_fdd58452_ecb4_458d_9f5b_9bce356d5125
+namespace Operators.Examples.templates
 {
+	[Guid("fdd58452-ecb4-458d-9f5b-9bce356d5125")]
     public class _ImgFxShaderTemplate : Instance<_ImgFxShaderTemplate>
     {
         [Output(Guid = "46381071-48e7-4ae7-a5c2-63bcd0fba47b")]
