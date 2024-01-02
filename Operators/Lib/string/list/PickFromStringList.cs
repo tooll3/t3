@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.@string.list
+namespace Operators.lib.@string.list
 {
 	[Guid("ef357e66-24e9-4f54-8d86-869db74602f4")]
     public class PickFromStringList : Instance<PickFromStringList>

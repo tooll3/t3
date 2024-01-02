@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.io.audio
+namespace Operators.lib.io.audio
 {
 	[Guid("03477b9a-860e-4887-81c3-5fe51621122c")]
     public class AudioReaction : Instance<AudioReaction>

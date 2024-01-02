@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.dx11.compute
+namespace Operators.lib.dx11.compute
 {
 	[Guid("cc11774e-82dd-409f-97fb-5be3f2746f9d")]
     public class CalcInt2DispatchCount : Instance<CalcInt2DispatchCount>

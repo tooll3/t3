@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.fx
+namespace Operators.lib.img.fx
 {
 	[Guid("f9d453d1-04d9-43ef-9189-50008f93bcc2")]
     public class FluidFeedback : Instance<FluidFeedback>

@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.generate
+namespace Operators.lib.point.generate
 {
 	[Guid("3352d3a1-ab04-4d0a-bb43-da69095b73fd")]
     public class RadialPoints : Instance<RadialPoints>

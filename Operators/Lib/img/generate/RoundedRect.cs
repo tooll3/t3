@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.generate
+namespace Operators.lib.img.generate
 {
 	[Guid("bf7fcd04-0cf6-4518-86cc-48f74483d98d")]
     public class RoundedRect : Instance<RoundedRect>

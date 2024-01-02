@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.rendering
+namespace Operators.lib._3d.rendering
 {
 	[Guid("4912ba82-460a-4229-884d-6b647d64b08c")]
     public class SetPointLight : Instance<SetPointLight>

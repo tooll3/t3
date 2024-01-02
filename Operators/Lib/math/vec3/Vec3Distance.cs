@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.vec3
+namespace Operators.lib.math.vec3
 {
 	[Guid("4af1080c-3133-4070-a440-4cf2f4cc10a1")]
     public class Vec3Distance : Instance<Vec3Distance>

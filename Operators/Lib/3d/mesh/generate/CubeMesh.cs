@@ -15,7 +15,7 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Operators.Lib._3d.mesh.generate
+namespace Operators.lib._3d.mesh.generate
 {
 	[Guid("c47ab830-aae7-4f8f-b67c-9119bcbaf7df")]
     public class CubeMesh : Instance<CubeMesh>

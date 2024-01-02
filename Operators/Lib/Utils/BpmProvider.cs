@@ -1,6 +1,6 @@
 using T3.Core.IO;
 
-namespace Operators.Lib.Utils;
+namespace Operators.lib.Utils;
 
 public class BpmProvider : IBpmProvider
 {

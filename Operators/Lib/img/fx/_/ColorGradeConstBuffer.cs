@@ -6,7 +6,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace Operators.Lib.img.fx.@_
+namespace Operators.lib.img.fx._
 {
 	[Guid("1ba08d52-c8ec-479a-8dc0-95d92da36577")]
     public class ColorGradeConstBuffer : Instance<ColorGradeConstBuffer>

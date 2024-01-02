@@ -10,7 +10,7 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector4 = System.Numerics.Vector4;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace Operators.Lib.dx11.buffer
+namespace Operators.lib.dx11.buffer
 {
 	[Guid("724da755-2d0c-42ab-8335-8c88ec5fb078")]
     public class FloatsToBuffer : Instance<FloatsToBuffer>

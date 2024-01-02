@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.dx11.buffer
+namespace Operators.lib.dx11.buffer
 {
 	[Guid("020573c5-acaa-442e-9b1b-01338b0f4b62")]
     public class SwapBuffers : Instance<SwapBuffers>

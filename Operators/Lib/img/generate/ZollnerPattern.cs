@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.generate
+namespace Operators.lib.img.generate
 {
 	[Guid("f2a0a8d9-e2dc-476b-ac97-de13101a6fdb")]
     public class ZollnerPattern : Instance<ZollnerPattern>

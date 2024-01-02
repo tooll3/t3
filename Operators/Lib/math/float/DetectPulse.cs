@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.math.@float
+namespace Operators.lib.math.@float
 {
 	[Guid("7ff47023-622e-4834-8de5-2438d56c09bd")]
     public class DetectPulse : Instance<DetectPulse>

@@ -7,7 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.Lib.dx11.draw
+namespace Operators.lib.dx11.draw
 {
 	[Guid("9515d59d-0bd5-406b-96da-6a5f60215700")]
     public class SamplerStateOp : Instance<SamplerStateOp>

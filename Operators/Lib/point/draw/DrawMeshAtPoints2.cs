@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.draw
+namespace Operators.lib.point.draw
 {
 	[Guid("065f6edb-6d3d-414b-ab36-4620a957a18c")]
     public class DrawMeshAtPoints2 : Instance<DrawMeshAtPoints2>

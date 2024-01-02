@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.particles
+namespace Operators.lib.point.particles
 {
 	[Guid("3f8376f2-b89a-4ab4-b6dc-a3e8bf88c0a5")]
     public class TurbulenceForce : Instance<TurbulenceForce>

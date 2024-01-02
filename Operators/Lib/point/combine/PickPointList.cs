@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.point.combine
+namespace Operators.lib.point.combine
 {
 	[Guid("e9a0bdfd-6f6e-41e2-8c0c-cd5fee26e359")]
     public class PickPointList : Instance<PickPointList>

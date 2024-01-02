@@ -11,7 +11,7 @@ using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace Operators.Lib.img.fx.@_
+namespace Operators.lib.img.fx._
 {
 	[Guid("cc3cc712-9e87-49c6-b04b-49a12cf2ba75")]
     public class _SpecularPrefilter : Instance<_SpecularPrefilter>

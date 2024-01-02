@@ -7,7 +7,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using ComputeShaderD3D = SharpDX.Direct3D11.ComputeShader;
 
-namespace Operators.Lib.dx11.compute
+namespace Operators.lib.dx11.compute
 {
 	[Guid("4e5bc624-9cda-46a8-9681-7fd412ea3893")]
     public class ComputeShaderFromSource : Instance<ComputeShaderFromSource>, IStatusProvider, IShaderOperator<ComputeShaderD3D>

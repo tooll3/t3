@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.transform
+namespace Operators.lib.point.transform
 {
 	[Guid("58afd953-d3fd-44a9-b54b-ccb287edc40c")]
     public class FindClosestPointsOnMesh : Instance<FindClosestPointsOnMesh>

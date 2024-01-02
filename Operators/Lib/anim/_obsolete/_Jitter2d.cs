@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.anim._obsolete
+namespace Operators.lib.anim._obsolete
 {
 	[Guid("23794a1f-372d-484b-ac31-9470d0e77819")]
     public class _Jitter2d : Instance<_Jitter2d>

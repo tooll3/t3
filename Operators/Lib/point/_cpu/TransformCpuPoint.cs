@@ -8,7 +8,7 @@ using T3.Core.Utils;
 //using SharpDX;
 using Point = T3.Core.DataTypes.Point;
 
-namespace Operators.Lib.point._cpu
+namespace Operators.lib.point._cpu
 {
 	[Guid("5f2df291-4667-474e-9e84-3b64d4cc0555")]
     public class TransformCpuPoint : Instance<TransformCpuPoint>

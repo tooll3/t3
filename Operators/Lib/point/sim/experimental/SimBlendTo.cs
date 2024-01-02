@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.sim.experimental
+namespace Operators.lib.point.sim.experimental
 {
 	[Guid("4ba8019b-f265-4e41-8722-4ee0c2c64ba9")]
     public class SimBlendTo : Instance<SimBlendTo>

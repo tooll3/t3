@@ -10,7 +10,7 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace Operators.Lib.math.floats
+namespace Operators.lib.math.floats
 {
 	[Guid("55cc0f79-96c9-482e-9794-934dc0f87708")]
     public class ValuesToTexture : Instance<ValuesToTexture>

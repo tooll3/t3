@@ -13,7 +13,7 @@ using T3.Core.Utils;
 using Buffer = SharpDX.Direct3D11.Buffer;
 // ReSharper disable RedundantNameQualifier
 
-namespace Operators.Lib._3d.mesh.generate
+namespace Operators.lib._3d.mesh.generate
 {
 	[Guid("be52b670-9749-4c0d-89f0-d8b101395227")]
     public class LoadObj : Instance<LoadObj>, IDescriptiveFilename, IStatusProvider

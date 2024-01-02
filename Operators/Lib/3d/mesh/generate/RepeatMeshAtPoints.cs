@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.mesh.generate
+namespace Operators.lib._3d.mesh.generate
 {
 	[Guid("ab496711-8b99-4463-aac9-b41fdf46608d")]
     public class RepeatMeshAtPoints : Instance<RepeatMeshAtPoints>

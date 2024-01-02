@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point._internal
+namespace Operators.lib.point._internal
 {
 	[Guid("f61ceb9b-74f8-4883-88ea-7e6c35b63bbd")]
     public class _BuildSpatialHashMap : Instance<_BuildSpatialHashMap>

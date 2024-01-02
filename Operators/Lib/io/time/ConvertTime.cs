@@ -6,7 +6,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.io.time
+namespace Operators.lib.io.time
 {
 	[Guid("0cd18cbb-e138-4b4b-a800-175fc39c61bf")]
     public class ConvertTime : Instance<ConvertTime>, IStatusProvider

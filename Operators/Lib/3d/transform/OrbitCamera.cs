@@ -11,7 +11,7 @@ using T3.Core.Utils.Geometry;
 
 // ReSharper disable SuggestVarOrType_SimpleTypes
 
-namespace Operators.Lib._3d.transform
+namespace Operators.lib._3d.transform
 {
 	[Guid("6415ed0e-3692-45e2-8e70-fe0cf4d29ebc")]
     public class OrbitCamera : Instance<OrbitCamera>

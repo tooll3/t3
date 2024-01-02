@@ -10,7 +10,7 @@ using T3.Core.Utils;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace Operators.Lib.point.helper
+namespace Operators.lib.point.helper
 {
 	[Guid("a5f4552f-7e25-43a5-bb14-21ab836fa0b3")]
     public class PointsToCPU : Instance<PointsToCPU>

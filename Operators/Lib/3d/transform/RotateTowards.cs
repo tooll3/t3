@@ -9,7 +9,7 @@ using T3.Core.Utils.Geometry;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
-namespace Operators.Lib._3d.transform
+namespace Operators.lib._3d.transform
 {
 	[Guid("8373c170-a140-4ce4-b59b-47f42fb71700")]
     public class RotateTowards : Instance<RotateTowards>

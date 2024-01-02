@@ -16,7 +16,7 @@ using Device = SharpDX.Direct3D11.Device;
 using Utilities = T3.Core.Utils.Utilities;
 using Vector4 = System.Numerics.Vector4;
 
-namespace Operators.Lib.img.generate
+namespace Operators.lib.img.generate
 {
 	[Guid("f9fe78c5-43a6-48ae-8e8c-6cdbbc330dd1")]
     public class RenderTarget : Instance<RenderTarget>, IRenderStatsProvider

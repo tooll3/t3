@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.io.midi
+namespace Operators.lib.io.midi
 {
 	[Guid("fd5467c7-c75d-4755-8885-fd1ff1f07c95")]
     public class SelectFloatFromDict : Instance<SelectFloatFromDict>

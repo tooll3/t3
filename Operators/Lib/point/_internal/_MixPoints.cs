@@ -8,7 +8,7 @@ using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Operators.Lib.point._internal
+namespace Operators.lib.point._internal
 {
 	[Guid("bdd982c4-dfc4-48d6-888a-f067081dbe8e")]
     public class _MixPoints : Instance<_MixPoints>

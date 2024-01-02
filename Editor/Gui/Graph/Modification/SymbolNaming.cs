@@ -60,7 +60,7 @@ internal static class SymbolNaming
             return;
         }
 
-        var originalSourcePath = symbol.SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
+        var originalSourcePath = symbol.SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceCodeExtension);
         var operatorResource = ResourceManager.Instance().GetOperatorFileResource(originalSourcePath);
         if (operatorResource == null)
             return;
@@ -70,7 +70,7 @@ internal static class SymbolNaming
         symbol.PendingSource = newSource;
         symbol.DeprecatedSourcePath = originalSourcePath;
 
-        GraphOperations.UpdateChangedOperators();
+        OperatorUpdating.UpdateChangedOperators();
         T3Ui.SaveAll();
     }
 }

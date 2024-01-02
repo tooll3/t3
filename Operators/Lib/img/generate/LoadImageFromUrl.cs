@@ -8,7 +8,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 
-namespace Operators.Lib.img.generate
+namespace Operators.lib.img.generate
 {
 	[Guid("61ec6355-bd7d-4abb-aa44-b01b7d658e23")]
     public class LoadImageFromUrl : Instance<LoadImageFromUrl>

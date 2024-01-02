@@ -7,7 +7,7 @@ using T3.Core.Operator.Slots;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
-namespace Operators.Lib.exec.context
+namespace Operators.lib.exec.context
 {
 	[Guid("2ed26fb7-fe66-4ed6-8b8d-230d87ae5c77")]
     public class CamPosition : Instance<CamPosition>

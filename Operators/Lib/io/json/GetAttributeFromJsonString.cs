@@ -7,7 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.io.json
+namespace Operators.lib.io.json
 {
 	[Guid("43783ad9-72a0-4928-bb86-c89aae5c5d85")]
     public class GetAttributeFromJsonString : Instance<GetAttributeFromJsonString>, IStatusProvider

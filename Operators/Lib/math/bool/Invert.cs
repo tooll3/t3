@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.@bool
+namespace Operators.lib.math.@bool
 {
 	[Guid("51648ecd-05ee-40b3-b562-8518ada70918")]
     public class Invert : Instance<Invert>

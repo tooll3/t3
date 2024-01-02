@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.mesh.modify
+namespace Operators.lib._3d.mesh.modify
 {
 	[Guid("97ffb173-f4cc-4143-a479-80cf3465cc7e")]
     public class MeshProjectUV : Instance<MeshProjectUV>

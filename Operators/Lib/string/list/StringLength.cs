@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.@string.list
+namespace Operators.lib.@string.list
 {
 	[Guid("4c496e8d-2a83-4493-a7a4-fdad29ef3f7d")]
     public class StringLength : Instance<StringLength>

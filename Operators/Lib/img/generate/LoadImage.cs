@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.Lib.img.generate
+namespace Operators.lib.img.generate
 {
 	[Guid("0b3436db-e283-436e-ba85-2f3a1de76a9d")]
     public class LoadImage : Instance<LoadImage>

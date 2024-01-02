@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.@float 
+namespace Operators.lib.math.@float 
 {
 	[Guid("7636bb3c-9f12-4323-b9be-e05f0eb561c5")]
     public class Atan2 : Instance<Atan2>

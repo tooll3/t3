@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.adjust
+namespace Operators.lib.img.adjust
 {
 	[Guid("2ab1bbef-8322-4638-8b1d-7e31aaa6a457")]
     public class KeyColor : Instance<KeyColor>

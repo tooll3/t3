@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.point.particles
+namespace Operators.lib.point.particles
 {
 	[Guid("87f68a6d-e13d-49b7-ab0c-c24c0cefd453")]
     public class PickParticleForce : Instance<PickParticleForce>

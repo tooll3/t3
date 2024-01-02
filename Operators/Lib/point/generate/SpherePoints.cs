@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.generate
+namespace Operators.lib.point.generate
 {
 	[Guid("1a241222-200b-417d-a8c7-131e3b48cc36")]
     public class SpherePoints : Instance<SpherePoints>

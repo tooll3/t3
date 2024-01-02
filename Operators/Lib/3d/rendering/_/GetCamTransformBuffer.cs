@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using Operators.Lib.dx11.buffer;
+using Operators.lib.dx11.buffer;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -8,7 +8,7 @@ using T3.Core.Rendering;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace Operators.Lib._3d.rendering.@_
+namespace Operators.lib._3d.rendering._
 {
 	[Guid("843c9378-6836-4f39-b676-06fd2828af3e")]
     public class GetCamTransformBuffer : Instance<GetCamTransformBuffer>

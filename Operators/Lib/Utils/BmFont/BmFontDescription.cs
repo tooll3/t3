@@ -1,7 +1,7 @@
 ﻿using System.Xml.Serialization;
 using T3.Core.Logging;
 
-namespace Operators.Lib.Utils.BmFont
+namespace Operators.lib.Utils.BmFont
 {
     public class BmFontDescription
     {

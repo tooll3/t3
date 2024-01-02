@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point._internal
+namespace Operators.lib.point._internal
 {
 	[Guid("bc88304a-a2c7-4df9-93d8-b7dfecbce3de")]
     public class SnapPointsToGird : Instance<SnapPointsToGird>

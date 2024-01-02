@@ -39,8 +39,9 @@ namespace T3.Editor.Gui.Dialog
                     }
                     else
                     {
+                        // todo : remove invalid characters
                         Log.Debug($"Moving home canvas to user.{UserSettings.Config.UserName}");
-                        homeSymbol.Namespace = $"user.{UserSettings.Config.UserName}";
+                        homeSymbol.Namespace = $"user.{UserSettings.Config.UserName}".ToLower();
                         T3Ui.SaveAll();
                     }
                     

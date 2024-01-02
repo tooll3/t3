@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.fx
+namespace Operators.lib.img.fx
 {
 	[Guid("c68fbb84-2f56-4aed-97ab-3c2df0ec700b")]
     public class MosiacTiling : Instance<MosiacTiling>

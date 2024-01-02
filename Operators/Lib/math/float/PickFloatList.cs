@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.math.@float
+namespace Operators.lib.math.@float
 {
 	[Guid("6832d272-e63f-4ab2-b48c-85466b4ede1b")]
     public class PickFloatList : Instance<PickFloatList>

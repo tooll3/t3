@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.math.vec4
+namespace Operators.lib.math.vec4
 {
 	[Guid("3539c3a0-73f1-412c-aad2-517810126ac6")]
     public class PickColor : Instance<PickColor>

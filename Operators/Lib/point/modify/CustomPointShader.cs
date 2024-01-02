@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.modify
+namespace Operators.lib.point.modify
 {
 	[Guid("3d958f08-9c0f-45eb-a252-de880b5834f3")]
     public class CustomPointShader : Instance<CustomPointShader>,ITransformable

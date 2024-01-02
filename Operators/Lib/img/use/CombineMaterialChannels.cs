@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.use
+namespace Operators.lib.img.use
 {
 	[Guid("085b7841-9502-4b49-896e-3b1fa023f1bf")]
     public class CombineMaterialChannels : Instance<CombineMaterialChannels>

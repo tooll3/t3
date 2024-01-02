@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.sprite
+namespace Operators.lib.sprite
 {
 	[Guid("9d494c7e-f94c-477f-aeb3-7fa70788f225")]
     public class DrawPointSprites : Instance<DrawPointSprites>

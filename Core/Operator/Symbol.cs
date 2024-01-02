@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator.Attributes;
@@ -27,7 +28,7 @@ namespace T3.Core.Operator
         public string PendingSource { get; set; }
         public string DeprecatedSourcePath { get; set; }
         public SymbolData SymbolData { get; internal set; }
-        public Assembly ParentAssembly => SymbolData.AssemblyInformation.Assembly;
+        public AssemblyInformation ParentAssembly => SymbolData.AssemblyInformation;
 
         public readonly List<Instance> InstancesOfSymbol = new();
         public readonly List<SymbolChild> Children = new();

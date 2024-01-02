@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.exec.context
+namespace Operators.lib.exec.context
 {
 	[Guid("6c1271a0-058f-4ff0-940b-f196e5debdf7")]
     public class GetForegroundColor : Instance<GetForegroundColor>

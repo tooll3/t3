@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.vec3
+namespace Operators.lib.math.vec3
 {
 	[Guid("7805285e-e74b-48f5-8228-20bbb178e828")]
     public class NormalizeVector3 : Instance<NormalizeVector3>

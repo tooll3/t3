@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.fx
+namespace Operators.lib.img.fx
 {
 	[Guid("ecf2c782-4461-4a94-8995-067425e3f84b")]
     public class ChromaticDistortion : Instance<ChromaticDistortion>

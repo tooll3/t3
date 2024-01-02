@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.dx11.draw
+namespace Operators.lib.dx11.draw
 {
 	[Guid("fd9bffd3-5c57-462f-8761-85f94c5a629b")]
     public class PickBlendMode : Instance<PickBlendMode>

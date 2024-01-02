@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.adjust
+namespace Operators.lib.img.adjust
 {
 	[Guid("51968877-03e7-472d-9b43-95bc8aeda3bc")]
     public class ChannelMixer : Instance<ChannelMixer>

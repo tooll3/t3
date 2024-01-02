@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
+using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Compilation
@@ -44,7 +47,7 @@ namespace T3.Editor.Compilation
                 return;
             }
 
-            var newAssembly = CompileSymbolFromSource(source, path, resource.ParentAssembly.Assembly);
+            var newAssembly = CompileSymbolFromSource(source, path, resource.ParentAssembly);
             if (newAssembly == null)
                 return;
 
@@ -52,7 +55,7 @@ namespace T3.Editor.Compilation
             resource.Updated = true;
         }
 
-        public static bool TryCreateSymbolFromSource(string sourceCode, string newSymbolName, Guid newSymbolId, string @namespace, Assembly parentAssembly,
+        public static bool TryCreateSymbolFromSource(string sourceCode, string newSymbolName, Guid newSymbolId, string @namespace, AssemblyInformation parentAssembly,
                                                      out Symbol newSymbol)
         {
             var newAssembly = CompileSymbolFromSource(sourceCode, newSymbolName, parentAssembly);
@@ -74,22 +77,18 @@ namespace T3.Editor.Compilation
             newSymbol = new Symbol(type, newSymbolId);
             newSymbol.PendingSource = sourceCode;
             newSymbol.Namespace = @namespace;
-            SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
-            var symbolData = UiSymbolData.SymbolDataByAssembly[parentAssembly];
-            symbolData.AddSymbol(newSymbol);
             return true;
         }
 
-        internal static Assembly CompileSymbolFromSource(string source, string symbolName, Assembly parentAssembly)
+        internal static Assembly CompileSymbolFromSource(string source, string symbolName, AssemblyInformation parentAssembly)
         {
-            IEnumerable<MetadataReference> referencedAssemblies = Array.Empty<MetadataReference>();
-            AddAllReferences(parentAssembly, ref referencedAssemblies, true);
+            var assemblyReferences = GetAllReferences();
 
             // Todo - I think this can be optimized by reusing the compilation object?
             var syntaxTree = CSharpSyntaxTree.ParseText(source);
             var compilation = CSharpCompilation.Create(symbolName,
                                                        new[] { syntaxTree },
-                                                       referencedAssemblies,
+                                                       assemblyReferences,
                                                        RuntimeCompilationOptions);
 
             using var dllStream = new MemoryStream();
@@ -138,7 +137,7 @@ namespace T3.Editor.Compilation
                 return false;
 
             //string path = @"Operators\Types\" + symbol.Name + ".cs";
-            var sourcePath = symbol.SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
+            var sourcePath = symbol.SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceCodeExtension);
 
             var operatorResource = ResourceManager.Instance().GetOperatorFileResource(sourcePath);
             if (operatorResource != null)
@@ -154,6 +153,15 @@ namespace T3.Editor.Compilation
             return false;
         }
 
+        internal static MetadataReference[] GetAllReferences()
+        {
+            return RuntimeAssemblies.AllAssemblies
+                                    .Append(RuntimeAssemblies.Core)
+                                    .Select(x => MetadataReference.CreateFromFile(x.Path))
+                                    .Cast<MetadataReference>()
+                                    .ToArray();
+        }
+
         internal static void AddAllReferences(Assembly from, ref IEnumerable<MetadataReference> to, bool includeThisAssembly)
         {
             var references = CollectReferencedAssemblies(from);
@@ -167,7 +175,7 @@ namespace T3.Editor.Compilation
             to = to.Concat(references)
                    .Where(x => x.Display != null)
                    .DistinctBy(x => x.Display);
-            
+
             return;
 
             static IEnumerable<MetadataReference> CollectReferencedAssemblies(Assembly parentAssembly)
@@ -178,8 +186,8 @@ namespace T3.Editor.Compilation
                     var asm = Assembly.Load(asmName);
                     Log.Debug($"  Loaded SUB from {asm} {asm.Location}");
 
-                    referencedAssemblies = referencedAssemblies.Concat(CollectReferencedAssemblies(asm))
-                                                               .Append(MetadataReference.CreateFromFile(asm.Location));
+                    referencedAssemblies = referencedAssemblies //.Concat(CollectReferencedAssemblies(asm))
+                       .Append(MetadataReference.CreateFromFile(asm.Location));
                 }
 
                 return referencedAssemblies;
@@ -187,5 +195,35 @@ namespace T3.Editor.Compilation
         }
 
         private static readonly CSharpCompilationOptions RuntimeCompilationOptions = new(OutputKind.DynamicallyLinkedLibrary);
+
+        /// <summary>
+        /// Updates symbol definition, instances and symbolUi if modification to operator source code
+        /// was detected by Resource file hook.
+        /// </summary>
+        public static void UpdateChangedOperators()
+        {
+            var modifiedSymbols = OperatorResource.UpdateChangedOperatorTypes();
+            foreach (var symbol in modifiedSymbols)
+            {
+                var uiSymbolData = (UiSymbolData)symbol.SymbolData;
+                uiSymbolData.UpdateUiEntriesForSymbol(symbol);
+                symbol.CreateAnimationUpdateActionsForSymbolInstances();
+            }
+        }
+
+        public static void RenameNameSpaces(NamespaceTreeNode node, string nameSpace)
+        {
+            var orgNameSpace = node.GetAsString();
+            foreach (var symbol in SymbolRegistry.Entries.Values)
+            {
+                if (!symbol.Namespace.StartsWith(orgNameSpace))
+                    continue;
+
+                //var newNameSpace = parent + "."
+                var newNameSpace = Regex.Replace(symbol.Namespace, orgNameSpace, nameSpace).ToLower();
+                Log.Debug($" Changing namespace of {symbol.Name}: {symbol.Namespace} -> {newNameSpace}");
+                symbol.Namespace = newNameSpace;
+            }
+        }
     }
 }

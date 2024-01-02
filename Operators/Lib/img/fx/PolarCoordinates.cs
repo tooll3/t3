@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.fx
+namespace Operators.lib.img.fx
 {
 	[Guid("941410e5-2023-43c6-87b1-55386bb048ac")]
     public class PolarCoordinates : Instance<PolarCoordinates>

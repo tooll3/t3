@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.vec4
+namespace Operators.lib.math.vec4
 {
 	[Guid("82a5f040-926b-4970-9da2-aa36de94b436")]
     public class RgbaToColor : Instance<RgbaToColor>

@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.math.@bool
+namespace Operators.lib.math.@bool
 {
 	[Guid("0bec016a-5e1b-467a-8273-368d4d6b9935")]
     public class Trigger : Instance<Trigger>

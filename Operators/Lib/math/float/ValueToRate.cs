@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.math.@float
+namespace Operators.lib.math.@float
 {
 	[Guid("8171c2f5-96df-41f6-884c-dbd004ae8a17")]
     public class ValueToRate : Instance<ValueToRate>

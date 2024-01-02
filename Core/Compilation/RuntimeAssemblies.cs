@@ -3,21 +3,34 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Microsoft.VisualBasic.ApplicationServices;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 
 namespace T3.Core.Compilation;
 
 public class RuntimeAssemblies
 {
-    public static readonly Assembly Core = typeof(RuntimeAssemblies).Assembly;
+    public static readonly AssemblyInformation Core;
     public static readonly IReadOnlyList<AssemblyInformation> AllAssemblies;
+    public static readonly IReadOnlyList<AssemblyInformation> DynamicallyLoadedAssemblies;
     public static readonly IReadOnlyList<AssemblyInformation> OperatorAssemblies;
 
     static RuntimeAssemblies()
     {
-        AllAssemblies = LoadAssemblies();
-        OperatorAssemblies = AllAssemblies
+        var coreAssembly = typeof(RuntimeAssemblies).Assembly;
+        var coreAssemblyName = coreAssembly.GetName();
+        var path = coreAssembly.Location;
+        Core = new AssemblyInformation(path, coreAssemblyName, coreAssembly);
+        var baseAssemblies = AppDomain.CurrentDomain.GetAssemblies()
+                                      .Where(x => !x.IsDynamic)
+                                      .Select(x => new AssemblyInformation(x.Location, x.GetName(), x))
+                                      .ToArray();
+
+        DynamicallyLoadedAssemblies = LoadAssemblies(baseAssemblies);
+
+        OperatorAssemblies = DynamicallyLoadedAssemblies
                             .Where(assemblyInformation =>
                                    {
                                        try
@@ -33,16 +46,19 @@ public class RuntimeAssemblies
                                        }
                                    })
                             .ToList();
-        
-        Log.Debug($"Loaded {AllAssemblies.Count} assemblies.");
+
+        Log.Debug($"Loaded {DynamicallyLoadedAssemblies.Count} assemblies.");
         Log.Debug($"Loaded {OperatorAssemblies.Count} operator assemblies.");
+
+        AllAssemblies = DynamicallyLoadedAssemblies
+                       .Concat(baseAssemblies)
+                       .ToArray();
     }
 
-    static List<AssemblyInformation> LoadAssemblies()
+    static List<AssemblyInformation> LoadAssemblies(IEnumerable<AssemblyInformation> baseAssemblies)
     {
         Log.Debug($"Attempting to load operator assemblies...");
-        var currentAssemblyFullNames = AppDomain.CurrentDomain.GetAssemblies().Select(x => x.GetName().FullName).ToList();
-        var coreAssemblyName = Core.GetName();
+        var currentAssemblyFullNames = baseAssemblies.Select(x => x.AssemblyName.FullName).ToList();
 
         var workingDirectory = Directory.GetCurrentDirectory();
 
@@ -50,7 +66,7 @@ public class RuntimeAssemblies
         {
             return Directory.GetFiles(workingDirectory, "*.dll", SearchOption.AllDirectories)
                              //.Where(path => path.Contains(BinaryDirectory))
-                            .Where(path => !path.Contains("NDI") && !path.Contains("Spout"))
+                             //.Where(path => !path.Contains("NDI") && !path.Contains("Spout"))
                             .Select(path =>
                                     {
                                         AssemblyName assemblyName = null;
@@ -73,7 +89,7 @@ public class RuntimeAssemblies
                                    {
                                        var assemblyName = nameAndPath.AssemblyName;
                                        return assemblyName != null
-                                              && assemblyName.ProcessorArchitecture == coreAssemblyName.ProcessorArchitecture
+                                              && assemblyName.ProcessorArchitecture == Core.AssemblyName.ProcessorArchitecture
                                               && !currentAssemblyFullNames.Contains(assemblyName.FullName);
                                    })
                             .Select(name =>
@@ -115,11 +131,11 @@ public class AssemblyInformation
     public readonly string Path;
     public readonly AssemblyName AssemblyName;
     public readonly Assembly Assembly;
-    
-    public bool TryGetType(string typeName, out Type type) => _types.TryGetValue(typeName, out type);
 
+    public bool TryGetType(Guid typeId, out Type type) => _operatorTypes.TryGetValue(typeId, out type);
+
+    private readonly Dictionary<Guid, Type> _operatorTypes;
     private readonly Dictionary<string, Type> _types;
-    
     public IReadOnlyCollection<Type> Types => _types.Values;
 
     public AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly)
@@ -128,11 +144,48 @@ public class AssemblyInformation
         Path = path;
         AssemblyName = assemblyName;
         Assembly = assembly;
-        _types = assembly.GetExportedTypes().ToDictionary(type => type.FullName, type => type);
+        try
+        {
+            _types = assembly.GetExportedTypes().ToDictionary(type => type.FullName, type => type);
+        }
+        catch (Exception e)
+        {
+            Log.Warning($"Failed to load types from assembly {assembly.FullName}\n{e.Message}\n{e.StackTrace}");
+            _types = new Dictionary<string, Type>();
+            _operatorTypes = new Dictionary<Guid, Type>();
+            return;
+        }
+
+        _operatorTypes = _types.Values
+                               .Where(x => x.IsAssignableTo(typeof(Instance)))
+                               .Select(x =>
+                                       {
+                                           var gotGuid = SymbolData.TryGetGuidOfType(x, out var id);
+                                           return new GuidInfo(gotGuid, id, x);
+                                       })
+                               .Where(x => x.HasGuid)
+                               .ToDictionary(x => x.Guid, x => x.Type);
     }
 
-    public void UpdateType(Type updated)
+    public void UpdateType(Type updated, Guid guid = default)
     {
         _types[updated.FullName!] = updated;
+
+        if (guid != default)
+            _operatorTypes[guid] = updated;
+    }
+
+    readonly struct GuidInfo
+    {
+        public readonly bool HasGuid;
+        public readonly Guid Guid;
+        public readonly Type Type;
+
+        public GuidInfo(bool hasGuid, Guid guid, Type type)
+        {
+            HasGuid = hasGuid;
+            Guid = guid;
+            this.Type = type;
+        }
     }
 }

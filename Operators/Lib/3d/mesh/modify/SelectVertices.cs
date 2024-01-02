@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.mesh.modify
+namespace Operators.lib._3d.mesh.modify
 {
 	[Guid("6184ac2d-c17d-47de-a314-15e1c670f969")]
     public class SelectVertices : Instance<SelectVertices>, ITransformable

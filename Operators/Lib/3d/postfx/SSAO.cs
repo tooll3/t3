@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.postfx
+namespace Operators.lib._3d.postfx
 {
 	[Guid("13d5260d-4e50-48f8-909c-7d84d6f0a43f")]
     public class SSAO : Instance<SSAO>

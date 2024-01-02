@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.gizmo
+namespace Operators.lib._3d.gizmo
 {
 	[Guid("d61d7192-9ca3-494e-91e2-10a530ee9375")]
     public class VisibleGizmos : Instance<VisibleGizmos>

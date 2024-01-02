@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.@string
+namespace Operators.lib.@string
 {
 	[Guid("04d0d6d7-8c40-4d18-aa44-6806c51fe139")]
     public class StringRepeat : Instance<StringRepeat>

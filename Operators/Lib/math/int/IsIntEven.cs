@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.@int
+namespace Operators.lib.math.@int
 {
 	[Guid("9a34f503-709b-42e0-a25f-bc74573afa6b")]
     public class IsIntEven : Instance<IsIntEven>

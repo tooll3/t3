@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.generate
+namespace Operators.lib.point.generate
 {
 	[Guid("c7f100bf-05a0-44af-9cf4-c5a1b5937e33")]
     public class SubdivideLinePoints : Instance<SubdivideLinePoints>

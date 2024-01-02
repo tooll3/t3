@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.@string
+namespace Operators.lib.@string
 {
 	[Guid("3af25959-fd3f-4608-b521-5860d82554df")]
     public class MockStrings : Instance<MockStrings>

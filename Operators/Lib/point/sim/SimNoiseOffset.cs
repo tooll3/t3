@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.sim
+namespace Operators.lib.point.sim
 {
 	[Guid("5f846187-e109-45d1-97e0-ae95e3e7d9ba")]
     public class SimNoiseOffset : Instance<SimNoiseOffset>

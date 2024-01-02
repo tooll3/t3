@@ -1,7 +1,7 @@
 using Rug.Osc;
 using T3.Core.Logging;
 
-namespace Operators.Lib.Utils
+namespace Operators.lib.Utils
 {
     public static class OscConnectionManager
     {
@@ -20,7 +20,7 @@ namespace Operators.Lib.Utils
                     continue;
 
                 foundConsumer = true;
-                var shouldCloseGroup = @group.Consumers.Count == 1;
+                var shouldCloseGroup = group.Consumers.Count == 1;
                 if (shouldCloseGroup)
                 {
                     Log.Debug($"Closing port {group.Port}");

@@ -439,6 +439,7 @@ public class T3Ui
                 return;
             }
 
+            ResourceFileWatcher.DisableOperatorFileWatcher();
             _saveStopwatch.Restart();
 
             // Todo - parallelize? 
@@ -448,6 +449,7 @@ public class T3Ui
             }
 
             _saveStopwatch.Stop();
+            ResourceFileWatcher.EnableOperatorFileWatcher();
             Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
         }
     }
@@ -462,6 +464,7 @@ public class T3Ui
                 return;
             }
 
+            ResourceFileWatcher.DisableOperatorFileWatcher();
             _saveStopwatch.Restart();
 
             // Todo - parallelize?
@@ -469,8 +472,9 @@ public class T3Ui
             {
                 data.SaveAll();
             }
-
+            
             _saveStopwatch.Stop();
+            ResourceFileWatcher.EnableOperatorFileWatcher();
             Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
         }
     }

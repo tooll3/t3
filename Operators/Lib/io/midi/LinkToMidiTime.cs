@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.io.midi
+namespace Operators.lib.io.midi
 {
 	[Guid("3f10f526-d8ca-4f67-95a4-d703b713088e")]
     public class LinkToMidiTime : Instance<LinkToMidiTime>

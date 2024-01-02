@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Operators.Lib.anim
+namespace Operators.lib.anim
 {
 	[Guid("8a6ab5ec-caa6-4baa-a9d1-2079af22685c")]
     public class OscillateVec3 : Instance<OscillateVec3>

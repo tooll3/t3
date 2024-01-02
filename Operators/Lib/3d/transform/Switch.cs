@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.transform
+namespace Operators.lib._3d.transform
 {
 	[Guid("e64f95e4-c045-400f-98ca-7c020ad46174")]
     public class Switch : Instance<Switch>

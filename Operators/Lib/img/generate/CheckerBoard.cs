@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.generate
+namespace Operators.lib.img.generate
 {
 	[Guid("1a411be2-1757-4019-8ce2-e29f808ed839")]
     public class CheckerBoard : Instance<CheckerBoard>

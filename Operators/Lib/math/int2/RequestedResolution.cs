@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.int2
+namespace Operators.lib.math.int2
 {
 	[Guid("c0a26813-bc97-4c42-b051-53a9a5913331")]
     public class RequestedResolution : Instance<RequestedResolution>

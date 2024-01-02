@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.@string
+namespace Operators.lib.@string
 {
 	[Guid("a9784e5e-7696-49a0-bb77-2302587ede59")]
     public class PickString : Instance<PickString>

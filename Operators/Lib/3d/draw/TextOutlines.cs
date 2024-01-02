@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.draw
+namespace Operators.lib._3d.draw
 {
 	[Guid("340e6898-c237-4287-acf0-62ec3eeb2b86")]
     public class TextOutlines : Instance<TextOutlines>

@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.@string
+namespace Operators.lib.@string
 {
 	[Guid("acdd78b1-4e66-4fd0-a36b-5318670fefd4")]
     public class ChangeCase : Instance<ChangeCase>

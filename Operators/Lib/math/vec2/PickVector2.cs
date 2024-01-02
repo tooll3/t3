@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.math.vec2
+namespace Operators.lib.math.vec2
 {
 	[Guid("1cd2f5b1-bc54-4405-8ee6-d1acf59ebe14")]
     public class PickVector2 : Instance<PickVector2>

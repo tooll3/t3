@@ -9,6 +9,7 @@ using T3.Core.Logging;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Editor.App;
+using T3.Editor.Compilation;
 using T3.Editor.Gui;
 using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
@@ -45,7 +46,7 @@ internal static class UiContentUpdate
         ImGui.GetIO().DisplaySize = ProgramWindows.Main.Size;
 
         ProgramWindows.HandleFullscreenToggle();
-        GraphOperations.UpdateChangedOperators();
+        OperatorUpdating.UpdateChangedOperators();
 
         DirtyFlag.IncrementGlobalTicks();
         T3Metrics.UiRenderingStarted();

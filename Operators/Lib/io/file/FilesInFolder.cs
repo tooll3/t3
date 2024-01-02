@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.io.file
+namespace Operators.lib.io.file
 {
 	[Guid("f90fcd0a-eab9-4e2a-b393-e8d3a0380823")]
     public class FilesInFolder : Instance<FilesInFolder>

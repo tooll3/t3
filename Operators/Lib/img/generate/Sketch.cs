@@ -6,7 +6,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.generate
+namespace Operators.lib.img.generate
 {
 	[Guid("8e6ed99c-a3e0-42c0-9f81-a89b1e340757")]
     public class Sketch : Instance<Sketch>

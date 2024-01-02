@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.combine
+namespace Operators.lib.point.combine
 {
 	[Guid("93e2f11a-18a2-4dcb-86df-c452d340b409")]
     public class BlendMeshVertices : Instance<BlendMeshVertices>

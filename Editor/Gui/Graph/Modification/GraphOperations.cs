@@ -35,36 +35,6 @@ namespace T3.Editor.Gui.Graph.Modification
             return childUi;
         }
 
-        /// <summary>
-        /// Updates symbol definition, instances and symbolUi if modification to operator source code
-        /// was detected by Resource file hook.
-        /// </summary>
-        public static void UpdateChangedOperators()
-        {
-            var modifiedSymbols = OperatorResource.UpdateChangedOperatorTypes();
-            foreach (var symbol in modifiedSymbols)
-            {
-                var uiSymbolData = (UiSymbolData)symbol.SymbolData;
-                uiSymbolData.UpdateUiEntriesForSymbol(symbol);
-                symbol.CreateAnimationUpdateActionsForSymbolInstances();
-            }
-        }
-
-        public static void RenameNameSpaces(NamespaceTreeNode node, string nameSpace)
-        {
-            var orgNameSpace = node.GetAsString();
-            foreach (var symbol in SymbolRegistry.Entries.Values)
-            {
-                if (!symbol.Namespace.StartsWith(orgNameSpace))
-                    continue;
-
-                //var newNameSpace = parent + "."
-                var newNameSpace = Regex.Replace(symbol.Namespace, orgNameSpace, nameSpace);
-                Log.Debug($" Changing namespace of {symbol.Name}: {symbol.Namespace} -> {newNameSpace}");
-                symbol.Namespace = newNameSpace;
-            }
-        }
-
         public static string CopyNodesAsJson(Guid symbolId, 
                                              IEnumerable<SymbolChildUi> selectedChildren, 
                                              List<Annotation> selectedAnnotations)

@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -103,17 +101,25 @@ public partial class SymbolData
                 return false;
             }
 
-            var @namespace = _innerNamespace.Replace(newType.Namespace ?? string.Empty, "").ToLower();
-            var idFromNamespace = _idFromNamespace
-                                 .Match(newType.Namespace ?? string.Empty).Value
-                                 .Replace('_', '-');
+            var @namespace = newType.Namespace;
 
-            Debug.Assert(!string.IsNullOrWhiteSpace(idFromNamespace));
-            symbol = new Symbol(newType, Guid.Parse(idFromNamespace))
-                             {
-                                 Namespace = @namespace,
-                                 Name = newType.Name
-                             };
+            if (string.IsNullOrWhiteSpace(@namespace))
+            {
+                // set namespace to assembly name
+                @namespace = AssemblyInformation.Name;
+            }
+
+            if (!TryGetGuidOfType(newType, out var guid))
+            {
+                symbol = null;
+                return false;
+            }
+
+            symbol = new Symbol(newType, guid)
+                         {
+                             Namespace = @namespace,
+                             Name = newType.Name
+                         };
 
             var added = SymbolRegistry.Entries.TryAdd(symbol.Id, symbol);
             if (!added)
@@ -124,7 +130,7 @@ public partial class SymbolData
 
             if (enableLog)
                 Log.Debug($"new added symbol: {newType}");
-            
+
             return true;
         }
 
@@ -144,6 +150,35 @@ public partial class SymbolData
         }
     }
 
+    public static bool TryGetGuidOfType(Type newType, out Guid guid)
+    {
+        var guidAttributes = newType.GetCustomAttributes(typeof(GuidAttribute), false);
+        if(guidAttributes.Length == 0)
+        {
+            Log.Error($"Type {newType.Name} has no GuidAttribute");
+            guid = Guid.Empty;
+            return false;
+        }
+            
+        if(guidAttributes.Length > 1)
+        {
+            Log.Error($"Type {newType.Name} has multiple GuidAttributes");
+            guid = Guid.Empty;
+            return false;
+        }
+            
+        var guidAttribute = (GuidAttribute)guidAttributes[0];
+        var guidString = guidAttribute.Value;
+            
+        if (!Guid.TryParse(guidString, out guid))
+        {
+            Log.Error($"Type {newType.Name} has invalid GuidAttribute");
+            return false;
+        }
+
+        return true;
+    }
+
     public void ApplySymbolChildren(List<SymbolJson.SymbolReadResult> symbolsRead)
     {
         Log.Debug($"{AssemblyInformation.Name}: Applying symbol children...");
@@ -161,23 +196,13 @@ public partial class SymbolData
         }
     }
 
-    private readonly Regex _innerNamespace = new(@".Id_(\{){0,1}[0-9a-fA-F]{8}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{12}(\}){0,1}",
-                                                 RegexOptions.IgnoreCase);
-
-    private readonly Regex _idFromNamespace = new(@"(\{){0,1}[0-9a-fA-F]{8}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{4}_[0-9a-fA-F]{12}(\}){0,1}",
-                                                  RegexOptions.IgnoreCase);
-
     public virtual void SaveAll()
     {
-        ResourceFileWatcher.DisableOperatorFileWatcher(Folder); // don't update ops if file is written during save
-
         MarkAsSaving();
         RemoveAllSymbolFiles();
         SortAllSymbolSourceFiles();
         SaveSymbolDefinitionAndSourceFiles(_symbols.Values);
         UnmarkAsSaving();
-
-        ResourceFileWatcher.EnableOperatorFileWatcher(Folder);
     }
 
     protected void MarkAsSaving() => Interlocked.Increment(ref _savingCount);
@@ -205,7 +230,7 @@ public partial class SymbolData
     private void SortAllSymbolSourceFiles()
     {
         // Move existing source files to correct namespace folder
-        var sourceFiles = Directory.GetFiles(Folder, $"*{SourceExtension}", SearchOption.AllDirectories);
+        var sourceFiles = Directory.GetFiles(Folder, $"*{SourceCodeExtension}", SearchOption.AllDirectories);
         foreach (var sourceFilePath in sourceFiles)
         {
             var classname = Path.GetFileNameWithoutExtension(sourceFilePath);
@@ -217,7 +242,7 @@ public partial class SymbolData
                 continue;
             }
 
-            var targetFilepath = BuildFilepathForSymbol(symbol, SourceExtension);
+            var targetFilepath = BuildFilepathForSymbol(symbol, SourceCodeExtension);
             if (sourceFilePath == targetFilepath)
                 continue;
 
@@ -253,7 +278,7 @@ public partial class SymbolData
 
     private void WriteSymbolSourceToFile(Symbol symbol)
     {
-        var sourcePath = BuildFilepathForSymbol(symbol, SourceExtension);
+        var sourcePath = BuildFilepathForSymbol(symbol, SourceCodeExtension);
         using (var sw = new StreamWriter(sourcePath))
         {
             sw.Write(symbol.PendingSource);
@@ -283,17 +308,25 @@ public partial class SymbolData
     #region File path handling
     public string BuildFilepathForSymbol(Symbol symbol, string extension)
     {
-        var dir = BuildAndCreateFolderFromNamespace(symbol.Namespace, Folder);
-        return extension == SourceExtension
+        var dir = BuildAndCreateFolderFromNamespace(Folder, symbol.Namespace);
+        return extension == SourceCodeExtension
                    ? Path.Combine(dir, symbol.Name + extension)
-                   : Path.Combine(dir, symbol.Name + "_" + symbol.Id + extension);
+                   : Path.Combine(dir, symbol.Name + '_' + symbol.Id + extension);
 
-        static string BuildAndCreateFolderFromNamespace(string symbolNamespace, string rootFolder)
+        string BuildAndCreateFolderFromNamespace(string rootFolder, string symbolNamespace)
         {
-            var subdirectory = symbolNamespace.Trim().Replace('.', Path.DirectorySeparatorChar);
-            var directory = Path.Combine(rootFolder, subdirectory);
-            Directory.CreateDirectory(directory);
+            if (string.IsNullOrEmpty(symbolNamespace) || symbolNamespace == AssemblyInformation.Name)
+            {
+                return rootFolder;
+            }
 
+            var namespaceParts = symbolNamespace.Split('.');
+            var assemblyRootParts = Folder.Split(Path.DirectorySeparatorChar);
+            var rootOfOperatorDirectoryIndex = Array.IndexOf(assemblyRootParts, OperatorDirectoryName);
+            var operatorRootParts = assemblyRootParts.AsSpan()[..(rootOfOperatorDirectoryIndex + 1)].ToArray();
+            
+            var directory = Path.Combine(operatorRootParts.Concat( namespaceParts).ToArray());
+            Directory.CreateDirectory(directory);
             return directory;
         }
     }
@@ -303,7 +336,7 @@ public partial class SymbolData
     {
         SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
         _symbols.Add(newSymbol.Id, newSymbol);
-        AssemblyInformation.UpdateType(newSymbol.InstanceType);
+        AssemblyInformation.UpdateType(newSymbol.InstanceType, newSymbol.Id);
         var added = SymbolOwnersEditable.TryAdd(newSymbol.Id, this);
         if (!added)
             throw new Exception($"Symbol {newSymbol.Id} already exists in {AssemblyInformation.Name}");
@@ -311,7 +344,7 @@ public partial class SymbolData
 
     private static readonly OpUpdateCounter _updateCounter;
 
-    public const string SourceExtension = ".cs";
+    public const string SourceCodeExtension = ".cs";
     public const string SymbolExtension = ".t3";
     public const string SymbolUiExtension = ".t3ui";
     public const string OperatorDirectoryName = "Operators";

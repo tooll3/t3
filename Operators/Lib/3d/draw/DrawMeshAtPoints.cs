@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib._3d.draw
+namespace Operators.lib._3d.draw
 {
 	[Guid("42cb88bc-beb8-4d89-ac99-44b77be5f03e")]
     public class DrawMeshAtPoints : Instance<DrawMeshAtPoints>

@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.fx.@_
+namespace Operators.lib.img.fx._
 {
 	[Guid("d40966c3-2369-40f2-8202-e5c8ab6d9cc0")]
     public class BlurWithMask : Instance<BlurWithMask>

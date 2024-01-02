@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.@string
+namespace Operators.lib.@string
 {
 	[Guid("39c96cfd-dedf-4f76-a471-d1c26c9ba9fa")]
     public class FloatToString : Instance<FloatToString>

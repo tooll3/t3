@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.generate
+namespace Operators.lib.point.generate
 {
 	[Guid("3ee8f66d-68df-43c1-b0eb-407259bf7e86")]
     public class GridPoints : Instance<GridPoints>

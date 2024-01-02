@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.generate
+namespace Operators.lib.point.generate
 {
 	[Guid("17188f49-1243-4511-a46c-1804cae10768")]
     public class PointsOnMesh : Instance<PointsOnMesh>

@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 
 // ReSharper disable InconsistentNaming
 
-namespace Operators.Lib.math.@bool
+namespace Operators.lib.math.@bool
 {
 	[Guid("ec1ba1fb-ceb7-4d4f-86b4-389589c7e6f0")]
     public class FlipFlop : Instance<FlipFlop>

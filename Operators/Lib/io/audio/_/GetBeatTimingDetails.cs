@@ -6,7 +6,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.io.audio.@_
+namespace Operators.lib.io.audio._
 {
 	[Guid("712c50e8-7cba-4b29-bde4-1d860ab6b701")]
     public class GetBeatTimingDetails : Instance<GetBeatTimingDetails>

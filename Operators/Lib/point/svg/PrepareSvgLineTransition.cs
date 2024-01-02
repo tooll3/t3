@@ -9,7 +9,7 @@ using T3.Core.Utils;
 using Point = T3.Core.DataTypes.Point;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Operators.Lib.point.svg
+namespace Operators.lib.point.svg
 {
 	[Guid("b7345438-f3f4-4ad3-9c57-6076ed0e9399")]
     public class PrepareSvgLineTransition : Instance<PrepareSvgLineTransition>

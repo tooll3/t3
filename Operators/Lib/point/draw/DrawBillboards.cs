@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.point.draw
+namespace Operators.lib.point.draw
 {
 	[Guid("18d3d929-e530-45fa-9131-658368060ae2")]
     public class DrawBillboards : Instance<DrawBillboards>

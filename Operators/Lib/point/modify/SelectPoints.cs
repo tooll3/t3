@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.modify
+namespace Operators.lib.point.modify
 {
 	[Guid("371d72b8-69d4-4ced-beda-271386ad2fd6")]
     public class SelectPoints : Instance<SelectPoints>, ITransformable

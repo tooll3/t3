@@ -6,7 +6,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.io.midi
+namespace Operators.lib.io.midi
 {
 	[Guid("a3ceb788-4055-4556-961b-63b7221f93e7")]
     public class MidiClip : Instance<MidiClip>, IDisposable

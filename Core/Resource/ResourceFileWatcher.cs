@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using SharpDX.Direct3D11;
 using T3.Core.Logging;
@@ -21,19 +22,12 @@ namespace T3.Core.Resource
             AddWatcher(ResourceManager.ResourcesFolder, "*.jpg");
             AddWatcher(ResourceManager.ResourcesFolder, "*.dds");
             AddWatcher(ResourceManager.ResourcesFolder, "*.tiff");
+
+            _csFileWatcher = AddWatcher(Core.Model.SymbolData.OperatorDirectoryName, "*.cs");
+            _csFileWatcher.Renamed += CsFileRenamedHandler;
+            _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
         }
-        
-        public static void AddCodeWatcher(string folder, Action<string> onFileChanged)
-        {
-            Directory.CreateDirectory(folder);
-            var csWatcher = new FileSystemWatcher(folder, "*.cs");
-            if(onFileChanged != null)
-                csWatcher.Changed += (sender, args) => onFileChanged(args.FullPath);
-            csWatcher.Renamed += CsFileRenamedHandler;
-            csWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
-            CSFileWatchers.TryAdd(folder, csWatcher);
-        }
-        
+
         public static void AddFileHook(string filepath, Action action)
         {
             if (string.IsNullOrEmpty(filepath))
@@ -49,7 +43,7 @@ namespace T3.Core.Resource
                 Log.Warning($"Can't get filepath from source file: {filepath}");
                 return;
             }
-            
+
             if (!_fileWatchers.ContainsKey(pattern))
             {
                 AddWatcher(ResourceManager.ResourcesFolder, pattern);
@@ -67,14 +61,15 @@ namespace T3.Core.Resource
                     Log.Warning($"Can't access filepath: {filepath}");
                     return;
                 }
+
                 var newHook = new ResourceFileHook(filepath, Array.Empty<uint>())
                                   {
                                       FileChangeAction = action
                                   };
-                HooksForResourceFilepaths.TryAdd(filepath,newHook);
+                HooksForResourceFilepaths.TryAdd(filepath, newHook);
             }
         }
-        
+
         private static FileSystemWatcher AddWatcher(string folder, string filePattern)
         {
             var newWatcher = new FileSystemWatcher(folder, filePattern)
@@ -88,19 +83,16 @@ namespace T3.Core.Resource
             return newWatcher;
         }
 
-
         private static Dictionary<string, FileSystemWatcher> _fileWatchers = new();
 
-        public static void DisableOperatorFileWatcher(string folder)
+        public static void DisableOperatorFileWatcher()
         {
-            var fileWatcher = CSFileWatchers[folder];
-            fileWatcher.EnableRaisingEvents = false;
+            _csFileWatcher.EnableRaisingEvents = false;
         }
 
-        public static void EnableOperatorFileWatcher(string folder)
+        public static void EnableOperatorFileWatcher()
         {
-            var fileWatcher = CSFileWatchers[folder];
-            fileWatcher.EnableRaisingEvents = true;
+            _csFileWatcher.EnableRaisingEvents = true;
         }
 
         private static void FileChangedHandler(object sender, FileSystemEventArgs fileSystemEventArgs)
@@ -121,7 +113,7 @@ namespace T3.Core.Resource
             // hack: in order to prevent editors like vs-code still having the file locked after writing to it, this gives these editors 
             //       some time to release the lock. With a locked file Shader.ReadFromFile(...) function will throw an exception, because
             //       it cannot read the file. 
-            
+
             Thread.Sleep(32);
             var ids = string.Join(",", fileHook.ResourceIds);
             Log.Info($"Updating '{fileSystemEventArgs.FullPath}' ({ids} {fileSystemEventArgs.ChangeType})");
@@ -151,10 +143,10 @@ namespace T3.Core.Resource
             ResourceManager.RenameOperatorResource(renamedEventArgs.OldFullPath, renamedEventArgs.FullPath);
         }
 
-        private static readonly ConcurrentDictionary<string, FileSystemWatcher> CSFileWatchers = new();
         public static readonly ConcurrentDictionary<string, ResourceFileHook> HooksForResourceFilepaths = new();
+        private static FileSystemWatcher _csFileWatcher;
     }
-    
+
     /// <summary>
     /// Used by some <see cref="AbstractResource"/>s to link to a file.
     /// Note that multiple resources likes <see cref="VertexShader"/> and <see cref="PixelShader"/> can

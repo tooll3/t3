@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.postfx
+namespace Operators.lib._3d.postfx
 {
 	[Guid("e1c294b5-1ea8-435e-a437-26d280d3c2f4")]
     public class GodRays : Instance<GodRays>

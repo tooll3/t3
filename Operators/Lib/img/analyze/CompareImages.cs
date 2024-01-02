@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.analyze
+namespace Operators.lib.img.analyze
 {
 	[Guid("0e13e34f-c07b-4ada-8c87-6b89f4ed8b41")]
     public class CompareImages : Instance<CompareImages>

@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.analyze
+namespace Operators.lib.img.analyze
 {
 	[Guid("592a2b6f-d4e3-43e0-9e73-034cca3b3900")]
     public class ImageLevels : Instance<ImageLevels>

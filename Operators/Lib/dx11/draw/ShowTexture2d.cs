@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.dx11.draw
+namespace Operators.lib.dx11.draw
 {
 	[Guid("b0212daa-7fba-4f6a-851c-3dd9e2e8a23e")]
     public class ShowTexture2d : Instance<ShowTexture2d>

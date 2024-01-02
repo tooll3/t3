@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.exec.context
+namespace Operators.lib.exec.context
 {
 	[Guid("7953f704-ebee-498b-8bdd-a2c201dfe278")]
     public class SetIntVariable : Instance<SetIntVariable>

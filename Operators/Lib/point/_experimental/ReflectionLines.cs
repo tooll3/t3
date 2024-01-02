@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point._experimental
+namespace Operators.lib.point._experimental
 {
 	[Guid("b5515341-24ef-48ff-b832-d40e8189c6a4")]
     public class ReflectionLines : Instance<ReflectionLines>

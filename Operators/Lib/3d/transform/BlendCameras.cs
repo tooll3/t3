@@ -6,7 +6,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib._3d.transform
+namespace Operators.lib._3d.transform
 {
 	[Guid("e3ff58e2-847a-4c97-947c-cfbcf8f9c79d")]
     public class BlendCameras : Instance<BlendCameras>, IStatusProvider

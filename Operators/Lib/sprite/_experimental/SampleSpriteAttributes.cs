@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.sprite._experimental
+namespace Operators.lib.sprite._experimental
 {
 	[Guid("4670ff79-f630-478c-8f3f-513e1f2b5913")]
     public class SampleSpriteAttributes : Instance<SampleSpriteAttributes>

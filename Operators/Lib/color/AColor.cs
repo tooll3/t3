@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.color
+namespace Operators.lib.color
 {
 	[Guid("70176d3c-825c-40b3-8121-a465735518fe")]
     public class AColor : Instance<AColor>

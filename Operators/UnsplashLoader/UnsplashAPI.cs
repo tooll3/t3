@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
@@ -7,6 +8,7 @@ using Unsplasharp.Models;
 
 namespace UnsplashLoader 
 {
+    [Guid("89162b9f-75f5-4d32-9d28-8259cf47cf58")]
     public class UnsplashAPI : Instance<UnsplashAPI>
     {
         [Output(Guid = "487C1FE8-5B7C-43FB-855D-CC2B3CA70566")]

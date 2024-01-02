@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.adjust
+namespace Operators.lib.img.adjust
 {
 	[Guid("025b32e9-b570-45be-ae84-50424982aae3")]
     public class ToneMapping : Instance<ToneMapping>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.@string
+namespace Operators.lib.@string
 {
 	[Guid("51943340-70b1-4bb5-8cb9-0e79d366a57b")]
     public class JoinStringList : Instance<JoinStringList>

@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.Lib.dx11.buffer
+namespace Operators.lib.dx11.buffer
 {
 	[Guid("5a88fa27-16ad-454f-a08d-5e65dd75cefe")]
     public class IndirectBuffer : Instance<IndirectBuffer>

@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.@string
+namespace Operators.lib.@string
 {
 	[Guid("b7910fc6-c3b2-4daf-93cd-010dcfe22a57")]
     public class SearchAndReplace : Instance<SearchAndReplace>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.generate
+namespace Operators.lib.img.generate
 {
 	[Guid("22a3cd4e-02b3-44d7-ad2b-aab5810c5e88")]
     public class NGon : Instance<NGon>

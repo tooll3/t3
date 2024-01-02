@@ -11,7 +11,7 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace Operators.Lib.math.curve
+namespace Operators.lib.math.curve
 {
 	[Guid("ab511978-bad5-4b69-90b2-c028447fe9f7")]
     public class CurvesToTexture : Instance<CurvesToTexture>

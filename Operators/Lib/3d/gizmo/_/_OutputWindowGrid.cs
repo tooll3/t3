@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.gizmo.@_
+namespace Operators.lib._3d.gizmo._
 {
 	[Guid("e5588101-5686-4b02-ab7d-e58199ba552e")]
     public class _OutputWindowGrid : Instance<_OutputWindowGrid>

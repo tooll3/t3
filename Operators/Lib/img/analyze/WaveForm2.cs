@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.analyze
+namespace Operators.lib.img.analyze
 {
 	[Guid("92e28e50-bd40-4f93-ba92-8f69cded6ec1")]
     public class WaveForm2 : Instance<WaveForm2>

@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.sim.experimental
+namespace Operators.lib.point.sim.experimental
 {
 	[Guid("03aa5f28-3f74-4feb-aa6a-36cdb2d7f0d9")]
     public class SimFollowMeshSurface : Instance<SimFollowMeshSurface>

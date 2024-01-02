@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.curve
+namespace Operators.lib.math.curve
 {
 	[Guid("b724ea74-d5d7-4928-9cd1-7a7850e4e179")]
     public class SampleCurve : Instance<SampleCurve>

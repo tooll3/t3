@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.transform
+namespace Operators.lib._3d.transform
 {
 	[Guid("1a8d2a8d-d189-472f-bab3-d645a63c7aff")]
     public class ShiftCamera : Instance<ShiftCamera>

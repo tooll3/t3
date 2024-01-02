@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.fx
+namespace Operators.lib.img.fx
 {
 	[Guid("4cdc0f90-6ce9-4a03-9cd0-efeddee70567")]
     public class Steps : Instance<Steps>

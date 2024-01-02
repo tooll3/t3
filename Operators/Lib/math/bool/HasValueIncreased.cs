@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.@bool
+namespace Operators.lib.math.@bool
 {
 	[Guid("c513c58d-e45c-408d-a0b8-250c9af31545")]
     public class HasValueIncreased : Instance<HasValueIncreased>

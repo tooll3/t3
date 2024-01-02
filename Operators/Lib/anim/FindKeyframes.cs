@@ -7,7 +7,7 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.anim
+namespace Operators.lib.anim
 {
 	[Guid("127e1eb9-aca9-4f8e-b0c9-b709c8a0745a")]
     public class FindKeyframes : Instance<FindKeyframes>, IStatusProvider

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.fx
+namespace Operators.lib.img.fx
 {
 	[Guid("5972a57b-73cd-49b2-8b24-96636a4c294b")]
     public class RgbTV : Instance<RgbTV>

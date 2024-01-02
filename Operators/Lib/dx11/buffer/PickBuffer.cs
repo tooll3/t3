@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.dx11.buffer
+namespace Operators.lib.dx11.buffer
 {
 	[Guid("e6bbbeef-08d8-4105-b84d-39edadb549c0")]
     public class PickBuffer : Instance<PickBuffer>

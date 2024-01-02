@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.generate
+namespace Operators.lib.point.generate
 {
 	[Guid("eaeb8937-f6ff-4a4a-8f00-27484285cd2d")]
     public class DoyleSpiralPoints2 : Instance<DoyleSpiralPoints2>

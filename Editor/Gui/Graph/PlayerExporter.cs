@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Newtonsoft.Json;
 using SharpDX.Direct3D11;
+using T3.Core.Compilation;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -61,7 +62,7 @@ namespace T3.Editor.Gui.Graph
                      .Select(symbol =>
                              {
                                  var filePathForSymbol = symbol.SymbolData.BuildFilepathForSymbol(symbol,
-                                                                                           SymbolData.SourceExtension);
+                                                                                           SymbolData.SourceCodeExtension);
 
                                  if (!File.Exists(filePathForSymbol))
                                  {
@@ -396,19 +397,14 @@ namespace T3.Editor.Gui.Graph
             }
         }
 
-        private static MetadataReference[] CompileSymbolsFromSource(string exportPath, IEnumerable<Assembly> parentAssemblies, params string[] sources)
+        private static MetadataReference[] CompileSymbolsFromSource(string exportPath, IEnumerable<AssemblyInformation> parentAssemblies, params string[] sources)
         {
-            IEnumerable<MetadataReference> referencedAssemblies = Array.Empty<MetadataReference>();
-            foreach(var parentAssembly in parentAssemblies)
-            {
-                OperatorUpdating.AddAllReferences(parentAssembly, ref referencedAssemblies, true);
-            }
+            var referencedAssemblies = OperatorUpdating.GetAllReferences();
             
-            var referencedAssemblyArray = referencedAssemblies.ToArray();
             var syntaxTrees = sources.AsParallel().Select(s => CSharpSyntaxTree.ParseText(s)).ToArray();
             var compilation = CSharpCompilation.Create("Operators",
                                                        syntaxTrees,
-                                                       referencedAssemblyArray,
+                                                       referencedAssemblies,
                                                        new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
                                                           .WithOptimizationLevel(OptimizationLevel.Release)
                                                           .WithAllowUnsafe(true));
@@ -444,7 +440,7 @@ namespace T3.Editor.Gui.Graph
                 Log.Info($"Compilation of 'export' successful.");
             }
 
-            return referencedAssemblyArray;
+            return referencedAssemblies;
         }
     }
 }

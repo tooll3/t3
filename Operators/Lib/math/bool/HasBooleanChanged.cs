@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.math.@bool
+namespace Operators.lib.math.@bool
 {
 	[Guid("57351603-f472-445f-b94b-e8f538f85517")]
     public class HasBooleanChanged : Instance<HasBooleanChanged>

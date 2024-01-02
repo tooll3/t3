@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.postfx
+namespace Operators.lib._3d.postfx
 {
 	[Guid("53d3eebd-4ead-4965-b26d-10a8bbd48182")]
     public class DepthOfField : Instance<DepthOfField>

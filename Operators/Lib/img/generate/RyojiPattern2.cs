@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.generate
+namespace Operators.lib.img.generate
 {
 	[Guid("cb28a67e-80cb-460a-8130-00e3cd85b7c2")]
     public class RyojiPattern2 : Instance<RyojiPattern2>

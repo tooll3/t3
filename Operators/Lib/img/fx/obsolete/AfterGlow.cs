@@ -6,7 +6,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.fx.obsolete
+namespace Operators.lib.img.fx.obsolete
 {
 	[Guid("d75de240-28a1-48cc-9b8f-388272188023")]
     public class AfterGlow : Instance<AfterGlow>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.exec._experimental
+namespace Operators.lib.exec._experimental
 {
 	[Guid("f19a9234-cd23-4229-a794-aa9d97ad8027")]
     public class DrawAsSplitView : Instance<DrawAsSplitView>

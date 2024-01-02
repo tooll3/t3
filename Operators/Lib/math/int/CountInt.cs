@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.@int
+namespace Operators.lib.math.@int
 {
 	[Guid("0e1d5f4b-3ba0-4e71-aa26-7308b6df214d")]
     public class CountInt : Instance<CountInt>

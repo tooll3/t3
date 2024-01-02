@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib._3d.draw
+namespace Operators.lib._3d.draw
 {
 	[Guid("d14233a2-8240-47d3-bb92-0854f6d3b218")]
     public class DustParticles : Instance<DustParticles>

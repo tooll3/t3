@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.generate
+namespace Operators.lib.img.generate
 {
 	[Guid("f7366bdc-86b2-4951-8788-3826126ed8c2")]
     public class KochKaleidoskope : Instance<KochKaleidoskope>

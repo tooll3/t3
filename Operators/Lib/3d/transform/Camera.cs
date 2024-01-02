@@ -8,7 +8,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 using T3.Core.Utils;
 
-namespace Operators.Lib._3d.transform
+namespace Operators.lib._3d.transform
 {
 	[Guid("746d886c-5ab6-44b1-bb15-f3ce2fadf7e6")]
     public class Camera : Instance<Camera>, ICamera, ICameraPropertiesProvider

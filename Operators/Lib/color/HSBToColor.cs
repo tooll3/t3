@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.color
+namespace Operators.lib.color
 {
 	[Guid("1677fd74-6e54-479a-b478-c2ac77288f9c")]
     public class HSBToColor : Instance<HSBToColor>

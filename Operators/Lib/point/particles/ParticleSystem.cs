@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.particles
+namespace Operators.lib.point.particles
 {
 	[Guid("e44ae9b6-cd56-4224-8a5d-118eda4cd3f4")]
     public class ParticleSystem : Instance<ParticleSystem>

@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.io.input
+namespace Operators.lib.io.input
 {
 	[Guid("2d1c9633-b66e-4958-913c-116ae36963a5")]
     public class MidiRecording : Instance<MidiRecording>

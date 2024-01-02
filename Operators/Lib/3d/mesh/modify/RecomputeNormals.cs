@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.mesh.modify
+namespace Operators.lib._3d.mesh.modify
 {
 	[Guid("68e0d0cb-1e57-4e9c-9f22-bd7927ddb4c5")]
     public class RecomputeNormals : Instance<RecomputeNormals>

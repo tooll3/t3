@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.generate
+namespace Operators.lib.img.generate
 {
 	[Guid("b5102fba-f05b-43fc-aa1d-613fe1d68ad2")]
     public class Grain : Instance<Grain>

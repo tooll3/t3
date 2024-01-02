@@ -23,7 +23,9 @@ namespace T3.Core.Resource
             OperatorAssembly = operatorAssembly;
             ParentAssembly = parentAssembly;
             SymbolId = Guid.Parse(nameWithId);  
-            _operators.Add(this);
+            
+            lock(_operators)
+                _operators.Add(this);
         }
 
         public delegate void UpdateDelegate(OperatorResource resource, string path);
@@ -42,48 +44,41 @@ namespace T3.Core.Resource
         public static List<Symbol> UpdateChangedOperatorTypes()
         {
             _modifiedSymbols.Clear();
-            foreach (var opResource in _operators)
+            lock (_operators)
             {
-                if (!opResource.Updated)
-                    continue;
+                foreach (var opResource in _operators)
+                {
+                    if (!opResource.Updated)
+                        continue;
 
-                var type = opResource.OperatorAssembly.ExportedTypes.FirstOrDefault();
-                if (type == null)
-                {
-                    Log.Error("Error updatable operator had not exported type");
-                    continue;
+                    var type = opResource.OperatorAssembly.ExportedTypes.FirstOrDefault();
+                    if (type == null)
+                    {
+                        Log.Error("Error updatable operator had not exported type");
+                        continue;
+                    }
+
+                    if (!SymbolRegistry.Entries.TryGetValue(opResource.SymbolId, out var symbol))
+                    {
+                        Log.Info($"Error replacing symbol type '{opResource.Name}");
+                        continue;
+                    }
+
+                    _operatorUpdateStopwatch.Restart();
+                    symbol.UpdateInstanceType(type);
+                    opResource.Updated = false;
+                    _operatorUpdateStopwatch.Stop();
+                    //Log.Info($"type updating took: {(double)_operatorUpdateStopwatch.ElapsedTicks / Stopwatch.Frequency}s");
+                    _modifiedSymbols.Add(symbol);
+
                 }
-                
-                if (!SymbolRegistry.Entries.TryGetValue(opResource.SymbolId, out var symbol))
-                {
-                    Log.Info($"Error replacing symbol type '{opResource.Name}");
-                    continue;
-                }
-                
-                _operatorUpdateStopwatch.Restart();
-                symbol.UpdateInstanceType(type);
-                opResource.Updated = false;
-                _operatorUpdateStopwatch.Stop();
-                //Log.Info($"type updating took: {(double)_operatorUpdateStopwatch.ElapsedTicks / Stopwatch.Frequency}s");
-                _modifiedSymbols.Add(symbol);
-                
             }
 
             return _modifiedSymbols;
         }
-        
-        public void RemoveOperatorEntry(uint resourceId)
-        {
-            var resources = ResourceManager.ResourcesById;
-            if (!resources.TryGetValue(resourceId, out var entry))
-                return;
-            
-            _operators.Remove(entry as OperatorResource);
-            resources.Remove(resourceId);
-        }        
                 
         private static readonly Stopwatch _operatorUpdateStopwatch = new();
         private static readonly List<Symbol> _modifiedSymbols = new();
-        private static readonly List<OperatorResource> _operators = new(1000);
+        private static readonly List<OperatorResource> _operators = new(2000);
     }
 }

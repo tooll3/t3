@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.dx11.draw
+namespace Operators.lib.dx11.draw
 {
 	[Guid("1f23db4a-871e-42a9-9255-49b956993eb1")]
     public class Viewport : Instance<Viewport>

@@ -7,7 +7,7 @@ using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Operators.Lib.point._cpu
+namespace Operators.lib.point._cpu
 {
 	[Guid("478522e1-5683-4db1-a7dc-db59838eca2a")]
     public class RepeatAtPointsCpu : Instance<RepeatAtPointsCpu>

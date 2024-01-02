@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.transform
+namespace Operators.lib.point.transform
 {
 	[Guid("20338d1c-e4d3-4208-8f65-e1b720b8b563")]
     public class TransformSomePoints : Instance<TransformSomePoints>

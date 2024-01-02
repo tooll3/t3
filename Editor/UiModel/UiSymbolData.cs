@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -29,7 +30,6 @@ public partial class UiSymbolData : SymbolData
             throw new ArgumentException("Could not find matching csproj file", nameof(assembly));
 
         Folder = Path.GetDirectoryName(csprojFile!.FullName);
-        ResourceFileWatcher.AddCodeWatcher(Folder, null); // can hook to recompile automagically
 
         var uiInitializerTypes = AssemblyInformation.Types.Where(x => x.IsAssignableTo(typeof(IOperatorUIInitializer)));
         foreach (var type in uiInitializerTypes)
@@ -45,7 +45,7 @@ public partial class UiSymbolData : SymbolData
             }
         }
 
-        SymbolDataByAssemblyEditable.Add(assembly.Assembly, this);
+        SymbolDataByAssemblyEditable.Add(assembly, this);
     }
 
     public void RegisterUiSymbols(bool enableLog)
@@ -124,7 +124,8 @@ public partial class UiSymbolData : SymbolData
 
     public override void SaveAll()
     {
-        Log.Debug("Saving...");
+        Log.Debug($"{AssemblyInformation.Name}: Saving...");
+        
         MarkAsSaving();
 
         // Save all t3 and source files
@@ -153,15 +154,13 @@ public partial class UiSymbolData : SymbolData
     /// <summary>
     /// Note: This does NOT clean up 
     /// </summary>
-    public void SaveModifiedSymbols()
+    internal void SaveModifiedSymbols()
     {
         MarkAsSaving();
         try
         {
             var modifiedSymbolUis = _symbolUis.Where(symbolUi => symbolUi.HasBeenModified).ToList();
             Log.Debug($"Saving {modifiedSymbolUis.Count} modified symbols...");
-
-            ResourceFileWatcher.DisableOperatorFileWatcher(Folder); // Don't update ops if file is written during save
 
             var modifiedSymbols = modifiedSymbolUis.Select(symbolUi => symbolUi.Symbol).ToList();
             SaveSymbolDefinitionAndSourceFiles(modifiedSymbols);
@@ -172,7 +171,6 @@ public partial class UiSymbolData : SymbolData
             Log.Warning($"Saving failed. Please try to save manually ({e.Message})");
         }
 
-        ResourceFileWatcher.EnableOperatorFileWatcher(Folder);
         UnmarkAsSaving();
     }
 
@@ -183,23 +181,23 @@ public partial class UiSymbolData : SymbolData
         foreach (var symbolUi in symbolUis)
         {
             var symbol = symbolUi.Symbol;
-            var filepath = BuildFilepathForSymbol(symbol, SymbolUiExtension);
+            var symbolFilePath = BuildFilepathForSymbol(symbol, SymbolUiExtension);
 
-            using (var sw = new StreamWriter(filepath))
+            using (var sw = new StreamWriter(symbolFilePath))
             using (var writer = new JsonTextWriter(sw))
             {
                 writer.Formatting = Formatting.Indented;
                 SymbolUiJson.WriteSymbolUi(symbolUi, writer);
             }
 
-            var symbolUiResource = resourceManager.GetOperatorFileResource(filepath);
+            var symbolUiResource = resourceManager.GetOperatorFileResource(symbolFilePath);
             if (symbolUiResource == null)
             {
                 // If the source wasn't registered before do this now
-                resourceManager.CreateOperatorEntry(filepath, symbol.Id.ToString(), AssemblyInformation, OperatorUpdating.ResourceUpdateHandler);
+                resourceManager.CreateOperatorEntry(symbolFilePath, symbol.Id.ToString(), AssemblyInformation, OperatorUpdating.ResourceUpdateHandler);
             }
 
-            var symbolSourceFilepath = BuildFilepathForSymbol(symbol, SymbolData.SourceExtension);
+            var symbolSourceFilepath = BuildFilepathForSymbol(symbol, SymbolData.SourceCodeExtension);
             var opResource = resourceManager.GetOperatorFileResource(symbolSourceFilepath);
             if (opResource == null)
             {
@@ -211,15 +209,20 @@ public partial class UiSymbolData : SymbolData
         }
     }
 
-    public void UpdateUiEntriesForSymbol(Symbol symbol)
+    public void UpdateUiEntriesForSymbol(Symbol symbol, SymbolUi symbolUi = null)
     {
-        if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var symbolUi))
+        if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var foundSymbolUi))
         {
-            symbolUi.UpdateConsistencyWithSymbol();
+            foundSymbolUi.UpdateConsistencyWithSymbol();
+
+            if (symbolUi != null)
+            {
+                Log.Warning("Symbol UI for symbol " + symbol.Id + " already exists. Disregarding new UI.");
+            }
         }
         else
         {
-            symbolUi = new SymbolUi(symbol);
+            symbolUi ??= new SymbolUi(symbol);
             SymbolUiRegistry.Entries.Add(symbol.Id, symbolUi);
             _symbolUis.Add(symbolUi);
         }
@@ -249,6 +252,13 @@ public partial class UiSymbolData : SymbolData
         RegisterCustomChildUi(newSymbol);
     }
 
+    public void AddSymbol(Symbol newSymbol, SymbolUi symbolUi)
+    {
+        base.AddSymbol(newSymbol);
+        UpdateUiEntriesForSymbol(newSymbol, symbolUi);
+        RegisterCustomChildUi(newSymbol);
+    }
+
     private static void RegisterCustomChildUi(Symbol symbol)
     {
         var valueInstanceType = symbol.InstanceType;
@@ -263,6 +273,6 @@ public partial class UiSymbolData : SymbolData
     public static Instance RootInstance { get; private set; }
     private List<SymbolUi> _symbolUis = new();
 
-    public static IReadOnlyDictionary<Assembly, UiSymbolData> SymbolDataByAssembly => SymbolDataByAssemblyEditable;
-    private static readonly Dictionary<Assembly, UiSymbolData> SymbolDataByAssemblyEditable = new();
+    public static IReadOnlyDictionary<AssemblyInformation, UiSymbolData> SymbolDataByAssembly => SymbolDataByAssemblyEditable;
+    private static readonly Dictionary<AssemblyInformation, UiSymbolData> SymbolDataByAssemblyEditable = new();
 }

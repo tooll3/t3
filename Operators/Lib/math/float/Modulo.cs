@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.@float 
+namespace Operators.lib.math.@float 
 {
 	[Guid("5202d3f6-c970-4006-933d-3c60d6c202dc")]
     public class Modulo : Instance<Modulo>

@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.@int
+namespace Operators.lib.math.@int
 {
 	[Guid("d1530d89-32b9-4e16-97fe-c08d095d9d03")]
     public class MinInt : Instance<MinInt>

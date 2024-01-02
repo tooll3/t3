@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.exec.context
+namespace Operators.lib.exec.context
 {
 	[Guid("2a0c932a-eb81-4a7d-aeac-836a23b0b789")]
     public class SetFloatVar : Instance<SetFloatVar>

@@ -5,7 +5,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using PixelShaderD3D = SharpDX.Direct3D11.PixelShader;
 
-namespace Operators.Lib.dx11.compute
+namespace Operators.lib.dx11.compute
 {
 	[Guid("9f784a4a-857f-41ad-afc1-0de08c1cfec6")]
     public class PixelShaderFromSource : Instance<PixelShaderFromSource>, IShaderOperator<PixelShaderD3D>

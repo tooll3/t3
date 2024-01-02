@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.particles
+namespace Operators.lib.point.particles
 {
 	[Guid("fbe1a703-f372-4236-9f20-5d0b69183843")]
     public class SurfaceForce : Instance<SurfaceForce>

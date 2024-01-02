@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.Lib.dx11.draw
+namespace Operators.lib.dx11.draw
 {
 	[Guid("e3596381-c118-4e2e-a482-83049a9f74af")]
     public class ClearRenderTarget : Instance<ClearRenderTarget>

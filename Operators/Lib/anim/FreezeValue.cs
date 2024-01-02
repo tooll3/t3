@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.anim
+namespace Operators.lib.anim
 {
 	[Guid("587dbb73-fd79-4481-a79e-f77055abda9a")]
     public class FreezeValue : Instance<FreezeValue>

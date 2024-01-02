@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.@int
+namespace Operators.lib.math.@int
 {
 	[Guid("cc07b314-4582-4c2c-84b8-bb32f59fc09b")]
     public class IntValue : Instance<IntValue>, IExtractable

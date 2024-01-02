@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib._3d.mesh.modify
+namespace Operators.lib._3d.mesh.modify
 {
 	[Guid("845371ef-a5c2-4ca2-8315-ea2b62f63ee2")]
     public class PickMeshBuffer : Instance<PickMeshBuffer>

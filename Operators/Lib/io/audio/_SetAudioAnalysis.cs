@@ -1,11 +1,11 @@
 using System.Runtime.InteropServices;
-using Operators.Lib.Utils;
+using Operators.lib.Utils;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.io.audio
+namespace Operators.lib.io.audio
 {
 	[Guid("ecbafbeb-c14b-4507-953f-80bc6676d077")]
     public class _SetAudioAnalysis : Instance<_SetAudioAnalysis>

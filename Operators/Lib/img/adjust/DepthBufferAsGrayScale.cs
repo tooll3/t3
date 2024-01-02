@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.adjust
+namespace Operators.lib.img.adjust
 {
 	[Guid("2d62dd4b-9597-4569-a09e-495abf880e34")]
     public class DepthBufferAsGrayScale : Instance<DepthBufferAsGrayScale>

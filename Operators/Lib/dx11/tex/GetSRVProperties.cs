@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace Operators.Lib.dx11.tex
+namespace Operators.lib.dx11.tex
 {
 	[Guid("bc489196-9a30-4580-af6f-dc059f226da1")]
     public class GetSRVProperties : Instance<GetSRVProperties>

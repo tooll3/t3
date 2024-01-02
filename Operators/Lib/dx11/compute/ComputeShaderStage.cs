@@ -10,7 +10,7 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace Operators.Lib.dx11.compute
+namespace Operators.lib.dx11.compute
 {
 	[Guid("8bef116d-7d1c-4c1b-b902-25c1d5e925a9")]
     public class ComputeShaderStage : Instance<ComputeShaderStage>, IRenderStatsProvider

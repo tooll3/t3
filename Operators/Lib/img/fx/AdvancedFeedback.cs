@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.fx
+namespace Operators.lib.img.fx
 {
 	[Guid("33424f7f-ea2d-4753-bbc3-8df00830c4b5")]
     public class AdvancedFeedback : Instance<AdvancedFeedback>

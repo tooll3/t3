@@ -6,7 +6,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using Vector4 = System.Numerics.Vector4;
 
-namespace Operators.Lib.color
+namespace Operators.lib.color
 {
 	[Guid("b9999f07-da19-45b9-ae12-f9d0662c694c")]
     public class BlendGradients : Instance<BlendGradients>

@@ -8,7 +8,7 @@ using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Operators.Lib.point._cpu
+namespace Operators.lib.point._cpu
 {
 	[Guid("a38626d8-3145-4aa9-820f-ca16b3411985")]
     public class RadialPointsCpu : Instance<RadialPointsCpu>

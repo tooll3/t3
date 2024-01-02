@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.gizmo
+namespace Operators.lib._3d.gizmo
 {
 	[Guid("92f3193e-a7dd-4417-b569-129823607fbe")]
     public class PlotValueCurve : Instance<PlotValueCurve>

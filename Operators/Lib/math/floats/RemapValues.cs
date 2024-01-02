@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.floats
+namespace Operators.lib.math.floats
 {
 	[Guid("efb9ecfc-5aa2-45f1-87b0-1455d7702aa7")]
     public class RemapValues : Instance<RemapValues>

@@ -46,10 +46,7 @@ internal static class Duplicate
         var newSource = root.GetText().ToString();
 
         var newSymbolId = Guid.NewGuid();
-        // patch the symbol id in namespace // todo: get rid of this part? namespace should just be overwritten to user?
-        var oldSymbolNamespace = sourceSymbol.Id.ToString().ToLower().Replace('-', '_');
-        var newSymbolNamespace = newSymbolId.ToString().ToLower().Replace('-', '_');
-        newSource = newSource.Replace(oldSymbolNamespace, newSymbolNamespace);
+        newSource = newSource.Replace(sourceSymbol.Namespace, nameSpace);
         Log.Debug(newSource);
 
         var parentAssembly = compositionUi.Symbol.ParentAssembly;
@@ -60,8 +57,8 @@ internal static class Duplicate
         var sourceSymbolUi = SymbolUiRegistry.Entries[sourceSymbol.Id];
         var newSymbolUi = sourceSymbolUi.CloneForNewSymbol(newSymbol, oldToNewIdMap);
         newSymbolUi.Description = description;
-
-        SymbolUiRegistry.Entries.Add(newSymbol.Id, newSymbolUi);
+        
+        UiSymbolData.SymbolDataByAssembly[parentAssembly].AddSymbol(newSymbol, newSymbolUi);
 
         // Apply content to new symbol
         var cmd = new CopySymbolChildrenCommand(sourceSymbolUi,

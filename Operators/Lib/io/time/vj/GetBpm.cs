@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.io.time.vj
+namespace Operators.lib.io.time.vj
 {
 	[Guid("6ae8ebb8-3174-463d-9ffb-e14e12eb3029")]
     public class GetBpm : Instance<GetBpm>

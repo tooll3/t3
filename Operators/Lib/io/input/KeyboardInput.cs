@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.io.input
+namespace Operators.lib.io.input
 {
 	[Guid("2b00bb7a-92cc-41e5-a5f6-bc3e8b16c5eb")]
     public class KeyboardInput : Instance<KeyboardInput>, IDisposable

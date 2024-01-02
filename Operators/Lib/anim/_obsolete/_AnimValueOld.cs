@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.anim._obsolete
+namespace Operators.lib.anim._obsolete
 {
 	[Guid("c5e39c67-256f-4cb9-a635-b62a0d9c796c")]
     public class _AnimValueOld : Instance<_AnimValueOld>

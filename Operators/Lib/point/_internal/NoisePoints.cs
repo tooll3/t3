@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.point._internal
+namespace Operators.lib.point._internal
 {
 	[Guid("a3bc1b8c-6bd9-4117-880e-afb9765e3104")]
     public class NoisePoints : Instance<NoisePoints>

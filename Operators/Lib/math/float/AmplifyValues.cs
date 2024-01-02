@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.math.@float
+namespace Operators.lib.math.@float
 {
 	[Guid("4def850e-3627-46d8-ae2b-58b513843885")]
     public class AmplifyValues : Instance<AmplifyValues>

@@ -11,7 +11,7 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using Vector2 = System.Numerics.Vector2;
 
-namespace Operators.Lib._3d.transform
+namespace Operators.lib._3d.transform
 {
 	[Guid("8b888408-e472-4bf9-be25-17a3dd8b90fd")]
     public class SliceViewPort : Instance<SliceViewPort>

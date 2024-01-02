@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.Lib.dx11.buffer
+namespace Operators.lib.dx11.buffer
 {
 	[Guid("0b5b14bf-c850-493a-afb1-72643926e214")]
     public class UavFromStructuredBuffer : Instance<UavFromStructuredBuffer>

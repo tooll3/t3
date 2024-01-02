@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.vec3
+namespace Operators.lib.math.vec3
 {
 	[Guid("99ce9535-23a3-4570-a98c-8d2262cb8755")]
     public class Magnitude : Instance<Magnitude>

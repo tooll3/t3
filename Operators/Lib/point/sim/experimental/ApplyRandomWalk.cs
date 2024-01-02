@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.sim.experimental
+namespace Operators.lib.point.sim.experimental
 {
 	[Guid("f925e9b9-5c7a-4fbf-9572-b11fe2d54d6c")]
     public class ApplyRandomWalk : Instance<ApplyRandomWalk>

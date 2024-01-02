@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.int2
+namespace Operators.lib.math.int2
 {
 	[Guid("40f0b1c9-9f87-489c-a6b9-ff9a5bd263ec")]
     public class AddInt2 : Instance<AddInt2>

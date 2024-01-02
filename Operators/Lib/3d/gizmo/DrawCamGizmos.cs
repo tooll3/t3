@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.gizmo
+namespace Operators.lib._3d.gizmo
 {
 	[Guid("cdf5dd6a-73dc-4779-a366-df19b69071a6")]
     public class DrawCamGizmos : Instance<DrawCamGizmos>

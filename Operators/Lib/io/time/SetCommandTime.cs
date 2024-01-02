@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.io.time
+namespace Operators.lib.io.time
 {
 	[Guid("32325c5b-53f7-4414-b4dd-a436e45528b0")]
     public class SetCommandTime : Instance<SetCommandTime>

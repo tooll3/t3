@@ -12,7 +12,7 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 using Point = T3.Core.DataTypes.Point;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Operators.Lib.point.helper
+namespace Operators.lib.point.helper
 {
 	[Guid("353f63fc-e613-43ca-b037-02d7b9f4e935")]
     public class CommonPointSets : Instance<CommonPointSets>

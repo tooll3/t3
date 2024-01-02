@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.@string.datetime
+namespace Operators.lib.@string.datetime
 {
 	[Guid("c1c3725a-0745-4ce1-874b-839810c2124c")]
     public class DateTimeToString : Instance<DateTimeToString>

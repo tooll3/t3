@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.Lib.io.file
+namespace Operators.lib.io.file
 {
 	[Guid("5f71d2f8-98c8-4502-8f40-2ea4a1e18cca")]
     public class ReadFile : Instance<ReadFile>

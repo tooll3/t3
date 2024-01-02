@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.combine
+namespace Operators.lib.point.combine
 {
 	[Guid("4dd8a618-eb3b-40af-9851-89c50683d83e")]
     public class CombineBuffers : Instance<CombineBuffers>

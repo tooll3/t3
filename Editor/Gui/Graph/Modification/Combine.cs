@@ -119,13 +119,15 @@ internal static class Combine
         usingStringBuilder.AppendLine("using T3.Core.Operator;");
         usingStringBuilder.AppendLine("using T3.Core.Operator.Attributes;");
         usingStringBuilder.AppendLine("using T3.Core.Operator.Slots;");
+        usingStringBuilder.AppendLine("using System.Runtime.InteropServices;");
 
         Guid newSymbolId = Guid.NewGuid();
 
         var classStringBuilder = new StringBuilder(usingStringBuilder.ToString());
         classStringBuilder.AppendLine("");
-        classStringBuilder.AppendLine("namespace T3.Operators.Types.Id_" + newSymbolId.ToString().ToLower().Replace('-', '_'));
+        classStringBuilder.Append("namespace Operators.").Append(nameSpace);
         classStringBuilder.AppendLine("{");
+        classStringBuilder.AppendLine("    [Guid(\"" + newSymbolId + "\")]");
         classStringBuilder.AppendFormat("    public class {0} : Instance<{0}>\n", newSymbolName);
         classStringBuilder.AppendLine("    {");
         classStringBuilder.Append(outputStringBuilder);
@@ -143,13 +145,14 @@ internal static class Combine
         if (!success)
             return;
         
+        var symbolData = UiSymbolData.SymbolDataByAssembly[assembly];
+        symbolData.AddSymbol(newSymbol);
+        
         var newSymbolUi = new SymbolUi(newSymbol)
                               {
                                   Description = description
                               };
         newSymbolUi.FlagAsModified();
-
-        SymbolUiRegistry.Entries.Add(newSymbol.Id, newSymbolUi);
 
         // Apply content to new symbol
         var copyCmd = new CopySymbolChildrenCommand(parentCompositionSymbolUi, selectedChildUis, selectedAnnotations, newSymbolUi, Vector2.Zero);

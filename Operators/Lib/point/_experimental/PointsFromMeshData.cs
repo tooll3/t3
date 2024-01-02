@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point._experimental
+namespace Operators.lib.point._experimental
 {
 	[Guid("7d302c05-9898-4c56-a894-1f8f44b9b920")]
     public class PointsFromMeshData : Instance<PointsFromMeshData>

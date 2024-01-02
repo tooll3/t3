@@ -369,11 +369,26 @@ namespace T3.Core.Model
                 inputDefaultValues[idAndValue.Item1] = idAndValue.Item2;
             }
 
-            var namespaceId = CreateGuidNamespaceString(id);
-            
-            Type instanceType = GetInstanceType();
-
             var @namespace = jToken[JsonKeys.Namespace]?.Value<string>() ?? string.Empty;
+            Type instanceType;
+            if (!allowNonOperatorInstanceType)
+            {
+                if(!owningAssembly.TryGetType(id, out instanceType))
+                    LogMissingTypeAndExit(owningAssembly, name);
+            }
+            else
+            {
+                try
+                {
+                    instanceType = Type.GetType(name) ?? typeof(object);
+                }
+                catch (Exception e) 
+                {
+                    instanceType = typeof(object);
+                    Log.Warning($"Failed to load type {name}: {e}");
+                }
+            }
+
             var symbol = new Symbol(instanceType, id, orderedInputIds)
                              {
                                  Name = name,
@@ -396,55 +411,12 @@ namespace T3.Core.Model
 
             var animatorData = (JArray)jToken[JsonKeys.Animator];
             return new SymbolReadResult(symbol, childrenJsons, animatorData);
-
-            Type GetInstanceType()
-            {
-                if (!allowNonOperatorInstanceType)
-                {
-                    instanceType = GetOperatorInstanceType(owningAssembly, name, namespaceId);
-                }
-                else
-                {
-                    try
-                    {
-                        instanceType = Type.GetType(name) ?? typeof(object);
-                    }
-                    catch (Exception e) 
-                    {
-                        instanceType = typeof(object);
-                        Log.Warning($"Failed to load type {name}: {e}");
-                    }
-                }
-
-                return instanceType;
-            }
         }
 
-        // returns an id with valid C# namespace characters ('_' instead of '-') and all-lowercase
-        static string CreateGuidNamespaceString(Guid guid)
-        {
-            var idSpan = guid.ToString().AsSpan();
-            Span<char> namespaceIdSpan = stackalloc char[idSpan.Length];
-            idSpan.ToLowerInvariant(namespaceIdSpan);
-
-            int index;
-            while ((index = namespaceIdSpan.IndexOf('-')) != -1)
-            {
-                namespaceIdSpan[index] = '_';
-            }
-
-            return new string(namespaceIdSpan);
-        }
 
         // Method for when allowNonOpInstanceType = true
-        static Type GetOperatorInstanceType(AssemblyInformation assemblyInformation, string typeName, string nameSpaceId)
+        static Type LogMissingTypeAndExit(AssemblyInformation assemblyInformation, string typeName)
         {
-            string fullName = "T3.Operators.Types.Id_" + nameSpaceId + "." + typeName;
-            var gotType = assemblyInformation.TryGetType(fullName, out var thisType);
-
-            if (gotType)
-                return thisType;
-
             var existingTypes = string.Join(",\n", assemblyInformation.Types.Select(x => x.FullName));
 
             CoreUi.Instance.ShowMessageBox($"Definition '{typeName}' is missing.\nPlease try to rebuild your solution.\n\n" +

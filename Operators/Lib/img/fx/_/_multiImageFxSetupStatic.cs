@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.fx.@_
+namespace Operators.lib.img.fx._
 {
 	[Guid("cc34a183-3978-4b6b-8ef1-dd8102410816")]
     public class _multiImageFxSetupStatic : Instance<_multiImageFxSetupStatic>

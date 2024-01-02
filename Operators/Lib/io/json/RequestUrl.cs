@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.io.json
+namespace Operators.lib.io.json
 {
 	[Guid("6535edc3-a4ed-46c7-ae71-d3974612b448")]
     public class RequestUrl : Instance<RequestUrl>

@@ -14,7 +14,7 @@ using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Operators.Lib.dx11.buffer
+namespace Operators.lib.dx11.buffer
 {
 	[Guid("edecd98f-209b-423d-8201-0fd7d590c4cf")]
     public class SplinePoints : Instance<SplinePoints>

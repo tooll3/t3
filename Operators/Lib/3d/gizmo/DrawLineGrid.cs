@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.gizmo
+namespace Operators.lib._3d.gizmo
 {
 	[Guid("296dddbd-250b-4801-a039-bcb3cd555774")]
     public class DrawLineGrid : Instance<DrawLineGrid>

@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using Operators.Lib.Utils;
+using Operators.lib.Utils;
 using Rug.Osc;
 using T3.Core.Animation;
 using T3.Core.Logging;
@@ -11,7 +11,7 @@ using T3.Core.Utils;
 //using System.Threading.Channels;
 //using System.Windows.Forms;
 
-namespace Operators.Lib.io.osc 
+namespace Operators.lib.io.osc 
 {
 	[Guid("3a1d7ea0-5445-4df0-b08a-6596e53f815a")]
     public class OscInput : Instance<OscInput>, OscConnectionManager.IOscConsumer, IDisposable

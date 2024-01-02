@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.math.floats
+namespace Operators.lib.math.floats
 {
 	[Guid("50bf9e01-6912-4ab7-b233-660ce67bca25")]
     public class SmoothValues : Instance<SmoothValues>

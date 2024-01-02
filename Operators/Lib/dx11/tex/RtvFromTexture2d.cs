@@ -8,7 +8,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 
-namespace Operators.Lib.dx11.tex
+namespace Operators.lib.dx11.tex
 {
 	[Guid("57a1ee33-702a-41ad-a17e-b43033d58638")]
     public class RtvFromTexture2d : Instance<RtvFromTexture2d>, IStatusProvider

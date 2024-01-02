@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.mesh.modify
+namespace Operators.lib._3d.mesh.modify
 {
 	[Guid("208a86b5-55cc-460a-86e6-2b17da818494")]
     public class TransformMeshUVs : Instance<TransformMeshUVs>

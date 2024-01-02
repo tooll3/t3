@@ -16,7 +16,7 @@ using Vector4 = System.Numerics.Vector4;
 
 // ReSharper disable RedundantNameQualifier
 
-namespace Operators.Lib.point._experimental
+namespace Operators.lib.point._experimental
 {
 	[Guid("b238b288-6e9b-4b91-bac9-3d7566416028")]
     public class _SketchImpl : Instance<_SketchImpl>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.fx
+namespace Operators.lib.img.fx
 {
 	[Guid("72e627e9-f570-4936-92b1-b12ed8d6004e")]
     public class EdgeRepeat : Instance<EdgeRepeat>

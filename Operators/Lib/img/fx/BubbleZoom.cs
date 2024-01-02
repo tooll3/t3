@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.fx
+namespace Operators.lib.img.fx
 {
 	[Guid("ca3f3c1b-6f22-4bf3-b06b-d2b0d85a8881")]
     public class BubbleZoom : Instance<BubbleZoom>

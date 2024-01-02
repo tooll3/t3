@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.dx11.buffer
+namespace Operators.lib.dx11.buffer
 {
 	[Guid("80dff680-5abf-484a-b9e0-81d72f3b7aa4")]
     public class GetBufferComponents : Instance<GetBufferComponents>

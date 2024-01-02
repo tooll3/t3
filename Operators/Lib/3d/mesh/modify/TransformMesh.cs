@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.mesh.modify
+namespace Operators.lib._3d.mesh.modify
 {
 	[Guid("026e6917-6e6f-4ee3-b2d4-58f4f1de74c9")]
     public class TransformMesh : Instance<TransformMesh>, ITransformable

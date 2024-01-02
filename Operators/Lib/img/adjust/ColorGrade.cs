@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.adjust
+namespace Operators.lib.img.adjust
 {
 	[Guid("42d86738-d644-47c8-ab92-cc426d958e51")]
     public class ColorGrade : Instance<ColorGrade>

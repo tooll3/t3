@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib._3d.@_
+namespace Operators.lib._3d._
 {
 	[Guid("4238439e-a6b4-4390-9984-e6ebf19c3a69")]
     public class ReprojectToUV : Instance<ReprojectToUV>

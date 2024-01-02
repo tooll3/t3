@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.Lib.math.floats
+namespace Operators.lib.math.floats
 {
 	[Guid("32a1d28e-23bc-44a8-becc-b52972464526")]
     public class KeepFloatValues : Instance<KeepFloatValues>

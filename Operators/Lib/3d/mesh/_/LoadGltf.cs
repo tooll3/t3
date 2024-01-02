@@ -13,7 +13,7 @@ using T3.Core.Resource;
 using T3.Core.Utils.Geometry;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace Operators.Lib._3d.mesh.@_
+namespace Operators.lib._3d.mesh._
 {
 	[Guid("92b18d2b-1022-488f-ab8e-a4dcca346a23")]
     public class LoadGltf : Instance<LoadGltf>

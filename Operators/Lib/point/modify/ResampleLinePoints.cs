@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point.modify
+namespace Operators.lib.point.modify
 {
 	[Guid("13ff9adb-2634-4129-8bb4-4fb764d38be6")]
     public class ResampleLinePoints : Instance<ResampleLinePoints>

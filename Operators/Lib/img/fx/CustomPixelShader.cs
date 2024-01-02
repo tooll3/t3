@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.fx
+namespace Operators.lib.img.fx
 {
 	[Guid("46daab0e-e957-413e-826c-0699569d0e07")]
     public class CustomPixelShader : Instance<CustomPixelShader>

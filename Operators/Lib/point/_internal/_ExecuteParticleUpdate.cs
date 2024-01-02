@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.point._internal
+namespace Operators.lib.point._internal
 {
 	[Guid("b1352ba6-1164-4b44-9b69-a9eb802ea77d")]
     public class _ExecuteParticleUpdate : Instance<_ExecuteParticleUpdate>

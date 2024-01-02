@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.@string.datetime
+namespace Operators.lib.@string.datetime
 {
 	[Guid("a78a07f8-cf75-4a72-8952-b9ba40d6983f")]
     public class StringToDateTime : Instance<StringToDateTime>, IStatusProvider

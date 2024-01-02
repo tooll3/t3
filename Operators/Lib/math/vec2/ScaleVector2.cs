@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.vec2
+namespace Operators.lib.math.vec2
 {
 	[Guid("4bbc6fac-789d-496e-9833-a0af78c31c98")]
     public class ScaleVector2 : Instance<ScaleVector2>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.img.generate
+namespace Operators.lib.img.generate
 {
 	[Guid("97eb35ec-2825-4f63-8fdf-3fe38fa9e652")]
     public class FractalNoise : Instance<FractalNoise>

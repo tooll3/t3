@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace Operators.Lib._3d.rendering.@_
+namespace Operators.lib._3d.rendering._
 {
 	[Guid("ca4fe8c4-cf61-4196-84e4-d69dc8869a25")]
     public class GetPbrParameters : Instance<GetPbrParameters>

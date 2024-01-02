@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.Lib.math.vec4
+namespace Operators.lib.math.vec4
 {
 	[Guid("f2e323bd-f881-41a8-81e2-e8f2ac1984dc")]
     public class Vector4 : Instance<Vector4>
