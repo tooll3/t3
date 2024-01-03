@@ -36,8 +36,8 @@ public partial class SymbolData
 
     public void LoadSymbols(bool enableLog, out List<SymbolJson.SymbolReadResult> symbolsRead)
     {
-        Log.Debug("Loading symbols...");
-        var symbolFiles = Directory.GetFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
+        Log.Debug($"{AssemblyInformation.Name}: Loading symbols...");
+        var symbolFiles = Directory.EnumerateFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
 
         symbolsRead = symbolFiles.AsParallel()
                                  .Select(JsonFileResult<Symbol>.ReadAndCreate)
@@ -51,7 +51,7 @@ public partial class SymbolData
                                                           .Where(type => !type.IsGenericType)
                                                           .ToHashSet();
 
-        Log.Debug("Registering loaded symbols...");
+        Log.Debug($"{AssemblyInformation.Name}: Registering loaded symbols...");
 
         foreach (var readSymbolResult in symbolsRead)
         {

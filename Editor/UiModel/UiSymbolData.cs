@@ -50,9 +50,8 @@ public partial class UiSymbolData : SymbolData
 
     public void RegisterUiSymbols(bool enableLog)
     {
-        Console.WriteLine($@"Updating UI entries for {AssemblyInformation.Name}...");
+        Log.Debug($@"{AssemblyInformation.Name}: Registering UI entries...");
 
-        Console.WriteLine(@"Registering Symbol UIs...");
         var dictionary = SymbolUiRegistry.Entries;
 
         foreach (var symbolUi in _symbolUis)
@@ -73,8 +72,6 @@ public partial class UiSymbolData : SymbolData
             if (enableLog)
                 Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
         }
-
-        Log.Debug($"Finished loading UI for {AssemblyInformation.Name}.");
     }
 
     public static bool TryCreateHome()
@@ -110,7 +107,7 @@ public partial class UiSymbolData : SymbolData
 
     public void LoadUiFiles()
     {
-        Log.Debug($"{AssemblyInformation.AssemblyName}: Loading Symbol UIs from \"{Folder}\"");
+        Log.Debug($"{AssemblyInformation.Name}: Loading Symbol UIs from \"{Folder}\"");
         var symbolUiFiles = Directory.EnumerateFiles(Folder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);
         _symbolUis = symbolUiFiles.AsParallel()
                                   .Select(JsonFileResult<SymbolUi>.ReadAndCreate)

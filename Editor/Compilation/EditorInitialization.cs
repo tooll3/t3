@@ -138,7 +138,6 @@ public static class EditorInitialization
                                               loadedSymbols.TryAdd(uiSymbolData, list);
                                           });
         loadedSymbols.AsParallel().ForAll(pair => pair.Key.ApplySymbolChildren(pair.Value));
-
         uiSymbolDatas.AsParallel().ForAll(uiSymbolData => uiSymbolData.LoadUiFiles());
 
         foreach (var uiSymbolData in uiSymbolDatas)
