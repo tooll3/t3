@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -59,8 +60,8 @@ internal static class GraphUtils
 
     public static bool IsValidUserName(string userName)
     {
-        return _validUserNamePattern.IsMatch(userName);
+        return UsernameValidator.Value.IsValidIdentifier(userName);
     }
 
-    private static readonly Regex _validUserNamePattern = new("^[A-Za-z0-9_]+$");
+    private static readonly Lazy<CodeDomProvider> UsernameValidator = new(() => CodeDomProvider.CreateProvider("C#"));
 }

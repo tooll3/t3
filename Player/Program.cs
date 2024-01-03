@@ -57,7 +57,8 @@ namespace T3.Player
         [STAThread]
         private static void Main(string[] args)
         {
-            var fileWriter = FileWriter.CreateDefault();
+            var logDirectory = Path.Combine(Core.UserData.UserData.RootFolder, "log");
+            var fileWriter = FileWriter.CreateDefault(logDirectory);
             try
             {
 

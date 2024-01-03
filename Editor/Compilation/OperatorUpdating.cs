@@ -220,7 +220,7 @@ namespace T3.Editor.Compilation
                     continue;
 
                 //var newNameSpace = parent + "."
-                var newNameSpace = Regex.Replace(symbol.Namespace, orgNameSpace, nameSpace).ToLower();
+                var newNameSpace = Regex.Replace(symbol.Namespace, orgNameSpace, nameSpace);
                 Log.Debug($" Changing namespace of {symbol.Name}: {symbol.Namespace} -> {newNameSpace}");
                 symbol.Namespace = newNameSpace;
             }

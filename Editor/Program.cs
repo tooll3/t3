@@ -4,10 +4,12 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using Sentry;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Resource;
 using T3.Core.SystemUi;
+using T3.Core.UserData;
 using T3.Editor.App;
 using T3.Editor.Gui;
 using T3.Editor.Gui.Graph.Interaction;
@@ -51,11 +53,11 @@ namespace T3.Editor
             // Not calling this first will cause exceptions...
             EditorUi.Instance = new MsFormsEditor();
             CoreUi.Instance = EditorUi.Instance;
-            
+
             ShaderCompiler.Instance = new DX11ShaderCompiler();
-            
+
             StartupValidation.ValidateNotRunningFromSystemFolder();
-            
+
             EditorUi.Instance.EnableDpiAwareScaling();
 
             var startupStopWatch = new Stopwatch();
@@ -74,10 +76,11 @@ namespace T3.Editor
                 // Catching this exception will the validation check dialog allow to be shown later
                 Log.Error("Failed to create splash screen. Please make sure to run from the correct working directory: " + e.Message);
             }
-            
+
+            var logDirectory = Path.Combine(Core.UserData.UserData.RootFolder, "log");
             Log.AddWriter(splashScreen);
             Log.AddWriter(new ConsoleWriter());
-            Log.AddWriter(FileWriter.CreateDefault());
+            Log.AddWriter(FileWriter.CreateDefault(logDirectory));
             Log.AddWriter(StatusErrorLine);
             Log.AddWriter(ConsoleLogWindow);
             Log.Debug($"Starting {Version}");
@@ -94,18 +97,19 @@ namespace T3.Editor
             StartUp.FlagBeginStartupSequence();
 
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
-
-            var userSettings = new UserSettings(saveOnQuit: true);
+            
+            var userSettingsPath = Path.Combine(UserData.RootFolder, "userSettings.json");
+            var userSettings = new UserSettings(saveOnQuit: true, userSettingsPath);
             var projectSettings = new ProjectSettings(saveOnQuit: true);
 
             Log.Debug($"About to initialize ProgramWindows");
             ProgramWindows.InitializeMainWindow(GetReleaseVersion(), out var device);
 
             Device = device;
-            
-            if(ShaderCompiler.Instance is not DX11ShaderCompiler shaderCompiler)
+
+            if (ShaderCompiler.Instance is not DX11ShaderCompiler shaderCompiler)
                 throw new Exception("ShaderCompiler is not DX11ShaderCompiler");
-            
+
             shaderCompiler.Device = device;
 
             Log.Debug($"About to initialize UiContentContentDrawer");
@@ -121,23 +125,22 @@ namespace T3.Editor
             ResourceManager.Init(device);
             ResourceManager resourceManager = ResourceManager.Instance();
             SharedResources.Initialize(resourceManager);
-            
+
             Log.Debug($"About to initialize T3 UI");
 
             // Initialize UI and load complete symbol model
-            try
+            var initializedUi = T3Ui.TryInitialize(out var uiException);
+
+            if (!initializedUi)
             {
-                T3Ui = new T3Ui();
-            }
-            catch (Exception e)
-            {
-                Log.Error(e.Message + "\n\n" + e.StackTrace);
-                var innerException = e.InnerException != null ? e.InnerException.Message.Replace("\\r", "\r") : string.Empty;
+                Log.Error(uiException.Message + "\n\n" + uiException.StackTrace);
+                var innerException = uiException.InnerException?.Message.Replace("\\r", "\r") ?? string.Empty;
                 EditorUi.Instance
-                        .ShowMessageBox($"Loading Operators failed:\n\n{e.Message}\n{innerException}\n\nThis is liked caused by a corrupted operator file.\nPlease try restarting and restore backup.",
+                        .ShowMessageBox($"Loading Operators failed:\n\n{uiException.Message}\n{innerException}\n\n" +
+                                        $"This is liked caused by a corrupted operator file." +
+                                        $"\nPlease try restarting and restore backup.",
                                         @"Error", PopUpButtons.Ok);
                 EditorUi.Instance.ExitApplication();
-                return;
             }
 
             SymbolAnalysis.UpdateUsagesOnly();
@@ -148,7 +151,7 @@ namespace T3.Editor
             UiContentUpdate.GenerateFontsWithScaleFactor(UserSettings.Config.UiScaleFactor);
 
             // Setup file watching the operator source
-            T3Ui.Initialize();
+            T3Ui.InitializeEnvironment();
 
             unsafe
             {
@@ -196,11 +199,9 @@ namespace T3.Editor
             Log.Debug("Shutdown complete");
         }
 
-
         // Main loop
         public static readonly StatusErrorLine StatusErrorLine = new();
         public static readonly ConsoleLogWindow ConsoleLogWindow = new();
-        public static T3Ui T3Ui;
         public static string RequestImGuiLayoutUpdate;
     }
 }

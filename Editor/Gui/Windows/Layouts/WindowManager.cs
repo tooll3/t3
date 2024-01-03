@@ -11,16 +11,28 @@ using T3.Editor.Gui.Windows.Output;
 using T3.Editor.Gui.Windows.RenderExport;
 using T3.Editor.Gui.Windows.Variations;
 using T3.Editor.SystemUi;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Windows.Layouts
 {
     public static class WindowManager
     {
+        private static bool _startedWithoutHomeCanvas;
+        
         public static void Draw()
         {
             TryToInitialize(); // We have to keep initializing until window sizes are initialized
             if (!_hasBeenInitialized)
                 return;
+
+            // create the home canvas if it hasn't been created yet
+            // we also need to re-apply the layout since the graph window was not created
+            if (_startedWithoutHomeCanvas && UiSymbolData.RootInstance != null)
+            {
+                _windows.Add(new GraphWindow(UiSymbolData.RootInstance));
+                LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
+                _startedWithoutHomeCanvas = false;
+            }
 
             LayoutHandling.ProcessKeyboardShortcuts();
 
@@ -52,7 +64,6 @@ namespace T3.Editor.Gui.Windows.Layouts
             _windows = new List<Window>()
                            {
                                new ParameterWindow(),
-                               new GraphWindow(),
                                new OutputWindow(),
                                new VariationsWindow(),
                                new ExplorationWindow(),
@@ -63,7 +74,16 @@ namespace T3.Editor.Gui.Windows.Layouts
                                Program.ConsoleLogWindow,
                                new IoViewWindow(),
                                new SettingsWindow(),
-                           };            
+                           };
+
+            if (UiSymbolData.RootInstance != null)
+            {
+                _windows.Add(new GraphWindow(UiSymbolData.RootInstance));
+            }
+            else
+            {
+                _startedWithoutHomeCanvas = true;
+            }
 
             LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
 

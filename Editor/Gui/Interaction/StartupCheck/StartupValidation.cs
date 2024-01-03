@@ -40,7 +40,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                                      {
                                          RequiredFilePaths = new List<string>()
                                                                  {
-                                                                     LayoutHandling.LayoutPath + "layout1.json",
+                                                                     LayoutHandling.LayoutFolder + "layout1.json",
                                                                      @"Editor\bin\Release\net6.0-windows\bass.dll",
                                                                      @"Editor\bin\Debug\net6.0-windows\bass.dll",
                                                                  },

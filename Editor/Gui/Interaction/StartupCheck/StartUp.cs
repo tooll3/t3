@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using T3.Core.Logging;
+using T3.Core.UserData;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
 using T3.SystemUi;
@@ -94,6 +95,6 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
         }
 
         private const string HelpUrl = "https://github.com/tooll3/t3/wiki/installation#setup-and-installation";
-        private const string StartUpLockFilePath = @".t3\startingUp";
+        private static string StartUpLockFilePath => Path.Combine(UserData.RootFolder, "startingUp");
     }
 }

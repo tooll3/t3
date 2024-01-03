@@ -9,6 +9,7 @@ using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Interaction;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows.Output;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Windows.Layouts
 {
@@ -20,6 +21,7 @@ namespace T3.Editor.Gui.Windows.Layouts
     /// </summary>    
     public static class LayoutHandling
     {
+        
         public static void ProcessKeyboardShortcuts()
         {
             // Process Keyboard shortcuts
@@ -88,9 +90,9 @@ namespace T3.Editor.Gui.Windows.Layouts
                 {
                     if (config.Title.StartsWith("Graph#"))
                     {
-                        if (GraphWindow.CanOpenAnotherWindow())
+                        if (GraphWindow.CanOpenAnotherWindow() && UiSymbolData.RootInstance != null)
                         {
-                            matchingWindow = new GraphWindow();
+                            matchingWindow = new GraphWindow(UiSymbolData.RootInstance);
                             matchingWindow.Config = config;
                         }
                     }
@@ -137,8 +139,7 @@ namespace T3.Editor.Gui.Windows.Layouts
 
         private static void SaveLayout(int index)
         {
-            if (!Directory.Exists(LayoutPath))
-                Directory.CreateDirectory(LayoutPath);
+            Directory.CreateDirectory(LayoutFolder);
 
             var serializer = JsonSerializer.Create();
             serializer.Formatting = Formatting.Indented;
@@ -188,7 +189,7 @@ namespace T3.Editor.Gui.Windows.Layouts
 
         private static string GetLayoutFilename(int index)
         {
-            return Path.Combine(LayoutPath, string.Format(LayoutFileNameFormat, index));
+            return Path.Combine(LayoutFolder, string.Format(LayoutFileNameFormat, index));
         }
 
         private static bool DoesLayoutExists(int index)
@@ -234,6 +235,6 @@ namespace T3.Editor.Gui.Windows.Layouts
         }
 
         private const string LayoutFileNameFormat = "layout{0}.json";
-        public const string LayoutPath = @".t3\layouts\";
+        public static string LayoutFolder => Path.Combine(Core.UserData.UserData.RootFolder, "layouts");
     }
 }

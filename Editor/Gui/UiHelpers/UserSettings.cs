@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using T3.Core.Animation;
@@ -17,7 +18,7 @@ namespace T3.Editor.Gui.UiHelpers
     /// </summary>
     public class UserSettings : Settings<UserSettings.ConfigData>
     {
-        public UserSettings(bool saveOnQuit) : base("userSettings.json", saveOnQuit:saveOnQuit)
+        public UserSettings(bool saveOnQuit, string fileName) : base(fileName, saveOnQuit)
         {
         }
 
@@ -112,7 +113,7 @@ namespace T3.Editor.Gui.UiHelpers
         
         public static bool IsUserNameDefined()
         {
-            return !string.IsNullOrEmpty(Config.UserName) && Config.UserName != UndefinedUserName;
+            return !string.IsNullOrWhiteSpace(Config.UserName) && Config.UserName != UndefinedUserName;
         }
 
         private const string UndefinedUserName = "unknown";

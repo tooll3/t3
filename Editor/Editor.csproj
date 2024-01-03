@@ -1,40 +1,72 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <StartupObject>T3.Editor.Program</StartupObject>
-    <ApplicationIcon>..\Resources\t3-editor\images\t3.ico</ApplicationIcon>
-    <RootNamespace>T3.Editor</RootNamespace>
-    <!--<AssemblyName>T3Editor</AssemblyName>-->
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <StartupObject>T3.Editor.Program</StartupObject>
+        <ApplicationIcon>..\Resources\t3-editor\images\t3.ico</ApplicationIcon>
+        <RootNamespace>T3.Editor</RootNamespace>
+        <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+        <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+        <!--<AssemblyName>T3Editor</AssemblyName>-->
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ImGui.NET" Version="1.87.3" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.9.0-2.final" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.0-2.final" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.0-2.final" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.9.0-2.final" />
-    <PackageReference Include="Rug.Osc" Version="1.2.5">
-      <NoWarn>NU1701</NoWarn>
-    </PackageReference>
-    <PackageReference Include="Sentry" Version="3.41.2" />
-    <PackageReference Include="SharpDX.Desktop" Version="4.2.0">
-      <NoWarn>NU1701</NoWarn>
-    </PackageReference>
-    <PackageReference Include="System.Management" Version="6.0.0" />
+    <ItemGroup>
+        <PackageReference Include="ImGui.NET" Version="1.87.3"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.9.0-2.final"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.0-2.final"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.0-2.final"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.9.0-2.final"/>
+        <PackageReference Include="Rug.Osc" Version="1.2.5">
+            <NoWarn>NU1701</NoWarn>
+        </PackageReference>
+        <PackageReference Include="Sentry" Version="3.41.2"/>
+        <PackageReference Include="SharpDX.Desktop" Version="4.2.0">
+            <NoWarn>NU1701</NoWarn>
+        </PackageReference>
+        <PackageReference Include="System.Management" Version="6.0.0"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="..\Core\Core.csproj"/>
+        <ProjectReference Include="..\Logging\Logging.csproj"/>
+        <ProjectReference Include="..\MsForms\MsForms.csproj"/>
+    </ItemGroup>
 
-  </ItemGroup>
+    
+    <!--This copies all files in the `dependencies` folder *directly* into the output directory-->
+    <ItemGroup>
+        <Content Include="../Dependencies/**/*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+        </Content>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj" />
-    <ProjectReference Include="..\Logging\Logging.csproj" />
-    <ProjectReference Include="..\MsForms\MsForms.csproj" />
-  </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Gui\UiHelpers\ConvertSvgFonts" />
-  </ItemGroup>
+    <ItemGroup>
+        <DefaultUserConfigs Include="../.Defaults/**/*.*"/>
+    </ItemGroup>
+
+    <Target Name="CopyDefaults" AfterTargets="AfterBuild">
+        <Copy SourceFiles="@(DefaultUserConfigs)"
+              SkipUnchangedFiles="true"
+              UseHardlinksIfPossible="true"
+              DestinationFiles="@(DefaultUserConfigs->'$(OutputPath)/.t3/%(RecursiveDir)%(Filename)%(Extension)')"/>
+    </Target>
+
+    <ItemGroup>
+        <Variations Include="../.Variations/**/*.*"/>
+    </ItemGroup>
+
+    <Target Name="CopyVariations" AfterTargets="AfterBuild">
+        <Copy SourceFiles="@(Variations)"
+              SkipUnchangedFiles="true"
+              UseHardlinksIfPossible="true"
+              DestinationFiles="@(Variations->'$(OutputPath)/.Variations/%(RecursiveDir)%(Filename)%(Extension)')"/>
+    </Target>
+
+
+    <!--/Target-->
 
 </Project>

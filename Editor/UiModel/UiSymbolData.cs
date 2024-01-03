@@ -27,7 +27,7 @@ public partial class UiSymbolData : SymbolData
     {
         var gotProject = TryFindMatchingCSProj(assembly, out var csprojFile);
         if (!gotProject)
-            throw new ArgumentException("Could not find matching csproj file", nameof(assembly));
+            throw new ArgumentException($"Could not find matching csproj file for {assembly.Name}", nameof(assembly));
 
         Folder = Path.GetDirectoryName(csprojFile!.FullName);
 
@@ -77,12 +77,24 @@ public partial class UiSymbolData : SymbolData
         Log.Debug($"Finished loading UI for {AssemblyInformation.Name}.");
     }
 
-    public bool TryCreateHome()
+    public static bool TryCreateHome()
     {
-        var symbolUisById = _symbolUis.ToDictionary(x => x.Symbol.Id, x => x);
+        var gotHome = SymbolOwners.TryGetValue(HomeSymbolId, out var homeSymbolOwner);
+        if (!gotHome)
+        {
+            return false;
+        }
+        
+        var homeUiSymbolData = (UiSymbolData)homeSymbolOwner;
+        var symbolUis = homeUiSymbolData._symbolUis;
+
+        var symbolUisById = symbolUis.ToDictionary(x => x.Symbol.Id, x => x);
         bool containsHome = symbolUisById.ContainsKey(HomeSymbolId);
         if (!containsHome)
+        {
+            Log.Error($"Could not find home symbol for {homeUiSymbolData.AssemblyInformation.Name} - something is wrong.");
             return false;
+        }
 
         // Create instance of project op, all children are created automatically
         if (RootInstance != null)
@@ -92,8 +104,7 @@ public partial class UiSymbolData : SymbolData
 
         Console.WriteLine(@"Creating home...");
         var homeSymbol = symbolUisById[HomeSymbolId].Symbol;
-        var homeInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
-        RootInstance = homeSymbol.CreateInstance(homeInstanceId);
+        RootInstance = homeSymbol.CreateInstance(HomeInstanceId);
         return true;
     }
 
@@ -125,7 +136,7 @@ public partial class UiSymbolData : SymbolData
     public override void SaveAll()
     {
         Log.Debug($"{AssemblyInformation.Name}: Saving...");
-        
+
         MarkAsSaving();
 
         // Save all t3 and source files
@@ -269,6 +280,7 @@ public partial class UiSymbolData : SymbolData
     }
 
     internal static readonly Guid HomeSymbolId = Guid.Parse("dab61a12-9996-401e-9aa6-328dd6292beb");
+    private static readonly Guid HomeInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
 
     public static Instance RootInstance { get; private set; }
     private List<SymbolUi> _symbolUis = new();

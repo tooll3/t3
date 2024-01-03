@@ -41,10 +41,11 @@ namespace T3.Core.Logging
 
         private readonly StreamWriter _fileWriter;
 
-        public static ILogWriter CreateDefault()
+        public static ILogWriter CreateDefault(string outputDirectory)
         {
-            Directory.CreateDirectory(@".t3\log");
-            return new FileWriter($@".t3\log\{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.log")
+            Directory.CreateDirectory(outputDirectory);
+            string fullPath = Path.Combine(outputDirectory, $"{DateTime.Now:yyyy_MM_dd-HH_mm_ss_fff}.log");
+            return new FileWriter(fullPath)
                        {
                            Filter = ILogEntry.EntryLevel.All
                        };

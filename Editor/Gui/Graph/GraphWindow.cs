@@ -26,7 +26,7 @@ namespace T3.Editor.Gui.Graph
     /// </summary>
     public class GraphWindow : Window
     {
-        public GraphWindow()
+        public GraphWindow(Instance instance)
         {
             _instanceCounter++;
             Config.Title = "Graph##" + _instanceCounter;
@@ -35,7 +35,7 @@ namespace T3.Editor.Gui.Graph
 
             // Legacy work-around
             var opId = UserSettings.GetLastOpenOpForWindow(Config.Title);
-            var shownOpInstance = FindIdInNestedChildren(UiSymbolData.RootInstance, opId) ?? UiSymbolData.RootInstance;
+            var shownOpInstance = FindIdInNestedChildren(instance, opId) ?? instance;
             var path = OperatorUtils.BuildIdPathForInstance(shownOpInstance);
             GraphCanvas = new GraphCanvas(this, path);
 
@@ -457,8 +457,11 @@ namespace T3.Editor.Gui.Graph
 
         protected override void AddAnotherInstance()
         {
+            if (UiSymbolData.RootInstance == null)
+                return;
+            
             // ReSharper disable once ObjectCreationAsStatement
-            new GraphWindow(); // Must call constructor
+            new GraphWindow(UiSymbolData.RootInstance); // Must call constructor
         }
 
         private static class TitleAndBreadCrumbs

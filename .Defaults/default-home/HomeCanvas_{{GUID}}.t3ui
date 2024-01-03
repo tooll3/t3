@@ -1,5 +1,5 @@
 {
-  "Id": "dab61a12-9996-401e-9aa6-328dd6292beb"/*HomeCanvas*/,
+  "Id": "{{GUID}}"/*HomeCanvas*/,
   "Description": "Your personal Workspace.",
   "InputUis": [],
   "SymbolChildUis": [

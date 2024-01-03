@@ -96,7 +96,7 @@ internal static class UiContentUpdate
             ProgramWindows.CopyToSecondaryRenderOutput();
         }
 
-        Program.T3Ui.ProcessFrame();
+        T3Ui.ProcessFrame();
 
         ProgramWindows.RefreshViewport();
 

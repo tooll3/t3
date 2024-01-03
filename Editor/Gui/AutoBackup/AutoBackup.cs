@@ -9,6 +9,10 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using T3.Core.Logging;
+using T3.Core.Model;
+using T3.Core.UserData;
+using T3.Editor.Gui.Styling;
+using T3.Editor.Gui.Windows.Layouts;
 
 namespace T3.Editor.Gui.AutoBackup
 {
@@ -44,6 +48,8 @@ namespace T3.Editor.Gui.AutoBackup
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
+            Directory.CreateDirectory(BackupDirectory);
+            
             var index = GetIndexOfLastBackup();
             index++;
             ReduceNumberOfBackups();
@@ -52,13 +58,9 @@ namespace T3.Editor.Gui.AutoBackup
 
             try
             {
-                var zipPath = Path.GetDirectoryName(zipFilePath);
-                if (!string.IsNullOrEmpty(zipPath) && !Directory.Exists(zipPath))
-                    Directory.CreateDirectory(zipPath);
-
                 using var archive = ZipFile.Open(zipFilePath, ZipArchiveMode.Create);
 
-                foreach (var sourcePath in _sourcePaths)
+                foreach (var sourcePath in SourcePaths)
                 {
                     foreach (var filepath in Directory.GetFiles(sourcePath, "*", SearchOption.AllDirectories))
                     {
@@ -173,10 +175,10 @@ namespace T3.Editor.Gui.AutoBackup
 
         public static string GetLatestArchiveFilePath()
         {
-            return Directory.Exists(BackupDirectory)
-                       ? Directory.GetFiles(BackupDirectory, "*.zip", SearchOption.TopDirectoryOnly).Reverse().FirstOrDefault()
-                       : null;
-            
+            Directory.CreateDirectory(BackupDirectory);
+            return Directory.EnumerateFiles(BackupDirectory, "*.zip", SearchOption.TopDirectoryOnly)
+                            .Reverse()
+                            .FirstOrDefault();
         }
 
         /*
@@ -210,9 +212,6 @@ namespace T3.Editor.Gui.AutoBackup
             var regexMatchIndex = new Regex(@"#(\d\d\d\d\d)-(\d\d\d\d)_(\d\d)_(\d\d)-(\d\d)_(\d\d)_(\d\d)_(\d\d\d)");
             var backupFilePathsByIndex = new Dictionary<int, string>();
             var highestIndex = int.MinValue;
-
-            if (!Directory.Exists(BackupDirectory))
-                return;
 
             foreach (var filename in Directory.GetFiles(BackupDirectory))
             {
@@ -288,12 +287,13 @@ namespace T3.Editor.Gui.AutoBackup
 
         private static readonly Stopwatch Stopwatch = Stopwatch.StartNew();
         private static bool _isSaving;
-        private const string BackupDirectory = @".t3\backup";
+        private static string BackupDirectory => Path.Combine(UserData.RootFolder, "backup");
 
-        private static readonly string[] _sourcePaths =
+        private static readonly string[] SourcePaths =
             {
-                @"Operators\Types",
-                @".t3\layouts",
+                Path.GetFullPath(SymbolData.OperatorDirectoryName),
+                ThemeHandling.ThemeFolder,
+                LayoutHandling.LayoutFolder
             };
     }
 }

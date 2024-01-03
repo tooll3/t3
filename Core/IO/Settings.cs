@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using T3.Serialization;
 
 namespace T3.Core.IO
@@ -18,8 +19,8 @@ namespace T3.Core.IO
 
             Defaults = new T();
             Config = JsonUtils.TryLoadingJson<T>(filepath) ?? new T();
-            _filepath = filepath;
             _instance = this;
+            _filepath = filepath;
         }
 
         private static void OnProcessExit(object sender, EventArgs e)

@@ -2,9 +2,10 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Reflection;
 using System.Threading.Tasks;
 using T3.Editor.Gui.Graph;
 using ImGuiNET;
@@ -18,7 +19,7 @@ using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
-using T3.Editor.Compilation;
+using T3.Core.UserData;
 using T3.Editor.Gui.Commands;
 using T3.Editor.Gui.Dialog;
 using T3.Editor.Gui.Graph.Interaction;
@@ -40,40 +41,141 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui;
 
-public class T3Ui
+public static class T3Ui
 {
     static T3Ui()
     {
-        var operatorAssemblies = RuntimeAssemblies.OperatorAssemblies;
-        
-        UiSymbolDatas = operatorAssemblies
-                       .Select(a => new UiSymbolData(a))
-                       .ToArray();
+        _userNameDialog.UserNameChanged += CreateOrMigrateUser;
+    }
+
+    private static void CreateOrMigrateUser(object sender, UserNameDialog.NameChangedEventArgs nameArgs)
+    {
+        var name = nameArgs.NewName;
+        string destinationDirectory = Path.Combine(SymbolData.OperatorDirectoryName, "user", name);
+            
+        if (_needsUserProject)
+        {
+            
+            var defaultHomeDir = Path.Combine(UserData.RootFolder, "default-home");
+            var files = Directory.EnumerateFiles(defaultHomeDir, "*");
+            destinationDirectory = Path.GetFullPath(destinationDirectory);
+            Directory.CreateDirectory(destinationDirectory);
+
+            var dependenciesDirectory = Path.Combine(destinationDirectory, "dependencies");
+            Directory.CreateDirectory(dependenciesDirectory);
+
+            string placeholderDependencyPath = Path.Combine(dependenciesDirectory, "PlaceNativeDllDependenciesHere.txt");
+            File.Create(placeholderDependencyPath).Dispose();
+
+            const string namePlaceholder = "{{USER}}";
+            const string guidPlaceholder = "{{GUID}}";
+            string homeGuid = UiSymbolData.HomeSymbolId.ToString();
+            foreach (var file in files)
+            {
+                string text = File.ReadAllText(file);
+                text = text.Replace(namePlaceholder, name)
+                           .Replace(guidPlaceholder, homeGuid);
+                
+                var destinationFilePath = Path.Combine(destinationDirectory, Path.GetFileName(file));
+                destinationFilePath = destinationFilePath.Replace(namePlaceholder, name)
+                                                         .Replace(guidPlaceholder, homeGuid);
+                
+                File.WriteAllText(destinationFilePath, text);
+            }
+
+            // Todo: add solution reference to project
+
+            // build destinationDirectory/name.csproj with dotnet build
+            var process = new Process
+                              {
+                                  StartInfo = new ProcessStartInfo
+                                                  {
+                                                      FileName = "dotnet",
+                                                      Arguments = $"build {name}.csproj",
+                                                      WorkingDirectory = destinationDirectory,
+                                                      UseShellExecute = true
+                                                  }
+                              };
+
+            process.Start();
+            process.WaitForExit();
+
+            var newOperatorAssemblies = RuntimeAssemblies.LoadNewOperatorAssemblies(destinationDirectory);
+
+            List<UiSymbolData> newUiSymbolDatas = new();
+            foreach (var assembly in newOperatorAssemblies)
+            {
+                var newUiSymbolData = new UiSymbolData(assembly);
+                newUiSymbolDatas.Add(newUiSymbolData);
+            }
+            
+            AddUiSymbolDatas(newUiSymbolDatas);
+            if (!UiSymbolData.TryCreateHome())
+            {
+                throw new Exception("Failed to create user home");
+            }
+            
+            _needsUserProject = false;
+        }
+        else if (nameArgs.NewName != nameArgs.OldName)
+        {
+            var oldUserNamespace = $"user.{nameArgs.OldName}";
+            var newUserNamespace = $"user.{nameArgs.NewName}";
+            
+            Log.Warning($"Have not implemented migration from {oldUserNamespace} to {newUserNamespace}");
+        }
+    }
+
+    [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
+    internal static bool TryInitialize(out Exception exception)
+    {
+        try
+        {
+            var operatorAssemblies = RuntimeAssemblies.OperatorAssemblies;
+
+            var uiSymbolDatas = operatorAssemblies
+                               .Select(a => new UiSymbolData(a))
+                               .ToList();
+            
+            AddUiSymbolDatas(uiSymbolDatas);
+
+            if (!UiSymbolData.TryCreateHome())
+            {
+                _needsUserProject = true;
+            }
+
+            Log.Debug($"Loaded {UiSymbolDatas.Count} UI datas.");
+            exception = null;
+            return true;
+        }
+        catch (Exception e)
+        {
+            exception = e;
+            return false;
+        }
+    }
+
+    private static void AddUiSymbolDatas(List<UiSymbolData> uiSymbolDatas)
+    {
+        UiSymbolDatasEditable.AddRange(uiSymbolDatas);
 
         ConcurrentDictionary<UiSymbolData, List<SymbolJson.SymbolReadResult>> loadedSymbols = new();
-        UiSymbolDatas.AsParallel().ForAll(uiSymbolData =>
+        uiSymbolDatas.AsParallel().ForAll(uiSymbolData =>
                                           {
                                               uiSymbolData.LoadSymbols(false, out var list);
                                               loadedSymbols.TryAdd(uiSymbolData, list);
                                           });
         loadedSymbols.AsParallel().ForAll(pair => pair.Key.ApplySymbolChildren(pair.Value));
-        
-        UiSymbolDatas.AsParallel().ForAll(uiSymbolData => uiSymbolData.LoadUiFiles());
-        
-        foreach(var uiSymbolData in UiSymbolDatas)
+
+        uiSymbolDatas.AsParallel().ForAll(uiSymbolData => uiSymbolData.LoadUiFiles());
+
+        foreach (var uiSymbolData in uiSymbolDatas)
         {
             uiSymbolData.RegisterUiSymbols(enableLog: false);
         }
-        
-        foreach(var uiSymbolData in UiSymbolDatas)
-        {
-            uiSymbolData.TryCreateHome();
-        }
-        
-        Log.Debug($"Loaded {UiSymbolDatas.Count} UI datas.");
     }
 
-    public static void Initialize()
+    public static void InitializeEnvironment()
     {
         //WindowManager.TryToInitialize();
         ExampleSymbolLinking.UpdateExampleLinks();
@@ -86,7 +188,7 @@ public class T3Ui
     public static readonly Playback DefaultTimelinePlayback = new();
     public static readonly BeatTimingPlayback DefaultBeatTimingPlayback = new();
 
-    private void InitializeAfterAppWindowReady()
+    private static void InitializeAfterAppWindowReady()
     {
         if (_initialed || ImGui.GetWindowSize() == Vector2.Zero)
             return;
@@ -95,9 +197,9 @@ public class T3Ui
         _initialed = true;
     }
 
-    private bool _initialed;
+    private static bool _initialed;
 
-    public void ProcessFrame()
+    public static void ProcessFrame()
     {
         ImGui.PushStyleColor(ImGuiCol.Text, UiColors.Text.Rgba);
 
@@ -170,7 +272,7 @@ public class T3Ui
         _importDialog.Draw();
         _createFromTemplateDialog.Draw();
 
-        if (!UserSettings.IsUserNameDefined())
+        if (!UserSettings.IsUserNameDefined() || _needsUserProject)
         {
             UserSettings.Config.UserName = Environment.UserName;
             _userNameDialog.ShowNextFrame();
@@ -182,9 +284,7 @@ public class T3Ui
         AutoBackup.AutoBackup.CheckForSave();
     }
 
-    private Dictionary<ImGuiKey, double> _keyReleaseTimes = new();
-
-    private void TriggerGlobalActionsFromKeyBindings()
+    private static void TriggerGlobalActionsFromKeyBindings()
     {
         if (KeyboardBinding.Triggered(UserActions.Undo))
         {
@@ -238,7 +338,7 @@ public class T3Ui
         }
     }
 
-    private void DrawAppMenuBar()
+    private static void DrawAppMenuBar()
     {
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(6, 6) * T3Ui.UiScaleFactor);
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, T3Style.WindowChildPadding * T3Ui.UiScaleFactor);
@@ -414,9 +514,6 @@ public class T3Ui
         }
     }
 
-    private static readonly object _saveLocker = new();
-    private static readonly Stopwatch _saveStopwatch = new();
-
     private static void SaveInBackground(bool saveAll)
     {
         if (saveAll)
@@ -431,16 +528,16 @@ public class T3Ui
 
     public static void SaveModified()
     {
-        lock (_saveLocker)
+        lock (SaveLocker)
         {
-            if (_saveStopwatch.IsRunning)
+            if (SaveStopwatch.IsRunning)
             {
                 Log.Debug("Can't save modified while saving is in progress");
                 return;
             }
 
             ResourceFileWatcher.DisableOperatorFileWatcher();
-            _saveStopwatch.Restart();
+            SaveStopwatch.Restart();
 
             // Todo - parallelize? 
             foreach (var data in UiSymbolDatas)
@@ -448,24 +545,24 @@ public class T3Ui
                 data.SaveModifiedSymbols();
             }
 
-            _saveStopwatch.Stop();
+            SaveStopwatch.Stop();
             ResourceFileWatcher.EnableOperatorFileWatcher();
-            Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
+            Log.Debug($"Saving took {SaveStopwatch.ElapsedMilliseconds}ms.");
         }
     }
 
     public static void SaveAll()
     {
-        lock (_saveLocker)
+        lock (SaveLocker)
         {
-            if (_saveStopwatch.IsRunning)
+            if (SaveStopwatch.IsRunning)
             {
                 Log.Debug("Can't save while saving is in progress");
                 return;
             }
 
             ResourceFileWatcher.DisableOperatorFileWatcher();
-            _saveStopwatch.Restart();
+            SaveStopwatch.Restart();
 
             // Todo - parallelize?
             foreach (var data in UiSymbolDatas)
@@ -473,9 +570,9 @@ public class T3Ui
                 data.SaveAll();
             }
             
-            _saveStopwatch.Stop();
+            SaveStopwatch.Stop();
             ResourceFileWatcher.EnableOperatorFileWatcher();
-            Log.Debug($"Saving took {_saveStopwatch.ElapsedMilliseconds}ms.");
+            Log.Debug($"Saving took {SaveStopwatch.ElapsedMilliseconds}ms.");
         }
     }
 
@@ -526,7 +623,8 @@ public class T3Ui
         }
     }
 
-    public static readonly IReadOnlyList<UiSymbolData> UiSymbolDatas;
+    private static readonly List<UiSymbolData> UiSymbolDatasEditable = new();
+    public static IReadOnlyList<UiSymbolData> UiSymbolDatas = UiSymbolDatasEditable;
 
     public static IntPtr NotDroppingPointer = new(0);
     public static bool DraggingIsInProgress = false;
@@ -534,7 +632,13 @@ public class T3Ui
     public static bool MouseWheelFieldWasHoveredLastFrame { get; private set; }
     public static bool ShowSecondaryRenderWindow => WindowManager.ShowSecondaryRenderWindow;
     public const string FloatNumberFormat = "{0:F2}";
-    public static bool IsCurrentlySaving => _saveStopwatch != null && _saveStopwatch.IsRunning;
+
+    private static readonly object SaveLocker = new();
+    private static readonly Stopwatch SaveStopwatch = new();
+    
+    // ReSharper disable once InconsistentlySynchronizedField
+    public static bool IsCurrentlySaving => SaveStopwatch is { IsRunning: true };
+    
     public static float UiScaleFactor { get; set; } = 1;
     public static float DisplayScaleFactor { get; set; } = 1;
     public static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);
@@ -560,4 +664,5 @@ public class T3Ui
 
     public static bool UseVSync = true;
     public static bool ItemRegionsVisible;
+    private static bool _needsUserProject;
 }

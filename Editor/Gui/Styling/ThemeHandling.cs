@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
+using T3.Core.UserData;
 using T3.Editor.Gui.UiHelpers;
 using T3.Serialization;
 
@@ -33,8 +34,7 @@ public static class ThemeHandling
 
     public static void SaveTheme(ColorTheme theme)
     {
-        if (!Directory.Exists(ThemeFolder))
-            Directory.CreateDirectory(ThemeFolder);
+        Directory.CreateDirectory(ThemeFolder);
 
         theme.Name = theme.Name.Trim();
         if (string.IsNullOrEmpty(theme.Name))
@@ -204,7 +204,7 @@ public static class ThemeHandling
     }
 
     public static readonly List<ColorTheme> Themes = new();
-    private const string ThemeFolder = @".t3\Themes\";
+    public static string ThemeFolder => Path.Combine(UserData.RootFolder, "themes");
     public static ColorTheme FactoryTheme;
     
     

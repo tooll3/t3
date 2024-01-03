@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using T3.Core.DataTypes;
 using T3.Serialization;
 
@@ -17,5 +18,5 @@ public static class GradientPresets
     
     private static List<Gradient> _presets;
 
-    private const string FilePath = ".t3/gradients.json";
+    private static string FilePath => Path.Combine(Core.UserData.UserData.RootFolder, "gradients.json");
 }

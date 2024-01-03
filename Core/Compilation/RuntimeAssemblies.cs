@@ -13,9 +13,9 @@ namespace T3.Core.Compilation;
 public class RuntimeAssemblies
 {
     public static readonly AssemblyInformation Core;
-    public static readonly IReadOnlyList<AssemblyInformation> AllAssemblies;
-    public static readonly IReadOnlyList<AssemblyInformation> DynamicallyLoadedAssemblies;
-    public static readonly IReadOnlyList<AssemblyInformation> OperatorAssemblies;
+    public static IReadOnlyList<AssemblyInformation> AllAssemblies { get; private set; }
+    public static IReadOnlyList<AssemblyInformation> DynamicallyLoadedAssemblies { get; private set; }
+    public static IReadOnlyList<AssemblyInformation> OperatorAssemblies { get; private set; }
 
     static RuntimeAssemblies()
     {
@@ -25,27 +25,16 @@ public class RuntimeAssemblies
         Core = new AssemblyInformation(path, coreAssemblyName, coreAssembly);
         var baseAssemblies = AppDomain.CurrentDomain.GetAssemblies()
                                       .Where(x => !x.IsDynamic)
+                                      .Where(x => !x.GetName().FullName.Contains("CodeAnalysis")) // Only the editor needs CodeAnalysis 
                                       .Select(x => new AssemblyInformation(x.Location, x.GetName(), x))
                                       .ToArray();
 
-        DynamicallyLoadedAssemblies = LoadAssemblies(baseAssemblies);
+        var workingDirectory = Directory.GetCurrentDirectory();
+        DynamicallyLoadedAssemblies = LoadAssemblies(baseAssemblies, workingDirectory);
 
         OperatorAssemblies = DynamicallyLoadedAssemblies
-                            .Where(assemblyInformation =>
-                                   {
-                                       try
-                                       {
-                                           return assemblyInformation.Assembly.DefinedTypes
-                                                                     .Any(typeInfo => typeInfo.IsAssignableTo(typeof(Instance)));
-                                       }
-                                       catch (Exception e)
-                                       {
-                                           Log.Debug($"Failed to check if assembly '{assemblyInformation.Name}' ({assemblyInformation.Path}) " +
-                                                     $"contains operator types.\n{e.Message}\n{e.StackTrace}");
-                                           return false;
-                                       }
-                                   })
-                            .ToList();
+                            .Where(AssemblyContainsOperators)
+                            .ToArray();
 
         Log.Debug($"Loaded {DynamicallyLoadedAssemblies.Count} assemblies.");
         Log.Debug($"Loaded {OperatorAssemblies.Count} operator assemblies.");
@@ -55,16 +44,41 @@ public class RuntimeAssemblies
                        .ToArray();
     }
 
-    static List<AssemblyInformation> LoadAssemblies(IEnumerable<AssemblyInformation> baseAssemblies)
+    private static bool AssemblyContainsOperators(AssemblyInformation assemblyInformation)
+    {
+        try
+        {
+            return assemblyInformation.Assembly.DefinedTypes
+                                      .Any(typeInfo => typeInfo.IsAssignableTo(typeof(Instance)));
+        }
+        catch (Exception e)
+        {
+            Log.Debug($"Failed to check if assembly '{assemblyInformation.Name}' ({assemblyInformation.Path}) " +
+                      $"contains operator types.\n{e.Message}\n{e.StackTrace}");
+            return false;
+        }
+    }
+
+    public static IReadOnlyList<AssemblyInformation> LoadNewOperatorAssemblies(string directory)
+    {
+        var assemblies = LoadAssemblies(AllAssemblies, directory);
+        var operatorAssemblies = assemblies.Where(AssemblyContainsOperators).ToArray();
+
+        OperatorAssemblies = OperatorAssemblies.Concat(operatorAssemblies).ToArray();
+        AllAssemblies = AllAssemblies.Concat(assemblies).ToArray();
+        DynamicallyLoadedAssemblies = DynamicallyLoadedAssemblies.Concat(assemblies).ToArray();
+        return operatorAssemblies;
+    }
+
+    static AssemblyInformation[] LoadAssemblies(IEnumerable<AssemblyInformation> baseAssemblies, string directory)
     {
         Log.Debug($"Attempting to load operator assemblies...");
         var currentAssemblyFullNames = baseAssemblies.Select(x => x.AssemblyName.FullName).ToList();
 
-        var workingDirectory = Directory.GetCurrentDirectory();
 
         try
         {
-            return Directory.GetFiles(workingDirectory, "*.dll", SearchOption.AllDirectories)
+            return Directory.GetFiles(directory, "*.dll", SearchOption.AllDirectories)
                              //.Where(path => path.Contains(BinaryDirectory))
                              //.Where(path => !path.Contains("NDI") && !path.Contains("Spout"))
                             .Select(path =>
@@ -90,7 +104,8 @@ public class RuntimeAssemblies
                                        var assemblyName = nameAndPath.AssemblyName;
                                        return assemblyName != null
                                               && assemblyName.ProcessorArchitecture == Core.AssemblyName.ProcessorArchitecture
-                                              && !currentAssemblyFullNames.Contains(assemblyName.FullName);
+                                              && !currentAssemblyFullNames.Contains(assemblyName.FullName)
+                                              && !assemblyName.FullName.Contains("CodeAnalysis"); // Only the editor needs CodeAnalysis
                                    })
                             .Select(name =>
                                     {
@@ -109,12 +124,12 @@ public class RuntimeAssemblies
                                         }
                                     })
                             .Where(info => info != null)
-                            .ToList();
+                            .ToArray();
         }
         catch (Exception e)
         {
             Log.Error($"Failed to load assemblies\n{e.Message}\n{e.StackTrace}");
-            return new List<AssemblyInformation>();
+            return Array.Empty<AssemblyInformation>();
         }
     }
 

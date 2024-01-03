@@ -3,18 +3,12 @@
     <PropertyGroup>
         <TargetFramework>net6.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>disable</Nullable>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Operators.user.{{USER}}</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Core\Core.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="CppSharp" Version="1.0.1" />
-        <PackageReference Include="NDILibDotNet6" Version="1.0.11"/>
-        <PackageReference Include="OpenGL.Net" Version="0.8.4"/>
+      <ProjectReference Include="..\..\..\Core\Core.csproj" />
     </ItemGroup>
 
     <!--This copies all files in the `dependencies` folder *directly* into the output directory-->
@@ -24,5 +18,7 @@
             <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
         </Content>
     </ItemGroup>
+
+
 
 </Project>

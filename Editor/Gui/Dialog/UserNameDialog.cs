@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using System;
+using ImGuiNET;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Graph.Helpers;
@@ -9,6 +10,8 @@ namespace T3.Editor.Gui.Dialog
 {
     public class UserNameDialog : ModalDialog
     {
+        private string _userName;
+
         public void Draw()
         {
             if (BeginDialog("Edit nickname"))
@@ -22,29 +25,43 @@ namespace T3.Editor.Gui.Dialog
                 if (ImGui.IsWindowAppearing())
                     ImGui.SetKeyboardFocusHere();
 
-                
-                ImGui.InputText("##name", ref UserSettings.Config.UserName, 255);
+                _userName ??= UserSettings.Config.UserName;
 
-                CustomComponents.HelpText("Tooll will use this to group your projects into a namespace.\n\n(This is a local setting only and not stored online.\n\nIt should be short and not contain spaces or special characters.");
+                ImGui.InputText("##name", ref _userName, 255);
+
+                CustomComponents
+                   .HelpText("Tooll will use this to group your projects into a namespace.\n\n(This is a local setting only and not stored online.\n\nIt should be short and not contain spaces or special characters.");
                 ImGui.Spacing();
 
-                if (CustomComponents.DisablableButton("Rename", GraphUtils.IsValidUserName(UserSettings.Config.UserName)))
+                if (CustomComponents.DisablableButton("Rename", GraphUtils.IsValidUserName(_userName)))
                 {
-                    UserSettings.Save();
-                    
+                    var eventArgs = new NameChangedEventArgs(UserSettings.Config.UserName, _userName);
+
                     // Change home (I.e. dashboard) namespace
-                    if(!SymbolRegistry.Entries.TryGetValue(UiModel.UiSymbolData.HomeSymbolId, out var homeSymbol))
+                    //if(!SymbolRegistry.Entries.TryGetValue(UiModel.UiSymbolData.HomeSymbolId, out var homeSymbol))
+                    //{
+                    //    Log.Warning("Skipped setting home canvas namespace because symbol wasn't found");
+                    //}
+                    //else
+                    //{
+                    //    // todo : remove invalid characters
+                    //    Log.Debug($"Moving home canvas to user.{UserSettings.Config.UserName}");
+                    //    homeSymbol.Namespace = $"user.{UserSettings.Config.UserName}"
+                    //    T3Ui.SaveAll();
+                    //}
+
+                    try
                     {
-                        Log.Warning("Skipped setting home canvas namespace because symbol wasn't found");
+                        UserNameChanged?.Invoke(this, eventArgs);
+                        UserSettings.Config.UserName = _userName;
+                        UserSettings.Save();
                     }
-                    else
+                    catch (Exception e)
                     {
-                        // todo : remove invalid characters
-                        Log.Debug($"Moving home canvas to user.{UserSettings.Config.UserName}");
-                        homeSymbol.Namespace = $"user.{UserSettings.Config.UserName}".ToLower();
-                        T3Ui.SaveAll();
+                        Log.Error($"Error while renaming user {e}");
+                        _userName = null;
                     }
-                    
+
                     ImGui.CloseCurrentPopup();
                 }
 
@@ -56,7 +73,22 @@ namespace T3.Editor.Gui.Dialog
 
                 EndDialogContent();
             }
+
             EndDialog();
+        }
+
+        public event EventHandler<NameChangedEventArgs> UserNameChanged;
+
+        public class NameChangedEventArgs : EventArgs
+        {
+            public NameChangedEventArgs(string newName, string oldName)
+            {
+                NewName = newName;
+                OldName = oldName;
+            }
+
+            public string NewName { get; }
+            public string OldName { get; }
         }
     }
 }
