@@ -27,14 +27,14 @@
         </PackageReference>
         <PackageReference Include="System.Management" Version="6.0.0"/>
     </ItemGroup>
-    
+
     <ItemGroup>
         <ProjectReference Include="..\Core\Core.csproj"/>
         <ProjectReference Include="..\Logging\Logging.csproj"/>
         <ProjectReference Include="..\MsForms\MsForms.csproj"/>
     </ItemGroup>
 
-    
+
     <!--This copies all files in the `dependencies` folder *directly* into the output directory-->
     <ItemGroup>
         <Content Include="../Dependencies/**/*">
@@ -44,6 +44,7 @@
     </ItemGroup>
 
 
+    <!--This copies all files in the `.Defaults` folder into the output/.t3 folder-->
     <ItemGroup>
         <DefaultUserConfigs Include="../.Defaults/**/*.*"/>
     </ItemGroup>
@@ -55,6 +56,8 @@
               DestinationFiles="@(DefaultUserConfigs->'$(OutputPath)/.t3/%(RecursiveDir)%(Filename)%(Extension)')"/>
     </Target>
 
+
+    <!--This copies all files in the `.Variations` folder into the output/.Variations folder-->
     <ItemGroup>
         <Variations Include="../.Variations/**/*.*"/>
     </ItemGroup>
@@ -65,8 +68,4 @@
               UseHardlinksIfPossible="true"
               DestinationFiles="@(Variations->'$(OutputPath)/.Variations/%(RecursiveDir)%(Filename)%(Extension)')"/>
     </Target>
-
-
-    <!--/Target-->
-
 </Project>
