@@ -11,6 +11,7 @@ using T3.Core.Resource;
 using T3.Core.SystemUi;
 using T3.Core.UserData;
 using T3.Editor.App;
+using T3.Editor.Compilation;
 using T3.Editor.Gui;
 using T3.Editor.Gui.Graph.Interaction;
 using T3.Editor.Gui.Interaction.Camera;
@@ -129,7 +130,7 @@ namespace T3.Editor
             Log.Debug($"About to initialize T3 UI");
 
             // Initialize UI and load complete symbol model
-            var initializedUi = T3Ui.TryInitialize(out var uiException);
+            var initializedUi = EditorInitialization.TryInitialize(out var uiException);
 
             if (!initializedUi)
             {
