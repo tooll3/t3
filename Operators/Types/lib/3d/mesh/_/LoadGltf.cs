@@ -34,9 +34,11 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
             var path = Path.GetValue(context);
             // var useGpuCaching = UseGPUCaching.GetValue(context);
 
+            var childIndexChanged = ChildIndex.DirtyFlag.IsDirty;
+            
             var childIndex = ChildIndex.GetValue(context);
 
-            if (path != _lastFilePath)
+            if (path != _lastFilePath || childIndexChanged)
             {
                 int verticesCount = 0;
                 int faceCount = 0;
@@ -143,7 +145,6 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
                                     faceIndex++;
                                 }
 
-                                newData.IndexBufferWithViews.Buffer = newData.IndexBuffer;
                                 const int stride = 3 * 4;
                                 if (faceCount == 0)
                                 {
@@ -154,6 +155,8 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
                                 ResourceManager.CreateStructuredBufferSrv(newData.IndexBuffer, ref newData.IndexBufferWithViews.Srv);
                                 ResourceManager.CreateStructuredBufferUav(newData.IndexBuffer, UnorderedAccessViewBufferFlags.None,
                                                                           ref newData.IndexBufferWithViews.Uav);
+                                
+                                newData.IndexBufferWithViews.Buffer = newData.IndexBuffer;
                             }
 
 
@@ -164,13 +167,13 @@ namespace T3.Operators.Types.Id_92b18d2b_1022_488f_ab8e_a4dcca346a23
                                 return;
                             }
                             Log.Debug($"  loaded {path} Child {childIndex}:  {verticesCount} vertices  {faceCount} faces", this);
-                            newData.VertexBufferWithViews.Buffer = newData.VertexBuffer;
                             ResourceManager.SetupStructuredBuffer(newData.VertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride,
                                                                   ref newData.VertexBuffer);
                             ResourceManager.CreateStructuredBufferSrv(newData.VertexBuffer, ref newData.VertexBufferWithViews.Srv);
                             ResourceManager.CreateStructuredBufferUav(newData.VertexBuffer, UnorderedAccessViewBufferFlags.None,
                                                                       ref newData.VertexBufferWithViews.Uav);
 
+                            newData.VertexBufferWithViews.Buffer = newData.VertexBuffer;
                         }
                         _data = newData;
                     }
