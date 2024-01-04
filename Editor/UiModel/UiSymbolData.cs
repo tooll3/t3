@@ -31,20 +31,6 @@ public partial class UiSymbolData : SymbolData
 
         Folder = Path.GetDirectoryName(csprojFile!.FullName);
 
-        var uiInitializerTypes = AssemblyInformation.Types.Where(x => x.IsAssignableTo(typeof(IOperatorUIInitializer)));
-        foreach (var type in uiInitializerTypes)
-        {
-            try
-            {
-                var initializer = (IOperatorUIInitializer)Activator.CreateInstance(type);
-                initializer!.Initialize();
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Failed to create UI initializer for {type.Name} - does it have a parameterless constructor?\n{e}");
-            }
-        }
-
         SymbolDataByAssemblyEditable.Add(assembly, this);
     }
 

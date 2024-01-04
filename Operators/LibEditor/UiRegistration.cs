@@ -14,6 +14,7 @@ using Operators.lib.math.@float;
 using Operators.lib.math.@int;
 using Operators.lib.@string;
 using Operators.lib.Utils;
+using T3.Core.Logging;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.Interaction.Timing;
@@ -24,6 +25,10 @@ namespace libEditor;
 
 public class UiRegistration : IOperatorUIInitializer
 {
+    // ReSharper disable once EmptyConstructor
+    public UiRegistration()
+    {
+    }
 
     public void Initialize()
     {
@@ -63,5 +68,7 @@ public class UiRegistration : IOperatorUIInitializer
         {
             TemplateDefinition.AddTemplateDefinition(templateDefinition);
         }
+        
+        Log.Debug("Registered UI entries. Total: {0}", CustomChildUiRegistry.Entries.Count);
     }
 }

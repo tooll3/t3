@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -24,10 +25,9 @@ public static class EditorInitialization
     {
         var name = nameArgs.NewName;
         string destinationDirectory = Path.Combine(SymbolData.OperatorDirectoryName, "user", name);
-            
+
         if (NeedsUserProject)
         {
-            
             var defaultHomeDir = Path.Combine(UserData.RootFolder, "default-home");
             var files = Directory.EnumerateFiles(defaultHomeDir, "*");
             destinationDirectory = Path.GetFullPath(destinationDirectory);
@@ -47,11 +47,11 @@ public static class EditorInitialization
                 string text = File.ReadAllText(file);
                 text = text.Replace(namePlaceholder, name)
                            .Replace(guidPlaceholder, homeGuid);
-                
+
                 var destinationFilePath = Path.Combine(destinationDirectory, Path.GetFileName(file));
                 destinationFilePath = destinationFilePath.Replace(namePlaceholder, name)
                                                          .Replace(guidPlaceholder, homeGuid);
-                
+
                 File.WriteAllText(destinationFilePath, text);
             }
 
@@ -80,20 +80,20 @@ public static class EditorInitialization
                 var newUiSymbolData = new UiSymbolData(assembly);
                 newUiSymbolDatas.Add(newUiSymbolData);
             }
-            
-            AddUiSymbolDatas(newUiSymbolDatas);
+
+            AddUiSymbolData(newUiSymbolDatas);
             if (!UiSymbolData.TryCreateHome())
             {
                 throw new Exception("Failed to create user home");
             }
-            
+
             NeedsUserProject = false;
         }
         else if (nameArgs.NewName != nameArgs.OldName)
         {
             var oldUserNamespace = $"user.{nameArgs.OldName}";
             var newUserNamespace = $"user.{nameArgs.NewName}";
-            
+
             Log.Warning($"Have not implemented migration from {oldUserNamespace} to {newUserNamespace}");
         }
     }
@@ -105,12 +105,53 @@ public static class EditorInitialization
         {
             var operatorAssemblies = RuntimeAssemblies.OperatorAssemblies;
 
-            var uiSymbolDatas = operatorAssemblies
-                               .Select(a => new UiSymbolData(a))
-                               .ToList();
-            
-            AddUiSymbolDatas(uiSymbolDatas);
+            // Select only Operator assemblies
+            var uiSymbolData = operatorAssemblies
+                              .Select(a => new UiSymbolData(a))
+                              .ToList();
 
+            // Load operators
+            AddUiSymbolData(uiSymbolData);
+
+            // Initialize custom UIs
+            var uiInitializerTypes = RuntimeAssemblies.AllAssemblies
+                                                      .Where(x => x.Name != "Editor")
+                                                      .ToArray()
+                                                      .AsParallel()
+                                                      .SelectMany(assemblyInfo => assemblyInfo.Types
+                                                                                              .Where(type =>
+                                                                                                         type.IsAssignableTo(typeof(IOperatorUIInitializer)))
+                                                                                              .Select(type => new AssemblyConstructorInfo(assemblyInfo, type)));
+
+            foreach (var constructorInfo in uiInitializerTypes)
+            {
+                //var assembly = Assembly.LoadFile(constructorInfo.AssemblyInformation.Path);
+                var assemblyName = constructorInfo.AssemblyInformation.Path;
+                var typeName = constructorInfo.InstanceType.FullName;
+                try
+                {
+                    var activated =Activator.CreateInstanceFrom(assemblyName, typeName);
+                    if (activated == null)
+                    {
+                        throw new Exception($"Created null activator handle for {typeName}");
+                    }
+                    
+                    var initializer = (IOperatorUIInitializer)activated.Unwrap();
+                    if (initializer == null)
+                    {
+                        throw new Exception($"Casted to null initializer for {typeName}");
+                    }
+
+                    initializer.Initialize();
+                    Log.Info($"Initialized UI initializer for {constructorInfo.AssemblyInformation.Name}: {typeName}");
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to create UI initializer for {constructorInfo.AssemblyInformation.Name}: \"{typeName}\" - does it have a parameterless constructor?\n{e}");
+                }
+            }
+
+            // Create home
             if (!UiSymbolData.TryCreateHome())
             {
                 NeedsUserProject = true;
@@ -127,7 +168,7 @@ public static class EditorInitialization
         }
     }
 
-    private static void AddUiSymbolDatas(List<UiSymbolData> uiSymbolDatas)
+    private static void AddUiSymbolData(List<UiSymbolData> uiSymbolDatas)
     {
         UiSymbolDatasEditable.AddRange(uiSymbolDatas);
 
@@ -143,6 +184,18 @@ public static class EditorInitialization
         foreach (var uiSymbolData in uiSymbolDatas)
         {
             uiSymbolData.RegisterUiSymbols(enableLog: false);
+        }
+    }
+
+    readonly struct AssemblyConstructorInfo
+    {
+        public readonly AssemblyInformation AssemblyInformation;
+        public readonly Type InstanceType;
+
+        public AssemblyConstructorInfo(AssemblyInformation assemblyInformation, Type instanceType)
+        {
+            AssemblyInformation = assemblyInformation;
+            InstanceType = instanceType;
         }
     }
 }
