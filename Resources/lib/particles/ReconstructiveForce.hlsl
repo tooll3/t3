@@ -44,6 +44,9 @@ void main(uint3 i : SV_DispatchThreadID)
 
     Particles[gi].Position = lerp(pos, TargetPoints[targetPointIndex].Position, blendFactor);
     Particles[gi].Rotation = qSlerp(rot, TargetPoints[targetPointIndex].Rotation, blendFactor);
-    Particles[gi].Velocity = lerp(velocity, 0, blendFactor);    
+    Particles[gi].Velocity = lerp(velocity, 0, blendFactor); 
+
+    Particles[gi].Color = lerp(Particles[gi].Color, TargetPoints[targetPointIndex].Color, blendFactor);
+    Particles[gi].Radius = lerp(Particles[gi].Radius, TargetPoints[targetPointIndex].W, blendFactor);     
 }
 
