@@ -129,7 +129,7 @@ namespace T3.Editor.Gui.Interaction.Variations.Model
             }
         }
 
-        private const string VariationsFolder = ".Variations";
+        private const string VariationsFolder = "Variations";
 
         private static string GetFilePathForVariationId(Guid compositionId)
         {
