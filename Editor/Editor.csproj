@@ -37,7 +37,7 @@
 
     <!--This copies all files in the `dependencies` folder *directly* into the output directory-->
     <ItemGroup>
-        <Content Include="../Dependencies/**/*">
+        <Content Include="../Dependencies/**/*" Visible="false">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
         </Content>
