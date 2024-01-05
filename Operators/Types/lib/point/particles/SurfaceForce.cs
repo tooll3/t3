@@ -68,6 +68,7 @@ namespace T3.Operators.Types.Id_fbe1a703_f372_4236_9f20_5d0b69183843
             Sphere,
             Box,
             Plane,
+            Cylinder
         }
     }
 }

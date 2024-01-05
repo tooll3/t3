@@ -31,7 +31,7 @@ RWStructuredBuffer<Particle> Particles : u0;
 static const int VolumeSphere = 0;
 static const int VolumeBox = 1;
 static const int VolumePlane = 2;
-static const int VolumeZebra = 3;
+static const int VolumeCylinder = 3;
 static const int VolumeNoise = 4;
 
 [numthreads(64,1,1)]
@@ -97,17 +97,39 @@ void main(uint3 i : SV_DispatchThreadID)
         surfaceN = float3(0,1,0);
         // s = smoothstep(FallOff, 0, distance);
     }
-    // else if (VolumeShape == VolumeZebra)
-    // {
-    //     //float distance = 1 - abs(mod(posInVolume.y * 1 + Phase, 2) - 1);
-    //     // s = smoothstep(Threshold + 0.5 + FallOff, Threshold + 0.5, distance);
-    // }
-    // else if (VolumeShape == VolumeNoise)
-    // {
-    //     //float3 noiseLookup = (posInVolume * 0.91 + Phase);
-    //     //float noise = snoise(noiseLookup);
-    //     // s = smoothstep(Threshold + FallOff, Threshold, noise);
-    // }
+    else if (VolumeShape == VolumeCylinder)
+{
+    // Assuming the cylinder is aligned along the y-axis
+    float rCylinder = 0.5;
+    float heightCylinder = 1.0;
+
+    float2 xyPos = posInVolume.xz;
+    float2 xyPosNext = posInVolumeNext.xz;
+
+    float distanceToCenter = length(xyPos);
+    float distanceToCenterNext = length(xyPosNext);
+
+    // Check if the particle is within the radius of the cylinder
+    if (distanceToCenter <= rCylinder)
+    {
+        distance = abs(posInVolume.y) - heightCylinder * 0.5;
+        distanceNext = abs(posInVolumeNext.y) - heightCylinder * 0.5;
+
+        // Set the surface normal based on the cylinder's orientation
+        surfaceN = float3(0, sign(posInVolume.y), 0);
+    }
+    else
+    {
+        // Particle is outside the cylinder, use the distance to the cylinder surface
+        distance = distanceToCenter - rCylinder;
+        distanceNext = distanceToCenterNext - rCylinder;
+
+        // Set the surface normal based on the cylinder's orientation
+        surfaceN = float3(xyPos.x, 0, xyPos.y);
+        surfaceN.y = 0; // Ignore the y-component, as it's already handled above
+        surfaceN = normalize(surfaceN);
+    }
+}
 
     float3 force =0;
 
