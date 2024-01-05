@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
@@ -71,6 +70,8 @@ public static class EditorInitialization
 
             process.Start();
             process.WaitForExit();
+            
+            //todo - check dotnet output for success - exit codes? parse output?
 
             var newOperatorAssemblies = RuntimeAssemblies.LoadNewOperatorAssemblies(destinationDirectory);
 

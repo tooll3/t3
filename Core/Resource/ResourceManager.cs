@@ -40,21 +40,6 @@ namespace T3.Core.Resource
             return (T)ResourcesById[resourceId];
         }
 
-        public OperatorResource GetOperatorFileResource(string path)
-        {
-            bool foundFileEntryForPath = ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(path, out var fileResource);
-            if (foundFileEntryForPath)
-            {
-                foreach (var id in fileResource.ResourceIds)
-                {
-                    if (ResourcesById[id] is OperatorResource opResource)
-                        return opResource;
-                }
-            }
-
-            return null;
-        }
-
         public static void RenameOperatorResource(string oldPath, string newPath)
         {
             var extension = Path.GetExtension(newPath);
@@ -76,22 +61,22 @@ namespace T3.Core.Resource
         public const uint NullResource = 0;
         private uint _resourceIdCounter = 1;
 
-        internal uint GetNextResourceId()
+        protected uint GetNextResourceId()
         {
             return _resourceIdCounter++;
         }
 
-        public static void Init(Device device)
+        public static void Init<TResourceManager>(Device device) where TResourceManager : ResourceManager, new()
         {
-            _instance ??= new ResourceManager(device);
+            _instance ??= new TResourceManager();
+            _instance.InitializeDevice(device);
         }
 
-        private static ResourceManager _instance;
+        protected static ResourceManager _instance;
 
-        private ResourceManager(Device device)
+        private void InitializeDevice(Device device)
         {
-            Device = device;
-
+            _device = device;
             var samplerDesc = new SamplerStateDescription()
                                   {
                                       Filter = Filter.MinMagMipLinear,
@@ -105,11 +90,12 @@ namespace T3.Core.Resource
                                       MinimumLod = -Single.MaxValue,
                                       MaximumLod = Single.MaxValue,
                                   };
+            
             DefaultSamplerState = new SamplerState(device, samplerDesc);
             ResourceFileWatcher.Setup();
         }
 
-        public SamplerState DefaultSamplerState { get; }
+        public SamplerState DefaultSamplerState { get; private set; }
 
         public static void SetupConstBuffer<T>(T bufferData, ref Buffer buffer) where T : struct
         {
@@ -311,39 +297,7 @@ namespace T3.Core.Resource
             }
         }
 
-        public uint CreateOperatorEntry(string sourceFilePath, string name, AssemblyInformation parentAssembly, OperatorResource.UpdateDelegate updateHandler)
-        {
-            // todo: code below is redundant with all file resources -> refactor
-            if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(sourceFilePath, out var fileResource))
-            {
-                foreach (var id in fileResource.ResourceIds)
-                {
-                    if (ResourcesById[id] is OperatorResource)
-                    {
-                        return id;
-                    }
-                }
-            }
-
-            var resourceEntry = new OperatorResource(GetNextResourceId(), name, null, parentAssembly, updateHandler);
-            ResourcesById.Add(resourceEntry.Id, resourceEntry);
-
-            if (fileResource == null)
-            {
-                fileResource = new ResourceFileHook(sourceFilePath, new[] { resourceEntry.Id });
-                var added = ResourceFileWatcher.HooksForResourceFilepaths.TryAdd(sourceFilePath, fileResource);
-
-                if (!added)
-                    Log.Error($"Can't add resource file hook to '{sourceFilePath}': file already exists");
-            }
-            else
-            {
-                // File resource already exists, so just add the id of the new type resource
-                fileResource.ResourceIds.Add(resourceEntry.Id);
-            }
-
-            return resourceEntry.Id;
-        }
+     
 
         public static Texture2D CreateTexture2DFromBitmap(Device device, BitmapSource bitmapSource)
         {
@@ -809,6 +763,7 @@ namespace T3.Core.Resource
 
         public const string ResourcesFolder = @"Resources";
 
-        public static Device Device { get; private set; }
+        private Device _device;
+        public static Device Device => _instance._device;
     }
 }

@@ -17,9 +17,10 @@ using T3.Core.Stats;
 
 namespace T3.Core.Model;
 
-public partial class SymbolData
+public abstract partial class SymbolData
 {
     public AssemblyInformation AssemblyInformation { get; }
+    public abstract string Folder { get; }
 
     static SymbolData()
     {
@@ -27,11 +28,9 @@ public partial class SymbolData
         RegisterTypes();
     }
 
-    public SymbolData(AssemblyInformation assembly)
+    protected SymbolData(AssemblyInformation assembly)
     {
         AssemblyInformation = assembly;
-        Folder = OperatorDirectoryName + Path.DirectorySeparatorChar + assembly.Name;
-        SymbolDatas.TryAdd(assembly, this);
     }
 
     public void LoadSymbols(bool enableLog, out List<SymbolJson.SymbolReadResult> symbolsRead)
@@ -57,13 +56,8 @@ public partial class SymbolData
         {
             var symbol = readSymbolResult.Symbol;
 
-            if (!TryAddSymbolTo(_symbols, symbol))
+            if (!TryAddSymbolTo(Symbols, symbol))
                 continue;
-
-            if (!SymbolOwnersEditable.TryAdd(symbol.Id, this))
-            {
-                Log.Error($"Duplicate symbol id {symbol.Id}");
-            }
 
             if (!TryAddSymbolTo(SymbolRegistry.Entries, symbol))
                 continue;
@@ -77,9 +71,8 @@ public partial class SymbolData
             var registered = TryRegisterTypeWithoutFile(newType, out var symbol);
             if (registered)
             {
-                TryAddSymbolTo(_symbols, symbol);
+                TryAddSymbolTo(Symbols, symbol);
                 symbol.SymbolData = this;
-                SymbolOwnersEditable.TryAdd(symbol.Id, this);
             }
         }
 
@@ -201,7 +194,7 @@ public partial class SymbolData
         MarkAsSaving();
         RemoveAllSymbolFiles();
         SortAllSymbolSourceFiles();
-        SaveSymbolDefinitionAndSourceFiles(_symbols.Values);
+        SaveSymbolDefinitionAndSourceFiles(Symbols.Values);
         UnmarkAsSaving();
     }
 
@@ -226,6 +219,7 @@ public partial class SymbolData
             }
         }
     }
+    
 
     private void SortAllSymbolSourceFiles()
     {
@@ -335,11 +329,8 @@ public partial class SymbolData
     public virtual void AddSymbol(Symbol newSymbol)
     {
         SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
-        _symbols.Add(newSymbol.Id, newSymbol);
+        Symbols.Add(newSymbol.Id, newSymbol);
         AssemblyInformation.UpdateType(newSymbol.InstanceType, newSymbol.Id);
-        var added = SymbolOwnersEditable.TryAdd(newSymbol.Id, this);
-        if (!added)
-            throw new Exception($"Symbol {newSymbol.Id} already exists in {AssemblyInformation.Name}");
     }
 
     private static readonly OpUpdateCounter _updateCounter;
@@ -348,15 +339,10 @@ public partial class SymbolData
     public const string SymbolExtension = ".t3";
     public const string SymbolUiExtension = ".t3ui";
     public const string OperatorDirectoryName = "Operators";
-    protected string Folder { get; init; }
 
     public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0;
 
     private static long _savingCount;
 
-    private static readonly ConcurrentDictionary<Guid, SymbolData> SymbolOwnersEditable = new();
-    public static IReadOnlyDictionary<Guid, SymbolData> SymbolOwners => SymbolOwnersEditable;
-
-    private readonly Dictionary<Guid, Symbol> _symbols = new();
-    private static readonly ConcurrentDictionary<AssemblyInformation, SymbolData> SymbolDatas = new();
+    protected readonly Dictionary<Guid, Symbol> Symbols = new();
 }

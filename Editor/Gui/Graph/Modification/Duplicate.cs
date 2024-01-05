@@ -49,7 +49,7 @@ internal static class Duplicate
         newSource = newSource.Replace(sourceSymbol.Namespace, nameSpace);
         Log.Debug(newSource);
 
-        var parentAssembly = compositionUi.Symbol.ParentAssembly;
+        var parentAssembly = UiSymbolData.ActiveProject.CsProjectFile;
         var success = OperatorUpdating.TryCreateSymbolFromSource(newSource, newTypeName, newSymbolId, nameSpace, parentAssembly, out var newSymbol);
         if (!success)
             return null;

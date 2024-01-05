@@ -1,11 +1,9 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using T3.Core.Compilation;
 using T3.Core.Logging;
@@ -15,23 +13,25 @@ using T3.Core.Operator.Interfaces;
 using T3.Core.Resource;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.ChildUi;
+using T3.Editor.Gui.Windows;
 
 // ReSharper disable RedundantNameQualifier
 
 namespace T3.Editor.UiModel;
 
-public partial class UiSymbolData : SymbolData
+public sealed partial class UiSymbolData : SymbolData
 {
     public UiSymbolData(AssemblyInformation assembly)
         : base(assembly)
     {
         var gotProject = TryFindMatchingCSProj(assembly, out var csprojFile);
-        if (!gotProject)
-            throw new ArgumentException($"Could not find matching csproj file for {assembly.Name}", nameof(assembly));
+        CanRecompile = gotProject;
 
-        Folder = Path.GetDirectoryName(csprojFile!.FullName);
-
-        SymbolDataByAssemblyEditable.Add(assembly, this);
+        if (gotProject)
+        {
+            CsProjectFile = csprojFile;
+            SymbolDataByProject.Add(csprojFile, this);
+        }
     }
 
     public void RegisterUiSymbols(bool enableLog)
@@ -39,6 +39,14 @@ public partial class UiSymbolData : SymbolData
         Log.Debug($@"{AssemblyInformation.Name}: Registering UI entries...");
 
         var dictionary = SymbolUiRegistry.Entries;
+
+        foreach (var symbol in Symbols.Values)
+        {
+            if (!SymbolOwnersEditable.TryAdd(symbol.Id, this))
+            {
+                Log.Error($"Duplicate symbol id {symbol.Id}");
+            }
+        }
 
         foreach (var symbolUi in _symbolUis)
         {
@@ -60,22 +68,22 @@ public partial class UiSymbolData : SymbolData
         }
     }
 
+    // todo - "home" should be marked by an attribute rather than a hard-coded id
     public static bool TryCreateHome()
     {
-        var gotHome = SymbolOwners.TryGetValue(HomeSymbolId, out var homeSymbolOwner);
+        var gotHome = SymbolOwners.TryGetValue(HomeSymbolId, out var homeOwner);
         if (!gotHome)
         {
             return false;
         }
-        
-        var homeUiSymbolData = (UiSymbolData)homeSymbolOwner;
-        var symbolUis = homeUiSymbolData._symbolUis;
+
+        var symbolUis = homeOwner._symbolUis;
 
         var symbolUisById = symbolUis.ToDictionary(x => x.Symbol.Id, x => x);
         bool containsHome = symbolUisById.ContainsKey(HomeSymbolId);
         if (!containsHome)
         {
-            Log.Error($"Could not find home symbol for {homeUiSymbolData.AssemblyInformation.Name} - something is wrong.");
+            Log.Error($"Could not find home symbol for {homeOwner.AssemblyInformation.Name} - something is wrong.");
             return false;
         }
 
@@ -88,6 +96,7 @@ public partial class UiSymbolData : SymbolData
         Console.WriteLine(@"Creating home...");
         var homeSymbol = symbolUisById[HomeSymbolId].Symbol;
         RootInstance = homeSymbol.CreateInstance(HomeInstanceId);
+        ActiveProject = homeOwner;
         return true;
     }
 
@@ -170,7 +179,7 @@ public partial class UiSymbolData : SymbolData
 
     private void WriteSymbolUis(IEnumerable<SymbolUi> symbolUis)
     {
-        var resourceManager = ResourceManager.Instance();
+        var resourceManager = (EditorResourceManager)ResourceManager.Instance();
 
         foreach (var symbolUi in symbolUis)
         {
@@ -184,19 +193,12 @@ public partial class UiSymbolData : SymbolData
                 SymbolUiJson.WriteSymbolUi(symbolUi, writer);
             }
 
-            var symbolUiResource = resourceManager.GetOperatorFileResource(symbolFilePath);
-            if (symbolUiResource == null)
+            if (CanRecompile)
             {
-                // If the source wasn't registered before do this now
-                resourceManager.CreateOperatorEntry(symbolFilePath, symbol.Id.ToString(), AssemblyInformation, OperatorUpdating.ResourceUpdateHandler);
-            }
-
-            var symbolSourceFilepath = BuildFilepathForSymbol(symbol, SymbolData.SourceCodeExtension);
-            var opResource = resourceManager.GetOperatorFileResource(symbolSourceFilepath);
-            if (opResource == null)
-            {
-                // If the source wasn't registered before do this now
-                resourceManager.CreateOperatorEntry(symbolSourceFilepath, symbol.Id.ToString(), AssemblyInformation, OperatorUpdating.ResourceUpdateHandler);
+                resourceManager.TrackOperatorFile(symbolFilePath, symbolUi.Symbol, CsProjectFile, OperatorUpdating.ResourceUpdateHandler);
+                
+                var symbolSourceFilepath = BuildFilepathForSymbol(symbol, SymbolData.SourceCodeExtension);
+                resourceManager.TrackOperatorFile(symbolSourceFilepath, symbolUi.Symbol, CsProjectFile, OperatorUpdating.ResourceUpdateHandler);
             }
 
             symbolUi.ClearModifiedFlag();
@@ -222,13 +224,13 @@ public partial class UiSymbolData : SymbolData
         }
     }
 
-    private static bool TryFindMatchingCSProj(AssemblyInformation assembly, out FileInfo csprojFile)
+    private static bool TryFindMatchingCSProj(AssemblyInformation assembly, out CsProjectFile csprojFile)
     {
         var assemblyNameString = assembly.Name;
         if (assemblyNameString == null)
             throw new ArgumentException("Assembly name is null", nameof(assembly));
 
-        csprojFile = Directory.GetFiles(OperatorDirectoryName, "*.csproj", SearchOption.AllDirectories)
+        var csproj = Directory.GetFiles(OperatorDirectoryName, "*.csproj", SearchOption.AllDirectories)
                               .Select(path => new FileInfo(path))
                               .FirstOrDefault(file =>
                                               {
@@ -236,12 +238,16 @@ public partial class UiSymbolData : SymbolData
                                                   return name == assemblyNameString;
                                               });
 
-        return csprojFile != null;
+        csprojFile = csproj != null ? new CsProjectFile(csproj, assembly) : null;
+        return csproj != null;
     }
 
     public override void AddSymbol(Symbol newSymbol)
     {
         base.AddSymbol(newSymbol);
+        var added = SymbolOwnersEditable.TryAdd(newSymbol.Id, this);
+        if (!added)
+            throw new Exception($"Symbol {newSymbol.Id} already exists in {AssemblyInformation.Name}");
         UpdateUiEntriesForSymbol(newSymbol);
         RegisterCustomChildUi(newSymbol);
     }
@@ -265,9 +271,37 @@ public partial class UiSymbolData : SymbolData
     internal static readonly Guid HomeSymbolId = Guid.Parse("dab61a12-9996-401e-9aa6-328dd6292beb");
     private static readonly Guid HomeInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
 
+    public override string Folder =>
+        CsProjectFile?.Directory ??
+        AssemblyInformation.Directory; // todo - is there a way to get this without the csproj? whats the expected nuget directory structure?
+
+    public readonly CsProjectFile? CsProjectFile;
+
     public static Instance RootInstance { get; private set; }
     private List<SymbolUi> _symbolUis = new();
 
-    public static IReadOnlyDictionary<AssemblyInformation, UiSymbolData> SymbolDataByAssembly => SymbolDataByAssemblyEditable;
-    private static readonly Dictionary<AssemblyInformation, UiSymbolData> SymbolDataByAssemblyEditable = new();
+    public readonly bool CanRecompile;
+
+    public static IReadOnlyDictionary<CsProjectFile, UiSymbolData> SymbolDataByAssembly => SymbolDataByProject;
+    private static readonly Dictionary<CsProjectFile, UiSymbolData> SymbolDataByProject = new();
+
+    private static readonly ConcurrentDictionary<Guid, UiSymbolData> SymbolOwnersEditable = new();
+    public static IReadOnlyDictionary<Guid, UiSymbolData> SymbolOwners => SymbolOwnersEditable;
+    
+    public static UiSymbolData ActiveProject { get; private set; }
+
+    public void RenameNameSpace(NamespaceTreeNode node, string nameSpace)
+    {
+        var orgNameSpace = node.GetAsString();
+        foreach (var symbol in SymbolRegistry.Entries.Values)
+        {
+            if (!symbol.Namespace.StartsWith(orgNameSpace))
+                continue;
+
+            //var newNameSpace = parent + "."
+            var newNameSpace = Regex.Replace(symbol.Namespace, orgNameSpace, nameSpace);
+            Log.Debug($" Changing namespace of {symbol.Name}: {symbol.Namespace} -> {newNameSpace}");
+            symbol.Namespace = newNameSpace;
+        }
+    }
 }

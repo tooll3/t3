@@ -140,7 +140,7 @@ internal static class Combine
         Log.Debug(newSource);
 
         // compile new instance type
-        var assembly = parentCompositionSymbol.ParentAssembly;
+        var assembly = UiSymbolData.ActiveProject.CsProjectFile;
         var success = OperatorUpdating.TryCreateSymbolFromSource(newSource, newSymbolName, newSymbolId, nameSpace, assembly, out var newSymbol);
         if (!success)
             return;

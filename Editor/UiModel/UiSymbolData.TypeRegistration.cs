@@ -21,7 +21,7 @@ using Point = T3.Core.DataTypes.Point;
 
 namespace T3.Editor.UiModel;
 
-public partial class UiSymbolData
+public sealed partial class UiSymbolData
 {
     static UiSymbolData()
     {

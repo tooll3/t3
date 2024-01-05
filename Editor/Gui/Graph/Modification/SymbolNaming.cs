@@ -8,6 +8,7 @@ using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Graph.Helpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Modification;
 
@@ -36,6 +37,10 @@ internal static class SymbolNaming
 
     public static void RenameSymbol(Symbol symbol, string newName)
     {
+        var parent = UiSymbolData.SymbolOwners[symbol.Id];
+        if (!parent.CanRecompile)
+            return;
+        
         var syntaxTree = GraphUtils.GetSyntaxTree(symbol);
         if (syntaxTree == null)
         {
@@ -61,7 +66,7 @@ internal static class SymbolNaming
         }
 
         var originalSourcePath = symbol.SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceCodeExtension);
-        var operatorResource = ResourceManager.Instance().GetOperatorFileResource(originalSourcePath);
+        var operatorResource = EditorResourceManager.Instance.GetOperatorFileResource(originalSourcePath);
         if (operatorResource == null)
             return;
         
