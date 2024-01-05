@@ -50,60 +50,31 @@ namespace T3.Editor.Gui.Windows
                 {
                     case Categories.Interface:
                         FormInputs.SetIndentToLeft();
+
                         FormInputs.AddSectionHeader("User Interface");
                         FormInputs.AddVerticalSpace();
-                        changed |= FormInputs.AddCheckBox("Suspend invalidation of inactive time clips",
-                                                          ref ProjectSettings.Config.TimeClipSuspending,
-                                                          "An experimental optimization that avoids dirty flag evaluation of graph behind inactive TimeClips. This is only relevant for very complex projects and multiple parts separated by timelines.",
-                                                          ProjectSettings.Defaults.TimeClipSuspending);
-
-                        changed |= FormInputs.AddCheckBox("Warn before Lib modifications",
-                                                          ref UserSettings.Config.WarnBeforeLibEdit,
-                                                          "This warning pops up when you attempt to enter an Operator that ships with the application.\n" +
-                                                          "If unsure, this is best left checked.",
-                                                          UserSettings.Defaults.WarnBeforeLibEdit);
-
-                        changed |= FormInputs.AddCheckBox("Use arc connections",
-                                                          ref UserSettings.Config.UseArcConnections,
-                                                          "Affects the shape of the connections between your Operators",
-                                                          UserSettings.Defaults.UseArcConnections);
-                        changed |= FormInputs.AddCheckBox("Reset time after playback",
-                                                          ref UserSettings.Config.ResetTimeAfterPlayback,
-                                                          "After the playback is halted, the time will reset to the moment when the playback began. This feature proves beneficial for iteratively reviewing animations without requiring manual rewinding.",
-                                                          UserSettings.Defaults.ResetTimeAfterPlayback);
-
-                        changed |= FormInputs.AddCheckBox("Show Graph thumbnails",
-                                                          ref UserSettings.Config.ShowThumbnails,
-                                                          null,
-                                                          UserSettings.Defaults.ShowThumbnails);
-
-                        changed |= FormInputs.AddCheckBox("Drag snapped nodes",
-                                                          ref UserSettings.Config.SmartGroupDragging,
-                                                          "An experimental features that will drag neighbouring snapped operators.",
-                                                          UserSettings.Defaults.SmartGroupDragging);
-
-                        changed |= FormInputs.AddCheckBox("Mousewheel adjust flight speed",
-                                                          ref UserSettings.Config.AdjustCameraSpeedWithMouseWheel,
-                                                          "If enabled, scrolling the mouse wheel while holding left of right mouse button will control navigation speed with WASD keys. This is similar to Unity and Unreal.",
-                                                          UserSettings.Defaults.AdjustCameraSpeedWithMouseWheel);
-
                         changed |= FormInputs.AddCheckBox("Editing values with mousewheel needs CTRL key",
                                                           ref UserSettings.Config.MouseWheelEditsNeedCtrlKey,
                                                           "In parameter window you can edit numeric values by using the mouse wheel. This setting will prevent accidental modifications while scrolling because by using ctrl key for activation.",
                                                           UserSettings.Defaults.MouseWheelEditsNeedCtrlKey);
 
-                        changed |= FormInputs.AddCheckBox("Suspend rendering when hidden",
-                                                          ref UserSettings.Config.SuspendRenderingWhenHidden,
-                                                          "Suspend rendering and update when Tooll's editor window is minimized. This will reduce energy consumption significantly.",
-                                                          UserSettings.Defaults.SuspendRenderingWhenHidden);
+                        changed |= FormInputs.AddCheckBox("Mousewheel adjust flight speed",
+                                                          ref UserSettings.Config.AdjustCameraSpeedWithMouseWheel,
+                                                          "If enabled, scrolling the mouse wheel while holding left of right mouse button will control navigation speed with WASD keys. This is similar to Unity and Unreal",
+                                                          UserSettings.Defaults.AdjustCameraSpeedWithMouseWheel);
 
-                        FormInputs.SetIndentToParameters();
+                        changed |= FormInputs.AddCheckBox("Use arc connections",
+                                                          ref UserSettings.Config.UseArcConnections,
+                                                          "Affects the shape of the connections between your operators",
+                                                          UserSettings.Defaults.UseArcConnections);
+
+                        changed |= FormInputs.AddCheckBox("Drag snapped nodes",
+                                                          ref UserSettings.Config.SmartGroupDragging,
+                                                          "An experimental features that will drag neighbouring snapped operators",
+                                                          UserSettings.Defaults.SmartGroupDragging);
+
                         FormInputs.AddVerticalSpace();
-                        changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.ValueEditGizmo,
-                                                              "Value edit control",
-                                                              "This controls the gizmo that pops up when dragging an float value"
-                                                             );
-
+                        FormInputs.SetIndentToParameters();
                         changed |= FormInputs.AddFloat("UI Scale",
                                                        ref UserSettings.Config.UiScaleFactor,
                                                        0.1f, 5f, 0.01f, true,
@@ -119,28 +90,70 @@ namespace T3.Editor.Gui.Windows
                         changed |= FormInputs.AddFloat("Snap strength",
                                                        ref UserSettings.Config.SnapStrength,
                                                        0.0f, 0.2f, 0.01f, true,
-                                                       "Controls the distance until items like keyframes snap in the timeline.",
+                                                       "Controls the distance until items such as keyframes snap in the timeline",
                                                        UserSettings.Defaults.SnapStrength);
 
                         changed |= FormInputs.AddFloat("Click threshold",
                                                        ref UserSettings.Config.ClickThreshold,
                                                        0.0f, 10f, 0.1f, true,
-                                                       "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input.",
+                                                       "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input",
                                                        UserSettings.Defaults.ClickThreshold);
 
-                        changed |= FormInputs.AddFloat("Timeline Raster Density",
+                        changed |= FormInputs.AddFloat("Timeline marks density",
                                                        ref UserSettings.Config.TimeRasterDensity,
                                                        0.0f, 10f, 0.01f, true,
-                                                       "The threshold in pixels until a click becomes a drag. Adjusting this might be useful for stylus input.",
+                                                       "Density/opacity of the marks (time or beat) at the bottom of the timeline",
                                                        UserSettings.Defaults.TimeRasterDensity);
+
+                        changed |= FormInputs.AddFloat("Gizmo size",
+                                                       ref UserSettings.Config.GizmoSize,
+                                                       0.0f, 10f, 0.01f, true);
 
                         changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.FrameStepAmount,
                                                               "Frame step amount",
                                                               "Controls the next rounding and step amount when jumping between frames.\nDefault shortcut is Shift+Cursor Left/Right");
 
-                        changed |= FormInputs.AddFloat("Gizmo size",
-                                                       ref UserSettings.Config.GizmoSize,
-                                                       0.0f, 10f, 0.01f, true);
+                        changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.ValueEditGizmo,
+                                                              "Value input widget",
+                                                              "The control that pops up when dragging on a number value"
+                                                             );
+
+
+                        FormInputs.SetIndentToLeft();
+                        FormInputs.AddVerticalSpace();
+                        FormInputs.AddSectionHeader("Previews");
+                        FormInputs.AddVerticalSpace();
+                        changed |= FormInputs.AddCheckBox("Show Graph thumbnails",
+                                                          ref UserSettings.Config.ShowThumbnails, null,
+                                                          UserSettings.Defaults.ShowThumbnails);
+                        
+                        changed |= FormInputs.AddCheckBox("Show nodes thumbnails when hovering",
+                                                          ref UserSettings.Config.EditorHoverPreview, null,
+                                                          UserSettings.Defaults.EditorHoverPreview);
+
+
+                        FormInputs.AddVerticalSpace();
+                        FormInputs.AddSectionHeader("Advanced");
+                        FormInputs.AddVerticalSpace();
+                        changed |= FormInputs.AddCheckBox("Reset time after playback",
+                                                          ref UserSettings.Config.ResetTimeAfterPlayback,
+                                                          "After the playback is halted, the time will reset to the moment when the playback began. This feature proves beneficial for iteratively reviewing animations without requiring manual rewinding.",
+                                                          UserSettings.Defaults.ResetTimeAfterPlayback);
+                        changed |= FormInputs.AddCheckBox("Suspend invalidation of inactive time clips",
+                                                          ref ProjectSettings.Config.TimeClipSuspending,
+                                                          "An experimental optimization that avoids dirty flag evaluation of graph behind inactive TimeClips. This is only relevant for very complex projects and multiple parts separated by timelines.",
+                                                          ProjectSettings.Defaults.TimeClipSuspending);
+
+                        changed |= FormInputs.AddCheckBox("Warn before Lib modifications",
+                                                          ref UserSettings.Config.WarnBeforeLibEdit,
+                                                          "This warning pops up when you attempt to enter an Operator that ships with the application.\n" +
+                                                          "If unsure, this is best left checked.",
+                                                          UserSettings.Defaults.WarnBeforeLibEdit);
+
+                        changed |= FormInputs.AddCheckBox("Suspend rendering when hidden",
+                                                          ref UserSettings.Config.SuspendRenderingWhenHidden,
+                                                          "Suspend rendering and update when Tooll's editor window is minimized. This will reduce energy consumption significantly.",
+                                                          UserSettings.Defaults.SuspendRenderingWhenHidden);
 
                         break;
                     case Categories.Theme:

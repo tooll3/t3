@@ -73,6 +73,8 @@ namespace T3.Editor.Gui.UiHelpers
 
             public bool VariationLiveThumbnails = true;
             public bool VariationHoverPreview = true;
+
+            public bool EditorHoverPreview = true;
             
             // Load Save
             public string UserName = UndefinedUserName;
