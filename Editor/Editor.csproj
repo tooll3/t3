@@ -59,7 +59,7 @@
 
     <!--This copies all files in the `.Variations` folder into the output/.Variations folder-->
     <ItemGroup>
-        <Variations Include="../Variations/**/*.*"/>
+        <Variations Include="../Variations/**/*.*" Visible="false"/>
     </ItemGroup>
 
     <Target Name="CopyVariations" AfterTargets="AfterBuild">
