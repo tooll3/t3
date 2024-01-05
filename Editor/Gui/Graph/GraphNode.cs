@@ -210,6 +210,7 @@ namespace T3.Editor.Gui.Graph
                     
                     // Tooltip
                     if (isNodeHovered
+                        && UserSettings.Config.EditorHoverPreview
                         && (customUiResult & SymbolChildUi.CustomUiResult.PreventTooltip) != SymbolChildUi.CustomUiResult.PreventTooltip
                         )
                     {
