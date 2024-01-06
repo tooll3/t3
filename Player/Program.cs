@@ -201,7 +201,7 @@ namespace T3.Player
                 }
 
                 //_symbolData = new SymbolData(operatorsAssembly);
-                _symbolData.Load(enableLog: false);
+                _symbolPackage.Load(enableLog: false);
 
                 var symbols = SymbolRegistry.Entries;
                 var demoSymbol = symbols.First(entry => entry.Value.Name == ProjectSettings.Config.MainOperatorName).Value;
@@ -460,7 +460,7 @@ namespace T3.Player
         private static SwapChain _swapChain;
         private static RenderTargetView _renderView;
         private static Texture2D _backBuffer;
-        private static PlayerSymbolData _symbolData;
+        private static StaticSymbolPackage _symbolPackage;
         private static Instance _project;
         private static EvaluationContext _evalContext;
         private static Playback _playback;

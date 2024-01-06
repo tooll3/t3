@@ -41,7 +41,7 @@ public static class TypeNameRegistry
     public static Dictionary<Type, string> Entries { get; } = new(20);
 }
 
-public partial class SymbolData
+public partial class SymbolPackage
 {
     
     private static void RegisterTypes()

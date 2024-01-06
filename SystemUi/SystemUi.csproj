@@ -3,7 +3,7 @@
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <TargetFrameworks>net6.0;net6.0-windows</TargetFrameworks>
+        <TargetFramework>net8.0</TargetFramework>
         <RootNamespace>T3.SystemUi</RootNamespace>
     </PropertyGroup>
 

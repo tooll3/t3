@@ -21,9 +21,9 @@ using Point = T3.Core.DataTypes.Point;
 
 namespace T3.Editor.UiModel;
 
-public sealed partial class UiSymbolData
+public sealed class UiRegistration
 {
-    static UiSymbolData()
+    static UiRegistration()
     {
         RegisterUiTypes();
     }

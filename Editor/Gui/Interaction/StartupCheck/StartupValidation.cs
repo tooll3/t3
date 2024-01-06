@@ -41,8 +41,8 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                                          RequiredFilePaths = new List<string>()
                                                                  {
                                                                      LayoutHandling.LayoutFolder + "layout1.json",
-                                                                     @"Editor\bin\Release\net6.0-windows\bass.dll",
-                                                                     @"Editor\bin\Debug\net6.0-windows\bass.dll",
+                                                                     @"Editor\bin\Release\net8.0-windows\bass.dll",
+                                                                     @"Editor\bin\Debug\net8.0-windows\bass.dll",
                                                                  },
                                          Message = "Please run Install/install.bat.",
                                          URL = "https://github.com/tooll3/t3/wiki/installation#setup-and-installation",
@@ -51,7 +51,7 @@ namespace T3.Editor.Gui.Interaction.StartupCheck
                                      {
                                          RequiredFilePaths = new List<string>()
                                                                  {
-                                                                     @"Player\bin\Release\net6.0-windows\Player.exe",
+                                                                     @"Player\bin\Release\net8.0-windows\Player.exe",
                                                                  },
                                          Message = "This will prevent you from exporting as executable.\nPlease rebuild your solution.",
                                          URL = "https://github.com/tooll3/t3/wiki/installation#setup-and-installation",
