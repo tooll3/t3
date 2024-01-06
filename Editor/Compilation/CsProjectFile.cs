@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using T3.Core.Compilation;
 using T3.Core.Logging;
+using T3.Core.UserData;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Compilation;
 
@@ -36,7 +38,7 @@ public class CsProjectFile
         RootNamespace = GetRootNamespace(Contents);
         TargetFramework = GetTargetFramework(Contents);
     }
-    
+
     public FileInfo GetBuildTargetPath(Compiler.BuildMode buildMode)
     {
         var buildModeStr = buildMode == Compiler.BuildMode.Debug ? "Debug" : "Release";
@@ -49,12 +51,12 @@ public class CsProjectFile
         const string endTargetFrameworkTag = "</TargetFramework>";
         var start = contents.IndexOf(beginTargetFrameworkTag, StringComparison.Ordinal) + beginTargetFrameworkTag.Length;
         var end = contents.IndexOf(endTargetFrameworkTag, StringComparison.Ordinal);
-        if(start == -1 || end == -1 || start > end)
+        if (start == -1 || end == -1 || start > end)
         {
             Log.Error($"Could not find {beginTargetFrameworkTag} in {FullPath}");
             return string.Empty;
         }
-        
+
         return contents[start..end];
     }
 
@@ -64,11 +66,11 @@ public class CsProjectFile
         const string endNamespaceTag = "</RootNamespace>";
         var start = contents.IndexOf(beginNamespaceTag, StringComparison.Ordinal) + beginNamespaceTag.Length;
         var end = contents.IndexOf(endNamespaceTag, StringComparison.Ordinal);
-        if(start == -1 || end == -1)
+        if (start == -1 || end == -1)
         {
             throw new Exception($"Could not find {beginNamespaceTag} in {FullPath}");
         }
-        
+
         return contents[start..end];
     }
 
@@ -186,7 +188,8 @@ public class CsProjectFile
     private const string ProjectReferenceStart = "<ProjectReference Include=\"";
     private const string PackageReferenceStart = "<PackageReference Include=\"";
 
-    public bool TryRecompile(Compiler.BuildMode buildMode) // todo - rate limit recompiles for when multiple files change. should change operator resources to projects or something
+    public bool
+        TryRecompile(Compiler.BuildMode buildMode) // todo - rate limit recompiles for when multiple files change. should change operator resources to projects or something
     {
         return Compiler.TryCompile(this, buildMode);
     }
@@ -198,8 +201,50 @@ public class CsProjectFile
             Assembly = assembly;
             return;
         }
-        
 
         throw new NotImplementedException();
+    }
+
+    public static CsProjectFile CreateNewProject(string projectName, string parentDirectory)
+    {
+        string destinationDirectory = Path.Combine(parentDirectory, "user", projectName);
+        var defaultHomeDir = Path.Combine(UserData.RootFolder, "default-home");
+        var files = System.IO.Directory.EnumerateFiles(defaultHomeDir, "*");
+        destinationDirectory = Path.GetFullPath(destinationDirectory);
+        System.IO.Directory.CreateDirectory(destinationDirectory);
+
+        var dependenciesDirectory = Path.Combine(destinationDirectory, "dependencies");
+        System.IO.Directory.CreateDirectory(dependenciesDirectory);
+
+        string placeholderDependencyPath = Path.Combine(dependenciesDirectory, "PlaceNativeDllDependenciesHere.txt");
+        File.Create(placeholderDependencyPath).Dispose();
+
+        const string namePlaceholder = "{{USER}}";
+        const string guidPlaceholder = "{{GUID}}";
+        string homeGuid = Guid.NewGuid().ToString();
+        string csprojPath = null;
+        foreach (var file in files)
+        {
+            string text = File.ReadAllText(file);
+            text = text.Replace(namePlaceholder, projectName)
+                       .Replace(guidPlaceholder, homeGuid);
+
+            var destinationFilePath = Path.Combine(destinationDirectory, Path.GetFileName(file));
+            destinationFilePath = destinationFilePath.Replace(namePlaceholder, projectName)
+                                                     .Replace(guidPlaceholder, homeGuid);
+
+            File.WriteAllText(destinationFilePath, text);
+
+            if (destinationFilePath.EndsWith(".csproj"))
+                csprojPath = destinationFilePath;
+        }
+
+        if (csprojPath == null)
+        {
+            Log.Error($"Could not find .csproj in {defaultHomeDir}");
+            return null;
+        }
+
+        return new CsProjectFile(new FileInfo(csprojPath));
     }
 }

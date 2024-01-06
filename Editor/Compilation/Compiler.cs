@@ -76,49 +76,6 @@ public static class Compiler
         return true;
     }
 
-    public static CsProjectFile CreateNewProject(string projectName)
-    {
-        string destinationDirectory = Path.Combine(SymbolPackage.OperatorDirectoryName, "user", projectName);
-        var defaultHomeDir = Path.Combine(UserData.RootFolder, "default-home");
-        var files = Directory.EnumerateFiles(defaultHomeDir, "*");
-        destinationDirectory = Path.GetFullPath(destinationDirectory);
-        Directory.CreateDirectory(destinationDirectory);
-
-        var dependenciesDirectory = Path.Combine(destinationDirectory, "dependencies");
-        Directory.CreateDirectory(dependenciesDirectory);
-
-        string placeholderDependencyPath = Path.Combine(dependenciesDirectory, "PlaceNativeDllDependenciesHere.txt");
-        File.Create(placeholderDependencyPath).Dispose();
-
-        const string namePlaceholder = "{{USER}}";
-        const string guidPlaceholder = "{{GUID}}";
-        string homeGuid = EditableSymbolPackage.HomeSymbolId.ToString();
-        string csprojPath = null;
-        foreach (var file in files)
-        {
-            string text = File.ReadAllText(file);
-            text = text.Replace(namePlaceholder, projectName)
-                       .Replace(guidPlaceholder, homeGuid);
-
-            var destinationFilePath = Path.Combine(destinationDirectory, Path.GetFileName(file));
-            destinationFilePath = destinationFilePath.Replace(namePlaceholder, projectName)
-                                                     .Replace(guidPlaceholder, homeGuid);
-
-            File.WriteAllText(destinationFilePath, text);
-
-            if (destinationFilePath.EndsWith(".csproj"))
-                csprojPath = destinationFilePath;
-        }
-
-        if (csprojPath == null)
-        {
-            Log.Error($"Could not find .csproj in {defaultHomeDir}");
-            return null;
-        }
-
-        return new CsProjectFile(new FileInfo(csprojPath));
-    }
-
     public enum BuildMode
     {
         Debug,

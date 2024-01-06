@@ -123,16 +123,14 @@ namespace T3.Editor
             ProgramWindows.SetInteractionDevices(spaceMouse);
 
             Log.Debug($"About to initialize Resource Manager");
-            ResourceManager.Init<EditorResourceManager>(device);
+            ResourceManager.Init(device);
             var resourceManager = ResourceManager.Instance();
             SharedResources.Initialize(resourceManager);
 
             Log.Debug($"About to initialize T3 UI");
 
             // Initialize UI and load complete symbol model
-            var initializedUi = EditorInitialization.TryInitialize(out var uiException);
-
-            if (!initializedUi)
+            if (!EditorInitialization.TryInitialize(out var uiException))
             {
                 Log.Error(uiException.Message + "\n\n" + uiException.StackTrace);
                 var innerException = uiException.InnerException?.Message.Replace("\\r", "\r") ?? string.Empty;

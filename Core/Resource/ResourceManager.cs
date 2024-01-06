@@ -28,7 +28,7 @@ namespace T3.Core.Resource
         void Update(string path);
     }
 
-    public class ResourceManager
+    public sealed class ResourceManager
     {
         public static ResourceManager Instance()
         {
@@ -66,9 +66,9 @@ namespace T3.Core.Resource
             return _resourceIdCounter++;
         }
 
-        public static void Init<TResourceManager>(Device device) where TResourceManager : ResourceManager, new()
+        public static void Init(Device device)
         {
-            _instance ??= new TResourceManager();
+            _instance ??= new ResourceManager();
             _instance.InitializeDevice(device);
         }
 

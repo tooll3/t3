@@ -1,32 +1,31 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
-using T3.Core.UserData;
 using T3.Editor.Gui.Dialog;
+using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Compilation;
 
 internal static class EditorInitialization
 {
-    private static readonly List<EditorSymbolPackage> EditorSymbolDatasList = new();
-    public static IReadOnlyList<EditorSymbolPackage> UiSymbolDatas = EditorSymbolDatasList;
+    private static readonly List<EditableSymbolPackage> EditableSymbolDatasList = new();
+    public static readonly IReadOnlyList<EditableSymbolPackage> EditableSymbolPackages = EditableSymbolDatasList;
     internal static bool NeedsUserProject;
 
-    internal static void CreateOrMigrateUser(object sender, UserNameDialog.NameChangedEventArgs nameArgs)
+    internal static void CreateOrMigrateProject(object sender, UserNameDialog.NameChangedEventArgs nameArgs)
     {
         var name = nameArgs.NewName;
 
         if (NeedsUserProject)
         {
-            var newProject = Compiler.CreateNewProject(name);
+            var newProject = CsProjectFile.CreateNewProject(name, UserSettings.Config.NewProjectDirectory);
             if(newProject == null)
             {
                 throw new Exception("Failed to create new project");
@@ -42,7 +41,7 @@ internal static class EditorInitialization
             var newUiSymbolData = new EditableSymbolPackage(newProject);
 
             AddSymbolPackages(newUiSymbolData);
-            if (!EditableSymbolPackage.TryCreateHome())
+            if (!newUiSymbolData.TryCreateHome())
             {
                 throw new Exception("Failed to create user home");
             }
@@ -126,14 +125,15 @@ internal static class EditorInitialization
                     Log.Error($"Failed to create UI initializer for {constructorInfo.AssemblyInformation.Name}: \"{typeName}\" - does it have a parameterless constructor?\n{e}");
                 }
             }
+            
+            
 
             // Create home
-            if (!EditableSymbolPackage.TryCreateHome())
+            if (!EditableSymbolPackage.ActiveProject.TryCreateHome())
             {
                 NeedsUserProject = true;
             }
 
-            Log.Debug($"Loaded {UiSymbolDatas.Count} UI datas.");
             exception = null;
             return true;
         }
@@ -182,8 +182,6 @@ internal static class EditorInitialization
 
     private static void AddSymbolPackages(params EditorSymbolPackage[] symbolPackages)
     {
-        EditorSymbolDatasList.AddRange(symbolPackages);
-
         ConcurrentDictionary<EditorSymbolPackage, List<SymbolJson.SymbolReadResult>> loadedSymbols = new();
         symbolPackages.AsParallel().ForAll(symbolPackage => //pull out for non-editable ones too
                                            {

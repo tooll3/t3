@@ -5,12 +5,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
-using T3.Core.Resource;
-using T3.Editor.Compilation;
+using T3.Editor.Gui;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.UiModel;
 
-namespace T3.Editor.Gui.Graph.Modification;
+namespace T3.Editor.Compilation;
 
 internal static class SymbolNaming
 {
@@ -37,8 +36,7 @@ internal static class SymbolNaming
 
     public static void RenameSymbol(Symbol symbol, string newName)
     {
-        var owner = EditorSymbolPackage.SymbolOwners[symbol.Id];
-        if (owner is not EditableSymbolPackage parent)
+        if (!symbol.SymbolPackage.IsModifiable)
             return;
         
         var syntaxTree = GraphUtils.GetSyntaxTree(symbol);
@@ -53,7 +51,7 @@ internal static class SymbolNaming
         var classRenamer = new ClassRenameRewriter(newName);
         root = classRenamer.Visit(root);
 
-        var memberRewriter = new SymbolNaming.ConstructorRewriter(newName);
+        var memberRewriter = new ConstructorRewriter(newName);
         root = memberRewriter.Visit(root);
 
         var newSource = root.GetText().ToString();

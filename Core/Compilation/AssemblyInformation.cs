@@ -5,6 +5,7 @@ using System.Reflection;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
+using T3.Core.Operator.Attributes;
 
 namespace T3.Core.Compilation;
 
@@ -21,6 +22,9 @@ public class AssemblyInformation
     private readonly Dictionary<Guid, Type> _operatorTypes;
     private readonly Dictionary<string, Type> _types;
     public IReadOnlyCollection<Type> Types => _types.Values;
+    
+    public Guid HomeGuid { get; private set; } = Guid.Empty;
+    public bool HasHome => HomeGuid != Guid.Empty;
 
     public AssemblyInformation(string path, AssemblyName assemblyName, Assembly assembly)
     {
@@ -47,6 +51,11 @@ public class AssemblyInformation
                                .Select(x =>
                                        {
                                            var gotGuid = SymbolPackage.TryGetGuidOfType(x, out var id);
+                                           var isHome = x.GetCustomAttribute<HomeAttribute>() is not null;
+                                           if (isHome && gotGuid)
+                                           {
+                                               HomeGuid = id;
+                                           }
                                            return new GuidInfo(gotGuid, id, x);
                                        })
                                .Where(x => x.HasGuid)

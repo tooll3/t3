@@ -22,10 +22,6 @@ namespace T3.Core.Resource
             AddWatcher(ResourceManager.ResourcesFolder, "*.jpg");
             AddWatcher(ResourceManager.ResourcesFolder, "*.dds");
             AddWatcher(ResourceManager.ResourcesFolder, "*.tiff");
-
-            _csFileWatcher = AddWatcher(Core.Model.SymbolPackage.OperatorDirectoryName, "*.cs");
-            _csFileWatcher.Renamed += CsFileRenamedHandler;
-            _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
         }
 
         public static void AddFileHook(string filepath, Action action)
@@ -85,16 +81,6 @@ namespace T3.Core.Resource
 
         private static Dictionary<string, FileSystemWatcher> _fileWatchers = new();
 
-        public static void DisableOperatorFileWatcher()
-        {
-            _csFileWatcher.EnableRaisingEvents = false;
-        }
-
-        public static void EnableOperatorFileWatcher()
-        {
-            _csFileWatcher.EnableRaisingEvents = true;
-        }
-
         private static void FileChangedHandler(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
             // Log.Info($"change for '{fileSystemEventArgs.Name}' due to '{fileSystemEventArgs.ChangeType}'.");
@@ -144,7 +130,6 @@ namespace T3.Core.Resource
         }
 
         public static readonly ConcurrentDictionary<string, ResourceFileHook> HooksForResourceFilepaths = new();
-        private static FileSystemWatcher _csFileWatcher;
     }
 
     /// <summary>

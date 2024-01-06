@@ -467,6 +467,7 @@ namespace T3.Editor.Gui.Graph
 
                 DrawList.PopClipRect();
                 DrawContextMenu();
+                
 
                 _duplicateSymbolDialog.Draw(CompositionOp, GetSelectedChildUis(), ref _nameSpaceForDialogEdits, ref _symbolNameForDialogEdits,
                                             ref _symbolDescriptionForDialog);

@@ -16,27 +16,11 @@ namespace T3.Editor.Compilation
     /// </summary>
     internal static class OperatorUpdating
     {
-        /// <summary>
-        /// An event called that is called if the file hook detects change to the symbol source code.
-        /// </summary>
-        public static void ResourceUpdateHandler(OperatorResource resource, string path)
-        {
-            //Log.Info($"Operator source '{path}' changed.");
-            //Log.Info($"Actual thread Id {Thread.CurrentThread.ManagedThreadId}");
-
-            var success = resource.ParentProject.TryRecompile();
-
-            if (success)
-            {
-                resource.Updated = true;
-                resource.RefreshType();
-            }
-        }
-
-        public static bool TryCreateSymbolFromSource(string sourceCode, string newSymbolName, Guid newSymbolId, string @namespace, CsProjectFile parentAssembly,
+        // called from duplicate/combine 
+        public static bool TryCreateSymbolFromSource(string sourceCode, string newSymbolName, Guid newSymbolId, string @namespace, EditableSymbolPackage package,
                                                      out Symbol newSymbol)
         {
-            var newAssembly = CompileSymbolFromSource(sourceCode, newSymbolName, parentAssembly);
+            return package.TryCompile(sourceCode, newSymbolName, newSymbolId, @namespace, out newSymbol);
             if (newAssembly == null)
             {
                 Log.Error("Error compiling duplicated type, aborting duplication.");
@@ -58,27 +42,18 @@ namespace T3.Editor.Compilation
             return true;
         }
 
+        // this currently is primarily used when re-ordering symbol inputs and outputs
         public static bool UpdateSymbolWithNewSource(Symbol symbol, string newSource)
         {
-            var newAssembly = CompileSymbolFromSource(newSource, symbol.Name, symbol.ParentAssembly);
-            if (newAssembly == null)
-                return false;
-
-            //string path = @"Operators\Types\" + symbol.Name + ".cs";
-            var sourcePath = symbol.SymbolPackage.BuildFilepathForSymbol(symbol, SymbolPackage.SourceCodeExtension);
-
-            var operatorResource = EditorResourceManager.Instance.GetOperatorFileResource(sourcePath);
-            if (operatorResource != null)
+            if (!symbol.SymbolPackage.IsModifiable)
             {
-                operatorResource.OperatorAssembly = newAssembly;
-                operatorResource.Updated = true;
-                symbol.PendingSource = newSource;
-                return true;
+                Log.Error($"Could not update symbol '{symbol.Name}' because it is not modifiable.");
+                return false;
             }
 
-            Log.Error($"Could not update symbol '{symbol.Name}' because its file resource couldn't be found.");
+            var editableSymbolPackage = (EditableSymbolPackage)symbol.SymbolPackage;
+            return editableSymbolPackage.TryRecompileWithNewSource(symbol, newSource);
 
-            return false;
         }
 
         /// <summary>
@@ -98,14 +73,43 @@ namespace T3.Editor.Compilation
 
         public static void RenameNameSpaces(NamespaceTreeNode node, string nameSpace)
         {
-            var uiSymbolDatas = EditableSymbolPackage.SymbolDataByProject.Values.ToList();
-            foreach (var uiSymbolData in uiSymbolDatas)
+            if (!IsEditableTargetNamespace(node, out var targetPackage))
             {
-                if (!uiSymbolData.CanRecompile)
-                    continue;
-                
-                uiSymbolData.RenameNameSpace(node, nameSpace);
+                return;
+            }
+
+            foreach (var package in EditorInitialization.EditableSymbolPackages)
+            {
+                package.RenameNameSpace(node, nameSpace, targetPackage);
             }
         }
+
+
+        private static bool IsEditableTargetNamespace(NamespaceTreeNode node, out EditableSymbolPackage targetPackage)
+        {
+            var namespaceInfos = EditorInitialization.EditableSymbolPackages
+                                                     .Select(package => new PackageNamespaceInfo(package, package.CsProjectFile.RootNamespace));
+
+            string targetNamespace = node.GetAsString();
+            foreach (var namespaceInfo in namespaceInfos)
+            {
+                // trim initial `Operators.` out of the namespace
+
+                string userNamespace = namespaceInfo.RootNamespace;
+                if (userNamespace.StartsWith("Operators."))
+                    userNamespace = userNamespace["Operators.".Length..];
+
+                if (targetNamespace.StartsWith(userNamespace))
+                {
+                    targetPackage = namespaceInfo.Package;
+                    return true;
+                }
+            }
+
+            targetPackage = null;
+            return false;
+        }
+        
+        private readonly record struct PackageNamespaceInfo(EditableSymbolPackage Package, string RootNamespace);
     }
 }

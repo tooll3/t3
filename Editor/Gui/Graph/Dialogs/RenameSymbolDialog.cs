@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ImGuiNET;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Graph.Helpers;
@@ -13,6 +14,11 @@ namespace T3.Editor.Gui.Graph.Dialogs
     {
         public void Draw(List<SymbolChildUi> selectedChildUis, ref string name)
         {
+            var canRename = selectedChildUis.All(x => x.IsModifiable);
+            
+            if (!canRename)
+                return;
+            
             if (BeginDialog("Rename symbol"))
             {
                 ImGui.PushFont(Fonts.FontSmall);

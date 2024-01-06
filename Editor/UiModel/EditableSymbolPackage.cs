@@ -3,59 +3,36 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Newtonsoft.Json;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Resource;
 using T3.Editor.Compilation;
-using T3.Editor.Gui.ChildUi;
 using T3.Editor.Gui.Windows;
-
-// ReSharper disable RedundantNameQualifier
 
 namespace T3.Editor.UiModel;
 
-internal sealed partial class EditableSymbolPackage : EditorSymbolPackage
+internal sealed class EditableSymbolPackage : EditorSymbolPackage
 {
     public EditableSymbolPackage(CsProjectFile csProjectFile)
         : base(csProjectFile.Assembly)
     {
         CsProjectFile = csProjectFile;
         SymbolDataByProjectRw.Add(csProjectFile, this);
+        _fileSystemWatcher = new EditablePackageFSWatcher(this);
     }
 
     // todo - "home" should be marked by an attribute rather than a hard-coded id
-    public static bool TryCreateHome()
+    public bool TryCreateHome()
     {
-        var gotHome = SymbolOwners.TryGetValue(HomeSymbolId, out var potentialHomeOwner);
-        if (!gotHome || potentialHomeOwner is not EditableSymbolPackage homeOwner)
-        {
-            // todo - home should be marked by an attribute rather than a hard-coded id
-            // home should only be searched for in the active user project? 
+        if (!CsProjectFile.Assembly.HasHome)
             return false;
-        }
 
-        var symbolUis = homeOwner.SymbolUis;
-
-        var symbolUisById = symbolUis.ToDictionary(x => x.Symbol.Id, x => x);
-        bool containsHome = symbolUisById.ContainsKey(HomeSymbolId);
-        if (!containsHome)
-        {
-            Log.Error($"Could not find home symbol for {homeOwner.AssemblyInformation.Name} - something is wrong.");
-            return false;
-        }
-
-        // Create instance of project op, all children are created automatically
-        if (RootInstance != null)
-        {
-            throw new Exception("RootInstance already exists");
-        }
-
-        Console.WriteLine(@"Creating home...");
-        var homeSymbol = symbolUisById[HomeSymbolId].Symbol;
-        RootInstance = homeSymbol.CreateInstance(HomeInstanceId);
-        ActiveProject = homeOwner;
+        var homeGuid = CsProjectFile.Assembly.HomeGuid;
+        var symbol = Symbols[homeGuid];
+        RootInstance = symbol.CreateInstance(HomeInstanceId);
         return true;
     }
 
@@ -103,7 +80,7 @@ internal sealed partial class EditableSymbolPackage : EditorSymbolPackage
             SaveSymbolDefinitionAndSourceFiles(modifiedSymbols);
             WriteSymbolUis(modifiedSymbolUis);
         }
-        catch (System.InvalidOperationException e)
+        catch (InvalidOperationException e)
         {
             Log.Warning($"Saving failed. Please try to save manually ({e.Message})");
         }
@@ -113,8 +90,6 @@ internal sealed partial class EditableSymbolPackage : EditorSymbolPackage
 
     private void WriteSymbolUis(IEnumerable<SymbolUi> symbolUis)
     {
-        var resourceManager = (EditorResourceManager)ResourceManager.Instance();
-
         foreach (var symbolUi in symbolUis)
         {
             var symbol = symbolUi.Symbol;
@@ -126,11 +101,6 @@ internal sealed partial class EditableSymbolPackage : EditorSymbolPackage
                 writer.Formatting = Formatting.Indented;
                 SymbolUiJson.WriteSymbolUi(symbolUi, writer);
             }
-
-            resourceManager.TrackOperatorFile(symbolFilePath, symbolUi.Symbol, CsProjectFile, OperatorUpdating.ResourceUpdateHandler);
-
-            var symbolSourceFilepath = BuildFilepathForSymbol(symbol, SymbolPackage.SourceCodeExtension);
-            resourceManager.TrackOperatorFile(symbolSourceFilepath, symbolUi.Symbol, CsProjectFile, OperatorUpdating.ResourceUpdateHandler);
 
             symbolUi.ClearModifiedFlag();
         }
@@ -155,26 +125,177 @@ internal sealed partial class EditableSymbolPackage : EditorSymbolPackage
         }
     }
 
-    public override void AddSymbol(Symbol newSymbol)
+    public virtual void SaveAll()
     {
-        base.AddSymbol(newSymbol);
-        var added = SymbolOwnersEditable.TryAdd(newSymbol.Id, this);
-        if (!added)
-            throw new Exception($"Symbol {newSymbol.Id} already exists in {AssemblyInformation.Name}");
-        UpdateUiEntriesForSymbol(newSymbol);
-        RegisterCustomChildUi(newSymbol);
+        MarkAsSaving();
+        RemoveAllSymbolFiles();
+        SortAllSymbolSourceFiles();
+        SaveSymbolDefinitionAndSourceFiles(Symbols.Values);
+        UnmarkAsSaving();
     }
 
-    public void AddSymbol(Symbol newSymbol, SymbolUi symbolUi)
+    protected void MarkAsSaving() => Interlocked.Increment(ref _savingCount);
+    protected void UnmarkAsSaving() => Interlocked.Decrement(ref _savingCount);
+
+    protected void SaveSymbolDefinitionAndSourceFiles(IEnumerable<Symbol> symbols)
+    {
+        foreach (var symbol in symbols)
+        {
+            var filepath = BuildFilepathForSymbol(symbol, SymbolExtension);
+
+            using (var sw = new StreamWriter(filepath))
+            using (var writer = new JsonTextWriter(sw) { Formatting = Formatting.Indented })
+            {
+                SymbolJson.WriteSymbol(symbol, writer);
+            }
+
+            if (!string.IsNullOrEmpty(symbol.PendingSource))
+            {
+                WriteSymbolSourceToFile(symbol);
+            }
+        }
+    }
+
+    private void SortAllSymbolSourceFiles()
+    {
+        // Move existing source files to correct namespace folder
+        var sourceFiles = Directory.GetFiles(Folder, $"*{SourceCodeExtension}", SearchOption.AllDirectories);
+        foreach (var sourceFilePath in sourceFiles)
+        {
+            var classname = Path.GetFileNameWithoutExtension(sourceFilePath);
+            var symbol = SymbolRegistry.Entries.Values.SingleOrDefault(s => s.Name == classname);
+            if (symbol == null)
+            {
+                // This happens when renaming symbols.
+                Log.Debug($"Skipping unregistered source file {sourceFilePath}");
+                continue;
+            }
+
+            var targetFilepath = BuildFilepathForSymbol(symbol, SourceCodeExtension);
+            if (sourceFilePath == targetFilepath)
+                continue;
+
+            Log.Debug($" Moving {sourceFilePath} -> {targetFilepath} ...");
+            try
+            {
+                File.Move(sourceFilePath, targetFilepath);
+            }
+            catch (Exception e)
+            {
+                Log.Warning("Failed to write source file '" + sourceFilePath + "': " + e);
+            }
+        }
+    }
+
+    // Todo: this sounds like a dangerous step. we should overwrite these files by default and can check which files are not overwritten to delete others?
+    private void RemoveAllSymbolFiles()
+    {
+        // Remove all old t3 files before storing to get rid off invalid ones
+        var symbolFiles = Directory.GetFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
+        foreach (var symbolFilePath in symbolFiles)
+        {
+            try
+            {
+                File.Delete(symbolFilePath);
+            }
+            catch (Exception e)
+            {
+                Log.Warning("Failed to deleted file '" + symbolFilePath + "': " + e);
+            }
+        }
+    }
+
+    private void WriteSymbolSourceToFile(Symbol symbol, string sourcePath = null)
+    {
+        sourcePath ??= BuildFilepathForSymbol(symbol, SourceCodeExtension);
+        using (var sw = new StreamWriter(sourcePath))
+        {
+            sw.Write(symbol.PendingSource);
+        }
+
+        // Remove old source file and its entry in project
+        if (!string.IsNullOrEmpty(symbol.DeprecatedSourcePath))
+        {
+            if (symbol.DeprecatedSourcePath == sourcePath)
+            {
+                Log.Warning($"Attempted to deprecated valid source file: {symbol.DeprecatedSourcePath}");
+                symbol.DeprecatedSourcePath = string.Empty;
+                return;
+            }
+
+            File.Delete(symbol.DeprecatedSourcePath);
+
+            // Adjust path of file resource
+            ResourceManager.RenameOperatorResource(symbol.DeprecatedSourcePath, sourcePath);
+
+            symbol.DeprecatedSourcePath = string.Empty;
+        }
+
+        symbol.PendingSource = null;
+    }
+
+    #region File path handling
+    private string BuildFilepathForSymbol(Symbol symbol, string extension)
+    {
+        var dir = BuildAndCreateFolderFromNamespace(Folder, symbol.Namespace);
+        return extension == SourceCodeExtension
+                   ? Path.Combine(dir, symbol.Name + extension)
+                   : Path.Combine(dir, symbol.Name + '_' + symbol.Id + extension);
+
+        string BuildAndCreateFolderFromNamespace(string rootFolder, string symbolNamespace)
+        {
+            if (string.IsNullOrEmpty(symbolNamespace) || symbolNamespace == AssemblyInformation.Name)
+            {
+                return rootFolder;
+            }
+
+            var namespaceParts = symbolNamespace.Split('.');
+            var assemblyRootParts = Folder.Split(Path.DirectorySeparatorChar);
+            var rootOfOperatorDirectoryIndex = Array.IndexOf(assemblyRootParts, AssemblyInformation.Name);
+            var operatorRootParts = assemblyRootParts.AsSpan()[..(rootOfOperatorDirectoryIndex)].ToArray();
+
+            var directory = Path.Combine(operatorRootParts.Concat(namespaceParts).ToArray());
+            Directory.CreateDirectory(directory);
+            return directory;
+        }
+    }
+    #endregion
+
+    public void AddSymbol(Symbol newSymbol, SymbolUi symbolUi = null)
     {
         base.AddSymbol(newSymbol);
         UpdateUiEntriesForSymbol(newSymbol, symbolUi);
         RegisterCustomChildUi(newSymbol);
     }
 
-    internal static readonly Guid HomeSymbolId = Guid.Parse("dab61a12-9996-401e-9aa6-328dd6292beb");
-    private static readonly Guid HomeInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
+    public void RenameNameSpace(NamespaceTreeNode node, string nameSpace, EditableSymbolPackage newDestinationPackage)
+    {
+        var movingToAnotherPackage = newDestinationPackage != this;
 
+        var orgNameSpace = node.GetAsString();
+        foreach (var symbol in Symbols.Values)
+        {
+            if (!symbol.Namespace.StartsWith(orgNameSpace))
+                continue;
+
+            //var newNameSpace = parent + "."
+            var newNameSpace = Regex.Replace(symbol.Namespace, orgNameSpace, nameSpace);
+            Log.Debug($" Changing namespace of {symbol.Name}: {symbol.Namespace} -> {newNameSpace}");
+            symbol.Namespace = newNameSpace;
+
+            if (!movingToAnotherPackage)
+                continue;
+
+            GiveSymbolToPackage(symbol, newDestinationPackage);
+        }
+    }
+
+    public void MarkAsModified()
+    {
+        _needsCompilation = true;
+    }
+
+    private static readonly Guid HomeInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
     public override string Folder => CsProjectFile.Directory;
 
     public readonly CsProjectFile CsProjectFile;
@@ -186,18 +307,59 @@ internal sealed partial class EditableSymbolPackage : EditorSymbolPackage
 
     public static EditableSymbolPackage ActiveProject { get; private set; }
 
-    public void RenameNameSpace(NamespaceTreeNode node, string nameSpace)
-    {
-        var orgNameSpace = node.GetAsString();
-        foreach (var symbol in SymbolRegistry.Entries.Values)
-        {
-            if (!symbol.Namespace.StartsWith(orgNameSpace))
-                continue;
+    public override bool IsModifiable => true;
 
-            //var newNameSpace = parent + "."
-            var newNameSpace = Regex.Replace(symbol.Namespace, orgNameSpace, nameSpace);
-            Log.Debug($" Changing namespace of {symbol.Name}: {symbol.Namespace} -> {newNameSpace}");
-            symbol.Namespace = newNameSpace;
+    private readonly EditablePackageFSWatcher _fileSystemWatcher;
+
+    private bool _needsCompilation;
+
+    public bool TryRecompileWithNewSource(Symbol symbol, string newSource)
+    {
+        // disable file watcher
+        
+        var path = BuildFilepathForSymbol(symbol, SourceCodeExtension);
+        var currentSource = File.ReadAllText(path);
+        symbol.PendingSource = newSource;
+        _fileSystemWatcher.EnableRaisingEvents = false;
+        WriteSymbolSourceToFile(symbol, path);
+
+        var success = CsProjectFile.TryRecompile(Compiler.BuildMode.Debug);
+
+        if (!success)
+        {
+            symbol.PendingSource = currentSource;
+            WriteSymbolSourceToFile(symbol, path);
         }
+        
+        _fileSystemWatcher.EnableRaisingEvents = true;
+
+        return success;
     }
+
+    public bool TryCompile(string sourceCode, string newSymbolName, Guid newSymbolId, string ns, out Symbol newSymbol)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+class EditablePackageFSWatcher : FileSystemWatcher
+{
+    public EditablePackageFSWatcher(EditableSymbolPackage package) : base(package.Folder, "*.cs")
+    {
+        NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
+
+        IncludeSubdirectories = true;
+        _package = package;
+        Changed += OnChangeEvent;
+        Created += OnChangeEvent;
+        Deleted += OnChangeEvent;
+        Renamed += OnChangeEvent;
+    }
+
+    private void OnChangeEvent(object sender, FileSystemEventArgs args)
+    {
+        _package.MarkAsModified();
+    }
+
+    private readonly EditableSymbolPackage _package;
 }

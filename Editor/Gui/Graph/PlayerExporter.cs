@@ -394,51 +394,5 @@ namespace T3.Editor.Gui.Graph
                 }
             }
         }
-
-        private static MetadataReference[] CompileSymbolsFromSource(string exportPath, IEnumerable<AssemblyInformation> parentAssemblies, params string[] sources)
-        {
-            var referencedAssemblies = OperatorUpdating.GetAllReferences();
-            
-            var syntaxTrees = sources.AsParallel().Select(s => CSharpSyntaxTree.ParseText(s)).ToArray();
-            var compilation = CSharpCompilation.Create("Operators",
-                                                       syntaxTrees,
-                                                       referencedAssemblies,
-                                                       new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
-                                                          .WithOptimizationLevel(OptimizationLevel.Release)
-                                                          .WithAllowUnsafe(true));
-
-            using var dllStream = new FileStream(Path.Combine(exportPath, "Operators.dll"), FileMode.Create);
-            using var pdbStream = new MemoryStream();
-
-            var emitResult = compilation.Emit(dllStream, pdbStream);
-            Log.Info($"compilation results of 'export':");
-
-            if (!emitResult.Success)
-            {
-                Log.Debug("Failed!");
-
-                Log.Debug("Source codes:");
-                foreach (var source in sources)
-                {
-                    Log.Debug(source);
-                    Log.Debug("~~~~~~~~~~~~~~~~~~");
-                }
-
-                Log.Debug("Messages");
-                foreach (var entry in emitResult.Diagnostics)
-                {
-                    if (entry.WarningLevel == 0)
-                        Log.Error("ERROR:" + entry.GetMessage());
-                    else
-                        Log.Warning(entry.GetMessage());
-                }
-            }
-            else
-            {
-                Log.Info($"Compilation of 'export' successful.");
-            }
-
-            return referencedAssemblies;
-        }
     }
 }

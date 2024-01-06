@@ -48,6 +48,7 @@ namespace T3.Editor.Gui.Graph.Interaction
         /// </summary>
         public static void Handle(ISelectableCanvasObject node, Instance instance = null)
         {
+
             var justClicked = ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenBlockedByPopup) && ImGui.IsMouseClicked(ImGuiMouseButton.Left);
             
             var isActiveNode = node.Id == _draggedNodeId;

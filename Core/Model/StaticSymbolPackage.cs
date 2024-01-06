@@ -9,4 +9,5 @@ public class StaticSymbolPackage : SymbolPackage
     }
 
     public override string Folder => AssemblyInformation.Directory; // todo: symbols will likely be organized in subfolders
+    public override bool IsModifiable => false;
 }

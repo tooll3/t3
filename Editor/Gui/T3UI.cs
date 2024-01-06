@@ -40,7 +40,7 @@ public static class T3Ui
 {
     static T3Ui()
     {
-        _userNameDialog.UserNameChanged += EditorInitialization.CreateOrMigrateUser;
+        _userNameDialog.UserNameChanged += EditorInitialization.CreateOrMigrateProject;
     }
 
     public static void InitializeEnvironment()
@@ -408,9 +408,9 @@ public static class T3Ui
             SaveStopwatch.Restart();
 
             // Todo - parallelize? 
-            foreach (var data in EditorInitialization.UiSymbolDatas)
+            foreach (var package in EditorInitialization.EditableSymbolPackages)
             {
-                data.SaveModifiedSymbols();
+                package.SaveModifiedSymbols();
             }
 
             SaveStopwatch.Stop();
@@ -433,7 +433,7 @@ public static class T3Ui
             SaveStopwatch.Restart();
 
             // Todo - parallelize?
-            foreach (var data in EditorInitialization.UiSymbolDatas)
+            foreach (var data in EditorInitialization.EditableSymbolPackages)
             {
                 data.SaveAll();
             }

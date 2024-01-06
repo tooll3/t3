@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -56,16 +54,6 @@ internal class EditorSymbolPackage : StaticSymbolPackage
     {
         Log.Debug($@"{AssemblyInformation.Name}: Registering UI entries...");
 
-        var dictionary = SymbolUiRegistry.Entries;
-
-        foreach (var symbol in Symbols.Values)
-        {
-            if (!SymbolOwnersEditable.TryAdd(symbol.Id, this))
-            {
-                Log.Error($"Duplicate symbol id {symbol.Id}");
-            }
-        }
-
         var allSymbolUiDict = SymbolUiRegistry.Entries;
         foreach (var symbolUi in SymbolUis)
         {
@@ -87,8 +75,7 @@ internal class EditorSymbolPackage : StaticSymbolPackage
         }
     }
 
-    protected static readonly ConcurrentDictionary<Guid, EditorSymbolPackage> SymbolOwnersEditable = new();
-    public static IReadOnlyDictionary<Guid, EditorSymbolPackage> SymbolOwners => SymbolOwnersEditable;
+    protected List<SymbolUi> SymbolUis = new();
     
-    protected internal List<SymbolUi> SymbolUis = new();
+    public override bool IsModifiable => false;
 }
