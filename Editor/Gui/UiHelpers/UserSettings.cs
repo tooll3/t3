@@ -56,7 +56,7 @@ namespace T3.Editor.Gui.UiHelpers
             public bool UseArcConnections = true;
             public bool ResetTimeAfterPlayback;
             public float SnapStrength = 5;
-            public ValueEditGizmos ValueEditGizmo;
+            public ValueEditMethods ValueEditMethod;
             public float ScrollSmoothing = 0.1f;
 
             public float ClickThreshold = 5; // Increase for high-res display and pen tablets
@@ -104,7 +104,7 @@ namespace T3.Editor.Gui.UiHelpers
             public string ColorThemeName;
         }
 
-        public enum ValueEditGizmos
+        public enum ValueEditMethods
         {
             InfinitySlider,
             RadialSlider,
