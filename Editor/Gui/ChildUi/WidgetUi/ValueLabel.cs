@@ -57,7 +57,7 @@ namespace T3.Editor.Gui.ChildUi.WidgetUi
                     {
                         if (ImGui.IsItemActive())
                         {
-                            SingleValueEdit.DrawValueEditGizmo(ref value,  restarted, _jogDailCenter,double.NegativeInfinity, double.PositiveInfinity, false, 0.025f);
+                            SingleValueEdit.DrawValueEditMethod(ref value,  restarted, _jogDailCenter,double.NegativeInfinity, double.PositiveInfinity, false, 0.025f);
                             inputSlot.SetTypedInputValue((float)value);
                             modified = true;
                         }

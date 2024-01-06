@@ -113,8 +113,8 @@ namespace T3.Editor.Gui.Windows
                                                               "Frame step amount",
                                                               "Controls the next rounding and step amount when jumping between frames.\nDefault shortcut is Shift+Cursor Left/Right");
 
-                        changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.ValueEditGizmo,
-                                                              "Value input widget",
+                        changed |= FormInputs.AddEnumDropdown(ref UserSettings.Config.ValueEditMethod,
+                                                              "Value input method",
                                                               "The control that pops up when dragging on a number value"
                                                              );
 
