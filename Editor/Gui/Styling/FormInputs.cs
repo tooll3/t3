@@ -525,7 +525,8 @@ namespace T3.Editor.Gui.Styling
 
             ImGui.SameLine();
             ImGui.PushID(id);
-            var clicked = CustomComponents.IconButton(Icon.Revert, Vector2.One * ImGui.GetFrameHeight());
+            var clicked = CustomComponents.IconButton(Icon.Revert,
+                new Vector2(Math.Min(.8f, T3Ui.UiScaleFactor)) * ImGui.GetFrameHeight());
             ImGui.PopID();
             return clicked;
         }
@@ -550,7 +551,6 @@ namespace T3.Editor.Gui.Styling
         private static float _widthRatio = 1;
         private static float LeftParameterPadding => _paramIndent * T3Ui.UiScaleFactor;
         public static float ParameterSpacing => 20 * T3Ui.UiScaleFactor;
-
 
     }
 }
