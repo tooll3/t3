@@ -65,7 +65,7 @@ namespace T3.Editor.Compilation
                 return false;
 
             //string path = @"Operators\Types\" + symbol.Name + ".cs";
-            var sourcePath = symbol.SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceCodeExtension);
+            var sourcePath = symbol.SymbolPackage.BuildFilepathForSymbol(symbol, SymbolPackage.SourceCodeExtension);
 
             var operatorResource = EditorResourceManager.Instance.GetOperatorFileResource(sourcePath);
             if (operatorResource != null)
@@ -90,7 +90,7 @@ namespace T3.Editor.Compilation
             var modifiedSymbols = OperatorResource.UpdateChangedOperatorTypes();
             foreach (var symbol in modifiedSymbols)
             {
-                var uiSymbolData = (UiSymbolData)symbol.SymbolData;
+                var uiSymbolData = (EditableSymbolPackage)symbol.SymbolPackage;
                 uiSymbolData.UpdateUiEntriesForSymbol(symbol);
                 symbol.CreateAnimationUpdateActionsForSymbolInstances();
             }
@@ -98,7 +98,7 @@ namespace T3.Editor.Compilation
 
         public static void RenameNameSpaces(NamespaceTreeNode node, string nameSpace)
         {
-            var uiSymbolDatas = UiSymbolData.SymbolDataByAssembly.Values.ToList();
+            var uiSymbolDatas = EditableSymbolPackage.SymbolDataByProject.Values.ToList();
             foreach (var uiSymbolData in uiSymbolDatas)
             {
                 if (!uiSymbolData.CanRecompile)

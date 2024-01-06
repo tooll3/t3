@@ -21,19 +21,14 @@ using Point = T3.Core.DataTypes.Point;
 
 namespace T3.Editor.UiModel;
 
-public sealed class UiRegistration
+internal sealed class UiRegistration
 {
-    static UiRegistration()
-    {
-        RegisterUiTypes();
-    }
-
     public static class TypeByNameRegistry
     {
         public static Dictionary<string, Type> Entries { get; } = new();
     }
 
-    private static void RegisterUiTypes()
+    public static void RegisterUiTypes()
     {
         // build-in types
         RegisterUiType(typeof(float), new ValueUiProperties(), () => new FloatInputUi(), () => new FloatOutputUi());

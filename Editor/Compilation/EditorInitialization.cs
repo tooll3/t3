@@ -14,76 +14,35 @@ using T3.Editor.UiModel;
 
 namespace T3.Editor.Compilation;
 
-public static class EditorInitialization
+internal static class EditorInitialization
 {
-    private static readonly List<UiSymbolData> UiSymbolDatasEditable = new();
-    public static IReadOnlyList<UiSymbolData> UiSymbolDatas = UiSymbolDatasEditable;
+    private static readonly List<EditorSymbolPackage> EditorSymbolDatasList = new();
+    public static IReadOnlyList<EditorSymbolPackage> UiSymbolDatas = EditorSymbolDatasList;
     internal static bool NeedsUserProject;
 
     internal static void CreateOrMigrateUser(object sender, UserNameDialog.NameChangedEventArgs nameArgs)
     {
         var name = nameArgs.NewName;
-        string destinationDirectory = Path.Combine(SymbolData.OperatorDirectoryName, "user", name);
 
         if (NeedsUserProject)
         {
-            var defaultHomeDir = Path.Combine(UserData.RootFolder, "default-home");
-            var files = Directory.EnumerateFiles(defaultHomeDir, "*");
-            destinationDirectory = Path.GetFullPath(destinationDirectory);
-            Directory.CreateDirectory(destinationDirectory);
-
-            var dependenciesDirectory = Path.Combine(destinationDirectory, "dependencies");
-            Directory.CreateDirectory(dependenciesDirectory);
-
-            string placeholderDependencyPath = Path.Combine(dependenciesDirectory, "PlaceNativeDllDependenciesHere.txt");
-            File.Create(placeholderDependencyPath).Dispose();
-
-            const string namePlaceholder = "{{USER}}";
-            const string guidPlaceholder = "{{GUID}}";
-            string homeGuid = UiSymbolData.HomeSymbolId.ToString();
-            foreach (var file in files)
+            var newProject = Compiler.CreateNewProject(name);
+            if(newProject == null)
             {
-                string text = File.ReadAllText(file);
-                text = text.Replace(namePlaceholder, name)
-                           .Replace(guidPlaceholder, homeGuid);
-
-                var destinationFilePath = Path.Combine(destinationDirectory, Path.GetFileName(file));
-                destinationFilePath = destinationFilePath.Replace(namePlaceholder, name)
-                                                         .Replace(guidPlaceholder, homeGuid);
-
-                File.WriteAllText(destinationFilePath, text);
+                throw new Exception("Failed to create new project");
             }
-
-            // Todo: add solution reference to project
-
-            // build destinationDirectory/name.csproj with dotnet build
-            var process = new Process
-                              {
-                                  StartInfo = new ProcessStartInfo
-                                                  {
-                                                      FileName = "dotnet",
-                                                      Arguments = $"build {name}.csproj",
-                                                      WorkingDirectory = destinationDirectory,
-                                                      UseShellExecute = true
-                                                  }
-                              };
-
-            process.Start();
-            process.WaitForExit();
             
-            //todo - check dotnet output for success - exit codes? parse output?
-
-            var newOperatorAssemblies = RuntimeAssemblies.LoadNewOperatorAssemblies(destinationDirectory);
-
-            List<UiSymbolData> newUiSymbolDatas = new();
-            foreach (var assembly in newOperatorAssemblies)
+            var compiled = Compiler.TryCompile(newProject, Compiler.BuildMode.Debug);
+            
+            if (!compiled)
             {
-                var newUiSymbolData = new UiSymbolData(assembly);
-                newUiSymbolDatas.Add(newUiSymbolData);
+                throw new Exception("Failed to compile new project");
             }
+            
+            var newUiSymbolData = new EditableSymbolPackage(newProject);
 
-            AddUiSymbolData(newUiSymbolDatas);
-            if (!UiSymbolData.TryCreateHome())
+            AddSymbolPackages(newUiSymbolData);
+            if (!EditableSymbolPackage.TryCreateHome())
             {
                 throw new Exception("Failed to create user home");
             }
@@ -102,17 +61,33 @@ public static class EditorInitialization
     [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
     internal static bool TryInitialize(out Exception exception)
     {
+        UiRegistration.RegisterUiTypes();
+
         try
         {
             var operatorAssemblies = RuntimeAssemblies.OperatorAssemblies;
+            List<EditableSymbolPackage> editablePackages = new();
+            List<EditorSymbolPackage> staticPackages = new();
 
-            // Select only Operator assemblies
-            var uiSymbolData = operatorAssemblies
-                              .Select(a => new UiSymbolData(a))
-                              .ToList();
+            foreach (var assemblyInfo in operatorAssemblies)
+            {
+                if (TryFindMatchingCSProj(assemblyInfo, out var csprojFile))
+                {
+                    var editableSymbolData = new EditableSymbolPackage(csprojFile);
+                    editablePackages.Add(editableSymbolData);
+                }
+                else
+                {
+                    var staticSymbolData = new EditorSymbolPackage(assemblyInfo);
+                    staticPackages.Add(staticSymbolData);
+                }
+            }
 
+            var allSymbolPackages = editablePackages
+                                .Concat(staticPackages)
+                                .ToArray();
             // Load operators
-            AddUiSymbolData(uiSymbolData);
+            AddSymbolPackages(allSymbolPackages);
 
             // Initialize custom UIs
             var uiInitializerTypes = RuntimeAssemblies.AllAssemblies
@@ -131,12 +106,12 @@ public static class EditorInitialization
                 var typeName = constructorInfo.InstanceType.FullName;
                 try
                 {
-                    var activated =Activator.CreateInstanceFrom(assemblyName, typeName);
+                    var activated = Activator.CreateInstanceFrom(assemblyName, typeName);
                     if (activated == null)
                     {
                         throw new Exception($"Created null activator handle for {typeName}");
                     }
-                    
+
                     var initializer = (IOperatorUIInitializer)activated.Unwrap();
                     if (initializer == null)
                     {
@@ -153,7 +128,7 @@ public static class EditorInitialization
             }
 
             // Create home
-            if (!UiSymbolData.TryCreateHome())
+            if (!EditableSymbolPackage.TryCreateHome())
             {
                 NeedsUserProject = true;
             }
@@ -169,22 +144,58 @@ public static class EditorInitialization
         }
     }
 
-    private static void AddUiSymbolData(List<UiSymbolData> uiSymbolDatas)
+    private static bool TryFindMatchingCSProj(AssemblyInformation assembly, out CsProjectFile csprojFile)
     {
-        UiSymbolDatasEditable.AddRange(uiSymbolDatas);
+        var assemblyNameString = assembly.Name;
+        if (assemblyNameString == null)
+            throw new ArgumentException("Assembly name is null", nameof(assembly));
 
-        ConcurrentDictionary<UiSymbolData, List<SymbolJson.SymbolReadResult>> loadedSymbols = new();
-        uiSymbolDatas.AsParallel().ForAll(uiSymbolData =>
-                                          {
-                                              uiSymbolData.LoadSymbols(false, out var list);
-                                              loadedSymbols.TryAdd(uiSymbolData, list);
-                                          });
-        loadedSymbols.AsParallel().ForAll(pair => pair.Key.ApplySymbolChildren(pair.Value));
-        uiSymbolDatas.AsParallel().ForAll(uiSymbolData => uiSymbolData.LoadUiFiles());
+        var assemblyDirectory = assembly.Directory;
 
-        foreach (var uiSymbolData in uiSymbolDatas)
+        // search upwards from the assembly directory to find a matching csproj
+        var csprojName = $"{assemblyNameString}.csproj";
+
+        var workingDirectory = Directory.GetParent(assemblyDirectory);
+        FileInfo csprojFileInfo = null;
+
+        while (workingDirectory != null)
         {
-            uiSymbolData.RegisterUiSymbols(enableLog: false);
+            var fileFound = Directory.EnumerateFiles(workingDirectory.FullName, csprojName).FirstOrDefault();
+            if (fileFound != null)
+            {
+                csprojFileInfo = new FileInfo(fileFound);
+                break;
+            }
+
+            workingDirectory = workingDirectory.Parent;
+        }
+
+        if (csprojFileInfo == null)
+        {
+            csprojFile = null;
+            return false;
+        }
+
+        csprojFile = new CsProjectFile(csprojFileInfo, assembly);
+        return true;
+    }
+
+    private static void AddSymbolPackages(params EditorSymbolPackage[] symbolPackages)
+    {
+        EditorSymbolDatasList.AddRange(symbolPackages);
+
+        ConcurrentDictionary<EditorSymbolPackage, List<SymbolJson.SymbolReadResult>> loadedSymbols = new();
+        symbolPackages.AsParallel().ForAll(symbolPackage => //pull out for non-editable ones too
+                                           {
+                                               symbolPackage.LoadSymbols(false, out var list);
+                                               loadedSymbols.TryAdd(symbolPackage, list);
+                                           });
+        loadedSymbols.AsParallel().ForAll(pair => pair.Key.ApplySymbolChildren(pair.Value));
+        symbolPackages.AsParallel().ForAll(uiSymbolData => uiSymbolData.LoadUiFiles());
+
+        foreach (var symbolPackage in symbolPackages)
+        {
+            symbolPackage.RegisterUiSymbols(enableLog: false);
         }
     }
 

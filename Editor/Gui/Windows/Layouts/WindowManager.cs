@@ -27,9 +27,9 @@ namespace T3.Editor.Gui.Windows.Layouts
 
             // create the home canvas if it hasn't been created yet
             // we also need to re-apply the layout since the graph window was not created
-            if (_startedWithoutHomeCanvas && UiSymbolData.RootInstance != null)
+            if (_startedWithoutHomeCanvas && EditableSymbolPackage.RootInstance != null)
             {
-                _windows.Add(new GraphWindow(UiSymbolData.RootInstance));
+                _windows.Add(new GraphWindow(EditableSymbolPackage.RootInstance));
                 LayoutHandling.LoadAndApplyLayoutOrFocusMode(UserSettings.Config.WindowLayoutIndex);
                 _startedWithoutHomeCanvas = false;
             }
@@ -76,9 +76,9 @@ namespace T3.Editor.Gui.Windows.Layouts
                                new SettingsWindow(),
                            };
 
-            if (UiSymbolData.RootInstance != null)
+            if (EditableSymbolPackage.RootInstance != null)
             {
-                _windows.Add(new GraphWindow(UiSymbolData.RootInstance));
+                _windows.Add(new GraphWindow(EditableSymbolPackage.RootInstance));
             }
             else
             {

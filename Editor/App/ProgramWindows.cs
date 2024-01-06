@@ -129,7 +129,7 @@ internal static class ProgramWindows
 
     private static void OnCloseMainWindow(object sender, CancelEventArgs args)
     {
-        if (SymbolData.IsSaving)
+        if (SymbolPackage.IsSaving)
         {
             args.Cancel = true;
             Log.Debug($"Cancel closing because save-operation is in progress.");

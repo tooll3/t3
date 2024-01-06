@@ -33,7 +33,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     warning = "Parameter name already exists.";
                     isValid = false;
                 }
-                else if (symbol.InstanceType == UiSymbolData.RootInstance.GetType())
+                else if (symbol.InstanceType == EditableSymbolPackage.RootInstance.GetType())
                 {
                     warning = "You can't add parameters to the home canvas.";
                     isValid = false;

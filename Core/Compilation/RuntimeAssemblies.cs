@@ -109,18 +109,10 @@ public class RuntimeAssemblies
                             .Select(name =>
                                     {
                                         Log.Debug($"Attempting to load assembly at {name.Path}");
-                                        try
-                                        {
-                                            var assembly = Assembly.LoadFile(name.Path);
-                                            currentAssemblyFullNames.Add(name.AssemblyName.FullName);
-                                            Log.Debug($"Loaded assembly {name.AssemblyName.FullName}");
-                                            return new AssemblyInformation(name.Path, name.AssemblyName, assembly);
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            Log.Error($"Failed to load assembly {name.AssemblyName.FullName}\n{name.Path}\n{e.Message}\n{e.StackTrace}");
-                                            return null;
-                                        }
+                                        var success = TryLoadAssemblyInformation(name, out var info);
+                                        if (success)
+                                            currentAssemblyFullNames.Add(info.AssemblyName.FullName);
+                                        return info;
                                     })
                             .Where(info => info != null)
                             .ToArray();
@@ -129,6 +121,46 @@ public class RuntimeAssemblies
         {
             Log.Error($"Failed to load assemblies\n{e.Message}\n{e.StackTrace}");
             return Array.Empty<AssemblyInformation>();
+        }
+    }
+    
+    public static bool TryLoadAssemblyInformation(string path, out AssemblyInformation info)
+    {
+        AssemblyName assemblyName;
+        try
+        {
+            assemblyName = AssemblyName.GetAssemblyName(path);
+        }
+        catch(Exception e)
+        {
+            Log.Error($"Failed to get assembly name for {path}\n{e.Message}\n{e.StackTrace}");
+            info = null;
+            return false;
+        }
+
+        var assemblyNameAndPath = new AssemblyNameAndPath()
+                                      {
+                                          AssemblyName = assemblyName,
+                                          Path = path
+                                      };
+        
+        return TryLoadAssemblyInformation(assemblyNameAndPath, out info);
+    }
+
+    private static bool TryLoadAssemblyInformation(AssemblyNameAndPath name, out AssemblyInformation info)
+    {
+        try
+        {
+            var assembly = Assembly.LoadFile(name.Path);
+            Log.Debug($"Loaded assembly {name.AssemblyName.FullName}");
+            info = new AssemblyInformation(name.Path, name.AssemblyName, assembly);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Log.Error($"Failed to load assembly {name.AssemblyName.FullName}\n{name.Path}\n{e.Message}\n{e.StackTrace}");
+            info = null;
+            return false;
         }
     }
 

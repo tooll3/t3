@@ -196,8 +196,8 @@ namespace T3.Editor.Gui.Dialog
 
             try
             {
-                const string t3FilePattern = $"*{SymbolData.SymbolExtension}";
-                const string t3UiFilePattern = $"*{SymbolData.SymbolUiExtension}";
+                const string t3FilePattern = $"*{SymbolPackage.SymbolExtension}";
+                const string t3UiFilePattern = $"*{SymbolPackage.SymbolUiExtension}";
                 allRemoteT3Files = Directory.GetFiles(_otherOperatorNamespaceDirectory, t3FilePattern, SearchOption.AllDirectories);
                 allRemoteT3UiFiles = Directory.GetFiles(_otherOperatorNamespaceDirectory, t3UiFilePattern, SearchOption.AllDirectories);
             }

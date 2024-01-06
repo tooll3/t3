@@ -291,7 +291,7 @@ namespace T3.Editor.Gui.AutoBackup
 
         private static readonly string[] SourcePaths =
             {
-                Path.GetFullPath(SymbolData.OperatorDirectoryName),
+                Path.GetFullPath(SymbolPackage.OperatorDirectoryName),
                 ThemeHandling.ThemeFolder,
                 LayoutHandling.LayoutFolder
             };

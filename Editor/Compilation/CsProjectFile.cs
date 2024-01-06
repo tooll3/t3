@@ -14,22 +14,48 @@ public class CsProjectFile
     public string Name { get; }
     public string Contents { get; }
     public string RootNamespace { get; }
-    public AssemblyInformation Assembly { get; }
+    public string TargetFramework { get; }
+    public AssemblyInformation Assembly { get; private set; }
     public IReadOnlyList<DependencyInfo> Dependencies => _dependencies;
     private readonly List<DependencyInfo> _dependencies;
 
-    public CsProjectFile(FileInfo file, AssemblyInformation assembly)
+    public CsProjectFile(FileInfo file, AssemblyInformation assembly) : this(file)
+    {
+        Assembly = assembly;
+    }
+
+    public CsProjectFile(FileInfo file)
     {
         FullPath = file.FullName;
         Contents = File.ReadAllText(file.FullName);
-        Assembly = assembly;
-
         Directory = Path.GetDirectoryName(FullPath)!;
         FileName = Path.GetFileName(FullPath);
         Name = Path.GetFileNameWithoutExtension(FullPath);
 
         _dependencies = ParseDependencies(Contents);
         RootNamespace = GetRootNamespace(Contents);
+        TargetFramework = GetTargetFramework(Contents);
+    }
+    
+    public FileInfo GetBuildTargetPath(Compiler.BuildMode buildMode)
+    {
+        var buildModeStr = buildMode == Compiler.BuildMode.Debug ? "Debug" : "Release";
+        return new FileInfo(Path.Combine(Directory, "bin", buildModeStr, TargetFramework, $"{Name}.dll"));
+    }
+
+    private string GetTargetFramework(string contents)
+    {
+        const string beginTargetFrameworkTag = "<TargetFramework>";
+        const string endTargetFrameworkTag = "</TargetFramework>";
+        var start = contents.IndexOf(beginTargetFrameworkTag, StringComparison.Ordinal) + beginTargetFrameworkTag.Length;
+        var end = contents.IndexOf(endTargetFrameworkTag, StringComparison.Ordinal);
+        if(start == -1 || end == -1 || start > end)
+        {
+            Log.Error($"Could not find {beginTargetFrameworkTag} in {FullPath}");
+            return string.Empty;
+        }
+        
+        return contents[start..end];
     }
 
     private string GetRootNamespace(string contents)
@@ -160,8 +186,20 @@ public class CsProjectFile
     private const string ProjectReferenceStart = "<ProjectReference Include=\"";
     private const string PackageReferenceStart = "<PackageReference Include=\"";
 
-    public bool TryRecompile() // todo - rate limit recompiles for when multiple files change. should change operator resources to projects or something
+    public bool TryRecompile(Compiler.BuildMode buildMode) // todo - rate limit recompiles for when multiple files change. should change operator resources to projects or something
     {
-        return Compiler.TryCompile(this);
+        return Compiler.TryCompile(this, buildMode);
+    }
+
+    public void UpdateAssembly(AssemblyInformation assembly)
+    {
+        if (Assembly == null)
+        {
+            Assembly = assembly;
+            return;
+        }
+        
+
+        throw new NotImplementedException();
     }
 }

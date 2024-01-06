@@ -23,7 +23,7 @@ namespace T3.Core.Resource
             AddWatcher(ResourceManager.ResourcesFolder, "*.dds");
             AddWatcher(ResourceManager.ResourcesFolder, "*.tiff");
 
-            _csFileWatcher = AddWatcher(Core.Model.SymbolData.OperatorDirectoryName, "*.cs");
+            _csFileWatcher = AddWatcher(Core.Model.SymbolPackage.OperatorDirectoryName, "*.cs");
             _csFileWatcher.Renamed += CsFileRenamedHandler;
             _csFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
         }

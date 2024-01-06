@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,55 +16,23 @@ using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.UiModel;
 
-internal sealed partial class EditableSymbolData : EditorSymbolData
+internal sealed partial class EditableSymbolPackage : EditorSymbolPackage
 {
-    public EditableSymbolData(CsProjectFile csProjectFile)
+    public EditableSymbolPackage(CsProjectFile csProjectFile)
         : base(csProjectFile.Assembly)
     {
         CsProjectFile = csProjectFile;
-        SymbolDataByProject.Add(csProjectFile, this);
-    }
-
-    public void RegisterUiSymbols(bool enableLog)
-    {
-        Log.Debug($@"{AssemblyInformation.Name}: Registering UI entries...");
-
-        var dictionary = SymbolUiRegistry.Entries;
-
-        foreach (var symbol in Symbols.Values)
-        {
-            if (!SymbolOwnersEditable.TryAdd(symbol.Id, this))
-            {
-                Log.Error($"Duplicate symbol id {symbol.Id}");
-            }
-        }
-
-        foreach (var symbolUi in SymbolUis)
-        {
-            var symbol = symbolUi.Symbol;
-
-            RegisterCustomChildUi(symbol);
-
-            var added = dictionary.TryAdd(symbol.Id, symbolUi);
-
-            if (!added)
-            {
-                Log.Error($"Can't load UI for [{symbolUi.Symbol.Name}] Registry already contains id {symbolUi.Symbol.Id}.");
-                continue;
-            }
-
-            symbolUi.UpdateConsistencyWithSymbol();
-            if (enableLog)
-                Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
-        }
+        SymbolDataByProjectRw.Add(csProjectFile, this);
     }
 
     // todo - "home" should be marked by an attribute rather than a hard-coded id
     public static bool TryCreateHome()
     {
-        var gotHome = SymbolOwners.TryGetValue(HomeSymbolId, out var homeOwner);
-        if (!gotHome)
+        var gotHome = SymbolOwners.TryGetValue(HomeSymbolId, out var potentialHomeOwner);
+        if (!gotHome || potentialHomeOwner is not EditableSymbolPackage homeOwner)
         {
+            // todo - home should be marked by an attribute rather than a hard-coded id
+            // home should only be searched for in the active user project? 
             return false;
         }
 
@@ -162,7 +129,7 @@ internal sealed partial class EditableSymbolData : EditorSymbolData
 
             resourceManager.TrackOperatorFile(symbolFilePath, symbolUi.Symbol, CsProjectFile, OperatorUpdating.ResourceUpdateHandler);
 
-            var symbolSourceFilepath = BuildFilepathForSymbol(symbol, SymbolData.SourceCodeExtension);
+            var symbolSourceFilepath = BuildFilepathForSymbol(symbol, SymbolPackage.SourceCodeExtension);
             resourceManager.TrackOperatorFile(symbolSourceFilepath, symbolUi.Symbol, CsProjectFile, OperatorUpdating.ResourceUpdateHandler);
 
             symbolUi.ClearModifiedFlag();
@@ -214,13 +181,10 @@ internal sealed partial class EditableSymbolData : EditorSymbolData
 
     public static Instance RootInstance { get; private set; }
 
-    public static IReadOnlyDictionary<CsProjectFile, EditableSymbolData> SymbolDataByAssembly => SymbolDataByProject;
-    private static readonly Dictionary<CsProjectFile, EditableSymbolData> SymbolDataByProject = new();
+    public static IReadOnlyDictionary<CsProjectFile, EditableSymbolPackage> SymbolDataByProject => SymbolDataByProjectRw;
+    private static readonly Dictionary<CsProjectFile, EditableSymbolPackage> SymbolDataByProjectRw = new();
 
-    private static readonly ConcurrentDictionary<Guid, EditableSymbolData> SymbolOwnersEditable = new();
-    public static IReadOnlyDictionary<Guid, EditableSymbolData> SymbolOwners => SymbolOwnersEditable;
-
-    public static EditableSymbolData ActiveProject { get; private set; }
+    public static EditableSymbolPackage ActiveProject { get; private set; }
 
     public void RenameNameSpace(NamespaceTreeNode node, string nameSpace)
     {

@@ -19,7 +19,7 @@ internal static class GraphUtils
         if (string.IsNullOrEmpty(pendingSource))
         {
             //var path = @"Operators\Types\" + symbol.Name + ".cs";
-            var path = symbol.SymbolData.BuildFilepathForSymbol(symbol, SymbolData.SourceCodeExtension);
+            var path = symbol.SymbolPackage.BuildFilepathForSymbol(symbol, SymbolPackage.SourceCodeExtension);
             try
             {
                 pendingSource = File.ReadAllText(path);

@@ -46,7 +46,7 @@ public class AssemblyInformation
                                .Where(x => x.IsAssignableTo(typeof(Instance)))
                                .Select(x =>
                                        {
-                                           var gotGuid = SymbolData.TryGetGuidOfType(x, out var id);
+                                           var gotGuid = SymbolPackage.TryGetGuidOfType(x, out var id);
                                            return new GuidInfo(gotGuid, id, x);
                                        })
                                .Where(x => x.HasGuid)

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,18 +16,18 @@ using T3.Core.Stats;
 
 namespace T3.Core.Model;
 
-public abstract partial class SymbolData
+public abstract partial class SymbolPackage
 {
     public AssemblyInformation AssemblyInformation { get; }
     public abstract string Folder { get; }
 
-    static SymbolData()
+    static SymbolPackage()
     {
         _updateCounter = new OpUpdateCounter();
         RegisterTypes();
     }
 
-    protected SymbolData(AssemblyInformation assembly)
+    protected SymbolPackage(AssemblyInformation assembly)
     {
         AssemblyInformation = assembly;
     }
@@ -63,7 +62,7 @@ public abstract partial class SymbolData
                 continue;
 
             instanceTypesWithoutFile.Remove(symbol.InstanceType);
-            symbol.SymbolData = this;
+            symbol.SymbolPackage = this;
         }
 
         foreach (var newType in instanceTypesWithoutFile)
@@ -72,7 +71,7 @@ public abstract partial class SymbolData
             if (registered)
             {
                 TryAddSymbolTo(Symbols, symbol);
-                symbol.SymbolData = this;
+                symbol.SymbolPackage = this;
             }
         }
 

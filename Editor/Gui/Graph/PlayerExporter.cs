@@ -59,8 +59,8 @@ namespace T3.Editor.Gui.Graph
                      .AsParallel()
                      .Select(symbol =>
                              {
-                                 var filePathForSymbol = symbol.SymbolData.BuildFilepathForSymbol(symbol,
-                                                                                           SymbolData.SourceCodeExtension);
+                                 var filePathForSymbol = symbol.SymbolPackage.BuildFilepathForSymbol(symbol,
+                                                                                           SymbolPackage.SourceCodeExtension);
 
                                  if (!File.Exists(filePathForSymbol))
                                  {
@@ -81,10 +81,10 @@ namespace T3.Editor.Gui.Graph
                 // Copy player and dependent assemblies to export dir
                 var currentDir = Directory.GetCurrentDirectory();
 
-                var playerPublishPath = currentDir + @"\Player\bin\Release\net6.0-windows\publish\";
-                var playerBuildPath = currentDir + @"\Player\bin\Release\net6.0-windows\";
+                var playerPublishPath = currentDir + @"\Player\bin\Release\net8.0-windows\publish\";
+                var playerBuildPath = currentDir + @"\Player\bin\Release\net8.0-windows\";
 
-                if (!File.Exists(currentDir + @"\Player\bin\Release\net6.0-windows\publish\Player.exe"))
+                if (!File.Exists(currentDir + @"\Player\bin\Release\net8.0-windows\publish\Player.exe"))
                 {
                     Log.Error($"Can't find valid build in player release folder: (${playerPublishPath})");
                     Log.Error("Please use your IDE to rebuild solution in release mode.");
@@ -126,14 +126,14 @@ namespace T3.Editor.Gui.Graph
 
                 // Generate exported .t3 files
 
-                var symbolExportDir = Path.Combine(exportDir, SymbolData.OperatorDirectoryName);
+                var symbolExportDir = Path.Combine(exportDir, SymbolPackage.OperatorDirectoryName);
                 if (Directory.Exists(symbolExportDir))
                     Directory.Delete(symbolExportDir, true);
 
                 Directory.CreateDirectory(symbolExportDir);
                 foreach (var symbol in exportInfo.UniqueSymbols)
                 {
-                    using var sw = new StreamWriter(symbolExportDir + symbol.Name + "_" + symbol.Id + SymbolData.SymbolExtension);
+                    using var sw = new StreamWriter(symbolExportDir + symbol.Name + "_" + symbol.Id + SymbolPackage.SymbolExtension);
                     using var writer = new JsonTextWriter(sw);
                     
                     writer.Formatting = Formatting.Indented;

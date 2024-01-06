@@ -140,12 +140,12 @@ internal static class Combine
         Log.Debug(newSource);
 
         // compile new instance type
-        var assembly = UiSymbolData.ActiveProject.CsProjectFile;
+        var assembly = EditableSymbolPackage.ActiveProject.CsProjectFile;
         var success = OperatorUpdating.TryCreateSymbolFromSource(newSource, newSymbolName, newSymbolId, nameSpace, assembly, out var newSymbol);
         if (!success)
             return;
         
-        var symbolData = UiSymbolData.SymbolDataByAssembly[assembly];
+        var symbolData = EditableSymbolPackage.SymbolDataByProject[assembly];
         symbolData.AddSymbol(newSymbol);
         
         var newSymbolUi = new SymbolUi(newSymbol)
