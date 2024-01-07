@@ -5,7 +5,7 @@ using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Compilation;
 
-namespace T3.Core.Resource
+namespace T3.Editor
 {
     internal sealed class OpPackage
     {

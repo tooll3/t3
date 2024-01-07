@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using SharpDX;
 using SharpDX.Direct3D;
@@ -10,7 +9,6 @@ using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
-using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Resource.Dds;
 using Buffer = SharpDX.Direct3D11.Buffer;
@@ -38,24 +36,6 @@ namespace T3.Core.Resource
         public T GetResource<T>(uint resourceId) where T : AbstractResource
         {
             return (T)ResourcesById[resourceId];
-        }
-
-        public static void RenameOperatorResource(string oldPath, string newPath)
-        {
-            var extension = Path.GetExtension(newPath);
-            if (extension != ".cs")
-            {
-                Log.Info($"Ignoring file rename to invalid extension '{extension}' in '{newPath}'.");
-                return;
-            }
-
-            if (ResourceFileWatcher.HooksForResourceFilepaths.TryGetValue(oldPath, out var fileResource))
-            {
-                Log.Info($"renamed file resource from '{oldPath}' to '{newPath}'");
-                fileResource.Path = newPath;
-                ResourceFileWatcher.HooksForResourceFilepaths.Remove(oldPath, out _);
-                ResourceFileWatcher.HooksForResourceFilepaths.TryAdd(newPath, fileResource);
-            }
         }
 
         public const uint NullResource = 0;

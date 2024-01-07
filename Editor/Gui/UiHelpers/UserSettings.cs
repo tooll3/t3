@@ -101,6 +101,7 @@ namespace T3.Editor.Gui.UiHelpers
             public List<Gradient> GradientPresets = new();
 
             public string ColorThemeName;
+            public string DefaultNewProjectDirectory;
         }
 
         public enum ValueEditGizmos

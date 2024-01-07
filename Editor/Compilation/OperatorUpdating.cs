@@ -1,11 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using T3.Core.Compilation;
 using T3.Core.Logging;
-using T3.Core.Model;
 using T3.Core.Operator;
-using T3.Core.Resource;
 using T3.Editor.Gui.Windows;
 using T3.Editor.UiModel;
 
@@ -17,24 +13,10 @@ namespace T3.Editor.Compilation
     internal static class OperatorUpdating
     {
         // called from duplicate/combine 
-        public static bool TryCreateSymbolFromSource(string sourceCode, string newSymbolName, Guid newSymbolId, string @namespace, EditableSymbolPackage package,
+        public static bool TryCreateSymbolFromSource(string sourceCode, string newSymbolName, Guid newSymbolId, string @namespace, EditableSymbolProject project,
                                                      out Symbol newSymbol)
         {
-            return package.TryCompile(sourceCode, newSymbolName, newSymbolId, @namespace, out newSymbol);
-            if (newAssembly == null)
-            {
-                Log.Error("Error compiling duplicated type, aborting duplication.");
-                newSymbol = null;
-                return false;
-            }
-
-            var type = newAssembly.ExportedTypes.FirstOrDefault();
-            if (type == null)
-            {
-                Log.Error("Error, new symbol has no compiled instance type");
-                newSymbol = null;
-                return false;
-            }
+            return project.TryCompile(sourceCode, newSymbolName, newSymbolId, @namespace, out newSymbol);
 
             newSymbol = new Symbol(type, newSymbolId);
             newSymbol.PendingSource = sourceCode;
@@ -51,24 +33,8 @@ namespace T3.Editor.Compilation
                 return false;
             }
 
-            var editableSymbolPackage = (EditableSymbolPackage)symbol.SymbolPackage;
+            var editableSymbolPackage = (EditableSymbolProject)symbol.SymbolPackage;
             return editableSymbolPackage.TryRecompileWithNewSource(symbol, newSource);
-
-        }
-
-        /// <summary>
-        /// Updates symbol definition, instances and symbolUi if modification to operator source code
-        /// was detected by Resource file hook.
-        /// </summary>
-        public static void UpdateChangedOperators()
-        {
-            var modifiedSymbols = OperatorResource.UpdateChangedOperatorTypes();
-            foreach (var symbol in modifiedSymbols)
-            {
-                var uiSymbolData = (EditableSymbolPackage)symbol.SymbolPackage;
-                uiSymbolData.UpdateUiEntriesForSymbol(symbol);
-                symbol.CreateAnimationUpdateActionsForSymbolInstances();
-            }
         }
 
         public static void RenameNameSpaces(NamespaceTreeNode node, string nameSpace)
@@ -84,8 +50,7 @@ namespace T3.Editor.Compilation
             }
         }
 
-
-        private static bool IsEditableTargetNamespace(NamespaceTreeNode node, out EditableSymbolPackage targetPackage)
+        private static bool IsEditableTargetNamespace(NamespaceTreeNode node, out EditableSymbolProject targetProject)
         {
             var namespaceInfos = EditorInitialization.EditableSymbolPackages
                                                      .Select(package => new PackageNamespaceInfo(package, package.CsProjectFile.RootNamespace));
@@ -95,21 +60,19 @@ namespace T3.Editor.Compilation
             {
                 // trim initial `Operators.` out of the namespace
 
-                string userNamespace = namespaceInfo.RootNamespace;
-                if (userNamespace.StartsWith("Operators."))
-                    userNamespace = userNamespace["Operators.".Length..];
+                string projectNamespace = namespaceInfo.RootNamespace;
 
-                if (targetNamespace.StartsWith(userNamespace))
+                if (targetNamespace.StartsWith(projectNamespace))
                 {
-                    targetPackage = namespaceInfo.Package;
+                    targetProject = namespaceInfo.Project;
                     return true;
                 }
             }
 
-            targetPackage = null;
+            targetProject = null;
             return false;
         }
         
-        private readonly record struct PackageNamespaceInfo(EditableSymbolPackage Package, string RootNamespace);
+        private readonly record struct PackageNamespaceInfo(EditableSymbolProject Project, string RootNamespace);
     }
 }

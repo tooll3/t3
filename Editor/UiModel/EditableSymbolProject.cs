@@ -5,26 +5,79 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Newtonsoft.Json;
+using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
-using T3.Core.Resource;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Windows;
 
 namespace T3.Editor.UiModel;
 
-internal sealed class EditableSymbolPackage : EditorSymbolPackage
+internal sealed class EditableSymbolProject : EditorSymbolPackage
 {
-    public EditableSymbolPackage(CsProjectFile csProjectFile)
+    protected override AssemblyInformation AssemblyInformation => CsProjectFile.Assembly;
+
+    private static readonly List<Action> PendingUpdateActions = new();
+
+    public EditableSymbolProject(CsProjectFile csProjectFile)
         : base(csProjectFile.Assembly)
     {
         CsProjectFile = csProjectFile;
+        csProjectFile.Recompiled += project => PendingUpdateActions.Add(() => UpdateSymbols(project));
         SymbolDataByProjectRw.Add(csProjectFile, this);
         _fileSystemWatcher = new EditablePackageFSWatcher(this);
     }
 
-    // todo - "home" should be marked by an attribute rather than a hard-coded id
+    private void UpdateSymbols(CsProjectFile project)
+    {
+        var operatorTypes = project.Assembly.OperatorTypes;
+        Dictionary<Guid, Symbol> foundSymbols = new();
+        foreach (var (guid, type) in operatorTypes)
+        {
+            if (Symbols.Remove(guid, out var symbol))
+            {
+                foundSymbols.Add(guid, symbol);
+                symbol.UpdateInstanceType(type);
+                symbol.CreateAnimationUpdateActionsForSymbolInstances();
+                UpdateUiEntriesForSymbol(symbol);
+            }
+            else
+            {
+                // it's a new type!!
+            }
+
+            UpdateUiEntriesForSymbol(symbol);
+        }
+
+        // remaining symbols have been removed from the assembly
+        while (Symbols.Count > 0)
+        {
+            var (guid, symbol) = Symbols.First();
+            RemoveSymbol(guid);
+        }
+
+        Symbols.Clear();
+
+        foreach (var (guid, symbol) in foundSymbols)
+        {
+            Symbols.Add(guid, symbol);
+        }
+    }
+
+    private bool RemoveSymbol(Guid guid)
+    {
+        var removed = Symbols.Remove(guid, out var symbol);
+
+        if (!removed)
+            return false;
+
+        SymbolRegistry.Entries.Remove(guid);
+        SymbolUiRegistry.Entries.Remove(guid, out var symbolUi);
+
+        return true;
+    }
+
     public bool TryCreateHome()
     {
         if (!CsProjectFile.Assembly.HasHome)
@@ -36,14 +89,16 @@ internal sealed class EditableSymbolPackage : EditorSymbolPackage
         return true;
     }
 
-    public override void SaveAll()
+    public void SaveAll()
     {
         Log.Debug($"{AssemblyInformation.Name}: Saving...");
 
         MarkAsSaving();
 
         // Save all t3 and source files
-        base.SaveAll();
+        RemoveAllSymbolFiles();
+        SortAllSymbolSourceFiles();
+        SaveSymbolDefinitionAndSourceFiles(Symbols.Values);
 
         // Remove all old ui files before storing to get rid off invalid ones
         // TODO: this also seems dangerous, similar to how the Symbol SaveAll works
@@ -110,11 +165,14 @@ internal sealed class EditableSymbolPackage : EditorSymbolPackage
     {
         if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var foundSymbolUi))
         {
-            foundSymbolUi.UpdateConsistencyWithSymbol();
-
             if (symbolUi != null)
             {
-                Log.Warning("Symbol UI for symbol " + symbol.Id + " already exists. Disregarding new UI.");
+                SymbolUiRegistry.Entries[symbol.Id] = symbolUi;
+                Log.Warning("Symbol UI for symbol " + symbol.Id + " already exists. Replacing.");
+            }
+            else
+            {
+                foundSymbolUi.UpdateConsistencyWithSymbol();
             }
         }
         else
@@ -125,31 +183,18 @@ internal sealed class EditableSymbolPackage : EditorSymbolPackage
         }
     }
 
-    public virtual void SaveAll()
-    {
-        MarkAsSaving();
-        RemoveAllSymbolFiles();
-        SortAllSymbolSourceFiles();
-        SaveSymbolDefinitionAndSourceFiles(Symbols.Values);
-        UnmarkAsSaving();
-    }
-
-    protected void MarkAsSaving() => Interlocked.Increment(ref _savingCount);
-    protected void UnmarkAsSaving() => Interlocked.Decrement(ref _savingCount);
-
-    protected void SaveSymbolDefinitionAndSourceFiles(IEnumerable<Symbol> symbols)
+    private void SaveSymbolDefinitionAndSourceFiles(IEnumerable<Symbol> symbols)
     {
         foreach (var symbol in symbols)
         {
             var filepath = BuildFilepathForSymbol(symbol, SymbolExtension);
 
-            using (var sw = new StreamWriter(filepath))
-            using (var writer = new JsonTextWriter(sw) { Formatting = Formatting.Indented })
-            {
-                SymbolJson.WriteSymbol(symbol, writer);
-            }
+            using var sw = new StreamWriter(filepath);
+            using var writer = new JsonTextWriter(sw);
+            writer.Formatting = Formatting.Indented;
+            SymbolJson.WriteSymbol(symbol, writer);
 
-            if (!string.IsNullOrEmpty(symbol.PendingSource))
+            if (!string.IsNullOrWhiteSpace(symbol.PendingSource))
             {
                 WriteSymbolSourceToFile(symbol);
             }
@@ -187,24 +232,6 @@ internal sealed class EditableSymbolPackage : EditorSymbolPackage
         }
     }
 
-    // Todo: this sounds like a dangerous step. we should overwrite these files by default and can check which files are not overwritten to delete others?
-    private void RemoveAllSymbolFiles()
-    {
-        // Remove all old t3 files before storing to get rid off invalid ones
-        var symbolFiles = Directory.GetFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
-        foreach (var symbolFilePath in symbolFiles)
-        {
-            try
-            {
-                File.Delete(symbolFilePath);
-            }
-            catch (Exception e)
-            {
-                Log.Warning("Failed to deleted file '" + symbolFilePath + "': " + e);
-            }
-        }
-    }
-
     private void WriteSymbolSourceToFile(Symbol symbol, string sourcePath = null)
     {
         sourcePath ??= BuildFilepathForSymbol(symbol, SourceCodeExtension);
@@ -224,10 +251,6 @@ internal sealed class EditableSymbolPackage : EditorSymbolPackage
             }
 
             File.Delete(symbol.DeprecatedSourcePath);
-
-            // Adjust path of file resource
-            ResourceManager.RenameOperatorResource(symbol.DeprecatedSourcePath, sourcePath);
-
             symbol.DeprecatedSourcePath = string.Empty;
         }
 
@@ -235,7 +258,7 @@ internal sealed class EditableSymbolPackage : EditorSymbolPackage
     }
 
     #region File path handling
-    private string BuildFilepathForSymbol(Symbol symbol, string extension)
+    private string BuildFilepathForSymbols(Symbol symbol, string extension)
     {
         var dir = BuildAndCreateFolderFromNamespace(Folder, symbol.Namespace);
         return extension == SourceCodeExtension
@@ -261,32 +284,32 @@ internal sealed class EditableSymbolPackage : EditorSymbolPackage
     }
     #endregion
 
-    public void AddSymbol(Symbol newSymbol, SymbolUi symbolUi = null)
+    public void ReplaceSymbolUi(Symbol newSymbol, SymbolUi symbolUi = null)
     {
         base.AddSymbol(newSymbol);
         UpdateUiEntriesForSymbol(newSymbol, symbolUi);
         RegisterCustomChildUi(newSymbol);
     }
 
-    public void RenameNameSpace(NamespaceTreeNode node, string nameSpace, EditableSymbolPackage newDestinationPackage)
+    public void RenameNameSpace(NamespaceTreeNode node, string nameSpace, EditableSymbolProject newDestinationProject)
     {
-        var movingToAnotherPackage = newDestinationPackage != this;
+        var movingToAnotherPackage = newDestinationProject != this;
 
-        var orgNameSpace = node.GetAsString();
+        var ogNameSpace = node.GetAsString();
         foreach (var symbol in Symbols.Values)
         {
-            if (!symbol.Namespace.StartsWith(orgNameSpace))
+            if (!symbol.Namespace.StartsWith(ogNameSpace))
                 continue;
 
             //var newNameSpace = parent + "."
-            var newNameSpace = Regex.Replace(symbol.Namespace, orgNameSpace, nameSpace);
+            var newNameSpace = Regex.Replace(symbol.Namespace, ogNameSpace, nameSpace);
             Log.Debug($" Changing namespace of {symbol.Name}: {symbol.Namespace} -> {newNameSpace}");
             symbol.Namespace = newNameSpace;
 
             if (!movingToAnotherPackage)
                 continue;
 
-            GiveSymbolToPackage(symbol, newDestinationPackage);
+            GiveSymbolToPackage(symbol, newDestinationProject);
         }
     }
 
@@ -295,32 +318,14 @@ internal sealed class EditableSymbolPackage : EditorSymbolPackage
         _needsCompilation = true;
     }
 
-    private static readonly Guid HomeInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
-    public override string Folder => CsProjectFile.Directory;
-
-    public readonly CsProjectFile CsProjectFile;
-
-    public static Instance RootInstance { get; private set; }
-
-    public static IReadOnlyDictionary<CsProjectFile, EditableSymbolPackage> SymbolDataByProject => SymbolDataByProjectRw;
-    private static readonly Dictionary<CsProjectFile, EditableSymbolPackage> SymbolDataByProjectRw = new();
-
-    public static EditableSymbolPackage ActiveProject { get; private set; }
-
-    public override bool IsModifiable => true;
-
-    private readonly EditablePackageFSWatcher _fileSystemWatcher;
-
-    private bool _needsCompilation;
-
     public bool TryRecompileWithNewSource(Symbol symbol, string newSource)
     {
         // disable file watcher
-        
+
         var path = BuildFilepathForSymbol(symbol, SourceCodeExtension);
         var currentSource = File.ReadAllText(path);
         symbol.PendingSource = newSource;
-        _fileSystemWatcher.EnableRaisingEvents = false;
+        MarkAsSaving();
         WriteSymbolSourceToFile(symbol, path);
 
         var success = CsProjectFile.TryRecompile(Compiler.BuildMode.Debug);
@@ -330,8 +335,8 @@ internal sealed class EditableSymbolPackage : EditorSymbolPackage
             symbol.PendingSource = currentSource;
             WriteSymbolSourceToFile(symbol, path);
         }
-        
-        _fileSystemWatcher.EnableRaisingEvents = true;
+
+        UnmarkAsSaving();
 
         return success;
     }
@@ -340,16 +345,49 @@ internal sealed class EditableSymbolPackage : EditorSymbolPackage
     {
         throw new NotImplementedException();
     }
+
+    private void MarkAsSaving()
+    {
+        Interlocked.Increment(ref _savingCount);
+        _fileSystemWatcher.EnableRaisingEvents = false;
+    }
+
+    private void UnmarkAsSaving()
+    {
+        Interlocked.Decrement(ref _savingCount);
+        _fileSystemWatcher.EnableRaisingEvents = true;
+    }
+
+    private static readonly Guid HomeInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
+    public override string Folder => CsProjectFile.Directory;
+
+    public readonly CsProjectFile CsProjectFile;
+
+    public static Instance RootInstance { get; private set; }
+
+    public static IReadOnlyDictionary<CsProjectFile, EditableSymbolProject> SymbolDataByProject => SymbolDataByProjectRw;
+    private static readonly Dictionary<CsProjectFile, EditableSymbolProject> SymbolDataByProjectRw = new();
+
+    public static EditableSymbolProject ActiveProject { get; private set; }
+
+    public override bool IsModifiable => true;
+
+    private readonly EditablePackageFSWatcher _fileSystemWatcher;
+
+    private bool _needsCompilation;
+
+    public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0;
+    private static long _savingCount;
 }
 
 class EditablePackageFSWatcher : FileSystemWatcher
 {
-    public EditablePackageFSWatcher(EditableSymbolPackage package) : base(package.Folder, "*.cs")
+    public EditablePackageFSWatcher(EditableSymbolProject project) : base(project.Folder, "*.cs")
     {
         NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
 
         IncludeSubdirectories = true;
-        _package = package;
+        _project = project;
         Changed += OnChangeEvent;
         Created += OnChangeEvent;
         Deleted += OnChangeEvent;
@@ -358,8 +396,8 @@ class EditablePackageFSWatcher : FileSystemWatcher
 
     private void OnChangeEvent(object sender, FileSystemEventArgs args)
     {
-        _package.MarkAsModified();
+        _project.MarkAsModified();
     }
 
-    private readonly EditableSymbolPackage _package;
+    private readonly EditableSymbolProject _project;
 }

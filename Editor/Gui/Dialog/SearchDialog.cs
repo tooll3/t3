@@ -228,7 +228,7 @@ namespace T3.Editor.Gui.Dialog
             
             var composition = _searchMode switch
                                       {
-                                          SearchModes.Global             => EditableSymbolPackage.RootInstance,
+                                          SearchModes.Global             => EditableSymbolProject.RootInstance,
                                           SearchModes.Local              => GraphWindow.GetMainComposition(),
                                           SearchModes.LocalAndInChildren => GraphWindow.GetMainComposition(),
                                           _                              => throw new ArgumentOutOfRangeException()

@@ -4,11 +4,10 @@ using System.IO;
 using T3.Core.Compilation;
 using T3.Core.Logging;
 using T3.Core.UserData;
-using T3.Editor.UiModel;
 
 namespace T3.Editor.Compilation;
 
-public class CsProjectFile
+internal class CsProjectFile
 {
     public string FullPath { get; }
     public string Directory { get; }
@@ -20,6 +19,7 @@ public class CsProjectFile
     public AssemblyInformation Assembly { get; private set; }
     public IReadOnlyList<DependencyInfo> Dependencies => _dependencies;
     private readonly List<DependencyInfo> _dependencies;
+    public event Action<CsProjectFile> Recompiled;
 
     public CsProjectFile(FileInfo file, AssemblyInformation assembly) : this(file)
     {
@@ -188,21 +188,16 @@ public class CsProjectFile
     private const string ProjectReferenceStart = "<ProjectReference Include=\"";
     private const string PackageReferenceStart = "<PackageReference Include=\"";
 
-    public bool
-        TryRecompile(Compiler.BuildMode buildMode) // todo - rate limit recompiles for when multiple files change. should change operator resources to projects or something
+    // todo - rate limit recompiles for when multiple files change. should change operator resources to projects or something
+    public bool TryRecompile(Compiler.BuildMode buildMode)
     {
         return Compiler.TryCompile(this, buildMode);
     }
 
     public void UpdateAssembly(AssemblyInformation assembly)
     {
-        if (Assembly == null)
-        {
-            Assembly = assembly;
-            return;
-        }
-
-        throw new NotImplementedException();
+        Assembly = assembly;
+        Recompiled?.Invoke(this);
     }
 
     public static CsProjectFile CreateNewProject(string projectName, string parentDirectory)

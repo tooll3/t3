@@ -50,7 +50,7 @@ namespace T3.Editor.Gui.Templates
                                               nameSpace, 
                                               description, 
                                               resourceFolder);
-            T3Ui.SaveModified();
+            T3Ui.Save(false);
         }
 
         private static Vector2 FindFreePositionOnCanvas(GraphCanvas canvas, Vector2 pos)

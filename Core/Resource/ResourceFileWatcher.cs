@@ -124,11 +124,6 @@ namespace T3.Core.Resource
             // else discard the (duplicated) OnChanged event
         }
 
-        private static void CsFileRenamedHandler(object sender, RenamedEventArgs renamedEventArgs)
-        {
-            ResourceManager.RenameOperatorResource(renamedEventArgs.OldFullPath, renamedEventArgs.FullPath);
-        }
-
         public static readonly ConcurrentDictionary<string, ResourceFileHook> HooksForResourceFilepaths = new();
     }
 

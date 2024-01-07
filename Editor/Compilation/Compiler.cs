@@ -1,16 +1,12 @@
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using T3.Core.Compilation;
 using T3.Core.Logging;
-using T3.Core.Model;
-using T3.Core.UserData;
-using T3.Editor.UiModel;
 
 namespace T3.Editor.Compilation;
 
-public static class Compiler
+internal static class Compiler
 {
     public static bool TryCompile(CsProjectFile projectFile, BuildMode buildMode, Verbosity verbosity = Verbosity.Minimal)
     {

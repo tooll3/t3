@@ -462,18 +462,11 @@ namespace T3.Core.Model
             public const string Animator = "Animator";
         }
 
-        public readonly struct SymbolReadResult
+        public readonly struct SymbolReadResult(Symbol symbol, JsonChildResult[] childrenJsonArray, JArray animatorJsonData)
         {
-            public readonly Symbol Symbol;
-            public readonly JsonChildResult[] ChildrenJsonArray;
-            public readonly JArray AnimatorJsonData;
-
-            public SymbolReadResult(Symbol symbol, JsonChildResult[] childrenJsonArray, JArray animatorJsonData)
-            {
-                Symbol = symbol;
-                ChildrenJsonArray = childrenJsonArray;
-                AnimatorJsonData = animatorJsonData;
-            }
+            public readonly Symbol Symbol = symbol;
+            public readonly JsonChildResult[] ChildrenJsonArray = childrenJsonArray;
+            public readonly JArray AnimatorJsonData = animatorJsonData;
         }
 
         public readonly struct JsonChildResult

@@ -125,7 +125,7 @@ internal static class Combine
 
         var classStringBuilder = new StringBuilder(usingStringBuilder.ToString());
         classStringBuilder.AppendLine("");
-        classStringBuilder.Append("namespace Operators.").Append(nameSpace);
+        classStringBuilder.Append("namespace ").Append(nameSpace);
         classStringBuilder.AppendLine("{");
         classStringBuilder.AppendLine("    [Guid(\"" + newSymbolId + "\")]");
         classStringBuilder.AppendFormat("    public class {0} : Instance<{0}>\n", newSymbolName);
@@ -140,13 +140,12 @@ internal static class Combine
         Log.Debug(newSource);
 
         // compile new instance type
-        var assembly = EditableSymbolPackage.ActiveProject.CsProjectFile;
+        var assembly = EditableSymbolProject.ActiveProject;
         var success = OperatorUpdating.TryCreateSymbolFromSource(newSource, newSymbolName, newSymbolId, nameSpace, assembly, out var newSymbol);
         if (!success)
             return;
         
-        var symbolData = EditableSymbolPackage.SymbolDataByProject[assembly];
-        symbolData.AddSymbol(newSymbol);
+        assembly.ReplaceSymbolUi(newSymbol);
         
         var newSymbolUi = new SymbolUi(newSymbol)
                               {
@@ -249,7 +248,7 @@ internal static class Combine
         // Sadly saving in background does not save the source files.
         // This needs to be fixed.
         //T3Ui.SaveInBackground(false);
-        T3Ui.SaveAll();
+        T3Ui.Save(true);
     }
 
     private static ImRect GetAreaFromChildren(List<SymbolChildUi> childUis)

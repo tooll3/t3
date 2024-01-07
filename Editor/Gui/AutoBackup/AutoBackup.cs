@@ -9,10 +9,10 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using T3.Core.Logging;
-using T3.Core.Model;
 using T3.Core.UserData;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.Windows.Layouts;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.AutoBackup
 {
@@ -21,7 +21,7 @@ namespace T3.Editor.Gui.AutoBackup
         public static int SecondsBetweenSaves { get; set; } = 3 * 60;
 
         public static bool IsEnabled { get; set; }
-        
+
         /// <summary>
         /// Should be call after all frame operators are completed
         /// </summary>
@@ -43,13 +43,13 @@ namespace T3.Editor.Gui.AutoBackup
                 return;
             }
 
-            T3Ui.SaveModified();
+            T3Ui.Save(false);
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
             Directory.CreateDirectory(BackupDirectory);
-            
+
             var index = GetIndexOfLastBackup();
             index++;
             ReduceNumberOfBackups();
@@ -185,15 +185,15 @@ namespace T3.Editor.Gui.AutoBackup
          * Reduce the number of backups by removing some of the older backups. The older the backup the
          * less versions are kept. We're using the binary representation of the backup index to separate
          * the deleted versions from the ones we keep.
-         * 
-         * This algorithm is a hard to describe in words, but it basically thins out the backup-copies 
+         *
+         * This algorithm is a hard to describe in words, but it basically thins out the backup-copies
          * according to their respective binary code:
-         * 
+         *
          *     bits    significant bit
          *     43210   bit         threshold for 2 saves per generation
-         *     ------- ----------- ------------------------------------   
+         *     ------- ----------- ------------------------------------
          * 10. 01011 - 1           +0 keep(level0/1st)          <- example of 10 saved versions
-         *  9. 01001 - 0           +0 keep(level0/2nd)      
+         *  9. 01001 - 0           +0 keep(level0/2nd)
          *  8. 01000 - 4           +1 keep(level1/1st)
          *  7. 00111 - 0            1 remove
          *  6. 00110 - 1           +1 keep(level1/2nd)
@@ -203,7 +203,7 @@ namespace T3.Editor.Gui.AutoBackup
          *  2. 00010 - 1            2 remove
          *  1. 00001 - 0            2 remove
          *  0. 00000   inf         +2 keep(level2/2nd)
-         * 
+         *
          * This means that we're keeping N*log2 backups (e.g. 3*16 out of 65536 saved versions) where N is the backup density.
          */
         private static void ReduceNumberOfBackups(int backupDensity = 3)
@@ -289,9 +289,19 @@ namespace T3.Editor.Gui.AutoBackup
         private static bool _isSaving;
         private static string BackupDirectory => Path.Combine(UserData.RootFolder, "backup");
 
-        private static readonly string[] SourcePaths =
+        private static string[] SourcePaths
+        {
+            get
             {
-                Path.GetFullPath(SymbolPackage.OperatorDirectoryName),
+                return EditableSymbolProject.SymbolDataByProject.Values
+                                            .Select(x => x.Folder)
+                                            .Concat(NonProjectSourcePaths)
+                                            .ToArray();
+            }
+        }
+
+        private static readonly string[] NonProjectSourcePaths =
+            {
                 ThemeHandling.ThemeFolder,
                 LayoutHandling.LayoutFolder
             };

@@ -90,7 +90,7 @@ public static class FileAssetsHelper
                             Log.Warning("Failed: " + e.Message);
                         }
                         
-                        T3Ui.SaveModified();
+                        T3Ui.Save(false);
                         ScanResources();
                         _wasFilenameChanged = false;
                         _activeFileResource = null;

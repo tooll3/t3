@@ -90,9 +90,9 @@ namespace T3.Editor.Gui.Windows.Layouts
                 {
                     if (config.Title.StartsWith("Graph#"))
                     {
-                        if (GraphWindow.CanOpenAnotherWindow() && EditableSymbolPackage.RootInstance != null)
+                        if (GraphWindow.CanOpenAnotherWindow() && EditableSymbolProject.RootInstance != null)
                         {
-                            matchingWindow = new GraphWindow(EditableSymbolPackage.RootInstance);
+                            matchingWindow = new GraphWindow(EditableSymbolProject.RootInstance);
                             matchingWindow.Config = config;
                         }
                     }

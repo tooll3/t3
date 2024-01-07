@@ -15,8 +15,8 @@ namespace T3.Editor.Compilation;
 
 internal static class EditorInitialization
 {
-    private static readonly List<EditableSymbolPackage> EditableSymbolDatasList = new();
-    public static readonly IReadOnlyList<EditableSymbolPackage> EditableSymbolPackages = EditableSymbolDatasList;
+    private static readonly List<EditableSymbolProject> EditableSymbolDatasList = new();
+    public static readonly IReadOnlyList<EditableSymbolProject> EditableSymbolPackages = EditableSymbolDatasList;
     internal static bool NeedsUserProject;
 
     internal static void CreateOrMigrateProject(object sender, UserNameDialog.NameChangedEventArgs nameArgs)
@@ -25,28 +25,7 @@ internal static class EditorInitialization
 
         if (NeedsUserProject)
         {
-            var newProject = CsProjectFile.CreateNewProject(name, UserSettings.Config.NewProjectDirectory);
-            if(newProject == null)
-            {
-                throw new Exception("Failed to create new project");
-            }
-            
-            var compiled = Compiler.TryCompile(newProject, Compiler.BuildMode.Debug);
-            
-            if (!compiled)
-            {
-                throw new Exception("Failed to compile new project");
-            }
-            
-            var newUiSymbolData = new EditableSymbolPackage(newProject);
-
-            AddSymbolPackages(newUiSymbolData);
-            if (!newUiSymbolData.TryCreateHome())
-            {
-                throw new Exception("Failed to create user home");
-            }
-
-            NeedsUserProject = false;
+            NeedsUserProject = !TryCreateProject(name);
         }
         else if (nameArgs.NewName != nameArgs.OldName)
         {
@@ -57,6 +36,47 @@ internal static class EditorInitialization
         }
     }
 
+    private static bool TryCreateProject(string name)
+    {
+        var newProject = CsProjectFile.CreateNewProject(name, UserSettings.Config.DefaultNewProjectDirectory);
+        if(newProject == null)
+        {
+            Log.Error("Failed to create new project");
+            return false;
+        }
+            
+        var compiled = Compiler.TryCompile(newProject, Compiler.BuildMode.Debug);
+            
+        if (!compiled)
+        {
+            Log.Error("Failed to compile new project");
+            return false;
+        }
+            
+        if(!newProject.Assembly.HasHome)
+        {
+            Log.Error("Failed to create project home");
+            return false;
+        }
+            
+        var newUiSymbolData = new EditableSymbolProject(newProject);
+
+        AddSymbolPackages(newUiSymbolData);
+        if (!newUiSymbolData.TryCreateHome())
+        {
+            Log.Error("Failed to create project home");
+            RemoveSymbolPackage(newUiSymbolData);
+            return false;
+        }
+
+        return true;
+    }
+
+    private static void RemoveSymbolPackage(EditableSymbolProject newUiSymbolData)
+    {
+        throw new NotImplementedException();
+    }
+
     [SuppressMessage("ReSharper", "InconsistentlySynchronizedField")]
     internal static bool TryInitialize(out Exception exception)
     {
@@ -65,14 +85,14 @@ internal static class EditorInitialization
         try
         {
             var operatorAssemblies = RuntimeAssemblies.OperatorAssemblies;
-            List<EditableSymbolPackage> editablePackages = new();
+            List<EditableSymbolProject> editablePackages = new();
             List<EditorSymbolPackage> staticPackages = new();
 
             foreach (var assemblyInfo in operatorAssemblies)
             {
                 if (TryFindMatchingCSProj(assemblyInfo, out var csprojFile))
                 {
-                    var editableSymbolData = new EditableSymbolPackage(csprojFile);
+                    var editableSymbolData = new EditableSymbolProject(csprojFile);
                     editablePackages.Add(editableSymbolData);
                 }
                 else
@@ -88,48 +108,10 @@ internal static class EditorInitialization
             // Load operators
             AddSymbolPackages(allSymbolPackages);
 
-            // Initialize custom UIs
-            var uiInitializerTypes = RuntimeAssemblies.AllAssemblies
-                                                      .Where(x => x.Name != "Editor")
-                                                      .ToArray()
-                                                      .AsParallel()
-                                                      .SelectMany(assemblyInfo => assemblyInfo.Types
-                                                                                              .Where(type =>
-                                                                                                         type.IsAssignableTo(typeof(IOperatorUIInitializer)))
-                                                                                              .Select(type => new AssemblyConstructorInfo(assemblyInfo, type)));
-
-            foreach (var constructorInfo in uiInitializerTypes)
-            {
-                //var assembly = Assembly.LoadFile(constructorInfo.AssemblyInformation.Path);
-                var assemblyName = constructorInfo.AssemblyInformation.Path;
-                var typeName = constructorInfo.InstanceType.FullName;
-                try
-                {
-                    var activated = Activator.CreateInstanceFrom(assemblyName, typeName);
-                    if (activated == null)
-                    {
-                        throw new Exception($"Created null activator handle for {typeName}");
-                    }
-
-                    var initializer = (IOperatorUIInitializer)activated.Unwrap();
-                    if (initializer == null)
-                    {
-                        throw new Exception($"Casted to null initializer for {typeName}");
-                    }
-
-                    initializer.Initialize();
-                    Log.Info($"Initialized UI initializer for {constructorInfo.AssemblyInformation.Name}: {typeName}");
-                }
-                catch (Exception e)
-                {
-                    Log.Error($"Failed to create UI initializer for {constructorInfo.AssemblyInformation.Name}: \"{typeName}\" - does it have a parameterless constructor?\n{e}");
-                }
-            }
-            
-            
+            InitializeCustomUis();
 
             // Create home
-            if (!EditableSymbolPackage.ActiveProject.TryCreateHome())
+            if (!EditableSymbolProject.ActiveProject.TryCreateHome())
             {
                 NeedsUserProject = true;
             }
@@ -141,6 +123,47 @@ internal static class EditorInitialization
         {
             exception = e;
             return false;
+        }
+    }
+
+    private static void InitializeCustomUis()
+    {
+        var uiInitializerTypes = RuntimeAssemblies.AllAssemblies
+                                                  .Where(x => x.Name != "Editor")
+                                                  .ToArray()
+                                                  .AsParallel()
+                                                  .SelectMany(assemblyInfo => assemblyInfo.Types
+                                                                                          .Where(type =>
+                                                                                                     type.IsAssignableTo(typeof(IOperatorUIInitializer)))
+                                                                                          .Select(type => new AssemblyConstructorInfo(assemblyInfo, type)))
+                                                  .ToList();
+
+        foreach (var constructorInfo in uiInitializerTypes)
+        {
+            //var assembly = Assembly.LoadFile(constructorInfo.AssemblyInformation.Path);
+            var assemblyName = constructorInfo.AssemblyInformation.Path;
+            var typeName = constructorInfo.InstanceType.FullName;
+            try
+            {
+                var activated = Activator.CreateInstanceFrom(assemblyName, typeName);
+                if (activated == null)
+                {
+                    throw new Exception($"Created null activator handle for {typeName}");
+                }
+
+                var initializer = (IOperatorUIInitializer)activated.Unwrap();
+                if (initializer == null)
+                {
+                    throw new Exception($"Casted to null initializer for {typeName}");
+                }
+
+                initializer.Initialize();
+                Log.Info($"Initialized UI initializer for {constructorInfo.AssemblyInformation.Name}: {typeName}");
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to create UI initializer for {constructorInfo.AssemblyInformation.Name}: \"{typeName}\" - does it have a parameterless constructor?\n{e}");
+            }
         }
     }
 
@@ -160,7 +183,8 @@ internal static class EditorInitialization
 
         while (workingDirectory != null)
         {
-            var fileFound = Directory.EnumerateFiles(workingDirectory.FullName, csprojName).FirstOrDefault();
+            var fileFound = Directory.EnumerateFiles(workingDirectory.FullName, csprojName)
+                                     .FirstOrDefault();
             if (fileFound != null)
             {
                 csprojFileInfo = new FileInfo(fileFound);
@@ -182,7 +206,7 @@ internal static class EditorInitialization
 
     private static void AddSymbolPackages(params EditorSymbolPackage[] symbolPackages)
     {
-        ConcurrentDictionary<EditorSymbolPackage, List<SymbolJson.SymbolReadResult>> loadedSymbols = new();
+        ConcurrentDictionary<EditorSymbolPackage, List<SymbolPackage.SymbolJsonResult>> loadedSymbols = new();
         symbolPackages.AsParallel().ForAll(symbolPackage => //pull out for non-editable ones too
                                            {
                                                symbolPackage.LoadSymbols(false, out var list);
@@ -197,15 +221,9 @@ internal static class EditorInitialization
         }
     }
 
-    readonly struct AssemblyConstructorInfo
+    readonly struct AssemblyConstructorInfo(AssemblyInformation assemblyInformation, Type instanceType)
     {
-        public readonly AssemblyInformation AssemblyInformation;
-        public readonly Type InstanceType;
-
-        public AssemblyConstructorInfo(AssemblyInformation assemblyInformation, Type instanceType)
-        {
-            AssemblyInformation = assemblyInformation;
-            InstanceType = instanceType;
-        }
+        public readonly AssemblyInformation AssemblyInformation = assemblyInformation;
+        public readonly Type InstanceType = instanceType;
     }
 }

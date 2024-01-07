@@ -384,17 +384,10 @@ public static class T3Ui
 
     private static void SaveInBackground(bool saveAll)
     {
-        if (saveAll)
-        {
-            Task.Run(SaveAll);
-        }
-        else
-        {
-            Task.Run(SaveModified);
-        }
+        Task.Run(() => Save(saveAll));
     }
 
-    public static void SaveModified()
+    public static void Save(bool saveAll)
     {
         lock (SaveLocker)
         {
@@ -404,42 +397,18 @@ public static class T3Ui
                 return;
             }
 
-            ResourceFileWatcher.DisableOperatorFileWatcher();
             SaveStopwatch.Restart();
 
             // Todo - parallelize? 
             foreach (var package in EditorInitialization.EditableSymbolPackages)
             {
-                package.SaveModifiedSymbols();
+                if (saveAll)
+                    package.SaveAll();
+                else
+                    package.SaveModifiedSymbols();
             }
 
             SaveStopwatch.Stop();
-            ResourceFileWatcher.EnableOperatorFileWatcher();
-            Log.Debug($"Saving took {SaveStopwatch.ElapsedMilliseconds}ms.");
-        }
-    }
-
-    public static void SaveAll()
-    {
-        lock (SaveLocker)
-        {
-            if (SaveStopwatch.IsRunning)
-            {
-                Log.Debug("Can't save while saving is in progress");
-                return;
-            }
-
-            ResourceFileWatcher.DisableOperatorFileWatcher();
-            SaveStopwatch.Restart();
-
-            // Todo - parallelize?
-            foreach (var data in EditorInitialization.EditableSymbolPackages)
-            {
-                data.SaveAll();
-            }
-            
-            SaveStopwatch.Stop();
-            ResourceFileWatcher.EnableOperatorFileWatcher();
             Log.Debug($"Saving took {SaveStopwatch.ElapsedMilliseconds}ms.");
         }
     }
@@ -500,10 +469,10 @@ public static class T3Ui
 
     private static readonly object SaveLocker = new();
     private static readonly Stopwatch SaveStopwatch = new();
-    
+
     // ReSharper disable once InconsistentlySynchronizedField
     public static bool IsCurrentlySaving => SaveStopwatch is { IsRunning: true };
-    
+
     public static float UiScaleFactor { get; set; } = 1;
     public static float DisplayScaleFactor { get; set; } = 1;
     public static bool IsAnyPopupOpen => !string.IsNullOrEmpty(FrameStats.Last.OpenedPopUpName);

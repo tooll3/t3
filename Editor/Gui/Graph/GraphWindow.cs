@@ -457,11 +457,11 @@ namespace T3.Editor.Gui.Graph
 
         protected override void AddAnotherInstance()
         {
-            if (EditableSymbolPackage.RootInstance == null)
+            if (EditableSymbolProject.RootInstance == null)
                 return;
             
             // ReSharper disable once ObjectCreationAsStatement
-            new GraphWindow(EditableSymbolPackage.RootInstance); // Must call constructor
+            new GraphWindow(EditableSymbolProject.RootInstance); // Must call constructor
         }
 
         private static class TitleAndBreadCrumbs

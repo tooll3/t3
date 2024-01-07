@@ -31,6 +31,7 @@ internal class EditorSymbolPackage : StaticSymbolPackage
                                                   return null;
                                               }
 
+                                              symbolUi.FilePath = symbolUiJson.FilePath;
                                               symbolUiJson.Object = symbolUi;
                                               return symbolUiJson;
                                           })
@@ -54,16 +55,13 @@ internal class EditorSymbolPackage : StaticSymbolPackage
     {
         Log.Debug($@"{AssemblyInformation.Name}: Registering UI entries...");
 
-        var allSymbolUiDict = SymbolUiRegistry.Entries;
         foreach (var symbolUi in SymbolUis)
         {
             var symbol = symbolUi.Symbol;
 
             RegisterCustomChildUi(symbol);
 
-            var added = allSymbolUiDict.TryAdd(symbol.Id, symbolUi);
-
-            if (!added)
+            if (!SymbolUiRegistry.Entries.TryAdd(symbol.Id, symbolUi))
             {
                 Log.Error($"Can't load UI for [{symbolUi.Symbol.Name}] Registry already contains id {symbolUi.Symbol.Id}.");
                 continue;
