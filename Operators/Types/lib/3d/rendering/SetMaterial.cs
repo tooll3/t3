@@ -27,19 +27,26 @@ namespace T3.Operators.Types.Id_0ed2bee3_641f_4b08_8685_df1506e9af3c
 
         private void Update(EvaluationContext context)
         {
+
+            var parameterBufferNeedsUpdate = BaseColor.DirtyFlag.IsDirty ||
+                              EmissiveColor.DirtyFlag.IsDirty ||
+                              Roughness.DirtyFlag.IsDirty ||
+                              Specular.DirtyFlag.IsDirty ||
+                              Metal.DirtyFlag.IsDirty ||
+            _pbrMaterial == null;
+            
             _pbrMaterial ??= new PbrMaterial();
             
-            // Todo: This should be cached
-            _pbrMaterial.Parameters = new PbrMaterial.PbrParameters()
-                                             {
-                                                 BaseColor = BaseColor.GetValue(context),
-                                                 EmissiveColor = EmissiveColor.GetValue(context),
-                                                 Roughness = Roughness.GetValue(context),
-                                                 Specular = Specular.GetValue(context),
-                                                 Metal = Metal.GetValue(context)
-                                             };
+            if (parameterBufferNeedsUpdate)
+            {
+                _pbrMaterial.Parameters.BaseColor = BaseColor.GetValue(context);
+                _pbrMaterial.Parameters.EmissiveColor = EmissiveColor.GetValue(context);
+                _pbrMaterial.Parameters.Roughness = Roughness.GetValue(context);
+                _pbrMaterial.Parameters.Specular = Specular.GetValue(context);
+                _pbrMaterial.Parameters.Metal = Metal.GetValue(context);
 
-            _pbrMaterial.UpdateParameterBuffer();
+                _pbrMaterial.UpdateParameterBuffer();
+            }
 
             UpdateSrv(BaseColorMap, context, ref _pbrMaterial.AlbedoColorSrv, PbrMaterial.DefaultAlbedoColorSrv);
             UpdateSrv(NormalMap, context, ref _pbrMaterial.NormalSrv, PbrMaterial.DefaultNormalSrv);

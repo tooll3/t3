@@ -62,14 +62,7 @@ public class PbrMaterial
         var newMaterial= new PbrMaterial()
                              {
                                  Name = "Default",
-                                 Parameters = new PbrMaterial.PbrParameters
-                                                  {
-                                                      BaseColor = Vector4.One,
-                                                      EmissiveColor = new Vector4(0, 0, 0, 1),
-                                                      Roughness = 0.5f,
-                                                      Specular = 10,
-                                                      Metal = 0
-                                                  },
+                                 Parameters = DefaultParameters,
                                  AlbedoColorSrv = DefaultAlbedoColorSrv,
                                  EmissiveColorSrv = DefaultEmissiveColorSrv,
                                  RoughnessMetallicOcclusionSrv = DefaultRoughnessMetallicOcclusionSrv,
@@ -80,6 +73,14 @@ public class PbrMaterial
         return newMaterial;
     }
 
+    public static PbrParameters DefaultParameters = new()
+                                                        {
+                                                            BaseColor = Vector4.One,
+                                                            EmissiveColor = new Vector4(0, 0, 0, 1),
+                                                            Roughness = 0.5f,
+                                                            Specular = 10,
+                                                            Metal = 0
+                                                        };
     public static ShaderResourceView DefaultEmissiveColorSrv;
     public static ShaderResourceView DefaultAlbedoColorSrv;
     public static ShaderResourceView DefaultRoughnessMetallicOcclusionSrv;
