@@ -33,6 +33,10 @@
     {
       "Id": "e31b78eb-940b-41df-93fa-d0c1c9f864f4"/*GenerateMips*/,
       "DefaultValue": false
+    },
+    {
+      "Id": "35f3b28b-2210-4f27-813a-5c857940d09c"/*TextureFormat*/,
+      "DefaultValue": "R16G16B16A16_Float"
     }
   ],
   "Children": [
@@ -149,6 +153,11 @@
             "X": 0,
             "Y": 0
           }
+        },
+        {
+          "Id": "ec46bef4-8dce-4eb4-bfe8-e35a5ac416ec"/*TextureFormat*/,
+          "Type": "SharpDX.DXGI.Format",
+          "Value": "R16G16B16A16_Float"
         },
         {
           "Id": "6ea4f801-ff52-4266-a41f-b9ef02c68510"/*WithDepthBuffer*/,
@@ -292,6 +301,12 @@
       "SourceSlotId": "e81c99ce-fcee-4e7c-a1c7-0aa3b352b7e1",
       "TargetParentOrChildId": "019ac41b-4792-4000-994c-58576e4d9a70",
       "TargetSlotId": "4da253b7-4953-439a-b03f-1d515a78bddf"
+    },
+    {
+      "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",
+      "SourceSlotId": "35f3b28b-2210-4f27-813a-5c857940d09c",
+      "TargetParentOrChildId": "019ac41b-4792-4000-994c-58576e4d9a70",
+      "TargetSlotId": "ec46bef4-8dce-4eb4-bfe8-e35a5ac416ec"
     },
     {
       "SourceParentOrChildId": "00000000-0000-0000-0000-000000000000",

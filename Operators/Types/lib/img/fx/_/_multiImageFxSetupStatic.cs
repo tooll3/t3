@@ -30,6 +30,9 @@ namespace T3.Operators.Types.Id_cc34a183_3978_4b6b_8ef1_dd8102410816
 
         [Input(Guid = "e31b78eb-940b-41df-93fa-d0c1c9f864f4")]
         public readonly InputSlot<bool> GenerateMips = new();
+
+        [Input(Guid = "35f3b28b-2210-4f27-813a-5c857940d09c")]
+        public readonly InputSlot<SharpDX.DXGI.Format> TextureFormat = new InputSlot<SharpDX.DXGI.Format>();
     }
 }
 

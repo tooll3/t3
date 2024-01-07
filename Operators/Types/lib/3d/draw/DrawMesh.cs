@@ -38,6 +38,9 @@ namespace T3.Operators.Types.Id_a3c5471e_079b_4d4b_886a_ec02d6428ff6
         [Input(Guid = "155c2396-0e05-4437-8171-288048b1158a")]
         public readonly InputSlot<SharpDX.Direct3D11.Filter> Filter = new();
 
+        [Input(Guid = "d1db33ea-1739-4323-9105-7b236a0e240f")]
+        public readonly InputSlot<SharpDX.Direct3D11.TextureAddressMode> AddressU = new InputSlot<SharpDX.Direct3D11.TextureAddressMode>();
+
     }
 }
 
