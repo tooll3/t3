@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using SharpDX.Direct3D11;
+using SharpGLTF.Schema2;
 using T3.Core.DataTypes;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
@@ -31,14 +32,26 @@ public class LoadGltf : Instance<LoadGltf>
 
     private void Update(EvaluationContext context)
     {
-        var path = Path.GetValue(context);
+        var pathChanged = Path.DirtyFlag.IsDirty;
         var childIndexChanged = ChildIndex.DirtyFlag.IsDirty;
 
         var childIndex = ChildIndex.GetValue(context);
 
-        if (path != _lastFilePath || childIndexChanged)
+        if (pathChanged || childIndexChanged)
         {
-            UpdateBuffers(path, childIndex);
+            var path = Path.GetValue(context);
+            if (!File.Exists(path))
+            {
+                ShowError($"Gltf File not found: {path}");
+                return;
+            }
+
+            var fullPath = System.IO.Path.GetFullPath(path);
+            var model = SharpGLTF.Schema2.ModelRoot.Load(fullPath);
+            
+            if(childIndexChanged)
+                UpdateBuffers(model, childIndex);
+            
         }
     }
 
@@ -48,31 +61,29 @@ public class LoadGltf : Instance<LoadGltf>
         Log.Warning(_lastErrorMessage, this);
     }
 
-    private void UpdateBuffers(string path, int childIndex)
+    private void UpdateBuffers(ModelRoot model, int childIndex)
     {
-        _lastFilePath = path;
-
-        if (!File.Exists(path))
+        var children = model.DefaultScene.VisualChildren.ToList();
+        if (childIndex < 0 && childIndex >= children.Count)
         {
-            ShowError($"Gltf File not found: {path}");
+            ShowError($"gltf child index {childIndex} exceeds visible children in default scene {children.Count}");
             return;
         }
 
-        var fullPath = System.IO.Path.GetFullPath(path);
+        var child = children[childIndex];
+        Data.Value = GenerateMeshDataFromGltfChild(child);
+    }
+    
+    private MeshBuffers GenerateMeshDataFromGltfChild(Node child)
+    {
+        //var newData = new GltfDataSet();
+        var newMesh = new MeshBuffers();
+        
+        var vertexBufferData = Array.Empty<PbrVertex>();
+        var indexBufferData = Array.Empty<Int3>();
+
         try
         {
-            var newData = new GltfDataSet();
-            var model = SharpGLTF.Schema2.ModelRoot.Load(fullPath);
-
-            var children = model.DefaultScene.VisualChildren.ToList();
-            if (childIndex < 0 && childIndex >= children.Count)
-            {
-                ShowError($"gltf child index {childIndex} exceeds visible children in default scene {children.Count}");
-                return;
-            }
-
-            var child = children[childIndex];
-
             // Convert vertices
             int verticesCount = 0;
             {
@@ -85,13 +96,13 @@ public class LoadGltf : Instance<LoadGltf>
                 if (!vertexAccessors.TryGetValue("POSITION", out var positionAccessor))
                 {
                     ShowError("Can't find POSITION attribute in gltf mesh");
-                    return;
+                    return null;
                 }
 
                 verticesCount = positionAccessor.Count;
 
-                if (newData.VertexBufferData.Length != verticesCount)
-                    newData.VertexBufferData = new PbrVertex[verticesCount];
+                if (vertexBufferData.Length != verticesCount)
+                    vertexBufferData = new PbrVertex[verticesCount];
 
                 var positions = positionAccessor.AsVector3Array();
 
@@ -113,7 +124,7 @@ public class LoadGltf : Instance<LoadGltf>
                 for (var vertexIndex = 0; vertexIndex < positions.Count; vertexIndex++)
                 {
                     var position = positions[vertexIndex];
-                    newData.VertexBufferData[vertexIndex] = new PbrVertex
+                    vertexBufferData[vertexIndex] = new PbrVertex
                                                                 {
                                                                     Position = new Vector3(position.X, position.Y, position.Z),
                                                                     Normal = normals == null ? VectorT3.Up : normals[vertexIndex],
@@ -133,33 +144,33 @@ public class LoadGltf : Instance<LoadGltf>
             {
                 var indices = child.Mesh.Primitives[0].GetTriangleIndices().ToList();
                 faceCount = indices.Count;
-                if (newData.IndexBufferData.Length != faceCount)
-                    newData.IndexBufferData = new Int3[faceCount];
+                if (indexBufferData.Length != faceCount)
+                    indexBufferData = new Int3[faceCount];
 
                 var faceIndex = 0;
                 foreach (var (a, b, c) in indices)
                 {
-                    newData.IndexBufferData[faceIndex] = new Int3(a, b, c);
+                    indexBufferData[faceIndex] = new Int3(a, b, c);
 
                     // Calc TBN space
-                    var aPos = newData.VertexBufferData[a].Position;
-                    var aUV = newData.VertexBufferData[a].Texcoord;
-                    var aNormal = newData.VertexBufferData[a].Normal;
+                    var aPos = vertexBufferData[a].Position;
+                    var aUV = vertexBufferData[a].Texcoord;
+                    var aNormal = vertexBufferData[a].Normal;
 
-                    var bPos = newData.VertexBufferData[b].Position;
-                    var bUV = newData.VertexBufferData[b].Texcoord;
-                    var bNormal = newData.VertexBufferData[b].Normal;
+                    var bPos = vertexBufferData[b].Position;
+                    var bUV = vertexBufferData[b].Texcoord;
+                    var bNormal = vertexBufferData[b].Normal;
 
-                    var cPos = newData.VertexBufferData[c].Position;
-                    var cUV = newData.VertexBufferData[c].Texcoord;
-                    var cNormal = newData.VertexBufferData[c].Normal;
+                    var cPos = vertexBufferData[c].Position;
+                    var cUV = vertexBufferData[c].Texcoord;
+                    var cNormal = vertexBufferData[c].Normal;
 
-                    MeshUtils.CalcTBNSpace(aPos, aUV, bPos, bUV, cPos, cUV, aNormal, out newData.VertexBufferData[a].Tangent,
-                                           out newData.VertexBufferData[a].Bitangent);
-                    MeshUtils.CalcTBNSpace(bPos, bUV, cPos, cUV, aPos, aUV, bNormal, out newData.VertexBufferData[b].Tangent,
-                                           out newData.VertexBufferData[b].Bitangent);
-                    MeshUtils.CalcTBNSpace(cPos, cUV, bPos, bUV, aPos, aUV, cNormal, out newData.VertexBufferData[c].Tangent,
-                                           out newData.VertexBufferData[c].Bitangent);
+                    MeshUtils.CalcTBNSpace(aPos, aUV, bPos, bUV, cPos, cUV, aNormal, out vertexBufferData[a].Tangent,
+                                           out vertexBufferData[a].Bitangent);
+                    MeshUtils.CalcTBNSpace(bPos, bUV, cPos, cUV, aPos, aUV, bNormal, out vertexBufferData[b].Tangent,
+                                           out vertexBufferData[b].Bitangent);
+                    MeshUtils.CalcTBNSpace(cPos, cUV, bPos, bUV, aPos, aUV, cNormal, out vertexBufferData[c].Tangent,
+                                           out vertexBufferData[c].Bitangent);
 
                     faceIndex++;
                 }
@@ -167,68 +178,44 @@ public class LoadGltf : Instance<LoadGltf>
                 if (faceCount == 0)
                 {
                     Log.Warning("No faces found", this);
-                    return;
+                    return null;
                 }
             }
 
             if (verticesCount == 0)
             {
                 Log.Warning("No vertices found", this);
-                return;
+                return null;
             }
 
-            Log.Debug($"  loaded {path} Child {childIndex}:  {verticesCount} vertices  {faceCount} faces", this);
+            Log.Debug($"  loaded gltf-child:  {verticesCount} vertices  {faceCount} faces", this);
 
             const int stride = 3 * 4;
-            ResourceManager.SetupStructuredBuffer(newData.IndexBufferData, stride * faceCount, stride, ref newData.IndexBuffer);
-            ResourceManager.CreateStructuredBufferSrv(newData.IndexBuffer, ref newData.IndexBufferWithViews.Srv);
-            ResourceManager.CreateStructuredBufferUav(newData.IndexBuffer, UnorderedAccessViewBufferFlags.None,
-                                                      ref newData.IndexBufferWithViews.Uav);
+            ResourceManager.SetupStructuredBuffer(indexBufferData, stride * faceCount, stride, ref newMesh.IndicesBuffer.Buffer);
+            ResourceManager.CreateStructuredBufferSrv(newMesh.IndicesBuffer.Buffer, ref newMesh.IndicesBuffer.Srv);
+            ResourceManager.CreateStructuredBufferUav(newMesh.IndicesBuffer.Buffer, UnorderedAccessViewBufferFlags.None,
+                                                      ref newMesh.IndicesBuffer.Uav);
 
-            newData.IndexBufferWithViews.Buffer = newData.IndexBuffer;
-
-            ResourceManager.SetupStructuredBuffer(newData.VertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride,
-                                                  ref newData.VertexBuffer);
-            ResourceManager.CreateStructuredBufferSrv(newData.VertexBuffer, ref newData.VertexBufferWithViews.Srv);
-            ResourceManager.CreateStructuredBufferUav(newData.VertexBuffer, UnorderedAccessViewBufferFlags.None,
-                                                      ref newData.VertexBufferWithViews.Uav);
-
-            newData.VertexBufferWithViews.Buffer = newData.VertexBuffer;
-
-            _gltfData = newData;
+            ResourceManager.SetupStructuredBuffer(vertexBufferData, PbrVertex.Stride * verticesCount, PbrVertex.Stride,
+                                                  ref newMesh.VertexBuffer.Buffer);
+            ResourceManager.CreateStructuredBufferSrv(newMesh.VertexBuffer.Buffer, ref newMesh.VertexBuffer.Srv);
+            ResourceManager.CreateStructuredBufferUav(newMesh.VertexBuffer.Buffer, UnorderedAccessViewBufferFlags.None,
+                                                      ref newMesh.VertexBuffer.Uav);
         }
         catch (Exception e)
         {
-            Log.Warning($"Failed loading {path}: {e.Message}", this);
+            Log.Warning($"Failed loading gltf: {e.Message}", this);
         }
 
-        _gltfData.DataBuffers.VertexBuffer = _gltfData.VertexBufferWithViews;
-        _gltfData.DataBuffers.IndicesBuffer = _gltfData.IndexBufferWithViews;
-        Data.Value = _gltfData.DataBuffers;
+        return newMesh;
     }
+    
+    
 
     public InputSlot<string> GetSourcePathSlot()
     {
         return Path;
     }
-
-    private string _lastFilePath;
-    private GltfDataSet _gltfData = new();
-
-    private class GltfDataSet
-    {
-        public readonly MeshBuffers DataBuffers = new();
-
-        public Buffer VertexBuffer;
-        public PbrVertex[] VertexBufferData = Array.Empty<PbrVertex>();
-        public readonly BufferWithViews VertexBufferWithViews = new();
-
-        public Buffer IndexBuffer;
-        public Int3[] IndexBufferData = Array.Empty<Int3>();
-        public readonly BufferWithViews IndexBufferWithViews = new();
-    }
-
-    private static readonly Dictionary<string, GltfDataSet> MeshBufferCache = new();
 
     [Input(Guid = "6e0fa62a-a8e1-4d0b-a5b1-80876ff636c0")]
     public readonly InputSlot<string> Path = new();
