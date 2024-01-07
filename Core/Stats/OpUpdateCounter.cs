@@ -26,6 +26,7 @@ namespace T3.Core.Stats
             _updateCount++;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void StartNewFrame()
         {
             _updateCount=0;
