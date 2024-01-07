@@ -64,9 +64,8 @@ public class LoadGltfScene : Instance<LoadGltfScene>
             var fullPath = System.IO.Path.GetFullPath(path);
             var model = SharpGLTF.Schema2.ModelRoot.Load(fullPath);
             
-            if(childIndexChanged)
-                UpdateBuffers(model, childIndex);
-            
+            // if(childIndexChanged)
+            //     UpdateBuffers(model, childIndex);
             
             var rootNode = ParseStructure(model.DefaultScene);
             _sceneSetup.Nodes.Clear();
@@ -84,6 +83,8 @@ public class LoadGltfScene : Instance<LoadGltfScene>
         _lastErrorMessage = message;
         Log.Warning(_lastErrorMessage, this);
     }
+    
+    
 
     private SceneSetup.SceneNode ParseStructure(Scene modelDefaultScene)
     {
@@ -91,12 +92,47 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                            {
                                Name = modelDefaultScene.Name
                            };
+        
+        _allMeshes.Clear();
+        ParseChildren(modelDefaultScene.VisualChildren, rootNode, _allMeshes);
 
-        ParseChildren(modelDefaultScene.VisualChildren, rootNode);
+        var totalFaceCount = 0;
+        var totalIndicesCount = 0;
+        
+        foreach (var mesh in _allMeshes)
+        {
+            var vertexCount = 0;
+            var faceCount = 0;
+            foreach (var p in mesh.Primitives)
+            {
+                // Collect positions
+                if (!p.VertexAccessors.TryGetValue("POSITION", out var positionAccessor) || positionAccessor == null)
+                {
+                    ShowError("Can't find POSITION attribute in gltf mesh");
+                    continue;
+                }                
+                vertexCount += positionAccessor.Count;
+                
+                faceCount += p.GetTriangleIndices().Count();
+
+            }
+            Log.Debug($"Found {mesh.Name} with {mesh.Primitives.Count} primitives / {vertexCount} vertices / {faceCount} faces");
+        }
         return rootNode;
     }
 
-    private static void ParseChildren(IEnumerable<Node> visualChildren, SceneSetup.SceneNode rootNode)
+    
+    public class MeshFragment
+    {
+        public int StartTriangleIndex;
+        public int TriangleCount;
+        public Mesh Mesh;
+        public int MeshPrimitiveIndex;
+        public int MaterialIndex;
+    } 
+    
+    
+    private static void ParseChildren(IEnumerable<Node> visualChildren, SceneSetup.SceneNode rootNode, HashSet<Mesh> allMeshes)
     {
         foreach (var child in visualChildren)
         {
@@ -106,38 +142,54 @@ public class LoadGltfScene : Instance<LoadGltfScene>
                                             MeshName = child.Mesh?.Name,
                                         };
             rootNode.ChildNodes.Add(newSceneChildNode);
+            if (child.Mesh != null)
+            {
+                // if (allMeshes.TryGetValue(child.Mesh.Name, out var existingMesh))
+                // {
+                //     if (existingMesh != child.Mesh)
+                //     {
+                //         Log.Warning($"Mesh {child.Mesh.Name} already defined with another mesh instance?");
+                //         continue;
+                //     }
+                // }
+                allMeshes.Add(child.Mesh);
+            }
             
-            ParseChildren(child.VisualChildren, newSceneChildNode);
+            ParseChildren(child.VisualChildren, newSceneChildNode, allMeshes);
         }
     }
 
 
-    private void UpdateBuffers(ModelRoot model, int childIndex)
+    // private void UpdateBuffers(ModelRoot model, int childIndex)
+    // {
+    //     var children = model.DefaultScene.VisualChildren.ToList();
+    //     if (childIndex < 0 && childIndex >= children.Count)
+    //     {
+    //         ShowError($"gltf child index {childIndex} exceeds visible children in default scene {children.Count}");
+    //         return;
+    //     }
+    //
+    //     var child = children[childIndex];
+    //     Data.Value = GenerateMeshDataFromGltfChild(child);
+    // }
+
+
+    private MeshBuffers GenerateMeshDataFromGltfChild(ModelRoot model)
     {
-        var rootNode = ParseStructure(model.DefaultScene);
-        _sceneSetup.Nodes.Clear();
-        _sceneSetup.Nodes.Add(rootNode);
+        // foreach (var meshBuffer in model.LogicalBuffers)
+        // {
+        //     model.LogicalBuffers
+        // }
         
-        var children = model.DefaultScene.VisualChildren.ToList();
-        if (childIndex < 0 && childIndex >= children.Count)
-        {
-            ShowError($"gltf child index {childIndex} exceeds visible children in default scene {children.Count}");
-            return;
-        }
-
-        var child = children[childIndex];
-        Data.Value = GenerateMeshDataFromGltfChild(child);
-    }
-
-
-    private MeshBuffers GenerateMeshDataFromGltfChild(Node child)
-    {
+        
         //var newData = new GltfDataSet();
         var newMesh = new MeshBuffers();
         
         var vertexBufferData = Array.Empty<PbrVertex>();
         var indexBufferData = Array.Empty<Int3>();
 
+        var child = model.DefaultScene.VisualChildren.ToArray()[0];
+        
         try
         {
             // Convert vertices
@@ -293,4 +345,5 @@ public class LoadGltfScene : Instance<LoadGltfScene>
     }
 
     private string _lastErrorMessage;
+    private HashSet<Mesh> _allMeshes = new();
 }

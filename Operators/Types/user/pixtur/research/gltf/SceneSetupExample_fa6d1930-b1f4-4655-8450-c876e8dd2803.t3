@@ -31,12 +31,12 @@
         {
           "Id": "292e80cf-ba31-4a50-9bf4-83712430f811"/*Path*/,
           "Type": "System.String",
-          "Value": "Resources\\common\\test-footage\\gltf-scene-test-01.glb"
+          "Value": "C:\\Users\\pixtur\\Framefield Dropbox\\Thomas Mann\\_projects\\2024-01-08 GltfFormat\\torus-fracture-v01.glb"
         },
         {
           "Id": "a82b725b-5a2b-4679-85be-2641c45d3687"/*ChildIndex*/,
           "Type": "System.Int32",
-          "Value": 1
+          "Value": 0
         },
         {
           "Id": "d02f41a6-1a6b-4a6e-8d6c-a28873c79f2c"/*Setup*/,
@@ -59,6 +59,18 @@
       "SymbolId": "a3c5471e-079b-4d4b-886a-ec02d6428ff6",
       "InputValues": [],
       "Outputs": []
+    },
+    {
+      "Id": "0a824666-6492-42c9-91e9-231522db3987"/*LoadGltf*/,
+      "SymbolId": "92b18d2b-1022-488f-ab8e-a4dcca346a23",
+      "InputValues": [],
+      "Outputs": []
+    },
+    {
+      "Id": "fb362609-3ed9-4061-922e-b62a100b939e"/*DrawMesh*/,
+      "SymbolId": "a3c5471e-079b-4d4b-886a-ec02d6428ff6",
+      "InputValues": [],
+      "Outputs": []
     }
   ],
   "Connections": [
@@ -66,6 +78,12 @@
       "SourceParentOrChildId": "f8621463-4c72-4dff-ab65-91d84af76386",
       "SourceSlotId": "c830b31a-b0d9-4a12-8883-da7734541e54",
       "TargetParentOrChildId": "6b915a14-43ea-4bf9-9262-bc5f1c65ad03",
+      "TargetSlotId": "97429e1f-3f30-4789-89a6-8e930e356ee6"
+    },
+    {
+      "SourceParentOrChildId": "0a824666-6492-42c9-91e9-231522db3987",
+      "SourceSlotId": "47588d3a-28fe-4417-9ffc-2e79e59d2540",
+      "TargetParentOrChildId": "fb362609-3ed9-4061-922e-b62a100b939e",
       "TargetSlotId": "97429e1f-3f30-4789-89a6-8e930e356ee6"
     }
   ]
