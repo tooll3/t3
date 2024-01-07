@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.examples
+namespace user.pixtur.examples
 {
 	[Guid("135fd07f-b9a1-47d9-acc5-c8a15ae7558a")]
     public class StreamCountDown : Instance<StreamCountDown>

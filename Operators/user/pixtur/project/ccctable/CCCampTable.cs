@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.project.ccctable
+namespace user.pixtur.project.ccctable
 {
 	[Guid("8be91ab1-a61d-4352-baf6-e74838fb657c")]
     public class CCCampTable : Instance<CCCampTable>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.dailies
+namespace user.pixtur.dailies
 {
 	[Guid("6f9126f8-fed5-4088-905a-7be8e800b968")]
     public class SlotMachine : Instance<SlotMachine>

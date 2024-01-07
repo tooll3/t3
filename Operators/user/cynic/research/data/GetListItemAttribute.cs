@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.user.cynic.research.data
+namespace user.cynic.research.data
 {
 	[Guid("37794826-a099-4af3-90f4-1e49092a09e1")]
     public class GetListItemAttribute : Instance<GetListItemAttribute>

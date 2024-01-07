@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.math.@bool
+namespace lib.math.@bool
 {
 	[Guid("3a6fd508-0272-4c18-96b8-bc2387d3b2fd")]
     public class All : Instance<All>

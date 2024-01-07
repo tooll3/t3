@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.dailies
+namespace user.pixtur.dailies
 {
 	[Guid("6c22e96f-bd1f-486a-a10f-a174a057f721")]
     public class PulseLaserTest : Instance<PulseLaserTest>

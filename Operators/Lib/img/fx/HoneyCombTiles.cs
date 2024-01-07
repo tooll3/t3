@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.fx
+namespace lib.img.fx
 {
 	[Guid("ee398291-674c-409b-aab8-9ca843ce6cef")]
     public class HoneyCombTiles : Instance<HoneyCombTiles>

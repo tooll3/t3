@@ -9,7 +9,7 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using Utilities = T3.Core.Utils.Utilities;
 
-namespace Operators.user.cynic.research
+namespace user.cynic.research
 {
 	[Guid("000e08d0-669f-48df-9083-7aa0a43bbc05")]
     public class GpuMeasure : Instance<GpuMeasure>

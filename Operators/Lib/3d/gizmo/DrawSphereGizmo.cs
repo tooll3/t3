@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib._3d.gizmo
+namespace lib._3d.gizmo
 {
 	[Guid("1998f949-5c0a-4f39-82cf-b0bda31f7f21")]
     public class DrawSphereGizmo : Instance<DrawSphereGizmo>

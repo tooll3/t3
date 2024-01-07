@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.research
+namespace user.pixtur.research
 {
 	[Guid("927a77d5-7bf0-477b-b288-4bb48d4980cd")]
     public class ImageSequenceClip : Instance<ImageSequenceClip>

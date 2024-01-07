@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib._3d.mesh.modify
+namespace lib._3d.mesh.modify
 {
 	[Guid("a368035f-2697-4ba5-a7bd-484eeb54c39b")]
     public class TextureDisplaceMesh : Instance<TextureDisplaceMesh> ,ITransformable

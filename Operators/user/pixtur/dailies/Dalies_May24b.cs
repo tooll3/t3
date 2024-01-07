@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.dailies
+namespace user.pixtur.dailies
 {
 	[Guid("bd6fe745-3d6a-4a34-995f-28e5a65a97e8")]
     public class Dalies_May24b : Instance<Dalies_May24b>

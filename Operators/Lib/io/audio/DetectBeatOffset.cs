@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.io.audio
+namespace lib.io.audio
 {
 	[Guid("1fa651c8-ab73-4ca0-9506-84602bbf2fcb")]
     /// <summary>

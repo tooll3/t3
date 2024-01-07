@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib._3d.mesh.modify
+namespace lib._3d.mesh.modify
 {
 	[Guid("c276f4eb-f19c-405b-b247-3db159677571")]
     public class CombineMeshes : Instance<CombineMeshes>

@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point._internal
+namespace lib.point._internal
 {
 	[Guid("e62c1fa0-6fcd-49f5-9cf8-d3081c8a5917")]
     public class GetParticleComponents : Instance<GetParticleComponents>, IStatusProvider

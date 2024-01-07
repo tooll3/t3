@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.still.katsu
+namespace user.still.katsu
 {
 	[Guid("bfa5b00c-e1f3-4b15-8fec-859156facfce")]
     public class Katsumaki : Instance<Katsumaki>

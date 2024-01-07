@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.research
+namespace user.pixtur.research
 {
 	[Guid("0dbc4f3f-8fdb-402b-a7cb-6949cf21a98a")]
     public class VideoClipLayer : Instance<VideoClipLayer>

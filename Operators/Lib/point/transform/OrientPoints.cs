@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.transform
+namespace lib.point.transform
 {
 	[Guid("acc71a14-daad-4b36-b0bc-cf0a796cc5d9")]
     public class OrientPoints : Instance<OrientPoints>

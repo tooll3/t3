@@ -10,7 +10,7 @@ using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Operators.lib.point._cpu
+namespace lib.point._cpu
 {
 	[Guid("688230de-a3fc-4740-a12d-9e2f98cad60a")]
     public class SampleSplinePoint : Instance<SampleSplinePoint>

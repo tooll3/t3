@@ -9,7 +9,7 @@ using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
-namespace Operators.lib._3d._
+namespace lib._3d.@_
 {
 	[Guid("947ad81e-47da-46c3-9b1d-8e578174d876")]
     public class _LenseFlareSprites : Instance<_LenseFlareSprites>

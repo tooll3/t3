@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <RootNamespace>Operators.lib</RootNamespace>
+        <RootNamespace>lib</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

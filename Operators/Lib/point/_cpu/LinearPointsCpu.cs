@@ -9,7 +9,7 @@ using T3.Core.Utils;
 //using Quaternion = SharpDX.Quaternion;
 //using Vector4 = SharpDX.Vector4;
 
-namespace Operators.lib.point._cpu
+namespace lib.point._cpu
 {
 	[Guid("796a5efb-2ccf-4cae-b01c-d3f20a070181")]
     public class LinearPointsCpu : Instance<LinearPointsCpu>

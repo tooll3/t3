@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.exec
+namespace lib.exec
 {
 	[Guid("936e4324-bea2-463a-b196-6064a2d8a6b2")]
     public class Execute : Instance<Execute>

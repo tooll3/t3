@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 using ImGuiNET;
-using Operators.lib.io.midi;
+using lib.io.midi;
 using T3.Core.Animation;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;

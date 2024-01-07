@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.dailies
+namespace user.pixtur.dailies
 {
 	[Guid("89682afb-0c4a-4142-9cb0-6e84e322a4ea")]
     public class AudioInk : Instance<AudioInk>

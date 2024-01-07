@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.modify
+namespace lib.point.modify
 {
 	[Guid("9d6cc9a3-980f-46ae-bf79-02fc1f49c480")]
     public class DisplacePoints2d : Instance<DisplacePoints2d>

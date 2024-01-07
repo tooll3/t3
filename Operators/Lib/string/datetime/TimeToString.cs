@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.@string.datetime
+namespace lib.@string.datetime
 {
 	[Guid("075612b1-8760-4858-ad6b-6c85a7716794")]
     public class TimeToString : Instance<TimeToString>

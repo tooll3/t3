@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.img.generate
+namespace lib.img.generate
 {
 	[Guid("c8590f8f-cca1-434a-a880-67bb91920e1a")]
     public class _BlobOld : Instance<_BlobOld>

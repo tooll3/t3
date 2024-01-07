@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.math.@float
+namespace lib.math.@float
 {
 	[Guid("d3fb5baf-43f8-4983-a1d9-42f4005a3af0")]
     public class PeakLevel : Instance<PeakLevel>

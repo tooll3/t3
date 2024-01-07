@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.research
+namespace user.pixtur.research
 {
 	[Guid("c454abd8-62a8-4413-a463-668013a6a5bd")]
     public class RaymarchFractal : Instance<RaymarchFractal>

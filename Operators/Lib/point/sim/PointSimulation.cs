@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.sim
+namespace lib.point.sim
 {
 	[Guid("10507c42-1240-47cc-9569-5e3f1c733e99")]
     public class PointSimulation : Instance<PointSimulation>

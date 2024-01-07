@@ -15,7 +15,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using ResourceManager = T3.Core.Resource.ResourceManager;
 
-namespace Operators.lib.img.video
+namespace lib.img.video
 {
 	[Guid("04c1a6dc-3042-48a8-81d2-0a5a162016dc")]
     /** 

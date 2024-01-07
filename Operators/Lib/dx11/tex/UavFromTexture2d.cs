@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.lib.dx11.tex
+namespace lib.dx11.tex
 {
 	[Guid("84e02044-3011-4a5e-b76a-c904d9b4557f")]
     public class UavFromTexture2d : Instance<UavFromTexture2d>

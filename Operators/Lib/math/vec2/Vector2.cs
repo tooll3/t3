@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.math.vec2
+namespace lib.math.vec2
 {
 	[Guid("926ab3fd-fbaf-4c4b-91bc-af277000dcb8")]
     public class Vector2 : Instance<Vector2>, IExtractable

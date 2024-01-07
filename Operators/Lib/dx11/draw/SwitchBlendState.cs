@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.dx11.draw
+namespace lib.dx11.draw
 {
 	[Guid("179093f6-d3ef-43bc-a5af-1df2379ec081")]
     public class SwitchBlendState : Instance<SwitchBlendState>

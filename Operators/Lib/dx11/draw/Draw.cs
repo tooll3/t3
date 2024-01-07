@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.lib.dx11.draw
+namespace lib.dx11.draw
 {
 	[Guid("9b28e6b9-1d1f-42d8-8a9e-33497b1df820")]
     public class Draw : Instance<Draw>, IRenderStatsProvider

@@ -11,7 +11,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.user.still.worksforeverybody.fx
+namespace user.still.worksforeverybody.fx
 {
 	[Guid("3246cf5a-3c9b-4765-89d1-68852a3dd7a1")]
     public class SaveParameterSet : Instance<SaveParameterSet>

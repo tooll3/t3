@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.examples
+namespace user.pixtur.examples
 {
 	[Guid("9bf84a1e-e676-4b5d-9554-99cd26a9ccc1")]
     public class BeatDetectionExample : Instance<BeatDetectionExample>

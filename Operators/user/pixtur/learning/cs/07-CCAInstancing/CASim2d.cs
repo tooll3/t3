@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.learning.cs._07_CCAInstancing
+namespace user.pixtur.learning.cs._07_CCAInstancing
 {
 	[Guid("63090462-3237-465e-a12c-25c8bbfaaa8c")]
     public class CASim2d : Instance<CASim2d>

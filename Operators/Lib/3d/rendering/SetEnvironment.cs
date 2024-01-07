@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib._3d.rendering
+namespace lib._3d.rendering
 {
 	[Guid("f3b66187-34b2-4018-8380-279f9f296ded")]
     public class SetEnvironment : Instance<SetEnvironment>

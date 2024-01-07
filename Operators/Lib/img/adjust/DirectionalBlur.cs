@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.adjust
+namespace lib.img.adjust
 {
 	[Guid("1192ae86-b174-4b58-9cc6-38afb666ce35")]
     public class DirectionalBlur : Instance<DirectionalBlur>

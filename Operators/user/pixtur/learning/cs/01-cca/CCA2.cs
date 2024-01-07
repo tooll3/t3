@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.learning.cs._01_cca
+namespace user.pixtur.learning.cs._01_cca
 {
 	[Guid("2d0cd5e6-361a-43c3-8daa-3be2c301dbc4")]
     public class CCA2 : Instance<CCA2>

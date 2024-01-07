@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.math.floats
+namespace lib.math.floats
 {
 	[Guid("ef3a1411-e88c-43a8-83b4-931fdbf16c75")]
     public class DampPeakDecay : Instance<DampPeakDecay>

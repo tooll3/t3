@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.examples.templates
+namespace examples.templates
 {
 	[Guid("fdd58452-ecb4-458d-9f5b-9bce356d5125")]
     public class _ImgFxShaderTemplate : Instance<_ImgFxShaderTemplate>

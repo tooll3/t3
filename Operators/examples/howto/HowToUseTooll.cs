@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.examples.howto
+namespace examples.howto
 {
 	[Guid("1ec749af-fe7d-4728-9855-d1fa3e879751")]
     public class HowToUseTooll : Instance<HowToUseTooll>

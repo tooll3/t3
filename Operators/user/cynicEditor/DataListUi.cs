@@ -1,9 +1,9 @@
 ﻿using ImGuiNET;
-using Operators.user.cynic.research.data;
 using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using user.cynic.research.data;
 
 namespace Operator.User.cynic.Editor
 {

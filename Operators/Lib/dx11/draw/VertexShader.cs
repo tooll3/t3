@@ -6,7 +6,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using VertexShaderD3D = SharpDX.Direct3D11.VertexShader;
 
-namespace Operators.lib.dx11.draw
+namespace lib.dx11.draw
 {
 	[Guid("646f5988-0a76-4996-a538-ba48054fd0ad")]
     public class VertexShader : Instance<VertexShader>, IDescriptiveFilename, IStatusProvider, IShaderOperator<VertexShaderD3D>

@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.anim
+namespace lib.anim
 {
 	[Guid("95d586a2-ee14-4ff5-a5bb-40c497efde95")]
     public class TriggerAnim : Instance<TriggerAnim>

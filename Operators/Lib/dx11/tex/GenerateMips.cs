@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.lib.dx11.tex
+namespace lib.dx11.tex
 {
 	[Guid("32a6a351-6d22-4915-aa0e-e0483b7f4e76")]
     public class GenerateMips : Instance<GenerateMips>

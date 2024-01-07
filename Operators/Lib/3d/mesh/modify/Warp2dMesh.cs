@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib._3d.mesh.modify
+namespace lib._3d.mesh.modify
 {
 	[Guid("99435f7a-4969-4a0e-83f5-404ee6a0cfa2")]
     public class Warp2dMesh : Instance<Warp2dMesh>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.adjust
+namespace lib.img.adjust
 {
 	[Guid("e1cd1cdf-3982-4bb3-b080-9f0a851566d7")]
     public class ConvertFormat : Instance<ConvertFormat>

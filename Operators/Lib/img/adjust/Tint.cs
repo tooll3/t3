@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.adjust
+namespace lib.img.adjust
 {
 	[Guid("d9a71078-8296-4a07-b7de-250d4e2b95ac")]
     public class Tint : Instance<Tint>

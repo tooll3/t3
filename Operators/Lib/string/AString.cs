@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.@string
+namespace lib.@string
 {
 	[Guid("5880cbc3-a541-4484-a06a-0e6f77cdbe8e")]
     public class AString : Instance<AString>, IExtractable

@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.math.@int
+namespace lib.math.@int
 {
 	[Guid("7934f11d-c95c-41ae-b282-6e568b9c5f30")]
     public class SubInts : Instance<SubInts>

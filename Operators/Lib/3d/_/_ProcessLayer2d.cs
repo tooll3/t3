@@ -12,7 +12,7 @@ using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
-namespace Operators.lib._3d._ 
+namespace lib._3d.@_ 
 {
 	[Guid("d8699da1-13aa-42f7-816a-88abb1d0ba06")]
     public class _ProcessLayer2d : Instance<_ProcessLayer2d>

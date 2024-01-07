@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.examples
+namespace user.pixtur.examples
 {
 	[Guid("4e95a5e8-a075-4493-9aaa-48ea181198e2")]
     public class ShadedRibbonsExample : Instance<ShadedRibbonsExample>

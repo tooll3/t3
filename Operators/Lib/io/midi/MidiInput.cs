@@ -11,7 +11,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 using Vector2 = System.Numerics.Vector2;
 
-namespace Operators.lib.io.midi
+namespace lib.io.midi
 {
 	[Guid("59a0458e-2f3a-4856-96cd-32936f783cc5")]
     public class MidiInput : Instance<MidiInput>, IMidiConsumer, IStatusProvider

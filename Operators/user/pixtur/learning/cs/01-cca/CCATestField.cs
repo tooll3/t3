@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.learning.cs._01_cca
+namespace user.pixtur.learning.cs._01_cca
 {
 	[Guid("393fedbb-f442-43ac-bcfa-e618e77591dc")]
     public class CCATestField : Instance<CCATestField>

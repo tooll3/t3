@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.generate
+namespace lib.img.generate
 {
 	[Guid("1fec51bc-4de7-400a-8910-db39f4129579")]
     public class NumberPattern : Instance<NumberPattern>

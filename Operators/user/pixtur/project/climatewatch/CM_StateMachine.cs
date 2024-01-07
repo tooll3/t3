@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.user.pixtur.project.climatewatch
+namespace user.pixtur.project.climatewatch
 {
 	[Guid("b0453fd5-e9c5-481a-aa6b-0040bd5c1318")]
     public class CM_StateMachine : Instance<CM_StateMachine>

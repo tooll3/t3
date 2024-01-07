@@ -10,7 +10,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.user.still.worksforeverybody.fx
+namespace user.still.worksforeverybody.fx
 {
 	[Guid("40676c51-ecca-4bc3-bd4a-eeb80fc0b937")]
     public class WFESaveScore : Instance<WFESaveScore>

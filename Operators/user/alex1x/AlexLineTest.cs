@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.alex1x;
+namespace user.alex1x;
 
 [Guid("27eb35ad-837a-43d6-a4bd-e8dfe3661070")]
 public class AlexLineTest : Instance<AlexLineTest>

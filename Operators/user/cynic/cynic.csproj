@@ -4,7 +4,7 @@
         <TargetFramework>net8.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <RootNamespace>Operators.user.cynic</RootNamespace>
+        <RootNamespace>user.cynic</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.sim
+namespace lib.point.sim
 {
 	[Guid("e85f0fcb-303e-4d21-b592-ad4578286336")]
     public class SamplePointSimAttributes : Instance<SamplePointSimAttributes>

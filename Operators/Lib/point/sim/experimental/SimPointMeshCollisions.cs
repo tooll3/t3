@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.sim.experimental
+namespace lib.point.sim.experimental
 {
 	[Guid("281b69e8-01ee-4a62-a9ed-8508c5355c6c")]
     public class SimPointMeshCollisions : Instance<SimPointMeshCollisions>

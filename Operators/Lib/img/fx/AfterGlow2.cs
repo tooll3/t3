@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.fx
+namespace lib.img.fx
 {
 	[Guid("04ac6a30-a2ad-4e43-8954-94dc852b0602")]
     public class AfterGlow2 : Instance<AfterGlow2>

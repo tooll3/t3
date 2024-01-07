@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.examples.templates
+namespace examples.templates
 {
 	[Guid("0db659a4-d0ba-4d23-acac-aea5ba5b57dc")]
     public class _PointShaderTemplate : Instance<_PointShaderTemplate>

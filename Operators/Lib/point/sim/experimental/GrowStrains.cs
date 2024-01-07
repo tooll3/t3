@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.sim.experimental
+namespace lib.point.sim.experimental
 {
 	[Guid("98df563e-fd59-4458-a490-b7b7604ec1f3")]
     public class GrowStrains : Instance<GrowStrains>

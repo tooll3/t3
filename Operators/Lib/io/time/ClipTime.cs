@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.io.time
+namespace lib.io.time
 {
 	[Guid("83b8fc42-a200-4c3d-85dc-035b4f478069")]
     public class ClipTime : Instance<ClipTime>

@@ -7,7 +7,7 @@ using T3.Core.Utils;
 
 // ReSharper disable InconsistentNaming
 
-namespace Operators.lib.math.@bool
+namespace lib.math.@bool
 {
 	[Guid("fbd9ac37-4427-4852-95d7-d8383fefbe36")]
     public class DelayTrigger : Instance<DelayTrigger>

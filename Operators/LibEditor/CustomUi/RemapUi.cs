@@ -1,5 +1,5 @@
 ﻿using ImGuiNET;
-using Operators.lib.math.@float;
+using lib.math.@float;
 using T3.Core.Operator;
 using T3.Core.Utils;
 using T3.Editor.Gui.ChildUi.WidgetUi;

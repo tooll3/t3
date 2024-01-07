@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.vj
+namespace user.pixtur.vj
 {
 	[Guid("e14af8a3-8672-4348-af9e-735714c31c92")]
     public class SetVJVariables : Instance<SetVJVariables>

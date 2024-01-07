@@ -1,7 +1,7 @@
 using Rug.Osc;
 using T3.Core.Logging;
 
-namespace Operators.lib.Utils
+namespace lib.Utils
 {
     public static class OscConnectionManager
     {

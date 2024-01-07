@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.draw
+namespace lib.point.draw
 {
 	[Guid("44d57201-addf-455c-9e31-709b018ba29f")]
     public class DrawConnectionLines : Instance<DrawConnectionLines>

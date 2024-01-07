@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.math.vec3
+namespace lib.math.vec3
 {
 	[Guid("185958a3-be54-499d-a105-cad22c0dd448")]
     public class EulerToAxisAngle : Instance<EulerToAxisAngle>

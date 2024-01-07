@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.fx
+namespace lib.img.fx
 {
 	[Guid("8a203866-148d-4785-ae0e-61328b7646bb")]
     public class ChromaticAbberation : Instance<ChromaticAbberation>

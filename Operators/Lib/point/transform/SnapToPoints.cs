@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.transform
+namespace lib.point.transform
 {
 	[Guid("5822b0d8-32ed-4db3-975b-0e8fb8d7dd17")]
     public class SnapToPoints : Instance<SnapToPoints>

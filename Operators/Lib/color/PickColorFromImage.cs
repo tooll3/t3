@@ -12,7 +12,7 @@ using Utilities = T3.Core.Utils.Utilities;
 using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
 
-namespace Operators.lib.color
+namespace lib.color
 {
 	[Guid("42703423-1414-489e-aac2-21a3d7204262")]
     public class PickColorFromImage : Instance<PickColorFromImage>

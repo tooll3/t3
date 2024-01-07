@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.vj
+namespace user.pixtur.vj
 {
 	[Guid("aaf19aea-06f6-4c5b-8765-9910f8ed7ad0")]
     public class SyncedRandomScroller : Instance<SyncedRandomScroller>

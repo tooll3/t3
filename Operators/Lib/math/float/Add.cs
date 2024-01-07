@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.math.@float
+namespace lib.math.@float
 {
 	[Guid("c160f925-0a66-4505-a569-cadd878dbb6f")]
     public class Add : Instance<Add>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.use
+namespace lib.img.use
 {
 	[Guid("7da55d23-0bd1-457b-a036-9b6b51d2e34b")]
     public class BlendWithMask : Instance<BlendWithMask>

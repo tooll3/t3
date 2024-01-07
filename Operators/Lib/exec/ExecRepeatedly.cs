@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.exec
+namespace lib.exec
 {
 	[Guid("46420979-1e56-4de3-a6ca-0447be1b9813")]
     public class ExecRepeatedly : Instance<ExecRepeatedly>

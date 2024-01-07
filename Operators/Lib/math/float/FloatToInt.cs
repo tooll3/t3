@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.math.@float
+namespace lib.math.@float
 {
 	[Guid("06b4728e-852c-491a-a89d-647f7e0b5415")]
     public class FloatToInt : Instance<FloatToInt>

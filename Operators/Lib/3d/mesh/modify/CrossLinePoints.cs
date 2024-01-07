@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib._3d.mesh.modify
+namespace lib._3d.mesh.modify
 {
 	[Guid("037c89b0-f5d3-4509-b574-c34fa8ec21f3")]
     public class CrossLinePoints : Instance<CrossLinePoints>

@@ -1,12 +1,12 @@
 using System.Runtime.InteropServices;
-using Operators.lib.io.audio;
+using lib.io.audio;
 using T3.Core.Audio;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.math.floats
+namespace lib.math.floats
 {
 	[Guid("cda108a1-db4f-4a0a-ae4d-d50e9aade467")]
     public class PlaybackFFT : Instance<PlaybackFFT>

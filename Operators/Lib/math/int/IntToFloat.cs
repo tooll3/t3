@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.math.@int
+namespace lib.math.@int
 {
 	[Guid("17db8a36-079d-4c83-8a2a-7ea4c1aa49e6")]
     public class IntToFloat : Instance<IntToFloat>

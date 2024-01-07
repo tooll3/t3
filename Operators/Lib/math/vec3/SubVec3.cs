@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.math.vec3
+namespace lib.math.vec3
 {
 	[Guid("3021300c-7f56-49c1-bcaf-92447b716dad")]
     public class SubVec3 : Instance<SubVec3>

@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.math.floats
+namespace lib.math.floats
 {
 	[Guid("919beb6b-4798-45fc-83bd-8203a9b26e8e")]
     public class DeltaSinceLastFrame : Instance<DeltaSinceLastFrame>

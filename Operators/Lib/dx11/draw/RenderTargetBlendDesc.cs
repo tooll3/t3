@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.dx11.draw
+namespace lib.dx11.draw
 {
 	[Guid("38ee7546-8d7d-463c-aeea-e482d7ca3f30")]
     public class RenderTargetBlendDesc : Instance<RenderTargetBlendDesc>

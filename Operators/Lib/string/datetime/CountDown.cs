@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.@string.datetime
+namespace lib.@string.datetime
 {
 	[Guid("e4a38f3c-bd4c-406a-9979-bb683d79b39b")]
     public class CountDown : Instance<CountDown>

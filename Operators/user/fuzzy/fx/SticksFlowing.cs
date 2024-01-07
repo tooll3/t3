@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.fuzzy.fx
+namespace user.fuzzy.fx
 {
 	[Guid("064c1f38-8b6d-44f0-aae3-32dd3916e2e9")]
     public class SticksFlowing : Instance<SticksFlowing>

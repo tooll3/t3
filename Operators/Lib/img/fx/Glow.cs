@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.img.fx
+namespace lib.img.fx
 {
 	[Guid("d392d4af-4c78-4f4a-bc3f-4c54c8c73538")]
     public class Glow : Instance<Glow>

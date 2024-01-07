@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.examples
+namespace user.pixtur.examples
 {
 	[Guid("ff01e31e-c987-449f-ab4a-066fedf5d237")]
     public class FindClosestPointOnMeshExample : Instance<FindClosestPointOnMeshExample>

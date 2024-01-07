@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.modify
+namespace lib.point.modify
 {
 	[Guid("7af59063-88d2-4697-985c-e09b8c77a43f")]
     public class PointAttributeFromNoise : Instance<PointAttributeFromNoise>

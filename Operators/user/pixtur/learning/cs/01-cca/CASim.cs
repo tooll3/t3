@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.learning.cs._01_cca
+namespace user.pixtur.learning.cs._01_cca
 {
 	[Guid("2b6981f8-f66c-4132-9f37-6536d477ed65")]
     public class CASim : Instance<CASim>

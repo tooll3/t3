@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.examples
+namespace user.pixtur.examples
 {
 	[Guid("232efdb7-b8ce-409a-af33-ea1373e256c3")]
     public class ParryTrainer : Instance<ParryTrainer>

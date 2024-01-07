@@ -13,7 +13,7 @@ using Color = T3.Core.DataTypes.Vector.Color;
 using Utilities = T3.Core.Utils.Utilities;
 using Vector2 = System.Numerics.Vector2;
 
-namespace Operators.user.cynic.research
+namespace user.cynic.research
 {
 	[Guid("afcd4aad-8c8d-4e59-8e8e-a8c12d312200")]
     public class Edtaa : Instance<Edtaa>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.research
+namespace user.pixtur.research
 {
 	[Guid("f68fd746-0b4f-4f51-8d7d-f271922c36e8")]
     public class PointsOnImageExample : Instance<PointsOnImageExample>

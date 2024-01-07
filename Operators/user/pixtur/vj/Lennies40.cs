@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.vj
+namespace user.pixtur.vj
 {
 	[Guid("80908e49-b0da-4785-acd6-16bac1f51d09")]
     public class Lennies40 : Instance<Lennies40>

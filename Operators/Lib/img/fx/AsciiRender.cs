@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.fx
+namespace lib.img.fx
 {
 	[Guid("42e6319e-669c-4524-8d0d-9416a86afdb3")]
     public class AsciiRender : Instance<AsciiRender>

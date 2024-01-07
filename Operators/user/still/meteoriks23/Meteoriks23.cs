@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.still.meteoriks23
+namespace user.still.meteoriks23
 {
 	[Guid("71ac2f3c-c85f-43d1-9929-a8445b797e68")]
     public class Meteoriks23 : Instance<Meteoriks23>

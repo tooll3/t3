@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.still.there.research
+namespace user.still.there.research
 {
 	[Guid("ef88a1f2-a541-4c7d-a6c7-ce6f768db2f5")]
     public class CameraSetupTest : Instance<CameraSetupTest>

@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Rendering;
 
-namespace Operators.lib._3d.rendering._
+namespace lib._3d.rendering.@_
 {
 	[Guid("944d1903-cd23-49ca-9b0d-2fc73bfcfd30")]
     public class SetContextTexture : Instance<SetContextTexture>

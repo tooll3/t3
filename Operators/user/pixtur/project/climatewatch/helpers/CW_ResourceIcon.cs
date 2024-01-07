@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.project.climatewatch.helpers
+namespace user.pixtur.project.climatewatch.helpers
 {
 	[Guid("487dad15-abb2-4d8f-a66a-520af9739684")]
     public class CW_ResourceIcon : Instance<CW_ResourceIcon>

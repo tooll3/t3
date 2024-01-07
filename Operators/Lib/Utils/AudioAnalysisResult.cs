@@ -1,4 +1,4 @@
-﻿namespace Operators.lib.Utils
+﻿namespace lib.Utils
 {
     public static class AudioAnalysisResult
     {

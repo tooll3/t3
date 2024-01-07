@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib._3d.mesh.modify
+namespace lib._3d.mesh.modify
 {
 	[Guid("daacabd8-0338-4998-898f-94580abd8eac")]
     public class ScatterMeshFaces : Instance<ScatterMeshFaces>

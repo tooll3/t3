@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.fx
+namespace lib.img.fx
 {
 	[Guid("da8ebc61-87cf-44ff-888e-994c8628ddb7")]
     public class TriangleGridTransition : Instance<TriangleGridTransition>

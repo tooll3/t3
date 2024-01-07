@@ -8,7 +8,7 @@ using T3.Core.Operator.Slots;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
-namespace Operators.lib.io.audio._obsolete
+namespace lib.io.audio._obsolete
 {
 	[Guid("a9e77500-ccb5-45b9-9f17-0d9bf9b58fb5")]
     public class SoundTrackLevels : Instance<SoundTrackLevels>

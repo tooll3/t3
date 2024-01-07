@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.user.pixtur.learning.cs._05_physarum
+namespace user.pixtur.learning.cs._05_physarum
 {
     using BreedList = StructuredList<_SpeciesDefinition.Breed>;
     

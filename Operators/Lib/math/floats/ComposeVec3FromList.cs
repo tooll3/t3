@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.math.floats
+namespace lib.math.floats
 {
 	[Guid("a52070ce-7110-439c-84e7-01f2a883b83f")]
     public class ComposeVec3FromList : Instance<ComposeVec3FromList>

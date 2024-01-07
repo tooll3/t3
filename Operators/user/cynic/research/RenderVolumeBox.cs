@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.cynic.research
+namespace user.cynic.research
 {
 	[Guid("74107b72-28d8-4350-9748-01d001e5f033")]
     public class RenderVolumeBox : Instance<RenderVolumeBox>

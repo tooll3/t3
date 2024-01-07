@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.modify
+namespace lib.point.modify
 {
 	[Guid("15f056a3-ee8b-41a2-92c9-eb85153f8200")]
     public class RandomizePoints : Instance<RandomizePoints>

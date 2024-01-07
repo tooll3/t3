@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.math.floats
+namespace lib.math.floats
 {
 	[Guid("affe33d0-b86a-4327-aae7-880553b4b7dc")]
     public class FloatListLength : Instance<FloatListLength>

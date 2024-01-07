@@ -7,7 +7,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace Operators.lib.dx11.draw
+namespace lib.dx11.draw
 {
 	[Guid("b956f707-2a33-4330-b7ff-9c91edbcf041")]
     public class SetPixelAndVertexShaderStage : Instance<SetPixelAndVertexShaderStage>

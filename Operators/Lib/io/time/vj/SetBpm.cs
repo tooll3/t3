@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using Operators.lib.Utils;
+using lib.Utils;
 using T3.Core.Animation;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
@@ -8,7 +8,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.io.time.vj
+namespace lib.io.time.vj
 {
 	[Guid("f5158500-39e4-481e-aa4f-f7dbe8cbe0fa")]
     public class SetBpm : Instance<SetBpm>

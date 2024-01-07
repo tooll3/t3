@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.dx11.tex
+namespace lib.dx11.tex
 {
 	[Guid("daec568f-f7b4-4d81-a401-34d62462daab")]
     public class GetTextureSize : Instance<GetTextureSize>

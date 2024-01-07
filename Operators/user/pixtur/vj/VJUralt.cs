@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.vj
+namespace user.pixtur.vj
 {
 	[Guid("a9e36415-58b3-4e2c-b42a-757000d5e337")]
     public class VJUralt : Instance<VJUralt>

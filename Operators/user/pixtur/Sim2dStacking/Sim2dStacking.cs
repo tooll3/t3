@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.Sim2dStacking
+namespace user.pixtur.Sim2dStacking
 {
 	[Guid("7bc42ff0-2987-4dff-ab48-0eb4ab11f149")]
     public class Sim2dStacking : Instance<Sim2dStacking>

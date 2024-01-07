@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.modify
+namespace lib.point.modify
 {
 	[Guid("0f40e5e5-e406-4f87-854b-fbdd670b5504")]
     public class SamplePointsByCameraDistance : Instance<SamplePointsByCameraDistance>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.io.time.vj
+namespace lib.io.time.vj
 {
 	[Guid("61dc8ba5-8aa6-4003-8d8c-8bce27f56a67")]
     public class SetSpeedFactors : Instance<SetSpeedFactors>

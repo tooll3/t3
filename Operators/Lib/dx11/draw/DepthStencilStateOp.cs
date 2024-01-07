@@ -7,7 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.lib.dx11.draw
+namespace lib.dx11.draw
 {
 	[Guid("04858a08-f0fe-4536-9152-686659f0ab58")]
     public class DepthStencilStateOp : Instance<DepthStencilStateOp>

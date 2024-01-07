@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib._3d.transform
+namespace lib._3d.transform
 {
 	[Guid("a6e12383-09b6-4bbd-a4bb-8908598c3409")]
     public class RotateAroundAxis : Instance<RotateAroundAxis>

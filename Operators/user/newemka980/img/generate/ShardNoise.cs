@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.newemka980.img.generate
+namespace user.newemka980.img.generate
 {
 	[Guid("dc34c54b-f856-4fd2-a182-68fd75189d7d")]
     public class ShardNoise : Instance<ShardNoise>

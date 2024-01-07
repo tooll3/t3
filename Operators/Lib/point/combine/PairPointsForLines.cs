@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.combine
+namespace lib.point.combine
 {
 	[Guid("ab6ab34f-4c6e-41ef-af69-48bb9393651b")]
     public class PairPointsForLines : Instance<PairPointsForLines>

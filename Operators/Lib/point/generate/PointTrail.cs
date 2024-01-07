@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.generate
+namespace lib.point.generate
 {
 	[Guid("25db2a97-38b2-4503-8842-fab3922d7a6c")]
     public class PointTrail : Instance<PointTrail>

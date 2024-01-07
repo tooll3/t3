@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.exec
+namespace lib.exec
 {
 	[Guid("58351c8f-4a73-448e-b7bb-69412e71bd76")]
     public class ExecuteBufferUpdate : Instance<ExecuteBufferUpdate>

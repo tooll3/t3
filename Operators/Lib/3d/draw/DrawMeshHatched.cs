@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib._3d.draw
+namespace lib._3d.draw
 {
 	[Guid("c757cde3-511c-44cb-af62-39156557daa6")]
     public class DrawMeshHatched : Instance<DrawMeshHatched>

@@ -1,6 +1,6 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
-using Operators.lib.Utils.BmFont;
+using lib.Utils.BmFont;
 using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
@@ -10,7 +10,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 
-namespace Operators.lib.sprite
+namespace lib.sprite
 {
 	[Guid("1a6a58ea-c63a-4c99-aa9d-aeaeb01662f4")]
     public class TextSprites : Instance<TextSprites>

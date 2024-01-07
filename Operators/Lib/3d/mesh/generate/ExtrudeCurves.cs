@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib._3d.mesh.generate
+namespace lib._3d.mesh.generate
 {
 	[Guid("816336a8-e214-4d2c-b8f9-05b1aa3ff2e2")]
     public class ExtrudeCurves : Instance<ExtrudeCurves>

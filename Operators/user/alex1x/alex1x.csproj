@@ -4,7 +4,7 @@
         <TargetFramework>net8.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <RootNamespace>Operators.user.alex1x</RootNamespace>
+        <RootNamespace>user.alex1x</RootNamespace>
         <PackageId>alex1x</PackageId>
     </PropertyGroup>
 

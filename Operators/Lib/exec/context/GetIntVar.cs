@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.exec.context
+namespace lib.exec.context
 {
 	[Guid("470db771-c7f2-4c52-8897-d3a9b9fc6a4e")]
     public class GetIntVar : Instance<GetIntVar>

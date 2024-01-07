@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.math.vec3
+namespace lib.math.vec3
 {
 	[Guid("fc201df2-8b05-4567-9f24-0d9128aa8507")]
     public class BlendVector3 : Instance<BlendVector3>

@@ -8,7 +8,7 @@ using T3.Core.Utils.Geometry;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Operators.lib.io.input
+namespace lib.io.input
 {
 	[Guid("eff2ffff-dc39-4b90-9b1c-3c0a9a0108c6")]
     public class MouseInput : Instance<MouseInput>

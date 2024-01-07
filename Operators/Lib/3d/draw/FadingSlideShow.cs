@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib._3d.draw
+namespace lib._3d.draw
 {
 	[Guid("cb89ed1d-03ea-4880-bfa0-1dd723e4bdab")]
     public class FadingSlideShow : Instance<FadingSlideShow>

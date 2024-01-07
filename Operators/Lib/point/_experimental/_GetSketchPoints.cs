@@ -7,7 +7,7 @@ using T3.Core.Operator.Slots;
 
 // ReSharper disable RedundantNameQualifier
 
-namespace Operators.lib.point._experimental
+namespace lib.point._experimental
 {
 	[Guid("271e397e-051c-473f-968f-a2251fed65d1")]
     public class _GetSketchPoints : Instance<_GetSketchPoints>

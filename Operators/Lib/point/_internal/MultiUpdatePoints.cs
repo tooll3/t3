@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point._internal
+namespace lib.point._internal
 {
 	[Guid("62c89469-7194-486a-87cd-c3e6bc0cf5d2")]
     public class MultiUpdatePoints : Instance<MultiUpdatePoints>

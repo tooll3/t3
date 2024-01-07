@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.img.generate
+namespace lib.img.generate
 {
 	[Guid("d002bd90-5921-48b0-a940-a8d0c779f674")]
     public class Rings : Instance<Rings>

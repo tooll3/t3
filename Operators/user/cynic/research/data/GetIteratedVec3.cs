@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.user.cynic.research.data
+namespace user.cynic.research.data
 {
 	[Guid("d86e9585-d233-455a-9059-fa93debfed01")]
     public class GetIteratedVec3 : Instance<GetIteratedVec3>

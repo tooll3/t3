@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.user.cynic.RandomParticleIndexBuffer
+namespace user.cynic.RandomParticleIndexBuffer
 {
 	[Guid("6fae395d-c3a0-4693-a3dc-8959cda5a92b")]
     public class RandomParticleIndexBuffer : Instance<RandomParticleIndexBuffer>

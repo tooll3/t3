@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.research
+namespace user.pixtur.research
 {
 	[Guid("6bb3fc41-f1d4-467e-afc6-62b452ec36be")]
     public class _AnalyseAudioRange : Instance<_AnalyseAudioRange>

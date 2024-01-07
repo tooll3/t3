@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.still.there.research
+namespace user.still.there.research
 {
 	[Guid("2d388f2b-3d07-4cbd-a86a-63c5cb83ed26")]
     public class ThereLetterBoxOverlay : Instance<ThereLetterBoxOverlay>

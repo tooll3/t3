@@ -4,7 +4,7 @@
         <TargetFramework>net8.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <RootNamespace>Operators.user.fuzzy</RootNamespace>
+        <RootNamespace>user.fuzzy</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.alex1x;
+namespace user.alex1x;
 
 [Guid("e830b91b-80cc-4fc7-9b9f-52b47c95fc85")]
 public class TVIntroSceneChair : Instance<TVIntroSceneChair>

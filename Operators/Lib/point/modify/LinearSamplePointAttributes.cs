@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.modify
+namespace lib.point.modify
 {
 	[Guid("bb4803d2-0c23-470a-94a8-c477e4f7dd8c")]
     public class LinearSamplePointAttributes : Instance<LinearSamplePointAttributes>

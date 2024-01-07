@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.particles
+namespace lib.point.particles
 {
 	[Guid("4f5999c9-8ade-4e31-8379-afb7db56e170")]
     public class ImageForce : Instance<ImageForce>

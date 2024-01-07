@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.still.there.scenes
+namespace user.still.there.scenes
 {
 	[Guid("6681f137-c653-4b48-a7ca-504b0056d3fc")]
     public class WispsForrest1 : Instance<WispsForrest1>

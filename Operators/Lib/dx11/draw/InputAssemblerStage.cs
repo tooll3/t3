@@ -8,7 +8,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace Operators.lib.dx11.draw
+namespace lib.dx11.draw
 {
 	[Guid("9d1266c5-23db-439f-a475-8000fdd1c318")]
     public class InputAssemblerStage : Instance<InputAssemblerStage>

@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.research
+namespace user.pixtur.research
 {
 	[Guid("117c9c2d-835f-4460-bf53-2f68226ae8ee")]
     public class EmptyComp2 : Instance<EmptyComp2>

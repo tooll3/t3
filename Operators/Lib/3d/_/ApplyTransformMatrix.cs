@@ -7,7 +7,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Utils.Geometry;
 using Vector4 = System.Numerics.Vector4;
 
-namespace Operators.lib._3d._
+namespace lib._3d.@_
 {
 	[Guid("195afff5-13f6-4c5d-af49-655a4f92c2f8")]
     public class ApplyTransformMatrix : Instance<ApplyTransformMatrix>

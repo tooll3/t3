@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib._3d.mesh.modify
+namespace lib._3d.mesh.modify
 {
 	[Guid("b5709297-c714-4019-9d0b-6982590b5590")]
     public class DisplaceMeshNoise : Instance<DisplaceMeshNoise>

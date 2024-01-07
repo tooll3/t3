@@ -15,7 +15,7 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Operators.lib._3d.mesh.generate
+namespace lib._3d.mesh.generate
 {
 	[Guid("5777a005-bbae-48d6-b633-5e998ca76c91")]
     public class CylinderMesh : Instance<CylinderMesh>

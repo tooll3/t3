@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.point._internal
+namespace lib.point._internal
 {
 	[Guid("7ad3a38a-9f04-43ba-a16f-6982b87dd2d4")]
     public class AnalyzeBuffers : Instance<AnalyzeBuffers>

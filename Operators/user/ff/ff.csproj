@@ -4,7 +4,7 @@
         <TargetFramework>net8.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <RootNamespace>Operators.user.ff</RootNamespace>
+        <RootNamespace>user.ff</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

@@ -8,7 +8,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.lib.dx11.tex
+namespace lib.dx11.tex
 {
 	[Guid("f52db9a4-fde9-49ca-9ef7-131825c34e65")]
     public class Texture2d : Instance<Texture2d>

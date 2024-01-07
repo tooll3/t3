@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.fx
+namespace lib.img.fx
 {
 	[Guid("8bede700-4e3e-42d8-8097-9744abdb8ad3")]
     public class DistortAndShade : Instance<DistortAndShade>

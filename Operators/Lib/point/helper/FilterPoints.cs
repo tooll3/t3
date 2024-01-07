@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.helper
+namespace lib.point.helper
 {
 	[Guid("18251874-5d5a-4384-8dcd-fcf297e54886")]
     public class FilterPoints : Instance<FilterPoints>

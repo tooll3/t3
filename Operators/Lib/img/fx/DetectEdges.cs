@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.fx
+namespace lib.img.fx
 {
 	[Guid("2a5475c8-9e16-409f-8c40-a3063e045d38")]
     public class DetectEdges : Instance<DetectEdges>

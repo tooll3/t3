@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.learning.cs._01_cca
+namespace user.pixtur.learning.cs._01_cca
 {
 	[Guid("4cbd1314-6da8-40b7-b24f-04725b98d3f4")]
     public class CCAPanic : Instance<CCAPanic>

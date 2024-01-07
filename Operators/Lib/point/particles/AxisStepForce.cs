@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.particles
+namespace lib.point.particles
 {
 	[Guid("2cc44046-2702-40d5-ab42-8b36ff3d6ca7")]
     public class AxisStepForce : Instance<AxisStepForce>

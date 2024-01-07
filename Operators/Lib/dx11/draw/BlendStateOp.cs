@@ -7,7 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.lib.dx11.draw
+namespace lib.dx11.draw
 {
 	[Guid("064ca51f-47ab-4cb7-95f2-e537b68e137e")]
     public class BlendStateOp : Instance<BlendStateOp>

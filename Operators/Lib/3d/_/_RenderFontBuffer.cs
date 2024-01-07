@@ -1,13 +1,13 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
-using Operators.lib.Utils.BmFont;
+using lib.Utils.BmFont;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 
-namespace Operators.lib._3d._
+namespace lib._3d.@_
 {
 	[Guid("c5707b79-859b-4d53-92e0-cbed53aae648")]
     public class _RenderFontBuffer : Instance<_RenderFontBuffer>

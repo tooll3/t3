@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.combine
+namespace lib.point.combine
 {
 	[Guid("2dc5c9d1-ea93-4597-a4d9-7b610aad603a")]
     public class BlendPoints : Instance<BlendPoints>

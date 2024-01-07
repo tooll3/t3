@@ -7,7 +7,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Utils.Geometry;
 using Vector4 = System.Numerics.Vector4;
 
-namespace Operators.lib._3d._
+namespace lib._3d.@_
 {
 	[Guid("3dae14a8-3d0b-432f-b951-bdd7afd7e5f8")]
     public class ApplyCamMatrices : Instance<ApplyCamMatrices>

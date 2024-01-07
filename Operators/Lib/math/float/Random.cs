@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.math.@float
+namespace lib.math.@float
 {
 	[Guid("10673c38-8c7e-4aa1-8dcd-3f2711c709b5")]
     public class Random : Instance<Random>

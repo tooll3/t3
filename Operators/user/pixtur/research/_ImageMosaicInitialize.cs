@@ -6,7 +6,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.research
+namespace user.pixtur.research
 {
 	[Guid("0c30ce21-0c02-4676-a636-63d744bfa788")]
     public class _ImageMosaicInitialize : Instance<_ImageMosaicInitialize>

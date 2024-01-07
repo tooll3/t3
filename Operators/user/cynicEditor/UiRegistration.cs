@@ -1,8 +1,8 @@
-﻿using Operators.user.cynic.research;
-using Operators.user.cynic.research.data;
-using T3.Core.Logging;
+﻿using T3.Core.Logging;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.ChildUi;
+using user.cynic.research;
+using user.cynic.research.data;
 
 namespace Operator.User.cynic.Editor;
 

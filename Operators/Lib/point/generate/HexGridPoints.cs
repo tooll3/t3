@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.generate
+namespace lib.point.generate
 {
 	[Guid("a71dc141-2b99-4e63-887c-6408b0f0b83c")]
     public class HexGridPoints : Instance<HexGridPoints>

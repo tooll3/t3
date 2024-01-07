@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.still.drd5
+namespace user.still.drd5
 {
 	[Guid("ce469ec7-708e-492f-8b6a-44eda127c28e")]
     public class EvokeInvitationExperiment : Instance<EvokeInvitationExperiment>

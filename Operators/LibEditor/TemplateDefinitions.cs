@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
-using Operators.lib.dx11._;
-using Operators.lib.dx11.compute;
+using lib.dx11._;
+using lib.dx11.compute;
 using T3.Core.Logging;
 using T3.Editor.Gui.Templates;
 

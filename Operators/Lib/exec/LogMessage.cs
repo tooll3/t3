@@ -7,7 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.exec
+namespace lib.exec
 {
 	[Guid("53127485-e2c7-4be8-aff2-da5790799593")]
     public class LogMessage : Instance<LogMessage>

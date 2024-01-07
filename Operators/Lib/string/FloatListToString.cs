@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.@string
+namespace lib.@string
 {
 	[Guid("abf1ec99-049d-474c-9023-5302d5a5c804")]
     public class FloatListToString : Instance<FloatListToString>

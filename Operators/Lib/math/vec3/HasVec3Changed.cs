@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.math.vec3
+namespace lib.math.vec3
 {
 	[Guid("841e4072-4138-4dda-b156-b01ec3a8f9ae")]
     public class HasVec3Changed : Instance<HasVec3Changed>

@@ -7,7 +7,7 @@ using T3.Core.Utils;
 using Vector2 = System.Numerics.Vector2;
 using Vector4 = System.Numerics.Vector4;
 
-namespace Operators.lib._3d._
+namespace lib._3d.@_
 {
 	[Guid("1cfe41c7-972e-4243-9ae4-a510ac038191")]
     public class _LenseFlareHoopPosition : Instance<_LenseFlareHoopPosition>

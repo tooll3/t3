@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.examples
+namespace user.pixtur.examples
 {
 	[Guid("a8f108a4-4d0a-4335-a3b5-f723239c25d1")]
     public class VennDiagram : Instance<VennDiagram>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.examples
+namespace user.pixtur.examples
 {
 	[Guid("f02d4cf2-4fb0-4964-8990-2360d2db7979")]
     public class SimpleSoundReactionExample : Instance<SimpleSoundReactionExample>

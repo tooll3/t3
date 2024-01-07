@@ -8,7 +8,7 @@ using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Operators.user.pixtur.research
+namespace user.pixtur.research
 {
 	[Guid("b3f34926-e536-439b-b47b-2ab89a0bc94d")]
     public class EarthNavigationTest : Instance<EarthNavigationTest>

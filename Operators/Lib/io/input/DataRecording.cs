@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.io.input
+namespace lib.io.input
 {
 	[Guid("4023bcbf-74a6-4e50-a12e-4c22be5dbbdf")]
     public class DataRecording : Instance<DataRecording>,  IStatusProvider, ICustomDropdownHolder

@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.img.generate
+namespace lib.img.generate
 {
 	[Guid("2c3d2c26-ac45-42e9-8f13-6ea338333568")]
     public class LinearGradient : Instance<LinearGradient>

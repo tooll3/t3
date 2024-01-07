@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.fc4
+namespace user.pixtur.fc4
 {
 	[Guid("995cc9f3-b23a-42fb-ac0d-3f1037e3aeaa")]
     public class FC4_Memory : Instance<FC4_Memory>

@@ -4,7 +4,7 @@
         <TargetFramework>net8.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <RootNamespace>Operators.user.lucid</RootNamespace>
+        <RootNamespace>user.lucid</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.examples
+namespace examples
 {
 	[Guid("5fb11919-0eef-4cee-bddf-bf30e0a98ad9")]
     public class CamPositionExample : Instance<CamPositionExample>

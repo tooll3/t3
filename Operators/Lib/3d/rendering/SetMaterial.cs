@@ -12,7 +12,7 @@ using Utilities = T3.Core.Utils.Utilities;
 using Vector4 = System.Numerics.Vector4;
 
 
-namespace Operators.lib._3d.rendering
+namespace lib._3d.rendering
 {
 	[Guid("0ed2bee3-641f-4b08-8685-df1506e9af3c")]
     public class SetMaterial : Instance<SetMaterial>

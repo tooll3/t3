@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.user.still.worksforeverybody 
+namespace user.still.worksforeverybody 
 {
 	[Guid("1dfc9f6d-effa-407b-8f8d-5adf62504205")]
     public class _WFEGameState : Instance<_WFEGameState>

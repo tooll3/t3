@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.math.@float
+namespace lib.math.@float
 {
 	[Guid("a1341063-f893-4447-93cd-63cfe514495e")]
     public class BlendValues : Instance<BlendValues>

@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.math.@float
+namespace lib.math.@float
 {
 	[Guid("61c70843-08ea-4249-ba90-9971493e45d1")]
     public class Cos : Instance<Cos>

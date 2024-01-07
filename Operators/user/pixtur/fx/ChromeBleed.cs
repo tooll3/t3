@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.fx
+namespace user.pixtur.fx
 {
 	[Guid("007b7ad9-e8f2-4830-be0f-d3f5f3444683")]
     public class ChromeBleed : Instance<ChromeBleed>

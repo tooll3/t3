@@ -9,7 +9,7 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace Operators.lib._3d.rendering
+namespace lib._3d.rendering
 {
 	[Guid("74cbfce0-f8b8-46a1-b5d6-38477d4eec99")]
     public class SetFog : Instance<SetFog>

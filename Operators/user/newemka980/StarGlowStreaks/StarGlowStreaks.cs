@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.user.newemka980.StarGlowStreaks
+namespace user.newemka980.StarGlowStreaks
 {
 	[Guid("ecbb40c4-aef4-49a8-ac89-e82c3a09862f")]
     public class StarGlowStreaks : Instance<StarGlowStreaks>

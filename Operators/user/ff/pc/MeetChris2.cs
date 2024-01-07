@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.ff.pc
+namespace user.ff.pc
 {
 	[Guid("500ee741-bd04-4e13-9e40-53ec72af1bea")]
     public class MeetChris2 : Instance<MeetChris2>

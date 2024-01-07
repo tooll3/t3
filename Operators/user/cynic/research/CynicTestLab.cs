@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.cynic.research
+namespace user.cynic.research
 {
 	[Guid("9e52c10e-d17e-4b5a-aaec-d8ffa78a2426")]
     public class CynicTestLab : Instance<CynicTestLab>

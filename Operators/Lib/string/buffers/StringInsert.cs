@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.@string.buffers
+namespace lib.@string.buffers
 {
 	[Guid("7dff2da3-30e3-4ad9-bfc6-d6800f90fca8")]
     public class StringInsert : Instance<StringInsert>

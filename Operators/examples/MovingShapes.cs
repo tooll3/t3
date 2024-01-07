@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.examples
+namespace examples
 {
 	[Guid("966b11dd-c9e2-4352-a249-6ca1ac5ad030")]
     public class MovingShapes : Instance<MovingShapes>, ITransformable

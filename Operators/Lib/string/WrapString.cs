@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.@string
+namespace lib.@string
 {
 	[Guid("96ccea19-c37f-4ee4-8dd2-5abdb347f5a1")]
     public class WrapString : Instance<WrapString>

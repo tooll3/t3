@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.fx
+namespace lib.img.fx
 {
 	[Guid("43f15919-f6c3-4a10-9092-00973fc8e821")]
     public class GlitchDisplace : Instance<GlitchDisplace>

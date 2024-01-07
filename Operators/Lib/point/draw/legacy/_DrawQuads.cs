@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.point.draw.legacy
+namespace lib.point.draw.legacy
 {
 	[Guid("16d10dc8-63b9-4ddf-90b8-41caef99d945")]
     public class _DrawQuads : Instance<_DrawQuads>

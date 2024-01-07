@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.anim._obsolete
+namespace lib.anim._obsolete
 {
 	[Guid("ffed6f9e-2495-4cf3-9cda-740ecec75d10")]
     public class __ObsoletePulsate : Instance<__ObsoletePulsate>

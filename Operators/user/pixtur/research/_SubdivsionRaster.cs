@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.research
+namespace user.pixtur.research
 {
 	[Guid("f15cc064-1d70-4945-ae60-35d884788c0f")]
     public class _SubdivsionRaster : Instance<_SubdivsionRaster>

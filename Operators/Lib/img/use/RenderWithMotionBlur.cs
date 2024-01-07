@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.use
+namespace lib.img.use
 {
 	[Guid("0989e44b-f543-4b9a-a08e-5058d0032259")]
     public class RenderWithMotionBlur : Instance<RenderWithMotionBlur>

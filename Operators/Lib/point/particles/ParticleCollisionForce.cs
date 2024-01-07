@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.particles
+namespace lib.point.particles
 {
 	[Guid("ed0bc47a-31ef-400b-b4e4-5552a859b309")]
     public class ParticleCollisionForce : Instance<ParticleCollisionForce>

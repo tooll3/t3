@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.project.lazers
+namespace user.pixtur.project.lazers
 {
 	[Guid("275b0dfd-be60-40f8-9e0f-5d1ebe0fe4b4")]
     public class LazersMainV2 : Instance<LazersMainV2>

@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.learning.cs._07_CCAInstancing
+namespace user.pixtur.learning.cs._07_CCAInstancing
 {
 	[Guid("7f40b06a-d5f9-490a-9acc-24eff78e3b40")]
     public class _CCAInstancing : Instance<_CCAInstancing>

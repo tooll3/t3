@@ -14,7 +14,7 @@ using T3.Core.Resource;
 using T3.Core.Utils;
 using Point = T3.Core.DataTypes.Point;
 
-namespace Operators.lib.io.file
+namespace lib.io.file
 {
 	[Guid("e8d94dd7-eb54-42fe-a7b1-b43543dd457e")]
     public class LoadSvg : Instance<LoadSvg>

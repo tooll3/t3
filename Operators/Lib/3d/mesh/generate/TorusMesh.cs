@@ -13,7 +13,7 @@ using Buffer = SharpDX.Direct3D11.Buffer;
 using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Operators.lib._3d.mesh.generate
+namespace lib._3d.mesh.generate
 {
 	[Guid("a835ab86-29c1-438e-a7f7-2e297108bfd5")]
     public class TorusMesh : Instance<TorusMesh>

@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib._3d.mesh.modify
+namespace lib._3d.mesh.modify
 {
 	[Guid("79c01289-f3a9-4bea-8e95-a6b5f89b752d")]
     public class DisplaceMesh : Instance<DisplaceMesh>

@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.generate
+namespace lib.point.generate
 {
 	[Guid("780edb20-f83f-494c-ab17-7015e2311250")]
     public class RepeatAtGPoints : Instance<RepeatAtGPoints>

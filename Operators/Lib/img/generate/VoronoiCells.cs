@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.generate
+namespace lib.img.generate
 {
 	[Guid("ba059fe1-3397-4950-9ddd-e328f0c2e0bd")]
     public class VoronoiCells : Instance<VoronoiCells>

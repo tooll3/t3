@@ -9,7 +9,7 @@ using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
-namespace Operators.lib._3d._ 
+namespace lib._3d.@_ 
 {
 	[Guid("17324ce1-8920-4653-ac67-c211ad507a81")]
     public class TransformMatrix : Instance<TransformMatrix>

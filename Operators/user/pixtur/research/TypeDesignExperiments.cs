@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.research
+namespace user.pixtur.research
 {
 	[Guid("24dc052c-562e-4b4e-a59b-ab9bf55ba01d")]
     public class TypeDesignExperiments : Instance<TypeDesignExperiments>

@@ -13,7 +13,7 @@ using Point = T3.Core.DataTypes.Point;
 using Quaternion = System.Numerics.Quaternion;
 using Vector3 = System.Numerics.Vector3;
 
-namespace Operators.lib.point.generate
+namespace lib.point.generate
 {
 	[Guid("9989f539-f86c-4508-83d7-3fc0e559f502")]
     public class APoint : Instance<APoint>, ITransformable

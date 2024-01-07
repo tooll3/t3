@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.cynic.research.data
+namespace user.cynic.research.data
 {
 	[Guid("8b285708-3f20-4957-9eb2-bb40e0d320ee")]
     public class IterateList : Instance<IterateList>

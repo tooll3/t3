@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.dailies
+namespace user.pixtur.dailies
 {
 	[Guid("fe9ef18c-7780-42f4-bf25-d37b21ea7c52")]
     public class HitMan2 : Instance<HitMan2>

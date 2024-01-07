@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.ff.pc.elements
+namespace user.ff.pc.elements
 {
 	[Guid("a85870e1-6b18-40db-96e2-076536d5a521")]
     public class PCProfileTransition : Instance<PCProfileTransition>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.cynic.research
+namespace user.cynic.research
 {
 	[Guid("35dd9888-dea5-4ca4-8e1d-b8f0a59ec0ea")]
     public class ExecuteFloat : Instance<ExecuteFloat>

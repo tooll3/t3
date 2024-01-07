@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.anim
+namespace lib.anim
 {
 	[Guid("94a392e6-3e03-4ccf-a114-e6fafa263b4f")]
     public class SequenceAnim : Instance<SequenceAnim>

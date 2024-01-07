@@ -1,5 +1,5 @@
 ﻿using ImGuiNET;
-using Operators.lib.anim;
+using lib.anim;
 using T3.Core.Operator;
 using T3.Editor.Gui.ChildUi.WidgetUi;
 using T3.Editor.Gui.UiHelpers;

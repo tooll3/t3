@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.examples
+namespace user.pixtur.examples
 {
 	[Guid("446d1664-5fcf-4792-874c-926450a900d7")]
     public class SamplePointAttributesExample : Instance<SamplePointAttributesExample>

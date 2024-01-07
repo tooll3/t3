@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.math.vec3
+namespace lib.math.vec3
 {
 	[Guid("50aab941-0a29-474a-affd-13a74ea0c780")]
     public class PerlinNoise3 : Instance<PerlinNoise3>

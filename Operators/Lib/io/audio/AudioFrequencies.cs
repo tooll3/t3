@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.io.audio
+namespace lib.io.audio
 {
 	[Guid("b72d968b-0045-408d-a2f9-5c739c692a66")]
     public class AudioFrequencies : Instance<AudioFrequencies>

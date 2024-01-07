@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.lib.dx11.draw
+namespace lib.dx11.draw
 {
 	[Guid("c7283335-ef57-46ad-9538-abbade65845a")]
     public class RasterizerStateOp : Instance<RasterizerStateOp>

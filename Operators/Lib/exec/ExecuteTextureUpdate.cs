@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.exec
+namespace lib.exec
 {
 	[Guid("6c2f8241-9f4b-451e-8a1d-871631d21163")]
     public class ExecuteTextureUpdate : Instance<ExecuteTextureUpdate>

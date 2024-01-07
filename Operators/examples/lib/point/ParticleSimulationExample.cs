@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.examples.lib.point
+namespace examples.lib.point
 {
 	[Guid("c05bc3da-6f9c-45a7-8030-78476027359d")]
     public class ParticleSimulationExample : Instance<ParticleSimulationExample>

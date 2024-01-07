@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.vj
+namespace user.pixtur.vj
 {
 	[Guid("a9bd30b1-8b58-4b88-8c8e-5f14b425edec")]
     public class VJSpermZoomer : Instance<VJSpermZoomer>

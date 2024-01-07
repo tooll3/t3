@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.@string.datetime
+namespace lib.@string.datetime
 {
 	[Guid("10acf0aa-2cb3-446b-b837-b6abe24d44da")]
     public class DateTimeToFloat : Instance<DateTimeToFloat>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.examples
+namespace user.pixtur.examples
 {
 	[Guid("2872d93c-882e-42ee-8bcf-747c24f9b042")]
     public class FadingFaces : Instance<FadingFaces>

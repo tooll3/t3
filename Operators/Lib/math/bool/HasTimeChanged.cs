@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.math.@bool
+namespace lib.math.@bool
 {
 	[Guid("2443b2fd-c397-4ea6-9588-b595f918cf01")]
     public class HasTimeChanged : Instance<HasTimeChanged>

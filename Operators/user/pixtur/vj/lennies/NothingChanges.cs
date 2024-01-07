@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.vj.lennies
+namespace user.pixtur.vj.lennies
 {
 	[Guid("ee425946-3c6f-4bac-ab25-0e30571e8ca6")]
     public class NothingChanges : Instance<NothingChanges>

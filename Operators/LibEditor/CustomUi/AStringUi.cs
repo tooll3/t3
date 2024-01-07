@@ -6,7 +6,7 @@ using T3.Editor.Gui.InputUi;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
-using String = Operators.lib.@string.AString;
+using String = lib.@string.AString;
 
 namespace libEditor.CustomUi
 {

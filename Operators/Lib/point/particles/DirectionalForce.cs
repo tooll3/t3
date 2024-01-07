@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.particles
+namespace lib.point.particles
 {
 	[Guid("0f1bf849-949e-4462-a7af-ecb2ff3cd109")]
     public class DirectionalForce : Instance<DirectionalForce>

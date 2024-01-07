@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace Operators.lib.exec
+namespace lib.exec
 {
 	[Guid("010aca02-263a-471c-b407-025b023f7f60")]
     public class ExecuteRawBufferUpdate : Instance<ExecuteRawBufferUpdate>

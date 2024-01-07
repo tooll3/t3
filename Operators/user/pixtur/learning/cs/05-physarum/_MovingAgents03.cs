@@ -5,7 +5,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.learning.cs._05_physarum
+namespace user.pixtur.learning.cs._05_physarum
 {
 	[Guid("8a3791db-8221-484b-8a0e-4e22399cdd9c")]
     public class _MovingAgents03 : Instance<_MovingAgents03>

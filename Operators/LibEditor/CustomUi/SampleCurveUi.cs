@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 using ImGuiNET;
-using Operators.lib.math.curve;
+using lib.math.curve;
 using T3.Core.Operator;
 using T3.Editor.Gui;
 using T3.Editor.Gui.ChildUi.WidgetUi;

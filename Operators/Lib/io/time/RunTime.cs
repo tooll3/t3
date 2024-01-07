@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.io.time
+namespace lib.io.time
 {
 	[Guid("862de1a8-f630-4823-8860-7afa918bb1bc")]
     public class RunTime : Instance<RunTime>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.examples.lib.exec
+namespace examples.lib.exec
 {
 	[Guid("a3945dbe-d5be-4f0f-a904-8ee287d14a9f")]
     public class LoopExample : Instance<LoopExample>

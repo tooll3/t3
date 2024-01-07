@@ -7,7 +7,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
-namespace Operators.lib.dx11.draw
+namespace lib.dx11.draw
 {
 	[Guid("4abd5f2e-3296-4d71-8462-faa203091b1d")]
     public class GeometryShaderStage : Instance<GeometryShaderStage>

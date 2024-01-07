@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.ff.pc.elements
+namespace user.ff.pc.elements
 {
 	[Guid("ffe6b076-f561-4230-a0c3-282fb4d58383")]
     public class PageTitle : Instance<PageTitle>

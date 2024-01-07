@@ -9,7 +9,7 @@ using T3.Core.Rendering;
 using T3.Core.Utils;
 using T3.Core.Utils.Geometry;
 
-namespace Operators.lib.point.helper
+namespace lib.point.helper
 {
 	[Guid("ad651447-75e7-4491-a56a-f737d70c0522")]
     public class LoadObjAsPoints : Instance<LoadObjAsPoints>

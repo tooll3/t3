@@ -9,7 +9,7 @@ using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 using T3.Core.Utils;
 
-namespace Operators.lib.dx11.tex
+namespace lib.dx11.tex
 {
 	[Guid("c2078514-cf1d-439c-a732-0d7b31b5084a")]
     public class SrvFromTexture2d : Instance<SrvFromTexture2d>

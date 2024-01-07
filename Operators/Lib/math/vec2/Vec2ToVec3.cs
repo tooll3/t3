@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.math.vec2
+namespace lib.math.vec2
 {
 	[Guid("b732a668-8994-4f34-ab96-5245d355e33f")]
     public class Vec2ToVec3 : Instance<Vec2ToVec3>

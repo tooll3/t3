@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.math.vec3
+namespace lib.math.vec3
 {
 	[Guid("a40cb2a4-5e4c-41ef-b70d-40fa04adafbb")]
     public class LerpVec3 : Instance<LerpVec3>

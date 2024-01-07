@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point._internal
+namespace lib.point._internal
 {
 	[Guid("9d3d0582-5e55-4268-9649-07d4dd11d792")]
     public class _AppendPoints : Instance<_AppendPoints>

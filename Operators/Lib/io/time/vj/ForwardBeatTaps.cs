@@ -1,12 +1,12 @@
 using System.Runtime.InteropServices;
-using Operators.lib.Utils;
+using lib.Utils;
 using T3.Core.DataTypes;
 using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.io.time.vj
+namespace lib.io.time.vj
 {
 	[Guid("79db48d8-38d3-47ca-9c9b-85dde2fa660d")]
     public class ForwardBeatTaps : Instance<ForwardBeatTaps>

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.exec
+namespace lib.exec
 {
 	[Guid("3631c727-36a0-4f26-ae76-ee9c100efc33")]
     public class Loop : Instance<Loop>

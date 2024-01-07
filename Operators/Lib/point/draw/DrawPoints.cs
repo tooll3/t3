@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.point.draw
+namespace lib.point.draw
 {
 	[Guid("ffd94e5a-bc98-4e70-84d8-cce831e6925f")]
     public class DrawPoints : Instance<DrawPoints>

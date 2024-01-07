@@ -7,7 +7,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.io.time
+namespace lib.io.time
 {
 	[Guid("c6d22dc3-a6ff-4a6f-aa14-8be6595da2b1")]
     public class SetPlaybackTime : Instance<SetPlaybackTime>

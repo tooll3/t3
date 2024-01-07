@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.examples.howto
+namespace examples.howto
 {
 	[Guid("9b1a1ff1-2935-4d9a-880f-897a7f8885ad")]
     public class HowToAnimate : Instance<HowToAnimate>

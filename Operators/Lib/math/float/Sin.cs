@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.math.@float
+namespace lib.math.@float
 {
 	[Guid("6ab63114-6477-4ab2-a071-a66a64a6d2b9")]
     public class Sin : Instance<Sin>

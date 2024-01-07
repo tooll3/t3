@@ -8,7 +8,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.lib.dx11.buffer
+namespace lib.dx11.buffer
 {
 	[Guid("8c41b312-6628-411c-a61d-604413b73a72")]
     public class SrvFromStructuredBuffer : Instance<SrvFromStructuredBuffer>

@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.point.draw
+namespace lib.point.draw
 {
 	[Guid("37a747b0-ec0e-4ebc-83dd-2e03022ad100")]
     public class DrawRibbons : Instance<DrawRibbons>

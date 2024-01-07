@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.@string.list
+namespace lib.@string.list
 {
 	[Guid("a0fcf7ed-1f14-4a8b-a57e-99e5b2407b1b")]
     public class SplitString : Instance<SplitString>

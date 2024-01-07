@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.learning.cs._06_boids
+namespace user.pixtur.learning.cs._06_boids
 {
 	[Guid("6b8db50a-383c-486c-8065-3aefe8c85576")]
     public class _BoidDefinition : Instance<_BoidDefinition>

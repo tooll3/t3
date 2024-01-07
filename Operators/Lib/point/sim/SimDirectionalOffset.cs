@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.sim
+namespace lib.point.sim
 {
 	[Guid("7a08d73e-1aea-479f-8d36-ecb119d75c3a")]
     public class SimDirectionalOffset : Instance<SimDirectionalOffset>

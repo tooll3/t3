@@ -1,11 +1,11 @@
 ﻿using System.Numerics;
 using ImGuiNET;
-using Operators.user.cynic.research;
 using T3.Core.DataTypes.Vector;
 using T3.Core.Operator;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.UiModel;
+using user.cynic.research;
 
 namespace Operator.User.cynic.Editor
 {

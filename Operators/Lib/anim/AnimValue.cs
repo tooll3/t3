@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.anim
+namespace lib.anim
 {
 	[Guid("ea7b8491-2f8e-4add-b0b1-fd068ccfed0d")]
     [SuppressMessage("ReSharper", "InconsistentNaming")]

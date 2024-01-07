@@ -15,7 +15,7 @@ using Vector2 = System.Numerics.Vector2;
 using Vector3 = System.Numerics.Vector3;
 using Int3 = T3.Core.DataTypes.Vector.Int3;
 
-namespace Operators.lib._3d.mesh.generate
+namespace lib._3d.mesh.generate
 {
 	[Guid("1b9977be-70cf-4dbd-8af1-1459596b6527")]
     public class NGonMesh : Instance<NGonMesh>

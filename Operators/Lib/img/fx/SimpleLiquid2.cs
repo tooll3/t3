@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.img.fx
+namespace lib.img.fx
 {
 	[Guid("d1a1f207-0537-416a-985b-e350c3f7e655")]
     public class SimpleLiquid2 : Instance<SimpleLiquid2>

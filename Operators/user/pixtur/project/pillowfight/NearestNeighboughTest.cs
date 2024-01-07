@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.project.pillowfight
+namespace user.pixtur.project.pillowfight
 {
 	[Guid("8228a543-f725-41d9-8629-f6d85f9e858e")]
     public class NearestNeighboughTest : Instance<NearestNeighboughTest>

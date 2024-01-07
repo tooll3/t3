@@ -6,7 +6,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Resource;
 
-namespace Operators.lib.dx11.buffer
+namespace lib.dx11.buffer
 {
 	[Guid("b6c5be1d-b133-45e9-a269-8047ea0d6ad7")]
     public class StructuredBufferWithViews : Instance<StructuredBufferWithViews>

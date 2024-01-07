@@ -5,7 +5,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 using T3.Core.Utils;
 
-namespace Operators.lib.anim
+namespace lib.anim
 {
 	[Guid("7814fd81-b8d0-4edf-b828-5165f5657344")]
     public class AnimVec3 : Instance<AnimVec3>

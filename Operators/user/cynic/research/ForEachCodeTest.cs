@@ -3,7 +3,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.cynic.research
+namespace user.cynic.research
 {
 	[Guid("fd873111-23b6-458a-918a-eefe990c6fa3")]
     

@@ -4,7 +4,7 @@ using T3.Core.Operator;
 using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Slots;
 
-namespace Operators.user.pixtur.vj
+namespace user.pixtur.vj
 {
 	[Guid("ff6d6856-c287-4f2c-9a9e-7dda8b4c2921")]
     public class SyncedNestBalls : Instance<SyncedNestBalls>

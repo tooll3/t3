@@ -4,7 +4,7 @@ using T3.Core.Operator.Attributes;
 using T3.Core.Operator.Interfaces;
 using T3.Core.Operator.Slots;
 
-namespace Operators.lib.point.particles
+namespace lib.point.particles
 {
 	[Guid("eeec02e2-7db9-4132-935a-4caf03c828c6")]
     public class ReconstructiveForce : Instance<ReconstructiveForce>
