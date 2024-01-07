@@ -5,8 +5,8 @@
     /// </summary>
     public class MeshBuffers
     {
-        public BufferWithViews VertexBuffer;
-        public BufferWithViews IndicesBuffer;
+        public BufferWithViews VertexBuffer = new ();
+        public BufferWithViews IndicesBuffer = new ();
 
         public override string ToString()
         {

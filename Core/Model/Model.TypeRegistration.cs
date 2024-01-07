@@ -285,8 +285,7 @@ public partial class SymbolData
         RegisterType(typeof(Object), "Object",
                      () => new InputValue<Object>());
         RegisterType(typeof(StructuredList), "StructuredList",
-                     () => new InputValue<StructuredList>()
-                    ,
+                     () => new InputValue<StructuredList>(),
                      (writer, obj) =>
                      {
                          if (obj is StructuredList l)
@@ -317,6 +316,32 @@ public partial class SymbolData
         
         RegisterType(typeof(DataSet), "DataSet",
                      () => new InputValue<DataSet>());
+        
+        
+        RegisterType(typeof(SceneSetup), nameof(SceneSetup),
+                     InputDefaultValueCreator<SceneSetup>,
+                     (writer, obj) =>
+                     {
+                         var sceneSetup = (SceneSetup)obj;
+                         writer.WriteStartObject();
+                         sceneSetup?.Write(writer);
+                         writer.WriteEndObject();
+                     },
+                     jsonToken =>
+                     {
+                         var sceneSetup = new SceneSetup();
+                         if (jsonToken == null || !jsonToken.HasValues)
+                         {
+                             sceneSetup = new SceneSetup(); // empty
+                         }
+                         else
+                         {
+                             sceneSetup.Read(jsonToken);
+                         }
+
+                         return sceneSetup;
+                     });        
+        
         // sharpdx types
         RegisterType(typeof(SharpDX.Direct3D.PrimitiveTopology), "PrimitiveTopology",
                      InputDefaultValueCreator<PrimitiveTopology>,

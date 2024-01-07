@@ -1,0 +1,37 @@
+{
+  "Id": "fa6d1930-b1f4-4655-8450-c876e8dd2803"/*SceneSetupExample*/,
+  "Description": "Early experience on loading a gltf scene",
+  "InputUis": [],
+  "SymbolChildUis": [
+    {
+      "ChildId": "7bbf9783-2ccd-4cc0-a17c-9ed7a656da47"/*LoadGltfScene*/,
+      "Position": {
+        "X": 946.0342,
+        "Y": 30.69983
+      }
+    },
+    {
+      "ChildId": "f8621463-4c72-4dff-ab65-91d84af76386"/*LoadGltfScene*/,
+      "Position": {
+        "X": 950.7302,
+        "Y": 118.66696
+      }
+    },
+    {
+      "ChildId": "6b915a14-43ea-4bf9-9262-bc5f1c65ad03"/*DrawMesh*/,
+      "Position": {
+        "X": 1118.6111,
+        "Y": 137.79263
+      }
+    }
+  ],
+  "OutputUis": [
+    {
+      "OutputId": "ce6a6d8c-a921-4c87-848b-83aecdff7684"/*ColorBuffer*/,
+      "Position": {
+        "X": 1125.7028,
+        "Y": 24.440186
+      }
+    }
+  ]
+}

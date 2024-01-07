@@ -15,7 +15,7 @@ namespace T3.Core.DataTypes
     {
         public void Write(JsonTextWriter writer)
         {
-            writer.WritePropertyName(typeof(Gradient).Name);
+            writer.WritePropertyName(nameof(Gradient));
             writer.WriteStartObject();
 
             writer.WriteObject("Interpolation", Interpolation);
@@ -257,7 +257,7 @@ namespace T3.Core.DataTypes
         /// to flag a gradient as modified.
         /// </summary>
         /// <remarks>
-        /// Sampling sampling 30K points takes roughly 5ms. 
+        /// Sampling 30K points takes roughly 5ms. 
         /// </remarks>
         public override int GetHashCode()
         {

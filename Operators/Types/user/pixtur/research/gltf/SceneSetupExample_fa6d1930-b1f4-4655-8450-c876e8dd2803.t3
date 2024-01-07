@@ -1,0 +1,72 @@
+{
+  "Name": "SceneSetupExample",
+  "Id": "fa6d1930-b1f4-4655-8450-c876e8dd2803",
+  "Namespace": "user.pixtur.research.gltf",
+  "Inputs": [],
+  "Children": [
+    {
+      "Id": "7bbf9783-2ccd-4cc0-a17c-9ed7a656da47"/*LoadGltfScene*/,
+      "SymbolId": "00618c91-f39a-44ea-b9d8-175c996460dc",
+      "InputValues": [
+        {
+          "Id": "d02f41a6-1a6b-4a6e-8d6c-a28873c79f2c"/*Setup*/,
+          "Type": "T3.Core.DataTypes.SceneSetup",
+          "Value": {
+            "SceneSetup": {
+              "NodeSettings": [
+                {
+                  "NodeHashId": 42
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "f8621463-4c72-4dff-ab65-91d84af76386"/*LoadGltfScene*/,
+      "SymbolId": "00618c91-f39a-44ea-b9d8-175c996460dc",
+      "InputValues": [
+        {
+          "Id": "292e80cf-ba31-4a50-9bf4-83712430f811"/*Path*/,
+          "Type": "System.String",
+          "Value": "Resources\\common\\test-footage\\gltf-scene-test-01.glb"
+        },
+        {
+          "Id": "a82b725b-5a2b-4679-85be-2641c45d3687"/*ChildIndex*/,
+          "Type": "System.Int32",
+          "Value": 1
+        },
+        {
+          "Id": "d02f41a6-1a6b-4a6e-8d6c-a28873c79f2c"/*Setup*/,
+          "Type": "T3.Core.DataTypes.SceneSetup",
+          "Value": {
+            "SceneSetup": {
+              "NodeSettings": [
+                {
+                  "NodeHashId": 42
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "Outputs": []
+    },
+    {
+      "Id": "6b915a14-43ea-4bf9-9262-bc5f1c65ad03"/*DrawMesh*/,
+      "SymbolId": "a3c5471e-079b-4d4b-886a-ec02d6428ff6",
+      "InputValues": [],
+      "Outputs": []
+    }
+  ],
+  "Connections": [
+    {
+      "SourceParentOrChildId": "f8621463-4c72-4dff-ab65-91d84af76386",
+      "SourceSlotId": "c830b31a-b0d9-4a12-8883-da7734541e54",
+      "TargetParentOrChildId": "6b915a14-43ea-4bf9-9262-bc5f1c65ad03",
+      "TargetSlotId": "97429e1f-3f30-4789-89a6-8e930e356ee6"
+    }
+  ]
+}

@@ -136,7 +136,10 @@ public partial class UiSymbolData
 
         RegisterUiType(typeof(DataSet), new FallBackUiProperties(),
                        () => new FallbackInputUi<DataSet>(), () => new DataSetOutputUi());
-        
+
+        RegisterUiType(typeof(SceneSetup), new FallBackUiProperties(),
+                       () => new FallbackInputUi<SceneSetup>(), () => new SceneSetupOutputUi());
+
         // sharpdx types
         RegisterUiType(typeof(Int3), new ValueUiProperties(), () => new Int3InputUi(), () => new ValueOutputUi<Int3>());
         RegisterUiType(typeof(Int2), new ValueUiProperties(), () => new Int2InputUi(), () => new ValueOutputUi<Int2>());
