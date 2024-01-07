@@ -124,7 +124,9 @@ void main(uint3 i : SV_DispatchThreadID)
         ResultPoints[gi].W = tooOld ? NAN : speed * AgingRate;
     }
 
-    ResultPoints[gi].W = 1;
+    ResultPoints[gi].Selected = 1;
+    ResultPoints[gi].Extend = 1;
+
     //ResultPoints[gi].Color = 1;
     //ResultPoints[gi].Rotation = QUATERNION_IDENTITY;
 
