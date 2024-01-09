@@ -189,6 +189,7 @@ namespace T3.Editor.Gui.Dialog
             _scanResultSummary = $"Found {opFiles.Length} Operators ({countNew} new / {countExisting} existing)  {_otherResourceFiles.Count} resource files";
         }
 
+        // todo - should this really be here?
         private void MigrateSelection()
         {
             string[] allRemoteT3Files;
@@ -270,7 +271,7 @@ namespace T3.Editor.Gui.Dialog
                     {
                         Log.Debug($"Overwriting {targetFileName}");
                     }
-                    else if (!Directory.Exists(targetDirectory))
+                    else
                     {
                         Directory.CreateDirectory(targetDirectory);
                     }

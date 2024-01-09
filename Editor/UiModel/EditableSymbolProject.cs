@@ -194,6 +194,17 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         throw new NotImplementedException();
     }
 
+    /// <returns>
+    /// Returns true if the project does not need to be recompiled or if it successfully recompiled.
+    /// </returns>
+    public bool RecompileIfNecessary()
+    {
+        if (!_needsCompilation)
+            return true;
+
+        return CsProjectFile.TryRecompile(Compiler.BuildMode.Debug);
+    }
+
     private static readonly Guid HomeInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
     public override string Folder => CsProjectFile.Directory;
 
@@ -210,4 +221,5 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     private readonly EditablePackageFsWatcher _fileSystemWatcher;
 
     private bool _needsCompilation;
+
 }

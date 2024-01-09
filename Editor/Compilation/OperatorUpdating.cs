@@ -60,8 +60,6 @@ namespace T3.Editor.Compilation
             string targetNamespace = node.GetAsString();
             foreach (var namespaceInfo in namespaceInfos)
             {
-                // trim initial `Operators.` out of the namespace
-
                 string projectNamespace = namespaceInfo.RootNamespace;
 
                 if (targetNamespace.StartsWith(projectNamespace))
@@ -76,5 +74,36 @@ namespace T3.Editor.Compilation
         }
         
         private readonly record struct PackageNamespaceInfo(EditableSymbolProject Project, string RootNamespace);
+
+        /// <summary>
+        /// A sort of hacky way to update all projects without considering their dependencies.
+        /// Any update that fails will be retried until it succeeds or no more progress can be made.
+        /// Should be replaced with actual dependency resolution.
+        /// </summary>
+        public static void UpdateChangedOperators()
+        {
+            var failedProjects = EditorInitialization.EditableSymbolPackages.ToList();
+            var failedRecompilationCount = failedProjects.Count;
+            var previousFailedRecompilationCount = -1;
+            
+            while (failedRecompilationCount > 0 && failedRecompilationCount != previousFailedRecompilationCount)
+            {
+                previousFailedRecompilationCount = failedRecompilationCount;
+                
+                // make a copy for iteration
+                var projectsNeedingRecompilation = failedProjects.ToList();
+                
+                failedRecompilationCount = 0;
+                foreach (var package in projectsNeedingRecompilation)
+                {
+                    var success = package.RecompileIfNecessary();
+                    if (success)
+                    {
+                        failedProjects.Remove(package);
+                        failedRecompilationCount++;
+                    }
+                }
+            }
+    
     }
 }
