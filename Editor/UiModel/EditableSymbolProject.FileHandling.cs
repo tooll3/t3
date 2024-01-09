@@ -30,7 +30,7 @@ internal sealed partial class EditableSymbolProject
     internal void SaveModifiedSymbols()
     {
         MarkAsSaving();
-        
+
         var modifiedSymbolUis = SymbolUis.Where(symbolUi => symbolUi.HasBeenModified).ToList();
         Log.Debug($"{CsProjectFile.Name}: Saving {modifiedSymbolUis.Count} modified symbols...");
 
@@ -199,35 +199,38 @@ internal sealed partial class EditableSymbolProject
 
     public void FindSourceCodeFiles()
     {
-        var sourceCodeFiles = Directory.EnumerateFiles(Folder, $"*{SourceCodeExtension}", SearchOption.AllDirectories);
-        sourceCodeFiles.AsParallel().ForAll(file =>
-                                            {
-                                                using var streamReader = new StreamReader(file);
-                                                while (!streamReader.EndOfStream)
-                                                {
-                                                    var line = streamReader.ReadLine();
-                                                    if (line == null)
-                                                        break;
+        Directory.EnumerateFiles(Folder, $"*{SourceCodeExtension}", SearchOption.AllDirectories)
+                 .AsParallel()
+                 .ForAll(file =>
+                         {
+                             using var streamReader = new StreamReader(file);
+                             while (!streamReader.EndOfStream)
+                             {
+                                 var line = streamReader.ReadLine();
+                                 if (line == null)
+                                     break;
 
-                                                    var firstQuoteIndex = line.IndexOf('"');
-                                                    if (firstQuoteIndex == -1)
-                                                        continue;
+                                 var firstQuoteIndex = line.IndexOf('"');
+                                 if (firstQuoteIndex == -1)
+                                     continue;
 
-                                                    var secondQuoteIndex = line.IndexOf('"', firstQuoteIndex + 1);
+                                 var secondQuoteIndex = line.IndexOf('"', firstQuoteIndex + 1);
 
-                                                    if (secondQuoteIndex == -1)
-                                                        continue;
+                                 if (secondQuoteIndex == -1)
+                                     continue;
 
-                                                    var stringSpan = line.AsSpan(firstQuoteIndex + 1, secondQuoteIndex - firstQuoteIndex - 1);
+                                 var stringSpan = line.AsSpan(firstQuoteIndex + 1, secondQuoteIndex - firstQuoteIndex - 1);
 
-                                                    if (!Guid.TryParse(stringSpan, out var guid))
-                                                        continue;
+                                 if (!Guid.TryParse(stringSpan, out var guid))
+                                     continue;
 
-                                                    _sourceCodeFiles.TryAdd(guid, file);
-                                                    break;
-                                                }
-                                            });
+                                 _sourceCodeFiles.TryAdd(guid, file);
+                                 break;
+                             }
+                         });
     }
+    
+    public bool TryGetSourceCodePath(Symbol symbol, out string path) => _sourceCodeFiles.TryGetValue(symbol.Id, out path);
 
     public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0;
     private static long _savingCount;
@@ -236,7 +239,7 @@ internal sealed partial class EditableSymbolProject
 
     private const string SourceCodeExtension = ".cs";
 
-    class EditablePackageFsWatcher : FileSystemWatcher
+    private class EditablePackageFsWatcher : FileSystemWatcher
     {
         public EditablePackageFsWatcher(EditableSymbolProject project, FileSystemEventHandler onChange, RenamedEventHandler onRename) :
             base(project.Folder, "*.cs")
@@ -249,6 +252,4 @@ internal sealed partial class EditableSymbolProject
             Renamed += onRename;
         }
     }
-
-    public bool TryGetSourceCodePath(Symbol symbol, out string path) => _sourceCodeFiles.TryGetValue(symbol.Id, out path);
 }
