@@ -249,4 +249,6 @@ internal sealed partial class EditableSymbolProject
             Renamed += onRename;
         }
     }
+
+    public bool TryGetSourceCodePath(Symbol symbol, out string path) => _sourceCodeFiles.TryGetValue(symbol.Id, out path);
 }

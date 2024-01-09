@@ -6,8 +6,8 @@ using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using T3.Core.Logging;
-using T3.Core.Model;
 using T3.Core.Operator;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Graph.Helpers;
 
@@ -15,30 +15,37 @@ internal static class GraphUtils
 {
     public static SyntaxTree GetSyntaxTree(Symbol symbol)
     {
-        var pendingSource = symbol.PendingSource; // there's intermediate source, so use this
-        if (string.IsNullOrEmpty(pendingSource))
+        if(symbol.SymbolPackage is not EditableSymbolProject project)
+            return null;
+        
+        var sourceCode = symbol.PendingSource; // there's intermediate source, so use this
+        if (string.IsNullOrEmpty(sourceCode))
         {
-            //var path = @"Operators\Types\" + symbol.Name + ".cs";
-            var path = symbol.SymbolPackage.BuildFilepathForSymbol(symbol, SymbolPackage.SourceCodeExtension);
+            if (!project.TryGetSourceCodePath(symbol, out var sourceCodePath))
+            {
+                Log.Error($"Could not find source file for symbol '{symbol.Name}'");
+                return null;
+            }
+            
             try
             {
-                pendingSource = File.ReadAllText(path);
+                sourceCode = File.ReadAllText(sourceCodePath);
             }
             catch (Exception e)
             {
-                Log.Error($"Error opening file '{path}");
+                Log.Error($"Error opening file '{sourceCodePath}");
                 Log.Error(e.Message);
                 return null;
             }
         }
 
-        if (string.IsNullOrEmpty(pendingSource))
+        if (string.IsNullOrEmpty(sourceCode))
         {
             Log.Info("Source was empty, skip compilation.");
             return null;
         }
 
-        return CSharpSyntaxTree.ParseText(pendingSource);
+        return CSharpSyntaxTree.ParseText(sourceCode);
     }
 
     public static bool IsNewSymbolNameValid(string newSymbolName)
