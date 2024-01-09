@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,6 +10,7 @@ using T3.Editor.Gui.ChildUi;
 
 namespace T3.Editor.UiModel;
 
+// todo - make abstract, create NugetSymbolPackage
 internal class EditorSymbolPackage : StaticSymbolPackage
 {
     public EditorSymbolPackage(AssemblyInformation assembly) : base(assembly)
