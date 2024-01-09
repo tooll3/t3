@@ -85,14 +85,14 @@ namespace T3.Editor.Compilation
             var failedProjects = EditorInitialization.EditableSymbolPackages.ToList();
             var failedRecompilationCount = failedProjects.Count;
             var previousFailedRecompilationCount = -1;
-            
+
             while (failedRecompilationCount > 0 && failedRecompilationCount != previousFailedRecompilationCount)
             {
                 previousFailedRecompilationCount = failedRecompilationCount;
-                
+
                 // make a copy for iteration
                 var projectsNeedingRecompilation = failedProjects.ToList();
-                
+
                 failedRecompilationCount = 0;
                 foreach (var package in projectsNeedingRecompilation)
                 {
@@ -104,6 +104,6 @@ namespace T3.Editor.Compilation
                     }
                 }
             }
-    
+        }
     }
 }
