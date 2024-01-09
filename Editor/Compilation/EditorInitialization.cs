@@ -218,6 +218,8 @@ internal static class EditorInitialization
         foreach (var symbolPackage in symbolPackages)
         {
             symbolPackage.RegisterUiSymbols(enableLog: false);
+            if (symbolPackage is EditorSymbolPackage editorSymbolPackage)
+                editorSymbolPackage.FindSourceCodeFiles();
         }
     }
 

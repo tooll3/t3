@@ -25,7 +25,6 @@ namespace T3.Core.Operator
         public string Name { get; set; }
         public string Namespace { get; set; }
         public string PendingSource { get; set; }
-        public string DeprecatedSourcePath { get; set; }
         public string SymbolFilePath { get; set; }
         public SymbolPackage SymbolPackage { get; internal set; }
 

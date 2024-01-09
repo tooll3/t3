@@ -153,7 +153,7 @@ internal static class Duplicate
 
         public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
         {
-            if (!(node.Declaration.Type is GenericNameSyntax nameSyntax))
+            if (node.Declaration.Type is not GenericNameSyntax nameSyntax)
                 return node;
 
             var idValue = nameSyntax.Identifier.ValueText;

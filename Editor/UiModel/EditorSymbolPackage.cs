@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,7 +33,7 @@ internal class EditorSymbolPackage : StaticSymbolPackage
                                                   return null;
                                               }
 
-                                              symbolUi.FilePath = symbolUiJson.FilePath;
+                                              symbolUi.UiFilePath = symbolUiJson.FilePath;
                                               symbolUiJson.Object = symbolUi;
                                               return symbolUiJson;
                                           })
@@ -76,4 +78,5 @@ internal class EditorSymbolPackage : StaticSymbolPackage
     protected List<SymbolUi> SymbolUis = new();
     
     public override bool IsModifiable => false;
+
 }

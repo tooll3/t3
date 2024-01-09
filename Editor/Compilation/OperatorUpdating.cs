@@ -3,6 +3,7 @@ using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Windows;
+using T3.Editor.SystemUi;
 using T3.Editor.UiModel;
 
 namespace T3.Editor.Compilation
@@ -41,6 +42,7 @@ namespace T3.Editor.Compilation
         {
             if (!IsEditableTargetNamespace(node, out var targetPackage))
             {
+                EditorUi.Instance.ShowMessageBox("Could not rename namespace", "The namespace belongs to a readonly project.");
                 return;
             }
 

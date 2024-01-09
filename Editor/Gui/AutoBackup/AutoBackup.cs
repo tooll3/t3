@@ -293,7 +293,7 @@ namespace T3.Editor.Gui.AutoBackup
         {
             get
             {
-                return EditableSymbolProject.SymbolDataByProject.Values
+                return EditableSymbolProject.AllProjects
                                             .Select(x => x.Folder)
                                             .Concat(NonProjectSourcePaths)
                                             .ToArray();

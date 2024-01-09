@@ -149,22 +149,10 @@ public abstract partial class SymbolPackage
             }
         }
     }
-
-
-    public virtual void AddSymbol(Symbol newSymbol)
-    {
-        SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
-        Symbols.Add(newSymbol.Id, newSymbol);
-        AssemblyInformation.UpdateType(newSymbol.InstanceType, newSymbol.Id);
-    }
     
     public readonly record struct SymbolJsonResult(in SymbolJson.SymbolReadResult Result, string Path);
 
     private static readonly OpUpdateCounter _updateCounter;
-
-    public const string SourceCodeExtension = ".cs";
-    public const string SymbolExtension = ".t3";
-    public const string SymbolUiExtension = ".t3ui";
 
     public abstract bool IsModifiable { get; }
 
