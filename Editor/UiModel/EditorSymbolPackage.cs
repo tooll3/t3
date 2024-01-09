@@ -78,5 +78,6 @@ internal class EditorSymbolPackage : StaticSymbolPackage
     protected List<SymbolUi> SymbolUis = new();
     
     public override bool IsModifiable => false;
+    protected const string SymbolUiExtension = ".t3ui";
 
 }

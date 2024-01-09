@@ -157,4 +157,6 @@ public abstract partial class SymbolPackage
     public abstract bool IsModifiable { get; }
 
     protected readonly Dictionary<Guid, Symbol> Symbols = new();
+
+    public const string SymbolExtension = ".t3";
 }

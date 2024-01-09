@@ -234,9 +234,7 @@ internal sealed partial class EditableSymbolProject
     static readonly FileStreamOptions SaveOptions = new() { Mode = FileMode.Create, Access = FileAccess.ReadWrite };
     private readonly ConcurrentDictionary<Guid, string> _sourceCodeFiles = new();
 
-    public const string SourceCodeExtension = ".cs";
-    public const string SymbolExtension = ".t3";
-    public const string SymbolUiExtension = ".t3ui";
+    private const string SourceCodeExtension = ".cs";
 
     class EditablePackageFsWatcher : FileSystemWatcher
     {
