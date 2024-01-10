@@ -28,7 +28,7 @@ internal static class Compiler
                                                   FileName = command,
                                                   Arguments = arguments,
                                                   WorkingDirectory = workingDirectory,
-                                                  UseShellExecute = true,
+                                                  UseShellExecute = false,
                                                   RedirectStandardOutput = true
                                               }
                           };
@@ -45,6 +45,7 @@ internal static class Compiler
                                       };
 
         process.Start();
+        process.BeginOutputReadLine();
         process.WaitForExit();
 
         if (process.ExitCode != 0)
@@ -52,7 +53,21 @@ internal static class Compiler
             return false;
         }
         
-        // todo - determine if compilation succeeded or not based on output of dotnet
+        bool success = false;
+        foreach (var line in output)
+        {
+            if (line.Contains("Build succeeded"))
+            {
+                success = true;
+                break;
+            }
+        }
+        
+        if (!success)
+        {
+            Log.Error($"{projectFile.Name}: Build failed");
+            return false;
+        }
         
         var assemblyFile = projectFile.GetBuildTargetPath(buildMode);
         if (!assemblyFile.Exists)

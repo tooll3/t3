@@ -20,6 +20,7 @@ namespace T3.Editor.Gui.UiHelpers
     {
         public UserSettings(bool saveOnQuit, string fileName) : base(fileName, saveOnQuit)
         {
+
         }
 
         
@@ -101,7 +102,11 @@ namespace T3.Editor.Gui.UiHelpers
             public List<Gradient> GradientPresets = new();
 
             public string ColorThemeName;
-            public string DefaultNewProjectDirectory;
+
+            private string _defaultNewProjectDirectory = DefaultProjectFolder;
+            public string DefaultNewProjectDirectory => _defaultNewProjectDirectory ??= DefaultProjectFolder;
+            
+            private static string DefaultProjectFolder => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "T3Projects");
         }
 
         public enum ValueEditGizmos

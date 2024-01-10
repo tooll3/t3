@@ -9,6 +9,7 @@
         <RootNamespace>T3.Editor</RootNamespace>
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
         <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+        <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
         <!--<AssemblyName>T3Editor</AssemblyName>-->
     </PropertyGroup>
 

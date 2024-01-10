@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Microsoft.VisualBasic.ApplicationServices;
 using T3.Core.Logging;
 using T3.Core.Operator;
 

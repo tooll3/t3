@@ -112,7 +112,7 @@ internal static class EditorInitialization
             InitializeCustomUis();
 
             // Create home
-            if (!EditableSymbolProject.ActiveProject.TryCreateHome())
+            if (EditableSymbolProject.ActiveProject == null || !EditableSymbolProject.ActiveProject.TryCreateHome())
             {
                 NeedsUserProject = true;
             }

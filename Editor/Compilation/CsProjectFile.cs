@@ -200,11 +200,12 @@ internal class CsProjectFile
         Recompiled?.Invoke(this);
     }
 
+    // todo- use Microsoft.Build.Construction and Microsoft.Build.Evaluation
     public static CsProjectFile CreateNewProject(string projectName, string parentDirectory)
     {
-        string destinationDirectory = Path.Combine(parentDirectory, "user", projectName);
         var defaultHomeDir = Path.Combine(UserData.RootFolder, "default-home");
         var files = System.IO.Directory.EnumerateFiles(defaultHomeDir, "*");
+        string destinationDirectory = Path.Combine(parentDirectory, "user", projectName);
         destinationDirectory = Path.GetFullPath(destinationDirectory);
         System.IO.Directory.CreateDirectory(destinationDirectory);
 
@@ -216,13 +217,17 @@ internal class CsProjectFile
 
         const string namePlaceholder = "{{USER}}";
         const string guidPlaceholder = "{{GUID}}";
+        const string coreReferencePlaceholder = "{{CORE_REFERENCE}}";
+
+        string coreReference = RuntimeAssemblies.Core.Path;
         string homeGuid = Guid.NewGuid().ToString();
         string csprojPath = null;
         foreach (var file in files)
         {
             string text = File.ReadAllText(file);
             text = text.Replace(namePlaceholder, projectName)
-                       .Replace(guidPlaceholder, homeGuid);
+                       .Replace(guidPlaceholder, homeGuid)
+                       .Replace(coreReferencePlaceholder, coreReference);
 
             var destinationFilePath = Path.Combine(destinationDirectory, Path.GetFileName(file));
             destinationFilePath = destinationFilePath.Replace(namePlaceholder, projectName)
