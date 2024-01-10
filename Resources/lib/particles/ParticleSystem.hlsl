@@ -112,8 +112,12 @@ void main(uint3 i : SV_DispatchThreadID)
     bool tooOld =  age >= MaxAge;
 
     if(WMode == 0) {
-        if(tooOld)
+        if(tooOld) {
           ResultPoints[gi].W = NAN;
+        }
+        else {
+          ResultPoints[gi].W = Particles[gi].Radius;
+        }
     }
     else if (WMode == 1) 
     {
