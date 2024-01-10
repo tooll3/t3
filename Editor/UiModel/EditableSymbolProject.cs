@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using T3.Core.Compilation;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Compilation;
 using T3.Editor.Gui.Windows;
@@ -39,12 +40,31 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
     public bool TryCompile(string sourceCode, string newSymbolName, Guid newSymbolId, string nameSpace, out Symbol newSymbol)
     {
-        throw new NotImplementedException();
+        var pathFmt = BuildFilepathFmt(newSymbolName, nameSpace);
+        var path = string.Format(pathFmt, SourceCodeExtension);
 
-        newSymbol = new Symbol(type, newSymbolId);
-        newSymbol.PendingSource = sourceCode;
-        newSymbol.Namespace = @namespace;
-        return true;
+        try
+        {
+            File.WriteAllText(path, sourceCode);
+        }
+        catch
+        {
+            Log.Error($"Could not write source code to {path}");
+            newSymbol = null;
+            return false;
+        }
+
+        var recompiled = TryRecompile();
+        
+        if (!recompiled)
+        {
+            newSymbol = null;
+            return false;
+        }
+        
+        ExecutePendingUpdates();
+        
+        return Symbols.TryGetValue(newSymbolId, out newSymbol);
     }
 
     /// <returns>
@@ -95,34 +115,7 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
     private void UpdateSymbols(CsProjectFile project)
     {
         LocateSourceCodeFiles();
-        var operatorTypes = project.Assembly.OperatorTypes;
-        Dictionary<Guid, Symbol> foundSymbols = new();
-
-        Dictionary<Guid, Type> newTypes = new();
-        foreach (var (guid, type) in operatorTypes)
-        {
-            if (Symbols.Count > 0 && Symbols.Remove(guid, out var symbol))
-            {
-                SymbolRegistry.EntriesEditable.Remove(guid);
-                foundSymbols.Add(guid, symbol);
-                symbol.UpdateInstanceType(type);
-                symbol.CreateAnimationUpdateActionsForSymbolInstances();
-                //UpdateUiEntriesForSymbol(symbol);
-            }
-            else
-            {
-                // it's a new type!!
-                newTypes.Add(guid, type);
-            }
-
-            //UpdateUiEntriesForSymbol(symbol);
-        }
-
-        foreach (var (guid, symbol) in foundSymbols)
-        {
-            Symbols.Add(guid, symbol);
-            SymbolRegistry.EntriesEditable.Add(guid, symbol);
-        }
+        EditorInitialization.UpdateSymbolPackage(this);
     }
 
     private bool RemoveSymbol(Guid guid)
@@ -151,14 +144,19 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         }
     }
 
-    public void ReplaceSymbolUi(Symbol newSymbol, SymbolUi symbolUi)
+    public void ReplaceSymbolUi(SymbolUi symbolUi)
     {
-        SymbolRegistry.EntriesEditable.Add(newSymbol.Id, newSymbol);
-        SymbolUiRegistry.EntriesEditable[newSymbol.Id] = symbolUi;
-        Symbols.Add(newSymbol.Id, newSymbol);
-        SymbolUis.TryAdd(newSymbol.Id, symbolUi); // todo - are connections still valid?
-        UpdateUiEntriesForSymbol(newSymbol);
-        RegisterCustomChildUi(newSymbol);
+        var symbol = symbolUi.Symbol;
+        SymbolUiRegistry.EntriesEditable[symbol.Id] = symbolUi;
+
+        if (SymbolUis.TryGetValue(symbolUi.Symbol.Id, out var oldSymbolUi))
+        {
+            // todo - are connections still valid?
+        }
+        
+        SymbolUis[symbol.Id] = symbolUi; 
+        UpdateUiEntriesForSymbol(symbol);
+        RegisterCustomChildUi(symbol);
     }
 
     public void RenameNameSpace(NamespaceTreeNode node, string nameSpace, EditableSymbolProject newDestinationProject)

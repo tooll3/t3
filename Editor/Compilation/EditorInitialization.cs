@@ -61,7 +61,7 @@ internal static class EditorInitialization
             
         var newUiSymbolData = new EditableSymbolProject(newProject);
 
-        AddSymbolPackages(newUiSymbolData);
+        UpdateSymbolPackages(newUiSymbolData);
         if (!newUiSymbolData.TryCreateHome())
         {
             Log.Error("Failed to create project home");
@@ -84,6 +84,7 @@ internal static class EditorInitialization
 
         try
         {
+            // todo: change to load CsProjs from specific directories and specific nuget packages from a package directory
             var operatorAssemblies = RuntimeAssemblies.OperatorAssemblies;
             List<EditableSymbolProject> editablePackages = new();
             List<EditorSymbolPackage> staticPackages = new();
@@ -106,7 +107,7 @@ internal static class EditorInitialization
                                 .Concat(staticPackages)
                                 .ToArray();
             // Load operators
-            AddSymbolPackages(allSymbolPackages);
+            UpdateSymbolPackages(allSymbolPackages);
 
             InitializeCustomUis();
 
@@ -203,8 +204,13 @@ internal static class EditorInitialization
         csprojFile = new CsProjectFile(csprojFileInfo, assembly);
         return true;
     }
+    
+    internal static void UpdateSymbolPackage(EditableSymbolProject project)
+    {
+        UpdateSymbolPackages(project);
+    }
 
-    private static void AddSymbolPackages(params EditorSymbolPackage[] symbolPackages)
+    private static void UpdateSymbolPackages(params EditorSymbolPackage[] symbolPackages)
     {
         ConcurrentDictionary<EditorSymbolPackage, List<SymbolJson.SymbolReadResult>> loadedSymbols = new();
         symbolPackages.AsParallel().ForAll(package => //pull out for non-editable ones too

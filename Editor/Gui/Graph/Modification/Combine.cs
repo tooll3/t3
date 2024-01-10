@@ -140,17 +140,13 @@ internal static class Combine
         Log.Debug(newSource);
 
         // compile new instance type
-        var assembly = EditableSymbolProject.ActiveProject;
-        var success = OperatorUpdating.TryCreateSymbolFromSource(newSource, newSymbolName, newSymbolId, nameSpace, assembly, out var newSymbol);
+
+        var success = EditableSymbolProject.ActiveProject.TryCompile(newSource, newSymbolName, newSymbolId, nameSpace, out var newSymbol);
         if (!success)
             return;
-        
-        assembly.ReplaceSymbolUi(newSymbol);
-        
-        var newSymbolUi = new SymbolUi(newSymbol)
-                              {
-                                  Description = description
-                              };
+
+        var newSymbolUi = SymbolUiRegistry.Entries[newSymbolId];
+        newSymbolUi.Description = description;
         newSymbolUi.FlagAsModified();
 
         // Apply content to new symbol

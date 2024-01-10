@@ -49,8 +49,7 @@ internal static class Duplicate
         newSource = newSource.Replace(sourceSymbol.Namespace, nameSpace);
         Log.Debug(newSource);
 
-        var parentAssembly = EditableSymbolProject.ActiveProject;
-        var success = OperatorUpdating.TryCreateSymbolFromSource(newSource, newTypeName, newSymbolId, nameSpace, parentAssembly, out var newSymbol);
+        var success = EditableSymbolProject.ActiveProject.TryCompile(newSource, newTypeName, newSymbolId, nameSpace, out var newSymbol);
         if (!success)
             return null;
         
@@ -58,7 +57,7 @@ internal static class Duplicate
         var newSymbolUi = sourceSymbolUi.CloneForNewSymbol(newSymbol, oldToNewIdMap);
         newSymbolUi.Description = description;
         
-        parentAssembly.ReplaceSymbolUi(newSymbol, newSymbolUi);
+        EditableSymbolProject.ActiveProject.ReplaceSymbolUi(newSymbolUi);
 
         // Apply content to new symbol
         var cmd = new CopySymbolChildrenCommand(sourceSymbolUi,

@@ -140,10 +140,13 @@ internal sealed partial class EditableSymbolProject
     }
 
     #region File path handling
-    private string BuildFilepathFmt(Symbol symbol)
+    private string BuildFilepathFmt(Symbol symbol) => BuildFilepathFmt(symbol.Name, symbol.Namespace);
+    
+
+    private string BuildFilepathFmt(string name, string @namespace)
     {
-        var dir = BuildAndCreateFolderFromNamespace(Folder, symbol.Namespace);
-        return Path.Combine(dir, symbol.Name + "{0}");
+        var dir = BuildAndCreateFolderFromNamespace(Folder, @namespace);
+        return Path.Combine(dir, name + "{0}");
 
         string BuildAndCreateFolderFromNamespace(string rootFolder, string symbolNamespace)
         {

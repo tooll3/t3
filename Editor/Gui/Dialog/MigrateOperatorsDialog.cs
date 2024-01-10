@@ -10,6 +10,7 @@ using T3.Core.Model;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.SystemUi;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Gui.Dialog
 {
@@ -198,7 +199,7 @@ namespace T3.Editor.Gui.Dialog
             try
             {
                 const string t3FilePattern = $"*{SymbolPackage.SymbolExtension}";
-                const string t3UiFilePattern = $"*{SymbolPackage.SymbolUiExtension}";
+                const string t3UiFilePattern = $"*{EditorSymbolPackage.SymbolUiExtension}";
                 allRemoteT3Files = Directory.GetFiles(_otherOperatorNamespaceDirectory, t3FilePattern, SearchOption.AllDirectories);
                 allRemoteT3UiFiles = Directory.GetFiles(_otherOperatorNamespaceDirectory, t3UiFilePattern, SearchOption.AllDirectories);
             }

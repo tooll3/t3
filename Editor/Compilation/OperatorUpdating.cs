@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using T3.Core.Logging;
 using T3.Core.Operator;
 using T3.Editor.Gui.Windows;
@@ -13,13 +12,6 @@ namespace T3.Editor.Compilation
     /// </summary>
     internal static class OperatorUpdating
     {
-        // called from duplicate/combine 
-        public static bool TryCreateSymbolFromSource(string sourceCode, string newSymbolName, Guid newSymbolId, string @namespace, EditableSymbolProject project,
-                                                     out Symbol newSymbol)
-        {
-            return project.TryCompile(sourceCode, newSymbolName, newSymbolId, @namespace, out newSymbol);
-
-        }
 
         // this currently is primarily used when re-ordering symbol inputs and outputs
         public static bool UpdateSymbolWithNewSource(Symbol symbol, string newSource)

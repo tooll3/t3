@@ -43,7 +43,7 @@ internal class EditorSymbolPackage : StaticSymbolPackage
                                               })
                                       .Where(result =>
                                              {
-                                                 if (result == null || result.Object == null)
+                                                 if (result?.Object == null)
                                                      return false;
 
                                                  var symbolUi = result.Object;

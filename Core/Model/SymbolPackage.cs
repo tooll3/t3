@@ -96,13 +96,6 @@ public abstract partial class SymbolPackage
         // these do not have a file
         foreach (var (guid, newType) in newTypes)
         {
-            var typeNamespace = newType.Namespace;
-            if (string.IsNullOrWhiteSpace(typeNamespace))
-            {
-                Log.Error($"Null or empty namespace of type {newType.Name}");
-                continue;
-            }
-
             var @namespace = newType.Namespace;
 
             if (string.IsNullOrWhiteSpace(@namespace))

@@ -105,7 +105,7 @@ namespace T3.Editor.Gui.Graph
                               },
                           exportDir);
 
-                var parentAssemblies = exportInfo.UniqueSymbols.Select(x => x.ParentAssembly).Distinct();
+                var parentAssemblies = exportInfo.UniqueSymbols.Select(x => x.SymbolPackage).Distinct();
                 
                 Log.Debug("Compiling Operators.dll...");
                 var references = CompileSymbolsFromSource(exportDir, parentAssemblies, operatorAssemblySources.ToArray());
@@ -126,7 +126,7 @@ namespace T3.Editor.Gui.Graph
 
                 // Generate exported .t3 files
 
-                var symbolExportDir = Path.Combine(exportDir, SymbolPackage.OperatorDirectoryName);
+                var symbolExportDir = Path.Combine(exportDir, "Operators");
                 if (Directory.Exists(symbolExportDir))
                     Directory.Delete(symbolExportDir, true);
 
