@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using T3.Core.Compilation;
 using T3.Core.Logging;
@@ -138,6 +137,14 @@ public abstract partial class SymbolPackage
                        Namespace = @namespace,
                        Name = newType.Name
                    };
+    }
+
+    protected virtual bool RemoveSymbol(Guid guid)
+    {
+        if (!Symbols.Remove(guid, out _))
+            return false;
+
+        return SymbolRegistry.EntriesEditable.Remove(guid);
     }
 
     public void ApplySymbolChildren(List<SymbolJson.SymbolReadResult> symbolsRead)

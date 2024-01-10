@@ -41,7 +41,7 @@ namespace T3.Editor.UiModel
             UpdateConsistencyWithSymbol();
         }
 
-        public SymbolUi CloneForNewSymbol(Symbol newSymbol, Dictionary<Guid, Guid> oldToNewIds)
+        internal SymbolUi CloneForNewSymbol(Symbol newSymbol, Dictionary<Guid, Guid> oldToNewIds)
         { 
             HasBeenModified = true;
 
@@ -91,7 +91,8 @@ namespace T3.Editor.UiModel
         }
         
 
-        public IEnumerable<ISelectableCanvasObject> GetSelectables()
+        IEnumerable<ISelectableCanvasObject> ISelectionContainer.GetSelectables() => GetSelectables();
+        internal IEnumerable<ISelectableCanvasObject> GetSelectables()
         {
             foreach (var childUi in ChildUis)
                 yield return childUi;
@@ -107,7 +108,7 @@ namespace T3.Editor.UiModel
 
         }
 
-        public void UpdateConsistencyWithSymbol()
+        internal void UpdateConsistencyWithSymbol()
         {
             // Check if child entries are missing
             foreach (var child in Symbol.Children)
@@ -247,7 +248,7 @@ namespace T3.Editor.UiModel
             return lastInputUi.PosOnCanvas + new Vector2(0, lastInputUi.Size.Y + SelectableNodeMovement.SnapPadding.Y);
         }
 
-        public Guid AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size, string name = null)
+        internal Guid AddChild(Symbol symbolToAdd, Guid addedChildId, Vector2 posInCanvas, Vector2 size, string name = null)
         {
             HasBeenModified = true;
             Symbol.AddChild(symbolToAdd, addedChildId, name);
@@ -262,7 +263,7 @@ namespace T3.Editor.UiModel
             return addedChildId;
         }
         
-        public SymbolChild AddChildAsCopyFromSource(Symbol symbolToAdd, SymbolChild sourceChild, SymbolUi sourceCompositionSymbolUi, Vector2 posInCanvas,
+        internal SymbolChild AddChildAsCopyFromSource(Symbol symbolToAdd, SymbolChild sourceChild, SymbolUi sourceCompositionSymbolUi, Vector2 posInCanvas,
                                                     Guid newChildId)
         {
             HasBeenModified = true;
@@ -281,7 +282,7 @@ namespace T3.Editor.UiModel
             return newChild;
         }
 
-        public void RemoveChild(Guid id)
+        internal void RemoveChild(Guid id)
         {
             HasBeenModified = true;
             
@@ -293,12 +294,12 @@ namespace T3.Editor.UiModel
         }
 
 
-        public void FlagAsModified()
+        internal void FlagAsModified()
         {
             HasBeenModified = true;
         }
 
-        public void ClearModifiedFlag()
+        internal void ClearModifiedFlag()
         {
             HasBeenModified = false;
         }

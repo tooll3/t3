@@ -86,6 +86,13 @@ internal class EditorSymbolPackage : StaticSymbolPackage
                 Log.Debug($"Add UI for {symbolUi.Symbol.Name} {symbolUi.Symbol.Id}");
         }
     }
+    
+    protected override bool RemoveSymbol(Guid guid)
+    {
+        return base.RemoveSymbol(guid) 
+               && SymbolUis.Remove(guid, out _) 
+               && SymbolUiRegistry.EntriesEditable.Remove(guid);
+    }
 
     protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUis = new();
 
