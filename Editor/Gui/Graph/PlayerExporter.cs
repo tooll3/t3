@@ -25,6 +25,7 @@ namespace T3.Editor.Gui.Graph
     {
         public static void ExportInstance(GraphCanvas graphCanvas, SymbolChildUi childUi)
         {
+            #if !DEBUG
             // Collect all ops and types
             var instance = graphCanvas.CompositionOp.Children.Single(child => child.SymbolChildId == childUi.Id);
             Log.Info($"Exporting {instance.Symbol.Name}...");
@@ -228,6 +229,10 @@ namespace T3.Editor.Gui.Graph
             {
                 Log.Debug("Done. Please check Export/ directory.");
             }
+            
+            #else
+                Log.Error("Exporting is disabled");
+            #endif
         }
 
         private class ExportInfo

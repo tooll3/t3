@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !DEBUG
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace T3.Editor.Gui.Dialog
                     var hasChanged = false;
                     hasChanged |= !_initialized;
                     _initialized = true;
-                    
+
                     hasChanged |= FormInputs.AddStringInput("User Namespace", ref _userNamespace);
 
                     var fullPath = (_otherToollDir != null && Directory.Exists(_otherToollDir)) ? Path.GetFullPath(_otherToollDir) : "";
@@ -56,8 +57,7 @@ namespace T3.Editor.Gui.Dialog
                     }
 
                     hasChanged |= FormInputs.AddFilePicker("Tooll directory", ref _otherToollDir, null, warning,
-                                                             FileOperations.FilePickerTypes.Folder);
-                    
+                                                           FileOperations.FilePickerTypes.Folder);
 
                     if (hasChanged)
                     {
@@ -208,7 +208,6 @@ namespace T3.Editor.Gui.Dialog
                 Log.Error("Migration failed: " + e.Message);
                 return;
             }
-            
 
             foreach (var item in _scanResults)
             {
@@ -240,9 +239,9 @@ namespace T3.Editor.Gui.Dialog
                 {
                     var otherFile =
                         fileList.FirstOrDefault(f =>
-                                                     Regex.IsMatch(f,
-                                                                   item.Title +
-                                                                   @"_[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\."));
+                                                    Regex.IsMatch(f,
+                                                                  item.Title +
+                                                                  @"_[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\."));
                     if (otherFile == null)
                     {
                         Log.Warning($"Can't find .t3 or .t3ui file for {item.Title}");
@@ -284,58 +283,37 @@ namespace T3.Editor.Gui.Dialog
                     Log.Warning($"Can't copy resource files {targetFileName}: " + e.Message);
                 }
             }
-        }
 
-        private static string AddRequiredNameSpaces(string sourceCode)
-        {
-            var requiredNamespaces = new[] { "using T3.Core.DataTypes;" };
-            foreach (var requiredNamespace in requiredNamespaces)
+            static string AddRequiredNameSpaces(string sourceCode)
             {
-                if (!sourceCode.Contains(requiredNamespace))
+                var requiredNamespaces = new[] { "using T3.Core.DataTypes;" };
+                foreach (var requiredNamespace in requiredNamespaces)
                 {
-                    sourceCode = requiredNamespace + "\r\n" + sourceCode;
+                    if (!sourceCode.Contains(requiredNamespace))
+                    {
+                        sourceCode = requiredNamespace + "\r\n" + sourceCode;
+                    }
                 }
+
+                return sourceCode;
             }
 
-            return sourceCode;
-        }
-
-        private static string FixLocalNamespaceUsages(string sourceCode)
-        {
-            foreach (var (key, value) in _stringReplacements)
+            static string FixLocalNamespaceUsages(string sourceCode)
             {
-                sourceCode = sourceCode.Replace(key, value);
-            }
+                foreach (var (key, value) in _stringReplacements)
+                {
+                    sourceCode = sourceCode.Replace(key, value);
+                }
 
-            return sourceCode;
+                return sourceCode;
+            }
         }
 
-        private static Dictionary<string, string> _stringReplacements
+        private static readonly Dictionary<string, string> _stringReplacements
             = new()
                   {
                       { "<T3.Core.Command>", "<Command>" }
                   };
-
-        private static string PrefixNameSpaceUsing(string sourceCode)
-        {
-            var t3NameSpaces = new[] { "Core.", "Operators." };
-
-            var newContent = Regex.Replace(sourceCode, @"^using\s+([^;\s]+);\s*?\n",
-                                           m =>
-                                           {
-                                               var namespaceMatch = m.Groups[1].Value;
-                                               foreach (var wouldNeedFix in t3NameSpaces)
-                                               {
-                                                   if (namespaceMatch.StartsWith(wouldNeedFix))
-                                                   {
-                                                       return "using T3." + namespaceMatch + ";\r\n";
-                                                   }
-                                               }
-
-                                               return m.Value;
-                                           }, RegexOptions.Multiline);
-            return newContent;
-        }
 
         private class ScanItem
         {
@@ -364,3 +342,4 @@ namespace T3.Editor.Gui.Dialog
         private string _localOperatorNamespaceDirectory;
     }
 }
+#endif
