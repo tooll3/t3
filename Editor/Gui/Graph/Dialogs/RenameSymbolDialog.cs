@@ -35,7 +35,8 @@ namespace T3.Editor.Gui.Graph.Dialogs
                 CustomComponents.HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
                 ImGui.Spacing();
 
-                if (CustomComponents.DisablableButton("Rename", GraphUtils.IsNewSymbolNameValid(name)))
+                var symbolPackages = selectedChildUis.Select(x => x.SymbolChild.Symbol.SymbolPackage).Distinct();
+                if (CustomComponents.DisablableButton("Rename", GraphUtils.IsNewSymbolNameValid(symbolPackages, name)))
                 {
                     SymbolNaming.RenameSymbol(selectedChildUis[0].SymbolChild.Symbol, name);
                     ImGui.CloseCurrentPopup();

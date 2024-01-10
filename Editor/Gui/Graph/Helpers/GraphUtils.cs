@@ -1,11 +1,13 @@
 ﻿using System;
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using T3.Core.Logging;
+using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.UiModel;
 
@@ -15,9 +17,9 @@ internal static class GraphUtils
 {
     public static SyntaxTree GetSyntaxTree(Symbol symbol)
     {
-        if(symbol.SymbolPackage is not EditableSymbolProject project)
+        if (symbol.SymbolPackage is not EditableSymbolProject project)
             return null;
-        
+
         var sourceCode = symbol.PendingSource; // there's intermediate source, so use this
         if (string.IsNullOrEmpty(sourceCode))
         {
@@ -26,7 +28,7 @@ internal static class GraphUtils
                 Log.Error($"Could not find source file for symbol '{symbol.Name}'");
                 return null;
             }
-            
+
             try
             {
                 sourceCode = File.ReadAllText(sourceCodePath);
@@ -48,14 +50,20 @@ internal static class GraphUtils
         return CSharpSyntaxTree.ParseText(sourceCode);
     }
 
-    public static bool IsNewSymbolNameValid(string newSymbolName)
+    public static bool IsNewSymbolNameValid(SymbolPackage symbolPackage, string newSymbolName)
     {
-        return !string.IsNullOrEmpty(newSymbolName)
-               && _validTypeNamePattern.IsMatch(newSymbolName)
-               && !SymbolRegistry.Entries.Values.Any(value => string.Equals(value.Name, newSymbolName, StringComparison.OrdinalIgnoreCase));
+        return IsClassNameValid(newSymbolName)
+               && !symbolPackage.ContainsSymbolName(newSymbolName);
     }
 
-    private static readonly Regex _validTypeNamePattern = new("^[A-Za-z_]+[A-Za-z0-9_]*$");
+    public static bool IsNewSymbolNameValid(IEnumerable<SymbolPackage> symbolPackages, string newSymbolName)
+    {
+        return IsClassNameValid(newSymbolName)
+               && !symbolPackages.Any(p => p.ContainsSymbolName(newSymbolName));
+    }
+
+    private static bool IsClassNameValid(string className) => !string.IsNullOrEmpty(className)
+                                                              && UsernameValidator.Value.IsValidIdentifier(className);
 
     public static bool IsNameSpaceValid(string nameSpaceString)
     {
@@ -65,10 +73,7 @@ internal static class GraphUtils
 
     private static readonly Regex _validTypeNameSpacePattern = new(@"^([A-Za-z][A-Za-z\d]*)(\.([A-Za-z_][A-Za-z_\d]*))*$");
 
-    public static bool IsValidUserName(string userName)
-    {
-        return UsernameValidator.Value.IsValidIdentifier(userName);
-    }
+    public static bool IsValidUserName(string userName) => UsernameValidator.Value.IsValidIdentifier(userName);
 
     private static readonly Lazy<CodeDomProvider> UsernameValidator = new(() => CodeDomProvider.CreateProvider("C#"));
 }

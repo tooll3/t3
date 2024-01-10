@@ -54,6 +54,8 @@ internal static class SymbolNaming
         root = memberRewriter.Visit(root);
 
         var newSource = root.GetText().ToString();
+        
+        
 
         var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newName, symbol.ParentAssembly);
         if (newAssembly == null)

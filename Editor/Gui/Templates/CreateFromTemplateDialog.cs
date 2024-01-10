@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using System.Text.RegularExpressions;
 using ImGuiNET;
+using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.Graph.Helpers;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
@@ -102,7 +103,8 @@ namespace T3.Editor.Gui.Templates
                     ImGui.PopStyleColor();
                     ImGui.Dummy(new Vector2(10,10));
 
-                    var isNewSymbolNameValid = GraphUtils.IsNewSymbolNameValid(_newSymbolName);
+                    var project = GraphWindow.GetMainComposition().Symbol.SymbolPackage;
+                    var isNewSymbolNameValid = GraphUtils.IsNewSymbolNameValid(project, _newSymbolName);
                     FormInputs.AddStringInput("Name",
                                                          ref _newSymbolName,
                                                          null,

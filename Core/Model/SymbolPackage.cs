@@ -165,4 +165,6 @@ public abstract partial class SymbolPackage
     protected readonly Dictionary<Guid, Symbol> Symbols = new();
 
     public const string SymbolExtension = ".t3";
+
+    public bool ContainsSymbolName(string newSymbolName) => Symbols.Values.Any(symbol => symbol.Name == newSymbolName);
 }

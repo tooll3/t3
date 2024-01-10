@@ -32,8 +32,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.SetNextItemWidth(250);
                     //ImGui.InputText("##namespace", ref nameSpace, 255);
                     InputWithTypeAheadSearch.Draw("##namespace", ref nameSpace,
-                                                              SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i));
-
+                                                  SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i));
 
                     ImGui.SetNextItemWidth(150);
                     ImGui.SameLine();
@@ -46,7 +45,7 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     CustomComponents.HelpText("This is a C# class. It must be unique and\nnot include spaces or special characters");
                     ImGui.Spacing();
                 }
-                
+
                 // Description
                 {
                     ImGui.PushFont(Fonts.FontSmall);
@@ -56,12 +55,14 @@ namespace T3.Editor.Gui.Graph.Dialogs
                     ImGui.InputTextMultiline("##description", ref description, 1024, new Vector2(450, 60));
                 }
 
-                if (CustomComponents.DisablableButton("Duplicate", GraphUtils.IsNewSymbolNameValid(newTypeName), enableTriggerWithReturn:false))
+                if (CustomComponents.DisablableButton("Duplicate", GraphUtils.IsNewSymbolNameValid(compositionOp.Symbol.SymbolPackage, newTypeName),
+                                                      enableTriggerWithReturn: false))
                 {
                     var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
                     var position = selectedChildUis.First().PosOnCanvas + new Vector2(0, 100);
-                    
-                    Duplicate.DuplicateAsNewType(compositionSymbolUi, selectedChildUis.First().SymbolChild.Symbol.Id, newTypeName, nameSpace, description, position);
+
+                    Duplicate.DuplicateAsNewType(compositionSymbolUi, selectedChildUis.First().SymbolChild.Symbol.Id, newTypeName, nameSpace, description,
+                                                 position);
                     T3Ui.Save(false);
                     ImGui.CloseCurrentPopup();
                 }

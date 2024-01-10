@@ -32,8 +32,8 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
                     ImGui.SetNextItemWidth(250);
                     InputWithTypeAheadSearch.Draw("##namespace2", ref nameSpace,
-                                                              SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i));
-                        
+                                                  SymbolRegistry.Entries.Values.Select(i => i.Namespace).Distinct().OrderBy(i => i));
+
                     ImGui.SetNextItemWidth(150);
                     ImGui.SameLine();
 
@@ -57,10 +57,12 @@ namespace T3.Editor.Gui.Graph.Dialogs
 
                 ImGui.Checkbox("Combine as time clip", ref _shouldBeTimeClip);
 
-                if (CustomComponents.DisablableButton("Combine", GraphUtils.IsNewSymbolNameValid(combineName), enableTriggerWithReturn:false))
+                if (CustomComponents.DisablableButton("Combine", GraphUtils.IsNewSymbolNameValid(compositionOp.Symbol.SymbolPackage, combineName),
+                                                      enableTriggerWithReturn: false))
                 {
                     var compositionSymbolUi = SymbolUiRegistry.Entries[compositionOp.Symbol.Id];
-                    Combine.CombineAsNewType(compositionSymbolUi, selectedChildUis, selectedAnnotations, combineName, nameSpace, description, _shouldBeTimeClip);
+                    Combine.CombineAsNewType(compositionSymbolUi, selectedChildUis, selectedAnnotations, combineName, nameSpace, description,
+                                             _shouldBeTimeClip);
                     _shouldBeTimeClip = false; // Making timeclips this is normally a one off operation
                     ImGui.CloseCurrentPopup();
                 }
