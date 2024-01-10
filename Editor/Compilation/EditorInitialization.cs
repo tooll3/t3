@@ -206,20 +206,26 @@ internal static class EditorInitialization
 
     private static void AddSymbolPackages(params EditorSymbolPackage[] symbolPackages)
     {
-        ConcurrentDictionary<EditorSymbolPackage, List<SymbolPackage.SymbolJsonResult>> loadedSymbols = new();
-        symbolPackages.AsParallel().ForAll(symbolPackage => //pull out for non-editable ones too
+        ConcurrentDictionary<EditorSymbolPackage, List<SymbolJson.SymbolReadResult>> loadedSymbols = new();
+        symbolPackages.AsParallel().ForAll(package => //pull out for non-editable ones too
                                            {
-                                               symbolPackage.LoadSymbols(false, out var list);
-                                               loadedSymbols.TryAdd(symbolPackage, list);
+                                               package.LoadSymbols(false, out var newlyRead);
+                                               loadedSymbols.TryAdd(package, newlyRead);
                                            });
         loadedSymbols.AsParallel().ForAll(pair => pair.Key.ApplySymbolChildren(pair.Value));
-        symbolPackages.AsParallel().ForAll(uiSymbolData => uiSymbolData.LoadUiFiles());
+        
+        ConcurrentDictionary<EditorSymbolPackage, IReadOnlyCollection<SymbolUi>> loadedSymbolUis = new();
+        symbolPackages.AsParallel().ForAll(package =>
+                                           {
+                                               package.LoadUiFiles(loadedSymbols[package], out var newlyRead);
+                                               loadedSymbolUis.TryAdd(package, newlyRead);
+                                           });
 
-        foreach (var symbolPackage in symbolPackages)
+        foreach (var (symbolPackage, symbolUis) in loadedSymbolUis)
         {
-            symbolPackage.RegisterUiSymbols(enableLog: false);
+            symbolPackage.RegisterUiSymbols(enableLog: false, symbolUis);
             if (symbolPackage is EditableSymbolProject project)
-                project.FindSourceCodeFiles();
+                project.LocateSourceCodeFiles();
         }
     }
 

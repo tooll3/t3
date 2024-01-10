@@ -24,45 +24,107 @@ public abstract partial class SymbolPackage
         RegisterTypes();
     }
 
-    public void LoadSymbols(bool enableLog, out List<SymbolJsonResult> symbolsRead)
+    public void LoadSymbols(bool enableLog, out List<SymbolJson.SymbolReadResult> newlyRead)
     {
         Log.Debug($"{AssemblyInformation.Name}: Loading symbols...");
-        var symbolFiles = Directory.EnumerateFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
-
-        symbolsRead = symbolFiles.AsParallel()
-                                 .Select(JsonFileResult<Symbol>.ReadAndCreate)
-                                 .Select(ReadSymbolFromJsonFileResult)
-                                 .Where(symbolReadResult => symbolReadResult.Result.Symbol is not null)
-                                 .ToList(); // Execute and bring back to main thread
-
         // Check if there are symbols without a file, if yes add these. this is a copy
-        var instanceTypesWithoutFile = AssemblyInformation.OperatorTypes.ToDictionary();
+        var operatorTypes = AssemblyInformation.OperatorTypes.ToDictionary();
 
-        Log.Debug($"{AssemblyInformation.Name}: Registering loaded symbols...");
+        Dictionary<Guid, Type> newTypes = new();
+        Dictionary<Guid, Symbol> foundSymbols = new();
 
-        foreach (var readSymbolResult in symbolsRead)
+        foreach (var (guid, type) in operatorTypes)
         {
-            var symbol = readSymbolResult.Result.Symbol;
+            if (Symbols.Count > 0 && Symbols.Remove(guid, out var symbol))
+            {
+                SymbolRegistry.EntriesEditable.Remove(guid);
+                foundSymbols.Add(guid, symbol);
+                symbol.UpdateInstanceType(type);
+                symbol.CreateAnimationUpdateActionsForSymbolInstances();
+                //UpdateUiEntriesForSymbol(symbol);
+            }
+            else
+            {
+                // it's a new type!!
+                newTypes.Add(guid, type);
+            }
 
-            if (!TryAddSymbolTo(Symbols, symbol))
-                continue;
-
-            if (!TryAddSymbolTo(SymbolRegistry.Entries, symbol))
-                continue;
-
-            instanceTypesWithoutFile.Remove(symbol.Id);
-            symbol.SymbolPackage = this;
-            symbol.SymbolFilePath = readSymbolResult.Path;
+            //UpdateUiEntriesForSymbol(symbol);
         }
 
-        foreach (var (guid, newType) in instanceTypesWithoutFile)
+        // remaining symbols have been removed from the assembly
+        while (Symbols.Count > 0)
         {
-            var registered = TryRegisterTypeWithoutFile(newType, guid, out var symbol);
-            if (registered)
+            var guid = Symbols.Keys.First();
+            RemoveSymbol(guid);
+        }
+
+        newlyRead = new();
+
+        if (newTypes.Count > 0)
+        {
+            var symbolFiles = Directory.EnumerateFiles(Folder, $"*{SymbolExtension}", SearchOption.AllDirectories);
+            var symbolsRead = symbolFiles.AsParallel()
+                                     .Select(JsonFileResult<Symbol>.ReadAndCreate)
+                                     .Where(result => newTypes.ContainsKey(result.Guid))
+                                     .Select(ReadSymbolFromJsonFileResult)
+                                     .Where(symbolReadResult => symbolReadResult.Result.Symbol is not null)
+                                     .ToList(); // Execute and bring back to main thread
+
+            Log.Debug($"{AssemblyInformation.Name}: Registering loaded symbols...");
+
+            foreach (var readSymbolResult in symbolsRead)
             {
-                TryAddSymbolTo(Symbols, symbol);
+                var symbol = readSymbolResult.Result.Symbol;
+
+                var added = Symbols.TryAdd(symbol.Id, symbol)
+                            && SymbolRegistry.EntriesEditable.TryAdd(symbol.Id, symbol);
+
+                if (!added)
+                {
+                    Log.Error($"Can't load symbol for [{symbol.Name}]. Registry already contains id {symbol.Id}.");
+                    continue;
+                }
+
+                newlyRead.Add(readSymbolResult.Result);
+                newTypes.Remove(symbol.Id);
                 symbol.SymbolPackage = this;
+                symbol.SymbolFilePath = readSymbolResult.Path;
             }
+        }
+
+        // these do not have a file
+        foreach (var (guid, newType) in newTypes)
+        {
+            var typeNamespace = newType.Namespace;
+            if (string.IsNullOrWhiteSpace(typeNamespace))
+            {
+                Log.Error($"Null or empty namespace of type {newType.Name}");
+                continue;
+            }
+
+            var @namespace = newType.Namespace;
+
+            if (string.IsNullOrWhiteSpace(@namespace))
+            {
+                // set namespace to assembly name
+                @namespace = AssemblyInformation.Name;
+            }
+
+            var symbol = CreateSymbol(newType, guid, @namespace);
+
+            var added = Symbols.TryAdd(symbol.Id, symbol)
+                        && SymbolRegistry.EntriesEditable.TryAdd(symbol.Id, symbol);
+            if (!added)
+            {
+                Log.Error($"Ignoring redefinition symbol {symbol.Name}. Please fix multiple definitions in Operators/Types/ folder");
+                continue;
+            }
+
+            if (enableLog)
+                Log.Debug($"new added symbol: {newType}");
+
+            symbol.SymbolPackage = this;
         }
 
         return;
@@ -74,82 +136,33 @@ public abstract partial class SymbolPackage
             jsonInfo.Object = result.Symbol;
             return new SymbolJsonResult(result, jsonInfo.FilePath);
         }
-
-
-        bool TryRegisterTypeWithoutFile(Type newType, Guid guid, out Symbol symbol)
-        {
-            var typeNamespace = newType.Namespace;
-            if (string.IsNullOrWhiteSpace(typeNamespace))
-            {
-                Log.Error($"Null or empty namespace of type {newType.Name}");
-                symbol = null;
-                return false;
-            }
-
-            var @namespace = newType.Namespace;
-
-            if (string.IsNullOrWhiteSpace(@namespace))
-            {
-                // set namespace to assembly name
-                @namespace = AssemblyInformation.Name;
-            }
-
-            symbol = CreateSymbol(newType, guid, @namespace);
-
-            if (!TryAddSymbolTo(Symbols, symbol))
-            {
-                Log.Error($"Ignoring redefinition symbol {symbol.Name}. Please fix multiple definitions in Operators/Types/ folder");
-                return false;
-            }
-
-            if (enableLog)
-                Log.Debug($"new added symbol: {newType}");
-
-            return true;
-        }
-
-        static bool TryAddSymbolTo(Dictionary<Guid, Symbol> collection, Symbol symbol)
-        {
-            bool added;
-            lock (collection)
-                added = collection.TryAdd(symbol.Id, symbol);
-
-            if (!added)
-            {
-                var existingSymbol = collection[symbol.Id];
-                Log.Error($"Symbol {existingSymbol.Name} {symbol.Id} exists multiple times in database.");
-            }
-
-            return added;
-        }
     }
 
     protected static Symbol CreateSymbol(Type newType, Guid guid, string @namespace)
     {
         return new Symbol(newType, guid)
-                     {
-                         Namespace = @namespace,
-                         Name = newType.Name
-                     };
+                   {
+                       Namespace = @namespace,
+                       Name = newType.Name
+                   };
     }
 
-    public void ApplySymbolChildren(List<SymbolJsonResult> symbolsRead)
+    public void ApplySymbolChildren(List<SymbolJson.SymbolReadResult> symbolsRead)
     {
         Log.Debug($"{AssemblyInformation.Name}: Applying symbol children...");
         Parallel.ForEach(symbolsRead, ReadAndApplyChildren);
         Log.Debug($"{AssemblyInformation.Name}: Done applying symbol children.");
         return;
 
-        void ReadAndApplyChildren(SymbolJsonResult readSymbolResult)
+        void ReadAndApplyChildren(SymbolJson.SymbolReadResult result)
         {
-            var result = readSymbolResult.Result;
             if (!SymbolJson.TryReadAndApplySymbolChildren(result))
             {
                 Log.Error($"Problem obtaining children of {result.Symbol.Name} ({result.Symbol.Id})");
             }
         }
     }
-    
+
     public readonly record struct SymbolJsonResult(in SymbolJson.SymbolReadResult Result, string Path);
 
     private static readonly OpUpdateCounter _updateCounter;

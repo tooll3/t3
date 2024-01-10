@@ -15,64 +15,15 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 {
     protected override AssemblyInformation AssemblyInformation => CsProjectFile.Assembly;
 
-    private static readonly List<Action> PendingUpdateActions = new();
+    private static readonly Queue<Action> PendingUpdateActions = new();
 
     public EditableSymbolProject(CsProjectFile csProjectFile)
         : base(csProjectFile.Assembly)
     {
         CsProjectFile = csProjectFile;
-        csProjectFile.Recompiled += project => PendingUpdateActions.Add(() => UpdateSymbols(project));
+        csProjectFile.Recompiled += project => PendingUpdateActions.Enqueue(() => UpdateSymbols(project));
         AllProjectsRw.Add(this);
         _fileSystemWatcher = new EditablePackageFsWatcher(this, OnFileChanged, OnFileRenamed);
-    }
-
-    private void UpdateSymbols(CsProjectFile project)
-    {
-        var operatorTypes = project.Assembly.OperatorTypes;
-        Dictionary<Guid, Symbol> foundSymbols = new();
-        foreach (var (guid, type) in operatorTypes)
-        {
-            if (Symbols.Remove(guid, out var symbol))
-            {
-                foundSymbols.Add(guid, symbol);
-                symbol.UpdateInstanceType(type);
-                symbol.CreateAnimationUpdateActionsForSymbolInstances();
-                UpdateUiEntriesForSymbol(symbol);
-            }
-            else
-            {
-                // it's a new type!!
-            }
-
-            UpdateUiEntriesForSymbol(symbol);
-        }
-
-        // remaining symbols have been removed from the assembly
-        while (Symbols.Count > 0)
-        {
-            var (guid, symbol) = Symbols.First();
-            RemoveSymbol(guid);
-        }
-
-        Symbols.Clear();
-
-        foreach (var (guid, symbol) in foundSymbols)
-        {
-            Symbols.Add(guid, symbol);
-        }
-    }
-
-    private bool RemoveSymbol(Guid guid)
-    {
-        var removed = Symbols.Remove(guid, out var symbol);
-
-        if (!removed)
-            return false;
-
-        SymbolRegistry.Entries.Remove(guid);
-        SymbolUiRegistry.Entries.Remove(guid, out var symbolUi);
-
-        return true;
     }
 
     public bool TryCreateHome()
@@ -86,41 +37,128 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         return true;
     }
 
-    public void UpdateUiEntriesForSymbol(Symbol symbol, SymbolUi symbolUi = null)
+    public bool TryCompile(string sourceCode, string newSymbolName, Guid newSymbolId, string nameSpace, out Symbol newSymbol)
     {
-        if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var foundSymbolUi))
+        throw new NotImplementedException();
+
+        newSymbol = new Symbol(type, newSymbolId);
+        newSymbol.PendingSource = sourceCode;
+        newSymbol.Namespace = @namespace;
+        return true;
+    }
+
+    /// <returns>
+    /// Returns true if the project does not need to be recompiled or if it successfully recompiled.
+    /// </returns>
+    public bool RecompileIfNecessary()
+    {
+        if (!_needsCompilation)
+            return true;
+
+        return TryRecompile();
+    }
+
+    public bool TryRecompileWithNewSource(Symbol symbol, string newSource)
+    {
+        string currentSource;
+        try
         {
-            if (symbolUi != null)
+            currentSource = File.ReadAllText(symbol.SymbolFilePath);
+        }
+        catch
+        {
+            Log.Error($"Could not read original source code at \"{symbol.SymbolFilePath}\"");
+            currentSource = string.Empty;
+        }
+
+        symbol.PendingSource = newSource;
+        MarkAsSaving();
+
+        var filePathFmt = BuildFilepathFmt(symbol);
+        WriteSymbolSourceToFile(symbol, filePathFmt);
+
+        var success = TryRecompile();
+
+        if (!success && currentSource != string.Empty)
+        {
+            symbol.PendingSource = currentSource;
+            WriteSymbolSourceToFile(symbol, filePathFmt);
+        }
+
+        UnmarkAsSaving();
+
+        return success;
+    }
+
+    private bool TryRecompile() => CsProjectFile.TryRecompile(Compiler.BuildMode.Debug);
+
+    private void UpdateSymbols(CsProjectFile project)
+    {
+        LocateSourceCodeFiles();
+        var operatorTypes = project.Assembly.OperatorTypes;
+        Dictionary<Guid, Symbol> foundSymbols = new();
+
+        Dictionary<Guid, Type> newTypes = new();
+        foreach (var (guid, type) in operatorTypes)
+        {
+            if (Symbols.Count > 0 && Symbols.Remove(guid, out var symbol))
             {
-                SymbolUiRegistry.Entries[symbol.Id] = symbolUi;
-                Log.Warning("Symbol UI for symbol " + symbol.Id + " already exists. Replacing.");
+                SymbolRegistry.EntriesEditable.Remove(guid);
+                foundSymbols.Add(guid, symbol);
+                symbol.UpdateInstanceType(type);
+                symbol.CreateAnimationUpdateActionsForSymbolInstances();
+                //UpdateUiEntriesForSymbol(symbol);
             }
             else
             {
-                foundSymbolUi.UpdateConsistencyWithSymbol();
+                // it's a new type!!
+                newTypes.Add(guid, type);
             }
+
+            //UpdateUiEntriesForSymbol(symbol);
+        }
+
+        foreach (var (guid, symbol) in foundSymbols)
+        {
+            Symbols.Add(guid, symbol);
+            SymbolRegistry.EntriesEditable.Add(guid, symbol);
+        }
+    }
+
+    private bool RemoveSymbol(Guid guid)
+    {
+        if (!Symbols.Remove(guid, out _))
+            return false;
+
+        SymbolRegistry.EntriesEditable.Remove(guid);
+        SymbolUiRegistry.EntriesEditable.Remove(guid, out var symbolUi);
+
+        // todo - are connections still valid?
+        return true;
+    }
+
+    private void UpdateUiEntriesForSymbol(Symbol symbol)
+    {
+        if (SymbolUiRegistry.Entries.TryGetValue(symbol.Id, out var symbolUi))
+        {
+            symbolUi.UpdateConsistencyWithSymbol();
         }
         else
         {
-            symbolUi ??= new SymbolUi(symbol);
-            SymbolUiRegistry.Entries.Add(symbol.Id, symbolUi);
-            SymbolUis.Add(symbolUi);
+            symbolUi = new SymbolUi(symbol);
+            SymbolUiRegistry.EntriesEditable.Add(symbol.Id, symbolUi);
+            SymbolUis.TryAdd(symbol.Id, symbolUi);
         }
     }
 
-    public void ReplaceSymbolUi(Symbol newSymbol, SymbolUi symbolUi = null)
+    public void ReplaceSymbolUi(Symbol newSymbol, SymbolUi symbolUi)
     {
-        AddSymbol(newSymbol);
-        UpdateUiEntriesForSymbol(newSymbol, symbolUi);
-        RegisterCustomChildUi(newSymbol);
-    }
-
-
-    private void AddSymbol(Symbol newSymbol)
-    {
-        SymbolRegistry.Entries.Add(newSymbol.Id, newSymbol);
+        SymbolRegistry.EntriesEditable.Add(newSymbol.Id, newSymbol);
+        SymbolUiRegistry.EntriesEditable[newSymbol.Id] = symbolUi;
         Symbols.Add(newSymbol.Id, newSymbol);
-        AssemblyInformation.UpdateType(newSymbol.InstanceType, newSymbol.Id);
+        SymbolUis.TryAdd(newSymbol.Id, symbolUi); // todo - are connections still valid?
+        UpdateUiEntriesForSymbol(newSymbol);
+        RegisterCustomChildUi(newSymbol);
     }
 
     public void RenameNameSpace(NamespaceTreeNode node, string nameSpace, EditableSymbolProject newDestinationProject)
@@ -150,59 +188,9 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         throw new NotImplementedException();
     }
 
-    public void MarkAsModified()
+    private void MarkAsModified()
     {
         _needsCompilation = true;
-    }
-
-    public bool TryRecompileWithNewSource(Symbol symbol, string newSource)
-    {
-        // disable file watcher
-        
-        string currentSource;
-        try
-        {
-            currentSource = File.ReadAllText(symbol.SymbolFilePath);
-        }
-        catch
-        {
-            Log.Error($"Could not read original source code at \"{symbol.SymbolFilePath}\"");
-            currentSource = string.Empty;
-        }
-
-        symbol.PendingSource = newSource;
-        MarkAsSaving();
-        
-        var filePathFmt = BuildFilepathFmt(symbol);
-        WriteSymbolSourceToFile(symbol, filePathFmt);
-
-        var success = CsProjectFile.TryRecompile(Compiler.BuildMode.Debug);
-
-        if (!success && currentSource != string.Empty)
-        {
-            symbol.PendingSource = currentSource;
-            WriteSymbolSourceToFile(symbol, filePathFmt);
-        }
-
-        UnmarkAsSaving();
-
-        return success;
-    }
-
-    public bool TryCompile(string sourceCode, string newSymbolName, Guid newSymbolId, string ns, out Symbol newSymbol)
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <returns>
-    /// Returns true if the project does not need to be recompiled or if it successfully recompiled.
-    /// </returns>
-    public bool RecompileIfNecessary()
-    {
-        if (!_needsCompilation)
-            return true;
-
-        return CsProjectFile.TryRecompile(Compiler.BuildMode.Debug);
     }
 
     private static readonly Guid HomeInstanceId = Guid.Parse("12d48d5a-b8f4-4e08-8d79-4438328662f0");
@@ -222,4 +210,11 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
     private bool _needsCompilation;
 
+    public void ExecutePendingUpdates()
+    {
+        while (PendingUpdateActions.TryDequeue(out var action))
+        {
+            action.Invoke();
+        }
+    }
 }

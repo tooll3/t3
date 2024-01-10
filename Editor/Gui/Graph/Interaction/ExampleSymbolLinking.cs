@@ -18,7 +18,7 @@ namespace T3.Editor.Gui.Graph.Interaction
             var potentialExamples = new List<(string correspondingSymbolName, Symbol exampleSymbol)>();
 
             var symbolUiCollection = SymbolUiRegistry.Entries.Values;
-            Dictionary<string, Symbol> symbolsByName = new(capacity: symbolUiCollection.Count);
+            Dictionary<string, Symbol> symbolsByName = new(capacity: SymbolUiRegistry.Entries.Count);
             foreach (var symbolUi in symbolUiCollection)
             {
                 var symbol = symbolUi.Symbol;

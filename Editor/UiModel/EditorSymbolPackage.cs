@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using T3.Core.Compilation;
@@ -17,30 +20,39 @@ internal class EditorSymbolPackage : StaticSymbolPackage
     {
     }
 
-    public void LoadUiFiles()
+    public void LoadUiFiles(List<SymbolJson.SymbolReadResult> newlyReadSymbols, out IReadOnlyCollection<SymbolUi> newlyReadSymbolUis)
     {
+        var newSymbols = newlyReadSymbols.ToDictionary(result => result.Symbol.Id, result => result.Symbol);
         Log.Debug($"{AssemblyInformation.Name}: Loading Symbol UIs from \"{Folder}\"");
-        var symbolUiFiles = Directory.EnumerateFiles(Folder, $"*{SymbolUiExtension}", SearchOption.AllDirectories);
-        SymbolUis = symbolUiFiles.AsParallel()
-                                  .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
-                                  .Select(symbolUiJson =>
-                                          {
-                                              var gotSymbolUi = SymbolUiJson.TryReadSymbolUi(symbolUiJson.JToken, symbolUiJson.Guid, out var symbolUi);
-                                              if (!gotSymbolUi)
+        newlyReadSymbolUis = Directory.EnumerateFiles(Folder, $"*{SymbolUiExtension}", SearchOption.AllDirectories)
+                                      .AsParallel()
+                                      .Select(JsonFileResult<SymbolUi>.ReadAndCreate)
+                                      .Where(result => newSymbols.ContainsKey(result.Guid))
+                                      .Select(symbolUiJson =>
                                               {
-                                                  Log.Error($"Error reading symbol Ui for {symbolUiJson.Guid} from file \"{symbolUiJson.FilePath}\"");
-                                                  return null;
-                                              }
+                                                  var gotSymbolUi = SymbolUiJson.TryReadSymbolUi(symbolUiJson.JToken, symbolUiJson.Guid, out var symbolUi);
+                                                  if (!gotSymbolUi)
+                                                  {
+                                                      Log.Error($"Error reading symbol Ui for {symbolUiJson.Guid} from file \"{symbolUiJson.FilePath}\"");
+                                                      return null;
+                                                  }
 
-                                              symbolUi.UiFilePath = symbolUiJson.FilePath;
-                                              symbolUiJson.Object = symbolUi;
-                                              return symbolUiJson;
-                                          })
-                                  .Where(result => result?.Object != null)
-                                  .Select(result => result.Object)
-                                  .ToList();
+                                                  symbolUi.UiFilePath = symbolUiJson.FilePath;
+                                                  symbolUiJson.Object = symbolUi;
+                                                  return symbolUiJson;
+                                              })
+                                      .Where(result =>
+                                             {
+                                                 if (result == null || result.Object == null)
+                                                     return false;
 
-        Log.Debug($"{AssemblyInformation.Name}: Loaded {SymbolUis.Count} symbol UIs");
+                                                 var symbolUi = result.Object;
+                                                 return SymbolUis.TryAdd(symbolUi.Symbol.Id, symbolUi);
+                                             })
+                                      .Select(result => result!.Object)
+                                      .ToArray();
+
+        Log.Debug($"{AssemblyInformation.Name}: Loaded {newlyReadSymbolUis.Count} symbol UIs");
     }
 
     protected static void RegisterCustomChildUi(Symbol symbol)
@@ -51,19 +63,20 @@ internal class EditorSymbolPackage : StaticSymbolPackage
             CustomChildUiRegistry.Entries.TryAdd(valueInstanceType, DescriptiveUi.DrawChildUi);
         }
     }
-    
-    public void RegisterUiSymbols(bool enableLog)
+
+    public void RegisterUiSymbols(bool enableLog, IReadOnlyCollection<SymbolUi> newSymbolUis)
     {
         Log.Debug($@"{AssemblyInformation.Name}: Registering UI entries...");
 
-        foreach (var symbolUi in SymbolUis)
+        foreach (var symbolUi in newSymbolUis)
         {
             var symbol = symbolUi.Symbol;
 
             RegisterCustomChildUi(symbol);
 
-            if (!SymbolUiRegistry.Entries.TryAdd(symbol.Id, symbolUi))
+            if (!SymbolUiRegistry.EntriesEditable.TryAdd(symbol.Id, symbolUi))
             {
+                SymbolUis.Remove(symbol.Id, out _);
                 Log.Error($"Can't load UI for [{symbolUi.Symbol.Name}] Registry already contains id {symbolUi.Symbol.Id}.");
                 continue;
             }
@@ -74,9 +87,8 @@ internal class EditorSymbolPackage : StaticSymbolPackage
         }
     }
 
-    protected List<SymbolUi> SymbolUis = new();
-    
+    protected readonly ConcurrentDictionary<Guid, SymbolUi> SymbolUis = new();
+
     public override bool IsModifiable => false;
     protected const string SymbolUiExtension = ".t3ui";
-
 }

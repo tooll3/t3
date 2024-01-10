@@ -19,10 +19,6 @@ namespace T3.Editor.Compilation
         {
             return project.TryCompile(sourceCode, newSymbolName, newSymbolId, @namespace, out newSymbol);
 
-            newSymbol = new Symbol(type, newSymbolId);
-            newSymbol.PendingSource = sourceCode;
-            newSymbol.Namespace = @namespace;
-            return true;
         }
 
         // this currently is primarily used when re-ordering symbol inputs and outputs
@@ -82,6 +78,12 @@ namespace T3.Editor.Compilation
         /// </summary>
         public static void UpdateChangedOperators()
         {
+            foreach (var project in EditorInitialization.EditableSymbolPackages)
+            {
+                project.ExecutePendingUpdates();
+            }
+
+            return;
             var failedProjects = EditorInitialization.EditableSymbolPackages.ToList();
             var failedRecompilationCount = failedProjects.Count;
             var previousFailedRecompilationCount = -1;

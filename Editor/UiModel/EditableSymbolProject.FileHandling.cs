@@ -20,7 +20,7 @@ internal sealed partial class EditableSymbolProject
         Log.Debug($"{CsProjectFile.Name}: Saving...");
 
         MarkAsSaving();
-        WriteAllSymbolFilesOf(SymbolUis);
+        WriteAllSymbolFilesOf(SymbolUis.Values);
         UnmarkAsSaving();
     }
 
@@ -31,8 +31,12 @@ internal sealed partial class EditableSymbolProject
     {
         MarkAsSaving();
 
-        var modifiedSymbolUis = SymbolUis.Where(symbolUi => symbolUi.HasBeenModified).ToList();
-        Log.Debug($"{CsProjectFile.Name}: Saving {modifiedSymbolUis.Count} modified symbols...");
+        var modifiedSymbolUis = SymbolUis
+                               .Select(x => x.Value)
+                               .Where(symbolUi => symbolUi.HasBeenModified)
+                               .ToArray();
+        
+        Log.Debug($"{CsProjectFile.Name}: Saving {modifiedSymbolUis.Length} modified symbols...");
 
         WriteAllSymbolFilesOf(modifiedSymbolUis);
 
@@ -197,8 +201,9 @@ internal sealed partial class EditableSymbolProject
         }
     }
 
-    public void FindSourceCodeFiles()
+    public void LocateSourceCodeFiles()
     {
+        _sourceCodeFiles.Clear();
         Directory.EnumerateFiles(Folder, $"*{SourceCodeExtension}", SearchOption.AllDirectories)
                  .AsParallel()
                  .ForAll(file =>
@@ -229,7 +234,7 @@ internal sealed partial class EditableSymbolProject
                              }
                          });
     }
-    
+
     public bool TryGetSourceCodePath(Symbol symbol, out string path) => _sourceCodeFiles.TryGetValue(symbol.Id, out path);
 
     public static bool IsSaving => Interlocked.Read(ref _savingCount) > 0;
