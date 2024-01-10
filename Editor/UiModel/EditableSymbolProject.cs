@@ -78,9 +78,11 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
         return TryRecompile();
     }
 
-    public bool TryRecompileWithNewSource(Symbol symbol, string newSource)
+    // todo : determine name from source code
+    public bool TryRecompileWithNewSource(Symbol symbol, string newSource, string newName = null)
     {
         string currentSource;
+        newName ??= symbol.Name;
         try
         {
             currentSource = File.ReadAllText(symbol.SymbolFilePath);
@@ -99,7 +101,11 @@ internal sealed partial class EditableSymbolProject : EditorSymbolPackage
 
         var success = TryRecompile();
 
-        if (!success && currentSource != string.Empty)
+        if (success)
+        {
+            symbol.Name = newName;
+        }
+        else if (currentSource != string.Empty)
         {
             symbol.PendingSource = currentSource;
             WriteSymbolSourceToFile(symbol, filePathFmt);

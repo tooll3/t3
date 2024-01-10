@@ -7,6 +7,7 @@ using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Editor.Gui;
 using T3.Editor.Gui.Graph.Helpers;
+using T3.Editor.UiModel;
 
 namespace T3.Editor.Compilation;
 
@@ -54,28 +55,19 @@ internal static class SymbolNaming
         root = memberRewriter.Visit(root);
 
         var newSource = root.GetText().ToString();
-        
-        
 
-        var newAssembly = OperatorUpdating.CompileSymbolFromSource(newSource, newName, symbol.ParentAssembly);
-        if (newAssembly == null)
+
+        var project = (EditableSymbolProject)symbol.SymbolPackage;
+
+        var updated = project.TryRecompileWithNewSource(symbol, newSource, newName);
+        if (!updated)
         {
             Log.Error($"Could not update symbol '{symbol.Name}' because its file resource couldn't be found.");
             return;
         }
 
-        var originalSourcePath = symbol.SymbolPackage.BuildFilepathForSymbol(symbol, SymbolPackage.SourceCodeExtension);
-        var operatorResource = EditorResourceManager.Instance.GetOperatorFileResource(originalSourcePath);
-        if (operatorResource == null)
-            return;
-        
-        operatorResource.OperatorAssembly = newAssembly;
-        operatorResource.Updated = true;
-        symbol.PendingSource = newSource;
-        symbol.DeprecatedSourcePath = originalSourcePath;
-
         OperatorUpdating.UpdateChangedOperators();
-        T3Ui.SaveAll();
+        T3Ui.Save(true);
     }
 }
 
