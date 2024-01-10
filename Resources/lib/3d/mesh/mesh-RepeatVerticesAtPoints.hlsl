@@ -39,19 +39,19 @@ void main(uint3 i : SV_DispatchThreadID)
     // Apply point transform
     float4 posInObject = float4( v.Position,1);
 
-    float4x4 orientationMatrix = transpose(qToMatrix(p.rotation));
+    float4x4 orientationMatrix = transpose(qToMatrix(p.Rotation));
 
     posInObject.xyz *= Size;
-    posInObject.xyz *= UseWForSize ? (lerp(Size, Size + p.w,  Stretch) ) :1;
+    posInObject.xyz *= UseWForSize ? (lerp(Size, Size + p.W,  Stretch) ) :1;
     //posInObject.xyz *= (UseWForSize ? (lerp(Size, Size + p.w,  Stretch) ) : Size);
     posInObject = mul( float4(posInObject.xyz, 1), orientationMatrix) ;
 
-    posInObject += float4(p.position, 0); 
+    posInObject += float4(p.Position, 0); 
 
     v.Position = posInObject; 
-    v.Normal = qRotateVec3(v.Normal, p.rotation);
-    v.Tangent = qRotateVec3(v.Tangent, p.rotation);
-    v.Bitangent = qRotateVec3(v.Bitangent, p.rotation);
+    v.Normal = qRotateVec3(v.Normal, p.Rotation);
+    v.Tangent = qRotateVec3(v.Tangent, p.Rotation);
+    v.Bitangent = qRotateVec3(v.Bitangent, p.Rotation);
     ResultVertices[targetVertexIndex] = v; 
 }
 

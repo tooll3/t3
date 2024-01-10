@@ -11,6 +11,9 @@ cbuffer Params : register(b0)
     float Confinment;
     float DepthConcentration;
     float CenterDepth;
+
+    float TwistAngle;
+    float Debug;
 }
 
 cbuffer Transforms : register(b1)
@@ -42,7 +45,7 @@ void main(uint3 i : SV_DispatchThreadID)
     if(i.x >= maxParticleCount)
         return;
 
-    float4 posInObject = float4(Particles[i.x].p.position,1);
+    float4 posInObject = float4(Particles[i.x].Position,1);
     float4 posInCamera = mul(posInObject, ObjectToCamera);
     float4 pos = mul(float4(posInCamera.xyz, 1), CameraToClipSpace);
     float depth = pos.z;
@@ -50,12 +53,20 @@ void main(uint3 i : SV_DispatchThreadID)
     
     float4 normalMap = FxTexture.SampleLevel(texSampler, (pos.xy * float2(1, -1)  + 1) / 2, 0);
     float3 offset = normalMap.rgb * float3(1,-1,1) * Amount * float3( AmountXY,0) * normalMap.a;
-    
+
+    // float lengthXY = length(offset.xy);
+    // if(lengthXY > 0.0001) 
+    // {
+    //     float angle = atan2( offset.x, offset.y) + TwistAngle / 180 * PI;
+    //     offset.xy = float2(sin(angle), cos(angle)) * lengthXY;
+    // }
+
     // Confine particles outside of view
     float2 dXYFromCenter = abs(pos.xy);
     float distanceFromCenter = max(dXYFromCenter.x, dXYFromCenter.y);
     float confineFactor= smoothstep(0.9,1.2, distanceFromCenter);
-    if(distanceFromCenter > 0.01) {
+    if(distanceFromCenter > 0.01) 
+    {
         offset.xy -= normalize(pos.xy) * confineFactor * Confinment;
     }
 
@@ -63,5 +74,16 @@ void main(uint3 i : SV_DispatchThreadID)
     offset.z += accelerationToDepthCenter * DepthConcentration;
     offset = mul(float4(offset.xyz, 0), CameraToWorld);
 
-    Particles[i.x].velocity += offset;
+
+    float3 v = Particles[i.x].Velocity + offset;
+
+    float lengthXY = length(v.xy);
+    if(lengthXY > 0.0001) 
+    {
+        
+        float angle = atan2( v.x, v.y) + TwistAngle / 180 * PI;
+        v.xy = float2(sin(angle), cos(angle)) * lengthXY;
+    }
+
+    Particles[i.x].Velocity = v;
 }

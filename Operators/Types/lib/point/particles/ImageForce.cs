@@ -29,6 +29,12 @@ namespace T3.Operators.Types.Id_4f5999c9_8ade_4e31_8379_afb7db56e170
 
         [Input(Guid = "fcb4c9ff-b8b7-4fa3-b1ab-d8af6dbedc96")]
         public readonly InputSlot<SharpDX.Direct3D11.Texture2D> SignedNormalMap = new();
+
+        [Input(Guid = "a63a10bb-b0c5-46bc-8f9d-8b0b3f4cd037")]
+        public readonly InputSlot<float> TwistAngle = new InputSlot<float>();
+
+        [Input(Guid = "47e77938-5132-4162-ab6f-e7b7ff72af3f")]
+        public readonly InputSlot<float> Debug = new InputSlot<float>();
         
         
         private enum Modes {

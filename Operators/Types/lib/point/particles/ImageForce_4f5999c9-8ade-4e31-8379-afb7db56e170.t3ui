@@ -56,6 +56,23 @@
         "X": -58.33496,
         "Y": 828.2144
       }
+    },
+    {
+      "InputId": "a63a10bb-b0c5-46bc-8f9d-8b0b3f4cd037"/*TwistAngle*/,
+      "Position": {
+        "X": -58.33496,
+        "Y": 873.2144
+      },
+      "Min": -180.0,
+      "Max": 180.0,
+      "Format": "{0:0.0}°"
+    },
+    {
+      "InputId": "47e77938-5132-4162-ab6f-e7b7ff72af3f"/*Debug*/,
+      "Position": {
+        "X": -58.33496,
+        "Y": 918.2144
+      }
     }
   ],
   "SymbolChildUis": [
@@ -133,7 +150,7 @@
       "ChildId": "b9cfe6eb-d521-48ec-acbe-e78404ea7ffa"/*SrvFromTexture2d*/,
       "Position": {
         "X": 602.3083,
-        "Y": 715.10626
+        "Y": 741.10626
       }
     },
     {
