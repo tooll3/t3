@@ -4,7 +4,6 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using Sentry;
 using T3.Core.IO;
 using T3.Core.Logging;
 using T3.Core.Resource;

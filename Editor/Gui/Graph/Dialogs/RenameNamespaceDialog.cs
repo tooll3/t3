@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using ImGuiNET;
 using T3.Editor.Compilation;
-using T3.Editor.Gui.Graph.Modification;
 using T3.Editor.Gui.Styling;
 using T3.Editor.Gui.UiHelpers;
 using T3.Editor.Gui.Windows;

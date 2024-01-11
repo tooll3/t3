@@ -122,7 +122,7 @@ public class WindowsUiContentDrawer : IUiContentDrawer<Device, ImDrawDataPtr>
         _deviceContext.MapSubresource(_ib, MapMode.WriteDiscard, SharpDX.Direct3D11.MapFlags.None, out var ibStream);
         for (int n = 0; n < drawData.CmdListsCount; n++)
         {
-            ImDrawListPtr cmdList = drawData.CmdListsRange[n];
+            ImDrawListPtr cmdList = drawData.CmdLists[n];
             vbStream.WriteRange(cmdList.VtxBuffer.Data, (uint)(cmdList.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>()));
             ibStream.WriteRange(cmdList.IdxBuffer.Data, (uint)(cmdList.IdxBuffer.Size * Unsafe.SizeOf<ushort>()));
         }
@@ -193,7 +193,7 @@ public class WindowsUiContentDrawer : IUiContentDrawer<Device, ImDrawDataPtr>
         Vector2 pos = drawData.DisplayPos;
         for (int n = 0; n < drawData.CmdListsCount; n++)
         {
-            var cmdList = drawData.CmdListsRange[n];
+            var cmdList = drawData.CmdLists[n];
             for (int cmdI = 0; cmdI < cmdList.CmdBuffer.Size; cmdI++)
             {
                 var cmd = cmdList.CmdBuffer[cmdI];

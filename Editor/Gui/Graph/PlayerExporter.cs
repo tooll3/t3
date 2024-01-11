@@ -2,19 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Newtonsoft.Json;
-using SharpDX.Direct3D11;
-using T3.Core.Compilation;
-using T3.Core.IO;
 using T3.Core.Logging;
-using T3.Core.Model;
 using T3.Core.Operator;
 using T3.Core.Operator.Slots;
-using T3.Editor.Compilation;
 using T3.Editor.Gui.InputUi.SimpleInputUis;
-using T3.Editor.Gui.Interaction.Timing;
 using T3.Editor.UiModel;
 
 // ReSharper disable StringLiteralTypo

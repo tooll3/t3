@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using T3.Core.Logging;
 using T3.Core.Operator;
 
 namespace T3.Editor.Gui.Templates

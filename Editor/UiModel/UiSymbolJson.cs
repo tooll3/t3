@@ -8,7 +8,6 @@ using T3.Core.DataTypes.Vector;
 using T3.Core.Logging;
 using T3.Core.Model;
 using T3.Core.Operator;
-using T3.Core.Resource;
 using T3.Editor.External.Truncon.Collections;
 using T3.Editor.Gui.Graph;
 using T3.Editor.Gui.InputUi;

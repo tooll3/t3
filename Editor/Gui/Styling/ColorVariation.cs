@@ -1,5 +1,4 @@
 ﻿using System;
-using ImGuiNET;
 using T3.Core.DataTypes.Vector;
 
 // ReSharper disable MemberCanBePrivate.Global
