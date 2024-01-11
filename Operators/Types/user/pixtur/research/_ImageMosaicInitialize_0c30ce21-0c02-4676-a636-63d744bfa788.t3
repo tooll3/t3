@@ -14,8 +14,8 @@
     {
       "Id": "a16ccad1-00b7-4779-8346-52b03b81249f"/*Resolution*/,
       "DefaultValue": {
-        "X": 0,
-        "Y": 0
+        "X": 256,
+        "Y": 256
       }
     }
   ],
@@ -209,6 +209,15 @@
           "Id": "ce649059-f136-4d32-81c6-23d7b55f3378"/*Format*/,
           "Type": "SharpDX.DXGI.Format",
           "Value": "R32_Float"
+        },
+        {
+          "Id": "dca953d6-bdc1-42eb-9a4d-5974c42cf45b"/*Size*/,
+          "Type": "T3.Core.DataTypes.Vector.Int3",
+          "Value": {
+            "X": 256,
+            "Y": 256,
+            "Z": 256
+          }
         }
       ],
       "Outputs": []

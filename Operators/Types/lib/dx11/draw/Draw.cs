@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SharpDX.Direct3D11;
 using T3.Core.DataTypes;
 using T3.Core.Logging;
 using T3.Core.Operator;
@@ -32,9 +33,8 @@ namespace T3.Operators.Types.Id_9b28e6b9_1d1f_42d8_8a9e_33497b1df820
             //Log.Debug("Draw2", this);
             var vertexCount = VertexCount.GetValue(context);
             var startVertexLocation = VertexStartLocation.GetValue(context);
-            
-            var device = ResourceManager.Device;
-            var deviceContext = device.ImmediateContext;
+
+            var deviceContext = ResourceManager.Device.ImmediateContext;
 
             var setVs = deviceContext.VertexShader.Get();
             var setPs = deviceContext.PixelShader.Get();
